@@ -5,13 +5,23 @@
   "main": "gulpfile.js",
   "dependencies": {
     "gulp": "^4.0.0",
-    "gulp-rollup": "^2.16.2",
+    "gulp-rollup": "^2.16.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.3.3",
+    "@babel/preset-env": "^7.3.1",
+    "gulp-babel": "^8.0.0",
+    "gulp-uglify": "^3.0.1",
+    "gulp-umd": "^2.0.0",
     "rollup-stream": "^1.24.1",
+    "size-limit": "^0.21.1",
+    "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
-  "devDependencies": {},
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "gulp && size-limit",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "size": "size-limit"
   },
   "author": "Billy",
   "license": "ISC"
