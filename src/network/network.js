@@ -1,5 +1,5 @@
 export default class Network {
   constructor() {
-    console.log('network loaded...');
+    console.log('Initialized the network service...');
   }
 }

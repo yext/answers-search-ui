@@ -1,29 +1,24 @@
-const { series, src, dest } = require('gulp')
+const { series, src, dest, watch } = require('gulp')
 const rollup = require('rollup-stream');
 const source = require('vinyl-source-stream');
 const buffer = require('vinyl-buffer');
 const babel = require('gulp-babel');
 const uglify = require('gulp-uglify');
 
-function defaultTask(cb) {
+function bundle() {
   return rollup({
-      input: './src/index.js',
+      input: './japi.js',
       name: 'JAPI',
       format: 'iife',
       sourcemap: true
     })
     .pipe(source('japi.min.js'))
     .pipe(buffer())
-    // .pipe(babel({
-    //   presets: ['@babel/env']
-    // }))
-//    .pipe(uglify())
-    .pipe(dest('dist'));
-}
-
-function bundle(cb) {
-  console.log('bundling...');
-  cb();
+    .pipe(babel({
+      presets: ['@babel/env']
+    }))
+//   .pipe(uglify())
+   .pipe(dest('dist'));
 }
 
 function minify(cb) {
@@ -36,10 +31,10 @@ function umdify(cb) {
   cb();
 }
 
-exports.build = series(
-  bundle,
-  minify,
-  umdify
-)
+function watchJS(cb) {
+  watch(['src/*.js'], {
+    ignored: './dist/'
+  }, bundle);
+}
 
-exports.default = defaultTask;
+exports.default = exports.build = series(bundle, watchJS);

@@ -4,7 +4,15 @@
     </head>
     <body>
         <script>
-            console.log(japi);
+          // Simple initialization
+          const simple = JAPI.init();
+
+          // NOTE(billy) We probably wont be explicit about advanced or not,
+          // but the API will just initialize based on advanced configuration
+          const advanced = JAPI.init({ 
+            advanced: true 
+          })
+          .widgets();
         </script>
     </body>
 </html>
