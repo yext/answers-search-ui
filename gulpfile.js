@@ -7,7 +7,7 @@ const uglify = require('gulp-uglify');
 
 function bundle() {
   return rollup({
-      input: './japi.js',
+      input: './src/japi-umd.js',
       format: 'umd',
       name: 'JAPI',
       exports: 'named',

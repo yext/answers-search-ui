@@ -1,5 +1,4 @@
-import StandardAPI from './src/interfaces/standard';
-import AdvancedAPI from './src/interfaces/advanced';
+import { StandardAPI, AdvancedAPI } from './index';
 
 export default JAPI = {
   init: function(opts) {
