@@ -30,15 +30,10 @@ function minify(cb) {
   cb();
 }
 
-function umdify(cb) {
-  console.log('umdifying...')
-  cb();
-}
-
 function watchJS(cb) {
-  watch(['src/*.js'], {
+  watch(['./src/*.js'], {
     ignored: './dist/'
   }, bundle);
 }
 
-exports.default = exports.build = series(bundle);
+exports.default = exports.build = series(bundle, watchJS);
