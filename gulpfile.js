@@ -8,8 +8,9 @@ const uglify = require('gulp-uglify');
 function bundle() {
   return rollup({
       input: './japi.js',
-      format: 'iife',
+      format: 'umd',
       name: 'JAPI',
+      exports: 'named',
       plugins: [
         babel({
           exclude: 'node_modules/**',
@@ -40,4 +41,4 @@ function watchJS(cb) {
   }, bundle);
 }
 
-exports.default = exports.build = series(bundle, watchJS);
+exports.default = exports.build = series(bundle);
