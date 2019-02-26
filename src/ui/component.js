@@ -1,5 +1,5 @@
 import DOM from './dom/dom';
-import { Renderers } from './rendering/renderers';
+import { Renderers } from './rendering/const';
 
 export default class Component {
   constructor(type, opts = {}) {

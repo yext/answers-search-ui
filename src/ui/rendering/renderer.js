@@ -8,7 +8,7 @@ export default class Renderer {
 	 * @param {string} template
 	 * @param {object} data
 	 */
-	render(template, data) {
-		return template;
-	}
+  render(template, data) {
+    return template;
+  }
 }
