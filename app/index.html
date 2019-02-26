@@ -1,19 +1,32 @@
 <html>
-    <head>
-        <script src="../dist/japi.min.js"></script>
-    </head>
-    <body>
-        <script>
-          // Simple initialization
-          const simple = JAPI.init();
 
-          // NOTE(billy) We probably wont be explicit about advanced or not,
-          // but the API will just initialize based on advanced configuration
-          const advanced = JAPI.init({ 
-            advanced: true 
-          })
-          .addComponent()
-          .createComponent();
-        </script>
-    </body>
+<head>
+  <script src="../dist/japi.min.js"></script>
+</head>
+
+<body>
+  <div class="component-container">
+
+  </div>
+  <script>
+    // Simple initialization
+    const simple = JAPI.init();
+
+    // NOTE(billy) We probably wont be explicit about advanced or not,
+    // but the API will just initialize based on advanced configuration
+    const advanced = JAPI.init({
+      advanced: true
+    })
+      .addComponent()
+      .createComponent('SearchInput', {
+        'container': '.component-container',
+        'class': 'custom-class-test',
+        'template': '<label for="search">Search Query: </label><input name="search" type="text"></input>',
+        'onMount': () => {
+          console.log('Custom Compontent is mounted!');
+        }
+      });
+  </script>
+</body>
+
 </html>

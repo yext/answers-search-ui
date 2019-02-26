@@ -29,8 +29,9 @@ export default class JAPI {
     return this;
   }
 
-  createComponent(){
+  createComponent(type, opts){
     console.log('Create Custom Component');
+    new UI.Component(type, opts).init().mount();
     return;
   }
 }
