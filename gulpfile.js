@@ -21,19 +21,18 @@ function bundle() {
     })
     .pipe(source('japi.min.js'))
     .pipe(buffer())
-    .pipe(uglify())
     .pipe(dest('dist'));
 }
 
 function minify(cb) {
-  console.log('minifying...');
-  cb();
+  return uglify()
 }
 
 function watchJS(cb) {
-  watch(['./src/*.js'], {
+  watch(['./src/**/*.js'], {
     ignored: './dist/'
   }, bundle);
 }
 
-exports.default = exports.build = series(bundle, watchJS);
+exports.default = exports.build = series(bundle, minify, watchJS);
+exports.dev = series(bundle, watchJS);
