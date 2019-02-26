@@ -1,13 +1,36 @@
-import { StandardAPI, AdvancedAPI } from './index';
+import * as Core from './core/index';
+import * as UI from './ui/index';
 
-export default JAPI = {
-  init: function(opts) {
-    opts = opts || {};
+/**
+ * Our API should only be instantiable once
+ * @type {JAPI} The instance of JAPI
+ */
+const instance = null;
 
-    if (opts.advanced) {
-      return new AdvancedAPI(opts).init();
+export default class JAPI {
+  constructor(opts) {
+    if (instance) {
+      return instance;
     }
 
-    return new StandardAPI(opts).init();
+    opts = opts || {};
+
+    this._components = new UI.ComponentManager();
+
+    return this;
+  }
+
+  static init(opts) {
+    return new JAPI(opts);
+  }
+
+  addComponent(){
+    console.log('Add Component');
+    return this;
+  }
+
+  createComponent(){
+    console.log('Create Custom Component');
+    return;
   }
 }

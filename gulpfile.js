@@ -10,7 +10,7 @@ function bundle() {
       input: './src/japi-umd.js',
       format: 'umd',
       name: 'JAPI',
-      exports: 'named',
+      exports: 'default',
       plugins: [
         babel({
           exclude: 'node_modules/**',
