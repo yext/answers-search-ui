@@ -1,1 +1,0 @@
-import HandleBars from 'handlebars/runtime';
