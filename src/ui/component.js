@@ -39,13 +39,16 @@ export default class Component {
      * A local reference to the {Renderer} that will be used for rendering the template
      * @type {Renderer}
      */
-    this._renderer = opts.renderer || Renderers.SOY;
+    this._renderer = opts.renderer || Renderers.HandleBars;
 
     /**
      * The data to be provided to the template for rendering
      * @type {object}
      */
-    this._data = {};
+    this._data = {
+      title: 'My Title',
+      body: 'My data body'
+    };
 
     /**
      * An internal state indicating whether or not the component has been mounted to the DOM
@@ -93,7 +96,7 @@ export default class Component {
    * @returns {string}
    */
   render(data) {
-    return this._renderer.render(this._template);
+    return this._renderer.render(this._template, data);
   }
 
   /**

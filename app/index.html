@@ -1,7 +1,6 @@
 <html>
 
 <head>
-  <script src="../dist/japi.min.js"></script>
 </head>
 
 <body>
@@ -9,17 +8,22 @@
     <!-- componenent container sandbox ;) -->
   </div>
 
+  <script src="../dist/japi.min.js"></script>
   <script>
-    JAPI.init()
-      .addComponent() // TODO
+    let j = JAPI.init()
+
+    // Simulate document -ready. Future us will have an onLoaded life cycle hook
+    setTimeout(() => {
+      j.addComponent() // TODO
       .createComponent('SearchInput', {
         'container': '.component-container',
         'class': 'custom-class-test',
-        'template': '<label for="search">Search Query: </label><input name="search" type="text"></input>',
+        'template': 'test',
         'onMount': () => {
           console.log('Custom Compontent is mounted!');
         }
       });
+    }, 10);
   </script>
 </body>
 

@@ -5,33 +5,50 @@ import * as UI from './ui/index';
  * Our API should only be instantiable once
  * @type {JAPI} The instance of JAPI
  */
-const instance = null;
-
 export default class JAPI {
   constructor(opts) {
-    if (instance) {
-      return instance;
+    if (!JAPI.setInstance(this)) {
+      return JAPI.getInstance();
     }
 
     opts = opts || {};
 
-    this._components = new UI.ComponentManager();
+    this.components = new UI.ComponentManager();
+
+    this.templates = new UI.TemplateLoader();
 
     return this;
+  }
+
+  static setInstance(instance) {
+    if (!this.instance) {
+      this.instance = instance;
+      return true;
+    }
+    return false;
+  }
+
+  static getInstance(opts) {
+    return this.instance;
+  }
+
+  static get templates() {
+    return this.instance.templates;
   }
 
   static init(opts) {
     return new JAPI(opts);
   }
 
-  addComponent(){
+  addComponent() {
     console.log('Add Component');
     return this;
   }
 
-  createComponent(type, opts){
+  createComponent(type, opts) {
     console.log('Create Custom Component');
     new UI.Component(type, opts).init().mount();
     return;
   }
 }
+
