@@ -1,4 +1,7 @@
 const { series, src, dest, watch } = require('gulp')
+
+const path = require('path');
+
 const rollup = require('gulp-rollup-lightweight');
 const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
@@ -16,16 +19,64 @@ const wrap = require('gulp-wrap');
 const NAMESPACE = 'JAPI';
 
 function precompileTemplates() {
-  return src('./src/ui/templates/**/*.hbs')
-    .pipe(handlebars())
-    .pipe(wrap('HandleBars.template(<%= contents %>)'))
-    .pipe(declare({
-      root: 'context',
-      noRedeclare: true
-    }))
-    .pipe(concat('japitemplates.compiled.js'))
-    .pipe(wrap('JAPI.templates.register(function(HandleBars) { let context = {}; HandleBars.templates = HandleBars.templates || {}; <%= contents %> return context })'))
-    .pipe(dest('dist'))
+    return src('./src/ui/templates/**/*.hbs')
+      .pipe(handlebars())
+      .pipe(wrap('Handlebars.template(<%= contents %>); \
+          \n\nHandlebars.registerPartial(<%= processPartialName(file.relative) %>, <%= customContext(file.relative) %> )', {}, {
+        imports: {
+          processPartialName: function(fileName, a, b, c) {
+            // Strip the extension and the underscore
+            // Escape the output with JSON.stringify
+            let name = fileName.split('.')[0];
+            console.log(name);
+            if (name.charAt(0) === '_') {
+              return JSON.stringify(name.substr(1));
+            } else {
+              return JSON.stringify(name);
+            }
+          },
+          // Strangly, the way that declare works is by creating a new namespace for each file name
+          // that
+          customContext: function(fileName) {
+            let name = fileName.split('.')[0];
+            let keys = name.split('.');
+            let context = 'context';
+            for (let i = 0; i < keys.length; i ++) {
+              context = context += '["' + keys[i] + '"]'
+            }
+            return context;
+          }
+        }
+      }))
+      .pipe(declare({
+        root: 'context',
+        noRedeclare: true,
+        processName: function(filePath) {
+          let path = filePath.replace('src/ui/templates', '');
+          return declare.processNameByPath(path, '').replace('.', '/');
+        }
+      }))
+      .pipe(concat('japitemplates.compiled.js'))
+      .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
+      .pipe(dest('dist'));
+}
+
+function bundleTemplates() {
+  return rollup({
+    input: './dist/japitemplates.compiled.js',
+    output: {
+      format: 'iife',
+      name: '__$japitemplateinit'
+    },
+    plugins: [
+      resolve(),
+      commonjs({
+        include: './node_modules/**'
+      })
+    ]
+  })
+  .pipe(source('japitemplates.compiled.bundle.min.js'))
+  .pipe(dest('dist'));
 }
 
 function bundle() {
@@ -62,7 +113,7 @@ function watchJS(cb) {
   }, bundle);
 }
 
-exports.templates = series(precompileTemplates);
+exports.templates = series(precompileTemplates, bundleTemplates);
 
 exports.default = exports.build = series(bundle, minify);
-exports.dev = series(precompileTemplates, bundle, watchJS);
+exports.dev = series(precompileTemplates, bundleTemplates, bundle, watchJS);

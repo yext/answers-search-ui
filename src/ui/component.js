@@ -39,7 +39,7 @@ export default class Component {
      * A local reference to the {Renderer} that will be used for rendering the template
      * @type {Renderer}
      */
-    this._renderer = opts.renderer || Renderers.HandleBars;
+    this._renderer = opts.renderer || Renderers.Handlebars;
 
     /**
      * The data to be provided to the template for rendering

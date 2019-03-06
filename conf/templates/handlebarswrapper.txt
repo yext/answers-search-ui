@@ -1,0 +1,12 @@
+import Handlebars from 'handlebars/runtime';
+var context = context || {};
+
+context['_hb'] = Handlebars;
+
+<%= contents %>;
+
+const autoinit = function() {
+  JAPI.templates.register(context);
+}()
+
+export default autoinit;

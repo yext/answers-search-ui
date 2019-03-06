@@ -1,8 +1,7 @@
 import Renderer from './renderer';
-import HandleBars from 'handlebars/runtime';
 import TemplateLoader from './templateloader';
 
-export default class HandleBarsRenderer extends Renderer {
+export default class HandlebarsRenderer extends Renderer {
   constructor() {
     super();
 
@@ -15,8 +14,7 @@ export default class HandleBarsRenderer extends Renderer {
 
   setup() {
     this._loader.onLoaded((templates) => {
-      this._templates = templates(HandleBars);
-      HandleBars.partials = this._templates;
+      this._templates = templates;
     })
   }
 
