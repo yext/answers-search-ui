@@ -1,14 +1,14 @@
-const { series, src, dest, watch } = require('gulp')
+const { series, parallel, src, dest, watch } = require('gulp')
 
 const path = require('path');
 
 const rollup = require('gulp-rollup-lightweight');
 const babel = require('rollup-plugin-babel');
+
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
-
 const source = require('vinyl-source-stream');
-const buffer = require('vinyl-buffer');
+
 const uglify = require('gulp-uglify');
 
 const handlebars = require('gulp-handlebars');
@@ -28,15 +28,14 @@ function precompileTemplates() {
             // Strip the extension and the underscore
             // Escape the output with JSON.stringify
             let name = fileName.split('.')[0];
-            console.log(name);
             if (name.charAt(0) === '_') {
               return JSON.stringify(name.substr(1));
             } else {
               return JSON.stringify(name);
             }
           },
-          // Strangly, the way that declare works is by creating a new namespace for each file name
-          // that
+          // TBH, this isn't really needed anymore since we don't name files like so 'foo.bar.js', but this is here to
+          // support that use case.
           customContext: function(fileName) {
             let name = fileName.split('.')[0];
             let keys = name.split('.');
@@ -113,7 +112,11 @@ function watchJS(cb) {
   }, bundle);
 }
 
-exports.templates = series(precompileTemplates, bundleTemplates);
-
-exports.default = exports.build = series(bundle, minify);
-exports.dev = series(precompileTemplates, bundleTemplates, bundle, watchJS);
+exports.default = exports.build = parallel(
+                                    series(precompileTemplates, bundleTemplates),
+                                    series(bundle, minify)
+                                  );
+exports.dev = parallel(
+                series(precompileTemplates, bundleTemplates),
+                series(bundle, watchJS)
+              );

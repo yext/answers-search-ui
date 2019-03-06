@@ -46,8 +46,19 @@ export default class Component {
      * @type {object}
      */
     this._data = {
-      title: 'My Title',
-      body: 'My data body'
+      title: 'Crazy Search Answers',
+      body: 'Hello this is my body',
+      results: [
+        {
+          title: 'Item #1',
+          body: 'This is my result for item #1'
+        },
+        {
+          title: 'Item #2',
+          body: 'This is my result for item #2'
+        },
+      ]
+
     };
 
     /**

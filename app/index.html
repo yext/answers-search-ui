@@ -10,16 +10,15 @@
 
   <script src="../dist/japi.min.js"></script>
   <script>
-    console.log
     let j = JAPI.init()
 
     // Simulate document -ready. Future us will have an onLoaded life cycle hook
     setTimeout(() => {
       j.addComponent() // TODO
-      .createComponent('SearchInput', {
+      .createComponent('Search', {
         'container': '.component-container',
         'class': 'custom-class-test',
-        'template': 'other',
+        'template': 'search',
         'onMount': () => {
           console.log('Custom Compontent is mounted!');
         }
