@@ -1,4 +1,8 @@
-export { default as Component } from './component';
+export { default as Component } from './components/component';
+export { default as SearchComponent } from './components/searchcomponent';
+export { default as ResultsComponent } from './components/resultscomponent';
+
+
 export { default as ComponentManager } from './componentmanager';
 export { default as DOM } from './dom/dom';
 

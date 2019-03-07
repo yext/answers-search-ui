@@ -1,5 +1,11 @@
 import * as Core from './core/index';
-import * as UI from './ui/index';
+import {
+  TemplateLoader,
+  ComponentManager,
+  Component,
+  SearchComponent,
+  ResultsComponent
+} from './ui/index';
 
 /**
  * Our API should only be instantiable once
@@ -13,9 +19,11 @@ export default class JAPI {
 
     opts = opts || {};
 
-    this.components = new UI.ComponentManager();
+    this.components = new ComponentManager()
+      .register(SearchComponent)
+      .register(ResultsComponent);
 
-    this.templates = new UI.TemplateLoader();
+    this.templates = new TemplateLoader();
 
     return this;
   }
@@ -40,14 +48,14 @@ export default class JAPI {
     return new JAPI(opts);
   }
 
-  addComponent() {
-    console.log('Add Component');
+  addComponent(type, opts) {
+    this.components.create(type, opts).init().mount();
     return this;
   }
 
   createComponent(type, opts) {
     console.log('Create Custom Component');
-    new UI.Component(type, opts).init().mount();
+    new Component(type, opts).init().mount();
     return;
   }
 }

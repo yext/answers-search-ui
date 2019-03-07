@@ -21,7 +21,7 @@ export default class DOM {
   static query(parent, selector) {
     // Facade, shifting the selector to the parent argument if only one
     // argument is provided
-    if (!selector) {
+    if (selector === undefined) {
       selector = parent;
       parent = document;
     }
@@ -46,7 +46,7 @@ export default class DOM {
   }
 
   static append(parent, node) {
-    if (!node) {
+    if (node === undefined) {
       node = parent;
       parent = document;
     }

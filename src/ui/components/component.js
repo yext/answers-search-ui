@@ -1,5 +1,5 @@
-import DOM from './dom/dom';
-import { Renderers } from './rendering/const';
+import DOM from '../dom/dom';
+import { Renderers } from '../rendering/const';
 
 export default class Component {
   constructor(type, opts = {}) {
@@ -15,13 +15,16 @@ export default class Component {
      * The component manager uses this information in order to persist and organize components
      * @type {string|ComponentType}
      */
-    this._type = type || ComponentTypes.Default;
+    this._type = this.constructor.Type;
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
      * @type {HTMLElement}
      */
     this._container = DOM.query(opts.container) || null;
+    if (this._container === null) {
+      throw new Error('Cannot find container DOM node: ' + opts.container);
+    }
 
     /**
      * A custom class to be applied to {this._container} node
@@ -30,10 +33,18 @@ export default class Component {
     this._className = opts.class || 'component';
 
     /**
-     * The template to use for rendering the component
+     * The template string to use for rendering the component
+     * If this is left empty, we lookup the template the base templates using the templateName
      * @type {string}
      */
-    this._template = opts.template || '';
+    this._template = opts.template || null;
+
+    /**
+     * The templateName to use for rendering the component.
+     * This is only used if _template is empty.
+     * @type {string}
+     */
+    this._templateName = opts.templateName || this.constructor.TemplateName;
 
     /**
      * A local reference to the {Renderer} that will be used for rendering the template
@@ -45,21 +56,7 @@ export default class Component {
      * The data to be provided to the template for rendering
      * @type {object}
      */
-    this._data = {
-      title: 'Crazy Search Answers',
-      body: 'Hello this is my body',
-      results: [
-        {
-          title: 'Item #1',
-          body: 'This is my result for item #1'
-        },
-        {
-          title: 'Item #2',
-          body: 'This is my result for item #2'
-        },
-      ]
-
-    };
+    this._data = opts.data || {};
 
     /**
      * An internal state indicating whether or not the component has been mounted to the DOM
@@ -72,6 +69,14 @@ export default class Component {
      * @type {function}
      */
     this._onMount = opts.onMount || function () { };
+  }
+
+  static get Type() {
+    return 'Default';
+  }
+
+  static get TemplateName() {
+    return 'default';
   }
 
   init() {
@@ -100,6 +105,7 @@ export default class Component {
 
     this._isMounted = true;
     this._onMount(this);
+    return this;
   }
 
   /**
@@ -107,7 +113,10 @@ export default class Component {
    * @returns {string}
    */
   render(data) {
-    return this._renderer.render(this._template, data);
+    return this._renderer.render({
+      template: this._template,
+      templateName: this._templateName
+    }, data);
   }
 
   /**
