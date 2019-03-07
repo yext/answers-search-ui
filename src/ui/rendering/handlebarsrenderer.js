@@ -23,9 +23,9 @@ export default class HandlebarsRenderer extends Renderer {
 
   render(config, data) {
     if (config.template !== null) {
-      return '';
-//      let t = this._handlebars.compile(config.template);
-//      return this._handlebars.template(t)(data);
+      // TODO(billy) these templates need to be pre-compiled with handlebars,
+      // and so we need to somehow ship the compiler.
+      return config.template;
     }
     return this._templates[config.templateName](data);
   }

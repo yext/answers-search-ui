@@ -4,21 +4,38 @@
 </head>
 
 <body>
-  <div class="component-container">
-    <!-- componenent container sandbox ;) -->
+  <div class="search-container">
+    <!-- search component will get injected here -->
+  </div>
+
+  <div class="results-container">
+    <!-- results component will get injected here -->
+  </div>
+
+  <div class="custom-component-container">
+    <!-- custom component will get injected here -->
   </div>
 
   <script src="../dist/japi.min.js"></script>
   <script>
-    let j = JAPI.init()
+    let japi = JAPI.init()
 
     // Simulate document -ready. Future us will have an onLoaded life cycle hook
     setTimeout(() => {
-      j.addComponent() // TODO
-      .createComponent('Search', {
-        'container': '.component-container',
+      japi
+      .addComponent('Search', {
+        container: '.search-container',
+        class: 'custom-search-lass'
+      })
+      .addComponent('Results', {
+        container: '.results-container',
+        class: 'custom-results-class'
+      })
+
+      .createComponent('Custom', {
+        'container': '.custom-component-container',
         'class': 'custom-class-test',
-        'template': 'search',
+        'template': '<div class="foo">CUSTOM STUFF</div>',
         'onMount': () => {
           console.log('Custom Compontent is mounted!');
         }
