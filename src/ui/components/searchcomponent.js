@@ -6,7 +6,7 @@ export default class SearchComponent extends Component {
 
     this._data = {
       title: 'Crazy Answers Searcher',
-      searchText: 'Write your Query: '
+      searchText: 'What are you interested in?'
     }
   }
 

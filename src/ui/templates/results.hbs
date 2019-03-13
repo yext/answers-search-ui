@@ -1,5 +1,8 @@
-<h3>Results</h3>
-{{#each results}}
-  {{> results/resultitem item="{{this}}"}}
-  <hr>
-{{/each}}
+<section class="result-list">
+  <h3>Results ({{totalResults}}):</h3>
+  <ul>
+  {{#each results}}
+    {{> results/resultitem item="{{this}}"}}
+  {{/each}}
+  </ul>
+</section>
