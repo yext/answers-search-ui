@@ -1,4 +1,5 @@
 import Component from './component';
+import ResultItemComponent from './resultitemcomponent';
 
 export default class ResultsComponent extends Component {
   constructor(opts = {}) {
@@ -8,7 +9,7 @@ export default class ResultsComponent extends Component {
 
     // TODO(billy) There should just be a global registry of components
     // Instead of having to manually register in each of the dependant classes
-    this._childComponents.register(ResultItem);
+    this._componentManager.register(ResultItemComponent);
 
     this.setState(ResultsComponent.generateData(this._limit));
   }
@@ -35,17 +36,5 @@ export default class ResultsComponent extends Component {
 
   static get TemplateName() {
     return 'results'
-  }
-}
-
-class ResultItem extends Component {
-  constructor(opts = {}) {
-    super(opts);
-
-    this._container = '[data-component="' + this._templateName + '"]';
-  }
-
-  static get TemplateName() {
-    return 'results/resultitem'
   }
 }

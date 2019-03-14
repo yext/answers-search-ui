@@ -24,6 +24,10 @@ export default class ComponentManager {
     return this;
   }
 
+  get(componentType) {
+    return this._components[componentType];
+  }
+
   create(componentType, opts) {
     return new this._components[componentType](opts);
   }

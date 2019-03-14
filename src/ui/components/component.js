@@ -1,51 +1,8 @@
-import DOM from '../dom/dom';
 import { Renderers } from '../rendering/const';
+
+import DOM from '../dom/dom';
 import ComponentManager from './componentmanager';
-
-class DataContainer {
-  constructor(data) {
-    this._state = data;
-  }
-
-  set(data) {
-    this._state = data;
-  }
-
-  update(data) {
-    this._state = data;
-  }
-
-  get(prop) {
-    if (prop === undefined) {
-      return this._state;
-    }
-    return this._state[prop];
-  }
-
-  on() {
-    return this;
-  }
-
-  asJSON() {
-    return this._state;
-  }
-}
-
-class ComponentRegistry {
-  constructor() {
-    this.components = {
-
-    }
-  };
-
-  register(component) {
-    this.components[component.type] = component;
-  }
-
-  get(type) {
-    return this.components[type];
-  }
-}
+import State from './state';
 
 export default class Component {
   constructor(type, opts = {}) {
@@ -79,9 +36,9 @@ export default class Component {
      * The state (data) of the component to be provided to the template for rendering
      * @type {object}
      */
-    this._state = new DataContainer(opts.data || {});
+    this._state = new State(opts.data || {});
 
-    this._childComponents = new ComponentRegistry();
+    this._componentManager = opts.componentManager || new ComponentManager();
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
@@ -164,12 +121,11 @@ export default class Component {
   }
 
   addChild(prop, type) {
-    let val = this._state.get(prop),
-        Component = this._childComponents.get(type);
+    let val = this._state.get(prop)
 
     if (Array.isArray(val)) {
       for (let i = 0; i < val.length; i ++) {
-        this._children.push(new Component({
+        this._children.push(this._componentManager.create(type, {
           parent: this,
           data: val[i]
         }));
