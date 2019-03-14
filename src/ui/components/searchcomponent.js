@@ -4,14 +4,10 @@ export default class SearchComponent extends Component {
   constructor(opts = {}) {
     super(opts)
 
-    this._data = {
+    this.setState({
       title: 'Crazy Answers Searcher',
       searchText: 'What are you interested in?'
-    }
-  }
-
-  static get type() {
-    return 'Search';
+    });
   }
 
   static get TemplateName() {

@@ -29,20 +29,20 @@
     // Simulate document -ready. Future us will have an onLoaded life cycle hook
     setTimeout(() => {
       japi
-      .addComponent('Search', {
+      .addComponent('SearchComponent', {
         container: '.search-container',
         class: 'custom-search-class'
       })
-      .addComponent('Results', {
+      .addComponent('ResultsComponent', {
         container: '.results-container',
         class: 'custom-results-class',
         limit: 5
       })
-      .addComponent('Results', {
-        container: '.results-container.second',
-        class: 'custom-results-class',
-        limit: 2
-      })
+      // .addComponent('Results', {
+      //   container: '.results-container.second',
+      //   class: 'custom-results-class',
+      //   limit: 2
+      // })
 
       .createComponent('Custom', {
         container: '.custom-component-container',

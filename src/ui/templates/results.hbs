@@ -1,8 +1,6 @@
 <section class="result-list">
   <h3>Results ({{totalResults}}):</h3>
-  <ul>
-  {{#each results}}
-    {{> results/resultitem item="{{this}}"}}
-  {{/each}}
+  <ul class="result-items" data-component="ResultItem" data-prop="results">
+
   </ul>
 </section>

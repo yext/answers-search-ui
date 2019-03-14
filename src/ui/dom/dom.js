@@ -8,7 +8,7 @@ export default class DOM {
    * @return {HTMLElement}
    */
   static create(html) {
-    return this.parser.parseFromString(html, 'text/html');
+    return parser.parseFromString(html, 'text/html').body;
   }
 
   /**
@@ -24,6 +24,10 @@ export default class DOM {
     if (selector === undefined) {
       selector = parent;
       parent = document;
+    }
+
+    if (selector instanceof HTMLElement) {
+      return selector;
     }
 
     return parent.querySelectorAll(selector)[0];

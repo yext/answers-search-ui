@@ -6,7 +6,16 @@ export default class ResultsComponent extends Component {
 
     this._limit = opts.limit || 10;
 
-    this._data = ResultsComponent.generateData(this._limit)
+    // TODO(billy) There should just be a global registry of components
+    // Instead of having to manually register in each of the dependant classes
+    this._childComponents.register(ResultItem);
+
+    this.setState(ResultsComponent.generateData(this._limit));
+  }
+
+  init() {
+    super.init();
+    return this;
   }
 
   static generateData(numResults) {
@@ -24,11 +33,19 @@ export default class ResultsComponent extends Component {
     }
   }
 
-  static get type() {
-    return 'Results';
+  static get TemplateName() {
+    return 'results'
+  }
+}
+
+class ResultItem extends Component {
+  constructor(opts = {}) {
+    super(opts);
+
+    this._container = '[data-component="' + this._templateName + '"]';
   }
 
   static get TemplateName() {
-    return 'results'
+    return 'results/resultitem'
   }
 }

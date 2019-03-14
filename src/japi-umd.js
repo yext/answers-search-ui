@@ -21,7 +21,7 @@ export default class JAPI {
 
     this.components = new ComponentManager()
       .register(SearchComponent)
-      .register(ResultsComponent);
+      .register(ResultsComponent)
 
     this.templates = new TemplateLoader();
 
