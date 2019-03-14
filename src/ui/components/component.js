@@ -1,8 +1,8 @@
 import { Renderers } from '../rendering/const';
 
 import DOM from '../dom/dom';
-import ComponentManager from './componentmanager';
 import State from './state';
+import { COMPONENTS } from './const';
 
 export default class Component {
   constructor(type, opts = {}) {
@@ -38,7 +38,12 @@ export default class Component {
      */
     this._state = new State(opts.data || {});
 
-    this._componentManager = opts.componentManager || new ComponentManager();
+    /**
+     * A local reference to the component manager, which contains all of the component classes
+     * eligible to be created
+     * @type {ComponentManager}
+     */
+    this._componentManager = COMPONENTS;
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
@@ -115,6 +120,7 @@ export default class Component {
   }
 
   _propogateState(data) {
+    data = data || this._state.get();
     for (let i = 0; i < this._children.length; i++) {
       this._children[i].setState(data);
     }

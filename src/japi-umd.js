@@ -1,10 +1,7 @@
 import * as Core from './core/index';
 import {
   TemplateLoader,
-  ComponentManager,
-  Component,
-  SearchComponent,
-  ResultsComponent
+  COMPONENTS
 } from './ui/index';
 
 /**
@@ -19,9 +16,8 @@ export default class JAPI {
 
     opts = opts || {};
 
-    this.components = new ComponentManager()
-      .register(SearchComponent)
-      .register(ResultsComponent)
+    this.components = COMPONENTS;
+    console.log(this.components);
 
     this.templates = new TemplateLoader();
 
@@ -55,7 +51,7 @@ export default class JAPI {
 
   createComponent(type, opts) {
     console.log('Create Custom Component');
-    new Component(type, opts).init().mount();
+    this.components.create('Component', opts).init().mount();
     return;
   }
 }

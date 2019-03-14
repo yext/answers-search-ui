@@ -1,11 +1,11 @@
 import Component from './component';
 
-export default class ResultItemComponent extends Component {
+export default class ResultsItemComponent extends Component {
   constructor(opts = {}) {
     super(opts);
   }
 
   static get TemplateName() {
-    return 'results/resultitem'
+    return 'results/resultsitem'
   }
 }

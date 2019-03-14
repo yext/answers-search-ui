@@ -3,7 +3,6 @@ export default class ComponentManager {
     if (!ComponentManager.setInstance(this)) {
       return ComponentManager.getInstance();
     }
-
     this._components = {};
   }
 
@@ -15,7 +14,7 @@ export default class ComponentManager {
     return false;
   }
 
-  static getInstance(opts) {
+  static getInstance() {
     return this.instance;
   }
 
