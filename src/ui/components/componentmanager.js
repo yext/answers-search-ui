@@ -28,6 +28,10 @@ export default class ComponentManager {
   }
 
   create(componentType, opts) {
+    // Make sure every component has access to the component manager
+    opts = Object.assign({
+      componentManager: this
+    }, opts);
     return new this._components[componentType](opts);
   }
 }

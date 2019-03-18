@@ -2,7 +2,6 @@ import { Renderers } from '../rendering/const';
 
 import DOM from '../dom/dom';
 import State from './state';
-import { COMPONENTS } from './const';
 
 export default class Component {
   constructor(type, opts = {}) {
@@ -43,7 +42,7 @@ export default class Component {
      * eligible to be created
      * @type {ComponentManager}
      */
-    this._componentManager = COMPONENTS;
+    this._componentManager = opts.componentManager || null;
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
