@@ -17,7 +17,6 @@ export default class JAPI {
     opts = opts || {};
 
     this.components = COMPONENTS;
-    console.log(this.components);
 
     this.templates = new TemplateLoader();
 
@@ -45,12 +44,13 @@ export default class JAPI {
   }
 
   addComponent(type, opts) {
+    console.log('Adding Standard Component...');
     this.components.create(type, opts).init().mount();
     return this;
   }
 
   createComponent(type, opts) {
-    console.log('Create Custom Component');
+    console.log('Create Custom Component...');
     this.components.create('Component', opts).init().mount();
     return;
   }
