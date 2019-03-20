@@ -4,6 +4,8 @@ export default class SearchComponent extends Component {
   constructor(opts = {}) {
     super(opts)
 
+    // this.moduleId = 2;
+
     this.setState({
       title: 'Crazy Answers Searcher',
       searchText: 'What are you interested in?'

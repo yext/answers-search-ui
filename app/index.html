@@ -33,15 +33,20 @@
         container: '.search-container',
         class: 'custom-search-class'
       })
+
       .addComponent('ResultsComponent', {
         container: '.results-container',
         class: 'custom-results-class',
         limit: 5
       })
+
       .addComponent('ResultsComponent', {
         container: '.results-container.second',
         class: 'custom-results-class',
-        limit: 2
+        limit: 2,
+        resultItem: {
+//          container: ''
+        }
       })
 
       .createComponent('Custom', {

@@ -7,6 +7,8 @@ export default class ComponentManager {
     this._componentRegistry = {};
 
     this._activeComponents = {};
+
+    this._storage = null;
   }
 
   static setInstance(instance) {
@@ -19,6 +21,11 @@ export default class ComponentManager {
 
   static getInstance() {
     return this.instance;
+  }
+
+  useStorage(storage) {
+    this._storage = storage;
+    return this;
   }
 
   register(component) {
@@ -37,8 +44,19 @@ export default class ComponentManager {
     }, opts);
 
     let component = new this._componentRegistry[componentType](opts);
-
     this._activeComponents[componentType] = component;
+
+    if (this._storage) {
+      if (component.moduleId === undefined || component.moduleId === null) {
+        return component;
+      }
+
+      component.setState(this._storage.getState(component.moduleId));
+
+      this._storage.on('update', component.moduleId, (data) => {
+        component.setState(data);
+      })
+    }
 
     return component;
   }

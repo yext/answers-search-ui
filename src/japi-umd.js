@@ -16,7 +16,41 @@ export default class JAPI {
 
     opts = opts || {};
 
-    this.components = COMPONENTS;
+    this.storage = new Core.Storage();
+
+    this.components = COMPONENTS.useStorage(this.storage);
+
+    this.storage.insert({
+      1: {
+        totalResults: 2,
+        results: [
+          {
+            title: 'Result Item',
+            body: 'This is the result body for item'
+          }
+        ]
+      }
+    })
+
+    setInterval(() => {
+      let results = [];
+      let numResults = Math.floor((Math.random() * 5) + 1);
+      for (let i = 1; i <= numResults; i ++) {
+        results.push({
+          title: 'Result Item #' + i,
+          body: 'This is the result body for item #' + i
+        })
+      }
+
+      this.storage.insert({
+        1: {
+          totalResults: numResults,
+          results: results
+        }
+      })
+    }, 1000)
+
+
 
     this.templates = new TemplateLoader();
 

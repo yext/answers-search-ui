@@ -5,6 +5,8 @@ export default class ResultsComponent extends Component {
   constructor(opts = {}) {
     super(opts);
 
+    this.moduleId = 1;
+
     this._limit = opts.limit || 10;
 
     this.setState(ResultsComponent.generateData(this._limit));

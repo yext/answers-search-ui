@@ -12,6 +12,8 @@ export default class Component {
       type = opts.type;
     }
 
+    this.moduleId = opts.moduleId || null;
+
     /**
      * An identifier used to classify the type of component.
      * The component manager uses this information in order to persist and organize components
@@ -107,40 +109,23 @@ export default class Component {
 
   init() {
     DOM.addClass(this._container, this._className);
-
-    this._state.on('update', this._render);
-
     return this;
   }
 
   setState(data) {
     this._state.set(data);
-    this._propogateState(data);
+    this.mount();
   }
 
-  _propogateState(data) {
-    data = data || this._state.get();
-    for (let i = 0; i < this._children.length; i++) {
-      this._children[i].setState(data);
-    }
-  }
 
-  addChild(prop, type) {
-    let val = this._state.get(prop)
+  addChild(data, type) {
+    let childComponent = this._componentManager.create(type, {
+      parent: this,
+      data: data
+    });
 
-    if (Array.isArray(val)) {
-      for (let i = 0; i < val.length; i ++) {
-        this._children.push(this._componentManager.create(type, {
-          parent: this,
-          data: val[i]
-        }));
-      }
-
-      return this;
-    }
-
-    this._children.push(new Component().setState(val));
-    return this;
+    this._children.push(childComponent);
+    return childComponent;
   }
 
   /**
@@ -160,6 +145,7 @@ export default class Component {
   }
 
   mount() {
+    DOM.empty(this._container);
     DOM.append(this._container, this.render(this._state.asJSON()));
 
     this._isMounted = true;
@@ -187,26 +173,22 @@ export default class Component {
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     // TODO(billy) This should probably return a collection of components
-    let component = DOM.query(el, '[data-component]');
-    if (this._children.length === 0) {
-      if (component !== undefined) {
-        let type = component.dataset.component,
-            prop = component.dataset.prop;
+    this._children = [];
+    let domComponent = DOM.query(el, '[data-component]');
+    if (domComponent !== undefined) {
+      let type = domComponent.dataset.component,
+          prop = domComponent.dataset.prop;
 
-        this.addChild(prop, type);
+      let childData = data[prop];
+      if (Array.isArray(childData)) {
+        let childHTML = [];
+        for (let i = 0; i < childData.length; i ++) {
+          let childComponent = this.addChild(childData[i], type);
+          childHTML.push(childComponent.render());
+        }
+
+        DOM.append(domComponent, childHTML.join(''));
       }
-    }
-
-    // Render the child components recursively, and inject their result
-    // into the proper node of the containing component
-    let len = this._children.length;
-    if (len > 0) {
-      let children = [];
-      for (let i = 0; i < len; i ++) {
-        children.push(this._children[i].render())
-      }
-
-      DOM.append(component, children.join(''));
     }
 
     return el.innerHTML;

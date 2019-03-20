@@ -18,10 +18,6 @@ export default class State {
     return this._state[prop];
   }
 
-  on() {
-    return this;
-  }
-
   asJSON() {
     return this._state;
   }
