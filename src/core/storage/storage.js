@@ -1,39 +1,3 @@
-//import Search from './search';
-//import Storage from './storage';
-import EventEmitter from './eventemitter';
-
-class Core {
-  constructor() {
-    this.storage = new Storage();
-
-    this.searcher = new SearchService();
-  }
-
-  search(queryString) {
-    this.searcher
-      .query(queryString)
-      .then((results) => {
-        // Handl errors here
-        this.storage.insert(results);
-      })
-  }
-
-  listen(module, cb) {
-    this.storage.on(module, cb);
-  }
-}
-
-// let component = new Component()
-// Component.state.sync(storage)
-
-/**
-   sync(storage) {
-      storage.on('update', this.moduleId, (state) => {
-        this.set(state);
-      })
-   }
-*/
-
 import ModuleData from './moduledata';
 
 export default class Storage {
