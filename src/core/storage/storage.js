@@ -6,7 +6,7 @@ class Core {
   constructor() {
     this.storage = new Storage();
 
-    this.searcher = new Search();
+    this.searcher = new SearchService();
   }
 
   search(queryString) {

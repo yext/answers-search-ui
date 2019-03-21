@@ -1,7 +1,7 @@
-import * as Core from './core/index';
+import Core from './core/core';
 import {
   TemplateLoader,
-  COMPONENTS
+  COMPONENT_MANAGER
 } from './ui/index';
 
 /**
@@ -16,41 +16,9 @@ export default class JAPI {
 
     opts = opts || {};
 
-    this.storage = new Core.Storage();
+    this.core = new Core();
 
-    this.components = COMPONENTS.useStorage(this.storage);
-
-    this.storage.insert({
-      1: {
-        totalResults: 2,
-        results: [
-          {
-            title: 'Result Item',
-            body: 'This is the result body for item'
-          }
-        ]
-      }
-    })
-
-    setInterval(() => {
-      let results = [];
-      let numResults = Math.floor((Math.random() * 5) + 1);
-      for (let i = 1; i <= numResults; i ++) {
-        results.push({
-          title: 'Result Item #' + i,
-          body: 'This is the result body for item #' + i
-        })
-      }
-
-      this.storage.insert({
-        1: {
-          totalResults: numResults,
-          results: results
-        }
-      })
-    }, 1000)
-
-
+    this.components = COMPONENT_MANAGER.useStorage(this.core.storage);
 
     this.templates = new TemplateLoader();
 

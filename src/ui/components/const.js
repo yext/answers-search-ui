@@ -5,7 +5,7 @@ import SearchComponent from './searchcomponent';
 import ResultsComponent from './resultscomponent';
 import ResultsItemComponent from './resultsitemcomponent';
 
-export const COMPONENTS = new ComponentManager()
+export const COMPONENT_MANAGER = new ComponentManager()
       .register(Component)
       .register(SearchComponent)
       .register(ResultsComponent)
