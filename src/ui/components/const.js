@@ -1,7 +1,7 @@
 import ComponentManager from './componentmanager';
 
 import Component from './component';
-import SearchComponent from './searchcomponent';
+import SearchComponent from './search/searchcomponent';
 import ResultsComponent from './results/resultscomponent';
 import ResultsItemComponent from './results/resultsitemcomponent';
 import PeopleResultsComponent from './results/peopleresultscomponent';
