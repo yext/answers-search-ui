@@ -49,8 +49,6 @@ export default class ResultsComponent extends Component {
         results: limitedResults
       }
     }
-
-    console.log(data);
     super.setState(data);
   }
 
