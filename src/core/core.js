@@ -19,8 +19,8 @@ export default class Core {
       })
   }
 
-  on(module, cb) {
-    this.storage.on(module, cb);
+  on(evt, moduleId, cb) {
+    return this.storage.on(evt, moduleId, cb);
   }
 
   simulateDataInserts() {
