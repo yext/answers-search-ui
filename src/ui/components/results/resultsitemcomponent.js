@@ -1,4 +1,4 @@
-import Component from './component';
+import Component from '../component';
 
 export default class ResultsItemComponent extends Component {
   constructor(opts = {}) {

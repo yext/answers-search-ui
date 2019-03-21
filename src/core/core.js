@@ -24,34 +24,54 @@ export default class Core {
   }
 
   simulateDataInserts() {
+    // Initial state
     this.storage.insert({
-      1: {
-        totalResults: 2,
-        results: [
-          {
-            title: 'Result Item',
-            body: 'This is the result body for item'
-          }
-        ]
-      }
+      1: this.generateResults(),
+      2: this.generatePeopleResults()
     })
 
+    // Simulate data pushes
     setInterval(() => {
-      let results = [];
-      let numResults = Math.floor((Math.random() * 5) + 1);
-      for (let i = 1; i <= numResults; i ++) {
-        results.push({
-          title: 'Result Item #' + i,
-          body: 'This is the result body for item #' + i
-        })
-      }
-
       this.storage.insert({
-        1: {
-          totalResults: numResults,
-          results: results
-        }
+        1: this.generateResults(),
+        2: this.generatePeopleResults()
       })
-    }, 1000)
+    }, 2000)
+  }
+
+  generateResults() {
+    let results = [];
+    let numResults = Math.floor((Math.random() * 5) + 1);
+    for (let i = 1; i <= numResults; i ++) {
+      results.push({
+        title: 'Result Item #' + i,
+        body: 'This is the result body for item #' + i
+      })
+    }
+
+    return {
+      totalResults: numResults,
+      results: results
+    }
+  }
+
+generatePeopleResults() {
+  let names = ['Billy', 'Steve', 'Kevin', 'Max', 'Tom', 'Joe', 'Bob'],
+      professions = ['Front end person', 'Data Guy', 'Mastermind', 'Product Lover', 'El capitan', 'OOF', 'Lover of cake']
+
+    let results = [];
+    let numResults = Math.floor((Math.random() * 5) + 1);
+    for (let i = 1; i <= numResults; i ++) {
+      results.push({
+        name: names[i],
+        profession: professions[i],
+        description: 'Too lazy to make #' + i,
+      })
+    }
+
+    return {
+      totalResults: numResults,
+      results: results
+    }
   }
 }

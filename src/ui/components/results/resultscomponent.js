@@ -1,4 +1,4 @@
-import Component from './component';
+import Component from '../component';
 import ResultsItemComponent from './resultsitemcomponent';
 
 export default class ResultsComponent extends Component {
@@ -32,11 +32,33 @@ export default class ResultsComponent extends Component {
     }
   }
 
+  setState(data) {
+    let limitedResults = [];
+    if (data.results) {
+      let count = 0;
+      for (let i = 0; i < data.results.length; i++) {
+        if (i > this._limit - 1) {
+          break;
+        }
+
+        limitedResults.push(data.results[i]);
+        count ++;
+      }
+      data = {
+        totalResults: count,
+        results: limitedResults
+      }
+    }
+
+    console.log(data);
+    super.setState(data);
+  }
+
   static get type() {
     return 'ResultsComponent';
   }
 
   static get TemplateName() {
-    return 'results'
+    return 'results/results'
   }
 }

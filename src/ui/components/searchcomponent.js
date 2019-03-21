@@ -13,7 +13,7 @@ export default class SearchComponent extends Component {
   }
 
   static get TemplateName() {
-    return 'search'
+    return 'search/search'
   }
 
   static get type() {

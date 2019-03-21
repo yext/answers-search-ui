@@ -13,8 +13,8 @@
     <!-- results component will get injected here -->
   </div>
 
-  <div class="results-container second">
-
+  <div class="results-container people-results-container">
+    <!-- custom component will get injected here -->
   </div>
 
   <div class="custom-component-container">
@@ -40,23 +40,11 @@
         limit: 5
       })
 
-      .addComponent('ResultsComponent', {
-        container: '.results-container.second',
+      .addComponent('PeopleResultsComponent', {
+        container: '.people-results-container',
         class: 'custom-results-class',
         limit: 2,
-        resultItem: {
-//          container: ''
-        }
       })
-
-      .createComponent('Custom', {
-        container: '.custom-component-container',
-        class: 'custom-class-test',
-        template: '<div class="foo">CUSTOM TEMPLATE STUFF</div>',
-        onMount: () => {
-          console.log('Custom Compontent is mounted!');
-        }
-      });
     }, 100);
   </script>
 </body>
