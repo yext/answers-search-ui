@@ -20,8 +20,10 @@ body {
 .custom-results-class {
   width: 48%;
   padding: 20px;
-  float: left;
+  display: inline-block;
+  vertical-align:top;
   box-sizing: border-box;
+  margin: 0 auto;
 }
 
 .custom-results-class .results-list {
