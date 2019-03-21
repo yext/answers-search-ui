@@ -15,5 +15,9 @@ export default class SearchComponent extends Component {
   static get TemplateName() {
     return 'search'
   }
+
+  static get type() {
+    return 'SearchComponent';
+  }
 }
 

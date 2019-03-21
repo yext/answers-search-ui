@@ -32,6 +32,10 @@ export default class ResultsComponent extends Component {
     }
   }
 
+  static get type() {
+    return 'ResultsComponent';
+  }
+
   static get TemplateName() {
     return 'results'
   }

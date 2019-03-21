@@ -103,13 +103,15 @@ function bundle() {
 }
 
 function minify(cb) {
-  return src('./dist/japi.min.js').pipe(uglify());
+  return src('./dist/japi.min.js')
+    .pipe(uglify())
+    .pipe(dest('dist'));
 }
 
 function watchJS(cb) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
-  }, bundle);
+  }, series(bundle, minify));
 }
 
 exports.default = exports.build = parallel(
@@ -118,5 +120,5 @@ exports.default = exports.build = parallel(
                                   );
 exports.dev = parallel(
                 series(precompileTemplates, bundleTemplates),
-                series(bundle, watchJS)
+                series(bundle, minify, watchJS)
               );

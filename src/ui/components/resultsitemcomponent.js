@@ -8,4 +8,8 @@ export default class ResultsItemComponent extends Component {
   static get TemplateName() {
     return 'results/resultsitem'
   }
+
+  static get type() {
+    return 'ResultsItemComponent';
+  }
 }

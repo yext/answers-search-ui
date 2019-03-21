@@ -100,7 +100,7 @@ export default class Component {
   }
 
   static get type() {
-    return this.name;
+    return 'Component';
   }
 
   static get TemplateName() {
