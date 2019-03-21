@@ -57,15 +57,15 @@ export default class Core {
 
 generatePeopleResults() {
   let names = ['Billy', 'Steve', 'Kevin', 'Max', 'Tom', 'Joe', 'Bob'],
-      professions = ['Front end person', 'Data Guy', 'Mastermind', 'Product Lover', 'El capitan', 'OOF', 'Lover of cake']
+      professions = ['Front-end ninja', 'Data Guy', 'Mastermind', 'Product Lover', 'El capitan', 'OOF', 'Lover of cake']
 
     let results = [];
     let numResults = Math.floor((Math.random() * 5) + 1);
-    for (let i = 1; i <= numResults; i ++) {
+    for (let i = 0; i < numResults; i ++) {
       results.push({
         name: names[i],
         profession: professions[i],
-        description: 'Too lazy to make #' + i,
+        description: 'Too lazy to make #' + (i+1),
       })
     }
 

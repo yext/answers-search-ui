@@ -5,6 +5,7 @@ body {
   margin: 0 auto;
 }
 
+
 .custom-search-class input {
   display: block;
   width: 100%;
@@ -12,8 +13,15 @@ body {
   margin: 10px 0;
 }
 
-.custom-results-class.second {
+.people-results-container {
   color: blue;
+}
+
+.custom-results-class {
+  width: 48%;
+  padding: 20px;
+  float: left;
+  box-sizing: border-box;
 }
 
 .custom-results-class .results-list {

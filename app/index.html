@@ -13,7 +13,7 @@
     <!-- results component will get injected here -->
   </div>
 
-  <div class="results-container people-results-container">
+  <div class="people-results-container">
     <!-- custom component will get injected here -->
   </div>
 
@@ -43,7 +43,7 @@
       .addComponent('PeopleResultsComponent', {
         container: '.people-results-container',
         class: 'custom-results-class',
-        limit: 2,
+        limit: 10,
       })
     }, 100);
   </script>
