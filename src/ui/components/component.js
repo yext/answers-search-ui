@@ -40,6 +40,11 @@ export default class Component {
     this._state = new State(opts.data || {});
 
     /**
+     * TODO(billy) This should be 'services'
+     */
+    this.core = opts.core || null;
+
+    /**
      * A local reference to the component manager, which contains all of the component classes
      * eligible to be created
      * @type {ComponentManager}
@@ -96,7 +101,7 @@ export default class Component {
      * The a local reference to the callback that will be invoked when a component is Mounted.
      * @type {function}
      */
-    this._onMount = opts.onMount || function () { };
+    this._onMount = opts.onMount || this._onMount || function () { };
   }
 
   static get type() {

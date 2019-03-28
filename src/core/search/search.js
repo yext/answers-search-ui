@@ -1,9 +1,36 @@
-import Network from '../network/network';
+import HttpRequester from '../network/httprequester';
 
 export default class Search {
-  constructor() {
-    this.network = new Network();
-    
-    console.log('this is the search module...')
+  constructor(opts = {}) {
+    let isLocal = true;
+
+    this.requester = new HttpRequester();
+
+    this._baseUrl = isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
+
+    this._version = opts.version || 20190301;
+
+    this._apiKey = opts.apiKey || '0ac3132c65069700209f094b6768fcea';
+
+    this._answersKey = opts.answersKey || 'abc123';
+
+    // http://localhost/v2/accounts/me/answers/query?v=20190301&api_key=0ac3132c65069700209f094b6768fcea&answersKey=abc123&input=panda
+  }
+
+  query(queryString) {
+    return this.requester
+      .get(this._baseUrl + '/v2/accounts/me/answers/query', this.data({
+        'input': queryString
+      }))
+      .then(response => response.json())
+      .catch(error => console.error(error))
+  }
+
+  data(opts) {
+    return Object.assign({
+      'v': this._version,
+      'api_key': this._apiKey,
+      'answersKey': this._answersKey
+    }, opts || {});
   }
 }

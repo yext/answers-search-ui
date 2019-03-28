@@ -20,7 +20,7 @@ export default class JAPI {
 
     // TODO(billy) the components and templates should be contained within a broader UI class.
     // The UI should be registered to JAPI via an interface so that it can be pulled in separately
-    this.components = COMPONENT_MANAGER.useStorage(this.core.storage);
+    this.components = COMPONENT_MANAGER.setCore(this.core);
 
     // Templates are currently downloaded separately from the CORE and UI bundle.
     // Future enhancement is to ship the components with templates in a separate bundle.

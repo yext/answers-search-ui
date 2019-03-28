@@ -43,3 +43,13 @@ body {
   border-top: 1px #ccc dashed;
 }
 
+.custom-results-class .event-performers {
+  margin: 5px 30px;
+}
+
+.custom-results-class .event-performers li {
+  padding: 5px;
+  margin: 0;
+  border: none;
+  list-style-type: disc;
+}

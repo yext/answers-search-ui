@@ -4,13 +4,13 @@ import Component from './component';
 import SearchComponent from './search/searchcomponent';
 import ResultsComponent from './results/resultscomponent';
 import ResultsItemComponent from './results/resultsitemcomponent';
-import PeopleResultsComponent from './results/peopleresultscomponent';
-import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
+import EventResultsComponent from './results/eventresultscomponent';
+import EventResultsItemComponent from './results/eventresultsitemcomponent';
 
 export const COMPONENT_MANAGER = new ComponentManager()
       .register(Component)
       .register(SearchComponent)
       .register(ResultsComponent)
       .register(ResultsItemComponent)
-      .register(PeopleResultsComponent)
-      .register(PeopleResultsItemComponent);
+      .register(EventResultsComponent)
+      .register(EventResultsItemComponent);

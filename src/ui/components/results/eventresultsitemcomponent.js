@@ -1,15 +1,15 @@
 import ResultsItemComponent from './resultsitemcomponent';
 
-export default class PeopleResultsItemComponent extends ResultsItemComponent {
+export default class EventResultsItemComponent extends ResultsItemComponent {
   constructor(opts = {}) {
     super(opts);
   }
 
   static get TemplateName() {
-    return 'results/peopleresultsitem'
+    return 'results/eventresultsitem'
   }
 
   static get type() {
-    return 'PeopleResultsItemComponent';
+    return 'EventResultsItemComponent';
   }
 }

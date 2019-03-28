@@ -5,7 +5,9 @@ export default class Core {
   constructor() {
     this.storage = new Storage();
 
-    this.searcher = new Search();
+    this.searcher = new Search({
+      storage: this.storage
+    });
 
     this.simulateDataInserts();
   }
@@ -13,9 +15,8 @@ export default class Core {
   search(queryString) {
     this.searcher
       .query(queryString)
-      .then((results) => {
-        // Handl errors here
-        this.storage.insert(results);
+      .then(data => {
+        this.storage.insert(data.response.modules);
       })
   }
 
@@ -26,33 +27,8 @@ export default class Core {
   simulateDataInserts() {
     // Initial state
     this.storage.insert({
-      1: this.generateResults(),
       2: this.generatePeopleResults()
     })
-
-    // Simulate data pushes
-    setInterval(() => {
-      this.storage.insert({
-        1: this.generateResults(),
-        2: this.generatePeopleResults()
-      })
-    }, 2000)
-  }
-
-  generateResults() {
-    let results = [];
-    let numResults = Math.floor((Math.random() * 5) + 1);
-    for (let i = 1; i <= numResults; i ++) {
-      results.push({
-        title: 'Result Item #' + i,
-        body: 'This is the result body for item #' + i
-      })
-    }
-
-    return {
-      totalResults: numResults,
-      results: results
-    }
   }
 
 generatePeopleResults() {

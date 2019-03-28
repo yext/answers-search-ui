@@ -12,6 +12,18 @@ export default class SearchComponent extends Component {
     });
   }
 
+  _onMount() {
+    let query = document.querySelector('.js-yext-query'),
+        submit = document.querySelector('form');
+
+    submit
+      .addEventListener('submit', (e) => {
+        e.preventDefault();
+        this.core.search(query.value);
+        return false;
+      })
+  }
+
   static get TemplateName() {
     return 'search/search'
   }

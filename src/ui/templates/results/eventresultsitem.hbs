@@ -1,0 +1,21 @@
+<li class="event-result-item">
+  <div class="event-result-item-info">
+    <b>Name:</b> {{name}}
+    <br>
+    {{#if organizerEmail}}
+    <b>Organizer:</b> {{organizerEmail}}<br>
+    {{/if}}
+    {{#if website}}
+    <b>Website:</b> {{website}}<br>
+    <br>
+    {{/if}}
+    {{#if performers}}
+    <b>Performers:</b><br>
+    <ul class="event-performers">
+    {{#each performers}}
+      <li>{{this}}</li>
+    {{/each}}
+    </ul>
+    {{/if}}
+  </div>
+</li>

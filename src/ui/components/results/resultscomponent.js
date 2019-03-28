@@ -27,7 +27,7 @@ export default class ResultsComponent extends Component {
     }
 
     return {
-      totalResults: numResults,
+      resultsCount: numResults,
       results: results
     }
   }
@@ -45,7 +45,7 @@ export default class ResultsComponent extends Component {
         count ++;
       }
       data = {
-        totalResults: count,
+        resultsCount: count,
         results: limitedResults
       }
     }

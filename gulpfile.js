@@ -120,5 +120,5 @@ exports.default = exports.build = parallel(
                                   );
 exports.dev = parallel(
                 series(precompileTemplates, bundleTemplates),
-                series(bundle, watchJS)
+                series(bundle, minify, watchJS)
               );

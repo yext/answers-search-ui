@@ -13,18 +13,16 @@
     <!-- results component will get injected here -->
   </div>
 
-  <div class="people-results-container">
+  <div class="event-results-container">
     <!-- custom component will get injected here -->
   </div>
-
-  <div class="custom-component-container">
-    <!-- custom component will get injected here -->
-  </div>
-
 
   <script src="../dist/japi.min.js"></script>
   <script>
-    let japi = JAPI.init()
+    let japi = JAPI.init({
+      key: '12598159fSAIJFoijsfsf',
+      experience: '15'
+    })
 
     // Simulate document -ready. Future us will have an onLoaded life cycle hook
     setTimeout(() => {
@@ -40,8 +38,8 @@
         limit: 5
       })
 
-      .addComponent('PeopleResultsComponent', {
-        container: '.people-results-container',
+      .addComponent('EventResultsComponent', {
+        container: '.event-results-container',
         class: 'custom-results-class',
         limit: 5,
       })

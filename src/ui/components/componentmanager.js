@@ -27,10 +27,15 @@ export default class ComponentManager {
     this._activeComponents = {};
 
     /**
-     * Storage is the source of truth for the state of all components.
-     * Whenever state in the storage changes, it pushes the state down to each of the relevant components.
+     * A local reference to the core library dependency
+     *
+     * The Core contains both the storage AND services that are needed for performing operations
+     * like search and auto complete.
+     *
+     * The storage is the source of truth for the state of ALL components.
+     * Whenever the storage is updated, the state gets pushed down to the necessary components.
      */
-    this._storage = null;
+    this._core = null;
   }
 
   static setInstance(instance) {
@@ -45,8 +50,8 @@ export default class ComponentManager {
     return this.instance;
   }
 
-  useStorage(storage) {
-    this._storage = storage;
+  setCore(core) {
+    this._core = core;
     return this;
   }
 
@@ -71,6 +76,7 @@ export default class ComponentManager {
     // because sometimes components have subcomponents that need to be
     // constructed during creation
     opts = Object.assign({
+      core: this._core,
       componentManager: this
     }, opts);
 
@@ -81,14 +87,14 @@ export default class ComponentManager {
     // If there is a local storage to power state, apply the state
     // from the storage to the component, and then bind the component
     // state to the storage via its updates
-    if (this._storage !== null) {
+    if (this._core.storage !== null) {
       if (component.moduleId === undefined || component.moduleId === null) {
         return component;
       }
 
-      component.setState(this._storage.getState(component.moduleId));
+      component.setState(this._core.storage.getState(component.moduleId));
 
-      this._storage.on('update', component.moduleId, (data) => {
+      this._core.storage.on('update', component.moduleId, (data) => {
         component.setState(data);
       })
     }

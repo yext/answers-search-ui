@@ -23,7 +23,7 @@ export default class ModuleData extends EventEmitter {
     let keys = Object.keys(data),
         len = keys.length,
         isDirty = false;
-    for (let i = 0; i < keys.length; i ++) {
+    for (let i = 0; i < len; i ++) {
       let prop = keys[i],
           val = data[keys[i]];
 
