@@ -32,13 +32,24 @@
         class: 'custom-search-class'
       })
 
+      // .addComponent('UniversalResultsComponent', {
+      //   container: 'here'
+      // })
+
+      // // .override('ResultsList', {
+      // //   configId: VERTICAL_CONFIG_ID -> EventResultsComponent
+      // //   template: '<my template>',
+      // // })
+
+
+
       .addComponent('ResultsComponent', {
         container: '.results-container',
         class: 'custom-results-class',
         limit: 5
       })
 
-      .addComponent('EventResultsComponent', {
+      .addComponent('ResultsComponent', {
         container: '.event-results-container',
         class: 'custom-results-class',
         limit: 5,

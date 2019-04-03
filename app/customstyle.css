@@ -53,3 +53,7 @@ body {
   border: none;
   list-style-type: disc;
 }
+
+.custom-search-class .js-yext-query-submit {
+  display: none;
+}
