@@ -1,6 +1,14 @@
-<section class="result-list">
-  <h3>Results ({{resultsCount}}): {{verticalConfigId}}</h3>
-  <ul class="result-items"
+<section class="yext-result-list">
+  <h1>{{verticalConfigId}}</h1>
+  <ul class="yext-filters-applied">
+    {{#each appliedQueryFilters}}
+      <li class="yext-filter">
+        <span class="yext-filter-key">{{key}}:</span>
+        <span class="yext-filter-value"> {{value}}</span>
+      </li>
+    {{/each}}
+  </ul>
+  <ul class="yext-result-items"
       data-component="ResultsItemComponent"
       data-prop="results">
   </ul>

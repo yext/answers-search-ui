@@ -5,7 +5,6 @@ body {
   margin: 0 auto;
 }
 
-
 .custom-search-class input {
   display: block;
   width: 100%;
@@ -13,49 +12,25 @@ body {
   margin: 10px 0;
 }
 
-.people-results-container {
-  color: blue;
+.custom-search-class .js-yext-query-submit {
+  display: none;
 }
 
-.custom-results-class {
-  width: 48%;
-  padding: 20px;
-  display: inline-block;
-  vertical-align:top;
-  box-sizing: border-box;
-  margin: 0 auto;
-}
-
-.custom-results-class .results-list {
+.yext-result-list {
+  border: 1px #ccc solid;
+  border-radius: 10px;
+  margin: 15px 0;
   padding: 10px;
-  flex: 0 0 100%;
 }
 
-.custom-results-class ul {
+.yext-result-list h1 {
+  margin: 0;
+}
+
+.yext-result-list ul {
   list-style-type: none;
   margin: 0;
   padding: 0;
-}
-
-.custom-results-class ul li {
-  margin: 20px 0;
-  padding: 20px 0 0;
-  border-top: 1px #ccc dashed;
-}
-
-.custom-results-class .event-performers {
-  margin: 5px 30px;
-}
-
-.custom-results-class .event-performers li {
-  padding: 5px;
-  margin: 0;
-  border: none;
-  list-style-type: disc;
-}
-
-.custom-search-class .js-yext-query-submit {
-  display: none;
 }
 
 .result-items {
@@ -64,8 +39,57 @@ body {
   padding: 0;
 }
 
-.result-items li {
-  margin: 20px 0;
-  padding: 20px 0 0;
-  border-top: 1px #ccc dashed;
+.yext-result-list li {
+  margin: 10px 0;
+  padding: 10px 0;
+  border-top: 1px #ccc solid;
+}
+
+.yext-result-list .yext-filters-applied {
+  margin: 10px 0;
+}
+
+.yext-filters-applied li {
+  font-size: 11px;
+  display: inline-block;
+  background-color: #ccc;
+  border-radius: 10px;
+  padding: 8px;
+  margin: 0;
+  margin-right: 5px;
+}
+
+.yext-filter-key {
+
+}
+
+.yext-filter-value {
+  font-weight: bold;
+}
+
+.yext-location-name {
+  margin: 0;
+}
+
+.yext-event-result-item h3 {
+  margin: 5px 0;
+}
+
+.yext-event-result-item h4 {
+  margin: 10px 0;
+}
+.yext-event-photo-container li {
+  display: inline-block;
+  border: none;
+  padding: 0;
+}
+
+.yext-event-performer-container .yext-event-performer {
+  border: 0;
+  display: inline-block;
+  padding: 10px;
+  font-weight: bold;
+  background-color: #97c6f1;
+  border-radius: 5px;
+  margin: 0 5px 0 0;
 }

@@ -1,7 +1,14 @@
-<li class="location-result-item">
-  <div class="location-result-item-info">
-    <b>Location Name:</b> {{name}}
-    <br>
-    <b>Description:</b> {{description}}
+<li class="yext-location-result-item">
+  <div class="yext-location-result-item-info">
+    <h3 class="yext-location-name">{{name}}</h3>
+
+    <div class="yext-location-info">
+      <span class="yext-address">
+        {{address.line1}}, {{address.city}}, {{address.region}}, {{address.postalCode}}
+      </span>
+      <div>
+        <span class="yext-phone">Phone: {{mainPhone}}</span>
+      </div>
+    </div>
   </div>
 </li>

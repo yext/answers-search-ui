@@ -13,11 +13,11 @@ export default class ResultsComponent extends Component {
   constructor(opts = {}) {
     super(opts);
 
-    this._limit = opts.limit || 5;
-
     this._templateName = 'results/results';
 
     this.verticalSearchKey = opts.verticalSearchKey || null;
+
+    this.limit = opts.limit || 5;
   }
 
   static get type() {
