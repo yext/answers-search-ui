@@ -81,7 +81,16 @@ export default class ComponentManager {
     }, opts);
 
     // Instantiate our new component and keep track of it
-    let component = new this._componentRegistry[componentType](opts);
+    let component =
+      new this._componentRegistry[componentType](opts)
+        .init();
+
+    // Only set the state of top level components, since data
+    // trickeles through the parent downward
+    if (component._parent === null) {
+      component.setState(opts.data || {});
+    }
+
     this._activeComponents[componentType] = component;
 
     // If there is a local storage to power state, apply the state

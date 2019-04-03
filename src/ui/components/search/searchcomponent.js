@@ -4,14 +4,11 @@ export default class SearchComponent extends Component {
   constructor(opts = {}) {
     super(opts)
 
-    // this.moduleId = 2;
-
     this._templateName = 'search/search';
 
-    this.setState({
-      title: 'Crazy Answers Searcher',
-      searchText: 'What are you interested in?'
-    });
+    this.title = opts.title || 'Crazy Answers Searcher';
+
+    this.searchText = opts.title || 'What are you interested in?';
   }
 
   _onMount() {
@@ -24,6 +21,13 @@ export default class SearchComponent extends Component {
         this.core.search(query.value);
         return false;
       })
+  }
+
+  setState(data) {
+    return super.setState(Object.assign({
+      title: this.title,
+      searchText: this.searchText
+    }, data))
   }
 
   static get type() {

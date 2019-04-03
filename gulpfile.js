@@ -111,7 +111,7 @@ function minify(cb) {
 function watchJS(cb) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
-  }, series(bundle, minify));
+  }, series(bundle));
 }
 
 exports.default = exports.build = parallel(
@@ -120,5 +120,5 @@ exports.default = exports.build = parallel(
                                   );
 exports.dev = parallel(
                 series(precompileTemplates, bundleTemplates),
-                series(bundle, minify, watchJS)
+                series(bundle, watchJS)
               );

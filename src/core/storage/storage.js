@@ -15,7 +15,6 @@ export default class Storage {
     let moduleIds = Object.keys(data);
     for (let i = 0; i < moduleIds.length; i ++) {
       let moduleId = moduleIds[i];
-      console.log(data[moduleId]);
       if (this._moduleDataContainer[moduleId] === undefined) {
         this._moduleDataContainer[moduleId] = new ModuleData(moduleId);
         this._applyFutureListeners(moduleId);

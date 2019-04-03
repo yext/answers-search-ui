@@ -13,20 +13,15 @@ export default class ResultsComponent extends Component {
   constructor(opts = {}) {
     super(opts);
 
-    this.verticalSearchKey = opts.verticalSearchKey || null;
+    this._limit = opts.limit || 5;
 
     this._templateName = 'results/results';
 
-    this._limit = opts.limit || 10;
+    this.verticalSearchKey = opts.verticalSearchKey || null;
   }
 
   static get type() {
     return 'ResultsComponent';
-  }
-
-  init() {
-    super.init();
-    return this;
   }
 
   addChild(data, type) {
@@ -59,9 +54,10 @@ export default class ResultsComponent extends Component {
       }
       data = {
         resultsCount: count,
-        results: limitedResults
+        results: limitedResults,
+        verticalConfigId: data.verticalConfigId
       }
     }
-    super.setState(data);
+    return super.setState(data);
   }
 }

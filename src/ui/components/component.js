@@ -12,7 +12,7 @@ export default class Component {
       type = opts.type;
     }
 
-    this.moduleId = opts.moduleId || null;
+    this.moduleId = null;
 
     /**
      * An identifier used to classify the type of component.
@@ -37,7 +37,7 @@ export default class Component {
      * The state (data) of the component to be provided to the template for rendering
      * @type {object}
      */
-    this._state = new State(opts.data || {});
+    this._state = new State();
 
     /**
      * TODO(billy) This should be 'services'
@@ -116,6 +116,7 @@ export default class Component {
   setState(data) {
     this._state.set(data);
     this.mount();
+    return this;
   }
 
 
@@ -146,6 +147,10 @@ export default class Component {
   }
 
   mount() {
+    if (!this._container) {
+      return this;
+    }
+
     DOM.empty(this._container);
     DOM.append(this._container, this.render(this._state.asJSON()));
 
@@ -185,7 +190,7 @@ export default class Component {
         let childHTML = [];
         for (let i = 0; i < childData.length; i ++) {
           let childComponent = this.addChild(childData[i], type);
-          childHTML.push(childComponent.render());
+          childHTML.push(childComponent.render(childData[i]));
         }
 
         DOM.append(domComponent, childHTML.join(''));
