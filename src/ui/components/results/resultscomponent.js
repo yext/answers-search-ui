@@ -13,15 +13,11 @@ export default class ResultsComponent extends Component {
   constructor(opts = {}) {
     super(opts);
 
-    this.moduleId = 1;
+    this.verticalSearchKey = opts.verticalSearchKey || null;
 
     this._templateName = 'results/results';
 
-    this.verticalSearchKey = opts.verticalSearchKey || null;
-
     this._limit = opts.limit || 10;
-
-    this.setState(ResultsComponent.generateData(this._limit));
   }
 
   static get type() {
@@ -47,21 +43,6 @@ export default class ResultsComponent extends Component {
     }
 
     return super.addChild(data, type);
-  }
-
-  static generateData(numResults) {
-    let results = [];
-    for (let i = 1; i <= numResults; i ++) {
-      results.push({
-        title: 'Result Item #' + i,
-        body: 'This is the result body for item #' + i
-      })
-    }
-
-    return {
-      resultsCount: numResults,
-      results: results
-    }
   }
 
   setState(data) {

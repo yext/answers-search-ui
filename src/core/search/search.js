@@ -4,7 +4,7 @@ export default class Search {
   constructor(opts = {}) {
     let isLocal = true;
 
-    this.requester = new HttpRequester();
+    this._requester = new HttpRequester();
 
     this._baseUrl = isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
 
@@ -18,11 +18,12 @@ export default class Search {
   }
 
   query(queryString) {
-    return this.requester
+    return this._requester
       .get(this._baseUrl + '/v2/accounts/me/answers/query', this.data({
         'input': queryString
       }))
       .then(response => response.json())
+      .then(response => DataTransformer.transform(response))
       .catch(error => console.error(error))
   }
 
@@ -32,5 +33,18 @@ export default class Search {
       'api_key': this._apiKey,
       'answersKey': this._answersKey
     }, opts || {});
+  }
+}
+
+// Create our own front-end data models
+class DataTransformer {
+  static transform(data) {
+    let sections = data.response.modules;
+
+    return {
+      universalResults: {
+        sections: sections
+      }
+    };
   }
 }
