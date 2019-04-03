@@ -3,6 +3,12 @@ import LocationResultsItemComponent from './locationresultsitemcomponent';
 import EventResultsItemComponent from './eventresultsitemcomponent';
 import PeopleResultsItemComponent from './peopleresultsitemcomponent';
 
+const ResultType = {
+  EVENT: 'event',
+  LOCATION: 'location',
+  PEOPLE: 'people'
+};
+
 export default class ResultsComponent extends Component {
   constructor(opts = {}) {
     super(opts);
@@ -10,6 +16,8 @@ export default class ResultsComponent extends Component {
     this.moduleId = 1;
 
     this._templateName = 'results/results';
+
+    this.verticalSearchKey = opts.verticalSearchKey || null;
 
     this._limit = opts.limit || 10;
 
@@ -20,10 +28,6 @@ export default class ResultsComponent extends Component {
     return 'ResultsComponent';
   }
 
-  static get TemplateName() {
-    return 'results/results'
-  }
-
   init() {
     super.init();
     return this;
@@ -31,13 +35,13 @@ export default class ResultsComponent extends Component {
 
   addChild(data, type) {
     switch (data.type) {
-      case 'event':
+      case ResultType.EVENT:
         type = EventResultsItemComponent.type;
         break;
-      case 'location':
+      case ResultType.LOCATION:
         type = LocationResultsItemComponent.type;
         break;
-      case 'people':
+      case ResultType.PEOPLE:
         type = PeopleResultsItemComponent.type;
         break;
     }
