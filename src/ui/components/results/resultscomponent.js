@@ -1,5 +1,7 @@
 import Component from '../component';
-import ResultsItemComponent from './resultsitemcomponent';
+import LocationResultsItemComponent from './locationresultsitemcomponent';
+import EventResultsItemComponent from './eventresultsitemcomponent';
+import PeopleResultsItemComponent from './peopleresultsitemcomponent';
 
 export default class ResultsComponent extends Component {
   constructor(opts = {}) {
@@ -7,14 +9,40 @@ export default class ResultsComponent extends Component {
 
     this.moduleId = 1;
 
+    this._templateName = 'results/results';
+
     this._limit = opts.limit || 10;
 
     this.setState(ResultsComponent.generateData(this._limit));
   }
 
+  static get type() {
+    return 'ResultsComponent';
+  }
+
+  static get TemplateName() {
+    return 'results/results'
+  }
+
   init() {
     super.init();
     return this;
+  }
+
+  addChild(data, type) {
+    switch (data.type) {
+      case 'event':
+        type = EventResultsItemComponent.type;
+        break;
+      case 'location':
+        type = LocationResultsItemComponent.type;
+        break;
+      case 'people':
+        type = PeopleResultsItemComponent.type;
+        break;
+    }
+
+    return super.addChild(data, type);
   }
 
   static generateData(numResults) {
@@ -50,13 +78,5 @@ export default class ResultsComponent extends Component {
       }
     }
     super.setState(data);
-  }
-
-  static get type() {
-    return 'ResultsComponent';
-  }
-
-  static get TemplateName() {
-    return 'results/results'
   }
 }

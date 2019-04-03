@@ -6,6 +6,8 @@ export default class SearchComponent extends Component {
 
     // this.moduleId = 2;
 
+    this._templateName = 'search/search';
+
     this.setState({
       title: 'Crazy Answers Searcher',
       searchText: 'What are you interested in?'
@@ -22,10 +24,6 @@ export default class SearchComponent extends Component {
         this.core.search(query.value);
         return false;
       })
-  }
-
-  static get TemplateName() {
-    return 'search/search'
   }
 
   static get type() {

@@ -83,7 +83,7 @@ export default class Component {
      * This is only used if _template is empty.
      * @type {string}
      */
-    this._templateName = opts.templateName || this.constructor.TemplateName;
+    this._templateName = opts.templateName || 'default';
 
     /**
      * A local reference to the {Renderer} that will be used for rendering the template
@@ -106,10 +106,6 @@ export default class Component {
 
   static get type() {
     return 'Component';
-  }
-
-  static get TemplateName() {
-    return 'default';
   }
 
   init() {
