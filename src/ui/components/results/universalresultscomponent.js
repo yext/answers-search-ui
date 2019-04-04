@@ -21,7 +21,6 @@ export default class UniversalResultsComponent extends Component {
   }
 
   addChild(data, type) {
-    console.log(data, type);
     return super.addChild(data, type);
   }
 }
