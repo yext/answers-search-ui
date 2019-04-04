@@ -7,10 +7,16 @@ export default class Core {
       throw new Error('Missing required `apiKey`. Type must be {string}');
     }
 
+    if (typeof opts.answersKey !== 'string') {
+      throw new Error('Missing required `answersKey`. Type must be {string}');
+    }
+
+
     this.storage = new Storage();
 
     this.searcher = new Search({
-      apiKey: opts.apiKey
+      apiKey: opts.apiKey,
+      answersKey: opts.answersKey
     });
   }
 

@@ -12,7 +12,7 @@ export default class Search {
 
     this._apiKey = opts.apiKey || null;
 
-    this._answersKey = opts.answersKey || 'abc123';
+    this._answersKey = opts.answersKey || null;
 
     // http://localhost/v2/accounts/me/answers/query?v=20190301&api_key=0ac3132c65069700209f094b6768fcea&answersKey=abc123&input=panda
   }

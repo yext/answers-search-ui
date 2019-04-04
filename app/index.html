@@ -17,15 +17,14 @@
   <script>
     JAPI.init({
       apiKey: '0ac3132c65069700209f094b6768fcea',
+      answersKey: 'abc123',
       onReady: function() {
         this.addComponent('SearchComponent', {
           container: '.search-container',
           class: 'custom-search-class'
         })
 
-        this.addComponent('UniversalResultsComponent', {
-          container: '.results-container'
-        })
+        this.addComponent('UniversalResultsComponent', '.results-container');
       }
     });
   </script>

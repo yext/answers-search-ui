@@ -23,7 +23,7 @@ export default class JAPI {
       COMPONENT_MANAGER
         .setCore(new Core({
           apiKey: opts.apiKey,
-          experience: opts.experience
+          answersKey: opts.answersKey
         }))
         .setRenderer(new Renderers.Handlebars(templates));
 
