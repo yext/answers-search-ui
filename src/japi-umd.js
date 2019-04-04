@@ -27,7 +27,7 @@ export default class JAPI {
         }))
         .setRenderer(new Renderers.Handlebars(templates));
 
-        this._onReady.call(this);
+      this._onReady.call(this);
     });
 
     this._onReady = opts.onReady || function() {};
@@ -44,7 +44,7 @@ export default class JAPI {
   }
 
   static getInstance(opts) {
-    return this.instance;
+    return this.instance;git
   }
 
   static get templates() {
@@ -62,6 +62,12 @@ export default class JAPI {
 
   addComponent(type, opts) {
     console.log('Adding Standard Component...');
+    if (typeof opts === 'string') {
+      opts = {
+        container: opts
+      }
+    }
+
     this.components.create(type, opts).init().mount();
     return this;
   }
