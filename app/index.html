@@ -16,33 +16,19 @@
   <script src="../dist/japi.min.js"></script>
   <script>
     let japi = JAPI.init({
-      key: '12598159fSAIJFoijsfsf',
-      experience: '15'
-    })
+        key: '12598159fSAIJFoijsfsf',
+        experience: '15',
+        onReady: () => {
+          japi.addComponent('SearchComponent', {
+            container: '.search-container',
+            class: 'custom-search-class'
+          })
 
-    // Simulate document -ready. Future us will have an onLoaded life cycle hook
-    setTimeout(() => {
-      japi
-      .addComponent('SearchComponent', {
-        container: '.search-container',
-        class: 'custom-search-class'
-      })
-
-      .addComponent('UniversalResultsComponent', {
-        container: '.results-container'
-      })
-
-      // // .override('ResultsList', {
-      // //   configId: VERTICAL_CONFIG_ID -> EventResultsComponent
-      // //   template: '<my template>',
-      // // })
-
-      // .addComponent('ResultsComponent', {
-      //   container: '.event-results-container',
-      //   class: 'custom-results-class',
-      //   limit: 5,
-      // })
-    }, 100);
+          japi.addComponent('UniversalResultsComponent', {
+            container: '.results-container'
+          })
+        }
+      });
   </script>
 </body>
 </html>

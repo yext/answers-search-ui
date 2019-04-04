@@ -34,8 +34,15 @@ export default class ComponentManager {
      *
      * The storage is the source of truth for the state of ALL components.
      * Whenever the storage is updated, the state gets pushed down to the necessary components.
+     * @type {Core}
      */
     this._core = null;
+
+    /**
+     * The primary renderer to use for all components
+     * @type {HandlebarsRenderer}
+     */
+    this._renderer = null;
   }
 
   static setInstance(instance) {
@@ -48,6 +55,11 @@ export default class ComponentManager {
 
   static getInstance() {
     return this.instance;
+  }
+
+  setRenderer(renderer) {
+    this._renderer = renderer;
+    return this;
   }
 
   setCore(core) {
@@ -77,7 +89,8 @@ export default class ComponentManager {
     // constructed during creation
     opts = Object.assign({
       core: this._core,
-      componentManager: this
+      renderer: this._renderer,
+      componentManager: this,
     }, opts);
 
     // Instantiate our new component and keep track of it

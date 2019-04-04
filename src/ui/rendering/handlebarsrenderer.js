@@ -2,23 +2,12 @@ import Renderer from './renderer';
 import TemplateLoader from './templateloader';
 
 export default class HandlebarsRenderer extends Renderer {
-  constructor() {
+  constructor(templates, opts = {}) {
     super();
 
-    this._handlebars = null;
+    this._handlebars = templates._hb || null;
 
-    this._loader = new TemplateLoader();
-
-    this._templates = {};
-
-    this.setup();
-  }
-
-  setup() {
-    this._loader.onLoaded((templates) => {
-      this._handlebars = templates._hb;
-      this._templates = templates;
-    })
+    this._templates = templates || {};
   }
 
   render(config, data) {

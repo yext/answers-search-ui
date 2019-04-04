@@ -1,7 +1,8 @@
 import Core from './core/core';
 import {
   TemplateLoader,
-  COMPONENT_MANAGER
+  COMPONENT_MANAGER,
+  Renderers
 } from './ui/index';
 
 /**
@@ -9,22 +10,27 @@ import {
  * @type {JAPI} The instance of JAPI
  */
 export default class JAPI {
-  constructor(opts) {
+  constructor(opts = {}) {
     if (!JAPI.setInstance(this)) {
       return JAPI.getInstance();
     }
 
-    opts = opts || {};
-
-    this.core = new Core();
-
-    // TODO(billy) the components and templates should be contained within a broader UI class.
-    // The UI should be registered to JAPI via an interface so that it can be pulled in separately
-    this.components = COMPONENT_MANAGER.setCore(this.core);
+    this.components = COMPONENT_MANAGER;
 
     // Templates are currently downloaded separately from the CORE and UI bundle.
     // Future enhancement is to ship the components with templates in a separate bundle.
-    this.templates = new TemplateLoader();
+    this.templates = new TemplateLoader().onLoaded((templates) => {
+      COMPONENT_MANAGER
+        .setCore(new Core({
+          key: opts.key,
+          experience: opts.experience
+        }))
+        .setRenderer(new Renderers.Handlebars(templates));
+
+        this._onReady.call(this);
+    });
+
+    this._onReady = opts.onReady || function() {};
 
     return this;
   }
@@ -47,6 +53,11 @@ export default class JAPI {
 
   static init(opts) {
     return new JAPI(opts);
+  }
+
+  onReady(cb) {
+    this._onReady = cb;
+    return this;
   }
 
   addComponent(type, opts) {
