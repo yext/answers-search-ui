@@ -15,20 +15,19 @@
 
   <script src="../dist/japi.min.js"></script>
   <script>
-    let japi = JAPI.init({
-        key: '12598159fSAIJFoijsfsf',
-        experience: '15',
-        onReady: () => {
-          japi.addComponent('SearchComponent', {
-            container: '.search-container',
-            class: 'custom-search-class'
-          })
+    JAPI.init({
+      apiKey: '0ac3132c65069700209f094b6768fcea',
+      onReady: function() {
+        this.addComponent('SearchComponent', {
+          container: '.search-container',
+          class: 'custom-search-class'
+        })
 
-          japi.addComponent('UniversalResultsComponent', {
-            container: '.results-container'
-          })
-        }
-      });
+        this.addComponent('UniversalResultsComponent', {
+          container: '.results-container'
+        })
+      }
+    });
   </script>
 </body>
 </html>

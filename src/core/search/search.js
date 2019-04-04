@@ -10,7 +10,7 @@ export default class Search {
 
     this._version = opts.version || 20190301;
 
-    this._apiKey = opts.apiKey || '0ac3132c65069700209f094b6768fcea';
+    this._apiKey = opts.apiKey || null;
 
     this._answersKey = opts.answersKey || 'abc123';
 

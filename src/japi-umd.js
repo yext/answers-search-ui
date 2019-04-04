@@ -22,7 +22,7 @@ export default class JAPI {
     this.templates = new TemplateLoader().onLoaded((templates) => {
       COMPONENT_MANAGER
         .setCore(new Core({
-          key: opts.key,
+          apiKey: opts.apiKey,
           experience: opts.experience
         }))
         .setRenderer(new Renderers.Handlebars(templates));
