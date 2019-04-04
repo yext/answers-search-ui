@@ -10,8 +10,7 @@ export default class Core {
     this.storage = new Storage();
 
     this.searcher = new Search({
-      apiKey: opts.apiKey,
-      storage: this.storage
+      apiKey: opts.apiKey
     });
   }
 
