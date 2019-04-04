@@ -1,4 +1,4 @@
-import HttpRequester from '../network/httprequester';
+import HttpRequester from '../http/httprequester';
 
 export default class Search {
   constructor(opts = {}) {
