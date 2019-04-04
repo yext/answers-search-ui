@@ -24,7 +24,9 @@
           class: 'custom-search-class'
         })
 
-        this.addComponent('UniversalResultsComponent', '.results-container');
+        this.addComponent('UniversalResultsComponent', {
+          container: '.results-container'
+        });
       }
     });
   </script>

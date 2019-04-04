@@ -55,6 +55,10 @@ export default class Component {
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
      * @type {HTMLElement}
      */
+    if (typeof opts.container !== 'string') {
+      throw new Error('Missing container for component configuration. Must be of type `string`.');
+    }
+
     if (this._parent === null) {
       this._container = DOM.query(opts.container) || null;
     } else {
@@ -62,7 +66,7 @@ export default class Component {
     }
 
     if (this._container === null) {
-      throw new Error('Cannot find container DOM node: ' + opts.container);
+      throw new Error('Cannot find container DOM node: ' + this._container);
     }
 
     /**
