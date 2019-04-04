@@ -55,18 +55,17 @@ export default class Component {
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
      * @type {HTMLElement}
      */
-    if (typeof opts.container !== 'string') {
-      throw new Error('Missing container for component configuration. Must be of type `string`.');
-    }
-
     if (this._parent === null) {
+      if (typeof opts.container !== 'string') {
+        throw new Error('Missing `container` option for component configuration. Must be of type `string`.');
+      }
       this._container = DOM.query(opts.container) || null;
     } else {
       this._container = DOM.query(this._parent._container, opts.container);
     }
 
     if (this._container === null) {
-      throw new Error('Cannot find container DOM node: ' + this._container);
+      throw new Error('Cannot find container DOM node: ' + opts.container);
     }
 
     /**
