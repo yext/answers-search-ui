@@ -1,4 +1,4 @@
-import EventEmitter from './eventemitter';
+import EventEmitter from '../eventemitter/eventemitter';
 
 export default class ModuleData extends EventEmitter {
   constructor(id, data = {}) {

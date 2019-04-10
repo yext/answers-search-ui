@@ -104,7 +104,13 @@ export default class Component {
      * The a local reference to the callback that will be invoked when a component is Mounted.
      * @type {function}
      */
-    this._onMount = opts.onMount || this._onMount || function () { };
+    this.onMount = opts.onMount || this.onMount || function () { };
+
+    /**
+     * The a local reference to the callback that will be invoked when a components state is updated.
+     * @type {function}
+     */
+    this.onUpdate = opts.onUpdate || this.onUpdate || function () { };
   }
 
   static get type() {
@@ -112,16 +118,19 @@ export default class Component {
   }
 
   init() {
+    this._state.on('update', () => {
+      this.onUpdate();
+      this.mount();
+    });
+
     DOM.addClass(this._container, this._className);
     return this;
   }
 
   setState(data) {
     this._state.set(data);
-    this.mount();
     return this;
   }
-
 
   addChild(data, type) {
     let childComponent = this._componentManager.create(type, {
@@ -158,7 +167,7 @@ export default class Component {
     DOM.append(this._container, this.render(this._state.asJSON()));
 
     this._isMounted = true;
-    this._onMount(this);
+    this.onMount(this);
     return this;
   }
 
