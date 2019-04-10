@@ -1,5 +1,11 @@
 <li class="result-item">
   <div class="result-item-info">
-    <b>Name:</b> {{name}}
+    {{#if name}}<b>Name:</b> {{name}}{{/if}}
+
+    {{#if htmlTitle}}
+      <a href="{{{link}}}">{{{htmlTitle}}}</a> - {{{htmlSnippet}}}
+      <br>
+      {{displayLink}}
+    {{/if}}
   </div>
 </li>

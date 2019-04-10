@@ -8,7 +8,7 @@ export default class Search {
 
     this._baseUrl = isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
 
-    this._version = opts.version || 20190301;
+    this._version = opts.version || 20190101 || 20190301;
 
     this._apiKey = opts.apiKey || null;
 
@@ -43,9 +43,19 @@ class DataTransformer {
 
     return {
       universalResults: {
-        sections: sections
+        sections: DataTransformer.sort(sections)
       }
     };
+  }
+
+  static sort(sections) {
+    let s = sections
+      .filter(section => section.resultsCount > 0 && (section.verticalConfigId === 'cap1GoogleCse' || section.appliedQueryFilters.length > 0))
+      .sort((a, b) => {
+        a.appliedQueryFilters.length - b.appliedQueryFilters.length
+      })
+
+    return s;
   }
 }
 
