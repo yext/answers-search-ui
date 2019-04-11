@@ -121,7 +121,7 @@ export default class DOM {
     let target = event.target;
       while (!target.isEqualNode(el)) {
         if (target.matches(selector)) {
-          handler(event);
+          handler(event, target);
           break;
         }
         target = target.parentNode;

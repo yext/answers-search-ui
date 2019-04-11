@@ -32,12 +32,15 @@ export default class AutoCompleteComponent extends Component {
 
     DOM.on(query, 'keyup', () => {
       this.query = query.value;
+      if (this.query.length === 0) {
+        this.close();
+        return;
+      }
       this.core.autoComplete(query.value, this._barKey);
     })
 
-    DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (event) => {
-      let target = event.target,
-          data = target.dataset,
+    DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
+      let data = target.dataset,
           val = data.value,
           filter = JSON.parse(data.filter);
 
