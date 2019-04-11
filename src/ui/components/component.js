@@ -49,7 +49,7 @@ export default class Component {
      * eligible to be created
      * @type {ComponentManager}
      */
-    this._componentManager = opts.componentManager || null;
+    this.componentManager = opts.componentManager || null;
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
@@ -118,6 +118,7 @@ export default class Component {
   }
 
   init() {
+    this.onCreate()
     this._state.on('update', () => {
       this.onUpdate();
       this.mount();
@@ -133,7 +134,7 @@ export default class Component {
   }
 
   addChild(data, type) {
-    let childComponent = this._componentManager.create(type, {
+    let childComponent = this.componentManager.create(type, {
       parent: this,
       data: data
     });
@@ -176,6 +177,7 @@ export default class Component {
    * @returns {string}
    */
   render(data) {
+    this.beforeRender();
     data = data || this._state.get();
 
     // Render the existing templates as a string
@@ -193,7 +195,7 @@ export default class Component {
     // TODO(billy) This should probably return a collection of components
     this._children = [];
     let domComponent = DOM.query(el, '[data-component]');
-    if (domComponent !== undefined) {
+    if (domComponent !== undefined && domComponent !== null) {
       let type = domComponent.dataset.component,
           prop = domComponent.dataset.prop;
 
@@ -209,6 +211,7 @@ export default class Component {
       }
     }
 
+    this.afterRender();
     return el.innerHTML;
   }
 
@@ -229,10 +232,18 @@ export default class Component {
   }
 
   /**
-   * onRendered event is triggered when the component is rendered
+   * beforeRender event is triggered before the component is rendered
    * @param {function} the callback to invoke upon emit
    */
-  onRendered(cb) {
+  beforeRender(cb) {
+
+  }
+
+  /**
+   * afterRender event is triggered after the component is rendered
+   * @param {function} the callback to invoke upon emit
+   */
+  afterRender(cb) {
 
   }
 

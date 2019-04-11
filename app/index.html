@@ -9,6 +9,10 @@
     <!-- search component will get injected here -->
   </div>
 
+  <div class="search-container2">
+    <!-- search component will get injected here -->
+  </div>
+
   <div class="results-container">
     <!-- results component will get injected here -->
   </div>
@@ -25,11 +29,22 @@
 
     JAPI.init({
       apiKey: '429baa6106459e64ed03056e36323f17',
-      answersKey: 'finDemo',
+      answersKey: 'nathan_singlebar_test',
       onReady: function() {
         this.addComponent('SearchComponent', {
           container: '.search-container',
-          class: 'custom-search-class'
+          class: 'custom-search-class',
+          barKey: 'testBar',
+          title: 'Healthcare Professional',
+          searchText: 'What is your problem?'
+        })
+
+        this.addComponent('SearchComponent', {
+          container: '.search-container2',
+          class: 'custom-search-class',
+          barKey: 'doctor_location',
+          title: ' ',
+          searchText: 'location?'
         })
 
         this.addComponent('UniversalResultsComponent', {

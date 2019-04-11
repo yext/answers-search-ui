@@ -30,8 +30,31 @@ export default class DOM {
       return selector;
     }
 
-    return parent.querySelectorAll(selector)[0];
+    return parent.querySelector(selector);
   }
+
+  /**
+   * query the DOM for a given css selector
+   * @param {HTMLElement} parent Optional context to use for a search. Defaults to document if not provided.
+   * @param {string} selector the CSS selector to query for
+   *
+   * @returns {HTMLElement} the FIRST node it finds, if any
+   */
+  static queryAll(parent, selector) {
+    // Facade, shifting the selector to the parent argument if only one
+    // argument is provided
+    if (selector === undefined) {
+      selector = parent;
+      parent = document;
+    }
+
+    if (selector instanceof HTMLElement) {
+      return selector;
+    }
+
+    return parent.querySelectorAll(selector);
+  }
+
 
   /**
    * createEle will create a {HTMLElement} and apply the properties attributes through an object provided.
@@ -78,5 +101,31 @@ export default class DOM {
 
   static empty(parent) {
     parent.innerHTML = '';
+  }
+
+  static attr(selector, attr, val) {
+    DOM.query(selector).setAttribute(attr, val);
+  }
+
+  static on(selector, evt, handler) {
+    DOM.query(selector).addEventListener(evt, handler);
+  }
+
+  static off(selector, evt, handler) {
+    DOM.query(selector).removeEventListener(evt, handler);
+  }
+
+  static delegate(ctxt, selector, evt, handler) {
+    let el = DOM.query(ctxt);
+    el.addEventListener(evt, function(event) {
+    let target = event.target;
+      while (!target.isEqualNode(el)) {
+        if (target.matches(selector)) {
+          handler(event);
+          break;
+        }
+        target = target.parentNode;
+      }
+    })
   }
 }

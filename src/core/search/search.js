@@ -49,6 +49,10 @@ class DataTransformer {
   }
 
   static sort(sections) {
+    if (!sections) {
+      return sections;
+    }
+
     let s = sections
       .filter(section => section.resultsCount > 0 && (section.verticalConfigId === 'cap1GoogleCse' || section.appliedQueryFilters.length > 0))
       .sort((a, b) => {

@@ -1,4 +1,6 @@
 import Search from './search/search';
+import AutoComplete from './search/autocomplete';
+
 import Storage from './storage/storage'
 
 export default class Core {
@@ -11,18 +13,34 @@ export default class Core {
       throw new Error('Missing required `answersKey`. Type must be {string}');
     }
 
+    this._apiKey = opts.apiKey;
+
+    this._answersKey = opts.answersKey;
 
     this.storage = new Storage();
 
-    this.searcher = new Search({
-      apiKey: opts.apiKey,
-      answersKey: opts.answersKey
+    this._searcher = new Search({
+      apiKey: this._apiKey,
+      answersKey: this._answersKey
+    });
+
+    this._autoComplete = new AutoComplete({
+      apiKey: this._apiKey,
+      answersKey: this._answersKey
     });
   }
 
   search(queryString) {
-    this.searcher
+    return this._searcher
       .query(queryString)
+      .then(data => {
+        this.storage.insert(data);
+      })
+  }
+
+  autoComplete(queryString, barKey) {
+    return this._autoComplete
+      .query(queryString, barKey)
       .then(data => {
         this.storage.insert(data);
       })
@@ -32,3 +50,4 @@ export default class Core {
     return this.storage.on(evt, moduleId, cb);
   }
 }
+

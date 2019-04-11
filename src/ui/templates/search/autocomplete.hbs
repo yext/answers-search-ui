@@ -1,0 +1,16 @@
+<div class="yext-autocomplete-container">
+  {{#each sections}}
+    <ul class="yext-auto-complete-results">
+    {{#if label}}
+      <li class="yext-no-select yext-auto-complete-header">{{label}}</li>
+    {{/if}}
+    {{#each results}}
+      <li class="js-yext-autocomplete-option yext-autocomplete-option"
+          data-value="{{shortValue}}"
+          data-filter='{"key": "{{{filter.key}}}", "value": "{{{filter.value}}}", "ref": "{{{filter.reference}}}"}''>
+          {{{highlightedValue}}}
+      </li>
+    {{/each}}
+    </ul>
+  {{/each}}
+</div>
