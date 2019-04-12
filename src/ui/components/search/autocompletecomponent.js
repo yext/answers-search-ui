@@ -105,8 +105,11 @@ export default class AutoCompleteComponent extends Component {
 
     DOM.on(queryInput, 'keydown', (e) => {
      this.handleNavigateResults(e.keyCode, e);
-     this.handleTyping(e.keyCode, queryInput, e)
    })
+
+    DOM.on(queryInput, 'keyup', (e) => {
+      this.handleTyping(e.keyCode, queryInput.value, e)
+    })
 
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
       let data = target.dataset,
@@ -118,7 +121,7 @@ export default class AutoCompleteComponent extends Component {
     });
   }
 
-  handleTyping(key, queryInput, e) {
+  handleTyping(key, value, e) {
     let ignoredKeys = [
       Keys.DOWN,
       Keys.UP,
@@ -153,13 +156,13 @@ export default class AutoCompleteComponent extends Component {
       return;
     }
 
-    this._originalQuery = queryInput.value;
+    this._originalQuery = value;
     if (this._originalQuery.length === 0) {
       this.close();
       return;
     }
 
-    this.core.autoComplete(queryInput.value, this._experienceKey, this._barKey);
+    this.core.autoComplete(value, this._experienceKey, this._barKey);
   }
 
   handleNavigateResults(key, e) {
