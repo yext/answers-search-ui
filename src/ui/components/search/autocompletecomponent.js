@@ -77,6 +77,13 @@ export default class AutoCompleteComponent extends Component {
   }
 
   /**
+   * The aliased used by the component manager for creation.
+   */
+  static get type() {
+    return 'AutoComplete';
+  }
+
+  /**
    * setState is overridden so that we can provide additional meta data
    * to the template (e.g. the sectionIndex and resultIndex), since
    * those are client-interaction specific values and aren't returned from the server.
@@ -267,9 +274,4 @@ export default class AutoCompleteComponent extends Component {
       return;
     }
   }
-
-  static get type() {
-    return 'AutoComplete';
-  }
 }
-
