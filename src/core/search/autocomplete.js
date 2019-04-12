@@ -15,10 +15,11 @@ export default class AutoComplete {
     this._answersKey = opts.answersKey || null;
   }
 
-  query(queryString, barKey) {
+  query(queryString, experienceKey, barKey) {
     return this._requester
       .get(this._baseUrl + '/v2/accounts/me/entities/autocomplete', this.data({
         'input': queryString,
+        'experienceKey': experienceKey,
         'barKey': barKey
       }))
       .then(response => response.json())
@@ -29,8 +30,7 @@ export default class AutoComplete {
   data(opts) {
     return Object.assign({
       'v': this._version,
-      'api_key': this._apiKey,
-      'experienceKey': this._answersKey
+      'api_key': this._apiKey
     }, opts || {});
   }
 }

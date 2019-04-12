@@ -94,6 +94,20 @@ body {
   margin: 0 5px 0 0;
 }
 
+.yext-search-container {
+  position: relative;
+}
+
+.yext-autocomplete-container {
+  position: absolute;
+  background-color: #fff;
+  z-index: 10;
+  left: 0;
+  right: 0;
+  border-radius: 3px;
+  border: 1px #ccc solid;
+}
+
 .yext-autocomplete-container .yext-autocomplete-results {
   margin: 0;
   padding: 0;
@@ -110,6 +124,8 @@ body {
   color: #fff;
 }
 
+.yext-autocomplete-container .yext-autocomplete-option:hover,
 .yext-autocomplete-container .yext-autocomplete-option.yext-selected {
   background-color: #ccc;
+  cursor: pointer;
 }

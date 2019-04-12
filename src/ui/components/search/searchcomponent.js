@@ -7,6 +7,8 @@ export default class SearchComponent extends Component {
 
     this._barKey = opts.barKey || null;
 
+    this._experienceKey = opts.experienceKey || null;
+
     this._templateName = 'search/search';
 
     this.title = opts.title || 'Answers Universal Search';
@@ -20,6 +22,7 @@ export default class SearchComponent extends Component {
     let autoComplete = this.componentManager.create('AutoComplete', {
       parent: this,
       barKey: this._barKey,
+      experienceKey: this._experienceKey,
       container: '.yext-search-autocomplete'
     });
 

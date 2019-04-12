@@ -38,9 +38,9 @@ export default class Core {
       })
   }
 
-  autoComplete(queryString, barKey) {
+  autoComplete(queryString, experienceKey, barKey) {
     return this._autoComplete
-      .query(queryString, barKey)
+      .query(queryString, experienceKey, barKey)
       .then(data => {
         this.storage.insert(data);
       })

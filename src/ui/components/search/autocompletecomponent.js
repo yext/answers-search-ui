@@ -22,6 +22,12 @@ export default class AutoCompleteComponent extends Component {
 
     this._barKey = opts.barKey || null;
 
+    this._experienceKey = opts.experienceKey || null;
+
+    if (this._barKey === null || this._experienceKey === null) {
+      throw new Error('AutoComplete requires a {barKey} and {experienceKey} to use!');
+    }
+
     this.moduleId = 'search.' + this._barKey;
 
     this._templateName = 'search/autocomplete';
@@ -41,7 +47,6 @@ export default class AutoCompleteComponent extends Component {
 
   setState(data) {
     data = data || {};
-    console.log(data.sections);
     if (data.sections && data.sections.length === 0) {
       delete data.sections;
     }
@@ -146,6 +151,7 @@ export default class AutoCompleteComponent extends Component {
       Keys.RIGHT_OS_KEY,
       Keys.SELECT_KEY
     ];
+
     DOM.on(queryInput, 'keyup', (e) => {
       if (ignoredKeys.indexOf(e.keyCode) > -1) {
         return;
@@ -170,7 +176,7 @@ export default class AutoCompleteComponent extends Component {
         return;
       }
 
-      this.core.autoComplete(queryInput.value, this._barKey);
+      this.core.autoComplete(queryInput.value, this._experienceKey, this._barKey);
     })
 
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
@@ -178,7 +184,6 @@ export default class AutoCompleteComponent extends Component {
           val = data.value,
           filter = JSON.parse(data.filter);
 
-      console.log('here', val);
       this.updateQuery(val);
       this.close();
     });

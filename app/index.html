@@ -29,12 +29,13 @@
 
     JAPI.init({
       apiKey: '429baa6106459e64ed03056e36323f17',
-      answersKey: 'nathan_singlebar_test',
+      answersKey: 'finDemo',
       onReady: function() {
         this.addComponent('SearchComponent', {
           container: '.search-container',
           class: 'custom-search-class',
           barKey: 'testBar',
+          experienceKey: 'nathan_singlebar_test',
           title: 'Healthcare Professional',
           searchText: 'What is your problem?'
         })
@@ -43,6 +44,7 @@
           container: '.search-container2',
           class: 'custom-search-class',
           barKey: 'doctor_location',
+          experienceKey: 'nathan_singlebar_test',
           title: ' ',
           searchText: 'location?'
         })
