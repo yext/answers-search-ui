@@ -28,7 +28,6 @@ export default class HttpRequester {
 
   encodeParams(url, params) {
     let hasParam = url.indexOf('?') > -1;
-    console.log(url, hasParam)
     for (let key in params) {
       if (!hasParam) {
         hasParam = true;
