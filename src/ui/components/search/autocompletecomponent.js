@@ -2,15 +2,20 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 
 const Keys = {
-  LEFT: 37,
-  RIGHT: 39,
-  UP: 38,
-  DOWN: 40,
-  ESCAPE: 27,
+  BACKSPACE: 8,
+  TAB: 9,
   ENTER: 13,
   SHIFT: 16,
   CTRL: 17,
   ALT: 18,
+  ESCAPE: 27,
+
+  LEFT: 37,
+  RIGHT: 39,
+  UP: 38,
+
+  DELETE: 46,
+  DOWN: 40,
   LEFT_OS_KEY: 91,
   RIGHT_OS_KEY: 92,
   SELECT_KEY: 93
@@ -40,9 +45,14 @@ export default class AutoCompleteComponent extends Component {
   }
 
   close() {
+    this.setState({});
+    this.reset();
+  }
+
+  reset() {
     this._selectedIndex = 0;
     this._resultIndex = -1;
-    this.setState({});
+    this.updateState();
   }
 
   setState(data) {
@@ -93,52 +103,22 @@ export default class AutoCompleteComponent extends Component {
       }, 10)
     });
 
-    DOM.on(queryInput, 'keyup', (e) => {
-      // Handle user up arrow
-      let sections = this._state.get('sections');
-      if (sections === undefined || sections.length <= 0) {
-        return;
-      }
+    DOM.on(queryInput, 'keydown', (e) => {
+     this.handleNavigateResults(e.keyCode, e);
+     this.handleTyping(e.keyCode, queryInput, e)
+   })
 
-      let results = sections[this._sectionIndex].results;
+    DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
+      let data = target.dataset,
+          val = data.value,
+          filter = JSON.parse(data.filter);
 
-      if (e.keyCode === Keys.UP) {
-        if (this._resultIndex === 0) {
-          if (this._sectionIndex > 0) {
-            this._sectionIndex --;
-            this._resultIndex = sections[this._sectionIndex].results.length - 1;
-          }
-          this.updateQuery();
-          this.updateState();
-          return;
-        }
+      this.updateQuery(val);
+      this.close();
+    });
+  }
 
-        this._resultIndex --;
-        this.updateState();
-        this.updateQuery();
-        return;
-      }
-
-      // Handle down arrow
-      if (e.keyCode === Keys.DOWN) {
-        if (this._resultIndex >= results.length - 1) {
-          if (this._sectionIndex < sections.length - 1) {
-            this._sectionIndex ++;
-            this._resultIndex = 0;
-          }
-          this.updateQuery();
-          this.updateState();
-          return;
-        }
-
-        this._resultIndex ++;
-        this.updateQuery();
-        this.updateState();
-        return;
-      }
-    })
-
-
+  handleTyping(key, queryInput, e) {
     let ignoredKeys = [
       Keys.DOWN,
       Keys.UP,
@@ -152,45 +132,84 @@ export default class AutoCompleteComponent extends Component {
       Keys.SELECT_KEY
     ];
 
-    DOM.on(queryInput, 'keyup', (e) => {
-      if (ignoredKeys.indexOf(e.keyCode) > -1) {
-        return;
-      }
+    if (ignoredKeys.indexOf(key) > -1) {
+      return;
+    }
 
-      // Escape
-      if (e.keyCode === Keys.ESCAPE) {
-        this.updateQuery(this._originalQuery);
-        this.close();
-        return;
-      }
+    if (key === Keys.DELETE || key === Keys.BACKSPACE) {
+      this.reset();
+    }
 
-      // Enter
-      if (e.keyCode === Keys.ENTER) {
-        this.close();
-        return;
-      }
-
-      this._originalQuery = queryInput.value;
-      if (this._originalQuery.length === 0) {
-        this.close();
-        return;
-      }
-
-      this.core.autoComplete(queryInput.value, this._experienceKey, this._barKey);
-    })
-
-    DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
-      let data = target.dataset,
-          val = data.value,
-          filter = JSON.parse(data.filter);
-
-      this.updateQuery(val);
+    // Escape
+    if (key === Keys.ESCAPE) {
+      this.updateQuery(this._originalQuery);
       this.close();
-    });
+      return;
+    }
+
+    // Enter
+    if (key === Keys.ENTER || key === Keys.TAB) {
+      this.close();
+      return;
+    }
+
+    this._originalQuery = queryInput.value;
+    if (this._originalQuery.length === 0) {
+      this.close();
+      return;
+    }
+
+    this.core.autoComplete(queryInput.value, this._experienceKey, this._barKey);
   }
 
-  onUpdate() {
+  handleNavigateResults(key, e) {
+    // Handle user up arrow
+    let sections = this._state.get('sections');
+    if (sections === undefined || sections.length <= 0) {
+      return;
+    }
 
+    let results = sections[this._sectionIndex].results;
+
+    if (key === Keys.UP) {
+      e.preventDefault();
+      if (this._resultIndex <= 0) {
+        if (this._sectionIndex > 0) {
+          this._sectionIndex --;
+          this._resultIndex = sections[this._sectionIndex].results.length - 1;
+        } else {
+          this.updateQuery(this._originalQuery);
+          this.reset();
+          return;
+        }
+        this.updateQuery();
+        this.updateState();
+        return;
+      }
+
+      this._resultIndex --;
+      this.updateState();
+      this.updateQuery();
+      return;
+    }
+
+    // Handle down arrow
+    if (key === Keys.DOWN) {
+      if (this._resultIndex >= results.length - 1) {
+        if (this._sectionIndex < sections.length - 1) {
+          this._sectionIndex ++;
+          this._resultIndex = 0;
+        }
+        this.updateQuery();
+        this.updateState();
+        return;
+      }
+
+      this._resultIndex ++;
+      this.updateQuery();
+      this.updateState();
+      return;
+    }
   }
 
   static get type() {
