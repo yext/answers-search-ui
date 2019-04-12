@@ -1,18 +1,20 @@
-<div class="yext-autocomplete-container">
-  {{assign 'currentSelected' sectionIndex resultIndex}}
-  {{#each sections}}
-    <ul class="yext-autocomplete-results">
-    {{#if label}}
-      <li class="yext-no-select yext-autocomplete-header">{{label}}</li>
-    {{/if}}
-    {{#each results}}
-      {{assign 'currentIndex' @../index @index}}
-      <li class="js-yext-autocomplete-option yext-autocomplete-option {{#ifeq ../../currentSelected ../../currentIndex}}yext-selected{{/ifeq}}"
-          data-value="{{shortValue}}"
-          data-filter='{"key": "{{{filter.key}}}", "value": "{{{filter.value}}}", "ref": "{{{filter.reference}}}"}''>
-          {{{highlightedValue}}}
-      </li>
+{{#if sections}}
+  <div class="yext-autocomplete-container">
+    {{assign 'currentSelected' sectionIndex resultIndex}}
+    {{#each sections}}
+      <ul class="yext-autocomplete-results">
+      {{#if label}}
+        <li class="yext-no-select yext-autocomplete-header">{{label}}</li>
+      {{/if}}
+      {{#each results}}
+        {{assign 'currentIndex' @../index @index}}
+        <li class="js-yext-autocomplete-option yext-autocomplete-option {{#ifeq ../../currentSelected ../../currentIndex}}yext-selected{{/ifeq}}"
+            data-value="{{shortValue}}"
+            data-filter='{"key": "{{{filter.key}}}", "value": "{{{filter.value}}}", "ref": "{{{filter.reference}}}"}''>
+            {{{highlightedValue}}}
+        </li>
+      {{/each}}
+      </ul>
     {{/each}}
-    </ul>
-  {{/each}}
-</div>
+  </div>
+{{/if}}
