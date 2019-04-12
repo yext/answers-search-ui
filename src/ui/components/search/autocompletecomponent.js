@@ -199,41 +199,39 @@ export default class AutoCompleteComponent extends Component {
       return;
     }
 
-    if (key === Keys.DELETE || key === Keys.BACKSPACE) {
-      this.reset();
-    }
-
-    // Escape
+    // User escapes out of auto complete, so we reset it to the original input
     if (key === Keys.ESCAPE) {
       this.updateQuery(this._originalQuery);
       this.close();
       return;
     }
 
-    // Enter
+    // Tabbing out or enter should close the auto complete.
     if (key === Keys.ENTER || key === Keys.TAB) {
       this.close();
       return;
     }
 
+    // Update the original value based on the user input
     this._originalQuery = value;
+
+    // If the value is empty, we exit the auto complete
     if (this._originalQuery.length === 0) {
       this.close();
       return;
     }
 
+    this.reset();
     this.core.autoComplete(value, this._experienceKey, this._barKey);
   }
 
   handleNavigateResults(key, e) {
-    // Handle user up arrow
     let sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
       return;
     }
 
     let results = sections[this._sectionIndex].results;
-
     if (key === Keys.UP) {
       e.preventDefault();
       if (this._resultIndex <= 0) {
@@ -256,7 +254,6 @@ export default class AutoCompleteComponent extends Component {
       return;
     }
 
-    // Handle down arrow
     if (key === Keys.DOWN) {
       if (this._resultIndex >= results.length - 1) {
         if (this._sectionIndex < sections.length - 1) {
