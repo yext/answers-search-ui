@@ -8,6 +8,34 @@ export default class HandlebarsRenderer extends Renderer {
     this._handlebars = templates._hb || null;
 
     this._templates = templates || {};
+
+    this._init();
+  }
+
+  _init() {
+    this._handlebars.registerHelper('ifeq', function(arg1, arg2, options) {
+      return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+    })
+
+    this._handlebars.registerHelper('ifnoteq', function(arg1, arg2, options) {
+      return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
+    })
+
+    this._handlebars.registerHelper('assign', function(name, value, options) {
+      let args = arguments;
+      options = args[args.length - 1];
+
+      if (!options.data.root) {
+        options.data.root = {};
+      }
+
+      let v = '';
+      for (let i = 1; i < args.length - 1; i ++) {
+        v = v + args[i];
+      }
+
+      options.data.root[name] = v;
+    })
   }
 
   render(config, data) {

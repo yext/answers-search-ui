@@ -1,11 +1,13 @@
 <div class="yext-autocomplete-container">
+  {{assign 'currentSelected' sectionIndex resultIndex}}
   {{#each sections}}
-    <ul class="yext-auto-complete-results">
+    <ul class="yext-autocomplete-results">
     {{#if label}}
-      <li class="yext-no-select yext-auto-complete-header">{{label}}</li>
+      <li class="yext-no-select yext-autocomplete-header">{{label}}</li>
     {{/if}}
     {{#each results}}
-      <li class="js-yext-autocomplete-option yext-autocomplete-option"
+      {{assign 'currentIndex' @../index @index}}
+      <li class="js-yext-autocomplete-option yext-autocomplete-option {{#ifeq ../../currentSelected ../../currentIndex}}yext-selected{{/ifeq}}"
           data-value="{{shortValue}}"
           data-filter='{"key": "{{{filter.key}}}", "value": "{{{filter.value}}}", "ref": "{{{filter.reference}}}"}''>
           {{{highlightedValue}}}
