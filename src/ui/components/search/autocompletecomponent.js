@@ -11,32 +11,80 @@ export default class AutoCompleteComponent extends Component {
 
     this._templateName = 'search/autocomplete';
 
-    this._selectedIndex = 0;
+    this._sectionIndex = 0;
+
+    this._resultIndex = 0;
   }
 
   close() {
     this._selectedIndex = 0;
+    this._resultIndex = 0;
     this.setState({});
   }
 
   setState(data) {
-    super.setState(Object.assign({
-      selectedIndex: this._selectedIndex
-    }, data));
+    data = data || {};
+    super.setState(Object.assign(data, {
+      sectionIndex: this._sectionIndex,
+      resultIndex: this._resultIndex
+    }));
+  }
+
+  updateState() {
+    this.setState(this._state.get());
   }
 
   onCreate() {
-    let query = DOM.query(this._parent._container, '.js-yext-query');
+    let queryInput = DOM.query(this._parent._container, '.js-yext-query');
 
-    DOM.attr(query, 'autoComplete', 'off');
+    DOM.attr(queryInput, 'autoComplete', 'off');
 
-    DOM.on(query, 'keyup', () => {
-      this.query = query.value;
-      if (this.query.length === 0) {
+    DOM.on(queryInput, 'keyup', (e) => {
+      console.log(this._sectionIndex, this._resultIndex);
+      // Handle user up arrow
+      if (e.keyCode === 38) {
+        let sections = this._state.get('sections'),
+            results = sections[this._sectionIndex].results;
+
+        if (this._resultIndex === 0) {
+          if (this._sectionIndex > 0) {
+            this._sectionIndex --;
+            this._resultIndex = sections[this._sectionIndex].results.length - 1;
+          }
+          this.updateState();
+          return;
+        }
+
+        this._resultIndex --;
+        this.updateState();
+        return;
+      }
+
+      // Handle down arrow
+      if (e.keyCode === 40) {
+        let sections = this._state.get('sections'),
+            results = sections[this._sectionIndex].results;
+
+        if (this._resultIndex >= results.length - 1) {
+          if (this._sectionIndex < sections.length - 1) {
+            this._sectionIndex ++;
+            this._resultIndex = 0;
+          }
+          this.updateState();
+          return;
+        }
+
+        this._resultIndex ++;
+          this.updateState();
+        return;
+      }
+
+      this.queryInput = queryInput.value;
+      if (this.queryInput.length === 0) {
         this.close();
         return;
       }
-      this.core.autoComplete(query.value, this._barKey);
+      this.core.autoComplete(queryInput.value, this._barKey);
     })
 
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
@@ -44,7 +92,7 @@ export default class AutoCompleteComponent extends Component {
           val = data.value,
           filter = JSON.parse(data.filter);
 
-      query.value = val;
+      queryInput.value = val;
       this.close();
     });
   }

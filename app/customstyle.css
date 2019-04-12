@@ -93,3 +93,23 @@ body {
   border-radius: 5px;
   margin: 0 5px 0 0;
 }
+
+.yext-autocomplete-container .yext-autocomplete-results {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.yext-autocomplete-container li {
+  display: block;
+  padding: 5px;
+}
+
+.yext-autocomplete-container .yext-autocomplete-header {
+  background-color: #666;
+  color: #fff;
+}
+
+.yext-autocomplete-container .yext-autocomplete-option.yext-selected {
+  background-color: #ccc;
+}
