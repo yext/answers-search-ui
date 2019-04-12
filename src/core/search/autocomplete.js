@@ -38,12 +38,22 @@ export default class AutoComplete {
 // Create our own front-end data models
 class DataTransformer {
   static transform(data, barKey) {
-    let sections = data.response.sections;
     let moduleId = 'search.'+barKey;
+
+    data = {
+      sections: data.response.sections
+    }
+
+    if (data.sections && data.sections.length === 0) {
+      delete data.sections;
+    }
+
+    if (data.sections && data.sections.length === 1 && data.sections[0].results.length === 0) {
+      delete data.sections;
+    }
+
     return {
-       [moduleId]: {
-        sections: sections
-      }
+       [moduleId]: data
     };
   }
 }
