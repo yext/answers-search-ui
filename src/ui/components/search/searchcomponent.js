@@ -11,6 +11,8 @@ export default class SearchComponent extends Component {
 
     this._templateName = 'search/search';
 
+    this._formEl = opts.formSelector || 'form';
+
     this._inputEl = opts.inputEl || '.js-yext-query';
 
     this.title = opts.title || 'Answers Universal Search';
@@ -21,20 +23,41 @@ export default class SearchComponent extends Component {
   }
 
   onMount() {
+    // Custom renders means our native Javascript probably wont work.
+    // So lets protect it, and let them manually initialize
+    if (this._render) {
+      return;
+    }
+
+    this.initSearch(this._formEl);
+    this.initAutoComplete(this._inputEl);
+  }
+
+  initSearch(formSelector) {
+    this._formEl = formSelector;
+
+    let form = DOM.query(this._container, formSelector);
+    DOM.on(form, 'submit', (e) => {
+      e.preventDefault();
+      this.search(form.querySelector(this._inputEl).value);
+      return false;
+    })
+  }
+
+  initAutoComplete(inputSelector) {
+    this._inputEl = inputSelector;
+
     let autoComplete = this.componentManager.create('AutoComplete', {
       parent: this,
       barKey: this._barKey,
       experienceKey: this._experienceKey,
       container: '.yext-search-autocomplete',
-      inputEl: this._inputEl
+      inputEl: inputSelector
     });
+  }
 
-    let form = DOM.query(this._container, 'form');
-    DOM.on(form, 'submit', (e) => {
-      e.preventDefault();
-      this.core.search(form.querySelector(this._inputEl).value);
-      return false;
-    })
+  search(query) {
+    this.core.search(query);
   }
 
   setState(data) {
