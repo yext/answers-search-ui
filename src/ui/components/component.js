@@ -67,7 +67,7 @@ export default class Component {
       // we construct the container and append it to the parent
       if (this._container === null) {
         this._container = DOM.createEl('div', {
-          class: opts.container.substring(1, opts.container.length);
+          class: opts.container.substring(1, opts.container.length)
         });
         DOM.append(this._parent._container, this._container);
       }

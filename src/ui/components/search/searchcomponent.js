@@ -11,6 +11,8 @@ export default class SearchComponent extends Component {
 
     this._templateName = 'search/search';
 
+    this._inputEl = opts.inputEl || '.js-yext-query';
+
     this.title = opts.title || 'Answers Universal Search';
 
     this.searchText = opts.searchText || 'What are you interested in?';
@@ -23,13 +25,14 @@ export default class SearchComponent extends Component {
       parent: this,
       barKey: this._barKey,
       experienceKey: this._experienceKey,
-      container: '.yext-search-autocomplete'
+      container: '.yext-search-autocomplete',
+      inputEl: this._inputEl
     });
 
     let form = DOM.query(this._container, 'form');
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
-      this.core.search(form.querySelector('input').value);
+      this.core.search(form.querySelector(this._inputEl).value);
       return false;
     })
   }

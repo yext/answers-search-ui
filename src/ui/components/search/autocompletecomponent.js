@@ -42,6 +42,12 @@ export default class AutoCompleteComponent extends Component {
     }
 
     /**
+     * A reference to the input el selector for auto complete
+     * @type {string}
+     */
+    this._inputEl = opts.inputEl || '.js-yext-query';
+
+    /**
      * An internal reference for the data-storage to listen for updates from the server
      * @type {string}
      */
@@ -108,7 +114,7 @@ export default class AutoCompleteComponent extends Component {
    */
   onCreate() {
     // Use the context of the parent component to find the input node.
-    let queryInput = DOM.query(this._parent._container, '.js-yext-query');
+    let queryInput = DOM.query(this._parent._container, this._inputEl);
 
     // Disable the native auto complete
     DOM.attr(queryInput, 'autoComplete', 'off');
