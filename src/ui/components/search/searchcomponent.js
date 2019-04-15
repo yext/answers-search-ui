@@ -22,6 +22,10 @@ export default class SearchComponent extends Component {
     this.query = opts.query || '';
   }
 
+  static get type() {
+    return 'SearchBar';
+  }
+
   onMount() {
     // Custom renders means our native Javascript probably wont work.
     // So lets protect it, and let them manually initialize
@@ -66,9 +70,5 @@ export default class SearchComponent extends Component {
       searchText: this.searchText,
       query: this.query
     }, data))
-  }
-
-  static get type() {
-    return 'SearchComponent';
   }
 }

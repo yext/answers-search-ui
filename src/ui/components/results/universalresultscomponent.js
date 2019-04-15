@@ -12,7 +12,7 @@ export default class UniversalResultsComponent extends Component {
   }
 
   static get type() {
-    return 'UniversalResultsComponent';
+    return 'UniversalResults';
   }
 
   init() {

@@ -15,6 +15,12 @@ export default class Component {
     this.moduleId = null;
 
     /**
+     * Cache the options so that we can propogate properly to child components
+     * @type {Object}
+     */
+    this._opts = opts;
+
+    /**
      * An identifier used to classify the type of component.
      * The component manager uses this information in order to persist and organize components
      * @type {string|ComponentType}
@@ -149,13 +155,26 @@ export default class Component {
   }
 
   addChild(data, type) {
-    let childComponent = this.componentManager.create(type, {
-      parent: this,
-      data: data
-    });
+    let childComponent = this.componentManager.create(
+      type,
+      Object.assign(this._opts, {
+        parent: this,
+        data: data
+      })
+    );
 
     this._children.push(childComponent);
     return childComponent;
+  }
+
+  /**
+   * Set the render method to be used for rendering the component
+   * @param {Function} render
+   * @return {string}
+   */
+  setRender(render) {
+    this._render = render;
+    return this;
   }
 
   /**
@@ -164,6 +183,7 @@ export default class Component {
    */
   setRenderer(renderer) {
     this._renderer = Renderers[renderer];
+    return this;
   }
 
   /**
