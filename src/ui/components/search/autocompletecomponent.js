@@ -120,7 +120,7 @@ export default class AutoCompleteComponent extends Component {
       // from being processed until the next UI tick.
       setTimeout(() => {
         this.close();
-      }, 10)
+      }, 100)
     });
 
     // Allow the user to navigate between the results using the keyboard
