@@ -66,6 +66,11 @@ export default class DOM {
         props = Object.keys(opts_data);
 
     for (let i = 0; i < props.length; i++) {
+      if (props[i] === 'class') {
+        DOM.addClass(node, opts_data[props[i]]);
+        continue;
+      }
+
       node[props[i]] = opts_data[props[i]];
     }
 

@@ -62,6 +62,15 @@ export default class Component {
       this._container = DOM.query(opts.container) || null;
     } else {
       this._container = DOM.query(this._parent._container, opts.container);
+
+      // If we have a parent, and the container is missing from the DOM,
+      // we construct the container and append it to the parent
+      if (this._container === null) {
+        this._container = DOM.createEl('div', {
+          class: opts.container.substring(1, opts.container.length);
+        });
+        DOM.append(this._parent._container, this._container);
+      }
     }
 
     if (this._container === null) {
@@ -75,7 +84,13 @@ export default class Component {
     this._className = opts.class || 'component';
 
     /**
-     * A local reference to the {Renderer} that will be used for rendering the template
+     * A custom render function to be used instead of using the default renderer
+     * @type {Renderer}
+     */
+    this._render = opts.render || null;
+
+    /**
+     * A local reference to the default {Renderer} that will be used for rendering the template
      * @type {Renderer}
      */
     this._renderer = opts.renderer || Renderers.Handlebars;
@@ -179,6 +194,12 @@ export default class Component {
   render(data) {
     this.beforeRender();
     data = data || this._state.get();
+
+    if (typeof this._render === 'function') {
+      let html = this._render(data);
+      this.afterRender();
+      return html;
+    }
 
     // Render the existing templates as a string
     let html = this._renderer.render({
