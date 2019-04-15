@@ -38,11 +38,18 @@ export default class HandlebarsRenderer extends Renderer {
     })
   }
 
+  compile(template) {
+    if (typeof template !== 'string') {
+      return '';
+    }
+    return this._handlebars.compile(template);
+  }
+
   render(config, data) {
     if (config.template !== null) {
       // TODO(billy) these templates need to be pre-compiled with handlebars,
       // and so we need to somehow ship the compiler.
-      return config.template;
+      return config.template(data);
     }
     return this._templates[config.templateName](data);
   }

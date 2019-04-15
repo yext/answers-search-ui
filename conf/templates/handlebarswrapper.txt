@@ -1,4 +1,4 @@
-import Handlebars from 'handlebars/runtime';
+import Handlebars from 'handlebars/dist/handlebars.min.js';
 
 var context = context || {};
 

@@ -75,11 +75,17 @@ export default class Component {
     this._className = opts.class || 'component';
 
     /**
+     * A local reference to the {Renderer} that will be used for rendering the template
+     * @type {Renderer}
+     */
+    this._renderer = opts.renderer || Renderers.Handlebars;
+
+    /**
      * The template string to use for rendering the component
      * If this is left empty, we lookup the template the base templates using the templateName
      * @type {string}
      */
-    this._template = opts.template || null;
+    this._template = opts.template ? this._renderer.compile(opts.template) : null;
 
     /**
      * The templateName to use for rendering the component.
@@ -87,12 +93,6 @@ export default class Component {
      * @type {string}
      */
     this._templateName = opts.templateName || 'default';
-
-    /**
-     * A local reference to the {Renderer} that will be used for rendering the template
-     * @type {Renderer}
-     */
-    this._renderer = opts.renderer || Renderers.Handlebars;
 
     /**
      * An internal state indicating whether or not the component has been mounted to the DOM
@@ -156,7 +156,7 @@ export default class Component {
    * @param {string} template
    */
   setTemplate(template) {
-    this._template = template;
+    this._template = this._renderer.compile(template);
   }
 
   mount() {
