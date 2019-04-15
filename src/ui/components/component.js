@@ -197,6 +197,9 @@ export default class Component {
 
     if (typeof this._render === 'function') {
       let html = this._render(data);
+      if (typeof html !== 'string') {
+        throw new Error('Render method must return HTML as type {string}');
+      }
       this.afterRender();
       return html;
     }
