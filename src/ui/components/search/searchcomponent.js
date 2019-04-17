@@ -29,7 +29,7 @@ export default class SearchComponent extends Component {
   onMount() {
     // Custom renders means our native Javascript probably wont work.
     // So lets protect it, and let them manually initialize
-    if (this._render) {
+    if (this._render || this._template) {
       return;
     }
 

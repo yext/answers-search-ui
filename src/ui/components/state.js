@@ -7,13 +7,21 @@ export default class State extends EventEmitter {
     this._state = data;
   }
 
+  init(prop, val) {
+    this._set(prop, val);
+  }
+
   set(prop, val) {
+    this._set(prop, val);
+    this.emit('update');
+  }
+
+  _set(prop, val) {
     if (val === undefined) {
       this._state = prop;
     } else {
       this._state[prop] = val;
     }
-    this.emit('update');
   }
 
   update(data) {

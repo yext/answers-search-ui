@@ -96,13 +96,7 @@ export default class ComponentManager {
     // Instantiate our new component and keep track of it
     let component =
       new this._componentRegistry[componentType](opts)
-        .init();
-
-    // Only set the state of top level components, since data
-    // trickeles through the parent downward
-    if (component._parent === null) {
-      component.setState(opts.data || {});
-    }
+        .init(opts);
 
     this._activeComponents[componentType] = component;
 
@@ -114,11 +108,11 @@ export default class ComponentManager {
         return component;
       }
 
-      component.setState(this._core.storage.getState(component.moduleId));
-
-      this._core.storage.on('update', component.moduleId, (data) => {
-        component.setState(data);
-      })
+      this._core.storage
+        .off('update', component.moduleId)
+        .on('update', component.moduleId, (data) => {
+          component.setState(data);
+        })
     }
 
     return component;

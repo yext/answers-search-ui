@@ -68,7 +68,7 @@ export default class JAPI {
       }
     }
 
-    this.components.create(type, opts).init().mount();
+    this.components.create(type, opts).mount();
     return this;
   }
 

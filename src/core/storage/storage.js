@@ -51,6 +51,22 @@ export default class Storage {
     }
 
     this._moduleDataContainer[moduleId].on(evt, cb);
+    return this;
+  }
+
+  off(evt, moduleId, cb) {
+    let moduleData = this._moduleDataContainer[moduleId];
+    if (moduleData === undefined) {
+
+      if (this._futureListeners[moduleId] !== undefined) {
+        this._futureListeners[moduleId].pop();
+      }
+
+      return this;
+    }
+
+    this._moduleDataContainer[moduleId].off(evt, cb);
+    return this;
   }
 
   _applyFutureListeners(moduleId) {

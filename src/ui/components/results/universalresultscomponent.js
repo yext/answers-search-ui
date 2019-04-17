@@ -15,8 +15,8 @@ export default class UniversalResultsComponent extends Component {
     return 'UniversalResults';
   }
 
-  init() {
-    super.init();
+  init(opts) {
+    super.init(opts);
     return this;
   }
 

@@ -138,7 +138,9 @@ export default class Component {
     return 'Component';
   }
 
-  init() {
+  init(opts) {
+    this.setState(opts.data || {});
+
     this.onCreate()
     this._state.on('update', () => {
       this.onUpdate();
@@ -154,13 +156,13 @@ export default class Component {
     return this;
   }
 
-  addChild(data, type) {
+  addChild(data, type, opts) {
     let childComponent = this.componentManager.create(
       type,
       Object.assign(this._opts, {
         parent: this,
         data: data
-      })
+      }, opts || {})
     );
 
     this._children.push(childComponent);

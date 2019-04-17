@@ -17,8 +17,6 @@ export default class ResultsComponent extends Component {
 
     this._templateName = 'results/results';
 
-    this.verticalSearchKey = opts.verticalSearchKey || null;
-
     this.limit = opts.limit || 5;
 
     this._itemConfig = {
@@ -40,14 +38,14 @@ export default class ResultsComponent extends Component {
       }
     }
 
-    this.configureRenderItem(opts.renderItem);
+    this.configureItem(opts.renderItem);
   }
 
   static get type() {
     return 'Results';
   }
 
-  configureRenderItem(config) {
+  configureItem(config) {
     if (typeof config === 'function') {
       this._itemConfig.global.render = config;
       return;
@@ -115,26 +113,5 @@ export default class ResultsComponent extends Component {
       comp.setTemplate(itemConfig.template)
     }
     return comp;
-  }
-
-  setState(data) {
-    let limitedResults = [];
-    if (data.results) {
-      let count = 0;
-      for (let i = 0; i < data.results.length; i++) {
-        if (i > this._limit - 1) {
-          break;
-        }
-
-        limitedResults.push(data.results[i]);
-        count ++;
-      }
-      data = {
-        resultsCount: count,
-        results: limitedResults,
-        verticalConfigId: data.verticalConfigId
-      }
-    }
-    return super.setState(data);
   }
 }
