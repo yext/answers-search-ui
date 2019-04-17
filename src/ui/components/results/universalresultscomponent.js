@@ -21,6 +21,15 @@ export default class UniversalResultsComponent extends Component {
   }
 
   addChild(data, type) {
-    return super.addChild(data, type);
+    let opts = this.getChildConfig([data['verticalConfigId']]);
+    return super.addChild(data, type, opts);
+  }
+
+  getChildConfig(configId) {
+    let config = this._opts.config;
+    if (config === undefined) {
+      return {};
+    }
+    return this._opts['config'][configId] || this._opts['config'];
   }
 }

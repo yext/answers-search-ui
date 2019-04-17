@@ -159,10 +159,12 @@ export default class Component {
   addChild(data, type, opts) {
     let childComponent = this.componentManager.create(
       type,
-      Object.assign(this._opts, {
+      Object.assign({
         parent: this,
         data: data
-      }, opts || {})
+      }, opts || {}, {
+        _parentOpts: this._opts
+      })
     );
 
     this._children.push(childComponent);

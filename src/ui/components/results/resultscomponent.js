@@ -38,6 +38,10 @@ export default class ResultsComponent extends Component {
       }
     }
 
+    if (opts.renderItem === undefined && opts._parentOpts !== undefined) {
+      opts.renderItem = opts._parentOpts.renderItem;
+    }
+
     this.configureItem(opts.renderItem);
   }
 
