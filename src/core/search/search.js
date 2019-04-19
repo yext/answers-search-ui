@@ -19,7 +19,7 @@ export default class Search {
 
   query(queryString) {
     return this._requester
-      .get(this._baseUrl + '/v2/accounts/me/answers/query', this.data({
+      .get(this._baseUrl + '/v2/accounts/me/answers/query', this.params({
         'input': queryString
       }))
       .then(response => response.json())
@@ -27,7 +27,7 @@ export default class Search {
       .catch(error => console.error(error))
   }
 
-  data(opts) {
+  params(opts) {
     return Object.assign({
       'v': this._version,
       'api_key': this._apiKey,

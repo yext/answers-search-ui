@@ -1,4 +1,4 @@
-import HttpRequester from '../http/httprequester';
+import ApiRequest from '../http/apirequest';
 
 export default class AutoComplete {
   constructor(opts = {}) {
@@ -14,110 +14,54 @@ export default class AutoComplete {
   }
 
   query(queryString, experienceKey, barKey) {
-    if (experienceKey && barKey) {
-      return new VSAutoCompleteRequest({
-        apiKey: this._apiKey,
-        version: this._version,
-        baseUrl: this._baseUrl,
-      }).get(queryString, experienceKey, barKey);
-    } else {
-      return new UniversalAutoCompleteRequest({
-        apiKey: this._apiKey,
-        answersKey: this._answersKey,
-        version: this._version,
-        baseUrl: this._baseUrl
-      }).get(queryString);
+    if (experienceKey || barKey) {
+      return this._queryVeritcal(queryString, experienceKey, barKey)
     }
-  }
-}
 
-class UniversalAutoCompleteRequest {
-  constructor(opts = {}) {
-    this._requester = new HttpRequester();
-
-    this._baseUrl = opts.baseUrl || null;
-
-    this._apiKey = opts.apiKey || null;
-
-    this._answersKey = opts.answersKey;
-
-    this._version = opts.version || 20190101;
+    return this._queryUniversal(queryString);
   }
 
-  get(queryString) {
-    return this._requester
-      .get(this._baseUrl + '/v2/accounts/me/answers/autocomplete', this.params(queryString))
-      .then(response => response.json())
-      .then(response => DataTransformer.transform(response))
-      .catch(error => console.error(error))
-
-    return this._requester;
-  }
-
-  params(query) {
-    return Object.assign({
-      'input': query,
-      'v': this._version,
-      'api_key': this._apiKey,
-      'answersKey': this._answersKey
-    });
-  }
-}
-
-class VSAutoCompleteRequest {
-  constructor(opts = {}) {
-    this._requester = new HttpRequester();
-
-    this._baseUrl = opts.baseUrl || null;
-
-    this._apiKey = opts.apiKey || null;
-
-    this._answersKey = opts.answersKey;
-
-    this._version = opts.version || 20190101;
-  }
-
-  get(queryString, experienceKey, barKey) {
-      return this._requester
-        .get(this._baseUrl + '/v2/accounts/me/entities/autocomplete', this.params({
+  _queryVeritcal(queryString, experienceKey, barKey) {
+    let request = new ApiRequest({
+        baseUrl: this._baseUrl,
+        endpoint: '/v2/accounts/me/entities/autocomplete',
+        apiKey: this._apiKey,
+        version: this._version,
+        params: {
           'input': queryString,
-          'barKey': barKey,
-          'experienceKey': experienceKey
-        }))
-        .then(response => response.json())
-        .then(response => DataTransformer.transform(response, barKey))
-        .catch(error => console.error(error))
+          'experienceKey': experienceKey,
+          'barKey': barKey
+        }
+      })
+
+    return request.get(queryString)
+      .then(response => response.json())
+      .then(response => DataTransformer.vertical(response.response, request._params.barKey))
+      .catch(error => console.error(error))
   }
 
-  params(opts) {
-    return Object.assign({
-      'v': this._version,
-      'api_key': this._apiKey
-    }, opts || {});
+  _queryUniversal(queryString) {
+    let request = new ApiRequest({
+      baseUrl: this._baseUrl,
+      endpoint: '/v2/accounts/me/answers/autocomplete',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': queryString,
+        'answersKey': this._answersKey
+      }
+    });
+
+    return request.get(queryString)
+      .then(response => response.json())
+      .then(response => DataTransformer.universal(response.response))
+      .catch(error => console.error(error));
   }
 }
-
 
 // Create our own front-end data models
 class DataTransformer {
-  static transform(data, barKey) {
-    let moduleId = 'autocomplete';
-    if (barKey !== undefined) {
-      moduleId = 'autocomplete.' + barKey;
-    }
-
-    if (!data.response.sections) {
-      data = {
-        sections: [{
-          'results': DataTransformer.universalResults(data.response.results)
-        }]
-      }
-    } else {
-      data = {
-        sections: data.response.sections
-      }
-    }
-
+  static clean(moduleId, data) {
     if (data.sections && data.sections.length === 0) {
       delete data.sections;
     }
@@ -131,16 +75,18 @@ class DataTransformer {
     };
   }
 
-  static universalResults(results) {
+  static universal(response) {
+    let moduleId = 'autocomplete',
+        results = response.results;
+
     let data = [];
     for (let i = 0; i < results.length; i ++) {
       let value = results[i].value,
           highlightedValue = value,
           subStrings = results[i].matchedSubstrings;
 
-      console.log(subStrings);
       for (let j = 0; j < subStrings.length; j ++) {
-        let start = subStrings[j].offset,
+        let start = Number(subStrings[j].offset),
             end = start + subStrings[j].length;
 
         highlightedValue = [value.slice(0, start), '<strong>', value.slice(start)].join();
@@ -152,6 +98,20 @@ class DataTransformer {
         highlightedValue: highlightedValue,
       });
     }
-    return data;
+
+    return DataTransformer.clean('autocomplete', {
+      'sections': [{
+        'results': data
+      }]
+    });
+  }
+
+  static vertical(response, barKey) {
+    let moduleId = 'autocomplete.' + barKey,
+        sections = response.sections;
+
+    return DataTransformer.clean(moduleId, {
+      'sections': sections
+    })
   }
 }
