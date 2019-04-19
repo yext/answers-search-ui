@@ -10,8 +10,8 @@ export default class HttpRequester {
 
   }
 
-  get(url, data) {
-    return this.request(Methods.GET, this.encodeParams(url, data))
+  get(url, data, opts) {
+    return this.request(Methods.GET, this.encodeParams(url, data), opts)
   }
 
   post(url, data) {
@@ -22,7 +22,8 @@ export default class HttpRequester {
 
   request(method, url, opts) {
     return fetch(url, Object.assign({
-      method: method
+      method: 'get',
+//      credentials: 'include'
     }, opts));
   }
 

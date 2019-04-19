@@ -112,6 +112,15 @@ export default class DOM {
     DOM.query(selector).setAttribute(attr, val);
   }
 
+  static trigger(selector, event, settings) {
+    let e = new Event(event, Object.assign({
+      'bubbles': true,
+      'cancelable': true
+    }, settings || {}))
+
+    DOM.query(selector).dispatchEvent(e);
+  }
+
   static on(selector, evt, handler) {
     DOM.query(selector).addEventListener(evt, handler);
   }

@@ -37,10 +37,6 @@ export default class AutoCompleteComponent extends Component {
      */
     this._experienceKey = opts.experienceKey || null;
 
-    if (this._barKey === null || this._experienceKey === null) {
-      throw new Error('AutoComplete requires a {barKey} and {experienceKey} to use!');
-    }
-
     /**
      * A reference to the input el selector for auto complete
      * @type {string}
@@ -51,7 +47,11 @@ export default class AutoCompleteComponent extends Component {
      * An internal reference for the data-storage to listen for updates from the server
      * @type {string}
      */
-    this.moduleId = 'search.' + this._barKey;
+    let moduleId = 'autocomplete';
+    if (this._barKey !== undefined && this._barKey !== null) {
+      moduleId = 'autocomplete.' + this._barKey;
+    }
+    this.moduleId = moduleId;
 
     /**
      * The default handlebars template name to use for rendering
@@ -80,6 +80,11 @@ export default class AutoCompleteComponent extends Component {
      * @type {number}
      */
     this._resultIndex = -1;
+
+    /**
+     * Callback invoked when the `Enter` key is pressed on auto complete.
+     */
+    this._onSubmit = opts.onSubmit || function() {};
   }
 
   /**
@@ -140,6 +145,7 @@ export default class AutoCompleteComponent extends Component {
           val = data.value,
           filter = JSON.parse(data.filter);
 
+      this._onSubmit();
       this.updateQuery(val);
       this.close();
     });

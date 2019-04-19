@@ -56,7 +56,10 @@ export default class SearchComponent extends Component {
       barKey: this._barKey,
       experienceKey: this._experienceKey,
       container: '.yext-search-autocomplete',
-      inputEl: inputSelector
+      inputEl: inputSelector,
+      onSubmit: () => {
+        DOM.trigger('form', 'submit');
+      }
     });
   }
 
