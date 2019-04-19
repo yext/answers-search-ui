@@ -1,5 +1,36 @@
 import HttpRequester from '../http/httprequester';
 
+export default class AutoComplete {
+  constructor(opts = {}) {
+    this._isLocal = true;
+
+    this._baseUrl = this._isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
+
+    this._version = opts.version || 20190101 || 20190301;
+
+    this._apiKey = opts.apiKey || null;
+
+    this._answersKey = opts.answersKey || null;
+  }
+
+  query(queryString, experienceKey, barKey) {
+    if (experienceKey && barKey) {
+      return new VSAutoCompleteRequest({
+        apiKey: this._apiKey,
+        version: this._version,
+        baseUrl: this._baseUrl,
+      }).get(queryString, experienceKey, barKey);
+    } else {
+      return new UniversalAutoCompleteRequest({
+        apiKey: this._apiKey,
+        answersKey: this._answersKey,
+        version: this._version,
+        baseUrl: this._baseUrl
+      }).get(queryString);
+    }
+  }
+}
+
 class UniversalAutoCompleteRequest {
   constructor(opts = {}) {
     this._requester = new HttpRequester();
@@ -32,7 +63,6 @@ class UniversalAutoCompleteRequest {
     });
   }
 }
-
 
 class VSAutoCompleteRequest {
   constructor(opts = {}) {
@@ -67,38 +97,6 @@ class VSAutoCompleteRequest {
   }
 }
 
-export default class AutoComplete {
-  constructor(opts = {}) {
-    this._isLocal = true;
-
-    this._requester = new HttpRequester();
-
-    this._baseUrl = this._isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
-
-    this._version = opts.version || 20190101 || 20190301;
-
-    this._apiKey = opts.apiKey || null;
-
-    this._answersKey = opts.answersKey || null;
-  }
-
-  query(queryString, experienceKey, barKey) {
-    if (experienceKey && barKey) {
-      return new VSAutoCompleteRequest({
-        apiKey: this._apiKey,
-        version: this._version,
-        baseUrl: this._baseUrl,
-      }).get(queryString, experienceKey, barKey);
-    } else {
-      return new UniversalAutoCompleteRequest({
-        apiKey: this._apiKey,
-        answersKey: this._answersKey,
-        version: this._version,
-        baseUrl: this._baseUrl
-      }).get(queryString);
-    }
-  }
-}
 
 // Create our own front-end data models
 class DataTransformer {
