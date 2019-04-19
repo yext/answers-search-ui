@@ -31,25 +31,22 @@
       apiKey: '429baa6106459e64ed03056e36323f17',
       answersKey: 'finDemo',
       onReady: function() {
-        this.addComponent('SearchComponent', {
-          container: '.search-container',
-          class: 'custom-search-class',
+        this.addComponent('SearchBar', {
           barKey: 'testBar',
           experienceKey: 'nathan_singlebar_test',
+          container: '.search-container',
+          class: 'custom-search-class',
           title: 'Healthcare Professional',
           searchText: 'What is your problem?'
         })
 
-        this.addComponent('SearchComponent', {
+        this.addComponent('SearchBar', {
           container: '.search-container2',
-          class: 'custom-search-class',
           barKey: 'doctor_location',
-          experienceKey: 'nathan_singlebar_test',
-          title: ' ',
-          searchText: 'location?'
+          experienceKey: 'nathan_singlebar_test'
         })
 
-        this.addComponent('UniversalResultsComponent', {
+        this.addComponent('UniversalResults', {
           container: '.results-container'
         });
       }
