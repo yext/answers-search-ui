@@ -74,7 +74,7 @@ function bundleTemplates() {
       })
     ]
   })
-  .pipe(source('japitemplates.compiled.bundle.min.js'))
+  .pipe(source('japitemplates.compiled.min.js'))
   .pipe(dest('dist'));
 }
 
