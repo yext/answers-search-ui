@@ -39,13 +39,24 @@ export default class Search {
 // Create our own front-end data models
 class DataTransformer {
   static transform(data) {
-    let sections = data.response.modules;
+    let sections = DataTransformer.sort(data.response.modules);
 
     return {
+      navigation: {
+        tabOrder: DataTransformer.navigation(sections),
+      },
       universalResults: {
-        sections: DataTransformer.sort(sections)
+        sections: sections
       }
     };
+  }
+
+  static navigation(sections) {
+    let nav = [];
+    for (let i = 0; i < sections.length; i ++) {
+      nav.push(sections[i].verticalConfigId)
+    }
+    return nav;
   }
 
   static sort(sections) {

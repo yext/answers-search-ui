@@ -82,11 +82,3 @@ export default class Storage {
     delete this._futureListeners[moduleId];
   }
 }
-
-class ModuleDataDelegator {
-  constructor() {
-    this.data = {
-      // MODULEID: DataTransformer
-    }
-  }
-}

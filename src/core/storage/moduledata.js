@@ -20,9 +20,12 @@ export default class ModuleData extends EventEmitter {
 
     this.capturePrevious();
 
+    // TODO(billy) This assumes the top level properties are all contained within
+    // an object. Probably not a good assumption to make.
     let keys = Object.keys(data),
         len = keys.length,
         isDirty = false;
+
     for (let i = 0; i < len; i ++) {
       let prop = keys[i],
           val = data[keys[i]];
