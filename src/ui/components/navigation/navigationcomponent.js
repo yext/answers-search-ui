@@ -33,6 +33,11 @@ export default class NavigationComponent extends Component {
     // tabOrder from the settings provided.
     for (let i = 0; i < opts.tabs.length; i++) {
       let tab = opts.tabs[i];
+      // For tabs without config ids, map their URL to the configID
+      // to avoid duplication of renders
+      if (tab.configId === undefined && this._tabs[tab.configId] === undefined) {
+        tab.configId = tab.url;
+      }
       this._tabOrder.push(tab.configId);
       this._tabs[tab.configId] = {
         label: tab.label,
