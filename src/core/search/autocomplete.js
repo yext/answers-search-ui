@@ -2,7 +2,8 @@ import ApiRequest from '../http/apirequest';
 
 export default class AutoComplete {
   constructor(opts = {}) {
-    this._isLocal = true;
+    let params = new URL(window.location.toString()).searchParams;
+    let isLocal = params.get('local');
 
     this._baseUrl = this._isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
 

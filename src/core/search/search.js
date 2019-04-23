@@ -2,7 +2,8 @@ import HttpRequester from '../http/httprequester';
 
 export default class Search {
   constructor(opts = {}) {
-    let isLocal = true;
+    let params = new URL(window.location.toString()).searchParams;
+    let isLocal = params.get('local');
 
     this._requester = new HttpRequester();
 
