@@ -16,7 +16,7 @@ const concat = require('gulp-concat');
 const declare = require('gulp-declare');
 const wrap = require('gulp-wrap');
 
-const NAMESPACE = 'JAPI';
+const NAMESPACE = 'ANSWERS';
 
 function precompileTemplates() {
     return src('./src/ui/templates/**/*.hbs')
@@ -55,17 +55,17 @@ function precompileTemplates() {
           return declare.processNameByPath(path, '').replace('.', '/');
         }
       }))
-      .pipe(concat('japitemplates.compiled.js'))
+      .pipe(concat('answerstemplates.compiled.min.js'))
       .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
       .pipe(dest('dist'));
 }
 
 function bundleTemplates() {
   return rollup({
-    input: './dist/japitemplates.compiled.js',
+    input: './dist/answerstemplates.compiled.min.js',
     output: {
       format: 'iife',
-      name: '__$japitemplateinit'
+      name: '__$answerstemplateinit'
     },
     plugins: [
       resolve(),
@@ -74,13 +74,13 @@ function bundleTemplates() {
       })
     ]
   })
-  .pipe(source('japitemplates.compiled.min.js'))
+  .pipe(source('answerstemplates.compiled.min.js'))
   .pipe(dest('dist'));
 }
 
 function bundle() {
   return rollup({
-    input: './src/japi-umd.js',
+    input: './src/answers-umd.js',
     output: {
       format: 'umd',
       name: NAMESPACE,
@@ -98,12 +98,12 @@ function bundle() {
       })
     ]
   })
-  .pipe(source('japi.min.js'))
+  .pipe(source('answers.min.js'))
   .pipe(dest('dist'));
 }
 
 function minify(cb) {
-  return src('./dist/japi.min.js')
+  return src('./dist/answers.min.js')
     .pipe(uglify())
     .pipe(dest('dist'));
 }

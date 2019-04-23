@@ -44,7 +44,7 @@ export default class TemplateLoader {
         onload: resolve,
         onerror: reject,
         async: true,
-        src: '../dist/japitemplates.compiled.min.js'
+        src: '../dist/answerstemplates.compiled.min.js'
       });
 
       DOM.append('body', script);

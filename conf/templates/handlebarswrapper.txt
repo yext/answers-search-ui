@@ -7,7 +7,7 @@ context['_hb'] = Handlebars;
 <%= contents %>;
 
 const autoinit = function() {
-  JAPI.templates.register(context);
+  ANSWERS.templates.register(context);
 }()
 
 export default autoinit;

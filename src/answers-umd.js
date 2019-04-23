@@ -7,12 +7,12 @@ import {
 
 /**
  * Our API should only be instantiable once
- * @type {JAPI} The instance of JAPI
+ * @type {ANSWERS} The instance of ANSWERS
  */
-export default class JAPI {
+export default class ANSWERS {
   constructor(opts = {}) {
-    if (!JAPI.setInstance(this)) {
-      return JAPI.getInstance();
+    if (!ANSWERS.setInstance(this)) {
+      return ANSWERS.getInstance();
     }
 
     this.components = COMPONENT_MANAGER;
@@ -52,7 +52,7 @@ export default class JAPI {
   }
 
   static init(opts) {
-    return new JAPI(opts);
+    return new ANSWERS(opts);
   }
 
   onReady(cb) {

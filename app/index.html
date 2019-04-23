@@ -6,7 +6,7 @@
 
 <body>
   <nav class="navigation-container">
-    <!-- navigation component will get injected here -->\
+    <!-- navigation component will get injected here -->
   </nav>
 
   <div class="search-container">
@@ -21,7 +21,7 @@
     <!-- results component will get injected here -->
   </div>
 
-  <script src="../dist/japi.min.js"></script>
+  <script src="../dist/answers.min.js"></script>
   <script>
     // FinDemo
     // 429baa6106459e64ed03056e36323f17
@@ -35,40 +35,42 @@
     // d7185aa5d8ea68645b0599e451f2db49
     // askyext
 
-    JAPI.init({
-      apiKey: '429baa6106459e64ed03056e36323f17',
-      answersKey: 'finDemo',
+    ANSWERS.init({
+      apiKey: 'd7185aa5d8ea68645b0599e451f2db49',
+      answersKey: 'askyext',
       onReady: function() {
         this.addComponent('Navigation', {
           container: '.navigation-container',
           tabs: [
             {
-              configId: 'finDemoATMs',
-              label: 'ATM',
+              configId: 'locations',
+              label: 'Locations',
               url: 'path/to/atm'
             },
             {
-              configId: 'finDemoBranches',
-              label: 'Branches',
+              configId: 'employees',
+              label: 'Employees',
               url: 'path/to/branches'
             },
             {
-              configId: 'finCreditCards',
-              label: 'Credit Cards',
+              configId: 'events',
+              label: 'Events',
               url: 'path/to/creditcards'
             }
           ]
         })
 
+        // Example Vertical Search Component
         this.addComponent('SearchBar', {
-          barKey: 'testBar',
-          experienceKey: 'nathan_singlebar_test',
+          barKey: 'input',
+          experienceKey: 'locations',
           container: '.search-container',
           class: 'custom-search-class',
           title: 'VS AutoComplete',
           searchText: 'What are you looking for?'
         })
 
+        // Example Universal Search Component
         this.addComponent('SearchBar', {
           container: '.search-container2',
           class: 'custom-search-class',

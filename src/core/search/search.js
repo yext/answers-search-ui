@@ -54,6 +54,9 @@ class DataTransformer {
 
   static navigation(sections) {
     let nav = [];
+    if (!sections || !Array.isArray(sections)) {
+      return nav;
+    }
     for (let i = 0; i < sections.length; i ++) {
       nav.push(sections[i].verticalConfigId)
     }
