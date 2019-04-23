@@ -4,15 +4,33 @@ export default class NavigationComponent extends Component {
   constructor(opts = {}) {
     super(opts);
 
+    /**
+     * The data storage key
+     * @type {string}
+     */
     this.moduleId = 'navigation';
 
+    /**
+     * The handlebars template to use
+     * @type {string}
+     */
     this._templateName = 'navigation/navigation';
 
+    /**
+     * The order of the tabs, parsed from configuration.
+     * This gets updated based on the server results
+     * @type {Array.<String>} The list of VS configIds
+     */
     this._tabOrder = [];
 
+    /**
+     * The data container for each tab, keyed by VS configId
+     * @type {Object.<String, Object>}
+     */
     this._tabs = {};
 
-    // Build out oru tabs configuration
+    // Parse the options and build out our tabs and
+    // tabOrder from the settings provided.
     for (let i = 0; i < opts.tabs.length; i++) {
       let tab = opts.tabs[i];
       this._tabOrder.push(tab.configId);
@@ -23,6 +41,17 @@ export default class NavigationComponent extends Component {
     }
   }
 
+  static get type() {
+    return 'Navigation';
+  }
+
+  /**
+   * Since the server data only provides a list of
+   * VS configIds, we need to compute and transform
+   * the data into the proper format for rendering.
+   *
+   * @override
+   */
   setState(data) {
     if (data.tabOrder !== undefined) {
       this._tabOrder = data.tabOrder;
@@ -54,10 +83,5 @@ export default class NavigationComponent extends Component {
 
   render(data) {
     return super.render(data);
-  }
-
-
-  static get type() {
-    return 'Navigation';
   }
 }
