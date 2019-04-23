@@ -9,9 +9,10 @@
     <!-- navigation component will get injected here -->
   </nav>
 
-  <div class="universal-search-container">
+  <div class="search-container">
     <!-- search component will get injected here -->
   </div>
+
 
   <div class="results-container">
     <!-- results component will get injected here -->
@@ -39,28 +40,19 @@
           container: '.navigation-container',
           tabs: [
             {
-              configId: 'locations',
-              label: 'Locations',
-              url: 'locations.html'
-            },
-            {
-              configId: 'employees',
-              label: 'Employees',
-              url: 'path/to/branches'
-            },
-            {
-              configId: 'events',
-              label: 'Events',
-              url: 'path/to/creditcards'
+              label: 'Home',
+              url: 'index.html'
             }
           ]
         })
 
-        // Example Universal Search Component
+        // Example Vertical Search Component
         this.addComponent('SearchBar', {
-          container: '.universal-search-container',
+          barKey: 'input',
+          experienceKey: 'locations',
+          container: '.search-container',
           class: 'custom-search-class',
-          title: 'Universal Auto Complete',
+          title: 'VS AutoComplete',
           searchText: 'What are you looking for?'
         })
 
