@@ -1,12 +1,12 @@
 # Answers
 Answers Javascript API Library.
 
-Includes:
+Outline:
+1. [Install / Setup](#install-&-setup)
+2. [Component Usage](#component-usage)
+3. [Types of Components](#types-of-components)
 
-1. Core API Library
-2. Component API Library
-
-# Install / Setup
+# Install & Setup
 
 To include the answers base CSS (optional).
 ```html
