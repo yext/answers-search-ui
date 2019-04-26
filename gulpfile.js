@@ -16,6 +16,8 @@ const concat = require('gulp-concat');
 const declare = require('gulp-declare');
 const wrap = require('gulp-wrap');
 
+const sass = require('gulp-sass');
+
 const NAMESPACE = 'ANSWERS';
 
 function precompileTemplates() {
@@ -118,6 +120,13 @@ function minifyTemplates(cb) {
     .pipe(dest('dist'));
 }
 
+function compileCSS() {
+  return src('./src/sass/**/*.scss')
+    .pipe(sass({
+      outputStyle: 'compressed'
+    }).on('error', sass.logError))
+    .pipe(dest('./dist/'))
+}
 
 function watchJS(cb) {
   return watch(['./src/**/*.js'], {
@@ -125,11 +134,19 @@ function watchJS(cb) {
   }, series(bundle));
 }
 
+function watchCSS(cb) {
+  return watch(['./src/**/*.scss'], {
+    ignored: './dist/'
+  }, series(compileCSS));
+}
+
 exports.default = exports.build = parallel(
                                     series(precompileTemplates, bundleTemplates, minifyTemplates),
-                                    series(bundle, minifyJS)
+                                    series(bundle, minifyJS),
+                                    series(compileCSS)
                                   );
 exports.dev = parallel(
                 series(precompileTemplates, bundleTemplates),
-                series(bundle, watchJS)
+                series(bundle, watchJS),
+                series(compileCSS, watchCSS)
               );

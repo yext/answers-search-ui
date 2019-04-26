@@ -5,7 +5,7 @@
   "main": "gulpfile.js",
   "dependencies": {
     "gulp": "^4.0.0",
-    "handlebars": "^4.1.0"
+    "handlebars": "^4.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
@@ -15,9 +15,11 @@
     "gulp-handlebars": "^5.0.2",
     "gulp-remove-code": "^3.0.4",
     "gulp-rollup-lightweight": "^1.0.10",
+    "gulp-sass": "^4.0.2",
     "gulp-uglify": "^3.0.1",
     "gulp-umd": "^2.0.0",
     "gulp-wrap": "^0.14.0",
+    "node-sass": "^4.11.0",
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.2.1",
