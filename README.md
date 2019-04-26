@@ -4,14 +4,14 @@ Answers Javascript API Library.
 Outline:
 1. [Install / Setup](#install-&-setup)
 2. [Component Usage](#component-usage)
-- [Base Component Configuration](#base-component-configuration)
-- [Adding a Component](#adding-a-component)
-- [Using a Custom Template](#using-a-custom-template)
-- [Using a Custom Renderer](#using-a-custom-renderer)
+   - [Base Component Configuration](#base-component-configuration)
+   - [Adding a Component](#adding-a-component)
+   - [Using a Custom Template](#using-a-custom-template)
+   - [Using a Custom Renderer](#using-a-custom-renderer)
 3. [Types of Components](#types-of-components)
-- [Navigation Component](#navigation-component)
-- [SearchBar Component](#searchbar-component)
-- [UniversalResults Component](#universalresults-component)
+   - [Navigation Component](#navigation-component)
+   - [SearchBar Component](#searchbar-component)
+  - [UniversalResults Component](#universalresults-component)
 
 # Install & Setup
 
