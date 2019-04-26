@@ -195,7 +195,7 @@ ANSWERS.addComponent('UniversalResults', {
 })
 ```
 
-### Custom Render for ALL Items
+### Custom Render for ALL Result Items
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
@@ -205,6 +205,13 @@ ANSWERS.addComponent('UniversalResults', {
 })
 ````
 
+### Custom Template for ALL Result Items
+```js
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  itemTemplate: `my item {{name}}`
+})
+````
 
 ### Custom Render For Specific Vertical Result Items
 
