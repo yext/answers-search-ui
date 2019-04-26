@@ -1,15 +1,15 @@
 {
-  "name": "japi",
+  "name": "answers",
   "version": "1.0.0",
   "description": "Javascript Answers Programming Interface",
   "main": "gulpfile.js",
   "dependencies": {
-    "gulp": "^4.0.0",
     "handlebars": "^4.1.2"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
+    "gulp": "^4.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-declare": "^0.3.0",
     "gulp-handlebars": "^5.0.2",

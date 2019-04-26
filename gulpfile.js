@@ -121,7 +121,7 @@ function minifyTemplates(cb) {
 }
 
 function compileCSS() {
-  return src('./src/sass/**/*.scss')
+  return src('./src/ui/sass/**/*.scss')
     .pipe(sass({
       outputStyle: 'compressed'
     }).on('error', sass.logError))
@@ -135,7 +135,7 @@ function watchJS(cb) {
 }
 
 function watchCSS(cb) {
-  return watch(['./src/**/*.scss'], {
+  return watch(['./src/ui/sass/**/*.scss'], {
     ignored: './dist/'
   }, series(compileCSS));
 }
