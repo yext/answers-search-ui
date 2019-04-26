@@ -1,6 +1,6 @@
 module.exports = [
     {
-        path: "dist/japi.min.js",
+        path: "dist/answers.min.js",
         limit: "9 KB"
     }
 ]
