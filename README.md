@@ -4,7 +4,14 @@ Answers Javascript API Library.
 Outline:
 1. [Install / Setup](#install-&-setup)
 2. [Component Usage](#component-usage)
+- [Base Component Configuration](#base-component-configuration)
+- [Adding a Component](#adding-a-component)
+- [Using a Custom Template](#using-a-custom-template)
+- [Using a Custom Renderer](#using-a-custom-renderer)
 3. [Types of Components](#types-of-components)
+- [Navigation Component](#navigation-component)
+- [SearchBar Component](#searchbar-component)
+- [UniversalResults Component](#universalresults-component)
 
 # Install & Setup
 
@@ -71,7 +78,7 @@ This is an example of the `SearchComponent`. See [Types of Components](#types-of
   })
 ````
 
-## Using a custom HTML Template
+## Using a Custom Template
 All component templates are written using handlebars.
 
 It's easy to override these templates with your own templates.
@@ -90,7 +97,7 @@ Keep in mind, that you must provide valid handlebars syntax here.
 If you want to use a use your own template language (e.g. soy, mustache, groovy, etc),
 you should NOT use the template argument. Instead, you can provide a custom render function to the component.
 
-## Using a Custom Renderer for a component
+## Using a Custom Renderer
 
 ```js
   ANSWERS.addComponent('SearchComponent', {
