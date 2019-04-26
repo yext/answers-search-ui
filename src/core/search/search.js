@@ -40,7 +40,7 @@ export default class Search {
 // Create our own front-end data models
 class DataTransformer {
   static transform(data) {
-    let sections = DataTransformer.sort(data.response.modules);
+    let sections = data.response.modules;
 
     return {
       navigation: {
@@ -61,20 +61,6 @@ class DataTransformer {
       nav.push(sections[i].verticalConfigId)
     }
     return nav;
-  }
-
-  static sort(sections) {
-    if (!sections) {
-      return sections;
-    }
-
-    let s = sections
-      .filter(section => section.resultsCount > 0 && (section.verticalConfigId === 'cap1GoogleCse' || section.appliedQueryFilters.length > 0))
-      .sort((a, b) => {
-        a.appliedQueryFilters.length - b.appliedQueryFilters.length
-      })
-
-    return s;
   }
 }
 
