@@ -180,7 +180,7 @@ ANSWERS.addComponent('SearchBar', {
 
 ## Universal Results Component
 
-The most complex component
+The most complex component has a ton of overridable configuration options.
 
 ```html
 <nav class="universal-results-container"></nav>
@@ -196,6 +196,11 @@ ANSWERS.addComponent('UniversalResults', {
 ```
 
 ### Custom Render for ALL Result Items
+
+You can override the render function for EACH item in the result list,
+as apposed to the entire component.
+
+
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
@@ -206,6 +211,10 @@ ANSWERS.addComponent('UniversalResults', {
 ````
 
 ### Custom Template for ALL Result Items
+
+You can override the handlebars template for EACH item in the result list,
+as apposed to the entire component.
+
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
@@ -214,6 +223,9 @@ ANSWERS.addComponent('UniversalResults', {
 ````
 
 ### Custom Render For Specific Vertical Result Items
+
+You can override the render function for a particular section within the results list,
+by providing a vertical search config id as the context, and using the same options as above.
 
 ```js
 
@@ -230,6 +242,9 @@ ANSWERS.addComponent('UniversalResults', {
 ```
 
 ### Custom Template For Specific Vertical Result Items
+
+You can override the handlebars template for a particular section within the results list,
+by providing a vertical search config id as the context, and using the same options as above.
 
 ```js
 
