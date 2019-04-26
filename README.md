@@ -45,17 +45,24 @@ Every component has the same base configuration options.
 | container | string     | the CSS selector to append the component. | required      |
 | class     | string     | a custom class to apply to the component  | not required  |
 | render    | function   | override render function. data provided   | not required  |
-| template  | string     | override internal mustache template       | not required  |
+| template  | string     | override internal handlebars template       | not required  |
 
 
-## Adding Component
-Every component requires an HTML container.
+## Adding a Component
+Adding a component to your page is super easy!
+You can add many different [types](#types-of-components) of components to your page.
+Each component supports the base configuration options above, as well as their own unique configurations.
+
+To start, every component requires an HTML container.
+
 ```html
 
   <div class="search-container"></div>
 ```
 
-You can add compoennts through the ANSWERS add interface. See Types of Components below.
+Then, you can add a component to your page through the ANSWERS add interface.
+
+This is an example of the `SearchComponent`. See [Types of Components](#types-of-components) below.
 
 ```js
   ANSWERS.addComponent('SearchComponent', {
@@ -64,12 +71,14 @@ You can add compoennts through the ANSWERS add interface. See Types of Component
   })
 ````
 
-## Using internal Mustach template
+## Using a custom HTML Template
+All component templates are written using handlebars.
 
-It's easy to override mustache templates used for components.
-Templates must be provded as valid mustache syntax.
+It's easy to override these templates with your own templates.
+Keep in mind, that you must provide valid handlebars syntax here.
 
 ```js
+  // Use handlebars syntax to create a template string
   let customTemplate = `<div class="my-search">{{title}}</div>`
 
   ANSWERS.addComponent('SearchComponent', {
@@ -78,9 +87,10 @@ Templates must be provded as valid mustache syntax.
   })
 ````
 
-If you don't like mustache, and want to use your own template language, you can use the render function.
+If you want to use a use your own template language (e.g. soy, mustache, groovy, etc),
+you should NOT use the template argument. Instead, you can provide a custom render function to the component.
 
-## Custom Render
+## Using a Custom Renderer for a component
 
 ```js
   ANSWERS.addComponent('SearchComponent', {
