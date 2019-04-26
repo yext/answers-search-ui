@@ -22,7 +22,7 @@ To include the answers base CSS (optional).
 
 Adding the Javascript library
 ```html
-<script src="https://answersjs.netlify.com/answers.min.js" onload="initAnswers()"></script>
+<script src="https://answersjs.netlify.com/answers.min.js" onload="initAnswers()" async></script>
 ```
 
 ```js
