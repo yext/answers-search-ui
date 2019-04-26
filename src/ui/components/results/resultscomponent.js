@@ -65,7 +65,6 @@ export default class ResultsComponent extends Component {
       }
     }
 
-    console.log(config.template);
     if (typeof config.template === 'string') {
       this._itemConfig.global.template = config.template;
     } else {
