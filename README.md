@@ -132,20 +132,20 @@ ANSWERS.addComponent('Navigation', {
   container: '.navigation-container',
   tabs: [
     {
-      label: 'Home',
-      url: './',
-      isFirst: true,        // optional, will always show this item first
-      active: true         // optional, will add a special class to the item
+      label: 'Home',         // The label used for the navigation element
+      url: './index.html',   // The link for the navigation element
+      isFirst: true,         // optional, will always show this item first
+      isActive: true         // optional, will add a special class to the item
     },
     {
-      configId: 'locations' // optional, the vertical search config id
-      label: 'Location'     // The label used for the navigation element
-      url: 'locations.html' // The link for the navigation element
+      configId: 'locations'  // optional, the vertical search config id
+      label: 'Location'      // The label used for the navigation element
+      url: 'locations.html'  // The link for the navigation element
     },
     {
-      configId: 'employees' // optional, the vertical search config id
+      configId: 'employees'  // optional, the vertical search config id
       label: 'Employees'     // The label used for the navigation element
-      url: 'employees.html' // The link for the navigation element
+      url: 'employees.html'  // The link for the navigation element
     }
   ]
 })
