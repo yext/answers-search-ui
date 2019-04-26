@@ -179,3 +179,59 @@ ANSWERS.addComponent('SearchBar', {
 ```
 
 ## Universal Results Component
+
+The most complex component
+
+```html
+<nav class="universal-results-container"></nav>
+```
+
+### Basic Component
+
+```js
+
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+})
+```
+
+### Custom Render for ALL Items
+```js
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  renderItem: function(data) {
+    return `my item ${data.name}`
+  }
+})
+````
+
+
+### Custom Render For Specific Vertical Result Items
+
+```js
+
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  config: {
+    'locations': { // The vertical search config id
+      renderItem: function(data) {
+        return `my item ${data.name}`;
+      }
+    }
+  }
+})
+```
+
+### Custom Template For Specific Vertical Result Items
+
+```js
+
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  config: {
+    'locations': { // The vertical search config id
+      itemTemplate: `my item {{name}}`
+    }
+  }
+})
+```
