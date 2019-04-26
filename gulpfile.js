@@ -71,8 +71,12 @@ function bundleTemplates() {
       resolve(),
       commonjs({
         include: './node_modules/**'
+      }),
+      babel({
+        exclude: 'node_modules/**',
+        presets: ['@babel/env']
       })
-    ]
+    ],
   })
   .pipe(source('answerstemplates.compiled.min.js'))
   .pipe(dest('dist'));
@@ -102,11 +106,18 @@ function bundle() {
   .pipe(dest('dist'));
 }
 
-function minify(cb) {
+function minifyJS(cb) {
   return src('./dist/answers.min.js')
     .pipe(uglify())
     .pipe(dest('dist'));
 }
+
+function minifyTemplates(cb) {
+  return src('./dist/answerstemplates.compiled.min.js')
+    .pipe(uglify())
+    .pipe(dest('dist'));
+}
+
 
 function watchJS(cb) {
   return watch(['./src/**/*.js'], {
@@ -115,8 +126,8 @@ function watchJS(cb) {
 }
 
 exports.default = exports.build = parallel(
-                                    series(precompileTemplates, bundleTemplates),
-                                    series(bundle, minify)
+                                    series(precompileTemplates, bundleTemplates, minifyTemplates),
+                                    series(bundle, minifyJS)
                                   );
 exports.dev = parallel(
                 series(precompileTemplates, bundleTemplates),
