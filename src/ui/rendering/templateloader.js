@@ -6,6 +6,11 @@ export default class TemplateLoader {
       return TemplateLoader.getInstance();
     }
 
+    let params = new URL(window.location.toString()).searchParams;
+    let isLocal = params.get('local');
+
+    this._templateUrl = isLocal ? '../dist/answerstemplates.compiled.min.js' : 'https://answersjs.netlify.com/answerstemplates.compiled.min.js';
+
     this._templates = {};
 
     this._onLoaded = function() {};
@@ -36,6 +41,7 @@ export default class TemplateLoader {
       return;
     }
 
+    let that = this;
     // Inject a script to fetch the compiled templates,
     // wrapping it a Promise for cleanliness
     new Promise((resolve, reject) => {
@@ -44,7 +50,7 @@ export default class TemplateLoader {
         onload: resolve,
         onerror: reject,
         async: true,
-        src: '../dist/answerstemplates.compiled.min.js'
+        src: that._templateUrl
       });
 
       DOM.append('body', script);
