@@ -132,6 +132,12 @@ ANSWERS.addComponent('Navigation', {
   container: '.navigation-container',
   tabs: [
     {
+      label: 'Home',
+      url: './',
+      isFirst: true,        // optional, will always show this item first
+      active: true         // optional, will add a special class to the item
+    },
+    {
       configId: 'locations' // optional, the vertical search config id
       label: 'Location'     // The label used for the navigation element
       url: 'locations.html' // The link for the navigation element
