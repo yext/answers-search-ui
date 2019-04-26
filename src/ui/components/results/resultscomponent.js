@@ -42,7 +42,14 @@ export default class ResultsComponent extends Component {
       opts.renderItem = opts._parentOpts.renderItem;
     }
 
-    this.configureItem(opts.renderItem);
+    if (opts.itemTemplate === undefined && opts._parentOpts !== undefined) {
+      opts.itemTemplate = opts._parentOpts.itemTemplate;
+    }
+
+    this.configureItem({
+      render: opts.renderItem,
+      template: opts.itemTemplate
+    });
   }
 
   static get type() {
@@ -50,13 +57,21 @@ export default class ResultsComponent extends Component {
   }
 
   configureItem(config) {
-    if (typeof config === 'function') {
-      this._itemConfig.global.render = config;
-      return;
+    if (typeof config.render === 'function') {
+      this._itemConfig.global.render = config.render;
+    } else {
+      for (let key in config.render) {
+        this.setItemRender(key, config.render[key]);
+      }
     }
 
-    for (let key in config) {
-      this.setItemRender(key, config[key]);
+    console.log(config.template);
+    if (typeof config.template === 'string') {
+      this._itemConfig.global.template = config.template;
+    } else {
+      for (let key in config.template) {
+        this.setItemTemplate(key, config.template[key]);
+      }
     }
   }
 
@@ -99,9 +114,15 @@ export default class ResultsComponent extends Component {
         globalConfig = this._itemConfig.global,
         itemConfig = this._itemConfig[clazz.type];
 
-    let hasGlobalRender = typeof globalConfig.render === 'function';
+    let hasGlobalRender = typeof globalConfig.render === 'function',
+        hasGlobalTemplate = typeof globalConfig.template === 'string';
+
     if (hasGlobalRender) {
       comp.setRender(globalConfig.render);
+    }
+
+    if (hasGlobalTemplate) {
+      comp.setTemplate(globalConfig.template);
     }
 
     if (!itemConfig) {
@@ -113,7 +134,7 @@ export default class ResultsComponent extends Component {
     }
 
     // Apply template specific situation
-    if (itemConfig.template) {
+    if (!hasGlobalTemplate && itemConfig.template) {
       comp.setTemplate(itemConfig.template)
     }
     return comp;
