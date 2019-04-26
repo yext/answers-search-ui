@@ -41,7 +41,7 @@ function initAnswers() {
 
 The Answers Component Library exposes an easy to use interface for adding and customizing various types of UI components on your page.
 
-You can add various types of components to a page. Every component requires a containing HTML element.
+Every component requires a containing HTML element.
 
 ## Base Component Configuration
 
