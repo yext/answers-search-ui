@@ -38,10 +38,19 @@ export default class NavigationComponent extends Component {
       if (tab.configId === undefined && this._tabs[tab.configId] === undefined) {
         tab.configId = tab.url;
       }
-      this._tabOrder.push(tab.configId);
+
+      // isFirst should always be the first element in the list
+      if (tab.isFirst) {
+        this._tabOrder.unshift(tab.configId);
+      } else {
+        this._tabOrder.push(tab.configId);
+      }
+
       this._tabs[tab.configId] = {
         label: tab.label,
-        url: tab.url
+        url: tab.url,
+        isFirst: tab.isFirst === true ? true : false,
+        isActive: tab.isActive === true ? true : false
       };
     }
   }
@@ -77,10 +86,19 @@ export default class NavigationComponent extends Component {
     // the other tabs to the end of the array
     for (let configId in this._tabs) {
       if (this._tabOrder.indexOf(configId) <= -1) {
-        tabs.push(this._tabs[configId]);
+        let tab = this._tabs[configId];
+
+        // isFirst should always be the first element in the list
+        if (tab.isFirst) {
+          tabs.unshift(tab);
+          continue;
+        }
+
+        tabs.push(tab);
       }
     }
 
+    console.log(tabs);
     return super.setState({
       tabs: tabs
     });

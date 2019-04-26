@@ -1,5 +1,5 @@
 <nav class="yext-nav">
 {{#each tabs}}
-  <a class="yext-nav-item" href="{{url}}">{{label}}</a>
+  <a class="yext-nav-item {{#if isActive}}active{{/if}}" href="{{url}}">{{label}}</a>
 {{/each}}
 </nav>
