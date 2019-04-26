@@ -11,7 +11,7 @@ Outline:
 3. [Types of Components](#types-of-components)
    - [Navigation Component](#navigation-component)
    - [SearchBar Component](#searchbar-component)
-  - [UniversalResults Component](#universalresults-component)
+   - [UniversalResults Component](#universalresults-component)
 
 # Install & Setup
 
