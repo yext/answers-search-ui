@@ -83,7 +83,6 @@ export default class ANSWERS {
   }
 
   registerHelper(name, cb) {
-    console.log('testttt');
     this.renderer.registerHelper(name, cb);
     return this;
   };
