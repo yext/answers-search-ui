@@ -10,7 +10,7 @@ const builtins = require('rollup-plugin-node-builtins');
 
 const source = require('vinyl-source-stream');
 
-const uglify = require('gulp-uglify');
+const uglify = require('gulp-uglify-es').default;
 
 const handlebars = require('gulp-handlebars');
 const concat = require('gulp-concat');
