@@ -1,4 +1,5 @@
 import ModuleData from './moduledata';
+import SearchDataTransformer from '../search/searchdatatransformer';
 
 export default class Storage {
   constructor() {
@@ -22,6 +23,10 @@ export default class Storage {
 
       this._moduleDataContainer[moduleId].set(data[moduleId]);
     }
+  }
+
+  insertUniversalResults(data) {
+    this.insert(SearchDataTransformer.transform(data));
   }
 
   getState(moduleId) {
