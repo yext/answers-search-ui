@@ -134,6 +134,13 @@ export default class AutoCompleteComponent extends Component {
       }, 100)
     });
 
+    // When a user focuses the input, we should populate the autocomplete based
+    // on the current value
+    DOM.on(queryInput, 'focus', () => {
+      this.reset();
+      this.core.autoComplete(queryInput.value, this._experienceKey, this._barKey);
+    });
+
     // Allow the user to navigate between the results using the keyboard
     DOM.on(queryInput, 'keydown', (e) => {
      this.handleNavigateResults(e.keyCode, e);
@@ -145,8 +152,8 @@ export default class AutoCompleteComponent extends Component {
           val = data.value,
           filter = JSON.parse(data.filter);
 
-      this._onSubmit();
       this.updateQuery(val);
+      this._onSubmit();
       this.close();
     });
 
