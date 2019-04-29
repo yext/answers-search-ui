@@ -9,34 +9,30 @@ import {
  * Our API should only be instantiable once
  * @type {ANSWERS} The instance of ANSWERS
  */
-export default class ANSWERS {
-  constructor(opts = {}) {
-    if (!ANSWERS.setInstance(this)) {
-      return ANSWERS.getInstance();
+class Answers {
+  constructor() {
+    if (!Answers.setInstance(this)) {
+      return Answers.getInstance();
     }
 
-    this.renderer = null;
+    /**
+     * A reference of the renderer to use for the components
+     * This is provided during initialization.
+     * @type {Renderer}
+     */
+    this.renderer = new Renderers.Handlebars();
 
+    /**
+     * A local reference to the component manager
+     * @type {ComponentManager}
+     */
     this.components = COMPONENT_MANAGER;
 
-    // Templates are currently downloaded separately from the CORE and UI bundle.
-    // Future enhancement is to ship the components with templates in a separate bundle.
-    this.templates = new TemplateLoader().onLoaded((templates) => {
-      this.renderer = new Renderers.Handlebars(templates);
-
-      this.components
-        .setCore(new Core({
-          apiKey: opts.apiKey,
-          answersKey: opts.answersKey
-        }))
-        .setRenderer(this.renderer);
-
-      this._onReady.call(this);
-    });
-
-    this._onReady = opts.onReady || function() {};
-
-    return this;
+    /**
+     * A callback function to invoke once the library is ready.
+     * Typically fired after templates are fetched from server for rendering.
+     */
+    this._onReady = function() {};
   }
 
   static setInstance(instance) {
@@ -51,12 +47,24 @@ export default class ANSWERS {
     return this.instance;
   }
 
-  static get templates() {
-    return this.instance.templates;
-  }
+  init(opts) {
+    this.components.setCore(new Core({
+      apiKey: opts.apiKey,
+      answersKey: opts.answersKey
+    }))
+    .setRenderer(this.renderer);
 
-  static init(opts) {
-    return new ANSWERS(opts);
+    // Templates are currently downloaded separately from the CORE and UI bundle.
+    // Future enhancement is to ship the components with templates in a separate bundle.
+    this.templates = new TemplateLoader().onLoaded((templates) => {
+      this.renderer.init(templates);
+
+      this._onReady.call(this);
+    });
+
+    this._onReady = opts.onReady || function() {};
+
+    return this;
   }
 
   onReady(cb) {
@@ -88,3 +96,5 @@ export default class ANSWERS {
   };
 }
 
+const ANSWERS = new Answers();
+export default ANSWERS;

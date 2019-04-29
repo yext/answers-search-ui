@@ -2,17 +2,19 @@ import Renderer from './renderer';
 import TemplateLoader from './templateloader';
 
 export default class HandlebarsRenderer extends Renderer {
-  constructor(templates, opts = {}) {
+  constructor(templates = {}, opts = {}) {
     super();
 
     this._handlebars = templates._hb || null;
 
     this._templates = templates || {};
-
-    this._init();
   }
 
-  _init() {
+  init(templates) {
+    this._handlebars = templates._hb;
+
+    this._templates = templates;
+
     this.registerHelper('ifeq', function(arg1, arg2, options) {
       return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
     })
