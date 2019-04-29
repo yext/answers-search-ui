@@ -13,15 +13,15 @@ export default class HandlebarsRenderer extends Renderer {
   }
 
   _init() {
-    this._handlebars.registerHelper('ifeq', function(arg1, arg2, options) {
+    this.registerHelper('ifeq', function(arg1, arg2, options) {
       return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
     })
 
-    this._handlebars.registerHelper('ifnoteq', function(arg1, arg2, options) {
+    this.registerHelper('ifnoteq', function(arg1, arg2, options) {
       return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
     })
 
-    this._handlebars.registerHelper('assign', function(name, value, options) {
+    this.registerHelper('assign', function(name, value, options) {
       let args = arguments;
       options = args[args.length - 1];
 
@@ -36,6 +36,10 @@ export default class HandlebarsRenderer extends Renderer {
 
       options.data.root[name] = v;
     })
+  }
+
+  registerHelper(name, cb) {
+    this._handlebars.registerHelper(name, cb);
   }
 
   compile(template) {

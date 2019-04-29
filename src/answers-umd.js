@@ -15,17 +15,21 @@ export default class ANSWERS {
       return ANSWERS.getInstance();
     }
 
+    this.renderer = null;
+
     this.components = COMPONENT_MANAGER;
 
     // Templates are currently downloaded separately from the CORE and UI bundle.
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new TemplateLoader().onLoaded((templates) => {
-      COMPONENT_MANAGER
+      this.renderer = new Renderers.Handlebars(templates);
+
+      this.components
         .setCore(new Core({
           apiKey: opts.apiKey,
           answersKey: opts.answersKey
         }))
-        .setRenderer(new Renderers.Handlebars(templates));
+        .setRenderer(this.renderer);
 
       this._onReady.call(this);
     });
@@ -44,7 +48,7 @@ export default class ANSWERS {
   }
 
   static getInstance(opts) {
-    return this.instance;git
+    return this.instance;
   }
 
   static get templates() {
@@ -77,5 +81,11 @@ export default class ANSWERS {
     this.components.create('Component', opts).init().mount();
     return;
   }
+
+  registerHelper(name, cb) {
+    console.log('testttt');
+    this.renderer.registerHelper(name, cb);
+    return this;
+  };
 }
 

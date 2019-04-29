@@ -4,9 +4,10 @@ const path = require('path');
 
 const rollup = require('gulp-rollup-lightweight');
 const babel = require('rollup-plugin-babel');
-
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
+const builtins = require('rollup-plugin-node-builtins');
+
 const source = require('vinyl-source-stream');
 
 const uglify = require('gulp-uglify');
@@ -71,6 +72,7 @@ function bundleTemplates() {
     },
     plugins: [
       resolve(),
+      builtins(),
       commonjs({
         include: './node_modules/**'
       }),

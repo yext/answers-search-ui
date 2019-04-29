@@ -11,4 +11,12 @@ export default class Renderer {
   render(template, data) {
     return template;
   }
+
+  registerHelper(name, cb) {
+
+  }
+
+  compile(template) {
+
+  }
 }

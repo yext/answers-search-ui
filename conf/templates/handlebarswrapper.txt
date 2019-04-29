@@ -1,4 +1,24 @@
 import Handlebars from 'handlebars/dist/handlebars.min.js';
+import templateHelpers from 'template-helpers';
+
+const ignoreHelpers = ['each'];
+let parseHelper = function(helpers) {
+
+  for (let name in helpers) {
+    if (typeof helpers[name] !== 'function') {
+      parseHelper(helpers[name]);
+      continue;
+    }
+
+    if (ignoreHelpers.indexOf(name) > -1) {
+      continue;
+    }
+    Handlebars.registerHelper(name, helpers[name]);
+  }
+}
+
+let handlebarsHelpers = templateHelpers();
+parseHelper(handlebarsHelpers);
 
 var context = context || {};
 
