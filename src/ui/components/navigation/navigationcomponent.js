@@ -98,7 +98,6 @@ export default class NavigationComponent extends Component {
       }
     }
 
-    console.log(tabs);
     return super.setState({
       tabs: tabs
     });
