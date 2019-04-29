@@ -122,6 +122,14 @@ export default class Component {
     this._isMounted = false;
 
     /**
+     * A local reference to the callback, thats used to transform the internal data
+     * models of the components, before it gets applied to the component state.
+     * By default, no transformation happens.
+     * @type {function}
+     */
+    this.transformData = opts.transformData || this.transformData || function() {};
+
+    /**
      * The a local reference to the callback that will be invoked when a component is Mounted.
      * @type {function}
      */
@@ -152,8 +160,12 @@ export default class Component {
   }
 
   setState(data) {
-    this._state.set(data);
+    this._state.set(this.transformData(data));
     return this;
+  }
+
+  transformData(data) {
+    return data;
   }
 
   addChild(data, type, opts) {
