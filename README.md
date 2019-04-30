@@ -31,7 +31,7 @@ function initAnswers() {
   ANSWERS.init({
     apiKey: '<API_KEY_HERE>',
     answersKey: '<ANSWERS_KEY_HERE>',
-    useTemplates: false, // optional, defaults true - DON'T CHANGE IF YOU WANT TO USE OUR TEMPLATES
+    useTemplates: false,                         // optional, defaults true
     templateUrl: 'path/to/precompiled/templates' // optional, defaults to CDN
     onReady: function() {
       // Component logic her
@@ -47,7 +47,7 @@ Below is a list of configuration options that can be used during initialization.
 |-----------|------------|-------------------------------------------|---------------|
 | apiKey       | string     | Your API key                              | required      |
 | answersKey   | string     | The key used for your answers project     | required      |
-| useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates   | not required  |
+| useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | not required  |
 | templateUrl  | string     | Use precompiled template hosted by you       | not required  |
 
 
