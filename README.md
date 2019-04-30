@@ -137,9 +137,10 @@ you can use the `dataTransform` hook.
 ANSWERS.addComponent('SearchComponent', {
   container: '.search-container',
   dataTrasform: (data) => {
-    return {
+    // Extend/overide the data object
+    return Object.assign(data, {
       title: data.title.toLowerCase()
-    }
+    })
   },
   render: function(data) {
     // Using native ES6 templates -- but you can replace this with soy,
