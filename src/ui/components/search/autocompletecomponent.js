@@ -129,9 +129,7 @@ export default class AutoCompleteComponent extends Component {
     DOM.on(queryInput, 'blur', () => {
       // Blur fires before click events, so we want to delay the event
       // from being processed until the next UI tick.
-      setTimeout(() => {
-        this.close();
-      }, 100)
+      this.close();
     });
 
     // When a user focuses the input, we should populate the autocomplete based
@@ -147,7 +145,7 @@ export default class AutoCompleteComponent extends Component {
     });
 
     // Allow the user to select a result with the mouse
-    DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
+    DOM.delegate(this._container, '.js-yext-autocomplete-option', 'mousedown', (evt, target) => {
       let data = target.dataset,
           val = data.value,
           filter = JSON.parse(data.filter);
