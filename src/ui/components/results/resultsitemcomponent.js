@@ -10,12 +10,4 @@ export default class ResultsItemComponent extends Component {
   static get type() {
     return 'ResultsItemComponent';
   }
-
-  // render(data) {
-  //   if (this._parent._renders[this.constructor.type]) {
-  //     console.log('ah');
-  //     this._render = this._parent._renders[this.constructor.type];
-  //     return super.render(data);
-  //   }
-  // }
 }
