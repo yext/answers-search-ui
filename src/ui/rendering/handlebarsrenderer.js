@@ -5,16 +5,68 @@ export default class HandlebarsRenderer extends Renderer {
   constructor(templates = {}, opts = {}) {
     super();
 
+    /**
+     * A local reference to the handlebars compiler
+     * @type {Handlebars}
+     * @private
+     */
     this._handlebars = templates._hb || null;
 
+    /**
+     * A local reference to the pre-compiled handlebars templates
+     * @type {Handlebars}
+     * @private
+     */
     this._templates = templates || {};
   }
 
   init(templates) {
+    // Assign the handlebars compiler and templates based on
+    // information provided from external dep (in default case, it comes from external server request)
     this._handlebars = templates._hb;
-
     this._templates = templates;
 
+    // TODO(billy) Once we re-write templates using the new helpers library
+    // we probably don't need these custom helpers anymore
+    this._registerCustomHelpers();
+  }
+
+  /**
+   * registerHelper is a public interface for external dependencies to
+   * register their own custom helpers to our internal Handlebars Compiler
+   */
+  registerHelper(name, cb) {
+    this._handlebars.registerHelper(name, cb);
+  }
+
+  /**
+   * compile a handlebars template so that it can be rendered,
+   * using the {Handlebars} compiler
+   * @param {string} template The template string to compile
+   */
+  compile(template) {
+    if (typeof template !== 'string') {
+      return '';
+    }
+    return this._handlebars.compile(template);
+  }
+
+  /**
+   * render will render a template with data
+   * @param {Object} config Provide either a templateName or a pre-compiled template
+   * @param {Object} data The data to provide to the template
+   */
+  render(config, data) {
+    // If a custom template is provided, use it,
+    // otherwise fall back to the template name
+    // TODO(billy) This interface should probably be less ugly
+    if (config.template !== null) {
+      return config.template(data);
+    }
+    return this._templates[config.templateName](data);
+  }
+
+  _registerCustomHelpers() {
     this.registerHelper('ifeq', function(arg1, arg2, options) {
       return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
     })
@@ -38,25 +90,5 @@ export default class HandlebarsRenderer extends Renderer {
 
       options.data.root[name] = v;
     })
-  }
-
-  registerHelper(name, cb) {
-    this._handlebars.registerHelper(name, cb);
-  }
-
-  compile(template) {
-    if (typeof template !== 'string') {
-      return '';
-    }
-    return this._handlebars.compile(template);
-  }
-
-  render(config, data) {
-    if (config.template !== null) {
-      // TODO(billy) these templates need to be pre-compiled with handlebars,
-      // and so we need to somehow ship the compiler.
-      return config.template(data);
-    }
-    return this._templates[config.templateName](data);
   }
 }
