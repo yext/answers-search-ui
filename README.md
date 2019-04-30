@@ -30,12 +30,24 @@ function initAnswers() {
   ANSWERS.init({
     apiKey: '<API_KEY_HERE>',
     answersKey: '<ANSWERS_KEY_HERE>',
+    useTemplates: false, // optional, defaults true - DON'T CHANGE IF YOU WANT TO USE OUR TEMPLATES
+    templateUrl: 'path/to/precompiled/templates' // optional, defaults to CDN
     onReady: function() {
       // Component logic her
-    })
+    }),
   })
 }
 ```
+
+## Initialization Configuration
+
+|  option   | type       | description                               | required      |
+|-----------|------------|-------------------------------------------|---------------|
+| apiKey       | string     | Your API key                              | required      |
+| answersKey   | string     | The key used for your answers project     | required      |
+| useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates   | not required  |
+| templateUrl  | string     | Use precompiled template hosted by you       | not required  |
+
 
 # Component Usage
 
@@ -53,6 +65,7 @@ Every component has the same base configuration options.
 | class     | string     | a custom class to apply to the component  | not required  |
 | render    | function   | override render function. data provided   | not required  |
 | template  | string     | override internal handlebars template       | not required  |
+| onMount   | function   | invoked when the HTML is mounted to the DOM | not required |
 
 
 ## Adding a Component
@@ -157,7 +170,7 @@ The SearchBar component is the main entry point for search querying. It provides
 types their query, as well as the autocomplete behavior.
 
 ```html
-<nav class="search-query-container"></nav>
+<div class="search-query-container"></div>
 ```
 
 There are two types of search experiences. Universal Search and Vertical Search.
@@ -189,7 +202,7 @@ ANSWERS.addComponent('SearchBar', {
 The most complex component has a ton of overridable configuration options.
 
 ```html
-<nav class="universal-results-container"></nav>
+<div class="universal-results-container"></div>
 ```
 
 ### Basic Component
