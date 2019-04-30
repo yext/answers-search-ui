@@ -9,6 +9,7 @@ Outline:
    - [Adding a Component](#adding-a-component)
    - [Using a Custom Template](#using-a-custom-template)
    - [Using a Custom Renderer](#using-a-custom-renderer)
+   - [Custom Data Transforms](#custom-data-transforms)
 3. [Types of Components](#types-of-components)
    - [Navigation Component](#navigation-component)
    - [SearchBar Component](#searchbar-component)
@@ -57,17 +58,19 @@ The Answers Component Library exposes an easy to use interface for adding and cu
 
 Every component requires a containing HTML element.
 
+
 ## Base Component Configuration
 
 Every component has the same base configuration options.
 
 |  option   | type       | description                               | required      |
 |-----------|------------|-------------------------------------------|---------------|
-| container | string     | the CSS selector to append the component. | required      |
-| class     | string     | a custom class to apply to the component  | not required  |
-| render    | function   | override render function. data provided   | not required  |
-| template  | string     | override internal handlebars template       | not required  |
-| onMount   | function   | invoked when the HTML is mounted to the DOM | not required |
+| container     | string     | the CSS selector to append the component. | required      |
+| class         | string     | a custom class to apply to the component  | not required  |
+| render        | function   | override render function. data provided   | not required  |
+| template      | string     | override internal handlebars template       | not required  |
+| dataTransform | function   | A hook for transforming data before it gets sent to render | not required |
+| onMount       | function   | invoked when the HTML is mounted to the DOM | not required |
 
 
 ## Adding a Component
@@ -108,14 +111,36 @@ ANSWERS.addComponent('SearchComponent', {
 })
 ````
 
+## Using a Custom Renderer
+
 If you want to use a use your own template language (e.g. soy, mustache, groovy, etc),
 you should NOT use the template argument. Instead, you can provide a custom render function to the component.
-
-## Using a Custom Renderer
 
 ```js
 ANSWERS.addComponent('SearchComponent', {
   container: '.search-container',
+  render: function(data) {
+    // Using native ES6 templates -- but you can replace this with soy,
+    // or any other templating language as long as it returns a string.
+    return `<div class="my-search">${data.title}</div>`
+  }
+})
+````
+
+## Custom Data Transforms
+
+If you want to mutate the data thats provided to the render/template before it gets rendered,
+you can use the `dataTransform` hook.
+
+
+```js
+ANSWERS.addComponent('SearchComponent', {
+  container: '.search-container',
+  dataTrasform: (data) => {
+    return {
+      title: data.title.toLowerCase()
+    }
+  },
   render: function(data) {
     // Using native ES6 templates -- but you can replace this with soy,
     // or any other templating language as long as it returns a string.
