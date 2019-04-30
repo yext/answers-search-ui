@@ -31,10 +31,10 @@ function initAnswers() {
   ANSWERS.init({
     apiKey: '<API_KEY_HERE>',
     answersKey: '<ANSWERS_KEY_HERE>',
-    useTemplates: false,                         // optional, defaults true
-    templateUrl: 'path/to/precompiled/templates' // optional, defaults to CDN
+    useTemplates: false,                          // optional, defaults true
+    templateUrl: 'path/to/precompiled/templates', // optional, defaults to CDN
     onReady: function() {
-      // Component logic her
+      // Component creation logic here
     }),
   })
 }
@@ -78,8 +78,7 @@ Each component supports the base configuration options above, as well as their o
 To start, every component requires an HTML container.
 
 ```html
-
-  <div class="search-container"></div>
+<div class="search-container"></div>
 ```
 
 Then, you can add a component to your page through the ANSWERS add interface.
@@ -87,10 +86,10 @@ Then, you can add a component to your page through the ANSWERS add interface.
 This is an example of the `SearchComponent`. See [Types of Components](#types-of-components) below.
 
 ```js
-  ANSWERS.addComponent('SearchComponent', {
-    container: '.search-container',
-    // -- other options --
-  })
+ANSWERS.addComponent('SearchComponent', {
+  container: '.search-container',
+  // -- other options --
+})
 ````
 
 ## Using a Custom Template
@@ -100,13 +99,13 @@ It's easy to override these templates with your own templates.
 Keep in mind, that you must provide valid handlebars syntax here.
 
 ```js
-  // Use handlebars syntax to create a template string
-  let customTemplate = `<div class="my-search">{{title}}</div>`
+// Use handlebars syntax to create a template string
+let customTemplate = `<div class="my-search">{{title}}</div>`
 
-  ANSWERS.addComponent('SearchComponent', {
-    container: '.search-container',
-    template: customTemplate
-  })
+ANSWERS.addComponent('SearchComponent', {
+  container: '.search-container',
+  template: customTemplate
+})
 ````
 
 If you want to use a use your own template language (e.g. soy, mustache, groovy, etc),
@@ -115,14 +114,14 @@ you should NOT use the template argument. Instead, you can provide a custom rend
 ## Using a Custom Renderer
 
 ```js
-  ANSWERS.addComponent('SearchComponent', {
-    container: '.search-container',
-    render: function(data) {
-      // Using native ES6 templates -- but you can replace this with soy,
-      // or any other templating language as long as it returns a string.
-      return `<div class="my-search">${data.title}</div>`
-    }
-  })
+ANSWERS.addComponent('SearchComponent', {
+  container: '.search-container',
+  render: function(data) {
+    // Using native ES6 templates -- but you can replace this with soy,
+    // or any other templating language as long as it returns a string.
+    return `<div class="my-search">${data.title}</div>`
+  }
+})
 ````
 
 # Types of Components
@@ -142,7 +141,6 @@ updated based on the search results.
 ```
 
 ```js
-
 ANSWERS.addComponent('Navigation', {
   container: '.navigation-container',
   tabs: [
@@ -181,7 +179,6 @@ Each provide a different way of auto complete.
 ### For Universal Search:
 
 ```js
-
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
   title: 'Search my Brand',                // optional, defaults to 'Answers'
@@ -191,7 +188,6 @@ ANSWERS.addComponent('SearchBar', {
 
 ### For Vertical Search:
 ```js
-
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
   experienceKey: '<EXPERIENCE_KEY>',  // required
@@ -210,7 +206,6 @@ The most complex component has a ton of overridable configuration options.
 ### Basic Component
 
 ```js
-
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
 })
@@ -249,7 +244,6 @@ You can override the render function for a particular section within the results
 by providing a vertical search config id as the context, and using the same options as above.
 
 ```js
-
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   config: {
@@ -268,7 +262,6 @@ You can override the handlebars template for a particular section within the res
 by providing a vertical search config id as the context, and using the same options as above.
 
 ```js
-
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   config: {
