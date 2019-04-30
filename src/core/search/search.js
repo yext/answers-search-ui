@@ -1,5 +1,6 @@
 import HttpRequester from '../http/httprequester';
 import SearchDataTransformer from './searchdatatransformer';
+import ApiRequest from '../http/apirequest';
 
 export default class Search {
   constructor(opts = {}) {
@@ -8,33 +9,51 @@ export default class Search {
 
     this._requester = new HttpRequester();
 
-    this._baseUrl = isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
+    /**
+     * The baseUrl to use for making a request
+     * @type {string}
+     * @private
+     */
+    this._baseUrl = this._isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
 
-    this._version = opts.version || 20190101 || 20190301;
-
+    /**
+     * The API Key to use for the request
+     * @type {string}
+     * @private
+     */
     this._apiKey = opts.apiKey || null;
 
+    /**
+     * The Answers Key to use for the request
+     * @type {string}
+     * @private
+     */
     this._answersKey = opts.answersKey || null;
 
-    // http://localhost/v2/accounts/me/answers/query?v=20190301&api_key=0ac3132c65069700209f094b6768fcea&answersKey=abc123&input=panda
+    /**
+     * The version of the API to make a request to
+     * @type {string}
+     * @private
+     */
+    this._version = opts.version || 20190101 || 20190301;
   }
 
   query(queryString) {
-    return this._requester
-      .get(this._baseUrl + '/v2/accounts/me/answers/query', this.params({
-        'input': queryString
-      }))
+    let request = new ApiRequest({
+      baseUrl: this._baseUrl,
+      endpoint: '/v2/accounts/me/answers/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': queryString,
+        'answersKey': this._answersKey,
+      }
+    })
+
+    return request.get()
       .then(response => response.json())
       .then(response => SearchDataTransformer.transform(response))
       .catch(error => console.error(error))
-  }
-
-  params(opts) {
-    return Object.assign({
-      'v': this._version,
-      'api_key': this._apiKey,
-      'answersKey': this._answersKey
-    }, opts || {});
   }
 }
 

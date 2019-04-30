@@ -1,3 +1,6 @@
+/**
+ * Types of HTTP requests
+ */
 const Methods = {
   GET: 'get',
   POST: 'post',
@@ -10,14 +13,30 @@ export default class HttpRequester {
 
   }
 
+  /**
+   * Create a GET HTTP request
+   * @param {string} url The url to make a request to
+   * @param {Object} data The data to provide (gets encoded into the URL)
+   * @param {Object} opts Configuration options to use for the request
+   */
   get(url, data, opts) {
     return this.request(Methods.GET, this.encodeParams(url, data), opts)
   }
 
-  post(url, data) {
-    return this.request(Methods.POST, url, {
-      body: JSON.stringify(data)
-    });
+  /**
+   * Create a POST HTTP request
+   * @param {string} url The url to make a request to
+   * @param {Object} data The data to provide (gets encoded into the URL)
+   * @param {Object} opts Configuration options to use for the request
+   */
+  post(url, data, opts) {
+    return this.request(
+      Methods.POST,
+      url,
+      Object.assign({
+        body: JSON.stringify(data)
+      }, opts)
+    );
   }
 
   request(method, url, opts) {

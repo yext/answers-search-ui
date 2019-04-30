@@ -1,4 +1,10 @@
-// Create our own front-end data models
+/**
+ * A Data Transformer that takes the response object from a Search request
+ * And transforms in to a front-end oriented data structure that our
+ * component library and core storage understand.
+ *
+ * TODO(billy) Create our own front-end data models
+ */
 export default class SearchDataTransformer {
   static transform(data) {
     let sections = data.response.modules;
