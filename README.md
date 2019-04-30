@@ -48,6 +48,7 @@ Below is a list of configuration options that can be used during initialization.
 |-----------|------------|-------------------------------------------|---------------|
 | apiKey       | string     | Your API key                              | required      |
 | answersKey   | string     | The key used for your answers project     | required      |
+| onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | not required  |
 | templateUrl  | string     | Use precompiled template hosted by you       | not required  |
 
@@ -67,8 +68,8 @@ Every component has the same base configuration options.
 |-----------|------------|-------------------------------------------|---------------|
 | container     | string     | the CSS selector to append the component. | required      |
 | class         | string     | a custom class to apply to the component  | not required  |
-| render        | function   | override render function. data provided   | not required  |
 | template      | string     | override internal handlebars template       | not required  |
+| render        | function   | override render function. data provided   | not required  |
 | dataTransform | function   | A hook for transforming data before it gets sent to render | not required |
 | onMount       | function   | invoked when the HTML is mounted to the DOM | not required |
 
