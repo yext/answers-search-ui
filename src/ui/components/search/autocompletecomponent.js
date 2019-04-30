@@ -127,8 +127,6 @@ export default class AutoCompleteComponent extends Component {
     // The user exits the input, so we want to reset the state and close
     // the auto complete
     DOM.on(queryInput, 'blur', () => {
-      // Blur fires before click events, so we want to delay the event
-      // from being processed until the next UI tick.
       this.close();
     });
 
