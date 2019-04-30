@@ -1,7 +1,7 @@
 import DOM from '../dom/dom';
 
 export default class TemplateLoader {
-  constructor() {
+  constructor(opts = {}) {
     if (!TemplateLoader.setInstance(this)) {
       return TemplateLoader.getInstance();
     }
@@ -9,7 +9,7 @@ export default class TemplateLoader {
     let params = new URL(window.location.toString()).searchParams;
     let isLocal = params.get('local');
 
-    this._templateUrl = isLocal ? '../dist/answerstemplates.compiled.min.js' : 'https://answersjs.netlify.com/answerstemplates.compiled.min.js';
+    this._templateUrl = opts.templateUrl || (isLocal ? '../dist/answerstemplates.compiled.min.js' : 'https://answersjs.netlify.com/answerstemplates.compiled.min.js');
 
     this._templates = {};
 

@@ -54,15 +54,22 @@ class Answers {
     }))
     .setRenderer(this.renderer);
 
+    this._onReady = opts.onReady || function() {};
+
+    if (opts.useTemplates === false) {
+      this._onReady.call(this);
+      return this;
+    }
+
     // Templates are currently downloaded separately from the CORE and UI bundle.
     // Future enhancement is to ship the components with templates in a separate bundle.
-    this.templates = new TemplateLoader().onLoaded((templates) => {
+    this.templates = new TemplateLoader({
+      templateUrl: opts.templateUrl
+    }).onLoaded((templates) => {
       this.renderer.init(templates);
 
       this._onReady.call(this);
     });
-
-    this._onReady = opts.onReady || function() {};
 
     return this;
   }
