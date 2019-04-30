@@ -3,6 +3,7 @@ Answers Javascript API Library.
 
 Outline:
 1. [Install / Setup](#install-&-setup)
+   - [Configuration Options](#configuration-options)
 2. [Component Usage](#component-usage)
    - [Base Component Configuration](#base-component-configuration)
    - [Adding a Component](#adding-a-component)
@@ -39,7 +40,8 @@ function initAnswers() {
 }
 ```
 
-## Initialization Configuration
+## Configuration Options
+Below is a list of configuration options that can be used during initialization.
 
 |  option   | type       | description                               | required      |
 |-----------|------------|-------------------------------------------|---------------|
