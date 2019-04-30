@@ -1,4 +1,5 @@
 import HttpRequester from '../http/httprequester';
+import SearchDataTransformer from './searchdatatransformer';
 
 export default class Search {
   constructor(opts = {}) {
@@ -24,7 +25,7 @@ export default class Search {
         'input': queryString
       }))
       .then(response => response.json())
-      .then(response => DataTransformer.transform(response))
+      .then(response => SearchDataTransformer.transform(response))
       .catch(error => console.error(error))
   }
 
@@ -37,30 +38,5 @@ export default class Search {
   }
 }
 
-// Create our own front-end data models
-class DataTransformer {
-  static transform(data) {
-    let sections = data.response.modules;
 
-    return {
-      navigation: {
-        tabOrder: DataTransformer.navigation(sections),
-      },
-      universalResults: {
-        sections: sections
-      }
-    };
-  }
-
-  static navigation(sections) {
-    let nav = [];
-    if (!sections || !Array.isArray(sections)) {
-      return nav;
-    }
-    for (let i = 0; i < sections.length; i ++) {
-      nav.push(sections[i].verticalConfigId)
-    }
-    return nav;
-  }
-}
 
