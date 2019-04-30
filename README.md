@@ -87,10 +87,10 @@ To start, every component requires an HTML container.
 
 Then, you can add a component to your page through the ANSWERS add interface.
 
-This is an example of the `SearchComponent`. See [Types of Components](#types-of-components) below.
+This is an example of the `SearchBar`. See [Types of Components](#types-of-components) below.
 
 ```js
-ANSWERS.addComponent('SearchComponent', {
+ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   // -- other options --
 })
@@ -106,7 +106,7 @@ Keep in mind, that you must provide valid handlebars syntax here.
 // Use handlebars syntax to create a template string
 let customTemplate = `<div class="my-search">{{title}}</div>`
 
-ANSWERS.addComponent('SearchComponent', {
+ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   template: customTemplate
 })
@@ -118,7 +118,7 @@ If you want to use a use your own template language (e.g. soy, mustache, groovy,
 you should NOT use the template argument. Instead, you can provide a custom render function to the component.
 
 ```js
-ANSWERS.addComponent('SearchComponent', {
+ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   render: function(data) {
     // Using native ES6 templates -- but you can replace this with soy,
@@ -135,7 +135,7 @@ you can use the `dataTransform` hook.
 
 
 ```js
-ANSWERS.addComponent('SearchComponent', {
+ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   dataTransform: (data) => {
     // Extend/overide the data object
