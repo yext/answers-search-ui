@@ -136,7 +136,7 @@ you can use the `dataTransform` hook.
 ```js
 ANSWERS.addComponent('SearchComponent', {
   container: '.search-container',
-  dataTrasform: (data) => {
+  dataTransform: (data) => {
     // Extend/overide the data object
     return Object.assign(data, {
       title: data.title.toLowerCase()
