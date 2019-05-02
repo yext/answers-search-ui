@@ -80,7 +80,7 @@ export default class SearchComponent extends Component {
 
     let form = DOM.query(this._container, formSelector);
     if (!form) {
-      throw new Error('Could not initialize SearchBar; {HTMLElement} `form` is missing.');
+      throw new Error('Could not initialize SearchBar; Can not find {HTMLElement} `', this._formEl, '`.');
     }
 
     DOM.on(form, 'submit', (e) => {
