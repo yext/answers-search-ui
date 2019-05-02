@@ -160,7 +160,7 @@ export default class Component {
   }
 
   setState(data) {
-    this._state.set(this.transformData(data));
+    this._state.set(data);
     return this;
   }
 
@@ -229,7 +229,7 @@ export default class Component {
    */
   render(data) {
     this.beforeRender();
-    data = data || this._state.get();
+    data = this.transformData(data) || this.transformData(this._state.get());
 
     if (typeof this._render === 'function') {
       let html = this._render(data);
