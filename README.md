@@ -4,6 +4,7 @@ Answers Javascript API Library.
 Outline:
 1. [Install / Setup](#install-&-setup)
    - [Configuration Options](#configuration-options)
+   - [Template Helpers](#template-helpers)
 2. [Component Usage](#component-usage)
    - [Base Component Configuration](#base-component-configuration)
    - [Adding a Component](#adding-a-component)
@@ -52,6 +53,17 @@ Below is a list of configuration options that can be used during initialization.
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | not required  |
 | templateUrl  | string     | Use precompiled template hosted by you       | not required  |
 
+## Template Helpers
+When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
+
+If you want to register custom template helpers to the handlebars render, you can do so like this:
+```
+ANSWERS.registerHelper('noop', function(options) {
+  return options.fn(this);
+})
+```
+
+You can learn more about the interface for registering helpers by taking a look at the [Handlebars Block Helpers](https://handlebarsjs.com/block_helpers.html) documentation.
 
 # Component Usage
 
@@ -132,6 +144,8 @@ ANSWERS.addComponent('SearchBar', {
 
 If you want to mutate the data thats provided to the render/template before it gets rendered,
 you can use the `transformData` hook.
+
+All properties and values that you return from here will be accessible from templates.
 
 
 ```js
