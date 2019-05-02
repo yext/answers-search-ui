@@ -33,8 +33,6 @@ function initAnswers() {
   ANSWERS.init({
     apiKey: '<API_KEY_HERE>',
     answersKey: '<ANSWERS_KEY_HERE>',
-    useTemplates: false,                          // optional, defaults true
-    templateUrl: 'path/to/precompiled/templates', // optional, defaults to CDN
     onReady: function() {
       // Component creation logic here
     }),
