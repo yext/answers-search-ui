@@ -57,7 +57,7 @@ Below is a list of configuration options that can be used during initialization.
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
 
 If you want to register custom template helpers to the handlebars render, you can do so like this:
-```
+```js
 ANSWERS.registerHelper('noop', function(options) {
   return options.fn(this);
 })
