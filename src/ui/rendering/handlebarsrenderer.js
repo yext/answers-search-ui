@@ -104,12 +104,12 @@ export default class HandlebarsRenderer extends Renderer {
       let encodedMarkers = '',
           mapMarkers = mapData.mapMarkers,
           width = mapConfig.width || 600,
-          height = mapConfig.height || 300,
+          height = mapConfig.height || 200,
           zoom = mapConfig.height || 13
 
       for (let i = 0; i < mapMarkers.length; i++) {
         let mm = mapMarkers[i];
-        encodedMarkers += `&markers=label: ${mm.label},${mm.latitude},${mm.longitude}`
+        encodedMarkers += `&markers=label:${mm.label}|${mm.latitude},${mm.longitude}`
       }
 
       return `<img src="https://maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&size=${width}x${height}&key=${mapConfig.apiKey}">`;
