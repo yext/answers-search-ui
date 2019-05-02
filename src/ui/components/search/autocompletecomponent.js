@@ -120,6 +120,9 @@ export default class AutoCompleteComponent extends Component {
   onCreate() {
     // Use the context of the parent component to find the input node.
     let queryInput = DOM.query(this._parent._container, this._inputEl);
+    if (!queryInput) {
+      throw new Error('Could not initialize AutoComplete. Missing {HTMLElement} `inputEl` CSS selector.')
+    }
 
     // Disable the native auto complete
     DOM.attr(queryInput, 'autoComplete', 'off');
