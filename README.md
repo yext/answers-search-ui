@@ -70,7 +70,7 @@ Every component has the same base configuration options.
 | class         | string     | a custom class to apply to the component  | not required  |
 | template      | string     | override internal handlebars template       | not required  |
 | render        | function   | override render function. data provided   | not required  |
-| dataTransform | function   | A hook for transforming data before it gets sent to render | not required |
+| transformData | function   | A hook for transforming data before it gets sent to render | not required |
 | onMount       | function   | invoked when the HTML is mounted to the DOM | not required |
 
 
@@ -131,13 +131,13 @@ ANSWERS.addComponent('SearchBar', {
 ## Custom Data Transforms
 
 If you want to mutate the data thats provided to the render/template before it gets rendered,
-you can use the `dataTransform` hook.
+you can use the `transformData` hook.
 
 
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
-  dataTransform: (data) => {
+  transformData: (data) => {
     // Extend/overide the data object
     return Object.assign(data, {
       title: data.title.toLowerCase()
