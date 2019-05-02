@@ -66,12 +66,6 @@ export default class SearchComponent extends Component {
   }
 
   onMount() {
-    // Custom renders means our native Javascript probably wont work.
-    // So lets protect it, and let them manually initialize
-    if (this._render || this._template) {
-      return;
-    }
-
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
     this.initAutoComplete(this._inputEl);
