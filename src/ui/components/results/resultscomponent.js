@@ -52,6 +52,13 @@ export default class ResultsComponent extends Component {
     });
   }
 
+  setState(data, val) {
+    return super.setState(Object.assign(data, {
+      includeMap: this._opts.includeMap,
+      mapConfig: this._opts.mapConfig
+    }), val);
+  }
+
   static get type() {
     return 'Results';
   }

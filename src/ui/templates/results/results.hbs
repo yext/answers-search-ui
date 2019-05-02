@@ -1,5 +1,16 @@
 <section class="yext-result-list">
   <h1>{{verticalConfigId}}</h1>
+  {{#if includeMap}}
+  {{map}}
+    <div class="yext-map-container">
+      {{#ifeq mapConfig.mapProvider 'google'}}
+        {{{googleMap map mapConfig}}}
+      {{/ifeq}}
+      {{#ifeq mapConfig.mapProvider 'mapBox'}}
+        {{{mapBox map mapConfig}}}
+      {{/ifeq}}
+    </div>
+  {{/if}}
   <ul class="yext-filters-applied">
     {{#each appliedQueryFilters}}
       <li class="yext-filter">

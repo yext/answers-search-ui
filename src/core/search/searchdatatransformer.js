@@ -14,9 +14,48 @@ export default class SearchDataTransformer {
         tabOrder: SearchDataTransformer.navigation(sections),
       },
       universalResults: {
-        sections: sections
+        sections: SearchDataTransformer.sections(sections)
       }
     };
+  }
+
+  static sections(sections) {
+    let newSections = [];
+    if (!sections || !Array.isArray(sections)) {
+      return sections;
+    }
+
+    // Our sections should contain a property of mapMarker objects
+    for (let i = 0; i < sections.length; i ++) {
+      let mapMarkers = [],
+          section = sections[i],
+          centerCoordinates = {};
+
+      for (let j = 0; j < section.results.length; j ++) {
+        let result = section.results[j];
+        if (result && result.yextDisplayCoordinate) {
+          if (!centerCoordinates.latitude) {
+            centerCoordinates = {
+              latitude: result.yextDisplayCoordinate.latitude,
+              longitude: result.yextDisplayCoordinate.longitude
+            };
+          }
+          mapMarkers.push({
+            label: mapMarkers.length + 1,
+            latitude: result.yextDisplayCoordinate.latitude,
+            longitude: result.yextDisplayCoordinate.longitude
+          })
+        }
+      }
+
+      newSections.push(Object.assign(section, {
+        'map': {
+          'mapCenter': centerCoordinates,
+          'mapMarkers': mapMarkers
+        }
+      }))
+    }
+    return newSections;
   }
 
   static navigation(sections) {
