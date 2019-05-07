@@ -58,11 +58,17 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = opts.query || '';
+    this.query = opts.query || new URLSearchParams(window.location.search.substring(1)).get('query') || '';
   }
 
   static get type() {
     return 'SearchBar';
+  }
+
+  onCreate() {
+    if (this.query && this.query.length > 0) {
+      this.search(this.query);
+    }
   }
 
   onMount() {
@@ -111,6 +117,10 @@ export default class SearchComponent extends Component {
 
   search(query) {
     this.core.search(query);
+    let params = new URLSearchParams(window.location.search.substring(1));
+    params.set('query', query);
+
+    window.history.pushState(null, null, '?' + params.toString());
   }
 
   setState(data) {
