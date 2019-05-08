@@ -63,6 +63,10 @@ export default class ResultsComponent extends Component {
   }
 
   setState(data, val) {
+    if (Object.keys(data).length === 0) {
+      return this;
+    }
+
     return super.setState(Object.assign(data, {
       includeMap: this._opts.includeMap,
       mapConfig: this._opts.mapConfig
