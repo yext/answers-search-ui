@@ -38,6 +38,25 @@ export default class Search {
     this._version = opts.version || 20190101 || 20190301;
   }
 
+  verticalQuery(queryString, verticalKey) {
+    let request = new ApiRequest({
+      baseUrl: this._baseUrl,
+      endpoint: '/v2/accounts/me/answers/vertical/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': queryString,
+        'answersKey': this._answersKey,
+        'verticalKey': verticalKey
+      }
+    });
+
+    return request.get()
+      .then(response => response.json())
+      .then(response => SearchDataTransformer.transformVertical(response))
+      .catch(error => console.error(error));
+  }
+
   query(queryString) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,

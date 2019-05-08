@@ -15,6 +15,7 @@ Outline:
    - [Navigation Component](#navigation-component)
    - [SearchBar Component](#searchbar-component)
    - [UniversalResults Component](#universal-results-component)
+   - [VerticalResults Component](#vertical-results-component)
 
 # Install & Setup
 
@@ -229,8 +230,8 @@ ANSWERS.addComponent('SearchBar', {
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
-  experienceKey: '<EXPERIENCE_KEY>',  // required
-  barKey: '<BAR_KEY>'                 // required
+  verticalKey: '<EXPERIENCE_KEY>',    // required
+  barKey: '<BAR_KEY>'                 // optional
 })
 ```
 
@@ -308,5 +309,21 @@ ANSWERS.addComponent('UniversalResults', {
       itemTemplate: `my item {{name}}`
     }
   }
+})
+```
+
+## Vertical Results Component
+
+The Vertical Results component shares all the same configurations from Universal Results, but you don't need to specifiy a config or context.
+
+You define all the options at the top level object.
+
+```html
+<div class="results-container"></div>
+```
+
+```js
+ANSWERS.addComponent('VerticalResults', {
+  container: '.results-container',
 })
 ```

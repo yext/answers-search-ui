@@ -1,23 +1,25 @@
-<section class="yext-result-list">
-  <h1>{{verticalConfigId}}</h1>
-  {{#if includeMap}}
-  {{map}}
-    <div class="yext-map-container">
-      {{#ifeq mapConfig.mapProvider 'google'}}
-        {{{googleMap map mapConfig}}}
-      {{/ifeq}}
-      {{#ifeq mapConfig.mapProvider 'mapBox'}}
-        {{{mapBox map mapConfig}}}
-      {{/ifeq}}
-    </div>
-  {{/if}}
-  <ul class="yext-filters-applied">
-    {{#each appliedQueryFilters}}
-      <li class="yext-filter">
-        <span class="yext-filter-key">{{key}}:</span>
-        <span class="yext-filter-value"> {{value}}</span>
-      </li>
-    {{/each}}
-  </ul>
-  {{> results/resultitems}}
-</section>
+{{#if results}}
+  <section class="yext-result-list">
+    <h1>{{verticalConfigId}}</h1>
+    {{#if includeMap}}
+    {{map}}
+      <div class="yext-map-container">
+        {{#ifeq mapConfig.mapProvider 'google'}}
+          {{{googleMap map mapConfig}}}
+        {{/ifeq}}
+        {{#ifeq mapConfig.mapProvider 'mapBox'}}
+          {{{mapBox map mapConfig}}}
+        {{/ifeq}}
+      </div>
+    {{/if}}
+    <ul class="yext-filters-applied">
+      {{#each appliedQueryFilters}}
+        <li class="yext-filter">
+          <span class="yext-filter-key">{{key}}:</span>
+          <span class="yext-filter-value"> {{value}}</span>
+        </li>
+      {{/each}}
+    </ul>
+    {{> results/resultitems}}
+  </section>
+{{/if}}

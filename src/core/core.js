@@ -30,6 +30,15 @@ export default class Core {
     });
   }
 
+  verticalSearch(queryString, verticalKey) {
+    return this._searcher
+      .verticalQuery(queryString, verticalKey)
+      .then(data => {
+        console.log(data);
+        this.storage.insert(data);
+      })
+  }
+
   search(queryString) {
     return this._searcher
       .query(queryString)

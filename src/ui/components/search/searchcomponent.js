@@ -23,7 +23,7 @@ export default class SearchComponent extends Component {
      * If not provided, auto-complete and search will be based on universal
      * @type {string}
      */
-    this._experienceKey = opts.experienceKey || null;
+    this._verticalKey = opts.verticalKey || null;
 
     /**
      * Query submission is based on a form as context.
@@ -116,11 +116,16 @@ export default class SearchComponent extends Component {
   }
 
   search(query) {
-    this.core.search(query);
     let params = new URLSearchParams(window.location.search.substring(1));
     params.set('query', query);
 
     window.history.pushState(null, null, '?' + params.toString());
+
+    if (this._verticalKey) {
+      this.core.verticalSearch(query, this._verticalKey);
+    } else {
+      this.core.search(query);
+    }
   }
 
   setState(data) {

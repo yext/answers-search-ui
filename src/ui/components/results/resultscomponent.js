@@ -15,6 +15,8 @@ export default class ResultsComponent extends Component {
   constructor(opts = {}) {
     super(opts);
 
+    this.moduleId = 'verticalResults';
+
     this._templateName = 'results/results';
 
     this.limit = opts.limit || 5;
@@ -60,7 +62,7 @@ export default class ResultsComponent extends Component {
   }
 
   static get type() {
-    return 'Results';
+    return 'VerticalResults';
   }
 
   configureItem(config) {
