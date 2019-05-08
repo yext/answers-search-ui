@@ -164,6 +164,10 @@ export default class Component {
     return this;
   }
 
+  getState(key) {
+    return this._state.get(key);
+  }
+
   transformData(data) {
     return data;
   }

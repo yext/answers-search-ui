@@ -54,6 +54,14 @@ export default class ResultsComponent extends Component {
     });
   }
 
+  mount() {
+    if (Object.keys(this.getState()).length > 0) {
+      super.mount();
+    }
+
+    return this;
+  }
+
   setState(data, val) {
     return super.setState(Object.assign(data, {
       includeMap: this._opts.includeMap,
