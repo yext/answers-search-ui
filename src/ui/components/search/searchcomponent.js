@@ -70,7 +70,7 @@ export default class SearchComponent extends Component {
       this.search(this.query);
     }
 
-    DOM.on(window, 'popstate', () => { this.handleBrowserHistory() });
+    this.bindBrowserHistory();
   }
 
   onMount() {
@@ -93,17 +93,19 @@ export default class SearchComponent extends Component {
 
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
-      this.search(form.querySelector(this._inputEl).value);
+
+      let query = form.querySelector(this._inputEl).value,
+          params = this.getUrlParams();
+
+      params.set('query', query);
+
+      window.history.pushState({
+        query: query
+      }, query, './?' + params.toString());
+
+      this.search(query);
       return false;
     })
-  }
-
-  handleBrowserHistory() {
-    let query = this.getUrlParams().get('query');
-    if (query) {
-      this.setState('query', query);
-      this.search(query);
-    }
   }
 
   /**
@@ -125,18 +127,7 @@ export default class SearchComponent extends Component {
     });
   }
 
-  getUrlParams() {
-    return new URLSearchParams(window.location.search.substring(1));
-  }
-
   search(query) {
-    let params = this.getUrlParams();
-    params.set('query', query);
-
-    window.history.pushState({
-      query: query
-    }, null, '?' + params.toString());
-
     if (this._verticalKey) {
       this.core.verticalSearch(query, this._verticalKey);
     } else {
@@ -150,5 +141,20 @@ export default class SearchComponent extends Component {
       searchText: this.searchText,
       query: this.query
     }, data))
+  }
+
+  getUrlParams() {
+    return new URLSearchParams(window.location.search.substring(1));
+  }
+
+  bindBrowserHistory() {
+    DOM.on(window, 'popstate', () => {
+      this.query = this.getUrlParams().get('query');
+      this.setState({
+        query: this.query
+      });
+
+      this.search(this.query);
+    });
   }
 }
