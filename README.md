@@ -14,6 +14,7 @@ Outline:
 3. [Types of Components](#types-of-components)
    - [Navigation Component](#navigation-component)
    - [SearchBar Component](#searchbar-component)
+   - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
 
@@ -36,7 +37,7 @@ function initAnswers() {
     answersKey: '<ANSWERS_KEY_HERE>',
     onReady: function() {
       // Component creation logic here
-    }),
+    })
   })
 }
 ```
@@ -232,6 +233,29 @@ ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
   verticalKey: '<EXPERIENCE_KEY>',    // required
   barKey: '<BAR_KEY>'                 // optional
+})
+```
+
+## Direct Answer Component
+
+The Direct Answer Component will render the BEST result, if found,
+based on the query.
+
+```html
+<div class="direct-answer-container"></div>
+```
+
+```js
+ANSWERS.addComponent('DirectAnswer', {
+  container: '.direct-answer-container'
+})
+```
+
+### Basic Component
+
+```js
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
 })
 ```
 
