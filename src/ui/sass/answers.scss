@@ -136,3 +136,20 @@ input {
   background-color: #ccc;
   cursor: pointer;
 }
+
+.yext-direct-answer {
+  border: 1px #ccc solid;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 15px 0;
+  background-color: #f9f9f9;
+
+  .yext-direct-answer-title {
+    border-bottom: 1px #ccc solid;
+    padding-bottom: 15px;
+  }
+
+  .yext-direct-answer-entity-name {
+    color: #888;
+  }
+}
