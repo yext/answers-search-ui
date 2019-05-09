@@ -67,6 +67,10 @@ export default class State extends EventEmitter {
     return this._state[opt_prop];
   }
 
+  has(prop) {
+    return this._state[prop] !== undefined;
+  }
+
   asJSON() {
     return this._state;
   }

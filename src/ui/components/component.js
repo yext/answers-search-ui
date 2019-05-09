@@ -164,8 +164,12 @@ export default class Component {
     return this;
   }
 
-  getState(key) {
-    return this._state.get(key);
+  getState(prop) {
+    return this._state.get(prop);
+  }
+
+  hasState(prop) {
+    return this._state.has(prop);
   }
 
   transformData(data) {
@@ -214,12 +218,16 @@ export default class Component {
     this._template = this._renderer.compile(template);
   }
 
+  unMount() {
+    DOM.empty(this._container);
+  }
+
   mount() {
     if (!this._container) {
       return this;
     }
 
-    DOM.empty(this._container);
+    this.unMount();
     DOM.append(this._container, this.render(this._state.asJSON()));
 
     this._isMounted = true;
