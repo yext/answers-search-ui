@@ -1,0 +1,29 @@
+<form class="yext-question">
+  <label for="name">
+    {{nameLabel}}
+  </label>
+  <input class="yext-input" name="name">
+
+  <label for="email">
+    {{emailLabel}}
+  <label>
+  <input class="yext-input yext-email"
+         name="email"
+         placeholder="example@gmail.com"
+         required>
+
+
+  <label for="question">
+    {{questionLabel}}
+  </label>
+  <textarea class="yext-input" name="question" required>{{question}}</textarea>
+
+  <label for="privacyPolicy" class="yext-privacy-label">
+    <input type="checkbox" name="privacyPolicy" id="privacyPolicy" required>
+    {{privacyPolicyLabel}}
+  </label>
+
+  <input type="submit"
+         class="yext-submit-question"
+         value="{{buttonLabel}}"></button>
+</form>

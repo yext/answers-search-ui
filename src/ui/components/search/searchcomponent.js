@@ -58,7 +58,7 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = opts.query || new URLSearchParams(window.location.search.substring(1)).get('query') || '';
+    this.query = opts.query || this.getUrlParams().get('query') || '';
   }
 
   static get type() {

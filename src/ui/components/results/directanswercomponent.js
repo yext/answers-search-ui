@@ -9,13 +9,12 @@ export default class DirectAnswerComponent extends Component {
     this._templateName = 'results/directanswer';
   }
 
-  mount() {
+  beforeMount() {
     if (!this.hasState('answer')) {
-      this.unMount();
-      return this;
+      return false;
     }
 
-    super.mount();
+    return true;
   }
 
   static get type() {

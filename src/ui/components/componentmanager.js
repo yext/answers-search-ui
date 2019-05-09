@@ -109,7 +109,6 @@ export default class ComponentManager {
       }
 
       this._core.storage
-        .off('update', component.moduleId)
         .on('update', component.moduleId, (data) => {
           component.setState(data);
         })

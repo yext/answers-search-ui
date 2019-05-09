@@ -36,10 +36,6 @@ export default class Storage {
     return {};
   }
 
-  remove() {
-
-  }
-
   on(evt, moduleId, cb) {
     let moduleData = this._moduleDataContainer[moduleId];
     if (moduleData === undefined) {

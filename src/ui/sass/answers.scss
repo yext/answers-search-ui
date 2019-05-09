@@ -5,11 +5,24 @@ body {
   margin: 0 auto;
 }
 
-input {
+input,
+textarea {
   display: block;
   width: 100%;
   height: 30px;
   margin: 10px 0;
+}
+
+textarea {
+  height: 70px;
+}
+
+input[type=checkbox] {
+  display: inline-block;
+  width: 10px;
+  margin: 0;
+  margin-right: 10px;
+  vertical-align: middle;
 }
 
 .js-yext-query-submit {
@@ -137,7 +150,9 @@ input {
   cursor: pointer;
 }
 
-.yext-direct-answer {
+.yext-direct-answer,
+.yext-question {
+  overflow: hidden;
   border: 1px #ccc solid;
   border-radius: 10px;
   padding: 10px;
@@ -151,5 +166,16 @@ input {
 
   .yext-direct-answer-entity-name {
     color: #888;
+  }
+
+  .yext-privacy-label {
+    font-size: 10px;
+    display: block;
+  }
+
+  .yext-submit-question {
+    float: right;
+    width: 100px;
+    height: 30px;
   }
 }

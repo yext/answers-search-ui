@@ -16,11 +16,20 @@ import LocationResultsItemComponent from './results/locationresultsitemcomponent
 import EventResultsItemComponent from './results/eventresultsitemcomponent';
 import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
 
+import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
+
 export const COMPONENT_MANAGER = new ComponentManager()
+      // Core Component
       .register(Component)
+
+      // Navigation Components
       .register(NavigationComponent)
+
+      // Search Components
       .register(SearchComponent)
       .register(AutoCompleteComponent)
+
+      // Results Components
       .register(DirectAnswerComponent)
       .register(UniversalResultsComponent)
       .register(ResultsComponent)
@@ -28,3 +37,6 @@ export const COMPONENT_MANAGER = new ComponentManager()
       .register(LocationResultsItemComponent)
       .register(EventResultsItemComponent)
       .register(PeopleResultsItemComponent)
+
+      // Questions Components
+      .register(QuestionSubmissionComponent)

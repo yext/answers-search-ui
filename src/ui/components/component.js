@@ -228,6 +228,10 @@ export default class Component {
     }
 
     this.unMount();
+    if (this.beforeMount() === false) {
+      return this;
+    }
+
     DOM.append(this._container, this.render(this._state.asJSON()));
 
     this._isMounted = true;
@@ -332,6 +336,14 @@ export default class Component {
    * @param {function} the callback to invoke upon emit
    */
   onUnMount(cb) {
+
+  }
+
+  /**
+   * beforeMount is triggered before the component is mounted to the DOM
+   * @param {function} the callback to invoke upon emit
+   */
+  beforeMount(cb) {
 
   }
 
