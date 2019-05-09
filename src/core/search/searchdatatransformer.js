@@ -13,6 +13,7 @@ export default class SearchDataTransformer {
       navigation: {
         tabOrder: SearchDataTransformer.navigation(sections),
       },
+      directAnswer: SearchDataTransformer.directAnswer(data.response.directAnswer),
       universalResults: {
         sections: SearchDataTransformer.sections(sections)
       }
@@ -26,8 +27,17 @@ export default class SearchDataTransformer {
       SearchDataTransformer.map(response.results))
 
     return {
-      verticalResults: response
+      verticalResults: response,
+      directAnswer: SearchDataTransformer.directAnswer(response)
     };
+  }
+
+  static directAnswer(directAnswer) {
+    if (directAnswer === undefined) {
+      return {};
+    }
+
+    return directAnswer;
   }
 
   static sections(sections) {

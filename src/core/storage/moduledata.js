@@ -14,6 +14,8 @@ export default class ModuleData extends EventEmitter {
   }
 
   set(data) {
+    data = data || {};
+
     if (this._data === undefined) {
       this._data = {};
     }
@@ -25,6 +27,12 @@ export default class ModuleData extends EventEmitter {
     let keys = Object.keys(data),
         len = keys.length,
         isDirty = false;
+
+    // Reset the object if its being applied as empty
+    if (keys.length === 0) {
+      this._data = data;
+      isDirty = true;
+    }
 
     for (let i = 0; i < len; i ++) {
       let prop = keys[i],
