@@ -251,15 +251,10 @@ ANSWERS.addComponent('DirectAnswer', {
 })
 ```
 
-### Basic Component
-
-```js
-ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-})
-```
-
 ## Universal Results Component
+
+The Universal Results component will render the results of a query,
+across all configured verticals, seperated by sections.
 
 The most complex component has a ton of overridable configuration options.
 
