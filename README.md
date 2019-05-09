@@ -17,7 +17,7 @@ Outline:
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
-
+   - [QASubmission Component](#qa-submission-component)
 # Install & Setup
 
 To include the answers base CSS (optional).
@@ -344,5 +344,25 @@ You define all the options at the top level object.
 ```js
 ANSWERS.addComponent('VerticalResults', {
   container: '.results-container',
+})
+```
+
+## QA Submission Component
+
+The QA Submission component provides a form for submitting a QA question,
+when a search query is run.
+
+```html
+<div class="question-submission-container"></div>
+```
+
+```js
+ANSWERS.addComponent('QASubmission', {
+  container: '.question-submission-container',
+  nameLabel: 'Your Name:',             // Optional, defaults to 'Name:'
+  emailLabel: '*Email:',               // Optional, defaults to '*Email:'
+  questionLabel: 'Ask us anything!:',  // Optional, defaults to 'What is your question?'
+  privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
+  buttonLabel: 'Submit'                // Optional,  defaults to 'Submit:'
 })
 ```
