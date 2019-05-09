@@ -63,7 +63,12 @@ export default class HandlebarsRenderer extends Renderer {
     if (config.template !== null) {
       return config.template(data);
     }
-    return this._templates[config.templateName](data);
+
+    try {
+      return this._templates[config.templateName](data);
+    } catch (e) {
+      throw new Error('Can not find/render template: ' + config.templateName, e);
+    }
   }
 
   _registerCustomHelpers() {
