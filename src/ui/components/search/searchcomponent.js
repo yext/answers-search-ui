@@ -69,6 +69,8 @@ export default class SearchComponent extends Component {
     if (this.query && this.query.length > 0) {
       this.search(this.query);
     }
+
+    DOM.on(window, 'popstate', () => { this.handleBrowserHistory() });
   }
 
   onMount() {
@@ -96,6 +98,14 @@ export default class SearchComponent extends Component {
     })
   }
 
+  handleBrowserHistory() {
+    let query = this.getUrlParams().get('query');
+    if (query) {
+      this.setState('query', query);
+      this.search(query);
+    }
+  }
+
   /**
    * A helper method to wire up our auto complete on an input selector
    * @param {string} inputSelector CSS selector to bind our auto complete component to
@@ -115,11 +125,17 @@ export default class SearchComponent extends Component {
     });
   }
 
+  getUrlParams() {
+    return new URLSearchParams(window.location.search.substring(1));
+  }
+
   search(query) {
-    let params = new URLSearchParams(window.location.search.substring(1));
+    let params = this.getUrlParams();
     params.set('query', query);
 
-    window.history.pushState(null, null, '?' + params.toString());
+    window.history.pushState({
+      query: query
+    }, null, '?' + params.toString());
 
     if (this._verticalKey) {
       this.core.verticalSearch(query, this._verticalKey);

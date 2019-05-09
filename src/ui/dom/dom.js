@@ -26,7 +26,7 @@ export default class DOM {
       parent = document;
     }
 
-    if (selector instanceof HTMLElement) {
+    if (selector instanceof HTMLElement || selector instanceof Window) {
       return selector;
     }
 
