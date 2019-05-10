@@ -34,8 +34,7 @@ export default class AutoCompleteDataTransformer {
         let start = Number(subStrings[j].offset),
             end = start + subStrings[j].length;
 
-        highlightedValue = [value.slice(0, start), '<strong>', value.slice(start)].join();
-        highlightedValue = [value.slice(0, end), '</strong>', value.slice(end)].join();
+        highlightedValue = [valuce.slice(0, start), '<strong>', value.slice(start, end), '</strong>', value.slice(end)].join('');
       }
 
       data.push({
