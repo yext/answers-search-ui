@@ -224,7 +224,8 @@ ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
   title: 'Search my Brand',                // optional, defaults to 'Answers'
   searchText: 'What are you looking for?', // optional, defaults to 'What are you interested in?'
-  autoFocus: true                          // optional, defaults to false
+  autoFocus: true,                          // optional, defaults to false
+  redirectUrl: 'path/to/url'                // optional, redirect search query to url
 })
 ```
 

@@ -61,6 +61,17 @@ export default class SearchComponent extends Component {
     this.autoFocus = opts.autoFocus === true ? true : false;
 
     /**
+     * submitURL will force the search query submission to get
+     * redirected to the URL provided.
+     * Optional, defaults to null.
+     *
+     * If no redirectUrl provided, we keep the page as a single page app.
+     *
+     * @type {boolean}
+     */
+    this.redirectUrl = opts.redirectUrl || null;
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string}
@@ -88,6 +99,11 @@ export default class SearchComponent extends Component {
     if (this.autoFocus === true && this.query.length === 0) {
       DOM.query(this._container, this._inputEl).focus();
     }
+
+    if (typeof this.redirectUrl === 'string') {
+      let form = DOM.query(this._container, this._formEl);
+      DOM.attr(form, 'action', this.redirectUrl);
+    }
   }
 
   /**
@@ -110,9 +126,17 @@ export default class SearchComponent extends Component {
 
       params.set('query', query);
 
+      // If we have a redirectUrl, we want the form to be
+      // serialized and submitted.
+      if (typeof this.redirectUrl === 'string') {
+        console.log('nah');
+        window.location.href = this.redirectUrl + '?' + params.toString();
+        return false;
+      }
+
       window.history.pushState({
         query: query
-      }, query, './?' + params.toString());
+      }, query, '?' + params.toString());
 
       this.search(query);
       return false;

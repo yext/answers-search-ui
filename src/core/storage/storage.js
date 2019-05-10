@@ -13,6 +13,10 @@ export default class Storage {
   }
 
   insert(data) {
+    if (data === undefined) {
+      return;
+    }
+
     let moduleIds = Object.keys(data);
     for (let i = 0; i < moduleIds.length; i ++) {
       let moduleId = moduleIds[i];
