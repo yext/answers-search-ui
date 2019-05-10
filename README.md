@@ -223,7 +223,8 @@ Each provide a different way of auto complete.
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
   title: 'Search my Brand',                // optional, defaults to 'Answers'
-  searchText: 'What are you looking for?'  // optional, defaults to 'What are you interested in?'
+  searchText: 'What are you looking for?', // optional, defaults to 'What are you interested in?'
+  autoFocus: true                          // optional, defaults to false
 })
 ```
 

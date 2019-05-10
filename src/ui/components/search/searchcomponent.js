@@ -54,6 +54,13 @@ export default class SearchComponent extends Component {
     this.searchText = opts.searchText || 'What are you interested in?';
 
     /**
+     * Auto focuses the input box if set to true.
+     * Optionally provided, defaults to false.
+     * @type {boolean}
+     */
+    this.autoFocus = opts.autoFocus === true ? true : false;
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string}
@@ -77,6 +84,10 @@ export default class SearchComponent extends Component {
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
     this.initAutoComplete(this._inputEl);
+
+    if (this.autoFocus === true && this.query.length === 0) {
+      DOM.query(this._container, this._inputEl).focus();
+    }
   }
 
   /**
