@@ -166,7 +166,22 @@ export default class SearchComponent extends Component {
         .getActiveComponent('Navigation');
 
       if (nav) {
-        return this.core.search(query, nav.getState('tabs'));
+        let tabs = nav.getState('tabs'),
+            urls = {};
+
+        if (tabs && Array.isArray(tabs)) {
+          for (let i = 0; i < tabs.length; i ++) {
+            let params = this.getUrlParams(tabs[i].url.split('?')[1]);
+            params.set('query', query);
+
+            let url = tabs[i].baseUrl;
+            if (params.toString().length > 0) {
+              url += '?' + params.toString();
+            }
+            urls[tabs[i].configId] = url;
+          }
+        }
+        return this.core.search(query, urls);
       }
 
       return this.core.search(query);
@@ -181,8 +196,9 @@ export default class SearchComponent extends Component {
     }, data))
   }
 
-  getUrlParams() {
-    return new URLSearchParams(window.location.search.substring(1));
+  getUrlParams(url) {
+    url = url || window.location.search.substring(1);
+    return new URLSearchParams(url);
   }
 
   bindBrowserHistory() {

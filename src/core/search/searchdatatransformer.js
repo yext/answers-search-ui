@@ -6,15 +6,9 @@
  * TODO(billy) Create our own front-end data models
  */
 export default class SearchDataTransformer {
-  static transform(data, nav) {
+  static transform(data, urls) {
     let sections = data.response.modules;
 
-    let urls = {};
-    if (nav && Array.isArray(nav)) {
-      for (let i = 0; i < nav.length; i ++) {
-        urls[nav[i].configId] = nav[i].url;
-      }
-    }
     return {
       navigation: {
         tabOrder: SearchDataTransformer.navigation(sections),

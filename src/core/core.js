@@ -42,10 +42,10 @@ export default class Core {
       .catch(error => console.error(error));
   }
 
-  search(queryString, nav) {
+  search(queryString, urls) {
     return this._searcher
       .query(queryString)
-      .then(response => SearchDataTransformer.transform(response, nav))
+      .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
         this.storage.insert(data);
       })
