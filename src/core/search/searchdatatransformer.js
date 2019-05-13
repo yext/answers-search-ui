@@ -52,9 +52,11 @@ export default class SearchDataTransformer {
         sections[i],
         SearchDataTransformer.mapData(sections[i].results));
 
-      newSections.push(Object.assign(newSection, {
-        url: urls[sections[i].verticalConfigId]
-      }));
+      if (urls)
+        newSections.push(Object.assign(newSection, {
+          url: urls[sections[i].verticalConfigId]
+        }));
+      }
     }
     return newSections;
   }
