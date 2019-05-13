@@ -64,6 +64,14 @@ export default class NavigationComponent extends Component {
     return new URLSearchParams(window.location.search.substring(1));
   }
 
+  generateTabUrl(tab) {
+    let params = this.getUrlParams();
+    if (params.toString().length > 0) {
+      tab.url = tab.baseUrl + '?' + params.toString();
+    }
+    return tab;
+  }
+
   /**
    * Since the server data only provides a list of
    * VS configIds, we need to compute and transform
@@ -72,7 +80,6 @@ export default class NavigationComponent extends Component {
    * @override
    */
   setState(data) {
-    let params = this.getUrlParams();
     if (data.tabOrder !== undefined) {
       this._tabOrder = data.tabOrder;
     }
@@ -83,7 +90,7 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < this._tabOrder.length; i ++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
-        tabs.push(tab)
+        tabs.push(this.generateTabUrl(tab));
       }
     }
 
@@ -92,11 +99,7 @@ export default class NavigationComponent extends Component {
     // the other tabs to the end of the array
     for (let configId in this._tabs) {
       if (this._tabOrder.indexOf(configId) <= -1) {
-        let tab = this._tabs[configId];
-
-        if (params.toString().length > 0) {
-          tab.url = tab.baseUrl + '?' + params.toString();
-        }
+        let tab = this.generateTabUrl(this._tabs[configId]);
 
         // isFirst should always be the first element in the list
         if (tab.isFirst) {

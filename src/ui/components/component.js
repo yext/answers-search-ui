@@ -43,7 +43,7 @@ export default class Component {
      * The state (data) of the component to be provided to the template for rendering
      * @type {object}
      */
-    this._state = new State();
+    this._state = new State(opts.state);
 
     /**
      * TODO(billy) This should be 'services'
@@ -128,6 +128,12 @@ export default class Component {
      * @type {function}
      */
     this.transformData = opts.transformData || this.transformData || function() {};
+
+    /**
+     * The a local reference to the callback that will be invoked when a component is created.
+     * @type {function}
+     */
+    this.onCreate = opts.onCreate || this.onCreate || function() {};
 
     /**
      * The a local reference to the callback that will be invoked when a component is Mounted.
