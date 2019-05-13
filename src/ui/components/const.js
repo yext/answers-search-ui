@@ -16,6 +16,8 @@ import LocationResultsItemComponent from './results/locationresultsitemcomponent
 import EventResultsItemComponent from './results/eventresultsitemcomponent';
 import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
 
+import MapComponent from './results/mapcomponent';
+
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
 export const COMPONENT_MANAGER = new ComponentManager()
@@ -37,6 +39,8 @@ export const COMPONENT_MANAGER = new ComponentManager()
       .register(LocationResultsItemComponent)
       .register(EventResultsItemComponent)
       .register(PeopleResultsItemComponent)
+
+      .register(MapComponent)
 
       // Questions Components
       .register(QuestionSubmissionComponent)

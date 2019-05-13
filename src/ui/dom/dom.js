@@ -108,6 +108,14 @@ export default class DOM {
     parent.innerHTML = '';
   }
 
+  static css(selector, styles) {
+    let node = DOM.query(selector);
+
+    for (let prop in styles) {
+      node.style[prop] = styles[prop];
+    }
+  }
+
   static attr(selector, attr, val) {
     DOM.query(selector).setAttribute(attr, val);
   }
