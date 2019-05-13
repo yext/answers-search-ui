@@ -49,6 +49,7 @@ export default class NavigationComponent extends Component {
       this._tabs[tab.configId] = {
         label: tab.label,
         url: tab.url,
+        baseUrl: tab.url,
         isFirst: tab.isFirst === true ? true : false,
         isActive: tab.isActive === true ? true : false
       };
@@ -59,6 +60,10 @@ export default class NavigationComponent extends Component {
     return 'Navigation';
   }
 
+  getUrlParams() {
+    return new URLSearchParams(window.location.search.substring(1));
+  }
+
   /**
    * Since the server data only provides a list of
    * VS configIds, we need to compute and transform
@@ -67,6 +72,7 @@ export default class NavigationComponent extends Component {
    * @override
    */
   setState(data) {
+    let params = this.getUrlParams();
     if (data.tabOrder !== undefined) {
       this._tabOrder = data.tabOrder;
     }
@@ -87,6 +93,10 @@ export default class NavigationComponent extends Component {
     for (let configId in this._tabs) {
       if (this._tabOrder.indexOf(configId) <= -1) {
         let tab = this._tabs[configId];
+
+        if (params.toString().length > 0) {
+          tab.url = tab.baseUrl + '?' + params.toString();
+        }
 
         // isFirst should always be the first element in the list
         if (tab.isFirst) {
