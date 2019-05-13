@@ -24,7 +24,7 @@ export default class SearchDataTransformer {
     let response = data.response;
     Object.assign(
       response,
-      SearchDataTransformer.map(response.results))
+      SearchDataTransformer.mapData(response.results))
 
     return {
       verticalResults: response,
