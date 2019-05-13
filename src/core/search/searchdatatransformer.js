@@ -6,16 +6,22 @@
  * TODO(billy) Create our own front-end data models
  */
 export default class SearchDataTransformer {
-  static transform(data) {
+  static transform(data, nav) {
     let sections = data.response.modules;
 
+    let urls = {};
+    if (nav && Array.isArray(nav)) {
+      for (let i = 0; i < nav.length; i ++) {
+        urls[nav[i].configId] = nav[i].url;
+      }
+    }
     return {
       navigation: {
         tabOrder: SearchDataTransformer.navigation(sections),
       },
       directAnswer: SearchDataTransformer.directAnswer(data.response.directAnswer),
       universalResults: {
-        sections: SearchDataTransformer.sections(sections)
+        sections: SearchDataTransformer.sections(sections, urls)
       }
     };
   }
@@ -40,7 +46,7 @@ export default class SearchDataTransformer {
     return directAnswer;
   }
 
-  static sections(sections) {
+  static sections(sections, urls) {
     let newSections = [];
     if (!sections || !Array.isArray(sections)) {
       return sections;
@@ -48,14 +54,18 @@ export default class SearchDataTransformer {
 
     // Our sections should contain a property of mapMarker objects
     for (let i = 0; i < sections.length; i ++) {
-      newSections.push(Object.assign(
+      let newSection = Object.assign(
         sections[i],
-        SearchDataTransformer.map(sections[i].results)))
+        SearchDataTransformer.mapData(sections[i].results));
+
+      newSections.push(Object.assign(newSection, {
+        url: urls[sections[i].verticalConfigId]
+      }));
     }
     return newSections;
   }
 
-  static map(results) {
+  static mapData(results) {
     let mapMarkers = [],
         centerCoordinates = {};
 

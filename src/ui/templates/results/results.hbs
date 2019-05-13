@@ -1,6 +1,9 @@
 {{#if results}}
   <section class="yext-result-list">
-    <h1>{{verticalConfigId}}</h1>
+    <h1>
+      {{verticalConfigId}}
+      {{#if url}}(<a href="{{url}}">View More</a>){{/if}}
+    </h1>
     {{#if includeMap}}
     {{map}}
       <div class="yext-map-container">

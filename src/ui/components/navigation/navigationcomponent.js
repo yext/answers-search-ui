@@ -48,6 +48,7 @@ export default class NavigationComponent extends Component {
 
       this._tabs[tab.configId] = {
         label: tab.label,
+        configId: tab.configId,
         url: tab.url,
         baseUrl: tab.url,
         isFirst: tab.isFirst === true ? true : false,

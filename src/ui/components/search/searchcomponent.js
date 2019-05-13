@@ -3,7 +3,7 @@ import DOM from '../../dom/dom';
 
 export default class SearchComponent extends Component {
   constructor(opts = {}) {
-    super(opts)
+    super(opts);
 
     /**
      * The template name to use for rendering with handlebars
@@ -158,9 +158,18 @@ export default class SearchComponent extends Component {
 
   search(query) {
     if (this._verticalKey) {
-      this.core.verticalSearch(query, this._verticalKey);
+      return this.core.verticalSearch(query, this._verticalKey);
     } else {
-      this.core.search(query);
+      // NOTE(billy) Temporary hack for DEMO
+      // Remove me after the demo
+      let nav = this.componentManager
+        .getActiveComponent('Navigation');
+
+      if (nav) {
+        return this.core.search(query, nav.getState('tabs'));
+      }
+
+      return this.core.search(query);
     }
   }
 

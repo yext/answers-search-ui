@@ -1,5 +1,4 @@
 import HttpRequester from '../http/httprequester';
-import SearchDataTransformer from './searchdatatransformer';
 import ApiRequest from '../http/apirequest';
 
 export default class Search {
@@ -52,9 +51,7 @@ export default class Search {
     });
 
     return request.get()
-      .then(response => response.json())
-      .then(response => SearchDataTransformer.transformVertical(response))
-      .catch(error => console.error(error));
+      .then(response => response.json());
   }
 
   query(queryString) {
@@ -70,9 +67,7 @@ export default class Search {
     })
 
     return request.get()
-      .then(response => response.json())
-      .then(response => SearchDataTransformer.transform(response))
-      .catch(error => console.error(error))
+      .then(response => response.json());
   }
 }
 

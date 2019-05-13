@@ -1,6 +1,8 @@
 import Search from './search/search';
 import AutoComplete from './search/autocomplete';
 
+import SearchDataTransformer from './search/searchdatatransformer';
+
 import Storage from './storage/storage'
 
 export default class Core {
@@ -33,18 +35,21 @@ export default class Core {
   verticalSearch(queryString, verticalKey) {
     return this._searcher
       .verticalQuery(queryString, verticalKey)
+      .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
-        console.log(data);
         this.storage.insert(data);
       })
+      .catch(error => console.error(error));
   }
 
-  search(queryString) {
+  search(queryString, nav) {
     return this._searcher
       .query(queryString)
+      .then(response => SearchDataTransformer.transform(response, nav))
       .then(data => {
         this.storage.insert(data);
       })
+      .catch(error => console.error(error))
   }
 
   autoComplete(queryString, experienceKey, barKey) {

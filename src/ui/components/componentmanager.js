@@ -116,4 +116,8 @@ export default class ComponentManager {
 
     return component;
   }
+
+  getActiveComponent(type) {
+    return this._activeComponents[type];
+  }
 }
