@@ -99,11 +99,6 @@ export default class SearchComponent extends Component {
     if (this.autoFocus === true && this.query.length === 0) {
       DOM.query(this._container, this._inputEl).focus();
     }
-
-    if (typeof this.redirectUrl === 'string') {
-      let form = DOM.query(this._container, this._formEl);
-      DOM.attr(form, 'action', this.redirectUrl);
-    }
   }
 
   /**
@@ -129,7 +124,6 @@ export default class SearchComponent extends Component {
       // If we have a redirectUrl, we want the form to be
       // serialized and submitted.
       if (typeof this.redirectUrl === 'string') {
-        console.log('nah');
         window.location.href = this.redirectUrl + '?' + params.toString();
         return false;
       }
