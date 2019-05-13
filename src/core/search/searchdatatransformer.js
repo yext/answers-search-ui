@@ -54,7 +54,7 @@ export default class SearchDataTransformer {
 
       if (urls) {
         newSection = Object.assign(newSection, {
-          url: urls[sections[i].verticalConfigId]
+          verticalURL: urls[sections[i].verticalConfigId]
         });
       }
       newSections.push(newSection);
