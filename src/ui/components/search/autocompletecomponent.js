@@ -234,10 +234,10 @@ export default class AutoCompleteComponent extends Component {
     this._originalQuery = value;
 
     // If the value is empty, we exit the auto complete
-    if (this._originalQuery.length === 0) {
-      this.close();
-      return;
-    }
+    // if (this._originalQuery.length === 0) {
+    //   this.close();
+    //   return;
+    // }
 
     this.reset();
     this.core.autoComplete(value, this._experienceKey, this._barKey);
