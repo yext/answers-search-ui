@@ -91,7 +91,7 @@ class Answers {
     return this;
   }
 
-  createComponent(type, opts) {
+  createComponent(opts) {
     console.log('Create Custom Component...');
     this.components.create('Component', opts).init().mount();
     return;
