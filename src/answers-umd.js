@@ -93,8 +93,7 @@ class Answers {
 
   createComponent(opts) {
     console.log('Create Custom Component...');
-    this.components.create('Component', opts).mount();
-    return;
+    return this.components.create('Component', opts).mount();
   }
 
   registerHelper(name, cb) {
