@@ -47,17 +47,18 @@ export default class HttpRequester {
   }
 
   encodeParams(url, params) {
-    let hasParam = url.indexOf('?') > -1;
+    let hasParam = url.indexOf('?') > -1,
+        searchQuery = '';
     for (let key in params) {
       if (!hasParam) {
         hasParam = true;
-        url += '?';
+        searchQuery += '?';
       } else {
-        url += '&';
+        searchQuery += '&';
       }
 
-      url += key + '=' + params[key];
+      searchQuery += key + '=' + params[key];
     }
-    return url;
+    return encodeURI(url + searchQuery);
   }
 }
