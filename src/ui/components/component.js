@@ -153,7 +153,7 @@ export default class Component {
   }
 
   init(opts) {
-    this.setState(opts.data || {});
+    this.setState(opts.data || opts.state || {});
 
     this.onCreate()
     this._state.on('update', () => {
