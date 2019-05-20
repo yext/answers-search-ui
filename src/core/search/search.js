@@ -16,14 +16,14 @@ export default class Search {
     this._baseUrl = this._isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
 
     /**
-     * The API Key to use for the request
+     * A local reference to the API Key to use for the request
      * @type {string}
      * @private
      */
     this._apiKey = opts.apiKey || null;
 
     /**
-     * The Answers Key to use for the request
+     * A local reference to the Answers Key to use for the request
      * @type {string}
      * @private
      */

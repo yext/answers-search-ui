@@ -15,17 +15,44 @@ export default class Core {
       throw new Error('Missing required `answersKey`. Type must be {string}');
     }
 
+    /**
+     * A reference to the client API Key used for all requests
+     * @type {string}
+     * @private
+     */
     this._apiKey = opts.apiKey;
 
+    /**
+     * A reference to the client Answers Key used for all requests
+     * @type {string}
+     * @private
+     */
     this._answersKey = opts.answersKey;
 
+    /**
+     * A reference to the core data storage that powers the UI
+     * @type {Storage}
+     * @private
+     */
     this.storage = new Storage();
 
+    /**
+     * An abstraction containing the integration with the RESTful search API
+     * For both vertical and universal search
+     * @type {Search}
+     * @private
+     */
     this._searcher = new Search({
       apiKey: this._apiKey,
       answersKey: this._answersKey
     });
 
+    /**
+     * An abstraction containing the integration with the RESTful autocomplete API
+     * For both vertical and universal search
+     * @type {Search}
+     * @private
+     */
     this._autoComplete = new AutoComplete({
       apiKey: this._apiKey,
       answersKey: this._answersKey
