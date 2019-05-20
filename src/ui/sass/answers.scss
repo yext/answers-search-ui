@@ -145,6 +145,10 @@ body.yext {
   color: #fff;
 }
 
+.yext-autocomplete-container .yext-autocomplete-prompt-header {
+  font-weight: bold;
+}
+
 .yext-autocomplete-container .yext-autocomplete-option:hover,
 .yext-autocomplete-container .yext-autocomplete-option.yext-selected {
   background-color: #ccc;

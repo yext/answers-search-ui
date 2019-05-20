@@ -54,6 +54,13 @@ export default class SearchComponent extends Component {
     this.searchText = opts.searchText || 'What are you interested in?';
 
     /**
+     * The query text to show as the first item for auto complete.
+     * Optionally provided
+     * @type {string}
+     */
+    this.promptHeader = opts.promptHeader || null;
+
+    /**
      * Auto focuses the input box if set to true.
      * Optionally provided, defaults to false.
      * @type {boolean}
@@ -148,6 +155,7 @@ export default class SearchComponent extends Component {
       parent: this,
       barKey: this._barKey,
       experienceKey: this._experienceKey,
+      promptHeader: this.promptHeader,
       container: '.yext-search-autocomplete',
       inputEl: inputSelector,
       onSubmit: () => {

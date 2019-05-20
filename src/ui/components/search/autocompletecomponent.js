@@ -82,6 +82,13 @@ export default class AutoCompleteComponent extends Component {
     this._resultIndex = -1;
 
     /**
+     * The query text to show as the first item for auto complete.
+     * Optionally provided
+     * @type {string}
+     */
+    this.promptHeader = opts.promptHeader || null;
+
+    /**
      * Callback invoked when the `Enter` key is pressed on auto complete.
      */
     this._onSubmit = opts.onSubmit || function() {};
@@ -102,7 +109,8 @@ export default class AutoCompleteComponent extends Component {
   setState(data) {
     super.setState(Object.assign(data, {
       sectionIndex: this._sectionIndex,
-      resultIndex: this._resultIndex
+      resultIndex: this._resultIndex,
+      promptHeader: this.promptHeader
     }));
   }
 

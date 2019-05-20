@@ -1,6 +1,13 @@
 {{#if sections}}
   <div class="yext-autocomplete-container">
     {{assign 'currentSelected' sectionIndex resultIndex}}
+    {{#if promptHeader}}
+      <ul class="yext-autocomplete-results">
+        <li class="yext-no-select yext-autocomplete-prompt-header">
+          {{promptHeader}}
+        </li>
+      </ul>
+    {{/if}}
     {{#each sections}}
       <ul class="yext-autocomplete-results">
       {{#if label}}
