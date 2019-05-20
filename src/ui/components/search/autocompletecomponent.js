@@ -110,7 +110,7 @@ export default class AutoCompleteComponent extends Component {
     super.setState(Object.assign(data, {
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
-      promptHeader: this.promptHeader
+      promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null
     }));
   }
 
@@ -240,12 +240,6 @@ export default class AutoCompleteComponent extends Component {
 
     // Update the original value based on the user input
     this._originalQuery = value;
-
-    // If the value is empty, we exit the auto complete
-    // if (this._originalQuery.length === 0) {
-    //   this.close();
-    //   return;
-    // }
 
     this.reset();
     this.core.autoComplete(value, this._experienceKey, this._barKey);
