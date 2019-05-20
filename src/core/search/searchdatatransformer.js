@@ -15,6 +15,7 @@ export default class SearchDataTransformer {
       },
       directAnswer: SearchDataTransformer.directAnswer(data.response.directAnswer),
       universalResults: {
+        queryId: data.response.queryId,
         sections: SearchDataTransformer.sections(sections, urls)
       }
     };
