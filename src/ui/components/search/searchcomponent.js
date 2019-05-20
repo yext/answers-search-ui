@@ -153,10 +153,11 @@ export default class SearchComponent extends Component {
 
     let autoComplete = this.componentManager.create('AutoComplete', {
       parent: this,
+      container: '.yext-search-autocomplete',
       barKey: this._barKey,
       experienceKey: this._experienceKey,
       promptHeader: this.promptHeader,
-      container: '.yext-search-autocomplete',
+      originalQuery: this.query,
       inputEl: inputSelector,
       onSubmit: () => {
         DOM.trigger('form', 'submit');

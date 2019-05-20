@@ -65,7 +65,7 @@ export default class AutoCompleteComponent extends Component {
      * change based on interactions. For instance, hitting escape should reset the value to the original typed query.
      * @type {string}
      */
-    this._originalQuery = '';
+    this._originalQuery = opts.originalQuery || '';
 
     /**
      * Used for keyboard navigation through results.
