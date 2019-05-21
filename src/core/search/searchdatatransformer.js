@@ -1,74 +1,37 @@
-/**
- * A Data Transformer that takes the response object from a Search request
- * And transforms in to a front-end oriented data structure that our
- * component library and core storage understand.
- *
- * TODO(billy) Create our own front-end data models
- */
-export default class SearchDataTransformer {
-  static transform(data, urls) {
-    let sections = data.response.modules;
+class UniversalResults {
+  constructor(response, urls) {
+    this.queryId = response.queryId;
 
-    return {
-      navigation: {
-        tabOrder: SearchDataTransformer.navigation(sections),
-      },
-      directAnswer: SearchDataTransformer.directAnswer(data.response.directAnswer),
-      universalResults: {
-        queryId: data.response.queryId,
-        sections: SearchDataTransformer.sections(sections, urls)
-      }
-    };
+    this.sections = Section.from(response.modules, urls);
+  }
+}
+
+class Section {
+  constructor(data, url) {
+    this.verticalConfigId = data.verticalConfigId || null;
+
+    this.resultsCount = data.resultsCount || 0;
+
+    this.encodedState = data.encodedState || '';
+
+    this.appliedQueryFilters = data.appliedQueryFilters || null;
+
+    this.facets = data.facets || null;
+
+    this.results = Result.from(data.results);
+
+    this.map = Section.parseMap(data.results);
+
+    this.verticalURL = url || null;
   }
 
-  static transformVertical(data) {
-    let response = data.response;
-    Object.assign(
-      response,
-      SearchDataTransformer.mapData(response.results))
-
-    return {
-      verticalResults: response,
-      directAnswer: SearchDataTransformer.directAnswer(response)
-    };
-  }
-
-  static directAnswer(directAnswer) {
-    if (directAnswer === undefined) {
-      return {};
-    }
-
-    return directAnswer;
-  }
-
-  static sections(sections, urls) {
-    let newSections = [];
-    if (!sections || !Array.isArray(sections)) {
-      return sections;
-    }
-
-    // Our sections should contain a property of mapMarker objects
-    for (let i = 0; i < sections.length; i ++) {
-      let newSection = Object.assign(
-        sections[i],
-        SearchDataTransformer.mapData(sections[i].results));
-
-      if (urls) {
-        newSection = Object.assign(newSection, {
-          verticalURL: urls[sections[i].verticalConfigId]
-        });
-      }
-      newSections.push(newSection);
-    }
-    return newSections;
-  }
-
-  static mapData(results) {
+  static parseMap(results) {
     let mapMarkers = [],
         centerCoordinates = {};
 
     for (let j = 0; j < results.length; j ++) {
-      let result = results[j];
+      // TODO(billy) Remove legacy fallback from all data format
+      let result = results[j].data || results[j];
       if (result && result.yextDisplayCoordinate) {
         if (!centerCoordinates.latitude) {
           centerCoordinates = {
@@ -85,21 +48,105 @@ export default class SearchDataTransformer {
     }
 
     return {
-      'map': {
-        'mapCenter': centerCoordinates,
-        'mapMarkers': mapMarkers
-      }
+      'mapCenter': centerCoordinates,
+      'mapMarkers': mapMarkers
     };
   }
 
-  static navigation(sections) {
+  static from(modules, urls) {
+    let sections = [];
+    if (!modules) {
+      return sections;
+    }
+
+    if (!Array.isArray(modules)) {
+      return new Section(modules);
+    }
+
+    // Our sections should contain a property of mapMarker objects
+    for (let i = 0; i < modules.length; i ++) {
+      sections.push(
+        new Section(
+          modules[i],
+          urls[modules[i].verticalConfigId]
+        )
+      );
+    }
+
+    return sections;
+  }
+}
+
+class Result {
+  constructor(data = {}) {
+    Object.assign(this, data);
+  }
+
+  /**
+   * resultsData expected format: { data: { ... }, highlightedFields: { ... }}
+   */
+  static from(resultsData) {
+    let results = [];
+    for (let i = 0; i < resultsData.length; i++) {
+      // TODO use resultData.highlightedFields to
+      // transform resultData.data into html-friendly strings that highlight values.
+
+      // Check for new data format, otherwise fallback to legacy
+      results.push(new Result(resultsData[i].data || resultsData[i]));
+    }
+
+    return results;
+  }
+}
+
+class DirectAnswer {
+  constructor(directAnswer = {}) {
+    Object.assign(this, directAnswer);
+  }
+}
+
+class Navigation {
+  constructor(modules) {
+    this.tabOrder = Navigation.from(modules);
+  }
+
+  static from(modules) {
     let nav = [];
-    if (!sections || !Array.isArray(sections)) {
+    if (!modules || !Array.isArray(modules)) {
       return nav;
     }
-    for (let i = 0; i < sections.length; i ++) {
-      nav.push(sections[i].verticalConfigId)
+    for (let i = 0; i < modules.length; i ++) {
+      nav.push(modules[i].verticalConfigId)
     }
     return nav;
+  }
+}
+
+class VerticalResults {
+  constructor(response) {
+    Object.assign(this, Section.from(response))
+  }
+}
+
+/**
+ * A Data Transformer that takes the response object from a Search request
+ * And transforms in to a front-end oriented data structure that our
+ * component library and core storage understand.
+ */
+export default class SearchDataTransformer {
+  static transform(data, urls) {
+    let response = data.response;
+
+    return {
+      navigation: new Navigation(response.modules),
+      directAnswer: new DirectAnswer(response.directAnswer),
+      universalResults: new UniversalResults(response, urls)
+    };
+  }
+
+  static transformVertical(data) {
+    return {
+      verticalResults: new VerticalResults(data.response)
+    };
   }
 }
