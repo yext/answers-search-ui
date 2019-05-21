@@ -1,9 +1,16 @@
 import Section from './section';
 
 export default class UniversalResults {
-  constructor(response, urls) {
-    this.queryId = response.queryId;
+  constructor(data) {
+    this.queryId = data.queryId || null;
 
-    this.sections = Section.from(response.modules, urls);
+    this.sections = data.sections || [];
+  }
+
+  static from(response, urls) {
+    return new UniversalResults({
+      queryId: response.queryId,
+      sections: Section.from(response.modules, urls)
+    })
   }
 }

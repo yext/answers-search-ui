@@ -12,15 +12,15 @@ export default class SearchDataTransformer {
   static transform(data, urls) {
     let response = data.response;
     return {
-      navigation: new Navigation(response.modules),
+      navigation: Navigation.from(response.modules),
       directAnswer: new DirectAnswer(response.directAnswer),
-      universalResults: new UniversalResults(response, urls)
+      universalResults: UniversalResults.from(response, urls)
     };
   }
 
   static transformVertical(data) {
     return {
-      verticalResults: new VerticalResults(data.response)
+      verticalResults: VerticalResults.from(data.response)
     };
   }
 }

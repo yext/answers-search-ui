@@ -1,7 +1,11 @@
 import Section from './section';
 
 export default class VerticalResults {
-  constructor(response) {
-    Object.assign(this, Section.from(response))
+  constructor(data = {}) {
+    Object.assign(this, data);
+  }
+
+  static from(response) {
+    return new VerticalResults(Section.from(response));
   }
 }

@@ -1,6 +1,6 @@
 export default class Navigation {
-  constructor(modules) {
-    this.tabOrder = Navigation.from(modules);
+  constructor(tabOrder) {
+    this.tabOrder = tabOrder || [];
   }
 
   static from(modules) {
@@ -11,6 +11,6 @@ export default class Navigation {
     for (let i = 0; i < modules.length; i ++) {
       nav.push(modules[i].verticalConfigId)
     }
-    return nav;
+    return new Navigation(nav);
   }
 }
