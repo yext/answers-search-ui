@@ -11,7 +11,6 @@ import VerticalResults from '../models/verticalresults';
 export default class SearchDataTransformer {
   static transform(data, urls) {
     let response = data.response;
-    console.log(new UniversalResults(response, urls));
     return {
       navigation: new Navigation(response.modules),
       directAnswer: new DirectAnswer(response.directAnswer),
