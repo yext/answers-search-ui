@@ -27,6 +27,25 @@ jobs:
           paths:
             - dist
             - .circleci
+  # run the jest unit tests
+  unit_test:
+    docker:
+      - image: circleci/node:7.10
+    working_directory: ~/answers
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "package.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      - run: npm install
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-dependencies-{{ checksum "package.json" }}
+      - run: npm run test
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
@@ -101,13 +120,19 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+      - unit_test:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - build
       - hold:
           type: approval
           filters:
             branches:
               only: master
           requires:
-            - build
+            - unit_test
       - deploy_latest:
           filters:
             branches:
@@ -119,7 +144,7 @@ workflows:
             branches:
               ignore: master
           requires:
-            - build
+            - unit_test
       - deploy_version:
           filters:
             tags:
