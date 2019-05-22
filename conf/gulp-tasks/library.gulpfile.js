@@ -6,6 +6,7 @@ const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 
 const source = require('vinyl-source-stream');
+const rename = require('gulp-rename');
 
 const sass = require('gulp-sass');
 
@@ -33,12 +34,13 @@ function bundle() {
       })
     ]
   })
-  .pipe(source('answers.min.js'))
+  .pipe(source('answers.js'))
   .pipe(dest('dist'));
 }
 
 function minifyJS(cb) {
-  return src('./dist/answers.min.js')
+  return src('./dist/answers.js')
+    .pipe(rename('answers.min.js'))
     .pipe(uglify())
     .pipe(dest('dist'));
 }
