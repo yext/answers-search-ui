@@ -9,7 +9,7 @@ import VerticalResults from '../models/verticalresults';
  * component library and core storage understand.
  */
 export default class SearchDataTransformer {
-  static transform(data, urls) {
+  static transform(data, urls = {}) {
     let response = data.response;
     return {
       navigation: Navigation.from(response.modules),
