@@ -21,6 +21,7 @@
     "gulp-uglify-es": "^1.0.4",
     "gulp-umd": "^2.0.0",
     "gulp-wrap": "^0.14.0",
+    "jest": "^24.8.0",
     "node-sass": "^4.12.0",
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.3.2",
@@ -33,8 +34,15 @@
   },
   "scripts": {
     "build": "gulp && size-limit",
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "size": "size-limit"
+  },
+  "jest": {
+    "bail": 1,
+    "verbose": true,
+    "testMatch": [
+      "**/tests/**/*.js"
+    ]
   },
   "author": "Billy",
   "license": "ISC"
