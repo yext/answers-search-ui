@@ -27,7 +27,9 @@ context['_hb'] = Handlebars;
 <%= contents %>;
 
 const autoinit = function() {
-  ANSWERS.templates.register(context);
+  if (window.ANSWERS) {
+    ANSWERS.templates.register(context);
+  }
 }()
 
 export { context as default };
