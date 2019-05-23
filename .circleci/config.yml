@@ -48,6 +48,7 @@ jobs:
             --acl public-read \
             --cache-control "max-age=86400" \
             --recursive \
+            --profile production \
   # dryrun version of the deploy job, used for all non-master branches
   deploy_dryrun:
     docker:
