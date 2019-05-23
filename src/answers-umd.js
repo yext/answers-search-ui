@@ -56,7 +56,11 @@ class Answers {
 
     this._onReady = opts.onReady || function() {};
 
-    if (opts.useTemplates === false) {
+    if (opts.useTemplates === false || opts.templateBundle) {
+      if (opts.templateBundle) {
+        this.renderer.init(opts.templateBundle);
+      }
+
       this._onReady.call(this);
       return this;
     }
