@@ -30,4 +30,4 @@ const autoinit = function() {
   ANSWERS.templates.register(context);
 }()
 
-export default autoinit;
+export { context as default };

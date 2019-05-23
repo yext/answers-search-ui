@@ -63,8 +63,9 @@ function bundleTemplates() {
   return rollup({
     input: './dist/answerstemplates.compiled.min.js',
     output: {
-      format: 'iife',
-      name: '__$answerstemplateinit'
+      format: 'umd',
+      name: 'TemplateBundle',
+      exports: 'named'
     },
     plugins: [
       resolve(),
