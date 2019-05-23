@@ -27,8 +27,8 @@ jobs:
           paths:
             - dist
             - .circleci
-  # deploy to S3
-  deploy:
+  # deploy to S3 in the root folder, overwriting the existing latest version
+  deploy_latest:
     docker:
       - image: circleci/python:2.7
     working_directory: ~/answers
@@ -46,11 +46,11 @@ jobs:
           to: '${AWS_DEPLOY_BUCKET}'
           arguments: |
             --acl public-read \
-            --cache-control "max-age=86400" \
+            --cache-control "max-age=3600" \
             --recursive \
             --profile production \
-  # dryrun version of the deploy job, used for all non-master branches
-  deploy_dryrun:
+  # deploys assets to an uncached folder in the S3 bucket named by branch
+  deploy_branch:
     docker:
       - image: circleci/python:2.7
     working_directory: ~/answers
@@ -65,30 +65,66 @@ jobs:
             echo -e $AWS_PROD_PROFILE >> ~/.aws/config
       - aws-s3/copy:
           from: dist
-          to: '${AWS_DEPLOY_BUCKET}'
+          to: '${AWS_DEPLOY_BUCKET}/dev/${CIRCLE_BRANCH}'
           arguments: |
             --acl public-read \
-            --cache-control "max-age=86400" \
+            --cache-control "no-cache" \
             --recursive \
-            --dryrun \
+            --profile production \
+  # deploys assets to a long-lived-cache folder in the S3 bucket named by release tag
+  deploy_version:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/answers
+    steps:
+      - attach_workspace:
+          at: ~/answers
+      - run:
+          name: Configure AWS
+          command: |
+            mkdir ~/.aws
+            cp .circleci/aws_config ~/.aws/config
+            echo -e $AWS_PROD_PROFILE >> ~/.aws/config
+      - aws-s3/copy:
+          from: dist
+          to: '${AWS_DEPLOY_BUCKET}/${CIRCLE_TAG}'
+          arguments: |
+            --acl public-read \
+            --cache-control "max-age=31536000" \
+            --recursive \
+            --profile production \
 workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build
+      - build:
+          filters:
+            tags:
+              only: /^v.*/
       - hold:
           type: approval
+          filters:
+            branches:
+              only: master
           requires:
             - build
-      - deploy:
+      - deploy_latest:
           filters:
             branches:
               only: master
           requires:
             - hold
-      - deploy_dryrun:
+      - deploy_branch:
           filters:
             branches:
               ignore: master
+          requires:
+            - build
+      - deploy_version:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
           requires:
             - hold
