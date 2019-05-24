@@ -1,8 +1,10 @@
 import Core from './core/core';
+
 import {
   TemplateLoader,
   COMPONENT_MANAGER,
-  Renderers
+  Renderers,
+  DOM
 } from './ui/index';
 
 /**
@@ -76,6 +78,10 @@ class Answers {
     });
 
     return this;
+  }
+
+  domReady(cb) {
+    DOM.ready(cb);
   }
 
   onReady(cb) {

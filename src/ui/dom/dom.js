@@ -26,7 +26,7 @@ export default class DOM {
       parent = document;
     }
 
-    if (selector instanceof HTMLElement || selector instanceof Window) {
+    if (selector instanceof HTMLElement || selector instanceof Window || selector instanceof HTMLDocument) {
       return selector;
     }
 
@@ -48,13 +48,21 @@ export default class DOM {
       parent = document;
     }
 
-    if (selector instanceof HTMLElement) {
+    if (selector instanceof HTMLElement || selector instanceof HTMLDocument || selector instanceof Window) {
       return selector;
     }
 
     return parent.querySelectorAll(selector);
   }
 
+  static ready(cb) {
+    if (document.readyState === 'complete' || document.readyState === 'loaded' || document.readyState === 'interactive') {
+      cb();
+      return;
+    }
+
+    DOM.on(document, 'DOMContentLoaded', cb);
+  }
 
   /**
    * createEle will create a {HTMLElement} and apply the properties attributes through an object provided.
