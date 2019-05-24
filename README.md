@@ -2,7 +2,7 @@
 Answers Javascript API Library.
 
 Outline:
-1. [Install / Setup](#install-&-setup)
+1. [Install / Setup](#install-and-setup)
    - [Configuration Options](#configuration-options)
    - [Template Helpers](#template-helpers)
 2. [Component Usage](#component-usage)
@@ -18,16 +18,16 @@ Outline:
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
    - [QASubmission Component](#qa-submission-component)
-# Install & Setup
+# Install and Setup
 
 To include the answers base CSS (optional).
 ```html
-<link rel="stylesheet" type="text/css" href="https://answersjs.netlify.com/answers.css">
+<link rel="stylesheet" type="text/css" href="https://assets.sitescdn.net/answers/answers.css">
 ```
 
 Adding the Javascript library
 ```html
-<script src="https://answersjs.netlify.com/answers.min.js" onload="initAnswers()" async></script>
+<script src="https://assets.sitescdn.net/answers/answers.min.js" onload="ANSWERS.domReady(initAnswers)" async></script>
 ```
 
 ```js
@@ -52,6 +52,7 @@ Below is a list of configuration options that can be used during initialization.
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | not required  |
 | templateUrl  | string     | Use precompiled template hosted by you       | not required  |
+| templateBundle  | object     | Provide the precompiled templates      | not required  |
 
 ## Template Helpers
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
