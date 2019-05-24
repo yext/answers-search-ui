@@ -81,7 +81,7 @@ class Answers {
   }
 
   domReady(cb) {
-    DOM.ready(cb);
+    DOM.onReady(cb);
   }
 
   onReady(cb) {

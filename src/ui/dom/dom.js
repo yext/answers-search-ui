@@ -55,7 +55,7 @@ export default class DOM {
     return parent.querySelectorAll(selector);
   }
 
-  static ready(cb) {
+  static onReady(cb) {
     if (document.readyState === 'complete' || document.readyState === 'loaded' || document.readyState === 'interactive') {
       cb();
       return;
