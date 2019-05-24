@@ -46,7 +46,7 @@ jobs:
           to: '${AWS_DEPLOY_BUCKET}'
           arguments: |
             --acl public-read \
-            --cache-control "max-age=3600" \
+            --cache-control "no-cache" \
             --recursive \
             --profile production \
   # deploys assets to an uncached folder in the S3 bucket named by branch
