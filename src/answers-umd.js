@@ -90,7 +90,6 @@ class Answers {
   }
 
   addComponent(type, opts) {
-    console.log('Adding Standard Component...');
     if (typeof opts === 'string') {
       opts = {
         container: opts
@@ -102,7 +101,6 @@ class Answers {
   }
 
   createComponent(opts) {
-    console.log('Create Custom Component...');
     return this.components.create('Component', opts).mount();
   }
 
