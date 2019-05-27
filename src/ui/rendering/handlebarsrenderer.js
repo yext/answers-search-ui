@@ -123,5 +123,11 @@ export default class HandlebarsRenderer extends Renderer {
 
       options.data.root[name] = v;
     })
+
+    this.registerHelper('json', function(name, value, options) {
+      return name === undefined
+        ? ""
+        : JSON.stringify(name).replace(/\"/g, '\\"');
+    })
   }
 }

@@ -36,6 +36,7 @@
     "build": "gulp && size-limit",
     "dev": "gulp dev",
     "test": "jest",
+    "dev": "gulp dev",
     "size": "size-limit"
   },
   "jest": {

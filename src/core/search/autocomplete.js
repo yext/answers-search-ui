@@ -47,13 +47,37 @@ export default class AutoComplete {
    */
   query(input, experienceKey, barKey) {
     if (experienceKey || barKey) {
-      return this._queryVeritcal(input, experienceKey, barKey)
+      return this._queryVertical(input, experienceKey, barKey)
     }
 
     return this._queryUniversal(input);
   }
 
-  _queryVeritcal(input, experienceKey, barKey) {
+  /**
+   * Autocomplete filters
+   * @param {string} input The input to use for auto complete
+   */
+  queryFilter(input, experienceKey, barKey) {
+    let request = new ApiRequest({
+      baseUrl: this._baseUrl,
+      endpoint: '/v2/accounts/me/answers/filtersearch',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': input,
+        'answersKey': this._answersKey,
+        'experiencekey': experienceKey,
+        'inputKey': barKey,
+      }
+    });
+
+    return request.get()
+      .then(response => response.json())
+      .then(response => AutoCompleteDataTransformer.filter(response.response, barKey))
+      .catch(error => console.error(error));
+  }
+
+  _queryVertical(input, experienceKey, barKey) {
     let request = new ApiRequest({
         baseUrl: this._baseUrl,
         endpoint: '/v2/accounts/me/entities/autocomplete',

@@ -26,6 +26,12 @@ export default class AutoCompleteComponent extends Component {
     super(opts)
 
     /**
+     * Whether autocomplete is simple or filter
+     * @type {boolean}
+     */
+    this.isFilterSearch = opts.isFilterSearch || false
+
+    /**
      * The `barKey` in the vertical search to use for auto-complete
      * @type {string}
      */
@@ -145,22 +151,27 @@ export default class AutoCompleteComponent extends Component {
     // on the current value
     DOM.on(queryInput, 'focus', () => {
       this.reset();
-      this.core.autoComplete(queryInput.value, this._experienceKey, this._barKey);
+      if (this.isFilterSearch) {
+        this.core.autoCompleteFilter(queryInput.value, this._experienceKey, this._barKey);
+      } else {
+        this.core.autoComplete(queryInput.value, this._experienceKey, this._barKey);
+      }
     });
 
     // Allow the user to navigate between the results using the keyboard
     DOM.on(queryInput, 'keydown', (e) => {
-     this.handleNavigateResults(e.keyCode, e);
+      this.handleNavigateResults(e.keyCode, e);
+      this.handleSubmitResult(e.keyCode, queryInput.value, e);
     });
 
     // Allow the user to select a result with the mouse
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'mousedown', (evt, target) => {
       let data = target.dataset,
-          val = data.value,
+          val = data.short,
           filter = JSON.parse(data.filter);
 
       this.updateQuery(val);
-      this._onSubmit();
+      this._onSubmit(val, filter.filter);
       this.close();
     });
 
@@ -183,7 +194,7 @@ export default class AutoCompleteComponent extends Component {
    * a template-rerender via updateState
    */
   reset() {
-    this._selectedIndex = 0;
+    this._sectionIndex = 0;
     this._resultIndex = -1;
     this.updateState();
   }
@@ -242,7 +253,11 @@ export default class AutoCompleteComponent extends Component {
     this._originalQuery = value;
 
     this.reset();
-    this.core.autoComplete(value, this._experienceKey, this._barKey);
+    if (this.isFilterSearch) {
+      this.core.autoCompleteFilter(value, this._experienceKey, this._barKey);
+    } else {
+      this.core.autoComplete(value, this._experienceKey, this._barKey);
+    }
   }
 
   handleNavigateResults(key, e) {
@@ -275,6 +290,7 @@ export default class AutoCompleteComponent extends Component {
     }
 
     if (key === Keys.DOWN) {
+      e.preventDefault();
       if (this._resultIndex >= results.length - 1) {
         if (this._sectionIndex < sections.length - 1) {
           this._sectionIndex ++;
@@ -289,6 +305,25 @@ export default class AutoCompleteComponent extends Component {
       this.updateQuery();
       this.updateState();
       return;
+    }
+  }
+
+  handleSubmitResult(key, value, e) {
+    let sections = this._state.get('sections');
+    if (sections === undefined || sections.length <= 0) {
+      return;
+    }
+
+    // submit the search on enter
+    if (key === Keys.ENTER) {
+      e.preventDefault();
+      const filter = JSON.stringify(sections[this._sectionIndex].results[this._resultIndex].filter);
+
+      this.updateQuery(value);
+      this._originalQuery = value;
+      this._onSubmit(value, filter);
+      this.reset();
+      this.close();
     }
   }
 }
