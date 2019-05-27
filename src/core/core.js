@@ -59,9 +59,9 @@ export default class Core {
     });
   }
 
-  verticalSearch(queryString, verticalKey) {
+  verticalSearch(queryString, verticalKey, filter) {
     return this._searcher
-      .verticalQuery(queryString, verticalKey)
+      .verticalQuery(queryString, verticalKey, filter)
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
         this.storage.insert(data);
@@ -85,6 +85,14 @@ export default class Core {
       .then(data => {
         this.storage.insert(data);
       })
+  }
+
+  autoCompleteFilter(input, experienceKey, barKey) {
+    return this._autoComplete
+      .queryFilter(input, experienceKey, barKey)
+      .then(data => {
+        this.storage.insert(data);
+      });
   }
 
   on(evt, moduleId, cb) {

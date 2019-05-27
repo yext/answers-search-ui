@@ -13,7 +13,7 @@ export default class Search {
      * @type {string}
      * @private
      */
-    this._baseUrl = this._isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
+    this._baseUrl = isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
 
     /**
      * A local reference to the API Key to use for the request
@@ -37,7 +37,7 @@ export default class Search {
     this._version = opts.version || 20190101 || 20190301;
   }
 
-  verticalQuery(queryString, verticalKey) {
+  verticalQuery(queryString, verticalKey, filter) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/vertical/query',
@@ -46,6 +46,7 @@ export default class Search {
       params: {
         'input': queryString,
         'answersKey': this._answersKey,
+        'filter': filter,
         'verticalKey': verticalKey
       }
     });

@@ -35,6 +35,7 @@
   "scripts": {
     "build": "gulp && size-limit",
     "test": "jest",
+    "dev": "gulp dev",
     "size": "size-limit"
   },
   "jest": {
