@@ -113,7 +113,7 @@ export default class HandlebarsRenderer extends Renderer {
           mapMarkers = mapData.mapMarkers,
           width = mapConfig.width || 600,
           height = mapConfig.height || 200,
-          zoom = mapConfig.zoom || 13
+          zoom = mapConfig.zoom || 13;
 
       for (let i = 0; i < mapMarkers.length; i++) {
         let mm = mapMarkers[i];
