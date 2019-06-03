@@ -5,7 +5,7 @@
       {{#if verticalURL}}(<a href="{{verticalURL}}">View More</a>){{/if}}
     </h1>
     {{#if includeMap}}
-    {{map}}
+      {{map}}
       <div class="yext-map-container">
         {{#ifeq mapConfig.mapProvider 'google'}}
           {{{googleMap map mapConfig}}}
