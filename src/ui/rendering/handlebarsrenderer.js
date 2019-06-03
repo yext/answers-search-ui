@@ -105,7 +105,7 @@ export default class HandlebarsRenderer extends Renderer {
         }
         encodedMarkers += `pin-s-${mm.label}(${mm.longitude},${mm.latitude})`
       }
-     return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${mapConfig.apiKey}">`;
+      return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${mapConfig.apiKey}">`;
     });
 
     this.registerHelper('googleMap', function(mapData, mapConfig, options) {
