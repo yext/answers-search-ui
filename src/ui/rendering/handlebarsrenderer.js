@@ -93,16 +93,19 @@ export default class HandlebarsRenderer extends Renderer {
     this.registerHelper('mapBox', function(mapData, mapConfig, options) {
       let encodedMarkers = '',
           mapMarkers = mapData.mapMarkers,
-          center = mapData.mapCenter;
+          center = mapData.mapCenter,
+          width = mapConfig.width || 600,
+          height = mapConfig.height || 200,
+          zoom = mapConfig.zoom || 9;
 
       for (let i = 0; i < mapMarkers.length; i++) {
         let mm = mapMarkers[i];
         if (i > 0) {
           encodedMarkers += ',';
         }
-        encodedMarkers += `pin-s-${mm.label}(${mm.latitude},${mm.longitude})`
+        encodedMarkers += `pin-s-${mm.label}(${mm.longitude},${mm.latitude})`
       }
-     return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.latitude},${center.longitude},9.67,0.00,0.00}/1000x600@2x?access_token=${mapConfig.apiKey}">`;
+     return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${mapConfig.apiKey}">`;
     });
 
     this.registerHelper('googleMap', function(mapData, mapConfig, options) {
@@ -110,7 +113,7 @@ export default class HandlebarsRenderer extends Renderer {
           mapMarkers = mapData.mapMarkers,
           width = mapConfig.width || 600,
           height = mapConfig.height || 200,
-          zoom = mapConfig.height || 13
+          zoom = mapConfig.zoom || 13
 
       for (let i = 0; i < mapMarkers.length; i++) {
         let mm = mapMarkers[i];
