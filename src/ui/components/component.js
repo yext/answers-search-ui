@@ -253,20 +253,21 @@ export default class Component {
     this.beforeRender();
     data = this.transformData(data) || this.transformData(this._state.get());
 
+    let html = '';
+    // Use either the custom render function or the internal renderer
+    // dependant on the component configuration
     if (typeof this._render === 'function') {
-      let html = this._render(data);
+      html = this._render(data);
       if (typeof html !== 'string') {
         throw new Error('Render method must return HTML as type {string}');
       }
-      this.afterRender();
-      return html;
+    } else {
+      // Render the existing templates as a string
+      html = this._renderer.render({
+        template: this._template,
+        templateName: this._templateName
+      }, data);
     }
-
-    // Render the existing templates as a string
-    let html = this._renderer.render({
-      template: this._template,
-      templateName: this._templateName
-    }, data);
 
     // We create an HTML Document fragment with the rendered string
     // So that we can query it for processing of sub components
