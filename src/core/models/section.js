@@ -34,6 +34,7 @@ export default class Section {
           };
         }
         mapMarkers.push({
+          item: result,
           label: mapMarkers.length + 1,
           latitude: result.yextDisplayCoordinate.latitude,
           longitude: result.yextDisplayCoordinate.longitude

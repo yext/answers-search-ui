@@ -39,6 +39,29 @@ export default class MapProvider {
      * @type {boolean}
      */
     this._isLoaded = false;
+
+    /**
+     * The custom configuration override to use for the map markers
+     * @type {Object|Function}
+     */
+    this._pinConfig = typeof opts.pin === 'function' ? opts.pin : Object.assign(MapProvider.DEFAULT_PIN_CONFIG, opts.pin);
+  }
+
+  /**
+   * The default configuration to use for the map markers
+   * @type {Object}
+   * TODO(billy) Create a configuration model
+   */
+  static get DEFAULT_PIN_CONFIG() {
+    return {
+      icon: {
+        anchor: null,    // e.g. { x: 1, y: 1 }
+        svg: null,
+        url: null,
+        scaledSize: null // e.g. { w: 20, h: 20 }
+      },
+      labelType: 'numeric'
+    };
   }
 
   isLoaded() {
