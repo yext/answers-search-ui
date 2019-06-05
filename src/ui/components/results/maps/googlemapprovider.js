@@ -35,7 +35,6 @@ export default class GoogleMapProvider extends MapProvider {
         height: this._height
       });
 
-
       this.map = new google.maps.Map(container, {
         zoom: this._zoom
       });
@@ -45,13 +44,11 @@ export default class GoogleMapProvider extends MapProvider {
         let markers = mapData.mapMarkers;
         for (let i = 0; i < markers.length; i ++) {
 
-          let marker = new google.maps.Marker({
-            map: this.map,
-            position: {
-              lat: markers[i].latitude,
-              lng: markers[i].longitude
-            }
-          })
+          let marker = new google.maps.Marker(
+            Object.assign({
+              map: this.map,
+            }, GoogleMapConfig.from(markers[i], this._pinConfig))
+          );
 
           bounds.extend(marker.position);
         }
@@ -59,5 +56,67 @@ export default class GoogleMapProvider extends MapProvider {
 
       this.map.fitBounds(bounds);
     }, 100);
+  }
+}
+
+// TODO(billy) Move to own class
+class GoogleMapConfig {
+  constructor(opts) {
+    this.position = opts.position || {};
+
+    this.icon = opts.icon || undefined;
+
+    this.label = opts.label || undefined;
+  }
+
+  static from(marker, config) {
+    // Support configuration as a function
+    if (typeof config === 'function') {
+      config = config(
+        marker.item,
+        MapProvider.DEFAULT_PIN_CONFIG,
+        marker);
+    }
+
+    // Transform our Configuration Object into the expected
+    // Google API format.
+    let icon = {};
+    if (config.anchor) {
+      icon.anchor = google.maps.Point(config.anchor.x, config.anchor.y);
+    }
+
+    if (config.scaledSize) {
+      icon.scaledSize = google.maps.Size(config.scaledSize.w, config.scaledSize.h);
+    }
+
+    if (config.url) {
+      icon.url = iconCfg.url;
+    }
+
+    if (config.svg) {
+      icon.url = `data:image/svg+xml;charset=utf-8, ${encodeURIComponent(config.svg)}`;
+    }
+
+    let label;
+    if (config.label) {
+      label = config.label;
+    } else {
+      label = marker.label.toString();
+    }
+
+    // NOTE(billy) Google maps doesn't handle empty icon objects nicely
+    // Make google maps happy if no settings for icon are provided;
+    if (Object.keys(icon).length === 0) {
+      icon = undefined;
+    }
+
+    return new GoogleMapConfig({
+      position: {
+        lat: marker.latitude,
+        lng: marker.longitude
+      },
+      icon: icon,
+      label: label
+    })
   }
 }
