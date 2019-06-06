@@ -16,7 +16,7 @@ import LocationResultsItemComponent from './results/locationresultsitemcomponent
 import EventResultsItemComponent from './results/eventresultsitemcomponent';
 import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
 
-import MapComponent from './results/mapcomponent';
+import MapComponent from './map/mapcomponent';
 
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
