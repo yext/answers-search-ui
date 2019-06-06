@@ -87,6 +87,5 @@ export default class AutoComplete {
     return request.get(queryString)
       .then(response => response.json())
       .then(response => AutoCompleteDataTransformer.universal(response.response))
-      .catch(error => console.error(error));
   }
 }

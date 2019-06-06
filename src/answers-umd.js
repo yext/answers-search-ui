@@ -7,6 +7,8 @@ import {
   DOM
 } from './ui/index';
 
+import ErrorReporter from './core/errors/errorreporter';
+
 /**
  * Our API should only be instantiable once
  * @type {ANSWERS} The instance of ANSWERS
@@ -29,6 +31,10 @@ class Answers {
      * @type {ComponentManager}
      */
     this.components = COMPONENT_MANAGER;
+
+    // TODO(jdelerme): have this populate by bundle instead
+    // i.e. minified bundle is not dev, other bundle is
+    this._isDev = new URL(window.location.toString()).searchParams.get('local');
 
     /**
      * A callback function to invoke once the library is ready.
@@ -76,6 +82,12 @@ class Answers {
 
       this._onReady.call(this);
     });
+
+    if (!this._isDev && !opts.suppressErrorReports) {
+      this._errorReporter = new ErrorReporter(opts.apiKey, opts.answersKey);
+      window.addEventListener('error', e => this._errorReporter.report(e.error));
+      window.addEventListener('unhandledrejection', e => this._errorReporter.report(e.error));
+    }
 
     return this;
   }
