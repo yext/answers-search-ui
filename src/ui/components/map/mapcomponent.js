@@ -1,8 +1,8 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 
-import GoogleMapProvider from './maps/googlemapprovider';
-import MapBoxMapProvider from './maps/mapboxmapprovider';
+import GoogleMapProvider from './providers/googlemapprovider';
+import MapBoxMapProvider from './providers/mapboxmapprovider';
 
 export default class MapComponent extends Component {
   constructor(opts = {}) {
