@@ -3,7 +3,7 @@ import AutoComplete from './search/autocomplete';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
-import Storage from './storage/storage'
+import Storage from './storage/storage';
 
 export default class Core {
   constructor(opts = {}) {
@@ -66,7 +66,6 @@ export default class Core {
       .then(data => {
         this.storage.insert(data);
       })
-      .catch(error => console.error(error));
   }
 
   search(queryString, urls) {
@@ -76,7 +75,6 @@ export default class Core {
       .then(data => {
         this.storage.insert(data);
       })
-      .catch(error => console.error(error))
   }
 
   autoComplete(queryString, experienceKey, barKey) {

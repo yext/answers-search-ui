@@ -34,6 +34,7 @@
   },
   "scripts": {
     "build": "gulp && size-limit",
+    "dev": "gulp dev",
     "test": "jest",
     "size": "size-limit"
   },
