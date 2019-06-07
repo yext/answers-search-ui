@@ -8,19 +8,19 @@ export default class MapProvider {
      * The API Key used for interacting with the map provider
      * @type {string}
      */
-    this._apiKey = opts.mapApiKey;
+    this._apiKey = opts.apiKey;
 
     /**
      * The height of the map to append to the DOM, defaults to 100%
      * @type {number}
      */
-    this._height = opts.height || '100%';
+    this._height = opts.height || 200;
 
     /**
      * The width of the map to append to the DOM, defaults to 100%
      * @type {number}
      */
-    this._width = opts.width || '100%';
+    this._width = opts.width || 600;
 
     /**
      * The zoom level of the map, defaults to 20
@@ -70,6 +70,10 @@ export default class MapProvider {
 
   loadJS() {
     throw new Error('Unimplemented Method: loadJS');
+  }
+
+  loadStatic() {
+    throw new Error('Unimplemented Method: loadStatic');
   }
 
   init(mapData) {

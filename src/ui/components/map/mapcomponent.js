@@ -4,6 +4,11 @@ import DOM from '../../dom/dom';
 import GoogleMapProvider from './providers/googlemapprovider';
 import MapBoxMapProvider from './providers/mapboxmapprovider';
 
+const ProviderTypes = {
+  'google': GoogleMapProvider,
+  'mapbox': MapBoxMapProvider
+};
+
 export default class MapComponent extends Component {
   constructor(opts = {}) {
     super(opts);
@@ -23,6 +28,15 @@ export default class MapComponent extends Component {
      * @type {string}
      */
     this._mapProvider = opts.mapProvider;
+    if (!(this._mapProvider in ProviderTypes)) {
+      throw new Error('MapComponent: Invalid Map Provider; must be `google` or `mapBox`')
+    }
+
+    /**
+     * Internal indication of whether or not to use a static or dynamic map
+     * @type {boolean}
+     */
+    this._isStatic = opts.isStatic || false;
 
     /**
      * A reference to an instance of the {MapProvider} that's constructed
@@ -35,19 +49,27 @@ export default class MapComponent extends Component {
     return 'Map';
   }
 
+  // TODO(billy) Make ProviderTypes a factory class
+  getProviderInstance(type) {
+    return new ProviderTypes[type](this._opts);
+  }
+
   onCreate() {
-    if (this._mapProvider === 'google') {
-      this._map = new GoogleMapProvider(this._opts);
-    } else {
-      this._map = new MapBoxMapProvider(this._opts);
+    this._map = this.getProviderInstance(this._mapProvider.toLowerCase());
+
+    let mapData = this.getState('map');
+    if (mapData === undefined) {
+      return;
+    }
+
+    if (this._isStatic) {
+      // TODO(billy) The existing template should just take in the map `imgURL` as data
+      // Instead of overriding the template like so, but NBD for now.
+      this.setTemplate(this._map.generateStatic(mapData));
+      return;
     }
 
     this._map.loadJS(() => {
-      let mapData = this.getState('map');
-      if (mapData === undefined) {
-        return;
-      }
-
       this._map.init(this._container, mapData);
     });
   }
@@ -68,7 +90,7 @@ export default class MapComponent extends Component {
     return super.setState(Object.assign(data, {
       mapConfig: {
         mapProvider: this._mapProvider,
-        mapApiKey: this._mapApiKey
+        mapApiKey: this._apiKey
       }
     }), val);
   }
