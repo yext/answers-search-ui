@@ -8,7 +8,6 @@ import { COMPONENT_MANAGER } from '../../../src/ui/components/const';
 // The DOM doesn't exist within components in the JEST environment,
 //so we have to provide it to our DOM API properly.
 DOM.setup(
-  window,
   document,
   new DOMParser()
 );
