@@ -103,7 +103,7 @@ export default class ComponentManager {
     // If there is a local storage to power state, apply the state
     // from the storage to the component, and then bind the component
     // state to the storage via its updates
-    if (this._core.storage !== null) {
+    if (this._core && this._core.storage !== null) {
       if (component.moduleId === undefined || component.moduleId === null) {
         return component;
       }

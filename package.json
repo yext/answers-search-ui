@@ -38,7 +38,7 @@
     "size": "size-limit"
   },
   "jest": {
-    "bail": 1,
+    "bail": 0,
     "verbose": true,
     "testMatch": [
       "**/tests/**/*.js"
