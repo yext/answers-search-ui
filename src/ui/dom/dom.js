@@ -2,8 +2,7 @@ let document = window.document;
 let parser = new DOMParser();
 
 export default class DOM {
-  static setup(w, d, p) {
-    window = w;
+  static setup(d, p) {
     document = d;
     parser = p;
   }
