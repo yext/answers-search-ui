@@ -1,7 +1,13 @@
-const document = window.document;
-const parser = new DOMParser();
+let document = window.document;
+let parser = new DOMParser();
 
 export default class DOM {
+  static setup(w, d, p) {
+    window = w;
+    document = d;
+    parser = p;
+  }
+
   /**
    * create a HTMLElement from and HTML string
    * @param {string} html The HTML to parse to a DOM node.
