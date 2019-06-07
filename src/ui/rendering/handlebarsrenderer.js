@@ -108,21 +108,6 @@ export default class HandlebarsRenderer extends Renderer {
       return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${mapConfig.apiKey}">`;
     });
 
-    this.registerHelper('googleMap', function(mapData, mapConfig, options) {
-      let encodedMarkers = '',
-          mapMarkers = mapData.mapMarkers,
-          width = mapConfig.width || 600,
-          height = mapConfig.height || 200,
-          zoom = mapConfig.zoom || 13;
-
-      for (let i = 0; i < mapMarkers.length; i++) {
-        let mm = mapMarkers[i];
-        encodedMarkers += `&markers=label:${mm.label}|${mm.latitude},${mm.longitude}`
-      }
-
-      return `<img src="https://maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&size=${width}x${height}&key=${mapConfig.apiKey}">`;
-    })
-
     this.registerHelper('assign', function(name, value, options) {
       let args = arguments;
       options = args[args.length - 1];

@@ -20,7 +20,7 @@ export default class UniversalResultsComponent extends Component {
     return this;
   }
 
-  addChild(data, type) {
+  addChild(data = {}, type) {
     let opts = this.getChildConfig([data['verticalConfigId']]);
     return super.addChild(data, type, opts);
   }

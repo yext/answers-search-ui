@@ -5,15 +5,16 @@
       {{#if verticalURL}}(<a href="{{verticalURL}}">View More</a>){{/if}}
     </h1>
     {{#if includeMap}}
-      {{map}}
-      <div class="yext-map-container">
-        {{#ifeq mapConfig.mapProvider 'google'}}
-          {{{googleMap map mapConfig}}}
-        {{/ifeq}}
-        {{#ifeq mapConfig.mapProvider 'mapBox'}}
-          {{{mapBox map mapConfig}}}
-        {{/ifeq}}
-      </div>
+      {{#ifeq mapConfig.mapProvider 'google'}}
+        <div class="yext-map-container"
+            data-component="Map"
+            data-prop="map"
+            data-opts='{"isStatic": true}'>
+        </div>
+      {{/ifeq}}
+      {{#ifeq mapConfig.mapProvider 'mapBox'}}
+        {{{mapBox map mapConfig}}}
+      {{/ifeq}}
     {{/if}}
     <ul class="yext-filters-applied">
       {{#each appliedQueryFilters}}

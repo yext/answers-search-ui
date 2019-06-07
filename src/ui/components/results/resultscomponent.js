@@ -4,6 +4,7 @@ import ResultsItemComponent from './resultsitemcomponent';
 import LocationResultsItemComponent from './locationresultsitemcomponent';
 import EventResultsItemComponent from './eventresultsitemcomponent';
 import PeopleResultsItemComponent from './peopleresultsitemcomponent';
+import MapComponent from '../map/mapcomponent';
 
 const ResultType = {
   EVENT: 'event',
@@ -122,17 +123,26 @@ export default class ResultsComponent extends Component {
     return comp;
   }
 
-  addChild(data, type) {
-    let clazz = this.getItemComponent(data.type);
-    if (clazz) {
-      type = clazz.type;
+  addChild(data, type, opts) {
+    // TODO(billy) Refactor the way configuration and data flows
+    // through top level components to child components.
+    if (type === ResultsItemComponent.type) {
+      let clazz = this.getItemComponent(data.type);
+      if (clazz) {
+        type = clazz.type;
+      }
+    } else if (type === MapComponent.type) {
+      data = {
+        map: data
+      }
+      opts = Object.assign(this._opts.mapConfig, opts);
     }
 
     // Apply the proper item renders to the the components
     // have just been constructed. Prioritize global over individual items.
-    let comp = super.addChild(data, type),
+    let comp = super.addChild(data, type, opts),
         globalConfig = this._itemConfig.global,
-        itemConfig = this._itemConfig[clazz.type];
+        itemConfig = this._itemConfig[comp.type];
 
     let hasGlobalRender = typeof globalConfig.render === 'function',
         hasGlobalTemplate = typeof globalConfig.template === 'string';
