@@ -151,7 +151,7 @@ describe('render template components using markup syntax', () => {
     expect(renderEl.isEqualNode(testEl)).toBeTruthy();
   });
 
-  it('renders template with component markup syntax, provided data array', () => {
+  it('renders with template component, provided data array', () => {
     const CUSTOM_TEMPLATES_TEST = {
       TEMPLATE: `
         <div>
