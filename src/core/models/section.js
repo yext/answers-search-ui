@@ -8,7 +8,7 @@ export default class Section {
 
     this.encodedState = data.encodedState || '';
 
-    this.appliedQueryFilters = data.appliedQueryFilters || null;
+    this.appliedQueryFilters = AppliedQueryFilter.from(data.appliedQueryFilters);
 
     this.facets = data.facets || null;
 
@@ -69,5 +69,22 @@ export default class Section {
     }
 
     return sections;
+  }
+}
+
+class AppliedQueryFilter {
+  // Support legacy model and new model until fully migrated.
+  // TODO(billy) Remove the left expression during assignment when migrated.
+  constructor(appliedQueryFilter) {
+    this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
+    this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
+  }
+
+  static from(appliedQueryFilters) {
+    let filters = [];
+    for (let i = 0; i < appliedQueryFilters.length; i ++) {
+      filters.push(new AppliedQueryFilter(appliedQueryFilters[i]))
+    }
+    return filters;
   }
 }
