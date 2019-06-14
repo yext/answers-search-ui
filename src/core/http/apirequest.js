@@ -58,9 +58,15 @@ export default class ApiRequest {
   }
 
   params(params) {
-    return Object.assign({
+    var baseParams = {
       'v': this._version,
       'api_key': this._apiKey
-    }, params || {});
+    };
+    const urlParams = new URL(window.location.toString()).searchParams;
+    if (urlParams.has('beta')) {
+      baseParams['beta'] = urlParams.get('beta');
+    }
+
+    return Object.assign(baseParams, params || {});
   }
 }
