@@ -51,11 +51,11 @@ export default class MapComponent extends Component {
 
   // TODO(billy) Make ProviderTypes a factory class
   getProviderInstance(type) {
-    return new ProviderTypes[type](this._opts);
+    return new ProviderTypes[type.toLowerCase()](this._opts);
   }
 
   onCreate() {
-    this._map = this.getProviderInstance(this._mapProvider.toLowerCase());
+    this._map = this.getProviderInstance(this._mapProvider);
 
     let mapData = this.getState('map');
     if (mapData === undefined) {
