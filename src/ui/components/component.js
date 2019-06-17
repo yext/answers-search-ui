@@ -241,8 +241,19 @@ export default class Component {
     DOM.append(this._container, this.render(this._state.asJSON()));
 
     this._isMounted = true;
-    this.onMount(this);
+    this._onMount();
     return this;
+  }
+
+  _onMount() {
+    this.onMount(this);
+    if (this._children.length === 0) {
+      return;
+    }
+
+    this._children.forEach(child => {
+      child._onMount();
+    })
   }
 
   /**
@@ -290,19 +301,19 @@ export default class Component {
 
       let childData = data[prop];
 
-      // Data that's an array is special, see below TODO
-      if (!Array.isArray(childData)) {
-        let childComponent = this.addChild(childData, type, opts);
-        DOM.append(domComponent, childComponent.render(childData));
-        return;
-      }
-
       // TODO(billy) Right now, if we provide an array as the data prop,
       // the behavior is to create many components for each item in the array.
       // THAT interface SHOULD change to use a different property that defines
       // whether to array data should be used for a single component or
       // to create many components for each item.
       // Overloading and having this side effect is unintuitive and WRONG
+      if (!Array.isArray(childData)) {
+        let childComponent = this.addChild(childData, type, opts);
+        DOM.append(domComponent, childComponent.render(childData));
+        return;
+      }
+
+      // Otherwise, render the component as expected
       let childHTML = [];
       for (let i = 0; i < childData.length; i ++) {
         let childComponent = this.addChild(childData[i], type, opts);

@@ -4,9 +4,22 @@ import DOM from '../../../dom/dom';
 export default class GoogleMapProvider extends MapProvider {
   constructor(opts) {
     super(opts);
+
+    this._clientId = opts.clientId;
+
+    this._signature = opts.signature;
+
+    if (!this.hasValidClientCredentials() && !this._apiKey) {
+      throw new Error('GoogleMapsProvider: Missing `apiKey` or {`clientId`, `signature`}');
+    }
   }
 
   loadJS(onLoad) {
+    if (DOM.query('#yext-map-js')) {
+      onLoad();
+      return;
+    }
+
     let script = DOM.createEl('script', {
       id: 'yext-map-js',
       onload: () => {
@@ -14,7 +27,7 @@ export default class GoogleMapProvider extends MapProvider {
         onLoad();
       },
       async: true,
-      src: 'https://maps.googleapis.com/maps/api/js?key='+this._apiKey
+      src: `//maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
     });
 
     DOM.append('body', script);
@@ -28,7 +41,20 @@ export default class GoogleMapProvider extends MapProvider {
 
     let encodedMarkers = GoogleMapMarkerConfig.serialize(googleMapMarkerConfigs);
     return `
-      <img src="https://maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&size=${this._width}x${this._height}&key=${this._apiKey}">`;
+      <img src="//maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&size=${this._width}x${this._height}&${this.generateCredentials()}">`;
+  }
+
+  generateCredentials() {
+    if (this.hasValidClientCredentials()) {
+      return `client=${this._clientId}`;
+    } else {
+      return `key=${this._apiKey}`;
+    }
+  }
+
+  hasValidClientCredentials() {
+    // Signature is only required if map is static
+    return this._clientId && (this._signature || !this._isStatic);
   }
 
   init(el, mapData) {
