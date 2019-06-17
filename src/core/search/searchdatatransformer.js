@@ -20,6 +20,7 @@ export default class SearchDataTransformer {
 
   static transformVertical(data) {
     return {
+      navigation: new Navigation(), // Veritcal doesn't respond with ordering, so use empty nav.
       verticalResults: VerticalResults.from(data.response)
     };
   }
