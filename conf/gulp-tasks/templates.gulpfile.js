@@ -74,7 +74,6 @@ function bundleTemplates() {
         include: './node_modules/**'
       }),
       babel({
-        exclude: 'node_modules/**',
         presets: ['@babel/env']
       })
     ],
