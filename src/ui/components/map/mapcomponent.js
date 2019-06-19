@@ -28,7 +28,7 @@ export default class MapComponent extends Component {
      * @type {string}
      */
     this._mapProvider = opts.mapProvider;
-    if (!(this._mapProvider in ProviderTypes)) {
+    if (!this._mapProvider || !(this._mapProvider.toLowerCase() in ProviderTypes)) {
       throw new Error('MapComponent: Invalid Map Provider; must be `google` or `mapBox`')
     }
 
@@ -59,14 +59,14 @@ export default class MapComponent extends Component {
 
     let mapData = this.getState('map');
     if (mapData === undefined) {
-      return;
+      return this;
     }
 
     if (this._isStatic) {
       // TODO(billy) The existing template should just take in the map `imgURL` as data
       // Instead of overriding the template like so, but NBD for now.
       this.setTemplate(this._map.generateStatic(mapData));
-      return;
+      return this;
     }
 
     this._map.loadJS(() => {
