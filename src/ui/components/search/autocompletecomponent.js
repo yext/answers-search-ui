@@ -317,7 +317,10 @@ export default class AutoCompleteComponent extends Component {
     // submit the search on enter
     if (key === Keys.ENTER) {
       e.preventDefault();
-      const filter = JSON.stringify(sections[this._sectionIndex].results[this._resultIndex].filter);
+      let filter = '';
+      if (this._sectionIndex >= 0 && this._resultIndex >= 0) {
+        filter = JSON.stringify(sections[this._sectionIndex].results[this._resultIndex].filter);
+      }
 
       this.updateQuery(value);
       this._originalQuery = value;
