@@ -23,10 +23,10 @@ export default class MapProvider {
     this._width = opts.width || 600;
 
     /**
-     * The zoom level of the map, defaults to 20
+     * The zoom level of the map, defaults to 9
      * @type {number}
      */
-    this._zoom = opts.zoom || 20;
+    this._zoom = opts.zoom || 9;
 
     /**
      * A reference to the underlying map instance, created by the external lib.

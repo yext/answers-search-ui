@@ -33,6 +33,24 @@ export default class MapBoxMapProvider extends MapProvider {
     DOM.append('body', script);
   }
 
+  generateStatic(mapData) {
+    let encodedMarkers = '',
+          mapMarkers = mapData.mapMarkers,
+          center = mapData.mapCenter,
+          width = this._width || 600,
+          height = this._height || 200,
+          zoom = this._zoom || 9;
+
+      for (let i = 0; i < mapMarkers.length; i++) {
+        let mm = mapMarkers[i];
+        if (i > 0) {
+          encodedMarkers += ',';
+        }
+        encodedMarkers += `pin-s-${mm.label}(${mm.longitude},${mm.latitude})`
+      }
+    return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${this._apiKey}">`;
+  }
+
   init(el, mapData) {
     if (!mapData || mapData.mapMarkers.length <= 0) {
       this._map = null;
