@@ -40,6 +40,10 @@ export default class MapProvider {
      */
     this._isLoaded = false;
 
+    /**
+     * Callback to invoke once the Javascript is loaded
+     * @type {function}
+     */
     this._onLoaded = opts.onLoaded || function () {};
 
     /**
@@ -67,9 +71,13 @@ export default class MapProvider {
   }
 
   onLoaded (cb) {
+    if (typeof cb !== 'function') {
+      return;
+    }
+
     this._onLoaded = cb;
     if (this.isLoaded()) {
-      cb();
+      this._onLoaded();
     }
   }
 
