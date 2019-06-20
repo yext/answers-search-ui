@@ -17,11 +17,8 @@ export default class ResultsComponent extends Component {
     super(opts);
 
     this.moduleId = 'verticalResults';
-
     this._templateName = 'results/results';
-
     this.limit = opts.limit || 5;
-
     this._itemConfig = {
       global: {
         render: null,
@@ -141,13 +138,9 @@ export default class ResultsComponent extends Component {
     // Apply the proper item renders to the the components
     // have just been constructed. Prioritize global over individual items.
     let comp = super.addChild(data, type, opts);
-
     let globalConfig = this._itemConfig.global;
-
     let itemConfig = this._itemConfig[comp.type];
-
     let hasGlobalRender = typeof globalConfig.render === 'function';
-
     let hasGlobalTemplate = typeof globalConfig.template === 'string';
 
     if (hasGlobalRender) {

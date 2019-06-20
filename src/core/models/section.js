@@ -3,19 +3,12 @@ import Result from './result';
 export default class Section {
   constructor (data, url) {
     this.verticalConfigId = data.verticalConfigId || null;
-
     this.resultsCount = data.resultsCount || 0;
-
     this.encodedState = data.encodedState || '';
-
     this.appliedQueryFilters = AppliedQueryFilter.from(data.appliedQueryFilters);
-
     this.facets = data.facets || null;
-
     this.results = Result.from(data.results);
-
     this.map = Section.parseMap(data.results);
-
     this.verticalURL = url || null;
   }
 

@@ -4,7 +4,6 @@ import SearchDataTransformer from '../search/searchdatatransformer';
 export default class Storage {
   constructor () {
     this._moduleDataContainer = {};
-
     this._futureListeners = {};
   }
 

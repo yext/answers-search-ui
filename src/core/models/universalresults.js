@@ -3,7 +3,6 @@ import Section from './section';
 export default class UniversalResults {
   constructor (data) {
     this.queryId = data.queryId || null;
-
     this.sections = data.sections || [];
   }
 

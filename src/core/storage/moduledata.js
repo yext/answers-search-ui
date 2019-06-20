@@ -5,11 +5,8 @@ export default class ModuleData extends EventEmitter {
     super();
 
     this._id = id;
-
     this._history = [];
-
     this._data = {};
-
     this.set(data);
   }
 
@@ -25,9 +22,7 @@ export default class ModuleData extends EventEmitter {
     // TODO(billy) This assumes the top level properties are all contained within
     // an object. Probably not a good assumption to make.
     let keys = Object.keys(data);
-
     let len = keys.length;
-
     let isDirty = false;
 
     // Reset the object if its being applied as empty
@@ -38,7 +33,6 @@ export default class ModuleData extends EventEmitter {
 
     for (let i = 0; i < len; i++) {
       let prop = keys[i];
-
       let val = data[keys[i]];
 
       // TODO(billy) For now, one level of comparison is probably fine,

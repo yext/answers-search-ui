@@ -1,3 +1,5 @@
+/* global fetch */
+
 /**
  * Types of HTTP requests
  */
@@ -9,10 +11,6 @@ const Methods = {
 };
 
 export default class HttpRequester {
-  constructor () {
-
-  }
-
   /**
    * Create a GET HTTP request
    * @param {string} url The url to make a request to

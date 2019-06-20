@@ -35,7 +35,7 @@ export default class AutoCompleteDataTransformer {
       AutoCompleteData.from(response));
   }
 
-  static vertical (response, barKey) {
+  static vertical (response, inputKey) {
     return AutoCompleteDataTransformer.clean(
       `autocomplete.${inputKey}`,
       { sections: response.sections });

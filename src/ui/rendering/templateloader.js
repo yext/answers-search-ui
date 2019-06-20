@@ -10,11 +10,8 @@ export default class TemplateLoader {
     let isLocal = params.get('local');
 
     this._templateUrl = opts.templateUrl || (isLocal ? '../dist/answerstemplates.compiled.min.js' : 'https://assets.sitescdn.net/answers/answerstemplates.compiled.min.js');
-
     this._templates = {};
-
     this._onLoaded = function () {};
-
     this._init();
   }
 

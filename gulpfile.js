@@ -1,4 +1,4 @@
-const { series, parallel } = require('gulp');
+const { parallel } = require('gulp');
 
 const templates = require('./conf/gulp-tasks/templates.gulpfile.js');
 const library = require('./conf/gulp-tasks/library.gulpfile.js');

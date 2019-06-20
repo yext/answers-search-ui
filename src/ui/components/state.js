@@ -21,17 +21,17 @@ export default class State extends EventEmitter {
    * Set the initial state of the component.
    * NOTE(billy): Does not fire an update message
    */
-  init (prop, opt_val) {
-    this._set(prop, opt_val);
+  init (prop, optVal) {
+    this._set(prop, optVal);
   }
 
   /**
    * setter for the state
    * @param prop {string|Object} The property to set
-   * @param opt_val Optional, if prop is a {string}, it will assign the value to that property
+   * @param optVal Optional, if prop is a {string}, it will assign the value to that property
    */
-  set (prop, opt_val) {
-    this._set(prop, opt_val);
+  set (prop, optVal) {
+    this._set(prop, optVal);
     this.emit('update');
   }
 
@@ -39,14 +39,14 @@ export default class State extends EventEmitter {
    * setter for the state enables you to update a single property, or complete state
    * depending on the arguments provided.
    * @param prop {string|Object} The property to set
-   * @param opt_val If prop is a {string}, provide its value
+   * @param optVal If prop is a {string}, provide its value
    * @private
    */
-  _set (prop, opt_val) {
-    if (opt_val === undefined) {
+  _set (prop, optVal) {
+    if (optVal === undefined) {
       this._state = prop;
     } else {
-      this._state[prop] = opt_val;
+      this._state[prop] = optVal;
     }
   }
 
@@ -58,13 +58,13 @@ export default class State extends EventEmitter {
   /**
    * Retrieve a properties value from the state
    * If no property provided, return the full state
-   * @param {string} opt_prop optional property to retrieve
+   * @param {string} optProp optional property to retrieve
    */
-  get (opt_prop) {
-    if (opt_prop === undefined) {
+  get (optProp) {
+    if (optProp === undefined) {
       return this._state;
     }
-    return this._state[opt_prop];
+    return this._state[optProp];
   }
 
   has (prop) {

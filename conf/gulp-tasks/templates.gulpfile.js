@@ -1,6 +1,4 @@
-const { series, parallel, src, dest, watch } = require('gulp');
-
-const path = require('path');
+const { series, src, dest, watch } = require('gulp');
 
 const rollup = require('gulp-rollup-lightweight');
 const babel = require('rollup-plugin-babel');
@@ -20,8 +18,8 @@ const source = require('vinyl-source-stream');
 function precompileTemplates () {
   return src('./src/ui/templates/**/*.hbs')
     .pipe(handlebars())
-    .pipe(wrap('Handlebars.template(<%= contents %>); \
-          \n\nHandlebars.registerPartial(<%= processPartialName(file.relative) %>, <%= customContext(file.relative) %> )', {}, {
+    .pipe(wrap(`Handlebars.template(<%= contents %>);
+        Handlebars.registerPartial(<%= processPartialName(file.relative) %>, <%= customContext(file.relative) %> )`, {}, {
       imports: {
         processPartialName: function (fileName, a, b, c) {
           // Strip the extension and the underscore

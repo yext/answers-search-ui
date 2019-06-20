@@ -154,7 +154,6 @@ export default class Component {
 
   init (opts) {
     this.setState(opts.data || opts.state || {});
-
     this.onCreate();
     this._state.on('update', () => {
       this.onUpdate();
@@ -290,9 +289,7 @@ export default class Component {
     domComponents.forEach((domComponent) => {
       let dataset = domComponent.dataset;
       let type = dataset.component;
-
       let prop = dataset.prop;
-
       let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
 
       // Rendering a sub component should be within the context,

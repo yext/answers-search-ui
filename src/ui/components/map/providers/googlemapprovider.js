@@ -1,12 +1,13 @@
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
+/* global google, iconCfg */
+
 export default class GoogleMapProvider extends MapProvider {
   constructor (opts) {
     super(opts);
 
     this._clientId = opts.clientId;
-
     this._signature = opts.signature;
 
     if (!this.hasValidClientCredentials() && !this._apiKey) {

@@ -124,9 +124,7 @@ export default class SearchComponent extends Component {
       e.preventDefault();
 
       let query = form.querySelector(this._inputEl).value;
-
       let params = this.getUrlParams();
-
       params.set('query', query);
 
       // If we have a redirectUrl, we want the form to be
@@ -152,7 +150,7 @@ export default class SearchComponent extends Component {
   initAutoComplete (inputSelector) {
     this._inputEl = inputSelector;
 
-    let autoComplete = this.componentManager.create('AutoComplete', {
+    this.componentManager.create('AutoComplete', {
       parent: this,
       container: '.yext-search-autocomplete',
       barKey: this._barKey,
@@ -177,7 +175,6 @@ export default class SearchComponent extends Component {
 
       if (nav) {
         let tabs = nav.getState('tabs');
-
         let urls = {};
 
         if (tabs && Array.isArray(tabs)) {
