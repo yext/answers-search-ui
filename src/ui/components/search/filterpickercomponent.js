@@ -1,7 +1,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 
-export default class FilterPicker extends Component {
+export default class FilterPickerComponent extends Component {
   constructor(opts = {}) {
     super(opts);
 
