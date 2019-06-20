@@ -40,7 +40,7 @@ export default class MapProvider {
      */
     this._isLoaded = false;
 
-    this._onLoaded = opts.onLoaded || function() {};
+    this._onLoaded = opts.onLoaded || function () {};
 
     /**
      * The custom configuration override to use for the map markers
@@ -66,7 +66,7 @@ export default class MapProvider {
     };
   }
 
-  onLoaded(cb) {
+  onLoaded (cb) {
     this._onLoaded = cb;
     if (this.isLoaded()) {
       cb();
