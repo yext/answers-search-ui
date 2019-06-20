@@ -19,17 +19,17 @@ const Keys = {
   LEFT_OS_KEY: 91,
   RIGHT_OS_KEY: 92,
   SELECT_KEY: 93
-}
+};
 
 export default class AutoCompleteComponent extends Component {
-  constructor(opts = {}) {
-    super(opts)
+  constructor (opts = {}) {
+    super(opts);
 
     /**
      * Whether autocomplete is simple or filter
      * @type {boolean}
      */
-    this.isFilterSearch = opts.isFilterSearch || false
+    this.isFilterSearch = opts.isFilterSearch || false;
 
     /**
      * The `barKey` in the vertical search to use for auto-complete
@@ -97,13 +97,13 @@ export default class AutoCompleteComponent extends Component {
     /**
      * Callback invoked when the `Enter` key is pressed on auto complete.
      */
-    this._onSubmit = opts.onSubmit || function() {};
+    this._onSubmit = opts.onSubmit || function () {};
   }
 
   /**
    * The aliased used by the component manager for creation.
    */
-  static get type() {
+  static get type () {
     return 'AutoComplete';
   }
 
@@ -112,7 +112,7 @@ export default class AutoCompleteComponent extends Component {
    * to the template (e.g. the sectionIndex and resultIndex), since
    * those are client-interaction specific values and aren't returned from the server.
    */
-  setState(data) {
+  setState (data) {
     super.setState(Object.assign(data, {
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
@@ -123,7 +123,7 @@ export default class AutoCompleteComponent extends Component {
   /**
    * updateState is a helper to apply the current state with new client-state.
    */
-  updateState() {
+  updateState () {
     this.setState(this._state.get());
   }
 
@@ -131,11 +131,11 @@ export default class AutoCompleteComponent extends Component {
    * onCreate is triggered when the component is constructed from the framework.
    * Once we're initalized, we wire up all of our user interactions
    */
-  onCreate() {
+  onCreate () {
     // Use the context of the parent component to find the input node.
     let queryInput = DOM.query(this._parent._container, this._inputEl);
     if (!queryInput) {
-      throw new Error('Could not initialize AutoComplete. Can not find {HTMLElement} `', this._inputEl, '`.')
+      throw new Error('Could not initialize AutoComplete. Can not find {HTMLElement} `', this._inputEl, '`.');
     }
 
     // Disable the native auto complete
@@ -166,9 +166,11 @@ export default class AutoCompleteComponent extends Component {
 
     // Allow the user to select a result with the mouse
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'mousedown', (evt, target) => {
-      let data = target.dataset,
-          val = data.short,
-          filter = JSON.parse(data.filter);
+      let data = target.dataset;
+
+      let val = data.short;
+
+      let filter = JSON.parse(data.filter);
 
       this.updateQuery(val);
       this._onSubmit(val, filter.filter);
@@ -177,14 +179,14 @@ export default class AutoCompleteComponent extends Component {
 
     // When the user is typing in the input, process the auto complete.
     DOM.on(queryInput, 'keyup', (e) => {
-      this.handleTyping(e.keyCode, queryInput.value, e)
-    })
+      this.handleTyping(e.keyCode, queryInput.value, e);
+    });
   }
 
   /**
    * close will hide the auto complete results and reset the state.
    */
-  close() {
+  close () {
     this.setState({});
     this.reset();
   }
@@ -193,7 +195,7 @@ export default class AutoCompleteComponent extends Component {
    * resets the client state to their original values and triggers
    * a template-rerender via updateState
    */
-  reset() {
+  reset () {
     this._sectionIndex = 0;
     this._resultIndex = -1;
     this.updateState();
@@ -204,13 +206,14 @@ export default class AutoCompleteComponent extends Component {
    * @param {string} opt_value Option value provided.
    * If no value provided, we'll try to find it based on the selection indexes.
    */
-  updateQuery(opt_value) {
+  updateQuery (opt_value) {
     // Only want to update the query string if theres a value.
     // If one is provided, great.
     // Otherwise, lets try to find it from the current selection in the results.
     if (opt_value === undefined) {
-      let sections = this._state.get('sections'),
-          results = sections[this._sectionIndex].results;
+      let sections = this._state.get('sections');
+
+      let results = sections[this._sectionIndex].results;
       opt_value = results[this._resultIndex].shortValue;
     }
 
@@ -218,7 +221,7 @@ export default class AutoCompleteComponent extends Component {
     queryEl.value = opt_value;
   }
 
-  handleTyping(key, value, e) {
+  handleTyping (key, value, e) {
     let ignoredKeys = [
       Keys.DOWN,
       Keys.UP,
@@ -260,7 +263,7 @@ export default class AutoCompleteComponent extends Component {
     }
   }
 
-  handleNavigateResults(key, e) {
+  handleNavigateResults (key, e) {
     let sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
       return;
@@ -271,7 +274,7 @@ export default class AutoCompleteComponent extends Component {
       e.preventDefault();
       if (this._resultIndex <= 0) {
         if (this._sectionIndex > 0) {
-          this._sectionIndex --;
+          this._sectionIndex--;
           this._resultIndex = sections[this._sectionIndex].results.length - 1;
         } else {
           this.updateQuery(this._originalQuery);
@@ -283,7 +286,7 @@ export default class AutoCompleteComponent extends Component {
         return;
       }
 
-      this._resultIndex --;
+      this._resultIndex--;
       this.updateState();
       this.updateQuery();
       return;
@@ -293,7 +296,7 @@ export default class AutoCompleteComponent extends Component {
       e.preventDefault();
       if (this._resultIndex >= results.length - 1) {
         if (this._sectionIndex < sections.length - 1) {
-          this._sectionIndex ++;
+          this._sectionIndex++;
           this._resultIndex = 0;
         }
         this.updateQuery();
@@ -301,14 +304,13 @@ export default class AutoCompleteComponent extends Component {
         return;
       }
 
-      this._resultIndex ++;
+      this._resultIndex++;
       this.updateQuery();
       this.updateState();
-      return;
     }
   }
 
-  handleSubmitResult(key, value, e) {
+  handleSubmitResult (key, value, e) {
     let sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
       return;

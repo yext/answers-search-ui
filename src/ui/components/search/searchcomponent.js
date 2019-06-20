@@ -2,7 +2,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 
 export default class SearchComponent extends Component {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
     /**
@@ -65,7 +65,7 @@ export default class SearchComponent extends Component {
      * Optionally provided, defaults to false.
      * @type {boolean}
      */
-    this.autoFocus = opts.autoFocus === true ? true : false;
+    this.autoFocus = opts.autoFocus === true;
 
     /**
      * submitURL will force the search query submission to get
@@ -86,11 +86,11 @@ export default class SearchComponent extends Component {
     this.query = opts.query || this.getUrlParams().get('query') || '';
   }
 
-  static get type() {
+  static get type () {
     return 'SearchBar';
   }
 
-  onCreate() {
+  onCreate () {
     if (this.query && this.query.length > 0) {
       this.search(this.query);
     }
@@ -98,7 +98,7 @@ export default class SearchComponent extends Component {
     this.bindBrowserHistory();
   }
 
-  onMount() {
+  onMount () {
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
     this.initAutoComplete(this._inputEl);
@@ -112,7 +112,7 @@ export default class SearchComponent extends Component {
    * A helper method to use for wiring up searching on form submission
    * @param {string} formSelector CSS selector to bind our submit handling to
    */
-  initSearch(formSelector) {
+  initSearch (formSelector) {
     this._formEl = formSelector;
 
     let form = DOM.query(this._container, formSelector);
@@ -123,8 +123,9 @@ export default class SearchComponent extends Component {
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
 
-      let query = form.querySelector(this._inputEl).value,
-          params = this.getUrlParams();
+      let query = form.querySelector(this._inputEl).value;
+
+      let params = this.getUrlParams();
 
       params.set('query', query);
 
@@ -141,14 +142,14 @@ export default class SearchComponent extends Component {
 
       this.search(query);
       return false;
-    })
+    });
   }
 
   /**
    * A helper method to wire up our auto complete on an input selector
    * @param {string} inputSelector CSS selector to bind our auto complete component to
    */
-  initAutoComplete(inputSelector) {
+  initAutoComplete (inputSelector) {
     this._inputEl = inputSelector;
 
     let autoComplete = this.componentManager.create('AutoComplete', {
@@ -165,7 +166,7 @@ export default class SearchComponent extends Component {
     });
   }
 
-  search(query) {
+  search (query) {
     if (this._verticalKey) {
       return this.core.verticalSearch(query, this._verticalKey);
     } else {
@@ -175,11 +176,12 @@ export default class SearchComponent extends Component {
         .getActiveComponent('Navigation');
 
       if (nav) {
-        let tabs = nav.getState('tabs'),
-            urls = {};
+        let tabs = nav.getState('tabs');
+
+        let urls = {};
 
         if (tabs && Array.isArray(tabs)) {
-          for (let i = 0; i < tabs.length; i ++) {
+          for (let i = 0; i < tabs.length; i++) {
             let params = this.getUrlParams(tabs[i].url.split('?')[1]);
             params.set('query', query);
 
@@ -197,20 +199,20 @@ export default class SearchComponent extends Component {
     }
   }
 
-  setState(data) {
+  setState (data) {
     return super.setState(Object.assign({
       title: this.title,
       searchText: this.searchText,
       query: this.query
-    }, data))
+    }, data));
   }
 
-  getUrlParams(url) {
+  getUrlParams (url) {
     url = url || window.location.search.substring(1);
     return new URLSearchParams(url);
   }
 
-  bindBrowserHistory() {
+  bindBrowserHistory () {
     DOM.on(window, 'popstate', () => {
       this.query = this.getUrlParams().get('query');
       this.setState({

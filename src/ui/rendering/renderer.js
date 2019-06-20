@@ -8,15 +8,15 @@ export default class Renderer {
    * @param {string} template
    * @param {object} data
    */
-  render(template, data) {
+  render (template, data) {
     return template;
   }
 
-  registerHelper(name, cb) {
+  registerHelper (name, cb) {
 
   }
 
-  compile(template) {
+  compile (template) {
 
   }
 }

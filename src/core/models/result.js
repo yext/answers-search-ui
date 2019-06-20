@@ -1,12 +1,12 @@
 export default class Result {
-  constructor(data = {}) {
+  constructor (data = {}) {
     Object.assign(this, data);
   }
 
   /**
    * resultsData expected format: { data: { ... }, highlightedFields: { ... }}
    */
-  static from(resultsData) {
+  static from (resultsData) {
     let results = [];
     for (let i = 0; i < resultsData.length; i++) {
       // TODO use resultData.highlightedFields to

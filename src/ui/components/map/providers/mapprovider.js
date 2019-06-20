@@ -3,7 +3,7 @@
  * Implementations should extend this interface
  */
 export default class MapProvider {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     /**
      * The API Key used for interacting with the map provider
      * @type {string}
@@ -52,10 +52,10 @@ export default class MapProvider {
    * @type {Object}
    * TODO(billy) Create a configuration model
    */
-  static get DEFAULT_PIN_CONFIG() {
+  static get DEFAULT_PIN_CONFIG () {
     return {
       icon: {
-        anchor: null,    // e.g. { x: 1, y: 1 }
+        anchor: null, // e.g. { x: 1, y: 1 }
         svg: null,
         url: null,
         scaledSize: null // e.g. { w: 20, h: 20 }
@@ -64,20 +64,20 @@ export default class MapProvider {
     };
   }
 
-  isLoaded() {
+  isLoaded () {
     return this._isLoaded;
   }
 
-  loadJS() {
+  loadJS () {
     throw new Error('Unimplemented Method: loadJS');
   }
 
-  loadStatic() {
+  loadStatic () {
     throw new Error('Unimplemented Method: loadStatic');
   }
 
-  init(mapData) {
+  init (mapData) {
     // TODO(billy) This should be based off a promise that gets created from loadJS
-    throw new Error('Unimplemented Method: init')
+    throw new Error('Unimplemented Method: init');
   }
 }

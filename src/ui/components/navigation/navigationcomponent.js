@@ -1,7 +1,7 @@
 import Component from '../component';
 
 export default class NavigationComponent extends Component {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
     /**
@@ -51,21 +51,21 @@ export default class NavigationComponent extends Component {
         configId: tab.configId,
         url: tab.url,
         baseUrl: tab.url,
-        isFirst: tab.isFirst === true ? true : false,
-        isActive: tab.isActive === true ? true : false
+        isFirst: tab.isFirst === true,
+        isActive: tab.isActive === true
       };
     }
   }
 
-  static get type() {
+  static get type () {
     return 'Navigation';
   }
 
-  getUrlParams() {
+  getUrlParams () {
     return new URLSearchParams(window.location.search.substring(1));
   }
 
-  generateTabUrl(tab) {
+  generateTabUrl (tab) {
     let params = this.getUrlParams();
     if (params.toString().length > 0) {
       tab.url = tab.baseUrl + '?' + params.toString();
@@ -80,7 +80,7 @@ export default class NavigationComponent extends Component {
    *
    * @override
    */
-  setState(data) {
+  setState (data) {
     if (data.tabOrder !== undefined) {
       this._tabOrder = data.tabOrder;
     }
@@ -88,7 +88,7 @@ export default class NavigationComponent extends Component {
     // Since our tab configuration is local, we generate it
     // based on the feedback from the server
     let tabs = [];
-    for (let i = 0; i < this._tabOrder.length; i ++) {
+    for (let i = 0; i < this._tabOrder.length; i++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
         tabs.push(this.generateTabUrl(tab));
@@ -117,7 +117,7 @@ export default class NavigationComponent extends Component {
     });
   }
 
-  render(data) {
+  render (data) {
     return super.render(data);
   }
 }

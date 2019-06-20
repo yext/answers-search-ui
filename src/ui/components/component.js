@@ -4,7 +4,7 @@ import DOM from '../dom/dom';
 import State from './state';
 
 export default class Component {
-  constructor(type, opts = {}) {
+  constructor (type, opts = {}) {
     // Simple facade pattern to enable the user to pass a single object
     // containing all the necessary options and settings
     if (typeof type === 'object') {
@@ -127,13 +127,13 @@ export default class Component {
      * By default, no transformation happens.
      * @type {function}
      */
-    this.transformData = opts.transformData || this.transformData || function() {};
+    this.transformData = opts.transformData || this.transformData || function () {};
 
     /**
      * The a local reference to the callback that will be invoked when a component is created.
      * @type {function}
      */
-    this.onCreate = opts.onCreate || this.onCreate || function() {};
+    this.onCreate = opts.onCreate || this.onCreate || function () {};
 
     /**
      * The a local reference to the callback that will be invoked when a component is Mounted.
@@ -148,14 +148,14 @@ export default class Component {
     this.onUpdate = opts.onUpdate || this.onUpdate || function () { };
   }
 
-  static get type() {
+  static get type () {
     return 'Component';
   }
 
-  init(opts) {
+  init (opts) {
     this.setState(opts.data || opts.state || {});
 
-    this.onCreate()
+    this.onCreate();
     this._state.on('update', () => {
       this.onUpdate();
       this.mount();
@@ -165,24 +165,24 @@ export default class Component {
     return this;
   }
 
-  setState(data) {
+  setState (data) {
     this._state.set(data);
     return this;
   }
 
-  getState(prop) {
+  getState (prop) {
     return this._state.get(prop);
   }
 
-  hasState(prop) {
+  hasState (prop) {
     return this._state.has(prop);
   }
 
-  transformData(data) {
+  transformData (data) {
     return data;
   }
 
-  addChild(data, type, opts) {
+  addChild (data, type, opts) {
     let childComponent = this.componentManager.create(
       type,
       Object.assign({
@@ -202,7 +202,7 @@ export default class Component {
    * @param {Function} render
    * @return {string}
    */
-  setRender(render) {
+  setRender (render) {
     this._render = render;
     return this;
   }
@@ -211,7 +211,7 @@ export default class Component {
    * Set the renderer for the component
    * @param {RendererType} renderer
    */
-  setRenderer(renderer) {
+  setRenderer (renderer) {
     this._renderer = Renderers[renderer];
     return this;
   }
@@ -220,15 +220,15 @@ export default class Component {
    * Sets the template for the component to use when rendering
    * @param {string} template
    */
-  setTemplate(template) {
+  setTemplate (template) {
     this._template = this._renderer.compile(template);
   }
 
-  unMount() {
+  unMount () {
     DOM.empty(this._container);
   }
 
-  mount() {
+  mount () {
     if (!this._container) {
       return this;
     }
@@ -245,7 +245,7 @@ export default class Component {
     return this;
   }
 
-  _onMount() {
+  _onMount () {
     this.onMount(this);
     if (this._children.length === 0) {
       return;
@@ -253,14 +253,14 @@ export default class Component {
 
     this._children.forEach(child => {
       child._onMount();
-    })
+    });
   }
 
   /**
    * render the template using the {Renderer} with the current state and template of the component
    * @returns {string}
    */
-  render(data) {
+  render (data) {
     this.beforeRender();
     data = this.transformData(data) || this.transformData(this._state.get());
 
@@ -289,15 +289,17 @@ export default class Component {
     let domComponents = DOM.queryAll(el, '[data-component]');
     domComponents.forEach((domComponent) => {
       let dataset = domComponent.dataset;
-      let type = dataset.component,
-          prop = dataset.prop,
-          opts = dataset.opts ? JSON.parse(dataset.opts) : {};
+      let type = dataset.component;
+
+      let prop = dataset.prop;
+
+      let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
 
       // Rendering a sub component should be within the context,
       // of the node that we processed it from
       opts = Object.assign(opts, {
         container: domComponent
-      })
+      });
 
       let childData = data[prop];
 
@@ -315,7 +317,7 @@ export default class Component {
 
       // Otherwise, render the component as expected
       let childHTML = [];
-      for (let i = 0; i < childData.length; i ++) {
+      for (let i = 0; i < childData.length; i++) {
         let childComponent = this.addChild(childData[i], type, opts);
         childHTML.push(childComponent.render(childData[i]));
       }
@@ -331,7 +333,7 @@ export default class Component {
    * onCreate is triggered when the component is constructed
    * @param {function} the callback to invoke upon emit
    */
-  onCreate(cb) {
+  onCreate (cb) {
 
   }
 
@@ -339,7 +341,7 @@ export default class Component {
    * onUpdate is triggered when the state of the component changes
    * @param {function} the callback to invoke upon emit
    */
-  onUpdate(cb) {
+  onUpdate (cb) {
 
   }
 
@@ -347,7 +349,7 @@ export default class Component {
    * beforeRender event is triggered before the component is rendered
    * @param {function} the callback to invoke upon emit
    */
-  beforeRender(cb) {
+  beforeRender (cb) {
 
   }
 
@@ -355,7 +357,7 @@ export default class Component {
    * afterRender event is triggered after the component is rendered
    * @param {function} the callback to invoke upon emit
    */
-  afterRender(cb) {
+  afterRender (cb) {
 
   }
 
@@ -363,7 +365,7 @@ export default class Component {
    * onMount is triggered when the component is appended to the DOM
    * @param {function} the callback to invoke upon emit
    */
-  onMount(cb) {
+  onMount (cb) {
 
   }
 
@@ -371,7 +373,7 @@ export default class Component {
    * onUnMount is triggered when the component is removed from the DOM
    * @param {function} the callback to invoke upon emit
    */
-  onUnMount(cb) {
+  onUnMount (cb) {
 
   }
 
@@ -379,7 +381,7 @@ export default class Component {
    * beforeMount is triggered before the component is mounted to the DOM
    * @param {function} the callback to invoke upon emit
    */
-  beforeMount(cb) {
+  beforeMount (cb) {
 
   }
 
@@ -387,7 +389,7 @@ export default class Component {
    * onDestroy is triggered when the component is destroyed
    * @param {function} the callback to invoke upon emit
    */
-  onDestroy(cb) {
+  onDestroy (cb) {
 
   }
 }

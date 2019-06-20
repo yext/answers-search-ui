@@ -8,7 +8,7 @@ import AutoCompleteData from '../models/autocompletedata';
  * TODO(billy) Create our own front-end data models
  */
 export default class AutoCompleteDataTransformer {
-  static clean(moduleId, data) {
+  static clean (moduleId, data) {
     if (data.sections && data.sections.length === 0) {
       delete data.sections;
     }
@@ -18,26 +18,26 @@ export default class AutoCompleteDataTransformer {
     }
 
     return {
-       [moduleId]: data
+      [moduleId]: data
     };
   }
 
-  static universal(response) {
+  static universal (response) {
     return AutoCompleteDataTransformer.clean(
       'autocomplete',
       AutoCompleteData.from(response)
     );
   }
 
-  static filter(response, inputKey) {
+  static filter (response, inputKey) {
     return AutoCompleteDataTransformer.clean(
       `autocomplete.${inputKey}`,
       AutoCompleteData.from(response));
   }
 
-  static vertical(response, barKey) {
+  static vertical (response, barKey) {
     return AutoCompleteDataTransformer.clean(
       `autocomplete.${inputKey}`,
-      { sections: response.sections })
+      { sections: response.sections });
   }
 }

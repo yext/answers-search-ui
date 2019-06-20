@@ -13,7 +13,7 @@ const ResultType = {
 };
 
 export default class ResultsComponent extends Component {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
     this.moduleId = 'verticalResults';
@@ -39,7 +39,7 @@ export default class ResultsComponent extends Component {
         render: null,
         template: null
       }
-    }
+    };
 
     if (opts.renderItem === undefined && opts._parentOpts !== undefined) {
       opts.renderItem = opts._parentOpts.renderItem;
@@ -55,7 +55,7 @@ export default class ResultsComponent extends Component {
     });
   }
 
-  mount() {
+  mount () {
     if (Object.keys(this.getState()).length > 0) {
       super.mount();
     }
@@ -63,7 +63,7 @@ export default class ResultsComponent extends Component {
     return this;
   }
 
-  setState(data, val) {
+  setState (data, val) {
     if (Object.keys(data).length === 0) {
       return this;
     }
@@ -74,11 +74,11 @@ export default class ResultsComponent extends Component {
     }), val);
   }
 
-  static get type() {
+  static get type () {
     return 'VerticalResults';
   }
 
-  configureItem(config) {
+  configureItem (config) {
     if (typeof config.render === 'function') {
       this._itemConfig.global.render = config.render;
     } else {
@@ -96,17 +96,17 @@ export default class ResultsComponent extends Component {
     }
   }
 
-  setItemTemplate(type, template) {
+  setItemTemplate (type, template) {
     let clazz = this.getItemComponent(type);
     this._itemConfig[clazz.type].template = template;
   }
 
-  setItemRender(type, render) {
+  setItemRender (type, render) {
     let clazz = this.getItemComponent(type);
     this._itemConfig[clazz.type].render = render;
   }
 
-  getItemComponent(type) {
+  getItemComponent (type) {
     let comp = ResultsItemComponent;
     switch (type) {
       case ResultType.EVENT:
@@ -123,7 +123,7 @@ export default class ResultsComponent extends Component {
     return comp;
   }
 
-  addChild(data, type, opts) {
+  addChild (data, type, opts) {
     // TODO(billy) Refactor the way configuration and data flows
     // through top level components to child components.
     if (type === ResultsItemComponent.type) {
@@ -134,18 +134,21 @@ export default class ResultsComponent extends Component {
     } else if (type === MapComponent.type) {
       data = {
         map: data
-      }
+      };
       opts = Object.assign(this._opts.mapConfig, opts);
     }
 
     // Apply the proper item renders to the the components
     // have just been constructed. Prioritize global over individual items.
-    let comp = super.addChild(data, type, opts),
-        globalConfig = this._itemConfig.global,
-        itemConfig = this._itemConfig[comp.type];
+    let comp = super.addChild(data, type, opts);
 
-    let hasGlobalRender = typeof globalConfig.render === 'function',
-        hasGlobalTemplate = typeof globalConfig.template === 'string';
+    let globalConfig = this._itemConfig.global;
+
+    let itemConfig = this._itemConfig[comp.type];
+
+    let hasGlobalRender = typeof globalConfig.render === 'function';
+
+    let hasGlobalTemplate = typeof globalConfig.template === 'string';
 
     if (hasGlobalRender) {
       comp.setRender(globalConfig.render);
@@ -160,12 +163,12 @@ export default class ResultsComponent extends Component {
     }
 
     if (!hasGlobalRender && itemConfig.render) {
-      comp.setRender(itemConfig.render)
+      comp.setRender(itemConfig.render);
     }
 
     // Apply template specific situation
     if (!hasGlobalTemplate && itemConfig.template) {
-      comp.setTemplate(itemConfig.template)
+      comp.setTemplate(itemConfig.template);
     }
     return comp;
   }

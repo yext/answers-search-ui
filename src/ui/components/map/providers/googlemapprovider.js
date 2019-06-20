@@ -2,7 +2,7 @@ import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
 export default class GoogleMapProvider extends MapProvider {
-  constructor(opts) {
+  constructor (opts) {
     super(opts);
 
     this._clientId = opts.clientId;
@@ -14,7 +14,7 @@ export default class GoogleMapProvider extends MapProvider {
     }
   }
 
-  loadJS(onLoad) {
+  loadJS (onLoad) {
     if (DOM.query('#yext-map-js')) {
       onLoad();
       return;
@@ -33,7 +33,7 @@ export default class GoogleMapProvider extends MapProvider {
     DOM.append('body', script);
   }
 
-  generateStatic(mapData) {
+  generateStatic (mapData) {
     let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
       mapData.mapMarkers,
       this._pinConfig
@@ -44,7 +44,7 @@ export default class GoogleMapProvider extends MapProvider {
       <img src="//maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&size=${this._width}x${this._height}&${this.generateCredentials()}">`;
   }
 
-  generateCredentials() {
+  generateCredentials () {
     if (this.hasValidClientCredentials()) {
       return `client=${this._clientId}`;
     } else {
@@ -52,12 +52,12 @@ export default class GoogleMapProvider extends MapProvider {
     }
   }
 
-  hasValidClientCredentials() {
+  hasValidClientCredentials () {
     // Signature is only required if map is static
     return this._clientId && (this._signature || !this._isStatic);
   }
 
-  init(el, mapData) {
+  init (el, mapData) {
     if (!mapData || mapData.mapMarkers.length <= 0) {
       this._map = null;
       return this;
@@ -83,7 +83,7 @@ export default class GoogleMapProvider extends MapProvider {
         this._pinConfig,
         this.map);
 
-      for (let i = 0; i < googleMapMarkerConfigs.length; i ++) {
+      for (let i = 0; i < googleMapMarkerConfigs.length; i++) {
         let marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
         bounds.extend(marker.position);
       }
@@ -95,7 +95,7 @@ export default class GoogleMapProvider extends MapProvider {
 
 // TODO(billy) Move to own class
 class GoogleMapMarkerConfig {
-  constructor(opts) {
+  constructor (opts) {
     /**
      * A reference to the google map, that the marker is appended to
      * @type {GoogleMap}
@@ -135,11 +135,11 @@ class GoogleMapMarkerConfig {
    * @param {Array.<GoogleMapMarkerConfig>} googleMapMarkerConfigs
    * @returns {Array.<String>}
    */
-  static serialize(googleMapMarkerConfigs) {
+  static serialize (googleMapMarkerConfigs) {
     let serializedMarkers = [];
     googleMapMarkerConfigs.forEach((marker) => {
-      serializedMarkers.push(`markers=label:${marker.label}|${marker.position.lat},${marker.position.lng}`)
-    })
+      serializedMarkers.push(`markers=label:${marker.label}|${marker.position.lat},${marker.position.lng}`);
+    });
     return serializedMarkers.join('&');
   }
 
@@ -150,7 +150,7 @@ class GoogleMapMarkerConfig {
    * @param {Object} pinConfig The configuration to apply to the marker
    * @returns {Array.<GoogleMapMarkerConfig>}
    */
-  static from(markers, pinConfig, map) {
+  static from (markers, pinConfig, map) {
     let googleMapMarkerConfigs = [];
     if (!Array.isArray(markers)) {
       markers = [markers];

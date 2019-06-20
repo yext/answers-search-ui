@@ -2,7 +2,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 
 export default class FilterPickerComponent extends Component {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
     /**
@@ -63,7 +63,7 @@ export default class FilterPickerComponent extends Component {
      * Optionally provided, defaults to false.
      * @type {boolean}
      */
-    this.autoFocus = opts.autoFocus === true ? true : false;
+    this.autoFocus = opts.autoFocus === true;
 
     /**
      * submitURL will force the search query submission to get
@@ -91,11 +91,11 @@ export default class FilterPickerComponent extends Component {
     this.filter = opts.filter || this.getUrlParams().get('filter') || '';
   }
 
-  static get type() {
+  static get type () {
     return 'FilterPicker';
   }
 
-  onCreate() {
+  onCreate () {
     if (this.query && this.query.length > 0 && this.filter && this.filter.length > 0) {
       this.search(this.query, this.filter);
     }
@@ -103,7 +103,7 @@ export default class FilterPickerComponent extends Component {
     this.bindBrowserHistory();
   }
 
-  onMount() {
+  onMount () {
     // Wire up our search handling and auto complete
     this.initAutoComplete(this._inputEl);
 
@@ -116,7 +116,7 @@ export default class FilterPickerComponent extends Component {
    * A helper method to wire up our auto complete on an input selector
    * @param {string} inputSelector CSS selector to bind our auto complete component to
    */
-  initAutoComplete(inputSelector) {
+  initAutoComplete (inputSelector) {
     this._inputEl = inputSelector;
 
     this.componentManager.create('AutoComplete', {
@@ -135,7 +135,7 @@ export default class FilterPickerComponent extends Component {
     });
   }
 
-  search(query, filter) {
+  search (query, filter) {
     const params = this.getUrlParams();
 
     params.set('query', query);
@@ -150,27 +150,27 @@ export default class FilterPickerComponent extends Component {
 
     window.history.pushState({
       query: query,
-      filter: filter,
+      filter: filter
     }, query, '?' + params.toString());
 
-    this.core.verticalSearch("", this._experienceKey, filter);
+    this.core.verticalSearch('', this._experienceKey, filter);
   }
 
-  setState(data) {
+  setState (data) {
     return super.setState(Object.assign({
       title: this.title,
       searchText: this.searchText,
       query: this.query,
-      filter: this.filter,
-    }, data))
+      filter: this.filter
+    }, data));
   }
 
-  getUrlParams(url) {
+  getUrlParams (url) {
     url = url || window.location.search.substring(1);
     return new URLSearchParams(url);
   }
 
-  bindBrowserHistory() {
+  bindBrowserHistory () {
     DOM.on(window, 'popstate', () => {
       this.query = this.getUrlParams().get('query');
       this.filter = this.getUrlParams().get('filter');

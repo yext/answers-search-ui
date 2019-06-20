@@ -7,7 +7,7 @@
  *
  */
 export default class ComponentManager {
-  constructor() {
+  constructor () {
     if (!ComponentManager.setInstance(this)) {
       return ComponentManager.getInstance();
     }
@@ -45,7 +45,7 @@ export default class ComponentManager {
     this._renderer = null;
   }
 
-  static setInstance(instance) {
+  static setInstance (instance) {
     if (!this.instance) {
       this.instance = instance;
       return true;
@@ -53,16 +53,16 @@ export default class ComponentManager {
     return false;
   }
 
-  static getInstance() {
+  static getInstance () {
     return this.instance;
   }
 
-  setRenderer(renderer) {
+  setRenderer (renderer) {
     this._renderer = renderer;
     return this;
   }
 
-  setCore(core) {
+  setCore (core) {
     this._core = core;
     return this;
   }
@@ -71,7 +71,7 @@ export default class ComponentManager {
    * registers a component to be eligible for creation and override.
    * @param {Component} The Component Class to register
    */
-  register(componentClazz) {
+  register (componentClazz) {
     this._componentRegistry[componentClazz.type] = componentClazz;
     return this;
   }
@@ -83,14 +83,14 @@ export default class ComponentManager {
    * @param {string} componentType The component type to create
    * @param {Object} opts The options to pipe to the construction of the component
    */
-  create(componentType, opts) {
+  create (componentType, opts) {
     // Every component needs local access to the component manager
     // because sometimes components have subcomponents that need to be
     // constructed during creation
     opts = Object.assign({
       core: this._core,
       renderer: this._renderer,
-      componentManager: this,
+      componentManager: this
     }, opts);
 
     // Instantiate our new component and keep track of it
@@ -111,13 +111,13 @@ export default class ComponentManager {
       this._core.storage
         .on('update', component.moduleId, (data) => {
           component.setState(data);
-        })
+        });
     }
 
     return component;
   }
 
-  getActiveComponent(type) {
+  getActiveComponent (type) {
     return this._activeComponents[type];
   }
 }

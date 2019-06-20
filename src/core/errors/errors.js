@@ -6,7 +6,7 @@
  * 4XX errors: Core errors
  */
 export class AnswersBaseError extends Error {
-  constructor(errorCode, message, boundary, causedBy) {
+  constructor (errorCode, message, boundary, causedBy) {
     super(message);
     this.errorCode = errorCode;
     this.errorMessage = message;
@@ -15,11 +15,11 @@ export class AnswersBaseError extends Error {
     this.reported = false;
   }
 
-  toJson() {
+  toJson () {
     return JSON.stringify(this);
   }
 
-  static from(builtinError, boundary) {
+  static from (builtinError, boundary) {
     const error = new AnswersBasicError(builtinError.message, boundary);
     error.stack = builtinError.stack;
     return error;
@@ -27,25 +27,25 @@ export class AnswersBaseError extends Error {
 }
 
 export class AnswersBasicError extends AnswersBaseError {
-  constructor(message, boundary, causedBy) {
+  constructor (message, boundary, causedBy) {
     super(100, message, boundary, causedBy);
   }
 }
 
 export class AnswersUiError extends AnswersBaseError {
-  constructor(message, boundary, causedBy) {
+  constructor (message, boundary, causedBy) {
     super(200, message, boundary, causedBy);
   }
 }
 
 export class AnswersEndpointError extends AnswersBaseError {
-  constructor(message, boundary, causedBy) {
+  constructor (message, boundary, causedBy) {
     super(300, message, boundary, causedBy);
   }
 }
 
 export class AnswersCoreError extends AnswersBaseError {
-  constructor(message, boundary, causedBy) {
+  constructor (message, boundary, causedBy) {
     super(400, message, boundary, causedBy);
   }
 }

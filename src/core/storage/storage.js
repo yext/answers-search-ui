@@ -2,23 +2,23 @@ import ModuleData from './moduledata';
 import SearchDataTransformer from '../search/searchdatatransformer';
 
 export default class Storage {
-  constructor() {
-    this._moduleDataContainer = {}
+  constructor () {
+    this._moduleDataContainer = {};
 
     this._futureListeners = {};
-  };
+  }
 
-  init() {
+  init () {
 
   }
 
-  insert(data) {
+  insert (data) {
     if (data === undefined) {
       return;
     }
 
     let moduleIds = Object.keys(data);
-    for (let i = 0; i < moduleIds.length; i ++) {
+    for (let i = 0; i < moduleIds.length; i++) {
       let moduleId = moduleIds[i];
       if (this._moduleDataContainer[moduleId] === undefined) {
         this._moduleDataContainer[moduleId] = new ModuleData(moduleId);
@@ -29,18 +29,18 @@ export default class Storage {
     }
   }
 
-  insertUniversalResults(data) {
+  insertUniversalResults (data) {
     this.insert(SearchDataTransformer.transform(data));
   }
 
-  getState(moduleId) {
+  getState (moduleId) {
     if (this._moduleDataContainer[moduleId]) {
       return this._moduleDataContainer[moduleId].raw();
     }
     return {};
   }
 
-  on(evt, moduleId, cb) {
+  on (evt, moduleId, cb) {
     let moduleData = this._moduleDataContainer[moduleId];
     if (moduleData === undefined) {
       if (this._futureListeners[moduleId] === undefined) {
@@ -50,7 +50,7 @@ export default class Storage {
       this._futureListeners[moduleId].push({
         event: evt,
         cb: cb
-      })
+      });
 
       return;
     }
@@ -59,10 +59,9 @@ export default class Storage {
     return this;
   }
 
-  off(evt, moduleId, cb) {
+  off (evt, moduleId, cb) {
     let moduleData = this._moduleDataContainer[moduleId];
     if (moduleData === undefined) {
-
       if (this._futureListeners[moduleId] !== undefined) {
         this._futureListeners[moduleId].pop();
       }
@@ -74,13 +73,13 @@ export default class Storage {
     return this;
   }
 
-  _applyFutureListeners(moduleId) {
+  _applyFutureListeners (moduleId) {
     let futures = this._futureListeners[moduleId];
     if (!futures) {
       return;
     }
 
-    for (let i = 0; i < futures.length; i ++) {
+    for (let i = 0; i < futures.length; i++) {
       let future = futures[i];
       this.on(future.event, moduleId, future.cb);
     }

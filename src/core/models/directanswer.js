@@ -1,5 +1,5 @@
 export default class DirectAnswer {
-  constructor(directAnswer = {}) {
+  constructor (directAnswer = {}) {
     Object.assign(this, directAnswer);
   }
 }

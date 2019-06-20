@@ -6,7 +6,7 @@ import SearchDataTransformer from './search/searchdatatransformer';
 import Storage from './storage/storage';
 
 export default class Core {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     if (typeof opts.apiKey !== 'string') {
       throw new Error('Missing required `apiKey`. Type must be {string}');
     }
@@ -59,33 +59,33 @@ export default class Core {
     });
   }
 
-  verticalSearch(queryString, verticalKey, filter) {
+  verticalSearch (queryString, verticalKey, filter) {
     return this._searcher
       .verticalQuery(queryString, verticalKey, filter)
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
         this.storage.insert(data);
-      })
+      });
   }
 
-  search(queryString, urls) {
+  search (queryString, urls) {
     return this._searcher
       .query(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
         this.storage.insert(data);
-      })
+      });
   }
 
-  autoComplete(queryString, experienceKey, barKey) {
+  autoComplete (queryString, experienceKey, barKey) {
     return this._autoComplete
       .query(queryString, experienceKey, barKey)
       .then(data => {
         this.storage.insert(data);
-      })
+      });
   }
 
-  autoCompleteFilter(input, experienceKey, barKey) {
+  autoCompleteFilter (input, experienceKey, barKey) {
     return this._autoComplete
       .queryFilter(input, experienceKey, barKey)
       .then(data => {
@@ -93,8 +93,7 @@ export default class Core {
       });
   }
 
-  on(evt, moduleId, cb) {
+  on (evt, moduleId, cb) {
     return this.storage.on(evt, moduleId, cb);
   }
 }
-

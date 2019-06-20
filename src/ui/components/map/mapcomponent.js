@@ -10,7 +10,7 @@ const ProviderTypes = {
 };
 
 export default class MapComponent extends Component {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
     /**
@@ -29,7 +29,7 @@ export default class MapComponent extends Component {
      */
     this._mapProvider = opts.mapProvider;
     if (!this._mapProvider || !(this._mapProvider.toLowerCase() in ProviderTypes)) {
-      throw new Error('MapComponent: Invalid Map Provider; must be `google` or `mapBox`')
+      throw new Error('MapComponent: Invalid Map Provider; must be `google` or `mapBox`');
     }
 
     /**
@@ -45,16 +45,16 @@ export default class MapComponent extends Component {
     this._map = null;
   }
 
-  static get type() {
+  static get type () {
     return 'Map';
   }
 
   // TODO(billy) Make ProviderTypes a factory class
-  getProviderInstance(type) {
+  getProviderInstance (type) {
     return new ProviderTypes[type.toLowerCase()](this._opts);
   }
 
-  onCreate() {
+  onCreate () {
     this._map = this.getProviderInstance(this._mapProvider);
 
     let mapData = this.getState('map');
@@ -74,7 +74,7 @@ export default class MapComponent extends Component {
     });
   }
 
-  onMount() {
+  onMount () {
     // NOTE(billy) This is temporary, we should create a single promise interface
     // for init to deal with the internal javascript loading
     if (this._map.isLoaded()) {
@@ -82,7 +82,7 @@ export default class MapComponent extends Component {
     }
   }
 
-  setState(data, val) {
+  setState (data, val) {
     if (Object.keys(data).length === 0) {
       return this;
     }

@@ -5,11 +5,11 @@ const Methods = {
   GET: 'get',
   POST: 'post',
   PUT: 'put',
-  DELETE: 'delete',
-}
+  DELETE: 'delete'
+};
 
 export default class HttpRequester {
-  constructor() {
+  constructor () {
 
   }
 
@@ -19,8 +19,8 @@ export default class HttpRequester {
    * @param {Object} data The data to provide (gets encoded into the URL)
    * @param {Object} opts Configuration options to use for the request
    */
-  get(url, data, opts) {
-    return this.request(Methods.GET, this.encodeParams(url, data), opts)
+  get (url, data, opts) {
+    return this.request(Methods.GET, this.encodeParams(url, data), opts);
   }
 
   /**
@@ -29,7 +29,7 @@ export default class HttpRequester {
    * @param {Object} data The data to provide (gets encoded into the URL)
    * @param {Object} opts Configuration options to use for the request
    */
-  post(url, data, opts) {
+  post (url, data, opts) {
     return this.request(
       Methods.POST,
       url,
@@ -39,16 +39,17 @@ export default class HttpRequester {
     );
   }
 
-  request(method, url, opts) {
+  request (method, url, opts) {
     return fetch(url, Object.assign({
       method: 'get',
       credentials: 'include'
     }, opts));
   }
 
-  encodeParams(url, params) {
-    let hasParam = url.indexOf('?') > -1,
-        searchQuery = '';
+  encodeParams (url, params) {
+    let hasParam = url.indexOf('?') > -1;
+
+    let searchQuery = '';
     for (let key in params) {
       if (!hasParam) {
         hasParam = true;

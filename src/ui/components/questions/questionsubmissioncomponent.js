@@ -2,7 +2,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 
 export default class QuestionSubmissionComponent extends Component {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
     this.moduleId = 'universalResults';
@@ -52,7 +52,7 @@ export default class QuestionSubmissionComponent extends Component {
     this._buttonLabel = opts.buttonLabel || 'Submit';
   }
 
-  beforeMount() {
+  beforeMount () {
     // Only mount our component if the query has been triggered at least once.
     if (this.getState('hasQueried') === true) {
       return true;
@@ -61,11 +61,11 @@ export default class QuestionSubmissionComponent extends Component {
     return false;
   }
 
-  onMount() {
+  onMount () {
     this.initSubmit(this._formEl);
   }
 
-  initSubmit(formSelector) {
+  initSubmit (formSelector) {
     this._formEl = formSelector;
 
     let form = DOM.query(this._container, this._formEl);
@@ -77,11 +77,11 @@ export default class QuestionSubmissionComponent extends Component {
     });
   }
 
-  static get type() {
+  static get type () {
     return 'QASubmission';
   }
 
-  setState(data, val) {
+  setState (data, val) {
     // Since we're binding to search results,
     // and we only want to show the QA submission
     return super.setState({

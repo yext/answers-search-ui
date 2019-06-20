@@ -6,7 +6,7 @@ import EventEmitter from '../../core/eventemitter/eventemitter';
  * dependencies can listen/hook subscribe to messages/updates.
  */
 export default class State extends EventEmitter {
-  constructor(data) {
+  constructor (data) {
     super();
 
     /**
@@ -21,7 +21,7 @@ export default class State extends EventEmitter {
    * Set the initial state of the component.
    * NOTE(billy): Does not fire an update message
    */
-  init(prop, opt_val) {
+  init (prop, opt_val) {
     this._set(prop, opt_val);
   }
 
@@ -30,7 +30,7 @@ export default class State extends EventEmitter {
    * @param prop {string|Object} The property to set
    * @param opt_val Optional, if prop is a {string}, it will assign the value to that property
    */
-  set(prop, opt_val) {
+  set (prop, opt_val) {
     this._set(prop, opt_val);
     this.emit('update');
   }
@@ -42,7 +42,7 @@ export default class State extends EventEmitter {
    * @param opt_val If prop is a {string}, provide its value
    * @private
    */
-  _set(prop, opt_val) {
+  _set (prop, opt_val) {
     if (opt_val === undefined) {
       this._state = prop;
     } else {
@@ -50,7 +50,7 @@ export default class State extends EventEmitter {
     }
   }
 
-  update(data) {
+  update (data) {
     this._state = data;
     this.emit('update');
   }
@@ -60,18 +60,18 @@ export default class State extends EventEmitter {
    * If no property provided, return the full state
    * @param {string} opt_prop optional property to retrieve
    */
-  get(opt_prop) {
+  get (opt_prop) {
     if (opt_prop === undefined) {
       return this._state;
     }
     return this._state[opt_prop];
   }
 
-  has(prop) {
+  has (prop) {
     return this._state[prop] !== undefined;
   }
 
-  asJSON() {
+  asJSON () {
     return this._state;
   }
 }

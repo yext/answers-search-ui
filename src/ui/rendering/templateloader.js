@@ -1,7 +1,7 @@
 import DOM from '../dom/dom';
 
 export default class TemplateLoader {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     if (!TemplateLoader.setInstance(this)) {
       return TemplateLoader.getInstance();
     }
@@ -13,12 +13,12 @@ export default class TemplateLoader {
 
     this._templates = {};
 
-    this._onLoaded = function() {};
+    this._onLoaded = function () {};
 
-    this._init()
+    this._init();
   }
 
-  static setInstance(instance) {
+  static setInstance (instance) {
     if (!this.instance) {
       this.instance = instance;
       return true;
@@ -26,15 +26,15 @@ export default class TemplateLoader {
     return false;
   }
 
-  static getInstance(opts) {
+  static getInstance (opts) {
     return this.instance;
   }
 
-  _init() {
+  _init () {
     this.fetchTemplates();
   }
 
-  fetchTemplates() {
+  fetchTemplates () {
     // If we already have templates loaded, do nothing
     let node = DOM.query('#yext-answers-templates');
     if (node) {
@@ -55,10 +55,10 @@ export default class TemplateLoader {
 
       DOM.append('body', script);
     })
-    .then((response) => {
+      .then((response) => {
       // TODO(billy) Implmenet error handling here (e.g. request could fail)
-      console.log('Templates loaded successfully!');
-    });
+        console.log('Templates loaded successfully!');
+      });
     return this;
   }
 
@@ -68,7 +68,7 @@ export default class TemplateLoader {
    *
    * `fetchTemplates` will automatically call this, providing the compiled templates from the server.
    */
-  register(templates) {
+  register (templates) {
     this._templates = templates;
 
     // Notify our consumers that the templates are here :)
@@ -76,19 +76,19 @@ export default class TemplateLoader {
     return this;
   }
 
-  onLoaded(cb) {
+  onLoaded (cb) {
     this._onLoaded = cb;
     return this;
   }
 
-  get(templateName) {
+  get (templateName) {
     return this._templates[templateName];
   }
 
   /**
    * @return The internal template collection
    */
-  getTemplates() {
+  getTemplates () {
     return this._templates;
   }
 }

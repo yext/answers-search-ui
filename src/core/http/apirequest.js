@@ -5,7 +5,7 @@ import HttpRequester from './httprequester';
  * It defines all of the core properties required to make a request
  */
 export default class ApiRequest {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     /**
      * An abstraction used for making network request and handling errors
      * @type {HttpRequester}
@@ -53,11 +53,11 @@ export default class ApiRequest {
    * get creates a new `GET` request to the server using the configuration of the request class
    * @returns {Promise}
    */
-  get() {
+  get () {
     return this._requester.get(this._baseUrl + this._endpoint, this.params(this._params));
   }
 
-  params(params) {
+  params (params) {
     var baseParams = {
       'v': this._version,
       'api_key': this._apiKey

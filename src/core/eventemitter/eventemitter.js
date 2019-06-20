@@ -3,7 +3,7 @@
  * a pub/sub interface, for emitting messages and providing listeners.
  */
 export default class EventEmitter {
-  constructor() {
+  constructor () {
     /**
      * The subscribers of messages
      * @type {Array.<Object>}
@@ -18,7 +18,7 @@ export default class EventEmitter {
    * @param {function} cb The callback to invoke when the {evt} is emitted
    * @param {boolean} once Optional value which will only handle the message once
    */
-  on(evt, cb, once) {
+  on (evt, cb, once) {
     if (typeof cb !== 'function') {
       throw new Error('callback handler should be of type {function}');
     }
@@ -44,7 +44,7 @@ export default class EventEmitter {
    * @param {function} cb The callback to invoke when the {evt} is emitted
    * @param {boolean} once Optional value which will only handle the message once
    */
-  once(evt, cb) {
+  once (evt, cb) {
     return this.on(evt, cb, true);
   }
 
@@ -52,7 +52,7 @@ export default class EventEmitter {
    * off is the public interface for unsubscribing from an event
    * @param {string} evt the event name to unsubscribe from
    */
-  off(evt) {
+  off (evt) {
     delete this._listeners[evt];
     return this;
   }
@@ -62,7 +62,7 @@ export default class EventEmitter {
    * @param {string} evt the event name to publish from
    * @param {Object} data the data to send along to the subscribers
    */
-  emit(evt, data) {
+  emit (evt, data) {
     let listeners = this._listeners[evt];
     if (listeners === undefined) {
       return;
@@ -70,7 +70,7 @@ export default class EventEmitter {
 
     // Invoke each of all the listener handlers and remove the ones that should fire only once.
     let keep = [];
-    for (let i = 0; i < listeners.length; i ++) {
+    for (let i = 0; i < listeners.length; i++) {
       listeners[i].cb(data);
       if (listeners[i].once === true) {
         continue;
