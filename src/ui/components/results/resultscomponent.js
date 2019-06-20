@@ -133,6 +133,7 @@ export default class ResultsComponent extends Component {
         map: data
       };
       opts = Object.assign(this._opts.mapConfig, opts);
+      return super.addChild(data, type, opts);
     }
 
     // Apply the proper item renders to the the components
