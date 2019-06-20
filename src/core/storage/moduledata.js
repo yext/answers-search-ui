@@ -1,7 +1,7 @@
 import EventEmitter from '../eventemitter/eventemitter';
 
 export default class ModuleData extends EventEmitter {
-  constructor(id, data = {}) {
+  constructor (id, data = {}) {
     super();
 
     this._id = id;
@@ -13,7 +13,7 @@ export default class ModuleData extends EventEmitter {
     this.set(data);
   }
 
-  set(data) {
+  set (data) {
     data = data || {};
 
     if (this._data === undefined) {
@@ -24,9 +24,11 @@ export default class ModuleData extends EventEmitter {
 
     // TODO(billy) This assumes the top level properties are all contained within
     // an object. Probably not a good assumption to make.
-    let keys = Object.keys(data),
-        len = keys.length,
-        isDirty = false;
+    let keys = Object.keys(data);
+
+    let len = keys.length;
+
+    let isDirty = false;
 
     // Reset the object if its being applied as empty
     if (keys.length === 0) {
@@ -34,9 +36,10 @@ export default class ModuleData extends EventEmitter {
       isDirty = true;
     }
 
-    for (let i = 0; i < len; i ++) {
-      let prop = keys[i],
-          val = data[keys[i]];
+    for (let i = 0; i < len; i++) {
+      let prop = keys[i];
+
+      let val = data[keys[i]];
 
       // TODO(billy) For now, one level of comparison is probably fine,
       // in the future we'll probably need to do some deeper object comparisons
@@ -57,7 +60,7 @@ export default class ModuleData extends EventEmitter {
     return this;
   }
 
-  capturePrevious() {
+  capturePrevious () {
     if (this._history === undefined) {
       this._history = [];
     }
@@ -70,7 +73,7 @@ export default class ModuleData extends EventEmitter {
     this._history.push(JSON.stringify(this._data || {}));
   }
 
-  undo() {
+  undo () {
     let previous = {};
     if (this._previous.length > 0) {
       previous = JSON.parse(this._previous.pop());
@@ -79,7 +82,7 @@ export default class ModuleData extends EventEmitter {
     this._data.set(previous);
   }
 
-  raw() {
+  raw () {
     return this._data;
   }
 }

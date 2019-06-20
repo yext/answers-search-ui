@@ -9,7 +9,7 @@ import VerticalResults from '../models/verticalresults';
  * component library and core storage understand.
  */
 export default class SearchDataTransformer {
-  static transform(data, urls = {}) {
+  static transform (data, urls = {}) {
     let response = data.response;
     return {
       navigation: Navigation.from(response.modules),
@@ -18,7 +18,7 @@ export default class SearchDataTransformer {
     };
   }
 
-  static transformVertical(data) {
+  static transformVertical (data) {
     return {
       navigation: new Navigation(), // Veritcal doesn't respond with ordering, so use empty nav.
       verticalResults: VerticalResults.from(data.response)

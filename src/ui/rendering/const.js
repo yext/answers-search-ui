@@ -6,4 +6,4 @@ import HandlebarsRenderer from './handlebarsrenderer';
 export const Renderers = {
   SOY: Renderer,
   Handlebars: HandlebarsRenderer
-}
+};

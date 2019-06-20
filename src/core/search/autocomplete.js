@@ -5,7 +5,7 @@ import AutoCompleteDataTransformer from './autocompletedatatransformer';
  * A wrapper around the AutoComplete {ApiRequest} endpoints
  */
 export default class AutoComplete {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     let params = new URL(window.location.toString()).searchParams;
     let isLocal = params.get('local');
 
@@ -45,9 +45,9 @@ export default class AutoComplete {
    * @param {string} experienceKey The experience key to use for a vertical auto complete request
    * @param {string} barKey The barKey to use for a vertical search auto complete request
    */
-  query(input, experienceKey, barKey) {
+  query (input, experienceKey, barKey) {
     if (experienceKey || barKey) {
-      return this._queryVertical(input, experienceKey, barKey)
+      return this._queryVertical(input, experienceKey, barKey);
     }
 
     return this._queryUniversal(input);
@@ -57,7 +57,7 @@ export default class AutoComplete {
    * Autocomplete filters
    * @param {string} input The input to use for auto complete
    */
-  queryFilter(input, experienceKey, barKey) {
+  queryFilter (input, experienceKey, barKey) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/filtersearch',
@@ -67,7 +67,7 @@ export default class AutoComplete {
         'input': input,
         'answersKey': this._answersKey,
         'experiencekey': experienceKey,
-        'inputKey': barKey,
+        'inputKey': barKey
       }
     });
 
@@ -77,26 +77,26 @@ export default class AutoComplete {
       .catch(error => console.error(error));
   }
 
-  _queryVertical(input, experienceKey, barKey) {
+  _queryVertical (input, experienceKey, barKey) {
     let request = new ApiRequest({
-        baseUrl: this._baseUrl,
-        endpoint: '/v2/accounts/me/entities/autocomplete',
-        apiKey: this._apiKey,
-        version: this._version,
-        params: {
-          'input': input,
-          'experienceKey': experienceKey,
-          'barKey': barKey
-        }
-      })
+      baseUrl: this._baseUrl,
+      endpoint: '/v2/accounts/me/entities/autocomplete',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': input,
+        'experienceKey': experienceKey,
+        'barKey': barKey
+      }
+    });
 
     return request.get()
       .then(response => response.json())
       .then(response => AutoCompleteDataTransformer.vertical(response.response, request._params.barKey))
-      .catch(error => console.error(error))
+      .catch(error => console.error(error));
   }
 
-  _queryUniversal(queryString) {
+  _queryUniversal (queryString) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/autocomplete',
@@ -110,6 +110,6 @@ export default class AutoComplete {
 
     return request.get(queryString)
       .then(response => response.json())
-      .then(response => AutoCompleteDataTransformer.universal(response.response))
+      .then(response => AutoCompleteDataTransformer.universal(response.response));
   }
 }

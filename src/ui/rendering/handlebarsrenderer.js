@@ -2,7 +2,7 @@ import Renderer from './renderer';
 import TemplateLoader from './templateloader';
 
 export default class HandlebarsRenderer extends Renderer {
-  constructor(templates = {}, opts = {}) {
+  constructor (templates = {}, opts = {}) {
     super();
 
     /**
@@ -20,7 +20,7 @@ export default class HandlebarsRenderer extends Renderer {
     this._templates = templates || {};
   }
 
-  init(templates) {
+  init (templates) {
     // Assign the handlebars compiler and templates based on
     // information provided from external dep (in default case, it comes from external server request)
     this._handlebars = templates._hb;
@@ -35,7 +35,7 @@ export default class HandlebarsRenderer extends Renderer {
    * registerHelper is a public interface for external dependencies to
    * register their own custom helpers to our internal Handlebars Compiler
    */
-  registerHelper(name, cb) {
+  registerHelper (name, cb) {
     this._handlebars.registerHelper(name, cb);
   }
 
@@ -44,7 +44,7 @@ export default class HandlebarsRenderer extends Renderer {
    * using the {Handlebars} compiler
    * @param {string} template The template string to compile
    */
-  compile(template) {
+  compile (template) {
     if (typeof template !== 'string') {
       return '';
     }
@@ -56,7 +56,7 @@ export default class HandlebarsRenderer extends Renderer {
    * @param {Object} config Provide either a templateName or a pre-compiled template
    * @param {Object} data The data to provide to the template
    */
-  render(config, data) {
+  render (config, data) {
     // If a custom template is provided, use it,
     // otherwise fall back to the template name
     // TODO(billy) This interface should probably be less ugly
@@ -71,26 +71,26 @@ export default class HandlebarsRenderer extends Renderer {
     }
   }
 
-  _registerCustomHelpers() {
-    this.registerHelper('ifeq', function(arg1, arg2, options) {
+  _registerCustomHelpers () {
+    this.registerHelper('ifeq', function (arg1, arg2, options) {
       return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
-    })
+    });
 
-    this.registerHelper('ifnoteq', function(arg1, arg2, options) {
+    this.registerHelper('ifnoteq', function (arg1, arg2, options) {
       return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
     });
 
-    this.registerHelper('formatPhoneNumber', function(phoneNumberString) {
-      var cleaned = ('' + phoneNumberString).replace(/\D/g, '')
-      var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/)
+    this.registerHelper('formatPhoneNumber', function (phoneNumberString) {
+      var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
+      var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
       if (match) {
-          var intlCode = (match[1] ? '+1 ' : '')
-          return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('')
+        var intlCode = (match[1] ? '+1 ' : '');
+        return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
       }
       return null;
     });
 
-    this.registerHelper('assign', function(name, value, options) {
+    this.registerHelper('assign', function (name, value, options) {
       let args = arguments;
       options = args[args.length - 1];
 
@@ -99,17 +99,17 @@ export default class HandlebarsRenderer extends Renderer {
       }
 
       let v = '';
-      for (let i = 1; i < args.length - 1; i ++) {
+      for (let i = 1; i < args.length - 1; i++) {
         v = v + args[i];
       }
 
       options.data.root[name] = v;
-    })
+    });
 
-    this.registerHelper('json', function(name, value, options) {
+    this.registerHelper('json', function (name, value, options) {
       return name === undefined
-        ? ""
+        ? ''
         : JSON.stringify(name).replace(/\"/g, '\\"');
-    })
+    });
   }
 }

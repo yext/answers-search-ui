@@ -1,4 +1,4 @@
-const { series, parallel, src, dest, watch } = require('gulp')
+const { series, parallel, src, dest, watch } = require('gulp');
 
 const rollup = require('gulp-rollup-lightweight');
 const babel = require('rollup-plugin-babel');
@@ -14,7 +14,7 @@ const uglify = require('gulp-uglify-es').default;
 
 const NAMESPACE = 'ANSWERS';
 
-function bundle() {
+function bundle () {
   return rollup({
     input: './src/answers-umd.js',
     output: {
@@ -34,43 +34,43 @@ function bundle() {
       })
     ]
   })
-  .pipe(source('answers.js'))
-  .pipe(dest('dist'));
+    .pipe(source('answers.js'))
+    .pipe(dest('dist'));
 }
 
-function minifyJS(cb) {
+function minifyJS (cb) {
   return src('./dist/answers.js')
     .pipe(rename('answers.min.js'))
     .pipe(uglify())
     .pipe(dest('dist'));
 }
 
-function compileCSS() {
+function compileCSS () {
   return src('./src/ui/sass/**/*.scss')
     .pipe(sass({
       outputStyle: 'compressed'
     }).on('error', sass.logError))
-    .pipe(dest('./dist/'))
+    .pipe(dest('./dist/'));
 }
 
-function watchJS(cb) {
+function watchJS (cb) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
   }, series(bundle));
 }
 
-function watchCSS(cb) {
+function watchCSS (cb) {
   return watch(['./src/ui/sass/**/*.scss'], {
     ignored: './dist/'
   }, series(compileCSS));
 }
 
 exports.default = parallel(
-                    series(bundle, minifyJS),
-                    series(compileCSS)
-                  );
+  series(bundle, minifyJS),
+  series(compileCSS)
+);
 
 exports.dev = parallel(
-                    series(bundle, watchJS),
-                    series(compileCSS, watchCSS)
-                  );
+  series(bundle, watchJS),
+  series(compileCSS, watchCSS)
+);

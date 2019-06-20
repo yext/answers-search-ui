@@ -1,13 +1,13 @@
 import ResultsItemComponent from './resultsitemcomponent';
 
 export default class PeopleResultsItemComponent extends ResultsItemComponent {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
-    this._templateName = 'results/peopleresultsitem'
+    this._templateName = 'results/peopleresultsitem';
   }
 
-  static get type() {
+  static get type () {
     return 'PeopleResultsItemComponent';
   }
 }

@@ -22,27 +22,27 @@ import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
 export const COMPONENT_MANAGER = new ComponentManager()
-      // Core Component
-      .register(Component)
+// Core Component
+  .register(Component)
 
-      // Navigation Components
-      .register(NavigationComponent)
+// Navigation Components
+  .register(NavigationComponent)
 
-      // Search Components
-      .register(SearchComponent)
-      .register(FilterPickerComponent)
-      .register(AutoCompleteComponent)
+// Search Components
+  .register(SearchComponent)
+  .register(FilterPickerComponent)
+  .register(AutoCompleteComponent)
 
-      // Results Components
-      .register(DirectAnswerComponent)
-      .register(UniversalResultsComponent)
-      .register(ResultsComponent)
-      .register(ResultsItemComponent)
-      .register(LocationResultsItemComponent)
-      .register(EventResultsItemComponent)
-      .register(PeopleResultsItemComponent)
+// Results Components
+  .register(DirectAnswerComponent)
+  .register(UniversalResultsComponent)
+  .register(ResultsComponent)
+  .register(ResultsItemComponent)
+  .register(LocationResultsItemComponent)
+  .register(EventResultsItemComponent)
+  .register(PeopleResultsItemComponent)
 
-      .register(MapComponent)
+  .register(MapComponent)
 
-      // Questions Components
-      .register(QuestionSubmissionComponent)
+// Questions Components
+  .register(QuestionSubmissionComponent);

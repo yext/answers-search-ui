@@ -30,13 +30,14 @@
     "rollup-plugin-node-resolve": "^4.0.1",
     "size-limit": "^0.21.1",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "semistandard": "^13.0.1"
   },
   "scripts": {
     "build": "gulp && size-limit",
     "dev": "gulp dev",
-    "test": "jest",
-    "dev": "gulp dev",
+    "lint": "semistandard",
+    "test": "semistandard && jest",
     "size": "size-limit"
   },
   "jest": {
@@ -44,6 +45,16 @@
     "verbose": true,
     "testMatch": [
       "**/tests/**/*.js"
+    ]
+  },
+  "semistandard": {
+    "globals": [
+      "beforeEach",
+      "describe",
+      "it",
+      "expect",
+      "jest",
+      "DOMParser"
     ]
   },
   "author": "Billy",

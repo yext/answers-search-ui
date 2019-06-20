@@ -1,7 +1,7 @@
 import Component from '../component';
 
 export default class DirectAnswerComponent extends Component {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
     this.moduleId = 'directAnswer';
@@ -9,7 +9,7 @@ export default class DirectAnswerComponent extends Component {
     this._templateName = 'results/directanswer';
   }
 
-  beforeMount() {
+  beforeMount () {
     if (!this.hasState('answer')) {
       return false;
     }
@@ -17,7 +17,7 @@ export default class DirectAnswerComponent extends Component {
     return true;
   }
 
-  static get type() {
+  static get type () {
     return 'DirectAnswer';
   }
 }

@@ -2,7 +2,7 @@ let document = window.document;
 let parser = new DOMParser();
 
 export default class DOM {
-  static setup(d, p) {
+  static setup (d, p) {
     document = d;
     parser = p;
   }
@@ -12,7 +12,7 @@ export default class DOM {
    * @param {string} html The HTML to parse to a DOM node.
    * @return {HTMLElement}
    */
-  static create(html) {
+  static create (html) {
     return parser.parseFromString(html, 'text/html').body;
   }
 
@@ -23,7 +23,7 @@ export default class DOM {
    *
    * @returns {HTMLElement} the FIRST node it finds, if any
    */
-  static query(parent, selector) {
+  static query (parent, selector) {
     // Facade, shifting the selector to the parent argument if only one
     // argument is provided
     if (selector === undefined) {
@@ -45,7 +45,7 @@ export default class DOM {
    *
    * @returns {HTMLElement} the FIRST node it finds, if any
    */
-  static queryAll(parent, selector) {
+  static queryAll (parent, selector) {
     // Facade, shifting the selector to the parent argument if only one
     // argument is provided
     if (selector === undefined) {
@@ -60,7 +60,7 @@ export default class DOM {
     return parent.querySelectorAll(selector);
   }
 
-  static onReady(cb) {
+  static onReady (cb) {
     if (document.readyState === 'complete' || document.readyState === 'loaded' || document.readyState === 'interactive') {
       cb();
       return;
@@ -74,9 +74,10 @@ export default class DOM {
    * @param {string} el The element `tag` name to construct
    * @param {Object} opts_data Optional attributes to apply to the new HTMLElement
    */
-  static createEl(el, opts_data = {}) {
-    let node = document.createElement(el),
-        props = Object.keys(opts_data);
+  static createEl (el, opts_data = {}) {
+    let node = document.createElement(el);
+
+    let props = Object.keys(opts_data);
 
     for (let i = 0; i < props.length; i++) {
       if (props[i] === 'class') {
@@ -90,7 +91,7 @@ export default class DOM {
     return node;
   }
 
-  static append(parent, node) {
+  static append (parent, node) {
     if (node === undefined) {
       node = parent;
       parent = document;
@@ -108,20 +109,21 @@ export default class DOM {
     }
   }
 
-  static addClass(node, className) {
-    let classes = className.split(','),
-        len = classes.length;
+  static addClass (node, className) {
+    let classes = className.split(',');
 
-    for (let i = 0; i < len; i ++) {
+    let len = classes.length;
+
+    for (let i = 0; i < len; i++) {
       node.classList.add(classes[i]);
     }
   }
 
-  static empty(parent) {
+  static empty (parent) {
     parent.innerHTML = '';
   }
 
-  static css(selector, styles) {
+  static css (selector, styles) {
     let node = DOM.query(selector);
 
     for (let prop in styles) {
@@ -129,31 +131,31 @@ export default class DOM {
     }
   }
 
-  static attr(selector, attr, val) {
+  static attr (selector, attr, val) {
     DOM.query(selector).setAttribute(attr, val);
   }
 
-  static trigger(selector, event, settings) {
+  static trigger (selector, event, settings) {
     let e = new Event(event, Object.assign({
       'bubbles': true,
       'cancelable': true
-    }, settings || {}))
+    }, settings || {}));
 
     DOM.query(selector).dispatchEvent(e);
   }
 
-  static on(selector, evt, handler) {
+  static on (selector, evt, handler) {
     DOM.query(selector).addEventListener(evt, handler);
   }
 
-  static off(selector, evt, handler) {
+  static off (selector, evt, handler) {
     DOM.query(selector).removeEventListener(evt, handler);
   }
 
-  static delegate(ctxt, selector, evt, handler) {
+  static delegate (ctxt, selector, evt, handler) {
     let el = DOM.query(ctxt);
-    el.addEventListener(evt, function(event) {
-    let target = event.target;
+    el.addEventListener(evt, function (event) {
+      let target = event.target;
       while (!target.isEqualNode(el)) {
         if (target.matches(selector)) {
           handler(event, target);
@@ -161,6 +163,6 @@ export default class DOM {
         }
         target = target.parentNode;
       }
-    })
+    });
   }
 }

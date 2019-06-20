@@ -2,7 +2,7 @@ import HttpRequester from '../http/httprequester';
 import ApiRequest from '../http/apirequest';
 
 export default class Search {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     let params = new URL(window.location.toString()).searchParams;
     let isLocal = params.get('local');
 
@@ -37,7 +37,7 @@ export default class Search {
     this._version = opts.version || 20190101 || 20190301;
   }
 
-  verticalQuery(queryString, verticalKey, filter) {
+  verticalQuery (queryString, verticalKey, filter) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/vertical/query',
@@ -55,7 +55,7 @@ export default class Search {
       .then(response => response.json());
   }
 
-  query(queryString) {
+  query (queryString) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/query',
@@ -63,14 +63,11 @@ export default class Search {
       version: this._version,
       params: {
         'input': queryString,
-        'answersKey': this._answersKey,
+        'answersKey': this._answersKey
       }
-    })
+    });
 
     return request.get()
       .then(response => response.json());
   }
 }
-
-
-

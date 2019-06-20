@@ -6,7 +6,7 @@ import Component from '../../../src/ui/components/component';
 import { COMPONENT_MANAGER } from '../../../src/ui/components/const';
 
 // The DOM doesn't exist within components in the JEST environment,
-//so we have to provide it to our DOM API properly.
+// so we have to provide it to our DOM API properly.
 DOM.setup(
   document,
   new DOMParser()
@@ -45,14 +45,14 @@ beforeEach(() => {
   DOM.empty(bodyEl);
 
   // Create the container that our component will be injected into
-  DOM.append(bodyEl, DOM.createEl('div', { class: 'test-component' } ))
+  DOM.append(bodyEl, DOM.createEl('div', { class: 'test-component' }));
 
   // Finally construct our component
   component = new Component({
     container: '.test-component',
     renderer: RENDERER,
     componentManager: COMPONENT_MANAGER
-  })
+  });
 });
 
 describe('render component templates', () => {
@@ -64,8 +64,9 @@ describe('render component templates', () => {
       EXPECTED_RESULT: `<div>This is a default template Billy</div>`
     };
 
-    let renderEl = DOM.create(component.render(COMPONENT_TEMPLATES_TEST.DATA)),
-        testEl = DOM.create(COMPONENT_TEMPLATES_TEST.EXPECTED_RESULT)
+    let renderEl = DOM.create(component.render(COMPONENT_TEMPLATES_TEST.DATA));
+
+    let testEl = DOM.create(COMPONENT_TEMPLATES_TEST.EXPECTED_RESULT);
 
     expect(renderEl.isEqualNode(testEl)).toBeTruthy();
   });
@@ -81,8 +82,9 @@ describe('render component templates', () => {
 
     component.setTemplate(CUSTOM_TEMPLATES_TEST.TEMPLATE);
 
-    let renderEl = DOM.create(component.render(CUSTOM_TEMPLATES_TEST.DATA)),
-        testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT)
+    let renderEl = DOM.create(component.render(CUSTOM_TEMPLATES_TEST.DATA));
+
+    let testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT);
 
     expect(renderEl.isEqualNode(testEl)).toBeTruthy();
   });
@@ -113,8 +115,9 @@ describe('render template components using markup syntax', () => {
 
     component.setTemplate(CUSTOM_TEMPLATES_TEST.TEMPLATE);
 
-    let renderEl = DOM.create(component.render(CUSTOM_TEMPLATES_TEST.DATA)),
-        testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT)
+    let renderEl = DOM.create(component.render(CUSTOM_TEMPLATES_TEST.DATA));
+
+    let testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT);
 
     expect(renderEl.isEqualNode(testEl)).toBeTruthy();
   });
@@ -145,8 +148,9 @@ describe('render template components using markup syntax', () => {
 
     component.setTemplate(CUSTOM_TEMPLATES_TEST.TEMPLATE);
 
-    let renderEl = DOM.create(component.render(CUSTOM_TEMPLATES_TEST.DATA)),
-        testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT)
+    let renderEl = DOM.create(component.render(CUSTOM_TEMPLATES_TEST.DATA));
+
+    let testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT);
 
     expect(renderEl.isEqualNode(testEl)).toBeTruthy();
   });
@@ -172,8 +176,9 @@ describe('render template components using markup syntax', () => {
     };
 
     component.setTemplate(CUSTOM_TEMPLATES_TEST.TEMPLATE);
-    let renderEl = DOM.create(component.render(CUSTOM_TEMPLATES_TEST.DATA)),
-        testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT)
+    let renderEl = DOM.create(component.render(CUSTOM_TEMPLATES_TEST.DATA));
+
+    let testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT);
 
     expect(renderEl.isEqualNode(testEl)).toBeTruthy();
   });

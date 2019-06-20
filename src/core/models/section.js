@@ -1,7 +1,7 @@
 import Result from './result';
 
 export default class Section {
-  constructor(data, url) {
+  constructor (data, url) {
     this.verticalConfigId = data.verticalConfigId || null;
 
     this.resultsCount = data.resultsCount || 0;
@@ -19,11 +19,12 @@ export default class Section {
     this.verticalURL = url || null;
   }
 
-  static parseMap(results) {
-    let mapMarkers = [],
-        centerCoordinates = {};
+  static parseMap (results) {
+    let mapMarkers = [];
 
-    for (let j = 0; j < results.length; j ++) {
+    let centerCoordinates = {};
+
+    for (let j = 0; j < results.length; j++) {
       // TODO(billy) Remove legacy fallback from all data format
       let result = results[j].data || results[j];
       if (result && result.yextDisplayCoordinate) {
@@ -38,7 +39,7 @@ export default class Section {
           label: mapMarkers.length + 1,
           latitude: result.yextDisplayCoordinate.latitude,
           longitude: result.yextDisplayCoordinate.longitude
-        })
+        });
       }
     }
 
@@ -48,7 +49,7 @@ export default class Section {
     };
   }
 
-  static from(modules, urls) {
+  static from (modules, urls) {
     let sections = [];
     if (!modules) {
       return sections;
@@ -59,7 +60,7 @@ export default class Section {
     }
 
     // Our sections should contain a property of mapMarker objects
-    for (let i = 0; i < modules.length; i ++) {
+    for (let i = 0; i < modules.length; i++) {
       sections.push(
         new Section(
           modules[i],
@@ -75,15 +76,15 @@ export default class Section {
 class AppliedQueryFilter {
   // Support legacy model and new model until fully migrated.
   // TODO(billy) Remove the left expression during assignment when migrated.
-  constructor(appliedQueryFilter) {
+  constructor (appliedQueryFilter) {
     this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
     this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
   }
 
-  static from(appliedQueryFilters) {
+  static from (appliedQueryFilters) {
     let filters = [];
-    for (let i = 0; i < appliedQueryFilters.length; i ++) {
-      filters.push(new AppliedQueryFilter(appliedQueryFilters[i]))
+    for (let i = 0; i < appliedQueryFilters.length; i++) {
+      filters.push(new AppliedQueryFilter(appliedQueryFilters[i]));
     }
     return filters;
   }

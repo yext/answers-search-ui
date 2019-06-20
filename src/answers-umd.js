@@ -14,7 +14,7 @@ import ErrorReporter from './core/errors/errorreporter';
  * @type {ANSWERS} The instance of ANSWERS
  */
 class Answers {
-  constructor() {
+  constructor () {
     if (!Answers.setInstance(this)) {
       return Answers.getInstance();
     }
@@ -40,10 +40,10 @@ class Answers {
      * A callback function to invoke once the library is ready.
      * Typically fired after templates are fetched from server for rendering.
      */
-    this._onReady = function() {};
+    this._onReady = function () {};
   }
 
-  static setInstance(instance) {
+  static setInstance (instance) {
     if (!this.instance) {
       this.instance = instance;
       return true;
@@ -51,18 +51,18 @@ class Answers {
     return false;
   }
 
-  static getInstance(opts) {
+  static getInstance (opts) {
     return this.instance;
   }
 
-  init(opts) {
+  init (opts) {
     this.components.setCore(new Core({
       apiKey: opts.apiKey,
       answersKey: opts.answersKey
     }))
-    .setRenderer(this.renderer);
+      .setRenderer(this.renderer);
 
-    this._onReady = opts.onReady || function() {};
+    this._onReady = opts.onReady || function () {};
 
     if (opts.useTemplates === false || opts.templateBundle) {
       if (opts.templateBundle) {
@@ -92,34 +92,34 @@ class Answers {
     return this;
   }
 
-  domReady(cb) {
+  domReady (cb) {
     DOM.onReady(cb);
   }
 
-  onReady(cb) {
+  onReady (cb) {
     this._onReady = cb;
     return this;
   }
 
-  addComponent(type, opts) {
+  addComponent (type, opts) {
     if (typeof opts === 'string') {
       opts = {
         container: opts
-      }
+      };
     }
 
     this.components.create(type, opts).mount();
     return this;
   }
 
-  createComponent(opts) {
+  createComponent (opts) {
     return this.components.create('Component', opts).mount();
   }
 
-  registerHelper(name, cb) {
+  registerHelper (name, cb) {
     this.renderer.registerHelper(name, cb);
     return this;
-  };
+  }
 }
 
 const ANSWERS = new Answers();

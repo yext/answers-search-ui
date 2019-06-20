@@ -1,7 +1,7 @@
 import Component from '../component';
 
 export default class UniversalResultsComponent extends Component {
-  constructor(opts = {}) {
+  constructor (opts = {}) {
     super(opts);
 
     this.moduleId = 'universalResults';
@@ -11,21 +11,21 @@ export default class UniversalResultsComponent extends Component {
     this._limit = opts.limit || 10;
   }
 
-  static get type() {
+  static get type () {
     return 'UniversalResults';
   }
 
-  init(opts) {
+  init (opts) {
     super.init(opts);
     return this;
   }
 
-  addChild(data = {}, type) {
+  addChild (data = {}, type) {
     let opts = this.getChildConfig([data['verticalConfigId']]);
     return super.addChild(data, type, opts);
   }
 
-  getChildConfig(configId) {
+  getChildConfig (configId) {
     let config = this._opts.config;
     if (config === undefined) {
       return {};

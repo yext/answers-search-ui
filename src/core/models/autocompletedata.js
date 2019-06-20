@@ -1,28 +1,28 @@
 export default class AutoCompleteData {
-  constructor(data = {}) {
+  constructor (data = {}) {
     this.sections = data.sections || [];
   }
 
-  highlightResults(section) {
-    return section.results.map(highlightResult)
+  highlightResults (section) {
+    return section.results.map(highlightResult);
   }
 
-  static from(response) {
-    let sections
+  static from (response) {
+    let sections;
     if (response.sections) {
       sections = response.sections.map(s => ({
         label: s.label,
         results: s.results.map(r => new AutoCompleteResult(r))
-      }))
+      }));
     } else {
-      sections = [{ results: response.results.map(r => new AutoCompleteResult(r))}]
+      sections = [{ results: response.results.map(r => new AutoCompleteResult(r)) }];
     }
     return new AutoCompleteData({ sections });
   }
 }
 
 export class AutoCompleteResult {
-  constructor(data = {}) {
+  constructor (data = {}) {
     this.filter = data.filter || {};
     this.highlightedValue = this.highlight(data);
     this.key = data.key || '';
@@ -32,7 +32,7 @@ export class AutoCompleteResult {
   }
 
   // TODO(jdelerme): consolidate with other highlight functions
-  highlight(data) {
+  highlight (data) {
     const { value, matchedSubstrings } = data;
 
     if (!matchedSubstrings || matchedSubstrings.length === 0) {
@@ -53,12 +53,14 @@ export class AutoCompleteResult {
     });
 
     // Build our new value based on the highlights
-    let highlightedValue = '',
-        nextStart = 0;
+    let highlightedValue = '';
 
-    for (let j = 0; j < matchedSubstrings.length; j ++) {
-      let start = Number(matchedSubstrings[j].offset),
-          end = start + matchedSubstrings[j].length;
+    let nextStart = 0;
+
+    for (let j = 0; j < matchedSubstrings.length; j++) {
+      let start = Number(matchedSubstrings[j].offset);
+
+      let end = start + matchedSubstrings[j].length;
 
       highlightedValue += [value.slice(nextStart, start), '<strong>', value.slice(start, end), '</strong>'].join('');
 
