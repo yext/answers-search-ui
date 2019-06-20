@@ -1,6 +1,8 @@
 let document = window.document;
 let parser = new DOMParser();
 
+/* global HTMLElement, HTMLDocument, Window, Event */
+
 export default class DOM {
   static setup (d, p) {
     document = d;
@@ -76,7 +78,6 @@ export default class DOM {
    */
   static createEl (el, opts_data = {}) {
     let node = document.createElement(el);
-
     let props = Object.keys(opts_data);
 
     for (let i = 0; i < props.length; i++) {
@@ -111,7 +112,6 @@ export default class DOM {
 
   static addClass (node, className) {
     let classes = className.split(',');
-
     let len = classes.length;
 
     for (let i = 0; i < len; i++) {

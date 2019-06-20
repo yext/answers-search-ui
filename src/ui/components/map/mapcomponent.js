@@ -1,5 +1,4 @@
 import Component from '../component';
-import DOM from '../../dom/dom';
 
 import GoogleMapProvider from './providers/googlemapprovider';
 import MapBoxMapProvider from './providers/mapboxmapprovider';

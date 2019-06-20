@@ -5,9 +5,7 @@ export default class UniversalResultsComponent extends Component {
     super(opts);
 
     this.moduleId = 'universalResults';
-
     this._templateName = 'results/universalresults';
-
     this._limit = opts.limit || 10;
   }
 

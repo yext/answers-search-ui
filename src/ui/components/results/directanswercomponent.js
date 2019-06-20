@@ -5,7 +5,6 @@ export default class DirectAnswerComponent extends Component {
     super(opts);
 
     this.moduleId = 'directAnswer';
-
     this._templateName = 'results/directanswer';
   }
 

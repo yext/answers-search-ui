@@ -203,22 +203,22 @@ export default class AutoCompleteComponent extends Component {
 
   /**
    * Helper method to update the input text
-   * @param {string} opt_value Option value provided.
+   * @param {string} optValue Option value provided.
    * If no value provided, we'll try to find it based on the selection indexes.
    */
-  updateQuery (opt_value) {
+  updateQuery (optValue) {
     // Only want to update the query string if theres a value.
     // If one is provided, great.
     // Otherwise, lets try to find it from the current selection in the results.
-    if (opt_value === undefined) {
+    if (optValue === undefined) {
       let sections = this._state.get('sections');
 
       let results = sections[this._sectionIndex].results;
-      opt_value = results[this._resultIndex].shortValue;
+      optValue = results[this._resultIndex].shortValue;
     }
 
     let queryEl = DOM.query(this._parent._container, '.js-yext-query');
-    queryEl.value = opt_value;
+    queryEl.value = optValue;
   }
 
   handleTyping (key, value, e) {

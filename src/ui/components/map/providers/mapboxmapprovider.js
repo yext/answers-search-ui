@@ -1,11 +1,9 @@
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
-export default class MapBoxMapProvider extends MapProvider {
-  constructor (opts) {
-    super(opts);
-  }
+/* global mapboxgl */
 
+export default class MapBoxMapProvider extends MapProvider {
   /**
    * Load the external JS Library
    * @param {function} onLoad An optional callback to invoke once the JS is loaded.
@@ -35,15 +33,10 @@ export default class MapBoxMapProvider extends MapProvider {
 
   generateStatic (mapData) {
     let encodedMarkers = '';
-
     let mapMarkers = mapData.mapMarkers;
-
     let center = mapData.mapCenter;
-
     let width = this._width || 600;
-
     let height = this._height || 200;
-
     let zoom = this._zoom || 9;
 
     for (let i = 0; i < mapMarkers.length; i++) {

@@ -3,10 +3,6 @@ export default class AutoCompleteData {
     this.sections = data.sections || [];
   }
 
-  highlightResults (section) {
-    return section.results.map(highlightResult);
-  }
-
   static from (response) {
     let sections;
     if (response.sections) {
@@ -28,7 +24,7 @@ export class AutoCompleteResult {
     this.key = data.key || '';
     this.matchedSubstrings = data.matchedSubstrings || [];
     this.value = data.value || '';
-    this.shortValue = data.shortValue || data.value;
+    this.shortValue = data.shortValue || this.value;
   }
 
   // TODO(jdelerme): consolidate with other highlight functions
@@ -54,12 +50,10 @@ export class AutoCompleteResult {
 
     // Build our new value based on the highlights
     let highlightedValue = '';
-
     let nextStart = 0;
 
     for (let j = 0; j < matchedSubstrings.length; j++) {
       let start = Number(matchedSubstrings[j].offset);
-
       let end = start + matchedSubstrings[j].length;
 
       highlightedValue += [value.slice(nextStart, start), '<strong>', value.slice(start, end), '</strong>'].join('');

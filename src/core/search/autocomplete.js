@@ -14,7 +14,7 @@ export default class AutoComplete {
      * @type {string}
      * @private
      */
-    this._baseUrl = this._isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
+    this._baseUrl = isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
 
     /**
      * The API Key to use for the request

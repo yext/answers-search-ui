@@ -1,6 +1,4 @@
 import Renderer from './renderer';
-import TemplateLoader from './templateloader';
-
 export default class HandlebarsRenderer extends Renderer {
   constructor (templates = {}, opts = {}) {
     super();
@@ -73,11 +71,11 @@ export default class HandlebarsRenderer extends Renderer {
 
   _registerCustomHelpers () {
     this.registerHelper('ifeq', function (arg1, arg2, options) {
-      return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+      return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
     });
 
     this.registerHelper('ifnoteq', function (arg1, arg2, options) {
-      return (arg1 != arg2) ? options.fn(this) : options.inverse(this);
+      return (arg1 !== arg2) ? options.fn(this) : options.inverse(this);
     });
 
     this.registerHelper('formatPhoneNumber', function (phoneNumberString) {
@@ -109,7 +107,7 @@ export default class HandlebarsRenderer extends Renderer {
     this.registerHelper('json', function (name, value, options) {
       return name === undefined
         ? ''
-        : JSON.stringify(name).replace(/\"/g, '\\"');
+        : JSON.stringify(name).replace(/"/g, '\\"');
     });
   }
 }

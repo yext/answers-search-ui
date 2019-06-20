@@ -69,7 +69,7 @@ class Answers {
         this.renderer.init(opts.templateBundle);
       }
 
-      this._onReady.call(this);
+      this._onReady();
       return this;
     }
 
@@ -80,7 +80,7 @@ class Answers {
     }).onLoaded((templates) => {
       this.renderer.init(templates);
 
-      this._onReady.call(this);
+      this._onReady();
     });
 
     if (!this._isDev && !opts.suppressErrorReports) {
