@@ -25,7 +25,7 @@ export default class GoogleMapProvider extends MapProvider {
       id: 'yext-map-js',
       onload: () => {
         this._isLoaded = true;
-        onLoad();
+        this._onLoaded();
       },
       async: true,
       src: `//maps.googleapis.com/maps/api/js?${this.generateCredentials()}`

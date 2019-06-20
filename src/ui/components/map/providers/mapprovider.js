@@ -40,6 +40,8 @@ export default class MapProvider {
      */
     this._isLoaded = false;
 
+    this._onLoaded = opts.onLoaded || function() {};
+
     /**
      * The custom configuration override to use for the map markers
      * @type {Object|Function}
@@ -62,6 +64,13 @@ export default class MapProvider {
       },
       labelType: 'numeric'
     };
+  }
+
+  onLoaded(cb) {
+    this._onLoaded = cb;
+    if (this.isLoaded()) {
+      cb();
+    }
   }
 
   isLoaded () {

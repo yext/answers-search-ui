@@ -55,9 +55,8 @@ export default class MapComponent extends Component {
 
   onCreate () {
     this._map = this.getProviderInstance(this._mapProvider);
-
     let mapData = this.getState('map');
-    if (mapData === undefined) {
+    if (mapData === undefined && this._isStatic) {
       return this;
     }
 
@@ -68,17 +67,13 @@ export default class MapComponent extends Component {
       return this;
     }
 
-    this._map.loadJS(() => {
-      this._map.init(this._container, mapData);
-    });
+    this._map.loadJS();
   }
 
   onMount () {
-    // NOTE(billy) This is temporary, we should create a single promise interface
-    // for init to deal with the internal javascript loading
-    if (this._map.isLoaded()) {
+    this._map.onLoaded(() => {
       this._map.init(this._container, this.getState('map'));
-    }
+    });
   }
 
   setState (data, val) {
@@ -86,11 +81,6 @@ export default class MapComponent extends Component {
       return this;
     }
 
-    return super.setState(Object.assign(data, {
-      mapConfig: {
-        mapProvider: this._mapProvider,
-        mapApiKey: this._apiKey
-      }
-    }), val);
+    return super.setState(data, val);
   }
 }
