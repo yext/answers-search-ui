@@ -38,10 +38,10 @@ export default class AutoCompleteComponent extends Component {
     this._barKey = opts.barKey || null;
 
     /**
-     * The `experienceKey` of the vertical search to use for auto-complete
+     * The `verticalKey` of the vertical search to use for auto-complete
      * @type {string}
      */
-    this._experienceKey = opts.experienceKey || null;
+    this._verticalKey = opts.verticalKey || null;
 
     /**
      * A reference to the input el selector for auto complete
@@ -152,9 +152,9 @@ export default class AutoCompleteComponent extends Component {
     DOM.on(queryInput, 'focus', () => {
       this.reset();
       if (this.isFilterSearch) {
-        this.core.autoCompleteFilter(queryInput.value, this._experienceKey, this._barKey);
+        this.core.autoCompleteFilter(queryInput.value, this._verticalKey, this._barKey);
       } else {
-        this.core.autoComplete(queryInput.value, this._experienceKey, this._barKey);
+        this.core.autoComplete(queryInput.value, this._verticalKey, this._barKey);
       }
     });
 
@@ -254,9 +254,9 @@ export default class AutoCompleteComponent extends Component {
 
     this.reset();
     if (this.isFilterSearch) {
-      this.core.autoCompleteFilter(value, this._experienceKey, this._barKey);
+      this.core.autoCompleteFilter(value, this._verticalKey, this._barKey);
     } else {
-      this.core.autoComplete(value, this._experienceKey, this._barKey);
+      this.core.autoComplete(value, this._verticalKey, this._barKey);
     }
   }
 

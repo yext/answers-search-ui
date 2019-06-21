@@ -234,7 +234,7 @@ ANSWERS.addComponent('SearchBar', {
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
-  verticalKey: '<EXPERIENCE_KEY>',    // required
+  verticalKey: '<VERTICAL_KEY>',      // required
   barKey: '<BAR_KEY>'                 // optional
 })
 ```
