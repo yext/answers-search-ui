@@ -19,7 +19,7 @@ export default class SearchComponent extends Component {
     this._barKey = opts.barKey || null;
 
     /**
-     * The optional experience key for vertical search configuration
+     * The optional vertical key for vertical search configuration
      * If not provided, auto-complete and search will be based on universal
      * @type {string}
      */
@@ -154,7 +154,7 @@ export default class SearchComponent extends Component {
       parent: this,
       container: '.yext-search-autocomplete',
       barKey: this._barKey,
-      experienceKey: this._experienceKey,
+      verticalKey: this._verticalKey,
       promptHeader: this.promptHeader,
       originalQuery: this.query,
       inputEl: inputSelector,
