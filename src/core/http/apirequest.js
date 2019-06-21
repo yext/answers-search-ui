@@ -62,10 +62,23 @@ export default class ApiRequest {
       'v': this._version,
       'api_key': this._apiKey
     };
+
     const urlParams = new URL(window.location.toString()).searchParams;
+
     if (urlParams.has('beta')) {
       baseParams['beta'] = urlParams.get('beta');
     }
+
+    // Remove any paramaters whos value is `undefined`.
+    //
+    // NOTE(billy) Probably better to be explicit about how to handle this at the request building level,
+    // but I can't see any cases where we'd ever want to send 'undefined' as a value to the server.
+    // So it's probably fine to 'clean' the params object here
+    Object.keys(params).forEach(key => {
+      if (params[key] === undefined) {
+        delete params[key];
+      }
+    });
 
     return Object.assign(baseParams, params || {});
   }
