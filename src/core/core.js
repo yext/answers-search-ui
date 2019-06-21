@@ -77,17 +77,17 @@ export default class Core {
       });
   }
 
-  autoComplete (queryString, experienceKey, barKey) {
+  autoComplete (queryString, verticalKey, barKey) {
     return this._autoComplete
-      .query(queryString, experienceKey, barKey)
+      .query(queryString, verticalKey, barKey)
       .then(data => {
         this.storage.insert(data);
       });
   }
 
-  autoCompleteFilter (input, experienceKey, barKey) {
+  autoCompleteFilter (input, verticalKey, barKey) {
     return this._autoComplete
-      .queryFilter(input, experienceKey, barKey)
+      .queryFilter(input, verticalKey, barKey)
       .then(data => {
         this.storage.insert(data);
       });

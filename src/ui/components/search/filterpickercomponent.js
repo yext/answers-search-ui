@@ -18,10 +18,10 @@ export default class FilterPickerComponent extends Component {
     this._barKey = opts.barKey || opts.inputKey || null;
 
     /**
-     * The experience key for vertical search configuration
+     * The vertical key for vertical search configuration
      * @type {string}
      */
-    this._experienceKey = opts.experienceKey || null;
+    this._verticalKey = opts.verticalKey || null;
 
     /**
      * Query submission is based on a form as context.
@@ -127,7 +127,7 @@ export default class FilterPickerComponent extends Component {
       originalQuery: this.query,
       originalFilter: this.filter,
       inputEl: inputSelector,
-      experienceKey: this._experienceKey,
+      verticalKey: this._verticalKey,
       barKey: this._barKey,
       onSubmit: (query, filter) => {
         this.search(query, filter);
@@ -153,7 +153,7 @@ export default class FilterPickerComponent extends Component {
       filter: filter
     }, query, '?' + params.toString());
 
-    this.core.verticalSearch('', this._experienceKey, filter);
+    this.core.verticalSearch('', this._verticalKey, filter);
   }
 
   setState (data) {
