@@ -1,5 +1,6 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
+import { AUTOCOMPLETE } from '../../../core/storage/storagekeys';
 
 const Keys = {
   BACKSPACE: 8,
@@ -53,9 +54,9 @@ export default class AutoCompleteComponent extends Component {
      * An internal reference for the data-storage to listen for updates from the server
      * @type {string}
      */
-    let moduleId = 'autocomplete';
+    let moduleId = AUTOCOMPLETE;
     if (this._barKey !== undefined && this._barKey !== null) {
-      moduleId = 'autocomplete.' + this._barKey;
+      moduleId = `${AUTOCOMPLETE}.${this._barKey}`;
     }
     this.moduleId = moduleId;
 

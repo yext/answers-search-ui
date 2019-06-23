@@ -5,6 +5,7 @@ import LocationResultsItemComponent from './locationresultsitemcomponent';
 import EventResultsItemComponent from './eventresultsitemcomponent';
 import PeopleResultsItemComponent from './peopleresultsitemcomponent';
 import MapComponent from '../map/mapcomponent';
+import { VERTICAL_RESULTS } from '../../../core/storage/storagekeys';
 
 const ResultType = {
   EVENT: 'event',
@@ -16,7 +17,7 @@ export default class ResultsComponent extends Component {
   constructor (opts = {}) {
     super(opts);
 
-    this.moduleId = 'verticalResults';
+    this.moduleId = VERTICAL_RESULTS;
     this._templateName = 'results/results';
     this.limit = opts.limit || 5;
     this._itemConfig = {

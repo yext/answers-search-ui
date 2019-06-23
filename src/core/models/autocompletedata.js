@@ -1,6 +1,7 @@
 export default class AutoCompleteData {
   constructor (data = {}) {
     this.sections = data.sections || [];
+    Object.freeze(this);
   }
 
   static from (response) {
@@ -25,14 +26,16 @@ export class AutoCompleteResult {
     this.matchedSubstrings = data.matchedSubstrings || [];
     this.value = data.value || '';
     this.shortValue = data.shortValue || this.value;
+    Object.freeze(this);
   }
 
   // TODO(jdelerme): consolidate with other highlight functions
   highlight (data) {
-    const { value, matchedSubstrings } = data;
+    const { value, shortValue, matchedSubstrings } = data;
+    const val = value || shortValue;
 
     if (!matchedSubstrings || matchedSubstrings.length === 0) {
-      return value;
+      return val;
     }
 
     // Make sure our highlighted substrings are sorted
@@ -56,10 +59,10 @@ export class AutoCompleteResult {
       let start = Number(matchedSubstrings[j].offset);
       let end = start + matchedSubstrings[j].length;
 
-      highlightedValue += [value.slice(nextStart, start), '<strong>', value.slice(start, end), '</strong>'].join('');
+      highlightedValue += [val.slice(nextStart, start), '<strong>', val.slice(start, end), '</strong>'].join('');
 
-      if (j === matchedSubstrings.length - 1 && end < value.length) {
-        highlightedValue += value.slice(end);
+      if (j === matchedSubstrings.length - 1 && end < val.length) {
+        highlightedValue += val.slice(end);
       }
 
       nextStart = end;
