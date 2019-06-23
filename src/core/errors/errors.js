@@ -49,3 +49,11 @@ export class AnswersCoreError extends AnswersBaseError {
     super(400, message, boundary, causedBy);
   }
 }
+
+export class AnswersStorageError extends AnswersBaseError {
+  constructor (message, storageKey, data, causedBy) {
+    super(401, message, 'Storage', causedBy);
+    this.storageKey = storageKey;
+    this.data = data;
+  }
+}

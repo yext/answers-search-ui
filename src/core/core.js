@@ -4,6 +4,7 @@ import AutoComplete from './search/autocomplete';
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import Storage from './storage/storage';
+import * as StorageKeys from './storage/storagekeys';
 
 export default class Core {
   constructor (opts = {}) {
@@ -64,7 +65,8 @@ export default class Core {
       .verticalQuery(queryString, verticalKey, filter)
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
-        this.storage.insert(data);
+        this.storage.insert(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.insert(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
       });
   }
 
@@ -73,15 +75,18 @@ export default class Core {
       .query(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
-        this.storage.insert(data);
+        this.storage.insert(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.insert(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        this.storage.insert(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS]);
       });
   }
 
   autoComplete (queryString, verticalKey, barKey) {
+    const storageKey = barKey ? `${StorageKeys.AUTOCOMPLETE}.${barKey}` : StorageKeys.AUTOCOMPLETE;
     return this._autoComplete
       .query(queryString, verticalKey, barKey)
       .then(data => {
-        this.storage.insert(data);
+        this.storage.insert(storageKey, data);
       });
   }
 
@@ -89,7 +94,7 @@ export default class Core {
     return this._autoComplete
       .queryFilter(input, verticalKey, barKey)
       .then(data => {
-        this.storage.insert(data);
+        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${barKey}`, data);
       });
   }
 

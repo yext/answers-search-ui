@@ -23,21 +23,14 @@ export default class AutoCompleteDataTransformer {
   }
 
   static universal (response) {
-    return AutoCompleteDataTransformer.clean(
-      'autocomplete',
-      AutoCompleteData.from(response)
-    );
+    return AutoCompleteData.from(response);
   }
 
-  static filter (response, inputKey) {
-    return AutoCompleteDataTransformer.clean(
-      `autocomplete.${inputKey}`,
-      AutoCompleteData.from(response));
+  static filter (response) {
+    return AutoCompleteData.from(response);
   }
 
-  static vertical (response, inputKey) {
-    return AutoCompleteDataTransformer.clean(
-      `autocomplete.${inputKey}`,
-      { sections: response.sections });
+  static vertical (response) {
+    return AutoCompleteData.from(response);
   }
 }
