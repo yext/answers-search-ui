@@ -1,10 +1,11 @@
 import Component from '../component';
+import { UNIVERSAL_RESULTS } from '../../../core/storage/storagekeys';
 
 export default class UniversalResultsComponent extends Component {
   constructor (opts = {}) {
     super(opts);
 
-    this.moduleId = 'universalResults';
+    this.moduleId = UNIVERSAL_RESULTS;
     this._templateName = 'results/universalresults';
     this._limit = opts.limit || 10;
   }

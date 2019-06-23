@@ -1,6 +1,7 @@
 export default class Navigation {
   constructor (tabOrder) {
     this.tabOrder = tabOrder || [];
+    Object.freeze(this);
   }
 
   static from (modules) {

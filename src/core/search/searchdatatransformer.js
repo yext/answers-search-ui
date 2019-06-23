@@ -2,6 +2,7 @@ import UniversalResults from '../models/universalresults';
 import DirectAnswer from '../models/directanswer';
 import Navigation from '../models/navigation';
 import VerticalResults from '../models/verticalresults';
+import * as StorageKeys from '../storage/storagekeys';
 
 /**
  * A Data Transformer that takes the response object from a Search request
@@ -12,16 +13,16 @@ export default class SearchDataTransformer {
   static transform (data, urls = {}) {
     let response = data.response;
     return {
-      navigation: Navigation.from(response.modules),
-      directAnswer: new DirectAnswer(response.directAnswer),
-      universalResults: UniversalResults.from(response, urls)
+      [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
+      [StorageKeys.DIRECT_ANSWER]: new DirectAnswer(response.directAnswer),
+      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls)
     };
   }
 
   static transformVertical (data) {
     return {
-      navigation: new Navigation(), // Veritcal doesn't respond with ordering, so use empty nav.
-      verticalResults: VerticalResults.from(data.response)
+      [StorageKeys.NAVIGATION]: new Navigation(), // Veritcal doesn't respond with ordering, so use empty nav.
+      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response)
     };
   }
 }
