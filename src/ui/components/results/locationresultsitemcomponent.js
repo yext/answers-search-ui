@@ -10,4 +10,8 @@ export default class LocationResultsItemComponent extends ResultsItemComponent {
   static get type () {
     return 'LocationResultsItemComponent';
   }
+
+  static areDuplicateNamesAllowed () {
+    return true;
+  }
 }

@@ -79,6 +79,7 @@ Every component has the same base configuration options.
 
 |  option   | type       | description                               | required      |
 |-----------|------------|-------------------------------------------|---------------|
+| name          | string     | a unique name, if using multiple components of the same type  | optional      |
 | container     | string     | the CSS selector to append the component. | required      |
 | class         | string     | a custom class to apply to the component  | not required  |
 | template      | string     | override internal handlebars template       | not required  |

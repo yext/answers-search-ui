@@ -54,11 +54,7 @@ export default class AutoCompleteComponent extends Component {
      * An internal reference for the data-storage to listen for updates from the server
      * @type {string}
      */
-    let moduleId = AUTOCOMPLETE;
-    if (this._barKey !== undefined && this._barKey !== null) {
-      moduleId = `${AUTOCOMPLETE}.${this._barKey}`;
-    }
-    this.moduleId = moduleId;
+    this.moduleId = `${AUTOCOMPLETE}.${this.name}`;
 
     /**
      * The default handlebars template name to use for rendering
@@ -152,11 +148,7 @@ export default class AutoCompleteComponent extends Component {
     // on the current value
     DOM.on(queryInput, 'focus', () => {
       this.reset();
-      if (this.isFilterSearch) {
-        this.core.autoCompleteFilter(queryInput.value, this._verticalKey, this._barKey);
-      } else {
-        this.core.autoComplete(queryInput.value, this._verticalKey, this._barKey);
-      }
+      this.autoComplete(queryInput.value);
     });
 
     // Allow the user to navigate between the results using the keyboard
@@ -254,10 +246,16 @@ export default class AutoCompleteComponent extends Component {
     this._originalQuery = value;
 
     this.reset();
+    this.autoComplete(value);
+  }
+
+  autoComplete (input) {
     if (this.isFilterSearch) {
-      this.core.autoCompleteFilter(value, this._verticalKey, this._barKey);
+      this.core.autoCompleteFilter(input, this.name, this._verticalKey, this._barKey);
+    } else if (this._verticalKey || this._barKey) {
+      this.core.autoCompleteVertical(input, this.name, this._verticalKey, this._barKey);
     } else {
-      this.core.autoComplete(value, this._verticalKey, this._barKey);
+      this.core.autoCompleteUniversal(input, this.name);
     }
   }
 

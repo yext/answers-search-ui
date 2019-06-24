@@ -152,6 +152,7 @@ export default class SearchComponent extends Component {
 
     this.componentManager.create('AutoComplete', {
       parent: this,
+      name: `${this.name}.autocomplete`,
       container: '.yext-search-autocomplete',
       barKey: this._barKey,
       verticalKey: this._verticalKey,
