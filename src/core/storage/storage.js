@@ -1,4 +1,5 @@
 import ModuleData from './moduledata';
+import { AnswersStorageError } from '../errors/errors';
 
 export default class Storage {
   constructor () {
@@ -7,6 +8,13 @@ export default class Storage {
   }
 
   insert (key, data) {
+    if (key === undefined || key === null || typeof key !== 'string') {
+      throw new AnswersStorageError('Invalid storage key provided', key, data);
+    }
+    if (data === undefined || data === null) {
+      throw new AnswersStorageError('No data provided', key, data);
+    }
+
     if (this._moduleDataContainer[key] === undefined) {
       this._moduleDataContainer[key] = new ModuleData(key);
       this._applyFutureListeners(key);
@@ -20,6 +28,16 @@ export default class Storage {
       return this._moduleDataContainer[moduleId].raw();
     }
     return {};
+  }
+
+  getAll (key) {
+    const data = [];
+    for (const dataKey of Object.keys(this._moduleDataContainer)) {
+      if (dataKey.startsWith(key)) {
+        data.push(this._moduleDataContainer[dataKey].raw());
+      }
+    }
+    return data;
   }
 
   on (evt, moduleId, cb) {

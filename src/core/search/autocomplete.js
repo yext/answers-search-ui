@@ -39,25 +39,10 @@ export default class AutoComplete {
   }
 
   /**
-   * query supports both UniversalSearch and VerticalSearch auto completing.
-   * Providing an experienceKey and barKey will create a vertical search auto complete request.
-   * @param {string} input The input to use for auto complete
-   * @param {string} experienceKey The experience key to use for a vertical auto complete request
-   * @param {string} barKey The barKey to use for a vertical search auto complete request
-   */
-  query (input, experienceKey, barKey) {
-    if (experienceKey || barKey) {
-      return this._queryVertical(input, experienceKey, barKey);
-    }
-
-    return this._queryUniversal(input);
-  }
-
-  /**
    * Autocomplete filters
    * @param {string} input The input to use for auto complete
    */
-  queryFilter (input, experienceKey, barKey) {
+  queryFilter (input, verticalKey, barKey) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/filtersearch',
@@ -66,7 +51,7 @@ export default class AutoComplete {
       params: {
         'input': input,
         'answersKey': this._answersKey,
-        'experiencekey': experienceKey,
+        'experiencekey': verticalKey,
         'inputKey': barKey
       }
     });
@@ -77,7 +62,7 @@ export default class AutoComplete {
       .catch(error => console.error(error));
   }
 
-  _queryVertical (input, experienceKey, barKey) {
+  queryVertical (input, verticalKey, barKey) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/entities/autocomplete',
@@ -85,7 +70,7 @@ export default class AutoComplete {
       version: this._version,
       params: {
         'input': input,
-        'experienceKey': experienceKey,
+        'experienceKey': verticalKey,
         'barKey': barKey
       }
     });
@@ -96,7 +81,7 @@ export default class AutoComplete {
       .catch(error => console.error(error));
   }
 
-  _queryUniversal (queryString) {
+  queryUniversal (queryString) {
     let request = new ApiRequest({
       baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/autocomplete',

@@ -1,5 +1,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
+import * as StorageKeys from '../../../core/storage/storagekeys';
+import Filter from '../../../core/models/filter';
 
 export default class FilterPickerComponent extends Component {
   constructor (opts = {}) {
@@ -81,14 +83,14 @@ export default class FilterPickerComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = opts.query || this.getUrlParams().get('query') || '';
+    this.query = opts.query || this.getUrlParams().get(`${this.name}.query`) || '';
 
     /**
      * The filter string to use for the provided query
      * Optionally provided
      * @type {string}
      */
-    this.filter = opts.filter || this.getUrlParams().get('filter') || '';
+    this.filter = opts.filter || this.getUrlParams().get(`${this.name}.filter`) || '';
   }
 
   static get type () {
@@ -121,6 +123,7 @@ export default class FilterPickerComponent extends Component {
 
     this.componentManager.create('AutoComplete', {
       parent: this,
+      name: `${this.name}.autocomplete`,
       isFilterSearch: true,
       container: '.yext-search-autocomplete',
       promptHeader: this.promptHeader,
@@ -138,8 +141,8 @@ export default class FilterPickerComponent extends Component {
   search (query, filter) {
     const params = this.getUrlParams();
 
-    params.set('query', query);
-    params.set('filter', filter);
+    params.set(`${this.name}.query`, query);
+    params.set(`${this.name}.filter`, filter);
 
     // If we have a redirectUrl, we want the params to be
     // serialized and submitted.
@@ -153,7 +156,14 @@ export default class FilterPickerComponent extends Component {
       filter: filter
     }, query, '?' + params.toString());
 
-    this.core.verticalSearch('', this._verticalKey, filter);
+    this.core.setFilter(this.name, filter);
+    const filters = this.core.storage.getAll(StorageKeys.FILTER);
+    let totalFilter = filters[0];
+    if (filters.length > 1) {
+      totalFilter = Filter.and(...filters);
+    }
+
+    this.core.verticalSearch('', this._verticalKey, JSON.stringify(totalFilter));
   }
 
   setState (data) {
@@ -172,14 +182,14 @@ export default class FilterPickerComponent extends Component {
 
   bindBrowserHistory () {
     DOM.on(window, 'popstate', () => {
-      this.query = this.getUrlParams().get('query');
-      this.filter = this.getUrlParams().get('filter');
+      this.query = this.getUrlParams().get(`${this.name}.query`);
+      this.filter = this.getUrlParams().get(`${this.name}.filter`);
       this.setState({
         query: this.query,
         filter: this.filter
       });
 
-      this.search(this.query);
+      this.search(this.query, this.filter);
     });
   }
 }

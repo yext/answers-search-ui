@@ -1,3 +1,5 @@
+import { AnswersComponentError } from '../../core/errors/errors';
+
 /**
  * ComponentManager is a Singletone that contains both an internal registry of
  * eligible components to be created, as well as keeps track of the current
@@ -24,7 +26,7 @@ export default class ComponentManager {
      * The active components is an internal container to keep track
      * of all of the components that have been constructed
      */
-    this._activeComponents = {};
+    this._activeComponents = [];
 
     /**
      * A local reference to the core library dependency
@@ -93,12 +95,23 @@ export default class ComponentManager {
       componentManager: this
     }, opts);
 
+    let componentClass = this._componentRegistry[componentType];
+
+    if (
+      !componentClass.areDuplicateNamesAllowed() &&
+      this._activeComponents.some(c => c.name === opts.name)
+    ) {
+      throw new AnswersComponentError(
+        `Another component with name ${opts.name} already exists`,
+        componentType);
+    }
+
     // Instantiate our new component and keep track of it
     let component =
       new this._componentRegistry[componentType](opts)
         .init(opts);
 
-    this._activeComponents[componentType] = component;
+    this._activeComponents.push(component);
 
     // If there is a local storage to power state, apply the state
     // from the storage to the component, and then bind the component
@@ -118,6 +131,6 @@ export default class ComponentManager {
   }
 
   getActiveComponent (type) {
-    return this._activeComponents[type];
+    return this._activeComponents.find(c => c.type === type);
   }
 }

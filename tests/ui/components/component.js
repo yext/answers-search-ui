@@ -96,7 +96,7 @@ describe('render template components using markup syntax', () => {
       TEMPLATE: `
         <div>
            This is a test template {{name}}
-           <div data-component="Map" data-prop="map" data-opts='{"mapProvider": "google", "isStatic": true, "apiKey": "test"}'>
+           <div data-component="Map" data-prop="map" data-opts='{"name": "myMap", "mapProvider": "google", "isStatic": true, "apiKey": "test"}'>
            </div>
         </div>`,
       DATA: {
@@ -108,7 +108,7 @@ describe('render template components using markup syntax', () => {
       EXPECTED_RESULT: `
         <div>
            This is a test template Billy
-           <div data-component="Map" data-prop="map" data-opts='{"mapProvider": "google", "isStatic": true, "apiKey": "test"}' class="component"><div>MY MAP</div>
+           <div data-component="Map" data-prop="map" data-opts='{"name": "myMap", "mapProvider": "google", "isStatic": true, "apiKey": "test"}' class="component"><div>MY MAP</div>
            </div>
         </div>`
     };
@@ -127,9 +127,9 @@ describe('render template components using markup syntax', () => {
       TEMPLATE: `
         <div>
            This is a test template {{name}}
-           <div data-component="Map" data-prop="map" data-opts='{"mapProvider": "google", "apiKey": "test"}'>
+           <div data-component="Map" data-prop="map" data-opts='{"name": "myMap2", "mapProvider": "google", "apiKey": "test"}'>
            </div>
-           <div data-component="Map" data-prop="map" data-opts='{"mapProvider": "google", "apiKey": "test"}'>
+           <div data-component="Map" data-prop="map" data-opts='{"name": "myMap3", "mapProvider": "google", "apiKey": "test"}'>
            </div>
         </div>`,
       DATA: {
@@ -139,9 +139,9 @@ describe('render template components using markup syntax', () => {
       EXPECTED_RESULT: `
         <div>
            This is a test template Billy
-           <div data-component="Map" data-prop="map" data-opts='{"mapProvider": "google", "apiKey": "test"}' class="component"><div>MY MAP</div>
+           <div data-component="Map" data-prop="map" data-opts='{"name": "myMap2", "mapProvider": "google", "apiKey": "test"}' class="component"><div>MY MAP</div>
            </div>
-           <div data-component="Map" data-prop="map" data-opts='{"mapProvider": "google", "apiKey": "test"}' class="component"><div>MY MAP</div>
+           <div data-component="Map" data-prop="map" data-opts='{"name": "myMap3", "mapProvider": "google", "apiKey": "test"}' class="component"><div>MY MAP</div>
            </div>
         </div>`
     };
@@ -165,7 +165,7 @@ describe('render template components using markup syntax', () => {
         </div>`,
       DATA: {
         name: 'Billy',
-        map: [{}, {}]
+        map: [{ name: 'myMap4' }, { name: 'myMap5' }]
       },
       EXPECTED_RESULT: `
         <div>

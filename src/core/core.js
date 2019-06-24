@@ -5,6 +5,7 @@ import SearchDataTransformer from './search/searchdatatransformer';
 
 import Storage from './storage/storage';
 import * as StorageKeys from './storage/storagekeys';
+import Filter from './models/filter';
 
 export default class Core {
   constructor (opts = {}) {
@@ -81,21 +82,61 @@ export default class Core {
       });
   }
 
-  autoComplete (queryString, verticalKey, barKey) {
-    const storageKey = barKey ? `${StorageKeys.AUTOCOMPLETE}.${barKey}` : StorageKeys.AUTOCOMPLETE;
+  /**
+   * Given an input, query for a list of similar results and insert into storage
+   *
+   * @param {string} input     the string to autocomplete
+   * @param {string} namespace the namespace to use for the storage key
+   */
+  autoCompleteUniversal (input, namespace) {
     return this._autoComplete
-      .query(queryString, verticalKey, barKey)
+      .queryUniversal(input)
       .then(data => {
-        this.storage.insert(storageKey, data);
+        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
-  autoCompleteFilter (input, verticalKey, barKey) {
+  /**
+   * Given an input, query for a list of similar results in the provided vertical
+   * and insert into storage
+   *
+   * @param {string} input       the string to autocomplete
+   * @param {string} namespace the namespace to use for the storage key
+   * @param {string} verticalKey the vertical key for the experience
+   * @param {string} barKey      the bar key for the experience
+   */
+  autoCompleteVertical (input, namespace, verticalKey, barKey) {
+    return this._autoComplete
+      .queryVertical(input, verticalKey, barKey)
+      .then(data => {
+        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+      });
+  }
+
+  /**
+   * Given an input, provide a list of suitable filters for autocompletion
+   *
+   * @param {string} input         the string to search for filters with
+   * @param {string} namespace     the namespace to use for the storage key
+   * @param {string} verticalKey   the vertical key for the experience
+   * @param {string} barKey        the bar key for the experience
+   */
+  autoCompleteFilter (input, namespace, verticalKey, barKey) {
     return this._autoComplete
       .queryFilter(input, verticalKey, barKey)
       .then(data => {
-        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${barKey}`, data);
+        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
+  }
+
+  /**
+   * Stores the given filter into storage, to be used for the next search
+   *
+   * @param {string} namespace the namespace to use for the storage key
+   * @param {string} filter    the filter string
+   */
+  setFilter (namespace, filter) {
+    this.storage.insert(`${StorageKeys.FILTER}.${namespace}`, Filter.from(filter));
   }
 
   on (evt, moduleId, cb) {

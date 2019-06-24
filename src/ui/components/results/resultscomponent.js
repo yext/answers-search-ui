@@ -61,6 +61,10 @@ export default class ResultsComponent extends Component {
     return this;
   }
 
+  static get duplicatesAllowed () {
+    return true;
+  }
+
   setState (data, val) {
     if (Object.keys(data).length === 0) {
       return this;
