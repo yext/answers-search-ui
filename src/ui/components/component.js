@@ -15,6 +15,13 @@ export default class Component {
     this.moduleId = null;
 
     /**
+     * Unique name of this component instance
+     * Used to distinguish between other components of the same type
+     * @type {String}
+     */
+    this.name = opts.name || this.constructor.name;
+
+    /**
      * Cache the options so that we can propogate properly to child components
      * @type {Object}
      */
@@ -152,6 +159,10 @@ export default class Component {
     return 'Component';
   }
 
+  static areDuplicateNamesAllowed () {
+    return false;
+  }
+
   init (opts) {
     this.setState(opts.data || opts.state || {});
     this.onCreate();
@@ -185,6 +196,7 @@ export default class Component {
     let childComponent = this.componentManager.create(
       type,
       Object.assign({
+        name: data.name,
         parent: this,
         data: data
       }, opts || {}, {

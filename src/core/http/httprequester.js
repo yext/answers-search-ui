@@ -56,8 +56,8 @@ export default class HttpRequester {
         searchQuery += '&';
       }
 
-      searchQuery += key + '=' + params[key];
+      searchQuery += key + '=' + encodeURIComponent(params[key]);
     }
-    return encodeURI(url + searchQuery);
+    return url + searchQuery;
   }
 }

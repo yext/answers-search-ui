@@ -38,6 +38,12 @@ export class AnswersUiError extends AnswersBaseError {
   }
 }
 
+export class AnswersComponentError extends AnswersBaseError {
+  constructor (message, component, causedBy) {
+    super(201, message, component, causedBy);
+  }
+}
+
 export class AnswersEndpointError extends AnswersBaseError {
   constructor (message, boundary, causedBy) {
     super(300, message, boundary, causedBy);

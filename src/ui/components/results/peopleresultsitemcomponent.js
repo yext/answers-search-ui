@@ -10,4 +10,8 @@ export default class PeopleResultsItemComponent extends ResultsItemComponent {
   static get type () {
     return 'PeopleResultsItemComponent';
   }
+
+  static areDuplicateNamesAllowed () {
+    return true;
+  }
 }

@@ -9,4 +9,8 @@ export default class VerticalResults {
   static from (response) {
     return new VerticalResults(Section.from(response));
   }
+
+  static areDuplicateNamesAllowed () {
+    return true;
+  }
 }

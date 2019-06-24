@@ -14,6 +14,10 @@ export default class UniversalResultsComponent extends Component {
     return 'UniversalResults';
   }
 
+  static areDuplicateNamesAllowed () {
+    return true;
+  }
+
   init (opts) {
     super.init(opts);
     return this;

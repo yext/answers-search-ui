@@ -10,4 +10,8 @@ export default class EventResultsItemComponent extends ResultsItemComponent {
   static get type () {
     return 'EventResultsItemComponent';
   }
+
+  static areDuplicateNamesAllowed () {
+    return true;
+  }
 }
