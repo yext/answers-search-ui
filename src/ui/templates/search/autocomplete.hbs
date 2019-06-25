@@ -18,7 +18,7 @@
         <li class="js-yext-autocomplete-option yext-autocomplete-option {{#ifeq ../../currentSelected ../../currentIndex}}yext-selected{{/ifeq}}"
             data-value="{{value}}"
             data-short="{{shortValue}}"
-            data-filter='{"key": "{{{key}}}", "value": "{{{value}}}", "filter": "{{{json filter}}}"}'>
+            data-filter='{{json filter}}'>
             {{{highlightedValue}}}
         </li>
       {{/each}}
