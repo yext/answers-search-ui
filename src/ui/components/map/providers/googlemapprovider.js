@@ -161,35 +161,38 @@ class GoogleMapMarkerConfig {
 
     markers.forEach((marker) => {
       // Support configuration as a function
+      let pinConfigObj = {};
       if (typeof pinConfig === 'function') {
-        pinConfig = pinConfig(
+        pinConfigObj = pinConfig(
           marker.item,
           MapProvider.DEFAULT_PIN_CONFIG,
           marker);
+      } else {
+        pinConfigObj = pinConfig;
       }
 
       // Transform our Configuration Object into the expected
       // Google API format.
       let icon = {};
-      if (pinConfig.anchor) {
-        icon.anchor = google.maps.Point(pinConfig.anchor.x, pinConfig.anchor.y);
+      if (pinConfigObj.anchor) {
+        icon.anchor = google.maps.Point(pinConfigObj.anchor.x, pinConfigObj.anchor.y);
       }
 
-      if (pinConfig.scaledSize) {
-        icon.scaledSize = google.maps.Size(pinConfig.scaledSize.w, pinConfig.scaledSize.h);
+      if (pinConfigObj.scaledSize) {
+        icon.scaledSize = google.maps.Size(pinConfigObj.scaledSize.w, pinConfigObj.scaledSize.h);
       }
 
-      if (pinConfig.url) {
+      if (pinConfigObj.url) {
         icon.url = iconCfg.url;
       }
 
-      if (pinConfig.svg) {
-        icon.url = `data:image/svg+xml;charset=utf-8, ${encodeURIComponent(pinConfig.svg)}`;
+      if (pinConfigObj.svg) {
+        icon.url = `data:image/svg+xml;charset=utf-8, ${encodeURIComponent(pinConfigObj.svg)}`;
       }
 
       let label;
-      if (pinConfig.label) {
-        label = pinConfig.label;
+      if (pinConfigObj.label) {
+        label = pinConfigObj.label;
       } else {
         label = marker.label.toString();
       }
