@@ -107,7 +107,7 @@ export default class HandlebarsRenderer extends Renderer {
     this.registerHelper('json', function (name, value, options) {
       return name === undefined
         ? ''
-        : JSON.stringify(name).replace(/"/g, '\\"');
+        : JSON.stringify(name);
     });
   }
 }

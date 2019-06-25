@@ -167,13 +167,10 @@ export default class AutoCompleteComponent extends Component {
     // Allow the user to select a result with the mouse
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'mousedown', (evt, target) => {
       let data = target.dataset;
-
       let val = data.short;
 
-      let filter = JSON.parse(data.filter);
-
       this.updateQuery(val);
-      this._onSubmit(val, filter.filter);
+      this._onSubmit(val, data.filter);
       this.close();
     });
 
