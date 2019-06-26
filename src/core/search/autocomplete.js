@@ -2,6 +2,7 @@
 
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
+import { AnswersEndpointError } from '../errors/errors';
 
 /**
  * A wrapper around the AutoComplete {ApiRequest} endpoints
@@ -53,7 +54,7 @@ export default class AutoComplete {
       params: {
         'input': input,
         'answersKey': this._answersKey,
-        'experiencekey': verticalKey,
+        'experienceKey': verticalKey,
         'inputKey': barKey
       }
     });
@@ -61,7 +62,9 @@ export default class AutoComplete {
     return request.get()
       .then(response => response.json())
       .then(response => AutoCompleteDataTransformer.filter(response.response, barKey))
-      .catch(error => console.error(error));
+      .catch(error => {
+        throw new AnswersEndpointError('Filter search request failed', 'AutoComplete', error);
+      });
   }
 
   queryVertical (input, verticalKey, barKey) {
@@ -80,7 +83,9 @@ export default class AutoComplete {
     return request.get()
       .then(response => response.json())
       .then(response => AutoCompleteDataTransformer.vertical(response.response, request._params.barKey))
-      .catch(error => console.error(error));
+      .catch(error => {
+        throw new AnswersEndpointError('Vertical search request failed', 'AutoComplete', error);
+      });
   }
 
   queryUniversal (queryString) {
@@ -97,6 +102,9 @@ export default class AutoComplete {
 
     return request.get(queryString)
       .then(response => response.json())
-      .then(response => AutoCompleteDataTransformer.universal(response.response));
+      .then(response => AutoCompleteDataTransformer.universal(response.response))
+      .catch(error => {
+        throw new AnswersEndpointError('Universal search request failed', 'AutoComplete', error);
+      });
   }
 }
