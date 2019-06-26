@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
+import SearchParams from '../../dom/SearchParams';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -193,7 +194,7 @@ export default class FilterSearchComponent extends Component {
 
   getUrlParams (url) {
     url = url || window.location.search.substring(1);
-    return new URLSearchParams(url);
+    return new SearchParams(url);
   }
 
   bindBrowserHistory () {

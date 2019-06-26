@@ -3,6 +3,7 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchParams from '../../dom/SearchParams';
 
 /**
  * The Tab is a model that is used to power the Navigation tabs in the view.
@@ -149,7 +150,7 @@ export default class NavigationComponent extends Component {
   }
 
   getUrlParams () {
-    return new URLSearchParams(window.location.search.substring(1));
+    return new SearchParams(window.location.search.substring(1));
   }
 
   /**
