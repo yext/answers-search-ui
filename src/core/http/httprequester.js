@@ -41,7 +41,7 @@ export default class HttpRequester {
 
   request (method, url, opts) {
     return fetch(url, Object.assign({
-      method: 'get',
+      method,
       credentials: 'include'
     }, opts));
   }
