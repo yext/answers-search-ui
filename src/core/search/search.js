@@ -46,7 +46,7 @@ export default class Search {
       params: {
         'input': queryString,
         'answersKey': this._answersKey,
-        'filter': filter,
+        'filters': filter,
         'verticalKey': verticalKey
       }
     });
