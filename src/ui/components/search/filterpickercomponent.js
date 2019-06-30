@@ -13,7 +13,7 @@ export default class FilterPickerComponent extends Component {
      * The template name to use for rendering with handlebars
      * @type {string}
      */
-    this._templateName = 'search/search';
+    this._templateName = 'search/filterpicker';
 
     /**
      * The input key for the vertical search configuration
