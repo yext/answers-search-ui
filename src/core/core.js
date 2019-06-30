@@ -6,7 +6,7 @@ import AutoComplete from './search/autocomplete';
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import Storage from './storage/storage';
-import * as StorageKeys from './storage/storagekeys';
+import { StorageKeys } from './storage/storagekeys';
 import Filter from './models/filter';
 
 export default class Core {

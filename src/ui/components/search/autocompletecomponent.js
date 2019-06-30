@@ -2,7 +2,7 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import { AUTOCOMPLETE } from '../../../core/storage/storagekeys';
+import { StorageKeys } from '../../../core/storage/storagekeys';
 
 const Keys = {
   BACKSPACE: 8,
@@ -56,7 +56,7 @@ export default class AutoCompleteComponent extends Component {
      * An internal reference for the data-storage to listen for updates from the server
      * @type {string}
      */
-    this.moduleId = `${AUTOCOMPLETE}.${this.name}`;
+    this.moduleId = `${StorageKeys.AUTOCOMPLETE}.${this.name}`;
 
     /**
      * The default handlebars template name to use for rendering
