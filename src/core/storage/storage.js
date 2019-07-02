@@ -9,7 +9,18 @@ export default class Storage {
     this._futureListeners = {};
   }
 
-  insert (key, data) {
+  /**
+   * Set the data in storage with the given key to the provided data,
+   * completely overwriting any existing data.
+   * @param {string} key the storage key to set
+   * @param {*} data the data to set
+   */
+  set (key, data) {
+    this._initDataContainer(key, data);
+    this._moduleDataContainer[key].set(data);
+  }
+
+  _initDataContainer (key, data) {
     if (key === undefined || key === null || typeof key !== 'string') {
       throw new AnswersStorageError('Invalid storage key provided', key, data);
     }
@@ -21,8 +32,6 @@ export default class Storage {
       this._moduleDataContainer[key] = new ModuleData(key);
       this._applyFutureListeners(key);
     }
-
-    this._moduleDataContainer[key].set(data);
   }
 
   getState (moduleId) {
