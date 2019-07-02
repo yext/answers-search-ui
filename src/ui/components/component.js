@@ -4,6 +4,8 @@ import { Renderers } from '../rendering/const';
 
 import DOM from '../dom/dom';
 import State from './state';
+import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused-vars
+import AnalyticsEvent from '../../core/analytics/analyticsevent';
 
 export default class Component {
   constructor (type, opts = {}) {
@@ -65,6 +67,12 @@ export default class Component {
      * @type {ComponentManager}
      */
     this.componentManager = opts.componentManager || null;
+
+    /**
+     * A local reference to the analytics reporter, used to report events for this component
+     * @type {AnalyticsReporter}
+     */
+    this.analyticsReporter = opts.analyticsReporter || null;
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
@@ -255,6 +263,11 @@ export default class Component {
 
     this._isMounted = true;
     this._onMount();
+
+    // Attach analytics hooks as necessary
+    let domHooks = DOM.queryAll(this._container, '[data-eventtype]');
+    domHooks.forEach(this._createAnalyticsHook.bind(this));
+
     return this;
   }
 
@@ -300,44 +313,59 @@ export default class Component {
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     let domComponents = DOM.queryAll(el, '[data-component]');
-    domComponents.forEach((domComponent) => {
-      let dataset = domComponent.dataset;
-      let type = dataset.component;
-      let prop = dataset.prop;
-      let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
-
-      // Rendering a sub component should be within the context,
-      // of the node that we processed it from
-      opts = Object.assign(opts, {
-        container: domComponent
-      });
-
-      let childData = data[prop];
-
-      // TODO(billy) Right now, if we provide an array as the data prop,
-      // the behavior is to create many components for each item in the array.
-      // THAT interface SHOULD change to use a different property that defines
-      // whether to array data should be used for a single component or
-      // to create many components for each item.
-      // Overloading and having this side effect is unintuitive and WRONG
-      if (!Array.isArray(childData)) {
-        let childComponent = this.addChild(childData, type, opts);
-        DOM.append(domComponent, childComponent.render(childData));
-        return;
-      }
-
-      // Otherwise, render the component as expected
-      let childHTML = [];
-      for (let i = 0; i < childData.length; i++) {
-        let childComponent = this.addChild(childData[i], type, opts);
-        childHTML.push(childComponent.render(childData[i]));
-      }
-
-      DOM.append(domComponent, childHTML.join(''));
-    });
+    domComponents.forEach(c => this._createSubcomponent(c, data));
 
     this.afterRender();
     return el.innerHTML;
+  }
+
+  _createSubcomponent (domComponent, data) {
+    let dataset = domComponent.dataset;
+    let type = dataset.component;
+    let prop = dataset.prop;
+    let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
+
+    // Rendering a sub component should be within the context,
+    // of the node that we processed it from
+    opts = Object.assign(opts, {
+      container: domComponent
+    });
+
+    let childData = data[prop];
+
+    // TODO(billy) Right now, if we provide an array as the data prop,
+    // the behavior is to create many components for each item in the array.
+    // THAT interface SHOULD change to use a different property that defines
+    // whether to array data should be used for a single component or
+    // to create many components for each item.
+    // Overloading and having this side effect is unintuitive and WRONG
+    if (!Array.isArray(childData)) {
+      let childComponent = this.addChild(childData, type, opts);
+      DOM.append(domComponent, childComponent.render(childData));
+      return;
+    }
+
+    // Otherwise, render the component as expected
+    let childHTML = [];
+    for (let i = 0; i < childData.length; i++) {
+      let childComponent = this.addChild(childData[i], type, opts);
+      childHTML.push(childComponent.render(childData[i]));
+    }
+
+    DOM.append(domComponent, childHTML.join(''));
+  }
+
+  _createAnalyticsHook (domComponent) {
+    const dataset = domComponent.dataset;
+    const type = dataset.eventtype;
+    const label = dataset.eventlabel;
+    const options = dataset.eventoptions ? JSON.parse(dataset.eventoptions) : {};
+
+    DOM.on(domComponent, 'mousedown', () => {
+      const event = new AnalyticsEvent(type, label);
+      event.addOptions(options);
+      this.analyticsReporter.report(event);
+    });
   }
 
   /**

@@ -59,6 +59,10 @@ export default class ApiRequest {
     return this._requester.get(this._baseUrl + this._endpoint, this.params(this._params));
   }
 
+  post () {
+    return this._requester.post(this._baseUrl + this._endpoint, this.params(this._params));
+  }
+
   params (params) {
     var baseParams = {
       'v': this._version,

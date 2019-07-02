@@ -4,6 +4,7 @@ import Handlebars from 'handlebars/dist/handlebars.min.js';
 
 import Component from '../../../src/ui/components/component';
 import { COMPONENT_MANAGER } from '../../../src/ui/components/const';
+import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
 
 // The DOM doesn't exist within components in the JEST environment,
 // so we have to provide it to our DOM API properly.
@@ -38,6 +39,7 @@ const RENDERER = new HandlebarsRenderer({
 COMPONENT_MANAGER.setRenderer(RENDERER);
 
 let component;
+const reportMock = jest.fn();
 
 beforeEach(() => {
   // Always reset the DOM before each component render test
@@ -51,7 +53,8 @@ beforeEach(() => {
   component = new Component({
     container: '.test-component',
     renderer: RENDERER,
-    componentManager: COMPONENT_MANAGER
+    componentManager: COMPONENT_MANAGER,
+    analyticsReporter: { report: reportMock }
   });
 });
 
@@ -181,5 +184,31 @@ describe('render template components using markup syntax', () => {
     let testEl = DOM.create(CUSTOM_TEMPLATES_TEST.EXPECTED_RESULT);
 
     expect(renderEl.isEqualNode(testEl)).toBeTruthy();
+  });
+});
+
+describe('attaching analytics events', () => {
+  it('attaches analytics events based on data attributes during mount', () => {
+    const template = `<div data-eventtype="test_event" data-eventoptions='{"name":"{{{name}}}"}'>This is a test template</div>`;
+    const data = { name: 'Billy' };
+    const expected = `<div data-eventtype="test_event" data-eventoptions='{"name":"Billy"}'>This is a test template</div>`;
+
+    const domOn = jest.spyOn(DOM, 'on');
+
+    component.setTemplate(template);
+
+    let renderEl = DOM.create(component.render(data));
+    let testEl = DOM.create(expected);
+    expect(renderEl.isEqualNode(testEl)).toBeTruthy();
+
+    component.setState(data);
+    component.mount();
+    expect(domOn).toHaveBeenCalledTimes(1);
+
+    DOM.trigger('[data-eventtype]', 'mousedown');
+    expect(reportMock).toHaveBeenCalledTimes(1);
+    const expectedEvent = new AnalyticsEvent('test_event');
+    expectedEvent.addOptions({ name: 'Billy' });
+    expect(reportMock).toHaveBeenCalledWith(expectedEvent);
   });
 });

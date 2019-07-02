@@ -10,6 +10,7 @@ import {
 } from './ui/index';
 
 import ErrorReporter from './core/errors/errorreporter';
+import { AnalyticsReporter } from './core';
 
 /**
  * The main Answers interface
@@ -61,7 +62,8 @@ class Answers {
       apiKey: opts.apiKey,
       answersKey: opts.answersKey
     }))
-      .setRenderer(this.renderer);
+      .setRenderer(this.renderer)
+      .setAnalyticsReporter(new AnalyticsReporter(opts.apiKey, opts.answersKey));
 
     this._onReady = opts.onReady || function () {};
 
