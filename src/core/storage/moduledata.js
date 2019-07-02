@@ -12,48 +12,22 @@ export default class ModuleData extends EventEmitter {
     this.set(data);
   }
 
+  /**
+   * replaces the currently held data with the given data
+   * @param {*} data the data to replace the current data
+   */
   set (data) {
-    data = data || {};
-
-    if (this._data === undefined) {
-      this._data = {};
-    }
+    const newData = data || {};
 
     this.capturePrevious();
 
-    // TODO(billy) This assumes the top level properties are all contained within
-    // an object. Probably not a good assumption to make.
-    let keys = Object.keys(data);
-    let len = keys.length;
-    let isDirty = false;
-
-    // Reset the object if its being applied as empty
-    if (keys.length === 0) {
-      this._data = data;
-      isDirty = true;
-    }
-
-    for (let i = 0; i < len; i++) {
-      let prop = keys[i];
-      let val = data[keys[i]];
-
-      // TODO(billy) For now, one level of comparison is probably fine,
-      // in the future we'll probably need to do some deeper object comparisons
-      // If the value is already correct, no updates!
-      if (this._data[prop] === val) {
-        continue;
+    for (const key of Object.keys(newData)) {
+      if (this._data[key] !== newData[key]) {
+        this._data = newData;
+        this.emit('update', this._data);
+        return this;
       }
-
-      this._data[prop] = val;
-      isDirty = true;
     }
-
-    // Only emit updates if the model was dirty
-    if (isDirty) {
-      this.emit('update', this._data);
-    }
-
-    return this;
   }
 
   capturePrevious () {
