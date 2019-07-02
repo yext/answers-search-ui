@@ -65,3 +65,10 @@ export class AnswersStorageError extends AnswersBaseError {
     this.data = data;
   }
 }
+
+export class AnswersAnalyticsError extends AnswersBaseError {
+  constructor (message, event, causedBy) {
+    super(402, message, 'Analytics', causedBy);
+    this.event = event;
+  }
+}
