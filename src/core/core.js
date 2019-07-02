@@ -68,8 +68,8 @@ export default class Core {
       .verticalQuery(queryString, verticalKey, filter)
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
-        this.storage.insert(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.insert(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
       });
   }
 
@@ -78,14 +78,14 @@ export default class Core {
       .query(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
-        this.storage.insert(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.insert(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.storage.insert(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS]);
       });
   }
 
   /**
-   * Given an input, query for a list of similar results and insert into storage
+   * Given an input, query for a list of similar results and set into storage
    *
    * @param {string} input     the string to autocomplete
    * @param {string} namespace the namespace to use for the storage key
@@ -94,13 +94,13 @@ export default class Core {
     return this._autoComplete
       .queryUniversal(input)
       .then(data => {
-        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
   /**
    * Given an input, query for a list of similar results in the provided vertical
-   * and insert into storage
+   * and set into storage
    *
    * @param {string} input       the string to autocomplete
    * @param {string} namespace the namespace to use for the storage key
@@ -111,7 +111,7 @@ export default class Core {
     return this._autoComplete
       .queryVertical(input, verticalKey, barKey)
       .then(data => {
-        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
@@ -127,7 +127,7 @@ export default class Core {
     return this._autoComplete
       .queryFilter(input, verticalKey, barKey)
       .then(data => {
-        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
@@ -138,7 +138,7 @@ export default class Core {
    * @param {string} filter    the filter string
    */
   setFilter (namespace, filter) {
-    this.storage.insert(`${StorageKeys.FILTER}.${namespace}`, Filter.from(filter));
+    this.storage.set(`${StorageKeys.FILTER}.${namespace}`, Filter.from(filter));
   }
 
   on (evt, moduleId, cb) {
