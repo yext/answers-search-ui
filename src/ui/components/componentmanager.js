@@ -47,6 +47,11 @@ export default class ComponentManager {
      * @type {HandlebarsRenderer}
      */
     this._renderer = null;
+
+    /**
+     * A local reference to the analytics reporter dependency
+     */
+    this._analyticsReporter = null;
   }
 
   static setInstance (instance) {
@@ -68,6 +73,11 @@ export default class ComponentManager {
 
   setCore (core) {
     this._core = core;
+    return this;
+  }
+
+  setAnalyticsReporter (reporter) {
+    this._analyticsReporter = reporter;
     return this;
   }
 
@@ -94,6 +104,7 @@ export default class ComponentManager {
     opts = Object.assign({
       core: this._core,
       renderer: this._renderer,
+      analyticsReporter: this._analyticsReporter,
       componentManager: this
     }, opts);
 
