@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Source: ui/components/map/providers/googlemapprovider.js</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Source: ui/components/map/providers/googlemapprovider.js</h1>
+
+    
+
+
+
+    
+    <section>
+        <article>
+            <pre class="prettyprint source linenums"><code>/** @module GoogleMapProvider */
+
+import MapProvider from './mapprovider';
+import DOM from '../../../dom/dom';
+
+/* global google, iconCfg */
+
+export default class GoogleMapProvider extends MapProvider {
+  constructor (opts) {
+    super(opts);
+
+    this._clientId = opts.clientId;
+    this._signature = opts.signature;
+
+    if (!this.hasValidClientCredentials() &amp;&amp; !this._apiKey) {
+      throw new Error('GoogleMapsProvider: Missing `apiKey` or {`clientId`, `signature`}');
+    }
+  }
+
+  loadJS (onLoad) {
+    if (DOM.query('#yext-map-js')) {
+      if (typeof onLoad === 'function') {
+        onLoad();
+      }
+      return;
+    }
+
+    let script = DOM.createEl('script', {
+      id: 'yext-map-js',
+      onload: () => {
+        this._isLoaded = true;
+        this._onLoaded();
+      },
+      async: true,
+      src: `//maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
+    });
+
+    DOM.append('body', script);
+  }
+
+  generateStatic (mapData) {
+    let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
+      mapData.mapMarkers,
+      this._pinConfig
+    );
+
+    let encodedMarkers = GoogleMapMarkerConfig.serialize(googleMapMarkerConfigs);
+    return `
+      &lt;img src="//maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&amp;size=${this._width}x${this._height}&amp;${this.generateCredentials()}">`;
+  }
+
+  generateCredentials () {
+    if (this.hasValidClientCredentials()) {
+      return `client=${this._clientId}`;
+    } else {
+      return `key=${this._apiKey}`;
+    }
+  }
+
+  hasValidClientCredentials () {
+    // Signature is only required if map is static
+    return this._clientId &amp;&amp; (this._signature || !this._isStatic);
+  }
+
+  init (el, mapData) {
+    if (!mapData || mapData.mapMarkers.length &lt;= 0) {
+      this._map = null;
+      return this;
+    }
+
+    // NOTE(billy) This timeout is a hack for dealing with async nature.
+    // Only here for demo purposes, so we'll fix later.
+    setTimeout(() => {
+      let container = DOM.query(el);
+      DOM.css(container, {
+        width: this._width,
+        height: this._height
+      });
+
+      this.map = new google.maps.Map(container, {
+        zoom: this._zoom
+      });
+
+      // Apply our search data to our GoogleMap
+      let bounds = new google.maps.LatLngBounds();
+      let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
+        mapData.mapMarkers,
+        this._pinConfig,
+        this.map);
+
+      for (let i = 0; i &lt; googleMapMarkerConfigs.length; i++) {
+        let marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
+        bounds.extend(marker.position);
+      }
+
+      this.map.fitBounds(bounds);
+    }, 100);
+  }
+}
+
+// TODO(billy) Move to own class
+class GoogleMapMarkerConfig {
+  constructor (opts) {
+    /**
+     * A reference to the google map, that the marker is appended to
+     * @type {GoogleMap}
+     */
+    this.map = opts.map || undefined;
+
+    /**
+     * The coordinates of the marker (lat/lng)
+     * @type {Object}
+     */
+    this.position = opts.position || {
+      lat: undefined,
+      lng: undefined
+    };
+
+    /**
+     * The properties/settings of the icon used for the marker
+     * e.g. {
+     *        anchor: { x: 0, y: 0 }
+     *        url: 'path/to/url.jpg'
+     *        scaledSize: { w: 0, h: 0 }
+     *       }
+     *
+     * @type {object}
+     */
+    this.icon = opts.icon || undefined;
+
+    /**
+     * The label of the marker to use
+     * @type {string}
+     */
+    this.label = opts.label || undefined;
+  }
+
+  /**
+   * Serializes an array of marker configs
+   * @param {Array.&lt;GoogleMapMarkerConfig>} googleMapMarkerConfigs
+   * @returns {Array.&lt;String>}
+   */
+  static serialize (googleMapMarkerConfigs) {
+    let serializedMarkers = [];
+    googleMapMarkerConfigs.forEach((marker) => {
+      serializedMarkers.push(`markers=label:${marker.label}|${marker.position.lat},${marker.position.lng}`);
+    });
+    return serializedMarkers.join('&amp;');
+  }
+
+  /**
+   * Converts the storage data model of markers into GoogleAPIMarker
+   * @param {GoogleMap} A reference to the google map to apply the marker to
+   * @param {Array.&lt;Object>} markers The data of the marker
+   * @param {Object} pinConfig The configuration to apply to the marker
+   * @returns {Array.&lt;GoogleMapMarkerConfig>}
+   */
+  static from (markers, pinConfig, map) {
+    let googleMapMarkerConfigs = [];
+    if (!Array.isArray(markers)) {
+      markers = [markers];
+    }
+
+    markers.forEach((marker) => {
+      // Support configuration as a function
+      if (typeof pinConfig === 'function') {
+        pinConfig = pinConfig(
+          marker.item,
+          MapProvider.DEFAULT_PIN_CONFIG,
+          marker);
+      }
+
+      // Transform our Configuration Object into the expected
+      // Google API format.
+      let icon = {};
+      if (pinConfig.anchor) {
+        icon.anchor = google.maps.Point(pinConfig.anchor.x, pinConfig.anchor.y);
+      }
+
+      if (pinConfig.scaledSize) {
+        icon.scaledSize = google.maps.Size(pinConfig.scaledSize.w, pinConfig.scaledSize.h);
+      }
+
+      if (pinConfig.url) {
+        icon.url = iconCfg.url;
+      }
+
+      if (pinConfig.svg) {
+        icon.url = `data:image/svg+xml;charset=utf-8, ${encodeURIComponent(pinConfig.svg)}`;
+      }
+
+      let label;
+      if (pinConfig.label) {
+        label = pinConfig.label;
+      } else {
+        label = marker.label.toString();
+      }
+
+      // NOTE(billy) Google maps doesn't handle empty icon objects nicely
+      // Make google maps happy if no settings for icon are provided;
+      if (Object.keys(icon).length === 0) {
+        icon = undefined;
+      }
+
+      googleMapMarkerConfigs.push(
+        new GoogleMapMarkerConfig({
+          map: map,
+          position: {
+            lat: marker.latitude,
+            lng: marker.longitude
+          },
+          icon: icon,
+          label: label
+        })
+      );
+    });
+
+    return googleMapMarkerConfigs;
+  }
+}
+</code></pre>
+        </article>
+    </section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterPickerComponent.html">FilterPickerComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-Search.html">Search</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 10:34:41 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
