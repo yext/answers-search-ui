@@ -1,3 +1,5 @@
+/** @module Section */
+
 import Result from './result';
 
 export default class Section {

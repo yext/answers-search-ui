@@ -1,3 +1,5 @@
+/** @module DirectAnswerComponent */
+
 import Component from '../component';
 
 export default class DirectAnswerComponent extends Component {

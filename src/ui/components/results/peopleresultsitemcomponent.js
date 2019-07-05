@@ -1,3 +1,5 @@
+/** @module PeopleResultsItemComponent */
+
 import ResultsItemComponent from './resultsitemcomponent';
 
 export default class PeopleResultsItemComponent extends ResultsItemComponent {

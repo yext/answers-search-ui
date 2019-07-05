@@ -1,3 +1,5 @@
+/** @module FilterPickerComponent */
+
 import Component from '../component';
 import DOM from '../../dom/dom';
 import * as StorageKeys from '../../../core/storage/storagekeys';

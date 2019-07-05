@@ -1,3 +1,5 @@
+/** @module Core */
+
 import Search from './search/search';
 import AutoComplete from './search/autocomplete';
 

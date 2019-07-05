@@ -1,3 +1,5 @@
+/** @module GoogleMapProvider */
+
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 

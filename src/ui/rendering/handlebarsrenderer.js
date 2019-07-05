@@ -1,3 +1,5 @@
+/** @module HandlebarsRenderer */
+
 import Renderer from './renderer';
 export default class HandlebarsRenderer extends Renderer {
   constructor (templates = {}, opts = {}) {

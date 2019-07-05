@@ -1,3 +1,5 @@
+/** @module AutoCompleteDataTransformer */
+
 import AutoCompleteData from '../models/autocompletedata';
 
 /**

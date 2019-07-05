@@ -1,3 +1,5 @@
+/** @module State */
+
 import EventEmitter from '../../core/eventemitter/eventemitter';
 
 /**

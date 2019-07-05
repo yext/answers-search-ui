@@ -1,3 +1,5 @@
+/** @module HttpRequester */
+
 /* global fetch */
 
 /**

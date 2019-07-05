@@ -1,3 +1,5 @@
+/** @module EventResultsItemComponent */
+
 import ResultsItemComponent from './resultsitemcomponent';
 
 export default class EventResultsItemComponent extends ResultsItemComponent {

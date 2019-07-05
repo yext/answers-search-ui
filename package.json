@@ -23,6 +23,7 @@
     "gulp-umd": "^2.0.0",
     "gulp-wrap": "^0.14.0",
     "jest": "^24.8.0",
+    "jsdoc": "~3.6.2",
     "node-sass": "^4.12.0",
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.3.2",
@@ -37,6 +38,7 @@
   "scripts": {
     "build": "gulp && size-limit",
     "dev": "gulp dev",
+    "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "semistandard",
     "test": "semistandard && jest",
     "size": "size-limit"
@@ -56,6 +58,9 @@
       "expect",
       "jest",
       "DOMParser"
+    ],
+    "ignore": [
+      "docs/"
     ]
   },
   "author": "Billy",

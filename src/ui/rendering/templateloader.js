@@ -1,3 +1,5 @@
+/** @module TemplateLoader */
+
 import DOM from '../dom/dom';
 
 export default class TemplateLoader {

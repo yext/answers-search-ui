@@ -1,3 +1,5 @@
+/** @module ComponentManager */
+
 import { AnswersComponentError } from '../../core/errors/errors';
 
 /**

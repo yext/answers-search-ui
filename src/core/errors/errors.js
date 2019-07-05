@@ -1,3 +1,5 @@
+/** @module Errors */
+
 /**
  * Error codes fall into one of four categories:
  * 1XX errors: Basic errors

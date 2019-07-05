@@ -1,3 +1,5 @@
+/** @module Storage */
+
 import ModuleData from './moduledata';
 import { AnswersStorageError } from '../errors/errors';
 
