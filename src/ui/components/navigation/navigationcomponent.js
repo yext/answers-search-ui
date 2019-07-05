@@ -1,3 +1,5 @@
+/** @module NavigationComponent */
+
 import Component from '../component';
 
 export default class NavigationComponent extends Component {

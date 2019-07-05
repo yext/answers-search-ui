@@ -1,3 +1,5 @@
+/** @module SearchComponent */
+
 import Component from '../component';
 import DOM from '../../dom/dom';
 

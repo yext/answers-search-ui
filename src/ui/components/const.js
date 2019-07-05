@@ -1,3 +1,5 @@
+/** @module */
+
 import ComponentManager from './componentmanager';
 
 import Component from './component';

@@ -1,3 +1,5 @@
+/** @module */
+
 import Core from './core/core';
 
 import {
@@ -10,8 +12,7 @@ import {
 import ErrorReporter from './core/errors/errorreporter';
 
 /**
- * Our API should only be instantiable once
- * @type {ANSWERS} The instance of ANSWERS
+ * The main Answers interface
  */
 class Answers {
   constructor () {

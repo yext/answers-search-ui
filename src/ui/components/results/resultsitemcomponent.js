@@ -1,3 +1,5 @@
+/** @module ResultsItemComponent */
+
 import Component from '../component';
 
 export default class ResultsItemComponent extends Component {

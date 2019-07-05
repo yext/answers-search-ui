@@ -1,3 +1,5 @@
+/** @module SearchDataTransformer */
+
 import UniversalResults from '../models/universalresults';
 import DirectAnswer from '../models/directanswer';
 import Navigation from '../models/navigation';

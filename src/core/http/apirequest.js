@@ -1,3 +1,5 @@
+/** @module ApiRequest */
+
 import HttpRequester from './httprequester';
 
 /**

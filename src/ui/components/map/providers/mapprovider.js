@@ -1,3 +1,5 @@
+/** @module MapProvider */
+
 /**
  * The core MapProvider interface to implement for various types of map providers.
  * Implementations should extend this interface

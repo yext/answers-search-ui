@@ -1,3 +1,5 @@
+/** @module LocationResultsItemComponent */
+
 import ResultsItemComponent from './resultsitemcomponent';
 
 export default class LocationResultsItemComponent extends ResultsItemComponent {

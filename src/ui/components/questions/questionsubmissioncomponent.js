@@ -1,3 +1,5 @@
+/** @module QuestionSubmissionComponent */
+
 import Component from '../component';
 import DOM from '../../dom/dom';
 

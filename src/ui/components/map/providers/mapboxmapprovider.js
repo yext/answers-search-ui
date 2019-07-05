@@ -1,3 +1,5 @@
+/** @module MapBoxMapProvider */
+
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
