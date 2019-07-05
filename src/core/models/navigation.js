@@ -1,3 +1,5 @@
+/** @module Navigation */
+
 export default class Navigation {
   constructor (tabOrder) {
     this.tabOrder = tabOrder || [];

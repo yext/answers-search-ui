@@ -1,3 +1,5 @@
+/** @module */
+
 import Renderer from './renderer';
 import HandlebarsRenderer from './handlebarsrenderer';
 

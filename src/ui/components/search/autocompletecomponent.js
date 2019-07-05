@@ -1,3 +1,5 @@
+/** @module AutoCompleteComponent */
+
 import Component from '../component';
 import DOM from '../../dom/dom';
 import { AUTOCOMPLETE } from '../../../core/storage/storagekeys';

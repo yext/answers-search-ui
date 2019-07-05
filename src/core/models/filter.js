@@ -1,3 +1,5 @@
+/** @module Filter */
+
 export default class Filter {
   constructor (data = {}) {
     Object.assign(this, data);

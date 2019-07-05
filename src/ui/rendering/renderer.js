@@ -1,3 +1,5 @@
+/** @module Renderer */
+
 /**
  * Renderer is an abstract class that all Renderers should extend and implement
  */

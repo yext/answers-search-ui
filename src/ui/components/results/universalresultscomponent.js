@@ -1,3 +1,5 @@
+/** @module UniversalResultsComponent */
+
 import Component from '../component';
 import { UNIVERSAL_RESULTS } from '../../../core/storage/storagekeys';
 

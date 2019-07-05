@@ -1,3 +1,5 @@
+/** @module ErrorReporter */
+
 import { AnswersBaseError } from './errors';
 
 import ApiRequest from '../http/apirequest';

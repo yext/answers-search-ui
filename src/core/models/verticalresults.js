@@ -1,3 +1,5 @@
+/** @module VerticalResults */
+
 import Section from './section';
 
 export default class VerticalResults {

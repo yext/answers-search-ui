@@ -1,3 +1,5 @@
+/** @module Component */
+
 import { Renderers } from '../rendering/const';
 
 import DOM from '../dom/dom';

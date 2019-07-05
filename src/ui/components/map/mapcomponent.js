@@ -1,3 +1,5 @@
+/** @module MapComponent */
+
 import Component from '../component';
 
 import GoogleMapProvider from './providers/googlemapprovider';

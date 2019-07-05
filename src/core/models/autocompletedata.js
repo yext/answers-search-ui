@@ -1,3 +1,5 @@
+/** @module AutoCompleteData */
+
 export default class AutoCompleteData {
   constructor (data = {}) {
     this.sections = data.sections || [];

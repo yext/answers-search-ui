@@ -1,3 +1,5 @@
+/** @module */
+
 export const NAVIGATION = 'navigation';
 export const UNIVERSAL_RESULTS = 'universal-results';
 export const VERTICAL_RESULTS = 'vertical-results';

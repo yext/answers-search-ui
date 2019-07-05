@@ -1,3 +1,5 @@
+/** @module ModuleData */
+
 import EventEmitter from '../eventemitter/eventemitter';
 
 export default class ModuleData extends EventEmitter {

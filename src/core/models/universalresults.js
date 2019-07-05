@@ -1,3 +1,5 @@
+/** @module UniversalResults */
+
 import Section from './section';
 
 export default class UniversalResults {

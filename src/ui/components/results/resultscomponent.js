@@ -1,3 +1,5 @@
+/** @module ResultsComponent */
+
 import Component from '../component';
 
 import ResultsItemComponent from './resultsitemcomponent';

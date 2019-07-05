@@ -1,8 +1,14 @@
-let document = window.document;
-let parser = new DOMParser();
+/** @module DOM */
 
 /* global HTMLElement, HTMLDocument, Window, Event */
 
+let document = window.document;
+let parser = new DOMParser();
+
+/**
+ * Static interface for interacting with the DOM
+ * @namespace
+ */
 export default class DOM {
   static setup (d, p) {
     document = d;

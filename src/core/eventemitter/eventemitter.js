@@ -1,3 +1,5 @@
+/** @module EventEmitter */
+
 /**
  * EventEmitter is a base class for any object that wants to expose
  * a pub/sub interface, for emitting messages and providing listeners.

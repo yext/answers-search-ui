@@ -1,3 +1,5 @@
+/** @module AutoComplete */
+
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
 
