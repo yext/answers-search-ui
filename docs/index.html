@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Home</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Home</h1>
+
+    
+
+
+
+    
+
+
+    <h3> </h3>
+
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
+    <section>
+        <article><h1>Answers</h1>
+<p>Answers Javascript API Library.</p>
+<p>Outline:</p>
+<ol>
+<li><a href="#install-and-setup">Install / Setup</a>
+<ul>
+<li><a href="#configuration-options">Configuration Options</a></li>
+<li><a href="#template-helpers">Template Helpers</a></li>
+</ul>
+</li>
+<li><a href="#component-usage">Component Usage</a>
+<ul>
+<li><a href="#base-component-configuration">Base Component Configuration</a></li>
+<li><a href="#adding-a-component">Adding a Component</a></li>
+<li><a href="#using-a-custom-template">Using a Custom Template</a></li>
+<li><a href="#using-a-custom-renderer">Using a Custom Renderer</a></li>
+<li><a href="#custom-data-transforms">Custom Data Transforms</a></li>
+</ul>
+</li>
+<li><a href="#types-of-components">Types of Components</a>
+<ul>
+<li><a href="#navigation-component">Navigation Component</a></li>
+<li><a href="#searchbar-component">SearchBar Component</a></li>
+<li><a href="#direct-answer-component">DirectAnswer Component</a></li>
+<li><a href="#universal-results-component">UniversalResults Component</a></li>
+<li><a href="#vertical-results-component">VerticalResults Component</a></li>
+<li><a href="#qa-submission-component">QASubmission Component</a></li>
+</ul>
+</li>
+</ol>
+<h1>Install and Setup</h1>
+<p>To include the answers base CSS (optional).</p>
+<pre class="prettyprint source lang-html"><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://assets.sitescdn.net/answers/answers.css&quot;>
+</code></pre>
+<p>Adding the Javascript library</p>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://assets.sitescdn.net/answers/answers.min.js&quot; onload=&quot;ANSWERS.domReady(initAnswers)&quot; async>&lt;/script>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>function initAnswers() {
+  ANSWERS.init({
+    apiKey: '&lt;API_KEY_HERE>',
+    answersKey: '&lt;ANSWERS_KEY_HERE>',
+    onReady: function() {
+      // Component creation logic here
+    })
+  })
+}
+</code></pre>
+<h2>Configuration Options</h2>
+<p>Below is a list of configuration options that can be used during initialization.</p>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>type</th>
+<th>description</th>
+<th>required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>apiKey</td>
+<td>string</td>
+<td>Your API key</td>
+<td>required</td>
+</tr>
+<tr>
+<td>answersKey</td>
+<td>string</td>
+<td>The key used for your answers project</td>
+<td>required</td>
+</tr>
+<tr>
+<td>onReady</td>
+<td>function</td>
+<td>Invoked when the Answers component library is loaded/ready</td>
+<td>required</td>
+</tr>
+<tr>
+<td>useTemplates</td>
+<td>boolean</td>
+<td>default: <code>true</code>.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!</td>
+<td>not required</td>
+</tr>
+<tr>
+<td>templateUrl</td>
+<td>string</td>
+<td>Use precompiled template hosted by you</td>
+<td>not required</td>
+</tr>
+<tr>
+<td>templateBundle</td>
+<td>object</td>
+<td>Provide the precompiled templates</td>
+<td>not required</td>
+</tr>
+</tbody>
+</table>
+<h2>Template Helpers</h2>
+<p>When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them <a href="https://github.com/jonschlinkert/template-helpers">here</a>.</p>
+<p>If you want to register custom template helpers to the handlebars render, you can do so like this:</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.registerHelper('noop', function(options) {
+  return options.fn(this);
+})
+</code></pre>
+<p>You can learn more about the interface for registering helpers by taking a look at the <a href="https://handlebarsjs.com/block_helpers.html">Handlebars Block Helpers</a> documentation.</p>
+<h1>Component Usage</h1>
+<p>The Answers Component Library exposes an easy to use interface for adding and customizing various types of UI components on your page.</p>
+<p>Every component requires a containing HTML element.</p>
+<h2>Base Component Configuration</h2>
+<p>Every component has the same base configuration options.</p>
+<table>
+<thead>
+<tr>
+<th>option</th>
+<th>type</th>
+<th>description</th>
+<th>required</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>a unique name, if using multiple components of the same type</td>
+<td>optional</td>
+</tr>
+<tr>
+<td>container</td>
+<td>string</td>
+<td>the CSS selector to append the component.</td>
+<td>required</td>
+</tr>
+<tr>
+<td>class</td>
+<td>string</td>
+<td>a custom class to apply to the component</td>
+<td>not required</td>
+</tr>
+<tr>
+<td>template</td>
+<td>string</td>
+<td>override internal handlebars template</td>
+<td>not required</td>
+</tr>
+<tr>
+<td>render</td>
+<td>function</td>
+<td>override render function. data provided</td>
+<td>not required</td>
+</tr>
+<tr>
+<td>transformData</td>
+<td>function</td>
+<td>A hook for transforming data before it gets sent to render</td>
+<td>not required</td>
+</tr>
+<tr>
+<td>onMount</td>
+<td>function</td>
+<td>invoked when the HTML is mounted to the DOM</td>
+<td>not required</td>
+</tr>
+</tbody>
+</table>
+<h2>Adding a Component</h2>
+<p>Adding a component to your page is super easy!
+You can add many different <a href="#types-of-components">types</a> of components to your page.
+Each component supports the base configuration options above, as well as their own unique configurations.</p>
+<p>To start, every component requires an HTML container.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;search-container&quot;>&lt;/div>
+</code></pre>
+<p>Then, you can add a component to your page through the ANSWERS add interface.</p>
+<p>This is an example of the <code>SearchBar</code>. See <a href="#types-of-components">Types of Components</a> below.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  // -- other options --
+})
+</code></pre>
+<h2>Using a Custom Template</h2>
+<p>All component templates are written using handlebars.</p>
+<p>It's easy to override these templates with your own templates.
+Keep in mind, that you must provide valid handlebars syntax here.</p>
+<pre class="prettyprint source lang-js"><code>// Use handlebars syntax to create a template string
+let customTemplate = `&lt;div class=&quot;my-search&quot;>{{title}}&lt;/div>`
+
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  template: customTemplate
+})
+</code></pre>
+<h2>Using a Custom Renderer</h2>
+<p>If you want to use a use your own template language (e.g. soy, mustache, groovy, etc),
+you should NOT use the template argument. Instead, you can provide a custom render function to the component.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  render: function(data) {
+    // Using native ES6 templates -- but you can replace this with soy,
+    // or any other templating language as long as it returns a string.
+    return `&lt;div class=&quot;my-search&quot;>${data.title}&lt;/div>`
+  }
+})
+</code></pre>
+<h2>Custom Data Transforms</h2>
+<p>If you want to mutate the data thats provided to the render/template before it gets rendered,
+you can use the <code>transformData</code> hook.</p>
+<p>All properties and values that you return from here will be accessible from templates.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  transformData: (data) => {
+    // Extend/overide the data object
+    return Object.assign(data, {
+      title: data.title.toLowerCase()
+    })
+  },
+  render: function(data) {
+    // Using native ES6 templates -- but you can replace this with soy,
+    // or any other templating language as long as it returns a string.
+    return `&lt;div class=&quot;my-search&quot;>${data.title}&lt;/div>`
+  }
+})
+</code></pre>
+<h1>Types of Components</h1>
+<p>Each type of Component has it's own custom configurations. However, all components share the
+base configuration options defined above.</p>
+<h2>Navigation Component</h2>
+<p>The Navigation Component adds a dynamic experience to your pages navigation experience.
+When using multiple veritcal searches in a universal search, the navigation ordering will be automatically
+updated based on the search results.</p>
+<pre class="prettyprint source lang-html"><code>&lt;nav class=&quot;navigation-container&quot;>&lt;/nav>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('Navigation', {
+  container: '.navigation-container',
+  tabs: [
+    {
+      label: 'Home',         // The label used for the navigation element
+      url: './index.html',   // The link for the navigation element
+      isFirst: true,         // optional, will always show this item first
+      isActive: true         // optional, will add a special class to the item
+    },
+    {
+      configId: 'locations'  // optional, the vertical search config id
+      label: 'Location'      // The label used for the navigation element
+      url: 'locations.html'  // The link for the navigation element
+    },
+    {
+      configId: 'employees'  // optional, the vertical search config id
+      label: 'Employees'     // The label used for the navigation element
+      url: 'employees.html'  // The link for the navigation element
+    }
+  ]
+})
+</code></pre>
+<h2>SearchBar Component</h2>
+<p>The SearchBar component is the main entry point for search querying. It provides the input box, where the user
+types their query, as well as the autocomplete behavior.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;search-query-container&quot;>&lt;/div>
+</code></pre>
+<p>There are two types of search experiences. Universal Search and Vertical Search.
+Each provide a different way of auto complete.</p>
+<h3>For Universal Search:</h3>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
+  container: '.search-query-container',
+  title: 'Search my Brand',                // optional, defaults to 'Answers'
+  searchText: 'What are you looking for?', // optional, defaults to 'What are you interested in?'
+  autoFocus: true,                          // optional, defaults to false
+  redirectUrl: 'path/to/url'                // optional, redirect search query to url
+})
+</code></pre>
+<h3>For Vertical Search:</h3>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
+  container: '.search-query-container',
+  verticalKey: '&lt;VERTICAL_KEY>',      // required
+  barKey: '&lt;BAR_KEY>'                 // optional
+})
+</code></pre>
+<h2>Direct Answer Component</h2>
+<p>The Direct Answer Component will render the BEST result, if found,
+based on the query.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;direct-answer-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('DirectAnswer', {
+  container: '.direct-answer-container'
+})
+</code></pre>
+<h2>Universal Results Component</h2>
+<p>The Universal Results component will render the results of a query,
+across all configured verticals, seperated by sections.</p>
+<p>The most complex component has a ton of overridable configuration options.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;universal-results-container&quot;>&lt;/div>
+</code></pre>
+<h3>Basic Component</h3>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+})
+</code></pre>
+<h3>Custom Render for ALL Result Items</h3>
+<p>You can override the render function for EACH item in the result list,
+as apposed to the entire component.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  renderItem: function(data) {
+    return `my item ${data.name}`
+  }
+})
+</code></pre>
+<h3>Custom Template for ALL Result Items</h3>
+<p>You can override the handlebars template for EACH item in the result list,
+as apposed to the entire component.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  itemTemplate: `my item {{name}}`
+})
+</code></pre>
+<h3>Custom Render For Specific Vertical Result Items</h3>
+<p>You can override the render function for a particular section within the results list,
+by providing a vertical search config id as the context, and using the same options as above.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  config: {
+    'locations': { // The vertical search config id
+      renderItem: function(data) {
+        return `my item ${data.name}`;
+      }
+    }
+  }
+})
+</code></pre>
+<h3>Custom Template For Specific Vertical Result Items</h3>
+<p>You can override the handlebars template for a particular section within the results list,
+by providing a vertical search config id as the context, and using the same options as above.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  config: {
+    'locations': { // The vertical search config id
+      itemTemplate: `my item {{name}}`
+    }
+  }
+})
+</code></pre>
+<h2>Vertical Results Component</h2>
+<p>The Vertical Results component shares all the same configurations from Universal Results, but you don't need to specifiy a config or context.</p>
+<p>You define all the options at the top level object.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;results-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('VerticalResults', {
+  container: '.results-container',
+})
+</code></pre>
+<h2>QA Submission Component</h2>
+<p>The QA Submission component provides a form for submitting a QA question,
+when a search query is run.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;question-submission-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('QASubmission', {
+  container: '.question-submission-container',
+  nameLabel: 'Your Name:',             // Optional, defaults to 'Name:'
+  emailLabel: '*Email:',               // Optional, defaults to '*Email:'
+  questionLabel: 'Ask us anything!:',  // Optional, defaults to 'What is your question?'
+  privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
+  buttonLabel: 'Submit'                // Optional,  defaults to 'Submit:'
+})
+</code></pre></article>
+    </section>
+
+
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterPickerComponent.html">FilterPickerComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-Search.html">Search</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 10:34:41 GMT-0400 (Eastern Daylight Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>
