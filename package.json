@@ -39,7 +39,8 @@
     "dev": "gulp dev",
     "lint": "semistandard",
     "test": "semistandard && jest",
-    "size": "size-limit"
+    "size": "size-limit",
+    "fix": "semistandard --fix"
   },
   "jest": {
     "bail": 0,
