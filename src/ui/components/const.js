@@ -10,6 +10,9 @@ import SearchComponent from './search/searchcomponent';
 import FilterSearchComponent from './search/filtersearchcomponent';
 import AutoCompleteComponent from './search/autocompletecomponent';
 
+import FilterOptionsComponent from './filters/filteroptionscomponent';
+import FilterBoxComponent from './filters/filterboxcomponent';
+
 import DirectAnswerComponent from './results/directanswercomponent';
 import ResultsComponent from './results/resultscomponent';
 import UniversalResultsComponent from './results/universalresultscomponent';
@@ -34,6 +37,10 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(SearchComponent)
   .register(FilterSearchComponent)
   .register(AutoCompleteComponent)
+
+// Filter Components
+  .register(FilterBoxComponent)
+  .register(FilterOptionsComponent)
 
 // Results Components
   .register(DirectAnswerComponent)

@@ -1,0 +1,10 @@
+{{#each options}}
+  <input
+    type="radio"
+    class="js-yext-radio"
+    id="js-yext-radio-{{../name}}-{{@index}}"
+    name="{{../name}}"
+    value="{{value}}"
+    data-field="{{field}}">
+  <label for="js-yext-radio-{{../name}}-{{@index}}">{{label}}</label>
+{{/each}}

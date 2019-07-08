@@ -1,0 +1,9 @@
+{{#each options}}
+  <input
+    type="checkbox"
+    class="js-yext-checkbox"
+    id="js-yext-checkbox-{{../name}}-{{@index}}"
+    value="{{value}}"
+    data-field="{{field}}">
+  <label for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}}</label>
+{{/each}}
