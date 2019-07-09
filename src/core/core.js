@@ -38,6 +38,18 @@ export default class Core {
     this._answersKey = opts.answersKey;
 
     /**
+     * A reference to the client locale used for all requests. If not specified, defaults to "en" (for
+     * backwards compatibility).
+     * @type {string}
+     * @private
+     */
+    if (opts.locale != null) {
+      this._locale = opts.locale;
+    } else {
+      this._locale = 'en';
+    }
+
+    /**
      * A reference to the core data storage that powers the UI
      * @type {Storage}
      * @private
@@ -52,18 +64,20 @@ export default class Core {
      */
     this._searcher = new SearchApi({
       apiKey: this._apiKey,
-      answersKey: this._answersKey
+      answersKey: this._answersKey,
+      locale: this._locale
     });
 
     /**
      * An abstraction containing the integration with the RESTful autocomplete API
-     * For both vertical and universal search
-     * @type {Search}
+     * For autocomplete filter, vertical autocomplete, and universal autocomplete
+     * @type {Autocomplete}
      * @private
      */
     this._autoComplete = new AutoCompleteApi({
       apiKey: this._apiKey,
-      answersKey: this._answersKey
+      answersKey: this._answersKey,
+      locale: this._locale
     });
   }
 

@@ -28,6 +28,13 @@ export default class SearchApi {
      * @private
      */
     this._version = opts.version || 20190101 || 20190301;
+
+    /**
+     * A local reference to the locale to use for the request
+     * @type {string}
+     * @private
+     */
+    this._locale = opts.locale || null;
   }
 
   verticalQuery (queryString, verticalKey, filter) {
@@ -39,7 +46,8 @@ export default class SearchApi {
         'input': queryString,
         'answersKey': this._answersKey,
         'filters': filter,
-        'verticalKey': verticalKey
+        'verticalKey': verticalKey,
+        'locale': this._locale
       }
     });
 
@@ -54,7 +62,8 @@ export default class SearchApi {
       version: this._version,
       params: {
         'input': queryString,
-        'answersKey': this._answersKey
+        'answersKey': this._answersKey,
+        'locale': this._locale
       }
     });
 

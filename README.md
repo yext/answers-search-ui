@@ -54,6 +54,7 @@ Below is a list of configuration options that can be used during initialization.
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | not required  |
 | templateUrl  | string     | Use precompiled template hosted by you       | not required  |
 | templateBundle  | object     | Provide the precompiled templates      | not required  |
+| locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | not required |
 
 ## Template Helpers
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).

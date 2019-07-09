@@ -30,6 +30,13 @@ export default class AutoCompleteApi {
      * @private
      */
     this._version = opts.version || 20190101 || 20190301;
+
+    /**
+     * The locale to use for the request
+     * @type {string}
+     * @private
+     */
+    this._locale = opts.locale || null;
   }
 
   /**
@@ -45,7 +52,8 @@ export default class AutoCompleteApi {
         'input': input,
         'answersKey': this._answersKey,
         'experienceKey': verticalKey,
-        'inputKey': barKey
+        'inputKey': barKey,
+        'locale': this._locale
       }
     });
 
@@ -65,7 +73,8 @@ export default class AutoCompleteApi {
       params: {
         'input': input,
         'experienceKey': verticalKey,
-        'barKey': barKey
+        'barKey': barKey,
+        'locale': this._locale
       }
     });
 
@@ -84,7 +93,8 @@ export default class AutoCompleteApi {
       version: this._version,
       params: {
         'input': queryString,
-        'answersKey': this._answersKey
+        'answersKey': this._answersKey,
+        'locale': this._locale
       }
     });
 
