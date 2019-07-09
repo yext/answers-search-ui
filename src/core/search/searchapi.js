@@ -1,14 +1,13 @@
-/** @module Search */
+/** @module SearchApi */
 
 import HttpRequester from '../http/httprequester';
 import ApiRequest from '../http/apirequest';
 
 /**
- * Search is the API for doing various types of search
+ * SearchApi is the API for doing various types of search
  * over the network (e.g. vertical or universal)
- * TODO(billy) Rename to SearchApi
  */
-export default class Search {
+export default class SearchApi {
   constructor (opts = {}) {
     let params = new URL(window.location.toString()).searchParams;
     let isLocal = params.get('local');
