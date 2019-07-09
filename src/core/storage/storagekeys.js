@@ -7,4 +7,3 @@ export const StorageKeys = {
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter'
 };
-
