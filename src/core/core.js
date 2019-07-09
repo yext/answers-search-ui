@@ -1,7 +1,7 @@
 /** @module Core */
 
-import Search from './search/search';
-import AutoComplete from './search/autocomplete';
+import SearchApi from './search/searchapi';
+import AutoCompleteApi from './search/autocompleteapi';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -50,7 +50,7 @@ export default class Core {
      * @type {Search}
      * @private
      */
-    this._searcher = new Search({
+    this._searcher = new SearchApi({
       apiKey: this._apiKey,
       answersKey: this._answersKey
     });
@@ -61,7 +61,7 @@ export default class Core {
      * @type {Search}
      * @private
      */
-    this._autoComplete = new AutoComplete({
+    this._autoComplete = new AutoCompleteApi({
       apiKey: this._apiKey,
       answersKey: this._answersKey
     });
