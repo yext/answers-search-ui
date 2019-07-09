@@ -1,10 +1,10 @@
+/** @module FilterBoxComponent */
+
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import * as StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
-
-/** @module FilterBoxComponent */
 
 /**
  * Renders a set of filters, and searches with them when applied.
@@ -20,12 +20,47 @@ export default class FilterBoxComponent extends Component {
         'FilterBox');
     }
 
+    /**
+     * The list of filters to display and control
+     * @type {object[]}
+     * @private
+     */
     this._filterConfigs = opts.filters;
+
+    /**
+     * The vertical key for the search
+     * @type {string}
+     * @private
+     */
     this._verticalKey = opts.verticalKey || null;
-    this._filterComponents = [];
-    this._filters = [];
-    this._templateName = `filters/filterbox`;
+
+    /**
+     * If true, trigger a search on each change to a filter
+     * @type {boolean}
+     * @private
+     */
     this._searchOnChange = opts.searchOnChange || false;
+
+    /**
+     * The components created for each filter config
+     * @type {Component[]}
+     * @private
+     */
+    this._filterComponents = [];
+
+    /**
+     * The current state of the filter components in the box
+     * @type {Filter}
+     * @private
+     */
+    this._filters = [];
+
+    /**
+     * The template to render
+     * @type {string}
+     * @private
+     */
+    this._templateName = `filters/filterbox`;
   }
 
   static get type () {

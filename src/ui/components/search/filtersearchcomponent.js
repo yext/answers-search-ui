@@ -165,7 +165,7 @@ export default class FilterSearchComponent extends Component {
       filter: filter
     }, query, '?' + params.toString());
 
-    this.core.setFilter(this.name, Filter.from(filter));
+    this.core.setFilter(this.name, Filter.fromResponse(filter));
     const filters = this.core.storage.getAll(StorageKeys.FILTER);
     let totalFilter = filters[0];
     if (filters.length > 1) {
