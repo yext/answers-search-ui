@@ -72,7 +72,7 @@ export default class ResultsComponent extends Component {
       return this;
     }
 
-    return super.setState(Object.assign(data, {
+    return super.setState(Object.assign({}, data, {
       includeMap: this._opts.includeMap,
       mapConfig: this._opts.mapConfig
     }), val);
@@ -139,8 +139,8 @@ export default class ResultsComponent extends Component {
       data = {
         map: data
       };
-      opts = Object.assign(this._opts.mapConfig, opts);
-      return super.addChild(data, type, opts);
+      const newOpts = Object.assign({}, this._opts.mapConfig, opts);
+      return super.addChild(data, type, newOpts);
     }
 
     // Apply the proper item renders to the the components

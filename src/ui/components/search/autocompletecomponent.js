@@ -112,7 +112,7 @@ export default class AutoCompleteComponent extends Component {
    * those are client-interaction specific values and aren't returned from the server.
    */
   setState (data) {
-    super.setState(Object.assign(data, {
+    super.setState(Object.assign({}, data, {
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null

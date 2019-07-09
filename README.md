@@ -155,7 +155,7 @@ ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   transformData: (data) => {
     // Extend/overide the data object
-    return Object.assign(data, {
+    return Object.assign({}, data, {
       title: data.title.toLowerCase()
     })
   },
