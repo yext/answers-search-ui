@@ -2,6 +2,11 @@
 
 import DOM from '../dom/dom';
 
+/**
+ * TemplateLoader exposes an interface for loading templates asynchronously
+ * from the server and registers them with the proper renderer.
+ * It also allows you to assign them synchronously.
+ */
 export default class TemplateLoader {
   constructor (opts = {}) {
     if (!TemplateLoader.setInstance(this)) {

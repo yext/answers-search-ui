@@ -1,10 +1,15 @@
 /** @module GoogleMapProvider */
 
-/* global google */
-
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
+/* global google */
+
+/**
+ * GoogleMapProvider is an implementation of a MapProvider
+ * that handles the integration with the third party API to expose maps.
+ * @extends MapProvider
+ */
 export default class GoogleMapProvider extends MapProvider {
   constructor (opts) {
     super(opts);

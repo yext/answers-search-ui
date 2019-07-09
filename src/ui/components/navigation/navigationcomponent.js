@@ -2,6 +2,11 @@
 
 import Component from '../component';
 
+/**
+ * NavigationComponent exposes an interface for building a dynamic
+ * navigation that is powered by universal search updates.
+ * @extends Component
+ */
 export default class NavigationComponent extends Component {
   constructor (opts = {}) {
     super(opts);
