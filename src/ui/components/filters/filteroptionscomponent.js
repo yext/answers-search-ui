@@ -14,16 +14,16 @@ const SUPPORTED_CONTROLS = [
  * Renders a set of options, each one representing a filter in a search.
  */
 export default class FilterOptionsComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (config = {}) {
+    super(config);
 
-    if (!opts.control || !SUPPORTED_CONTROLS.includes(opts.control)) {
+    if (!config.control || !SUPPORTED_CONTROLS.includes(config.control)) {
       throw new AnswersComponentError(
         'FilterOptions requires a valid "control" to be provided',
         'FilterOptions');
     }
 
-    if (!opts.options) {
+    if (!config.options) {
       throw new AnswersComponentError(
         'FilterOptions component requires options to be provided',
         'FilterOptions');
@@ -34,35 +34,35 @@ export default class FilterOptionsComponent extends Component {
      * @type {object[]}
      * @private
      */
-    this._options = opts.options;
+    this._options = config.options;
 
     /**
      * The selector used for options in the template
      * @type {string}
      * @private
      */
-    this._optionSelector = opts.optionSelector || '.js-yext-filter-option';
+    this._optionSelector = config.optionSelector || '.js-yext-filter-option';
 
     /**
      * If true, stores the filter to storage on each change
      * @type {boolean}
      * @private
      */
-    this._storeOnChange = opts.storeOnChange || false;
+    this._storeOnChange = config.storeOnChange || false;
 
     /**
      * The callback function to call when changed
      * @type {function}
      * @private
      */
-    this._onChange = opts.onChange || function () {};
+    this._onChange = config.onChange || function () {};
 
     /**
      * The template to render, based on the control
      * @type {string}
      * @private
      */
-    this._templateName = `controls/${opts.control}`;
+    this._templateName = `controls/${config.control}`;
   }
 
   static get type () {

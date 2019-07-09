@@ -11,10 +11,10 @@ import Filter from '../../../core/models/filter';
  * Multiple FilterBox components will AND together but will not share state.
  */
 export default class FilterBoxComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (config = {}) {
+    super(config);
 
-    if (!opts.filters || !(opts.filters instanceof Array)) {
+    if (!config.filters || !(config.filters instanceof Array)) {
       throw new AnswersComponentError(
         'FilterBox requires filters to be provided as an array',
         'FilterBox');
@@ -25,21 +25,21 @@ export default class FilterBoxComponent extends Component {
      * @type {object[]}
      * @private
      */
-    this._filterConfigs = opts.filters;
+    this._filterConfigs = config.filters;
 
     /**
      * The vertical key for the search
      * @type {string}
      * @private
      */
-    this._verticalKey = opts.verticalKey || null;
+    this._verticalKey = config.verticalKey || null;
 
     /**
      * If true, trigger a search on each change to a filter
      * @type {boolean}
      * @private
      */
-    this._searchOnChange = opts.searchOnChange || false;
+    this._searchOnChange = config.searchOnChange || false;
 
     /**
      * The components created for each filter config
