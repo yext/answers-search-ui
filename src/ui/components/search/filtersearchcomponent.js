@@ -1,11 +1,18 @@
-/** @module FilterPickerComponent */
+/** @module FilterSearchComponent */
 
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 
-export default class FilterPickerComponent extends Component {
+/**
+ * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
+ * It'll allow you to pick pre-set filters that are setup on the backend within
+ * a vertical search context.
+ *
+ * @extends Component
+ */
+export default class FilterSearchComponent extends Component {
   constructor (opts = {}) {
     super(opts);
 
@@ -13,7 +20,7 @@ export default class FilterPickerComponent extends Component {
      * The template name to use for rendering with handlebars
      * @type {string}
      */
-    this._templateName = 'search/filterpicker';
+    this._templateName = 'search/filtersearch';
 
     /**
      * The input key for the vertical search configuration
