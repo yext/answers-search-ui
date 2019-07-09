@@ -1,15 +1,14 @@
-/** @module AutoComplete */
+/** @module AutoCompleteApi */
 
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
 import { AnswersEndpointError } from '../errors/errors';
 
 /**
- * AutoComplete exposes an interface for network related matters
+ * AutoCompleteApi exposes an interface for network related matters
  * for all the autocomplete endpoints.
- * TODO(billy) Rename to AutoCompleteApi
  */
-export default class AutoComplete {
+export default class AutoCompleteApi {
   constructor (opts = {}) {
     let params = new URL(window.location.toString()).searchParams;
     let isLocal = params.get('local');

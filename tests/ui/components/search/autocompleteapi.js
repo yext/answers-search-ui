@@ -1,4 +1,4 @@
-import AutoComplete from '../../../../src/core/search/autocomplete';
+import AutoCompleteApi from '../../../../src/core/search/autocompleteapi';
 import AutoCompleteData from '../../../../src/core/models/autocompletedata';
 import HttpRequester from '../../../../src/core/http/httprequester';
 jest.mock('../../../../src/core/http/httprequester');
@@ -41,7 +41,7 @@ describe('querying and responding', () => {
         get: mockedGet
       };
     });
-    autocomplete = new AutoComplete({
+    autocomplete = new AutoCompleteApi({
       apiKey,
       answersKey
     });
