@@ -8,7 +8,6 @@ import { AnswersComponentError } from '../../core/errors/errors';
  * instantiated and active components.
  *
  * ALL components should be constructed using the {ComponentManager} via its `create` method.
- *
  */
 export default class ComponentManager {
   constructor () {

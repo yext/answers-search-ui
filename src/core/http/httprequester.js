@@ -12,6 +12,11 @@ const Methods = {
   DELETE: 'delete'
 };
 
+/**
+ * HttpRequester is a wrapper around the native implementation of AJAX
+ * related matters. It's used to make all types of network requests
+ * and exposes a promise interface.
+ */
 export default class HttpRequester {
   /**
    * Create a GET HTTP request

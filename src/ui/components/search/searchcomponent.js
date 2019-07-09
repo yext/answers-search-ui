@@ -3,6 +3,12 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 
+/**
+ * SearchComponent exposes an interface in order to create
+ * a UI Search experience for vertical and universal search.
+ *
+ * @extends Component
+ */
 export default class SearchComponent extends Component {
   constructor (opts = {}) {
     super(opts);

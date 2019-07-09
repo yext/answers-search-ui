@@ -9,6 +9,10 @@ import Storage from './storage/storage';
 import StorageKeys from './storage/storagekeys';
 import Filter from './models/filter';
 
+/**
+ * Core is the main application container for all of the network and storage
+ * related behaviors of the application.
+ */
 export default class Core {
   constructor (opts = {}) {
     if (typeof opts.apiKey !== 'string') {

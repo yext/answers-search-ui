@@ -3,6 +3,11 @@
 import ModuleData from './moduledata';
 import { AnswersStorageError } from '../errors/errors';
 
+/**
+ * Storage is a container around application state.
+ * It exposes an interface for CRUD operations as well as listening
+ * for stateful changes.
+ */
 export default class Storage {
   constructor () {
     this._moduleDataContainer = {};
