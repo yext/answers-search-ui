@@ -1,9 +1,9 @@
 /** @module GoogleMapProvider */
 
+/* global google */
+
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
-
-/* global google, iconCfg */
 
 export default class GoogleMapProvider extends MapProvider {
   constructor (opts) {
@@ -183,7 +183,7 @@ export class GoogleMapMarkerConfig {
       }
 
       if (pinConfigObj.url) {
-        icon.url = iconCfg.url;
+        icon.url = pinConfigObj.url;
       }
 
       if (pinConfigObj.svg) {
