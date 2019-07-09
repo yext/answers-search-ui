@@ -5,6 +5,11 @@ import DOM from '../../../dom/dom';
 
 /* global mapboxgl */
 
+/**
+ * MapBoxMapProvider is an implementation of a MapProvider
+ * that handles the integration with the third party API to expose maps.
+ * @extends MapProvider
+ */
 export default class MapBoxMapProvider extends MapProvider {
   /**
    * Load the external JS Library

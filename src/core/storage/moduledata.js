@@ -2,6 +2,13 @@
 
 import EventEmitter from '../eventemitter/eventemitter';
 
+/**
+ * ModuleData is used as a generic model for Storage.
+ * Typically an instance of ModuleData powers a single component.
+
+ * A data model that exposes an event emitter interface.
+ * @extends EventEmitter
+ */
 export default class ModuleData extends EventEmitter {
   constructor (id, data = {}) {
     super();

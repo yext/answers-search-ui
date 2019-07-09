@@ -7,6 +7,13 @@ import State from './state';
 import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused-vars
 import AnalyticsEvent from '../../core/analytics/analyticsevent';
 
+/**
+ * Component is an abstraction that encapsulates state, behavior,
+ * and view for a particular chunk of functionality on the page.
+ *
+ * The API exposes event life cycle hooks for when things are rendered,
+ * mounted, created, etc.
+ */
 export default class Component {
   constructor (type, opts = {}) {
     // Simple facade pattern to enable the user to pass a single object

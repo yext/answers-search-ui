@@ -5,7 +5,9 @@ import AutoCompleteDataTransformer from './autocompletedatatransformer';
 import { AnswersEndpointError } from '../errors/errors';
 
 /**
- * A wrapper around the AutoComplete {ApiRequest} endpoints
+ * AutoComplete exposes an interface for network related matters
+ * for all the autocomplete endpoints.
+ * TODO(billy) Rename to AutoCompleteApi
  */
 export default class AutoComplete {
   constructor (opts = {}) {
