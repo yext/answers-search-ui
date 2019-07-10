@@ -1,6 +1,7 @@
 /** @module ApiRequest */
 
 import HttpRequester from './httprequester';
+import { API_BASE_URL } from '../constants';
 
 /**
  * ApiRequest is the base class for all API requests.
@@ -20,7 +21,7 @@ export default class ApiRequest {
      * @type {string}
      * @private
      */
-    this._baseUrl = opts.baseUrl || null;
+    this._baseUrl = opts.baseUrl || API_BASE_URL;
 
     /**
      * The endpoint to use in the url (appended to the {baseUrl})
