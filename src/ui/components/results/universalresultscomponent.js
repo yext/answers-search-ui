@@ -1,7 +1,7 @@
 /** @module UniversalResultsComponent */
 
 import Component from '../component';
-import { StorageKeys } from '../../../core/storage/storagekeys';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 export default class UniversalResultsComponent extends Component {
   constructor (opts = {}) {
