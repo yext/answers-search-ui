@@ -29,8 +29,6 @@ export default class SearchApi {
      * @private
      */
     this._version = opts.version || 20190101 || 20190301;
-
-    this._requester = new HttpRequester();
   }
 
   verticalQuery (queryString, verticalKey, filter) {
