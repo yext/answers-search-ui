@@ -1,6 +1,5 @@
 /** @module SearchApi */
 
-import HttpRequester from '../http/httprequester';
 import ApiRequest from '../http/apirequest';
 
 /**
