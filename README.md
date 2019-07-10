@@ -243,7 +243,7 @@ ANSWERS.addComponent('SearchBar', {
 
 ## FilterSearch Component
 
-The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed.
+The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.
 
 ```html
 <div class="filter-search-container"></div>
