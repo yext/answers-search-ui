@@ -1,5 +1,5 @@
 import Storage from '../../../src/core/storage/storage';
-import { StorageKeys } from '../../../src/core/storage/storagekeys';
+import StorageKeys from '../../../src/core/storage/storagekeys';
 
 let storage;
 

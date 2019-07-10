@@ -4,7 +4,7 @@ import UniversalResults from '../models/universalresults';
 import DirectAnswer from '../models/directanswer';
 import Navigation from '../models/navigation';
 import VerticalResults from '../models/verticalresults';
-import { StorageKeys } from '../storage/storagekeys';
+import StorageKeys from '../storage/storagekeys';
 
 /**
  * A Data Transformer that takes the response object from a Search request

@@ -2,7 +2,7 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import { StorageKeys } from '../../../core/storage/storagekeys';
+import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 
 export default class FilterPickerComponent extends Component {

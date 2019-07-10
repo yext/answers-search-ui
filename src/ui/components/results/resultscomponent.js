@@ -7,7 +7,7 @@ import LocationResultsItemComponent from './locationresultsitemcomponent';
 import EventResultsItemComponent from './eventresultsitemcomponent';
 import PeopleResultsItemComponent from './peopleresultsitemcomponent';
 import MapComponent from '../map/mapcomponent';
-import { StorageKeys } from '../../../core/storage/storagekeys';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 const ResultType = {
   EVENT: 'event',
