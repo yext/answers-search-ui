@@ -1,6 +1,7 @@
 /** @module SearchApi */
 
 import ApiRequest from '../http/apirequest';
+import { AnswersBasicError } from '../errors/errors';
 
 /**
  * SearchApi is the API for doing various types of search
@@ -13,14 +14,20 @@ export default class SearchApi {
      * @type {string}
      * @private
      */
-    this._apiKey = opts.apiKey || null;
+    if (!opts.apiKey) {
+      throw new AnswersBasicError('Api Key is required', 'Search');
+    }
+    this._apiKey = opts.apiKey;
 
     /**
      * A local reference to the Answers Key to use for the request
      * @type {string}
      * @private
      */
-    this._answersKey = opts.answersKey || null;
+    if (!opts.answersKey) {
+      throw new AnswersBasicError('Answers Key is required', 'Search');
+    }
+    this._answersKey = opts.answersKey;
 
     /**
      * The version of the API to make a request to
@@ -34,7 +41,10 @@ export default class SearchApi {
      * @type {string}
      * @private
      */
-    this._locale = opts.locale || null;
+    if (!opts.locale) {
+      throw new AnswersBasicError('Locale is required', 'Search');
+    }
+    this._locale = opts.locale;
   }
 
   verticalQuery (queryString, verticalKey, filter) {

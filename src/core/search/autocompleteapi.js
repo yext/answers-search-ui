@@ -2,7 +2,7 @@
 
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
-import { AnswersEndpointError } from '../errors/errors';
+import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
 
 /**
  * AutoCompleteApi exposes an interface for network related matters
@@ -15,14 +15,20 @@ export default class AutoCompleteApi {
      * @type {string}
      * @private
      */
-    this._apiKey = opts.apiKey || null;
+    if (!opts.apiKey) {
+      throw new AnswersBasicError('Api Key is required', 'AutoComplete');
+    }
+    this._apiKey = opts.apiKey;
 
     /**
      * The Answers Key to use for the request
      * @type {string}
      * @private
      */
-    this._answersKey = opts.answersKey || null;
+    if (!opts.answersKey) {
+      throw new AnswersBasicError('Answers Key is required', 'AutoComplete');
+    }
+    this._answersKey = opts.answersKey;
 
     /**
      * The version of the API to make a request to
@@ -36,7 +42,10 @@ export default class AutoCompleteApi {
      * @type {string}
      * @private
      */
-    this._locale = opts.locale || null;
+    if (!opts.locale) {
+      throw new AnswersBasicError('Locale is required', 'AutoComplete');
+    }
+    this._locale = opts.locale;
   }
 
   /**

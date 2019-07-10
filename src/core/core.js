@@ -43,11 +43,7 @@ export default class Core {
      * @type {string}
      * @private
      */
-    if (opts.locale != null) {
-      this._locale = opts.locale;
-    } else {
-      this._locale = 'en';
-    }
+    this._locale = opts.locale || 'en';
 
     /**
      * A reference to the core data storage that powers the UI
@@ -70,7 +66,7 @@ export default class Core {
 
     /**
      * An abstraction containing the integration with the RESTful autocomplete API
-     * For autocomplete filter, vertical autocomplete, and universal autocomplete
+     * For filter search, vertical autocomplete, and universal autocomplete
      * @type {Autocomplete}
      * @private
      */
