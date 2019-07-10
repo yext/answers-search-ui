@@ -2,7 +2,7 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import { StorageKeys } from '../../../core/storage/storagekeys';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 const Keys = {
   BACKSPACE: 8,
