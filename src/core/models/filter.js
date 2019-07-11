@@ -1,5 +1,9 @@
 /** @module Filter */
 
+/**
+ * Represents an api filter and provides static methods for easily constructing Filters.
+ * See https://developer.yext.com/docs/api-reference/#operation/listEntities for structure details
+ */
 export default class Filter {
   constructor (data = {}) {
     Object.assign(this, data);

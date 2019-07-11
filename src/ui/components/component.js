@@ -53,7 +53,7 @@ export default class Component {
 
     /**
      * A container for all the child components
-     * @type {Array.Component}
+     * @type {Component[]}
      */
     this._children = [];
 

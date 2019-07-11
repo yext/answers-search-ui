@@ -3,12 +3,13 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
-import * as StorageKeys from '../../../core/storage/storagekeys';
+import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 
 /**
  * Renders a set of filters, and searches with them when applied.
  * Multiple FilterBox components will AND together but will not share state.
+ * @extends Component
  */
 export default class FilterBoxComponent extends Component {
   constructor (config = {}) {
@@ -40,6 +41,13 @@ export default class FilterBoxComponent extends Component {
      * @private
      */
     this._searchOnChange = config.searchOnChange || false;
+
+    /**
+     * The selector of the apply button
+     * @type {string}
+     * @private
+     */
+    this._applyButtonSelector = config.applyButtonSelector || '.js-yext-filterbox-apply';
 
     /**
      * The components created for each filter config
@@ -95,8 +103,11 @@ export default class FilterBoxComponent extends Component {
 
     // Initialize apply button
     if (!this._searchOnChange) {
-      const button = DOM.query(this._container, '.js-yext-filterbox-apply');
-      DOM.on(button, 'click', () => this._applyFilters());
+      const button = DOM.query(this._container, this._applyButtonSelector);
+      DOM.on(button, 'click', () => {
+        this._saveFiltersToStorage();
+        this._search();
+      });
     }
   }
 
@@ -108,22 +119,30 @@ export default class FilterBoxComponent extends Component {
   onFilterChange (index, filter) {
     this._filters[index] = filter;
     if (this._searchOnChange) {
-      this._applyFilters();
+      this._saveFiltersToStorage();
+      this._search();
     }
   }
 
   /**
-   * Save current filters to storage and trigger a search with all filters
-   * in storage
-   * @private
+   * Save current filters to storage to be used in the next search
    */
-  _applyFilters () {
+  _saveFiltersToStorage () {
     const validFilters = this._filters.filter(f => f !== undefined && f !== null);
-    const combinedFilter = validFilters.length > 1 ? Filter.and(...validFilters) : validFilters[0];
-    this.core.setFilter(this.name, combinedFilter);
+    const combinedFilter = validFilters.length > 1
+      ? Filter.and(...validFilters)
+      : validFilters[0];
+    this.core.setFilter(this.name, combinedFilter || {});
+  }
 
+  /**
+   * Trigger a search with all filters in storage
+   */
+  _search () {
     const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
-    const totalFilter = allFilters.length > 1 ? Filter.and(...allFilters) : allFilters[0];
+    const totalFilter = allFilters.length > 1
+      ? Filter.and(...allFilters)
+      : allFilters[0];
 
     this.core.verticalSearch('', this._verticalKey, JSON.stringify(totalFilter));
   }

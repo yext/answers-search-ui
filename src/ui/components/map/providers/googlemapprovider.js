@@ -142,8 +142,8 @@ export class GoogleMapMarkerConfig {
 
   /**
    * Serializes an array of marker configs
-   * @param {Array.<GoogleMapMarkerConfig>} googleMapMarkerConfigs
-   * @returns {Array.<String>}
+   * @param {GoogleMapMarkerConfig[]} googleMapMarkerConfigs
+   * @returns {string[]}
    */
   static serialize (googleMapMarkerConfigs) {
     let serializedMarkers = [];
@@ -156,9 +156,9 @@ export class GoogleMapMarkerConfig {
   /**
    * Converts the storage data model of markers into GoogleAPIMarker
    * @param {GoogleMap} A reference to the google map to apply the marker to
-   * @param {Array.<Object>} markers The data of the marker
+   * @param {object[]} markers The data of the marker
    * @param {Object} pinConfig The configuration to apply to the marker
-   * @returns {Array.<GoogleMapMarkerConfig>}
+   * @returns {GoogleMapMarkerConfig[]}
    */
   static from (markers, pinConfig, map) {
     let googleMapMarkerConfigs = [];
