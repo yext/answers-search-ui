@@ -10,16 +10,6 @@ import { AnswersEndpointError } from '../errors/errors';
  */
 export default class AutoCompleteApi {
   constructor (opts = {}) {
-    let params = new URL(window.location.toString()).searchParams;
-    let isLocal = params.get('local');
-
-    /**
-     * The baseUrl to use for making a request
-     * @type {string}
-     * @private
-     */
-    this._baseUrl = isLocal ? 'http://' + window.location.hostname : 'https://liveapi.yext.com';
-
     /**
      * The API Key to use for the request
      * @type {string}
@@ -48,7 +38,6 @@ export default class AutoCompleteApi {
    */
   queryFilter (input, verticalKey, barKey) {
     let request = new ApiRequest({
-      baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/filtersearch',
       apiKey: this._apiKey,
       version: this._version,
@@ -70,7 +59,6 @@ export default class AutoCompleteApi {
 
   queryVertical (input, verticalKey, barKey) {
     let request = new ApiRequest({
-      baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/entities/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
@@ -91,7 +79,6 @@ export default class AutoCompleteApi {
 
   queryUniversal (queryString) {
     let request = new ApiRequest({
-      baseUrl: this._baseUrl,
       endpoint: '/v2/accounts/me/answers/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
