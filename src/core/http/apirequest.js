@@ -82,7 +82,7 @@ export default class ApiRequest {
     // but I can't see any cases where we'd ever want to send 'undefined' as a value to the server.
     // So it's probably fine to 'clean' the params object here
     Object.keys(params).forEach(key => {
-      if (params[key] === undefined) {
+      if (params[key] === undefined || params[key] === null) {
         delete params[key];
       }
     });
