@@ -1,0 +1,10 @@
+<div>
+  {{#each filterConfigs}}
+    <div class="js-yext-filterbox-filter{{@index}}"></div>
+  {{/each}}
+  {{#if showApplyButton}}
+    <div>
+      <button type="button" class="js-yext-filterbox-apply">Apply</button>
+    </div>
+  {{/if}}
+</div>

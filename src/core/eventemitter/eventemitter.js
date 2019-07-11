@@ -8,7 +8,7 @@ export default class EventEmitter {
   constructor () {
     /**
      * The subscribers of messages
-     * @type {Array.<Object>}
+     * @type {object[]}
      * @private
      */
     this._listeners = {};
