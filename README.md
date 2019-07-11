@@ -14,6 +14,7 @@ Outline:
 3. [Types of Components](#types-of-components)
    - [Navigation Component](#navigation-component)
    - [SearchBar Component](#searchbar-component)
+   - [FilterSearch Component](#filtersearch-component)
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
@@ -165,7 +166,7 @@ ANSWERS.addComponent('SearchBar', {
     return `<div class="my-search">${data.title}</div>`
   }
 })
-````
+```
 
 # Types of Components
 
@@ -235,6 +236,22 @@ ANSWERS.addComponent('SearchBar', {
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
+  verticalKey: '<VERTICAL_KEY>',      // required
+  barKey: '<BAR_KEY>'                 // optional
+})
+```
+
+## FilterSearch Component
+
+The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.
+
+```html
+<div class="filter-search-container"></div>
+```
+
+```js
+ANSWERS.addComponent('FilterSearch', {
+  container: '.filter-search-container',
   verticalKey: '<VERTICAL_KEY>',      // required
   barKey: '<BAR_KEY>'                 // optional
 })
