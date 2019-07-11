@@ -1,6 +1,7 @@
 /** @module SearchApi */
 
 import ApiRequest from '../http/apirequest';
+import { AnswersBasicError } from '../errors/errors';
 
 /**
  * SearchApi is the API for doing various types of search
@@ -13,14 +14,20 @@ export default class SearchApi {
      * @type {string}
      * @private
      */
-    this._apiKey = opts.apiKey || null;
+    if (!opts.apiKey) {
+      throw new AnswersBasicError('Api Key is required', 'Search');
+    }
+    this._apiKey = opts.apiKey;
 
     /**
      * A local reference to the Answers Key to use for the request
      * @type {string}
      * @private
      */
-    this._answersKey = opts.answersKey || null;
+    if (!opts.answersKey) {
+      throw new AnswersBasicError('Answers Key is required', 'Search');
+    }
+    this._answersKey = opts.answersKey;
 
     /**
      * The version of the API to make a request to
@@ -28,6 +35,16 @@ export default class SearchApi {
      * @private
      */
     this._version = opts.version || 20190101 || 20190301;
+
+    /**
+     * A local reference to the locale to use for the request
+     * @type {string}
+     * @private
+     */
+    if (!opts.locale) {
+      throw new AnswersBasicError('Locale is required', 'Search');
+    }
+    this._locale = opts.locale;
   }
 
   verticalQuery (queryString, verticalKey, filter) {
@@ -39,7 +56,8 @@ export default class SearchApi {
         'input': queryString,
         'answersKey': this._answersKey,
         'filters': filter,
-        'verticalKey': verticalKey
+        'verticalKey': verticalKey,
+        'locale': this._locale
       }
     });
 
@@ -54,7 +72,8 @@ export default class SearchApi {
       version: this._version,
       params: {
         'input': queryString,
-        'answersKey': this._answersKey
+        'answersKey': this._answersKey,
+        'locale': this._locale
       }
     });
 
