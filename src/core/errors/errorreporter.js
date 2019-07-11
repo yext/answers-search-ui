@@ -35,7 +35,6 @@ export default class ErrorReporter {
     err.reported = true;
 
     const request = new ApiRequest({
-      baseUrl: this._isDev ? 'http://' + 'localhost' : 'https://liveapi.yext.com',
       endpoint: '/v2/accounts/me/answers/errors',
       apiKey: this.apiKey,
       version: 20190301,
