@@ -19,14 +19,12 @@ export default class AnalyticsEvent {
    * Return the event in the api format, typically for reporting to the api
    */
   toApiEvent () {
-    const apiEvent = {};
-    Object.assign(
-      apiEvent,
+    return Object.assign(
+      {},
       {
         event_type: this.eventType,
         label: this.label
       },
       this.options);
-    return apiEvent;
   }
 }
