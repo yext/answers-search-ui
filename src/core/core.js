@@ -7,7 +7,6 @@ import SearchDataTransformer from './search/searchdatatransformer';
 
 import Storage from './storage/storage';
 import StorageKeys from './storage/storagekeys';
-import Filter from './models/filter';
 
 /**
  * Core is the main application container for all of the network and storage
@@ -139,10 +138,10 @@ export default class Core {
    * Stores the given filter into storage, to be used for the next search
    *
    * @param {string} namespace the namespace to use for the storage key
-   * @param {string} filter    the filter string
+   * @param {Filter} filter    the filter to set
    */
   setFilter (namespace, filter) {
-    this.storage.set(`${StorageKeys.FILTER}.${namespace}`, Filter.from(filter));
+    this.storage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
   }
 
   on (evt, moduleId, cb) {

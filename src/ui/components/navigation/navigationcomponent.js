@@ -26,7 +26,7 @@ export default class NavigationComponent extends Component {
     /**
      * The order of the tabs, parsed from configuration.
      * This gets updated based on the server results
-     * @type {Array.<String>} The list of VS configIds
+     * @type {string[]} The list of VS configIds
      */
     this._tabOrder = [];
 
