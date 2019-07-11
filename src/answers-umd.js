@@ -34,10 +34,6 @@ class Answers {
      */
     this.components = COMPONENT_MANAGER;
 
-    // TODO(jdelerme): have this populate by bundle instead
-    // i.e. minified bundle is not dev, other bundle is
-    this._isDev = new URL(window.location.toString()).searchParams.get('local');
-
     /**
      * A callback function to invoke once the library is ready.
      * Typically fired after templates are fetched from server for rendering.
@@ -53,23 +49,23 @@ class Answers {
     return false;
   }
 
-  static getInstance (opts) {
+  static getInstance () {
     return this.instance;
   }
 
-  init (opts) {
+  init (config) {
     this.components.setCore(new Core({
-      apiKey: opts.apiKey,
-      answersKey: opts.answersKey
+      apiKey: config.apiKey,
+      answersKey: config.answersKey
     }))
       .setRenderer(this.renderer)
-      .setAnalyticsReporter(new AnalyticsReporter(opts.apiKey, opts.answersKey));
+      .setAnalyticsReporter(new AnalyticsReporter(config.apiKey, config.answersKey));
 
-    this._onReady = opts.onReady || function () {};
+    this._onReady = config.onReady || function () {};
 
-    if (opts.useTemplates === false || opts.templateBundle) {
-      if (opts.templateBundle) {
-        this.renderer.init(opts.templateBundle);
+    if (config.useTemplates === false || config.templateBundle) {
+      if (config.templateBundle) {
+        this.renderer.init(config.templateBundle);
       }
 
       this._onReady();
@@ -79,15 +75,15 @@ class Answers {
     // Templates are currently downloaded separately from the CORE and UI bundle.
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new TemplateLoader({
-      templateUrl: opts.templateUrl
+      templateUrl: config.templateUrl
     }).onLoaded((templates) => {
       this.renderer.init(templates);
 
       this._onReady();
     });
 
-    if (!this._isDev && !opts.suppressErrorReports) {
-      this._errorReporter = new ErrorReporter(opts.apiKey, opts.answersKey);
+    if (!config.suppressErrorReports) {
+      this._errorReporter = new ErrorReporter(config.apiKey, config.answersKey);
       window.addEventListener('error', e => this._errorReporter.report(e.error));
       window.addEventListener('unhandledrejection', e => this._errorReporter.report(e.error));
     }
