@@ -1,8 +1,16 @@
 /** @module */
 
-export const NAVIGATION = 'navigation';
-export const UNIVERSAL_RESULTS = 'universal-results';
-export const VERTICAL_RESULTS = 'vertical-results';
-export const AUTOCOMPLETE = 'autocomplete';
-export const DIRECT_ANSWER = 'direct-answer';
-export const FILTER = 'filter';
+/**
+ * StorageKeys is an ENUM are considered the root context
+ * for how data is stored and scoped in the storage.
+ *
+ * @enum {string}
+ */
+export default {
+  NAVIGATION: 'navigation',
+  UNIVERSAL_RESULTS: 'universal-results',
+  VERTICAL_RESULTS: 'vertical-results',
+  AUTOCOMPLETE: 'autocomplete',
+  DIRECT_ANSWER: 'direct-answer',
+  FILTER: 'filter'
+};

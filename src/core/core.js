@@ -1,14 +1,18 @@
 /** @module Core */
 
-import Search from './search/search';
-import AutoComplete from './search/autocomplete';
+import SearchApi from './search/searchapi';
+import AutoCompleteApi from './search/autocompleteapi';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import Storage from './storage/storage';
-import * as StorageKeys from './storage/storagekeys';
+import StorageKeys from './storage/storagekeys';
 import Filter from './models/filter';
 
+/**
+ * Core is the main application container for all of the network and storage
+ * related behaviors of the application.
+ */
 export default class Core {
   constructor (opts = {}) {
     if (typeof opts.apiKey !== 'string') {
@@ -46,7 +50,7 @@ export default class Core {
      * @type {Search}
      * @private
      */
-    this._searcher = new Search({
+    this._searcher = new SearchApi({
       apiKey: this._apiKey,
       answersKey: this._answersKey
     });
@@ -57,7 +61,7 @@ export default class Core {
      * @type {Search}
      * @private
      */
-    this._autoComplete = new AutoComplete({
+    this._autoComplete = new AutoCompleteApi({
       apiKey: this._apiKey,
       answersKey: this._answersKey
     });

@@ -1,8 +1,11 @@
 /** @module MapProvider */
 
 /**
- * The core MapProvider interface to implement for various types of map providers.
- * Implementations should extend this interface
+ * A MapProvider is an interface that represents that should be implemented
+ * in order to integrate with a Third Party Map provider for both
+ * static and interactive maps. MapProviders are used by the MapComponent.
+ *
+ * Implementations should extend this interface.
  */
 export default class MapProvider {
   constructor (opts = {}) {

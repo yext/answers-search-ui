@@ -6,7 +6,7 @@ let document = window.document;
 let parser = new DOMParser();
 
 /**
- * Static interface for interacting with the DOM
+ * Static interface for interacting with the DOM API.
  * @namespace
  */
 export default class DOM {

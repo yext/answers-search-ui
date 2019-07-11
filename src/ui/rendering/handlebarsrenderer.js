@@ -1,6 +1,11 @@
 /** @module HandlebarsRenderer */
 
 import Renderer from './renderer';
+
+/**
+ * HandlebarsRenderer is a wrapper around the nativate handlebars renderer.
+ * @extends Renderer
+ */
 export default class HandlebarsRenderer extends Renderer {
   constructor (templates = {}, opts = {}) {
     super();

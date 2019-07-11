@@ -1,17 +1,19 @@
 /** @module TemplateLoader */
 
 import DOM from '../dom/dom';
+import { COMPILED_TEMPLATES_URL } from '../../core/constants';
 
+/**
+ * TemplateLoader exposes an interface for loading templates asynchronously
+ * from the server and registers them with the proper renderer.
+ * It also allows you to assign them synchronously.
+ */
 export default class TemplateLoader {
-  constructor (opts = {}) {
+  constructor () {
     if (!TemplateLoader.setInstance(this)) {
       return TemplateLoader.getInstance();
     }
 
-    let params = new URL(window.location.toString()).searchParams;
-    let isLocal = params.get('local');
-
-    this._templateUrl = opts.templateUrl || (isLocal ? '../dist/answerstemplates.compiled.min.js' : 'https://assets.sitescdn.net/answers/answerstemplates.compiled.min.js');
     this._templates = {};
     this._onLoaded = function () {};
     this._init();
@@ -40,7 +42,6 @@ export default class TemplateLoader {
       return;
     }
 
-    let that = this;
     // Inject a script to fetch the compiled templates,
     // wrapping it a Promise for cleanliness
     new Promise((resolve, reject) => {
@@ -49,7 +50,7 @@ export default class TemplateLoader {
         onload: resolve,
         onerror: reject,
         async: true,
-        src: that._templateUrl
+        src: COMPILED_TEMPLATES_URL
       });
 
       DOM.append('body', script);

@@ -6,6 +6,7 @@ import EventEmitter from '../../core/eventemitter/eventemitter';
  * State contains the data for the component
  * and exposes an {EventEmitter} interface so that external
  * dependencies can listen/hook subscribe to messages/updates.
+ * @extends EventEmitter
  */
 export default class State extends EventEmitter {
   constructor (data) {

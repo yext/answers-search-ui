@@ -7,7 +7,7 @@ import Component from './component';
 import NavigationComponent from './navigation/navigationcomponent';
 
 import SearchComponent from './search/searchcomponent';
-import FilterPickerComponent from './search/filterpickercomponent';
+import FilterSearchComponent from './search/filtersearchcomponent';
 import AutoCompleteComponent from './search/autocompletecomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
@@ -32,7 +32,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
 
 // Search Components
   .register(SearchComponent)
-  .register(FilterPickerComponent)
+  .register(FilterSearchComponent)
   .register(AutoCompleteComponent)
 
 // Results Components
