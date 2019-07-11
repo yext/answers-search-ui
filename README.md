@@ -258,6 +258,85 @@ ANSWERS.addComponent('FilterSearch', {
 })
 ```
 
+## FilterBox Component
+
+The FilterBox component shows a list of filters to apply to a search.
+
+```html
+<div class="filters-container"></div>
+```
+
+```js
+ANSWERS.addComponent('FilterBox', {
+  container: '.filters-container',
+  // List of filter component configurations
+  filters: [
+    {
+      type: 'FilterOptions',
+      control: 'multioption',
+      options: [
+        {
+          label: 'Open Now',
+          field: 'c_openNow',
+          value: 'true'
+        },
+        {
+          label: 'Dog Friendly',
+          field: 'c_dogFriendly',
+          value: 'true'
+        },
+        {
+          label: 'Megastores',
+          field: 'c_storeType',
+          value: 'Megastore'
+        }
+      ]
+    }
+  ]
+});
+```
+
+## Filter Components
+
+Filter components can be used in a FilterBox or on their own to affect a search.
+
+### FilterOptions
+
+FilterOptions displays a set of filters with either checkboxes or radio buttons.
+
+```html
+<div class="filter-container"></div>
+```
+
+```js
+ANSWERS.addComponent('FilterOptions', {
+  container: '.filter-container',
+  // Control type, singleoption or multioption
+  control: 'singleoption',
+  // List of options
+  options: [
+    {
+      // Label to show next to the filter option
+      label: 'Open Now',
+      // The api field to filter on, configured on the Yext platform
+      field: 'c_openNow',
+      // The value for the above field to filter by
+      value: 'true'
+    },
+    {
+      label: 'Dog Friendly',
+      field: 'c_dogFriendly',
+      value: 'true'
+    },
+    {
+      label: 'Megastores',
+      field: 'c_storeType',
+      value: 'Megastore'
+    }
+  ]
+});
+```
+
 ## Direct Answer Component
 
 The Direct Answer Component will render the BEST result, if found,

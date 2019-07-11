@@ -28,11 +28,18 @@ export default class ModuleData extends EventEmitter {
 
     this.capturePrevious();
 
+    if (Object.keys(newData).length !== Object.keys(this._data).length) {
+      this._data = newData;
+      this.emit('update', this._data);
+      return;
+    }
+
+    // check for shallow equality
     for (const key of Object.keys(newData)) {
       if (this._data[key] !== newData[key]) {
         this._data = newData;
         this.emit('update', this._data);
-        return this;
+        return;
       }
     }
   }

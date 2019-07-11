@@ -9,10 +9,17 @@ import { COMPILED_TEMPLATES_URL } from '../../core/constants';
  * It also allows you to assign them synchronously.
  */
 export default class TemplateLoader {
-  constructor () {
+  constructor (config) {
     if (!TemplateLoader.setInstance(this)) {
       return TemplateLoader.getInstance();
     }
+
+    /**
+     * The template url to fetch compiled templates from
+     * @type {string}
+     * @private
+     */
+    this._templateUrl = config.templateUrl || COMPILED_TEMPLATES_URL;
 
     this._templates = {};
     this._onLoaded = function () {};
@@ -27,7 +34,7 @@ export default class TemplateLoader {
     return false;
   }
 
-  static getInstance (opts) {
+  static getInstance () {
     return this.instance;
   }
 
@@ -50,7 +57,7 @@ export default class TemplateLoader {
         onload: resolve,
         onerror: reject,
         async: true,
-        src: COMPILED_TEMPLATES_URL
+        src: this._templateUrl
       });
 
       DOM.append('body', script);
