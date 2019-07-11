@@ -108,7 +108,8 @@ export default class FilterSearchComponent extends Component {
 
   onCreate () {
     if (this.query && this.query.length > 0 && this.filter && this.filter.length > 0) {
-      this.search(this.query, this.filter);
+      this._saveQueryAndFilter(this.query, this.filter);
+      this.search();
     }
 
     this.bindBrowserHistory();
@@ -142,23 +143,22 @@ export default class FilterSearchComponent extends Component {
       verticalKey: this._verticalKey,
       barKey: this._barKey,
       onSubmit: (query, filter) => {
-        this.search(query, filter);
+        this._saveQueryAndFilter(query, filter);
+        this.search();
       }
     });
   }
 
-  search (query, filter) {
+  /**
+   * Saves the current query and selected filter to the url and storage,
+   * to be used in the next search
+   * @private
+   */
+  _saveQueryAndFilter (query, filter) {
     const params = this.getUrlParams();
 
     params.set(`${this.name}.query`, query);
     params.set(`${this.name}.filter`, filter);
-
-    // If we have a redirectUrl, we want the params to be
-    // serialized and submitted.
-    if (typeof this.redirectUrl === 'string') {
-      window.location.href = this.redirectUrl + '?' + params.toString();
-      return false;
-    }
 
     window.history.pushState({
       query: query,
@@ -166,13 +166,28 @@ export default class FilterSearchComponent extends Component {
     }, query, '?' + params.toString());
 
     this.core.setFilter(this.name, Filter.fromResponse(filter));
+  }
+
+  /**
+   * Perform the vertical search with all saved filters and query,
+   * optionally redirecting based on config
+   */
+  search () {
+    // If we have a redirectUrl, we want the params to be
+    // serialized and submitted.
+    if (typeof this.redirectUrl === 'string') {
+      window.location.href = this.redirectUrl + '?' + this.getUrlParams().toString();
+      return false;
+    }
+
     const filters = this.core.storage.getAll(StorageKeys.FILTER);
     let totalFilter = filters[0];
     if (filters.length > 1) {
       totalFilter = Filter.and(...filters);
     }
+    const searchQuery = this.core.storage.getState(StorageKeys.QUERY) || '';
 
-    this.core.verticalSearch('', this._verticalKey, JSON.stringify(totalFilter));
+    this.core.verticalSearch(searchQuery, this._verticalKey, JSON.stringify(totalFilter));
   }
 
   setState (data) {
@@ -198,7 +213,8 @@ export default class FilterSearchComponent extends Component {
         filter: this.filter
       });
 
-      this.search(this.query, this.filter);
+      this._saveQueryAndFilter(this.query, this.filter);
+      this.search();
     });
   }
 }

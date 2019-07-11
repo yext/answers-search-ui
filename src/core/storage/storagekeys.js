@@ -12,5 +12,6 @@ export default {
   VERTICAL_RESULTS: 'vertical-results',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
-  FILTER: 'filter'
+  FILTER: 'filter',
+  QUERY: 'query'
 };

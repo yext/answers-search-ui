@@ -2,6 +2,8 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
+import Filter from '../../../core/models/filter';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -100,6 +102,7 @@ export default class SearchComponent extends Component {
 
   onCreate () {
     if (this.query && this.query.length > 0) {
+      this.core.setQuery(this.query);
       this.search(this.query);
     }
 
@@ -146,6 +149,7 @@ export default class SearchComponent extends Component {
         query: query
       }, query, '?' + params.toString());
 
+      this.core.setQuery(query);
       this.search(query);
       return false;
     });
@@ -175,7 +179,11 @@ export default class SearchComponent extends Component {
 
   search (query) {
     if (this._verticalKey) {
-      return this.core.verticalSearch(query, this._verticalKey);
+      const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
+      const totalFilter = allFilters.length > 1
+        ? Filter.and(...allFilters)
+        : allFilters[0];
+      return this.core.verticalSearch(query, this._verticalKey, JSON.stringify(totalFilter));
     } else {
       // NOTE(billy) Temporary hack for DEMO
       // Remove me after the demo
@@ -224,6 +232,8 @@ export default class SearchComponent extends Component {
       this.setState({
         query: this.query
       });
+
+      this.core.setQuery(this.query);
 
       this.search(this.query);
     });
