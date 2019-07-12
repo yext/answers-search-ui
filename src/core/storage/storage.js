@@ -1,6 +1,6 @@
 /** @module Storage */
 
-import ModuleData from './moduledata';
+import StorageContainer from './storagecontainer';
 import { AnswersStorageError } from '../errors/errors';
 
 /**
@@ -10,55 +10,55 @@ import { AnswersStorageError } from '../errors/errors';
  */
 export default class Storage {
   constructor () {
-    this._moduleDataContainer = {};
+    this._storageContainer = {};
     this._futureListeners = {};
   }
 
   /**
-   * Set the data in storage with the given key to the provided data,
+   * Set the data in storage with the given index to the provided data,
    * completely overwriting any existing data.
-   * @param {string} key the storage key to set
+   * @param {string} index the storage index to set
    * @param {*} data the data to set
    */
-  set (key, data) {
-    this._initDataContainer(key, data);
-    this._moduleDataContainer[key].set(data);
+  set (index, data) {
+    this._initStorageContainer(index, data);
+    this._storageContainer[index].set(data);
   }
 
-  _initDataContainer (key, data) {
-    if (key === undefined || key === null || typeof key !== 'string') {
-      throw new AnswersStorageError('Invalid storage key provided', key, data);
+  _initStorageContainer (index, data) {
+    if (index === undefined || index === null || typeof index !== 'string') {
+      throw new AnswersStorageError('Invalid storage index provided', index, data);
     }
     if (data === undefined || data === null) {
-      throw new AnswersStorageError('No data provided', key, data);
+      throw new AnswersStorageError('No data provided', index, data);
     }
 
-    if (this._moduleDataContainer[key] === undefined) {
-      this._moduleDataContainer[key] = new ModuleData(key);
-      this._applyFutureListeners(key);
+    if (this._storageContainer[index] === undefined) {
+      this._storageContainer[index] = new StorageContainer(index);
+      this._applyFutureListeners(index);
     }
   }
 
-  getState (moduleId) {
-    if (this._moduleDataContainer[moduleId]) {
-      return this._moduleDataContainer[moduleId].raw();
+  getState (index) {
+    if (this._storageContainer[index]) {
+      return this._storageContainer[index].raw();
     }
     return {};
   }
 
-  getAll (key) {
+  getAll (index) {
     const data = [];
-    for (const dataKey of Object.keys(this._moduleDataContainer)) {
-      if (dataKey.startsWith(key)) {
-        data.push(this._moduleDataContainer[dataKey].raw());
+    for (const dataKey of Object.keys(this._storageContainer)) {
+      if (dataKey.startsWith(index)) {
+        data.push(this._storageContainer[dataKey].raw());
       }
     }
     return data;
   }
 
   on (evt, moduleId, cb) {
-    let moduleData = this._moduleDataContainer[moduleId];
-    if (moduleData === undefined) {
+    let storage = this._storageContainer[moduleId];
+    if (storage === undefined) {
       if (this._futureListeners[moduleId] === undefined) {
         this._futureListeners[moduleId] = [];
       }
@@ -71,13 +71,13 @@ export default class Storage {
       return;
     }
 
-    this._moduleDataContainer[moduleId].on(evt, cb);
+    this._storageContainer[moduleId].on(evt, cb);
     return this;
   }
 
   off (evt, moduleId, cb) {
-    let moduleData = this._moduleDataContainer[moduleId];
-    if (moduleData === undefined) {
+    let storage = this._storageContainer[moduleId];
+    if (storage === undefined) {
       if (this._futureListeners[moduleId] !== undefined) {
         this._futureListeners[moduleId].pop();
       }
@@ -85,7 +85,7 @@ export default class Storage {
       return this;
     }
 
-    this._moduleDataContainer[moduleId].off(evt, cb);
+    this._storageContainer[moduleId].off(evt, cb);
     return this;
   }
 
