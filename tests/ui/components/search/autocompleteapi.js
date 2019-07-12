@@ -12,6 +12,7 @@ describe('querying and responding', () => {
   const barKey = 'testing';
   const input = 'test';
   const version = 20190101;
+  const locale = 'fr_CA';
 
   const expectedResponse = {
     response: {
@@ -43,7 +44,8 @@ describe('querying and responding', () => {
     });
     autocomplete = new AutoCompleteApi({
       apiKey,
-      answersKey
+      answersKey,
+      locale
     });
   });
 
@@ -55,7 +57,8 @@ describe('querying and responding', () => {
       experienceKey: verticalKey,
       input,
       inputKey: barKey,
-      v: version
+      v: version,
+      locale: locale
     };
 
     it('calls the get method with the filter url', () => {
@@ -81,7 +84,8 @@ describe('querying and responding', () => {
       barKey,
       experienceKey: verticalKey,
       input,
-      v: version
+      v: version,
+      locale: locale
     };
 
     it('creates a proper GET request for vertical search', () => {
@@ -106,7 +110,8 @@ describe('querying and responding', () => {
       answersKey,
       api_key: apiKey,
       input,
-      v: version
+      v: version,
+      locale: locale
     };
 
     it('creates a proper GET request for vertical search', () => {

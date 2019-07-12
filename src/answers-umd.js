@@ -56,7 +56,8 @@ class Answers {
   init (config) {
     this.components.setCore(new Core({
       apiKey: config.apiKey,
-      answersKey: config.answersKey
+      answersKey: config.answersKey,
+      locale: config.locale
     }))
       .setRenderer(this.renderer)
       .setAnalyticsReporter(new AnalyticsReporter(config.apiKey, config.answersKey));
