@@ -341,6 +341,32 @@ ANSWERS.addComponent('FilterOptions', {
 });
 ```
 
+### RangeFilter
+
+Displays two numeric inputs for selecting a number range.
+
+```html
+<div class="range-filter-container"></div>
+```
+
+```js
+ANSWERS.addComponent('RangeFilter', {
+  container: '.range-filter-container',
+  // The api field to filter on
+  field: 'outdoorPoolCount',
+  // Title to display for the range
+  title: 'Number of Outdoor Pools',
+  // The label to show next to the min value, optional
+  minLabel: 'At Least',
+  // The label to show next to the max value, optional
+  maxLabel: 'Not More Than',
+  // The initial min value to show, defaults to 0
+  initialMin: 1,
+  // The initial max value to show, defaults to 10
+  initialMax: 5
+});
+```
+
 ### DateRangeFilter
 
 Displays two date inputs for selecting a range of dates.

@@ -10,8 +10,9 @@ import SearchComponent from './search/searchcomponent';
 import FilterSearchComponent from './search/filtersearchcomponent';
 import AutoCompleteComponent from './search/autocompletecomponent';
 
-import FilterOptionsComponent from './filters/filteroptionscomponent';
 import FilterBoxComponent from './filters/filterboxcomponent';
+import FilterOptionsComponent from './filters/filteroptionscomponent';
+import RangeFilterComponent from './filters/rangefiltercomponent';
 import DateRangeFilterComponent from './filters/daterangefiltercomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
@@ -42,6 +43,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
 // Filter Components
   .register(FilterBoxComponent)
   .register(FilterOptionsComponent)
+  .register(RangeFilterComponent)
   .register(DateRangeFilterComponent)
 
 // Results Components
