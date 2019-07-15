@@ -15,6 +15,7 @@ export default class SearchDataTransformer {
   static transform (data, urls = {}) {
     let response = data.response;
     return {
+      queryId: response.queryId,
       [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
       [StorageKeys.DIRECT_ANSWER]: new DirectAnswer(response.directAnswer),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls)
@@ -23,6 +24,7 @@ export default class SearchDataTransformer {
 
   static transformVertical (data) {
     return {
+      queryId: data.response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Veritcal doesn't respond with ordering, so use empty nav.
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response)
     };

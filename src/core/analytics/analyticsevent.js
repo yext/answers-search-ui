@@ -12,19 +12,13 @@ export default class AnalyticsEvent {
    * @param {object} options Additional options for the event
    */
   addOptions (options) {
-    this.options = options;
+    Object.assign(this, options);
   }
 
   /**
    * Return the event in the api format, typically for reporting to the api
    */
   toApiEvent () {
-    return Object.assign(
-      {},
-      {
-        event_type: this.eventType,
-        label: this.label
-      },
-      this.options);
+    return Object.assign({}, this);
   }
 }

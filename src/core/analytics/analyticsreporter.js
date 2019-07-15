@@ -35,7 +35,7 @@ export default class AnalyticsReporter {
       throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
     }
 
-    event.addOptions({ answers_key: this._answersKey });
+    event.addOptions({ answersKey: this._answersKey });
 
     const request = new ApiRequest({
       baseUrl: ANALYTICS_BASE_URL,

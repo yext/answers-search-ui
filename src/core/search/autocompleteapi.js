@@ -2,7 +2,7 @@
 
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
-import { AnswersEndpointError } from '../errors/errors';
+import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
 
 /**
  * AutoCompleteApi exposes an interface for network related matters
@@ -15,14 +15,20 @@ export default class AutoCompleteApi {
      * @type {string}
      * @private
      */
-    this._apiKey = opts.apiKey || null;
+    if (!opts.apiKey) {
+      throw new AnswersBasicError('Api Key is required', 'AutoComplete');
+    }
+    this._apiKey = opts.apiKey;
 
     /**
      * The Answers Key to use for the request
      * @type {string}
      * @private
      */
-    this._answersKey = opts.answersKey || null;
+    if (!opts.answersKey) {
+      throw new AnswersBasicError('Answers Key is required', 'AutoComplete');
+    }
+    this._answersKey = opts.answersKey;
 
     /**
      * The version of the API to make a request to
@@ -30,6 +36,16 @@ export default class AutoCompleteApi {
      * @private
      */
     this._version = opts.version || 20190101 || 20190301;
+
+    /**
+     * The locale to use for the request
+     * @type {string}
+     * @private
+     */
+    if (!opts.locale) {
+      throw new AnswersBasicError('Locale is required', 'AutoComplete');
+    }
+    this._locale = opts.locale;
   }
 
   /**
@@ -45,7 +61,8 @@ export default class AutoCompleteApi {
         'input': input,
         'answersKey': this._answersKey,
         'experienceKey': verticalKey,
-        'inputKey': barKey
+        'inputKey': barKey,
+        'locale': this._locale
       }
     });
 
@@ -65,7 +82,8 @@ export default class AutoCompleteApi {
       params: {
         'input': input,
         'experienceKey': verticalKey,
-        'barKey': barKey
+        'barKey': barKey,
+        'locale': this._locale
       }
     });
 
@@ -84,7 +102,8 @@ export default class AutoCompleteApi {
       version: this._version,
       params: {
         'input': queryString,
-        'answersKey': this._answersKey
+        'answersKey': this._answersKey,
+        'locale': this._locale
       }
     });
 
