@@ -3,6 +3,7 @@
 export default class AutoCompleteData {
   constructor (data = {}) {
     this.sections = data.sections || [];
+    this.queryId = data.queryId || '';
     Object.freeze(this);
   }
 
@@ -16,7 +17,7 @@ export default class AutoCompleteData {
     } else {
       sections = [{ results: response.results.map(r => new AutoCompleteResult(r)) }];
     }
-    return new AutoCompleteData({ sections });
+    return new AutoCompleteData({ sections, queryId: response.queryId });
   }
 }
 
