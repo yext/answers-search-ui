@@ -1,6 +1,7 @@
 /** @module NavigationComponent */
 
 import Component from '../component';
+import { AnswersComponentError } from '../../../core/errors/errors';
 
 /**
  * The Tab is a model that is used to power the Navigation tabs in the view.
@@ -12,26 +13,32 @@ export class Tab {
      * The name of the tab that is exposed for the link
      * @type {string}
      */
-    this.label = config.label || '';
+    this.label = config.label;
+    if (typeof this.label !== 'string') {
+      throw new AnswersComponentError('NavigationComponent: label is a required configuration option for tab.');
+    }
+
+    /**
+     * The complete URL, including the params
+     * @type {string}
+     */
+    this.url = config.url;
+    if (typeof this.url !== 'string') {
+      throw new AnswersComponentError('NavigationComponent: url is a required configuration option for tab.');
+    }
 
     /**
      * The serverside vertical config id that this is referenced to.
      * By providing this, enables dynamic sorting based on results.
      * @type {string}
      */
-    this.configId = config.configId || '';
-
-    /**
-     * The complete URL, including the params
-     * @type {string}
-     */
-    this.url = config.url || '';
+    this.configId = config.configId || null;
 
     /**
      * The base URL used for constructing the URL with params
      * @type {string}
      */
-    this.baseUrl = config.url || '';
+    this.baseUrl = config.url;
 
     /**
      * Determines whether to show this tab first in the order
@@ -145,7 +152,7 @@ export default class NavigationComponent extends Component {
    * getDefaultTabOrder will compute the initial tab ordering based
    * on a combination of the configuration provided directly to the component
    * and the url params.
-   * @param {object} tabsConfig
+   * @param {Object[]} tabsConfig
    * @param {UrlSearchParams}
    */
   getDefaultTabOrder (tabsConfig, urlParams) {
@@ -153,7 +160,7 @@ export default class NavigationComponent extends Component {
 
     // Use the ordering from the URL as the primary configuration
     // And then merge it with the local configuration, if provided.
-    if (urlParams.has('tabOrder')) {
+    if (urlParams && urlParams.has('tabOrder')) {
       tabOrder = urlParams.get('tabOrder').split(',');
     }
 
@@ -190,13 +197,15 @@ export default class NavigationComponent extends Component {
   mergeTabOrder (tabOrder, otherTabOrder) {
     for (let i = 0; i < otherTabOrder.length; i++) {
       const tabConfig = otherTabOrder[i];
-      if (!tabOrder.includes(tabConfig)) {
-        // isFirst should be an override to dynamic tab ordering.
-        if (this._tabs[tabConfig] && this._tabs[tabConfig].isFirst) {
-          tabOrder.unshift(tabConfig);
-        } else {
-          tabOrder.push(tabConfig);
-        }
+      if (tabOrder.includes(tabConfig)) {
+        continue;
+      }
+
+      // isFirst should be an override to dynamic tab ordering.
+      if (this._tabs[tabConfig] && this._tabs[tabConfig].isFirst) {
+        tabOrder.unshift(tabConfig);
+      } else {
+        tabOrder.push(tabConfig);
       }
     }
 
