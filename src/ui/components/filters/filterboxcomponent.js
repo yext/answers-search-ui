@@ -126,6 +126,7 @@ export default class FilterBoxComponent extends Component {
 
   /**
    * Save current filters to storage to be used in the next search
+   * @private
    */
   _saveFiltersToStorage () {
     const validFilters = this._filters.filter(f => f !== undefined && f !== null);
@@ -144,6 +145,8 @@ export default class FilterBoxComponent extends Component {
       ? Filter.and(...allFilters)
       : allFilters[0];
 
-    this.core.verticalSearch('', this._verticalKey, JSON.stringify(totalFilter));
+    const query = this.core.storage.getState(StorageKeys.QUERY) || '';
+
+    this.core.verticalSearch(query, this._verticalKey, JSON.stringify(totalFilter));
   }
 }

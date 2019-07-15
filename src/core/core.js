@@ -145,6 +145,14 @@ export default class Core {
   }
 
   /**
+   * Stores the given query into storage, to be used for the next search
+   * @param {string} query the query to store
+   */
+  setQuery (query) {
+    this.storage.set(StorageKeys.QUERY, query);
+  }
+
+  /**
    * Stores the given filter into storage, to be used for the next search
    *
    * @param {string} namespace the namespace to use for the storage key
