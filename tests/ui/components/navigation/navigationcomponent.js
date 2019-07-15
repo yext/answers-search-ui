@@ -1,6 +1,4 @@
-
 import DOM from '../../../../src/ui/dom/dom';
-
 import NavigationComponent, { Tab } from '../../../../src/ui/components/navigation/navigationcomponent';
 
 // The DOM doesn't exist within components in the JEST environment,
