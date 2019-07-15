@@ -10,4 +10,4 @@ export const API_BASE_URL = 'https://liveapi.yext.com';
 export const COMPILED_TEMPLATES_URL = 'https://assets.sitescdn.net/answers/answerstemplates.compiled.min.js';
 
 /** The base url for the analytics backend  */
-export const ANALYTICS_BASE_URL = 'https://realtimeanalytics.yext.com';
+export const ANALYTICS_BASE_URL = 'http://realtimeanalytics.yext.com';
