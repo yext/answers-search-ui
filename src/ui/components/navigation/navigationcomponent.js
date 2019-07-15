@@ -15,7 +15,7 @@ export class Tab {
      */
     this.label = config.label;
     if (typeof this.label !== 'string') {
-      throw new AnswersComponentError('NavigationComponent: label is a required configuration option for tab.');
+      throw new AnswersComponentError('label is a required configuration option for tab.', 'NavigationComponent');
     }
 
     /**
@@ -24,7 +24,7 @@ export class Tab {
      */
     this.url = config.url;
     if (typeof this.url !== 'string') {
-      throw new AnswersComponentError('NavigationComponent: url is a required configuration option for tab.');
+      throw new AnswersComponentError('url is a required configuration option for tab.', 'NavigationComponent');
     }
 
     /**
@@ -94,12 +94,14 @@ export default class NavigationComponent extends Component {
     /**
      * The handlebars template to use
      * @type {string}
+     * @private
      */
     this._templateName = 'navigation/navigation';
 
     /**
      * Unordered map of each tab, keyed by VS configId
      * @type {Object.<String, Object>}
+     * @private
      */
     this._tabs = Tab.from(config.tabs);
 
@@ -107,6 +109,7 @@ export default class NavigationComponent extends Component {
      * The order of the tabs, parsed from configuration or URL.
      * This gets updated based on the server results
      * @type {Array.<String>} The list of VS configIds
+     * @private
      */
     this._tabOrder = this.getDefaultTabOrder(config.tabs, this.getUrlParams());
   }
