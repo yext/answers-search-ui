@@ -4,7 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
-import SearchParams from '../../dom/SearchParams';
+import SearchParams from '../../dom/searchparams';
 
 /**
  * SearchComponent exposes an interface in order to create

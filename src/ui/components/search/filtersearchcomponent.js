@@ -4,7 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
-import SearchParams from '../../dom/SearchParams';
+import SearchParams from '../../dom/searchparams';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.

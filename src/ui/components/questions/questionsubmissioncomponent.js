@@ -3,7 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
-import SearchParams from '../../dom/SearchParams';
+import SearchParams from '../../dom/searchparams';
 
 export default class QuestionSubmissionComponent extends Component {
   constructor (opts = {}) {
