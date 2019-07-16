@@ -76,11 +76,12 @@ export default class AutoCompleteApi {
 
   queryVertical (input, verticalKey, barKey) {
     let request = new ApiRequest({
-      endpoint: '/v2/accounts/me/entities/autocomplete',
+      endpoint: '/v2/accounts/me/answers/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
       params: {
         'input': input,
+        'answersKey': this._answersKey,
         'experienceKey': verticalKey,
         'barKey': barKey,
         'locale': this._locale
