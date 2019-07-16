@@ -5,6 +5,8 @@ import Component from '../component';
 import GoogleMapProvider from './providers/googlemapprovider';
 import MapBoxMapProvider from './providers/mapboxmapprovider';
 
+import StorageKeys from '../../../core/storage/storagekeys';
+
 const ProviderTypes = {
   'google': GoogleMapProvider,
   'mapbox': MapBoxMapProvider
@@ -17,7 +19,7 @@ export default class MapComponent extends Component {
     /**
      * Bind this component to listen to the storage based on this key
      */
-    this.moduleId = 'verticalResults';
+    this.moduleId = StorageKeys.VERTICAL_RESULTS;
 
     /**
      * The default template to use to render this component
