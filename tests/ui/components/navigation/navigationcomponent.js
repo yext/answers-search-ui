@@ -189,4 +189,23 @@ describe('navigation component configuration', () => {
     const url = navComponent.generateTabUrl(tabConfig[0].url, params);
     expect(url).toEqual('/tab1/?query=yes&tabOrder=tab1');
   });
+
+  it('generates tab url without params', () => {
+    const tabConfig = [
+      {
+        label: 'This this is my second label',
+        url: '/tab1/',
+        configId: 'tab1'
+      }
+    ];
+
+    // Finally construct our component
+    let navComponent = new NavigationComponent({
+      container: '.test-component',
+      tabs: tabConfig
+    });
+
+    const url = navComponent.generateTabUrl(tabConfig[0].url);
+    expect(url).toEqual('/tab1/?tabOrder=tab1');
+  });
 });
