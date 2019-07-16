@@ -78,8 +78,9 @@ describe('querying and responding', () => {
   });
 
   describe('queryVertical', () => {
-    const expectedUrl = `${baseUrl}/entities/autocomplete`;
+    const expectedUrl = `${baseUrl}/answers/autocomplete`;
     const expectedData = {
+      answersKey,
       api_key: apiKey,
       barKey,
       experienceKey: verticalKey,
