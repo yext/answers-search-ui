@@ -2,7 +2,7 @@
 
 import HttpRequester from './httprequester';
 import { API_BASE_URL } from '../constants';
-import SearchParams from '../../ui/dom/SearchParams';
+import SearchParams from '../../ui/dom/SearchParams'; // TODO ideally this would be passed in as a param
 
 /**
  * ApiRequest is the base class for all API requests.

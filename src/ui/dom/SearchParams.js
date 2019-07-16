@@ -1,9 +1,13 @@
+/** @module SearchParams */
+
+/**
+ * SearchParams is a class to get the search params in a URL.
+ * It is a replacement for URL.searchParams and URLSearchParams for browsers like IE11
+ */
 export default class SearchParams {
   constructor (url) {
-    this.useNative = false;
     if (window.URLSearchParams) {
-      this.useNative = true;
-      this.params = new URLSearchParams(url);
+      return new URLSearchParams(url);
     } else {
       this.params = this.parse(url);
     }
@@ -22,7 +26,7 @@ export default class SearchParams {
     for (let keyVal of keyVals) {
       let split = keyVal.split('=');
       if (split.length > 1) {
-        mapping[split[0]] = split[1];
+        mapping[split[0]] = this.decode(split[1]);
       } else {
         mapping[split[0]] = '';
       }
@@ -31,49 +35,37 @@ export default class SearchParams {
   }
 
   get (query) {
-    if (this.useNative === true) {
-      return this.params.get(query);
-    }
     return this.params[query];
   }
 
   set (name, value) {
-    if (this.useNative === true) {
-      this.params.set(name, value);
-    }
     this.params[name] = value;
   }
 
   has (query) {
-    if (this.useNative === true) {
-      return this.params.get(query);
-    }
     return query in this.params;
   }
 
   toString () {
-    if (this.useNative === true) {
-      return this.params.toString();
-    }
     let string = [];
-    for (let key of this.params) {
-      string.push(`${key}=${this.params[key]}`);
+    for (let key in this.params) {
+      string.push(`${key}=${this.encode(this.params[key])}`);
     }
     return string.join('&');
   }
 
+  decode (string) {
+    return decodeURIComponent(string.replace(/[ +]/g, '%20'));
+  }
+
   encode (string) {
-    // from https://github.com/jerrybendy/url-search-params-polyfill/blob/master/index.js
-    var replace = {
+    let replace = {
       '!': '%21',
       "'": '%27',
       '(': '%28',
       ')': '%29',
-      '~': '%7E',
-      '%20': '+',
-      '%00': '\x00'
     };
-    return encodeURIComponent(string).replace(/[!'()~]|%20|%00/g, function (match) {
+    return encodeURIComponent(string).replace(/[!'()]/g, function (match) {
       return replace[match];
     });
   }
