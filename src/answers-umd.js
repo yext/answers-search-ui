@@ -6,7 +6,7 @@ import {
   TemplateLoader,
   COMPONENT_MANAGER,
   Renderers,
-  DOM,
+  DOM
 } from './ui/index';
 
 import ErrorReporter from './core/errors/errorreporter';
