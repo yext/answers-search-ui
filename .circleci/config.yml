@@ -33,7 +33,7 @@ commands:
       - run:
           name: Configure AWS
           command: |
-            mkdir ~/.aws
+            mkdir -p ~/.aws
             cp .circleci/aws_config ~/.aws/config
             echo -e $AWS_PROD_PROFILE >> ~/.aws/config
       - aws-s3/copy:
