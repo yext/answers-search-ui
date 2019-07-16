@@ -1,12 +1,14 @@
 /** @module SearchParams */
 
+/* global window */
+
 /**
  * SearchParams is a class to get the search params in a URL.
  * It is a replacement for URL.searchParams and URLSearchParams for browsers like IE11
  */
 export default class SearchParams {
   constructor (url) {
-    /** 
+    /**
      * Mapping of all query parameters in the given url, query param -> value
      * Only used if URLSearchParams does not exist in the window
      * @type {Object}
@@ -21,17 +23,17 @@ export default class SearchParams {
     }
   }
 
-  /** 
+  /**
    * parse creates a mapping of all query params in a given url
    * The query param values are decoded before being put in the map
-   * @param {string} url The url 
+   * @param {string} url The url
    * @returns {Object} mapping from query param -> value
    */
   parse (url) {
     let mapping = {};
     let search = url;
     if (url.indexOf('?') > -1) {
-      search = url.slice(url.indexOf('?'));
+      search = url.slice(url.indexOf('?') + 1);
     }
     if (search === '') {
       return mapping;
@@ -40,7 +42,7 @@ export default class SearchParams {
     for (let keyVal of keyVals) {
       let split = keyVal.split('=');
       if (split.length > 1) {
-        mapping[split[0]] = this.decode(split[1]);
+        mapping[split[0]] = SearchParams.decode(split[1]);
       } else {
         mapping[split[0]] = '';
       }
@@ -51,9 +53,12 @@ export default class SearchParams {
   /**
    * get returns the value of the given query param
    * @param {string} query the query param key to get the value of
-   * @return {string} param value, undefined otherwise
+   * @return {string} param value, null otherwise
    */
   get (query) {
+    if (typeof this._params[String(query)] === 'undefined') {
+      return null;
+    }
     return this._params[query];
   }
 
@@ -63,7 +68,7 @@ export default class SearchParams {
    * @param {string} value the value of the query param update with
    */
   set (name, value) {
-    this._params[name] = value;
+    this._params[String(name)] = String(value);
   }
 
   /**
@@ -82,7 +87,7 @@ export default class SearchParams {
   toString () {
     let string = [];
     for (let key in this._params) {
-      string.push(`${key}=${this.encode(this._params[key])}`);
+      string.push(`${key}=${SearchParams.encode(this._params[key])}`);
     }
     return string.join('&');
   }
@@ -92,7 +97,7 @@ export default class SearchParams {
    * @param {string} string the string to decode
    * @return {string}
    */
-  decode (string) {
+  static decode (string) {
     return decodeURIComponent(string.replace(/[ +]/g, '%20'));
   }
 
@@ -101,14 +106,15 @@ export default class SearchParams {
    * @param {string} string the string to encode
    * @return {string}
    */
-  encode (string) {
+  static encode (string) {
     let replace = {
       '!': '%21',
       "'": '%27',
       '(': '%28',
       ')': '%29',
+      '%20': '+'
     };
-    return encodeURIComponent(string).replace(/[!'()]/g, function (match) {
+    return encodeURIComponent(string).replace(/[!'()]|%20/g, function (match) {
       return replace[match];
     });
   }
