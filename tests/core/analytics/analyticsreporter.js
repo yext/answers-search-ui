@@ -43,6 +43,7 @@ describe('reporting events', () => {
     expect(mockedPost).toBeCalledTimes(1);
     expect(mockedPost).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expectedEvent.toApiEvent() }));
+      expect.objectContaining({ 'data': expectedEvent.toApiEvent() }),
+      undefined);
   });
 });
