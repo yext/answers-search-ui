@@ -480,8 +480,8 @@ Click analytics can be attached to an element by adding the `data-eventtype` att
 
 ```html
 <button class="driving-directions-button"
-  data-eventtype="DRIVING_DIRECTIONS"
-  data-eventoptions='{"store": "{{store}}"}'
+        data-eventtype="DRIVING_DIRECTIONS"
+        data-eventoptions='{"store": "{{store}}"}'
 >
     Drive to {{store}}
 </button>
