@@ -348,7 +348,7 @@ export default class Component {
     // Overloading and having this side effect is unintuitive and WRONG
     if (!Array.isArray(childData)) {
       let childComponent = this.addChild(childData, type, opts);
-      DOM.append(domComponent, childComponent.render(childData));
+      DOM.append(domComponent, childComponent.render());
       return;
     }
 
