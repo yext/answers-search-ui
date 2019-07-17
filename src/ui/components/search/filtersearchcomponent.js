@@ -103,12 +103,16 @@ export default class FilterSearchComponent extends Component {
   }
 
   static get type () {
-    return 'FilterPicker';
+    return 'FilterSearch';
   }
 
   onCreate () {
     if (this.query && this.query.length > 0 && this.filter && this.filter.length > 0) {
-      this._saveQueryAndFilter(this.query, this.filter);
+      const params = this.getUrlParams();
+      params.set(`${this.name}.query`, this.query);
+      params.set(`${this.name}.filter`, this.filter);
+      window.history.pushState({}, '', '?' + params.toString());
+      this.core.setFilter(this.name, Filter.fromResponse(this.filter));
       this.search();
     }
 
