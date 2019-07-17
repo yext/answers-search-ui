@@ -72,7 +72,7 @@ export default class ResultsComponent extends Component {
       return this;
     }
 
-    return super.setState(Object.assign(data, {
+    return super.setState(Object.assign({}, data, {
       includeMap: this._opts.includeMap,
       mapConfig: this._opts.mapConfig
     }), val);

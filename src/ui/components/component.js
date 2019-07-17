@@ -356,7 +356,7 @@ export default class Component {
     let childHTML = [];
     for (let i = 0; i < childData.length; i++) {
       let childComponent = this.addChild(childData[i], type, opts);
-      childHTML.push(childComponent.render(childData[i]));
+      childHTML.push(childComponent.render());
     }
 
     DOM.append(domComponent, childHTML.join(''));
