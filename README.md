@@ -19,6 +19,8 @@ Outline:
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
    - [QASubmission Component](#qa-submission-component)
+4. [Analytics](#analytics)
+   - [Click Analytics](#click-analytics)
 # Install and Setup
 
 To include the answers base CSS (optional).
@@ -466,4 +468,21 @@ ANSWERS.addComponent('QASubmission', {
   privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
   buttonLabel: 'Submit'                // Optional,  defaults to 'Submit:'
 })
+```
+
+# Analytics
+
+Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks. You may add additional, custom analytic events to templates using certain data attributes, explained below.
+
+## Click Analytics
+
+Click analytics can be attached to an element by adding the `data-eventtype` attribute to the element you want to track clicks for. The provided string should be the type of the analytics event. You can optionally include metadata inside the `data-eventoptions` attribute, in a JSON format. Whenever the element is clicked, an analtyics event with that data will be sent to the server.
+
+```html
+<button class="driving-directions-button"
+  data-eventtype="DRIVING_DIRECTIONS"
+  data-eventoptions='{"store": "{{store}}"}'
+>
+    Drive to {{store}}
+</button>
 ```
