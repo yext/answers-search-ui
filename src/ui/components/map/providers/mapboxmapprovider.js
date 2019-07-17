@@ -75,15 +75,30 @@ export default class MapBoxMapProvider extends MapProvider {
       center: [mapData.mapCenter.longitude, mapData.mapCenter.latitude]
     });
 
+    let pinConfig = this._pinConfig;
+    let pinConfigObj,
+        wrapper;
+
     this._map.on('load', () => {
       if (mapData && mapData.mapMarkers.length > 0) {
         let markers = mapData.mapMarkers;
         for (let i = 0; i < markers.length; i++) {
+          if (pinConfig) {
+            if (typeof pinConfig === 'function') {
+              pinConfigObj = pinConfig(markers[i].item, MapProvider.DEFAULT_PIN_CONFIG, markers[i]);
+            }
+          }
+
+          wrapper = document.createElement('div');
+          if (pinConfigObj.svg) {
+            wrapper.innerHTML = pinConfigObj.svg
+          }
+
           let coords = new mapboxgl.LngLat(
             markers[i].longitude,
             markers[i].latitude);
 
-          let marker = new mapboxgl.Marker().setLngLat(coords);
+          let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
           marker.addTo(this._map);
         }
       }
