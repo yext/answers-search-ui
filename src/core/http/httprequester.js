@@ -39,7 +39,8 @@ export default class HttpRequester {
       Methods.POST,
       url,
       Object.assign({
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
+        credentials: undefined
       }, opts)
     );
   }
