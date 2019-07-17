@@ -77,7 +77,7 @@ export default class MapBoxMapProvider extends MapProvider {
 
     let pinConfig = this._pinConfig;
     let pinConfigObj,
-        wrapper;
+      wrapper;
 
     this._map.on('load', () => {
       if (mapData && mapData.mapMarkers.length > 0) {
@@ -91,7 +91,7 @@ export default class MapBoxMapProvider extends MapProvider {
 
           wrapper = document.createElement('div');
           if (pinConfigObj.svg) {
-            wrapper.innerHTML = pinConfigObj.svg
+            wrapper.innerHTML = pinConfigObj.svg;
           }
 
           let coords = new mapboxgl.LngLat(
