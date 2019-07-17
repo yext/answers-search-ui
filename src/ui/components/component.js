@@ -348,7 +348,7 @@ export default class Component {
     // Overloading and having this side effect is unintuitive and WRONG
     if (!Array.isArray(childData)) {
       let childComponent = this.addChild(childData, type, opts);
-      DOM.append(domComponent, childComponent.render(childData));
+      DOM.append(domComponent, childComponent.render());
       return;
     }
 
@@ -356,7 +356,7 @@ export default class Component {
     let childHTML = [];
     for (let i = 0; i < childData.length; i++) {
       let childComponent = this.addChild(childData[i], type, opts);
-      childHTML.push(childComponent.render(childData[i]));
+      childHTML.push(childComponent.render());
     }
 
     DOM.append(domComponent, childHTML.join(''));
