@@ -2,6 +2,7 @@
 
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 /**
  * The Tab is a model that is used to power the Navigation tabs in the view.
@@ -89,7 +90,7 @@ export default class NavigationComponent extends Component {
      * The data storage key
      * @type {string}
      */
-    this.moduleId = 'navigation';
+    this.moduleId = StorageKeys.NAVIGATION;
 
     /**
      * The handlebars template to use
