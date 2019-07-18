@@ -39,20 +39,17 @@ export default class MapBoxMapProvider extends MapProvider {
   }
 
   generateStatic (mapData) {
-    let encodedMarkers = '';
-    let mapMarkers = mapData.mapMarkers;
+    let mapboxMapMarkerConfigs = MapBoxMarkerConfig.from(
+      mapData.mapMarkers,
+      this._pinConfig
+    );
+
     let center = mapData.mapCenter;
     let width = this._width || 600;
     let height = this._height || 200;
     let zoom = this._zoom || 9;
 
-    for (let i = 0; i < mapMarkers.length; i++) {
-      let mm = mapMarkers[i];
-      if (i > 0) {
-        encodedMarkers += ',';
-      }
-      encodedMarkers += `pin-s-${mm.label}(${mm.longitude},${mm.latitude})`;
-    }
+    let encodedMarkers = MapBoxMarkerConfig.serialize(mapboxMapMarkerConfigs);
     return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${this._apiKey}">`;
   }
 
@@ -75,31 +72,102 @@ export default class MapBoxMapProvider extends MapProvider {
       center: [mapData.mapCenter.longitude, mapData.mapCenter.latitude]
     });
 
-    const pinConfig = this._pinConfig;
-    let pinConfigObj,
-      wrapper;
+    const mapboxMapMarkerConfigs = MapBoxMarkerConfig.from(
+      mapData.mapMarkers,
+      this._pinConfig,
+      this._map);
 
-    this._map.on('load', () => {
-      if (mapData && mapData.mapMarkers.length > 0) {
-        let markers = mapData.mapMarkers;
-        for (let i = 0; i < markers.length; i++) {
-          if (pinConfig && typeof pinConfig === 'function') {
-            pinConfigObj = pinConfig(markers[i].item, MapProvider.DEFAULT_PIN_CONFIG, markers[i]);
-          }
+    for (let i = 0; i < mapboxMapMarkerConfigs.length; i++) {
+      let wrapper = mapboxMapMarkerConfigs[i].wrapper;
+      let coords = new mapboxgl.LngLat(
+        mapboxMapMarkerConfigs[i].position.longitude,
+        mapboxMapMarkerConfigs[i].position.latitude);
+      let marker = new mapboxgl.Marker(wrapper).setLngtLat(coords);
+      marker.addTo(this._map);
+    }
+  }
+}
 
-          wrapper = document.createElement('div');
-          if (pinConfig && pinConfigObj.svg) {
-            wrapper.innerHTML = pinConfigObj.svg;
-          }
+export class MapBoxMarkerConfig {
+  constructor (opts) {
+    /**
+     * A reference to the google map, that the marker is appended to
+     * @type {MapBox}
+     */
+    this.map = opts.map || undefined;
 
-          let coords = new mapboxgl.LngLat(
-            markers[i].longitude,
-            markers[i].latitude);
+    /**
+     * The coordinates of the marker (lat/lng)
+     * @type {Object}
+     */
+    this.position = opts.position || {
+      latitude: undefined,
+      longitude: undefined
+    };
 
-          let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
-          marker.addTo(this._map);
-        }
-      }
+    /**
+     * The html element to be used as the map marker
+     * @type {object}
+     */
+    this.wrapper = opts.wrapper || undefined;
+
+    /**
+     * The label of the marker to use
+     * @type {string}
+     */
+    this.label = opts.label || undefined;
+  }
+
+  /**
+   * Serializes an array of marker configs
+   * @param {MapBoxMarkerConfig[]} mapboxMapMarkerConfigs
+   * @returns {string[]}
+   */
+  static serialize (mapboxMapMarkerConfigs) {
+    let serializedMarkers = [];
+    mapboxMapMarkerConfigs.forEach((marker) => {
+      serializedMarkers.push(`pin-s-${marker.label}(${marker.position.longitude},${marker.position.latitude})`);
     });
+    return serializedMarkers.join(',');
+  }
+
+  /**
+   * Converts the storage data model of markers into GoogleAPIMarker
+   * @param {MapBox} A reference to the google map to apply the marker to
+   * @param {object[]} markers The data of the marker
+   * @param {Object} pinConfig The configuration to apply to the marker
+   * @returns {MapBoxMarkerConfig[]}
+   */
+  static from (markers, pinConfig, map) {
+    let mapboxMapMarkerConfigs = [];
+    if (!Array.isArray(markers)) {
+      markers = [markers];
+    }
+
+    markers.forEach((marker) => {
+      // Support configuration as a function
+      let pinConfigObj = pinConfig;
+      if (typeof pinConfig === 'function') {
+        pinConfigObj = pinConfig(
+          marker.item,
+          MapProvider.DEFAULT_PIN_CONFIG,
+          marker);
+      }
+
+      let wrapper = pinConfigObj.wrapper ? pinConfigObj.wrapper : null;
+
+      mapboxMapMarkerConfigs.push(
+        new MapBoxMarkerConfig({
+          map: map,
+          position: {
+            latitude: marker.latitude,
+            longitude: marker.longitude
+          },
+          wrapper: wrapper
+        })
+      );
+    });
+
+    return mapboxMapMarkerConfigs;
   }
 }
