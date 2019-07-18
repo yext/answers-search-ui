@@ -91,7 +91,7 @@ export default class MapBoxMapProvider extends MapProvider {
 export class MapBoxMarkerConfig {
   constructor (opts) {
     /**
-     * A reference to the google map, that the marker is appended to
+     * A reference to the mapbox map, that the marker is appended to
      * @type {MapBox}
      */
     this.map = opts.map || undefined;
