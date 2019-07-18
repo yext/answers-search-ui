@@ -74,7 +74,7 @@ describe('resquesting and responding', () => {
       requester.post(`${baseUrl}/answers/query`, data, {});
       expect(global.fetch).toHaveBeenCalledWith(
         expectedUrl,
-        { method: 'post', credentials: 'include', body: JSON.stringify(data) }
+        { method: 'post', credentials: undefined, body: JSON.stringify(data) }
       );
     });
 
