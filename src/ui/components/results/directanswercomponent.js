@@ -1,12 +1,13 @@
 /** @module DirectAnswerComponent */
 
 import Component from '../component';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 export default class DirectAnswerComponent extends Component {
   constructor (opts = {}) {
     super(opts);
 
-    this.moduleId = 'directAnswer';
+    this.moduleId = StorageKeys.DIRECT_ANSWER;
     this._templateName = 'results/directanswer';
   }
 
