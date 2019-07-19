@@ -66,10 +66,16 @@
 <ul>
 <li><a href="#navigation-component">Navigation Component</a></li>
 <li><a href="#searchbar-component">SearchBar Component</a></li>
+<li><a href="#filtersearch-component">FilterSearch Component</a></li>
 <li><a href="#direct-answer-component">DirectAnswer Component</a></li>
 <li><a href="#universal-results-component">UniversalResults Component</a></li>
 <li><a href="#vertical-results-component">VerticalResults Component</a></li>
 <li><a href="#qa-submission-component">QASubmission Component</a></li>
+</ul>
+</li>
+<li><a href="#analytics">Analytics</a>
+<ul>
+<li><a href="#click-analytics">Click Analytics</a></li>
 </ul>
 </li>
 </ol>
@@ -136,6 +142,12 @@
 <td>templateBundle</td>
 <td>object</td>
 <td>Provide the precompiled templates</td>
+<td>not required</td>
+</tr>
+<tr>
+<td>locale</td>
+<td>string</td>
+<td>The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'.</td>
 <td>not required</td>
 </tr>
 </tbody>
@@ -253,7 +265,7 @@ you can use the <code>transformData</code> hook.</p>
   container: '.search-container',
   transformData: (data) => {
     // Extend/overide the data object
-    return Object.assign(data, {
+    return Object.assign({}, data, {
       title: data.title.toLowerCase()
     })
   },
@@ -317,6 +329,81 @@ Each provide a different way of auto complete.</p>
   verticalKey: '&lt;VERTICAL_KEY>',      // required
   barKey: '&lt;BAR_KEY>'                 // optional
 })
+</code></pre>
+<h2>FilterSearch Component</h2>
+<p>The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filter-search-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterSearch', {
+  container: '.filter-search-container',
+  verticalKey: '&lt;VERTICAL_KEY>',      // required
+  barKey: '&lt;BAR_KEY>'                 // optional
+})
+</code></pre>
+<h2>FilterBox Component</h2>
+<p>The FilterBox component shows a list of filters to apply to a search.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filters-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterBox', {
+  container: '.filters-container',
+  // List of filter component configurations
+  filters: [
+    {
+      type: 'FilterOptions',
+      control: 'multioption',
+      options: [
+        {
+          label: 'Open Now',
+          field: 'c_openNow',
+          value: 'true'
+        },
+        {
+          label: 'Dog Friendly',
+          field: 'c_dogFriendly',
+          value: 'true'
+        },
+        {
+          label: 'Megastores',
+          field: 'c_storeType',
+          value: 'Megastore'
+        }
+      ]
+    }
+  ]
+});
+</code></pre>
+<h2>Filter Components</h2>
+<p>Filter components can be used in a FilterBox or on their own to affect a search.</p>
+<h3>FilterOptions</h3>
+<p>FilterOptions displays a set of filters with either checkboxes or radio buttons.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filter-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterOptions', {
+  container: '.filter-container',
+  // Control type, singleoption or multioption
+  control: 'singleoption',
+  // List of options
+  options: [
+    {
+      // Label to show next to the filter option
+      label: 'Open Now',
+      // The api field to filter on, configured on the Yext platform
+      field: 'c_openNow',
+      // The value for the above field to filter by
+      value: 'true'
+    },
+    {
+      label: 'Dog Friendly',
+      field: 'c_dogFriendly',
+      value: 'true'
+    },
+    {
+      label: 'Megastores',
+      field: 'c_storeType',
+      value: 'Megastore'
+    }
+  ]
+});
 </code></pre>
 <h2>Direct Answer Component</h2>
 <p>The Direct Answer Component will render the BEST result, if found,
@@ -404,6 +491,17 @@ when a search query is run.</p>
   privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
   buttonLabel: 'Submit'                // Optional,  defaults to 'Submit:'
 })
+</code></pre>
+<h1>Analytics</h1>
+<p>Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks. You may add additional, custom analytic events to templates using certain data attributes, explained below.</p>
+<h2>Click Analytics</h2>
+<p>Click analytics can be attached to an element by adding the <code>data-eventtype</code> attribute to the element you want to track clicks for. The provided string should be the type of the analytics event. You can optionally include metadata inside the <code>data-eventoptions</code> attribute, in a JSON format. Whenever the element is clicked, an analtyics event with that data will be sent to the server.</p>
+<pre class="prettyprint source lang-html"><code>&lt;button class=&quot;driving-directions-button&quot;
+        data-eventtype=&quot;DRIVING_DIRECTIONS&quot;
+        data-eventoptions='{&quot;store&quot;: &quot;{{store}}&quot;}'
+>
+    Drive to {{store}}
+&lt;/button>
 </code></pre></article>
     </section>
 
@@ -415,13 +513,13 @@ when a search query is run.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterPickerComponent.html">FilterPickerComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-Search.html">Search</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 10:34:41 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 19 2019 10:43:24 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

@@ -32,7 +32,16 @@ import { Renderers } from '../rendering/const';
 
 import DOM from '../dom/dom';
 import State from './state';
+import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused-vars
+import AnalyticsEvent from '../../core/analytics/analyticsevent';
 
+/**
+ * Component is an abstraction that encapsulates state, behavior,
+ * and view for a particular chunk of functionality on the page.
+ *
+ * The API exposes event life cycle hooks for when things are rendered,
+ * mounted, created, etc.
+ */
 export default class Component {
   constructor (type, opts = {}) {
     // Simple facade pattern to enable the user to pass a single object
@@ -72,7 +81,7 @@ export default class Component {
 
     /**
      * A container for all the child components
-     * @type {Array.Component}
+     * @type {Component[]}
      */
     this._children = [];
 
@@ -93,6 +102,12 @@ export default class Component {
      * @type {ComponentManager}
      */
     this.componentManager = opts.componentManager || null;
+
+    /**
+     * A local reference to the analytics reporter, used to report events for this component
+     * @type {AnalyticsReporter}
+     */
+    this.analyticsReporter = opts.analyticsReporter || null;
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
@@ -283,6 +298,11 @@ export default class Component {
 
     this._isMounted = true;
     this._onMount();
+
+    // Attach analytics hooks as necessary
+    let domHooks = DOM.queryAll(this._container, '[data-eventtype]');
+    domHooks.forEach(this._createAnalyticsHook.bind(this));
+
     return this;
   }
 
@@ -328,44 +348,59 @@ export default class Component {
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     let domComponents = DOM.queryAll(el, '[data-component]');
-    domComponents.forEach((domComponent) => {
-      let dataset = domComponent.dataset;
-      let type = dataset.component;
-      let prop = dataset.prop;
-      let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
-
-      // Rendering a sub component should be within the context,
-      // of the node that we processed it from
-      opts = Object.assign(opts, {
-        container: domComponent
-      });
-
-      let childData = data[prop];
-
-      // TODO(billy) Right now, if we provide an array as the data prop,
-      // the behavior is to create many components for each item in the array.
-      // THAT interface SHOULD change to use a different property that defines
-      // whether to array data should be used for a single component or
-      // to create many components for each item.
-      // Overloading and having this side effect is unintuitive and WRONG
-      if (!Array.isArray(childData)) {
-        let childComponent = this.addChild(childData, type, opts);
-        DOM.append(domComponent, childComponent.render(childData));
-        return;
-      }
-
-      // Otherwise, render the component as expected
-      let childHTML = [];
-      for (let i = 0; i &lt; childData.length; i++) {
-        let childComponent = this.addChild(childData[i], type, opts);
-        childHTML.push(childComponent.render(childData[i]));
-      }
-
-      DOM.append(domComponent, childHTML.join(''));
-    });
+    domComponents.forEach(c => this._createSubcomponent(c, data));
 
     this.afterRender();
     return el.innerHTML;
+  }
+
+  _createSubcomponent (domComponent, data) {
+    let dataset = domComponent.dataset;
+    let type = dataset.component;
+    let prop = dataset.prop;
+    let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
+
+    // Rendering a sub component should be within the context,
+    // of the node that we processed it from
+    opts = Object.assign(opts, {
+      container: domComponent
+    });
+
+    let childData = data[prop];
+
+    // TODO(billy) Right now, if we provide an array as the data prop,
+    // the behavior is to create many components for each item in the array.
+    // THAT interface SHOULD change to use a different property that defines
+    // whether to array data should be used for a single component or
+    // to create many components for each item.
+    // Overloading and having this side effect is unintuitive and WRONG
+    if (!Array.isArray(childData)) {
+      let childComponent = this.addChild(childData, type, opts);
+      DOM.append(domComponent, childComponent.render());
+      return;
+    }
+
+    // Otherwise, render the component as expected
+    let childHTML = [];
+    for (let i = 0; i &lt; childData.length; i++) {
+      let childComponent = this.addChild(childData[i], type, opts);
+      childHTML.push(childComponent.render());
+    }
+
+    DOM.append(domComponent, childHTML.join(''));
+  }
+
+  _createAnalyticsHook (domComponent) {
+    const dataset = domComponent.dataset;
+    const type = dataset.eventtype;
+    const label = dataset.eventlabel;
+    const options = dataset.eventoptions ? JSON.parse(dataset.eventoptions) : {};
+
+    DOM.on(domComponent, 'mousedown', () => {
+      const event = new AnalyticsEvent(type, label);
+      event.addOptions(options);
+      this.analyticsReporter.report(event);
+    });
   }
 
   /**
@@ -442,13 +477,13 @@ export default class Component {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterPickerComponent.html">FilterPickerComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-Search.html">Search</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 10:34:41 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 19 2019 10:43:24 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
