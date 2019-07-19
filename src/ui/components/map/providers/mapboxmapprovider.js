@@ -82,7 +82,7 @@ export default class MapBoxMapProvider extends MapProvider {
       let coords = new mapboxgl.LngLat(
         mapboxMapMarkerConfigs[i].position.longitude,
         mapboxMapMarkerConfigs[i].position.latitude);
-      let marker = new mapboxgl.Marker(wrapper).setLngtLat(coords);
+      let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
       marker.addTo(this._map);
     }
   }
