@@ -1,0 +1,14 @@
+{
+  "plugins": {
+    "postcss-line-height-px-to-unitless": {},
+    "postcss-pxtorem": {
+      "rootValue": 16,
+      "propList": ["*"],
+      "mediaQuery": true
+    },
+    "autoprefixer": {
+      "browsers": ["last 2 versions"],
+      "grid": true
+    }
+  }
+}
