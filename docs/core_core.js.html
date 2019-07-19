@@ -28,15 +28,18 @@
         <article>
             <pre class="prettyprint source linenums"><code>/** @module Core */
 
-import Search from './search/search';
-import AutoComplete from './search/autocomplete';
+import SearchApi from './search/searchapi';
+import AutoCompleteApi from './search/autocompleteapi';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import Storage from './storage/storage';
-import * as StorageKeys from './storage/storagekeys';
-import Filter from './models/filter';
+import StorageKeys from './storage/storagekeys';
 
+/**
+ * Core is the main application container for all of the network and storage
+ * related behaviors of the application.
+ */
 export default class Core {
   constructor (opts = {}) {
     if (typeof opts.apiKey !== 'string') {
@@ -62,6 +65,14 @@ export default class Core {
     this._answersKey = opts.answersKey;
 
     /**
+     * A reference to the client locale used for all requests. If not specified, defaults to "en" (for
+     * backwards compatibility).
+     * @type {string}
+     * @private
+     */
+    this._locale = opts.locale || 'en';
+
+    /**
      * A reference to the core data storage that powers the UI
      * @type {Storage}
      * @private
@@ -74,20 +85,22 @@ export default class Core {
      * @type {Search}
      * @private
      */
-    this._searcher = new Search({
+    this._searcher = new SearchApi({
       apiKey: this._apiKey,
-      answersKey: this._answersKey
+      answersKey: this._answersKey,
+      locale: this._locale
     });
 
     /**
      * An abstraction containing the integration with the RESTful autocomplete API
-     * For both vertical and universal search
-     * @type {Search}
+     * For filter search, vertical autocomplete, and universal autocomplete
+     * @type {Autocomplete}
      * @private
      */
-    this._autoComplete = new AutoComplete({
+    this._autoComplete = new AutoCompleteApi({
       apiKey: this._apiKey,
-      answersKey: this._answersKey
+      answersKey: this._answersKey,
+      locale: this._locale
     });
   }
 
@@ -96,8 +109,8 @@ export default class Core {
       .verticalQuery(queryString, verticalKey, filter)
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
-        this.storage.insert(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.insert(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
       });
   }
 
@@ -106,14 +119,14 @@ export default class Core {
       .query(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
-        this.storage.insert(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.insert(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.storage.insert(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
       });
   }
 
   /**
-   * Given an input, query for a list of similar results and insert into storage
+   * Given an input, query for a list of similar results and set into storage
    *
    * @param {string} input     the string to autocomplete
    * @param {string} namespace the namespace to use for the storage key
@@ -122,13 +135,13 @@ export default class Core {
     return this._autoComplete
       .queryUniversal(input)
       .then(data => {
-        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
   /**
    * Given an input, query for a list of similar results in the provided vertical
-   * and insert into storage
+   * and set into storage
    *
    * @param {string} input       the string to autocomplete
    * @param {string} namespace the namespace to use for the storage key
@@ -139,7 +152,7 @@ export default class Core {
     return this._autoComplete
       .queryVertical(input, verticalKey, barKey)
       .then(data => {
-        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
@@ -155,18 +168,26 @@ export default class Core {
     return this._autoComplete
       .queryFilter(input, verticalKey, barKey)
       .then(data => {
-        this.storage.insert(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
+  }
+
+  /**
+   * Stores the given query into storage, to be used for the next search
+   * @param {string} query the query to store
+   */
+  setQuery (query) {
+    this.storage.set(StorageKeys.QUERY, query);
   }
 
   /**
    * Stores the given filter into storage, to be used for the next search
    *
    * @param {string} namespace the namespace to use for the storage key
-   * @param {string} filter    the filter string
+   * @param {Filter} filter    the filter to set
    */
   setFilter (namespace, filter) {
-    this.storage.insert(`${StorageKeys.FILTER}.${namespace}`, Filter.from(filter));
+    this.storage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
   }
 
   on (evt, moduleId, cb) {
@@ -183,13 +204,13 @@ export default class Core {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterPickerComponent.html">FilterPickerComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-Search.html">Search</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 10:34:41 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 19 2019 10:43:24 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

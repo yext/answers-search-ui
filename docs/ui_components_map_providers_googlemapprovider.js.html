@@ -31,8 +31,13 @@
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
-/* global google, iconCfg */
+/* global google */
 
+/**
+ * GoogleMapProvider is an implementation of a MapProvider
+ * that handles the integration with the third party API to expose maps.
+ * @extends MapProvider
+ */
 export default class GoogleMapProvider extends MapProvider {
   constructor (opts) {
     super(opts);
@@ -127,7 +132,7 @@ export default class GoogleMapProvider extends MapProvider {
 }
 
 // TODO(billy) Move to own class
-class GoogleMapMarkerConfig {
+export class GoogleMapMarkerConfig {
   constructor (opts) {
     /**
      * A reference to the google map, that the marker is appended to
@@ -165,8 +170,8 @@ class GoogleMapMarkerConfig {
 
   /**
    * Serializes an array of marker configs
-   * @param {Array.&lt;GoogleMapMarkerConfig>} googleMapMarkerConfigs
-   * @returns {Array.&lt;String>}
+   * @param {GoogleMapMarkerConfig[]} googleMapMarkerConfigs
+   * @returns {string[]}
    */
   static serialize (googleMapMarkerConfigs) {
     let serializedMarkers = [];
@@ -179,9 +184,9 @@ class GoogleMapMarkerConfig {
   /**
    * Converts the storage data model of markers into GoogleAPIMarker
    * @param {GoogleMap} A reference to the google map to apply the marker to
-   * @param {Array.&lt;Object>} markers The data of the marker
+   * @param {object[]} markers The data of the marker
    * @param {Object} pinConfig The configuration to apply to the marker
-   * @returns {Array.&lt;GoogleMapMarkerConfig>}
+   * @returns {GoogleMapMarkerConfig[]}
    */
   static from (markers, pinConfig, map) {
     let googleMapMarkerConfigs = [];
@@ -191,8 +196,9 @@ class GoogleMapMarkerConfig {
 
     markers.forEach((marker) => {
       // Support configuration as a function
+      let pinConfigObj = pinConfig;
       if (typeof pinConfig === 'function') {
-        pinConfig = pinConfig(
+        pinConfigObj = pinConfig(
           marker.item,
           MapProvider.DEFAULT_PIN_CONFIG,
           marker);
@@ -201,25 +207,25 @@ class GoogleMapMarkerConfig {
       // Transform our Configuration Object into the expected
       // Google API format.
       let icon = {};
-      if (pinConfig.anchor) {
-        icon.anchor = google.maps.Point(pinConfig.anchor.x, pinConfig.anchor.y);
+      if (pinConfigObj.anchor) {
+        icon.anchor = google.maps.Point(pinConfigObj.anchor.x, pinConfigObj.anchor.y);
       }
 
-      if (pinConfig.scaledSize) {
-        icon.scaledSize = google.maps.Size(pinConfig.scaledSize.w, pinConfig.scaledSize.h);
+      if (pinConfigObj.scaledSize) {
+        icon.scaledSize = google.maps.Size(pinConfigObj.scaledSize.w, pinConfigObj.scaledSize.h);
       }
 
-      if (pinConfig.url) {
-        icon.url = iconCfg.url;
+      if (pinConfigObj.url) {
+        icon.url = pinConfigObj.url;
       }
 
-      if (pinConfig.svg) {
-        icon.url = `data:image/svg+xml;charset=utf-8, ${encodeURIComponent(pinConfig.svg)}`;
+      if (pinConfigObj.svg) {
+        icon.url = `data:image/svg+xml;charset=utf-8, ${encodeURIComponent(pinConfigObj.svg)}`;
       }
 
       let label;
-      if (pinConfig.label) {
-        label = pinConfig.label;
+      if (pinConfigObj.label) {
+        label = pinConfigObj.label;
       } else {
         label = marker.label.toString();
       }
@@ -256,13 +262,13 @@ class GoogleMapMarkerConfig {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterPickerComponent.html">FilterPickerComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-Search.html">Search</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module-Analytics.html">Analytics</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoComplete.html">AutoComplete</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Wed Jul 03 2019 10:34:41 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 19 2019 10:43:24 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
