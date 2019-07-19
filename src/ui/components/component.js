@@ -293,9 +293,9 @@ export default class Component {
    * render the template using the {Renderer} with the current state and template of the component
    * @returns {string}
    */
-  render (data) {
+  render (data = this._state.get()) {
     this.beforeRender();
-    data = this.transformData(data) || this.transformData(this._state.get());
+    data = this.transformData(data);
 
     let html = '';
     // Use either the custom render function or the internal renderer
