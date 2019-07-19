@@ -10,6 +10,8 @@ const rename = require('gulp-rename');
 
 const sass = require('gulp-sass');
 
+const postcss = require('gulp-postcss');
+
 const uglify = require('gulp-uglify-es').default;
 
 const NAMESPACE = 'ANSWERS';
@@ -50,6 +52,7 @@ function compileCSS () {
     .pipe(sass({
       outputStyle: 'compressed'
     }).on('error', sass.logError))
+    .pipe(postcss())
     .pipe(dest('./dist/'));
 }
 
