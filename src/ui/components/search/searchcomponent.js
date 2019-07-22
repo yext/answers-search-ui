@@ -17,12 +17,6 @@ export default class SearchComponent extends Component {
     super(config);
 
     /**
-     * The template name to use for rendering with handlebars
-     * @type {string}
-     */
-    this._templateName = 'search/search';
-
-    /**
      * The optional input key for the vertical search configuration
      * If not provided, auto-complete and search will be based on universal
      * @type {string}
@@ -120,6 +114,15 @@ export default class SearchComponent extends Component {
 
   static get type () {
     return 'SearchBar';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName (config) {
+    return 'search/search';
   }
 
   onCreate () {
