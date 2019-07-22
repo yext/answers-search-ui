@@ -3,6 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchParams from '../../dom/searchparams';
 
 export default class QuestionSubmissionComponent extends Component {
   constructor (opts = {}) {
@@ -94,7 +95,7 @@ export default class QuestionSubmissionComponent extends Component {
       questionLabel: this._questionLabel,
       privacyPolicyLabel: this._privacyPolicyLabel,
       buttonLabel: this._buttonLabel,
-      question: new URLSearchParams(window.location.search.substring(1)).get('query')
+      question: new SearchParams(window.location.search.substring(1)).get('query')
     });
   }
 }

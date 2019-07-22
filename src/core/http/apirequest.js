@@ -2,6 +2,7 @@
 
 import HttpRequester from './httprequester';
 import { API_BASE_URL } from '../constants';
+import SearchParams from '../../ui/dom/searchparams'; // TODO ideally this would be passed in as a param
 
 /**
  * ApiRequest is the base class for all API requests.
@@ -70,7 +71,7 @@ export default class ApiRequest {
       'api_key': this._apiKey
     };
 
-    const urlParams = new URL(window.location.toString()).searchParams;
+    const urlParams = new SearchParams(window.location.toString());
 
     if (urlParams.has('beta')) {
       baseParams['beta'] = urlParams.get('beta');
