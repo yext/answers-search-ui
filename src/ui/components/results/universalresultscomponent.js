@@ -45,6 +45,9 @@ export default class UniversalResultsComponent extends Component {
 
   addChild (data = {}, type) {
     let opts = this.getChildConfig([data['verticalConfigId']]);
+    if (opts.useAccordion === true) {
+      return super.addChild(data, AccordionResultsComponent.type, opts);
+    }
     return super.addChild(data, type, opts);
   }
 

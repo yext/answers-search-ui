@@ -1,0 +1,47 @@
+.yxt-AccordionResult
+{
+  &-toggle
+  {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  &-indicator
+  {
+    display: flex;
+    transform: rotate(-90deg);
+    transition: transform 400ms ease-in;
+  }
+
+  &-toggle
+  {
+    padding-top: 1em;
+  }
+
+  &-toggle,
+  &-content
+  {
+    padding-right: 1em;
+    padding-bottom: 1em;
+    padding-left: 1em;
+  }
+
+  &-body
+  {
+    transition: all 400ms ease-in;
+    overflow: hidden;
+  }
+
+  &.is-collapsed &-body
+  {
+    height: 0;
+    border-top: 0;
+  }
+
+  &.is-collapsed &-indicator
+  {
+    transform: rotate(90deg);
+  }
+}
