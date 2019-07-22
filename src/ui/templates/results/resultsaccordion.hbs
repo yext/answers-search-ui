@@ -1,0 +1,26 @@
+{{#if results}}
+    <section class="yxt-Accordion yxt-Results yxt-Results--{{vertical}} js-yxt-Accordion">
+        {{> results/resultssectionheader}}
+        <ul class="yxt-Accordion-list yext-result-items"
+            data-prop="results">
+            {{#each results}}
+                <li class="yxt-Accordion-item js-yxt-Accordion-item yxt-AccordionResult{{#if collapsed}} is-collapsed{{/if}}{{#if resultModifier}} yxt-AccordionResult--{{resultModifier}}{{/if}}">
+                    <button class="yxt-AccordionResult-toggle js-yxt-AccordionResult-toggle"
+                            aria-expanded="{{#if collapsed}}false{{else}}true{{/if}}"
+                            aria-controls="#{{id}}">
+                        <h3 class="yxt-AccordionResult-title">
+                            {{title}}
+                        </h3>
+                        <div class="yxt-AccordionResult-indicator" aria-hidden="true">
+                        </div>
+                    </button>
+                    <div class="yxt-AccordionResult-body js-yxt-AccordionResult-body" id="{{id}}">
+                        <div class="yxt-AccordionResult-content">
+                            {{{description}}}
+                        </div>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </section>
+{{/if}}

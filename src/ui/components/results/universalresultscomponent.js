@@ -2,6 +2,7 @@
 
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import AccordionResultsComponent from './accordionresultscomponent.js';
 
 export default class UniversalResultsComponent extends Component {
   constructor (opts = {}) {
@@ -27,6 +28,9 @@ export default class UniversalResultsComponent extends Component {
 
   addChild (data = {}, type) {
     let opts = this.getChildConfig([data['verticalConfigId']]);
+    if (opts.useAccordion === true) {
+      return super.addChild(data, AccordionResultsComponent.type, opts);
+    }
     return super.addChild(data, type, opts);
   }
 
