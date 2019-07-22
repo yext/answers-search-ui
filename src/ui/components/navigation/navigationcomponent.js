@@ -95,13 +95,6 @@ export default class NavigationComponent extends Component {
     this.moduleId = StorageKeys.NAVIGATION;
 
     /**
-     * The handlebars template to use
-     * @type {string}
-     * @private
-     */
-    this._templateName = 'navigation/navigation';
-
-    /**
      * Unordered map of each tab, keyed by VS configId
      * @type {Object.<String, Object>}
      * @private
@@ -126,6 +119,15 @@ export default class NavigationComponent extends Component {
 
   static get type () {
     return 'Navigation';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName () {
+    return 'navigation/navigation';
   }
 
   /**

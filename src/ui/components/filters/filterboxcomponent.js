@@ -62,17 +62,19 @@ export default class FilterBoxComponent extends Component {
      * @private
      */
     this._filters = [];
-
-    /**
-     * The template to render
-     * @type {string}
-     * @private
-     */
-    this._templateName = `filters/filterbox`;
   }
 
   static get type () {
     return 'FilterBox';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName () {
+    return 'results/results';
   }
 
   setState (data) {

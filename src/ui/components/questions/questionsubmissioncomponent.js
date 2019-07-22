@@ -11,8 +11,6 @@ export default class QuestionSubmissionComponent extends Component {
 
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
 
-    this._templateName = 'questions/submission';
-
     /**
      * Question submission is based on a form as context.
      * Optionally provided, otherwise defaults to native form node within container
@@ -54,6 +52,15 @@ export default class QuestionSubmissionComponent extends Component {
      * @type {string}
      */
     this._buttonLabel = opts.buttonLabel || 'Submit';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName () {
+    return 'questions/submission';
   }
 
   beforeMount () {

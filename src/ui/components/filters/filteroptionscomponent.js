@@ -67,17 +67,19 @@ export default class FilterOptionsComponent extends Component {
      * @private
      */
     this._onChange = config.onChange || function () {};
-
-    /**
-     * The template to render, based on the control
-     * @type {string}
-     * @private
-     */
-    this._templateName = `controls/${config.control}`;
   }
 
   static get type () {
     return 'FilterOptions';
+  }
+
+  /**
+   * The template to render, based on the control
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName () {
+    return `controls/${this._control}`;
   }
 
   setState (data) {

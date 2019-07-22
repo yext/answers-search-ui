@@ -20,7 +20,6 @@ export default class ResultsComponent extends Component {
     super(opts);
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
-    this._templateName = 'results/results';
     this.limit = opts.limit || 5;
     this._itemConfig = {
       global: {
@@ -77,6 +76,15 @@ export default class ResultsComponent extends Component {
 
   static get type () {
     return 'VerticalResults';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName () {
+    return 'results/results';
   }
 
   configureItem (config) {

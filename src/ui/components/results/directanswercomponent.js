@@ -8,7 +8,6 @@ export default class DirectAnswerComponent extends Component {
     super(opts);
 
     this.moduleId = StorageKeys.DIRECT_ANSWER;
-    this._templateName = 'results/directanswer';
 
     /**
      * Call to action for viewing details of the Direct Answer
@@ -51,5 +50,14 @@ export default class DirectAnswerComponent extends Component {
 
   static get type () {
     return 'DirectAnswer';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName () {
+    return 'results/directanswer';
   }
 }

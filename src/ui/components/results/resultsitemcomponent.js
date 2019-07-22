@@ -5,12 +5,19 @@ import Component from '../component';
 export default class ResultsItemComponent extends Component {
   constructor (opts = {}) {
     super(opts);
-
-    this._templateName = 'results/resultsitem';
   }
 
   static get type () {
     return 'ResultsItemComponent';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName () {
+    return 'results/resultsitem';
   }
 
   static areDuplicateNamesAllowed () {
