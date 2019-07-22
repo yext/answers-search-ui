@@ -6,6 +6,7 @@ import DOM from '../dom/dom';
 import State from './state';
 import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused-vars
 import AnalyticsEvent from '../../core/analytics/analyticsevent';
+import { merge } from '../../core/util/objects';
 
 /**
  * Component is an abstraction that encapsulates state, behavior,
@@ -212,7 +213,7 @@ export default class Component {
   addChild (data, type, opts) {
     let childComponent = this.componentManager.create(
       type,
-      Object.assign({
+      merge({
         name: data.name,
         parent: this,
         data: data
@@ -334,7 +335,7 @@ export default class Component {
 
     // Rendering a sub component should be within the context,
     // of the node that we processed it from
-    opts = Object.assign(opts, {
+    opts = merge(opts, {
       container: domComponent
     });
 

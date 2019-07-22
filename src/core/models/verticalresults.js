@@ -1,10 +1,11 @@
 /** @module VerticalResults */
 
 import Section from './section';
+import { merge } from '../util/objects';
 
 export default class VerticalResults {
   constructor (data = {}) {
-    Object.assign(this, data);
+    merge(this, data);
     Object.freeze(this);
   }
 

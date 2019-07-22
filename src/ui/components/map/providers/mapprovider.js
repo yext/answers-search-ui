@@ -1,3 +1,5 @@
+import { merge } from '../../../../core/util/objects';
+
 /** @module MapProvider */
 
 /**
@@ -55,7 +57,7 @@ export default class MapProvider {
      * The custom configuration override to use for the map markers
      * @type {Object|Function}
      */
-    this._pinConfig = typeof opts.pin === 'function' ? opts.pin : Object.assign(MapProvider.DEFAULT_PIN_CONFIG, opts.pin);
+    this._pinConfig = typeof opts.pin === 'function' ? opts.pin : merge(MapProvider.DEFAULT_PIN_CONFIG, opts.pin);
   }
 
   /**

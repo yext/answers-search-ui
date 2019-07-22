@@ -1,3 +1,5 @@
+import { merge } from '../util/objects';
+
 /**
  * Model for the analytics event type
  */
@@ -12,13 +14,13 @@ export default class AnalyticsEvent {
    * @param {object} options Additional options for the event
    */
   addOptions (options) {
-    Object.assign(this, options);
+    merge(this, options);
   }
 
   /**
    * Return the event in the api format, typically for reporting to the api
    */
   toApiEvent () {
-    return Object.assign({}, this);
+    return merge({}, this);
   }
 }

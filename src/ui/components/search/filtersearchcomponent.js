@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 import SearchParams from '../../dom/searchparams';
+import { merge } from '../../../core/util/objects';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -184,7 +185,7 @@ export default class FilterSearchComponent extends Component {
   }
 
   setState (data) {
-    return super.setState(Object.assign({
+    return super.setState(merge({
       title: this.title,
       searchText: this.searchText,
       query: this.query,

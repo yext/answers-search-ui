@@ -1,6 +1,7 @@
 /** @module ComponentManager */
 
 import { AnswersComponentError } from '../../core/errors/errors';
+import { merge } from '../../core/util/objects';
 
 /**
  * ComponentManager is a Singletone that contains both an internal registry of
@@ -100,7 +101,7 @@ export default class ComponentManager {
     // Every component needs local access to the component manager
     // because sometimes components have subcomponents that need to be
     // constructed during creation
-    opts = Object.assign({
+    opts = merge({
       core: this._core,
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,

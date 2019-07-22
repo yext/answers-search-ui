@@ -1,3 +1,5 @@
+import { merge } from '../../core/util/objects';
+
 /** @module DOM */
 
 /* global HTMLElement, HTMLDocument, Window, Event */
@@ -142,7 +144,7 @@ export default class DOM {
   }
 
   static trigger (selector, event, settings) {
-    let e = new Event(event, Object.assign({
+    let e = new Event(event, merge({
       'bubbles': true,
       'cancelable': true
     }, settings || {}));

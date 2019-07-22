@@ -3,6 +3,7 @@
 import HttpRequester from './httprequester';
 import { API_BASE_URL } from '../constants';
 import SearchParams from '../../ui/dom/searchparams'; // TODO ideally this would be passed in as a param
+import { merge } from '../util/objects';
 
 /**
  * ApiRequest is the base class for all API requests.
@@ -88,6 +89,6 @@ export default class ApiRequest {
       }
     });
 
-    return Object.assign(baseParams, params || {});
+    return merge(baseParams, params || {});
   }
 }

@@ -5,13 +5,15 @@
   "main": "gulpfile.js",
   "dependencies": {
     "handlebars": "^4.1.2",
-    "template-helpers": "^1.0.1"
+    "template-helpers": "^1.0.1",
+    "whatwg-fetch": "^3.0.0"
   },
   "devDependencies": {
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@types/jest": "^24.0.15",
     "autoprefixer": "7.2.5",
+    "core-js": "^3.1.4",
     "gulp": "^4.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-declare": "^0.3.0",
@@ -65,7 +67,8 @@
       "DOMParser"
     ],
     "ignore": [
-      "docs/"
+      "docs/",
+      "src/core/util/fetch.umd.js"
     ]
   },
   "author": "Billy",

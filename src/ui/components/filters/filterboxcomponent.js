@@ -5,6 +5,7 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
+import { merge } from '../../../core/util/objects';
 
 /**
  * Renders a set of filters, and searches with them when applied.
@@ -76,7 +77,7 @@ export default class FilterBoxComponent extends Component {
   }
 
   setState (data) {
-    super.setState(Object.assign(data, {
+    super.setState(merge(data, {
       filterConfigs: this._filterConfigs,
       showApplyButton: !this._searchOnChange
     }));
@@ -86,7 +87,7 @@ export default class FilterBoxComponent extends Component {
     // Initialize filters from configs
     for (let i = 0; i < this._filterConfigs.length; i++) {
       const config = this._filterConfigs[i];
-      const component = this.componentManager.create(config.type, Object.assign({},
+      const component = this.componentManager.create(config.type, merge({},
         config,
         {
           parent: this,

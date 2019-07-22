@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
+import { merge } from '../../../core/util/objects';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -215,7 +216,7 @@ export default class SearchComponent extends Component {
   }
 
   setState (data) {
-    return super.setState(Object.assign({
+    return super.setState(merge({
       title: this.title,
       searchText: this.searchText,
       query: this.query

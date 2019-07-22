@@ -1,8 +1,10 @@
+import { merge } from '../util/objects';
+
 /** @module Result */
 
 export default class Result {
   constructor (data = {}) {
-    Object.assign(this, data);
+    merge(this, data);
   }
 
   /**

@@ -48,11 +48,9 @@ export default class Storage {
 
   getAll (key) {
     const data = [];
-    for (const dataKey of Object.keys(this._moduleDataContainer)) {
-      if (dataKey.startsWith(key) && this._moduleDataContainer[dataKey].raw() !== null) {
-        data.push(this._moduleDataContainer[dataKey].raw());
-      }
-    }
+    Object.keys(this._moduleDataContainer)
+      .filter(k => k.startsWith(key) && this._moduleDataContainer[k].raw() !== null)
+      .forEach(k => data.push(this._moduleDataContainer[k].raw()));
     return data;
   }
 

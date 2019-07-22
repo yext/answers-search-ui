@@ -35,8 +35,9 @@ export default class ModuleData extends EventEmitter {
     }
 
     // check for shallow equality
-    for (const key of Object.keys(newData)) {
-      if (this._data[key] !== newData[key]) {
+    const keys = Object.keys(newData);
+    for (let i = 0; i < keys.length; i++) {
+      if (this._data[keys[i]] !== newData[keys[i]]) {
         this._data = newData;
         this.emit('update', this._data);
         return;

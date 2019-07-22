@@ -1,3 +1,5 @@
+import { merge } from '../util/objects';
+
 /** @module HttpRequester */
 
 /* global fetch */
@@ -38,7 +40,7 @@ export default class HttpRequester {
     return this.request(
       Methods.POST,
       url,
-      Object.assign({
+      merge({
         body: JSON.stringify(data),
         credentials: undefined
       }, opts)
@@ -46,7 +48,7 @@ export default class HttpRequester {
   }
 
   request (method, url, opts) {
-    return fetch(url, Object.assign({
+    return fetch(url, merge({
       method,
       credentials: 'include'
     }, opts));

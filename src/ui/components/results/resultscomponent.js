@@ -8,6 +8,7 @@ import EventResultsItemComponent from './eventresultsitemcomponent';
 import PeopleResultsItemComponent from './peopleresultsitemcomponent';
 import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
+import { merge } from '../../../core/util/objects';
 
 const ResultType = {
   EVENT: 'event',
@@ -72,7 +73,7 @@ export default class ResultsComponent extends Component {
       return this;
     }
 
-    return super.setState(Object.assign({}, data, {
+    return super.setState(merge({}, data, {
       includeMap: this._opts.includeMap,
       mapConfig: this._opts.mapConfig
     }), val);
@@ -139,7 +140,7 @@ export default class ResultsComponent extends Component {
       data = {
         map: data
       };
-      const newOpts = Object.assign({}, this._opts.mapConfig, opts);
+      const newOpts = merge({}, this._opts.mapConfig, opts);
       return super.addChild(data, type, newOpts);
     }
 

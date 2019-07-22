@@ -1,3 +1,5 @@
+import { merge } from '../util/objects';
+
 /** @module Filter */
 
 /**
@@ -6,7 +8,7 @@
  */
 export default class Filter {
   constructor (data = {}) {
-    Object.assign(this, data);
+    merge(this, data);
     Object.freeze(this);
   }
 
@@ -48,18 +50,17 @@ export default class Filter {
    */
   static group (...filters) {
     const groups = {};
-    for (const filter of filters) {
+    filters.forEach(filter => {
       const key = Object.keys(filter)[0];
       if (!groups[key]) {
         groups[key] = [];
       }
       groups[key].push(filter);
-    }
+    });
 
     const groupFilters = [];
-    for (const field of Object.keys(groups)) {
-      groupFilters.push(groups[field].length > 1 ? Filter.or(...groups[field]) : groups[field][0]);
-    }
+    Object.keys(groups).forEach(field =>
+      groupFilters.push(groups[field].length > 1 ? Filter.or(...groups[field]) : groups[field][0]));
 
     return groupFilters.length > 1 ? Filter.and(...groupFilters) : groupFilters[0];
   }

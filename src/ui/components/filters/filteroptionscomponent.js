@@ -4,6 +4,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import { merge } from '../../../core/util/objects';
 
 /**
  * The currently supported controls
@@ -38,7 +39,7 @@ export default class FilterOptionsComponent extends Component {
      * @type {object[]}
      * @private
      */
-    this._options = config.options.map(o => Object.assign({}, o, { checked: false }));
+    this._options = config.options.map(o => merge({}, o, { checked: false }));
 
     /**
      * The type of control to display
@@ -81,7 +82,7 @@ export default class FilterOptionsComponent extends Component {
   }
 
   setState (data) {
-    super.setState(Object.assign({}, data, {
+    super.setState(merge({}, data, {
       name: this.name,
       options: this._options
     }));
@@ -102,10 +103,10 @@ export default class FilterOptionsComponent extends Component {
 
   _updateOption (index, checked) {
     if (this._control === 'singleoption') {
-      this._options = this._options.map(o => Object.assign({}, o, { checked: false }));
+      this._options = this._options.map(o => merge({}, o, { checked: false }));
     }
 
-    this._options[index] = Object.assign({}, this._options[index], { checked });
+    this._options[index] = merge({}, this._options[index], { checked });
     this.setState();
   }
 

@@ -3,6 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
+import { merge } from '../../../core/util/objects';
 
 const Keys = {
   BACKSPACE: 8,
@@ -112,7 +113,7 @@ export default class AutoCompleteComponent extends Component {
    * those are client-interaction specific values and aren't returned from the server.
    */
   setState (data) {
-    super.setState(Object.assign({}, data, {
+    super.setState(merge({}, data, {
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null
