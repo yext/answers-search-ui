@@ -144,7 +144,7 @@ export default class Component {
      * This is only used if _template is empty.
      * @type {string}
      */
-    this._templateName = config.templateName || 'default';
+    this._templateName = config.templateName || this.constructor.defaultTemplateName(config);
 
     /**
      * An internal state indicating whether or not the component has been mounted to the DOM
@@ -177,6 +177,15 @@ export default class Component {
      * @type {function}
      */
     this.onUpdate = config.onUpdate || this.onUpdate || function () { };
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName (config) {
+    return 'default';
   }
 
   static get type () {

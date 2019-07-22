@@ -65,12 +65,6 @@ export default class AutoCompleteComponent extends Component {
     this.moduleId = `${StorageKeys.AUTOCOMPLETE}.${this.name}`;
 
     /**
-     * The default handlebars template name to use for rendering
-     * @type {string}
-     */
-    this._templateName = 'search/autocomplete';
-
-    /**
      * An internal reference to the input value when typing.
      * We use this for resetting the state of the input value when other interactions (e.g. result navigation)
      * change based on interactions. For instance, hitting escape should reset the value to the original typed query.
@@ -110,6 +104,15 @@ export default class AutoCompleteComponent extends Component {
    */
   static get type () {
     return 'AutoComplete';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName (config) {
+    return 'search/autocomplete';
   }
 
   /**
