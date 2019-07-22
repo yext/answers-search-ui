@@ -1,11 +1,54 @@
-<li class="result-item">
-  <div class="result-item-info">
-    {{#if name}}<b>Name:</b> {{name}}{{/if}}
+<li class="yxt-Result{{#if modifier}} yxt-Result--{{modifier}}{{/if}} yxt-Result-item">
+  <div class="yxt-Result-wrapper">
+    {{#if image.url}}
+        <div class="yxt-Result-imageWrapper">
+          <img class="yxt-Result-image" src="{{image.url}}" alt="{{image.alternateText}}">
+        </div>
+    {{/if}}
 
-    {{#if htmlTitle}}
-      <a href="{{{link}}}">{{{htmlTitle}}}</a> - {{{htmlSnippet}}}
-      <br>
-      {{displayLink}}
+    <div class="yxt-Result-info">
+      <h3 class="yxt-Result-title">
+        {{#if link}}
+        <a class="yxt-Result-titleLink" href="{{link}}">
+        {{/if}}
+
+        {{{title}}}
+
+        {{#if link}}
+        </a>
+        {{/if}}
+      </h3>
+
+      {{#if subtitle}}
+        <div class="yxt-Result-subtitle">
+          {{{subtitle}}}
+        </div>
+      {{/if}}
+
+      {{#if details}}
+        <div class="yxt-Result-details">
+          {{{details}}}
+        </div>
+      {{/if}}
+    </div>
+
+    {{#if callsToAction}}
+      <div class="yxt-Result-ctasWrapper">
+        <div class="yxt-Result-ctas">
+          {{#each callsToAction}}
+            <a class="yxt-Result-cta" href="{{this.url}}">
+              {{#if this.icon}}
+                <div class="yxt-Result-ctaIconWrapper">
+                  <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
+                </div>
+              {{/if}}
+              <span class="yxt-Result-ctaLabel">
+                {{{this.label}}}
+              </span>
+            </a>
+          {{/each}}
+        </div>
+      </div>
     {{/if}}
   </div>
 </li>

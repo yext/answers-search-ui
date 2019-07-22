@@ -1,8 +1,16 @@
 /** @module Result */
 
 export default class Result {
-  constructor (data = {}) {
-    Object.assign(this, data);
+  constructor (data = {}, index) {
+    this._raw = data;
+    // data.htmlTitle is from GSCE, but we want to strip html from it
+    // before displaying, by default.
+    this.title = data.name || data.htmlTitle.replace(/(<([^>]+)>)/ig, '') || null;
+    // data.htmlSnippet is from GSCE
+    this.details = data.description || data.htmlSnippet || null;
+    // data.link is from GCSE;
+    this.link = data.website || data.link || null;
+    this.ordinal = index + 1 || null;
   }
 
   /**
@@ -15,7 +23,7 @@ export default class Result {
       // transform resultData.data into html-friendly strings that highlight values.
 
       // Check for new data format, otherwise fallback to legacy
-      results.push(new Result(resultsData[i].data || resultsData[i]));
+      results.push(new Result(resultsData[i].data || resultsData[i], i));
     }
 
     return results;

@@ -1,0 +1,47 @@
+/** @define Results */
+
+.yxt-Results
+{
+  &-section
+  {
+    & + &
+    {
+      margin-top: 18px;
+    }
+  }
+
+  &-titleBar
+  {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  &-left
+  {
+    display: flex;
+    align-items: center;
+  }
+
+  &-titleIconWrapper
+  {
+    margin-right: 8px;
+  }
+
+  &-viewAllLink
+  {
+    display: flex;
+    align-items: center;
+  }
+
+  &-filters
+  {
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}

@@ -1,19 +1,58 @@
-<li class="yext-event-result-item">
-  <div class="yext-event-result-item-info">
-    <h3>{{venueName}}<h3>
-    <h4 class="yext-event-description">{{description}}</h4>
-    <ul class="yext-event-photo-container">
-    {{#each photoGallery}}
-      <li class="yext-event-photo">
-        <img src="{{image.url}}" width=50 height=50>
-      </li>
-    {{/each}}
-    </ul>
+<li class="yxt-Result yxt-Result--event yxt-Result-item">
+  <div class="yxt-Result-wrapper">
+    {{! // TODO(bmcginnis): add date formatting in model }}
+    {{#if startDate.day}}
+      <div class="yxt-Result-dateWrapper">
+        <div class="yxt-Result-dateInnerWrapper">
+          <span class="yxt-Result-day">{{startDate.day}}</span>
+          <span class="yxt-Result-month">{{startDate.month}}</span>
+        </div>
+      </div>
+    {{/if}}
 
-    <ul class="yext-event-performer-container">
-      {{#each performers}}
-        <li class="yext-event-performer">{{this}}</li>
-      {{/each}}
-    </ul>
+    <div class="yxt-Result-info">
+      <h3 class="yxt-Result-title">
+        {{#if link}}
+          <a class="yxt-Result-titleLink" href="{{link}}">
+        {{/if}}
+
+        {{{title}}}
+
+        {{#if link}}
+          </a>
+        {{/if}}
+      </h3>
+
+      {{#if subtitle}}
+        <div class="yxt-Result-subtitle">
+          {{{subtitle}}}
+        </div>
+      {{/if}}
+
+      {{#if details}}
+        <div class="yxt-Result-details">
+          {{{details}}}
+        </div>
+      {{/if}}
+    </div>
+
+    {{#if callsToAction}}
+      <div class="yxt-Result-ctasWrapper">
+        <div class="yxt-Result-ctas">
+          {{#each callsToAction}}
+            <a class="yxt-Result-cta" href="{{this.url}}">
+              {{#if this.icon}}
+                <div class="yxt-Result-ctaIconWrapper">
+                  <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
+                </div>
+              {{/if}}
+              <span class="yxt-Result-ctaLabel">
+                {{{this.label}}}
+              </span>
+            </a>
+          {{/each}}
+        </div>
+      </div>
+    {{/if}}
   </div>
 </li>

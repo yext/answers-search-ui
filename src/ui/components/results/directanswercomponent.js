@@ -9,14 +9,44 @@ export default class DirectAnswerComponent extends Component {
 
     this.moduleId = StorageKeys.DIRECT_ANSWER;
     this._templateName = 'results/directanswer';
+
+    /**
+     * Call to action for viewing details of the Direct Answer
+     * @type {string}
+     */
+    this._viewDetailsText = opts.viewDetailsText || 'View Details';
+
+    /**
+     * footer text displays below the answer
+     * @type {string}
+     */
+    this._footerText = opts.footerText || 'Was this the answer you were looking for?';
+
+    // TODO (bmcginnis): provide default icons
+    /**
+     * Icon url to signify this was a helpful Direct Answer
+     * @type {string|null}
+     */
+    this._thumbsUpImage = opts.thumbsUpImage || null;
+
+    /**
+     * Icon url to signify this was not a helpful Direct Answer
+     * @type {string|null}
+     */
+    this._thumbsDownImage = opts.thumbsDownImage || null;
   }
 
   beforeMount () {
-    if (!this.hasState('answer')) {
-      return false;
-    }
+    return this.hasState('answer');
+  }
 
-    return true;
+  setState (data) {
+    return super.setState(Object.assign({}, data, {
+      viewDetailsText: this._viewDetailsText,
+      footerText: this._footerText,
+      thumbsUpImage: this._thumbsUpImage,
+      thumbsDownImage: this._thumbsDownImage
+    }));
   }
 
   static get type () {
