@@ -5,6 +5,7 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
+import Facet from '../../../core/models/facet';
 
 /**
  * Renders a set of filters, and searches with them when applied.
@@ -62,19 +63,25 @@ export default class FilterBoxComponent extends Component {
      * @private
      */
     this._filters = [];
+
+    /**
+     * Whether or not this filterbox contains dynamic filters. This affects the
+     * the way the filters are used in the search
+     * @type {boolean}
+     * @private
+     */
+    this._isDynamic = config.isDynamic || false;
+
+    /**
+     * The template to render
+     * @type {string}
+     * @private
+     */
+    this._templateName = `filters/filterbox`;
   }
 
   static get type () {
     return 'FilterBox';
-  }
-
-  /**
-   * The template to render
-   * @returns {string}
-   * @override
-   */
-  static defaultTemplateName (config) {
-    return 'results/results';
   }
 
   setState (data) {
@@ -85,6 +92,12 @@ export default class FilterBoxComponent extends Component {
   }
 
   onMount () {
+    if (this._filterComponents.length) {
+      this._filterComponents.forEach(c => c.remove());
+      this._filterComponents = [];
+      this._filters = [];
+    }
+
     // Initialize filters from configs
     for (let i = 0; i < this._filterConfigs.length; i++) {
       const config = this._filterConfigs[i];
@@ -95,12 +108,13 @@ export default class FilterBoxComponent extends Component {
           name: `${this.name}.filter${i}`,
           storeOnChange: false,
           container: `.js-yext-filterbox-filter${i}`,
-          onChange: (f) => {
-            this.onFilterChange(i, f);
+          onChange: (filter) => {
+            this.onFilterChange(i, filter);
           }
         }));
       component.mount();
       this._filterComponents.push(component);
+      this._filters[i] = component.getFilter();
     }
 
     // Initialize apply button
@@ -127,15 +141,32 @@ export default class FilterBoxComponent extends Component {
   }
 
   /**
+   * Remove all filter components along with this component
+   */
+  remove () {
+    this._filterComponents.forEach(c => c.remove());
+    super.remove();
+  }
+
+  /**
    * Save current filters to storage to be used in the next search
    * @private
    */
   _saveFiltersToStorage () {
-    const validFilters = this._filters.filter(f => f !== undefined && f !== null);
-    const combinedFilter = validFilters.length > 1
-      ? Filter.and(...validFilters)
-      : validFilters[0];
-    this.core.setFilter(this.name, combinedFilter || {});
+    const validFilters = this._filters.filter(f =>
+      f !== undefined &&
+      f !== null &&
+      Object.keys(f).length > 0);
+
+    if (this._isDynamic) {
+      const combinedFilter = Facet.fromFilters(...validFilters);
+      this.core.setFacetFilter(this.name, combinedFilter || {});
+    } else {
+      const combinedFilter = validFilters.length > 1
+        ? Filter.and(...validFilters)
+        : validFilters[0];
+      this.core.setFilter(this.name, combinedFilter || {});
+    }
   }
 
   /**
@@ -147,8 +178,16 @@ export default class FilterBoxComponent extends Component {
       ? Filter.and(...allFilters)
       : allFilters[0];
 
-    const query = this.core.storage.getState(StorageKeys.QUERY) || '';
+    // TODO(jdelerme): check empty object
+    const query = this.core.storage.getState(StorageKeys.QUERY);
 
-    this.core.verticalSearch(query, this._verticalKey, JSON.stringify(totalFilter));
+    const facetFilter = this.core.storage.getAll(StorageKeys.FACET_FILTER)[0];
+
+    this.core.verticalSearch({
+      queryString: query,
+      verticalKey: this._verticalKey,
+      filter: JSON.stringify(totalFilter),
+      facetFilter: JSON.stringify(facetFilter)
+    });
   }
 }

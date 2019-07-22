@@ -215,7 +215,13 @@ export default class SearchComponent extends Component {
       const totalFilter = allFilters.length > 1
         ? Filter.and(...allFilters)
         : allFilters[0];
-      return this.core.verticalSearch(query, this._verticalKey, JSON.stringify(totalFilter));
+      const facetFilter = this.core.storage.getAll(StorageKeys.FACET_FILTER)[0];
+      return this.core.verticalSearch({
+        queryString: query,
+        verticalKey: this._verticalKey,
+        filter: JSON.stringify(totalFilter),
+        facetFilter: JSON.stringify(facetFilter)
+      });
     } else {
       // NOTE(billy) Temporary hack for DEMO
       // Remove me after the demo

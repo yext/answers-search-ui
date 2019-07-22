@@ -116,6 +116,10 @@ export default class DateRangeFilterComponent extends Component {
     this._updateRange('max', date);
   }
 
+  getFilter () {
+    return this._buildFilter();
+  }
+
   /**
    * Updates the current state of the date range
    * @param {string} key The key for the date value

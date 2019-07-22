@@ -78,15 +78,18 @@ export default class Core {
     });
   }
 
-  verticalSearch (queryString, verticalKey, filter) {
+  verticalSearch (searchOptions) {
     this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
     return this._searcher
-      .verticalQuery(queryString, verticalKey, filter)
+      .verticalQuery(Object.assign({}, searchOptions, { isDynamicFiltersEnabled: this._isDynamicFiltersEnabled }))
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+        if (data[StorageKeys.DYNAMIC_FILTERS]) {
+          this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
+        }
       });
   }
 
@@ -174,6 +177,14 @@ export default class Core {
    */
   setFilter (namespace, filter) {
     this.storage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
+  }
+
+  setFacetFilter (namespace, filter) {
+    this.storage.set(`${StorageKeys.FACET_FILTER}.${namespace}`, filter);
+  }
+
+  enableDynamicFilters () {
+    this._isDynamicFiltersEnabled = true;
   }
 
   on (evt, moduleId, cb) {

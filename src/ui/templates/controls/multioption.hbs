@@ -1,17 +1,17 @@
-<fieldset class="Multioption-fieldset">
-  <legend class="Multioption-legend">
+<fieldset class="multioption-fieldset">
+  <legend class="multioption-legend">
     {{label}}
   </legend>
   {{#each options}}
-    <div class="Multioption-option">
+    <div class="multioption-option">
       <input
         type="checkbox"
         class="js-yext-filter-option"
         id="js-yext-checkbox-{{../name}}-{{@index}}"
         value="{{value}}"
         data-index="{{@index}}"
-        {{#if checked}}checked{{/if}}>
-      <label class="Multioption-label" for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}}</label>
+        {{#if selected}}checked{{/if}}>
+      <label class="multioption-label" for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
     </div>
   {{/each}}
 </fieldset>

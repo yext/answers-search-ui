@@ -14,5 +14,7 @@ export default {
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter',
   QUERY: 'query',
-  QUERY_ID: 'query-id'
+  QUERY_ID: 'query-id',
+  FACET_FILTER: 'facet-filter',
+  DYNAMIC_FILTERS: 'dynamic-filters'
 };

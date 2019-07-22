@@ -243,6 +243,16 @@ export default class Component {
   }
 
   /**
+   * Unmount and remove this component and its children from the list
+   * of active components
+   */
+  remove () {
+    this._children.forEach(c => c.remove());
+    this.unMount();
+    this.componentManager.remove(this);
+  }
+
+  /**
    * Set the render method to be used for rendering the component
    * @param {Function} render
    * @return {string}

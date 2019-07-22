@@ -142,6 +142,18 @@ export default class ComponentManager {
     return component;
   }
 
+  /**
+   * Remove the provided component from the list of active components and remove
+   * the associated storage event listener
+   * @param {Component} component The component to remove
+   */
+  remove (component) {
+    this._core.storage.off('update', component.moduleId);
+
+    const index = this._activeComponents.findIndex(c => c.name === component.name);
+    this._activeComponents.splice(index, 1);
+  }
+
   getActiveComponent (type) {
     return this._activeComponents.find(c => c.constructor.type === type);
   }
