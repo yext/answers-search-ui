@@ -18,12 +18,6 @@ export default class FilterSearchComponent extends Component {
     super(opts);
 
     /**
-     * The template name to use for rendering with handlebars
-     * @type {string}
-     */
-    this._templateName = 'search/filtersearch';
-
-    /**
      * The input key for the vertical search configuration
      * @type {string}
      */
@@ -105,6 +99,15 @@ export default class FilterSearchComponent extends Component {
 
   static get type () {
     return 'FilterSearch';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName (config) {
+    return 'search/filtersearch';
   }
 
   onCreate () {

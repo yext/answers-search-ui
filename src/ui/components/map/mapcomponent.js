@@ -22,11 +22,6 @@ export default class MapComponent extends Component {
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
 
     /**
-     * The default template to use to render this component
-     */
-    this._templateName = 'results/map';
-
-    /**
      * An aliased used to determine the type of map provider to use
      * @type {string}
      */
@@ -50,6 +45,15 @@ export default class MapComponent extends Component {
 
   static get type () {
     return 'Map';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName (config) {
+    return 'results/map';
   }
 
   // TODO(billy) Make ProviderTypes a factory class

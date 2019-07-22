@@ -9,12 +9,20 @@ export default class UniversalResultsComponent extends Component {
     super(opts);
 
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
-    this._templateName = 'results/universalresults';
     this._limit = opts.limit || 10;
   }
 
   static get type () {
     return 'UniversalResults';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName (config) {
+    return 'results/universalresults';
   }
 
   static areDuplicateNamesAllowed () {
