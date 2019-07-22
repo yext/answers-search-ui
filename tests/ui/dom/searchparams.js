@@ -8,6 +8,11 @@ beforeEach(() => {
 });
 
 describe('searchparams parse', () => {
+  it('parses standard url with no params', () => {
+    let u = new SearchParams('https://www.yext.com/');
+    expect(u.get('https://www.yext.com/')).toStrictEqual('');
+    expect(u.get('askjfhsdkjhfs')).not.toStrictEqual('');
+  });
   it('parses standard url', () => {
     let u = new SearchParams('https://www.yext.com/?query=hello');
     expect(u.get('query')).toStrictEqual('hello');
@@ -38,6 +43,11 @@ describe('searchparams parse', () => {
   it('parses url with +', () => {
     let u = new SearchParams('query=hello+world&q=area51+event');
     expect(u.get('query')).toStrictEqual('hello world');
+    expect(u.get('q')).toStrictEqual('area51 event');
+  });
+  it('parses query without value', () => {
+    let u = new SearchParams('query=&q=area51+event');
+    expect(u.get('query')).toStrictEqual('');
     expect(u.get('q')).toStrictEqual('area51 event');
   });
 });

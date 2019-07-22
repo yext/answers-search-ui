@@ -16,7 +16,7 @@ export default class SearchParams {
      */
     this._params = {};
 
-    if (window.URLSearchParams) {
+    if (window && window.URLSearchParams) {
       return new URLSearchParams(url);
     } else {
       this._params = this.parse(url);
@@ -26,28 +26,37 @@ export default class SearchParams {
   /**
    * parse creates a mapping of all query params in a given url
    * The query param values are decoded before being put in the map
+   * Three types of input are supported
+   *   (1) full URL e.g. http://www.yext.com/?q=hello
+   *   (2) params with ? e.g. ?q=hello
+   *   (1) params without ? e.g. q=hello
    * @param {string} url The url
-   * @returns {Object} mapping from query param -> value
+   * @returns {Object} mapping from query param -> value where value is '' if no value is provided
    */
   parse (url) {
-    let mapping = {};
+    let params = {};
     let search = url;
+
+    if (search === '') {
+      return params;
+    }
+
+    // Normalize all url inputs to string of query params separated by &
     if (url.indexOf('?') > -1) {
       search = url.slice(url.indexOf('?') + 1);
     }
-    if (search === '') {
-      return mapping;
-    }
-    const keyVals = search.split('&');
-    for (let keyVal of keyVals) {
-      let split = keyVal.split('=');
-      if (split.length > 1) {
-        mapping[split[0]] = SearchParams.decode(split[1]);
+
+    const encodedParams = search.split('&');
+    for (let i = 0; i < encodedParams.length; i++) {
+      const keyVal = encodedParams[i].split('=');
+      if (keyVal.length > 1) {
+        params[keyVal[0]] = SearchParams.decode(keyVal[1]);
       } else {
-        mapping[split[0]] = '';
+        params[keyVal[0]] = '';
       }
     }
-    return mapping;
+
+    return params;
   }
 
   /**
