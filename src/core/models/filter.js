@@ -115,14 +115,35 @@ export default class Filter {
   }
 
   /**
-   * Create a new inclusive range filter for a field
+   * Create a new inclusive range filter
    * @param {string} field The subject field of the filter
-   * @param {*} min The minimum value of the range
-   * @param {*} max The maximum value of the ranger
+   * @param {*} min The minimum value
+   * @param {*} max The maximum value
    * @returns {Filter}
    */
-  static range (field, min, max) {
-    return Filter.and(Filter.greaterThanEqual(field, min), Filter.lessThanEqual(field, max));
+  static inclusiveRange (field, min, max) {
+    return new Filter({
+      [field]: {
+        '$ge': min,
+        '$le': max
+      }
+    });
+  }
+
+  /**
+   * Create a new exclusive range filter
+   * @param {string} field The subject field of the filter
+   * @param {*} min The minimum value
+   * @param {*} max The maximum value
+   * @returns {Filter}
+   */
+  static exclusiveRange (field, min, max) {
+    return new Filter({
+      [field]: {
+        '$gt': min,
+        '$lt': max
+      }
+    });
   }
 
   /**

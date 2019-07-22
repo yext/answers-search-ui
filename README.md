@@ -341,6 +341,32 @@ ANSWERS.addComponent('FilterOptions', {
 });
 ```
 
+### DateRangeFilter
+
+Displays two date inputs for selecting a range of dates.
+
+```html
+<div class="date-range-filter-container"></div>
+```
+
+```js
+ANSWERS.addComponent('DateRangeFilter', {
+  container: '.date-range-filter-container',
+  // The api field to filter on
+  field: 'time.start',
+  // Title to display for the range
+  title: 'Event Start Date',
+  // The label to show next to the min date, optional
+  minLabel: 'Earliest',
+  // The label to show next to the max date, optional
+  maxLabel: 'Latest',
+  // The initial min date to show in yyyy-mm-dd format, defaults to today
+  initialMin: '2019-08-01',
+  // The initial max date to show in yyyy-mm-dd format, defaults to today
+  initialMax: '2019-09-01'
+});
+```
+
 ## Direct Answer Component
 
 The Direct Answer Component will render the BEST result, if found,
