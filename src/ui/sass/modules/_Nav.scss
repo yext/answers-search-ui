@@ -23,4 +23,45 @@
       opacity: 0;
     }
   }
+
+  &-more
+  {
+    display: flex;
+    align-items: center;
+
+    &::before
+    {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 20px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  &-modal
+  {
+    display: none;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    right: 0;
+    top: 30px;
+
+    &.is-active
+    {
+      display: block;
+    }
+  }
+
+  &-dropDownItem
+  {
+    display: block;
+    font-size: 13px;
+    padding: 8px 16px;
+  }
 }
