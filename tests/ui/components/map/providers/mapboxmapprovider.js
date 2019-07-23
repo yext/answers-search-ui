@@ -53,6 +53,25 @@ describe('serizalize an array of MapBoxMarker configs', () => {
 
     expect(actual).toEqual(expected);
   });
+
+  it('serializes an array of markers using a custom img url', () => {
+    const markers = [new MapBoxMarkerConfig({
+      map: map,
+      position: { latitude: 44, longitude: 45 },
+      label: '1',
+      staticMapPin: 'https%3A%2F%2Fimg.png'
+    }),
+    new MapBoxMarkerConfig({
+      map: map,
+      position: { latitude: 30, longitude: 31 },
+      label: '2'
+    })];
+
+    const actual = MapBoxMarkerConfig.serialize(markers);
+    const expected = 'url-https%3A%2F%2Fimg.png(45,44),pin-s-2(31,30)';
+
+    expect(actual).toEqual(expected);
+  });
 });
 
 describe('converts array of markers into MapboxMarkers', () => {
@@ -96,7 +115,7 @@ describe('converts array of markers into MapboxMarkers', () => {
     expect(actual).toEqual(expected);
   });
 
-  it('converts array of markers into GoogleAPIMarkers using pinConfig function', () => {
+  it('converts array of markers into MapboxMarkers using pinConfig function', () => {
     const markers = [
       {
         latitude: 44,
@@ -122,7 +141,8 @@ describe('converts array of markers into MapboxMarkers', () => {
           latitude: 44,
           longitude: 45
         },
-        wrapper: `<svg><tspan>1</tspan></svg>`
+        wrapper: `<svg><tspan>1</tspan></svg>`,
+        label: '1'
       }),
       new MapBoxMarkerConfig({
         map: map,
@@ -130,7 +150,8 @@ describe('converts array of markers into MapboxMarkers', () => {
           latitude: 44,
           longitude: 45
         },
-        wrapper: `<svg><tspan>2</tspan></svg>`
+        wrapper: `<svg><tspan>2</tspan></svg>`,
+        label: '2'
       })
     ];
 
