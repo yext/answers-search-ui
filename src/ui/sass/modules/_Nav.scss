@@ -1,0 +1,26 @@
+/** @define Nav */
+
+.yxt-Nav
+{
+  &-container
+  {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+
+    // make the nav scroll on mobile
+    @media (max-width: 768px)
+    {
+      overflow-x: auto;
+    }
+  }
+
+  &-item
+  {
+    &--more
+    {
+      position: absolute;
+      opacity: 0;
+    }
+  }
+}
