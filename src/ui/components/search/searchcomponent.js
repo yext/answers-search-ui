@@ -58,11 +58,24 @@ export default class SearchComponent extends Component {
     this.title = opts.title || 'Answers Universal Search';
 
     /**
-     * The search text used for labeling the input box, also provided to template.
+     * The label text is used for labeling the input box, also provided to template.
      * Optionally provided
      * @type {string}
      */
-    this.searchText = opts.searchText || 'What are you interested in?';
+    this.labelText = opts.labelText || 'What are you interested in?';
+
+    /**
+     * The submit text is used for labeling the submit button, also provided to the template.
+     * @type {string}
+     */
+    this.submitText = opts.submitText || 'Submit';
+
+    /**
+     * The submit icon is an icon for the submit button, if provided it will be displayed and the
+     * submit text will be used for screen readers.
+     * @type {string|null}
+     */
+    this.submitIcon = opts.submitIcon || null;
 
     /**
      * The query text to show as the first item for auto complete.
@@ -217,7 +230,9 @@ export default class SearchComponent extends Component {
   setState (data) {
     return super.setState(Object.assign({
       title: this.title,
-      searchText: this.searchText,
+      labelText: this.labelText,
+      submitIcon: this.submitIcon,
+      submitText: this.submitText,
       query: this.query
     }, data));
   }

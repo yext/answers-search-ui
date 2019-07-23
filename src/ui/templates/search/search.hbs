@@ -1,5 +1,22 @@
-<h1>{{title}}</h1>
-<div class="yext-search-container">
-  <div class="yext-search-query">{{> search/searchquery}}</div>
-  <div class="yext-search-autocomplete"></div>
+{{!// TODO (creotutar) def not multilang safe}}
+{{!// TODO (bmcginnis) probably needs better label / placeholder setup for WCAG }}
+<h1 class="yxt-SearchBar-title">{{title}}</h1>
+<div class="yxt-SearchBar-container">
+  <div class="yxt-SearchBar-query">
+    <form class="yxt-SearchBar-form">
+      <label class="yxt-SearchBar-label" for="query">{{labelText}}</label>
+      {{!// TODO (bmcginnis): migrate js class names}}
+      <input class="js-yext-query yxt-SearchBar-input" type="text" name="query" value="{{query}}">
+      <button type="submit" class="js-yext-submit yxt-SearchBar-button">
+        {{#if submitIcon}}
+          <img src="{{submitIcon}}" class="yxt-SearchBar-buttonImage" alt="">
+        {{/if}}
+        <span class="yxt-SearchBar-buttonText{{#if submitIcon}} sr-only{{/if}}">
+          {{submitText}}
+        </span>
+      </button>
+    </form>
+  </div>
+  {{!// TODO (bmcginnis): convert yext-search-autocomplete to yxt-SearchBar-autocomplete after discussing with Billy }}
+  <div class="yext-search-autocomplete yxt-SearchBar-autocomplete"></div>
 </div>
