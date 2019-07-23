@@ -1,0 +1,49 @@
+/** @define SearchBar */
+
+.yxt-SearchBar
+{
+  &-title
+  {
+    text-align: center;
+    margin-bottom: 16px;
+    color: white;
+  }
+
+  &-form
+  {
+    display: flex;
+    border-radius: 50px;
+    background-color: white;
+    height: 50px;
+    position: relative;
+    z-index: 3;
+  }
+
+  &-container
+  {
+    padding-bottom: 24px;
+    position: relative;
+  }
+
+  &-input
+  {
+    background-color: transparent;
+
+    flex-grow: 1;
+    padding-top: 12px;
+    padding-bottom: 12px;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  &-button
+  {
+    padding-right: 18px;
+    padding-top: 6px;
+  }
+
+  &-label
+  {
+    display: none; // TODO (creotutar) lets get a floating label here
+  }
+}
