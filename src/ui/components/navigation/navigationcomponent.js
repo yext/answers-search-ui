@@ -4,6 +4,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
+import DOM from '../../dom/dom';
 
 /**
  * The Tab is a model that is used to power the Navigation tabs in the view.
@@ -107,6 +108,13 @@ export default class NavigationComponent extends Component {
      * @private
      */
     this._tabOrder = this.getDefaultTabOrder(config.tabs, this.getUrlParams());
+
+    /**
+     * Handles to the close modal click listeners, to be removed in unMount()
+     * @type {array}
+     * @private
+     */
+    this._listenersToTearDown = [];
   }
 
   static get type () {
@@ -224,5 +232,74 @@ export default class NavigationComponent extends Component {
     // URLS we create.
     params.set('tabOrder', this._tabOrder);
     return baseUrl + '?' + params.toString();
+  }
+
+  /**
+   * If there are too many tabs, create a "more"
+   * dropdown menu to display tabs least relevant
+   * to the query.
+   *
+   * @override
+   */
+  onMount () {
+    const parentEl = DOM.query(this._container, '.js-yxt-navContainer');
+    const navItemEls = DOM.queryAll(this._container, '.js-yxt-navItem');
+    const modalEl = DOM.query(this._container, '.js-yxt-navModal');
+    const moreButtonEl = DOM.query(this._container, '.js-yxt-navMore');
+    const parentWidth = parentEl.offsetWidth;
+    const moreButtonWidth = moreButtonEl.offsetWidth;
+    let elsToMove = [];
+
+    // Collect links that need to be added to the dropdown
+    for (const navItemEl of navItemEls) {
+      let childPos = navItemEl.offsetLeft;
+      let childWidth = navItemEl.offsetWidth;
+
+      // Determines if the nav item is overflowing and needs to be added to the dropdown
+      // Offsets by the width of the more button to make sure there is enough space to add it
+      if (childPos + childWidth > parentWidth - moreButtonWidth) {
+        elsToMove.push(navItemEl);
+      }
+    }
+
+    // Shows the 'More' button if there are verticals to display in the dropdown
+    if (elsToMove.length) {
+      moreButtonEl.classList.remove('yxt-Nav-item--more');
+    }
+
+    // Adds cutoff elements to the dropdown
+    for (const el of elsToMove) {
+      modalEl.appendChild(el);
+      el.classList.add('yxt-Nav-dropDownItem');
+      el.classList.remove('yxt-Nav-item');
+    }
+
+    // Click listener to display/hide dropwdown, will be removed by DOM.empty in onUnMount()
+    moreButtonEl.addEventListener('click', () => {
+      modalEl.classList.toggle('is-active');
+    });
+
+    // Close the modal when clicking outside of it, will be removed by DOM.empty in onUnMount()
+    const closeModalClickListener = (e) => {
+      // TODO (bmcginnis): this is not robust if they have an image in the button or modal
+      if (e.target === modalEl || e.target === moreButtonEl) {
+        return;
+      }
+      modalEl.classList.remove('is-active');
+    };
+
+    window.addEventListener('click', closeModalClickListener);
+    this._listenersToTearDown.push({ type: 'click', fn: closeModalClickListener });
+
+    // TODO: (bmcginnis) move keyboard key detection from Autocomplete into common object so we can detect escape key
+    // here and close the modal.
+
+    return super.onMount();
+  }
+
+  onUnMount () {
+    this._listenersToTearDown.forEach(listener => window.removeEventListener(listener.type, listener.fn));
+
+    return super.onUnMount();
   }
 }
