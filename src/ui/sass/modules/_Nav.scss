@@ -57,4 +57,49 @@
       font-weight: $font-weight-bold;
     }
   }
+
+  &-more
+  {
+    display: flex;
+    align-items: center;
+    position: relative;
+
+    &::before
+    {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 20px;
+      background-repeat: no-repeat;
+      background-position: center;
+    }
+  }
+
+  &-modal
+  {
+    white-space: nowrap;
+    display: none;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    position: absolute;
+    background-color: white;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    top: 30px;
+
+    &.is-active
+    {
+      display: block;
+    }
+  }
+
+  &-dropDownItem
+  {
+    display: block;
+    font-size: 13px;
+    padding: 8px 16px;
+    text-align: left;
+  }
 }
