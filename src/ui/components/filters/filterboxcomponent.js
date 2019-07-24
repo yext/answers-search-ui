@@ -50,6 +50,13 @@ export default class FilterBoxComponent extends Component {
     this._applyButtonSelector = config.applyButtonSelector || '.js-yext-filterbox-apply';
 
     /**
+     * The selector of the reset button
+     * @type {string}
+     * @private
+     */
+    this._resetButtonSelector = config.resetButtonSelector || '.js-yext-filterbox-reset';
+
+    /**
      * The components created for each filter config
      * @type {Component[]}
      * @private
@@ -109,6 +116,12 @@ export default class FilterBoxComponent extends Component {
         this._search();
       });
     }
+
+    // Initializes reset button
+    const resetButton = DOM.query(this._container, this._resetButtonSelector);
+    DOM.on(resetButton, 'click', () => {
+      this._clearFilters();
+    });
   }
 
   /**
@@ -134,6 +147,25 @@ export default class FilterBoxComponent extends Component {
       ? Filter.and(...validFilters)
       : validFilters[0];
     this.core.setFilter(this.name, combinedFilter || {});
+  }
+
+  /**
+   * Clear filers in storage and uncheck all selected filters
+   * @private
+   */
+  _clearFilters () {
+    this._filters = [];
+    for (const filterComponent of this._filterComponents) {
+      if (filterComponent._type === 'FilterOptionsComponent') {
+        filterComponent.clear();
+        for (const option of filterComponent._options) {
+          option.checked = false;
+        }
+      }
+    }
+
+    this._saveFiltersToStorage();
+    this._search();
   }
 
   /**

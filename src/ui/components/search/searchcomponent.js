@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchParams from '../../dom/searchparams';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -223,7 +224,7 @@ export default class SearchComponent extends Component {
 
   getUrlParams (url) {
     url = url || window.location.search.substring(1);
-    return new URLSearchParams(url);
+    return new SearchParams(url);
   }
 
   bindBrowserHistory () {
