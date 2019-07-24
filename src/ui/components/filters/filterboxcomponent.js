@@ -163,7 +163,7 @@ export default class FilterBoxComponent extends Component {
 
     this.core.verticalSearch(query, this._verticalKey, JSON.stringify(totalFilter));
 
-    const numElement =  DOM.query(this._container, '.js-filterBoxNum');
+    const numElement = DOM.query(this._container, '.js-filterBoxNum');
 
     if (this._showNumFilters && numElement) {
       const filters = DOM.queryAll(this._container, this._inputSelector);
