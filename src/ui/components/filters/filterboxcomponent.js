@@ -69,6 +69,20 @@ export default class FilterBoxComponent extends Component {
      * @private
      */
     this._templateName = `filters/filterbox`;
+
+    /**
+     * If true, show number of applied results next to title
+     * @type {boolean}
+     * @private
+     */
+    this._showNumFilters = config.showNumFilters || false;
+
+    /**
+     * The selector of the inputs
+     * @type {string}
+     * @private
+     */
+    this._inputSelector = config.inputSelector || '.js-yext-filter-option';
   }
 
   static get type () {
@@ -148,5 +162,18 @@ export default class FilterBoxComponent extends Component {
     const query = this.core.storage.getState(StorageKeys.QUERY) || '';
 
     this.core.verticalSearch(query, this._verticalKey, JSON.stringify(totalFilter));
+
+    const numElement =  DOM.query(this._container, '.js-filterBoxNum');
+
+    if (this._showNumFilters && numElement) {
+      const filters = DOM.queryAll(this._container, this._inputSelector);
+      const numAppliedFilters = filters.filter(e => e.checked).length;
+
+      if (numAppliedFilters > 0) {
+        numElement.innerHTML = numAppliedFilters;
+      } else {
+        numElement.innerHTML = '';
+      }
+    }
   }
 }
