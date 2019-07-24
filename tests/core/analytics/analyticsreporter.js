@@ -25,11 +25,6 @@ describe('reporting events', () => {
     analyticsReporter = new AnalyticsReporter('123lakcsfn88', 'abc123');
   });
 
-  it('fetches the business ID from an empty query on initialization', () => {
-    expect(mockedGet).toHaveBeenCalledTimes(1);
-    expect(analyticsReporter._businessId).toBe(123456);
-  });
-
   it('throws an error if given a non-AnalyticsEvent', () => {
     expect(() => {
       analyticsReporter.report({ event_type: 'fake event' });
