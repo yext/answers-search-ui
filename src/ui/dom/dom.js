@@ -3,7 +3,6 @@
 /* global HTMLElement, HTMLDocument, Window, Event */
 
 let document = window.document;
-let parser = new DOMParser();
 
 /**
  * Static interface for interacting with the DOM API.
@@ -12,7 +11,6 @@ let parser = new DOMParser();
 export default class DOM {
   static setup (d, p) {
     document = d;
-    parser = p;
   }
 
   /**
@@ -21,7 +19,19 @@ export default class DOM {
    * @return {HTMLElement}
    */
   static create (html) {
-    return parser.parseFromString(html, 'text/html').body;
+    if ('createRange' in document) {
+      // prefer this implementation as it has wider browser support
+      // and it's better performing.
+      // see https://davidwalsh.name/convert-html-stings-dom-nodes
+      const container = document.createElement('div');
+      const frag = document.createRange().createContextualFragment(html);
+      container.appendChild(frag);
+      return container;
+    }
+
+    // fallback to this because of a bug in jsdom that causes tests to fail
+    // see: https://github.com/jsdom/jsdom/issues/399
+    return new DOMParser().parseFromString(html, 'text/html').body;
   }
 
   /**
@@ -51,7 +61,7 @@ export default class DOM {
    * @param {HTMLElement} parent Optional context to use for a search. Defaults to document if not provided.
    * @param {string} selector the CSS selector to query for
    *
-   * @returns {HTMLElement} the FIRST node it finds, if any
+   * @returns {Array} the FIRST node it finds, if any
    */
   static queryAll (parent, selector) {
     // Facade, shifting the selector to the parent argument if only one
@@ -61,11 +71,16 @@ export default class DOM {
       parent = document;
     }
 
-    if (selector instanceof HTMLElement || selector instanceof HTMLDocument || selector instanceof Window) {
-      return selector;
+    // handle the case where client code is using a pointer to a dom node and it's null, e.g. this._container
+    if (parent == null) {
+      parent = document;
     }
 
-    return parent.querySelectorAll(selector);
+    if (selector instanceof HTMLElement || selector instanceof HTMLDocument || selector instanceof Window) {
+      return [selector];
+    }
+
+    return Array.from(parent.querySelectorAll(selector));
   }
 
   static onReady (cb) {
