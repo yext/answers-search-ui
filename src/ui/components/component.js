@@ -272,8 +272,10 @@ export default class Component {
     this._onMount();
 
     // Attach analytics hooks as necessary
-    let domHooks = DOM.queryAll(this._container, '[data-eventtype]');
-    domHooks.forEach(this._createAnalyticsHook.bind(this));
+    if (this.analyticsReporter) {
+      let domHooks = DOM.queryAll(this._container, '[data-eventtype]');
+      domHooks.forEach(this._createAnalyticsHook.bind(this));
+    }
 
     return this;
   }
