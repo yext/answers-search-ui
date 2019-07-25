@@ -20,7 +20,6 @@ const SUPPORTED_CONTROLS = [
 export default class FilterOptionsComponent extends Component {
   constructor (config = {}) {
     super(config);
-    console.log(config)
 
     if (!config.control || !SUPPORTED_CONTROLS.includes(config.control)) {
       throw new AnswersComponentError(
