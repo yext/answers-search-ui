@@ -69,7 +69,7 @@ export default class FilterOptionsComponent extends Component {
     this._onChange = config.onChange || function () {};
 
     /**
-     * The label to br used in the legend
+     * The label to be used in the legend
      * @type {string}
      * @private
      */

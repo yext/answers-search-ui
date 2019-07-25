@@ -1,10 +1,21 @@
-{{#each options}}
-  <input
-    type="checkbox"
-    class="js-yext-filter-option"
-    id="js-yext-checkbox-{{../name}}-{{@index}}"
-    value="{{value}}"
-    data-index="{{@index}}"
-    {{#if checked}}checked{{/if}}>
-  <label for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}}</label>
-{{/each}}
+<fieldset class="Multioption-fieldset">
+  <legend class="Multioption-legend">
+    {{#if label}}
+      {{label}}
+    {{else}}
+      Filters
+    {{/if}}
+  </legend>
+  {{#each options}}
+    <div class="Multioption-option">
+      <input
+        type="checkbox"
+        class="js-yext-filter-option"
+        id="js-yext-checkbox-{{../name}}-{{@index}}"
+        value="{{value}}"
+        data-index="{{@index}}"
+        {{#if checked}}checked{{/if}}>
+      <label class="Multioption-label" for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}}</label>
+    </div>
+  {{/each}}
+</fieldset>
