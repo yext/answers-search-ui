@@ -55,20 +55,23 @@ describe('serizalize an array of MapBoxMarker configs', () => {
   });
 
   it('serializes an array of markers using a custom img url', () => {
-    const markers = [new MapBoxMarkerConfig({
-      map: map,
-      position: { latitude: 44, longitude: 45 },
-      label: '1',
-      staticMapPin: 'https%3A%2F%2Fimg.png'
-    }),
-    new MapBoxMarkerConfig({
-      map: map,
-      position: { latitude: 30, longitude: 31 },
+    const pinConfig = (item, config, marker) => {
+      config.staticMapPin = encodeURIComponent('https://' + marker.label + '.png');
+      return config;
+    };
+    const markers = MapBoxMarkerConfig.from([{
+      latitude: 44,
+      longitude: 45,
+      label: '1'
+    },
+    {
+      latitude: 30,
+      longitude: 31,
       label: '2'
-    })];
+    }], pinConfig, map);
 
     const actual = MapBoxMarkerConfig.serialize(markers);
-    const expected = 'url-https%3A%2F%2Fimg.png(45,44),pin-s-2(31,30)';
+    const expected = 'url-https%3A%2F%2F1.png(45,44),url-https%3A%2F%2F2.png(31,30)';
 
     expect(actual).toEqual(expected);
   });
