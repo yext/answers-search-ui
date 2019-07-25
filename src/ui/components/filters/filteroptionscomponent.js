@@ -135,6 +135,9 @@ export default class FilterOptionsComponent extends Component {
   clear () {
     const elements = DOM.queryAll(this._container, this._optionSelector);
     elements.forEach(e => e.removeAttribute('checked'));
+    for (const option of this._options) {
+      option.checked = false;
+    }
   }
 
   /**

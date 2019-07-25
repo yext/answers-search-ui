@@ -1,10 +1,34 @@
-<div>
-  {{#each filterConfigs}}
-    <div class="js-yext-filterbox-filter{{@index}}"></div>
-  {{/each}}
-  {{#if showApplyButton}}
-    <div>
-      <button type="button" class="js-yext-filterbox-apply">Apply</button>
+<div class="FilterBox{{#if mod}} FilterBox--{{mod}}{{/if}} js-filterbox">
+  <div class="FilterBox-titleWrapper">
+    {{#if toggle}}
+      <button class="FilterBox-toggle js-filterBoxToggle">
+        {{#if title}}
+          {{title}}
+        {{else}}
+          Filters
+        {{/if}}
+      </button>
+    {{else}}
+      <p class="FilterBox-title">
+        {{#if title}}
+          {{title}}
+        {{else}}
+          Filters
+        {{/if}}
+      </p>
+    {{/if}}
+  </div>
+  <div class="FilterBox-contentWrapper js-filtersContentWrapper">
+    <div class="FilterBox-filtersWrapper js-filtersWrapper">
+      {{#each filterConfigs}}
+        <div class="FilterBox-filterConfig js-yext-filterbox-filter{{@index}}"></div>
+      {{/each}}
     </div>
-  {{/if}}
+    {{#if showApplyButton}}
+      <div class="FilterBox-buttonsWrapper">
+        <button type="button" class="FilterBox-button FilterBox-button--reset js-yext-filterbox-reset">Reset</button>
+        <button type="button" class="FilterBox-button FilterBox-button--apply js-yext-filterbox-apply">Apply</button>
+      </div>
+    {{/if}}
+  </div>
 </div>

@@ -194,9 +194,6 @@ export default class FilterBoxComponent extends Component {
     for (const filterComponent of this._filterComponents) {
       if (filterComponent._type === 'FilterOptionsComponent') {
         filterComponent.clear();
-        for (const option of filterComponent._options) {
-          option.checked = false;
-        }
       }
     }
 
