@@ -36,16 +36,18 @@
       <div class="yxt-Result-ctasWrapper">
         <div class="yxt-Result-ctas">
           {{#each callsToAction}}
-            <a class="yxt-Result-cta" href="{{this.url}}">
-              {{#if this.icon}}
-                <div class="yxt-Result-ctaIconWrapper">
-                  <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
-                </div>
-              {{/if}}
-              <span class="yxt-Result-ctaLabel">
-                {{{this.label}}}
-              </span>
-            </a>
+            {{#if this.url}}
+              <a class="yxt-Result-cta" href="{{this.url}}">
+                {{#if this.icon}}
+                  <div class="yxt-Result-ctaIconWrapper">
+                    <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
+                  </div>
+                {{/if}}
+                <span class="yxt-Result-ctaLabel">
+                  {{{this.label}}}
+                </span>
+              </a>
+            {{/if}}
           {{/each}}
         </div>
       </div>
