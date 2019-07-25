@@ -36,7 +36,7 @@ export default class UniversalResultsComponent extends Component {
   }
 
   addChild (data = {}, type) {
-    let opts = this.getChildConfig([data['verticalConfigId']]);
+    let opts = this.getChildConfig(data['verticalConfigId']);
     return super.addChild(data, type, opts);
   }
 
@@ -46,5 +46,17 @@ export default class UniversalResultsComponent extends Component {
       return {};
     }
     return this._config['config'][configId] || this._config['config'];
+  }
+
+  setState (data) {
+    if (data.sections) {
+      data.sections = data.sections.map(section => {
+        if (this._opts && this._opts.config && this._opts.config[section.verticalConfigId]) {
+          return Object.assign(section, this._opts.config[section.verticalConfigId]);
+        }
+        return section;
+      });
+    }
+    return super.setState(data);
   }
 }
