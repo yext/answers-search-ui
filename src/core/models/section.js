@@ -12,6 +12,14 @@ export default class Section {
     this.results = Result.from(data.results);
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
+    this.sectionTitle = null;
+    if (this.verticalConfigId) {
+      // derive the sectionTitle from the verticalConfigId by default
+      this.sectionTitle = this.verticalConfigId
+        .split('_')
+        .map(frag => `${frag.charAt(0).toUpperCase()}${frag.slice(1)}`)
+        .join(' ');
+    }
   }
 
   static parseMap (results) {
