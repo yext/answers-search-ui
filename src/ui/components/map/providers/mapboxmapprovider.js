@@ -116,6 +116,12 @@ export class MapBoxMarkerConfig {
      * @type {string}
      */
     this.label = opts.label || undefined;
+
+    /**
+     * The url of the pin for the static map
+     * @type {string}
+     */
+    this.staticMapPin = opts.staticMapPin || undefined;
   }
 
   /**
@@ -126,7 +132,11 @@ export class MapBoxMarkerConfig {
   static serialize (mapboxMapMarkerConfigs) {
     let serializedMarkers = [];
     mapboxMapMarkerConfigs.forEach((marker) => {
-      serializedMarkers.push(`pin-s-${marker.label}(${marker.position.longitude},${marker.position.latitude})`);
+      if (marker.staticMapPin) {
+        serializedMarkers.push(`url-${marker.staticMapPin}(${marker.position.longitude},${marker.position.latitude})`);
+      } else {
+        serializedMarkers.push(`pin-s-${marker.label}(${marker.position.longitude},${marker.position.latitude})`);
+      }
     });
     return serializedMarkers.join(',');
   }
@@ -154,7 +164,8 @@ export class MapBoxMarkerConfig {
           marker);
       }
 
-      let wrapper = pinConfigObj.wrapper ? pinConfigObj.wrapper : null;
+      const wrapper = pinConfigObj.wrapper ? pinConfigObj.wrapper : null;
+      const staticMapPin = pinConfigObj.staticMapPin ? pinConfigObj.staticMapPin : null;
 
       mapboxMapMarkerConfigs.push(
         new MapBoxMarkerConfig({
@@ -163,7 +174,9 @@ export class MapBoxMarkerConfig {
             latitude: marker.latitude,
             longitude: marker.longitude
           },
-          wrapper: wrapper
+          wrapper: wrapper,
+          label: marker.label,
+          staticMapPin: staticMapPin
         })
       );
     });
