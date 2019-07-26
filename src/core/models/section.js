@@ -12,8 +12,8 @@ export default class Section {
     this.results = Result.from(data.results);
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
-    this.sectionTitle = null;
-    if (this.verticalConfigId) {
+    this.sectionTitle = data.sectionTitle || null;
+    if (this.verticalConfigId && !data.sectionTitle) {
       // derive the sectionTitle from the verticalConfigId by default
       this.sectionTitle = this.verticalConfigId
         .split('_')
