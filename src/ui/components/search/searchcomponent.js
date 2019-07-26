@@ -108,6 +108,14 @@ export default class SearchComponent extends Component {
      * @type {string}
      */
     this.query = opts.query || this.getUrlParams().get('query') || '';
+
+    /**
+     * The minimum time allowed in milliseconds between searches to prevent
+     * many duplicate searches back-to-back
+     * @type {number}
+     * @private
+     */
+    this._searchCooldown = opts.searchCooldown || 1000;
   }
 
   static get type () {
@@ -192,6 +200,13 @@ export default class SearchComponent extends Component {
   }
 
   search (query) {
+    if (this._throttled) {
+      return;
+    }
+
+    this._throttled = true;
+    setTimeout(() => { this._throttled = false; }, this._searchCooldown);
+
     if (this._verticalKey) {
       const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
       const totalFilter = allFilters.length > 1
