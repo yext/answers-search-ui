@@ -43,7 +43,7 @@ export default class Storage {
     if (this._moduleDataContainer[moduleId]) {
       return this._moduleDataContainer[moduleId].raw();
     }
-    return {};
+    return null;
   }
 
   getAll (key) {
