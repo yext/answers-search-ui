@@ -69,6 +69,13 @@ export default class FilterOptionsComponent extends Component {
     this._onChange = config.onChange || function () {};
 
     /**
+     * The label to be used in the legend
+     * @type {string}
+     * @private
+     */
+    this._label = config.label || 'Filters';
+
+    /**
      * The template to render, based on the control
      * @type {string}
      * @private
@@ -83,7 +90,8 @@ export default class FilterOptionsComponent extends Component {
   setState (data) {
     super.setState(Object.assign({}, data, {
       name: this.name,
-      options: this._options
+      options: this._options,
+      label: this._label
     }));
   }
 
