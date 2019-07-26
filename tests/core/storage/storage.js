@@ -40,6 +40,10 @@ describe('storing and retrieving', () => {
     expect(allData).toContainEqual({ test: 'test data two' });
     expect(allData).toContainEqual({ test: 'test data three' });
   });
+
+  it('returns null for unset state', () => {
+    expect(storage.getState(StorageKeys.QUERY)).toBeNull();
+  });
 });
 
 describe('publishing and subscribing', () => {
