@@ -170,6 +170,13 @@ export default class Component {
      * @type {function}
      */
     this.onUpdate = opts.onUpdate || this.onUpdate || function () { };
+
+    /**
+     * The amount of time to wait for an analytics event to complete before navigating off a page, in ms
+     * @type {number}
+     * @private
+     */
+    this._analyticsTimeout = 300;
   }
 
   static get type () {
@@ -273,7 +280,7 @@ export default class Component {
 
     // Attach analytics hooks as necessary
     if (this.analyticsReporter) {
-      let domHooks = DOM.queryAll(this._container, '[data-eventtype]');
+      let domHooks = DOM.queryAll(this._container, '[data-eventtype]:not([data-is-analytics-attached])');
       domHooks.forEach(this._createAnalyticsHook.bind(this));
     }
 
@@ -365,15 +372,22 @@ export default class Component {
   }
 
   _createAnalyticsHook (domComponent) {
+    domComponent.dataset.isAnalyticsAttached = true;
     const dataset = domComponent.dataset;
     const type = dataset.eventtype;
     const label = dataset.eventlabel;
     const options = dataset.eventoptions ? JSON.parse(dataset.eventoptions) : {};
 
-    DOM.on(domComponent, 'mousedown', () => {
+    DOM.on(domComponent, 'click', e => {
       const event = new AnalyticsEvent(type, label);
       event.addOptions(options);
-      this.analyticsReporter.report(event);
+      const reportPromise = this.analyticsReporter.report(event);
+      // Wait for analytics response before navigating, with timeout
+      if (domComponent.tagName === 'A') {
+        e.preventDefault();
+        setTimeout(() => { window.location.href = domComponent.href; }, this._analyticsTimeout);
+        reportPromise.then(() => { window.location.href = domComponent.href; });
+      }
     });
   }
 

@@ -4,7 +4,9 @@
 export default class AnalyticsEvent {
   constructor (type, label) {
     this.eventType = type.toUpperCase();
-    this.label = label;
+    if (label) {
+      this.label = label;
+    }
   }
 
   /**
