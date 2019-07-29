@@ -13,8 +13,8 @@ import SearchParams from '../../dom/searchparams';
  * @extends Component
  */
 export default class SearchComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (config = {}) {
+    super(config);
 
     /**
      * The template name to use for rendering with handlebars
@@ -27,69 +27,69 @@ export default class SearchComponent extends Component {
      * If not provided, auto-complete and search will be based on universal
      * @type {string}
      */
-    this._barKey = opts.barKey || null;
+    this._barKey = config.barKey || null;
 
     /**
      * The optional vertical key for vertical search configuration
      * If not provided, auto-complete and search will be based on universal
      * @type {string}
      */
-    this._verticalKey = opts.verticalKey || null;
+    this._verticalKey = config.verticalKey || null;
 
     /**
      * Query submission is based on a form as context.
      * Optionally provided, otherwise defaults to native form node within container
      * @type {string} CSS selector
      */
-    this._formEl = opts.formSelector || 'form';
+    this._formEl = config.formSelector || 'form';
 
     /**
      * The input element used for searching and wires up the keyboard interaction
      * Optionally provided.
      * @type {string} CSS selector
      */
-    this._inputEl = opts.inputEl || '.js-yext-query';
+    this._inputEl = config.inputEl || '.js-yext-query';
 
     /**
      * The title used, provided to the template as a data point
      * Optionally provided.
      * @type {string}
      */
-    this.title = opts.title || 'Answers Universal Search';
+    this.title = config.title || 'Answers Universal Search';
 
     /**
      * The label text is used for labeling the input box, also provided to template.
      * Optionally provided
      * @type {string}
      */
-    this.labelText = opts.labelText || 'What are you interested in?';
+    this.labelText = config.labelText || 'What are you interested in?';
 
     /**
      * The submit text is used for labeling the submit button, also provided to the template.
      * @type {string}
      */
-    this.submitText = opts.submitText || 'Submit';
+    this.submitText = config.submitText || 'Submit';
 
     /**
      * The submit icon is an icon for the submit button, if provided it will be displayed and the
      * submit text will be used for screen readers.
      * @type {string|null}
      */
-    this.submitIcon = opts.submitIcon || null;
+    this.submitIcon = config.submitIcon || null;
 
     /**
      * The query text to show as the first item for auto complete.
      * Optionally provided
      * @type {string}
      */
-    this.promptHeader = opts.promptHeader || null;
+    this.promptHeader = config.promptHeader || null;
 
     /**
      * Auto focuses the input box if set to true.
      * Optionally provided, defaults to false.
      * @type {boolean}
      */
-    this.autoFocus = opts.autoFocus === true;
+    this.autoFocus = config.autoFocus === true;
 
     /**
      * submitURL will force the search query submission to get
@@ -100,14 +100,22 @@ export default class SearchComponent extends Component {
      *
      * @type {boolean}
      */
-    this.redirectUrl = opts.redirectUrl || null;
+    this.redirectUrl = config.redirectUrl || null;
 
     /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string}
      */
-    this.query = opts.query || this.getUrlParams().get('query') || '';
+    this.query = config.query || this.getUrlParams().get('query') || '';
+
+    /**
+     * The minimum time allowed in milliseconds between searches to prevent
+     * many duplicate searches back-to-back
+     * @type {number}
+     * @private
+     */
+    this._searchCooldown = config.searchCooldown || 300;
   }
 
   static get type () {
@@ -192,6 +200,13 @@ export default class SearchComponent extends Component {
   }
 
   search (query) {
+    if (this._throttled) {
+      return;
+    }
+
+    this._throttled = true;
+    setTimeout(() => { this._throttled = false; }, this._searchCooldown);
+
     if (this._verticalKey) {
       const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
       const totalFilter = allFilters.length > 1
