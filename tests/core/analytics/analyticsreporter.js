@@ -23,7 +23,7 @@ describe('reporting events', () => {
         post: mockedPost
       };
     });
-    analyticsReporter = new AnalyticsReporter('123lakcsfn88', 'abc123', '213412');
+    analyticsReporter = new AnalyticsReporter('abc123', '213412');
   });
 
   it('throws an error if given a non-AnalyticsEvent', () => {
@@ -44,7 +44,7 @@ describe('reporting events', () => {
   });
 
   it('includes global options', () => {
-    const analyticsReporter = new AnalyticsReporter('123lakcsfn88', 'abc123', '213412', { testOption: 'test' });
+    const analyticsReporter = new AnalyticsReporter('abc123', '213412', { testOption: 'test' });
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 

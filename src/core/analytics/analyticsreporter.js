@@ -9,8 +9,7 @@ import { ANALYTICS_BASE_URL } from '../constants';
  * Class for reporting analytics events to the server
  */
 export default class AnalyticsReporter {
-  constructor (apiKey, answersKey, businessId, globalOptions) {
-    this._apiKey = apiKey;
+  constructor (answersKey, businessId, globalOptions) {
     this._businessId = businessId;
     this._globalOptions = globalOptions || {};
     this._globalOptions.answersKey = answersKey;
@@ -26,7 +25,6 @@ export default class AnalyticsReporter {
     const request = new ApiRequest({
       baseUrl: ANALYTICS_BASE_URL,
       endpoint: `/realtimeanalytics/data/answers/${this._businessId}`,
-      apiKey: this._apiKey,
       version: 20190301,
       params: {
         'data': event.toApiEvent()
