@@ -63,7 +63,7 @@ class Answers {
 
     if (config.businessId) {
       this.components
-        .setAnalyticsReporter(new AnalyticsReporter(config.apiKey, config.answersKey, config.businessId));
+        .setAnalyticsReporter(new AnalyticsReporter(config.answersKey, config.businessId, config.analyticsOptions));
     }
 
     this._onReady = config.onReady || function () {};

@@ -16,13 +16,14 @@ describe('reporting events', () => {
 
   beforeEach(() => {
     mockedGet.mockClear();
+    mockedPost.mockClear();
     HttpRequester.mockImplementation(() => {
       return {
         get: mockedGet,
         post: mockedPost
       };
     });
-    analyticsReporter = new AnalyticsReporter('123lakcsfn88', 'abc123');
+    analyticsReporter = new AnalyticsReporter('abc123', '213412');
   });
 
   it('throws an error if given a non-AnalyticsEvent', () => {
@@ -39,6 +40,18 @@ describe('reporting events', () => {
     expect(mockedPost).toBeCalledWith(
       expect.anything(),
       expect.objectContaining({ 'data': expectedEvent.toApiEvent() }),
+      undefined);
+  });
+
+  it('includes global options', () => {
+    const analyticsReporter = new AnalyticsReporter('abc123', '213412', { testOption: 'test' });
+    const expectedEvent = new AnalyticsEvent('thumbs_up');
+    analyticsReporter.report(expectedEvent);
+
+    expect(mockedPost).toBeCalledTimes(1);
+    expect(mockedPost).toBeCalledWith(
+      expect.anything(),
+      expect.objectContaining({ 'data': expect.objectContaining({ testOption: 'test' }) }),
       undefined);
   });
 });

@@ -90,6 +90,7 @@ Every component has the same base configuration options.
 | render        | function   | override render function. data provided   | not required  |
 | transformData | function   | A hook for transforming data before it gets sent to render | not required |
 | onMount       | function   | invoked when the HTML is mounted to the DOM | not required |
+| analyticsOptions | object | additional properties to send with every analytics event | not required |
 
 
 ## Adding a Component

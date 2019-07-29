@@ -39,7 +39,7 @@ const RENDERER = new HandlebarsRenderer({
 COMPONENT_MANAGER.setRenderer(RENDERER);
 
 let component;
-const reportMock = jest.fn();
+const reportMock = jest.fn(() => Promise.resolve());
 
 beforeEach(() => {
   // Always reset the DOM before each component render test
@@ -56,6 +56,8 @@ beforeEach(() => {
     componentManager: COMPONENT_MANAGER,
     analyticsReporter: { report: reportMock }
   });
+
+  jest.clearAllMocks();
 });
 
 describe('render component templates', () => {
@@ -205,7 +207,32 @@ describe('attaching analytics events', () => {
     component.mount();
     expect(domOn).toHaveBeenCalledTimes(1);
 
-    DOM.trigger('[data-eventtype]', 'mousedown');
+    DOM.trigger('[data-eventtype]', 'click');
+    expect(reportMock).toHaveBeenCalledTimes(1);
+    const expectedEvent = new AnalyticsEvent('test_event');
+    expectedEvent.addOptions({ name: 'Billy' });
+    expect(reportMock).toHaveBeenCalledWith(expectedEvent);
+  });
+
+  it('attaches analytics events only one', () => {
+    const template = `<div data-eventtype="test_event" data-eventoptions='{"name":"{{{name}}}"}'>This is a test template</div>`;
+    const data = { name: 'Billy' };
+    const expected = `<div data-eventtype="test_event" data-eventoptions='{"name":"Billy"}'>This is a test template</div>`;
+
+    const domOn = jest.spyOn(DOM, 'on');
+
+    component.setTemplate(template);
+
+    let renderEl = DOM.create(component.render(data));
+    let testEl = DOM.create(expected);
+    expect(renderEl.isEqualNode(testEl)).toBeTruthy();
+
+    component.setState(data);
+    component.mount();
+    component.mount();
+    expect(domOn).toHaveBeenCalledTimes(2);
+
+    DOM.trigger('[data-eventtype]', 'click');
     expect(reportMock).toHaveBeenCalledTimes(1);
     const expectedEvent = new AnalyticsEvent('test_event');
     expectedEvent.addOptions({ name: 'Billy' });
