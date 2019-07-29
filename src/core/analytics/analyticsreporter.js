@@ -9,10 +9,11 @@ import { ANALYTICS_BASE_URL } from '../constants';
  * Class for reporting analytics events to the server
  */
 export default class AnalyticsReporter {
-  constructor (apiKey, answersKey, businessId) {
+  constructor (apiKey, answersKey, businessId, globalOptions) {
     this._apiKey = apiKey;
-    this._answersKey = answersKey;
     this._businessId = businessId;
+    this._globalOptions = globalOptions || {};
+    this._globalOptions.answersKey = answersKey;
   }
 
   report (event) {
@@ -20,7 +21,7 @@ export default class AnalyticsReporter {
       throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
     }
 
-    event.addOptions({ answersKey: this._answersKey });
+    event.addOptions(this._globalOptions);
 
     const request = new ApiRequest({
       baseUrl: ANALYTICS_BASE_URL,
