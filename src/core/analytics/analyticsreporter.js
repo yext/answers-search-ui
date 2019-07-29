@@ -32,7 +32,7 @@ export default class AnalyticsReporter {
       }
     });
 
-    request.post()
+    return request.post()
       .catch(console.err);
   }
 }
