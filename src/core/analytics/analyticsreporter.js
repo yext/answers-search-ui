@@ -9,10 +9,15 @@ import { ANALYTICS_BASE_URL } from '../constants';
  * Class for reporting analytics events to the server
  */
 export default class AnalyticsReporter {
-  constructor (answersKey, businessId, globalOptions) {
+  constructor (answersKey, businessId, globalOptions = {}) {
     this._businessId = businessId;
-    this._globalOptions = globalOptions || {};
-    this._globalOptions.answersKey = answersKey;
+
+    /**
+     * Options to include with every analytic event reported to the server
+     * @type {object}
+     * @private
+     */
+    this._globalOptions = Object.assign({}, globalOptions, { answersKey });
   }
 
   report (event) {
