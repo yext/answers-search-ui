@@ -231,7 +231,7 @@ ANSWERS.addComponent('SearchBar', {
   title: 'Search my Brand',                // optional, defaults to 'Answers'
   searchText: 'What are you looking for?', // optional, defaults to 'What are you interested in?'
   autoFocus: true,                          // optional, defaults to false
-  searchCooldown: 2000,                     // optional, defaults to 1000ms (1 second)
+  searchCooldown: 2000,                     // optional, defaults to 300ms (0.3 seconds)
   redirectUrl: 'path/to/url'                // optional, redirect search query to url
 })
 ```
