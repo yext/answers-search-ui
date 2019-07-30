@@ -7,14 +7,14 @@
       <label class="yxt-SearchBar-label" for="query">{{labelText}}</label>
       {{!// TODO (bmcginnis): migrate js class names}}
       <input class="js-yext-query yxt-SearchBar-input" type="text" name="query" value="{{query}}">
-      <button type="submit" class="js-yext-submit yxt-SearchBar-button">
+      <input type="submit" class="js-yext-submit yxt-SearchBar-button">
         {{#if submitIcon}}
           <img src="{{submitIcon}}" class="yxt-SearchBar-buttonImage" alt="">
         {{/if}}
         <span class="yxt-SearchBar-buttonText{{#if submitIcon}} sr-only{{/if}}">
           {{submitText}}
         </span>
-      </button>
+      </input>
     </form>
   </div>
   {{!// TODO (bmcginnis): convert yext-search-autocomplete to yxt-SearchBar-autocomplete after discussing with Billy }}

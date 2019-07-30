@@ -157,10 +157,23 @@ export default class DOM {
   }
 
   static trigger (selector, event, settings) {
-    let e = new Event(event, Object.assign({
+    let objs = [{
       'bubbles': true,
       'cancelable': true
-    }, settings || {}));
+    }, settings];
+
+    let combinedObjs = settings ? objs.reduce(function (r, o) {
+      Object.keys(o).forEach(function (k) {
+        r[k] = o[k];
+      });
+      return r;
+    }, {}) : {
+      'bubbles': true,
+      'cancelable': true
+    };
+
+    let e = document.createEvent('CustomEvent');
+    e.initCustomEvent(event, combinedObjs.bubbles, combinedObjs.cancelable, combinedObjs.detail);
 
     DOM.query(selector).dispatchEvent(e);
   }
@@ -175,6 +188,10 @@ export default class DOM {
 
   static delegate (ctxt, selector, evt, handler) {
     let el = DOM.query(ctxt);
+    if (!Element.prototype.matches) {
+      Element.prototype.matches = Element.prototype.msMatchesSelector ||
+                                  Element.prototype.webkitMatchesSelector;
+    }
     el.addEventListener(evt, function (event) {
       let target = event.target;
       while (!target.isEqualNode(el)) {
