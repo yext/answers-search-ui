@@ -2,6 +2,7 @@
 
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchStates from '../../../core/storage/searchstates';
 
 export default class UniversalResultsComponent extends Component {
   constructor (opts = {}) {
@@ -23,6 +24,15 @@ export default class UniversalResultsComponent extends Component {
   init (opts) {
     super.init(opts);
     return this;
+  }
+
+  setState (data, val) {
+    const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    return super.setState(Object.assign({}, data, {
+      isPreSearch: searchState === SearchStates.PRE_SEARCH,
+      isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
+      isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE
+    }), val);
   }
 
   addChild (data = {}, type) {

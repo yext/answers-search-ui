@@ -7,6 +7,8 @@ import SearchDataTransformer from './search/searchdatatransformer';
 
 import Storage from './storage/storage';
 import StorageKeys from './storage/storagekeys';
+import VerticalResults from './models/verticalresults';
+import UniversalResults from './models/universalresults';
 
 /**
  * Core is the main application container for all of the network and storage
@@ -77,6 +79,7 @@ export default class Core {
   }
 
   verticalSearch (queryString, verticalKey, filter) {
+    this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
     return this._searcher
       .verticalQuery(queryString, verticalKey, filter)
       .then(response => SearchDataTransformer.transformVertical(response))
@@ -87,6 +90,7 @@ export default class Core {
   }
 
   search (queryString, urls) {
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     return this._searcher
       .query(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
