@@ -1,4 +1,4 @@
-/** @module */
+/** @module StorageKeys */
 
 /**
  * StorageKeys is an ENUM are considered the root context
