@@ -1,6 +1,6 @@
 /** @module DOM */
 
-/* global HTMLElement, HTMLDocument, Window, Event */
+/* global HTMLElement, HTMLDocument, Window, Element */
 
 let document = window.document;
 
