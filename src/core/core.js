@@ -84,6 +84,7 @@ export default class Core {
       .verticalQuery(queryString, verticalKey, filter)
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
       });
@@ -95,6 +96,7 @@ export default class Core {
       .query(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
@@ -154,6 +156,14 @@ export default class Core {
    */
   setQuery (query) {
     this.storage.set(StorageKeys.QUERY, query);
+  }
+
+  /**
+   * Stores the provided query ID, to be used in analytics
+   * @param {string} queryId The query id to store
+   */
+  setQueryId (queryId) {
+    this.storage.set(StorageKeys.QUERY_ID, queryId);
   }
 
   /**

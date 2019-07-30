@@ -20,6 +20,10 @@ export default class AnalyticsReporter {
     this._globalOptions = Object.assign({}, globalOptions, { answersKey });
   }
 
+  setQueryId (queryId) {
+    this._globalOptions.queryId = queryId;
+  }
+
   report (event) {
     if (!(event instanceof AnalyticsEvent)) {
       throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
