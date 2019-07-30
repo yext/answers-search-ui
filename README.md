@@ -388,7 +388,7 @@ ANSWERS.addComponent('UniversalResults', {
     return `my item ${data.name}`
   }
 })
-````
+```
 
 ### Custom Template for ALL Result Items
 

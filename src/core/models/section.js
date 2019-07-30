@@ -1,9 +1,11 @@
 /** @module Section */
 
 import Result from './result';
+import SearchStates from '../storage/searchstates';
 
 export default class Section {
   constructor (data, url) {
+    this.searchState = SearchStates.SEARCH_COMPLETE;
     this.verticalConfigId = data.verticalConfigId || null;
     this.resultsCount = data.resultsCount || 0;
     this.encodedState = data.encodedState || '';
