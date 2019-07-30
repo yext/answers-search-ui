@@ -51,7 +51,7 @@ export default class GoogleMapProvider extends MapProvider {
 
     let encodedMarkers = GoogleMapMarkerConfig.serialize(googleMapMarkerConfigs);
     return `
-      <img src="//maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&size=${this._width}x${this._height}&${this.generateCredentials()}">`;
+      <img src="//maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&size=${this._width}x${this._height}&${this.generateCredentials()}" alt="">`;
   }
 
   generateCredentials () {

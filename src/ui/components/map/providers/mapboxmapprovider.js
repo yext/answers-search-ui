@@ -50,7 +50,7 @@ export default class MapBoxMapProvider extends MapProvider {
     let zoom = this._zoom || 9;
 
     let encodedMarkers = MapBoxMarkerConfig.serialize(mapboxMapMarkerConfigs);
-    return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${this._apiKey}">`;
+    return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${this._apiKey}" alt="">`;
   }
 
   init (el, mapData) {
