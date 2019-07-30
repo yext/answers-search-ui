@@ -11,7 +11,6 @@ import {
 
 import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
-import storagekeys from './core/storage/storagekeys';
 
 /**
  * The main Answers interface
@@ -64,10 +63,8 @@ class Answers {
       .setRenderer(this.renderer);
 
     if (config.businessId) {
-      const reporter = new AnalyticsReporter(config.answersKey, config.businessId, config.analyticsOptions);
-      this.components
-        .setAnalyticsReporter(reporter);
-      core.storage.on('update', storagekeys.QUERY_ID, id => reporter.setQueryId(id));
+      const reporter = new AnalyticsReporter(core, config.answersKey, config.businessId, config.analyticsOptions);
+      this.components.setAnalyticsReporter(reporter);
     }
 
     this._onReady = config.onReady || function () {};

@@ -4,12 +4,13 @@ import ApiRequest from '../http/apirequest';
 import AnalyticsEvent from './analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
 import { ANALYTICS_BASE_URL } from '../constants';
+import StorageKeys from '../storage/storagekeys';
 
 /**
  * Class for reporting analytics events to the server
  */
 export default class AnalyticsReporter {
-  constructor (answersKey, businessId, globalOptions = {}) {
+  constructor (core, answersKey, businessId, globalOptions = {}) {
     this._businessId = businessId;
 
     /**
@@ -18,6 +19,9 @@ export default class AnalyticsReporter {
      * @private
      */
     this._globalOptions = Object.assign({}, globalOptions, { answersKey });
+
+    // listen to query id updates
+    core.storage.on('update', StorageKeys.QUERY_ID, id => this.setQueryId(id));
   }
 
   setQueryId (queryId) {
