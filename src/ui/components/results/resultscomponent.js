@@ -8,6 +8,7 @@ import EventResultsItemComponent from './eventresultsitemcomponent';
 import PeopleResultsItemComponent from './peopleresultsitemcomponent';
 import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchStates from '../../../core/storage/searchstates';
 
 const ResultType = {
   EVENT: 'event',
@@ -68,11 +69,11 @@ export default class ResultsComponent extends Component {
   }
 
   setState (data, val) {
-    if (Object.keys(data).length === 0) {
-      return this;
-    }
-
+    const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign({}, data, {
+      isPreSearch: searchState === SearchStates.PRE_SEARCH,
+      isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
+      isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
       includeMap: this._opts.includeMap,
       mapConfig: this._opts.mapConfig
     }), val);
