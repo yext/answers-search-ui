@@ -143,6 +143,6 @@ export default class ComponentManager {
   }
 
   getActiveComponent (type) {
-    return this._activeComponents.find(c => c.type === type);
+    return this._activeComponents.find(c => c.constructor.type === type);
   }
 }
