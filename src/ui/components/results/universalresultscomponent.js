@@ -41,10 +41,10 @@ export default class UniversalResultsComponent extends Component {
   }
 
   getChildConfig (configId) {
-    let config = this._opts.config;
+    let config = this._config.config;
     if (config === undefined) {
       return {};
     }
-    return this._opts['config'][configId] || this._opts['config'];
+    return this._config['config'][configId] || this._config['config'];
   }
 }

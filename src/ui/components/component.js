@@ -15,12 +15,12 @@ import AnalyticsEvent from '../../core/analytics/analyticsevent';
  * mounted, created, etc.
  */
 export default class Component {
-  constructor (type, opts = {}) {
+  constructor (type, config = {}) {
     // Simple facade pattern to enable the user to pass a single object
     // containing all the necessary options and settings
     if (typeof type === 'object') {
-      opts = type;
-      type = opts.type;
+      config = type;
+      type = config.type;
     }
 
     this.moduleId = null;
@@ -30,13 +30,13 @@ export default class Component {
      * Used to distinguish between other components of the same type
      * @type {String}
      */
-    this.name = opts.name || this.constructor.name;
+    this.name = config.name || this.constructor.name;
 
     /**
      * Cache the options so that we can propogate properly to child components
      * @type {Object}
      */
-    this._opts = opts;
+    this._config = config;
 
     /**
      * An identifier used to classify the type of component.
@@ -49,7 +49,7 @@ export default class Component {
      * A local reference to the parent component, if exists
      * @type {Component}
      */
-    this._parent = opts.parent || null;
+    this._parent = config.parent || null;
 
     /**
      * A container for all the child components
@@ -61,83 +61,90 @@ export default class Component {
      * The state (data) of the component to be provided to the template for rendering
      * @type {object}
      */
-    this._state = new State(opts.state);
+    this._state = new State(config.state);
 
     /**
      * TODO(billy) This should be 'services'
      */
-    this.core = opts.core || null;
+    this.core = config.core || null;
 
     /**
      * A local reference to the component manager, which contains all of the component classes
      * eligible to be created
      * @type {ComponentManager}
      */
-    this.componentManager = opts.componentManager || null;
+    this.componentManager = config.componentManager || null;
 
     /**
      * A local reference to the analytics reporter, used to report events for this component
      * @type {AnalyticsReporter}
      */
-    this.analyticsReporter = opts.analyticsReporter || null;
+    this.analyticsReporter = config.analyticsReporter || null;
+
+    /**
+     * Options to include with all analytic events sent by this component
+     * @type {object}
+     * @private
+     */
+    this._analyticsOptions = config.analyticsOptions || {};
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
      * @type {HTMLElement}
      */
     if (this._parent === null) {
-      if (typeof opts.container !== 'string') {
+      if (typeof config.container !== 'string') {
         throw new Error('Missing `container` option for component configuration. Must be of type `string`.');
       }
-      this._container = DOM.query(opts.container) || null;
+      this._container = DOM.query(config.container) || null;
     } else {
-      this._container = DOM.query(this._parent._container, opts.container);
+      this._container = DOM.query(this._parent._container, config.container);
 
       // If we have a parent, and the container is missing from the DOM,
       // we construct the container and append it to the parent
       if (this._container === null) {
         this._container = DOM.createEl('div', {
-          class: opts.container.substring(1, opts.container.length)
+          class: config.container.substring(1, config.container.length)
         });
         DOM.append(this._parent._container, this._container);
       }
     }
 
     if (this._container === null) {
-      throw new Error('Cannot find container DOM node: ' + opts.container);
+      throw new Error('Cannot find container DOM node: ' + config.container);
     }
 
     /**
      * A custom class to be applied to {this._container} node
      * @type {string}
      */
-    this._className = opts.class || 'component';
+    this._className = config.class || 'component';
 
     /**
      * A custom render function to be used instead of using the default renderer
      * @type {Renderer}
      */
-    this._render = opts.render || null;
+    this._render = config.render || null;
 
     /**
      * A local reference to the default {Renderer} that will be used for rendering the template
      * @type {Renderer}
      */
-    this._renderer = opts.renderer || Renderers.Handlebars;
+    this._renderer = config.renderer || Renderers.Handlebars;
 
     /**
      * The template string to use for rendering the component
      * If this is left empty, we lookup the template the base templates using the templateName
      * @type {string}
      */
-    this._template = opts.template ? this._renderer.compile(opts.template) : null;
+    this._template = config.template ? this._renderer.compile(config.template) : null;
 
     /**
      * The templateName to use for rendering the component.
      * This is only used if _template is empty.
      * @type {string}
      */
-    this._templateName = opts.templateName || 'default';
+    this._templateName = config.templateName || 'default';
 
     /**
      * An internal state indicating whether or not the component has been mounted to the DOM
@@ -151,25 +158,25 @@ export default class Component {
      * By default, no transformation happens.
      * @type {function}
      */
-    this.transformData = opts.transformData || this.transformData || function () {};
+    this.transformData = config.transformData || this.transformData || function () {};
 
     /**
      * The a local reference to the callback that will be invoked when a component is created.
      * @type {function}
      */
-    this.onCreate = opts.onCreate || this.onCreate || function () {};
+    this.onCreate = config.onCreate || this.onCreate || function () {};
 
     /**
      * The a local reference to the callback that will be invoked when a component is Mounted.
      * @type {function}
      */
-    this.onMount = opts.onMount || this.onMount || function () { };
+    this.onMount = config.onMount || this.onMount || function () { };
 
     /**
      * The a local reference to the callback that will be invoked when a components state is updated.
      * @type {function}
      */
-    this.onUpdate = opts.onUpdate || this.onUpdate || function () { };
+    this.onUpdate = config.onUpdate || this.onUpdate || function () { };
 
     /**
      * The amount of time to wait for an analytics event to complete before navigating off a page, in ms
@@ -224,7 +231,7 @@ export default class Component {
         parent: this,
         data: data
       }, opts || {}, {
-        _parentOpts: this._opts
+        _parentOpts: this._config
       })
     );
 
@@ -380,6 +387,7 @@ export default class Component {
 
     DOM.on(domComponent, 'click', e => {
       const event = new AnalyticsEvent(type, label);
+      event.addOptions(this._analyticsOptions);
       event.addOptions(options);
       const reportPromise = this.analyticsReporter.report(event);
       // Wait for analytics response before navigating, with timeout
