@@ -74,8 +74,8 @@ export default class ResultsComponent extends Component {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      includeMap: this._opts.includeMap,
-      mapConfig: this._opts.mapConfig
+      includeMap: this._config.includeMap,
+      mapConfig: this._config.mapConfig
     }), val);
   }
 
@@ -140,7 +140,7 @@ export default class ResultsComponent extends Component {
       data = {
         map: data
       };
-      const newOpts = Object.assign({}, this._opts.mapConfig, opts);
+      const newOpts = Object.assign({}, this._config.mapConfig, opts);
       return super.addChild(data, type, newOpts);
     }
 
