@@ -1,21 +1,21 @@
 {{#if sections}}
-  <div class="yext-autocomplete-container js-yext-autocomplete-container">
+  <div class="yxt-AutoComplete">
     {{assign 'currentSelected' sectionIndex resultIndex}}
     {{#if promptHeader}}
-      <ul class="yext-autocomplete-results">
-        <li class="yext-no-select yext-autocomplete-prompt-header">
+      <ul class="yxt-AutoComplete-results">
+        <li class="yxt-AutoComplete-option yxt-AutoComplete-option--promptHeader">
           {{promptHeader}}
         </li>
       </ul>
     {{/if}}
     {{#each sections}}
-      <ul class="yext-autocomplete-results">
+      <ul class="yxt-AutoComplete-results">
       {{#if label}}
-        <li class="yext-no-select yext-autocomplete-header">{{label}}</li>
+        <li class="yxt-AutoComplete-resultHeader">{{label}}</li>
       {{/if}}
       {{#each results}}
         {{assign 'currentIndex' @../index @index}}
-        <li class="js-yext-autocomplete-option yext-autocomplete-option {{#ifeq ../../currentSelected ../../currentIndex}}yext-selected{{/ifeq}}"
+        <li class="js-yext-autocomplete-option yxt-AutoComplete-option yxt-AutoComplete-option--item{{#ifeq ../../currentSelected ../../currentIndex}} yxt-selected{{/ifeq}}"
             data-value="{{value}}"
             data-short="{{shortValue}}"
             data-filter='{{json filter}}'

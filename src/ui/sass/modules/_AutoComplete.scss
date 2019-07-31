@@ -1,0 +1,41 @@
+/** @define AutoComplete */
+
+.yxt-AutoComplete
+{
+  background-color: white;
+  border-radius: 0 0 24px 24px;
+  box-shadow: 0 4px 6px 0 rgba(32, 33, 36, 0.28);
+  padding-top: 32px;
+  position: absolute;
+  top: 23px;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  overflow: hidden;
+
+  &-option
+  {
+    padding: 12px;
+
+    &.yxt-selected
+    {
+      color: white;
+      background-color: black;
+    }
+
+    strong
+    {
+      font-weight: 700;
+    }
+
+    &--item
+    {
+      cursor: pointer;
+
+      &:hover
+      {
+        background-color: gray;
+      }
+    }
+  }
+}
