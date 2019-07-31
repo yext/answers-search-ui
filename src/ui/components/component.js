@@ -177,13 +177,6 @@ export default class Component {
      * @type {function}
      */
     this.onUpdate = config.onUpdate || this.onUpdate || function () { };
-
-    /**
-     * The amount of time to wait for an analytics event to complete before navigating off a page, in ms
-     * @type {number}
-     * @private
-     */
-    this._analyticsTimeout = 300;
   }
 
   static get type () {
