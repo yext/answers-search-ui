@@ -53,6 +53,12 @@ export default class AutoCompleteComponent extends Component {
     this._inputEl = opts.inputEl || '.js-yext-query';
 
     /**
+     * A selector for the autocomplete elementes
+     * @type {string}
+     */
+    this._autocompleteEls = opts.autoCompleteEls || '.js-yext-autocomlete-option';
+
+    /**
      * An internal reference for the data-storage to listen for updates from the server
      * @type {string}
      */
@@ -142,8 +148,9 @@ export default class AutoCompleteComponent extends Component {
 
     // The user exits the input, so we want to reset the state and close
     // the auto complete
-    DOM.on(queryInput, 'blur', () => {
-      this.close();
+    DOM.on(queryInput, 'blur', e => {
+      // TODO(jdelerme): temporary hack to allow click handlers to fire. Close logic to be moved to parent
+      setTimeout(() => this.close(), 100);
     });
 
     // When a user focuses the input, we should populate the autocomplete based
@@ -160,7 +167,7 @@ export default class AutoCompleteComponent extends Component {
     });
 
     // Allow the user to select a result with the mouse
-    DOM.delegate(this._container, '.js-yext-autocomplete-option', 'mousedown', (evt, target) => {
+    DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
       let data = target.dataset;
       let val = data.short;
 
