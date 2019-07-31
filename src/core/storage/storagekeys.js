@@ -13,5 +13,6 @@ export default {
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter',
-  QUERY: 'query'
+  QUERY: 'query',
+  QUERY_ID: 'query-id'
 };
