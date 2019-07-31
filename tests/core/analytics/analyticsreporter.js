@@ -2,6 +2,7 @@ import AnalyticsReporter from '../../../src/core/analytics/analyticsreporter';
 import HttpRequester from '../../../src/core/http/httprequester';
 import { AnswersAnalyticsError } from '../../../src/core/errors/errors';
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
+
 jest.mock('../../../src/core/http/httprequester');
 
 describe('reporting events', () => {
@@ -12,6 +13,12 @@ describe('reporting events', () => {
   };
   const mockedGet = jest.fn(() => Promise.resolve({ json: () => Promise.resolve(mockResponse) }));
   const mockedPost = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
+  const mockedStorageOn = jest.fn();
+  const mockedCore = {
+    storage: {
+      on: mockedStorageOn
+    }
+  };
   let analyticsReporter;
 
   beforeEach(() => {
@@ -23,7 +30,7 @@ describe('reporting events', () => {
         post: mockedPost
       };
     });
-    analyticsReporter = new AnalyticsReporter('abc123', '213412');
+    analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', '213412');
   });
 
   it('throws an error if given a non-AnalyticsEvent', () => {
@@ -44,7 +51,7 @@ describe('reporting events', () => {
   });
 
   it('includes global options', () => {
-    const analyticsReporter = new AnalyticsReporter('abc123', '213412', { testOption: 'test' });
+    const analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', '213412', { testOption: 'test' });
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 

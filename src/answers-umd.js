@@ -54,16 +54,17 @@ class Answers {
   }
 
   init (config) {
-    this.components.setCore(new Core({
+    const core = new Core({
       apiKey: config.apiKey,
       answersKey: config.answersKey,
       locale: config.locale
-    }))
+    });
+    this.components.setCore(core)
       .setRenderer(this.renderer);
 
     if (config.businessId) {
-      this.components
-        .setAnalyticsReporter(new AnalyticsReporter(config.answersKey, config.businessId, config.analyticsOptions));
+      const reporter = new AnalyticsReporter(core, config.answersKey, config.businessId, config.analyticsOptions);
+      this.components.setAnalyticsReporter(reporter);
     }
 
     this._onReady = config.onReady || function () {};
