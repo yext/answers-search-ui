@@ -389,13 +389,7 @@ export default class Component {
       const event = new AnalyticsEvent(type, label);
       event.addOptions(this._analyticsOptions);
       event.addOptions(options);
-      const reportPromise = this.analyticsReporter.report(event);
-      // Wait for analytics response before navigating, with timeout
-      if (domComponent.tagName === 'A') {
-        e.preventDefault();
-        setTimeout(() => { window.location.href = domComponent.href; }, this._analyticsTimeout);
-        reportPromise.then(() => { window.location.href = domComponent.href; });
-      }
+      this.analyticsReporter.report(event);
     });
   }
 

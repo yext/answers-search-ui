@@ -6,13 +6,7 @@ import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
 jest.mock('../../../src/core/http/httprequester');
 
 describe('reporting events', () => {
-  const mockResponse = {
-    response: {
-      businessId: 123456
-    }
-  };
-  const mockedGet = jest.fn(() => Promise.resolve({ json: () => Promise.resolve(mockResponse) }));
-  const mockedPost = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
+  const mockedBeacon = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
   const mockedStorageOn = jest.fn();
   const mockedCore = {
     storage: {
@@ -22,12 +16,10 @@ describe('reporting events', () => {
   let analyticsReporter;
 
   beforeEach(() => {
-    mockedGet.mockClear();
-    mockedPost.mockClear();
+    mockedBeacon.mockClear();
     HttpRequester.mockImplementation(() => {
       return {
-        get: mockedGet,
-        post: mockedPost
+        beacon: mockedBeacon
       };
     });
     analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', '213412');
@@ -39,15 +31,14 @@ describe('reporting events', () => {
     }).toThrow(AnswersAnalyticsError);
   });
 
-  it('sends the event via POST in the "data" property', () => {
+  it('sends the event via beacon in the "data" property', () => {
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 
-    expect(mockedPost).toBeCalledTimes(1);
-    expect(mockedPost).toBeCalledWith(
+    expect(mockedBeacon).toBeCalledTimes(1);
+    expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expectedEvent.toApiEvent() }),
-      undefined);
+      expect.objectContaining({ 'data': expectedEvent.toApiEvent() }));
   });
 
   it('includes global options', () => {
@@ -55,10 +46,9 @@ describe('reporting events', () => {
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 
-    expect(mockedPost).toBeCalledTimes(1);
-    expect(mockedPost).toBeCalledWith(
+    expect(mockedBeacon).toBeCalledTimes(1);
+    expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expect.objectContaining({ testOption: 'test' }) }),
-      undefined);
+      expect.objectContaining({ 'data': expect.objectContaining({ testOption: 'test' }) }));
   });
 });

@@ -1,10 +1,10 @@
 /** @module AnalyticsReporter */
 
-import ApiRequest from '../http/apirequest';
 import AnalyticsEvent from './analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
 import { ANALYTICS_BASE_URL } from '../constants';
 import StorageKeys from '../storage/storagekeys';
+import HttpRequester from '../http/httprequester';
 
 /**
  * Class for reporting analytics events to the server
@@ -35,16 +35,11 @@ export default class AnalyticsReporter {
 
     event.addOptions(this._globalOptions);
 
-    const request = new ApiRequest({
-      baseUrl: ANALYTICS_BASE_URL,
-      endpoint: `/realtimeanalytics/data/answers/${this._businessId}`,
-      version: 20190301,
-      params: {
-        'data': event.toApiEvent()
-      }
-    });
+    const request = new HttpRequester();
 
-    return request.post()
-      .catch(console.err);
+    return request.beacon(
+      `${ANALYTICS_BASE_URL}/realtimeanalytics/data/answers/${this._businessId}`,
+      { 'data': event.toApiEvent() }
+    );
   }
 }
