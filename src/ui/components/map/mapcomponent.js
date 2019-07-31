@@ -54,7 +54,7 @@ export default class MapComponent extends Component {
 
   // TODO(billy) Make ProviderTypes a factory class
   getProviderInstance (type) {
-    return new ProviderTypes[type.toLowerCase()](this._opts);
+    return new ProviderTypes[type.toLowerCase()](this._config);
   }
 
   onCreate () {
