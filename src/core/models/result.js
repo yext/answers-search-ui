@@ -11,6 +11,7 @@ export default class Result {
     // data.link is from GCSE;
     this.link = data.website || data.link || null;
     this.ordinal = index + 1 || null;
+    this.id = data.id || null;
   }
 
   /**
