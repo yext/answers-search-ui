@@ -26,6 +26,8 @@ import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
 
 import MapComponent from './map/mapcomponent';
 
+import LocatorComponent from './results/locatorcomponent';
+
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
 export const COMPONENT_MANAGER = new ComponentManager()
@@ -54,6 +56,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(LocationResultsItemComponent)
   .register(EventResultsItemComponent)
   .register(PeopleResultsItemComponent)
+  .register(LocatorComponent)
 
   .register(MapComponent)
 

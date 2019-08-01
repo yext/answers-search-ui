@@ -1,0 +1,29 @@
+/** @define Locator */
+
+.yxt-Locator
+{
+  display: flex;
+
+  &-resultsWrapper
+  {
+    width: 100%;
+
+    @media (min-width: 768px)
+    {
+      width: 50%;
+      height: calc(100vh - 307px);
+      overflow-y: auto;
+    }
+  }
+
+  &-mapWrapper
+  {
+    width: 50%;
+    min-height: calc(100vh - 307px);
+
+    @media (max-width: 768px)
+    {
+      display: none;
+    }
+  }
+}
