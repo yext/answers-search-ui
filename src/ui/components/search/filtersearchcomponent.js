@@ -102,6 +102,12 @@ export default class FilterSearchComponent extends Component {
      * @type {string}
      */
     this.filter = config.filter || this.getUrlParams().get(`${this.name}.filter`) || '';
+
+    /**
+     * The placeholder for the input box
+     * @type {string}
+     */
+    this._placeholder = config.placeholder || null;
   }
 
   static get type () {
@@ -207,7 +213,8 @@ export default class FilterSearchComponent extends Component {
       title: this.title,
       searchText: this.searchText,
       query: this.query,
-      filter: this.filter
+      filter: this.filter,
+      placeholder: this._placeholder
     }, data));
   }
 
