@@ -1,0 +1,18 @@
+<div class="yxt-Locator">
+  <div class="yxt-Locator-contentWrapper">
+    <div class="yxt-Locator-searchWrapper">
+      <div class="js-yxt-locatorSearch yxt-Locator-searchBar"></div>
+      {{#if filterToggle}}
+        <button class="jx-yxt-locatorFilterToggle yxt-Locator-filterToggle">
+          {{filterToggleText}}
+        </button>
+      {{/if}}
+      <div class="js-yxt-locatorFiltersWrapper yxt-Locator-filtersWrapper{{#if filterToggle}} is-collapsed{{/if}}">
+        <div class="js-yxt-locatorFiltersSearch yxt-Locator-filtersSearch"></div>
+        <div class="js-yxt-locatorFilters yxt-Locator-filtersBox"></div>
+      </div>
+    </div>
+    <div class="js-yxt-locatorResults yxt-Locator-resultsWrapper"></div>
+  </div>
+  <div class="js-yxt-locatorMap yxt-Locator-mapWrapper"></div>
+</div>
