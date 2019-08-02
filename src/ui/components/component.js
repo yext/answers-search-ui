@@ -200,7 +200,8 @@ export default class Component {
   }
 
   setState (data) {
-    this._state.set(data);
+    const newState = Object.assign({}, { _config: this._config }, data);
+    this._state.set(newState);
     return this;
   }
 
