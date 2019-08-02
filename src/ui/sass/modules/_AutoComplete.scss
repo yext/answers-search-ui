@@ -1,4 +1,9 @@
 /** @define AutoComplete */
+$autocomplete-background-color: white !default;
+$autocomplete-box-shadow: 0 4px 6px 0 rgba(32, 33, 36, 0.28) !default;
+$autocomplete-selected-color: white !default;
+$autocomplete-selected-background-color: $color-gray2 !default;
+$autocomplete-option-hover-background-color: $color-gray1 !default;
 
 .yxt-AutoComplete
 {
@@ -15,7 +20,7 @@
 
   &-option
   {
-    padding: 12px;
+    padding: 6px;
 
     &.yxt-selected
     {
