@@ -2,9 +2,9 @@
 
 .yxt-AutoComplete
 {
-  background-color: white;
+  background-color: $autocomplete-background-color;
   border-radius: 0 0 24px 24px;
-  box-shadow: 0 4px 6px 0 rgba(32, 33, 36, 0.28);
+  box-shadow: $autocomplete-box-shadow;
   padding-top: 32px;
   position: absolute;
   top: 23px;
@@ -19,13 +19,13 @@
 
     &.yxt-selected
     {
-      color: white;
-      background-color: black;
+      color: $autocomplete-selected-color;
+      background-color: $autocomplete-selected-background-color;
     }
 
     strong
     {
-      font-weight: 700;
+      font-weight: $font-weight-bold;
     }
 
     &--item
@@ -34,7 +34,7 @@
 
       &:hover
       {
-        background-color: gray;
+        background-color: $autocomplete-option-hover-background-color;
       }
     }
   }
