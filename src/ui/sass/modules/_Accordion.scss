@@ -1,14 +1,14 @@
-.yxt-Accordion
+.yxt-AccordionResult
 {
-  &-subtitle
-  {
-    font-size: 12px;
-    line-height: 1.17;
-    margin-top: 0.25rem;
-  }
-
   &-answer
   {
     margin-top: 1rem;
+    white-space: pre-line;
+  }
+
+  &-cta
+  {
+    display: flex;
+    align-items: center;
   }
 }
