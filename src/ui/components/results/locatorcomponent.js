@@ -1,7 +1,6 @@
 /** @module SearchComponent */
 
 import Component from '../component';
-import StorageKeys from '../../../core/storage/storagekeys';
 
 /**
  * LocatorComponent creates a Map next to a Results component,
@@ -12,7 +11,6 @@ import StorageKeys from '../../../core/storage/storagekeys';
 export default class LocatorComponent extends Component {
   constructor (config = {}) {
     super(config);
-
 
     this._resultsConfig = config.resultsConfig || {};
     this._mapConfig = config.mapConfig || {};
