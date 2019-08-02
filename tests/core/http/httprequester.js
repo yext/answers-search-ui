@@ -174,4 +174,17 @@ describe('resquesting and responding', () => {
       expect(url).toBe(`${baseUrl}/answers/query?a=%26pizza&b=who%20is%20jsharps%3F&c=1%2B2%3D3`);
     });
   });
+
+  describe('beacon', () => {
+    const expectedUrl = `${baseUrl}/analytics`;
+    const expectedData = { data: { eventType: 'test', queryId: '1234abc' } };
+
+    it('sends a beacon to the url with stringified data', () => {
+      const mockedSendBeacon = jest.fn();
+      global.navigator.sendBeacon = mockedSendBeacon;
+
+      requester.beacon(expectedUrl, expectedData);
+      expect(mockedSendBeacon).toBeCalledWith(expectedUrl, JSON.stringify(expectedData));
+    });
+  });
 });
