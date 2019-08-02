@@ -52,6 +52,18 @@ export default class HttpRequester {
     }, opts));
   }
 
+  /**
+   * Send a beacon to the provided url which will send a non-blocking request
+   * to the server that is guaranteed to send before page load. No response is returned,
+   * so beacons are primarily used for analytics reporting.
+   * @param {string} url The url to send the beacon to
+   * @param {object} data The data payload to send in the beacon
+   * @return {boolean} true if the request is successfully queued
+   */
+  beacon (url, data) {
+    return navigator.sendBeacon(url, JSON.stringify(data));
+  }
+
   encodeParams (url, params) {
     let hasParam = url.indexOf('?') > -1;
 
