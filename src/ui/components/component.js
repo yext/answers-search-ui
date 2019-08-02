@@ -177,13 +177,6 @@ export default class Component {
      * @type {function}
      */
     this.onUpdate = config.onUpdate || this.onUpdate || function () { };
-
-    /**
-     * The amount of time to wait for an analytics event to complete before navigating off a page, in ms
-     * @type {number}
-     * @private
-     */
-    this._analyticsTimeout = 300;
   }
 
   static get type () {
@@ -390,13 +383,7 @@ export default class Component {
       const event = new AnalyticsEvent(type, label);
       event.addOptions(this._analyticsOptions);
       event.addOptions(options);
-      const reportPromise = this.analyticsReporter.report(event);
-      // Wait for analytics response before navigating, with timeout
-      if (domComponent.tagName === 'A') {
-        e.preventDefault();
-        setTimeout(() => { window.location.href = domComponent.href; }, this._analyticsTimeout);
-        reportPromise.then(() => { window.location.href = domComponent.href; });
-      }
+      this.analyticsReporter.report(event);
     });
   }
 
