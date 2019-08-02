@@ -58,6 +58,13 @@ export default class FilterBoxComponent extends Component {
     this._resetButtonSelector = config.resetButtonSelector || '.js-yext-filterbox-reset';
 
     /**
+     * If true, trigger a search after clearing filters
+     * @type {boolean}
+     * @private
+     */
+    this._searchOnClear = config.searchOnClear || false;
+
+    /**
      * The components created for each filter config
      * @type {Component[]}
      * @private
@@ -140,6 +147,11 @@ export default class FilterBoxComponent extends Component {
     const resetButton = DOM.query(this._container, this._resetButtonSelector);
     DOM.on(resetButton, 'click', () => {
       this._clearFilters();
+
+      if (this._searchOnClear) {
+        this._saveFiltersToStorage();
+        this._search();
+      }
     });
   }
 
@@ -196,9 +208,6 @@ export default class FilterBoxComponent extends Component {
         filterComponent.clear();
       }
     }
-
-    this._saveFiltersToStorage();
-    this._search();
   }
 
   /**
