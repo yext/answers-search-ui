@@ -14,6 +14,7 @@ export default class LocatorComponent extends Component {
 
     this._resultsConfig = config.resultsConfig || {};
     this._mapConfig = config.mapConfig || {};
+    this._filtersConfig = config.filtersConfig || {};
 
     /**
      * Locator param: The template name to use for rendering with handlebars
@@ -32,6 +33,10 @@ export default class LocatorComponent extends Component {
   onMount () {
     this.initResults();
     this.initMap();
+
+    if (Object.keys(this._filtersConfig).length > 0) {
+      this.initFilters();
+    }
   }
 
   /**
@@ -52,5 +57,15 @@ export default class LocatorComponent extends Component {
       parent: this,
       container: '.js-yxt-locatorMap'
     }, this._mapConfig));
+  }
+
+  /**
+   * A helper method to mount the FilterBox component
+   */
+  initFilters () {
+    this.componentManager.create('FilterBox', Object.assign({
+      parent: this,
+      container: '.js-yxt-locatorFilters'
+    }, this._filtersConfig));
   }
 }
