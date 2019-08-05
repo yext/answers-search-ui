@@ -1,7 +1,7 @@
 /** @module */
 
 /** The current lib version, reported with errors and analytics */
-export const LIB_VERSION = 'v0.7.4';
+export const LIB_VERSION = 'v0.7.5';
 
 /** The base url for the api backend */
 export const API_BASE_URL = 'https://liveapi.yext.com';
