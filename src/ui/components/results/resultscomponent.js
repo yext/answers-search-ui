@@ -70,7 +70,7 @@ export default class ResultsComponent extends Component {
 
   setState (data, val) {
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
-    return super.setState(Object.assign({}, data, {
+    return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
