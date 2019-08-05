@@ -245,6 +245,10 @@ export default class AutoCompleteComponent extends Component {
       return;
     }
 
+    if (this.isFilterSearch && key === Keys.ENTER) {
+      return;
+    }
+
     // Tabbing out or enter should close the auto complete.
     if (key === Keys.ENTER || key === Keys.TAB) {
       this.close();
@@ -318,12 +322,20 @@ export default class AutoCompleteComponent extends Component {
   handleSubmitResult (key, value, e) {
     let sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
+      if (this.isFilterSearch) {
+        this.autoComplete(value);
+      }
       return;
     }
 
     // submit the search on enter
     if (key === Keys.ENTER) {
       e.preventDefault();
+
+      if (this.isFilterSearch && this._resultIndex === -1) {
+        return;
+      }
+
       let filter = '';
       if (this._sectionIndex >= 0 && this._resultIndex >= 0) {
         filter = JSON.stringify(sections[this._sectionIndex].results[this._resultIndex].filter);
