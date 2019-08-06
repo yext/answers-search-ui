@@ -234,6 +234,7 @@ export default class AutoCompleteComponent extends Component {
       Keys.RIGHT,
       Keys.LEFT_OS_KEY,
       Keys.RIGHT_OS_KEY,
+      Keys.ENTER,
       Keys.SELECT_KEY
     ];
 
@@ -248,12 +249,8 @@ export default class AutoCompleteComponent extends Component {
       return;
     }
 
-    if (this.isFilterSearch && key === Keys.ENTER) {
-      return;
-    }
-
     // Tabbing out or enter should close the auto complete.
-    if (key === Keys.ENTER || key === Keys.TAB) {
+    if (key === Keys.TAB) {
       this.close();
       return;
     }
@@ -347,7 +344,6 @@ export default class AutoCompleteComponent extends Component {
       this.updateQuery(value);
       this._originalQuery = value;
       this._onSubmit(value, filter);
-      this.reset();
       this.close();
     }
   }
