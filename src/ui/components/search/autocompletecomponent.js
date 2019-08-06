@@ -148,9 +148,12 @@ export default class AutoCompleteComponent extends Component {
 
     // The user exits the input, so we want to reset the state and close
     // the auto complete
-    DOM.on(queryInput, 'blur', e => {
-      // TODO(jdelerme): temporary hack to allow click handlers to fire. Close logic to be moved to parent
-      setTimeout(() => this.close(), 100);
+    // TODO(jdelerme): Close logic to be moved to parent
+    DOM.on(document, 'click', e => {
+      if (e.target.matches('.js-yext-autocomplete-container *') || e.target.matches(this._inputEl)) {
+        return;
+      }
+      this.close();
     });
 
     // When a user focuses the input, we should populate the autocomplete based
