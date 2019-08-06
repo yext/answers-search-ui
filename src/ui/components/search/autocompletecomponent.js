@@ -148,9 +148,12 @@ export default class AutoCompleteComponent extends Component {
 
     // The user exits the input, so we want to reset the state and close
     // the auto complete
-    DOM.on(queryInput, 'blur', e => {
-      // TODO(jdelerme): temporary hack to allow click handlers to fire. Close logic to be moved to parent
-      setTimeout(() => this.close(), 100);
+    // TODO(jdelerme): Close logic to be moved to parent
+    DOM.on(document, 'click', e => {
+      if (e.target.matches('.js-yext-autocomplete-container *') || e.target.matches(this._inputEl)) {
+        return;
+      }
+      this.close();
     });
 
     // When a user focuses the input, we should populate the autocomplete based
@@ -231,6 +234,7 @@ export default class AutoCompleteComponent extends Component {
       Keys.RIGHT,
       Keys.LEFT_OS_KEY,
       Keys.RIGHT_OS_KEY,
+      Keys.ENTER,
       Keys.SELECT_KEY
     ];
 
@@ -246,7 +250,7 @@ export default class AutoCompleteComponent extends Component {
     }
 
     // Tabbing out or enter should close the auto complete.
-    if (key === Keys.ENTER || key === Keys.TAB) {
+    if (key === Keys.TAB) {
       this.close();
       return;
     }
@@ -318,12 +322,20 @@ export default class AutoCompleteComponent extends Component {
   handleSubmitResult (key, value, e) {
     let sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
+      if (this.isFilterSearch) {
+        this.autoComplete(value);
+      }
       return;
     }
 
     // submit the search on enter
     if (key === Keys.ENTER) {
       e.preventDefault();
+
+      if (this.isFilterSearch && this._resultIndex === -1) {
+        return;
+      }
+
       let filter = '';
       if (this._sectionIndex >= 0 && this._resultIndex >= 0) {
         filter = JSON.stringify(sections[this._sectionIndex].results[this._resultIndex].filter);
@@ -332,7 +344,6 @@ export default class AutoCompleteComponent extends Component {
       this.updateQuery(value);
       this._originalQuery = value;
       this._onSubmit(value, filter);
-      this.reset();
       this.close();
     }
   }
