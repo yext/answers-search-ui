@@ -22,7 +22,9 @@ export default class MapBoxMapProvider extends MapProvider {
         this._isLoaded = true;
         mapboxgl.accessToken = this._apiKey;
 
-        onLoad();
+        if (typeof onLoad === 'function') {
+          onLoad();
+        }
       },
       async: true,
       src: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'
