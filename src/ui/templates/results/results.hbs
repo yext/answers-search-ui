@@ -1,24 +1,14 @@
 {{#if results}}
-  <section class="yext-result-list">
-    <h1>
-      {{verticalConfigId}}
-      {{#if verticalURL}}(<a href="{{verticalURL}}">View More</a>){{/if}}
-    </h1>
+  <section class="yxt-Results yxt-Results--{{verticalConfigId}}">
+    {{> results/resultssectionheader}}
     {{#if includeMap}}
-      <div class="yext-map-container"
-          data-component="Map"
-          data-prop="map"
-          data-opts='{ "isStatic": true }'>
+      <div class="yxt-Results-map"
+           data-component="Map"
+           data-prop="map"
+           data-opts='{ "isStatic": true }'>
       </div>
     {{/if}}
-    <ul class="yext-filters-applied">
-      {{#each appliedQueryFilters}}
-        <li class="yext-filter">
-          <span class="yext-filter-key">{{key}}:</span>
-          <span class="yext-filter-value"> {{value}}</span>
-        </li>
-      {{/each}}
-    </ul>
     {{> results/resultitems}}
   </section>
 {{/if}}
+{{log this}}

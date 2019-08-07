@@ -9,6 +9,7 @@
     "autoprefixer": {
       "browsers": ["last 2 versions"],
       "grid": true
-    }
+    },
+    "cssnano": true
   }
 }

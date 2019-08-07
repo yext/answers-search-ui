@@ -1,0 +1,31 @@
+<div class="yxt-Results-titleBar">
+  <div class="yxt-Results-left">
+    <div class="yxt-Results-titleIconWrapper">
+      <img class="yxt-Results-titleIcon" src="{{_config.sectionTitleIcon}}" alt="">
+    </div>
+    <h2 class="yxt-Results-title">
+      {{_config.sectionTitle}}
+    </h2>
+  </div>
+  {{#if _config.verticalURL}}
+    <a class="yxt-Results-viewAllLink" href="{{_config.verticalURL}}">
+      {{_config.viewAllText}}
+    </a>
+  {{/if}}
+  {{#if appliedQueryFilters}}
+    <ul class="yxt-Results-filters">
+      {{#each appliedQueryFilters}}
+        <li class="yxt-Results-filter">
+          <span class="yxt-Results-filterValue">{{value}}</span>
+        </li>
+      {{/each}}
+      {{#if _config.showChangeFilters}}
+        {{#if _config.verticalURL}}
+          <a class="yxt-Results-changeFilters" href="{{_config.verticalURL}}">
+            change filters
+          </a>
+        {{/if}}
+      {{/if}}
+    </ul>
+  {{/if}}
+</div>

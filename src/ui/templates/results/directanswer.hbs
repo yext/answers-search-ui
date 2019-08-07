@@ -1,14 +1,59 @@
-<div class="yext-direct-answer">
-  <div class="yext-direct-answer-title">
-    <span class="yext-direct-answer-entity-name">
-      {{answer.entityName}}
-    </span>
-    /
-    <span class="yext-direct-answer-field-name">
-      {{answer.fieldName}}
-    </span>
+<div class="yxt-DirectAnswer">
+  <div class="yxt-DirectAnswer-titleWrapper">
+    {{#if icon}}
+      <div class="yxt-DirectAnswer-iconWrapper">
+        <img class="yxt-DirectAnswer-icon"
+             src="{{{icon}}}"
+             alt="">
+      </div>
+    {{/if}}
+    <h2 class="yxt-DirectAnswer-title">
+      <span class="yxt-DirectAnswer-entityName">
+        {{{answer.entityName}}}
+      </span>
+      <span class="yxt-DirectAnswer-slash">
+        /
+      </span>
+      <span class="yxt-DirectAnswer-fieldName">
+        {{{answer.fieldName}}}
+      </span>
+    </h2>
   </div>
-  <h2 class="yext-direct-answer-field-value">
-   {{answer.value}}
-  </h2>
+  <div class="yxt-DirectAnswer-content">
+    <div class="yxt-DirectAnswer-fieldValue">
+      {{{answer.value}}}
+    </div>
+    {{#if relatedItem.data.website}}
+      <div class="yxt-DirectAnswer-viewMoreWrapper">
+        <a class="yxt-DirectAnswer-viewMore" href="{{{relatedItem.data.website}}}">
+          {{{viewDetailsText}}}
+        </a>
+      </div>
+    {{/if}}
+  </div>
+  <div class="yxt-DirectAnswer-footerWrapper">
+    <div class="yxt-DirectAnswer-footer">
+      <div class="yxt-DirectAnswer-footerText">
+        {{{footerText}}}
+      </div>
+      <div class="yxt-DirectAnswer-thumbs">
+        <div class="yxt-DirectAnswer-thumb yxt-DirectAnswer-thumbUp">
+          <button class="yxt-DirectAnswer-thumbUpButton js-directAnswer-thumbUp">
+            <img class="yxt-DirectAnswer-thumbUpIcon" src="{{{thumbsUpImage}}}" alt="">
+            <span class="sr-only">
+                This answered my question
+            </span>
+          </button>
+        </div>
+        <div class="yxt-DirectAnswer-thumb yxt-DirectAnswer-thumbDown">
+          <button class="yxt-DirectAnswer-thumbDownButton js-directAnswer-thumbDown">
+            <img class="yxt-DirectAnswer-thumbDownIcon" src="{{{thumbsDownImage}}}" alt="">
+            <span class="sr-only">
+                This did not answer my question
+            </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
