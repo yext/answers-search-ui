@@ -212,6 +212,7 @@ export default class SearchComponent extends Component {
 
     if (this._verticalKey) {
       const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
+      console.log(allFilters)
       const totalFilter = allFilters.length > 1
         ? Filter.and(...allFilters)
         : allFilters[0];

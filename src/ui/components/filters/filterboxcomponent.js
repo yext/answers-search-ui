@@ -43,6 +43,13 @@ export default class FilterBoxComponent extends Component {
     this._searchOnChange = config.searchOnChange || false;
 
     /**
+     * If true, save filters on select
+     * @type {boolean}
+     * @private
+     */
+    this._saveOnChange = config.saveOnChange || false;
+
+    /**
      * The selector of the apply button
      * @type {string}
      * @private
@@ -119,10 +126,15 @@ export default class FilterBoxComponent extends Component {
    * @param {Filter} filter The new filter
    */
   onFilterChange (index, filter) {
+    console.log(this._saveOnChange)
     this._filters[index] = filter;
     if (this._searchOnChange) {
       this._saveFiltersToStorage();
       this._search();
+    }
+    if (this._saveOnChange) {
+      console.log('go')
+      this._saveFiltersToStorage();
     }
   }
 
