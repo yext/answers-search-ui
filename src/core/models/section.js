@@ -1,7 +1,7 @@
 /** @module Section */
 
-import Result from './result';
 import SearchStates from '../storage/searchstates';
+import ResultFactory from './resultfactory';
 
 export default class Section {
   constructor (data, url) {
@@ -11,7 +11,7 @@ export default class Section {
     this.encodedState = data.encodedState || '';
     this.appliedQueryFilters = AppliedQueryFilter.from(data.appliedQueryFilters);
     this.facets = data.facets || null;
-    this.results = Result.from(data.results);
+    this.results = ResultFactory.from(data.results);
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
   }

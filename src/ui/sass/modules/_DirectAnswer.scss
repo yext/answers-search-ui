@@ -1,0 +1,41 @@
+/** @define yxt-DirectAnswer */
+
+.yxt-DirectAnswer
+{
+  margin-bottom: 16px;
+
+  &-titleWrapper
+  {
+    padding: 16px;
+    display: flex;
+    align-items: center;
+  }
+
+  &-iconWrapper
+  {
+    margin-right: 8px;
+  }
+
+  &-content
+  {
+    padding: 16px;
+    background-color: white;
+  }
+
+  &-footer
+  {
+    display: flex;
+    justify-content: flex-end;
+    padding: 16px;
+  }
+
+  &-thumbs
+  {
+    display: flex;
+  }
+
+  &-thumb
+  {
+    margin-left: 12px;
+  }
+}
