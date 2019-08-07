@@ -1,0 +1,76 @@
+/** @define Results */
+
+.yxt-Results
+{
+  & + &
+  {
+    margin-top: 18px;
+  }
+
+  &-titleBar
+  {
+    display: flex;
+    justify-content: space-between;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+  }
+
+  &-left
+  {
+    display: flex;
+    align-items: center;
+  }
+
+  &-titleIconWrapper
+  {
+    margin-right: 8px;
+  }
+
+  &-viewAllLink
+  {
+    display: flex;
+    align-items: center;
+  }
+
+  &-filters
+  {
+    display: flex;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+
+  &-filter
+  {
+    display: flex;
+    align-items: center;
+
+    &:not(:first-child)::before
+    {
+      content: '';
+      width: 1px;
+      top: 0;
+      height: 40%;
+      margin-left: 15px;
+      margin-right: 15px;
+      display: inline-block;
+    }
+  }
+
+  &-changeFilters
+  {
+    line-height: 28px;
+    margin-left: 30px;
+  }
+
+  &-map
+  {
+    img
+    {
+      width: 100%;
+    }
+  }
+}

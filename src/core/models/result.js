@@ -2,22 +2,67 @@
 
 export default class Result {
   constructor (data = {}) {
-    Object.assign(this, data);
-  }
+    /**
+     * The raw profile data
+     * @type {Object}
+     * @private
+     */
+    this._raw = data.raw || null;
 
-  /**
-   * resultsData expected format: { data: { ... }, highlightedFields: { ... }}
-   */
-  static from (resultsData) {
-    let results = [];
-    for (let i = 0; i < resultsData.length; i++) {
-      // TODO use resultData.highlightedFields to
-      // transform resultData.data into html-friendly strings that highlight values.
+    /**
+     * The title of the result card
+     * @type {string|null}
+     */
+    this.title = data.title || null;
 
-      // Check for new data format, otherwise fallback to legacy
-      results.push(new Result(resultsData[i].data || resultsData[i]));
-    }
+    /**
+     * The body of the details section of the result card, can contain HTML
+     * @type {string| null}
+     */
+    this.details = data.details || null;
 
-    return results;
+    /**
+     * The destination link for the title of the result card
+     * @type {string|null}
+     */
+    this.link = data.link || null;
+
+    /**
+     * The Entity ID, or other unique identifier, used for to power interactivity
+     * @type {string|null}
+     */
+    this.id = data.id || null;
+
+    /**
+     * The subtitle on the result card
+     * @type {string|null}
+     */
+    this.subtitle = data.subtitle || null;
+
+    /**
+     * The class modifier, usually derived from the vertical configuration ID
+     * Used to apply different styling to different result card types
+     * @type {string|null}
+     */
+    this.modifier = data.modifier || null;
+
+    /**
+     * A large date, of the format { month: 'Jan', day: '01' }
+     * @type {Object|null}
+     */
+    this.bigDate = data.bigDate || null;
+
+    /**
+     * An image profile object, expected to have a url property
+     * @type {Object|null}
+     */
+    this.image = data.image || null;
+
+    /**
+     * An array of calls to action, of the format:
+     * { icon: '', url: '', text: '', eventType: '', eventOptions: {}}
+     * @type {Array}
+     */
+    this.callsToAction = data.callsToAction || [];
   }
 }
