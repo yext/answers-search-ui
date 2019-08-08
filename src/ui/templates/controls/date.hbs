@@ -1,0 +1,23 @@
+<fieldset>
+  <legend>{{title}}</legend>
+  {{#if minLabel}}
+    <label for="js-yext-date-min-{{name}}">{{minLabel}}</label>
+  {{/if}}
+  <input
+    id="js-yext-date-min-{{name}}"
+    type="date"
+    class="js-yext-date"
+    data-key="min"
+    value="{{dateMin}}">
+
+
+  {{#if maxLabel}}
+    <label for="js-yext-date-max-{{name}}">{{maxLabel}}</label>
+  {{/if}}
+  <input
+    id="js-yext-date-max-{{name}}"
+    type="date"
+    class="js-yext-date"
+    data-key="max"
+    value="{{dateMax}}">
+</fieldset>
