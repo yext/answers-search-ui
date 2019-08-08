@@ -1,0 +1,27 @@
+<fieldset>
+  <legend>{{title}}</legend>
+
+  {{#if minLabel}}
+    <label for="js-yext-range-min-{{name}}">{{minLabel}}</label>
+  {{/if}}
+  <input
+    id="js-yext-range-min-{{name}}"
+    type="number"
+    class="js-yext-range"
+    placeholder="Min"
+    max="{{max}}"
+    data-key="min"
+    value="{{minValue}}">
+
+  {{#if maxLabel}}
+    <label for="js-yext-range-max-{{name}}">{{maxLabel}}</label>
+  {{/if}}
+  <input
+    id="js-yext-range-max-{{name}}"
+    type="number"
+    class="js-yext-range"
+    placeholder="Max"
+    min="{{min}}"
+    data-key="max"
+    value="{{maxValue}}">
+</fieldset>

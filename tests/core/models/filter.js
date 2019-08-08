@@ -73,13 +73,14 @@ describe('creating filters', () => {
   });
 
   it('properly creates range filters', () => {
-    const expectedFilter = new Filter({ '$and': [
-      { 'age': { '$ge': 30 } },
-      { 'age': { '$le': 40 } }
-    ] });
+    const expectedInclusiveFilter = new Filter({ 'age': { '$ge': 30, '$le': 40 } });
+    const expectedExclusiveFilter = new Filter({ 'age': { '$gt': 30, '$lt': 40 } });
 
-    const actualFilter = Filter.range('age', 30, 40);
-    expect(actualFilter).toEqual(expectedFilter);
+    const actualInclusiveFilter = Filter.inclusiveRange('age', 30, 40);
+    expect(actualInclusiveFilter).toEqual(expectedInclusiveFilter);
+
+    const actualExclusiveFilter = Filter.exclusiveRange('age', 30, 40);
+    expect(actualExclusiveFilter).toEqual(expectedExclusiveFilter);
   });
 
   it('properly creates generic filters from a given matcher', () => {
