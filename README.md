@@ -15,6 +15,8 @@ Outline:
    - [Navigation Component](#navigation-component)
    - [SearchBar Component](#searchbar-component)
    - [FilterSearch Component](#filtersearch-component)
+   - [FilterBox Component](#filterbox-component)
+   - [Filter Components](#filter-components)
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
@@ -317,6 +319,9 @@ ANSWERS.addComponent('FilterOptions', {
   container: '.filter-container',
   // Control type, singleoption or multioption
   control: 'singleoption',
+  // If true, the filter value is saved on change and sent with the next search.
+  // Defaults to false.
+  storeOnChange: true,
   // List of options
   options: [
     {
