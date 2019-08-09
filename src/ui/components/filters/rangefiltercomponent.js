@@ -23,6 +23,13 @@ export default class RangeFilterComponent extends Component {
     this._onChange = config.onChange || function () {};
 
     /**
+     * If true, stores the filter to storage on each change
+     * @type {boolean}
+     * @private
+     */
+    this._storeOnChange = config.storeOnChange || false;
+
+    /**
      * The current range represented
      * @type {object}
      * @private
