@@ -38,7 +38,7 @@ export default class AccordionResultsComponent extends ResultsComponent {
       item.classList.toggle('is-collapsed');
       item.isCollapsed = !item.isCollapsed;
       this.changeHeight(item, body);
-      item.setAttribute('aria-expanded', item.isCollapsed ? 'false' : 'true');
+      toggle.setAttribute('aria-expanded', item.isCollapsed ? 'false' : 'true');
     });
   }
 

@@ -3,6 +3,7 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
+import AccordionResultsComponent from './accordionresultscomponent.js';
 
 export default class UniversalResultsComponent extends Component {
   constructor (opts = {}) {
