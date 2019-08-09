@@ -1,0 +1,46 @@
+/** @define AutoComplete */
+$autocomplete-background-color: white !default;
+$autocomplete-box-shadow: 0 4px 6px 0 rgba(32, 33, 36, 0.28) !default;
+$autocomplete-selected-color: white !default;
+$autocomplete-selected-background-color: $color-gray2 !default;
+$autocomplete-option-hover-background-color: $color-gray1 !default;
+
+.yxt-AutoComplete
+{
+  background-color: $autocomplete-background-color;
+  border-radius: 0 0 24px 24px;
+  box-shadow: $autocomplete-box-shadow;
+  padding-top: 32px;
+  position: absolute;
+  top: 23px;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  overflow: hidden;
+
+  &-option
+  {
+    padding: 6px;
+
+    &.yxt-selected
+    {
+      color: $autocomplete-selected-color;
+      background-color: $autocomplete-selected-background-color;
+    }
+
+    strong
+    {
+      font-weight: $font-weight-bold;
+    }
+
+    &--item
+    {
+      cursor: pointer;
+
+      &:hover
+      {
+        background-color: $autocomplete-option-hover-background-color;
+      }
+    }
+  }
+}
