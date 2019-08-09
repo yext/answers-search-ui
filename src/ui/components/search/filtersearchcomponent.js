@@ -14,8 +14,8 @@ import SearchParams from '../../dom/searchparams';
  * @extends Component
  */
 export default class FilterSearchComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (config = {}) {
+    super(config);
 
     /**
      * The template name to use for rendering with handlebars
@@ -27,55 +27,62 @@ export default class FilterSearchComponent extends Component {
      * The input key for the vertical search configuration
      * @type {string}
      */
-    this._barKey = opts.barKey || opts.inputKey || null;
+    this._barKey = config.barKey || config.inputKey || null;
 
     /**
      * The vertical key for vertical search configuration
      * @type {string}
      */
-    this._verticalKey = opts.verticalKey || null;
+    this._verticalKey = config.verticalKey || null;
+
+    /**
+     * If true, store the filter value but do not search on change
+     * @type {boolean}
+     * @private
+     */
+    this._storeOnChange = config.storeOnChange || false;
 
     /**
      * Query submission is based on a form as context.
      * Optionally provided, otherwise defaults to native form node within container
      * @type {string} CSS selector
      */
-    this._formEl = opts.formSelector || 'form';
+    this._formEl = config.formSelector || 'form';
 
     /**
      * The input element used for searching and wires up the keyboard interaction
      * Optionally provided.
      * @type {string} CSS selector
      */
-    this._inputEl = opts.inputEl || '.js-yext-query';
+    this._inputEl = config.inputEl || '.js-yext-query';
 
     /**
      * The title used, provided to the template as a data point
      * Optionally provided.
      * @type {string}
      */
-    this.title = opts.title;
+    this.title = config.title;
 
     /**
      * The search text used for labeling the input box, also provided to template.
      * Optionally provided
      * @type {string}
      */
-    this.searchText = opts.searchText || 'What are you interested in?';
+    this.searchText = config.searchText || 'What are you interested in?';
 
     /**
      * The query text to show as the first item for auto complete.
      * Optionally provided
      * @type {string}
      */
-    this.promptHeader = opts.promptHeader || null;
+    this.promptHeader = config.promptHeader || null;
 
     /**
      * Auto focuses the input box if set to true.
      * Optionally provided, defaults to false.
      * @type {boolean}
      */
-    this.autoFocus = opts.autoFocus === true;
+    this.autoFocus = config.autoFocus === true;
 
     /**
      * submitURL will force the search query submission to get
@@ -86,21 +93,21 @@ export default class FilterSearchComponent extends Component {
      *
      * @type {boolean}
      */
-    this.redirectUrl = opts.redirectUrl || null;
+    this.redirectUrl = config.redirectUrl || null;
 
     /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string}
      */
-    this.query = opts.query || this.getUrlParams().get(`${this.name}.query`) || '';
+    this.query = config.query || this.getUrlParams().get(`${this.name}.query`) || '';
 
     /**
      * The filter string to use for the provided query
      * Optionally provided
      * @type {string}
      */
-    this.filter = opts.filter || this.getUrlParams().get(`${this.name}.filter`) || '';
+    this.filter = config.filter || this.getUrlParams().get(`${this.name}.filter`) || '';
   }
 
   static get type () {
@@ -173,6 +180,10 @@ export default class FilterSearchComponent extends Component {
    * optionally redirecting based on config
    */
   search () {
+    if (this._storeOnChange) {
+      return;
+    }
+
     const filters = this.core.storage.getAll(StorageKeys.FILTER);
     let totalFilter = filters[0];
     if (filters.length > 1) {

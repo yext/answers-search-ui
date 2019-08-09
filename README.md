@@ -260,7 +260,10 @@ The FilterSearch component provides a text input box for users to type a query a
 ANSWERS.addComponent('FilterSearch', {
   container: '.filter-search-container',
   verticalKey: '<VERTICAL_KEY>',      // required
-  barKey: '<BAR_KEY>'                 // optional
+  barKey: '<BAR_KEY>',                // optional
+  // If true, the selected filter is saved and used for the next search,
+  // but does not trigger a search itself. Defaults to false.
+  storeOnChange: true
 })
 ```
 
