@@ -111,13 +111,13 @@ export default class FilterBoxComponent extends Component {
     }
 
     // Initialize apply button
-    if (!this._searchOnChange) {
-      const button = DOM.query(this._container, this._applyButtonSelector);
-      DOM.on(button, 'click', () => {
-        this._saveFiltersToStorage();
-        this._search();
-      });
-    }
+    // if (!this._searchOnChange) {
+    //   const button = DOM.query(this._container, this._applyButtonSelector);
+    //   DOM.on(button, 'click', () => {
+    //     this._saveFiltersToStorage();
+    //     this._search();
+    //   });
+    // }
   }
 
   /**
