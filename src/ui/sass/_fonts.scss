@@ -1,4 +1,57 @@
-$font-weight-bold: 700;
-$font-weight-semibold: 600;
-$font-weight-normal: 400;
-$font-weight-light: 300;
+$font-weight-bold: 700 !default;
+$font-weight-semibold: 600 !default;
+$font-weight-normal: 400 !default;
+$font-weight-light: 300 !default;
+
+$font-size-default: 16px !default;
+$font-size-small: 14px !default;
+
+$font-size-results-title-bar-text: $font-size-default !default;
+$font-line-height-results-title-bar-text: 24px !default;
+$font-weight-results-title-bar-text: $font-weight-semibold !default;
+$font-style-results-title-bar-text: normal !default;
+
+$font-size-results-title-bar-link: $font-size-small !default;
+$font-line-height-results-title-bar-link: 24px !default;
+$font-weight-results-title-bar-link: $font-weight-semibold !default;
+$font-style-results-title-bar-link: normal !default;
+
+$font-size-results-filters-text: $font-size-small !default;
+$font-line-height-results-filters-text: 20px !default;
+$font-weight-results-filters-text: $font-weight-normal !default;
+$font-style-results-filters-text: normal !default;
+
+$font-size-results-filters-link: $font-size-small !default;
+$font-line-height-results-filters-link: 20px !default;
+$font-weight-results-filters-link: $font-weight-normal !default;
+$font-style-results-filters-link: normal !default;
+
+@mixin Text($size, $line-height, $weight, $style, $color: $color-text-primary)
+{
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+  font-style: $style;
+  color: $color;
+}
+
+@mixin Link-1
+{
+  color: $color-blue1;
+
+  &:hover
+  {
+    text-decoration: underline;
+  }
+}
+
+@mixin Link-2
+{
+  color: $color-blue1;
+  text-decoration: underline;
+
+  &:hover
+  {
+    text-decoration: none;
+  }
+}
