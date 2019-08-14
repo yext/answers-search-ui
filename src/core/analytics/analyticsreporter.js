@@ -11,6 +11,10 @@ import HttpRequester from '../http/httprequester';
  */
 export default class AnalyticsReporter {
   constructor (core, answersKey, businessId, globalOptions = {}) {
+    /**
+     * The internal business identifier used for reporting
+     * @type {number}
+     */
     this._businessId = businessId;
 
     /**
@@ -35,11 +39,11 @@ export default class AnalyticsReporter {
 
     event.addOptions(this._globalOptions);
 
-    const request = new HttpRequester();
-
-    return request.beacon(
+    return HttpRequester().beacon(
       `${ANALYTICS_BASE_URL}/realtimeanalytics/data/answers/${this._businessId}`,
-      { 'data': event.toApiEvent() }
+      {
+        'data': event.toApiEvent()
+      }
     );
   }
 }

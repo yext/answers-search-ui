@@ -3,7 +3,16 @@
  */
 export default class AnalyticsEvent {
   constructor (type, label) {
+    /**
+     * The type of event to report
+     * @type {string}
+     */
     this.eventType = type.toUpperCase();
+
+    /**
+     * An optional label to be provided for the event
+     * @type {string}
+     */
     if (label) {
       this.label = label;
     }
@@ -15,6 +24,7 @@ export default class AnalyticsEvent {
    */
   addOptions (options) {
     Object.assign(this, options);
+    return this;
   }
 
   /**
