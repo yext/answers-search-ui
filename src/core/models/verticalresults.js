@@ -9,6 +9,17 @@ export default class VerticalResults {
     Object.freeze(this);
   }
 
+  /**
+   * Append the provided results to the current results
+   * @param {VerticalResults} results the results to append to the current results
+   */
+  append (results) {
+    const merged = { ...this };
+    merged.results = this.results.concat(results.results);
+    merged.map.mapMarkers = this.map.mapMarkers.concat(results.map.mapMarkers);
+    return new VerticalResults(merged);
+  }
+
   static from (response) {
     return new VerticalResults(Section.from(response));
   }
