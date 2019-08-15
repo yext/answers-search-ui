@@ -197,7 +197,7 @@ export default class SearchComponent extends Component {
       originalQuery: this.query,
       inputEl: inputSelector,
       onSubmit: () => {
-        DOM.trigger('form', 'submit');
+        DOM.trigger(this._formEl, 'submit');
       }
     });
   }
