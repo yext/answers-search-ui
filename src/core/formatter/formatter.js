@@ -1,11 +1,18 @@
+import AddressFactory from './address/addressfactory.js';
+
 export default class Formatter {
   /**
    * address returns a US or UK formatted address TODO (bmcginnis): setup full i18n or move server side
    * @param profile {Object} an entity profile
-   * @returns string
+   * @returns {string|null}
    */
   static address (profile) {
-    return '';
+    const addr = AddressFactory.addressFrom(profile);
+    if (!addr) {
+      return null;
+    }
+
+    return addr.formatted();
   }
 
   /**

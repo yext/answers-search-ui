@@ -1,18 +1,21 @@
 import Formatter from '../../../src/core/formatter/formatter.js';
 
 describe('address formatting', () => {
+  it('should return null if the profile is missing address', () => {
+    expect(Formatter.address({})).toBeNull();
+  });
   it('should properly format uk addresses', () => {
     const profile = {
       address: {
         line1: '1 Madison Ave',
         line2: '5th Floor',
         city: 'New York',
-        state: 'NY',
+        region: 'NY',
         postalCode: '10010',
-        country: 'US'
+        countryCode: 'US'
       }
     };
-    const expectedFormat = `<div class="yxt-AddressRow"><span class="yxt-Address-line1">1 Madison Ave</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-line2">5th Floor</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-city">New York</span><yxt-comma>,</yxt-comma> <span class="yxt-Address-state"></span> <span class="yxt-Address-postalCode">10010</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-countryName yxt-Address-country--us">US</span></div>`;
+    const expectedFormat = `<div class="yxt-Address"><div class="yxt-AddressRow"><span class="yxt-Address-line1">1 Madison Ave</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-line2">5th Floor</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-city">New York</span><yxt-comma>,</yxt-comma> <span class="yxt-Address-region">NY</span> <span class="yxt-Address-postalCode">10010</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-country yxt-Address-country--us">US</span></div></div>`;
 
     const actualFormat = Formatter.address(profile);
     expect(actualFormat).toEqual(expectedFormat);
@@ -24,14 +27,14 @@ describe('address formatting', () => {
         line1: '2 Great Titchfield Street',
         line2: '7th Floor, United Kingdom House',
         city: 'London',
-        state: 'Greater London',
+        region: 'Greater London',
         sublocality: 'Fitzrovia',
         postalCode: 'W1D 1NN',
-        country: 'UK'
+        countryCode: 'GB'
       }
     };
 
-    const expectedFormat = `<div class="yxt-Address"><div class="yxt-AddressRow"><span class="yxt-Address-line1">2 Great Titchfield Street</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-line2">7th Floor, United Kingdom House</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-sublocality">Fitzrovia</span> <span class="yxt-Address-city">London</span> <span class="yxt-Address-postalCode">W1D 1NN</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-countryName yxt-Address-country--gb">GB</span></div></div>`;
+    const expectedFormat = `<div class="yxt-Address"><div class="yxt-AddressRow"><span class="yxt-Address-line1">2 Great Titchfield Street</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-line2">7th Floor, United Kingdom House</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-sublocality">Fitzrovia</span> <span class="yxt-Address-city">London</span> <span class="yxt-Address-postalCode">W1D 1NN</span> </div><div class="yxt-AddressRow"><span class="yxt-Address-country yxt-Address-country--gb">GB</span></div></div>`;
 
     const actualFormat = Formatter.address(profile);
     expect(actualFormat).toEqual(expectedFormat);
