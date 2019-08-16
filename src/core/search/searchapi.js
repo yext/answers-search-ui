@@ -47,16 +47,18 @@ export default class SearchApi {
     this._locale = opts.locale;
   }
 
-  verticalQuery (queryString, verticalKey, filter) {
+  verticalQuery (searchOptions) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/vertical/query',
       apiKey: this._apiKey,
       version: this._version,
       params: {
-        'input': queryString,
+        'input': searchOptions.queryString,
         'answersKey': this._answersKey,
-        'filters': filter,
-        'verticalKey': verticalKey,
+        'filters': searchOptions.filter,
+        'facetFilters': searchOptions.facetFilter,
+        'verticalKey': searchOptions.verticalKey,
+        'retrieveFacets': searchOptions.isDynamicFiltersEnabled,
         'locale': this._locale
       }
     });
