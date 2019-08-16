@@ -23,7 +23,7 @@ describe('vertical searching', () => {
   });
 
   it('searches with input', () => {
-    const result = searchApi.verticalQuery('vertical', { input: 'query' });
+    const result = searchApi.verticalSearch('vertical', { input: 'query' });
     expect.assertions(2);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
@@ -36,7 +36,7 @@ describe('vertical searching', () => {
 
   it('searches with filters', () => {
     const filter = '{ "thing": { "$eq": "cool" } }';
-    const result = searchApi.verticalQuery('vertical', { filter });
+    const result = searchApi.verticalSearch('vertical', { filter });
     expect.assertions(2);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
@@ -49,7 +49,7 @@ describe('vertical searching', () => {
 
   it('searches with input and filter', () => {
     const filter = '{ "thing": { "$eq": "cool" } }';
-    const result = searchApi.verticalQuery('vertical', { input: 'word', filter });
+    const result = searchApi.verticalSearch('vertical', { input: 'word', filter });
     expect.assertions(2);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
@@ -61,7 +61,7 @@ describe('vertical searching', () => {
   });
 
   it('searches with limit and offset', () => {
-    const result = searchApi.verticalQuery('vertical', { input: 'query', limit: 25, offset: 10 });
+    const result = searchApi.verticalSearch('vertical', { input: 'query', limit: 25, offset: 10 });
     expect.assertions(2);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
@@ -74,7 +74,7 @@ describe('vertical searching', () => {
 
   it('throws error if limit exceeds 50', () => {
     expect(() => {
-      searchApi.verticalQuery('vertical', { input: 'query', limit: 150, offset: 10 });
+      searchApi.verticalSearch('vertical', { input: 'query', limit: 150, offset: 10 });
     }).toThrow(AnswersCoreError);
   });
 });

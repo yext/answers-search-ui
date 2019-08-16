@@ -58,7 +58,7 @@ export default class SearchApi {
    * @param {number} query.offset The results offset, for fetching more results of the same query
    * @param {boolean} query.isDynamicFiltersEnabled If true, asks the server to return dynamic filters
    */
-  verticalQuery (verticalKey, { input, filter, facetFilter, limit, offset, isDynamicFiltersEnabled }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, isDynamicFiltersEnabled }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -84,7 +84,7 @@ export default class SearchApi {
       .then(response => response.json());
   }
 
-  query (queryString) {
+  universalSearch (queryString) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/query',
       apiKey: this._apiKey,

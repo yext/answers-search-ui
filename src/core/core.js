@@ -92,7 +92,7 @@ export default class Core {
   verticalSearch (verticalKey, query) {
     this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
     return this._searcher
-      .verticalQuery(verticalKey, { ...query, isDynamicFiltersEnabled: this._isDynamicFiltersEnabled })
+      .verticalSearch(verticalKey, { ...query, isDynamicFiltersEnabled: this._isDynamicFiltersEnabled })
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(results => query.append
         ? this.storage.getState(StorageKeys.VERTICAL_RESULTS).append(results)
@@ -110,7 +110,7 @@ export default class Core {
   search (queryString, urls) {
     this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     return this._searcher
-      .query(queryString)
+      .universalSearch(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
