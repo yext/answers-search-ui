@@ -38,7 +38,7 @@ export default class FilterOptionsComponent extends Component {
      * @type {object[]}
      * @private
      */
-    this._options = config.options.map(o => Object.assign({}, o, { checked: false }));
+    this._options = config.options.map(o => Object.assign({}, { selected: false }, o));
 
     /**
      * The type of control to display
@@ -68,6 +68,8 @@ export default class FilterOptionsComponent extends Component {
      */
     this._onChange = config.onChange || function () {};
 
+    this._label = config.label || '';
+
     /**
      * The label to be used in the legend
      * @type {string}
@@ -91,32 +93,40 @@ export default class FilterOptionsComponent extends Component {
 
   setState (data) {
     super.setState(Object.assign({}, data, {
-      name: this.name,
+      name: this.name.toLowerCase(),
       options: this._options,
       label: this._label
     }));
   }
 
   onMount () {
-    DOM.delegate(this._container, this._optionSelector, 'click', (event) => {
-      this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
+    DOM.delegate(
+      DOM.query(this._container, `.${this._control}-fieldset`),
+      this._optionSelector,
+      'click',
+      event => {
+        this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
 
-      const filter = this._buildFilter();
-      if (this._storeOnChange) {
-        this.core.setFilter(this.name, filter);
-      }
+        const filter = this._buildFilter();
+        if (this._storeOnChange) {
+          this.core.setFilter(this.name, filter);
+        }
 
-      this._onChange(filter);
-    });
+        this._onChange(filter);
+      });
   }
 
-  _updateOption (index, checked) {
+  _updateOption (index, selected) {
     if (this._control === 'singleoption') {
-      this._options = this._options.map(o => Object.assign({}, o, { checked: false }));
+      this._options = this._options.map(o => Object.assign({}, o, { selected: false }));
     }
 
-    this._options[index] = Object.assign({}, this._options[index], { checked });
+    this._options[index] = Object.assign({}, this._options[index], { selected });
     this.setState();
+  }
+
+  getFilter () {
+    return this._buildFilter();
   }
 
   /**
@@ -135,8 +145,10 @@ export default class FilterOptionsComponent extends Component {
    */
   _buildFilter () {
     const filters = this._options
-      .filter(o => o.checked)
-      .map(o => Filter.equal(o.field, o.value));
+      .filter(o => o.selected)
+      .map(o => o.filter
+        ? o.filter
+        : Filter.equal(o.field, o.value));
 
     return filters.length > 0
       ? Filter.group(...filters)

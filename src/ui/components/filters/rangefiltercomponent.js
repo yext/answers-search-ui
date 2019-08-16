@@ -97,6 +97,10 @@ export default class RangeFilterComponent extends Component {
     this._updateRange('max', value);
   }
 
+  getFilter () {
+    return this._buildFilter();
+  }
+
   /**
    * Update the current range state
    * @param {string} key The range key to update

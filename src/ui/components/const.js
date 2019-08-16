@@ -14,6 +14,7 @@ import FilterBoxComponent from './filters/filterboxcomponent';
 import FilterOptionsComponent from './filters/filteroptionscomponent';
 import RangeFilterComponent from './filters/rangefiltercomponent';
 import DateRangeFilterComponent from './filters/daterangefiltercomponent';
+import DynamicFiltersComponent from './filters/dynamicfilterscomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
 import ResultsComponent from './results/resultscomponent';
@@ -45,6 +46,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(FilterOptionsComponent)
   .register(RangeFilterComponent)
   .register(DateRangeFilterComponent)
+  .register(DynamicFiltersComponent)
 
 // Results Components
   .register(DirectAnswerComponent)

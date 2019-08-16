@@ -5,6 +5,7 @@ import DirectAnswer from '../models/directanswer';
 import Navigation from '../models/navigation';
 import VerticalResults from '../models/verticalresults';
 import StorageKeys from '../storage/storagekeys';
+import DynamicFilters from '../models/dynamicfilters';
 
 /**
  * A Data Transformer that takes the response object from a Search request
@@ -26,7 +27,8 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: data.response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Veritcal doesn't respond with ordering, so use empty nav.
-      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response)
+      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response),
+      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response)
     };
   }
 }
