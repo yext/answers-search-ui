@@ -195,9 +195,8 @@ export default class FilterSearchComponent extends Component {
     const searchQuery = this.core.storage.getState(StorageKeys.QUERY) || '';
     const facetFilter = this.core.storage.getAll(StorageKeys.FACET_FILTER)[0];
 
-    this.core.verticalSearch({
-      queryString: searchQuery,
-      verticalKey: this._verticalKey,
+    this.core.verticalSearch(this._verticalKey, {
+      input: searchQuery,
       filter: JSON.stringify(totalFilter),
       facetFilter: JSON.stringify(facetFilter)
     });

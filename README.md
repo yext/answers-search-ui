@@ -498,7 +498,7 @@ ANSWERS.addComponent('UniversalResults', {
 
 ## Vertical Results Component
 
-The Vertical Results component shares all the same configurations from Universal Results, but you don't need to specifiy a config or context.
+The Vertical Results component shares all the same configurations from Universal Results, but you don't need to specifiy a config or context. You may limit the number of search results returned, with a maximum of 50.
 
 You define all the options at the top level object.
 
@@ -509,6 +509,8 @@ You define all the options at the top level object.
 ```js
 ANSWERS.addComponent('VerticalResults', {
   container: '.results-container',
+  // The max number of search results to return, defaults to 20
+  limit: 25
 })
 ```
 

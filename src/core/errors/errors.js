@@ -83,6 +83,7 @@ export class AnswersCoreError extends AnswersBaseError {
     super(400, message, boundary, causedBy);
   }
 }
+
 /**
  * AnswersStorageError represents storage related errors
  * @extends AnswersBaseError
@@ -95,6 +96,10 @@ export class AnswersStorageError extends AnswersBaseError {
   }
 }
 
+/**
+ * AnswersAnalyticsError is used for errors when reporting analytics
+ * @extends AnswersBaseError
+ */
 export class AnswersAnalyticsError extends AnswersBaseError {
   constructor (message, event, causedBy) {
     super(402, message, 'Analytics', causedBy);
