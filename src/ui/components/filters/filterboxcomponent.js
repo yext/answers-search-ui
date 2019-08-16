@@ -62,6 +62,8 @@ export default class FilterBoxComponent extends Component {
      * @private
      */
     this._filters = [];
+
+    this._saveOnChange = config.saveOnChange || false;
   }
 
   static get type () {
@@ -123,6 +125,10 @@ export default class FilterBoxComponent extends Component {
     if (this._searchOnChange) {
       this._saveFiltersToStorage();
       this._search();
+    }
+
+    if (this._saveOnChange) {
+      this._saveFiltersToStorage();
     }
   }
 

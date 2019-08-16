@@ -110,6 +110,8 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._searchCooldown = config.searchCooldown || 300;
+
+    this._onMountAddition = config.onMountAddition || null;
   }
 
   static get type () {
@@ -142,6 +144,8 @@ export default class SearchComponent extends Component {
     if (this.autoFocus === true && this.query.length === 0) {
       DOM.query(this._container, this._inputEl).focus();
     }
+
+    this._onMountAddition();
   }
 
   /**

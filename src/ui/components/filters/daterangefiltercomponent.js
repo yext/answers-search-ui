@@ -96,6 +96,7 @@ export default class DateRangeFilterComponent extends Component {
 
   onCreate () {
     DOM.delegate(this._container, '.js-yext-date', 'change', (event) => {
+      console.log(event.target.dataset.key, event.target.value);
       this._updateRange(event.target.dataset.key, event.target.value);
     });
   }
