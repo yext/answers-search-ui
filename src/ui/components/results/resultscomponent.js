@@ -17,11 +17,10 @@ const ResultType = {
 };
 
 export default class ResultsComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (config = {}) {
+    super(config);
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
-    this.limit = opts.limit || 5;
     this._itemConfig = {
       global: {
         render: null,
@@ -41,17 +40,17 @@ export default class ResultsComponent extends Component {
       }
     };
 
-    if (opts.renderItem === undefined && opts._parentOpts !== undefined) {
-      opts.renderItem = opts._parentOpts.renderItem;
+    if (config.renderItem === undefined && config._parentOpts !== undefined) {
+      config.renderItem = config._parentOpts.renderItem;
     }
 
-    if (opts.itemTemplate === undefined && opts._parentOpts !== undefined) {
-      opts.itemTemplate = opts._parentOpts.itemTemplate;
+    if (config.itemTemplate === undefined && config._parentOpts !== undefined) {
+      config.itemTemplate = config._parentOpts.itemTemplate;
     }
 
     this.configureItem({
-      render: opts.renderItem,
-      template: opts.itemTemplate
+      render: config.renderItem,
+      template: config.itemTemplate
     });
   }
 

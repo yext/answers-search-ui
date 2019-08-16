@@ -183,9 +183,8 @@ export default class FilterBoxComponent extends Component {
 
     const facetFilter = this.core.storage.getAll(StorageKeys.FACET_FILTER)[0];
 
-    this.core.verticalSearch({
-      queryString: query,
-      verticalKey: this._verticalKey,
+    this.core.verticalSearch(this._verticalKey, {
+      input: query,
       filter: JSON.stringify(totalFilter),
       facetFilter: JSON.stringify(facetFilter)
     });

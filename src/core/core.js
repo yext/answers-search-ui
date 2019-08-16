@@ -15,12 +15,12 @@ import UniversalResults from './models/universalresults';
  * related behaviors of the application.
  */
 export default class Core {
-  constructor (opts = {}) {
-    if (typeof opts.apiKey !== 'string') {
+  constructor (config = {}) {
+    if (typeof config.apiKey !== 'string') {
       throw new Error('Missing required `apiKey`. Type must be {string}');
     }
 
-    if (typeof opts.answersKey !== 'string') {
+    if (typeof config.answersKey !== 'string') {
       throw new Error('Missing required `answersKey`. Type must be {string}');
     }
 
@@ -29,14 +29,14 @@ export default class Core {
      * @type {string}
      * @private
      */
-    this._apiKey = opts.apiKey;
+    this._apiKey = config.apiKey;
 
     /**
      * A reference to the client Answers Key used for all requests
      * @type {string}
      * @private
      */
-    this._answersKey = opts.answersKey;
+    this._answersKey = config.answersKey;
 
     /**
      * A reference to the client locale used for all requests. If not specified, defaults to "en" (for
@@ -44,7 +44,7 @@ export default class Core {
      * @type {string}
      * @private
      */
-    this._locale = opts.locale || 'en';
+    this._locale = config.locale || 'en';
 
     /**
      * A reference to the core data storage that powers the UI
@@ -78,11 +78,25 @@ export default class Core {
     });
   }
 
-  verticalSearch (searchOptions) {
+  /**
+   * Search in the context of a vertical
+   * @param {string} verticalKey vertical ID for the search
+   * @param {object} query The query details
+   * @param {string} query.input The input to search for
+   * @param {string} query.filter The filter to use in the search
+   * @param {string} query.facetFilter The facet filter to use in the search
+   * @param {number} query.limit The max number of results to include, max of 50
+   * @param {number} query.offset The results offset, for fetching more results of the same query
+   * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
+   */
+  verticalSearch (verticalKey, query) {
     this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
     return this._searcher
-      .verticalQuery(Object.assign({}, searchOptions, { isDynamicFiltersEnabled: this._isDynamicFiltersEnabled }))
+      .verticalSearch(verticalKey, { ...query, isDynamicFiltersEnabled: this._isDynamicFiltersEnabled })
       .then(response => SearchDataTransformer.transformVertical(response))
+      .then(results => query.append
+        ? this.storage.getState(StorageKeys.VERTICAL_RESULTS).append(results)
+        : results)
       .then(data => {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
@@ -96,7 +110,7 @@ export default class Core {
   search (queryString, urls) {
     this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     return this._searcher
-      .query(queryString)
+      .universalSearch(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
