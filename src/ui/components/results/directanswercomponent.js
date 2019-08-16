@@ -16,12 +16,6 @@ export default class DirectAnswerComponent extends Component {
     this.moduleId = StorageKeys.DIRECT_ANSWER;
 
     /**
-     * The default template to use for rendering
-     * @type {string}
-     */
-    this._templateName = 'results/directanswer';
-
-    /**
      * The form used for submitting the feedback
      * @type {string}
      */
@@ -38,6 +32,19 @@ export default class DirectAnswerComponent extends Component {
      * @type {string}
      */
     this._thumbsDownSelector = config.thumbsDownSelector || '.js-directAnswer-thumbUp';
+  }
+
+  static get type () {
+    return 'DirectAnswer';
+  }
+
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName (config) {
+    return 'results/directanswer';
   }
 
   /**
@@ -98,18 +105,5 @@ export default class DirectAnswerComponent extends Component {
       });
 
     this.analyticsReporter.report(event);
-  }
-
-  static get type () {
-    return 'DirectAnswer';
-  }
-
-  /**
-   * The template to render
-   * @returns {string}
-   * @override
-   */
-  static defaultTemplateName (config) {
-    return 'results/directanswer';
   }
 }
