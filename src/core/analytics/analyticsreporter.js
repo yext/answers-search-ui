@@ -39,7 +39,7 @@ export default class AnalyticsReporter {
 
     event.addOptions(this._globalOptions);
 
-    return HttpRequester().beacon(
+    return new HttpRequester().beacon(
       `${ANALYTICS_BASE_URL}/realtimeanalytics/data/answers/${this._businessId}`,
       {
         'data': event.toApiEvent()

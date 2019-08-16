@@ -22,16 +22,22 @@ export default class DirectAnswerComponent extends Component {
     this._templateName = 'results/directanswer';
 
     /**
+     * The form used for submitting the feedback
+     * @type {string}
+     */
+    this._formEl = config.formEl || '.js-directAnswer-feedback-form';
+
+    /**
      * The `thumbs up` css selector to bind ui interaction to for reporting
      * @type {string}
      */
-    this._thumbsUpSelector = config.thumbsUpSelector || '.js-yext-thumbs-up';
+    this._thumbsUpSelector = config.thumbsUpSelector || '.js-directAnswer-thumbDown';
 
     /**
      * The `thumbs down` css selector to bind ui interaction to for reporting
      * @type {string}
      */
-    this._thumbsDownSelector = config.thumbsDownSelector || '.js-yext-thumbs-down';
+    this._thumbsDownSelector = config.thumbsDownSelector || '.js-directAnswer-thumbUp';
   }
 
   /**
@@ -50,19 +56,26 @@ export default class DirectAnswerComponent extends Component {
    * we want to wire up the behavior for interacting with the quality feedback reporting (thumbsup/down)
    */
   onMount () {
-    DOM.on(this._thumbsUpSelector, 'click', () => {
-      this.reportQuality(true);
+    // Avoid bindings if the feedback has previously been submitted
+    if (this.getState('feedbackSubmitted') === true) {
+      return this;
+    }
+
+    // For WCAG compliance, the feedback should be a submittable form
+    DOM.on(this._formEl, 'submit', (e) => {
+      let formEl = e.target;
+      let checkedValue = DOM.query(formEl, 'input:checked').value;
+
+      this.reportQuality(checkedValue);
       this.updateState({
         'feedbackSubmitted': true
       });
     });
 
-    DOM.on(this._thumbsDownSelector, 'click', () => {
-      this.reportQuality(false);
-      this.updateState({
-        'feedbackSubmitted': true
-      });
-    });
+    // Is this actually necessary? I guess it's only necessary if the
+    // submit button is hidden.
+    DOM.on(this._thumbsUpSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
+    DOM.on(this._thumbsDownSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
   }
 
   /**
