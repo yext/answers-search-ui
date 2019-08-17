@@ -40,3 +40,23 @@ describe('address formatting', () => {
     expect(actualFormat).toEqual(expectedFormat);
   });
 });
+
+describe('open status empty or unknown', () => {
+  it('should return null if the field is missing', () => {
+    expect(Formatter.openStatus({})).toBeNull();
+  });
+});
+
+describe.each([])('open status message', (profile, currentTime, expectedMessage) => {
+  test(`returns ${expectedMessage}`, () => {
+    const message = Formatter.openStatus(profile, currentTime);
+    expect(message).toBe(expectedMessage);
+  });
+});
+
+describe('date range formatting', () => {
+  it('should return null if the field is missing', () => {
+    expect(Formatter.dateRange({})).toBeNull();
+  });
+  // it('should ')
+});

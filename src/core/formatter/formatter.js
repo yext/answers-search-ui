@@ -2,7 +2,8 @@ import AddressFactory from './address/addressfactory.js';
 
 export default class Formatter {
   /**
-   * address returns a US or UK formatted address TODO (bmcginnis): setup full i18n or move server side
+   * address returns a US or UK formatted address
+   * TODO (bmcginnis): setup full i18n or move server side
    * @param profile {Object} an entity profile
    * @returns {string|null}
    */
@@ -18,10 +19,12 @@ export default class Formatter {
   /**
    * openStatus returns a string representing the open/closed state of an entity that has hours on the profile,
    * e.g. Open Now - Closes 5PM or Closed - Opens at 9am Monday
-   * @param profile {Object} an entity profile TODO (bmcginnis): setup full i18n or move server side
+   * TODO (bmcginnis): setup full i18n or move server side
+   * @param profile {Object} an entity profile
+   * @param currentTime {Date} the DateTime to use when calculating open status
    * @returns string
    */
-  static openStatus (profile) {
+  static openStatus (profile, currentTime = new Date()) {
     return '';
   }
 
@@ -37,6 +40,7 @@ export default class Formatter {
 
   /**
    * phoneDisplay returns a localized, formatted phone number from the given key path
+   * TODO (bmcginnis): setup full i18n or move server side
    * @param profile {Object} an entity profile
    * @param keyPath {string} the profile field or custom field dot-separated key path from which to retrieve the phone number
    * @returns string
