@@ -1,4 +1,24 @@
 /** @define Results */
+$color-results-title-bar-background: $color-gray3 !default;
+$color-results-filters-background: white !default;
+
+$color-results-title-bar-text: $color-text-primary !default;
+$font-size-results-title-bar-text: $font-size-md-lg !default;
+$font-line-height-results-title-bar-text: $line-height-lg !default;
+$font-weight-results-title-bar-text: $font-weight-semibold !default;
+
+$font-size-results-title-bar-link: $font-size-md !default;
+$font-line-height-results-title-bar-link: $line-height-xxlg !default;
+$font-weight-results-title-bar-link: $font-weight-semibold !default;
+
+$color-results-filters-text: $color-text-primary !default;
+$font-size-results-filters-text: $font-size-md !default;
+$font-line-height-results-filters-text: $line-height-md !default;
+$font-weight-results-filters-text: $font-weight-normal !default;
+
+$font-size-results-filters-link: $font-size-md !default;
+$font-line-height-results-filters-link: $line-height-md !default;
+$font-weight-results-filters-link: $font-weight-normal !default;
 
 .yxt-Results
 {
@@ -6,17 +26,17 @@
 
   & + &
   {
-    margin-top: $layout-gutter-width;
+    margin-top: $base-spacing;
   }
 
   &-titleBar
   {
     display: flex;
     justify-content: space-between;
-    padding-left: $layout-gutter-width;
-    padding-right: $layout-gutter-width;
-    padding-top: $layout-gutter-width;
-    padding-bottom: $layout-gutter-width;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    padding-top: $base-spacing;
+    padding-bottom: $base-spacing;
     background-color: $color-results-title-bar-background;
     border-bottom: $border-default;
   }
@@ -29,7 +49,7 @@
 
   &-titleIconWrapper
   {
-    margin-right: $layout-gutter-width;
+    margin-right: $base-spacing;
   }
 
   &-title
@@ -38,7 +58,7 @@
       $font-size-results-title-bar-text,
       $font-line-height-results-title-bar-text,
       $font-weight-results-title-bar-text,
-      $font-style-results-title-bar-text
+      $color: $color-results-title-bar-text
     );
 
     text-transform: uppercase;
@@ -53,7 +73,6 @@
       $font-size-results-title-bar-link,
       $font-line-height-results-title-bar-link,
       $font-weight-results-title-bar-link,
-      $font-style-results-title-bar-link
     );
     @include Link-1;
   }
@@ -61,10 +80,10 @@
   &-filters
   {
     display: flex;
-    padding-left: $layout-gutter-width;
-    padding-right: $layout-gutter-width;
-    padding-top: $layout-gutter-width;
-    padding-bottom: $layout-gutter-width;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    padding-top: $base-spacing;
+    padding-bottom: $base-spacing;
     background-color: $color-results-filters-background;
   }
 
@@ -79,8 +98,8 @@
       width: 1px;
       top: 0;
       height: 40%;
-      margin-left: $layout-gutter-width;
-      margin-right: $layout-gutter-width;
+      margin-left: $base-spacing;
+      margin-right: $base-spacing;
       display: inline-block;
     }
   }
@@ -91,7 +110,7 @@
       $font-size-results-filters-text,
       $font-line-height-results-filters-text,
       $font-weight-results-filters-text,
-      $font-style-results-filters-text,
+      $color: $color-results-filters-text
     );
   }
 
@@ -101,12 +120,11 @@
       $font-size-results-filters-link,
       $font-line-height-results-filters-link,
       $font-weight-results-filters-link,
-      $font-style-results-filters-link,
-      $color-blue1
+      $color: $color-blue1
     );
     @include Link-2;
 
-    margin-left: $layout-gutter-width / 2;
+    margin-left: $base-spacing / 2;
   }
 
   &-map
