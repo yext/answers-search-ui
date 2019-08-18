@@ -1,27 +1,27 @@
 /** @define Results */
-$color-results-title-bar-background: $color-gray3 !default;
-$color-results-filters-background: white !default;
-
-$color-results-title-bar-text: $color-text-primary !default;
-$font-size-results-title-bar-text: $font-size-md-lg !default;
-$font-line-height-results-title-bar-text: $line-height-lg !default;
-$font-weight-results-title-bar-text: $font-weight-semibold !default;
-
-$font-size-results-title-bar-link: $font-size-md !default;
-$font-line-height-results-title-bar-link: $line-height-xxlg !default;
-$font-weight-results-title-bar-link: $font-weight-semibold !default;
-
-$color-results-filters-text: $color-text-primary !default;
-$font-size-results-filters-text: $font-size-md !default;
-$font-line-height-results-filters-text: $line-height-md !default;
-$font-weight-results-filters-text: $font-weight-normal !default;
-
-$font-size-results-filters-link: $font-size-md !default;
-$font-line-height-results-filters-link: $line-height-md !default;
-$font-weight-results-filters-link: $font-weight-normal !default;
-
 .yxt-Results
 {
+  $color-results-title-bar-background: $color-gray3 !default;
+  $color-results-filters-background: white !default;
+
+  $color-results-title-bar-text: $color-text-primary !default;
+  $font-size-results-title-bar-text: $font-size-md-lg !default;
+  $font-line-height-results-title-bar-text: $line-height-lg !default;
+  $font-weight-results-title-bar-text: $font-weight-semibold !default;
+
+  $font-size-results-title-bar-link: $font-size-md !default;
+  $font-line-height-results-title-bar-link: $line-height-xxlg !default;
+  $font-weight-results-title-bar-link: $font-weight-semibold !default;
+
+  $color-results-filters-text: $color-text-primary !default;
+  $font-size-results-filters-text: $font-size-md !default;
+  $font-line-height-results-filters-text: $line-height-md !default;
+  $font-weight-results-filters-text: $font-weight-normal !default;
+
+  $font-size-results-filters-link: $font-size-md !default;
+  $font-line-height-results-filters-link: $line-height-md !default;
+  $font-weight-results-filters-link: $font-weight-normal !default;
+
   border: $border-default;
 
   & + &
@@ -35,8 +35,8 @@ $font-weight-results-filters-link: $font-weight-normal !default;
     justify-content: space-between;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
-    padding-top: $base-spacing;
-    padding-bottom: $base-spacing;
+    padding-top: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
     background-color: $color-results-title-bar-background;
     border-bottom: $border-default;
   }
@@ -49,6 +49,7 @@ $font-weight-results-filters-link: $font-weight-normal !default;
 
   &-titleIconWrapper
   {
+    display: flex;
     margin-right: $base-spacing;
   }
 
@@ -129,6 +130,8 @@ $font-weight-results-filters-link: $font-weight-normal !default;
 
   &-map
   {
+    display: flex;
+
     img
     {
       width: 100%;
