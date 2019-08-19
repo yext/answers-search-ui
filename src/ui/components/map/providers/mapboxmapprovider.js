@@ -25,6 +25,10 @@ export default class MapBoxMapProvider extends MapProvider {
         if (typeof onLoad === 'function') {
           onLoad();
         }
+
+        if (typeof this._onLoaded === 'function') {
+          this._onLoaded();
+        }
       },
       async: true,
       src: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'
@@ -56,7 +60,7 @@ export default class MapBoxMapProvider extends MapProvider {
   }
 
   init (el, mapData) {
-    if (!mapData || mapData.mapMarkers.length <= 0) {
+    if ((!mapData || mapData.mapMarkers.length <= 0) && !this._showEmptyMap) {
       this._map = null;
       return this;
     }
@@ -71,21 +75,25 @@ export default class MapBoxMapProvider extends MapProvider {
       container: container,
       zoom: this._zoom,
       style: 'mapbox://styles/mapbox/streets-v9',
-      center: [mapData.mapCenter.longitude, mapData.mapCenter.latitude]
+      center: mapData && mapData.mapCenter && mapData.mapCenter.longitude && mapData.mapCenter.latitude
+        ? [mapData.mapCenter.longitude, mapData.mapCenter.latitude]
+        : { lng: this._defaultPosition.lng, lat: this._defaultPosition.lat }
     });
 
-    const mapboxMapMarkerConfigs = MapBoxMarkerConfig.from(
-      mapData.mapMarkers,
-      this._pinConfig,
-      this._map);
+    if (mapData) {
+      const mapboxMapMarkerConfigs = MapBoxMarkerConfig.from(
+        mapData.mapMarkers,
+        this._pinConfig,
+        this._map);
 
-    for (let i = 0; i < mapboxMapMarkerConfigs.length; i++) {
-      let wrapper = mapboxMapMarkerConfigs[i].wrapper;
-      let coords = new mapboxgl.LngLat(
-        mapboxMapMarkerConfigs[i].position.longitude,
-        mapboxMapMarkerConfigs[i].position.latitude);
-      let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
-      marker.addTo(this._map);
+      for (let i = 0; i < mapboxMapMarkerConfigs.length; i++) {
+        let wrapper = mapboxMapMarkerConfigs[i].wrapper;
+        let coords = new mapboxgl.LngLat(
+          mapboxMapMarkerConfigs[i].position.longitude,
+          mapboxMapMarkerConfigs[i].position.latitude);
+        let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
+        marker.addTo(this._map);
+      }
     }
   }
 }
