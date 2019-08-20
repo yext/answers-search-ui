@@ -1,18 +1,23 @@
 /** @define AutoComplete */
-$autocomplete-background-color: white !default;
-$autocomplete-box-shadow: 0 4px 6px 0 rgba(32, 33, 36, 0.28) !default;
-$autocomplete-selected-color: white !default;
-$autocomplete-selected-background-color: $color-gray2 !default;
-$autocomplete-option-hover-background-color: $color-gray1 !default;
-
 .yxt-AutoComplete
 {
+  $autocomplete-background-color: white !default;
+  $autocomplete-box-shadow: 0 4px 6px 0 rgba(32, 33, 36, 0.28) !default;
+  $autocomplete-selected-background-color: $color-gray8 !default;
+  $autocomplete-option-hover-background-color: $color-gray8 !default;
+
+  $autocomplete-text-font-size: $font-size-md-lg !default;
+  $autocomplete-text-line-height: $line-height-md !default;
+  $autocomplete-text-font-weight: $font-weight-semibold !default;
+  $autocomplete-text-color: $color-text-primary !default;
+
   background-color: $autocomplete-background-color;
   border-radius: 0 0 24px 24px;
   box-shadow: $autocomplete-box-shadow;
-  padding-top: 32px;
+  padding-top: $base-spacing;
+  padding-bottom: $base-spacing / 2;
   position: absolute;
-  top: 23px;
+  top: $base-spacing;
   left: 0;
   width: 100%;
   z-index: 2;
@@ -20,27 +25,37 @@ $autocomplete-option-hover-background-color: $color-gray1 !default;
 
   &-option
   {
-    padding: 6px;
+    @include Text(
+      $size: $autocomplete-text-font-size,
+      $line-height: $autocomplete-text-line-height,
+      $weight: $autocomplete-text-font-weight,
+      $color: $autocomplete-text-color
+    );
+
+    padding-left: $base-spacing;
+    padding-top: $base-spacing / 4;
+    padding-right: $base-spacing;
+    padding-bottom: $base-spacing / 4;
+    cursor: pointer;
 
     &.yxt-selected
     {
-      color: $autocomplete-selected-color;
       background-color: $autocomplete-selected-background-color;
     }
 
     strong
     {
-      font-weight: $font-weight-bold;
+      font-weight: $font-weight-normal;
     }
 
-    &--item
+    &:hover
     {
-      cursor: pointer;
+      background-color: $autocomplete-option-hover-background-color;
+    }
 
-      &:hover
-      {
-        background-color: $autocomplete-option-hover-background-color;
-      }
+    &:first-child
+    {
+      padding-top: 8px;
     }
   }
 }

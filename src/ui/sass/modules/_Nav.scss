@@ -2,6 +2,11 @@
 
 .yxt-Nav
 {
+  $nav-text-font-size: $font-size-md !default;
+  $nav-text-line-height: $line-height-md !default;
+  $nav-text-font-weight: $font-weight-semibold !default;
+  $nav-text-color: $color-text-primary !default;
+  
   &-container
   {
     display: flex;
@@ -17,10 +22,39 @@
 
   &-item
   {
+    @include Text(
+      $size: $nav-text-font-size,
+      $line-height: $nav-text-line-height,
+      $weight: $nav-text-font-weight,
+      $color: $nav-text-color
+    );
+
+    padding-bottom: 6px;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    text-transform: uppercase;
+
+    &:hover
+    {
+      text-shadow: 0 0 1px white;
+    }
+
+    &:not(:last-child)
+    {
+      flex-shrink: 0;
+    }
+
     &--more
     {
       position: absolute;
       opacity: 0;
+    }
+
+    &.is-active
+    {
+      color: $color-blue1;
+      border-bottom: 2px solid $color-blue1;
+      font-weight: $font-weight-bold;
     }
   }
 }
