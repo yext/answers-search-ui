@@ -68,11 +68,10 @@ export default class GoogleMapProvider extends MapProvider {
   }
 
   init (el, mapData) {
-    if (!mapData || mapData.mapMarkers.length <= 0) {
+    if ((!mapData || mapData.mapMarkers.length <= 0) && !this._showEmptyMap) {
       this._map = null;
       return this;
     }
-
     // NOTE(billy) This timeout is a hack for dealing with async nature.
     // Only here for demo purposes, so we'll fix later.
     setTimeout(() => {
@@ -88,17 +87,22 @@ export default class GoogleMapProvider extends MapProvider {
 
       // Apply our search data to our GoogleMap
       let bounds = new google.maps.LatLngBounds();
-      let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
-        mapData.mapMarkers,
-        this._pinConfig,
-        this.map);
 
-      for (let i = 0; i < googleMapMarkerConfigs.length; i++) {
-        let marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
-        bounds.extend(marker.position);
+      if (mapData && mapData.mapMarkers.length) {
+        let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
+          mapData.mapMarkers,
+          this._pinConfig,
+          this.map);
+
+        for (let i = 0; i < googleMapMarkerConfigs.length; i++) {
+          let marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
+          bounds.extend(marker.position);
+        }
+
+        this.map.fitBounds(bounds);
+      } else {
+        this.map.setCenter(new google.maps.LatLng(this._defaultPosition.lat, this._defaultPosition.lng));
       }
-
-      this.map.fitBounds(bounds);
     }, 100);
   }
 }
