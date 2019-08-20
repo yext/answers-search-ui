@@ -34,6 +34,19 @@ export default class MapProvider {
     this._zoom = opts.zoom || 9;
 
     /**
+     * The default coordinates to display if there are no results returned
+     * Only used if showEmptyMap is set to true
+     * @type {Object}
+     */
+    this._defaultPosition = opts.defaultPosition || { lat: 37.0902, lng: -95.7129 };
+
+    /**
+     * Determines if an empty map should be shown when there are no results
+     * @type {boolean}
+     */
+    this._showEmptyMap = opts.showEmptyMap || false;
+
+    /**
      * A reference to the underlying map instance, created by the external lib.
      * @type {number}
      */
