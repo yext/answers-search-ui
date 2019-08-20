@@ -35,6 +35,7 @@ export default class MapProvider {
 
     /**
      * The default coordinates to display if there are no results returned
+     * Only used if showEmptyMap is set to true
      * @type {Object}
      */
     this._defaultPosition = opts.defaultPosition || { lat: 37.0902, lng: -95.7129 };

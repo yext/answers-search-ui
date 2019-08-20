@@ -75,9 +75,7 @@ export default class MapBoxMapProvider extends MapProvider {
       container: container,
       zoom: this._zoom,
       style: 'mapbox://styles/mapbox/streets-v9',
-      center: mapData && mapData.mapCenter && mapData.mapCenter.longitude && mapData.mapCenter.latitude
-        ? [mapData.mapCenter.longitude, mapData.mapCenter.latitude]
-        : { lng: this._defaultPosition.lng, lat: this._defaultPosition.lat }
+      center: this.getCenterMarker(mapData)
     });
 
     if (mapData) {
@@ -95,6 +93,12 @@ export default class MapBoxMapProvider extends MapProvider {
         marker.addTo(this._map);
       }
     }
+  }
+
+  getCenterMarker (mapData) {
+    return mapData && mapData.mapCenter && mapData.mapCenter.longitude && mapData.mapCenter.latitude
+        ? [mapData.mapCenter.longitude, mapData.mapCenter.latitude]
+        : { lng: this._defaultPosition.lng, lat: this._defaultPosition.lat };
   }
 }
 
