@@ -97,8 +97,8 @@ export default class MapBoxMapProvider extends MapProvider {
 
   getCenterMarker (mapData) {
     return mapData && mapData.mapCenter && mapData.mapCenter.longitude && mapData.mapCenter.latitude
-        ? [mapData.mapCenter.longitude, mapData.mapCenter.latitude]
-        : { lng: this._defaultPosition.lng, lat: this._defaultPosition.lat };
+      ? [mapData.mapCenter.longitude, mapData.mapCenter.latitude]
+      : { lng: this._defaultPosition.lng, lat: this._defaultPosition.lat };
   }
 }
 
