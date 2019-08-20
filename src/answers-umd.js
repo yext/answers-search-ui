@@ -59,12 +59,19 @@ class Answers {
       answersKey: config.answersKey,
       locale: config.locale
     });
-    this.components.setCore(core)
+
+    this.components
+      .setCore(core)
       .setRenderer(this.renderer);
 
     if (config.businessId) {
-      const reporter = new AnalyticsReporter(core, config.answersKey, config.businessId, config.analyticsOptions);
-      this.components.setAnalyticsReporter(reporter);
+      this.components.setAnalyticsReporter(
+        new AnalyticsReporter(
+          core,
+          config.answersKey,
+          config.businessId,
+          config.analyticsOptions)
+      );
     }
 
     this._onReady = config.onReady || function () {};
