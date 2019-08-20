@@ -50,18 +50,20 @@
         <div class="yxt-Result-ctas">
           {{#each callsToAction}}
             {{#if this.url}}
-              <a class="yxt-Result-cta" href="{{this.url}}"
-                {{#if this.eventType}} data-eventtype="{{this.eventType}}"{{/if}}
-                {{#if this.eventOptions}} data-eventoptions='{{this.eventOptions}}'{{/if}}>
-                {{#if this.icon}}
-                  <div class="yxt-Result-ctaIconWrapper">
-                    <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
-                  </div>
-                {{/if}}
-                <span class="yxt-Result-ctaLabel">
-                  {{{this.label}}}
-                </span>
-              </a>
+              <div class="Result-ctaWrapper">
+                <a class="yxt-Result-cta" href="{{this.url}}"
+                  {{#if this.eventType}} data-eventtype="{{this.eventType}}"{{/if}}
+                  {{#if this.eventOptions}} data-eventoptions='{{this.eventOptions}}'{{/if}}>
+                  {{#if this.icon}}
+                    <div class="yxt-Result-ctaIconWrapper">
+                      <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
+                    </div>
+                  {{/if}}
+                  <span class="yxt-Result-ctaLabel">
+                    {{{this.label}}}
+                  </span>
+                </a>
+              </div>
             {{/if}}
           {{/each}}
         </div>

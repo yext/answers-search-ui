@@ -12,20 +12,20 @@
       {{_config.viewAllText}}
     </a>
   {{/if}}
-  {{#if appliedQueryFilters}}
-    <ul class="yxt-Results-filters">
-      {{#each appliedQueryFilters}}
-        <li class="yxt-Results-filter">
-          <span class="yxt-Results-filterValue">{{value}}</span>
-        </li>
-      {{/each}}
-      {{#if _config.showChangeFilters}}
-        {{#if _config.verticalURL}}
-          <a class="yxt-Results-changeFilters" href="{{_config.verticalURL}}">
-            change filters
-          </a>
-        {{/if}}
-      {{/if}}
-    </ul>
-  {{/if}}
 </div>
+{{#if appliedQueryFilters}}
+  <ul class="yxt-Results-filters">
+    {{#each appliedQueryFilters}}
+      <li class="yxt-Results-filter">
+        <span class="yxt-Results-filterValue">{{value}}</span>
+      </li>
+    {{/each}}
+    {{#if _config.showChangeFilters}}
+      {{#if _config.verticalURL}}
+        <a class="yxt-Results-changeFilters" href="{{_config.verticalURL}}">
+          change
+        </a>
+      {{/if}}
+    {{/if}}
+  </ul>
+{{/if}}

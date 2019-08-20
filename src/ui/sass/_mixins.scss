@@ -1,0 +1,55 @@
+@mixin Text(
+  $size: $font-size-md,
+  $line-height: $line-height-xs,
+  $weight: $font-weight-normal,
+  $style: normal,
+  $color: $color-text-primary
+) {
+  font-size: $size;
+  line-height: $line-height;
+  font-weight: $weight;
+  font-style: $style;
+  color: $color;
+}
+
+@mixin Link(
+  $base-color: inherit,
+  $base-decoration: none,
+  $hover-color: $base-color,
+  $hover-decoration: underline,
+  $active-color: $hover-color
+) {
+    &:link,
+    &:visited
+   {
+       color: $base-color;
+       text-decoration: $base-decoration;
+   }
+
+    &:hover,
+    &:focus
+    {
+      color: $hover-color;
+      text-decoration: $hover-decoration;
+    }
+
+    &:active
+    {
+        color: $active-color;
+        text-decoration: $hover-decoration;
+    }
+}
+
+@mixin Link-1
+{
+  @include Link($base-color: $color-blue1);
+}
+
+@mixin Link-2
+{
+  @include Link(
+    $base-color: $color-blue1,
+    $base-decoration: underline,
+    $hover-decoration: none
+  );
+}

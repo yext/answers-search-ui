@@ -1,4 +1,21 @@
-$font-weight-bold: 700;
-$font-weight-semibold: 600;
-$font-weight-normal: 400;
-$font-weight-light: 300;
+$font-weight-bold: 700 !default;
+$font-weight-semibold: 600 !default;
+$font-weight-normal: 400 !default;
+$font-weight-light: 300 !default;
+
+$font-size-xs: 10px;
+$font-size-sm: 12px;
+$font-size-md: 14px;
+$font-size-md-lg: 16px;
+$font-size-lg: 18px;
+$font-size-xlg: 20px;
+$font-size-xxlg: 40px;
+
+$line-height-xs: 1;
+$line-height-sm: 1.2;
+$line-height-md-sm: 4/3;
+$line-height-md: 1.4;
+$line-height-lg: 1.5;
+$line-height-xlg: 5/3;
+$line-height-xxlg: 1.7;
+

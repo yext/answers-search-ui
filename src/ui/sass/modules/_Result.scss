@@ -1,12 +1,61 @@
 .yxt-Result
 {
+  $result-background-color: white !default;
+
+  $result-event-background-color: $color-gray3 !default;
+
+  $result-day-font-size: $font-size-xxlg !default;
+  $result-day-line-height: $line-height-sm !default;
+  $result-day-font-weight: $font-weight-semibold !default;
+  $result-day-color: $color-text-primary !default;
+
+  $result-month-font-size: $font-size-md !default;
+  $result-month-line-height: $line-height-md !default;
+  $result-month-font-weight: $font-weight-normal !default;
+  $result-month-color: $color-text-primary !default;
+
+  $result-ordinal-background-color: $color-blue1 !default;
+  $result-ordinal-font-size: $font-size-xs !default;
+  $result-ordinal-line-height: $line-height-xs !default;
+  $result-ordinal-font-weight: $font-weight-bold !default;
+  $result-ordinal-color: white !default;
+
+  $result-details-font-size: $font-size-md !default;
+  $result-details-line-height: $line-height-md !default;
+  $result-details-font-weight: $font-weight-normal !default;
+  $result-details-color: $color-text-primary !default;
+
+  $result-title-font-size: $font-size-md-lg !default;
+  $result-title-line-height: $line-height-lg !default;
+  $result-title-font-weight: $font-weight-semibold !default;
+  $result-title-color: $color-text-primary !default;
+
+  $result-subtitle-font-size: $font-size-md !default;
+  $result-subtitle-line-height: $line-height-md !default;
+  $result-subtitle-font-weight: $font-weight-normal !default;
+  $result-subtitle-color: $color-gray7 !default;
+
+  $result-cta-font-size: $font-size-md !default;
+  $result-cta-line-height: $line-height-md !default;
+  $result-cta-font-weight: $font-weight-semibold !default;
+  $result-cta-color: $color-link-primary !default;
+
   &-title
   {
-    margin-bottom: 8px;
+    @include Text(
+      $size: $result-title-font-size,
+      $line-height: $result-title-line-height,
+      $weight: $result-title-font-weight,
+      $color: $result-title-color
+    );
+
+    margin-bottom: $base-spacing / 2;
   }
 
   &-titleLink
   {
+    @include Link-1;
+
     display: inline-flex;
     align-items: center;
 
@@ -18,28 +67,41 @@
 
   &-ordinalWrapper
   {
-    margin-right: 16px;
+    margin-right: $base-spacing-sm;
   }
 
   &-ordinal
   {
+    @include Text(
+      $size: $result-ordinal-font-size,
+      $line-height: $result-ordinal-line-height,
+      $weight: $result-ordinal-font-weight,
+      $color: $result-ordinal-color
+    );
+
+    background-color: $result-ordinal-background-color;
     height: 18px;
     width: 18px;
-    color: white;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    line-height: 1;
+    margin-top: 3px;
   }
 
   &-wrapper
   {
     display: flex;
-    padding-top: 16px;
-    padding-bottom: 16px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-top: $base-spacing;
+    padding-bottom: $base-spacing;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    background-color: $result-background-color;
+    border-top: $border-default;
+
+    &:not(:first-child) {
+      border-bottom: $border-default;
+    }
 
     @media (max-width: 768px)
     {
@@ -54,10 +116,20 @@
     margin-right: 1rem;
   }
 
+  &-details
+  {
+    @include Text(
+      $size: $result-details-font-size,
+      $line-height: $result-details-line-height,
+      $weight: $result-details-font-weight,
+      $color: $result-details-color
+    );
+  }
+
   &-ctasWrapper
   {
     display: flex;
-    align-items: center;
+    align-items: top;
     flex-grow: 1;
 
     @media (min-width: 768px)
@@ -73,47 +145,51 @@
 
   &-cta
   {
+    @include Link-1;
+
     display: flex;
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    padding-top: 8px;
-    padding-left: 8px;
-    padding-right: 8px;
-    padding-bottom: 8px;
+    padding-top: $base-spacing / 2;
+    padding-left: $base-spacing / 2;
+    padding-right: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
     border-radius: 4px;
     min-width: 60px;
     text-align: center;
 
     & + &
     {
-      margin-left: 16px;
+      margin-left: $base-spacing / 2;
     }
   }
 
   &-ctaIconWrapper
   {
-    padding-top: 10px;
-    padding-left: 10px;
-    padding-right: 10px;
-    padding-bottom: 10px;
+    display: flex;
+    padding-left: $base-spacing * 2;
+    padding-right: $base-spacing * 2;
+    margin-bottom: $base-spacing / 2;
   }
 
   &-ctaIcon
   {
-    width: 1.7em;
-    height: 1.7em;
+    width: 24px;
+    height: 24px;
   }
 
   &-ctaLabel
   {
-    text-transform: uppercase;
-  }
+    @include Text(
+      $size: $result-cta-font-size,
+      $line-height: $result-cta-line-height,
+      $weight: $result-cta-font-weight,
+      $color: $result-cta-color
+    );
 
-  &-hours,
-  &-address
-  {
-    margin-bottom: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
   }
 
   &-dateWrapper
@@ -121,15 +197,48 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-right: 48px;
     min-width: 80px;
+    margin-right: $base-spacing * 2;
+    background-color: $result-event-background-color;
   }
 
   &-dateInnerWrapper
   {
+    display: flex;
+    flex-direction: column;
     border-radius: 8px;
-    padding: 4px;
+    padding: $base-spacing / 4;
     text-align: center;
+  }
+
+  &-day
+  {
+    @include Text(
+      $size: $result-day-font-size,
+      $line-height: $result-day-line-height,
+      $weight: $result-day-font-weight,
+      $color: $result-day-color
+    );
+  }
+
+  &-month
+  {
+    @include Text(
+      $size: $result-month-font-size,
+      $line-height: $result-month-line-height,
+      $weight: $result-month-font-weight,
+      $color: $result-month-color
+    );
+  }
+
+  &-subtitle
+  {
+    @include Text(
+      $size: $result-subtitle-font-size,
+      $line-height: $result-subtitle-line-height,
+      $weight: $result-subtitle-font-weight,
+      $color: $result-subtitle-color
+    );
   }
 
   &-features

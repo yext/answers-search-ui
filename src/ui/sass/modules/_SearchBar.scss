@@ -1,14 +1,18 @@
 /** @define SearchBar */
-$searchbar-title-color: white !default;
-$searchbar-form-background-color: white !default;
-
 .yxt-SearchBar
 {
+  $searchbar-form-background-color: white !default;
+
+  $searchbar-text-color: $color-text-secondary !default;
+  $searchbar-text-font-size: $font-size-md-lg !default;
+  $searchbar-text-line-height: $line-height-lg !default;
+  $searchbar-text-font-weight: $font-weight-normal !default;
+
+  padding-top: $base-spacing;
+
   &-title
   {
-    text-align: center;
-    margin-bottom: 16px;
-    color: $searchbar-title-color;
+    @include sr-only;
   }
 
   &-form
@@ -16,32 +20,39 @@ $searchbar-form-background-color: white !default;
     display: flex;
     border-radius: 50px;
     background-color: $searchbar-form-background-color;
-    height: 50px;
     position: relative;
     z-index: 3;
   }
 
   &-container
   {
-    padding-bottom: 24px;
+    padding-bottom: $base-spacing-sm * 2;
     position: relative;
   }
 
   &-input
   {
-    background-color: transparent;
+    @include Text(
+      $size: $searchbar-text-font-size,
+      $line-height: $searchbar-text-line-height,
+      $weight: $searchbar-text-font-weight,
+      $color: $searchbar-text-color
+    );
 
+    background-color: transparent;
     flex-grow: 1;
-    padding-top: 12px;
-    padding-bottom: 12px;
-    padding-left: 16px;
-    padding-right: 16px;
+    padding-top: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
   }
 
   &-button
   {
-    padding-right: 18px;
-    padding-top: 6px;
+    display: flex;
+    padding-right: $base-spacing;
+    padding-top: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
   }
 
   &-label
