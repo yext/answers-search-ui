@@ -8,6 +8,7 @@
 
   $autocomplete-text-font-size: $font-size-md-lg !default;
   $autocomplete-text-line-height: $line-height-md !default;
+  $autocomplete-text-font-weight: $font-weight-semibold !default;
   $autocomplete-text-color: $color-text-primary !default;
 
   background-color: $autocomplete-background-color;
@@ -16,7 +17,7 @@
   padding-top: $base-spacing;
   padding-bottom: $base-spacing / 2;
   position: absolute;
-  top: $base-spacing-sm * 2;
+  top: $base-spacing;
   left: 0;
   width: 100%;
   z-index: 2;
@@ -27,6 +28,7 @@
     @include Text(
       $size: $autocomplete-text-font-size,
       $line-height: $autocomplete-text-line-height,
+      $weight: $autocomplete-text-font-weight,
       $color: $autocomplete-text-color
     );
 
@@ -43,12 +45,17 @@
 
     strong
     {
-      font-weight: $font-weight-bold;
+      font-weight: $font-weight-normal;
     }
 
     &:hover
     {
       background-color: $autocomplete-option-hover-background-color;
+    }
+
+    &:first-child
+    {
+      padding-top: 8px;
     }
   }
 }

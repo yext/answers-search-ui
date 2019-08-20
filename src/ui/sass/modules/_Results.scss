@@ -1,26 +1,26 @@
 /** @define Results */
 .yxt-Results
 {
-  $color-results-title-bar-background: $color-gray3 !default;
-  $color-results-filters-background: white !default;
+  $results-title-bar-background: $color-gray3 !default;
+  $results-filters-background: white !default;
 
-  $color-results-title-bar-text: $color-text-primary !default;
-  $font-size-results-title-bar-text: $font-size-md-lg !default;
-  $font-line-height-results-title-bar-text: $line-height-lg !default;
-  $font-weight-results-title-bar-text: $font-weight-semibold !default;
+  $results-title-bar-text-color: $color-text-primary !default;
+  $results-title-bar-text-font-size: $font-size-md-lg !default;
+  $results-title-bar-text-line-height: $line-height-lg !default;
+  $results-title-bar-text-font-weight: $font-weight-semibold !default;
 
-  $font-size-results-title-bar-link: $font-size-md !default;
-  $font-line-height-results-title-bar-link: $line-height-xxlg !default;
-  $font-weight-results-title-bar-link: $font-weight-semibold !default;
+  $results-title-bar-link-font-size: $font-size-md !default;
+  $results-title-bar-link-line-height: $line-height-xxlg !default;
+  $results-title-bar-link-font-weight: $font-weight-semibold !default;
 
-  $color-results-filters-text: $color-text-primary !default;
-  $font-size-results-filters-text: $font-size-md !default;
-  $font-line-height-results-filters-text: $line-height-md !default;
-  $font-weight-results-filters-text: $font-weight-normal !default;
+  $results-filters-text-color: $color-text-primary !default;
+  $results-filters-text-font-size: $font-size-md !default;
+  $results-filters-text-line-height: $line-height-md !default;
+  $results-filters-text-font-weight: $font-weight-normal !default;
 
-  $font-size-results-filters-link: $font-size-md !default;
-  $font-line-height-results-filters-link: $line-height-md !default;
-  $font-weight-results-filters-link: $font-weight-normal !default;
+  $results-filters-link-font-size: $font-size-md !default;
+  $results-filters-link-line-height: $line-height-md !default;
+  $results-filters-link-font-weight: $font-weight-normal !default;
 
   border: $border-default;
 
@@ -37,7 +37,7 @@
     padding-right: $base-spacing;
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
-    background-color: $color-results-title-bar-background;
+    background-color: $results-title-bar-background;
     border-bottom: $border-default;
   }
 
@@ -56,10 +56,10 @@
   &-title
   {
     @include Text(
-      $font-size-results-title-bar-text,
-      $font-line-height-results-title-bar-text,
-      $font-weight-results-title-bar-text,
-      $color: $color-results-title-bar-text
+      $results-title-bar-text-font-size,
+      $results-title-bar-text-line-height,
+      $results-title-bar-text-font-weight,
+      $color: $results-title-bar-text-color
     );
 
     text-transform: uppercase;
@@ -71,9 +71,9 @@
     align-items: center;
 
     @include Text(
-      $font-size-results-title-bar-link,
-      $font-line-height-results-title-bar-link,
-      $font-weight-results-title-bar-link,
+      $results-title-bar-link-font-size,
+      $results-title-bar-link-line-height,
+      $results-title-bar-link-font-weight,
     );
     @include Link-1;
   }
@@ -85,7 +85,7 @@
     padding-right: $base-spacing;
     padding-top: $base-spacing;
     padding-bottom: $base-spacing;
-    background-color: $color-results-filters-background;
+    background-color: $results-filters-background;
   }
 
   &-filter
@@ -108,19 +108,19 @@
   &-filterValue
   {
     @include Text(
-      $font-size-results-filters-text,
-      $font-line-height-results-filters-text,
-      $font-weight-results-filters-text,
-      $color: $color-results-filters-text
+      $results-filters-text-font-size,
+      $results-filters-text-line-height,
+      $results-filters-text-font-weight,
+      $color: $results-filters-text-color
     );
   }
 
   &-changeFilters
   {
     @include Text(
-      $font-size-results-filters-link,
-      $font-line-height-results-filters-link,
-      $font-weight-results-filters-link,
+      $results-filters-link-font-size,
+      $results-filters-link-line-height,
+      $results-filters-link-font-weight,
       $color: $color-blue1
     );
     @include Link-2;

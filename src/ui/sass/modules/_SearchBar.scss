@@ -3,10 +3,10 @@
 {
   $searchbar-form-background-color: white !default;
 
-  $color-searchbar-text: $color-text-secondary !default;
-  $font-size-searchbar-text: $font-size-md-lg !default;
-  $font-line-height-searchbar-text: $line-height-lg !default;
-  $font-weight-searchbar-text: $font-weight-normal !default;
+  $searchbar-text-color: $color-text-secondary !default;
+  $searchbar-text-font-size: $font-size-md-lg !default;
+  $searchbar-text-line-height: $line-height-lg !default;
+  $searchbar-text-font-weight: $font-weight-normal !default;
 
   padding-top: $base-spacing;
 
@@ -33,10 +33,10 @@
   &-input
   {
     @include Text(
-      $size: $font-size-searchbar-text,
-      $line-height: $font-line-height-searchbar-text,
-      $weight: $font-weight-searchbar-text,
-      $color: $color-searchbar-text
+      $size: $searchbar-text-font-size,
+      $line-height: $searchbar-text-line-height,
+      $weight: $searchbar-text-font-weight,
+      $color: $searchbar-text-color
     );
 
     background-color: transparent;
