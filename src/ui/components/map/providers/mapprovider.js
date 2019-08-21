@@ -60,7 +60,7 @@ export default class MapProvider {
 
     /**
      * Callback to invoke when a pin is clicked. The clicked item(s) are passed to the callback
-     * @callback
+     * @type {function}
      */
     this._onPinClick = config.onPinClick || null;
 
