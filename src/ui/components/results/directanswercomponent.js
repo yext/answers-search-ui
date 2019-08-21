@@ -5,6 +5,17 @@ import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 
+/**
+ * EventTypes are explicit strings defined
+ * for what the server expects for analytics.
+ *
+ * @enum
+ */
+const EventTypes = {
+  THUMBS_UP: 'THUMBS_UP',
+  THUMBS_DOWN: 'THUMBS_DOWN'
+};
+
 export default class DirectAnswerComponent extends Component {
   constructor (config = {}) {
     super(config);
@@ -99,9 +110,10 @@ export default class DirectAnswerComponent extends Component {
    * @param {boolean} isGood true if the answer is what you were looking for
    */
   reportQuality (isGood) {
-    const event = new AnalyticsEvent('quality_feedback')
+    const eventType = isGood === true ? EventTypes.THUMBS_UP : EventTypes.THUMBS_DOWN;
+    const event = new AnalyticsEvent(eventType)
       .addOptions({
-        'thumbs_up': isGood
+        'directAnswer': true
       });
 
     this.analyticsReporter.report(event);
