@@ -101,9 +101,7 @@ export default class Core {
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, query) {
-    this.storage.set(
-      StorageKeys.VERTICAL_RESULTS,
-      VerticalResults.searchLoading());
+    this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
 
     return this._searcher
       .verticalSearch(verticalKey, {
@@ -126,9 +124,7 @@ export default class Core {
   }
 
   search (queryString, urls) {
-    this.storage.set(
-      StorageKeys.UNIVERSAL_RESULTS,
-      UniversalResults.searchLoading());
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
 
     return this._searcher
       .universalSearch(queryString)
@@ -138,12 +134,9 @@ export default class Core {
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
-        this.storage.set(
-          StorageKeys.QUESTION_SUBMISSION,
-          new QuestionSubmission({
-            questionText: queryString
-          })
-        );
+        this.storage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({
+          questionText: queryString
+        }));
       });
   }
 
