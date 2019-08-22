@@ -1,42 +1,36 @@
 /** @module QuestionSubmission */
 
 export default class QuestionSubmission {
-  constructor (data = {}) {
+  constructor (question = {}) {
     /**
      * The author of the question
      * @type {string}
      */
-    this.name = data.name || null;
+    this.name = question.name || null;
 
     /**
      * The email address of the question
      * @type {string}
      */
-    this.email = data.email || null;
+    this.email = question.email || null;
 
     /**
      * True if the privacy policy was approved
      * @type {boolean}
      */
-    this.privacyPolicy = data.privacyPolicy || null;
+    this.privacyPolicy = question.privacyPolicy || null;
 
     /**
      * The question to be sent to the server
      * @type {string}
      */
-    this.questionText = data.questionText || null;
+    this.questionText = question.questionText || null;
 
     /**
      * Alternative question meta information
      * @type {string}
      */
-    this.questionDescription = data.questionDescription || null;
-
-    /**
-     * A container for the errors from validation
-     * @type {object}
-     */
-    this.errors = data.errors || null;
+    this.questionDescription = question.questionDescription || null;
 
     Object.freeze(this);
   }
