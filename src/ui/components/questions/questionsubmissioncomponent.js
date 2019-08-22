@@ -115,6 +115,12 @@ export default class QuestionSubmissionComponent extends Component {
     }
   }
 
+  beforeMount () {
+    // Avoid mounting the component if theres no data
+    // Note, 1 because `config` is always part of the state.
+    return Object.keys(this.getState()).length > 1;
+  }
+
   onMount () {
     let formEl = DOM.query(this._container, this._config.formSelector);
     if (formEl === null) {
