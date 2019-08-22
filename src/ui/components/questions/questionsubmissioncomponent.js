@@ -3,7 +3,6 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
-import SearchParams from '../../dom/searchparams';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
@@ -176,7 +175,7 @@ export default class QuestionSubmissionComponent extends Component {
     let obj = {};
     for (let i = 0; i < inputFields.length; i++) {
       let val = inputFields[i].value;
-      if (inputFields[i].type === 'checkbox' && val == 'true') {
+      if (inputFields[i].type === 'checkbox' && val === 'true') {
         val = true;
       }
       obj[inputFields[i].name] = val;
