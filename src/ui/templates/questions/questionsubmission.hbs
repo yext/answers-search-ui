@@ -1,0 +1,46 @@
+{{#if questionSubmitted}}
+  <div class="yxt-QuestionSubmission">Thanks for your submission!</div>
+{{else}}
+  <form class="yxt-QuestionSubmission">
+    {{#if errors}}
+      <div class="yxt-errors">
+        You're missing some required fields!
+      </div>
+    {{/if}}
+    <label for="name">
+      {{_config.nameLabel}}
+    </label>
+    <input class="js-question-field"
+           name="name"
+           value="{{name}}">
+
+    <label for="email">
+      {{_config.emailLabel}}
+    </label>
+    <input class="js-question-field"
+           name="email"
+           placeholder="example@gmail.com"
+           value="{{email}}"
+           required>
+
+
+    <label for="question">
+      {{_config.questionLabel}}
+    </label>
+    <textarea class="js-question-field"
+              name="questionText"
+              required>{{questionText}}</textarea>
+
+    <label class="yxt-privacy-label">
+      <input type="checkbox"
+             name="privacyPolicy"
+             class="js-question-field"
+             value="true"
+             required>
+      {{_config.privacyPolicyLabel}}
+    </label>
+
+    <button type="submit"
+           class="yxt-submit-question">{{_config.buttonLabel}}</button>
+  </form>
+{{/if}}

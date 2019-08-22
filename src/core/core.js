@@ -9,6 +9,7 @@ import Storage from './storage/storage';
 import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
+import QuestionSubmission from './models/questionsubmission';
 
 /**
  * Core is the main application container for all of the network and storage
@@ -90,33 +91,78 @@ export default class Core {
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, query) {
-    this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    this.storage.set(
+      StorageKeys.VERTICAL_RESULTS,
+      VerticalResults.searchLoading());
+
     return this._searcher
-      .verticalSearch(verticalKey, { ...query, isDynamicFiltersEnabled: this._isDynamicFiltersEnabled })
+      .verticalSearch(verticalKey, {
+        ...query,
+        isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
+      })
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(results => query.append
         ? this.storage.getState(StorageKeys.VERTICAL_RESULTS).append(results)
         : results)
       .then(data => {
-        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+        this.storage.set(
+          StorageKeys.QUERY_ID,
+          data[StorageKeys.QUERY_ID]);
+
+        this.storage.set(
+          StorageKeys.NAVIGATION,
+          data[StorageKeys.NAVIGATION]);
+
+        this.storage.set(
+          StorageKeys.VERTICAL_RESULTS,
+          data[StorageKeys.VERTICAL_RESULTS]);
+
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.storage.set(StorageKeys.DYNAMIC_FILTERS,
+            data[StorageKeys.DYNAMIC_FILTERS]);
         }
+
+        this.storage.set(
+          StorageKeys.QUESTION_SUBMISSION,
+          new QuestionSubmission({
+            questionText: query.input
+          })
+        );
       });
   }
 
   search (queryString, urls) {
-    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.storage.set(
+      StorageKeys.UNIVERSAL_RESULTS,
+      UniversalResults.searchLoading());
+
     return this._searcher
       .universalSearch(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
-        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
+        this.storage.set(
+          StorageKeys.QUERY_ID,
+          data[StorageKeys.QUERY_ID]);
+
+        this.storage.set(
+          StorageKeys.NAVIGATION,
+          data[StorageKeys.NAVIGATION]);
+
+        this.storage.set(
+          StorageKeys.DIRECT_ANSWER,
+          data[StorageKeys.DIRECT_ANSWER]);
+
+        this.storage.set(
+          StorageKeys.UNIVERSAL_RESULTS,
+          data[StorageKeys.UNIVERSAL_RESULTS],
+          urls);
+
+        this.storage.set(
+          StorageKeys.QUESTION_SUBMISSION,
+          new QuestionSubmission({
+            questionText: queryString
+          })
+        );
       });
   }
 
@@ -165,6 +211,17 @@ export default class Core {
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
+  }
+
+  /**
+   * Submits a question to the server and updates the underlying questin model
+   * @param {object} question The question object to submit to the server
+   */
+  submitQuestion (question) {
+    // TODO(billy) Implement network request
+    this.storage.set(
+      StorageKeys.QUESTION_SUBMISSION,
+      QuestionSubmission.isSubmitted());
   }
 
   /**
