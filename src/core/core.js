@@ -80,7 +80,7 @@ export default class Core {
     });
 
     /**
-     * An abstraction
+     * An abstraction for interacting with the Q&A rest interface
      * @type {QuestionAnswerApi}
      * @private
      */
@@ -117,22 +117,11 @@ export default class Core {
       .then(data => {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.set(
-          StorageKeys.VERTICAL_RESULTS,
-          data[StorageKeys.VERTICAL_RESULTS]);
+        this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.storage.set(
-            StorageKeys.DYNAMIC_FILTERS,
-            data[StorageKeys.DYNAMIC_FILTERS]);
+          this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
         }
-
-        this.storage.set(
-          StorageKeys.QUESTION_SUBMISSION,
-          new QuestionSubmission({
-            questionText: query.input
-          })
-        );
       });
   }
 
@@ -148,11 +137,7 @@ export default class Core {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.storage.set(
-          StorageKeys.UNIVERSAL_RESULTS,
-          data[StorageKeys.UNIVERSAL_RESULTS],
-          urls);
-
+        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
         this.storage.set(
           StorageKeys.QUESTION_SUBMISSION,
           new QuestionSubmission({
@@ -210,7 +195,7 @@ export default class Core {
   }
 
   /**
-   * Submits a question to the server and updates the underlying questin model
+   * Submits a question to the server and updates the underlying question model
    * @param {object} question The question object to submit to the server
    * @param {number} question.entityId The entity to associate with the question (required)
    * @param {string} question.lanuage The language of the question

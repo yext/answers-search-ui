@@ -16,7 +16,6 @@ const DEFAULT_CONFIG = {
    * The entity identifier that the question is associated with.
    * This is typically an organization object
    * @type {number}
-   * @required
    */
   'entityId': null,
 
@@ -126,6 +125,10 @@ export default class QuestionSubmissionComponent extends Component {
     this.bindFormSubmit(formEl);
   }
 
+  /**
+   * bindAnalytics will wire up DOM event hooks to serverside reporting
+   * @param {HTMLElement} formEl
+   */
   bindAnalytics (formEl) {
     if (this.analyticsReporter === null) {
       return;
@@ -137,6 +140,10 @@ export default class QuestionSubmissionComponent extends Component {
     });
   }
 
+  /**
+   * bindFormSubmit handles submitting the question to the server.
+   * @param {HTMLElement} formEl
+   */
   bindFormSubmit (formEl) {
     DOM.on(formEl, 'submit', (e) => {
       e.preventDefault();
@@ -170,7 +177,7 @@ export default class QuestionSubmissionComponent extends Component {
   /**
    * Takes the form, and builds a object that represents the input names
    * and text fields.
-   * @param {HTMLElement} formData
+   * @param {HTMLElement} formEl
    * @returns {object}
    */
   parse (formEl) {

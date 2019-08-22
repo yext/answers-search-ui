@@ -1,5 +1,9 @@
 /** @module QuestionSubmission */
 
+/**
+ * QuestionSubmission is the core state model
+ * to power the QuestionSubmission component
+ */
 export default class QuestionSubmission {
   constructor (question = {}, errors) {
     /**
