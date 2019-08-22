@@ -3,6 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
+import QuestionSubmission from '../../../core/models/questionsubmission';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
@@ -143,9 +144,7 @@ export default class QuestionSubmissionComponent extends Component {
       const formData = this.parse(formEl);
       const errors = this.validateRequired(formData);
       if (errors) {
-        return this.setState(Object.assign({}, formData, {
-          errors: errors
-        }));
+        return this.setState(new QuestionSubmission(formData, errors));
       }
 
       this.core.submitQuestion({
@@ -158,11 +157,11 @@ export default class QuestionSubmissionComponent extends Component {
         'questionDescription': formData.questionDescription
       })
         .catch(error => {
-          this.setState(Object.assign({}, formData, {
-            errors: {
+          this.setState(
+            new QuestionSubmission(formData, {
               'network': 'There was a problem submitting your question. Please try again.'
-            }
-          }));
+            })
+          );
           throw error;
         });
     });

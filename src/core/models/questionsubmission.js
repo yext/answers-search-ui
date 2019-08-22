@@ -1,7 +1,7 @@
 /** @module QuestionSubmission */
 
 export default class QuestionSubmission {
-  constructor (question = {}) {
+  constructor (question = {}, errors) {
     /**
      * The author of the question
      * @type {string}
@@ -32,6 +32,12 @@ export default class QuestionSubmission {
      */
     this.questionDescription = question.questionDescription || null;
 
+    /**
+     * Contains any errors about the question submission
+     * @type {object}
+     */
+    this.errors = errors || null;
+
     Object.freeze(this);
   }
 
@@ -39,5 +45,9 @@ export default class QuestionSubmission {
     return {
       questionSubmitted: true
     };
+  }
+
+  static errors (question, errors) {
+    return QuestionSubmission(question, errors);
   }
 }
