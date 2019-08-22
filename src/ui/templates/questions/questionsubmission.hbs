@@ -3,14 +3,18 @@
 {{else}}
   <form class="yxt-QuestionSubmission">
     {{#if errors}}
-      <div class="yxt-errors" role="alert">
-        <h3>You are missing {{errors.length}} required fields</h3>
-        <ul>
-          {{#each errors}}
-            <li>{{this}}</li>
-          {{/each}}
-         </ul>
-      </div>
+      {{#if errors.network}}
+        <h3>{{errors.network}}</h3>
+      {{else}}
+        <div class="yxt-errors" role="alert">
+          <h3>You are missing {{errors.length}} required fields</h3>
+          <ul>
+            {{#each errors}}
+              <li>{{this}}</li>
+            {{/each}}
+           </ul>
+        </div>
+      {{/if}}
     {{/if}}
 
     <label for="name">

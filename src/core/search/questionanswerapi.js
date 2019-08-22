@@ -22,7 +22,7 @@ export default class QuestionAnswerApi {
 
   submitQuestion (question) {
     let request = new ApiRequest({
-      endpoint: '/v2/accounts/me/question',
+      endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
       params: {
         'entityId': question.entityId,

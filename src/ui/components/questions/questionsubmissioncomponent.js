@@ -156,7 +156,15 @@ export default class QuestionSubmissionComponent extends Component {
         'email': formData.email,
         'questionText': formData.questionText,
         'questionDescription': formData.questionDescription
-      });
+      })
+        .catch(error => {
+          this.setState(Object.assign({}, formData, {
+            errors: {
+              'network': 'There was a problem submitting your question. Please try again.'
+            }
+          }));
+          throw error;
+        });
     });
   }
 

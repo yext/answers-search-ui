@@ -226,7 +226,7 @@ export default class Core {
       .then(data => {
         this.storage.set(
           StorageKeys.QUESTION_SUBMISSION,
-          QuestionSubmission.isSubmitted());
+          QuestionSubmission.submitted());
       });
   }
 
