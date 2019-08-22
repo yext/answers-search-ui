@@ -34,7 +34,7 @@
       <span class="yxt-field-required">*</span>
       <span class="yxt-field-label">{{_config.questionLabel}}</span>
     </label>
-    <textarea class="js-question-field"
+    <textarea class="js-question-field js-question-text"
               name="questionText"
               required>{{questionText}}</textarea>
 
@@ -49,6 +49,7 @@
     </label>
 
     <button type="submit"
-           class="yxt-submit-question">{{_config.buttonLabel}}</button>
+           class="yxt-submit-question"
+           data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
   </form>
 {{/if}}

@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 import { AnswersComponentError } from '../../../core/errors/errors';
+import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
 /**
  * Configurable options for the component
@@ -26,48 +27,47 @@ const DEFAULT_CONFIG = {
   'language': 'EN',
 
   /**
-   * Question submission is based on a form as context.
-   * Optionally provided, otherwise defaults to native form node within container
+   * The main CSS selector used to reference the form for the component.
    * @type {string} CSS selector
    */
   'formSelector': 'form',
 
   /**
-   * The label to use for the e-mail address input
-   * Optionally provided, otherwise defaults to `Email Address`
+   * An optional label to use for the e-mail address input
    * @type {string}
    */
   'emailLabel': 'Email Address:',
 
   /**
-   * The label to use for the name input
-   * Optionally provided, otherwise defaults to `Name`
+   * An optional label to use for the name input
    * @type {string}
    */
   'nameLabel': 'Name:',
 
   /**
-   * The label to use for the Question
-   * Optionally provided, otherwise defaults to `What is your question?`
+   * An optional label to use for the question
    * @type {string}
    */
   'questionLabel': 'What is your question?',
 
   /**
-   * The label to use for the Privacy Policy
-   * Optionally provided, otherwise defaults to `What is your question?`
+   * An optional label to use for the Privacy Policy
    * @type {string}
    */
   'privacyPolicyLabel': 'I agree to our Privacy Policy:',
 
   /**
    * The label to use for the Submit button
-   * Optionally provided, otherwise defaults to `Submit?`
    * @type {string}
    */
   'buttonLabel': 'Submit'
 };
 
+/**
+ * QuestionSubmissionComponent is a component that creates a form
+ * thats displayed whenever a query is run. It enables the user
+ * to submit questions that they cant find the answer for.
+ */
 export default class QuestionSubmissionComponent extends Component {
   constructor (config = {}) {
     super(Object.assign({}, DEFAULT_CONFIG, config));
@@ -122,9 +122,25 @@ export default class QuestionSubmissionComponent extends Component {
       return;
     }
 
+    this.bindAnalytics(formEl);
+    this.bindFormSubmit(formEl);
+  }
+
+  bindAnalytics (formEl) {
+    if (this.analyticsReporter === null) {
+      return;
+    }
+
+    const questionTextEl = DOM.query(formEl, '.js-question-text');
+    DOM.on(questionTextEl, 'focus', () => {
+      this.analyticsReporter.report(new AnalyticsEvent('QUESTION_FOCUS'));
+    });
+  }
+
+  bindFormSubmit (formEl) {
     DOM.on(formEl, 'submit', (e) => {
       e.preventDefault();
-
+      // TODO(billy) we probably want to disable the form from being submitted twice
       const formData = this.parse(formEl);
       const errors = this.validateRequired(formData);
       if (errors) {

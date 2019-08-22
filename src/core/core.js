@@ -2,6 +2,7 @@
 
 import SearchApi from './search/searchapi';
 import AutoCompleteApi from './search/autocompleteapi';
+import QuestionAnswerApi from './search/questionanswerapi';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -76,6 +77,15 @@ export default class Core {
       apiKey: this._apiKey,
       answersKey: this._answersKey,
       locale: this._locale
+    });
+
+    /**
+     * An abstraction
+     * @type {QuestionAnswerApi}
+     * @private
+     */
+    this._questionAnswer = new QuestionAnswerApi({
+      apiKey: this._apiKey
     });
   }
 
@@ -202,12 +212,22 @@ export default class Core {
   /**
    * Submits a question to the server and updates the underlying questin model
    * @param {object} question The question object to submit to the server
+   * @param {number} question.entityId The entity to associate with the question (required)
+   * @param {string} question.lanuage The language of the question
+   * @param {string} question.site The "publisher" of the (e.g. 'FIRST_PARTY')
+   * @param {string} question.name The name of the author
+   * @param {string} question.email The email address of the author
+   * @param {string} question.questionText The question
+   * @param {string} question.questionDescription Additional information about the question
    */
   submitQuestion (question) {
-    // TODO(billy) Implement network request
-    this.storage.set(
-      StorageKeys.QUESTION_SUBMISSION,
-      QuestionSubmission.isSubmitted());
+    return this._questionAnswer
+      .submitQuestion(question)
+      .then(data => {
+        this.storage.set(
+          StorageKeys.QUESTION_SUBMISSION,
+          QuestionSubmission.isSubmitted());
+      });
   }
 
   /**
