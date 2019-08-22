@@ -223,6 +223,6 @@ export default class QuestionSubmissionComponent extends Component {
       errors['questionText'] = 'Question text is required!';
     }
 
-    return Object.keys(errors).length > 0 ? errors : false;
+    return Object.keys(errors).length > 0 ? errors : null;
   }
 }
