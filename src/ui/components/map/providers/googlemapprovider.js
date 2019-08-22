@@ -85,17 +85,22 @@ export default class GoogleMapProvider extends MapProvider {
         zoom: this._zoom
       });
 
+      const collapsedMarkers = this._collapseMarkers(mapData.mapMarkers);
+
       // Apply our search data to our GoogleMap
       let bounds = new google.maps.LatLngBounds();
 
       if (mapData && mapData.mapMarkers.length) {
         let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
-          mapData.mapMarkers,
+          collapsedMarkers,
           this._pinConfig,
           this.map);
 
         for (let i = 0; i < googleMapMarkerConfigs.length; i++) {
           let marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
+          if (this._onPinClick) {
+            marker.addListener('click', () => this._onPinClick(collapsedMarkers[i].item));
+          }
           bounds.extend(marker.position);
         }
 
@@ -159,9 +164,9 @@ export class GoogleMapMarkerConfig {
 
   /**
    * Converts the storage data model of markers into GoogleAPIMarker
-   * @param {GoogleMap} A reference to the google map to apply the marker to
    * @param {object[]} markers The data of the marker
-   * @param {Object} pinConfig The configuration to apply to the marker
+   * @param {(Object|function)} pinConfig The configuration to apply to the marker
+   * @param {GoogleMap} map reference to the google map to apply the marker to
    * @returns {GoogleMapMarkerConfig[]}
    */
   static from (markers, pinConfig, map) {

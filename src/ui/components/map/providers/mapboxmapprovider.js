@@ -79,8 +79,9 @@ export default class MapBoxMapProvider extends MapProvider {
     });
 
     if (mapData) {
+      const collapsedMarkers = this._collapseMarkers(mapData.mapMarkers);
       const mapboxMapMarkerConfigs = MapBoxMarkerConfig.from(
-        mapData.mapMarkers,
+        collapsedMarkers,
         this._pinConfig,
         this._map);
 
@@ -91,6 +92,9 @@ export default class MapBoxMapProvider extends MapProvider {
           mapboxMapMarkerConfigs[i].position.latitude);
         let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
         marker.addTo(this._map);
+        if (this._onPinClick) {
+          marker.getElement().addEventListener('click', () => this._onPinClick(collapsedMarkers[i].item));
+        }
       }
     }
   }

@@ -8,43 +8,43 @@
  * Implementations should extend this interface.
  */
 export default class MapProvider {
-  constructor (opts = {}) {
+  constructor (config = {}) {
     /**
      * The API Key used for interacting with the map provider
      * @type {string}
      */
-    this._apiKey = opts.apiKey;
+    this._apiKey = config.apiKey;
 
     /**
      * The height of the map to append to the DOM, defaults to 100%
      * @type {number}
      */
-    this._height = opts.height || 200;
+    this._height = config.height || 200;
 
     /**
      * The width of the map to append to the DOM, defaults to 100%
      * @type {number}
      */
-    this._width = opts.width || 600;
+    this._width = config.width || 600;
 
     /**
      * The zoom level of the map, defaults to 9
      * @type {number}
      */
-    this._zoom = opts.zoom || 9;
+    this._zoom = config.zoom || 9;
 
     /**
      * The default coordinates to display if there are no results returned
      * Only used if showEmptyMap is set to true
      * @type {Object}
      */
-    this._defaultPosition = opts.defaultPosition || { lat: 37.0902, lng: -95.7129 };
+    this._defaultPosition = config.defaultPosition || { lat: 37.0902, lng: -95.7129 };
 
     /**
      * Determines if an empty map should be shown when there are no results
      * @type {boolean}
      */
-    this._showEmptyMap = opts.showEmptyMap || false;
+    this._showEmptyMap = config.showEmptyMap || false;
 
     /**
      * A reference to the underlying map instance, created by the external lib.
@@ -59,16 +59,22 @@ export default class MapProvider {
     this._isLoaded = false;
 
     /**
+     * Callback to invoke when a pin is clicked. The clicked item(s) are passed to the callback
+     * @type {function}
+     */
+    this._onPinClick = config.onPinClick || null;
+
+    /**
      * Callback to invoke once the Javascript is loaded
      * @type {function}
      */
-    this._onLoaded = opts.onLoaded || function () {};
+    this._onLoaded = config.onLoaded || function () {};
 
     /**
      * The custom configuration override to use for the map markers
      * @type {Object|Function}
      */
-    this._pinConfig = typeof opts.pin === 'function' ? opts.pin : Object.assign(MapProvider.DEFAULT_PIN_CONFIG, opts.pin);
+    this._pinConfig = typeof config.pin === 'function' ? config.pin : Object.assign(MapProvider.DEFAULT_PIN_CONFIG, config.pin);
   }
 
   /**
@@ -114,5 +120,35 @@ export default class MapProvider {
   init (mapData) {
     // TODO(billy) This should be based off a promise that gets created from loadJS
     throw new Error('Unimplemented Method: init');
+  }
+
+  /**
+   * Given a list of markers, combine markers with the same lat/lng into a single marker
+   * @param {object[]} markers The markers to collapse
+   */
+  _collapseMarkers (markers) {
+    const locationToItem = {};
+    markers.forEach(m => {
+      locationToItem[`${m.latitude}${m.longitude}`]
+        ? locationToItem[`${m.latitude}${m.longitude}`].push(m)
+        : locationToItem[`${m.latitude}${m.longitude}`] = [m];
+    });
+
+    const collapsedMarkers = [];
+    for (let [, markers] of Object.entries(locationToItem)) {
+      if (markers.length > 1) {
+        const collapsedMarker = {
+          item: markers.map(m => m.item),
+          label: markers.length,
+          latitude: markers[0].latitude,
+          longitude: markers[0].longitude
+        };
+        collapsedMarkers.push(collapsedMarker);
+      } else {
+        collapsedMarkers.push(markers[0]);
+      }
+    }
+
+    return collapsedMarkers;
   }
 }
