@@ -37,21 +37,21 @@ const DEFAULT_CONFIG = {
    * Optionally provided, otherwise defaults to `Email Address`
    * @type {string}
    */
-  'emailLabel': '*Email Address:',
+  'emailLabel': 'Email Address:',
 
   /**
    * The label to use for the name input
    * Optionally provided, otherwise defaults to `Name`
    * @type {string}
    */
-  'nameLabel': '*Name:',
+  'nameLabel': 'Name:',
 
   /**
    * The label to use for the Question
    * Optionally provided, otherwise defaults to `What is your question?`
    * @type {string}
    */
-  'questionLabel': '*What is your question',
+  'questionLabel': 'What is your question?',
 
   /**
    * The label to use for the Privacy Policy
@@ -170,8 +170,8 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   /**
-   * Validates the required fields (or rules) for the formData
-   * @param {HTMLElement} formData
+   * Validates the required fields (or rules) for the form data
+   * @param {Object} formData
    * @returns {Object|boolean} errors object if any errors found
    */
   validateRequired (formData) {

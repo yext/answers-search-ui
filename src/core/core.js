@@ -105,20 +105,15 @@ export default class Core {
         ? this.storage.getState(StorageKeys.VERTICAL_RESULTS).append(results)
         : results)
       .then(data => {
-        this.storage.set(
-          StorageKeys.QUERY_ID,
-          data[StorageKeys.QUERY_ID]);
-
-        this.storage.set(
-          StorageKeys.NAVIGATION,
-          data[StorageKeys.NAVIGATION]);
-
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(
           StorageKeys.VERTICAL_RESULTS,
           data[StorageKeys.VERTICAL_RESULTS]);
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.storage.set(StorageKeys.DYNAMIC_FILTERS,
+          this.storage.set(
+            StorageKeys.DYNAMIC_FILTERS,
             data[StorageKeys.DYNAMIC_FILTERS]);
         }
 
@@ -140,18 +135,9 @@ export default class Core {
       .universalSearch(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
-        this.storage.set(
-          StorageKeys.QUERY_ID,
-          data[StorageKeys.QUERY_ID]);
-
-        this.storage.set(
-          StorageKeys.NAVIGATION,
-          data[StorageKeys.NAVIGATION]);
-
-        this.storage.set(
-          StorageKeys.DIRECT_ANSWER,
-          data[StorageKeys.DIRECT_ANSWER]);
-
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.storage.set(
           StorageKeys.UNIVERSAL_RESULTS,
           data[StorageKeys.UNIVERSAL_RESULTS],
