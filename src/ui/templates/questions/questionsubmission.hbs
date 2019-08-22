@@ -3,8 +3,13 @@
 {{else}}
   <form class="yxt-QuestionSubmission">
     {{#if errors}}
-      <div class="yxt-errors">
-        You're missing some required fields!
+      <div class="yxt-errors" role="alert">
+        <h3>You are missing {{errors.length}} required fields</h3>
+        <ul>
+          {{#each errors}}
+            <li>{{this}}</li>
+          {{/each}}
+         </ul>
       </div>
     {{/if}}
     <label for="name">
@@ -22,7 +27,7 @@
            name="email"
            placeholder="example@gmail.com"
            value="{{email}}"
-           required>
+           >
 
     <label for="question">
       <span class="yxt-field-required">*</span>
