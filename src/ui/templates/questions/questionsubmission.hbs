@@ -1,0 +1,59 @@
+{{#if questionSubmitted}}
+  <div class="yxt-QuestionSubmission">Thanks for your submission!</div>
+{{else}}
+  <form class="yxt-QuestionSubmission">
+    {{#if errors}}
+      {{#if errors.network}}
+        <h3>{{errors.network}}</h3>
+      {{else}}
+        <div class="yxt-errors" role="alert">
+          <h3>You are missing {{errors.length}} required fields</h3>
+          <ul>
+            {{#each errors}}
+              <li>{{this}}</li>
+            {{/each}}
+           </ul>
+        </div>
+      {{/if}}
+    {{/if}}
+
+    <label for="name">
+      <span class="yext-field-label">{{_config.nameLabel}}</span>
+    </label>
+    <input class="js-question-field"
+           name="name"
+           value="{{name}}">
+
+    <label for="email">
+      <span class="yxt-field-required">*</span>
+      <span class="yxt-field-label">{{_config.emailLabel}}</span>
+    </label>
+    <input class="js-question-field"
+           name="email"
+           placeholder="example@gmail.com"
+           value="{{email}}"
+           required>
+
+    <label for="question">
+      <span class="yxt-field-required">*</span>
+      <span class="yxt-field-label">{{_config.questionLabel}}</span>
+    </label>
+    <textarea class="js-question-field js-question-text"
+              name="questionText"
+              required>{{questionText}}</textarea>
+
+    <label class="yxt-privacy-label">
+      <input type="checkbox"
+             name="privacyPolicy"
+             class="js-question-field"
+             value="true"
+             required>
+      <span class="yxt-field-required">*</span>
+      <span class="yxt-field-label">{{_config.privacyPolicyLabel}}</span>
+    </label>
+
+    <button type="submit"
+           class="yxt-submit-question"
+           data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
+  </form>
+{{/if}}
