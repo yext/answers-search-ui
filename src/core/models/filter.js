@@ -147,6 +147,16 @@ export default class Filter {
   }
 
   /**
+   * Create a new position filter
+   * @param {number} lat The latitude of the position
+   * @param {number} lng The longitude of the position
+   * @param {number} radius The search radius (in meters)
+   */
+  static position (lat, lng, radius) {
+    return Filter._fromMatcher('builtin.location', '$near', { lat, lng, radius });
+  }
+
+  /**
    * Create a new filter with the given matcher
    * @private
    * @param {string} field The subject field of the filter
