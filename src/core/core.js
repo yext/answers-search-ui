@@ -2,6 +2,7 @@
 
 import SearchApi from './search/searchapi';
 import AutoCompleteApi from './search/autocompleteapi';
+import QuestionAnswerApi from './search/questionanswerapi';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -9,6 +10,7 @@ import Storage from './storage/storage';
 import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
+import QuestionSubmission from './models/questionsubmission';
 
 /**
  * Core is the main application container for all of the network and storage
@@ -76,6 +78,15 @@ export default class Core {
       answersKey: this._answersKey,
       locale: this._locale
     });
+
+    /**
+     * An abstraction for interacting with the Q&A rest interface
+     * @type {QuestionAnswerApi}
+     * @private
+     */
+    this._questionAnswer = new QuestionAnswerApi({
+      apiKey: this._apiKey
+    });
   }
 
   /**
@@ -91,8 +102,12 @@ export default class Core {
    */
   verticalSearch (verticalKey, query) {
     this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+
     return this._searcher
-      .verticalSearch(verticalKey, { ...query, isDynamicFiltersEnabled: this._isDynamicFiltersEnabled })
+      .verticalSearch(verticalKey, {
+        ...query,
+        isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
+      })
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(results => query.append
         ? this.storage.getState(StorageKeys.VERTICAL_RESULTS).append(results)
@@ -101,6 +116,7 @@ export default class Core {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
           this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
         }
@@ -109,6 +125,7 @@ export default class Core {
 
   search (queryString, urls) {
     this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+
     return this._searcher
       .universalSearch(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
@@ -117,6 +134,9 @@ export default class Core {
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
+        this.storage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({
+          questionText: queryString
+        }));
       });
   }
 
@@ -164,6 +184,27 @@ export default class Core {
       .queryFilter(input, verticalKey, barKey)
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+      });
+  }
+
+  /**
+   * Submits a question to the server and updates the underlying question model
+   * @param {object} question The question object to submit to the server
+   * @param {number} question.entityId The entity to associate with the question (required)
+   * @param {string} question.lanuage The language of the question
+   * @param {string} question.site The "publisher" of the (e.g. 'FIRST_PARTY')
+   * @param {string} question.name The name of the author
+   * @param {string} question.email The email address of the author
+   * @param {string} question.questionText The question
+   * @param {string} question.questionDescription Additional information about the question
+   */
+  submitQuestion (question) {
+    return this._questionAnswer
+      .submitQuestion(question)
+      .then(data => {
+        this.storage.set(
+          StorageKeys.QUESTION_SUBMISSION,
+          QuestionSubmission.submitted());
       });
   }
 

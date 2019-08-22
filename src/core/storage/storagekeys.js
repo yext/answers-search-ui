@@ -16,5 +16,6 @@ export default {
   QUERY: 'query',
   QUERY_ID: 'query-id',
   FACET_FILTER: 'facet-filter',
-  DYNAMIC_FILTERS: 'dynamic-filters'
+  DYNAMIC_FILTERS: 'dynamic-filters',
+  QUESTION_SUBMISSION: 'question-submission'
 };
