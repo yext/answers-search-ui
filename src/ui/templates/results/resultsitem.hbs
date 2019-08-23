@@ -27,7 +27,11 @@
       <div class="yxt-Result-info">
         <h3 class="yxt-Result-title">
           {{#if link}}
-            <a class="yxt-Result-titleLink" href="{{link}}" data-eventtype="TITLE_CLICK">{{{title}}}</a>
+            <a class="yxt-Result-titleLink"
+               href="{{link}}"
+               data-eventtype="TITLE_CLICK"
+              {{#if titleEventOptions}} data-eventoptions='{{titleEventOptions}}'{{/if}}
+            >{{{title}}}</a>
           {{else}}
             {{title}}
           {{/if}}
@@ -38,6 +42,7 @@
             {{{subtitle}}}
           </div>
         {{/if}}
+
 
         {{#if details}}
           <div class="yxt-Result-details">

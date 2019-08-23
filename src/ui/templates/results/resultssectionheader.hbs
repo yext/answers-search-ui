@@ -14,7 +14,9 @@
     </h2>
   </div>
   {{#if verticalURL}}
-    <a class="yxt-Results-viewAllLink" href="{{verticalURL}}">
+    <a class="yxt-Results-viewAllLink" href="{{verticalURL}}"
+      {{#if viewAllEventType}} data-eventtype="{{viewAllEventType}}"{{/if}}
+      {{#if viewAllEventOptions}} data-eventoptions='{{viewAllEventOptions}}'{{/if}}>
       {{_config.viewAllText}}
     </a>
   {{/if}}
@@ -28,7 +30,9 @@
     {{/each}}
     {{#if _config.showChangeFilters}}
       {{#if verticalURL}}
-        <a class="yxt-Results-changeFilters" href="{{verticalURL}}">
+        <a class="yxt-Results-changeFilters" href="{{verticalURL}}"
+           data-eventtype="FILTERING_WITHIN_SECTION"
+           {{#if filteringEventOptions}} data-eventoptions='{{filteringEventOptions}}'{{/if}}>
           change
         </a>
       {{/if}}

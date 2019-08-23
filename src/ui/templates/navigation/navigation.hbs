@@ -1,6 +1,9 @@
 <nav class="yxt-Nav-container js-yxt-navContainer">
   {{#each tabs}}
-    <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}" href="{{url}}">
+    <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
+       href="{{url}}"
+       {{#if eventType}} data-eventtype="{{eventType}}"{{/if}}
+       {{#if eventOptions}} data-eventoptions='{{eventOptions}}'{{/if}}>
       {{label}}
     </a>
   {{/each}}
