@@ -24,7 +24,7 @@ export default class ResultFactory {
         continue;
       }
 
-      results.push(ResultFactory.fromGeneric(data));
+      results.push(ResultFactory.fromGeneric(data, i));
     }
 
     return results;
@@ -35,13 +35,14 @@ export default class ResultFactory {
    * @param data
    * @returns {Result}
    */
-  static fromGeneric (data) {
+  static fromGeneric (data, index) {
     return new Result({
       raw: data,
       title: data.name,
       details: data.description,
       link: data.website,
-      id: data.id
+      id: data.id,
+      ordinal: index + 1
     });
   }
 

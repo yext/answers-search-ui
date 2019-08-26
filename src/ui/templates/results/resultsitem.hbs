@@ -1,6 +1,6 @@
-<li class="yxt-Result{{#if modifier}} yxt-Result--{{modifier}}{{/if}} yxt-Result-item">
+<li class="yxt-Result{{#if _config._parentOpts.modifier}} yxt-Result--{{_config._parentOpts.modifier}}{{/if}} yxt-Result-item">
   <div class="yxt-Result-wrapper">
-    {{#if _config.showOrdinal}}
+    {{#if _config._parentOpts.showOrdinal}}
       <div class="yxt-Result-ordinalWrapper">
         <div class="yxt-Result-ordinal">
           {{ordinal}}
