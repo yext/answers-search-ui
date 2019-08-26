@@ -151,6 +151,13 @@ export default class SearchComponent extends Component {
      * Controls showing and hiding the search clear button
      */
     this._showClearButton = this.clearButton && this.query;
+
+    /**
+     * Specifies whether not to render out all results
+     * @type {boolean}
+     * @private
+     */
+    this._renderAllResults = config.renderAllResults || false;
   }
 
   static get type () {
@@ -328,7 +335,7 @@ export default class SearchComponent extends Component {
         input: query,
         filter: JSON.stringify(totalFilter),
         facetFilter: JSON.stringify(facetFilter)
-      });
+      }, this._renderAllResults);
     } else {
       // NOTE(billy) Temporary hack for DEMO
       // Remove me after the demo

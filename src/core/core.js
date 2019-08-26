@@ -122,8 +122,12 @@ export default class Core {
    * @param {number} query.offset The results offset, for fetching more results of the same query
    * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
+   * @param {boolean} renderAllResults If true, continue querying until all results are returned
    */
-  verticalSearch (verticalKey, query) {
+  verticalSearch (verticalKey, query, renderAllResults) {
+    if (renderAllResults) {
+      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    }
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
@@ -138,7 +142,34 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger')
       })
-      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
+      .then (response => {
+        if (renderAllResults) {
+          let searchPromises = [];
+          let totalResultCount = response.response.resultsCount;
+          let currentResultsAdded = 50;
+
+          while (totalResultCount > currentResultsAdded) {
+            searchPromises.push(this._searcher.verticalSearch(verticalKey, {
+              ...query,
+              offset: currentResultsAdded + 1,
+              isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
+              limit: 50
+            }));
+            currentResultsAdded += 50;
+          }
+          return Promise.all(searchPromises).then((value) => {
+            for (const resp of value) {
+              response.response.results.push(...resp.response.results);
+            }
+            return response;
+          })
+        } else {
+          return response;
+        }
+      })
+      .then(response => {
+        return SearchDataTransformer.transformVertical(response, this._fieldFormatters)
+      })
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
