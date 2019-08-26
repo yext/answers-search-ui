@@ -44,6 +44,12 @@ describe('storing and retrieving', () => {
   it('returns null for unset state', () => {
     expect(storage.getState(StorageKeys.QUERY)).toBeNull();
   });
+
+  it('correctly stores primitives', () => {
+    storage.set(StorageKeys.SEARCH_LIMIT, 25);
+
+    expect(storage.getState(StorageKeys.SEARCH_LIMIT)).toBe(25);
+  });
 });
 
 describe('publishing and subscribing', () => {
