@@ -98,6 +98,7 @@ export default class Core {
    * @param {string} query.facetFilter The facet filter to use in the search
    * @param {number} query.limit The max number of results to include, max of 50
    * @param {number} query.offset The results offset, for fetching more results of the same query
+   * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, query) {

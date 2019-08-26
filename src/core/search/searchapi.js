@@ -56,9 +56,10 @@ export default class SearchApi {
    * @param {string} query.facetFilter The facet filter to use in the search
    * @param {number} query.limit The max number of results to include, max of 50
    * @param {number} query.offset The results offset, for fetching more results of the same query
+   * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
    * @param {boolean} query.isDynamicFiltersEnabled If true, asks the server to return dynamic filters
    */
-  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, isDynamicFiltersEnabled }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, isDynamicFiltersEnabled }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -75,6 +76,7 @@ export default class SearchApi {
         'verticalKey': verticalKey,
         'limit': limit,
         'offset': offset,
+        'queryId': id,
         'retrieveFacets': isDynamicFiltersEnabled,
         'locale': this._locale
       }
