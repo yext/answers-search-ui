@@ -101,7 +101,9 @@ export default class Core {
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, query) {
-    this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    if (!query.append) {
+      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    }
 
     return this._searcher
       .verticalSearch(verticalKey, {
