@@ -108,6 +108,7 @@ export default class Core {
 
     return this._searcher
       .verticalSearch(verticalKey, {
+        limit: this.storage.getState(StorageKeys.SEARCH_LIMIT),
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
       })
@@ -247,6 +248,10 @@ export default class Core {
 
   enableDynamicFilters () {
     this._isDynamicFiltersEnabled = true;
+  }
+
+  setSearchLimit (limit) {
+    this.storage.set(StorageKeys.SEARCH_LIMIT, limit);
   }
 
   on (evt, moduleId, cb) {
