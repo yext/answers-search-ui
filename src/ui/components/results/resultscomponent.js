@@ -51,7 +51,6 @@ export default class ResultsComponent extends Component {
 
     if (config.limit) {
       const limit = config.limit;
-      console.log(limit);
       if (typeof limit !== 'number' || limit < 1 || limit > 50) {
         throw new AnswersComponentError('Search Limit must be between 1 and 50', 'VerticalResults');
       }
