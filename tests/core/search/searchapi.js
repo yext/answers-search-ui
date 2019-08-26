@@ -77,4 +77,14 @@ describe('vertical searching', () => {
       searchApi.verticalSearch('vertical', { input: 'query', limit: 150, offset: 10 });
     }).toThrow(AnswersCoreError);
   });
+
+  it('searches with queryId if provided', () => {
+    const result = searchApi.verticalSearch('vertical', { input: 'query', limit: 25, offset: 10, id: '12345' });
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'query', limit: 25, offset: 10, verticalKey: 'vertical', id: '12345' }));
+    });
+  });
 });
