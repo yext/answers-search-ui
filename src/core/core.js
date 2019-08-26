@@ -101,7 +101,9 @@ export default class Core {
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, query) {
-    this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    if (!query.append) {
+      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    }
 
     return this._searcher
       .verticalSearch(verticalKey, {
@@ -109,13 +111,17 @@ export default class Core {
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
       })
       .then(response => SearchDataTransformer.transformVertical(response))
-      .then(results => query.append
-        ? this.storage.getState(StorageKeys.VERTICAL_RESULTS).append(results)
-        : results)
       .then(data => {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+
+        if (query.append) {
+          const mergedResults = this.storage.getState(StorageKeys.VERTICAL_RESULTS)
+            .append(data[StorageKeys.VERTICAL_RESULTS]);
+          this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+        } else {
+          this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+        }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
           this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
