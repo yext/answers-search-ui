@@ -9,6 +9,7 @@ import PeopleResultsItemComponent from './peopleresultsitemcomponent';
 import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
+import { AnswersComponentError } from '../../../core/errors/errors';
 
 const ResultType = {
   EVENT: 'event',
@@ -46,6 +47,15 @@ export default class ResultsComponent extends Component {
 
     if (config.itemTemplate === undefined && config._parentOpts !== undefined) {
       config.itemTemplate = config._parentOpts.itemTemplate;
+    }
+
+    if (config.limit) {
+      const limit = config.limit;
+      console.log(limit);
+      if (typeof limit !== 'number' || limit < 1 || limit > 50) {
+        throw new AnswersComponentError('Search Limit must be between 1 and 50', 'VerticalResults');
+      }
+      this.core.setSearchLimit(limit);
     }
 
     this.configureItem({

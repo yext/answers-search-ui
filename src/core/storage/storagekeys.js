@@ -17,5 +17,6 @@ export default {
   QUERY_ID: 'query-id',
   FACET_FILTER: 'facet-filter',
   DYNAMIC_FILTERS: 'dynamic-filters',
+  SEARCH_LIMIT: 'search-limit',
   QUESTION_SUBMISSION: 'question-submission'
 };
