@@ -10,6 +10,12 @@ export default class Result {
     this._raw = data.raw || null;
 
     /**
+     * The index number of the result
+     * @type {Number}
+     */
+    this.ordinal = data.ordinal || null;
+
+    /**
      * The title of the result card
      * @type {string|null}
      */
