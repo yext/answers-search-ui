@@ -122,6 +122,7 @@ export default class AutoCompleteComponent extends Component {
    */
   setState (data) {
     super.setState(Object.assign({}, data, {
+      hasResults: this.hasResults(data),
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null
@@ -153,7 +154,7 @@ export default class AutoCompleteComponent extends Component {
     // the auto complete
     // TODO(jdelerme): Close logic to be moved to parent
     DOM.on(document, 'click', e => {
-      if (e.target.matches('.js-yext-autocomplete-container *') || e.target.matches(this._inputEl)) {
+      if (e.target.matches('.js-yxt-AutoComplete-wrapper *') || e.target.matches(this._inputEl)) {
         return;
       }
       this.close();
@@ -273,6 +274,37 @@ export default class AutoCompleteComponent extends Component {
     } else {
       this.core.autoCompleteUniversal(input, this.name);
     }
+  }
+
+  /**
+   * returns true if we have results in any section
+   * @returns boolean
+   */
+  hasResults (data) {
+    if (!data) {
+      return false;
+    }
+    let sections = data['sections'];
+    if (!sections) {
+      return false;
+    }
+
+    for (let i = 0; i < sections.length; i++) {
+      const data = sections[i];
+      if (!data) {
+        continue;
+      }
+      const results = data.results;
+      if (!results) {
+        continue;
+      }
+
+      if (results.length > 0) {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   handleNavigateResults (key, e) {

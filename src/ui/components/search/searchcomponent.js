@@ -151,6 +151,8 @@ export default class SearchComponent extends Component {
   initSearch (formSelector) {
     this._formEl = formSelector;
 
+    this._container.classList.add('yxt-SearchBar-wrapper');
+
     let form = DOM.query(this._container, formSelector);
     if (!form) {
       throw new Error('Could not initialize SearchBar; Can not find {HTMLElement} `', this._formEl, '`.');
@@ -194,7 +196,7 @@ export default class SearchComponent extends Component {
     this.componentManager.create('AutoComplete', {
       parent: this,
       name: `${this.name}.autocomplete`,
-      container: '.yext-search-autocomplete',
+      container: '.yxt-SearchBar-autocomplete',
       barKey: this._barKey,
       verticalKey: this._verticalKey,
       promptHeader: this.promptHeader,
