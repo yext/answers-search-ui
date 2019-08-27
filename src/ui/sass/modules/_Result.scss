@@ -40,6 +40,11 @@
   $result-cta-font-weight: $font-weight-semibold !default;
   $result-cta-color: $color-link-primary !default;
 
+  & + &
+  {
+    border-top: $border-default;
+  }
+
   &-title
   {
     @include Text(
@@ -97,11 +102,6 @@
     padding-left: $base-spacing;
     padding-right: $base-spacing;
     background-color: $result-background-color;
-    border-top: $border-default;
-
-    &:not(:first-child) {
-      border-bottom: $border-default;
-    }
 
     @media (max-width: 768px)
     {
@@ -131,10 +131,12 @@
     display: flex;
     align-items: top;
     flex-grow: 1;
+    flex-shrink: 0;
 
     @media (min-width: 768px)
     {
       justify-content: flex-end;
+      margin-left: $base-spacing-sm*2;
     }
   }
 
@@ -199,7 +201,6 @@
     justify-content: center;
     min-width: 80px;
     margin-right: $base-spacing * 2;
-    background-color: $result-event-background-color;
   }
 
   &-dateInnerWrapper
@@ -209,6 +210,7 @@
     border-radius: 8px;
     padding: $base-spacing / 4;
     text-align: center;
+    background-color: $result-event-background-color;
   }
 
   &-day
@@ -239,6 +241,8 @@
       $weight: $result-subtitle-font-weight,
       $color: $result-subtitle-color
     );
+
+    margin-bottom: $base-spacing/2;
   }
 
   &-features
