@@ -5,9 +5,7 @@
   "main": "gulpfile.js",
   "dependencies": {
     "handlebars": "^4.1.2",
-    "template-helpers": "^1.0.1"
-  },
-  "devDependencies": {
+    "template-helpers": "^1.0.1",
     "@babel/core": "^7.3.4",
     "@babel/preset-env": "^7.3.4",
     "@types/jest": "^24.0.15",
