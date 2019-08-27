@@ -46,9 +46,9 @@ export default class ResultsComponent extends Component {
         render: null,
         template: null
       },
-      [AccordionResultsComponent.type] : {
+      [AccordionResultsComponent.type]: {
         render: null,
-        template: null,
+        template: null
       }
     };
 

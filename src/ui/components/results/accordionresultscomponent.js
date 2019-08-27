@@ -42,6 +42,11 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
     this.collapsedClass = opts.collapsedClass || 'is-collapsed';
   }
 
+  /**
+   * the component type
+   * @returns {string}
+   * @override
+   */
   static get type () {
     return 'AccordionResults';
   }
@@ -55,6 +60,11 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
     return 'results/resultsaccordion';
   }
 
+  /**
+   * overrides onMount to add bindings to change the height on click
+   * @returns {AccordionResultsComponent}
+   * @override
+   */
   onMount () {
     super.onMount();
 
@@ -76,6 +86,10 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
     return this;
   }
 
+  /**
+   * returns true if the element is currently collapsed
+   * @returns {boolean}
+   */
   isCollapsed () {
     if (!this.wrapperEl) {
       return false;
@@ -84,24 +98,43 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
     return this.wrapperEl.classList.contains(this.collapsedClass);
   }
 
+  /**
+   * click handler for the accordion toggle button
+   */
   handleClick () {
     this.wrapperEl.classList.toggle(this.collapsedClass);
     this.changeHeight();
     this.toggleEl.setAttribute('aria-expanded', this.isCollapsed() ? 'false' : 'true');
   }
 
+  /**
+   * toggles the height between 0 and the content height for smooth animation
+   */
   changeHeight () {
     this.contentEl.style.height = `${this.isCollapsed() ? 0 : this.contentEl.scrollHeight}px`;
   }
 
+  /**
+   * helper for composing child element selectors
+   * @param child {string}
+   * @returns {string}
+   */
   buildSelector (child) {
     return `${this._selectorBase}${child}`;
   }
 
+  /**
+   * helper for the toggle button selector
+   * @returns {string}
+   */
   toggleSelector () {
     return this.buildSelector('-toggle');
   }
 
+  /**
+   * helper for the content element selector
+   * @returns {string}
+   */
   bodySelector () {
     return this.buildSelector('-body');
   }
