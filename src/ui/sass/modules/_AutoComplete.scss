@@ -2,26 +2,33 @@
 .yxt-AutoComplete
 {
   $autocomplete-background-color: white !default;
-  $autocomplete-box-shadow: 0 4px 6px 0 rgba(32, 33, 36, 0.28) !default;
+  $autocomplete-box-shadow: 0 1px 6px 0 rgba(32,33,36,0.47) !default;;
   $autocomplete-selected-background-color: $color-gray8 !default;
   $autocomplete-option-hover-background-color: $color-gray8 !default;
+  $autocomplete-separator-color: $color-gray7 !default;
 
   $autocomplete-text-font-size: $font-size-md-lg !default;
   $autocomplete-text-line-height: $line-height-md !default;
   $autocomplete-text-font-weight: $font-weight-semibold !default;
   $autocomplete-text-color: $color-text-primary !default;
 
-  background-color: $autocomplete-background-color;
-  border-radius: 0 0 24px 24px;
-  box-shadow: $autocomplete-box-shadow;
-  padding-top: $base-spacing;
-  padding-bottom: $base-spacing / 2;
-  position: absolute;
-  top: $base-spacing;
-  left: 0;
-  width: 100%;
-  z-index: 2;
-  overflow: hidden;
+  padding-bottom: 10px;
+
+  &:before
+  {
+    margin-left: $base-spacing-sm*2;
+    margin-right: $base-spacing-sm*2;
+    margin-bottom: 10px;
+    height: 1px;
+    background-color: $autocomplete-separator-color;
+    content: "";
+    display: block;
+  }
+
+  &-wrapper
+  {
+    background-color: $autocomplete-background-color;
+  }
 
   &-option
   {
@@ -32,11 +39,11 @@
       $color: $autocomplete-text-color
     );
 
-    padding-left: $base-spacing;
-    padding-top: $base-spacing / 4;
-    padding-right: $base-spacing;
-    padding-bottom: $base-spacing / 4;
     cursor: pointer;
+    padding-left: $base-spacing-sm*2;
+    padding-right: $base-spacing-sm*2;
+    padding-top: $base-spacing / 4;
+    padding-bottom: $base-spacing / 4;
 
     &.yxt-selected
     {
@@ -51,11 +58,6 @@
     &:hover
     {
       background-color: $autocomplete-option-hover-background-color;
-    }
-
-    &:first-child
-    {
-      padding-top: 8px;
     }
   }
 }

@@ -150,7 +150,7 @@ export default class FilterSearchComponent extends Component {
       parent: this,
       name: `${this.name}.autocomplete`,
       isFilterSearch: true,
-      container: '.yext-search-autocomplete',
+      container: '.yxt-SearchBar-autocomplete',
       promptHeader: this.promptHeader,
       originalQuery: this.query,
       originalFilter: this.filter,
