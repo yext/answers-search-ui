@@ -1,5 +1,17 @@
 .yxt-AccordionResult
 {
+  &-answer
+  {
+    margin-top: 1rem;
+    white-space: pre-line;
+  }
+
+  &-cta
+  {
+    display: flex;
+    align-items: center;
+  }
+
   &-toggle
   {
     display: flex;

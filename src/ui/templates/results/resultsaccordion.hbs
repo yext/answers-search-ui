@@ -1,51 +1,42 @@
-{{#if results}}
-    <section class="yxt-Accordion yxt-Results yxt-Results--{{modifier}} js-yxt-Accordion">
-        {{> results/resultssectionheader}}
-        <ul class="yxt-Accordion-list yext-result-items" aria-expanded="true"
-            data-prop="results">
-            {{#each results}}
-                <li class="yxt-Accordion-item js-yxt-Accordion-item yxt-AccordionResult
-                           {{#if collapsed}} is-collapsed{{/if}}
-                           {{#if modifier}} yxt-AccordionResult--{{modifier}}{{/if}}">
-                    <button class="yxt-AccordionResult-toggle js-yxt-AccordionResult-toggle"
-                            aria-expanded="{{#if collapsed}}false{{else}}true{{/if}}"
-                            aria-controls="#{{id}}">
-                        <h3 class="yxt-AccordionResult-title">
-                            {{title}}
-                        </h3>
-                        <div class="yxt-AccordionResult-indicator" aria-hidden="true">
-                        </div>
-                    </button>
-                    <div class="yxt-AccordionResult-body js-yxt-AccordionResult-body" id="{{id}}">
-                        <div class="yxt-AccordionResult-content">
-                          <div class="yxt-AccordionResult-details">
-                            {{{details}}}
-                          </div>
+<li id="accordion-{{id}}"
+    class="yxt-AccordionResult
+          {{#if collapsed}} is-collapsed{{/if}}
+          {{#if _config._parentOpts.modifier}} yxt-AccordionResult--{{_config._parentOpts.modifier}}{{/if}}">
+    <button class="yxt-AccordionResult-toggle js-yxt-AccordionResult-toggle"
+            aria-expanded="{{#if collapsed}}false{{else}}true{{/if}}"
+            aria-controls="#{{id}}">
+        <h3 class="yxt-AccordionResult-title">
+            {{title}}
+        </h3>
+        <div class="yxt-AccordionResult-indicator" aria-hidden="true">
+        </div>
+    </button>
+    <div class="yxt-AccordionResult-body js-yxt-AccordionResult-body" id="{{id}}">
+        <div class="yxt-AccordionResult-content">
+          <div class="yxt-AccordionResult-details">
+            {{{details}}}
+          </div>
 
-                          {{#if callsToAction}}
-                            <div class="yxt-AccordionResult-ctasWrapper">
-                              <div class="yxt-AccordionResult-ctas">
-                                {{#each callsToAction}}
-                                  {{#if this.url}}
-                                    <a class="yxt-AccordionResult-cta" href="{{this.url}}">
-                                      {{#if this.icon}}
-                                        <div class="yxt-AccordionResult-ctaIconWrapper">
-                                          <img class="yxt-AccordionResult-ctaIcon" src="{{this.icon}}" alt="">
-                                        </div>
-                                      {{/if}}
-                                      <span class="yxt-AccordionResult-ctaLabel">
-                                        {{{this.label}}}
-                                      </span>
-                                    </a>
-                                  {{/if}}
-                                {{/each}}
-                              </div>
-                            </div>
-                          {{/if}}
+          {{#if callsToAction}}
+            <div class="yxt-AccordionResult-ctasWrapper">
+              <div class="yxt-AccordionResult-ctas">
+                {{#each callsToAction}}
+                  {{#if this.url}}
+                    <a class="yxt-AccordionResult-cta" href="{{this.url}}">
+                      {{#if this.icon}}
+                        <div class="yxt-AccordionResult-ctaIconWrapper">
+                          <img class="yxt-AccordionResult-ctaIcon" src="{{this.icon}}" alt="">
                         </div>
-                    </div>
-                </li>
-            {{/each}}
-        </ul>
-    </section>
-{{/if}}
+                      {{/if}}
+                      <span class="yxt-AccordionResult-ctaLabel">
+                        {{{this.label}}}
+                      </span>
+                    </a>
+                  {{/if}}
+                {{/each}}
+              </div>
+            </div>
+          {{/if}}
+        </div>
+    </div>
+</li>

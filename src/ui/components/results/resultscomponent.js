@@ -10,6 +10,7 @@ import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import { AnswersComponentError } from '../../../core/errors/errors';
+import AccordionResultsComponent from './accordionresultscomponent';
 
 const ResultType = {
   EVENT: 'event',
@@ -20,6 +21,12 @@ const ResultType = {
 export default class ResultsComponent extends Component {
   constructor (config = {}) {
     super(config);
+
+    /**
+     * enable accordion mode
+     * @type {boolean}
+     */
+    this.useAccordion = config.useAccordion || false;
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._itemConfig = {
@@ -38,6 +45,10 @@ export default class ResultsComponent extends Component {
       [PeopleResultsItemComponent.type]: {
         render: null,
         template: null
+      },
+      [AccordionResultsComponent.type] : {
+        render: null,
+        template: null,
       }
     };
 
@@ -129,6 +140,7 @@ export default class ResultsComponent extends Component {
 
   getItemComponent (type) {
     let comp = ResultsItemComponent;
+
     switch (type) {
       case ResultType.EVENT:
         comp = EventResultsItemComponent;
@@ -147,7 +159,9 @@ export default class ResultsComponent extends Component {
   addChild (data, type, opts) {
     // TODO(billy) Refactor the way configuration and data flows
     // through top level components to child components.
-    if (type === ResultsItemComponent.type) {
+    if (this.useAccordion) {
+      type = AccordionResultsComponent.type;
+    } else if (type === ResultsItemComponent.type) {
       let clazz = this.getItemComponent(data.type);
       if (clazz) {
         type = clazz.type;
