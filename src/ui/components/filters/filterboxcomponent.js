@@ -123,9 +123,9 @@ export default class FilterBoxComponent extends Component {
 
       if (button) {
         DOM.on(button, 'click', () => {
-        this._saveFiltersToStorage();
-        this._search();
-      });
+          this._saveFiltersToStorage();
+          this._search();
+        });
       }
     }
   }
