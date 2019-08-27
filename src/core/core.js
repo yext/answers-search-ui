@@ -152,7 +152,7 @@ export default class Core {
             searchPromises.push(this._searcher.verticalSearch(verticalKey, {
               ...query,
               offset: currentResultsAdded + 1,
-              // isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
+              isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
               limit: 50
             }));
             currentResultsAdded += 50;
