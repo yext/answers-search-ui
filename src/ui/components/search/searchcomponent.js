@@ -159,7 +159,9 @@ export default class SearchComponent extends Component {
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
 
-      let query = form.querySelector(this._inputEl).value;
+      let inputEl = form.querySelector(this._inputEl);
+
+      let query = inputEl.value;
       let params = this.getUrlParams();
       params.set('query', query);
 
@@ -173,6 +175,8 @@ export default class SearchComponent extends Component {
       window.history.pushState({
         query: query
       }, query, '?' + params.toString());
+
+      inputEl.blur();
 
       this.core.setQuery(query);
       this.search(query);
