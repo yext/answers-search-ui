@@ -47,7 +47,8 @@
     "lint": "semistandard",
     "test": "semistandard && jest",
     "size": "size-limit",
-    "fix": "semistandard --fix"
+    "fix": "semistandard --fix",
+    "install": "npm run build"
   },
   "jest": {
     "bail": 0,
