@@ -164,19 +164,37 @@ export default class Component {
      * The a local reference to the callback that will be invoked when a component is created.
      * @type {function}
      */
-    this.onCreate = config.onCreate || this.onCreate || function () {};
+    this.onCreate = config.onCreateOverride || this.onCreate || function () {};
 
     /**
      * The a local reference to the callback that will be invoked when a component is Mounted.
      * @type {function}
      */
-    this.onMount = config.onMount || this.onMount || function () { };
+    this.onMount = config.onMountOverride || this.onMount || function () {};
 
     /**
      * The a local reference to the callback that will be invoked when a components state is updated.
      * @type {function}
      */
-    this.onUpdate = config.onUpdate || this.onUpdate || function () { };
+    this.onUpdate = config.onUpdateOverride || this.onUpdate || function () { };
+
+    /**
+     * A user provided onCreate callback
+     * @type {function}
+     */
+    this.userOnCreate = config.onCreate || function () {};
+
+    /**
+     * A user provided onMount callback
+     * @type {function}
+     */
+    this.userOnMount = config.onMount || function () {};
+
+    /**
+     * A user provided onUpdate callback
+     * @type {function}
+     */
+    this.userOnUpdate = config.onUpdate || function () {};
   }
 
   /**
@@ -199,8 +217,10 @@ export default class Component {
   init (opts) {
     this.setState(opts.data || opts.state || {});
     this.onCreate();
+    this.userOnCreate();
     this._state.on('update', () => {
       this.onUpdate();
+      this.userOnUpdate();
       this.mount();
     });
 
@@ -296,8 +316,14 @@ export default class Component {
 
     DOM.append(this._container, this.render(this._state.asJSON()));
 
-    this._isMounted = true;
-    this._onMount();
+    // Process the DOM to determine if we should create
+    // in-memory sub-components for rendering
+    let domComponents = DOM.queryAll(this._container, '[data-component]');
+    domComponents.forEach(c => this._createSubcomponent(c, this._state.get()));
+
+    this._children.forEach(child => {
+      child.mount();
+    });
 
     // Attach analytics hooks as necessary
     if (this.analyticsReporter) {
@@ -305,18 +331,11 @@ export default class Component {
       domHooks.forEach(this._createAnalyticsHook.bind(this));
     }
 
-    return this;
-  }
-
-  _onMount () {
+    this._isMounted = true;
     this.onMount(this);
-    if (this._children.length === 0) {
-      return;
-    }
+    this.userOnMount(this);
 
-    this._children.forEach(child => {
-      child._onMount();
-    });
+    return this;
   }
 
   /**
@@ -347,26 +366,15 @@ export default class Component {
     // So that we can query it for processing of sub components
     let el = DOM.create(html);
 
-    // Process the DOM to determine if we should create
-    // in-memory sub-components for rendering
-    let domComponents = DOM.queryAll(el, '[data-component]');
-    domComponents.forEach(c => this._createSubcomponent(c, data));
-
     this.afterRender();
     return el.innerHTML;
   }
 
   _createSubcomponent (domComponent, data) {
-    let dataset = domComponent.dataset;
-    let type = dataset.component;
-    let prop = dataset.prop;
+    const dataset = domComponent.dataset;
+    const type = dataset.component;
+    const prop = dataset.prop;
     let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
-
-    // Rendering a sub component should be within the context,
-    // of the node that we processed it from
-    opts = Object.assign(opts, {
-      container: domComponent
-    });
 
     let childData = data[prop];
 
@@ -377,19 +385,25 @@ export default class Component {
     // to create many components for each item.
     // Overloading and having this side effect is unintuitive and WRONG
     if (!Array.isArray(childData)) {
-      let childComponent = this.addChild(childData, type, opts);
-      DOM.append(domComponent, childComponent.render());
+      // Rendering a sub component should be within the context,
+      // of the node that we processed it from
+      opts = {
+        ...opts,
+        container: domComponent
+      };
+      this.addChild(childData, type, opts);
       return;
     }
 
-    // Otherwise, render the component as expected
-    let childHTML = [];
-    for (let i = 0; i < childData.length; i++) {
-      let childComponent = this.addChild(childData[i], type, opts);
-      childHTML.push(childComponent.render());
-    }
-
-    DOM.append(domComponent, childHTML.join(''));
+    childData.reverse();
+    childData.forEach((data, index) => {
+      DOM.append(domComponent, `<div id=${this.name}-child-${index}></div>`);
+      opts = {
+        ...opts,
+        container: `#${this.name}-child-${index}`
+      };
+      this.addChild(data, type, opts);
+    });
   }
 
   _createAnalyticsHook (domComponent) {

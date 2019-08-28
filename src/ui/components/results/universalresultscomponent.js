@@ -43,9 +43,9 @@ export default class UniversalResultsComponent extends Component {
     }), val);
   }
 
-  addChild (data = {}, type) {
-    let opts = this.getChildConfig([data['verticalConfigId']]);
-    return super.addChild(data, type, opts);
+  addChild (data = {}, type, opts) {
+    let childOpts = Object.assign({}, opts, this.getChildConfig([data['verticalConfigId']]));
+    return super.addChild(data, type, childOpts);
   }
 
   getChildConfig (configId) {
