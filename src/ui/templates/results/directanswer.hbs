@@ -26,44 +26,44 @@
     {{#if relatedItem.data.website}}
       <div class="yxt-DirectAnswer-viewMoreWrapper">
         <a class="yxt-DirectAnswer-viewMore" href="{{{relatedItem.data.website}}}">
-          {{{viewDetailsText}}}
+          {{{_config.viewDetailsText}}}
         </a>
       </div>
     {{/if}}
   </div>
   <div class="yxt-DirectAnswer-footerWrapper">
     <div class="yxt-DirectAnswer-footer">
-      <div class="yxt-DirectAnswer-footerText">
-        {{{footerText}}}
-      </div>
       {{#if feedbackSubmitted}}
-        Thank you for your feedback!
+      <div class="yxt-DirectAnswer-footerText">
+          Thank you for your feedback!
+      </div>
       {{else}}
-        <div class="yxt-DirectAnswer-thumbs">
-          <form class="yxt-directAnswer-feedback-form js-directAnswer-feedback-form">
-            <label>
-              <img class="yxt-DirectAnswer-thumbUpIcon" src="{{{thumbsUpImage}}}" alt="">
-              <input type="radio"
-                     name="feedback"
-                     value="true"
-                     class="yxt-DirectAnswer-thumbUpButton js-directAnswer-thumbUp">
-              <img class="yxt-DirectAnswer-thumbDownIcon" src="{{{thumbsDownImage}}}" alt="">
-              <span class="sr-only">
-                  This answered my question
-              </span>
-            </label>
-            <label>
-              <input type="radio"
-                     name="feedback"
-                     value="false"
-                     class="yxt-DirectAnswer-thumbDownButton js-directAnswer-thumbDown">
-              <span class="sr-only">
-                  This did not answer my question
-              </span>
-            </label>
-            <input type="submit">
-          </form>
+        <div class="yxt-DirectAnswer-footerText">
+          {{{_config.footerText}}}
         </div>
+        <form class="yxt-DirectAnswer-thumbs js-directAnswer-feedback-form">
+          <label class="yxt-DirectAnswer-thumb">
+            <img class="yxt-DirectAnswer-thumbUpIcon" src="{{{_config.thumbsUpImage}}}" alt="">
+            <input type="radio"
+                   name="feedback"
+                   value="true"
+                   class="yxt-DirectAnswer-feedback yxt-DirectAnswer-thumbUpButton js-directAnswer-thumbUp">
+            <span class="sr-only">
+              This answered my question
+            </span>
+          </label>
+          <label class="yxt-DirectAnswer-thumb">
+            <img class="yxt-DirectAnswer-thumbDownIcon" src="{{{_config.thumbsDownImage}}}" alt="">
+            <input type="radio"
+                   name="feedback"
+                   value="false"
+                   class="yxt-DirectAnswer-feedback yxt-DirectAnswer-thumbDownButton js-directAnswer-thumbDown">
+            <span class="sr-only">
+              This did not answer my question
+            </span>
+          </label>
+          <button type="submit" class="sr-only sr-only-focusable">
+        </form>
       {{/if}}
     </div>
   </div>
