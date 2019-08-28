@@ -368,7 +368,7 @@ export default class Component {
       container: domComponent
     });
 
-    let childData = data[prop];
+    let childData = data[prop] || {};
 
     // TODO(billy) Right now, if we provide an array as the data prop,
     // the behavior is to create many components for each item in the array.

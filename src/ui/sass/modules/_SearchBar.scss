@@ -80,9 +80,21 @@
     padding-right: $base-spacing;
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
-
     background-color: $searchbar-button-background-color-base;
     color: $searchbar-button-text-color-base;
+
+    &:hover,
+    &:focus
+    {
+      background-color: $searchbar-button-background-color-hover;
+      color: $searchbar-button-text-color-hover;
+    }
+
+    &:active
+    {
+      background-color: $searchbar-button-text-color-active;
+      color: $searchbar-button-text-color-active;
+    }
   }
 
   &-input,
