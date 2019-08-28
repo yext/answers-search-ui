@@ -64,6 +64,7 @@
     justify-content: flex-end;
     align-items: center;
     padding: $base-spacing;
+    heigth: 44px;
   }
 
   &-footerText
@@ -84,8 +85,18 @@
     margin-left: $base-spacing-sm * 2;
   }
 
-  &-thumb:last-child
+  &-thumb
   {
-    margin-left: $base-spacing;
+    cursor: pointer;
+
+    & + &
+    {
+      margin-left: $base-spacing;
+    }
+  }
+
+  &-feedback
+  {
+    display: none;
   }
 }
