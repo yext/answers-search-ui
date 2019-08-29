@@ -268,7 +268,6 @@ export default class Component {
    */
   remove () {
     this._children.forEach(c => c.remove());
-    this.unMount();
     this.componentManager.remove(this);
   }
 
@@ -302,6 +301,8 @@ export default class Component {
   unMount () {
     this._children = [];
     DOM.empty(this._container);
+    this._children.forEach(c => c.remove());
+    this._children = [];
   }
 
   mount () {
