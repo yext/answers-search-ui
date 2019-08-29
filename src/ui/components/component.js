@@ -280,6 +280,7 @@ export default class Component {
   }
 
   unMount () {
+    this._children = [];
     DOM.empty(this._container);
   }
 
