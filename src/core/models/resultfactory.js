@@ -81,10 +81,12 @@ export default class ResultFactory {
 
     for (let i = 0; i < words.length; i++) {
       const word = words[i];
-      if (truncated.length + word.length + sep.length > max) {
+      if (truncated.length + word.length > max ||
+        (i !== 0 && truncated.length + word.length + sep.length > max)) {
         truncated += trailing;
         break;
       }
+
       truncated += i === 0 ? word : sep + word;
     }
 
