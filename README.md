@@ -55,6 +55,7 @@ Below is a list of configuration options that can be used during initialization.
 | apiKey       | string     | Your API key                              | required      |
 | answersKey   | string     | The key used for your answers project     | required      |
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
+| onStateChange | function | Invoked when the public sate changes | not required |
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | not required  |
 | templateUrl  | string     | Use precompiled template hosted by you       | not required  |
 | templateBundle  | object     | Provide the precompiled templates      | not required  |
