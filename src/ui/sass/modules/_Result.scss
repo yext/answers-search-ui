@@ -116,6 +116,12 @@
     margin-right: 1rem;
   }
 
+  &-infoCtasWrapper
+  {
+    display: flex;
+    flex-grow: 1;
+  }
+
   &-details
   {
     @include Text(
