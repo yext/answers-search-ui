@@ -221,6 +221,7 @@ export default class Component {
     this._state.on('update', () => {
       this.onUpdate();
       this.userOnUpdate();
+      this.unMount();
       this.mount();
     });
 
@@ -299,10 +300,18 @@ export default class Component {
   }
 
   unMount () {
-    this._children = [];
+    if (!this._container) {
+      return this;
+    }
+
+    this._children.forEach(child => {
+      child.unMount();
+    });
+
     DOM.empty(this._container);
     this._children.forEach(c => c.remove());
     this._children = [];
+    this.onUnMount();
   }
 
   mount () {
@@ -310,7 +319,6 @@ export default class Component {
       return this;
     }
 
-    this.unMount();
     if (this.beforeMount() === false) {
       return this;
     }
@@ -319,7 +327,7 @@ export default class Component {
 
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
-    let domComponents = DOM.queryAll(this._container, '[data-component]');
+    let domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');
     domComponents.forEach(c => this._createSubcomponent(c, this._state.get()));
 
     this._children.forEach(child => {
@@ -372,12 +380,18 @@ export default class Component {
   }
 
   _createSubcomponent (domComponent, data) {
+    domComponent.dataset.isComponentMounted = true;
     const dataset = domComponent.dataset;
     const type = dataset.component;
     const prop = dataset.prop;
     let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
 
-    let childData = data[prop];
+    let childData = data[prop] || {};
+
+    opts = {
+      ...opts,
+      container: domComponent
+    };
 
     // TODO(billy) Right now, if we provide an array as the data prop,
     // the behavior is to create many components for each item in the array.
@@ -388,21 +402,12 @@ export default class Component {
     if (!Array.isArray(childData)) {
       // Rendering a sub component should be within the context,
       // of the node that we processed it from
-      opts = {
-        ...opts,
-        container: domComponent
-      };
       this.addChild(childData, type, opts);
       return;
     }
 
     childData.reverse();
-    childData.forEach((data, index) => {
-      DOM.append(domComponent, `<div id=${this.name}-child-${index}></div>`);
-      opts = {
-        ...opts,
-        container: `#${this.name}-child-${index}`
-      };
+    childData.forEach(data => {
       this.addChild(data, type, opts);
     });
   }
