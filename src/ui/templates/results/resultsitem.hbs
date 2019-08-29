@@ -23,51 +23,53 @@
         </div>
     {{/if}}
 
-    <div class="yxt-Result-info">
-      <h3 class="yxt-Result-title">
-        {{#if link}}
-          <a class="yxt-Result-titleLink" href="{{link}}" data-eventtype="TITLE_CLICK">{{{title}}}</a>
-        {{else}}
-          {{title}}
+    <div class="yxt-Result-infoCtasWrapper">
+      <div class="yxt-Result-info">
+        <h3 class="yxt-Result-title">
+          {{#if link}}
+            <a class="yxt-Result-titleLink" href="{{link}}" data-eventtype="TITLE_CLICK">{{{title}}}</a>
+          {{else}}
+            {{title}}
+          {{/if}}
+        </h3>
+
+        {{#if subtitle}}
+          <div class="yxt-Result-subtitle">
+            {{{subtitle}}}
+          </div>
         {{/if}}
-      </h3>
 
-      {{#if subtitle}}
-        <div class="yxt-Result-subtitle">
-          {{{subtitle}}}
-        </div>
-      {{/if}}
+        {{#if details}}
+          <div class="yxt-Result-details">
+            {{{details}}}
+          </div>
+        {{/if}}
+      </div>
 
-      {{#if details}}
-        <div class="yxt-Result-details">
-          {{{details}}}
+      {{#if callsToAction}}
+        <div class="yxt-Result-ctasWrapper">
+          <div class="yxt-Result-ctas">
+            {{#each callsToAction}}
+              {{#if this.url}}
+                <div class="Result-ctaWrapper">
+                  <a class="yxt-Result-cta" href="{{this.url}}"
+                    {{#if this.eventType}} data-eventtype="{{this.eventType}}"{{/if}}
+                    {{#if this.eventOptions}} data-eventoptions='{{this.eventOptions}}'{{/if}}>
+                    {{#if this.icon}}
+                      <div class="yxt-Result-ctaIconWrapper">
+                        <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
+                      </div>
+                    {{/if}}
+                    <span class="yxt-Result-ctaLabel">
+                      {{{this.label}}}
+                    </span>
+                  </a>
+                </div>
+              {{/if}}
+            {{/each}}
+          </div>
         </div>
       {{/if}}
     </div>
-
-    {{#if callsToAction}}
-      <div class="yxt-Result-ctasWrapper">
-        <div class="yxt-Result-ctas">
-          {{#each callsToAction}}
-            {{#if this.url}}
-              <div class="Result-ctaWrapper">
-                <a class="yxt-Result-cta" href="{{this.url}}"
-                  {{#if this.eventType}} data-eventtype="{{this.eventType}}"{{/if}}
-                  {{#if this.eventOptions}} data-eventoptions='{{this.eventOptions}}'{{/if}}>
-                  {{#if this.icon}}
-                    <div class="yxt-Result-ctaIconWrapper">
-                      <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
-                    </div>
-                  {{/if}}
-                  <span class="yxt-Result-ctaLabel">
-                    {{{this.label}}}
-                  </span>
-                </a>
-              </div>
-            {{/if}}
-          {{/each}}
-        </div>
-      </div>
-    {{/if}}
   </div>
 </li>
