@@ -39,7 +39,9 @@ export default class ResultFactory {
     return new Result({
       raw: data,
       title: data.name,
-      details: data.description,
+      details:
+        data.description.length > 250
+          ? data.description.substr(0, 247) + '...' : data.description,
       link: data.website,
       id: data.id,
       ordinal: index + 1
