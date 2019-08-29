@@ -123,6 +123,7 @@ export default class FilterSearchComponent extends Component {
       params.set(`${this.name}.query`, this.query);
       params.set(`${this.name}.filter`, this.filter);
       window.history.pushState({}, '', '?' + params.toString());
+      this.core.storage.set(StorageKeys.PARAMS, params.toString());
       this.core.setFilter(this.name, Filter.fromResponse(this.filter));
       this.search();
     }
@@ -170,6 +171,7 @@ export default class FilterSearchComponent extends Component {
         }
 
         window.history.pushState({}, '', '?' + params.toString());
+        this.core.storage.set(StorageKeys.PARAMS, params.toString());
 
         // save the filter to storage for the next search
         this.core.setFilter(this.name, Filter.fromResponse(filter));

@@ -11,6 +11,7 @@ import {
 
 import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
+import StorageKeys from './core/storage/storagekeys';
 
 /**
  * The main Answers interface
@@ -75,6 +76,10 @@ class Answers {
     }
 
     this._onReady = config.onReady || function () {};
+
+    if (config.onStateChange && typeof config.onStateChange === 'function') {
+      core.storage.on('update', StorageKeys.PARAMS, params => config.onStateChange(params));
+    }
 
     if (config.useTemplates === false || config.templateBundle) {
       if (config.templateBundle) {
