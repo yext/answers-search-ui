@@ -165,18 +165,21 @@ export default class Component {
      * @type {function}
      */
     this.onCreate = config.onCreateOverride || this.onCreate || function () {};
+    this.onCreate = this.onCreate.bind(this);
 
     /**
      * The a local reference to the callback that will be invoked when a component is Mounted.
      * @type {function}
      */
     this.onMount = config.onMountOverride || this.onMount || function () {};
+    this.onMount = this.onMount.bind(this);
 
     /**
      * The a local reference to the callback that will be invoked when a components state is updated.
      * @type {function}
      */
     this.onUpdate = config.onUpdateOverride || this.onUpdate || function () { };
+    this.onUpdate = this.onUpdate.bind(this);
 
     /**
      * A user provided onCreate callback
