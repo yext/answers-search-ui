@@ -18,5 +18,6 @@ export default {
   FACET_FILTER: 'facet-filter',
   DYNAMIC_FILTERS: 'dynamic-filters',
   SEARCH_LIMIT: 'search-limit',
+  PARAMS: 'params',
   QUESTION_SUBMISSION: 'question-submission'
 };

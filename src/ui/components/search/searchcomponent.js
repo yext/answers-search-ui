@@ -177,6 +177,7 @@ export default class SearchComponent extends Component {
       window.history.pushState({
         query: query
       }, query, '?' + params.toString());
+      this.core.storage.set(StorageKeys.PARAMS, params.toString());
 
       inputEl.blur();
 
