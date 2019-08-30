@@ -148,7 +148,9 @@ export default class AutoCompleteComponent extends Component {
     }
 
     // Disable the native auto complete
-    DOM.attr(queryInput, 'autoComplete', 'off');
+    DOM.attr(queryInput, 'autocomplete', 'off');
+    DOM.attr(queryInput, 'autocorrect', 'off');
+    DOM.attr(queryInput, 'spellcheck', 'false');
 
     // The user exits the input, so we want to reset the state and close
     // the auto complete
