@@ -141,6 +141,10 @@ export default class ResultsComponent extends Component {
   getItemComponent (type) {
     let comp = ResultsItemComponent;
 
+    if (this.useAccordion) {
+      return AccordionResultsComponent;
+    }
+
     switch (type) {
       case ResultType.EVENT:
         comp = EventResultsItemComponent;
@@ -159,9 +163,7 @@ export default class ResultsComponent extends Component {
   addChild (data, type, opts) {
     // TODO(billy) Refactor the way configuration and data flows
     // through top level components to child components.
-    if (this.useAccordion) {
-      type = AccordionResultsComponent.type;
-    } else if (type === ResultsItemComponent.type) {
+    if (type === ResultsItemComponent.type) {
       let clazz = this.getItemComponent(data.type);
       if (clazz) {
         type = clazz.type;
