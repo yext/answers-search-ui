@@ -23,7 +23,11 @@
                     <a class="yxt-AccordionResult-cta" href="{{this.url}}">
                       {{#if this.icon}}
                         <div class="yxt-AccordionResult-ctaIconWrapper">
-                          <img class="yxt-AccordionResult-ctaIcon" src="{{this.icon}}" alt="">
+                          <span class="yxt-AccordionResult-ctaIcon"
+                                data-component="IconComponent"
+                                data-opts='{"iconName": "{{this.icon}}"}'
+                                data-prop="icon"
+                          ></span>
                         </div>
                       {{/if}}
                       <span class="yxt-AccordionResult-ctaLabel">
