@@ -67,16 +67,30 @@ export default class MapBoxMapProvider extends MapProvider {
         this._pinConfig,
         this._map);
 
+      let bounds = new mapboxgl.LngLatBounds()
+
       for (let i = 0; i < mapboxMapMarkerConfigs.length; i++) {
         let wrapper = mapboxMapMarkerConfigs[i].wrapper;
         let coords = new mapboxgl.LngLat(
           mapboxMapMarkerConfigs[i].position.longitude,
           mapboxMapMarkerConfigs[i].position.latitude);
         let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
+        bounds.extend(coords);
         marker.addTo(this._map);
         if (this._onPinClick) {
           marker.getElement().addEventListener('click', () => this._onPinClick(collapsedMarkers[i].item));
         }
+      }
+
+      if (mapboxMapMarkerConfigs.length) {
+        this._map.fitBounds(bounds,  {
+          linear: true,
+          duration: 0,
+          animate: false,
+          padding: 30,
+          maxZoom: 14,
+          offset: [0, 0]
+        });
       }
     }
   }

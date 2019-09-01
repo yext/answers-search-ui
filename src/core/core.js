@@ -5,6 +5,7 @@ import AutoCompleteApi from './search/autocompleteapi';
 import QuestionAnswerApi from './search/questionanswerapi';
 
 import SearchDataTransformer from './search/searchdatatransformer';
+import SearchStates from './storage/searchstates';
 
 import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
@@ -161,6 +162,7 @@ export default class Core {
             for (const resp of value) {
               response.response.results.push(...resp.response.results);
             }
+            this.storage.set(StorageKeys.VERTICAL_RESULTS, SearchStates.SEARCH_COMPLETE);
             return response;
           })
         } else {
