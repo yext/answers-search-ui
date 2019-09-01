@@ -73,6 +73,13 @@ export default class FilterBoxComponent extends Component {
     this._isDynamic = config.isDynamic || false;
 
     /**
+     * If true, stores the filter to storage on each change
+     * @type {boolean}
+     * @private
+     */
+    this._storeOnChange = config.storeOnChange || false;
+
+    /**
      * The template to render
      * @type {string}
      * @private
@@ -140,6 +147,10 @@ export default class FilterBoxComponent extends Component {
     if (this._searchOnChange) {
       this._saveFiltersToStorage();
       this._search();
+    }
+
+    if (this._storeOnChange) {
+      this._saveFiltersToStorage();
     }
   }
 

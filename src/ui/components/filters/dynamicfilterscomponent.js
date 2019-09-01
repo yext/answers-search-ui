@@ -40,6 +40,13 @@ export default class DynamicFiltersComponent extends Component {
     this._fieldControls = config.fieldControls || {};
 
     /**
+     * If true, stores the filter to storage on each change
+     * @type {boolean}
+     * @private
+     */
+    this._storeOnChange = config.storeOnChange || false;
+
+    /**
      * The template to render
      * @type {string}
      * @private
@@ -93,6 +100,7 @@ export default class DynamicFiltersComponent extends Component {
         searchOnChange: this._searchOnChange,
         verticalKey: this._verticalKey,
         isDynamic: true,
+        storeOnChange: this._storeOnChange,
         filters
       })
     );
