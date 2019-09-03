@@ -164,19 +164,40 @@ export default class Component {
      * The a local reference to the callback that will be invoked when a component is created.
      * @type {function}
      */
-    this.onCreate = config.onCreate || this.onCreate || function () {};
+    this.onCreate = config.onCreateOverride || this.onCreate || function () {};
+    this.onCreate = this.onCreate.bind(this);
 
     /**
      * The a local reference to the callback that will be invoked when a component is Mounted.
      * @type {function}
      */
-    this.onMount = config.onMount || this.onMount || function () { };
+    this.onMount = config.onMountOverride || this.onMount || function () {};
+    this.onMount = this.onMount.bind(this);
 
     /**
      * The a local reference to the callback that will be invoked when a components state is updated.
      * @type {function}
      */
-    this.onUpdate = config.onUpdate || this.onUpdate || function () { };
+    this.onUpdate = config.onUpdateOverride || this.onUpdate || function () { };
+    this.onUpdate = this.onUpdate.bind(this);
+
+    /**
+     * A user provided onCreate callback
+     * @type {function}
+     */
+    this.userOnCreate = config.onCreate || function () {};
+
+    /**
+     * A user provided onMount callback
+     * @type {function}
+     */
+    this.userOnMount = config.onMount || function () {};
+
+    /**
+     * A user provided onUpdate callback
+     * @type {function}
+     */
+    this.userOnUpdate = config.onUpdate || function () {};
   }
 
   /**
@@ -199,8 +220,11 @@ export default class Component {
   init (opts) {
     this.setState(opts.data || opts.state || {});
     this.onCreate();
+    this.userOnCreate();
     this._state.on('update', () => {
       this.onUpdate();
+      this.userOnUpdate();
+      this.unMount();
       this.mount();
     });
 
@@ -248,7 +272,6 @@ export default class Component {
    */
   remove () {
     this._children.forEach(c => c.remove());
-    this.unMount();
     this.componentManager.remove(this);
   }
 
@@ -280,8 +303,18 @@ export default class Component {
   }
 
   unMount () {
-    this._children = [];
+    if (!this._container) {
+      return this;
+    }
+
+    this._children.forEach(child => {
+      child.unMount();
+    });
+
     DOM.empty(this._container);
+    this._children.forEach(c => c.remove());
+    this._children = [];
+    this.onUnMount();
   }
 
   mount () {
@@ -289,15 +322,20 @@ export default class Component {
       return this;
     }
 
-    this.unMount();
     if (this.beforeMount() === false) {
       return this;
     }
 
     DOM.append(this._container, this.render(this._state.asJSON()));
 
-    this._isMounted = true;
-    this._onMount();
+    // Process the DOM to determine if we should create
+    // in-memory sub-components for rendering
+    let domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');
+    domComponents.forEach(c => this._createSubcomponent(c, this._state.get()));
+
+    this._children.forEach(child => {
+      child.mount();
+    });
 
     // Attach analytics hooks as necessary
     if (this.analyticsReporter) {
@@ -305,18 +343,11 @@ export default class Component {
       domHooks.forEach(this._createAnalyticsHook.bind(this));
     }
 
-    return this;
-  }
-
-  _onMount () {
+    this._isMounted = true;
     this.onMount(this);
-    if (this._children.length === 0) {
-      return;
-    }
+    this.userOnMount(this);
 
-    this._children.forEach(child => {
-      child._onMount();
-    });
+    return this;
   }
 
   /**
@@ -347,28 +378,23 @@ export default class Component {
     // So that we can query it for processing of sub components
     let el = DOM.create(html);
 
-    // Process the DOM to determine if we should create
-    // in-memory sub-components for rendering
-    let domComponents = DOM.queryAll(el, '[data-component]');
-    domComponents.forEach(c => this._createSubcomponent(c, data));
-
     this.afterRender();
     return el.innerHTML;
   }
 
   _createSubcomponent (domComponent, data) {
-    let dataset = domComponent.dataset;
-    let type = dataset.component;
-    let prop = dataset.prop;
+    domComponent.dataset.isComponentMounted = true;
+    const dataset = domComponent.dataset;
+    const type = dataset.component;
+    const prop = dataset.prop;
     let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
 
-    // Rendering a sub component should be within the context,
-    // of the node that we processed it from
-    opts = Object.assign(opts, {
-      container: domComponent
-    });
-
     let childData = data[prop] || {};
+
+    opts = {
+      ...opts,
+      container: domComponent
+    };
 
     // TODO(billy) Right now, if we provide an array as the data prop,
     // the behavior is to create many components for each item in the array.
@@ -377,19 +403,16 @@ export default class Component {
     // to create many components for each item.
     // Overloading and having this side effect is unintuitive and WRONG
     if (!Array.isArray(childData)) {
-      let childComponent = this.addChild(childData, type, opts);
-      DOM.append(domComponent, childComponent.render());
+      // Rendering a sub component should be within the context,
+      // of the node that we processed it from
+      this.addChild(childData, type, opts);
       return;
     }
 
-    // Otherwise, render the component as expected
-    let childHTML = [];
-    for (let i = 0; i < childData.length; i++) {
-      let childComponent = this.addChild(childData[i], type, opts);
-      childHTML.push(childComponent.render());
-    }
-
-    DOM.append(domComponent, childHTML.join(''));
+    childData.reverse();
+    childData.forEach(data => {
+      this.addChild(data, type, opts);
+    });
   }
 
   _createAnalyticsHook (domComponent) {
