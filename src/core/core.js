@@ -6,7 +6,7 @@ import QuestionAnswerApi from './search/questionanswerapi';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
-import Storage from './storage/storage';
+import GlobalStorage from './storage/globalstorage';
 import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
@@ -50,10 +50,10 @@ export default class Core {
 
     /**
      * A reference to the core data storage that powers the UI
-     * @type {Storage}
+     * @type {GlobalStorage}
      * @private
      */
-    this.storage = new Storage();
+    this.globalStorage = new GlobalStorage();
 
     /**
      * An abstraction containing the integration with the RESTful search API
@@ -103,46 +103,46 @@ export default class Core {
    */
   verticalSearch (verticalKey, query) {
     if (!query.append) {
-      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
     }
 
     return this._searcher
       .verticalSearch(verticalKey, {
-        limit: this.storage.getState(StorageKeys.SEARCH_LIMIT),
+        limit: this.globalStorage.getState(StorageKeys.SEARCH_LIMIT),
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
       })
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
-        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
 
         if (query.append) {
-          const mergedResults = this.storage.getState(StorageKeys.VERTICAL_RESULTS)
+          const mergedResults = this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
-          this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
         } else {
-          this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
         }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
         }
       });
   }
 
   search (queryString, urls) {
-    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
 
     return this._searcher
       .universalSearch(queryString)
       .then(response => SearchDataTransformer.transform(response, urls))
       .then(data => {
-        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
-        this.storage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({
+        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
+        this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({
           questionText: queryString
         }));
       });
@@ -158,7 +158,7 @@ export default class Core {
     return this._autoComplete
       .queryUniversal(input)
       .then(data => {
-        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
@@ -175,7 +175,7 @@ export default class Core {
     return this._autoComplete
       .queryVertical(input, verticalKey, barKey)
       .then(data => {
-        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
@@ -191,7 +191,7 @@ export default class Core {
     return this._autoComplete
       .queryFilter(input, verticalKey, barKey)
       .then(data => {
-        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
   }
 
@@ -210,7 +210,7 @@ export default class Core {
     return this._questionAnswer
       .submitQuestion(question)
       .then(data => {
-        this.storage.set(
+        this.globalStorage.set(
           StorageKeys.QUESTION_SUBMISSION,
           QuestionSubmission.submitted());
       });
@@ -221,7 +221,7 @@ export default class Core {
    * @param {string} query the query to store
    */
   setQuery (query) {
-    this.storage.set(StorageKeys.QUERY, query);
+    this.globalStorage.set(StorageKeys.QUERY, query);
   }
 
   /**
@@ -229,7 +229,7 @@ export default class Core {
    * @param {string} queryId The query id to store
    */
   setQueryId (queryId) {
-    this.storage.set(StorageKeys.QUERY_ID, queryId);
+    this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
   }
 
   /**
@@ -239,11 +239,11 @@ export default class Core {
    * @param {Filter} filter    the filter to set
    */
   setFilter (namespace, filter) {
-    this.storage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
+    this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
   }
 
   setFacetFilter (namespace, filter) {
-    this.storage.set(`${StorageKeys.FACET_FILTER}.${namespace}`, filter);
+    this.globalStorage.set(`${StorageKeys.FACET_FILTER}.${namespace}`, filter);
   }
 
   enableDynamicFilters () {
@@ -251,10 +251,10 @@ export default class Core {
   }
 
   setSearchLimit (limit) {
-    this.storage.set(StorageKeys.SEARCH_LIMIT, limit);
+    this.globalStorage.set(StorageKeys.SEARCH_LIMIT, limit);
   }
 
   on (evt, moduleId, cb) {
-    return this.storage.on(evt, moduleId, cb);
+    return this.globalStorage.on(evt, moduleId, cb);
   }
 }

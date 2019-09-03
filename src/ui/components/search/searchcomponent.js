@@ -177,7 +177,7 @@ export default class SearchComponent extends Component {
       window.history.pushState({
         query: query
       }, query, '?' + params.toString());
-      this.core.storage.set(StorageKeys.PARAMS, params.toString());
+      this.core.globalStorage.set(StorageKeys.PARAMS, params.toString());
 
       inputEl.blur();
 
@@ -218,11 +218,11 @@ export default class SearchComponent extends Component {
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
 
     if (this._verticalKey) {
-      const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
+      const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
       const totalFilter = allFilters.length > 1
         ? Filter.and(...allFilters)
         : allFilters[0];
-      const facetFilter = this.core.storage.getAll(StorageKeys.FACET_FILTER)[0];
+      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
       return this.core.verticalSearch(this._verticalKey, {
         input: query,
         filter: JSON.stringify(totalFilter),

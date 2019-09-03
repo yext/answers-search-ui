@@ -1,10 +1,10 @@
-import Storage from '../../../src/core/storage/storage';
+import GlobalStorage from '../../../src/core/storage/globalstorage';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 let storage;
 
 beforeEach(() => {
-  storage = new Storage();
+  storage = new GlobalStorage();
 });
 
 describe('storing and retrieving', () => {

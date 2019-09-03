@@ -79,7 +79,7 @@ class Answers {
 
     if (config.onStateChange && typeof config.onStateChange === 'function') {
       config.onStateChange(window.location.search.substr(1));
-      core.storage.on('update', StorageKeys.PARAMS, params => config.onStateChange(params));
+      core.globalStorage.on('update', StorageKeys.PARAMS, params => config.onStateChange(params));
     }
 
     if (config.useTemplates === false || config.templateBundle) {

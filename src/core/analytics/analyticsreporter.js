@@ -25,7 +25,7 @@ export default class AnalyticsReporter {
     this._globalOptions = Object.assign({}, globalOptions, { answersKey });
 
     // listen to query id updates
-    core.storage.on('update', StorageKeys.QUERY_ID, id => this.setQueryId(id));
+    core.globalStorage.on('update', StorageKeys.QUERY_ID, id => this.setQueryId(id));
   }
 
   setQueryId (queryId) {

@@ -128,12 +128,12 @@ export default class ComponentManager {
     // If there is a local storage to power state, apply the state
     // from the storage to the component, and then bind the component
     // state to the storage via its updates
-    if (this._core && this._core.storage !== null) {
+    if (this._core && this._core.globalStorage !== null) {
       if (component.moduleId === undefined || component.moduleId === null) {
         return component;
       }
 
-      this._core.storage
+      this._core.globalStorage
         .on('update', component.moduleId, (data) => {
           component.setState(data);
         });
@@ -148,7 +148,7 @@ export default class ComponentManager {
    * @param {Component} component The component to remove
    */
   remove (component) {
-    this._core.storage.off('update', component.moduleId);
+    this._core.globalStorage.off('update', component.moduleId);
 
     const index = this._activeComponents.findIndex(c => c.name === component.name);
     this._activeComponents.splice(index, 1);
