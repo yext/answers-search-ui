@@ -36,13 +36,13 @@ export default class DirectAnswerComponent extends Component {
      * The `thumbs up` css selector to bind ui interaction to for reporting
      * @type {string}
      */
-    this._thumbsUpSelector = config.thumbsUpSelector || '.js-directAnswer-thumbDown';
+    this._thumbsUpSelector = config.thumbsUpSelector || '.js-directAnswer-thumbUp';
 
     /**
      * The `thumbs down` css selector to bind ui interaction to for reporting
      * @type {string}
      */
-    this._thumbsDownSelector = config.thumbsDownSelector || '.js-directAnswer-thumbUp';
+    this._thumbsDownSelector = config.thumbsDownSelector || '.js-directAnswer-thumbDown';
   }
 
   static get type () {
