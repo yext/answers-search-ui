@@ -84,7 +84,7 @@ describe('vertical searching', () => {
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
         expect.anything(),
-        expect.objectContaining({ input: 'query', limit: 25, offset: 10, verticalKey: 'vertical', id: '12345' }));
+        expect.objectContaining({ input: 'query', limit: 25, offset: 10, verticalKey: 'vertical', queryId: '12345' }));
     });
   });
 });
