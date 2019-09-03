@@ -4,7 +4,9 @@
           {{#if _config._parentOpts.modifier}} yxt-AccordionResult--{{_config._parentOpts.modifier}}{{/if}}">
     <button class="yxt-AccordionResult-toggle js-yxt-AccordionResult-toggle"
             aria-expanded="{{#if collapsed}}false{{else}}true{{/if}}"
-            aria-controls="#{{id}}">
+            aria-controls="#{{id}}"
+            data-eventtype="{{#if collapsed}}ROW_EXPAND{{else}}ROW_COLLAPSE{{/if}}"
+            data-eventoptions='{{eventOptions}}'>
         <h3 class="yxt-AccordionResult-title">
             {{title}}
         </h3>
@@ -20,7 +22,11 @@
               <div class="yxt-AccordionResult-ctas">
                 {{#each callsToAction}}
                   {{#if this.url}}
-                    <a class="yxt-AccordionResult-cta" href="{{this.url}}" target="_blank">
+                    <a class="yxt-AccordionResult-cta"
+                       href="{{this.url}}"
+                       target="_blank"
+                       {{#if this.eventType}} data-eventtype="{{this.eventType}}"{{/if}}
+                       {{#if this.eventOptions}} data-eventoptions='{{this.eventOptions}}'{{/if}}>
                       {{#if this.icon}}
                         <div class="yxt-AccordionResult-ctaIconWrapper">
                           <span class="yxt-AccordionResult-ctaIcon"

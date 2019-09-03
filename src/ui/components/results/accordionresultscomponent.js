@@ -40,6 +40,12 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
      * @type {string}
      */
     this.collapsedClass = opts.collapsedClass || 'is-collapsed';
+
+    /**
+     * vertical config id is required for analytics
+     * @type {string|null}
+     */
+    this.verticalConfigId = opts.verticalConfigId || opts._parentOpts.verticalConfigId || null;
   }
 
   /**
@@ -84,6 +90,17 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
     });
 
     return this;
+  }
+
+  setState(data) {
+    // TODO (bmcginnis): this would be better handled if handClick just hit analyticsReporter directly
+    // but that seems too far a field for now.
+    return super.setState(Object.assign(data, {
+      eventOptions: {
+        entityId: data.id,
+        verticalConfigId: this.verticalConfigId,
+      }
+    }));
   }
 
   /**
