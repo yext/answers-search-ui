@@ -82,7 +82,7 @@ export default class DirectAnswerComponent extends Component {
     // For WCAG compliance, the feedback should be a submittable form
     DOM.on(this._formEl, 'submit', (e) => {
       let formEl = e.target;
-      let checkedValue = DOM.query(formEl, 'input:checked').value;
+      let checkedValue = DOM.query(formEl, 'input:checked').checked;
 
       this.reportQuality(checkedValue);
       this.updateState({
