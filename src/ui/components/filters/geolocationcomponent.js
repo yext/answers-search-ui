@@ -49,13 +49,13 @@ const DEFAULT_CONFIG = {
    * The CSS selector of the toggle button
    * @type {string}
    */
-  buttonSelector: '.js-yext-geo-button',
+  buttonSelector: '.js-yxt-GeoLocationFilter-button',
 
   /**
    * The CSS selector of the query input
    * @type {string}
    */
-  inputSelector: '.js-yext-query'
+  inputSelector: '.js-yxt-GeoLocationFilter-input'
 };
 
 /**
@@ -111,7 +111,7 @@ export default class GeoLocationComponent extends Component {
       this._autocomplete.remove();
     }
 
-    this._initAutoComplete(this.inputSelector);
+    this._initAutoComplete(this._config.inputSelector);
     DOM.on(this._config.buttonSelector, 'click', () => this._toggleGeoFilter());
   }
 
@@ -125,7 +125,7 @@ export default class GeoLocationComponent extends Component {
       parent: this,
       name: `${this.name}.autocomplete`,
       isFilterSearch: true,
-      container: '.js-yext-geo-autocomplete',
+      container: '.js-yxt-GeoLocationFilter-autocomplete',
       originalQuery: this.query,
       originalFilter: this.filter,
       inputEl: inputSelector,

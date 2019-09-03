@@ -422,7 +422,7 @@ ANSWERS.addComponent('', {
   // The label to show when unable to get the user's location
   errorLabel: 'Unable To Use Location',
   // CSS selector of the button
-  buttonSelector: '.js-yext-geolocation-button'
+  buttonSelector: '.js-yxt-GeoLocationFilter-button'
 });
 ```
 
