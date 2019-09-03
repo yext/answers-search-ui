@@ -402,6 +402,30 @@ ANSWERS.addComponent('DateRangeFilter', {
 });
 ```
 
+### GeoLocationFilter
+
+Displays a "Use My Location" button that filters results to a radius around the user's current position.
+
+```html
+<div class="geolocation-filter-container"></div>
+```
+
+```js
+ANSWERS.addComponent('', {
+  container: '.geolocation-filter-container',
+  // Radius around the user, in miles, to find results
+  radius: 50,
+  // The label to show when disabled (initial state)
+  disabledLabel: 'Use My Location',
+  // The label to show when enabled
+  enabledLabel: 'Disable My Location',
+  // The label to show when unable to get the user's location
+  errorLabel: 'Unable To Use Location',
+  // CSS selector of the button
+  buttonSelector: '.js-yxt-GeoLocationFilter-button'
+});
+```
+
 ## Direct Answer Component
 
 The Direct Answer Component will render the BEST result, if found,

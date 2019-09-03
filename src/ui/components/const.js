@@ -15,6 +15,7 @@ import FilterOptionsComponent from './filters/filteroptionscomponent';
 import RangeFilterComponent from './filters/rangefiltercomponent';
 import DateRangeFilterComponent from './filters/daterangefiltercomponent';
 import DynamicFiltersComponent from './filters/dynamicfilterscomponent';
+import GeoLocationComponent from './filters/geolocationcomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
 import ResultsComponent from './results/resultscomponent';
@@ -47,6 +48,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(RangeFilterComponent)
   .register(DateRangeFilterComponent)
   .register(DynamicFiltersComponent)
+  .register(GeoLocationComponent)
 
 // Results Components
   .register(DirectAnswerComponent)

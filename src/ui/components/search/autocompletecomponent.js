@@ -223,7 +223,7 @@ export default class AutoCompleteComponent extends Component {
       optValue = results[this._resultIndex].shortValue;
     }
 
-    let queryEl = DOM.query(this._parent._container, '.js-yext-query');
+    let queryEl = DOM.query(this._parent._container, this._inputEl);
     queryEl.value = optValue;
   }
 
