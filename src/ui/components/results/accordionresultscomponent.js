@@ -92,13 +92,13 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
     return this;
   }
 
-  setState(data) {
+  setState (data) {
     // TODO (bmcginnis): this would be better handled if handClick just hit analyticsReporter directly
     // but that seems too far a field for now.
     return super.setState(Object.assign(data, {
       eventOptions: {
         entityId: data.id,
-        verticalConfigId: this.verticalConfigId,
+        verticalConfigId: this.verticalConfigId
       }
     }));
   }
