@@ -44,12 +44,12 @@ export default class UniversalResultsComponent extends Component {
     }), val);
   }
 
-  addChild (data = {}, type) {
-    let opts = this.getChildConfig([data['verticalConfigId']]);
-    if (opts.useAccordion === true) {
-      return super.addChild(data, AccordionResultsComponent.type, opts);
+  addChild (data = {}, type, opts) {
+    const childOpts = { ...opts, ...this.getChildConfig([data['verticalConfigId']]) };
+    if (childOpts.useAccordion === true) {
+      return super.addChild(data, AccordionResultsComponent.type, childOpts);
     }
-    return super.addChild(data, type, opts);
+    return super.addChild(data, type, childOpts);
   }
 
   getChildConfig (configId) {
