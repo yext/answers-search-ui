@@ -156,6 +156,11 @@ export default class DOM {
     DOM.query(selector).setAttribute(attr, val);
   }
 
+  static attributes (selector, attrs) {
+    Object.entries(attrs)
+      .forEach(([attr, val]) => this.attr(selector, attr, val));
+  }
+
   static trigger (selector, event, settings) {
     let e = new Event(event, Object.assign({
       'bubbles': true,
