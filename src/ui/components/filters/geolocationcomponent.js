@@ -3,7 +3,6 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
-import SearchParams from '../../dom/searchparams';
 import StorageKeys from '../../../core/storage/storagekeys';
 
 const METERS_PER_MILE = 1609.344;
@@ -166,15 +165,6 @@ export default class GeoLocationComponent extends Component {
         () => this.setState({ geoError: true })
       );
     }
-  }
-
-  /**
-   * Get the current params from a url
-   * @param {string} url The optional url to pull params from
-   */
-  getUrlParams (url) {
-    url = url || window.location.search.substring(1);
-    return new SearchParams(url);
   }
 
   /**
