@@ -69,6 +69,12 @@ export default class Component {
     this.core = config.core || null;
 
     /**
+     * A local reference the the persistent storage object
+     * @type {PersistentStorage}
+     */
+    this.persistentStorage = config.persistentStorage || null;
+
+    /**
      * A local reference to the component manager, which contains all of the component classes
      * eligible to be created
      * @type {ComponentManager}

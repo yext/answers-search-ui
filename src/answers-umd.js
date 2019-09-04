@@ -11,7 +11,7 @@ import {
 
 import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
-import StorageKeys from './core/storage/storagekeys';
+import PersistentStorage from './ui/storage/persistentstorage';
 
 /**
  * The main Answers interface
@@ -61,8 +61,18 @@ class Answers {
       locale: config.locale
     });
 
+    const persistentStorage = new PersistentStorage();
+    core.globalStorage.setAll(persistentStorage.getAll());
+    persistentStorage.onReset(data => core.globalStorage.setAll(data));
+
+    if (config.onStateChange && typeof config.onStateChange === 'function') {
+      config.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
+      persistentStorage.onUpdate(config.onStateChange);
+    }
+
     this.components
       .setCore(core)
+      .setPersistentStorage(persistentStorage)
       .setRenderer(this.renderer);
 
     if (config.businessId) {
@@ -76,11 +86,6 @@ class Answers {
     }
 
     this._onReady = config.onReady || function () {};
-
-    if (config.onStateChange && typeof config.onStateChange === 'function') {
-      config.onStateChange(window.location.search.substr(1));
-      core.globalStorage.on('update', StorageKeys.PARAMS, params => config.onStateChange(params));
-    }
 
     if (config.useTemplates === false || config.templateBundle) {
       if (config.templateBundle) {

@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import SearchParams from '../../dom/searchparams';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -71,19 +72,19 @@ export default class GeoLocationComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = this.getUrlParams().get(`${this.name}.query`) || '';
+    this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
+    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
+      this.query = q;
+      this.setState();
+    });
 
     /**
      * The filter string to use for the provided query
      * Optionally provided
      * @type {string}
      */
-    this.filter = this.getUrlParams().get(`${this.name}.filter`) || '';
-
-    if (this.query && this.query.length > 0 && this.filter && this.filter.length > 0) {
-      window.history.pushState({}, '', '?' + this.getUrlParams().toString());
-      this._saveFilterToStorage(Filter.fromResponse(this.filter));
-    }
+    this.filter = this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || '';
+    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
   }
 
   static get type () {
@@ -121,6 +122,10 @@ export default class GeoLocationComponent extends Component {
    * @private
    */
   _initAutoComplete (inputSelector) {
+    if (this._autocomplete) {
+      this._autocomplete.remove();
+    }
+
     this._autocomplete = this.componentManager.create('AutoComplete', {
       parent: this,
       name: `${this.name}.autocomplete`,
@@ -131,13 +136,9 @@ export default class GeoLocationComponent extends Component {
       inputEl: inputSelector,
       verticalKey: this._verticalKey,
       onSubmit: (query, filter) => {
-        const params = this.getUrlParams();
-        params.set(`${this.name}.query`, query);
-        params.set(`${this.name}.filter`, filter);
-        window.history.pushState({}, '', '?' + params.toString());
-
         this.query = query;
-        this._saveFilterToStorage(Filter.fromResponse(filter));
+        this.filter = Filter.fromResponse(filter);
+        this._saveDataToStorage(query, this.filter);
         this._enabled = false;
       }
     });
@@ -156,13 +157,11 @@ export default class GeoLocationComponent extends Component {
     if (!this._enabled) {
       navigator.geolocation.getCurrentPosition(
         position => {
-          this._saveFilterToStorage(this._buildFilter(position));
+          this._saveDataToStorage('', this._buildFilter(position));
           this._enabled = true;
           this.setState({});
-          const params = this.getUrlParams();
-          params.delete(`${this.name}.query`);
-          params.delete(`${this.name}.filter`);
-          window.history.pushState({}, '', '?' + params.toString());
+          this.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
+          this.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
         },
         () => this.setState({ geoError: true })
       );
@@ -183,7 +182,9 @@ export default class GeoLocationComponent extends Component {
    * @param {Filter} filter The filter to save
    * @private
    */
-  _saveFilterToStorage (filter) {
+  _saveDataToStorage (query, filter) {
+    this.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
+    this.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
     this.core.setFilter(this.name, filter);
   }
 

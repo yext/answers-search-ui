@@ -42,6 +42,15 @@ export default class ComponentManager {
     this._core = null;
 
     /**
+     * A local reference the persistent storage dependency
+     *
+     * The persistent storage is used when components want to persist some data across
+     * refreshes and history changes.
+     * @type {PersistentStorage}
+     */
+    this._persistentStorage = null;
+
+    /**
      * The primary renderer to use for all components
      * @type {HandlebarsRenderer}
      */
@@ -75,6 +84,11 @@ export default class ComponentManager {
     return this;
   }
 
+  setPersistentStorage (persistentStorage) {
+    this._persistentStorage = persistentStorage;
+    return this;
+  }
+
   setAnalyticsReporter (reporter) {
     this._analyticsReporter = reporter;
     return this;
@@ -102,6 +116,7 @@ export default class ComponentManager {
     // constructed during creation
     opts = Object.assign({
       core: this._core,
+      persistentStorage: this._persistentStorage,
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,
       componentManager: this
@@ -125,7 +140,7 @@ export default class ComponentManager {
 
     this._activeComponents.push(component);
 
-    // If there is a local storage to power state, apply the state
+    // If there is a global storage to power state, apply the state
     // from the storage to the component, and then bind the component
     // state to the storage via its updates
     if (this._core && this._core.globalStorage !== null) {

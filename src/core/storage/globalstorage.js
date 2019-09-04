@@ -25,6 +25,16 @@ export default class GlobalStorage {
     this._moduleDataContainer[key].set(data);
   }
 
+  /**
+   * Add all key/value pairs in the provided map to the storage
+   * @param {*} data The key/value pairs to set in the storage
+   */
+  setAll (data) {
+    for (const [key, val] of Object.entries(data)) {
+      this.set(key, val);
+    }
+  }
+
   _initDataContainer (key, data) {
     if (key === undefined || key === null || typeof key !== 'string') {
       throw new AnswersStorageError('Invalid storage key provided', key, data);
