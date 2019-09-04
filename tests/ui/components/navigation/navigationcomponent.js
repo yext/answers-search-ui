@@ -1,6 +1,13 @@
 import DOM from '../../../../src/ui/dom/dom';
 import NavigationComponent, { Tab } from '../../../../src/ui/components/navigation/navigationcomponent';
 
+window.matchMedia = function () {
+  return {
+    matches: false,
+    addListener: () => {}
+  };
+};
+
 // The DOM doesn't exist within components in the JEST environment,
 // so we have to provide it to our DOM API properly.
 DOM.setup(
