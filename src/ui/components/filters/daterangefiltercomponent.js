@@ -61,6 +61,15 @@ export default class DateRangeFilterComponent extends Component {
     this._isExclusive = config.isExclusive;
 
     /**
+     * The selector for the reset button
+     * @type {string}
+     * @private
+     */
+    this._resetButton = config.resetButton;
+
+    this._afterMount = config.afterMount;
+
+    /**
      * The template for this component
      * @private
      */
@@ -100,6 +109,21 @@ export default class DateRangeFilterComponent extends Component {
     DOM.delegate(this._container, '.js-yext-date', 'change', (event) => {
       this._updateRange(event.target.dataset.key, event.target.value);
     });
+  }
+
+  onMount () {
+    const resetButton = DOM.query(this._resetButton);
+    if (resetButton) {
+      resetButton.addEventListener('click', () => {
+        resetButton.setAttribute('data-selected', false);
+        this.setMin('Select Start Date');
+        this.setMax('Select End Date');
+      })
+    }
+
+    if (this._afterMount) {
+      this._afterMount();
+    }
   }
 
   /**
