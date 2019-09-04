@@ -21,6 +21,20 @@ export default class ResultsComponent extends Component {
   constructor (config = {}) {
     super(config);
 
+    /**
+     * verticalConfigId used for analytics and passed to children
+     * @type {string}
+     * @private
+     */
+    this._verticalConfigId = config.verticalConfigId;
+
+    /**
+     * isUniversal is set to true if this component is added by the UniversalResultsComponent
+     * @type {boolean}
+     * @private
+     */
+    this._isUniversal = config.isUniversal || false;
+
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._itemConfig = {
       global: {
@@ -82,8 +96,19 @@ export default class ResultsComponent extends Component {
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
       includeMap: this._config.includeMap,
-      mapConfig: this._config.mapConfig
+      mapConfig: this._config.mapConfig,
+      eventOptions: this.eventOptions()
     }), val);
+  }
+
+  /**
+   * helper to construct the eventOptions object for the view all link
+   * @returns {string}
+   */
+  eventOptions () {
+    return JSON.stringify({
+      verticalConfigId: this._verticalConfigId
+    });
   }
 
   static get type () {
@@ -162,7 +187,10 @@ export default class ResultsComponent extends Component {
 
     // Apply the proper item renders to the the components
     // have just been constructed. Prioritize global over individual items.
-    let comp = super.addChild(data, type, opts);
+    let comp = super.addChild(data, type, Object.assign(opts, {
+      verticalConfigId: this._verticalConfigId,
+      isUniversal: this._isUniversal
+    }));
     let globalConfig = this._itemConfig.global;
     let itemConfig = this._itemConfig[comp.type];
     let hasGlobalRender = typeof globalConfig.render === 'function';

@@ -2,8 +2,8 @@
   {{#each tabs}}
     <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
        href="{{url}}"
-       {{#if eventType}} data-eventtype="{{eventType}}"{{/if}}
-       {{#if eventOptions}} data-eventoptions='{{eventOptions}}'{{/if}}>
+       data-eventtype="VERTICAL_SEARCHER_TAB"
+       data-eventoptions='{{eventOptions}}'>
       {{label}}
     </a>
   {{/each}}
