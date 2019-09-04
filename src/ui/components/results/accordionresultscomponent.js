@@ -122,6 +122,7 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
     this.wrapperEl.classList.toggle(this.collapsedClass);
     this.changeHeight();
     this.toggleEl.setAttribute('aria-expanded', this.isCollapsed() ? 'false' : 'true');
+    this.toggleEl.dataset.eventtype = this.isCollapsed() ? 'ROW_EXPAND' : 'ROW_COLLAPSE';
   }
 
   /**
