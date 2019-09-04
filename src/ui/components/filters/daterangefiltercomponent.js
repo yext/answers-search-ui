@@ -61,19 +61,13 @@ export default class DateRangeFilterComponent extends Component {
     this._isExclusive = config.isExclusive;
 
     /**
-     * The selector for the reset button
-     * @type {string}
-     * @private
-     */
-    this._resetButton = config.resetButton;
-
-    this._afterMount = config.afterMount;
-
-    /**
      * The template for this component
      * @private
      */
     this._templateName = `controls/date`;
+
+    this._afterMount = config.afterMount;
+    this._resetButton = config.resetButton;
 
     const today = new Date();
     const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
@@ -113,17 +107,17 @@ export default class DateRangeFilterComponent extends Component {
 
   onMount () {
     const resetButton = DOM.query(this._resetButton);
+
     if (resetButton) {
       resetButton.addEventListener('click', () => {
-        resetButton.setAttribute('data-selected', false);
-        this.setMin('Select Start Date');
-        this.setMax('Select End Date');
-      })
+        // this.setMin('Select Start Date');
+        // this.setMax('Select End Date');
+        this.core.setFilter(this.name, {});
+        this._onChange({});
+      });
     }
 
-    if (this._afterMount) {
-      this._afterMount();
-    }
+    this._afterMount();
   }
 
   /**
