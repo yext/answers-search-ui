@@ -147,10 +147,12 @@ export default class AutoCompleteComponent extends Component {
       throw new Error('Could not initialize AutoComplete. Can not find {HTMLElement} `', this._inputEl, '`.');
     }
 
-    // Disable the native auto complete
-    DOM.attr(queryInput, 'autocomplete', 'off');
-    DOM.attr(queryInput, 'autocorrect', 'off');
-    DOM.attr(queryInput, 'spellcheck', 'false');
+    // Disable the native autocomplete, autocorrect & spellcheck
+    DOM.attributes(queryInput, {
+      autocomplete: 'off',
+      autocorrect: 'off',
+      spellcheck: 'false'
+    });
 
     // The user exits the input, so we want to reset the state and close
     // the auto complete
