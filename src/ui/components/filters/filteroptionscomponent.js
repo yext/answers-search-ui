@@ -150,7 +150,7 @@ export default class FilterOptionsComponent extends Component {
         ? o.filter
         : Filter.equal(o.field, o.value));
 
-    this.persistentStorage.set(this.name, this._options.filter(o => o.selected).map(o => o.label));
+    this.core.persistentStorage.set(this.name, this._options.filter(o => o.selected).map(o => o.label));
     return filters.length > 0
       ? Filter.group(...filters)
       : {};

@@ -102,6 +102,11 @@ export default class SearchComponent extends Component {
      * @type {string}
      */
     this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
+      this.query = q;
+      this.setState();
+      this.search(q);
+    });
 
     /**
      * The minimum time allowed in milliseconds between searches to prevent
@@ -174,7 +179,7 @@ export default class SearchComponent extends Component {
 
       inputEl.blur();
 
-      this.persistentStorage.set(StorageKeys.QUERY, query);
+      this.core.persistentStorage.set(StorageKeys.QUERY, query);
       this.core.setQuery(query);
       this.search(query);
       return false;

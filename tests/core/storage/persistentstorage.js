@@ -3,9 +3,11 @@ import PersistentStorage from '../../../src/ui/storage/persistentstorage';
 describe('adding and removing data', () => {
   let storage;
   let mockPushState;
+  let updateCb;
 
   beforeEach(() => {
-    storage = new PersistentStorage();
+    updateCb = jest.fn();
+    storage = new PersistentStorage({ updateListener: updateCb });
     mockPushState = jest.fn();
     window.history.pushState = mockPushState;
     window.location.search = '';
@@ -55,13 +57,10 @@ describe('adding and removing data', () => {
   });
 
   it('sends update info to listeners', () => {
-    const cb = jest.fn();
-    storage.onUpdate(cb);
-
     storage.set('key1', 'val1');
     expect.assertions(1);
     return new Promise(resolve => setTimeout(() => {
-      expect(cb).toBeCalledWith({ key1: 'val1' }, 'key1=val1');
+      expect(updateCb).toBeCalledWith({ key1: 'val1' }, 'key1=val1');
       resolve();
     }, 200));
   });

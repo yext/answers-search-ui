@@ -4,7 +4,7 @@ import { AnswersStorageError } from '../../core/errors/errors';
 /** @module PersistentStorage */
 
 export default class PersistentStorage {
-  constructor () {
+  constructor (config = {}) {
     /**
      * The current params model
      * @type {SearchParams}
@@ -21,18 +21,18 @@ export default class PersistentStorage {
      * The list of listeners to every storage update
      * @type {function[]}
      */
-    this._updateListeners = [];
+    this._updateListener = config.updateListener || function () {};
 
     /**
      * The list of listeners to storage resets
      * @type {function[]}
      */
-    this._resetListeners = [];
+    this._resetListener = config.resetListener || function () {};
 
     window.onpopstate = () => {
       this._params = new SearchParams(window.location.search.substring(1));
-      this._callListeners(this._updateListeners);
-      this._callListeners(this._resetListeners);
+      this._callListener(this._updateListener);
+      this._callListener(this._resetListener);
     };
   }
 
@@ -72,25 +72,9 @@ export default class PersistentStorage {
       () => {
         this._historyTimer = null;
         window.history.pushState(null, null, `?${this._params.toString()}`);
-        this._callListeners(this._updateListeners);
+        this._callListener(this._updateListener);
       },
       100);
-  }
-
-  /**
-   * Add the given callback to the list of functions invoked when storage is updated
-   * @param {function} cb The callback to invoke when storage is updated
-   */
-  onUpdate (cb) {
-    this._updateListeners.push(cb);
-  }
-
-  /**
-   * Add the given callback to the list of functions invoked when storage is reset
-   * @param {function} cb The callback to invoke when storage is reset
-   */
-  onReset (cb) {
-    this._resetListeners.push(cb);
   }
 
   /**
@@ -98,8 +82,8 @@ export default class PersistentStorage {
    * @param {function[]} listeners The callbacks to invoke
    * @private
    */
-  _callListeners (listeners) {
-    listeners.forEach(cb => cb(this.getAll(), this._params.toString()));
+  _callListener (listener) {
+    listener(this.getAll(), this._params.toString());
   }
 
   /**

@@ -159,8 +159,8 @@ export default class GeoLocationComponent extends Component {
           this._saveDataToStorage('', this._buildFilter(position));
           this._enabled = true;
           this.setState({});
-          this.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-          this.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+          this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
+          this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
         },
         () => this.setState({ geoError: true })
       );
@@ -173,8 +173,8 @@ export default class GeoLocationComponent extends Component {
    * @private
    */
   _saveDataToStorage (query, filter) {
-    this.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
-    this.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
+    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
+    this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
     this.core.setFilter(this.name, filter);
   }
 

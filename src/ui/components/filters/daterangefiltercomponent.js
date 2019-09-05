@@ -136,8 +136,8 @@ export default class DateRangeFilterComponent extends Component {
     if (this._storeOnChange) {
       this.core.setFilter(this.name, filter);
     }
-    this.persistentStorage.set(`${this.name}.min`, this._date.min);
-    this.persistentStorage.set(`${this.name}.max`, this._date.max);
+    this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
+    this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
     this._onChange(filter);
   }

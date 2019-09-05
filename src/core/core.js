@@ -6,7 +6,6 @@ import QuestionAnswerApi from './search/questionanswerapi';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
-import GlobalStorage from './storage/globalstorage';
 import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
@@ -53,7 +52,14 @@ export default class Core {
      * @type {GlobalStorage}
      * @private
      */
-    this.globalStorage = new GlobalStorage();
+    this.globalStorage = config.globalStorage;
+
+    /**
+     * A reference to the core persistent storage
+     * @type {PersistentStorage}
+     * @private
+     */
+    this.persistentStorage = config.persistentStorage;
 
     /**
      * An abstraction containing the integration with the RESTful search API
