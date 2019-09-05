@@ -1,7 +1,8 @@
 /** @module AccordionResultsComponent */
-import ResultsItemComponent from './resultsitemcomponent';
+import ResultsComponent from './resultscomponent.js';
+import DOM from '../../dom/dom';
 
-export default class AccordionResultsComponent extends ResultsItemComponent {
+export default class AccordionResultsComponent extends ResultsComponent {
   constructor (opts = {}) {
     super(opts);
 
@@ -10,30 +11,6 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
      * @type {string}
      */
     this._selectorBase = opts.selectorBase || '.js-yxt-AccordionResult';
-
-    /**
-     * the entityId, used here for DOM binding
-     * @type {string}
-     */
-    this.wrapperElementId = `accordion-${opts.data.id}`;
-
-    /**
-     * handle to the DOM element
-     * @type {HTMLElement |null}
-     */
-    this.wrapperEl = null;
-
-    /**
-     * handle to the collapsible content element
-     * @type {HTMLElement |null}
-     */
-    this.contentEl = null;
-
-    /**
-     * handle to the toggle button element
-     * @type {HTMLElement |null}
-     */
-    this.toggleEl = null;
 
     /**
      * collapsed state class
@@ -67,69 +44,75 @@ export default class AccordionResultsComponent extends ResultsItemComponent {
   }
 
   /**
-   * overrides onMount to add bindings to change the height on click
+   * overrides _onMount to add bindings to change the height on click
    * @returns {AccordionResultsComponent}
    * @override
    */
-  onMount () {
-    super.onMount();
+  _onMount () {
+    super._onMount();
 
-    this.wrapperEl = document.getElementById(this.wrapperElementId);
-    if (!this.wrapperEl) {
-      // it seems as part of the re-mounting process onMount() is called twice
-      // the first time without the data changing and without anything rendered.
-      // doing this to avoid throwing an exception while we figure out the issue.
-      return this;
-    }
-
-    this.toggleEl = this.wrapperEl.querySelector(this.toggleSelector());
-    this.contentEl = this.wrapperEl.querySelector(this.bodySelector());
-    this.changeHeight();
-    this.toggleEl.addEventListener('click', () => {
-      this.handleClick();
+    const accordionEls = DOM.queryAll(this._container, this._selectorBase);
+    accordionEls.forEach((accordionEl) => {
+      const toggleEl = DOM.query(accordionEl, this.toggleSelector());
+      const contentEl = DOM.query(accordionEl, this.bodySelector());
+      this.changeHeight(contentEl, accordionEl);
+      toggleEl.addEventListener('click', () => {
+        this.handleClick(accordionEl, toggleEl, contentEl);
+      });
     });
 
     return this;
   }
 
   setState (data) {
-    // TODO (bmcginnis): this would be better handled if handClick just hit analyticsReporter directly
+    // TODO (bmcginnis): this would be better handled if handleClick just hit analyticsReporter directly
     // but that seems too far a field for now.
-    return super.setState(Object.assign(data, {
-      eventOptions: {
-        entityId: data.id,
-        verticalConfigId: this.verticalConfigId
-      }
+    return super.setState(Object.assign({}, data, {
+      modifier: this.verticalConfigId,
+      results: data.results ? data.results.map((result) => {
+        return Object.assign(result, {
+          eventOptions: JSON.stringify({
+            entityId: result.id,
+            verticalConfigId: this.verticalConfigId
+          })
+        });
+      }) : data.results
     }));
   }
 
   /**
-   * returns true if the element is currently collapsed
-   * @returns {boolean}
+   * click handler for the accordion toggle button
+   * @param wrapperEl {HTMLElement} the toggle container
+   * @param toggleEl {HTMLElement} the button
+   * @param contentEl {HTMLElement} the toggle target
    */
-  isCollapsed () {
-    if (!this.wrapperEl) {
-      return false;
-    }
-
-    return this.wrapperEl.classList.contains(this.collapsedClass);
+  handleClick (wrapperEl, toggleEl, contentEl) {
+    wrapperEl.classList.toggle(this.collapsedClass);
+    this.changeHeight(contentEl, wrapperEl);
+    toggleEl.setAttribute('aria-expanded', this.isCollapsed(wrapperEl) ? 'false' : 'true');
+    toggleEl.dataset.eventtype = this.isCollapsed(wrapperEl) ? 'ROW_EXPAND' : 'ROW_COLLAPSE';
   }
 
   /**
-   * click handler for the accordion toggle button
+   * returns true if the element is currently collapsed
+   * @param wrapperEl {HTMLElement} the toggle container
+   * @returns {boolean}
    */
-  handleClick () {
-    this.wrapperEl.classList.toggle(this.collapsedClass);
-    this.changeHeight();
-    this.toggleEl.setAttribute('aria-expanded', this.isCollapsed() ? 'false' : 'true');
-    this.toggleEl.dataset.eventtype = this.isCollapsed() ? 'ROW_EXPAND' : 'ROW_COLLAPSE';
+  isCollapsed (wrapperEl) {
+    if (!wrapperEl) {
+      return false;
+    }
+
+    return wrapperEl.classList.contains(this.collapsedClass);
   }
 
   /**
    * toggles the height between 0 and the content height for smooth animation
+   * @param targetEl {HTMLElement}
+   * @param wrapperEl {HTMLElement}
    */
-  changeHeight () {
-    this.contentEl.style.height = `${this.isCollapsed() ? 0 : this.contentEl.scrollHeight}px`;
+  changeHeight (targetEl, wrapperEl) {
+    targetEl.style.height = `${this.isCollapsed(wrapperEl) ? 0 : targetEl.scrollHeight}px`;
   }
 
   /**

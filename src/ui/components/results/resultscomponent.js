@@ -10,7 +10,6 @@ import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import { AnswersComponentError } from '../../../core/errors/errors';
-import AccordionResultsComponent from './accordionresultscomponent';
 
 const ResultType = {
   EVENT: 'event',
@@ -21,12 +20,6 @@ const ResultType = {
 export default class ResultsComponent extends Component {
   constructor (config = {}) {
     super(config);
-
-    /**
-     * enable accordion mode
-     * @type {boolean}
-     */
-    this.useAccordion = config.useAccordion || false;
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._itemConfig = {
@@ -43,10 +36,6 @@ export default class ResultsComponent extends Component {
         template: null
       },
       [PeopleResultsItemComponent.type]: {
-        render: null,
-        template: null
-      },
-      [AccordionResultsComponent.type]: {
         render: null,
         template: null
       }
@@ -140,11 +129,6 @@ export default class ResultsComponent extends Component {
 
   getItemComponent (type) {
     let comp = ResultsItemComponent;
-
-    if (this.useAccordion) {
-      return AccordionResultsComponent;
-    }
-
     switch (type) {
       case ResultType.EVENT:
         comp = EventResultsItemComponent;

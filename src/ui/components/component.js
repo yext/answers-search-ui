@@ -294,9 +294,6 @@ export default class Component {
       return this;
     }
 
-    // TODO (bmcginnis): it would be nice if we gave the component a handle to
-    //  it's corresponding dom element, so we don't force item level
-    //  components to reconcile themselves against their siblings with IDs.
     DOM.append(this._container, this.render(this._state.asJSON()));
 
     this._isMounted = true;
