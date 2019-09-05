@@ -1,4 +1,4 @@
-import SVGIcon from './icons.js';
+import SVGIcon from './icon.js';
 export default new SVGIcon({
   name: 'tag',
   viewBox: '0 0 18 18',

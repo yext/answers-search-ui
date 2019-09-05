@@ -25,7 +25,6 @@ export default class SVGIcon {
      * @type {string}
      */
     this.viewBox = config.viewBox || '0 0 24 24';
-
     /**
      * actual contents used
      */

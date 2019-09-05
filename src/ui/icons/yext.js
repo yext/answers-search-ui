@@ -1,4 +1,4 @@
-import SVGIcon from './icons.js';
+import SVGIcon from './icon.js';
 export default new SVGIcon({
   name: 'yext',
   viewBox: '0 0 30 30',

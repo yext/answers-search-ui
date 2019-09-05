@@ -1,4 +1,4 @@
-import SVGIcon from './icons.js';
+import SVGIcon from './icon.js';
 export default new SVGIcon({
   name: 'kabob',
   viewBox: '0 0 3 11',
