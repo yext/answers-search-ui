@@ -19,15 +19,16 @@ import GeoLocationComponent from './filters/geolocationcomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
 import ResultsComponent from './results/resultscomponent';
+import AccordionResultsComponent from './results/accordionresultscomponent.js';
 import UniversalResultsComponent from './results/universalresultscomponent';
 
 import ResultsItemComponent from './results/resultsitemcomponent';
 import LocationResultsItemComponent from './results/locationresultsitemcomponent';
 import EventResultsItemComponent from './results/eventresultsitemcomponent';
+
 import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
 
 import MapComponent from './map/mapcomponent';
-
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
 export const COMPONENT_MANAGER = new ComponentManager()
@@ -55,6 +56,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(UniversalResultsComponent)
   .register(ResultsComponent)
   .register(ResultsItemComponent)
+  .register(AccordionResultsComponent)
   .register(LocationResultsItemComponent)
   .register(EventResultsItemComponent)
   .register(PeopleResultsItemComponent)
