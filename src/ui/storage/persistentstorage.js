@@ -68,6 +68,7 @@ export default class PersistentStorage {
       clearTimeout(this._historyTimer);
     }
 
+    // batch update calls across components to avoid updating the url too much
     this._historyTimer = setTimeout(
       () => {
         this._historyTimer = null;
