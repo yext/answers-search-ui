@@ -4,14 +4,38 @@ import Component from '../component';
 import Icons from '../../icons';
 
 export default class IconComponent extends Component {
+  /**
+   * IconComponent
+   * @param opts
+   * @param opts.iconName {string}
+   * @param opts.customIcon {string}
+   * @param opts.iconUrl {string}
+   */
   constructor (opts = {}) {
     super(opts);
 
+    /**
+     * name of an icon from the default icon set
+     * @type {string}
+     */
     this.iconName = opts.iconName || 'default';
+
+    /**
+     * the markup for a fully custom icon
+     * @type {*|null}
+     */
     this.customIcon = opts.customIcon || null;
+    /**
+     * the url to a custom image icon
+     * @type {null}
+     */
     this.iconUrl = opts.iconUrl || null;
   }
 
+  /**
+   * getter for the image pasted to handlebars
+   * @returns {string}
+   */
   get image () {
     if (this.customIcon) {
       return this.customIcon;
@@ -50,6 +74,11 @@ export default class IconComponent extends Component {
     return true;
   }
 
+  /**
+   * overrides default functionality to provide name and markup
+   * @param data
+   * @returns {IconComponent}
+   */
   setState (data) {
     return super.setState(Object.assign(data, {
       image: this.image,
