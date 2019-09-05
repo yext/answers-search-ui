@@ -3,26 +3,26 @@ import ResultsComponent from './resultscomponent.js';
 import DOM from '../../dom/dom';
 
 export default class AccordionResultsComponent extends ResultsComponent {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (config = {}) {
+    super(config);
 
     /**
      * base selector to use when finding DOM targets
      * @type {string}
      */
-    this._selectorBase = opts.selectorBase || '.js-yxt-AccordionResult';
+    this._selectorBase = config.selectorBase || '.js-yxt-AccordionResult';
 
     /**
      * collapsed state class
      * @type {string}
      */
-    this.collapsedClass = opts.collapsedClass || 'is-collapsed';
+    this.collapsedClass = config.collapsedClass || 'is-collapsed';
 
     /**
      * vertical config id is required for analytics
      * @type {string|null}
      */
-    this.verticalConfigId = opts.verticalConfigId || opts._parentOpts.verticalConfigId || null;
+    this.verticalConfigId = config.verticalConfigId || config._parentOpts.verticalConfigId || null;
   }
 
   /**
