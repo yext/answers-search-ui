@@ -1,0 +1,60 @@
+{{#if results}}
+  <section class="yxt-Accordion yxt-Results yxt-Results--{{modifier}}">
+    {{> results/resultssectionheader}}
+    <ul class="yxt-Accordion-list yxt-Results-items"
+        data-prop="results">
+      {{#each results}}
+        <li id="accordion-{{this.id}}"
+            class="yxt-AccordionResult js-yxt-AccordionResult
+                  {{#if this.collapsed}} is-collapsed{{/if}}
+                  {{#if modifier}} yxt-AccordionResult--{{modifier}}{{/if}}">
+
+          <h3 class="yxt-AccordionResult-title">
+            <button class="yxt-AccordionResult-toggle js-yxt-AccordionResult-toggle"
+                    aria-expanded="{{#if this.collapsed}}false{{else}}true{{/if}}"
+                    aria-controls="#{{this.id}}"
+                    data-eventtype="{{#if this.collapsed}}ROW_EXPAND{{else}}ROW_COLLAPSE{{/if}}"
+                    data-eventoptions='{{this.eventOptions}}'>
+                    {{this.title}}
+                <span class="yxt-AccordionResult-indicator" aria-hidden="true">
+                </span>
+            </button>
+          </h3>
+          <div class="yxt-AccordionResult-body js-yxt-AccordionResult-body" id="{{this.id}}">
+            <div class="yxt-AccordionResult-content">
+              <div class="yxt-AccordionResult-details">{{{this.details}}}</div>
+              {{#if this.callsToAction}}
+                <div class="yxt-AccordionResult-ctasWrapper">
+                  <div class="yxt-AccordionResult-ctas">
+                    {{#each callsToAction}}
+                      {{#if this.url}}
+                        <a class="yxt-AccordionResult-cta"
+                           href="{{this.url}}"
+                           target="_blank"
+                           {{#if this.eventType}} data-eventtype="{{this.eventType}}"{{/if}}
+                           {{#if this.eventOptions}} data-eventoptions='{{this.eventOptions}}'{{/if}}
+                        >
+                          {{#if this.icon}}
+                            <div class="yxt-AccordionResult-ctaIconWrapper">
+                              <span class="yxt-AccordionResult-ctaIcon"
+                                    data-component="IconComponent"
+                                    data-opts='{"iconName": "{{this.icon}}"}'
+                                    data-prop="icon"></span>
+                            </div>
+                          {{/if}}
+                          <span class="yxt-AccordionResult-ctaLabel">
+                            {{{this.label}}}
+                          </span>
+                        </a>
+                      {{/if}}
+                    {{/each}}
+                  </div>
+                </div>
+              {{/if}}
+            </div>
+          </div>
+        </li>
+      {{/each}}
+    </ul>
+  </section>
+{{/if}}
