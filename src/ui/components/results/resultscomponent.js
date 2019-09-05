@@ -10,6 +10,7 @@ import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import { AnswersComponentError } from '../../../core/errors/errors';
+import CallToAction from '../../../core/models/calltoaction.js';
 
 const ResultType = {
   EVENT: 'event',
@@ -34,6 +35,8 @@ export default class ResultsComponent extends Component {
      * @private
      */
     this._isUniversal = config.isUniversal || false;
+
+    this._callsToActionBuilders = this.setupCallsToActions(config);
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._itemConfig = {
@@ -83,6 +86,10 @@ export default class ResultsComponent extends Component {
     this._universalUrl = config.universalUrl;
   }
 
+  setupCallsToActions (config, modifier) {
+    return CallToAction.buildCTATemplatesFromConfig(config.callsToAction || [], this._verticalConfigId, this._isUniversal, modifier);
+  }
+
   mount () {
     if (Object.keys(this.getState()).length > 0) {
       super.mount();
@@ -98,6 +105,7 @@ export default class ResultsComponent extends Component {
   setState (data, val) {
     const results = data.results || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    const preparedResults = this.prepareResults(data);
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -107,18 +115,52 @@ export default class ResultsComponent extends Component {
       eventOptions: this.eventOptions(),
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: results.length === 0,
-      query: this.core.globalStorage.getState(StorageKeys.QUERY)
+      query: this.core.globalStorage.getState(StorageKeys.QUERY),
+      modifier: this.verticalConfigId,
+      results: preparedResults
     }), val);
   }
 
+  prepareResults (data) {
+    const prepared = [];
+
+    if (!data && !data.results) {
+      return prepared;
+    }
+
+    for (let res of data.results) {
+      const eventOptions = this.eventOptions(res.id);
+      const callsToAction = this._callsToActionBuilders
+        .map(builder => builder(res._raw));
+
+      prepared.push(Object.assign({}, res, {
+        eventOptions: eventOptions,
+        callsToAction: callsToAction,
+      }));
+    }
+
+    debugger;
+
+    return prepared;
+  }
+
   /**
-   * helper to construct the eventOptions object for the view all link
+   * helper to construct the eventOptions object for the title link & the view all link
    * @returns {string}
    */
-  eventOptions () {
-    return JSON.stringify({
+  eventOptions (entityId) {
+    const base = {
       verticalConfigId: this._verticalConfigId
-    });
+    };
+    if (!entityId) {
+      return JSON.stringify(base);
+    }
+    return JSON.stringify(
+      Object.assign(base, {
+        searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL',
+        entityId: entityId
+      })
+    );
   }
 
   static get type () {
@@ -199,7 +241,8 @@ export default class ResultsComponent extends Component {
     // have just been constructed. Prioritize global over individual items.
     let comp = super.addChild(data, type, Object.assign(opts, {
       verticalConfigId: this._verticalConfigId,
-      isUniversal: this._isUniversal
+      isUniversal: this._isUniversal,
+      callsToActionBuilders: this._callsToActionBuilders
     }));
     let globalConfig = this._itemConfig.global;
     let itemConfig = this._itemConfig[comp.type];

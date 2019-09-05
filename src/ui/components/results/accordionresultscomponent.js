@@ -44,6 +44,10 @@ export default class AccordionResultsComponent extends ResultsComponent {
     return 'results/resultsaccordion';
   }
 
+  setupCallsToActions (config) {
+    return super.setupCallsToActions(config, 'accordion');
+  }
+
   /**
    * overrides _onMount to add bindings to change the height on click
    * @returns {AccordionResultsComponent}
@@ -63,12 +67,6 @@ export default class AccordionResultsComponent extends ResultsComponent {
     });
 
     return this;
-  }
-
-  setState (data) {
-    return super.setState(Object.assign({}, data, {
-      modifier: this.verticalConfigId
-    }));
   }
 
   /**

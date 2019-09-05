@@ -1,0 +1,18 @@
+{{log this}}
+
+<a class="yxt-CallToAction{{#if modifier}} yxt-CallToAction--{{modifier}}{{/if}}"
+   href="{{url}}"
+   target="{{#if target}}{{target}}{{else}}_blank{{/if}}"
+           data-eventtype="{{eventType}}"
+           data-eventoptions='{{eventOptions}}'>
+  {{#if iconOptions}}
+    <div class="yxt-CallToAction-iconWrapper"
+         data-component="IconComponent"
+         data-opts='{{iconOptions}}'
+         data-prop="icon">
+    </div>
+  {{/if}}
+  <span class="yxt-CallToActionLabel">
+    {{{label}}}
+  </span>
+</a>
