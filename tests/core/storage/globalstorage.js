@@ -50,6 +50,13 @@ describe('storing and retrieving', () => {
 
     expect(storage.getState(StorageKeys.SEARCH_LIMIT)).toBe(25);
   });
+
+  it('sets all data with setAll()', () => {
+    storage.setAll({ key1: 'val1', key2: 'val2' });
+
+    expect(storage.getState('key1')).toBe('val1');
+    expect(storage.getState('key2')).toBe('val2');
+  });
 });
 
 describe('publishing and subscribing', () => {

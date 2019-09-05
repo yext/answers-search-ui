@@ -51,7 +51,19 @@ export default class PersistentStorage {
       newData = JSON.stringify(data);
     }
     this._params.set(key, newData);
+    this._updateHistory();
+  }
 
+  /**
+   * Delete the given key from storage
+   * @param {string} key The key to delete
+   */
+  delete (key) {
+    this._params.delete(key);
+    this._updateHistory();
+  }
+
+  _updateHistory () {
     if (this._historyTimer) {
       clearTimeout(this._historyTimer);
     }
@@ -63,14 +75,6 @@ export default class PersistentStorage {
         this._callListeners(this._updateListeners);
       },
       100);
-  }
-
-  /**
-   * Delete the given key from storage
-   * @param {string} key The key to delete
-   */
-  delete (key) {
-    this._params.delete(key);
   }
 
   /**
