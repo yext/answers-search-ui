@@ -1,6 +1,7 @@
 /** @module AccordionResultsComponent */
-import ResultsComponent from './resultscomponent.js';
+import ResultsComponent from './resultscomponent';
 import DOM from '../../dom/dom';
+import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
 export default class AccordionResultsComponent extends ResultsComponent {
   constructor (config = {}) {
@@ -65,18 +66,8 @@ export default class AccordionResultsComponent extends ResultsComponent {
   }
 
   setState (data) {
-    // TODO (bmcginnis): this would be better handled if handleClick just hit analyticsReporter directly
-    // but that seems too far a field for now.
     return super.setState(Object.assign({}, data, {
-      modifier: this.verticalConfigId,
-      results: data.results ? data.results.map((result) => {
-        return Object.assign(result, {
-          eventOptions: JSON.stringify({
-            entityId: result.id,
-            verticalConfigId: this.verticalConfigId
-          })
-        });
-      }) : data.results
+      modifier: this.verticalConfigId
     }));
   }
 
@@ -87,10 +78,15 @@ export default class AccordionResultsComponent extends ResultsComponent {
    * @param contentEl {HTMLElement} the toggle target
    */
   handleClick (wrapperEl, toggleEl, contentEl) {
+    const event = new AnalyticsEvent(this.isCollapsed(wrapperEl) ? 'ROW_EXPAND' : 'ROW_COLLAPSE')
+      .addOptions({
+        verticalConfigId: this.verticalConfigId,
+        entityId: toggleEl.dataset.entityId
+      });
     wrapperEl.classList.toggle(this.collapsedClass);
     this.changeHeight(contentEl, wrapperEl);
     toggleEl.setAttribute('aria-expanded', this.isCollapsed(wrapperEl) ? 'false' : 'true');
-    toggleEl.dataset.eventtype = this.isCollapsed(wrapperEl) ? 'ROW_EXPAND' : 'ROW_COLLAPSE';
+    this.analyticsReporter.report(event);
   }
 
   /**

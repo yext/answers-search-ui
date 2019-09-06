@@ -87,7 +87,8 @@ export default class FilterBoxComponent extends Component {
   setState (data) {
     super.setState(Object.assign(data, {
       filterConfigs: this._filterConfigs,
-      showApplyButton: !this._searchOnChange
+      showApplyButton: !this._searchOnChange,
+      eventType: this._isDynamic ? 'FACETING' : 'FILTERING'
     }));
   }
 

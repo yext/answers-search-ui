@@ -4,7 +4,11 @@
   {{/each}}
   {{#if showApplyButton}}
     <div>
-      <button type="button" class="js-yext-filterbox-apply">Apply</button>
+      <button type="button"
+              class="js-yext-filterbox-apply"
+              data-eventtype="{{eventType}}">
+        Apply
+      </button>
     </div>
   {{/if}}
 </div>
