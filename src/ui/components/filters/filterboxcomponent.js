@@ -176,15 +176,15 @@ export default class FilterBoxComponent extends Component {
    * Trigger a search with all filters in storage
    */
   _search () {
-    const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
+    const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
     const totalFilter = allFilters.length > 1
       ? Filter.and(...allFilters)
       : allFilters[0];
 
     // TODO(jdelerme): check empty object
-    const query = this.core.storage.getState(StorageKeys.QUERY);
+    const query = this.core.globalStorage.getState(StorageKeys.QUERY);
 
-    const facetFilter = this.core.storage.getAll(StorageKeys.FACET_FILTER)[0];
+    const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
 
     this.core.verticalSearch(this._verticalKey, {
       input: query,

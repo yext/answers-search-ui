@@ -101,7 +101,12 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = config.query || this.getUrlParams().get('query') || '';
+    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
+      this.query = q;
+      this.setState();
+      this.search(q);
+    });
 
     /**
      * The minimum time allowed in milliseconds between searches to prevent
@@ -130,8 +135,6 @@ export default class SearchComponent extends Component {
       this.core.setQuery(this.query);
       this.search(this.query);
     }
-
-    this.bindBrowserHistory();
   }
 
   onMount () {
@@ -164,7 +167,7 @@ export default class SearchComponent extends Component {
       let inputEl = form.querySelector(this._inputEl);
 
       let query = inputEl.value;
-      let params = this.getUrlParams();
+      let params = new SearchParams(window.location.search.substring(1));
       params.set('query', query);
 
       // If we have a redirectUrl, we want the form to be
@@ -174,13 +177,9 @@ export default class SearchComponent extends Component {
         return false;
       }
 
-      window.history.pushState({
-        query: query
-      }, query, '?' + params.toString());
-      this.core.storage.set(StorageKeys.PARAMS, params.toString());
-
       inputEl.blur();
 
+      this.core.persistentStorage.set(StorageKeys.QUERY, query);
       this.core.setQuery(query);
       this.search(query);
       return false;
@@ -194,7 +193,11 @@ export default class SearchComponent extends Component {
   initAutoComplete (inputSelector) {
     this._inputEl = inputSelector;
 
-    this.componentManager.create('AutoComplete', {
+    if (this._autocomplete) {
+      this._autocomplete.remove();
+    }
+
+    this._autocomplete = this.componentManager.create('AutoComplete', {
       parent: this,
       name: `${this.name}.autocomplete`,
       container: '.yxt-SearchBar-autocomplete',
@@ -218,11 +221,11 @@ export default class SearchComponent extends Component {
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
 
     if (this._verticalKey) {
-      const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
+      const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
       const totalFilter = allFilters.length > 1
         ? Filter.and(...allFilters)
         : allFilters[0];
-      const facetFilter = this.core.storage.getAll(StorageKeys.FACET_FILTER)[0];
+      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
       return this.core.verticalSearch(this._verticalKey, {
         input: query,
         filter: JSON.stringify(totalFilter),
@@ -265,23 +268,5 @@ export default class SearchComponent extends Component {
       submitText: this.submitText,
       query: this.query
     }, data));
-  }
-
-  getUrlParams (url) {
-    url = url || window.location.search.substring(1);
-    return new SearchParams(url);
-  }
-
-  bindBrowserHistory () {
-    DOM.on(window, 'popstate', () => {
-      this.query = this.getUrlParams().get('query');
-      this.setState({
-        query: this.query
-      });
-
-      this.core.setQuery(this.query);
-
-      this.search(this.query);
-    });
   }
 }

@@ -9,7 +9,7 @@ describe('reporting events', () => {
   const mockedBeacon = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
   const mockedStorageOn = jest.fn();
   const mockedCore = {
-    storage: {
+    globalStorage: {
       on: mockedStorageOn
     }
   };

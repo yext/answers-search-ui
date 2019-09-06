@@ -33,12 +33,14 @@ export default class FilterOptionsComponent extends Component {
         'FilterOptions');
     }
 
+    const selectedOptions = this.core.globalStorage.getState(this.name) || [];
+
     /**
      * The list of filter options to display with checked status
      * @type {object[]}
      * @private
      */
-    this._options = config.options.map(o => Object.assign({}, { selected: false }, o));
+    this._options = config.options.map(o => Object.assign({}, { selected: selectedOptions.includes(o.label) }, o));
 
     /**
      * The type of control to display
@@ -67,8 +69,6 @@ export default class FilterOptionsComponent extends Component {
      * @private
      */
     this._onChange = config.onChange || function () {};
-
-    this._label = config.label || '';
 
     /**
      * The label to be used in the legend
@@ -150,6 +150,7 @@ export default class FilterOptionsComponent extends Component {
         ? o.filter
         : Filter.equal(o.field, o.value));
 
+    this.core.persistentStorage.set(this.name, this._options.filter(o => o.selected).map(o => o.label));
     return filters.length > 0
       ? Filter.group(...filters)
       : {};

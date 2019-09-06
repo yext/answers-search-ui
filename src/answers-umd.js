@@ -11,7 +11,8 @@ import {
 
 import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
-import StorageKeys from './core/storage/storagekeys';
+import PersistentStorage from './ui/storage/persistentstorage';
+import GlobalStorage from './core/storage/globalstorage';
 
 /**
  * The main Answers interface
@@ -55,11 +56,24 @@ class Answers {
   }
 
   init (config) {
+    const globalStorage = new GlobalStorage();
+    const persistentStorage = new PersistentStorage({
+      updateListener: config.onStateChange,
+      resetListener: data => globalStorage.setAll(data)
+    });
+    globalStorage.setAll(persistentStorage.getAll());
+
     const core = new Core({
       apiKey: config.apiKey,
+      globalStorage: globalStorage,
+      persistentStorage: persistentStorage,
       answersKey: config.answersKey,
       locale: config.locale
     });
+
+    if (config.onStateChange && typeof config.onStateChange === 'function') {
+      config.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
+    }
 
     this.components
       .setCore(core)
@@ -76,11 +90,6 @@ class Answers {
     }
 
     this._onReady = config.onReady || function () {};
-
-    if (config.onStateChange && typeof config.onStateChange === 'function') {
-      config.onStateChange(window.location.search.substr(1));
-      core.storage.on('update', StorageKeys.PARAMS, params => config.onStateChange(params));
-    }
 
     if (config.useTemplates === false || config.templateBundle) {
       if (config.templateBundle) {

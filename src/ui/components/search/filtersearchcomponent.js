@@ -94,14 +94,19 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = config.query || this.getUrlParams().get(`${this.name}.query`) || '';
+    this.query = config.query || this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
+    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
+      this.query = q;
+      this.search();
+    });
 
     /**
      * The filter string to use for the provided query
      * Optionally provided
      * @type {string}
      */
-    this.filter = config.filter || this.getUrlParams().get(`${this.name}.filter`) || '';
+    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || '';
+    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
   }
 
   static get type () {
@@ -113,22 +118,14 @@ export default class FilterSearchComponent extends Component {
    * @returns {string}
    * @override
    */
-  static defaultTemplateName (config) {
+  static defaultTemplateName () {
     return 'search/filtersearch';
   }
 
   onCreate () {
-    if (this.query && this.query.length > 0 && this.filter && this.filter.length > 0) {
-      const params = this.getUrlParams();
-      params.set(`${this.name}.query`, this.query);
-      params.set(`${this.name}.filter`, this.filter);
-      window.history.pushState({}, '', '?' + params.toString());
-      this.core.storage.set(StorageKeys.PARAMS, params.toString());
-      this.core.setFilter(this.name, Filter.fromResponse(this.filter));
+    if (this.query && this.filter) {
       this.search();
     }
-
-    this.bindBrowserHistory();
   }
 
   onMount () {
@@ -159,7 +156,7 @@ export default class FilterSearchComponent extends Component {
       verticalKey: this._verticalKey,
       barKey: this._barKey,
       onSubmit: (query, filter) => {
-        const params = this.getUrlParams();
+        const params = new SearchParams(window.location.search.substring(1));
         params.set(`${this.name}.query`, query);
         params.set(`${this.name}.filter`, filter);
 
@@ -170,11 +167,12 @@ export default class FilterSearchComponent extends Component {
           return false;
         }
 
-        window.history.pushState({}, '', '?' + params.toString());
-        this.core.storage.set(StorageKeys.PARAMS, params.toString());
-
         // save the filter to storage for the next search
-        this.core.setFilter(this.name, Filter.fromResponse(filter));
+        this.query = query;
+        this.filter = Filter.fromResponse(filter);
+        this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+        this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, this.filter);
+        this.core.setFilter(this.name, this.filter);
         this.search();
       }
     });
@@ -189,13 +187,13 @@ export default class FilterSearchComponent extends Component {
       return;
     }
 
-    const filters = this.core.storage.getAll(StorageKeys.FILTER);
+    const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
     let totalFilter = filters[0];
     if (filters.length > 1) {
       totalFilter = Filter.and(...filters);
     }
-    const searchQuery = this.core.storage.getState(StorageKeys.QUERY) || '';
-    const facetFilter = this.core.storage.getAll(StorageKeys.FACET_FILTER)[0];
+    const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
 
     this.core.verticalSearch(this._verticalKey, {
       input: searchQuery,
@@ -211,24 +209,5 @@ export default class FilterSearchComponent extends Component {
       query: this.query,
       filter: this.filter
     }, data));
-  }
-
-  getUrlParams (url) {
-    url = url || window.location.search.substring(1);
-    return new SearchParams(url);
-  }
-
-  bindBrowserHistory () {
-    DOM.on(window, 'popstate', () => {
-      this.query = this.getUrlParams().get(`${this.name}.query`);
-      this.filter = this.getUrlParams().get(`${this.name}.filter`);
-      this.setState({
-        query: this.query,
-        filter: this.filter
-      });
-
-      this._saveQueryAndFilter(this.query, this.filter);
-      this.search();
-    });
   }
 }
