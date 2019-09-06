@@ -29,6 +29,8 @@
       <div class="yxt-DirectAnswer-viewMoreWrapper">
         <a class="yxt-DirectAnswer-viewMore"
            href="{{{relatedItem.data.website}}}"
+           data-eventtype="CTA_CLICK"
+           data-eventoptions="{{eventOptions}}"
            target="{{#if _config.linkTarget}}{{_config.linkTarget}}{{else}}_blank{{/if}}">
           {{{_config.viewDetailsText}}}
         </a>
