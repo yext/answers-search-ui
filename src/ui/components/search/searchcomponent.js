@@ -243,7 +243,7 @@ export default class SearchComponent extends Component {
 
         if (tabs && Array.isArray(tabs)) {
           for (let i = 0; i < tabs.length; i++) {
-            let params = this.getUrlParams(tabs[i].url.split('?')[1]);
+            let params = new SearchParams(tabs[i].url.split('?')[1]);
             params.set('query', query);
 
             let url = tabs[i].baseUrl;
