@@ -1,10 +1,10 @@
-import Storage from '../../../src/core/storage/storage';
+import GlobalStorage from '../../../src/core/storage/globalstorage';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 let storage;
 
 beforeEach(() => {
-  storage = new Storage();
+  storage = new GlobalStorage();
 });
 
 describe('storing and retrieving', () => {
@@ -49,6 +49,13 @@ describe('storing and retrieving', () => {
     storage.set(StorageKeys.SEARCH_LIMIT, 25);
 
     expect(storage.getState(StorageKeys.SEARCH_LIMIT)).toBe(25);
+  });
+
+  it('sets all data with setAll()', () => {
+    storage.setAll({ key1: 'val1', key2: 'val2' });
+
+    expect(storage.getState('key1')).toBe('val1');
+    expect(storage.getState('key2')).toBe('val2');
   });
 });
 

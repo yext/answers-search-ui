@@ -29,14 +29,17 @@ export default class RangeFilterComponent extends Component {
      */
     this._storeOnChange = config.storeOnChange || false;
 
+    const minVal = this.core.globalStorage.getState(`${this.name}.min`);
+    const maxVal = this.core.globalStorage.getState(`${this.name}.max`);
+
     /**
      * The current range represented
      * @type {object}
      * @private
      */
     this._range = {
-      min: config.initialMin || 0,
-      max: config.initialMax || 10
+      min: minVal || config.initialMin || 0,
+      max: maxVal || config.initialMax || 10
     };
 
     /**
@@ -114,6 +117,8 @@ export default class RangeFilterComponent extends Component {
     if (this._storeOnChange) {
       this.core.setFilter(this.name, filter);
     }
+    this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
+    this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
 
     this._onChange(filter);
   }
