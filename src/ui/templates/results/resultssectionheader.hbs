@@ -1,8 +1,14 @@
 <div class="yxt-Results-titleBar">
   <div class="yxt-Results-left">
-    <div class="yxt-Results-titleIconWrapper">
-      <img class="yxt-Results-titleIcon" src="{{_config.sectionTitleIcon}}" alt="">
-    </div>
+    <div class="yxt-Results-titleIconWrapper"
+         data-component="IconComponent"
+         data-opts='{
+            "iconName": "{{_config.sectionTitleIconName}}",
+            "customIcon": "{{_config.customSectionTitleIcon}}",
+            "iconUrl": "{{_config.sectionTitleIconUrl}}"
+          }'
+         data-prop="icon"
+    ></div>
     <h2 class="yxt-Results-title">
       {{_config.sectionTitle}}
     </h2>
