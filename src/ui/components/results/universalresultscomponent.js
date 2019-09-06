@@ -53,10 +53,14 @@ export default class UniversalResultsComponent extends Component {
   }
 
   getChildConfig (configId) {
+    const defaultConfig = {
+      verticalConfigId: configId,
+      isUniversal: true
+    };
     let config = this._config.config;
     if (config === undefined) {
-      return {};
+      return defaultConfig;
     }
-    return this._config['config'][configId] || this._config['config'];
+    return Object.assign(defaultConfig, this._config['config'][configId] || this._config['config']);
   }
 }
