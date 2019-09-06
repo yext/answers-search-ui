@@ -1,7 +1,7 @@
 const { series, src, dest, watch } = require('gulp');
 
 const rollup = require('gulp-rollup-lightweight');
-// const babel = require('rollup-plugin-babel');
+const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const builtins = require('rollup-plugin-node-builtins');
@@ -71,9 +71,9 @@ function bundleTemplates () {
       commonjs({
         include: './node_modules/**'
       }),
-      // babel({
-      //   presets: ['@babel/env']
-      // })
+      babel({
+        presets: ['@babel/env']
+      })
     ]
   })
     .pipe(source('answerstemplates.compiled.min.js'))
