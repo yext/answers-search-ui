@@ -105,6 +105,24 @@ export default class DirectAnswerComponent extends Component {
     this.setState(newState);
   }
 
+  setState (data) {
+    return super.setState(Object.assign({}, data, {
+      eventOptions: this.eventOptions(data)
+    }));
+  }
+
+  eventOptions (data) {
+    if (!data || Object.keys(data).length === 0) {
+      return data;
+    }
+    return JSON.stringify({
+      verticalConfigId: data.relatedItem.verticalConfigId,
+      searcher: 'UNIVERSAL',
+      entityId: data.relatedItem.data.id,
+      ctaLabel: this._config.viewDetailsText.toUpperCase().replace(' ', '_')
+    });
+  }
+
   /**
    * reportQuality will send the quality feedback to analytics
    * @param {boolean} isGood true if the answer is what you were looking for
