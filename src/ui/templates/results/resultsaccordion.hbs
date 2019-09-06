@@ -13,8 +13,7 @@
             <button class="yxt-AccordionResult-toggle js-yxt-AccordionResult-toggle"
                     aria-expanded="{{#if this.collapsed}}false{{else}}true{{/if}}"
                     aria-controls="#{{this.id}}"
-                    data-eventtype="{{#if this.collapsed}}ROW_EXPAND{{else}}ROW_COLLAPSE{{/if}}"
-                    data-eventoptions='{{this.eventOptions}}'>
+                    data-entity-id="{{this.id}}">
                     {{this.title}}
                 <span class="yxt-AccordionResult-indicator" aria-hidden="true">
                 </span>
