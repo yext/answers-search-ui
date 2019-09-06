@@ -8,10 +8,16 @@
       {{!// TODO (bmcginnis): migrate js class names}}
       <input class="js-yext-query yxt-SearchBar-input" type="text" name="query" value="{{query}}">
       <button type="submit" class="js-yext-submit yxt-SearchBar-button">
-        {{#if submitIcon}}
-          <img src="{{submitIcon}}" class="yxt-SearchBar-buttonImage" alt="">
-        {{/if}}
-        <span class="yxt-SearchBar-buttonText{{#if submitIcon}} sr-only{{/if}}">
+        <div class="yxt-SearchBar-buttonImage"
+             data-component="IconComponent"
+             data-opts='{
+                "iconName": "{{#if submitIcon}}{{submitIcon}}{{else}}magnifying_glass{{/if}}",
+                "customIcon": "{{_config.customIcon}}",
+                "iconUrl": "{{_config.customIconUrl}}"
+              }'
+             data-prop="icon"
+        ></div>
+        <span class="yxt-SearchBar-buttonText sr-only">
           {{submitText}}
         </span>
       </button>

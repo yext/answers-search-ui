@@ -57,7 +57,11 @@
                     {{#if this.eventOptions}} data-eventoptions='{{this.eventOptions}}'{{/if}}>
                     {{#if this.icon}}
                       <div class="yxt-Result-ctaIconWrapper">
-                        <img class="yxt-Result-ctaIcon" src="{{this.icon}}" alt="">
+                        <span class="yxt-Result-ctaIcon"
+                              data-component="IconComponent"
+                              data-opts='{"iconName": "{{this.icon}}"}'
+                              data-prop="icon"
+                        ></span>
                       </div>
                     {{/if}}
                     <span class="yxt-Result-ctaLabel">

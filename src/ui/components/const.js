@@ -31,6 +31,8 @@ import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
 import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
+import IconComponent from './icons/iconcomponent.js';
+
 export const COMPONENT_MANAGER = new ComponentManager()
 // Core Component
   .register(Component)
@@ -64,4 +66,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(MapComponent)
 
 // Questions Components
-  .register(QuestionSubmissionComponent);
+  .register(QuestionSubmissionComponent)
+
+// Helper Components
+  .register(IconComponent);

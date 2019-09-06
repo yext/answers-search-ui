@@ -1,13 +1,15 @@
 <div class="yxt-DirectAnswer">
-  <div class="yxt-DirectAnswer-titleWrapper">
-    {{#if icon}}
-      <div class="yxt-DirectAnswer-iconWrapper">
-        <img class="yxt-DirectAnswer-icon"
-             src="{{{icon}}}"
-             alt="">
-      </div>
-    {{/if}}
-    <h2 class="yxt-DirectAnswer-title">
+  <div class="yxt-DirectAnswer-title">
+    <div class="yxt-Results-titleIconWrapper"
+         data-component="IconComponent"
+         data-opts='{
+            "iconName": "{{iconName}}",
+            "customIcon": "{{customIcon}}",
+            "iconUrl": "{{customIconUrl}}"
+          }'
+         data-prop="icon"
+    ></div>
+    <h2 class="yxt-DirectAnswer-titleText">
       <span class="yxt-DirectAnswer-entityName">
         {{{answer.entityName}}}
       </span>
@@ -43,7 +45,11 @@
         </div>
         <form class="yxt-DirectAnswer-thumbs js-directAnswer-feedback-form">
           <label class="yxt-DirectAnswer-thumb">
-            <img class="yxt-DirectAnswer-thumbUpIcon" src="{{{_config.thumbsUpImage}}}" alt="">
+            <span class="yxt-DirectAnswer-thumbUpIcon"
+                 data-component="IconComponent"
+                 data-opts='{"iconName": "thumb"}'
+                 data-prop="icon"
+            ></span>
             <input type="radio"
                    name="feedback"
                    value="true"
@@ -53,7 +59,11 @@
             </span>
           </label>
           <label class="yxt-DirectAnswer-thumb">
-            <img class="yxt-DirectAnswer-thumbDownIcon" src="{{{_config.thumbsDownImage}}}" alt="">
+            <span class="yxt-DirectAnswer-thumbDownIcon"
+                 data-component="IconComponent"
+                 data-opts='{"iconName": "thumb"}'
+                 data-prop="icon"
+            ></span>
             <input type="radio"
                    name="feedback"
                    value="false"
@@ -62,7 +72,7 @@
               This did not answer my question
             </span>
           </label>
-          <button type="submit" class="sr-only sr-only-focusable">
+          <button type="submit" class="sr-only sr-only-focusable">Send feedback</button>
         </form>
       {{/if}}
     </div>
