@@ -27,7 +27,9 @@
     </div>
     {{#if relatedItem.data.website}}
       <div class="yxt-DirectAnswer-viewMoreWrapper">
-        <a class="yxt-DirectAnswer-viewMore" href="{{{relatedItem.data.website}}}">
+        <a class="yxt-DirectAnswer-viewMore"
+           href="{{{relatedItem.data.website}}}"
+           target="{{#if _config.linkTarget}}{{_config.linkTarget}}{{else}}_blank{{/if}}">
           {{{_config.viewDetailsText}}}
         </a>
       </div>
