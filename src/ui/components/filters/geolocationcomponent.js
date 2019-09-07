@@ -28,6 +28,12 @@ const DEFAULT_CONFIG = {
   searchOnChange: false,
 
   /**
+   * The bar key to use
+   * @type {string}
+   */
+  barKey: null,
+
+  /**
    * The title to display
    * @type {string}
    */
@@ -176,7 +182,8 @@ export default class GeoLocationComponent extends Component {
       originalQuery: this.query,
       originalFilter: this.filter,
       inputEl: inputSelector,
-      verticalKey: this._verticalKey,
+      verticalKey: this._config.verticalKey,
+      barKey: this._config.barKey,
       onSubmit: (query, filter) => {
         this.query = query;
         this.filter = Filter.fromResponse(filter);

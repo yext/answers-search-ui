@@ -127,7 +127,7 @@ export default class Core {
    */
   verticalSearch (verticalKey, query, renderAllResults) {
     if (renderAllResults) {
-      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
     }
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
@@ -162,7 +162,7 @@ export default class Core {
             for (const resp of value) {
               response.response.results.push(...resp.response.results);
             }
-            this.storage.set(StorageKeys.VERTICAL_RESULTS, SearchStates.SEARCH_COMPLETE);
+            this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, SearchStates.SEARCH_COMPLETE);
             return response;
           })
         } else {
