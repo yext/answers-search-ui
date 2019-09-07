@@ -46,7 +46,7 @@ export default class FilterOptionsComponent extends Component {
      * @type {object[]}
      * @private
      */
-    this._options = config.options.map(o => Object.assign({}, { selected: selectedOptions.includes(o.label) }, o));
+    this._options = config.options.map(o => Object.assign({}, { selected: Array.isArray(selectedOptions) ? selectedOptions.includes(o.label) : false }, o));
 
     /**
      * The type of control to display
