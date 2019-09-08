@@ -1,0 +1,21 @@
+<div class="yxt-NoResults">
+  <div class="yxt-NoResults-wrapper">
+    <p class="yxt-NoResults-info">
+      Your search - <span class="yxt-NoResults-query">{{{query}}}</span> - did not match any answers we have.
+    </p>
+    {{#if universalUrl}}
+      <p class="yxt-NoResults-returnLinkWrapper">
+        Try refining your query or <a href="{{universalUrl}}" class="yxt-NoResults-returnLink">search all content.</a>
+      </p>
+    {{/if}}
+    <div class="yxt-NoResults-suggestions">
+      <p class="yxt-NoResults-suggestionsHeader">Suggestions:</p>
+      <ul class="yxt-NoResults-suggestionsList">
+        <li class="yxt-NoResults-suggestion">Make sure all words are spelled correctly.</li>
+        <li class="yxt-NoResults-suggestion">Try to ask your question a different way.</li>
+        <li class="yxt-NoResults-suggestion">Try more general words.</li>
+        <li class="yxt-NoResults-suggestion">Try fewer words.</li>
+      </ul>
+    </div>
+  </div>
+</div>

@@ -75,6 +75,8 @@ export default class ResultsComponent extends Component {
       render: config.renderItem,
       template: config.itemTemplate
     });
+
+    this._universalUrl = config.universalUrl;
   }
 
   mount () {
@@ -90,6 +92,7 @@ export default class ResultsComponent extends Component {
   }
 
   setState (data, val) {
+    const results = data.results || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
@@ -97,7 +100,10 @@ export default class ResultsComponent extends Component {
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
       includeMap: this._config.includeMap,
       mapConfig: this._config.mapConfig,
-      eventOptions: this.eventOptions()
+      eventOptions: this.eventOptions(),
+      universalUrl: this._universalUrl + window.location.search,
+      showNoResults: results.length === 0,
+      query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }), val);
   }
 

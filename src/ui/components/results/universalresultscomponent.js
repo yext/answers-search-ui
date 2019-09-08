@@ -36,11 +36,14 @@ export default class UniversalResultsComponent extends Component {
   }
 
   setState (data, val) {
+    const sections = data.sections || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign({ sections: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
-      isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE
+      isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
+      showNoResults: sections.length === 0 && searchState === SearchStates.SEARCH_COMPLETE,
+      query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }), val);
   }
 

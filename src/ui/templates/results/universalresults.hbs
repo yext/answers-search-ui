@@ -1,6 +1,12 @@
-<div class="universal-result-list">
-  <div class="universal-result-sections"
-      data-component="VerticalResults"
-      data-prop="sections">
-  </div>
-</div>
+{{#if isSearchComplete}}
+  {{#if showNoResults}}
+    {{> results/noresults}}
+  {{else}}
+    <div class="universal-result-list">
+      <div class="universal-result-sections"
+          data-component="VerticalResults"
+          data-prop="sections">
+      </div>
+    </div>
+  {{/if}}
+{{/if}}
