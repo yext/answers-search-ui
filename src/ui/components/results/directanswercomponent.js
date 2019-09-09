@@ -43,6 +43,12 @@ export default class DirectAnswerComponent extends Component {
      * @type {string}
      */
     this._thumbsDownSelector = config.thumbsDownSelector || '.js-directAnswer-thumbDown';
+
+    /** 
+     * The display text for the View Details click to action link
+     * @type {string}
+     */
+    this._viewDetailsText = config.viewDetailsText || 'View Details';
   }
 
   static get type () {
@@ -107,7 +113,8 @@ export default class DirectAnswerComponent extends Component {
 
   setState (data) {
     return super.setState(Object.assign({}, data, {
-      eventOptions: this.eventOptions(data)
+      eventOptions: this.eventOptions(data),
+      viewDetailsText: this._viewDetailsText
     }));
   }
 
