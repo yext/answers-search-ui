@@ -7,6 +7,9 @@
 @import "layout";
 @import "mixins";
 
+// General styling
+@import "base";
+
 // Component Styling
 @import "modules/SearchBar";
 @import "modules/Icon";
