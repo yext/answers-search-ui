@@ -7,7 +7,7 @@
   $results-title-bar-text-color: $color-text-primary !default;
   $results-title-bar-text-font-size: $font-size-md-lg !default;
   $results-title-bar-text-line-height: $line-height-lg !default;
-  $results-title-bar-text-font-weight: $font-weight-semibold !default;
+  $results-title-bar-text-font-weight: $font-weight-bold !default;
 
   $results-title-bar-link-font-size: $font-size-md !default;
   $results-title-bar-link-line-height: $line-height-xxlg !default;
@@ -52,7 +52,7 @@
   &-titleIconWrapper
   {
     display: flex;
-    margin-right: $base-spacing;
+    margin-right: $base-spacing / 2;
   }
 
   &-title
@@ -134,6 +134,7 @@
   &-map
   {
     display: flex;
+    border-bottom: $results-border;
 
     img
     {
