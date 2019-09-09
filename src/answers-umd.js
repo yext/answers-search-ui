@@ -8,6 +8,7 @@ import {
   Renderers,
   DOM
 } from './ui/index';
+import Component from './ui/components/component';
 
 import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
@@ -24,6 +25,12 @@ class Answers {
     }
 
     /**
+     * A reference to the Component base class for custom
+     * components to extend
+     */
+    this.Component = Component;
+
+    /**
      * A reference of the renderer to use for the components
      * This is provided during initialization.
      * @type {Renderer}
@@ -35,6 +42,12 @@ class Answers {
      * @type {ComponentManager}
      */
     this.components = COMPONENT_MANAGER;
+
+    /**
+     * A local reference to the core api
+     * @type {Core}
+     */
+    this.core = null;
 
     /**
      * A callback function to invoke once the library is ready.
@@ -63,7 +76,7 @@ class Answers {
     });
     globalStorage.setAll(persistentStorage.getAll());
 
-    const core = new Core({
+    this.core = new Core({
       apiKey: config.apiKey,
       globalStorage: globalStorage,
       persistentStorage: persistentStorage,
@@ -76,13 +89,13 @@ class Answers {
     }
 
     this.components
-      .setCore(core)
+      .setCore(this.core)
       .setRenderer(this.renderer);
 
     if (config.businessId) {
       this.components.setAnalyticsReporter(
         new AnalyticsReporter(
-          core,
+          this.core,
           config.answersKey,
           config.businessId,
           config.analyticsOptions)
@@ -128,6 +141,15 @@ class Answers {
     return this;
   }
 
+  /**
+   * Register a custom component type so it can be created via
+   * addComponent and used as a child component
+   * @param {Component} componentClass
+   */
+  registerComponentType (componentClass) {
+    this.components.register(componentClass);
+  }
+
   addComponent (type, opts) {
     if (typeof opts === 'string') {
       opts = {
@@ -137,6 +159,14 @@ class Answers {
 
     this.components.create(type, opts).mount();
     return this;
+  }
+
+  /**
+   * Remove the component - and all of its children - with the given name
+   * @param {string} name The name of the component to remove
+   */
+  removeComponent (name) {
+    this.components.removeByName(name);
   }
 
   createComponent (opts) {
