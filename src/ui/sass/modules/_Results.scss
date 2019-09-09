@@ -22,7 +22,9 @@
   $results-filters-link-line-height: $line-height-md !default;
   $results-filters-link-font-weight: $font-weight-normal !default;
 
-  border: $border-default;
+  $results-border: $border-default !default;
+
+  border: $results-border;
 
   & + &
   {
@@ -38,7 +40,7 @@
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
     background-color: $results-title-bar-background;
-    border-bottom: $border-default;
+    border-bottom: $results-border;
   }
 
   &-left
@@ -86,6 +88,7 @@
     padding-top: $base-spacing;
     padding-bottom: $base-spacing;
     background-color: $results-filters-background;
+    border-bottom: $results-border;
   }
 
   &-filter
