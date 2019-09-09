@@ -119,6 +119,16 @@ export default class GeoLocationComponent extends Component {
   }
 
   setState (data) {
+    let placeholder = '';
+    if (this._enabled) {
+      placeholder = this._config.enabledText;
+    }
+    if (data.geoLoading) {
+      placeholder = this._config.loadingText;
+    }
+    if (data.geoError) {
+      placeholder = this._config.errorText;
+    }
     super.setState({
       ...data,
       title: this._config.title,
@@ -129,6 +139,8 @@ export default class GeoLocationComponent extends Component {
       loadingText: this._config.loadingText,
       errorText: this._config.errorText,
       geoButtonIcon: this._config.geoButtonIcon,
+      geoValue: this._enabled || data.geoLoading || data.geoError ? '' : this.query,
+      geoPlaceholder: placeholder,
       geoButtonText: this._config.geoButtonText
     });
   }

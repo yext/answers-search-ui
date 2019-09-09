@@ -4,8 +4,8 @@
     <div class="yxt-GeoLocationFilter-query">
       <form class="yxt-GeoLocationFilter-form">
         <label class="yxt-GeoLocationFilter-label" for="query">{{labelText}}</label>
-        <input class="js-yxt-GeoLocationFilter-input yxt-GeoLocationFilter-input" type="text" name="query" value="{{#unless geoEnabled}}{{#unless geoLoading}}{{#unless geoError}}{{query}}{{/unless}}{{/unless}}{{/unless}}"
-          placeholder="{{#if geoEnabled}}{{enabledText}}{{else}}{{#if geoLoading}}{{loadingText}}{{else}}{{#if geoError}}{{errorText}}{{/if}}{{/if}}{{/if}}"
+        <input class="js-yxt-GeoLocationFilter-input yxt-GeoLocationFilter-input" type="text" name="query" value="{{geoValue}}"
+          placeholder="{{geoPlaceholder}}"
         >
         <button type="button" class="js-yxt-GeoLocationFilter-button yxt-GeoLocationFilter-button" {{#if geoError}}disabled{{/if}}>
           {{#if geoButtonIcon}}
