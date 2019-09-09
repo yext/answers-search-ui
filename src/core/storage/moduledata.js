@@ -24,20 +24,18 @@ export default class ModuleData extends EventEmitter {
    * @param {*} data the data to replace the current data
    */
   set (data) {
-    const newData = data || {};
-
     this.capturePrevious();
 
-    if (typeof data !== 'object' || Object.keys(newData).length !== Object.keys(this._data).length) {
-      this._data = newData;
+    if (typeof data !== 'object' || Object.keys(data).length !== Object.keys(this._data).length) {
+      this._data = data;
       this.emit('update', this._data);
       return;
     }
 
     // check for shallow equality
-    for (const key of Object.keys(newData)) {
-      if (this._data[key] !== newData[key]) {
-        this._data = newData;
+    for (const key of Object.keys(data)) {
+      if (this._data[key] !== data[key]) {
+        this._data = data;
         this.emit('update', this._data);
         return;
       }
