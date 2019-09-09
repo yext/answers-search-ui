@@ -22,6 +22,12 @@ const DEFAULT_CONFIG = {
   verticalKey: null,
 
   /**
+   * If true, submits a search when the value is changed
+   * @type {boolean}
+   */
+  searchOnChange: false,
+
+  /**
    * The title to display
    * @type {string}
    */
@@ -44,6 +50,24 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   geoButtonText: 'Use My Location',
+
+  /**
+   * The text to show when geolocation is enabled
+   * @type {string}
+   */
+  enabledText: 'Current Location',
+
+  /**
+   * The text to show when loading the user's location
+   * @type {string}
+   */
+  loadingText: 'Finding Your Location...',
+
+  /**
+   * The text to show if the user's location cannot be found
+   * @type {string}
+   */
+  errorText: 'Could Not Find Your Location',
 
   /**
    * The CSS selector of the toggle button
@@ -95,13 +119,28 @@ export default class GeoLocationComponent extends Component {
   }
 
   setState (data) {
+    let placeholder = '';
+    if (this._enabled) {
+      placeholder = this._config.enabledText;
+    }
+    if (data.geoLoading) {
+      placeholder = this._config.loadingText;
+    }
+    if (data.geoError) {
+      placeholder = this._config.errorText;
+    }
     super.setState({
       ...data,
       title: this._config.title,
       geoEnabled: this._enabled,
       query: this.query,
       labelText: this._config.label,
+      enabledText: this._config.enabledText,
+      loadingText: this._config.loadingText,
+      errorText: this._config.errorText,
       geoButtonIcon: this._config.geoButtonIcon,
+      geoValue: this._enabled || data.geoLoading || data.geoError ? '' : this.query,
+      geoPlaceholder: placeholder,
       geoButtonText: this._config.geoButtonText
     });
   }
@@ -154,6 +193,7 @@ export default class GeoLocationComponent extends Component {
     }
 
     if (!this._enabled) {
+      this.setState({ geoLoading: true });
       navigator.geolocation.getCurrentPosition(
         position => {
           this._saveDataToStorage('', this._buildFilter(position));
@@ -176,6 +216,22 @@ export default class GeoLocationComponent extends Component {
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
     this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
     this.core.setFilter(this.name, filter);
+
+    if (this._config.searchOnChange) {
+      const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
+      let totalFilter = filters[0];
+      if (filters.length > 1) {
+        totalFilter = Filter.and(...filters);
+      }
+      const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
+
+      this.core.verticalSearch(this._config.verticalKey, {
+        input: searchQuery,
+        filter: JSON.stringify(totalFilter),
+        facetFilter: JSON.stringify(facetFilter)
+      });
+    }
   }
 
   /**
