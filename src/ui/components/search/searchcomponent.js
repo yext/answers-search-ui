@@ -126,7 +126,7 @@ export default class SearchComponent extends Component {
    * @returns {string}
    * @override
    */
-  static defaultTemplateName (config) {
+  static defaultTemplateName () {
     return 'search/search';
   }
 
