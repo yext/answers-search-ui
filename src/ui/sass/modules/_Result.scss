@@ -25,7 +25,7 @@
   $result-details-font-weight: $font-weight-normal !default;
   $result-details-color: $color-text-primary !default;
 
-  $result-title-font-size: $font-size-md-lg !default;
+  $result-title-font-size: $font-size-lg !default;
   $result-title-line-height: $line-height-lg !default;
   $result-title-font-weight: $font-weight-semibold !default;
   $result-title-color: $color-text-primary !default;
@@ -64,7 +64,7 @@
     display: inline-flex;
     align-items: center;
 
-    @media (max-width: 768px)
+    @media (max-width: 767px)
     {
       display: inline;
     }
@@ -97,13 +97,14 @@
   &-wrapper
   {
     display: flex;
+    flex-wrap: nowrap;
     padding-top: $base-spacing;
     padding-bottom: $base-spacing;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
     background-color: $result-background-color;
 
-    @media (max-width: 768px)
+    @media (max-width: 767px)
     {
       flex-wrap: wrap;
     }
@@ -111,6 +112,8 @@
 
   &-imageWrapper
   {
+    display: flex;
+    align-items: flex-start;
     width: 100px;
     min-width: 100px;
     margin-right: 1rem;
@@ -120,6 +123,11 @@
   {
     display: flex;
     flex-grow: 1;
+
+    @media (max-width: 767px)
+    {
+      flex-direction: column;
+    }
   }
 
   &-details
@@ -142,13 +150,23 @@
     @media (min-width: 768px)
     {
       justify-content: flex-end;
-      margin-left: $base-spacing-sm*2;
+      margin-left: $base-spacing-sm * 2;
+    }
+
+    @media (max-width: 767px)
+    {
+      margin-top: $base-spacing / 2;
     }
   }
 
   &-ctas
   {
     display: flex;
+
+    @media (max-width: 767px)
+    {
+      flex-direction: column;
+    }
   }
 
   &-cta
@@ -167,6 +185,12 @@
     min-width: 60px;
     text-align: center;
 
+    @media (max-width: 768px)
+    {
+      flex-direction: row;
+      padding-left: 0;
+    }
+
     & + &
     {
       margin-left: $base-spacing / 2;
@@ -179,6 +203,16 @@
     padding-left: $base-spacing * 2;
     padding-right: $base-spacing * 2;
     margin-bottom: $base-spacing / 2;
+
+    @media(max-width: 768px)
+    {
+      padding-left: 0;
+      padding-right: 0;
+      margin-right: 8px;
+      margin-bottom: 0;
+      height: 18px;
+      width: 18px;
+    }
   }
 
   &-ctaIcon
@@ -206,7 +240,13 @@
     flex-direction: column;
     justify-content: center;
     min-width: 80px;
-    margin-right: $base-spacing * 2;
+    margin-left: $base-spacing * 2;
+    margin-right: $base-spacing * 3;
+
+    @media (max-width: 767px)
+    {
+      display: none;
+    }
   }
 
   &-dateInnerWrapper
