@@ -2,6 +2,8 @@
 
 .yxt-DirectAnswer
 {
+  $direct-answer-border: $border-default !default;
+
   $direct-answer-title-background-color: $color-blue1 !default;
   $direct-answer-content-background-color: white !default;
   $direct-answer-footer-background-color: $color-gray3 !default;
@@ -11,7 +13,16 @@
   $direct-answer-title-font-weight: $font-weight-semibold !default;
   $direct-answer-title-color: white !default;
 
-  $direct-answer-footer-font-size: $font-size-md !default;
+  $direct-answer-content-font-size: $font-size-xlg !default;
+  $direct-answer-content-line-height: $line-height-md !default;
+  $direct-answer-content-font-weight: $font-weight-normal !default;
+  $direct-answer-content-color: $color-text-primary !default;
+
+  $direct-answer-view-details-font-size: $font-size-md !default;
+  $direct-answer-view-details-line-height: $line-height-xxlg !default;
+  $direct-answer-view-details-font-weight: $font-weight-normal !default;
+
+  $direct-answer-footer-font-size: 13.5px !default;
   $direct-answer-footer-line-height: $line-height-md !default;
   $direct-answer-footer-font-weight: $font-weight-normal !default;
   $direct-answer-footer-color: $color-text-primary !default;
@@ -25,6 +36,7 @@
     display: flex;
     align-items: center;
     background-color: $direct-answer-title-background-color;
+    border: $direct-answer-border;
 
     @include Text(
       $size: $direct-answer-title-font-size,
@@ -49,6 +61,8 @@
   {
     padding: $base-spacing;
     background-color: $direct-answer-content-background-color;
+    border-left: $direct-answer-border;
+    border-right: $direct-answer-border;
   }
 
   &-footerWrapper
@@ -61,8 +75,11 @@
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    padding: $base-spacing;
-    heigth: 44px;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: $direct-answer-border;
   }
 
   &-footerText
@@ -80,7 +97,7 @@
   &-thumbs
   {
     display: flex;
-    margin-left: $base-spacing-sm * 2;
+    margin-left: 18px;
   }
 
   &-thumbUpIcon
@@ -96,17 +113,53 @@
 
   &-thumb
   {
+    display: flex;
+    flex-shrink: 0;
     cursor: pointer;
     font-size: 24px;
 
     & + &
     {
-      margin-left: $base-spacing;
+      margin-left: 10px;
     }
+  }
+
+  &-fieldValue
+  {
+    @include Text(
+      $size: $direct-answer-content-font-size,
+      $line-height: $direct-answer-content-line-height,
+      $weight: $direct-answer-content-font-weight,
+      $color: $direct-answer-content-color
+    );
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  &-fieldValueLink
+  {
+    @include Link-1;
+
+    font-weight: $font-weight-semibold;
   }
 
   &-feedback
   {
     display: none;
+  }
+
+  &-viewMore
+  {
+    @include Text(
+      $size: $direct-answer-view-details-font-size,
+      $line-height: $direct-answer-view-details-line-height,
+      $weight: $direct-answer-view-details-font-weight,
+    )
+    @include Link-1;
+
+    display: inline-flex;
+    align-items: center;
   }
 }
