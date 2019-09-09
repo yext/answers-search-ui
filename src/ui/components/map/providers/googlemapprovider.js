@@ -85,12 +85,11 @@ export default class GoogleMapProvider extends MapProvider {
         zoom: this._zoom
       });
 
-      const collapsedMarkers = this._collapseMarkers(mapData.mapMarkers);
-
       // Apply our search data to our GoogleMap
       let bounds = new google.maps.LatLngBounds();
 
       if (mapData && mapData.mapMarkers.length) {
+        const collapsedMarkers = this._collapseMarkers(mapData.mapMarkers);
         let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
           collapsedMarkers,
           this._pinConfig,
