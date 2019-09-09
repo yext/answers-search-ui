@@ -42,7 +42,7 @@ export default class UniversalResultsComponent extends Component {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      showNoResults: sections.length === 0 && searchState === SearchStates.SEARCH_COMPLETE,
+      showNoResults: sections.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }), val);
   }

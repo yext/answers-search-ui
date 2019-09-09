@@ -101,7 +101,7 @@ export default class ResultsComponent extends Component {
       includeMap: this._config.includeMap,
       mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
-      universalUrl: this._universalUrl + window.location.search,
+      universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }), val);
