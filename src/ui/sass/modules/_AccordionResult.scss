@@ -1,13 +1,80 @@
 .yxt-AccordionResult
 {
-  &-answer
+  $accordion-result-border: $border-default !default;
+
+  $accordion-result-background-color: white !default;
+  $accordion-result-hover-color: $color-gray3 !default;
+
+  $accordion-result-title-font-size: $font-size-md-lg !default;
+  $accordion-result-title-line-height: $line-height-lg !default;
+  $accordion-result-title-font-weight: $font-weight-semibold !default;
+  $accordion-result-title-color: $color-blue1 !default;
+
+  $accordion-result-details-font-size: $font-size-md !default;
+  $accordion-result-details-line-height: $line-height-md-sm !default;
+  $accordion-result-details-font-weight: $font-weight-normal !default;
+  $accordion-result-details-color: $color-text-primary !default;
+
+  $accordion-result-cta-font-size: $font-size-md !default;
+  $accordion-result-cta-line-height: $line-height-xxlg !default;
+  $accordion-result-cta-font-weight: $font-weight-normal !default;
+
+  background-color: $accordion-result-background-color;
+
+  & + &
   {
-    margin-top: 1rem;
+    border-top: $accordion-result-border;
+  }
+
+  &:hover,
+  &:not(.is-collapsed)
+  {
+    background-color: $accordion-result-hover-color;
+  }
+
+  &-title
+  {
+    @include Text(
+      $size: $accordion-result-title-font-size,
+      $line-height: $accordion-result-title-line-height,
+      $weight: $accordion-result-title-font-weight,
+      $color: $accordion-result-title-color
+    );
+  }
+
+  &-details
+  {
+    @include Text(
+      $size: $accordion-result-details-font-size,
+      $line-height: $accordion-result-details-line-height,
+      $weight: $accordion-result-details-font-weight,
+      $color: $accordion-result-details-color
+    );
+
     white-space: pre-line;
+  }
+
+  &-ctasWrapper
+  {
+    margin-top: $base-spacing / 2;
+  }
+
+  &-ctas
+  {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
   }
 
   &-cta
   {
+    @include Text(
+      $size: $accordion-result-cta-font-size,
+      $line-height: $accordion-result-cta-line-height,
+      $weight: $accordion-result-cta-font-weight,
+    );
+    @include Link-1;
+
     display: flex;
     align-items: center;
   }
@@ -29,14 +96,17 @@
 
   &-toggle
   {
-    padding-top: 1em;
+    padding-top: $base-spacing / 2;
+    padding-bottom: 10px;
+    padding-left: 1em;
+    padding-right: 1em;
   }
 
-  &-toggle,
   &-content
   {
-    padding-right: 1em;
+    padding-top: $base-spacing-sm / 2;
     padding-bottom: 1em;
+    padding-right: 1em;
     padding-left: 1em;
   }
 

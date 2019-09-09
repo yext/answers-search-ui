@@ -15,8 +15,12 @@
                     aria-controls="#{{this.id}}"
                     data-entity-id="{{this.id}}">
                     {{this.title}}
-                <span class="yxt-AccordionResult-indicator" aria-hidden="true">
-                </span>
+                <div class="yxt-AccordionResult-indicatorWrapper" aria-hidden="true">
+                  <span class="yxt-AccordionResult-indicator"
+                        data-component="IconComponent"
+                        data-opts='{"iconName": "chevron"}'
+                        data-prop="icon"></span>
+                </div>
             </button>
           </h3>
           <div class="yxt-AccordionResult-body js-yxt-AccordionResult-body" id="{{this.id}}">
