@@ -192,7 +192,7 @@ export class GoogleMapMarkerConfig {
       }
 
       if (pinConfigObj.scaledSize) {
-        icon.scaledSize = google.maps.Size(pinConfigObj.scaledSize.w, pinConfigObj.scaledSize.h);
+        icon.scaledSize = new google.maps.Size(pinConfigObj.scaledSize.w, pinConfigObj.scaledSize.h);
       }
 
       if (pinConfigObj.url) {
