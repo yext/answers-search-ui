@@ -30,7 +30,7 @@ export default class Component {
      * Used to distinguish between other components of the same type
      * @type {String}
      */
-    this.name = config.name || this.constructor.name;
+    this.name = config.name || this.constructor.type;
 
     /**
      * Cache the options so that we can propogate properly to child components
