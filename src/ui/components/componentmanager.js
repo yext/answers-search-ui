@@ -154,6 +154,15 @@ export default class ComponentManager {
     this._activeComponents.splice(index, 1);
   }
 
+  /**
+   * Remove the component with the given name
+   * @param {string} name The name of the compnent to remove
+   */
+  removeByName (name) {
+    const component = this._activeComponents.find(c => c.name === name);
+    component.remove();
+  }
+
   getActiveComponent (type) {
     return this._activeComponents.find(c => c.constructor.type === type);
   }
