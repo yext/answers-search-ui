@@ -126,7 +126,7 @@ export default class DirectAnswerComponent extends Component {
       verticalConfigId: data.relatedItem.verticalConfigId,
       searcher: 'UNIVERSAL',
       entityId: data.relatedItem.data.id,
-      ctaLabel: this._config.viewDetailsText.toUpperCase().replace(' ', '_')
+      ctaLabel: this._viewDetailsText.toUpperCase().replace(' ', '_')
     });
   }
 
