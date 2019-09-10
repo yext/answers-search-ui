@@ -12,6 +12,8 @@ Outline:
    - [Using a Custom Renderer](#using-a-custom-renderer)
    - [Custom Data Formatting](#custom-data-formatting)
    - [Custom Data Transforms](#custom-data-transforms)
+   - [Creating Custom Components](#creating-custom-components)
+   - [Removing Components](#removing-components)
 3. [Types of Components](#types-of-components)
    - [Navigation Component](#navigation-component)
    - [SearchBar Component](#searchbar-component)
@@ -188,6 +190,74 @@ ANSWERS.addComponent('SearchBar', {
     return `<div class="my-search">${data.title}</div>`
   }
 })
+```
+
+## Creating Custom Components
+
+You can create custom Answers components with the same power of the builtin components. First, create a subtype of ANSWERS.Component:
+
+```js
+// ES6
+class MyCustomComponent extends ANSWERS.Component {
+  constructor (config) {
+    super(config);
+
+    this.myProperty = config.myProperty;
+  }
+
+  static defaultTemplateName () {
+    return 'default';
+  }
+
+  static areDuplicateNamesAllowed () {
+    return false;
+  }
+
+  static get type () {
+    return 'MyCustomComponent';
+  }
+}
+
+// ES5
+function MyCustomComponent (config) {
+  ANSWERS.Component.call(this, config);
+
+  this.myProperty = config.myProperty;
+}
+
+MyCustomComponent.prototype = Object.create(ANSWERS.Component.prototype);
+MyCustomComponent.prototype.constructor = MyCustomComponent;
+MyCustomComponent.defaultTemplateName = function () { return 'default' };
+MyCustomComponent.areDuplicateNamesAllowed = function () { return false };
+Object.defineProperty(MyCustomComponent, 'type', { get: function () { return 'MyCustomComponent' } });
+```
+
+Then, you can register your custom component with Answers:
+
+```js
+ANSWERS.registerComponentType(MyCustomComponent);
+```
+
+Now you can use your custom component like any builtin component:
+
+```js
+ANSWERS.addComponent('MyCustomComponent', {
+  container: '.my-component-container',
+  myProperty: 'my property'
+});
+```
+
+## Removing Components
+If you'd like to remove a component and all of its children, you can use `ANSWERS.removeComponent(<component name>)`:
+
+```js
+ANSWERS.addComponent('FilterSearch', {
+  container: '.filter-search-container',
+  verticalKey: 'myvertical',
+  name: 'my-filter-search'
+});
+
+ANSWERS.removeComponent('my-filter-search');
 ```
 
 # Types of Components
