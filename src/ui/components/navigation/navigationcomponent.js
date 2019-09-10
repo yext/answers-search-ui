@@ -127,10 +127,23 @@ export default class NavigationComponent extends Component {
     this._listenersToTearDown = [];
 
     /**
+     * Px value for mobile breakpoint
+     * @type {string}
+     * @private
+     */
+    this._mobileBreakpoint = config.mobileBreakpoint || '768';
+
+    /**
      * Information on the mobile media query applied to the doc
      * @type {MediaQueryList}
      */
-    this._mql = window.matchMedia('(max-width: 768px)');
+    this._mql = window.matchMedia(`(max-width: ${this._mobileBreakpoint}px)`);
+
+    /**
+     * The width of the desktop parent container
+     * @type {int}
+     */
+    this._parentContainerWidth = config.parentContainerWidth || 700;
   }
 
   static get type () {
@@ -265,6 +278,13 @@ export default class NavigationComponent extends Component {
     const parentWidth = parentEl.offsetWidth;
     const moreButtonWidth = moreButtonEl.offsetWidth;
     let elsToMove = [];
+    const selectedEl = DOM.query(this._container, '.js-yxt-navItem.is-active');
+    const isUniversal = navItemEls.indexOf(selectedEl) === 0;
+    const priorityEls = [navItemEls[0], moreButtonEl];
+    if (!isUniversal) {
+      priorityEls.push(selectedEl);
+    }
+    const nonPriorityEls = navItemEls.filter(el => priorityEls.indexOf(el) === -1);
 
     // Collect links that need to be added to the dropdown
     for (const navItemEl of navItemEls) {
@@ -273,7 +293,7 @@ export default class NavigationComponent extends Component {
 
       // Determines if the nav item is overflowing and needs to be added to the dropdown
       // Offsets by the width of the more button to make sure there is enough space to add it
-      if (childPos + childWidth > parentWidth - moreButtonWidth) {
+      if (childPos + childWidth > this._parentContainerWidth - moreButtonWidth) {
         elsToMove.push(navItemEl);
       }
     }
@@ -313,32 +333,34 @@ export default class NavigationComponent extends Component {
     // TODO (creotutar) this is repeat code we probably want to split up set-up and showing/hiding
     // the more button
     if (this._mql.matches) {
-      for (const el of elsToMove) {
-        parentEl.appendChild(el);
-        el.classList.remove('yxt-Nav-dropDownItem');
-        el.classList.add('yxt-Nav-item');
+      for (const el of nonPriorityEls) {
+        modalEl.appendChild(el);
+        el.classList.add('yxt-Nav-dropDownItem');
+        el.classList.remove('yxt-Nav-item');
       }
-      moreButtonEl.style.display = 'none';
     }
 
     const breakpointChange = (e) => {
       if (e.matches) {
         // show scroll
-        for (const el of elsToMove) {
+        for (const el of nonPriorityEls) {
+          modalEl.appendChild(el);
+          el.classList.add('yxt-Nav-dropDownItem');
+          el.classList.remove('yxt-Nav-item');
+        }
+      } else {
+        // show more
+        for (const el of nonPriorityEls) {
           parentEl.appendChild(el);
           el.classList.remove('yxt-Nav-dropDownItem');
           el.classList.add('yxt-Nav-item');
         }
-        // TODO (creotutar) we should use a class instead of a style change
-        moreButtonEl.style.display = 'none';
-      } else {
-        // show more
         for (const el of elsToMove) {
           modalEl.appendChild(el);
           el.classList.add('yxt-Nav-dropDownItem');
           el.classList.remove('yxt-Nav-item');
         }
-        moreButtonEl.style.display = 'flex';
+        parentEl.appendChild(moreButtonEl);
       }
     };
 

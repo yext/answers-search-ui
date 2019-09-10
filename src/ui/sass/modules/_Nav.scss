@@ -17,18 +17,12 @@
   $nav-dropdown-color: $nav-text-color !default;
   $nav-dropdown-hover-color: $nav-dropdown-color !default;
   $nav-dropdown-hover-background-color: $color-gray10 !default;
-  
+
   &-container
   {
     display: flex;
     justify-content: flex-start;
     position: relative;
-
-    // make the nav scroll on mobile
-    @media (max-width: $breakpoint-mobile-max)
-    {
-      overflow-x: auto;
-    }
   }
 
   &-item
