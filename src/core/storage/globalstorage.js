@@ -31,9 +31,7 @@ export default class GlobalStorage {
    */
   setAll (data) {
     for (const [key, val] of Object.entries(data)) {
-      if (val) {
-        this.set(key, val);
-      }
+      this.set(key, val);
     }
   }
 
