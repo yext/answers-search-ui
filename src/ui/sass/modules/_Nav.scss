@@ -14,7 +14,7 @@
     position: relative;
 
     // make the nav scroll on mobile
-    @media (max-width: 767px)
+    @media (max-width: $breakpoint-mobile-max)
     {
       overflow-x: auto;
     }

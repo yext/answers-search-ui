@@ -64,7 +64,7 @@
     display: inline-flex;
     align-items: center;
 
-    @media (max-width: 767px)
+    @media (max-width: $breakpoint-mobile-max)
     {
       display: inline;
     }
@@ -104,7 +104,7 @@
     padding-right: $base-spacing;
     background-color: $result-background-color;
 
-    @media (max-width: 767px)
+    @media (max-width: $breakpoint-mobile-max)
     {
       flex-wrap: wrap;
     }
@@ -124,7 +124,7 @@
     display: flex;
     flex-grow: 1;
 
-    @media (max-width: 767px)
+    @media (max-width: $breakpoint-mobile-max)
     {
       flex-direction: column;
     }
@@ -147,13 +147,13 @@
     flex-grow: 1;
     flex-shrink: 0;
 
-    @media (min-width: 768px)
+    @media (min-width: $breakpoint-mobile-min)
     {
       justify-content: flex-end;
       margin-left: $base-spacing-sm * 2;
     }
 
-    @media (max-width: 767px)
+    @media (max-width: $breakpoint-mobile-max)
     {
       margin-top: $base-spacing / 2;
     }
@@ -163,7 +163,7 @@
   {
     display: flex;
 
-    @media (max-width: 767px)
+    @media (max-width: $breakpoint-mobile-max)
     {
       flex-direction: column;
     }
@@ -185,7 +185,7 @@
     min-width: 60px;
     text-align: center;
 
-    @media (max-width: 768px)
+    @media (max-width: $breakpoint-mobile-max)
     {
       flex-direction: row;
       padding-left: 0;
@@ -204,7 +204,7 @@
     padding-right: $base-spacing * 2;
     margin-bottom: $base-spacing / 2;
 
-    @media(max-width: 768px)
+    @media(max-width: $breakpoint-mobile-max)
     {
       padding-left: 0;
       padding-right: 0;
@@ -243,7 +243,7 @@
     margin-left: $base-spacing * 2;
     margin-right: $base-spacing * 3;
 
-    @media (max-width: 767px)
+    @media (max-width: $breakpoint-mobile-max)
     {
       display: none;
     }
