@@ -44,7 +44,7 @@ export default class DirectAnswerComponent extends Component {
      */
     this._thumbsDownSelector = config.thumbsDownSelector || '.js-directAnswer-thumbDown';
 
-    /** 
+    /**
      * The display text for the View Details click to action link
      * @type {string}
      */
