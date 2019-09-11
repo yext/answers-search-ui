@@ -1,13 +1,17 @@
-{{#if results}}
-  <section class="yxt-Results yxt-Results--{{_config.modifier}}">
-    {{> results/resultssectionheader}}
-    {{#if includeMap}}
-      <div class="yxt-Results-map"
-           data-component="Map"
-           data-prop="map"
-           data-opts='{ "isStatic": true }'>
-      </div>
-    {{/if}}
-    {{> results/resultitems}}
-  </section>
+{{#if isSearchComplete}}
+  {{#if showNoResults}}
+    {{> results/noresults}}
+  {{else}}
+    <section class="yxt-Results yxt-Results--{{_config.modifier}}">
+      {{> results/resultssectionheader}}
+      {{#if includeMap}}
+        <div class="yxt-Results-map"
+             data-component="Map"
+             data-prop="map"
+             data-opts='{ "isStatic": true }'>
+        </div>
+      {{/if}}
+      {{> results/resultitems}}
+    </section>
+  {{/if}}
 {{/if}}

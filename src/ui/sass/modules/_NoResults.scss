@@ -1,0 +1,52 @@
+/** @define NoResults */
+.yxt-NoResults
+{
+  $noresults-font-size: $font-size-md !default;
+  $noresults-line-height: $line-height-md !default;
+  $noresults-font-weight: $font-weight-normal !default;
+  $noresults-query-font-weight: $font-weight-semibold !default;
+
+  &-wrapper
+  {
+    font-size: $noresults-font-size;
+    line-height: $noresults-line-height;
+    font-weight: $noresults-font-weight;
+  }
+
+  &-query
+  {
+    font-weight: $noresults-query-font-weight;
+  }
+
+  &-returnLinkWrapper
+  {
+    margin-top: $base-spacing;
+  }
+
+  &-returnLink
+  {
+    @include Link-2;
+  }
+
+  &-suggestions
+  {
+    margin-top: $base-spacing;
+  }
+
+  &-suggestionsHeader
+  {
+    font-style: italic;
+  }
+
+  &-suggestionsList
+  {
+    margin-top: $base-spacing / 2;
+  }
+
+  &-suggestion
+  {
+    margin-left: $base-spacing-sm * 2;
+    list-style-type: disc;
+    list-style-position: inside;
+  }
+}
