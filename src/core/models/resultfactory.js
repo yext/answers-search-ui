@@ -3,6 +3,9 @@
 import Result from './result';
 
 export default class ResultFactory {
+  constructor(formatter = {}) {
+    this._formatter = formatter;
+  }
   /**
    * Converts an API result object into a Result view model.
    * Includes default mappings of GoogleCustomSearchEngine results to
@@ -10,19 +13,23 @@ export default class ResultFactory {
    * @param resultsData  {Array} expected format: { data: { ... }, highlightedFields: { ... }}
    * @returns {Result[]}
    */
-  static from (resultsData) {
+  from (resultsData) {
     let results = [];
     for (let i = 0; i < resultsData.length; i++) {
       // TODO use resultData.highlightedFields to
       // transform resultData.data into html-friendly strings that highlight values.
       // Check for new data format, otherwise fallback to legacy
 
-      const data = resultsData[i].data || resultsData[i];
+      let data = resultsData[i].data || resultsData[i];
 
       if (data.htmlSnippet) {
         results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
         continue;
       }
+
+      data = Object.assign(data, {
+        formatted: this.applyFormats(data),
+      });
 
       results.push(ResultFactory.fromGeneric(data, i));
     }
@@ -30,12 +37,25 @@ export default class ResultFactory {
     return results;
   }
 
+  applyFormats(rawData) {
+    const result = {};
+    for (let [k, v] of rawData) {
+      if (this._formatter[k]) {
+        const valueResult = this._formatter[k](v, rawData);
+        Object.assign(result, {
+          k: valueResult,
+        });
+      }
+    }
+    return result;
+  }
+
   /**
    * Converts an API result object into a generic result view model.
    * @param data
    * @returns {Result}
    */
-  static fromGeneric (data, index) {
+  fromGeneric (data, index) {
     return new Result({
       raw: data,
       title: data.name,
@@ -52,7 +72,7 @@ export default class ResultFactory {
    * @param data
    * @returns {Result}
    */
-  static fromGoogleCustomSearchEngine (data) {
+  fromGoogleCustomSearchEngine (data) {
     return new Result({
       raw: data,
       title: data.htmlTitle.replace(/(<([^>]+)>)/ig, ''),
@@ -69,7 +89,7 @@ export default class ResultFactory {
    * @param sep {string} the word separator
    * @returns {string}
    */
-  static truncate (str, limit = 250, trailing = '...', sep = ' ') {
+  truncate (str, limit = 250, trailing = '...', sep = ' ') {
     if (!str || str.length <= limit) {
       return str;
     }
