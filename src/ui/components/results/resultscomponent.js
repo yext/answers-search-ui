@@ -76,6 +76,10 @@ export default class ResultsComponent extends Component {
       template: config.itemTemplate
     });
 
+    /**
+     * The url to the universal page for the no results page to link back to with current query
+     * @type {string|null}
+     */
     this._universalUrl = config.universalUrl;
   }
 
