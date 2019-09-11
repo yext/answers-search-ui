@@ -46,7 +46,7 @@
     "test": "semistandard && jest",
     "size": "size-limit",
     "fix": "semistandard --fix",
-    "install": "npm run build"
+    "install": "gulp"
   },
   "jest": {
     "bail": 0,
