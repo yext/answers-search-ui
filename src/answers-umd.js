@@ -68,6 +68,7 @@ class Answers {
       globalStorage: globalStorage,
       persistentStorage: persistentStorage,
       answersKey: config.answersKey,
+      fieldFormatters: config.fieldFormatters,
       locale: config.locale
     });
 

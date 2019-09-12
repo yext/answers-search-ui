@@ -48,6 +48,13 @@ export default class Core {
     this._locale = config.locale || 'en';
 
     /**
+     * A map of field formatters used to format results, if present
+     * @type {Object.<string, function>}
+     * @private
+     */
+    this._fieldFormatters = config.fieldFormatters || {};
+
+    /**
      * A reference to the core data storage that powers the UI
      * @type {GlobalStorage}
      * @private
@@ -118,7 +125,7 @@ export default class Core {
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
       })
-      .then(response => SearchDataTransformer.transformVertical(response))
+      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
@@ -142,7 +149,7 @@ export default class Core {
 
     return this._searcher
       .universalSearch(queryString)
-      .then(response => SearchDataTransformer.transform(response, urls))
+      .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
