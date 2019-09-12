@@ -53,7 +53,7 @@ export default class ResultFactory {
       formatted: formattedData,
       title: formattedData.name || data.name,
       details: formattedData.description || this.truncate(data.description),
-      link: formattedData.website || data.website,
+      link: data.website,
       id: data.id,
       ordinal: index + 1
     });
