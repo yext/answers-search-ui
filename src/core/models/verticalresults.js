@@ -20,8 +20,13 @@ export default class VerticalResults {
     return new VerticalResults(merged);
   }
 
-  static from (response) {
-    return new VerticalResults(Section.from(response));
+  /**
+   * Create vertical results from server data
+   * @param {Object} response The server response
+   * @param {Object.<string, function>} formatters The field formatters to use
+   */
+  static from (response, formatters) {
+    return new VerticalResults(Section.from(response, null, formatters));
   }
 
   /**

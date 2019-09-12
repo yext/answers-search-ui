@@ -116,7 +116,7 @@ ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   // -- other options --
 })
-````
+```
 
 ## Using a Custom Template
 All component templates are written using handlebars.
@@ -132,7 +132,7 @@ ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   template: customTemplate
 })
-````
+```
 
 ## Using a Custom Renderer
 
@@ -148,7 +148,21 @@ ANSWERS.addComponent('SearchBar', {
     return `<div class="my-search">${data.title}</div>`
   }
 })
-````
+```
+
+## Custom Data Formatting
+
+You can format specific entity fields using `fieldFormatters`. These formatters are applied before the `transformData` step. Each formatter takes in three arguments, `(fieldValue, entityData, verticalId)`.
+
+```js
+ANSWERS.init({
+  apiKey: '<API_KEY_HERE>',
+  answersKey: '<ANSWERS_KEY_HERE>',
+  fieldFormatters: {
+    'name': (name, entityData, verticalId) => name.toUpperCase()
+  }
+});
+```
 
 ## Custom Data Transforms
 
@@ -485,7 +499,7 @@ ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   itemTemplate: `my item {{name}}`
 })
-````
+```
 
 ### Custom Render For Specific Vertical Result Items
 

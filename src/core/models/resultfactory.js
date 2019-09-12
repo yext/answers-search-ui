@@ -8,9 +8,11 @@ export default class ResultFactory {
    * Includes default mappings of GoogleCustomSearchEngine results to
    * the fields exposed by the template.
    * @param resultsData  {Array} expected format: { data: { ... }, highlightedFields: { ... }}
+   * @param {Object.<string, function>} formatters The formatters to apply to the result
+   * @param {string} verticalId The vertical of these results
    * @returns {Result[]}
    */
-  static from (resultsData) {
+  static from (resultsData, formatters, verticalId) {
     let results = [];
     for (let i = 0; i < resultsData.length; i++) {
       // TODO use resultData.highlightedFields to
@@ -18,13 +20,21 @@ export default class ResultFactory {
       // Check for new data format, otherwise fallback to legacy
 
       const data = resultsData[i].data || resultsData[i];
+      const formattedData = {};
+      if (Object.keys(formatters).length > 0) {
+        Object.entries(data).forEach(([key, val]) => {
+          if (formatters[key]) {
+            formattedData[key] = formatters[key](val, data, verticalId);
+          }
+        });
+      }
 
       if (data.htmlSnippet || data.htmlTitle) {
         results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
         continue;
       }
 
-      results.push(ResultFactory.fromGeneric(data, i));
+      results.push(ResultFactory.fromGeneric(data, formattedData, i));
     }
 
     return results;
@@ -33,14 +43,17 @@ export default class ResultFactory {
   /**
    * Converts an API result object into a generic result view model.
    * @param data
+   * @param formattedData
+   * @param index
    * @returns {Result}
    */
-  static fromGeneric (data, index) {
+  static fromGeneric (data, formattedData, index) {
     return new Result({
       raw: data,
-      title: data.name,
-      details: this.truncate(data.description),
-      link: data.website,
+      formatted: formattedData,
+      title: formattedData.name || data.name,
+      details: formattedData.description || this.truncate(data.description),
+      link: formattedData.website || data.website,
       id: data.id,
       ordinal: index + 1
     });
