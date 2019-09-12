@@ -14,3 +14,41 @@ describe('truncating a long description', () => {
     expect(ResultFactory.truncate('abc def gj ij klmnop qrs tuv wxyz', 15)).toEqual('abc def gj...');
   });
 });
+
+describe('formatting data', () => {
+  it('doesn\'t format anything with empty formatters', () => {
+    const data = [{
+      data: {
+        name: 'Test',
+        description: 'Result description'
+      }
+    }];
+
+    const results = ResultFactory.from(data, {}, null);
+    expect(results[0].title).toBe('Test');
+    expect(results[0].details).toBe('Result description');
+    expect(results[0]._formatted).toEqual({});
+  });
+
+  it('provides formatted data with formatters', () => {
+    const data = [{
+      data: {
+        name: 'Test',
+        description: 'Result description'
+      }
+    }];
+
+    const formatters = {
+      'name': name => name.toUpperCase(),
+      'description': desc => desc.substr(7)
+    };
+
+    const results = ResultFactory.from(data, formatters, null);
+    expect(results[0].title).toBe('TEST');
+    expect(results[0].details).toBe('description');
+    expect(results[0]._formatted).toEqual({
+      name: 'TEST',
+      description: 'description'
+    });
+  });
+});

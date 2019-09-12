@@ -10,6 +10,13 @@ export default class Result {
     this._raw = data.raw || null;
 
     /**
+     * The formatted profile data
+     * @type {Object}
+     * @private
+     */
+    this._formatted = data.formatted;
+
+    /**
      * The index number of the result
      * @type {Number}
      */
