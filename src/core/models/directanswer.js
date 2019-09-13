@@ -13,13 +13,13 @@ export default class DirectAnswer {
    */
   static from (response, formatters) {
     const data = { ...response };
-    const { fieldApiName, value } = data.answer;
+    const { answer, relatedItem } = data;
 
-    if (formatters[fieldApiName]) {
-      data.answer.value = formatters[fieldApiName](
-        value,
-        data.relatedItem.data.fieldValues,
-        data.relatedItem.verticalConfigId,
+    if (formatters[answer.fieldApiName]) {
+      answer.value = formatters[answer.fieldApiName](
+        answer.value,
+        relatedItem.data.fieldValues,
+        relatedItem.verticalConfigId,
         true);
     }
 
