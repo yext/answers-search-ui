@@ -19,7 +19,7 @@ export default class ResultFactory {
 
       const data = resultsData[i].data || resultsData[i];
 
-      if (data.htmlSnippet) {
+      if (data.htmlSnippet || data.htmlTitle) {
         results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
         continue;
       }
