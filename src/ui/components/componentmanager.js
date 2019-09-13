@@ -1,6 +1,7 @@
 /** @module ComponentManager */
 
 import { AnswersComponentError } from '../../core/errors/errors';
+import { DOM } from '..';
 
 /**
  * ComponentManager is a Singletone that contains both an internal registry of
@@ -161,6 +162,7 @@ export default class ComponentManager {
   removeByName (name) {
     const component = this._activeComponents.find(c => c.name === name);
     component.remove();
+    DOM.empty(component._container);
   }
 
   getActiveComponent (type) {
