@@ -60,7 +60,7 @@ describe('constructing from a response', () => {
         shortValue: 'Jesse Sharps',
         filter: {},
         matchedSubstrings: [ { offset: 8, length: 2 } ],
-        highlightedValue: 'Jesse Sh<strong>ar</strong>ps'
+        highlightedValue: '<strong>Jesse Sh</strong>ar<strong>ps</strong>'
       },
       {
         key: 'billy',
@@ -68,7 +68,7 @@ describe('constructing from a response', () => {
         shortValue: 'Billy Bastardi',
         filter: {},
         matchedSubstrings: [ { offset: 10, length: 2 } ],
-        highlightedValue: 'Billy Bast<strong>ar</strong>di'
+        highlightedValue: '<strong>Billy Bast</strong>ar<strong>di</strong>'
       }
     ];
 
@@ -101,7 +101,7 @@ describe('constructing from a response', () => {
         shortValue: 'Jesse Sharps',
         filter: {},
         matchedSubstrings: [ { offset: 1, length: 3 }, { offset: 7, length: 4 } ],
-        highlightedValue: 'J<strong>ess</strong>e S<strong>harp</strong>s'
+        highlightedValue: '<strong>J</strong>ess<strong>e S</strong>harp<strong>s</strong>'
       }
     ];
 
