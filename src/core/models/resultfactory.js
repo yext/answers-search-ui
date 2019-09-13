@@ -24,7 +24,7 @@ export default class ResultFactory {
       if (Object.keys(formatters).length > 0) {
         Object.entries(data).forEach(([key, val]) => {
           if (formatters[key]) {
-            formattedData[key] = formatters[key](val, data, verticalId);
+            formattedData[key] = formatters[key](val, data, verticalId, false);
           }
         });
       }

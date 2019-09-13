@@ -18,7 +18,7 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
-      [StorageKeys.DIRECT_ANSWER]: new DirectAnswer(response.directAnswer),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.from(response.directAnswer, formatters),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters)
     };
   }
