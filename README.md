@@ -160,7 +160,7 @@ ANSWERS.init({
   apiKey: '<API_KEY_HERE>',
   answersKey: '<ANSWERS_KEY_HERE>',
   fieldFormatters: {
-    'name': (name, entityData, verticalId, isDirectAnswer) => name.toUpperCase()
+    'name': (fieldValue, entityData, verticalId, isDirectAnswer) => fieldValue.toUpperCase()
   }
 });
 ```
