@@ -10,6 +10,7 @@ Outline:
    - [Adding a Component](#adding-a-component)
    - [Using a Custom Template](#using-a-custom-template)
    - [Using a Custom Renderer](#using-a-custom-renderer)
+   - [Custom Data Formatting](#custom-data-formatting)
    - [Custom Data Transforms](#custom-data-transforms)
 3. [Types of Components](#types-of-components)
    - [Navigation Component](#navigation-component)
@@ -152,14 +153,14 @@ ANSWERS.addComponent('SearchBar', {
 
 ## Custom Data Formatting
 
-You can format specific entity fields using `fieldFormatters`. These formatters are applied before the `transformData` step. Each formatter takes in three arguments, `(fieldValue, entityData, verticalId)`.
+You can format specific entity fields using `fieldFormatters`. These formatters are applied before the `transformData` step. Each formatter takes in three arguments, `(fieldValue, entityData, verticalId, isDirectAnswer)`.
 
 ```js
 ANSWERS.init({
   apiKey: '<API_KEY_HERE>',
   answersKey: '<ANSWERS_KEY_HERE>',
   fieldFormatters: {
-    'name': (name, entityData, verticalId) => name.toUpperCase()
+    'name': (name, entityData, verticalId, isDirectAnswer) => name.toUpperCase()
   }
 });
 ```
