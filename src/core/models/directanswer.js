@@ -15,7 +15,7 @@ export default class DirectAnswer {
     const data = { ...response };
     const { answer, relatedItem } = data;
 
-    if (formatters[answer.fieldApiName]) {
+    if (answer && formatters[answer.fieldApiName]) {
       answer.value = formatters[answer.fieldApiName](
         answer.value,
         relatedItem.data.fieldValues,
