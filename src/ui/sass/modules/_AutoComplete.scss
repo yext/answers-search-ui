@@ -9,7 +9,7 @@
 
   $autocomplete-text-font-size: $font-size-md-lg !default;
   $autocomplete-text-line-height: $line-height-md !default;
-  $autocomplete-text-font-weight: $font-weight-semibold !default;
+  $autocomplete-text-font-weight: $font-weight-normal !default;
   $autocomplete-text-color: $color-text-primary !default;
 
   padding-bottom: 10px;
@@ -52,7 +52,7 @@
 
     strong
     {
-      font-weight: $font-weight-normal;
+      font-weight: $font-weight-semibold;
     }
 
     &:hover

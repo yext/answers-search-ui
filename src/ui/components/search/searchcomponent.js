@@ -138,13 +138,13 @@ export default class SearchComponent extends Component {
   }
 
   onMount () {
-    // Wire up our search handling and auto complete
-    this.initSearch(this._formEl);
-    this.initAutoComplete(this._inputEl);
-
     if (this.autoFocus === true && this.query.length === 0) {
       DOM.query(this._container, this._inputEl).focus();
     }
+
+    // Wire up our search handling and auto complete
+    this.initSearch(this._formEl);
+    this.initAutoComplete(this._inputEl);
   }
 
   /**
