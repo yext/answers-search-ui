@@ -198,8 +198,7 @@ base configuration options defined above.
 ## Navigation Component
 
 The Navigation Component adds a dynamic experience to your pages navigation experience.
-When using multiple veritcal searches in a universal search, the navigation ordering will be automatically
-updated based on the search results.
+When using multiple vertical searches in a universal search, the navigation ordering will be automatically updated based on the search results. By default, tabs that do not fit in the container will go inside a dropdown menu.
 
 
 ```html
@@ -209,6 +208,9 @@ updated based on the search results.
 ```js
 ANSWERS.addComponent('Navigation', {
   container: '.navigation-container',
+  dropdownLabel: 'More',     // The label to display on the dropdown menu button
+  dropdownIcon: null,        // If provided, show this icon on the dropdown button instead
+  static: false,             // If true, shows all tabs in a horizontally scrolling container
   tabs: [
     {
       label: 'Home',         // The label used for the navigation element

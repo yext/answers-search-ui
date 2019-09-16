@@ -1,10 +1,22 @@
-<nav class="yxt-Nav-container js-yxt-navContainer">
-  {{#each tabs}}
-    <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
-       href="{{url}}"
-       data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
-       data-eventoptions='{{eventOptions}}'>
-      {{label}}
-    </a>
-  {{/each}}
+<nav class="yxt-Nav-container js-yxt-navContainer {{#if static}}yxt-Nav-static{{/if}}">
+  <ul class="yxt-Nav-expanded-items">
+    {{#each tabs}}
+      <li class="yxt-Nav-link">
+        <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
+          href="{{url}}"
+          data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
+          data-eventoptions='{{eventOptions}}'>
+          {{label}}
+        </a>
+      </li>
+    {{/each}}
+  </ul>
+  <ul class="yxt-Nav-collapsed-items yxt-Nav-hidden"></ul>
+  <button class="yxt-Nav-more-button {{#if static}}yxt-Nav-hidden{{/if}}">
+    {{#if dropdownIcon}}
+      <img src="{{dropdownIcon}}" class="yxt-Nav-more-icon" alt="More Navigation Links">
+    {{else}}
+      {{dropdownLabel}}
+    {{/if}}
+  </button>
 </nav>

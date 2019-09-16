@@ -6,18 +6,64 @@
   $nav-text-line-height: $line-height-md !default;
   $nav-text-font-weight: $font-weight-semibold !default;
   $nav-text-color: $color-text-primary !default;
-  
+
   &-container
   {
-    display: flex;
-    justify-content: space-between;
     position: relative;
+    width: 100%;
+  }
 
-    // make the nav scroll on mobile
-    @media (max-width: $breakpoint-mobile-max)
-    {
-      overflow-x: auto;
+  &-static
+  {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  }
+
+  &-more-button
+  {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+  }
+
+  &-more-icon
+  {
+    width: 30px;
+    height: 30px;
+  }
+
+  &-expanded-items
+  {
+    display: inline-block;
+    list-style-type: none;
+    white-space: nowrap;
+  }
+
+  &-collapsed-items
+  {
+    list-style-type: none;
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 5;
+    background: #fff;
+    margin: 0;
+    padding: 0;
+
+    .yxt-Nav-link {
+      display: block;
     }
+  }
+
+  &-hidden
+  {
+    visibility: hidden;
+  }
+
+  &-link
+  {
+    display: inline;
   }
 
   &-item

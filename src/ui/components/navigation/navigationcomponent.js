@@ -4,6 +4,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
+import DOM from '../../dom/dom';
 
 /**
  * The Tab is a model that is used to power the Navigation tabs in the view.
@@ -98,6 +99,24 @@ export default class NavigationComponent extends Component {
     super(config);
 
     /**
+     * The label to show on the dropdown menu button
+     * @type {string}
+     */
+    this.dropdownLabel = config.dropdownLabel || 'More';
+
+    /**
+     * The optional icon to show on the dropdown menu button
+     * @type {string}
+     */
+    this.dropdownIcon = config.dropdownIcon || null;
+
+    /**
+     * If true, render a static navigation with no "more" menu
+     * @type {boolean}
+     */
+    this.static = config.static || false;
+
+    /**
      * The data storage key
      * @type {string}
      */
@@ -117,6 +136,13 @@ export default class NavigationComponent extends Component {
      * @private
      */
     this._tabOrder = this.getDefaultTabOrder(config.tabs, this.getUrlParams());
+
+    /**
+     * Breakpoints at which navigation items move to the "more" dropdown
+     * @type {number[]}
+     * @private
+     */
+    this._navBreakpoints = [];
   }
 
   static get type () {
@@ -130,6 +156,90 @@ export default class NavigationComponent extends Component {
    */
   static defaultTemplateName (config) {
     return 'navigation/navigation';
+  }
+
+  onCreate () {
+    if (!this.static) {
+      DOM.on(window, 'resize', this.refitNav.bind(this));
+      DOM.on(window, 'click', this.checkOutsideClick.bind(this));
+    }
+  }
+
+  onMount () {
+    if (!this.static) {
+      this.refitNav();
+      DOM.on(DOM.query(this._container, '.yxt-Nav-more-button'), 'click', this.toggleMoreDropdown.bind(this));
+    }
+  }
+
+  refitNav () {
+    const container = DOM.query(this._container, '.yxt-Nav-container');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more-button');
+    const mainLinks = DOM.query(this._container, '.yxt-Nav-expanded-items');
+    const collapsedLinks = DOM.query(this._container, '.yxt-Nav-collapsed-items');
+
+    const navWidth = moreButton.classList.contains('yxt-Nav-hidden')
+      ? container.offsetWidth
+      : container.offsetWidth - moreButton.offsetWidth;
+
+    if (mainLinks.offsetWidth > navWidth) {
+      this._navBreakpoints.push(mainLinks.offsetWidth);
+      const lastLink = mainLinks.children.item(mainLinks.children.length - 1);
+      if (lastLink === null) {
+        return;
+      }
+      collapsedLinks.prepend(lastLink);
+
+      if (moreButton.classList.contains('yxt-Nav-hidden')) {
+        moreButton.classList.remove('yxt-Nav-hidden');
+      }
+    } else {
+      const numBreakpoints = this._navBreakpoints.length;
+      if (numBreakpoints && navWidth > this._navBreakpoints[numBreakpoints - 1]) {
+        const firstLink = collapsedLinks.children.item(0);
+        if (firstLink === null) {
+          return;
+        }
+        mainLinks.append(firstLink);
+        this._navBreakpoints.pop();
+      }
+
+      if (collapsedLinks.children.length === 0) {
+        moreButton.classList.add('yxt-Nav-hidden');
+      }
+    }
+
+    this.closeMoreDropdown();
+    if (mainLinks.offsetWidth > navWidth) {
+      this.refitNav();
+    }
+  }
+
+  closeMoreDropdown () {
+    const collapsed = DOM.query(this._container, '.yxt-Nav-collapsed-items');
+    collapsed.classList.add('yxt-Nav-hidden');
+  }
+
+  openMoreDropdown () {
+    const collapsed = DOM.query(this._container, '.yxt-Nav-collapsed-items');
+    collapsed.classList.remove('yxt-Nav-hidden');
+  }
+
+  toggleMoreDropdown () {
+    const collapsed = DOM.query(this._container, '.yxt-Nav-collapsed-items');
+    if (collapsed.classList.contains('yxt-Nav-hidden')) {
+      this.openMoreDropdown();
+    } else {
+      this.closeMoreDropdown();
+    }
+  }
+
+  checkOutsideClick (e) {
+    if (e.target.closest('.yxt-Nav-container')) {
+      return;
+    }
+
+    this.closeMoreDropdown();
   }
 
   /**
@@ -157,7 +267,10 @@ export default class NavigationComponent extends Component {
     }
 
     return super.setState({
-      tabs: tabs
+      tabs: tabs,
+      dropdownLabel: this.dropdownLabel,
+      dropdownIcon: this.dropdownIcon,
+      static: this.static
     });
   }
 
