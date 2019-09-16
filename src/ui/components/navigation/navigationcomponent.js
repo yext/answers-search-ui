@@ -7,6 +7,12 @@ import SearchParams from '../../dom/searchparams';
 import DOM from '../../dom/dom';
 
 /**
+ * The debounce duration for resize events
+ * @type {number}
+ */
+const RESIZE_DEBOUNCE = 100;
+
+/**
  * The Tab is a model that is used to power the Navigation tabs in the view.
  * It's initialized through the configuration provided to the component.
  */
@@ -160,7 +166,13 @@ export default class NavigationComponent extends Component {
 
   onCreate () {
     if (!this.static) {
-      DOM.on(window, 'resize', this.refitNav.bind(this));
+      DOM.on(window, 'resize', () => {
+        if (this._debounceTimer) {
+          clearTimeout(this._debounceTimer);
+        }
+
+        this._debounceTimer = setTimeout(this.refitNav.bind(this), RESIZE_DEBOUNCE);
+      });
       DOM.on(window, 'click', this.checkOutsideClick.bind(this));
     }
   }
@@ -181,6 +193,7 @@ export default class NavigationComponent extends Component {
     const navWidth = moreButton.classList.contains('yxt-Nav-hidden')
       ? container.offsetWidth
       : container.offsetWidth - moreButton.offsetWidth;
+    let numBreakpoints = this._navBreakpoints.length;
 
     if (mainLinks.offsetWidth > navWidth) {
       this._navBreakpoints.push(mainLinks.offsetWidth);
@@ -194,7 +207,6 @@ export default class NavigationComponent extends Component {
         moreButton.classList.remove('yxt-Nav-hidden');
       }
     } else {
-      const numBreakpoints = this._navBreakpoints.length;
       if (numBreakpoints && navWidth > this._navBreakpoints[numBreakpoints - 1]) {
         const firstLink = collapsedLinks.children.item(0);
         if (firstLink === null) {
@@ -202,6 +214,7 @@ export default class NavigationComponent extends Component {
         }
         mainLinks.append(firstLink);
         this._navBreakpoints.pop();
+        numBreakpoints--;
       }
 
       if (collapsedLinks.children.length === 0) {
@@ -210,7 +223,8 @@ export default class NavigationComponent extends Component {
     }
 
     this.closeMoreDropdown();
-    if (mainLinks.offsetWidth > navWidth) {
+    if (mainLinks.offsetWidth > navWidth ||
+      (numBreakpoints > 0 && navWidth > this._navBreakpoints[numBreakpoints - 1])) {
       this.refitNav();
     }
   }

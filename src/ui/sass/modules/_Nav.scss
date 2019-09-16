@@ -6,6 +6,19 @@
   $nav-text-line-height: $line-height-md !default;
   $nav-text-font-weight: $font-weight-semibold !default;
   $nav-text-color: $color-text-primary !default;
+  $nav-text-hover-color: $color-gray9 !default;
+  $nav-text-active-color: $color-blue1 !default;
+  $nav-text-active-border: 2px solid $color-blue1 !default;
+  $nav-text-focus-background-color: $color-gray2 !default;
+
+  $nav-dropdown-font-size: 13px !default;
+  $nav-dropdown-line-height: $line-height-sm !default;
+  $nav-dropdown-font-weight: $font-weight-semibold !default;
+  $nav-dropdown-color: $nav-text-color !default;
+  $nav-dropdown-hover-color: $nav-dropdown-color !default;
+  $nav-dropdown-hover-background-color: $color-gray10 !default;
+
+
 
   &-container
   {
@@ -50,9 +63,20 @@
     background: #fff;
     margin: 0;
     padding: 0;
+    border: 1px solid black;
+    box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
 
-    .yxt-Nav-link {
+    .yxt-Nav-link
+    {
       display: block;
+      padding: 4px 16px;
+
+      &:hover,
+      &:focus
+      {
+        color: $nav-dropdown-hover-color;
+        background-color: $nav-dropdown-hover-background-color;
+      }
     }
   }
 
@@ -63,7 +87,13 @@
 
   &-link
   {
-    display: inline;
+    display: inline-block;
+    @include Text(
+      $size: $nav-dropdown-font-size,
+      $line-height: $nav-dropdown-line-height,
+      $weight: $nav-dropdown-font-weight,
+      $color: $nav-dropdown-color
+    );
   }
 
   &-item
@@ -75,6 +105,7 @@
       $color: $nav-text-color
     );
 
+    display: block;
     padding-bottom: 6px;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
@@ -83,6 +114,18 @@
     &:hover
     {
       text-shadow: 0 0 1px white;
+      color: $nav-text-hover-color;
+
+      @media (hover: none)
+      {
+        color: $nav-text-color;
+      }
+    }
+
+    &:focus
+    {
+      background-color: $nav-text-focus-background-color;
+      color: $nav-text-color;
     }
 
     &:not(:last-child)
