@@ -101,9 +101,9 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    this.query = config.query || String(this.core.globalStorage.getState(StorageKeys.QUERY)) || '';
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
-      this.query = q;
+      this.query = String(q);
       this.setState();
       this.search(q);
     });
@@ -131,7 +131,7 @@ export default class SearchComponent extends Component {
   }
 
   onCreate () {
-    if (this.query && this.query.length > 0) {
+    if (this.query) {
       this.core.setQuery(this.query);
       this.search(this.query);
     }
