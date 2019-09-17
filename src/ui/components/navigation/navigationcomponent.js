@@ -114,7 +114,7 @@ export default class NavigationComponent extends Component {
      * The optional icon to show on the dropdown menu button
      * @type {string}
      */
-    this.dropdownIcon = config.dropdownIcon || null;
+    this.dropdownIcon = config.dropdownIcon || 'kabob';
 
     /**
      * If true, render a static navigation with no "more" menu
@@ -180,17 +180,17 @@ export default class NavigationComponent extends Component {
   onMount () {
     if (!this.static) {
       this.refitNav();
-      DOM.on(DOM.query(this._container, '.yxt-Nav-more-button'), 'click', this.toggleMoreDropdown.bind(this));
+      DOM.on(DOM.query(this._container, '.yxt-Nav-more'), 'click', this.toggleMoreDropdown.bind(this));
     }
   }
 
   refitNav () {
     const container = DOM.query(this._container, '.yxt-Nav-container');
-    const moreButton = DOM.query(this._container, '.yxt-Nav-more-button');
-    const mainLinks = DOM.query(this._container, '.yxt-Nav-expanded-items');
-    const collapsedLinks = DOM.query(this._container, '.yxt-Nav-collapsed-items');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more');
+    const mainLinks = DOM.query(this._container, '.yxt-Nav-expanded');
+    const collapsedLinks = DOM.query(this._container, '.yxt-Nav-modal');
 
-    const navWidth = moreButton.classList.contains('yxt-Nav-hidden')
+    const navWidth = moreButton.classList.contains('yxt-Nav-item--more')
       ? container.offsetWidth
       : container.offsetWidth - moreButton.offsetWidth;
     let numBreakpoints = this._navBreakpoints.length;
@@ -203,8 +203,8 @@ export default class NavigationComponent extends Component {
       }
       collapsedLinks.prepend(lastLink);
 
-      if (moreButton.classList.contains('yxt-Nav-hidden')) {
-        moreButton.classList.remove('yxt-Nav-hidden');
+      if (moreButton.classList.contains('yxt-Nav-item--more')) {
+        moreButton.classList.remove('yxt-Nav-item--more');
       }
     } else {
       if (numBreakpoints && navWidth > this._navBreakpoints[numBreakpoints - 1]) {
@@ -218,7 +218,7 @@ export default class NavigationComponent extends Component {
       }
 
       if (collapsedLinks.children.length === 0) {
-        moreButton.classList.add('yxt-Nav-hidden');
+        moreButton.classList.add('yxt-Nav-item--more');
       }
     }
 
@@ -230,22 +230,24 @@ export default class NavigationComponent extends Component {
   }
 
   closeMoreDropdown () {
-    const collapsed = DOM.query(this._container, '.yxt-Nav-collapsed-items');
-    collapsed.classList.add('yxt-Nav-hidden');
+    const collapsed = DOM.query(this._container, '.yxt-Nav-modal');
+    collapsed.classList.remove('is-active');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more');
+    moreButton.setAttribute('aria-expanded', false);
   }
 
   openMoreDropdown () {
-    const collapsed = DOM.query(this._container, '.yxt-Nav-collapsed-items');
-    collapsed.classList.remove('yxt-Nav-hidden');
+    const collapsed = DOM.query(this._container, '.yxt-Nav-modal');
+    collapsed.classList.add('is-active');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more');
+    moreButton.setAttribute('aria-expanded', true);
   }
 
   toggleMoreDropdown () {
-    const collapsed = DOM.query(this._container, '.yxt-Nav-collapsed-items');
-    if (collapsed.classList.contains('yxt-Nav-hidden')) {
-      this.openMoreDropdown();
-    } else {
-      this.closeMoreDropdown();
-    }
+    const collapsed = DOM.query(this._container, '.yxt-Nav-modal');
+    collapsed.classList.toggle('is-active');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more');
+    moreButton.setAttribute('aria-expanded', collapsed.classList.contains('is-active'));
   }
 
   checkOutsideClick (e) {

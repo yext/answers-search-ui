@@ -1,27 +1,31 @@
-<nav class="yxt-Nav-container js-yxt-navContainer {{#if static}}yxt-Nav-static{{/if}}">
-  <ul class="yxt-Nav-expanded-items">
+<nav class="yxt-Nav-container js-yxt-navContainer">
+  <div class="yxt-Nav-expanded">
     {{#each tabs}}
-      <li class="yxt-Nav-link">
-        <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
-          href="{{url}}"
-          data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
-          data-eventoptions='{{eventOptions}}'>
-          {{label}}
-        </a>
-      </li>
+      <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
+        href="{{url}}"
+        data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
+        data-eventoptions='{{eventOptions}}'
+        role="option"
+        {{#if isActive}}aria-selected="true"{{/if}}
+      >
+        {{label}}
+      </a>
     {{/each}}
-  </ul>
-  <ul class="yxt-Nav-collapsed-items yxt-Nav-hidden"></ul>
-  <button class="yxt-Nav-more-button {{#if static}}yxt-Nav-hidden{{/if}}">
-    {{#if dropdownIcon}}
-      <div class="yxt-Nav-moreIconWrapper">
-        <div class="yxt-Nav-moreIcon"
-        data-component="IconComponent"
-        data-opts='{"iconName": "{{#if dropdownIcon}}{{dropdownIcon}}{{/if}}"}'
-        data-prop="icon"></div>
-      </div>
-    {{else}}
-      {{dropdownLabel}}
-    {{/if}}
+  </div>
+  <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore"
+    aria-haspopup="listbox"
+    aria-labelledby="yxt-Nav-moreButton"
+  >
+    <div class="yxt-Nav-moreIconWrapper">
+      <span class="yxt-Nav-moreIcon"
+      data-component="IconComponent"
+      data-opts='{"iconName": "{{dropdownIcon}}"}'
+      data-prop="icon"></span>
+    </div>
+    {{dropdownLabel}}
   </button>
+  <div class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"
+    role="listbox"
+    aria-labelledby="yxt-Nav-moreButton"
+  ></div>
 </nav>
