@@ -255,6 +255,7 @@ export default class AutoCompleteComponent extends Component {
       Keys.LEFT_OS_KEY,
       Keys.RIGHT_OS_KEY,
       Keys.ENTER,
+      Keys.TAB,
       Keys.SELECT_KEY
     ];
 
@@ -265,12 +266,6 @@ export default class AutoCompleteComponent extends Component {
     // User escapes out of auto complete, so we reset it to the original input
     if (key === Keys.ESCAPE) {
       this.updateQuery(this._originalQuery);
-      this.close();
-      return;
-    }
-
-    // Tabbing out or enter should close the auto complete.
-    if (key === Keys.TAB) {
       this.close();
       return;
     }
@@ -326,6 +321,12 @@ export default class AutoCompleteComponent extends Component {
   handleNavigateResults (key, e) {
     let sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
+      return;
+    }
+
+    // Tabbing out or enter should close the auto complete.
+    if (key === Keys.TAB) {
+      this.close();
       return;
     }
 
