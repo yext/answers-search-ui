@@ -29,8 +29,18 @@ export default class RangeFilterComponent extends Component {
      */
     this._storeOnChange = config.storeOnChange || false;
 
-    const minVal = this.core.globalStorage.getState(`${this.name}.min`);
-    const maxVal = this.core.globalStorage.getState(`${this.name}.max`);
+    let minVal = this.core.globalStorage.getState(`${this.name}.min`);
+    if (typeof minVal === 'string') {
+      try {
+        minVal = Number.parseInt(minVal);
+      } catch (e) {}
+    }
+    let maxVal = this.core.globalStorage.getState(`${this.name}.max`);
+    if (typeof minVal === 'string') {
+      try {
+        maxVal = Number.parseInt(maxVal);
+      } catch (e) {}
+    }
 
     /**
      * The current range represented

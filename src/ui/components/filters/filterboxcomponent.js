@@ -182,7 +182,6 @@ export default class FilterBoxComponent extends Component {
       ? Filter.and(...allFilters)
       : allFilters[0];
 
-    // TODO(jdelerme): check empty object
     const query = this.core.globalStorage.getState(StorageKeys.QUERY);
 
     const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];

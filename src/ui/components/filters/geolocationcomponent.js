@@ -92,7 +92,6 @@ export default class GeoLocationComponent extends Component {
 
     /**
      * The query string to use for the input box, provided to template for rendering.
-     * Optionally provided
      * @type {string}
      */
     this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
@@ -102,11 +101,16 @@ export default class GeoLocationComponent extends Component {
     });
 
     /**
-     * The filter string to use for the provided query
-     * Optionally provided
-     * @type {string}
+     * The filter to use for the current query
+     * @type {Filter}
      */
-    this.filter = this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || '';
+    this.filter = this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || {};
+    if (typeof this.filter === 'string') {
+      try {
+        this.filter = JSON.parse(this.filter);
+      } catch (e) {}
+    }
+
     this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
   }
 
