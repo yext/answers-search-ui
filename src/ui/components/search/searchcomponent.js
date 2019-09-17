@@ -86,6 +86,13 @@ export default class SearchComponent extends Component {
     this.autoFocus = config.autoFocus === true;
 
     /**
+     * When autofocusing on load, optionally open the autocomplete
+     * (preset prompts)
+     * @type {boolean}
+     */
+    this.autocompleteOnLoad = config.autocompleteOnLoad || false;
+
+    /**
      * submitURL will force the search query submission to get
      * redirected to the URL provided.
      * Optional, defaults to null.
@@ -101,9 +108,9 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = config.query || String(this.core.globalStorage.getState(StorageKeys.QUERY)) || '';
+    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY) || '';
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
-      this.query = String(q);
+      this.query = q;
       this.setState();
       this.search(q);
     });
@@ -138,13 +145,17 @@ export default class SearchComponent extends Component {
   }
 
   onMount () {
-    if (this.autoFocus === true && this.query.length === 0) {
+    if (this.autoFocus === true && this.query.length === 0 && !this.autocompleteOnLoad) {
       DOM.query(this._container, this._inputEl).focus();
     }
 
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
     this.initAutoComplete(this._inputEl);
+
+    if (this.autoFocus === true && this.query.length === 0 && this.autocompleteOnLoad) {
+      DOM.query(this._container, this._inputEl).focus();
+    }
   }
 
   /**
