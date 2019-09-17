@@ -174,6 +174,10 @@ export default class DOM {
     DOM.query(selector).addEventListener(evt, handler);
   }
 
+  static once (selector, evt, handler) {
+    DOM.query(selector).addEventListener(evt, handler, { once: true });
+  }
+
   static off (selector, evt, handler) {
     DOM.query(selector).removeEventListener(evt, handler);
   }

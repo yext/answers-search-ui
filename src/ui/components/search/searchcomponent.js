@@ -213,6 +213,7 @@ export default class SearchComponent extends Component {
       name: `${this.name}.autocomplete`,
       container: '.yxt-SearchBar-autocomplete',
       barKey: this._barKey,
+      autoFocus: this.autoFocus && !this.autocompleteOnLoad,
       verticalKey: this._verticalKey,
       promptHeader: this.promptHeader,
       originalQuery: this.query,
