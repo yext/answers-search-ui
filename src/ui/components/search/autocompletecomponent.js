@@ -94,6 +94,12 @@ export default class AutoCompleteComponent extends Component {
     this.promptHeader = opts.promptHeader || null;
 
     /**
+     * Whether the input is autocomatically focused or not
+     * @type {boolean}
+     */
+    this._autoFocus = opts.autoFocus || false;
+
+    /**
      * Callback invoked when the `Enter` key is pressed on auto complete.
      */
     this._onSubmit = opts.onSubmit || function () {};
@@ -176,6 +182,12 @@ export default class AutoCompleteComponent extends Component {
       this.handleNavigateResults(e.keyCode, e);
       this.handleSubmitResult(e.keyCode, queryInput.value, e);
     });
+
+    if (this._autoFocus) {
+      DOM.once(queryInput, 'click', () => {
+        this.autoComplete(queryInput.value);
+      });
+    }
 
     // Allow the user to select a result with the mouse
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {

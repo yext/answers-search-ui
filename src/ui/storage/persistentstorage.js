@@ -93,11 +93,7 @@ export default class PersistentStorage {
   getAll () {
     const allParams = {};
     for (const [key, val] of this._params.entries()) {
-      let parsedVal = val;
-      try {
-        parsedVal = JSON.parse(val);
-      } catch (e) { }
-      allParams[key] = parsedVal;
+      allParams[key] = val;
     }
     return allParams;
   }

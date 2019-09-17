@@ -106,6 +106,12 @@ export default class FilterSearchComponent extends Component {
      * @type {string}
      */
     this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || '';
+    if (typeof this.filter === 'string') {
+      try {
+        this.filter = JSON.parse(this.filter);
+      } catch (e) {}
+    }
+
     this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
   }
 

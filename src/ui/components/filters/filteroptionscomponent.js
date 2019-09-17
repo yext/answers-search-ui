@@ -33,7 +33,13 @@ export default class FilterOptionsComponent extends Component {
         'FilterOptions');
     }
 
-    const selectedOptions = this.core.globalStorage.getState(this.name) || [];
+    let previousOptions = this.core.globalStorage.getState(this.name);
+    if (typeof previousOptions === 'string') {
+      try {
+        previousOptions = JSON.parse(previousOptions);
+      } catch (e) {}
+    }
+    let selectedOptions = previousOptions || [];
 
     /**
      * The list of filter options to display with checked status
