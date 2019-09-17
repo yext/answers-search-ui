@@ -2,7 +2,7 @@
   {{#each tabs}}
     <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
        href="{{url}}"
-       data-eventtype="VERTICAL_TAB_NAVIGATION"
+       data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
        data-eventoptions='{{eventOptions}}'>
       {{label}}
     </a>
