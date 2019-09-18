@@ -239,9 +239,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    min-width: 80px;
     margin-left: $base-spacing * 2;
     margin-right: $base-spacing * 3;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
 
     @media (max-width: $breakpoint-mobile-max)
     {
