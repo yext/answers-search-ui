@@ -129,7 +129,8 @@ function watchCSS (cb) {
 }
 
 exports.default = parallel(
-  series(bundle, legacyBundle, minifyJS, minifyLegacy),
+  series(bundle, minifyJS),
+  series(legacyBundle, minifyLegacy),
   series(compileCSS)
 );
 
