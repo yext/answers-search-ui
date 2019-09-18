@@ -77,5 +77,11 @@ export default class Result {
      * @type {Array}
      */
     this.callsToAction = data.callsToAction || [];
+
+    /**
+     * Determines if an accordian result should be collapsed by default
+     * @type {boolean}
+     */
+    this.collapsed = data.collapsed || true;
   }
 }
