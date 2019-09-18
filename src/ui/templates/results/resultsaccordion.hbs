@@ -9,11 +9,11 @@
         {{#each results}}
           <li id="accordion-{{this.id}}"
               class="yxt-AccordionResult js-yxt-AccordionResult
-                    {{#if this.collapsed}} is-collapsed{{/if}}
+                    is-collapsed
                     {{#if modifier}} yxt-AccordionResult--{{modifier}}{{/if}}">
             <h3 class="yxt-AccordionResult-title">
               <button class="yxt-AccordionResult-toggle js-yxt-AccordionResult-toggle"
-                      aria-expanded="{{#if this.collapsed}}false{{else}}true{{/if}}"
+                      aria-expanded="false"
                       aria-controls="#{{this.id}}"
                       data-entity-id="{{this.id}}">
                 {{this.title}}
