@@ -110,4 +110,37 @@ describe('constructing from a response', () => {
     expect(actualResults).toHaveLength(1);
     expect(actualResults).toEqual(expectedResults);
   });
+
+  it('properly handles full length match', () => {
+    const response = {
+      sections: [
+        {
+          label: 'Team Watson',
+          results: [
+            {
+              key: 'jesse',
+              value: 'Jesse',
+              matchedSubstrings: [ { offset: 0, length: 5 } ]
+            }
+          ]
+        }
+      ]
+    };
+
+    const expectedResults = [
+      {
+        key: 'jesse',
+        value: 'Jesse',
+        shortValue: 'Jesse',
+        filter: {},
+        matchedSubstrings: [ { offset: 0, length: 5 } ],
+        highlightedValue: 'Jesse'
+      }
+    ];
+
+    const data = AutoCompleteData.from(response);
+    const actualResults = data.sections[0].results;
+    expect(actualResults).toHaveLength(1);
+    expect(actualResults).toEqual(expectedResults);
+  });
 });

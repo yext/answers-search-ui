@@ -78,6 +78,10 @@ export class AutoCompleteResult {
     let highlightedValue = '';
     let nextStart = 0;
 
+    if (invertedSubstrings.length === 0) {
+      return val;
+    }
+
     for (let j = 0; j < invertedSubstrings.length; j++) {
       let start = Number(invertedSubstrings[j].offset);
       let end = start + invertedSubstrings[j].length;
