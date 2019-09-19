@@ -89,7 +89,9 @@ export default class GoogleMapProvider extends MapProvider {
       let bounds = new google.maps.LatLngBounds();
 
       if (mapData && mapData.mapMarkers.length) {
-        const collapsedMarkers = this._collapseMarkers(mapData.mapMarkers);
+        const collapsedMarkers = this._collapsePins
+          ? this._collapseMarkers(mapData.mapMarkers)
+          : mapData.mapMarkers;
         let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
           collapsedMarkers,
           this._pinConfig,

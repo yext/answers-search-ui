@@ -79,7 +79,9 @@ export default class MapBoxMapProvider extends MapProvider {
     });
 
     if (mapData) {
-      const collapsedMarkers = this._collapseMarkers(mapData.mapMarkers);
+      const collapsedMarkers = this._collapsePins
+        ? this._collapseMarkers(mapData.mapMarkers)
+        : mapData.mapMarkers;
       const mapboxMapMarkerConfigs = MapBoxMarkerConfig.from(
         collapsedMarkers,
         this._pinConfig,
