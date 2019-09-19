@@ -75,6 +75,12 @@ export default class MapProvider {
      * @type {Object|Function}
      */
     this._pinConfig = typeof config.pin === 'function' ? config.pin : Object.assign(MapProvider.DEFAULT_PIN_CONFIG, config.pin);
+
+    /**
+     * Determines whether or not to collapse pins at the same lat/lng
+     * @type {boolean}
+     */
+    this._collapsePins = config.collapsePins || false;
   }
 
   /**
