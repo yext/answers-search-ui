@@ -101,6 +101,14 @@ export default class SearchParams {
     return string.join('&');
   }
 
+  entries () {
+    let entries = [];
+    for (let key in this._params) {
+      entries.push([key, this._params[key]]);
+    }
+    return entries;
+  }
+
   /**
    * decode returns the decoded representation of the given string
    * @param {string} string the string to decode
