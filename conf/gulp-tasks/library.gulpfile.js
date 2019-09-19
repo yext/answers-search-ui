@@ -38,7 +38,7 @@ function bundle () {
       })
     ]
   })
-    .pipe(source('answers.js'))
+    .pipe(source('answers-modern.js'))
     .pipe(dest('dist'));
 }
 
@@ -103,20 +103,20 @@ function legacyBundle () {
       })
     ]
   })
-    .pipe(source('answers-legacy.js'))
+    .pipe(source('answers.js'))
     .pipe(dest('dist'));
 }
 
 function minifyJS () {
-  return src('./dist/answers.js')
-    .pipe(rename('answers.min.js'))
+  return src('./dist/answers-modern.js')
+    .pipe(rename('answers-modern.min.js'))
     .pipe(uglify())
     .pipe(dest('dist'));
 }
 
 function minifyLegacy () {
-  return src('./dist/answers-legacy.js')
-    .pipe(rename('answers-legacy.min.js'))
+  return src('./dist/answers.js')
+    .pipe(rename('answers.min.js'))
     .pipe(uglify())
     .pipe(dest('dist'));
 }
