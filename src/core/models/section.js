@@ -11,7 +11,7 @@ export default class Section {
     this.encodedState = data.encodedState || '';
     this.appliedQueryFilters = AppliedQueryFilter.from(data.appliedQueryFilters);
     this.facets = data.facets || null;
-    this.results = ResultFactory.from(data.results, formatters, this.verticalConfigId);
+    this.results = ResultFactory.from(data.results, formatters, this.verticalConfigId, data.source);
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
   }
