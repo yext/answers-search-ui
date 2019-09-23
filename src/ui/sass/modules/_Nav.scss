@@ -98,15 +98,11 @@
     align-items: center;
   }
 
-  &-moreIconWrapper
-  {
-    margin-top: 1px;
-    margin-right: 7px;
-  }
-
   &-moreIcon
   {
     display: flex;
+    margin-top: 1px;
+    margin-right: 7px;
 
     .Icon--kabob
     {
