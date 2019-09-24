@@ -4,6 +4,13 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
+import DOM from '../../dom/dom';
+
+/**
+ * The debounce duration for resize events
+ * @type {number}
+ */
+const RESIZE_DEBOUNCE = 100;
 
 /**
  * The Tab is a model that is used to power the Navigation tabs in the view.
@@ -98,6 +105,24 @@ export default class NavigationComponent extends Component {
     super(config);
 
     /**
+     * The label to show on the dropdown menu button
+     * @type {string}
+     */
+    this.dropdownLabel = config.dropdownLabel || 'More';
+
+    /**
+     * The optional icon to show on the dropdown menu button
+     * @type {string}
+     */
+    this.dropdownIcon = config.dropdownIcon || 'kabob';
+
+    /**
+     * If true, render a static navigation with no "more" menu
+     * @type {boolean}
+     */
+    this.static = config.static || false;
+
+    /**
      * The data storage key
      * @type {string}
      */
@@ -117,6 +142,13 @@ export default class NavigationComponent extends Component {
      * @private
      */
     this._tabOrder = this.getDefaultTabOrder(config.tabs, this.getUrlParams());
+
+    /**
+     * Breakpoints at which navigation items move to the "more" dropdown
+     * @type {number[]}
+     * @private
+     */
+    this._navBreakpoints = [];
   }
 
   static get type () {
@@ -130,6 +162,100 @@ export default class NavigationComponent extends Component {
    */
   static defaultTemplateName (config) {
     return 'navigation/navigation';
+  }
+
+  onCreate () {
+    if (!this.static) {
+      DOM.on(window, 'resize', () => {
+        if (this._debounceTimer) {
+          clearTimeout(this._debounceTimer);
+        }
+
+        this._debounceTimer = setTimeout(this.refitNav.bind(this), RESIZE_DEBOUNCE);
+      });
+      DOM.on(window, 'click', this.checkOutsideClick.bind(this));
+    }
+  }
+
+  onMount () {
+    if (!this.static) {
+      this.refitNav();
+      DOM.on(DOM.query(this._container, '.yxt-Nav-more'), 'click', this.toggleMoreDropdown.bind(this));
+    }
+  }
+
+  refitNav () {
+    const container = DOM.query(this._container, '.yxt-Nav-container');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more');
+    const mainLinks = DOM.query(this._container, '.yxt-Nav-expanded');
+    const collapsedLinks = DOM.query(this._container, '.yxt-Nav-modal');
+
+    const navWidth = moreButton.classList.contains('yxt-Nav-item--more')
+      ? container.offsetWidth
+      : container.offsetWidth - moreButton.offsetWidth;
+    let numBreakpoints = this._navBreakpoints.length;
+
+    if (mainLinks.offsetWidth > navWidth) {
+      this._navBreakpoints.push(mainLinks.offsetWidth);
+      const lastLink = mainLinks.children.item(mainLinks.children.length - 1);
+      if (lastLink === null) {
+        return;
+      }
+      collapsedLinks.prepend(lastLink);
+
+      if (moreButton.classList.contains('yxt-Nav-item--more')) {
+        moreButton.classList.remove('yxt-Nav-item--more');
+      }
+    } else {
+      if (numBreakpoints && navWidth > this._navBreakpoints[numBreakpoints - 1]) {
+        const firstLink = collapsedLinks.children.item(0);
+        if (firstLink === null) {
+          return;
+        }
+        mainLinks.append(firstLink);
+        this._navBreakpoints.pop();
+        numBreakpoints--;
+      }
+
+      if (collapsedLinks.children.length === 0) {
+        moreButton.classList.add('yxt-Nav-item--more');
+      }
+    }
+
+    this.closeMoreDropdown();
+    if (mainLinks.offsetWidth > navWidth ||
+      (numBreakpoints > 0 && navWidth > this._navBreakpoints[numBreakpoints - 1])) {
+      this.refitNav();
+    }
+  }
+
+  closeMoreDropdown () {
+    const collapsed = DOM.query(this._container, '.yxt-Nav-modal');
+    collapsed.classList.remove('is-active');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more');
+    moreButton.setAttribute('aria-expanded', false);
+  }
+
+  openMoreDropdown () {
+    const collapsed = DOM.query(this._container, '.yxt-Nav-modal');
+    collapsed.classList.add('is-active');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more');
+    moreButton.setAttribute('aria-expanded', true);
+  }
+
+  toggleMoreDropdown () {
+    const collapsed = DOM.query(this._container, '.yxt-Nav-modal');
+    collapsed.classList.toggle('is-active');
+    const moreButton = DOM.query(this._container, '.yxt-Nav-more');
+    moreButton.setAttribute('aria-expanded', collapsed.classList.contains('is-active'));
+  }
+
+  checkOutsideClick (e) {
+    if (e.target.closest('.yxt-Nav-container')) {
+      return;
+    }
+
+    this.closeMoreDropdown();
   }
 
   /**
@@ -157,7 +283,10 @@ export default class NavigationComponent extends Component {
     }
 
     return super.setState({
-      tabs: tabs
+      tabs: tabs,
+      dropdownLabel: this.dropdownLabel,
+      dropdownIcon: this.dropdownIcon,
+      static: this.static
     });
   }
 
