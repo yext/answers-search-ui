@@ -9,43 +9,50 @@ import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
  * for all the autocomplete endpoints.
  */
 export default class AutoCompleteApi {
-  constructor (opts = {}) {
+  constructor (config = {}) {
     /**
      * The API Key to use for the request
      * @type {string}
      * @private
      */
-    if (!opts.apiKey) {
+    if (!config.apiKey) {
       throw new AnswersBasicError('Api Key is required', 'AutoComplete');
     }
-    this._apiKey = opts.apiKey;
+    this._apiKey = config.apiKey;
 
     /**
      * The Answers Key to use for the request
      * @type {string}
      * @private
      */
-    if (!opts.answersKey) {
+    if (!config.answersKey) {
       throw new AnswersBasicError('Answers Key is required', 'AutoComplete');
     }
-    this._answersKey = opts.answersKey;
+    this._answersKey = config.answersKey;
 
     /**
      * The version of the API to make a request to
      * @type {string}
      * @private
      */
-    this._version = opts.version || 20190101 || 20190301;
+    this._version = config.version || 20190101 || 20190301;
+
+    /**
+     * The answers config version to use for all requests
+     * @type {string}
+     * @private
+     */
+    this._configVersion = config.configVersion;
 
     /**
      * The locale to use for the request
      * @type {string}
      * @private
      */
-    if (!opts.locale) {
+    if (!config.locale) {
       throw new AnswersBasicError('Locale is required', 'AutoComplete');
     }
-    this._locale = opts.locale;
+    this._locale = config.locale;
   }
 
   /**
@@ -60,6 +67,7 @@ export default class AutoCompleteApi {
       params: {
         'input': input,
         'answersKey': this._answersKey,
+        'version': this._configVersion,
         'experienceKey': verticalKey,
         'inputKey': barKey,
         'locale': this._locale
@@ -82,6 +90,7 @@ export default class AutoCompleteApi {
       params: {
         'input': input,
         'answersKey': this._answersKey,
+        'version': this._configVersion,
         'verticalKey': verticalKey,
         'barKey': barKey,
         'locale': this._locale
@@ -104,6 +113,7 @@ export default class AutoCompleteApi {
       params: {
         'input': queryString,
         'answersKey': this._answersKey,
+        'version': this._configVersion,
         'locale': this._locale
       }
     });
