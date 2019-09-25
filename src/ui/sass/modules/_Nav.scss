@@ -21,7 +21,7 @@
   &-container
   {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     position: relative;
   }
 
@@ -82,6 +82,12 @@
       border-bottom: $nav-text-active-border;
       font-weight: $font-weight-semibold;
     }
+  }
+
+  &-moreContainer
+  {
+    margin-left: auto;
+    position: relative;
   }
 
   &-more
