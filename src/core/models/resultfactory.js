@@ -10,9 +10,10 @@ export default class ResultFactory {
    * @param resultsData  {Array} expected format: { data: { ... }, highlightedFields: { ... }}
    * @param {Object.<string, function>} formatters The formatters to apply to the result
    * @param {string} verticalId The vertical of these results
+   * @param {string} source Backend source of these results
    * @returns {Result[]}
    */
-  static from (resultsData, formatters, verticalId) {
+  static from (resultsData, formatters, verticalId, source) {
     let results = [];
     for (let i = 0; i < resultsData.length; i++) {
       // TODO use resultData.highlightedFields to
@@ -29,8 +30,13 @@ export default class ResultFactory {
         });
       }
 
-      if (data.htmlSnippet || data.htmlTitle) {
+      if (source === 'GOOGLE_CSE' || source === 'CUSTOM_SEARCHER') {
         results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
+        continue;
+      }
+
+      if (source === 'BING_CSE') {
+        results.push(ResultFactory.fromBingCustomSearchEngine(data));
         continue;
       }
 
@@ -71,6 +77,21 @@ export default class ResultFactory {
       title: data.htmlTitle.replace(/(<([^>]+)>)/ig, ''),
       details: data.htmlSnippet,
       link: data.link
+    });
+  }
+
+  /**
+   * Converts an API result object into a result view model.
+   * Maps view model fields based on the API data for a Bing Custom Search Engine object.
+   * @param data
+   * @returns {Result}
+   */
+  static fromBingCustomSearchEngine (data) {
+    return new Result({
+      raw: data,
+      title: data.name,
+      details: data.snippet,
+      link: data.url
     });
   }
 
