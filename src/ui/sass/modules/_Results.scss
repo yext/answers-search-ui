@@ -134,11 +134,7 @@
   &-map
   {
     display: flex;
+    justify-content: center;
     border-bottom: $results-border;
-
-    img
-    {
-      width: 100%;
-    }
   }
 }
