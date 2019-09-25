@@ -1,4 +1,4 @@
-<nav class="yxt-Nav-container js-yxt-navContainer">
+<nav class="yxt-Nav-container js-yxt-navContainer {{#if static}} yxt-Nav-static{{/if}}">
   <div class="yxt-Nav-expanded">
     {{#each tabs}}
       <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
@@ -12,18 +12,22 @@
       </a>
     {{/each}}
   </div>
-  <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore"
-    aria-haspopup="listbox"
-    aria-labelledby="yxt-Nav-moreButton"
-  >
-    <span class="yxt-Nav-moreIcon"
-    data-component="IconComponent"
-    data-opts='{"iconName": "{{dropdownIcon}}"}'
-    data-prop="icon"></span>
-    {{dropdownLabel}}
-  </button>
-  <div class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"
-    role="listbox"
-    aria-labelledby="yxt-Nav-moreButton"
-  ></div>
+  {{#unless static}}
+    <div class="yxt-Nav-moreContainer">
+      <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore"
+        aria-haspopup="listbox"
+        aria-labelledby="yxt-Nav-moreButton"
+      >
+        <span class="yxt-Nav-moreIcon"
+        data-component="IconComponent"
+        data-opts='{"iconName": "{{dropdownIcon}}"}'
+        data-prop="icon"></span>
+        {{dropdownLabel}}
+      </button>
+      <div class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"
+        role="listbox"
+        aria-labelledby="yxt-Nav-moreButton"
+      ></div>
+    </div>
+  {{/unless}}
 </nav>
