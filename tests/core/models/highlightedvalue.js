@@ -23,7 +23,7 @@ describe('createing highlighted values', () => {
     const data = {
       key: 'jesse',
       value: 'Jesse Sharps',
-      matchedSubstrings: [ { offset: 1, length: 3 }, { offset: 7, length: 4 } ]
+      matchedSubstrings: [ { offset: 7, length: 4 }, { offset: 1, length: 3 } ]
     };
 
     const expectedResult = 'J<strong>ess</strong>e S<strong>harp</strong>s';

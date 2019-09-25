@@ -1,13 +1,11 @@
 /** @module HighlightedValue */
 
 /**
- * Model representing a highlighted value
- *
+ * Model representing a highlighted value.
  */
 export default class HighlightedValue {
   constructor (data = {}) {
-    this.value = data.value || '';
-    this.shortValue = data.shortValue || this.value;
+    this.value = data.value || data.shortValue || '';
     this.matchedSubstrings = data.matchedSubstrings || [];
   }
 
@@ -16,7 +14,8 @@ export default class HighlightedValue {
    * @returns {string}
    */
   get () {
-    return this._getValue(false);
+    this._sortMatchedSubstrings();
+    return this._buildHighlightedValue(this.value, this.matchedSubstrings);
   }
 
   /**
@@ -24,16 +23,12 @@ export default class HighlightedValue {
    * @returns {string}
    */
   getInverted () {
-    return this._getValue(true);
+    this._sortMatchedSubstrings();
+    const invertedSubstrings = this._getInvertedSubstrings(this.matchedSubstrings, this.value.length);
+    return this._buildHighlightedValue(this.value, invertedSubstrings);
   }
 
-  _getValue (shouldInvert) {
-    let val = this.value || this.shortValue;
-    if (!this.matchedSubstrings || this.matchedSubstrings.length === 0) {
-      return val;
-    }
-
-    // Make sure our highlighted substrings are sorted
+  _sortMatchedSubstrings () {
     this.matchedSubstrings.sort((a, b) => {
       if (a.offset < b.offset) {
         return -1;
@@ -45,18 +40,9 @@ export default class HighlightedValue {
 
       return 0;
     });
-
-    const highlightedSubstrings = this._getHighlightSubstrings(this.matchedSubstrings, val.length, shouldInvert);
-
-    let highlightedValue = this._buildHighlightedValue(val, highlightedSubstrings);
-
-    return highlightedValue;
   }
 
-  _getHighlightSubstrings (matchedSubstrings, valueLength, shouldInvert) {
-    if (!shouldInvert) {
-      return matchedSubstrings;
-    }
+  _getInvertedSubstrings (matchedSubstrings, valueLength) {
     const invertedSubstrings = [];
     for (let i = 0; i < matchedSubstrings.length; i++) {
       const substring = matchedSubstrings[i];
