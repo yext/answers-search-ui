@@ -21,7 +21,7 @@
   &-container
   {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     position: relative;
   }
 
@@ -112,6 +112,11 @@
     }
   }
 
+  &-static
+  {
+    overflow: scroll;
+  }
+
   &-modal
   {
     white-space: nowrap;
@@ -122,9 +127,8 @@
     background-color: white;
     box-shadow: 0 2px 10px 0 rgba(0, 0, 0, 0.2);
     border-radius: 8px;
-    left: 50%;
-    transform: translateX(-50%);
     top: 30px;
+    right: 0;
     z-index: $z-index-nav-more-modal;
 
     &.is-active
