@@ -30,6 +30,13 @@ export default class SearchApi {
     this._answersKey = config.answersKey;
 
     /**
+     * The answers config version to use for all requests
+     * @type {string}
+     * @private
+     */
+    this._configVersion = config.configVersion;
+
+    /**
      * The version of the API to make a request to
      * @type {string}
      * @private
@@ -71,6 +78,7 @@ export default class SearchApi {
       params: {
         'input': input,
         'answersKey': this._answersKey,
+        'version': this._configVersion,
         'filters': filter,
         'facetFilters': facetFilter,
         'verticalKey': verticalKey,
@@ -94,6 +102,7 @@ export default class SearchApi {
       params: {
         'input': queryString,
         'answersKey': this._answersKey,
+        'version': this._configVersion,
         'locale': this._locale
       }
     });
