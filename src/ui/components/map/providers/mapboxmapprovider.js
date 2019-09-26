@@ -44,21 +44,6 @@ export default class MapBoxMapProvider extends MapProvider {
     DOM.append('body', script);
   }
 
-  generateStatic (mapData) {
-    let mapboxMapMarkerConfigs = MapBoxMarkerConfig.from(
-      mapData.mapMarkers,
-      this._pinConfig
-    );
-
-    let center = mapData.mapCenter;
-    let width = this._width || 600;
-    let height = this._height || 200;
-    let zoom = this._zoom || 9;
-
-    let encodedMarkers = MapBoxMarkerConfig.serialize(mapboxMapMarkerConfigs);
-    return `<img src="https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/${encodedMarkers}/${center.longitude},${center.latitude},${zoom}/auto/${width}x${height}?access_token=${this._apiKey}">`;
-  }
-
   init (el, mapData) {
     if ((!mapData || mapData.mapMarkers.length <= 0) && !this._showEmptyMap) {
       this._map = null;

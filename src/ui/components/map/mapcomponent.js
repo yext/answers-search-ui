@@ -6,7 +6,6 @@ import GoogleMapProvider from './providers/googlemapprovider';
 import MapBoxMapProvider from './providers/mapboxmapprovider';
 
 import StorageKeys from '../../../core/storage/storagekeys';
-import { DOM } from '../..';
 
 const ProviderTypes = {
   'google': GoogleMapProvider,
@@ -30,12 +29,6 @@ export default class MapComponent extends Component {
     if (!this._mapProvider || !(this._mapProvider.toLowerCase() in ProviderTypes)) {
       throw new Error('MapComponent: Invalid Map Provider; must be `google` or `mapBox`');
     }
-
-    /**
-     * Internal indication of whether or not to use a static or dynamic map
-     * @type {boolean}
-     */
-    this._isStatic = opts.isStatic || false;
 
     /**
      * A reference to an instance of the {MapProvider} that's constructed
@@ -64,19 +57,6 @@ export default class MapComponent extends Component {
 
   onCreate () {
     this._map = this.getProviderInstance(this._mapProvider);
-    let mapData = this.getState('map');
-    if (mapData === undefined && this._isStatic) {
-      return this;
-    }
-
-    if (this._isStatic) {
-      // TODO(billy) The existing template should just take in the map `imgURL` as data
-      // Instead of overriding the template like so, but NBD for now.
-      this.setTemplate(this._map.generateStatic(mapData));
-      DOM.addClass(this._container, 'yxt-Results-mapStatic');
-      return this;
-    }
-
     this._map.loadJS();
   }
 
