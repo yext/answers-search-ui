@@ -9,6 +9,7 @@ import NavigationComponent from './navigation/navigationcomponent';
 import SearchComponent from './search/searchcomponent';
 import FilterSearchComponent from './search/filtersearchcomponent';
 import AutoCompleteComponent from './search/autocompletecomponent';
+import SpellCheckComponent from './search/spellcheckcomponent';
 
 import FilterBoxComponent from './filters/filterboxcomponent';
 import FilterOptionsComponent from './filters/filteroptionscomponent';
@@ -44,6 +45,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(SearchComponent)
   .register(FilterSearchComponent)
   .register(AutoCompleteComponent)
+  .register(SpellCheckComponent)
 
 // Filter Components
   .register(FilterBoxComponent)

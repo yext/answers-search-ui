@@ -19,5 +19,6 @@ export default {
   DYNAMIC_FILTERS: 'dynamic-filters',
   SEARCH_LIMIT: 'search-limit',
   PARAMS: 'params',
-  QUESTION_SUBMISSION: 'question-submission'
+  QUESTION_SUBMISSION: 'question-submission',
+  SPELL_CHECK: 'spell-check'
 };
