@@ -6,6 +6,7 @@ import GoogleMapProvider from './providers/googlemapprovider';
 import MapBoxMapProvider from './providers/mapboxmapprovider';
 
 import StorageKeys from '../../../core/storage/storagekeys';
+import { DOM } from '../..';
 
 const ProviderTypes = {
   'google': GoogleMapProvider,
@@ -72,6 +73,7 @@ export default class MapComponent extends Component {
       // TODO(billy) The existing template should just take in the map `imgURL` as data
       // Instead of overriding the template like so, but NBD for now.
       this.setTemplate(this._map.generateStatic(mapData));
+      DOM.addClass(this._container, 'yxt-Results-mapStatic');
       return this;
     }
 

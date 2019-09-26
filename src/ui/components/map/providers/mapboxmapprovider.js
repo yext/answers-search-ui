@@ -67,8 +67,8 @@ export default class MapBoxMapProvider extends MapProvider {
 
     let container = DOM.query(el);
     DOM.css(container, {
-      width: this._width,
-      height: this._height
+      width: this._width || '100%',
+      height: this._height || '100%'
     });
 
     this._map = new mapboxgl.Map({

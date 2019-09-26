@@ -19,13 +19,13 @@ export default class MapProvider {
      * The height of the map to append to the DOM, defaults to 100%
      * @type {number}
      */
-    this._height = config.height || 200;
+    this._height = config.height || null;
 
     /**
      * The width of the map to append to the DOM, defaults to 100%
      * @type {number}
      */
-    this._width = config.width || 600;
+    this._width = config.width || null;
 
     /**
      * The zoom level of the map, defaults to 9

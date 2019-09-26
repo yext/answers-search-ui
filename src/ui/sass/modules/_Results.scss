@@ -133,8 +133,12 @@
 
   &-map
   {
+    border-bottom: $results-border;
+  }
+
+  &-mapStatic
+  {
     display: flex;
     justify-content: center;
-    border-bottom: $results-border;
   }
 }
