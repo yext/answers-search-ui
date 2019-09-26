@@ -107,8 +107,7 @@ export default class Core {
      * @private
      */
     this._questionAnswer = new QuestionAnswerApi({
-      apiKey: this._apiKey,
-      configVersion: this._configVersion
+      apiKey: this._apiKey
     });
   }
 

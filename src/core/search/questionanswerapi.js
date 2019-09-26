@@ -18,13 +18,6 @@ export default class QuestionAnswerApi {
       throw new AnswersBasicError('Api Key is required', 'QuestionAnswerApi');
     }
     this._apiKey = config.apiKey;
-
-    /**
-     * The answers config version to use for all requests
-     * @type {string}
-     * @private
-     */
-    this._configVersion = config.configVersion;
   }
 
   /**
@@ -44,7 +37,6 @@ export default class QuestionAnswerApi {
       endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
       params: {
-        'version': this._configVersion,
         'entityId': question.entityId,
         'site': question.site,
         'name': question.name,
