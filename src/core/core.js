@@ -40,6 +40,13 @@ export default class Core {
     this._answersKey = config.answersKey;
 
     /**
+     * The answers config version to use for all requests
+     * @type {string}
+     * @private
+     */
+    this._configVersion = config.configVersion;
+
+    /**
      * A reference to the client locale used for all requests. If not specified, defaults to "en" (for
      * backwards compatibility).
      * @type {string}
@@ -77,6 +84,7 @@ export default class Core {
     this._searcher = new SearchApi({
       apiKey: this._apiKey,
       answersKey: this._answersKey,
+      configVersion: this._configVersion,
       locale: this._locale
     });
 
@@ -89,6 +97,7 @@ export default class Core {
     this._autoComplete = new AutoCompleteApi({
       apiKey: this._apiKey,
       answersKey: this._answersKey,
+      configVersion: this._configVersion,
       locale: this._locale
     });
 

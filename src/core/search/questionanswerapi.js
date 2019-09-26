@@ -8,16 +8,16 @@ import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
  * the Q&A REST API
  */
 export default class QuestionAnswerApi {
-  constructor (opts = {}) {
+  constructor (config = {}) {
     /**
      * The API Key to use for the request
      * @type {string}
      * @private
      */
-    if (!opts.apiKey) {
+    if (!config.apiKey) {
       throw new AnswersBasicError('Api Key is required', 'QuestionAnswerApi');
     }
-    this._apiKey = opts.apiKey;
+    this._apiKey = config.apiKey;
   }
 
   /**
