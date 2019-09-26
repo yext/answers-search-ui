@@ -126,7 +126,7 @@ class Answers {
     });
 
     if (!config.suppressErrorReports) {
-      this._errorReporter = new ErrorReporter(config.apiKey, config.answersKey);
+      this._errorReporter = new ErrorReporter(config.apiKey, config.answersKey, config.configVersion);
       window.addEventListener('error', e => this._errorReporter.report(e.error));
       window.addEventListener('unhandledrejection', e => this._errorReporter.report(e.error));
     }
