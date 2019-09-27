@@ -10,7 +10,7 @@ import HttpRequester from '../http/httprequester';
  * Class for reporting analytics events to the server
  */
 export default class AnalyticsReporter {
-  constructor (core, answersKey, businessId, globalOptions = {}) {
+  constructor (core, answersKey, configVersion, businessId, globalOptions = {}) {
     /**
      * The internal business identifier used for reporting
      * @type {number}
@@ -23,6 +23,10 @@ export default class AnalyticsReporter {
      * @private
      */
     this._globalOptions = Object.assign({}, globalOptions, { answersKey });
+
+    if (configVersion) {
+      this._globalOptions.configVersion = configVersion;
+    }
 
     // listen to query id updates
     core.globalStorage.on('update', StorageKeys.QUERY_ID, id => this.setQueryId(id));
