@@ -22,7 +22,7 @@ describe('reporting events', () => {
         beacon: mockedBeacon
       };
     });
-    analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', '213412');
+    analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', null, '213412');
   });
 
   it('throws an error if given a non-AnalyticsEvent', () => {
@@ -42,7 +42,7 @@ describe('reporting events', () => {
   });
 
   it('includes global options', () => {
-    const analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', '213412', { testOption: 'test' });
+    const analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', null, '213412', { testOption: 'test' });
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 
@@ -50,5 +50,16 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
       expect.objectContaining({ 'data': expect.objectContaining({ testOption: 'test' }) }));
+  });
+
+  it('includes configVersion when supplied', () => {
+    const analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', 'PRODUCTION', '213412', { testOption: 'test' });
+    const expectedEvent = new AnalyticsEvent('thumbs_up');
+    analyticsReporter.report(expectedEvent);
+
+    expect(mockedBeacon).toBeCalledTimes(1);
+    expect(mockedBeacon).toBeCalledWith(
+      expect.anything(),
+      expect.objectContaining({ 'data': expect.objectContaining({ configVersion: 'PRODUCTION' }) }));
   });
 });
