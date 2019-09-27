@@ -1,7 +1,6 @@
 /** @module SpellCheck */
 
 import HighlightedValue from './highlightedvalue';
-import SearchParams from '../../ui/dom/searchparams';
 
 /**
  * SpellCheck is the core state model
@@ -43,7 +42,7 @@ export default class SpellCheck {
      * The redirect url for the corrected query
      * @type {string}
      */
-    this.correctedQueryUrl = this._buildRedirectQueryUrl(this.correctedQuery, this.type);
+    this.correctedQueryUrl = this._buildRedirectQueryUrl(data.params, this.correctedQuery, this.type);
 
     /**
      * The help text such as Did you mean
@@ -56,7 +55,7 @@ export default class SpellCheck {
    * Create a spell check model from the provided data
    * @param {Object} response The spell check response
    */
-  static from (response) {
+  static from (response, params) {
     if (!response) {
       return {};
     }
@@ -65,19 +64,27 @@ export default class SpellCheck {
       query: response.originalQuery,
       correctedQuery: response.correctedQuery,
       correctedQueryDisplay: new HighlightedValue(response.correctedQuery).get(),
-      type: response.type
+      type: response.type,
+      params: params
     });
   }
 
-  _buildRedirectQueryUrl (query, type) {
+  _buildRedirectQueryUrl (params, query, type) {
     if (query === null) {
       return '';
     }
-    let params = new SearchParams(window.location.search.substring(1));
-    params.set('query', query.value);
-    params.set('skipSpellCheck', true);
-    params.set('queryTrigger', type.toLowerCase());
-    return window.location.href.split('?')[0] + '?' + params.toString();
+    params['query'] = query.value;
+    params['skipSpellCheck'] = true;
+    params['queryTrigger'] = type.toLowerCase();
+
+    let url = '?';
+    for (let key in params) {
+      if (url.length > 1) {
+        url += '&';
+      }
+      url += key + '=' + encodeURIComponent(params[key]);
+    }
+    return url;
   }
 
   _getHelpText (type) {
