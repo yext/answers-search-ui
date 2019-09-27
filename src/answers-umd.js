@@ -99,6 +99,7 @@ class Answers {
         new AnalyticsReporter(
           this.core,
           config.answersKey,
+          config.configVersion,
           config.businessId,
           config.analyticsOptions)
       );
