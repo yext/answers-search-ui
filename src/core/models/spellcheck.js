@@ -37,18 +37,6 @@ export default class SpellCheck {
      * @type {boolean}
      */
     this.shouldShow = this.correctedQuery !== null;
-
-    /**
-     * The redirect url for the corrected query
-     * @type {string}
-     */
-    this.correctedQueryUrl = this._buildRedirectQueryUrl(data.params, this.correctedQuery, this.type);
-
-    /**
-     * The help text such as Did you mean
-     * @type {string}
-     */
-    this.helpText = this._getHelpText(this.type);
   }
 
   /**
@@ -64,35 +52,7 @@ export default class SpellCheck {
       query: response.originalQuery,
       correctedQuery: response.correctedQuery,
       correctedQueryDisplay: new HighlightedValue(response.correctedQuery).get(),
-      type: response.type,
-      params: params
+      type: response.type
     });
-  }
-
-  _buildRedirectQueryUrl (params, query, type) {
-    if (query === null) {
-      return '';
-    }
-    params['query'] = query.value;
-    params['skipSpellCheck'] = true;
-    params['queryTrigger'] = type.toLowerCase();
-
-    let url = '?';
-    for (let key in params) {
-      if (url.length > 1) {
-        url += '&';
-      }
-      url += key + '=' + encodeURIComponent(params[key]);
-    }
-    return url;
-  }
-
-  _getHelpText (type) {
-    switch (type) {
-      case 'SUGGEST':
-        return 'Did you mean:';
-      default:
-        return '';
-    }
   }
 }

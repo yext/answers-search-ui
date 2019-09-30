@@ -1,6 +1,7 @@
 /** @module SpellCheckComponent */
 
 import Component from '../component';
+import SearchParams from '../../dom/searchparams';
 import StorageKeys from '../../../core/storage/storagekeys';
 
 /**
@@ -27,5 +28,33 @@ export default class SpellCheckComponent extends Component {
   onCreate () {
     this.core.persistentStorage.delete('skipSpellCheck');
     this.core.persistentStorage.delete('queryTrigger');
+  }
+
+  setState (data, val) {
+    return super.setState(Object.assign({}, data, {
+      shouldShow: data.correctedQuery !== undefined,
+      correctedQueryUrl: this._buildRedirectQueryUrl(data.correctedQuery, data.type),
+      helpText: this._getHelpText(data.type)
+    }, val));
+  }
+
+  _buildRedirectQueryUrl (query, type) {
+    if (query === undefined) {
+      return '';
+    }
+    let params = new SearchParams(window.location.search.substring(1));
+    params.set('query', query.value);
+    params.set('skipSpellCheck', true);
+    params.set('queryTrigger', type.toLowerCase());
+    return '?' + params.toString();
+  }
+
+  _getHelpText (type) {
+    switch (type) {
+      case 'SUGGEST':
+        return 'Did you mean:';
+      default:
+        return '';
+    }
   }
 }
