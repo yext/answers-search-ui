@@ -9,7 +9,7 @@ import { LIB_VERSION } from '../constants';
  * ErrorReporter is used for reporting errors to the server
  */
 export default class ErrorReporter {
-  constructor (apiKey, answersKey) {
+  constructor (apiKey, answersKey, configVersion) {
     /**
      * The apiKey to use for reporting
      * @type {string}
@@ -21,6 +21,12 @@ export default class ErrorReporter {
      * @type {string}
      */
     this.answersKey = answersKey;
+
+    /**
+     * The answers config version used for api requests
+     * @type {string|number}
+     */
+    this.configVersion = configVersion || 'config1.0';
   }
 
   /**
@@ -41,6 +47,7 @@ export default class ErrorReporter {
       params: {
         'error': err.toJson(),
         'libVersion': LIB_VERSION,
+        'configVersion': this.configVersion,
         'answersKey': this.answersKey
       }
     });
