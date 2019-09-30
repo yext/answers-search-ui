@@ -43,7 +43,7 @@ export default class SpellCheck {
    * Create a spell check model from the provided data
    * @param {Object} response The spell check response
    */
-  static from (response, params) {
+  static from (response) {
     if (!response) {
       return {};
     }

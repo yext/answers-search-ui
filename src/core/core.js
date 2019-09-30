@@ -125,7 +125,7 @@ export default class Core {
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
       })
-      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, this.persistentStorage.getAll()))
+      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
@@ -152,7 +152,7 @@ export default class Core {
 
     return this._searcher
       .universalSearch(queryString)
-      .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters, this.persistentStorage.getAll()))
+      .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);

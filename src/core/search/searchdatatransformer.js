@@ -21,7 +21,7 @@ export default class SearchDataTransformer {
       [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
       [StorageKeys.DIRECT_ANSWER]: DirectAnswer.from(response.directAnswer, formatters),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck, params)
+      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck)
     };
   }
 
@@ -31,7 +31,7 @@ export default class SearchDataTransformer {
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response, formatters),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.response.spellCheck, params)
+      [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.response.spellCheck)
     };
   }
 }
