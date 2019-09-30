@@ -14,7 +14,7 @@ import DynamicFilters from '../models/dynamicfilters';
  * component library and core storage understand.
  */
 export default class SearchDataTransformer {
-  static transform (data, urls = {}, formatters, params) {
+  static transform (data, urls = {}, formatters) {
     let response = data.response;
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
@@ -25,7 +25,7 @@ export default class SearchDataTransformer {
     };
   }
 
-  static transformVertical (data, formatters, params) {
+  static transformVertical (data, formatters) {
     return {
       [StorageKeys.QUERY_ID]: data.response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
