@@ -2,8 +2,8 @@
 
 /**
  * A MapProvider is an interface that represents that should be implemented
- * in order to integrate with a Third Party Map provider for both
- * static and interactive maps. MapProviders are used by the MapComponent.
+ * in order to integrate with a Third Party Map provider for
+ * interactive maps. MapProviders are used by the MapComponent.
  *
  * Implementations should extend this interface.
  */
@@ -19,13 +19,13 @@ export default class MapProvider {
      * The height of the map to append to the DOM, defaults to 100%
      * @type {number}
      */
-    this._height = config.height || 200;
+    this._height = config.height || null;
 
     /**
      * The width of the map to append to the DOM, defaults to 100%
      * @type {number}
      */
-    this._width = config.width || 600;
+    this._width = config.width || null;
 
     /**
      * The zoom level of the map, defaults to 9
@@ -117,10 +117,6 @@ export default class MapProvider {
 
   loadJS () {
     throw new Error('Unimplemented Method: loadJS');
-  }
-
-  loadStatic () {
-    throw new Error('Unimplemented Method: loadStatic');
   }
 
   init (mapData) {
