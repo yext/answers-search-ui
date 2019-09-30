@@ -37,21 +37,10 @@ export default class GoogleMapProvider extends MapProvider {
         this._onLoaded();
       },
       async: true,
-      src: `//maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
+      src: `http://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
     });
 
     DOM.append('body', script);
-  }
-
-  generateStatic (mapData) {
-    let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
-      mapData.mapMarkers,
-      this._pinConfig
-    );
-
-    let encodedMarkers = GoogleMapMarkerConfig.serialize(googleMapMarkerConfigs);
-    return `
-      <img src="//maps.googleapis.com/maps/api/staticmap?${encodedMarkers}&size=${this._width}x${this._height}&${this.generateCredentials()}">`;
   }
 
   generateCredentials () {
@@ -63,8 +52,7 @@ export default class GoogleMapProvider extends MapProvider {
   }
 
   hasValidClientCredentials () {
-    // Signature is only required if map is static
-    return this._clientId && (this._signature || !this._isStatic);
+    return this._clientId;
   }
 
   init (el, mapData) {
@@ -77,8 +65,8 @@ export default class GoogleMapProvider extends MapProvider {
     setTimeout(() => {
       let container = DOM.query(el);
       DOM.css(container, {
-        width: this._width,
-        height: this._height
+        width: this._width || '100%',
+        height: this._height || '100%'
       });
 
       this.map = new google.maps.Map(container, {
