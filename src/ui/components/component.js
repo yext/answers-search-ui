@@ -6,6 +6,7 @@ import DOM from '../dom/dom';
 import State from './state';
 import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused-vars
 import AnalyticsEvent from '../../core/analytics/analyticsevent';
+import { AnswersComponentError } from '../../core/errors/errors';
 
 /**
  * Component is an abstraction that encapsulates state, behavior,
@@ -218,14 +219,29 @@ export default class Component {
   }
 
   init (opts) {
-    this.setState(opts.data || opts.state || {});
-    this.onCreate();
-    this.userOnCreate();
+    try {
+      this.setState(opts.data || opts.state || {});
+      this.onCreate();
+      this.userOnCreate();
+    } catch (e) {
+      throw new AnswersComponentError(
+        'Error initializing component',
+        this.constructor.type,
+        e);
+    }
+
     this._state.on('update', () => {
-      this.onUpdate();
-      this.userOnUpdate();
-      this.unMount();
-      this.mount();
+      try {
+        this.onUpdate();
+        this.userOnUpdate();
+        this.unMount();
+        this.mount();
+      } catch (e) {
+        throw new AnswersComponentError(
+          'Error updating component',
+          this.constructor.type,
+          e);
+      }
     });
 
     DOM.addClass(this._container, this._className);

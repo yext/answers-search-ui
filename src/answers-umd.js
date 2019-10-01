@@ -14,6 +14,7 @@ import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
+import { AnswersComponentError } from './core/errors/errors';
 
 /**
  * The main Answers interface
@@ -160,7 +161,11 @@ class Answers {
       };
     }
 
-    this.components.create(type, opts).mount();
+    try {
+      this.components.create(type, opts).mount();
+    } catch (e) {
+      throw new AnswersComponentError('Failed to add component', type, e);
+    }
     return this;
   }
 

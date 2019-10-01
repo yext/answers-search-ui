@@ -17,8 +17,13 @@ export class AnswersBaseError extends Error {
     this.errorCode = errorCode;
     this.errorMessage = message;
     this.boundary = boundary;
-    this.causedBy = causedBy;
     this.reported = false;
+
+    if (causedBy) {
+      this.causedBy = causedBy instanceof AnswersBaseError
+        ? causedBy
+        : AnswersBaseError.from(causedBy);
+    }
   }
 
   toJson () {
