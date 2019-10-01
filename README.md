@@ -24,6 +24,7 @@ Outline:
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
    - [QASubmission Component](#qa-submission-component)
+   - [SpellCheck Component](#spell-check-component)
 4. [Analytics](#analytics)
    - [Click Analytics](#click-analytics)
 # Install and Setup
@@ -644,6 +645,20 @@ ANSWERS.addComponent('QASubmission', {
   questionLabel: 'Ask us anything!:',  // Optional, defaults to 'What is your question?'
   privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
   buttonLabel: 'Submit'                // Optional,  defaults to 'Submit:'
+})
+```
+
+## Spell Check Component
+
+The spell check component shows spell check suggestions/autocorrect.
+
+```html
+<div class="spell-check-container"></div>
+```
+
+```js
+ANSWERS.addComponent('SpellCheck', {
+  container: '.spell-check-container'
 })
 ```
 
