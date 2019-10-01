@@ -4,6 +4,7 @@ import UniversalResults from '../models/universalresults';
 import DirectAnswer from '../models/directanswer';
 import Navigation from '../models/navigation';
 import VerticalResults from '../models/verticalresults';
+import SpellCheck from '../models/spellcheck';
 import StorageKeys from '../storage/storagekeys';
 import DynamicFilters from '../models/dynamicfilters';
 import SearchIntents from '../models/searchintents';
@@ -21,7 +22,8 @@ export default class SearchDataTransformer {
       [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
       [StorageKeys.DIRECT_ANSWER]: DirectAnswer.from(response.directAnswer, formatters),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters),
-      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents)
+      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck)
     };
   }
 
@@ -31,7 +33,8 @@ export default class SearchDataTransformer {
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response, formatters),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response),
-      [StorageKeys.INTENTS]: SearchIntents.from(data.response.searchIntents)
+      [StorageKeys.INTENTS]: SearchIntents.from(data.response.searchIntents),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.response.spellCheck)
     };
   }
 }

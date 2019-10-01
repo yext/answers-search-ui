@@ -152,6 +152,9 @@ export default class Core {
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
           this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
         }
+        if (data[StorageKeys.SPELL_CHECK]) {
+          this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+        }
       });
   }
 
@@ -170,6 +173,7 @@ export default class Core {
         this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({
           questionText: queryString
         }));
+        this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
       });
   }
 

@@ -1,0 +1,30 @@
+/** @define SpellCheck */
+
+.yxt-SpellCheck
+{
+  $spellCheck-text-font-size: $font-size-md-lg !default;
+  $spellCheck-text-font-weight: $font-weight-normal !default;
+  $spellCheck-text-color: $color-text-primary !default;
+
+  padding-left: $base-spacing-sm*2;
+  padding-right: $base-spacing-sm*2;
+  padding-top: $base-spacing / 4;
+  padding-bottom: $base-spacing / 4;
+  display: block;
+
+  @include Text(
+    $size: $spellCheck-text-font-size,
+    $weight: $spellCheck-text-font-weight,
+    $color: $spellCheck-text-color
+  );
+
+  strong
+  {
+    font-weight: $font-weight-semibold;
+  }
+
+  a
+  {
+    text-decoration: none;
+  }
+}
