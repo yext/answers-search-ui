@@ -21,5 +21,6 @@ export default {
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',
   INTENTS: 'intents',
-  QUESTION_SUBMISSION: 'question-submission'
+  QUESTION_SUBMISSION: 'question-submission',
+  SPELL_CHECK: 'spell-check'
 };
