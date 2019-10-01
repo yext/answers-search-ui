@@ -220,19 +220,18 @@ export default class FilterSearchComponent extends Component {
     }, data));
   }
 
-  _buildSearchParameters (searchParameterCongigs) {
-    console.log(searchParameterCongigs);
+  _buildSearchParameters (searchParameterConfigs) {
     let searchParameters = {
-      sectionded: false,
+      sectioned: false,
       fields: []
     };
-    if (searchParameterCongigs === undefined) {
+    if (searchParameterConfigs === undefined) {
       return searchParameters;
     }
-    if (searchParameterCongigs.sectionded) {
-      searchParameters.sectionded = searchParameterCongigs.sectionded;
+    if (searchParameterConfigs.sectioned) {
+      searchParameters.sectioned = searchParameterConfigs.sectioned;
     }
-    searchParameters.fields = this._buildFields(searchParameterCongigs.fields);
+    searchParameters.fields = this._buildFields(searchParameterConfigs.fields);
     return searchParameters;
   }
 

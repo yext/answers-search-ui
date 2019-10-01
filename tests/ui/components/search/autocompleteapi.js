@@ -52,7 +52,7 @@ describe('querying and responding', () => {
   describe('queryFilter', () => {
     const expectedUrl = `${baseUrl}/answers/filtersearch`;
     const searchParameters = {
-      sectionded: true,
+      sectioned: true,
       fields: [
         {
           fieldId: 'c_featuredSpeakers.name',
