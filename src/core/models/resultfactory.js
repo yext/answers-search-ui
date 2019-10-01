@@ -30,7 +30,7 @@ export default class ResultFactory {
         });
       }
 
-      if (source === 'GOOGLE_CSE' || source === 'CUSTOM_SEARCHER') {
+      if (source === 'GOOGLE_CSE') {
         results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
         continue;
       }
