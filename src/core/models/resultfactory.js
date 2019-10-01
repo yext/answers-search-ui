@@ -40,6 +40,11 @@ export default class ResultFactory {
         continue;
       }
 
+      if (source === 'ZENDESK') {
+        results.push(ResultFactory.fromZendeskSearchEngine(data));
+        continue;
+      }
+
       results.push(ResultFactory.fromGeneric(data, formattedData, i));
     }
 
@@ -92,6 +97,21 @@ export default class ResultFactory {
       title: data.name,
       details: data.snippet,
       link: data.url
+    });
+  }
+
+  /**
+   * Converts an API result object into a result view model.
+   * Maps view model fields based on the API data for a Zendesk Search Engine object.
+   * @param data
+   * @returns {Result}
+   */
+  static fromZendeskSearchEngine (data) {
+    return new Result({
+      raw: data,
+      title: data.title,
+      details: data.snippet,
+      link: data.html_url
     });
   }
 

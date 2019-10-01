@@ -43,7 +43,7 @@ function initAnswers() {
     answersKey: '<ANSWERS_KEY_HERE>',
     onReady: function() {
       // Component creation logic here
-    })
+    }
   })
 }
 ```
