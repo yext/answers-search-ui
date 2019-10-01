@@ -59,7 +59,7 @@ export default class AutoCompleteApi {
    * Autocomplete filters
    * @param {string} input The input to use for auto complete
    */
-  queryFilter (input, verticalKey, barKey) {
+  queryFilter (input, verticalKey, barKey, searchParameters) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/filtersearch',
       apiKey: this._apiKey,
@@ -68,9 +68,10 @@ export default class AutoCompleteApi {
         'input': input,
         'answersKey': this._answersKey,
         'version': this._configVersion,
-        'experienceKey': verticalKey,
+        'verticalKey': verticalKey,
         'inputKey': barKey,
-        'locale': this._locale
+        'locale': this._locale,
+        'search_parameters': JSON.stringify(searchParameters)
       }
     });
 

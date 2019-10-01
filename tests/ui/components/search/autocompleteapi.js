@@ -51,25 +51,36 @@ describe('querying and responding', () => {
 
   describe('queryFilter', () => {
     const expectedUrl = `${baseUrl}/answers/filtersearch`;
+    const searchParameters = {
+      sectionded: true,
+      fields: [
+        {
+          fieldId: 'c_featuredSpeakers.name',
+          entityTypeId: 'event',
+          fetchEntities: false
+        }
+      ]
+    };
     const expectedData = {
       answersKey,
       api_key: apiKey,
-      experienceKey: verticalKey,
+      verticalKey: verticalKey,
       input,
       inputKey: barKey,
       v: version,
-      locale: locale
+      locale: locale,
+      search_parameters: JSON.stringify(searchParameters)
     };
 
     it('calls the get method with the filter url', () => {
-      autocomplete.queryFilter('test', verticalKey, barKey);
+      autocomplete.queryFilter('test', verticalKey, barKey, searchParameters);
       expect(mockedGet).toHaveBeenCalledTimes(1);
       expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData);
     });
 
     it('returns the right AutoCompleteData', () => {
       expect.assertions(3);
-      return autocomplete.queryFilter('test', verticalKey, barKey).then(d => {
+      return autocomplete.queryFilter('test', verticalKey, barKey, searchParameters).then(d => {
         expect(d instanceof AutoCompleteData).toBeTruthy();
         expect(d.sections).toHaveLength(1);
         expect(d.sections[0].results).toHaveLength(1);

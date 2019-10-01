@@ -213,9 +213,9 @@ export default class Core {
    * @param {string} verticalKey   the vertical key for the experience
    * @param {string} barKey        the bar key for the experience
    */
-  autoCompleteFilter (input, namespace, verticalKey, barKey) {
+  autoCompleteFilter (input, namespace, verticalKey, barKey, searchParameters) {
     return this._autoComplete
-      .queryFilter(input, verticalKey, barKey)
+      .queryFilter(input, verticalKey, barKey, searchParameters)
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });

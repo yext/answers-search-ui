@@ -112,6 +112,8 @@ export default class FilterSearchComponent extends Component {
       } catch (e) {}
     }
 
+    this.searchParameters = this._buildSearchParameters(config.searchParameters);
+
     this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
   }
 
@@ -161,6 +163,7 @@ export default class FilterSearchComponent extends Component {
       inputEl: inputSelector,
       verticalKey: this._verticalKey,
       barKey: this._barKey,
+      searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         const params = new SearchParams(window.location.search.substring(1));
         params.set(`${this.name}.query`, query);
@@ -215,5 +218,34 @@ export default class FilterSearchComponent extends Component {
       query: this.query,
       filter: this.filter
     }, data));
+  }
+
+  _buildSearchParameters (searchParameterCongigs) {
+    console.log(searchParameterCongigs);
+    let searchParameters = {
+      sectionded: false,
+      fields: []
+    };
+    if (searchParameterCongigs === undefined) {
+      return searchParameters;
+    }
+    if (searchParameterCongigs.sectionded) {
+      searchParameters.sectionded = searchParameterCongigs.sectionded;
+    }
+    searchParameters.fields = this._buildFields(searchParameterCongigs.fields);
+    return searchParameters;
+  }
+
+  _buildFields (fieldConfigs) {
+    let fields = [];
+    if (fieldConfigs === undefined) {
+      return fields;
+    }
+    for (let i = 0; i < fieldConfigs.length; i++) {
+      fields.push(Object.assign({
+        fetchEntities: false
+      }, fieldConfigs[i]));
+    }
+    return fields;
   }
 }
