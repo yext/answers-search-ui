@@ -133,7 +133,7 @@ function compileCSS () {
 function watchJS (cb) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
-  }, series(bundle));
+  }, series(bundle, legacyBundle));
 }
 
 function watchCSS (cb) {
