@@ -224,7 +224,8 @@ export default class SearchComponent extends Component {
   }
 
   search (query) {
-    if (this._throttled) {
+    // Don't search if we recently searched, or if there's no query for universal search
+    if (this._throttled || (!query && !this._verticalKey)) {
       return;
     }
 
