@@ -58,11 +58,12 @@ export default class AutoCompleteApi {
   /**
    * Autocomplete filters
    * @param {string} input The input to use for auto complete
-   * @param {string} verticalKey The vertical key for the config
-   * @param {string} barKey The bar key for the config v1
-   * @param {object} searchParameters The search parameters for the config v2
+   * @param {object} config The config to use for filters
+   * @param {string} config.verticalKey The vertical key for the config
+   * @param {string} config.barKey The bar key for the config v1
+   * @param {object} config.searchParameters The search parameters for the config v2
    */
-  queryFilter (input, verticalKey, barKey, searchParameters) {
+  queryFilter (input, config) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/filtersearch',
       apiKey: this._apiKey,
@@ -71,16 +72,16 @@ export default class AutoCompleteApi {
         'input': input,
         'answersKey': this._answersKey,
         'version': this._configVersion,
-        'verticalKey': verticalKey,
-        'inputKey': barKey,
+        'verticalKey': config.verticalKey,
+        'inputKey': config.barKey,
         'locale': this._locale,
-        'search_parameters': JSON.stringify(searchParameters)
+        'search_parameters': JSON.stringify(config.searchParameters)
       }
     });
 
     return request.get()
       .then(response => response.json())
-      .then(response => AutoCompleteDataTransformer.filter(response.response, barKey))
+      .then(response => AutoCompleteDataTransformer.filter(response.response, config.barKey))
       .catch(error => {
         throw new AnswersEndpointError('Filter search request failed', 'AutoComplete', error);
       });

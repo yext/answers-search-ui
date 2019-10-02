@@ -217,7 +217,7 @@ export default class Core {
    */
   autoCompleteFilter (input, config) {
     return this._autoComplete
-      .queryFilter(input, config.verticalKey, config.barKey, config.searchParameters)
+      .queryFilter(input, config)
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });

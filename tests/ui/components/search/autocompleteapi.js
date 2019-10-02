@@ -73,14 +73,22 @@ describe('querying and responding', () => {
     };
 
     it('calls the get method with the filter url', () => {
-      autocomplete.queryFilter('test', verticalKey, barKey, searchParameters);
+      autocomplete.queryFilter('test', {
+        verticalKey: verticalKey,
+        barKey: barKey,
+        searchParameters: searchParameters
+      });
       expect(mockedGet).toHaveBeenCalledTimes(1);
       expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData);
     });
 
     it('returns the right AutoCompleteData', () => {
       expect.assertions(3);
-      return autocomplete.queryFilter('test', verticalKey, barKey, searchParameters).then(d => {
+      return autocomplete.queryFilter('test', {
+        verticalKey: verticalKey,
+        barKey: barKey,
+        searchParameters: searchParameters
+      }).then(d => {
         expect(d instanceof AutoCompleteData).toBeTruthy();
         expect(d.sections).toHaveLength(1);
         expect(d.sections[0].results).toHaveLength(1);
