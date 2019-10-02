@@ -281,7 +281,12 @@ export default class AutoCompleteComponent extends Component {
 
   autoComplete (input) {
     if (this.isFilterSearch) {
-      this.core.autoCompleteFilter(input, this.name, this._verticalKey, this._barKey, this._searchParameters);
+      this.core.autoCompleteFilter(input, {
+        namespace: this.name,
+        verticalKey: this._verticalKey,
+        barKey: this._barKey,
+        searchParameters: this._searchParameters
+      });
     } else if (this._verticalKey || this._barKey) {
       this.core.autoCompleteVertical(input, this.name, this._verticalKey, this._barKey);
     } else {

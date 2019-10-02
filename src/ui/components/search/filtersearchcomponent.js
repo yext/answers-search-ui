@@ -236,15 +236,10 @@ export default class FilterSearchComponent extends Component {
   }
 
   _buildFields (fieldConfigs) {
-    let fields = [];
     if (fieldConfigs === undefined) {
-      return fields;
+      return [];
     }
-    for (let i = 0; i < fieldConfigs.length; i++) {
-      fields.push(Object.assign({
-        fetchEntities: false
-      }, fieldConfigs[i]));
-    }
-    return fields;
+
+    return fieldConfigs.map(fc => ({ fetchEntities: false, ...fc }));
   }
 }
