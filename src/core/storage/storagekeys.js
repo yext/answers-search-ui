@@ -19,5 +19,7 @@ export default {
   DYNAMIC_FILTERS: 'dynamic-filters',
   SEARCH_LIMIT: 'search-limit',
   PARAMS: 'params',
+  GEOLOCATION: 'geolocation',
+  INTENTS: 'intents',
   QUESTION_SUBMISSION: 'question-submission'
 };

@@ -122,6 +122,15 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._searchCooldown = config.searchCooldown || 300;
+
+    /**
+     * When true and "near me" intent is expressed, prompt the user for their geolocation
+     * @type {boolean}
+     * @private
+     */
+    this._promptForLocation = config.promptForLocation === undefined
+      ? true
+      : config.promptForLocation;
   }
 
   static get type () {
@@ -140,6 +149,23 @@ export default class SearchComponent extends Component {
   onCreate () {
     if (this.query && !this.redirectUrl) {
       this.core.setQuery(this.query);
+    }
+    if (this._promptForLocation) {
+      this.core.globalStorage.on('update', StorageKeys.INTENTS, i => {
+        if (i.nearMe && !this.core.globalStorage.getState(StorageKeys.GEOLOCATION)) {
+          navigator.geolocation.getCurrentPosition(
+            position => {
+              const coords = {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                radius: position.coords.accuracy
+              };
+              this.core.globalStorage.set(StorageKeys.GEOLOCATION, coords);
+              this.search(this.query);
+            }
+          );
+        }
+      });
     }
   }
 
