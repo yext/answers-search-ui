@@ -58,6 +58,9 @@ export default class AutoCompleteApi {
   /**
    * Autocomplete filters
    * @param {string} input The input to use for auto complete
+   * @param {string} verticalKey The vertical key for the config
+   * @param {string} barKey The bar key for the config v1
+   * @param {object} searchParameters The search parameters for the config v2
    */
   queryFilter (input, verticalKey, barKey, searchParameters) {
     let request = new ApiRequest({

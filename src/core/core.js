@@ -208,11 +208,12 @@ export default class Core {
   /**
    * Given an input, provide a list of suitable filters for autocompletion
    *
-   * @param {string} input         the string to search for filters with
-   * @param {object} config        config contains namespace to use for
-   *                               the storage key, verticalKey for the
-   *                               config, barKey for the config v1 and
-   *                               searchParameters for the config v2
+   * @param {string} input  the string to search for filters with
+   * @param {object} config  the config to serach for filters with
+   * @param {string} config.namespace  the namespace to use for the storage key
+   * @param {string} config.verticalKey the vertical key for the config
+   * @param {string} config.barKey  the bar key for the config v1
+   * @param {object} config.searchParameters  the search parameters for the config v2
    */
   autoCompleteFilter (input, config) {
     return this._autoComplete
