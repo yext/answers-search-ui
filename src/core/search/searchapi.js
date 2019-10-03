@@ -57,9 +57,10 @@ export default class SearchApi {
    * @param {number} query.limit The max number of results to include, max of 50
    * @param {number} query.offset The results offset, for fetching more results of the same query
    * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
+   * @param {Object} query.geolocation The user's geolocation position used to bias the results
    * @param {boolean} query.isDynamicFiltersEnabled If true, asks the server to return dynamic filters
    */
-  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, isDynamicFiltersEnabled }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -76,6 +77,8 @@ export default class SearchApi {
         'verticalKey': verticalKey,
         'limit': limit,
         'offset': offset,
+        'location': geolocation ? `${geolocation.lat},${geolocation.lng}` : null,
+        'radius': geolocation ? geolocation.radius : null,
         'queryId': id,
         'retrieveFacets': isDynamicFiltersEnabled,
         'locale': this._locale
@@ -86,7 +89,12 @@ export default class SearchApi {
       .then(response => response.json());
   }
 
-  universalSearch (queryString) {
+  /**
+   * Search across all verticals
+   * @param {string} queryString The input to search for
+   * @param {Object} geolocation the user's geolocation position used to bias the results
+   */
+  universalSearch (queryString, geolocation) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/query',
       apiKey: this._apiKey,
@@ -94,6 +102,8 @@ export default class SearchApi {
       params: {
         'input': queryString,
         'answersKey': this._answersKey,
+        'location': geolocation ? `${geolocation.lat},${geolocation.lng}` : null,
+        'radius': geolocation ? geolocation.radius : null,
         'locale': this._locale
       }
     });

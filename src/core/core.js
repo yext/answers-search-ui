@@ -122,6 +122,7 @@ export default class Core {
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_LIMIT),
+        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
       })
@@ -129,6 +130,7 @@ export default class Core {
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
 
         if (query.append) {
           const mergedResults = this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS)
@@ -148,13 +150,14 @@ export default class Core {
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
 
     return this._searcher
-      .universalSearch(queryString)
+      .universalSearch(queryString, this.globalStorage.getState(StorageKeys.GEOLOCATION))
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
+        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
         this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({
           questionText: queryString
         }));
