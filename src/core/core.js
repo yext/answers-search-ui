@@ -211,16 +211,18 @@ export default class Core {
   /**
    * Given an input, provide a list of suitable filters for autocompletion
    *
-   * @param {string} input         the string to search for filters with
-   * @param {string} namespace     the namespace to use for the storage key
-   * @param {string} verticalKey   the vertical key for the experience
-   * @param {string} barKey        the bar key for the experience
+   * @param {string} input  the string to search for filters with
+   * @param {object} config  the config to serach for filters with
+   * @param {string} config.namespace  the namespace to use for the storage key
+   * @param {string} config.verticalKey the vertical key for the config
+   * @param {string} config.barKey  the bar key for the config v1
+   * @param {object} config.searchParameters  the search parameters for the config v2
    */
-  autoCompleteFilter (input, namespace, verticalKey, barKey) {
+  autoCompleteFilter (input, config) {
     return this._autoComplete
-      .queryFilter(input, verticalKey, barKey)
+      .queryFilter(input, config)
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });
   }
 
