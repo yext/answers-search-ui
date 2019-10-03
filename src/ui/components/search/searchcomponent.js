@@ -122,6 +122,15 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._searchCooldown = config.searchCooldown || 300;
+
+    /**
+     * When true and "near me" intent is expressed, prompt the user for their geolocation
+     * @type {boolean}
+     * @private
+     */
+    this._promptForLocation = config.promptForLocation === undefined
+      ? true
+      : Boolean(config.promptForLocation);
   }
 
   static get type () {
@@ -141,6 +150,9 @@ export default class SearchComponent extends Component {
     if (this.query && !this.redirectUrl) {
       this.core.setQuery(this.query);
     }
+    if (this._promptForLocation) {
+      this.initLocationPrompt();
+    }
   }
 
   onMount () {
@@ -155,6 +167,23 @@ export default class SearchComponent extends Component {
     if (this.autoFocus === true && this.query.length === 0 && this.autocompleteOnLoad) {
       DOM.query(this._container, this._inputEl).focus();
     }
+  }
+
+  initLocationPrompt () {
+    this.core.globalStorage.on('update', StorageKeys.INTENTS, intent => {
+      if (!intent.nearMe || this.core.globalStorage.getState(StorageKeys.GEOLOCATION) !== null) {
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(position => {
+        this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          radius: position.coords.accuracy
+        });
+        this.search(this.query);
+      });
+    });
   }
 
   /**
