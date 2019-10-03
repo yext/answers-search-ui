@@ -6,6 +6,7 @@ import Navigation from '../models/navigation';
 import VerticalResults from '../models/verticalresults';
 import StorageKeys from '../storage/storagekeys';
 import DynamicFilters from '../models/dynamicfilters';
+import SearchIntents from '../models/searchintents';
 
 /**
  * A Data Transformer that takes the response object from a Search request
@@ -19,7 +20,8 @@ export default class SearchDataTransformer {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
       [StorageKeys.DIRECT_ANSWER]: DirectAnswer.from(response.directAnswer, formatters),
-      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters)
+      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters),
+      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents)
     };
   }
 
@@ -28,7 +30,8 @@ export default class SearchDataTransformer {
       [StorageKeys.QUERY_ID]: data.response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response, formatters),
-      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response)
+      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response),
+      [StorageKeys.INTENTS]: SearchIntents.from(data.response.searchIntents)
     };
   }
 }
