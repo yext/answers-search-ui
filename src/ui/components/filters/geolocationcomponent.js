@@ -222,12 +222,11 @@ export default class GeoLocationComponent extends Component {
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
     this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
     this.core.setFilter(this.name, filter);
-    const coords = {
+    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
       lat: position.coords.latitude,
       lng: position.coords.longitude,
       radius: position.coords.accuracy
-    };
-    this.core.globalStorage.set(StorageKeys.GEOLOCATION, coords);
+    });
 
     if (this._config.searchOnChange) {
       const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);

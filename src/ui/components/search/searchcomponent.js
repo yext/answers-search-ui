@@ -130,7 +130,7 @@ export default class SearchComponent extends Component {
      */
     this._promptForLocation = config.promptForLocation === undefined
       ? true
-      : config.promptForLocation;
+      : Boolean(config.promptForLocation);
   }
 
   static get type () {
@@ -151,21 +151,7 @@ export default class SearchComponent extends Component {
       this.core.setQuery(this.query);
     }
     if (this._promptForLocation) {
-      this.core.globalStorage.on('update', StorageKeys.INTENTS, i => {
-        if (i.nearMe && !this.core.globalStorage.getState(StorageKeys.GEOLOCATION)) {
-          navigator.geolocation.getCurrentPosition(
-            position => {
-              const coords = {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                radius: position.coords.accuracy
-              };
-              this.core.globalStorage.set(StorageKeys.GEOLOCATION, coords);
-              this.search(this.query);
-            }
-          );
-        }
-      });
+      this.initLocationPrompt();
     }
   }
 
@@ -181,6 +167,23 @@ export default class SearchComponent extends Component {
     if (this.autoFocus === true && this.query.length === 0 && this.autocompleteOnLoad) {
       DOM.query(this._container, this._inputEl).focus();
     }
+  }
+
+  initLocationPrompt () {
+    this.core.globalStorage.on('update', StorageKeys.INTENTS, intent => {
+      if (!intent.nearMe || this.core.globalStorage.getState(StorageKeys.GEOLOCATION) !== null) {
+        return;
+      }
+
+      navigator.geolocation.getCurrentPosition(position => {
+        this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude,
+          radius: position.coords.accuracy
+        });
+        this.search(this.query);
+      });
+    });
   }
 
   /**
