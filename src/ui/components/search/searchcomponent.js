@@ -86,6 +86,15 @@ export default class SearchComponent extends Component {
     this.autoFocus = config.autoFocus === true;
 
     /**
+     * If true, show an "x" that allows the user to clear the current
+     * query
+     * @type {boolean}
+     */
+    this.clearButton = config.clearButton === undefined
+      ? true
+      : config.clearButton;
+
+    /**
      * When autofocusing on load, optionally open the autocomplete
      * (preset prompts)
      * @type {boolean}
@@ -131,6 +140,11 @@ export default class SearchComponent extends Component {
     this._promptForLocation = config.promptForLocation === undefined
       ? true
       : Boolean(config.promptForLocation);
+
+    /**
+     * Controls showing and hiding the search clear button
+     */
+    this._showClearButton = this.clearButton && this.query;
   }
 
   static get type () {
@@ -164,9 +178,39 @@ export default class SearchComponent extends Component {
     this.initSearch(this._formEl);
     this.initAutoComplete(this._inputEl);
 
+    if (this.clearButton) {
+      this.initClearButton();
+    }
+
     if (this.autoFocus === true && this.query.length === 0 && this.autocompleteOnLoad) {
       DOM.query(this._container, this._inputEl).focus();
     }
+  }
+
+  initClearButton () {
+    const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
+    this._showClearButton = this._showClearButton || this.query;
+    button.classList.toggle('yxt-SearchBar-hidden', !this._showClearButton);
+
+    DOM.on(button, 'click', () => {
+      this.query = '';
+      this._showClearButton = false;
+      button.classList.add('yxt-SearchBar-hidden');
+      this.setState({});
+      this.core.persistentStorage.set(StorageKeys.QUERY, this.query);
+      this.core.setQuery(this.query);
+    });
+
+    DOM.on(this._inputEl, 'input', e => {
+      const input = e.target.value;
+      if (!this._showClearButton && input.length > 0) {
+        this._showClearButton = true;
+        button.classList.remove('yxt-SearchBar-hidden');
+      } else if (this._showClearButton && input.length === 0) {
+        this._showClearButton = false;
+        button.classList.add('yxt-SearchBar-hidden');
+      }
+    });
   }
 
   initLocationPrompt () {
@@ -307,6 +351,7 @@ export default class SearchComponent extends Component {
       labelText: this.labelText,
       submitIcon: this.submitIcon,
       submitText: this.submitText,
+      showClearButton: this._showClearButton,
       query: this.query
     }, data));
   }
