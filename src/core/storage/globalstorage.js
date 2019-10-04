@@ -66,6 +66,15 @@ export default class GlobalStorage {
     return data;
   }
 
+  /**
+   * Remove the data in storage with the given key to the provided data,
+   * @param {string} key the storage key to delete
+   */
+  delete (key) {
+    // Note: Do we need to clean up listeners here?
+    delete this._moduleDataContainer[key];
+  }
+
   on (evt, moduleId, cb) {
     let moduleData = this._moduleDataContainer[moduleId];
     if (moduleData === undefined) {
