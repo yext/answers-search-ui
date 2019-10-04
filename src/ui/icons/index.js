@@ -23,6 +23,7 @@ import pinIcon from './pin.js';
 import gearIcon from './gear.js';
 import lightBulbIcon from './light_bulb.js';
 import starIcon from './star.js';
+import close from './close.js';
 
 const iconsArray = [
   thumbIcon,
@@ -48,7 +49,8 @@ const iconsArray = [
   yextIcon,
   pinIcon,
   gearIcon,
-  lightBulbIcon
+  lightBulbIcon,
+  close
 ];
 
 const Icons = {};
