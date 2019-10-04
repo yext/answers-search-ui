@@ -42,13 +42,13 @@
 
 @mixin Link-1
 {
-  @include Link($base-color: $color-blue1);
+  @include Link($base-color: $color-brand-primary);
 }
 
 @mixin Link-2
 {
   @include Link(
-    $base-color: $color-blue1,
+    $base-color: $color-brand-primary,
     $base-decoration: underline,
     $hover-decoration: none
   );

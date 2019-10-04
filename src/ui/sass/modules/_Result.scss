@@ -2,7 +2,7 @@
 {
   $result-background-color: white !default;
 
-  $result-event-background-color: $color-gray3 !default;
+  $result-event-background-color: $color-background-highlight !default;
 
   $result-day-font-size: $font-size-xxlg !default;
   $result-day-line-height: $line-height-sm !default;
@@ -14,7 +14,7 @@
   $result-month-font-weight: $font-weight-normal !default;
   $result-month-color: $color-text-primary !default;
 
-  $result-ordinal-background-color: $color-blue1 !default;
+  $result-ordinal-background-color: $color-brand-primary !default;
   $result-ordinal-font-size: $font-size-xs !default;
   $result-ordinal-line-height: $line-height-xs !default;
   $result-ordinal-font-weight: $font-weight-bold !default;
@@ -33,7 +33,7 @@
   $result-subtitle-font-size: $font-size-md !default;
   $result-subtitle-line-height: $line-height-md !default;
   $result-subtitle-font-weight: $font-weight-normal !default;
-  $result-subtitle-color: $color-gray7 !default;
+  $result-subtitle-color: $color-text-secondary !default;
 
   $result-cta-font-size: $font-size-md !default;
   $result-cta-line-height: $line-height-md !default;
