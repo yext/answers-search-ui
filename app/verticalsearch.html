@@ -1,0 +1,92 @@
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="../dist/answers.css">
+  <script src="../dist/answers.js" onload="ANSWERS.domReady(startApp)" async></script>
+</head>
+
+<body>
+  <nav class="navigation-container">
+    <!-- navigation component will get injected here -->
+  </nav>
+
+  <div class="search-container">
+    <!-- search component will get injected here -->
+  </div>
+
+  <div class="filters-container">
+
+  </div>
+
+  <div class="results-container">
+    <!-- results component will get injected here -->
+  </div>
+
+  <div class="qa-submit">
+
+  </div>
+
+  <script>
+    function startApp() {
+      fetch('./config.json')
+      .then(response => {
+        return response.json();
+      })
+      .then(config => {
+        fetch('./credentials.json')
+        .then(response => {
+          return response.json()
+        })
+        .then(credentials => {
+          initAnswers(Object.assign({}, config, credentials));
+        })
+      })
+    }
+
+    function initAnswers(config) {
+      config.tabs[1].isActive = true;
+
+      ANSWERS.init({
+        apiKey: config.apiKey,
+        answersKey: config.answersKey,
+        onReady: function() {
+          this.addComponent('Navigation', {
+            container: '.navigation-container',
+            tabs: config.tabs
+          })
+
+          this.addComponent('SearchBar', {
+            verticalKey: config.verticalKey.VERTICAL_SEARCH,
+            container: '.search-container',
+            class: 'custom-search-class',
+            title: 'VS AutoComplete',
+            searchText: 'What are you looking for?'
+          })
+
+          this.addComponent('FilterBox', {
+            container: '.filters-container',
+            verticalKey: config.verticalKey.VERTICAL_SEARCH,
+            filters: config.filters
+          })
+
+          this.addComponent('VerticalResults', {
+            container: '.results-container',
+            mapProvider: config.maps.provider,
+            apiKey: config.maps.apiKey
+          });
+
+          ANSWERS.addComponent('QASubmission', {
+            entityId: 4,
+            container: '.qa-submit',
+            nameLabel: 'Your Name:',
+            emailLabel: 'Your Email:',
+            questionLabel: 'What is your question?',
+            privacyPolicyLabel: 'I agree to our Privacy Policy',
+            buttonLabel: 'Submit'
+          })
+        }
+      });
+    }
+  </script>
+</body>
+</html>

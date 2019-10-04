@@ -1,0 +1,92 @@
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="../dist/answers.css">
+  <script src="../dist/answers.js" onload="ANSWERS.domReady(startApp)" async></script>
+</head>
+
+<body class="yext">
+  <nav class="navigation-container">
+    <!-- navigation component will get injected here -->
+  </nav>
+
+  <div class="universal-search-container">
+    <!-- search component will get injected here -->
+  </div>
+
+  <section id="results-wrap">
+    <div class="map" height="100%">
+
+    </div>
+
+    <div id="direct-answer">
+      <!-- direct answer will get injected here -->
+    </div>
+    <div class="results-container">
+      <!-- results component will get injected here -->
+    </div>
+    <div id="question-submission">
+      <!-- question submission module injected here -->
+    </div>
+  </section>
+  <script>
+    function startApp() {
+      fetch('./config.json')
+      .then(response => {
+        return response.json();
+      })
+      .then(config => {
+        fetch('./credentials.json')
+        .then(response => {
+          return response.json()
+        })
+        .then(credentials => {
+          initAnswers(Object.assign({}, config, credentials));
+        })
+      })
+    }
+
+    function initAnswers(config) {
+      config.tabs[0].isActive = true;
+
+      ANSWERS.init({
+        apiKey: config.apiKey,
+        answersKey: config.answersKey,
+        businessId: 555555,
+        onReady: function() {
+          ANSWERS.addComponent('Navigation', {
+            container: '.navigation-container',
+            tabs: config.tabs
+          })
+
+          // Example Universal Search Component
+          ANSWERS.addComponent('SearchBar', {
+            container: '.universal-search-container',
+            class: 'custom-search-class',
+            title: 'Universal Auto Complete',
+            searchText: 'What are you looking for?',
+          })
+
+          ANSWERS.addComponent('DirectAnswer', {
+            container: '#direct-answer',
+          })
+
+          ANSWERS.addComponent('UniversalResults', {
+            container: '.results-container'
+          });
+
+          ANSWERS.addComponent('QASubmission', {
+            entityId: 4,
+            container: '#question-submission',
+            nameLabel: 'Your Name:',
+            emailLabel: 'Your Email:',
+            questionLabel: 'What is your question?',
+            privacyPolicyLabel: 'I agree to our Privacy Policy',
+            buttonLabel: 'Submit'
+          })
+        }
+      });
+    }
+  </script>
+</body>
+</html>

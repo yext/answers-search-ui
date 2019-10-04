@@ -1,0 +1,100 @@
+<html>
+
+<head>
+  <link rel="stylesheet" type="text/css" href="customstyle.css">
+  <link rel="stylesheet" type="text/css" href="../dist/answers.css">
+  <script src="../dist/answers.js" onload="ANSWERS.domReady(startApp)" async></script>
+</head>
+
+<body>
+  <nav class="navigation-container">
+    <!-- navigation component will get injected here -->
+  </nav>
+
+  <div class="search">
+    <div class="search-container">
+      <!-- search component will get injected here -->
+    </div>
+
+    <div class="filter-search-container">
+
+    </div>
+
+    <div class="filters-container">
+
+    </div>
+  </div>
+
+  <div class="locator-container row">
+    <div class="results-container column">
+      <!-- results component will get injected here -->
+    </div>
+
+    <div class="map-container column">
+
+    </div>
+  </div>
+
+  <script>
+    function startApp() {
+      fetch('./config.json')
+        .then(response => {
+          return response.json();
+        })
+        .then(config => {
+          fetch('./credentials.json')
+            .then(response => {
+              return response.json()
+            })
+            .then(credentials => {
+              initAnswers(Object.assign({}, config, credentials));
+            })
+        })
+    }
+
+    function initAnswers(config) {
+      config.tabs[2].isActive = true;
+
+      ANSWERS.init({
+        apiKey: config.apiKey,
+        answersKey: config.answersKey,
+        onReady: function() {
+          this.addComponent('Navigation', {
+            container: '.navigation-container',
+            tabs: config.tabs
+          })
+
+          this.addComponent('SearchBar', {
+            verticalKey: config.verticalKey.STORE_LOCATOR,
+            container: '.search-container',
+          })
+
+          this.addComponent('FilterSearch', {
+            verticalKey: config.verticalKey.STORE_LOCATOR,
+            barKey: 'input',
+            container: '.filter-search-container',
+            searchText: 'FilterSearch: '
+          })
+
+          this.addComponent('FilterBox', {
+            container: '.filters-container',
+            verticalKey: config.verticalKey.STORE_LOCATOR,
+            filters: config.filters
+          })
+
+          this.addComponent('VerticalResults', {
+            container: '.results-container',
+          });
+
+          this.addComponent('Map', {
+            container: '.map-container',
+            mapProvider: config.maps.provider,
+            apiKey: config.maps.apiKey,
+            height: '600'
+          });
+        }
+      });
+    }
+  </script>
+</body>
+</html>

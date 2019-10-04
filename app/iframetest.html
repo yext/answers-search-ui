@@ -1,0 +1,55 @@
+<html>
+  <head>
+
+  </head>
+  <body>
+    <div id="answers-iframe" style="width:100%; height:100%"></div>
+    <script>!function(e,r,t){e=e||"",r=r||"query",t=t||"verticalUrl";for(var a,i,l=document.querySelector("#answers-iframe"),o=window.location.search,n=(o=o.substr(1,o.length)).split("&"),h=0;h<n.length;h++){var s=n[h].split("=");s[0]===r&&(a=s[1]),s[0]===t&&(i=s[1])}var c=e;i&&(c+="/"+i),a&&(c+="?query="+a);var d=document.createElement("iframe");d.src=c,d.width=l.offsetWidth,d.height=l.offsetHeight,d.frameBorder=0,l.appendChild(d)}("//localhost:8000/app/universalsearch.html");</script>
+
+    <script>
+      (function(domain, queryParam, urlParam) {
+        domain = domain || '';
+        queryParam = queryParam || 'query';
+        urlParam = urlParam || 'verticalUrl';
+
+        var containerEl = document.querySelector('#answers-iframe');
+
+        var paramString = window.location.search;
+        paramString = paramString.substr(1, paramString.length);
+
+        // Parse the params out of the URL
+        var params = paramString.split('&'),
+            query,
+            verticalUrl;
+
+        for (var i = 0; i < params.length; i ++) {
+          var kv = params[i].split('=');
+          if (kv[0] === queryParam) {
+            query = kv[1];
+          }
+
+          if (kv[0] === urlParam) {
+            verticalUrl = kv[1];
+          }
+        }
+
+        // Build the Iframe URL
+        var iframeUrl = domain;
+        if (verticalUrl) {
+          iframeUrl += '/' + verticalUrl;
+        }
+
+        if (query) {
+          iframeUrl += '?query=' + query;
+        }
+
+        var iframe = document.createElement('iframe');
+        iframe.src = iframeUrl;
+        iframe.width = containerEl.offsetWidth;
+        iframe.height = containerEl.offsetHeight;
+        iframe.frameBorder = 0;
+        containerEl.appendChild(iframe);
+      })('//localhost:8000/app/universalsearch.html');
+    </script>
+  </body>
+</html>

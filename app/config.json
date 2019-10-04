@@ -1,0 +1,50 @@
+{
+  "verticalKey": {
+    "STORE_LOCATOR": "locations",
+    "VERTICAL_SEARCH": "locations"
+  },
+  "tabs": [
+    {
+      "isFirst": true,
+      "label": "Universal Search",
+      "url": "universalsearch.html"
+    },
+    {
+      "configId": "people",
+      "label": "Vertical Search",
+      "url": "verticalsearch.html"
+    },
+    {
+      "configId": "location",
+      "label": "Store Locator",
+      "url": "storelocator.html"
+    }
+  ],
+  "maps": {
+    "provider": "mapbox",
+    "apiKey": "pk.eyJ1IjoibXNoYXciLCJhIjoiY2p0YWUxemltMGEyazQ0bzNiNHc4emk1YiJ9.HNzdEE42Jhs7FTQJg_EIkA"
+  },
+  "filters": [
+    {
+      "type": "FilterOptions",
+      "control": "multioption",
+      "options": [
+        {
+          "label": "Open Now",
+          "field": "c_openNow",
+          "value": true
+        },
+        {
+          "label": "Dog Friendly",
+          "field": "c_dogFriendly",
+          "value": "true"
+        },
+        {
+          "label": "Megastores",
+          "field": "c_storeType",
+          "value": "Megastore"
+        }
+      ]
+    }
+  ]
+}
