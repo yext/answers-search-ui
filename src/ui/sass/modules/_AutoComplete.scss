@@ -3,9 +3,9 @@
 {
   $autocomplete-background-color: white !default;
   $autocomplete-box-shadow: 0 1px 6px 0 rgba(32,33,36,0.47) !default;;
-  $autocomplete-selected-background-color: $color-gray8 !default;
-  $autocomplete-option-hover-background-color: $color-gray8 !default;
-  $autocomplete-separator-color: $color-gray7 !default;
+  $autocomplete-selected-background-color: #f9f9f9 !default;
+  $autocomplete-option-hover-background-color: #f9f9f9 !default;
+  $autocomplete-separator-color: $color-text-secondary !default;
 
   $autocomplete-text-font-size: $font-size-md-lg !default;
   $autocomplete-text-line-height: $line-height-md !default;
