@@ -1,7 +1,7 @@
 /** @define Results */
 .yxt-Results
 {
-  $results-title-bar-background: $color-gray3 !default;
+  $results-title-bar-background: $color-background-highlight !default;
   $results-filters-background: white !default;
 
   $results-title-bar-text-color: $color-text-primary !default;
@@ -124,7 +124,7 @@
       $results-filters-link-font-size,
       $results-filters-link-line-height,
       $results-filters-link-font-weight,
-      $color: $color-blue1
+      $color: $color-brand-primary
     );
     @include Link-2;
 

@@ -6,17 +6,17 @@
   $nav-text-line-height: $line-height-md !default;
   $nav-text-font-weight: $font-weight-semibold !default;
   $nav-text-color: $color-text-primary !default;
-  $nav-text-hover-color: $color-gray9 !default;
-  $nav-text-active-color: $color-blue1 !default;
-  $nav-text-active-border: 2px solid $color-blue1 !default;
-  $nav-text-focus-background-color: $color-gray2 !default;
+  $nav-text-hover-color: #c5cace !default;
+  $nav-text-active-color: $color-brand-primary !default;
+  $nav-text-active-border: 2px solid $color-brand-primary !default;
+  $nav-text-focus-background-color: #e9e9e9 !default;
 
   $nav-dropdown-font-size: 13px !default;
   $nav-dropdown-line-height: $line-height-sm !default;
   $nav-dropdown-font-weight: $font-weight-semibold !default;
   $nav-dropdown-color: $nav-text-color !default;
   $nav-dropdown-hover-color: $nav-dropdown-color !default;
-  $nav-dropdown-hover-background-color: $color-gray10 !default;
+  $nav-dropdown-hover-background-color: #eeeff0 !default;
 
   &-container
   {

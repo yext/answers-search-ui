@@ -14,7 +14,7 @@
   $searchbar-text-font-weight: $font-weight-normal !default;
 
   $searchbar-button-background-color-base: white !default;
-  $searchbar-button-background-color-hover: $color-gray6 !default;
+  $searchbar-button-background-color-hover: $searchbar-text-color !default;
   $searchbar-button-background-color-active: $searchbar-button-background-color-base !default;
 
   $searchbar-button-text-color-base: $color-text-primary !default;
