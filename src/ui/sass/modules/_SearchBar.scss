@@ -73,7 +73,7 @@
     padding-right: $base-spacing-sm*2;
   }
 
-  &-button
+  &-button, &-clear
   {
     display: flex;
     padding-left: $base-spacing;
@@ -95,6 +95,11 @@
       background-color: $searchbar-button-background-color-active;
       color: $searchbar-button-text-color-active;
     }
+  }
+
+  &--hidden
+  {
+    display: none;
   }
 
   &-input,

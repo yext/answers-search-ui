@@ -254,6 +254,7 @@ ANSWERS.addComponent('SearchBar', {
   autoFocus: true,                          // optional, defaults to false
   searchCooldown: 2000,                     // optional, defaults to 300ms (0.3 seconds)
   promptForLocation: true,                  // optional, asks the user for their geolocation when "near me" intent is detected
+  clearButton: true,                        // optional, displays an "x" button to clear the current query when true
   redirectUrl: 'path/to/url'                // optional, redirect search query to url
 })
 ```
