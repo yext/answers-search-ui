@@ -34,7 +34,7 @@ export default class SearchApi {
      * @type {string}
      * @private
      */
-    this._configVersion = config.configVersion;
+    this._experienceVersion = config.experienceVersion;
 
     /**
      * The version of the API to make a request to
@@ -81,7 +81,7 @@ export default class SearchApi {
       params: {
         'input': input,
         'answersKey': this._answersKey,
-        'version': this._configVersion,
+        'version': this._experienceVersion,
         'filters': filter,
         'facetFilters': facetFilter,
         'verticalKey': verticalKey,
@@ -118,7 +118,7 @@ export default class SearchApi {
         'answersKey': this._answersKey,
         'location': params.geolocation ? `${params.geolocation.lat},${params.geolocation.lng}` : null,
         'radius': params.geolocation ? params.geolocation.radius : null,
-        'version': this._configVersion,
+        'version': this._experienceVersion,
         'locale': this._locale,
         'skipSpellCheck': params.skipSpellCheck,
         'queryTrigger': params.queryTrigger
