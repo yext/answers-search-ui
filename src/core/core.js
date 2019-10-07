@@ -133,7 +133,9 @@ export default class Core {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_LIMIT),
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         ...query,
-        isDynamicFiltersEnabled: this._isDynamicFiltersEnabled
+        isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
+        skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
+        queryTrigger: this.globalStorage.getState('queryTrigger')
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -155,6 +157,8 @@ export default class Core {
         if (data[StorageKeys.SPELL_CHECK]) {
           this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         }
+        this.globalStorage.delete('skipSpellCheck');
+        this.globalStorage.delete('queryTrigger');
       });
   }
 
@@ -162,7 +166,11 @@ export default class Core {
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
 
     return this._searcher
-      .universalSearch(queryString, this.globalStorage.getState(StorageKeys.GEOLOCATION))
+      .universalSearch(queryString, {
+        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+        skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
+        queryTrigger: this.globalStorage.getState('queryTrigger')
+      })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
@@ -174,6 +182,8 @@ export default class Core {
           questionText: queryString
         }));
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+        this.globalStorage.delete('skipSpellCheck');
+        this.globalStorage.delete('queryTrigger');
       });
   }
 
