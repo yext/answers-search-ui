@@ -71,7 +71,7 @@ export default class ApiRequest {
       'api_key': this._apiKey
     };
 
-    const urlParams = new SearchParams(window.location.toString());
+    const urlParams = new SearchParams(window.location.search.substring(1));
 
     if (urlParams.has('beta')) {
       baseParams['beta'] = urlParams.get('beta');
