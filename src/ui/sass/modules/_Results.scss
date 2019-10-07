@@ -83,10 +83,7 @@
   &-filters
   {
     display: flex;
-    padding-left: $base-spacing;
-    padding-right: $base-spacing;
-    padding-top: $base-spacing;
-    padding-bottom: $base-spacing;
+    padding: $base-spacing/2 $base-spacing;
     background-color: $results-filters-background;
     border-bottom: $results-border;
   }
