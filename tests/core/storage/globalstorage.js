@@ -7,7 +7,7 @@ beforeEach(() => {
   storage = new GlobalStorage();
 });
 
-describe('storing and retrieving', () => {
+describe('storing, retrieving and deleting', () => {
   it('stores data by the provided key', () => {
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
     storage.set(StorageKeys.NAVIGATION, { test: 'test navigation data' });
@@ -55,6 +55,13 @@ describe('storing and retrieving', () => {
     storage.setAll({ key1: 'val1', key2: 'val2' });
 
     expect(storage.getState('key1')).toBe('val1');
+    expect(storage.getState('key2')).toBe('val2');
+  });
+
+  it('remove data with delete()', () => {
+    storage.setAll({ key1: 'val1', key2: 'val2' });
+    storage.delete('key1');
+    expect(storage.getState('key1')).toBe(null);
     expect(storage.getState('key2')).toBe('val2');
   });
 });

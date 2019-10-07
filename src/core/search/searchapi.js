@@ -66,8 +66,10 @@ export default class SearchApi {
    * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
    * @param {Object} query.geolocation The user's geolocation position used to bias the results
    * @param {boolean} query.isDynamicFiltersEnabled If true, asks the server to return dynamic filters
+   * @param {string} query.skipSpellCheck The boolean as string to indicate if it should skip spell checking
+   * @param {string} query.queryTrigger The source that triggers query such as suggest
    */
-  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -89,7 +91,9 @@ export default class SearchApi {
         'radius': geolocation ? geolocation.radius : null,
         'queryId': id,
         'retrieveFacets': isDynamicFiltersEnabled,
-        'locale': this._locale
+        'locale': this._locale,
+        'skipSpellCheck': skipSpellCheck,
+        'queryTrigger': queryTrigger
       }
     });
 
@@ -100,9 +104,11 @@ export default class SearchApi {
   /**
    * Search across all verticals
    * @param {string} queryString The input to search for
-   * @param {Object} geolocation the user's geolocation position used to bias the results
+   * @param {Object} params.geolocation the user's geolocation position used to bias the results
+   * @param {string} params.skipSpellCheck The boolean as string to indicate if it should skip spell checking
+   * @param {string} params.queryTrigger The source that triggers query such as suggest
    */
-  universalSearch (queryString, geolocation) {
+  universalSearch (queryString, params) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/query',
       apiKey: this._apiKey,
@@ -110,10 +116,12 @@ export default class SearchApi {
       params: {
         'input': queryString,
         'answersKey': this._answersKey,
-        'location': geolocation ? `${geolocation.lat},${geolocation.lng}` : null,
-        'radius': geolocation ? geolocation.radius : null,
+        'location': params.geolocation ? `${params.geolocation.lat},${params.geolocation.lng}` : null,
+        'radius': params.geolocation ? params.geolocation.radius : null,
         'version': this._configVersion,
-        'locale': this._locale
+        'locale': this._locale,
+        'skipSpellCheck': params.skipSpellCheck,
+        'queryTrigger': params.queryTrigger
       }
     });
 
