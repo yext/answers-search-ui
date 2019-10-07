@@ -187,6 +187,11 @@ export default class SearchComponent extends Component {
     }
   }
 
+  remove () {
+    this._autocomplete.remove();
+    super.remove();
+  }
+
   initClearButton () {
     const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
     this._showClearButton = this._showClearButton || this.query;
