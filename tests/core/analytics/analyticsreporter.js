@@ -52,7 +52,7 @@ describe('reporting events', () => {
       expect.objectContaining({ 'data': expect.objectContaining({ testOption: 'test' }) }));
   });
 
-  it('includes configVersion when supplied', () => {
+  it('includes experienceVersion when supplied', () => {
     const analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', 'PRODUCTION', '213412', { testOption: 'test' });
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
@@ -60,6 +60,6 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expect.objectContaining({ configVersion: 'PRODUCTION' }) }));
+      expect.objectContaining({ 'data': expect.objectContaining({ experienceVersion: 'PRODUCTION' }) }));
   });
 });

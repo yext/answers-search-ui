@@ -83,7 +83,7 @@ class Answers {
       persistentStorage: persistentStorage,
       answersKey: config.answersKey,
       fieldFormatters: config.fieldFormatters,
-      configVersion: config.configVersion,
+      experienceVersion: config.experienceVersion,
       locale: config.locale
     });
 
@@ -100,7 +100,7 @@ class Answers {
         new AnalyticsReporter(
           this.core,
           config.answersKey,
-          config.configVersion,
+          config.experienceVersion,
           config.businessId,
           config.analyticsOptions)
       );
@@ -128,7 +128,7 @@ class Answers {
     });
 
     if (!config.suppressErrorReports) {
-      this._errorReporter = new ErrorReporter(config.apiKey, config.answersKey, config.configVersion);
+      this._errorReporter = new ErrorReporter(config.apiKey, config.answersKey, config.experienceVersion);
       window.addEventListener('error', e => this._errorReporter.report(e.error));
       window.addEventListener('unhandledrejection', e => this._errorReporter.report(e.error));
     }
