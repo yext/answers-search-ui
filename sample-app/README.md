@@ -1,5 +1,10 @@
 # Answers Sample App
 
+## Install
+```
+npm ci
+```
+
 ## Add credentials
 `credentials.json`:
 ```json

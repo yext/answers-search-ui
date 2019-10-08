@@ -1,4 +1,3 @@
-/* eslint-env es6 */
 /* global ANSWERS:readonly */
 
 const config = JSON.parse(document.getElementById('config').textContent);
@@ -19,6 +18,7 @@ window.initAnswers = async function initAnswers () {
       apiKey: mapApiKey
     }
   };
+
   ANSWERS.init({
     apiKey,
     answersKey,

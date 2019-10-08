@@ -1,10 +1,7 @@
 .search {
   display: flex;
   max-width: 900px;
-  margin: 0 auto;
-
   flex-flow: row wrap;
-  justify-content: center;
 }
 
 main {
@@ -13,20 +10,5 @@ main {
 }
 
 .sidebar {
-  position: sticky;
-  top: 0;
-
   flex: 1 0 15rem;
-}
-
-.yxt-Nav-expanded {
-  flex-grow: 1;
-  justify-content: space-around;
-}
-
-.yxt-QuestionSubmission::before {
-  content: "Can't find your answer?";
-  display: block;
-  font-size: 200%;
-  font-weight: bolder;
 }

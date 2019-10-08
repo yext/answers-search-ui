@@ -9,5 +9,7 @@
     "start": "npm run buildLib && npm run buildHtml"
   },
   "author": "Adrian Mullings",
-  "dependencies": {}
+  "dependencies": {
+    "handlebars": "^4.4.3"
+  }
 }

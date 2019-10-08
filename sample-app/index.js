@@ -1,8 +1,19 @@
 const fs = require('fs');
 const path = require('path');
 const util = require('util');
-
 const writeFile = util.promisify(fs.writeFile);
+
+const Handlebars = require('handlebars');
+const metadataTemplate = Handlebars.compile(
+  fs.readFileSync('./metadata.handlebars', 'utf8')
+);
+const universalTemplate = Handlebars.compile(
+  fs.readFileSync('./universal.handlebars', 'utf8')
+);
+const verticalTemplate = Handlebars.compile(
+  fs.readFileSync('./vertical.handlebars', 'utf8')
+);
+Handlebars.registerPartial('metadata', metadataTemplate);
 
 const credentials = require('./credentials.json');
 const configFile = process.argv[2]
@@ -14,72 +25,37 @@ const config = Object.assign({}, credentials, siteConfig);
 const bundleUrl = `../dist/answers.js`;
 const cssUrl = `../dist/answers.css`;
 
-async function main () {
-  const universalHtml = renderHtml({
-    config,
-    title: 'Universal Search Experience Test',
-    markup: `
-    <main>
-      <div class="search-container"></div>
-      <div class="direct-answer-container"></div>
-      <div class="universal-results-container"></div>
-      <div class="question-submission-container"></div>
-    </main>`
-  });
-  writeFile('index.html', universalHtml)
-    .catch(console.error);
+function main () {
+  writeUniversalHtml();
 
   for (const verticalKey of Object.keys(config.verticals)) {
-    const configWithVertical = Object.assign({}, config, {
-      verticalKey
-    });
-
-    const verticalHtml = renderHtml({
-      config: configWithVertical,
-      title: `${capitalize(verticalKey)} Experience Test`,
-      markup: `
-    <div class="sidebar">
-      <div class="filter-search-container"></div>
-      <div class="dynamic-filter-container"></div>
-      <div class="filters-container"></div>
-    </div>
-    <main>
-      <div class="search-container"></div>
-      <div class="results-container"></div>
-    </main>`
-    });
-    writeFile(`${verticalKey}.html`, verticalHtml)
-      .catch(console.error);
+    writeVerticalHtml(verticalKey);
   }
 }
 
-function renderHtml ({
-  config,
-  title,
-  markup
-}) {
-  return `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${title}</title>
-  <link rel="stylesheet" type="text/css" href="${cssUrl}">
-  <link rel="stylesheet" href="public/style.css">
-  <script type="application/json" id="config">
-${JSON.stringify(config)}
-  </script>
-  <script src="public/app.js" defer></script>
-  <script src="${bundleUrl}" onload="ANSWERS.domReady(initAnswers)" defer></script>
-</head>
-<body>
-  <nav class="navigation-container"></nav>
-  <div class="search">${markup}
-  </div>
-</body>
-</html>
-  `;
+function writeUniversalHtml () {
+  const html = universalTemplate({
+    bundleUrl,
+    cssUrl,
+    title: 'Universal Search Experience Test',
+    configJson: new Handlebars.SafeString(JSON.stringify(config))
+  });
+  writeFile('index.html', html)
+    .catch(console.error);
+}
+
+function writeVerticalHtml (verticalKey) {
+  const configWithVertical = Object.assign({}, config, {
+    verticalKey
+  });
+  const html = verticalTemplate({
+    bundleUrl,
+    cssUrl,
+    title: `${capitalize(verticalKey)} Experience Test`,
+    configJson: new Handlebars.SafeString(JSON.stringify(configWithVertical))
+  });
+  writeFile(`${verticalKey}.html`, html)
+    .catch(console.error);
 }
 
 function capitalize (s) {
