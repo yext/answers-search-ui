@@ -42,7 +42,7 @@ export default class AutoCompleteApi {
      * @type {string}
      * @private
      */
-    this._configVersion = config.configVersion;
+    this._experienceVersion = config.experienceVersion;
 
     /**
      * The locale to use for the request
@@ -71,7 +71,7 @@ export default class AutoCompleteApi {
       params: {
         'input': input,
         'answersKey': this._answersKey,
-        'version': this._configVersion,
+        'version': this._experienceVersion,
         'verticalKey': config.verticalKey,
         'inputKey': config.barKey,
         'locale': this._locale,
@@ -95,7 +95,7 @@ export default class AutoCompleteApi {
       params: {
         'input': input,
         'answersKey': this._answersKey,
-        'version': this._configVersion,
+        'version': this._experienceVersion,
         'verticalKey': verticalKey,
         'barKey': barKey,
         'locale': this._locale
@@ -118,7 +118,7 @@ export default class AutoCompleteApi {
       params: {
         'input': queryString,
         'answersKey': this._answersKey,
-        'version': this._configVersion,
+        'version': this._experienceVersion,
         'locale': this._locale
       }
     });

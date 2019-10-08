@@ -44,7 +44,7 @@ export default class Core {
      * @type {string}
      * @private
      */
-    this._configVersion = config.configVersion;
+    this._experienceVersion = config.experienceVersion;
 
     /**
      * A reference to the client locale used for all requests. If not specified, defaults to "en" (for
@@ -84,7 +84,7 @@ export default class Core {
     this._searcher = new SearchApi({
       apiKey: this._apiKey,
       answersKey: this._answersKey,
-      configVersion: this._configVersion,
+      experienceVersion: this._experienceVersion,
       locale: this._locale
     });
 
@@ -97,7 +97,7 @@ export default class Core {
     this._autoComplete = new AutoCompleteApi({
       apiKey: this._apiKey,
       answersKey: this._answersKey,
-      configVersion: this._configVersion,
+      experienceVersion: this._experienceVersion,
       locale: this._locale
     });
 
