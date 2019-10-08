@@ -1,5 +1,7 @@
 const { series, parallel, src, dest, watch } = require('gulp');
 
+const fs = require('fs');
+
 const rollup = require('gulp-rollup-lightweight');
 const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
@@ -52,30 +54,11 @@ function legacyBundle () {
     },
     plugins: [
       resolve(),
-      insert.prepend(`
-        import '@babel/polyfill/noConflict';
-        import 'whatwg-fetch';
-        if (!Element.prototype.matches) { // Element.matches polyfill from MDN
-          Element.prototype.matches = Element.prototype.msMatchesSelector ||
-                                      Element.prototype.webkitMatchesSelector;
-        }
-(function () {
-
-  if ( typeof window.CustomEvent === "function" ) return false;
-
-  function CustomEvent ( event, params ) {
-    params = params || { bubbles: false, cancelable: false, detail: null };
-    var evt = document.createEvent( 'CustomEvent' );
-    evt.initCustomEvent( event, params.bubbles, params.cancelable, params.detail );
-    return evt;
-   }
-
-  window.CustomEvent = CustomEvent;
-  window.Event = CustomEvent;
-})();`,
-      {
-        include: './src/answers-umd.js'
-      }),
+      insert.prepend(
+        fs.readFileSync('./conf/gulp-tasks/polyfill-prefix.js').toString(),
+        {
+          include: './src/answers-umd.js'
+        }),
       commonjs({
         include: './node_modules/**'
       }),
