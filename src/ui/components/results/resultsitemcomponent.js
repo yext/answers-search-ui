@@ -41,14 +41,23 @@ export default class ResultsItemComponent extends Component {
 
   /**
    * helper to construct the eventOptions object for the title link
+   * @param entityId The ID of the result item, if present
+   * @param url The url of the result item, if present
    * @returns {string}
    */
-  eventOptions (entityId) {
-    return JSON.stringify({
+  eventOptions (entityId, url) {
+    const options = {
       verticalConfigId: this._verticalConfigId,
-      searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL',
-      entityId: entityId
-    });
+      searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+    };
+
+    if (entityId) {
+      options.entityId = entityId;
+    } else {
+      options.url = url;
+    }
+
+    return JSON.stringify(options);
   }
 
   /**
@@ -59,7 +68,7 @@ export default class ResultsItemComponent extends Component {
    */
   setState (data) {
     return super.setState(Object.assign(data, {
-      eventOptions: this.eventOptions(data.id)
+      eventOptions: this.eventOptions(data.id, data.link)
     }));
   }
 }
