@@ -5,13 +5,13 @@ const writeFile = util.promisify(fs.writeFile);
 
 const Handlebars = require('handlebars');
 const metadataTemplate = Handlebars.compile(
-  fs.readFileSync('./metadata.handlebars', 'utf8')
+  fs.readFileSync('./metadata.hbs', 'utf8')
 );
 const universalTemplate = Handlebars.compile(
-  fs.readFileSync('./universal.handlebars', 'utf8')
+  fs.readFileSync('./universal.hbs', 'utf8')
 );
 const verticalTemplate = Handlebars.compile(
-  fs.readFileSync('./vertical.handlebars', 'utf8')
+  fs.readFileSync('./vertical.hbs', 'utf8')
 );
 Handlebars.registerPartial('metadata', metadataTemplate);
 
