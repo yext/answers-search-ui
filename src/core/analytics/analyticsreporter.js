@@ -6,8 +6,12 @@ import { ANALYTICS_BASE_URL, ANALYTICS_BASE_URL_NO_COOKIE } from '../constants';
 import StorageKeys from '../storage/storagekeys';
 import HttpRequester from '../http/httprequester';
 
+/** @typedef {import('../services/analyticsreporterservice').default} AnalyticsReporterService */
+
 /**
- * Class for reporting analytics events to the server
+ * Class for reporting analytics events to the server via HTTP
+ *
+ * @implements {AnalyticsReporterService}
  */
 export default class AnalyticsReporter {
   constructor (core, experienceKey, experienceVersion, businessId, globalOptions = {}) {
@@ -43,6 +47,7 @@ export default class AnalyticsReporter {
     this._globalOptions.queryId = queryId;
   }
 
+  /** @inheritdoc */
   report (event) {
     if (!(event instanceof AnalyticsEvent)) {
       throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
@@ -58,6 +63,7 @@ export default class AnalyticsReporter {
     );
   }
 
+  /** @inheritdoc */
   setConversionTrackingEnabled (isEnabled) {
     this._baseUrl = isEnabled ? ANALYTICS_BASE_URL : ANALYTICS_BASE_URL_NO_COOKIE;
   }

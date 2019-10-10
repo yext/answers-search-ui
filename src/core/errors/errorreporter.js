@@ -5,8 +5,12 @@ import { AnswersBaseError } from './errors';
 import ApiRequest from '../http/apirequest';
 import { LIB_VERSION } from '../constants';
 
+/** @typedef {import('../services/errorreporterservice').default} ErrorReporterService */
+
 /**
- * ErrorReporter is used for reporting errors to the console and server
+ * ErrorReporter is used for reporting errors to the console and API
+ *
+ * @implements {ErrorReporterService}
  */
 export default class ErrorReporter {
   constructor (config) {
