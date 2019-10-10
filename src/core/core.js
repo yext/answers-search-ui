@@ -1,9 +1,5 @@
 /** @module Core */
 
-import SearchApi from './search/searchapi';
-import AutoCompleteApi from './search/autocompleteapi';
-import QuestionAnswerApi from './search/questionanswerapi';
-
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import StorageKeys from './storage/storagekeys';
@@ -11,20 +7,16 @@ import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
 
+/** @typedef {import('./services/searchservice').default} SearchService */
+/** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
+/** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
+
 /**
  * Core is the main application container for all of the network and storage
  * related behaviors of the application.
  */
 export default class Core {
   constructor (config = {}) {
-    if (typeof config.apiKey !== 'string') {
-      throw new Error('Missing required `apiKey`. Type must be {string}');
-    }
-
-    if (typeof config.experienceKey !== 'string') {
-      throw new Error('Missing required `experienceKey`. Type must be {string}');
-    }
-
     /**
      * A reference to the client API Key used for all requests
      * @type {string}
@@ -52,7 +44,7 @@ export default class Core {
      * @type {string}
      * @private
      */
-    this._locale = config.locale || 'en';
+    this._locale = config.locale;
 
     /**
      * A map of field formatters used to format results, if present
@@ -78,37 +70,25 @@ export default class Core {
     /**
      * An abstraction containing the integration with the RESTful search API
      * For both vertical and universal search
-     * @type {Search}
+     * @type {SearchService}
      * @private
      */
-    this._searcher = new SearchApi({
-      apiKey: this._apiKey,
-      experienceKey: this._experienceKey,
-      experienceVersion: this._experienceVersion,
-      locale: this._locale
-    });
+    this._searcher = config.searchService;
 
     /**
      * An abstraction containing the integration with the RESTful autocomplete API
      * For filter search, vertical autocomplete, and universal autocomplete
-     * @type {Autocomplete}
+     * @type {AutoCompleteService}
      * @private
      */
-    this._autoComplete = new AutoCompleteApi({
-      apiKey: this._apiKey,
-      experienceKey: this._experienceKey,
-      experienceVersion: this._experienceVersion,
-      locale: this._locale
-    });
+    this._autoComplete = config.autoCompleteService;
 
     /**
      * An abstraction for interacting with the Q&A rest interface
-     * @type {QuestionAnswerApi}
+     * @type {QuestionAnswerService}
      * @private
      */
-    this._questionAnswer = new QuestionAnswerApi({
-      apiKey: this._apiKey
-    });
+    this._questionAnswer = config.questionAnswerService;
   }
 
   /**

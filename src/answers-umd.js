@@ -11,11 +11,36 @@ import {
 import Component from './ui/components/component';
 
 import ErrorReporter from './core/errors/errorreporter';
-import { AnalyticsReporter } from './core';
+import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
+import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
+import AutoCompleteApi from './core/search/autocompleteapi';
+import MockAutoCompleteService from './core/search/mockautocompleteservice';
+import QuestionAnswerApi from './core/search/questionanswerapi';
+import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
+import SearchApi from './core/search/searchapi';
+import MockSearchService from './core/search/mocksearchservice';
+
+/** @typedef {import('./core/services/searchservice').default} SearchService */
+/** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
+/** @typedef {import('./core/services/questionanswerservice').default} QuestionAnswerService */
+/** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
+/** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
+
+/**
+ * @typedef Services
+ * @property {SearchService} searchService
+ * @property {AutoCompleteService} autoCompleteService
+ * @property {QuestionAnswerService} questionAnswerService
+ * @property {ErrorReporterService} errorReporterService
+ */
+
+const DEFAULTS = {
+  locale: 'en'
+};
 
 /**
  * The main Answers interface
@@ -68,6 +93,18 @@ class Answers {
      * @private
      */
     this._eligibleForAnalytics = false;
+
+    /**
+     * @type {Services}
+     * @private
+     */
+    this._services = null;
+
+    /**
+     * @type {AnalyticsReporterService}
+     * @private
+     */
+    this._analyticsReporterService = null;
   }
 
   static setInstance (instance) {
@@ -83,12 +120,23 @@ class Answers {
   }
 
   init (config) {
+    config = Object.assign({}, config, DEFAULTS);
+    if (typeof config.apiKey !== 'string') {
+      throw new Error('Missing required `apiKey`. Type must be {string}');
+    }
+
+    if (typeof config.experienceKey !== 'string') {
+      throw new Error('Missing required `experienceKey`. Type must be {string}');
+    }
+
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: config.onStateChange,
       resetListener: data => globalStorage.setAll(data)
     });
     globalStorage.setAll(persistentStorage.getAll());
+
+    this._services = config.mock ? getMockServices() : getServices(config);
 
     this.core = new Core({
       apiKey: config.apiKey,
@@ -97,7 +145,10 @@ class Answers {
       experienceKey: config.experienceKey,
       fieldFormatters: config.fieldFormatters,
       experienceVersion: config.experienceVersion,
-      locale: config.locale
+      locale: config.locale,
+      searchService: this._services.searchService,
+      autoCompleteService: this._services.autoCompleteService,
+      questionAnswerService: this._services.questionAnswerService
     });
 
     if (config.onStateChange && typeof config.onStateChange === 'function') {
@@ -110,14 +161,17 @@ class Answers {
 
     this._eligibleForAnalytics = config.businessId != null;
     if (this._eligibleForAnalytics) {
-      const reporter = new AnalyticsReporter(
-        this.core,
-        config.experienceKey,
-        config.experienceVersion,
-        config.businessId,
-        config.analyticsOptions);
+      // TODO(amullings): Initialize with other services
+      const reporter = config.mock
+        ? new NoopAnalyticsReporter()
+        : new AnalyticsReporter(
+          this.core,
+          config.experienceKey,
+          config.experienceVersion,
+          config.businessId,
+          config.analyticsOptions);
 
-      this.AnalyticsReporter = reporter;
+      this._analyticsReporterService = reporter;
 
       this.components.setAnalyticsReporter(reporter);
       initScrollListener(reporter);
@@ -142,15 +196,6 @@ class Answers {
       this.renderer.init(templates);
 
       this._onReady();
-    });
-
-    // Report errors to console & server
-    this._errorReporter = new ErrorReporter({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      printVerbose: config.debug,
-      sendToServer: !config.suppressErrorReports
     });
 
     return this;
@@ -212,9 +257,52 @@ class Answers {
    */
   setConversionsOptIn (optIn) {
     if (this._eligibleForAnalytics) {
-      this.AnalyticsReporter.setConversionTrackingEnabled(optIn);
+      this._analyticsReporterService.setConversionTrackingEnabled(optIn);
     }
   }
+}
+
+/**
+ * @param {Object} config
+ * @returns {Services}
+ */
+function getServices (config) {
+  return {
+    searchService: new SearchApi({
+      apiKey: config.apiKey,
+      experienceKey: config.experienceKey,
+      experienceVersion: config.experienceVersion,
+      locale: config.locale
+    }),
+    autoCompleteService: new AutoCompleteApi({
+      apiKey: config.apiKey,
+      experienceKey: config.experienceKey,
+      experienceVersion: config.experienceVersion,
+      locale: config.locale
+    }),
+    questionAnswerService: new QuestionAnswerApi({
+      apiKey: config.apiKey
+    }),
+    errorReporterService: new ErrorReporter({
+      apiKey: config.apiKey,
+      experienceKey: config.experienceKey,
+      experienceVersion: config.experienceVersion,
+      printVerbose: config.debug,
+      sendToServer: !config.suppressErrorReports
+    })
+  };
+}
+
+/**
+ * @returns {Services}
+ */
+function getMockServices () {
+  return {
+    searchService: new MockSearchService(),
+    autoCompleteService: new MockAutoCompleteService(),
+    questionAnswerService: new MockQuestionAnswerService(),
+    errorReporterService: new ConsoleErrorReporter()
+  };
 }
 
 /**
