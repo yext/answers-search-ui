@@ -30,27 +30,22 @@ export default class ResultFactory {
         });
       }
 
-      if (source === 'GOOGLE_CSE') {
-        results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
-        continue;
+      switch (source) {
+        case 'GOOGLE_CSE':
+          results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
+          break;
+        case 'BING_CSE':
+          results.push(ResultFactory.fromBingCustomSearchEngine(data));
+          break;
+        case 'ZENDESK':
+          results.push(ResultFactory.fromZendeskSearchEngine(data));
+          break;
+        case 'ALGOLIA':
+          results.push(ResultFactory.fromAlgoliaSearchEngine(data));
+          break;
+        default:
+          results.push(ResultFactory.fromGeneric(data, formattedData, i));
       }
-
-      if (source === 'BING_CSE') {
-        results.push(ResultFactory.fromBingCustomSearchEngine(data));
-        continue;
-      }
-
-      if (source === 'ZENDESK') {
-        results.push(ResultFactory.fromZendeskSearchEngine(data));
-        continue;
-      }
-
-      if (source === 'ALGOLIA') {
-        results.push(ResultFactory.fromAlgoliaSearchEngine(data));
-        continue;
-      }
-
-      results.push(ResultFactory.fromGeneric(data, formattedData, i));
     }
 
     return results;
