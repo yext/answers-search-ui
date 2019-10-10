@@ -15,6 +15,7 @@ import { AnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
 import { AnswersComponentError } from './core/errors/errors';
+import AnalyticsEvent from './core/analytics/analyticsevent';
 
 /**
  * The main Answers interface
@@ -96,14 +97,15 @@ class Answers {
       .setRenderer(this.renderer);
 
     if (config.businessId) {
-      this.components.setAnalyticsReporter(
-        new AnalyticsReporter(
-          this.core,
-          config.answersKey,
-          config.experienceVersion,
-          config.businessId,
-          config.analyticsOptions)
-      );
+      const reporter = new AnalyticsReporter(
+        this.core,
+        config.answersKey,
+        config.experienceVersion,
+        config.businessId,
+        config.analyticsOptions);
+
+      this.components.setAnalyticsReporter(reporter);
+      initScrollListener(reporter);
     }
 
     this._onReady = config.onReady || function () {};
@@ -185,6 +187,28 @@ class Answers {
     this.renderer.registerHelper(name, cb);
     return this;
   }
+}
+
+/**
+ * Initialize the scroll event listener to send analytics events
+ * when the user scrolls to the bottom. Debounces scroll events so
+ * they are processed after the user stops scrolling
+ */
+function initScrollListener (reporter) {
+  const DEBOUNCE_TIME = 100;
+  let timeout = null;
+
+  const sendEvent = () => {
+    if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight) {
+      const event = new AnalyticsEvent('SCROLL_TO_BOTTOM_OF_PAGE');
+      reporter.report(event);
+    }
+  };
+
+  document.addEventListener('scroll', () => {
+    clearTimeout(timeout);
+    timeout = setTimeout(sendEvent, DEBOUNCE_TIME);
+  });
 }
 
 const ANSWERS = new Answers();
