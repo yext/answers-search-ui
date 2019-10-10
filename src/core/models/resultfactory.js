@@ -45,6 +45,11 @@ export default class ResultFactory {
         continue;
       }
 
+      if (source === 'ALGOLIA') {
+        results.push(ResultFactory.fromAlgoliaSearchEngine(data));
+        continue;
+      }
+
       results.push(ResultFactory.fromGeneric(data, formattedData, i));
     }
 
@@ -112,6 +117,21 @@ export default class ResultFactory {
       title: data.title,
       details: data.snippet,
       link: data.html_url
+    });
+  }
+
+  /**
+   * Converts an API result object into a result view model.
+   * Maps view model fields based on the API data for a Algolia Search Engine object.
+   * Deatiails field is set to objectID since response has only one general field objectID.
+   * @param data
+   * @returns {Result}
+   */
+  static fromAlgoliaSearchEngine (data) {
+    return new Result({
+      raw: data,
+      details: data.objectID,
+      id: data.objectID
     });
   }
 
