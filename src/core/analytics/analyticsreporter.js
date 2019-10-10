@@ -10,7 +10,7 @@ import HttpRequester from '../http/httprequester';
  * Class for reporting analytics events to the server
  */
 export default class AnalyticsReporter {
-  constructor (core, answersKey, experienceVersion, businessId, globalOptions = {}) {
+  constructor (core, experienceKey, experienceVersion, businessId, globalOptions = {}) {
     /**
      * The internal business identifier used for reporting
      * @type {number}
@@ -22,7 +22,7 @@ export default class AnalyticsReporter {
      * @type {object}
      * @private
      */
-    this._globalOptions = Object.assign({}, globalOptions, { answersKey });
+    this._globalOptions = Object.assign({}, globalOptions, { experienceKey });
 
     if (experienceVersion) {
       this._globalOptions.experienceVersion = experienceVersion;
