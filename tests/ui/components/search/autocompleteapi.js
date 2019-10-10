@@ -1,6 +1,7 @@
 import AutoCompleteApi from '../../../../src/core/search/autocompleteapi';
 import AutoCompleteData from '../../../../src/core/models/autocompletedata';
 import HttpRequester from '../../../../src/core/http/httprequester';
+import { LIB_VERSION } from '../../../../src/core/constants';
 jest.mock('../../../../src/core/http/httprequester');
 
 const baseUrl = 'https://liveapi.yext.com/v2/accounts/me';
@@ -64,6 +65,7 @@ describe('querying and responding', () => {
     const expectedData = {
       answersKey,
       api_key: apiKey,
+      jsLibVersion: LIB_VERSION,
       verticalKey: verticalKey,
       input,
       inputKey: barKey,
@@ -101,6 +103,7 @@ describe('querying and responding', () => {
     const expectedData = {
       answersKey,
       api_key: apiKey,
+      jsLibVersion: LIB_VERSION,
       barKey,
       verticalKey: verticalKey,
       input,
@@ -129,6 +132,7 @@ describe('querying and responding', () => {
     const expectedData = {
       answersKey,
       api_key: apiKey,
+      jsLibVersion: LIB_VERSION,
       input,
       v: version,
       locale: locale

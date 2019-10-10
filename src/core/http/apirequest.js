@@ -1,7 +1,7 @@
 /** @module ApiRequest */
 
 import HttpRequester from './httprequester';
-import { API_BASE_URL } from '../constants';
+import { API_BASE_URL, LIB_VERSION } from '../constants';
 import SearchParams from '../../ui/dom/searchparams'; // TODO ideally this would be passed in as a param
 
 /**
@@ -68,7 +68,8 @@ export default class ApiRequest {
   params (params) {
     var baseParams = {
       'v': this._version,
-      'api_key': this._apiKey
+      'api_key': this._apiKey,
+      'jsLibVersion': LIB_VERSION
     };
 
     const urlParams = new SearchParams(window.location.search.substring(1));
