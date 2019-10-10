@@ -1,0 +1,14 @@
+.search {
+  display: flex;
+  max-width: 900px;
+  flex-flow: row wrap;
+}
+
+main {
+  width: min-content;
+  flex: 100000 1 auto;
+}
+
+.sidebar {
+  flex: 1 0 15rem;
+}
