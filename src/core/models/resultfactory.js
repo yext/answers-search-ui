@@ -30,22 +30,22 @@ export default class ResultFactory {
         });
       }
 
-      if (source === 'GOOGLE_CSE') {
-        results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
-        continue;
+      switch (source) {
+        case 'GOOGLE_CSE':
+          results.push(ResultFactory.fromGoogleCustomSearchEngine(data));
+          break;
+        case 'BING_CSE':
+          results.push(ResultFactory.fromBingCustomSearchEngine(data));
+          break;
+        case 'ZENDESK':
+          results.push(ResultFactory.fromZendeskSearchEngine(data));
+          break;
+        case 'ALGOLIA':
+          results.push(ResultFactory.fromAlgoliaSearchEngine(data));
+          break;
+        default:
+          results.push(ResultFactory.fromGeneric(data, formattedData, i));
       }
-
-      if (source === 'BING_CSE') {
-        results.push(ResultFactory.fromBingCustomSearchEngine(data));
-        continue;
-      }
-
-      if (source === 'ZENDESK') {
-        results.push(ResultFactory.fromZendeskSearchEngine(data));
-        continue;
-      }
-
-      results.push(ResultFactory.fromGeneric(data, formattedData, i));
     }
 
     return results;
@@ -112,6 +112,21 @@ export default class ResultFactory {
       title: data.title,
       details: data.snippet,
       link: data.html_url
+    });
+  }
+
+  /**
+   * Converts an API result object into a result view model.
+   * Maps view model fields based on the API data for a Algolia Search Engine object.
+   * Details field is set to objectID since response has only one general field objectID.
+   * @param data
+   * @returns {Result}
+   */
+  static fromAlgoliaSearchEngine (data) {
+    return new Result({
+      raw: data,
+      details: data.objectID,
+      id: data.objectID
     });
   }
 
