@@ -372,7 +372,15 @@ export default class Component {
    */
   render (data = this._state.get()) {
     this.beforeRender();
-    data = this.transformData(data);
+    // Temporary fix for passing immutable data to transformData().
+    // Excluding fields to avoid circular reference.
+    data = this.transformData(JSON.parse(JSON.stringify(data, (key, value) => {
+      let excludedFields = ['componentManager', 'core', 'renderer', 'analyticsReporter', 'parent'];
+      if (excludedFields.includes(key)) {
+        return undefined;
+      }
+      return value;
+    })));
 
     let html = '';
     // Use either the custom render function or the internal renderer
