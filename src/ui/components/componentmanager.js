@@ -1,7 +1,7 @@
 /** @module ComponentManager */
 
 import { AnswersComponentError } from '../../core/errors/errors';
-import { DOM } from '..';
+import DOM from '../dom/dom';
 
 /**
  * ComponentManager is a Singletone that contains both an internal registry of

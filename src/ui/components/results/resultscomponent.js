@@ -26,7 +26,7 @@ export default class ResultsComponent extends Component {
      * @type {string}
      * @private
      */
-    this._verticalConfigId = config.verticalConfigId;
+    this._verticalKey = config.verticalConfigId || config.verticalKey;
 
     /**
      * isUniversal is set to true if this component is added by the UniversalResultsComponent
@@ -34,6 +34,13 @@ export default class ResultsComponent extends Component {
      * @private
      */
     this._isUniversal = config.isUniversal || false;
+
+    /**
+     * if true, run an empty search when initialized to show some results on load
+     * @type {boolean}
+     * @private
+     */
+    this._showAllOnLoad = config.showAllOnLoad;
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._itemConfig = {
@@ -83,6 +90,16 @@ export default class ResultsComponent extends Component {
     this._universalUrl = config.universalUrl;
   }
 
+  onCreate () {
+    const query = this.core.globalStorage.getState(StorageKeys.QUERY);
+    if (this._showAllOnLoad && (query === null || query === '')) {
+      if (!this._verticalKey) {
+        throw new AnswersComponentError('showOnLoad requires a verticalKey');
+      }
+      this.core.verticalSearch(this._verticalKey, { input: '' });
+    }
+  }
+
   mount () {
     if (Object.keys(this.getState()).length > 0) {
       super.mount();
@@ -117,7 +134,7 @@ export default class ResultsComponent extends Component {
    */
   eventOptions () {
     return JSON.stringify({
-      verticalConfigId: this._verticalConfigId
+      verticalConfigId: this._verticalKey
     });
   }
 
@@ -198,7 +215,7 @@ export default class ResultsComponent extends Component {
     // Apply the proper item renders to the the components
     // have just been constructed. Prioritize global over individual items.
     let comp = super.addChild(data, type, Object.assign(opts, {
-      verticalConfigId: this._verticalConfigId,
+      verticalConfigId: this._verticalKey,
       isUniversal: this._isUniversal
     }));
     let globalConfig = this._itemConfig.global;
