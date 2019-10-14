@@ -28,6 +28,52 @@ export default class HighlightedValue {
     return this.buildHighlightedValue(this.value, invertedSubstrings);
   }
 
+  /**
+   * introduces highlighting to input data according to highlighting specifiers
+   *
+   * @param val input object to apply highlighting to
+   *
+   *  example object :
+   *  {
+   *    name: 'ATM',
+   *    featuredMessage: {
+   *      description: 'Save time & bank on your terms at over 1,800 ATMs'
+   *    }
+   *  }
+   *
+   * @param highlightedSubstrings highlighting specifiers to apply to input object
+   *
+   *  example object :
+   *  {
+   *    name: {
+   *      matchedSubstrings: [{
+   *        length: 3,
+   *        offset: 0
+   *      }],
+   *      value: 'ATM'
+   *    },
+   *    featuredMessage: {
+   *      description: {
+   *        matchedSubstrings: [{
+   *          length: 4,
+   *          offset: 45
+   *        }],
+   *        value: 'Save time & bank on your terms at over 1,800 ATMs'
+   *      }
+   *    }
+   *  }
+   *
+   * @returns {string} copy of input value with highlighting applied
+   *
+   *  example object :
+   *  {
+   *    name: '<strong>ATM</strong>',
+   *    featuredMessage: {
+   *      description: 'Save time & bank on your terms at over 1,800 <strong>ATMs</strong>'
+   *    }
+   *  }
+   *
+   */
   buildHighlightedValue (val, highlightedSubstrings) {
     let highlightedValue = '';
     let nextStart = 0;
