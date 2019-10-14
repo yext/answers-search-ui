@@ -15,7 +15,7 @@ export default class HighlightedValue {
    */
   get () {
     this._sortMatchedSubstrings();
-    return this._buildHighlightedValue(this.value, this.matchedSubstrings);
+    return this.buildHighlightedValue(this.value, this.matchedSubstrings);
   }
 
   /**
@@ -25,7 +25,31 @@ export default class HighlightedValue {
   getInverted () {
     this._sortMatchedSubstrings();
     const invertedSubstrings = this._getInvertedSubstrings(this.matchedSubstrings, this.value.length);
-    return this._buildHighlightedValue(this.value, invertedSubstrings);
+    return this.buildHighlightedValue(this.value, invertedSubstrings);
+  }
+
+  buildHighlightedValue (val, highlightedSubstrings) {
+    let highlightedValue = '';
+    let nextStart = 0;
+
+    if (highlightedSubstrings.length === 0) {
+      return val;
+    }
+
+    for (let j = 0; j < highlightedSubstrings.length; j++) {
+      let start = Number(highlightedSubstrings[j].offset);
+      let end = start + highlightedSubstrings[j].length;
+
+      highlightedValue += [val.slice(nextStart, start), '<strong>', val.slice(start, end), '</strong>'].join('');
+
+      if (j === highlightedSubstrings.length - 1 && end < val.length) {
+        highlightedValue += val.slice(end);
+      }
+
+      nextStart = end;
+    }
+
+    return highlightedValue;
   }
 
   _sortMatchedSubstrings () {
@@ -61,29 +85,5 @@ export default class HighlightedValue {
       }
     }
     return invertedSubstrings;
-  }
-
-  _buildHighlightedValue (val, highlightedSubstrings) {
-    let highlightedValue = '';
-    let nextStart = 0;
-
-    if (highlightedSubstrings.length === 0) {
-      return val;
-    }
-
-    for (let j = 0; j < highlightedSubstrings.length; j++) {
-      let start = Number(highlightedSubstrings[j].offset);
-      let end = start + highlightedSubstrings[j].length;
-
-      highlightedValue += [val.slice(nextStart, start), '<strong>', val.slice(start, end), '</strong>'].join('');
-
-      if (j === highlightedSubstrings.length - 1 && end < val.length) {
-        highlightedValue += val.slice(end);
-      }
-
-      nextStart = end;
-    }
-
-    return highlightedValue;
   }
 }
