@@ -630,7 +630,9 @@ ANSWERS.addComponent('VerticalResults', {
   // Show some results when the page loads by sending an empty query
   showAllOnLoad: false,
   // If showAllOnLoad is desired, you must pass the vertical key as well
-  verticalKey: ''
+  verticalKey: '',
+  // If showAllOnLoad is desired, you may set the query to load the initial results with
+  defaultQuery: ''
 })
 ```
 

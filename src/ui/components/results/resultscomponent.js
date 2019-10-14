@@ -42,6 +42,13 @@ export default class ResultsComponent extends Component {
      */
     this._showAllOnLoad = config.showAllOnLoad;
 
+    /**
+     * if showAllOnLoad is true, this is the query the page is loaded with
+     * @type {string}
+     * @private
+     */
+    this._defaultQuery = config.defaultQuery || '';
+
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._itemConfig = {
       global: {
@@ -97,7 +104,7 @@ export default class ResultsComponent extends Component {
         throw new AnswersComponentError('showOnLoad requires a verticalKey');
       }
       this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, 'onLoad');
-      this.core.verticalSearch(this._verticalKey, { input: '' });
+      this.core.verticalSearch(this._verticalKey, { input: this._defaultQuery });
     }
   }
 
