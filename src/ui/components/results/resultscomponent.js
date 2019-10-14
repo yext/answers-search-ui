@@ -101,7 +101,7 @@ export default class ResultsComponent extends Component {
     const query = this.core.globalStorage.getState(StorageKeys.QUERY);
     if (this._showAllOnLoad && (query === null || query === '')) {
       if (!this._verticalKey) {
-        throw new AnswersComponentError('showOnLoad requires a verticalKey');
+        throw new AnswersComponentError('showOnLoad requires a verticalKey', 'VerticalResults');
       }
       this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, 'onLoad');
       this.core.verticalSearch(this._verticalKey, { input: this._defaultQuery });
