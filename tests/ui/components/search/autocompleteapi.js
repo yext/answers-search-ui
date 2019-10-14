@@ -8,7 +8,7 @@ const baseUrl = 'https://liveapi.yext.com/v2/accounts/me';
 
 describe('querying and responding', () => {
   const apiKey = 'abc123';
-  const answersKey = '123456';
+  const experienceKey = '123456';
   const verticalKey = 'unittests';
   const barKey = 'testing';
   const input = 'test';
@@ -45,7 +45,7 @@ describe('querying and responding', () => {
     });
     autocomplete = new AutoCompleteApi({
       apiKey,
-      answersKey,
+      experienceKey,
       locale
     });
   });
@@ -63,7 +63,7 @@ describe('querying and responding', () => {
       ]
     };
     const expectedData = {
-      answersKey,
+      experienceKey,
       api_key: apiKey,
       jsLibVersion: LIB_VERSION,
       verticalKey: verticalKey,
@@ -101,7 +101,7 @@ describe('querying and responding', () => {
   describe('queryVertical', () => {
     const expectedUrl = `${baseUrl}/answers/vertical/autocomplete`;
     const expectedData = {
-      answersKey,
+      experienceKey,
       api_key: apiKey,
       jsLibVersion: LIB_VERSION,
       barKey,
@@ -130,7 +130,7 @@ describe('querying and responding', () => {
   describe('queryUniversal', () => {
     const expectedUrl = `${baseUrl}/answers/autocomplete`;
     const expectedData = {
-      answersKey,
+      experienceKey,
       api_key: apiKey,
       jsLibVersion: LIB_VERSION,
       input,
