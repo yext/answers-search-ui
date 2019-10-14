@@ -52,37 +52,43 @@ export default class ResultFactory {
   /**
    * Applies field formatters to Knowledge Manager Entity Profile Data
    *
-   * @param data Entity Profile Data
+   * @param entityProfileData Entity Profile Data
    * @param formatters Developer specified Field Formatters
    * @param verticalId Identifier for Vertical
    * @param highlightedFields KM specified highlighting instructions to highlight certain Fields
    * @returns {Object} Subset of Entity Profile Data Fields with field formatters applied
    */
-  static getFormattedData (data, formatters, verticalId, highlightedFields) {
+  static getFormattedData (entityProfileData, formatters, verticalId, highlightedFields) {
+    // if no field formatters specified, nothing to format
+    if (Object.keys(formatters).length === 0) {
+      return {};
+    }
+
     const formattedData = {};
 
-    if (Object.keys(formatters).length > 0) {
-      Object.entries(data).forEach(([fieldName, fieldVal]) => {
-        if (formatters[fieldName]) {
-          let highlightedFieldObject = ResultFactory.getHighlightedData(data, highlightedFields);
+    Object.entries(entityProfileData).forEach(([fieldName, fieldVal]) => {
+      // check if a field formatter function exists for the current entity profile field
+      if (formatters[fieldName] === undefined || typeof formatters[fieldName] !== 'function') {
+        return;
+      }
 
-          let highlightedFieldVal = null;
-          if (highlightedFieldObject && highlightedFieldObject[fieldName]) {
-            highlightedFieldVal = highlightedFieldObject[fieldName];
-          }
+      let highlightedFieldObject = ResultFactory.getHighlightedData(entityProfileData, highlightedFields);
 
-          let fieldFormatterInputParams = {
-            entityProfileData: data,
-            entityFieldValue: fieldVal,
-            highlightedEntityFieldValue: highlightedFieldVal,
-            verticalId: verticalId,
-            isDirectAnswer: false
-          };
+      let highlightedFieldVal = null;
+      if (highlightedFieldObject && highlightedFieldObject[fieldName]) {
+        highlightedFieldVal = highlightedFieldObject[fieldName];
+      }
 
-          formattedData[fieldName] = formatters[fieldName](fieldFormatterInputParams);
-        }
-      });
-    }
+      let fieldFormatterInputParams = {
+        entityProfileData: entityProfileData,
+        entityFieldValue: fieldVal,
+        highlightedEntityFieldValue: highlightedFieldVal,
+        verticalId: verticalId,
+        isDirectAnswer: false
+      };
+
+      formattedData[fieldName] = formatters[fieldName](fieldFormatterInputParams);
+    });
 
     return formattedData;
   }
@@ -91,11 +97,11 @@ export default class ResultFactory {
    * Applies highlighting to substrings within Knowledge Manager Entity Field Values
    * according to highlighting specifiers returned from the Knowledge Manager Search Backend
    *
-   * @param data Entity Profile Data
+   * @param entityProfileData Entity Profile Data
    * @param highlightedFields KM specified highlighting instructions to highlight certain Fields
    * @returns {Object} Subset of Entity Profile Data Fields with highlighting applied
    */
-  static getHighlightedData (data, highlightedFields) {
+  static getHighlightedData (entityProfileData, highlightedFields) {
     // if no highlighted fields specified, nothing to highlight
     if (Object.keys(highlightedFields).length === 0) {
       return {};
@@ -106,7 +112,7 @@ export default class ResultFactory {
     // iterate through entity fields that have highlighting instructions
     Object.entries(highlightedFields).forEach(([highlightedFieldName]) => {
       // verify that the highlighted field name corresponds to an existing entity profile field
-      if (data[highlightedFieldName] === undefined) {
+      if (entityProfileData[highlightedFieldName] === undefined) {
         return;
       }
 
@@ -118,10 +124,10 @@ export default class ResultFactory {
           highlightedField['matchedSubstrings'] === undefined) {
         // recurse to children fields
         highlightedData[highlightedFieldName] = ResultFactory.getHighlightedData(
-          data[highlightedFieldName],
+          entityProfileData[highlightedFieldName],
           highlightedFields[highlightedFieldName]);
       } else {
-        let highlightedDataValue = new HighlightedValue(data).buildHighlightedValue(
+        let highlightedDataValue = new HighlightedValue(entityProfileData).buildHighlightedValue(
           highlightedField.value,
           highlightedField.matchedSubstrings);
         highlightedData[highlightedFieldName] = highlightedDataValue;
