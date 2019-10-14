@@ -169,7 +169,7 @@ export default class GeoLocationComponent extends Component {
     }
 
     this._autocomplete = this.componentManager.create('AutoComplete', {
-      parent: this,
+      parentContainer: this._container,
       name: `${this.name}.autocomplete`,
       isFilterSearch: true,
       container: '.js-yxt-GeoLocationFilter-autocomplete',

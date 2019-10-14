@@ -286,7 +286,7 @@ export default class SearchComponent extends Component {
     }
 
     this._autocomplete = this.componentManager.create('AutoComplete', {
-      parent: this,
+      parentContainer: this._container,
       name: `${this.name}.autocomplete`,
       container: '.yxt-SearchBar-autocomplete',
       barKey: this._barKey,

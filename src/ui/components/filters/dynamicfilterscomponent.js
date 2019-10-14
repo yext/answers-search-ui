@@ -87,7 +87,7 @@ export default class DynamicFiltersComponent extends Component {
     this._filterbox = this.componentManager.create(
       'FilterBox',
       Object.assign({}, {
-        parent: this,
+        parentContainer: this._container,
         name: `${this.name}.filterbox`,
         container: '.js-yext-dynamic-filters',
         searchOnChange: this._searchOnChange,

@@ -16,12 +16,23 @@ import { AnswersComponentError } from '../../core/errors/errors';
  * mounted, created, etc.
  */
 export default class Component {
-  constructor (type, config = {}) {
+  constructor (type, config = {}, systemConfig = {}) {
     // Simple facade pattern to enable the user to pass a single object
     // containing all the necessary options and settings
     if (typeof type === 'object') {
       config = type;
       type = config.type;
+    }
+
+    if (Object.keys(systemConfig).length === 0) {
+      systemConfig = {
+        core: config.core,
+        componentManager: config.componentManager,
+        renderer: config.renderer,
+        analyticsReporter: config.analyticsReporter
+      };
+
+      this.removeSystemConfig(config);
     }
 
     this.moduleId = null;
@@ -50,7 +61,7 @@ export default class Component {
      * A local reference to the parent component, if exists
      * @type {Component}
      */
-    this._parent = config.parent || null;
+    this._parentContainer = config.parentContainer || null;
 
     /**
      * A container for all the child components
@@ -67,20 +78,20 @@ export default class Component {
     /**
      * TODO(billy) This should be 'services'
      */
-    this.core = config.core || null;
+    this.core = systemConfig.core || null;
 
     /**
      * A local reference to the component manager, which contains all of the component classes
      * eligible to be created
      * @type {ComponentManager}
      */
-    this.componentManager = config.componentManager || null;
+    this.componentManager = systemConfig.componentManager || null;
 
     /**
      * A local reference to the analytics reporter, used to report events for this component
      * @type {AnalyticsReporter}
      */
-    this.analyticsReporter = config.analyticsReporter || null;
+    this.analyticsReporter = systemConfig.analyticsReporter || null;
 
     /**
      * Options to include with all analytic events sent by this component
@@ -93,13 +104,13 @@ export default class Component {
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
      * @type {HTMLElement}
      */
-    if (this._parent === null) {
+    if (this._parentContainer === null) {
       if (typeof config.container !== 'string') {
         throw new Error('Missing `container` option for component configuration. Must be of type `string`.');
       }
       this._container = DOM.query(config.container) || null;
     } else {
-      this._container = DOM.query(this._parent._container, config.container);
+      this._container = DOM.query(this._parentContainer, config.container);
 
       // If we have a parent, and the container is missing from the DOM,
       // we construct the container and append it to the parent
@@ -107,7 +118,7 @@ export default class Component {
         this._container = DOM.createEl('div', {
           class: config.container.substring(1, config.container.length)
         });
-        DOM.append(this._parent._container, this._container);
+        DOM.append(this._parentContainer, this._container);
       }
     }
 
@@ -131,7 +142,7 @@ export default class Component {
      * A local reference to the default {Renderer} that will be used for rendering the template
      * @type {Renderer}
      */
-    this._renderer = config.renderer || Renderers.Handlebars;
+    this._renderer = systemConfig.renderer || Renderers.Handlebars;
 
     /**
      * The template string to use for rendering the component
@@ -271,7 +282,7 @@ export default class Component {
       type,
       Object.assign({
         name: data.name,
-        parent: this,
+        parentContainer: this._container,
         data: data
       }, opts || {}, {
         _parentOpts: this._config
@@ -374,13 +385,7 @@ export default class Component {
     this.beforeRender();
     // Temporary fix for passing immutable data to transformData().
     // Excluding fields to avoid circular reference.
-    data = this.transformData(JSON.parse(JSON.stringify(data, (key, value) => {
-      let excludedFields = ['componentManager', 'core', 'renderer', 'analyticsReporter', 'parent'];
-      if (excludedFields.includes(key)) {
-        return undefined;
-      }
-      return value;
-    })));
+    data = this.transformData(JSON.parse(JSON.stringify(data)));
 
     let html = '';
     // Use either the custom render function or the internal renderer
@@ -404,6 +409,13 @@ export default class Component {
 
     this.afterRender();
     return el.innerHTML;
+  }
+
+  removeSystemConfig (config) {
+    let excludedFields = ['componentManager', 'core', 'renderer', 'analyticsReporter'];
+    excludedFields.map((field) => {
+      delete config[field];
+    });
   }
 
   _createSubcomponent (domComponent, data) {

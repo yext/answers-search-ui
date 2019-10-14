@@ -150,7 +150,7 @@ export default class AutoCompleteComponent extends Component {
    */
   onCreate () {
     // Use the context of the parent component to find the input node.
-    let queryInput = DOM.query(this._parent._container, this._inputEl);
+    let queryInput = DOM.query(this._parentContainer, this._inputEl);
     if (!queryInput) {
       throw new Error('Could not initialize AutoComplete. Can not find {HTMLElement} `', this._inputEl, '`.');
     }
@@ -241,7 +241,7 @@ export default class AutoCompleteComponent extends Component {
       optValue = results[this._resultIndex].shortValue;
     }
 
-    let queryEl = DOM.query(this._parent._container, this._inputEl);
+    let queryEl = DOM.query(this._parentContainer, this._inputEl);
     queryEl.value = optValue;
   }
 
