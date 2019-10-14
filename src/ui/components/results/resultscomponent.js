@@ -96,6 +96,7 @@ export default class ResultsComponent extends Component {
       if (!this._verticalKey) {
         throw new AnswersComponentError('showOnLoad requires a verticalKey');
       }
+      this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, 'onLoad');
       this.core.verticalSearch(this._verticalKey, { input: '' });
     }
   }

@@ -135,7 +135,7 @@ export default class Core {
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger')
+        queryTrigger: this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -158,7 +158,7 @@ export default class Core {
           this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         }
         this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete('queryTrigger');
+        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
       });
   }
 
@@ -169,7 +169,7 @@ export default class Core {
       .universalSearch(queryString, {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger')
+        queryTrigger: this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
@@ -183,7 +183,7 @@ export default class Core {
         }));
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete('queryTrigger');
+        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
       });
   }
 
