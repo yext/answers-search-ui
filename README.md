@@ -43,7 +43,7 @@ Adding the Javascript library
 function initAnswers() {
   ANSWERS.init({
     apiKey: '<API_KEY_HERE>',
-    answersKey: '<ANSWERS_KEY_HERE>',
+    experienceKey: '<EXPERIENCE_KEY_HERE>',
     onReady: function() {
       // Component creation logic here
     }
@@ -57,7 +57,7 @@ Below is a list of configuration options that can be used during initialization.
 |  option   | type       | description                               | required      |
 |-----------|------------|-------------------------------------------|---------------|
 | apiKey       | string     | Your API key                              | required      |
-| answersKey   | string     | The key used for your answers project     | required      |
+| experienceKey   | string     | The key used for your answers experience     | required      |
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | onStateChange | function | Invoked when the public sate changes | not required |
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | not required  |
@@ -162,7 +162,7 @@ You can format specific entity fields using `fieldFormatters`. These formatters 
 ```js
 ANSWERS.init({
   apiKey: '<API_KEY_HERE>',
-  answersKey: '<ANSWERS_KEY_HERE>',
+  experienceKey: '<EXPERIENCE_KEY_HERE>',
   fieldFormatters: {
     'name': (fieldValue, entityData, verticalId, isDirectAnswer) => fieldValue.toUpperCase()
   }

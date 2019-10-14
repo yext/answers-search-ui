@@ -25,10 +25,10 @@ export default class AutoCompleteApi {
      * @type {string}
      * @private
      */
-    if (!config.answersKey) {
+    if (!config.experienceKey) {
       throw new AnswersBasicError('Answers Key is required', 'AutoComplete');
     }
-    this._answersKey = config.answersKey;
+    this._experienceKey = config.experienceKey;
 
     /**
      * The version of the API to make a request to
@@ -70,7 +70,7 @@ export default class AutoCompleteApi {
       version: this._version,
       params: {
         'input': input,
-        'answersKey': this._answersKey,
+        'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'verticalKey': config.verticalKey,
         'inputKey': config.barKey,
@@ -94,7 +94,7 @@ export default class AutoCompleteApi {
       version: this._version,
       params: {
         'input': input,
-        'answersKey': this._answersKey,
+        'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'verticalKey': verticalKey,
         'barKey': barKey,
@@ -117,7 +117,7 @@ export default class AutoCompleteApi {
       version: this._version,
       params: {
         'input': queryString,
-        'answersKey': this._answersKey,
+        'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'locale': this._locale
       }

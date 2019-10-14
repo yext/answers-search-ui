@@ -17,7 +17,7 @@ describe('vertical searching', () => {
     });
     searchApi = new SearchApi({
       apiKey: '1234abcd',
-      answersKey: 'abc123',
+      experienceKey: 'abc123',
       locale: 'en'
     });
   });

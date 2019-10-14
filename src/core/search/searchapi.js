@@ -24,10 +24,10 @@ export default class SearchApi {
      * @type {string}
      * @private
      */
-    if (!config.answersKey) {
+    if (!config.experienceKey) {
       throw new AnswersBasicError('Answers Key is required', 'Search');
     }
-    this._answersKey = config.answersKey;
+    this._experienceKey = config.experienceKey;
 
     /**
      * The answers config version to use for all requests
@@ -80,7 +80,7 @@ export default class SearchApi {
       version: this._version,
       params: {
         'input': input,
-        'answersKey': this._answersKey,
+        'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'filters': filter,
         'facetFilters': facetFilter,
@@ -115,7 +115,7 @@ export default class SearchApi {
       version: this._version,
       params: {
         'input': queryString,
-        'answersKey': this._answersKey,
+        'experienceKey': this._experienceKey,
         'location': params.geolocation ? `${params.geolocation.lat},${params.geolocation.lng}` : null,
         'radius': params.geolocation ? params.geolocation.radius : null,
         'version': this._experienceVersion,

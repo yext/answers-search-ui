@@ -21,8 +21,8 @@ export default class Core {
       throw new Error('Missing required `apiKey`. Type must be {string}');
     }
 
-    if (typeof config.answersKey !== 'string') {
-      throw new Error('Missing required `answersKey`. Type must be {string}');
+    if (typeof config.experienceKey !== 'string') {
+      throw new Error('Missing required `experienceKey`. Type must be {string}');
     }
 
     /**
@@ -37,7 +37,7 @@ export default class Core {
      * @type {string}
      * @private
      */
-    this._answersKey = config.answersKey;
+    this._experienceKey = config.experienceKey;
 
     /**
      * The answers config version to use for all requests
@@ -83,7 +83,7 @@ export default class Core {
      */
     this._searcher = new SearchApi({
       apiKey: this._apiKey,
-      answersKey: this._answersKey,
+      experienceKey: this._experienceKey,
       experienceVersion: this._experienceVersion,
       locale: this._locale
     });
@@ -96,7 +96,7 @@ export default class Core {
      */
     this._autoComplete = new AutoCompleteApi({
       apiKey: this._apiKey,
-      answersKey: this._answersKey,
+      experienceKey: this._experienceKey,
       experienceVersion: this._experienceVersion,
       locale: this._locale
     });
