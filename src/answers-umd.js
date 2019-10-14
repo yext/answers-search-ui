@@ -14,7 +14,7 @@ import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
-import { AnswersComponentError } from './core/errors/errors';
+import { AnswersComponentError, AnswersBaseError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 
 /**
@@ -129,6 +129,20 @@ class Answers {
       this._onReady();
     });
 
+    const printError = e => {
+      if (e.error instanceof AnswersBaseError) {
+        console.error(e.error.toString());
+        if (config.debug) {
+          console.log({ ...e.error });
+        }
+      }
+    };
+
+    // Print detailed error messages
+    window.addEventListener('error', printError);
+    window.addEventListener('unhandledrejection', printError);
+
+    // Report errors to server
     if (!config.suppressErrorReports) {
       this._errorReporter = new ErrorReporter(config.apiKey, config.experienceKey, config.experienceVersion);
       window.addEventListener('error', e => this._errorReporter.report(e.error));

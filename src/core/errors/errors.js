@@ -30,6 +30,14 @@ export class AnswersBaseError extends Error {
     return JSON.stringify(this);
   }
 
+  toString () {
+    let string = `${this.errorMessage} (${this.boundary})`;
+    if (this.causedBy) {
+      string += `\n  Caused By: ${this.causedBy.toString()}`;
+    }
+    return string;
+  }
+
   static from (builtinError, boundary) {
     const error = new AnswersBasicError(builtinError.message, boundary);
     error.stack = builtinError.stack;
