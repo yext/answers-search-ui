@@ -129,25 +129,16 @@ class Answers {
       this._onReady();
     });
 
-    const printError = e => {
-      if (e.error instanceof AnswersBaseError) {
-        console.error(e.error.toString());
-        if (config.debug) {
-          console.log({ ...e.error });
-        }
-      }
-    };
-
-    // Print detailed error messages
-    window.addEventListener('error', printError);
-    window.addEventListener('unhandledrejection', printError);
-
-    // Report errors to server
-    if (!config.suppressErrorReports) {
-      this._errorReporter = new ErrorReporter(config.apiKey, config.experienceKey, config.experienceVersion);
-      window.addEventListener('error', e => this._errorReporter.report(e.error));
-      window.addEventListener('unhandledrejection', e => this._errorReporter.report(e.error));
-    }
+    // Report errors to console & server
+    this._errorReporter = new ErrorReporter({
+      apiKey: config.apiKey,
+      experienceKey: config.experienceKey,
+      experienceVersion: config.experienceVersion,
+      printVerbose: config.debug,
+      sendToServer: !config.suppressErrorReports
+    });
+    window.addEventListener('error', e => this._errorReporter.report(e.error));
+    window.addEventListener('unhandledrejection', e => this._errorReporter.report(e.error));
 
     return this;
   }
