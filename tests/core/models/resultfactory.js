@@ -1,4 +1,5 @@
 import ResultFactory from '../../../src/core/models/resultfactory';
+import { AnswersCoreError } from '../../../src/core/errors/errors';
 
 describe('truncating a long description', () => {
   it('returns the string if it is less than the limit', () => {
@@ -16,6 +17,34 @@ describe('truncating a long description', () => {
 });
 
 describe('formatting data', () => {
+  it('invalid field formatter throws exception', () => {
+    const data = [{
+      data: {
+        name: 'Test',
+        description: 'Result description'
+      }
+    }];
+
+    // this is a valid field formatter
+    let nameFormatter = formatterParams => {
+      return formatterParams.entityFieldValue.toUpperCase();
+    };
+
+    // this is an invalid field formatter since it is an object instead of a function
+    let invalidDescriptionFormatter = {
+      description: 'make it this value'
+    };
+
+    const formatters = {
+      'name': nameFormatter,
+      'description': invalidDescriptionFormatter
+    };
+
+    expect(() => {
+      ResultFactory.from(data, formatters, null, 'KNOWLEDGE_MANAGER');
+    }).toThrow(AnswersCoreError);
+  });
+
   it('doesn\'t format anything with empty formatters', () => {
     const data = [{
       data: {
@@ -81,8 +110,31 @@ describe('highlighting data', () => {
     }
   };
 
+  it('highlighting a field name that does not exist in entity profile throws exception', () => {
+    const highlightedFields = {
+      name: {
+        matchedSubstrings: [{
+          length: 3,
+          offset: 0
+        }],
+        value: 'ATM'
+      },
+      thisFieldDoesNotExist: {
+        matchedSubstrings: [{
+          length: 3,
+          offset: 0
+        }],
+        value: 'ATM'
+      }
+    };
+
+    expect(() => {
+      ResultFactory.computeHighlightedData(data, highlightedFields);
+    }).toThrow(AnswersCoreError);
+  });
+
   it('highlighted data should be empty when no highlighted fields specified', () => {
-    const highlightedData = ResultFactory.getHighlightedData(data, {});
+    const highlightedData = ResultFactory.computeHighlightedData(data, {});
     expect(highlightedData).toEqual({});
   });
 
@@ -97,7 +149,7 @@ describe('highlighting data', () => {
       }
     };
 
-    const outputHighlightedData = ResultFactory.getHighlightedData(data, highlightedFields);
+    const outputHighlightedData = ResultFactory.computeHighlightedData(data, highlightedFields);
 
     expect(outputHighlightedData).toEqual({
       name: '<strong>ATM</strong>'
@@ -117,7 +169,7 @@ describe('highlighting data', () => {
       }
     };
 
-    const outputHighlightedData = ResultFactory.getHighlightedData(data, highlightedFields);
+    const outputHighlightedData = ResultFactory.computeHighlightedData(data, highlightedFields);
 
     expect(outputHighlightedData).toEqual({
       featuredMessage: {
@@ -148,7 +200,7 @@ describe('highlighting data', () => {
       }
     };
 
-    const outputHighlightedData = ResultFactory.getHighlightedData(data, highlightedFields);
+    const outputHighlightedData = ResultFactory.computeHighlightedData(data, highlightedFields);
 
     expect(outputHighlightedData).toEqual({
       parentLevel1: {
