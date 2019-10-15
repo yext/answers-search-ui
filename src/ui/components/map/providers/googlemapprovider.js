@@ -24,6 +24,7 @@ export default class GoogleMapProvider extends MapProvider {
 
   loadJS (onLoad) {
     if (DOM.query('#yext-map-js')) {
+      this._isLoaded = true;
       if (typeof onLoad === 'function') {
         onLoad();
       }
