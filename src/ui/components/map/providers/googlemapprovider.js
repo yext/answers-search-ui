@@ -37,7 +37,7 @@ export default class GoogleMapProvider extends MapProvider {
         this._onLoaded();
       },
       async: true,
-      src: `http://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
+      src: `https://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
     });
 
     DOM.append('body', script);
