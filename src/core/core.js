@@ -126,6 +126,7 @@ export default class Core {
   verticalSearch (verticalKey, query) {
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
     }
 
     return this._searcher
@@ -164,6 +165,7 @@ export default class Core {
 
   search (queryString, urls) {
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
 
     return this._searcher
       .universalSearch(queryString, {
