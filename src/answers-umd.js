@@ -14,7 +14,7 @@ import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
-import { AnswersComponentError, AnswersBaseError } from './core/errors/errors';
+import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 
 /**
