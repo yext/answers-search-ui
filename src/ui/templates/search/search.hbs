@@ -6,15 +6,17 @@
     <form class="yxt-SearchBar-form">
       <label class="yxt-SearchBar-label" for="query">{{labelText}}</label>
       {{!// TODO (bmcginnis): migrate js class names}}
-      <input class="js-yext-query yxt-SearchBar-input" type="text" name="query" value="{{query}}">
-      <button
-        type="button"
-        class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
-        data-eventtype="SEARCH_CLEAR_BUTTON"
-        data-component="IconComponent"
-        data-opts='{ "iconName": "close" }'
-        data-prop="icon"
-      >
+      <input class="js-yext-query yxt-SearchBar-input"
+             type="text"
+             name="query"
+             value="{{query}}"
+             {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}>
+      <button type="button"
+              class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
+              data-eventtype="SEARCH_CLEAR_BUTTON"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "close" }'
+              data-prop="icon">
       </button>
       <button type="submit" class="js-yext-submit yxt-SearchBar-button">
         <div class="yxt-SearchBar-buttonImage"
