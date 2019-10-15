@@ -2,6 +2,7 @@
 
 import Result from './result';
 import HighlightedValue from './highlightedvalue';
+import { AnswersCoreError } from '../errors/errors';
 
 export default class ResultFactory {
   /**
@@ -35,7 +36,7 @@ export default class ResultFactory {
           break;
         case 'KNOWLEDGE_MANAGER':
           const highlightedFields = resultsData[i].highlightedFields || {};
-          const formattedData = ResultFactory.getFormattedData(
+          const formattedData = ResultFactory.computeFormattedData(
             data, formatters, verticalId, highlightedFields);
 
           results.push(ResultFactory.fromKnowledgeManager(
@@ -52,13 +53,13 @@ export default class ResultFactory {
   /**
    * Applies field formatters to Knowledge Manager Entity Profile Data
    *
-   * @param entityProfileData Entity Profile Data
-   * @param formatters Developer specified Field Formatters
-   * @param verticalId Identifier for Vertical
-   * @param highlightedFields KM specified highlighting instructions to highlight certain Fields
+   * @param {Object} entityProfileData Entity Profile Data
+   * @param {Object} formatters Developer specified Field Formatters
+   * @param {string} verticalId Identifier for Vertical
+   * @param {Object} highlightedFields KM specified highlighting instructions to highlight certain Fields
    * @returns {Object} Subset of Entity Profile Data Fields with field formatters applied
    */
-  static getFormattedData (entityProfileData, formatters, verticalId, highlightedFields) {
+  static computeFormattedData (entityProfileData, formatters, verticalId, highlightedFields) {
     // if no field formatters specified, nothing to format
     if (Object.keys(formatters).length === 0) {
       return {};
@@ -67,27 +68,31 @@ export default class ResultFactory {
     const formattedData = {};
 
     Object.entries(entityProfileData).forEach(([fieldName, fieldVal]) => {
-      // check if a field formatter function exists for the current entity profile field
-      if (formatters[fieldName] === undefined || typeof formatters[fieldName] !== 'function') {
+      // check if a field formatter exists for the current entity profile field
+      if (formatters[fieldName] === undefined) {
         return;
       }
+      // verify the field formatter provided is a formatter function as expected
+      if (typeof formatters[fieldName] !== 'function') {
+        throw new AnswersCoreError('Field Formatter is not of expected type', 'ResultFactory');
+      }
 
-      let highlightedFieldObject = ResultFactory.getHighlightedData(entityProfileData, highlightedFields);
+      let highlightedFieldObject = ResultFactory.computeHighlightedData(entityProfileData, highlightedFields);
 
       let highlightedFieldVal = null;
       if (highlightedFieldObject && highlightedFieldObject[fieldName]) {
         highlightedFieldVal = highlightedFieldObject[fieldName];
       }
 
-      let fieldFormatterInputParams = {
+      // call formatter function associated with the field name
+      // the input object defines the interface that field formatter functions work with
+      formattedData[fieldName] = formatters[fieldName]({
         entityProfileData: entityProfileData,
         entityFieldValue: fieldVal,
         highlightedEntityFieldValue: highlightedFieldVal,
         verticalId: verticalId,
         isDirectAnswer: false
-      };
-
-      formattedData[fieldName] = formatters[fieldName](fieldFormatterInputParams);
+      });
     });
 
     return formattedData;
@@ -97,11 +102,11 @@ export default class ResultFactory {
    * Applies highlighting to substrings within Knowledge Manager Entity Field Values
    * according to highlighting specifiers returned from the Knowledge Manager Search Backend
    *
-   * @param entityProfileData Entity Profile Data
-   * @param highlightedFields KM specified highlighting instructions to highlight certain Fields
+   * @param {Object} entityProfileData Entity Profile Data
+   * @param {Object} highlightedFields KM specified highlighting instructions to highlight certain Fields
    * @returns {Object} Subset of Entity Profile Data Fields with highlighting applied
    */
-  static getHighlightedData (entityProfileData, highlightedFields) {
+  static computeHighlightedData (entityProfileData, highlightedFields) {
     // if no highlighted fields specified, nothing to highlight
     if (Object.keys(highlightedFields).length === 0) {
       return {};
@@ -113,7 +118,7 @@ export default class ResultFactory {
     Object.entries(highlightedFields).forEach(([highlightedFieldName]) => {
       // verify that the highlighted field name corresponds to an existing entity profile field
       if (entityProfileData[highlightedFieldName] === undefined) {
-        return;
+        throw new AnswersCoreError('Highlighted Field Name does not exist in Entity Profile', 'ResultFactory');
       }
 
       let highlightedField = highlightedFields[highlightedFieldName];
@@ -123,7 +128,7 @@ export default class ResultFactory {
           Object.keys(highlightedField).length > 0 &&
           highlightedField['matchedSubstrings'] === undefined) {
         // recurse to children fields
-        highlightedData[highlightedFieldName] = ResultFactory.getHighlightedData(
+        highlightedData[highlightedFieldName] = ResultFactory.computeHighlightedData(
           entityProfileData[highlightedFieldName],
           highlightedFields[highlightedFieldName]);
       } else {
@@ -139,8 +144,8 @@ export default class ResultFactory {
 
   /**
    * Converts an API result object into a generic result view model.
-   * @param data
-   * @param index
+   * @param {Object} data
+   * @param {number} index
    * @returns {Result}
    */
   static fromGeneric (data, index) {
@@ -156,17 +161,17 @@ export default class ResultFactory {
 
   /**
    * Converts an API result object into a Knowledge Manager result view model.
-   * @param data
-   * @param formattedData
-   * @param highlightedFields
-   * @param index
+   * @param {Object} data
+   * @param {Object} formattedData
+   * @param {Object} highlightedFields
+   * @param {number} index
    * @returns {Result}
    */
   static fromKnowledgeManager (data, formattedData, highlightedFields, index) {
     return new Result({
       raw: data,
       formatted: formattedData,
-      highlighted: ResultFactory.getHighlightedData(data, highlightedFields),
+      highlighted: ResultFactory.computeHighlightedData(data, highlightedFields),
       title: formattedData.name || data.name,
       details: formattedData.description || this.truncate(data.description),
       link: data.website,
@@ -178,7 +183,7 @@ export default class ResultFactory {
   /**
    * Converts an API result object into a result view model.
    * Maps view model fields based on the API data for a Google Custom Search Engine object.
-   * @param data
+   * @param {Object} data
    * @returns {Result}
    */
   static fromGoogleCustomSearchEngine (data) {
@@ -193,7 +198,7 @@ export default class ResultFactory {
   /**
    * Converts an API result object into a result view model.
    * Maps view model fields based on the API data for a Bing Custom Search Engine object.
-   * @param data
+   * @param {Object} data
    * @returns {Result}
    */
   static fromBingCustomSearchEngine (data) {
@@ -208,7 +213,7 @@ export default class ResultFactory {
   /**
    * Converts an API result object into a result view model.
    * Maps view model fields based on the API data for a Zendesk Search Engine object.
-   * @param data
+   * @param {Object} data
    * @returns {Result}
    */
   static fromZendeskSearchEngine (data) {
@@ -224,7 +229,7 @@ export default class ResultFactory {
    * Converts an API result object into a result view model.
    * Maps view model fields based on the API data for a Algolia Search Engine object.
    * Details field is set to objectID since response has only one general field objectID.
-   * @param data
+   * @param {Object} data
    * @returns {Result}
    */
   static fromAlgoliaSearchEngine (data) {
