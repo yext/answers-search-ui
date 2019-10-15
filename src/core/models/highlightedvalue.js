@@ -31,7 +31,7 @@ export default class HighlightedValue {
   /**
    * introduces highlighting to input data according to highlighting specifiers
    *
-   * @param val input object to apply highlighting to
+   * @param {Object} val input object to apply highlighting to
    *
    *  example object :
    *  {
@@ -41,7 +41,7 @@ export default class HighlightedValue {
    *    }
    *  }
    *
-   * @param highlightedSubstrings highlighting specifiers to apply to input object
+   * @param {Object} highlightedSubstrings highlighting specifiers to apply to input object
    *
    *  example object :
    *  {
