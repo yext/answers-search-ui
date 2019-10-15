@@ -16,18 +16,6 @@ export default class MapProvider {
     this._apiKey = config.apiKey;
 
     /**
-     * The height of the map to append to the DOM, defaults to 100%
-     * @type {number}
-     */
-    this._height = config.height || null;
-
-    /**
-     * The width of the map to append to the DOM, defaults to 100%
-     * @type {number}
-     */
-    this._width = config.width || null;
-
-    /**
      * The zoom level of the map, defaults to 9
      * @type {number}
      */

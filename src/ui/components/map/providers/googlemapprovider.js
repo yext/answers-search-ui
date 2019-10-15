@@ -64,11 +64,6 @@ export default class GoogleMapProvider extends MapProvider {
     // Only here for demo purposes, so we'll fix later.
     setTimeout(() => {
       let container = DOM.query(el);
-      DOM.css(container, {
-        width: this._width || '100%',
-        height: this._height || '100%'
-      });
-
       this.map = new google.maps.Map(container, {
         zoom: this._zoom
       });
