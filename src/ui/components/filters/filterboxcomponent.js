@@ -13,8 +13,8 @@ import Facet from '../../../core/models/facet';
  * @extends Component
  */
 export default class FilterBoxComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     if (!config.filters || !(config.filters instanceof Array)) {
       throw new AnswersComponentError(

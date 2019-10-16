@@ -87,8 +87,8 @@ const DEFAULT_CONFIG = {
  * @extends Component
  */
 export default class GeoLocationComponent extends Component {
-  constructor (config = {}) {
-    super({ ...DEFAULT_CONFIG, ...config });
+  constructor (config = {}, systemConfig = {}) {
+    super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     /**
      * The query string to use for the input box, provided to template for rendering.

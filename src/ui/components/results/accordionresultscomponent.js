@@ -4,8 +4,8 @@ import DOM from '../../dom/dom';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
 export default class AccordionResultsComponent extends ResultsComponent {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * base selector to use when finding DOM targets

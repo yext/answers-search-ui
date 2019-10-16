@@ -5,8 +5,8 @@ import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 
 export default class RangeFilterComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * The field to filter on

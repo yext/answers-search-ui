@@ -25,8 +25,8 @@ const Keys = {
 };
 
 export default class AutoCompleteComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (opts = {}, systemOpts = {}) {
+    super(opts, systemOpts);
 
     /**
      * Whether autocomplete is simple or filter

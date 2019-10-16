@@ -16,24 +16,7 @@ import { AnswersComponentError } from '../../core/errors/errors';
  * mounted, created, etc.
  */
 export default class Component {
-  constructor (type, config = {}, systemConfig = {}) {
-    // Simple facade pattern to enable the user to pass a single object
-    // containing all the necessary options and settings
-    if (typeof type === 'object') {
-      config = type;
-      type = config.type;
-    }
-
-    if (Object.keys(systemConfig).length === 0) {
-      systemConfig = {
-        core: config.core,
-        componentManager: config.componentManager,
-        renderer: config.renderer,
-        analyticsReporter: config.analyticsReporter
-      };
-
-      this.removeSystemConfig(config);
-    }
+  constructor (config = {}, systemConfig = {}) {
 
     this.moduleId = null;
 
@@ -384,7 +367,6 @@ export default class Component {
   render (data = this._state.get()) {
     this.beforeRender();
     // Temporary fix for passing immutable data to transformData().
-    // Excluding fields to avoid circular reference.
     data = this.transformData(JSON.parse(JSON.stringify(data)));
 
     let html = '';
@@ -409,13 +391,6 @@ export default class Component {
 
     this.afterRender();
     return el.innerHTML;
-  }
-
-  removeSystemConfig (config) {
-    let excludedFields = ['componentManager', 'core', 'renderer', 'analyticsReporter'];
-    excludedFields.map((field) => {
-      delete config[field];
-    });
   }
 
   _createSubcomponent (domComponent, data) {

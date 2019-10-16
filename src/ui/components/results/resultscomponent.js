@@ -18,8 +18,8 @@ const ResultType = {
 };
 
 export default class ResultsComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * verticalConfigId used for analytics and passed to children

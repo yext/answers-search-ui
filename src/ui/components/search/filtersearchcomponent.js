@@ -14,8 +14,8 @@ import SearchParams from '../../dom/searchparams';
  * @extends Component
  */
 export default class FilterSearchComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * The input key for the vertical search configuration
