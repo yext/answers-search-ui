@@ -1,0 +1,10 @@
+{
+  "answersKey": "deepakyextanswersconfig",
+  "mapProvider": "mapbox",
+  "verticals": {
+    "offices": {
+      "map": true
+    },
+    "jobs": {}
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "answersKey": "deepakyextanswersconfig",
+  "mapProvider": "mapbox",
+  "verticals": {
+    "leadership": {
+      "filters": [
+        {
+          "type": "FilterOptions",
+          "control": "singleoption",
+          "title": "University",
+          "options": [
+            {
+              "label": "Cornell",
+              "field": "c_education.institutionName",
+              "value": "Cornell"
+            },
+            {
+              "label": "Duke",
+              "field": "c_education.institutionName",
+              "value": "Duke"
+            },
+            {
+              "label": "Princeton",
+              "field": "c_education.institutionName",
+              "value": "Princeton"
+            }
+          ]
+        },
+        {
+          "type": "FilterOptions",
+          "control": "multioption",
+          "title": "Title",
+          "options": [
+            {
+              "label": "Chief Executive Officer",
+              "field": "c_title",
+              "value": "CEO & Founder"
+            },
+            {
+              "label": "Chief Revenue Officer",
+              "field": "c_title",
+              "value": "President & Chief Revenue Officer"
+            },
+            {
+              "label": "Chief Technology Officer",
+              "field": "c_title",
+              "value": "Chief Technology Officer"
+            }
+          ]
+        }
+      ]
+    },
+    "offices": {
+      "map": true
+    },
+    "jobs": {}
+  }
+}
