@@ -51,7 +51,9 @@ beforeEach(() => {
 
   // Finally construct our component
   component = new Component({
-    container: '.test-component',
+    container: '.test-component'
+  },
+  {
     renderer: RENDERER,
     componentManager: COMPONENT_MANAGER,
     analyticsReporter: { report: reportMock }
@@ -148,10 +150,12 @@ describe('attaching analytics events', () => {
   it('reports analyticsOptions provided to the component', () => {
     component = new Component({
       container: '.test-component',
+      analyticsOptions: { testOption: 'test' }
+    },
+    {
       renderer: RENDERER,
       componentManager: COMPONENT_MANAGER,
-      analyticsReporter: { report: reportMock },
-      analyticsOptions: { testOption: 'test' }
+      analyticsReporter: { report: reportMock }
     });
 
     const template = `<div data-eventtype="test_event" data-eventoptions='{"name":"{{{name}}}"}'>This is a test template</div>`;

@@ -68,8 +68,8 @@ const DEFAULT_CONFIG = {
  * to submit questions that they cant find the answer for.
  */
 export default class QuestionSubmissionComponent extends Component {
-  constructor (config = {}) {
-    super(Object.assign({}, DEFAULT_CONFIG, config));
+  constructor (config = {}, systemConfig = {}) {
+    super(Object.assign({}, DEFAULT_CONFIG, config), systemConfig);
 
     /**
      * Reference to the storage model

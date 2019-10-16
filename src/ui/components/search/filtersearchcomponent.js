@@ -14,8 +14,8 @@ import SearchParams from '../../dom/searchparams';
  * @extends Component
  */
 export default class FilterSearchComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * The input key for the vertical search configuration
@@ -153,7 +153,7 @@ export default class FilterSearchComponent extends Component {
     this._inputEl = inputSelector;
 
     this.componentManager.create('AutoComplete', {
-      parent: this,
+      parentContainer: this._container,
       name: `${this.name}.autocomplete`,
       isFilterSearch: true,
       container: '.yxt-SearchBar-autocomplete',

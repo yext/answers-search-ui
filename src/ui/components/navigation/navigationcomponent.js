@@ -101,8 +101,8 @@ export class Tab {
  * @extends Component
  */
 export default class NavigationComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * The label to show on the dropdown menu button
