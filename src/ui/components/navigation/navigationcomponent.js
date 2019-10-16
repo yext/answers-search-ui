@@ -195,6 +195,8 @@ export default class NavigationComponent extends Component {
       : container.offsetWidth - moreButton.offsetWidth;
     let numBreakpoints = this._navBreakpoints.length;
 
+    // sum child widths instead of using parent's width to avoid
+    // browser inconsistencies
     let mainLinksWidth = 0;
     for (let el of mainLinks.children) {
       mainLinksWidth += el.offsetWidth;
