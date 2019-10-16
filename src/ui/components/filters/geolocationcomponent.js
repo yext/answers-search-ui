@@ -200,7 +200,8 @@ export default class GeoLocationComponent extends Component {
       this.setState({ geoLoading: true });
       navigator.geolocation.getCurrentPosition(
         position => {
-          this._saveDataToStorage('', position);
+          const filter = this._buildFilter(position);
+          this._saveDataToStorage('', filter, position);
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
@@ -214,19 +215,22 @@ export default class GeoLocationComponent extends Component {
   /**
    * Saves the provided filter under this component's name
    * @param {string} query The query to save
+   * @param {Filter} filter The filter to save
    * @param {Object} position The position to save
    * @private
    */
-  _saveDataToStorage (query, position) {
-    const filter = this._buildFilter(position);
+  _saveDataToStorage (query, filter, position) {
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
     this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
     this.core.setFilter(this.name, filter);
-    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
-      lat: position.coords.latitude,
-      lng: position.coords.longitude,
-      radius: position.coords.accuracy
-    });
+
+    if (position) {
+      this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+        lat: position.coords.latitude,
+        lng: position.coords.longitude,
+        radius: position.coords.accuracy
+      });
+    }
 
     if (this._config.searchOnChange) {
       const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
