@@ -137,8 +137,6 @@ class Answers {
       printVerbose: config.debug,
       sendToServer: !config.suppressErrorReports
     });
-    window.addEventListener('error', e => this._errorReporter.report(e.error));
-    window.addEventListener('unhandledrejection', e => this._errorReporter.report(e.error));
 
     return this;
   }

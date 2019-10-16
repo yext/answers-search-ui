@@ -39,6 +39,10 @@ export default class ErrorReporter {
      * @type {boolean}
      */
     this.sendToServer = config.sendToServer;
+
+    // Attach reporting listeners to window
+    window.addEventListener('error', e => this.report(e.error));
+    window.addEventListener('unhandledrejection', e => this.report(e.error));
   }
 
   /**
