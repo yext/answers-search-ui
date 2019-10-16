@@ -11,8 +11,8 @@ export default class IconComponent extends Component {
    * @param opts.customIcon {string}
    * @param opts.iconUrl {string}
    */
-  constructor (opts = {}) {
-    super(opts);
+  constructor (opts = {}, systemOpts = {}) {
+    super(opts, systemOpts);
 
     /**
      * name of an icon from the default icon set

@@ -13,8 +13,8 @@ const ProviderTypes = {
 };
 
 export default class MapComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (opts = {}, systemOpts = {}) {
+    super(opts, systemOpts);
 
     /**
      * Bind this component to listen to the storage based on this key

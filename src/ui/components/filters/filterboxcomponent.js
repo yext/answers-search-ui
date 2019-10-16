@@ -13,8 +13,8 @@ import Facet from '../../../core/models/facet';
  * @extends Component
  */
 export default class FilterBoxComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     if (!config.filters || !(config.filters instanceof Array)) {
       throw new AnswersComponentError(
@@ -104,7 +104,7 @@ export default class FilterBoxComponent extends Component {
       const component = this.componentManager.create(config.type, Object.assign({},
         config,
         {
-          parent: this,
+          parentContainer: this._container,
           name: `${this.name}.filter${i}`,
           storeOnChange: false,
           container: `.js-yext-filterbox-filter${i}`,

@@ -8,8 +8,8 @@ import StorageKeys from '../../../core/storage/storagekeys';
  * @extends Component
  */
 export default class DynamicFiltersComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * The vertical key for the search
@@ -87,7 +87,7 @@ export default class DynamicFiltersComponent extends Component {
     this._filterbox = this.componentManager.create(
       'FilterBox',
       Object.assign({}, {
-        parent: this,
+        parentContainer: this._container,
         name: `${this.name}.filterbox`,
         container: '.js-yext-dynamic-filters',
         searchOnChange: this._searchOnChange,

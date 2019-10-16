@@ -3,8 +3,8 @@
 import Component from '../component';
 
 export default class ResultsItemComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (opts = {}, systemConfig = {}) {
+    super(opts, systemConfig);
 
     /**
      * verticalConfigId used for analytics and passed to children

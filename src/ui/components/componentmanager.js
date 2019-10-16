@@ -101,12 +101,12 @@ export default class ComponentManager {
     // Every component needs local access to the component manager
     // because sometimes components have subcomponents that need to be
     // constructed during creation
-    opts = Object.assign({
+    let systemOpts = {
       core: this._core,
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,
       componentManager: this
-    }, opts);
+    };
 
     let componentClass = this._componentRegistry[componentType];
 
@@ -121,7 +121,7 @@ export default class ComponentManager {
 
     // Instantiate our new component and keep track of it
     let component =
-      new this._componentRegistry[componentType](opts)
+      new this._componentRegistry[componentType](opts, systemOpts)
         .init(opts);
 
     this._activeComponents.push(component);

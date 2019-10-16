@@ -3,8 +3,8 @@
 import ResultsItemComponent from './resultsitemcomponent';
 
 export default class LocationResultsItemComponent extends ResultsItemComponent {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (opts = {}, systemConfig = {}) {
+    super(opts, systemConfig);
   }
 
   static get type () {
