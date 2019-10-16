@@ -36,11 +36,9 @@ export default class ResultFactory {
           break;
         case 'KNOWLEDGE_MANAGER':
           const highlightedFields = resultsData[i].highlightedFields || {};
-          const formattedData = ResultFactory.computeFormattedData(
-            data, formatters, verticalId, highlightedFields);
 
           results.push(ResultFactory.fromKnowledgeManager(
-            data, formattedData, highlightedFields, i));
+            data, formatters, verticalId, highlightedFields, i));
           break;
         default:
           results.push(ResultFactory.fromGeneric(data, i));
@@ -56,10 +54,10 @@ export default class ResultFactory {
    * @param {Object} entityProfileData Entity Profile Data
    * @param {Object} formatters Developer specified Field Formatters
    * @param {string} verticalId Identifier for Vertical
-   * @param {Object} highlightedFields KM specified highlighting instructions to highlight certain Fields
+   * @param {Object} highlightedEntityProfileData Subset of Entity Profile Data with highlighting applied
    * @returns {Object} Subset of Entity Profile Data Fields with field formatters applied
    */
-  static computeFormattedData (entityProfileData, formatters, verticalId, highlightedFields) {
+  static computeFormattedData (entityProfileData, formatters, verticalId, highlightedEntityProfileData) {
     // if no field formatters specified, nothing to format
     if (Object.keys(formatters).length === 0) {
       return {};
@@ -74,14 +72,13 @@ export default class ResultFactory {
       }
       // verify the field formatter provided is a formatter function as expected
       if (typeof formatters[fieldName] !== 'function') {
-        throw new AnswersCoreError('Field Formatter is not of expected type', 'ResultFactory');
+        throw new AnswersCoreError('Field formatter is not of expected type function', 'ResultFactory');
       }
 
-      let highlightedFieldObject = ResultFactory.computeHighlightedData(entityProfileData, highlightedFields);
-
+      // if highlighted version of field value is available, make it available to field formatter
       let highlightedFieldVal = null;
-      if (highlightedFieldObject && highlightedFieldObject[fieldName]) {
-        highlightedFieldVal = highlightedFieldObject[fieldName];
+      if (highlightedEntityProfileData && highlightedEntityProfileData[fieldName]) {
+        highlightedFieldVal = highlightedEntityProfileData[fieldName];
       }
 
       // call formatter function associated with the field name
@@ -162,18 +159,35 @@ export default class ResultFactory {
   /**
    * Converts an API result object into a Knowledge Manager result view model.
    * @param {Object} data
-   * @param {Object} formattedData
+   * @param {Object} formatters
+   * @param {string} verticalId
    * @param {Object} highlightedFields
    * @param {number} index
    * @returns {Result}
    */
-  static fromKnowledgeManager (data, formattedData, highlightedFields, index) {
+  static fromKnowledgeManager (data, formatters, verticalId, highlightedFields, index) {
+    // compute highlighted entity profile data
+    let highlightedEntityProfileData = ResultFactory.computeHighlightedData(data, highlightedFields);
+    // compute formatted entity profile data
+    const formattedEntityProfileData = ResultFactory.computeFormattedData(
+      data, formatters, verticalId, highlightedEntityProfileData);
+
+    // set result details checking the following in order of priority : formatted, highlighted, raw
+    let resultDetails = null;
+    if (formattedEntityProfileData.description !== undefined) {
+      resultDetails = formattedEntityProfileData.description;
+    } else if (highlightedEntityProfileData.description !== undefined) {
+      resultDetails = this.truncate(highlightedEntityProfileData.description);
+    } else {
+      resultDetails = this.truncate(data.description);
+    }
+
     return new Result({
       raw: data,
-      formatted: formattedData,
-      highlighted: ResultFactory.computeHighlightedData(data, highlightedFields),
-      title: formattedData.name || data.name,
-      details: formattedData.description || this.truncate(data.description),
+      formatted: formattedEntityProfileData,
+      highlighted: highlightedEntityProfileData,
+      title: formattedEntityProfileData.name || data.name,
+      details: resultDetails,
       link: data.website,
       id: data.id,
       ordinal: index + 1

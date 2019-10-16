@@ -212,3 +212,118 @@ describe('highlighting data', () => {
     });
   });
 });
+
+describe('highlighting and formatting data', () => {
+  const data = [{
+    data: {
+      name: 'ATM',
+      description: 'Result description'
+    },
+    highlightedFields: {
+      name: {
+        matchedSubstrings: [{
+          length: 3,
+          offset: 0
+        }],
+        value: 'ATM'
+      }
+    }
+  }];
+
+  it('field formatter works as expected with highlighting specifiers present', () => {
+    let nameFormatter = formatterParams => {
+      return formatterParams.entityFieldValue.toLowerCase();
+    };
+
+    let descriptionFormatter = formatterParams => {
+      // since no highlighter specified for this field, highlightedEntityFieldValue should be null
+      expect(formatterParams.highlightedEntityFieldValue).toBeNull();
+      return formatterParams.entityFieldValue; // do no formatting
+    };
+
+    const formatters = {
+      'name': nameFormatter,
+      'description': descriptionFormatter
+    };
+
+    const results = ResultFactory.from(data, formatters, null, 'KNOWLEDGE_MANAGER');
+    expect(results[0].title).toBe('atm');
+    expect(results[0].details).toBe('Result description');
+    expect(results[0]._formatted).toEqual({
+      name: 'atm',
+      description: 'Result description'
+    });
+    expect(results[0]._highlighted).toEqual({
+      name: '<strong>ATM</strong>'
+    });
+  });
+
+  it('highlighed field value can be used by field formatter', () => {
+    let nameFormatter = formatterParams => {
+      return formatterParams.highlightedEntityFieldValue.toLowerCase();
+    };
+
+    const formatters = {
+      'name': nameFormatter
+    };
+
+    const results = ResultFactory.from(data, formatters, null, 'KNOWLEDGE_MANAGER');
+    expect(results[0].title).toBe('<strong>atm</strong>');
+    expect(results[0].details).toBe('Result description');
+    expect(results[0]._formatted).toEqual({
+      name: '<strong>atm</strong>'
+    });
+  });
+});
+
+describe('result details', () => {
+  const data = [{
+    data: {
+      description: 'Result description'
+    },
+    highlightedFields: {
+      description: {
+        matchedSubstrings: [{
+          length: 11,
+          offset: 7
+        }],
+        value: 'Result description'
+      }
+    }
+  }];
+
+  it('formatted detail should be first priority', () => {
+    let descriptionFormatter = formatterParams => {
+      return formatterParams.entityFieldValue.toLowerCase();
+    };
+
+    const formatters = {
+      'description': descriptionFormatter
+    };
+
+    const results = ResultFactory.from(data, formatters, null, 'KNOWLEDGE_MANAGER');
+
+    expect(results[0].details).toBe('result description');
+  });
+
+  it('highlighted detail should be second priority', () => {
+    const formatters = {};
+
+    const results = ResultFactory.from(data, formatters, null, 'KNOWLEDGE_MANAGER');
+
+    expect(results[0].details).toBe('Result <strong>description</strong>');
+  });
+
+  it('raw detail should be fallback and last priority', () => {
+    const dataWithNoHighlighting = [{
+      data: {
+        description: 'Result description'
+      }
+    }];
+
+    const formatters = {};
+    const results = ResultFactory.from(dataWithNoHighlighting, formatters, null, 'KNOWLEDGE_MANAGER');
+
+    expect(results[0].details).toBe('Result description');
+  });
+});
