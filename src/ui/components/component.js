@@ -17,7 +17,6 @@ import { AnswersComponentError } from '../../core/errors/errors';
  */
 export default class Component {
   constructor (config = {}, systemConfig = {}) {
-
     this.moduleId = null;
 
     /**
