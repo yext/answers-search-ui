@@ -53,7 +53,11 @@ export default class Core {
      * @type {Storage}
      * @private
      */
-    this.storage = new Storage();
+    this.storage = new Storage()
+      .createIndex(StorageIndexes.DEFAULT)
+      .createIndex(StorageIndexes.GLOBAL)
+      .createIndex(StorageIndexes.SEARCH)
+      .createIndex(StorageIndexes.MODELS)
 
     /**
      * An abstraction containing the integration with the RESTful search API
@@ -239,6 +243,8 @@ export default class Core {
    * @param {Filter} filter    the filter to set
    */
   setFilter (namespace, filter) {
+    this.storage.set(StorageKeys.SEARCH, namespace, filter)
+
     this.storage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
   }
 
