@@ -340,10 +340,9 @@ export default class Component {
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     let domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');
-    domComponents.forEach(c => {
-      const data = this.transformData(JSON.parse(JSON.stringify(this._state.get())));
-      this._createSubcomponent(c, data);
-    });
+
+    const data = this.transformData(JSON.parse(JSON.stringify(this._state.get())));
+    domComponents.forEach(c => this._createSubcomponent(c, data));
 
     this._children.forEach(child => {
       child.mount();
