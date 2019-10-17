@@ -8,21 +8,21 @@ Outline:
 2. [Component Usage](#component-usage)
    - [Base Component Configuration](#base-component-configuration)
    - [Adding a Component](#adding-a-component)
-   - [Using a Custom Template](#using-a-custom-template)
    - [Using a Custom Renderer](#using-a-custom-renderer)
    - [Custom Data Formatting](#custom-data-formatting)
    - [Custom Data Transforms](#custom-data-transforms)
    - [Creating Custom Components](#creating-custom-components)
+   - [Using a Custom Template](#using-a-custom-template)
    - [Removing Components](#removing-components)
 3. [Types of Components](#types-of-components)
-   - [Navigation Component](#navigation-component)
    - [SearchBar Component](#searchbar-component)
-   - [FilterSearch Component](#filtersearch-component)
-   - [FilterBox Component](#filterbox-component)
-   - [Filter Components](#filter-components)
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
+   - [FilterBox Component](#filterbox-component)
+   - [FilterSearch Component](#filtersearch-component)
+   - [Filter Components](#filter-components)
+   - [Navigation Component](#navigation-component)
    - [QASubmission Component](#qa-submission-component)
    - [SpellCheck Component](#spell-check-component)
 4. [Analytics](#analytics)
@@ -51,6 +51,8 @@ function initAnswers() {
 }
 ```
 
+Learn more about [getting you API key](https://developer.yext.com/docs/guides/get-started/).
+
 ## Configuration Options
 Below is a list of configuration options that can be used during initialization.
 
@@ -59,13 +61,13 @@ Below is a list of configuration options that can be used during initialization.
 | apiKey       | string     | Your API key                              | required      |
 | experienceKey   | string     | The key used for your answers experience     | required      |
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
-| onStateChange | function | Invoked when the public sate changes | not required |
-| useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | not required  |
-| templateUrl  | string     | Use precompiled template hosted by you       | not required  |
-| templateBundle  | object     | Provide the precompiled templates      | not required  |
-| locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | not required |
-| experienceVersion | string or number | The Answers Experience version to use for api requests | not required |
-| debug | boolean | Prints full Answers error objects when set to `true` | not required |
+| onStateChange | function | Invoked when the sate changes | optional |
+| useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | optional  |
+| templateUrl  | string     | Use precompiled template hosted by you       | optional  |
+| templateBundle  | object     | Provide the precompiled templates      | optional  |
+| locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | optional |
+| experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
+| debug | boolean | Prints full Answers error objects when set to `true` | optional |
 
 ## Template Helpers
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
@@ -94,12 +96,12 @@ Every component has the same base configuration options.
 |-----------|------------|-------------------------------------------|---------------|
 | name          | string     | a unique name, if using multiple components of the same type  | optional      |
 | container     | string     | the CSS selector to append the component. | required      |
-| class         | string     | a custom class to apply to the component  | not required  |
-| template      | string     | override internal handlebars template       | not required  |
-| render        | function   | override render function. data provided   | not required  |
-| transformData | function   | A hook for transforming data before it gets sent to render | not required |
-| onMount       | function   | invoked when the HTML is mounted to the DOM | not required |
-| analyticsOptions | object | additional properties to send with every analytics event | not required |
+| class         | string     | a custom class to apply to the component  | optional  |
+| template      | string     | override internal handlebars template       | optional  |
+| render        | function   | override render function. data provided   | optional  |
+| transformData | function   | A hook for transforming data before it gets sent to render | optional |
+| onMount       | function   | invoked when the HTML is mounted to the DOM | optional |
+| analyticsOptions | object | additional properties to send with every analytics event | optional |
 
 
 ## Adding a Component
@@ -113,7 +115,7 @@ To start, every component requires an HTML container.
 <div class="search-container"></div>
 ```
 
-Then, you can add a component to your page through the ANSWERS add interface.
+Then, you can add a component to your page through the ANSWERS add interface. You need to call `addComponent` from `onReday`.
 
 This is an example of the `SearchBar`. See [Types of Components](#types-of-components) below.
 
@@ -121,22 +123,6 @@ This is an example of the `SearchBar`. See [Types of Components](#types-of-compo
 ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   // -- other options --
-})
-```
-
-## Using a Custom Template
-All component templates are written using handlebars.
-
-It's easy to override these templates with your own templates.
-Keep in mind, that you must provide valid handlebars syntax here.
-
-```js
-// Use handlebars syntax to create a template string
-let customTemplate = `<div class="my-search">{{title}}</div>`
-
-ANSWERS.addComponent('SearchBar', {
-  container: '.search-container',
-  template: customTemplate
 })
 ```
 
@@ -250,6 +236,22 @@ ANSWERS.addComponent('MyCustomComponent', {
 });
 ```
 
+## Using a Custom Template
+All component templates are written using handlebars.
+
+It's easy to override these templates with your own templates.
+Keep in mind, that you must provide valid handlebars syntax here.
+
+```js
+// Use handlebars syntax to create a template string
+let customTemplate = `<div class="my-search">{{title}}</div>`
+
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  template: customTemplate
+})
+```
+
 ## Removing Components
 If you'd like to remove a component and all of its children, you can use `ANSWERS.removeComponent(<component name>)`:
 
@@ -267,43 +269,6 @@ ANSWERS.removeComponent('my-filter-search');
 
 Each type of Component has it's own custom configurations. However, all components share the
 base configuration options defined above.
-
-## Navigation Component
-
-The Navigation Component adds a dynamic experience to your pages navigation experience.
-When using multiple vertical searches in a universal search, the navigation ordering will be automatically updated based on the search results. By default, tabs that do not fit in the container will go inside a dropdown menu.
-
-
-```html
-<nav class="navigation-container"></nav>
-```
-
-```js
-ANSWERS.addComponent('Navigation', {
-  container: '.navigation-container',
-  dropdownLabel: 'More',     // The label to display on the dropdown menu button
-  dropdownIcon: null,        // If provided, show this icon on the dropdown button instead
-  static: false,             // If true, shows all tabs in a horizontally scrolling container
-  tabs: [
-    {
-      label: 'Home',         // The label used for the navigation element
-      url: './index.html',   // The link for the navigation element
-      isFirst: true,         // optional, will always show this item first
-      isActive: true         // optional, will add a special class to the item
-    },
-    {
-      configId: 'locations'  // optional, the vertical search config id
-      label: 'Location'      // The label used for the navigation element
-      url: 'locations.html'  // The link for the navigation element
-    },
-    {
-      configId: 'employees'  // optional, the vertical search config id
-      label: 'Employees'     // The label used for the navigation element
-      url: 'employees.html'  // The link for the navigation element
-    }
-  ]
-})
-```
 
 ## SearchBar Component
 
@@ -323,14 +288,20 @@ Each provide a different way of auto complete.
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
   title: 'Search my Brand',                 // optional, defaults to 'Answers'
+  query: 'query',                           // optional, the query string to use for the input box
   labelText: 'What are you looking for?',   // optional, defaults to 'What are you interested in?'
+  submitText: 'Submit',                     // optional, used for labeling the submit button, also provided to the template
+  submitIcon: 'path/to/icon',               // optional, an icon for the submit butto
+  promptHeader: 'Header',                   // optioanl, shown as the first item for auto complete
   placeholderText: 'Start typing...'        // optional, no default
   autoFocus: true,                          // optional, defaults to false
   autoCompleteOnLoad: false,                // optional, when auto focus on load, optionally open the autocomplete
   searchCooldown: 2000,                     // optional, defaults to 300ms (0.3 seconds)
   promptForLocation: true,                  // optional, asks the user for their geolocation when "near me" intent is detected
   clearButton: true,                        // optional, displays an "x" button to clear the current query when true
-  redirectUrl: 'path/to/url'                // optional, redirect search query to url
+  redirectUrl: 'path/to/url',               // optional, redirect search query to url
+  formSelector: 'form',                     // optional, defaults to native form node within container
+  inputEl: '.js-yext-query'                // optional, the input element used for searching and wires up the keyboard interaction
 })
 ```
 
@@ -338,187 +309,8 @@ ANSWERS.addComponent('SearchBar', {
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
-  verticalKey: '<VERTICAL_KEY>',      // required
-  barKey: '<BAR_KEY>'                 // optional
+  verticalKey: '<VERTICAL_KEY>'       // required
 })
-```
-
-## FilterSearch Component
-
-The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.
-
-```html
-<div class="filter-search-container"></div>
-```
-
-```js
-ANSWERS.addComponent('FilterSearch', {
-  container: '.filter-search-container',
-  verticalKey: '<VERTICAL_KEY>',      // required
-  barKey: '<BAR_KEY>',                // optional
-  placeholderText: 'Start typing...', // optional, no default
-  // If true, the selected filter is saved and used for the next search,
-  // but does not trigger a search itself. Defaults to false.
-  storeOnChange: true
-})
-```
-
-## FilterBox Component
-
-The FilterBox component shows a list of filters to apply to a search.
-
-```html
-<div class="filters-container"></div>
-```
-
-```js
-ANSWERS.addComponent('FilterBox', {
-  container: '.filters-container',
-  // List of filter component configurations
-  filters: [
-    {
-      type: 'FilterOptions',
-      control: 'multioption',
-      options: [
-        {
-          label: 'Open Now',
-          field: 'c_openNow',
-          value: 'true'
-        },
-        {
-          label: 'Dog Friendly',
-          field: 'c_dogFriendly',
-          value: 'true'
-        },
-        {
-          label: 'Megastores',
-          field: 'c_storeType',
-          value: 'Megastore'
-        }
-      ]
-    }
-  ]
-});
-```
-
-## Filter Components
-
-Filter components can be used in a FilterBox or on their own to affect a search.
-
-### FilterOptions
-
-FilterOptions displays a set of filters with either checkboxes or radio buttons.
-
-```html
-<div class="filter-container"></div>
-```
-
-```js
-ANSWERS.addComponent('FilterOptions', {
-  container: '.filter-container',
-  // Control type, singleoption or multioption
-  control: 'singleoption',
-  // If true, the filter value is saved on change and sent with the next search.
-  // Defaults to false.
-  storeOnChange: true,
-  // List of options
-  options: [
-    {
-      // Label to show next to the filter option
-      label: 'Open Now',
-      // The api field to filter on, configured on the Yext platform
-      field: 'c_openNow',
-      // The value for the above field to filter by
-      value: 'true'
-    },
-    {
-      label: 'Dog Friendly',
-      field: 'c_dogFriendly',
-      value: 'true'
-    },
-    {
-      label: 'Megastores',
-      field: 'c_storeType',
-      value: 'Megastore'
-    }
-  ]
-});
-```
-
-### RangeFilter
-
-Displays two numeric inputs for selecting a number range.
-
-```html
-<div class="range-filter-container"></div>
-```
-
-```js
-ANSWERS.addComponent('RangeFilter', {
-  container: '.range-filter-container',
-  // The api field to filter on
-  field: 'outdoorPoolCount',
-  // Title to display for the range
-  title: 'Number of Outdoor Pools',
-  // The label to show next to the min value, optional
-  minLabel: 'At Least',
-  // The label to show next to the max value, optional
-  maxLabel: 'Not More Than',
-  // The initial min value to show, defaults to 0
-  initialMin: 1,
-  // The initial max value to show, defaults to 10
-  initialMax: 5
-});
-```
-
-### DateRangeFilter
-
-Displays two date inputs for selecting a range of dates.
-
-```html
-<div class="date-range-filter-container"></div>
-```
-
-```js
-ANSWERS.addComponent('DateRangeFilter', {
-  container: '.date-range-filter-container',
-  // The api field to filter on
-  field: 'time.start',
-  // Title to display for the range
-  title: 'Event Start Date',
-  // The label to show next to the min date, optional
-  minLabel: 'Earliest',
-  // The label to show next to the max date, optional
-  maxLabel: 'Latest',
-  // The initial min date to show in yyyy-mm-dd format, defaults to today
-  initialMin: '2019-08-01',
-  // The initial max date to show in yyyy-mm-dd format, defaults to today
-  initialMax: '2019-09-01'
-});
-```
-
-### GeoLocationFilter
-
-Displays a "Use My Location" button that filters results to a radius around the user's current position.
-
-```html
-<div class="geolocation-filter-container"></div>
-```
-
-```js
-ANSWERS.addComponent('', {
-  container: '.geolocation-filter-container',
-  // Radius around the user, in miles, to find results
-  radius: 50,
-  // The label to show when disabled (initial state)
-  disabledLabel: 'Use My Location',
-  // The label to show when enabled
-  enabledLabel: 'Disable My Location',
-  // The label to show when unable to get the user's location
-  errorLabel: 'Unable To Use Location',
-  // CSS selector of the button
-  buttonSelector: '.js-yxt-GeoLocationFilter-button'
-});
 ```
 
 ## Direct Answer Component
@@ -532,7 +324,11 @@ based on the query.
 
 ```js
 ANSWERS.addComponent('DirectAnswer', {
-  container: '.direct-answer-container'
+  container: '.direct-answer-container',
+  formEl: '.js-directAnswer-feedback-form',         // optional, the form used for submitting the feedback
+  thumbsUpSelector: '.js-directAnswer-thumbUp'      // optional, the selector to bind ui interaction to for reporting
+  thumbsDownSelector: '.js-directAnswer-thumbDown', // optional, the selector to bind ui interaction to for reporting
+  viewDetailsText: 'View Details'                   // optional, the display text for the View Details click to action link
 })
 ```
 
@@ -552,6 +348,8 @@ The most complex component has a ton of overridable configuration options.
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
+  // The max number of search results to return, defaults to 10
+  limit: 5
 })
 ```
 
@@ -634,6 +432,270 @@ ANSWERS.addComponent('VerticalResults', {
 })
 ```
 
+## FilterBox Component
+
+The FilterBox component shows a list of filters to apply to a search.
+
+```html
+<div class="filters-container"></div>
+```
+
+```js
+ANSWERS.addComponent('FilterBox', {
+  container: '.filters-container',
+  // List of filter component configurations
+  filters: [
+    {
+      type: 'FilterOptions',
+      control: 'multioption',
+      options: [
+        {
+          label: 'Open Now',
+          field: 'c_openNow',
+          value: 'true'
+        },
+        {
+          label: 'Dog Friendly',
+          field: 'c_dogFriendly',
+          value: 'true'
+        },
+        {
+          label: 'Megastores',
+          field: 'c_storeType',
+          value: 'Megastore'
+        }
+      ]
+    }
+  ],
+  // Required, the vertical key for the search, default null
+  verticalKey: 'verticalKey',
+  // Optional, if triggers a search on each change to a filter, default false
+  searchOnChange: true,
+  // Optional, the selector of the apply button, default '.js-yext-filterbox-apply'
+  applyButtonSelector: '.js-btn-selector',
+  // Optional, whether or not this filterbox contains dynamic filters, default false
+  isDynamic: true
+});
+```
+
+## FilterSearch Component
+
+The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.
+
+```html
+<div class="filter-search-container"></div>
+```
+
+```js
+ANSWERS.addComponent('FilterSearch', {
+  container: '.filter-search-container',
+  verticalKey: '<VERTICAL_KEY>',      // required
+  placeholderText: 'Start typing...', // optional, no default
+  // If true, the selected filter is saved and used for the next search,
+  // but does not trigger a search itself. Defaults to false.
+  storeOnChange: true,
+  // Optional, defaults to native form node within container
+  formSelector: '.js-form',
+  // Optional, the input element used for searching and wires up the keyboard interaction
+  inputEl: '.js-query',
+  // Optional, provided to the template as a data point
+  title: 'title',
+  // Optional, the search text used for labeling the input box, also provided to template
+  searchText: 'What do you want to search',
+  // Optional, the query text to show as the first item for auto complete
+  promptHeader: 'Header',
+  // Optional, auto focuses the input box if set to true, default false
+  autoFocus: true,
+  // Optional, redirect search query to url
+  redirectUrl: 'path/to/url'
+})
+```
+
+## Filter Components
+
+Filter components can be used in a FilterBox or on their own to affect a search.
+
+### FilterOptions
+
+FilterOptions displays a set of filters with either checkboxes or radio buttons.
+
+```html
+<div class="filter-container"></div>
+```
+
+```js
+ANSWERS.addComponent('FilterOptions', {
+  container: '.filter-container',
+  // Control type, singleoption or multioption
+  control: 'singleoption',
+  // If true, the filter value is saved on change and sent with the next search.
+  // Defaults to false.
+  storeOnChange: true,
+  // List of options
+  options: [
+    {
+      // Label to show next to the filter option
+      label: 'Open Now',
+      // The api field to filter on, configured on the Yext platform
+      field: 'c_openNow',
+      // The value for the above field to filter by
+      value: 'true'
+    },
+    {
+      label: 'Dog Friendly',
+      field: 'c_dogFriendly',
+      value: 'true'
+    },
+    {
+      label: 'Megastores',
+      field: 'c_storeType',
+      value: 'Megastore'
+    }
+  ],
+  // Optional, the selector used for options in the template
+  optionSelector: '.js-option',
+  // Optional, if triggers a search on each change to a filter, default false
+  searchOnChange: true,
+  // Optional, the callback function to call when changed
+  onChange: function() {},
+  // Optional, the label to be used in the legend
+  label: 'Filters'
+});
+```
+
+### RangeFilter
+
+Displays two numeric inputs for selecting a number range.
+
+```html
+<div class="range-filter-container"></div>
+```
+
+```js
+ANSWERS.addComponent('RangeFilter', {
+  container: '.range-filter-container',
+  // The api field to filter on
+  field: 'outdoorPoolCount',
+  // Title to display for the range
+  title: 'Number of Outdoor Pools',
+  // The label to show next to the min value, optional
+  minLabel: 'At Least',
+  // The label to show next to the max value, optional
+  maxLabel: 'Not More Than',
+  // The initial min value to show, defaults to 0
+  initialMin: 1,
+  // The initial max value to show, defaults to 10
+  initialMax: 5,
+  // Optional, if triggers a search on each change to a filter, default false
+  searchOnChange: true,
+  // Optional, the callback function to call when changed
+  onChange: function() {}
+});
+```
+
+### DateRangeFilter
+
+Displays two date inputs for selecting a range of dates.
+
+```html
+<div class="date-range-filter-container"></div>
+```
+
+```js
+ANSWERS.addComponent('DateRangeFilter', {
+  container: '.date-range-filter-container',
+  // The api field to filter on
+  field: 'time.start',
+  // Title to display for the range
+  title: 'Event Start Date',
+  // The label to show next to the min date, optional
+  minLabel: 'Earliest',
+  // The label to show next to the max date, optional
+  maxLabel: 'Latest',
+  // The initial min date to show in yyyy-mm-dd format, defaults to today
+  initialMin: '2019-08-01',
+  // The initial max date to show in yyyy-mm-dd format, defaults to today
+  initialMax: '2019-09-01',
+  // If true, this filter represents an exclusive range, rather than an inclusive one
+  isExclusive: false,
+  // Optional, if triggers a search on each change to a filter, default false
+  searchOnChange: true,
+  // Optional, the callback function to call when changed
+  onChange: function() {}
+});
+```
+
+### GeoLocationFilter
+
+Displays a "Use My Location" button that filters results to a radius around the user's current position.
+
+```html
+<div class="geolocation-filter-container"></div>
+```
+
+```js
+ANSWERS.addComponent('', {
+  container: '.geolocation-filter-container',
+  // Optional, the vertical key to use
+  verticalKey: 'verticalKey',
+  // Optioanl, radius around the user, in miles, to find results, default 50
+  radius: 50,
+  // Optional, the text to show when enabled
+  enabledText: 'Disable My Location',
+  // Optional, the text to show ehn loading the user's location
+  loadingText: 'Loading',
+  // The label to show when unable to get the user's location
+  errorText: 'Unable To Use Location',
+  // Optional, CSS selector of the button
+  buttonSelector: '.js-yxt-GeoLocationFilter-button',
+  // OPtional, Css selector of the query input
+  inputSelector: '.js-yxt-GeoLocationFilter-input',
+  // Optional, if triggers a search on each change to a filter, default false
+  searchOnChange: true,
+  // Optional, the icon url to show in the geo button
+  geoButtonIcon: 'path/to/url',
+  // Optional, the text toe show in the geo button
+  geoButtonText: 'Use my location'
+});
+```
+
+## Navigation Component
+
+The Navigation Component adds a dynamic experience to your pages navigation experience.
+When using multiple vertical searches in a universal search, the navigation ordering will be automatically updated based on the search results. By default, tabs that do not fit in the container will go inside a dropdown menu.
+
+
+```html
+<nav class="navigation-container"></nav>
+```
+
+```js
+ANSWERS.addComponent('Navigation', {
+  container: '.navigation-container',
+  dropdownLabel: 'More',     // The label to display on the dropdown menu button
+  dropdownIcon: null,        // If provided, show this icon on the dropdown button instead
+  static: false,             // If true, shows all tabs in a horizontally scrolling container
+  tabs: [
+    {
+      label: 'Home',         // The label used for the navigation element
+      url: './index.html',   // The link for the navigation element
+      isFirst: true,         // optional, will always show this item first
+      isActive: true         // optional, will add a special class to the item
+    },
+    {
+      configId: 'locations'  // optional, the vertical search config id
+      label: 'Location'      // The label used for the navigation element
+      url: 'locations.html'  // The link for the navigation element
+    },
+    {
+      configId: 'employees'  // optional, the vertical search config id
+      label: 'Employees'     // The label used for the navigation element
+      url: 'employees.html'  // The link for the navigation element
+    }
+  ]
+})
+```
+
 ## QA Submission Component
 
 The QA Submission component provides a form for submitting a QA question,
@@ -650,7 +712,10 @@ ANSWERS.addComponent('QASubmission', {
   emailLabel: '*Email:',               // Optional, defaults to '*Email:'
   questionLabel: 'Ask us anything!:',  // Optional, defaults to 'What is your question?'
   privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
-  buttonLabel: 'Submit'                // Optional,  defaults to 'Submit:'
+  buttonLabel: 'Submit',               // Optional, defaults to 'Submit:'
+  entityIdL 123,                       // Optional, the entity identifier that the question is associated with
+  language: 'en',                      // Optional, defaults to 'EN'
+  formSelector: '.js-form'             // Optional, defaults to native form node within container
 })
 ```
 
