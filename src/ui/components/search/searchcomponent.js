@@ -113,6 +113,12 @@ export default class SearchComponent extends Component {
     this.redirectUrl = config.redirectUrl || null;
 
     /**
+     * true if there is another search bar present on the page.
+     * Twins only update the query, and do not search
+     */
+    this._isTwin = config.isTwin;
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string}
@@ -296,14 +302,16 @@ export default class SearchComponent extends Component {
       originalQuery: this.query,
       inputEl: inputSelector,
       onSubmit: () => {
-        DOM.trigger(this._formEl, 'submit');
+        DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
       }
     });
   }
 
   search (query) {
-    // Don't search if we recently searched, or if there's no query for universal search
-    if (this._throttled || (!query && !this._verticalKey)) {
+    // Don't search if we recently searched,
+    // if there's no query for universal search,
+    // or if this is a twin searchbar
+    if (this._throttled || (!query && !this._verticalKey) || this._isTwin) {
       return;
     }
 
