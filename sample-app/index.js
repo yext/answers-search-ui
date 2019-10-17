@@ -15,15 +15,18 @@ const verticalTemplate = Handlebars.compile(
 );
 Handlebars.registerPartial('metadata', metadataTemplate);
 
+const bundleUrl = '../dist/answers-modern.js';
+const templateUrl = '../dist/answerstemplates.compiled.min.js';
+const cssUrl = '../dist/answers.css';
+
 const credentials = require('./credentials.json');
 const configFile = process.argv[2]
   ? path.join(process.cwd(), process.argv[2])
   : './sample-config.json';
 const siteConfig = require(configFile);
-const config = Object.assign({}, credentials, siteConfig);
-
-const bundleUrl = `../dist/answers.js`;
-const cssUrl = `../dist/answers.css`;
+const config = Object.assign({}, credentials, siteConfig, {
+  templateUrl
+});
 
 function main () {
   writeUniversalHtml();
