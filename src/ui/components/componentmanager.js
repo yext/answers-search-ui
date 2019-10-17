@@ -119,10 +119,15 @@ export default class ComponentManager {
         componentType);
     }
 
+    const config = {
+      isTwin: this._activeComponents.some(component => component.constructor.type === componentType),
+      ...opts
+    };
+
     // Instantiate our new component and keep track of it
     let component =
-      new this._componentRegistry[componentType](opts, systemOpts)
-        .init(opts);
+      new this._componentRegistry[componentType](config, systemOpts)
+        .init(config);
 
     this._activeComponents.push(component);
 
