@@ -45,12 +45,12 @@ export default class AccordionResultsComponent extends ResultsComponent {
   }
 
   /**
-   * overrides _onMount to add bindings to change the height on click
+   * overrides onMount to add bindings to change the height on click
    * @returns {AccordionResultsComponent}
    * @override
    */
-  _onMount () {
-    super._onMount();
+  onMount () {
+    super.onMount();
 
     const accordionEls = DOM.queryAll(this._container, this._selectorBase);
     accordionEls.forEach((accordionEl) => {
