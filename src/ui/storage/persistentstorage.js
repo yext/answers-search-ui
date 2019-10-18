@@ -40,6 +40,7 @@ export default class PersistentStorage {
    * Insert the given key/value pair into storage
    * @param {string} key The key to insert the data in
    * @param {*} data The data to insert
+   * @param {boolean} only replace hisotry instead of pushing new if true
    */
   set (key, data, replaceHistory = false) {
     if (typeof key !== 'string') {
@@ -57,6 +58,7 @@ export default class PersistentStorage {
   /**
    * Delete the given key from storage
    * @param {string} key The key to delete
+   * @param {boolean} only replace hisotry instead of pushing new if true
    */
   delete (key, replaceHistory = false) {
     this._params.delete(key);
