@@ -115,7 +115,7 @@ To start, every component requires an HTML container.
 <div class="search-container"></div>
 ```
 
-Then, you can add a component to your page through the ANSWERS add interface. You need to call `addComponent` from `onReday`.
+Then, you can add a component to your page through the ANSWERS add interface. You need to call `addComponent` from `onReady`.
 
 This is an example of the `SearchBar`. See [Types of Components](#types-of-components) below.
 
@@ -288,11 +288,11 @@ Each provide a different way of auto complete.
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
   title: 'Search my Brand',                 // optional, defaults to 'Answers'
-  query: 'query',                           // optional, the query string to use for the input box
+  query: 'query',                           // optional, the initial query string to use for the input box
   labelText: 'What are you looking for?',   // optional, defaults to 'What are you interested in?'
   submitText: 'Submit',                     // optional, used for labeling the submit button, also provided to the template
-  submitIcon: 'path/to/icon',               // optional, an icon for the submit butto
-  promptHeader: 'Header',                   // optioanl, shown as the first item for auto complete
+  submitIcon: 'path/to/icon',               // optional, an icon for the submit button
+  promptHeader: 'Header',                   // optioanl, the query text to show as the first item for auto complete
   placeholderText: 'Start typing...'        // optional, no default
   autoFocus: true,                          // optional, defaults to false
   autoCompleteOnLoad: false,                // optional, when auto focus on load, optionally open the autocomplete
@@ -301,7 +301,7 @@ ANSWERS.addComponent('SearchBar', {
   clearButton: true,                        // optional, displays an "x" button to clear the current query when true
   redirectUrl: 'path/to/url',               // optional, redirect search query to url
   formSelector: 'form',                     // optional, defaults to native form node within container
-  inputEl: '.js-yext-query'                // optional, the input element used for searching and wires up the keyboard interaction
+  inputEl: '.js-yext-query'                 // optional, the input element used for searching and wires up the keyboard interaction
 })
 ```
 
@@ -469,7 +469,7 @@ ANSWERS.addComponent('FilterBox', {
   ],
   // Required, the vertical key for the search, default null
   verticalKey: 'verticalKey',
-  // Optional, if triggers a search on each change to a filter, default false
+  // Optional, if true, triggers a search on each change to a filter, default false
   searchOnChange: true,
   // Optional, the selector of the apply button, default '.js-yext-filterbox-apply'
   applyButtonSelector: '.js-btn-selector',
@@ -554,7 +554,7 @@ ANSWERS.addComponent('FilterOptions', {
   ],
   // Optional, the selector used for options in the template
   optionSelector: '.js-option',
-  // Optional, if triggers a search on each change to a filter, default false
+  // Optional, if true, triggers a search on each change to a filter, default false
   searchOnChange: true,
   // Optional, the callback function to call when changed
   onChange: function() {},
@@ -586,7 +586,7 @@ ANSWERS.addComponent('RangeFilter', {
   initialMin: 1,
   // The initial max value to show, defaults to 10
   initialMax: 5,
-  // Optional, if triggers a search on each change to a filter, default false
+  // Optional, if true, triggers a search on each change to a filter, default false
   searchOnChange: true,
   // Optional, the callback function to call when changed
   onChange: function() {}
@@ -618,7 +618,7 @@ ANSWERS.addComponent('DateRangeFilter', {
   initialMax: '2019-09-01',
   // If true, this filter represents an exclusive range, rather than an inclusive one
   isExclusive: false,
-  // Optional, if triggers a search on each change to a filter, default false
+  // Optional, if true, triggers a search on each change to a filter, default false
   searchOnChange: true,
   // Optional, the callback function to call when changed
   onChange: function() {}
@@ -650,11 +650,11 @@ ANSWERS.addComponent('', {
   buttonSelector: '.js-yxt-GeoLocationFilter-button',
   // OPtional, Css selector of the query input
   inputSelector: '.js-yxt-GeoLocationFilter-input',
-  // Optional, if triggers a search on each change to a filter, default false
+  // Optional, if true, triggers a search on each change to a filter, default false
   searchOnChange: true,
   // Optional, the icon url to show in the geo button
   geoButtonIcon: 'path/to/url',
-  // Optional, the text toe show in the geo button
+  // Optional, the text to show in the geo button
   geoButtonText: 'Use my location'
 });
 ```
