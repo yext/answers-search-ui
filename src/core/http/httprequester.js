@@ -31,17 +31,18 @@ export default class HttpRequester {
   /**
    * Create a POST HTTP request
    * @param {string} url The url to make a request to
-   * @param {Object} data The data to provide (gets encoded into the URL)
-   * @param {Object} opts Configuration options to use for the request
+   * @param {Object} urlParams The params to encode into the URL
+   * @param {Object} jsonBody The request body (json) to provide with the POST request
+   * @param {Object} requestConfig Configuration options to use for the request
    */
-  post (url, data, opts) {
+  post (url, urlParams, jsonBody, requestConfig) {
     return this.request(
       Methods.POST,
-      url,
+      this.encodeParams(url, urlParams),
       Object.assign({
-        body: JSON.stringify(data),
+        body: JSON.stringify(jsonBody),
         credentials: undefined
-      }, opts)
+      }, requestConfig)
     );
   }
 
