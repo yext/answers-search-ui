@@ -209,6 +209,8 @@ export default class SearchComponent extends Component {
       button.classList.add('yxt-SearchBar--hidden');
       this.setState({});
       this.core.persistentStorage.set(StorageKeys.QUERY, this.query);
+      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(this.query);
     });
 
@@ -274,6 +276,8 @@ export default class SearchComponent extends Component {
       inputEl.blur();
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
+      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(query);
       this.search(query);
       return false;
@@ -327,6 +331,7 @@ export default class SearchComponent extends Component {
       return this.core.verticalSearch(this._verticalKey, {
         input: query,
         filter: JSON.stringify(totalFilter),
+        offset: this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         facetFilter: JSON.stringify(facetFilter)
       });
     } else {

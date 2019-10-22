@@ -1,0 +1,39 @@
+{{#if showControls}}
+  <div class="yxt-Pagination">
+    {{#if firstPageButtonEnabled}}
+      <button class="yxt-Pagination-button js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
+        {{#unless showFirstPageButton}}disabled{{/unless}}
+        data-eventtype="BACKWARD_PAGINATE"
+        data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+      >
+        &lt;&lt;
+      </button>
+    {{/if}}
+    <button class="yxt-Pagination-button js-yxt-Pagination-previous {{#unless showPreviousPageButton}}yxt-Pagination--hidden{{/unless}}"
+      {{#unless showPreviousPageButton}}disabled{{/unless}}
+      data-eventtype="BACKWARD_PAGINATE"
+      data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
+    >
+      &lt;
+    </button>
+
+    <span class="yxt-Pagination-page">Page {{pageNumber}}</span>
+
+    <button class="yxt-Pagination-button js-yxt-Pagination-next {{#unless showNextPageButton}}yxt-Pagination--hidden{{/unless}}"
+      {{#unless showNextPageButton}}disabled{{/unless}}
+      data-eventtype="FORWARD_PAGINATE"
+      data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
+    >
+      &gt;
+    </button>
+    {{#if lastPageButtonEnabled}}
+      <button class="yxt-Pagination-button js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
+        {{#unless showLastPageButton}}disabled{{/unless}}
+        data-eventtype="FORWARD_PAGINATE"
+        data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+      >
+        &gt;&gt;
+      </button>
+    {{/if}}
+  </div>
+{{/if}}

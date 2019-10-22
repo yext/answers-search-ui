@@ -46,9 +46,9 @@ describe('storing, retrieving and deleting', () => {
   });
 
   it('correctly stores primitives', () => {
-    storage.set(StorageKeys.SEARCH_LIMIT, 25);
+    storage.set(StorageKeys.QUERY, 'tested');
 
-    expect(storage.getState(StorageKeys.SEARCH_LIMIT)).toBe(25);
+    expect(storage.getState(StorageKeys.QUERY)).toBe('tested');
   });
 
   it('sets all data with setAll()', () => {
