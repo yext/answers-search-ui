@@ -66,6 +66,10 @@ export default class HttpRequester {
   }
 
   encodeParams (url, params) {
+    if (typeof params !== 'object') {
+      return;
+    }
+
     let hasParam = url.indexOf('?') > -1;
 
     let searchQuery = '';
