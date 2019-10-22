@@ -58,7 +58,7 @@ Below is a list of configuration options that can be used during initialization.
 
 |  option   | type       | description                               | required      |
 |-----------|------------|-------------------------------------------|---------------|
-| apiKey       | string     | Your API key                              | required      |
+| apiKey    | string     | Your API key                              | required      |
 | experienceKey   | string     | The key used for your answers experience     | required      |
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | onStateChange | function | Invoked when the sate changes | optional |
