@@ -17,8 +17,8 @@ const EventTypes = {
 };
 
 export default class DirectAnswerComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * Recieve updates from storage based on this index

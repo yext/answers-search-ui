@@ -18,8 +18,8 @@ const SUPPORTED_CONTROLS = [
  * Renders a set of options, each one representing a filter in a search.
  */
 export default class FilterOptionsComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     if (!config.control || !SUPPORTED_CONTROLS.includes(config.control)) {
       throw new AnswersComponentError(

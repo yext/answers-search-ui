@@ -65,6 +65,7 @@ Below is a list of configuration options that can be used during initialization.
 | templateBundle  | object     | Provide the precompiled templates      | not required  |
 | locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | not required |
 | experienceVersion | string or number | The Answers Experience version to use for api requests | not required |
+| debug | boolean | Prints full Answers error objects when set to `true` | not required |
 
 ## Template Helpers
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
@@ -321,9 +322,11 @@ Each provide a different way of auto complete.
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
-  title: 'Search my Brand',                // optional, defaults to 'Answers'
-  searchText: 'What are you looking for?', // optional, defaults to 'What are you interested in?'
+  title: 'Search my Brand',                 // optional, defaults to 'Answers'
+  labelText: 'What are you looking for?',   // optional, defaults to 'What are you interested in?'
+  placeholderText: 'Start typing...'        // optional, no default
   autoFocus: true,                          // optional, defaults to false
+  autoCompleteOnLoad: false,                // optional, when auto focus on load, optionally open the autocomplete
   searchCooldown: 2000,                     // optional, defaults to 300ms (0.3 seconds)
   promptForLocation: true,                  // optional, asks the user for their geolocation when "near me" intent is detected
   clearButton: true,                        // optional, displays an "x" button to clear the current query when true
@@ -353,6 +356,7 @@ ANSWERS.addComponent('FilterSearch', {
   container: '.filter-search-container',
   verticalKey: '<VERTICAL_KEY>',      // required
   barKey: '<BAR_KEY>',                // optional
+  placeholderText: 'Start typing...', // optional, no default
   // If true, the selected filter is saved and used for the next search,
   // but does not trigger a search itself. Defaults to false.
   storeOnChange: true

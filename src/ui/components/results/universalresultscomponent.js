@@ -6,8 +6,8 @@ import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
 
 export default class UniversalResultsComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (opts = {}, systemOpts = {}) {
+    super(opts, systemOpts);
 
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
     this._limit = opts.limit || 10;

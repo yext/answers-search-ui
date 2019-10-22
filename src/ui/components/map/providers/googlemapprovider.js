@@ -24,6 +24,7 @@ export default class GoogleMapProvider extends MapProvider {
 
   loadJS (onLoad) {
     if (DOM.query('#yext-map-js')) {
+      this._isLoaded = true;
       if (typeof onLoad === 'function') {
         onLoad();
       }
@@ -37,7 +38,7 @@ export default class GoogleMapProvider extends MapProvider {
         this._onLoaded();
       },
       async: true,
-      src: `http://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
+      src: `https://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
     });
 
     DOM.append('body', script);
@@ -64,11 +65,6 @@ export default class GoogleMapProvider extends MapProvider {
     // Only here for demo purposes, so we'll fix later.
     setTimeout(() => {
       let container = DOM.query(el);
-      DOM.css(container, {
-        width: this._width || '100%',
-        height: this._height || '100%'
-      });
-
       this.map = new google.maps.Map(container, {
         zoom: this._zoom
       });

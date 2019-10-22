@@ -101,8 +101,8 @@ export class Tab {
  * @extends Component
  */
 export default class NavigationComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * The label to show on the dropdown menu button
@@ -195,8 +195,15 @@ export default class NavigationComponent extends Component {
       : container.offsetWidth - moreButton.offsetWidth;
     let numBreakpoints = this._navBreakpoints.length;
 
-    if (mainLinks.offsetWidth > navWidth) {
-      this._navBreakpoints.push(mainLinks.offsetWidth);
+    // sum child widths instead of using parent's width to avoid
+    // browser inconsistencies
+    let mainLinksWidth = 0;
+    for (let el of mainLinks.children) {
+      mainLinksWidth += el.offsetWidth;
+    }
+
+    if (mainLinksWidth > navWidth) {
+      this._navBreakpoints.push(mainLinksWidth);
       const lastLink = mainLinks.children.item(mainLinks.children.length - 1);
       if (lastLink === null) {
         return;
@@ -223,7 +230,7 @@ export default class NavigationComponent extends Component {
     }
 
     this.closeMoreDropdown();
-    if (mainLinks.offsetWidth > navWidth ||
+    if (mainLinksWidth > navWidth ||
       (numBreakpoints > 0 && navWidth > this._navBreakpoints[numBreakpoints - 1])) {
       this.refitNav();
     }

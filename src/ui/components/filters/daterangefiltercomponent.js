@@ -8,8 +8,8 @@ import DOM from '../../dom/dom';
  * A filter for a range of dates
  */
 export default class DateRangeFilterComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * The api field this filter controls

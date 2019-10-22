@@ -3,8 +3,8 @@
 import ResultsItemComponent from './resultsitemcomponent';
 
 export default class PeopleResultsItemComponent extends ResultsItemComponent {
-  constructor (opts = {}) {
-    super(opts);
+  constructor (opts = {}, systemOpts = {}) {
+    super(opts, systemOpts);
   }
 
   static get type () {

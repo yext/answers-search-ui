@@ -1,0 +1,15 @@
+{
+  "name": "answers-sample-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "buildLib": "npm run -C .. build",
+    "buildHtml": "node index.js",
+    "start": "npm run buildLib && npm run buildHtml"
+  },
+  "author": "Adrian Mullings",
+  "dependencies": {
+    "handlebars": "^4.4.3"
+  }
+}
