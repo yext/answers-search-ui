@@ -58,26 +58,36 @@ export default class ApiRequest {
    * @returns {Promise}
    */
   get () {
-    return this._requester.get(this._baseUrl + this._endpoint, this.params(this._params));
+    return this._requester.get(
+      this._baseUrl + this._endpoint,
+      Object.assign({}, this.baseParams(), this.sanitizeParams(this._params))
+    );
   }
 
   post (opts) {
-    return this._requester.post(this._baseUrl + this._endpoint, this.params(this._params), opts);
+    return this._requester.post(
+      this._baseUrl + this._endpoint,
+      this.baseParams() /* urlParams */,
+      this.sanitizeParams(this._params) /* jsonBody */,
+      opts /* requestConfig */);
   }
 
-  params (params) {
-    var baseParams = {
+  baseParams () {
+    let baseParams = {
       'v': this._version,
       'api_key': this._apiKey,
       'jsLibVersion': LIB_VERSION
     };
 
     const urlParams = new SearchParams(window.location.search.substring(1));
-
     if (urlParams.has('beta')) {
       baseParams['beta'] = urlParams.get('beta');
     }
 
+    return baseParams;
+  }
+
+  sanitizeParams (params = {}) {
     // Remove any paramaters whos value is `undefined`.
     //
     // NOTE(billy) Probably better to be explicit about how to handle this at the request building level,
@@ -89,6 +99,6 @@ export default class ApiRequest {
       }
     });
 
-    return Object.assign(baseParams, params || {});
+    return params;
   }
 }
