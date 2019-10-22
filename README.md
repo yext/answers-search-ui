@@ -160,8 +160,8 @@ ANSWERS.init({
   apiKey: '<API_KEY_HERE>',
   experienceKey: '<EXPERIENCE_KEY_HERE>',
   fieldFormatters: {
-    'name': (formatterObject) => formatterParams.entityFieldValue.toUpperCase(),
-    'description' : (formatterObject) => formatterParams.highlightedEntityFieldValue
+    'name': (formatterObject) => formatterObject.entityFieldValue.toUpperCase(),
+    'description' : (formatterObject) => formatterObject.highlightedEntityFieldValue
   }
 });
 ```
