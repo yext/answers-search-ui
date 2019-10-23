@@ -1,0 +1,40 @@
+/** @define Pagination */
+.yxt-Pagination
+{
+  $pagination-text-color: $color-text-primary !default;
+  $pagination-text-color-hover: $color-text-secondary !default;
+  $pagination-text-font-size: $font-size-md-lg !default;
+  $pagination-text-line-height: $line-height-lg !default;
+  $pagination-text-font-weight: $font-weight-normal !default;
+
+  display: flex;
+
+  @include Text(
+    $size: $pagination-text-font-size,
+    $line-height: $pagination-text-line-height,
+    $weight: $pagination-text-font-weight,
+    $color: $pagination-text-color
+  );
+
+  &-button
+  {
+    background: none;
+    border: none;
+    margin: 0 3px;
+
+    &:not(:disabled)
+    {
+      cursor: pointer;
+
+      &:hover
+      {
+        color: $pagination-text-color-hover;
+      }
+    }
+  }
+
+  &-page
+  {
+    margin: 0 20px;
+  }
+}
