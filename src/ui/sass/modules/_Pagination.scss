@@ -20,7 +20,7 @@
   {
     background: none;
     border: none;
-    margin: 0 3px;
+    padding: 0 4px;
 
     &:not(:disabled)
     {
@@ -35,6 +35,17 @@
 
   &-page
   {
+    padding: 0;
     margin: 0 20px;
+  }
+
+  &-chevron--left svg, &-doubleChevron--left svg
+  {
+    transform: rotate(180deg);
+  }
+
+  &-doubleChevron, &-doubleChevron--left
+  {
+    margin-right: -6px;
   }
 }
