@@ -115,6 +115,7 @@ export default class FilterBoxComponent extends Component {
       component.mount();
       this._filterComponents.push(component);
       this._filters[i] = component.getFilter();
+      this._saveFiltersToStorage();
     }
 
     // Initialize apply button
