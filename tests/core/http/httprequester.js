@@ -71,7 +71,7 @@ describe('resquesting and responding', () => {
     it('creates a proper POST request with body', () => {
       global.fetch = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
 
-      requester.post(`${baseUrl}/answers/query`, data, {});
+      requester.post(`${baseUrl}/answers/query`, null, data, {});
       expect(global.fetch).toHaveBeenCalledWith(
         expectedUrl,
         { method: 'post', credentials: undefined, body: JSON.stringify(data) }
@@ -81,9 +81,20 @@ describe('resquesting and responding', () => {
     it('uses the provided options for the request', () => {
       global.fetch = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
 
-      requester.post(`${baseUrl}/answers/query`, data, { credentials: 'omit', redirect: 'error' });
+      requester.post(`${baseUrl}/answers/query`, null, data, { credentials: 'omit', redirect: 'error' });
       expect(global.fetch).toHaveBeenCalledWith(
         expectedUrl,
+        { method: 'post', credentials: 'omit', redirect: 'error', body: JSON.stringify(data) }
+      );
+    });
+
+    it('encodes urlparams into request', () => {
+      const apiKey = 123;
+      global.fetch = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
+
+      requester.post(`${baseUrl}/answers/query`, { api_key: apiKey }, data, { credentials: 'omit', redirect: 'error' });
+      expect(global.fetch).toHaveBeenCalledWith(
+        `${expectedUrl}?api_key=${apiKey}`,
         { method: 'post', credentials: 'omit', redirect: 'error', body: JSON.stringify(data) }
       );
     });
