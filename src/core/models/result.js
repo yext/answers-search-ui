@@ -17,6 +17,13 @@ export default class Result {
     this._formatted = data.formatted;
 
     /**
+     * The highlighted profile data with highlights applied to applicable fields
+     * @type {Object}
+     * @private
+     */
+    this._highlighted = data.highlighted;
+
+    /**
      * The index number of the result
      * @type {Number}
      */
