@@ -119,6 +119,13 @@
     margin-right: 1rem;
   }
 
+  &-image
+  {
+    // Firefox is the only browser that handles img elements in flex containers
+    // properly
+    width: 100%;
+  }
+
   &-infoCtasWrapper
   {
     display: flex;
