@@ -53,6 +53,12 @@
     "offices": {
       "map": true
     },
-    "jobs": {}
+    "events": {},
+    "speakers": {},
+    "jobs": {},
+    "packages": {},
+    "app_directory_partners": {},
+    "publishers": {},
+    "faqs": {}
   }
 }
