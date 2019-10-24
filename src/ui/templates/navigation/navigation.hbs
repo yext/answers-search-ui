@@ -4,7 +4,7 @@
       <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
         href="{{url}}"
         data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
-        data-eventoptions='{{eventOptions}}'
+        data-eventoptions='{"verticalConfigId": "{{configId}}"}'
         role="option"
         {{#if isActive}}aria-selected="true"{{/if}}
       >

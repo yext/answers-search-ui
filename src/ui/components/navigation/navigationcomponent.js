@@ -64,16 +64,6 @@ export class Tab {
   }
 
   /**
-   * helper to construct the eventOptions for analytics
-   * @returns {string}
-   */
-  get eventOptions () {
-    return JSON.stringify({
-      verticalConfigId: this.configId
-    });
-  }
-
-  /**
    * from will construct a map of configId to {Tab} from
    * a configuration file
    * @param {object} tabsConfig the configuration to use
