@@ -33,6 +33,12 @@ class Answers {
     this.Component = Component;
 
     /**
+     * A reference to the AnalyticsEvent base class for reporting
+     * custom analytics
+     */
+    this.AnalyticsEvent = AnalyticsEvent;
+
+    /**
      * A reference of the renderer to use for the components
      * This is provided during initialization.
      * @type {Renderer}
@@ -103,6 +109,8 @@ class Answers {
         config.experienceVersion,
         config.businessId,
         config.analyticsOptions);
+
+      this.AnalyticsReporter = reporter;
 
       this.components.setAnalyticsReporter(reporter);
       initScrollListener(reporter);
