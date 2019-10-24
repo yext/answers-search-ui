@@ -46,7 +46,12 @@ export default class FilterOptionsComponent extends Component {
      * @type {object[]}
      * @private
      */
-    this._options = config.options.map(o => Object.assign({}, { selected: selectedOptions.includes(o.label) }, o));
+    this._options = config.options.map(o => ({
+      ...o,
+      selected: selectedOptions.length
+        ? selectedOptions.includes(o.label)
+        : o.selected
+    }));
 
     /**
      * The type of control to display
