@@ -1,0 +1,81 @@
+/** @define FilterOptions */
+
+.yxt-FilterOptions {
+  &-container {
+    @include Text($line-height: $line-height-md);
+
+    button {
+      @include Text(
+        $color: $color-brand-primary,
+        $line-height: $line-height-xxlg,
+        $style: italic);
+      @include TextButton();
+
+      svg {
+        width: 6px;
+        margin-left: 5px;
+      }
+    }
+  }
+
+  &-fieldSet {
+    border: 0;
+    padding: 0;
+    margin: 12px 0;
+  }
+
+  &-label {
+    @include Text(
+      $size: $font-size-md-lg,
+      $line-height: $line-height-lg,
+      $weight: $font-weight-semibold);
+  }
+
+  &-legend {
+    width: 100%;
+    padding: 0;
+  }
+
+  &-legendLabel {
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &-selectedCount {
+    @include Text(
+      $size: $font-size-xs,
+      $weight: $font-weight-bold,
+      $color: white);
+
+    width: 20px;
+    height: 20px;
+    margin-left: 12px;
+    display: flex;
+    background: $color-background-dark;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+
+  &-expand {
+    @include TextButton();
+    margin-left: auto;
+  }
+
+  &--collapsed {
+    display: none;
+  }
+
+  &-collapseUp, &-collapseDown {
+    vertical-align: middle;
+  }
+
+  &-collapseUp svg {
+    transform: rotate(270deg);
+  }
+
+  &-collapseDown svg {
+    transform: rotate(90deg);
+  }
+}
