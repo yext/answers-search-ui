@@ -2,6 +2,7 @@ import AnalyticsReporter from '../../../src/core/analytics/analyticsreporter';
 import HttpRequester from '../../../src/core/http/httprequester';
 import { AnswersAnalyticsError } from '../../../src/core/errors/errors';
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
+import { ANALYTICS_BASE_URL_NO_COOKIE, ANALYTICS_BASE_URL } from '../../../src/core/constants';
 
 jest.mock('../../../src/core/http/httprequester');
 
@@ -61,5 +62,24 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
       expect.objectContaining({ 'data': expect.objectContaining({ experienceVersion: 'PRODUCTION' }) }));
+  });
+
+  it('doesn\'t send cookies by default', () => {
+    analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
+
+    expect(mockedBeacon).toBeCalledTimes(1);
+    expect(mockedBeacon).toBeCalledWith(
+      expect.stringContaining(ANALYTICS_BASE_URL_NO_COOKIE),
+      expect.anything());
+  });
+
+  it('sends cookies if opted in', () => {
+    analyticsReporter.setConversionTrackingEnabled(true);
+    analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
+
+    expect(mockedBeacon).toBeCalledTimes(1);
+    expect(mockedBeacon).toBeCalledWith(
+      expect.stringContaining(ANALYTICS_BASE_URL),
+      expect.anything());
   });
 });
