@@ -8,6 +8,9 @@ export default class SearchConfig {
     // Also defines the number of results per page, if pagination is enabled
     this.limit = config.limit || 20;
 
+    // The vertical key to use for all searches
+    this.verticalKey = config.verticalKey || null;
+
     this.validate();
     Object.freeze(this);
   }

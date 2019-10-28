@@ -3,6 +3,7 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
+import { AnswersComponentError } from '../../../core/errors/errors';
 
 export default class PaginationComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -13,7 +14,12 @@ export default class PaginationComponent extends Component {
      * @type {string}
      * @private
      */
-    this._verticalKey = config.verticalKey;
+    this._verticalKey = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    if (typeof this._verticalKey !== 'string') {
+      throw new AnswersComponentError(
+        'verticalKey not provided, but necessary for pagination',
+        'PaginationComponent');
+    }
 
     /**
      * If true, displays the first page button
