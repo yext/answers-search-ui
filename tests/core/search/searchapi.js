@@ -94,7 +94,7 @@ describe('vertical searching', () => {
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
         expect.anything(),
-        expect.objectContaining({ input: 'Kelly Yu' }));
+        expect.objectContaining({ input: 'Kelly Yu ' }));
     });
   });
 

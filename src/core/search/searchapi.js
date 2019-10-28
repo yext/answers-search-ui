@@ -133,7 +133,7 @@ export default class SearchApi {
    * Initiate a kelly search
    * @param {boolean} includeLastName include last name in the search
    * @param {boolean} useUserName user username instead of real name
-   * @param {string} additionalSearchText more text to add to theeasrch
+   * @param {string} additionalSearchText more text to add to the search
    */
   kellySearch (includeLastName, useUserName, additionalSearchText) {
     let name = includeLastName ? 'Kelly Yu' : 'Kelly';
