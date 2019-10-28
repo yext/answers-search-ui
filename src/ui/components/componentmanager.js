@@ -138,13 +138,11 @@ export default class ComponentManager {
       if (component.moduleId === undefined || component.moduleId === null) {
         return component;
       }
-
       this._core.globalStorage
         .on('update', component.moduleId, (data) => {
           component.setState(data);
         });
     }
-
     return component;
   }
 

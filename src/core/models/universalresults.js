@@ -14,6 +14,7 @@ export default class UniversalResults {
      * @type {string}
      */
     this.searchState = data.searchState || SearchStates.SEARCH_COMPLETE;
+    this.timestamp = data.timestamp || new Date().toLocaleString;
   }
 
   /**
@@ -25,7 +26,8 @@ export default class UniversalResults {
   static from (response, urls, formatters) {
     return new UniversalResults({
       queryId: response.queryId,
-      sections: Section.from(response.modules, urls, formatters)
+      sections: Section.from(response.modules, urls, formatters),
+      timestamp: new Date().toLocaleString()
     });
   }
 
@@ -34,6 +36,9 @@ export default class UniversalResults {
    * @return {UniversalResults}
    */
   static searchLoading () {
-    return new UniversalResults({ searchState: SearchStates.SEARCH_LOADING });
+    return new UniversalResults({
+      searchState: SearchStates.SEARCH_LOADING,
+      timestamp: new Date().toLocaleString()
+    });
   }
 }

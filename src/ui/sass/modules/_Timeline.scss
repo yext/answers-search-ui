@@ -1,0 +1,14 @@
+/** @define Timeline */
+
+.yxt-Timeline
+{
+  $timeline-text-font-size: $font-size-md-lg !default;
+  $timeline-text-font-weight: $font-weight-normal !default;
+  $timeline-text-color: $color-text-primary !default;
+
+  @include Text(
+    $size: $timeline-text-font-size,
+    $weight: $timeline-text-font-weight,
+    $color: $timeline-text-color
+  );
+}
