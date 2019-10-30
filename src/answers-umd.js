@@ -62,6 +62,12 @@ class Answers {
      * Typically fired after templates are fetched from server for rendering.
      */
     this._onReady = function () {};
+
+    /**
+     * @type {boolean}
+     * @private
+     */
+    this._eligibleForAnalytics = false;
   }
 
   static setInstance (instance) {
@@ -102,7 +108,8 @@ class Answers {
       .setCore(this.core)
       .setRenderer(this.renderer);
 
-    if (config.businessId) {
+    this._eligibleForAnalytics = config.businessId != null;
+    if (this._eligibleForAnalytics) {
       const reporter = new AnalyticsReporter(
         this.core,
         config.experienceKey,
@@ -197,6 +204,16 @@ class Answers {
   registerHelper (name, cb) {
     this.renderer.registerHelper(name, cb);
     return this;
+  }
+
+  /**
+   * Opt in or out of convertion tracking analytics
+   * @param {boolean} optIn
+   */
+  setConversionsOptIn (optIn) {
+    if (this._eligibleForAnalytics) {
+      this.AnalyticsReporter.setConversionTrackingEnabled(optIn);
+    }
   }
 }
 
