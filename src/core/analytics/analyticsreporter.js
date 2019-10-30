@@ -2,7 +2,7 @@
 
 import AnalyticsEvent from './analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
-import { ANALYTICS_BASE_URL } from '../constants';
+import { ANALYTICS_BASE_URL, ANALYTICS_BASE_URL_NO_COOKIE } from '../constants';
 import StorageKeys from '../storage/storagekeys';
 import HttpRequester from '../http/httprequester';
 
@@ -24,6 +24,13 @@ export default class AnalyticsReporter {
      */
     this._globalOptions = Object.assign({}, globalOptions, { experienceKey });
 
+    /**
+     * Base URL for the analytics API
+     * @type {string}
+     * @private
+     */
+    this._baseUrl = ANALYTICS_BASE_URL_NO_COOKIE;
+
     if (experienceVersion) {
       this._globalOptions.experienceVersion = experienceVersion;
     }
@@ -44,10 +51,14 @@ export default class AnalyticsReporter {
     event.addOptions(this._globalOptions);
 
     return new HttpRequester().beacon(
-      `${ANALYTICS_BASE_URL}/realtimeanalytics/data/answers/${this._businessId}`,
+      `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,
       {
         'data': event.toApiEvent()
       }
     );
+  }
+
+  setConversionTrackingEnabled (isEnabled) {
+    this._baseUrl = isEnabled ? ANALYTICS_BASE_URL : ANALYTICS_BASE_URL_NO_COOKIE;
   }
 }
