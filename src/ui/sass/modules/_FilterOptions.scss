@@ -7,9 +7,10 @@
     button {
       @include Text(
         $color: $color-brand-primary,
-        $line-height: $line-height-xxlg,
         $style: italic);
       @include TextButton();
+
+      margin-left: -10px;
 
       svg {
         width: 6px;
@@ -42,6 +43,10 @@
     align-items: center;
   }
 
+  &-option {
+    margin: 2px 0;
+  }
+
   &-selectedCount {
     @include Text(
       $size: $font-size-xs,
@@ -61,6 +66,10 @@
   &-expand {
     @include TextButton();
     margin-left: auto;
+
+    &:not(:disabled):hover {
+      color: $color-text-secondary;
+    }
   }
 
   &--collapsed {

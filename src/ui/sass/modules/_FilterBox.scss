@@ -1,0 +1,48 @@
+/** @define FilterBox */
+
+.yxt-FilterBox {
+  &-container {
+    width: 250px;
+    //remove
+    margin: 25px;
+  }
+
+  &-title {
+    @include Text(
+      $size: $font-size-md-lg,
+      $line-height: $line-height-lg,
+      $weight: $font-weight-semibold);
+
+    text-transform: uppercase;
+
+    margin-bottom: 4px;
+  }
+
+  &-filter:not(.yxt-FilterBox-filter--first) {
+    border-top: 1px solid $color-background-dark;
+  }
+
+  &-apply {
+    @include Text(
+      $size: $font-size-md,
+      $weight: $font-weight-semibold,
+      $color: white);
+
+    @include Button();
+
+    width: 90px;
+    height: 40px;
+  }
+
+  &-reset {
+    @include Text(
+      $size: $font-size-md,
+      $weight: $font-weight-semibold,
+      $color: $color-brand-primary);
+
+    @include TextButton();
+
+    margin-left: 10px;
+    letter-spacing: 0.5px;
+  }
+}

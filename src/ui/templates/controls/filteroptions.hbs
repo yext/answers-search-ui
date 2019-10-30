@@ -40,7 +40,7 @@
     <div class='yxt-FilterOptions-options'>
       {{#each options}}
         {{#if ../isSingleOption}}
-          <div class="singleoption-option">
+          <div class="singleoption-option yxt-FilterOptions-option">
             <input
               type="radio"
               class="js-yext-filter-option"
@@ -52,7 +52,7 @@
             <label class="singleoption-label" for="js-yext-radio-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
           </div>
         {{else}}
-          <div class="multioption-option">
+          <div class="multioption-option yxt-FilterOptions-option">
             <input
               type="checkbox"
               class="js-yext-filter-option"

@@ -50,7 +50,8 @@ class FilterOptionsConfig {
      * If true, show a button to reset the current filter selection
      * @type {boolean}
      */
-    this.showReset = config.showReset === undefined ? true : config.showReset;
+    this.showReset = config.showReset || false;
+    this.showReset = this.showReset & this.options.length > 0;
 
     /**
      * The label to show for the reset button
@@ -147,7 +148,7 @@ export default class FilterOptionsComponent extends Component {
       ...config
     });
 
-    this.expanded = true;
+    this.expanded = this.config.options.length > 0;
     this.allShown = false;
   }
 

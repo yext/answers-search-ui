@@ -343,12 +343,10 @@ export default class SearchComponent extends Component {
       const totalFilter = allFilters.length > 1
         ? Filter.and(...allFilters)
         : allFilters[0];
-      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
       return this.core.verticalSearch(this._verticalKey, {
         input: query,
         filter: JSON.stringify(totalFilter),
-        offset: this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
-        facetFilter: JSON.stringify(facetFilter)
+        offset: this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0
       });
     } else {
       // NOTE(billy) Temporary hack for DEMO

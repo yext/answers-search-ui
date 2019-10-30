@@ -14,18 +14,47 @@
 }
 
 @mixin TextButton(
-  $padding: 0,
-  $hover-color: $color-text-secondary
+  $padding: 5px 10px,
+  $focus-color: $color-brand-hover
 ) {
   background: none;
-  border: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
   padding: $padding;
 
   &:not(:disabled) {
     cursor: pointer;
 
     &:hover {
-      color: $hover-color;
+      text-decoration: underline;
+    }
+
+    &:focus {
+      color: $focus-color;
+      border: 1px solid $focus-color;
+    }
+  }
+}
+
+@mixin Button(
+
+) {
+  border: 0;
+  border-radius: 3px;
+  margin-top: 16px;
+  background: $color-brand-primary;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+
+  &:not(:disabled){
+    cursor: pointer;
+
+    &:hover, &:focus {
+      background: padding-box $color-brand-hover;
+    }
+
+    &:focus {
+      border: 3px double #0c5ecb;
     }
   }
 }
