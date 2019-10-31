@@ -77,14 +77,20 @@ export default class PaginationComponent extends Component {
 
     const previousPageButton = DOM.query(this._container, '.js-yxt-Pagination-previous');
     const nextPageButton = DOM.query(this._container, '.js-yxt-Pagination-next');
-    const firstPageButton = DOM.query(this._container, '.js-yxt-Pagination-first');
-    const lastPageButton = DOM.query(this._container, '.js-yxt-Pagination-last');
     const maxPage = Math.trunc((results.resultsCount - 1) / limit);
 
     DOM.on(previousPageButton, 'click', () => this.updatePage(offset - limit));
     DOM.on(nextPageButton, 'click', () => this.updatePage(offset + limit));
-    DOM.on(firstPageButton, 'click', () => this.updatePage(0));
-    DOM.on(lastPageButton, 'click', () => this.updatePage(maxPage * limit));
+
+    if (this._firstPageButtonEnabled) {
+      const firstPageButton = DOM.query(this._container, '.js-yxt-Pagination-first');
+      DOM.on(firstPageButton, 'click', () => this.updatePage(0));
+    }
+
+    if (this._lastPageButtonEnabled) {
+      const lastPageButton = DOM.query(this._container, '.js-yxt-Pagination-last');
+      DOM.on(lastPageButton, 'click', () => this.updatePage(maxPage * limit));
+    }
   }
 
   updatePage (offset) {
