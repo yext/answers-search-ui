@@ -1,10 +1,14 @@
 <fieldset class="yxt-FilterOptions-fieldSet">
   <legend class="yxt-FilterOptions-legend">
     <div class="yxt-FilterOptions-legendLabel">
-      <span class="yxt-FilterOptions-label">{{label}}</span>
+      {{#if showExpand}}
+          <button type="button" class="yxt-FilterOptions-label yxt-FilterOptions-labelButton">{{label}}</button>
+        {{else}}
+          <span class="yxt-FilterOptions-label">{{label}}</span>
+      {{/if}}
       {{#if showReset}}
         {{#unless showExpand}}
-          <button class="yxt-FilterOptions-reset">{{resetLabel}}</button>
+          <button class="yxt-FilterOptions-reset yxt-FilterOptions-reset--right">{{resetLabel}}</button>
         {{/unless}}
       {{/if}}
       {{#if showNumberApplied}}
@@ -60,7 +64,7 @@
               value="{{value}}"
               data-index="{{@index}}"
               {{#if selected}}checked{{/if}}>
-            <label class="multioption-label" for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
+            <label class="yxt-FilterOptions-optionLabel" for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
           </div>
         {{/if}}
       {{/each}}

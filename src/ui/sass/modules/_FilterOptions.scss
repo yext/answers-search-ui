@@ -34,7 +34,7 @@
 
   &-legend {
     width: 100%;
-    padding: 0;
+    padding: 0 0 5px 0;
   }
 
   &-legendLabel {
@@ -45,6 +45,13 @@
 
   &-option {
     margin: 2px 0;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  &-optionLabel {
+    display: block;
+    margin-left: 5px;
   }
 
   &-selectedCount {
@@ -61,6 +68,27 @@
     align-items: center;
     justify-content: center;
     border-radius: 4px;
+  }
+
+  &-reset {
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton();
+  }
+
+  &-reset--right {
+    margin-left: auto;
+  }
+
+  &-labelButton {
+    @include TextButton();
+    padding: 0;
+
+    &:not(:disabled):hover {
+      color: $color-text-secondary;
+      text-decoration: none;
+    }
   }
 
   &-expand {

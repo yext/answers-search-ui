@@ -31,25 +31,25 @@ class FilterBoxConfig {
      * If true, show a button to reset for each facet group
      * @type {boolean}
      */
-    this.resetFacet = config.resetFacet || false;
+    this.resetFilter = config.resetFacet || false;
 
     /**
      * The label to show for the reset button
      * @type {string}
      */
-    this.resetFacetLabel = config.resetFacetLabel || 'reset';
+    this.resetFilterLabel = config.resetFacetLabel || 'reset';
 
     /**
      * If true, show a "reset all" button to reset all facets
      * @type {boolean}
      */
-    this.resetFacets = config.resetFacets === undefined ? true : config.resetFacets;
+    this.resetFilters = config.resetFacets === undefined ? true : config.resetFacets;
 
     /**
      * The label to show for the "reset all" button
      * @type {string}
      */
-    this.resetFacetsLabel = config.resetFacetsLabel || 'reset all';
+    this.resetFiltersLabel = config.resetFacetsLabel || 'reset all';
 
     /**
      * The max number of facets to show before displaying "show more"/"show less"
@@ -100,10 +100,10 @@ class FilterBoxConfig {
     this.applyButtonSelector = config.applyButtonSelector || '.js-yext-filterbox-apply';
 
     /**
-     * The list of filters to display and control
+     * The list of filters to display and control, ignoring empty sections
      * @type {object[]}
      */
-    this.filterConfigs = config.filters;
+    this.filterConfigs = config.filters.filter(f => f.options.length !== 0);
 
     /**
      * Whether or not this filterbox contains facets. This affects the
@@ -176,8 +176,8 @@ export default class FilterBoxComponent extends Component {
 
   setState (data) {
     super.setState(Object.assign({}, data, this.config, {
-      showReset: this.config.resetFacets,
-      resetLabel: this.config.resetFacetsLabel,
+      showReset: this.config.resetFilters,
+      resetLabel: this.config.resetFiltersLabel,
       showApplyButton: !this.config.searchOnChange
     }));
   }
@@ -200,7 +200,8 @@ export default class FilterBoxComponent extends Component {
           name: `${this.name}.filter${i}`,
           storeOnChange: false,
           container: `.js-yext-filterbox-filter${i}`,
-          showReset: this.config.resetFacet,
+          showReset: this.config.resetFilter,
+          resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
           onChange: (filter) => {
             this.onFilterChange(i, filter);
@@ -225,7 +226,7 @@ export default class FilterBoxComponent extends Component {
     }
 
     // Initialize reset button
-    if (this.config.resetFacets) {
+    if (this.config.resetFilters) {
       DOM.on(
         DOM.query(this._container, '.js-yxt-FilterBox-reset'),
         'click',

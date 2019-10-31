@@ -148,7 +148,10 @@ export default class FilterOptionsComponent extends Component {
       ...config
     });
 
-    this.expanded = this.config.options.length > 0;
+    const selectedCount = this.config.options.reduce(
+      (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
+      0);
+    this.expanded = selectedCount > 0;
     this.allShown = false;
   }
 
@@ -176,6 +179,7 @@ export default class FilterOptionsComponent extends Component {
     super.setState(Object.assign({}, data, {
       name: this.name.toLowerCase(),
       ...this.config,
+      showReset: this.config.showReset && selectedCount > 0,
       expanded: this.expanded,
       allShown: this.allShown,
       selectedCount,
@@ -193,8 +197,12 @@ export default class FilterOptionsComponent extends Component {
         this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
       });
 
+    const selectedCount = this.config.options.reduce(
+      (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
+      0);
+
     // reset button
-    if (this.config.showReset) {
+    if (this.config.showReset && selectedCount > 0) {
       DOM.on(
         DOM.query(this._container, '.yxt-FilterOptions-reset'),
         'click',
@@ -216,6 +224,14 @@ export default class FilterOptionsComponent extends Component {
     if (this.config.showExpand) {
       DOM.on(
         DOM.query(this._container, '.yxt-FilterOptions-expand'),
+        'click',
+        () => {
+          this.expanded = !this.expanded;
+          this.setState();
+        });
+
+      DOM.on(
+        DOM.query(this._container, '.yxt-FilterOptions-labelButton'),
         'click',
         () => {
           this.expanded = !this.expanded;

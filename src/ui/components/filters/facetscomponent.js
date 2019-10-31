@@ -196,10 +196,11 @@ export default class FacetsComponent extends Component {
         parentContainer: this._container,
         name: `${this.name}.filterbox`,
         container: '.js-yxt-Facets',
-        // searchOnChange: this.config.searchOnChange,
         verticalKey: this._verticalKey,
-        // title: this.config.title,
-        // showCount: this.config.showCount,
+        resetFilter: this.config.resetFacet,
+        resetFilters: this.config.resetFacets,
+        resetFilterLabel: this.config.resetFacetLabel,
+        resetFiltersLabel: this.config.resetFacetsLabel,
         isDynamic: true,
         filters
       })
