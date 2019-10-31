@@ -26,14 +26,14 @@ export default class PaginationComponent extends Component {
      * @type {boolean}
      * @private
      */
-    this._firstPageButtonEnabled = config.showFirstPageButton ? config.showFirstPageButton : true;
+    this._firstPageButtonEnabled = config.showFirst === undefined ? true : config.showFirst;
 
     /**
      * If true, displays the last page button
      * @type {boolean}
      * @private
      */
-    this._lastPageButtonEnabled = config.showLastPageButton ? config.showLastPageButton : true;
+    this._lastPageButtonEnabled = config.showLast === undefined ? true : config.showLast;
 
     /**
      * Options to include with all analytic events sent by this component
