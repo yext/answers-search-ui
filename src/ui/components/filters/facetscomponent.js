@@ -163,6 +163,13 @@ export default class FacetsComponent extends Component {
     return 'filters/facets';
   }
 
+  remove () {
+    if (this._filterbox) {
+      this._filterbox.remove();
+    }
+    super.remove();
+  }
+
   onMount () {
     this.core.enableDynamicFilters();
 
