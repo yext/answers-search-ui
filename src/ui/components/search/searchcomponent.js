@@ -167,7 +167,7 @@ export default class SearchComponent extends Component {
   }
 
   onCreate () {
-    if (this.query && !this.redirectUrl) {
+    if (this.query != null && !this.redirectUrl) {
       this.core.setQuery(this.query);
     }
     if (this._promptForLocation) {
