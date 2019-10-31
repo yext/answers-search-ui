@@ -151,7 +151,7 @@ export default class FilterOptionsComponent extends Component {
     const selectedCount = this.config.options.reduce(
       (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
       0);
-    this.expanded = selectedCount > 0;
+    this.expanded = this.config.showExpand ? selectedCount > 0 : true;
     this.allShown = false;
   }
 

@@ -42,6 +42,12 @@
 
     @include TextButton();
 
+    text-decoration: underline;
+
+    &:not(:disabled):hover {
+      text-decoration: none;
+    }
+
     margin-left: 10px;
     letter-spacing: 0.5px;
   }

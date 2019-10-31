@@ -44,9 +44,16 @@
   }
 
   &-option {
-    margin: 2px 0;
     display: flex;
     align-items: flex-start;
+    margin: 2px 0;
+    @media (max-width: $breakpoint-mobile-max) {
+      margin: 22px 0;
+    }
+
+    &:first-child {
+      margin-top: 0;
+    }
   }
 
   &-optionLabel {
