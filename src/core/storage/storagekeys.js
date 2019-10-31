@@ -22,5 +22,6 @@ export default {
   GEOLOCATION: 'geolocation',
   INTENTS: 'intents',
   QUESTION_SUBMISSION: 'question-submission',
-  SPELL_CHECK: 'spell-check'
+  SPELL_CHECK: 'spell-check',
+  LOCATION_BIAS: 'location-bias'
 };

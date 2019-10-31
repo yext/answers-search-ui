@@ -166,6 +166,7 @@ export default class Core {
   search (queryString, urls) {
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
+    this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
 
     return this._searcher
       .universalSearch(queryString, {
@@ -186,6 +187,7 @@ export default class Core {
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete('queryTrigger');
+        this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
       });
   }
 

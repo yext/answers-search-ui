@@ -146,6 +146,9 @@ export default class SearchComponent extends Component {
     this._promptForLocation = config.promptForLocation === undefined
       ? true
       : Boolean(config.promptForLocation);
+    this.core.globalStorage.on('update', StorageKeys.GEOLOCATION, e => {
+      this.search(this.query);
+    });
 
     /**
      * Controls showing and hiding the search clear button

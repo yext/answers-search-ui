@@ -1,0 +1,9 @@
+<div class="yxt-LocationBias" {{#unless shouldShow}}style="display:none"{{/unless}}>
+  <div class="yxt-LocationBias-container">
+    <span class="yxt-locationBias-bullet {{#if isPreciseLocation}}yxt-locationBias-bullet-precise-loc{{/if}} 
+    {{#if isUnknownLocation}} yxt-LocationBias-bullet-unknown-loc {{/if}}"></span>
+    <strong>{{locationDisplayName}}</strong> 
+    {{#if accuracyText}}<span class="yxt-locationBias-loc-source">({{accuracyText}}) | </span>{{else}} | {{/if}}
+    <a class="js-locationBias-update-location">Update your location</a>
+  </div>
+</div>
