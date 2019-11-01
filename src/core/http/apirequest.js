@@ -55,7 +55,7 @@ export default class ApiRequest {
 
   /**
    * get creates a new `GET` request to the server using the configuration of the request class
-   * @returns {Promise}
+   * @returns {Promise<Response>}
    */
   get () {
     return this._requester.get(
@@ -64,6 +64,10 @@ export default class ApiRequest {
     );
   }
 
+  /**
+   * @param {Object} opts
+   * @returns {Promise<Response>}
+   */
   post (opts) {
     return this._requester.post(
       this._baseUrl + this._endpoint,
@@ -72,6 +76,10 @@ export default class ApiRequest {
       opts /* requestConfig */);
   }
 
+  /**
+   * @returns {Object}
+   * @private
+   */
   baseParams () {
     let baseParams = {
       'v': this._version,

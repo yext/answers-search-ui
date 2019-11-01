@@ -4,11 +4,14 @@ const config = JSON.parse(document.getElementById('config').textContent);
 
 window.initAnswers = async function initAnswers () {
   const {
+    mock,
+    templateUrl,
     apiKey,
-    answersKey,
+    experienceKey,
     verticalKey,
     mapProvider,
-    mapApiKey
+    mapApiKey,
+    businessId
   } = config;
   const verticalConfig = config.verticals[verticalKey];
   const mapConfig = {
@@ -20,8 +23,11 @@ window.initAnswers = async function initAnswers () {
   };
 
   ANSWERS.init({
+    mock,
+    templateUrl,
     apiKey,
-    answersKey,
+    experienceKey,
+    businessId,
     onReady: function () {
       ANSWERS.addComponent('Navigation', {
         container: '.navigation-container',

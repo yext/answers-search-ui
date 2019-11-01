@@ -1,11 +1,15 @@
 /** @module SearchApi */
 
+/** @typedef {import('./searchservice').default} SearchService */
+
 import ApiRequest from '../http/apirequest';
 import { AnswersBasicError, AnswersCoreError } from '../errors/errors';
 
 /**
  * SearchApi is the API for doing various types of search
  * over the network (e.g. vertical or universal)
+ *
+ * @implements {SearchService}
  */
 export default class SearchApi {
   constructor (config = {}) {
@@ -54,21 +58,7 @@ export default class SearchApi {
     this._locale = config.locale;
   }
 
-  /**
-   * Search in the context of a vertical
-   * @param {string} verticalKey vertical ID for the search
-   * @param {object} query The query details
-   * @param {string} query.input The input to search for
-   * @param {string} query.filter The filter to use in the search
-   * @param {string} query.facetFilter The facet filter to use in the search
-   * @param {number} query.limit The max number of results to include, max of 50
-   * @param {number} query.offset The results offset, for fetching more results of the same query
-   * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
-   * @param {Object} query.geolocation The user's geolocation position used to bias the results
-   * @param {boolean} query.isDynamicFiltersEnabled If true, asks the server to return dynamic filters
-   * @param {string} query.skipSpellCheck The boolean as string to indicate if it should skip spell checking
-   * @param {string} query.queryTrigger The source that triggers query such as suggest
-   */
+  /** @inheritdoc */
   verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
@@ -101,13 +91,7 @@ export default class SearchApi {
       .then(response => response.json());
   }
 
-  /**
-   * Search across all verticals
-   * @param {string} queryString The input to search for
-   * @param {Object} params.geolocation the user's geolocation position used to bias the results
-   * @param {string} params.skipSpellCheck The boolean as string to indicate if it should skip spell checking
-   * @param {string} params.queryTrigger The source that triggers query such as suggest
-   */
+  /** @inheritdoc */
   universalSearch (queryString, params) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/query',

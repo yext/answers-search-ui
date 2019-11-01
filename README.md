@@ -755,3 +755,12 @@ Click analytics can be attached to an element by adding the `data-eventtype` att
     Drive to {{store}}
 </button>
 ```
+
+## Conversion Tracking
+
+By default, Answers does not perform conversion tracking for analytics. To opt-in to this behavior, use the `setConversionsOptIn` method after initialization:
+
+```js
+ANSWERS.init({ ... });
+agreementButton.onclick = function() { ANSWERS.setConversionsOptIn(true); };
+```

@@ -2,12 +2,16 @@
 
 import AnalyticsEvent from './analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
-import { ANALYTICS_BASE_URL } from '../constants';
+import { ANALYTICS_BASE_URL, ANALYTICS_BASE_URL_NO_COOKIE } from '../constants';
 import StorageKeys from '../storage/storagekeys';
 import HttpRequester from '../http/httprequester';
 
+/** @typedef {import('../services/analyticsreporterservice').default} AnalyticsReporterService */
+
 /**
- * Class for reporting analytics events to the server
+ * Class for reporting analytics events to the server via HTTP
+ *
+ * @implements {AnalyticsReporterService}
  */
 export default class AnalyticsReporter {
   constructor (core, experienceKey, experienceVersion, businessId, globalOptions = {}) {
@@ -24,6 +28,13 @@ export default class AnalyticsReporter {
      */
     this._globalOptions = Object.assign({}, globalOptions, { experienceKey });
 
+    /**
+     * Base URL for the analytics API
+     * @type {string}
+     * @private
+     */
+    this._baseUrl = ANALYTICS_BASE_URL_NO_COOKIE;
+
     if (experienceVersion) {
       this._globalOptions.experienceVersion = experienceVersion;
     }
@@ -36,6 +47,7 @@ export default class AnalyticsReporter {
     this._globalOptions.queryId = queryId;
   }
 
+  /** @inheritdoc */
   report (event) {
     if (!(event instanceof AnalyticsEvent)) {
       throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
@@ -44,10 +56,15 @@ export default class AnalyticsReporter {
     event.addOptions(this._globalOptions);
 
     return new HttpRequester().beacon(
-      `${ANALYTICS_BASE_URL}/realtimeanalytics/data/answers/${this._businessId}`,
+      `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,
       {
         'data': event.toApiEvent()
       }
     );
+  }
+
+  /** @inheritdoc */
+  setConversionTrackingEnabled (isEnabled) {
+    this._baseUrl = isEnabled ? ANALYTICS_BASE_URL : ANALYTICS_BASE_URL_NO_COOKIE;
   }
 }
