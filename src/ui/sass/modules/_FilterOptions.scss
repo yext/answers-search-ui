@@ -3,20 +3,6 @@
 .yxt-FilterOptions {
   &-container {
     @include Text($line-height: $line-height-md);
-
-    button {
-      @include Text(
-        $color: $color-brand-primary,
-        $style: italic);
-      @include TextButton();
-
-      margin-left: -10px;
-
-      svg {
-        width: 6px;
-        margin-left: 5px;
-      }
-    }
   }
 
   &-fieldSet {
@@ -30,17 +16,23 @@
       $size: $font-size-md-lg,
       $line-height: $line-height-lg,
       $weight: $font-weight-semibold);
+
+    text-align: left;
   }
 
   &-legend {
     width: 100%;
-    padding: 0 0 5px 0;
+    padding: 0;
   }
 
   &-legendLabel {
     width: 100%;
     display: flex;
     align-items: center;
+
+    &:hover button {
+      color: $color-text-secondary;
+    }
   }
 
   &-option {
@@ -50,6 +42,10 @@
     @media (max-width: $breakpoint-mobile-max) {
       margin: 22px 0;
     }
+  }
+
+  &-options {
+    margin: 12px 0;
   }
 
   &-optionLabel {
@@ -65,7 +61,6 @@
 
     width: 20px;
     height: 20px;
-    margin-left: 12px;
     display: flex;
     background: $color-background-dark;
     align-items: center;
@@ -77,7 +72,27 @@
     @include Text(
       $color: $color-brand-primary,
       $style: italic);
-    @include TextButton();
+    @include TextButton($padding: 0);
+
+    @media (max-width: $breakpoint-mobile-max) {
+      margin-top: 12px;
+    }
+  }
+
+  &-showToggle {
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton($padding: 0);
+
+    svg {
+      width: 6px;
+      margin-left: 5px;
+    }
+  }
+
+  &-input {
+    margin-left: 0;
   }
 
   &-reset--right {
@@ -88,6 +103,7 @@
   &-labelButton {
     @include TextButton();
     padding: 0;
+    padding-right: 12px;
 
     &:not(:disabled):hover {
       color: $color-text-secondary;
@@ -102,6 +118,9 @@
     &:not(:disabled):hover {
       color: $color-text-secondary;
     }
+
+    flex-grow: 1;
+    text-align: right;
   }
 
   &--collapsed {
@@ -110,6 +129,10 @@
 
   &-collapseUp, &-collapseDown {
     vertical-align: middle;
+  }
+
+  &-collapseUp {
+    padding-top: 2px;
   }
 
   &-collapseUp svg {
