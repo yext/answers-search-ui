@@ -6,6 +6,7 @@ import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
+import Filter from './models/filter';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -111,7 +112,7 @@ export default class Core {
 
     return this._searcher
       .verticalSearch(verticalKey, {
-        limit: this.globalStorage.getState(StorageKeys.SEARCH_LIMIT),
+        limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
@@ -141,6 +142,26 @@ export default class Core {
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete('queryTrigger');
       });
+  }
+
+  /**
+   * Page within the results of the last query
+   * @param {string} verticalKey The vertical key to use in the search
+   * @param {number} offset The offset to use in the search
+   */
+  verticalPage (verticalKey, offset) {
+    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
+    const totalFilter = allFilters.length > 1
+      ? Filter.and(...allFilters)
+      : allFilters[0];
+    const facetFilter = this.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
+    this.verticalSearch(verticalKey, {
+      input: this.globalStorage.getState(StorageKeys.QUERY),
+      id: this.globalStorage.getState(StorageKeys.QUERY_ID),
+      filter: JSON.stringify(totalFilter),
+      facetFilter: JSON.stringify(facetFilter),
+      offset
+    });
   }
 
   search (queryString, urls) {
@@ -271,10 +292,6 @@ export default class Core {
 
   enableDynamicFilters () {
     this._isDynamicFiltersEnabled = true;
-  }
-
-  setSearchLimit (limit) {
-    this.globalStorage.set(StorageKeys.SEARCH_LIMIT, limit);
   }
 
   on (evt, moduleId, cb) {

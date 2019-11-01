@@ -60,6 +60,16 @@ export class AnswersBasicError extends AnswersBaseError {
  * AnswersUiError used for things like DOM errors.
  * @extends AnswersBaseError
  */
+export class AnswersConfigError extends AnswersBaseError {
+  constructor (message, boundary, causedBy) {
+    super(101, message, boundary, causedBy);
+  }
+}
+
+/**
+ * AnswersUiError used for things like DOM errors.
+ * @extends AnswersBaseError
+ */
 export class AnswersUiError extends AnswersBaseError {
   constructor (message, boundary, causedBy) {
     super(200, message, boundary, causedBy);
