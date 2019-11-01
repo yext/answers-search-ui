@@ -4,6 +4,7 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { AnswersComponentError } from '../../../core/errors/errors';
+import SearchStates from '../../../core/storage/searchstates';
 
 export default class PaginationComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -53,8 +54,10 @@ export default class PaginationComponent extends Component {
       this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
     });
 
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, () => {
-      this.setState();
+    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
+      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+        this.setState();
+      }
     });
   }
 
