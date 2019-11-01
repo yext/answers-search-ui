@@ -33,6 +33,10 @@
     }
   }
 
+  &-button:disabled {
+    visibility: hidden;
+  }
+
   &-page
   {
     padding: 0;
