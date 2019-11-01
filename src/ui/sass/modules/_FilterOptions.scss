@@ -50,10 +50,6 @@
     @media (max-width: $breakpoint-mobile-max) {
       margin: 22px 0;
     }
-
-    &:first-child {
-      margin-top: 0;
-    }
   }
 
   &-optionLabel {
@@ -86,6 +82,7 @@
 
   &-reset--right {
     margin-left: auto;
+    padding: 0;
   }
 
   &-labelButton {

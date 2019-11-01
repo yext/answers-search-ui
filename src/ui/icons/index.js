@@ -24,6 +24,7 @@ import gearIcon from './gear.js';
 import lightBulbIcon from './light_bulb.js';
 import starIcon from './star.js';
 import close from './close.js';
+import elements from './elements';
 
 const iconsArray = [
   thumbIcon,
@@ -50,6 +51,7 @@ const iconsArray = [
   pinIcon,
   gearIcon,
   lightBulbIcon,
+  elements,
   close
 ];
 

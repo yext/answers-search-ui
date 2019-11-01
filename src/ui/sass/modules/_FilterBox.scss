@@ -2,9 +2,14 @@
 
 .yxt-FilterBox {
   &-container {
-    width: 250px;
-    //remove
-    margin: 25px;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
+  &-titleContainer {
+    display: flex;
+    align-items: center;
+    margin-bottom: 4px;
   }
 
   &-title {
@@ -14,8 +19,7 @@
       $weight: $font-weight-semibold);
 
     text-transform: uppercase;
-
-    margin-bottom: 4px;
+    margin-left: 13px;
   }
 
   &-filter:not(.yxt-FilterBox-filter--first) {

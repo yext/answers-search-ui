@@ -1,6 +1,12 @@
 <div class="yxt-FilterBox-container">
   {{#if title}}
-    <span class="yxt-FilterBox-title">{{title}}</span>
+    <div class="yxt-FilterBox-titleContainer">
+      <div
+        data-component="IconComponent"
+        data-opts='{ "iconName": "elements" }'>
+      </div>
+      <span class="yxt-FilterBox-title">{{title}}</span>
+    </div>
   {{/if}}
   {{#each filterConfigs}}
     <div class="js-yext-filterbox-filter{{@index}} yxt-FilterBox-filter {{#if @first}}yxt-FilterBox-filter--first{{/if}}">
