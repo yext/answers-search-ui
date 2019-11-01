@@ -120,7 +120,7 @@ class Answers {
   }
 
   init (config) {
-    config = Object.assign({}, config, DEFAULTS);
+    config = Object.assign({}, DEFAULTS, config);
     if (typeof config.apiKey !== 'string') {
       throw new Error('Missing required `apiKey`. Type must be {string}');
     }
