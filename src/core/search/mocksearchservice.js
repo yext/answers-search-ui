@@ -15,27 +15,37 @@
  * @returns {ResultData[]}
  */
 
+/**
+ * @callback MockDataConsumer
+ * @param {Section[]} sections
+ * @returns {Promise<Object>}
+ */
+
 const ARBITRARY_BUSINESS_ID = 919871;
-let mockDataJson = [];
-const dataFetch = fetch('https://assets.sitescdn.net/answers/testdata/search/mockdata_v1.json')
-  .then(resp => resp.text())
-  .then(text => { mockDataJson = text; })
-  .catch(console.error);
 
 /**
  * @implements {SearchService}
  */
 export default class MockSearchService {
+  constructor () {
+    /**
+     * @type {Promise<string>}
+     * @private
+     */
+    this._getMockDataJson = fetch('https://assets.sitescdn.net/answers/testdata/search/mockdata_v1.json')
+      .then(resp => resp.text())
+      .catch(console.error);
+  }
+
   /** @inheritdoc */
   verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger }) {
-    return dataFetch.then(() => {
+    return this.useMockData(sections => {
       if (input === '') {
         return delayedResponse(constructVerticalResponse({
           results: [],
           appliedQueryFilters: []
         }));
       }
-      const sections = mockData();
 
       // Either find a section with matching ID, or pick one at random
       let section = sections.find(
@@ -59,11 +69,10 @@ export default class MockSearchService {
 
   /** @inheritdoc */
   universalSearch (queryString, params) {
-    return dataFetch.then(() => {
+    return this.useMockData(sections => {
       if (queryString === '') {
         return delayedResponse(constructUniversalResponse([]));
       }
-      let sections = mockData();
 
       sections.forEach(section => {
         modifyResults(section, getResultsFilterer(queryString));
@@ -76,6 +85,15 @@ export default class MockSearchService {
       const resp = constructUniversalResponse(sections);
       return delayedResponse(resp);
     });
+  }
+
+  /**
+   * @param {MockDataConsumer} consumer
+   * @returns {Promise<Object>}
+   * @private
+   */
+  useMockData (consumer) {
+    return this._getMockDataJson.then(JSON.parse).then(consumer);
   }
 }
 
@@ -195,9 +213,4 @@ function uuidV4 () {
  */
 function randomInt (min, max) {
   return Math.floor(Math.random() * (max - min) + min);
-}
-
-/** @returns {Section[]} */
-function mockData () {
-  return JSON.parse(mockDataJson);
 }
