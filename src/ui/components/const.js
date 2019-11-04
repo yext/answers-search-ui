@@ -23,6 +23,7 @@ import DirectAnswerComponent from './results/directanswercomponent';
 import ResultsComponent from './results/resultscomponent';
 import AccordionResultsComponent from './results/accordionresultscomponent.js';
 import UniversalResultsComponent from './results/universalresultscomponent';
+import PaginationComponent from './results/paginationcomponent';
 
 import ResultsItemComponent from './results/resultsitemcomponent';
 import LocationResultsItemComponent from './results/locationresultsitemcomponent';
@@ -61,6 +62,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(DirectAnswerComponent)
   .register(UniversalResultsComponent)
   .register(ResultsComponent)
+  .register(PaginationComponent)
   .register(ResultsItemComponent)
   .register(AccordionResultsComponent)
   .register(LocationResultsItemComponent)

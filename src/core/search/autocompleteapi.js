@@ -4,9 +4,13 @@ import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
 
+/** @typedef {import('./autocompleteservice').default} AutoCompleteService */
+
 /**
  * AutoCompleteApi exposes an interface for network related matters
  * for all the autocomplete endpoints.
+ *
+ * @implements {AutoCompleteService}
  */
 export default class AutoCompleteApi {
   constructor (config = {}) {
@@ -55,14 +59,7 @@ export default class AutoCompleteApi {
     this._locale = config.locale;
   }
 
-  /**
-   * Autocomplete filters
-   * @param {string} input The input to use for auto complete
-   * @param {object} config The config to use for filters
-   * @param {string} config.verticalKey The vertical key for the config
-   * @param {string} config.barKey The bar key for the config v1
-   * @param {object} config.searchParameters The search parameters for the config v2
-   */
+  /** @inheritdoc */
   queryFilter (input, config) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/filtersearch',
@@ -87,6 +84,7 @@ export default class AutoCompleteApi {
       });
   }
 
+  /** @inheritdoc */
   queryVertical (input, verticalKey, barKey) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/vertical/autocomplete',
@@ -110,6 +108,7 @@ export default class AutoCompleteApi {
       });
   }
 
+  /** @inheritdoc */
   queryUniversal (queryString) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/autocomplete',

@@ -3,9 +3,12 @@
 import ApiRequest from '../http/apirequest';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
 
+/** @typedef {import('./questionanswerservice').default} QuestionAnswerService */
+
 /**
- * QuestionAnswerApi exposes an interface to do networky things against
- * the Q&A REST API
+ * QuestionAnswerApi submits questions via the Q&A REST API
+ *
+ * @implements {QuestionAnswerService}
  */
 export default class QuestionAnswerApi {
   constructor (config = {}) {
@@ -20,18 +23,7 @@ export default class QuestionAnswerApi {
     this._apiKey = config.apiKey;
   }
 
-  /**
-   * submitQuestion will create a network request to
-   * create a question for Q&A.
-   * @param {object} question The question object to submit to the server
-   * @param {number} question.entityId The entity to associate with the question (required)
-   * @param {string} question.lanuage The language of the question
-   * @param {string} question.site The "publisher" of the (e.g. 'FIRST_PARTY')
-   * @param {string} question.name The name of the author
-   * @param {string} question.email The email address of the author
-   * @param {string} question.questionText The question
-   * @param {string} question.questionDescription Additional information about the question
-   */
+  /** @inheritdoc */
   submitQuestion (question) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/questions',
