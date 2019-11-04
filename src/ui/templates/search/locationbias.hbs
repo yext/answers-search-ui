@@ -3,7 +3,6 @@
     <span class="yxt-locationBias-bullet {{#if isPreciseLocation}}yxt-locationBias-bullet-precise-loc{{/if}} 
     {{#if isUnknownLocation}} yxt-LocationBias-bullet-unknown-loc {{/if}}"></span>
     <strong>{{locationDisplayName}}</strong> 
-    {{#if accuracyText}}<span class="yxt-locationBias-loc-source">({{accuracyText}}) | </span>{{else}} | {{/if}}
-    <a class="js-locationBias-update-location">Update your location</a>
+    <span class="yxt-locationBias-loc-source">{{#if accuracyText}}({{accuracyText}}){{/if}} | <a class="js-locationBias-update-location">Update your location</a></span>
   </div>
 </div>
