@@ -35,31 +35,73 @@ const DEFAULT_CONFIG = {
    * An optional label to use for the e-mail address input
    * @type {string}
    */
-  'emailLabel': 'Email Address:',
+  'emailLabel': 'Email',
 
   /**
    * An optional label to use for the name input
    * @type {string}
    */
-  'nameLabel': 'Name:',
+  'nameLabel': 'Name',
 
   /**
    * An optional label to use for the question
    * @type {string}
    */
-  'questionLabel': 'What is your question?',
+  'questionLabel': 'Question',
 
   /**
    * An optional label to use for the Privacy Policy
    * @type {string}
    */
-  'privacyPolicyLabel': 'I agree to our Privacy Policy:',
+  'privacyPolicyLabel': 'By submitting my email address, I consent to being contacted via email at the address provided.',
 
   /**
    * The label to use for the Submit button
    * @type {string}
    */
-  'buttonLabel': 'Submit'
+  'buttonLabel': 'Submit Feedback',
+
+  /**
+   * The title to display in the title bar
+   * @type {string}
+   */
+  'sectionTitle' : 'Feedback',
+
+  /**
+   * The description to display in the title bar
+   * @type {string}
+   */
+  'sectionDescription' : 'Can’t find what you are looking for? Provide your feedback below.',
+
+  /**
+   * The name of the icon to use in the title bar
+   * @type {string}
+   */
+  'sectionTitleIconName' : 'support',
+
+  /**
+   * The text to display in the feedback form ahead of the Question input
+   * @type {string}
+   */
+  'feedbackFormInfoText' : 'Enter your question and contact information, and we\'ll get back to you with a response shortly.',
+
+  /**
+   * The placeholder text for required inputs
+   * @type {string}
+   */
+  'requiredInputPlaceholder' : ' (required)',
+
+  /**
+   * The placeholder text for the question text area
+   * @type {string}
+   */
+  'questionInputPlaceholder' : 'Enter your question here',
+
+  /**
+   * The confirmation text to display after successfully submitting feedback
+   * @type {string}
+   */
+  'questionSubmissionConfirmationText' : 'Thank you for your feedback!'
 };
 
 /**

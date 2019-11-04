@@ -1,59 +1,126 @@
-{{#if questionSubmitted}}
-  <div class="yxt-QuestionSubmission">Thanks for your submission!</div>
-{{else}}
-  <form class="yxt-QuestionSubmission">
-    {{#if errors}}
-      {{#if errors.network}}
-        <h3>{{errors.network}}</h3>
-      {{else}}
-        <div class="yxt-errors" role="alert">
-          <h3>You are missing {{errors.length}} required fields</h3>
-          <ul>
-            {{#each errors}}
-              <li>{{this}}</li>
-            {{/each}}
-           </ul>
-        </div>
+
+<section class="yxt-QuestionSubmission">
+
+  <div class="yxt-QuestionSubmission-titleBar">
+    <div class="yxt-QuestionSubmission-titleBar-left">
+      <div class="yxt-QuestionSubmission-titleBar-titleIconWrapper"
+          data-component="IconComponent"
+          data-opts='{
+              "iconName": "{{_config.sectionTitleIconName}}"
+            }'
+          data-prop="icon"
+      ></div>
+      <div class="yxt-QuestionSubmission-titleBar-title">
+        {{_config.sectionTitle}}
+      </div>
+    </div>
+    <div class="yxt-QuestionSubmission-titleBar-right">
+      <div class="yxt-QuestionSubmission-titleBar-description">
+        {{_config.sectionDescription}}
+      </div>
+    </div>
+  </div>
+  {{#if questionSubmitted}}
+    <div class="yxt-QuestionSubmission-form">
+      <div class="yxt-QuestionSubmission-form-row">
+        {{_config.questionSubmissionConfirmationText}}
+      </div>
+    </div>
+  {{else}}
+    <form class="yxt-QuestionSubmission-form">
+      {{#if errors}}
+        {{#if errors.network}}
+          <div class="yxt-QuestionSubmission-form-row">
+            <div class="yxt-QuestionSubmission-form-row-error" role="alert">
+              <h3>{{errors.network}}</h3>
+            </div>
+          </div>
+        {{else}}
+          <div class="yxt-QuestionSubmission-form-row">
+            <div class="yxt-QuestionSubmission-form-row-error" role="alert">
+              <h3>You are missing {{errors.length}} required fields</h3>
+              <ul>
+                {{#each errors}}
+                  <li>{{this}}</li>
+                {{/each}}
+              </ul>
+            </div>
+          </div>
+        {{/if}}
       {{/if}}
-    {{/if}}
 
-    <label for="name">
-      <span class="yext-field-label">{{_config.nameLabel}}</span>
-    </label>
-    <input class="js-question-field"
-           name="name"
-           value="{{name}}">
+      <div class="yxt-QuestionSubmission-form-row">
+        {{_config.feedbackFormInfoText}}
+      </div>
 
-    <label for="email">
-      <span class="yxt-field-required">*</span>
-      <span class="yxt-field-label">{{_config.emailLabel}}</span>
-    </label>
-    <input class="js-question-field"
-           name="email"
-           placeholder="example@gmail.com"
-           value="{{email}}"
-           required>
+      <div class="yxt-QuestionSubmission-form-row">
+        <div class="yxt-QuestionSubmission-form-row-field">
+          <div class="yxt-QuestionSubmission-form-row-field-label">
+            <label for="question">
+              <span class="yxt-field-label">{{_config.questionLabel}}</span>
+            </label>
+          </div>
+          <div class="yxt-QuestionSubmission-form-row-field-input">
+            <textarea class="js-question-field js-question-text"
+                      name="questionText"
+                      placeholder="{{_config.questionInputPlaceholder}}"
+                      required>{{questionText}}</textarea>
+          </div>
+        </div>
+      </div>
 
-    <label for="question">
-      <span class="yxt-field-required">*</span>
-      <span class="yxt-field-label">{{_config.questionLabel}}</span>
-    </label>
-    <textarea class="js-question-field js-question-text"
-              name="questionText"
-              required>{{questionText}}</textarea>
+      <div class="yxt-QuestionSubmission-form-row">
+        <div class="yxt-QuestionSubmission-form-row-field">
+          <div class="yxt-QuestionSubmission-form-row-field-label">
+            <label for="name">
+              <span class="yext-field-label">{{_config.nameLabel}}</span>
+            </label>
+          </div>
+          <div class="yxt-QuestionSubmission-form-row-field-input">
+            <input class="js-question-field"
+              name="name"
+              placeholder="{{_config.requiredInputPlaceholder}}"
+              value="{{name}}"
+              required>
+          </div>
+        </div>
 
-    <label class="yxt-privacy-label">
-      <input type="checkbox"
-             name="privacyPolicy"
-             class="js-question-field"
-             value="true"
-             required>
-      <span class="yxt-field-required">*</span>
-      <span class="yxt-field-label">{{_config.privacyPolicyLabel}}</span>
-    </label>
+        <div class="yxt-QuestionSubmission-form-row-field">
+          <div class="yxt-QuestionSubmission-form-row-field-label">
+            <label for="email">
+              <span class="yxt-field-label">{{_config.emailLabel}}</span>
+            </label>
+          </div>
+          <div class="yxt-QuestionSubmission-form-row-field-input">
+            <input class="js-question-field"
+                  name="email"
+                  placeholder="{{_config.requiredInputPlaceholder}}"
+                  value="{{email}}"
+                  required>
+          </div>
+        </div>
+      </div>
 
-    <button type="submit"
-           class="yxt-submit-question"
-           data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
-  </form>
-{{/if}}
+      <div class="yxt-QuestionSubmission-acknowledgementBar">
+        <div class="yxt-QuestionSubmission-acknowledgementBar-ackCheckboxInput">
+          <input type="checkbox"
+                 name="privacyPolicy"
+                 class="js-question-field"
+                 value="true"
+                 required>
+        </div>
+
+        <div class="yxt-QuestionSubmission-acknowledgementBar-privacyPolicyText">
+          {{_config.privacyPolicyLabel}}
+        </div>
+
+        <button type="submit"
+          class="yxt-QuestionSubmission-acknowledgementBar-submitButton"
+          data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
+
+      </div>
+    </form>
+
+  {{/if}}
+
+</section>
