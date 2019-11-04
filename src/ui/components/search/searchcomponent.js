@@ -151,6 +151,13 @@ export default class SearchComponent extends Component {
      * Controls showing and hiding the search clear button
      */
     this._showClearButton = this.clearButton && this.query;
+
+    /**
+     * For vertical search bars, whether or not to allow empty searches.
+     * @type {boolean}
+     * @private
+     */
+    this._allowEmptySearch = !!config.allowEmptySearch;
   }
 
   static get type () {
@@ -315,7 +322,10 @@ export default class SearchComponent extends Component {
     // Don't search if we recently searched,
     // if there's no query for universal search,
     // or if this is a twin searchbar
-    if (this._throttled || (!query && !this._verticalKey) || this._isTwin) {
+    if (this._throttled ||
+      (!query && !this._verticalKey) ||
+      (!query && this._verticalKey && !this._allowEmptySearch) ||
+      this._isTwin) {
       return;
     }
 
