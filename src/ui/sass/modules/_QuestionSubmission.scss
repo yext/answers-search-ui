@@ -1,0 +1,178 @@
+/** @define yxt-QuestionSubmission */
+.yxt-QuestionSubmission
+{
+  $question-submission-border: $border-default !default;
+  border: $question-submission-border;
+
+  display: flex;
+  flex-direction: column;
+
+  $question-submission-cta-background-color: #1070F0;
+  $question-submission-cta-foreground-color: white;
+  $question-submission-error-text-color: rgb(148, 0, 0);
+
+  margin-top: $base-spacing;
+
+  &-titleBar
+  {
+    $question-submission-title-bar-background: $color-background-highlight !default;
+    background-color: $question-submission-title-bar-background;
+
+    $question-submission-title-bar-text-color: $color-text-primary !default;
+    $question-submission-title-bar-text-line-height: $line-height-lg !default;
+  
+    display: flex;
+
+    justify-content: space-between;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    padding-top: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
+    
+    border-bottom: $question-submission-border;
+
+    &-left
+    {
+      display: flex;
+      align-items: center;
+    }
+
+    &-right
+    {
+      display: flex;
+      align-items: center;
+    }
+
+    &-titleIconWrapper
+    {
+      display: flex;
+      margin-right: $base-spacing / 2;
+      color: $question-submission-cta-background-color;
+    }
+  
+    &-title
+    {
+      color: $question-submission-title-bar-text-color;
+      line-height: $question-submission-title-bar-text-line-height;
+      font-weight: $font-weight-semibold;
+      font-size: $font-size-md-lg;
+      text-transform: uppercase;
+    }
+
+    &-description
+    {
+      text-align: right;
+      float: left;
+      margin-right: $base-spacing / 2;
+      font-size: $font-size-md;
+      font-style: italic;
+    }
+  }
+
+  &-form
+  {
+    display: flex;
+    flex-direction: column;
+
+    &-row
+    {
+      display: flex;
+      flex-direction: row;
+      margin-top: $base-spacing / 2;
+      margin-bottom: $base-spacing / 2;
+      margin-left: $base-spacing;
+      margin-right: $base-spacing;
+
+      @media (max-width: $breakpoint-mobile-max)
+      {
+        flex-direction: column;
+      }
+
+      &-field
+      {
+        display: flex;
+        flex-direction: column;
+        margin-right: $base-spacing;
+        width:100%;
+
+        @media (max-width: $breakpoint-mobile-max)
+        {
+          margin-bottom: $base-spacing;
+        }
+
+        &-label
+        {
+          display: flex;
+          font-weight: bold;
+          margin-bottom: $base-spacing / 4;
+        }
+
+        &-input
+        {
+          display: flex;
+
+          ::placeholder
+          {
+            font-style: italic;
+          }
+
+          textarea
+          {
+            width:100%;
+          }
+
+          input
+          {
+            width:100%;
+          }
+        }
+      }
+
+      &-error
+      {
+        color: $question-submission-error-text-color;
+      }
+    }
+  }
+
+  &-acknowledgementBar
+  {
+    $acknowledgement-bar-background: $color-background-highlight !default;
+    background-color: $acknowledgement-bar-background;
+
+    display: flex;
+
+    justify-content: space-between;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    padding-top: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
+
+    margin-top: $base-spacing / 2;
+
+    border-top: $question-submission-border;
+
+    &-ackCheckboxInput
+    {
+      margin-right: $base-spacing / 2;
+    }
+
+    &-privacyPolicyText
+    {
+      margin-right: $base-spacing;
+    }
+
+    &-submitButton
+    {
+        text-transform: uppercase;
+        background: $question-submission-cta-background-color;
+        letter-spacing: 0.5px;
+        font-weight: $font-weight-semibold;
+        height: 40px;
+        min-width: 165px;
+        color: $question-submission-cta-foreground-color;
+        border: none;
+    }
+  }
+
+}
