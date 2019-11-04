@@ -65,43 +65,43 @@ const DEFAULT_CONFIG = {
    * The title to display in the title bar
    * @type {string}
    */
-  'sectionTitle' : 'Feedback',
+  'sectionTitle': 'Feedback',
 
   /**
    * The description to display in the title bar
    * @type {string}
    */
-  'sectionDescription' : 'Can’t find what you are looking for? Provide your feedback below.',
+  'sectionDescription': 'Can’t find what you are looking for? Provide your feedback below.',
 
   /**
    * The name of the icon to use in the title bar
    * @type {string}
    */
-  'sectionTitleIconName' : 'support',
+  'sectionTitleIconName': 'support',
 
   /**
    * The text to display in the feedback form ahead of the Question input
    * @type {string}
    */
-  'feedbackFormInfoText' : 'Enter your question and contact information, and we\'ll get back to you with a response shortly.',
+  'feedbackFormInfoText': 'Enter your question and contact information, and we\'ll get back to you with a response shortly.',
 
   /**
    * The placeholder text for required inputs
    * @type {string}
    */
-  'requiredInputPlaceholder' : ' (required)',
+  'requiredInputPlaceholder': ' (required)',
 
   /**
    * The placeholder text for the question text area
    * @type {string}
    */
-  'questionInputPlaceholder' : 'Enter your question here',
+  'questionInputPlaceholder': 'Enter your question here',
 
   /**
    * The confirmation text to display after successfully submitting feedback
    * @type {string}
    */
-  'questionSubmissionConfirmationText' : 'Thank you for your feedback!'
+  'questionSubmissionConfirmationText': 'Thank you for your feedback!'
 };
 
 /**
