@@ -121,9 +121,9 @@ export default class SearchComponent extends Component {
     /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
-     * @type {string}
+     * @type {string|null}
      */
-    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY);
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
       this.query = q;
       this.setState();
@@ -167,7 +167,7 @@ export default class SearchComponent extends Component {
   }
 
   onCreate () {
-    if (this.query && !this.redirectUrl) {
+    if (this.query != null && !this.redirectUrl) {
       this.core.setQuery(this.query);
     }
     if (this._promptForLocation) {
@@ -370,7 +370,7 @@ export default class SearchComponent extends Component {
       submitIcon: this.submitIcon,
       submitText: this.submitText,
       showClearButton: this._showClearButton,
-      query: this.query
+      query: this.query || ''
     }, data));
   }
 }
