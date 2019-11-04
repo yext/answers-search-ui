@@ -17,6 +17,8 @@ import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
+import StorageKeys from './core/storage/storagekeys';
+import SearchConfig from './core/models/searchconfig';
 import AutoCompleteApi from './core/search/autocompleteapi';
 import MockAutoCompleteService from './core/search/mockautocompleteservice';
 import QuestionAnswerApi from './core/search/questionanswerapi';
@@ -135,6 +137,7 @@ class Answers {
       resetListener: data => globalStorage.setAll(data)
     });
     globalStorage.setAll(persistentStorage.getAll());
+    globalStorage.set(StorageKeys.SEARCH_CONFIG, new SearchConfig(config.search));
 
     this._services = config.mock ? getMockServices() : getServices(config);
 
