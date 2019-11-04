@@ -18,6 +18,7 @@ export default class SearchService {
    * @param {boolean} query.isDynamicFiltersEnabled If true, asks the server to return dynamic filters
    * @param {string} query.skipSpellCheck The boolean as string to indicate if it should skip spell checking
    * @param {string} query.queryTrigger The source that triggers query such as suggest
+   * @param {string} query.optOutCookies The boolean as string to indicate opting out of cookies
    * @returns {Promise<Object>} The backend response
    */
   verticalSearch (verticalKey, query) {}
@@ -28,6 +29,7 @@ export default class SearchService {
    * @param {Object} params.geolocation the user's geolocation position used to bias the results
    * @param {string} params.skipSpellCheck The boolean as string to indicate if it should skip spell checking
    * @param {string} params.queryTrigger The source that triggers query such as suggest
+   * @param {string} params.optOutCookies The boolean as string to indicate opting out of cookies
    * @returns {Promise<Object>} The backend response
    */
   universalSearch (queryString, params) {}

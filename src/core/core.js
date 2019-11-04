@@ -108,6 +108,7 @@ export default class Core {
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
+      this.globalStorage.set('optOutCookies', true);
     }
 
     return this._searcher
@@ -117,7 +118,8 @@ export default class Core {
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger')
+        queryTrigger: this.globalStorage.getState('queryTrigger'),
+        optOutCookies: this.globalStorage.getState('optOutCookies')
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -167,12 +169,14 @@ export default class Core {
   search (queryString, urls) {
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
+    this.globalStorage.set('optOutCookies', true);
 
     return this._searcher
       .universalSearch(queryString, {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger')
+        queryTrigger: this.globalStorage.getState('queryTrigger'),
+        optOutCookies: this.globalStorage.getState('optOutCookies')
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
@@ -187,6 +191,7 @@ export default class Core {
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete('queryTrigger');
+        this.globalStorage.delete('optOutCookies');
       });
   }
 
