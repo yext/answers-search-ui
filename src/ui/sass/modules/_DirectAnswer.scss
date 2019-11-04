@@ -26,10 +26,11 @@
   $direct-answer-footer-line-height: $line-height-md !default;
   $direct-answer-footer-font-weight: $font-weight-normal !default;
   $direct-answer-footer-color: $color-text-secondary !default;
+  $direct-answer-footer-height: $module-footer-height;
 
   &-title
   {
-    height: 26px;
+    margin: 0;
     padding-top: $base-spacing / 2;
     padding-left: $base-spacing;
     padding-bottom: $base-spacing / 2;
@@ -76,7 +77,6 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 60px;
     padding: $base-spacing;
     background-color: $direct-answer-content-background-color;
     border-left: $direct-answer-border;
@@ -92,7 +92,7 @@
   {
     display: flex;
     justify-content: flex-end;
-    height: 24px;
+    height: $direct-answer-footer-height;
     align-items: center;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
@@ -103,7 +103,7 @@
 
   &-footerText
   {
-    margin-right: 16px;
+    margin-right: $base-spacing;
     @include Text(
       $size: $direct-answer-footer-font-size,
       $line-height: $direct-answer-footer-line-height,
