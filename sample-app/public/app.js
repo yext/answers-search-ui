@@ -5,7 +5,7 @@ const config = JSON.parse(document.getElementById('config').textContent);
 window.initAnswers = async function initAnswers () {
   const {
     apiKey,
-    experienceKey,
+    answersKey,
     verticalKey,
     mapProvider,
     mapApiKey
@@ -21,7 +21,7 @@ window.initAnswers = async function initAnswers () {
 
   ANSWERS.init({
     apiKey,
-    experienceKey,
+    answersKey,
     onReady: function () {
       ANSWERS.addComponent('Navigation', {
         container: '.navigation-container',
