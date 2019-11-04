@@ -5,6 +5,9 @@
   "businessId": "919871",
   "verticals": {
     "leadership": {
+      "search": {
+        "defaultInitialSearch": "executives"
+      },
       "filters": [
         {
           "type": "FilterOptions",
@@ -53,11 +56,26 @@
       ]
     },
     "offices": {
-      "map": true
+      "map": true,
+      "search": {
+        "defaultInitialSearch": "New York"
+      }
     },
-    "events": {},
-    "speakers": {},
-    "jobs": {},
+    "events": {
+      "search": {
+        "defaultInitialSearch": "Onward"
+      }
+    },
+    "speakers": {
+      "search": {
+        "defaultInitialSearch": ""
+      }
+    },
+    "jobs": {
+      "search": {
+        "defaultInitialSearch": ""
+      }
+    },
     "packages": {},
     "app_directory_partners": {},
     "publishers": {},
