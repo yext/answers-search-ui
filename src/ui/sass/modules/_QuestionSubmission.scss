@@ -31,16 +31,11 @@
     
     border-bottom: $question-submission-border;
 
-    &-left
+    &-left, &-right
     {
       display: flex;
       align-items: center;
-    }
-
-    &-right
-    {
-      display: flex;
-      align-items: center;
+      justify-content: space-between;
     }
 
     &-titleIconWrapper
@@ -61,8 +56,6 @@
 
     &-description
     {
-      text-align: right;
-      float: left;
       margin-right: $base-spacing / 2;
       font-size: $font-size-md;
       font-style: italic;
@@ -116,12 +109,7 @@
             font-style: italic;
           }
 
-          textarea
-          {
-            width:100%;
-          }
-
-          input
+          textarea, input
           {
             width:100%;
           }
