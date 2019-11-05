@@ -2,6 +2,7 @@
 
 import ModuleData from './moduledata';
 import { AnswersStorageError } from '../errors/errors';
+import StorageKeys from './storagekeys';
 
 /**
  * Storage is a container around application state.
@@ -31,7 +32,16 @@ export default class GlobalStorage {
    */
   setAll (data) {
     for (const [key, val] of Object.entries(data)) {
+      if (key === StorageKeys.QUERY) {
+        continue;
+      }
       this.set(key, val);
+    }
+
+    // Update query last since it triggers a search
+    // TODO: move listeners up so all of storage can be updated at the same time
+    if (data[StorageKeys.QUERY]) {
+      this.set(StorageKeys.QUERY, data[StorageKeys.QUERY]);
     }
   }
 

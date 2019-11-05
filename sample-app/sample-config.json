@@ -1,8 +1,13 @@
 {
-  "answersKey": "deepakyextanswersconfig",
+  "mock": false,
+  "experienceKey": "deepakyextanswersconfig",
   "mapProvider": "mapbox",
+  "businessId": "919871",
   "verticals": {
     "leadership": {
+      "search": {
+        "defaultInitialSearch": "executives"
+      },
       "filters": [
         {
           "type": "FilterOptions",
@@ -51,8 +56,31 @@
       ]
     },
     "offices": {
-      "map": true
+      "map": true,
+      "search": {
+        "defaultInitialSearch": "New York"
+      },
+      "allowEmptySearch": true
     },
-    "jobs": {}
+    "events": {
+      "search": {
+        "defaultInitialSearch": "Answers"
+      }
+    },
+    "speakers": {
+      "search": {
+        "defaultInitialSearch": ""
+      },
+      "allowEmptySearch": true
+    },
+    "jobs": {
+      "search": {
+        "defaultInitialSearch": ""
+      }
+    },
+    "packages": {},
+    "app_directory_partners": {},
+    "publishers": {},
+    "faqs": {}
   }
 }

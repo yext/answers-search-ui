@@ -1,0 +1,53 @@
+{{#if showControls}}
+  <div class="yxt-Pagination">
+    {{#if firstPageButtonEnabled}}
+      <button class="yxt-Pagination-button js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
+        {{#unless showFirstPageButton}}disabled{{/unless}}
+        data-eventtype="BACKWARD_PAGINATE"
+        data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+      >
+        <span class="yxt-Pagination-doubleChevron--left"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "chevron" }'></span>
+        <span class="yxt-Pagination-chevron--left"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "chevron" }'></span>
+      </button>
+    {{/if}}
+    <button class="yxt-Pagination-button js-yxt-Pagination-previous {{#unless showPreviousPageButton}}yxt-Pagination--hidden{{/unless}}"
+      {{#unless showPreviousPageButton}}disabled{{/unless}}
+      data-eventtype="BACKWARD_PAGINATE"
+      data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
+    >
+      <span class="yxt-Pagination-chevron--left"
+            data-component="IconComponent"
+            data-opts='{ "iconName": "chevron" }'></span>
+    </button>
+
+    <span class="yxt-Pagination-page">Page {{pageNumber}}</span>
+
+    <button class="yxt-Pagination-button js-yxt-Pagination-next {{#unless showNextPageButton}}yxt-Pagination--hidden{{/unless}}"
+      {{#unless showNextPageButton}}disabled{{/unless}}
+      data-eventtype="FORWARD_PAGINATE"
+      data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
+    >
+      <span class="yxt-Pagination-chevron"
+            data-component="IconComponent"
+            data-opts='{ "iconName": "chevron" }'></span>
+    </button>
+    {{#if lastPageButtonEnabled}}
+      <button class="yxt-Pagination-button js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
+        {{#unless showLastPageButton}}disabled{{/unless}}
+        data-eventtype="FORWARD_PAGINATE"
+        data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+      >
+        <span class="yxt-Pagination-doubleChevron"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "chevron" }'></span>
+        <span class="yxt-Pagination-chevron"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "chevron" }'></span>
+      </button>
+    {{/if}}
+  </div>
+{{/if}}

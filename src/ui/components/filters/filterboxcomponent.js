@@ -115,6 +115,7 @@ export default class FilterBoxComponent extends Component {
       component.mount();
       this._filterComponents.push(component);
       this._filters[i] = component.getFilter();
+      this._saveFiltersToStorage();
     }
 
     // Initialize apply button
@@ -185,6 +186,8 @@ export default class FilterBoxComponent extends Component {
 
     const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
 
+    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.verticalSearch(this._verticalKey, {
       input: query,
       filter: JSON.stringify(totalFilter),

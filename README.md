@@ -735,7 +735,13 @@ ANSWERS.addComponent('SpellCheck', {
 
 # Analytics
 
-Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks. You may add additional, custom analytic events to templates using certain data attributes, explained below.
+Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks. You may add additional, custom analytic events to templates using certain data attributes, explained below. You may also send analytics from external code with the below interface.
+
+```js
+  const event = new ANSWERS.AnalyticsEvent('CUSTOM');
+  event.addOptions({ myData: 'data' });
+  ANSWERS.AnalyticsReporter.report(event)
+```
 
 ## Click Analytics
 
@@ -748,4 +754,13 @@ Click analytics can be attached to an element by adding the `data-eventtype` att
 >
     Drive to {{store}}
 </button>
+```
+
+## Conversion Tracking
+
+By default, Answers does not perform conversion tracking for analytics. To opt-in to this behavior, use the `setConversionsOptIn` method after initialization:
+
+```js
+ANSWERS.init({ ... });
+agreementButton.onclick = function() { ANSWERS.setConversionsOptIn(true); };
 ```

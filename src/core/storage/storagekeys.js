@@ -17,10 +17,11 @@ export default {
   QUERY_ID: 'query-id',
   FACET_FILTER: 'facet-filter',
   DYNAMIC_FILTERS: 'dynamic-filters',
-  SEARCH_LIMIT: 'search-limit',
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',
   INTENTS: 'intents',
   QUESTION_SUBMISSION: 'question-submission',
+  SEARCH_CONFIG: 'search-config',
+  SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check'
 };
