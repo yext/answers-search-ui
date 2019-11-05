@@ -131,13 +131,15 @@ class Answers {
       throw new Error('Missing required `experienceKey`. Type must be {string}');
     }
 
+    config.search = new SearchConfig(config.search);
+
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: config.onStateChange,
       resetListener: data => globalStorage.setAll(data)
     });
     globalStorage.setAll(persistentStorage.getAll());
-    globalStorage.set(StorageKeys.SEARCH_CONFIG, new SearchConfig(config.search));
+    globalStorage.set(StorageKeys.SEARCH_CONFIG, config.search);
 
     this._services = config.mock ? getMockServices() : getServices(config);
 
@@ -179,6 +181,8 @@ class Answers {
       this.components.setAnalyticsReporter(reporter);
       initScrollListener(reporter);
     }
+
+    this._setDefaultInitialSearch(config.search);
 
     this._onReady = config.onReady || function () {};
 
@@ -262,6 +266,25 @@ class Answers {
     if (this._eligibleForAnalytics) {
       this._analyticsReporterService.setConversionTrackingEnabled(optIn);
     }
+  }
+
+  /**
+   * Sets a search query on initialization for vertical searchers that have a
+   * defaultInitialSearch provided, if the user hasn't already provided their
+   * own via URL param.
+   * @param {SearchConfig} searchConfig
+   * @private
+   */
+  _setDefaultInitialSearch (searchConfig) {
+    if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
+      return;
+    }
+    const prepopulatedQuery = this.core.globalStorage.getState(StorageKeys.QUERY);
+    if (prepopulatedQuery != null) {
+      return;
+    }
+    this.core.globalStorage.set('queryTrigger', 'initialize');
+    this.core.setQuery(searchConfig.defaultInitialSearch);
   }
 }
 
