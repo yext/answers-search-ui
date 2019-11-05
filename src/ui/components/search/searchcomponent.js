@@ -121,9 +121,9 @@ export default class SearchComponent extends Component {
     /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
-     * @type {string}
+     * @type {string|null}
      */
-    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY);
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
       this.query = q;
       this.setState();
@@ -151,6 +151,13 @@ export default class SearchComponent extends Component {
      * Controls showing and hiding the search clear button
      */
     this._showClearButton = this.clearButton && this.query;
+
+    /**
+     * For vertical search bars, whether or not to allow empty searches.
+     * @type {boolean}
+     * @private
+     */
+    this._allowEmptySearch = !!config.allowEmptySearch;
   }
 
   static get type () {
@@ -167,7 +174,7 @@ export default class SearchComponent extends Component {
   }
 
   onCreate () {
-    if (this.query && !this.redirectUrl) {
+    if (this.query != null && !this.redirectUrl) {
       this.core.setQuery(this.query);
     }
     if (this._promptForLocation) {
@@ -315,7 +322,10 @@ export default class SearchComponent extends Component {
     // Don't search if we recently searched,
     // if there's no query for universal search,
     // or if this is a twin searchbar
-    if (this._throttled || (!query && !this._verticalKey) || this._isTwin) {
+    if (this._throttled ||
+      (!query && !this._verticalKey) ||
+      (!query && this._verticalKey && !this._allowEmptySearch) ||
+      this._isTwin) {
       return;
     }
 
@@ -370,7 +380,7 @@ export default class SearchComponent extends Component {
       submitIcon: this.submitIcon,
       submitText: this.submitText,
       showClearButton: this._showClearButton,
-      query: this.query
+      query: this.query || ''
     }, data));
   }
 }
