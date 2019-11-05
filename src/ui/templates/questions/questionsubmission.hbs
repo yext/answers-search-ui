@@ -2,27 +2,27 @@
 <section class="yxt-QuestionSubmission">
 
   <div class="yxt-QuestionSubmission-titleBar">
-    <div class="yxt-QuestionSubmission-titleBar-left">
-      <div class="yxt-QuestionSubmission-titleBar-titleIconWrapper"
+    <div class="yxt-QuestionSubmission-left">
+      <div class="yxt-QuestionSubmission-titleIconWrapper"
           data-component="IconComponent"
           data-opts='{
               "iconName": "{{_config.sectionTitleIconName}}"
             }'
           data-prop="icon"
       ></div>
-      <div class="yxt-QuestionSubmission-titleBar-title">
+      <div class="yxt-QuestionSubmission-title">
         {{_config.sectionTitle}}
       </div>
     </div>
-    <div class="yxt-QuestionSubmission-titleBar-right">
-      <div class="yxt-QuestionSubmission-titleBar-description">
+    <div class="yxt-QuestionSubmission-right">
+      <div class="yxt-QuestionSubmission-titleDescription">
         {{_config.sectionDescription}}
       </div>
     </div>
   </div>
   {{#if questionSubmitted}}
     <div class="yxt-QuestionSubmission-form">
-      <div class="yxt-QuestionSubmission-form-row">
+      <div class="yxt-QuestionSubmission-formRow">
         {{_config.questionSubmissionConfirmationText}}
       </div>
     </div>
@@ -30,14 +30,14 @@
     <form class="yxt-QuestionSubmission-form">
       {{#if errors}}
         {{#if errors.network}}
-          <div class="yxt-QuestionSubmission-form-row">
-            <div class="yxt-QuestionSubmission-form-row-error" role="alert">
+          <div class="yxt-QuestionSubmission-formRow">
+            <div class="yxt-QuestionSubmission-formError" role="alert">
               <h3>{{errors.network}}</h3>
             </div>
           </div>
         {{else}}
-          <div class="yxt-QuestionSubmission-form-row">
-            <div class="yxt-QuestionSubmission-form-row-error" role="alert">
+          <div class="yxt-QuestionSubmission-formRow">
+            <div class="yxt-QuestionSubmission-formError" role="alert">
               <h3>You are missing {{errors.length}} required fields</h3>
               <ul>
                 {{#each errors}}
@@ -49,18 +49,18 @@
         {{/if}}
       {{/if}}
 
-      <div class="yxt-QuestionSubmission-form-row">
+      <div class="yxt-QuestionSubmission-formRow">
         {{_config.feedbackFormInfoText}}
       </div>
 
-      <div class="yxt-QuestionSubmission-form-row">
-        <div class="yxt-QuestionSubmission-form-row-field">
-          <div class="yxt-QuestionSubmission-form-row-field-label">
+      <div class="yxt-QuestionSubmission-formRow">
+        <div class="yxt-QuestionSubmission-formField">
+          <div class="yxt-QuestionSubmission-formLabel">
             <label for="question">
               <span class="yxt-field-label">{{_config.questionLabel}}</span>
             </label>
           </div>
-          <div class="yxt-QuestionSubmission-form-row-field-input">
+          <div class="yxt-QuestionSubmission-formInput">
             <textarea class="js-question-field js-question-text"
                       name="questionText"
                       placeholder="{{_config.questionInputPlaceholder}}"
@@ -69,14 +69,14 @@
         </div>
       </div>
 
-      <div class="yxt-QuestionSubmission-form-row">
-        <div class="yxt-QuestionSubmission-form-row-field">
-          <div class="yxt-QuestionSubmission-form-row-field-label">
+      <div class="yxt-QuestionSubmission-formRow">
+        <div class="yxt-QuestionSubmission-formField">
+          <div class="yxt-QuestionSubmission-formLabel">
             <label for="name">
               <span class="yext-field-label">{{_config.nameLabel}}</span>
             </label>
           </div>
-          <div class="yxt-QuestionSubmission-form-row-field-input">
+          <div class="yxt-QuestionSubmission-formInput">
             <input class="js-question-field"
               name="name"
               placeholder="{{_config.requiredInputPlaceholder}}"
@@ -85,13 +85,13 @@
           </div>
         </div>
 
-        <div class="yxt-QuestionSubmission-form-row-field">
-          <div class="yxt-QuestionSubmission-form-row-field-label">
+        <div class="yxt-QuestionSubmission-formField">
+          <div class="yxt-QuestionSubmission-formLabel">
             <label for="email">
               <span class="yxt-field-label">{{_config.emailLabel}}</span>
             </label>
           </div>
-          <div class="yxt-QuestionSubmission-form-row-field-input">
+          <div class="yxt-QuestionSubmission-formInput">
             <input class="js-question-field"
                   name="email"
                   placeholder="{{_config.requiredInputPlaceholder}}"
@@ -102,21 +102,21 @@
       </div>
 
       <div class="yxt-QuestionSubmission-acknowledgementBar">
-        <div class="yxt-QuestionSubmission-acknowledgementBar-acknowledgement">
-          <div class="yxt-QuestionSubmission-acknowledgementBar-ackCheckboxInput">
+        <div class="yxt-QuestionSubmission-acknowledgement">
+          <div class="yxt-QuestionSubmission-ackCheckboxInput">
             <input type="checkbox"
                   name="privacyPolicy"
                   class="js-question-field"
                   value="true"
                   required>
           </div>
-          <div class="yxt-QuestionSubmission-acknowledgementBar-privacyPolicyText">
+          <div class="yxt-QuestionSubmission-privacyPolicyText">
             {{_config.privacyPolicyLabel}}
           </div>
         </div>
 
         <button type="submit"
-          class="yxt-QuestionSubmission-acknowledgementBar-submitButton"
+          class="yxt-QuestionSubmission-submitButton"
           data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
 
       </div>
