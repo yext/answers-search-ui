@@ -183,7 +183,10 @@ export default class SearchComponent extends Component {
   }
 
   onMount () {
-    if (this.autoFocus === true && this.query.length === 0 && !this.autocompleteOnLoad) {
+    // NOTE(amullings): If autocompleteOnLoad is false, we focus the input
+    // element before loading the autocomplete component so that its focus
+    // handler won't be triggered
+    if (this.autoFocus === true && !this.query && !this.autocompleteOnLoad) {
       DOM.query(this._container, this._inputEl).focus();
     }
 
@@ -195,7 +198,7 @@ export default class SearchComponent extends Component {
       this.initClearButton();
     }
 
-    if (this.autoFocus === true && this.query.length === 0 && this.autocompleteOnLoad) {
+    if (this.autoFocus === true && !this.query && this.autocompleteOnLoad) {
       DOM.query(this._container, this._inputEl).focus();
     }
   }
@@ -245,7 +248,7 @@ export default class SearchComponent extends Component {
           lng: position.coords.longitude,
           radius: position.coords.accuracy
         });
-        this.search(this.query);
+        this.search(this.query || '');
       });
     });
   }
@@ -318,6 +321,9 @@ export default class SearchComponent extends Component {
     });
   }
 
+  /**
+   * @param {string} query
+   */
   search (query) {
     // Don't search if we recently searched,
     // if there's no query for universal search,
