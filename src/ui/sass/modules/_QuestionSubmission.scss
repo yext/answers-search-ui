@@ -105,15 +105,11 @@
   &-formInput
   {
     display: flex;
+    width:100%;
 
     ::placeholder
     {
       font-style: italic;
-    }
-
-    textarea, input
-    {
-      width:100%;
     }
   }
 

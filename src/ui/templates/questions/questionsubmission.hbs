@@ -55,49 +55,43 @@
 
       <div class="yxt-QuestionSubmission-formRow">
         <div class="yxt-QuestionSubmission-formField">
-          <div class="yxt-QuestionSubmission-formLabel">
-            <label for="question">
-              <span class="yxt-field-label">{{_config.questionLabel}}</span>
-            </label>
-          </div>
-          <div class="yxt-QuestionSubmission-formInput">
-            <textarea class="js-question-field js-question-text"
+          <label>
+            <div class="yxt-QuestionSubmission-formLabel">
+              {{_config.questionLabel}}
+            </div>
+            <textarea class="yxt-QuestionSubmission-formInput js-question-field js-question-text"
                       name="questionText"
                       placeholder="{{_config.questionInputPlaceholder}}"
                       required>{{questionText}}</textarea>
-          </div>
+          </label>
         </div>
       </div>
 
       <div class="yxt-QuestionSubmission-formRow">
         <div class="yxt-QuestionSubmission-formField">
-          <div class="yxt-QuestionSubmission-formLabel">
-            <label for="name">
-              <span class="yext-field-label">{{_config.nameLabel}}</span>
-            </label>
-          </div>
-          <div class="yxt-QuestionSubmission-formInput">
-            <input class="js-question-field"
+          <label>
+            <div class="yxt-QuestionSubmission-formLabel">
+              {{_config.nameLabel}}
+            </div>
+            <input class="yxt-QuestionSubmission-formInput js-question-field"
               name="name"
               placeholder="{{_config.requiredInputPlaceholder}}"
               value="{{name}}"
               required>
-          </div>
+          </label>
         </div>
 
         <div class="yxt-QuestionSubmission-formField">
-          <div class="yxt-QuestionSubmission-formLabel">
-            <label for="email">
-              <span class="yxt-field-label">{{_config.emailLabel}}</span>
-            </label>
-          </div>
-          <div class="yxt-QuestionSubmission-formInput">
-            <input class="js-question-field"
-                  name="email"
-                  placeholder="{{_config.requiredInputPlaceholder}}"
-                  value="{{email}}"
-                  required>
-          </div>
+          <label>
+            <div class="yxt-QuestionSubmission-formLabel">
+              {{_config.emailLabel}}
+            </div>
+            <input class="yxt-QuestionSubmission-formInput js-question-field"
+                name="email"
+                placeholder="{{_config.requiredInputPlaceholder}}"
+                value="{{email}}"
+                required>
+          </label>
         </div>
       </div>
 
