@@ -140,6 +140,7 @@ class Answers {
     });
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, config.search);
+    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, config.sessionTrackingEnabled);
 
     this._services = config.mock ? getMockServices() : getServices(config);
 
@@ -266,6 +267,14 @@ class Answers {
     if (this._eligibleForAnalytics) {
       this._analyticsReporterService.setConversionTrackingEnabled(optIn);
     }
+  }
+
+  /**
+   * Opt in or out of session cookies
+   * @param {boolean} optIn
+   */
+  setSessionsOptIn (optIn) {
+    this.core.globalStorage.set(StorageKeys.SESSIONS_OPT_IN, optIn);
   }
 
   /**
