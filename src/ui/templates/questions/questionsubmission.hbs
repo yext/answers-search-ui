@@ -102,16 +102,17 @@
       </div>
 
       <div class="yxt-QuestionSubmission-acknowledgementBar">
-        <div class="yxt-QuestionSubmission-acknowledgementBar-ackCheckboxInput">
-          <input type="checkbox"
-                 name="privacyPolicy"
-                 class="js-question-field"
-                 value="true"
-                 required>
-        </div>
-
-        <div class="yxt-QuestionSubmission-acknowledgementBar-privacyPolicyText">
-          {{_config.privacyPolicyLabel}}
+        <div class="yxt-QuestionSubmission-acknowledgementBar-acknowledgement">
+          <div class="yxt-QuestionSubmission-acknowledgementBar-ackCheckboxInput">
+            <input type="checkbox"
+                  name="privacyPolicy"
+                  class="js-question-field"
+                  value="true"
+                  required>
+          </div>
+          <div class="yxt-QuestionSubmission-acknowledgementBar-privacyPolicyText">
+            {{_config.privacyPolicyLabel}}
+          </div>
         </div>
 
         <button type="submit"
