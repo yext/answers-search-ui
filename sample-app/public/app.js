@@ -56,7 +56,8 @@ window.initAnswers = async function initAnswers () {
 
       ANSWERS.addComponent('SearchBar', {
         container: '.search-container',
-        verticalKey
+        verticalKey,
+        allowEmptySearch: verticalConfig && verticalConfig.allowEmptySearch
       });
 
       if (!verticalKey) {

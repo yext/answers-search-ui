@@ -59,17 +59,19 @@
       "map": true,
       "search": {
         "defaultInitialSearch": "New York"
-      }
+      },
+      "allowEmptySearch": true
     },
     "events": {
       "search": {
-        "defaultInitialSearch": "Onward"
+        "defaultInitialSearch": "Answers"
       }
     },
     "speakers": {
       "search": {
         "defaultInitialSearch": ""
-      }
+      },
+      "allowEmptySearch": true
     },
     "jobs": {
       "search": {
