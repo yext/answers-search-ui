@@ -140,6 +140,11 @@
 
     border-top: $question-submission-border;
 
+    &-acknowledgement
+    {
+      display: flex;
+    }
+
     &-ackCheckboxInput
     {
       margin-right: $base-spacing / 2;
