@@ -18,11 +18,7 @@
     $question-submission-title-bar-background: $color-background-highlight !default;
     background-color: $question-submission-title-bar-background;
 
-    $question-submission-title-bar-text-color: $color-text-primary !default;
-    $question-submission-title-bar-text-line-height: $line-height-lg !default;
-  
     display: flex;
-
     justify-content: space-between;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
@@ -30,97 +26,100 @@
     padding-bottom: $base-spacing / 2;
     
     border-bottom: $question-submission-border;
+  }
 
-    &-left, &-right
-    {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
+  &-left, &-right
+  {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-    &-titleIconWrapper
-    {
-      display: flex;
-      margin-right: $base-spacing / 2;
-      color: $question-submission-cta-background-color;
-    }
-  
-    &-title
-    {
-      color: $question-submission-title-bar-text-color;
-      line-height: $question-submission-title-bar-text-line-height;
-      font-weight: $font-weight-semibold;
-      font-size: $font-size-md-lg;
-      text-transform: uppercase;
-    }
+  &-titleIconWrapper
+  {
+    display: flex;
+    margin-right: $base-spacing / 2;
+    color: $question-submission-cta-background-color;
+  }
 
-    &-description
-    {
-      margin-right: $base-spacing / 2;
-      font-size: $font-size-md;
-      font-style: italic;
-    }
+  &-title
+  {
+    $question-submission-title-bar-text-color: $color-text-primary !default;
+    $question-submission-title-bar-text-line-height: $line-height-lg !default;
+
+    color: $question-submission-title-bar-text-color;
+    line-height: $question-submission-title-bar-text-line-height;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-md-lg;
+    text-transform: uppercase;
+  }
+
+  &-titleDescription
+  {
+    margin-right: $base-spacing / 2;
+    font-size: $font-size-md;
+    font-style: italic;
   }
 
   &-form
   {
     display: flex;
     flex-direction: column;
+  }
 
-    &-row
+  &-formRow
+  {
+    display: flex;
+    flex-direction: row;
+    margin-top: $base-spacing / 2;
+    margin-bottom: $base-spacing / 2;
+    margin-left: $base-spacing;
+    margin-right: $base-spacing;
+
+    @media (max-width: $breakpoint-mobile-max)
     {
-      display: flex;
-      flex-direction: row;
-      margin-top: $base-spacing / 2;
-      margin-bottom: $base-spacing / 2;
-      margin-left: $base-spacing;
-      margin-right: $base-spacing;
-
-      @media (max-width: $breakpoint-mobile-max)
-      {
-        flex-direction: column;
-      }
-
-      &-field
-      {
-        display: flex;
-        flex-direction: column;
-        margin-right: $base-spacing;
-        width:100%;
-
-        @media (max-width: $breakpoint-mobile-max)
-        {
-          margin-bottom: $base-spacing;
-        }
-
-        &-label
-        {
-          display: flex;
-          font-weight: bold;
-          margin-bottom: $base-spacing / 4;
-        }
-
-        &-input
-        {
-          display: flex;
-
-          ::placeholder
-          {
-            font-style: italic;
-          }
-
-          textarea, input
-          {
-            width:100%;
-          }
-        }
-      }
-
-      &-error
-      {
-        color: $question-submission-error-text-color;
-      }
+      flex-direction: column;
     }
+  }
+
+  &-formField
+  {
+    display: flex;
+    flex-direction: column;
+    margin-right: $base-spacing;
+    width:100%;
+
+    @media (max-width: $breakpoint-mobile-max)
+    {
+      margin-bottom: $base-spacing;
+    }
+  }
+
+  &-formLabel
+  {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: $base-spacing / 4;
+  }
+
+  &-formInput
+  {
+    display: flex;
+
+    ::placeholder
+    {
+      font-style: italic;
+    }
+
+    textarea, input
+    {
+      width:100%;
+    }
+  }
+
+  &-formError
+  {
+    color: $question-submission-error-text-color;
   }
 
   &-acknowledgementBar
@@ -135,37 +134,34 @@
     padding-right: $base-spacing;
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
-
     margin-top: $base-spacing / 2;
-
     border-top: $question-submission-border;
-
-    &-acknowledgement
-    {
-      display: flex;
-    }
-
-    &-ackCheckboxInput
-    {
-      margin-right: $base-spacing / 2;
-    }
-
-    &-privacyPolicyText
-    {
-      margin-right: $base-spacing;
-    }
-
-    &-submitButton
-    {
-        text-transform: uppercase;
-        background: $question-submission-cta-background-color;
-        letter-spacing: 0.5px;
-        font-weight: $font-weight-semibold;
-        height: 40px;
-        min-width: 165px;
-        color: $question-submission-cta-foreground-color;
-        border: none;
-    }
   }
 
+  &-acknowledgement
+  {
+    display: flex;
+  }
+
+  &-ackCheckboxInput
+  {
+    margin-right: $base-spacing / 2;
+  }
+
+  &-privacyPolicyText
+  {
+    margin-right: $base-spacing;
+  }
+
+  &-submitButton
+  {
+      text-transform: uppercase;
+      background: $question-submission-cta-background-color;
+      letter-spacing: 0.5px;
+      font-weight: $font-weight-semibold;
+      height: 40px;
+      min-width: 165px;
+      color: $question-submission-cta-foreground-color;
+      border: none;
+  }
 }
