@@ -4,12 +4,23 @@ import { AnswersConfigError } from '../errors/errors';
 
 export default class SearchConfig {
   constructor (config = {}) {
-    // The max results per search.
-    // Also defines the number of results per page, if pagination is enabled
+    /**
+     * The max results per search.
+     * Also defines the number of results per page, if pagination is enabled
+     * @type {number}
+     */
     this.limit = config.limit || 20;
 
-    // The vertical key to use for all searches
+    /**
+     * The vertical key to use for all searches
+     * @type {string}
+     */
     this.verticalKey = config.verticalKey || null;
+
+    /**
+     * @type {string}
+     */
+    this.defaultInitialSearch = config.defaultInitialSearch;
 
     this.validate();
     Object.freeze(this);

@@ -11,7 +11,8 @@ window.initAnswers = async function initAnswers () {
     verticalKey,
     mapProvider,
     mapApiKey,
-    businessId
+    businessId,
+    search
   } = config;
   const verticalConfig = config.verticals[verticalKey];
   const mapConfig = {
@@ -21,6 +22,11 @@ window.initAnswers = async function initAnswers () {
       apiKey: mapApiKey
     }
   };
+  const searchConfig = Object.assign(
+    {},
+    search,
+    verticalConfig ? verticalConfig.search : {},
+    verticalKey ? { verticalKey } : {});
 
   ANSWERS.init({
     mock,
@@ -28,6 +34,7 @@ window.initAnswers = async function initAnswers () {
     apiKey,
     experienceKey,
     businessId,
+    search: searchConfig,
     onReady: function () {
       ANSWERS.addComponent('Navigation', {
         container: '.navigation-container',
@@ -49,7 +56,9 @@ window.initAnswers = async function initAnswers () {
 
       ANSWERS.addComponent('SearchBar', {
         container: '.search-container',
-        verticalKey
+        autoFocus: true,
+        verticalKey,
+        allowEmptySearch: verticalConfig && verticalConfig.allowEmptySearch
       });
 
       if (!verticalKey) {
