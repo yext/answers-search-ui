@@ -35,19 +35,19 @@
     background: $locationBias-bullet-color-default;
   }
 
-  &-bullet-unknown-loc
+  &-unknownLoc
   {
     background-color: transparent;
     border: 1px solid $locationBias-bullet-color-default;
   }
 
-  &-bullet-precise-loc
+  &-preciseLoc
   {
     background: $color-brand-primary;
     border: 1px solid $color-brand-primary;
   }
 
-  &-loc-source
+  &-locSource
   {
     @media (max-width: $breakpoint-mobile-max)
     {

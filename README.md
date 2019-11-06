@@ -744,7 +744,9 @@ The location component component shows location that used for location bias and 
 
 ```js
 ANSWERS.addComponent('LocationBias', {
-  container: '.location-bias-container'
+  container: '.location-bias-container',
+  verticalKey: 'verticalKey',                             // Optional, the vertical key for the search, default null
+  updateLocationEl: '.js-locationBias-update-location'    // Optional, the element used for updating location
 })
 ```
 
