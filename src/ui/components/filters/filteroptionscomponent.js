@@ -112,12 +112,22 @@ class FilterOptionsConfig {
       }
     }
     let selectedOptions = config.previousOptions || [];
-    this.options = this.options.map(o => ({
+    this.options = this.setDefaultSelectedValues(this.options, selectedOptions);
+  }
+
+  setDefaultSelectedValues (options, selectedOptions) {
+    return options.map(o => ({
       ...o,
       selected: selectedOptions.length
         ? selectedOptions.includes(o.label)
         : o.selected
     }));
+  }
+
+  getSelectedCount () {
+    return this.options.reduce(
+      (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
+      0);
   }
 
   validate () {
@@ -143,15 +153,28 @@ export default class FilterOptionsComponent extends Component {
     super(config, systemConfig);
 
     let previousOptions = this.core.globalStorage.getState(this.name);
+
+    /**
+     * The component config
+     * @type {FilterOptionsConfig}
+     */
     this.config = new FilterOptionsConfig({
       previousOptions,
       ...config
     });
 
-    const selectedCount = this.config.options.reduce(
-      (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
-      0);
+    const selectedCount = this.config.getSelectedCount();
+
+    /**
+     * True if the option list is expanded and visible
+     * @type {boolean}
+     */
     this.expanded = this.config.showExpand ? selectedCount > 0 : true;
+
+    /**
+     * True if all options are shown, false if some are hidden based on config
+     * @type {boolean}
+     */
     this.allShown = false;
   }
 
@@ -173,9 +196,7 @@ export default class FilterOptionsComponent extends Component {
     if (this.config.showMore && !this.allShown) {
       options = this.config.options.slice(0, this.config.showMoreLimit);
     }
-    const selectedCount = this.config.options.reduce(
-      (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
-      0);
+    const selectedCount = this.config.getSelectedCount();
     super.setState(Object.assign({}, data, {
       name: this.name.toLowerCase(),
       ...this.config,
@@ -197,9 +218,7 @@ export default class FilterOptionsComponent extends Component {
         this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
       });
 
-    const selectedCount = this.config.options.reduce(
-      (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
-      0);
+    const selectedCount = this.config.getSelectedCount();
 
     // reset button
     if (this.config.showReset && selectedCount > 0) {
@@ -222,20 +241,26 @@ export default class FilterOptionsComponent extends Component {
 
     // expand button
     if (this.config.showExpand) {
+      const legend = DOM.query(this._container, '.yxt-FilterOptions-clickableLegend');
       DOM.on(
-        DOM.query(this._container, '.yxt-FilterOptions-expand'),
-        'click',
-        () => {
-          this.expanded = !this.expanded;
-          this.setState();
+        legend,
+        'mousedown',
+        click => {
+          if (click.button === 0) {
+            this.expanded = !this.expanded;
+            this.setState();
+          }
         });
 
       DOM.on(
-        DOM.query(this._container, '.yxt-FilterOptions-labelButton'),
-        'click',
-        () => {
-          this.expanded = !this.expanded;
-          this.setState();
+        legend,
+        'keydown',
+        key => {
+          if (key.key === ' ' || key.key === 'Enter') {
+            key.preventDefault();
+            this.expanded = !this.expanded;
+            this.setState();
+          }
         });
     }
   }

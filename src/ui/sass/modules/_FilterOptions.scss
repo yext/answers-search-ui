@@ -11,21 +11,17 @@
     margin: 12px 0;
   }
 
-  &-label {
-    @include Text(
-      $size: $font-size-md-lg,
-      $line-height: $line-height-lg,
-      $weight: $font-weight-semibold);
-
-    text-align: left;
-  }
-
   &-legend {
     width: 100%;
     padding: 0;
   }
 
   &-legendLabel {
+    @include Text(
+      $size: $font-size-md-lg,
+      $line-height: $line-height-lg,
+      $weight: $font-weight-semibold);
+    text-align: left;
     width: 100%;
     display: flex;
     align-items: center;
@@ -61,6 +57,7 @@
 
     width: 20px;
     height: 20px;
+    margin-left: 12px;
     display: flex;
     background: $color-background-dark;
     align-items: center;
@@ -91,6 +88,23 @@
     }
   }
 
+  &-clickableLegend {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:focus {
+      border: 1px solid $color-brand-hover;
+    }
+
+    &:not(:disabled):hover {
+      color: $color-text-secondary;
+    }
+  }
+
   &-input {
     margin-left: 0;
   }
@@ -100,27 +114,8 @@
     padding: 0;
   }
 
-  &-labelButton {
-    @include TextButton();
-    padding: 0;
-    padding-right: 12px;
-
-    &:not(:disabled):hover {
-      color: $color-text-secondary;
-      text-decoration: none;
-    }
-  }
-
   &-expand {
-    @include TextButton();
     margin-left: auto;
-
-    &:not(:disabled):hover {
-      color: $color-text-secondary;
-    }
-
-    flex-grow: 1;
-    text-align: right;
   }
 
   &--collapsed {
