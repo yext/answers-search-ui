@@ -27,7 +27,7 @@
     margin-left: 13px;
   }
 
-  &-filter:not(.yxt-FilterBox-filter--first) {
+  &-filter + &-filter {
     border-top: 1px solid $color-borders;
   }
 
