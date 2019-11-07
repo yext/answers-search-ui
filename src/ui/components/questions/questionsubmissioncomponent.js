@@ -89,7 +89,7 @@ const DEFAULT_CONFIG = {
    * The placeholder text for required inputs
    * @type {string}
    */
-  'requiredInputPlaceholder': ' (required)',
+  'requiredInputPlaceholder': '(required)',
 
   /**
    * The placeholder text for the question text area
