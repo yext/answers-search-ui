@@ -3,10 +3,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{title}}</title>
   <link rel="stylesheet" type="text/css" href="{{cssUrl}}">
-  <link rel="stylesheet" href="public/style.css">
+  <link rel="stylesheet" href="{{publicDir}}/style.css">
   <script type="application/json" id="config">
     {{configJson}}
   </script>
-  <script src="public/app.js" defer></script>
+  <script src="{{publicDir}}/app.js" defer></script>
   <script src="{{bundleUrl}}" onload="ANSWERS.domReady(initAnswers)" defer></script>
 </head>

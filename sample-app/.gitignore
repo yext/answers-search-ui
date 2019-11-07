@@ -1,3 +1,3 @@
 node_modules
-credentials.json
-*.html
+config/credentials.json
+generated/

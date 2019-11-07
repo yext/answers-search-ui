@@ -6,7 +6,7 @@ npm ci
 ```
 
 ## Add credentials
-`credentials.json`:
+`config/credentials.json`:
 ```json
 {
   "apiKey": "0123456789abcdefg",
@@ -22,4 +22,7 @@ or
 ```
 npm start [config_file]
 ```
-Open `index.html` in your browser of choice
+
+Once done, all the assets for the generated site will live in the `generated` directory by default.
+
+You can `cd` into that directory and open `index.html` in your browser of choice
