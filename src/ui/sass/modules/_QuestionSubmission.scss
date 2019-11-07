@@ -113,6 +113,9 @@
     display: flex;
     width:100%;
 
+    border: $question-submission-border;
+    border-radius: 3px;
+
     ::placeholder
     {
       font-style: italic;
