@@ -153,6 +153,7 @@ export default class FilterOptionsComponent extends Component {
     super(config, systemConfig);
 
     let previousOptions = this.core.globalStorage.getState(this.name);
+    this.core.globalStorage.delete(this.name);
 
     /**
      * The component config
