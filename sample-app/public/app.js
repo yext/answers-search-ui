@@ -56,6 +56,7 @@ window.initAnswers = async function initAnswers () {
 
       ANSWERS.addComponent('SearchBar', {
         container: '.search-container',
+        autoFocus: true,
         verticalKey,
         allowEmptySearch: verticalConfig && verticalConfig.allowEmptySearch
       });
