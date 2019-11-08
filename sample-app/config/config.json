@@ -1,86 +1,11 @@
 {
   "mock": false,
-  "experienceKey": "deepakyextanswersconfig",
+  "answersKey": "deepakyextanswersconfig",
   "mapProvider": "mapbox",
-  "businessId": "919871",
   "verticals": {
-    "leadership": {
-      "search": {
-        "defaultInitialSearch": "executives"
-      },
-      "filters": [
-        {
-          "type": "FilterOptions",
-          "control": "singleoption",
-          "title": "University",
-          "options": [
-            {
-              "label": "Cornell",
-              "field": "c_education.institutionName",
-              "value": "Cornell"
-            },
-            {
-              "label": "Duke",
-              "field": "c_education.institutionName",
-              "value": "Duke"
-            },
-            {
-              "label": "Princeton",
-              "field": "c_education.institutionName",
-              "value": "Princeton"
-            }
-          ]
-        },
-        {
-          "type": "FilterOptions",
-          "control": "multioption",
-          "title": "Title",
-          "options": [
-            {
-              "label": "Chief Executive Officer",
-              "field": "c_title",
-              "value": "CEO & Founder"
-            },
-            {
-              "label": "Chief Revenue Officer",
-              "field": "c_title",
-              "value": "President & Chief Revenue Officer"
-            },
-            {
-              "label": "Chief Technology Officer",
-              "field": "c_title",
-              "value": "Chief Technology Officer"
-            }
-          ]
-        }
-      ]
-    },
     "offices": {
-      "map": true,
-      "search": {
-        "defaultInitialSearch": "New York"
-      },
-      "allowEmptySearch": true
+      "map": true
     },
-    "events": {
-      "search": {
-        "defaultInitialSearch": "Answers"
-      }
-    },
-    "speakers": {
-      "search": {
-        "defaultInitialSearch": ""
-      },
-      "allowEmptySearch": true
-    },
-    "jobs": {
-      "search": {
-        "defaultInitialSearch": ""
-      }
-    },
-    "packages": {},
-    "app_directory_partners": {},
-    "publishers": {},
-    "faqs": {}
+    "jobs": {}
   }
 }
