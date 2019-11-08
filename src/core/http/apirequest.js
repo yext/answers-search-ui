@@ -1,7 +1,7 @@
 /** @module ApiRequest */
 
 import HttpRequester from './httprequester';
-import { API_BASE_URL, LIB_VERSION } from '../constants';
+import { LIVE_API_BASE_URL, LIB_VERSION } from '../constants';
 import SearchParams from '../../ui/dom/searchparams'; // TODO ideally this would be passed in as a param
 
 /**
@@ -22,7 +22,7 @@ export default class ApiRequest {
      * @type {string}
      * @private
      */
-    this._baseUrl = opts.baseUrl || API_BASE_URL;
+    this._baseUrl = opts.baseUrl || LIVE_API_BASE_URL;
 
     /**
      * The endpoint to use in the url (appended to the {baseUrl})
