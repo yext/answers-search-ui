@@ -39,7 +39,7 @@ export default class HttpRequester {
     return this.request(
       Methods.POST,
       this.encodeParams(url, urlParams),
-      Object.assign({
+      Object.assign({}, {
         body: JSON.stringify(jsonBody),
         credentials: undefined
       }, requestConfig)
@@ -47,10 +47,12 @@ export default class HttpRequester {
   }
 
   request (method, url, opts) {
-    return fetch(url, Object.assign({
-      method,
-      credentials: 'include'
-    }, opts));
+    const reqArgs = Object.assign({}, {
+      'method': method,
+      'credentials': 'include'
+    }, opts);
+
+    return fetch(url, reqArgs);
   }
 
   /**

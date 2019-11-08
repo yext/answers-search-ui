@@ -1,6 +1,7 @@
 /** @module QuestionAnswerApi */
 
 import ApiRequest from '../http/apirequest';
+import { API_BASE_URL } from '../constants';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
 
 /** @typedef {import('./questionanswerservice').default} QuestionAnswerService */
@@ -26,6 +27,7 @@ export default class QuestionAnswerApi {
   /** @inheritdoc */
   submitQuestion (question) {
     let request = new ApiRequest({
+      baseUrl: API_BASE_URL,
       endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
       params: {
@@ -39,7 +41,12 @@ export default class QuestionAnswerApi {
       }
     });
 
-    return request.post()
+    return request.post({
+      mode: 'cors',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
       .then(response => response.json())
       .catch(error => {
         throw new AnswersEndpointError(

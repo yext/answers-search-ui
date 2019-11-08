@@ -107,8 +107,7 @@ export default class QuestionSubmissionComponent extends Component {
    * that are used to validate aginst configuration provided by the user
    */
   validateConfig () {
-    if (this._config.entityId === null ||
-        typeof this._config.entityId !== 'number') {
+    if (this._config.entityId === null || this._config.entityId === undefined) {
       throw new AnswersComponentError(
         '`entityId` is a required configuration option for Question Submission',
         'QuestionSubmission');
