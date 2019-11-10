@@ -169,7 +169,8 @@
       letter-spacing: 0.5px;
       font-weight: $font-weight-semibold;
       height: 40px;
-      min-width: 185px;
+      box-sizing: border-box;
+      width: 170px;
       color: $question-submission-cta-foreground-color;
       border: none;
       padding-top: $base-spacing / 2;
