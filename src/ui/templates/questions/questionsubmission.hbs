@@ -32,7 +32,7 @@
         {{#if errors.network}}
           <div class="yxt-QuestionSubmission-formRow">
             <div class="yxt-QuestionSubmission-formError" role="alert">
-              <h3>{{errors.network}}</h3>
+              {{errors.network}}
             </div>
           </div>
         {{else}}
@@ -47,73 +47,75 @@
             </div>
           </div>
         {{/if}}
+      {{else}}
+        <div class="yxt-QuestionSubmission-formRow">
+          {{_config.feedbackFormInfoText}}
+        </div>
+
+        <div class="yxt-QuestionSubmission-formRow">
+          <div class="yxt-QuestionSubmission-formField">
+            <label>
+              <div class="yxt-QuestionSubmission-formLabel">
+                {{_config.questionLabel}}
+              </div>
+              <textarea class="yxt-QuestionSubmission-formInput js-question-field js-question-text"
+                        name="questionText"
+                        placeholder="{{_config.questionInputPlaceholder}}"
+                        required>{{questionText}}</textarea>
+            </label>
+          </div>
+        </div>
+
+        <div class="yxt-QuestionSubmission-formRow">
+          <div class="yxt-QuestionSubmission-formField">
+            <label>
+              <div class="yxt-QuestionSubmission-formLabel">
+                {{_config.nameLabel}}
+              </div>
+              <input class="yxt-QuestionSubmission-formInput js-question-field"
+                name="name"
+                placeholder="{{_config.requiredInputPlaceholder}}"
+                value="{{name}}"
+                required>
+            </label>
+          </div>
+
+          <div class="yxt-QuestionSubmission-formField">
+            <label>
+              <div class="yxt-QuestionSubmission-formLabel">
+                {{_config.emailLabel}}
+              </div>
+              <input class="yxt-QuestionSubmission-formInput js-question-field"
+                  name="email"
+                  placeholder="{{_config.requiredInputPlaceholder}}"
+                  value="{{email}}"
+                  required>
+            </label>
+          </div>
+        </div>
+
+        <div class="yxt-QuestionSubmission-acknowledgementBar">
+          <div class="yxt-QuestionSubmission-acknowledgement">
+            <div class="yxt-QuestionSubmission-ackCheckboxInput">
+              <input type="checkbox"
+                    name="privacyPolicy"
+                    class="js-question-field"
+                    value="true"
+                    required>
+            </div>
+            <div class="yxt-QuestionSubmission-privacyPolicyText">
+              {{_config.privacyPolicyLabel}}
+            </div>
+          </div>
+
+          <button type="submit"
+            class="yxt-QuestionSubmission-submitButton"
+            data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
+        </div>
       {{/if}}
 
-      <div class="yxt-QuestionSubmission-formRow">
-        {{_config.feedbackFormInfoText}}
-      </div>
 
-      <div class="yxt-QuestionSubmission-formRow">
-        <div class="yxt-QuestionSubmission-formField">
-          <label>
-            <div class="yxt-QuestionSubmission-formLabel">
-              {{_config.questionLabel}}
-            </div>
-            <textarea class="yxt-QuestionSubmission-formInput js-question-field js-question-text"
-                      name="questionText"
-                      placeholder="{{_config.questionInputPlaceholder}}"
-                      required>{{questionText}}</textarea>
-          </label>
-        </div>
-      </div>
 
-      <div class="yxt-QuestionSubmission-formRow">
-        <div class="yxt-QuestionSubmission-formField">
-          <label>
-            <div class="yxt-QuestionSubmission-formLabel">
-              {{_config.nameLabel}}
-            </div>
-            <input class="yxt-QuestionSubmission-formInput js-question-field"
-              name="name"
-              placeholder="{{_config.requiredInputPlaceholder}}"
-              value="{{name}}"
-              required>
-          </label>
-        </div>
-
-        <div class="yxt-QuestionSubmission-formField">
-          <label>
-            <div class="yxt-QuestionSubmission-formLabel">
-              {{_config.emailLabel}}
-            </div>
-            <input class="yxt-QuestionSubmission-formInput js-question-field"
-                name="email"
-                placeholder="{{_config.requiredInputPlaceholder}}"
-                value="{{email}}"
-                required>
-          </label>
-        </div>
-      </div>
-
-      <div class="yxt-QuestionSubmission-acknowledgementBar">
-        <div class="yxt-QuestionSubmission-acknowledgement">
-          <div class="yxt-QuestionSubmission-ackCheckboxInput">
-            <input type="checkbox"
-                  name="privacyPolicy"
-                  class="js-question-field"
-                  value="true"
-                  required>
-          </div>
-          <div class="yxt-QuestionSubmission-privacyPolicyText">
-            {{_config.privacyPolicyLabel}}
-          </div>
-        </div>
-
-        <button type="submit"
-          class="yxt-QuestionSubmission-submitButton"
-          data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
-
-      </div>
     </form>
 
   {{/if}}

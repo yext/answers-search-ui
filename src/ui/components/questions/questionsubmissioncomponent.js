@@ -214,7 +214,7 @@ export default class QuestionSubmissionComponent extends Component {
         .catch(error => {
           this.setState(
             new QuestionSubmission(formData, {
-              'network': 'There was a problem submitting your question. Please try again.'
+              'network': 'We\'re sorry, an error occurred.'
             })
           );
           throw error;
