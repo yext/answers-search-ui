@@ -2,7 +2,7 @@
 
 ## Install
 ```
-npm ci
+npm install
 ```
 
 ## Add credentials

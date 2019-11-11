@@ -1,10 +1,13 @@
 /** @module */
 
 /** The current lib version, reported with errors and analytics */
-export const LIB_VERSION = 'v0.9.2';
+export const LIB_VERSION = 'v0.9.3';
 
-/** The base url for the api backend */
-export const API_BASE_URL = 'https://liveapi.yext.com';
+/** The base url for the live api backend */
+export const LIVE_API_BASE_URL = 'https://liveapi.yext.com';
+
+/** The base url for the knowledge api backend */
+export const API_BASE_URL = 'https://api.yext.com';
 
 /** The default url for compiled component templates */
 export const COMPILED_TEMPLATES_URL = `https://assets.sitescdn.net/answers/${LIB_VERSION}/answerstemplates.compiled.min.js`;
