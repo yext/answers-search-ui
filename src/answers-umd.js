@@ -140,7 +140,8 @@ class Answers {
     });
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, config.search);
-    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, config.sessionTrackingEnabled);
+    let sessionTrackingEnabled = config.sessionTrackingEnabled || true;
+    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, sessionTrackingEnabled);
 
     this._services = config.mock ? getMockServices() : getServices(config);
 
