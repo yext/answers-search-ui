@@ -16,10 +16,10 @@ export default class MapProvider {
     this._apiKey = config.apiKey;
 
     /**
-     * The zoom level of the map, defaults to 9
+     * The zoom level of the map, defaults to 14
      * @type {number}
      */
-    this._zoom = config.zoom || 9;
+    this._zoom = config.zoom || 14;
 
     /**
      * The default coordinates to display if there are no results returned
