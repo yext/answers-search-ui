@@ -14,6 +14,9 @@ export default class GoogleMapProvider extends MapProvider {
   constructor (opts) {
     super(opts);
 
+    // normalize because google's zoom is effectively 1 unit of difference away from mapbox zoom
+    this._zoomOffset = 1;
+    this._zoom += this._zoomOffset;
     this._clientId = opts.clientId;
     this._signature = opts.signature;
 
@@ -61,17 +64,17 @@ export default class GoogleMapProvider extends MapProvider {
       this._map = null;
       return this;
     }
+
     // NOTE(billy) This timeout is a hack for dealing with async nature.
     // Only here for demo purposes, so we'll fix later.
     setTimeout(() => {
       let container = DOM.query(el);
       this.map = new google.maps.Map(container, {
-        zoom: this._zoom
+        zoom: this._zoom,
+        center: this.getCenterMarker(mapData)
       });
 
       // Apply our search data to our GoogleMap
-      let bounds = new google.maps.LatLngBounds();
-
       if (mapData && mapData.mapMarkers.length) {
         const collapsedMarkers = this._collapsePins
           ? this._collapseMarkers(mapData.mapMarkers)
@@ -81,6 +84,7 @@ export default class GoogleMapProvider extends MapProvider {
           this._pinConfig,
           this.map);
 
+        let bounds = new google.maps.LatLngBounds();
         for (let i = 0; i < googleMapMarkerConfigs.length; i++) {
           let marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
           if (this._onPinClick) {
@@ -89,11 +93,17 @@ export default class GoogleMapProvider extends MapProvider {
           bounds.extend(marker.position);
         }
 
-        this.map.fitBounds(bounds);
-      } else {
-        this.map.setCenter(new google.maps.LatLng(this._defaultPosition.lat, this._defaultPosition.lng));
+        if (googleMapMarkerConfigs.length >= 2) {
+          this.map.fitBounds(bounds);
+        }
       }
     }, 100);
+  }
+
+  getCenterMarker (mapData) {
+    return mapData && mapData.mapCenter && mapData.mapCenter.longitude && mapData.mapCenter.latitude
+      ? { lng: mapData.mapCenter.longitude, lat: mapData.mapCenter.latitude }
+      : { lng: this._defaultPosition.lng, lat: this._defaultPosition.lat };
   }
 }
 
