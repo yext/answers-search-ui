@@ -10,6 +10,7 @@
   $question-submission-cta-background-color: #1070F0;
   $question-submission-cta-foreground-color: white;
   $question-submission-error-text-color: rgb(148, 0, 0);
+  $question-submission-focus-outline: rgb(59, 153, 252) solid 2px;
 
   margin-top: $base-spacing;
 
@@ -158,6 +159,11 @@
   &-ackCheckboxInput
   {
     margin-right: $base-spacing / 2;
+
+    input:focus
+    {
+      outline: $question-submission-focus-outline;
+    }
   }
 
   &-privacyPolicyText
@@ -167,18 +173,27 @@
 
   &-submitButton
   {
-      text-transform: uppercase;
-      background: $question-submission-cta-background-color;
-      letter-spacing: 0.5px;
-      font-weight: $font-weight-semibold;
-      height: 40px;
-      box-sizing: border-box;
-      width: 170px;
-      color: $question-submission-cta-foreground-color;
-      border: none;
-      padding-top: $base-spacing / 2;
-      padding-bottom: $base-spacing / 2;
-      padding-left: $base-spacing;
-      padding-right: $base-spacing;
+      button
+      {
+        text-transform: uppercase;
+        background: $question-submission-cta-background-color;
+        letter-spacing: 0.5px;
+        font-weight: $font-weight-semibold;
+        height: 40px;
+        box-sizing: border-box;
+        width: 170px;
+        color: $question-submission-cta-foreground-color;
+        border: none;
+        padding-top: $base-spacing / 2;
+        padding-bottom: $base-spacing / 2;
+        padding-left: $base-spacing;
+        padding-right: $base-spacing;
+      }
+
+      button:focus
+      {
+        outline: $question-submission-focus-outline;
+      }
+
   }
 }
