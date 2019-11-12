@@ -471,12 +471,78 @@ ANSWERS.addComponent('FilterBox', {
   ],
   // Required, the vertical key for the search, default null
   verticalKey: 'verticalKey',
-  // Optional, if true, triggers a search on each change to a filter, default false
-  searchOnChange: true,
-  // Optional, the selector of the apply button, default '.js-yext-filterbox-apply'
-  applyButtonSelector: '.js-btn-selector',
+  // Title to display above the filter
+  title: 'Filters',
+  // Show number of results for each filter
+  showCount: true,
+  // Execute a new search whenever a filter selection changes
+  searchOnChange: false,
+  // Show a reset button per filter group
+  resetFilter: false,
+  // The label to use for the reset button above
+  resetFilterLabel: 'reset',
+  // Show a reset-all button for the filter control
+  resetFilters: true,
+  // The label to use for the reset-all button above
+  resetFiltersLabel: 'reset-all',
+  // Allow collapsing excess filter options after a limit
+  showMore: true,
+  // The max number of filter to show before collapsing extras
+  showMoreLimit: 5,
+  // The label to show for displaying more filter
+  showMoreLabel: 'show more',
+  // The label to show for displaying less filter
+  showLessLabel: 'show less',
+  // Allow expanding and collapsing entire groups of filters
+  expand: true,
+  // Show the number of applied filter when a group is collapsed
+  showNumberApplied: true,
+  // The label to show on the apply button
+  applyLabel: 'apply',
   // Optional, whether or not this filterbox contains dynamic filters, default false
   isDynamic: true
+});
+```
+
+## Facets Component
+
+The Facets component displays filters relevant to the current search, configured on the server, automatically. Facets are only available for vertical searches.
+
+```html
+<div class="facets-container"></div>
+```
+
+```js
+ANSWERS.addComponent('Facets', {
+  container: '.facets-container',
+  // Title to display above the facets
+  title: 'Filters',
+  // Show number of results for each facet
+  showCount: true,
+  // Execute a new search whenever a facet selection changes
+  searchOnChange: false,
+  // Show a reset button per facet group
+  resetFacet: false,
+  // The label to use for the reset button above
+  resetFacetLabel: 'reset',
+  // Show a reset-all button for the facets control
+  resetFacets: true,
+  // The label to use for the reset-all button above
+  resetFacetsLabel: 'reset-all',
+  // Allow collapsing excess facet options after a limit
+  showMore: true,
+  // The max number of facets to show before collapsing extras
+  showMoreLimit: 5,
+  // The label to show for displaying more facets
+  showMoreLabel: 'show more',
+  // The label to show for displaying less facets
+  showLessLabel: 'show less',
+  // Allow expanding and collapsing entire groups of facets
+  expand: true,
+  // Show the number of applied facets when a group is collapsed
+  showNumberApplied: true,
+  // The label to show on the apply button
+  applyLabel: 'apply'
 });
 ```
 
@@ -558,6 +624,22 @@ ANSWERS.addComponent('FilterOptions', {
   optionSelector: '.js-option',
   // Optional, if true, triggers a search on each change to a filter, default false
   searchOnChange: true,
+  // Show a reset button
+  showReset: false,
+  // The label to use for the reset button
+  resetLabel: 'reset',
+  // Allow collapsing excess filter options after a limit
+  showMore: true,
+  // The max number of filter options to show before collapsing extras
+  showMoreLimit: 5,
+  // The label to show for displaying more options
+  showMoreLabel: 'show more',
+  // The label to show for displaying less options
+  showLessLabel: 'show less',
+  // Allow expanding and collapsing the filter
+  showExpand: true,
+  // Show the number of applied options when a group is collapsed
+  showNumberApplied: true,
   // Optional, the callback function to call when changed
   onChange: function() {},
   // Optional, the label to be used in the legend

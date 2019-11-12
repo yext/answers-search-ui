@@ -1,0 +1,140 @@
+/** @define FilterOptions */
+
+.yxt-FilterOptions {
+  &-container {
+    @include Text($line-height: $line-height-md);
+  }
+
+  &-fieldSet {
+    border: 0;
+    padding: 0;
+    margin: 12px 0;
+  }
+
+  &-legend {
+    width: 100%;
+    padding: 0;
+  }
+
+  &-legendLabel {
+    @include Text(
+      $size: $font-size-md-lg,
+      $line-height: $line-height-lg,
+      $weight: $font-weight-semibold);
+    text-align: left;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    &:hover button {
+      color: $color-text-secondary;
+    }
+  }
+
+  &-option {
+    display: flex;
+    align-items: flex-start;
+    margin: 2px 0;
+    @media (max-width: $breakpoint-mobile-max) {
+      margin: 22px 0;
+    }
+  }
+
+  &-options {
+    margin: 12px 0;
+  }
+
+  &-optionLabel {
+    display: block;
+    margin-left: 5px;
+  }
+
+  &-selectedCount {
+    @include Text(
+      $size: $font-size-xs,
+      $weight: $font-weight-bold,
+      $color: white);
+
+    width: 20px;
+    height: 20px;
+    margin-left: 12px;
+    display: flex;
+    background: $color-background-dark;
+    align-items: center;
+    justify-content: center;
+    border-radius: 4px;
+  }
+
+  &-reset {
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton($padding: 0);
+
+    @media (max-width: $breakpoint-mobile-max) {
+      margin-top: 12px;
+    }
+  }
+
+  &-showToggle {
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton($padding: 0);
+
+    svg {
+      width: 6px;
+      margin-left: 5px;
+    }
+  }
+
+  &-clickableLegend {
+    border: 1px solid transparent;
+    border-radius: 4px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+
+    &:focus {
+      border: 1px solid $color-brand-hover;
+    }
+
+    &:not(:disabled):hover {
+      color: $color-text-secondary;
+    }
+  }
+
+  &-input {
+    margin-left: 0;
+  }
+
+  &-reset--right {
+    margin-left: auto;
+    padding: 0;
+  }
+
+  &-expand {
+    margin-left: auto;
+  }
+
+  &--collapsed {
+    display: none;
+  }
+
+  &-collapseUp, &-collapseDown {
+    vertical-align: middle;
+  }
+
+  &-collapseUp {
+    padding-top: 2px;
+  }
+
+  &-collapseUp svg {
+    transform: rotate(270deg);
+  }
+
+  &-collapseDown svg {
+    transform: rotate(90deg);
+  }
+}

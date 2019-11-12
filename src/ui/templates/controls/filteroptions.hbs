@@ -1,0 +1,89 @@
+<fieldset class="yxt-FilterOptions-fieldSet">
+  <legend class="yxt-FilterOptions-legend">
+    <div class="yxt-FilterOptions-legendLabel">
+      {{#if showExpand}}
+          <div class="yxt-FilterOptions-clickableLegend" role="button" tabindex="0" aria-expanded="{{expanded}}">
+            <span class="yxt-FilterOptions-label">{{label}}</span>
+
+            {{#if showNumberApplied}}
+              {{#unless expanded}}
+                {{#if selectedCount}}
+                  <span class="yxt-FilterOptions-selectedCount">{{selectedCount}}</span>
+                {{/if}}
+              {{/unless}}
+            {{/if}}
+
+            {{#if expanded}}
+              <span class="yxt-FilterOptions-expand yxt-FilterOptions-collapseUp"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "chevron" }'></span>
+            {{else}}
+              <span class="yxt-FilterOptions-expand yxt-FilterOptions-collapseDown"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "chevron" }'></span>
+            {{/if}}
+          </div>
+        {{else}}
+          <span class="yxt-FilterOptions-label">{{label}}</span>
+      {{/if}}
+      {{#if showReset}}
+        {{#unless showExpand}}
+          <button class="yxt-FilterOptions-reset yxt-FilterOptions-reset--right">{{resetLabel}}</button>
+        {{/unless}}
+      {{/if}}
+    </div>
+  </legend>
+
+  <div class="yxt-FilterOptions-container {{#unless expanded}}yxt-FilterOptions--collapsed{{/unless}}">
+    {{#if showReset}}
+      {{#if showExpand}}
+        <button class="yxt-FilterOptions-reset">{{resetLabel}}</button>
+      {{/if}}
+    {{/if}}
+
+    <div class='yxt-FilterOptions-options'>
+      {{#each options}}
+        {{#if ../isSingleOption}}
+          <div class="singleoption-option yxt-FilterOptions-option">
+            <input
+              type="radio"
+              class="js-yext-filter-option yxt-FilterOptions-input"
+              id="js-yext-radio-{{../name}}-{{@index}}"
+              name="{{../name}}"
+              value="{{value}}"
+              data-index="{{@index}}"
+              {{#if selected}}checked{{/if}}>
+            <label class="singleoption-label" for="js-yext-radio-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
+          </div>
+        {{else}}
+          <div class="multioption-option yxt-FilterOptions-option">
+            <input
+              type="checkbox"
+              class="js-yext-filter-option yxt-FilterOptions-input"
+              id="js-yext-checkbox-{{../name}}-{{@index}}"
+              value="{{value}}"
+              data-index="{{@index}}"
+              {{#if selected}}checked{{/if}}>
+            <label class="yxt-FilterOptions-optionLabel" for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
+          </div>
+        {{/if}}
+      {{/each}}
+    </div>
+
+    {{#if showMore}}
+      <button class="yxt-FilterOptions-showToggle">
+        {{#if allShown}}
+          {{showLessLabel}}
+          <span class="yxt-FilterOptions-collapseUp"
+            data-component="IconComponent"
+            data-opts='{ "iconName": "chevron" }'></span>
+        {{else}}
+          {{showMoreLabel}}
+          <span class="yxt-FilterOptions-collapseDown"
+            data-component="IconComponent"
+            data-opts='{ "iconName": "chevron" }'></span>
+        {{/if}}
+      </button>
+    {{/if}}
+  </div>
+</fieldset>

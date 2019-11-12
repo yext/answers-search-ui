@@ -1,0 +1,12 @@
+/** @define Facets */
+
+.yxt-Facets {
+  &-container {
+    box-sizing: border-box;
+    padding: 25px;
+    width: 300px;
+    @media (max-width: $breakpoint-mobile-max) {
+      width: 100%;
+    }
+  }
+}
