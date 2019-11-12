@@ -1,4 +1,3 @@
-// TODO(billy) Move to ES6 imports when Node supports ES6 modules
 const fs = require('fs-extra');
 const path = require('path');
 const util = require('util');
