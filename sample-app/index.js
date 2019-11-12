@@ -75,20 +75,14 @@ function main () {
   }
 
   // Copy our assets into the `output directory`
-  fs.copy(config.assetsDir, `${config.outputDir}/${config.assetsDir}`, function (err) {
-    if (err) {
-      return console.error(err);
-    }
-    console.log('Copied assets to generated site!');
-  });
+  fs.copy(config.assetsDir, `${config.outputDir}/${config.assetsDir}`)
+    .catch(console.error)
+    .then(() => console.log('Copied assets to generated site!'));
 
   // Copy our sdk bundle into the `output directory`
-  fs.copy(config.sdkBundleDir, `${config.outputDir}/${config.assetsDir}`, function (err) {
-    if (err) {
-      return console.error(err);
-    }
-    console.log('Copied SDK bundles to generated site!');
-  });
+  fs.copy(config.sdkBundleDir, `${config.outputDir}/${config.assetsDir}`)
+    .catch(console.error)
+    .then(() => console.log('Copied SDK bundles to generated site!'))
 
   // Generate our static HTML
   writeUniversalHtml();
