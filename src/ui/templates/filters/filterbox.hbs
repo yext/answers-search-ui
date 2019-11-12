@@ -1,13 +1,28 @@
-<div>
+<div class="yxt-FilterBox-container">
+  {{#if title}}
+    <h2 class="yxt-FilterBox-titleContainer">
+      <div
+        data-component="IconComponent"
+        data-opts='{ "iconName": "elements" }'>
+      </div>
+      <span class="yxt-FilterBox-title">{{title}}</span>
+    </h2>
+  {{/if}}
   {{#each filterConfigs}}
-    <div class="js-yext-filterbox-filter{{@index}}"></div>
+    <div class="js-yext-filterbox-filter{{@index}} yxt-FilterBox-filter">
+    </div>
   {{/each}}
   {{#if showApplyButton}}
-    <div>
+    <div class="yxt-FilterBox-controls">
       <button type="button"
-              class="js-yext-filterbox-apply">
-        Apply
+              class="js-yext-filterbox-apply yxt-FilterBox-apply">
+        {{applyLabel}}
       </button>
+      {{~#if showReset ~}}
+        <button type="button" class="js-yxt-FilterBox-reset yxt-FilterBox-reset">
+          {{resetLabel}}
+        </button>
+      {{/if}}
     </div>
   {{/if}}
 </div>
