@@ -3,6 +3,7 @@
   "experienceKey": "deepakyextanswersconfig",
   "mapProvider": "mapbox",
   "businessId": "919871",
+  "sessionTrackingEnabled": true,
   "verticals": {
     "leadership": {
       "search": {

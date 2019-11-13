@@ -23,5 +23,6 @@ export default {
   QUESTION_SUBMISSION: 'question-submission',
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
-  SPELL_CHECK: 'spell-check'
+  SPELL_CHECK: 'spell-check',
+  SESSIONS_OPT_IN: 'sessions-opt-in'
 };

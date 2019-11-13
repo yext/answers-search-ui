@@ -117,7 +117,8 @@ export default class Core {
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger')
+        queryTrigger: this.globalStorage.getState('queryTrigger'),
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -172,7 +173,8 @@ export default class Core {
       .universalSearch(queryString, {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger')
+        queryTrigger: this.globalStorage.getState('queryTrigger'),
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
