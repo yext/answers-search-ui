@@ -59,7 +59,7 @@ export default class SearchApi {
   }
 
   /** @inheritdoc */
-  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -83,7 +83,8 @@ export default class SearchApi {
         'retrieveFacets': isDynamicFiltersEnabled,
         'locale': this._locale,
         'skipSpellCheck': skipSpellCheck,
-        'queryTrigger': queryTrigger
+        'queryTrigger': queryTrigger,
+        'sessionTrackingEnabled': sessionTrackingEnabled
       }
     });
 
@@ -105,7 +106,8 @@ export default class SearchApi {
         'version': this._experienceVersion,
         'locale': this._locale,
         'skipSpellCheck': params.skipSpellCheck,
-        'queryTrigger': params.queryTrigger
+        'queryTrigger': params.queryTrigger,
+        'sessionTrackingEnabled': params.sessionTrackingEnabled
       }
     });
 

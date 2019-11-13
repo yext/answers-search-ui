@@ -68,6 +68,7 @@ Below is a list of configuration options that can be used during initialization.
 | locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | optional |
 | experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
 | debug | boolean | Prints full Answers error objects when set to `true` | optional |
+| sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
 
 ## Template Helpers
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
