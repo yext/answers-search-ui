@@ -140,6 +140,11 @@ class Answers {
     });
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, config.search);
+    let sessionTrackingEnabled = true;
+    if (typeof config.sessionTrackingEnabled === 'boolean') {
+      sessionTrackingEnabled = config.sessionTrackingEnabled;
+    }
+    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, sessionTrackingEnabled);
 
     this._services = config.mock ? getMockServices() : getServices(config);
 
@@ -266,6 +271,14 @@ class Answers {
     if (this._eligibleForAnalytics) {
       this._analyticsReporterService.setConversionTrackingEnabled(optIn);
     }
+  }
+
+  /**
+   * Opt in or out of session cookies
+   * @param {boolean} optIn
+   */
+  setSessionsOptIn (optIn) {
+    this.core.globalStorage.set(StorageKeys.SESSIONS_OPT_IN, optIn);
   }
 
   /**
