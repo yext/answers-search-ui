@@ -37,6 +37,11 @@ export default class QuestionSubmission {
     this.questionDescription = question.questionDescription || null;
 
     /**
+     * Whether the form is expanded or not. Defaults to true.
+     */
+    this.questionExpanded = typeof question.expanded !== 'boolean' || question.expanded;
+
+    /**
      * Contains any errors about the question submission
      * @type {object}
      */

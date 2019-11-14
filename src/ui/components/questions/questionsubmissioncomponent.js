@@ -101,7 +101,19 @@ const DEFAULT_CONFIG = {
    * The confirmation text to display after successfully submitting feedback
    * @type {string}
    */
-  'questionSubmissionConfirmationText': 'Thank you for your feedback!'
+  'questionSubmissionConfirmationText': 'Thank you for your feedback!',
+
+  /**
+   * The default privacy policy url label
+   * @type {string}
+  */
+  'privacyPolicyUrlLabel': 'Learn more here',
+
+  /**
+   * The default privacy policy url
+   * @type {string}
+   */
+  'privacyPolicyUrl': ''
 };
 
 /**
@@ -163,6 +175,12 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   onMount () {
+    let triggerEl = DOM.query(this._container, '.js-content-visibility-toggle');
+    if (triggerEl === null) {
+      return;
+    }
+    this.bindFormToggle(triggerEl);
+
     let formEl = DOM.query(this._container, this._config.formSelector);
     if (formEl === null) {
       return;
@@ -222,6 +240,18 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   /**
+   * bindFormToggle handles expanding and mimimizing the component's form.
+   * @param {HTMLElement} triggerEl
+   */
+  bindFormToggle (triggerEl) {
+    DOM.on(triggerEl, 'click', (e) => {
+      const formData = this.getState();
+      const expandState = this.getState('questionExpanded');
+      this.setState(new QuestionSubmission({ ...formData, 'expanded': !expandState }));
+    });
+  }
+
+  /**
    * Takes the form, and builds a object that represents the input names
    * and text fields.
    * @param {HTMLElement} formEl
@@ -236,8 +266,8 @@ export default class QuestionSubmissionComponent extends Component {
     let obj = {};
     for (let i = 0; i < inputFields.length; i++) {
       let val = inputFields[i].value;
-      if (inputFields[i].type === 'checkbox' && val === 'true') {
-        val = true;
+      if (inputFields[i].type === 'checkbox') {
+        val = inputFields[i].checked;
       }
       obj[inputFields[i].name] = val;
     }
@@ -251,17 +281,26 @@ export default class QuestionSubmissionComponent extends Component {
    * @returns {Object|boolean} errors object if any errors found
    */
   validateRequired (formData) {
+    var chromiumEmailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    console.log(formData);
     let errors = {};
-    if (!formData.email || typeof formData.email !== 'string') {
-      errors['email'] = 'Missing email address!';
+    if (!formData.email) {
+      errors['emailRequired'] = true;
+    } else if (!chromiumEmailRegex.test(formData.email.trim())) {
+      errors['email'] = '* Please enter a valid email address.';
+      errors['emailRequired'] = true;
+    }
+
+    if (!formData.name) {
+      errors['nameRequired'] = true;
     }
 
     if (!formData.privacyPolicy || formData.privacyPolicy !== true) {
-      errors['privacyPolicy'] = 'Approving our privacy policy terms is required!';
+      errors['privacyPolicy'] = '* You must agree to the privacy policy to submit feedback.';
     }
 
-    if (!formData.questionText || typeof formData.questionText !== 'string') {
-      errors['questionText'] = 'Question text is required!';
+    if (!formData.questionText || formData.questionText.trim().length === 0) {
+      errors['questionTextRequired'] = true;
     }
 
     return Object.keys(errors).length > 0 ? errors : null;
