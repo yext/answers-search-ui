@@ -3,14 +3,6 @@
   outline: none;
 }
 
-button:focus
-{
-  $button-focus-color: rgb(11, 94, 203);
-
-  outline: $button-focus-color solid 1px;
-  outline-offset: 1px;
-}
-
 input[type='checkbox']:focus
 {
   outline: black solid 1px;

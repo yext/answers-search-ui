@@ -59,7 +59,7 @@ const DEFAULT_CONFIG = {
    * The label to use for the Submit button
    * @type {string}
    */
-  'buttonLabel': 'Submit Feedback',
+  'buttonLabel': 'Submit',
 
   /**
    * The title to display in the title bar
