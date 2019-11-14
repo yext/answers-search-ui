@@ -163,6 +163,12 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   onMount () {
+    let triggerEl = DOM.query(this._container, '.js-content-visibility-toggle');
+    if (triggerEl === null) {
+      return;
+    }
+    this.bindFormToggle(triggerEl);
+
     let formEl = DOM.query(this._container, this._config.formSelector);
     if (formEl === null) {
       return;
@@ -218,6 +224,18 @@ export default class QuestionSubmissionComponent extends Component {
           );
           throw error;
         });
+    });
+  }
+
+  /**
+   * bindFormToggle handles expanding and mimimizing the component's form.
+   * @param {HTMLElement} triggerEl
+   */
+  bindFormToggle (triggerEl) {
+    DOM.on(triggerEl, 'click', (e) => {
+      const formData = this.getState();
+      const expandState = this.getState('questionExpanded');
+      this.setState(new QuestionSubmission({ ...formData, 'expanded': !expandState }));
     });
   }
 

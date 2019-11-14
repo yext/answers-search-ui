@@ -33,11 +33,23 @@
     justify-content: space-between;
   }
 
-  &-titleIconWrapper
+  &-titleIconWrapper, &-expandWrapper, &-collapseWrapper
   {
     display: flex;
     margin-right: $base-spacing / 2;
     color: $color-brand-primary;
+  }
+
+  &-expandWrapper
+  {
+    transform: rotate(-90deg);
+    cursor: pointer;
+  }
+
+  &-collapseWrapper
+  {
+    transform: rotate(90deg);
+    cursor: pointer;
   }
 
   &-title
