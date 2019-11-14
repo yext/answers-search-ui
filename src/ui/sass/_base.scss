@@ -3,6 +3,11 @@
   outline: none;
 }
 
+input[type='checkbox']:focus
+{
+  outline: black solid 1px;
+}
+
 body
 {
   -webkit-font-smoothing: antialiased;
