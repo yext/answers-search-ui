@@ -1,0 +1,183 @@
+/** @define yxt-QuestionSubmission */
+.yxt-QuestionSubmission
+{
+  $question-submission-border: $border-default !default;
+  border: $question-submission-border;
+
+  display: flex;
+  flex-direction: column;
+
+  $question-submission-error-text-color: rgb(148, 0, 0);
+
+  margin-top: $base-spacing;
+
+  &-titleBar
+  {
+    $question-submission-title-bar-background: $color-background-highlight !default;
+    background-color: $question-submission-title-bar-background;
+
+    display: flex;
+    justify-content: space-between;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    padding-top: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
+    
+    border-bottom: $question-submission-border;
+  }
+
+  &-left, &-right
+  {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &-titleIconWrapper
+  {
+    display: flex;
+    margin-right: $base-spacing / 2;
+    color: $color-brand-primary;
+  }
+
+  &-title
+  {
+    $question-submission-title-bar-text-color: $color-text-primary !default;
+    $question-submission-title-bar-text-line-height: $line-height-lg !default;
+
+    color: $question-submission-title-bar-text-color;
+    line-height: $question-submission-title-bar-text-line-height;
+    font-weight: $font-weight-semibold;
+    font-size: $font-size-md-lg;
+    text-transform: uppercase;
+  }
+
+  &-titleDescription
+  {
+    margin-right: $base-spacing / 2;
+    font-size: $font-size-md;
+    font-style: italic;
+
+    @media (max-width: $breakpoint-mobile-max)
+    {
+      visibility: hidden;
+    }
+  }
+
+  &-form
+  {
+    display: flex;
+    flex-direction: column;
+    margin-block-end: 0px;
+  }
+
+  &-formRow
+  {
+    display: flex;
+    flex-direction: row;
+    margin-top: $base-spacing / 2;
+    margin-bottom: $base-spacing / 2;
+    margin-left: $base-spacing;
+    margin-right: $base-spacing;
+
+    @media (max-width: $breakpoint-mobile-max)
+    {
+      flex-direction: column;
+    }
+  }
+
+  &-formField
+  {
+    display: flex;
+    flex-direction: column;
+    margin-right: $base-spacing;
+    width:100%;
+
+    @media (max-width: $breakpoint-mobile-max)
+    {
+      margin-bottom: $base-spacing;
+    }
+  }
+
+  &-formLabel
+  {
+    display: flex;
+    font-weight: bold;
+    margin-bottom: $base-spacing / 4;
+  }
+
+  &-formInput
+  {
+    display: flex;
+    width:100%;
+    border: $question-submission-border;
+    border-radius: 3px;
+    box-sizing: border-box;
+    padding-top: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
+    padding-left: $base-spacing / 2;
+    padding-right: $base-spacing / 2;
+
+    ::placeholder
+    {
+      font-style: italic;
+    }
+  }
+
+  &-formError
+  {
+    padding-top: $base-spacing / 2;
+    padding-bottom: $base-spacing / 2;
+    color: $question-submission-error-text-color;
+    font-style: italic;
+  }
+
+  &-acknowledgementBar
+  {
+    $acknowledgement-bar-background: $color-background-highlight !default;
+    background-color: $acknowledgement-bar-background;
+
+    display: flex;
+
+    justify-content: space-between;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    padding-top: $base-spacing ;
+    padding-bottom: $base-spacing;
+    margin-top: $base-spacing / 2;
+    border-top: $question-submission-border;
+  }
+
+  &-acknowledgement
+  {
+    display: flex;
+  }
+
+  &-ackCheckboxInput
+  {
+    margin-right: $base-spacing / 2;
+  }
+
+  &-privacyPolicyText
+  {
+    margin-right: $base-spacing;
+  }
+
+  &-submitButton
+  {
+    @include Button;
+
+    color: white;
+    width: 100px;
+    height: 40px;
+    box-sizing: border-box;
+    margin-top: 0px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
+    letter-spacing: 0.5px;
+    font-size: 14px;
+    font-weight: $font-weight-semibold;
+  }
+}
