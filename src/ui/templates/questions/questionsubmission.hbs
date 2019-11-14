@@ -55,9 +55,9 @@
         <div class="yxt-QuestionSubmission-formRow">
           <div class="yxt-QuestionSubmission-formField">
             <label>
-              <div class="yxt-QuestionSubmission-formLabel">
+              <span class="yxt-QuestionSubmission-formLabel">
                 {{_config.questionLabel}}
-              </div>
+              </span>
               <textarea class="yxt-QuestionSubmission-formInput js-question-field js-question-text"
                         name="questionText"
                         placeholder="{{_config.questionInputPlaceholder}}"
@@ -69,9 +69,9 @@
         <div class="yxt-QuestionSubmission-formRow">
           <div class="yxt-QuestionSubmission-formField">
             <label>
-              <div class="yxt-QuestionSubmission-formLabel">
+              <span class="yxt-QuestionSubmission-formLabel">
                 {{_config.nameLabel}}
-              </div>
+              </span>
               <input class="yxt-QuestionSubmission-formInput js-question-field"
                 name="name"
                 placeholder="{{_config.requiredInputPlaceholder}}"
@@ -82,9 +82,9 @@
 
           <div class="yxt-QuestionSubmission-formField">
             <label>
-              <div class="yxt-QuestionSubmission-formLabel">
+              <span class="yxt-QuestionSubmission-formLabel">
                 {{_config.emailLabel}}
-              </div>
+              </span>
               <input class="yxt-QuestionSubmission-formInput js-question-field"
                   name="email"
                   placeholder="{{_config.requiredInputPlaceholder}}"
@@ -96,25 +96,18 @@
 
         <div class="yxt-QuestionSubmission-acknowledgementBar">
           <div class="yxt-QuestionSubmission-acknowledgement">
-            <div class="yxt-QuestionSubmission-ackCheckboxInput">
-              <input type="checkbox"
-                    name="privacyPolicy"
-                    class="js-question-field"
-                    value="true"
-                    required>
-            </div>
+            <input type="checkbox"
+                  name="privacyPolicy"
+                  class="yxt-QuestionSubmission-ackCheckboxInput js-question-field"
+                  value="true"
+                  required>
             <div class="yxt-QuestionSubmission-privacyPolicyText">
               {{_config.privacyPolicyLabel}}
             </div>
           </div>
-
-          <div class="yxt-QuestionSubmission-submitButton">
-            <button type="submit" data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
-          </div>
+          <button class="yxt-QuestionSubmission-submitButton" type="submit" data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
         </div>
       {{/if}}
-
-
 
     </form>
 
