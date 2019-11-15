@@ -12,7 +12,8 @@ window.initAnswers = async function initAnswers () {
     mapProvider,
     mapApiKey,
     businessId,
-    search
+    search,
+    sessionTrackingEnabled
   } = config;
   const verticalConfig = config.verticals[verticalKey];
   const mapConfig = {
@@ -35,6 +36,7 @@ window.initAnswers = async function initAnswers () {
     experienceKey,
     businessId,
     search: searchConfig,
+    sessionTrackingEnabled: sessionTrackingEnabled,
     onReady: function () {
       ANSWERS.addComponent('Navigation', {
         container: '.navigation-container',

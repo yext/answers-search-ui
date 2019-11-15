@@ -58,7 +58,7 @@ export default class MapBoxMapProvider extends MapProvider {
       center: this.getCenterMarker(mapData)
     });
 
-    if (mapData) {
+    if (mapData && mapData.mapMarkers.length) {
       const collapsedMarkers = this._collapsePins
         ? this._collapseMarkers(mapData.mapMarkers)
         : mapData.mapMarkers;
@@ -67,16 +67,21 @@ export default class MapBoxMapProvider extends MapProvider {
         this._pinConfig,
         this._map);
 
+      const bounds = new mapboxgl.LngLatBounds();
       for (let i = 0; i < mapboxMapMarkerConfigs.length; i++) {
         let wrapper = mapboxMapMarkerConfigs[i].wrapper;
         let coords = new mapboxgl.LngLat(
           mapboxMapMarkerConfigs[i].position.longitude,
           mapboxMapMarkerConfigs[i].position.latitude);
         let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
+        bounds.extend(marker.getLngLat());
         marker.addTo(this._map);
         if (this._onPinClick) {
           marker.getElement().addEventListener('click', () => this._onPinClick(collapsedMarkers[i].item));
         }
+      }
+      if (mapboxMapMarkerConfigs.length >= 2) {
+        this._map.fitBounds(bounds, { padding: 50 });
       }
     }
   }
@@ -142,8 +147,8 @@ export class MapBoxMarkerConfig {
   }
 
   /**
-   * Converts the storage data model of markers into GoogleAPIMarker
-   * @param {MapBox} A reference to the google map to apply the marker to
+   * Converts the storage data model of markers into MapBoxMarkerConfig
+   * @param {MapBox} A reference to the mapbox map to apply the marker to
    * @param {object[]} markers The data of the marker
    * @param {Object} pinConfig The configuration to apply to the marker
    * @returns {MapBoxMarkerConfig[]}

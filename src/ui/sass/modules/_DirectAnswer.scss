@@ -15,17 +15,18 @@
 
   $direct-answer-content-font-size: $font-size-xlg !default;
   $direct-answer-content-line-height: $line-height-md !default;
-  $direct-answer-content-font-weight: $font-weight-normal !default;
+  $direct-answer-content-font-weight: $font-weight-semibold !default;
   $direct-answer-content-color: $color-text-primary !default;
 
   $direct-answer-view-details-font-size: $font-size-md !default;
   $direct-answer-view-details-line-height: $line-height-xxlg !default;
-  $direct-answer-view-details-font-weight: $font-weight-normal !default;
+  $direct-answer-view-details-font-weight: $font-weight-semibold !default;
 
-  $direct-answer-footer-font-size: 13.5px !default;
+  $direct-answer-footer-font-size: $font-size-md !default;
   $direct-answer-footer-line-height: $line-height-md !default;
   $direct-answer-footer-font-weight: $font-weight-normal !default;
-  $direct-answer-footer-color: $color-text-primary !default;
+  $direct-answer-footer-color: $color-text-secondary !default;
+  $direct-answer-footer-height: $module-footer-height;
 
   &-title
   {
@@ -37,13 +38,27 @@
     align-items: center;
     background-color: $direct-answer-title-background-color;
     border: $direct-answer-border;
+    @include Text(
+      $color: $direct-answer-title-color
+    )
+  }
 
+  &-titleText
+  {
+    margin: 0;
     @include Text(
       $size: $direct-answer-title-font-size,
       $line-height: $direct-answer-title-line-height,
       $weight: $direct-answer-title-font-weight,
       $color: $direct-answer-title-color
     );
+  }
+
+  &-titleIconWrapper
+  {
+    display: flex;
+    margin-right: $base-spacing / 2;
+    height: 18px;
   }
 
   &-entityName
@@ -59,6 +74,9 @@
 
   &-content
   {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     padding: $base-spacing;
     background-color: $direct-answer-content-background-color;
     border-left: $direct-answer-border;
@@ -74,6 +92,7 @@
   {
     display: flex;
     justify-content: flex-end;
+    height: $direct-answer-footer-height;
     align-items: center;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
@@ -84,6 +103,7 @@
 
   &-footerText
   {
+    margin-right: $base-spacing;
     @include Text(
       $size: $direct-answer-footer-font-size,
       $line-height: $direct-answer-footer-line-height,
@@ -97,7 +117,7 @@
   &-thumbs
   {
     display: flex;
-    margin-left: 18px;
+    margin: 0;
   }
 
   &-thumbUpIcon
@@ -109,6 +129,7 @@
   &-thumbDownIcon
   {
     display: inline-flex;
+    color: $color-text-secondary;
   }
 
   &-thumb
@@ -161,5 +182,11 @@
 
     display: inline-flex;
     align-items: center;
+  }
+
+  &-viewMoreIcon
+  {
+    $line-height: $direct-answer-view-details-line-height;
+    margin-left: 4px;
   }
 }
