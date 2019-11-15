@@ -8,6 +8,7 @@ import SpellCheck from '../models/spellcheck';
 import StorageKeys from '../storage/storagekeys';
 import DynamicFilters from '../models/dynamicfilters';
 import SearchIntents from '../models/searchintents';
+import LocationBias from '../models/locationbias';
 
 /**
  * A Data Transformer that takes the response object from a Search request
@@ -23,7 +24,8 @@ export default class SearchDataTransformer {
       [StorageKeys.DIRECT_ANSWER]: DirectAnswer.from(response.directAnswer, formatters),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters),
       [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck)
+      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
+      [StorageKeys.LOCATION_BIAS]: LocationBias.from(response.locationBias)
     };
   }
 
@@ -34,7 +36,8 @@ export default class SearchDataTransformer {
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response, formatters),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response),
       [StorageKeys.INTENTS]: SearchIntents.from(data.response.searchIntents),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.response.spellCheck)
+      [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.response.spellCheck),
+      [StorageKeys.LOCATION_BIAS]: LocationBias.from(data.response.locationBias)
     };
   }
 }

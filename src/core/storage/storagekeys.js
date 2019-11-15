@@ -24,5 +24,6 @@ export default {
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check',
+  LOCATION_BIAS: 'location-bias',
   SESSIONS_OPT_IN: 'sessions-opt-in'
 };
