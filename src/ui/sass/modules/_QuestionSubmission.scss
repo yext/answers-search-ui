@@ -38,6 +38,11 @@
     display: flex;
     margin-right: $base-spacing / 2;
     color: $color-brand-primary;
+
+    svg {
+      height: 1.125em;
+      width: 1.125em;
+    }
   }
 
   &-expandWrapper
