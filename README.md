@@ -25,6 +25,7 @@ Outline:
    - [Navigation Component](#navigation-component)
    - [QASubmission Component](#qa-submission-component)
    - [SpellCheck Component](#spell-check-component)
+   - [LocationBias Component](#location-bias-component)
 4. [Analytics](#analytics)
    - [Click Analytics](#click-analytics)
 # Install and Setup
@@ -731,6 +732,22 @@ The spell check component shows spell check suggestions/autocorrect.
 ```js
 ANSWERS.addComponent('SpellCheck', {
   container: '.spell-check-container'
+})
+```
+
+## Location Bias Component
+
+The location component component shows location that used for location bias and allow user to improve accuracy with HTML5 geolocation.
+
+```html
+<div class="location-bias-container"></div>
+```
+
+```js
+ANSWERS.addComponent('LocationBias', {
+  container: '.location-bias-container',
+  verticalKey: 'verticalKey',                             // Optional, the vertical key for the search, default null
+  updateLocationEl: '.js-locationBias-update-location'    // Optional, the element used for updating location
 })
 ```
 

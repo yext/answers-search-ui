@@ -230,6 +230,7 @@ export default class Component {
         this.unMount();
         this.mount();
       } catch (e) {
+        console.log(e);
         throw new AnswersComponentError(
           'Error updating component',
           this.constructor.type,

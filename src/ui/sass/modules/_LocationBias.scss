@@ -1,0 +1,65 @@
+/** @define LocationBias */
+
+.yxt-LocationBias
+{
+  $locationBias-text-font-size: $font-size-md !default;
+  $locationBias-text-font-weight: $font-weight-normal !default;
+  $locationBias-text-color: $color-text-secondary !default;
+  $locationBias-bullet-size: $font-size-sm / 2 !default;
+  $locationBias-bullet-color-default: $locationBias-text-color !default;
+
+  padding-bottom: $base-spacing;
+  display: block;
+  text-align: center;
+
+  padding-top: $base-spacing;
+  padding-bottom: $base-spacing;
+
+  @include Text(
+    $size: $locationBias-text-font-size,
+    $weight: $locationBias-text-font-weight,
+    $color: $locationBias-text-color
+  );
+
+  strong
+  {
+    font-weight: $font-weight-semibold;
+  }
+
+  &-bullet
+  {
+    height:  $locationBias-bullet-size;
+    width:  $locationBias-bullet-size;
+    display: inline-block;
+    border-radius: 100%;
+    background: $locationBias-bullet-color-default;
+  }
+
+  &-unknownLoc
+  {
+    background-color: transparent;
+    border: 1px solid $locationBias-bullet-color-default;
+  }
+
+  &-preciseLoc
+  {
+    background: $color-brand-primary;
+    border: 1px solid $color-brand-primary;
+  }
+
+  &-locSource
+  {
+    @media (max-width: $breakpoint-mobile-max)
+    {
+      display: block;
+    }
+  }
+
+  &-updateLoc
+  {
+    @include Link-1;
+    cursor: pointer;
+    color: $color-brand-primary;
+    text-decoration: none;
+  }
+}
