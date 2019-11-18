@@ -1,28 +1,60 @@
 /** @define yxt-QuestionSubmission */
 .yxt-QuestionSubmission
 {
-  $question-submission-border: $border-default !default;
-  border: $question-submission-border;
+  $question-submission-font-size: $font-size-md !default;
+  $question-submission-line-height: $line-height-md !default;
+  $question-submission-font-weight: $font-weight-normal !default;
+  $question-submission-color: $color-text-primary !default;
 
-  display: flex;
-  flex-direction: column;
+  $question-submission-title-font-size: $font-size-md-lg !default;
+  $question-submission-title-line-height: $line-height-lg !default;
+  $question-submission-title-font-weight: $font-weight-semibold !default;
+  $question-submission-title-color: $color-text-primary !default;
+
+  $question-submission-description-font-size: $font-size-md !default;
+  $question-submission-description-line-height: $line-height-md !default;
+  $question-submission-description-font-weight: $font-weight-normal !default;
+  $question-submission-description-color: $color-text-primary !default;
+
+  $question-submission-label-font-size: $font-size-md !default;
+  $question-submission-label-line-height: $line-height-md !default;
+  $question-submission-label-font-weight: $font-weight-bold !default;
+  $question-submission-label-color: $color-text-primary !default;
+
+  $question-submission-input-font-size: $font-size-md !default;
+  $question-submission-input-line-height: $line-height-md !default;
+  $question-submission-input-font-weight: $font-weight-normal !default;
+  $question-submission-input-color: $color-text-primary !default;
+
+  $question-submission-border: $border-default !default;
 
   $question-submission-error-text-color: rgb(148, 0, 0);
 
+  $question-submission-title-bar-background: $color-background-highlight !default;
+
+  $acknowledgement-bar-background: $color-background-highlight !default;
+
+  @include Text(
+    $size: $question-submission-font-size,
+    $line-height: $question-submission-line-height,
+    $weight: $question-submission-font-weight,
+    $color: $question-submission-color
+  );
+
+  display: flex;
+  flex-direction: column;
+  border: $question-submission-border;
   margin-top: $base-spacing;
 
   &-titleBar
   {
-    $question-submission-title-bar-background: $color-background-highlight !default;
-    background-color: $question-submission-title-bar-background;
-
     display: flex;
     justify-content: space-between;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
-    
+    background-color: $question-submission-title-bar-background;
     border-bottom: $question-submission-border;
   }
 
@@ -40,8 +72,8 @@
     color: $color-brand-primary;
 
     svg {
-      height: 1.125em;
-      width: 1.125em;
+      height: 1.25em;
+      width: 1.25em;
     }
   }
 
@@ -59,20 +91,25 @@
 
   &-title
   {
-    $question-submission-title-bar-text-color: $color-text-primary !default;
-    $question-submission-title-bar-text-line-height: $line-height-lg !default;
-
-    color: $question-submission-title-bar-text-color;
-    line-height: $question-submission-title-bar-text-line-height;
-    font-weight: $font-weight-semibold;
-    font-size: $font-size-md-lg;
+    @include Text(
+      $size: $question-submission-title-font-size,
+      $line-height: $question-submission-title-line-height,
+      $weight: $question-submission-title-font-weight,
+      $color: $question-submission-title-color
+    );
     text-transform: uppercase;
   }
 
   &-titleDescription
   {
+    @include Text(
+      $size: $question-submission-description-font-size,
+      $line-height: $question-submission-description-line-height,
+      $weight: $question-submission-description-font-weight,
+      $color: $question-submission-description-color
+    );
+
     margin-right: $base-spacing / 2;
-    font-size: $font-size-md;
     font-style: italic;
 
     @media (max-width: $breakpoint-mobile-max)
@@ -92,10 +129,13 @@
   {
     display: flex;
     flex-direction: row;
-    margin-top: $base-spacing / 2;
-    margin-bottom: $base-spacing / 2;
+    margin-bottom: $base-spacing;
     margin-left: $base-spacing;
     margin-right: $base-spacing;
+
+    &:first-child {
+      margin-top: $base-spacing;
+    }
 
     @media (max-width: $breakpoint-mobile-max)
     {
@@ -118,15 +158,26 @@
 
   &-formLabel
   {
+    @include Text(
+      $size: $question-submission-label-font-size,
+      $line-height: $question-submission-label-line-height,
+      $weight: $question-submission-label-font-weight,
+      $color: $question-submission-label-color
+    );
     display: flex;
-    font-weight: bold;
     margin-bottom: $base-spacing / 4;
   }
 
   &-formInput
   {
+    @include Text(
+      $size: $question-submission-input-font-size,
+      $line-height: $question-submission-input-line-height,
+      $weight: $question-submission-input-font-weight,
+      $color: $question-submission-input-color
+    );
     display: flex;
-    width:100%;
+    width: 100%;
     border: $question-submission-border;
     border-radius: 3px;
     box-sizing: border-box;
@@ -135,7 +186,7 @@
     padding-left: $base-spacing / 2;
     padding-right: $base-spacing / 2;
 
-    ::placeholder
+    &::placeholder
     {
       font-style: italic;
     }
@@ -151,18 +202,14 @@
 
   &-acknowledgementBar
   {
-    $acknowledgement-bar-background: $color-background-highlight !default;
-    background-color: $acknowledgement-bar-background;
-
     display: flex;
-
     justify-content: space-between;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
     padding-top: $base-spacing ;
     padding-bottom: $base-spacing;
-    margin-top: $base-spacing / 2;
     border-top: $question-submission-border;
+    background-color: $acknowledgement-bar-background;
   }
 
   &-acknowledgement
