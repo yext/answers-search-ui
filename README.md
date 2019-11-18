@@ -59,7 +59,7 @@ Below is a list of configuration options that can be used during initialization.
 
 |  option   | type       | description                               | required      |
 |-----------|------------|-------------------------------------------|---------------|
-| apiKey       | string     | Your API key                              | required      |
+| apiKey    | string     | Your API key                              | required      |
 | experienceKey   | string     | The key used for your answers experience     | required      |
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | onStateChange | function | Invoked when the sate changes | optional |
@@ -146,14 +146,24 @@ ANSWERS.addComponent('SearchBar', {
 
 ## Custom Data Formatting
 
-You can format specific entity fields using `fieldFormatters`. These formatters are applied before the `transformData` step. Each formatter takes in three arguments, `(fieldValue, entityData, verticalId, isDirectAnswer)`.
+You can format specific entity fields using `fieldFormatters`.
+These formatters are applied before the `transformData` step.
 
+Each formatter takes in an object with the following properties :
+- `entityProfileData`
+- `entityFieldValue`
+- `highlightedEntityFieldValue`
+- `verticalId`
+- `isDirectAnswer`
+
+Below is an example usage.
 ```js
 ANSWERS.init({
   apiKey: '<API_KEY_HERE>',
   experienceKey: '<EXPERIENCE_KEY_HERE>',
   fieldFormatters: {
-    'name': (fieldValue, entityData, verticalId, isDirectAnswer) => fieldValue.toUpperCase()
+    'name': (formatterObject) => formatterObject.entityFieldValue.toUpperCase(),
+    'description' : (formatterObject) => formatterObject.highlightedEntityFieldValue
   }
 });
 ```
