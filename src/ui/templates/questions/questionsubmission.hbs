@@ -18,11 +18,11 @@
       <div class="yxt-QuestionSubmission-titleDescription">
         {{_config.sectionDescription}}
       </div>
-      <div class="{{#if questionExpanded}}yxt-QuestionSubmission-expandWrapper{{else}}yxt-QuestionSubmission-collapseWrapper{{/if}} js-content-visibility-toggle"
+      <button class="{{#if questionExpanded}}yxt-QuestionSubmission--expanded{{else}}yxt-QuestionSubmission--collapsed{{/if}} js-content-visibility-toggle"
         data-component="IconComponent"
         data-opts='{ "iconName": "chevron" }'
         data-prop="icon"
-      ></div>
+      ></button>
     </div>
   </div>
 

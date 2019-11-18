@@ -65,11 +65,13 @@
     justify-content: space-between;
   }
 
-  &-titleIconWrapper, &-expandWrapper, &-collapseWrapper
+  &-titleIconWrapper, &--expanded, &--collapsed
   {
     display: flex;
     margin-right: $base-spacing / 2;
     color: $color-brand-primary;
+    background: none;
+    border: none;
 
     svg {
       height: 1.25em;
@@ -77,13 +79,13 @@
     }
   }
 
-  &-expandWrapper
+  &--expanded
   {
     transform: rotate(-90deg);
     cursor: pointer;
   }
 
-  &-collapseWrapper
+  &--collapsed
   {
     transform: rotate(90deg);
     cursor: pointer;
