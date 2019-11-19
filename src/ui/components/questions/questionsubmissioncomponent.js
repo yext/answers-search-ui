@@ -101,7 +101,19 @@ const DEFAULT_CONFIG = {
    * The confirmation text to display after successfully submitting feedback
    * @type {string}
    */
-  'questionSubmissionConfirmationText': 'Thank you for your feedback!'
+  'questionSubmissionConfirmationText': 'Thank you for your feedback!',
+
+  /**
+   * The default privacy policy url label
+   * @type {string}
+  */
+  'privacyPolicyUrlLabel': 'Learn more here',
+
+  /**
+   * The default privacy policy url
+   * @type {string}
+   */
+  'privacyPolicyUrl': ''
 };
 
 /**

@@ -234,6 +234,16 @@
     margin-right: $base-spacing;
   }
 
+  &-privacyPolicyUrl
+  {
+    color: $color-brand-primary;
+
+    &:hover
+    {
+      color: $color-brand-hover;
+    }
+  }
+
   &-submitButton
   {
     @include Button;
