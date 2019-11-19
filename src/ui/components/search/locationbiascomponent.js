@@ -53,6 +53,7 @@ export default class LocationBiasComponent extends Component {
     if (!this._allowUpdate) {
       return;
     }
+    this._disableLocationUpdateIfGeolocationDenied();
     DOM.on(this._updateLocationEl, 'click', (e) => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -64,12 +65,7 @@ export default class LocationBiasComponent extends Component {
           this._doSearch();
         }, (err) => {
           if (err.code === 1) {
-            this.core.globalStorage.delete(StorageKeys.GEOLOCATION);
-            this._allowUpdate = false;
-            this.setState({
-              locationDisplayName: this._locationDisplayName,
-              accuracy: this._accuracy
-            });
+            this._disableLocationUpdate();
           }
         });
       }
@@ -125,5 +121,25 @@ export default class LocationBiasComponent extends Component {
     } else {
       this.core.search(query);
     }
+  }
+
+  _disableLocationUpdateIfGeolocationDenied () {
+    if ('permissions' in navigator) {
+      navigator.permissions.query({ name: 'geolocation' })
+        .then((result) => {
+          if (result.state === 'denied') {
+            this._disableLocationUpdate();
+          }
+        });
+    }
+  }
+
+  _disableLocationUpdate () {
+    this.core.globalStorage.delete(StorageKeys.GEOLOCATION);
+    this._allowUpdate = false;
+    this.setState({
+      locationDisplayName: this._locationDisplayName,
+      accuracy: this._accuracy
+    });
   }
 }
