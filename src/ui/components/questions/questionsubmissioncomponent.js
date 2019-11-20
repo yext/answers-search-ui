@@ -176,10 +176,9 @@ export default class QuestionSubmissionComponent extends Component {
 
   onMount () {
     let triggerEl = DOM.query(this._container, '.js-content-visibility-toggle');
-    if (triggerEl === null) {
-      return;
+    if (triggerEl !== null) {
+      this.bindFormToggle(triggerEl);
     }
-    this.bindFormToggle(triggerEl);
 
     let formEl = DOM.query(this._container, this._config.formSelector);
     if (formEl === null) {
@@ -282,7 +281,6 @@ export default class QuestionSubmissionComponent extends Component {
    */
   validateRequired (formData) {
     var chromiumEmailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    console.log(formData);
     let errors = {};
     if (!formData.email) {
       errors['emailRequired'] = true;
