@@ -4,6 +4,7 @@ Answers Javascript API Library.
 Outline:
 1. [Install / Setup](#install-and-setup)
    - [Configuration Options](#configuration-options)
+   - [Search Configuration Options](#search-configuration)
    - [Template Helpers](#template-helpers)
 2. [Component Usage](#component-usage)
    - [Base Component Configuration](#base-component-configuration)
@@ -19,6 +20,7 @@ Outline:
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
+   - [Pagination Component](#pagination-component)
    - [FilterBox Component](#filterbox-component)
    - [FilterSearch Component](#filtersearch-component)
    - [Filter Components](#filter-components)
@@ -66,10 +68,20 @@ Below is a list of configuration options that can be used during initialization.
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | optional  |
 | templateUrl  | string     | Use precompiled template hosted by you       | optional  |
 | templateBundle  | object     | Provide the precompiled templates      | optional  |
+| search | object | Search specific settings, see [search configuration](#search-configuration) below | optional |
 | locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | optional |
 | experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
 | debug | boolean | Prints full Answers error objects when set to `true` | optional |
 | sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
+
+## Search Configuration
+Below is a list of configuration options related to search, used in the [base configuration](#configuration-options) above.
+
+|  option   | type       | description                               | required      |
+|-----------|------------|-------------------------------------------|---------------|
+| verticalKey | string | The vertical key to use for searches | optional |
+| limit | number | The number of results to display per page | optional |
+| defaultInitialSearch | string | A default search to use on initialization for vertical searchers, when the user has't provided a query  | optional |
 
 ## Template Helpers
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
@@ -442,6 +454,24 @@ ANSWERS.addComponent('VerticalResults', {
   // The max number of search results to return, defaults to 20
   limit: 25
 })
+```
+
+## Pagination Component
+
+The Pagination component allows users to page through vertical search results. Pagination requires verticalKey to be provided in the [base configuration](#configuration-options).
+
+```html
+<div class="pagination-container"></div>
+```
+
+```js
+ANSWERS.addComponent('Pagination', {
+  container: '.pagination-component',
+  // Display a double arrow allowing users to jump to the first page of results
+  showFirst: true,
+  // Display a double arrow allowing users to jump to the last page of results
+  showLast: true
+});
 ```
 
 ## FilterBox Component
