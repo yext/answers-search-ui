@@ -270,7 +270,8 @@ export default class FilterBoxComponent extends Component {
       Object.keys(f).length > 0);
 
     if (this.config.isDynamic) {
-      const combinedFilter = Facet.fromFilters(...validFilters);
+      const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
+      const combinedFilter = Facet.fromFilters(availableFieldIds, ...validFilters);
       this.core.setFacetFilter(this.name, combinedFilter || {});
     } else {
       const combinedFilter = validFilters.length > 1

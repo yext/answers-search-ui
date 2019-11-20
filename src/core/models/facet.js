@@ -20,8 +20,11 @@ export default class Facet {
    * @param  {...Filter} filters The filters to use in this facet
    * @returns {Facet}
    */
-  static fromFilters (...filters) {
+  static fromFilters (availableFieldIds, ...filters) {
     const groups = {};
+    availableFieldIds.forEach(fieldId => {
+      groups[fieldId] = [];
+    });
     const flatFilters = filters.flatMap(f => f.$or || f);
     flatFilters.forEach(f => {
       const key = Object.keys(f)[0];
