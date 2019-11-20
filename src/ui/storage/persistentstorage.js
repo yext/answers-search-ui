@@ -74,8 +74,7 @@ export default class PersistentStorage {
         this._historyTimer = null;
         window.history.pushState(null, null, `?${this._params.toString()}`);
         this._callListener(this._updateListener);
-      },
-      100);
+      });
   }
 
   /**
