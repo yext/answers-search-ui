@@ -127,7 +127,26 @@ export default class SearchComponent extends Component {
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
       this.query = q;
       this.setState();
-      this.search(q);
+      // If the Permissions API is supported in this browser, we can use location data the user
+      // has already consented to share instead of prompting again to get location data
+      if (navigator.permissions) {
+        navigator.permissions.query({ name: 'geolocation' }).then(({ state }) => {
+          if (state === 'granted') {
+            navigator.geolocation.getCurrentPosition(position => {
+              this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+                lat: position.coords.latitude,
+                lng: position.coords.longitude,
+                radius: position.coords.accuracy
+              });
+              this.search(q);
+            });
+          } else {
+            this.search(q);
+          }
+        });
+      } else {
+        this.search(q);
+      }
     });
 
     /**
