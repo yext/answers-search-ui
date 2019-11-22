@@ -18,7 +18,7 @@
       <div class="yxt-QuestionSubmission-titleDescription">
         {{_config.sectionDescription}}
       </div>
-      <button class="{{#if questionExpanded}}yxt-QuestionSubmission__toggle--expanded{{else}}yxt-QuestionSubmission__toggle--collapsed{{/if}} js-content-visibility-toggle"
+      <button class="{{#if questionExpanded}}yxt-QuestionSubmission-toggle--expanded{{else}}yxt-QuestionSubmission-toggle--collapsed{{/if}} js-content-visibility-toggle"
         data-component="IconComponent"
         data-opts='{ "iconName": "chevron" }'
         data-prop="icon"
@@ -31,13 +31,13 @@
   {{#if questionExpanded}}
 
     {{#if questionSubmitted}}
-      <div id="yxt-QuestionSubmission-form" class="yxt-QuestionSubmission-form">
+      <div class="yxt-QuestionSubmission-form">
         <div class="yxt-QuestionSubmission-formRow">
           {{_config.questionSubmissionConfirmationText}}
         </div>
       </div>
     {{else}}
-      <form class="yxt-QuestionSubmission-form" novalidate>
+      <form id="yxt-QuestionSubmission-form-{{name}}" class="yxt-QuestionSubmission-form" novalidate>
         {{#if errors.network}}
           <div class="yxt-QuestionSubmission-formRow">
             <div class="yxt-QuestionSubmission-formError" role="alert">
@@ -55,7 +55,7 @@
               <span class="yxt-QuestionSubmission-formLabel">
                 {{_config.questionLabel}}
               </span>
-              <textarea class="yxt-QuestionSubmission-formInput js-question-field js-question-text{{#if errors.questionTextRequired}} required-error{{/if}}"
+              <textarea class="yxt-QuestionSubmission-formInput js-question-field js-question-text{{#if errors.questionTextError}} yxt-required-error{{/if}}"
                         name="questionText"
                         placeholder="{{_config.questionInputPlaceholder}}"
                         required>{{questionText}}</textarea>
@@ -69,7 +69,7 @@
               <span class="yxt-QuestionSubmission-formLabel">
                 {{_config.nameLabel}}
               </span>
-              <input class="yxt-QuestionSubmission-formInput js-question-field{{#if errors.nameRequired}} required-error{{/if}}"
+              <input class="yxt-QuestionSubmission-formInput js-question-field{{#if errors.nameError}} yxt-required-error{{/if}}"
                 name="name"
                 type="text"
                 placeholder="{{_config.requiredInputPlaceholder}}"
@@ -83,33 +83,31 @@
               <span class="yxt-QuestionSubmission-formLabel">
                 {{_config.emailLabel}}
               </span>
-              <input class="yxt-QuestionSubmission-formInput js-question-field{{#if errors.emailRequired}} required-error{{/if}}"
+              <input class="yxt-QuestionSubmission-formInput js-question-field{{#if errors.emailError}} yxt-required-error{{/if}}"
                   name="email"
                   type="email"
                   placeholder="{{_config.requiredInputPlaceholder}}"
                   value="{{email}}"
                   required>
             </label>
-            <div class='yxt-QuestionSubmission-inputError'>{{#if errors.email}}{{errors.email}}{{/if}}</div>
+            <div class='yxt-QuestionSubmission-inputError'>{{#if errors.emailErrorText}}{{errors.emailErrorText}}{{/if}}</div>
           </div>
         </div>
 
         <div class="yxt-QuestionSubmission-acknowledgementBar">
           <div class="yxt-QuestionSubmission-acknowledgement">
-            <input type="checkbox"
-                id="yxt-QuestionSubmission-ackCheckboxInput"
-                name="privacyPolicy"
-                class="yxt-QuestionSubmission-ackCheckboxInput js-question-field"
-                value="true"
-                required>
-            <span>
-              <label for="yxt-QuestionSubmission-ackCheckboxInput"
-                  class="yxt-QuestionSubmission-privacyPolicyText">
+            <span class="yxt-QuestionSubmission-privacyPolicy">
+              <label class="yxt-QuestionSubmission-privacyPolicyText">
+                <input type="checkbox"
+                    id="yxt-QuestionSubmission-ackCheckboxInput"
+                    name="privacyPolicy"
+                    class="yxt-QuestionSubmission-ackCheckboxInput js-question-field{{#if errors.privacyPolicyError}} yxt-required-error{{/if}}"
+                    required>
                   {{_config.privacyPolicyLabel}}
               </label>
               <a class="yxt-QuestionSubmission-privacyPolicyUrl" href="{{_config.privacyPolicyUrl}}" target="_blank">{{_config.privacyPolicyUrlLabel}}</a>
-              <div class='yxt-QuestionSubmission-inputError'>{{#if errors.privacyPolicy}}{{errors.privacyPolicy}}{{/if}}</div>
             </span>
+            <div class='yxt-QuestionSubmission-inputError'>{{#if errors.privacyPolicyErrorText}}{{errors.privacyPolicyErrorText}}{{/if}}</div>
           </div>
           <button class="yxt-QuestionSubmission-submitButton" type="submit" data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
         </div>

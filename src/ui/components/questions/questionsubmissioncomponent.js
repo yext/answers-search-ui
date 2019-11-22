@@ -65,7 +65,7 @@ const DEFAULT_CONFIG = {
    * The title to display in the title bar
    * @type {string}
    */
-  'sectionTitle': 'Feedback',
+  'sectionTitle': 'Ask a Question',
 
   /**
    * The description to display in the title bar
@@ -212,9 +212,9 @@ export default class QuestionSubmissionComponent extends Component {
     DOM.on(formEl, 'submit', (e) => {
       e.preventDefault();
       // TODO(billy) we probably want to disable the form from being submitted twice
+      const errors = this.validate(formEl);
       const formData = this.parse(formEl);
-      const errors = this.validateRequired(formData);
-      if (errors) {
+      if (Object.keys(errors).length) {
         return this.setState(new QuestionSubmission(formData, errors));
       }
 
@@ -275,32 +275,30 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   /**
-   * Validates the required fields (or rules) for the form data
-   * @param {Object} formData
-   * @returns {Object|boolean} errors object if any errors found
+   * Validates the fields for correct formatting
+   * @param {HTMLElement} formEl
+   * @returns {Object} errors object if any errors found
    */
-  validateRequired (formData) {
-    var chromiumEmailRegex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  validate (formEl) {
     let errors = {};
-    if (!formData.email) {
-      errors['emailRequired'] = true;
-    } else if (!chromiumEmailRegex.test(formData.email.trim())) {
-      errors['email'] = '* Please enter a valid email address.';
-      errors['emailRequired'] = true;
+    const fields = DOM.queryAll(formEl, '.js-question-field');
+    for (let i = 0; i < fields.length; i++) {
+      if (!fields[i].checkValidity()) {
+        if (fields[i].name === 'email') {
+          errors['emailError'] = true;
+          if (!fields[i].validity.valueMissing) {
+            errors['emailErrorText'] = '* Please enter a valid email address';
+          }
+        } else if (fields[i].name === 'name') {
+          errors['nameError'] = true;
+        } else if (fields[i].name === 'privacyPolicy') {
+          errors['privacyPolicyErrorText'] = '* You must agree to the privacy policy to submit feedback.';
+          errors['privacyPolicyError'] = true;
+        } else if (fields[i].name === 'questionText') {
+          errors['questionTextError'] = true;
+        }
+      }
     }
-
-    if (!formData.name) {
-      errors['nameRequired'] = true;
-    }
-
-    if (!formData.privacyPolicy || formData.privacyPolicy !== true) {
-      errors['privacyPolicy'] = '* You must agree to the privacy policy to submit feedback.';
-    }
-
-    if (!formData.questionText || formData.questionText.trim().length === 0) {
-      errors['questionTextRequired'] = true;
-    }
-
-    return Object.keys(errors).length > 0 ? errors : null;
+    return errors;
   }
 }

@@ -52,7 +52,8 @@ export default class QuestionSubmission {
 
   static submitted () {
     return {
-      questionSubmitted: true
+      questionSubmitted: true,
+      questionExpanded: true
     };
   }
 
