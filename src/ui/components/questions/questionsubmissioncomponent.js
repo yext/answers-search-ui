@@ -113,7 +113,19 @@ const DEFAULT_CONFIG = {
    * The default privacy policy url
    * @type {string}
    */
-  'privacyPolicyUrl': ''
+  'privacyPolicyUrl': '',
+
+  /**
+   * The default privacy policy error text, shown when the user does not agree
+   * @type {string}
+   */
+  'privacyPolicyErrorText': '* You must agree to the privacy policy to submit feedback.',
+
+  /**
+   * The default email format error text, shown when the user submits an invalid email
+   * @type {string}
+   */
+  'emailFormatErrorText': '* Please enter a valid email address'
 };
 
 /**
@@ -288,14 +300,14 @@ export default class QuestionSubmissionComponent extends Component {
           case 'email':
             errors['emailError'] = true;
             if (!fields[i].validity.valueMissing) {
-              errors['emailErrorText'] = '* Please enter a valid email address';
+              errors['emailErrorText'] = this._config.emailFormatErrorText;
             }
             break;
           case 'name':
             errors['nameError'] = true;
             break;
           case 'privacyPolicy':
-            errors['privacyPolicyErrorText'] = '* You must agree to the privacy policy to submit feedback.';
+            errors['privacyPolicyErrorText'] = this._config.privacyPolicyErrorText;
             errors['privacyPolicyError'] = true;
             break;
           case 'questionText':
