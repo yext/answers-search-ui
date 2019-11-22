@@ -805,9 +805,9 @@ ANSWERS.addComponent('QASubmission', {
   nameLabel: 'Your Name:',             // Optional, defaults to 'Name:'
   emailLabel: '*Email:',               // Optional, defaults to '*Email:'
   questionLabel: 'Ask us anything!:',  // Optional, defaults to 'What is your question?'
-  privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
+  privacyPolicyText: 'I agree!',       // Optional, defaults to 'By submitting my email address, I consent to being contacted via email at the address provided.',
   buttonLabel: 'Submit',               // Optional, defaults to 'Submit:'
-  entityIdL 123,                       // Optional, the entity identifier that the question is associated with
+  entityId: 123,                       // Optional, the entity identifier that the question is associated with
   language: 'en',                      // Optional, defaults to 'EN'
   formSelector: '.js-form'             // Optional, defaults to native form node within container
 })

@@ -53,7 +53,7 @@ const DEFAULT_CONFIG = {
    * An optional label to use for the Privacy Policy
    * @type {string}
    */
-  'privacyPolicyLabel': 'By submitting my email address, I consent to being contacted via email at the address provided.',
+  'privacyPolicyText': 'By submitting my email address, I consent to being contacted via email at the address provided.',
 
   /**
    * The label to use for the Submit button
@@ -284,18 +284,23 @@ export default class QuestionSubmissionComponent extends Component {
     const fields = DOM.queryAll(formEl, '.js-question-field');
     for (let i = 0; i < fields.length; i++) {
       if (!fields[i].checkValidity()) {
-        if (fields[i].name === 'email') {
-          errors['emailError'] = true;
-          if (!fields[i].validity.valueMissing) {
-            errors['emailErrorText'] = '* Please enter a valid email address';
-          }
-        } else if (fields[i].name === 'name') {
-          errors['nameError'] = true;
-        } else if (fields[i].name === 'privacyPolicy') {
-          errors['privacyPolicyErrorText'] = '* You must agree to the privacy policy to submit feedback.';
-          errors['privacyPolicyError'] = true;
-        } else if (fields[i].name === 'questionText') {
-          errors['questionTextError'] = true;
+        switch (fields[i].name) {
+          case 'email':
+            errors['emailError'] = true;
+            if (!fields[i].validity.valueMissing) {
+              errors['emailErrorText'] = '* Please enter a valid email address';
+            }
+            break;
+          case 'name':
+            errors['nameError'] = true;
+            break;
+          case 'privacyPolicy':
+            errors['privacyPolicyErrorText'] = '* You must agree to the privacy policy to submit feedback.';
+            errors['privacyPolicyError'] = true;
+            break;
+          case 'questionText':
+            errors['questionTextError'] = true;
+            break;
         }
       }
     }

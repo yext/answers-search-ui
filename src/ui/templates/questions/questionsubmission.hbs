@@ -22,7 +22,7 @@
         data-component="IconComponent"
         data-opts='{ "iconName": "chevron" }'
         data-prop="icon"
-        aria-controls="yxt-QuestionSubmission-form"
+        aria-controls="yxt-QuestionSubmission-form-{{name}}"
         aria-expanded="{{#if questionExpanded}}true{{else}}false{{/if}}"
       ></button>
     </div>
@@ -31,7 +31,7 @@
   {{#if questionExpanded}}
 
     {{#if questionSubmitted}}
-      <div class="yxt-QuestionSubmission-form">
+      <div id="yxt-QuestionSubmission-form-{{name}}" class="yxt-QuestionSubmission-form">
         <div class="yxt-QuestionSubmission-formRow">
           {{_config.questionSubmissionConfirmationText}}
         </div>
@@ -103,11 +103,11 @@
                     name="privacyPolicy"
                     class="yxt-QuestionSubmission-ackCheckboxInput js-question-field{{#if errors.privacyPolicyError}} yxt-required-error{{/if}}"
                     required>
-                  {{_config.privacyPolicyLabel}}
+                  {{_config.privacyPolicyText}}
               </label>
               <a class="yxt-QuestionSubmission-privacyPolicyUrl" href="{{_config.privacyPolicyUrl}}" target="_blank">{{_config.privacyPolicyUrlLabel}}</a>
+              <div class='yxt-QuestionSubmission-inputError'>{{#if errors.privacyPolicyErrorText}}{{errors.privacyPolicyErrorText}}{{/if}}</div>
             </span>
-            <div class='yxt-QuestionSubmission-inputError'>{{#if errors.privacyPolicyErrorText}}{{errors.privacyPolicyErrorText}}{{/if}}</div>
           </div>
           <button class="yxt-QuestionSubmission-submitButton" type="submit" data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
         </div>
