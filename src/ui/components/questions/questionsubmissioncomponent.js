@@ -53,7 +53,7 @@ const DEFAULT_CONFIG = {
    * An optional label to use for the Privacy Policy
    * @type {string}
    */
-  'privacyPolicyLabel': 'By submitting my email address, I consent to being contacted via email at the address provided.',
+  'privacyPolicyText': 'By submitting my email address, I consent to being contacted via email at the address provided.',
 
   /**
    * The label to use for the Submit button
@@ -65,7 +65,7 @@ const DEFAULT_CONFIG = {
    * The title to display in the title bar
    * @type {string}
    */
-  'sectionTitle': 'Feedback',
+  'sectionTitle': 'Ask a Question',
 
   /**
    * The description to display in the title bar
@@ -101,7 +101,31 @@ const DEFAULT_CONFIG = {
    * The confirmation text to display after successfully submitting feedback
    * @type {string}
    */
-  'questionSubmissionConfirmationText': 'Thank you for your feedback!'
+  'questionSubmissionConfirmationText': 'Thank you for your feedback!',
+
+  /**
+   * The default privacy policy url label
+   * @type {string}
+  */
+  'privacyPolicyUrlLabel': 'Learn more here',
+
+  /**
+   * The default privacy policy url
+   * @type {string}
+   */
+  'privacyPolicyUrl': '',
+
+  /**
+   * The default privacy policy error text, shown when the user does not agree
+   * @type {string}
+   */
+  'privacyPolicyErrorText': '* You must agree to the privacy policy to submit feedback.',
+
+  /**
+   * The default email format error text, shown when the user submits an invalid email
+   * @type {string}
+   */
+  'emailFormatErrorText': '* Please enter a valid email address'
 };
 
 /**
@@ -163,6 +187,11 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   onMount () {
+    let triggerEl = DOM.query(this._container, '.js-content-visibility-toggle');
+    if (triggerEl !== null) {
+      this.bindFormToggle(triggerEl);
+    }
+
     let formEl = DOM.query(this._container, this._config.formSelector);
     if (formEl === null) {
       return;
@@ -195,9 +224,9 @@ export default class QuestionSubmissionComponent extends Component {
     DOM.on(formEl, 'submit', (e) => {
       e.preventDefault();
       // TODO(billy) we probably want to disable the form from being submitted twice
+      const errors = this.validate(formEl);
       const formData = this.parse(formEl);
-      const errors = this.validateRequired(formData);
-      if (errors) {
+      if (Object.keys(errors).length) {
         return this.setState(new QuestionSubmission(formData, errors));
       }
 
@@ -222,6 +251,18 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   /**
+   * bindFormToggle handles expanding and mimimizing the component's form.
+   * @param {HTMLElement} triggerEl
+   */
+  bindFormToggle (triggerEl) {
+    DOM.on(triggerEl, 'click', (e) => {
+      const formData = this.getState();
+      const expandState = this.getState('questionExpanded');
+      this.setState(new QuestionSubmission({ ...formData, 'expanded': !expandState }));
+    });
+  }
+
+  /**
    * Takes the form, and builds a object that represents the input names
    * and text fields.
    * @param {HTMLElement} formEl
@@ -236,8 +277,8 @@ export default class QuestionSubmissionComponent extends Component {
     let obj = {};
     for (let i = 0; i < inputFields.length; i++) {
       let val = inputFields[i].value;
-      if (inputFields[i].type === 'checkbox' && val === 'true') {
-        val = true;
+      if (inputFields[i].type === 'checkbox') {
+        val = inputFields[i].checked;
       }
       obj[inputFields[i].name] = val;
     }
@@ -246,24 +287,35 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   /**
-   * Validates the required fields (or rules) for the form data
-   * @param {Object} formData
-   * @returns {Object|boolean} errors object if any errors found
+   * Validates the fields for correct formatting
+   * @param {HTMLElement} formEl
+   * @returns {Object} errors object if any errors found
    */
-  validateRequired (formData) {
+  validate (formEl) {
     let errors = {};
-    if (!formData.email || typeof formData.email !== 'string') {
-      errors['email'] = 'Missing email address!';
+    const fields = DOM.queryAll(formEl, '.js-question-field');
+    for (let i = 0; i < fields.length; i++) {
+      if (!fields[i].checkValidity()) {
+        switch (fields[i].name) {
+          case 'email':
+            errors['emailError'] = true;
+            if (!fields[i].validity.valueMissing) {
+              errors['emailErrorText'] = this._config.emailFormatErrorText;
+            }
+            break;
+          case 'name':
+            errors['nameError'] = true;
+            break;
+          case 'privacyPolicy':
+            errors['privacyPolicyErrorText'] = this._config.privacyPolicyErrorText;
+            errors['privacyPolicyError'] = true;
+            break;
+          case 'questionText':
+            errors['questionTextError'] = true;
+            break;
+        }
+      }
     }
-
-    if (!formData.privacyPolicy || formData.privacyPolicy !== true) {
-      errors['privacyPolicy'] = 'Approving our privacy policy terms is required!';
-    }
-
-    if (!formData.questionText || typeof formData.questionText !== 'string') {
-      errors['questionText'] = 'Question text is required!';
-    }
-
-    return Object.keys(errors).length > 0 ? errors : null;
+    return errors;
   }
 }
