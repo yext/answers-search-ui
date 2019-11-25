@@ -90,7 +90,7 @@
                   value="{{email}}"
                   required>
             </label>
-            <div class='yxt-QuestionSubmission-inputError'>{{#if errors.emailErrorText}}{{errors.emailErrorText}}{{/if}}</div>
+            <strong class='yxt-QuestionSubmission-inputError'>{{#if errors.emailErrorText}}{{errors.emailErrorText}}{{/if}}</strong>
           </div>
         </div>
 
@@ -104,9 +104,9 @@
                     class="yxt-QuestionSubmission-ackCheckboxInput js-question-field{{#if errors.privacyPolicyError}} yxt-required-error{{/if}}"
                     required>
                   {{_config.privacyPolicyText}}
+                  <a class="yxt-QuestionSubmission-privacyPolicyUrl" href="{{_config.privacyPolicyUrl}}" target="_blank">{{_config.privacyPolicyUrlLabel}}</a>
               </label>
-              <a class="yxt-QuestionSubmission-privacyPolicyUrl" href="{{_config.privacyPolicyUrl}}" target="_blank">{{_config.privacyPolicyUrlLabel}}</a>
-              <div class='yxt-QuestionSubmission-inputError'>{{#if errors.privacyPolicyErrorText}}{{errors.privacyPolicyErrorText}}{{/if}}</div>
+              <strong class='yxt-QuestionSubmission-inputError'>{{#if errors.privacyPolicyErrorText}}{{errors.privacyPolicyErrorText}}{{/if}}</strong>
             </span>
           </div>
           <button class="yxt-QuestionSubmission-submitButton" type="submit" data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>

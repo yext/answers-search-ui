@@ -802,14 +802,18 @@ when a search query is run.
 ```js
 ANSWERS.addComponent('QASubmission', {
   container: '.question-submission-container',
-  nameLabel: 'Your Name:',             // Optional, defaults to 'Name:'
-  emailLabel: '*Email:',               // Optional, defaults to '*Email:'
-  questionLabel: 'Ask us anything!:',  // Optional, defaults to 'What is your question?'
+  nameLabel: 'Your Name:',             // Optional, defaults to 'Name'
+  emailLabel: '*Email:',               // Optional, defaults to 'Email'
+  questionLabel: 'Ask us anything!:',  // Optional, defaults to 'Ask a Question'
   privacyPolicyText: 'I agree!',       // Optional, defaults to 'By submitting my email address, I consent to being contacted via email at the address provided.',
-  buttonLabel: 'Submit',               // Optional, defaults to 'Submit:'
+  buttonLabel: 'Submit',               // Optional, defaults to 'Submit'
   entityId: 123,                       // Optional, the entity identifier that the question is associated with
   language: 'en',                      // Optional, defaults to 'EN'
-  formSelector: '.js-form'             // Optional, defaults to native form node within container
+  formSelector: '.js-form',            // Optional, defaults to native form node within container
+  privacyPolicyUrlLabel: 'Learn more here',                   // Optional, defaults to 'Learn more here'
+  privacyPolicyUrl: 'https://mybiz.com/policy',               // Optional, defaults to ''
+  privacyPolicyErrorText: 'Please agree before proceeding.',  // Optional, defaults to '* You must agree to the privacy policy to submit feedback.'
+  emailFormatErrorText: 'Not valid'                           // Optional, defaults to '* Please enter a valid email address'
 })
 ```
 
