@@ -31,13 +31,13 @@ export default class MapBoxMapProvider extends MapProvider {
         }
       },
       async: true,
-      src: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'
+      src: 'https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'
     });
 
     let css = DOM.createEl('link', {
       id: 'yext-map-css',
       rel: 'stylesheet',
-      href: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css'
+      href: 'https://api.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css'
     });
 
     DOM.append('body', css);
