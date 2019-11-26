@@ -21,6 +21,9 @@ export default class ResultFactory {
       // Check for new data format, otherwise fallback to legacy
 
       const data = resultsData[i].data || resultsData[i];
+      if (resultsData[i].distance) {
+        data.distance = resultsData[i].distance;
+      }
       const formattedData = {};
       if (Object.keys(formatters).length > 0) {
         Object.entries(data).forEach(([key, val]) => {
