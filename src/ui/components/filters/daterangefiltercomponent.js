@@ -56,6 +56,13 @@ export default class DateRangeFilterComponent extends Component {
     this._storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
     /**
+     * The selector for the reset button
+     * @type {string}
+     * @private
+     */
+    this._resetButton = config.resetButton;
+
+    /**
      * If true, this filter represents an exclusive range, rather than an inclusive one
      * @type {boolean}
      * @private
@@ -100,6 +107,17 @@ export default class DateRangeFilterComponent extends Component {
     DOM.delegate(this._container, '.js-yext-date', 'change', (event) => {
       this._updateRange(event.target.dataset.key, event.target.value);
     });
+  }
+
+  onMount () {
+    const resetButton = DOM.query(this._resetButton);
+
+    if (resetButton) {
+      resetButton.addEventListener('click', () => {
+        this.core.setFilter(this.name, {});
+        this._onChange({});
+      });
+    }
   }
 
   /**
