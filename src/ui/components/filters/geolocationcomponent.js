@@ -87,7 +87,13 @@ const DEFAULT_CONFIG = {
    * The CSS selector of the query input
    * @type {string}
    */
-  inputSelector: '.js-yxt-GeoLocationFilter-input'
+  inputSelector: '.js-yxt-GeoLocationFilter-input',
+
+  /**
+   * The bar key to use
+   * @type {string}
+   */
+  barKey: null
 };
 
 /**
@@ -198,6 +204,7 @@ export default class GeoLocationComponent extends Component {
       originalQuery: this.query,
       inputEl: inputSelector,
       verticalKey: this._config.verticalKey,
+      barKey: this._config.barKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => this._handleSubmit(query, filter)
     });
