@@ -20,6 +20,17 @@ export default class ResultFactory {
 
     for (let i = 0; i < resultsData.length; i++) {
       const data = resultsData[i].data || resultsData[i];
+      if (resultsData[i].distance) {
+        data.distance = resultsData[i].distance;
+      }
+      const formattedData = {};
+      if (Object.keys(formatters).length > 0) {
+        Object.entries(data).forEach(([key, val]) => {
+          if (formatters[key]) {
+            formattedData[key] = formatters[key](val, data, verticalId, false);
+          }
+        });
+      }
 
       switch (source) {
         case 'GOOGLE_CSE':
