@@ -10,7 +10,7 @@ export const LIVE_API_BASE_URL = 'https://liveapi.yext.com';
 export const API_BASE_URL = 'https://api.yext.com';
 
 /** The default url for compiled component templates */
-export const COMPILED_TEMPLATES_URL = `https://assets.sitescdn.net/answers/${LIB_VERSION}/answerstemplates.compiled.min.js`;
+export const COMPILED_TEMPLATES_URL = `../dist/answerstemplates.compiled.min.js`;
 
 /** The base urls for the analytics backend  */
 export const ANALYTICS_BASE_URL = 'https://realtimeanalytics.yext.com';

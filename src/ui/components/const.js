@@ -36,6 +36,8 @@ import QuestionSubmissionComponent from './questions/questionsubmissioncomponent
 
 import IconComponent from './icons/iconcomponent.js';
 
+import UniversalExperienceComponent from './experiences/universalexperiencecomponent';
+
 export const COMPONENT_MANAGER = new ComponentManager()
 // Core Component
   .register(Component)
@@ -75,4 +77,6 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(QuestionSubmissionComponent)
 
 // Helper Components
-  .register(IconComponent);
+  .register(IconComponent)
+
+  .register(UniversalExperienceComponent);
