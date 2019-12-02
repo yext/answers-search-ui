@@ -1,5 +1,4 @@
 import { EnzymeAdapter } from 'enzyme';
-import { COMPONENT_REGISTRY } from '../../src/ui/components/registry';
 
 /* global Event, Text */
 
@@ -23,13 +22,11 @@ export default class AnswersAdapter extends EnzymeAdapter {
     if (!node || typeof node !== 'object') {
       return null;
     }
-
-    return this.createElement(node.type, node.props);
+    return node.instance;
   }
 
-  createElement (type, props) {
-    const ComponentClass = COMPONENT_REGISTRY[type];
-    return new ComponentClass({ ...props, container: null });
+  elementToNode (el) {
+    return toComponentRstNode(el);
   }
 
   createMountRenderer (options) {
