@@ -2,6 +2,7 @@
 
 import { AnswersComponentError } from '../../core/errors/errors';
 import DOM from '../dom/dom';
+import { COMPONENT_REGISTRY } from './registry';
 
 /**
  * ComponentManager is a Singletone that contains both an internal registry of
@@ -12,18 +13,6 @@ import DOM from '../dom/dom';
  */
 export default class ComponentManager {
   constructor () {
-    if (!ComponentManager.setInstance(this)) {
-      return ComponentManager.getInstance();
-    }
-
-    /**
-     * The component registry is an internal map, that contains
-     * all available component CLASSES used for creation or override.
-     * Each component class has a unique TYPE, which is used as the key for the registry
-     * @type {Object}
-     */
-    this._componentRegistry = {};
-
     /**
      * The active components is an internal container to keep track
      * of all of the components that have been constructed
@@ -54,15 +43,11 @@ export default class ComponentManager {
     this._analyticsReporter = null;
   }
 
-  static setInstance (instance) {
-    if (!this.instance) {
-      this.instance = instance;
-      return true;
-    }
-    return false;
-  }
-
   static getInstance () {
+    if (!this.instance) {
+      this.instance = new ComponentManager();
+    }
+
     return this.instance;
   }
 
@@ -86,7 +71,7 @@ export default class ComponentManager {
    * @param {Component} The Component Class to register
    */
   register (componentClazz) {
-    this._componentRegistry[componentClazz.type] = componentClazz;
+    COMPONENT_REGISTRY[componentClazz.type] = componentClazz;
     return this;
   }
 
@@ -108,7 +93,7 @@ export default class ComponentManager {
       componentManager: this
     };
 
-    let componentClass = this._componentRegistry[componentType];
+    let componentClass = COMPONENT_REGISTRY[componentType];
 
     if (
       !componentClass.areDuplicateNamesAllowed() &&

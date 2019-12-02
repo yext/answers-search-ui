@@ -3,8 +3,8 @@ import HandlebarsRenderer from '../../../src/ui/rendering/handlebarsrenderer';
 import Handlebars from 'handlebars/dist/handlebars.min.js';
 
 import Component from '../../../src/ui/components/component';
-import { COMPONENT_MANAGER } from '../../../src/ui/components/const';
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
+import ComponentManager from '../../../src/ui/components/componentmanager';
 
 // The DOM doesn't exist within components in the JEST environment,
 // so we have to provide it to our DOM API properly.
@@ -33,6 +33,8 @@ const RENDERER = new HandlebarsRenderer({
   [COMPONENT_TEMPLATES.COMPONENT.TEMPLATE_NAME]: COMPONENT_TEMPLATES.COMPONENT.TEMPLATE,
   [COMPONENT_TEMPLATES.MAP.TEMPLATE_NAME]: COMPONENT_TEMPLATES.MAP.TEMPLATE
 });
+
+const COMPONENT_MANAGER = ComponentManager.getInstance();
 
 // The component manager is used to render components within a template
 // using the `<div data-component='Component'>` syntax
