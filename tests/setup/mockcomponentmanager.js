@@ -20,6 +20,12 @@ export default class MockComponentManager {
     this.renderer.init(templates);
   }
 
+  /**
+   *
+   * @param {string} componentType - The type of the component (as defined by the registry)
+   * @param {Object} config - The config to pass to the component constructor
+   * @param {Object} analyticsReporter - The optional analytics reporter to provide to the component (typically a jest mock)
+   */
   create (componentType, config, analyticsReporter) {
     const systemConfig = {
       core: this.core,

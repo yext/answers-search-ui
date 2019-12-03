@@ -2,6 +2,11 @@ import { EnzymeAdapter } from 'enzyme';
 
 /* global Event, Text */
 
+/**
+ * The adapter class to bind the ezyme api to the Answers component framework.
+ * All enzyme functionality is powered by this adapter, so some functions may not work
+ * entirely or might function slightly differently than enzyme docs state
+ */
 export default class AnswersAdapter extends EnzymeAdapter {
   isValidElement (el) {
     if (el === null) {
@@ -10,14 +15,21 @@ export default class AnswersAdapter extends EnzymeAdapter {
     return true;
   }
 
+  /**
+   * Convert the RST node to a real node (Answers Component or DOM Element)
+   * @param {Object} node - The RST node
+   */
   nodeToHostNode (node) {
     if (!node) {
       return;
     }
-
     return node.instance;
   }
 
+  /**
+   * Convert the RST node to a DOM element if possible
+   * @param {Object} node - The RST node
+   */
   nodeToElement (node) {
     if (!node || typeof node !== 'object') {
       return null;
@@ -25,14 +37,28 @@ export default class AnswersAdapter extends EnzymeAdapter {
     return node.instance;
   }
 
+  /**
+   * Convert the given Answers component to an RST node
+   * @param {Component} el - The Answers component to convert
+   */
   elementToNode (el) {
     return toComponentRstNode(el);
   }
 
+  /**
+   * Create an enzyme renderer used to mount Answers components
+   * @param {Object} options - Renderer options
+   */
   createMountRenderer (options) {
     const domNode = options.attachTo || global.document.createElement('span');
     let instance = null;
     return {
+      /**
+       * Render and mount the component to the DOM
+       * @param {Component} el - The Answers component to mount
+       * @param {Object} context - Additional context for the mount
+       * @param {Function} callback - Callback to call after mounting
+       */
       render (el, context, callback) {
         el.mount(domNode);
         instance = el;
@@ -41,12 +67,18 @@ export default class AnswersAdapter extends EnzymeAdapter {
         }
       },
 
+      /**
+       * Remove the current instance from the DOM
+       */
       unmount () {
         instance.remove();
         instance = null;
         domNode.innerHTML = '';
       },
 
+      /**
+       * Get the current instance as an RST node
+       */
       getNode () {
         const node = toComponentRstNode(instance);
         return node;
@@ -56,6 +88,12 @@ export default class AnswersAdapter extends EnzymeAdapter {
         return fn;
       },
 
+      /**
+       * Simulate a browser event on the given node
+       * @param {Object} node - The RST node to simulate on
+       * @param {string} eventName - The name of the event to simulate
+       * @param  {...any} args - Additional args for the event
+       */
       simulateEvent (node, eventName, ...args) {
         if (node.nodeType !== 'host') {
           throw new Error(
@@ -79,6 +117,9 @@ export default class AnswersAdapter extends EnzymeAdapter {
     };
   }
 
+  /**
+   * Create an enzyme renderer for rendering Answers components to strings
+   */
   createStringRenderer () {
     return {
       render (el) {
@@ -87,6 +128,10 @@ export default class AnswersAdapter extends EnzymeAdapter {
     };
   }
 
+  /**
+   * Create an appropriate renderer based on the provided options
+   * @param {Object} options - Renderer options
+   */
   createRenderer (options) {
     switch (options.mode) {
       case EnzymeAdapter.MODES.MOUNT: return this.createMountRenderer(options);
@@ -96,6 +141,10 @@ export default class AnswersAdapter extends EnzymeAdapter {
   }
 }
 
+/**
+ * Convert the given Answers component to an enzyme RST node
+ * @param {Component} answersComponent - The Answers component to convert
+ */
 function toComponentRstNode (answersComponent) {
   const container = answersComponent._container;
   const children = container.hasChildNodes() ? Array.from(container.childNodes) : [];
@@ -117,6 +166,10 @@ function toComponentRstNode (answersComponent) {
   };
 }
 
+/**
+ * Convert the given DOM element to an enzyme RST node
+ * @param {Element} domElement - The DOM element to convert
+ */
 function toDomRstNode (domElement) {
   const children = domElement.hasChildNodes() ? Array.from(domElement.childNodes) : [];
   const childRstNodes = children.map(toDomRstNode);
