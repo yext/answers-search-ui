@@ -98,11 +98,8 @@ export default class AnswersAdapter extends EnzymeAdapter {
 
 function toComponentRstNode (answersComponent) {
   const container = answersComponent._container;
-  const children = container.hasChildNodes() ? container.childNodes : [];
-  const childRstNodes = [];
-  for (let child of children) {
-    childRstNodes.push(toDomRstNode(child));
-  }
+  const children = container.hasChildNodes() ? Array.from(container.childNodes) : [];
+  const childRstNodes = children.map(toDomRstNode);
 
   // note(jdelerme): child components do not create component RST nodes, only the
   // child component's DOM nodes are added. This means we cannot assert on child component
@@ -121,14 +118,11 @@ function toComponentRstNode (answersComponent) {
 }
 
 function toDomRstNode (domElement) {
-  const children = domElement.hasChildNodes() ? domElement.childNodes : [];
-  const childRstNodes = [];
-  for (let child of children) {
-    childRstNodes.push(toDomRstNode(child));
-  }
+  const children = domElement.hasChildNodes() ? Array.from(domElement.childNodes) : [];
+  const childRstNodes = children.map(toDomRstNode);
 
   if (domElement instanceof Text) {
-    const text = Text.wholeText;
+    const text = domElement.wholeText;
     if (text) {
       return domElement.textContent;
     }
@@ -152,6 +146,6 @@ function toDomRstNode (domElement) {
     key: null,
     ref: null,
     instance: domElement,
-    rendered: childRstNodes
+    rendered: childRstNodes.length ? childRstNodes : undefined
   };
 }

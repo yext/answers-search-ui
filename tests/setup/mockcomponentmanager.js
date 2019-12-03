@@ -14,15 +14,16 @@ import { COMPONENT_REGISTRY } from '../../src/ui/components/registry';
  */
 export default class MockComponentManager {
   constructor (mockCore) {
-    this._core = mockCore;
+    this.core = mockCore;
 
     this.renderer = new Renderers.Handlebars();
     this.renderer.init(templates);
   }
 
-  create (componentType, config) {
+  create (componentType, config, analyticsReporter) {
     const systemConfig = {
-      core: this._core,
+      core: this.core,
+      analyticsReporter,
       renderer: this.renderer,
       componentManager: this
     };

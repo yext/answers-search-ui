@@ -34,7 +34,7 @@ import QuestionSubmissionComponent from './questions/questionsubmissioncomponent
 
 import IconComponent from './icons/iconcomponent.js';
 
-export const COMPONENT_CLASS_LIST = [
+const COMPONENT_CLASS_LIST = [
   // Core Component
   Component,
 
@@ -79,7 +79,7 @@ export const COMPONENT_CLASS_LIST = [
  * The component registry is a map that contains
  * all available component classes used for creation or extension.
  * Each component class has a unique type, which is used as the key for the registry
- * @type {Object.<string, function>}
+ * @type {Object.<string, Component>}
  */
 export const COMPONENT_REGISTRY = COMPONENT_CLASS_LIST.reduce((registry, clazz) => {
   registry[clazz.type] = clazz;
