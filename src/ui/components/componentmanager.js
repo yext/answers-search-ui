@@ -111,7 +111,7 @@ export default class ComponentManager {
 
     // Instantiate our new component and keep track of it
     let component =
-      new this._componentRegistry[componentType](config, systemOpts)
+      new COMPONENT_REGISTRY[componentType](config, systemOpts)
         .init(config);
 
     this._activeComponents.push(component);
