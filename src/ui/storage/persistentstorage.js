@@ -40,8 +40,9 @@ export default class PersistentStorage {
    * Insert the given key/value pair into storage
    * @param {string} key The key to insert the data in
    * @param {*} data The data to insert
+   * @param {boolean} replace history instead of pushing new state
    */
-  set (key, data) {
+  set (key, data, replaceHistory = false) {
     if (typeof key !== 'string') {
       throw new AnswersStorageError('Storage data key must be a string', key, data);
     }
@@ -51,19 +52,20 @@ export default class PersistentStorage {
       newData = JSON.stringify(data);
     }
     this._params.set(key, newData);
-    this._updateHistory();
+    this._updateHistory(replaceHistory);
   }
 
   /**
    * Delete the given key from storage
    * @param {string} key The key to delete
+   * @param {boolean} replace history instead of pushing new state
    */
-  delete (key) {
+  delete (key, replaceHistory = false) {
     this._params.delete(key);
-    this._updateHistory();
+    this._updateHistory(replaceHistory);
   }
 
-  _updateHistory () {
+  _updateHistory (replaceHistory = false) {
     if (this._historyTimer) {
       clearTimeout(this._historyTimer);
     }
@@ -72,7 +74,11 @@ export default class PersistentStorage {
     this._historyTimer = setTimeout(
       () => {
         this._historyTimer = null;
-        window.history.pushState(null, null, `?${this._params.toString()}`);
+        if (replaceHistory) {
+          window.history.replaceState(null, null, `?${this._params.toString()}`);
+        } else {
+          window.history.pushState(null, null, `?${this._params.toString()}`);
+        }
         this._callListener(this._updateListener);
       });
   }
