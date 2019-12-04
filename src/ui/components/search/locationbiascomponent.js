@@ -25,7 +25,7 @@ export default class LocationBiasComponent extends Component {
      * a universal search will be triggered.
      * @type {string}
      */
-    this._verticalKey = config.verticalKey || null;
+    this._verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey || null;
 
     /**
      * The element used for updating location
