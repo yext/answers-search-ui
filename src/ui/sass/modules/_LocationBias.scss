@@ -33,6 +33,7 @@
     display: inline-block;
     border-radius: 100%;
     background: $locationBias-bullet-color-default;
+    margin-bottom: 2px;
   }
 
   &-unknownLoc
@@ -61,5 +62,9 @@
     cursor: pointer;
     color: $color-brand-primary;
     text-decoration: none;
+    border: none;
+    font-size: $locationBias-text-font-size;
+    padding: 0;
+    background: none;
   }
 }
