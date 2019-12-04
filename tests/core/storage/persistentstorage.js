@@ -47,7 +47,7 @@ describe('adding and removing data', () => {
 
   it('removes data with delete()', () => {
     storage.set('key1', 'val1');
-    storage.delete('key1', 'val1');
+    storage.delete('key1');
 
     expect.assertions(1);
     return new Promise(resolve => setTimeout(() => {
