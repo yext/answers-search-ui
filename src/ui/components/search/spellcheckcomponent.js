@@ -26,8 +26,8 @@ export default class SpellCheckComponent extends Component {
   }
 
   onCreate () {
-    this.core.persistentStorage.delete('skipSpellCheck');
-    this.core.persistentStorage.delete('queryTrigger');
+    this.core.persistentStorage.delete('skipSpellCheck', true);
+    this.core.persistentStorage.delete('queryTrigger', true);
   }
 
   setState (data, val) {
