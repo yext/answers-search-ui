@@ -108,6 +108,7 @@ export default class Core {
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
+      this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
     return this._searcher
@@ -169,7 +170,9 @@ export default class Core {
   }
 
   search (queryString, urls) {
+    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
 
