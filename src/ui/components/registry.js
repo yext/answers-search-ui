@@ -1,7 +1,5 @@
 /** @module */
 
-import ComponentManager from './componentmanager';
-
 import Component from './component';
 
 import NavigationComponent from './navigation/navigationcomponent';
@@ -36,43 +34,54 @@ import QuestionSubmissionComponent from './questions/questionsubmissioncomponent
 
 import IconComponent from './icons/iconcomponent.js';
 
-export const COMPONENT_MANAGER = new ComponentManager()
-// Core Component
-  .register(Component)
+const COMPONENT_CLASS_LIST = [
+  // Core Component
+  Component,
 
-// Navigation Components
-  .register(NavigationComponent)
+  // Navigation Components
+  NavigationComponent,
 
-// Search Components
-  .register(SearchComponent)
-  .register(FilterSearchComponent)
-  .register(AutoCompleteComponent)
-  .register(SpellCheckComponent)
-  .register(LocationBiasComponent)
+  // Search Components
+  SearchComponent,
+  FilterSearchComponent,
+  AutoCompleteComponent,
+  SpellCheckComponent,
+  LocationBiasComponent,
 
-// Filter Components
-  .register(FilterBoxComponent)
-  .register(FilterOptionsComponent)
-  .register(RangeFilterComponent)
-  .register(DateRangeFilterComponent)
-  .register(FacetsComponent)
-  .register(GeoLocationComponent)
+  // Filter Components
+  FilterBoxComponent,
+  FilterOptionsComponent,
+  RangeFilterComponent,
+  DateRangeFilterComponent,
+  FacetsComponent,
+  GeoLocationComponent,
 
-// Results Components
-  .register(DirectAnswerComponent)
-  .register(UniversalResultsComponent)
-  .register(ResultsComponent)
-  .register(PaginationComponent)
-  .register(ResultsItemComponent)
-  .register(AccordionResultsComponent)
-  .register(LocationResultsItemComponent)
-  .register(EventResultsItemComponent)
-  .register(PeopleResultsItemComponent)
+  // Results Components
+  DirectAnswerComponent,
+  UniversalResultsComponent,
+  ResultsComponent,
+  PaginationComponent,
+  ResultsItemComponent,
+  AccordionResultsComponent,
+  LocationResultsItemComponent,
+  EventResultsItemComponent,
+  PeopleResultsItemComponent,
+  MapComponent,
 
-  .register(MapComponent)
+  // Questions Components
+  QuestionSubmissionComponent,
 
-// Questions Components
-  .register(QuestionSubmissionComponent)
+  // Helper Components
+  IconComponent
+];
 
-// Helper Components
-  .register(IconComponent);
+/**
+ * The component registry is a map that contains
+ * all available component classes used for creation or extension.
+ * Each component class has a unique type, which is used as the key for the registry
+ * @type {Object.<string, Component>}
+ */
+export const COMPONENT_REGISTRY = COMPONENT_CLASS_LIST.reduce((registry, clazz) => {
+  registry[clazz.type] = clazz;
+  return registry;
+}, {});

@@ -4,7 +4,6 @@ import Core from './core/core';
 
 import {
   TemplateLoader,
-  COMPONENT_MANAGER,
   Renderers,
   DOM
 } from './ui/index';
@@ -25,6 +24,7 @@ import QuestionAnswerApi from './core/search/questionanswerapi';
 import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
 import SearchApi from './core/search/searchapi';
 import MockSearchService from './core/search/mocksearchservice';
+import ComponentManager from './ui/components/componentmanager';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -76,7 +76,7 @@ class Answers {
      * A local reference to the component manager
      * @type {ComponentManager}
      */
-    this.components = COMPONENT_MANAGER;
+    this.components = ComponentManager.getInstance();
 
     /**
      * A local reference to the core api

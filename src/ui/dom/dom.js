@@ -132,6 +132,10 @@ export default class DOM {
   }
 
   static addClass (node, className) {
+    if (!node) {
+      return;
+    }
+
     let classes = className.split(',');
     let len = classes.length;
 
