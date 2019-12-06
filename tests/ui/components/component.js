@@ -17,7 +17,12 @@ const RENDERER = new HandlebarsRenderer({
 });
 
 const COMPONENT_MANAGER = new MockComponentManager();
-COMPONENT_MANAGER.renderer = RENDERER;
+COMPONENT_MANAGER.setRenderer(RENDERER);
+
+const mockAnalyticsReporter = {
+  report: jest.fn(() => Promise.resolve())
+};
+COMPONENT_MANAGER.setAnalyticsReporter(mockAnalyticsReporter);
 
 describe('rendering component templates', () => {
   it('renders default templates', () => {
@@ -55,10 +60,6 @@ describe('creating subcomponents', () => {
 });
 
 describe('attaching analytics events', () => {
-  const mockAnalyticsReporter = {
-    report: jest.fn(() => Promise.resolve())
-  };
-
   beforeEach(() => {
     jest.clearAllMocks();
   });
@@ -68,16 +69,12 @@ describe('attaching analytics events', () => {
 
     const component = COMPONENT_MANAGER.create(
       'Component',
-      { data: { name: 'Jesse' } },
-      mockAnalyticsReporter);
+      { data: { name: 'Jesse' } });
     component.setTemplate(template);
 
     const domOn = jest.spyOn(DOM, 'on');
 
     const wrapper = mount(component);
-    const div = wrapper.find('#test').getDOMNode();
-    expect(div.getAttribute('data-eventtype')).toBe('test_event');
-    expect(div.getAttribute('data-eventoptions')).toBe('{"name":"Jesse"}');
     expect(domOn).toHaveBeenCalledTimes(1);
 
     wrapper.find('#test').simulate('click');
@@ -97,18 +94,11 @@ describe('attaching analytics events', () => {
 
     const component = COMPONENT_MANAGER.create(
       'Component',
-      {
-        data: { name: 'Vig' }
-      },
-      mockAnalyticsReporter);
+      { data: { name: 'Vig' } });
     component.setTemplate(template);
     const domOn = jest.spyOn(DOM, 'on');
 
     const wrapper = mount(component);
-    const div = wrapper.find('#test').getDOMNode();
-    expect(div.getAttribute('data-eventtype')).toBe('test_event');
-    expect(div.getAttribute('data-eventoptions')).toBe('{"name":"Vig"}');
-    expect(div.getAttribute('data-is-analytics-attached')).toBe('true');
     expect(domOn).toHaveBeenCalledTimes(1);
 
     wrapper.find('#test').simulate('click');
@@ -126,16 +116,12 @@ describe('attaching analytics events', () => {
       {
         data: { name: 'Kelly' },
         analyticsOptions: { testOption: 'test' }
-      },
-      mockAnalyticsReporter);
+      });
     component.setTemplate(template);
 
     const domOn = jest.spyOn(DOM, 'on');
 
     const wrapper = mount(component);
-    const div = wrapper.find('#test').getDOMNode();
-    expect(div.getAttribute('data-eventtype')).toBe('test_event');
-    expect(div.getAttribute('data-eventoptions')).toBe('{"name":"Kelly"}');
     expect(domOn).toHaveBeenCalledTimes(1);
 
     wrapper.find('#test').simulate('click');
