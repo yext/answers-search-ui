@@ -224,7 +224,8 @@ export default class SearchComponent extends Component {
       this.core.setQuery(this.query);
     });
 
-    DOM.on(this._inputEl, 'input', e => {
+    const input = DOM.query(this._container, this._inputEl);
+    DOM.on(input, 'input', e => {
       const input = e.target.value;
       if (!this._showClearButton && input.length > 0) {
         this._showClearButton = true;

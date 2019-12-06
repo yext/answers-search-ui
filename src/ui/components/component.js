@@ -87,10 +87,12 @@ export default class Component {
      * @type {HTMLElement}
      */
     if (this._parentContainer === null) {
-      if (typeof config.container !== 'string') {
-        throw new Error('Missing `container` option for component configuration. Must be of type `string`.');
+      if (typeof config.container === 'string') {
+        this._container = DOM.query(config.container) || null;
+        if (this._container === null) {
+          throw new Error('Cannot find container DOM node: ' + config.container);
+        }
       }
-      this._container = DOM.query(config.container) || null;
     } else {
       this._container = DOM.query(this._parentContainer, config.container);
 
@@ -102,10 +104,6 @@ export default class Component {
         });
         DOM.append(this._parentContainer, this._container);
       }
-    }
-
-    if (this._container === null) {
-      throw new Error('Cannot find container DOM node: ' + config.container);
     }
 
     /**
@@ -327,7 +325,11 @@ export default class Component {
     this.onUnMount();
   }
 
-  mount () {
+  mount (container) {
+    if (container) {
+      this._container = container;
+    }
+
     if (!this._container) {
       return this;
     }
