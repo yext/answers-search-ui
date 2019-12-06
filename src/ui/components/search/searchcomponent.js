@@ -145,7 +145,10 @@ export default class SearchComponent extends Component {
           }
         });
       } else {
-        this.search(q);
+        // Make sure both code paths are asynchrounous, for consistency
+        setTimeout(() => {
+          this.search(q);
+        });
       }
     });
 
