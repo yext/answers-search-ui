@@ -92,16 +92,16 @@ window.initAnswers = async function initAnswers () {
           verticalKey
         });
 
-        ANSWERS.addComponent('DynamicFilters', {
-          container: '.dynamic-filter-container',
-          verticalKey
-        });
-
         if (verticalConfig.filters) {
           ANSWERS.addComponent('FilterBox', {
             container: '.filters-container',
             verticalKey,
             filters: verticalConfig.filters
+          });
+        } else {
+          ANSWERS.addComponent('Facets', {
+            container: '.facets-container',
+            verticalKey
           });
         }
       }
