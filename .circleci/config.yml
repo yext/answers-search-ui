@@ -65,6 +65,8 @@ jobs:
     working_directory: ~/answers
     steps:
       - setup-workspace
+      - attach_workspace:
+          at: ~/answers
       - run: npm run test
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
