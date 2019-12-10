@@ -52,7 +52,12 @@ export default class AccordionResultsComponent extends ResultsComponent {
   onMount () {
     super.onMount();
 
-    const accordionEls = DOM.queryAll(this._container, this._selectorBase);
+    // NOTE(amullings): This is a hack, since currently components with siblings
+    // have no way of referring to their own element. We have to grab the first
+    // element since sections get added in reverse.
+    const selfEl = this._container.firstElementChild;
+
+    const accordionEls = DOM.queryAll(selfEl, this._selectorBase);
     accordionEls.forEach((accordionEl) => {
       const toggleEl = DOM.query(accordionEl, this.toggleSelector());
       const contentEl = DOM.query(accordionEl, this.bodySelector());
