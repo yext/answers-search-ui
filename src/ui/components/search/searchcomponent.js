@@ -209,7 +209,7 @@ export default class SearchComponent extends Component {
     // element before loading the autocomplete component so that its focus
     // handler won't be triggered
     if (this.autoFocus === true && !this.query && !this.autocompleteOnLoad) {
-      DOM.query(this._container, this._inputEl).focus();
+      this.focusInputElement();
     }
 
     // Wire up our search handling and auto complete
@@ -221,7 +221,7 @@ export default class SearchComponent extends Component {
     }
 
     if (this.autoFocus === true && !this.query && this.autocompleteOnLoad) {
-      DOM.query(this._container, this._inputEl).focus();
+      this.focusInputElement();
     }
   }
 
@@ -244,6 +244,13 @@ export default class SearchComponent extends Component {
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(this.query);
+
+      // Focus the input element after clearing the query, regardless of whether
+      // or not the autoFocus option is enabled.
+      // NOTE(amullings): This depends heavily on the fact that the re-renders
+      // triggered by setState and core.setQuery happen synchronously; if this
+      // stops being the case at some point, we'll need an alternative solution
+      this.focusInputElement();
     });
 
     DOM.on(this._inputEl, 'input', e => {
@@ -408,5 +415,9 @@ export default class SearchComponent extends Component {
       showClearButton: this._showClearButton,
       query: this.query || ''
     }, data));
+  }
+
+  focusInputElement () {
+    DOM.query(this._container, this._inputEl).focus();
   }
 }
