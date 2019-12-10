@@ -18,11 +18,14 @@
   $nav-dropdown-hover-color: $nav-dropdown-color !default;
   $nav-dropdown-hover-background-color: #eeeff0 !default;
 
+  $nav-border-color: $color-borders !default;
+
   &-container
   {
     display: flex;
     justify-content: flex-start;
     position: relative;
+    border-bottom: 2px solid $nav-border-color;
   }
 
   &-expanded
@@ -48,6 +51,7 @@
     text-transform: uppercase;
     display: flex;
     align-items: center;
+    text-decoration: none;
 
     &:hover
     {
@@ -96,6 +100,8 @@
     align-items: center;
     position: relative;
     overflow: visible;
+    border: none;
+    background: transparent;
   }
 
   &-moreTextWrapper
@@ -120,7 +126,7 @@
 
   &-static
   {
-    overflow: scroll;
+    overflow: auto;
   }
 
   &-modal

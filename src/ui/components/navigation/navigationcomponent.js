@@ -13,6 +13,21 @@ import DOM from '../../dom/dom';
 const RESIZE_DEBOUNCE = 100;
 
 /**
+ * The breakpoint for mobile
+ * @type {number}
+ */
+const MOBILE_BREAKPOINT = 767;
+
+/**
+ * Enum options for mobile overflow beahvior
+ * @type {Object.<string, string>}
+ */
+const MOBILE_OVERFLOW_BEHAVIOR_OPTION = {
+  COLLAPSE: 'COLLAPSE',
+  INNERSCROLL: 'INNERSCROLL'
+};
+
+/**
  * The Tab is a model that is used to power the Navigation tabs in the view.
  * It's initialized through the configuration provided to the component.
  */
@@ -75,7 +90,7 @@ export class Tab {
       let tab = tabsConfig[i];
       // For tabs without config ids, map their URL to the configID
       // to avoid duplication of renders
-      if (tab.configId === undefined && tabs[tab.configId] === undefined) {
+      if (tab.configId === null && tabs[tab.configId] === undefined) {
         tab.configId = tab.url;
       }
 
@@ -95,22 +110,16 @@ export default class NavigationComponent extends Component {
     super(config, systemConfig);
 
     /**
-     * The label to show on the dropdown menu button
+     * The label to show on the dropdown menu button when overflow
      * @type {string}
      */
-    this.dropdownLabel = config.dropdownLabel || 'More';
+    this.overflowLabel = config.overflowLabel || 'More';
 
     /**
-     * The optional icon to show on the dropdown menu button
+     * The optional icon to show on the dropdown menu button when overflow
      * @type {string}
      */
-    this.dropdownIcon = config.dropdownIcon || 'kabob';
-
-    /**
-     * If true, render a static navigation with no "more" menu
-     * @type {boolean}
-     */
-    this.static = config.static || false;
+    this.overflowIcon = config.overflowIcon || 'kabob';
 
     /**
      * The data storage key
@@ -119,11 +128,18 @@ export default class NavigationComponent extends Component {
     this.moduleId = StorageKeys.NAVIGATION;
 
     /**
+     * Tabs config from global navigation config
+     * @type {Array.<object>}
+     * @private
+     */
+    this._tabsConfig = this.core.globalStorage.getState(StorageKeys.NAVIGATION_CONFIG).tabsConfig;
+
+    /**
      * Unordered map of each tab, keyed by VS configId
      * @type {Object.<String, Object>}
      * @private
      */
-    this._tabs = Tab.from(config.tabs);
+    this._tabs = Tab.from(this._tabsConfig);
 
     /**
      * The order of the tabs, parsed from configuration or URL.
@@ -131,7 +147,7 @@ export default class NavigationComponent extends Component {
      * @type {Array.<String>} The list of VS configIds
      * @private
      */
-    this._tabOrder = this.getDefaultTabOrder(config.tabs, this.getUrlParams());
+    this._tabOrder = this.getDefaultTabOrder(this._tabsConfig, this.getUrlParams());
 
     /**
      * Breakpoints at which navigation items move to the "more" dropdown
@@ -139,6 +155,18 @@ export default class NavigationComponent extends Component {
      * @private
      */
     this._navBreakpoints = [];
+
+    /**
+     *  The mobile overflow behavior config
+     *  @type {string}
+     */
+    this._mobileOverflowBehavior = config.mobileOverflowBehavior || MOBILE_OVERFLOW_BEHAVIOR_OPTION.COLLAPSE;
+
+    /**
+     *  The ARIA label
+     *  @type {string}
+     */
+    this._ariaLabel = config.ariaLabel || 'Search Page Navigation';
   }
 
   static get type () {
@@ -155,23 +183,45 @@ export default class NavigationComponent extends Component {
   }
 
   onCreate () {
-    if (!this.static) {
-      DOM.on(window, 'resize', () => {
-        if (this._debounceTimer) {
-          clearTimeout(this._debounceTimer);
-        }
-
-        this._debounceTimer = setTimeout(this.refitNav.bind(this), RESIZE_DEBOUNCE);
-      });
-      DOM.on(window, 'click', this.checkOutsideClick.bind(this));
+    if (this.shouldCollapse()) {
+      this.bindOverflowHandlers();
     }
+
+    DOM.on(window, 'resize', () => {
+      if (this._checkMobileOverflowBehaviorTimer) {
+        clearTimeout(this._checkMobileOverflowBehaviorTimer);
+      }
+
+      this._checkMobileOverflowBehaviorTimer = setTimeout(this.setState.bind(this), RESIZE_DEBOUNCE);
+    });
   }
 
   onMount () {
-    if (!this.static) {
+    this.unbindOverflowHandlers();
+    if (this.shouldCollapse()) {
+      this._navBreakpoints = [];
+      this.bindOverflowHandlers();
       this.refitNav();
       DOM.on(DOM.query(this._container, '.yxt-Nav-more'), 'click', this.toggleMoreDropdown.bind(this));
     }
+  }
+
+  bindOverflowHandlers () {
+    DOM.on(window, 'resize', () => {
+      if (this._debounceTimer) {
+        clearTimeout(this._debounceTimer);
+      }
+
+      this._debounceTimer = setTimeout(this.refitNav.bind(this), RESIZE_DEBOUNCE);
+    });
+    DOM.on(window, 'click', this.checkOutsideClick.bind(this));
+  }
+
+  unbindOverflowHandlers () {
+    if (this._debounceTimer) {
+      clearTimeout(this._debounceTimer);
+    }
+    DOM.off(window, 'click', this.checkOutsideClick.bind(this));
   }
 
   refitNav () {
@@ -262,7 +312,7 @@ export default class NavigationComponent extends Component {
    *
    * @override
    */
-  setState (data) {
+  setState (data = {}) {
     if (data.tabOrder !== undefined) {
       this._tabOrder = this.mergeTabOrder(data.tabOrder, this._tabOrder);
     }
@@ -281,14 +331,26 @@ export default class NavigationComponent extends Component {
 
     return super.setState({
       tabs: tabs,
-      dropdownLabel: this.dropdownLabel,
-      dropdownIcon: this.dropdownIcon,
-      static: this.static
+      overflowLabel: this.overflowLabel,
+      overflowIcon: this.overflowIcon,
+      showCollapse: this.shouldCollapse(),
+      ariaLabel: this._ariaLabel
     });
   }
 
   getUrlParams () {
     return new SearchParams(window.location.search.substring(1));
+  }
+
+  shouldCollapse () {
+    const container = DOM.query(this._container, '.yxt-Nav-container') || this._container;
+    const navWidth = container.offsetWidth;
+    switch (this._mobileOverflowBehavior) {
+      case MOBILE_OVERFLOW_BEHAVIOR_OPTION.COLLAPSE:
+        return true;
+      case MOBILE_OVERFLOW_BEHAVIOR_OPTION.INNERSCROLL:
+        return navWidth > MOBILE_BREAKPOINT;
+    }
   }
 
   /**

@@ -1,18 +1,18 @@
-<nav class="yxt-Nav-container js-yxt-navContainer {{#if static}} yxt-Nav-static{{/if}}">
-  <div class="yxt-Nav-expanded">
+<nav class="yxt-Nav-container js-yxt-navContainer {{#unless showCollapse}} yxt-Nav-static{{/unless}}">
+  <div class="yxt-Nav-expanded" role="tablist" aria-label="{{ariaLabel}}">
     {{#each tabs}}
       <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
         href="{{url}}"
         data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
         data-eventoptions='{"verticalConfigId": "{{configId}}"}'
-        role="option"
+        role="tab"
         {{#if isActive}}aria-selected="true"{{/if}}
       >
         {{label}}
       </a>
     {{/each}}
   </div>
-  {{#unless static}}
+  {{#if showCollapse}}
     <div class="yxt-Nav-moreContainer">
       <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore"
         aria-haspopup="listbox"
@@ -20,14 +20,14 @@
       >
         <span class="yxt-Nav-moreIcon"
         data-component="IconComponent"
-        data-opts='{"iconName": "{{dropdownIcon}}"}'
+        data-opts='{"iconName": "{{overflowIcon}}"}'
         data-prop="icon"></span>
-        {{dropdownLabel}}
+        {{overflowLabel}}
       </button>
       <div class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"
         role="listbox"
         aria-labelledby="yxt-Nav-moreButton"
       ></div>
     </div>
-  {{/unless}}
+  {{/if}}
 </nav>
