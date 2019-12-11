@@ -140,8 +140,7 @@ function appendDependencyLicenses () {
     exclude: ['./sample-app'],
     production: true,
     onlyDirectDependencies: true,
-    noColor: true,
-    omitVersion: true
+    noColor: true
   };
 
   return through.obj((file, _, cb) => {
@@ -153,10 +152,11 @@ function appendDependencyLicenses () {
       let allDepLicenses = await Object.keys(deps)
         .map(depName => ({
           name: depName,
-          url: deps[depName].licenseUrl
+          repoUrl: deps[depName].repository,
+          licenseUrl: deps[depName].licenseUrl
         }))
         .map(async (license) => {
-          const licenseTextRes = await fetch(license.url);
+          const licenseTextRes = await fetch(license.licenseUrl);
           const text = await licenseTextRes.text();
           if (!licenseTextRes.ok) {
             cb(text, file);
@@ -169,7 +169,7 @@ function appendDependencyLicenses () {
         .reduce(async (allLicensesPromise, licensePromise) => {
           const allLicenses = await allLicensesPromise;
           const license = await licensePromise;
-          return [allLicenses, `${license.name} License`, license.text].join('\n\n');
+          return [allLicenses, `${license.name} License (${license.repoUrl})`, license.text].join('\n\n');
         }, Promise.resolve(''))
         .catch(err => cb(err, file));
 
