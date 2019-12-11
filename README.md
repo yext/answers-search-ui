@@ -71,7 +71,7 @@ Below is a list of configuration options that can be used during initialization.
 | search | object | Search specific settings, see [search configuration](#search-configuration) below | optional |
 | locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | optional |
 | experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
-| debug | boolean | Prints full Answers error objects when set to `true` | optional |
+| debug | boolean | Prints full Answers error details when set to `true` | optional |
 | sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
 
 ## Search Configuration
