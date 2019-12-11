@@ -33,6 +33,9 @@
     display: flex;
     justify-content: flex-start;
     white-space: nowrap;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
   }
 
   &-item

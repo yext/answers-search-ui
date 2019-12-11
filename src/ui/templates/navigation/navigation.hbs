@@ -1,17 +1,17 @@
 <nav class="yxt-Nav-container js-yxt-navContainer {{#unless showCollapse}} yxt-Nav-static{{/unless}}">
-  <div class="yxt-Nav-expanded" role="tablist" aria-label="{{ariaLabel}}">
+  <ul class="yxt-Nav-expanded" aria-label="{{ariaLabel}}">
     {{#each tabs}}
-      <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
-        href="{{url}}"
-        data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
-        data-eventoptions='{"verticalConfigId": "{{configId}}"}'
-        role="tab"
-        {{#if isActive}}aria-selected="true"{{/if}}
-      >
-        {{label}}
-      </a>
+      <li>
+        <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
+          href="{{url}}"
+          data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
+          data-eventoptions='{"verticalConfigId": "{{configId}}"}'
+        >
+          {{label}}
+        </a>
+      </li>
     {{/each}}
-  </div>
+  </ul>
   {{#if showCollapse}}
     <div class="yxt-Nav-moreContainer">
       <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore"
