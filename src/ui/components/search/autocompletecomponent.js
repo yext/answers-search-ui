@@ -129,12 +129,21 @@ export default class AutoCompleteComponent extends Component {
    * those are client-interaction specific values and aren't returned from the server.
    */
   setState (data) {
+    if (!this.isQueryInputFocused()) {
+      this._sectionIndex = 0;
+      this._resultIndex = -1;
+      data = {};
+    }
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null
     }));
+  }
+
+  isQueryInputFocused () {
+    return document.activeElement.className.includes(this._inputEl.substring(1));
   }
 
   /**
