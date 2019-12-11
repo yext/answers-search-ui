@@ -1,21 +1,24 @@
-const { series, parallel, src, dest, watch } = require('gulp');
-
 const fs = require('fs');
 
+const { series, parallel, src, dest, watch } = require('gulp');
+const rename = require('gulp-rename');
+const sass = require('gulp-sass');
+const postcss = require('gulp-postcss');
+const uglify = require('gulp-uglify-es').default;
 const rollup = require('gulp-rollup-lightweight');
+
 const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
 const insert = require('rollup-plugin-insert');
 
 const source = require('vinyl-source-stream');
-const rename = require('gulp-rename');
 
-const sass = require('gulp-sass');
+const licenseCrawler = require('npm-license-crawler');
 
-const postcss = require('gulp-postcss');
+const fetch = require('node-fetch');
 
-const uglify = require('gulp-uglify-es').default;
+const through = require('through2');
 
 const NAMESPACE = 'ANSWERS';
 
@@ -113,19 +116,72 @@ function compileCSS () {
     .pipe(dest('./dist/'));
 }
 
-function watchJS (cb) {
+function watchJS () {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
   }, parallel(bundle, legacyBundle));
 }
 
-function watchCSS (cb) {
+function watchCSS () {
   return watch(['./src/ui/sass/**/*.scss'], {
     ignored: './dist/'
   }, series(compileCSS));
 }
 
+function createDistributionLicense () {
+  return src('./LICENSE')
+    .pipe(appendDependencyLicenses())
+    .pipe(dest('./dist'));
+}
+
+function appendDependencyLicenses () {
+  const licenseCrawlerOptions = {
+    start: ['./'],
+    exclude: ['./sample-app'],
+    production: true,
+    onlyDirectDependencies: true,
+    noColor: true,
+    omitVersion: true
+  };
+
+  return through.obj((file, _, cb) => {
+    licenseCrawler.dumpLicenses(licenseCrawlerOptions, async (err, deps) => {
+      if (err) {
+        cb(err, null);
+      }
+
+      let allDepLicenses = await Object.keys(deps)
+        .map(depName => ({
+          name: depName,
+          url: deps[depName].licenseUrl
+        }))
+        .map(async (license) => {
+          const licenseTextRes = await fetch(license.url);
+          const text = await licenseTextRes.text();
+          if (!licenseTextRes.ok) {
+            cb(text, file);
+          }
+
+          return {
+            ...license,
+            text: text.trim()
+          };
+        })
+        .reduce(async (allLicensesPromise, licensePromise) => {
+          const allLicenses = await allLicensesPromise;
+          const license = await licensePromise;
+          return [allLicenses, `${license.name} License`, license.text].join('\n\n');
+        }, Promise.resolve(''))
+        .catch(err => cb(err, file));
+
+      file.contents = Buffer.concat([file.contents, Buffer.from(allDepLicenses)]);
+      cb(null, file);
+    });
+  });
+}
+
 exports.default = parallel(
+  series(createDistributionLicense),
   series(bundle, minifyJS),
   series(legacyBundle, minifyLegacy),
   series(compileCSS)
