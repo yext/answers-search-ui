@@ -162,10 +162,9 @@ function appendDependencyLicenses () {
             cb(text, file);
           }
 
-          return {
-            ...license,
+          return Object.assign({}, license, {
             text: text.trim()
-          };
+          });
         })
         .reduce(async (allLicensesPromise, licensePromise) => {
           const allLicenses = await allLicensesPromise;
