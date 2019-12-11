@@ -145,6 +145,9 @@
     top: 30px;
     right: 0;
     z-index: $z-index-nav-more-modal;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
 
     &.is-active
     {
