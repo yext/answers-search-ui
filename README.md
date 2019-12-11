@@ -70,6 +70,7 @@ Below is a list of configuration options that can be used during initialization.
 | experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
 | debug | boolean | Prints full Answers error objects when set to `true` | optional |
 | sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
+| navigation | object | Provide navigation configuartion including tab configurations | optional |
 
 ## Template Helpers
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
@@ -758,17 +759,10 @@ ANSWERS.addComponent('', {
 The Navigation Component adds a dynamic experience to your pages navigation experience.
 When using multiple vertical searches in a universal search, the navigation ordering will be automatically updated based on the search results. By default, tabs that do not fit in the container will go inside a dropdown menu.
 
-
-```html
-<nav class="navigation-container"></nav>
-```
+Tab configurations should be provided in initial configuration.
 
 ```js
-ANSWERS.addComponent('Navigation', {
-  container: '.navigation-container',
-  dropdownLabel: 'More',     // The label to display on the dropdown menu button
-  dropdownIcon: null,        // If provided, show this icon on the dropdown button instead
-  static: false,             // If true, shows all tabs in a horizontally scrolling container
+navigation: {
   tabs: [
     {
       label: 'Home',         // The label used for the navigation element
@@ -780,13 +774,23 @@ ANSWERS.addComponent('Navigation', {
       configId: 'locations'  // optional, the vertical search config id
       label: 'Location'      // The label used for the navigation element
       url: 'locations.html'  // The link for the navigation element
-    },
-    {
-      configId: 'employees'  // optional, the vertical search config id
-      label: 'Employees'     // The label used for the navigation element
-      url: 'employees.html'  // The link for the navigation element
     }
   ]
+}
+```
+
+
+```html
+<nav class="navigation-container"></nav>
+```
+
+```js
+ANSWERS.addComponent('Navigation', {
+  container: '.navigation-container',
+  mobileOverflowBehavior: 'COLLAPSE'     // optional, options which are COLLAPSE, INNERSCROLL to control if navigation shows scroll bar or dropdown for mobile
+  ariaLabel: 'Search Page Navigation'    // optional, the aria-label to set on the navigation
+  overflowLabel: 'More',    // optional, the label to display on the dropdown menu button when overflow
+  overflowIcon: null        // optional, show this icon on the dropdown button instead when overflow
 })
 ```
 
