@@ -40,6 +40,9 @@ export class TabConfig {
 
   static from (tabs) {
     let tabConfigs = [];
+    if (tabs === undefined) {
+      return tabConfigs;
+    }
     for (let i = 0; i < tabs.length; i++) {
       let tab = tabs[i];
       tabConfigs.push(new TabConfig(tab));
