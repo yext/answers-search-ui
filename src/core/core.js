@@ -187,9 +187,6 @@ export default class Core {
         this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({
-          questionText: queryString
-        }));
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.globalStorage.delete('skipSpellCheck');
