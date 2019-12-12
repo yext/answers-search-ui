@@ -124,7 +124,7 @@ export default class QuestionSubmissionComponent extends Component {
      * @type {string}
      * @private
      */
-    this._verticalKey = config.verticalKey;
+    this._verticalKey = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
 
     /**
      * isUniversal is used for analytics and passed to children and is set to
@@ -196,18 +196,10 @@ export default class QuestionSubmissionComponent extends Component {
       return;
     }
 
-    const questionFields = DOM.queryAll(formEl, '.js-question-field');
-    for (let i = 0; i < questionFields.length; i++) {
-      const questionField = questionFields[i];
-      DOM.on(questionField, 'focus', () => {
-        const analyticsEvent = new AnalyticsEvent('QUESTION_FOCUS');
-        analyticsEvent.addOptions({
-          verticalConfigId: this._verticalKey,
-          searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL'
-        });
-        this.analyticsReporter.report(analyticsEvent);
-      });
-    }
+    const questionText = DOM.query(formEl, '.js-question-text');
+    DOM.on(questionText, 'focus', () => {
+      this.analyticsReporter.report(this.getAnalyticsEvent('QUESTION_FOCUS'));
+    });
   }
 
   /**
@@ -218,14 +210,7 @@ export default class QuestionSubmissionComponent extends Component {
   bindFormSubmit (formEl) {
     DOM.on(formEl, 'submit', (e) => {
       e.preventDefault();
-
-      // we report that we are attempting to submit form data
-      const analyticsEvent = new AnalyticsEvent('QUESTION_SUBMIT');
-      analyticsEvent.addOptions({
-        verticalConfigId: this._verticalConfigId,
-        searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL'
-      });
-      this.analyticsReporter.report(analyticsEvent);
+      this.analyticsReporter.report(this.getAnalyticsEvent('QUESTION_SUBMIT'));
 
       // TODO(billy) we probably want to disable the form from being submitted twice
       const formData = this.parse(formEl);
@@ -298,5 +283,17 @@ export default class QuestionSubmissionComponent extends Component {
     }
 
     return Object.keys(errors).length > 0 ? errors : null;
+  }
+
+  /**
+   * Returns an options object describing the context of a reportable event
+   */
+  getAnalyticsEvent (eventType) {
+    const analyticsEvent = new AnalyticsEvent(eventType);
+    analyticsEvent.addOptions({
+      verticalConfigId: this._verticalKey,
+      searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+    });
+    return analyticsEvent;
   }
 }

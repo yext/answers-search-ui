@@ -79,7 +79,6 @@ window.initAnswers = async function initAnswers () {
 
         ANSWERS.addComponent('QASubmission', {
           container: '.question-submission-container',
-          verticalKey,
           entityId: 13171501
         });
       } else {
