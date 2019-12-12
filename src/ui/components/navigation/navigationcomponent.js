@@ -252,6 +252,7 @@ export default class NavigationComponent extends Component {
 
       if (moreButton.classList.contains('yxt-Nav-item--more')) {
         moreButton.classList.remove('yxt-Nav-item--more');
+        this.setAriaHidden('false');
       }
     } else {
       if (numBreakpoints && navWidth > this._navBreakpoints[numBreakpoints - 1]) {
@@ -266,6 +267,7 @@ export default class NavigationComponent extends Component {
 
       if (collapsedLinks.children.length === 0) {
         moreButton.classList.add('yxt-Nav-item--more');
+        this.setAriaHidden('true');
       }
     }
 
@@ -422,5 +424,9 @@ export default class NavigationComponent extends Component {
     // URLS we create.
     params.set('tabOrder', this._tabOrder);
     return baseUrl + '?' + params.toString();
+  }
+
+  setAriaHidden (val) {
+    DOM.attr('.yxt-Nav-more', 'aria-hidden', val);
   }
 }

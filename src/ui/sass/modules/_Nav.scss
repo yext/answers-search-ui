@@ -8,7 +8,8 @@
   $nav-text-color: $color-text-primary !default;
   $nav-text-hover-color: #c5cace !default;
   $nav-text-active-color: $color-brand-primary !default;
-  $nav-text-active-border: 2px solid $color-brand-primary !default;
+  $nav-text-activ-border-width: 2px;
+  $nav-text-active-border: $nav-text-activ-border-width solid $color-brand-primary !default;
   $nav-text-focus-background-color: #e9e9e9 !default;
 
   $nav-dropdown-font-size: 13px !default;
@@ -25,7 +26,7 @@
     display: flex;
     justify-content: flex-start;
     position: relative;
-    border-bottom: 2px solid $nav-border-color;
+    border-bottom: $nav-text-activ-border-width solid $nav-border-color;
   }
 
   &-expanded
@@ -58,7 +59,7 @@
 
     &:hover
     {
-      color: $nav-text-hover-color;
+      color: $nav-text-active-color;
 
       @media (hover: none)
       {
@@ -130,6 +131,10 @@
   &-static
   {
     overflow: auto;
+  }
+
+  &-static::-webkit-scrollbar {
+    display: none;
   }
 
   &-modal
