@@ -120,6 +120,21 @@ export default class QuestionSubmissionComponent extends Component {
     this.moduleId = StorageKeys.QUESTION_SUBMISSION;
 
     /**
+     * verticalKey is used for analytics
+     * @type {string}
+     * @private
+     */
+    this._verticalKey = config.verticalKey;
+
+    /**
+     * isUniversal is used for analytics and passed to children and is set to
+     * true if this component is added by the UniversalResultsComponent
+     * @type {boolean}
+     * @private
+     */
+    this._isUniversal = config.isUniversal || false;
+
+    /**
      * NOTE(billy) if this is a pattern we want to follow for configuration
      * we should bake it into the core class.
      */
@@ -168,32 +183,50 @@ export default class QuestionSubmissionComponent extends Component {
       return;
     }
 
-    this.bindAnalytics(formEl);
+    this.bindFormFocus(formEl);
     this.bindFormSubmit(formEl);
   }
 
   /**
-   * bindAnalytics will wire up DOM event hooks to serverside reporting
+   * bindFormFocus will wire up the DOM focus event to serverside reporting
    * @param {HTMLElement} formEl
    */
-  bindAnalytics (formEl) {
+  bindFormFocus (formEl) {
     if (this.analyticsReporter === null) {
       return;
     }
 
-    const questionTextEl = DOM.query(formEl, '.js-question-text');
-    DOM.on(questionTextEl, 'focus', () => {
-      this.analyticsReporter.report(new AnalyticsEvent('QUESTION_FOCUS'));
-    });
+    const questionFields = DOM.queryAll(formEl, '.js-question-field');
+    for (let i = 0; i < questionFields.length; i++) {
+      const questionField = questionFields[i];
+      DOM.on(questionField, 'focus', () => {
+        const analyticsEvent = new AnalyticsEvent('QUESTION_FOCUS');
+        analyticsEvent.addOptions({
+          verticalConfigId: this._verticalKey,
+          searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+        });
+        this.analyticsReporter.report(analyticsEvent);
+      });
+    }
   }
 
   /**
-   * bindFormSubmit handles submitting the question to the server.
+   * bindFormSubmit handles submitting the question to the server,
+   * and submits an event to serverside reporting
    * @param {HTMLElement} formEl
    */
   bindFormSubmit (formEl) {
     DOM.on(formEl, 'submit', (e) => {
       e.preventDefault();
+
+      // we report that we are attempting to submit form data
+      const analyticsEvent = new AnalyticsEvent('QUESTION_SUBMIT');
+      analyticsEvent.addOptions({
+        verticalConfigId: this._verticalConfigId,
+        searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+      });
+      this.analyticsReporter.report(analyticsEvent);
+
       // TODO(billy) we probably want to disable the form from being submitted twice
       const formData = this.parse(formEl);
       const errors = this.validateRequired(formData);
