@@ -127,14 +127,6 @@ export default class QuestionSubmissionComponent extends Component {
     this._verticalKey = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
 
     /**
-     * isUniversal is used for analytics and passed to children and is set to
-     * true if this component is added by the UniversalResultsComponent
-     * @type {boolean}
-     * @private
-     */
-    this._isUniversal = config.isUniversal || false;
-
-    /**
      * NOTE(billy) if this is a pattern we want to follow for configuration
      * we should bake it into the core class.
      */
@@ -292,7 +284,7 @@ export default class QuestionSubmissionComponent extends Component {
     const analyticsEvent = new AnalyticsEvent(eventType);
     analyticsEvent.addOptions({
       verticalConfigId: this._verticalKey,
-      searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+      searcher: this._verticalKey ? 'VERTICAL' : 'UNIVERSAL'
     });
     return analyticsEvent;
   }
