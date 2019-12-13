@@ -131,6 +131,14 @@ export default class QuestionSubmissionComponent extends Component {
      * we should bake it into the core class.
      */
     this.validateConfig();
+
+    this.core.globalStorage.on('update', StorageKeys.QUERY_ID, () => {
+      const questionText = this.core.globalStorage.getState(StorageKeys.QUERY);
+      this.setState(new QuestionSubmission({
+        questionText: questionText,
+        expanded: this._config.expanded
+      }));
+    });
   }
 
   /**
