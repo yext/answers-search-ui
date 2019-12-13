@@ -800,20 +800,34 @@ when a search query is run.
 ```
 
 ```js
+// Unless noted, fields are optional and show default values
 ANSWERS.addComponent('QASubmission', {
   container: '.question-submission-container',
-  nameLabel: 'Your Name:',             // Optional, defaults to 'Name'
-  emailLabel: '*Email:',               // Optional, defaults to 'Email'
-  questionLabel: 'Ask us anything!:',  // Optional, defaults to 'Ask a Question'
-  privacyPolicyText: 'I agree!',       // Optional, defaults to 'By submitting my email address, I consent to being contacted via email at the address provided.',
-  buttonLabel: 'Submit',               // Optional, defaults to 'Submit'
-  entityId: 123,                       // Optional, the entity identifier that the question is associated with
-  language: 'en',                      // Optional, defaults to 'EN'
-  formSelector: '.js-form',            // Optional, defaults to native form node within container
-  privacyPolicyUrlLabel: 'Learn more here',                   // Optional, defaults to 'Learn more here'
-  privacyPolicyUrl: 'https://mybiz.com/policy',               // Optional, defaults to ''
-  privacyPolicyErrorText: 'Please agree before proceeding.',  // Optional, defaults to '* You must agree to the privacy policy to submit feedback.'
-  emailFormatErrorText: 'Not valid'                           // Optional, defaults to '* Please enter a valid email address'
+  formSelector: '.js-form',                       // Defaults to native form node within container
+  nameLabel: 'Name',                              // Label for name input
+  emailLabel: 'Email',                            // Label for email input
+  questionLabel: 'Question',                      // Label for question input
+  sectionTitle: 'Ask a question',                 // Title displayed for the form
+  teaser: 'Can\'t find what you’re looking for? Ask a question below.',
+                                                  // Teaser displayed for the form, next to the title
+  description: 'Enter your question and contact information, and we\'ll get back to you with a response shortly.'
+                                                  // Description for the form
+  privacyPolicyText: 'By submitting my email address, I consent to being contacted via email at the address provided.',
+                                                  // Text before the privacy policy link
+  privacyPolicyUrlLabel: 'Learn more here.',      // Label for the privacy policy url
+  privacyPolicyUrl: 'https://mybiz.com/policy',   // Required. Defaults to ''
+  privacyPolicyErrorText: '* You must agree to the privacy policy to submit feedback.',
+                                                  // Error message displayed when the privacy policy is not selected
+  emailFormatErrorText: '* Please enter a valid email address.'
+                                                  // Error message displayed when an invalid email is not submitted
+  requiredInputPlaceholder: '(required)',         // Placeholder displayed in all required fields
+  questionSubmissionConfirmationText: 'Thank you for your question!',
+                                                  // Confirmation displayed once a question is submitted
+  buttonLabel: 'Submit',                          // Label displayed on the button to submit a question
+  entityId: 123,                                  // Required. Set this to the Entity ID of the organization entity in the Knowledge Graph
+
+  language: 'en',
+  expanded: true                                  // Set this to whether or not the form is expanded by default when a user arrives on the page
 })
 ```
 
