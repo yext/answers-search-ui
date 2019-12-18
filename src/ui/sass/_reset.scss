@@ -1,0 +1,21 @@
+// This file performs a targeted CSS reset that prevents any user agent styles from interfering
+// with Answers styling. Note that this resets CSS styling only for elements with 'yxt' in the
+// class name. It will not reset any customer styling.
+
+[class*="yxt-"], [class*="yxt-"]::before, [class*="yxt-"]::after
+{
+  box-sizing: border-box;
+}
+
+ul[class*="yxt-"], ol[class*="yxt-"]
+{
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+button[class*="yxt-"], input[class*="yxt-"]
+{
+  appearance: none;
+  border: none;
+}
