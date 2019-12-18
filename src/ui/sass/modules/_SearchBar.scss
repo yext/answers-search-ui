@@ -2,11 +2,10 @@
 .yxt-SearchBar, .yxt-GeoLocationFilter
 {
   $searchbar-form-background-color: white !default;
-  $searchbar-form-outline-color-base: #464b4f !default;
-  $searchbar-form-outline-color-hover: #1d1e1f !default;
-  $searchbar-focus-shadow-height: 6px !default;
-  $searchbar-focus-shadow: 0 1px $searchbar-focus-shadow-height 0 rgba(32,33,36,0.47) !default;
-  $searchbar-form-border-radius: 2*$base-spacing-sm !default;
+  $searchbar-form-outline-color-base: $color-borders !default;
+  $searchbar-focus-shadow-height: 10px !default;
+  $searchbar-focus-shadow: 0 0 $searchbar-focus-shadow-height 0 rgba(0, 0, 0, 0.1) !default;
+  $searchbar-form-border-radius: 0.4*$base-spacing !default;
 
   $searchbar-text-color: $color-text-primary !default;
   $searchbar-text-font-size: $font-size-md-lg !default;
@@ -30,19 +29,20 @@
     position: relative;
     overflow: hidden;
     z-index: 1;
-    border-radius: $searchbar-form-border-radius;
-    border: 1px solid $searchbar-form-outline-color-base;
-    background-color: $searchbar-form-background-color;
 
-    &:hover
-    {
-      border-color: $searchbar-form-outline-color-hover;
+    @media (min-width: $breakpoint-mobile-min) {
+      border-radius: $searchbar-form-border-radius;
+      border: 1px solid $searchbar-form-outline-color-base;
     }
 
+    background-color: $searchbar-form-background-color;
+
+    &:hover,
     &:focus-within
     {
-      box-shadow: $searchbar-focus-shadow;
-      border-color: $searchbar-form-outline-color-hover;
+      @media (min-width: $breakpoint-mobile-min) {
+        box-shadow: $searchbar-focus-shadow;
+      }
     }
   }
 
@@ -70,8 +70,8 @@
     flex-grow: 1;
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
-    padding-left: $base-spacing-sm*2;
-    padding-right: $base-spacing-sm*2;
+    padding-left: $base-spacing;
+    padding-right: $base-spacing;
 
     &::-ms-clear
     {
@@ -81,28 +81,22 @@
     }
   }
 
-  &-button, &-clear
+  &-button
+  {
+    padding-right: $base-spacing;
+  }
+
+  &-button,
+  &-clear
   {
     display: flex;
+    font: inherit;
     padding-left: $base-spacing;
-    padding-right: $base-spacing;
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
     background-color: $searchbar-button-background-color-base;
-    color: $searchbar-button-text-color-base;
-
-    &:hover,
-    &:focus
-    {
-      background-color: $searchbar-button-background-color-hover;
-      color: $searchbar-button-text-color-hover;
-    }
-
-    &:active
-    {
-      background-color: $searchbar-button-background-color-active;
-      color: $searchbar-button-text-color-active;
-    }
+    color: $color-text-secondary;
+    cursor: pointer;
   }
 
   &--hidden
