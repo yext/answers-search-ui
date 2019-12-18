@@ -407,6 +407,20 @@ export default class SearchComponent extends Component {
     }
   }
 
+  /**
+   * A helper method that constructs the meta information needed by the SEARCH_CLEAR_BUTTON
+   * analytics event.
+   */
+  eventOptions () {
+    const queryId = this.core.globalStorage.getState(StorageKeys.QUERY_ID);
+    const options = Object.assign(
+      {},
+      queryId && { queryId },
+      this._verticalKey && { verticalKey: this._verticalKey }
+    );
+    return JSON.stringify(options);
+  }
+
   setState (data) {
     return super.setState(Object.assign({
       title: this.title,
@@ -414,7 +428,8 @@ export default class SearchComponent extends Component {
       submitIcon: this.submitIcon,
       submitText: this.submitText,
       showClearButton: this._showClearButton,
-      query: this.query || ''
+      query: this.query || '',
+      eventOptions: this.eventOptions()
     }, data));
   }
 
