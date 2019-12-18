@@ -46,10 +46,10 @@ export default class SearchComponent extends Component {
 
     /**
      * The title used, provided to the template as a data point
-     * Optionally provided.
+     * Optionally provided. If not provided, no title will be included.
      * @type {string}
      */
-    this.title = config.title || 'Answers Universal Search';
+    this.title = config.title;
 
     /**
      * The label text is used for labeling the input box, also provided to template.

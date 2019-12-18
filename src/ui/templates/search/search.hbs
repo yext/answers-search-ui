@@ -1,6 +1,8 @@
 {{!// TODO (creotutar) def not multilang safe}}
 {{!// TODO (bmcginnis) probably needs better label / placeholder setup for WCAG }}
-<h1 class="yxt-SearchBar-title">{{title}}</h1>
+{{#if title}}
+  <h1 class="yxt-SearchBar-title">{{title}}</h1>
+{{/if}}
 <div class="yxt-SearchBar">
   <div class="yxt-SearchBar-container">
     <form class="yxt-SearchBar-form">
