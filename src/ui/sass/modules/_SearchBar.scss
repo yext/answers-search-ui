@@ -97,6 +97,12 @@
     background-color: $searchbar-button-background-color-base;
     color: $color-text-secondary;
     cursor: pointer;
+
+    &:focus
+    {
+      background-color: $searchbar-button-background-color-hover;
+      color: $searchbar-button-text-color-hover;
+    }
   }
 
   &--hidden
