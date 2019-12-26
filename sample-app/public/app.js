@@ -28,6 +28,22 @@ window.initAnswers = async function initAnswers () {
     search,
     verticalConfig ? verticalConfig.search : {},
     verticalKey ? { verticalKey } : {});
+  const navigationConfig = {
+    tabs: [
+      {
+        label: 'Home',
+        url: 'index.html',
+        isFirst: true,
+        isActive: !verticalKey
+      },
+      ...Object.keys(config.verticals).map(v => ({
+        configId: v,
+        label: v,
+        url: `${v}.html`,
+        isActive: verticalKey === v
+      }))
+    ]
+  };
 
   ANSWERS.init({
     mock,
@@ -36,24 +52,11 @@ window.initAnswers = async function initAnswers () {
     experienceKey,
     businessId,
     search: searchConfig,
+    navigation: navigationConfig,
     sessionTrackingEnabled: sessionTrackingEnabled,
     onReady: function () {
       ANSWERS.addComponent('Navigation', {
-        container: '.navigation-container',
-        tabs: [
-          {
-            label: 'Home',
-            url: 'index.html',
-            isFirst: true,
-            isActive: !verticalKey
-          },
-          ...Object.keys(config.verticals).map(v => ({
-            configId: v,
-            label: v,
-            url: `${v}.html`,
-            isActive: verticalKey === v
-          }))
-        ]
+        container: '.navigation-container'
       });
 
       ANSWERS.addComponent('SearchBar', {
