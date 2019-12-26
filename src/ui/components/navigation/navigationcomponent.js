@@ -167,6 +167,10 @@ export default class NavigationComponent extends Component {
      *  @type {string}
      */
     this._ariaLabel = config.ariaLabel || 'Search Page Navigation';
+
+    this.checkOutsideClick = this.checkOutsideClick.bind(this);
+    this.checkMobileOverflowBehavior = this.checkMobileOverflowBehavior.bind(this);
+    this.checkRefitNav = this.checkRefitNav.bind(this);
   }
 
   static get type () {
@@ -183,21 +187,16 @@ export default class NavigationComponent extends Component {
   }
 
   onCreate () {
-    if (this.shouldCollapse()) {
-      this.bindOverflowHandlers();
-    }
+    // TODO: Re-rendering and re-mounting the component every tim e the window changes size
+    // is not great.
+    DOM.on(window, 'resize', this.checkMobileOverflowBehavior);
+  }
 
-    DOM.on(window, 'resize', () => {
-      if (this._checkMobileOverflowBehaviorTimer) {
-        clearTimeout(this._checkMobileOverflowBehaviorTimer);
-      }
-
-      this._checkMobileOverflowBehaviorTimer = setTimeout(this.setState.bind(this), RESIZE_DEBOUNCE);
-    });
+  onDestroy () {
+    DOM.off(window, 'resize', this.checkMobileOverflowBehavior);
   }
 
   onMount () {
-    this.unbindOverflowHandlers();
     if (this.shouldCollapse()) {
       this._navBreakpoints = [];
       this.bindOverflowHandlers();
@@ -206,22 +205,21 @@ export default class NavigationComponent extends Component {
     }
   }
 
-  bindOverflowHandlers () {
-    DOM.on(window, 'resize', () => {
-      if (this._debounceTimer) {
-        clearTimeout(this._debounceTimer);
-      }
+  onUnMount () {
+    this.unbindOverflowHandlers();
+  }
 
-      this._debounceTimer = setTimeout(this.refitNav.bind(this), RESIZE_DEBOUNCE);
-    });
-    DOM.on(window, 'click', this.checkOutsideClick.bind(this));
+  bindOverflowHandlers () {
+    DOM.on(window, 'resize', this.checkRefitNav);
+    DOM.on(window, 'click', this.checkOutsideClick);
   }
 
   unbindOverflowHandlers () {
     if (this._debounceTimer) {
       clearTimeout(this._debounceTimer);
     }
-    DOM.off(window, 'click', this.checkOutsideClick.bind(this));
+    DOM.off(window, 'click', this.checkOutsideClick);
+    DOM.off(window, 'resize', this.checkRefitNav);
   }
 
   refitNav () {
@@ -252,7 +250,6 @@ export default class NavigationComponent extends Component {
 
       if (moreButton.classList.contains('yxt-Nav-item--more')) {
         moreButton.classList.remove('yxt-Nav-item--more');
-        this.setAriaHidden('false');
       }
     } else {
       if (numBreakpoints && navWidth > this._navBreakpoints[numBreakpoints - 1]) {
@@ -267,7 +264,6 @@ export default class NavigationComponent extends Component {
 
       if (collapsedLinks.children.length === 0) {
         moreButton.classList.add('yxt-Nav-item--more');
-        this.setAriaHidden('true');
       }
     }
 
@@ -305,6 +301,22 @@ export default class NavigationComponent extends Component {
     }
 
     this.closeMoreDropdown();
+  }
+
+  checkMobileOverflowBehavior () {
+    if (this._checkMobileOverflowBehaviorTimer) {
+      clearTimeout(this._checkMobileOverflowBehaviorTimer);
+    }
+
+    this._checkMobileOverflowBehaviorTimer = setTimeout(this.setState.bind(this), RESIZE_DEBOUNCE);
+  }
+
+  checkRefitNav () {
+    if (this._debounceTimer) {
+      clearTimeout(this._debounceTimer);
+    }
+
+    this._debounceTimer = setTimeout(this.refitNav.bind(this), RESIZE_DEBOUNCE);
   }
 
   /**
@@ -345,12 +357,12 @@ export default class NavigationComponent extends Component {
   }
 
   shouldCollapse () {
-    const container = DOM.query(this._container, '.yxt-Nav-container') || this._container;
-    const navWidth = container.offsetWidth;
     switch (this._mobileOverflowBehavior) {
       case MOBILE_OVERFLOW_BEHAVIOR_OPTION.COLLAPSE:
         return true;
       case MOBILE_OVERFLOW_BEHAVIOR_OPTION.INNERSCROLL:
+        const container = DOM.query(this._container, '.yxt-Nav-container') || this._container;
+        const navWidth = container.offsetWidth;
         return navWidth > MOBILE_BREAKPOINT;
     }
   }
@@ -424,9 +436,5 @@ export default class NavigationComponent extends Component {
     // URLS we create.
     params.set('tabOrder', this._tabOrder);
     return baseUrl + '?' + params.toString();
-  }
-
-  setAriaHidden (val) {
-    DOM.attr('.yxt-Nav-more', 'aria-hidden', val);
   }
 }

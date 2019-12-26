@@ -1,6 +1,7 @@
 import DOM from '../../../../src/ui/dom/dom';
 import NavigationComponent, { Tab } from '../../../../src/ui/components/navigation/navigationcomponent';
 import NavigationConfig from '../../../../src/core/models/navigationconfig';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 // The DOM doesn't exist within components in the JEST environment,
 // so we have to provide it to our DOM API properly.
@@ -102,7 +103,8 @@ describe('navigation component configuration', () => {
     });
     return {
       globalStorage: {
-        getState: () => {
+        getState: (storageKey) => {
+          expect(storageKey).toEqual(StorageKeys.NAVIGATION_CONFIG);
           return navigationConfig;
         }
       }

@@ -14,17 +14,14 @@
   </ul>
   {{#if showCollapse}}
     <div class="yxt-Nav-moreContainer">
-      <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore"
-        aria-labelledby="yxt-Nav-moreButton"
-      >
+      <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore">
         <span class="yxt-Nav-moreIcon"
         data-component="IconComponent"
         data-opts='{"iconName": "{{overflowIcon}}"}'
         data-prop="icon"></span>
         {{overflowLabel}}
       </button>
-      <ul class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"
-        aria-labelledby="yxt-Nav-moreButton"></ul>
+      <ul class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"></ul>
     </div>
   {{/if}}
 </nav>

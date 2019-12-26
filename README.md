@@ -4,6 +4,7 @@ Answers Javascript API Library.
 Outline:
 1. [Install / Setup](#install-and-setup)
    - [Configuration Options](#configuration-options)
+   - [Navigation Configuration](#navigation-configuration)
    - [Template Helpers](#template-helpers)
 2. [Component Usage](#component-usage)
    - [Base Component Configuration](#base-component-configuration)
@@ -70,7 +71,28 @@ Below is a list of configuration options that can be used during initialization.
 | experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
 | debug | boolean | Prints full Answers error objects when set to `true` | optional |
 | sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
-| navigation | object | Provide navigation configuartion including tab configurations | optional |
+| navigation | object | Provide navigation configuration including tab configurations | optional |
+
+## Navigation Configuration
+Below is a list of configuration options related to navigation, used in the [base configuration](#configuration-options) above.
+
+```js
+navigation: {
+  tabs: [
+    {
+      label: 'Home',         // The label used for the navigation element
+      url: './index.html',   // The link for the navigation element
+      isFirst: true,         // optional, will always show this item first
+      isActive: true         // optional, will add a special class to the item
+    },
+    {
+      configId: 'locations'  // optional, the vertical search config id
+      label: 'Location'      // The label used for the navigation element
+      url: 'locations.html'  // The link for the navigation element
+    }
+  ]
+}
+```
 
 ## Template Helpers
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
@@ -757,31 +779,14 @@ ANSWERS.addComponent('', {
 ## Navigation Component
 
 The Navigation Component adds a dynamic experience to your pages navigation experience.
+
 When using multiple vertical searches in a universal search, the navigation ordering will be automatically updated based on the search results. By default, tabs that do not fit in the container will go inside a dropdown menu.
 
 Tab configurations should be provided in initial configuration.
 
-```js
-navigation: {
-  tabs: [
-    {
-      label: 'Home',         // The label used for the navigation element
-      url: './index.html',   // The link for the navigation element
-      isFirst: true,         // optional, will always show this item first
-      isActive: true         // optional, will add a special class to the item
-    },
-    {
-      configId: 'locations'  // optional, the vertical search config id
-      label: 'Location'      // The label used for the navigation element
-      url: 'locations.html'  // The link for the navigation element
-    }
-  ]
-}
-```
-
 
 ```html
-<nav class="navigation-container"></nav>
+<div class="navigation-container"></nav>
 ```
 
 ```js
@@ -789,8 +794,8 @@ ANSWERS.addComponent('Navigation', {
   container: '.navigation-container',
   mobileOverflowBehavior: 'COLLAPSE'     // optional, options which are COLLAPSE, INNERSCROLL to control if navigation shows scroll bar or dropdown for mobile
   ariaLabel: 'Search Page Navigation'    // optional, the aria-label to set on the navigation
-  overflowLabel: 'More',    // optional, the label to display on the dropdown menu button when overflow
-  overflowIcon: null        // optional, show this icon on the dropdown button instead when overflow
+  overflowLabel: 'More',    // optional, the label to display on the dropdown menu button when it overflows
+  overflowIcon: null        // optional, show this icon on the dropdown button instead when it overflows
 })
 ```
 
