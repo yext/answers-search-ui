@@ -802,7 +802,7 @@ when a search query is run.
 ```js
 // Unless noted, fields are optional and show default values
 ANSWERS.addComponent('QASubmission', {
-  container: '.question-submission-container',
+  container: '.question-submission-container',    // Required. This is the class of the target HTML element the component will be mounted to
   formSelector: '.js-form',                       // Defaults to native form node within container
   nameLabel: 'Name',                              // Label for name input
   emailLabel: 'Email',                            // Label for email input
@@ -825,8 +825,6 @@ ANSWERS.addComponent('QASubmission', {
                                                   // Confirmation displayed once a question is submitted
   buttonLabel: 'Submit',                          // Label displayed on the button to submit a question
   entityId: 123,                                  // Required. Set this to the Entity ID of the organization entity in the Knowledge Graph
-
-  language: 'en',
   expanded: true                                  // Set this to whether or not the form is expanded by default when a user arrives on the page
 })
 ```

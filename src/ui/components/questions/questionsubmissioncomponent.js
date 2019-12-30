@@ -20,12 +20,6 @@ const DEFAULT_CONFIG = {
   'entityId': null,
 
   /**
-   * The default language of the question
-   * @type {string}
-   */
-  'language': 'EN',
-
-  /**
    * The main CSS selector used to reference the form for the component.
    * @type {string} CSS selector
    */
