@@ -170,7 +170,6 @@ export default class NavigationComponent extends Component {
 
     this.checkOutsideClick = this.checkOutsideClick.bind(this);
     this.checkMobileOverflowBehavior = this.checkMobileOverflowBehavior.bind(this);
-    this.checkRefitNav = this.checkRefitNav.bind(this);
   }
 
   static get type () {
@@ -210,16 +209,11 @@ export default class NavigationComponent extends Component {
   }
 
   bindOverflowHandlers () {
-    DOM.on(window, 'resize', this.checkRefitNav);
     DOM.on(window, 'click', this.checkOutsideClick);
   }
 
   unbindOverflowHandlers () {
-    if (this._debounceTimer) {
-      clearTimeout(this._debounceTimer);
-    }
     DOM.off(window, 'click', this.checkOutsideClick);
-    DOM.off(window, 'resize', this.checkRefitNav);
   }
 
   refitNav () {
@@ -309,14 +303,6 @@ export default class NavigationComponent extends Component {
     }
 
     this._checkMobileOverflowBehaviorTimer = setTimeout(this.setState.bind(this), RESIZE_DEBOUNCE);
-  }
-
-  checkRefitNav () {
-    if (this._debounceTimer) {
-      clearTimeout(this._debounceTimer);
-    }
-
-    this._debounceTimer = setTimeout(this.refitNav.bind(this), RESIZE_DEBOUNCE);
   }
 
   /**

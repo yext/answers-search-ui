@@ -792,7 +792,7 @@ Tab configurations should be provided in initial configuration.
 ```js
 ANSWERS.addComponent('Navigation', {
   container: '.navigation-container',
-  mobileOverflowBehavior: 'COLLAPSE'     // optional, options which are COLLAPSE, INNERSCROLL to control if navigation shows scroll bar or dropdown for mobile
+  mobileOverflowBehavior: 'COLLAPSE'     // optional, controls if navigation shows a scroll bar or dropdown for mobile. Options are COLLAPSE and INNERSCROLL
   ariaLabel: 'Search Page Navigation'    // optional, the aria-label to set on the navigation
   overflowLabel: 'More',    // optional, the label to display on the dropdown menu button when it overflows
   overflowIcon: null        // optional, show this icon on the dropdown button instead when it overflows
