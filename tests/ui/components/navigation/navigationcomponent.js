@@ -1,5 +1,7 @@
 import DOM from '../../../../src/ui/dom/dom';
 import NavigationComponent, { Tab } from '../../../../src/ui/components/navigation/navigationcomponent';
+import NavigationConfig from '../../../../src/core/models/navigationconfig';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 // The DOM doesn't exist within components in the JEST environment,
 // so we have to provide it to our DOM API properly.
@@ -64,12 +66,14 @@ describe('navigation component configuration', () => {
   it('multi tab configuration', () => {
     const tab1Config = {
       label: 'This is my label',
-      url: '/tab1/'
+      url: '/tab1/',
+      configId: null
     };
 
     const tab2Config = {
       label: 'This this is my second label',
-      url: '/tab2/'
+      url: '/tab2/',
+      configId: null
     };
 
     const expected = {
@@ -93,6 +97,20 @@ describe('navigation component configuration', () => {
     expect(tab).toMatchObject(expected);
   });
 
+  const mockedCore = (tabsConfig) => {
+    const navigationConfig = new NavigationConfig({
+      tabs: tabsConfig
+    });
+    return {
+      globalStorage: {
+        getState: (storageKey) => {
+          expect(storageKey).toEqual(StorageKeys.NAVIGATION_CONFIG);
+          return navigationConfig;
+        }
+      }
+    };
+  };
+
   it('component supports default tab ordering from config', () => {
     const tabConfig = [
       {
@@ -110,8 +128,9 @@ describe('navigation component configuration', () => {
 
     // Finally construct our component
     let navComponent = new NavigationComponent({
-      container: '.test-component',
-      tabs: tabConfig
+      container: '.test-component'
+    }, {
+      core: mockedCore(tabConfig)
     });
 
     const defaultOrder = navComponent.getDefaultTabOrder(tabConfig);
@@ -134,8 +153,9 @@ describe('navigation component configuration', () => {
 
     // Finally construct our component
     let navComponent = new NavigationComponent({
-      container: '.test-component',
-      tabs: tabConfig
+      container: '.test-component'
+    }, {
+      core: mockedCore(tabConfig)
     });
 
     let params = new URLSearchParams('tabOrder=tab2,tab1');
@@ -159,8 +179,9 @@ describe('navigation component configuration', () => {
 
     // Finally construct our component
     let navComponent = new NavigationComponent({
-      container: '.test-component',
-      tabs: tabConfig
+      container: '.test-component'
+    }, {
+      core: mockedCore(tabConfig)
     });
 
     const tabOrder1 = ['tab1', 'tab2'];
@@ -181,8 +202,9 @@ describe('navigation component configuration', () => {
 
     // Finally construct our component
     let navComponent = new NavigationComponent({
-      container: '.test-component',
-      tabs: tabConfig
+      container: '.test-component'
+    }, {
+      core: mockedCore(tabConfig)
     });
 
     const params = new URLSearchParams('query=yes');
@@ -201,8 +223,9 @@ describe('navigation component configuration', () => {
 
     // Finally construct our component
     let navComponent = new NavigationComponent({
-      container: '.test-component',
-      tabs: tabConfig
+      container: '.test-component'
+    }, {
+      core: mockedCore(tabConfig)
     });
 
     const url = navComponent.generateTabUrl(tabConfig[0].url);
