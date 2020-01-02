@@ -37,8 +37,8 @@ window.initAnswers = async function initAnswers () {
     experienceKey,
     businessId,
     search: searchConfig,
-    sessionTrackingEnabled: sessionTrackingEnabled,
-    locale: locale,
+    sessionTrackingEnabled,
+    locale,
     onReady: function () {
       ANSWERS.addComponent('Navigation', {
         container: '.navigation-container',
