@@ -1,7 +1,12 @@
 
 <section class="yxt-QuestionSubmission">
 
-  <div class="yxt-QuestionSubmission-titleBar">
+  <button
+    class="yxt-QuestionSubmission-titleBar js-content-visibility-toggle"
+    tabindex="0"
+    aria-label="expand question form"
+    aria-controls="yxt-QuestionSubmission-form-{{name}}"
+    aria-expanded="{{#if questionExpanded}}true{{else}}false{{/if}}">
     <div class="yxt-QuestionSubmission-left">
       <div class="yxt-QuestionSubmission-titleIconWrapper"
           data-component="IconComponent"
@@ -16,17 +21,15 @@
     </div>
     <div class="yxt-QuestionSubmission-right">
       <div class="yxt-QuestionSubmission-titleDescription">
-        {{_config.sectionDescription}}
+        {{_config.teaser}}
       </div>
-      <button class="{{#if questionExpanded}}yxt-QuestionSubmission-toggle--expanded{{else}}yxt-QuestionSubmission-toggle--collapsed{{/if}} js-content-visibility-toggle"
+      <span class="yxt-QuestionSubmission-toggle{{#if questionExpanded}}--expanded{{else}}--collapsed{{/if}} yxt-QuestionSubmission-toggle"
         data-component="IconComponent"
         data-opts='{ "iconName": "chevron" }'
         data-prop="icon"
-        aria-controls="yxt-QuestionSubmission-form-{{name}}"
-        aria-expanded="{{#if questionExpanded}}true{{else}}false{{/if}}"
-      ></button>
+      ></span>
     </div>
-  </div>
+  </button>
 
   {{#if questionExpanded}}
 
@@ -37,80 +40,88 @@
         </div>
       </div>
     {{else}}
-      <form id="yxt-QuestionSubmission-form-{{name}}" class="yxt-QuestionSubmission-form" novalidate>
+      <form id="yxt-QuestionSubmission-form-{{name}}" class="yxt-QuestionSubmission-form" novalidate autocomplete="off">
         {{#if errors.network}}
           <div class="yxt-QuestionSubmission-formRow">
             <div class="yxt-QuestionSubmission-formError" role="alert">
               {{errors.network}}
             </div>
           </div>
-        {{/if}}
-        <div class="yxt-QuestionSubmission-formRow">
-          {{_config.feedbackFormInfoText}}
-        </div>
-
-        <div class="yxt-QuestionSubmission-formRow">
-          <div class="yxt-QuestionSubmission-formField">
-            <label>
-              <span class="yxt-QuestionSubmission-formLabel">
-                {{_config.questionLabel}}
-              </span>
-              <textarea class="yxt-QuestionSubmission-formInput js-question-field js-question-text{{#if errors.questionTextError}} yxt-required-error{{/if}}"
-                        name="questionText"
-                        placeholder="{{_config.questionInputPlaceholder}}"
-                        required>{{questionText}}</textarea>
-            </label>
-          </div>
-        </div>
-
-        <div class="yxt-QuestionSubmission-formRow">
-          <div class="yxt-QuestionSubmission-formField">
-            <label>
-              <span class="yxt-QuestionSubmission-formLabel">
-                {{_config.nameLabel}}
-              </span>
-              <input class="yxt-QuestionSubmission-formInput js-question-field{{#if errors.nameError}} yxt-required-error{{/if}}"
-                name="name"
-                type="text"
-                placeholder="{{_config.requiredInputPlaceholder}}"
-                value="{{name}}"
-                required>
-            </label>
+        {{else}}
+          <div class="yxt-QuestionSubmission-formRow">
+            {{_config.description}}
           </div>
 
-          <div class="yxt-QuestionSubmission-formField">
-            <label>
-              <span class="yxt-QuestionSubmission-formLabel">
-                {{_config.emailLabel}}
-              </span>
-              <input class="yxt-QuestionSubmission-formInput js-question-field{{#if errors.emailError}} yxt-required-error{{/if}}"
-                  name="email"
-                  type="email"
+          <div class="yxt-QuestionSubmission-formRow">
+            <div class="yxt-QuestionSubmission-formField">
+              <label>
+                <span class="yxt-QuestionSubmission-formLabel">
+                  {{_config.questionLabel}}
+                </span>
+                <textarea class="yxt-QuestionSubmission-formInput js-question-field js-question-text{{#if errors.questionTextError}} yxt-required-error{{/if}}"
+                          name="questionText"
+                          placeholder="{{_config.questionInputPlaceholder}}"
+                          required>{{questionText}}</textarea>
+              </label>
+            </div>
+          </div>
+
+          <div class="yxt-QuestionSubmission-formRow">
+            <div class="yxt-QuestionSubmission-formField">
+              <label>
+                <span class="yxt-QuestionSubmission-formLabel">
+                  {{_config.nameLabel}}
+                </span>
+                <input class="yxt-QuestionSubmission-formInput js-question-field{{#if errors.nameError}} yxt-required-error{{/if}}"
+                  name="name"
+                  type="text"
                   placeholder="{{_config.requiredInputPlaceholder}}"
-                  value="{{email}}"
+                  value="{{name}}"
                   required>
-            </label>
-            <strong class='yxt-QuestionSubmission-inputError'>{{#if errors.emailErrorText}}{{errors.emailErrorText}}{{/if}}</strong>
-          </div>
-        </div>
+              </label>
+            </div>
 
-        <div class="yxt-QuestionSubmission-acknowledgementBar">
-          <div class="yxt-QuestionSubmission-acknowledgement">
-            <span class="yxt-QuestionSubmission-privacyPolicy">
-              <label class="yxt-QuestionSubmission-privacyPolicyText">
+            <div class="yxt-QuestionSubmission-formField">
+              <label>
+                <span class="yxt-QuestionSubmission-formLabel">
+                  {{_config.emailLabel}}
+                </span>
+                <input class="yxt-QuestionSubmission-formInput js-question-field{{#if errors.emailError}} yxt-required-error{{/if}}"
+                    name="email"
+                    type="email"
+                    placeholder="{{_config.requiredInputPlaceholder}}"
+                    value="{{email}}"
+                    required>
+              </label>
+              <strong class='yxt-QuestionSubmission-inputError'>{{#if errors.emailErrorText}}{{errors.emailErrorText}}{{/if}}</strong>
+            </div>
+          </div>
+
+          <div class="yxt-QuestionSubmission-acknowledgementBar">
+            <div class="yxt-QuestionSubmission-acknowledgement">
+              <span class="yxt-QuestionSubmission-privacyPolicy">
                 <input type="checkbox"
-                    id="yxt-QuestionSubmission-ackCheckboxInput"
+                    id="yxt-QuestionSubmission-ackCheckboxInput-{{name}}"
                     name="privacyPolicy"
                     class="yxt-QuestionSubmission-ackCheckboxInput js-question-field{{#if errors.privacyPolicyError}} yxt-required-error{{/if}}"
-                    required>
-                  {{_config.privacyPolicyText}}
-                  <a class="yxt-QuestionSubmission-privacyPolicyUrl" href="{{_config.privacyPolicyUrl}}" target="_blank">{{_config.privacyPolicyUrlLabel}}</a>
-              </label>
-              <strong class='yxt-QuestionSubmission-inputError'>{{#if errors.privacyPolicyErrorText}}{{errors.privacyPolicyErrorText}}{{/if}}</strong>
-            </span>
+                    required
+                >
+                <span>
+                  <label class="yxt-QuestionSubmission-privacyPolicyText" for="yxt-QuestionSubmission-ackCheckboxInput-{{name}}">
+                    {{_config.privacyPolicyText}}
+                    {{#if _config.privacyPolicyUrl}}
+                      <a class="yxt-QuestionSubmission-privacyPolicyUrl" href="{{_config.privacyPolicyUrl}}" target="_blank">
+                        {{_config.privacyPolicyUrlLabel}}
+                      </a>
+                    {{/if}}
+                  </label>
+                  <strong class='yxt-QuestionSubmission-inputError'>{{#if errors.privacyPolicyErrorText}}{{errors.privacyPolicyErrorText}}{{/if}}</strong>
+                </span>
+              </span>
+            </div>
+            <button class="yxt-QuestionSubmission-submitButton" type="submit" data-eventtype="QUESTION_SUBMIT">{{_config.buttonLabel}}</button>
           </div>
-          <button class="yxt-QuestionSubmission-submitButton" type="submit">{{_config.buttonLabel}}</button>
-        </div>
+        {{/if}}
       </form>
 
     {{/if}}
