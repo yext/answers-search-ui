@@ -40,7 +40,7 @@
         </div>
       </div>
     {{else}}
-      <form id="yxt-QuestionSubmission-form-{{name}}" class="yxt-QuestionSubmission-form" novalidate autocomplete="false">
+      <form id="yxt-QuestionSubmission-form-{{name}}" class="yxt-QuestionSubmission-form" novalidate autocomplete="off">
         {{#if errors.network}}
           <div class="yxt-QuestionSubmission-formRow">
             <div class="yxt-QuestionSubmission-formError" role="alert">
@@ -77,7 +77,6 @@
                   type="text"
                   placeholder="{{_config.requiredInputPlaceholder}}"
                   value="{{name}}"
-                  autocomplete="new-password"
                   required>
               </label>
             </div>
@@ -92,7 +91,6 @@
                     type="email"
                     placeholder="{{_config.requiredInputPlaceholder}}"
                     value="{{email}}"
-                    autocomplete="new-password"
                     required>
               </label>
               <strong class='yxt-QuestionSubmission-inputError'>{{#if errors.emailErrorText}}{{errors.emailErrorText}}{{/if}}</strong>
