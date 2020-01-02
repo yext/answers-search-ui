@@ -140,6 +140,7 @@ class Answers {
     });
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, config.search);
+    globalStorage.set(StorageKeys.LOCALE, config.locale);
     let sessionTrackingEnabled = true;
     if (typeof config.sessionTrackingEnabled === 'boolean') {
       sessionTrackingEnabled = config.sessionTrackingEnabled;

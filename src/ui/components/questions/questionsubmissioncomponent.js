@@ -20,12 +20,6 @@ const DEFAULT_CONFIG = {
   'entityId': null,
 
   /**
-   * The default language of the question
-   * @type {string}
-   */
-  'language': 'EN',
-
-  /**
    * The main CSS selector used to reference the form for the component.
    * @type {string} CSS selector
    */
@@ -71,7 +65,7 @@ const DEFAULT_CONFIG = {
    * The description to display in the title bar
    * @type {string}
    */
-  'sectionDescription': 'Can’t find what you are looking for? Provide your feedback below.',
+  'teaser': 'Can’t find what you\'re looking for? Ask a question below.',
 
   /**
    * The name of the icon to use in the title bar
@@ -83,7 +77,7 @@ const DEFAULT_CONFIG = {
    * The text to display in the feedback form ahead of the Question input
    * @type {string}
    */
-  'feedbackFormInfoText': 'Enter your question and contact information, and we\'ll get back to you with a response shortly.',
+  'description': 'Enter your question and contact information, and we\'ll get back to you with a response shortly.',
 
   /**
    * The placeholder text for required inputs
@@ -101,13 +95,13 @@ const DEFAULT_CONFIG = {
    * The confirmation text to display after successfully submitting feedback
    * @type {string}
    */
-  'questionSubmissionConfirmationText': 'Thank you for your feedback!',
+  'questionSubmissionConfirmationText': 'Thank you for your question!',
 
   /**
    * The default privacy policy url label
    * @type {string}
   */
-  'privacyPolicyUrlLabel': 'Learn more here',
+  'privacyPolicyUrlLabel': 'Learn more here.',
 
   /**
    * The default privacy policy url
@@ -119,13 +113,19 @@ const DEFAULT_CONFIG = {
    * The default privacy policy error text, shown when the user does not agree
    * @type {string}
    */
-  'privacyPolicyErrorText': '* You must agree to the privacy policy to submit feedback.',
+  'privacyPolicyErrorText': '* You must agree to the privacy policy to submit a question.',
 
   /**
    * The default email format error text, shown when the user submits an invalid email
    * @type {string}
    */
-  'emailFormatErrorText': '* Please enter a valid email address'
+  'emailFormatErrorText': '* Please enter a valid email address.',
+
+  /**
+   * Whether or not this component is expanded by default.
+   * @type {boolean}
+   */
+  'expanded': true
 };
 
 /**
@@ -144,11 +144,10 @@ export default class QuestionSubmissionComponent extends Component {
     this.moduleId = StorageKeys.QUESTION_SUBMISSION;
 
     /**
-     * verticalKey is used for analytics
+     * Reference to the locale as set in the global config
      * @type {string}
-     * @private
      */
-    this._verticalKey = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    this.locale = this.core.globalStorage.getState(StorageKeys.LOCALE);
 
     /**
      * NOTE(billy) if this is a pattern we want to follow for configuration
@@ -250,7 +249,7 @@ export default class QuestionSubmissionComponent extends Component {
 
       this.core.submitQuestion({
         'entityId': this._config.entityId,
-        'questionLanguage': this._config.language,
+        'questionLanguage': this.locale,
         'site': 'FIRSTPARTY',
         'name': formData.name,
         'email': formData.email,
@@ -275,8 +274,12 @@ export default class QuestionSubmissionComponent extends Component {
   bindFormToggle (triggerEl) {
     DOM.on(triggerEl, 'click', (e) => {
       const formData = this.getState();
-      const expandState = this.getState('questionExpanded');
-      this.setState(new QuestionSubmission({ ...formData, 'expanded': !expandState }));
+      this.setState(
+        new QuestionSubmission({
+          ...formData,
+          'expanded': !formData.questionExpanded,
+          'submitted': formData.questionSubmitted },
+        formData.errors));
     });
   }
 
@@ -314,6 +317,10 @@ export default class QuestionSubmissionComponent extends Component {
     const fields = DOM.queryAll(formEl, '.js-question-field');
     for (let i = 0; i < fields.length; i++) {
       if (!fields[i].checkValidity()) {
+        if (i === 0) {
+          // set focus state on first error
+          fields[i].focus();
+        }
         switch (fields[i].name) {
           case 'email':
             errors['emailError'] = true;
