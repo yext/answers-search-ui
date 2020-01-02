@@ -1,33 +1,29 @@
-<nav class="yxt-Nav-container js-yxt-navContainer {{#if static}} yxt-Nav-static{{/if}}">
-  <div class="yxt-Nav-expanded">
+<nav class="yxt-Nav-container js-yxt-navContainer {{#unless showCollapse}} yxt-Nav-static{{/unless}}">
+  <ul class="yxt-Nav-expanded" aria-label="{{ariaLabel}}">
     {{#each tabs}}
-      <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
-        href="{{url}}"
-        data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
-        data-eventoptions='{"verticalConfigId": "{{configId}}"}'
-        role="option"
-        {{#if isActive}}aria-selected="true"{{/if}}
-      >
-        {{label}}
-      </a>
+      <li>
+        <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
+          href="{{url}}"
+          data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
+          data-eventoptions='{"verticalConfigId": "{{configId}}"}'
+        >
+          {{label}}
+        </a>
+      </li>
     {{/each}}
-  </div>
-  {{#unless static}}
+  </ul>
+  {{#if showCollapse}}
     <div class="yxt-Nav-moreContainer">
-      <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore"
-        aria-haspopup="listbox"
-        aria-labelledby="yxt-Nav-moreButton"
-      >
+      <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore">
         <span class="yxt-Nav-moreIcon"
         data-component="IconComponent"
-        data-opts='{"iconName": "{{dropdownIcon}}"}'
+        data-opts='{"iconName": "{{overflowIcon}}"}'
         data-prop="icon"></span>
-        {{dropdownLabel}}
+        {{overflowLabel}}
       </button>
-      <div class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"
-        role="listbox"
+      <ul class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"
         aria-labelledby="yxt-Nav-moreButton"
-      ></div>
+      ></ul>
     </div>
-  {{/unless}}
+  {{/if}}
 </nav>
