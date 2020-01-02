@@ -144,6 +144,12 @@ export default class QuestionSubmissionComponent extends Component {
     this.moduleId = StorageKeys.QUESTION_SUBMISSION;
 
     /**
+     * Reference to the locale as set in the global config
+     * @type {string}
+     */
+    this.locale = this.core.globalStorage.getState(StorageKeys.LOCALE);
+
+    /**
      * NOTE(billy) if this is a pattern we want to follow for configuration
      * we should bake it into the core class.
      */
@@ -240,7 +246,7 @@ export default class QuestionSubmissionComponent extends Component {
 
       this.core.submitQuestion({
         'entityId': this._config.entityId,
-        'questionLanguage': this._config.language,
+        'questionLanguage': this.locale,
         'site': 'FIRSTPARTY',
         'name': formData.name,
         'email': formData.email,
