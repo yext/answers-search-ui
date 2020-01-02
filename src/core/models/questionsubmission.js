@@ -47,6 +47,11 @@ export default class QuestionSubmission {
      */
     this.errors = errors || null;
 
+    /**
+     * Whether the form has been submitted or not. Defaults to false.
+     */
+    this.questionSubmitted = question.submitted || false;
+
     Object.freeze(this);
   }
 
