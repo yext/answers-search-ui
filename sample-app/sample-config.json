@@ -4,6 +4,7 @@
   "mapProvider": "mapbox",
   "businessId": "919871",
   "sessionTrackingEnabled": true,
+  "locale": "en",
   "verticals": {
     "leadership": {
       "search": {
