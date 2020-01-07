@@ -13,11 +13,10 @@
   $searchbar-text-font-weight: $font-weight-normal !default;
 
   $searchbar-button-background-color-base: white !default;
-  $searchbar-button-background-color-hover: $searchbar-text-color !default;
+  $searchbar-button-background-color-hover: #e9e9e9 !default;
   $searchbar-button-background-color-active: $searchbar-button-background-color-base !default;
 
   $searchbar-button-text-color-base: $color-text-primary !default;
-  $searchbar-button-text-color-hover: white !default;
   $searchbar-button-text-color-active: $searchbar-button-text-color-base !default;
 
   width: 100%;
@@ -100,7 +99,6 @@
     &:focus
     {
       background-color: $searchbar-button-background-color-hover;
-      color: $searchbar-button-text-color-hover;
     }
   }
 
