@@ -81,8 +81,15 @@
     }
   }
 
+  &-clear
+  {
+    padding-left: $base-spacing / 2;
+    padding-right: $base-spacing / 2;
+  }
+
   &-button
   {
+    padding-left: $base-spacing;
     padding-right: $base-spacing;
   }
 
@@ -91,7 +98,6 @@
   {
     display: flex;
     font: inherit;
-    padding-left: $base-spacing;
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
     background-color: $searchbar-button-background-color-base;

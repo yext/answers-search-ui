@@ -164,6 +164,8 @@ export default class AutoCompleteComponent extends Component {
       throw new Error('Could not initialize AutoComplete. Can not find {HTMLElement} `', this._inputEl, '`.');
     }
 
+    // TODO (tmeyer): Properly implement autoFocus behavior for AutoComplete.
+
     // Disable the native autocomplete, autocorrect & spellcheck
     DOM.attributes(queryInput, {
       autocomplete: 'off',
@@ -193,12 +195,6 @@ export default class AutoCompleteComponent extends Component {
       this.handleNavigateResults(e.keyCode, e);
       this.handleSubmitResult(e.keyCode, queryInput.value, e);
     });
-
-    if (this._autoFocus) {
-      DOM.once(queryInput, 'click', () => {
-        this.autoComplete(queryInput.value);
-      });
-    }
 
     // Allow the user to select a result with the mouse
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
