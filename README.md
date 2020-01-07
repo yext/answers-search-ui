@@ -4,7 +4,7 @@ Answers Javascript API Library.
 Outline:
 1. [Install / Setup](#install-and-setup)
    - [Configuration Options](#configuration-options)
-   - [Search Configuration Options](#search-configuration)
+   - [Navigation Configuration](#navigation-configuration)
    - [Template Helpers](#template-helpers)
 2. [Component Usage](#component-usage)
    - [Base Component Configuration](#base-component-configuration)
@@ -73,6 +73,28 @@ Below is a list of configuration options that can be used during initialization.
 | experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
 | debug | boolean | Prints full Answers error objects when set to `true` | optional |
 | sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
+| navigation | object | Provide navigation configuration including tab configurations | optional |
+
+## Navigation Configuration
+Below is a list of configuration options related to navigation, used in the [base configuration](#configuration-options) above.
+
+```js
+navigation: {
+  tabs: [
+    {
+      label: 'Home',         // The label used for the navigation element
+      url: './index.html',   // The link for the navigation element
+      isFirst: true,         // optional, will always show this item first
+      isActive: true         // optional, will add a special class to the item
+    },
+    {
+      configId: 'locations'  // optional, the vertical search config id
+      label: 'Location'      // The label used for the navigation element
+      url: 'locations.html'  // The link for the navigation element
+    }
+  ]
+}
+```
 
 ## Search Configuration
 Below is a list of configuration options related to search, used in the [base configuration](#configuration-options) above.
@@ -786,37 +808,23 @@ ANSWERS.addComponent('', {
 ## Navigation Component
 
 The Navigation Component adds a dynamic experience to your pages navigation experience.
+
 When using multiple vertical searches in a universal search, the navigation ordering will be automatically updated based on the search results. By default, tabs that do not fit in the container will go inside a dropdown menu.
+
+Tab configurations should be provided in initial configuration.
 
 
 ```html
-<nav class="navigation-container"></nav>
+<div class="navigation-container"></nav>
 ```
 
 ```js
 ANSWERS.addComponent('Navigation', {
   container: '.navigation-container',
-  dropdownLabel: 'More',     // The label to display on the dropdown menu button
-  dropdownIcon: null,        // If provided, show this icon on the dropdown button instead
-  static: false,             // If true, shows all tabs in a horizontally scrolling container
-  tabs: [
-    {
-      label: 'Home',         // The label used for the navigation element
-      url: './index.html',   // The link for the navigation element
-      isFirst: true,         // optional, will always show this item first
-      isActive: true         // optional, will add a special class to the item
-    },
-    {
-      configId: 'locations'  // optional, the vertical search config id
-      label: 'Location'      // The label used for the navigation element
-      url: 'locations.html'  // The link for the navigation element
-    },
-    {
-      configId: 'employees'  // optional, the vertical search config id
-      label: 'Employees'     // The label used for the navigation element
-      url: 'employees.html'  // The link for the navigation element
-    }
-  ]
+  mobileOverflowBehavior: 'COLLAPSE'     // optional, controls if navigation shows a scroll bar or dropdown for mobile. Options are COLLAPSE and INNERSCROLL
+  ariaLabel: 'Search Page Navigation'    // optional, the aria-label to set on the navigation
+  overflowLabel: 'More',    // optional, the label to display on the dropdown menu button when it overflows
+  overflowIcon: null        // optional, show this icon on the dropdown button instead when it overflows
 })
 ```
 
@@ -830,16 +838,32 @@ when a search query is run.
 ```
 
 ```js
+// Unless noted, fields are optional and show default values
 ANSWERS.addComponent('QASubmission', {
-  entityId: 123,                       // The entity identifier that the question is associated with
-  container: '.question-submission-container',
-  nameLabel: 'Your Name:',             // Optional, defaults to 'Name:'
-  emailLabel: '*Email:',               // Optional, defaults to '*Email:'
-  questionLabel: 'Ask us anything!:',  // Optional, defaults to 'What is your question?'
-  privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
-  buttonLabel: 'Submit',               // Optional, defaults to 'Submit:'
-  language: 'en',                      // Optional, defaults to 'EN'
-  formSelector: '.js-form'             // Optional, defaults to native form node within container
+  container: '.question-submission-container',    // Required. This is the class of the target HTML element the component will be mounted to
+  formSelector: '.js-form',                       // Defaults to native form node within container
+  nameLabel: 'Name',                              // Label for name input
+  emailLabel: 'Email',                            // Label for email input
+  questionLabel: 'Question',                      // Label for question input
+  sectionTitle: 'Ask a question',                 // Title displayed for the form
+  teaser: 'Can\'t find what you’re looking for? Ask a question below.',
+                                                  // Teaser displayed for the form, next to the title
+  description: 'Enter your question and contact information, and we\'ll get back to you with a response shortly.'
+                                                  // Description for the form
+  privacyPolicyText: 'By submitting my email address, I consent to being contacted via email at the address provided.',
+                                                  // Text before the privacy policy link
+  privacyPolicyUrlLabel: 'Learn more here.',      // Label for the privacy policy url
+  privacyPolicyUrl: 'https://mybiz.com/policy',   // Required. Defaults to ''
+  privacyPolicyErrorText: '* You must agree to the privacy policy to submit feedback.',
+                                                  // Error message displayed when the privacy policy is not selected
+  emailFormatErrorText: '* Please enter a valid email address.'
+                                                  // Error message displayed when an invalid email is not submitted
+  requiredInputPlaceholder: '(required)',         // Placeholder displayed in all required fields
+  questionSubmissionConfirmationText: 'Thank you for your question!',
+                                                  // Confirmation displayed once a question is submitted
+  buttonLabel: 'Submit',                          // Label displayed on the button to submit a question
+  entityId: 123,                                  // Required. Set this to the Entity ID of the organization entity in the Knowledge Graph
+  expanded: true                                  // Set this to whether or not the form is expanded by default when a user arrives on the page
 })
 ```
 

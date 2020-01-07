@@ -13,7 +13,8 @@ window.initAnswers = async function initAnswers () {
     mapApiKey,
     businessId,
     search,
-    sessionTrackingEnabled
+    sessionTrackingEnabled,
+    locale
   } = config;
   const verticalConfig = config.verticals[verticalKey];
   const mapConfig = {
@@ -28,6 +29,22 @@ window.initAnswers = async function initAnswers () {
     search,
     verticalConfig ? verticalConfig.search : {},
     verticalKey ? { verticalKey } : {});
+  const navigationConfig = {
+    tabs: [
+      {
+        label: 'Home',
+        url: 'index.html',
+        isFirst: true,
+        isActive: !verticalKey
+      },
+      ...Object.keys(config.verticals).map(v => ({
+        configId: v,
+        label: v,
+        url: `${v}.html`,
+        isActive: verticalKey === v
+      }))
+    ]
+  };
 
   ANSWERS.init({
     mock,
@@ -36,24 +53,12 @@ window.initAnswers = async function initAnswers () {
     experienceKey,
     businessId,
     search: searchConfig,
+    navigation: navigationConfig,
     sessionTrackingEnabled: sessionTrackingEnabled,
+    locale: locale,
     onReady: function () {
       ANSWERS.addComponent('Navigation', {
-        container: '.navigation-container',
-        tabs: [
-          {
-            label: 'Home',
-            url: 'index.html',
-            isFirst: true,
-            isActive: !verticalKey
-          },
-          ...Object.keys(config.verticals).map(v => ({
-            configId: v,
-            label: v,
-            url: `${v}.html`,
-            isActive: verticalKey === v
-          }))
-        ]
+        container: '.navigation-container'
       });
 
       ANSWERS.addComponent('SearchBar', {

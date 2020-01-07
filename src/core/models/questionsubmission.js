@@ -37,17 +37,28 @@ export default class QuestionSubmission {
     this.questionDescription = question.questionDescription || null;
 
     /**
+     * Whether the form is expanded or not. Defaults to true.
+     */
+    this.questionExpanded = typeof question.expanded !== 'boolean' || question.expanded;
+
+    /**
      * Contains any errors about the question submission
      * @type {object}
      */
     this.errors = errors || null;
+
+    /**
+     * Whether the form has been submitted or not. Defaults to false.
+     */
+    this.questionSubmitted = question.submitted || false;
 
     Object.freeze(this);
   }
 
   static submitted () {
     return {
-      questionSubmitted: true
+      questionSubmitted: true,
+      questionExpanded: true
     };
   }
 
