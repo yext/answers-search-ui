@@ -40,15 +40,8 @@
     &:hover,
     &:focus-within
     {
-      @media (min-width: $breakpoint-mobile-min) {
-        box-shadow: $searchbar-focus-shadow;
-      }
+      box-shadow: $searchbar-focus-shadow;
     }
-  }
-
-  &-title
-  {
-    @include sr-only;
   }
 
   &-form
@@ -120,6 +113,25 @@
   }
 
   &-label
+  {
+    @include sr-only;
+  }
+}
+
+.yxt-SearchBar
+{
+  &-title
+  {
+    margin-bottom: $base-spacing;
+    @media (max-width: $breakpoint-mobile-max) {
+      margin-left: $base-spacing;
+    }
+  }
+}
+
+.yxt-GeoLocationFilter
+{
+  &-title
   {
     @include sr-only;
   }
