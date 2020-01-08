@@ -56,7 +56,7 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.labelText = config.labelText || 'What are you interested in?';
+    this.labelText = config.labelText || 'Conduct a search';
 
     /**
      * The submit text is used for labeling the submit button, also provided to the template.
