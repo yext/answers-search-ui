@@ -126,6 +126,13 @@
 {
   &-title
   {
+    @include Text(
+      $size: $font-size-xlg,
+      $line-height: $line-height-md,
+      $weight: $font-weight-semibold,
+      $color: $color-text-primary,
+    );
+
     margin-bottom: $base-spacing;
     @media (max-width: $breakpoint-mobile-max) {
       margin-left: $base-spacing;
