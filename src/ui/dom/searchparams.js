@@ -90,6 +90,14 @@ export default class SearchParams {
   }
 
   /**
+   * delete removes the given query param and its associated value from the params object
+   * @param {string} name the query param key
+   */
+  delete (name) {
+    delete this._params[String(name)];
+  }
+
+  /**
    * toString returns a url with all the query params in the params object (without a ?)
    * @return {string}
    */

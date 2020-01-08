@@ -13,11 +13,10 @@
   $searchbar-text-font-weight: $font-weight-normal !default;
 
   $searchbar-button-background-color-base: white !default;
-  $searchbar-button-background-color-hover: $searchbar-text-color !default;
+  $searchbar-button-background-color-hover: #e9e9e9 !default;
   $searchbar-button-background-color-active: $searchbar-button-background-color-base !default;
 
   $searchbar-button-text-color-base: $color-text-primary !default;
-  $searchbar-button-text-color-hover: white !default;
   $searchbar-button-text-color-active: $searchbar-button-text-color-base !default;
 
   width: 100%;
@@ -40,15 +39,8 @@
     &:hover,
     &:focus-within
     {
-      @media (min-width: $breakpoint-mobile-min) {
-        box-shadow: $searchbar-focus-shadow;
-      }
+      box-shadow: $searchbar-focus-shadow;
     }
-  }
-
-  &-title
-  {
-    @include sr-only;
   }
 
   &-form
@@ -107,7 +99,6 @@
     &:focus
     {
       background-color: $searchbar-button-background-color-hover;
-      color: $searchbar-button-text-color-hover;
     }
   }
 
@@ -126,6 +117,25 @@
   }
 
   &-label
+  {
+    @include sr-only;
+  }
+}
+
+.yxt-SearchBar
+{
+  &-title
+  {
+    margin-bottom: $base-spacing;
+    @media (max-width: $breakpoint-mobile-max) {
+      margin-left: $base-spacing;
+    }
+  }
+}
+
+.yxt-GeoLocationFilter
+{
+  &-title
   {
     @include sr-only;
   }
