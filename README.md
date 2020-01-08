@@ -333,9 +333,9 @@ Each provide a different way of auto complete.
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
-  title: 'Search my Brand',                 // optional, defaults to 'Answers'
+  title: 'Search my Brand',                 // optional, title is not present by default
   query: 'query',                           // optional, the initial query string to use for the input box
-  labelText: 'What are you looking for?',   // optional, defaults to 'What are you interested in?'
+  labelText: 'What are you looking for?',   // optional, defaults to 'Conduct a search'
   submitText: 'Submit',                     // optional, used for labeling the submit button, also provided to the template
   submitIcon: 'path/to/icon',               // optional, an icon for the submit button
   promptHeader: 'Header',                   // optioanl, the query text to show as the first item for auto complete
