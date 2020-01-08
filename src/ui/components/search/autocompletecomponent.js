@@ -150,7 +150,8 @@ export default class AutoCompleteComponent extends Component {
   }
 
   isQueryInputFocused () {
-    return document.activeElement.className.includes(this._inputEl.substring(1));
+    return document.activeElement &&
+      document.activeElement.className.includes(this._inputEl.substring(1));
   }
 
   /**
