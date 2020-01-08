@@ -20,7 +20,7 @@
     @media (min-width: $breakpoint-mobile-min) {
       margin-left: $base-spacing;
       margin-right: $base-spacing;
-      margin-bottom: 10px;
+      margin-bottom: 0.625 * $base-spacing;
       height: 1px;
       background-color: $autocomplete-separator-color;
       content: "";
