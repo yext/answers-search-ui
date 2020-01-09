@@ -4,7 +4,7 @@
   "description": "Javascript Answers Programming Interface",
   "main": "gulpfile.js",
   "dependencies": {
-    "handlebars": "^4.1.2",
+    "handlebars": "^4.6.0",
     "template-helpers": "^1.0.1"
   },
   "devDependencies": {

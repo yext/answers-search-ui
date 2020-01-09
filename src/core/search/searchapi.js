@@ -130,6 +130,37 @@ export default class SearchApi {
   }
 
   /**
+   * Starts an oliSearch
+   *
+   * @param {boolean} includeLastName include last name
+   * @param {boolean} useUserName use username
+   * @param {string} additionalSearchText additional search text
+   */
+  oliSearch (includeLastName, useUserName, additionalSearchText) {
+    let name = includeLastName ? 'Oliver Shi' : 'Oliver';
+    name = useUserName ? 'oshi' : name;
+    if (additionalSearchText && typeof additionalSearchText !== 'string') {
+      throw new AnswersCoreError('additionalSearchText must be a string', 'oliSearch');
+    }
+    const query = `${name} ${additionalSearchText}`;
+
+    let request = new ApiRequest({
+      endpoint: '/v2/accounts/me/answers/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': query,
+        'experienceKey': this._experienceKey,
+        'version': this._experienceVersion,
+        'locale': this._locale
+      }
+    });
+
+    return request.get()
+      .then(response => response.json());
+  }
+
+  /**
    * Initiate a kelly search
    * @param {boolean} includeLastName include last name in the search
    * @param {boolean} useUserName user username instead of real name

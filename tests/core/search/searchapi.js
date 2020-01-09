@@ -107,4 +107,24 @@ describe('vertical searching', () => {
         expect.objectContaining({ input: 'kyu additional' }));
     });
   });
+
+  it('searches with Oliver full name and no additional text', () => {
+    const result = searchApi.oliSearch(true, false, '');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Oliver Shi' }));
+    });
+  });
+
+  it('searches with Oliver username and additional text', () => {
+    const result = searchApi.kellySearch(false, true, 'additional');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'oshi additional' }));
+    });
+  });
 });
