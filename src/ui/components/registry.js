@@ -33,6 +33,7 @@ import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
 import IconComponent from './icons/iconcomponent.js';
+import TimelineComponent from './search/timelinecomponent';
 
 const COMPONENT_CLASS_LIST = [
   // Core Component
@@ -47,6 +48,7 @@ const COMPONENT_CLASS_LIST = [
   AutoCompleteComponent,
   SpellCheckComponent,
   LocationBiasComponent,
+  TimelineComponent,
 
   // Filter Components
   FilterBoxComponent,

@@ -370,6 +370,8 @@ export default class Component {
     this.beforeRender();
     // Temporary fix for passing immutable data to transformData().
     data = this.transformData(JSON.parse(JSON.stringify(data)));
+    console.log("-------");
+    console.log(data);
 
     let html = '';
     // Use either the custom render function or the internal renderer
