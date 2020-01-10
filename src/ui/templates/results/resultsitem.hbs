@@ -31,7 +31,7 @@
                href="{{link}}"
                data-eventtype="TITLE_CLICK"
                data-eventoptions='{{eventOptions}}'
-               target="{{#if _config.target}}{{_config.target}}{{else}}_blank{{/if}}"
+               target="{{#if _config._parentOpts.target}}{{_config._parentOpts.target}}{{else}}_blank{{/if}}"
             >{{{title}}}</a>
           {{else}}
             {{title}}
