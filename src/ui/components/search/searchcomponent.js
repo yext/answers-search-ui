@@ -46,17 +46,17 @@ export default class SearchComponent extends Component {
 
     /**
      * The title used, provided to the template as a data point
-     * Optionally provided.
+     * Optionally provided. If not provided, no title will be included.
      * @type {string}
      */
-    this.title = config.title || 'Answers Universal Search';
+    this.title = config.title;
 
     /**
      * The label text is used for labeling the input box, also provided to template.
      * Optionally provided
      * @type {string}
      */
-    this.labelText = config.labelText || 'What are you interested in?';
+    this.labelText = config.labelText || 'Conduct a search';
 
     /**
      * The submit text is used for labeling the submit button, also provided to the template.
@@ -347,6 +347,9 @@ export default class SearchComponent extends Component {
       inputEl: inputSelector,
       onSubmit: () => {
         DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
+      },
+      onChange: () => {
+        DOM.trigger(DOM.query(this._container, inputSelector), 'input');
       }
     });
   }
@@ -407,6 +410,20 @@ export default class SearchComponent extends Component {
     }
   }
 
+  /**
+   * A helper method that constructs the meta information needed by the SEARCH_CLEAR_BUTTON
+   * analytics event.
+   */
+  eventOptions () {
+    const queryId = this.core.globalStorage.getState(StorageKeys.QUERY_ID);
+    const options = Object.assign(
+      {},
+      queryId && { queryId },
+      this._verticalKey && { verticalKey: this._verticalKey }
+    );
+    return JSON.stringify(options);
+  }
+
   setState (data) {
     return super.setState(Object.assign({
       title: this.title,
@@ -414,7 +431,8 @@ export default class SearchComponent extends Component {
       submitIcon: this.submitIcon,
       submitText: this.submitText,
       showClearButton: this._showClearButton,
-      query: this.query || ''
+      query: this.query || '',
+      eventOptions: this.eventOptions()
     }, data));
   }
 

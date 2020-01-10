@@ -104,6 +104,13 @@ export default class AutoCompleteComponent extends Component {
      */
     this._onSubmit = opts.onSubmit || function () {};
 
+    /**
+     * Callback invoked when keys are used to navigate through the auto complete. Note that this is
+     * not called when either the `Enter` key is pressed or the mouse is used to select an
+     * autocomplete option.
+     */
+    this._onChange = opts.onChange || function () {};
+
     this._searchParameters = opts.searchParameters || null;
   }
 
@@ -143,7 +150,8 @@ export default class AutoCompleteComponent extends Component {
   }
 
   isQueryInputFocused () {
-    return document.activeElement.className.includes(this._inputEl.substring(1));
+    return document.activeElement &&
+      document.activeElement.className.includes(this._inputEl.substring(1));
   }
 
   /**
@@ -413,6 +421,8 @@ export default class AutoCompleteComponent extends Component {
       this._originalQuery = value;
       this._onSubmit(value, filter);
       this.close();
+    } else {
+      this._onChange();
     }
   }
 }
