@@ -158,6 +158,13 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._allowEmptySearch = !!config.allowEmptySearch;
+
+    /**
+     * The name of the child AutoComplete component.
+     * @type {string}
+     * @private
+     */
+    this._autoCompleteName = `${this.name}.autocomplete`;
   }
 
   static get type () {
@@ -295,7 +302,7 @@ export default class SearchComponent extends Component {
 
     this._autocomplete = this.componentManager.create('AutoComplete', {
       parentContainer: this._container,
-      name: `${this.name}.autocomplete`,
+      name: this._autoCompleteName,
       container: '.yxt-SearchBar-autocomplete',
       barKey: this._barKey,
       autoFocus: this.autoFocus && !this.autocompleteOnLoad,
@@ -407,18 +414,23 @@ export default class SearchComponent extends Component {
 
   /**
    * A helper method that computes the intents of the provided query. If the query was entered
-   * manually into the search bar, its intents will have been stored already in globalStorage.
-   * Otherwise, a new API call will have to be issued to determine intent.
+   * manually into the search bar or selected via autocomplete, its intents will have been stored
+   * already in globalStorage. Otherwise, a new API call will have to be issued to determine
+   * intent.
    * @param {string} query The query whose intent is needed.
    * @returns {Promise} A promise containing the intents of the query.
    */
   fetchQueryIntents (query) {
     const autocompleteData =
-      this.core.globalStorage.getState(`${StorageKeys.AUTOCOMPLETE}.${this.name}.autocomplete`);
+      this.core.globalStorage.getState(`${StorageKeys.AUTOCOMPLETE}.${this._autoCompleteName}`);
     if (!autocompleteData) {
       const autocompleteRequest = this._verticalKey
-        ? this.core.queryVertical(query, this._verticalKey, this._barKey)
-        : this.core.queryUniversal(query);
+        ? this.core.autoCompleteVertical(
+          query,
+          this._autoCompleteName,
+          this._verticalKey,
+          this._barKey)
+        : this.core.autoCompleteUniversal(query, this._autoCompleteName);
       return autocompleteRequest.then(data => data.inputIntents);
     } else {
       // There are two alternatives to consider here. The user could have selected the query
@@ -428,7 +440,7 @@ export default class SearchComponent extends Component {
       const results = autocompleteData.sections.flatMap(section => section.results);
       const matchingResult = results.find(result => result.value === query);
       const queryIntents = matchingResult ? matchingResult.intents : autocompleteData.inputIntents;
-      return new Promise((resolve, reject) => resolve(queryIntents));
+      return Promise.resolve(queryIntents);
     }
   }
 
