@@ -198,14 +198,35 @@ export default class Core {
   }
 
   /**
+   * Given an input, query for a list of similar results
+   *
+   * @param {string} input the string to autocomplete
+   * @returns {Promise<AutoCompleteData>} the autocomplete results
+   */
+  queryUniversal (input) {
+    return this._autoComplete.queryUniversal(input);
+  }
+
+  /**
+   * Given an input, query for a list of similar results in the provided vertical
+   *
+   * @param {string} input the string to autocomplete
+   * @param {string} verticalKey the vertical key for the experience
+   * @param {string} barKey the bar key for the experience
+   * @returns {Promise<AutoCompleteData>} the autocomplete results
+   */
+  queryVertical (input, verticalKey, barKey) {
+    return this._autoComplete.queryVertical(input, verticalKey, barKey);
+  }
+
+  /**
    * Given an input, query for a list of similar results and set into storage
    *
    * @param {string} input     the string to autocomplete
    * @param {string} namespace the namespace to use for the storage key
    */
   autoCompleteUniversal (input, namespace) {
-    return this._autoComplete
-      .queryUniversal(input)
+    return this.queryUniversal(input)
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
@@ -221,8 +242,7 @@ export default class Core {
    * @param {string} barKey      the bar key for the experience
    */
   autoCompleteVertical (input, namespace, verticalKey, barKey) {
-    return this._autoComplete
-      .queryVertical(input, verticalKey, barKey)
+    return this.queryVertical(input, verticalKey, barKey)
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
       });
