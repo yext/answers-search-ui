@@ -61,7 +61,9 @@
   "jest": {
     "bail": 0,
     "verbose": true,
-    "setupFilesAfterEnv": ["./tests/setup/setup.js"],
+    "setupFilesAfterEnv": [
+      "./tests/setup/setup.js"
+    ],
     "testMatch": [
       "**/tests/core/**/*.js",
       "**/tests/ui/**/*.js"

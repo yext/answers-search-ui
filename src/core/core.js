@@ -208,6 +208,7 @@ export default class Core {
       .queryUniversal(input)
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        return data;
       });
   }
 
@@ -225,6 +226,7 @@ export default class Core {
       .queryVertical(input, verticalKey, barKey)
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        return data;
       });
   }
 
