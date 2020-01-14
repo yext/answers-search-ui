@@ -219,10 +219,11 @@ export default class Core {
    * @param {string} input       the string to autocomplete
    * @param {string} namespace the namespace to use for the storage key
    * @param {string} verticalKey the vertical key for the experience
+   * @param {Object} searchParameters search parameters containing fields to query for
    */
-  autoCompleteVertical (input, namespace, verticalKey) {
+  autoCompleteVertical (input, namespace, verticalKey, searchParameters) {
     return this._autoComplete
-      .queryVertical(input, verticalKey)
+      .queryVertical(input, verticalKey, searchParameters)
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;

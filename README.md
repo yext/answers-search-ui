@@ -780,15 +780,18 @@ Displays a "Use My Location" button that filters results to a radius around the 
 ```
 
 ```js
-ANSWERS.addComponent('', {
+ANSWERS.addComponent('GeoLocationFilter', {
   container: '.geolocation-filter-container',
   // Search parameters for the geolocation autocomplete
   searchParameters: {
+    // List of fields to query for
     fields: [{
-      // the field id to query for
+      // Field id to query for e.g. c_customFieldName, buildin.location
       fieldId: "builtin.location",
-      // the entity type to query
-      entityTypeId: "ce_person"
+      // Entity type api name e.g. healthcareProfessional, location, ce_person
+      entityTypeId: "ce_person",
+      // Optional, if true sections search results by search filter, default false
+      sectioned: false,
     }]
   },
   // Optional, the vertical key to use
