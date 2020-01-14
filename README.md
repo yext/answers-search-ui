@@ -340,7 +340,7 @@ ANSWERS.addComponent('SearchBar', {
   clearText: 'Clear',                       // optional, used for labeling the clear button, also provided to the template
   submitIcon: 'path/to/icon',               // optional, an icon for the submit button
   promptHeader: 'Header',                   // optioanl, the query text to show as the first item for auto complete
-  placeholderText: 'Start typing...'        // optional, no default
+  placeholderText: 'Start typing...',       // optional, no default
   autoFocus: true,                          // optional, defaults to false
   autoCompleteOnLoad: false,                // optional, when auto focus on load, optionally open the autocomplete
   searchCooldown: 2000,                     // optional, defaults to 300ms (0.3 seconds)
@@ -348,7 +348,7 @@ ANSWERS.addComponent('SearchBar', {
   clearButton: true,                        // optional, displays an "x" button to clear the current query when true
   redirectUrl: 'path/to/url',               // optional, redirect search query to url
   formSelector: 'form',                     // optional, defaults to native form node within container
-  inputEl: '.js-yext-query',                // optional, the input element used for searching and wires up the keyboard interaction
+  inputEl: '.js-yext-query'                 // optional, the input element used for searching and wires up the keyboard interaction
 })
 ```
 
@@ -373,7 +373,7 @@ based on the query.
 ANSWERS.addComponent('DirectAnswer', {
   container: '.direct-answer-container',
   formEl: '.js-directAnswer-feedback-form',         // optional, the form used for submitting the feedback
-  thumbsUpSelector: '.js-directAnswer-thumbUp'      // optional, the selector to bind ui interaction to for reporting
+  thumbsUpSelector: '.js-directAnswer-thumbUp',      // optional, the selector to bind ui interaction to for reporting
   thumbsDownSelector: '.js-directAnswer-thumbDown', // optional, the selector to bind ui interaction to for reporting
   viewDetailsText: 'View Details'                   // optional, the display text for the View Details click to action link
 })
@@ -650,7 +650,7 @@ ANSWERS.addComponent('FilterSearch', {
       // Optional, if true sections search results by search filter, default false
       sectioned: false,
     }]
-  },
+  }
 })
 ```
 

@@ -26,7 +26,7 @@ export default class MockAutoCompleteService {
   }
 
   /** @inheritdoc */
-  queryVertical (input, verticalKey, searchParameters) {
+  queryVertical (input, verticalKey) {
     return filterOptions(input, verticalOptions
       .map(opt => `${verticalKey} ${opt}`)
       .concat(universalOptions)
