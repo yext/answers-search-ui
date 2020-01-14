@@ -18,6 +18,9 @@ describe('querying and responding', () => {
   const expectedResponse = {
     response: {
       businessId: 1234,
+      input: {
+        queryIntents: []
+      },
       sections: [
         {
           label: 'Watson',
@@ -25,7 +28,8 @@ describe('querying and responding', () => {
             {
               key: 'name',
               value: 'Bret Quiqley',
-              filter: { name: { $eq: 'Bret Quiqley' } }
+              filter: { name: { $eq: 'Bret Quiqley' } },
+              queryIntents: []
             }
           ]
         }
