@@ -22,13 +22,6 @@ export default class RangeFilterComponent extends Component {
      */
     this._onChange = config.onChange || function () {};
 
-    /**
-     * If true, stores the filter to storage on each change
-     * @type {boolean}
-     * @private
-     */
-    this._storeOnChange = config.storeOnChange || false;
-
     let minVal = this.core.globalStorage.getState(`${this.name}.min`);
     if (typeof minVal === 'string') {
       try {
@@ -124,9 +117,7 @@ export default class RangeFilterComponent extends Component {
     this.setState();
 
     const filter = this._buildFilter();
-    if (this._storeOnChange) {
-      this.core.setFilter(this.name, filter);
-    }
+    this.core.setFilter(this.name, filter);
     this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
 
