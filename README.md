@@ -337,6 +337,7 @@ ANSWERS.addComponent('SearchBar', {
   query: 'query',                           // optional, the initial query string to use for the input box
   labelText: 'What are you looking for?',   // optional, defaults to 'Conduct a search'
   submitText: 'Submit',                     // optional, used for labeling the submit button, also provided to the template
+  clearText: 'Clear',                       // optional, used for labeling the clear button, also provided to the template
   submitIcon: 'path/to/icon',               // optional, an icon for the submit button
   promptHeader: 'Header',                   // optioanl, the query text to show as the first item for auto complete
   placeholderText: 'Start typing...'        // optional, no default
