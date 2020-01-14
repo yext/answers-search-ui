@@ -6,8 +6,17 @@
   $spellCheck-text-font-weight: $font-weight-normal !default;
   $spellCheck-text-color: $color-text-primary !default;
 
+  padding-top: 32px;
   padding-bottom: $base-spacing;
   display: block;
+
+  .yxt-SpellCheck-helpText {
+    font-size: $font-size-lg;
+  }
+
+  .yxt-SpellCheck-container {
+    height: 20px;
+  }
 
   @include Text(
     $size: $spellCheck-text-font-size,
@@ -17,6 +26,7 @@
 
   strong
   {
+    font-style: italic;
     font-weight: $font-weight-semibold;
   }
 
