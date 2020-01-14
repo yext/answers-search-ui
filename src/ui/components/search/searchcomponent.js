@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
+import buildSearchParameters from '../../tools/searchparamsparser';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -165,7 +166,7 @@ export default class SearchComponent extends Component {
      */
     this._autoCompleteName = `${this.name}.autocomplete`;
 
-    this._searchParameters = this._buildSearchParameters(config.searchParameters);
+    this._searchParameters = buildSearchParameters(config.searchParameters);
   }
 
   static get type () {
@@ -474,28 +475,5 @@ export default class SearchComponent extends Component {
 
   focusInputElement () {
     DOM.query(this._container, this._inputEl).focus();
-  }
-
-  _buildSearchParameters (searchParameterConfigs) {
-    let searchParameters = {
-      sectioned: false,
-      fields: []
-    };
-    if (searchParameterConfigs === undefined) {
-      return searchParameters;
-    }
-    if (searchParameterConfigs.sectioned) {
-      searchParameters.sectioned = searchParameterConfigs.sectioned;
-    }
-    searchParameters.fields = this._buildFields(searchParameterConfigs.fields);
-    return searchParameters;
-  }
-
-  _buildFields (fieldConfigs) {
-    if (fieldConfigs === undefined) {
-      return [];
-    }
-
-    return fieldConfigs.map(fc => ({ fetchEntities: false, ...fc }));
   }
 }

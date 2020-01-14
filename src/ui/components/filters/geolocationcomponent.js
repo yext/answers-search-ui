@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
+import buildSearchParameters from '../../tools/searchparamsparser';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -113,7 +114,7 @@ export default class GeoLocationComponent extends Component {
 
     this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
 
-    this.searchParameters = this._buildSearchParameters(config.searchParameters);
+    this.searchParameters = buildSearchParameters(config.searchParameters);
   }
 
   static get type () {
@@ -264,28 +265,5 @@ export default class GeoLocationComponent extends Component {
     const { latitude, longitude, accuracy } = position.coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
     return Filter.position(latitude, longitude, radius);
-  }
-
-  _buildSearchParameters (searchParameterConfigs) {
-    let searchParameters = {
-      sectioned: false,
-      fields: []
-    };
-    if (searchParameterConfigs === undefined) {
-      return searchParameters;
-    }
-    if (searchParameterConfigs.sectioned) {
-      searchParameters.sectioned = searchParameterConfigs.sectioned;
-    }
-    searchParameters.fields = this._buildFields(searchParameterConfigs.fields);
-    return searchParameters;
-  }
-
-  _buildFields (fieldConfigs) {
-    if (fieldConfigs === undefined) {
-      return [];
-    }
-
-    return fieldConfigs.map(fc => ({ fetchEntities: false, ...fc }));
   }
 }

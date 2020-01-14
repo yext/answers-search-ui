@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 import SearchParams from '../../dom/searchparams';
+import buildSearchParameters from '../../tools/searchparamsparser';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -106,7 +107,7 @@ export default class FilterSearchComponent extends Component {
       } catch (e) {}
     }
 
-    this.searchParameters = this._buildSearchParameters(config.searchParameters);
+    this.searchParameters = buildSearchParameters(config.searchParameters);
 
     this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
   }
@@ -213,28 +214,5 @@ export default class FilterSearchComponent extends Component {
       query: this.query,
       filter: this.filter
     }, data));
-  }
-
-  _buildSearchParameters (searchParameterConfigs) {
-    let searchParameters = {
-      sectioned: false,
-      fields: []
-    };
-    if (searchParameterConfigs === undefined) {
-      return searchParameters;
-    }
-    if (searchParameterConfigs.sectioned) {
-      searchParameters.sectioned = searchParameterConfigs.sectioned;
-    }
-    searchParameters.fields = this._buildFields(searchParameterConfigs.fields);
-    return searchParameters;
-  }
-
-  _buildFields (fieldConfigs) {
-    if (fieldConfigs === undefined) {
-      return [];
-    }
-
-    return fieldConfigs.map(fc => ({ fetchEntities: false, ...fc }));
   }
 }
