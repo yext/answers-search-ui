@@ -782,9 +782,18 @@ Displays a "Use My Location" button that filters results to a radius around the 
 ```js
 ANSWERS.addComponent('', {
   container: '.geolocation-filter-container',
+  // Search parameters for the geolocation autocomplete
+  searchParameters: {
+    fields: [{
+      // the field id to query for
+      fieldId: "builtin.location",
+      // the entity type to query
+      entityTypeId: "ce_person"
+    }]
+  },
   // Optional, the vertical key to use
   verticalKey: 'verticalKey',
-  // Optioanl, radius around the user, in miles, to find results, default 50
+  // Optional, radius around the user, in miles, to find results, default 50
   radius: 50,
   // Optional, the text to show when enabled
   enabledText: 'Disable My Location',
@@ -794,7 +803,7 @@ ANSWERS.addComponent('', {
   errorText: 'Unable To Use Location',
   // Optional, CSS selector of the button
   buttonSelector: '.js-yxt-GeoLocationFilter-button',
-  // OPtional, Css selector of the query input
+  // Optional, Css selector of the query input
   inputSelector: '.js-yxt-GeoLocationFilter-input',
   // Optional, if true, triggers a search on each change to a filter, default false
   searchOnChange: true,

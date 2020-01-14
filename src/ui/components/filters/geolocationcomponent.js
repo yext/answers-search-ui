@@ -112,6 +112,8 @@ export default class GeoLocationComponent extends Component {
     }
 
     this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
+
+    this.searchParameters = this._buildSearchParameters(config.searchParameters);
   }
 
   static get type () {
@@ -176,7 +178,8 @@ export default class GeoLocationComponent extends Component {
       originalQuery: this.query,
       originalFilter: this.filter,
       inputEl: inputSelector,
-      verticalKey: this._verticalKey,
+      verticalKey: this._config.verticalKey,
+      searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         this.query = query;
         this.filter = Filter.fromResponse(filter);
@@ -261,5 +264,28 @@ export default class GeoLocationComponent extends Component {
     const { latitude, longitude, accuracy } = position.coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
     return Filter.position(latitude, longitude, radius);
+  }
+
+  _buildSearchParameters (searchParameterConfigs) {
+    let searchParameters = {
+      sectioned: false,
+      fields: []
+    };
+    if (searchParameterConfigs === undefined) {
+      return searchParameters;
+    }
+    if (searchParameterConfigs.sectioned) {
+      searchParameters.sectioned = searchParameterConfigs.sectioned;
+    }
+    searchParameters.fields = this._buildFields(searchParameterConfigs.fields);
+    return searchParameters;
+  }
+
+  _buildFields (fieldConfigs) {
+    if (fieldConfigs === undefined) {
+      return [];
+    }
+
+    return fieldConfigs.map(fc => ({ fetchEntities: false, ...fc }));
   }
 }

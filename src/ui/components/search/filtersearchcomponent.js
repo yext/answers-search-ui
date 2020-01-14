@@ -18,12 +18,6 @@ export default class FilterSearchComponent extends Component {
     super(config, systemConfig);
 
     /**
-     * The input key for the vertical search configuration
-     * @type {string}
-     */
-    this._barKey = config.barKey || config.inputKey || null;
-
-    /**
      * The vertical key for vertical search configuration
      * @type {string}
      */
@@ -162,7 +156,6 @@ export default class FilterSearchComponent extends Component {
       originalFilter: this.filter,
       inputEl: inputSelector,
       verticalKey: this._verticalKey,
-      barKey: this._barKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         const params = new SearchParams(window.location.search.substring(1));
