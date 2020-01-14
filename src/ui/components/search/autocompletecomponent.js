@@ -297,8 +297,8 @@ export default class AutoCompleteComponent extends Component {
         verticalKey: this._verticalKey,
         searchParameters: this._searchParameters
       });
-    } else if (this._verticalKey || this._searchParameters) {
-      this.core.autoCompleteVertical(input, this.name, this._verticalKey, this._searchParameters);
+    } else if (this._verticalKey) {
+      this.core.autoCompleteVertical(input, this.name, this._verticalKey);
     } else {
       this.core.autoCompleteUniversal(input, this.name);
     }
