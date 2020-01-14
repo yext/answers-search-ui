@@ -20,9 +20,10 @@ export default class AutoCompleteService {
    * Autocomplete vertical search
    * @param {string} input The input to use for auto-complete
    * @param {string} verticalKey The vertical key
+   * @param {Object} searchParameters The search parameters for the query.
    * @returns {Promise<AutoCompleteData>}
    */
-  queryVertical (input, verticalKey) {}
+  queryVertical (input, verticalKey, searchParameters) {}
 
   /**
    * Autocomplete universal search

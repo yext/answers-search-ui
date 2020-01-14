@@ -158,6 +158,8 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._autoCompleteName = `${this.name}.autocomplete`;
+
+    this._searchParameters = this._buildSearchParameters(config.searchParameters);
   }
 
   static get type () {
@@ -465,5 +467,28 @@ export default class SearchComponent extends Component {
 
   focusInputElement () {
     DOM.query(this._container, this._inputEl).focus();
+  }
+
+  _buildSearchParameters (searchParameterConfigs) {
+    let searchParameters = {
+      sectioned: false,
+      fields: []
+    };
+    if (searchParameterConfigs === undefined) {
+      return searchParameters;
+    }
+    if (searchParameterConfigs.sectioned) {
+      searchParameters.sectioned = searchParameterConfigs.sectioned;
+    }
+    searchParameters.fields = this._buildFields(searchParameterConfigs.fields);
+    return searchParameters;
+  }
+
+  _buildFields (fieldConfigs) {
+    if (fieldConfigs === undefined) {
+      return [];
+    }
+
+    return fieldConfigs.map(fc => ({ fetchEntities: false, ...fc }));
   }
 }

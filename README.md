@@ -347,7 +347,18 @@ ANSWERS.addComponent('SearchBar', {
   clearButton: true,                        // optional, displays an "x" button to clear the current query when true
   redirectUrl: 'path/to/url',               // optional, redirect search query to url
   formSelector: 'form',                     // optional, defaults to native form node within container
-  inputEl: '.js-yext-query'                 // optional, the input element used for searching and wires up the keyboard interaction
+  inputEl: '.js-yext-query',                // optional, the input element used for searching and wires up the keyboard interaction
+  searchParameters: {                       // optional, the search parameters for autocompletion 
+    // List of fields to query for
+    fields: [{
+      // Field id to query for e.g. c_customFieldName, buildin.location
+      fieldId: "builtin.location",
+      // Entity type api name e.g. healthcareProfessional, location, ce_person
+      entityTypeId: "ce_person",
+      // Optional, if true sections search results by search filter, default false
+      sectioned: false,
+    }]
+  },
 })
 ```
 
@@ -637,7 +648,19 @@ ANSWERS.addComponent('FilterSearch', {
   // Optional, auto focuses the input box if set to true, default false
   autoFocus: true,
   // Optional, redirect search query to url
-  redirectUrl: 'path/to/url'
+  redirectUrl: 'path/to/url',
+  // Optional, the search parameters for autocompletion
+  searchParameters: {
+    // List of fields to query for
+    fields: [{
+      // Field id to query for e.g. c_customFieldName, buildin.location
+      fieldId: "builtin.location",
+      // Entity type api name e.g. healthcareProfessional, location, ce_person
+      entityTypeId: "ce_person",
+      // Optional, if true sections search results by search filter, default false
+      sectioned: false,
+    }]
+  },
 })
 ```
 
@@ -782,18 +805,6 @@ Displays a "Use My Location" button that filters results to a radius around the 
 ```js
 ANSWERS.addComponent('GeoLocationFilter', {
   container: '.geolocation-filter-container',
-  // Search parameters for the geolocation autocomplete
-  searchParameters: {
-    // List of fields to query for
-    fields: [{
-      // Field id to query for e.g. c_customFieldName, buildin.location
-      fieldId: "builtin.location",
-      // Entity type api name e.g. healthcareProfessional, location, ce_person
-      entityTypeId: "ce_person",
-      // Optional, if true sections search results by search filter, default false
-      sectioned: false,
-    }]
-  },
   // Optional, the vertical key to use
   verticalKey: 'verticalKey',
   // Optional, radius around the user, in miles, to find results, default 50
@@ -813,7 +824,19 @@ ANSWERS.addComponent('GeoLocationFilter', {
   // Optional, the icon url to show in the geo button
   geoButtonIcon: 'path/to/url',
   // Optional, the text to show in the geo button
-  geoButtonText: 'Use my location'
+  geoButtonText: 'Use my location',
+  // Optional, Search parameters for the geolocation autocomplete
+  searchParameters: {
+    // List of fields to query for
+    fields: [{
+      // Field id to query for e.g. c_customFieldName, buildin.location
+      fieldId: "builtin.location",
+      // Entity type api name e.g. healthcareProfessional, location, ce_person
+      entityTypeId: "ce_person",
+      // Optional, if true sections search results by search filter, default false
+      sectioned: false,
+    }]
+  },
 });
 ```
 
