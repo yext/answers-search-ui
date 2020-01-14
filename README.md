@@ -349,17 +349,6 @@ ANSWERS.addComponent('SearchBar', {
   redirectUrl: 'path/to/url',               // optional, redirect search query to url
   formSelector: 'form',                     // optional, defaults to native form node within container
   inputEl: '.js-yext-query',                // optional, the input element used for searching and wires up the keyboard interaction
-  searchParameters: {                       // optional, the search parameters for autocompletion 
-    // List of fields to query for
-    fields: [{
-      // Field id to query for e.g. c_customFieldName, buildin.location
-      fieldId: "builtin.location",
-      // Entity type api name e.g. healthcareProfessional, location, ce_person
-      entityTypeId: "ce_person",
-      // Optional, if true sections search results by search filter, default false
-      sectioned: false,
-    }]
-  },
 })
 ```
 

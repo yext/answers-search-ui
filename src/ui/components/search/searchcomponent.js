@@ -5,7 +5,6 @@ import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
-import buildSearchParameters from '../../tools/searchparamsparser';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -165,8 +164,6 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._autoCompleteName = `${this.name}.autocomplete`;
-
-    this._searchParameters = buildSearchParameters(config.searchParameters);
   }
 
   static get type () {
@@ -306,7 +303,6 @@ export default class SearchComponent extends Component {
       parentContainer: this._container,
       name: this._autoCompleteName,
       container: '.yxt-SearchBar-autocomplete',
-      searchParameters: this._searchParameters,
       autoFocus: this.autoFocus && !this.autocompleteOnLoad,
       verticalKey: this._verticalKey,
       promptHeader: this.promptHeader,

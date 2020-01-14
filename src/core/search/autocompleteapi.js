@@ -84,7 +84,7 @@ export default class AutoCompleteApi {
   }
 
   /** @inheritdoc */
-  queryVertical (input, verticalKey, searchParameters) {
+  queryVertical (input, verticalKey) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/vertical/autocomplete',
       apiKey: this._apiKey,
@@ -94,7 +94,6 @@ export default class AutoCompleteApi {
         'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'verticalKey': verticalKey,
-        'search_parameters': JSON.stringify(searchParameters),
         'locale': this._locale
       }
     });
