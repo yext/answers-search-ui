@@ -65,6 +65,12 @@ export default class SearchComponent extends Component {
     this.submitText = config.submitText || 'Submit';
 
     /**
+     * The clear text is used for labeling the clear button, also provided to the template.
+     * @type {string}
+     */
+    this.clearText = config.clearText || 'Clear';
+
+    /**
      * The submit icon is an icon for the submit button, if provided it will be displayed and the
      * submit text will be used for screen readers.
      * @type {string|null}
@@ -464,6 +470,7 @@ export default class SearchComponent extends Component {
       labelText: this.labelText,
       submitIcon: this.submitIcon,
       submitText: this.submitText,
+      clearText: this.clearText,
       showClearButton: this._showClearButton,
       query: this.query || '',
       eventOptions: this.eventOptions()
