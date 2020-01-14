@@ -70,7 +70,6 @@ export default class AutoCompleteApi {
         'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'verticalKey': config.verticalKey,
-        'inputKey': config.barKey,
         'locale': this._locale,
         'search_parameters': JSON.stringify(config.searchParameters)
       }
@@ -78,14 +77,14 @@ export default class AutoCompleteApi {
 
     return request.get()
       .then(response => response.json())
-      .then(response => AutoCompleteDataTransformer.filter(response.response, config.barKey))
+      .then(response => AutoCompleteDataTransformer.filter(response.response))
       .catch(error => {
         throw new AnswersEndpointError('Filter search request failed', 'AutoComplete', error);
       });
   }
 
   /** @inheritdoc */
-  queryVertical (input, verticalKey, barKey) {
+  queryVertical (input, verticalKey) {
     let request = new ApiRequest({
       endpoint: '/v2/accounts/me/answers/vertical/autocomplete',
       apiKey: this._apiKey,
@@ -95,14 +94,13 @@ export default class AutoCompleteApi {
         'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'verticalKey': verticalKey,
-        'barKey': barKey,
         'locale': this._locale
       }
     });
 
     return request.get()
       .then(response => response.json())
-      .then(response => AutoCompleteDataTransformer.vertical(response.response, request._params.barKey))
+      .then(response => AutoCompleteDataTransformer.vertical(response.response))
       .catch(error => {
         throw new AnswersEndpointError('Vertical search request failed', 'AutoComplete', error);
       });

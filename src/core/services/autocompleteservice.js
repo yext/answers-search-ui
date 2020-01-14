@@ -11,7 +11,6 @@ export default class AutoCompleteService {
    * @param {string} input The input to use for auto-complete
    * @param {object} config The config to use for filters
    * @param {string} config.verticalKey The vertical key for the config
-   * @param {string} config.barKey The bar key for the config v1
    * @param {object} config.searchParameters The search parameters for the config v2
    * @returns {Promise<AutoCompleteData>}
    */
