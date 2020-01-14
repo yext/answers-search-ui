@@ -47,6 +47,13 @@ export default class DateRangeFilterComponent extends Component {
     this._onChange = config.onChange || function () {};
 
     /**
+     * If true, stores the filter to storage on each change
+     * @type {boolean}
+     * @private
+     */
+    this._storeOnChange = config.storeOnChange || true;
+
+    /**
      * If true, this filter represents an exclusive range, rather than an inclusive one
      * @type {boolean}
      * @private
@@ -126,7 +133,9 @@ export default class DateRangeFilterComponent extends Component {
     this.setState();
 
     const filter = this._buildFilter();
-    this.core.setFilter(this.name, filter);
+    if (this._storeOnChange) {
+      this.core.setFilter(this.name, filter);
+    }
     this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
