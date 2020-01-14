@@ -8,15 +8,14 @@ describe('resquesting and responding', () => {
   const input = 'test';
   const experienceKey = '123456';
   const verticalKey = 'unittests';
-  const barKey = 'testing';
-  const data = { apiKey, input, experienceKey, verticalKey, barKey };
+  const data = { apiKey, input, experienceKey, verticalKey };
 
   beforeEach(() => {
     requester = new HttpRequester();
   });
 
   describe('get', () => {
-    const expectedUrl = `${baseUrl}/answers/query?apiKey=${apiKey}&input=${input}&experienceKey=${experienceKey}&verticalKey=${verticalKey}&barKey=${barKey}`;
+    const expectedUrl = `${baseUrl}/answers/query?apiKey=${apiKey}&input=${input}&experienceKey=${experienceKey}&verticalKey=${verticalKey}`;
 
     it('creates a proper GET request with params', () => {
       global.fetch = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
@@ -167,7 +166,7 @@ describe('resquesting and responding', () => {
   });
 
   describe('encodeParams', () => {
-    const expectedUrl = `${baseUrl}/answers/query?apiKey=${apiKey}&input=${input}&experienceKey=${experienceKey}&verticalKey=${verticalKey}&barKey=${barKey}`;
+    const expectedUrl = `${baseUrl}/answers/query?apiKey=${apiKey}&input=${input}&experienceKey=${experienceKey}&verticalKey=${verticalKey}`;
 
     it('adds all params to the url', () => {
       const url = requester.encodeParams(`${baseUrl}/answers/query`, data);

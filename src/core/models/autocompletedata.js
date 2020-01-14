@@ -20,10 +20,11 @@ export default class AutoCompleteData {
     } else {
       sections = [{ results: response.results.map(r => new AutoCompleteResult(r)) }];
     }
+    let inputIntents = response.input ? response.input.queryIntents : [];
     return new AutoCompleteData({
       sections,
       queryId: response.queryId,
-      inputIntents: response.input.queryIntents });
+      inputIntents });
   }
 }
 
