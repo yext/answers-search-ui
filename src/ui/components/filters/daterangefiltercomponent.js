@@ -51,7 +51,7 @@ export default class DateRangeFilterComponent extends Component {
      * @type {boolean}
      * @private
      */
-    this._storeOnChange = config.storeOnChange || false;
+    this._storeOnChange = config.storeOnChange || true;
 
     /**
      * If true, this filter represents an exclusive range, rather than an inclusive one
