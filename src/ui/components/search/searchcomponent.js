@@ -17,13 +17,6 @@ export default class SearchComponent extends Component {
     super(config, systemConfig);
 
     /**
-     * The optional input key for the vertical search configuration
-     * If not provided, auto-complete and search will be based on universal
-     * @type {string}
-     */
-    this._barKey = config.barKey || null;
-
-    /**
      * The optional vertical key for vertical search configuration
      * If not provided, auto-complete and search will be based on universal
      * @type {string}
@@ -63,6 +56,12 @@ export default class SearchComponent extends Component {
      * @type {string}
      */
     this.submitText = config.submitText || 'Submit';
+
+    /**
+     * The clear text is used for labeling the clear button, also provided to the template.
+     * @type {string}
+     */
+    this.clearText = config.clearText || 'Clear';
 
     /**
      * The submit icon is an icon for the submit button, if provided it will be displayed and the
@@ -127,29 +126,7 @@ export default class SearchComponent extends Component {
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
       this.query = q;
       this.setState();
-      // If the Permissions API is supported in this browser, we can use location data the user
-      // has already consented to share instead of prompting again to get location data
-      if (navigator.permissions) {
-        navigator.permissions.query({ name: 'geolocation' }).then(({ state }) => {
-          if (state === 'granted') {
-            navigator.geolocation.getCurrentPosition(position => {
-              this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
-                lat: position.coords.latitude,
-                lng: position.coords.longitude,
-                radius: position.coords.accuracy
-              });
-              this.search(q);
-            });
-          } else {
-            this.search(q);
-          }
-        });
-      } else {
-        // Make sure both code paths are asynchrounous, for consistency
-        setTimeout(() => {
-          this.search(q);
-        });
-      }
+      this.debouncedSearch(q);
     });
 
     /**
@@ -180,6 +157,13 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._allowEmptySearch = !!config.allowEmptySearch;
+
+    /**
+     * The name of the child AutoComplete component.
+     * @type {string}
+     * @private
+     */
+    this._autoCompleteName = `${this.name}.autocomplete`;
   }
 
   static get type () {
@@ -198,9 +182,6 @@ export default class SearchComponent extends Component {
   onCreate () {
     if (this.query != null && !this.redirectUrl) {
       this.core.setQuery(this.query);
-    }
-    if (this._promptForLocation) {
-      this.initLocationPrompt();
     }
   }
 
@@ -266,23 +247,6 @@ export default class SearchComponent extends Component {
     });
   }
 
-  initLocationPrompt () {
-    this.core.globalStorage.on('update', StorageKeys.INTENTS, intent => {
-      if (!intent.nearMe || this.core.globalStorage.getState(StorageKeys.GEOLOCATION) !== null) {
-        return;
-      }
-
-      navigator.geolocation.getCurrentPosition(position => {
-        this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-          radius: position.coords.accuracy
-        });
-        this.search(this.query || '');
-      });
-    });
-  }
-
   /**
    * A helper method to use for wiring up searching on form submission
    * @param {string} formSelector CSS selector to bind our submit handling to
@@ -319,7 +283,7 @@ export default class SearchComponent extends Component {
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(query);
-      this.search(query);
+      this.debouncedSearch(query);
       return false;
     });
   }
@@ -337,9 +301,8 @@ export default class SearchComponent extends Component {
 
     this._autocomplete = this.componentManager.create('AutoComplete', {
       parentContainer: this._container,
-      name: `${this.name}.autocomplete`,
+      name: this._autoCompleteName,
       container: '.yxt-SearchBar-autocomplete',
-      barKey: this._barKey,
       autoFocus: this.autoFocus && !this.autocompleteOnLoad,
       verticalKey: this._verticalKey,
       promptHeader: this.promptHeader,
@@ -355,12 +318,13 @@ export default class SearchComponent extends Component {
   }
 
   /**
-   * @param {string} query
+   * Performs a debounced query using the provided string input. Specifically, a new search is not
+   * performed if we recently searched, if there's no query for universal search, or if this
+   * is a twin searchbar.
+   * @param {string} query The string to query against.
+   * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
-  search (query) {
-    // Don't search if we recently searched,
-    // if there's no query for universal search,
-    // or if this is a twin searchbar
+  debouncedSearch (query) {
     if (this._throttled ||
       (!query && !this._verticalKey) ||
       (!query && this._verticalKey && !this._allowEmptySearch) ||
@@ -371,6 +335,42 @@ export default class SearchComponent extends Component {
     this._throttled = true;
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
 
+    // If _promptForLocation is enabled, we will compute the query's intent and, from there,
+    // determine if it's necessary to prompt the user for their location information. It will
+    // be unnecessary if the query does not have near me intent or we already have their location
+    // stored.
+    if (this._promptForLocation) {
+      this.fetchQueryIntents(query)
+        .then(queryIntents => queryIntents.includes('NEAR_ME'))
+        .then(queryHasNearMeIntent => {
+          if (queryHasNearMeIntent && !this.core.globalStorage.getState(StorageKeys.GEOLOCATION)) {
+            return new Promise((resolve, reject) =>
+              navigator.geolocation.getCurrentPosition(
+                position => {
+                  this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    radius: position.coords.accuracy
+                  });
+                  resolve(this.search(query));
+                },
+                () => resolve(this.search(query)))
+            );
+          } else {
+            return this.search(query);
+          }
+        });
+    } else {
+      return this.search(query);
+    }
+  }
+
+  /**
+   * Performs a query using the provided string input.
+   * @param {string} query The string to query against.
+   * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
+   */
+  search (query) {
     if (this._verticalKey) {
       const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
       const totalFilter = allFilters.length > 1
@@ -411,6 +411,37 @@ export default class SearchComponent extends Component {
   }
 
   /**
+   * A helper method that computes the intents of the provided query. If the query was entered
+   * manually into the search bar or selected via autocomplete, its intents will have been stored
+   * already in globalStorage. Otherwise, a new API call will have to be issued to determine
+   * intent.
+   * @param {string} query The query whose intent is needed.
+   * @returns {Promise} A promise containing the intents of the query.
+   */
+  fetchQueryIntents (query) {
+    const autocompleteData =
+      this.core.globalStorage.getState(`${StorageKeys.AUTOCOMPLETE}.${this._autoCompleteName}`);
+    if (!autocompleteData) {
+      const autocompleteRequest = this._verticalKey
+        ? this.core.autoCompleteVertical(
+          query,
+          this._autoCompleteName,
+          this._verticalKey)
+        : this.core.autoCompleteUniversal(query, this._autoCompleteName);
+      return autocompleteRequest.then(data => data.inputIntents);
+    } else {
+      // There are two alternatives to consider here. The user could have selected the query
+      // as an autocomplete option or manually input it themselves. If the former, use the intents
+      // of the corresponding autocomplete option. If the latter, use the inputIntents of the
+      // autocompleteData.
+      const results = autocompleteData.sections.flatMap(section => section.results);
+      const matchingResult = results.find(result => result.value === query);
+      const queryIntents = matchingResult ? matchingResult.intents : autocompleteData.inputIntents;
+      return Promise.resolve(queryIntents);
+    }
+  }
+
+  /**
    * A helper method that constructs the meta information needed by the SEARCH_CLEAR_BUTTON
    * analytics event.
    */
@@ -430,6 +461,7 @@ export default class SearchComponent extends Component {
       labelText: this.labelText,
       submitIcon: this.submitIcon,
       submitText: this.submitText,
+      clearText: this.clearText,
       showClearButton: this._showClearButton,
       query: this.query || '',
       eventOptions: this.eventOptions()

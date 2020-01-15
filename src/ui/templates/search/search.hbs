@@ -19,7 +19,11 @@
               data-eventoptions="{{eventOptions}}"
               data-component="IconComponent"
               data-opts='{ "iconName": "close" }'
-              data-prop="icon">
+              data-prop="icon"
+      >
+        <span class="yxt-SearchBar-clearButtonText sr-only">
+          {{clearText}}
+        </span>
       </button>
       <button type="submit" class="js-yext-submit yxt-SearchBar-button">
         <div class="yxt-SearchBar-buttonImage"
