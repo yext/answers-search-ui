@@ -35,12 +35,6 @@ export default class AutoCompleteComponent extends Component {
     this.isFilterSearch = opts.isFilterSearch || false;
 
     /**
-     * The `barKey` in the vertical search to use for auto-complete
-     * @type {string}
-     */
-    this._barKey = opts.barKey || null;
-
-    /**
      * The `verticalKey` of the vertical search to use for auto-complete
      * @type {string}
      */
@@ -56,7 +50,7 @@ export default class AutoCompleteComponent extends Component {
      * A selector for the autocomplete elementes
      * @type {string}
      */
-    this._autocompleteEls = opts.autoCompleteEls || '.js-yext-autocomlete-option';
+    this._autocompleteEls = opts.autoCompleteEls || '.js-yext-autocomplete-option';
 
     /**
      * An internal reference for the data-storage to listen for updates from the server
@@ -301,11 +295,10 @@ export default class AutoCompleteComponent extends Component {
       this.core.autoCompleteFilter(input, {
         namespace: this.name,
         verticalKey: this._verticalKey,
-        barKey: this._barKey,
         searchParameters: this._searchParameters
       });
-    } else if (this._verticalKey || this._barKey) {
-      this.core.autoCompleteVertical(input, this.name, this._verticalKey, this._barKey);
+    } else if (this._verticalKey) {
+      this.core.autoCompleteVertical(input, this.name, this._verticalKey);
     } else {
       this.core.autoCompleteUniversal(input, this.name);
     }

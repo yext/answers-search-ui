@@ -71,13 +71,16 @@ export default class ErrorReporter {
         apiKey: this.apiKey,
         version: 20190301,
         params: {
-          'error': err.toJson(),
           'libVersion': LIB_VERSION,
           'experienceVersion': this.experienceVersion,
-          'experienceKey': this.experienceKey
+          'experienceKey': this.experienceKey,
+          'error': err.toJson()
         }
       });
 
+      // TODO(amullings): We should probably change this endpoint to POST,
+      // ideally using the beacon API. Stack traces will likely easily hit URL
+      // length limits.
       request.get()
         .catch(console.err);
     }
@@ -90,9 +93,13 @@ export default class ErrorReporter {
    * @param {AnswersBaseError} err The error to be printed
    */
   printError (err) {
-    console.error(err.toString());
     if (this.printVerbose) {
-      console.log({ ...err });
+      console.error(`error: ${err.errorMessage}
+code: ${err.errorCode}
+boundary: ${err.boundary}
+stack: ${err.stack}`);
+    } else {
+      console.error(err.toString());
     }
   }
 }
