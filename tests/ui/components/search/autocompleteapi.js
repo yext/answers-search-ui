@@ -10,7 +10,6 @@ describe('querying and responding', () => {
   const apiKey = 'abc123';
   const experienceKey = '123456';
   const verticalKey = 'unittests';
-  const barKey = 'testing';
   const input = 'test';
   const version = 20190101;
   const locale = 'fr_CA';
@@ -72,7 +71,6 @@ describe('querying and responding', () => {
       jsLibVersion: LIB_VERSION,
       verticalKey: verticalKey,
       input,
-      inputKey: barKey,
       v: version,
       locale: locale,
       search_parameters: JSON.stringify(searchParameters)
@@ -81,7 +79,6 @@ describe('querying and responding', () => {
     it('calls the get method with the filter url', () => {
       autocomplete.queryFilter('test', {
         verticalKey: verticalKey,
-        barKey: barKey,
         searchParameters: searchParameters
       });
       expect(mockedGet).toHaveBeenCalledTimes(1);
@@ -92,7 +89,6 @@ describe('querying and responding', () => {
       expect.assertions(3);
       return autocomplete.queryFilter('test', {
         verticalKey: verticalKey,
-        barKey: barKey,
         searchParameters: searchParameters
       }).then(d => {
         expect(d instanceof AutoCompleteData).toBeTruthy();
@@ -108,7 +104,6 @@ describe('querying and responding', () => {
       experienceKey,
       api_key: apiKey,
       jsLibVersion: LIB_VERSION,
-      barKey,
       verticalKey: verticalKey,
       input,
       v: version,
@@ -116,14 +111,14 @@ describe('querying and responding', () => {
     };
 
     it('creates a proper GET request for vertical search', () => {
-      autocomplete.queryVertical('test', verticalKey, barKey);
+      autocomplete.queryVertical('test', verticalKey);
       expect(mockedGet).toHaveBeenCalledTimes(1);
       expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData);
     });
 
     it('returns the right AutoCompleteData', () => {
       expect.assertions(3);
-      return autocomplete.queryVertical('test', verticalKey, barKey).then(d => {
+      return autocomplete.queryVertical('test', verticalKey).then(d => {
         expect(d instanceof AutoCompleteData).toBeTruthy();
         expect(d.sections).toHaveLength(1);
         expect(d.sections[0].results).toHaveLength(1);
@@ -150,7 +145,7 @@ describe('querying and responding', () => {
 
     it('returns the right AutoCompleteData', () => {
       expect.assertions(3);
-      return autocomplete.queryUniversal('test', verticalKey, barKey).then(d => {
+      return autocomplete.queryUniversal('test', verticalKey).then(d => {
         expect(d instanceof AutoCompleteData).toBeTruthy();
         expect(d.sections).toHaveLength(1);
         expect(d.sections[0].results).toHaveLength(1);

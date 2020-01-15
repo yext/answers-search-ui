@@ -17,13 +17,6 @@ export default class SearchComponent extends Component {
     super(config, systemConfig);
 
     /**
-     * The optional input key for the vertical search configuration
-     * If not provided, auto-complete and search will be based on universal
-     * @type {string}
-     */
-    this._barKey = config.barKey || null;
-
-    /**
      * The optional vertical key for vertical search configuration
      * If not provided, auto-complete and search will be based on universal
      * @type {string}
@@ -310,7 +303,6 @@ export default class SearchComponent extends Component {
       parentContainer: this._container,
       name: this._autoCompleteName,
       container: '.yxt-SearchBar-autocomplete',
-      barKey: this._barKey,
       autoFocus: this.autoFocus && !this.autocompleteOnLoad,
       verticalKey: this._verticalKey,
       promptHeader: this.promptHeader,
@@ -434,8 +426,7 @@ export default class SearchComponent extends Component {
         ? this.core.autoCompleteVertical(
           query,
           this._autoCompleteName,
-          this._verticalKey,
-          this._barKey)
+          this._verticalKey)
         : this.core.autoCompleteUniversal(query, this._autoCompleteName);
       return autocompleteRequest.then(data => data.inputIntents);
     } else {
