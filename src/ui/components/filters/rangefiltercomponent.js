@@ -79,6 +79,12 @@ export default class RangeFilterComponent extends Component {
      * @private
      */
     this._templateName = `controls/range`;
+
+    /**
+     * If true, trigger a search on each change to a filter
+     * @type {boolean}
+     */
+    this.searchOnChange = config.searchOnChange || false;
   }
 
   static get type () {

@@ -733,8 +733,6 @@ ANSWERS.addComponent('RangeFilter', {
   initialMin: 1,
   // The initial max value to show, defaults to 10
   initialMax: 5,
-  // Optional, if true, triggers a search on each change to a filter, default false
-  searchOnChange: true,
   // Optional, the callback function to call when changed
   onChange: function() {}
 });
@@ -765,8 +763,6 @@ ANSWERS.addComponent('DateRangeFilter', {
   initialMax: '2019-09-01',
   // If true, this filter represents an exclusive range, rather than an inclusive one
   isExclusive: false,
-  // Optional, if true, triggers a search on each change to a filter, default false
-  searchOnChange: true,
   // Optional, the callback function to call when changed
   onChange: function() {}
 });

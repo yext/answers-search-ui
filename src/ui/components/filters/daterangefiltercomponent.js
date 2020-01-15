@@ -79,6 +79,13 @@ export default class DateRangeFilterComponent extends Component {
       min: minDate || config.initialMin || todayString,
       max: maxDate || config.initialMax || todayString
     };
+
+    /**
+     * If true, trigger a search on each change to a filter
+     * @type {boolean}
+     * @private
+     */
+    this._searchOnChange = config.searchOnChange || false;
   }
 
   static get type () {
@@ -136,6 +143,7 @@ export default class DateRangeFilterComponent extends Component {
     if (this._storeOnChange) {
       this.core.setFilter(this.name, filter);
     }
+    if (this._search)
     this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
