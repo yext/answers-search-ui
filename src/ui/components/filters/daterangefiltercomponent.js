@@ -79,13 +79,6 @@ export default class DateRangeFilterComponent extends Component {
       min: minDate || config.initialMin || todayString,
       max: maxDate || config.initialMax || todayString
     };
-
-    /**
-     * If true, trigger a search on each change to a filter
-     * @type {boolean}
-     * @private
-     */
-    this._searchOnChange = config.searchOnChange || false;
   }
 
   static get type () {
