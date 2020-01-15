@@ -5,9 +5,24 @@
   $spellCheck-text-font-size: $font-size-md-lg !default;
   $spellCheck-text-font-weight: $font-weight-normal !default;
   $spellCheck-text-color: $color-text-primary !default;
+  $spellCheck-container-height: $module-container-height !default;
 
+  @media (max-width: $breakpoint-mobile-max)
+  {
+    margin-left: $base-spacing;
+  }
+
+  margin-top: $base-spacing*2;
   padding-bottom: $base-spacing;
   display: block;
+
+  .yxt-SpellCheck-helpText {
+    font-size: $font-size-lg;
+  }
+
+  .yxt-SpellCheck-container {
+    height: $spellCheck-container-height;
+  }
 
   @include Text(
     $size: $spellCheck-text-font-size,
@@ -17,6 +32,7 @@
 
   strong
   {
+    font-style: italic;
     font-weight: $font-weight-semibold;
   }
 
