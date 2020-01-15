@@ -219,11 +219,10 @@ export default class Core {
    * @param {string} input       the string to autocomplete
    * @param {string} namespace the namespace to use for the storage key
    * @param {string} verticalKey the vertical key for the experience
-   * @param {string} barKey      the bar key for the experience
    */
-  autoCompleteVertical (input, namespace, verticalKey, barKey) {
+  autoCompleteVertical (input, namespace, verticalKey) {
     return this._autoComplete
-      .queryVertical(input, verticalKey, barKey)
+      .queryVertical(input, verticalKey)
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
@@ -237,7 +236,6 @@ export default class Core {
    * @param {object} config  the config to serach for filters with
    * @param {string} config.namespace  the namespace to use for the storage key
    * @param {string} config.verticalKey the vertical key for the config
-   * @param {string} config.barKey  the bar key for the config v1
    * @param {object} config.searchParameters  the search parameters for the config v2
    */
   autoCompleteFilter (input, config) {
