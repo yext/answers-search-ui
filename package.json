@@ -76,7 +76,8 @@
       "it",
       "expect",
       "jest",
-      "DOMParser"
+      "DOMParser",
+      "ytag"
     ],
     "ignore": [
       "docs/"
