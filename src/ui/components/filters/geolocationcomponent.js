@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
+import buildSearchParameters from '../../tools/searchparamsparser';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -112,6 +113,8 @@ export default class GeoLocationComponent extends Component {
     }
 
     this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
+
+    this.searchParameters = buildSearchParameters(config.searchParameters);
   }
 
   static get type () {
@@ -176,7 +179,8 @@ export default class GeoLocationComponent extends Component {
       originalQuery: this.query,
       originalFilter: this.filter,
       inputEl: inputSelector,
-      verticalKey: this._verticalKey,
+      verticalKey: this._config.verticalKey,
+      searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         this.query = query;
         this.filter = Filter.fromResponse(filter);
