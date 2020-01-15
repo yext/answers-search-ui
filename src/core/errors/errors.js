@@ -12,7 +12,7 @@
  * 4XX errors: Core errors
  */
 export class AnswersBaseError extends Error {
-  constructor (errorCode, message, boundary, causedBy) {
+  constructor (errorCode, message, boundary = 'unknown', causedBy) {
     super(message);
     this.errorCode = errorCode;
     this.errorMessage = message;
@@ -23,6 +23,7 @@ export class AnswersBaseError extends Error {
       this.causedBy = causedBy instanceof AnswersBaseError
         ? causedBy
         : AnswersBaseError.from(causedBy);
+      this.stack = `${this.stack}\nCaused By: ${this.causedBy.stack}`;
     }
   }
 
