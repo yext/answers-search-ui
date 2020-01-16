@@ -23,14 +23,29 @@ export default class ResultFactory {
       if (resultsData[i].distance) {
         data.distance = resultsData[i].distance;
       }
+      /*
       const formattedData = {};
       if (Object.keys(formatters).length > 0) {
         Object.entries(data).forEach(([key, val]) => {
+          if (formatters[key] === undefined) {
+            return;
+          }
+          // verify the field formatter provided is a formatter function as expected
+          if (typeof formatters[key] !== 'function') {
+            throw new AnswersCoreError('Field formatter is not of expected type function', 'ResultFactory');
+          }
           if (formatters[key]) {
-            formattedData[key] = formatters[key](val, data, verticalId, false);
+            formattedData[key] = formatters[key]({
+              entityProfileData: data,
+              entityFieldValue: val,
+              highlightedEntityFieldValue: null,
+              verticalId: verticalId,
+              isDirectAnswer: false
+            });
           }
         });
       }
+      */
 
       switch (source) {
         case 'GOOGLE_CSE':

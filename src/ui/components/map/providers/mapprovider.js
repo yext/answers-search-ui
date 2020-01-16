@@ -119,9 +119,15 @@ export default class MapProvider {
   _collapseMarkers (markers) {
     const locationToItem = {};
     markers.forEach(m => {
-      locationToItem[`${m.item.address.line1},${m.item.address.city},${m.item.address.region}`]
-        ? locationToItem[`${m.item.address.line1},${m.item.address.city},${m.item.address.region}`].push(m)
-        : locationToItem[`${m.item.address.line1},${m.item.address.city},${m.item.address.region}`] = [m];
+      if (m.item && m.item.address) {
+        locationToItem[`${m.item.address.line1},${m.item.address.city},${m.item.address.region}`]
+          ? locationToItem[`${m.item.address.line1},${m.item.address.city},${m.item.address.region}`].push(m)
+          : locationToItem[`${m.item.address.line1},${m.item.address.city},${m.item.address.region}`] = [m];
+      } else {
+        locationToItem[`${m.latitude}${m.longitude}`]
+          ? locationToItem[`${m.latitude}${m.longitude}`].push(m)
+          : locationToItem[`${m.latitude}${m.longitude}`] = [m];
+      }
     });
 
     const collapsedMarkers = [];
