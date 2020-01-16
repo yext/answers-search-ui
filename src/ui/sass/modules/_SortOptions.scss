@@ -1,0 +1,11 @@
+/** @define SortOptions */
+.yxt-SortOptions {
+  display: flex;
+
+  &-showReset {
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton($padding: 0);
+  }
+}

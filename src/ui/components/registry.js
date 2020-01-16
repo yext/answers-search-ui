@@ -16,6 +16,7 @@ import RangeFilterComponent from './filters/rangefiltercomponent';
 import DateRangeFilterComponent from './filters/daterangefiltercomponent';
 import FacetsComponent from './filters/facetscomponent';
 import GeoLocationComponent from './filters/geolocationcomponent';
+import SortOptionsComponent from './filters/sortoptionscomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
 import ResultsComponent from './results/resultscomponent';
@@ -55,6 +56,7 @@ const COMPONENT_CLASS_LIST = [
   DateRangeFilterComponent,
   FacetsComponent,
   GeoLocationComponent,
+  SortOptionsComponent,
 
   // Results Components
   DirectAnswerComponent,

@@ -59,7 +59,7 @@ export default class SearchApi {
   }
 
   /** @inheritdoc */
-  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled, sortBys }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -84,7 +84,8 @@ export default class SearchApi {
         'locale': this._locale,
         'skipSpellCheck': skipSpellCheck,
         'queryTrigger': queryTrigger,
-        'sessionTrackingEnabled': sessionTrackingEnabled
+        'sessionTrackingEnabled': sessionTrackingEnabled,
+        'sortBys': sortBys
       }
     });
 

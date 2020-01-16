@@ -1,0 +1,43 @@
+<fieldset class="yxt-SortOptions" id="yxt-SortOptions-fieldset">
+  <legend>{{label}}</legend>
+
+  {{#if showReset}}
+    <button class="yxt-SortOptions-showReset">{{resetLabel}}</button>
+  {{/if}}
+
+  <div>
+    <input
+      type="radio"
+      name="yxt-SortOptions-radio"
+      id="yxt-SortOptions-option_-1"
+      value="-1"
+    >
+    <label for="yxt-SortOptions-option_-1">{{this.defaultSortLabel}}</label>
+  </div>
+
+
+  {{#each options}}
+  <div>
+    <input type="radio" name="yxt-SortOptions-radio" id="yxt-SortOptions-option_{{@index}}" value="{{@index}}" class="{{../optionSelector}}">
+    <label for="yxt-SortOptions-option_{{@index}}">{{this.label}}</label>
+  </div>
+  {{/each}}
+
+  {{#if showMore}}
+    <button class="yxt-SortOptions-showToggle">
+      {{#if allShown}}
+        {{showLessLabel}}
+        <span class="yxt-SortOptions-collapseUp"
+          data-component="IconComponent"
+          data-opts='{ "iconName": "chevron" }'></span>
+      {{else}}
+        {{showMoreLabel}}
+        <span class="yxt-SortOptions-collapseDown"
+          data-component="IconComponent"
+          data-opts='{ "iconName": "chevron" }'></span>
+      {{/if}}
+    </button>
+  {{/if}}
+</fieldset>
+
+
