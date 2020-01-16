@@ -19,6 +19,7 @@ export default class SearchService {
    * @param {string} query.skipSpellCheck The boolean as string to indicate if it should skip spell checking
    * @param {string} query.queryTrigger The source that triggers query such as suggest
    * @param {boolean} query.sessionTrackingEnabled Indicates if session tracking is on
+   * @param {string} query.sortBys stringified array of options to sort by
    * @returns {Promise<Object>} The backend response
    */
   verticalSearch (verticalKey, query) {}

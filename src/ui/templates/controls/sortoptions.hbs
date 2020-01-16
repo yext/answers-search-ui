@@ -1,0 +1,11 @@
+<fieldset class="yxt-SortOptions" id="{{fieldSetId}}">
+  <legend>{{label}}</legend>
+  <input type="radio" name="yxt-SortOptions-radio" id="{{this.defaultSortLabel}}_-1" value="-1" checked>
+  <label for="{{this.defaultSortLabel}}_-1">{{this.defaultSortLabel}}</label>
+  {{#each options}}
+    <input type="radio" name="yxt-SortOptions-radio" id="{{this.label}}_{{@index}}" value="{{@index}}">
+    <label for="{{this.label}}_{{@index}}">{{this.label}}</label>
+  {{/each}}
+</fieldset>
+
+

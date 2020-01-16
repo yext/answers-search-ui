@@ -119,7 +119,8 @@ export default class Core {
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
+        sortBys: JSON.stringify(this.globalStorage.getState(StorageKeys.SORT_BY) || undefined)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -265,6 +266,14 @@ export default class Core {
           StorageKeys.QUESTION_SUBMISSION,
           QuestionSubmission.submitted());
       });
+  }
+
+  /**
+   * Stores the given sortBys into storage, to be used for the next search
+   * @param {Array<Object>} sortBys
+   */
+  setSortBys (sortBys) {
+    this.globalStorage.set(StorageKeys.SORT_BY, sortBys);
   }
 
   /**
