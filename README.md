@@ -949,3 +949,9 @@ By default, Answers does not perform conversion tracking for analytics. To opt-i
 ANSWERS.init({ ... });
 agreementButton.onclick = function() { ANSWERS.setConversionsOptIn(true); };
 ```
+
+You must also add the following to your HTML:
+
+```html
+<script src="https://assets.sitescdn.net/ytag/ytag.min.js"></script>
+```

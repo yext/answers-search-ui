@@ -73,13 +73,23 @@ describe('reporting events', () => {
       expect.anything());
   });
 
-  it('sends cookies if opted in', () => {
+  it('throws error if opted in and ytag missing', () => {
+    analyticsReporter.setConversionTrackingEnabled(true);
+    expect(() => {
+      analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
+    }).toThrow(AnswersAnalyticsError);
+  });
+
+  it('includes cookies if opted in and ytag present', () => {
+    const cookieData = { cookieId: 'some_id' };
+    global.ytag = jest.fn(() => cookieData);
+
     analyticsReporter.setConversionTrackingEnabled(true);
     analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
 
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.stringContaining(ANALYTICS_BASE_URL),
-      expect.anything());
+      { data: { eventType: 'THUMBS_UP', experienceKey: 'abc123' }, ...cookieData });
   });
 });

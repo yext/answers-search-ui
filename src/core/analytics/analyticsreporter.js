@@ -35,6 +35,13 @@ export default class AnalyticsReporter {
      */
     this._baseUrl = ANALYTICS_BASE_URL_NO_COOKIE;
 
+    /**
+     * Boolean indicating if opted in or out of conversion tracking
+     * @type {boolean}
+     * @private
+     */
+    this._conversionTrackingEnabled = false;
+
     if (experienceVersion) {
       this._globalOptions.experienceVersion = experienceVersion;
     }
@@ -49,6 +56,14 @@ export default class AnalyticsReporter {
 
   /** @inheritdoc */
   report (event) {
+    let cookieData = {};
+    if (this._conversionTrackingEnabled && typeof ytag === 'function') {
+      ytag('optin', true);
+      cookieData = ytag('yfpc', null);
+    } else if (this._conversionTrackingEnabled) {
+      throw new AnswersAnalyticsError('Tried to enable conversion tracking without including ytag');
+    }
+
     if (!(event instanceof AnalyticsEvent)) {
       throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
     }
@@ -57,14 +72,13 @@ export default class AnalyticsReporter {
 
     return new HttpRequester().beacon(
       `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,
-      {
-        'data': event.toApiEvent()
-      }
+      { data: event.toApiEvent(), ...cookieData }
     );
   }
 
   /** @inheritdoc */
   setConversionTrackingEnabled (isEnabled) {
+    this._conversionTrackingEnabled = isEnabled;
     this._baseUrl = isEnabled ? ANALYTICS_BASE_URL : ANALYTICS_BASE_URL_NO_COOKIE;
   }
 }
