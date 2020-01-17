@@ -3,6 +3,7 @@
 import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import StorageKeys from '../../coree/storage/storagekeys
 
 /**
  * A filter for a range of dates
@@ -86,6 +87,10 @@ export default class DateRangeFilterComponent extends Component {
       min: minDate || config.initialMin || todayString,
       max: maxDate || config.initialMax || todayString
     };
+
+    if (minDate || maxDate) {
+      this.core.setFilter(this.name, this._buildFilter());
+    }
   }
 
   static get type () {
@@ -154,7 +159,7 @@ export default class DateRangeFilterComponent extends Component {
     if (this._storeOnChange) {
       this.core.setFilter(this.name, filter);
     }
-    this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
+    this.core.persistentStorage.set(StorageKeys.FILTER, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
     this._onChange(filter);
