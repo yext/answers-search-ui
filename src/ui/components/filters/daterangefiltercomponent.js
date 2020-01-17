@@ -3,7 +3,7 @@
 import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
-import StorageKeys from '../../core/storage/storagekeys';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 /**
  * A filter for a range of dates
