@@ -23,15 +23,6 @@
   height: 51px;
   margin-bottom: 0;
 
-  // Targeted CSS reset that prevents any user agent styles from interfering
-  // with styling of SearchBar's buttons and input. Note that this resets CSS styling only for
-  // elements with 'yxt' in the class name. It will not impact any customer styling.
-  button[class*="yxt-"], input[class*="yxt-"]
-  {
-    appearance: none;
-    border: none;
-  }
-
   &-container
   {
     position: relative;
@@ -66,6 +57,8 @@
       $weight: $searchbar-text-font-weight,
       $color: $searchbar-text-color
     );
+
+    border: none;
 
     background-color: transparent;
     flex-grow: 1;
@@ -104,6 +97,8 @@
     background-color: $searchbar-button-background-color-base;
     color: $color-text-secondary;
     cursor: pointer;
+
+    border: none;
 
     &:focus
     {
