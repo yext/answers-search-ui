@@ -27,7 +27,7 @@ export default class RangeFilterComponent extends Component {
      * @type {boolean}
      * @private
      */
-    this._storeOnChange = config.storeOnChange || true;
+    this._storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
     let minVal = this.core.globalStorage.getState(`${this.name}.min`);
     if (typeof minVal === 'string') {

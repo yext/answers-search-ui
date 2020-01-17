@@ -89,6 +89,6 @@ export default class Result {
      * Determines if an accordian result should be collapsed by default
      * @type {boolean}
      */
-    this.collapsed = data.collapsed || true;
+    this.collapsed = data.collapsed === undefined ? true : data.collapsed;
   }
 }
