@@ -18,7 +18,8 @@ describe('vertical searching', () => {
     searchApi = new SearchApi({
       apiKey: '1234abcd',
       experienceKey: 'abc123',
-      locale: 'en'
+      locale: 'en',
+      sessionTrackingEnabled: true
     });
   });
 

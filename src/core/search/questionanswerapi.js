@@ -22,6 +22,16 @@ export default class QuestionAnswerApi {
       throw new AnswersBasicError('Api Key is required', 'QuestionAnswerApi');
     }
     this._apiKey = config.apiKey;
+
+    /**
+     * If session tracking has been enabled for the request
+     * @type {boolean}
+     * @private
+     */
+    if (typeof config.sessionTrackingEnabled !== 'boolean') {
+      throw new AnswersBasicError('Must specify if session tracking is enabled', 'QuestionAnswerApi');
+    }
+    this._sessionTrackingEnabled = config.sessionTrackingEnabled;
   }
 
   /** @inheritdoc */
@@ -30,6 +40,7 @@ export default class QuestionAnswerApi {
       baseUrl: API_BASE_URL,
       endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
+      sessionTrackingEnabled: this._sessionTrackingEnabled,
       params: {
         'entityId': question.entityId,
         'site': question.site,

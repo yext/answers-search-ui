@@ -3,6 +3,7 @@
 import HttpRequester from './httprequester';
 import { LIVE_API_BASE_URL, LIB_VERSION } from '../constants';
 import SearchParams from '../../ui/dom/searchparams'; // TODO ideally this would be passed in as a param
+import { AnswersBasicError } from '../errors/errors';
 
 /**
  * ApiRequest is the base class for all API requests.
@@ -23,6 +24,16 @@ export default class ApiRequest {
      * @private
      */
     this._baseUrl = opts.baseUrl || LIVE_API_BASE_URL;
+
+    /**
+     * A boolean indicating if sessionTracking is enabled
+     * @type {boolean}
+     * @private
+     */
+    if (typeof opts.sessionTrackingEnabled !== 'boolean') {
+      throw new AnswersBasicError('Must indicate if session tracking is enabled', 'ApiRequest');
+    }
+    this._sessionTrackingEnabled = opts.sessionTrackingEnabled;
 
     /**
      * The endpoint to use in the url (appended to the {baseUrl})
@@ -84,7 +95,8 @@ export default class ApiRequest {
     let baseParams = {
       'v': this._version,
       'api_key': this._apiKey,
-      'jsLibVersion': LIB_VERSION
+      'jsLibVersion': LIB_VERSION,
+      'sessionTrackingEnabled': this._sessionTrackingEnabled
     };
 
     const urlParams = new SearchParams(window.location.search.substring(1));

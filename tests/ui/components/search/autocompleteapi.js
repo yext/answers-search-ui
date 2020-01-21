@@ -13,6 +13,7 @@ describe('querying and responding', () => {
   const input = 'test';
   const version = 20190101;
   const locale = 'fr_CA';
+  const sessionTrackingEnabled = true;
 
   const expectedResponse = {
     response: {
@@ -49,7 +50,8 @@ describe('querying and responding', () => {
     autocomplete = new AutoCompleteApi({
       apiKey,
       experienceKey,
-      locale
+      locale,
+      sessionTrackingEnabled
     });
   });
 
@@ -73,6 +75,7 @@ describe('querying and responding', () => {
       input,
       v: version,
       locale: locale,
+      sessionTrackingEnabled,
       search_parameters: JSON.stringify(searchParameters)
     };
 
@@ -107,7 +110,8 @@ describe('querying and responding', () => {
       verticalKey: verticalKey,
       input,
       v: version,
-      locale: locale
+      locale: locale,
+      sessionTrackingEnabled
     };
 
     it('creates a proper GET request for vertical search', () => {
@@ -134,7 +138,8 @@ describe('querying and responding', () => {
       jsLibVersion: LIB_VERSION,
       input,
       v: version,
-      locale: locale
+      locale: locale,
+      sessionTrackingEnabled
     };
 
     it('creates a proper GET request for vertical search', () => {

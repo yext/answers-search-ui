@@ -1,6 +1,6 @@
 /** @module ErrorReporter */
 
-import { AnswersBaseError } from './errors';
+import { AnswersBaseError, AnswersBasicError } from './errors';
 
 import ApiRequest from '../http/apirequest';
 import { LIB_VERSION } from '../constants';
@@ -44,6 +44,15 @@ export default class ErrorReporter {
      */
     this.sendToServer = config.sendToServer;
 
+    /**
+     * If session tracking has been enabled for all reporting requests
+     * @type {boolean}
+     */
+    if (typeof config.sessionTrackingEnabled !== 'boolean') {
+      throw new AnswersBasicError('Must specify if session tracking is enabled', 'ErrorReporter');
+    }
+    this.sessionTrackingEnabled = config.sessionTrackingEnabled;
+
     // Attach reporting listeners to window
     window.addEventListener('error', e => this.report(e.error));
     window.addEventListener('unhandledrejection', e => this.report(e.error));
@@ -70,6 +79,7 @@ export default class ErrorReporter {
         endpoint: '/v2/accounts/me/answers/errors',
         apiKey: this.apiKey,
         version: 20190301,
+        sessionTrackingEnabled: this.sessionTrackingEnabled,
         params: {
           'libVersion': LIB_VERSION,
           'experienceVersion': this.experienceVersion,

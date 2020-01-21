@@ -56,6 +56,16 @@ export default class SearchApi {
       throw new AnswersBasicError('Locale is required', 'Search');
     }
     this._locale = config.locale;
+
+    /**
+     * If session tracking has been enabled for all requests
+     * @type {boolean}
+     * @private
+     */
+    if (typeof config.sessionTrackingEnabled !== 'boolean') {
+      throw new AnswersBasicError('Must specify if session tracking is enabled', 'Search');
+    }
+    this._sessionTrackingEnabled = config.sessionTrackingEnabled;
   }
 
   /** @inheritdoc */
@@ -68,6 +78,7 @@ export default class SearchApi {
       endpoint: '/v2/accounts/me/answers/vertical/query',
       apiKey: this._apiKey,
       version: this._version,
+      sessionTrackingEnabled: this._sessionTrackingEnabled,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -98,6 +109,7 @@ export default class SearchApi {
       endpoint: '/v2/accounts/me/answers/query',
       apiKey: this._apiKey,
       version: this._version,
+      sessionTrackingEnabled: this._sessionTrackingEnabled,
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,
