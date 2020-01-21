@@ -214,7 +214,6 @@ export default class Component {
       this.setState(opts.data || opts.state || {});
       this.onCreate();
       this.userOnCreate();
-      // console.log('init', this);
     } catch (e) {
       throw new AnswersComponentError(
         'Error initializing component',
@@ -228,7 +227,6 @@ export default class Component {
         this.userOnUpdate();
         this.unMount();
         this.mount();
-        // console.log('uddate', this);
       } catch (e) {
         throw new AnswersComponentError(
           'Error updating component',

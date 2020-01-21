@@ -1,6 +1,6 @@
 /** @define FilterOptions */
 
-.yxt-FilterOptions {
+.yxt-FilterOptions, .yxt-SortOptions {
   &-container {
     @include Text($line-height: $line-height-md);
   }

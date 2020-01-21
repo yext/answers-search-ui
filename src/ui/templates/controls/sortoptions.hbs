@@ -1,43 +1,49 @@
-<fieldset class="yxt-SortOptions" id="yxt-SortOptions-fieldset">
-  <legend>{{label}}</legend>
+<fieldset class='yxt-SortOptions-fieldSet'>
+  <legend class='yxt-SortOptions-legend'>
+    <div class='yxt-SortOptions-legendLabel'>
+      {{label}}
+    </div>
+  </legend>
 
   {{#if showReset}}
-    <button class="yxt-SortOptions-showReset">{{resetLabel}}</button>
+    <button class='yxt-SortOptions-reset'>{{resetLabel}}</button>
   {{/if}}
 
-  <div>
-    <input
-      type="radio"
-      name="yxt-SortOptions-radio"
-      id="yxt-SortOptions-option_-1"
-      value="-1"
-    >
-    <label for="yxt-SortOptions-option_-1">{{this.defaultSortLabel}}</label>
-  </div>
+  <div class='yxt-SortOptions-container'>
+    <div class='yxt-SortOptions-options'>
+      {{#each options}}
+        <div class='yxt-SortOptions-option'>
+          <input
+            type='radio'
+            name='yxt-SortOptions-radio_{{../name}}'
+            id='yxt-SortOptions-option_{{../name}}_{{@index}}'
+            value='{{@index}}'
+            class='{{../optionSelector}}'
+            {{#if this.isSelected}} checked {{/if}}
+          >
+          <label class='yxt-SortOptions-optionLabel' for='yxt-SortOptions-option_{{../name}}_{{@index}}'>{{this.label}}</label>
+        </div>
+      {{/each}}
+    </div>
 
-
-  {{#each options}}
-  <div>
-    <input type="radio" name="yxt-SortOptions-radio" id="yxt-SortOptions-option_{{@index}}" value="{{@index}}" class="{{../optionSelector}}">
-    <label for="yxt-SortOptions-option_{{@index}}">{{this.label}}</label>
-  </div>
-  {{/each}}
-
-  {{#if showMore}}
-    <button class="yxt-SortOptions-showToggle">
-      {{#if allShown}}
-        {{showLessLabel}}
-        <span class="yxt-SortOptions-collapseUp"
-          data-component="IconComponent"
-          data-opts='{ "iconName": "chevron" }'></span>
+    {{#if showMore}}
+      {{#if hideExcessOptions}}
+        <button class='yxt-SortOptions-showToggle'>
+          {{showMoreLabel}}
+          <span class='yxt-SortOptions-collapseDown'
+            data-component='IconComponent'
+            data-opts='{ "iconName": "chevron" }'></span>
+        </button>
       {{else}}
-        {{showMoreLabel}}
-        <span class="yxt-SortOptions-collapseDown"
-          data-component="IconComponent"
-          data-opts='{ "iconName": "chevron" }'></span>
+        <button class='yxt-SortOptions-showToggle'>
+          {{showLessLabel}}
+          <span class='yxt-SortOptions-collapseUp'
+            data-component='IconComponent'
+            data-opts='{ "iconName": "chevron" }'></span>
+        </button>
       {{/if}}
-    </button>
-  {{/if}}
+    {{/if}}
+  </div>
 </fieldset>
 
 

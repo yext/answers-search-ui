@@ -120,7 +120,7 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: JSON.stringify(this.globalStorage.getState(StorageKeys.SORT_BY) || undefined)
+        sortBys: JSON.stringify(this.globalStorage.getAll(StorageKeys.SORT_BY))
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -269,11 +269,16 @@ export default class Core {
   }
 
   /**
-   * Stores the given sortBys into storage, to be used for the next search
-   * @param {Array<Object>} sortBys
+   * Stores the given sortBy into storage, to be used for the next search
+   * @param {string} namespace the namespace to use for the storage key
+   * @param {Object} sortBy
    */
-  setSortBys (sortBys) {
-    this.globalStorage.set(StorageKeys.SORT_BY, sortBys);
+  setSortBy (namespace, sortBy) {
+    if (sortBy === null) {
+      this.globalStorage.delete(`${StorageKeys.SORT_BY}.${namespace}`);
+    } else {
+      this.globalStorage.set(`${StorageKeys.SORT_BY}.${namespace}`, sortBy);
+    }
   }
 
   /**
