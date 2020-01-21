@@ -23,6 +23,14 @@
   height: 51px;
   margin-bottom: 0;
 
+  // Targeted CSS reset that prevents select user agent styles from interfering
+  // with styling of SearchBar's buttons and input. Note that this resets CSS styling only for
+  // elements with 'yxt' in the class name. It will not impact any customer styling.
+  button[class*="yxt-"], input[class*="yxt-"]
+  {
+    appearance: none;
+  }
+
   &-container
   {
     position: relative;
