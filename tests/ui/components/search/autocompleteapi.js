@@ -2,7 +2,9 @@ import AutoCompleteApi from '../../../../src/core/search/autocompleteapi';
 import AutoCompleteData from '../../../../src/core/models/autocompletedata';
 import HttpRequester from '../../../../src/core/http/httprequester';
 import { LIB_VERSION } from '../../../../src/core/constants';
+import GlobalStorage from '../../../../src/core/storage/globalstorage';
 jest.mock('../../../../src/core/http/httprequester');
+jest.mock('../../../../src/core/storage/globalstorage');
 
 const baseUrl = 'https://liveapi.yext.com/v2/accounts/me';
 
@@ -13,7 +15,7 @@ describe('querying and responding', () => {
   const input = 'test';
   const version = 20190101;
   const locale = 'fr_CA';
-  const sessionTrackingEnabled = true;
+  const sessionTrackingEnabled = false;
 
   const expectedResponse = {
     response: {
@@ -40,6 +42,14 @@ describe('querying and responding', () => {
   let autocomplete;
   const mockedGet = jest.fn(() => Promise.resolve({ json: () => Promise.resolve(expectedResponse) }));
 
+  const mockedGetState = jest.fn(() => false);
+  GlobalStorage.mockImplementation(() => {
+    return {
+      getState: mockedGetState
+    };
+  });
+  const globalStorage = new GlobalStorage();
+
   beforeEach(() => {
     mockedGet.mockClear();
     HttpRequester.mockImplementation(() => {
@@ -47,12 +57,7 @@ describe('querying and responding', () => {
         get: mockedGet
       };
     });
-    autocomplete = new AutoCompleteApi({
-      apiKey,
-      experienceKey,
-      locale,
-      sessionTrackingEnabled
-    });
+    autocomplete = new AutoCompleteApi({ apiKey, experienceKey, locale }, globalStorage);
   });
 
   describe('queryFilter', () => {

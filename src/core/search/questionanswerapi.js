@@ -1,6 +1,7 @@
 /** @module QuestionAnswerApi */
 
 import ApiRequest from '../http/apirequest';
+import StorageKeys from '../storage/storagekeys';
 import { API_BASE_URL } from '../constants';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
 
@@ -12,7 +13,7 @@ import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
  * @implements {QuestionAnswerService}
  */
 export default class QuestionAnswerApi {
-  constructor (config = {}) {
+  constructor (config = {}, globalStorage) {
     /**
      * The API Key to use for the request
      * @type {string}
@@ -24,14 +25,14 @@ export default class QuestionAnswerApi {
     this._apiKey = config.apiKey;
 
     /**
-     * If session tracking has been enabled for the request
-     * @type {boolean}
+     * The global storage instance of the experience
+     * @type {GlobalStorage}
      * @private
      */
-    if (typeof config.sessionTrackingEnabled !== 'boolean') {
-      throw new AnswersBasicError('Must specify if session tracking is enabled', 'QuestionAnswerApi');
+    if (!globalStorage) {
+      throw new AnswersBasicError('Global storage is required', 'QuestionAnswerApi');
     }
-    this._sessionTrackingEnabled = config.sessionTrackingEnabled;
+    this._globalStorage = globalStorage;
   }
 
   /** @inheritdoc */
@@ -40,7 +41,7 @@ export default class QuestionAnswerApi {
       baseUrl: API_BASE_URL,
       endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
-      sessionTrackingEnabled: this._sessionTrackingEnabled,
+      sessionTrackingEnabled: this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
       params: {
         'entityId': question.entityId,
         'site': question.site,

@@ -3,6 +3,7 @@
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
+import StorageKeys from '../storage/storagekeys';
 
 /** @typedef {import('./autocompleteservice').default} AutoCompleteService */
 
@@ -13,7 +14,7 @@ import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
  * @implements {AutoCompleteService}
  */
 export default class AutoCompleteApi {
-  constructor (config = {}) {
+  constructor (config = {}, globalStorage) {
     /**
      * The API Key to use for the request
      * @type {string}
@@ -59,14 +60,14 @@ export default class AutoCompleteApi {
     this._locale = config.locale;
 
     /**
-     * If session tracking has been enabled for all requests
-     * @type {boolean}
+     * The global storage instance of the experience
+     * @type {GlobalStorage}
      * @private
      */
-    if (typeof config.sessionTrackingEnabled !== 'boolean') {
-      throw new AnswersBasicError('Must specify if session tracking is enabled', 'AutoComplete');
+    if (!globalStorage) {
+      throw new AnswersBasicError('Global storage is required', 'AutoComplete');
     }
-    this._sessionTrackingEnabled = config.sessionTrackingEnabled;
+    this._globalStorage = globalStorage;
   }
 
   /** @inheritdoc */
@@ -75,7 +76,7 @@ export default class AutoCompleteApi {
       endpoint: '/v2/accounts/me/answers/filtersearch',
       apiKey: this._apiKey,
       version: this._version,
-      sessionTrackingEnabled: this._sessionTrackingEnabled,
+      sessionTrackingEnabled: this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -100,7 +101,7 @@ export default class AutoCompleteApi {
       endpoint: '/v2/accounts/me/answers/vertical/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
-      sessionTrackingEnabled: this._sessionTrackingEnabled,
+      sessionTrackingEnabled: this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -124,7 +125,7 @@ export default class AutoCompleteApi {
       endpoint: '/v2/accounts/me/answers/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
-      sessionTrackingEnabled: this._sessionTrackingEnabled,
+      sessionTrackingEnabled: this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,

@@ -146,7 +146,9 @@ class Answers {
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
     globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
 
-    this._services = parsedConfig.mock ? getMockServices() : getServices(parsedConfig);
+    this._services = parsedConfig.mock
+      ? getMockServices()
+      : getServices(parsedConfig, globalStorage);
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
@@ -289,6 +291,14 @@ class Answers {
   }
 
   /**
+   * Opt in or out of session cookies
+   * @param {boolean} optIn
+   */
+  setSessionsOptIn (optIn) {
+    this.core.globalStorage.set(StorageKeys.SESSIONS_OPT_IN, optIn);
+  }
+
+  /**
    * Sets a search query on initialization for vertical searchers that have a
    * defaultInitialSearch provided, if the user hasn't already provided their
    * own via URL param.
@@ -310,36 +320,37 @@ class Answers {
 
 /**
  * @param {Object} config
+ * @param {GlobalStorage} globalStorage
  * @returns {Services}
  */
-function getServices (config) {
+function getServices (config, globalStorage) {
   return {
     searchService: new SearchApi({
       apiKey: config.apiKey,
       experienceKey: config.experienceKey,
       experienceVersion: config.experienceVersion,
-      locale: config.locale,
-      sessionTrackingEnabled: config.sessionTrackingEnabled
+      locale: config.locale
     }),
-    autoCompleteService: new AutoCompleteApi({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      locale: config.locale,
-      sessionTrackingEnabled: config.sessionTrackingEnabled
-    }),
-    questionAnswerService: new QuestionAnswerApi({
-      apiKey: config.apiKey,
-      sessionTrackingEnabled: config.sessionTrackingEnabled
-    }),
-    errorReporterService: new ErrorReporter({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      printVerbose: config.debug,
-      sendToServer: !config.suppressErrorReports,
-      sessionTrackingEnabled: config.sessionTrackingEnabled
-    })
+    autoCompleteService: new AutoCompleteApi(
+      {
+        apiKey: config.apiKey,
+        experienceKey: config.experienceKey,
+        experienceVersion: config.experienceVersion,
+        locale: config.locale
+      },
+      globalStorage),
+    questionAnswerService: new QuestionAnswerApi(
+      { apiKey: config.apiKey },
+      globalStorage),
+    errorReporterService: new ErrorReporter(
+      {
+        apiKey: config.apiKey,
+        experienceKey: config.experienceKey,
+        experienceVersion: config.experienceVersion,
+        printVerbose: config.debug,
+        sendToServer: !config.suppressErrorReports
+      },
+      globalStorage)
   };
 }
 

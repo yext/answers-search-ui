@@ -3,6 +3,7 @@
 import { AnswersBaseError, AnswersBasicError } from './errors';
 
 import ApiRequest from '../http/apirequest';
+import StorageKeys from '../storage/storagekeys';
 import { LIB_VERSION } from '../constants';
 
 /** @typedef {import('../services/errorreporterservice').default} ErrorReporterService */
@@ -13,7 +14,7 @@ import { LIB_VERSION } from '../constants';
  * @implements {ErrorReporterService}
  */
 export default class ErrorReporter {
-  constructor (config) {
+  constructor (config, globalStorage) {
     /**
      * The apiKey to use for reporting
      * @type {string}
@@ -45,13 +46,15 @@ export default class ErrorReporter {
     this.sendToServer = config.sendToServer;
 
     /**
-     * If session tracking has been enabled for all reporting requests
-     * @type {boolean}
+     * The global storage instance of the experience
+     * @type {GlobalStorage}
      */
-    if (typeof config.sessionTrackingEnabled !== 'boolean') {
-      throw new AnswersBasicError('Must specify if session tracking is enabled', 'ErrorReporter');
+    if (this.sendToServer && !globalStorage) {
+      throw new AnswersBasicError(
+        'Must include globalStorage to send errors to server',
+        'ErrorReporter');
     }
-    this.sessionTrackingEnabled = config.sessionTrackingEnabled;
+    this.globalStorage = globalStorage;
 
     // Attach reporting listeners to window
     window.addEventListener('error', e => this.report(e.error));
@@ -79,7 +82,7 @@ export default class ErrorReporter {
         endpoint: '/v2/accounts/me/answers/errors',
         apiKey: this.apiKey,
         version: 20190301,
-        sessionTrackingEnabled: this.sessionTrackingEnabled,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         params: {
           'libVersion': LIB_VERSION,
           'experienceVersion': this.experienceVersion,
