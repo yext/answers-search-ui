@@ -1,7 +1,6 @@
 /** @module QuestionAnswerApi */
 
 import ApiRequest from '../http/apirequest';
-import StorageKeys from '../storage/storagekeys';
 import { API_BASE_URL } from '../constants';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
 
@@ -37,11 +36,10 @@ export default class QuestionAnswerApi {
 
   /** @inheritdoc */
   submitQuestion (question) {
-    let request = new ApiRequest({
+    const requestConfig = {
       baseUrl: API_BASE_URL,
       endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
-      sessionTrackingEnabled: this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
       params: {
         'entityId': question.entityId,
         'site': question.site,
@@ -51,7 +49,8 @@ export default class QuestionAnswerApi {
         'questionDescription': question.questionDescription,
         'questionLanguage': question.questionLanguage
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.post({
       mode: 'cors',

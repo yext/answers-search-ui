@@ -63,12 +63,10 @@ export default class SearchApi {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
-
-    let request = new ApiRequest({
+    const requestConfig = {
       endpoint: '/v2/accounts/me/answers/vertical/query',
       apiKey: this._apiKey,
       version: this._version,
-      sessionTrackingEnabled,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -86,7 +84,8 @@ export default class SearchApi {
         'skipSpellCheck': skipSpellCheck,
         'queryTrigger': queryTrigger
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, { getState: () => sessionTrackingEnabled });
 
     return request.get()
       .then(response => response.json());
@@ -94,11 +93,10 @@ export default class SearchApi {
 
   /** @inheritdoc */
   universalSearch (queryString, params) {
-    let request = new ApiRequest({
+    const requestConfig = {
       endpoint: '/v2/accounts/me/answers/query',
       apiKey: this._apiKey,
       version: this._version,
-      sessionTrackingEnabled: params.sessionTrackingEnabled,
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,
@@ -109,7 +107,8 @@ export default class SearchApi {
         'skipSpellCheck': params.skipSpellCheck,
         'queryTrigger': params.queryTrigger
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, { getState: () => params.sessionTrackingEnabled });
 
     return request.get()
       .then(response => response.json());

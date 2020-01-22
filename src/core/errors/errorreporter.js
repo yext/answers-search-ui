@@ -3,7 +3,6 @@
 import { AnswersBaseError, AnswersBasicError } from './errors';
 
 import ApiRequest from '../http/apirequest';
-import StorageKeys from '../storage/storagekeys';
 import { LIB_VERSION } from '../constants';
 
 /** @typedef {import('../services/errorreporterservice').default} ErrorReporterService */
@@ -78,18 +77,18 @@ export default class ErrorReporter {
     this.printError(err);
 
     if (this.sendToServer) {
-      const request = new ApiRequest({
+      const requestConfig = {
         endpoint: '/v2/accounts/me/answers/errors',
         apiKey: this.apiKey,
         version: 20190301,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         params: {
           'libVersion': LIB_VERSION,
           'experienceVersion': this.experienceVersion,
           'experienceKey': this.experienceKey,
           'error': err.toJson()
         }
-      });
+      };
+      const request = new ApiRequest(requestConfig, this.globalStorage);
 
       // TODO(amullings): We should probably change this endpoint to POST,
       // ideally using the beacon API. Stack traces will likely easily hit URL

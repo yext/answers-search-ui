@@ -3,7 +3,6 @@
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
-import StorageKeys from '../storage/storagekeys';
 
 /** @typedef {import('./autocompleteservice').default} AutoCompleteService */
 
@@ -72,11 +71,10 @@ export default class AutoCompleteApi {
 
   /** @inheritdoc */
   queryFilter (input, config) {
-    let request = new ApiRequest({
+    const requestConfig = {
       endpoint: '/v2/accounts/me/answers/filtersearch',
       apiKey: this._apiKey,
       version: this._version,
-      sessionTrackingEnabled: this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -85,7 +83,8 @@ export default class AutoCompleteApi {
         'locale': this._locale,
         'search_parameters': JSON.stringify(config.searchParameters)
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.get()
       .then(response => response.json())
@@ -97,11 +96,10 @@ export default class AutoCompleteApi {
 
   /** @inheritdoc */
   queryVertical (input, verticalKey) {
-    let request = new ApiRequest({
+    const requestConfig = {
       endpoint: '/v2/accounts/me/answers/vertical/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
-      sessionTrackingEnabled: this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -109,7 +107,8 @@ export default class AutoCompleteApi {
         'verticalKey': verticalKey,
         'locale': this._locale
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.get()
       .then(response => response.json())
@@ -121,18 +120,18 @@ export default class AutoCompleteApi {
 
   /** @inheritdoc */
   queryUniversal (queryString) {
-    let request = new ApiRequest({
+    const requestConfig = {
       endpoint: '/v2/accounts/me/answers/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
-      sessionTrackingEnabled: this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'locale': this._locale
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.get(queryString)
       .then(response => response.json())

@@ -124,13 +124,7 @@ class Answers {
 
   init (config) {
     const parsedConfig = this.parseConfig(config);
-    if (typeof parsedConfig.apiKey !== 'string') {
-      throw new Error('Missing required `apiKey`. Type must be {string}');
-    }
-
-    if (typeof parsedConfig.experienceKey !== 'string') {
-      throw new Error('Missing required `experienceKey`. Type must be {string}');
-    }
+    this.validateConfig(parsedConfig);
 
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.navigation = new NavigationConfig(parsedConfig.navigation);
@@ -237,6 +231,23 @@ class Answers {
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
     return parsedConfig;
+  }
+
+  /**
+   * Validates the Answers config object to ensure things like api key and experience key are
+   * properly set.
+   * @param {Object} config The Answers config.
+   */
+  validateConfig (config) {
+    // TODO (tmeyer): Extract this method into it's own class. Investigate the use of JSON schema
+    // to validate these configs.
+    if (typeof config.apiKey !== 'string') {
+      throw new Error('Missing required `apiKey`. Type must be {string}');
+    }
+
+    if (typeof config.experienceKey !== 'string') {
+      throw new Error('Missing required `experienceKey`. Type must be {string}');
+    }
   }
 
   /**

@@ -42,7 +42,7 @@ describe('querying and responding', () => {
   let autocomplete;
   const mockedGet = jest.fn(() => Promise.resolve({ json: () => Promise.resolve(expectedResponse) }));
 
-  const mockedGetState = jest.fn(() => false);
+  const mockedGetState = jest.fn(() => sessionTrackingEnabled);
   GlobalStorage.mockImplementation(() => {
     return {
       getState: mockedGetState
