@@ -13,45 +13,26 @@ import Filter from '../../../core/models/filter';
  */
 export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
-    this._config = assignDefaults(config);
+    super(assignDefaults(config), systemConfig);
 
-    // config needed in template
-    this.defaultSortLabel = this._config.defaultSortLabel;
     this.options = this._config.options;
-    this.showReset = this._config.showReset;
-    this.showMore = this._config.showMore && (this.options.length > this._config.showMoreLimit);
-    this.showMoreLabel = this._config.showMoreLabel;
-    this.showLessLabel = this._config.showLessLabel;
-    this.label = this._config.label;
-    this.resetLabel = this._config.resetLabel;
-    this.optionSelector = this._config.optionSelector;
 
     // Flag for whether all options are shown or if they are hidden behind a show more link
-    this.hideExcessOptions = this.showMore;
+    this.hideExcessOptions = this._config.showMore;
 
     // Component has default option checked on init
-    const optionIndex = parseInt(this.core.globalStorage.getState(`${this.name}`)) || 0;
-    this.selectedOptionIndex = optionIndex;
-    this.updateSortBys(optionIndex);
+    this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
+    this.updateSortBys(this.selectedOptionIndex);
   }
 
-  setState () {
+  setState (data) {
     let options = this.options;
     if (this.hideExcessOptions) {
       options = this.options.slice(0, this._config.showMoreLimit);
     }
-    super.setState(Object.assign({}, {
-      defaultSortLabel: this.defaultSortLabel,
+    super.setState(Object.assign({}, data, {
       options,
-      showReset: this.showReset,
-      showMore: this.showMore,
-      showMoreLabel: this.showMoreLabel,
-      showLessLabel: this.showLessLabel,
-      label: this.label,
       hideExcessOptions: this.hideExcessOptions,
-      resetLabel: this.resetLabel,
-      optionSelector: this._config.optionSelector,
       name: this.name
     }));
   }
@@ -64,7 +45,7 @@ export default class SortOptionsComponent extends Component {
     // Update selected option in component and persistentStorage
     const option = this.options[optionIndex];
     this.selectedOptionIndex = optionIndex;
-    this.core.persistentStorage.set(`${this.name}`, optionIndex);
+    this.core.persistentStorage.set(this.name, optionIndex);
 
     // Update sortBys in global storage
     if (this._config.storeOnChange && optionIndex === 0) {
@@ -77,7 +58,7 @@ export default class SortOptionsComponent extends Component {
     this._config.onChange(option);
 
     // If search on change, search
-    if (this._searchOnChange) {
+    if (this._config._searchOnChange) {
       this._search();
     }
 
@@ -93,7 +74,7 @@ export default class SortOptionsComponent extends Component {
     );
 
     // Register more/less button
-    if (this.showMore) {
+    if (this._config.showMore) {
       DOM.on(
         DOM.query(this._container, '.yxt-SortOptions-showToggle'),
         'click',
@@ -105,7 +86,7 @@ export default class SortOptionsComponent extends Component {
     }
 
     // Register show reset button
-    if (this.showReset) {
+    if (this._config.showReset) {
       DOM.on(
         DOM.query(this._container, '.yxt-SortOptions-reset'),
         'click',
@@ -142,31 +123,30 @@ export default class SortOptionsComponent extends Component {
   }
 }
 
-function throwConfigError (message) {
-  throw new AnswersBasicError(message, 'SortOptions');
-}
-
 function assignDefaults (config) {
-  const updatedConfig = {};
+  const updatedConfig = Object.assign({}, config);
 
   // Optional, The label used for the “default” sort (aka the sort specified by the experience config").
   updatedConfig.defaultSortLabel = config.defaultSortLabel || 'Best Match';
 
   // Array of search options, where an option has type, label, and if is type FIELD also a label and direction
   if (!config.options) {
-    throwConfigError('config.options are required');
+    throw new AnswersBasicError('config.options are required', 'SortOptions');
   }
   const OPTION_TYPES = ['FIELD', 'RELEVANCE', 'ENTITY_DISTANCE'];
   updatedConfig.options = config.options.map(option => {
+    if (!option.label || !option.type) {
+      throw new AnswersBasicError(`option.label and option.type are required option ${option}`, 'SortOptions');
+    }
     const newOption = { isSelected: false };
-    newOption.label = option.label || throwConfigError(`Invalid option.type for option: ${option}`);
-    newOption.type = option.type || throwConfigError(`option.type is required for option: ${option}`);
+    newOption.label = option.label;
+    newOption.type = option.type;
     const isField = OPTION_TYPES.indexOf(newOption.type) === 0;
     if (isField && option.field && option.direction) {
       newOption.field = option.field;
       newOption.direction = option.direction;
     } else if (isField) {
-      throwConfigError(`option.field and option.direction are required for option: ${option}`);
+      throw new AnswersBasicError(`option.field and option.direction are required for option: ${option}`, 'SortOptions');
     }
     return newOption;
   });
@@ -188,11 +168,12 @@ function assignDefaults (config) {
   // Optional, the label to use for the reset button
   updatedConfig.resetLabel = config.resetLabel || 'reset';
 
-  // Optional, allow collapsing excess sort options after a limit
-  updatedConfig.showMore = config.showMore === undefined ? true : config.showMore;
-
   // Optional, the max number of filter options to show before collapsing extras
   updatedConfig.showMoreLimit = config.showMoreLimit || 5;
+
+  // Optional, allow collapsing excess sort options after a limit
+  updatedConfig.showMore = config.showMore === undefined ? true : config.showMore;
+  updatedConfig.showMore = updatedConfig.showMore && (updatedConfig.options.length > updatedConfig.showMoreLimit);
 
   // Optional, the label to show for displaying more options
   updatedConfig.showMoreLabel = config.showMoreLabel || 'Show more';

@@ -48,7 +48,6 @@ export default class IconComponent extends Component {
     if (Icons[this.iconName]) {
       return Icons[this.iconName];
     }
-
     return Icons.default;
   }
 

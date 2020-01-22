@@ -922,7 +922,7 @@ ANSWERS.addComponent('LocationBias', {
 ## Sort Options Component
 
 The sort options component displays a list of radio buttons that allows users to sort the results of a vertical search.
-There may only one sort options component per page.
+Currently, there may be only one sort options component per page.
 
 ```html
 <div class='sort-options-container'></div>

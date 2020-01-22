@@ -292,7 +292,7 @@ export default class FilterBoxComponent extends Component {
       ? Filter.and(...allFilters)
       : allFilters[0];
 
-    const query = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    const query = this.core.globalStorage.getState(StorageKeys.QUERY);
 
     const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
 

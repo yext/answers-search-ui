@@ -280,14 +280,14 @@ export default class Core {
         direction: option.direction
       };
     });
-    this.globalStorage.set(`${StorageKeys.SORT_BYS}`, JSON.stringify(sortBys));
+    this.globalStorage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
   }
 
   /**
    * Clears the sortBys key in global storage.
    */
   clearSortBys () {
-    this.globalStorage.delete(`${StorageKeys.SORT_BYS}`);
+    this.globalStorage.delete(StorageKeys.SORT_BYS);
   }
 
   /**
