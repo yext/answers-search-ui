@@ -11,6 +11,8 @@ import StorageKeys from '../storage/storagekeys';
  * It defines all of the core properties required to make a request
  */
 export default class ApiRequest {
+  // TODO (tmeyer): Create an ApiService interface and pass an implementation to the current
+  // consumers of ApiRequest as a dependency.
   constructor (opts = {}, globalStorage) {
     /**
      * An abstraction used for making network request and handling errors
@@ -54,16 +56,13 @@ export default class ApiRequest {
      */
     this._params = opts.params || {};
 
-    // TOOD (tmeyer): Create an interface for fetching sitesTrackingEnabled. Inject an
-    // implementation of that interface here.
-    /**
-     * The global storage of the Answers experience
-     * @type {GlobalStorage}
-     * @private
-     */
     if (!globalStorage) {
       throw new AnswersBasicError('Must include global storage', 'ApiRequest');
     }
+    /**
+     * @type {GlobalStorage}
+     * @private
+     */
     this._globalStorage = globalStorage;
   }
 
