@@ -12,7 +12,7 @@ import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
  * @implements {QuestionAnswerService}
  */
 export default class QuestionAnswerApi {
-  constructor (config = {}) {
+  constructor (config = {}, globalStorage) {
     /**
      * The API Key to use for the request
      * @type {string}
@@ -22,11 +22,21 @@ export default class QuestionAnswerApi {
       throw new AnswersBasicError('Api Key is required', 'QuestionAnswerApi');
     }
     this._apiKey = config.apiKey;
+
+    /**
+     * The global storage instance of the experience
+     * @type {GlobalStorage}
+     * @private
+     */
+    if (!globalStorage) {
+      throw new AnswersBasicError('Global storage is required', 'QuestionAnswerApi');
+    }
+    this._globalStorage = globalStorage;
   }
 
   /** @inheritdoc */
   submitQuestion (question) {
-    let request = new ApiRequest({
+    const requestConfig = {
       baseUrl: API_BASE_URL,
       endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
@@ -39,7 +49,8 @@ export default class QuestionAnswerApi {
         'questionDescription': question.questionDescription,
         'questionLanguage': question.questionLanguage
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.post({
       mode: 'cors',

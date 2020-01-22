@@ -1,6 +1,6 @@
 /** @module ErrorReporter */
 
-import { AnswersBaseError } from './errors';
+import { AnswersBaseError, AnswersBasicError } from './errors';
 
 import ApiRequest from '../http/apirequest';
 import { LIB_VERSION } from '../constants';
@@ -13,7 +13,7 @@ import { LIB_VERSION } from '../constants';
  * @implements {ErrorReporterService}
  */
 export default class ErrorReporter {
-  constructor (config) {
+  constructor (config, globalStorage) {
     /**
      * The apiKey to use for reporting
      * @type {string}
@@ -44,6 +44,17 @@ export default class ErrorReporter {
      */
     this.sendToServer = config.sendToServer;
 
+    /**
+     * The global storage instance of the experience
+     * @type {GlobalStorage}
+     */
+    if (this.sendToServer && !globalStorage) {
+      throw new AnswersBasicError(
+        'Must include globalStorage to send errors to server',
+        'ErrorReporter');
+    }
+    this.globalStorage = globalStorage;
+
     // Attach reporting listeners to window
     window.addEventListener('error', e => this.report(e.error));
     window.addEventListener('unhandledrejection', e => this.report(e.error));
@@ -66,7 +77,7 @@ export default class ErrorReporter {
     this.printError(err);
 
     if (this.sendToServer) {
-      const request = new ApiRequest({
+      const requestConfig = {
         endpoint: '/v2/accounts/me/answers/errors',
         apiKey: this.apiKey,
         version: 20190301,
@@ -76,7 +87,8 @@ export default class ErrorReporter {
           'experienceKey': this.experienceKey,
           'error': err.toJson()
         }
-      });
+      };
+      const request = new ApiRequest(requestConfig, this.globalStorage);
 
       // TODO(amullings): We should probably change this endpoint to POST,
       // ideally using the beacon API. Stack traces will likely easily hit URL
