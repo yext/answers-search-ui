@@ -4,17 +4,30 @@ import IconComponent from '../../../../src/ui/components/icons/iconcomponent';
 import { mount } from 'enzyme';
 import { AnswersBasicError } from '../../../../src/core/errors/errors';
 import mockManager from '../../../setup/managermocker';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 const mockedCore = () => {
   return {
-    setSortBy: (nameSpace, option) => {},
+    setSortBys: (...options) => {
+      options.forEach(opt => {
+        expect(opt).toHaveProperty('type');
+      });
+    },
+    clearSortBys: () => {},
     verticalSearch: () => {},
     globalStorage: {
-      getState: storageKey => {},
-      getAll: storageKey => {}
+      getState: storageKey => {
+        expect(['SortOptions', StorageKeys.QUERY]).toContain(storageKey);
+      },
+      getAll: storageKey => {
+        expect([StorageKeys.FACET_FILTER, StorageKeys.FILTER]).toContain(storageKey);
+      }
     },
     persistentStorage: {
-      set: (namespace, optionIndex) => {}
+      set: (namespace, optionIndex) => {
+        expect(namespace).toBe('SortOptions');
+        expect(typeof optionIndex).toBe('number');
+      }
     }
   };
 };
@@ -71,7 +84,7 @@ describe('sort options component', () => {
   it('renders correctly for default values', () => {
     const opts = { ...config, options: defaultOptions };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
-    expect(component.currentlySelectedOption).toEqual(0);
+    expect(component.selectedOptionIndex).toEqual(0);
     const wrapper = mount(COMPONENT_MANAGER.create('SortOptions', opts));
     expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(2);
     expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(0);
@@ -83,9 +96,9 @@ describe('sort options component', () => {
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(1);
-    expect(component.currentlySelectedOption).toEqual(0);
+    expect(component.selectedOptionIndex).toEqual(0);
     wrapper.find('.yxt-SortOptions-optionSelector').at(1).simulate('click');
-    expect(component.currentlySelectedOption).toEqual(1);
+    expect(component.selectedOptionIndex).toEqual(1);
   });
 
   it('has correct show more/less behavior', () => {

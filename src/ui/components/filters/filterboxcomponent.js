@@ -157,13 +157,6 @@ export default class FilterBoxComponent extends Component {
      */
     this._filters = [];
 
-    /**
-     * The current state of the sortOptions components in the box
-     * @type {Object}
-     * @private
-     */
-    this._sortBys = [];
-
     if (!this.config.showCount) {
       this.config.filterConfigs.forEach(config => {
         config.options.forEach(option => {
@@ -204,7 +197,7 @@ export default class FilterBoxComponent extends Component {
         this.config,
         {
           parentContainer: this._container,
-          name: `${this.name}-filter${i}`,
+          name: `${this.name}.filter${i}`,
           storeOnChange: false,
           container: `.js-yext-filterbox-filter${i}`,
           showReset: this.config.resetFilter,
@@ -212,8 +205,8 @@ export default class FilterBoxComponent extends Component {
           showExpand: this.config.expand,
           showMore: this.showMore,
           showMoreLimit: this.showMoreLimit,
-          onChange: (filter, sortBy) => {
-            this.onFilterChange(i, filter, sortBy);
+          onChange: filter => {
+            this.onFilterChange(i, filter);
           }
         }));
       component.mount();
@@ -251,11 +244,9 @@ export default class FilterBoxComponent extends Component {
    * Handle changes to child filter components
    * @param {number} index The index of the changed filter
    * @param {Filter} filter The new filter
-   * @param {Object} sortBy The new sortBy
    */
-  onFilterChange (index, filter, sortBy = null) {
+  onFilterChange (index, filter) {
     this._filters[index] = filter;
-    this._sortBys[index] = sortBy;
     if (this.config.searchOnChange) {
       this._saveFiltersToStorage();
       this._search();
@@ -289,14 +280,6 @@ export default class FilterBoxComponent extends Component {
         ? Filter.and(...validFilters)
         : validFilters[0];
       this.core.setFilter(this.name, combinedFilter || {});
-    }
-
-    for (let i = 0; i < this._sortBys.length; i++) {
-      if (this._sortBys[i]) {
-        this.core.setSortBy(`${this.name}.${i}`, this._sortBys[i]);
-      } else {
-        this.core.setSortBy(`${this.name}.${i}`, null);
-      }
     }
   }
 

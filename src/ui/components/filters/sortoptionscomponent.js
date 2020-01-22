@@ -8,6 +8,8 @@ import Filter from '../../../core/models/filter';
 
 /**
  * Renders configuration options for sorting Vertical Results.
+ * TODO: how to deal with multiple instances of this component (and filters in general),
+ * ideally "identical" filters/sorts would be synced up.
  */
 export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -30,7 +32,7 @@ export default class SortOptionsComponent extends Component {
 
     // Component has default option checked on init
     const optionIndex = parseInt(this.core.globalStorage.getState(`${this.name}`)) || 0;
-    this.currentlySelectedOption = optionIndex;
+    this.selectedOptionIndex = optionIndex;
     this.updateSortBys(optionIndex);
   }
 
@@ -56,32 +58,29 @@ export default class SortOptionsComponent extends Component {
 
   updateSortBys (optionIndex) {
     // Change selected option to new optionIndex
-    this.options[this.currentlySelectedOption].isSelected = false;
+    this.options[this.selectedOptionIndex].isSelected = false;
     this.options[optionIndex].isSelected = true;
 
     // Update selected option in component and persistentStorage
     const option = this.options[optionIndex];
-    this.currentlySelectedOption = optionIndex;
+    this.selectedOptionIndex = optionIndex;
     this.core.persistentStorage.set(`${this.name}`, optionIndex);
 
     // Update sortBys in global storage
-    if (optionIndex === 0) {
-      this.core.setSortBy(this.name, null);
+    if (this._config.storeOnChange && optionIndex === 0) {
+      this.core.clearSortBys();
     } else if (this._config.storeOnChange) {
-      this.core.setSortBy(this.name, {
-        type: option.type,
-        field: option.field,
-        direction: option.direction
-      });
+      this.core.setSortBys(option);
     }
+
+    // Run additional on change function
+    this._config.onChange(option);
 
     // If search on change, search
     if (this._searchOnChange) {
       this._search();
     }
 
-    // Run additional on change function, either from user config or FilterBox
-    this._config.onChange(undefined, option);
     this.setState();
   }
 
@@ -113,22 +112,6 @@ export default class SortOptionsComponent extends Component {
         () => this.updateSortBys(0)
       );
     }
-  }
-
-  /**
-   * Needed by FilterBox, but since this component modifies the sortBys parameter not the filter parameter of
-   * a vertical search this return an empty filter.
-   */
-  getFilter () {
-    return {};
-  }
-
-  /**
-   * Needed by FilterBox, called when resetAll in the FilterBox is clicked.
-   */
-  clearOptions () {
-    this.updateSortBys(0);
-    this.setState();
   }
 
   /**
@@ -173,36 +156,17 @@ function assignDefaults (config) {
   if (!config.options) {
     throwConfigError('config.options are required');
   }
-  const OPTION_TYPES = ['FIELD', 'RELEVANCE', 'ENTITY_DISTANCE', 'RELEVANCE_RANDOM'];
+  const OPTION_TYPES = ['FIELD', 'RELEVANCE', 'ENTITY_DISTANCE'];
   updatedConfig.options = config.options.map(option => {
     const newOption = { isSelected: false };
-    newOption.type = option.type || throwConfigError('option.type is required for option: ' + option);
+    newOption.label = option.label || throwConfigError(`Invalid option.type for option: ${option}`);
+    newOption.type = option.type || throwConfigError(`option.type is required for option: ${option}`);
     const isField = OPTION_TYPES.indexOf(newOption.type) === 0;
     if (isField && option.field && option.direction) {
       newOption.field = option.field;
       newOption.direction = option.direction;
     } else if (isField) {
-      throwConfigError('option.field and option.direction are required for option: ' + option);
-    }
-    if (!option.label) {
-      switch (option.type) {
-        case 'FIELD':
-          newOption.label = 'Field';
-          break;
-        case 'RELEVANCE':
-          newOption.label = 'Relevance';
-          break;
-        case 'ENTITY_DISTANCE':
-          newOption.label = 'Distance';
-          break;
-        case 'RELEVANCE_RANDOM':
-          newOption.label = 'Relevance';
-          break;
-        default:
-          throwConfigError('Invalid option.type', option);
-      }
-    } else {
-      newOption.label = option.label;
+      throwConfigError(`option.field and option.direction are required for option: ${option}`);
     }
     return newOption;
   });
@@ -242,8 +206,8 @@ function assignDefaults (config) {
   // Optional, Top title for the sorting component
   updatedConfig.label = config.label || 'Sorting';
 
-  // Optional, used to not immediately update globalStorage when this component
-  // is part of a FilterBox
+  // Optional, when true component does not update globalStorage
+  // possibly delegating that to a higher-order/composite component
   updatedConfig.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
   // note: showExpand and showNumberApplied explicitly not included, on the grounds that

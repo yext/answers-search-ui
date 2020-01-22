@@ -28,6 +28,7 @@ Outline:
    - [QASubmission Component](#qa-submission-component)
    - [SpellCheck Component](#spell-check-component)
    - [LocationBias Component](#location-bias-component)
+   - [SortOptions Component](#sort-options-component)
 4. [Analytics](#analytics)
    - [Click Analytics](#click-analytics)
 # Install and Setup
@@ -904,7 +905,7 @@ ANSWERS.addComponent('SpellCheck', {
 
 ## Location Bias Component
 
-The location component component shows location that used for location bias and allow user to improve accuracy with HTML5 geolocation.
+The location bias component shows location that used for location bias and allow user to improve accuracy with HTML5 geolocation.
 
 ```html
 <div class="location-bias-container"></div>
@@ -916,6 +917,67 @@ ANSWERS.addComponent('LocationBias', {
   verticalKey: 'verticalKey',                             // Optional, the vertical key for the search, default null
   updateLocationEl: '.js-locationBias-update-location'    // Optional, the element used for updating location
 })
+```
+
+## Sort Options Component
+
+The sort options component displays a list of radio buttons that allows users to sort the results of a vertical search.
+There may only one sort options component per page.
+
+```html
+<div class='sort-options-container'></div>
+```
+
+```js
+// note: showExpand and showNumberApplied options are explicitly not included:
+// sorting will always be exposed to the user if added.
+ANSWERS.addComponent('SortOptions', {
+  container: '.sort-options-container',
+  // Optional: The label used for the “default” sort (aka sort the order provided by the config), defaults to 'Best Match'
+  defaultSortLabel: 'Best Match',
+  // Required: List of component configurations
+  options: [
+    {
+      // Required: Either FIELD, ENTITY_DISTANCE, or RELEVANCE
+      type: 'FIELD',
+      // Required only if type is FIELD, field name to sort by
+      field: 'c_popularity',
+      // Required only if type is FIELD, direction to sort by
+      direction: 'ASC',
+      // Required: Label for the sort option's radio button
+      label: 'Popularity',
+    },
+    {
+      type: "ENTITY_DISTANCE",
+      label: 'Distance'
+    },
+    {
+      type: 'RELEVANCE',
+      label: 'Relevance'
+    }
+  ],
+  // Optional: the selector used for options in the template, defaults to '.yxt-SortOptions-optionSelector'
+  optionSelector: '.yxt-SortOptions-optionSelector',
+  // Optional: if true, triggers a search on each change to a filter, defaults to false
+  searchOnChange: false,
+  // Optional: Show a reset button, defaults to false
+  showReset: false,
+  // Optional: The label to use for the reset button, defaults to 'reset'
+  resetLabel: 'reset',
+  // Optional: Allow collapsing excess filter options after a limit, defaults to true
+  showMore: true,
+  // Optional: The max number of filter options to show before collapsing extras, defaults to 5
+  showMoreLimit: 5,
+  // Optional: The label to show for displaying more options, defaults to 'Show more'
+  showMoreLabel: 'Show more',
+  // Optional: The label to show for displaying less options, defaults to 'Show less'
+  showLessLabel: 'Show less',
+  // Optional, the callback function to call when changed, defaults to function() => {}
+  // runs BEFORE search triggered by searchOnChange if searchOnChange is true
+  onChange: function() {},
+  // Optional, the label to be used in the legend, defaults to 'Sorting'
+  label: 'Sorting'
+});
 ```
 
 # Analytics

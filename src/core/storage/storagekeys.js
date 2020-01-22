@@ -28,5 +28,5 @@ export default {
   SESSIONS_OPT_IN: 'sessions-opt-in',
   NAVIGATION_CONFIG: 'navigation-config',
   LOCALE: 'locale',
-  SORT_BY: 'sort-by'
+  SORT_BYS: 'sort-bys'
 };
