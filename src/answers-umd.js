@@ -26,6 +26,7 @@ import SearchApi from './core/search/searchapi';
 import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import NavigationConfig from './core/models/navigationconfig';
+import { SANDBOX, PRODUCTION } from './core/constants';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -175,7 +176,8 @@ class Answers {
           parsedConfig.experienceKey,
           parsedConfig.experienceVersion,
           parsedConfig.businessId,
-          parsedConfig.analyticsOptions);
+          parsedConfig.analyticsOptions,
+          parsedConfig.environment);
 
       this._analyticsReporterService = reporter;
 
@@ -230,6 +232,13 @@ class Answers {
       sessionTrackingEnabled = config.sessionTrackingEnabled;
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
+
+    const sandboxPrefix = `${SANDBOX}-`;
+    parsedConfig.apiKey.includes(sandboxPrefix)
+      ? parsedConfig.environment = SANDBOX
+      : parsedConfig.environment = PRODUCTION;
+    parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
+
     return parsedConfig;
   }
 
@@ -340,18 +349,20 @@ function getServices (config, globalStorage) {
       apiKey: config.apiKey,
       experienceKey: config.experienceKey,
       experienceVersion: config.experienceVersion,
-      locale: config.locale
+      locale: config.locale,
+      environment: config.environment
     }),
     autoCompleteService: new AutoCompleteApi(
       {
         apiKey: config.apiKey,
         experienceKey: config.experienceKey,
         experienceVersion: config.experienceVersion,
-        locale: config.locale
+        locale: config.locale,
+        environment: config.environment
       },
       globalStorage),
     questionAnswerService: new QuestionAnswerApi(
-      { apiKey: config.apiKey },
+      { apiKey: config.apiKey, environment: config.environment },
       globalStorage),
     errorReporterService: new ErrorReporter(
       {
@@ -359,7 +370,8 @@ function getServices (config, globalStorage) {
         experienceKey: config.experienceKey,
         experienceVersion: config.experienceVersion,
         printVerbose: config.debug,
-        sendToServer: !config.suppressErrorReports
+        sendToServer: !config.suppressErrorReports,
+        environment: config.environment
       },
       globalStorage)
   };

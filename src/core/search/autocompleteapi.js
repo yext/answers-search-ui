@@ -67,6 +67,13 @@ export default class AutoCompleteApi {
       throw new AnswersBasicError('Global storage is required', 'AutoComplete');
     }
     this._globalStorage = globalStorage;
+
+    /**
+     * The environment of the Answers experience
+     * @type {string}
+     * @private
+     */
+    this._environment = config.environment;
   }
 
   /** @inheritdoc */
@@ -75,6 +82,7 @@ export default class AutoCompleteApi {
       endpoint: '/v2/accounts/me/answers/filtersearch',
       apiKey: this._apiKey,
       version: this._version,
+      environment: this._environment,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -100,6 +108,7 @@ export default class AutoCompleteApi {
       endpoint: '/v2/accounts/me/answers/vertical/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
+      environment: this._environment,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -124,6 +133,7 @@ export default class AutoCompleteApi {
       endpoint: '/v2/accounts/me/answers/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
+      environment: this._environment,
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,

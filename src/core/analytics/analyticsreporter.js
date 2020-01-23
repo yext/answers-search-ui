@@ -2,9 +2,10 @@
 
 import AnalyticsEvent from './analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
-import { ANALYTICS_BASE_URL, ANALYTICS_BASE_URL_NO_COOKIE } from '../constants';
+import { PRODUCTION } from '../constants';
 import StorageKeys from '../storage/storagekeys';
 import HttpRequester from '../http/httprequester';
+import { getAnalyticsUrl } from '../utils/urlutils';
 
 /** @typedef {import('../services/analyticsreporterservice').default} AnalyticsReporterService */
 
@@ -14,7 +15,13 @@ import HttpRequester from '../http/httprequester';
  * @implements {AnalyticsReporterService}
  */
 export default class AnalyticsReporter {
-  constructor (core, experienceKey, experienceVersion, businessId, globalOptions = {}) {
+  constructor (
+    core,
+    experienceKey,
+    experienceVersion,
+    businessId,
+    globalOptions = {},
+    environment = PRODUCTION) {
     /**
      * The internal business identifier used for reporting
      * @type {number}
@@ -29,11 +36,18 @@ export default class AnalyticsReporter {
     this._globalOptions = Object.assign({}, globalOptions, { experienceKey });
 
     /**
+     * The environment of the Answers experience
+     * @type {string}
+     * @private
+     */
+    this._environment = environment;
+
+    /**
      * Base URL for the analytics API
      * @type {string}
      * @private
      */
-    this._baseUrl = ANALYTICS_BASE_URL_NO_COOKIE;
+    this._baseUrl = getAnalyticsUrl(this._environment);
 
     /**
      * Boolean indicating if opted in or out of conversion tracking
@@ -79,6 +93,6 @@ export default class AnalyticsReporter {
   /** @inheritdoc */
   setConversionTrackingEnabled (isEnabled) {
     this._conversionTrackingEnabled = isEnabled;
-    this._baseUrl = isEnabled ? ANALYTICS_BASE_URL : ANALYTICS_BASE_URL_NO_COOKIE;
+    this._baseUrl = getAnalyticsUrl(this._environment, isEnabled);
   }
 }

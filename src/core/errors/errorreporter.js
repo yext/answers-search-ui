@@ -55,6 +55,13 @@ export default class ErrorReporter {
     }
     this.globalStorage = globalStorage;
 
+    /**
+     * The environment of the Answers experience
+     * @type {string}
+     * @private
+     */
+    this.environment = config.environment;
+
     // Attach reporting listeners to window
     window.addEventListener('error', e => this.report(e.error));
     window.addEventListener('unhandledrejection', e => this.report(e.error));
@@ -81,6 +88,7 @@ export default class ErrorReporter {
         endpoint: '/v2/accounts/me/answers/errors',
         apiKey: this.apiKey,
         version: 20190301,
+        environment: this.environment,
         params: {
           'libVersion': LIB_VERSION,
           'experienceVersion': this.experienceVersion,

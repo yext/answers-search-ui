@@ -56,6 +56,13 @@ export default class SearchApi {
       throw new AnswersBasicError('Locale is required', 'Search');
     }
     this._locale = config.locale;
+
+    /**
+     * The environment of the Answers experience
+     * @type {string}
+     * @private
+     */
+    this._environment = config.environment;
   }
 
   /** @inheritdoc */
@@ -67,6 +74,7 @@ export default class SearchApi {
       endpoint: '/v2/accounts/me/answers/vertical/query',
       apiKey: this._apiKey,
       version: this._version,
+      environment: this._environment,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -97,6 +105,7 @@ export default class SearchApi {
       endpoint: '/v2/accounts/me/answers/query',
       apiKey: this._apiKey,
       version: this._version,
+      environment: this._environment,
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,
