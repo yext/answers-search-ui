@@ -14,15 +14,14 @@ import Filter from '../../../core/models/filter';
 export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
-
     this.options = this._config.options;
-
-    // Flag for whether all options are shown or if they are hidden behind a show more link
-    this.hideExcessOptions = this._config.showMore;
 
     // Component has default option checked on init
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
-    this.updateSortBys(this.selectedOptionIndex);
+    this.options[this.selectedOptionIndex].isSelected = true;
+
+    // Flag for whether all options are shown or if they are hidden behind a show more link
+    this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex <= this._config.showMoreLimit;
   }
 
   setState (data) {
@@ -37,40 +36,12 @@ export default class SortOptionsComponent extends Component {
     }));
   }
 
-  updateSortBys (optionIndex) {
-    // Change selected option to new optionIndex
-    this.options[this.selectedOptionIndex].isSelected = false;
-    this.options[optionIndex].isSelected = true;
-
-    // Update selected option in component and persistentStorage
-    const option = this.options[optionIndex];
-    this.selectedOptionIndex = optionIndex;
-    this.core.persistentStorage.set(this.name, optionIndex);
-
-    // Update sortBys in global storage
-    if (this._config.storeOnChange && optionIndex === 0) {
-      this.core.clearSortBys();
-    } else if (this._config.storeOnChange) {
-      this.core.setSortBys(option);
-    }
-
-    // Run additional on change function
-    this._config.onChange(option);
-
-    // If search on change, search
-    if (this._config._searchOnChange) {
-      this._search();
-    }
-
-    this.setState();
-  }
-
   onMount () {
     // Handle radio button selections
     DOM.on(
       DOM.query(this._container, '.yxt-SortOptions-fieldSet'),
       'change',
-      evt => this.updateSortBys(parseInt(evt.target.value))
+      evt => this.handleOptionSelection(parseInt(evt.target.value))
     );
 
     // Register more/less button
@@ -90,25 +61,65 @@ export default class SortOptionsComponent extends Component {
       DOM.on(
         DOM.query(this._container, '.yxt-SortOptions-reset'),
         'click',
-        () => this.updateSortBys(0)
+        () => this.handleOptionSelection(0)
+      );
+    }
+
+    // Register apply button
+    if (!this._config.searchOnChange) {
+      DOM.on(
+        DOM.query(this._container, '.yxt-SortOptions-apply'),
+        'click',
+        () => this._sortResults()
       );
     }
   }
 
+  handleOptionSelection (optionIndex) {
+    this._updateSelectedOption(optionIndex);
+    if (this._config.searchOnChange) {
+      this._sortResults();
+    }
+  }
+
+  _updateSelectedOption (optionIndex) {
+    this.options[this.selectedOptionIndex].isSelected = false;
+    this.options[optionIndex].isSelected = true;
+    this.selectedOptionIndex = optionIndex;
+    this.setState();
+  }
+
+  _sortResults () {
+    const optionIndex = this.selectedOptionIndex;
+    const option = this.options[optionIndex];
+
+    // searchOnChange really means sort on change here, just that the sort is done through a search,
+    // This was done to have a consistent option name between filters.
+    this.core.persistentStorage.set(this.name, optionIndex);
+    if (this._config.storeOnChange && optionIndex === 0) {
+      this.core.clearSortBys();
+    } else if (this._config.storeOnChange) {
+      this.core.setSortBys(option);
+    }
+    this._search();
+    this._config.onChange(option);
+    this.setState();
+  }
+
   /**
    * Trigger a search with all filters in storage
-   * TODO(oshi): move global storage logic to core for all calls to core.verticalSearch.
    */
   _search () {
     const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
     const totalFilter = allFilters.length > 1
       ? Filter.and(...allFilters)
       : allFilters[0];
-
-    const query = this.core.globalStorage.getState(StorageKeys.QUERY);
+    const input = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
     const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-    this.core.verticalSearch(this._verticalKey, {
-      input: query,
+    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.verticalSearch(this._config.verticalKey, {
+      input,
       filter: JSON.stringify(totalFilter),
       facetFilter: JSON.stringify(facetFilter)
     });
@@ -153,14 +164,15 @@ function assignDefaults (config) {
   // Add default option to the front of the options array
   updatedConfig.options.unshift({
     label: updatedConfig.defaultSortLabel,
-    isSelected: true
+    isSelected: false
   });
 
   // Optional, the selector used for options in the template
   updatedConfig.optionSelector = config.optionSelector || 'yxt-SortOptions-optionSelector';
 
-  // Optional, if true, triggers a search on each change to a filter, default false
-  updatedConfig.searchOnChange = config.searchOnChange || false;
+  // Optional, if true, triggers a search on each change to a filter,
+  // if false the component also renders an apply button, defaults to false
+  updatedConfig.searchOnChange = config.searchOnChange === undefined ? true : config.searchOnChange;
 
   // Optional, show a reset button. Clicking it will always return the user to the default sorting option.
   updatedConfig.showReset = config.showReset || false;
@@ -190,6 +202,13 @@ function assignDefaults (config) {
   // Optional, when true component does not update globalStorage
   // possibly delegating that to a higher-order/composite component
   updatedConfig.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
+
+  updatedConfig.applyLabel = config.applyLabel || 'Apply';
+
+  if (!config.verticalKey) {
+    throw new AnswersBasicError('vertical key is required', 'SortOptions');
+  }
+  updatedConfig.verticalKey = config.verticalKey;
 
   // note: showExpand and showNumberApplied explicitly not included, on the grounds that
   // sorting should always be exposed to the user if added.

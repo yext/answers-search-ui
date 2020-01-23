@@ -1,6 +1,6 @@
-/** @define FilterOptions */
+/** @define SortOptions */
 
-.yxt-FilterOptions {
+.yxt-SortOptions {
   &-container {
     @include Text($line-height: $line-height-md);
   }
@@ -49,22 +49,6 @@
     margin-left: 5px;
   }
 
-  &-selectedCount {
-    @include Text(
-      $size: $font-size-xs,
-      $weight: $font-weight-bold,
-      $color: white);
-
-    width: 20px;
-    height: 20px;
-    margin-left: 12px;
-    display: flex;
-    background: $color-background-dark;
-    align-items: center;
-    justify-content: center;
-    border-radius: 4px;
-  }
-
   &-reset {
     @include Text(
       $color: $color-brand-primary,
@@ -88,40 +72,10 @@
     }
   }
 
-  &-clickableLegend {
-    border: 1px solid transparent;
-    border-radius: 4px;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    cursor: pointer;
-
-    &:focus {
-      border: 1px solid $color-brand-hover;
-    }
-
-    &:not(:disabled):hover {
-      color: $color-text-secondary;
-    }
-  }
-
   &-input {
     margin-left: 0;
   }
-
-  &-reset--right {
-    margin-left: auto;
-    padding: 0;
-  }
-
-  &-expand {
-    margin-left: auto;
-  }
-
-  &--collapsed {
-    display: none;
-  }
-
+  
   &-collapseUp, &-collapseDown {
     vertical-align: middle;
   }
@@ -136,5 +90,17 @@
 
   &-collapseDown svg {
     transform: rotate(90deg);
+  }
+
+  &-apply {
+    @include Text(
+      $size: $font-size-md,
+      $weight: $font-weight-semibold,
+      $color: white);
+
+    @include Button();
+
+    width: 90px;
+    height: 40px;
   }
 }

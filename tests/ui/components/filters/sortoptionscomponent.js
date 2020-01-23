@@ -9,36 +9,45 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 const mockedCore = () => {
   return {
     setSortBys: (...options) => {
-      options.forEach(opt => {
-        expect(opt).toHaveProperty('type');
-      });
+      options.forEach(opt => expect(opt).toHaveProperty('type'));
     },
     clearSortBys: () => {},
     verticalSearch: () => {},
     globalStorage: {
       getState: storageKey => {
         expect(['SortOptions', StorageKeys.QUERY]).toContain(storageKey);
+        return null;
       },
       getAll: storageKey => {
         expect([StorageKeys.FACET_FILTER, StorageKeys.FILTER]).toContain(storageKey);
-      }
+        return [];
+      },
+      delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
     },
     persistentStorage: {
       set: (namespace, optionIndex) => {
         expect(namespace).toBe('SortOptions');
         expect(typeof optionIndex).toBe('number');
-      }
+      },
+      delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
     }
   };
 };
 
 DOM.setup(document, new DOMParser());
 
-const COMPONENT_MANAGER = mockManager(mockedCore(), SortOptionsComponent.defaultTemplateName(), IconComponent.defaultTemplateName());
+const COMPONENT_MANAGER = mockManager(
+  mockedCore(),
+  SortOptionsComponent.defaultTemplateName(),
+  IconComponent.defaultTemplateName()
+);
 
 describe('sort options component', () => {
   const systemConfig = { core: mockedCore() };
-  const config = { container: '#test-component' };
+  const config = {
+    container: '#test-component',
+    verticalKey: 'verticalKey'
+  };
 
   const defaultOptions = [
     {
@@ -101,6 +110,20 @@ describe('sort options component', () => {
     expect(component.selectedOptionIndex).toEqual(1);
   });
 
+  it('has correct number of options when show more is false', () => {
+    const opts = {
+      ...config,
+      options: threeOptions,
+      showMore: false,
+      showMoreLimit: 2,
+      showMoreLabel: 'show more label!',
+      showLessLabel: 'show less label!'
+    };
+    const component = COMPONENT_MANAGER.create('SortOptions', opts);
+    const wrapper = mount(component);
+    expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(4);
+  });
+
   it('has correct show more/less behavior', () => {
     const opts = {
       ...config,
@@ -125,5 +148,40 @@ describe('sort options component', () => {
     expect(wrapper.find('.yxt-SortOptions-showToggle')).toHaveLength(1);
     expect(wrapper.find('.yxt-SortOptions-showToggle').text()).toContain('show more label!');
     expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(2);
+  });
+
+  it('has correct radio button behavior', () => {
+    const opts = {
+      ...config,
+      options: threeOptions
+    };
+    const component = COMPONENT_MANAGER.create('SortOptions', opts);
+    const wrapper = mount(component);
+    expect('checked' in wrapper.find('.yxt-SortOptions-optionSelector').first().props()).toBeTruthy();
+    wrapper.find('.yxt-SortOptions-optionSelector').at(3).simulate('click');
+    expect('checked' in wrapper.find('.yxt-SortOptions-optionSelector').at(3).props()).toBeTruthy();
+  });
+
+  it('no apply button when default searchOnChange value (true)', () => {
+    const opts = {
+      ...config,
+      options: threeOptions
+    };
+    const component = COMPONENT_MANAGER.create('SortOptions', opts);
+    const wrapper = mount(component);
+    expect(component._config.searchOnChange).toBeTruthy();
+    expect(wrapper.find('.yxt-SortOptions-apply')).toHaveLength(0);
+  });
+
+  it('has apply button with searchOnChange = false', () => {
+    const opts = {
+      ...config,
+      options: threeOptions,
+      searchOnChange: false
+    };
+    const component = COMPONENT_MANAGER.create('SortOptions', opts);
+    const wrapper = mount(component);
+    expect(component._config.searchOnChange).toBeFalsy();
+    expect(wrapper.find('.yxt-SortOptions-apply')).toHaveLength(1);
   });
 });

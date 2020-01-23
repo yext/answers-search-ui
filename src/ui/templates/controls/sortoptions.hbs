@@ -46,6 +46,12 @@
       {{/if}}
     {{/if}}
   </div>
+
+  {{#unless _config.searchOnChange}}
+    <button type='button' class='yxt-SortOptions-apply'>
+      {{_config.applyLabel}}
+    </button>
+  {{/unless}}
 </fieldset>
 
 

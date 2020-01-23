@@ -956,9 +956,12 @@ ANSWERS.addComponent('SortOptions', {
       label: 'Relevance'
     }
   ],
+  // Required: the vertical key used
+  verticalKey: 'KM',
   // Optional: the selector used for options in the template, defaults to '.yxt-SortOptions-optionSelector'
   optionSelector: '.yxt-SortOptions-optionSelector',
-  // Optional: if true, triggers a search on each change to a filter, defaults to false
+  // Optional: if true, triggers a resorts on each change to the sort options,
+  // if false the component also renders an apply button that applies the sort, defaults to false
   searchOnChange: false,
   // Optional: Show a reset button, defaults to false
   showReset: false,
@@ -976,7 +979,10 @@ ANSWERS.addComponent('SortOptions', {
   // runs BEFORE search triggered by searchOnChange if searchOnChange is true
   onChange: function() {},
   // Optional, the label to be used in the legend, defaults to 'Sorting'
-  label: 'Sorting'
+  label: 'Sorting',
+  // Optional, the label to be used on the apply button
+  // only appears if searchOnChange is false, defaults to 'Apply'
+  applyLabel: 'Apply'
 });
 ```
 
