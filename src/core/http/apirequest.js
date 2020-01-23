@@ -1,10 +1,11 @@
 /** @module ApiRequest */
 
 import HttpRequester from './httprequester';
-import { LIVE_API_BASE_URL, LIB_VERSION } from '../constants';
+import { LIB_VERSION, PRODUCTION } from '../constants';
 import SearchParams from '../../ui/dom/searchparams'; // TODO ideally this would be passed in as a param
 import { AnswersBasicError } from '../errors/errors';
 import StorageKeys from '../storage/storagekeys';
+import { getLiveApiUrl } from '../utils/urlutils';
 
 /**
  * ApiRequest is the base class for all API requests.
@@ -22,11 +23,18 @@ export default class ApiRequest {
     this._requester = new HttpRequester();
 
     /**
+     * The environment the request should be made to
+     * @type {string}
+     * @private
+     */
+    this._environment = opts.environment || PRODUCTION;
+
+    /**
      * The baseUrl to use for making a request
      * @type {string}
      * @private
      */
-    this._baseUrl = opts.baseUrl || LIVE_API_BASE_URL;
+    this._baseUrl = opts.baseUrl || getLiveApiUrl(this._environment);
 
     /**
      * The endpoint to use in the url (appended to the {baseUrl})
