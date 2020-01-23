@@ -1,8 +1,9 @@
 /** @module QuestionAnswerApi */
 
 import ApiRequest from '../http/apirequest';
-import { API_BASE_URL } from '../constants';
+import { PRODUCTION } from '../constants';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
+import { getKnowledgeApiUrl } from '../utils/urlutils';
 
 /** @typedef {import('./questionanswerservice').default} QuestionAnswerService */
 
@@ -32,12 +33,19 @@ export default class QuestionAnswerApi {
       throw new AnswersBasicError('Global storage is required', 'QuestionAnswerApi');
     }
     this._globalStorage = globalStorage;
+
+    /**
+     * The environment of the Answers experience
+     * @type {string}
+     * @private
+     */
+    this._environment = config.environment || PRODUCTION;
   }
 
   /** @inheritdoc */
   submitQuestion (question) {
     const requestConfig = {
-      baseUrl: API_BASE_URL,
+      baseUrl: getKnowledgeApiUrl(this._environment),
       endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
       params: {
