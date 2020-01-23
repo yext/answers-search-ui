@@ -15,6 +15,7 @@ export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
     this.options = this._config.options;
+    console.log(this);
 
     // Component has default option checked on init
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
@@ -205,10 +206,10 @@ function assignDefaults (config) {
 
   updatedConfig.applyLabel = config.applyLabel || 'Apply';
 
-  if (!config.verticalKey) {
+  updatedConfig.verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+  if (!updatedConfig.verticalKey) {
     throw new AnswersBasicError('vertical key is required', 'SortOptions');
   }
-  updatedConfig.verticalKey = config.verticalKey;
 
   // note: showExpand and showNumberApplied explicitly not included, on the grounds that
   // sorting should always be exposed to the user if added.
