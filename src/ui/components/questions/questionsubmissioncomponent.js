@@ -6,6 +6,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import QuestionSubmission from '../../../core/models/questionsubmission';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
+import SearchStates from '../../../core/storage/searchstates';
 
 /**
  * Configurable options for the component
@@ -155,13 +156,24 @@ export default class QuestionSubmissionComponent extends Component {
      */
     this.validateConfig();
 
-    this.core.globalStorage.on('update', StorageKeys.QUERY_ID, () => {
-      const questionText = this.core.globalStorage.getState(StorageKeys.QUERY);
-      this.setState(new QuestionSubmission({
-        questionText: questionText,
-        expanded: this._config.expanded
-      }));
-    });
+    /**
+     * The QuestionSubmission component should be rendered only once a search has completed. If the
+     * search results are still loading, the component should not be displayed.
+     */
+    const onResultsUpdate = results => {
+      if (results.searchState !== SearchStates.SEARCH_LOADING) {
+        const questionText = this.core.globalStorage.getState(StorageKeys.QUERY);
+        this.setState(new QuestionSubmission({
+          questionText: questionText,
+          expanded: this._config.expanded
+        }));
+      } else {
+        this.unMount();
+      }
+    };
+
+    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, onResultsUpdate);
+    this.core.globalStorage.on('update', StorageKeys.UNIVERSAL_RESULTS, onResultsUpdate);
   }
 
   /**
