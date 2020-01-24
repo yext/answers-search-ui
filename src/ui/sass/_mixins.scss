@@ -54,7 +54,7 @@
     }
 
     &:focus {
-      border: 3px double #0c5ecb;
+      border: $button-focus-border-size double #0c5ecb;
     }
   }
 }
