@@ -1,0 +1,113 @@
+/** @define SortOptions */
+
+.yxt-SortOptions {
+  &-container {
+    @include Text($line-height: $line-height-md);
+  }
+
+  &-fieldSet {
+    border: 0;
+    padding: 0;
+    margin: $base-spacing 0;
+  }
+
+  &-legend {
+    width: 100%;
+    padding: 0;
+  }
+
+  &-legendLabel {
+    @include Text(
+      $size: $font-size-md-lg,
+      $line-height: $line-height-lg,
+      $weight: $font-weight-semibold);
+    text-align: left;
+    width: 100%;
+    display: flex;
+    align-items: center;
+  }
+
+  &-option {
+    display: flex;
+    align-items: flex-start;
+    margin: 2px 0;
+    @media (max-width: $breakpoint-mobile-max) {
+      margin: 22px 0;
+    }
+  }
+
+  &-options {
+    margin: $base-spacing  0;
+  }
+
+  &-optionLabel {
+    display: block;
+    margin-left: 5px;
+  }
+
+  &-reset {
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton($padding: 0);
+
+    @media (max-width: $breakpoint-mobile-max) {
+      margin-top: $base-spacing ;
+    }
+  }
+
+  &-showToggle {
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton($padding: 0);
+
+    svg {
+      width: 6px;
+      margin-left: 5px;
+    }
+  }
+
+  &-input {
+    margin-left: 0;
+  }
+  
+  &-collapseUp, &-collapseDown {
+    vertical-align: middle;
+  }
+
+  &-collapseUp {
+    padding-top: 2px;
+  }
+
+  &-collapseUp svg {
+    transform: rotate(270deg);
+  }
+
+  &-collapseDown svg {
+    transform: rotate(90deg);
+  }
+
+  &-apply {
+    @include Text(
+      $size: $font-size-md,
+      $weight: $font-weight-semibold,
+      $color: white);
+
+    @include Button;
+
+    color: white;
+    box-sizing: border-box;
+    padding: $base-spacing-sm;
+    letter-spacing: 0.5px;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    overflow-wrap: break-word;
+    margin-top: $base-spacing-sm;
+
+    &:focus
+    {
+      padding: $base-spacing-sm - $button-focus-border-size;
+    }
+  }
+}
