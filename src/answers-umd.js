@@ -26,6 +26,7 @@ import SearchApi from './core/search/searchapi';
 import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import NavigationConfig from './core/models/navigationconfig';
+import { SANDBOX, PRODUCTION } from './core/constants';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -123,67 +124,60 @@ class Answers {
   }
 
   init (config) {
-    config = Object.assign({}, DEFAULTS, config);
-    if (typeof config.apiKey !== 'string') {
-      throw new Error('Missing required `apiKey`. Type must be {string}');
-    }
+    const parsedConfig = this.parseConfig(config);
+    this.validateConfig(parsedConfig);
 
-    if (typeof config.experienceKey !== 'string') {
-      throw new Error('Missing required `experienceKey`. Type must be {string}');
-    }
-
-    config.search = new SearchConfig(config.search);
-    config.navigation = new NavigationConfig(config.navigation);
+    parsedConfig.search = new SearchConfig(parsedConfig.search);
+    parsedConfig.navigation = new NavigationConfig(parsedConfig.navigation);
 
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
-      updateListener: config.onStateChange,
+      updateListener: parsedConfig.onStateChange,
       resetListener: data => globalStorage.setAll(data)
     });
     globalStorage.setAll(persistentStorage.getAll());
-    globalStorage.set(StorageKeys.SEARCH_CONFIG, config.search);
-    globalStorage.set(StorageKeys.NAVIGATION_CONFIG, config.navigation);
-    globalStorage.set(StorageKeys.LOCALE, config.locale);
-    let sessionTrackingEnabled = true;
-    if (typeof config.sessionTrackingEnabled === 'boolean') {
-      sessionTrackingEnabled = config.sessionTrackingEnabled;
-    }
-    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, sessionTrackingEnabled);
+    globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
+    globalStorage.set(StorageKeys.NAVIGATION_CONFIG, parsedConfig.navigation);
+    globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
+    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
 
-    this._services = config.mock ? getMockServices() : getServices(config);
+    this._services = parsedConfig.mock
+      ? getMockServices()
+      : getServices(parsedConfig, globalStorage);
 
     this.core = new Core({
-      apiKey: config.apiKey,
+      apiKey: parsedConfig.apiKey,
       globalStorage: globalStorage,
       persistentStorage: persistentStorage,
-      experienceKey: config.experienceKey,
-      fieldFormatters: config.fieldFormatters,
-      experienceVersion: config.experienceVersion,
-      locale: config.locale,
+      experienceKey: parsedConfig.experienceKey,
+      fieldFormatters: parsedConfig.fieldFormatters,
+      experienceVersion: parsedConfig.experienceVersion,
+      locale: parsedConfig.locale,
       searchService: this._services.searchService,
       autoCompleteService: this._services.autoCompleteService,
       questionAnswerService: this._services.questionAnswerService
     });
 
-    if (config.onStateChange && typeof config.onStateChange === 'function') {
-      config.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
+    if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
+      parsedConfig.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
     }
 
     this.components
       .setCore(this.core)
       .setRenderer(this.renderer);
 
-    this._eligibleForAnalytics = config.businessId != null;
+    this._eligibleForAnalytics = parsedConfig.businessId != null;
     if (this._eligibleForAnalytics) {
       // TODO(amullings): Initialize with other services
-      const reporter = config.mock
+      const reporter = parsedConfig.mock
         ? new NoopAnalyticsReporter()
         : new AnalyticsReporter(
           this.core,
-          config.experienceKey,
-          config.experienceVersion,
-          config.businessId,
-          config.analyticsOptions);
+          parsedConfig.experienceKey,
+          parsedConfig.experienceVersion,
+          parsedConfig.businessId,
+          parsedConfig.analyticsOptions,
+          parsedConfig.environment);
 
       this._analyticsReporterService = reporter;
 
@@ -191,13 +185,13 @@ class Answers {
       initScrollListener(reporter);
     }
 
-    this._setDefaultInitialSearch(config.search);
+    this._setDefaultInitialSearch(parsedConfig.search);
 
-    this._onReady = config.onReady || function () {};
+    this._onReady = parsedConfig.onReady || function () {};
 
-    if (config.useTemplates === false || config.templateBundle) {
-      if (config.templateBundle) {
-        this.renderer.init(config.templateBundle);
+    if (parsedConfig.useTemplates === false || parsedConfig.templateBundle) {
+      if (parsedConfig.templateBundle) {
+        this.renderer.init(parsedConfig.templateBundle);
       }
 
       this._onReady();
@@ -207,7 +201,7 @@ class Answers {
     // Templates are currently downloaded separately from the CORE and UI bundle.
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new TemplateLoader({
-      templateUrl: config.templateUrl
+      templateUrl: parsedConfig.templateUrl
     }).onLoaded((templates) => {
       this.renderer.init(templates);
 
@@ -224,6 +218,45 @@ class Answers {
   onReady (cb) {
     this._onReady = cb;
     return this;
+  }
+
+  /**
+   * Parses the config provided by the user. In the parsed config, any options not supplied by the
+   * user are given default values.
+   * @param {Object} config The user supplied config.
+   */
+  parseConfig (config) {
+    const parsedConfig = Object.assign({}, DEFAULTS, config);
+    let sessionTrackingEnabled = true;
+    if (typeof config.sessionTrackingEnabled === 'boolean') {
+      sessionTrackingEnabled = config.sessionTrackingEnabled;
+    }
+    parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
+
+    const sandboxPrefix = `${SANDBOX}-`;
+    parsedConfig.apiKey.includes(sandboxPrefix)
+      ? parsedConfig.environment = SANDBOX
+      : parsedConfig.environment = PRODUCTION;
+    parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
+
+    return parsedConfig;
+  }
+
+  /**
+   * Validates the Answers config object to ensure things like api key and experience key are
+   * properly set.
+   * @param {Object} config The Answers config.
+   */
+  validateConfig (config) {
+    // TODO (tmeyer): Extract this method into it's own class. Investigate the use of JSON schema
+    // to validate these configs.
+    if (typeof config.apiKey !== 'string') {
+      throw new Error('Missing required `apiKey`. Type must be {string}');
+    }
+
+    if (typeof config.experienceKey !== 'string') {
+      throw new Error('Missing required `experienceKey`. Type must be {string}');
+    }
   }
 
   /**
@@ -307,32 +340,40 @@ class Answers {
 
 /**
  * @param {Object} config
+ * @param {GlobalStorage} globalStorage
  * @returns {Services}
  */
-function getServices (config) {
+function getServices (config, globalStorage) {
   return {
     searchService: new SearchApi({
       apiKey: config.apiKey,
       experienceKey: config.experienceKey,
       experienceVersion: config.experienceVersion,
-      locale: config.locale
+      locale: config.locale,
+      environment: config.environment
     }),
-    autoCompleteService: new AutoCompleteApi({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      locale: config.locale
-    }),
-    questionAnswerService: new QuestionAnswerApi({
-      apiKey: config.apiKey
-    }),
-    errorReporterService: new ErrorReporter({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      printVerbose: config.debug,
-      sendToServer: !config.suppressErrorReports
-    })
+    autoCompleteService: new AutoCompleteApi(
+      {
+        apiKey: config.apiKey,
+        experienceKey: config.experienceKey,
+        experienceVersion: config.experienceVersion,
+        locale: config.locale,
+        environment: config.environment
+      },
+      globalStorage),
+    questionAnswerService: new QuestionAnswerApi(
+      { apiKey: config.apiKey, environment: config.environment },
+      globalStorage),
+    errorReporterService: new ErrorReporter(
+      {
+        apiKey: config.apiKey,
+        experienceKey: config.experienceKey,
+        experienceVersion: config.experienceVersion,
+        printVerbose: config.debug,
+        sendToServer: !config.suppressErrorReports,
+        environment: config.environment
+      },
+      globalStorage)
   };
 }
 

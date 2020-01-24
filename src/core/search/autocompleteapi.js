@@ -13,7 +13,7 @@ import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
  * @implements {AutoCompleteService}
  */
 export default class AutoCompleteApi {
-  constructor (config = {}) {
+  constructor (config = {}, globalStorage) {
     /**
      * The API Key to use for the request
      * @type {string}
@@ -57,14 +57,32 @@ export default class AutoCompleteApi {
       throw new AnswersBasicError('Locale is required', 'AutoComplete');
     }
     this._locale = config.locale;
+
+    /**
+     * The global storage instance of the experience
+     * @type {GlobalStorage}
+     * @private
+     */
+    if (!globalStorage) {
+      throw new AnswersBasicError('Global storage is required', 'AutoComplete');
+    }
+    this._globalStorage = globalStorage;
+
+    /**
+     * The environment of the Answers experience
+     * @type {string}
+     * @private
+     */
+    this._environment = config.environment;
   }
 
   /** @inheritdoc */
   queryFilter (input, config) {
-    let request = new ApiRequest({
+    const requestConfig = {
       endpoint: '/v2/accounts/me/answers/filtersearch',
       apiKey: this._apiKey,
       version: this._version,
+      environment: this._environment,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -73,7 +91,8 @@ export default class AutoCompleteApi {
         'locale': this._locale,
         'search_parameters': JSON.stringify(config.searchParameters)
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.get()
       .then(response => response.json())
@@ -85,10 +104,11 @@ export default class AutoCompleteApi {
 
   /** @inheritdoc */
   queryVertical (input, verticalKey) {
-    let request = new ApiRequest({
+    const requestConfig = {
       endpoint: '/v2/accounts/me/answers/vertical/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
+      environment: this._environment,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -96,7 +116,8 @@ export default class AutoCompleteApi {
         'verticalKey': verticalKey,
         'locale': this._locale
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.get()
       .then(response => response.json())
@@ -108,17 +129,19 @@ export default class AutoCompleteApi {
 
   /** @inheritdoc */
   queryUniversal (queryString) {
-    let request = new ApiRequest({
+    const requestConfig = {
       endpoint: '/v2/accounts/me/answers/autocomplete',
       apiKey: this._apiKey,
       version: this._version,
+      environment: this._environment,
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,
         'version': this._experienceVersion,
         'locale': this._locale
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.get(queryString)
       .then(response => response.json())

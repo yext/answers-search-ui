@@ -1,8 +1,9 @@
 /** @module QuestionAnswerApi */
 
 import ApiRequest from '../http/apirequest';
-import { API_BASE_URL } from '../constants';
+import { PRODUCTION } from '../constants';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
+import { getKnowledgeApiUrl } from '../utils/urlutils';
 
 /** @typedef {import('./questionanswerservice').default} QuestionAnswerService */
 
@@ -12,7 +13,7 @@ import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
  * @implements {QuestionAnswerService}
  */
 export default class QuestionAnswerApi {
-  constructor (config = {}) {
+  constructor (config = {}, globalStorage) {
     /**
      * The API Key to use for the request
      * @type {string}
@@ -22,12 +23,29 @@ export default class QuestionAnswerApi {
       throw new AnswersBasicError('Api Key is required', 'QuestionAnswerApi');
     }
     this._apiKey = config.apiKey;
+
+    /**
+     * The global storage instance of the experience
+     * @type {GlobalStorage}
+     * @private
+     */
+    if (!globalStorage) {
+      throw new AnswersBasicError('Global storage is required', 'QuestionAnswerApi');
+    }
+    this._globalStorage = globalStorage;
+
+    /**
+     * The environment of the Answers experience
+     * @type {string}
+     * @private
+     */
+    this._environment = config.environment || PRODUCTION;
   }
 
   /** @inheritdoc */
   submitQuestion (question) {
-    let request = new ApiRequest({
-      baseUrl: API_BASE_URL,
+    const requestConfig = {
+      baseUrl: getKnowledgeApiUrl(this._environment),
       endpoint: '/v2/accounts/me/questions',
       apiKey: this._apiKey,
       params: {
@@ -39,7 +57,8 @@ export default class QuestionAnswerApi {
         'questionDescription': question.questionDescription,
         'questionLanguage': question.questionLanguage
       }
-    });
+    };
+    let request = new ApiRequest(requestConfig, this._globalStorage);
 
     return request.post({
       mode: 'cors',
