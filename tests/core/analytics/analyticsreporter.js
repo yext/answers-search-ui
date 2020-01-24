@@ -2,7 +2,8 @@ import AnalyticsReporter from '../../../src/core/analytics/analyticsreporter';
 import HttpRequester from '../../../src/core/http/httprequester';
 import { AnswersAnalyticsError } from '../../../src/core/errors/errors';
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
-import { ANALYTICS_BASE_URL_NO_COOKIE, ANALYTICS_BASE_URL } from '../../../src/core/constants';
+import { getAnalyticsUrl } from '../../../src/core/utils/urlutils';
+import { PRODUCTION } from '../../../src/core/constants';
 
 jest.mock('../../../src/core/http/httprequester');
 
@@ -69,7 +70,7 @@ describe('reporting events', () => {
 
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
-      expect.stringContaining(ANALYTICS_BASE_URL_NO_COOKIE),
+      expect.stringContaining(getAnalyticsUrl()),
       expect.anything());
   });
 
@@ -89,7 +90,7 @@ describe('reporting events', () => {
 
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
-      expect.stringContaining(ANALYTICS_BASE_URL),
+      expect.stringContaining(getAnalyticsUrl(PRODUCTION, true)),
       { data: { eventType: 'THUMBS_UP', experienceKey: 'abc123' }, ...cookieData });
   });
 });
