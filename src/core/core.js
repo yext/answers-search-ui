@@ -119,7 +119,8 @@ export default class Core {
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
+        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -265,6 +266,28 @@ export default class Core {
           StorageKeys.QUESTION_SUBMISSION,
           QuestionSubmission.submitted());
       });
+  }
+
+  /**
+   * Stores the given sortBy into storage, to be used for the next search
+   * @param {Object} sortByOptions
+   */
+  setSortBys (...sortByOptions) {
+    const sortBys = sortByOptions.map(option => {
+      return {
+        type: option.type,
+        field: option.field,
+        direction: option.direction
+      };
+    });
+    this.globalStorage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+  }
+
+  /**
+   * Clears the sortBys key in global storage.
+   */
+  clearSortBys () {
+    this.globalStorage.delete(StorageKeys.SORT_BYS);
   }
 
   /**

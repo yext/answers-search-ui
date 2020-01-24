@@ -24,13 +24,15 @@ export default class MockComponentManager {
    *
    * @param {string} componentType - The type of the component (as defined by the registry)
    * @param {Object} config - The config to pass to the component constructor
+   * @param {?Object} systemConfig - The system config to override default mock system config
    */
-  create (componentType, config) {
-    const systemConfig = {
+  create (componentType, config, systemConfig = {}) {
+    systemConfig = {
       core: this.core,
       analyticsReporter: this.analyticsReporter,
       renderer: this.renderer,
-      componentManager: this
+      componentManager: this,
+      ...systemConfig
     };
 
     const componentConfig = {

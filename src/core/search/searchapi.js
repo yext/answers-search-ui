@@ -66,7 +66,7 @@ export default class SearchApi {
   }
 
   /** @inheritdoc */
-  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled, sortBys }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -90,7 +90,9 @@ export default class SearchApi {
         'retrieveFacets': isDynamicFiltersEnabled,
         'locale': this._locale,
         'skipSpellCheck': skipSpellCheck,
-        'queryTrigger': queryTrigger
+        'queryTrigger': queryTrigger,
+        'sessionTrackingEnabled': sessionTrackingEnabled,
+        'sortBys': sortBys
       }
     };
     let request = new ApiRequest(requestConfig, { getState: () => sessionTrackingEnabled });

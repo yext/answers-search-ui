@@ -27,5 +27,6 @@ export default {
   LOCATION_BIAS: 'location-bias',
   SESSIONS_OPT_IN: 'sessions-opt-in',
   NAVIGATION_CONFIG: 'navigation-config',
-  LOCALE: 'locale'
+  LOCALE: 'locale',
+  SORT_BYS: 'sort-bys'
 };
