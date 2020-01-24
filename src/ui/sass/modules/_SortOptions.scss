@@ -8,7 +8,7 @@
   &-fieldSet {
     border: 0;
     padding: 0;
-    margin: 12px 0;
+    margin: $base-spacing 0;
   }
 
   &-legend {
@@ -25,10 +25,6 @@
     width: 100%;
     display: flex;
     align-items: center;
-
-    &:hover button {
-      color: $color-text-secondary;
-    }
   }
 
   &-option {
@@ -41,7 +37,7 @@
   }
 
   &-options {
-    margin: 12px 0;
+    margin: $base-spacing  0;
   }
 
   &-optionLabel {
@@ -56,7 +52,7 @@
     @include TextButton($padding: 0);
 
     @media (max-width: $breakpoint-mobile-max) {
-      margin-top: 12px;
+      margin-top: $base-spacing ;
     }
   }
 
@@ -98,9 +94,20 @@
       $weight: $font-weight-semibold,
       $color: white);
 
-    @include Button();
+    @include Button;
 
-    width: 90px;
-    height: 40px;
+    color: white;
+    box-sizing: border-box;
+    padding: $base-spacing-sm;
+    letter-spacing: 0.5px;
+    font-size: $font-size-md;
+    font-weight: $font-weight-semibold;
+    overflow-wrap: break-word;
+    margin-top: $base-spacing-sm;
+
+    &:focus
+    {
+      padding: $base-spacing-sm - $button-focus-border-size;
+    }
   }
 }

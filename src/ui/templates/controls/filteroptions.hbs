@@ -71,21 +71,19 @@
     </div>
 
     {{#if showMore}}
-      {{#if allShown}}
-          <button class="yxt-FilterOptions-showToggle">
-            {{showLessLabel}}
-            <span class="yxt-FilterOptions-collapseUp"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
-          </button>
+      <button class="yxt-FilterOptions-showToggle">
+        {{#if allShown}}
+          {{showLessLabel}}
+          <span class="yxt-FilterOptions-collapseUp"
+            data-component="IconComponent"
+            data-opts='{ "iconName": "chevron" }'></span>
         {{else}}
-          <button class="yxt-FilterOptions-showToggle">
-            {{showMoreLabel}}
-            <span class="yxt-FilterOptions-collapseDown"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
-          </button>
-      {{/if}}
+          {{showMoreLabel}}
+          <span class="yxt-FilterOptions-collapseDown"
+            data-component="IconComponent"
+            data-opts='{ "iconName": "chevron" }'></span>
+        {{/if}}
+      </button>
     {{/if}}
   </div>
 </fieldset>

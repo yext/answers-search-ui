@@ -15,7 +15,6 @@ export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
     this.options = this._config.options;
-    console.log(this);
 
     // Component has default option checked on init
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
@@ -33,7 +32,8 @@ export default class SortOptionsComponent extends Component {
     super.setState(Object.assign({}, data, {
       options,
       hideExcessOptions: this.hideExcessOptions,
-      name: this.name
+      name: this.name,
+      showReset: this._config.showReset && this.selectedOptionIndex !== 0
     }));
   }
 
