@@ -968,6 +968,7 @@ ANSWERS.addComponent('SortOptions', {
   // Optional: The label to use for the reset button, defaults to 'reset'
   resetLabel: 'reset',
   // Optional: Allow collapsing excess filter options after a limit, defaults to true
+  // Note: screen readers will not read options hidden by this flag, without clicking show more first
   showMore: true,
   // Optional: The max number of filter options to show before collapsing extras, defaults to 5
   showMoreLimit: 5,

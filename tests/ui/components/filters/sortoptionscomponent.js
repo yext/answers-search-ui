@@ -44,75 +44,80 @@ const COMPONENT_MANAGER = mockManager(
 
 describe('sort options component', () => {
   const systemConfig = { core: mockedCore() };
-  const config = {
-    container: '#test-component',
-    verticalKey: 'verticalKey'
-  };
-
-  const defaultOptions = [
-    {
-      type: 'FIELD',
-      field: 'c_popularity',
-      direction: 'ASC',
-      label: 'Popularity'
-    }
-  ];
-
-  const threeOptions = [
-    {
-      type: 'FIELD',
-      field: 'c_popularity',
-      direction: 'ASC',
-      label: 'Popularity'
-    },
-    {
-      type: 'FIELD',
-      field: 'c_price',
-      direction: 'ASC',
-      label: 'Price - Low to High'
-    },
-    {
-      type: 'FIELD',
-      field: 'c_price',
-      direction: 'DESC',
-      label: 'Price - High to Low'
-    }
-  ];
+  let defaultConfig;
+  let threeOptions;
 
   beforeEach(() => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
+
+    defaultConfig = {
+      container: '#test-component',
+      verticalKey: 'verticalKey',
+      options: [
+        {
+          type: 'FIELD',
+          field: 'c_popularity',
+          direction: 'ASC',
+          label: 'Popularity'
+        }
+      ]
+    };
+
+    threeOptions = [
+      {
+        type: 'FIELD',
+        field: 'c_popularity',
+        direction: 'ASC',
+        label: 'Popularity'
+      },
+      {
+        type: 'FIELD',
+        field: 'c_price',
+        direction: 'ASC',
+        label: 'Price - Low to High'
+      },
+      {
+        type: 'FIELD',
+        field: 'c_price',
+        direction: 'DESC',
+        label: 'Price - High to Low'
+      }
+    ];
   });
 
   it('throws an error when config.options is unset', () => {
     const error = new AnswersBasicError('config.options are required', 'SortOptions');
-    expect(() => new SortOptionsComponent(config, systemConfig)).toThrow(error);
+    expect(() => new SortOptionsComponent({ container: '#test-component' }, systemConfig)).toThrow(error);
   });
 
   it('renders correctly for default values', () => {
-    const opts = { ...config, options: defaultOptions };
-    const component = COMPONENT_MANAGER.create('SortOptions', opts);
+    const component = COMPONENT_MANAGER.create('SortOptions', defaultConfig);
     expect(component.selectedOptionIndex).toEqual(0);
-    const wrapper = mount(COMPONENT_MANAGER.create('SortOptions', opts));
+    const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(2);
     expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(0);
     expect(wrapper.find('.yxt-SortOptions-showToggle')).toHaveLength(0);
   });
 
   it('reset button correctly resets', () => {
-    const opts = { ...config, options: defaultOptions, showReset: true };
+    const opts = { ...defaultConfig, showReset: true };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(1);
+    expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(0);
     expect(component.selectedOptionIndex).toEqual(0);
     wrapper.find('.yxt-SortOptions-optionSelector').at(1).simulate('click');
+    expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(1);
     expect(component.selectedOptionIndex).toEqual(1);
+    wrapper.find('.yxt-SortOptions-reset').first().simulate('click');
+    expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(0);
+    expect(component.selectedOptionIndex).toEqual(0);
   });
 
   it('has correct number of options when show more is false', () => {
     const opts = {
-      ...config,
+      ...defaultConfig,
       options: threeOptions,
       showMore: false,
       showMoreLimit: 2,
@@ -126,7 +131,7 @@ describe('sort options component', () => {
 
   it('has correct show more/less behavior', () => {
     const opts = {
-      ...config,
+      ...defaultConfig,
       options: threeOptions,
       showMore: true,
       showMoreLimit: 2,
@@ -152,7 +157,7 @@ describe('sort options component', () => {
 
   it('has correct radio button behavior', () => {
     const opts = {
-      ...config,
+      ...defaultConfig,
       options: threeOptions
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
@@ -164,7 +169,7 @@ describe('sort options component', () => {
 
   it('no apply button when default searchOnChange value (true)', () => {
     const opts = {
-      ...config,
+      ...defaultConfig,
       options: threeOptions
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
@@ -175,7 +180,7 @@ describe('sort options component', () => {
 
   it('has apply button with searchOnChange = false', () => {
     const opts = {
-      ...config,
+      ...defaultConfig,
       options: threeOptions,
       searchOnChange: false
     };

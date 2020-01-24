@@ -15,13 +15,10 @@ export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
     this.options = this._config.options;
-
-    // Component has default option checked on init
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
     this.options[this.selectedOptionIndex].isSelected = true;
-
-    // Flag for whether all options are shown or if they are hidden behind a show more link
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex <= this._config.showMoreLimit;
+    this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
   }
 
   setState (data) {
@@ -33,7 +30,7 @@ export default class SortOptionsComponent extends Component {
       options,
       hideExcessOptions: this.hideExcessOptions,
       name: this.name,
-      showReset: this._config.showReset && this.selectedOptionIndex !== 0
+      showReset: this.showReset
     }));
   }
 
@@ -58,7 +55,7 @@ export default class SortOptionsComponent extends Component {
     }
 
     // Register show reset button
-    if (this._config.showReset) {
+    if (this.showReset) {
       DOM.on(
         DOM.query(this._container, '.yxt-SortOptions-reset'),
         'click',
@@ -87,6 +84,7 @@ export default class SortOptionsComponent extends Component {
     this.options[this.selectedOptionIndex].isSelected = false;
     this.options[optionIndex].isSelected = true;
     this.selectedOptionIndex = optionIndex;
+    this.showReset = this._config.showReset && optionIndex !== 0;
     this.setState();
   }
 
@@ -146,6 +144,9 @@ function assignDefaults (config) {
     throw new AnswersBasicError('config.options are required', 'SortOptions');
   }
   const OPTION_TYPES = ['FIELD', 'RELEVANCE', 'ENTITY_DISTANCE'];
+  if (!Array.isArray(config.options)) {
+    throw new AnswersBasicError('options must be an array of objects', 'SortOptions');
+  }
   updatedConfig.options = config.options.map(option => {
     if (!option.label || !option.type) {
       throw new AnswersBasicError(`option.label and option.type are required option ${option}`, 'SortOptions');
