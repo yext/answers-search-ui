@@ -108,3 +108,42 @@ describe('vertical searching', () => {
     });
   });
 });
+
+describe('alexis search', () => {
+  const mockedRequest = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({ test: 'Alexis Grow' }) }));
+  let searchApi;
+
+  beforeEach(() => {
+    mockedRequest.mockClear();
+    HttpRequester.mockImplementation(() => {
+      return {
+        get: mockedRequest
+      };
+    });
+    searchApi = new SearchApi({
+      apiKey: '1234abcd',
+      experienceKey: 'abc123',
+      locale: 'en'
+    });
+  });
+
+  it('searches with alexis full name and username and additional text', () => {
+    const result = searchApi.alexisSearch(true, true, 'query');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'agrow query' }));
+    });
+  });
+
+  it('searches with alexis full name and no additional text', () => {
+    const result = searchApi.alexisSearch(true, false, '');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Alexis Grow ' }));
+    });
+  });
+});
