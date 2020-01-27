@@ -1,0 +1,15 @@
+.yxt-Alexis
+{
+  &-button
+  {
+    padding: 8px 12px;
+    background-color: gray;
+    color: white;
+    cursor: pointer;
+
+    &:hover
+    {
+      background-color: darkgray;
+    }
+  }
+}

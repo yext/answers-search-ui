@@ -8,6 +8,7 @@ import NavigationComponent from './navigation/navigationcomponent';
 
 import SearchComponent from './search/searchcomponent';
 import FilterSearchComponent from './search/filtersearchcomponent';
+import AlexisComponent from './search/alexiscomponent';
 import AutoCompleteComponent from './search/autocompletecomponent';
 import SpellCheckComponent from './search/spellcheckcomponent';
 
@@ -44,6 +45,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
 // Search Components
   .register(SearchComponent)
   .register(FilterSearchComponent)
+  .register(AlexisComponent)
   .register(AutoCompleteComponent)
   .register(SpellCheckComponent)
 
