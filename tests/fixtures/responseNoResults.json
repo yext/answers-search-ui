@@ -1,0 +1,22 @@
+{
+  "meta": {
+      "uuid": "test-uuid",
+      "errors": []
+  },
+  "response": {
+      "businessId": 1,
+      "queryId": "test-queryId",
+      "resultsCount": 0,
+      "results": [],
+      "appliedQueryFilters": [],
+      "facets": [],
+      "source": "KNOWLEDGE_MANAGER",
+      "searchIntents": [],
+      "locationBias": {
+          "latitude": 38.9034,
+          "longitude": -76.9882,
+          "locationDisplayName": "Washington, District of Columbia, United States of America",
+          "accuracy": "IP"
+      }
+  }
+}
