@@ -78,10 +78,14 @@
     }
   }
 
+  &-wrapper {
+    width: 100%;
+  }
+
   &-image {
     min-width: 25%;
     max-width: 25%;
-    margin-right: $vertical-results-svg-size;
+    margin-right: $standard-card-svg-size;
     background-size: contain;
     background-repeat: no-repeat;
     background-position: center center;
@@ -91,6 +95,6 @@
 
   &-iconLabel {
     word-wrap: break-word;
-    margin-left: $base-spacing/2;
+    margin-left: $base-spacing;
   }
 }
