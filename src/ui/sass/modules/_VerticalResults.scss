@@ -1,0 +1,37 @@
+/** @define VerticalResults */
+.yxt-VerticalResults {
+
+  &-items {
+    padding: 0;
+    border: $border-default;
+  }
+
+  &-item {
+    list-style: none;
+  }
+
+  &-footer {
+    text-align: center;
+    a {
+      text-decoration: none;
+      color: $color-text-primary;
+    }
+    svg {
+      width: 48px;
+      height: 48px;
+    }
+  }
+
+  &-columns {
+    display: flex;
+  }
+
+  &-listWrapper {
+    margin-left: 32px;
+
+    &-1 { width: 100%; }
+    &-2 { width: 50%; }
+    &-4 { width: 25%; }
+  }
+
+}

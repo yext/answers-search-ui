@@ -1,0 +1,33 @@
+<section class="yxt-VerticalResults">
+  <div class='yxt-VerticalResults-appliedFilters'></div>
+  <div class='yxt-VerticalResults-columns'>
+    {{#each results}}
+      <div class='yxt-VerticalResults-listWrapper yxt-VerticalResults-listWrapper-{{../_config.maxNumberOfColumns}}'>
+        <ul class="yxt-VerticalResults-items yxt-VerticalResults-items-{{@index}}">
+          {{#each this}}
+            <li class='yxt-VerticalResults-item-{{@../index}}-{{@index}} yxt-VerticalResults-item'></li>
+          {{/each}}
+        </ul>
+      </div>
+    {{/each}}
+  </div>
+  {{#if results}}
+    {{#if footerSVG}}
+      <a href='{{_config.footerLogoUrl}}' class="yxt-VerticalResults-footer">
+        {{{footerSVG}}}
+      </a>
+    {{/if}}
+    {{#if footerImage}}
+      <a href='{{_config.footerLogoUrl}}' class="yxt-VerticalResults-footer">
+        <img src='{{footerImage}}'>
+      </a>
+    {{/if}}
+    {{#if footerIcon}}
+      <div class="yxt-VerticalResults-footer">
+        <a href='{{_config.footerLogoUrl}}' >
+          <span data-component="IconComponent" data-opts='{ "iconName": "{{footerIcon}}" }'></span>
+        </a>
+      </div>
+    {{/if}}
+  {{/if}}
+</section>

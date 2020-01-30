@@ -19,16 +19,11 @@ import GeoLocationComponent from './filters/geolocationcomponent';
 import SortOptionsComponent from './filters/sortoptionscomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
-import ResultsComponent from './results/resultscomponent';
-import AccordionResultsComponent from './results/accordionresultscomponent.js';
+import VerticalResultsComponent from './results/verticalresultscomponent';
 import UniversalResultsComponent from './results/universalresultscomponent';
 import PaginationComponent from './results/paginationcomponent';
 
-import ResultsItemComponent from './results/resultsitemcomponent';
-import LocationResultsItemComponent from './results/locationresultsitemcomponent';
-import EventResultsItemComponent from './results/eventresultsitemcomponent';
-
-import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
+import StandardCardComponent from './cards/standardcardcomponent';
 
 import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
@@ -61,14 +56,12 @@ const COMPONENT_CLASS_LIST = [
   // Results Components
   DirectAnswerComponent,
   UniversalResultsComponent,
-  ResultsComponent,
+  VerticalResultsComponent,
   PaginationComponent,
-  ResultsItemComponent,
-  AccordionResultsComponent,
-  LocationResultsItemComponent,
-  EventResultsItemComponent,
-  PeopleResultsItemComponent,
   MapComponent,
+
+  // Card Components
+  StandardCardComponent,
 
   // Questions Components
   QuestionSubmissionComponent,

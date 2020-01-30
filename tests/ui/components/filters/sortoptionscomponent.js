@@ -1,6 +1,5 @@
 import DOM from '../../../../src/ui/dom/dom';
 import SortOptionsComponent from '../../../../src/ui/components/filters/sortoptionscomponent';
-import IconComponent from '../../../../src/ui/components/icons/iconcomponent';
 import { mount } from 'enzyme';
 import { AnswersBasicError } from '../../../../src/core/errors/errors';
 import mockManager from '../../../setup/managermocker';
@@ -38,8 +37,7 @@ DOM.setup(document, new DOMParser());
 
 const COMPONENT_MANAGER = mockManager(
   mockedCore(),
-  SortOptionsComponent.defaultTemplateName(),
-  IconComponent.defaultTemplateName()
+  SortOptionsComponent.defaultTemplateName()
 );
 
 describe('sort options component', () => {

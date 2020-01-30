@@ -1,0 +1,104 @@
+/** @define StandardCard */
+.yxt-StandardCard {
+  display: flex; //
+  padding: 16px;
+  border-bottom: $border-default;
+
+  &-wrapper {
+    // min-width: 0px;
+    // width: 100%;
+  }
+
+  &-title {
+    text-decoration: none;
+    padding-bottom: 8px;
+    @include Text(
+      $size: $font-size-md-lg,
+      $line-height: $line-height-lg,
+      $weight: $font-weight-semibold,
+      $color: $color-brand-primary
+    );
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &-subtitle {
+    padding-bottom: 8px;
+    text-decoration: none;
+    @include Text(
+      $line-height: 20px,
+      $weight: $font-weight-normal,
+      $color: $color-text-secondary,
+    );
+  }
+
+  &-content {
+    display: flex; //
+    // width: 100%;
+  }
+
+  &-details {
+    flex-basis: 50%;
+    flex-grow: 1;
+
+    @include Text(
+      $size: 14px,
+      $line-height: $line-height-md,
+      $weight: $font-weight-normal,
+      $color: $color-text-primary
+    );
+  }
+
+  &-showToggle {
+    margin-top: 8px;
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton($padding: 0);
+  }
+  
+  &-cta {
+    // min-width: 0;
+    // flex-basis: 0;
+    margin-left: 12px;
+
+    &-item {
+      text-align: center;
+      // padding-left: 16px; //
+      margin-bottom: 12px;
+      display: flex; //
+      text-decoration: none;
+      align-items: center;
+
+      @include Text(
+        $size: 14px,
+        $line-height: 20px,
+        $weight: $font-weight-semibold,
+        $color: $color-brand-primary
+      );
+
+      svg {
+        height: 24px;
+        width: 24px;
+      }
+    }
+  }
+
+  &-image {
+    min-width: 25%;
+    max-width: 25%;
+    margin-right: 16px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-color: aliceblue;
+    border-radius: 2px;
+  }
+
+  &-iconLabel {
+    word-wrap: break-word;
+    margin-left: 8px;
+  }
+}
