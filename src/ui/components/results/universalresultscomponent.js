@@ -3,7 +3,6 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
-import AccordionResultsComponent from './accordionresultscomponent.js';
 
 export default class UniversalResultsComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
@@ -49,9 +48,6 @@ export default class UniversalResultsComponent extends Component {
 
   addChild (data = {}, type, opts) {
     const childOpts = { ...opts, ...this.getChildConfig([data['verticalConfigId']]) };
-    if (childOpts.useAccordion === true) {
-      return super.addChild(data, AccordionResultsComponent.type, childOpts);
-    }
     return super.addChild(data, type, childOpts);
   }
 

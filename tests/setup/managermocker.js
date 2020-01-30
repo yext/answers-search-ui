@@ -6,6 +6,7 @@ import path from 'path';
 import HandlebarsRenderer from '../../src/ui/rendering/handlebarsrenderer';
 import Handlebars from 'handlebars/dist/handlebars.min.js';
 import MockComponentManager from './mockcomponentmanager';
+import IconComponent from '../../src/ui/components/icons/iconcomponent';
 
 /**
  * Generates a MockComponentManager with templates from the passed in template paths.
@@ -20,6 +21,8 @@ export default function mockManager (mockedCore, ...templatePaths) {
     const templatePath = templatePaths[i];
     rendererOpts[templatePath] = Handlebars.compile(loadTemplate(templatePath));
   }
+  const iconTemplate = IconComponent.defaultTemplateName();
+  rendererOpts[iconTemplate] = Handlebars.compile(loadTemplate(iconTemplate));
 
   const RENDERER = new HandlebarsRenderer(rendererOpts);
   const COMPONENT_MANAGER = new MockComponentManager(mockedCore);

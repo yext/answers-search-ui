@@ -1,0 +1,46 @@
+<div class='yxt-StandardCard'>
+  {{#if _config.image}}
+    <div style="background-image: url('{{_config.image}}');" class='yxt-StandardCard-image'></div>
+  {{/if}}
+  <div class='yxt-StandardCard-wrapper'>
+    {{#if title}}
+      <a href="{{url}}" class='yxt-StandardCard-title' target='_blank'>
+        {{title}}
+      </a>
+    {{/if}}
+    {{#if _config.subtitle}}  
+      <div class='yxt-StandardCard-subtitle'>
+        {{_config.subtitle}}
+      </div>
+    {{/if}}
+    <div class='yxt-StandardCard-content'>
+      {{#if details}}
+        <div class='yxt-StandardCard-details'>
+          {{details}}
+          {{#if showToggle}}
+            <button class='yxt-StandardCard-showToggle'>
+              {{#if hideExcessDetails}}
+                {{_config.showMoreText}}
+              {{else}} 
+                {{_config.showLessText}}
+              {{/if}}
+            </button>
+          {{/if}}
+        </div>
+      {{/if}}
+      {{#if callsToAction}}
+        <div class='yxt-StandardCard-cta'>
+          {{#each callsToAction}}
+            <a href="{{url}}"
+              target="{{#if newWindow}} _blank {{else}} _self {{/if}}"
+              class='yxt-StandardCard-cta-{{@index}} yxt-StandardCard-cta-item'
+            >
+              <div class='yxt-StandardCard-icon' data-component='IconComponent' data-opts='{ "iconName": "{{icon}}" }'></div>
+              <div class='yxt-StandardCard-iconLabel'>{{label}}</div>
+            </a>
+          {{/each}}
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</div>

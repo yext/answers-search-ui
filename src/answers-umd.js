@@ -27,6 +27,7 @@ import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import NavigationConfig from './core/models/navigationconfig';
 import { SANDBOX, PRODUCTION } from './core/constants';
+import { cardTemplates } from './ui/components/cards/consts';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -91,6 +92,11 @@ class Answers {
      * Typically fired after templates are fetched from server for rendering.
      */
     this._onReady = function () {};
+
+    /**
+     * @type {Object}
+     */
+    this.cardTemplates = cardTemplates;
 
     /**
      * @type {boolean}

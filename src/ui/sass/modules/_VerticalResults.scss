@@ -1,0 +1,37 @@
+/** @define VerticalResults */
+.yxt-VerticalResults {
+  $vertical-results-svg-size: 48px !default;
+
+  &-items {
+    padding: 0;
+    border: $border-default;
+  }
+
+  &-item {
+    list-style: none;
+  }
+
+  &-footer {
+    text-align: center;
+    a {
+      text-decoration: none;
+      color: $color-text-primary;
+    }
+    svg {
+      width: $vertical-results-svg-size;
+      height: $vertical-results-svg-size;
+    }
+  }
+
+  &-columns {
+    display: flex;
+  }
+
+  &-listWrapper {
+    margin-left: $base-spacing * 2;
+
+    &-1 { width: 100%; }
+    &-2 { width: 50%; }
+    &-4 { width: 25%; }
+  }
+}
