@@ -111,8 +111,6 @@ export default class Core {
    * @param {string} verticalKey vertical ID for the search
    * @param {object} query The query details
    * @param {string} query.input The input to search for
-   * @param {string} query.filter The filter to use in the search
-   * @param {string} query.facetFilter The facet filter to use in the search
    * @param {number} query.limit The max number of results to include, max of 50
    * @param {number} query.offset The results offset, for fetching more results of the same query
    * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
