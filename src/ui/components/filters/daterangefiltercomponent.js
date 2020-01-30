@@ -150,8 +150,9 @@ export default class DateRangeFilterComponent extends Component {
     if (this._date.min === '' || this._date.max === '') {
       return {};
     }
+    const label = this._title || 'Date';
     return this._isExclusive
-      ? Filter.exclusiveRange(this._field, this._date.min, this._date.max)
-      : Filter.inclusiveRange(this._field, this._date.min, this._date.max);
+      ? Filter.exclusiveRange(this._field, this._date.min, this._date.max, label)
+      : Filter.inclusiveRange(this._field, this._date.min, this._date.max, label);
   }
 }

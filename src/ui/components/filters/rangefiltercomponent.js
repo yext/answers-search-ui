@@ -138,6 +138,6 @@ export default class RangeFilterComponent extends Component {
    * @returns {Filter}
    */
   _buildFilter () {
-    return Filter.inclusiveRange(this._field, this._range.min, this._range.max);
+    return Filter.inclusiveRange(this._field, this._range.min, this._range.max, this._title || 'Range');
   }
 }

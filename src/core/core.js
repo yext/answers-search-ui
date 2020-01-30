@@ -93,6 +93,20 @@ export default class Core {
   }
 
   /**
+   * Format a Filter to send to the backend
+   * @param {*} requestFilter The filter to be formatted
+   * @returns {Filter}
+   */
+  formatFilter (requestFilter) {
+    return JSON.stringify(requestFilter, (key, value) => {
+      if (key === 'label') {
+        return undefined;
+      }
+      return value;
+    });
+  }
+
+  /**
    * Search in the context of a vertical
    * @param {string} verticalKey vertical ID for the search
    * @param {object} query The query details
@@ -111,6 +125,13 @@ export default class Core {
       this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
+    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
+    const totalFilter = allFilters.length > 1
+      ? Filter.and(...allFilters)
+      : allFilters[0];
+    const filter = this.formatFilter(totalFilter);
+    const facetFilter = this.formatFilter(this.globalStorage.getAll(StorageKeys.FACET_FILTER)[0]);
+
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
@@ -120,7 +141,9 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS)
+        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
+        filter,
+        facetFilter
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -156,16 +179,9 @@ export default class Core {
    * @param {number} offset The offset to use in the search
    */
   verticalPage (verticalKey, offset) {
-    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
-    const totalFilter = allFilters.length > 1
-      ? Filter.and(...allFilters)
-      : allFilters[0];
-    const facetFilter = this.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
     this.verticalSearch(verticalKey, {
       input: this.globalStorage.getState(StorageKeys.QUERY),
       id: this.globalStorage.getState(StorageKeys.QUERY_ID),
-      filter: JSON.stringify(totalFilter),
-      facetFilter: JSON.stringify(facetFilter),
       offset
     });
   }
@@ -311,8 +327,12 @@ export default class Core {
    *
    * @param {string} namespace the namespace to use for the storage key
    * @param {Filter} filter    the filter to set
+   * @param {string} label     label of the filter in the ui, e.g. for showing applied filters
    */
-  setFilter (namespace, filter) {
+  setFilter (namespace, filter, label = null) {
+    if (label) {
+      filter = Filter.withLabel(filter, label);
+    }
     this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
   }
 

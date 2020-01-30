@@ -264,6 +264,6 @@ export default class GeoLocationComponent extends Component {
   _buildFilter (position) {
     const { latitude, longitude, accuracy } = position.coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
-    return Filter.position(latitude, longitude, radius);
+    return Filter.position(latitude, longitude, radius, this.label);
   }
 }
