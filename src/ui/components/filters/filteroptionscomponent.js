@@ -44,7 +44,7 @@ class FilterOptionsConfig {
      * If true, stores the filter to storage on each change
      * @type {boolean}
      */
-    this.storeOnChange = config.storeOnChange || false;
+    this._storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
     /**
      * If true, show a button to reset the current filter selection
@@ -273,7 +273,7 @@ export default class FilterOptionsComponent extends Component {
 
   updateListeners () {
     const filter = this._buildFilter();
-    if (this.config.storeOnChange) {
+    if (this.config._storeOnChange) {
       this.core.setFilter(this.name, filter);
     }
 
