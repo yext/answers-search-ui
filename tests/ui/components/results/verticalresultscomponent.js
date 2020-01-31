@@ -1,15 +1,21 @@
 import DOM from '../../../../src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import VerticalResultsComponent from '../../../../src/ui/components/results/resultscomponent';
+import ResultsComponent from '../../../../src/ui/components/results/resultscomponent';
+import IconComponent from '../../../../src/ui/components/icons/iconcomponent';
 
-const mockedCore = () => ({});
+const mockedCore = () => ({
+  globalStorage: {
+    getState: () => {}
+  }
+});
 
 DOM.setup(document, new DOMParser());
 
 const COMPONENT_MANAGER = mockManager(
   mockedCore(),
-  VerticalResultsComponent.defaultTemplateName()
+  ResultsComponent.defaultTemplateName(),
+  IconComponent.defaultTemplateName()
 );
 
 describe('vertical results component', () => {
@@ -27,8 +33,8 @@ describe('vertical results component', () => {
   });
 
   it('renders with only default config', () => {
-    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
+    const component = COMPONENT_MANAGER.create(ResultsComponent.type, defaultConfig);
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-VerticalResults')).toHaveLength(1);
+    expect(wrapper).toBeTruthy();
   });
 });
