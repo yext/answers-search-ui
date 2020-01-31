@@ -26,25 +26,13 @@ export default class ResultsComponent extends Component {
     this._isUniversal = config.isUniversal || false;
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
-    this._itemConfig = {
-      global: {
-        render: null,
-        template: null
-      }
-    };
 
-    if (config.renderItem === undefined && config._parentOpts !== undefined) {
-      config.renderItem = config._parentOpts.renderItem;
-    }
-
-    if (config.itemTemplate === undefined && config._parentOpts !== undefined) {
-      config.itemTemplate = config._parentOpts.itemTemplate;
-    }
-
-    this.configureItem({
-      render: config.renderItem,
-      template: config.itemTemplate
-    });
+    /**
+     * Apply config given renderItem {function} and itemTemplate {string}
+     */
+    const parentOpts = config._parentOpts || {};
+    this.renderItem = config.renderItem || parentOpts.renderItem;
+    this.itemTemplate = config.itemTemplate || parentOpts.itemTemplate;
 
     /**
      * The url to the universal page for the no results page to link back to with current query
@@ -104,32 +92,6 @@ export default class ResultsComponent extends Component {
     return 'results/results';
   }
 
-  configureItem (config) {
-    if (typeof config.render === 'function') {
-      this._itemConfig.global.render = config.render;
-    } else {
-      for (let key in config.render) {
-        this.setItemRender(config.render[key]);
-      }
-    }
-
-    if (typeof config.template === 'string') {
-      this._itemConfig.global.template = config.template;
-    } else {
-      for (let key in config.template) {
-        this.setItemTemplate(config.template[key]);
-      }
-    }
-  }
-
-  setItemTemplate (template) {
-    this._itemConfig[ResultsItemComponent.type].template = template;
-  }
-
-  setItemRender (render) {
-    this._itemConfig[ResultsItemComponent.type].render = render;
-  }
-
   addChild (data, type, opts) {
     if (type === MapComponent.type) {
       data = {
@@ -146,20 +108,11 @@ export default class ResultsComponent extends Component {
       isUniversal: this._isUniversal
     }));
 
-    let globalConfig = this._itemConfig.global;
-    let itemConfig = this._itemConfig[comp.type] || {};
-    let hasGlobalRender = typeof globalConfig.render === 'function';
-    let hasGlobalTemplate = typeof globalConfig.template === 'string';
-
-    if (hasGlobalRender) {
-      comp.setRender(globalConfig.render);
-    } else if (itemConfig.render) {
-      comp.setRender(itemConfig.render);
+    if (typeof this.renderItem === 'function') {
+      comp.setRender(this.renderItem);
     }
-    if (hasGlobalTemplate) {
-      comp.setTemplate(globalConfig.template);
-    } else if (itemConfig.template) {
-      comp.setTemplate(itemConfig.template);
+    if (typeof this.itemTemplate === 'string') {
+      comp.setTemplate(this.itemTemplate);
     }
     return comp;
   }
