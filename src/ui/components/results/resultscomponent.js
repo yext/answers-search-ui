@@ -2,6 +2,7 @@
 
 import Component from '../component';
 
+import ResultsItemComponent from './resultsitemcomponent';
 import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
@@ -25,6 +26,25 @@ export default class ResultsComponent extends Component {
     this._isUniversal = config.isUniversal || false;
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
+    this._itemConfig = {
+      global: {
+        render: null,
+        template: null
+      }
+    };
+
+    if (config.renderItem === undefined && config._parentOpts !== undefined) {
+      config.renderItem = config._parentOpts.renderItem;
+    }
+
+    if (config.itemTemplate === undefined && config._parentOpts !== undefined) {
+      config.itemTemplate = config._parentOpts.itemTemplate;
+    }
+
+    this.configureItem({
+      render: config.renderItem,
+      template: config.itemTemplate
+    });
 
     /**
      * The url to the universal page for the no results page to link back to with current query
@@ -80,8 +100,34 @@ export default class ResultsComponent extends Component {
    * @returns {string}
    * @override
    */
-  static defaultTemplateName () {
+  static defaultTemplateName (config) {
     return 'results/results';
+  }
+
+  configureItem (config) {
+    if (typeof config.render === 'function') {
+      this._itemConfig.global.render = config.render;
+    } else {
+      for (let key in config.render) {
+        this.setItemRender(config.render[key]);
+      }
+    }
+
+    if (typeof config.template === 'string') {
+      this._itemConfig.global.template = config.template;
+    } else {
+      for (let key in config.template) {
+        this.setItemTemplate(config.template[key]);
+      }
+    }
+  }
+
+  setItemTemplate (template) {
+    this._itemConfig[ResultsItemComponent.type].template = template;
+  }
+
+  setItemRender (render) {
+    this._itemConfig[ResultsItemComponent.type].render = render;
   }
 
   addChild (data, type, opts) {
@@ -95,9 +141,26 @@ export default class ResultsComponent extends Component {
 
     // Apply the proper item renders to the the components
     // have just been constructed. Prioritize global over individual items.
-    return super.addChild(data, type, Object.assign(opts, {
+    let comp = super.addChild(data, type, Object.assign(opts, {
       verticalConfigId: this._verticalConfigId,
       isUniversal: this._isUniversal
     }));
+
+    let globalConfig = this._itemConfig.global;
+    let itemConfig = this._itemConfig[comp.type] || {};
+    let hasGlobalRender = typeof globalConfig.render === 'function';
+    let hasGlobalTemplate = typeof globalConfig.template === 'string';
+
+    if (hasGlobalRender) {
+      comp.setRender(globalConfig.render);
+    } else if (itemConfig.render) {
+      comp.setRender(itemConfig.render);
+    }
+    if (hasGlobalTemplate) {
+      comp.setTemplate(globalConfig.template);
+    } else if (itemConfig.template) {
+      comp.setTemplate(itemConfig.template);
+    }
+    return comp;
   }
 }

@@ -20,6 +20,7 @@ import SortOptionsComponent from './filters/sortoptionscomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
 import ResultsComponent from './results/resultscomponent';
+import AccordionResultsComponent from './results/accordionresultscomponent.js';
 import UniversalResultsComponent from './results/universalresultscomponent';
 import PaginationComponent from './results/paginationcomponent';
 
@@ -59,6 +60,7 @@ const COMPONENT_CLASS_LIST = [
   ResultsComponent,
   PaginationComponent,
   ResultsItemComponent,
+  AccordionResultsComponent,
   MapComponent,
 
   // Questions Components
