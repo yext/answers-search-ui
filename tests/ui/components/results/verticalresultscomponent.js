@@ -1,7 +1,7 @@
 import DOM from '../../../../src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import ResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
+import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
 import IconComponent from '../../../../src/ui/components/icons/iconcomponent';
 
 const mockedCore = () => ({
@@ -14,7 +14,7 @@ DOM.setup(document, new DOMParser());
 
 const COMPONENT_MANAGER = mockManager(
   mockedCore(),
-  ResultsComponent.defaultTemplateName(),
+  VerticalResultsComponent.defaultTemplateName(),
   IconComponent.defaultTemplateName()
 );
 
@@ -33,7 +33,7 @@ describe('vertical results component', () => {
   });
 
   it('renders with only default config', () => {
-    const component = COMPONENT_MANAGER.create(ResultsComponent.type, defaultConfig);
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
     const wrapper = mount(component);
     expect(wrapper).toBeTruthy();
   });
