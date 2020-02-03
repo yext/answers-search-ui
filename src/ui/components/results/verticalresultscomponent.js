@@ -34,6 +34,13 @@ export default class ResultsComponent extends Component {
     this.itemTemplate = config.itemTemplate || parentOpts.itemTemplate;
 
     /**
+     * Apply config given renderItem {function} and itemTemplate {string}
+     */
+    const parentOpts = config._parentOpts || {};
+    this.renderItem = config.renderItem || parentOpts.renderItem;
+    this.itemTemplate = config.itemTemplate || parentOpts.itemTemplate;
+
+    /**
      * The url to the universal page for the no results page to link back to with current query
      * @type {string|null}
      */
@@ -88,7 +95,7 @@ export default class ResultsComponent extends Component {
    * @override
    */
   static defaultTemplateName (config) {
-    return 'results/results';
+    return 'results/verticalresults';
   }
 
   addChild (data, type, opts) {

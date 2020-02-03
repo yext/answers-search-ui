@@ -1,7 +1,7 @@
 import DOM from '../../../../src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import ResultsComponent from '../../../../src/ui/components/results/resultscomponent';
+import ResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
 import IconComponent from '../../../../src/ui/components/icons/iconcomponent';
 
 const mockedCore = () => ({
