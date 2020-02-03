@@ -1,9 +1,9 @@
 /** @module AccordionResultsComponent */
-import ResultsComponent from './resultscomponent';
+import VerticalResultsComponent from './verticalresultscomponent';
 import DOM from '../../dom/dom';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
-export default class AccordionResultsComponent extends ResultsComponent {
+export default class AccordionResultsComponent extends VerticalResultsComponent {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
 
