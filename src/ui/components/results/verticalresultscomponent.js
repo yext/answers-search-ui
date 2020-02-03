@@ -88,7 +88,7 @@ export default class ResultsComponent extends Component {
    * @override
    */
   static defaultTemplateName (config) {
-    return 'results/results';
+    return 'results/verticalresults';
   }
 
   addChild (data, type, opts) {
