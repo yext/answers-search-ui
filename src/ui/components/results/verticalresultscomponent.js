@@ -6,9 +6,9 @@ import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 
-export default class VerticalResultsComponent extends Component {
-  constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
+class VerticalResultsConfig {
+  constructor (config = {}) {
+    Object.assign(this, config);
 
     /**
      * verticalConfigId used for analytics and passed to children
@@ -24,13 +24,18 @@ export default class VerticalResultsComponent extends Component {
      */
     this._isUniversal = config.isUniversal || false;
 
-    this.moduleId = StorageKeys.VERTICAL_RESULTS;
+    const parentOpts = config._parentOpts || {};
 
     /**
-     * Apply config given renderItem {function} and itemTemplate {string}
+     * Custom render function
+     * @type {function}
      */
-    const parentOpts = config._parentOpts || {};
     this.renderItem = config.renderItem || parentOpts.renderItem;
+
+    /**
+     * Custom item template
+     * @type {string}
+     */
     this.itemTemplate = config.itemTemplate || parentOpts.itemTemplate;
 
     /**
@@ -38,6 +43,14 @@ export default class VerticalResultsComponent extends Component {
      * @type {string|null}
      */
     this._universalUrl = config.universalUrl;
+  }
+}
+
+export default class VerticalResultsComponent extends Component {
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
+    this._config = new VerticalResultsConfig(this._config);
+    this.moduleId = StorageKeys.VERTICAL_RESULTS;
   }
 
   mount () {
@@ -62,7 +75,7 @@ export default class VerticalResultsComponent extends Component {
       includeMap: this._config.includeMap,
       mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
-      universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
+      universalUrl: this._config._universalUrl ? this._config._universalUrl + window.location.search : '',
       showNoResults: results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }), val);
@@ -74,7 +87,7 @@ export default class VerticalResultsComponent extends Component {
    */
   eventOptions () {
     return JSON.stringify({
-      verticalConfigId: this._verticalConfigId
+      verticalConfigId: this._config._verticalConfigId
     });
   }
 
@@ -103,15 +116,15 @@ export default class VerticalResultsComponent extends Component {
     // Apply the proper item renders to the the components
     // have just been constructed. Prioritize global over individual items.
     let comp = super.addChild(data, type, Object.assign(opts, {
-      verticalConfigId: this._verticalConfigId,
-      isUniversal: this._isUniversal
+      verticalConfigId: this._config._verticalConfigId,
+      isUniversal: this._config._isUniversal
     }));
 
-    if (typeof this.renderItem === 'function') {
-      comp.setRender(this.renderItem);
+    if (typeof this._config.renderItem === 'function') {
+      comp.setRender(this._config.renderItem);
     }
-    if (typeof this.itemTemplate === 'string') {
-      comp.setTemplate(this.itemTemplate);
+    if (typeof this._config.itemTemplate === 'string') {
+      comp.setTemplate(this._config.itemTemplate);
     }
     return comp;
   }
