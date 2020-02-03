@@ -2,10 +2,10 @@
   {{#if showNoResults}}
     {{> results/noresults}}
   {{else}}
-    <section class="yxt-VerticalResults yxt-VerticalResults--{{_config.modifier}}">
+    <section class="yxt-Results yxt-Results--{{_config.modifier}}">
       {{> results/resultssectionheader}}
       {{#if includeMap}}
-        <div class="yxt-VerticalResults-map"
+        <div class="yxt-Results-map"
              data-component="Map"
              data-prop="map">
         </div>
