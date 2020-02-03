@@ -25,10 +25,6 @@ import UniversalResultsComponent from './results/universalresultscomponent';
 import PaginationComponent from './results/paginationcomponent';
 
 import ResultsItemComponent from './results/resultsitemcomponent';
-import LocationResultsItemComponent from './results/locationresultsitemcomponent';
-import EventResultsItemComponent from './results/eventresultsitemcomponent';
-
-import PeopleResultsItemComponent from './results/peopleresultsitemcomponent';
 
 import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
@@ -65,9 +61,6 @@ const COMPONENT_CLASS_LIST = [
   PaginationComponent,
   ResultsItemComponent,
   AccordionResultsComponent,
-  LocationResultsItemComponent,
-  EventResultsItemComponent,
-  PeopleResultsItemComponent,
   MapComponent,
 
   // Questions Components
