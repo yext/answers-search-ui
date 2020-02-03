@@ -1,4 +1,4 @@
-/** @module ResultsComponent */
+/** @module VerticalResultsComponent */
 
 import Component from '../component';
 
@@ -6,7 +6,7 @@ import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 
-export default class ResultsComponent extends Component {
+export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
 
@@ -88,7 +88,7 @@ export default class ResultsComponent extends Component {
    * @override
    */
   static defaultTemplateName (config) {
-    return 'results/results';
+    return 'results/verticalresults';
   }
 
   addChild (data, type, opts) {
