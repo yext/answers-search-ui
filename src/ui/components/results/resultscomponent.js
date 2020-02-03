@@ -2,19 +2,9 @@
 
 import Component from '../component';
 
-import ResultsItemComponent from './resultsitemcomponent';
-import LocationResultsItemComponent from './locationresultsitemcomponent';
-import EventResultsItemComponent from './eventresultsitemcomponent';
-import PeopleResultsItemComponent from './peopleresultsitemcomponent';
 import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
-
-const ResultType = {
-  EVENT: 'event',
-  LOCATION: 'location',
-  PEOPLE: 'people'
-};
 
 export default class ResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -35,37 +25,13 @@ export default class ResultsComponent extends Component {
     this._isUniversal = config.isUniversal || false;
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
-    this._itemConfig = {
-      global: {
-        render: null,
-        template: null
-      },
-      [EventResultsItemComponent.type]: {
-        render: null,
-        template: null
-      },
-      [LocationResultsItemComponent.type]: {
-        render: null,
-        template: null
-      },
-      [PeopleResultsItemComponent.type]: {
-        render: null,
-        template: null
-      }
-    };
 
-    if (config.renderItem === undefined && config._parentOpts !== undefined) {
-      config.renderItem = config._parentOpts.renderItem;
-    }
-
-    if (config.itemTemplate === undefined && config._parentOpts !== undefined) {
-      config.itemTemplate = config._parentOpts.itemTemplate;
-    }
-
-    this.configureItem({
-      render: config.renderItem,
-      template: config.itemTemplate
-    });
+    /**
+     * Apply config given renderItem {function} and itemTemplate {string}
+     */
+    const parentOpts = config._parentOpts || {};
+    this.renderItem = config.renderItem || parentOpts.renderItem;
+    this.itemTemplate = config.itemTemplate || parentOpts.itemTemplate;
 
     /**
      * The url to the universal page for the no results page to link back to with current query
@@ -125,60 +91,8 @@ export default class ResultsComponent extends Component {
     return 'results/results';
   }
 
-  configureItem (config) {
-    if (typeof config.render === 'function') {
-      this._itemConfig.global.render = config.render;
-    } else {
-      for (let key in config.render) {
-        this.setItemRender(key, config.render[key]);
-      }
-    }
-
-    if (typeof config.template === 'string') {
-      this._itemConfig.global.template = config.template;
-    } else {
-      for (let key in config.template) {
-        this.setItemTemplate(key, config.template[key]);
-      }
-    }
-  }
-
-  setItemTemplate (type, template) {
-    let clazz = this.getItemComponent(type);
-    this._itemConfig[clazz.type].template = template;
-  }
-
-  setItemRender (type, render) {
-    let clazz = this.getItemComponent(type);
-    this._itemConfig[clazz.type].render = render;
-  }
-
-  getItemComponent (type) {
-    let comp = ResultsItemComponent;
-    switch (type) {
-      case ResultType.EVENT:
-        comp = EventResultsItemComponent;
-        break;
-      case ResultType.LOCATION:
-        comp = LocationResultsItemComponent;
-        break;
-      case ResultType.PEOPLE:
-        comp = PeopleResultsItemComponent;
-        break;
-    }
-
-    return comp;
-  }
-
   addChild (data, type, opts) {
-    // TODO(billy) Refactor the way configuration and data flows
-    // through top level components to child components.
-    if (type === ResultsItemComponent.type) {
-      let clazz = this.getItemComponent(data.type);
-      if (clazz) {
-        type = clazz.type;
-      }
-    } else if (type === MapComponent.type) {
+    if (type === MapComponent.type) {
       data = {
         map: data
       };
@@ -192,30 +106,12 @@ export default class ResultsComponent extends Component {
       verticalConfigId: this._verticalConfigId,
       isUniversal: this._isUniversal
     }));
-    let globalConfig = this._itemConfig.global;
-    let itemConfig = this._itemConfig[comp.type];
-    let hasGlobalRender = typeof globalConfig.render === 'function';
-    let hasGlobalTemplate = typeof globalConfig.template === 'string';
 
-    if (hasGlobalRender) {
-      comp.setRender(globalConfig.render);
+    if (typeof this.renderItem === 'function') {
+      comp.setRender(this.renderItem);
     }
-
-    if (hasGlobalTemplate) {
-      comp.setTemplate(globalConfig.template);
-    }
-
-    if (!itemConfig) {
-      return comp;
-    }
-
-    if (!hasGlobalRender && itemConfig.render) {
-      comp.setRender(itemConfig.render);
-    }
-
-    // Apply template specific situation
-    if (!hasGlobalTemplate && itemConfig.template) {
-      comp.setTemplate(itemConfig.template);
+    if (typeof this.itemTemplate === 'string') {
+      comp.setTemplate(this.itemTemplate);
     }
     return comp;
   }
