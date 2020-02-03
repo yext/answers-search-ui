@@ -469,12 +469,12 @@ The Vertical Results component shares all the same configurations from Universal
 You define all the options at the top level object.
 
 ```html
-<div class="results-container"></div>
+<div class="vertical-results-container"></div>
 ```
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
-  container: '.results-container',
+  container: '.vertical-results-container',
   // The max number of search results to return, defaults to 20
   limit: 25,
   // Optional: function to give each result item custom rendering
