@@ -2,7 +2,6 @@
 
 import Component from '../component';
 
-import ResultsItemComponent from './resultsitemcomponent';
 import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
