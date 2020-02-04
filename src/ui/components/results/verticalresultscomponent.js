@@ -121,6 +121,8 @@ export default class VerticalResultsComponent extends Component {
         ...this._config.card,
         verticalConfigId: this._config.verticalConfigId,
         isUniversal: this._config.isUniversal,
+        template: this._config.itemTemplate,
+        render: this._config.renderItem,
         ...opts
       };
       return super.addChild(data, type, newOpts);

@@ -14,18 +14,6 @@ class CardConfig {
     this.cardType = config.cardType || cardTypes.Standard;
 
     /**
-     * Custom render method
-     * @type {function|undefined}
-     */
-    this.renderItem = config.renderItem;
-
-    /**
-     * Custom template string
-     * @type {string|undefined}
-     */
-    this.itemTemplate = config.itemTemplate;
-
-    /**
      * isUniversal is set to true if this component is added by the UniversalResultsComponent
      * @type {boolean}
      * @private
@@ -44,18 +32,13 @@ class CardConfig {
 export default class CardComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new CardConfig(config), systemConfig);
-    if (typeof this._config.renderItem === 'function') {
-      this.setRender(this._config.renderItem);
-    }
-    if (typeof this._config.itemTemplate === 'string') {
-      this.setTemplate(this._config.itemTemplate);
-    }
   }
 
   setState (data) {
+    const { verticalConfigId, isUniversal } = this._config;
     return super.setState(Object.assign({}, data, {
       cardType: this._config.cardType,
-      cardOpts: JSON.stringify(new CardConfig(this._config))
+      cardOpts: JSON.stringify({ verticalConfigId, isUniversal })
     }));
   }
 
