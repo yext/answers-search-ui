@@ -19,12 +19,12 @@ export default class CardComponent extends Component {
     // parentContainer and name
     const childConfig = {
       verticalConfigId: this._config._verticalConfigId,
-      isUniversal: this._config._isUniversal,
-      data: data
+      isUniversal: this._config._isUniversal
     };
     return super.setState(Object.assign({}, data, {
       childConfig: JSON.stringify(childConfig),
-      cardType: cardTypes.Standard
+      cardType: cardTypes.Standard,
+      data
     }));
   }
 
