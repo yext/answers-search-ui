@@ -1,4 +1,4 @@
-/** @module StandardCardComponent */
+/** @module CardComponent */
 
 import Component from '../component';
 import { cardTypes } from './consts';

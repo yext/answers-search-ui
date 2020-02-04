@@ -60,10 +60,12 @@ const COMPONENT_CLASS_LIST = [
   UniversalResultsComponent,
   VerticalResultsComponent,
   PaginationComponent,
-  StandardCardComponent,
-  CardComponent,
   AccordionResultsComponent,
   MapComponent,
+
+  // Card Components
+  StandardCardComponent,
+  CardComponent,
 
   // Questions Components
   QuestionSubmissionComponent,

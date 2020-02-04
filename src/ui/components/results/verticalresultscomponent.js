@@ -83,7 +83,7 @@ export default class VerticalResultsComponent extends Component {
       eventOptions: this.eventOptions(),
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: results.length === 0,
-      query: this.core.globalStorage.getState(StorageKeys.QUERY),
+      query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }), val);
   }
 
