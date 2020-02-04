@@ -46,8 +46,8 @@ export default class HandlebarsRenderer extends Renderer {
   }
 
   /**
-   * registerHelper is a public interface for external dependencies to
-   * register their own custom helpers to our internal Handlebars Compiler
+   * SafeString is a public interface for external dependencies to
+   * mark a string as 'safe'. Handlebars will not escape a SafeString
    */
   SafeString (string) {
     return new this._handlebars.SafeString(string);
