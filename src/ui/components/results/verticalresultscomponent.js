@@ -5,6 +5,7 @@ import Component from '../component';
 import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
+import CardComponent from '../cards/cardcomponent';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -43,6 +44,12 @@ class VerticalResultsConfig {
      * @type {string|null}
      */
     this._universalUrl = config.universalUrl;
+
+    /**
+     * The config to pass to the card
+     * @type {Object}
+     */
+    this.card = config.card || {};
   }
 }
 
@@ -67,10 +74,6 @@ export default class VerticalResultsComponent extends Component {
   setState (data, val) {
     const results = data.results || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
-    const cardOpts = {
-      verticalConfigId: this._config._verticalConfigId,
-      isUniversal: this._config._isUniversal
-    };
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -81,7 +84,6 @@ export default class VerticalResultsComponent extends Component {
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
-      cardOpts: JSON.stringify(cardOpts)
     }), val);
   }
 
@@ -114,6 +116,14 @@ export default class VerticalResultsComponent extends Component {
         map: data
       };
       const newOpts = Object.assign({}, this._config.mapConfig, opts);
+      return super.addChild(data, type, newOpts);
+    } else if (type === CardComponent.type) {
+      const newOpts = {
+        ...this._config.card,
+        verticalConfigId: this._config._verticalConfigId,
+        isUniversal: this._config._isUniversal,
+        ...opts
+      };
       return super.addChild(data, type, newOpts);
     }
     return super.addChild(data, type, opts);
