@@ -1,3 +1,7 @@
 <div class="Icon Icon--{{name}}" aria-hidden="true">
-  {{{image}}}
+  {{#if iconUrl}}
+    <img src={{iconUrl}} alt="" class="Icon-image">
+  {{else}}
+    {{icon iconName}}
+  {{/if}}
 </div>
