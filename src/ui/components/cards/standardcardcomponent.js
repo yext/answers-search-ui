@@ -1,30 +1,30 @@
 /** @module StandardCardComponent */
 
 import Component from '../component';
-import { cardTemplates, templateToType } from './consts';
+import { cardTemplates, cardTypes } from './consts';
 
 export default class StandardCardComponent extends Component {
-  constructor (opts = {}, systemConfig = {}) {
-    super(opts, systemConfig);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
-     * verticalConfigId used for analytics and passed to children
+     * verticalConfigId used for analytics
      * @type {string}
      * @private
      */
-    this._verticalConfigId = opts.verticalConfigId;
+    this._verticalConfigId = config.verticalConfigId;
 
     /**
-     * isUniversal is used for analytics and passed to children and is set to
+     * isUniversal is used for analytics and is set to
      * true if this component is added by the UniversalResultsComponent
      * @type {boolean}
      * @private
      */
-    this._isUniversal = opts.isUniversal || false;
+    this._isUniversal = config.isUniversal || false;
   }
 
   static get type () {
-    return templateToType[this.defaultTemplateName()];
+    return cardTypes.Standard;
   }
 
   /**

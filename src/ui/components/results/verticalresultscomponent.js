@@ -57,7 +57,6 @@ export default class VerticalResultsComponent extends Component {
     if (Object.keys(this.getState()).length > 0) {
       super.mount();
     }
-
     return this;
   }
 
@@ -68,6 +67,10 @@ export default class VerticalResultsComponent extends Component {
   setState (data, val) {
     const results = data.results || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    const cardOpts = {
+      verticalConfigId: this._config._verticalConfigId,
+      isUniversal: this._config._isUniversal
+    };
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -75,9 +78,10 @@ export default class VerticalResultsComponent extends Component {
       includeMap: this._config.includeMap,
       mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
-      universalUrl: this._config._universalUrl ? this._config._universalUrl + window.location.search : '',
+      universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: results.length === 0,
-      query: this.core.globalStorage.getState(StorageKeys.QUERY)
+      query: this.core.globalStorage.getState(StorageKeys.QUERY),
+      cardOpts: JSON.stringify(cardOpts)
     }), val);
   }
 
@@ -112,20 +116,6 @@ export default class VerticalResultsComponent extends Component {
       const newOpts = Object.assign({}, this._config.mapConfig, opts);
       return super.addChild(data, type, newOpts);
     }
-
-    // Apply the proper item renders to the the components
-    // have just been constructed. Prioritize global over individual items.
-    let comp = super.addChild(data, type, Object.assign(opts, {
-      verticalConfigId: this._config._verticalConfigId,
-      isUniversal: this._config._isUniversal
-    }));
-
-    if (typeof this._config.renderItem === 'function') {
-      comp.setRender(this._config.renderItem);
-    }
-    if (typeof this._config.itemTemplate === 'string') {
-      comp.setTemplate(this._config.itemTemplate);
-    }
-    return comp;
+    return super.addChild(data, type, opts);
   }
 }
