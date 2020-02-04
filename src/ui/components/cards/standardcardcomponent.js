@@ -12,7 +12,7 @@ export default class StandardCardComponent extends Component {
      * @type {string}
      * @private
      */
-    this._verticalConfigId = config.verticalConfigId;
+    this.verticalConfigId = config.verticalConfigId;
 
     /**
      * isUniversal is used for analytics and is set to
@@ -20,7 +20,7 @@ export default class StandardCardComponent extends Component {
      * @type {boolean}
      * @private
      */
-    this._isUniversal = config.isUniversal || false;
+    this.isUniversal = config.isUniversal || false;
   }
 
   static get type () {
@@ -48,8 +48,8 @@ export default class StandardCardComponent extends Component {
    */
   eventOptions (entityId, url) {
     const options = {
-      verticalConfigId: this._verticalConfigId,
-      searcher: this._isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+      verticalConfigId: this._config.verticalConfigId,
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
     };
 
     if (entityId) {

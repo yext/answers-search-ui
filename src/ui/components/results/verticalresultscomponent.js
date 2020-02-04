@@ -16,14 +16,14 @@ class VerticalResultsConfig {
      * @type {string}
      * @private
      */
-    this._verticalConfigId = config.verticalConfigId;
+    this.verticalConfigId = config.verticalConfigId;
 
     /**
      * isUniversal is set to true if this component is added by the UniversalResultsComponent
      * @type {boolean}
      * @private
      */
-    this._isUniversal = config.isUniversal || false;
+    this.isUniversal = config.isUniversal || false;
 
     const parentOpts = config._parentOpts || {};
 
@@ -55,8 +55,7 @@ class VerticalResultsConfig {
 
 export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
-    this._config = new VerticalResultsConfig(this._config);
+    super(new VerticalResultsConfig(config), systemConfig);
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
   }
 
@@ -93,7 +92,7 @@ export default class VerticalResultsComponent extends Component {
    */
   eventOptions () {
     return JSON.stringify({
-      verticalConfigId: this._config._verticalConfigId
+      verticalConfigId: this._config.verticalConfigId
     });
   }
 
@@ -120,8 +119,8 @@ export default class VerticalResultsComponent extends Component {
     } else if (type === CardComponent.type) {
       const newOpts = {
         ...this._config.card,
-        verticalConfigId: this._config._verticalConfigId,
-        isUniversal: this._config._isUniversal,
+        verticalConfigId: this._config.verticalConfigId,
+        isUniversal: this._config.isUniversal,
         ...opts
       };
       return super.addChild(data, type, newOpts);

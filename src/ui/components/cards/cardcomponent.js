@@ -4,7 +4,7 @@ import Component from '../component';
 import { cardTypes } from './consts';
 
 class CardConfig {
-  constructor (config) {
+  constructor (config = {}) {
     Object.assign(this, config);
 
     /**
@@ -14,37 +14,36 @@ class CardConfig {
     this.cardType = config.cardType || cardTypes.Standard;
 
     /**
-     * Custom render method,
-     * TODO(oshi) this feels like something a Component should just have in general?
+     * Custom render method
      * @type {function|undefined}
      */
     this.renderItem = config.renderItem;
 
     /**
      * Custom template string
-     * TODO(oshi) also something a Component might want in general
      * @type {string|undefined}
      */
     this.itemTemplate = config.itemTemplate;
 
     /**
-     * Template mappings is a function specified in the config
-     * that returns config based on the data passed into card
+     * isUniversal is set to true if this component is added by the UniversalResultsComponent
+     * @type {boolean}
+     * @private
      */
-    const data = config.data;
-    const templateMappings = config.templateMappings || (() => {});
-    try {
-      Object.assign(this, templateMappings(data));
-    } catch (err) {
-      console.error(err);
-    }
+    this.isUniversal = config.isUniversal || false;
+
+    /**
+     * verticalConfigId used for analytics and passed to children
+     * @type {string}
+     * @private
+     */
+    this.verticalConfigId = config.verticalConfigId;
   }
 }
 
 export default class CardComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
-    this._config = new CardConfig(this._config);
+    super(new CardConfig(config), systemConfig);
     if (typeof this._config.renderItem === 'function') {
       this.setRender(this._config.renderItem);
     }
@@ -55,7 +54,8 @@ export default class CardComponent extends Component {
 
   setState (data) {
     return super.setState(Object.assign({}, data, {
-      cardType: this._config.cardType
+      cardType: this._config.cardType,
+      cardOpts: JSON.stringify(new CardConfig(this._config))
     }));
   }
 
@@ -74,12 +74,5 @@ export default class CardComponent extends Component {
 
   static areDuplicateNamesAllowed () {
     return true;
-  }
-
-  addChild (data, type, opts) {
-    return super.addChild(data, type, {
-      ...this._config,
-      ...opts
-    });
   }
 }
