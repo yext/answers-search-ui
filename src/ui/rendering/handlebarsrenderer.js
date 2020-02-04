@@ -1,6 +1,7 @@
 /** @module HandlebarsRenderer */
 
 import Renderer from './renderer';
+import Icons from '../icons';
 
 /**
  * HandlebarsRenderer is a wrapper around the nativate handlebars renderer.
@@ -42,6 +43,14 @@ export default class HandlebarsRenderer extends Renderer {
    */
   registerHelper (name, cb) {
     this._handlebars.registerHelper(name, cb);
+  }
+
+  /**
+   * registerHelper is a public interface for external dependencies to
+   * register their own custom helpers to our internal Handlebars Compiler
+   */
+  SafeString (string) {
+    return new this._handlebars.SafeString(string);
   }
 
   /**
@@ -115,6 +124,15 @@ export default class HandlebarsRenderer extends Renderer {
       return name === undefined
         ? ''
         : JSON.stringify(name);
+    });
+
+    let self = this;
+    self.registerHelper('icon', function (name, value, options) {
+      let icon = Icons.default;
+      if (Icons[name]) {
+        icon = Icons[name];
+      }
+      return self.SafeString(icon);
     });
   }
 }
