@@ -5,6 +5,7 @@ import Component from '../component';
 import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
+import CardComponent from '../cards/cardcomponent';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -15,14 +16,14 @@ class VerticalResultsConfig {
      * @type {string}
      * @private
      */
-    this._verticalConfigId = config.verticalConfigId;
+    this.verticalConfigId = config.verticalConfigId;
 
     /**
      * isUniversal is set to true if this component is added by the UniversalResultsComponent
      * @type {boolean}
      * @private
      */
-    this._isUniversal = config.isUniversal || false;
+    this.isUniversal = config.isUniversal || false;
 
     const parentOpts = config._parentOpts || {};
 
@@ -43,13 +44,18 @@ class VerticalResultsConfig {
      * @type {string|null}
      */
     this._universalUrl = config.universalUrl;
+
+    /**
+     * The config to pass to the card
+     * @type {Object}
+     */
+    this.card = config.card || {};
   }
 }
 
 export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
-    this._config = new VerticalResultsConfig(this._config);
+    super(new VerticalResultsConfig(config), systemConfig);
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
   }
 
@@ -57,7 +63,6 @@ export default class VerticalResultsComponent extends Component {
     if (Object.keys(this.getState()).length > 0) {
       super.mount();
     }
-
     return this;
   }
 
@@ -75,7 +80,7 @@ export default class VerticalResultsComponent extends Component {
       includeMap: this._config.includeMap,
       mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
-      universalUrl: this._config._universalUrl ? this._config._universalUrl + window.location.search : '',
+      universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }), val);
@@ -87,7 +92,7 @@ export default class VerticalResultsComponent extends Component {
    */
   eventOptions () {
     return JSON.stringify({
-      verticalConfigId: this._config._verticalConfigId
+      verticalConfigId: this._config.verticalConfigId
     });
   }
 
@@ -111,21 +116,17 @@ export default class VerticalResultsComponent extends Component {
       };
       const newOpts = Object.assign({}, this._config.mapConfig, opts);
       return super.addChild(data, type, newOpts);
+    } else if (type === CardComponent.type) {
+      const newOpts = {
+        ...this._config.card,
+        verticalConfigId: this._config.verticalConfigId,
+        isUniversal: this._config.isUniversal,
+        template: this._config.itemTemplate,
+        render: this._config.renderItem,
+        ...opts
+      };
+      return super.addChild(data, type, newOpts);
     }
-
-    // Apply the proper item renders to the the components
-    // have just been constructed. Prioritize global over individual items.
-    let comp = super.addChild(data, type, Object.assign(opts, {
-      verticalConfigId: this._config._verticalConfigId,
-      isUniversal: this._config._isUniversal
-    }));
-
-    if (typeof this._config.renderItem === 'function') {
-      comp.setRender(this._config.renderItem);
-    }
-    if (typeof this._config.itemTemplate === 'string') {
-      comp.setTemplate(this._config.itemTemplate);
-    }
-    return comp;
+    return super.addChild(data, type, opts);
   }
 }
