@@ -1,6 +1,6 @@
 /** @module DOM */
 
-/* global HTMLElement, HTMLDocument, Window, Event */
+/* global HTMLElement, HTMLDocument, Window, CustomEvent */
 
 let document = window.document;
 
@@ -162,7 +162,7 @@ export default class DOM {
   }
 
   static trigger (selector, event, settings) {
-    let e = new Event(event, Object.assign({
+    let e = new CustomEvent(event, Object.assign({
       'bubbles': true,
       'cancelable': true
     }, settings || {}));

@@ -92,7 +92,10 @@ export default class PersistentStorage {
    */
   getAll () {
     const allParams = {};
-    for (const [key, val] of this._params.entries()) {
+    const entries = Array.from(this._params.entries());
+    for (let i = 0; i < entries.length; i++) {
+      const key = entries[i][0];
+      const val = entries[i][1];
       allParams[key] = val;
     }
     return allParams;
