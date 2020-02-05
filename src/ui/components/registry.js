@@ -24,7 +24,8 @@ import VerticalResultsComponent from './results/verticalresultscomponent';
 import UniversalResultsComponent from './results/universalresultscomponent';
 import PaginationComponent from './results/paginationcomponent';
 
-import ResultsItemComponent from './results/resultsitemcomponent';
+import CardComponent from './cards/cardcomponent';
+import StandardCardComponent from './cards/standardcardcomponent';
 
 import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
@@ -59,9 +60,12 @@ const COMPONENT_CLASS_LIST = [
   UniversalResultsComponent,
   VerticalResultsComponent,
   PaginationComponent,
-  ResultsItemComponent,
   AccordionResultsComponent,
   MapComponent,
+
+  // Card Components
+  StandardCardComponent,
+  CardComponent,
 
   // Questions Components
   QuestionSubmissionComponent,
