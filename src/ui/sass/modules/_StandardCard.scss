@@ -1,0 +1,80 @@
+/** @define StandardCard */
+.yxt-StandardCard {
+  display: flex;
+  padding: $base-spacing;
+  border-bottom: $border-default;
+  $standard-card-svg-height: 24px !default;
+  $standard-card-svg-width: 24px !default;
+  $standard-card-background-size: cover;
+  $standard-card-image-size: 25%;
+  $standard-card-link-color: $color-brand-primary;
+  $standard-card-subtitle-color: $color-text-secondary;
+
+  &-title {
+    text-decoration: none;
+    padding-bottom: $base-spacing/2;
+    @include Text(
+      $size: $font-size-md-lg,
+      $line-height: $line-height-lg,
+      $weight: $font-weight-semibold,
+      $color: $standard-card-link-color
+    );
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &-subtitle {
+    padding-bottom: $base-spacing/2;
+    text-decoration: none;
+    @include Text(
+      $line-height: 20px,
+      $weight: $font-weight-normal,
+      $color: $standard-card-subtitle-color,
+    );
+  }
+
+  &-content {
+    display: flex;
+    .yxt-ShowMore {
+      &-details {
+        flex-basis: 50%;
+        flex-grow: 1;
+      }
+
+      &-toggle {
+        margin-top: $base-spacing/2;
+      } 
+    }
+  }
+  
+  &-ctas {
+    margin-left: $base-spacing-sm;
+
+    &-item {
+      text-align: center;
+      margin-bottom:  $base-spacing-sm;
+      align-items: center;
+
+      svg {
+        height: $standard-card-svg-height;
+        width: $standard-card-svg-width;
+      }
+    }
+  }
+
+  &-wrapper {
+    width: 100%;
+  }
+
+  &-image {
+    min-width: $standard-card-image-size;
+    padding-bottom: $standard-card-image-size;
+    margin-right: $base-spacing;
+    @include Image(
+      $background-size: $standard-card-background-size
+    );
+  }
+
+}

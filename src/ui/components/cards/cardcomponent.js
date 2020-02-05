@@ -38,7 +38,8 @@ export default class CardComponent extends Component {
     const { verticalConfigId, isUniversal } = this._config;
     return super.setState(Object.assign({}, data, {
       cardType: this._config.cardType,
-      cardOpts: JSON.stringify({ verticalConfigId, isUniversal })
+      cardOpts: JSON.stringify({ verticalConfigId, isUniversal }),
+      cardData: data
     }));
   }
 
