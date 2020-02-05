@@ -19,7 +19,7 @@ describe('constructing from a response', () => {
         shortValue: 'Jesse Sharps',
         filter: {},
         matchedSubstrings: [],
-        highlightedValue: 'Jesse Sharps',
+        highlightedValue: { key: 'jesse', value: 'Jesse Sharps', queryIntents: [] },
         intents: []
       },
       {
@@ -28,7 +28,7 @@ describe('constructing from a response', () => {
         shortValue: 'Billy Bastardi',
         filter: {},
         matchedSubstrings: [],
-        highlightedValue: 'Billy Bastardi',
+        highlightedValue: { key: 'billy', value: 'Billy Bastardi', queryIntents: [] },
         intents: []
       }
     ];
@@ -39,92 +39,6 @@ describe('constructing from a response', () => {
 
     const actualResults = data.sections[0].results;
     expect(actualResults).toHaveLength(2);
-    expect(actualResults).toEqual(expectedResults);
-  });
-
-  it('properly creates highlightedValue from matchedSubstrings', () => {
-    const response = {
-      input: {
-        queryIntents: []
-      },
-      results: [
-        {
-          key: 'jesse',
-          value: 'Jesse Sharps',
-          matchedSubstrings: [ { offset: 8, length: 2 } ],
-          queryIntents: []
-        },
-        {
-          key: 'billy',
-          value: 'Billy Bastardi',
-          matchedSubstrings: [ { offset: 10, length: 2 } ],
-          queryIntents: []
-        }
-      ]
-    };
-
-    const expectedResults = [
-      {
-        key: 'jesse',
-        value: 'Jesse Sharps',
-        shortValue: 'Jesse Sharps',
-        filter: {},
-        matchedSubstrings: [ { offset: 8, length: 2 } ],
-        highlightedValue: '<strong>Jesse Sh</strong>ar<strong>ps</strong>',
-        intents: []
-      },
-      {
-        key: 'billy',
-        value: 'Billy Bastardi',
-        shortValue: 'Billy Bastardi',
-        filter: {},
-        matchedSubstrings: [ { offset: 10, length: 2 } ],
-        highlightedValue: '<strong>Billy Bast</strong>ar<strong>di</strong>',
-        intents: []
-      }
-    ];
-
-    const data = AutoCompleteData.from(response);
-    const actualResults = data.sections[0].results;
-    expect(actualResults).toHaveLength(2);
-    expect(actualResults).toEqual(expectedResults);
-  });
-
-  it('properly highlights multiple matchedSubstrings', () => {
-    const response = {
-      input: {
-        queryIntents: []
-      },
-      sections: [
-        {
-          label: 'Team Watson',
-          results: [
-            {
-              key: 'jesse',
-              value: 'Jesse Sharps',
-              matchedSubstrings: [ { offset: 1, length: 3 }, { offset: 7, length: 4 } ],
-              queryIntents: []
-            }
-          ]
-        }
-      ]
-    };
-
-    const expectedResults = [
-      {
-        key: 'jesse',
-        value: 'Jesse Sharps',
-        shortValue: 'Jesse Sharps',
-        filter: {},
-        matchedSubstrings: [ { offset: 1, length: 3 }, { offset: 7, length: 4 } ],
-        highlightedValue: '<strong>J</strong>ess<strong>e S</strong>harp<strong>s</strong>',
-        intents: []
-      }
-    ];
-
-    const data = AutoCompleteData.from(response);
-    const actualResults = data.sections[0].results;
-    expect(actualResults).toHaveLength(1);
     expect(actualResults).toEqual(expectedResults);
   });
 
@@ -155,7 +69,12 @@ describe('constructing from a response', () => {
         shortValue: 'Jesse',
         filter: {},
         matchedSubstrings: [ { offset: 0, length: 5 } ],
-        highlightedValue: 'Jesse',
+        highlightedValue: {
+          key: 'jesse',
+          value: 'Jesse',
+          matchedSubstrings: [{ offset: 0, length: 5 }],
+          queryIntents: []
+        },
         intents: []
       }
     ];
@@ -195,7 +114,12 @@ describe('constructing from a response', () => {
         shortValue: 'Jesse',
         filter: {},
         matchedSubstrings: [ { offset: 0, length: 5 } ],
-        highlightedValue: 'Jesse',
+        highlightedValue: {
+          key: 'jesse',
+          value: 'Jesse',
+          matchedSubstrings: [{ offset: 0, length: 5 }],
+          queryIntents: resultIntents
+        },
         intents: resultIntents
       }
     ];

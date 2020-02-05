@@ -1,8 +1,10 @@
 {{#if shouldShow}}
   <div class="yxt-SpellCheck">
     <div class="yxt-SpellCheck-container">
-      <span class="yxt-SpellCheck-helpText">{{helpText}}</span> 
-      <a href="{{correctedQueryUrl}}">{{{correctedQueryDisplay}}}</a>
+      <span class="yxt-SpellCheck-helpText">{{helpText}}</span>
+      <a href="{{correctedQueryUrl}}">
+        {{highlightedValue correctedQuery false}}
+      </a>
     </div>
   </div>
 {{/if}}

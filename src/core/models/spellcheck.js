@@ -1,7 +1,5 @@
 /** @module SpellCheck */
 
-import HighlightedValue from './highlightedvalue';
-
 /**
  * SpellCheck is the core state model
  * to power the SpellCheck component
@@ -19,12 +17,6 @@ export default class SpellCheck {
      * @type {string}
      */
     this.correctedQuery = data.correctedQuery || null;
-
-    /**
-     * The corrected query with highlighted tags
-     * @type {string}
-     */
-    this.correctedQueryDisplay = data.correctedQueryDisplay || null;
 
     /**
      * The spell check type
@@ -51,7 +43,6 @@ export default class SpellCheck {
     return new SpellCheck({
       query: response.originalQuery,
       correctedQuery: response.correctedQuery,
-      correctedQueryDisplay: new HighlightedValue(response.correctedQuery).get(),
       type: response.type
     });
   }

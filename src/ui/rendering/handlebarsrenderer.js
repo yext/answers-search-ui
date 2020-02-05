@@ -2,6 +2,7 @@
 
 import Renderer from './renderer';
 import Icons from '../icons';
+import HighlightedValue from '../../core/models/highlightedvalue';
 
 /**
  * HandlebarsRenderer is a wrapper around the nativate handlebars renderer.
@@ -51,6 +52,14 @@ export default class HandlebarsRenderer extends Renderer {
    */
   SafeString (string) {
     return new this._handlebars.SafeString(string);
+  }
+
+  /**
+   * EscapeExpression is a public interface for external dependencies to
+   * escape a string
+   */
+  escapeExpression (string) {
+    return this._handlebars.escapeExpression(string);
   }
 
   /**
@@ -133,6 +142,18 @@ export default class HandlebarsRenderer extends Renderer {
         icon = Icons[name];
       }
       return self.SafeString(icon);
+    });
+
+    self.registerHelper('highlightedValue', function (value, getInverted, options) {
+      const escapedInput = self.escapeExpression(value.value || value.shortValue);
+
+      const highlightedVal = new HighlightedValue({
+        value: escapedInput,
+        matchedSubstrings: value.matchedSubstrings
+      });
+
+      return getInverted ? self.SafeString(highlightedVal.getInverted())
+        : self.SafeString(highlightedVal.get());
     });
   }
 }
