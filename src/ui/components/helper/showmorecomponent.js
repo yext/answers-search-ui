@@ -37,12 +37,6 @@ class ShowMoreConfig {
      */
     const detailsOverLimit = this.details.length > this.showMoreLimit;
     this.showToggle = this.showMoreLimit && detailsOverLimit;
-
-    /**
-     * Whether to show the button or text first, default false
-     * @type {boolean}
-     */
-    this.buttonFirst = config.buttonFirst;
   }
 }
 
