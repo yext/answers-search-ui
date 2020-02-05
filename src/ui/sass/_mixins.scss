@@ -100,3 +100,13 @@
     $hover-decoration: none
   );
 }
+
+@mixin Image(
+  $background-size: cover,
+  $background-repeat: no-repeat,
+  $border-radius: 2px
+) {
+  background-size: $background-size;
+  background-repeat: $background-repeat;
+  border-radius: $border-radius;
+}

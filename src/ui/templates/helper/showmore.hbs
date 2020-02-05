@@ -1,0 +1,25 @@
+{{#if _config.buttonFirst}}
+  {{#if _config.showToggle}}
+    <button class='yxt-ShowMore-toggle'>
+      {{#if hideExcessDetails}}
+        {{_config.showMoreText}}
+      {{else}} 
+        {{_config.showLessText}}
+      {{/if}}
+    </button>
+  {{/if}}
+{{/if}}
+<div class='yxt-ShowMore-details'>
+  {{details}}
+</div>
+{{#unless _config.buttonFirst}}
+  {{#if _config.showToggle}}
+    <button class='yxt-ShowMore-toggle'>
+      {{#if hideExcessDetails}}
+        {{_config.showMoreText}}
+      {{else}} 
+        {{_config.showLessText}}
+      {{/if}}
+    </button>
+  {{/if}}
+{{/unless}}
