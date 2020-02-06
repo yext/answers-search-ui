@@ -4,7 +4,6 @@
          data-component="IconComponent"
          data-opts='{
             "iconName": "{{iconName}}",
-            "customIcon": "{{customIcon}}",
             "iconUrl": "{{customIconUrl}}"
           }'
          data-prop="icon"
@@ -28,11 +27,11 @@
     {{#if relatedItem.data.website}}
       <div class="yxt-DirectAnswer-viewMoreWrapper">
         <a class="yxt-DirectAnswer-viewMore"
-           href="{{{relatedItem.data.website}}}"
+           href="{{relatedItem.data.website}}"
            data-eventtype="CTA_CLICK"
            data-eventoptions="{{eventOptions}}"
            target="{{#if _config.linkTarget}}{{_config.linkTarget}}{{else}}_blank{{/if}}">
-          {{{viewDetailsText}}}
+          {{viewDetailsText}}
         </a>
       </div>
     {{/if}}
@@ -45,7 +44,7 @@
       </div>
       {{else}}
         <div class="yxt-DirectAnswer-footerText">
-          {{{_config.footerText}}}
+          {{_config.footerText}}
         </div>
         <form class="yxt-DirectAnswer-thumbs js-directAnswer-feedback-form">
           <label class="yxt-DirectAnswer-thumb">

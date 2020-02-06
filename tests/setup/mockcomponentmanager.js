@@ -49,6 +49,7 @@ export default class MockComponentManager {
    */
   setRenderer (renderer) {
     this.renderer = renderer;
+    this.renderer._registerCustomHelpers();
   }
 
   /**
