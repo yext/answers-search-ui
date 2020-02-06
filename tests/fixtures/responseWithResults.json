@@ -1,0 +1,188 @@
+{
+  "meta": {
+      "uuid": "test-uuid",
+      "errors": []
+  },
+  "response": {
+      "businessId": 1,
+      "queryId": "test-queryId",
+      "resultsCount": 7,
+      "results": [
+          {
+              "data": {
+                  "id": "faq-72",
+                  "type": "faq",
+                  "answer": "Scan your Roses' Roses Card from the App on your phone, or swipe a Roses' Roses Card that’s linked to your account. In a pinch, you can give your phone number that’s associated with your account, too.",
+                  "name": "How do I let you know I’m a Madsion Sandwiches MR™ Rewards member?"
+              },
+              "highlightedFields": {
+                  "answer": {
+                      "value": "Scan your Roses' Roses Card from the App on your phone, or swipe a Roses' Roses Card that’s linked to your account. In a pinch, you can give your phone number that’s associated with your account, too.",
+                      "matchedSubstrings": [
+                          {
+                              "offset": 49,
+                              "length": 5
+                          },
+                          {
+                              "offset": 146,
+                              "length": 5
+                          },
+                          {
+                              "offset": 152,
+                              "length": 6
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "data": {
+                  "id": "faq-99",
+                  "type": "faq",
+                  "answer": "Your Madsion Sandwiches Card is like your backstage pass. Scan it from the Madsion Sandwiches App or swipe the plastic Madsion Sandwiches Card at the register to redeem $2.00 Rewards or Surprise Rewards.Note: You cannot provide your mobile phone number associated with your account to redeem rewards.",
+                  "name": "How do I show you I’m a Madsion Sandwiches MR™ Rewards member and get my rewards?"
+              },
+              "highlightedFields": {
+                  "answer": {
+                      "value": "Your Madsion Sandwiches Card is like your backstage pass. Scan it from the Madsion Sandwiches App or swipe the plastic Madsion Sandwiches Card at the register to redeem $2.00 Rewards or Surprise Rewards.Note: You cannot provide your mobile phone number associated with your account to redeem rewards.",
+                      "matchedSubstrings": [
+                          {
+                              "offset": 240,
+                              "length": 5
+                          },
+                          {
+                              "offset": 246,
+                              "length": 6
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "data": {
+                  "id": "faq-66",
+                  "type": "faq",
+                  "answer": "You get to keep all your tokens, as long as you make one earning Roses' Roses purchase or redeem a reward at least once every 12 months. Just scan your Roses' Roses Card or provide your phone number that’s associated with your account to earn tokens. If you don’t, your token balance will expire and reset to zero.",
+                  "name": "Will my token balance expire?"
+              },
+              "highlightedFields": {
+                  "answer": {
+                      "value": "You get to keep all your tokens, as long as you make one earning Roses' Roses purchase or redeem a reward at least once every 12 months. Just scan your Roses' Roses Card or provide your phone number that’s associated with your account to earn tokens. If you don’t, your token balance will expire and reset to zero.",
+                      "matchedSubstrings": [
+                          {
+                              "offset": 186,
+                              "length": 5
+                          },
+                          {
+                              "offset": 192,
+                              "length": 6
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "data": {
+                  "id": "faq-89",
+                  "type": "faq",
+                  "answer": "Any way you want! Sandwiches? Salads? COOKIES?! You can use the $2.00 Reward toward App, online, or in-restaurant purchases.If you’re using the Roses' Roses App or website to order, you can apply any available $2.00 Rewards to your total bill.When making a purchase in a restaurant, select the rewards you want to use in your App, and scan your Roses' Roses Card at the cash register or swipe your plastic Roses' Roses Card.Note: you may not enter your phone number to redeem your $2.00 Reward.",
+                  "name": "How do I use my $2.00 Reward?"
+              },
+              "highlightedFields": {
+                  "answer": {
+                      "value": "Any way you want! Sandwiches? Salads? COOKIES?! You can use the $2.00 Reward toward App, online, or in-restaurant purchases.If you’re using the Roses' Roses App or website to order, you can apply any available $2.00 Rewards to your total bill.When making a purchase in a restaurant, select the rewards you want to use in your App, and scan your Roses' Roses Card at the cash register or swipe your plastic Roses' Roses Card.Note: you may not enter your phone number to redeem your $2.00 Reward.",
+                      "matchedSubstrings": [
+                          {
+                              "offset": 453,
+                              "length": 5
+                          },
+                          {
+                              "offset": 459,
+                              "length": 6
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "data": {
+                  "id": "faq-91",
+                  "type": "faq",
+                  "answer": "We know, we know - you can barely stop smiling! Who doesn’t love a surprise? You can redeem a Surprise Reward through online, App, or in-person orders at a Roses' Roses restaurant.Ordering on the go via the Roses' Roses App or online: Apply any available Surprise Rewards to your order to get your surprise.At a Roses' Roses Restaurant: Select the rewards you want to use and then scan your Roses' Roses Card at the cash register or swipe your plastic Roses' Roses Card.Note: you may not enter your phone number to redeem your Surprise Reward offer. You do not need to print out the Surprise Reward offer for redemption.",
+                  "name": "How do I use my Surprise Reward?"
+              },
+              "highlightedFields": {
+                  "answer": {
+                      "value": "We know, we know - you can barely stop smiling! Who doesn’t love a surprise? You can redeem a Surprise Reward through online, App, or in-person orders at a Roses' Roses restaurant.Ordering on the go via the Roses' Roses App or online: Apply any available Surprise Rewards to your order to get your surprise.At a Roses' Roses Restaurant: Select the rewards you want to use and then scan your Roses' Roses Card at the cash register or swipe your plastic Roses' Roses Card.Note: you may not enter your phone number to redeem your Surprise Reward offer. You do not need to print out the Surprise Reward offer for redemption.",
+                      "matchedSubstrings": [
+                          {
+                              "offset": 499,
+                              "length": 5
+                          },
+                          {
+                              "offset": 505,
+                              "length": 6
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "data": {
+                  "id": "faq-100",
+                  "type": "faq",
+                  "answer": "You have 90 days to use your $2.00 Reward once it has been issued to you. If it is not used after 90 days, the reward will expire and you will not be able to use it.Note: Remember, your tokens don't expire, as long as you make one earning Madsion Sandwiches purchase or redeem a reward at least once every 12 months. Just scan your Madsion Sandwiches Card or provide your phone number to earn tokens. If you don't, your token balance will expire and reset to zero. The more you swipe, the more tokens you'll have which will earn you more rewards, so keep spending!",
+                  "name": "I earned a $2.00 Reward! When will it expire?"
+              },
+              "highlightedFields": {
+                  "answer": {
+                      "value": "You have 90 days to use your $2.00 Reward once it has been issued to you. If it is not used after 90 days, the reward will expire and you will not be able to use it.Note: Remember, your tokens don't expire, as long as you make one earning Madsion Sandwiches purchase or redeem a reward at least once every 12 months. Just scan your Madsion Sandwiches Card or provide your phone number to earn tokens. If you don't, your token balance will expire and reset to zero. The more you swipe, the more tokens you'll have which will earn you more rewards, so keep spending!",
+                      "matchedSubstrings": [
+                          {
+                              "offset": 372,
+                              "length": 5
+                          },
+                          {
+                              "offset": 378,
+                              "length": 6
+                          }
+                      ]
+                  }
+              }
+          },
+          {
+              "data": {
+                  "id": "faq-76",
+                  "type": "faq",
+                  "answer": "Our rewards are deliciously delightful! Earn 4 tokens for every dollar* you spend on food and beverage purchases in Madsion Sandwiches restaurants. Once you hit 200 tokens - BOOM! - you earn a $2.00 Reward for a future Madsion Sandwiches purchase. Easy, right? But wait, there's more! We want to keep you on your toes, so be on the lookout for Surprise Rewards.Earn tokens a variety of ways. You'll earn when you order on the go or in-person. When ordering at a restaurant in person, you will earn tokens if you identify yourself in one of three ways listed below:Scan your digital Madsion Sandwiches Card (with your Madsion Sandwiches App)Swipe a registered plastic Madsion Sandwiches CardProvide your phone number at Madsion Sandwiches restaurants*Excluding gift card and Catering Call Center purchases.",
+                  "name": "What are the benefits of joining Madsion Sandwiches MR™ Rewards?"
+              },
+              "highlightedFields": {
+                  "answer": {
+                      "value": "Our rewards are deliciously delightful! Earn 4 tokens for every dollar* you spend on food and beverage purchases in Madsion Sandwiches restaurants. Once you hit 200 tokens - BOOM! - you earn a $2.00 Reward for a future Madsion Sandwiches purchase. Easy, right? But wait, there's more! We want to keep you on your toes, so be on the lookout for Surprise Rewards.Earn tokens a variety of ways. You'll earn when you order on the go or in-person. When ordering at a restaurant in person, you will earn tokens if you identify yourself in one of three ways listed below:Scan your digital Madsion Sandwiches Card (with your Madsion Sandwiches App)Swipe a registered plastic Madsion Sandwiches CardProvide your phone number at Madsion Sandwiches restaurants*Excluding gift card and Catering Call Center purchases.",
+                      "matchedSubstrings": [
+                          {
+                              "offset": 703,
+                              "length": 5
+                          },
+                          {
+                              "offset": 709,
+                              "length": 6
+                          }
+                      ]
+                  }
+              }
+          }
+      ],
+      "appliedQueryFilters": [],
+      "facets": [],
+      "source": "KNOWLEDGE_MANAGER",
+      "searchIntents": [],
+      "locationBias": {
+          "latitude": 38.9034,
+          "longitude": -76.9882,
+          "locationDisplayName": "Washington, District of Columbia, United States of America",
+          "accuracy": "IP"
+      }
+  }
+}
