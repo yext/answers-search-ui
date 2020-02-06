@@ -1,7 +1,5 @@
 /** @module AutoCompleteData */
 
-import HighlightedValue from './highlightedvalue';
-
 export default class AutoCompleteData {
   constructor (data = {}) {
     this.sections = data.sections || [];
@@ -31,7 +29,6 @@ export default class AutoCompleteData {
 export class AutoCompleteResult {
   constructor (data = {}) {
     this.filter = data.filter || {};
-    this.highlightedValue = new HighlightedValue(data).getInverted();
     this.key = data.key || '';
     this.matchedSubstrings = data.matchedSubstrings || [];
     this.value = data.value || '';
