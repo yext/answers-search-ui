@@ -7,6 +7,7 @@
   $standard-card-background-size: cover !default;
   $standard-card-background-position: center top;
   $standard-card-image-width: 10 * $base-spacing-sm !default;
+  $standard-card-image-height: 10 * $base-spacing-sm !default;
   $standard-card-link-color: $color-brand-primary !default;
   $standard-card-subtitle-color: $color-text-secondary !default;
   $standard-card-text-width: 100% !default;
@@ -19,7 +20,9 @@
 
   &-image {
     min-width: $standard-card-image-width;
-    padding-bottom: $standard-card-image-width;
+    width: $standard-card-image-width;
+    min-height: $standard-card-image-height;
+    height: $standard-card-image-height;
     margin-right: $base-spacing-sm;
     background-size: $standard-card-background-size;
     background-position: $standard-card-background-position;
