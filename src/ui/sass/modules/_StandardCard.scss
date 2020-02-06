@@ -4,7 +4,8 @@
   $standard-card-svg-width: $base-spacing * 1.125 !default;
   $standard-card-svg-height-solo: $base-spacing * 1.5 !default;
   $standard-card-svg-width-solo: $base-spacing * 1.5 !default;
-  $standard-card-background-size: 100% !default;
+  $standard-card-background-size: cover !default;
+  $standard-card-background-position: center top;
   $standard-card-image-width: 10 * $base-spacing-sm !default;
   $standard-card-link-color: $color-brand-primary !default;
   $standard-card-subtitle-color: $color-text-secondary !default;
@@ -21,6 +22,7 @@
     padding-bottom: $standard-card-image-width;
     margin-right: $base-spacing-sm;
     background-size: $standard-card-background-size;
+    background-position: $standard-card-background-position;
     background-repeat: no-repeat;
   }
 
