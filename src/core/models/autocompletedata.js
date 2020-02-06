@@ -29,7 +29,6 @@ export default class AutoCompleteData {
 export class AutoCompleteResult {
   constructor (data = {}) {
     this.filter = data.filter || {};
-    this.highlightedValue = data;
     this.key = data.key || '';
     this.matchedSubstrings = data.matchedSubstrings || [];
     this.value = data.value || '';

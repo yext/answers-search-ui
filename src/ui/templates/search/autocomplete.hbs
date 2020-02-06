@@ -22,7 +22,7 @@
             data-eventtype="AUTO_COMPLETE_SELECTION"
             data-eventoptions='{"suggestedSearchText": "{{value}}"}'
         >
-            {{highlightedValue highlightedValue true}}
+            {{highlightValue this getInverted=true}}
         </li>
       {{/each}}
       </ul>

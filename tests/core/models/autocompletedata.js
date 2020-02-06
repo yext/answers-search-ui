@@ -19,7 +19,6 @@ describe('constructing from a response', () => {
         shortValue: 'Jesse Sharps',
         filter: {},
         matchedSubstrings: [],
-        highlightedValue: { key: 'jesse', value: 'Jesse Sharps', queryIntents: [] },
         intents: []
       },
       {
@@ -28,7 +27,6 @@ describe('constructing from a response', () => {
         shortValue: 'Billy Bastardi',
         filter: {},
         matchedSubstrings: [],
-        highlightedValue: { key: 'billy', value: 'Billy Bastardi', queryIntents: [] },
         intents: []
       }
     ];
@@ -69,12 +67,6 @@ describe('constructing from a response', () => {
         shortValue: 'Jesse',
         filter: {},
         matchedSubstrings: [ { offset: 0, length: 5 } ],
-        highlightedValue: {
-          key: 'jesse',
-          value: 'Jesse',
-          matchedSubstrings: [{ offset: 0, length: 5 }],
-          queryIntents: []
-        },
         intents: []
       }
     ];
@@ -114,12 +106,6 @@ describe('constructing from a response', () => {
         shortValue: 'Jesse',
         filter: {},
         matchedSubstrings: [ { offset: 0, length: 5 } ],
-        highlightedValue: {
-          key: 'jesse',
-          value: 'Jesse',
-          matchedSubstrings: [{ offset: 0, length: 5 }],
-          queryIntents: resultIntents
-        },
         intents: resultIntents
       }
     ];

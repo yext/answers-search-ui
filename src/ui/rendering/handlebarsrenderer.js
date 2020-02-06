@@ -144,7 +144,7 @@ export default class HandlebarsRenderer extends Renderer {
       return self.SafeString(icon);
     });
 
-    self.registerHelper('highlightedValue', function (value, getInverted, options) {
+    self.registerHelper('highlightValue', function (value, getInverted) {
       const escapedInput = self.escapeExpression(value.value || value.shortValue);
 
       const highlightedVal = new HighlightedValue({
