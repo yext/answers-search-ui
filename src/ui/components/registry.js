@@ -27,8 +27,6 @@ import PaginationComponent from './results/paginationcomponent';
 import CardComponent from './cards/cardcomponent';
 import StandardCardComponent from './cards/standardcardcomponent';
 
-import ShowMoreComponent from './helper/showmorecomponent';
-
 import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
@@ -73,8 +71,7 @@ const COMPONENT_CLASS_LIST = [
   QuestionSubmissionComponent,
 
   // Helper Components
-  IconComponent,
-  ShowMoreComponent
+  IconComponent
 ];
 
 /**

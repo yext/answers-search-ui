@@ -24,13 +24,7 @@ class CardConfig {
      * Template mappings is a function specified in the config
      * that returns config based on the data passed into card
      */
-    const templateMappings = config.templateMappings || (() => {});
-
-    /**
-     * The config for the child from templateMappings
-     * @type {Object}
-     */
-    this.cardOpts = templateMappings(this.data) || {};
+    this.templateMappings = config.templateMappings || (() => {});
   }
 }
 
@@ -43,8 +37,14 @@ export default class CardComponent extends Component {
     return super.setState({
       ...data,
       cardType: this._config.cardType,
-      cardOpts: JSON.stringify(this._config.cardOpts),
-      cardData: data
+      result: this._config.data
+    });
+  }
+
+  addChild (data, type, opts) {
+    return super.addChild(data, type, {
+      templateMappings: this._config.templateMappings,
+      ...opts
     });
   }
 

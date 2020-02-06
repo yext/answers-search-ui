@@ -1,14 +1,33 @@
 /** @define StandardCard */
 .yxt-StandardCard {
+  $standard-card-svg-height: $base-spacing * 1.125 !default;
+  $standard-card-svg-width: $base-spacing * 1.125 !default;
+  $standard-card-svg-height-solo: $base-spacing * 1.5 !default;
+  $standard-card-svg-width-solo: $base-spacing * 1.5 !default;
+  $standard-card-background-size: 100% !default;
+  $standard-card-image-width: 10 * $base-spacing-sm !default;
+  $standard-card-link-color: $color-brand-primary !default;
+  $standard-card-subtitle-color: $color-text-secondary !default;
+  $standard-card-text-width: 100% !default;
+  $standard-card-link-hover-color: $color-brand-hover !default;
   display: flex;
-  padding: $base-spacing;
+  padding: $base-spacing-sm;
   border-bottom: $border-default;
-  $standard-card-svg-height: 24px !default;
-  $standard-card-svg-width: 24px !default;
-  $standard-card-background-size: cover;
-  $standard-card-image-size: 25%;
-  $standard-card-link-color: $color-brand-primary;
-  $standard-card-subtitle-color: $color-text-secondary;
+
+  @include Text();
+
+  &-image {
+    min-width: $standard-card-image-width;
+    padding-bottom: $standard-card-image-width;
+    margin-right: $base-spacing-sm;
+    background-size: $standard-card-background-size;
+    background-repeat: no-repeat;
+  }
+
+  &-textWrapper {
+    flex-grow: 1;
+    flex-basis: $standard-card-text-width;
+  }
 
   &-title {
     text-decoration: none;
@@ -20,7 +39,8 @@
       $color: $standard-card-link-color
     );
 
-    &:hover {
+    &:hover, &:focus {
+      color: $standard-card-link-hover-color;
       text-decoration: underline;
     }
   }
@@ -35,45 +55,41 @@
     );
   }
 
-  &-content {
-    display: flex;
-    .yxt-ShowMore {
-      &-details {
-        flex-basis: 50%;
-        flex-grow: 1;
-      }
-
-      &-toggle {
-        margin-top: $base-spacing/2;
-      } 
-    }
-  }
-  
-  &-ctas {
-    margin-left: $base-spacing-sm;
-
-    &-item {
-      text-align: center;
-      margin-bottom:  $base-spacing-sm;
-      align-items: center;
-
-      svg {
-        height: $standard-card-svg-height;
-        width: $standard-card-svg-width;
-      }
-    }
-  }
-
-  &-wrapper {
-    width: 100%;
-  }
-
-  &-image {
-    min-width: $standard-card-image-size;
-    padding-bottom: $standard-card-image-size;
-    margin-right: $base-spacing;
-    @include Image(
-      $background-size: $standard-card-background-size
+  &-details {
+    margin-top: $base-spacing-sm/2;
+    flex-basis: $standard-card-text-width;
+    flex-grow: 1;
+    @include Text(
+      $size: $font-size-md,
+      $line-height: $line-height-md,
+      $weight: $font-weight-normal,
+      $color: $color-text-primary
     );
   }
+
+  &-toggle {
+    margin-top: $base-spacing/2;
+    @include Text(
+      $color: $color-brand-primary,
+      $style: italic);
+    @include TextButton($padding: 0);
+  }
+
+
+  @media (max-width: $breakpoint-mobile-max) {
+    flex-direction: column;
+
+    &-image {
+      min-width: 100%;
+      margin-bottom: $base-spacing;
+      padding-bottom: 100%;
+    }
+
+    &-details {
+      margin-top: 0;
+      margin-bottom: $base-spacing-sm/2;
+    }
+  }
 }
+
+

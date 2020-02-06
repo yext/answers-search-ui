@@ -2,9 +2,9 @@
   {{#if _config.image}}
     <div style="background-image: url('{{_config.image}}');" class='yxt-StandardCard-image'></div>
   {{/if}}
-  <div class='yxt-StandardCard-wrapper'>
+  <div class='yxt-StandardCard-textWrapper'>
     {{#if _config.title}}
-      <a href="{{url}}" class='yxt-StandardCard-title' target='_blank'>
+      <a href="{{url}}" class='yxt-StandardCard-title' target="{{#if _config.newWindow}}_blank{{else}}_self{{/if}}">
         {{_config.title}}
       </a>
     {{/if}}
@@ -13,12 +13,19 @@
         {{_config.subtitle}}
       </div>
     {{/if}}
-    <div class='yxt-StandardCard-content'>
-        <div class='yxt-StandardCard-details'
-          data-component='ShowMore'
-          data-opts="{{showMoreOpts}}"
-        >
-        </div>
-    </div>
+    {{#if _config.details}}
+      <div class='yxt-StandardCard-details'>
+        {{details}}
+      </div>
+      {{#if _config.showToggle}}
+        <button class='yxt-StandardCard-toggle'>
+          {{#if hideExcessDetails}}
+            {{_config.showMoreText}}
+          {{else}} 
+            {{_config.showLessText}}
+          {{/if}}
+        </button>
+      {{/if}}
+    {{/if}}
   </div>
 </div>
