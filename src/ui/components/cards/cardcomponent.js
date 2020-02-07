@@ -16,7 +16,7 @@ class CardConfig {
     /**
      * config.data comes from the data-prop attribute passed in
      * from the parent component.
-     * @type {Object}
+     * @type {Result}
      */
     this.result = config.data || {};
 

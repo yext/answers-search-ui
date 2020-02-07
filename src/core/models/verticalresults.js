@@ -7,6 +7,7 @@ export default class VerticalResults {
   constructor (data = {}) {
     Object.assign(this, { searchState: SearchStates.SEARCH_COMPLETE }, data);
     Object.freeze(this);
+    console.log(this);
   }
 
   /**

@@ -8,10 +8,18 @@ class StandardCardConfig {
   constructor (config = {}) {
     Object.assign(this, config);
 
+    /**
+     * The result data
+     * @type {Result}
+     */
     const result = config.result || {};
     const templateMappings = config.templateMappings || (() => {});
     Object.assign(this, templateMappings(result));
 
+    /**
+     * The raw profile data
+     * @type {Object}
+     */
     const rawResult = result._raw || {};
 
     /**
