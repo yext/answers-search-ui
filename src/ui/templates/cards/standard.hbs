@@ -1,13 +1,15 @@
 <div class='yxt-StandardCard'>
   {{#if _config.image}}
-    {{!-- <div style="background-image: url('{{_config.image}}');" class='yxt-StandardCard-image'></div> --}}
     <div class='yxt-StandardCard-img'>
       <img src='{{_config.image}}'>
     </div>
   {{/if}}
   <div class='yxt-StandardCard-textWrapper'>
     {{#if _config.title}}
-      <a href="{{url}}" class='yxt-StandardCard-title' target="{{#if _config.newWindow}}_blank{{else}}_self{{/if}}">
+      <a class='yxt-StandardCard-title'
+        {{#if url}} href="{{url}}" {{/if}}
+        target="{{#if _config.newWindow}}_blank{{else}}_self{{/if}}"
+      >
         {{_config.title}}
       </a>
     {{/if}}
