@@ -8,28 +8,29 @@ class StandardCardConfig {
   constructor (config = {}) {
     Object.assign(this, config);
 
-    const data = config.data || {};
-    Object.assign(this, config.templateMappings(data));
+    const result = config.result || {};
+    const templateMappings = config.templateMappings || (() => {});
+    Object.assign(this, templateMappings(result));
 
-    const raw = data._raw || {};
+    const rawResult = result._raw || {};
 
     /**
      * Title for the card
      * @type {string}
      */
-    this.title = this.title || data.title || raw.name || '';
+    this.title = this.title || result.title || rawResult.name || '';
 
     /**
      * Details for the card
      * @type {string}
      */
-    this.details = this.details || data.details || raw.description || '';
+    this.details = this.details || result.details || rawResult.description || '';
 
     /**
      * Url when you click the title
      * @type {string}
      */
-    this.url = this.url || data.link || raw.website;
+    this.url = this.url || result.link || rawResult.website;
 
     /**
      * If showMoreLimit is set, the text that displays beneath it

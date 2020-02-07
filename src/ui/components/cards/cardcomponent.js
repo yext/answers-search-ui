@@ -18,7 +18,7 @@ class CardConfig {
      * from the parent component.
      * @type {Object}
      */
-    this.data = config.data || {};
+    this.result = config.data || {};
 
     /**
      * Template mappings is a function specified in the config
@@ -36,14 +36,14 @@ export default class CardComponent extends Component {
   setState (data) {
     return super.setState({
       ...data,
-      cardType: this._config.cardType,
-      result: this._config.data
+      cardType: this._config.cardType
     });
   }
 
   addChild (data, type, opts) {
     return super.addChild(data, type, {
       templateMappings: this._config.templateMappings,
+      result: this._config.result,
       ...opts
     });
   }
