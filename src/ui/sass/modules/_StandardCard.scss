@@ -6,7 +6,7 @@
   $standard-card-image-width: 10 * $standard-card-base-spacing-sm !default;
   $standard-card-image-height: 10 * $standard-card-base-spacing-sm !default;
   $standard-card-image-fit: cover !default;
-  $standard-card-image-fit: top !default;
+  $standard-card-image-position: top !default;
 
   $standard-card-link-color: $color-brand-primary !default;
   $standard-card-subtitle-color: $color-text-secondary !default;
@@ -36,7 +36,7 @@
       width: 100%;
       height: 100%;
       object-fit: $standard-card-image-fit;
-      object-position: $standard-card-image-fit;
+      object-position: $standard-card-image-position;
     }
   }
 
