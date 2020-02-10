@@ -4,7 +4,9 @@
   $standard-card-base-spacing-sm: $base-spacing;
 
   $standard-card-image-width: 10 * $standard-card-base-spacing-sm !default;
-  $standard-card-image-height: 10 * $standard-card-base-spacing-sm !default;
+  $standard-card-image-height: 12 * $standard-card-base-spacing-sm !default;
+  $standard-card-mobile-image-width: 80% !default;
+  $standard-card-mobile-image-height: 10 * $standard-card-base-spacing-sm !default;
   $standard-card-image-fit: cover !default;
   $standard-card-image-position: top !default;
 
@@ -24,13 +26,20 @@
 
   @include Text();
 
-  &-img {
-    min-width: $standard-card-image-width;
-    width: $standard-card-image-width;
-    min-height: $standard-card-image-height;
-    height: $standard-card-image-height;
-    margin-right: $standard-card-base-spacing-sm;
+  &-imgWrapper {
+    @media (min-width: $breakpoint-mobile-min) {
+      min-width: $standard-card-image-width;
+      width: $standard-card-image-width;
+      min-height: $standard-card-image-height;
+      height: $standard-card-image-height;
+    }
+    @media (max-width: $breakpoint-mobile-max) {
+      flex-basis: $standard-card-mobile-image-width;
+      min-height: $standard-card-mobile-image-height;
+      height: $standard-card-mobile-image-height;
+    }
     overflow: hidden;
+    margin-right: $standard-card-base-spacing-sm;
 
     img {
       width: 100%;
@@ -72,7 +81,13 @@
   }
 
   &-details {
-    margin-top: $standard-card-base-spacing-sm/2;
+    @media (min-width: $breakpoint-mobile-min) {
+      margin-top: $standard-card-base-spacing-sm/2;
+    }
+    @media (max-width: $breakpoint-mobile-max) {
+      margin-top: 0;
+      margin-bottom: $standard-card-base-spacing-sm/2;
+    }
     flex-basis: $standard-card-text-width;
     flex-grow: 1;
     @include Text(
@@ -89,22 +104,6 @@
       $color: $color-brand-primary,
       $style: italic);
     @include TextButton($padding: 0);
-  }
-
-
-  @media (max-width: $breakpoint-mobile-max) {
-    flex-direction: column;
-
-    &-image {
-      min-width: 100%;
-      margin-bottom: $standard-card-base-spacing;
-      padding-bottom: 100%;
-    }
-
-    &-details {
-      margin-top: 0;
-      margin-bottom: $standard-card-base-spacing-sm/2;
-    }
   }
 }
 

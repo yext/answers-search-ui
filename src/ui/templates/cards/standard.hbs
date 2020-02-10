@@ -1,14 +1,16 @@
 <div class='yxt-StandardCard'>
   {{#if _config.image}}
-    <div class='yxt-StandardCard-img'>
+    <div class='yxt-StandardCard-imgWrapper'>
       <img src='{{_config.image}}'>
     </div>
   {{/if}}
   <div class='yxt-StandardCard-textWrapper'>
     {{#if _config.title}}
       <a class='yxt-StandardCard-title'
-        {{#if url}} href="{{url}}" {{/if}}
-        target="{{#if _config.newWindow}}_blank{{else}}_self{{/if}}"
+        {{#if url}} 
+          href="{{url}}"
+          target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
+        {{/if}}
       >
         {{_config.title}}
       </a>
