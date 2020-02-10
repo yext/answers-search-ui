@@ -19,6 +19,7 @@
   $standard-card-svg-width: $standard-card-base-spacing * 1.125 !default;
   $standard-card-svg-height-solo: $standard-card-base-spacing * 1.5 !default;
   $standard-card-svg-width-solo: $standard-card-base-spacing * 1.5 !default;
+  $standard-card-cta-width: 20% !default;
 
   display: flex;
   padding: $standard-card-base-spacing-sm;
@@ -104,6 +105,64 @@
       $color: $color-brand-primary,
       $style: italic);
     @include TextButton($padding: 0);
+  }
+
+  &-ctas {
+    margin-left: $standard-card-base-spacing/2;
+    flex-basis: $standard-card-cta-width;
+    min-width: $standard-card-cta-width;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    &-item {
+      text-align: center;
+      margin-top: $base-spacing-sm;
+      align-items: center;
+
+      .yxt-CTA {
+        @include CTA(
+          $svg-height: $standard-card-svg-height,
+          $svg-width: $standard-card-svg-width,
+          $word-break: break-word,
+        );
+      }
+
+      &:only-child .yxt-CTA {
+        @include CTA(
+          $flex-direction: column,
+          $svg-height: $standard-card-svg-height-solo,
+          $svg-width: $standard-card-svg-width-solo,
+          $label-margin: $standard-card-base-spacing-sm/2 0 0 0,
+          $margin: 0,
+          $text-align: center,
+          $word-break: break-word,
+        );
+      }
+    }
+  }
+
+  @media (max-width: $breakpoint-mobile-max) {
+    &-ctas {
+      margin: $standard-card-base-spacing-sm/2 0;
+      flex-basis: 0;
+      min-width: auto;
+
+      &-item .yxt-CTA {
+        flex-direction: row;
+        @include CTA(
+          $label-margin: 0 0 0 $standard-card-base-spacing/2,
+          $margin: 0,
+        );
+      }
+
+      &-item:only-child .yxt-CTA {
+        flex-direction: row;
+        @include CTA(
+          $label-margin: 0 0 0 0,
+        );
+      }
+    }
   }
 }
 

@@ -31,6 +31,7 @@ import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
 import IconComponent from './icons/iconcomponent.js';
+import CTAComponent from './helper/ctacomponent';
 
 const COMPONENT_CLASS_LIST = [
   // Core Component
@@ -71,7 +72,8 @@ const COMPONENT_CLASS_LIST = [
   QuestionSubmissionComponent,
 
   // Helper Components
-  IconComponent
+  IconComponent,
+  CTAComponent
 ];
 
 /**
