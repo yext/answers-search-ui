@@ -7,8 +7,8 @@
   <div class='yxt-StandardCard-textWrapper'>
     {{#if _config.title}}
       <a class='yxt-StandardCard-title'
-        {{#if url}} 
-          href="{{url}}"
+        {{#if _config.url}} 
+          href="{{_config.url}}"
           target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
         {{/if}}
       >
