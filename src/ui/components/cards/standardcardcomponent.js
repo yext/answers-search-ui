@@ -64,7 +64,7 @@ class StandardCardConfig {
      * Whether the click should open in a new window
      * @type {boolean}
      */
-    this.newWindow = config.newWindow;
+    this.newWindow = this.newWindow;
 
     /**
      * Image url to display
