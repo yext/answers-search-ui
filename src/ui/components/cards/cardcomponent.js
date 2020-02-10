@@ -25,6 +25,32 @@ class CardConfig {
      * that returns config based on the data passed into card
      */
     this.templateMappings = config.templateMappings || (() => {});
+
+    const callsToAction = config.callsToAction || [];
+    /**
+     * Array of call to action configuration objects
+     * @type {Array<Object>}
+     */
+    this.callsToAction = callsToAction.map(cta => this.handleCTA(cta));
+  }
+
+  handleCTA (cta) {
+    if (typeof cta === 'function') {
+      return cta(this.result);
+    } else if (typeof cta === 'object') {
+      return this.handleCTAObject(cta);
+    }
+    return {};
+  }
+
+  handleCTAObject (cta) {
+    const calculatedCTA = { ...cta };
+    for (let [ctaOption, optionValue] of Object.entries(cta)) {
+      if (typeof optionValue === 'function') {
+        calculatedCTA[ctaOption] = optionValue(this.result);
+      }
+    }
+    return calculatedCTA;
   }
 }
 
@@ -44,6 +70,7 @@ export default class CardComponent extends Component {
   addChild (data, type, opts) {
     return super.addChild(data, type, {
       templateMappings: this._config.templateMappings,
+      callsToAction: this._config.callsToAction,
       ...opts
     });
   }

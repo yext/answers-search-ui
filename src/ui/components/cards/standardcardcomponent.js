@@ -83,6 +83,18 @@ class StandardCardConfig {
      */
     const detailsOverLimit = this.details.length > this.showMoreLimit;
     this.showToggle = this.showMoreLimit && detailsOverLimit;
+
+    /**
+     * The calls to action array
+     */
+    this.callsToAction = this.callsToAction || [];
+    this.callsToAction = this.callsToAction.map(cta => {
+      const _cta = cta || {};
+      return {
+        optsString: JSON.stringify(_cta),
+        shouldRender: _cta.url && _cta.label
+      };
+    });
   }
 }
 
@@ -103,6 +115,7 @@ export default class StandardCardComponent extends Component {
     return super.setState({
       ...data,
       hideExcessDetails: this.hideExcessDetails,
+      callsToAction: this._config.callsToAction,
       details
     });
   }

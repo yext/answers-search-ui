@@ -35,4 +35,15 @@
       {{/if}}
     {{/if}}
   </div>
+  <div class='yxt-StandardCard-ctas'>
+    {{#each callsToAction}}
+      {{#if this.shouldRender}}
+        <div class='yxt-StandardCard-ctas-item'
+          data-component='CTA'
+          data-opts='{{this.optsString}}'
+        >
+        </div>
+      {{/if}}
+    {{/each}}
+  </div>
 </div>
