@@ -11,7 +11,7 @@ class CardConfig {
      * The card type to use
      * @type {string}
      */
-    this.cardType = config.cardType || cardTypes.Standard;
+    this.cardType = config.cardType || 'Standard';
 
     /**
      * config.data comes from the data-prop attribute passed in
@@ -37,7 +37,7 @@ export default class CardComponent extends Component {
     return super.setState({
       ...data,
       result: this._config.result,
-      cardType: this._config.cardType
+      cardType: cardTypes[this._config.cardType]
     });
   }
 

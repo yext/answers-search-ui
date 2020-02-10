@@ -58,7 +58,13 @@ class StandardCardConfig {
      * Clicking show more should expand the results (but no “show less” link).
      * @type {number}
      */
-    this.showMoreLimit = this.showMoreLimit;
+    this.showMoreLimit = this.showMoreLimit || 350;
+
+    /**
+     * Whether the click should open in a new window
+     * @type {boolean}
+     */
+    this.newWindow = config.newWindow;
 
     /**
      * Image url to display
