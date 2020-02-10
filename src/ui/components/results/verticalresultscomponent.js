@@ -71,6 +71,9 @@ export default class VerticalResultsComponent extends Component {
   }
 
   setState (data, val) {
+    /**
+     * @type {Array<Result>}
+     */
     const results = data.results || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign({ results: [] }, data, {
