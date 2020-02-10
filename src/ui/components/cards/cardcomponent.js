@@ -36,6 +36,7 @@ export default class CardComponent extends Component {
   setState (data) {
     return super.setState({
       ...data,
+      result: this._config.result,
       cardType: this._config.cardType
     });
   }
@@ -43,7 +44,6 @@ export default class CardComponent extends Component {
   addChild (data, type, opts) {
     return super.addChild(data, type, {
       templateMappings: this._config.templateMappings,
-      result: this._config.result,
       ...opts
     });
   }

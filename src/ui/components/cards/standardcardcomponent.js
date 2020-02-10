@@ -12,7 +12,7 @@ class StandardCardConfig {
      * The result data
      * @type {Result}
      */
-    const result = config.result || {};
+    const result = config.data || {};
     const templateMappings = config.templateMappings || (() => {});
     Object.assign(this, templateMappings(result));
 
