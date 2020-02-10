@@ -475,8 +475,6 @@ You define all the options at the top level object.
 ```js
 ANSWERS.addComponent('VerticalResults', {
   container: '.vertical-results-container',
-  // The max number of search results to return, defaults to 20
-  limit: 25,
   // Optional: function to give each result item custom rendering
   renderItem: () => {},
   // Optional: string to give custom template to result item
