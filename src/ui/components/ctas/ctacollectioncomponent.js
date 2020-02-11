@@ -40,7 +40,7 @@ export default class CTACollectionComponent extends Component {
    *    a) static value
    *    b) function that takes in resut data and returns the given attributes value
    * 3. an api field name that keys into the result data which contains the cta config as a json string
-   * @param {Array<Function|Object|string>} ctaMapping
+   * @param {Function|Object|string} ctaMapping
    * @param {Object} result
    * @returns {Object}
    */
