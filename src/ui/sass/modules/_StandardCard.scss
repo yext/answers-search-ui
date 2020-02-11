@@ -97,7 +97,7 @@
     margin-top: $standard-card-base-spacing/2;
     @include Text(
       $color: $color-brand-primary,
-      $style: italic);     
+      $style: italic);
     @include TextButton($padding: 0);
   }
 
