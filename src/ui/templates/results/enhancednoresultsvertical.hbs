@@ -1,0 +1,16 @@
+{{#if isSearchComplete}}
+  <div class="yxt-NoResultsVertical">
+    <div class="yxt-NoResultsVertical-wrapper">
+      <p class="yxt-NoResultsVertical-info">
+        No results found for
+        <span class="yxt-NoResultsVertical-query">
+          {{query}}
+        </span>
+        in {{currentVerticalLabel}}. Showing all {{currentVerticalLabel}}.
+      </p>
+      <div class="yxt-NoResultsVertical-alternativeVerticals"
+           data-component="AlternativeVerticals">
+      </div>
+    </div>
+  </div>
+{{/if}}

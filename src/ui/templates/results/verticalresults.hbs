@@ -1,7 +1,12 @@
 {{#if isSearchComplete}}
   {{#if showNoResults}}
-    {{> results/noresults}}
-  {{else}}
+    {{#if showEnhancedNoResults}}
+      {{> results/enhancednoresultsvertical}}
+    {{else}}
+      {{> results/noresults}}
+    {{/if}}
+  {{/if}}
+  {{#if showResults}}
     <section class="yxt-Results yxt-Results--{{_config.modifier}}">
       {{> results/resultssectionheader}}
       {{#if includeMap}}
