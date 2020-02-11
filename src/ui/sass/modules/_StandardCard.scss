@@ -25,6 +25,10 @@
   padding: $standard-card-base-spacing-sm;
   border-bottom: $border-default;
 
+  @media (max-width: $breakpoint-mobile-max) {
+    flex-direction: column;
+  }
+
   @include Text();
 
   &-imgWrapper {
@@ -82,9 +86,7 @@
   }
 
   &-details {
-    @media (min-width: $breakpoint-mobile-min) {
-      margin-top: $standard-card-base-spacing-sm/2;
-    }
+    margin-top: $standard-card-base-spacing-sm/2;
     @media (max-width: $breakpoint-mobile-max) {
       margin-top: 0;
       margin-bottom: $standard-card-base-spacing-sm/2;
@@ -114,6 +116,11 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    @media (max-width: $breakpoint-mobile-max) {
+      margin: $standard-card-base-spacing-sm/2 0;
+      flex-basis: 0;
+      min-width: auto;
+    }
 
     &-item {
       text-align: center;
@@ -121,46 +128,41 @@
       align-items: center;
 
       .yxt-CTA {
-        @include CTA(
-          $svg-height: $standard-card-svg-height,
-          $svg-width: $standard-card-svg-width,
-          $word-break: break-word,
-        );
+        word-break: break-word;
+        @media (max-width: $breakpoint-mobile-max) {
+          flex-direction: row;
+          margin: 0;
+          &-iconLabel {
+            margin: 0 0 0 $standard-card-base-spacing/2;
+          } 
+        }
+
+        .Icon svg {
+          height: $standard-card-svg-height;
+          width: $standard-card-svg-width;
+        }
       }
 
       &:only-child .yxt-CTA {
-        @include CTA(
-          $flex-direction: column,
-          $svg-height: $standard-card-svg-height-solo,
-          $svg-width: $standard-card-svg-width-solo,
-          $label-margin: $standard-card-base-spacing-sm/2 0 0 0,
-          $margin: 0,
-          $text-align: center,
-          $word-break: break-word,
-        );
-      }
-    }
-  }
+        $flex-direction: column;
+        margin: 0;
+        text-align: center;
+        word-break: break-word;
+        @media (max-width: $breakpoint-mobile-max) {
+          flex-direction: row;
+        }
 
-  @media (max-width: $breakpoint-mobile-max) {
-    &-ctas {
-      margin: $standard-card-base-spacing-sm/2 0;
-      flex-basis: 0;
-      min-width: auto;
+        .Icon svg {
+          height: $standard-card-svg-height-solo;
+          width: $standard-card-svg-width-solo;
+        }
 
-      &-item .yxt-CTA {
-        flex-direction: row;
-        @include CTA(
-          $label-margin: 0 0 0 $standard-card-base-spacing/2,
-          $margin: 0,
-        );
-      }
-
-      &-item:only-child .yxt-CTA {
-        flex-direction: row;
-        @include CTA(
-          $label-margin: 0,
-        );
+        &-iconLabel {
+          margin: $standard-card-base-spacing-sm/2 0 0 0;
+          @media (max-width: $breakpoint-mobile-max) {
+            margin: 0;
+          }
+        }
       }
     }
   }
