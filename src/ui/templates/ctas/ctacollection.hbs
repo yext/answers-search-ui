@@ -1,9 +1,11 @@
 {{#each callsToAction}}
-  {{#if this.shouldRender}}
-    <div class='yxt-StandardCard-ctas-item'
-      data-component='CTA'
-      data-opts='{{this.optsString}}'
-    >
-    </div>
+  {{#if this.url}}
+    {{#if this.label}}
+      <div class='yxt-StandardCard-ctas-item'
+        data-component='CTA'
+        data-opts='{{json this}}'
+      >
+      </div>
+    {{/if}}
   {{/if}}
 {{/each}}

@@ -2,54 +2,63 @@
 
 import Component from '../component';
 
-class CTACollectionConfig {
-  constructor (config = {}) {
-    Object.assign(this, config);
+export default class CTACollectionComponent extends Component {
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
-    this.result = config.data || {};
-
-    this.callsToAction = config.callsToAction || [];
+    /**
+     * Result data
+     * @type {Result}
+     */
+    this._config.result = this._config.data || {};
 
     /**
      * Either a function that spits out an array of CTA config objects or an array of CTA config objects
      * or api fieldnames
      * @type {Function|Array<Object|string>}
      */
-    if (typeof this.callsToAction === 'function') {
-      this.callsToAction = this.callsToAction(this.result);
+    let callsToAction = this._config.callsToAction || [];
+
+    if (typeof callsToAction === 'function') {
+      callsToAction = callsToAction(this._config.result) || [];
     }
-    if (Array.isArray(this.callsToAction)) {
-      this.callsToAction = this.callsToAction.map(cta => {
-        const _cta = this.handleCTA(cta);
-        return {
-          optsString: JSON.stringify(_cta),
-          shouldRender: _cta.url && _cta.label
-        };
-      });
-    }
+    callsToAction = callsToAction.map(ctaMapping =>
+      CTACollectionComponent.resolveCTAMapping(ctaMapping, this._config.result)
+    );
+
+    /**
+     * The computed calls to action array
+     * @type {Array<Object>}
+     */
+    this._config.callsToAction = callsToAction;
   }
 
-  handleCTA (cta) {
-    if (typeof cta === 'function') {
-      return cta(this.result);
-    } else if (typeof cta === 'object') {
-      const calculatedCTA = { ...cta };
-      for (let [ctaOption, optionValue] of Object.entries(cta)) {
-        if (typeof optionValue === 'function') {
-          calculatedCTA[ctaOption] = optionValue(this.result);
+  /**
+   * Handles resolving ctas from a cta mapping which is either
+   * 1. a function that returns a cta's config
+   * 2. an object that has a per-attribute mapping of either a
+   *    a) static value
+   *    b) function that takes in resut data and returns the given attributes value
+   * 3. an api field name that keys into the result data which contains the cta config as a json string
+   * @param {Array<Function|Object|string>} ctaMapping
+   * @param {Object} result
+   * @returns {Object}
+   */
+  static resolveCTAMapping (ctaMapping, result) {
+    if (typeof ctaMapping === 'function') {
+      return ctaMapping(result);
+    } else if (typeof ctaMapping === 'object') {
+      const ctaObject = { ...ctaMapping };
+      for (let [ctaAttribute, attributeMapping] of Object.entries(ctaMapping)) {
+        if (typeof attributeMapping === 'function') {
+          ctaObject[ctaAttribute] = attributeMapping(result);
         }
       }
-      return calculatedCTA;
+      return ctaObject;
     } else if (typeof cta === 'string') {
-      return JSON.parse(this.result[cta]);
+      return { ...JSON.parse(result[ctaMapping]) };
     }
     return {};
-  }
-}
-
-export default class CTACollectionComponent extends Component {
-  constructor (config = {}, systemConfig = {}) {
-    super(new CTACollectionConfig(config), systemConfig);
   }
 
   setState (data) {

@@ -140,11 +140,12 @@
         .Icon svg {
           height: $standard-card-svg-height;
           width: $standard-card-svg-width;
+          margin-right: $standard-card-base-spacing-sm/2;
         }
       }
 
       &:only-child .yxt-CTA {
-        $flex-direction: column;
+        flex-direction: column;
         margin: 0;
         text-align: center;
         word-break: break-word;
