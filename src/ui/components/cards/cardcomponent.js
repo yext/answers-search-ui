@@ -23,34 +23,16 @@ class CardConfig {
     /**
      * Template mappings is a function specified in the config
      * that returns config based on the data passed into card
+     * @type {Function}
      */
     this.templateMappings = config.templateMappings || (() => {});
 
-    const callsToAction = config.callsToAction || [];
     /**
-     * Array of call to action configuration objects
-     * @type {Array<Object>}
+     * Either a function that spits out an array of CTA config objects or an array of CTA config objects
+     * or api fieldnames
+     * @type {Function|Array<Object|string>}
      */
-    this.callsToAction = callsToAction.map(cta => this.handleCTA(cta));
-  }
-
-  handleCTA (cta) {
-    if (typeof cta === 'function') {
-      return cta(this.result);
-    } else if (typeof cta === 'object') {
-      return this.handleCTAObject(cta);
-    }
-    return {};
-  }
-
-  handleCTAObject (cta) {
-    const calculatedCTA = { ...cta };
-    for (let [ctaOption, optionValue] of Object.entries(cta)) {
-      if (typeof optionValue === 'function') {
-        calculatedCTA[ctaOption] = optionValue(this.result);
-      }
-    }
-    return calculatedCTA;
+    this.callsToAction = config.callsToAction || [];
   }
 }
 

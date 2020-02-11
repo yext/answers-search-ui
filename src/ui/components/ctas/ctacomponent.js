@@ -42,7 +42,7 @@ class CTAConfig {
      * The eventOptions needed for the event to fire, passed as a string from templateMappings.
      * @type {Object}
      */
-    this.eventOptions = JSON.parse(config.eventOptions) || {};
+    this.eventOptions = config.eventOptions ? JSON.parse(config.eventOptions) : {};
   }
 }
 
@@ -68,7 +68,7 @@ export default class CTAComponent extends Component {
     return 'CTA';
   }
 
-  static defaultTemplateName () {
-    return 'helper/cta';
+  static defaultTemplateName (config) {
+    return 'ctas/cta';
   }
 }

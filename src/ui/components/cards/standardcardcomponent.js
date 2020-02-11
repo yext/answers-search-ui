@@ -12,33 +12,34 @@ class StandardCardConfig {
      * The result data
      * @type {Result}
      */
-    const result = config.data || {};
+    this.result = config.data || {};
+
     const templateMappings = config.templateMappings || (() => {});
-    Object.assign(this, templateMappings(result));
+    Object.assign(this, templateMappings(this.result));
 
     /**
      * The raw profile data
      * @type {Object}
      */
-    const rawResult = result._raw || {};
+    const rawResult = this.result._raw || {};
 
     /**
      * Title for the card
      * @type {string}
      */
-    this.title = this.title || result.title || rawResult.name || '';
+    this.title = this.title || this.result.title || rawResult.name || '';
 
     /**
      * Details for the card
      * @type {string}
      */
-    this.details = this.details || result.details || rawResult.description || '';
+    this.details = this.details || this.result.details || rawResult.description || '';
 
     /**
      * Url when you click the title
      * @type {string}
      */
-    this.url = this.url || result.link || rawResult.website;
+    this.url = this.url || this.result.link || rawResult.website;
 
     /**
      * If showMoreLimit is set, the text that displays beneath it
@@ -85,16 +86,11 @@ class StandardCardConfig {
     this.showToggle = this.showMoreLimit && detailsOverLimit;
 
     /**
-     * The calls to action array
+     * Either a function that spits out an array of CTA config objects or an array of CTA config objects
+     * or api fieldnames
+     * @type {Function|Array<Object|string>}
      */
     this.callsToAction = this.callsToAction || [];
-    this.callsToAction = this.callsToAction.map(cta => {
-      const _cta = cta || {};
-      return {
-        optsString: JSON.stringify(_cta),
-        shouldRender: _cta.url && _cta.label
-      };
-    });
   }
 }
 
@@ -115,7 +111,7 @@ export default class StandardCardComponent extends Component {
     return super.setState({
       ...data,
       hideExcessDetails: this.hideExcessDetails,
-      callsToAction: this._config.callsToAction,
+      result: this._config.result,
       details
     });
   }
@@ -128,6 +124,13 @@ export default class StandardCardComponent extends Component {
         this.setState();
       });
     }
+  }
+
+  addChild (data, type, opts) {
+    return super.addChild(data, type, {
+      callsToAction: this._config.callsToAction,
+      ...opts
+    });
   }
 
   static get type () {
