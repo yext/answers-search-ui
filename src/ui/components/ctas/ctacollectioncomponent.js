@@ -33,13 +33,14 @@ export default class CTACollectionComponent extends Component {
    *    a) static value
    *    b) function that takes in resut data and returns the given attributes value
    * 4. an api field name that keys into the result data which contains the cta config as a json string
+   * Note: Intentionally does not allow nesting functions.
    * @param {Function|Array<Object|string>|Object|string} ctaMapping
    * @param {Object} result
    * @returns {Array<Object>}
    */
   resolveCTAMapping (ctaMapping, result) {
     if (typeof ctaMapping === 'function') {
-      return this.resolveCTAMapping(ctaMapping(result), result);
+      return ctaMapping(result);
     }
     if (Array.isArray(ctaMapping)) {
       return ctaMapping.flatMap(cta => this.resolveCTAMapping(cta, result));
