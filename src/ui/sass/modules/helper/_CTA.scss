@@ -1,15 +1,16 @@
 .yxt-CTA {
-  display: flex;
-  flex-direction: row;
   text-decoration: none;
+  word-break: break-word;
   word-wrap: break-word;
-  margin: 0 0 0 $base-spacing;
-  text-align: left;
-  word-break: normal;
   color: $color-brand-primary;
-  align-items: center;
 
-  &:hover, &:focus {
+  @include Text(
+    $size: $font-size-md,
+    $weight: $font-weight-semibold,
+    $color: $color-brand-primary
+  );
+
+  &:hover, &:focus, &:active {
     color: $color-brand-hover;
     text-decoration: underline;
   }
@@ -20,12 +21,6 @@
   }
 
   &-iconLabel {
-    margin: 0 0 0 $base-spacing-sm/2;
-
-    @include Text(
-      $size: $font-size-md,
-      $weight: $font-weight-semibold,
-      $color: $color-brand-primary
-    );
+    margin-left: $base-spacing-sm/2;
   }
 }

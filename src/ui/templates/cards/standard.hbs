@@ -4,36 +4,38 @@
       <img src='{{_config.image}}'>
     </div>
   {{/if}}
-  <div class='yxt-StandardCard-textWrapper'>
-    {{#if _config.title}}
-      <a class='yxt-StandardCard-title'
-        {{#if _config.url}} 
-          href="{{_config.url}}"
-          target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
-        {{/if}}
-      >
-        {{_config.title}}
-      </a>
-    {{/if}}
-    {{#if _config.subtitle}}  
-      <div class='yxt-StandardCard-subtitle'>
-        {{_config.subtitle}}
-      </div>
-    {{/if}}
-    {{#if _config.details}}
-      <div class='yxt-StandardCard-details'>
-        {{details}}
-      </div>
-      {{#if _config.showToggle}}
-        <button class='yxt-StandardCard-toggle'>
-          {{#if hideExcessDetails}}
-            {{_config.showMoreText}}
-          {{else}} 
-            {{_config.showLessText}}
+  <div class='yxt-standardCard-wrapper'>
+    <div class='yxt-StandardCard-textWrapper'>
+      {{#if _config.title}}
+        <a class='yxt-StandardCard-title'
+          {{#if _config.url}} 
+            href="{{_config.url}}"
+            target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
           {{/if}}
-        </button>
+        >
+          {{_config.title}}
+        </a>
       {{/if}}
-    {{/if}}
+      {{#if _config.subtitle}}  
+        <div class='yxt-StandardCard-subtitle'>
+          {{_config.subtitle}}
+        </div>
+      {{/if}}
+      {{#if _config.details}}
+        <div class='yxt-StandardCard-details'>
+          {{details}}
+        </div>
+        {{#if _config.showToggle}}
+          <button class='yxt-StandardCard-toggle'>
+            {{#if hideExcessDetails}}
+              {{_config.showMoreText}}
+            {{else}} 
+              {{_config.showLessText}}
+            {{/if}}
+          </button>
+        {{/if}}
+      {{/if}}
+    </div>
+    <div class='yxt-StandardCard-ctas' data-component='CTACollection' data-prop='result'></div>
   </div>
-  <div class='yxt-StandardCard-ctas' data-component='CTACollection' data-prop='result'></div>
 </div>

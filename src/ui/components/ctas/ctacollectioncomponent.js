@@ -23,14 +23,14 @@ export default class CTACollectionComponent extends Component {
       callsToAction = callsToAction(this._config.result) || [];
     }
     callsToAction = callsToAction.map(ctaMapping =>
-      CTACollectionComponent.resolveCTAMapping(ctaMapping, this._config.result)
+      this.resolveCTAMapping(ctaMapping, this._config.result)
     );
 
     /**
      * The computed calls to action array
      * @type {Array<Object>}
      */
-    this._config.callsToAction = callsToAction;
+    this.callsToAction = callsToAction;
   }
 
   /**
@@ -44,7 +44,7 @@ export default class CTACollectionComponent extends Component {
    * @param {Object} result
    * @returns {Object}
    */
-  static resolveCTAMapping (ctaMapping, result) {
+  resolveCTAMapping (ctaMapping, result) {
     if (typeof ctaMapping === 'function') {
       return ctaMapping(result);
     } else if (typeof ctaMapping === 'object') {
@@ -64,7 +64,7 @@ export default class CTACollectionComponent extends Component {
   setState (data) {
     return super.setState({
       ...data,
-      callsToAction: this._config.callsToAction
+      callsToAction: this.callsToAction
     });
   }
 

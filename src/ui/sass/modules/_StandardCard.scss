@@ -4,45 +4,42 @@
   $standard-card-base-spacing-sm: $base-spacing;
 
   $standard-card-image-width: 10 * $standard-card-base-spacing-sm !default;
-  $standard-card-image-height: 12 * $standard-card-base-spacing-sm !default;
+  $standard-card-image-height: 10 * $standard-card-base-spacing-sm !default;
   $standard-card-mobile-image-width: 80% !default;
-  $standard-card-mobile-image-height: 10 * $standard-card-base-spacing-sm !default;
+  $standard-card-mobile-image-height: 12 * $standard-card-base-spacing-sm !default;
   $standard-card-image-fit: cover !default;
   $standard-card-image-position: top !default;
 
   $standard-card-link-color: $color-brand-primary !default;
   $standard-card-subtitle-color: $color-text-secondary !default;
-  $standard-card-text-width: 100% !default;
+  $standard-card-text-width: 50% !default;
   $standard-card-link-hover-color: $color-brand-hover !default;
 
   $standard-card-svg-height: $standard-card-base-spacing * 1.125 !default;
   $standard-card-svg-width: $standard-card-base-spacing * 1.125 !default;
   $standard-card-svg-height-solo: $standard-card-base-spacing * 1.5 !default;
   $standard-card-svg-width-solo: $standard-card-base-spacing * 1.5 !default;
-  $standard-card-cta-width: 20% !default;
+  $standard-card-cta-width: $standard-card-base-spacing * 10 !default;
 
   display: flex;
   padding: $standard-card-base-spacing-sm;
   border-bottom: $border-default;
 
-  @media (max-width: $breakpoint-mobile-max) {
-    flex-direction: column;
-  }
-
   @include Text();
 
-  &-imgWrapper {
-    @media (min-width: $breakpoint-mobile-min) {
-      min-width: $standard-card-image-width;
-      width: $standard-card-image-width;
-      min-height: $standard-card-image-height;
-      height: $standard-card-image-height;
-    }
+  &-wrapper {
+    display: flex;
+    width: 100%;
     @media (max-width: $breakpoint-mobile-max) {
-      flex-basis: $standard-card-mobile-image-width;
-      min-height: $standard-card-mobile-image-height;
-      height: $standard-card-mobile-image-height;
-    }
+      flex-direction: column;
+    }  
+  }
+
+  &-imgWrapper {
+    min-width: $standard-card-image-width;
+    width: $standard-card-image-width;
+    min-height: $standard-card-image-height;
+    height: $standard-card-image-height;
     overflow: hidden;
     margin-right: $standard-card-base-spacing-sm;
 
@@ -86,11 +83,6 @@
   }
 
   &-details {
-    margin-top: $standard-card-base-spacing-sm/2;
-    @media (max-width: $breakpoint-mobile-max) {
-      margin-top: 0;
-      margin-bottom: $standard-card-base-spacing-sm/2;
-    }
     flex-basis: $standard-card-text-width;
     flex-grow: 1;
     @include Text(
@@ -105,64 +97,61 @@
     margin-top: $standard-card-base-spacing/2;
     @include Text(
       $color: $color-brand-primary,
-      $style: italic);
+      $style: italic);     
     @include TextButton($padding: 0);
   }
 
   &-ctas {
     margin-left: $standard-card-base-spacing/2;
-    flex-basis: $standard-card-cta-width;
-    min-width: $standard-card-cta-width;
+    @media (min-width: $breakpoint-mobile-min) {
+      width: $standard-card-cta-width;
+      min-width: $standard-card-cta-width;
+    }
     display: flex;
     flex-direction: column;
     justify-content: center;
+
     @media (max-width: $breakpoint-mobile-max) {
-      margin: $standard-card-base-spacing-sm/2 0;
       flex-basis: 0;
       min-width: auto;
+      margin-left: 0;
+    }
+  }
+
+  .yxt-CTA {
+    display: flex;
+    align-items: center;
+    @media (max-width: $breakpoint-mobile-max) {
+      &-iconLabel {
+        margin-left: $standard-card-base-spacing/2;
+      } 
     }
 
-    &-item {
+    .Icon svg {
+      height: $standard-card-svg-height;
+      width: $standard-card-svg-width;
+      margin-right: $standard-card-base-spacing-sm/2;
+    }
+  }
+
+  .yxt-CTACollection-item {
+    margin-top: $standard-card-base-spacing-sm * 0.75;
+    align-items: center;
+
+    &:only-child .yxt-CTA {
       text-align: center;
-      margin-top: $base-spacing-sm;
-      align-items: center;
 
-      .yxt-CTA {
-        word-break: break-word;
-        @media (max-width: $breakpoint-mobile-max) {
-          flex-direction: row;
-          margin: 0;
-          &-iconLabel {
-            margin: 0 0 0 $standard-card-base-spacing/2;
-          } 
-        }
-
-        .Icon svg {
-          height: $standard-card-svg-height;
-          width: $standard-card-svg-width;
-          margin-right: $standard-card-base-spacing-sm/2;
-        }
+      .Icon svg {
+        height: $standard-card-svg-height-solo;
+        width: $standard-card-svg-width-solo;
+        margin-right: 0;
       }
 
-      &:only-child .yxt-CTA {
+      @media (min-width: $breakpoint-mobile-min) {
         flex-direction: column;
-        margin: 0;
-        text-align: center;
-        word-break: break-word;
-        @media (max-width: $breakpoint-mobile-max) {
-          flex-direction: row;
-        }
-
-        .Icon svg {
-          height: $standard-card-svg-height-solo;
-          width: $standard-card-svg-width-solo;
-        }
 
         &-iconLabel {
-          margin: $standard-card-base-spacing-sm/2 0 0 0;
-          @media (max-width: $breakpoint-mobile-max) {
-            margin: 0;
-          }
+          margin-top: $standard-card-base-spacing-sm/2;
         }
       }
     }
