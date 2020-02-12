@@ -1,6 +1,6 @@
 import DOM from '../../../../src/ui/dom/dom';
 import NavigationComponent, { Tab } from '../../../../src/ui/components/navigation/navigationcomponent';
-import NavigationConfig from '../../../../src/core/models/navigationconfig';
+import VerticalPagesConfig from '../../../../src/core/models/verticalpagesconfig';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 // The DOM doesn't exist within components in the JEST environment,
@@ -30,7 +30,7 @@ describe('navigation component configuration', () => {
       label: config.label,
       url: config.url,
       baseUrl: config.url,
-      configId: null,
+      verticalKey: null,
       isFirst: false,
       isActive: false
     };
@@ -44,7 +44,7 @@ describe('navigation component configuration', () => {
     const config = {
       label: 'This is my label',
       url: 'This is my url',
-      configId: 'test',
+      verticalKey: 'test',
       isFirst: true,
       isActive: true
     };
@@ -53,7 +53,7 @@ describe('navigation component configuration', () => {
       label: config.label,
       url: config.url,
       baseUrl: config.url,
-      configId: config.configId,
+      verticalKey: config.verticalKey,
       isFirst: config.isFirst,
       isActive: config.isActive
     };
@@ -67,27 +67,27 @@ describe('navigation component configuration', () => {
     const tab1Config = {
       label: 'This is my label',
       url: '/tab1/',
-      configId: null
+      verticalKey: null
     };
 
     const tab2Config = {
       label: 'This this is my second label',
       url: '/tab2/',
-      configId: null
+      verticalKey: null
     };
 
     const expected = {
       '/tab1/': {
         label: tab1Config.label,
         url: tab1Config.url,
-        configId: '/tab1/',
+        verticalKey: '/tab1/',
         isFirst: false,
         isActive: false
       },
       '/tab2/': {
         label: tab2Config.label,
         url: tab2Config.url,
-        configId: '/tab2/',
+        verticalKey: '/tab2/',
         isFirst: false,
         isActive: false
       }
@@ -97,15 +97,13 @@ describe('navigation component configuration', () => {
     expect(tab).toMatchObject(expected);
   });
 
-  const mockedCore = (tabsConfig) => {
-    const navigationConfig = new NavigationConfig({
-      tabs: tabsConfig
-    });
+  const mockedCore = (config) => {
+    const verticalsConfig = new VerticalPagesConfig(config);
     return {
       globalStorage: {
         getState: (storageKey) => {
-          expect(storageKey).toEqual(StorageKeys.NAVIGATION_CONFIG);
-          return navigationConfig;
+          expect(storageKey).toEqual(StorageKeys.VERTICAL_PAGES_CONFIG);
+          return verticalsConfig;
         }
       }
     };
@@ -116,12 +114,12 @@ describe('navigation component configuration', () => {
       {
         label: 'This this is my second label',
         url: '/tab1/',
-        configId: 'tab1'
+        verticalKey: 'tab1'
       },
       {
         label: 'This is my label',
         url: '/tab2/',
-        configId: 'tab2',
+        verticalKey: 'tab2',
         isFirst: true
       }
     ];
@@ -142,12 +140,12 @@ describe('navigation component configuration', () => {
       {
         label: 'This this is my second label',
         url: '/tab1/',
-        configId: 'tab1'
+        verticalKey: 'tab1'
       },
       {
         label: 'This is my label',
         url: '/tab2/',
-        configId: 'tab2'
+        verticalKey: 'tab2'
       }
     ];
 
@@ -168,12 +166,12 @@ describe('navigation component configuration', () => {
       {
         label: 'This this is my second label',
         url: '/tab1/',
-        configId: 'tab1'
+        verticalKey: 'tab1'
       },
       {
         label: 'This is my label',
         url: '/tab2/',
-        configId: 'tab2'
+        verticalKey: 'tab2'
       }
     ];
 
@@ -196,7 +194,7 @@ describe('navigation component configuration', () => {
       {
         label: 'This this is my second label',
         url: '/tab1/',
-        configId: 'tab1'
+        verticalKey: 'tab1'
       }
     ];
 
@@ -217,7 +215,7 @@ describe('navigation component configuration', () => {
       {
         label: 'This this is my second label',
         url: '/tab1/',
-        configId: 'tab1'
+        verticalKey: 'tab1'
       }
     ];
 

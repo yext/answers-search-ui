@@ -27,7 +27,7 @@ export default {
   SPELL_CHECK: 'spell-check',
   LOCATION_BIAS: 'location-bias',
   SESSIONS_OPT_IN: 'sessions-opt-in',
-  NAVIGATION_CONFIG: 'navigation-config',
+  VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',
   SORT_BYS: 'sort-bys'
 };

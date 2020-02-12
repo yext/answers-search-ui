@@ -56,7 +56,7 @@ export class Tab {
      * By providing this, enables dynamic sorting based on results.
      * @type {string}
      */
-    this.configId = config.configId || null;
+    this.verticalKey = config.verticalKey || null;
 
     /**
      * The base URL used for constructing the URL with params
@@ -79,7 +79,7 @@ export class Tab {
   }
 
   /**
-   * from will construct a map of configId to {Tab} from
+   * from will construct a map of verticalKey to {Tab} from
    * a configuration file
    * @param {object} tabsConfig the configuration to use
    */
@@ -88,13 +88,20 @@ export class Tab {
     // Parse the options and build out our tabs and
     for (let i = 0; i < tabsConfig.length; i++) {
       let tab = tabsConfig[i];
-      // For tabs without config ids, map their URL to the configID
-      // to avoid duplication of renders
-      if (tab.configId === null && tabs[tab.configId] === undefined) {
-        tab.configId = tab.url;
+
+      // If a tab is configured to be hidden in this component,
+      // do not process it
+      if (tab.hideInNavigation) {
+        continue;
       }
 
-      tabs[tab.configId] = new Tab(tab);
+      // For tabs without config ids, map their URL to the configID
+      // to avoid duplication of renders
+      if (tab.verticalKey === null && tabs[tab.verticalKey] === undefined) {
+        tab.verticalKey = tab.url;
+      }
+
+      tabs[tab.verticalKey] = new Tab(tab);
     }
     return tabs;
   }
@@ -132,10 +139,10 @@ export default class NavigationComponent extends Component {
      * @type {Array.<object>}
      * @private
      */
-    this._tabsConfig = this.core.globalStorage.getState(StorageKeys.NAVIGATION_CONFIG).tabsConfig;
+    this._tabsConfig = this.core.globalStorage.getState(StorageKeys.VERTICAL_PAGES_CONFIG).verticalPagesConfig;
 
     /**
-     * Unordered map of each tab, keyed by VS configId
+     * Unordered map of each tab, keyed by VS verticalKey
      * @type {Object.<String, Object>}
      * @private
      */
@@ -144,7 +151,7 @@ export default class NavigationComponent extends Component {
     /**
      * The order of the tabs, parsed from configuration or URL.
      * This gets updated based on the server results
-     * @type {Array.<String>} The list of VS configIds
+     * @type {Array.<String>} The list of VS verticalKeys
      * @private
      */
     this._tabOrder = this.getDefaultTabOrder(this._tabsConfig, this.getUrlParams());
@@ -307,7 +314,7 @@ export default class NavigationComponent extends Component {
 
   /**
    * Since the server data only provides a list of
-   * VS configIds, we need to compute and transform
+   * VS verticalKeys, we need to compute and transform
    * the data into the proper format for rendering.
    *
    * @override
@@ -371,21 +378,21 @@ export default class NavigationComponent extends Component {
 
     for (let i = 0; i < tabsConfig.length; i++) {
       const tab = tabsConfig[i];
-      // Some tabs don't have configId, so we map it from URL
-      if (tab.configId === undefined) {
-        tab.configId = tab.url;
+      // Some tabs don't have verticalKey, so we map it from URL
+      if (tab.verticalKey === undefined) {
+        tab.verticalKey = tab.url;
       }
 
       // Avoid duplicates if config was provided from URL
-      if (tabOrder.includes(tab.configId)) {
+      if (tabOrder.includes(tab.verticalKey)) {
         continue;
       }
 
       // isFirst should always be the first element in the list
       if (tab.isFirst) {
-        tabOrder.unshift(tab.configId);
+        tabOrder.unshift(tab.verticalKey);
       } else {
-        tabOrder.push(tab.configId);
+        tabOrder.push(tab.verticalKey);
       }
     }
 
