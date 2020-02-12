@@ -1,0 +1,26 @@
+.yxt-CTA {
+  text-decoration: none;
+  word-break: break-word;
+  word-wrap: break-word;
+  color: $color-brand-primary;
+
+  @include Text(
+    $size: $font-size-md,
+    $weight: $font-weight-semibold,
+    $color: $color-brand-primary
+  );
+
+  &:hover, &:focus, &:active {
+    color: $color-brand-hover;
+    text-decoration: underline;
+  }
+
+  .Icon svg {
+    height: $base-spacing * 1.125;
+    width: $base-spacing * 1.125;
+  }
+
+  &-iconLabel {
+    margin-left: $base-spacing-sm/2;
+  }
+}
