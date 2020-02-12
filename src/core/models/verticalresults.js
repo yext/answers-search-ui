@@ -1,5 +1,6 @@
 /** @module VerticalResults */
 
+import { AnswersCoreError } from '../errors/errors';
 import ResultsContext from '../storage/resultscontext';
 import Section from './section';
 import SearchStates from '../storage/searchstates';
@@ -23,10 +24,13 @@ export default class VerticalResults {
    * @param {VerticalResults} results the results to append to the current results
    */
   append (results) {
+    if (results.resultsContext !== this.resultsContext) {
+      throw new AnswersCoreError('Cannot merge results with different contexts', 'VerticalResults');
+    }
     const merged = { ...this };
+    merged.resultsContext = this.resultsContext;
     merged.results = this.results.concat(results.results);
     merged.map.mapMarkers = this.map.mapMarkers.concat(results.map.mapMarkers);
-    merged.resultsContext = this.resultsContext;
     return new VerticalResults(merged);
   }
 
@@ -35,7 +39,7 @@ export default class VerticalResults {
    * results in `results`
    * @param {Object} response The server response
    */
-  static formResponseWithAlternateResults (response) {
+  static _formResponseFromAllResultsForVertical (response) {
     let responseCopy = { ...response };
     const allResultsForVertical = response.allResultsForVertical || {};
     responseCopy.results = allResultsForVertical.results || [];
@@ -54,7 +58,7 @@ export default class VerticalResults {
 
     return new VerticalResults(
       Section.from(
-        hasResults ? response : VerticalResults.formResponseWithAlternateResults(response),
+        hasResults ? response : VerticalResults._formResponseFromAllResultsForVertical(response),
         null,
         formatters),
       resultsContext);

@@ -1,7 +1,6 @@
 /** @module AlternativeVerticals */
 
 import Section from './section';
-import SearchStates from '../storage/searchstates';
 
 export default class AlternativeVerticals {
   constructor (data) {
@@ -10,13 +9,6 @@ export default class AlternativeVerticals {
      * @type {Section}
      */
     this.alternativeVerticals = data || [];
-
-    /**
-     * The current state of the search, used to render different templates before, during,
-     * and after loading
-     * @type {string}
-     */
-    this.searchState = data.searchState || SearchStates.SEARCH_COMPLETE;
   }
 
   /**
@@ -26,13 +18,5 @@ export default class AlternativeVerticals {
    */
   static from (response, formatters) {
     return new AlternativeVerticals(Section.from(response.alternativeVerticals, {}, formatters));
-  }
-
-  /**
-   * Construct a AlternativeVerticals object representing loading results
-   * @return {AlternativeVerticals}
-   */
-  static searchLoading () {
-    return new AlternativeVerticals({ searchState: SearchStates.SEARCH_LOADING });
   }
 }

@@ -7,7 +7,6 @@ import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
 import Filter from './models/filter';
-import AlternativeVerticals from './models/alternativeverticals';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -108,7 +107,6 @@ export default class Core {
   verticalSearch (verticalKey, query) {
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
-      this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, AlternativeVerticals.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
       this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }

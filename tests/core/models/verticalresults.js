@@ -57,13 +57,13 @@ describe('forming no results response', () => {
 
   it('does not alter original response ', () => {
     const initialResponse = { ...response };
-    VerticalResults.formResponseWithAlternateResults(response);
+    VerticalResults._formResponseFromAllResultsForVertical(response);
 
     expect(response).toEqual(initialResponse);
   });
 
   it('properly converts response with data', () => {
-    const convertedResponse = VerticalResults.formResponseWithAlternateResults(response);
+    const convertedResponse = VerticalResults._formResponseFromAllResultsForVertical(response);
 
     expect(convertedResponse).toEqual({
       resultsCount: 2,
@@ -103,7 +103,7 @@ describe('forming no results response', () => {
       allResultsForVertical: [],
       appliedQueryFilters: []
     };
-    const convertedResponse = VerticalResults.formResponseWithAlternateResults(responseEmptyResults);
+    const convertedResponse = VerticalResults._formResponseFromAllResultsForVertical(responseEmptyResults);
 
     expect(convertedResponse).toEqual({
       results: [],
@@ -119,7 +119,7 @@ describe('forming no results response', () => {
       resultsCount: 0,
       appliedQueryFilters: []
     };
-    const convertedResponse = VerticalResults.formResponseWithAlternateResults(responseEmptyResults);
+    const convertedResponse = VerticalResults._formResponseFromAllResultsForVertical(responseEmptyResults);
 
     expect(convertedResponse).toEqual({
       results: [],
