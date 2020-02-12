@@ -23,8 +23,16 @@ class CardConfig {
     /**
      * Template mappings is a function specified in the config
      * that returns config based on the data passed into card
+     * @type {Function}
      */
     this.templateMappings = config.templateMappings || (() => {});
+
+    /**
+     * Either a function that spits out an array of CTA config objects or an array of CTA config objects
+     * or api fieldnames
+     * @type {Function|Array<Object|string>}
+     */
+    this.callsToAction = config.callsToAction || [];
   }
 }
 
@@ -44,6 +52,7 @@ export default class CardComponent extends Component {
   addChild (data, type, opts) {
     return super.addChild(data, type, {
       templateMappings: this._config.templateMappings,
+      callsToAction: this._config.callsToAction,
       ...opts
     });
   }
