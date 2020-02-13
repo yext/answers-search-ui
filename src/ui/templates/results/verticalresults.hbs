@@ -1,7 +1,8 @@
 {{#if isSearchComplete}}
   {{#if showNoResults}}
     {{#if showEnhancedNoResults}}
-      {{> results/enhancednoresultsvertical}}
+      <div class="yxt-Results-alternativeVerticals"
+           data-component="AlternativeVerticals"></div>
     {{else}}
       {{> results/noresults}}
     {{/if}}

@@ -1,9 +1,16 @@
-{{#if shouldDisplayComponent}}
-  <div class="yxt-AlternativeVerticals">
+<div class="yxt-AlternativeVerticals">
+  <p class="yxt-AlternativeVerticals-noResultsInfo">
+    No results found for
+    <span class="yxt-AlternativeVerticals-noResultsInfo--query">
+      {{query}}
+    </span>
+    in {{currentVerticalLabel}}. Showing all {{currentVerticalLabel}}.
+  </p>
+  {{#if hasVerticalSuggestions}}
     <div class="yxt-AlternativeVerticals-suggestionsWrapper">
       The following search categories yielded results
       {{#if query}}
-        for<span class="yxt-AlternativeVerticals-query"> {{query}}</span>
+        for<span class="yxt-AlternativeVerticals-suggestionsWrapper--query"> {{query}}</span>
       {{/if}}
     </div>
     <ul class="yxt-AlternativeVerticals-suggestionsList">
@@ -11,7 +18,7 @@
         {{#with this}}
           <li class="yxt-AlternativeVerticals-suggestion">
             <a class="yxt-AlternativeVerticals-suggestionLink"
-               href="{{url}}">
+                href="{{url}}">
               <span class="yxt-AlternativeVerticals-verticalIconWrapper"
                     data-component="IconComponent"
                     data-opts='{
@@ -37,5 +44,5 @@
         Alternatively, you can <a href={{universalUrl}}>view results across all categories</a>.
       </div>
     {{/if}}
-  </div>
-{{/if}}
+  {{/if}}
+</div>

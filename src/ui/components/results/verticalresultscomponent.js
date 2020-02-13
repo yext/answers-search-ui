@@ -90,7 +90,6 @@ export default class VerticalResultsComponent extends Component {
     this._verticalsConfig = this.core.globalStorage
       .getState(StorageKeys.VERTICAL_PAGES_CONFIG)
       .verticalPagesConfig || [];
-    this._currentVerticalLabel = this._getCurrentVerticalName(this._verticalsConfig) || '';
   }
 
   mount () {
@@ -152,14 +151,6 @@ export default class VerticalResultsComponent extends Component {
    */
   static defaultTemplateName (config) {
     return 'results/verticalresults';
-  }
-
-  _getCurrentVerticalName (verticalsConfig) {
-    const thisVertical = verticalsConfig.find(config => {
-      return config.isActive || false;
-    });
-
-    return thisVertical ? thisVertical.label : '';
   }
 
   addChild (data, type, opts) {

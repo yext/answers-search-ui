@@ -104,6 +104,12 @@ export default class AlternativeVerticalsComponent extends Component {
     this._verticalsConfig = opts.verticalsConfig || [];
 
     /**
+     * The name of the vertical that is exposed for the link
+     * @type {string}
+     */
+    this._currentVerticalLabel = this.getCurrentVerticalLabel(opts.verticalsConfig) || '';
+
+    /**
      * The alternative vertical search suggestions, parsed from alternative verticals and
      * the global verticals config.
      * This gets updated based on the server results
@@ -143,8 +149,17 @@ export default class AlternativeVerticalsComponent extends Component {
     return super.setState(Object.assign({ verticalSuggestions: [] }, data, {
       universalUrl: this._universalUrl,
       verticalSuggestions: this.verticalSuggestions,
-      shouldDisplayComponent: this.verticalSuggestions && this.verticalSuggestions.length > 0,
+      hasVerticalSuggestions: this.verticalSuggestions && this.verticalSuggestions.length > 0,
+      currentVerticalLabel: this._currentVerticalLabel,
       query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }));
+  }
+
+  getCurrentVerticalLabel (verticalsConfig) {
+    const thisVertical = verticalsConfig.find(config => {
+      return config.isActive || false;
+    });
+
+    return thisVertical ? thisVertical.label : '';
   }
 }
