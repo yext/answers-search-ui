@@ -8,9 +8,6 @@
 // General styling
 @import "base";
 
-// Helper component Styling
-@import "modules/helper/CTA";
-
 // Component Styling
 @import "modules/SearchBar";
 @import "modules/Icon";
@@ -29,3 +26,4 @@
 @import "modules/QuestionSubmission";
 @import "modules/SortOptions";
 @import "modules/StandardCard";
+@import "modules/CTA";

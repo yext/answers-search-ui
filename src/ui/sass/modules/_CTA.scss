@@ -1,7 +1,5 @@
 .yxt-CTA {
   text-decoration: none;
-  word-break: break-word;
-  word-wrap: break-word;
   color: $color-brand-primary;
 
   @include Text(
@@ -18,9 +16,5 @@
   .Icon svg {
     height: $base-spacing * 1.125;
     width: $base-spacing * 1.125;
-  }
-
-  &-iconLabel {
-    margin-left: $base-spacing-sm/2;
   }
 }
