@@ -85,15 +85,15 @@ verticalPages: [
     label: 'Home',          // The label used for the navigation element
     url: './index.html',    // The link for the navigation element
     isFirst: true,          // optional, will always show this item first
-    isActive: true          // optional, will add a special class to the item
+    isActive: true,         // optional, will add a special class to the item
     icon: 'star',           // optional, the icon to use in no results and universal results, defaults to star
     hideInNavigation: true  // optional, hide this tab in the navigation component if it’s been added, defaults to false
 
   },
   {
-    verticalKey: 'locations' // optional, the vertical search config id
-    label: 'Location'        // The label used for the navigation element
-    url: 'locations.html'    // The link for the navigation element
+    verticalKey: 'locations', // optional, the vertical search config id
+    label: 'Location',        // The label used for the navigation element
+    url: 'locations.html'     // The link for the navigation element
   }
 ]
 ```
