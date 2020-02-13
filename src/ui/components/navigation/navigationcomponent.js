@@ -87,7 +87,7 @@ export class Tab {
     let tabs = {};
     // Parse the options and build out our tabs and
     for (let i = 0; i < tabsConfig.length; i++) {
-      let tab = tabsConfig[i];
+      let tab = { ...tabsConfig[i] };
 
       // If a tab is configured to be hidden in this component,
       // do not process it
