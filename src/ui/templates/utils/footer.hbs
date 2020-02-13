@@ -1,0 +1,13 @@
+<a class="yxt-Results-footer" 
+  {{#if _config.url}} 
+    href="{{_config.url}}"
+    target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
+  {{/if}}
+>
+  {{#if _config.image}}
+    <img src='{{_config.image}}'>
+  {{/if}}
+  {{#if _config.icon}}
+    <span data-component="IconComponent" data-opts='{ "iconName": "{{_config.icon}}" }'></span>
+  {{/if}}
+</a>
