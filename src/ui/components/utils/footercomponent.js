@@ -1,4 +1,4 @@
-/** @module VerticalResultsComponent */
+/** @module FooterComponent */
 
 import Component from '../component';
 import Icons from '../../../ui/icons/index';
@@ -17,7 +17,7 @@ export default class FooterComponent extends Component {
      * Whether the logo should open the link in a new window
      * @type {boolean}
      */
-    this._config.newWindow = config.newWindow;
+    this._config.newWindow = config.newWindow || false;
 
     /**
      * Either the name of an icon to display or a url to an image.
@@ -25,17 +25,19 @@ export default class FooterComponent extends Component {
      */
     const logo = config.logo || 'yext';
 
-    /**
-     * Icon name of footer image
-     * @type {string}
-     */
-    this._config.icon = Icons[logo] && logo;
-
-    /**
-     * Url of footer image
-     * @type {string}
-     */
-    this._config.image = !this._config.icon && logo;
+    if (Icons[logo]) {
+      /**
+       * Icon name of footer image
+       * @type {string}
+       */
+      this._config.icon = logo;
+    } else {
+      /**
+       * Url of footer image
+       * @type {string}
+       */
+      this._config.image = logo;
+    }
   }
 
   static get duplicatesAllowed () {
