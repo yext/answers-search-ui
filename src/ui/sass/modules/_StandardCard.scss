@@ -20,25 +20,29 @@
   $standard-card-svg-height-solo: $standard-card-base-spacing * 1.5 !default;
   $standard-card-svg-width-solo: $standard-card-base-spacing * 1.5 !default;
   $standard-card-cta-width: $standard-card-base-spacing * 10 !default;
+  $standard-card-wrapper-width: $standard-card-base-spacing * 10 !default;
 
   display: flex;
   padding: $standard-card-base-spacing-sm;
+  border: $border-default;
+  margin: $standard-card-base-spacing/2;
+  flex-wrap: wrap;
 
   @include Text();
 
   &-wrapper {
     display: flex;
     width: 100%;
-    @media (max-width: $breakpoint-mobile-max) {
-      flex-direction: column;
-    }  
+    flex-wrap: wrap;
+    flex-basis: 0;
+    flex-grow: 1;
   }
 
   &-imgWrapper {
-    min-width: $standard-card-image-width;
     width: $standard-card-image-width;
-    min-height: $standard-card-image-height;
+    min-width: $standard-card-image-width;
     height: $standard-card-image-height;
+    min-height: $standard-card-image-height;
     overflow: hidden;
     margin-right: $standard-card-base-spacing-sm;
 
@@ -102,29 +106,16 @@
 
   &-ctas {
     margin-left: $standard-card-base-spacing/2;
-    @media (min-width: $breakpoint-mobile-min) {
-      width: $standard-card-cta-width;
-      min-width: $standard-card-cta-width;
-    }
+    max-width: $standard-card-cta-width;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    @media (max-width: $breakpoint-mobile-max) {
-      flex-basis: 0;
-      min-width: auto;
-      margin-left: 0;
-    }
   }
 
   .yxt-CTA {
     display: flex;
     align-items: center;
-    @media (max-width: $breakpoint-mobile-max) {
-      &-iconLabel {
-        margin-left: $standard-card-base-spacing/2;
-      } 
-    }
 
     .Icon svg {
       height: $standard-card-svg-height;
@@ -137,21 +128,16 @@
     margin-top: $standard-card-base-spacing-sm * 0.75;
     align-items: center;
 
-    &:only-child .yxt-CTA {
-      text-align: center;
+    &:only-child {
+      .yxt-CTA {
+        text-align: center;
+        flex-direction: column;
+      }
 
       .Icon svg {
         height: $standard-card-svg-height-solo;
         width: $standard-card-svg-width-solo;
-        margin-right: 0;
-      }
-
-      @media (min-width: $breakpoint-mobile-min) {
-        flex-direction: column;
-
-        &-iconLabel {
-          margin-top: $standard-card-base-spacing-sm/2;
-        }
+        margin-bottom: $standard-card-base-spacing-sm/2;
       }
     }
   }

@@ -33,7 +33,6 @@
   $results-footer-image-fit: contain !default;
   $results-footer-image-border-radius: $base-spacing/6 !default;
 
-  border: $results-border;
   border-bottom: 0;
 
   & + &
@@ -100,7 +99,7 @@
     padding: $base-spacing/2 $base-spacing;
     background-color: $results-filters-background;
     border-bottom: $results-border;
-    margin-bottom: 0;
+    margin-bottom: $base-spacing-sm;
   }
 
   &-filter
@@ -152,9 +151,32 @@
   &-items {
     margin-bottom: 0;
     padding: 0;
-    margin-top: 0;
-    margin-bottom: 0;
     list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+
+    .yxt-Card {
+      min-width: $base-spacing * 24;
+      flex-grow: 1;
+    }
+
+    @media (min-width: $breakpoint-mobile-min) {
+      &-1 .yxt-Card {
+        width: 100%;
+      }
+
+      &-2 .yxt-Card {
+        width: 50%;
+      }
+
+      &-3 .yxt-Card {
+        width: 33.3%;
+      }
+
+      &-4 .yxt-Card {
+        width: 25%;
+      }
+    }  
   }
 
   &-footer {
