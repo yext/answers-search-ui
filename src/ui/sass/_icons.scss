@@ -1,0 +1,14 @@
+.yxt-Icons {
+  &-collapseUp svg {
+    transform: rotate(270deg);
+  }
+
+  &-collapseDown svg {
+    transform: rotate(90deg);
+  }
+
+  &-sm .Icon svg {
+    height: $base-spacing / 2;
+    width: $base-spacing / 2;
+  }
+}

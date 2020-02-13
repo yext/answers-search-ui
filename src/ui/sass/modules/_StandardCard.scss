@@ -3,40 +3,32 @@
   $standard-card-base-spacing: $base-spacing;
   $standard-card-base-spacing-sm: $base-spacing;
 
-  $standard-card-image-width: 10 * $standard-card-base-spacing-sm !default;
-  $standard-card-image-height: 10 * $standard-card-base-spacing-sm !default;
+  $standard-card-image-width: 7.5 * $standard-card-base-spacing!default;
+  $standard-card-image-height: 7.5 * $standard-card-base-spacing !default;
   $standard-card-mobile-image-width: 80% !default;
-  $standard-card-mobile-image-height: 12 * $standard-card-base-spacing-sm !default;
+  $standard-card-mobile-image-height: 9 * $standard-card-base-spacing !default;
   $standard-card-image-fit: cover !default;
   $standard-card-image-position: top !default;
 
   $standard-card-link-color: $color-brand-primary !default;
   $standard-card-subtitle-color: $color-text-secondary !default;
-  $standard-card-text-width: 50% !default;
   $standard-card-link-hover-color: $color-brand-hover !default;
 
-  $standard-card-svg-height: $standard-card-base-spacing * 1.125 !default;
-  $standard-card-svg-width: $standard-card-base-spacing * 1.125 !default;
-  $standard-card-svg-height-solo: $standard-card-base-spacing * 1.5 !default;
-  $standard-card-svg-width-solo: $standard-card-base-spacing * 1.5 !default;
-  $standard-card-cta-width: $standard-card-base-spacing * 10 !default;
-  $standard-card-wrapper-width: $standard-card-base-spacing * 10 !default;
+  $standard-card-text-min-width: 8 * $standard-card-base-spacing;
+
+  $standard-card-svg-height: 1.125 * $standard-card-base-spacing !default;
+  $standard-card-svg-width: 1.125 * $standard-card-base-spacing !default;
+  $standard-card-svg-height-solo: 1.5 * $standard-card-base-spacing !default;
+  $standard-card-svg-width-solo: 1.5 * $standard-card-base-spacing !default;
+  $standard-card-cta-width: 8 * $standard-card-base-spacing !default;
+  $standard-card-wrapper-width: 10 * $standard-card-base-spacing !default;
 
   display: flex;
   padding: $standard-card-base-spacing-sm;
   border: $border-default;
   margin: $standard-card-base-spacing/2;
-  flex-wrap: wrap;
 
   @include Text();
-
-  &-wrapper {
-    display: flex;
-    width: 100%;
-    flex-wrap: wrap;
-    flex-basis: 0;
-    flex-grow: 1;
-  }
 
   &-imgWrapper {
     width: $standard-card-image-width;
@@ -54,14 +46,16 @@
     }
   }
 
-  &-textWrapper {
+  &-wrapper {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 0;
     flex-grow: 1;
-    flex-basis: $standard-card-text-width;
   }
 
   &-title {
     text-decoration: none;
-    padding-bottom: $standard-card-base-spacing/2;
+    display: block;
     @include Text(
       $size: $font-size-md-lg,
       $line-height: $line-height-lg,
@@ -85,9 +79,24 @@
     );
   }
 
-  &-details {
-    flex-basis: $standard-card-text-width;
+  &-content {
+    display: flex;
+    flex-basis: 100%;
     flex-grow: 1;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-self: flex-end;
+    width: 100%;
+  }
+
+  &-details {
+    min-width: $standard-card-text-min-width;
+    flex-basis: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: $standard-card-base-spacing / 2;
     @include Text(
       $size: $font-size-md,
       $line-height: $line-height-md,
@@ -98,6 +107,7 @@
 
   &-toggle {
     margin-top: $standard-card-base-spacing/2;
+    text-align: left;
     @include Text(
       $color: $color-brand-primary,
       $style: italic);
@@ -105,9 +115,12 @@
   }
 
   &-ctas {
-    margin-left: $standard-card-base-spacing/2;
+    margin-left: $standard-card-base-spacing;
+    min-width: $standard-card-cta-width;
     max-width: $standard-card-cta-width;
-    width: 100%;
+    align-self: flex-start;
+    flex-grow: 1;
+    flex-basis: 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -138,6 +151,7 @@
         height: $standard-card-svg-height-solo;
         width: $standard-card-svg-width-solo;
         margin-bottom: $standard-card-base-spacing-sm/2;
+        margin-right: 0;
       }
     }
   }
