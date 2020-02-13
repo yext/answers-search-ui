@@ -46,6 +46,12 @@ class VerticalResultsConfig {
     this._universalUrl = config.universalUrl;
 
     /**
+     * The maximum number of columns to display, supports 1, 2, 3, or 4.
+     * @type {number}
+     */
+    this.maxNumberOfColumns = config.maxNumberOfColumns || 1;
+
+    /**
      * The config to pass to the card
      * @type {Object}
      */
@@ -81,6 +87,7 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array<Result>}
      */
     const results = data.results || [];
+    const numColumns = Math.min(results.length || 1, this._config.maxNumberOfColumns);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
@@ -91,7 +98,8 @@ export default class VerticalResultsComponent extends Component {
       eventOptions: this.eventOptions(),
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: results.length === 0,
-      query: this.core.globalStorage.getState(StorageKeys.QUERY)
+      query: this.core.globalStorage.getState(StorageKeys.QUERY),
+      numColumns
     }), val);
   }
 
