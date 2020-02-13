@@ -10,6 +10,7 @@ export default {
   NAVIGATION: 'navigation',
   UNIVERSAL_RESULTS: 'universal-results',
   VERTICAL_RESULTS: 'vertical-results',
+  ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter',
