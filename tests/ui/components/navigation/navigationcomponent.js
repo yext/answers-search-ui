@@ -76,6 +76,13 @@ describe('navigation component configuration', () => {
       verticalKey: null
     };
 
+    const tab3Config = {
+      label: 'this should be hidden :O',
+      url: '/secrettab/',
+      verticalKey: null,
+      hideInNavigation: true
+    };
+
     const expected = {
       '/tab1/': {
         label: tab1Config.label,
@@ -93,7 +100,7 @@ describe('navigation component configuration', () => {
       }
     };
 
-    const tab = Tab.from([tab1Config, tab2Config]);
+    const tab = Tab.from([tab1Config, tab2Config, tab3Config]);
     expect(tab).toMatchObject(expected);
   });
 

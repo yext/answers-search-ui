@@ -43,6 +43,12 @@ export class VerticalPageConfig {
 
   validate () {
   }
+}
+
+export default class VerticalPagesConfig {
+  constructor (config = {}) {
+    this.verticalPagesConfig = VerticalPagesConfig.from(config);
+  }
 
   static from (pages) {
     let verticalPagesConfig = [];
@@ -54,11 +60,5 @@ export class VerticalPageConfig {
       verticalPagesConfig.push(new VerticalPageConfig(page));
     }
     return verticalPagesConfig;
-  }
-}
-
-export default class VerticalPagesConfig {
-  constructor (config = {}) {
-    this.verticalPagesConfig = VerticalPageConfig.from(config);
   }
 }
