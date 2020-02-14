@@ -6,14 +6,13 @@
   {{/if}}
   <div class="yxt-StandardCard-wrapper">
     {{#if _config.title}}
-      <a class="yxt-StandardCard-title"
-        {{#if _config.url}} 
-          href="{{_config.url}}"
-          target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
-        {{/if}}
-      >
-        {{_config.title}}
-      </a>
+      <div class="yxt-StandardCard-title">
+        <a {{#if _config.url}} 
+          href="{{_config.url}}" target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
+        {{/if}}>
+          {{_config.title}}
+        </a>
+      </div>
     {{/if}}
     {{#if _config.subtitle}}  
       <div class="yxt-StandardCard-subtitle">
@@ -28,14 +27,12 @@
             <button class="yxt-StandardCard-toggle">
               {{#if hideExcessDetails}}
                 {{_config.showMoreText}}
-                <span class="yxt-Icons-collapseDown yxt-Icons-sm"
-                  data-component="IconComponent"
-                  data-opts='{ "iconName": "chevron" }'></span>
+                <span data-component="IconComponent"
+                  data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseDown" }'></span>
               {{else}} 
                 {{_config.showLessText}}
-                <span class="yxt-Icons-collapseUp yxt-Icons-sm"
-                  data-component="IconComponent"
-                  data-opts='{ "iconName": "chevron" }'></span>
+                <span data-component="IconComponent"
+                  data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseUp" }'></span>
               {{/if}}
             </button>
           {{/if}}

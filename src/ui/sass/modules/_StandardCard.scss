@@ -53,9 +53,8 @@
     flex-grow: 1;
   }
 
-  &-title {
+  &-title a {
     text-decoration: none;
-    display: block;
     @include Text(
       $size: $font-size-md-lg,
       $line-height: $line-height-lg,
@@ -81,11 +80,9 @@
 
   &-content {
     display: flex;
-    flex-basis: 100%;
     flex-grow: 1;
     flex-wrap: wrap;
     justify-content: space-between;
-    align-self: flex-end;
     width: 100%;
   }
 
@@ -116,8 +113,7 @@
 
   &-ctas {
     margin-left: $standard-card-base-spacing;
-    min-width: $standard-card-cta-width;
-    max-width: $standard-card-cta-width;
+    width: $standard-card-cta-width;
     align-self: flex-start;
     display: flex;
     flex-direction: column;
@@ -128,7 +124,7 @@
     display: flex;
     align-items: center;
 
-    .Icon svg {
+    .Icon {
       height: $standard-card-svg-height;
       width: $standard-card-svg-width;
       margin-right: $standard-card-base-spacing-sm/2;
@@ -145,7 +141,7 @@
         flex-direction: column;
       }
 
-      .Icon svg {
+      .Icon {
         height: $standard-card-svg-height-solo;
         width: $standard-card-svg-width-solo;
         margin-bottom: $standard-card-base-spacing-sm/2;
