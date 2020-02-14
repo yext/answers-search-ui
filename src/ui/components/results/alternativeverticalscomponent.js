@@ -17,7 +17,10 @@ export class VerticalSearchSuggestion {
      */
     this.label = config.label;
     if (typeof this.label !== 'string') {
-      throw new AnswersComponentError('label is a required configuration option for verticalPage.', 'AlternativeVerticalsComponent');
+      throw new AnswersComponentError(
+        'label is a required configuration option for verticalPage.',
+        'AlternativeVerticalsComponent'
+      );
     }
 
     /**
@@ -26,7 +29,10 @@ export class VerticalSearchSuggestion {
      */
     this.url = config.url;
     if (typeof this.url !== 'string') {
-      throw new AnswersComponentError('url is a required configuration option for verticalPage.', 'AlternativeVerticalsComponent');
+      throw new AnswersComponentError(
+        'url is a required configuration option for verticalPage.',
+        'AlternativeVerticalsComponent'
+      );
     }
 
     /**
@@ -47,38 +53,6 @@ export class VerticalSearchSuggestion {
      * @type {number}
      */
     this.resultsCount = config.resultsCount;
-  }
-
-  /**
-   * from will construct an array of {VerticalSearchSuggestion} from
-   * a configuration file
-   * @param {object} tabsConfig the configuration to use
-   */
-  static from (alternativeVerticals, verticalsConfig) {
-    let verticals = [];
-
-    for (let alternativeVertical of alternativeVerticals) {
-      const verticalKey = alternativeVertical.verticalConfigId;
-
-      const matchingVerticalConfig = verticalsConfig.find(config => {
-        return (config.verticalKey === verticalKey) ||
-          (!config.verticalKey && !verticalKey);
-      });
-
-      if (!matchingVerticalConfig) {
-        continue;
-      }
-
-      verticals.push(new VerticalSearchSuggestion({
-        label: matchingVerticalConfig.label,
-        url: matchingVerticalConfig.url,
-        baseUrl: matchingVerticalConfig.url,
-        icon: matchingVerticalConfig.icon,
-        resultsCount: alternativeVertical.resultsCount
-      }));
-    }
-
-    return verticals;
   }
 }
 
@@ -115,7 +89,10 @@ export default class AlternativeVerticalsComponent extends Component {
      * This gets updated based on the server results
      * @type {VerticalSearchSuggestion[]}
      */
-    this.verticalSuggestions = VerticalSearchSuggestion.from(this._alternativeVerticals, this._verticalsConfig);
+    this.verticalSuggestions = this._buildVerticalSuggestions(
+      this._alternativeVerticals,
+      this._verticalsConfig
+    );
 
     /**
      * The url to the universal page to link back to with current query
@@ -161,5 +138,41 @@ export default class AlternativeVerticalsComponent extends Component {
     });
 
     return thisVertical ? thisVertical.label : '';
+  }
+
+  /**
+   * _buildVerticalSuggestions will construct an array of {VerticalSearchSuggestion}
+   * from alternative verticals and verticalPages configuration
+   * @param {object} alternativeVerticals alternativeVerticals server response
+   * @param {object} verticalsConfig the configuration to use
+   */
+  static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
+    let verticals = [];
+
+    for (let alternativeVertical of alternativeVerticals) {
+      const verticalKey = alternativeVertical.verticalConfigId;
+
+      const matchingVerticalConfig = verticalsConfig.find(config => {
+        return (config.verticalKey === verticalKey) ||
+          (!config.verticalKey && !verticalKey);
+      });
+
+      if (!matchingVerticalConfig) {
+        throw new AnswersComponentError(
+          'no matching verticalPages config entry for ' + verticalKey,
+          'AlternativeVerticalsComponent'
+        );
+      }
+
+      verticals.push(new VerticalSearchSuggestion({
+        label: matchingVerticalConfig.label,
+        url: matchingVerticalConfig.url,
+        baseUrl: matchingVerticalConfig.url,
+        icon: matchingVerticalConfig.icon,
+        resultsCount: alternativeVertical.resultsCount
+      }));
+    }
+
+    return verticals;
   }
 }

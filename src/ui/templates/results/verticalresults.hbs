@@ -1,13 +1,13 @@
 {{#if isSearchComplete}}
   {{#if showNoResults}}
-    {{#if showEnhancedNoResults}}
+    {{#if isEnhancedNoResultsEnabled}}
       <div class="yxt-Results-alternativeVerticals"
            data-component="AlternativeVerticals"></div>
     {{else}}
       {{> results/noresults}}
     {{/if}}
   {{/if}}
-  {{#if showResults}}
+  {{#if resultsPresent}}
     <section class="yxt-Results yxt-Results--{{_config.modifier}}">
       {{> results/resultssectionheader}}
       {{#if includeMap}}

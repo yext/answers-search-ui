@@ -44,7 +44,7 @@ export class VerticalPageConfig {
      * name of an icon from the default icon set
      * @type {string}
      */
-    this.icon = config.icon || false;
+    this.icon = config.icon || 'star';
   }
 
   validate () {

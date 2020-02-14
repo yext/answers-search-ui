@@ -123,10 +123,10 @@ export default class VerticalResultsComponent extends Component {
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
       numColumns,
-      showNoResults: results.length === 0 || data.resultsContext === ResultsContext.NO_RESULTS,
-      showResults: displayResultsIfExist && results.length !== 0,
-      showEnhancedNoResults: this._config._showEnhancedNoResults,
-      currentVerticalLabel: this._currentVerticalLabel
+      currentVerticalLabel: this._currentVerticalLabel,
+      resultsPresent: displayResultsIfExist && results.length !== 0,
+      showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
+      isEnhancedNoResultsEnabled: this._config._showEnhancedNoResults
     }), val);
   }
 
