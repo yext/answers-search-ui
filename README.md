@@ -580,8 +580,7 @@ const callsToAction = item => [{
 }]
 ```
 
-Each individual field in a CTA config can also be a function that operates on the result item, and all
-options above can be mixed and matched like so.
+Each individual field in a CTA config can also be a function that operates on the result item.
 
 ```js
 const callsToAction = item => [{
@@ -611,8 +610,10 @@ ANSWERS.addComponent('VerticalResults', {
 ```
 
 ## Template Mappings
-Card config outside of the cardType and callsToAction is defined in a templateMappings attribute that either is
-a function that returns a templateMappings object or a static templateMappings object.
+
+TemplateMappings define how a card's attributes, such as title and details, will be rendered.
+They can be configured either through a function that returns a templateMappings object
+or a static templateMappings object.
 
 Each attribute of a templateMappings object is also either a function or a static value.
 
