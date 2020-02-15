@@ -147,11 +147,15 @@ export default class DateRangeFilterComponent extends Component {
    * @private
    */
   _buildFilter () {
+    const metadata = {
+      fieldName: this._title,
+      displayValue: `${this._title}: ${this._date.min} - ${this._date.max}`
+    };
     if (this._date.min === '' || this._date.max === '') {
       return {};
     }
     return this._isExclusive
-      ? Filter.exclusiveRange(this._field, this._date.min, this._date.max)
-      : Filter.inclusiveRange(this._field, this._date.min, this._date.max);
+      ? Filter.exclusiveRange(this._field, this._date.min, this._date.max, metadata)
+      : Filter.inclusiveRange(this._field, this._date.min, this._date.max, metadata);
   }
 }

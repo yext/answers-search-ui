@@ -1,0 +1,17 @@
+<span class='yxt-Results-resultsCount'>
+  {{pageStart}} - {{pageEnd}} of {{pageEnd}} 
+</span>
+{{#if appliedQueryFilters}}
+  <span class="yxt-Results-filterValue">{{_config.resultsCountSeparator}}</span>
+  {{#each appliedQueryFilters}}
+    <span class="yxt-Results-filterValue">{{value}}</span>
+  {{/each}}
+{{/if}}
+{{#if appliedFiltersString}}
+  <span class='yxt-Results-filterValue'>-</span>
+  <span class="yxt-Results-filterValue">{{appliedFiltersString}}</span>
+{{/if}}
+{{#if sortBysString}}
+  <span class='yxt-Results-filterValue'>-</span>
+  <span class="yxt-Results-filterValue">{{sortBysString}}</span>
+{{/if}}

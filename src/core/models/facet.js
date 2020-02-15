@@ -36,4 +36,16 @@ export default class Facet {
 
     return new Facet(groups);
   }
+
+  /**
+   * Stringify the facet to send in the request.
+   * @param {Facet} facet
+   */
+  static stringify (facet) {
+    return JSON.stringify(facet, (key, value) => {
+      if (key !== 'metadata') {
+        return value;
+      }
+    });
+  }
 }

@@ -13,7 +13,10 @@
   $results-title-bar-link-line-height: $line-height-xxlg !default;
   $results-title-bar-link-font-weight: $font-weight-semibold !default;
 
-  $results-filters-text-color: $color-text-primary !default;
+  $results-count-color: $color-text-primary !default;
+  $results-count-weight: $font-weight-semibold !default;
+
+  $results-filters-text-color: $color-text-secondary !default;
   $results-filters-text-font-size: $font-size-md !default;
   $results-filters-text-line-height: $line-height-md !default;
   $results-filters-text-font-weight: $font-weight-normal !default;
@@ -102,30 +105,35 @@
     margin-bottom: $base-spacing-sm;
   }
 
-  &-filter
-  {
-    display: flex;
-    align-items: center;
-
-    &:not(:first-child)::before
-    {
-      content: '';
-      width: 1px;
-      top: 0;
-      height: 40%;
-      margin-left: $base-spacing;
-      margin-right: $base-spacing;
-      display: inline-block;
-    }
-  }
-
-  &-filterValue
+  &-resultsCount
   {
     @include Text(
       $results-filters-text-font-size,
       $results-filters-text-line-height,
+      $weight: $results-count-weight,
+      $color: $results-count-color,
+    );
+  }
+
+  &-filterSeparator
+  {
+    margin: 0 $base-spacing-sm/2;
+    @include Text(
+      $results-filters-text-font-size,
+      $results-filters-text-line-height,
       $results-filters-text-font-weight,
-      $color: $results-filters-text-color
+      $color: $results-filters-text-color,
+    );
+  }
+
+  &-filterValue
+  {
+    margin-left: $base-spacing/2;
+    @include Text(
+      $results-filters-text-font-size,
+      $results-filters-text-line-height,
+      $results-filters-text-font-weight,
+      $color: $results-filters-text-color,
     );
   }
 

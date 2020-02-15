@@ -44,7 +44,7 @@ class FilterOptionsConfig {
      * If true, stores the filter to storage on each change
      * @type {boolean}
      */
-    this.storeOnChange = config.storeOnChange || false;
+    this.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
     /**
      * If true, show a button to reset the current filter selection
@@ -103,6 +103,9 @@ class FilterOptionsConfig {
 
     this.validate();
 
+    // TODO(oshi) this has issues if there are duplicate values of always choosing the last one,
+    // This wouldn't happened if we kept track of the index, but I guess why would anybody ever have
+    // Two of the same filter option label?...
     if (typeof config.previousOptions === 'string') {
       try {
         config.previousOptions = JSON.parse(config.previousOptions);
@@ -112,6 +115,8 @@ class FilterOptionsConfig {
     }
     let selectedOptions = config.previousOptions || [];
     this.options = this.setDefaultSelectedValues(this.options, selectedOptions);
+
+    this.addMetadataToFilters();
   }
 
   setDefaultSelectedValues (options, selectedOptions) {
@@ -141,6 +146,26 @@ class FilterOptionsConfig {
         'FilterOptions component requires options to be provided',
         'FilterOptions');
     }
+  }
+
+  /**
+   * Adds required display metadata to any passed in filters.
+   */
+  addMetadataToFilters () {
+    this.options = this.options.map(o => {
+      const filter = o.filter;
+      if (!filter) {
+        return o;
+      }
+      const metadata = {
+        ...filter.metadata,
+        fieldName: this.label,
+        fieldValue: o.label
+      };
+      return { ...o,
+        filter: new Filter(filter, metadata)
+      };
+    });
   }
 }
 
@@ -304,6 +329,17 @@ export default class FilterOptionsComponent extends Component {
   }
 
   /**
+   * Build the display label for the filter, to be saved in filter metadata
+   * @param {String} label
+   */
+  _buildFilterMetadata (label) {
+    return {
+      fieldName: this.config.label,
+      fieldValue: label
+    };
+  }
+
+  /**
    * Build and return the Filter that represents the current state
    * @returns {Filter}
    * @private
@@ -313,7 +349,7 @@ export default class FilterOptionsComponent extends Component {
       .filter(o => o.selected)
       .map(o => o.filter
         ? o.filter
-        : Filter.equal(o.field, o.value));
+        : Filter.equal(o.field, o.value, this._buildFilterMetadata(o.label)));
 
     this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
     return filters.length > 0

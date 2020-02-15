@@ -183,7 +183,12 @@ export default class GeoLocationComponent extends Component {
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         this.query = query;
-        this.filter = Filter.fromResponse(filter);
+        const fieldName = this._config.label || this._config.title || 'Location';
+        const fieldValue = query.split(',')[0];
+        this.filter = Filter.fromResponse(filter, {
+          fieldName: fieldName,
+          fieldValue: fieldValue
+        });
         this._saveDataToStorage(query, this.filter);
         this._enabled = false;
       }
@@ -237,20 +242,12 @@ export default class GeoLocationComponent extends Component {
     }
 
     if (this._config.searchOnChange) {
-      const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-      let totalFilter = filters[0];
-      if (filters.length > 1) {
-        totalFilter = Filter.and(...filters);
-      }
       const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
-      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
 
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.verticalSearch(this._config.verticalKey, {
-        input: searchQuery,
-        filter: JSON.stringify(totalFilter),
-        facetFilter: JSON.stringify(facetFilter)
+        input: searchQuery
       });
     }
   }
@@ -264,6 +261,10 @@ export default class GeoLocationComponent extends Component {
   _buildFilter (position) {
     const { latitude, longitude, accuracy } = position.coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
-    return Filter.position(latitude, longitude, radius);
+    const metadata = {
+      fieldName: this._config.title || this._config.label || 'Location',
+      fieldValue: 'Near me'
+    };
+    return Filter.position(latitude, longitude, radius, metadata);
   }
 }

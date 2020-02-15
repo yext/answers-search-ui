@@ -21,21 +21,16 @@
     </a>
   {{/if}}
 </div>
-{{#if appliedQueryFilters}}
-  <ul class="yxt-Results-filters">
-    {{#each appliedQueryFilters}}
-      <li class="yxt-Results-filter">
-        <span class="yxt-Results-filterValue">{{value}}</span>
-      </li>
-    {{/each}}
-    {{#if _config.showChangeFilters}}
-      {{#if verticalURL}}
-        <a class="yxt-Results-changeFilters" href="{{verticalURL}}"
-           data-eventtype="FILTERING_WITHIN_SECTION"
-           data-eventoptions='{{eventOptions}}'>
-          change
-        </a>
-      {{/if}}
+<div class="yxt-Results-filters" >
+  <div class="yxt-DummyContainer" data-component="AppliedFilters" data-opts='{{json _config.appliedFiltersOpts}}'></div>
+  {{#if _config.showChangeFilters}}
+    {{#if verticalURL}}
+      <a class="yxt-Results-changeFilters" href="{{verticalURL}}"
+          data-eventtype="FILTERING_WITHIN_SECTION"
+          data-eventoptions='{{eventOptions}}'>
+        change
+      </a>
     {{/if}}
-  </ul>
-{{/if}}
+  {{/if}}
+</div>
+

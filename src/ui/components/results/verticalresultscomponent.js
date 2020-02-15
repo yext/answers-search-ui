@@ -62,6 +62,30 @@ class VerticalResultsConfig {
      * @type {Object}
      */
     this.footer = config.footer || {};
+
+    /**
+     * If present, show the filters that were ultimately applied to this query
+     * @type {boolean}
+     */
+    this.showAppliedFilters = config.showAppliedFilters === undefined ? true : undefined;
+
+    /**
+     * Display the count of results at the very top of the results
+     * @type {boolean}
+     */
+    this.showResultsCount = config.showResultsCount === undefined ? true : undefined;
+
+    /**
+     * If showResultsCount and showAppliedFilters are true,
+     * display this a separator between the result count and the applied query filters
+     * @type {string}
+     */
+    this.resultsCountSeparator = config.resultsCountSeparator || '|';
+
+    this.appliedFiltersOpts = {
+      showFieldNames: this.showFieldNames,
+      hiddenFields: this.hiddenFields
+    };
   }
 }
 

@@ -7,6 +7,7 @@ import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
 import Filter from './models/filter';
+import Facet from './models/facet';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -97,8 +98,6 @@ export default class Core {
    * @param {string} verticalKey vertical ID for the search
    * @param {object} query The query details
    * @param {string} query.input The input to search for
-   * @param {string} query.filter The filter to use in the search
-   * @param {string} query.facetFilter The facet filter to use in the search
    * @param {number} query.limit The max number of results to include, max of 50
    * @param {number} query.offset The results offset, for fetching more results of the same query
    * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
@@ -111,16 +110,36 @@ export default class Core {
       this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
+    // If no verticalKey is set try to get verticalKey from the common search config
+    if (!verticalKey) {
+      verticalKey = this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    }
+
+    // Get filters and facet to send in the request
+    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
+    const totalFilter = allFilters.length > 1
+      ? Filter.and(...allFilters)
+      : allFilters[0];
+    const facetFilter = this.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
+
+    // Get sortBys and remove unwanted attributes (label) from the sortBys in the request
+    const sortBys = this.globalStorage.getState(StorageKeys.SORT_BYS) || [];
+    const sortBysString = JSON.stringify(sortBys, (key, value) => {
+      if (key !== 'label') return value;
+    });
+
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         ...query,
+        filter: Filter.stringify(totalFilter),
+        facetFilter: Facet.stringify(facetFilter),
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS)
+        sortBys: sortBysString
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -156,16 +175,9 @@ export default class Core {
    * @param {number} offset The offset to use in the search
    */
   verticalPage (verticalKey, offset) {
-    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
-    const totalFilter = allFilters.length > 1
-      ? Filter.and(...allFilters)
-      : allFilters[0];
-    const facetFilter = this.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
     this.verticalSearch(verticalKey, {
       input: this.globalStorage.getState(StorageKeys.QUERY),
       id: this.globalStorage.getState(StorageKeys.QUERY_ID),
-      filter: JSON.stringify(totalFilter),
-      facetFilter: JSON.stringify(facetFilter),
       offset
     });
   }
@@ -277,10 +289,11 @@ export default class Core {
       return {
         type: option.type,
         field: option.field,
-        direction: option.direction
+        direction: option.direction,
+        label: option.label
       };
     });
-    this.globalStorage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+    this.globalStorage.set(StorageKeys.SORT_BYS, sortBys);
   }
 
   /**
