@@ -49,10 +49,9 @@ export default class CTACollectionComponent extends Component {
    * @returns {Array<Object>}
    */
   resolveCTAMapping (result, callsToActionFields = [], ...ctas) {
-    if (callsToActionFields.length > 0) {
-      return callsToActionFields.map(ctaFieldName => {
-        return { ...JSON.parse(result[ ctaFieldName ]) };
-      });
+    const filteredCTAFields = callsToActionFields.filter(ctaFieldName => result._raw[ ctaFieldName ]);
+    if (filteredCTAFields.length > 0) {
+      return filteredCTAFields.map(ctaFieldName => result._raw[ ctaFieldName ]);
     }
     return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
