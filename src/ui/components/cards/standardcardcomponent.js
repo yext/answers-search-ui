@@ -110,6 +110,13 @@ class StandardCardConfig {
      * @type {Function|Array<Object|string>}
      */
     this.callsToAction = this.callsToAction || [];
+
+    /**
+     * An array of cta custom field names, whose custom field data are expected
+     * to contain CTA configuration.
+     * @type {Array<string>}
+     */
+    this.callsToActionFields = config.callsToActionFields || [];
   }
 }
 
@@ -148,6 +155,7 @@ export default class StandardCardComponent extends Component {
   addChild (data, type, opts) {
     return super.addChild(data, type, {
       callsToAction: this._config.callsToAction,
+      callsToActionFields: this._config.callsToActionFields,
       ...opts
     });
   }

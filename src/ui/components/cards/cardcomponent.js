@@ -33,6 +33,13 @@ class CardConfig {
      * @type {Function|Array<Object|string>}
      */
     this.callsToAction = config.callsToAction || [];
+
+    /**
+     * An array of cta custom field names, whose custom field data are expected
+     * to contain CTA configuration.
+     * @type {Array<string>}
+     */
+    this.callsToActionFields = config.callsToActionFields || [];
   }
 }
 
@@ -53,6 +60,7 @@ export default class CardComponent extends Component {
     return super.addChild(data, type, {
       templateMappings: this._config.templateMappings,
       callsToAction: this._config.callsToAction,
+      callsToActionFields: this._config.callsToActionFields,
       ...opts
     });
   }
