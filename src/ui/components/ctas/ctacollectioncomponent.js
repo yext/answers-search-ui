@@ -20,25 +20,39 @@ export default class CTACollectionComponent extends Component {
     let callsToAction = this._config.callsToAction || [];
 
     /**
+     * An array of cta custom field names, whose custom field data are expected
+     * to contain CTA configuration.
+     * @type {Array<string>}
+     */
+    let callsToActionFields = this._config.callsToActionFields || [];
+
+    /**
      * The computed calls to action array
      * @type {Array<Object>}
      */
-    this.callsToAction = this.resolveCTAMapping(this._config.result, ...callsToAction);
+    this.callsToAction = this.resolveCTAMapping(this._config.result, callsToActionFields, ...callsToAction);
   }
 
   /**
-   * Handles resolving ctas from a cta mapping which is either
+   * Handles resolving ctas from a cta mapping which are either
    * 1. a function that returns a cta's config
    * 2. an object that has a per-attribute mapping of either a
    *    a) static value
    *    b) function that takes in resut data and returns the given attributes value
+   * callsToAction can also be specified through callsToActionFields, which are:
    * 3. an api field name that keys into the result data which contains the cta config as a json string
+   * If callToActionFields are present other ctas should be ignored.
    * Note: Intentionally does not allow nesting functions.
    * @param {Object} result
+   * @param {Array<string>} callsToActionFields
    * @param {Function|...(Object|string)} ctaMapping
    * @returns {Array<Object>}
    */
-  resolveCTAMapping (result, ...ctas) {
+  resolveCTAMapping (result, callsToActionFields = [], ...ctas) {
+    const filteredCTAFields = callsToActionFields.filter(ctaFieldName => result._raw[ ctaFieldName ]);
+    if (filteredCTAFields.length > 0) {
+      return filteredCTAFields.map(ctaFieldName => result._raw[ ctaFieldName ]);
+    }
     return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
         return ctaMapping(result);
@@ -51,10 +65,6 @@ export default class CTACollectionComponent extends Component {
           }
         }
         return ctaObject;
-      }
-      // If cta is specified through an API Field Name
-      if (typeof ctaMapping === 'string') {
-        return { ...JSON.parse(result[ctaMapping]) };
       }
     });
   }
