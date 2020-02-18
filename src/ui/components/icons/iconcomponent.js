@@ -23,6 +23,12 @@ export default class IconComponent extends Component {
      * @type {null}
      */
     this.iconUrl = opts.iconUrl || null;
+
+    /**
+     * An additional string to append to the icon's css class. Multiple
+     * classes should be space delimited.
+     */
+    this.classNames = opts.classNames || null;
   }
 
   static get type () {
@@ -56,7 +62,8 @@ export default class IconComponent extends Component {
     return super.setState(Object.assign(data, {
       iconUrl: this.iconUrl,
       iconName: this.iconName,
-      name: this.iconName ? this.iconName : 'custom'
+      name: this.iconName ? this.iconName : 'custom',
+      classNames: this.classNames
     }));
   }
 }
