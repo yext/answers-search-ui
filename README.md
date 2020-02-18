@@ -488,8 +488,11 @@ ANSWERS.addComponent('VerticalResults', {
     cardType: 'Standard',
     // Required, see [Template Mappings](#Template-Mappings) for more details
     templateMappings: () => {},
-    // Required, see [Calls To Action](#Calls-To-Action) for more details
-    callsToAction: () => []
+    // At least one of callsToAction and callsToActionFields are required,
+    // callsToActionFields takes precendence over callsToAction.
+    // see [Calls To Action](#Calls-To-Action) and [Calls To Action Fields](#Calls-To-Action-Fields)
+    callsToAction: () => [],
+    callsToActionFields: [ "c_primaryCTA","c_secondaryCTA" ]
   },
   // Config for the footer at the bottom of the results
   footer: {
@@ -519,10 +522,17 @@ There is currently only one built-in card, the [Standard Card](#Standard-Card)
 
 ## Calls To Action
 
-An array of callsToActions an be specified in 3 ways
-Note: A CTA without both a truthy label and icon will not be rendered.
+callsToActions are specified as either an array of CTA configs, or a function that returns
+an array of CTA configs. An array of CTA configs is an object of either static config options
+or functions that return the desired config option. The [callsToActionFields](#Calls-To-Action-Fields)
+option will take precendence over the callsToAction option if both are present, acting as if
+callsToAction was not specified at all.
 
-1. as a static CTA config object
+Examples are detailed below.
+
+Note: A CTA without both a label and icon will not be rendered.
+
+1. an array of static CTA config objects
 
 ```js
 const callsToAction = [{
@@ -573,7 +583,7 @@ const callsToAction = item => [{
 }]
 ```
 
-Each individual field in a CTA config can also be a function that operates on the result item.
+3. Each individual field in a CTA config can also be a function that operates on the result item.
 
 ```js
 const callsToAction = item => [{
@@ -586,7 +596,7 @@ const callsToAction = item => [{
 }]
 ```
 
-These can then be included in a card object like so:
+callsToActions can then be included in a card object like so:
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
@@ -597,6 +607,24 @@ ANSWERS.addComponent('VerticalResults', {
       label: item => item._raw.name,
       url: "https://yext.com",
     }]
+  }
+  /* ...other vertical results config... */
+})
+```
+
+## Calls To Action Fields
+
+callsToActionFields are specified as an array of custom field names, and
+these custom fields hold CTA configuration in some backend, (e.g. the Yext Knowledge Graph).
+callsToActionFields will take precendence over callsToAction if both are present, acting as if
+callsToAction was not specified at all.
+
+```js
+ANSWERS.addComponent('VerticalResults', {
+  /* ...other vertical results config... */
+  card: {
+    /* ...other card config...*/
+    callsToActionFields: [ "c_primaryCTA","c_secondaryCTA" ]
   }
   /* ...other vertical results config... */
 })
