@@ -25,11 +25,18 @@ export default class IconComponent extends Component {
      * @type {*|null}
      */
     this.customIcon = opts.customIcon || null;
+
     /**
      * the url to a custom image icon
      * @type {null}
      */
     this.iconUrl = opts.iconUrl || null;
+
+    /**
+     * An additional string to append to the icon's css class. Multiple
+     * classes should be space delimited.
+     */
+    this.classNames = opts.classNames || null;
   }
 
   /**
@@ -42,7 +49,7 @@ export default class IconComponent extends Component {
     }
 
     if (this.iconUrl) {
-      return `<img src="${this.iconUrl}" alt="" class="Icon-image">`;
+      return `<img src="${this.iconUrl}" alt="" class="Icon-image ${this.classNames}>"`;
     }
 
     if (Icons[this.iconName]) {
@@ -81,7 +88,8 @@ export default class IconComponent extends Component {
   setState (data) {
     return super.setState(Object.assign(data, {
       image: this.image,
-      name: this.iconName ? this.iconName : 'custom'
+      name: this.iconName ? this.iconName : 'custom',
+      classNames: this.classNames
     }));
   }
 }
