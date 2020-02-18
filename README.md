@@ -478,8 +478,184 @@ ANSWERS.addComponent('VerticalResults', {
   // Optional: function to give each result item custom rendering
   renderItem: () => {},
   // Optional: string to give custom template to result item
-  itemTemplate: `<div> Custom template </div>`
+  itemTemplate: `<div> Custom template </div>`,
+  // Set a maximum number of columns that will display at the widest breakpoint.
+  // Possible values are 1, 2, 3 or 4. defaults to 1
+  maxNumberOfColumns: 3,
+  // The card used to display each individual result, see [Cards](#Cards) section for more details,
+  card: {
+    // Optional: The type of card, currently only 'Standard' is supported, defaults to 'Standard'
+    cardType: 'Standard',
+    // Required, see [Template Mappings](#Template-Mappings) for more details
+    templateMappings: () => {},
+    // Required, see [Calls To Action](#Calls-To-Action) for more details
+    callsToAction: () => []
+  },
+  // Config for the footer at the bottom of the results
+  footer: {
+    // Image/icon to appear at the bottom. Either the name of an answers-sdk icon
+    // or a url to an image. Defaults to 'yext' (the built-in yext icon)
+    logo: 'yext',
+    // The url to open when the icon is clicked. NOTE: a protocol like http is needed
+    // To link to external pages like yext.com
+    url: 'https://yext.com',
+    // Whether to open the link in a new window, defaults to false
+    newWindow: false
+  }
 })
+```
+
+## Cards
+
+Cards are used in Universal/Vertical Results for configuring the UI for a result on a per-item basis.
+
+Cards take in a templateMappings attribute, which contains configuration for the card, and a callsToAction
+attribute, which contains config for any callToAction buttons in the card.
+
+callsToAction config is common throughout all cards, whereas different cards such as Standard vs BigImage
+have specialized configuration depending on the card.
+
+There is currently only one built-in card, the [Standard Card](#Standard-Card)
+
+## Calls To Action
+
+An array of callsToActions an be specified in 3 ways
+Note: A CTA without both a truthy label and icon will not be rendered.
+
+1. as a static CTA config object
+
+```js
+const callsToAction = [{
+  // Label below the CTA icon, default null
+  label: 'cta label',
+  // Icon name for the CTA that is one of the SDK icons
+  icon: 'star',
+  // Click through url for the icon and label
+  url: 'https://yext.com',
+  // Analytics event that should fire, defaults to 'CTA_CLICK':
+  //       'TITLE_CLICK',
+  //       'CTA_CLICK',
+  //       'TAP_TO_CALL',
+  //       'ORDER_NOW',
+  //       'ADD_TO_CART',
+  //       'APPLY_NOW',
+  //       'DRIVING_DIRECTIONS',
+  //       'VIEW_WEBSITE',
+  //       'EMAIL',
+  //       'BOOK_APPOINTMENT',
+  //       'RSVP'
+  analyticsEventType: 'CTA_CLICK',
+  // Whether the click should open in a new window, defaults to false
+  newWindow: false,
+  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. defaults to null
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "123123", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+}]
+```
+
+2. as a function that returns a cta config object.
+NOTE: we do not allow multiple nested functions, to avoid messy user configurations.
+
+```js
+const callsToAction = item => [{
+  label: item._raw.name,
+  url: "https://yext.com",
+  analyticsEventType: "CTA_CLICK",
+  newWindow: false,
+  icon: "briefcase",
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+}, {
+  label: 'call now',
+  url: "https://maps.google.com",
+  analyticsEventType: "CTA_CLICK",
+  newWindow: false,
+  icon: "phone",
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+}]
+```
+
+Each individual field in a CTA config can also be a function that operates on the result item.
+
+```js
+const callsToAction = item => [{
+  label: item => item._raw.name,
+  url: "https://yext.com",
+  analyticsEventType: "CTA_CLICK",
+  newWindow: item !== null,
+  icon: "briefcase",
+  eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+}]
+```
+
+These can then be included in a card object like so:
+
+```js
+ANSWERS.addComponent('VerticalResults', {
+  /* ...other vertical results config... */
+  card: {
+    /* ...other card config...*/
+    callsToAction: item => [{
+      label: item => item._raw.name,
+      url: "https://yext.com",
+    }]
+  }
+  /* ...other vertical results config... */
+})
+```
+
+## Template Mappings
+
+TemplateMappings define how a card's attributes, such as title and details, will be rendered.
+They can be configured either through a function that returns a templateMappings object
+or a static templateMappings object.
+
+Each attribute of a templateMappings object is also either a function or a static value.
+
+```js
+ANSWERS.addComponent('VerticalResults', {
+  /* ...other vertical results config... */
+  card: {
+    /* ...other card config...*/
+    templateMappings: item => ({
+      title: item._raw.name,
+      subtitle: `Department: ${item._raw.name} `,
+      details: item._raw.description,
+      image: item._raw.headshot ? item._raw.headshot.url : '',
+      url: 'https://yext.com',
+      showMoreLimit: 500,
+      showMoreText: "show more",
+      showLessText: "put it back",
+      newWindow: true,
+    })
+  }
+  /* ...other vertical results config... */
+})
+```
+
+## Standard Card
+
+The template mapping for a standard card has these attributes
+
+```js
+const templateMappings = {
+  // Title for the card, defaults to the name of the entity
+  title: item.title,
+  // Subtitle, defaults to null
+  subtitle: `Department: ${item._raw.name} `,
+  // Details, defaults to the entity's description
+  details: item._raw.description,
+  // Image to display, defaults to null
+  image: item._raw.headshot ? item._raw.headshot.url : '',
+  // Url for the title/subtitle, defaults to the entity's website url
+  url: item.link || item._raw.website,
+  // Character limit to hide remaining details and display a show more button, defaults to 350
+  showMoreLimit: 350,
+  // Text for show more button, defaults to 'Show More'
+  showMoreText: "show more",
+  // Text for show less button, defaults to 'Show Less'
+  showLessText: "put it back",
+  // Whether to open the title link in a new window, defaults to false
+  newWindow: true,
+}
 ```
 
 ## Pagination Component
