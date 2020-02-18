@@ -172,11 +172,11 @@ export default class VerticalResultsComponent extends Component {
       return super.addChild(data, type, newOpts);
     } else if (type === AlternativeVerticalsComponent.type) {
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
-      const newOpts = Object.assign({}, {
+      const newOpts = {
         universalUrl: this._config._universalUrl,
-        verticalsConfig: this._verticalsConfig
-      },
-      this._config.noResults, opts);
+        verticalsConfig: this._verticalsConfig,
+        ...opts
+      };
       return super.addChild(data, type, newOpts);
     }
     return super.addChild(data, type, opts);

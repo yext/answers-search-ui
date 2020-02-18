@@ -1,60 +1,9 @@
 /** @module AlternativeVerticalsComponent */
 
 import { AnswersComponentError } from '../../../core/errors/errors';
+import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
-
-/**
- * The VerticalSearchSuggestion is a model that is used to power the search
- * suggestions info box. It's initialized through the configuration provided
- * to the component.
- */
-export class VerticalSearchSuggestion {
-  constructor (config) {
-    /**
-     * The name of the vertical that is exposed for the link
-     * @type {string}
-     */
-    this.label = config.label;
-    if (typeof this.label !== 'string') {
-      throw new AnswersComponentError(
-        'label is a required configuration option for verticalPage.',
-        'AlternativeVerticalsComponent'
-      );
-    }
-
-    /**
-     * The complete URL, including the params
-     * @type {string}
-     */
-    this.url = config.url;
-    if (typeof this.url !== 'string') {
-      throw new AnswersComponentError(
-        'url is a required configuration option for verticalPage.',
-        'AlternativeVerticalsComponent'
-      );
-    }
-
-    /**
-     * The base URL used for constructing the URL with params
-     * @type {string}
-     */
-    this.baseUrl = config.url;
-
-    /**
-     * name of an icon from the default icon set
-     * @type {string}
-     */
-    this.icon = config.icon;
-
-    /**
-     * The number of results to display next to each alternative
-     * vertical
-     * @type {number}
-     */
-    this.resultsCount = config.resultsCount;
-  }
-}
 
 export default class AlternativeVerticalsComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
@@ -87,9 +36,9 @@ export default class AlternativeVerticalsComponent extends Component {
      * The alternative vertical search suggestions, parsed from alternative verticals and
      * the global verticals config.
      * This gets updated based on the server results
-     * @type {VerticalSearchSuggestion[]}
+     * @type {AlternativeVertical[]}
      */
-    this.verticalSuggestions = this._buildVerticalSuggestions(
+    this.verticalSuggestions = AlternativeVerticalsComponent._buildVerticalSuggestions(
       this._alternativeVerticals,
       this._verticalsConfig
     );
@@ -119,10 +68,6 @@ export default class AlternativeVerticalsComponent extends Component {
   }
 
   setState (data) {
-    for (let vertical of this.verticalSuggestions) {
-      vertical.url = vertical.baseUrl + window.location.search;
-    }
-
     return super.setState(Object.assign({ verticalSuggestions: [] }, data, {
       universalUrl: this._universalUrl,
       verticalSuggestions: this.verticalSuggestions,
@@ -141,20 +86,20 @@ export default class AlternativeVerticalsComponent extends Component {
   }
 
   /**
-   * _buildVerticalSuggestions will construct an array of {VerticalSearchSuggestion}
+   * _buildVerticalSuggestions will construct an array of {AlternativeVertical}
    * from alternative verticals and verticalPages configuration
    * @param {object} alternativeVerticals alternativeVerticals server response
    * @param {object} verticalsConfig the configuration to use
    */
   static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
     let verticals = [];
+    let queryParams = window.location.search;
 
     for (let alternativeVertical of alternativeVerticals) {
       const verticalKey = alternativeVertical.verticalConfigId;
 
       const matchingVerticalConfig = verticalsConfig.find(config => {
-        return (config.verticalKey === verticalKey) ||
-          (!config.verticalKey && !verticalKey);
+        return config.verticalKey === verticalKey;
       });
 
       if (!matchingVerticalConfig) {
@@ -164,10 +109,9 @@ export default class AlternativeVerticalsComponent extends Component {
         );
       }
 
-      verticals.push(new VerticalSearchSuggestion({
+      verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
-        url: matchingVerticalConfig.url,
-        baseUrl: matchingVerticalConfig.url,
+        url: matchingVerticalConfig.url + queryParams,
         icon: matchingVerticalConfig.icon,
         resultsCount: alternativeVertical.resultsCount
       }));
