@@ -33,7 +33,8 @@ export default class IconComponent extends Component {
     this.iconUrl = opts.iconUrl || null;
 
     /**
-     * additional css classnames to give to the icon
+     * An additional string to append to the icon's css class. Multiple
+     * classes should be space delimited.
      */
     this.classNames = opts.classNames || null;
   }
@@ -48,7 +49,7 @@ export default class IconComponent extends Component {
     }
 
     if (this.iconUrl) {
-      return `<img src="${this.iconUrl}" alt="" class="Icon-image ${this.classNames}>`;
+      return `<img src="${this.iconUrl}" alt="" class="Icon-image ${this.classNames}>"`;
     }
 
     if (Icons[this.iconName]) {
