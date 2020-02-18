@@ -42,7 +42,10 @@ class CTAConfig {
      * The eventOptions needed for the event to fire, passed as a string from templateMappings.
      * @type {Object}
      */
-    this.eventOptions = config.eventOptions ? JSON.parse(config.eventOptions) : {};
+    if (typeof config.eventOptions === 'string') {
+      this.eventOptions = JSON.parse(config.eventOptions);
+    }
+    this.eventOptions = this.eventOptions || {};
   }
 }
 
