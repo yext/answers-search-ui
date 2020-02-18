@@ -2,7 +2,9 @@
 
 import Component from '../component';
 
+import AlternativeVerticalsComponent from './alternativeverticalscomponent';
 import MapComponent from '../map/mapcomponent';
+import ResultsContext from '../../../core/storage/resultscontext';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
@@ -24,6 +26,22 @@ class VerticalResultsConfig {
      * @private
      */
     this.isUniversal = config.isUniversal || false;
+
+    /**
+     * _showEnhancedNoResults is set to true if the noResults object exists in the component's
+     * config
+     * @type {boolean}
+     * @private
+     */
+    this._showEnhancedNoResults = config.noResults || false;
+
+    /**
+     * _displayAllResults is set to true if the config option noResults.displayAllResults is true,
+     * meaning that all results for the vertical will display when there are no results for a query
+     * @type {boolean}
+     * @private
+     */
+    this._displayAllResults = config.noResults && config.noResults.displayAllResults;
 
     const parentOpts = config._parentOpts || {};
 
@@ -69,6 +87,9 @@ export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new VerticalResultsConfig(config), systemConfig);
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
+    this._verticalsConfig = this.core.globalStorage
+      .getState(StorageKeys.VERTICAL_PAGES_CONFIG)
+      .verticalPagesConfig || [];
   }
 
   mount () {
@@ -89,6 +110,9 @@ export default class VerticalResultsComponent extends Component {
     const results = data.results || [];
     const numColumns = Math.min(results.length || 1, this._config.maxNumberOfColumns);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    const displayResultsIfExist = this._config._isUniversal ||
+      this._config._displayAllResults ||
+      data.resultsContext === ResultsContext.NORMAL;
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -97,9 +121,12 @@ export default class VerticalResultsComponent extends Component {
       mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
-      showNoResults: results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
-      numColumns
+      numColumns,
+      currentVerticalLabel: this._currentVerticalLabel,
+      resultsPresent: displayResultsIfExist && results.length !== 0,
+      showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
+      isEnhancedNoResultsEnabled: this._config._showEnhancedNoResults
     }), val);
   }
 
@@ -140,6 +167,14 @@ export default class VerticalResultsComponent extends Component {
         isUniversal: this._config.isUniversal,
         template: this._config.itemTemplate,
         render: this._config.renderItem,
+        ...opts
+      };
+      return super.addChild(data, type, newOpts);
+    } else if (type === AlternativeVerticalsComponent.type) {
+      data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
+      const newOpts = {
+        universalUrl: this._config._universalUrl,
+        verticalsConfig: this._verticalsConfig,
         ...opts
       };
       return super.addChild(data, type, newOpts);

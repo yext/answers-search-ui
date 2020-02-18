@@ -1,0 +1,48 @@
+<div class="yxt-AlternativeVerticals">
+  <p class="yxt-AlternativeVerticals-noResultsInfo">
+    No results found for
+    <span class="yxt-AlternativeVerticals-noResultsInfo--query">
+      {{query}}
+    </span>
+    in {{currentVerticalLabel}}. Showing all {{currentVerticalLabel}}.
+  </p>
+  {{#if hasVerticalSuggestions}}
+    <div class="yxt-AlternativeVerticals-suggestionsWrapper">
+      The following search categories yielded results
+      {{#if query}}
+        for<span class="yxt-AlternativeVerticals-suggestionsWrapper--query"> {{query}}</span>
+      {{/if}}
+    </div>
+    <ul class="yxt-AlternativeVerticals-suggestionsList">
+      {{#each verticalSuggestions}}
+        {{#with this}}
+          <li class="yxt-AlternativeVerticals-suggestion">
+            <a class="yxt-AlternativeVerticals-suggestionLink"
+                href="{{url}}">
+              <span class="yxt-AlternativeVerticals-verticalIconWrapper"
+                    data-component="IconComponent"
+                    data-opts='{
+                      "iconName": "{{iconName}}"
+                    }'>
+              </span>
+              <span class="yxt-AlternativeVerticals-suggestionsListItem">
+                {{label}} ({{resultsCount}} results)
+              </span>
+              <span class="yxt-AlternativeVerticals-arrowIconWrapper"
+                    data-component="IconComponent"
+                    data-opts='{
+                      "iconName": "chevron"
+                    }'>
+              </span>
+            </a>
+          </li>
+        {{/with}}
+      {{/each}}
+    </ul>
+    {{#if universalUrl}}
+      <div class="yxt-AlternativeVerticals-universalDetails">
+        Alternatively, you can <a href={{universalUrl}}>view results across all categories</a>.
+      </div>
+    {{/if}}
+  {{/if}}
+</div>
