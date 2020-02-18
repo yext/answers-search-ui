@@ -552,14 +552,7 @@ const callsToAction = [{
 }]
 ```
 
-2. as a custom field name. For each field name, if the entity in the result data has this field name,
-a callsToAction button is rendered based on the configuration stored in the field.
-
-```js
-const callsToAction = ['c_primaryCTA', 'c_anotherCTA', 'c_youDontHaveToFollowNamingConventionsNecessarily'];
-```
-
-3. as a function that returns a cta config object.
+2. as a function that returns a cta config object.
 NOTE: we do not allow multiple nested functions, to avoid messy user configurations.
 
 ```js
@@ -590,7 +583,7 @@ const callsToAction = item => [{
   newWindow: item !== null,
   icon: "briefcase",
   eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
-}, 'c_customCTAField']
+}]
 ```
 
 These can then be included in a card object like so:
@@ -603,7 +596,7 @@ ANSWERS.addComponent('VerticalResults', {
     callsToAction: item => [{
       label: item => item._raw.name,
       url: "https://yext.com",
-    }, 'c_customCTAField']
+    }]
   }
   /* ...other vertical results config... */
 })
