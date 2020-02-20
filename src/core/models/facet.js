@@ -9,23 +9,24 @@
  *
  * @see {@link Filter}
  */
-export default class Facet {
-  constructor (data = {}) {
-    Object.assign(this, data);
+export default class FacetView {
+  constructor (facet = {}, metadata) {
+    this.facet = facet;
+    this.metadata = metadata;
     Object.freeze(this);
   }
 
   /**
-   * Create a facet filter from a list of Filters
-   * @param  {...Filter} filters The filters to use in this facet
+   * Create a facet filter from a list of FilterViews
+   * @param  {...FilterViews} filterViews The filters to use in this facet
    * @returns {Facet}
    */
-  static fromFilters (availableFieldIds, ...filters) {
+  static fromFilterViews (availableFieldIds, ...filterViews) {
     const groups = {};
     availableFieldIds.forEach(fieldId => {
       groups[fieldId] = [];
     });
-    const flatFilters = filters.flatMap(f => f.$or || f);
+    const flatFilters = filterViews.flatMap(f => f.filter.$or || f.filter);
     flatFilters.forEach(f => {
       const key = Object.keys(f)[0];
       if (!groups[key]) {
@@ -33,7 +34,7 @@ export default class Facet {
       }
       groups[key].push(f);
     });
-
-    return new Facet(groups);
+    const metadata = filterViews.map(f => f.metadata);
+    return new FacetView(groups, metadata);
   }
 }

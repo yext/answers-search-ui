@@ -1,7 +1,7 @@
 /** @module DateFilterComponent */
 
 import Component from '../component';
-import Filter from '../../../core/models/filter';
+import FilterView from '../../../core/models/filterview';
 import DOM from '../../dom/dom';
 
 /**
@@ -118,8 +118,8 @@ export default class DateRangeFilterComponent extends Component {
     this._updateRange('max', date);
   }
 
-  getFilter () {
-    return this._buildFilter();
+  getFilterView () {
+    return this._buildFilterView();
   }
 
   /**
@@ -132,26 +132,30 @@ export default class DateRangeFilterComponent extends Component {
     this._date = Object.assign({}, this._date, { [key]: value });
     this.setState();
 
-    const filter = this._buildFilter();
+    const filterView = this._buildFilterView();
     if (this._storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.core.setFilterView(this.name, filterView);
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
-    this._onChange(filter);
+    this._onChange(filterView);
   }
 
   /**
-   * Construct an api filter with the current date state
+   * Construct an api filter view with the current date state
    * @private
    */
-  _buildFilter () {
+  _buildFilterView () {
     if (this._date.min === '' || this._date.max === '') {
-      return {};
+      return null;
     }
+    const metadata = {
+      fieldName: this._title,
+      displayValue: `${this._title}: ${this._date.min} - ${this._date.max}`
+    };
     return this._isExclusive
-      ? Filter.exclusiveRange(this._field, this._date.min, this._date.max)
-      : Filter.inclusiveRange(this._field, this._date.min, this._date.max);
+      ? FilterView.exclusiveRange(this._field, this._date.min, this._date.max, metadata)
+      : FilterView.inclusiveRange(this._field, this._date.min, this._date.max, metadata);
   }
 }

@@ -6,7 +6,7 @@ import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
-import Filter from './models/filter';
+import FilterView from './models/filterview';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -119,11 +119,12 @@ export default class Core {
     let totalFilter = {};
     if (allFilters.length > 0) {
       totalFilter = allFilters.length > 1
-        ? Filter.and(...allFilters)
+        ? FilterView.and(...allFilters)
         : allFilters[0];
+      totalFilter = totalFilter.filter;
     }
     const facets = this.globalStorage.getAll(StorageKeys.FACET_FILTER);
-    const facetFilter = facets.length > 0 ? facets[0] : {};
+    const facetFilter = facets.length > 0 ? facets[0].facet : {};
 
     // Get sortBys and remove unwanted attributes (label) from the sortBys in the request
     const sortBys = this.globalStorage.getState(StorageKeys.SORT_BYS) || [];
@@ -322,13 +323,13 @@ export default class Core {
   }
 
   /**
-   * Stores the given filter into storage, to be used for the next search
+   * Stores the given filter view into storage, to be used for the next search
    *
    * @param {string} namespace the namespace to use for the storage key
-   * @param {Filter} filter    the filter to set
+   * @param {FilterView} filterView    the filter view to set
    */
-  setFilter (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
+  setFilterView (namespace, filterView) {
+    this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filterView);
   }
 
   setFacetFilter (namespace, filter) {
