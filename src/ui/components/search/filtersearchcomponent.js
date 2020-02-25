@@ -100,7 +100,7 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    let filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || '';
+    let filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || '';
     if (typeof filter === 'string') {
       try {
         filter = JSON.parse(filter);
@@ -111,7 +111,7 @@ export default class FilterSearchComponent extends Component {
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
 
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filterView = f; });
+    this.core.globalStorage.on('update', `${StorageKeys.FILTER_VIEW}.${this.name}`, f => { this.filterView = f; });
   }
 
   static get type () {
@@ -176,7 +176,7 @@ export default class FilterSearchComponent extends Component {
         this.query = query;
         this.filterView = FilterView.fromResponse(filter);
         this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, this.filterView);
+        this.core.persistentStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, this.filterView);
         this.core.setFilterView(this.name, this.filterVIew);
         this.search();
       }

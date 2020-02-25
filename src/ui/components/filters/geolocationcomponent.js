@@ -3,6 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import FilterView from '../../../core/models/filterview';
+import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import buildSearchParameters from '../../tools/searchparamsparser';
 
@@ -105,14 +106,14 @@ export default class GeoLocationComponent extends Component {
      * The filter to use for the current query
      * @type {Filter}
      */
-    this.filterView = this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || {};
+    this.filterView = this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || {};
     if (typeof this.filterView === 'string') {
       try {
         this.filterView = JSON.parse(this.filterView);
       } catch (e) {}
     }
 
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filterView = f; });
+    this.core.globalStorage.on('update', `${StorageKeys.FILTER_VIEW}.${this.name}`, f => { this.filterView = f; });
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
   }
@@ -184,10 +185,10 @@ export default class GeoLocationComponent extends Component {
       onSubmit: (query, filter) => {
         this.query = query;
         const metadata = {
-          fieldName: this._config.label || this._config.title || 'Location',
-          fieldValue: query.split(',')[0]
+          displayField: this._config.label || this._config.title || 'Location',
+          displayValues: query.split(',')[0]
         };
-        this.filterView = FilterView.fromResponse(filter, metadata);
+        this.filterView = new FilterView(Filter.fromResponse(filter), metadata);
         this._saveDataToStorage(query, this.filterView);
         this._enabled = false;
       }
@@ -213,7 +214,7 @@ export default class GeoLocationComponent extends Component {
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-          this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+          this.core.persistentStorage.delete(`${StorageKeys.FILTER_VIEW}.${this.name}`);
         },
         () => this.setState({ geoError: true })
       );
@@ -229,7 +230,7 @@ export default class GeoLocationComponent extends Component {
    */
   _saveDataToStorage (query, filterView, position) {
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
-    this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filterView);
+    this.core.persistentStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, filterView);
     this.core.setFilterView(this.name, filterView);
 
     if (position) {
@@ -259,9 +260,9 @@ export default class GeoLocationComponent extends Component {
     const { latitude, longitude, accuracy } = position.coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
     const metadata = {
-      fieldName: this._config.title || this._config.label || 'Location',
-      fieldValue: 'Near me'
+      displayField: this._config.title || this._config.label || 'Location',
+      displayValues: 'Near me'
     };
-    return FilterView.position(latitude, longitude, radius, metadata);
+    return new FilterView(Filter.position(latitude, longitude, radius), metadata);
   }
 }

@@ -1,5 +1,7 @@
 /** @module Facet */
 
+import Filter from './filter';
+
 /**
  * Model representing a facet filter with the format of
  * {
@@ -9,32 +11,32 @@
  *
  * @see {@link Filter}
  */
-export default class FacetView {
-  constructor (facet = {}, metadata) {
-    this.facet = facet;
-    this.metadata = metadata;
+export default class Facet {
+  constructor (data = {}) {
+    Object.assign(this, data);
     Object.freeze(this);
   }
 
   /**
-   * Create a facet filter from a list of FilterViews
-   * @param  {...FilterViews} filterViews The filters to use in this facet
+   * Create a facet filter from a list of Filters
+   * @param {Array<string>} availableFieldIds array of expected field ids
+   * @param  {...Filter} filters The filters to use in this facet
    * @returns {Facet}
    */
-  static fromFilterViews (availableFieldIds, ...filterViews) {
+  static fromFilterViews (availableFieldIds, ...filters) {
     const groups = {};
     availableFieldIds.forEach(fieldId => {
       groups[fieldId] = [];
     });
-    const flatFilters = filterViews.flatMap(f => f.filter.$or || f.filter);
+    const flatFilters = filters.flatMap(f => f.$or || f);
     flatFilters.forEach(f => {
-      const key = Object.keys(f)[0];
+      const key = Filter.getFilterKey(f);
       if (!groups[key]) {
         groups[key] = [];
       }
       groups[key].push(f);
     });
-    const metadata = filterViews.map(f => f.metadata);
-    return new FacetView(groups, metadata);
+
+    return new Facet(groups);
   }
 }

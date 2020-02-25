@@ -3,6 +3,7 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import FilterView from '../../../core/models/filterview';
+import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 
 /**
@@ -276,7 +277,7 @@ export default class FilterOptionsComponent extends Component {
       this.core.setFilterView(this.name, filterView);
     }
 
-    this.config.onChange(filterView);
+    this.config.onChange(filterView.filter, filterView.metadatas);
   }
 
   _updateOption (index, selected) {
@@ -303,34 +304,23 @@ export default class FilterOptionsComponent extends Component {
   }
 
   /**
-   * Build the display label for the filter, to be saved in filter metadata
-   * @param {String} label
-   */
-  _buildFilterMetadata (label) {
-    return {
-      fieldName: this.config.label,
-      fieldValue: label
-    };
-  }
-
-  /**
    * Build and return the Filter that represents the current state
    * @returns {FilterView}
    * @private
    */
   _buildFilterView () {
-    const filters = this.config.options
-      .filter(o => o.selected)
-      .map(o => o.filter
-        ? new FilterView(o.filter, this._buildFilterMetadata(o.label))
-        : FilterView.equal(o.field, o.value, this._buildFilterMetadata(o.label)));
-
-    this.core.persistentStorage.set(
-      this.name,
-      this.config.options.filter(o => o.selected).map(o => o.label)
+    const selectedOptions = this.config.options.filter(o => o.selected);
+    const filters = selectedOptions.map(o => o.filter
+      ? o.filter
+      : Filter.equal(o.field, o.value)
     );
-    return filters.length > 0
-      ? FilterView.group(...filters)
-      : null;
+    const selectedLabels = selectedOptions.map(o => o.label);
+    const metadata = {
+      displayField: this.config.label,
+      displayValues: selectedLabels
+    };
+    this.core.persistentStorage.set(this.name, selectedLabels);
+    const groupedFilter = filters.length > 0 ? Filter.group(...filters) : {};
+    return new FilterView(groupedFilter, metadata);
   }
 }

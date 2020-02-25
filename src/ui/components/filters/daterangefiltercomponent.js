@@ -3,6 +3,7 @@
 import Component from '../component';
 import FilterView from '../../../core/models/filterview';
 import DOM from '../../dom/dom';
+import Filter from '../../../core/models/filter';
 
 /**
  * A filter for a range of dates
@@ -139,7 +140,7 @@ export default class DateRangeFilterComponent extends Component {
     this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
-    this._onChange(filterView);
+    this._onChange(filterView.filter, filterView.metadatas);
   }
 
   /**
@@ -148,14 +149,14 @@ export default class DateRangeFilterComponent extends Component {
    */
   _buildFilterView () {
     if (this._date.min === '' || this._date.max === '') {
-      return null;
+      return {};
     }
     const metadata = {
-      fieldName: this._title,
-      displayValue: `${this._title}: ${this._date.min} - ${this._date.max}`
+      displayField: this.title,
+      displayValues: `${this._date.min} - ${this._date.max}`
     };
     return this._isExclusive
-      ? FilterView.exclusiveRange(this._field, this._date.min, this._date.max, metadata)
-      : FilterView.inclusiveRange(this._field, this._date.min, this._date.max, metadata);
+      ? new FilterView(Filter.exclusiveRange(this._field, this._date.min, this._date.max), metadata)
+      : new FilterView(Filter.inclusiveRange(this._field, this._date.min, this._date.max), metadata);
   }
 }

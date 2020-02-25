@@ -115,19 +115,16 @@ export default class Core {
     }
 
     // Get filters and facet to send in the request
-    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
-    let totalFilter = {};
-    if (allFilters.length > 0) {
-      totalFilter = allFilters.length > 1
-        ? FilterView.and(...allFilters)
-        : allFilters[0];
-      totalFilter = totalFilter.filter;
-    }
-    const facets = this.globalStorage.getAll(StorageKeys.FACET_FILTER);
+    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER_VIEW) || [];
+    const totalFilter = FilterView.combineFilterViews(...allFilters).filter || {};
+    const facets = this.globalStorage.getAll(StorageKeys.FACET_FILTER_VIEW);
     const facetFilter = facets.length > 0 ? facets[0].facet : {};
 
     // Get sortBys and remove unwanted attributes (label) from the sortBys in the request
     const sortBys = this.globalStorage.getState(StorageKeys.SORT_BYS) || [];
+    const sortByString = JSON.stringify(sortBys,
+      (key, value) => key === 'label' ? undefined : value
+    );
 
     return this._searcher
       .verticalSearch(verticalKey, {
@@ -140,7 +137,7 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: JSON.stringify(sortBys)
+        sortBys: sortByString
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
       .then(data => {
@@ -293,7 +290,8 @@ export default class Core {
       return {
         type: option.type,
         field: option.field,
-        direction: option.direction
+        direction: option.direction,
+        label: option.label
       };
     });
     this.globalStorage.set(StorageKeys.SORT_BYS, sortBys);
@@ -323,17 +321,18 @@ export default class Core {
   }
 
   /**
-   * Stores the given filter view into storage, to be used for the next search
+   * Stores the given filter view into storage.
+   * The view's filter data object will be used in the next search.
    *
    * @param {string} namespace the namespace to use for the storage key
    * @param {FilterView} filterView    the filter view to set
    */
   setFilterView (namespace, filterView) {
-    this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filterView);
+    this.globalStorage.set(`${StorageKeys.FILTER_VIEW}.${namespace}`, filterView);
   }
 
-  setFacetFilter (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FACET_FILTER}.${namespace}`, filter);
+  setFacetFilterView (namespace, filter) {
+    this.globalStorage.set(`${StorageKeys.FACET_FILTER_VIEW}.${namespace}`, filter);
   }
 
   enableDynamicFilters () {
