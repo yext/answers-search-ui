@@ -486,8 +486,8 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     // Optional: The type of card, currently only 'Standard' is supported, defaults to 'Standard'
     cardType: 'Standard',
-    // Required, see [Template Mappings](#Template-Mappings) for more details
-    templateMappings: () => {},
+    // Required, see [Card Mappings](#Card-Mappings) for more details
+    cardMappings: () => {},
     // At least one of callsToAction and callsToActionFields are required,
     // callsToActionFields takes precendence over callsToAction.
     // see [Calls To Action](#Calls-To-Action) and [Calls To Action Fields](#Calls-To-Action-Fields)
@@ -512,7 +512,7 @@ ANSWERS.addComponent('VerticalResults', {
 
 Cards are used in Universal/Vertical Results for configuring the UI for a result on a per-item basis.
 
-Cards take in a templateMappings attribute, which contains configuration for the card, and a callsToAction
+Cards take in a cardMappings attribute, which contains configuration for the card, and a callsToAction
 attribute, which contains config for any callToAction buttons in the card.
 
 callsToAction config is common throughout all cards, whereas different cards such as Standard vs BigImage
@@ -630,20 +630,20 @@ ANSWERS.addComponent('VerticalResults', {
 })
 ```
 
-## Template Mappings
+## Card Mappings
 
-TemplateMappings define how a card's attributes, such as title and details, will be rendered.
-They can be configured either through a function that returns a templateMappings object
-or a static templateMappings object.
+CardMappings define how a card's attributes, such as title and details, will be rendered.
+They can be configured either through a function that returns a cardMappings object
+or a static cardMappings object.
 
-Each attribute of a templateMappings object is also either a function or a static value.
+Each attribute of a cardMappings object is also either a function or a static value.
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
   /* ...other vertical results config... */
   card: {
     /* ...other card config...*/
-    templateMappings: item => ({
+    cardMappings: item => ({
       title: item._raw.name,
       subtitle: `Department: ${item._raw.name} `,
       details: item._raw.description,
@@ -661,10 +661,10 @@ ANSWERS.addComponent('VerticalResults', {
 
 ## Standard Card
 
-The template mapping for a standard card has these attributes
+The card mapping for a standard card has these attributes
 
 ```js
-const templateMappings = {
+const cardMappings = {
   // Title for the card, defaults to the name of the entity
   title: item.title,
   // Subtitle, defaults to null
