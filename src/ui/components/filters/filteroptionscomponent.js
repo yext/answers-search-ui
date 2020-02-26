@@ -277,7 +277,7 @@ export default class FilterOptionsComponent extends Component {
       this.core.setFilterView(this.name, filterView);
     }
 
-    this.config.onChange(filterView.filter, filterView.metadatas);
+    this.config.onChange(filterView.filter, filterView.metadata);
   }
 
   _updateOption (index, selected) {
@@ -316,8 +316,7 @@ export default class FilterOptionsComponent extends Component {
     );
     const selectedLabels = selectedOptions.map(o => o.label);
     const metadata = {
-      displayField: this.config.label,
-      displayValues: selectedLabels
+      [this.config.label]: selectedLabels
     };
     this.core.persistentStorage.set(this.name, selectedLabels);
     const groupedFilter = filters.length > 0 ? Filter.group(...filters) : {};

@@ -331,7 +331,7 @@ export default class Core {
     this.globalStorage.set(`${StorageKeys.FILTER_VIEW}.${namespace}`, filterView);
   }
 
-  setFacetFilterView (namespace, filter) {
+  setFacetView (namespace, filter) {
     this.globalStorage.set(`${StorageKeys.FACET_FILTER_VIEW}.${namespace}`, filter);
   }
 

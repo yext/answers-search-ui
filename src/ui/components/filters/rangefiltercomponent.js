@@ -131,7 +131,7 @@ export default class RangeFilterComponent extends Component {
     this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
 
-    this._onChange(filterView.filter, filterView.metadatas);
+    this._onChange(filterView.filter, filterView.metadata);
   }
 
   /**
@@ -140,8 +140,7 @@ export default class RangeFilterComponent extends Component {
    */
   _buildFilterView () {
     const metadata = {
-      displayField: this.title,
-      displayValues: `${this.title}: ${this._range.min} - ${this._range.max}`
+      [this.title]: [`${this.title}: ${this._range.min} - ${this._range.max}`]
     };
     return new FilterView(Filter.inclusiveRange(this._field, this._range.min, this._range.max), metadata);
   }

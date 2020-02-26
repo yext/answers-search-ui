@@ -204,8 +204,8 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
-          onChange: (filter, metadatas) => {
-            this.onFilterChange(i, filter, metadatas);
+          onChange: (filter, metadata) => {
+            this.onFilterChange(i, filter, metadata);
           }
         }));
       component.mount();
@@ -243,10 +243,10 @@ export default class FilterBoxComponent extends Component {
    * Handle changes to child filter components
    * @param {number} index The index of the changed filter
    * @param {Filter} filter The new filter
-   * @param {Array<FilterMetadata>} metadatas The new metadatas
+   * @param {Object} metadata The new metadata
    */
-  onFilterChange (index, filter, metadatas) {
-    this._filterViews[index] = new FilterView(filter, ...metadatas);
+  onFilterChange (index, filter, metadata) {
+    this._filterViews[index] = new FilterView(filter, metadata);
     if (this.config.searchOnChange) {
       this._saveFilterViewsToStorage();
       this._search();
@@ -271,7 +271,7 @@ export default class FilterBoxComponent extends Component {
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
       const combinedFilter = FacetView.fromFilterViews(availableFieldIds, ...validFilters);
-      this.core.setFacetFilterView(this.name, combinedFilter);
+      this.core.setFacetView(this.name, combinedFilter);
     } else if (validFilters.length !== 0) {
       this.core.setFilterView(this.name, FilterView.combineFilterViews(...validFilters));
     }

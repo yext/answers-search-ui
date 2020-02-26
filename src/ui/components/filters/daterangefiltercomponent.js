@@ -140,7 +140,7 @@ export default class DateRangeFilterComponent extends Component {
     this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
-    this._onChange(filterView.filter, filterView.metadatas);
+    this._onChange(filterView.filter, filterView.metadata);
   }
 
   /**
@@ -152,8 +152,7 @@ export default class DateRangeFilterComponent extends Component {
       return {};
     }
     const metadata = {
-      displayField: this.title,
-      displayValues: `${this._date.min} - ${this._date.max}`
+      [this.title]: [`${this._date.min} - ${this._date.max}`]
     };
     return this._isExclusive
       ? new FilterView(Filter.exclusiveRange(this._field, this._date.min, this._date.max), metadata)

@@ -1,12 +1,13 @@
 /** @module FilterView */
 
 import Filter from './filter';
+import FilterMetadata from './filtermetadata';
 
 /**
  * Contains a {@link Filter} and associated metadata.
  */
 export default class FilterView {
-  constructor (filter, ...metadatas) {
+  constructor (filter, metadata) {
     /**
      * The exactly formatted filter to send to the backend.
      * @type {Filter}
@@ -14,10 +15,11 @@ export default class FilterView {
     this.filter = filter;
 
     /**
-     * Metadata for the filter.
-     * @type {FilterMetadata}
+     * Metadata for the filter, and is an object of
+     * field display name to array of field values.
+     * @type {Object}
      */
-    this.metadatas = metadatas.map(md => new FilterMetadata(md.displayField, md.displayValues));
+    this.metadata = metadata;
     Object.freeze(this);
   }
 
@@ -26,25 +28,9 @@ export default class FilterView {
    * @param  {...FilterView} filterViews
    */
   static and (...filterViews) {
-    const groupedMetadata = {};
-    filterViews.forEach(fv => {
-      const metadatas = fv.metadatas;
-      metadatas.forEach(md => {
-        const { displayField, displayValues } = md;
-        if (!groupedMetadata[displayField]) {
-          groupedMetadata[displayField] = [];
-        }
-        groupedMetadata[displayField].push(...displayValues);
-      });
-    });
-    const metadatas = Object.keys(groupedMetadata).map(displayField =>
-      new FilterMetadata({
-        displayField,
-        displayValues: groupedMetadata[displayField]
-      })
-    );
+    const metadata = FilterMetadata.combine(filterViews.map(fv => fv.metadata));
     const filters = filterViews.map(fv => fv.filter);
-    return new FilterView(Filter.and(...filters), ...metadatas);
+    return new FilterView(Filter.and(...filters), metadata);
   }
 
   /**
@@ -59,23 +45,5 @@ export default class FilterView {
     } else {
       return FilterView.and(...filterViews);
     }
-  }
-}
-
-class FilterMetadata {
-  constructor (displayField, displayValues) {
-    /**
-     * Display string for the field name.
-     * @type {string}
-     */
-    this.displayField = displayField;
-
-    /**
-     * Display values for the filter's metadata.
-     * @type {Array<string>}
-     */
-    this.displayValues = [ displayValues ].flat();
-
-    Object.freeze(this);
   }
 }

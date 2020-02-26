@@ -184,9 +184,9 @@ export default class GeoLocationComponent extends Component {
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         this.query = query;
+        const displayField = this._config.label || this._config.title || 'Location';
         const metadata = {
-          displayField: this._config.label || this._config.title || 'Location',
-          displayValues: query.split(',')[0]
+          [displayField]: [query.split(',')[0]]
         };
         this.filterView = new FilterView(Filter.fromResponse(filter), metadata);
         this._saveDataToStorage(query, this.filterView);
@@ -259,9 +259,9 @@ export default class GeoLocationComponent extends Component {
   _buildFilterView (position) {
     const { latitude, longitude, accuracy } = position.coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
+    const displayField = this._config.title || this._config.label || 'Location';
     const metadata = {
-      displayField: this._config.title || this._config.label || 'Location',
-      displayValues: 'Near me'
+      [displayField]: ['Near me']
     };
     return new FilterView(Filter.position(latitude, longitude, radius), metadata);
   }
