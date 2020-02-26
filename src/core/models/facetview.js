@@ -9,7 +9,7 @@ import FilterMetadata from './filtermetadata';
 export default class FacetView {
   constructor (facet = {}, metadata = {}) {
     /**
-     * The exactly formatted facet to send to the backend.
+     * The facet to send to the backend.
      * @type {Facet}
      */
     this.facet = facet;
@@ -30,7 +30,7 @@ export default class FacetView {
    * @returns {Facet}
    */
   static fromFilterViews (availableFieldIds, ...filterViews) {
-    const facet = Facet.fromFilterViews(availableFieldIds, ...filterViews.map(fv => fv.filter));
+    const facet = Facet.fromFilters(availableFieldIds, ...filterViews.map(fv => fv.filter));
     const metadata = FilterMetadata.combine(filterViews.map(fv => fv.metadata));
     return new FacetView(facet, metadata);
   }

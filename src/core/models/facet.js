@@ -23,7 +23,7 @@ export default class Facet {
    * @param  {...Filter} filters The filters to use in this facet
    * @returns {Facet}
    */
-  static fromFilterViews (availableFieldIds, ...filters) {
+  static fromFilters (availableFieldIds, ...filters) {
     const groups = {};
     availableFieldIds.forEach(fieldId => {
       groups[fieldId] = [];

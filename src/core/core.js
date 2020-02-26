@@ -115,8 +115,8 @@ export default class Core {
     }
 
     // Get filters and facet to send in the request
-    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER_VIEW) || [];
-    const totalFilter = FilterView.combineFilterViews(...allFilters).filter || {};
+    const allFilterViews = this.globalStorage.getAll(StorageKeys.FILTER_VIEW) || [];
+    const totalFilter = FilterView.combineFilterViews(...allFilterViews).filter || {};
     const facets = this.globalStorage.getAll(StorageKeys.FACET_FILTER_VIEW);
     const facetFilter = facets.length > 0 ? facets[0].facet : {};
 
