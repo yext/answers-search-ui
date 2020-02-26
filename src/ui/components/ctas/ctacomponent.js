@@ -39,7 +39,7 @@ class CTAConfig {
     this.newWindow = config.newWindow;
 
     /**
-     * The eventOptions needed for the event to fire, passed as a string from templateMappings.
+     * The eventOptions needed for the event to fire, passed as a string from cardMappings.
      * @type {Object}
      */
     if (typeof config.eventOptions === 'string') {
