@@ -33,7 +33,10 @@
   $results-footer-image-fit: contain !default;
   $results-footer-image-border-radius: $base-spacing/6 !default;
 
+  $results-cards-margin: $base-spacing / 2 !default;
+
   border-bottom: 0;
+  width: 100%;
 
   & + &
   {
@@ -154,10 +157,13 @@
     list-style: none;
     display: flex;
     flex-flow: row wrap;
+    margin-right: -1 * $results-cards-margin;
 
     .yxt-Card {
       min-width: $base-spacing * 24;
       flex-grow: 1;
+      margin-right: $results-cards-margin;
+      margin-bottom: $results-cards-margin;
     }
 
     @media (min-width: $breakpoint-mobile-min) {

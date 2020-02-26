@@ -26,7 +26,6 @@
   display: flex;
   padding: $standard-card-base-spacing-sm;
   border: $border-default;
-  margin: $standard-card-base-spacing/2;
 
   @include Text();
 
@@ -103,10 +102,10 @@
   }
 
   &-toggle {
-    margin-top: $standard-card-base-spacing/2;
     text-align: left;
     @include Text(
       $color: $color-brand-primary,
+      $line-height: $line-height-md,
       $style: italic);
     @include TextButton($padding: 0);
   }
