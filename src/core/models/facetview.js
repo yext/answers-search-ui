@@ -12,14 +12,14 @@ export default class FacetView {
      * The facet to send to the backend.
      * @type {Facet}
      */
-    this.facet = facet;
+    this.facet = new Facet(facet);
 
     /**
      * Metadata for the facet, and is an object of
      * field display name to array of field values.
-     * @type {Object}
+     * @type {FilterMetadata}
      */
-    this.metadata = metadata;
+    this.metadata = new FilterMetadata(metadata);
     Object.freeze(this);
   }
 
