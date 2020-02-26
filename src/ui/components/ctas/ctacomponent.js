@@ -18,7 +18,7 @@ class CTAConfig {
      * CTA icon, maps to a set of icons.
      * @type {string}
      */
-    this.icon = config.icon || 'star';
+    this.icon = config.icon;
 
     /**
      * Click through url for the icon and label
