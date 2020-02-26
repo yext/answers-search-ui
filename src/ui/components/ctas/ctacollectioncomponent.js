@@ -1,6 +1,7 @@
 /** @module CTAComponent */
 
 import Component from '../component';
+import StorageKeys from './../../../core/storage/storagekeys';
 
 export default class CTACollectionComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -64,9 +65,26 @@ export default class CTACollectionComponent extends Component {
             ctaObject[ctaAttribute] = attributeMapping(result);
           }
         }
+        // Assign default event options if none exist.
+        ctaObject.eventOptions = ctaObject.eventOptions || this.defaultEventOptions(result);
         return ctaObject;
       }
     });
+  }
+
+  defaultEventOptions (result) {
+    const verticalKey = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    if (!verticalKey) {
+      return {};
+    }
+    const eventOptions = {
+      verticalKey,
+      searcher: 'VERTICAL'
+    };
+    if (result._raw.id) {
+      eventOptions.entityId = result._raw.id;
+    }
+    return eventOptions;
   }
 
   setState (data) {
