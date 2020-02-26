@@ -23,12 +23,33 @@
   $standard-card-cta-width: 8 * $standard-card-base-spacing !default;
   $standard-card-wrapper-width: 10 * $standard-card-base-spacing !default;
 
+  $standard-card-ordinal-size: $base-spacing !default;
+  $standard-card-ordinal-font-size: $font-size-sm;
+
   display: flex;
   padding: $standard-card-base-spacing-sm;
   border: $border-default;
   margin: $standard-card-base-spacing/2;
 
   @include Text();
+
+  &-ordinalWrapper {
+    margin-right: $standard-card-ordinal-size;
+  }
+
+  &-ordinal {
+    padding: $standard-card-ordinal-size * 0.2 $standard-card-ordinal-size * 0.35;
+    border-radius: $standard-card-ordinal-size;
+    min-width: $standard-card-ordinal-size * 0.6;
+    height: $standard-card-ordinal-size * 0.8;
+    background-color: $color-brand-primary;
+    border: solid black 1px;
+    text-align: center;
+    @include Text(
+      $color: white,
+      $size: $standard-card-ordinal-font-size,
+    );
+  }
 
   &-imgWrapper {
     width: $standard-card-image-width;
