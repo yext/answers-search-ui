@@ -116,7 +116,13 @@ class StandardCardConfig {
      * to contain CTA configuration.
      * @type {Array<string>}
      */
-    this.callsToActionFields = config.callsToActionFields || [];
+    this.callsToActionFields = this.callsToActionFields || [];
+
+    /**
+     * Whether to show the ordinal of the card in the results.
+     * @type {boolean}
+     */
+    this.showOrdinal = this.showOrdinal || false;
   }
 }
 

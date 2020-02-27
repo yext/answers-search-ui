@@ -683,6 +683,9 @@ const cardMappings = {
   showLessText: "put it back",
   // Whether to open the title link in a new window, defaults to false
   newWindow: true,
+  // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
+  // defaults to false
+  showOrdinal: false
 }
 ```
 
