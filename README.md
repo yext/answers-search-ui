@@ -538,7 +538,7 @@ Note: A CTA without both a label and icon will not be rendered.
 const callsToAction = [{
   // Label below the CTA icon, default null
   label: 'cta label',
-  // Icon name for the CTA that is one of the SDK icons
+  // Icon name for the CTA that is one of the SDK icons, default to undefined (no icon)
   icon: 'star',
   // Click through url for the icon and label
   url: 'https://yext.com',
