@@ -12,7 +12,9 @@
   {{#if hasVerticalSuggestions}}
     <div class="yxt-AlternativeVerticals-suggestionsWrapper">
       <div class="yxt-AlternativeVerticals-details">
-        Note: the following search categories yielded results
+        Note: the following search
+        {{plural verticalSuggestions.length 'category' 'categories'}}
+        yielded results
         {{#if query}}
           for
           <span class="yxt-AlternativeVerticals-details--query">
@@ -36,7 +38,7 @@
                     {{label}}
                   </span>
                   <span class="yxt-AlternativeVerticals-suggestionLink--copyResults">
-                    ({{resultsCount}} results)
+                    ({{resultsCount}} {{plural resultsCount 'result' 'results'}})
                   </span>
                 </div>
                 <div class="yxt-AlternativeVerticals-arrowIconWrapper"
