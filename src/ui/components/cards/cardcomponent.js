@@ -49,10 +49,14 @@ export default class CardComponent extends Component {
   }
 
   setState (data) {
+    let cardType = this._config.cardType;
+    if (!cardTypes[cardType]) {
+      cardType = 'Standard';
+    }
     return super.setState({
       ...data,
       result: this._config.result,
-      cardType: cardTypes[this._config.cardType]
+      cardType: cardTypes[cardType]
     });
   }
 

@@ -10,7 +10,7 @@
              data-prop="map">
         </div>
       {{/if}}
-      <ul class="yxt-Results-items yxt-Results-items-{{_config.maxNumberOfColumns}}">
+      <ul class="yxt-Results-items {{#if numColumns}}yxt-Results-items-{{numColumns}}{{/if}}">
         {{#each results}}
           <div class="yxt-Card" data-component="Card" data-opts='{"index": {{@index}} }'></div>
         {{/each}}
