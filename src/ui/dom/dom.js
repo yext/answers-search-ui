@@ -1,6 +1,6 @@
 /** @module DOM */
 
-/* global HTMLElement, HTMLDocument, Window, Event */
+/* global HTMLElement, HTMLDocument, Window, Event, Element */
 
 let document = window.document;
 
@@ -203,12 +203,24 @@ export default class DOM {
     el.addEventListener(evt, function (event) {
       let target = event.target;
       while (!target.isEqualNode(el)) {
-        if (target.matches(selector)) {
+        if (DOM.matches(target, selector)) {
           handler(event, target);
           break;
         }
         target = target.parentNode;
       }
     });
+  }
+
+  static matches (element, potentialMatch) {
+    if (Element.prototype.matches) {
+      return element.matches(potentialMatch);
+    }
+    if (Element.prototype.msMatchesSelector) {
+      return element.msMatchesSelector(potentialMatch);
+    }
+    if (Element.prototype.webkitMatchesSelector) {
+      return element.webkitMatchesSelector(potentialMatch);
+    }
   }
 }

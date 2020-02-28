@@ -368,21 +368,9 @@ export default class NavigationComponent extends Component {
   }
 
   // TODO (agrow) investigate removing this
-  // **Adapted from** Element.closest polyfill
+  // Adapted from Element.closest polyfill
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
   closest (element, closestElSelector) {
-    if (!Element.prototype.matches) {
-      Object.defineProperty(element, 'matches', {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: function matches () {
-          return Element.prototype.msMatchesSelector ||
-            Element.prototype.webkitMatchesSelector;
-        }
-      });
-    }
-
     if (!Element.prototype.closest) {
       Object.defineProperty(element, 'closest', {
         configurable: true,
@@ -392,7 +380,7 @@ export default class NavigationComponent extends Component {
           var el = this;
 
           do {
-            if (el.matches(s)) return el;
+            if (DOM.matches(el, s)) return el;
             el = el.parentElement || el.parentNode;
           } while (el !== null && el.nodeType === 1);
           return null;

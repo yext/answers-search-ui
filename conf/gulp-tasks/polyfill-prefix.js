@@ -5,11 +5,6 @@ import 'whatwg-fetch';
 /* eslint-env browser */
 /* global ActiveXObject */
 
-if (!Element.prototype.matches) { // Element.matches polyfill from MDN
-  Element.prototype.matches = Element.prototype.msMatchesSelector ||
-                              Element.prototype.webkitMatchesSelector;
-}
-
 // Navigator.sendBeacon polyfill
 // Combination of the compact Financial Times polyfill:
 // https://github.com/Financial-Times/polyfill-library/blob/master/polyfills/navigator/sendBeacon/polyfill.js
