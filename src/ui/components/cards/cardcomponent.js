@@ -2,6 +2,7 @@
 
 import Component from '../component';
 import { cardTypes } from './consts';
+import { AnswersConfigError } from '../../../core/errors/errors';
 
 class CardConfig {
   constructor (config = {}) {
@@ -49,9 +50,12 @@ export default class CardComponent extends Component {
   }
 
   setState (data) {
-    let cardType = this._config.cardType;
+    const cardType = this._config.cardType;
     if (!cardTypes[cardType]) {
-      cardType = 'Standard';
+      const validCards = `["${Object.keys(cardTypes).join('", "')}"]`;
+      const msg = `Card type "${cardType}" is not recognized as a valid built-in card type.` +
+      ` Valid types include ${validCards}`;
+      throw new AnswersConfigError(msg, 'CardComponent');
     }
     return super.setState({
       ...data,

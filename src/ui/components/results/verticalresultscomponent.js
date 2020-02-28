@@ -8,6 +8,18 @@ import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import DOM from '../../dom/dom';
 
+/**
+ * Breakpoint for when somebody is on desktop, prescribed by Jeremy.
+ * @type {number}
+ */
+const DESKTOP_BREAKPOINT = 400;
+
+/**
+ * Minimum width for the card.
+ * @type {number}
+ */
+const CARD_MIN_WIDTH = 210;
+
 class VerticalResultsConfig {
   constructor (config = {}) {
     Object.assign(this, config);
@@ -99,10 +111,10 @@ export default class VerticalResultsComponent extends Component {
       return 1;
     }
     const totalWidth = this._container.scrollWidth;
-    if (totalWidth <= this._config._desktopBreakpoint) {
+    if (totalWidth <= DESKTOP_BREAKPOINT) {
       return 1;
     }
-    const numColumns = Math.floor(totalWidth / this._config._cardMinWidth);
+    const numColumns = Math.floor(totalWidth / CARD_MIN_WIDTH);
     return Math.min(numColumns, this._config.maxNumberOfColumns, this.results.length);
   }
 
@@ -150,7 +162,7 @@ export default class VerticalResultsComponent extends Component {
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: this.results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
-      placeholders: new Array(this._config.maxNumberOfColumns),
+      placeholders: new Array(this._config.maxNumberOfColumns - 1),
       numColumns: this.numColumns
     }), val);
   }
