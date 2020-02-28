@@ -1,5 +1,7 @@
 /** @module NavigationComponent */
 
+/* global Node */
+
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
@@ -240,7 +242,7 @@ export default class NavigationComponent extends Component {
       if (lastLink === null) {
         return;
       }
-      collapsedLinks.prepend(lastLink);
+      this.prepend(collapsedLinks, lastLink);
 
       if (moreButton.classList.contains('yxt-Nav-item--more')) {
         moreButton.classList.remove('yxt-Nav-item--more');
@@ -336,6 +338,33 @@ export default class NavigationComponent extends Component {
       showCollapse: this.shouldCollapse(),
       ariaLabel: this._ariaLabel
     });
+  }
+
+  // TODO (agrow) investigate removing this
+  // ParentNode.prepend polyfill
+  // https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend#Polyfill
+  prepend (collapsedLinks, lastLink) {
+    if (!collapsedLinks.hasOwnProperty('prepend')) {
+      Object.defineProperty(collapsedLinks, 'prepend', {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        value: function prepend () {
+          var argArr = Array.prototype.slice.call(arguments);
+
+          var docFrag = document.createDocumentFragment();
+
+          argArr.forEach(function (argItem) {
+            var isNode = argItem instanceof Node;
+            docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
+          });
+
+          this.insertBefore(docFrag, this.firstChild);
+        }
+      });
+    }
+
+    collapsedLinks.prepend(lastLink);
   }
 
   getUrlParams () {
