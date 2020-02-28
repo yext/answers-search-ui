@@ -71,7 +71,6 @@ export default class AlternativeVerticalsComponent extends Component {
     return super.setState(Object.assign({ verticalSuggestions: [] }, data, {
       universalUrl: this._universalUrl,
       verticalSuggestions: this.verticalSuggestions,
-      hasVerticalSuggestions: this.verticalSuggestions && this.verticalSuggestions.length > 0,
       currentVerticalLabel: this._currentVerticalLabel,
       query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }));
