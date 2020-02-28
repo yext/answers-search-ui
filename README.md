@@ -687,7 +687,9 @@ const cardMappings = {
   newWindow: true,
   // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
   // defaults to false
-  showOrdinal: false
+  showOrdinal: false,
+  // A tag to display on top of an image, always overlays the image, default no tag
+  tagLabel: 'On Sale!'
 }
 ```
 

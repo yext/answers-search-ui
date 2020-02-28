@@ -52,7 +52,8 @@ const iconsArray = [
   gearIcon,
   lightBulbIcon,
   elements,
-  close
+  close,
+  starIcon
 ];
 
 const Icons = {};

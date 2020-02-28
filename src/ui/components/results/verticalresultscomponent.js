@@ -6,6 +6,7 @@ import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
+import DOM from '../../dom/dom';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -62,6 +63,12 @@ class VerticalResultsConfig {
      * @type {Object}
      */
     this.footer = config.footer || {};
+
+    /**
+     * Vertical/Universal results
+     * @type {Array<Result>}
+     */
+    this.results = [];
   }
 }
 
@@ -69,6 +76,8 @@ export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new VerticalResultsConfig(config), systemConfig);
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
+    this.results = [];
+    this.placeholderCount = 0;
   }
 
   mount () {
@@ -78,16 +87,47 @@ export default class VerticalResultsComponent extends Component {
     return this;
   }
 
+  onMount () {
+    const placeholderCount = this.getPlaceholderCount();
+    if (this.placeholderCount !== placeholderCount) {
+      this.placeholderCount = placeholderCount;
+      this.setState(this._state.get());
+    }
+  }
+
   static get duplicatesAllowed () {
     return true;
+  }
+
+  getPlaceholderCount () {
+    const resultsCount = this.results.length;
+    if (this._config.maxNumberOfColumns <= 1 || !resultsCount) {
+      return 0;
+    }
+    // When there is only a single row of cards, it's undetermined without querying the dom
+    // whether placeholders are required or not. If the user resizes
+    // their page after this initialization the placeholders will not be updated, but
+    // adding a listener on window resize is incredibly laggy and an uncommon use case.
+    if (resultsCount < this._config.maxNumberOfColumns) {
+      const itemsEl = DOM.query(this._container, '.yxt-Results-items');
+      const cardEl = DOM.query(this._container, '[data-component=Card]');
+      if (!itemsEl || !cardEl) {
+        return 0;
+      }
+      const totalWidth = itemsEl.scrollWidth + 32;
+      const cardWidth = cardEl.scrollWidth;
+      const numColumns = Math.floor(totalWidth / cardWidth);
+      const numPlaceholders = (numColumns - resultsCount % numColumns) % numColumns;
+      return numPlaceholders;
+    }
+    return this._config.maxNumberOfColumns;
   }
 
   setState (data, val) {
     /**
      * @type {Array<Result>}
      */
-    const results = data.results || [];
-    const numColumns = Math.min(results.length || 1, this._config.maxNumberOfColumns);
+    this.results = data.results || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
@@ -97,9 +137,9 @@ export default class VerticalResultsComponent extends Component {
       mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
-      showNoResults: results.length === 0,
+      showNoResults: this.results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
-      numColumns
+      placeholders: new Array(this.placeholderCount)
     }), val);
   }
 
@@ -142,7 +182,8 @@ export default class VerticalResultsComponent extends Component {
         render: this._config.renderItem,
         ...opts
       };
-      return super.addChild(data, type, newOpts);
+      const index = opts.index;
+      return super.addChild(this.results[index], type, newOpts);
     }
     return super.addChild(data, type, opts);
   }

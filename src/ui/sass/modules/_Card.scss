@@ -1,0 +1,21 @@
+.yxt-Card {
+  $cards-margin: $base-spacing / 2 !default;
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-width: 210px;
+  margin-right: $cards-margin;
+  margin-bottom: $cards-margin;
+  border: $border-default;
+
+  @media (max-width: $breakpoint-mobile-max) 
+  {
+    margin-bottom: 0;
+
+    & + &
+    {
+      border-top: 0;
+    }
+  }
+}
