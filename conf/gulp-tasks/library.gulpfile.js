@@ -71,15 +71,15 @@ function legacyBundle () {
             '@babel/preset-env',
             {
               'loose': true,
-              'modules': false,
-              'corejs': 3,
-              'useBuiltIns': 'entry'
+              'modules': false
             }
           ]
         ],
         plugins: [
           '@babel/syntax-dynamic-import',
-          '@babel/plugin-transform-runtime',
+          ['@babel/plugin-transform-runtime', {
+            'corejs': 3
+          }],
           '@babel/plugin-transform-arrow-functions',
           '@babel/plugin-proposal-object-rest-spread'
         ]

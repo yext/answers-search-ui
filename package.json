@@ -4,7 +4,9 @@
   "description": "Javascript Answers Programming Interface",
   "main": "gulpfile.js",
   "dependencies": {
+    "core-js": "^3.6.4",
     "handlebars": "^4.1.2",
+    "regenerator-runtime": "^0.13.3",
     "template-helpers": "^1.0.1"
   },
   "devDependencies": {
@@ -13,9 +15,8 @@
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-arrow-functions": "^7.2.0",
     "@babel/plugin-transform-runtime": "^7.6.0",
-    "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
-    "@babel/runtime": "^7.6.0",
+    "@babel/runtime-corejs3": "^7.8.4",
     "@types/jest": "^24.0.15",
     "autoprefixer": "7.2.5",
     "cssnano": "^4.1.10",
