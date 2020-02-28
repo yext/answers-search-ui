@@ -1,6 +1,7 @@
 /** @module StandardCardComponent */
 
 import Component from '../component';
+import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 
@@ -18,23 +19,9 @@ class StandardCardConfig {
      * The cardMappings attribute of the config
      * is either a function that returns additional config for
      * a card or an object that is the additional config.
-     *
-     * This additional config has attributes that are either static values
-     * or functions.
      */
     let cardMappings = config.cardMappings || {};
-    if (typeof cardMappings === 'function') {
-      cardMappings = cardMappings(this.result);
-    }
-    if (typeof cardMappings === 'object') {
-      Object.entries(cardMappings).forEach(([attribute, value]) => {
-        if (typeof value === 'function') {
-          this[attribute] = value(this.result);
-        } else {
-          this[attribute] = value;
-        }
-      });
-    }
+    Object.assign(this, CardComponent.applyCardMappings(this.result, cardMappings));
 
     /**
      * The raw profile data

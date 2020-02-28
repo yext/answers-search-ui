@@ -25,13 +25,6 @@ class VerticalResultsConfig {
     Object.assign(this, config);
 
     /**
-     * verticalConfigId used for analytics and passed to children
-     * @type {string}
-     * @private
-     */
-    this.verticalConfigId = config.verticalConfigId;
-
-    /**
      * isUniversal is set to true if this component is added by the UniversalResultsComponent
      * @type {boolean}
      * @private

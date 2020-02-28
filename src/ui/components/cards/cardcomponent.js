@@ -22,6 +22,12 @@ class CardConfig {
     this.result = config.data || {};
 
     /**
+     * Vertical key for the vertical the card is a part of.
+     * @type {string}
+     */
+    this.verticalKey = config.verticalKey;
+
+    /**
      * Card mappings is a function specified in the config
      * that returns config based on the data passed into card
      * @type {Function}
@@ -69,8 +75,32 @@ export default class CardComponent extends Component {
       cardMappings: this._config.cardMappings,
       callsToAction: this._config.callsToAction,
       callsToActionFields: this._config.callsToActionFields,
+      verticalKey: this._config.verticalKey,
       ...opts
     });
+  }
+
+  /**
+   * Used by children card components like StandardCardComponent to
+   * apply given template mappings as config.
+   * @param {Result} result
+   * @param {Object|Function} cardMappings
+   */
+  static applyCardMappings (result, cardMappings) {
+    const config = {};
+    if (typeof cardMappings === 'function') {
+      cardMappings = cardMappings(result);
+    }
+    if (typeof cardMappings === 'object') {
+      Object.entries(cardMappings).forEach(([attribute, value]) => {
+        if (typeof value === 'function') {
+          config[attribute] = value(result);
+        } else {
+          config[attribute] = value;
+        }
+      });
+    }
+    return config;
   }
 
   static get type () {

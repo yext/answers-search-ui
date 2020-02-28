@@ -484,7 +484,7 @@ ANSWERS.addComponent('VerticalResults', {
   maxNumberOfColumns: 3,
   // The card used to display each individual result, see [Cards](#Cards) section for more details,
   card: {
-    // Optional: The type of card, currently only 'Standard' is supported, defaults to 'Standard'
+    // Optional: The type of card, currently only 'Standard' and 'Accordion' are supported, defaults to 'Standard'
     cardType: 'Standard',
     // Required, see [Card Mappings](#Card-Mappings) for more details
     cardMappings: () => {},
@@ -691,6 +691,23 @@ const cardMappings = {
   showOrdinal: false,
   // A tag to display on top of an image, always overlays the image, default no tag
   tagLabel: 'On Sale!'
+}
+```
+
+## Accordion Card
+
+The card mapping for an accordion card has these attributes
+
+```js
+const cardMappings = {
+  // Title for the card, defaults to the name of the entity
+  title: item.title,
+  // Subtitle, defaults to null
+  subtitle: `Department: ${item._raw.name} `,
+  // Details, defaults to the entity's description
+  details: item._raw.description,
+  // Whether this current card Mapping's Accordion Card should be open on page load, defaults to false
+  expanded: false
 }
 ```
 
