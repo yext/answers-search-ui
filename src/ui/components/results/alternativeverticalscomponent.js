@@ -1,6 +1,5 @@
 /** @module AlternativeVerticalsComponent */
 
-import { AnswersComponentError } from '../../../core/errors/errors';
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
@@ -101,11 +100,8 @@ export default class AlternativeVerticalsComponent extends Component {
         return config.verticalKey === verticalKey;
       });
 
-      if (!matchingVerticalConfig) {
-        throw new AnswersComponentError(
-          'no matching verticalPages config entry for ' + verticalKey,
-          'AlternativeVerticalsComponent'
-        );
+      if (!matchingVerticalConfig || alternativeVertical.resultsCount < 1) {
+        continue;
       }
 
       verticals.push(new AlternativeVertical({
