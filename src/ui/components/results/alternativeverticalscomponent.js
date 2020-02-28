@@ -47,6 +47,12 @@ export default class AlternativeVerticalsComponent extends Component {
      * @type {string|null}
      */
     this._universalUrl = opts.universalUrl || '';
+
+    /**
+     * Whether or not results are displaying, used to control language in the info box
+     * @type {boolean}
+     */
+    this._isShowingResults = opts.isShowingResults || false;
   }
 
   static get type () {
@@ -71,6 +77,7 @@ export default class AlternativeVerticalsComponent extends Component {
       universalUrl: this._universalUrl,
       verticalSuggestions: this.verticalSuggestions,
       currentVerticalLabel: this._currentVerticalLabel,
+      isShowingResults: this._isShowingResults,
       query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }));
   }

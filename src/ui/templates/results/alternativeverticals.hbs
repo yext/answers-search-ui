@@ -1,13 +1,16 @@
-<div class="yxt-AlternativeVerticals">
+<div class="yxt-AlternativeVerticals{{#unless isShowingResults}} yxt-AlternativeVerticals--notShowingResults{{/unless}}">
   <div class="yxt-AlternativeVerticals-noResultsInfo">
     <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">
       No results found
     </em>
-    in {{currentVerticalLabel}}. Showing
-    <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">
-      all {{currentVerticalLabel}}
-    </em>
-    instead.
+    in {{currentVerticalLabel}}.
+    {{#if isShowingResults}}
+      Showing
+      <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">
+        all {{currentVerticalLabel}}
+      </em>
+      instead.
+    {{/if}}
   </div>
   {{#if verticalSuggestions}}
     <div class="yxt-AlternativeVerticals-suggestionsWrapper">
