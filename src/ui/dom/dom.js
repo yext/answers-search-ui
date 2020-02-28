@@ -166,12 +166,24 @@ export default class DOM {
   }
 
   static trigger (selector, event, settings) {
-    let e = new Event(event, Object.assign({
-      'bubbles': true,
-      'cancelable': true
-    }, settings || {}));
-
+    let e = DOM._customEvent(event, settings);
     DOM.query(selector).dispatchEvent(e);
+  }
+
+  // TODO (agrow) investigate removing this
+  // Event constructor polyfill
+  static _customEvent (event, settings) {
+    if (typeof window.CustomEvent === 'function') {
+      return new Event(event, Object.assign({
+        'bubbles': true,
+        'cancelable': true
+      }, settings || {}));
+    }
+
+    settings = settings || { bubbles: false, cancelable: false, detail: null };
+    var evt = document.createEvent('CustomEvent');
+    evt.initCustomEvent(event, settings.bubbles, settings.cancelable, settings.detail);
+    return evt;
   }
 
   static on (selector, evt, handler) {

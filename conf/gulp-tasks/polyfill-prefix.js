@@ -10,23 +10,6 @@ if (!Element.prototype.matches) { // Element.matches polyfill from MDN
                               Element.prototype.webkitMatchesSelector;
 }
 
-// Event constructor polyfill
-(function () {
-  if (typeof window.CustomEvent === 'function') {
-    return false;
-  }
-
-  function CustomEvent (event, params) {
-    params = params || { bubbles: false, cancelable: false, detail: null };
-    var evt = document.createEvent('CustomEvent');
-    evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
-    return evt;
-  }
-
-  window.CustomEvent = CustomEvent;
-  window.Event = CustomEvent;
-})();
-
 // Element.closest polyfill
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
 (function () {
