@@ -64,7 +64,7 @@ export default class HttpRequester {
    * @return {boolean} true if the request is successfully queued
    */
   beacon (url, data) {
-    return this._sendBeacon(navigator, url, JSON.stringify(data));
+    return this._sendBeacon(url, JSON.stringify(data));
   }
 
   // TODO (agrow) investigate removing this
@@ -73,7 +73,7 @@ export default class HttpRequester {
   // https://github.com/Financial-Times/polyfill-library/blob/master/polyfills/navigator/sendBeacon/polyfill.js
   // with the async-by-default behavior of Miguel Mota's polyfill:
   // https://github.com/miguelmota/Navigator.sendBeacon/blob/master/sendbeacon.js
-  _sendBeacon (navigator, url, data) {
+  _sendBeacon (url, data) {
     if (window.navigator && window.navigator.sendBeacon) {
       return window.navigator.sendBeacon(url, data);
     }
