@@ -212,6 +212,8 @@ export default class DOM {
     });
   }
 
+  // TODO (agrow) investigate removing this
+  // Element.matches polyfill
   static matches (element, potentialMatch) {
     if (Element.prototype.matches) {
       return element.matches(potentialMatch);
