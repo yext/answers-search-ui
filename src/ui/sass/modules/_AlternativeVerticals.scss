@@ -114,10 +114,12 @@
   }
 
   a {
+    color: $color-brand-primary;
+
     &:hover,
     &:active,
     &:visited {
-      color: $color-brand-primary;
+      color: $color-brand-hover;
     }
   }
 }
