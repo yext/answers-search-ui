@@ -1,7 +1,6 @@
 /** @define StandardCard */
 .yxt-StandardCard {
   $standard-card-base-spacing: $base-spacing;
-  $standard-card-base-spacing-sm: $base-spacing;
 
   $standard-card-image-width: 7.5 * $standard-card-base-spacing!default;
   $standard-card-image-height: 7.5 * $standard-card-base-spacing !default;
@@ -24,33 +23,39 @@
   $standard-card-wrapper-width: 10 * $standard-card-base-spacing !default;
 
   $standard-card-ordinal-size: $base-spacing !default;
-  $standard-card-ordinal-font-size: $font-size-sm;
+  $standard-card-ordinal-font-size: $font-size-xs;
 
+  padding: $standard-card-base-spacing;
+  display: flex;
   flex-grow: 1;
 
   @include Text();
 
   &-wrapper {
     display: flex;
-    padding: $standard-card-base-spacing-sm;
     flex-wrap: wrap;
   }
 
   &-ordinalWrapper {
-    margin-right: $standard-card-ordinal-size;
+    margin-right: $standard-card-base-spacing * 3/4;
   }
 
   &-ordinal {
-    padding: $standard-card-ordinal-size * 0.2 $standard-card-ordinal-size * 0.35;
+    padding-top: $standard-card-ordinal-size * 3/16;
+    padding-right: $standard-card-ordinal-size * 1/8;
+    padding-bottom: $standard-card-ordinal-size * 5/16;
+    padding-left: $standard-card-ordinal-size * 1/8;
     border-radius: $standard-card-ordinal-size;
-    min-width: $standard-card-ordinal-size * 0.6;
-    height: $standard-card-ordinal-size * 0.8;
+    min-width: $standard-card-ordinal-size * 7/8;
+    height: $standard-card-ordinal-size * 5/8;
     background-color: $color-brand-primary;
     border: solid black 1px;
     text-align: center;
     @include Text(
       $color: white,
       $size: $standard-card-ordinal-font-size,
+      $line-height: $line-height-xs,
+      $weight: $font-weight-bold,
     );
   }
 
@@ -85,7 +90,7 @@
     height: $standard-card-image-height;
     min-height: $standard-card-image-height;
     overflow: hidden;
-    margin-right: $standard-card-base-spacing-sm;
+    margin-right: $standard-card-base-spacing;
 
     img {
       width: 100%;
@@ -180,12 +185,12 @@
     .Icon {
       height: $standard-card-svg-height;
       width: $standard-card-svg-width;
-      margin-right: $standard-card-base-spacing-sm/2;
+      margin-right: $standard-card-base-spacing/2;
     }
   }
 
   .yxt-CTACollection-item {
-    margin-top: $standard-card-base-spacing-sm * 0.75;
+    margin-top: $standard-card-base-spacing * 0.75;
     align-items: center;
 
     &:only-child {
@@ -197,7 +202,7 @@
       .Icon {
         height: $standard-card-svg-height-solo;
         width: $standard-card-svg-width-solo;
-        margin-bottom: $standard-card-base-spacing-sm/2;
+        margin-bottom: $standard-card-base-spacing/2;
         margin-right: 0;
       }
     }

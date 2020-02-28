@@ -1,12 +1,12 @@
 <div class="yxt-StandardCard">
-  <div class="yxt-StandardCard-wrapper">
-    {{#if _config.showOrdinal}}
-      <div class="yxt-StandardCard-ordinalWrapper">
-        <div class="yxt-StandardCard-ordinal">
-          {{_config.result.ordinal}}
-        </div>
+  {{#if _config.showOrdinal}}
+    <div class="yxt-StandardCard-ordinalWrapper">
+      <div class="yxt-StandardCard-ordinal">
+        {{_config.result.ordinal}}
       </div>
-    {{/if}}
+    </div>
+  {{/if}}
+  <div class="yxt-StandardCard-wrapper">
     {{#if _config.image}}
       <div class="yxt-StandardCard-imgWrapper">
         <img src="{{_config.image}}">

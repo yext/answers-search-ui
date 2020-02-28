@@ -63,12 +63,6 @@ class VerticalResultsConfig {
      * @type {Object}
      */
     this.footer = config.footer || {};
-
-    /**
-     * Vertical/Universal results
-     * @type {Array<Result>}
-     */
-    this.results = [];
   }
 }
 
@@ -76,6 +70,9 @@ export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new VerticalResultsConfig(config), systemConfig);
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
+    /**
+     * @type {Array<Result>}
+     */
     this.results = [];
     this.placeholderCount = 0;
   }

@@ -46,7 +46,7 @@ class CTAConfig {
     if (typeof config.eventOptions === 'string') {
       this.eventOptions = JSON.parse(config.eventOptions);
     }
-    this.eventOptions = this.eventOptions || {};
+    this.eventOptions = this.eventOptions;
   }
 }
 
@@ -57,7 +57,7 @@ export default class CTAComponent extends Component {
 
   onMount () {
     const el = DOM.query(this._container, `.js-yxt-CTA`);
-    if (el) {
+    if (el && this._config.eventOptions) {
       DOM.on(el, 'click', () => this.reportAnalyticsEvent());
     }
   }
