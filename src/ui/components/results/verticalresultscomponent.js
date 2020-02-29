@@ -43,6 +43,12 @@ class VerticalResultsConfig {
      */
     this._displayAllResults = config.noResults && config.noResults.displayAllResults;
 
+    /**
+     * Custom no results template
+     * @type {string}
+     */
+    this.noResultsTemplate = config.noResults ? config.noResults.template : '';
+
     const parentOpts = config._parentOpts || {};
 
     /**
@@ -173,6 +179,7 @@ export default class VerticalResultsComponent extends Component {
     } else if (type === AlternativeVerticalsComponent.type) {
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
+        template: this._config.noResultsTemplate,
         universalUrl: this._config._universalUrl,
         verticalsConfig: this._verticalsConfig,
         ...opts
