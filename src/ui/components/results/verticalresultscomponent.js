@@ -171,7 +171,7 @@ export default class VerticalResultsComponent extends Component {
       };
       return super.addChild(data, type, newOpts);
     } else if (type === AlternativeVerticalsComponent.type) {
-      let results = this.core.globalStorage
+      const results = this.core.globalStorage
         .getState(StorageKeys.VERTICAL_RESULTS).results;
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
