@@ -93,12 +93,16 @@
     }
   }
 
-  &-arrowIconWrapper {
-    width: 9px;
+  &-arrowIconWrapper,
+  &-verticalIconWrapper {
+    display: flex;
+    align-items: center;
+  }
 
+  &-arrowIconWrapper {
+    &,
     > * {
-      height: 100%;
-      width: 100%;
+      width: 9px;
     }
   }
 
