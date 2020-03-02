@@ -1,18 +1,23 @@
-<div class="yxt-AlternativeVerticals">
+<div class="yxt-AlternativeVerticals{{#unless isShowingResults}} yxt-AlternativeVerticals--notShowingResults{{/unless}}">
   <div class="yxt-AlternativeVerticals-noResultsInfo">
     <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">
       No results found
     </em>
-    in {{currentVerticalLabel}}. Showing
-    <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">
-      all {{currentVerticalLabel}}
-    </em>
-    instead.
+    in {{currentVerticalLabel}}.
+    {{#if isShowingResults}}
+      Showing
+      <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">
+        all {{currentVerticalLabel}}
+      </em>
+      instead.
+    {{/if}}
   </div>
-  {{#if hasVerticalSuggestions}}
+  {{#if verticalSuggestions}}
     <div class="yxt-AlternativeVerticals-suggestionsWrapper">
       <div class="yxt-AlternativeVerticals-details">
-        Note: the following search categories yielded results
+        Note: the following search
+        {{plural verticalSuggestions.length 'category' 'categories'}}
+        yielded results
         {{#if query}}
           for
           <span class="yxt-AlternativeVerticals-details--query">
@@ -36,7 +41,7 @@
                     {{label}}
                   </span>
                   <span class="yxt-AlternativeVerticals-suggestionLink--copyResults">
-                    ({{resultsCount}} results)
+                    ({{resultsCount}} {{plural resultsCount 'result' 'results'}})
                   </span>
                 </div>
                 <div class="yxt-AlternativeVerticals-arrowIconWrapper"

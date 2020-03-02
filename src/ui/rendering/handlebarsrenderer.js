@@ -116,5 +116,11 @@ export default class HandlebarsRenderer extends Renderer {
         ? ''
         : JSON.stringify(name);
     });
+
+    this.registerHelper('plural', function (number, singularText, pluralText) {
+      return number === 1
+        ? singularText
+        : pluralText;
+    });
   }
 }

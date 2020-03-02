@@ -1,6 +1,5 @@
 /** @module AlternativeVerticalsComponent */
 
-import { AnswersComponentError } from '../../../core/errors/errors';
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
@@ -48,6 +47,12 @@ export default class AlternativeVerticalsComponent extends Component {
      * @type {string|null}
      */
     this._universalUrl = opts.universalUrl || '';
+
+    /**
+     * Whether or not results are displaying, used to control language in the info box
+     * @type {boolean}
+     */
+    this._isShowingResults = opts.isShowingResults || false;
   }
 
   static get type () {
@@ -71,8 +76,8 @@ export default class AlternativeVerticalsComponent extends Component {
     return super.setState(Object.assign({ verticalSuggestions: [] }, data, {
       universalUrl: this._universalUrl,
       verticalSuggestions: this.verticalSuggestions,
-      hasVerticalSuggestions: this.verticalSuggestions && this.verticalSuggestions.length > 0,
       currentVerticalLabel: this._currentVerticalLabel,
+      isShowingResults: this._isShowingResults,
       query: this.core.globalStorage.getState(StorageKeys.QUERY)
     }));
   }
@@ -102,11 +107,8 @@ export default class AlternativeVerticalsComponent extends Component {
         return config.verticalKey === verticalKey;
       });
 
-      if (!matchingVerticalConfig) {
-        throw new AnswersComponentError(
-          'no matching verticalPages config entry for ' + verticalKey,
-          'AlternativeVerticalsComponent'
-        );
+      if (!matchingVerticalConfig || alternativeVertical.resultsCount < 1) {
+        continue;
       }
 
       verticals.push(new AlternativeVertical({

@@ -177,11 +177,14 @@ export default class VerticalResultsComponent extends Component {
       };
       return super.addChild(data, type, newOpts);
     } else if (type === AlternativeVerticalsComponent.type) {
+      const results = this.core.globalStorage
+        .getState(StorageKeys.VERTICAL_RESULTS).results;
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
         template: this._config.noResultsTemplate,
         universalUrl: this._config._universalUrl,
         verticalsConfig: this._verticalsConfig,
+        isShowingResults: this._config._displayAllResults && results && results.length > 0,
         ...opts
       };
       return super.addChild(data, type, newOpts);

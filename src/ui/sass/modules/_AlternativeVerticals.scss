@@ -13,6 +13,11 @@
     border: $border-default;
   }
 
+  &--notShowingResults
+  {
+    border-bottom: $border-default;
+  }
+
   &-noResultsInfo {
     background-color: $color-brand-primary;
     color: $color-brand-white;
@@ -88,12 +93,16 @@
     }
   }
 
-  &-arrowIconWrapper {
-    width: 9px;
+  &-arrowIconWrapper,
+  &-verticalIconWrapper {
+    display: flex;
+    align-items: center;
+  }
 
+  &-arrowIconWrapper {
+    &,
     > * {
-      height: 100%;
-      width: 100%;
+      width: 9px;
     }
   }
 
@@ -114,10 +123,12 @@
   }
 
   a {
+    color: $color-brand-primary;
+
     &:hover,
     &:active,
     &:visited {
-      color: $color-brand-primary;
+      color: $color-brand-hover;
     }
   }
 }
