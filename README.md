@@ -503,7 +503,11 @@ ANSWERS.addComponent('VerticalResults', {
     // To link to external pages like yext.com
     url: 'https://yext.com',
     // Whether to open the link in a new window, defaults to false
-    newWindow: false
+    newWindow: false,
+    // Optional: text for screen readers in the footer, will only be visible by screen readers
+    screenReaderText: "I will only be read by screen readers",
+    // Optional: alt text for the footer image
+    altText: "If image doesn't load I will appear"
   }
 })
 ```

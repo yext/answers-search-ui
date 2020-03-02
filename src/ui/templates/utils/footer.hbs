@@ -5,13 +5,18 @@
       rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
       aria-label="Vertical Results footer link"
     >
+    {{#if _config.screenReaderText}}
+      <span class="sr-only">{{_config.screenReaderText}}</span>
+    {{/if}}
   {{/if}}
+  
 
   {{#if _config.image}}
-    <img src='{{_config.image}}' alt='Vertical Results footer image'>
+    <img src="{{_config.image}}" {{#if _config.altText}} alt="{{_config.altText}}" {{/if}}>
   {{/if}}
   {{#if _config.icon}}
-    <span data-component="IconComponent" data-opts='{ "iconName": "{{_config.icon}}" }'></span>
+    <span data-component="IconComponent" data-opts='{ "iconName": "{{_config.icon}}" }'
+    {{#if _config.altText}} alt="{{_config.altText}}" {{/if}}></span>
   {{/if}}
 
   {{#if _config.url}} 
