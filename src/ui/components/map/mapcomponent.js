@@ -57,10 +57,11 @@ export default class MapComponent extends Component {
 
   onCreate () {
     this._map = this.getProviderInstance(this._mapProvider);
+    this._map.loadJS();
   }
 
   onMount () {
-    this._map.loadJS(() => {
+    this._map.onLoaded(() => {
       this._map.init(this._container, this.getState('map'));
     });
   }
