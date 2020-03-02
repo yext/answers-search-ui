@@ -26,7 +26,7 @@ export default class GoogleMapProvider extends MapProvider {
   }
 
   loadJS () {
-    let self = this;
+    const self = this;
     const onLoad = function () {
       if (typeof self._onLoaded === 'function') {
         self._onLoaded();
@@ -41,7 +41,7 @@ export default class GoogleMapProvider extends MapProvider {
 
     let script = DOM.query('#yext-map-js');
     if (script) {
-      let onLoadFunc = script.onload;
+      const onLoadFunc = script.onload;
       script.onload = function () {
         onLoadFunc();
         onLoad();
