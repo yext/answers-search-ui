@@ -2,6 +2,8 @@
 
 /* global fetch, XMLHttpRequest, ActiveXObject */
 
+import { fetch as fetchPolyfill } from 'whatwg-fetch';
+
 /**
  * Types of HTTP requests
  */
@@ -52,6 +54,15 @@ export default class HttpRequester {
       'credentials': 'include'
     }, opts);
 
+    return this._fetch(url, reqArgs);
+  }
+
+  // TODO (agrow) investigate removing this
+  // Use imported fetchPolyfill if it does not already exist on window
+  _fetch (url, reqArgs) {
+    if (!window.fetch) {
+      return fetchPolyfill(url, reqArgs);
+    }
     return fetch(url, reqArgs);
   }
 
@@ -81,7 +92,7 @@ export default class HttpRequester {
     var event = window.event && window.event.type;
     var sync = event === 'unload' || event === 'beforeunload';
     var xhr = ('XMLHttpRequest' in window) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-    xhr.open('POST', url, sync); // TODO this should be !sync
+    xhr.open('POST', url, !sync);
     xhr.setRequestHeader('Accept', '*/*');
     if (typeof data === 'string') {
       xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');

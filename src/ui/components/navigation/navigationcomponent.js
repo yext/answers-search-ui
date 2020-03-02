@@ -242,7 +242,7 @@ export default class NavigationComponent extends Component {
       if (lastLink === null) {
         return;
       }
-      this.prepend(collapsedLinks, lastLink);
+      this._prepend(collapsedLinks, lastLink);
 
       if (moreButton.classList.contains('yxt-Nav-item--more')) {
         moreButton.classList.remove('yxt-Nav-item--more');
@@ -292,7 +292,7 @@ export default class NavigationComponent extends Component {
   }
 
   checkOutsideClick (e) {
-    if (this.closest(e.target, '.yxt-Nav-container')) {
+    if (this._closest(e.target, '.yxt-Nav-container')) {
       return;
     }
 
@@ -343,25 +343,14 @@ export default class NavigationComponent extends Component {
   // TODO (agrow) investigate removing this
   // ParentNode.prepend polyfill
   // https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend#Polyfill
-  prepend (collapsedLinks, lastLink) {
+  _prepend (collapsedLinks, lastLink) {
     if (!collapsedLinks.hasOwnProperty('prepend')) {
-      Object.defineProperty(collapsedLinks, 'prepend', {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: function prepend () {
-          var argArr = Array.prototype.slice.call(arguments);
+      let docFrag = document.createDocumentFragment();
+      let isNode = lastLink instanceof Node;
+      docFrag.appendChild(isNode ? lastLink : document.createTextNode(String(lastLink)));
 
-          var docFrag = document.createDocumentFragment();
-
-          argArr.forEach(function (argItem) {
-            var isNode = argItem instanceof Node;
-            docFrag.appendChild(isNode ? argItem : document.createTextNode(String(argItem)));
-          });
-
-          this.insertBefore(docFrag, this.firstChild);
-        }
-      });
+      collapsedLinks.insertBefore(docFrag, collapsedLinks.firstChild);
+      return;
     }
 
     collapsedLinks.prepend(lastLink);
@@ -370,24 +359,15 @@ export default class NavigationComponent extends Component {
   // TODO (agrow) investigate removing this
   // Adapted from Element.closest polyfill
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
-  closest (element, closestElSelector) {
-    if (!Element.prototype.closest) {
-      Object.defineProperty(element, 'closest', {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: function closest (s) {
-          var el = this;
-
-          do {
-            if (DOM.matches(el, s)) return el;
-            el = el.parentElement || el.parentNode;
-          } while (el !== null && el.nodeType === 1);
-          return null;
-        }
-      });
+  _closest (el, closestElSelector) {
+    if (!el.hasOwnProperty('closest')) {
+      do {
+        if (DOM.matches(el, closestElSelector)) return el;
+        el = el.parentElement || el.parentNode;
+      } while (el !== null && el.nodeType === 1);
+      return null;
     }
-    return element.closest(closestElSelector);
+    return el.closest(closestElSelector);
   }
 
   getUrlParams () {
