@@ -74,7 +74,7 @@ class AccordionCardConfig {
      * @type {Array<string>}
      */
     this.callsToActionFields = config.callsToActionFields || [];
-    
+
     /**
      * The index of the card.
      * @type {number}
