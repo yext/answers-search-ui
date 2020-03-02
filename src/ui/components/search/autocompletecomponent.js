@@ -177,7 +177,7 @@ export default class AutoCompleteComponent extends Component {
     // the auto complete
     // TODO(jdelerme): Close logic to be moved to parent
     DOM.on(document, 'click', e => {
-      if (e.target.matches('.js-yxt-AutoComplete-wrapper *') || e.target.matches(this._inputEl)) {
+      if (DOM.matches(e.target, '.js-yxt-AutoComplete-wrapper *') || DOM.matches(e.target, this._inputEl)) {
         return;
       }
       this.close();
