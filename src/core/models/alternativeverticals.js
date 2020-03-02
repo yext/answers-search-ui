@@ -17,6 +17,11 @@ export default class AlternativeVerticals {
    * @param {Object.<string, function>} formatters The field formatters to use
    */
   static from (response, formatters) {
-    return new AlternativeVerticals(Section.from(response.alternativeVerticals, {}, formatters));
+    const alternativeVerticals = response.alternativeVerticals;
+    if (!alternativeVerticals || !alternativeVerticals.modules) {
+      return {};
+    }
+
+    return new AlternativeVerticals(Section.from(alternativeVerticals.modules, {}, formatters));
   }
 }
