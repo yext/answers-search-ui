@@ -25,31 +25,41 @@ export default class GoogleMapProvider extends MapProvider {
     }
   }
 
-  loadJS (onLoad) {
-    if (DOM.query('#yext-map-js')) {
-      this._isLoaded = true;
-      if (typeof onLoad === 'function') {
-        onLoad();
+  loadJS () {
+    let self = this;
+    const onLoad = function () {
+      if (typeof self._onLoaded === 'function') {
+        self._onLoaded();
       }
+    };
+
+    if (typeof google !== 'undefined') {
+      self._isLoaded = true;
+      onLoad();
       return;
     }
 
-    // Inject the google maps script, wrapping it in a Promise for cleanliness
-    new Promise((resolve, reject) => {
-      let script = DOM.createEl('script', {
-        id: 'yext-map-js',
-        onload: resolve,
-        onerror: reject,
-        async: true,
-        src: `https://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
-      });
+    let script = DOM.query('#yext-map-js');
+    if (script) {
+      let onLoadFunc = script.onload;
+      script.onload = function () {
+        onLoadFunc();
+        onLoad();
+      };
+      return;
+    }
 
-      DOM.append('body', script);
-    }).then(function (response) {
-      // TODO(agrow) Implement error handling here (e.g. request could fail)
-      this._isLoaded = true;
-      this._onLoaded();
+    script = DOM.createEl('script', {
+      id: 'yext-map-js',
+      onload: () => {
+        self._isLoaded = true;
+        onLoad();
+      },
+      async: true,
+      src: `https://maps.googleapis.com/maps/api/js?${self.generateCredentials()}`
     });
+
+    DOM.append('body', script);
   }
 
   generateCredentials () {
