@@ -15,10 +15,6 @@
 
   $standard-card-text-min-width: 8 * $standard-card-base-spacing;
 
-  $standard-card-svg-height: 1.125 * $standard-card-base-spacing !default;
-  $standard-card-svg-width: 1.125 * $standard-card-base-spacing !default;
-  $standard-card-svg-height-solo: 1.5 * $standard-card-base-spacing !default;
-  $standard-card-svg-width-solo: 1.5 * $standard-card-base-spacing !default;
   $standard-card-cta-width: 8 * $standard-card-base-spacing !default;
   $standard-card-wrapper-width: 10 * $standard-card-base-spacing !default;
 
@@ -33,6 +29,7 @@
   &-wrapper {
     display: flex;
     flex-wrap: wrap;
+    align-content: flex-start;
   }
 
   &-ordinalWrapper {
@@ -90,6 +87,7 @@
     min-height: $standard-card-image-height;
     overflow: hidden;
     margin-right: $standard-card-base-spacing;
+    margin-bottom: $standard-card-base-spacing / 2;
 
     img {
       width: 100%;
@@ -177,33 +175,24 @@
     justify-content: center;
   }
 
-  .yxt-CTA {
-    display: flex;
-    align-items: center;
+  $standard-card-margin: $base-spacing / 2 !default;
 
-    .Icon {
-      height: $standard-card-svg-height;
-      width: $standard-card-svg-width;
-      margin-right: $standard-card-base-spacing/2;
-    }
-  }
+  $standard-card-border: $border-default !default;
+  border-bottom: $standard-card-border;
+  border-right: $standard-card-border;
+  border-left: $standard-card-border;
 
-  .yxt-CTACollection-item {
-    margin-top: $standard-card-base-spacing * 0.75;
-    align-items: center;
+  margin-right: $standard-card-margin;
+  margin-bottom: $standard-card-margin;
 
-    &:only-child {
-      .yxt-CTA {
-        text-align: center;
-        flex-direction: column;
-      }
+  border-top: $standard-card-border;
 
-      .Icon {
-        height: $standard-card-svg-height-solo;
-        width: $standard-card-svg-width-solo;
-        margin-bottom: $standard-card-base-spacing/2;
-        margin-right: 0;
-      }
+  @media (max-width: $breakpoint-mobile-max) 
+  {
+    margin-bottom: 0;
+    border-top: 0;
+    &--0 {
+      border-top: $standard-card-border;
     }
   }
 }

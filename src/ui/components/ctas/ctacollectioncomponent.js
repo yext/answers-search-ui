@@ -24,13 +24,25 @@ export default class CTACollectionComponent extends Component {
      * to contain CTA configuration.
      * @type {Array<string>}
      */
-    let callsToActionFields = this._config.callsToActionFields || [];
+    const callsToActionFields = this._config.callsToActionFields || [];
+
+    /**
+     * Additional context for the cta.
+     * @type {string}
+     */
+    this._config._context = this._config._context;
 
     /**
      * The computed calls to action array
      * @type {Array<Object>}
      */
     this.callsToAction = this.resolveCTAMapping(this._config.result, callsToActionFields, ...callsToAction);
+
+    this.callsToAction = this.callsToAction.filter(cta => cta.url && cta.label).map(cta => ({
+      ...cta,
+      _context: this._config._context,
+      _isSolo: this.callsToAction.length === 1
+    }));
   }
 
   /**
@@ -48,11 +60,13 @@ export default class CTACollectionComponent extends Component {
    * @param {Function|...(Object|string)} ctaMapping
    * @returns {Array<Object>}
    */
-  resolveCTAMapping (result, callsToActionFields = [], ...ctas) {
+  resolveCTAMapping (result, callsToActionFields, ...ctas) {
+    // If entity has any fields that are designed as callsToActionFields, return those instead
     const filteredCTAFields = callsToActionFields.filter(ctaFieldName => result._raw[ ctaFieldName ]);
     if (filteredCTAFields.length > 0) {
       return filteredCTAFields.map(ctaFieldName => result._raw[ ctaFieldName ]);
     }
+    // Otherwise, use given callsToAction if any
     return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
         return ctaMapping(result);

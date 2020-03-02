@@ -4,16 +4,11 @@ import Component from '../component';
 import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
+import CTACollectionComponent from '../ctas/ctacollectioncomponent';
 
 class StandardCardConfig {
   constructor (config = {}) {
     Object.assign(this, config);
-
-    /**
-     * The result data
-     * @type {Result}
-     */
-    this.result = config.data || {};
 
     /**
      * The cardMappings attribute of the config
@@ -21,7 +16,13 @@ class StandardCardConfig {
      * a card or an object that is the additional config.
      */
     let cardMappings = config.cardMappings || {};
-    Object.assign(this, CardComponent.applyCardMappings(this.result, cardMappings));
+    Object.assign(this, CardComponent.applyCardMappings(config.data, cardMappings));
+
+    /**
+     * The result data
+     * @type {Result}
+     */
+    this.result = config.data || {};
 
     /**
      * The raw profile data
@@ -110,6 +111,12 @@ class StandardCardConfig {
      * @type {boolean}
      */
     this.showOrdinal = this.showOrdinal || false;
+
+    /**
+     * The index of the card.
+     * @type {number}
+     */
+    this._index = config._index || 0;
   }
 }
 
@@ -146,11 +153,15 @@ export default class StandardCardComponent extends Component {
   }
 
   addChild (data, type, opts) {
-    return super.addChild(data, type, {
-      callsToAction: this._config.callsToAction,
-      callsToActionFields: this._config.callsToActionFields,
-      ...opts
-    });
+    if (type === CTACollectionComponent.type) {
+      return super.addChild(data, type, {
+        callsToAction: this._config.callsToAction,
+        callsToActionFields: this._config.callsToActionFields,
+        _context: 'StandardCard',
+        ...opts
+      });
+    }
+    return super.addChild(data, type, opts);
   }
 
   static get type () {

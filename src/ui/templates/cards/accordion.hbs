@@ -1,6 +1,7 @@
-<div class="yxt-AccordionCard {{#if isExpanded}}yxt-AccordionCard-expanded {{/if}}"
+<div class="yxt-AccordionCard js-yxt-AccordionCard
+  {{#if isExpanded}} yxt-AccordionCard--expanded {{/if}} yxt-AccordionCard--{{_config._index}}"
   id="{{id}}">
-  <div class="yxt-AccordionCard-toggle"
+  <div class="yxt-AccordionCard-toggle js-yxt-AccordionCard-toggle"
     aria-expanded="{{#if isExpanded}}true{{else}}false{{/if}}"
     aria-controls="{{id}}"
     tabindex="0"
@@ -8,12 +9,13 @@
     <div class="yxt-AccordionCard-title">
       {{_config.title}}
     </div>
-    <div class="yxt-AccordionCard-icon {{#if isExpanded}}yxt-AccordionCard-icon-expanded {{/if}}"
+    <div class="yxt-AccordionCard-icon js-yxt-AccordionCard-icon {{#if isExpanded}} yxt-AccordionCard-icon--expanded {{/if}}"
       data-component="IconComponent"
       data-opts='{"iconName": "chevron"}'
       data-prop="icon"></div>
   </div>
-  <div class="yxt-AccordionCard-content {{#if isExpanded}}yxt-AccordionCard-content-expanded {{/if}}"
+  <div class="yxt-AccordionCard-content js-yxt-AccordionCard-content
+    {{#if isExpanded}} yxt-AccordionCard-content--expanded yxt-AccordionCard-content--initExpanded {{/if}}"
     aria-hidden="{{#if isExpanded}}false{{else}}true{{/if}}">
     <div class="yxt-AccordionCard-subtitle">{{_config.subtitle}}</div>
     <div class="yxt-AccordionCard-details">{{_config.details}}</div>

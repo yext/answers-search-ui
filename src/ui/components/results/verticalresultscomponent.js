@@ -203,8 +203,7 @@ export default class VerticalResultsComponent extends Component {
         render: this._config.renderItem,
         ...opts
       };
-      const index = opts.index;
-      return super.addChild(this.results[index], type, newOpts);
+      return super.addChild(this.results[opts._index], type, newOpts);
     }
     return super.addChild(data, type, opts);
   }

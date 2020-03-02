@@ -14,19 +14,35 @@
   $accordion-card-subtitle-size: $font-size-md !default;
   $accordion-card-subtitle-color: $color-text-secondary !default;
 
-  $accordion-card-cta-svg-size: $accordion-card-spacing !default;
-  $accordion-card-cta-font-size: $font-size-md !default;
-  $accordion-card-cta-font-weight: $font-weight-normal !default;
-  $accordion-card-cta-color: $color-brand-primary !default;
-
   $accordion-card-details-size: $font-size-md !default;
   $accordion-card-details-weight: $font-weight-normal !default;
   $accordion-card-details-line-height: $line-height-md !default;
   $accordion-card-details-color: $color-text-primary !default;
 
+  $accordion-card-margin: $base-spacing / 2 !default;
+  $accordion-card-border: $border-default !default;
+
   background-color: $accordion-card-background-color;
 
-  &-expanded 
+  border-bottom: $accordion-card-border;
+  border-right: $accordion-card-border;
+  border-left: $accordion-card-border;
+
+  margin-right: $accordion-card-margin;
+  margin-bottom: $accordion-card-margin;
+
+  border-top: $accordion-card-border;
+
+  @media (max-width: $breakpoint-mobile-max) 
+  {
+    margin-bottom: 0;
+    border-top: 0;
+    &--0 {
+      border-top: $accordion-card-border;
+    }
+  }
+
+  &--expanded 
   {
     background-color: $accordion-card-content-background-color;
   }
@@ -36,11 +52,14 @@
     width: 100%;
     display: flex;
     cursor: pointer;
+    height: $accordion-card-spacing * 2.75;
   }
 
   &-title
   {
-    margin: $accordion-card-spacing * 0.5 $accordion-card-spacing;  
+    margin-top: $accordion-card-spacing * 0.5;
+    margin-right: $accordion-card-spacing;
+    margin-left: $accordion-card-spacing;
     @include Text(
       $size: $accordion-card-title-size,
       $color: $accordion-card-title-color,
@@ -60,7 +79,7 @@
     transition: transform 400ms ease-in;
   }
 
-  &-icon-expanded svg
+  &-icon--expanded svg
   {
     transform: rotate(-90deg);
   }
@@ -73,10 +92,15 @@
     transition: all 400ms ease;
   }
 
-  &-content-expanded 
+  &-content--expanded 
   {
     margin-bottom: $accordion-card-spacing / 2;
     display: block;
+  }
+
+  &-content--initExpanded 
+  {
+    height: auto;
   }
 
   &-subtitle
@@ -97,41 +121,5 @@
       $weight: $accordion-card-details-weight,
       $line-height: $accordion-card-details-line-height,
     );
-  }
-
-
-  .yxt-CTA 
-  {
-    display: flex;
-    margin-top: $accordion-card-spacing / 4;
-    margin-bottom: $accordion-card-spacing / 2;
-    align-items: center;
-
-    @include Text(
-      $size: $accordion-card-cta-font-size,
-      $weight: $accordion-card-cta-font-weight,
-      $color: $accordion-card-cta-color,
-    )
-  }
-
-  .yxt-CTA .Icon 
-  {
-    height: $accordion-card-cta-svg-size;
-    width: $accordion-card-cta-svg-size;
-    margin-right: $accordion-card-spacing * 0.3;
-  }
-}
-
-.yxt-Card 
-{
-  $accordion-card-border: $border-default !default;
-  & > .yxt-AccordionCard 
-  {
-    border: $accordion-card-border;
-  }
-
-  &:not(:first-child) > .yxt-AccordionCard
-  {
-    border-top: 0;
   }
 }

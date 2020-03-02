@@ -5,6 +5,7 @@ import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
+import CTACollectionComponent from '../ctas/ctacollectioncomponent';
 
 class AccordionCardConfig {
   constructor (config = {}) {
@@ -73,6 +74,12 @@ class AccordionCardConfig {
      * @type {Array<string>}
      */
     this.callsToActionFields = config.callsToActionFields || [];
+    
+    /**
+     * The index of the card.
+     * @type {number}
+     */
+    this._index = config._index || 0;
   }
 }
 
@@ -84,7 +91,7 @@ export default class AccordionCardComponent extends Component {
      * Whether the accordion is collapsed or not.
      * @type {boolean}
      */
-    this.isExpanded = false;
+    this.isExpanded = this._config.expanded;
   }
 
   setState (data) {
@@ -109,9 +116,10 @@ export default class AccordionCardComponent extends Component {
    */
   handleClick (toggleEl, iconEl, contentEl, accordionEl) {
     this.isExpanded = !this.isExpanded;
-    iconEl.classList.toggle('yxt-AccordionCard-icon-expanded');
-    contentEl.classList.toggle('yxt-AccordionCard-content-expanded');
-    accordionEl.classList.toggle('yxt-AccordionCard-expanded');
+    iconEl.classList.toggle('yxt-AccordionCard-icon--expanded');
+    contentEl.classList.toggle('yxt-AccordionCard-content--expanded');
+    contentEl.classList.remove('yxt-AccordionCard--initExpanded');
+    accordionEl.classList.toggle('yxt-AccordionCard--expanded');
 
     contentEl.style.height = `${this.isExpanded ? contentEl.scrollHeight : 0}px`;
 
@@ -126,10 +134,10 @@ export default class AccordionCardComponent extends Component {
   }
 
   onMount () {
-    const toggleEl = DOM.query(this._container, '.yxt-AccordionCard-toggle');
-    const iconEl = DOM.query(this._container, '.yxt-AccordionCard-icon');
-    const contentEl = DOM.query(this._container, '.yxt-AccordionCard-content');
-    const accordionEl = DOM.query(this._container, '.yxt-AccordionCard');
+    const toggleEl = DOM.query(this._container, '.js-yxt-AccordionCard-toggle');
+    const iconEl = DOM.query(this._container, '.js-yxt-AccordionCard-icon');
+    const contentEl = DOM.query(this._container, '.js-yxt-AccordionCard-content');
+    const accordionEl = DOM.query(this._container, '.js-yxt-AccordionCard');
 
     DOM.on(toggleEl, 'click', () => this.handleClick(toggleEl, iconEl, contentEl, accordionEl));
   }
@@ -138,11 +146,15 @@ export default class AccordionCardComponent extends Component {
    * For passing functions to the config of children {@link CTACollectionComponent}
    */
   addChild (data, type, opts) {
-    return super.addChild(data, type, {
-      callsToAction: this._config.callsToAction,
-      callsToActionFields: this._config.callsToActionFields,
-      ...opts
-    });
+    if (type === CTACollectionComponent.type) {
+      return super.addChild(data, type, {
+        callsToAction: this._config.callsToAction,
+        callsToActionFields: this._config.callsToActionFields,
+        _context: 'AccordionCard',
+        ...opts
+      });
+    }
+    return super.addChild(data, type, opts);
   }
 
   static get type () {

@@ -47,6 +47,12 @@ class CardConfig {
      * @type {Array<string>}
      */
     this.callsToActionFields = config.callsToActionFields || [];
+
+    /**
+     * The index of the card.
+     * @type {number}
+     */
+    this._index = config._index || 0;
   }
 }
 
@@ -76,6 +82,7 @@ export default class CardComponent extends Component {
       callsToAction: this._config.callsToAction,
       callsToActionFields: this._config.callsToActionFields,
       verticalKey: this._config.verticalKey,
+      _index: this._config._index,
       ...opts
     });
   }
@@ -91,15 +98,13 @@ export default class CardComponent extends Component {
     if (typeof cardMappings === 'function') {
       cardMappings = cardMappings(result);
     }
-    if (typeof cardMappings === 'object') {
-      Object.entries(cardMappings).forEach(([attribute, value]) => {
-        if (typeof value === 'function') {
-          config[attribute] = value(result);
-        } else {
-          config[attribute] = value;
-        }
-      });
-    }
+    Object.entries(cardMappings).forEach(([attribute, value]) => {
+      if (typeof value === 'function') {
+        config[attribute] = value(result);
+      } else {
+        config[attribute] = value;
+      }
+    });
     return config;
   }
 
