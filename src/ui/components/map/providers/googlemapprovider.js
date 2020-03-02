@@ -34,17 +34,22 @@ export default class GoogleMapProvider extends MapProvider {
       return;
     }
 
-    let script = DOM.createEl('script', {
-      id: 'yext-map-js',
-      onload: () => {
-        this._isLoaded = true;
-        this._onLoaded();
-      },
-      async: true,
-      src: `https://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
-    });
+    // Inject the google maps script, wrapping it in a Promise for cleanliness
+    new Promise((resolve, reject) => {
+      let script = DOM.createEl('script', {
+        id: 'yext-map-js',
+        onload: resolve,
+        onerror: reject,
+        async: true,
+        src: `https://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
+      });
 
-    DOM.append('body', script);
+      DOM.append('body', script);
+    }).then(function (response) {
+      // TODO(agrow) Implement error handling here (e.g. request could fail)
+      this._isLoaded = true;
+      this._onLoaded();
+    });
   }
 
   generateCredentials () {
