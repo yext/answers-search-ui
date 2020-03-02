@@ -25,23 +25,38 @@ export default class GoogleMapProvider extends MapProvider {
     }
   }
 
-  loadJS (onLoad) {
-    if (DOM.query('#yext-map-js')) {
-      this._isLoaded = true;
-      if (typeof onLoad === 'function') {
-        onLoad();
+  loadJS () {
+    const self = this;
+    const onLoad = function () {
+      if (typeof self._onLoaded === 'function') {
+        self._onLoaded();
       }
+    };
+
+    if (typeof google !== 'undefined') {
+      self._isLoaded = true;
+      onLoad();
       return;
     }
 
-    let script = DOM.createEl('script', {
+    let script = DOM.query('#yext-map-js');
+    if (script) {
+      const onLoadFunc = script.onload;
+      script.onload = function () {
+        onLoadFunc();
+        onLoad();
+      };
+      return;
+    }
+
+    script = DOM.createEl('script', {
       id: 'yext-map-js',
       onload: () => {
-        this._isLoaded = true;
-        this._onLoaded();
+        self._isLoaded = true;
+        onLoad();
       },
       async: true,
-      src: `https://maps.googleapis.com/maps/api/js?${this.generateCredentials()}`
+      src: `https://maps.googleapis.com/maps/api/js?${self.generateCredentials()}`
     });
 
     DOM.append('body', script);
