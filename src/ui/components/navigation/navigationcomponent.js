@@ -1,6 +1,6 @@
 /** @module NavigationComponent */
 
-/* global Element, Node */
+/* global Node */
 
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
