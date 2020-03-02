@@ -1,6 +1,8 @@
 /** @module HttpRequester */
 
-/* global fetch */
+/* global fetch, XMLHttpRequest, ActiveXObject */
+
+import { fetch as fetchPolyfill } from 'whatwg-fetch';
 
 /**
  * Types of HTTP requests
@@ -52,6 +54,15 @@ export default class HttpRequester {
       'credentials': 'include'
     }, opts);
 
+    return this._fetch(url, reqArgs);
+  }
+
+  // TODO (agrow) investigate removing this
+  // Use imported fetchPolyfill if it does not already exist on window
+  _fetch (url, reqArgs) {
+    if (!window.fetch) {
+      return fetchPolyfill(url, reqArgs);
+    }
     return fetch(url, reqArgs);
   }
 
@@ -64,7 +75,34 @@ export default class HttpRequester {
    * @return {boolean} true if the request is successfully queued
    */
   beacon (url, data) {
-    return navigator.sendBeacon(url, JSON.stringify(data));
+    return this._sendBeacon(url, JSON.stringify(data));
+  }
+
+  // TODO (agrow) investigate removing this
+  // Navigator.sendBeacon polyfill
+  // Combination of the compact Financial Times polyfill:
+  // https://github.com/Financial-Times/polyfill-library/blob/master/polyfills/navigator/sendBeacon/polyfill.js
+  // with the async-by-default behavior of Miguel Mota's polyfill:
+  // https://github.com/miguelmota/Navigator.sendBeacon/blob/master/sendbeacon.js
+  _sendBeacon (url, data) {
+    if (window.navigator && window.navigator.sendBeacon) {
+      return window.navigator.sendBeacon(url, data);
+    }
+
+    var event = window.event && window.event.type;
+    var sync = event === 'unload' || event === 'beforeunload';
+    var xhr = ('XMLHttpRequest' in window) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    xhr.open('POST', url, !sync);
+    xhr.setRequestHeader('Accept', '*/*');
+    if (typeof data === 'string') {
+      xhr.setRequestHeader('Content-Type', 'text/plain;charset=UTF-8');
+    } else if (Object.prototype.toString.call(data) === '[object Blob]') {
+      if (data.type) {
+        xhr.setRequestHeader('Content-Type', data.type);
+      }
+    }
+    xhr.send(data);
+    return true;
   }
 
   encodeParams (url, params) {

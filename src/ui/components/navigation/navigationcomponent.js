@@ -1,5 +1,7 @@
 /** @module NavigationComponent */
 
+/* global Node */
+
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
@@ -240,7 +242,7 @@ export default class NavigationComponent extends Component {
       if (lastLink === null) {
         return;
       }
-      collapsedLinks.prepend(lastLink);
+      this._prepend(collapsedLinks, lastLink);
 
       if (moreButton.classList.contains('yxt-Nav-item--more')) {
         moreButton.classList.remove('yxt-Nav-item--more');
@@ -290,7 +292,7 @@ export default class NavigationComponent extends Component {
   }
 
   checkOutsideClick (e) {
-    if (e.target.closest('.yxt-Nav-container')) {
+    if (this._closest(e.target, '.yxt-Nav-container')) {
       return;
     }
 
@@ -336,6 +338,36 @@ export default class NavigationComponent extends Component {
       showCollapse: this.shouldCollapse(),
       ariaLabel: this._ariaLabel
     });
+  }
+
+  // TODO (agrow) investigate removing this
+  // ParentNode.prepend polyfill
+  // https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend#Polyfill
+  _prepend (collapsedLinks, lastLink) {
+    if (!collapsedLinks.hasOwnProperty('prepend')) {
+      let docFrag = document.createDocumentFragment();
+      let isNode = lastLink instanceof Node;
+      docFrag.appendChild(isNode ? lastLink : document.createTextNode(String(lastLink)));
+
+      collapsedLinks.insertBefore(docFrag, collapsedLinks.firstChild);
+      return;
+    }
+
+    collapsedLinks.prepend(lastLink);
+  }
+
+  // TODO (agrow) investigate removing this
+  // Adapted from Element.closest polyfill
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
+  _closest (el, closestElSelector) {
+    if (!el.hasOwnProperty('closest')) {
+      do {
+        if (DOM.matches(el, closestElSelector)) return el;
+        el = el.parentElement || el.parentNode;
+      } while (el !== null && el.nodeType === 1);
+      return null;
+    }
+    return el.closest(closestElSelector);
   }
 
   getUrlParams () {
