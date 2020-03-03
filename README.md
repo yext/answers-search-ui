@@ -486,8 +486,8 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     // Optional: The type of card, currently only 'Standard' is supported, defaults to 'Standard'
     cardType: 'Standard',
-    // Required, see [Template Mappings](#Template-Mappings) for more details
-    templateMappings: () => {},
+    // Required, see [Card Mappings](#Card-Mappings) for more details
+    cardMappings: () => {},
     // At least one of callsToAction and callsToActionFields are required,
     // callsToActionFields takes precendence over callsToAction.
     // see [Calls To Action](#Calls-To-Action) and [Calls To Action Fields](#Calls-To-Action-Fields)
@@ -503,7 +503,9 @@ ANSWERS.addComponent('VerticalResults', {
     // To link to external pages like yext.com
     url: 'https://yext.com',
     // Whether to open the link in a new window, defaults to false
-    newWindow: false
+    newWindow: false,
+    // Optional: text for screen readers in the footer, will only be visible by screen readers
+    screenReaderText: "I will only be read by screen readers",
   }
 })
 ```
@@ -512,7 +514,7 @@ ANSWERS.addComponent('VerticalResults', {
 
 Cards are used in Universal/Vertical Results for configuring the UI for a result on a per-item basis.
 
-Cards take in a templateMappings attribute, which contains configuration for the card, and a callsToAction
+Cards take in a cardMappings attribute, which contains configuration for the card, and a callsToAction
 attribute, which contains config for any callToAction buttons in the card.
 
 callsToAction config is common throughout all cards, whereas different cards such as Standard vs BigImage
@@ -538,7 +540,7 @@ Note: A CTA without both a label and icon will not be rendered.
 const callsToAction = [{
   // Label below the CTA icon, default null
   label: 'cta label',
-  // Icon name for the CTA that is one of the SDK icons
+  // Icon name for the CTA that is one of the SDK icons, default to undefined (no icon)
   icon: 'star',
   // Click through url for the icon and label
   url: 'https://yext.com',
@@ -557,8 +559,9 @@ const callsToAction = [{
   analyticsEventType: 'CTA_CLICK',
   // Whether the click should open in a new window, defaults to false
   newWindow: false,
-  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. defaults to null
-  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "123123", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. Defaults to undefined, meaning
+  // no event will be fired
+  eventOptions: `{ "verticalKey": 'people', "entityId": 12312312, "searcher":"VERTICAL"}`
 }]
 ```
 
@@ -630,20 +633,20 @@ ANSWERS.addComponent('VerticalResults', {
 })
 ```
 
-## Template Mappings
+## Card Mappings
 
-TemplateMappings define how a card's attributes, such as title and details, will be rendered.
-They can be configured either through a function that returns a templateMappings object
-or a static templateMappings object.
+CardMappings define how a card's attributes, such as title and details, will be rendered.
+They can be configured either through a function that returns a cardMappings object
+or a static cardMappings object.
 
-Each attribute of a templateMappings object is also either a function or a static value.
+Each attribute of a cardMappings object is also either a function or a static value.
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
   /* ...other vertical results config... */
   card: {
     /* ...other card config...*/
-    templateMappings: item => ({
+    cardMappings: item => ({
       title: item._raw.name,
       subtitle: `Department: ${item._raw.name} `,
       details: item._raw.description,
@@ -661,10 +664,10 @@ ANSWERS.addComponent('VerticalResults', {
 
 ## Standard Card
 
-The template mapping for a standard card has these attributes
+The card mapping for a standard card has these attributes
 
 ```js
-const templateMappings = {
+const cardMappings = {
   // Title for the card, defaults to the name of the entity
   title: item.title,
   // Subtitle, defaults to null
@@ -683,6 +686,11 @@ const templateMappings = {
   showLessText: "put it back",
   // Whether to open the title link in a new window, defaults to false
   newWindow: true,
+  // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
+  // defaults to false
+  showOrdinal: false,
+  // A tag to display on top of an image, always overlays the image, default no tag
+  tagLabel: 'On Sale!'
 }
 ```
 

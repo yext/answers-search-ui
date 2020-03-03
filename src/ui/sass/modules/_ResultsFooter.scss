@@ -1,0 +1,29 @@
+.yxt-ResultsFooter {
+  $results-footer-svg-width: 1.875 * $base-spacing !default;
+  $results-footer-svg-height: 1.875 * $base-spacing !default;
+  $results-footer-align: center !default;
+  $results-footer-margin-top: 2 * $base-spacing-sm !default;
+  $results-footer-margin-bottom: 2 * $base-spacing-sm !default;
+  $results-footer-color: $color-text-primary !default;
+  $results-footer-image-fit: contain !default;
+  $results-footer-image-border-radius: $base-spacing/6 !default;
+
+  text-align: $results-footer-align;
+  margin-top: $results-footer-margin-top;
+  margin-bottom: $results-footer-margin-bottom;
+  display: block;
+  color: $results-footer-color;
+  height: $results-footer-svg-height;
+
+  img {
+    height: 100%;
+    object-fit: $results-footer-image-fit;
+    border-radius: $results-footer-image-border-radius;
+  }
+
+  .Icon svg {
+    width: $results-footer-svg-width;
+    height: $results-footer-svg-height;
+    color: $results-footer-color;
+  }
+}
