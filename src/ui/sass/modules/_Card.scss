@@ -22,3 +22,24 @@
     }
   }
 }
+
+.yxt-Results-items {
+  > .yxt-Card {
+    flex-basis: 100%;
+    flex-grow: 1;
+  }
+
+  @media (min-width: $container-desktop-base) {
+    &--2 > .yxt-Card {
+      flex-basis: 50%;
+    }
+  
+    &--3 > .yxt-Card {
+      flex-basis: 33.3%;
+    }
+  
+    &--4 > .yxt-Card {
+      flex-basis: 25%;
+    }
+  }
+}

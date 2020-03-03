@@ -145,25 +145,6 @@
     display: flex;
     flex-flow: row wrap;
     margin-right: -1 * $results-cards-margin;
-
-    & > div {
-      flex-basis: 100%;
-      flex-grow: 1;
-    }
-
-    @media (min-width: $container-desktop-base) {
-      &--2 > div {
-        flex-basis: 50%;
-      }
-
-      &--3 > div {
-        flex-basis: 33.3%;
-      }
-
-      &--4 > div {
-        flex-basis: 25%;
-      }
-    }
   }
 
   &-placeholder {
