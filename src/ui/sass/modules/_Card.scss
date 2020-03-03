@@ -3,18 +3,21 @@
 
   display: flex;
   flex-direction: column;
-  flex-grow: 1;
-  min-width: 210px;
-  margin-right: $cards-margin;
-  margin-bottom: $cards-margin;
-  border: $border-default;
 
-  @media (max-width: $breakpoint-mobile-max) 
-  {
-    margin-bottom: 0;
+  &-child {
+    margin-right: $cards-margin;
+    margin-bottom: $cards-margin;
+    flex-grow: 1;
+    min-width: 210px;
+    border: $border-default;
 
-    & + &
-    {
+    @media (max-width: $container-desktop-base) {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: $container-desktop-base) {
+    & + & .yxt-Card-child{
       border-top: 0;
     }
   }

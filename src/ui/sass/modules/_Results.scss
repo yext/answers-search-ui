@@ -146,22 +146,22 @@
     flex-flow: row wrap;
     margin-right: -1 * $results-cards-margin;
 
-    @media (min-width: $container-desktop-base) {
-      & > div {
-        display: flex;
-        flex-grow: 1;
-      }
+    & > div {
+      flex-basis: 100%;
+      flex-grow: 1;
+    }
 
+    @media (min-width: $container-desktop-base) {
       &-2 > div {
-        flex-basis: 49%;
+        flex-basis: 50%;
       }
 
       &-3 > div {
-        flex-basis: 32%;
+        flex-basis: 33.3%;
       }
 
       &-4 > div {
-        flex-basis: 24%;
+        flex-basis: 25%;
       }
     }
   }

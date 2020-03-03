@@ -8,6 +8,18 @@ import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import DOM from '../../dom/dom';
 
+/**
+ * Breakpoint for when somebody is on desktop, prescribed by Jeremy.
+ * @type {number}
+ */
+const DESKTOP_BREAKPOINT = 400;
+
+/**
+ * Minimum width for the card.
+ * @type {number}
+ */
+const CARD_MIN_WIDTH = 210;
+
 class VerticalResultsConfig {
   constructor (config = {}) {
     Object.assign(this, config);
@@ -74,7 +86,8 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array<Result>}
      */
     this.results = [];
-    this.placeholderCount = 0;
+    this.numColumns = 1;
+    this.handleResize = this.handleResize.bind(this);
   }
 
   mount () {
@@ -84,40 +97,56 @@ export default class VerticalResultsComponent extends Component {
     return this;
   }
 
-  onMount () {
-    const placeholderCount = this.getPlaceholderCount();
-    if (this.placeholderCount !== placeholderCount) {
-      this.placeholderCount = placeholderCount;
-      this.setState(this._state.get());
-    }
-  }
-
   static get duplicatesAllowed () {
     return true;
   }
 
-  getPlaceholderCount () {
-    const resultsCount = this.results.length;
-    if (this._config.maxNumberOfColumns <= 1 || !resultsCount) {
-      return 0;
+  /**
+   * Gets the number of columns needed, capped at the max number of columns
+   * set in the config, and also the number of results.
+   * @returns {number}
+   */
+  getNumColumns () {
+    if (this._config.maxNumberOfColumns <= 1 || !this.results.length) {
+      return 1;
     }
-    // When there is only a single row of cards, it's undetermined without querying the dom
-    // whether placeholders are required or not. If the user resizes
-    // their page after this initialization the placeholders will not be updated, but
-    // adding a listener on window resize is incredibly laggy and an uncommon use case.
-    if (resultsCount < this._config.maxNumberOfColumns) {
-      const itemsEl = DOM.query(this._container, '.yxt-Results-items');
-      const cardEl = DOM.query(this._container, '[data-component=Card]');
-      if (!itemsEl || !cardEl) {
-        return 0;
+    const totalWidth = this._container.scrollWidth;
+    if (totalWidth <= DESKTOP_BREAKPOINT) {
+      return 1;
+    }
+    const numColumns = Math.floor(totalWidth / CARD_MIN_WIDTH);
+    return Math.min(numColumns, this._config.maxNumberOfColumns, this.results.length);
+  }
+
+  handleResize () {
+    if (this._handleResizeTimer) {
+      clearTimeout(this._handleResizeTimer);
+    }
+
+    this._handleResizeTimer = setTimeout(() => {
+      const currentNumColumns = this.getNumColumns();
+      if (this.numColumns !== currentNumColumns) {
+        this.numColumns = currentNumColumns;
+        const resultsEl = DOM.query(this._container, '.yxt-Results-items');
+        resultsEl.classList.remove('yxt-Results-items-1');
+        resultsEl.classList.remove('yxt-Results-items-2');
+        resultsEl.classList.remove('yxt-Results-items-3');
+        resultsEl.classList.remove('yxt-Results-items-4');
+        resultsEl.classList.add(`yxt-Results-items-${currentNumColumns}`);
       }
-      const totalWidth = itemsEl.scrollWidth + 32;
-      const cardWidth = cardEl.scrollWidth;
-      const numColumns = Math.floor(totalWidth / cardWidth);
-      const numPlaceholders = (numColumns - resultsCount % numColumns) % numColumns;
-      return numPlaceholders;
+    }, 100);
+  }
+
+  onCreate () {
+    if (this._config.maxNumberOfColumns > 1) {
+      window.addEventListener('resize', this.handleResize);
     }
-    return this._config.maxNumberOfColumns;
+  }
+
+  onDestroy () {
+    if (this._config.maxNumberOfColumns > 1) {
+      window.removeEventListener('resize', this.handleResize);
+    }
   }
 
   setState (data, val) {
@@ -126,6 +155,7 @@ export default class VerticalResultsComponent extends Component {
      */
     this.results = data.results || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    this.numColumns = this.getNumColumns();
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -136,7 +166,8 @@ export default class VerticalResultsComponent extends Component {
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       showNoResults: this.results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
-      placeholders: new Array(this.placeholderCount)
+      placeholders: new Array(this._config.maxNumberOfColumns - 1),
+      numColumns: this.numColumns
     }), val);
   }
 
