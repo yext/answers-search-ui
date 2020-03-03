@@ -12,11 +12,10 @@
   
 
   {{#if _config.image}}
-    <img src="{{_config.image}}" {{#if _config.altText}} alt="{{_config.altText}}" {{/if}}>
+    <img src="{{_config.image}}">
   {{/if}}
   {{#if _config.icon}}
-    <span data-component="IconComponent" data-opts='{ "iconName": "{{_config.icon}}" }'
-    {{#if _config.altText}} alt="{{_config.altText}}" {{/if}}></span>
+    <span data-component="IconComponent" data-opts='{ "iconName": "{{_config.icon}}" }'></span>
   {{/if}}
 
   {{#if _config.url}} 

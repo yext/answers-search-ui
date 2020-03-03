@@ -40,12 +40,6 @@ export default class FooterComponent extends Component {
     }
 
     /**
-     * Alt text for the footer image.
-     * @type {string}
-     */
-    this._config.altText = config.altText;
-
-    /**
      * Screen reader text that will only be displayed to screen readers.
      * @type {string}
      */

@@ -506,8 +506,6 @@ ANSWERS.addComponent('VerticalResults', {
     newWindow: false,
     // Optional: text for screen readers in the footer, will only be visible by screen readers
     screenReaderText: "I will only be read by screen readers",
-    // Optional: alt text for the footer image
-    altText: "If image doesn't load I will appear"
   }
 })
 ```
@@ -561,10 +559,9 @@ const callsToAction = [{
   analyticsEventType: 'CTA_CLICK',
   // Whether the click should open in a new window, defaults to false
   newWindow: false,
-  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. defaults to the below,
-  // Where a value in double brackets like {{VERTICAL_KEY_OF_SEARCH}} means the vertical key of the search, like 'Location',
-  // Not the literal string {{VERTICAL_KEY_OF_SEARCH}}
-  eventOptions: `{ "verticalKey": {{VERTICAL KEY OF SEARCH IF NOT UNIVERSAL}}, "entityId": {{ENTITY ID}}, "searcher":"VERTICAL"}`
+  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. Defaults to undefined, meaning
+  // no event will be fired
+  eventOptions: `{ "verticalKey": 'people', "entityId": 12312312, "searcher":"VERTICAL"}`
 }]
 ```
 
