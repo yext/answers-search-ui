@@ -41,6 +41,12 @@ class CardConfig {
      * @type {Array<string>}
      */
     this.callsToActionFields = config.callsToActionFields || [];
+
+    /**
+     * Vertical key for the search.
+     * @type {string}
+     */
+    this.verticalKey = config.verticalKey;
   }
 }
 
@@ -69,6 +75,7 @@ export default class CardComponent extends Component {
       cardMappings: this._config.cardMappings,
       callsToAction: this._config.callsToAction,
       callsToActionFields: this._config.callsToActionFields,
+      verticalKey: this._config.verticalKey,
       ...opts
     });
   }

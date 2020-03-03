@@ -123,6 +123,12 @@ class StandardCardConfig {
      * @type {boolean}
      */
     this.showOrdinal = this.showOrdinal || false;
+
+    /**
+     * Vertical key for the search.
+     * @type {string}
+     */
+    this.verticalKey = config.verticalKey;
   }
 }
 
@@ -162,6 +168,7 @@ export default class StandardCardComponent extends Component {
     return super.addChild(data, type, {
       callsToAction: this._config.callsToAction,
       callsToActionFields: this._config.callsToActionFields,
+      verticalKey: this._config.verticalKey,
       ...opts
     });
   }

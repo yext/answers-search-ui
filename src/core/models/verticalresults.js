@@ -4,8 +4,14 @@ import Section from './section';
 import SearchStates from '../storage/searchstates';
 
 export default class VerticalResults {
-  constructor (data = {}) {
+  constructor (data = {}, verticalKey) {
     Object.assign(this, { searchState: SearchStates.SEARCH_COMPLETE }, data);
+
+    /**
+     * Vertical key for the search. Called verticalConfigId to be consistent with {@link Section}
+     * @type {string}
+     */
+    this.verticalConfigId = verticalKey;
     Object.freeze(this);
   }
 
@@ -25,8 +31,8 @@ export default class VerticalResults {
    * @param {Object} response The server response
    * @param {Object.<string, function>} formatters The field formatters to use
    */
-  static from (response, formatters) {
-    return new VerticalResults(Section.from(response, null, formatters));
+  static from (response, formatters, verticalKey) {
+    return new VerticalResults(Section.from(response, null, formatters), verticalKey);
   }
 
   /**

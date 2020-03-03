@@ -31,6 +31,17 @@ export default class CTACollectionComponent extends Component {
      * @type {Array<Object>}
      */
     this.callsToAction = this.resolveCTAMapping(this._config.result, callsToActionFields, ...callsToAction);
+
+    this.callsToAction = this.callsToAction.filter(cta => cta.url && cta.label).map(cta => ({
+      eventOptions: this.defaultEventOptions(this._config.result),
+      ...cta
+    }));
+
+    /**
+     * Vertical key for the search.
+     * @type {string}
+     */
+    this.verticalKey = config.verticalKey;
   }
 
   /**
@@ -67,6 +78,17 @@ export default class CTACollectionComponent extends Component {
         return ctaObject;
       }
     });
+  }
+
+  defaultEventOptions (result) {
+    const eventOptions = {
+      verticalKey: this._config.verticalKey,
+      searcher: 'VERTICAL'
+    };
+    if (result._raw.id) {
+      eventOptions.entityId = result._raw.id;
+    }
+    return eventOptions;
   }
 
   setState (data) {

@@ -88,6 +88,12 @@ export default class VerticalResultsComponent extends Component {
     this.results = [];
     this.numColumns = 1;
     this.handleResize = this.handleResize.bind(this);
+
+    /**
+     * Vertical key for the results.
+     * @type {string}
+     */
+    this.verticalKey = this._config.verticalConfigId;
   }
 
   mount () {
@@ -154,6 +160,7 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array<Result>}
      */
     this.results = data.results || [];
+    this.verticalKey = data.verticalConfigId;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     this.numColumns = this.getNumColumns();
     return super.setState(Object.assign({ results: [] }, data, {
@@ -204,10 +211,10 @@ export default class VerticalResultsComponent extends Component {
     } else if (type === CardComponent.type) {
       const newOpts = {
         ...this._config.card,
-        verticalConfigId: this._config.verticalConfigId,
         isUniversal: this._config.isUniversal,
         template: this._config.itemTemplate,
         render: this._config.renderItem,
+        verticalKey: this.verticalKey,
         ...opts
       };
       const index = opts.index;

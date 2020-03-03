@@ -122,7 +122,7 @@ export default class Core {
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS)
       })
-      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters))
+      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
