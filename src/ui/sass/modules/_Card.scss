@@ -1,0 +1,45 @@
+.yxt-Card {
+  $cards-margin: $base-spacing / 2 !default;
+
+  display: flex;
+  flex-direction: column;
+
+  &-child {
+    margin-right: $cards-margin;
+    margin-bottom: $cards-margin;
+    flex-grow: 1;
+    min-width: 210px;
+    border: $border-default;
+
+    @media (max-width: $container-desktop-base) {
+      margin-bottom: 0;
+    }
+  }
+
+  @media (max-width: $container-desktop-base) {
+    & + & .yxt-Card-child{
+      border-top: 0;
+    }
+  }
+}
+
+.yxt-Results-items {
+  > .yxt-Card {
+    flex-basis: 100%;
+    flex-grow: 1;
+  }
+
+  @media (min-width: $container-desktop-base) {
+    &--2 > .yxt-Card {
+      flex-basis: 50%;
+    }
+  
+    &--3 > .yxt-Card {
+      flex-basis: 33.3%;
+    }
+  
+    &--4 > .yxt-Card {
+      flex-basis: 25%;
+    }
+  }
+}

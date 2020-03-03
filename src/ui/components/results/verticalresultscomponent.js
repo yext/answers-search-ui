@@ -6,6 +6,19 @@ import MapComponent from '../map/mapcomponent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
+import DOM from '../../dom/dom';
+
+/**
+ * Breakpoint for when somebody is on desktop, prescribed by Jeremy.
+ * @type {number}
+ */
+const DESKTOP_BREAKPOINT = 400;
+
+/**
+ * Minimum width for the card.
+ * @type {number}
+ */
+const CARD_MIN_WIDTH = 210;
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -69,6 +82,12 @@ export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new VerticalResultsConfig(config), systemConfig);
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
+    /**
+     * @type {Array<Result>}
+     */
+    this.results = [];
+    this.numColumns = 1;
+    this.handleResize = this.handleResize.bind(this);
   }
 
   mount () {
@@ -82,13 +101,61 @@ export default class VerticalResultsComponent extends Component {
     return true;
   }
 
+  /**
+   * Gets the number of columns needed, capped at the max number of columns
+   * set in the config, and also the number of results.
+   * @returns {number}
+   */
+  getNumColumns () {
+    if (this._config.maxNumberOfColumns <= 1 || !this.results.length) {
+      return 1;
+    }
+    const totalWidth = this._container.scrollWidth;
+    if (totalWidth <= DESKTOP_BREAKPOINT) {
+      return 1;
+    }
+    const numColumns = Math.floor(totalWidth / CARD_MIN_WIDTH);
+    return Math.min(numColumns, this._config.maxNumberOfColumns, this.results.length);
+  }
+
+  handleResize () {
+    if (this._handleResizeTimer) {
+      clearTimeout(this._handleResizeTimer);
+    }
+
+    this._handleResizeTimer = setTimeout(() => {
+      const currentNumColumns = this.getNumColumns();
+      if (this.numColumns !== currentNumColumns) {
+        this.numColumns = currentNumColumns;
+        const resultsEl = DOM.query(this._container, '.yxt-Results-items');
+        resultsEl.classList.remove('yxt-Results-items--1');
+        resultsEl.classList.remove('yxt-Results-items--2');
+        resultsEl.classList.remove('yxt-Results-items--3');
+        resultsEl.classList.remove('yxt-Results-items--4');
+        resultsEl.classList.add(`yxt-Results-items--${currentNumColumns}`);
+      }
+    }, 100);
+  }
+
+  onCreate () {
+    if (this._config.maxNumberOfColumns > 1) {
+      window.addEventListener('resize', this.handleResize);
+    }
+  }
+
+  onDestroy () {
+    if (this._config.maxNumberOfColumns > 1) {
+      window.removeEventListener('resize', this.handleResize);
+    }
+  }
+
   setState (data, val) {
     /**
      * @type {Array<Result>}
      */
-    const results = data.results || [];
-    const numColumns = Math.min(results.length || 1, this._config.maxNumberOfColumns);
+    this.results = data.results || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    this.numColumns = this.getNumColumns();
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -97,9 +164,10 @@ export default class VerticalResultsComponent extends Component {
       mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
-      showNoResults: results.length === 0,
+      showNoResults: this.results.length === 0,
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
-      numColumns
+      placeholders: new Array(this._config.maxNumberOfColumns - 1),
+      numColumns: this.numColumns
     }), val);
   }
 
@@ -142,7 +210,8 @@ export default class VerticalResultsComponent extends Component {
         render: this._config.renderItem,
         ...opts
       };
-      return super.addChild(data, type, newOpts);
+      const index = opts.index;
+      return super.addChild(this.results[index], type, newOpts);
     }
     return super.addChild(data, type, opts);
   }

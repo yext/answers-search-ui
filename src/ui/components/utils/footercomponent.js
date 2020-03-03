@@ -38,6 +38,12 @@ export default class FooterComponent extends Component {
        */
       this._config.image = logo;
     }
+
+    /**
+     * Screen reader text that will only be displayed to screen readers.
+     * @type {string}
+     */
+    this._config.screenReaderText = config.screenReaderText;
   }
 
   static get duplicatesAllowed () {
