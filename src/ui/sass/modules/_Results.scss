@@ -152,15 +152,15 @@
     }
 
     @media (min-width: $container-desktop-base) {
-      &-2 > div {
+      &--2 > div {
         flex-basis: 50%;
       }
 
-      &-3 > div {
+      &--3 > div {
         flex-basis: 33.3%;
       }
 
-      &-4 > div {
+      &--4 > div {
         flex-basis: 25%;
       }
     }

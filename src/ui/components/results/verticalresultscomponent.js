@@ -128,11 +128,11 @@ export default class VerticalResultsComponent extends Component {
       if (this.numColumns !== currentNumColumns) {
         this.numColumns = currentNumColumns;
         const resultsEl = DOM.query(this._container, '.yxt-Results-items');
-        resultsEl.classList.remove('yxt-Results-items-1');
-        resultsEl.classList.remove('yxt-Results-items-2');
-        resultsEl.classList.remove('yxt-Results-items-3');
-        resultsEl.classList.remove('yxt-Results-items-4');
-        resultsEl.classList.add(`yxt-Results-items-${currentNumColumns}`);
+        resultsEl.classList.remove('yxt-Results-items--1');
+        resultsEl.classList.remove('yxt-Results-items--2');
+        resultsEl.classList.remove('yxt-Results-items--3');
+        resultsEl.classList.remove('yxt-Results-items--4');
+        resultsEl.classList.add(`yxt-Results-items--${currentNumColumns}`);
       }
     }, 100);
   }
