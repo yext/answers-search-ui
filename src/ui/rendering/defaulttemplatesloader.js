@@ -39,7 +39,7 @@ export default class DefaultTemplatesLoader {
 
     // Inject a script to fetch the compiled templates,
     // wrapping it a Promise for cleanliness
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let script = DOM.createEl('script', {
         id: 'yext-answers-templates',
         onload: resolve,
