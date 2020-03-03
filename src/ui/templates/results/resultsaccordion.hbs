@@ -1,0 +1,66 @@
+{{#if isSearchComplete}}
+  {{#if showNoResults}}
+    {{> results/noresults}}
+  {{else}}
+    <section class="yxt-Accordion yxt-Results yxt-Results--{{modifier}}">
+      {{> results/resultssectionheader}}
+      <ul class="yxt-Accordion-list yxt-Results-items"
+          data-prop="results">
+        {{#each results}}
+          <li id="accordion-{{this.id}}"
+              class="yxt-AccordionResult js-yxt-AccordionResult
+                    {{#if this.collapsed}} is-collapsed{{/if}}
+                    {{#if modifier}} yxt-AccordionResult--{{modifier}}{{/if}}">
+            <h3 class="yxt-AccordionResult-title">
+              <button class="yxt-AccordionResult-toggle js-yxt-AccordionResult-toggle"
+                      aria-expanded="{{#if this.collapsed}}false{{else}}true{{/if}}"
+                      aria-controls="#{{this.id}}"
+                      data-entity-id="{{this.id}}">
+                {{this.title}}
+                <div class="yxt-AccordionResult-indicatorWrapper" aria-hidden="true">
+                  <span class="yxt-AccordionResult-indicator"
+                        data-component="IconComponent"
+                        data-opts='{"iconName": "chevron"}'
+                        data-prop="icon"></span>
+                </div>
+              </button>
+            </h3>
+            <div class="yxt-AccordionResult-body js-yxt-AccordionResult-body" id="{{this.id}}">
+              <div class="yxt-AccordionResult-content">
+                <div class="yxt-AccordionResult-details">{{{this.details}}}</div>
+                {{#if this.callsToAction}}
+                  <div class="yxt-AccordionResult-ctasWrapper">
+                    <div class="yxt-AccordionResult-ctas">
+                      {{#each callsToAction}}
+                        {{#if this.url}}
+                          <a class="yxt-AccordionResult-cta"
+                             href="{{this.url}}"
+                             target="{{#if this.target}}{{this.target}}{{else}}_blank{{/if}}"
+                             data-eventtype="{{#if this.eventType}}{{this.eventType}}{{else}}CTA_CLICK{{/if}}"
+                             data-eventoptions='{{this.eventOptions}}'
+                          >
+                            {{#if this.icon}}
+                              <div class="yxt-AccordionResult-ctaIconWrapper">
+                                <span class="yxt-AccordionResult-ctaIcon"
+                                      data-component="IconComponent"
+                                      data-opts='{"iconName": "{{this.icon}}"}'
+                                      data-prop="icon"></span>
+                              </div>
+                            {{/if}}
+                            <span class="yxt-AccordionResult-ctaLabel">
+                              {{{this.label}}}
+                            </span>
+                          </a>
+                        {{/if}}
+                      {{/each}}
+                    </div>
+                  </div>
+                {{/if}}
+              </div>
+            </div>
+          </li>
+        {{/each}}
+      </ul>
+    </section>
+  {{/if}}
+{{/if}}

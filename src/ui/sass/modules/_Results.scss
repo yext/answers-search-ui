@@ -24,24 +24,14 @@
 
   $results-border: $border-default !default;
 
-  $results-footer-svg-width: 1.875 * $base-spacing !default;
-  $results-footer-svg-height: 1.875 * $base-spacing !default;
-  $results-footer-align: center !default;
-  $results-footer-margin-top: 2 * $base-spacing-sm !default;
-  $results-footer-margin-bottom: 2 * $base-spacing-sm !default;
-  $results-footer-color: $color-text-primary !default;
-  $results-footer-image-fit: contain !default;
-  $results-footer-image-border-radius: $base-spacing/6 !default;
+  $results-cards-margin: $base-spacing / 2 !default;
 
   border-bottom: 0;
+  width: 100%;
 
   & + &
   {
     margin-top: $base-spacing;
-  }
-
-  li {
-    border-bottom: $results-border;
   }
 
   &-titleBar
@@ -154,48 +144,11 @@
     list-style: none;
     display: flex;
     flex-flow: row wrap;
-
-    .yxt-Card {
-      min-width: $base-spacing * 24;
-      flex-grow: 1;
-    }
-
-    @media (min-width: $breakpoint-mobile-min) {
-      &-1 .yxt-Card {
-        width: 100%;
-      }
-
-      &-2 .yxt-Card {
-        width: 50%;
-      }
-
-      &-3 .yxt-Card {
-        width: 33.3%;
-      }
-
-      &-4 .yxt-Card {
-        width: 25%;
-      }
-    }  
+    margin-right: -1 * $results-cards-margin;
   }
 
-  &-footer {
-    text-align: $results-footer-align;
-    margin-top: $results-footer-margin-top;
-    margin-bottom: $results-footer-margin-bottom;
-    display: block;
-    color: $results-footer-color;
-    height: $results-footer-svg-height;
-
-    img {
-      height: 100%;
-      object-fit: $results-footer-image-fit;
-      border-radius: $results-footer-image-border-radius;
-    }
-
-    svg {
-      width: $results-footer-svg-width;
-      height: $results-footer-svg-height;
-    }
+  &-placeholder {
+    visibility: hidden;
+    height: 0;
   }
 }

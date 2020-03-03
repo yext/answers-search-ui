@@ -18,7 +18,7 @@ class CTAConfig {
      * CTA icon, maps to a set of icons.
      * @type {string}
      */
-    this.icon = config.icon || 'star';
+    this.icon = config.icon;
 
     /**
      * Click through url for the icon and label
@@ -39,13 +39,14 @@ class CTAConfig {
     this.newWindow = config.newWindow;
 
     /**
-     * The eventOptions needed for the event to fire, passed as a string from templateMappings.
+     * The eventOptions needed for the event to fire, passed as a string or Object
+     * from cardMappings.
      * @type {Object}
      */
     if (typeof config.eventOptions === 'string') {
       this.eventOptions = JSON.parse(config.eventOptions);
     }
-    this.eventOptions = this.eventOptions || {};
+    this.eventOptions = this.eventOptions;
   }
 }
 
@@ -56,7 +57,7 @@ export default class CTAComponent extends Component {
 
   onMount () {
     const el = DOM.query(this._container, `.js-yxt-CTA`);
-    if (el) {
+    if (el && this._config.eventOptions) {
       DOM.on(el, 'click', () => this.reportAnalyticsEvent());
     }
   }
