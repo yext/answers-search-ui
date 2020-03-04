@@ -1,4 +1,4 @@
-/** @module CTAComponent */
+/** @module CTACollectionComponent */
 
 import Component from '../component';
 
@@ -6,11 +6,19 @@ export default class CTACollectionComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
 
+    const data = this._config.data || {};
+
     /**
      * Result data
      * @type {Result}
      */
-    this._config.result = this._config.data || {};
+    this.result = data.result || {};
+
+    /**
+     * Vertical key for the search.
+     * @type {string}
+     */
+    this.verticalKey = data.verticalKey;
 
     /**
      * Either a function that spits out an array of CTA config objects or an array of CTA config objects
@@ -30,18 +38,12 @@ export default class CTACollectionComponent extends Component {
      * The computed calls to action array
      * @type {Array<Object>}
      */
-    this.callsToAction = this.resolveCTAMapping(this._config.result, callsToActionFields, ...callsToAction);
+    this.callsToAction = this.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
 
     this.callsToAction = this.callsToAction.filter(cta => cta.url && cta.label).map(cta => ({
-      eventOptions: this.defaultEventOptions(this._config.result),
+      eventOptions: this.defaultEventOptions(this.result),
       ...cta
     }));
-
-    /**
-     * Vertical key for the search.
-     * @type {string}
-     */
-    this.verticalKey = config.verticalKey;
   }
 
   /**
@@ -82,7 +84,7 @@ export default class CTACollectionComponent extends Component {
 
   defaultEventOptions (result) {
     const eventOptions = {
-      verticalKey: this._config.verticalKey,
+      verticalKey: this.verticalKey,
       searcher: 'VERTICAL'
     };
     if (result._raw.id) {

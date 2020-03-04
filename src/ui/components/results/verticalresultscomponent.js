@@ -214,11 +214,14 @@ export default class VerticalResultsComponent extends Component {
         isUniversal: this._config.isUniversal,
         template: this._config.itemTemplate,
         render: this._config.renderItem,
-        verticalKey: this.verticalKey,
         ...opts
       };
       const index = opts.index;
-      return super.addChild(this.results[index], type, newOpts);
+      const newData = {
+        result: this.results[index],
+        verticalKey: this.verticalKey
+      };
+      return super.addChild(newData, type, newOpts);
     }
     return super.addChild(data, type, opts);
   }

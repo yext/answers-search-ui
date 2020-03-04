@@ -15,13 +15,6 @@ class CardConfig {
     this.cardType = config.cardType || 'Standard';
 
     /**
-     * config.data comes from the data-prop attribute passed in
-     * from the parent component.
-     * @type {Result}
-     */
-    this.result = config.data || {};
-
-    /**
      * Card mappings is a function specified in the config
      * that returns config based on the data passed into card
      * @type {Function}
@@ -41,18 +34,31 @@ class CardConfig {
      * @type {Array<string>}
      */
     this.callsToActionFields = config.callsToActionFields || [];
-
-    /**
-     * Vertical key for the search.
-     * @type {string}
-     */
-    this.verticalKey = config.verticalKey;
   }
 }
 
 export default class CardComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new CardConfig(config), systemConfig);
+
+    /**
+     * config.data comes from the data-prop attribute passed in
+     * from the parent component.
+     * @type {Object}
+     */
+    const data = config.data || {};
+
+    /**
+     * The result data for this card.
+     * @type {Result}
+     */
+    this.result = data.result || {};
+
+    /**
+     * Vertical key for the search.
+     * @type {string}
+     */
+    this.verticalKey = data.verticalKey;
   }
 
   setState (data) {
@@ -65,19 +71,23 @@ export default class CardComponent extends Component {
     }
     return super.setState({
       ...data,
-      result: this._config.result,
+      result: this.result,
       cardType: cardTypes[cardType]
     });
   }
 
   addChild (data, type, opts) {
-    return super.addChild(data, type, {
+    const newData = {
+      verticalKey: this.verticalKey,
+      result: data
+    };
+    const newOpts = {
       cardMappings: this._config.cardMappings,
       callsToAction: this._config.callsToAction,
       callsToActionFields: this._config.callsToActionFields,
-      verticalKey: this._config.verticalKey,
       ...opts
-    });
+    };
+    return super.addChild(newData, type, newOpts);
   }
 
   static get type () {

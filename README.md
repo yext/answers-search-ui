@@ -559,10 +559,10 @@ const callsToAction = [{
   analyticsEventType: 'CTA_CLICK',
   // Whether the click should open in a new window, defaults to false
   newWindow: false,
-  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. defaults to the below,
+  // The eventOptions needed for the event to fire. Either a valid json string or an object. defaults to the below,
   // Where a value in double brackets like {{VERTICAL_KEY_OF_SEARCH}} means the vertical key of the search, like 'Location',
   // Not the literal string {{VERTICAL_KEY_OF_SEARCH}}
-  eventOptions: `{ "verticalKey": {{VERTICAL KEY OF SEARCH IF NOT UNIVERSAL}}, "entityId": {{ENTITY ID}}, "searcher":"VERTICAL"}`
+  eventOptions: `{ "verticalKey": {{VERTICAL KEY OF SEARCH}}, "entityId": {{ENTITY ID}}, "searcher":"VERTICAL"}`
 }]
 ```
 
