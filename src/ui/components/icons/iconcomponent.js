@@ -1,14 +1,12 @@
 /** @module IconComponent */
 
 import Component from '../component';
-import Icons from '../../icons';
 
 export default class IconComponent extends Component {
   /**
    * IconComponent
    * @param opts
    * @param opts.iconName {string}
-   * @param opts.customIcon {string}
    * @param opts.iconUrl {string}
    */
   constructor (opts = {}, systemOpts = {}) {
@@ -21,34 +19,16 @@ export default class IconComponent extends Component {
     this.iconName = opts.iconName || 'default';
 
     /**
-     * the markup for a fully custom icon
-     * @type {*|null}
-     */
-    this.customIcon = opts.customIcon || null;
-    /**
      * the url to a custom image icon
      * @type {null}
      */
     this.iconUrl = opts.iconUrl || null;
-  }
 
-  /**
-   * getter for the image pasted to handlebars
-   * @returns {string}
-   */
-  get image () {
-    if (this.customIcon) {
-      return this.customIcon;
-    }
-
-    if (this.iconUrl) {
-      return `<img src="${this.iconUrl}" alt="" class="Icon-image">`;
-    }
-
-    if (Icons[this.iconName]) {
-      return Icons[this.iconName];
-    }
-    return Icons.default;
+    /**
+     * An additional string to append to the icon's css class. Multiple
+     * classes should be space delimited.
+     */
+    this.classNames = opts.classNames || null;
   }
 
   static get type () {
@@ -80,8 +60,10 @@ export default class IconComponent extends Component {
    */
   setState (data) {
     return super.setState(Object.assign(data, {
-      image: this.image,
-      name: this.iconName ? this.iconName : 'custom'
+      iconUrl: this.iconUrl,
+      iconName: this.iconName,
+      name: this.iconName ? this.iconName : 'custom',
+      classNames: this.classNames
     }));
   }
 }

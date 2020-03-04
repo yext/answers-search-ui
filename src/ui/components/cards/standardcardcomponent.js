@@ -15,19 +15,19 @@ class StandardCardConfig {
     this.result = config.data || {};
 
     /**
-     * The templateMappings attribute of the config
+     * The cardMappings attribute of the config
      * is either a function that returns additional config for
      * a card or an object that is the additional config.
      *
      * This additional config has attributes that are either static values
      * or functions.
      */
-    let templateMappings = config.templateMappings || {};
-    if (typeof templateMappings === 'function') {
-      templateMappings = templateMappings(this.result);
+    let cardMappings = config.cardMappings || {};
+    if (typeof cardMappings === 'function') {
+      cardMappings = cardMappings(this.result);
     }
-    if (typeof templateMappings === 'object') {
-      Object.entries(templateMappings).forEach(([attribute, value]) => {
+    if (typeof cardMappings === 'object') {
+      Object.entries(cardMappings).forEach(([attribute, value]) => {
         if (typeof value === 'function') {
           this[attribute] = value(this.result);
         } else {
@@ -110,6 +110,19 @@ class StandardCardConfig {
      * @type {Function|Array<Object|string>}
      */
     this.callsToAction = this.callsToAction || [];
+
+    /**
+     * An array of cta custom field names, whose custom field data are expected
+     * to contain CTA configuration.
+     * @type {Array<string>}
+     */
+    this.callsToActionFields = this.callsToActionFields || [];
+
+    /**
+     * Whether to show the ordinal of the card in the results.
+     * @type {boolean}
+     */
+    this.showOrdinal = this.showOrdinal || false;
   }
 }
 
@@ -148,6 +161,7 @@ export default class StandardCardComponent extends Component {
   addChild (data, type, opts) {
     return super.addChild(data, type, {
       callsToAction: this._config.callsToAction,
+      callsToActionFields: this._config.callsToActionFields,
       ...opts
     });
   }

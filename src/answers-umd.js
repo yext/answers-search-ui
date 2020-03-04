@@ -3,7 +3,7 @@
 import Core from './core/core';
 
 import {
-  TemplateLoader,
+  DefaultTemplatesLoader,
   Renderers,
   DOM
 } from './ui/index';
@@ -200,11 +200,8 @@ class Answers {
 
     // Templates are currently downloaded separately from the CORE and UI bundle.
     // Future enhancement is to ship the components with templates in a separate bundle.
-    this.templates = new TemplateLoader({
-      templateUrl: parsedConfig.templateUrl
-    }).onLoaded((templates) => {
+    this.templates = new DefaultTemplatesLoader(templates => {
       this.renderer.init(templates);
-
       this._onReady();
     });
 

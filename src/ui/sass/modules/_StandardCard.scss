@@ -1,41 +1,86 @@
 /** @define StandardCard */
 .yxt-StandardCard {
   $standard-card-base-spacing: $base-spacing;
-  $standard-card-base-spacing-sm: $base-spacing;
 
-  $standard-card-image-width: 10 * $standard-card-base-spacing-sm !default;
-  $standard-card-image-height: 10 * $standard-card-base-spacing-sm !default;
+  $standard-card-image-width: 7.5 * $standard-card-base-spacing!default;
+  $standard-card-image-height: 7.5 * $standard-card-base-spacing !default;
   $standard-card-mobile-image-width: 80% !default;
-  $standard-card-mobile-image-height: 12 * $standard-card-base-spacing-sm !default;
+  $standard-card-mobile-image-height: 9 * $standard-card-base-spacing !default;
   $standard-card-image-fit: cover !default;
   $standard-card-image-position: top !default;
 
   $standard-card-link-color: $color-brand-primary !default;
   $standard-card-subtitle-color: $color-text-secondary !default;
-  $standard-card-text-width: 50% !default;
   $standard-card-link-hover-color: $color-brand-hover !default;
 
-  $standard-card-svg-height: $standard-card-base-spacing * 1.125 !default;
-  $standard-card-svg-width: $standard-card-base-spacing * 1.125 !default;
-  $standard-card-svg-height-solo: $standard-card-base-spacing * 1.5 !default;
-  $standard-card-svg-width-solo: $standard-card-base-spacing * 1.5 !default;
-  $standard-card-cta-width: $standard-card-base-spacing * 10 !default;
-  $standard-card-wrapper-width: $standard-card-base-spacing * 10 !default;
+  $standard-card-text-min-width: 8 * $standard-card-base-spacing;
 
+  $standard-card-svg-height: 1.125 * $standard-card-base-spacing !default;
+  $standard-card-svg-width: 1.125 * $standard-card-base-spacing !default;
+  $standard-card-svg-height-solo: 1.5 * $standard-card-base-spacing !default;
+  $standard-card-svg-width-solo: 1.5 * $standard-card-base-spacing !default;
+  $standard-card-cta-width: 8 * $standard-card-base-spacing !default;
+  $standard-card-wrapper-width: 10 * $standard-card-base-spacing !default;
+
+  $standard-card-ordinal-size: $base-spacing !default;
+  $standard-card-ordinal-font-size: $font-size-xs;
+
+  padding: $standard-card-base-spacing;
   display: flex;
-  padding: $standard-card-base-spacing-sm;
-  border: $border-default;
-  margin: $standard-card-base-spacing/2;
-  flex-wrap: wrap;
 
   @include Text();
 
   &-wrapper {
     display: flex;
-    width: 100%;
     flex-wrap: wrap;
-    flex-basis: 0;
+  }
+
+  &-ordinalWrapper {
+    margin-right: $standard-card-base-spacing * 3/4;
+  }
+
+  &-ordinal {
+    padding-top: $standard-card-ordinal-size * 3/16;
+    padding-right: $standard-card-ordinal-size * 1/8;
+    padding-bottom: $standard-card-ordinal-size * 5/16;
+    padding-left: $standard-card-ordinal-size * 1/8;
+    border-radius: $standard-card-ordinal-size;
+    min-width: $standard-card-ordinal-size * 7/8;
+    height: $standard-card-ordinal-size * 5/8;
+    background-color: $color-brand-primary;
+    border: solid black 1px;
+    text-align: center;
+    @include Text(
+      $color: white,
+      $size: $standard-card-ordinal-font-size,
+      $line-height: $line-height-xs,
+      $weight: $font-weight-bold,
+    );
+  }
+
+  &-imgTagWrapper {
+    display: flex;
+    background-color: black;
+    padding-top: $base-spacing-sm/4;
+    padding-bottom: $base-spacing-sm/4;
+    position: relative;
+    bottom: 90%;
+    width: 80%;
+    left: 10%;
+  }
+
+  &-imgTag {
+    text-align: center;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
     flex-grow: 1;
+    word-break: break-word;
+    @include Text(
+      $color: white,
+      $size: $font-size-md,
+      $line-height: 20px,
+      $weight: $font-weight-semibold,
+    );
   }
 
   &-imgWrapper {
@@ -44,7 +89,7 @@
     height: $standard-card-image-height;
     min-height: $standard-card-image-height;
     overflow: hidden;
-    margin-right: $standard-card-base-spacing-sm;
+    margin-right: $standard-card-base-spacing;
 
     img {
       width: 100%;
@@ -54,14 +99,15 @@
     }
   }
 
-  &-textWrapper {
+  &-contentWrapper {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 0;
     flex-grow: 1;
-    flex-basis: $standard-card-text-width;
   }
 
-  &-title {
+  &-title a {
     text-decoration: none;
-    padding-bottom: $standard-card-base-spacing/2;
     @include Text(
       $size: $font-size-md-lg,
       $line-height: $line-height-lg,
@@ -85,8 +131,22 @@
     );
   }
 
+  &-content {
+    display: flex;
+    flex-grow: 1;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+  }
+
   &-details {
-    flex-basis: $standard-card-text-width;
+    min-width: $standard-card-text-min-width;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-bottom: $standard-card-base-spacing / 2;
+    margin-right: $standard-card-base-spacing;
+    flex-basis: 0;
     flex-grow: 1;
     @include Text(
       $size: $font-size-md,
@@ -96,18 +156,22 @@
     );
   }
 
+  &-detailsText {
+    width: 100%;
+  }
+
   &-toggle {
-    margin-top: $standard-card-base-spacing/2;
+    text-align: left;
     @include Text(
       $color: $color-brand-primary,
+      $line-height: $line-height-md,
       $style: italic);
     @include TextButton($padding: 0);
   }
 
   &-ctas {
-    margin-left: $standard-card-base-spacing/2;
-    max-width: $standard-card-cta-width;
-    width: 100%;
+    width: $standard-card-cta-width;
+    align-self: flex-start;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -117,15 +181,15 @@
     display: flex;
     align-items: center;
 
-    .Icon svg {
+    .Icon {
       height: $standard-card-svg-height;
       width: $standard-card-svg-width;
-      margin-right: $standard-card-base-spacing-sm/2;
+      margin-right: $standard-card-base-spacing/2;
     }
   }
 
   .yxt-CTACollection-item {
-    margin-top: $standard-card-base-spacing-sm * 0.75;
+    margin-top: $standard-card-base-spacing * 0.75;
     align-items: center;
 
     &:only-child {
@@ -134,10 +198,11 @@
         flex-direction: column;
       }
 
-      .Icon svg {
+      .Icon {
         height: $standard-card-svg-height-solo;
         width: $standard-card-svg-width-solo;
-        margin-bottom: $standard-card-base-spacing-sm/2;
+        margin-bottom: $standard-card-base-spacing/2;
+        margin-right: 0;
       }
     }
   }

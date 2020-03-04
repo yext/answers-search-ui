@@ -67,7 +67,6 @@ Below is a list of configuration options that can be used during initialization.
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | onStateChange | function | Invoked when the sate changes | optional |
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | optional  |
-| templateUrl  | string     | Use precompiled template hosted by you       | optional  |
 | templateBundle  | object     | Provide the precompiled templates      | optional  |
 | search | object | Search specific settings, see [search configuration](#search-configuration) below | optional |
 | locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | optional |
@@ -340,7 +339,8 @@ ANSWERS.addComponent('SearchBar', {
   labelText: 'What are you looking for?',   // optional, defaults to 'Conduct a search'
   submitText: 'Submit',                     // optional, used for labeling the submit button, also provided to the template
   clearText: 'Clear',                       // optional, used for labeling the clear button, also provided to the template
-  submitIcon: 'path/to/icon',               // optional, an icon for the submit button
+  submitIcon: 'iconName',                   // optional, used to specify a different built-in icon for the submit button
+  customIconUrl: 'path/to/icon',            // optional, a url for a custom icon for the submit button
   promptHeader: 'Header',                   // optioanl, the query text to show as the first item for auto complete
   placeholderText: 'Start typing...',       // optional, no default
   autoFocus: true,                          // optional, defaults to false
@@ -487,10 +487,13 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     // Optional: The type of card, currently only 'Standard' is supported, defaults to 'Standard'
     cardType: 'Standard',
-    // Required, see [Template Mappings](#Template-Mappings) for more details
-    templateMappings: () => {},
-    // Required, see [Calls To Action](#Calls-To-Action) for more details
-    callsToAction: () => []
+    // Required, see [Card Mappings](#Card-Mappings) for more details
+    cardMappings: () => {},
+    // At least one of callsToAction and callsToActionFields are required,
+    // callsToActionFields takes precendence over callsToAction.
+    // see [Calls To Action](#Calls-To-Action) and [Calls To Action Fields](#Calls-To-Action-Fields)
+    callsToAction: () => [],
+    callsToActionFields: [ "c_primaryCTA","c_secondaryCTA" ]
   },
   // Config for the footer at the bottom of the results
   footer: {
@@ -501,7 +504,9 @@ ANSWERS.addComponent('VerticalResults', {
     // To link to external pages like yext.com
     url: 'https://yext.com',
     // Whether to open the link in a new window, defaults to false
-    newWindow: false
+    newWindow: false,
+    // Optional: text for screen readers in the footer, will only be visible by screen readers
+    screenReaderText: "I will only be read by screen readers",
   }
 })
 ```
@@ -510,7 +515,7 @@ ANSWERS.addComponent('VerticalResults', {
 
 Cards are used in Universal/Vertical Results for configuring the UI for a result on a per-item basis.
 
-Cards take in a templateMappings attribute, which contains configuration for the card, and a callsToAction
+Cards take in a cardMappings attribute, which contains configuration for the card, and a callsToAction
 attribute, which contains config for any callToAction buttons in the card.
 
 callsToAction config is common throughout all cards, whereas different cards such as Standard vs BigImage
@@ -520,16 +525,23 @@ There is currently only one built-in card, the [Standard Card](#Standard-Card)
 
 ## Calls To Action
 
-An array of callsToActions an be specified in 3 ways
-Note: A CTA without both a truthy label and icon will not be rendered.
+callsToActions are specified as either an array of CTA configs, or a function that returns
+an array of CTA configs. An array of CTA configs is an object of either static config options
+or functions that return the desired config option. The [callsToActionFields](#Calls-To-Action-Fields)
+option will take precendence over the callsToAction option if both are present, acting as if
+callsToAction was not specified at all.
 
-1. as a static CTA config object
+Examples are detailed below.
+
+Note: A CTA without both a label and icon will not be rendered.
+
+1. an array of static CTA config objects
 
 ```js
 const callsToAction = [{
   // Label below the CTA icon, default null
   label: 'cta label',
-  // Icon name for the CTA that is one of the SDK icons
+  // Icon name for the CTA that is one of the SDK icons, default to undefined (no icon)
   icon: 'star',
   // Click through url for the icon and label
   url: 'https://yext.com',
@@ -548,8 +560,9 @@ const callsToAction = [{
   analyticsEventType: 'CTA_CLICK',
   // Whether the click should open in a new window, defaults to false
   newWindow: false,
-  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. defaults to null
-  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "123123", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. Defaults to undefined, meaning
+  // no event will be fired
+  eventOptions: `{ "verticalKey": 'people', "entityId": 12312312, "searcher":"VERTICAL"}`
 }]
 ```
 
@@ -574,7 +587,7 @@ const callsToAction = item => [{
 }]
 ```
 
-Each individual field in a CTA config can also be a function that operates on the result item.
+3. Each individual field in a CTA config can also be a function that operates on the result item.
 
 ```js
 const callsToAction = item => [{
@@ -587,7 +600,7 @@ const callsToAction = item => [{
 }]
 ```
 
-These can then be included in a card object like so:
+callsToActions can then be included in a card object like so:
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
@@ -603,20 +616,38 @@ ANSWERS.addComponent('VerticalResults', {
 })
 ```
 
-## Template Mappings
+## Calls To Action Fields
 
-TemplateMappings define how a card's attributes, such as title and details, will be rendered.
-They can be configured either through a function that returns a templateMappings object
-or a static templateMappings object.
-
-Each attribute of a templateMappings object is also either a function or a static value.
+callsToActionFields are specified as an array of custom field names, and
+these custom fields hold CTA configuration in some backend, (e.g. the Yext Knowledge Graph).
+callsToActionFields will take precendence over callsToAction if both are present, acting as if
+callsToAction was not specified at all.
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
   /* ...other vertical results config... */
   card: {
     /* ...other card config...*/
-    templateMappings: item => ({
+    callsToActionFields: [ "c_primaryCTA","c_secondaryCTA" ]
+  }
+  /* ...other vertical results config... */
+})
+```
+
+## Card Mappings
+
+CardMappings define how a card's attributes, such as title and details, will be rendered.
+They can be configured either through a function that returns a cardMappings object
+or a static cardMappings object.
+
+Each attribute of a cardMappings object is also either a function or a static value.
+
+```js
+ANSWERS.addComponent('VerticalResults', {
+  /* ...other vertical results config... */
+  card: {
+    /* ...other card config...*/
+    cardMappings: item => ({
       title: item._raw.name,
       subtitle: `Department: ${item._raw.name} `,
       details: item._raw.description,
@@ -634,10 +665,10 @@ ANSWERS.addComponent('VerticalResults', {
 
 ## Standard Card
 
-The template mapping for a standard card has these attributes
+The card mapping for a standard card has these attributes
 
 ```js
-const templateMappings = {
+const cardMappings = {
   // Title for the card, defaults to the name of the entity
   title: item.title,
   // Subtitle, defaults to null
@@ -656,6 +687,11 @@ const templateMappings = {
   showLessText: "put it back",
   // Whether to open the title link in a new window, defaults to false
   newWindow: true,
+  // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
+  // defaults to false
+  showOrdinal: false,
+  // A tag to display on top of an image, always overlays the image, default no tag
+  tagLabel: 'On Sale!'
 }
 ```
 
@@ -1025,7 +1061,7 @@ ANSWERS.addComponent('Navigation', {
   mobileOverflowBehavior: 'COLLAPSE'     // optional, controls if navigation shows a scroll bar or dropdown for mobile. Options are COLLAPSE and INNERSCROLL
   ariaLabel: 'Search Page Navigation'    // optional, the aria-label to set on the navigation
   overflowLabel: 'More',    // optional, the label to display on the dropdown menu button when it overflows
-  overflowIcon: null        // optional, show this icon on the dropdown button instead when it overflows
+  overflowIcon: null        // optional, name of the icon to show on the dropdown button instead when it overflows
 })
 ```
 
