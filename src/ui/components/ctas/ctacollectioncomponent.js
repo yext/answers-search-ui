@@ -46,10 +46,20 @@ export default class CTACollectionComponent extends Component {
      */
     this.callsToAction = this.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
 
-    this.callsToAction = this.callsToAction.filter(cta => cta.url && cta.label).map(cta => ({
-      eventOptions: this.defaultEventOptions(this.result),
-      ...cta
-    }));
+    this.callsToAction = this.callsToAction.map(cta => {
+      if (!cta.label && !cta.url) {
+        console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
+      } else if (!cta.label) {
+        console.warn('Call to Action:', cta, 'is missing a label attribute and is being automatically hidden');
+      } else if (!cta.url) {
+        console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
+      } else {
+        return {
+          eventOptions: this.defaultEventOptions(this.result),
+          ...cta
+        };
+      }
+    });
   }
 
   /**
