@@ -19,7 +19,7 @@ export default class AlternativeVerticals {
   static from (response, formatters) {
     const alternativeVerticals = response.alternativeVerticals;
     if (!alternativeVerticals || !alternativeVerticals.modules) {
-      return {};
+      return new AlternativeVerticals();
     }
 
     return new AlternativeVerticals(Section.from(alternativeVerticals.modules, {}, formatters));
