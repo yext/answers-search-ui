@@ -1,6 +1,8 @@
 /** @module HandlebarsRenderer */
 
 import Renderer from './renderer';
+import Icons from '../icons';
+import HighlightedValue from '../../core/models/highlightedvalue';
 
 /**
  * HandlebarsRenderer is a wrapper around the nativate handlebars renderer.
@@ -42,6 +44,22 @@ export default class HandlebarsRenderer extends Renderer {
    */
   registerHelper (name, cb) {
     this._handlebars.registerHelper(name, cb);
+  }
+
+  /**
+   * SafeString is a public interface for external dependencies to
+   * mark a string as 'safe'. Handlebars will not escape a SafeString
+   */
+  SafeString (string) {
+    return new this._handlebars.SafeString(string);
+  }
+
+  /**
+   * EscapeExpression is a public interface for external dependencies to
+   * escape a string
+   */
+  escapeExpression (string) {
+    return this._handlebars.escapeExpression(string);
   }
 
   /**
@@ -115,6 +133,27 @@ export default class HandlebarsRenderer extends Renderer {
       return name === undefined
         ? ''
         : JSON.stringify(name);
+    });
+
+    let self = this;
+    self.registerHelper('icon', function (name, value, options) {
+      let icon = Icons.default;
+      if (Icons[name]) {
+        icon = Icons[name];
+      }
+      return self.SafeString(icon);
+    });
+
+    self.registerHelper('highlightValue', function (value, getInverted) {
+      const escapedInput = self.escapeExpression(value.value || value.shortValue);
+
+      const highlightedVal = new HighlightedValue({
+        value: escapedInput,
+        matchedSubstrings: value.matchedSubstrings
+      });
+
+      return getInverted ? self.SafeString(highlightedVal.getInverted())
+        : self.SafeString(highlightedVal.get());
     });
   }
 }

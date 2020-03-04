@@ -67,7 +67,6 @@ Below is a list of configuration options that can be used during initialization.
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | onStateChange | function | Invoked when the sate changes | optional |
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | optional  |
-| templateUrl  | string     | Use precompiled template hosted by you       | optional  |
 | templateBundle  | object     | Provide the precompiled templates      | optional  |
 | search | object | Search specific settings, see [search configuration](#search-configuration) below | optional |
 | locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | optional |
@@ -339,7 +338,8 @@ ANSWERS.addComponent('SearchBar', {
   labelText: 'What are you looking for?',   // optional, defaults to 'Conduct a search'
   submitText: 'Submit',                     // optional, used for labeling the submit button, also provided to the template
   clearText: 'Clear',                       // optional, used for labeling the clear button, also provided to the template
-  submitIcon: 'path/to/icon',               // optional, an icon for the submit button
+  submitIcon: 'iconName',                   // optional, used to specify a different built-in icon for the submit button
+  customIconUrl: 'path/to/icon',            // optional, a url for a custom icon for the submit button
   promptHeader: 'Header',                   // optioanl, the query text to show as the first item for auto complete
   placeholderText: 'Start typing...',       // optional, no default
   autoFocus: true,                          // optional, defaults to false
@@ -1060,7 +1060,7 @@ ANSWERS.addComponent('Navigation', {
   mobileOverflowBehavior: 'COLLAPSE'     // optional, controls if navigation shows a scroll bar or dropdown for mobile. Options are COLLAPSE and INNERSCROLL
   ariaLabel: 'Search Page Navigation'    // optional, the aria-label to set on the navigation
   overflowLabel: 'More',    // optional, the label to display on the dropdown menu button when it overflows
-  overflowIcon: null        // optional, show this icon on the dropdown button instead when it overflows
+  overflowIcon: null        // optional, name of the icon to show on the dropdown button instead when it overflows
 })
 ```
 

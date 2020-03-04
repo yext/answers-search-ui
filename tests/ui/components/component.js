@@ -65,7 +65,7 @@ describe('attaching analytics events', () => {
   });
 
   it('attaches analytics events based on data attributes during mount', () => {
-    const template = `<div id='test' data-eventtype="test_event" data-eventoptions='{"name":"{{{name}}}"}'>This is a test template</div>`;
+    const template = `<div id='test' data-eventtype="test_event" data-eventoptions='{"name":"{{name}}"}'>This is a test template</div>`;
 
     const component = COMPONENT_MANAGER.create(
       'Component',
@@ -86,7 +86,7 @@ describe('attaching analytics events', () => {
 
   it('attaches analytics events only once for subcomponents', () => {
     // eslint-disable-next-line
-    const childTemplate = `<div id="test" data-eventtype="test_event" data-eventoptions='{"name":"{{{name}}}"}'>This is a test template</div>`;
+    const childTemplate = `<div id="test" data-eventtype="test_event" data-eventoptions='{"name":"{{name}}"}'>This is a test template</div>`;
     const childConfig = {
       template: childTemplate
     };
@@ -109,7 +109,7 @@ describe('attaching analytics events', () => {
   });
 
   it('reports analyticsOptions provided to the component', () => {
-    const template = `<div id='test' data-eventtype="test_event" data-eventoptions='{"name":"{{{name}}}"}'>This is a test template</div>`;
+    const template = `<div id='test' data-eventtype="test_event" data-eventoptions='{"name":"{{name}}"}'>This is a test template</div>`;
 
     const component = COMPONENT_MANAGER.create(
       'Component',
