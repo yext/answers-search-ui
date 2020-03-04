@@ -52,7 +52,10 @@ export default class UniversalResultsComponent extends Component {
     if (childOpts.useAccordion === true) {
       return super.addChild(data, AccordionResultsComponent.type, childOpts);
     }
-    return super.addChild(data, type, childOpts);
+    return super.addChild(data, type, {
+      isUniversal: true,
+      ...opts
+    });
   }
 
   getChildConfig (configId) {

@@ -126,6 +126,12 @@ class StandardCardConfig {
      * @type {boolean}
      */
     this.showOrdinal = this.showOrdinal || false;
+
+    /**
+     * Whether this card is part of a universal search.
+     * @type {boolean}
+     */
+    this.isUniversal = this.isUniversal || false;
   }
 }
 
@@ -180,13 +186,14 @@ export default class StandardCardComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === CTACollectionComponent.type) {
-      const newData = {
+      const updatedData = {
         verticalKey: this.verticalKey,
         result: data
       };
-      return super.addChild(newData, type, {
+      return super.addChild(updatedData, type, {
         callsToAction: this._config.callsToAction,
         callsToActionFields: this._config.callsToActionFields,
+        isUniversal: this._config.isUniversal,
         ...opts
       });
     }

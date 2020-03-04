@@ -21,6 +21,12 @@ export default class CTACollectionComponent extends Component {
     this.verticalKey = data.verticalKey;
 
     /**
+     * Whether this cta is part of a universal search.
+     * @type {boolean}
+     */
+    this.isUniversal = this._config.isUniversal || false;
+
+    /**
      * Either a function that spits out an array of CTA config objects or an array of CTA config objects
      * or api fieldnames
      * @type {Function|Array<Object|string>}
@@ -85,7 +91,7 @@ export default class CTACollectionComponent extends Component {
   defaultEventOptions (result) {
     const eventOptions = {
       verticalKey: this.verticalKey,
-      searcher: 'VERTICAL'
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
     };
     if (result._raw.id) {
       eventOptions.entityId = result._raw.id;

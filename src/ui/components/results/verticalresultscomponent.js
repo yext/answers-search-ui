@@ -217,11 +217,11 @@ export default class VerticalResultsComponent extends Component {
         ...opts
       };
       const index = opts.index;
-      const newData = {
+      const updatedData = {
         result: this.results[index],
         verticalKey: this.verticalKey
       };
-      return super.addChild(newData, type, newOpts);
+      return super.addChild(updatedData, type, newOpts);
     }
     return super.addChild(data, type, opts);
   }

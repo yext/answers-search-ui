@@ -34,6 +34,11 @@ class CardConfig {
      * @type {Array<string>}
      */
     this.callsToActionFields = config.callsToActionFields || [];
+
+    /**
+     * Whether this card is part of a universal search
+     */
+    this.isUniversal = config.isUniversal || false;
   }
 }
 
@@ -77,7 +82,7 @@ export default class CardComponent extends Component {
   }
 
   addChild (data, type, opts) {
-    const newData = {
+    const updatedData = {
       verticalKey: this.verticalKey,
       result: data
     };
@@ -85,9 +90,10 @@ export default class CardComponent extends Component {
       cardMappings: this._config.cardMappings,
       callsToAction: this._config.callsToAction,
       callsToActionFields: this._config.callsToActionFields,
+      isUniversal: this._config.isUniversal,
       ...opts
     };
-    return super.addChild(newData, type, newOpts);
+    return super.addChild(updatedData, type, newOpts);
   }
 
   static get type () {
