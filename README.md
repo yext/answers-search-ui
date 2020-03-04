@@ -563,15 +563,17 @@ const callsToAction = [{
   // takes in the result data response.
   // By default, if no event options are specified the SDK will try to add verticalKey, entityId, and searcher options
   // to the analytics event.
-  eventOptions: result => ({
-    // The vertical key for the CTA. If unspecified, this defaults to the vertical key this cta is a part of
-    verticalKey: "people",
-    // The entity id of the result this cta is a part of, defaults to the entityId field in Knowledge Graph
-    entityId: result._raw.id,
-    // If the CTA is inside a vertical search, defaults to the value "VERTICAL",
-    // if is inside a universal search, defaults to the value "UNIVERSAL"
-    searcher: "VERTICAL"
-  })
+  eventOptions: result => {
+    return {
+      // The vertical key for the CTA. If unspecified, this defaults to the vertical key this cta is a part of
+      verticalKey: "people",
+      // The entity id of the result this cta is a part of, defaults to the entityId field in Knowledge Graph
+      entityId: result._raw.id,
+      // If the CTA is inside a vertical search, defaults to the value "VERTICAL",
+      // if is inside a universal search, defaults to the value "UNIVERSAL"
+      searcher: "VERTICAL"
+    };
+  }
 }]
 ```
 
