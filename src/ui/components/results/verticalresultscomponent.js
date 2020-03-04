@@ -196,9 +196,8 @@ export default class VerticalResultsComponent extends Component {
       eventOptions: this.eventOptions(),
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
-      numColumns,
       currentVerticalLabel: this._currentVerticalLabel,
-      resultsPresent: displayResultsIfExist && results.length !== 0,
+      resultsPresent: displayResultsIfExist && this.results.length !== 0,
       showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
       isEnhancedNoResultsEnabled: this._config._showEnhancedNoResults,
       placeholders: new Array(this._config.maxNumberOfColumns - 1),
@@ -248,14 +247,13 @@ export default class VerticalResultsComponent extends Component {
       const index = opts.index;
       return super.addChild(this.results[index], type, newOpts);
     } else if (type === AlternativeVerticalsComponent.type) {
-      const results = this.core.globalStorage
-        .getState(StorageKeys.VERTICAL_RESULTS).results;
+      const hasResults = this.results && this.results.length > 0;
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
         template: this._config.noResultsTemplate,
         universalUrl: this._config._universalUrl,
         verticalsConfig: this._verticalsConfig,
-        isShowingResults: this._config._displayAllResults && results && results.length > 0,
+        isShowingResults: this._config._displayAllResults && hasResults,
         ...opts
       };
       return super.addChild(data, type, newOpts);
