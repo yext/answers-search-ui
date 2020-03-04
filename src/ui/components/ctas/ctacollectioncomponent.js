@@ -1,4 +1,4 @@
-/** @module CTAComponent */
+/** @module CTACollectionComponent */
 
 import Component from '../component';
 
@@ -6,11 +6,25 @@ export default class CTACollectionComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
 
+    const data = this._config.data || {};
+
     /**
      * Result data
      * @type {Result}
      */
-    this._config.result = this._config.data || {};
+    this.result = data.result || {};
+
+    /**
+     * Vertical key for the search.
+     * @type {string}
+     */
+    this.verticalKey = data.verticalKey;
+
+    /**
+     * Whether this cta is part of a universal search.
+     * @type {boolean}
+     */
+    this.isUniversal = this._config.isUniversal || false;
 
     /**
      * Either a function that spits out an array of CTA config objects or an array of CTA config objects
@@ -30,7 +44,22 @@ export default class CTACollectionComponent extends Component {
      * The computed calls to action array
      * @type {Array<Object>}
      */
-    this.callsToAction = this.resolveCTAMapping(this._config.result, callsToActionFields, ...callsToAction);
+    this.callsToAction = this.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
+
+    this.callsToAction = this.callsToAction.map(cta => {
+      if (!cta.label && !cta.url) {
+        console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
+      } else if (!cta.label) {
+        console.warn('Call to Action:', cta, 'is missing a label attribute and is being automatically hidden');
+      } else if (!cta.url) {
+        console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
+      } else {
+        return {
+          eventOptions: this.defaultEventOptions(this.result),
+          ...cta
+        };
+      }
+    });
   }
 
   /**
@@ -67,6 +96,17 @@ export default class CTACollectionComponent extends Component {
         return ctaObject;
       }
     });
+  }
+
+  defaultEventOptions (result) {
+    const eventOptions = {
+      verticalKey: this.verticalKey,
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+    };
+    if (result._raw.id) {
+      eventOptions.entityId = result._raw.id;
+    }
+    return eventOptions;
   }
 
   setState (data) {
