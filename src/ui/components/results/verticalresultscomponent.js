@@ -25,13 +25,6 @@ class VerticalResultsConfig {
     Object.assign(this, config);
 
     /**
-     * verticalConfigId used for analytics and passed to children
-     * @type {string}
-     * @private
-     */
-    this.verticalConfigId = config.verticalConfigId;
-
-    /**
      * isUniversal is set to true if this component is added by the UniversalResultsComponent
      * @type {boolean}
      * @private
@@ -154,6 +147,7 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array<Result>}
      */
     this.results = data.results || [];
+    this.verticalKey = data.verticalConfigId;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     this.numColumns = this.getNumColumns();
     return super.setState(Object.assign({ results: [] }, data, {
@@ -177,7 +171,7 @@ export default class VerticalResultsComponent extends Component {
    */
   eventOptions () {
     return JSON.stringify({
-      verticalConfigId: this._config.verticalConfigId
+      verticalConfigId: this.verticalKey
     });
   }
 
@@ -204,14 +198,17 @@ export default class VerticalResultsComponent extends Component {
     } else if (type === CardComponent.type) {
       const newOpts = {
         ...this._config.card,
-        verticalConfigId: this._config.verticalConfigId,
         isUniversal: this._config.isUniversal,
         template: this._config.itemTemplate,
         render: this._config.renderItem,
         ...opts
       };
       const index = opts.index;
-      return super.addChild(this.results[index], type, newOpts);
+      const updatedData = {
+        result: this.results[index],
+        verticalKey: this.verticalKey
+      };
+      return super.addChild(updatedData, type, newOpts);
     }
     return super.addChild(data, type, opts);
   }

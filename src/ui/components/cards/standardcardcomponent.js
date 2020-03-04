@@ -3,16 +3,25 @@
 import Component from '../component';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
+import CTACollectionComponent from '../ctas/ctacollectioncomponent';
 
 class StandardCardConfig {
   constructor (config = {}) {
     Object.assign(this, config);
 
+    const data = config.data || {};
+
     /**
      * The result data
      * @type {Result}
      */
-    this.result = config.data || {};
+    const result = data.result || {};
+
+    /**
+     * The raw profile data
+     * @type {Object}
+     */
+    const rawResult = result._raw || {};
 
     /**
      * The cardMappings attribute of the config
@@ -24,12 +33,12 @@ class StandardCardConfig {
      */
     let cardMappings = config.cardMappings || {};
     if (typeof cardMappings === 'function') {
-      cardMappings = cardMappings(this.result);
+      cardMappings = cardMappings(result);
     }
     if (typeof cardMappings === 'object') {
       Object.entries(cardMappings).forEach(([attribute, value]) => {
         if (typeof value === 'function') {
-          this[attribute] = value(this.result);
+          this[attribute] = value(result);
         } else {
           this[attribute] = value;
         }
@@ -37,28 +46,22 @@ class StandardCardConfig {
     }
 
     /**
-     * The raw profile data
-     * @type {Object}
-     */
-    const rawResult = this.result._raw || {};
-
-    /**
      * Title for the card
      * @type {string}
      */
-    this.title = this.title || this.result.title || rawResult.name || '';
+    this.title = this.title || result.title || rawResult.name || '';
 
     /**
      * Details for the card
      * @type {string}
      */
-    this.details = this.details || this.result.details || rawResult.description || '';
+    this.details = this.details || result.details || rawResult.description || '';
 
     /**
      * Url when you click the title
      * @type {string}
      */
-    this.url = this.url || this.result.link || rawResult.website;
+    this.url = this.url || result.link || rawResult.website;
 
     /**
      * If showMoreLimit is set, the text that displays beneath it
@@ -123,6 +126,12 @@ class StandardCardConfig {
      * @type {boolean}
      */
     this.showOrdinal = this.showOrdinal || false;
+
+    /**
+     * Whether this card is part of a universal search.
+     * @type {boolean}
+     */
+    this.isUniversal = this.isUniversal || false;
   }
 }
 
@@ -134,6 +143,23 @@ export default class StandardCardComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new StandardCardConfig(config), systemConfig);
     this.hideExcessDetails = this._config.showToggle;
+
+    /**
+     * @type {Object}
+     */
+    const data = config.data || {};
+
+    /**
+     * Vertical key for the search.
+     * @type {string}
+     */
+    this.verticalKey = data.verticalKey;
+
+    /**
+     * The result data
+     * @type {Result}
+     */
+    this.result = data.result || {};
   }
 
   setState (data) {
@@ -143,7 +169,7 @@ export default class StandardCardComponent extends Component {
     return super.setState({
       ...data,
       hideExcessDetails: this.hideExcessDetails,
-      result: this._config.result,
+      result: this.result,
       details
     });
   }
@@ -159,11 +185,19 @@ export default class StandardCardComponent extends Component {
   }
 
   addChild (data, type, opts) {
-    return super.addChild(data, type, {
-      callsToAction: this._config.callsToAction,
-      callsToActionFields: this._config.callsToActionFields,
-      ...opts
-    });
+    if (type === CTACollectionComponent.type) {
+      const updatedData = {
+        verticalKey: this.verticalKey,
+        result: data
+      };
+      return super.addChild(updatedData, type, {
+        callsToAction: this._config.callsToAction,
+        callsToActionFields: this._config.callsToActionFields,
+        isUniversal: this._config.isUniversal,
+        ...opts
+      });
+    }
+    return super.addChild(data, type, opts);
   }
 
   static get type () {

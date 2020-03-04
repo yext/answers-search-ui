@@ -25,8 +25,11 @@ export default class VerticalResults {
    * @param {Object} response The server response
    * @param {Object.<string, function>} formatters The field formatters to use
    */
-  static from (response, formatters) {
-    return new VerticalResults(Section.from(response, null, formatters));
+  static from (response, formatters, verticalKey) {
+    return new VerticalResults({
+      ...Section.from(response, null, formatters),
+      verticalConfigId: verticalKey
+    });
   }
 
   /**
