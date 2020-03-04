@@ -560,9 +560,17 @@ const callsToAction = [{
   // Whether the click should open in a new window, defaults to false
   newWindow: false,
   // The eventOptions needed for the event to fire. Either a valid json string or an object. defaults to the below,
-  // Where a value in double brackets like {{VERTICAL_KEY_OF_SEARCH}} means the vertical key of the search, like 'Location',
-  // Not the literal string {{VERTICAL_KEY_OF_SEARCH}}
-  eventOptions: `{ "verticalKey": {{VERTICAL KEY OF SEARCH}}, "entityId": {{ENTITY ID}}, "searcher":"VERTICAL"}`
+  // result => {
+  //   const eventOptions = {
+  //     verticalKey: this.verticalKey,
+  //     searcher: 'VERTICAL'
+  //   };
+  //   if (result._raw.id) {
+  //     eventOptions.entityId = result._raw.id;
+  //   }
+  //   return eventOptions;
+  // }
+  eventOptions: item => `{ "verticalKey": "people", "entityId": "${item._raw.id}", "searcher":"VERTICAL"}`
 }]
 ```
 
