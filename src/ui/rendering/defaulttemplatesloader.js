@@ -1,29 +1,21 @@
-/** @module TemplateLoader */
+/** @module DefaultTemplatesLoader */
 
 import DOM from '../dom/dom';
 import { COMPILED_TEMPLATES_URL } from '../../core/constants';
 
 /**
- * TemplateLoader exposes an interface for loading templates asynchronously
- * from the server and registers them with the proper renderer.
- * It also allows you to assign them synchronously.
+ * DefaultTemplatesLoader exposes an interface for loading the default set of compiled templates
+ * asynchronously from the server. Note that this class cannot be repurposed to fetch custom
+ * templates hosted by a client.
  */
-export default class TemplateLoader {
-  constructor (config) {
-    if (!TemplateLoader.setInstance(this)) {
-      return TemplateLoader.getInstance();
+export default class DefaultTemplatesLoader {
+  constructor (onLoaded) {
+    if (!DefaultTemplatesLoader.setInstance(this)) {
+      return DefaultTemplatesLoader.getInstance();
     }
-
-    /**
-     * The template url to fetch compiled templates from
-     * @type {string}
-     * @private
-     */
-    this._templateUrl = config.templateUrl || COMPILED_TEMPLATES_URL;
-
     this._templates = {};
-    this._onLoaded = function () {};
-    this._init();
+    this._onLoaded = onLoaded || function () {};
+    this._fetchTemplates();
   }
 
   static setInstance (instance) {
@@ -38,12 +30,8 @@ export default class TemplateLoader {
     return this.instance;
   }
 
-  _init () {
-    this.fetchTemplates();
-  }
-
-  fetchTemplates () {
-    // If we already have templates loaded, do nothing
+  _fetchTemplates () {
+    // If template have already been loaded, do nothing
     let node = DOM.query('#yext-answers-templates');
     if (node) {
       return;
@@ -51,22 +39,16 @@ export default class TemplateLoader {
 
     // Inject a script to fetch the compiled templates,
     // wrapping it a Promise for cleanliness
-    new Promise((resolve, reject) => {
+    return new Promise((resolve, reject) => {
       let script = DOM.createEl('script', {
         id: 'yext-answers-templates',
         onload: resolve,
         onerror: reject,
         async: true,
-        src: this._templateUrl
+        src: COMPILED_TEMPLATES_URL
       });
-
       DOM.append('body', script);
-    })
-      .then((response) => {
-      // TODO(billy) Implmenet error handling here (e.g. request could fail)
-        console.log('Templates loaded successfully!');
-      });
-    return this;
+    });
   }
 
   /**
@@ -80,11 +62,6 @@ export default class TemplateLoader {
 
     // Notify our consumers that the templates are here :)
     this._onLoaded(this._templates);
-    return this;
-  }
-
-  onLoaded (cb) {
-    this._onLoaded = cb;
     return this;
   }
 

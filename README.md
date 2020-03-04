@@ -67,7 +67,6 @@ Below is a list of configuration options that can be used during initialization.
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | onStateChange | function | Invoked when the sate changes | optional |
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | optional  |
-| templateUrl  | string     | Use precompiled template hosted by you       | optional  |
 | templateBundle  | object     | Provide the precompiled templates      | optional  |
 | search | object | Search specific settings, see [search configuration](#search-configuration) below | optional |
 | locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | optional |
