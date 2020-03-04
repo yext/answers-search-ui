@@ -25,13 +25,6 @@ class VerticalResultsConfig {
     Object.assign(this, config);
 
     /**
-     * verticalConfigId used for analytics and passed to children
-     * @type {string}
-     * @private
-     */
-    this.verticalConfigId = config.verticalConfigId;
-
-    /**
      * isUniversal is set to true if this component is added by the UniversalResultsComponent
      * @type {boolean}
      * @private
@@ -88,12 +81,6 @@ export default class VerticalResultsComponent extends Component {
     this.results = [];
     this.numColumns = 1;
     this.handleResize = this.handleResize.bind(this);
-
-    /**
-     * Vertical key for the results.
-     * @type {string}
-     */
-    this.verticalKey = this._config.verticalConfigId;
   }
 
   mount () {
@@ -184,7 +171,7 @@ export default class VerticalResultsComponent extends Component {
    */
   eventOptions () {
     return JSON.stringify({
-      verticalConfigId: this._config.verticalConfigId
+      verticalConfigId: this.verticalKey
     });
   }
 
