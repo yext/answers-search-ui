@@ -24,7 +24,10 @@
 
   $results-border: $border-default !default;
 
-  border: $results-border;
+  $results-cards-margin: $base-spacing / 2 !default;
+
+  border-bottom: 0;
+  width: 100%;
 
   & + &
   {
@@ -86,6 +89,7 @@
     padding: $base-spacing/2 $base-spacing;
     background-color: $results-filters-background;
     border-bottom: $results-border;
+    margin-bottom: $base-spacing-sm;
   }
 
   &-filter
@@ -132,5 +136,19 @@
   {
     height: 300px;
     border-bottom: $results-border;
+  }
+
+  &-items {
+    margin-bottom: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+    margin-right: -1 * $results-cards-margin;
+  }
+
+  &-placeholder {
+    visibility: hidden;
+    height: 0;
   }
 }

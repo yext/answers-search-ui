@@ -1,0 +1,28 @@
+{{#if isSearchComplete}}
+  {{#if showNoResults}}
+    {{> results/noresults}}
+  {{else}}
+    <section class="yxt-Results yxt-Results--{{_config.modifier}}">
+      {{> results/resultssectionheader}}
+      {{#if includeMap}}
+        <div class="yxt-Results-map"
+             data-component="Map"
+             data-prop="map">
+        </div>
+      {{/if}}
+      <ul class="yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
+        {{#each results}}
+          <div class="yxt-Card" data-component="Card" data-opts='{"index": {{@index}} }'></div>
+        {{/each}}
+        {{#each placeholders}}
+          <div class="yxt-Results-placeholder yxt-Card" data-component="Card" data-opts='{"index": 0 }' aria-hidden="true"></div>
+        {{/each}}
+      </ul>
+    </section>
+    {{#if results}}
+      <div data-component='Footer'
+        data-opts='{{json _config.footer}}'
+      ></div>
+    {{/if}}
+  {{/if}}
+{{/if}}
