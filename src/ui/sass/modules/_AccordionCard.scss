@@ -43,6 +43,8 @@
     cursor: pointer;
     border: 0;
     align-items: center;
+    padding: 0;
+    padding-right: $accordion-card-spacing * 0.5;
   
     &:hover, &:active {
       $color: $color-brand-hover;
@@ -52,7 +54,7 @@
 
   &-toggle svg 
   {
-    height:  $accordion-card-toggle-icon-height;
+    height: $accordion-card-toggle-icon-height;
     width: $accordion-card-toggle-icon-width;
     color: $color-brand-primary;
   }
@@ -92,7 +94,6 @@
 
   &-subtitle
   {
-    margin-top: $accordion-card-spacing / 2;
     @include Text(
       $size: $accordion-card-subtitle-size,
       $color: $accordion-card-subtitle-color,
@@ -131,11 +132,10 @@
 
   .yxt-AccordionCard-content  
   {
-    margin: 0 $accordion-card-spacing--expanded;
+    margin: 0;
+    margin-left: $accordion-card-spacing--expanded;
+    height: auto;
     overflow: hidden;
     transition: all 400ms ease;
-    margin-bottom: $accordion-card-spacing--expanded / 2;
-    display: block;
-    height: auto;
   }
 }
