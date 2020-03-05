@@ -29,3 +29,102 @@ describe('vertical results', () => {
     expect(mergedResults.searchState).toBe('test');
   });
 });
+
+describe('forming no results response', () => {
+  let response;
+
+  beforeEach(() => {
+    response = {
+      results: [],
+      resultsCount: 0,
+      allResultsForVertical: {
+        resultsCount: 2,
+        results: [
+          {
+            data: {
+              id: 'faq-0',
+              type: 'faq',
+              answer: 'black',
+              name: 'what is alexis\' favorite color?'
+            },
+            highlightedFields: {}
+          }
+        ]
+      },
+      appliedQueryFilters: []
+    };
+  });
+
+  it('does not alter original response ', () => {
+    const initialResponse = { ...response };
+    VerticalResults._formResponseFromAllResultsForVertical(response);
+
+    expect(response).toEqual(initialResponse);
+  });
+
+  it('properly converts response with data', () => {
+    const convertedResponse = VerticalResults._formResponseFromAllResultsForVertical(response);
+
+    expect(convertedResponse).toEqual({
+      resultsCount: 2,
+      results: [
+        {
+          data: {
+            id: 'faq-0',
+            type: 'faq',
+            answer: 'black',
+            name: 'what is alexis\' favorite color?'
+          },
+          highlightedFields: {}
+        }
+      ],
+      allResultsForVertical: {
+        resultsCount: 2,
+        results: [
+          {
+            data: {
+              id: 'faq-0',
+              type: 'faq',
+              answer: 'black',
+              name: 'what is alexis\' favorite color?'
+            },
+            highlightedFields: {}
+          }
+        ]
+      },
+      appliedQueryFilters: []
+    });
+  });
+
+  it('properly converts response with empty results', () => {
+    const responseEmptyResults = {
+      results: [],
+      resultsCount: 0,
+      allResultsForVertical: [],
+      appliedQueryFilters: []
+    };
+    const convertedResponse = VerticalResults._formResponseFromAllResultsForVertical(responseEmptyResults);
+
+    expect(convertedResponse).toEqual({
+      results: [],
+      resultsCount: 0,
+      allResultsForVertical: [],
+      appliedQueryFilters: []
+    });
+  });
+
+  it('properly converts response with non-present results', () => {
+    const responseEmptyResults = {
+      results: [],
+      resultsCount: 0,
+      appliedQueryFilters: []
+    };
+    const convertedResponse = VerticalResults._formResponseFromAllResultsForVertical(responseEmptyResults);
+
+    expect(convertedResponse).toEqual({
+      results: [],
+      resultsCount: 0,
+      appliedQueryFilters: []
+    });
+  });
+});

@@ -9,6 +9,7 @@ import StorageKeys from '../storage/storagekeys';
 import DynamicFilters from '../models/dynamicfilters';
 import SearchIntents from '../models/searchintents';
 import LocationBias from '../models/locationbias';
+import AlternativeVerticals from '../models/alternativeverticals';
 
 /**
  * A Data Transformer that takes the response object from a Search request
@@ -37,6 +38,7 @@ export default class SearchDataTransformer {
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response),
       [StorageKeys.INTENTS]: SearchIntents.from(data.response.searchIntents),
       [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.response.spellCheck),
+      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(data.response, formatters),
       [StorageKeys.LOCATION_BIAS]: LocationBias.from(data.response.locationBias)
     };
   }
