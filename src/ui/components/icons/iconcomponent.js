@@ -62,7 +62,6 @@ export default class IconComponent extends Component {
     return super.setState(Object.assign(data, {
       iconUrl: this.iconUrl,
       iconName: this.iconName,
-      name: this.iconName ? this.iconName : 'custom',
       classNames: this.classNames
     }));
   }

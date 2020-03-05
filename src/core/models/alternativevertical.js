@@ -35,7 +35,7 @@ export default class AlternativeVertical {
      * name of an icon from the default icon set
      * @type {string}
      */
-    this.icon = config.icon;
+    this.iconName = config.icon;
 
     /**
      * The number of results to display next to each alternative
