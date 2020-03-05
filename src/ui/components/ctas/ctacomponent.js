@@ -47,6 +47,18 @@ class CTAConfig {
       this.eventOptions = JSON.parse(config.eventOptions);
     }
     this.eventOptions = this.eventOptions;
+
+    /**
+     * Additional css className modifiers for the cta
+     * @type {string}
+     */
+    this._ctaModifiers = config._ctaModifiers;
+
+    /**
+     * Whether the cta is the only one in its CTACollectionComponent
+     * @type {boolean}
+     */
+    this._isSolo = config._isSolo || false;
   }
 }
 

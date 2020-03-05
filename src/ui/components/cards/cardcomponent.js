@@ -36,6 +36,12 @@ class CardConfig {
     this.callsToActionFields = config.callsToActionFields || [];
 
     /**
+     * The index of the card.
+     * @type {number}
+     */
+    this._index = config._index || 0;
+
+    /**
      * Whether this card is part of a universal search
      */
     this.isUniversal = config.isUniversal || false;
@@ -90,10 +96,35 @@ export default class CardComponent extends Component {
       cardMappings: this._config.cardMappings,
       callsToAction: this._config.callsToAction,
       callsToActionFields: this._config.callsToActionFields,
+      verticalKey: this._config.verticalKey,
+      _index: this._config._index,
       isUniversal: this._config.isUniversal,
       ...opts
     };
     return super.addChild(updatedData, type, newOpts);
+  }
+
+  /**
+   * Used by children card components like StandardCardComponent to
+   * apply given template mappings as config.
+   * @param {Result} result
+   * @param {Object|Function} cardMappings
+   */
+  static applyCardMappings (result, cardMappings) {
+    const config = {};
+    if (typeof cardMappings === 'function') {
+      cardMappings = cardMappings(result);
+    }
+    if (typeof cardMappings === 'object') {
+      Object.entries(cardMappings).forEach(([attribute, value]) => {
+        if (typeof value === 'function') {
+          config[attribute] = value(result);
+        } else {
+          config[attribute] = value;
+        }
+      });
+    }
+    return config;
   }
 
   static get type () {

@@ -38,7 +38,13 @@ export default class CTACollectionComponent extends Component {
      * to contain CTA configuration.
      * @type {Array<string>}
      */
-    let callsToActionFields = this._config.callsToActionFields || [];
+    const callsToActionFields = this._config.callsToActionFields || [];
+
+    /**
+     * Additional css modifier classNames for the cta.
+     * @type {Array<string>}
+     */
+    this._config._ctaModifiers = this._config._ctaModifiers;
 
     /**
      * The computed calls to action array
@@ -54,8 +60,13 @@ export default class CTACollectionComponent extends Component {
       } else if (!cta.url) {
         console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
       } else {
+        const _ctaModifiers = this._config._ctaModifiers;
+        if (this.callsToAction.length === 1) {
+          _ctaModifiers.push('solo');
+        }
         return {
           eventOptions: this.defaultEventOptions(this.result),
+          _ctaModifiers: _ctaModifiers,
           ...cta
         };
       }
@@ -77,11 +88,13 @@ export default class CTACollectionComponent extends Component {
    * @param {Function|...(Object|string)} ctaMapping
    * @returns {Array<Object>}
    */
-  resolveCTAMapping (result, callsToActionFields = [], ...ctas) {
+  resolveCTAMapping (result, callsToActionFields, ...ctas) {
+    // If entity has any fields that are designed as callsToActionFields, return those instead
     const filteredCTAFields = callsToActionFields.filter(ctaFieldName => result._raw[ ctaFieldName ]);
     if (filteredCTAFields.length > 0) {
       return filteredCTAFields.map(ctaFieldName => result._raw[ ctaFieldName ]);
     }
+    // Otherwise, use given callsToAction if any
     return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
         return ctaMapping(result);
