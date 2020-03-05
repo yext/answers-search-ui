@@ -379,7 +379,7 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < tabsConfig.length; i++) {
       const tab = tabsConfig[i];
       // Some tabs don't have verticalKey, so we map it from URL
-      if (tab.verticalKey === undefined) {
+      if (!tab.verticalKey) {
         tab.verticalKey = tab.url;
       }
 
