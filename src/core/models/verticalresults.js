@@ -4,7 +4,7 @@ import Section from './section';
 import SearchStates from '../storage/searchstates';
 
 export default class VerticalResults {
-  constructor (data = {}, verticalKey) {
+  constructor (data = {}) {
     Object.assign(this, { searchState: SearchStates.SEARCH_COMPLETE }, data);
     Object.freeze(this);
   }
