@@ -3,6 +3,7 @@
 import Component from '../component';
 import FilterView from '../../../core/models/filterview';
 import Filter from '../../../core/models/filter';
+import FilterMetadata from '../../../core/models/filtermetadata';
 import DOM from '../../dom/dom';
 
 export default class RangeFilterComponent extends Component {
@@ -139,9 +140,7 @@ export default class RangeFilterComponent extends Component {
    * @returns {FilterView}
    */
   _buildFilterView () {
-    const metadata = {
-      [this.title]: [`${this.title}: ${this._range.min} - ${this._range.max}`]
-    };
+    const metadata = FilterMetadata.from(this._field, this._title, `${this._range.min} - ${this._range.max}`);
     return new FilterView(Filter.inclusiveRange(this._field, this._range.min, this._range.max), metadata);
   }
 }

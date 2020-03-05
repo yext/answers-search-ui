@@ -2,7 +2,6 @@
 .yxt-Results
 {
   $results-title-bar-background: $color-background-highlight !default;
-  $results-filters-background: white !default;
 
   $results-title-bar-text-color: $color-text-primary !default;
   $results-title-bar-text-font-size: $font-size-md-lg !default;
@@ -12,15 +11,6 @@
   $results-title-bar-link-font-size: $font-size-md !default;
   $results-title-bar-link-line-height: $line-height-xxlg !default;
   $results-title-bar-link-font-weight: $font-weight-semibold !default;
-
-  $results-filters-text-color: $color-text-primary !default;
-  $results-filters-text-font-size: $font-size-md !default;
-  $results-filters-text-line-height: $line-height-md !default;
-  $results-filters-text-font-weight: $font-weight-normal !default;
-
-  $results-filters-link-font-size: $font-size-md !default;
-  $results-filters-link-line-height: $line-height-md !default;
-  $results-filters-link-font-weight: $font-weight-normal !default;
 
   $results-border: $border-default !default;
 
@@ -81,55 +71,6 @@
       $results-title-bar-link-font-weight,
     );
     @include Link-1;
-  }
-
-  &-filters
-  {
-    display: flex;
-    padding: $base-spacing/2 $base-spacing;
-    background-color: $results-filters-background;
-    border-bottom: $results-border;
-    margin-bottom: $base-spacing-sm;
-  }
-
-  &-filter
-  {
-    display: flex;
-    align-items: center;
-
-    &:not(:first-child)::before
-    {
-      content: '';
-      width: 1px;
-      top: 0;
-      height: 40%;
-      margin-left: $base-spacing;
-      margin-right: $base-spacing;
-      display: inline-block;
-    }
-  }
-
-  &-filterValue
-  {
-    @include Text(
-      $results-filters-text-font-size,
-      $results-filters-text-line-height,
-      $results-filters-text-font-weight,
-      $color: $results-filters-text-color
-    );
-  }
-
-  &-changeFilters
-  {
-    @include Text(
-      $results-filters-link-font-size,
-      $results-filters-link-line-height,
-      $results-filters-link-font-weight,
-      $color: $color-brand-primary
-    );
-    @include Link-2;
-
-    margin-left: $base-spacing / 2;
   }
 
   &-map

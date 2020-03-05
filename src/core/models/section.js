@@ -2,6 +2,7 @@
 
 import SearchStates from '../storage/searchstates';
 import ResultFactory from './resultfactory';
+import Filter from './filter';
 
 export default class Section {
   constructor (data, url, formatters) {
@@ -83,6 +84,7 @@ class AppliedQueryFilter {
   constructor (appliedQueryFilter) {
     this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
     this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
+    this.fieldId = Filter.getFilterKey(appliedQueryFilter.filter);
   }
 
   static from (appliedQueryFilters) {

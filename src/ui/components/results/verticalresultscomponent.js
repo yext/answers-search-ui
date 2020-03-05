@@ -9,6 +9,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import DOM from '../../dom/dom';
+import ResultsHeaderComponent from './resultsheadercomponent';
 
 /**
  * Breakpoint for when somebody is on desktop, prescribed by Jeremy.
@@ -88,10 +89,54 @@ class VerticalResultsConfig {
     this.card = config.card || {};
 
     /**
-     * Config for the footer at the bottom of the vertical results
+     * Config for the {@link FooterComponent} at the bottom of the vertical results
      * @type {Object}
      */
     this.footer = config.footer || {};
+
+    /**
+     * Config options used in the {@link AppliedFiltersComponent}
+     */
+    this.resultsHeaderOpts = {
+      /**
+       * Display the count of results at the very top of the results
+       * @type {boolean}
+       */
+      showResultsCount: config.showResultsCount === undefined ? true : config.showResultsCount,
+
+      /**
+       * If present, show the filters that were ultimately applied to this query
+       * @type {boolean}
+       */
+      showAppliedFilters: config.showAppliedFilters === undefined ? true : config.showAppliedFilters,
+
+      /**
+       * If showResultsCount and showAppliedFilters are true,
+       * display this a separator between the result count and the applied query filters
+       * @type {string}
+       */
+      resultsCountSeparator: config.resultsCountSeparator || '|',
+
+      /**
+       * Config to send to the applied filters component.
+       * @type {Object}
+       */
+      appliedFiltersOpts: {
+
+        /**
+         * If showAppliedFilters is true, show the field name in the string followed by a colon.
+         * @type {boolean}
+         */
+        showFieldNames: config.showFieldNames || false,
+
+        /**
+         * If showAppliedFilters is true, this is list of filters
+         * that should not be displayed (common one is entity type)
+         * @type {Array<string>}
+         */
+        hiddenFields: config.hiddenFields || [ 'builtin.entityType' ]
+      }
+    };
   }
 }
 
@@ -171,7 +216,7 @@ export default class VerticalResultsComponent extends Component {
 
   setState (data, val) {
     /**
-     * @type {Array<Result>}
+     * @type {Section}
      */
     this.results = data.results || [];
     this.verticalKey = data.verticalConfigId;
@@ -250,6 +295,13 @@ export default class VerticalResultsComponent extends Component {
         ...opts
       };
       return super.addChild(data, type, newOpts);
+    } else if (type === ResultsHeaderComponent.type) {
+      const newData = {
+        resultsLength: this._state.get().results.length,
+        appliedQueryFilters: this._state.get().appliedQueryFilters,
+        ...data
+      };
+      return super.addChild(newData, type, opts);
     }
     return super.addChild(data, type, opts);
   }

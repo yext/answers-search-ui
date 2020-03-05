@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import FilterView from '../../../core/models/filterview';
 import Filter from '../../../core/models/filter';
+import FilterMetadata from '../../../core/models/filtermetadata';
 import StorageKeys from '../../../core/storage/storagekeys';
 import buildSearchParameters from '../../tools/searchparamsparser';
 
@@ -184,10 +185,10 @@ export default class GeoLocationComponent extends Component {
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         this.query = query;
-        const displayField = this._config.label || this._config.title || 'Location';
-        const metadata = {
-          [displayField]: [query.split(',')[0]]
-        };
+        const fieldId = Filter.getFilterKey(filter);
+        const label = this._config.label || this._config.title || 'Location';
+        const displayValues = query.split(',')[0];
+        const metadata = FilterMetadata.from(fieldId, label, displayValues);
         this.filterView = new FilterView(Filter.fromResponse(filter), metadata);
         this._saveDataToStorage(query, this.filterView);
         this._enabled = false;
@@ -259,10 +260,8 @@ export default class GeoLocationComponent extends Component {
   _buildFilterView (position) {
     const { latitude, longitude, accuracy } = position.coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
-    const displayField = this._config.title || this._config.label || 'Location';
-    const metadata = {
-      [displayField]: ['Near me']
-    };
+    const label = this._config.title || this._config.label || 'Location';
+    const metadata = FilterMetadata.from('builtin.location', label, 'Near me');
     return new FilterView(Filter.position(latitude, longitude, radius), metadata);
   }
 }

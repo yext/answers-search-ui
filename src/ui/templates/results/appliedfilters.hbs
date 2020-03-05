@@ -1,0 +1,31 @@
+<div class="yxt-AppliedFilters js-yxt-AppliedFilters">
+  <div class="yxt-AppliedFilters-content js-yxt-AppliedFilters-content">
+    {{#if sortByOptions}}
+      {{#if _config.showFieldNames}}
+        <div class="yxt-AppliedFilters-displayField">Sorted By:</div>
+      {{/if}}
+      {{#each sortByOptions}}
+        <div class="yxt-AppliedFilters-displayValue">{{this.label}}</div>
+      {{/each}}
+      {{#if appliedFilters}}
+        <div class="yxt-AppliedFilters-separator">|</div>
+      {{/if}}
+    {{/if}}
+    {{#each appliedFilters}}
+      {{#if ../_config.showFieldNames}}
+        <div class="yxt-AppliedFilters-displayField">{{this.label}}:</div>
+      {{/if}}
+      {{#each this.displayValues}}
+        <div class="yxt-AppliedFilters-displayValue">{{this}}{{#unless @last}}, {{/unless}}</div>
+      {{/each}}
+      {{#unless @last}}
+        <div class="yxt-AppliedFilters-separator">|</div>
+      {{/unless}}
+    {{/each}}
+  </div>
+
+  <div class="yxt-AppliedFilters-toggle yxt-AppliedFilters-toggle--down js-yxt-AppliedFilters-toggle"
+    data-component="IconComponent" 
+    data-opts='{ "iconName": "chevron" }'>
+  </div>
+</div>

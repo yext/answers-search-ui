@@ -1,4 +1,8 @@
 {{#if isSearchComplete}}
+  {{#if _config.isUniversal}}
+    {{> results/resultssectionheader}}
+  {{/if}}
+  <div data-component="ResultsHeader" data-opts='{{json _config.resultsHeaderOpts}}'></div>
   {{#if showNoResults}}
     {{#if isEnhancedNoResultsEnabled}}
       <div class="yxt-Results-alternativeVerticals"
@@ -9,7 +13,6 @@
   {{/if}}
   {{#if resultsPresent}}
     <section class="yxt-Results yxt-Results--{{_config.modifier}}">
-      {{> results/resultssectionheader}}
       {{#if includeMap}}
         <div class="yxt-Results-map"
              data-component="Map"

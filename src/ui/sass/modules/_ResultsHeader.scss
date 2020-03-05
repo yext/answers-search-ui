@@ -1,0 +1,46 @@
+/** @define ResultsHeader */
+.yxt-ResultsHeader {
+  $results-header-font-size: $font-size-md;
+
+  $results-header-color: $color-text-secondary !default;
+  $results-header-font-weight: $font-weight-normal !default;
+  $results-header-line-height: $line-height-md !default;
+  $results-header-margin-bottom: $base-spacing / 4 !default;
+
+  $results-header-count-color: $color-text-secondary !default;
+  $results-header-count-weight: $font-weight-bold !default;
+
+  margin-left: $results-header-font-size;
+  display: flex;
+  align-items: baseline;
+
+  &-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+  }
+
+  &-resultsCount
+  {
+    margin-right: $base-spacing / 4;
+    white-space: nowrap;
+    @include Text(
+      $size: $results-header-font-size,
+      $line-height: $results-header-line-height,
+      $weight: $results-header-count-weight,
+      $color: $results-header-count-color
+    );
+  }
+
+  &-separator
+  {
+    margin-right: $base-spacing / 4;
+    white-space: nowrap;
+    @include Text(
+      $size: $results-header-font-size,
+      $line-height: $results-header-line-height,
+      $weight: $results-header-font-weight,
+      $color: $results-header-color,
+    );
+  }
+}

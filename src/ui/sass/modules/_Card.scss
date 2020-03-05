@@ -11,12 +11,12 @@
     min-width: 210px;
     border: $border-default;
 
-    @media (max-width: $container-desktop-base) {
+    @media (max-width: $breakpoint-mobile-max) {
       margin-bottom: 0;
     }
   }
 
-  @media (max-width: $container-desktop-base) {
+  @media (max-width: $breakpoint-mobile-max) {
     & + & .yxt-Card-child{
       border-top: 0;
     }
@@ -29,7 +29,7 @@
     flex-grow: 1;
   }
 
-  @media (min-width: $container-desktop-base) {
+  @media (min-width: $breakpoint-mobile-min) {
     &--2 > .yxt-Card {
       flex-basis: 50%;
     }

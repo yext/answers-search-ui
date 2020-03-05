@@ -4,6 +4,7 @@ import Component from '../component';
 import FilterView from '../../../core/models/filterview';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
+import FilterMetadata from '../../../core/models/filtermetadata';
 
 /**
  * A filter for a range of dates
@@ -151,9 +152,7 @@ export default class DateRangeFilterComponent extends Component {
     if (this._date.min === '' || this._date.max === '') {
       return {};
     }
-    const metadata = {
-      [this.title]: [`${this._date.min} - ${this._date.max}`]
-    };
+    const metadata = FilterMetadata.from(this._field, this._title, `${this._date.min} - ${this._date.max}`);
     return this._isExclusive
       ? new FilterView(Filter.exclusiveRange(this._field, this._date.min, this._date.max), metadata)
       : new FilterView(Filter.inclusiveRange(this._field, this._date.min, this._date.max), metadata);

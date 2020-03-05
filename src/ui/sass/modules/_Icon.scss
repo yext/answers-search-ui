@@ -30,4 +30,9 @@
     height: 1em;
     object-fit: contain;
   }
+
+  &-link:hover {
+    cursor: pointer;
+    color: $color-text-secondary;
+  }
 }

@@ -23,6 +23,7 @@ import AccordionResultsComponent from './results/accordionresultscomponent.js';
 import VerticalResultsComponent from './results/verticalresultscomponent';
 import UniversalResultsComponent from './results/universalresultscomponent';
 import PaginationComponent from './results/paginationcomponent';
+import ResultsHeaderComponent from './results/resultsheadercomponent';
 
 import CardComponent from './cards/cardcomponent';
 import StandardCardComponent from './cards/standardcardcomponent';
@@ -36,6 +37,7 @@ import IconComponent from './icons/iconcomponent.js';
 import CTAComponent from './ctas/ctacomponent';
 import CTACollectionComponent from './ctas/ctacollectioncomponent';
 import FooterComponent from './utils/footercomponent.js';
+import AppliedFiltersComponent from './results/appliedfilterscomponent';
 
 const COMPONENT_CLASS_LIST = [
   // Core Component
@@ -68,6 +70,9 @@ const COMPONENT_CLASS_LIST = [
   AccordionResultsComponent,
   MapComponent,
   AlternativeVerticalsComponent,
+  ResultsHeaderComponent,
+  FooterComponent,
+  AppliedFiltersComponent,
 
   // Card Components
   CardComponent,
@@ -80,8 +85,7 @@ const COMPONENT_CLASS_LIST = [
   // Helper Components
   IconComponent,
   CTAComponent,
-  CTACollectionComponent,
-  FooterComponent
+  CTACollectionComponent
 ];
 
 /**

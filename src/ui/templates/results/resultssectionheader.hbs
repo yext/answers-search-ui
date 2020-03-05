@@ -1,12 +1,12 @@
 <div class="yxt-Results-titleBar">
   <div class="yxt-Results-left">
     <div class="yxt-Results-titleIconWrapper"
-         data-component="IconComponent"
-         data-opts='{
+        data-component="IconComponent"
+        data-opts='{
             "iconName": "{{_config.sectionTitleIconName}}",
             "iconUrl": "{{_config.sectionTitleIconUrl}}"
           }'
-         data-prop="icon"
+        data-prop="icon"
     ></div>
     <h2 class="yxt-Results-title">
       {{_config.sectionTitle}}
@@ -14,27 +14,9 @@
   </div>
   {{#if verticalURL}}
     <a class="yxt-Results-viewAllLink" href="{{verticalURL}}"
-       data-eventtype="VERTICAL_VIEW_ALL"
-       data-eventoptions='{{eventOptions}}'>
+      data-eventtype="VERTICAL_VIEW_ALL"
+      data-eventoptions='{{eventOptions}}'>
       {{_config.viewAllText}}
     </a>
   {{/if}}
 </div>
-{{#if appliedQueryFilters}}
-  <ul class="yxt-Results-filters">
-    {{#each appliedQueryFilters}}
-      <li class="yxt-Results-filter">
-        <span class="yxt-Results-filterValue">{{value}}</span>
-      </li>
-    {{/each}}
-    {{#if _config.showChangeFilters}}
-      {{#if verticalURL}}
-        <a class="yxt-Results-changeFilters" href="{{verticalURL}}"
-           data-eventtype="FILTERING_WITHIN_SECTION"
-           data-eventoptions='{{eventOptions}}'>
-          change
-        </a>
-      {{/if}}
-    {{/if}}
-  </ul>
-{{/if}}

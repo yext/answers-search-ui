@@ -2,6 +2,12 @@
 
 /**
  * Metadata helper for {@link Filter} or {@link Facet}
+ * Metadata structure is
+ * {
+ *  c_birdTypes: {
+ *    'Your Favorite Bird': ['rooster', 'penguin', 'turkey', 'chikn', 'dog']
+ *   }
+ * }
  */
 export default class FilterMetadata {
   constructor (metadata) {
@@ -9,20 +15,33 @@ export default class FilterMetadata {
     Object.freeze(this);
   }
 
+  static from (fieldId, label, ...values) {
+    return new FilterMetadata({
+      [fieldId]: {
+        [label]: values
+      }
+    });
+  }
+
   /**
    * Combines several filter metadata
    * @param  {Array<FilterMetadata>} metadataArray
    */
   static combine (metadataArray) {
-    const metadata = metadataArray.reduce((group, metadata) => {
-      Object.entries(metadata).forEach(([displayField, displayValues]) => {
-        if (!group[displayField]) {
-          group[displayField] = [];
+    const group = {};
+    metadataArray.forEach(metadata => {
+      Object.entries(metadata).forEach(([fieldId, labelToDisplayValues]) => {
+        if (!group[fieldId]) {
+          group[fieldId] = {};
         }
-        group[displayField].push(...displayValues);
+        Object.entries(labelToDisplayValues).forEach(([label, displayValues]) => {
+          if (!group[fieldId][label]) {
+            group[fieldId][label] = [];
+          }
+          group[fieldId][label].push(...displayValues);
+        });
       });
-      return group;
-    }, {}) || {};
-    return new FilterMetadata(metadata);
+    });
+    return new FilterMetadata(group);
   }
 }

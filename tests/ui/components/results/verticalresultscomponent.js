@@ -13,7 +13,8 @@ const mockedCore = () => {
           return {};
         }
       }
-    }
+    },
+    on: () => {}
   };
 };
 

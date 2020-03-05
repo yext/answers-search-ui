@@ -3,6 +3,7 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import FilterView from '../../../core/models/filterview';
+import FilterMetadata from '../../../core/models/filtermetadata';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 
@@ -314,11 +315,16 @@ export default class FilterOptionsComponent extends Component {
       ? o.filter
       : Filter.equal(o.field, o.value)
     );
-    const selectedLabels = selectedOptions.map(o => o.label);
-    const metadata = {
-      [this.config.label]: selectedLabels
-    };
-    this.core.persistentStorage.set(this.name, selectedLabels);
+    const metadata = selectedOptions.reduce((md, o) => {
+      let newMetadata = {};
+      if (o.filter) {
+        newMetadata = FilterMetadata.from(Filter.getFilterKey(o.filter), this.config.label, o.label);
+      } else {
+        newMetadata = FilterMetadata.from(o.field, this.config.label, o.label);
+      }
+      return FilterMetadata.combine([md, newMetadata]);
+    }, {}) || {};
+    this.core.persistentStorage.set(this.name, selectedOptions.map(o => o.label));
     const groupedFilter = filters.length > 0 ? Filter.group(...filters) : {};
     return new FilterView(groupedFilter, metadata);
   }
