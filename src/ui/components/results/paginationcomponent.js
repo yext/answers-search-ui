@@ -72,7 +72,7 @@ export default class PaginationComponent extends Component {
   onMount () {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
     const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
-    const showControls = results.searchState === 'search-complete' && results.resultsCount > limit;
+    const showControls = results.searchState === SearchStates.SEARCH_COMPLETE && results.resultsCount > limit;
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     if (!showControls) {
       return;
@@ -114,7 +114,7 @@ export default class PaginationComponent extends Component {
     let offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
     const pageNumber = offset / limit;
-    const showControls = results.searchState === 'search-complete' && results.resultsCount > limit;
+    const showControls = results.searchState === SearchStates.SEARCH_COMPLETE && results.resultsCount > limit;
     const isMoreResults = results.resultsCount > offset + limit;
     const maxPage = Math.trunc((results.resultsCount - 1) / limit);
     return super.setState({
