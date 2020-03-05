@@ -40,19 +40,16 @@ class AccordionCardConfig {
     this.verticalKey = config.verticalKey;
 
     /**
-     * Title for the card, located on the accordion toggle.
      * @type {string}
      */
     this.title = this.title || result.title || rawResult.name || '';
 
     /**
-     * Subtitle for the card, displayed above the details when the card is expanded.
      * @type {string}
      */
     this.subtitle = this.subtitle;
 
     /**
-     * Details for the card, displayed below the subtitle when the card is expanded.
      * @type {string}
      */
     this.details = this.details || result.details || rawResult.description || '';
@@ -77,12 +74,6 @@ class AccordionCardConfig {
      * @type {Array<string>}
      */
     this.callsToActionFields = config.callsToActionFields || [];
-
-    /**
-     * The index of the card within the context of a VerticalResults or Section.
-     * @type {number}
-     */
-    this._index = config._index || 0;
 
     /**
      * Whether this card is part of a universal search. Used in analytics.
@@ -136,15 +127,11 @@ export default class AccordionCardComponent extends Component {
    * it doesn't rip the whole component off of the page and remount it.
    * Also reports an analytics event.
    * @param {HTMLElement} toggleEl the toggle element
-   * @param {HTMLElement} iconEl the icon element
    * @param {HTMLElement} contentEl the content element
    * @param {HTMLElement} accordionEl the root accordion element
    */
-  handleClick (toggleEl, iconEl, contentEl, accordionEl) {
+  handleClick (toggleEl, contentEl, accordionEl) {
     this.isExpanded = !this.isExpanded;
-    iconEl.classList.toggle('yxt-AccordionCard-icon--expanded');
-    contentEl.classList.toggle('yxt-AccordionCard-content--expanded');
-    contentEl.classList.remove('yxt-AccordionCard--initExpanded');
     accordionEl.classList.toggle('yxt-AccordionCard--expanded');
 
     contentEl.style.height = `${this.isExpanded ? contentEl.scrollHeight : 0}px`;
@@ -161,11 +148,12 @@ export default class AccordionCardComponent extends Component {
 
   onMount () {
     const toggleEl = DOM.query(this._container, '.js-yxt-AccordionCard-toggle');
-    const iconEl = DOM.query(this._container, '.js-yxt-AccordionCard-icon');
     const contentEl = DOM.query(this._container, '.js-yxt-AccordionCard-content');
     const accordionEl = DOM.query(this._container, '.js-yxt-AccordionCard');
 
-    DOM.on(toggleEl, 'click', () => this.handleClick(toggleEl, iconEl, contentEl, accordionEl));
+    contentEl.style.height = `${this.isExpanded ? contentEl.scrollHeight : 0}px`;
+
+    DOM.on(toggleEl, 'click', () => this.handleClick(toggleEl, contentEl, accordionEl));
   }
 
   /**

@@ -32,11 +32,6 @@
     margin-bottom: 0;
     border-top: 0;
   }
-
-  &--expanded 
-  {
-    background-color: $accordion-card-content-background-color;
-  }
   
   &-toggle
   {
@@ -55,7 +50,8 @@
     }
   }
 
-  &-toggle svg {
+  &-toggle svg 
+  {
     height:  $accordion-card-toggle-icon-height;
     width: $accordion-card-toggle-icon-width;
     color: $color-brand-primary;
@@ -74,11 +70,13 @@
     );
   }
 
-  &-icon {
+  &-icon 
+  {
     margin-left: auto;
   }
 
-  &-icon .Icon {
+  &-icon .Icon 
+  {
     margin-top: $accordion-card-spacing / 2;
     margin-right: $accordion-card-spacing / 2;
   }
@@ -89,28 +87,12 @@
     transition: transform 400ms ease-in;
   }
 
-  &-icon--expanded svg
-  {
-    transform: rotate(-90deg);
-  }
-
   &-content
   {
     margin: 0 $accordion-card-spacing;
-    height: 0;
     overflow: hidden;
     transition: all 400ms ease;
-  }
-
-  &-content--expanded 
-  {
-    margin-bottom: $accordion-card-spacing / 2;
-    display: block;
-  }
-
-  &-content--initExpanded 
-  {
-    height: auto;
+    height: 0;
   }
 
   &-subtitle
@@ -133,7 +115,31 @@
     );
   }
 
-  &-ctas {
+  &-ctas 
+  {
     margin-top: $accordion-card-spacing / 2;
+  }
+}
+
+.yxt-AccordionCard--expanded 
+{
+  $accordion-card-background-color--expanded: white;
+  $accordion-card-spacing--expanded: $base-spacing !default;
+
+  background-color: $accordion-card-background-color--expanded;
+
+  &-icon  
+  {
+    transform: rotate(-90deg);
+  }
+
+  &-content
+  {
+    margin: 0 $accordion-card-spacing--expanded;
+    overflow: hidden;
+    transition: all 400ms ease;
+    margin-bottom: $accordion-card-spacing--expanded / 2;
+    display: block;
+    height: auto;
   }
 }

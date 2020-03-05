@@ -24,7 +24,6 @@ export default class VerticalResults {
    * Create vertical results from server data
    * @param {Object} response The server response
    * @param {Object.<string, function>} formatters The field formatters to use
-   * @param {string} verticalKey The verticalKey for the search
    */
   static from (response, formatters, verticalKey) {
     return new VerticalResults({
