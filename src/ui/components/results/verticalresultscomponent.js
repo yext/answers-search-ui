@@ -176,7 +176,7 @@ export default class VerticalResultsComponent extends Component {
     this.results = data.results || [];
     this.verticalKey = data.verticalConfigId;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
-    const displayResultsIfExist = this._config._isUniversal ||
+    const displayResultsIfExist = this._config.isUniversal ||
       this._config._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
     this.numColumns = this.getNumColumns();
