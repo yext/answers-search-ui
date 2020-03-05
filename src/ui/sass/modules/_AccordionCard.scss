@@ -73,11 +73,6 @@
   &-icon 
   {
     margin-left: auto;
-  }
-
-  &-icon .Icon 
-  {
-    margin-top: $accordion-card-spacing / 2;
     margin-right: $accordion-card-spacing / 2;
   }
 
@@ -128,12 +123,13 @@
 
   background-color: $accordion-card-background-color--expanded;
 
-  &-icon  
+  .yxt-AccordionCard-icon svg
   {
     transform: rotate(-90deg);
+    transition: transform 400ms ease-in;
   }
 
-  &-content
+  .yxt-AccordionCard-content  
   {
     margin: 0 $accordion-card-spacing--expanded;
     overflow: hidden;
