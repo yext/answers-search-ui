@@ -1,0 +1,142 @@
+/** @define AccordionCard */
+.yxt-AccordionCard 
+{
+  $accordion-card-spacing: $base-spacing !default;
+
+  $accordion-card-background-color: white !default;
+  $accordion-card-content-background-color: white !default;
+
+  $accordion-card-toggle-icon-height: $accordion-card-spacing !default; 
+  $accordion-card-toggle-icon-width: $accordion-card-spacing * 7/10 !default; 
+
+  $accordion-card-title-size: $font-size-md-lg !default;
+  $accordion-card-title-color: $color-brand-primary !default;
+  $accordion-card-title-line-height: $line-height-lg !default;
+  $accordion-card-title-weight: $font-weight-normal !default;
+
+  $accordion-card-subtitle-size: $font-size-md !default;
+  $accordion-card-subtitle-color: $color-text-secondary !default;
+
+  $accordion-card-details-size: $font-size-md !default;
+  $accordion-card-details-weight: $font-weight-normal !default;
+  $accordion-card-details-line-height: $line-height-md !default;
+  $accordion-card-details-color: $color-text-primary !default;
+
+  $accordion-card-margin: $base-spacing / 2 !default;
+  $accordion-card-border: $border-default !default;
+
+  background-color: $accordion-card-background-color;
+
+  @media (max-width: $breakpoint-mobile-max) 
+  {
+    margin-bottom: 0;
+    border-top: 0;
+  }
+  
+  &-toggle
+  {
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    height: $accordion-card-spacing * 2.75;
+    background: none;
+    cursor: pointer;
+    border: 0;
+    align-items: center;
+    padding: 0;
+    padding-right: $accordion-card-spacing * 0.5;
+  
+    &:hover, &:active {
+      $color: $color-brand-hover;
+      text-decoration: underline;
+    }
+  }
+
+  &-toggle svg 
+  {
+    height: $accordion-card-toggle-icon-height;
+    width: $accordion-card-toggle-icon-width;
+    color: $color-brand-primary;
+  }
+
+  &-title
+  {
+    margin-top: $accordion-card-spacing * 0.5;
+    margin-right: $accordion-card-spacing;
+    margin-left: $accordion-card-spacing;
+    @include Text(
+      $size: $accordion-card-title-size,
+      $color: $accordion-card-title-color,
+      $line-height: $accordion-card-title-line-height,
+      $weight: $accordion-card-title-weight,
+    );
+  }
+
+  &-icon 
+  {
+    margin-left: auto;
+    margin-right: $accordion-card-spacing / 2;
+  }
+
+  &-icon svg
+  {
+    transform: rotate(90deg);
+    transition: transform 400ms ease-in;
+  }
+
+  &-content
+  {
+    margin: 0 $accordion-card-spacing;
+    overflow: hidden;
+    transition: all 400ms ease;
+    height: 0;
+  }
+
+  &-subtitle
+  {
+    @include Text(
+      $size: $accordion-card-subtitle-size,
+      $color: $accordion-card-subtitle-color,
+    );
+  }
+
+  &-details
+  {
+    margin-top: $accordion-card-spacing / 2;
+    @include Text(
+      $size: $accordion-card-details-size,
+      $color: $accordion-card-details-color,
+      $weight: $accordion-card-details-weight,
+      $line-height: $accordion-card-details-line-height,
+    );
+  }
+
+  &-ctas 
+  {
+    margin-top: $accordion-card-spacing / 2;
+  }
+}
+
+.yxt-AccordionCard--expanded 
+{
+  $accordion-card-background-color--expanded: white;
+  $accordion-card-spacing--expanded: $base-spacing !default;
+
+  background-color: $accordion-card-background-color--expanded;
+  margin-bottom: $accordion-card-spacing--expanded * 0.5;
+
+  .yxt-AccordionCard-icon svg
+  {
+    transform: rotate(-90deg);
+    transition: transform 400ms ease-in;
+  }
+
+  .yxt-AccordionCard-content  
+  {
+    margin: 0;
+    margin-left: $accordion-card-spacing--expanded;
+    height: auto;
+    overflow: hidden;
+    transition: all 400ms ease;
+  }
+}

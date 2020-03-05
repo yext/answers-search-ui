@@ -1,7 +1,9 @@
 export const cardTemplates = {
-  'Standard': 'cards/standard'
+  'Standard': 'cards/standard',
+  'Accordion': 'cards/accordion'
 };
 
 export const cardTypes = {
-  'Standard': 'StandardCard'
+  'Standard': 'StandardCard',
+  'Accordion': 'AccordionCard'
 };

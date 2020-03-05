@@ -1,6 +1,7 @@
 /** @module StandardCardComponent */
 
 import Component from '../component';
+import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
@@ -27,23 +28,15 @@ class StandardCardConfig {
      * The cardMappings attribute of the config
      * is either a function that returns additional config for
      * a card or an object that is the additional config.
-     *
-     * This additional config has attributes that are either static values
-     * or functions.
      */
     let cardMappings = config.cardMappings || {};
-    if (typeof cardMappings === 'function') {
-      cardMappings = cardMappings(result);
-    }
-    if (typeof cardMappings === 'object') {
-      Object.entries(cardMappings).forEach(([attribute, value]) => {
-        if (typeof value === 'function') {
-          this[attribute] = value(result);
-        } else {
-          this[attribute] = value;
-        }
-      });
-    }
+    Object.assign(this, CardComponent.applyCardMappings(result, cardMappings));
+
+    /**
+     * The result data
+     * @type {Result}
+     */
+    this.result = config.data || {};
 
     /**
      * Title for the card
@@ -132,6 +125,12 @@ class StandardCardConfig {
      * @type {boolean}
      */
     this.isUniversal = this.isUniversal || false;
+
+    /**
+     * The index of the card.
+     * @type {number}
+     */
+    this._index = config._index || 0;
   }
 }
 
@@ -194,6 +193,7 @@ export default class StandardCardComponent extends Component {
         callsToAction: this._config.callsToAction,
         callsToActionFields: this._config.callsToActionFields,
         isUniversal: this._config.isUniversal,
+        _ctaModifiers: ['StandardCard'],
         ...opts
       });
     }
