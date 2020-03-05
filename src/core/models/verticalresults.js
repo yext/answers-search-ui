@@ -56,7 +56,8 @@ export default class VerticalResults {
     const hasResults = response.results && response.results.length > 0;
     const resultsContext = hasResults ? ResultsContext.NORMAL : ResultsContext.NO_RESULTS;
 
-    return new VerticalResults({
+    return new VerticalResults(
+      {
         ...Section.from(
           hasResults ? response : VerticalResults._formResponseFromAllResultsForVertical(response),
           null, formatters),
