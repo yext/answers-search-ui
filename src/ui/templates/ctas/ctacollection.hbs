@@ -1,10 +1,6 @@
 {{#each callsToAction}}
-  {{#if this.url}}
-    {{#if this.label}}
-      <div class='yxt-CTACollection-item'
-        data-component='CTA'
-        data-opts='{{json this}}'>
-      </div>
-    {{/if}}
-  {{/if}}
+  <div class='yxt-CTACollection-item'
+    data-component='CTA'
+    data-opts='{{json this}}'>
+  </div>
 {{/each}}

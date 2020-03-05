@@ -38,7 +38,13 @@ export default class CTACollectionComponent extends Component {
      * to contain CTA configuration.
      * @type {Array<string>}
      */
-    let callsToActionFields = this._config.callsToActionFields || [];
+    const callsToActionFields = this._config.callsToActionFields || [];
+
+    /**
+     * Additional context for the cta.
+     * @type {string}
+     */
+    this._config._context = this._config._context;
 
     /**
      * The computed calls to action array
@@ -56,6 +62,8 @@ export default class CTACollectionComponent extends Component {
       } else {
         return {
           eventOptions: this.defaultEventOptions(this.result),
+          _context: this._config._context,
+          _isSolo: this.callsToAction.length === 1,
           ...cta
         };
       }
@@ -77,11 +85,13 @@ export default class CTACollectionComponent extends Component {
    * @param {Function|...(Object|string)} ctaMapping
    * @returns {Array<Object>}
    */
-  resolveCTAMapping (result, callsToActionFields = [], ...ctas) {
+  resolveCTAMapping (result, callsToActionFields, ...ctas) {
+    // If entity has any fields that are designed as callsToActionFields, return those instead
     const filteredCTAFields = callsToActionFields.filter(ctaFieldName => result._raw[ ctaFieldName ]);
     if (filteredCTAFields.length > 0) {
       return filteredCTAFields.map(ctaFieldName => result._raw[ ctaFieldName ]);
     }
+    // Otherwise, use given callsToAction if any
     return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
         return ctaMapping(result);

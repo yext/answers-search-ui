@@ -190,23 +190,19 @@ export default class VerticalResultsComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === MapComponent.type) {
-      data = {
-        map: data
-      };
-      const newOpts = Object.assign({}, this._config.mapConfig, opts);
+      const newOpts = Object.assign({ map: data }, this._config.mapConfig, opts);
       return super.addChild(data, type, newOpts);
     } else if (type === CardComponent.type) {
+      const updatedData = {
+        result: this.results[opts._index],
+        verticalKey: this.verticalKey
+      };
       const newOpts = {
         ...this._config.card,
         isUniversal: this._config.isUniversal,
         template: this._config.itemTemplate,
         render: this._config.renderItem,
         ...opts
-      };
-      const index = opts.index;
-      const updatedData = {
-        result: this.results[index],
-        verticalKey: this.verticalKey
       };
       return super.addChild(updatedData, type, newOpts);
     }

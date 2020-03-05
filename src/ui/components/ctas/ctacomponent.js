@@ -47,6 +47,18 @@ class CTAConfig {
       this.eventOptions = JSON.parse(config.eventOptions);
     }
     this.eventOptions = this.eventOptions;
+
+    /**
+     * Context for the cta
+     * @type {string}
+     */
+    this._context = config._context;
+
+    /**
+     * Whether the cta is the only one in its CTACollectionComponent
+     * @type {boolean}
+     */
+    this._isSolo = config._isSolo || false;
   }
 }
 
