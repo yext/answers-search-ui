@@ -560,9 +560,21 @@ const callsToAction = [{
   analyticsEventType: 'CTA_CLICK',
   // Whether the click should open in a new window, defaults to false
   newWindow: false,
-  // The list of eventOptions needed for the event to fire. Either a valid json string or an object. Defaults to undefined, meaning
-  // no event will be fired
-  eventOptions: `{ "verticalKey": 'people', "entityId": 12312312, "searcher":"VERTICAL"}`
+  // The eventOptions needed for the event to fire. Either a valid json string, an object, or a function that
+  // takes in the result data response.
+  // By default, if no event options are specified the SDK will try to add verticalKey, entityId, and searcher options
+  // to the analytics event.
+  eventOptions: result => {
+    return {
+      // The vertical key for the CTA. If unspecified, this defaults to the vertical key this cta is a part of
+      verticalKey: "people",
+      // The entity id of the result this cta is a part of, defaults to the entityId field in Knowledge Graph
+      entityId: result._raw.id,
+      // If the CTA is inside a vertical search, defaults to the value "VERTICAL",
+      // if is inside a universal search, defaults to the value "UNIVERSAL"
+      searcher: "VERTICAL"
+    };
+  }
 }]
 ```
 

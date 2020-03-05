@@ -52,15 +52,16 @@ export default class VerticalResults {
    * @param {Object} response The server response
    * @param {Object.<string, function>} formatters The field formatters to use
    */
-  static from (response, formatters) {
+  static from (response, formatters, verticalKey) {
     const hasResults = response.results && response.results.length > 0;
     const resultsContext = hasResults ? ResultsContext.NORMAL : ResultsContext.NO_RESULTS;
 
-    return new VerticalResults(
-      Section.from(
-        hasResults ? response : VerticalResults._formResponseFromAllResultsForVertical(response),
-        null,
-        formatters),
+    return new VerticalResults({
+        ...Section.from(
+          hasResults ? response : VerticalResults._formResponseFromAllResultsForVertical(response),
+          null, formatters),
+        verticalConfigId: verticalKey
+      },
       resultsContext);
   }
 

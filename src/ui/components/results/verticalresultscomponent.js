@@ -27,13 +27,6 @@ class VerticalResultsConfig {
     Object.assign(this, config);
 
     /**
-     * verticalConfigId used for analytics and passed to children
-     * @type {string}
-     * @private
-     */
-    this.verticalConfigId = config.verticalConfigId;
-
-    /**
      * isUniversal is set to true if this component is added by the UniversalResultsComponent
      * @type {boolean}
      * @private
@@ -181,6 +174,7 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array<Result>}
      */
     this.results = data.results || [];
+    this.verticalKey = data.verticalConfigId;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config._isUniversal ||
       this._config._displayAllResults ||
@@ -211,7 +205,7 @@ export default class VerticalResultsComponent extends Component {
    */
   eventOptions () {
     return JSON.stringify({
-      verticalConfigId: this._config.verticalConfigId
+      verticalConfigId: this.verticalKey
     });
   }
 
@@ -238,14 +232,17 @@ export default class VerticalResultsComponent extends Component {
     } else if (type === CardComponent.type) {
       const newOpts = {
         ...this._config.card,
-        verticalConfigId: this._config.verticalConfigId,
         isUniversal: this._config.isUniversal,
         template: this._config.itemTemplate,
         render: this._config.renderItem,
         ...opts
       };
       const index = opts.index;
-      return super.addChild(this.results[index], type, newOpts);
+      const updatedData = {
+        result: this.results[index],
+        verticalKey: this.verticalKey
+      };
+      return super.addChild(updatedData, type, newOpts);
     } else if (type === AlternativeVerticalsComponent.type) {
       const hasResults = this.results && this.results.length > 0;
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
