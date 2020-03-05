@@ -41,8 +41,8 @@ export default class CTACollectionComponent extends Component {
     const callsToActionFields = this._config.callsToActionFields || [];
 
     /**
-     * Additional context for the cta.
-     * @type {string}
+     * Additional context css classNames for the cta.
+     * @type {Array<string>}
      */
     this._config._context = this._config._context;
 
@@ -60,10 +60,13 @@ export default class CTACollectionComponent extends Component {
       } else if (!cta.url) {
         console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
       } else {
+        const _context = this._config._context;
+        if (this.callsToAction.length === 1) {
+          _context.push('solo');
+        }
         return {
           eventOptions: this.defaultEventOptions(this.result),
-          _context: this._config._context,
-          _isSolo: this.callsToAction.length === 1,
+          _context: _context,
           ...cta
         };
       }

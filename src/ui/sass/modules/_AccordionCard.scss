@@ -123,6 +123,7 @@
   $accordion-card-spacing--expanded: $base-spacing !default;
 
   background-color: $accordion-card-background-color--expanded;
+  margin-bottom: $accordion-card-spacing--expanded * 0.5;
 
   .yxt-AccordionCard-icon svg
   {
