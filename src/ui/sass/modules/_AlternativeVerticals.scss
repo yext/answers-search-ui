@@ -1,0 +1,134 @@
+/** @define AlternativeVerticals */
+.yxt-AlternativeVerticals
+{
+  font-family: $font-family;
+  font-weight: $font-weight-light;
+  background-color: $color-brand-white;
+  border-right: $border-default;
+  border-left: $border-default;
+
+  @media (min-width: $breakpoint-mobile-max) {
+    margin-top: 42px;
+    margin-bottom: 24px;
+    border: $border-default;
+  }
+
+  &--notShowingResults
+  {
+    border-bottom: $border-default;
+  }
+
+  &-noResultsInfo {
+    background-color: $color-brand-primary;
+    color: $color-brand-white;
+    font-size: $font-size-md;
+    padding: 10px 15px;
+
+    &--emphasized {
+      font-weight: $font-weight-semibold;
+    }
+
+    @media (min-width: $breakpoint-mobile-max) {
+      font-size: $font-size-xlg;
+      padding: 10px 20px;
+    }
+  }
+
+  &-suggestionsWrapper {
+    padding: 15px;
+
+    @media (min-width: $breakpoint-mobile-max) {
+      padding: 10px 20px 15px;
+    }
+  }
+
+  &-details {
+    font-size: $font-size-md;
+
+    &--query {
+      font-weight: $font-weight-normal;
+    }
+
+    @media (min-width: $breakpoint-mobile-max) {
+      font-size: $font-size-md-lg;
+    }
+  }
+
+  &-suggestionsList {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  &-suggestion {
+    display: flex;
+    margin: 10px 0;
+
+    @media (min-width: $breakpoint-mobile-max) {
+      margin: 8px 0;
+    }
+  }
+
+  &-suggestionLink {
+    display: flex;
+    text-decoration: none;
+
+    > :not(:last-child) {
+      margin-right: 5px;
+    }
+
+    &:hover {
+      .yxt-AlternativeVerticals-suggestionLink--copy {
+        text-decoration: underline;
+      }
+    }
+
+    &--copy {
+      font-weight: $font-weight-semibold;
+
+      &Label {
+        text-transform: uppercase;
+      }
+    }
+  }
+
+  &-arrowIconWrapper,
+  &-verticalIconWrapper {
+    display: flex;
+    align-items: center;
+  }
+
+  &-arrowIconWrapper {
+    &,
+    > * {
+      width: 9px;
+    }
+  }
+
+  &-universalLink {
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+  &-universalDetails {
+    font-size: $font-size-md;
+
+    @media (min-width: $breakpoint-mobile-max) {
+      font-size: $font-size-md-lg;
+    }
+  }
+
+  a {
+    color: $color-brand-primary;
+
+    &:hover,
+    &:active,
+    &:visited {
+      color: $color-brand-hover;
+    }
+  }
+}

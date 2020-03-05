@@ -1,6 +1,6 @@
-/** @module NavigationConfig */
+/** @module VerticalPagesConfig */
 
-export class TabConfig {
+export class VerticalPageConfig {
   constructor (config = {}) {
     /**
      * The name of the tab that is exposed for the link
@@ -19,7 +19,13 @@ export class TabConfig {
      * By providing this, enables dynamic sorting based on results.
      * @type {string}
      */
-    this.configId = config.configId || null;
+    this.verticalKey = config.verticalKey || null;
+
+    /**
+     * Determines whether to show this tab in the navigation component
+     * @type {boolean}
+     */
+    this.hideInNavigation = config.hideInNavigation || false;
 
     /**
      * Determines whether to show this tab first in the order
@@ -33,26 +39,32 @@ export class TabConfig {
      * @type {boolean}
      */
     this.isActive = config.isActive || false;
+
+    /**
+     * name of an icon from the default icon set
+     * @type {string}
+     */
+    this.icon = config.icon || 'star';
   }
 
   validate () {
   }
-
-  static from (tabs) {
-    let tabConfigs = [];
-    if (tabs === undefined) {
-      return tabConfigs;
-    }
-    for (let i = 0; i < tabs.length; i++) {
-      let tab = tabs[i];
-      tabConfigs.push(new TabConfig(tab));
-    }
-    return tabConfigs;
-  }
 }
 
-export default class NavigationConfig {
+export default class VerticalPagesConfig {
   constructor (config = {}) {
-    this.tabsConfig = TabConfig.from(config.tabs);
+    this.verticalPagesConfig = VerticalPagesConfig.from(config);
+  }
+
+  static from (pages) {
+    let verticalPagesConfig = [];
+    if (pages === undefined) {
+      return verticalPagesConfig;
+    }
+    for (let i = 0; i < pages.length; i++) {
+      let page = pages[i];
+      verticalPagesConfig.push(new VerticalPageConfig(page));
+    }
+    return verticalPagesConfig;
   }
 }

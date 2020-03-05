@@ -25,7 +25,7 @@ import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
 import SearchApi from './core/search/searchapi';
 import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
-import NavigationConfig from './core/models/navigationconfig';
+import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION } from './core/constants';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
@@ -128,7 +128,7 @@ class Answers {
     this.validateConfig(parsedConfig);
 
     parsedConfig.search = new SearchConfig(parsedConfig.search);
-    parsedConfig.navigation = new NavigationConfig(parsedConfig.navigation);
+    parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
@@ -137,7 +137,7 @@ class Answers {
     });
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
-    globalStorage.set(StorageKeys.NAVIGATION_CONFIG, parsedConfig.navigation);
+    globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
     globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
 

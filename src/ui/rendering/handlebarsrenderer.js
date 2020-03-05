@@ -135,6 +135,12 @@ export default class HandlebarsRenderer extends Renderer {
         : JSON.stringify(name);
     });
 
+    this.registerHelper('plural', function (number, singularText, pluralText) {
+      return number === 1
+        ? singularText
+        : pluralText;
+    });
+
     let self = this;
     self.registerHelper('icon', function (name, value, options) {
       let icon = Icons.default;
