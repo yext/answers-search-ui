@@ -168,7 +168,7 @@ export default class AccordionCardComponent extends Component {
       return super.addChild(updatedData, type, {
         callsToAction: this._config.callsToAction,
         callsToActionFields: this._config.callsToActionFields,
-        _context: ['AccordionCard'],
+        _ctaModifiers: ['AccordionCard'],
         isUniversal: this._config.isUniversal,
         ...opts
       });

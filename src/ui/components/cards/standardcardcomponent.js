@@ -193,7 +193,7 @@ export default class StandardCardComponent extends Component {
         callsToAction: this._config.callsToAction,
         callsToActionFields: this._config.callsToActionFields,
         isUniversal: this._config.isUniversal,
-        _context: ['StandardCard'],
+        _ctaModifiers: ['StandardCard'],
         ...opts
       });
     }

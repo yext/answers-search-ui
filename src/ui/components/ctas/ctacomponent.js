@@ -49,10 +49,10 @@ class CTAConfig {
     this.eventOptions = this.eventOptions;
 
     /**
-     * Context for the cta
+     * Additional css className modifiers for the cta
      * @type {string}
      */
-    this._context = config._context;
+    this._ctaModifiers = config._ctaModifiers;
 
     /**
      * Whether the cta is the only one in its CTACollectionComponent
