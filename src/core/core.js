@@ -113,7 +113,7 @@ export default class Core {
 
     return this._searcher
       .verticalSearch(verticalKey, {
-        limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
+        limit: query.limit || this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         ...query,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
@@ -156,7 +156,7 @@ export default class Core {
    * @param {string} verticalKey The vertical key to use in the search
    * @param {number} offset The offset to use in the search
    */
-  verticalPage (verticalKey, offset) {
+  verticalPage (verticalKey, offset, limit) {
     const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
     const totalFilter = allFilters.length > 1
       ? Filter.and(...allFilters)
@@ -167,6 +167,7 @@ export default class Core {
       id: this.globalStorage.getState(StorageKeys.QUERY_ID),
       filter: JSON.stringify(totalFilter),
       facetFilter: JSON.stringify(facetFilter),
+      limit: limit,
       offset
     });
   }

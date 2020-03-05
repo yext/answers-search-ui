@@ -15,7 +15,7 @@ export default class PaginationComponent extends Component {
      * @type {string}
      * @private
      */
-    this._verticalKey = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    this._verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
     if (typeof this._verticalKey !== 'string') {
       throw new AnswersComponentError(
         'verticalKey not provided, but necessary for pagination',
@@ -45,6 +45,16 @@ export default class PaginationComponent extends Component {
       verticalKey: this._verticalKey
     };
 
+    /**
+     * The number of results to display per page, optional, falls back to limit from search config
+     * @type {number}
+     * @private
+     */
+    this._limit = config.limit || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+    if (this._limit && (typeof this._limit !== 'number' || this._limit < 1 || this._limit > 50)) {
+      throw new AnswersComponentError('Search Limit must be between 1 and 50', 'PaginationComponent');
+    }
+
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
     this.core.globalStorage.on('update', StorageKeys.SEARCH_OFFSET, offset => {
@@ -71,7 +81,7 @@ export default class PaginationComponent extends Component {
 
   onMount () {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
-    const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+    const limit = this._limit || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
     const showControls = results.searchState === 'search-complete' && results.resultsCount > limit;
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     if (!showControls) {
@@ -100,7 +110,7 @@ export default class PaginationComponent extends Component {
     this.scrollToTop();
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.persistentStorage.set(StorageKeys.SEARCH_OFFSET, offset);
-    this.core.verticalPage(this._verticalKey, offset);
+    this.core.verticalPage(this._verticalKey, offset, this._limit);
   }
 
   scrollToTop () {
@@ -112,7 +122,7 @@ export default class PaginationComponent extends Component {
   setState (data) {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
     let offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
-    const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+    const limit = this._limit || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
     const pageNumber = offset / limit;
     const showControls = results.searchState === 'search-complete' && results.resultsCount > limit;
     const isMoreResults = results.resultsCount > offset + limit;
