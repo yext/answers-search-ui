@@ -11,23 +11,21 @@
       <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
     {{/if}}
   {{/if}}
-  {{#if _config.showAppliedFilters}}
-    {{#if appliedFiltersArray}}
-      <div class="yxt-ResultsHeader-appliedFilters">
-        {{#each appliedFiltersArray}}
-          {{#if ../_config.showFieldNames}}
-            <div class="yxt-ResultsHeader-filterLabel">
-              {{this.label}}<span>:</span>
-            </div>
-          {{/if}}
-          {{#each this.displayValues}}
-            <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
-          {{/each}}
-          {{#unless @last}}
-            <div class="yxt-ResultsHeader-filterSeparator">|</div>
-          {{/unless}}
+  {{#if shouldShowFilters}}
+    <div class="yxt-ResultsHeader-appliedFilters">
+      {{#each appliedFiltersArray}}
+        {{#if ../_config.showFieldNames}}
+          <div class="yxt-ResultsHeader-filterLabel">
+            {{this.label}}<span>:</span>
+          </div>
+        {{/if}}
+        {{#each this.displayValues}}
+          <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
         {{/each}}
-      </div>
-    {{/if}}
+        {{#unless @last}}
+          <div class="yxt-ResultsHeader-filterSeparator">|</div>
+        {{/unless}}
+      {{/each}}
+    </div>
   {{/if}}
 </div>
