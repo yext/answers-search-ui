@@ -483,7 +483,7 @@ ANSWERS.addComponent('VerticalResults', {
   // Set a maximum number of columns that will display at the widest breakpoint.
   // Possible values are 1, 2, 3 or 4. defaults to 1
   maxNumberOfColumns: 3,
-  // Whether to display the count of results at the very top of the results, default true
+  // Whether to display the total number of results, default true
   showResultsCount: true,
   // If present, show the filters that were ultimately applied to this query, default true
   showAppliedFilters: true,
@@ -491,7 +491,7 @@ ANSWERS.addComponent('VerticalResults', {
   // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
   // otherwise display just 'Virginia'. Defaults to false.
   showFieldNames: false,
-  // display this a separator between the result count and the applied query filters
+  // display this separator between the result count and the applied query filters
   resultsCountSeparator: '|',
   // The card used to display each individual result, see [Cards](#Cards) section for more details,
   card: {

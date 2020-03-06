@@ -16,7 +16,6 @@
   $results-header-filters-line-height: $line-height-md !default;
 
   margin-left: $results-header-font-size;
-  margin-bottom: $results-header-spacing / 2;
   display: flex;
   align-items: baseline;
 
@@ -52,7 +51,6 @@
   &-filterLabel
   {
     margin-right: $results-header-spacing * 3 / 8;
-    white-space: pre;
     @include Text(
       $size: $results-header-filters-font-size,
       $line-height: $results-header-filters-line-height,
@@ -63,12 +61,16 @@
   &-filterValue
   {
     margin-right:$results-header-spacing  * 3 / 8;
-    white-space: pre;
     @include Text(
       $size: $results-header-filters-font-size,
       $line-height: $results-header-filters-line-height,
       $color: $results-header-filters-color,
     );
+  }
+  &-resultsCountSeparator
+  {
+    color: $results-header-filters-color;
+    margin-right: $results-header-spacing * 3 / 8;
   }
 
   &-filterSeparator

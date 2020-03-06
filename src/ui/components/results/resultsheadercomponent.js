@@ -1,7 +1,6 @@
 /** @module AppliedFiltersComponent */
 
 import Component from '../component';
-
 import StorageKeys from '../../../core/storage/storagekeys';
 
 export default class ResultsHeaderComponent extends Component {
