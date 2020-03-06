@@ -9,7 +9,9 @@
   {{/if}}
   {{#if resultsPresent}}
     <section class="yxt-Results yxt-Results--{{_config.modifier}}">
-      {{> results/resultssectionheader}}
+      {{#if showResultsHeader}}
+        <div data-component="ResultsHeader" data-opts='{{json _config.resultsHeaderOpts}}'></div>
+      {{/if}}
       {{#if includeMap}}
         <div class="yxt-Results-map"
              data-component="Map"

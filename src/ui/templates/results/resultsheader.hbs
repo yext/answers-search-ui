@@ -1,0 +1,31 @@
+<div class="yxt-ResultsHeader">
+  {{#if _config.showResultsCount}}
+    <div class="yxt-ResultsHeader-resultsCount">
+      {{resultsCountStart}}
+      <span>-</span>
+      {{resultsCountEnd}}
+      <span>of</span>
+      {{resultsLength}} 
+    </div>
+    {{#if showResultSeparator}}
+      <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
+    {{/if}}
+  {{/if}}
+  {{#if shouldShowFilters}}
+    <div class="yxt-ResultsHeader-appliedFilters">
+      {{#each appliedFiltersArray}}
+        {{#if ../_config.showFieldNames}}
+          <div class="yxt-ResultsHeader-filterLabel">
+            {{this.label}}<span>:</span>
+          </div>
+        {{/if}}
+        {{#each this.displayValues}}
+          <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
+        {{/each}}
+        {{#unless @last}}
+          <div class="yxt-ResultsHeader-filterSeparator">|</div>
+        {{/unless}}
+      {{/each}}
+    </div>
+  {{/if}}
+</div>
