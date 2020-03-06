@@ -8,7 +8,7 @@ export default class ResultsHeaderComponent extends Component {
     super(config, systemConfig);
 
     /**
-     * Display the count of results at the very top of the results
+     * Whether to display the number of results.
      * @type {boolean}
      */
     this._config.showResultsCount = config.showResultsCount === undefined ? true : config.showResultsCount;
@@ -27,7 +27,7 @@ export default class ResultsHeaderComponent extends Component {
 
     /**
      * If showResultsCount and showAppliedFilters are true,
-     * display this a separator between the result count and the applied query filters
+     * display this separator between the result count and the applied query filters
      * @type {string}
      */
     this._config.resultsCountSeparator = config.resultsCountSeparator || '|';

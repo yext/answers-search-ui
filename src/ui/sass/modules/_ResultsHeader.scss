@@ -1,6 +1,6 @@
 /** @define ResultsHeader */
 .yxt-ResultsHeader {
-  $results-header-font-size: $font-size-md;
+  $results-header-font-size: $font-size-md !default;
   $results-header-spacing: $base-spacing !default;
 
   $results-header-color: $color-text-secondary !default;

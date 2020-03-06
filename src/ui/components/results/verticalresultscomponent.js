@@ -99,7 +99,7 @@ class VerticalResultsConfig {
      */
     this.resultsHeaderOpts = {
       /**
-       * Display the count of results at the very top of the results
+       * Whether to display the number of results.
        * @type {boolean}
        */
       showResultsCount: config.showResultsCount === undefined ? true : config.showResultsCount,
@@ -112,7 +112,7 @@ class VerticalResultsConfig {
 
       /**
        * If showResultsCount and showAppliedFilters are true,
-       * display this a separator between the result count and the applied query filters
+       * display this separator between the result count and the applied query filters
        * @type {string}
        */
       resultsCountSeparator: config.resultsCountSeparator || '|',
