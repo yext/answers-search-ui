@@ -8,6 +8,7 @@ import ResultsContext from '../../../core/storage/resultscontext';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
+import ResultsHeaderComponent from './resultsheadercomponent';
 import DOM from '../../dom/dom';
 
 /**
@@ -92,6 +93,36 @@ class VerticalResultsConfig {
      * @type {Object}
      */
     this.footer = config.footer || {};
+
+    /**
+     * Config options used in the {@link ResultsHeaderComponent}
+     */
+    this.resultsHeaderOpts = {
+      /**
+       * Display the count of results at the very top of the results
+       * @type {boolean}
+       */
+      showResultsCount: config.showResultsCount === undefined ? true : config.showResultsCount,
+
+      /**
+       * If present, show the filters that were ultimately applied to this query
+       * @type {boolean}
+       */
+      showAppliedFilters: config.showAppliedFilters === undefined ? true : config.showAppliedFilters,
+
+      /**
+       * If showResultsCount and showAppliedFilters are true,
+       * display this a separator between the result count and the applied query filters
+       * @type {string}
+       */
+      resultsCountSeparator: config.resultsCountSeparator || '|',
+
+      /**
+       * If showAppliedFilters is true, show the field name in the string followed by a colon.
+       * @type {boolean}
+       */
+      showFieldNames: config.showFieldNames || false
+    };
   }
 }
 
@@ -175,11 +206,14 @@ export default class VerticalResultsComponent extends Component {
      */
     this.results = data.results || [];
     this.verticalKey = data.verticalConfigId;
+    this.appliedQueryFilters = data.appliedQueryFilters;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
       this._config._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
     this.numColumns = this.getNumColumns();
+    const showResultsHeader = this._config.resultsHeaderOpts.showResultsCount ||
+      this._config.resultsHeaderOpts.showAppliedFilters;
 
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
@@ -195,7 +229,8 @@ export default class VerticalResultsComponent extends Component {
       showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
       isEnhancedNoResultsEnabled: this._config._showEnhancedNoResults,
       placeholders: new Array(this._config.maxNumberOfColumns - 1),
-      numColumns: this.numColumns
+      numColumns: this.numColumns,
+      showResultsHeader: showResultsHeader
     }), val);
   }
 
@@ -250,6 +285,13 @@ export default class VerticalResultsComponent extends Component {
         ...opts
       };
       return super.addChild(data, type, newOpts);
+    } else if (type === ResultsHeaderComponent.type) {
+      const resultsHeaderData = {
+        resultsLength: this.results.length,
+        appliedQueryFilters: this.appliedQueryFilters,
+        ...data
+      };
+      return super.addChild(resultsHeaderData, type, opts);
     }
     return super.addChild(data, type, opts);
   }

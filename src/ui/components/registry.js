@@ -36,6 +36,7 @@ import IconComponent from './icons/iconcomponent.js';
 import CTAComponent from './ctas/ctacomponent';
 import CTACollectionComponent from './ctas/ctacollectioncomponent';
 import FooterComponent from './utils/footercomponent.js';
+import ResultsHeaderComponent from './results/resultsheadercomponent';
 
 const COMPONENT_CLASS_LIST = [
   // Core Component
@@ -68,6 +69,7 @@ const COMPONENT_CLASS_LIST = [
   AccordionResultsComponent,
   MapComponent,
   AlternativeVerticalsComponent,
+  ResultsHeaderComponent,
 
   // Card Components
   CardComponent,
