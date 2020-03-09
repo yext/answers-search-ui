@@ -205,6 +205,7 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array<Result>}
      */
     this.results = data.results || [];
+    this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
     this.appliedQueryFilters = data.appliedQueryFilters;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
@@ -288,6 +289,7 @@ export default class VerticalResultsComponent extends Component {
     } else if (type === ResultsHeaderComponent.type) {
       const resultsHeaderData = {
         resultsLength: this.results.length,
+        resultsCount: this.resultsCount,
         appliedQueryFilters: this.appliedQueryFilters,
         ...data
       };

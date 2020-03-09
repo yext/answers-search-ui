@@ -35,7 +35,13 @@ export default class ResultsHeaderComponent extends Component {
     const data = config.data || {};
 
     /**
-     * Results count
+     * Total number of results.
+     * @type {number}
+     */
+    this.resultsCount = data.resultsCount || 0;
+
+    /**
+     * Number of results displayed on the page.
      * @type {number}
      */
     this.resultsLength = data.resultsLength || 0;
@@ -70,7 +76,7 @@ export default class ResultsHeaderComponent extends Component {
     const shouldShowFilters = hasFilters && this._config.showAppliedFilters;
     return super.setState({
       ...data,
-      resultsLength: this.resultsLength,
+      resultsCount: this.resultsCount,
       resultsCountStart: offset + 1,
       resultsCountEnd: offset + this.resultsLength,
       showResultSeparator: this._config.showResultsCount && shouldShowFilters,
