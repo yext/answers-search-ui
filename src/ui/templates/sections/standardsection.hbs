@@ -1,0 +1,53 @@
+<section class="yxt-StandardSection">
+  <div class="yxt-StandardSection-header">
+    <div data-component="IconComponent" data-opts='{ "iconName": "{{_config.icon}}" }'></div>
+    <div class="yxt-StandardSection-title">{{_config.title}}</div>
+  </div>
+  {{#if _config.showAppliedFilters}}
+    <div class="yxt-StandardSection-appliedFilters">
+      {{#each appliedFiltersArray}}
+        {{#if ../_config.showFieldNames}}
+          <div class="yxt-StandardSection-filterLabel">{{this.label}}:</div>
+        {{/if}}
+        {{#each this.displayValues}}
+          <div class="yxt-StandardSection-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
+        {{/each}}
+        {{#unless @last}}
+          <div class="yxt-StandardSection-filterSeparator">|</div>
+        {{/unless}}
+      {{/each}}
+      <a class="yxt-StandardSection-changeFilters" href="{{_config.url}}">
+        change filters
+      </a>
+    </div>
+  {{/if}}
+
+  {{#if _config.includeMap}}
+    <div class="yxt-StandardSection-map"
+          data-component="Map"
+          data-prop="map">
+    </div>
+  {{/if}}
+  <div class="yxt-StandardSection-results">
+    {{#each results}}
+      <div class="yxt-Card" data-component="Card" data-opts='{"_index": {{@index}} }'></div>
+    {{/each}}
+  </div>
+  {{#if _config.viewMore}}
+    {{#if _config.viewMoreLabel}}
+      {{#if _config.url}}
+        <div class="yxt-StandardSection-viewMore">
+          <a class="yxt-StandardSection-viewMore-link" href="{{_config.url}}">
+            <div class="yxt-StandardSection-viewMore-label">{{_config.viewMoreLabel}}</div>
+            <div data-component="IconComponent" data-opts='{ "iconName": "chevron" }'></div>
+          </a>
+        </div>
+      {{else}}
+        <div class="yxt-StandardSection-viewMore">
+          <div class="yxt-StandardSection-viewMore-label">{{_config.viewMoreLabel}}</div>
+          <div data-component="IconComponent" data-opts='{ "iconName": "chevron" }'></div>
+        </div>
+      {{/if}}
+    {{/if}}
+  {{/if}}
+</section>

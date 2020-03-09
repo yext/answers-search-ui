@@ -1,0 +1,177 @@
+/** @define StandardSection */
+.yxt-StandardSection
+{
+
+  $standard-section-border: $border-default !default;
+  $standard-section-spacing: $base-spacing !default;
+  $standard-section-background: white !default;
+
+  $standard-section-header-background: $color-background-highlight !default;
+  $standard-section-header-svg-size: $standard-section-spacing * 9/8;
+  $standard-section-header-svg-padding-right: $standard-section-spacing * 3/4 !default;
+
+  $standard-section-title-color: $color-text-primary !default;
+  $standard-section-title-weight: $font-weight-semibold !default;
+  $standard-section-title-line-height: $line-height-lg !default;
+  $standard-section-title-size: $font-size-md-lg !default;
+
+  $standard-section-filters-font-size: $font-size-md !default;
+  $standard-section-filters-line-height: $line-height-md !default;
+  $standard-section-filters-color: $color-text-secondary !default;
+
+  $standard-section-viewMore-border: $border-default !default;
+  $standard-section-viewMore-color: $color-brand-primary !default;
+  $standard-section-viewMore-weight: $font-weight-semibold !default;
+  $standard-section-viewMore-line-height: $line-height-lg !default;
+  $standard-section-viewMore-size: $font-size-md !default;
+  $standard-section-viewMore-background: $color-background-highlight !default;
+  $standard-section-viewMore-link-hover-color: $color-brand-hover !default;
+  $standard-section-viewMore-svg-size: $standard-section-spacing !default;
+  $standard-section-viewMore-svg-color: $color-brand-primary !default;
+
+  background-color: $standard-section-background;
+  width: 100%;
+  margin-top: $standard-section-spacing;
+  margin-bottom: $standard-section-spacing;
+
+  &-header 
+  {
+    border: $border-default;
+    display: flex;
+    padding: $standard-section-spacing / 2 $standard-section-spacing;
+    align-items: center;
+    background-color: $standard-section-header-background;
+  }
+
+  &-header svg 
+  {
+    color: $color-brand-primary;
+    height: $standard-section-header-svg-size;
+    width: $standard-section-header-svg-size;
+    padding-right: $standard-section-header-svg-padding-right;
+  }
+
+  &-title 
+  {
+    text-transform: uppercase;
+    @include Text(
+      $color: $standard-section-title-color,
+      $weight: $standard-section-title-weight,
+      $line-height: $standard-section-title-line-height,
+      $size: $standard-section-title-size,
+    );
+  }
+
+  &-appliedFilters
+  {
+    padding-top: $standard-section-spacing / 2;
+    padding-bottom: $standard-section-spacing / 2;
+    padding-left: $standard-section-spacing;
+    padding-right: $standard-section-spacing;
+    border: $standard-section-border;
+    border-top: 0;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  &-filterLabel
+  {
+    margin-right: $standard-section-spacing * 3 / 8;
+    white-space: pre;
+    @include Text(
+      $size: $standard-section-filters-font-size,
+      $line-height: $standard-section-filters-line-height,
+      $color: $standard-section-filters-color,
+    )
+  }
+
+  &-filterValue
+  {
+    margin-right:$standard-section-spacing  * 3 / 8;
+    white-space: pre;
+    @include Text(
+      $size: $standard-section-filters-font-size,
+      $line-height: $standard-section-filters-line-height,
+      $color: $standard-section-filters-color,
+    );
+  }
+
+  &-filterSeparator
+  {
+    color: $standard-section-filters-color;
+    margin-right: $standard-section-spacing * 3 / 8;
+  }
+
+  &-changeFilters {
+    margin-left: $standard-section-spacing;
+    padding-right: $standard-section-spacing;
+    @include Link(
+      $base-color: $color-brand-primary
+    );
+    @include Text(
+      $line-height: 20px
+    );
+
+    &:hover 
+    {
+      cursor: pointer;
+    }
+  }
+
+  &-map
+  {
+    height: 300px;
+    border: $standard-section-border;
+    border-top: 0;
+  }
+
+  &-results 
+  {
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-flow: row wrap;
+  }
+
+  &-viewMore 
+  {
+    display: flex;
+    border: $standard-section-viewMore-border;
+    border-top: 0;
+    padding: $standard-section-spacing / 2 $standard-section-spacing;
+    align-items: center;
+    background-color: $standard-section-viewMore-background;
+    justify-content: center;
+  }
+
+  &-viewMore-link {
+    text-decoration: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    &:hover, &:focus 
+    {
+      color: $standard-section-viewMore-link-hover-color;
+      text-decoration: underline;
+    }
+  }
+
+  &-viewMore-label 
+  {
+    margin-right: $standard-section-spacing / 2;
+    @include Text(
+      $color: $standard-section-viewMore-color,
+      $weight: $standard-section-viewMore-weight,
+      $line-height: $standard-section-viewMore-line-height,
+      $size: $standard-section-viewMore-size,
+    );
+  }
+
+  &-viewMore svg
+  {
+    height: $standard-section-viewMore-svg-size * 5 / 8;
+    width: $standard-section-viewMore-svg-size  * 5 / 8;
+    color: $standard-section-viewMore-svg-color;
+  }
+}

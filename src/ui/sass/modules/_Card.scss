@@ -3,6 +3,8 @@
 
   display: flex;
   flex-direction: column;
+  flex-basis: 100%;
+  flex-grow: 1;
 
   &-child {
     margin-right: $cards-margin;
@@ -41,5 +43,15 @@
     &--4 > .yxt-Card {
       flex-basis: 25%;
     }
+  }
+}
+
+.yxt-UniversalResults .yxt-Card {
+  $universal-results-card-border: $border-default !default;
+
+  &-child {
+    margin: 0;
+    border: $universal-results-card-border;
+    border-top: 0;
   }
 }
