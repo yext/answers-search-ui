@@ -1,5 +1,8 @@
 const { series, src, dest, watch } = require('gulp');
 
+const fs = require('fs');
+const insert = require('rollup-plugin-insert');
+
 const rollup = require('gulp-rollup-lightweight');
 const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
@@ -67,6 +70,11 @@ function bundleTemplates () {
     },
     plugins: [
       resolve(),
+      insert.prepend(
+        fs.readFileSync('./conf/gulp-tasks/templates-polyfill-prefix.js').toString(),
+        {
+          include: './dist/answerstemplates.compiled.min.js'
+        }),
       builtins(),
       commonjs({
         include: './node_modules/**'
