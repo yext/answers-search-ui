@@ -53,6 +53,10 @@ class StandardSectionConfig {
      * @type {boolean}
      */
     this.showFieldNames = sectionConfig.showFieldNames || false;
+
+    // If showAppliedFilters is true, this is list of filters that should not be displayed.
+    // By default, builtin.entityType will be hidden
+    this.hiddenFields = sectionConfig.hiddenFields || [ 'builtin.entityType' ];
   }
 }
 
@@ -126,12 +130,13 @@ export default class StandardSectionComponent extends Component {
 
   getAppliedFiltersArray (appliedQueryFilters = []) {
     const groupedFilters = {};
-    appliedQueryFilters.forEach(filter => {
-      if (!groupedFilters[filter.key]) {
-        groupedFilters[filter.key] = [];
-      }
-      groupedFilters[filter.key].push(filter.value);
-    });
+    appliedQueryFilters.filter(f => !this._config.hiddenFields.includes(f.fieldId))
+      .forEach(filter => {
+        if (!groupedFilters[filter.key]) {
+          groupedFilters[filter.key] = [];
+        }
+        groupedFilters[filter.key].push(filter.value);
+      });
     // Has to be parsed into an array because our handlebars can only loop through arrays, not objects.
     return Object.keys(groupedFilters).map(label => ({
       label: label, displayValues: groupedFilters[label]

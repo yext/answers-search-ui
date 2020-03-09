@@ -502,7 +502,10 @@ ANSWERS.addComponent('UniversalResults', {
       // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
       // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
       // otherwise display just 'Virginia'. Defaults to false.
-      showFieldNames: false
+      showFieldNames: false,
+      // If showAppliedFilters is true, this is list of filters that should not be displayed.
+      // By default, builtin.entityType will be hidden
+      hiddenFields: ['builtin.entityType']
     }
   }
 })
