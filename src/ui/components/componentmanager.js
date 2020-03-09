@@ -94,6 +94,15 @@ export default class ComponentManager {
     };
 
     let componentClass = COMPONENT_REGISTRY[componentType];
+    if (!componentClass) {
+      let similarComponents = Object.keys(COMPONENT_REGISTRY).filter(type => type.startsWith(componentType.substring(0, 2)));
+      if (similarComponents.length === 0) {
+        similarComponents = Object.keys(COMPONENT_REGISTRY);
+      }
+      throw new AnswersComponentError(
+        `Component type ${componentType} is not recognized as a valid component.` +
+        ` You might have meant ${similarComponents.join(', ')}?`);
+    }
 
     if (
       !componentClass.areDuplicateNamesAllowed() &&
