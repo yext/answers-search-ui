@@ -71,7 +71,7 @@ function bundleTemplates () {
     plugins: [
       resolve(),
       insert.prepend(
-        fs.readFileSync('./conf/gulp-tasks/polyfill-prefix--templates.js').toString(),
+        fs.readFileSync('./conf/gulp-tasks/templates-polyfill-prefix.js').toString(),
         {
           include: './dist/answerstemplates.compiled.min.js'
         }),
