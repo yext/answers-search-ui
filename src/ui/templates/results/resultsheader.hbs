@@ -1,14 +1,16 @@
 <div class="yxt-ResultsHeader">
   {{#if _config.showResultsCount}}
-    <div class="yxt-ResultsHeader-resultsCount">
-      {{resultsCountStart}}
-      <span>-</span>
-      {{resultsCountEnd}}
-      <span>of</span>
-      {{resultsLength}} 
-    </div>
-    {{#if showResultSeparator}}
-      <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
+    {{#if resultsCount}}
+      <div class="yxt-ResultsHeader-resultsCount">
+        <span class="yxt-ResultsHeader-resultsCount-start">{{resultsCountStart}}</span>
+        <span class="yxt-ResultsHeader-resultsCount-dash">-</span>
+        <span class="yxt-ResultsHeader-resultsCount-end">{{resultsCountEnd}}</span>
+        <span class="yxt-ResultsHeader-resultsCount-of">of</span>
+        <span class="yxt-ResultsHeader-resultsCount-total">{{resultsCount}}</span>
+      </div>
+      {{#if showResultSeparator}}
+        <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
+      {{/if}}
     {{/if}}
   {{/if}}
   {{#if shouldShowFilters}}
@@ -16,7 +18,8 @@
       {{#each appliedFiltersArray}}
         {{#if ../_config.showFieldNames}}
           <div class="yxt-ResultsHeader-filterLabel">
-            {{this.label}}<span>:</span>
+            <span class="yxt-ResultsHeader-filterLabel-label">{{this.label}}</span>
+            <span class="yxt-ResultsHeader-filterLabel-colon">:</span>
           </div>
         {{/if}}
         {{#each this.displayValues}}
