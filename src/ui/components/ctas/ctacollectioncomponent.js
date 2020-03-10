@@ -46,30 +46,27 @@ export default class CTACollectionComponent extends Component {
      */
     this._config._ctaModifiers = this._config._ctaModifiers;
 
-    /**
-     * The computed calls to action array
-     * @type {Array<Object>}
-     */
-    this.callsToAction = this.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
-
-    this.callsToAction = this.callsToAction.map(cta => {
+    callsToAction = this.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
+    callsToAction.forEach(cta => {
       if (!cta.label && !cta.url) {
         console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
       } else if (!cta.label) {
         console.warn('Call to Action:', cta, 'is missing a label attribute and is being automatically hidden');
       } else if (!cta.url) {
         console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
-      } else {
-        const _ctaModifiers = this._config._ctaModifiers;
-        if (this.callsToAction.length === 1) {
-          _ctaModifiers.push('solo');
-        }
-        return {
-          eventOptions: this.defaultEventOptions(this.result),
-          _ctaModifiers: _ctaModifiers,
-          ...cta
-        };
       }
+    });
+    callsToAction = callsToAction.filter(cta => cta.url && cta.label);
+    this.callsToAction = callsToAction.map(cta => {
+      const _ctaModifiers = this._config._ctaModifiers;
+      if (callsToAction.length === 1) {
+        _ctaModifiers.push('solo');
+      }
+      return {
+        eventOptions: this.defaultEventOptions(this.result),
+        _ctaModifiers: _ctaModifiers,
+        ...cta
+      };
     });
   }
 
