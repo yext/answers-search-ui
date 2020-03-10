@@ -18,7 +18,7 @@
              data-prop="map">
         </div>
       {{/if}}
-      <ul class="yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
+      <ul class="yxt-Results-items js-yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
         {{#each results}}
           <div class="yxt-Card" data-component="Card" data-opts='{"_index": {{@index}} }'></div>
         {{/each}}
