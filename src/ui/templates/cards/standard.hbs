@@ -21,9 +21,15 @@
       {{#if _config.title}}
         {{#if _config.url}}
           <div class="yxt-StandardCard-title">
-            <a href="{{_config.url}}" target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
-              {{_config.title}}
-            </a>
+            {{#if _config.newWindow}}
+              <a href="{{_config.url}}" target="_blank" rel="noopener noreferrer nofollow">
+                {{_config.title}}
+              </a>
+            {{else}}
+              <a href="{{_config.url}}" target="_blank" "_self">
+                {{_config.title}}
+              </a>
+            {{/if}}
           </div>
         {{else}}
           <div class="yxt-StandardCard-title">
