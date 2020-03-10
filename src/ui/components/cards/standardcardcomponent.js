@@ -1,7 +1,7 @@
 /** @module StandardCardComponent */
 
 import Component from '../component';
-import CardComponent from './cardcomponent';
+import CardContainerComponent from './cardcontainercomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
@@ -30,7 +30,7 @@ class StandardCardConfig {
      * a card or an object that is the additional config.
      */
     let cardMappings = config.cardMappings || {};
-    Object.assign(this, CardComponent.applyCardMappings(result, cardMappings));
+    Object.assign(this, CardContainerComponent.applyCardMappings(result, cardMappings));
 
     /**
      * The result data

@@ -1,7 +1,7 @@
 /** @module AccordionCardComponent */
 
 import Component from '../component';
-import CardComponent from './cardcomponent';
+import CardContainerComponent from './cardcontainercomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
@@ -31,7 +31,7 @@ class AccordionCardConfig {
      * a card or an object that is the additional config.
      */
     const cardMappings = config.cardMappings || {};
-    Object.assign(this, CardComponent.applyCardMappings(result, cardMappings));
+    Object.assign(this, CardContainerComponent.applyCardMappings(result, cardMappings));
 
     /**
      * Vertical key for the card, added to analytics events sent by this component.

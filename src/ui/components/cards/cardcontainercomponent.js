@@ -1,4 +1,4 @@
-/** @module CardComponent */
+/** @module CardContainerComponent */
 
 import Component from '../component';
 import { cardTypes } from './consts';
@@ -47,7 +47,7 @@ class CardConfig {
   }
 }
 
-export default class CardComponent extends Component {
+export default class CardContainerComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new CardConfig(config), systemConfig);
 

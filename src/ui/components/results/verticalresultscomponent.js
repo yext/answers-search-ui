@@ -7,7 +7,7 @@ import MapComponent from '../map/mapcomponent';
 import ResultsContext from '../../../core/storage/resultscontext';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
-import CardComponent from '../cards/cardcomponent';
+import CardContainerComponent from '../cards/cardcontainercomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import DOM from '../../dom/dom';
 
@@ -261,7 +261,7 @@ export default class VerticalResultsComponent extends Component {
     if (type === MapComponent.type) {
       const newOpts = Object.assign({ map: data }, this._config.mapConfig, opts);
       return super.addChild(data, type, newOpts);
-    } else if (type === CardComponent.type) {
+    } else if (type === CardContainerComponent.type) {
       const updatedData = {
         result: this.results[opts._index],
         verticalKey: this.verticalKey

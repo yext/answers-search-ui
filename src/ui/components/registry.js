@@ -24,7 +24,7 @@ import VerticalResultsComponent from './results/verticalresultscomponent';
 import UniversalResultsComponent from './results/universalresultscomponent';
 import PaginationComponent from './results/paginationcomponent';
 
-import CardComponent from './cards/cardcomponent';
+import CardContainerComponent from './cards/cardcontainercomponent';
 import StandardCardComponent from './cards/standardcardcomponent';
 import AccordionCardComponent from './cards/accordioncardcomponent';
 
@@ -72,7 +72,7 @@ const COMPONENT_CLASS_LIST = [
   ResultsHeaderComponent,
 
   // Card Components
-  CardComponent,
+  CardContainerComponent,
   StandardCardComponent,
   AccordionCardComponent,
 
