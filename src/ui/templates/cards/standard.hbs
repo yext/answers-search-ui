@@ -63,7 +63,9 @@
             {{/if}}
           </div>
         {{/if}}
-        <div class="yxt-StandardCard-ctas" data-component="CTACollection" data-prop="result"></div>
+        {{#if hasCTAs}}
+          <div class="yxt-StandardCard-ctas" data-component="CTACollection" data-prop="result"></div>
+        {{/if}}
       </div>
     </div>
   </div>

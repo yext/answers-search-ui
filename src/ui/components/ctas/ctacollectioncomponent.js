@@ -46,7 +46,7 @@ export default class CTACollectionComponent extends Component {
      */
     this._config._ctaModifiers = this._config._ctaModifiers;
 
-    callsToAction = this.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
+    callsToAction = CTACollectionComponent.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
     callsToAction.forEach(cta => {
       if (!cta.label && !cta.url) {
         console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
@@ -70,6 +70,11 @@ export default class CTACollectionComponent extends Component {
     });
   }
 
+  static hasCTAs (result, callsToActionFields, ctas) {
+    return CTACollectionComponent.resolveCTAMapping(result, callsToActionFields, ...ctas)
+      .filter(cta => cta.url && cta.label).length > 0;
+  }
+
   /**
    * Handles resolving ctas from a cta mapping which are either
    * 1. a function that returns a cta's config
@@ -85,7 +90,7 @@ export default class CTACollectionComponent extends Component {
    * @param {Function|...(Object|string)} ctaMapping
    * @returns {Array<Object>}
    */
-  resolveCTAMapping (result, callsToActionFields, ...ctas) {
+  static resolveCTAMapping (result, callsToActionFields, ...ctas) {
     // If entity has any fields that are designed as callsToActionFields, return those instead
     const filteredCTAFields = callsToActionFields.filter(ctaFieldName => result._raw[ ctaFieldName ]);
     if (filteredCTAFields.length > 0) {

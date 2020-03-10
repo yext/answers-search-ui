@@ -161,6 +161,14 @@ export default class StandardCardComponent extends Component {
     this.result = data.result || {};
   }
 
+  hasCTAs () {
+    return CTACollectionComponent.hasCTAs(
+      this.result,
+      this._config.callsToActionFields,
+      ...this._config.callsToAction
+    );
+  }
+
   setState (data) {
     const details = this.hideExcessDetails
       ? `${this._config.details.substring(0, this._config.showMoreLimit)}...`
@@ -169,6 +177,7 @@ export default class StandardCardComponent extends Component {
       ...data,
       hideExcessDetails: this.hideExcessDetails,
       result: this.result,
+      hasCTAs: this.hasCTAs(),
       details
     });
   }

@@ -111,12 +111,21 @@ export default class AccordionCardComponent extends Component {
     this.result = data.result || {};
   }
 
+  hasCTAs () {
+    return CTACollectionComponent.hasCTAs(
+      this.result,
+      this._config.callsToActionFields,
+      ...this._config.callsToAction
+    );
+  }
+
   setState (data) {
     const id = this.result.id || this.result.ordinal;
     return super.setState({
       ...data,
       result: this.result,
       isExpanded: this.isExpanded,
+      hasCTAs: this.hasCTAs(),
       id: `${this.name}-${id}-${this.verticalKey}`
     });
   }
