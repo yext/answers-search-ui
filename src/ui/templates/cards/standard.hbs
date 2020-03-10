@@ -7,64 +7,54 @@
     </div>
   {{/if}}
   <div class="yxt-StandardCard-wrapper">
-    {{#if _config.image}}
-      <div class="yxt-StandardCard-imgWrapper">
-        <img src="{{_config.image}}">
-        {{#if _config.tagLabel}}
-          <div class="yxt-StandardCard-imgTagWrapper">
-            <div class="yxt-StandardCard-imgTag">{{_config.tagLabel}}</div>
-          </div>
-        {{/if}}
+  {{#if _config.image}}
+  <div class="yxt-StandardCard-img" style="background-image: url('{{_config.image}}');">
+    {{#if _config.tagLabel}}
+      <div class="yxt-StandardCard-imgTagWrapper">
+        <div class="yxt-StandardCard-imgTag">{{_config.tagLabel}}</div>
       </div>
     {{/if}}
-    <div class="yxt-StandardCard-contentWrapper">
-      {{#if _config.title}}
-        {{#if _config.url}}
-          <div class="yxt-StandardCard-title">
-            {{#if _config.newWindow}}
-              <a href="{{_config.url}}" target="_blank" rel="noopener noreferrer nofollow">
-                {{_config.title}}
-              </a>
-            {{else}}
-              <a href="{{_config.url}}" target="_blank" "_self">
-                {{_config.title}}
-              </a>
-            {{/if}}
-          </div>
+  </div>
+  {{/if}}
+  <div class="yxt-StandardCard-contentWrapper">
+    {{#if _config.title}}
+      {{#if _config.url}}
+        {{#if _config.newWindow}}
+          <a class="yxt-StandardCard-titleLink" href="{{_config.url}}" target="_blank" rel="noopener noreferrer nofollow">
         {{else}}
-          <div class="yxt-StandardCard-title">
-            {{_config.title}}
-          </div>
+          <a class="yxt-StandardCard-titleLink" href="{{_config.url}}" target="_self">
         {{/if}}
-      {{/if}}
-      {{#if _config.subtitle}}  
-        <div class="yxt-StandardCard-subtitle">
-          {{_config.subtitle}}
-        </div>
-      {{/if}}
-      <div class="yxt-StandardCard-content">
-        {{#if details}}
-          <div class="yxt-StandardCard-details">
-            <div class="yxt-StandardCard-detailsText">
-              {{details}}
-            </div>
-            {{#if _config.showToggle}}
-              <button class="yxt-StandardCard-toggle">
-                {{#if hideExcessDetails}}
-                  {{_config.showMoreText}}
-                  <span data-component="IconComponent"
-                    data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseDown" }'></span>
-                {{else}} 
-                  {{_config.showLessText}}
-                  <span data-component="IconComponent"
-                    data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseUp" }'></span>
-                {{/if}}
-              </button>
-            {{/if}}
-          </div>
-        {{/if}}
-        <div class="yxt-StandardCard-ctas" data-component="CTACollection" data-prop="result"></div>
+      {{else}}
+        <div class="yxt-StandardCard-title">{{_config.title}}</div>
+    {{/if}}
+    {{#if _config.subtitle}}  
+      <div class="yxt-StandardCard-subtitle">
+        {{_config.subtitle}}
       </div>
+    {{/if}}
+    <div class="yxt-StandardCard-content">
+      <div class="yxt-StandardCard-details">
+        {{#if details}}
+          <div class="yxt-StandardCard-detailsText">
+            {{details}}
+          </div>
+          {{#if _config.showToggle}}
+            <button class="yxt-StandardCard-toggle js-yxt-StandardCard-toggle">
+              {{#if hideExcessDetails}}
+                {{_config.showMoreText}}
+                <span data-component="IconComponent"
+                  data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseDown" }'></span>
+              {{else}} 
+                {{_config.showLessText}}
+                <span data-component="IconComponent"
+                  data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseUp" }'></span>
+              {{/if}}
+            </button>
+          {{/if}}
+        {{/if}}
+      </div>
+      <div class="yxt-StandardCard-ctas" data-component="CTACollection" data-prop="result"></div>
     </div>
+  </div>
   </div>
 </div>
