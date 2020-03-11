@@ -167,6 +167,7 @@ export default class StandardCardComponent extends Component {
       ...data,
       hideExcessDetails: this.hideExcessDetails,
       result: this.result,
+      hasCTAs: CTACollectionComponent.hasCTAs(this.result, this._config.callsToAction),
       details
     });
   }
