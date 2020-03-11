@@ -1,45 +1,19 @@
 /** @module AccordionCardComponent */
 
-import Component from '../component';
-import { CardConfig } from './cardcomponent';
+import { CardComponent, CardConfig } from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
 
-export default class AccordionCardComponent extends Component {
+export default class AccordionCardComponent extends CardComponent {
   constructor (config = {}, systemConfig = {}) {
     super(new CardConfig(config), systemConfig);
-
-    /**
-     * If expanded is true the accordion renders on page load expanded, the accordion is
-     * closed on load by default.
-     * @type {boolean}
-     */
-    this.expanded = this.expanded || false; // TODO what is the point of this (with this.isExpanded)
-
     /**
      * Whether the accordion is collapsed or not.
      * @type {boolean}
      */
     this.isExpanded = this._config.expanded;
-
-    /**
-     * @type {Object}
-     */
-    const data = config.data || {};
-
-    /**
-     * Vertical key for the card, added to analytics events sent by this component.
-     * @type {string}
-     */
-    this.verticalKey = data.verticalKey;
-
-    /**
-     * The result data, sent to children CTA Components that need this.
-     * @type {Result}
-     */
-    this.result = data.result || {};
   }
 
   setState (data) {
@@ -92,17 +66,7 @@ export default class AccordionCardComponent extends Component {
    */
   addChild (data, type, opts) {
     if (type === CTACollectionComponent.type) {
-      const updatedData = {
-        verticalKey: this.verticalKey,
-        result: data
-      };
-      return super.addChild(updatedData, type, {
-        callsToAction: this._config.callsToAction,
-        callsToActionFields: this._config.callsToActionFields,
-        _ctaModifiers: ['AccordionCard'],
-        isUniversal: this._config.isUniversal,
-        ...opts
-      });
+      return super.addCTACollectionComponent(data, type, opts, [AccordionCardComponent.type]);
     }
     return super.addChild(data, type, opts);
   }
@@ -113,9 +77,5 @@ export default class AccordionCardComponent extends Component {
 
   static defaultTemplateName () {
     return cardTemplates.Accordion;
-  }
-
-  static areDuplicateNamesAllowed () {
-    return true;
   }
 }

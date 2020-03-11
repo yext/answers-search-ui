@@ -1,8 +1,7 @@
 /** @module StandardCardComponent */
 
-import Component from '../component';
-import { CardConfig } from './cardcomponent';
-import { cardTemplates, cardTypes } from './consts';
+import { CardComponent, CardConfig } from './cardcomponent';
+import { cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
 
@@ -10,27 +9,10 @@ import CTACollectionComponent from '../ctas/ctacollectioncomponent';
  * Card components expect to receive a data config option, containing data regarding entity result
  * each card is assigned to, including all field data in data._raw.
  */
-export default class StandardCardComponent extends Component {
+export default class StandardCardComponent extends CardComponent {
   constructor (config = {}, systemConfig = {}) {
     super(new CardConfig(config), systemConfig);
     this.hideExcessDetails = this._config.showToggle;
-
-    /**
-     * @type {Object}
-     */
-    const data = config.data || {};
-
-    /**
-     * Vertical key for the search.
-     * @type {string}
-     */
-    this.verticalKey = data.verticalKey;
-
-    /**
-     * The result data
-     * @type {Result}
-     */
-    this.result = data.result || {};
   }
 
   setState (data) {
@@ -57,30 +39,12 @@ export default class StandardCardComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === CTACollectionComponent.type) {
-      const updatedData = {
-        verticalKey: this.verticalKey,
-        result: data
-      };
-      return super.addChild(updatedData, type, {
-        callsToAction: this._config.callsToAction,
-        callsToActionFields: this._config.callsToActionFields,
-        isUniversal: this._config.isUniversal,
-        _ctaModifiers: ['StandardCard'],
-        ...opts
-      });
+      return super.addCTACollectionComponent(data, type, opts, [StandardCardComponent.type]);
     }
     return super.addChild(data, type, opts);
   }
 
   static get type () {
     return cardTypes.Standard;
-  }
-
-  static defaultTemplateName () {
-    return cardTemplates.Standard;
-  }
-
-  static areDuplicateNamesAllowed () {
-    return true;
   }
 }
