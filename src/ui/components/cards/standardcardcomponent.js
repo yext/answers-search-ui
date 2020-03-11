@@ -192,7 +192,9 @@ export default class StandardCardComponent extends Component {
     }
 
     const titleEl = DOM.query(this._container, '.js-yxt-StandardCard-title');
-    DOM.on(titleEl, 'click', this.handleTitleClick);
+    if (titleEl) {
+      DOM.on(titleEl, 'click', this.handleTitleClick);
+    }
   }
 
   addChild (data, type, opts) {
