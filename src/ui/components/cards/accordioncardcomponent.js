@@ -1,91 +1,22 @@
 /** @module AccordionCardComponent */
 
 import Component from '../component';
-import CardContainerComponent from './cardcontainercomponent';
+import { CardConfig } from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
 
-class AccordionCardConfig {
-  constructor (config = {}) {
-    Object.assign(this, config);
-
-    const data = config.data || {};
-
-    /**
-     * The result data
-     * @type {Result}
-     */
-    const result = data.result || {};
-
-    /**
-     * The raw profile data
-     * @type {Object}
-     */
-    const rawResult = result._raw || {};
-
-    /**
-     * The templateMappings attribute of the config
-     * is either a function that returns additional config for
-     * a card or an object that is the additional config.
-     */
-    const cardMappings = config.cardMappings || {};
-    Object.assign(this, CardContainerComponent.applyCardMappings(result, cardMappings));
-
-    /**
-     * Vertical key for the card, added to analytics events sent by this component.
-     * @type {string}
-     */
-    this.verticalKey = config.verticalKey;
-
-    /**
-     * @type {string}
-     */
-    this.title = this.title || result.title || rawResult.name || '';
-
-    /**
-     * @type {string}
-     */
-    this.subtitle = this.subtitle;
-
-    /**
-     * @type {string}
-     */
-    this.details = this.details || result.details || rawResult.description || '';
+export default class AccordionCardComponent extends Component {
+  constructor (config = {}, systemConfig = {}) {
+    super(new CardConfig(config), systemConfig);
 
     /**
      * If expanded is true the accordion renders on page load expanded, the accordion is
      * closed on load by default.
      * @type {boolean}
      */
-    this.expanded = this.expanded || false;
-
-    /**
-     * Either a function that spits out an array of CTA config objects or an array of CTA config objects
-     * or api fieldnames
-     * @type {Function|Array<Object|string>}
-     */
-    this.callsToAction = this.callsToAction || [];
-
-    /**
-     * An array of cta custom field names, whose custom field data are expected
-     * to contain CTA configuration.
-     * @type {Array<string>}
-     */
-    this.callsToActionFields = config.callsToActionFields || [];
-
-    /**
-     * Whether this card is part of a universal search. Used in analytics.
-     * @type {boolean}
-     */
-    this.isUniversal = config.isUniversal || false;
-  }
-}
-
-export default class AccordionCardComponent extends Component {
-  constructor (config = {}, systemConfig = {}) {
-    super(new AccordionCardConfig(config), systemConfig);
+    this.expanded = this.expanded || false; // TODO what is the point of this (with this.isExpanded)
 
     /**
      * Whether the accordion is collapsed or not.
