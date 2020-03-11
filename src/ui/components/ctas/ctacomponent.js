@@ -33,10 +33,10 @@ class CTAConfig {
     this.analyticsEventType = config.analyticsEventType || 'CTA_CLICK';
 
     /**
-     * Whether the click should open in a new window
+     * The target attribute for the CTA link.
      * @type {boolean}
      */
-    this.newWindow = config.newWindow;
+    this.target = config.target || '_self';
 
     /**
      * The eventOptions needed for the event to fire, passed as a string or Object

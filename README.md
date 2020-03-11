@@ -555,8 +555,8 @@ const callsToAction = [{
   //       'BOOK_APPOINTMENT',
   //       'RSVP'
   analyticsEventType: 'CTA_CLICK',
-  // Whether the click should open in a new window, defaults to false
-  newWindow: false,
+  // The target attribute for the CTA link, defaults to '_self'. To open in a new window use '_blank'
+  target: '_blank',
   // The eventOptions needed for the event to fire. Either a valid json string, an object, or a function that
   // takes in the result data response.
   // By default, if no event options are specified the SDK will try to add verticalKey, entityId, and searcher options
@@ -583,14 +583,14 @@ const callsToAction = item => [{
   label: item._raw.name,
   url: "https://yext.com",
   analyticsEventType: "CTA_CLICK",
-  newWindow: false,
+  target: '_blank',
   icon: "briefcase",
   eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }, {
   label: 'call now',
   url: "https://maps.google.com",
   analyticsEventType: "CTA_CLICK",
-  newWindow: false,
+  target: '_blank',
   icon: "phone",
   eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }]
@@ -603,7 +603,7 @@ const callsToAction = item => [{
   label: item => item._raw.name,
   url: "https://yext.com",
   analyticsEventType: "CTA_CLICK",
-  newWindow: item !== null,
+  target: '_self',
   icon: "briefcase",
   eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }]
@@ -665,7 +665,7 @@ ANSWERS.addComponent('VerticalResults', {
       showMoreLimit: 500,
       showMoreText: "show more",
       showLessText: "put it back",
-      newWindow: true,
+      target: '_blank'
     })
   }
   /* ...other vertical results config... */
@@ -694,8 +694,8 @@ const cardMappings = {
   showMoreText: "show more",
   // Text for show less button, defaults to 'Show Less'
   showLessText: "put it back",
-  // Whether to open the title link in a new window, defaults to false
-  newWindow: true,
+  // The target attribute for the title link, defaults to '_self'. To open in a new window use '_blank'
+  target: '_blank',
   // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
   // defaults to false
   showOrdinal: false,
