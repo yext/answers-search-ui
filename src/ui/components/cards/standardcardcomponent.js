@@ -5,6 +5,7 @@ import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
+import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
 class StandardCardConfig {
   constructor (config = {}) {
@@ -161,6 +162,8 @@ export default class StandardCardComponent extends Component {
      * @type {Result}
      */
     this.result = data.result || {};
+
+    this.handleTitleClick = this.handleTitleClick.bind(this);
   }
 
   setState (data) {
@@ -175,6 +178,16 @@ export default class StandardCardComponent extends Component {
     });
   }
 
+  handleTitleClick () {
+    const event = new AnalyticsEvent('TITLE_CLICK')
+      .addOptions({
+        verticalKey: this.verticalKey,
+        entityId: this.result._raw.id,
+        searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+      });
+    this.analyticsReporter.report(event);
+  }
+
   onMount () {
     if (this._config.showToggle) {
       const el = DOM.query(this._container, '.js-yxt-StandardCard-toggle');
@@ -183,6 +196,9 @@ export default class StandardCardComponent extends Component {
         this.setState();
       });
     }
+
+    const titleEl = DOM.query(this._container, '.js-yxt-StandardCard-title');
+    DOM.on(titleEl, 'click', this.handleTitleClick);
   }
 
   addChild (data, type, opts) {
