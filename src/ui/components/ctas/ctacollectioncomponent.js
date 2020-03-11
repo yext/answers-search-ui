@@ -39,7 +39,7 @@ export default class CTACollectionComponent extends Component {
      */
     this._config._ctaModifiers = this._config._ctaModifiers;
 
-    callsToAction = this.resolveCTAMapping(this.result, ...callsToAction);
+    callsToAction = CTACollectionComponent.resolveCTAMapping(this.result, ...callsToAction);
     callsToAction.forEach(cta => {
       if (!cta.label && !cta.url) {
         console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
@@ -74,7 +74,7 @@ export default class CTACollectionComponent extends Component {
    * @param {Function|...(Object|string)} ctaMapping
    * @returns {Array<Object>}
    */
-  resolveCTAMapping (result, ...ctas) {
+  static resolveCTAMapping (result, ...ctas) {
     return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
         return ctaMapping(result);
@@ -89,6 +89,11 @@ export default class CTACollectionComponent extends Component {
         return ctaObject;
       }
     });
+  }
+
+  static hasCTAs (result, ctas) {
+    return CTACollectionComponent.resolveCTAMapping(result, ...ctas)
+      .filter(cta => cta.url && cta.label).length > 0;
   }
 
   defaultEventOptions (result) {

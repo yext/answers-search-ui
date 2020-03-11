@@ -112,7 +112,8 @@ export default class AccordionCardComponent extends Component {
       ...data,
       result: this.result,
       isExpanded: this.isExpanded,
-      id: `${this.name}-${id}-${this.verticalKey}`
+      id: `${this.name}-${id}-${this.verticalKey}`,
+      hasCTAs: CTACollectionComponent.hasCTAs(this.result, this._config.callsToAction)
     });
   }
 
