@@ -83,7 +83,7 @@ class VerticalResultsConfig {
        * Whether to display the number of results.
        * @type {boolean}
        */
-      showResultsCount: config.showResultsCount === undefined ? true : config.showResultsCount,
+      showResultCount: config.showResultCount === undefined ? true : config.showResultCount,
 
       /**
        * If present, show the filters that were ultimately applied to this query
@@ -92,7 +92,7 @@ class VerticalResultsConfig {
       showAppliedFilters: config.showAppliedFilters === undefined ? true : config.showAppliedFilters,
 
       /**
-       * If showResultsCount and showAppliedFilters are true,
+       * If showResultCount and showAppliedFilters are true,
        * display this separator between the result count and the applied query filters
        * @type {string}
        */
@@ -144,7 +144,7 @@ export default class VerticalResultsComponent extends Component {
     const displayResultsIfExist = this._config.isUniversal ||
       this._config._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    const showResultsHeader = this._config.resultsHeaderOpts.showResultsCount ||
+    const showResultsHeader = this._config.resultsHeaderOpts.showResultCount ||
       this._config.resultsHeaderOpts.showAppliedFilters;
 
     return super.setState(Object.assign({ results: [] }, data, {
