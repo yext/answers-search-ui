@@ -76,12 +76,6 @@ class VerticalResultsConfig {
     this.card = config.card || {};
 
     /**
-     * Config for the footer at the bottom of the vertical results
-     * @type {Object}
-     */
-    this.footer = config.footer || {};
-
-    /**
      * Config options used in the {@link ResultsHeaderComponent}
      */
     this.resultsHeaderOpts = {

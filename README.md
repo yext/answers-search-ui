@@ -504,19 +504,6 @@ ANSWERS.addComponent('VerticalResults', {
     // see [Calls To Action](#Calls-To-Action) and [Calls To Action Fields](#Calls-To-Action-Fields)
     callsToAction: () => [],
     callsToActionFields: [ "c_primaryCTA","c_secondaryCTA" ]
-  },
-  // Config for the footer at the bottom of the results
-  footer: {
-    // Image/icon to appear at the bottom. Either the name of an answers-sdk icon
-    // or a url to an image. Defaults to 'yext' (the built-in yext icon)
-    logo: 'yext',
-    // The url to open when the icon is clicked. NOTE: a protocol like http is needed
-    // To link to external pages like yext.com
-    url: 'https://yext.com',
-    // Whether to open the link in a new window, defaults to false
-    newWindow: false,
-    // Optional: text for screen readers in the footer, will only be visible by screen readers
-    screenReaderText: "I will only be read by screen readers",
   }
 })
 ```
