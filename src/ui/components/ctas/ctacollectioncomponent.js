@@ -34,19 +34,12 @@ export default class CTACollectionComponent extends Component {
     let callsToAction = this._config.callsToAction || [];
 
     /**
-     * An array of cta custom field names, whose custom field data are expected
-     * to contain CTA configuration.
-     * @type {Array<string>}
-     */
-    const callsToActionFields = this._config.callsToActionFields || [];
-
-    /**
      * Additional css modifier classNames for the cta.
      * @type {Array<string>}
      */
     this._config._ctaModifiers = this._config._ctaModifiers;
 
-    callsToAction = this.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
+    callsToAction = this.resolveCTAMapping(this.result, ...callsToAction);
     callsToAction.forEach(cta => {
       if (!cta.label && !cta.url) {
         console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
@@ -76,22 +69,12 @@ export default class CTACollectionComponent extends Component {
    * 2. an object that has a per-attribute mapping of either a
    *    a) static value
    *    b) function that takes in resut data and returns the given attributes value
-   * callsToAction can also be specified through callsToActionFields, which are:
-   * 3. an api field name that keys into the result data which contains the cta config as a json string
-   * If callToActionFields are present other ctas should be ignored.
    * Note: Intentionally does not allow nesting functions.
    * @param {Object} result
-   * @param {Array<string>} callsToActionFields
    * @param {Function|...(Object|string)} ctaMapping
    * @returns {Array<Object>}
    */
-  resolveCTAMapping (result, callsToActionFields, ...ctas) {
-    // If entity has any fields that are designed as callsToActionFields, return those instead
-    const filteredCTAFields = callsToActionFields.filter(ctaFieldName => result._raw[ ctaFieldName ]);
-    if (filteredCTAFields.length > 0) {
-      return filteredCTAFields.map(ctaFieldName => result._raw[ ctaFieldName ]);
-    }
-    // Otherwise, use given callsToAction if any
+  resolveCTAMapping (result, ...ctas) {
     return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
         return ctaMapping(result);
