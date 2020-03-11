@@ -175,7 +175,7 @@ export default class StandardCardComponent extends Component {
 
   onMount () {
     if (this._config.showToggle) {
-      const el = DOM.query(this._container, '.yxt-StandardCard-toggle');
+      const el = DOM.query(this._container, '.js-yxt-StandardCard-toggle');
       DOM.on(el, 'click', () => {
         this.hideExcessDetails = !this.hideExcessDetails;
         this.setState();

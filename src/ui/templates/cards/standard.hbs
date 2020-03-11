@@ -8,8 +8,7 @@
   {{/if}}
   <div class="yxt-StandardCard-wrapper">
     {{#if _config.image}}
-      <div class="yxt-StandardCard-imgWrapper">
-        <img src="{{_config.image}}">
+      <div class="yxt-StandardCard-img" style="background-image: url('{{_config.image}}');">
         {{#if _config.tagLabel}}
           <div class="yxt-StandardCard-imgTagWrapper">
             <div class="yxt-StandardCard-imgTag">{{_config.tagLabel}}</div>
@@ -20,21 +19,17 @@
     <div class="yxt-StandardCard-contentWrapper">
       {{#if _config.title}}
         {{#if _config.url}}
-          <div class="yxt-StandardCard-title">
-            {{#if _config.newWindow}}
-              <a href="//{{_config.url}}" target="_blank" rel="noopener noreferrer nofollow">
-                {{_config.title}}
-              </a>
-            {{else}}
-              <a href="//{{_config.url}}" target="_blank" "_self">
-                {{_config.title}}
-              </a>
-            {{/if}}
-          </div>
+          {{#if _config.newWindow}}
+            <a class="yxt-StandardCard-titleLink" href="//{{_config.url}}" target="_blank" rel="noopener noreferrer nofollow">
+              {{_config.title}}
+            </a>
+          {{else}}
+            <a class="yxt-StandardCard-titleLink" href="//{{_config.url}}" target="_self">
+              {{_config.title}}
+            </a>
+          {{/if}}
         {{else}}
-          <div class="yxt-StandardCard-title">
-            {{_config.title}}
-          </div>
+          <div class="yxt-StandardCard-title">{{_config.title}}</div>
         {{/if}}
       {{/if}}
       {{#if _config.subtitle}}  
@@ -49,7 +44,7 @@
               {{details}}
             </div>
             {{#if _config.showToggle}}
-              <button class="yxt-StandardCard-toggle">
+              <button class="yxt-StandardCard-toggle js-yxt-StandardCard-toggle">
                 {{#if hideExcessDetails}}
                   {{_config.showMoreText}}
                   <span data-component="IconComponent"

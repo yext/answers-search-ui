@@ -3,12 +3,12 @@
 
   display: flex;
   flex-direction: column;
+  min-width: 210px;
 
   &-child {
     margin-right: $cards-margin;
     margin-bottom: $cards-margin;
     flex-grow: 1;
-    min-width: 210px;
     border: $border-default;
 
     @media (max-width: $container-desktop-base) {
