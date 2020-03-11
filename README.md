@@ -723,7 +723,7 @@ const cardMappings = item => {
     subtitle: `Department: ${item._raw.name} `,
     // Details, defaults to the entity's description
     details: item._raw.description,
-    // Whether this current card Mapping's Accordion Card should be open on page load, defaults to false
+    // Whether the first Accordion Card shown in vertical/universal results should be open on page load, defaults to false
     expanded: false
   };
 }

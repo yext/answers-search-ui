@@ -57,8 +57,7 @@ class AccordionCardConfig {
       : '';
 
     /**
-     * If expanded is true the accordion renders on page load expanded, the accordion is
-     * closed on load by default.
+     * If expanded is true the first accordion in vertical/universal results renders on page load expanded.
      * @type {boolean}
      */
     this.expanded = this.expanded || false;
@@ -84,9 +83,11 @@ export default class AccordionCardComponent extends Component {
 
     /**
      * Whether the accordion is collapsed or not.
+     * Defaults to true only if the expanded option is true
+     * and this is the first card in the results.
      * @type {boolean}
      */
-    this.isExpanded = this._config.expanded;
+    this.isExpanded = this._config.expanded && config._index === 0;
 
     /**
      * @type {Object}
