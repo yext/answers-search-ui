@@ -140,10 +140,11 @@ export default class AccordionCardComponent extends Component {
 
     toggleEl.setAttribute('aria-expanded', this.isExpanded ? 'true' : 'false');
     contentEl.setAttribute('aria-hidden', this.isExpanded ? 'false' : 'true');
-    const event = new AnalyticsEvent(this.isExpanded ? 'ROW_COLLAPSE' : 'ROW_EXPAND')
+    const event = new AnalyticsEvent(this.isExpanded ? 'ROW_EXPAND' : 'ROW_COLLAPSE')
       .addOptions({
         verticalKey: this.verticalKey,
-        entityId: this.result._raw.id
+        entityId: this.result._raw.id,
+        searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
       });
     this.analyticsReporter.report(event);
   }
