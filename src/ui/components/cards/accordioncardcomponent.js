@@ -71,13 +71,6 @@ class AccordionCardConfig {
     this.callsToAction = this.callsToAction || [];
 
     /**
-     * An array of cta custom field names, whose custom field data are expected
-     * to contain CTA configuration.
-     * @type {Array<string>}
-     */
-    this.callsToActionFields = config.callsToActionFields || [];
-
-    /**
      * Whether this card is part of a universal search. Used in analytics.
      * @type {boolean}
      */
@@ -170,7 +163,6 @@ export default class AccordionCardComponent extends Component {
       };
       return super.addChild(updatedData, type, {
         callsToAction: this._config.callsToAction,
-        callsToActionFields: this._config.callsToActionFields,
         _ctaModifiers: ['AccordionCard'],
         isUniversal: this._config.isUniversal,
         ...opts

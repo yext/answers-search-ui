@@ -29,13 +29,6 @@ class CardConfig {
     this.callsToAction = config.callsToAction || [];
 
     /**
-     * An array of cta custom field names, whose custom field data are expected
-     * to contain CTA configuration.
-     * @type {Array<string>}
-     */
-    this.callsToActionFields = config.callsToActionFields || [];
-
-    /**
      * The index of the card.
      * @type {number}
      */
@@ -95,7 +88,6 @@ export default class CardComponent extends Component {
     const newOpts = {
       cardMappings: this._config.cardMappings,
       callsToAction: this._config.callsToAction,
-      callsToActionFields: this._config.callsToActionFields,
       verticalKey: this._config.verticalKey,
       _index: this._config._index,
       isUniversal: this._config.isUniversal,
