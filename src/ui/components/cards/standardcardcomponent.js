@@ -51,7 +51,7 @@ class StandardCardConfig {
      */
     this.details = this.details === undefined
       ? (this.details || result.details || rawResult.description || '')
-      : '';
+      : this.details;
 
     /**
      * Url when you click the title

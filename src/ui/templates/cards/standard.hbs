@@ -20,22 +20,22 @@
       {{#if _config.title}}
         {{#if _config.url}}
           <a class="yxt-StandardCard-titleLink js-yxt-StandardCard-title" href="//{{_config.url}}" target="{{_config.target}}" rel="noopener noreferrer nofollow">
-            {{_config.title}}
+            {{{_config.title}}}
           </a>
         {{else}}
-          <div class="yxt-StandardCard-title">{{_config.title}}</div>
+          <div class="yxt-StandardCard-title">{{{_config.title}}}</div>
         {{/if}}
       {{/if}}
       {{#if _config.subtitle}}  
         <div class="yxt-StandardCard-subtitle">
-          {{_config.subtitle}}
+          {{{_config.subtitle}}}
         </div>
       {{/if}}
       <div class="yxt-StandardCard-content">
         {{#if details}}
           <div class="yxt-StandardCard-details">
             <div class="yxt-StandardCard-detailsText">
-              {{details}}
+              {{{details}}}
             </div>
             {{#if _config.showToggle}}
               <button class="yxt-StandardCard-toggle js-yxt-StandardCard-toggle">
