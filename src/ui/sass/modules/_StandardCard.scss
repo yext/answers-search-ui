@@ -76,7 +76,6 @@
   }
 
   &-img {
-    max-width: 25%;
     height: $standard-card-base-spacing * 10;
     min-width: $standard-card-base-spacing * 7;
     flex-basis: 0;
@@ -146,7 +145,7 @@
     margin-bottom: $standard-card-base-spacing / 2;
     margin-right: $standard-card-base-spacing;
     flex-basis: 0;
-    flex-grow: 4;
+    flex-grow: 1;
     @include Text(
       $size: $font-size-md,
       $line-height: $line-height-md,

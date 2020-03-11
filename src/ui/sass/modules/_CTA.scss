@@ -3,6 +3,7 @@
   color: $color-brand-primary;
   display: flex;
   align-items: center;
+  word-break: break-all;
 
   @include Text(
     $size: $font-size-md,
