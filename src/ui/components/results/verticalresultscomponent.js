@@ -151,8 +151,6 @@ export default class VerticalResultsComponent extends Component {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      includeMap: this._config.includeMap,
-      mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
       universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
       query: this.core.globalStorage.getState(StorageKeys.QUERY),
@@ -191,8 +189,8 @@ export default class VerticalResultsComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === MapComponent.type) {
-      const newOpts = Object.assign({ map: data }, this._config.mapConfig, opts);
-      return super.addChild(data, type, newOpts);
+      const newOpts = Object.assign({}, this._config.mapConfig, opts);
+      return super.addChild({ map: data }, type, newOpts);
     } else if (type === CardComponent.type) {
       const updatedData = {
         result: this.results[opts._index],
