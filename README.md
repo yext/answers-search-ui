@@ -484,7 +484,7 @@ ANSWERS.addComponent('VerticalResults', {
   // Possible values are 1, 2, 3 or 4. defaults to 1
   maxNumberOfColumns: 3,
   // Whether to display the total number of results, default true
-  showResultsCount: true,
+  showResultCount: true,
   // If present, show the filters that were ultimately applied to this query, default true
   showAppliedFilters: true,
   // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
