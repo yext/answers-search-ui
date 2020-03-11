@@ -11,7 +11,7 @@ export default class ResultsHeaderComponent extends Component {
      * Whether to display the number of results.
      * @type {boolean}
      */
-    this._config.showResultsCount = config.showResultsCount === undefined ? true : config.showResultsCount;
+    this._config.showResultCount = config.showResultCount === undefined ? true : config.showResultCount;
 
     /**
      * If present, show the filters that were ultimately applied to this query
@@ -26,7 +26,7 @@ export default class ResultsHeaderComponent extends Component {
     this._config.showFieldNames = config.showFieldNames || false;
 
     /**
-     * If showResultsCount and showAppliedFilters are true,
+     * If showResultCount and showAppliedFilters are true,
      * display this separator between the result count and the applied query filters
      * @type {string}
      */
@@ -79,7 +79,7 @@ export default class ResultsHeaderComponent extends Component {
       resultsCount: this.resultsCount,
       resultsCountStart: offset + 1,
       resultsCountEnd: offset + this.resultsLength,
-      showResultSeparator: this._config.showResultsCount && shouldShowFilters,
+      showResultSeparator: this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
       appliedFiltersArray: this.getAppliedFiltersArray()
     });

@@ -52,7 +52,9 @@ class AccordionCardConfig {
     /**
      * @type {string}
      */
-    this.details = this.details || result.details || rawResult.description || '';
+    this.details = this.details === undefined
+      ? (this.details || result.details || rawResult.description || '')
+      : '';
 
     /**
      * If expanded is true the accordion renders on page load expanded, the accordion is
@@ -67,13 +69,6 @@ class AccordionCardConfig {
      * @type {Function|Array<Object|string>}
      */
     this.callsToAction = this.callsToAction || [];
-
-    /**
-     * An array of cta custom field names, whose custom field data are expected
-     * to contain CTA configuration.
-     * @type {Array<string>}
-     */
-    this.callsToActionFields = config.callsToActionFields || [];
 
     /**
      * Whether this card is part of a universal search. Used in analytics.
@@ -147,10 +142,11 @@ export default class AccordionCardComponent extends Component {
 
     toggleEl.setAttribute('aria-expanded', this.isExpanded ? 'true' : 'false');
     contentEl.setAttribute('aria-hidden', this.isExpanded ? 'false' : 'true');
-    const event = new AnalyticsEvent(this.isExpanded ? 'ROW_COLLAPSE' : 'ROW_EXPAND')
+    const event = new AnalyticsEvent(this.isExpanded ? 'ROW_EXPAND' : 'ROW_COLLAPSE')
       .addOptions({
         verticalKey: this.verticalKey,
-        entityId: this.result._raw.id
+        entityId: this.result._raw.id,
+        searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
       });
     this.analyticsReporter.report(event);
   }
@@ -176,7 +172,6 @@ export default class AccordionCardComponent extends Component {
       };
       return super.addChild(updatedData, type, {
         callsToAction: this._config.callsToAction,
-        callsToActionFields: this._config.callsToActionFields,
         _ctaModifiers: ['AccordionCard'],
         isUniversal: this._config.isUniversal,
         ...opts

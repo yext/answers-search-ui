@@ -6,11 +6,12 @@
   $accordion-card-background-color: white !default;
   $accordion-card-content-background-color: white !default;
 
-  $accordion-card-toggle-icon-height: $accordion-card-spacing !default; 
-  $accordion-card-toggle-icon-width: $accordion-card-spacing * 7/10 !default; 
+  $accordion-card-toggle-icon-height: $accordion-card-spacing !default;
+  $accordion-card-toggle-icon-width: $accordion-card-spacing * 7/10 !default;
 
   $accordion-card-title-size: $font-size-md-lg !default;
   $accordion-card-title-color: $color-brand-primary !default;
+  $accordion-card-title-color-hover: $color-background-highlight !default;
   $accordion-card-title-line-height: $line-height-lg !default;
   $accordion-card-title-weight: $font-weight-normal !default;
 
@@ -38,17 +39,20 @@
     width: 100%;
     display: flex;
     cursor: pointer;
-    height: $accordion-card-spacing * 2.75;
     background: none;
-    cursor: pointer;
     border: 0;
-    align-items: center;
     padding: 0;
     padding-right: $accordion-card-spacing * 0.5;
-  
-    &:hover, &:active {
-      $color: $color-brand-hover;
-      text-decoration: underline;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+
+    &:hover 
+    { 
+      background-color: $accordion-card-title-color-hover;
+    }
+
+    &:focus {
+      background-color: $accordion-card-title-color-hover;
+      border: solid 1px black;
     }
   }
 
@@ -61,9 +65,11 @@
 
   &-title
   {
-    margin-top: $accordion-card-spacing * 0.5;
+    margin-top: $accordion-card-spacing * 4 / 9;
     margin-right: $accordion-card-spacing;
     margin-left: $accordion-card-spacing;
+    margin-bottom: $accordion-card-spacing * 4 / 9;
+    text-align: left;
     @include Text(
       $size: $accordion-card-title-size,
       $color: $accordion-card-title-color,
@@ -76,6 +82,7 @@
   {
     margin-left: auto;
     margin-right: $accordion-card-spacing / 2;
+    margin-top: $accordion-card-spacing * 0.75;
   }
 
   &-icon svg
@@ -114,6 +121,7 @@
   &-ctas 
   {
     margin-top: $accordion-card-spacing / 2;
+    visibility: hidden;
   }
 }
 
@@ -133,10 +141,21 @@
 
   .yxt-AccordionCard-content  
   {
-    margin: 0;
+    margin-top: $accordion-card-spacing--expanded * 0.5;
+    margin-right: $accordion-card-spacing--expanded;
     margin-left: $accordion-card-spacing--expanded;
+    margin-bottom: 0;
     height: auto;
     overflow: hidden;
     transition: all 400ms ease;
+  }
+
+  .yxt-AccordionCard-ctas
+  {
+    visibility: visible;
+  }
+
+  .yxt-CTACollection-item:not(:last-child) {
+    margin-bottom: $accordion-card-spacing--expanded / 2;
   }
 }

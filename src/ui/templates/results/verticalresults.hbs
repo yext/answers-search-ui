@@ -9,16 +9,20 @@
   {{/if}}
   {{#if resultsPresent}}
     <section class="yxt-Results yxt-Results--{{_config.modifier}}">
-      {{#if showResultsHeader}}
-        <div data-component="ResultsHeader" data-opts='{{json _config.resultsHeaderOpts}}'></div>
+      {{#if _config.isUniversal}}
+        {{> results/resultssectionheader}}
+      {{else}}
+        {{#if showResultsHeader}}
+          <div data-component="ResultsHeader" data-opts='{{json _config.resultsHeaderOpts}}'></div>
+        {{/if}}
       {{/if}}
-      {{#if includeMap}}
+      {{#if _config.includeMap}}
         <div class="yxt-Results-map"
              data-component="Map"
              data-prop="map">
         </div>
       {{/if}}
-      <ul class="yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
+      <ul class="yxt-Results-items js-yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
         {{#each results}}
           <div class="yxt-Card" data-component="Card" data-opts='{"_index": {{@index}} }'></div>
         {{/each}}
@@ -27,10 +31,5 @@
         {{/each}}
       </ul>
     </section>
-    {{#if results}}
-      <div data-component='Footer'
-        data-opts='{{json _config.footer}}'
-      ></div>
-    {{/if}}
   {{/if}}
 {{/if}}

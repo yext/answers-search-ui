@@ -5,6 +5,7 @@ import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
+import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
 class StandardCardConfig {
   constructor (config = {}) {
@@ -48,7 +49,9 @@ class StandardCardConfig {
      * Details for the card
      * @type {string}
      */
-    this.details = this.details || result.details || rawResult.description || '';
+    this.details = this.details === undefined
+      ? (this.details || result.details || rawResult.description || '')
+      : this.details;
 
     /**
      * Url when you click the title
@@ -77,10 +80,10 @@ class StandardCardConfig {
     this.showMoreLimit = this.showMoreLimit || 350;
 
     /**
-     * Whether the click should open in a new window
-     * @type {boolean}
+     * The target attribute for the title link.
+     * @type {string}
      */
-    this.newWindow = this.newWindow;
+    this.target = this.target || '_self';
 
     /**
      * Image url to display
@@ -106,13 +109,6 @@ class StandardCardConfig {
      * @type {Function|Array<Object|string>}
      */
     this.callsToAction = this.callsToAction || [];
-
-    /**
-     * An array of cta custom field names, whose custom field data are expected
-     * to contain CTA configuration.
-     * @type {Array<string>}
-     */
-    this.callsToActionFields = this.callsToActionFields || [];
 
     /**
      * Whether to show the ordinal of the card in the results.
@@ -159,6 +155,8 @@ export default class StandardCardComponent extends Component {
      * @type {Result}
      */
     this.result = data.result || {};
+
+    this.handleTitleClick = this.handleTitleClick.bind(this);
   }
 
   hasCTAs () {
@@ -182,14 +180,27 @@ export default class StandardCardComponent extends Component {
     });
   }
 
+  handleTitleClick () {
+    const event = new AnalyticsEvent('TITLE_CLICK')
+      .addOptions({
+        verticalKey: this.verticalKey,
+        entityId: this.result._raw.id,
+        searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+      });
+    this.analyticsReporter.report(event);
+  }
+
   onMount () {
     if (this._config.showToggle) {
-      const el = DOM.query(this._container, '.yxt-StandardCard-toggle');
+      const el = DOM.query(this._container, '.js-yxt-StandardCard-toggle');
       DOM.on(el, 'click', () => {
         this.hideExcessDetails = !this.hideExcessDetails;
         this.setState();
       });
     }
+
+    const titleEl = DOM.query(this._container, '.js-yxt-StandardCard-title');
+    DOM.on(titleEl, 'click', this.handleTitleClick);
   }
 
   addChild (data, type, opts) {
@@ -200,7 +211,6 @@ export default class StandardCardComponent extends Component {
       };
       return super.addChild(updatedData, type, {
         callsToAction: this._config.callsToAction,
-        callsToActionFields: this._config.callsToActionFields,
         isUniversal: this._config.isUniversal,
         _ctaModifiers: ['StandardCard'],
         ...opts
