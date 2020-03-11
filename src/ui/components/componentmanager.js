@@ -76,6 +76,20 @@ export default class ComponentManager {
   }
 
   /**
+   * Returns components with names similar to the passed in component class.
+   * @param {string} componentType
+   */
+  getSimilarComponents (componentType) {
+    let similarComponents = Object.keys(COMPONENT_REGISTRY).filter(type =>
+      type.startsWith(componentType.substring(0, 2))
+    );
+    if (similarComponents.length === 0) {
+      similarComponents = Object.keys(COMPONENT_REGISTRY);
+    }
+    return similarComponents;
+  }
+
+  /**
    * create is the entry point for constructing any and all components.
    * It will instantiate a new instance of the component, and both apply
    * initial state from the storage and bind it to the storage for updates.
@@ -94,6 +108,11 @@ export default class ComponentManager {
     };
 
     let componentClass = COMPONENT_REGISTRY[componentType];
+    if (!componentClass) {
+      throw new AnswersComponentError(
+        `Component type ${componentType} is not recognized as a valid component.` +
+        ` You might have meant ${this.getSimilarComponents(componentType).join(', ')}?`);
+    }
 
     if (
       !componentClass.areDuplicateNamesAllowed() &&
