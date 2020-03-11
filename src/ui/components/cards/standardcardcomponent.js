@@ -80,10 +80,10 @@ class StandardCardConfig {
     this.showMoreLimit = this.showMoreLimit || 350;
 
     /**
-     * Whether the click should open in a new window
-     * @type {boolean}
+     * The target attribute for the title link.
+     * @type {string}
      */
-    this.newWindow = this.newWindow;
+    this.target = this.target || '_self';
 
     /**
      * Image url to display
