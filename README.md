@@ -485,14 +485,6 @@ ANSWERS.addComponent('VerticalResults', {
   maxNumberOfColumns: 3,
   // Whether to display the total number of results, default true
   showResultCount: true,
-  // If present, show the filters that were ultimately applied to this query, default true
-  showAppliedFilters: true,
-  // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
-  // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
-  // otherwise display just 'Virginia'. Defaults to false.
-  showFieldNames: false,
-  // display this separator between the result count and the applied query filters
-  resultsCountSeparator: '|',
   // The card used to display each individual result, see the Cards section for more details,
   card: {
     // Optional: The type of card, currently only 'Standard' and 'Accordion' are supported, defaults to 'Standard'
@@ -501,6 +493,14 @@ ANSWERS.addComponent('VerticalResults', {
     cardMappings: () => {},
     // Optional, used as configuration for any calls to action buttons on the page, see Calls To Action for more details
     callsToAction: () => []
+  },
+  // Configuration for what to display when no results are found.
+  noResults: {
+    // You can specify a custom template for the no results card, otherwise will use the built-in template.
+    template: '<div> <em>No results found!</em> Try again? </div>',
+    // Whether to display all results in the vertical when no results are found. Defaults to false. In which
+    // case only the no results card will be shown.
+    displayAllResults: false
   }
 })
 ```

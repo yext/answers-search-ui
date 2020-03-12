@@ -22,14 +22,6 @@ class VerticalResultsConfig {
     this.isUniversal = config.isUniversal || false;
 
     /**
-     * _showEnhancedNoResults is set to true if the noResults object exists in the component's
-     * config
-     * @type {boolean}
-     * @private
-     */
-    this._showEnhancedNoResults = config.noResults || false;
-
-    /**
      * _displayAllResults is set to true if the config option noResults.displayAllResults is true,
      * meaning that all results for the vertical will display when there are no results for a query
      * @type {boolean}
@@ -112,13 +104,13 @@ export default class VerticalResultsComponent extends Component {
     super(new VerticalResultsConfig(config), systemConfig);
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._verticalsConfig = this.core.globalStorage
-      .getState(StorageKeys.VERTICAL_PAGES_CONFIG)
-      .verticalPagesConfig || [];
+      .getState(StorageKeys.VERTICAL_PAGES_CONFIG).get() || [];
     /**
      * @type {Array<Result>}
      */
     this.results = [];
     this.numColumns = this._config.maxNumberOfColumns;
+    this.core.globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, this._config.noResults || {});
   }
 
   mount () {
@@ -130,6 +122,15 @@ export default class VerticalResultsComponent extends Component {
 
   static get duplicatesAllowed () {
     return true;
+  }
+
+  getUniversalUrl () {
+    const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
+    let universalUrl = this._universalUrl;
+    if (universalConfig.url) {
+      universalUrl = universalConfig.url;
+    }
+    return `${universalUrl}?query=${this.query || ''}`;
   }
 
   setState (data, val) {
@@ -146,18 +147,18 @@ export default class VerticalResultsComponent extends Component {
       data.resultsContext === ResultsContext.NORMAL;
     const showResultsHeader = this._config.resultsHeaderOpts.showResultCount ||
       this._config.resultsHeaderOpts.showAppliedFilters;
+    this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
 
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
       eventOptions: this.eventOptions(),
-      universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
-      query: this.core.globalStorage.getState(StorageKeys.QUERY),
+      universalUrl: this.getUniversalUrl(),
+      query: this.query,
       currentVerticalLabel: this._currentVerticalLabel,
       resultsPresent: displayResultsIfExist && this.results.length !== 0,
       showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
-      isEnhancedNoResultsEnabled: this._config._showEnhancedNoResults,
       placeholders: new Array(this._config.maxNumberOfColumns - 1),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
       showResultsHeader: showResultsHeader
@@ -209,7 +210,7 @@ export default class VerticalResultsComponent extends Component {
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
         template: this._config.noResultsTemplate,
-        universalUrl: this._config._universalUrl,
+        universalUrl: this.getUniversalUrl(),
         verticalsConfig: this._verticalsConfig,
         isShowingResults: this._config._displayAllResults && hasResults,
         ...opts

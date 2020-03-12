@@ -7,8 +7,9 @@
   border-right: $border-default;
   border-left: $border-default;
 
+  $alternative-verticals-emphasized-font-weight: 500;
+
   @media (min-width: $breakpoint-mobile-max) {
-    margin-top: 42px;
     margin-bottom: 24px;
     border: $border-default;
   }
@@ -22,10 +23,10 @@
     background-color: $color-brand-primary;
     color: $color-brand-white;
     font-size: $font-size-md;
-    padding: 10px 15px;
+    padding: $base-spacing / 2;
 
     &--emphasized {
-      font-weight: $font-weight-semibold;
+      font-weight: $alternative-verticals-emphasized-font-weight;
     }
 
     @media (min-width: $breakpoint-mobile-max) {
@@ -63,10 +64,10 @@
 
   &-suggestion {
     display: flex;
-    margin: 10px 0;
+    margin: $base-spacing * 0.75 0;
 
-    @media (min-width: $breakpoint-mobile-max) {
-      margin: 8px 0;
+    @media (max-width: $breakpoint-mobile-max) {
+      margin: $base-spacing / 2 0;
     }
   }
 
@@ -85,11 +86,7 @@
     }
 
     &--copy {
-      font-weight: $font-weight-semibold;
-
-      &Label {
-        text-transform: uppercase;
-      }
+      font-weight: $alternative-verticals-emphasized-font-weight;
     }
   }
 
@@ -126,8 +123,7 @@
     color: $color-brand-primary;
 
     &:hover,
-    &:active,
-    &:visited {
+    &:active {
       color: $color-brand-hover;
     }
   }

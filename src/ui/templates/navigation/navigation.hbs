@@ -4,8 +4,13 @@
       <li>
         <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
           href="{{url}}"
-          data-eventtype="{{#if @first}}ALL_TAB_NAVIGATION{{else}}VERTICAL_TAB_NAVIGATION{{/if}}"
-          data-eventoptions='{"verticalConfigId": "{{configId}}"}'
+          {{#if @first}}
+            data-eventtype="ALL_TAB_NAVIGATION"
+            data-eventoptions='{"verticalKey": "all"}'
+          {{else}}
+            data-eventtype="VERTICAL_TAB_NAVIGATION"
+            data-eventoptions='{"verticalKey": "{{verticalKey}}"}'
+          {{/if}}
         >
           {{label}}
         </a>

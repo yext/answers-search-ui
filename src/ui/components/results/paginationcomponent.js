@@ -5,6 +5,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import SearchStates from '../../../core/storage/searchstates';
+import ResultsContext from '../../../core/storage/resultscontext';
 
 export default class PaginationComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -69,10 +70,18 @@ export default class PaginationComponent extends Component {
     return 'results/pagination';
   }
 
+  shouldShowControls (results, limit) {
+    const hasResults = results.searchState === 'search-complete' && results.resultsCount > limit;
+    const noResultsConfig = this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) || {};
+    const showControls = hasResults &&
+      (results.resultsContext === ResultsContext.NORMAL || noResultsConfig.displayAllResults);
+    return showControls;
+  }
+
   onMount () {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
     const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
-    const showControls = results.searchState === 'search-complete' && results.resultsCount > limit;
+    const showControls = this.shouldShowControls(results, limit);
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     if (!showControls) {
       return;
@@ -114,11 +123,10 @@ export default class PaginationComponent extends Component {
     let offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
     const pageNumber = offset / limit;
-    const showControls = results.searchState === 'search-complete' && results.resultsCount > limit;
     const isMoreResults = results.resultsCount > offset + limit;
     const maxPage = Math.trunc((results.resultsCount - 1) / limit);
     return super.setState({
-      showControls: showControls,
+      showControls: this.shouldShowControls(results, limit),
       firstPageButtonEnabled: this._firstPageButtonEnabled,
       lastPageButtonEnabled: this._lastPageButtonEnabled,
       pageNumber: pageNumber + 1,

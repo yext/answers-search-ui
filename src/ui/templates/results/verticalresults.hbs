@@ -1,10 +1,10 @@
 {{#if isSearchComplete}}
   {{#if showNoResults}}
-    {{#if isEnhancedNoResultsEnabled}}
+    {{#if _config.isUniversal}}
+      {{> results/noresults}}
+    {{else}}
       <div class="yxt-Results-alternativeVerticals"
            data-component="AlternativeVerticals"></div>
-    {{else}}
-      {{> results/noresults}}
     {{/if}}
   {{/if}}
   {{#if resultsPresent}}
