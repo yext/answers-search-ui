@@ -5,7 +5,6 @@ import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
-import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
 class StandardCardConfig {
   constructor (config = {}) {
@@ -155,8 +154,6 @@ export default class StandardCardComponent extends Component {
      * @type {Result}
      */
     this.result = data.result || {};
-
-    this.handleTitleClick = this.handleTitleClick.bind(this);
   }
 
   getImgAlt () {
@@ -176,18 +173,10 @@ export default class StandardCardComponent extends Component {
       result: this.result,
       hasCTAs: CTACollectionComponent.hasCTAs(this.result, this._config.callsToAction),
       imgAlt: this.getImgAlt(),
+      entityId: this.result._raw.id,
+      verticalKey: this.verticalKey,
       details
     });
-  }
-
-  handleTitleClick () {
-    const event = new AnalyticsEvent('TITLE_CLICK')
-      .addOptions({
-        verticalKey: this.verticalKey,
-        entityId: this.result._raw.id,
-        searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
-      });
-    this.analyticsReporter.report(event);
   }
 
   onMount () {
@@ -197,11 +186,6 @@ export default class StandardCardComponent extends Component {
         this.hideExcessDetails = !this.hideExcessDetails;
         this.setState();
       });
-    }
-
-    const titleEl = DOM.query(this._container, '.js-yxt-StandardCard-title');
-    if (titleEl) {
-      DOM.on(titleEl, 'click', this.handleTitleClick);
     }
   }
 

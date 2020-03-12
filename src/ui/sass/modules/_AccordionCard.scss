@@ -121,7 +121,7 @@
   &-ctas 
   {
     margin-top: $accordion-card-spacing / 2;
-    visibility: hidden;
+    display: none;
   }
 }
 
@@ -152,10 +152,11 @@
 
   .yxt-AccordionCard-ctas
   {
-    visibility: visible;
+    display: block;
   }
 
-  .yxt-CTACollection-item:not(:last-child) {
+  .yxt-CTACollection-item:not(:last-child)
+  {
     margin-bottom: $accordion-card-spacing--expanded / 2;
   }
 }

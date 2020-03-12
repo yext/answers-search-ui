@@ -19,7 +19,16 @@
     <div class="yxt-StandardCard-contentWrapper">
       {{#if _config.title}}
         {{#if _config.url}}
-          <a class="yxt-StandardCard-titleLink js-yxt-StandardCard-title" href="//{{_config.url}}" target="{{_config.target}}" rel="noopener noreferrer nofollow">
+          <a class="yxt-StandardCard-titleLink js-yxt-StandardCard-title"
+            href="//{{_config.url}}" target="{{_config.target}}"
+            rel="noopener noreferrer nofollow"
+            data-eventtype="TITLE_CLICK"
+            data-eventoptions='{
+              "verticalKey": "{{verticalKey}}",
+              "entityId": "{{entityId}}",
+              "searcher": {{#if _config.isUniversal}}"UNIVERSAL"{{else}}"VERTICAL"{{/if}}
+            }'
+          >
             {{{_config.title}}}
           </a>
         {{else}}

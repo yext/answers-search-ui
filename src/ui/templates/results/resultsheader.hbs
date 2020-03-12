@@ -3,11 +3,11 @@
     {{#if resultsCount}}
       <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} to {{resultsCountEnd}} of {{resultsCount}}">
         <div aria-hidden="true">
-          <span class="yxt-ResultsHeader-resultsCount-start">{{resultsCountStart}}</span>
-          <span class="yxt-ResultsHeader-resultsCount-dash">-</span>
-          <span class="yxt-ResultsHeader-resultsCount-end">{{resultsCountEnd}}</span>
-          <span class="yxt-ResultsHeader-resultsCount-of">of</span>
-          <span class="yxt-ResultsHeader-resultsCount-total">{{resultsCount}}</span>
+          <span class="yxt-ResultsHeader-resultsCountStart">{{resultsCountStart}}</span>
+          <span class="yxt-ResultsHeader-resultsCountDash">-</span>
+          <span class="yxt-ResultsHeader-resultsCountEnd">{{resultsCountEnd}}</span>
+          <span class="yxt-ResultsHeader-resultsCountOf">of</span>
+          <span class="yxt-ResultsHeader-resultsCountTotal">{{resultsCount}}</span>
         </div>
       </div>
       {{#if showResultSeparator}}
@@ -20,8 +20,8 @@
       {{#each appliedFiltersArray}}
         {{#if ../_config.showFieldNames}}
           <div class="yxt-ResultsHeader-filterLabel">
-            <span class="yxt-ResultsHeader-filterLabel-label">{{this.label}}</span>
-            <span class="yxt-ResultsHeader-filterLabel-colon">:</span>
+            <span class="yxt-ResultsHeader-filterLabelText">{{this.label}}</span>
+            <span class="yxt-ResultsHeader-filterLabelColon">:</span>
           </div>
         {{/if}}
         {{#each this.displayValues}}
