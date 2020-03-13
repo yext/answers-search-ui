@@ -141,7 +141,8 @@ export default class NavigationComponent extends Component {
      * @type {Array.<object>}
      * @private
      */
-    this._tabsConfig = this.core.globalStorage.getState(StorageKeys.VERTICAL_PAGES_CONFIG).get();
+    this._tabsConfig = config.verticalPages ||
+      this.core.globalStorage.getState(StorageKeys.VERTICAL_PAGES_CONFIG).get();
 
     /**
      * Unordered map of each tab, keyed by VS verticalKey
