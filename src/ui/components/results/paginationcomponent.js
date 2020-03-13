@@ -15,7 +15,7 @@ export default class PaginationComponent extends Component {
      * @type {string}
      * @private
      */
-    this._verticalKey = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    this._verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
     if (typeof this._verticalKey !== 'string') {
       throw new AnswersComponentError(
         'verticalKey not provided, but necessary for pagination',
