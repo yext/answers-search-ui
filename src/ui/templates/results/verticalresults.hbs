@@ -22,14 +22,14 @@
              data-prop="map">
         </div>
       {{/if}}
-      <ul class="yxt-Results-items js-yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
+      <div class="yxt-Results-items js-yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
         {{#each results}}
           <div class="yxt-Card" data-component="Card" data-opts='{"_index": {{@index}} }'></div>
         {{/each}}
         {{#each placeholders}}
           <div class="yxt-Results-placeholder yxt-Card" data-component="Card" data-opts='{"_index": 0 }' aria-hidden="true"></div>
         {{/each}}
-      </ul>
+      </div>
     </section>
   {{/if}}
 {{/if}}
