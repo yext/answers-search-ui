@@ -56,13 +56,32 @@ export default class ResultsHeaderComponent extends Component {
     return true;
   }
 
+  getAppliedFiltersArray () {
+    const groupedFilters = {};
+    this.appliedQueryFilters.forEach(filter => {
+      if (!groupedFilters[filter.key]) {
+        groupedFilters[filter.key] = [];
+      }
+      groupedFilters[filter.key].push(filter.value);
+    });
+    // Has to be parsed into an array because our handlebars can only loop through arrays, not objects.
+    return Object.keys(groupedFilters).map(label => ({
+      label: label, displayValues: groupedFilters[label]
+    }));
+  }
+
   setState (data) {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
+    const hasFilters = this.appliedQueryFilters.length > 0;
+    const shouldShowFilters = hasFilters && this._config.showAppliedFilters;
     return super.setState({
       ...data,
       resultsCount: this.resultsCount,
       resultsCountStart: offset + 1,
-      resultsCountEnd: offset + this.resultsLength
+      resultsCountEnd: offset + this.resultsLength,
+      showResultSeparator: this._config.showResultsCount && shouldShowFilters,
+      shouldShowFilters: shouldShowFilters,
+      appliedFiltersArray: this.getAppliedFiltersArray()
     });
   }
 

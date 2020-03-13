@@ -15,4 +15,22 @@
       {{/if}}
     {{/if}}
   {{/if}}
+  {{#if shouldShowFilters}}
+    <div class="yxt-ResultsHeader-appliedFilters">
+      {{#each appliedFiltersArray}}
+        {{#if ../_config.showFieldNames}}
+          <div class="yxt-ResultsHeader-filterLabel">
+            <span class="yxt-ResultsHeader-filterLabelText">{{this.label}}</span>
+            <span class="yxt-ResultsHeader-filterLabelColon">:</span>
+          </div>
+        {{/if}}
+        {{#each this.displayValues}}
+          <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
+        {{/each}}
+        {{#unless @last}}
+          <div class="yxt-ResultsHeader-filterSeparator">|</div>
+        {{/unless}}
+      {{/each}}
+    </div>
+  {{/if}}
 </div>
