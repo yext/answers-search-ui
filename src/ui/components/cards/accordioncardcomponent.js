@@ -52,9 +52,7 @@ class AccordionCardConfig {
     /**
      * @type {string}
      */
-    this.details = this.details === undefined
-      ? (this.details || result.details || rawResult.description || '')
-      : '';
+    this.details = this.details === undefined ? '' : (this.details || result.details || rawResult.description || '');
 
     /**
      * If expanded is true the first accordion in vertical/universal results renders on page load expanded.
