@@ -72,7 +72,7 @@ export default class CTACollectionComponent extends Component {
         console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
       }
     });
-    return ctas.filter(cta => cta.url && cta.label).map(ctaMapping => {
+    return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
         return ctaMapping(result);
       } else if (typeof ctaMapping === 'object') {
@@ -84,7 +84,7 @@ export default class CTACollectionComponent extends Component {
         }
         return ctaObject;
       }
-    });
+    }).filter(cta => cta.url && cta.label);
   }
 
   static hasCTAs (result, ctas) {
