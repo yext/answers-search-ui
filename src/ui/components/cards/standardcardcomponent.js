@@ -154,13 +154,6 @@ export default class StandardCardComponent extends Component {
     this.result = data.result || {};
   }
 
-  getImgAlt () {
-    const raw = this.result._raw || {};
-    const headshot = raw.headshot || {};
-    const alternateText = headshot.alternateText || `Image for ${this._config.title}`;
-    return alternateText;
-  }
-
   setState (data) {
     const details = this.hideExcessDetails
       ? `${this._config.details.substring(0, this._config.showMoreLimit)}...`
@@ -170,7 +163,6 @@ export default class StandardCardComponent extends Component {
       hideExcessDetails: this.hideExcessDetails,
       result: this.result,
       hasCTAs: CTACollectionComponent.hasCTAs(this.result, this._config.callsToAction),
-      imgAlt: this.getImgAlt(),
       entityId: this.result._raw.id,
       verticalKey: this.verticalKey,
       details
