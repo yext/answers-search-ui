@@ -398,7 +398,7 @@ The most complex component has a ton of overridable configuration options.
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   // The max number of search results to return, defaults to 10
-  limit: 5
+  limit: 5,
 })
 ```
 
@@ -441,6 +441,36 @@ ANSWERS.addComponent('UniversalResults', {
     'locations': { // The vertical search config id
       renderItem: function(data) {
         return `my item ${data.name}`;
+      }
+    }
+  }
+})
+```
+
+### Custom options for specifi Vertical Results
+
+You can also provide several config options to each vertical. 
+These are the supported options:
+
+```js
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  config: {
+    'locations': { // The vertical search config id
+      renderItem: function(data) {
+        return `my item ${data.name}`;
+      },
+      // Specific text for the view all button, which links to the vertical search for this vertical.
+      // Default is no text.
+      viewAllText: "Go to this vertical's search",
+      // Whether to include a map with this vertical's results.
+      includeMap: true,
+      // If includeMap is true, mapconfig that contains a mapProvider and apiKey is required
+      mapConfig: {
+        // Either 'mapbox' or 'google'
+        mapProvider: 'google',
+        // Api key for the map provider
+        apiKey: '<<< enter your api key here >>>',
       }
     }
   }

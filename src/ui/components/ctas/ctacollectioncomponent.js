@@ -84,12 +84,11 @@ export default class CTACollectionComponent extends Component {
         }
         return ctaObject;
       }
-    }).filter(cta => cta.url && cta.label);
+    }).filter(cta => cta.url.trim() && cta.label.trim());
   }
 
   static hasCTAs (result, ctas) {
-    return CTACollectionComponent.resolveCTAMapping(result, ...ctas)
-      .filter(cta => cta.url && cta.label).length > 0;
+    return CTACollectionComponent.resolveCTAMapping(result, ...ctas).length > 0;
   }
 
   defaultEventOptions (result) {
