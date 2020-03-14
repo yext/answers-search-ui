@@ -50,6 +50,7 @@
 
   &-filterLabel
   {
+    display: flex;
     margin-right: $results-header-spacing * 3 / 8;
     @include Text(
       $size: $results-header-filters-font-size,
