@@ -133,6 +133,13 @@ export default class VerticalResultsComponent extends Component {
     return `${universalUrl}?query=${this.query || ''}`;
   }
 
+  getVerticalURL (data) {
+    const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
+    const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
+    console.log(this._verticalsConfig, verticalConfig, data, this.verticalKey);
+    return `${verticalURL}?query=${this.query || ''}`;
+  }
+
   setState (data, val) {
     /**
      * @type {Array<Result>}
@@ -155,6 +162,7 @@ export default class VerticalResultsComponent extends Component {
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
       eventOptions: this.eventOptions(),
       universalUrl: this.getUniversalUrl(),
+      verticalURL: this.getVerticalURL(data),
       query: this.query,
       currentVerticalLabel: this._currentVerticalLabel,
       resultsPresent: displayResultsIfExist && this.results.length !== 0,
