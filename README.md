@@ -447,7 +447,7 @@ ANSWERS.addComponent('UniversalResults', {
 })
 ```
 
-### Custom options for specifi Vertical Results
+### Custom options for specific Vertical Results
 
 You can also provide several config options to each vertical. 
 These are the supported options:
