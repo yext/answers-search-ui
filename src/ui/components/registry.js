@@ -24,8 +24,6 @@ import VerticalResultsComponent from './results/verticalresultscomponent';
 import UniversalResultsComponent from './results/universalresultscomponent';
 import PaginationComponent from './results/paginationcomponent';
 
-import StandardSectionComponent from './sections/standardsectioncomponent';
-
 import CardComponent from './cards/cardcomponent';
 import StandardCardComponent from './cards/standardcardcomponent';
 import AccordionCardComponent from './cards/accordioncardcomponent';
@@ -72,9 +70,6 @@ const COMPONENT_CLASS_LIST = [
   MapComponent,
   AlternativeVerticalsComponent,
   ResultsHeaderComponent,
-
-  // Section Components
-  StandardSectionComponent,
 
   // Card Components
   CardComponent,
