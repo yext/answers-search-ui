@@ -119,8 +119,14 @@ export default class VerticalResultsComponent extends Component {
     this._noResultsTemplate = this._noResultsConfig.template;
 
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
-    this._verticalsConfig = this.core.globalStorage
-      .getState(StorageKeys.VERTICAL_PAGES_CONFIG).get() || [];
+    /**
+     * Vertical config from config, if not present, fall back to global verticalPagesConfig
+     * @type {Array.<object>}
+     * @private
+     */
+    this._verticalsConfig = config.verticalPages || this.core.globalStorage
+      .getState(StorageKeys.VERTICAL_PAGES_CONFIG)
+      .get() || [];
     /**
      * @type {Array<Result>}
      */
