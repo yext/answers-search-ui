@@ -16,8 +16,16 @@
     }
   }
 
+  &-child--universal {
+    margin-bottom: 0;
+  }
+
+  & + & .yxt-Card-child--universal {
+    border-top: 0;
+  }
+
   @media (max-width: $breakpoint-mobile-max) {
-    & + & .yxt-Card-child{
+    & + & .yxt-Card-child {
       border-top: 0;
     }
   }

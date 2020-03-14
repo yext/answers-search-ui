@@ -136,7 +136,6 @@ export default class VerticalResultsComponent extends Component {
   getVerticalURL (data) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    console.log(this._verticalsConfig, verticalConfig, data, this.verticalKey);
     return `${verticalURL}?query=${this.query || ''}`;
   }
 
