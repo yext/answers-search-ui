@@ -3,6 +3,7 @@
   color: $color-brand-primary;
   display: flex;
   align-items: center;
+  word-break: break-word;
 
   @include Text(
     $size: $font-size-md,
@@ -54,8 +55,6 @@
     $accordion-card-cta-font-size: $font-size-md !default;
     $accordion-card-cta-font-weight: $font-weight-normal !default;
     $accordion-card-cta-color: $color-brand-primary !default;
-    margin-top: $accordion-card-cta-spacing / 4;
-    margin-bottom: $accordion-card-cta-spacing / 2;
 
     @include Text(
       $size: $accordion-card-cta-font-size,

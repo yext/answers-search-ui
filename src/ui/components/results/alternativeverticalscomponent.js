@@ -114,7 +114,7 @@ export default class AlternativeVerticalsComponent extends Component {
       verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
         url: matchingVerticalConfig.url + queryParams,
-        icon: matchingVerticalConfig.icon,
+        iconName: matchingVerticalConfig.icon,
         resultsCount: alternativeVertical.resultsCount
       }));
     }

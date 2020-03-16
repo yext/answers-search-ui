@@ -1,4 +1,15 @@
 <div class="yxt-StandardCard yxt-StandardCard--{{_config._index}}">
+  {{> ordinal}}
+  <div class="yxt-StandardCard-wrapper">
+    {{> image}}
+    <div class="yxt-StandardCard-contentWrapper">
+      {{> title}}
+      {{> content}}
+    </div>
+  </div>
+</div>
+
+{{#*inline "ordinal"}}
   {{#if _config.showOrdinal}}
     <div class="yxt-StandardCard-ordinalWrapper">
       <div class="yxt-StandardCard-ordinal">
@@ -6,55 +17,78 @@
       </div>
     </div>
   {{/if}}
-  <div class="yxt-StandardCard-wrapper">
-    {{#if _config.image}}
-      <div class="yxt-StandardCard-imgWrapper">
-        <img src="{{_config.image}}">
-        {{#if _config.tagLabel}}
-          <div class="yxt-StandardCard-imgTagWrapper">
-            <div class="yxt-StandardCard-imgTag">{{_config.tagLabel}}</div>
-          </div>
-        {{/if}}
-      </div>
-    {{/if}}
-    <div class="yxt-StandardCard-contentWrapper">
-      {{#if _config.title}}
-        <div class="yxt-StandardCard-title">
-          <a {{#if _config.url}} 
-            href="{{_config.url}}" target={{#if _config.newWindow}}"_blank" rel="noopener noreferrer nofollow"{{else}}"_self"{{/if}}
-          {{/if}}>
-            {{_config.title}}
-          </a>
+{{/inline}}
+
+{{#*inline "image"}}
+  {{#if _config.image}}
+    <div class="yxt-StandardCard-img" style="background-image: url('{{_config.image}}');" role="img" aria-label="Image for {{_config.title}}">
+      {{#if _config.tagLabel}}
+        <div class="yxt-StandardCard-imgTagWrapper">
+          <div class="yxt-StandardCard-imgTag">{{_config.tagLabel}}</div>
         </div>
       {{/if}}
-      {{#if _config.subtitle}}  
-        <div class="yxt-StandardCard-subtitle">
-          {{_config.subtitle}}
-        </div>
-      {{/if}}
-      <div class="yxt-StandardCard-content">
-        {{#if details}}
-          <div class="yxt-StandardCard-details">
-            <div class="yxt-StandardCard-detailsText">
-              {{details}}
-            </div>
-            {{#if _config.showToggle}}
-              <button class="yxt-StandardCard-toggle">
-                {{#if hideExcessDetails}}
-                  {{_config.showMoreText}}
-                  <span data-component="IconComponent"
-                    data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseDown" }'></span>
-                {{else}} 
-                  {{_config.showLessText}}
-                  <span data-component="IconComponent"
-                    data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseUp" }'></span>
-                {{/if}}
-              </button>
-            {{/if}}
-          </div>
-        {{/if}}
-        <div class="yxt-StandardCard-ctas" data-component="CTACollection" data-prop="result"></div>
-      </div>
     </div>
+  {{/if}}
+{{/inline}}
+
+{{#*inline "title"}}
+  {{#if _config.title}}
+    {{#if _config.url}}
+      <a class="yxt-StandardCard-titleLink js-yxt-StandardCard-title"
+        href="//{{_config.url}}" target="{{_config.target}}"
+        rel="noopener noreferrer nofollow"
+        data-eventtype="TITLE_CLICK"
+        data-eventoptions='{
+          "verticalKey": "{{verticalKey}}",
+          "entityId": "{{entityId}}",
+          "searcher": {{#if _config.isUniversal}}"UNIVERSAL"{{else}}"VERTICAL"{{/if}}
+        }'
+      >
+        {{{_config.title}}}
+      </a>
+    {{else}}
+      <div class="yxt-StandardCard-title">{{{_config.title}}}</div>
+    {{/if}}
+  {{/if}}
+  {{#if _config.subtitle}}  
+    <div class="yxt-StandardCard-subtitle">
+      {{{_config.subtitle}}}
+    </div>
+  {{/if}}
+{{/inline}}
+
+{{#*inline "content"}}
+  <div class="yxt-StandardCard-content">
+    {{> details}}
+    {{> ctas}}
   </div>
-</div>
+{{/inline}}
+
+{{#*inline "details"}}
+  {{#if details}}
+    <div class="yxt-StandardCard-details{{#unless _config.image}} yxt-StandardCard-details--noImage{{/unless}}{{#unless details}} yxt-StandardCard-details--empty{{/unless}}">
+      <div class="yxt-StandardCard-detailsText">
+        {{{details}}}
+      </div>
+      {{#if _config.showToggle}}
+        <button class="yxt-StandardCard-toggle js-yxt-StandardCard-toggle">
+          {{#if hideExcessDetails}}
+            {{_config.showMoreText}}
+            <span data-component="IconComponent"
+              data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseDown" }'></span>
+          {{else}} 
+            {{_config.showLessText}}
+            <span data-component="IconComponent"
+              data-opts='{ "iconName": "chevron", "classNames": "Icon-sm Icon-collapseUp" }'></span>
+          {{/if}}
+        </button>
+      {{/if}}
+    </div>
+  {{/if}}
+{{/inline}}
+
+{{#*inline "ctas"}}
+  {{#if hasCTAs}}
+    <div class="yxt-StandardCard-ctas" data-component="CTACollection" data-prop="result"></div>
+  {{/if}}
+{{/inline}}

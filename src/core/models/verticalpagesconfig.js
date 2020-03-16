@@ -44,7 +44,8 @@ export class VerticalPageConfig {
      * name of an icon from the default icon set
      * @type {string}
      */
-    this.icon = config.icon || 'star';
+    this.icon = config.icon;
+    Object.freeze(this);
   }
 
   validate () {
@@ -52,19 +53,20 @@ export class VerticalPageConfig {
 }
 
 export default class VerticalPagesConfig {
-  constructor (config = {}) {
-    this.verticalPagesConfig = VerticalPagesConfig.from(config);
+  constructor (pages = []) {
+    this.verticalPagesConfig = VerticalPagesConfig.from(pages);
+  }
+
+  /**
+   * Using a getter that copies the data instead of providing a reference prevents it from being mutated.
+   * This is important for global configuration.
+   * @returns {Array<VerticalPageConfig>}
+   */
+  get () {
+    return this.verticalPagesConfig.map(page => ({ ...page }));
   }
 
   static from (pages) {
-    let verticalPagesConfig = [];
-    if (pages === undefined) {
-      return verticalPagesConfig;
-    }
-    for (let i = 0; i < pages.length; i++) {
-      let page = pages[i];
-      verticalPagesConfig.push(new VerticalPageConfig(page));
-    }
-    return verticalPagesConfig;
+    return pages.map(page => new VerticalPageConfig(page));
   }
 }
