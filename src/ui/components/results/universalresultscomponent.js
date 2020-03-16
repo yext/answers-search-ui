@@ -1,69 +1,100 @@
 /** @module UniversalResultsComponent */
 
 import Component from '../component';
+
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
-import AccordionResultsComponent from './accordionresultscomponent.js';
+import VerticalResultsComponent from '../results/verticalresultscomponent';
 
 export default class UniversalResultsComponent extends Component {
-  constructor (opts = {}, systemOpts = {}) {
-    super(opts, systemOpts);
-
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
-    this._limit = opts.limit || 10;
+
+    const { container, isTwin, render, template, ...sectionConfigs } = config;
+
+    /**
+     * sectionConfigs is an object of verticalKey to config for vertical results.
+     * sectionConfigs contains all config attributes that are not one of the
+     * built-in component config or other config for universal results like container.
+     * @type {Object}
+     */
+    this.sectionConfigs = sectionConfigs;
+
+    /**
+     * Results data from the universal search.
+     * @type {Array<Section>}
+     */
+    this.sections = [];
+  }
+
+  static get duplicatesAllowed () {
+    return true;
   }
 
   static get type () {
     return 'UniversalResults';
   }
 
-  /**
-   * The template to render
-   * @returns {string}
-   * @override
-   */
   static defaultTemplateName (config) {
     return 'results/universalresults';
   }
 
-  static areDuplicateNamesAllowed () {
-    return true;
-  }
-
-  init (opts) {
-    super.init(opts);
-    return this;
-  }
-
-  setState (data, val) {
-    const sections = data.sections || [];
+  setState (data) {
+    this.sections = data.sections || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
-    return super.setState(Object.assign({ sections: [] }, data, {
+    return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      showNoResults: sections.length === 0,
-      query: this.core.globalStorage.getState(StorageKeys.QUERY)
-    }), val);
+      showNoResults: this.sections.length === 0,
+      sections: this.sections
+    }));
   }
 
-  addChild (data = {}, type, opts) {
-    const childOpts = { ...opts, ...this.getChildConfig([data['verticalConfigId']]) };
-    if (childOpts.useAccordion === true) {
-      return super.addChild(data, AccordionResultsComponent.type, childOpts);
-    }
-    return super.addChild(data, type, childOpts);
-  }
+  addChild (data, type, opts) {
+    if (type === VerticalResultsComponent.type) {
+      const verticalKey = opts.verticalKey;
 
-  getChildConfig (configId) {
-    const defaultConfig = {
-      verticalConfigId: configId,
-      isUniversal: true
-    };
-    let config = this._config.config;
-    if (config === undefined) {
-      return defaultConfig;
+      /**
+       * @type {Section}
+       */
+      const section = this.sections.find(section => section.verticalConfigId === verticalKey) || {};
+      const verticalConfig = this.sectionConfigs[verticalKey] || {};
+      const url = verticalConfig.url || verticalKey + '.html';
+      const verticalResultsOpts = {
+        ...DEFAULT_VERTICAL_CONFIG(verticalKey, url),
+        ...verticalConfig,
+        ...opts
+      };
+      return super.addChild(section, type, verticalResultsOpts);
     }
-    return Object.assign(defaultConfig, this._config['config'][configId] || this._config['config']);
+    return super.addChild(data, type, opts);
   }
 }
+
+const DEFAULT_VERTICAL_CONFIG = (verticalKey, url) => ({
+  // Tells vertical results it is in a universal results page.
+  isUniversal: true,
+  // Label for the vertical in the titlebar.
+  title: verticalKey,
+  // Icon in the titlebar
+  icon: 'star',
+  // Url that links to the vertical search for this vertical.
+  verticalURL: url,
+  // Show a view more link by default, which also links to verticalURL.
+  viewMore: true,
+  // By default, the view more link has a label of 'View More'.
+  viewMoreLabel: 'View More',
+  // By default, do not show a change filters button next to the applied filters.
+  // Also links to verticalURL
+  changeFilters: false,
+  // Whether to show the applied filters.
+  showAppliedFilters: true,
+  // Whether to show field names in the applied filters, e.g. 'Location: Virginia' vs just 'Virginia'.
+  showFieldNames: false,
+  // Field ids to hide in the applied filters.
+  hiddenFields: ['builtin.entityType'],
+  // Whether to show a result count.
+  showResultCount: false
+});

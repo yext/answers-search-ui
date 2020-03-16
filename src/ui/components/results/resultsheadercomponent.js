@@ -32,6 +32,12 @@ export default class ResultsHeaderComponent extends Component {
      */
     this._config.resultsCountSeparator = config.resultsCountSeparator || '|';
 
+    /**
+     * The url to go to the vertical search for this result's vertical key
+     * @type {string}
+     */
+    this._config.verticalURL = config.verticalURL;
+
     const data = config.data || {};
 
     /**
@@ -72,14 +78,13 @@ export default class ResultsHeaderComponent extends Component {
 
   setState (data) {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-    const hasFilters = this.appliedQueryFilters.length > 0;
-    const shouldShowFilters = hasFilters && this._config.showAppliedFilters;
+    const shouldShowFilters = this.appliedQueryFilters.length > 0 && this._config.showAppliedFilters;
     return super.setState({
       ...data,
       resultsCount: this.resultsCount,
       resultsCountStart: offset + 1,
       resultsCountEnd: offset + this.resultsLength,
-      showResultSeparator: this._config.showResultsCount && shouldShowFilters,
+      showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
       appliedFiltersArray: this.getAppliedFiltersArray()
     });

@@ -384,9 +384,7 @@ ANSWERS.addComponent('DirectAnswer', {
 ## Universal Results Component
 
 The Universal Results component will render the results of a query,
-across all configured verticals, seperated by sections.
-
-The most complex component has a ton of overridable configuration options.
+across all configured verticals, with one section per vertical.
 
 ```html
 <div class="universal-results-container"></div>
@@ -394,104 +392,66 @@ The most complex component has a ton of overridable configuration options.
 
 ### Basic Component
 
+The basic configuration for Universal Results is listed below, which only requires a container.
+ALL other configuration options are assumed to be configuration for a specific vertical
+with that attribute name, e.g. a configuration option named 'people' would be assumed
+to be configuration for a section for the 'people' vertical. This sadly means you cannot
+have a vertical named 'container'.
+
+This below details a Universal Results component with the basic configuration options:
+
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
-  // The max number of search results to return, defaults to 10
-  limit: 5,
 })
 ```
 
-### Custom Render for ALL Result Items
-
-You can override the render function for EACH item in the result list,
-as apposed to the entire component.
-
+Configuration for a vertical works as follows:
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
-  renderItem: function(data) {
-    return `my item ${data.name}`
-  }
-})
-```
-
-### Custom Template for ALL Result Items
-
-You can override the handlebars template for EACH item in the result list,
-as apposed to the entire component.
-
-```js
-ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  itemTemplate: `my item {{name}}`
-})
-```
-
-### Custom Render For Specific Vertical Result Items
-
-You can override the render function for a particular section within the results list,
-by providing a vertical search config id as the context, and using the same options as above.
-
-```js
-ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  config: {
-    'locations': { // The vertical search config id
-      renderItem: function(data) {
-        return `my item ${data.name}`;
-      }
+  people: {
+    card: {
+      // Configuration for the cards in this vertical, see [Cards](#Cards)
+    },
+    // Optional: A custom handlebars template for this section
+    template: "<div> Custom section template </div>",
+    // The title of the vertical
+    // Defaults to the vertical key, in this example 'people'
+    title: "People",
+    // Icon to display to the left of the title. Must be one of our built-in icons, defaults to 'star'
+    icon: 'star',
+    // The url for both the viewMore link and the change-filters link. Defaults to '/{{VERTICAL_KEY}}.html',
+    // in this case that is '/people.html'
+    url: '/people/about.html',
+    // Whether to display a view more link at the bottom of the vertical, defaults to true
+    viewMore: true,
+    // The text for the view more link, if viewMore is true. Defaults to 'View More'
+    viewMoreLabel: 'View More!',
+    // Whether or not to display the change-filters link, which links to the url config option
+    changeFilters: true,
+    // If true, show any applied back-end filters that were applied to the universal search. defaults to false
+    showAppliedFilters: true,
+    // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
+    // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
+    // otherwise display just 'Virginia'. Defaults to false.
+    showFieldNames: false,
+    // If showAppliedFilters is true, this is list of filters that should not be displayed.
+    // By default, builtin.entityType will be hidden
+    hiddenFields: ['builtin.entityType'],
+    // If true, adds a map to the vertical using the provided mapConfig. Default is false
+    includeMap: true,
+    // Configuration for a map, needed if includeMap is true.
+    // Requires a mapProvider and apiKey, where mapProvidder is either 'google' or 'mapBox'
+    mapConfig: {
+      mapProvider: 'google',
+      apiKey: '<<<< api key >>>>',
     }
   }
 })
 ```
 
-### Custom options for specific Vertical Results
-
-You can also provide several config options to each vertical. 
-These are the supported options:
-
-```js
-ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  config: {
-    'locations': { // The vertical search config id
-      renderItem: function(data) {
-        return `my item ${data.name}`;
-      },
-      // Specific text for the view all button, which links to the vertical search for this vertical.
-      // Default is no text.
-      viewAllText: "Go to this vertical's search",
-      // Whether to include a map with this vertical's results.
-      includeMap: true,
-      // If includeMap is true, mapconfig that contains a mapProvider and apiKey is required
-      mapConfig: {
-        // Either 'mapbox' or 'google'
-        mapProvider: 'google',
-        // Api key for the map provider
-        apiKey: '<<< enter your api key here >>>',
-      }
-    }
-  }
-})
-```
-
-### Custom Template For Specific Vertical Result Items
-
-You can override the handlebars template for a particular section within the results list,
-by providing a vertical search config id as the context, and using the same options as above.
-
-```js
-ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  config: {
-    'locations': { // The vertical search config id
-      itemTemplate: `my item {{name}}`
-    }
-  }
-})
-```
 
 ## Vertical Results Component
 
