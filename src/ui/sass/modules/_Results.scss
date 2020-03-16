@@ -29,11 +29,6 @@
   border-bottom: 0;
   width: 100%;
 
-  & + &
-  {
-    margin-top: $base-spacing;
-  }
-
   &-titleBar
   {
     display: flex;
@@ -70,67 +65,6 @@
     text-transform: uppercase;
   }
 
-  &-viewAllLink
-  {
-    display: flex;
-    align-items: center;
-
-    @include Text(
-      $results-title-bar-link-font-size,
-      $results-title-bar-link-line-height,
-      $results-title-bar-link-font-weight,
-    );
-    @include Link-1;
-  }
-
-  &-filters
-  {
-    display: flex;
-    padding: $base-spacing/2 $base-spacing;
-    background-color: $results-filters-background;
-    border-bottom: $results-border;
-  }
-
-  &-filter
-  {
-    display: flex;
-    align-items: center;
-
-    &:not(:first-child)::before
-    {
-      content: '';
-      width: 1px;
-      top: 0;
-      height: 40%;
-      margin-left: $base-spacing;
-      margin-right: $base-spacing;
-      display: inline-block;
-    }
-  }
-
-  &-filterValue
-  {
-    @include Text(
-      $results-filters-text-font-size,
-      $results-filters-text-line-height,
-      $results-filters-text-font-weight,
-      $color: $results-filters-text-color
-    );
-  }
-
-  &-changeFilters
-  {
-    @include Text(
-      $results-filters-link-font-size,
-      $results-filters-link-line-height,
-      $results-filters-link-font-weight,
-      $color: $color-brand-primary
-    );
-    @include Link-2;
-
-    margin-left: $base-spacing / 2;
-  }
-
   &-map
   {
     height: 300px;
@@ -144,14 +78,94 @@
     list-style: none;
     display: flex;
     flex-flow: row wrap;
+    margin-right: -1 * $results-cards-margin;
   }
 
-  &-placeholder {
-    visibility: hidden;
-    height: 0;
+  &-viewMore
+  {
+    display: flex;
+    border: $border-default;
+    border-top: 0;
+    padding: $base-spacing / 2 $base-spacing;
+    align-items: center;
+    background-color: $color-background-highlight;
+    justify-content: center;
+  }
 
-    * {
-      display: none;
+  &-viewMore svg
+  {
+    height: $base-spacing * 5 / 8;
+    width: $base-spacing  * 5 / 8;
+    color: $color-brand-primary;
+  }
+
+  &-viewMoreLink
+  {
+    text-decoration: none;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    &:hover, &:focus 
+    {
+      color: $color-brand-hover;
+      text-decoration: underline;
+    }
+  }
+
+  &-viewMoreLabel
+  {
+    margin-right: $base-spacing / 2;
+    @include Text(
+      $color: $color-brand-primary,
+      $weight: $font-weight-semibold,
+      $line-height: $line-height-lg,
+      $size: $font-size-md,
+    );
+  }
+
+  &-title
+  {
+    border: $border-default;
+    display: flex;
+    padding: $base-spacing / 2 $base-spacing;
+    align-items: center;
+    background-color:  $color-background-highlight;
+  }
+
+  &-title .Icon
+  {
+    margin-right: $base-spacing / 2;
+  }
+
+  &-title svg, &-title img 
+  {
+    color: $color-brand-primary;
+    height: $base-spacing * 9/8;
+    width: $base-spacing * 9/8;
+  }
+
+  &-titleLabel 
+  {
+    text-transform: uppercase;
+    @include Text(
+      $color: $color-text-primary,
+      $weight: $font-weight-semibold,
+      $line-height: $line-height-lg,
+      $size: $font-size-md-lg,
+    );
+  }
+}
+
+
+.yxt-Results--universal
+{
+  margin-top: $base-spacing;
+
+  .yxt-Results 
+  {
+    &-items 
+    {
+      margin-right: 0;
     }
   }
 }

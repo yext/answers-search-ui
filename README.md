@@ -464,9 +464,7 @@ ANSWERS.addComponent('DirectAnswer', {
 ## Universal Results Component
 
 The Universal Results component will render the results of a query,
-across all configured verticals, seperated by sections.
-
-The most complex component has a ton of overridable configuration options.
+across all configured verticals, with one section per vertical.
 
 ```html
 <div class="universal-results-container"></div>
@@ -474,104 +472,89 @@ The most complex component has a ton of overridable configuration options.
 
 ### Basic Component
 
+The basic configuration for Universal Results is listed below, which only requires a container.
+ALL other configuration options are assumed to be configuration for a specific vertical
+with that attribute name, e.g. a configuration option named 'people' would be assumed
+to be configuration for a section for the 'people' vertical. This sadly means you cannot
+have a vertical named 'container'.
+
+This below details a Universal Results component with minimal configuration options:
+
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
-  // The max number of search results to return, defaults to 10
-  limit: 5,
 })
 ```
 
-### Custom Render for ALL Result Items
-
-You can override the render function for EACH item in the result list,
-as apposed to the entire component.
-
+You can also add specific configuration per vertical.
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
-  renderItem: function(data) {
-    return `my item ${data.name}`
-  }
-})
-```
-
-### Custom Template for ALL Result Items
-
-You can override the handlebars template for EACH item in the result list,
-as apposed to the entire component.
-
-```js
-ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  itemTemplate: `my item {{name}}`
-})
-```
-
-### Custom Render For Specific Vertical Result Items
-
-You can override the render function for a particular section within the results list,
-by providing a vertical search config id as the context, and using the same options as above.
-
-```js
-ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  config: {
-    'locations': { // The vertical search config id
-      renderItem: function(data) {
-        return `my item ${data.name}`;
-      }
+  verticals: {
+    some_vertical: {
+      // Configuration for some_vertical, see below
+    },
+    another_vertical: {
+      // Configuration for another_vertical
+    },
+    people: {
+      // Configuration for people
     }
   }
 })
 ```
 
-### Custom options for specific Vertical Results
-
-You can also provide several config options to each vertical.
-These are the supported options:
+A vertical can take the following configuration.
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
-  config: {
-    'locations': { // The vertical search config id
-      renderItem: function(data) {
-        return `my item ${data.name}`;
+  verticals: {
+    people: {
+      card: {
+        // Configuration for the cards in this vertical, see Cards
       },
-      // Specific text for the view all button, which links to the vertical search for this vertical.
-      // Default is no text.
-      viewAllText: "Go to this vertical's search",
-      // Whether to include a map with this vertical's results.
+      // Optional: A custom handlebars template for this section
+      template: '<div> Custom section template </div>',
+      // The title of the vertical
+      // Defaults to the vertical key, in this example 'people'
+      title: 'People',
+      // Icon to display to the left of the title. Must be one of our built-in icons, defaults to 'star'
+      icon: 'star',
+      // The url for both the viewMore link and the change-filters link. Defaults to '/{{VERTICAL_KEY}}.html',
+      // in this case that is '/people.html'
+      url: '/people/about.html',
+      // Whether to display a view more link. Defaults to true
+      viewMore: true,
+      // The text for the view more link, if viewMore is true. Defaults to 'View More'
+      viewMoreLabel: 'View More!',
+      // Whether or not to display the change-filters link, which links to the url config option
+      changeFilters: true,
+      // If true, show any applied back-end filters that were applied to the universal search. Defaults to false
+      showAppliedFilters: true,
+      // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
+      // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
+      // otherwise display just 'Virginia'. Defaults to false.
+      showFieldNames: false,
+      // If showAppliedFilters is true, this is list of filters that should not be displayed.
+      // By default, builtin.entityType will be hidden
+      hiddenFields: ['builtin.entityType'],
+      // If true, adds a map to the vertical using the provided mapConfig. Defaults to false
+      showResultCount: true,
+      // If true, display the total number of results. Defaults to true
       includeMap: true,
-      // If includeMap is true, mapconfig that contains a mapProvider and apiKey is required
+      // Configuration for a map, needed if includeMap is true.
+      // Requires a mapProvider and apiKey, where mapProvider is either 'google' or 'mapBox'
       mapConfig: {
-        // Either 'mapbox' or 'google'
         mapProvider: 'google',
-        // Api key for the map provider
-        apiKey: '<<< enter your api key here >>>',
+        apiKey: '<<<< api key >>>>',
       }
     }
   }
 })
 ```
 
-### Custom Template For Specific Vertical Result Items
-
-You can override the handlebars template for a particular section within the results list,
-by providing a vertical search config id as the context, and using the same options as above.
-
-```js
-ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  config: {
-    'locations': { // The vertical search config id
-      itemTemplate: `my item {{name}}`
-    }
-  }
-})
-```
 
 ## Vertical Results Component
 
@@ -589,15 +572,15 @@ ANSWERS.addComponent('VerticalResults', {
   // Optional: function to give each result item custom rendering
   renderItem: () => {},
   // Optional: string to give custom template to result item
-  itemTemplate: `<div> Custom template </div>`,
+  itemTemplate: '<div> Custom template </div>',
   // Set a maximum number of columns that will display at the widest breakpoint.
-  // Possible values are 1, 2, 3 or 4. defaults to 1
+  // Possible values are 1, 2, 3 or 4. Defaults to 1
   maxNumberOfColumns: 3,
-  // Whether to display the total number of results, default true
+  // Whether to display the total number of results. Defaults to true
   showResultCount: true,
   // The card used to display each individual result, see the Cards section for more details,
   card: {
-    // Optional: The type of card, currently only 'Standard', 'Accordion', and 'Legacy' are supported, defaults to 'Standard'
+    // Optional: The type of card, currently only 'Standard', 'Accordion' and 'Legacy' are supported. Defaults to 'Standard'
     cardType: 'Standard',
     // Required, see Data Mappings for more details
     dataMappings: () => {},
@@ -674,12 +657,12 @@ const callsToAction = [{
   eventOptions: result => {
     return {
       // The vertical key for the CTA. If unspecified, this defaults to the vertical key this cta is a part of
-      verticalKey: "people",
+      verticalKey: 'people',
       // The entity id of the result this cta is a part of, defaults to the entityId field in Knowledge Graph
       entityId: result.id,
       // If the CTA is inside a vertical search, defaults to the value "VERTICAL",
       // if is inside a universal search, defaults to the value "UNIVERSAL"
-      searcher: "VERTICAL"
+      searcher: 'VERTICAL'
     };
   }
 }]
@@ -690,19 +673,19 @@ NOTE: we do not allow multiple nested functions, to avoid messy user configurati
 
 ```js
 const callsToAction = item => [{
-  label: item.name,
-  url: "https://yext.com",
-  analytics: "CTA_CLICK",
+  label: item._raw.name,
+  url: 'https://yext.com',
+  analyticsEventType: 'CTA_CLICK',
   target: '_blank',
-  icon: "briefcase",
-  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  icon: 'briefcase',
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }, {
   label: 'call now',
-  url: "https://maps.google.com",
-  analytics: "CTA_CLICK",
+  url: 'https://maps.google.com',
+  analyticsEventType: 'CTA_CLICK',
   target: '_blank',
-  icon: "phone",
-  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  icon: 'phone',
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher": "UNIVERSAL", "ctaLabel": "cards"}`
 }]
 ```
 
@@ -710,12 +693,12 @@ const callsToAction = item => [{
 
 ```js
 const callsToAction = item => [{
-  label: item => item.name,
-  url: "https://yext.com",
-  analytics: "CTA_CLICK",
+  label: item => item._raw.name,
+  url: 'https://yext.com',
+  analyticsEventType: 'CTA_CLICK',
   target: '_self',
-  icon: "briefcase",
-  eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  icon: 'briefcase',
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher": "UNIVERSAL", "ctaLabel": "cards"}`
 }]
 ```
 
@@ -727,8 +710,8 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     /* ...other card config...*/
     callsToAction: item => [{
-      label: item => item.name,
-      url: "https://yext.com",
+      label: item => item._raw.name,
+      url: 'https://yext.com',
     }]
   }
   /* ...other vertical results config... */
@@ -781,8 +764,8 @@ ANSWERS.addComponent('VerticalResults', {
       image: item => item.headshot ? item.headshot.url : '',
       url: 'https://yext.com',
       showMoreLimit: 500,
-      showMoreText: "show more",
-      showLessText: "put it back",
+      showMoreText: 'show more',
+      showLessText: 'put it back',
       target: '_blank'
     }
   }
@@ -812,9 +795,9 @@ const dataMappings = item => {
     // Character limit to hide remaining details and display a show more button, defaults to 350
     showMoreLimit: 350,
     // Text for show more button, defaults to 'Show More'
-    showMoreText: "show more",
+    showMoreText: 'show more',
     // Text for show less button, defaults to 'Show Less'
-    showLessText: "put it back",
+    showLessText: 'put it back',
     // The target attribute for the title link, defaults to '_self'. To open in a new window use '_blank'
     target: '_blank',
     // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
@@ -1041,9 +1024,9 @@ ANSWERS.addComponent('FilterSearch', {
     // List of fields to query for
     fields: [{
       // Field id to query for e.g. c_customFieldName, buildin.location
-      fieldId: "builtin.location",
+      fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
-      entityTypeId: "ce_person",
+      entityTypeId: 'ce_person',
       // Optional, if true sections search results by search filter, default false
       sectioned: false,
     }]
@@ -1219,9 +1202,9 @@ ANSWERS.addComponent('GeoLocationFilter', {
     // List of fields to query for
     fields: [{
       // Field id to query for e.g. c_customFieldName, buildin.location
-      fieldId: "builtin.location",
+      fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
-      entityTypeId: "ce_person",
+      entityTypeId: 'ce_person',
       // Optional, if true sections search results by search filter, default false
       sectioned: false,
     }]
