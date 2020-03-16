@@ -26,33 +26,33 @@
       </div>
       <ul class="yxt-AlternativeVerticals-suggestionsList">
         {{#each verticalSuggestions}}
-          {{#with this}}
-            <li class="yxt-AlternativeVerticals-suggestion">
-              <a class="yxt-AlternativeVerticals-suggestionLink"
-                  href="{{url}}">
+          <li class="yxt-AlternativeVerticals-suggestion">
+            <a class="yxt-AlternativeVerticals-suggestionLink"
+                href="{{url}}">
+              {{#if iconName}}
                 <div class="yxt-AlternativeVerticals-verticalIconWrapper"
                       data-component="IconComponent"
                       data-opts='{
                         "iconName": "{{iconName}}"
                       }'>
                 </div>
-                <div class="yxt-AlternativeVerticals-suggestionLink--copy">
-                  <span class="yxt-AlternativeVerticals-suggestionLink--copyLabel">
-                    {{label}}
-                  </span>
-                  <span class="yxt-AlternativeVerticals-suggestionLink--copyResults">
-                    ({{resultsCount}} {{plural resultsCount 'result' 'results'}})
-                  </span>
-                </div>
-                <div class="yxt-AlternativeVerticals-arrowIconWrapper"
-                      data-component="IconComponent"
-                      data-opts='{
-                        "iconName": "chevron"
-                      }'>
-                </div>
-              </a>
-            </li>
-          {{/with}}
+              {{/if}}
+              <div class="yxt-AlternativeVerticals-suggestionLink--copy">
+                <span class="yxt-AlternativeVerticals-suggestionLink--copyLabel">
+                  {{label}}
+                </span>
+                <span class="yxt-AlternativeVerticals-suggestionLink--copyResults">
+                  ({{resultsCount}} {{plural resultsCount 'result' 'results'}})
+                </span>
+              </div>
+              <div class="yxt-AlternativeVerticals-arrowIconWrapper"
+                    data-component="IconComponent"
+                    data-opts='{
+                      "iconName": "chevron"
+                    }'>
+              </div>
+            </a>
+          </li>
         {{/each}}
       </ul>
       {{#if universalUrl}}

@@ -9,19 +9,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
-import DOM from '../../dom/dom';
-
-/**
- * Breakpoint for when somebody is on desktop, prescribed by Jeremy.
- * @type {number}
- */
-const DESKTOP_BREAKPOINT = 400;
-
-/**
- * Minimum width for the card.
- * @type {number}
- */
-const CARD_MIN_WIDTH = 210;
+import { addParamsToUrl } from '../../../core/utils/urlutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -33,14 +21,6 @@ class VerticalResultsConfig {
      * @private
      */
     this.isUniversal = config.isUniversal || false;
-
-    /**
-     * _showEnhancedNoResults is set to true if the noResults object exists in the component's
-     * config
-     * @type {boolean}
-     * @private
-     */
-    this._showEnhancedNoResults = config.noResults || false;
 
     /**
      * _displayAllResults is set to true if the config option noResults.displayAllResults is true,
@@ -71,12 +51,6 @@ class VerticalResultsConfig {
     this.itemTemplate = config.itemTemplate || parentOpts.itemTemplate;
 
     /**
-     * The url to the universal page for the no results page to link back to with current query
-     * @type {string|null}
-     */
-    this._universalUrl = config.universalUrl;
-
-    /**
      * The maximum number of columns to display, supports 1, 2, 3, or 4.
      * @type {number}
      */
@@ -89,12 +63,6 @@ class VerticalResultsConfig {
     this.card = config.card || {};
 
     /**
-     * Config for the footer at the bottom of the vertical results
-     * @type {Object}
-     */
-    this.footer = config.footer || {};
-
-    /**
      * Config options used in the {@link ResultsHeaderComponent}
      */
     this.resultsHeaderOpts = {
@@ -102,7 +70,7 @@ class VerticalResultsConfig {
        * Whether to display the number of results.
        * @type {boolean}
        */
-      showResultsCount: config.showResultsCount === undefined ? true : config.showResultsCount,
+      showResultCount: config.showResultCount === undefined ? true : config.showResultCount,
 
       /**
        * If present, show the filters that were ultimately applied to this query
@@ -111,7 +79,7 @@ class VerticalResultsConfig {
       showAppliedFilters: config.showAppliedFilters === undefined ? true : config.showAppliedFilters,
 
       /**
-       * If showResultsCount and showAppliedFilters are true,
+       * If showResultCount and showAppliedFilters are true,
        * display this separator between the result count and the applied query filters
        * @type {string}
        */
@@ -131,14 +99,13 @@ export default class VerticalResultsComponent extends Component {
     super(new VerticalResultsConfig(config), systemConfig);
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._verticalsConfig = this.core.globalStorage
-      .getState(StorageKeys.VERTICAL_PAGES_CONFIG)
-      .verticalPagesConfig || [];
+      .getState(StorageKeys.VERTICAL_PAGES_CONFIG).get() || [];
     /**
      * @type {Array<Result>}
      */
     this.results = [];
-    this.numColumns = 1;
-    this.handleResize = this.handleResize.bind(this);
+    this.numColumns = this._config.maxNumberOfColumns;
+    this.core.globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, this._config.noResults || {});
   }
 
   mount () {
@@ -152,84 +119,48 @@ export default class VerticalResultsComponent extends Component {
     return true;
   }
 
-  /**
-   * Gets the number of columns needed, capped at the max number of columns
-   * set in the config, and also the number of results.
-   * @returns {number}
-   */
-  getNumColumns () {
-    if (this._config.maxNumberOfColumns <= 1 || !this.results.length) {
-      return 1;
-    }
-    const totalWidth = this._container.scrollWidth;
-    if (totalWidth <= DESKTOP_BREAKPOINT) {
-      return 1;
-    }
-    const numColumns = Math.floor(totalWidth / CARD_MIN_WIDTH);
-    return Math.min(numColumns, this._config.maxNumberOfColumns, this.results.length);
-  }
-
-  handleResize () {
-    if (this._handleResizeTimer) {
-      clearTimeout(this._handleResizeTimer);
-    }
-
-    this._handleResizeTimer = setTimeout(() => {
-      const currentNumColumns = this.getNumColumns();
-      if (this.numColumns !== currentNumColumns) {
-        this.numColumns = currentNumColumns;
-        const resultsEl = DOM.query(this._container, '.yxt-Results-items');
-        resultsEl.classList.remove('yxt-Results-items--1');
-        resultsEl.classList.remove('yxt-Results-items--2');
-        resultsEl.classList.remove('yxt-Results-items--3');
-        resultsEl.classList.remove('yxt-Results-items--4');
-        resultsEl.classList.add(`yxt-Results-items--${currentNumColumns}`);
-      }
-    }, 100);
-  }
-
-  onCreate () {
-    if (this._config.maxNumberOfColumns > 1) {
-      window.addEventListener('resize', this.handleResize);
+  getUniversalUrl () {
+    const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
+    if (universalConfig.url) {
+      return addParamsToUrl(universalConfig.url, { query: this.query });
     }
   }
 
-  onDestroy () {
-    if (this._config.maxNumberOfColumns > 1) {
-      window.removeEventListener('resize', this.handleResize);
-    }
+  getVerticalURL (data) {
+    const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
+    const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
+    return addParamsToUrl(verticalURL, { query: this.query });
   }
 
-  setState (data, val) {
+  setState (data = {}, val) {
     /**
      * @type {Array<Result>}
      */
     this.results = data.results || [];
+    this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
     this.appliedQueryFilters = data.appliedQueryFilters;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
       this._config._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    this.numColumns = this.getNumColumns();
-    const showResultsHeader = this._config.resultsHeaderOpts.showResultsCount ||
+    const showResultsHeader = this._config.resultsHeaderOpts.showResultCount ||
       this._config.resultsHeaderOpts.showAppliedFilters;
+    this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
 
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      includeMap: this._config.includeMap,
-      mapConfig: this._config.mapConfig,
       eventOptions: this.eventOptions(),
-      universalUrl: this._universalUrl ? this._universalUrl + window.location.search : '',
-      query: this.core.globalStorage.getState(StorageKeys.QUERY),
+      universalUrl: this.getUniversalUrl(),
+      verticalURL: this.getVerticalURL(data),
+      query: this.query,
       currentVerticalLabel: this._currentVerticalLabel,
       resultsPresent: displayResultsIfExist && this.results.length !== 0,
       showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
-      isEnhancedNoResultsEnabled: this._config._showEnhancedNoResults,
-      placeholders: new Array(this._config.maxNumberOfColumns - 1),
-      numColumns: this.numColumns,
+      placeholders: new Array(this._config.maxNumberOfColumns + 1),
+      numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
       showResultsHeader: showResultsHeader
     }), val);
   }
@@ -259,8 +190,8 @@ export default class VerticalResultsComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === MapComponent.type) {
-      const newOpts = Object.assign({ map: data }, this._config.mapConfig, opts);
-      return super.addChild(data, type, newOpts);
+      const newOpts = Object.assign({}, this._config.mapConfig, opts);
+      return super.addChild({ map: data }, type, newOpts);
     } else if (type === CardComponent.type) {
       const updatedData = {
         result: this.results[opts._index],
@@ -279,7 +210,7 @@ export default class VerticalResultsComponent extends Component {
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
         template: this._config.noResultsTemplate,
-        universalUrl: this._config._universalUrl,
+        universalUrl: this.getUniversalUrl(),
         verticalsConfig: this._verticalsConfig,
         isShowingResults: this._config._displayAllResults && hasResults,
         ...opts
@@ -288,6 +219,7 @@ export default class VerticalResultsComponent extends Component {
     } else if (type === ResultsHeaderComponent.type) {
       const resultsHeaderData = {
         resultsLength: this.results.length,
+        resultsCount: this.resultsCount,
         appliedQueryFilters: this.appliedQueryFilters,
         ...data
       };

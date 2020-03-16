@@ -35,7 +35,6 @@ import QuestionSubmissionComponent from './questions/questionsubmissioncomponent
 import IconComponent from './icons/iconcomponent.js';
 import CTAComponent from './ctas/ctacomponent';
 import CTACollectionComponent from './ctas/ctacollectioncomponent';
-import FooterComponent from './utils/footercomponent.js';
 import ResultsHeaderComponent from './results/resultsheadercomponent';
 
 const COMPONENT_CLASS_LIST = [
@@ -82,8 +81,7 @@ const COMPONENT_CLASS_LIST = [
   // Helper Components
   IconComponent,
   CTAComponent,
-  CTACollectionComponent,
-  FooterComponent
+  CTACollectionComponent
 ];
 
 /**

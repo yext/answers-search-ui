@@ -398,7 +398,7 @@ The most complex component has a ton of overridable configuration options.
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   // The max number of search results to return, defaults to 10
-  limit: 5
+  limit: 5,
 })
 ```
 
@@ -447,6 +447,36 @@ ANSWERS.addComponent('UniversalResults', {
 })
 ```
 
+### Custom options for specific Vertical Results
+
+You can also provide several config options to each vertical. 
+These are the supported options:
+
+```js
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  config: {
+    'locations': { // The vertical search config id
+      renderItem: function(data) {
+        return `my item ${data.name}`;
+      },
+      // Specific text for the view all button, which links to the vertical search for this vertical.
+      // Default is no text.
+      viewAllText: "Go to this vertical's search",
+      // Whether to include a map with this vertical's results.
+      includeMap: true,
+      // If includeMap is true, mapconfig that contains a mapProvider and apiKey is required
+      mapConfig: {
+        // Either 'mapbox' or 'google'
+        mapProvider: 'google',
+        // Api key for the map provider
+        apiKey: '<<< enter your api key here >>>',
+      }
+    }
+  }
+})
+```
+
 ### Custom Template For Specific Vertical Result Items
 
 You can override the handlebars template for a particular section within the results list,
@@ -484,39 +514,23 @@ ANSWERS.addComponent('VerticalResults', {
   // Possible values are 1, 2, 3 or 4. defaults to 1
   maxNumberOfColumns: 3,
   // Whether to display the total number of results, default true
-  showResultsCount: true,
-  // If present, show the filters that were ultimately applied to this query, default true
-  showAppliedFilters: true,
-  // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
-  // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
-  // otherwise display just 'Virginia'. Defaults to false.
-  showFieldNames: false,
-  // display this separator between the result count and the applied query filters
-  resultsCountSeparator: '|',
-  // The card used to display each individual result, see [Cards](#Cards) section for more details,
+  showResultCount: true,
+  // The card used to display each individual result, see the Cards section for more details,
   card: {
     // Optional: The type of card, currently only 'Standard' and 'Accordion' are supported, defaults to 'Standard'
     cardType: 'Standard',
-    // Required, see [Card Mappings](#Card-Mappings) for more details
+    // Required, see Card Mappings for more details
     cardMappings: () => {},
-    // At least one of callsToAction and callsToActionFields are required,
-    // callsToActionFields takes precendence over callsToAction.
-    // see [Calls To Action](#Calls-To-Action) and [Calls To Action Fields](#Calls-To-Action-Fields)
-    callsToAction: () => [],
-    callsToActionFields: [ "c_primaryCTA","c_secondaryCTA" ]
+    // Optional, used as configuration for any calls to action buttons on the page, see Calls To Action for more details
+    callsToAction: () => []
   },
-  // Config for the footer at the bottom of the results
-  footer: {
-    // Image/icon to appear at the bottom. Either the name of an answers-sdk icon
-    // or a url to an image. Defaults to 'yext' (the built-in yext icon)
-    logo: 'yext',
-    // The url to open when the icon is clicked. NOTE: a protocol like http is needed
-    // To link to external pages like yext.com
-    url: 'https://yext.com',
-    // Whether to open the link in a new window, defaults to false
-    newWindow: false,
-    // Optional: text for screen readers in the footer, will only be visible by screen readers
-    screenReaderText: "I will only be read by screen readers",
+  // Configuration for what to display when no results are found.
+  noResults: {
+    // You can specify a custom template for the no results card, otherwise will use the built-in template.
+    template: '<div> <em>No results found!</em> Try again? </div>',
+    // Whether to display all results in the vertical when no results are found. Defaults to false. In which
+    // case only the no results card will be shown.
+    displayAllResults: false
   }
 })
 ```
@@ -529,17 +543,15 @@ Cards take in a cardMappings attribute, which contains configuration for the car
 attribute, which contains config for any callToAction buttons in the card.
 
 callsToAction config is common throughout all cards, whereas different cards such as Standard vs BigImage
-have specialized configuration depending on the card.
+have specialized configuration depending on the card. See [Calls To Action](#Calls-To-Action)
 
-There is currently only one built-in card, the [Standard Card](#Standard-Card)
+There are two built-in cards, the [Standard Card](#Standard-Card) and the [Accordion Card](#Accordion-Card).
 
 ## Calls To Action
 
 callsToActions are specified as either an array of CTA configs, or a function that returns
 an array of CTA configs. An array of CTA configs is an object of either static config options
-or functions that return the desired config option. The [callsToActionFields](#Calls-To-Action-Fields)
-option will take precendence over the callsToAction option if both are present, acting as if
-callsToAction was not specified at all.
+or functions that return the desired config option.
 
 Examples are detailed below.
 
@@ -568,8 +580,8 @@ const callsToAction = [{
   //       'BOOK_APPOINTMENT',
   //       'RSVP'
   analyticsEventType: 'CTA_CLICK',
-  // Whether the click should open in a new window, defaults to false
-  newWindow: false,
+  // The target attribute for the CTA link, defaults to '_self'. To open in a new window use '_blank'
+  target: '_blank',
   // The eventOptions needed for the event to fire. Either a valid json string, an object, or a function that
   // takes in the result data response.
   // By default, if no event options are specified the SDK will try to add verticalKey, entityId, and searcher options
@@ -596,14 +608,14 @@ const callsToAction = item => [{
   label: item._raw.name,
   url: "https://yext.com",
   analyticsEventType: "CTA_CLICK",
-  newWindow: false,
+  target: '_blank',
   icon: "briefcase",
   eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }, {
   label: 'call now',
   url: "https://maps.google.com",
   analyticsEventType: "CTA_CLICK",
-  newWindow: false,
+  target: '_blank',
   icon: "phone",
   eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }]
@@ -616,7 +628,7 @@ const callsToAction = item => [{
   label: item => item._raw.name,
   url: "https://yext.com",
   analyticsEventType: "CTA_CLICK",
-  newWindow: item !== null,
+  target: '_self',
   icon: "briefcase",
   eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }]
@@ -638,24 +650,6 @@ ANSWERS.addComponent('VerticalResults', {
 })
 ```
 
-## Calls To Action Fields
-
-callsToActionFields are specified as an array of custom field names, and
-these custom fields hold CTA configuration in some backend, (e.g. the Yext Knowledge Graph).
-callsToActionFields will take precendence over callsToAction if both are present, acting as if
-callsToAction was not specified at all.
-
-```js
-ANSWERS.addComponent('VerticalResults', {
-  /* ...other vertical results config... */
-  card: {
-    /* ...other card config...*/
-    callsToActionFields: [ "c_primaryCTA","c_secondaryCTA" ]
-  }
-  /* ...other vertical results config... */
-})
-```
-
 ## Card Mappings
 
 CardMappings define how a card's attributes, such as title and details, will be rendered.
@@ -663,6 +657,8 @@ They can be configured either through a function that returns a cardMappings obj
 or a static cardMappings object.
 
 Each attribute of a cardMappings object is also either a function or a static value.
+
+Below is an example of cardMappings as function.
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
@@ -678,42 +674,69 @@ ANSWERS.addComponent('VerticalResults', {
       showMoreLimit: 500,
       showMoreText: "show more",
       showLessText: "put it back",
-      newWindow: true,
+      target: '_blank'
     })
   }
   /* ...other vertical results config... */
 })
 ```
 
+And below is an example of cardMappings as an object with functions inside it.
+You can use both static attributes and function attributes together.
+
+```js
+ANSWERS.addComponent('VerticalResults', {
+  /* ...other vertical results config... */
+  card: {
+    /* ...other card config...*/
+    cardMappings: {
+      title: item => item._raw.name,
+      subtitle: item => `Department: ${item._raw.name} `,
+      details: item => item._raw.description,
+      image: item => item._raw.headshot ? item._raw.headshot.url : '',
+      url: 'https://yext.com',
+      showMoreLimit: 500,
+      showMoreText: "show more",
+      showLessText: "put it back",
+      target: '_blank'
+    }
+  }
+  /* ...other vertical results config... */
+})
+```
+
+
 ## Standard Card
 
 The card mapping for a standard card has these attributes
 
 ```js
-const cardMappings = {
-  // Title for the card, defaults to the name of the entity
-  title: item.title,
-  // Subtitle, defaults to null
-  subtitle: `Department: ${item._raw.name} `,
-  // Details, defaults to the entity's description
-  details: item._raw.description,
-  // Image to display, defaults to null
-  image: item._raw.headshot ? item._raw.headshot.url : '',
-  // Url for the title/subtitle, defaults to the entity's website url
-  url: item.link || item._raw.website,
-  // Character limit to hide remaining details and display a show more button, defaults to 350
-  showMoreLimit: 350,
-  // Text for show more button, defaults to 'Show More'
-  showMoreText: "show more",
-  // Text for show less button, defaults to 'Show Less'
-  showLessText: "put it back",
-  // Whether to open the title link in a new window, defaults to false
-  newWindow: true,
-  // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
-  // defaults to false
-  showOrdinal: false,
-  // A tag to display on top of an image, always overlays the image, default no tag
-  tagLabel: 'On Sale!'
+const cardMappings = item => {
+  return {
+    // Title for the card, defaults to the name of the entity
+    title: item.title,
+    // Subtitle, defaults to null
+    subtitle: `Department: ${item._raw.name} `,
+    // Details, defaults to the entity's description
+    details: item._raw.description,
+    // Image to display, defaults to null
+    image: item._raw.headshot ? item._raw.headshot.url : '',
+    // Url for the title/subtitle, defaults to the entity's website url
+    url: item.link || item._raw.website,
+    // Character limit to hide remaining details and display a show more button, defaults to 350
+    showMoreLimit: 350,
+    // Text for show more button, defaults to 'Show More'
+    showMoreText: "show more",
+    // Text for show less button, defaults to 'Show Less'
+    showLessText: "put it back",
+    // The target attribute for the title link, defaults to '_self'. To open in a new window use '_blank'
+    target: '_blank',
+    // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
+    // defaults to false
+    showOrdinal: false,
+    // A tag to display on top of an image, always overlays the image, default no tag
+    tagLabel: 'On Sale!'
+  };
 }
 ```
 
@@ -722,15 +745,17 @@ const cardMappings = {
 The card mapping for an accordion card has these attributes
 
 ```js
-const cardMappings = {
-  // Title for the card, defaults to the name of the entity
-  title: item.title,
-  // Subtitle, defaults to null
-  subtitle: `Department: ${item._raw.name} `,
-  // Details, defaults to the entity's description
-  details: item._raw.description,
-  // Whether this current card Mapping's Accordion Card should be open on page load, defaults to false
-  expanded: false
+const cardMappings = item => {
+  return {
+    // Title for the card, defaults to the name of the entity
+    title: item.title,
+    // Subtitle, defaults to null
+    subtitle: `Department: ${item._raw.name} `,
+    // Details, defaults to the entity's description
+    details: item._raw.description,
+    // Whether the first Accordion Card shown in vertical/universal results should be open on page load, defaults to false
+    expanded: false
+  };
 }
 ```
 
