@@ -31,3 +31,12 @@ export function getAnalyticsUrl (env = PRODUCTION, conversionTrackingEnabled = f
     ? 'https://sandbox-answers.yext-pixel.com'
     : 'https://answers.yext-pixel.com';
 }
+
+/**
+ * Returns the passed in url with the query appended to it.
+ * @param {string} url
+ * @returns {string}
+ */
+export function addQueryToUrl (url, query) {
+  return url.split('?')[0] + '?query=' + query;
+}

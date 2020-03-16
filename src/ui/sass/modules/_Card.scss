@@ -5,27 +5,26 @@
   flex-direction: column;
   min-width: 210px;
 
-  &-child {
-    margin-right: $cards-margin;
-    margin-bottom: $cards-margin;
-    flex-grow: 1;
-    border: $border-default;
+  border: $border-default;
 
-    @media (max-width: $breakpoint-mobile-max) {
-      margin-bottom: 0;
-    }
+  margin-right: $cards-margin;
+  margin-bottom: $cards-margin;
+
+  &-child {
+    flex-grow: 1;
   }
 
-  &-child--universal {
+  &--universal {
     margin-bottom: 0;
   }
 
-  & + & .yxt-Card-child--universal {
+  &--universal + &--universal {
     border-top: 0;
   }
 
   @media (max-width: $breakpoint-mobile-max) {
-    & + & .yxt-Card-child {
+    margin-bottom: 0;
+    & + & {
       border-top: 0;
     }
   }
@@ -40,15 +39,15 @@
   @media (min-width: $breakpoint-mobile-max) {
 
     &--2 > .yxt-Card {
-      flex-basis: 50%;
+      flex-basis: 45%;
     }
   
     &--3 > .yxt-Card {
-      flex-basis: 33.3%;
+      flex-basis: 30%;
     }
   
     &--4 > .yxt-Card {
-      flex-basis: 25%;
+      flex-basis: 22%;
     }
   }
 }

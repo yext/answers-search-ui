@@ -9,6 +9,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
+import { addQueryToUrl } from '../../../core/utils/urlutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -48,12 +49,6 @@ class VerticalResultsConfig {
      * @type {string}
      */
     this.itemTemplate = config.itemTemplate || parentOpts.itemTemplate;
-
-    /**
-     * The url to the universal page for the no results page to link back to with current query
-     * @type {string|null}
-     */
-    this._universalUrl = config.universalUrl;
 
     /**
      * The maximum number of columns to display, supports 1, 2, 3, or 4.
@@ -126,17 +121,15 @@ export default class VerticalResultsComponent extends Component {
 
   getUniversalUrl () {
     const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
-    let universalUrl = this._universalUrl;
     if (universalConfig.url) {
-      universalUrl = universalConfig.url;
+      return addQueryToUrl(universalConfig.url, this.query);
     }
-    return `${universalUrl}?query=${this.query || ''}`;
   }
 
   getVerticalURL (data) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    return `${verticalURL}?query=${this.query || ''}`;
+    return addQueryToUrl(verticalURL, this.query);
   }
 
   setState (data, val) {
