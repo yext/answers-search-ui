@@ -15,7 +15,6 @@
   $results-header-filters-color: $color-text-secondary !default;
   $results-header-filters-line-height: $line-height-md !default;
 
-  margin-left: $results-header-spacing;
   margin-bottom: $results-header-spacing / 2;
   display: flex;
   align-items: baseline;
@@ -51,6 +50,7 @@
 
   &-filterLabel
   {
+    display: flex;
     margin-right: $results-header-spacing * 3 / 8;
     @include Text(
       $size: $results-header-filters-font-size,

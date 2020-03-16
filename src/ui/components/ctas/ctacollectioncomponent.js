@@ -31,46 +31,24 @@ export default class CTACollectionComponent extends Component {
      * or api fieldnames
      * @type {Function|Array<Object|string>}
      */
-    let callsToAction = this._config.callsToAction || [];
+    const callsToAction = this._config.callsToAction || [];
 
     /**
-     * An array of cta custom field names, whose custom field data are expected
-     * to contain CTA configuration.
-     * @type {Array<string>}
-     */
-    const callsToActionFields = this._config.callsToActionFields || [];
-
-    /**
-     * Additional css modifier classNames for the cta.
-     * @type {Array<string>}
-     */
-    this._config._ctaModifiers = this._config._ctaModifiers;
-
-    /**
-     * The computed calls to action array
+     * The config for each calls to action component to render.
      * @type {Array<Object>}
      */
-    this.callsToAction = this.resolveCTAMapping(this.result, callsToActionFields, ...callsToAction);
+    this.callsToAction = CTACollectionComponent.resolveCTAMapping(this.result, ...callsToAction);
 
-    this.callsToAction = this.callsToAction.map(cta => {
-      if (!cta.label && !cta.url) {
-        console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
-      } else if (!cta.label) {
-        console.warn('Call to Action:', cta, 'is missing a label attribute and is being automatically hidden');
-      } else if (!cta.url) {
-        console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
-      } else {
-        const _ctaModifiers = this._config._ctaModifiers;
-        if (this.callsToAction.length === 1) {
-          _ctaModifiers.push('solo');
-        }
-        return {
-          eventOptions: this.defaultEventOptions(this.result),
-          _ctaModifiers: _ctaModifiers,
-          ...cta
-        };
-      }
-    });
+    // Assign any extra cta config that does not come from the cta mappings.
+    const _ctaModifiers = this._config._ctaModifiers || [];
+    if (this.callsToAction.length === 1) {
+      _ctaModifiers.push('solo');
+    }
+    this.callsToAction = this.callsToAction.map(cta => ({
+      eventOptions: this.defaultEventOptions(this.result),
+      _ctaModifiers: _ctaModifiers,
+      ...cta
+    }));
   }
 
   /**
@@ -79,27 +57,25 @@ export default class CTACollectionComponent extends Component {
    * 2. an object that has a per-attribute mapping of either a
    *    a) static value
    *    b) function that takes in resut data and returns the given attributes value
-   * callsToAction can also be specified through callsToActionFields, which are:
-   * 3. an api field name that keys into the result data which contains the cta config as a json string
-   * If callToActionFields are present other ctas should be ignored.
    * Note: Intentionally does not allow nesting functions.
    * @param {Object} result
-   * @param {Array<string>} callsToActionFields
-   * @param {Function|...(Object|string)} ctaMapping
+   * @param {Function|...(Object|string)} ctas
    * @returns {Array<Object>}
    */
-  resolveCTAMapping (result, callsToActionFields, ...ctas) {
-    // If entity has any fields that are designed as callsToActionFields, return those instead
-    const filteredCTAFields = callsToActionFields.filter(ctaFieldName => result._raw[ ctaFieldName ]);
-    if (filteredCTAFields.length > 0) {
-      return filteredCTAFields.map(ctaFieldName => result._raw[ ctaFieldName ]);
-    }
-    // Otherwise, use given callsToAction if any
+  static resolveCTAMapping (result, ...ctas) {
+    ctas.forEach(cta => {
+      if (!cta.label && !cta.url) {
+        console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
+      } else if (!cta.label) {
+        console.warn('Call to Action:', cta, 'is missing a label attribute and is being automatically hidden');
+      } else if (!cta.url) {
+        console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
+      }
+    });
     return ctas.map(ctaMapping => {
       if (typeof ctaMapping === 'function') {
         return ctaMapping(result);
-      }
-      if (typeof ctaMapping === 'object') {
+      } else if (typeof ctaMapping === 'object') {
         const ctaObject = { ...ctaMapping };
         for (let [ctaAttribute, attributeMapping] of Object.entries(ctaMapping)) {
           if (typeof attributeMapping === 'function') {
@@ -108,7 +84,11 @@ export default class CTACollectionComponent extends Component {
         }
         return ctaObject;
       }
-    });
+    }).filter(cta => cta.url.trim() && cta.label.trim());
+  }
+
+  static hasCTAs (result, ctas) {
+    return CTACollectionComponent.resolveCTAMapping(result, ...ctas).length > 0;
   }
 
   defaultEventOptions (result) {

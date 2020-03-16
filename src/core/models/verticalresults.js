@@ -6,7 +6,7 @@ import Section from './section';
 import SearchStates from '../storage/searchstates';
 
 export default class VerticalResults {
-  constructor (data = {}, resultsContext) {
+  constructor (data = {}) {
     Object.assign(this, { searchState: SearchStates.SEARCH_COMPLETE }, data);
 
     /**
@@ -14,7 +14,7 @@ export default class VerticalResults {
      * these specific results were returned.
      * @type {ResultsContext}
      */
-    this.resultsContext = resultsContext;
+    this.resultsContext = data.resultsContext;
 
     Object.freeze(this);
   }
@@ -40,11 +40,12 @@ export default class VerticalResults {
    * @param {Object} response The server response
    */
   static _formResponseFromAllResultsForVertical (response) {
-    let responseCopy = { ...response };
-    const allResultsForVertical = response.allResultsForVertical || {};
-    responseCopy.results = allResultsForVertical.results || [];
-    responseCopy.resultsCount = allResultsForVertical.resultsCount || 0;
-    return responseCopy;
+    const { results, resultsCount } = response.allResultsForVertical || {};
+    return {
+      ...response,
+      results: results || [],
+      resultsCount: resultsCount || 0
+    };
   }
 
   /**
@@ -54,16 +55,19 @@ export default class VerticalResults {
    */
   static from (response, formatters, verticalKey) {
     const hasResults = response.results && response.results.length > 0;
-    const resultsContext = hasResults ? ResultsContext.NORMAL : ResultsContext.NO_RESULTS;
-
-    return new VerticalResults(
-      {
-        ...Section.from(
-          hasResults ? response : VerticalResults._formResponseFromAllResultsForVertical(response),
-          null, formatters),
-        verticalConfigId: verticalKey
-      },
-      resultsContext);
+    if (!hasResults) {
+      const data = Section.from(VerticalResults._formResponseFromAllResultsForVertical(response), null, formatters);
+      return new VerticalResults({ ...data,
+        verticalConfigId: verticalKey,
+        resultsContext: ResultsContext.NO_RESULTS
+      });
+    } else {
+      const data = Section.from(response, null, formatters);
+      return new VerticalResults({ ...data,
+        verticalConfigId: verticalKey,
+        resultsContext: ResultsContext.NORMAL
+      });
+    }
   }
 
   /**

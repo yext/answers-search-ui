@@ -2,13 +2,6 @@
 .yxt-StandardCard {
   $standard-card-base-spacing: $base-spacing;
 
-  $standard-card-image-width: 7.5 * $standard-card-base-spacing!default;
-  $standard-card-image-height: 7.5 * $standard-card-base-spacing !default;
-  $standard-card-mobile-image-width: 80% !default;
-  $standard-card-mobile-image-height: 9 * $standard-card-base-spacing !default;
-  $standard-card-image-fit: cover !default;
-  $standard-card-image-position: top !default;
-
   $standard-card-link-color: $color-brand-primary !default;
   $standard-card-subtitle-color: $color-text-secondary !default;
   $standard-card-link-hover-color: $color-brand-hover !default;
@@ -30,6 +23,8 @@
     display: flex;
     flex-wrap: wrap;
     align-content: flex-start;
+    flex-basis: 0;
+    flex-grow: 1;
   }
 
   &-ordinalWrapper {
@@ -61,7 +56,7 @@
     padding-top: $base-spacing-sm/4;
     padding-bottom: $base-spacing-sm/4;
     position: relative;
-    bottom: 90%;
+    top: 10%;
     width: 80%;
     left: 10%;
   }
@@ -80,32 +75,37 @@
     );
   }
 
-  &-imgWrapper {
-    width: $standard-card-image-width;
-    min-width: $standard-card-image-width;
-    height: $standard-card-image-height;
-    min-height: $standard-card-image-height;
-    overflow: hidden;
-    margin-right: $standard-card-base-spacing;
+  &-img {
+    height: $standard-card-base-spacing * 10;
+    min-width: $standard-card-base-spacing * 10;
+    flex-basis: 0;
+    flex-grow: 1;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: top left;
     margin-bottom: $standard-card-base-spacing / 2;
-
-    img {
-      width: 100%;
-      height: 100%;
-      object-fit: $standard-card-image-fit;
-      object-position: $standard-card-image-position;
-    }
+    margin-right: $standard-card-base-spacing;
   }
 
   &-contentWrapper {
-    display: flex;
     flex-direction: column;
     flex-basis: 0;
-    flex-grow: 1;
+    flex-grow: 3;
+    flex-wrap: wrap;
   }
 
-  &-title a {
+  &-title {
+    @include Text(
+      $size: $font-size-md-lg,
+      $line-height: $line-height-lg,
+      $weight: $font-weight-bold,
+      $color: $color-text-primary
+    );
+  }
+
+  &-titleLink {
     text-decoration: none;
+    display: block;
     @include Text(
       $size: $font-size-md-lg,
       $line-height: $line-height-lg,
@@ -131,31 +131,31 @@
 
   &-content {
     display: flex;
+    flex-basis: 0;
     flex-grow: 1;
     flex-wrap: wrap;
     justify-content: space-between;
-    width: 100%;
   }
 
   &-details {
-    min-width: $standard-card-text-min-width;
+    min-width: $standard-card-base-spacing * 6;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
     margin-bottom: $standard-card-base-spacing / 2;
     margin-right: $standard-card-base-spacing;
     flex-basis: 0;
     flex-grow: 1;
+    word-break: break-word;
     @include Text(
       $size: $font-size-md,
       $line-height: $line-height-md,
       $weight: $font-weight-normal,
       $color: $color-text-primary
     );
-  }
 
-  &-detailsText {
-    width: 100%;
+    &--noImage {
+      flex-basis: $standard-card-base-spacing * 11;
+    }
   }
 
   &-toggle {
@@ -168,11 +168,14 @@
   }
 
   &-ctas {
-    width: $standard-card-cta-width;
+    min-width: $standard-card-base-spacing * 8;
+    width: 30%;
     align-self: flex-start;
     display: flex;
     flex-direction: column;
     justify-content: center;
+    flex-grow: 1;
+    flex-basis: 0;
   }
 }
 

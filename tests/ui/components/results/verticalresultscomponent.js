@@ -8,8 +8,11 @@ import IconComponent from '../../../../src/ui/components/icons/iconcomponent';
 const mockedCore = () => {
   return {
     globalStorage: {
+      set: () => {},
       getState: (storageKey) => {
         if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
+          return { get: () => { return []; } };
+        } else if (storageKey === StorageKeys.NO_RESULTS_CONFIG) {
           return {};
         }
       }
