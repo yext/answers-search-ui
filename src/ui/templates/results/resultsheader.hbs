@@ -1,20 +1,26 @@
-<div class="yxt-ResultsHeader">
-  {{#if _config.showResultCount}}
-    {{#if resultsCount}}
-      <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} through {{resultsCountEnd}} of {{resultsCount}}">
-        <div aria-hidden="true">
-          <span class="yxt-ResultsHeader-resultsCountStart">{{resultsCountStart}}</span>
-          <span class="yxt-ResultsHeader-resultsCountDash">-</span>
-          <span class="yxt-ResultsHeader-resultsCountEnd">{{resultsCountEnd}}</span>
-          <span class="yxt-ResultsHeader-resultsCountOf">of</span>
-          <span class="yxt-ResultsHeader-resultsCountTotal">{{resultsCount}}</span>
-        </div>
-      </div>
-      {{#if showResultSeparator}}
-        <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
-      {{/if}}
-    {{/if}}
+<div class="yxt-ResultsHeader{{#if _config.isUniversal}} yxt-ResultsHeader--universal{{/if}}">
+  {{> resultscount}}
+  {{#if showResultSeparator}}
+    <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
   {{/if}}
+  {{> filters}}
+</div>
+
+{{#*inline "resultscount"}}
+  {{#every _config.showResultCount resultsCount}}
+    <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} through {{resultsCountEnd}} of {{resultsCount}}">
+      <div aria-hidden="true">
+        <span class="yxt-ResultsHeader-resultsCountStart">{{resultsCountStart}}</span>
+        <span class="yxt-ResultsHeader-resultsCountDash">-</span>
+        <span class="yxt-ResultsHeader-resultsCountEnd">{{resultsCountEnd}}</span>
+        <span class="yxt-ResultsHeader-resultsCountOf">of</span>
+        <span class="yxt-ResultsHeader-resultsCountTotal">{{resultsCount}}</span>
+      </div>
+    </div>
+  {{/every}}
+{{/inline}}
+
+{{#*inline "filters"}}
   {{#if shouldShowFilters}}
     <div class="yxt-ResultsHeader-appliedFilters">
       {{#each appliedFiltersArray}}
@@ -31,6 +37,11 @@
           <div class="yxt-ResultsHeader-filterSeparator">|</div>
         {{/unless}}
       {{/each}}
+    {{#every _config.isUniversal _config.verticalURL _config.showChangeFilters}}
+      <a class="yxt-ResultsHeader-changeFilters" href="{{ _config.verticalURL }}">
+        change filters
+      </a>
+    {{/every}}
     </div>
   {{/if}}
-</div>
+{{/inline}}

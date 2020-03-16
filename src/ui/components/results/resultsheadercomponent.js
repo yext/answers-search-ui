@@ -3,34 +3,18 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 
+const DEFAULT_CONFIG = {
+  showResultCount: true,
+  showAppliedFilters: true,
+  showFieldNames: false,
+  resultsCountSeparator: '|',
+  verticalURL: undefined,
+  showChangeFilters: false
+};
+
 export default class ResultsHeaderComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
-
-    /**
-     * Whether to display the number of results.
-     * @type {boolean}
-     */
-    this._config.showResultCount = config.showResultCount === undefined ? true : config.showResultCount;
-
-    /**
-     * If present, show the filters that were ultimately applied to this query
-     * @type {boolean}
-     */
-    this._config.showAppliedFilters = config.showAppliedFilters === undefined ? true : config.showAppliedFilters;
-
-    /**
-     * If showAppliedFilters is true, show the field name in the string followed by a colon.
-     * @type {boolean}
-     */
-    this._config.showFieldNames = config.showFieldNames || false;
-
-    /**
-     * If showResultCount and showAppliedFilters are true,
-     * display this separator between the result count and the applied query filters
-     * @type {string}
-     */
-    this._config.resultsCountSeparator = config.resultsCountSeparator || '|';
+    super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     const data = config.data || {};
 
@@ -52,7 +36,7 @@ export default class ResultsHeaderComponent extends Component {
     this.appliedQueryFilters = data.appliedQueryFilters || [];
   }
 
-  static get duplicatesAllowed () {
+  static areDuplicateNamesAllowed () {
     return true;
   }
 
@@ -72,14 +56,13 @@ export default class ResultsHeaderComponent extends Component {
 
   setState (data) {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-    const hasFilters = this.appliedQueryFilters.length > 0;
-    const shouldShowFilters = hasFilters && this._config.showAppliedFilters;
+    const shouldShowFilters = this.appliedQueryFilters.length > 0 && this._config.showAppliedFilters;
     return super.setState({
       ...data,
       resultsCount: this.resultsCount,
       resultsCountStart: offset + 1,
       resultsCountEnd: offset + this.resultsLength,
-      showResultSeparator: this._config.showResultsCount && shouldShowFilters,
+      showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
       appliedFiltersArray: this.getAppliedFiltersArray()
     });
