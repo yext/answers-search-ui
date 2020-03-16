@@ -1,4 +1,5 @@
 import { PRODUCTION, SANDBOX } from '../constants';
+import SearchParams from '../../ui/dom/searchparams';
 
 /**
  * Returns the base url for the live api backend in the desired environment.
@@ -35,8 +36,13 @@ export function getAnalyticsUrl (env = PRODUCTION, conversionTrackingEnabled = f
 /**
  * Returns the passed in url with the query appended to it.
  * @param {string} url
+ * @param {params} Object
  * @returns {string}
  */
-export function addQueryToUrl (url, query) {
-  return url.split('?')[0] + '?query=' + query;
+export function addParamsToUrl (url, params = {}) {
+  const urlParams = new SearchParams(window.location.search.substring(1));
+  for (const paramKey in params) {
+    urlParams.set(paramKey, params[paramKey]);
+  }
+  return url.split('?')[0] + '?' + urlParams;
 }

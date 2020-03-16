@@ -9,7 +9,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
-import { addQueryToUrl } from '../../../core/utils/urlutils';
+import { addParamsToUrl } from '../../../core/utils/urlutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -122,14 +122,14 @@ export default class VerticalResultsComponent extends Component {
   getUniversalUrl () {
     const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
     if (universalConfig.url) {
-      return addQueryToUrl(universalConfig.url, this.query);
+      return addParamsToUrl(universalConfig.url, { query: this.query });
     }
   }
 
   getVerticalURL (data) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    return addQueryToUrl(verticalURL, this.query);
+    return addParamsToUrl(verticalURL, { query: this.query });
   }
 
   setState (data, val) {
