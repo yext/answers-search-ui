@@ -28,7 +28,7 @@ export default class UniversalResultsComponent extends Component {
     this.sections = [];
   }
 
-  static get duplicatesAllowed () {
+  static areDuplicateNamesAllowed () {
     return true;
   }
 

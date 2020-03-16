@@ -58,7 +58,7 @@ export default class ResultsHeaderComponent extends Component {
     this.appliedQueryFilters = data.appliedQueryFilters || [];
   }
 
-  static get duplicatesAllowed () {
+  static areDuplicateNamesAllowed () {
     return true;
   }
 

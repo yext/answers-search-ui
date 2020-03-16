@@ -134,7 +134,7 @@ export default class VerticalResultsComponent extends Component {
     return this;
   }
 
-  static get duplicatesAllowed () {
+  static areDuplicateNamesAllowed () {
     return true;
   }
 
