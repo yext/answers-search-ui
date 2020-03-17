@@ -11,15 +11,13 @@ export default class UniversalResultsComponent extends Component {
     super(config, systemConfig);
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
 
-    const { container, isTwin, render, template, ...sectionConfigs } = config;
+    const { ...verticals } = config.verticals || {};
 
     /**
-     * sectionConfigs is an object of verticalKey to config for vertical results.
-     * sectionConfigs contains all config attributes that are not one of the
-     * built-in component config or other config for universal results like container.
+     * verticals is an object of verticalKey to config for vertical results.
      * @type {Object}
      */
-    this.sectionConfigs = sectionConfigs;
+    this.verticals = verticals;
 
     /**
      * Results data from the universal search.
@@ -58,7 +56,7 @@ export default class UniversalResultsComponent extends Component {
 
       /** @type {Section} */
       const section = this.sections.find(section => section.verticalConfigId === verticalKey) || {};
-      const verticalConfig = this.sectionConfigs[verticalKey] || {};
+      const verticalConfig = this.verticals[verticalKey] || {};
       const url = verticalConfig.url || verticalKey + '.html';
       const verticalResultsOpts = {
         ...DEFAULT_VERTICAL_CONFIG(verticalKey, url),

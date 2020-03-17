@@ -398,7 +398,7 @@ with that attribute name, e.g. a configuration option named 'people' would be as
 to be configuration for a section for the 'people' vertical. This sadly means you cannot
 have a vertical named 'container'.
 
-This below details a Universal Results component with the basic configuration options:
+This below details a Universal Results component with minimal configuration options:
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
@@ -406,49 +406,70 @@ ANSWERS.addComponent('UniversalResults', {
 })
 ```
 
-Configuration for a vertical works as follows:
+You can also add specific configuration per vertical.
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
-  people: {
-    card: {
-      // Configuration for the cards in this vertical, see Cards
+  verticals: {
+    some_vertical: {
+      // Configuration for some_vertical, see below
     },
-    // Optional: A custom handlebars template for this section
-    template: '<div> Custom section template </div>',
-    // The title of the vertical
-    // Defaults to the vertical key, in this example 'people'
-    title: 'People',
-    // Icon to display to the left of the title. Must be one of our built-in icons, defaults to 'star'
-    icon: 'star',
-    // The url for both the viewMore link and the change-filters link. Defaults to '/{{VERTICAL_KEY}}.html',
-    // in this case that is '/people.html'
-    url: '/people/about.html',
-    // Whether to display a view more link. Defaults to true
-    viewMore: true,
-    // The text for the view more link, if viewMore is true. Defaults to 'View More'
-    viewMoreLabel: 'View More!',
-    // Whether or not to display the change-filters link, which links to the url config option
-    changeFilters: true,
-    // If true, show any applied back-end filters that were applied to the universal search. Defaults to false
-    showAppliedFilters: true,
-    // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
-    // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
-    // otherwise display just 'Virginia'. Defaults to false.
-    showFieldNames: false,
-    // If showAppliedFilters is true, this is list of filters that should not be displayed.
-    // By default, builtin.entityType will be hidden
-    hiddenFields: ['builtin.entityType'],
-    // If true, adds a map to the vertical using the provided mapConfig. Defaults to false
-    showResultCount: true,
-    // If true, display the total number of results. Defaults to true
-    includeMap: true,
-    // Configuration for a map, needed if includeMap is true.
-    // Requires a mapProvider and apiKey, where mapProvider is either 'google' or 'mapBox'
-    mapConfig: {
-      mapProvider: 'google',
-      apiKey: '<<<< api key >>>>',
+    another_vertical: {
+      // Configuration for another_vertical
+    },
+    people: {
+      // Configuration for people
+    }
+  }
+})
+```
+
+A vertical can take the following configuration.
+
+```js
+ANSWERS.addComponent('UniversalResults', {
+  container: '.universal-results-container',
+  verticals: {
+    people: {
+      card: {
+        // Configuration for the cards in this vertical, see Cards
+      },
+      // Optional: A custom handlebars template for this section
+      template: '<div> Custom section template </div>',
+      // The title of the vertical
+      // Defaults to the vertical key, in this example 'people'
+      title: 'People',
+      // Icon to display to the left of the title. Must be one of our built-in icons, defaults to 'star'
+      icon: 'star',
+      // The url for both the viewMore link and the change-filters link. Defaults to '/{{VERTICAL_KEY}}.html',
+      // in this case that is '/people.html'
+      url: '/people/about.html',
+      // Whether to display a view more link. Defaults to true
+      viewMore: true,
+      // The text for the view more link, if viewMore is true. Defaults to 'View More'
+      viewMoreLabel: 'View More!',
+      // Whether or not to display the change-filters link, which links to the url config option
+      changeFilters: true,
+      // If true, show any applied back-end filters that were applied to the universal search. Defaults to false
+      showAppliedFilters: true,
+      // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
+      // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
+      // otherwise display just 'Virginia'. Defaults to false.
+      showFieldNames: false,
+      // If showAppliedFilters is true, this is list of filters that should not be displayed.
+      // By default, builtin.entityType will be hidden
+      hiddenFields: ['builtin.entityType'],
+      // If true, adds a map to the vertical using the provided mapConfig. Defaults to false
+      showResultCount: true,
+      // If true, display the total number of results. Defaults to true
+      includeMap: true,
+      // Configuration for a map, needed if includeMap is true.
+      // Requires a mapProvider and apiKey, where mapProvider is either 'google' or 'mapBox'
+      mapConfig: {
+        mapProvider: 'google',
+        apiKey: '<<<< api key >>>>',
+      }
     }
   }
 })
@@ -471,7 +492,7 @@ ANSWERS.addComponent('VerticalResults', {
   // Optional: function to give each result item custom rendering
   renderItem: () => {},
   // Optional: string to give custom template to result item
-  itemTemplate: `<div> Custom template </div>`,
+  itemTemplate: '<div> Custom template </div>',
   // Set a maximum number of columns that will display at the widest breakpoint.
   // Possible values are 1, 2, 3 or 4. Defaults to 1
   maxNumberOfColumns: 3,
