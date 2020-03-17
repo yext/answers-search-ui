@@ -56,9 +56,7 @@ export default class UniversalResultsComponent extends Component {
     if (type === VerticalResultsComponent.type) {
       const verticalKey = opts.verticalKey;
 
-      /**
-       * @type {Section}
-       */
+      /** @type {Section} */
       const section = this.sections.find(section => section.verticalConfigId === verticalKey) || {};
       const verticalConfig = this.sectionConfigs[verticalKey] || {};
       const url = verticalConfig.url || verticalKey + '.html';

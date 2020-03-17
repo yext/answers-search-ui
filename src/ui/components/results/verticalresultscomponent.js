@@ -173,7 +173,6 @@ export default class VerticalResultsComponent extends Component {
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
       eventOptions: this.eventOptions(),
-      universalUrl: this.getUniversalUrl(),
       verticalURL: this.getVerticalURL(data),
       query: this.query,
       currentVerticalLabel: this._currentVerticalLabel,

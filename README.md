@@ -413,13 +413,13 @@ ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   people: {
     card: {
-      // Configuration for the cards in this vertical, see [Cards](#Cards)
+      // Configuration for the cards in this vertical, see Cards
     },
     // Optional: A custom handlebars template for this section
-    template: "<div> Custom section template </div>",
+    template: '<div> Custom section template </div>',
     // The title of the vertical
     // Defaults to the vertical key, in this example 'people'
-    title: "People",
+    title: 'People',
     // Icon to display to the left of the title. Must be one of our built-in icons, defaults to 'star'
     icon: 'star',
     // The url for both the viewMore link and the change-filters link. Defaults to '/{{VERTICAL_KEY}}.html',
@@ -431,7 +431,7 @@ ANSWERS.addComponent('UniversalResults', {
     viewMoreLabel: 'View More!',
     // Whether or not to display the change-filters link, which links to the url config option
     changeFilters: true,
-    // If true, show any applied back-end filters that were applied to the universal search. defaults to false
+    // If true, show any applied back-end filters that were applied to the universal search. Defaults to false
     showAppliedFilters: true,
     // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
     // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
@@ -440,10 +440,12 @@ ANSWERS.addComponent('UniversalResults', {
     // If showAppliedFilters is true, this is list of filters that should not be displayed.
     // By default, builtin.entityType will be hidden
     hiddenFields: ['builtin.entityType'],
-    // If true, adds a map to the vertical using the provided mapConfig. Default is false
+    // If true, adds a map to the vertical using the provided mapConfig. Defaults to false
+    showResultCount: true,
+    // If true, display the total number of results. Defaults to true
     includeMap: true,
     // Configuration for a map, needed if includeMap is true.
-    // Requires a mapProvider and apiKey, where mapProvidder is either 'google' or 'mapBox'
+    // Requires a mapProvider and apiKey, where mapProvider is either 'google' or 'mapBox'
     mapConfig: {
       mapProvider: 'google',
       apiKey: '<<<< api key >>>>',
@@ -471,13 +473,13 @@ ANSWERS.addComponent('VerticalResults', {
   // Optional: string to give custom template to result item
   itemTemplate: `<div> Custom template </div>`,
   // Set a maximum number of columns that will display at the widest breakpoint.
-  // Possible values are 1, 2, 3 or 4. defaults to 1
+  // Possible values are 1, 2, 3 or 4. Defaults to 1
   maxNumberOfColumns: 3,
-  // Whether to display the total number of results, default true
+  // Whether to display the total number of results. Defaults to true
   showResultCount: true,
   // The card used to display each individual result, see the Cards section for more details,
   card: {
-    // Optional: The type of card, currently only 'Standard' and 'Accordion' are supported, defaults to 'Standard'
+    // Optional: The type of card, currently only 'Standard' and 'Accordion' are supported. Defaults to 'Standard'
     cardType: 'Standard',
     // Required, see Data Mappings for more details
     dataMappings: () => {},
@@ -549,12 +551,12 @@ const callsToAction = [{
   eventOptions: result => {
     return {
       // The vertical key for the CTA. If unspecified, this defaults to the vertical key this cta is a part of
-      verticalKey: "people",
+      verticalKey: 'people',
       // The entity id of the result this cta is a part of, defaults to the entityId field in Knowledge Graph
       entityId: result._raw.id,
       // If the CTA is inside a vertical search, defaults to the value "VERTICAL",
       // if is inside a universal search, defaults to the value "UNIVERSAL"
-      searcher: "VERTICAL"
+      searcher: 'VERTICAL'
     };
   }
 }]
@@ -566,18 +568,18 @@ NOTE: we do not allow multiple nested functions, to avoid messy user configurati
 ```js
 const callsToAction = item => [{
   label: item._raw.name,
-  url: "https://yext.com",
-  analyticsEventType: "CTA_CLICK",
+  url: 'https://yext.com',
+  analyticsEventType: 'CTA_CLICK',
   target: '_blank',
-  icon: "briefcase",
+  icon: 'briefcase',
   eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }, {
   label: 'call now',
-  url: "https://maps.google.com",
-  analyticsEventType: "CTA_CLICK",
+  url: 'https://maps.google.com',
+  analyticsEventType: 'CTA_CLICK',
   target: '_blank',
-  icon: "phone",
-  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  icon: 'phone',
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher": "UNIVERSAL", "ctaLabel": "cards"}`
 }]
 ```
 
@@ -586,11 +588,11 @@ const callsToAction = item => [{
 ```js
 const callsToAction = item => [{
   label: item => item._raw.name,
-  url: "https://yext.com",
-  analyticsEventType: "CTA_CLICK",
+  url: 'https://yext.com',
+  analyticsEventType: 'CTA_CLICK',
   target: '_self',
-  icon: "briefcase",
-  eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  icon: 'briefcase',
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher": "UNIVERSAL", "ctaLabel": "cards"}`
 }]
 ```
 
@@ -603,7 +605,7 @@ ANSWERS.addComponent('VerticalResults', {
     /* ...other card config...*/
     callsToAction: item => [{
       label: item => item._raw.name,
-      url: "https://yext.com",
+      url: 'https://yext.com',
     }]
   }
   /* ...other vertical results config... */
@@ -656,8 +658,8 @@ ANSWERS.addComponent('VerticalResults', {
       image: item => item._raw.headshot ? item._raw.headshot.url : '',
       url: 'https://yext.com',
       showMoreLimit: 500,
-      showMoreText: "show more",
-      showLessText: "put it back",
+      showMoreText: 'show more',
+      showLessText: 'put it back',
       target: '_blank'
     }
   }
@@ -686,9 +688,9 @@ const dataMappings = item => {
     // Character limit to hide remaining details and display a show more button, defaults to 350
     showMoreLimit: 350,
     // Text for show more button, defaults to 'Show More'
-    showMoreText: "show more",
+    showMoreText: 'show more',
     // Text for show less button, defaults to 'Show Less'
-    showLessText: "put it back",
+    showLessText: 'put it back',
     // The target attribute for the title link, defaults to '_self'. To open in a new window use '_blank'
     target: '_blank',
     // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
@@ -884,9 +886,9 @@ ANSWERS.addComponent('FilterSearch', {
     // List of fields to query for
     fields: [{
       // Field id to query for e.g. c_customFieldName, buildin.location
-      fieldId: "builtin.location",
+      fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
-      entityTypeId: "ce_person",
+      entityTypeId: 'ce_person',
       // Optional, if true sections search results by search filter, default false
       sectioned: false,
     }]
@@ -1056,9 +1058,9 @@ ANSWERS.addComponent('GeoLocationFilter', {
     // List of fields to query for
     fields: [{
       // Field id to query for e.g. c_customFieldName, buildin.location
-      fieldId: "builtin.location",
+      fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
-      entityTypeId: "ce_person",
+      entityTypeId: 'ce_person',
       // Optional, if true sections search results by search filter, default false
       sectioned: false,
     }]
