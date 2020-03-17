@@ -425,7 +425,7 @@ ANSWERS.addComponent('UniversalResults', {
     // The url for both the viewMore link and the change-filters link. Defaults to '/{{VERTICAL_KEY}}.html',
     // in this case that is '/people.html'
     url: '/people/about.html',
-    // Whether to display a view more link at the bottom of the vertical, defaults to true
+    // Whether to display a view more link. Defaults to true
     viewMore: true,
     // The text for the view more link, if viewMore is true. Defaults to 'View More'
     viewMoreLabel: 'View More!',
