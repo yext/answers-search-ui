@@ -81,15 +81,6 @@
     margin-right: -1 * $results-cards-margin;
   }
 
-  &-placeholder {
-    visibility: hidden;
-    height: 0;
-
-    * {
-      display: none;
-    }
-  }
-
   &-viewMore
   {
     display: flex;
