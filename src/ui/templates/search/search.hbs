@@ -6,13 +6,13 @@
 <div class="yxt-SearchBar">
   <div class="yxt-SearchBar-container">
     <form class="yxt-SearchBar-form">
-      <label class="yxt-SearchBar-label" for="query">{{labelText}}</label>
       {{!// TODO (bmcginnis): migrate js class names}}
       <input class="js-yext-query yxt-SearchBar-input"
              type="text"
              name="query"
              value="{{query}}"
-             {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}>
+             {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
+             aria-label="{{labelText}}">
       <button type="button"
               class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
               data-eventtype="SEARCH_CLEAR_BUTTON"
