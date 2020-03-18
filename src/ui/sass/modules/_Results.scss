@@ -132,12 +132,16 @@
     background-color:  $color-background-highlight;
   }
 
+  &-title .Icon
+  {
+    margin-right: $base-spacing / 2;
+  }
+
   &-title svg, &-title img 
   {
     color: $color-brand-primary;
     height: $base-spacing * 9/8;
     width: $base-spacing * 9/8;
-    padding-right: $base-spacing * 3/4;
   }
 
   &-titleLabel 
