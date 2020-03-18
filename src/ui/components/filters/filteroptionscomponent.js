@@ -103,6 +103,12 @@ class FilterOptionsConfig {
      */
     this.optionSelector = config.optionSelector || '.js-yext-filter-option';
 
+    /**
+     * Whether this filter is part of a dynamic facet.
+     * @type {boolean}
+     */
+    this.isDynamic = config.isDynamic || false;
+
     this.validate();
 
     if (typeof config.previousOptions === 'string') {
@@ -112,7 +118,7 @@ class FilterOptionsConfig {
         config.previousOptions = [];
       }
     }
-    let selectedOptions = config.previousOptions || [];
+    const selectedOptions = config.previousOptions || [];
     this.options = this.setDefaultSelectedValues(this.options, selectedOptions);
   }
 
@@ -166,6 +172,9 @@ export default class FilterOptionsComponent extends Component {
     });
 
     const selectedCount = this.config.getSelectedCount();
+    if (selectedCount > 0 && !this.config.isDynamic) {
+      this.core.setFilterView(this.name, this._buildFilterView());
+    }
 
     /**
      * True if the option list is expanded and visible
