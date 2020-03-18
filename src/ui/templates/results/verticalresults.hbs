@@ -23,7 +23,7 @@
       {{#if iconIsBuiltIn}}
         <div data-component="IconComponent" data-opts='{ "iconName": "{{ _config.icon }}" }'></div>
       {{else}}
-        <img src="{{ _config.icon }}">
+        <div data-component="IconComponent" data-opts='{ "iconUrl": "{{ _config.icon }}" }'></div>
       {{/if}}
       <div class="yxt-Results-titleLabel">{{_config.title}}</div>
     </div>
@@ -42,7 +42,7 @@
   	  </div>
     {{/each}}
     {{#each placeholders}}
-      <div class="yxt-Card--placeholder" data-component="Card" data-opts='{"_index": 0 }' aria-hidden="true"></div>
+      <div class="yxt-Card--placeholder" aria-hidden="true"></div>
     {{/each}}
   </div>
 {{/inline}}
