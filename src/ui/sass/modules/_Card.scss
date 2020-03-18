@@ -1,28 +1,21 @@
-.yxt-Card {
+.yxt-Card
+{
   $cards-margin: $base-spacing / 2 !default;
 
   display: flex;
   flex-direction: column;
-  min-width: 210px;
-
+  min-width: $cards-min-width;
   border: $border-default;
-
   margin-right: $cards-margin;
   margin-bottom: $cards-margin;
 
-  &-child {
+  &-child
+  {
     flex-grow: 1;
   }
 
-  &--universal {
-    margin-bottom: 0;
-  }
-
-  &--universal + &--universal {
-    border-top: 0;
-  }
-
-  @media (max-width: $breakpoint-mobile-max) {
+  @media (max-width: $breakpoint-mobile-max)
+  {
     margin-bottom: 0;
     & + & {
       border-top: 0;
@@ -30,24 +23,45 @@
   }
 }
 
-.yxt-Results-items {
-  > .yxt-Card {
-    flex-basis: 100%;
+.yxt-Results-items
+{
+  > div {
     flex-grow: 1;
+    flex-basis: 100%;
   }
 
-  @media (min-width: $breakpoint-mobile-max) {
-
-    &--2 > .yxt-Card {
+  @media (min-width: $breakpoint-mobile-max)
+  {
+    &--2 > div
+    {
       flex-basis: 45%;
     }
   
-    &--3 > .yxt-Card {
+    &--3 > div
+    {
       flex-basis: 30%;
     }
   
-    &--4 > .yxt-Card {
+    &--4 > div
+    {
       flex-basis: 22%;
     }
   }
+}
+
+.yxt-Card--universal
+{
+  $universal-results-card-border: $border-default !default;
+  border: $universal-results-card-border;
+  border-top: 0;
+  margin: 0;
+}
+
+.yxt-Card--placeholder
+{
+  visibility: hidden;
+  height: 0;
+  margin: 0;
+  padding: 0;
+  min-width: $cards-min-width;
 }

@@ -1,4 +1,12 @@
-<div class="yxt-ResultsHeader">
+<div class="yxt-ResultsHeader{{#if _config.isUniversal}} yxt-ResultsHeader--universal{{/if}}">
+  {{> resultscount}}
+  {{#if showResultSeparator}}
+    <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
+  {{/if}}
+  {{> filters}}
+</div>
+
+{{#*inline "resultscount"}}
   {{#if _config.showResultCount}}
     {{#if resultsCount}}
       <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} through {{resultsCountEnd}} of {{resultsCount}}">
@@ -10,11 +18,11 @@
           <span class="yxt-ResultsHeader-resultsCountTotal">{{resultsCount}}</span>
         </div>
       </div>
-      {{#if showResultSeparator}}
-        <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
-      {{/if}}
     {{/if}}
   {{/if}}
+{{/inline}}
+
+{{#*inline "filters"}}
   {{#if shouldShowFilters}}
     <div class="yxt-ResultsHeader-appliedFilters">
       {{#each appliedFiltersArray}}
@@ -31,6 +39,13 @@
           <div class="yxt-ResultsHeader-filterSeparator">|</div>
         {{/unless}}
       {{/each}}
+    {{#if _config.isUniversal}}
+      {{#if _config.verticalURL}}
+        <a class="yxt-ResultsHeader-changeFilters" href="{{ _config.verticalURL }}">
+          change filters
+        </a>
+      {{/if}}
+    {{/if}}
     </div>
   {{/if}}
-</div>
+{{/inline}}
