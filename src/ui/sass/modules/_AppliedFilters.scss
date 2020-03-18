@@ -1,0 +1,81 @@
+/** @define AppliedFilters */
+.yxt-AppliedFilters
+{
+  $applied-filters-font-size: $font-size-md !default;
+
+  $applied-filters-color: $color-text-secondary !default;
+  $applied-filters-font-weight: $font-weight-normal !default;
+  $applied-filters-line-height: $line-height-md !default;
+  $applied-filters-spacing: $base-spacing / 4 !default;
+
+  display: flex;
+  flex-basis: 0;
+  flex-grow: 1;
+
+  &-content
+  {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    min-height: $applied-filters-line-height * $applied-filters-font-size + $applied-filters-spacing * 1.5;
+    max-height: 0;
+    overflow: hidden;
+    transition: all 400ms ease;
+    flex-grow: 1;
+  }
+
+  &-fieldName
+  {
+    margin-right: $applied-filters-spacing * 1.5;
+    margin-bottom: $applied-filters-spacing * 1.5;
+    white-space: pre;
+    @include Text(
+      $size: $applied-filters-font-size,
+      $line-height: $applied-filters-line-height,
+      $color: $applied-filters-color,
+    )
+  }
+
+  &-displayValue
+  {
+    margin-bottom: $applied-filters-spacing * 1.5;
+    white-space: pre;
+    @include Text(
+      $size: $applied-filters-font-size,
+      $line-height: $applied-filters-line-height,
+      $color: $applied-filters-color,
+    );
+  }
+
+  &-filterSeparator
+  {
+    color: $applied-filters-color;
+    margin-right: $applied-filters-spacing * 1.5;
+    margin-left: $applied-filters-spacing * 1.5;
+  }
+
+  &-toggle .Icon
+  {
+    padding-top: $applied-filters-spacing;
+  }
+
+  &-toggle svg
+  {
+    transition: transform 400ms ease-in;
+  }
+
+  &-toggle--up svg
+  {
+    transform: rotate(270deg);
+  }
+
+  &-toggle--down svg
+  {
+    transform: rotate(90deg);
+  }
+
+  &-toggle--hidden
+  {
+    visibility: hidden;
+  }
+}

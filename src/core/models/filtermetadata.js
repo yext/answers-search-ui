@@ -30,19 +30,21 @@ export default class FilterMetadata {
    */
   static combine (metadataArray) {
     const group = {};
-    metadataArray.forEach(metadata => {
-      Object.entries(metadata).forEach(([fieldId, labelToDisplayValues]) => {
+    for (const metadata of metadataArray) {
+      for (const fieldId of Object.keys(metadata)) {
+        const fieldNameToDisplayValues = metadata[fieldId];
         if (!group[fieldId]) {
           group[fieldId] = {};
         }
-        Object.entries(labelToDisplayValues).forEach(([label, displayValues]) => {
-          if (!group[fieldId][label]) {
-            group[fieldId][label] = [];
+        for (const fieldName of Object.keys(fieldNameToDisplayValues)) {
+          const displayValues = fieldNameToDisplayValues[fieldName];
+          if (!group[fieldId][fieldName]) {
+            group[fieldId][fieldName] = [];
           }
-          group[fieldId][label].push(...displayValues);
-        });
-      });
-    });
+          group[fieldId][fieldName].push(...displayValues);
+        }
+      }
+    }
     return new FilterMetadata(group);
   }
 }
