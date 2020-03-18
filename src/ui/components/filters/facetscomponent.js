@@ -148,6 +148,7 @@ export default class FacetsComponent extends Component {
      * @private
      */
     this._filterbox = null;
+    this.needsInitialSearch = true;
   }
 
   static get type () {
@@ -207,5 +208,16 @@ export default class FacetsComponent extends Component {
     );
 
     this._filterbox.mount();
+    if (this.needsInitialSearch) {
+      this.needsInitialSearch = false;
+      this._filterbox.search();
+      this.setState();
+    }
+  }
+
+  setState (data) {
+    return super.setState({ ...data,
+      needsInitialSearch: this.needsInitialSearch
+    });
   }
 }

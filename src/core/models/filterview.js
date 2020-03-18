@@ -24,6 +24,14 @@ export default class FilterView {
   }
 
   /**
+   * Wrap filterView data in the FilterView class
+   * @param {Object} filterView
+   */
+  static from (filterView) {
+    return new FilterView(filterView.filter, filterView.metadata);
+  }
+
+  /**
    * Combines multiple filters if more than one is provided.
    * @param  {...FilterView} filterViews
    */

@@ -110,7 +110,11 @@ export default class GeoLocationComponent extends Component {
     this.filterView = this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || {};
     if (typeof this.filterView === 'string') {
       try {
-        this.filterView = JSON.parse(this.filterView);
+        this.filterView = FilterView.from(JSON.parse(this.filterView));
+        this.core.globalStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, this.filterView);
+        if (Object.keys(this.filterView.filter['builtin.location'])[0] === '$near') {
+          this._enabled = true;
+        }
       } catch (e) {}
     }
 
@@ -187,7 +191,7 @@ export default class GeoLocationComponent extends Component {
         this.query = query;
         const metadata = FilterMetadata.from({
           fieldId: Filter.getFilterKey(filter),
-          fieldName: this._cquery.split(',')[0],
+          fieldName: this._config.label || this._config.title || 'Location',
           displayValues: query.split(',')[0]
         });
         this.filterView = new FilterView(Filter.fromResponse(filter), metadata);
@@ -211,12 +215,12 @@ export default class GeoLocationComponent extends Component {
       this.setState({ geoLoading: true });
       navigator.geolocation.getCurrentPosition(
         position => {
-          const filterView = this._buildFilterView(position);
-          this._saveDataToStorage('', filterView, position);
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
           this.core.persistentStorage.delete(`${StorageKeys.FILTER_VIEW}.${this.name}`);
+          const filterView = this._buildFilterView(position);
+          this._saveDataToStorage('', filterView, position);
         },
         () => this.setState({ geoError: true })
       );
@@ -227,7 +231,6 @@ export default class GeoLocationComponent extends Component {
    * Saves the provided filter under this component's name
    * @param {string} query The query to save
    * @param {FilterView} filterView The filter to save
-   * @param {Object} position The position to save
    * @private
    */
   _saveDataToStorage (query, filterView, position) {
