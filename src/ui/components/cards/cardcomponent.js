@@ -15,11 +15,11 @@ class CardConfig {
     this.cardType = config.cardType || 'Standard';
 
     /**
-     * Card mappings is a function specified in the config
+     * Data mappings is a function specified in the config
      * that returns config based on the data passed into card
      * @type {Function}
      */
-    this.cardMappings = config.cardMappings || (() => {});
+    this.dataMappings = config.dataMappings || (() => {});
 
     /**
      * Either a function that spits out an array of CTA config objects or an array of CTA config objects
@@ -86,7 +86,7 @@ export default class CardComponent extends Component {
       result: data
     };
     const newOpts = {
-      cardMappings: this._config.cardMappings,
+      dataMappings: this._config.dataMappings,
       callsToAction: this._config.callsToAction,
       verticalKey: this._config.verticalKey,
       _index: this._config._index,
@@ -100,15 +100,15 @@ export default class CardComponent extends Component {
    * Used by children card components like StandardCardComponent to
    * apply given template mappings as config.
    * @param {Result} result
-   * @param {Object|Function} cardMappings
+   * @param {Object|Function} dataMappings
    */
-  static applyCardMappings (result, cardMappings) {
+  static applyDataMappings (result, dataMappings) {
     const config = {};
-    if (typeof cardMappings === 'function') {
-      cardMappings = cardMappings(result);
+    if (typeof dataMappings === 'function') {
+      dataMappings = dataMappings(result);
     }
-    if (typeof cardMappings === 'object') {
-      Object.entries(cardMappings).forEach(([attribute, value]) => {
+    if (typeof dataMappings === 'object') {
+      Object.entries(dataMappings).forEach(([attribute, value]) => {
         if (typeof value === 'function') {
           config[attribute] = value(result);
         } else {

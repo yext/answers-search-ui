@@ -25,12 +25,11 @@ class StandardCardConfig {
     const rawResult = result._raw || {};
 
     /**
-     * The cardMappings attribute of the config
+     * The dataMappings attribute of the config
      * is either a function that returns additional config for
      * a card or an object that is the additional config.
      */
-    let cardMappings = config.cardMappings || {};
-    Object.assign(this, CardComponent.applyCardMappings(result, cardMappings));
+    Object.assign(this, CardComponent.applyDataMappings(result, config.dataMappings || {}));
 
     /**
      * The result data

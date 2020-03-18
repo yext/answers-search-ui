@@ -40,7 +40,7 @@ class CTAConfig {
 
     /**
      * The eventOptions needed for the event to fire, passed as a string or Object
-     * from cardMappings.
+     * from config.dataMappings || {}.
      * @type {Object}
      */
     if (typeof config.eventOptions === 'string') {
