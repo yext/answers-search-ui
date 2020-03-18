@@ -35,10 +35,6 @@
 
   &-suggestionsWrapper {
     padding: $base-spacing;
-
-    @media (min-width: $breakpoint-mobile-max) {
-      padding: 10px 20px 15px;
-    }
   }
 
   &-details {
