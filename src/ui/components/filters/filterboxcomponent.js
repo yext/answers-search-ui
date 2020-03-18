@@ -204,6 +204,7 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
+          isDynamic: true,
           onChange: (filter, metadata) => {
             this.onFilterChange(i, filter, metadata);
           }
@@ -211,8 +212,8 @@ export default class FilterBoxComponent extends Component {
       component.mount();
       this._filterComponents.push(component);
       this._filterViews[i] = component.getFilterView();
-      this._saveFilterViewsToStorage();
     }
+    this._saveFilterViewsToStorage();
 
     // Initialize apply button
     if (!this.config.searchOnChange) {
@@ -221,7 +222,7 @@ export default class FilterBoxComponent extends Component {
       if (button) {
         DOM.on(button, 'click', () => {
           this._saveFilterViewsToStorage();
-          this._search();
+          this.search();
         });
       }
     }
@@ -249,7 +250,7 @@ export default class FilterBoxComponent extends Component {
     this._filterViews[index] = new FilterView(filter, metadata);
     if (this.config.searchOnChange) {
       this._saveFilterViewsToStorage();
-      this._search();
+      this.search();
     }
   }
 
@@ -280,7 +281,7 @@ export default class FilterBoxComponent extends Component {
   /**
    * Trigger a search with all filters in storage
    */
-  _search () {
+  search () {
     const query = this.core.globalStorage.getState(StorageKeys.QUERY);
     this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
