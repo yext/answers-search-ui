@@ -1204,7 +1204,7 @@ ANSWERS.addComponent('SortOptions', {
       type: 'FIELD',
       // Required only if type is FIELD, field name to sort by
       field: 'c_popularity',
-      // Required only if type is FIELD, direction to sort by
+      // Required only if type is FIELD, direction to sort by either 'ASC' or 'DESC'
       direction: 'ASC',
       // Required: Label for the sort option's radio button
       label: 'Popularity',
