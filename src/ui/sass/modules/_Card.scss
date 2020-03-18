@@ -21,12 +21,12 @@
 }
 
 .yxt-Results-items {
-  @media (min-width: $breakpoint-mobile-max) {
-    > div {
-      flex-grow: 1;
-      flex-basis: 100%;
-    }
+  > div {
+    flex-grow: 1;
+    flex-basis: 100%;
+  }
 
+  @media (min-width: $breakpoint-mobile-max) {
     &--2 > div {
       flex-basis: 45%;
     }
