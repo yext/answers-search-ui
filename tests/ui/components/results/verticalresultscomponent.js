@@ -16,7 +16,8 @@ const mockedCore = () => {
           return {};
         }
       }
-    }
+    },
+    on: () => {}
   };
 };
 
@@ -37,8 +38,7 @@ describe('vertical results component', () => {
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
     defaultConfig = {
-      container: '#test-component',
-      verticalKey: 'verticalKey'
+      container: '#test-component'
     };
   });
 
@@ -47,4 +47,26 @@ describe('vertical results component', () => {
     const wrapper = mount(component);
     expect(wrapper).toBeTruthy();
   });
+
+  // it('renders a results header component when showResultsCount is true', () => {
+  //   const config = {
+  //     showResultsCount: true,
+  //     ...defaultConfig
+  //   };
+  //   const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, config);
+  //   const wrapper = mount(component);
+  //   console.log(wrapper.debug());
+  //   expect(wrapper.find('.yxt-ResultsHeader')).toHaveLength(1);
+  // });
+
+  // it('does not render header component when showResultsCount and showAppliedFilters are false', () => {
+  //   const config = {
+  //     showResultsCount: false,
+  //     showAppliedFilters: false,
+  //     ...defaultConfig
+  //   };
+  //   const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, config);
+  //   const wrapper = mount(component);
+  //   expect(wrapper.find('.yxt-ResultsHeader')).toHaveLength(0);
+  // });
 });

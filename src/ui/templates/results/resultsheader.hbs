@@ -3,7 +3,7 @@
   {{#if showResultSeparator}}
     <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
   {{/if}}
-  {{> filters}}
+  {{> appliedFilters}}
 </div>
 
 {{#*inline "resultscount"}}
@@ -22,30 +22,46 @@
   {{/if}}
 {{/inline}}
 
-{{#*inline "filters"}}
+{{#*inline "appliedFilters"}}
+{{log shouldShowFilters}}
   {{#if shouldShowFilters}}
-    <div class="yxt-ResultsHeader-appliedFilters">
-      {{#each appliedFiltersArray}}
-        {{#if ../_config.showFieldNames}}
-          <div class="yxt-ResultsHeader-filterLabel">
-            <span class="yxt-ResultsHeader-filterLabelText">{{this.label}}</span>
-            <span class="yxt-ResultsHeader-filterLabelColon">:</span>
-          </div>
-        {{/if}}
-        {{#each this.displayValues}}
-          <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
-        {{/each}}
-        {{#unless @last}}
-          <div class="yxt-ResultsHeader-filterSeparator">|</div>
-        {{/unless}}
-      {{/each}}
-    {{#if _config.isUniversal}}
-      {{#if _config.verticalURL}}
-        <a class="yxt-ResultsHeader-changeFilters" href="{{ _config.verticalURL }}">
-          change filters
-        </a>
-      {{/if}}
-    {{/if}}
+    <div class="yxt-AppliedFilters js-yxt-AppliedFilters">
+      <div class="yxt-AppliedFilters-content js-yxt-AppliedFilters-content">
+        {{> sortOptions}}
+        {{> filters}}
+      </div>
+      <div class="yxt-AppliedFilters-toggle yxt-AppliedFilters-toggle--down js-yxt-AppliedFilters-toggle"
+        data-component="IconComponent" 
+        data-opts='{ "iconName": "chevron" }'>
+      </div>
     </div>
   {{/if}}
+{{/inline}}
+
+{{#*inline "sortOptions"}}
+  {{#if sortByOptions}}
+    {{#if _config.showFieldNames}}
+      <div class="yxt-AppliedFilters-fieldName">Sorted By:</div>
+    {{/if}}
+    {{#each sortByOptions}}
+      <div class="yxt-AppliedFilters-displayValue">{{this.label}}</div>
+    {{/each}}
+    {{#if appliedFilters}}
+      <div class="yxt-AppliedFilters-filterSeparator">|</div>
+    {{/if}}
+  {{/if}}
+{{/inline}}
+
+{{#*inline "filters"}}
+  {{#each appliedFilters}}
+    {{#if ../_config.showFieldNames}}
+      <div class="yxt-AppliedFilters-fieldName">{{this.label}}:</div>
+    {{/if}}
+    {{#each this.displayValues}}
+      <div class="yxt-AppliedFilters-displayValue">{{this}}{{#unless @last}}, {{/unless}}</div>
+    {{/each}}
+    {{#unless @last}}
+      <div class="yxt-AppliedFilters-filterSeparator">|</div>
+    {{/unless}}
+  {{/each}}
 {{/inline}}
