@@ -32,7 +32,7 @@ export default class FilterView {
   }
 
   /**
-   * Combines multiple filters if more than one is provided.
+   * Combines multiple filter views if more than one is provided.
    * @param  {...FilterView} filterViews
    */
   static combineFilterViews (...filterViews) {

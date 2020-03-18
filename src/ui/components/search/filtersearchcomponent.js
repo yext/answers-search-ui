@@ -3,6 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
+import Filter from '../../../core/models/filter';
 import FilterView from '../../../core/models/filterview';
 import SearchParams from '../../dom/searchparams';
 import buildSearchParameters from '../../tools/searchparamsparser';
@@ -100,18 +101,20 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    let filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || '';
-    if (typeof filter === 'string') {
+    let storedFilterView = this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || {};
+    if (typeof storedFilterView === 'string') {
       try {
-        filter = JSON.parse(filter);
-      } catch (e) {}
+        storedFilterView = FilterView.from(JSON.parse(storedFilterView));
+        this.core.globalStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, storedFilterView);
+      } catch (e) {
+        console.warn(e);
+      }
     }
-
-    this.filterView = new FilterView(filter);
+    this.filter = config.filter || storedFilterView.filter || '';
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
 
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER_VIEW}.${this.name}`, f => { this.filterView = f; });
+    this.core.globalStorage.on('update', `${StorageKeys.FILTER_VIEW}.${this.name}`, fv => { this.filter = fv.filter; });
   }
 
   static get type () {
@@ -128,7 +131,7 @@ export default class FilterSearchComponent extends Component {
   }
 
   onCreate () {
-    if (this.query && this.filterView) {
+    if (this.query && this.filter) {
       this.search();
     }
   }
@@ -156,7 +159,7 @@ export default class FilterSearchComponent extends Component {
       container: '.yxt-SearchBar-autocomplete',
       promptHeader: this.promptHeader,
       originalQuery: this.query,
-      originalFilter: this.filterView.filter,
+      originalFilter: this.filter,
       inputEl: inputSelector,
       verticalKey: this._verticalKey,
       searchParameters: this.searchParameters,
@@ -174,10 +177,11 @@ export default class FilterSearchComponent extends Component {
 
         // save the filter to storage for the next search
         this.query = query;
-        this.filterView = FilterView.fromResponse(filter);
+        this.filter = Filter.fromResponse(filter);
+        const filterView = new FilterView(this.filter);
         this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, this.filterView);
-        this.core.setFilterView(this.name, this.filterVIew);
+        this.core.persistentStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, filterView);
+        this.core.setFilterView(this.name, filterView);
         this.search();
       }
     });
@@ -203,7 +207,7 @@ export default class FilterSearchComponent extends Component {
       title: this.title,
       searchText: this.searchText,
       query: this.query,
-      filter: this.filterView.filter
+      filter: this.filter
     }, data));
   }
 }

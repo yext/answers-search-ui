@@ -1,10 +1,12 @@
-<div class="yxt-ResultsHeader{{#if _config.isUniversal}} yxt-ResultsHeader--universal{{/if}}">
-  {{> resultscount}}
-  {{#if showResultSeparator}}
-    <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
-  {{/if}}
-  {{> filters}}
-</div>
+{{#some shouldShowFilters _config.showResultCount}}
+  <div class="yxt-ResultsHeader{{#if _config.isUniversal}} yxt-ResultsHeader--universal{{/if}}">
+    {{> resultscount}}
+    {{#if showResultSeparator}}
+      <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
+    {{/if}}
+    {{> appliedFilters}}
+  </div>
+{{/some}}
 
 {{#*inline "resultscount"}}
   {{#every _config.showResultCount resultsCount}}
@@ -20,28 +22,54 @@
   {{/every}}
 {{/inline}}
 
-{{#*inline "filters"}}
-  {{#if shouldShowFilters}}
-    <div class="yxt-ResultsHeader-appliedFilters">
-      {{#each appliedFiltersArray}}
-        {{#if ../_config.showFieldNames}}
-          <div class="yxt-ResultsHeader-filterLabel">
-            <span class="yxt-ResultsHeader-filterLabelText">{{this.label}}</span>
-            <span class="yxt-ResultsHeader-filterLabelColon">:</span>
-          </div>
-        {{/if}}
-        {{#each this.displayValues}}
-          <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
-        {{/each}}
-        {{#unless @last}}
-          <div class="yxt-ResultsHeader-filterSeparator">|</div>
-        {{/unless}}
-      {{/each}}
-    {{#every _config.isUniversal _config.verticalURL _config.showChangeFilters}}
-      <a class="yxt-ResultsHeader-changeFilters" href="{{ _config.verticalURL }}">
-        change filters
-      </a>
-    {{/every}}
+{{#*inline "appliedFilters"}}
+  {{#some shouldShowFilters sortOptions}}
+    <div class="yxt-AppliedFilters js-yxt-AppliedFilters">
+      <div class="yxt-AppliedFilters-content js-yxt-AppliedFilters-content">
+        {{> sortedBy}}
+        {{> filters}}
+        {{> changeFilters}}
+      </div>
+      <div class="yxt-AppliedFilters-toggle yxt-AppliedFilters-toggle--down js-yxt-AppliedFilters-toggle"
+        data-component="IconComponent" 
+        data-opts='{ "iconName": "chevron" }'>
+      </div>
     </div>
+  {{/some}}
+{{/inline}}
+
+{{#*inline "sortedBy"}}
+  {{#if sortOptions}}
+    {{#if _config.showFieldNames}}
+      <div class="yxt-AppliedFilters-fieldName">Sorted By:</div>
+    {{/if}}
+    {{#each sortOptions}}
+      <div class="yxt-AppliedFilters-displayValue">{{this.label}}</div>
+    {{/each}}
+    {{#if appliedFilters}}
+      <div class="yxt-AppliedFilters-filterSeparator">|</div>
+    {{/if}}
   {{/if}}
+{{/inline}}
+
+{{#*inline "filters"}}
+  {{#each appliedFilters}}
+    {{#if ../_config.showFieldNames}}
+      <div class="yxt-AppliedFilters-fieldName">{{this.label}}:</div>
+    {{/if}}
+    {{#each this.displayValues}}
+      <div class="yxt-AppliedFilters-displayValue">{{this}}{{#unless @last}}, {{/unless}}</div>
+    {{/each}}
+    {{#unless @last}}
+      <div class="yxt-AppliedFilters-filterSeparator">|</div>
+    {{/unless}}
+  {{/each}}
+{{/inline}}
+
+{{#*inline "changeFilters"}}
+  {{#every _config.isUniversal _config.verticalURL _config.showChangeFilters}}
+    <a class="yxt-ResultsHeader-changeFilters" href="{{ _config.verticalURL }}">
+      change filters
+    </a>
+  {{/every}}
 {{/inline}}

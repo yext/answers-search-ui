@@ -496,15 +496,24 @@ ANSWERS.addComponent('VerticalResults', {
   // Set a maximum number of columns that will display at the widest breakpoint.
   // Possible values are 1, 2, 3 or 4. Defaults to 1
   maxNumberOfColumns: 3,
-  // Whether to display the total number of results. Defaults to true
-  showResultCount: true,
-  // The card used to display each individual result, see the Cards section for more details,
+  // Whether to display the count of results at the very top of the results, default true.
+  showResultsCount: true,
+  // If present, show the filters that were ultimately applied to this query, default true.
+  showAppliedFilters: false,
+  // If showAppliedFilters is true, show the field name in the string followed by a colon. default false.
+  showFieldNames: false,
+  // If showAppliedFilters is true, this is list of filters that should not be displayed (common one is entity type).
+  // Defaults to ["builtin.entityType"].
+  hiddenFields: ["builtin.entityType"],
+  // If showResultsCount and showAppliedFilters are true, display this between the result count and the applied filters.
+  resultsCountSeparator: '|',
+  // The card used to display each individual result, see Cards section for more details.
   card: {
     // Optional: The type of card, currently only 'Standard' and 'Accordion' are supported. Defaults to 'Standard'
     cardType: 'Standard',
-    // Required, see Data Mappings for more details
+    // Required, see Data Mappings for more details.
     dataMappings: () => {},
-    // Optional, used as configuration for any calls to action buttons on the page, see Calls To Action for more details
+    // Optional, used as configuration for any calls to action buttons on the page. See Calls To Action for more details.
     callsToAction: () => []
   },
   // Configuration for what to display when no results are found.
@@ -1200,11 +1209,11 @@ ANSWERS.addComponent('SortOptions', {
   // Required: List of component configurations
   options: [
     {
-      // Required: Either FIELD, ENTITY_DISTANCE, or RELEVANCE
+      // Required: Either 'FIELD', 'ENTITY_DISTANCE', or 'RELEVANCE'
       type: 'FIELD',
-      // Required only if type is FIELD, field name to sort by
+      // Required if type is FIELD, field id to sort by
       field: 'c_popularity',
-      // Required only if type is FIELD, direction to sort by either 'ASC' or 'DESC'
+      // Required if type is FIELD, either 'ASC' or 'DESC'
       direction: 'ASC',
       // Required: Label for the sort option's radio button
       label: 'Popularity',

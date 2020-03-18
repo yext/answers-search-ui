@@ -109,6 +109,12 @@ export default class HandlebarsRenderer extends Renderer {
       return (values.every(v => v)) ? options.fn(this) : options.inverse(this);
     });
 
+    this.registerHelper('some', function (...args) {
+      const values = args.slice(0, args.length - 1);
+      const options = args[args.length - 1];
+      return (values.some(v => v)) ? options.fn(this) : options.inverse(this);
+    });
+
     this.registerHelper('formatPhoneNumber', function (phoneNumberString) {
       var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
       var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);

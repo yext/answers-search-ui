@@ -121,7 +121,7 @@ export default class Core {
     const facetFilter = facets.length > 0 ? facets[0].facet : {};
 
     // Get all sortBys that have a type and remove unwanted attributes (label) from the sortBys in the request
-    const sortBys = this.globalStorage.getState(StorageKeys.SORT_BYS).filter(sortBy => sortBy.type) || [];
+    const sortBys = (this.globalStorage.getState(StorageKeys.SORT_BYS) || []).filter(sortBy => sortBy.type);
     const sortByString = JSON.stringify(sortBys,
       (key, value) => key === 'label' ? undefined : value
     );
@@ -284,17 +284,12 @@ export default class Core {
    * @param {Object} sortByOptions
    */
   setSortBys (...sortByOptions) {
-    if (sortByOptions.length === 0) {
-      return;
-    }
-    const sortBys = sortByOptions.map(option => {
-      return {
-        direction: option.direction,
-        field: option.field,
-        label: option.label,
-        type: option.type
-      };
-    });
+    const sortBys = sortByOptions.map(option => ({
+      direction: option.direction,
+      field: option.field,
+      label: option.label,
+      type: option.type
+    }));
     this.globalStorage.set(StorageKeys.SORT_BYS, sortBys);
   }
 

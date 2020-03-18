@@ -78,7 +78,7 @@ class VerticalResultsConfig {
      * If present, show the filters that were ultimately applied to this query
      * @type {boolean}
      */
-    this.showAppliedFilters = config.showAppliedFilters === undefined ? true : config.showAppliedFilters;
+    this.showAppliedFilters = config.showAppliedFilters === undefined ? true : config.showResultCount;
 
     /**
      * If showResultCount and showAppliedFilters are true,
@@ -131,12 +131,6 @@ export default class VerticalResultsComponent extends Component {
     this.results = [];
     this.numColumns = this._config.maxNumberOfColumns;
     this.core.globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, this._config.noResults || {});
-
-    /**
-     * Config options used in the {@link ResultsHeaderComponent}
-     */
-    const { showFieldNames, resultsCountSeparator, showResultCount, showAppliedFilters, showChangeFilters } = this._config;
-    this.resultsHeaderOpts = { showFieldNames, resultsCountSeparator, showResultCount, showAppliedFilters, showChangeFilters };
   }
 
   mount () {
@@ -170,14 +164,11 @@ export default class VerticalResultsComponent extends Component {
     this.results = data.results || [];
     this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
-    this.appliedQueryFilters = (data.appliedQueryFilters || [])
-      .filter(f => !this._config.hiddenFields.includes(f.fieldId));
+    this.appliedQueryFilters = data.appliedQueryFilters || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
       this._config._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
-      (this.resultsHeaderOpts.showAppliedFilters && this.appliedQueryFilters.length > 0);
     this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
 
     return super.setState(Object.assign({ results: [] }, data, {
@@ -192,7 +183,6 @@ export default class VerticalResultsComponent extends Component {
       showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
       placeholders: new Array(this._config.maxNumberOfColumns + 1),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
-      showResultsHeader: showResultsHeader,
       iconIsBuiltIn: Icons[this._config.icon]
     }), val);
   }
@@ -255,10 +245,26 @@ export default class VerticalResultsComponent extends Component {
         appliedQueryFilters: this.appliedQueryFilters,
         ...data
       };
+
+      // Config options used in the {@link ResultsHeaderComponent}
+      const {
+        showFieldNames,
+        resultsCountSeparator,
+        showResultCount,
+        showAppliedFilters,
+        showChangeFilters,
+        hiddenFields
+      } = this._config;
+
       return super.addChild(resultsHeaderData, type, {
         isUniversal: this._config.isUniversal,
         verticalURL: this.getVerticalURL(),
-        ...this.resultsHeaderOpts,
+        showFieldNames,
+        resultsCountSeparator,
+        showResultCount,
+        showAppliedFilters,
+        showChangeFilters,
+        hiddenFields,
         ...opts
       });
     }
