@@ -1,5 +1,7 @@
 /** @module Facet */
 
+import Filter from './filter';
+
 /**
  * Model representing a facet filter with the format of
  * {
@@ -17,6 +19,7 @@ export default class Facet {
 
   /**
    * Create a facet filter from a list of Filters
+   * @param {Array<string>} availableFieldIds array of expected field ids
    * @param  {...Filter} filters The filters to use in this facet
    * @returns {Facet}
    */
@@ -27,7 +30,7 @@ export default class Facet {
     });
     const flatFilters = filters.flatMap(f => f.$or || f);
     flatFilters.forEach(f => {
-      const key = Object.keys(f)[0];
+      const key = Filter.getFilterKey(f);
       if (!groups[key]) {
         groups[key] = [];
       }
