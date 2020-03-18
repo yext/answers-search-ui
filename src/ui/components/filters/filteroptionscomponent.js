@@ -2,6 +2,8 @@
 
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
+import FilterView from '../../../core/models/filterview';
+import FilterMetadata from '../../../core/models/filtermetadata';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 
@@ -214,9 +216,8 @@ export default class FilterOptionsComponent extends Component {
       DOM.query(this._container, `.yxt-FilterOptions-options`),
       this.config.optionSelector,
       'click',
-      event => {
-        this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
-      });
+      event => this._updateOption(parseInt(event.target.dataset.index), event.target.checked)
+    );
 
     const selectedCount = this.config.getSelectedCount();
 
@@ -272,12 +273,12 @@ export default class FilterOptionsComponent extends Component {
   }
 
   updateListeners () {
-    const filter = this._buildFilter();
+    const filterView = this._buildFilterView();
     if (this.config.storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.core.setFilterView(this.name, filterView);
     }
 
-    this.config.onChange(filter);
+    this.config.onChange(filterView.filter, filterView.metadata);
   }
 
   _updateOption (index, selected) {
@@ -290,8 +291,8 @@ export default class FilterOptionsComponent extends Component {
     this.setState();
   }
 
-  getFilter () {
-    return this._buildFilter();
+  getFilterView () {
+    return this._buildFilterView();
   }
 
   /**
@@ -305,19 +306,23 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Build and return the Filter that represents the current state
-   * @returns {Filter}
+   * @returns {FilterView}
    * @private
    */
-  _buildFilter () {
-    const filters = this.config.options
-      .filter(o => o.selected)
-      .map(o => o.filter
-        ? o.filter
-        : Filter.equal(o.field, o.value));
-
-    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
-    return filters.length > 0
-      ? Filter.group(...filters)
-      : {};
+  _buildFilterView () {
+    const selectedOptions = this.config.options.filter(o => o.selected);
+    this.core.persistentStorage.set(this.name, selectedOptions.map(o => o.label));
+    const filters = selectedOptions.map(o => o.filter
+      ? o.filter
+      : Filter.equal(o.field, o.value)
+    );
+    const filter = filters.length > 0 ? Filter.group(...filters) : {};
+    const selectedMetadata = selectedOptions.map(o => FilterMetadata.from({
+      fieldId: o.field || Filter.getFilterKey(o.filter),
+      fieldName: this.config.label,
+      displayValues: o.label
+    }));
+    const metadata = FilterMetadata.combine(selectedMetadata);
+    return new FilterView(filter, metadata);
   }
 }

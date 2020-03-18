@@ -165,7 +165,7 @@ export default class VerticalResultsComponent extends Component {
 
   setState (data = {}, val) {
     /**
-     * @type {Array<Result>}
+     * @type {Section}
      */
     this.results = data.results || [];
     this.resultsCount = data.resultsCount;

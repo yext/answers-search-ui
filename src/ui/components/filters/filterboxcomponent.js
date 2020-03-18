@@ -5,7 +5,8 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
-import Facet from '../../../core/models/facet';
+import FilterView from '../../../core/models/filterview';
+import FacetView from '../../../core/models/facetview';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -152,10 +153,10 @@ export default class FilterBoxComponent extends Component {
 
     /**
      * The current state of the filter components in the box
-     * @type {Filter}
+     * @type {FilterView}
      * @private
      */
-    this._filters = [];
+    this._filterViews = [];
 
     if (!this.config.showCount) {
       this.config.filterConfigs.forEach(config => {
@@ -186,7 +187,7 @@ export default class FilterBoxComponent extends Component {
     if (this._filterComponents.length) {
       this._filterComponents.forEach(c => c.remove());
       this._filterComponents = [];
-      this._filters = [];
+      this._filterViews = [];
     }
 
     // Initialize filters from configs
@@ -203,14 +204,14 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
-          onChange: (filter) => {
-            this.onFilterChange(i, filter);
+          onChange: (filter, metadata) => {
+            this.onFilterChange(i, filter, metadata);
           }
         }));
       component.mount();
       this._filterComponents.push(component);
-      this._filters[i] = component.getFilter();
-      this._saveFiltersToStorage();
+      this._filterViews[i] = component.getFilterView();
+      this._saveFilterViewsToStorage();
     }
 
     // Initialize apply button
@@ -219,7 +220,7 @@ export default class FilterBoxComponent extends Component {
 
       if (button) {
         DOM.on(button, 'click', () => {
-          this._saveFiltersToStorage();
+          this._saveFilterViewsToStorage();
           this._search();
         });
       }
@@ -242,11 +243,12 @@ export default class FilterBoxComponent extends Component {
    * Handle changes to child filter components
    * @param {number} index The index of the changed filter
    * @param {Filter} filter The new filter
+   * @param {FilterMetadata} metadata The new metadata
    */
-  onFilterChange (index, filter) {
-    this._filters[index] = filter;
+  onFilterChange (index, filter, metadata) {
+    this._filterViews[index] = new FilterView(filter, metadata);
     if (this.config.searchOnChange) {
-      this._saveFiltersToStorage();
+      this._saveFilterViewsToStorage();
       this._search();
     }
   }
@@ -263,21 +265,15 @@ export default class FilterBoxComponent extends Component {
    * Save current filters to storage to be used in the next search
    * @private
    */
-  _saveFiltersToStorage () {
-    const validFilters = this._filters.filter(f =>
-      f !== undefined &&
-      f !== null &&
-      Object.keys(f).length > 0);
+  _saveFilterViewsToStorage () {
+    const validFilters = this._filterViews.filter(fv => Filter.getFilterKey(fv.filter));
 
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
-      const combinedFilter = Facet.fromFilters(availableFieldIds, ...validFilters);
-      this.core.setFacetFilter(this.name, combinedFilter || {});
-    } else {
-      const combinedFilter = validFilters.length > 1
-        ? Filter.and(...validFilters)
-        : validFilters[0];
-      this.core.setFilter(this.name, combinedFilter || {});
+      const combinedFilter = FacetView.fromFilterViews(availableFieldIds, ...validFilters);
+      this.core.setFacetView(this.name, combinedFilter);
+    } else if (validFilters.length !== 0) {
+      this.core.setFilterView(this.name, FilterView.combineFilterViews(...validFilters));
     }
   }
 

@@ -2,7 +2,9 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
+import FilterView from '../../../core/models/filterview';
 import Filter from '../../../core/models/filter';
+import FilterMetadata from '../../../core/models/filtermetadata';
 import StorageKeys from '../../../core/storage/storagekeys';
 import buildSearchParameters from '../../tools/searchparamsparser';
 
@@ -105,14 +107,14 @@ export default class GeoLocationComponent extends Component {
      * The filter to use for the current query
      * @type {Filter}
      */
-    this.filter = this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || {};
-    if (typeof this.filter === 'string') {
+    this.filterView = this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || {};
+    if (typeof this.filterView === 'string') {
       try {
-        this.filter = JSON.parse(this.filter);
+        this.filterView = JSON.parse(this.filterView);
       } catch (e) {}
     }
 
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
+    this.core.globalStorage.on('update', `${StorageKeys.FILTER_VIEW}.${this.name}`, f => { this.filterView = f; });
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
   }
@@ -177,14 +179,19 @@ export default class GeoLocationComponent extends Component {
       isFilterSearch: true,
       container: '.js-yxt-GeoLocationFilter-autocomplete',
       originalQuery: this.query,
-      originalFilter: this.filter,
+      originalFilter: this.filterView.filter,
       inputEl: inputSelector,
       verticalKey: this._config.verticalKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         this.query = query;
-        this.filter = Filter.fromResponse(filter);
-        this._saveDataToStorage(query, this.filter);
+        const metadata = FilterMetadata.from({
+          fieldId: Filter.getFilterKey(filter),
+          fieldName: this._cquery.split(',')[0],
+          displayValues: query.split(',')[0]
+        });
+        this.filterView = new FilterView(Filter.fromResponse(filter), metadata);
+        this._saveDataToStorage(query, this.filterView);
         this._enabled = false;
       }
     });
@@ -204,12 +211,12 @@ export default class GeoLocationComponent extends Component {
       this.setState({ geoLoading: true });
       navigator.geolocation.getCurrentPosition(
         position => {
-          const filter = this._buildFilter(position);
-          this._saveDataToStorage('', filter, position);
+          const filterView = this._buildFilterView(position);
+          this._saveDataToStorage('', filterView, position);
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-          this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+          this.core.persistentStorage.delete(`${StorageKeys.FILTER_VIEW}.${this.name}`);
         },
         () => this.setState({ geoError: true })
       );
@@ -219,14 +226,14 @@ export default class GeoLocationComponent extends Component {
   /**
    * Saves the provided filter under this component's name
    * @param {string} query The query to save
-   * @param {Filter} filter The filter to save
+   * @param {FilterView} filterView The filter to save
    * @param {Object} position The position to save
    * @private
    */
-  _saveDataToStorage (query, filter, position) {
+  _saveDataToStorage (query, filterView, position) {
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
-    this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
-    this.core.setFilter(this.name, filter);
+    this.core.persistentStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, filterView);
+    this.core.setFilterView(this.name, filterView);
 
     if (position) {
       this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
@@ -251,9 +258,15 @@ export default class GeoLocationComponent extends Component {
    * @returns {Filter}
    * @private
    */
-  _buildFilter (position) {
+  _buildFilterView (position) {
     const { latitude, longitude, accuracy } = position.coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
-    return Filter.position(latitude, longitude, radius);
+    const label = this._config.title || this._config.label || 'Location';
+    const metadata = FilterMetadata.from({
+      fieldId: 'builtin.location',
+      fieldName: label,
+      displayValues: 'Near me'
+    });
+    return new FilterView(Filter.position(latitude, longitude, radius), metadata);
   }
 }

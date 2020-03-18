@@ -6,7 +6,7 @@ import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
-import Filter from './models/filter';
+import FilterView from './models/filterview';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -115,18 +115,16 @@ export default class Core {
     }
 
     // Get filters and facet to send in the request
-    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
-    let totalFilter = {};
-    if (allFilters.length > 0) {
-      totalFilter = allFilters.length > 1
-        ? Filter.and(...allFilters)
-        : allFilters[0];
-    }
-    const facets = this.globalStorage.getAll(StorageKeys.FACET_FILTER);
-    const facetFilter = facets.length > 0 ? facets[0] : {};
+    const allFilterViews = this.globalStorage.getAll(StorageKeys.FILTER_VIEW) || [];
+    const totalFilter = FilterView.combineFilterViews(...allFilterViews).filter || {};
+    const facets = this.globalStorage.getAll(StorageKeys.FACET_FILTER_VIEW);
+    const facetFilter = facets.length > 0 ? facets[0].facet : {};
 
-    // Get sortBys and remove unwanted attributes (label) from the sortBys in the request
-    const sortBys = this.globalStorage.getState(StorageKeys.SORT_BYS) || [];
+    // Get all sortBys that have a type and remove unwanted attributes (label) from the sortBys in the request
+    const sortBys = this.globalStorage.getState(StorageKeys.SORT_BYS).filter(sortBy => sortBy.type) || [];
+    const sortByString = JSON.stringify(sortBys,
+      (key, value) => key === 'label' ? undefined : value
+    );
 
     return this._searcher
       .verticalSearch(verticalKey, {
@@ -139,7 +137,7 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: JSON.stringify(sortBys)
+        sortBys: sortByString
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -291,19 +289,13 @@ export default class Core {
     }
     const sortBys = sortByOptions.map(option => {
       return {
-        type: option.type,
+        direction: option.direction,
         field: option.field,
-        direction: option.direction
+        label: option.label,
+        type: option.type
       };
     });
     this.globalStorage.set(StorageKeys.SORT_BYS, sortBys);
-  }
-
-  /**
-   * Clears the sortBys key in global storage.
-   */
-  clearSortBys () {
-    this.globalStorage.delete(StorageKeys.SORT_BYS);
   }
 
   /**
@@ -323,17 +315,18 @@ export default class Core {
   }
 
   /**
-   * Stores the given filter into storage, to be used for the next search
+   * Stores the given filter view into storage.
+   * The view's filter data object will be used in the next search.
    *
    * @param {string} namespace the namespace to use for the storage key
-   * @param {Filter} filter    the filter to set
+   * @param {FilterView} filterView    the filter view to set
    */
-  setFilter (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
+  setFilterView (namespace, filterView) {
+    this.globalStorage.set(`${StorageKeys.FILTER_VIEW}.${namespace}`, filterView);
   }
 
-  setFacetFilter (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FACET_FILTER}.${namespace}`, filter);
+  setFacetView (namespace, filter) {
+    this.globalStorage.set(`${StorageKeys.FACET_FILTER_VIEW}.${namespace}`, filter);
   }
 
   enableDynamicFilters () {
