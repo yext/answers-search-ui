@@ -3,7 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
-import Filter from '../../../core/models/filter';
+import FilterView from '../../../core/models/filterview';
 import SearchParams from '../../dom/searchparams';
 import buildSearchParameters from '../../tools/searchparamsparser';
 
@@ -100,16 +100,18 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || '';
-    if (typeof this.filter === 'string') {
+    let filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || '';
+    if (typeof filter === 'string') {
       try {
-        this.filter = JSON.parse(this.filter);
+        filter = JSON.parse(filter);
       } catch (e) {}
     }
 
+    this.filterView = new FilterView(filter);
+
     this.searchParameters = buildSearchParameters(config.searchParameters);
 
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
+    this.core.globalStorage.on('update', `${StorageKeys.FILTER_VIEW}.${this.name}`, f => { this.filterView = f; });
   }
 
   static get type () {
@@ -126,7 +128,7 @@ export default class FilterSearchComponent extends Component {
   }
 
   onCreate () {
-    if (this.query && this.filter) {
+    if (this.query && this.filterView) {
       this.search();
     }
   }
@@ -154,7 +156,7 @@ export default class FilterSearchComponent extends Component {
       container: '.yxt-SearchBar-autocomplete',
       promptHeader: this.promptHeader,
       originalQuery: this.query,
-      originalFilter: this.filter,
+      originalFilter: this.filterView.filter,
       inputEl: inputSelector,
       verticalKey: this._verticalKey,
       searchParameters: this.searchParameters,
@@ -172,10 +174,10 @@ export default class FilterSearchComponent extends Component {
 
         // save the filter to storage for the next search
         this.query = query;
-        this.filter = Filter.fromResponse(filter);
+        this.filterView = FilterView.fromResponse(filter);
         this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, this.filter);
-        this.core.setFilter(this.name, this.filter);
+        this.core.persistentStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, this.filterView);
+        this.core.setFilterView(this.name, this.filterVIew);
         this.search();
       }
     });
@@ -201,7 +203,7 @@ export default class FilterSearchComponent extends Component {
       title: this.title,
       searchText: this.searchText,
       query: this.query,
-      filter: this.filter
+      filter: this.filterView.filter
     }, data));
   }
 }

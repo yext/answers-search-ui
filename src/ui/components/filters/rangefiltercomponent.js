@@ -1,7 +1,9 @@
 /** @module RangeFilterComponent */
 
 import Component from '../component';
+import FilterView from '../../../core/models/filterview';
 import Filter from '../../../core/models/filter';
+import FilterMetadata from '../../../core/models/filtermetadata';
 import DOM from '../../dom/dom';
 
 export default class RangeFilterComponent extends Component {
@@ -110,8 +112,8 @@ export default class RangeFilterComponent extends Component {
     this._updateRange('max', value);
   }
 
-  getFilter () {
-    return this._buildFilter();
+  getFilterView () {
+    return this._buildFilterView();
   }
 
   /**
@@ -123,21 +125,26 @@ export default class RangeFilterComponent extends Component {
     this._range = Object.assign({}, this._range, { [key]: value });
     this.setState();
 
-    const filter = this._buildFilter();
+    const filterView = this._buildFilterView();
     if (this._storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.core.setFilterView(this.name, filterView);
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
 
-    this._onChange(filter);
+    this._onChange(filterView.filter, filterView.metadata);
   }
 
   /**
    * Build the filter representation of the current state
-   * @returns {Filter}
+   * @returns {FilterView}
    */
-  _buildFilter () {
-    return Filter.inclusiveRange(this._field, this._range.min, this._range.max);
+  _buildFilterView () {
+    const metadata = FilterMetadata.from({
+      fieldId: this._field,
+      fieldName: this._title,
+      displayValues: `${this._range.min} - ${this._range.max}`
+    });
+    return new FilterView(Filter.inclusiveRange(this._field, this._range.min, this._range.max), metadata);
   }
 }

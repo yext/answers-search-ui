@@ -18,6 +18,11 @@ export default class SortOptionsComponent extends Component {
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex <= this._config.showMoreLimit;
     this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
+
+    const option = this.options[this.selectedOptionIndex];
+    this.core.setSortBys(option);
+
+    this._config.verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
   }
 
   setState (data) {
@@ -95,7 +100,9 @@ export default class SortOptionsComponent extends Component {
     // This was done to have a consistent option name between filters.
     this.core.persistentStorage.set(this.name, optionIndex);
     if (this._config.storeOnChange && optionIndex === 0) {
-      this.core.clearSortBys();
+      this.core.setSortBys({
+        label: this._config.defaultSortLabel
+      });
     } else if (this._config.storeOnChange) {
       this.core.setSortBys(option);
     }
@@ -196,11 +203,6 @@ function assignDefaults (config) {
   updatedConfig.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
   updatedConfig.applyLabel = config.applyLabel || 'Apply';
-
-  updatedConfig.verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
-  if (!updatedConfig.verticalKey) {
-    throw new AnswersBasicError('vertical key is required', 'SortOptions');
-  }
 
   // note: showExpand and showNumberApplied explicitly not included, on the grounds that
   // sorting should always be exposed to the user if added.
