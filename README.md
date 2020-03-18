@@ -519,8 +519,8 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     // Optional: The type of card, currently only 'Standard' and 'Accordion' are supported, defaults to 'Standard'
     cardType: 'Standard',
-    // Required, see Card Mappings for more details
-    cardMappings: () => {},
+    // Required, see Data Mappings for more details
+    dataMappings: () => {},
     // Optional, used as configuration for any calls to action buttons on the page, see Calls To Action for more details
     callsToAction: () => []
   },
@@ -539,7 +539,7 @@ ANSWERS.addComponent('VerticalResults', {
 
 Cards are used in Universal/Vertical Results for configuring the UI for a result on a per-item basis.
 
-Cards take in a cardMappings attribute, which contains configuration for the card, and a callsToAction
+Cards take in a dataMappings attribute, which contains configuration for the card, and a callsToAction
 attribute, which contains config for any callToAction buttons in the card.
 
 callsToAction config is common throughout all cards, whereas different cards such as Standard vs BigImage
@@ -650,22 +650,22 @@ ANSWERS.addComponent('VerticalResults', {
 })
 ```
 
-## Card Mappings
+## Data Mappings
 
-CardMappings define how a card's attributes, such as title and details, will be rendered.
-They can be configured either through a function that returns a cardMappings object
-or a static cardMappings object.
+The dataMappings config option define how a card's attributes, such as title and details, will be rendered.
+They can be configured either through a function that returns a dataMappings object
+or a static dataMappings object.
 
-Each attribute of a cardMappings object is also either a function or a static value.
+Each attribute of a dataMappings object is also either a function or a static value.
 
-Below is an example of cardMappings as function.
+Below is an example of dataMappings as function.
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
   /* ...other vertical results config... */
   card: {
     /* ...other card config...*/
-    cardMappings: item => ({
+    dataMappings: item => ({
       title: item._raw.name,
       subtitle: `Department: ${item._raw.name} `,
       details: item._raw.description,
@@ -681,7 +681,7 @@ ANSWERS.addComponent('VerticalResults', {
 })
 ```
 
-And below is an example of cardMappings as an object with functions inside it.
+And below is an example of dataMappings as an object with functions inside it.
 You can use both static attributes and function attributes together.
 
 ```js
@@ -689,7 +689,7 @@ ANSWERS.addComponent('VerticalResults', {
   /* ...other vertical results config... */
   card: {
     /* ...other card config...*/
-    cardMappings: {
+    dataMappings: {
       title: item => item._raw.name,
       subtitle: item => `Department: ${item._raw.name} `,
       details: item => item._raw.description,
@@ -708,10 +708,10 @@ ANSWERS.addComponent('VerticalResults', {
 
 ## Standard Card
 
-The card mapping for a standard card has these attributes
+The data mappings for a standard card has these attributes
 
 ```js
-const cardMappings = item => {
+const dataMappings = item => {
   return {
     // Title for the card, defaults to the name of the entity
     title: item.title,
@@ -742,10 +742,10 @@ const cardMappings = item => {
 
 ## Accordion Card
 
-The card mapping for an accordion card has these attributes
+The data mappings for an accordion card has these attributes
 
 ```js
-const cardMappings = item => {
+const dataMappings = item => {
   return {
     // Title for the card, defaults to the name of the entity
     title: item.title,

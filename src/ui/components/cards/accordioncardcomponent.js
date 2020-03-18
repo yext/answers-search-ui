@@ -26,12 +26,12 @@ class AccordionCardConfig {
     const rawResult = result._raw || {};
 
     /**
-     * The templateMappings attribute of the config
+     * The dataMappings attribute of the config
      * is either a function that returns additional config for
      * a card or an object that is the additional config.
      */
-    const cardMappings = config.cardMappings || {};
-    Object.assign(this, CardComponent.applyCardMappings(result, cardMappings));
+    const dataMappings = config.dataMappings || {};
+    Object.assign(this, CardComponent.applyDataMappings(result, dataMappings));
 
     /**
      * Vertical key for the card, added to analytics events sent by this component.
