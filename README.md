@@ -837,12 +837,12 @@ ANSWERS.addComponent('FilterBox', {
         {
           label: 'Open Now',
           field: 'c_openNow',
-          value: 'true'
+          value: true
         },
         {
           label: 'Dog Friendly',
           field: 'c_dogFriendly',
-          value: 'true'
+          value: true
         },
         {
           label: 'Megastores',
@@ -1002,12 +1002,12 @@ ANSWERS.addComponent('FilterOptions', {
       // The api field to filter on, configured on the Yext platform
       field: 'c_openNow',
       // The value for the above field to filter by
-      value: 'true'
+      value: true
     },
     {
       label: 'Dog Friendly',
       field: 'c_dogFriendly',
-      value: 'true'
+      value: true
     },
     {
       label: 'Megastores',
