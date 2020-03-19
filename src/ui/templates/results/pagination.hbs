@@ -5,6 +5,7 @@
         {{#unless showFirstPageButton}}disabled{{/unless}}
         data-eventtype="BACKWARD_PAGINATE"
         data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+        aria-label="Go to the first page of results"
       >
         <span class="yxt-Pagination-doubleChevron--left"
               data-component="IconComponent"
@@ -18,6 +19,7 @@
       {{#unless showPreviousPageButton}}disabled{{/unless}}
       data-eventtype="BACKWARD_PAGINATE"
       data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
+      aria-label="Go to the previous page of results"
     >
       <span class="yxt-Pagination-chevron--left"
             data-component="IconComponent"
@@ -30,6 +32,7 @@
       {{#unless showNextPageButton}}disabled{{/unless}}
       data-eventtype="FORWARD_PAGINATE"
       data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
+        aria-label="Go to the next page of results"
     >
       <span class="yxt-Pagination-chevron"
             data-component="IconComponent"
@@ -40,6 +43,7 @@
         {{#unless showLastPageButton}}disabled{{/unless}}
         data-eventtype="FORWARD_PAGINATE"
         data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+        aria-label="Go to the last page of results"
       >
         <span class="yxt-Pagination-doubleChevron"
               data-component="IconComponent"
