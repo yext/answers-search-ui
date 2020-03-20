@@ -80,7 +80,8 @@
       "ytag"
     ],
     "ignore": [
-      "docs/"
+      "docs/",
+      "dist/"
     ]
   },
   "author": "Billy",
