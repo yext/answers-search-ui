@@ -173,7 +173,11 @@ export default class Core {
   search (queryString, urls) {
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
-    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
+    for (const key of this.globalStorage.getKeys()) {
+      if (key.startsWith(StorageKeys.QUESTION_SUBMISSION)) {
+        this.globalStorage.set(key, {});
+      }
+    }
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
 
@@ -263,7 +267,7 @@ export default class Core {
       .submitQuestion(question)
       .then(data => {
         this.globalStorage.set(
-          StorageKeys.QUESTION_SUBMISSION,
+          `${StorageKeys.QUESTION_SUBMISSION}.${question.entityId}`,
           QuestionSubmission.submitted());
       });
   }

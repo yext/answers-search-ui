@@ -142,7 +142,7 @@ export default class QuestionSubmissionComponent extends Component {
      * Reference to the storage model
      * @type {string}
      */
-    this.moduleId = StorageKeys.QUESTION_SUBMISSION;
+    this.moduleId = `${StorageKeys.QUESTION_SUBMISSION}.${config.entityId}`;
 
     /**
      * Reference to the locale as set in the global config

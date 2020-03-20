@@ -76,6 +76,10 @@ export default class GlobalStorage {
     return data;
   }
 
+  getKeys() {
+    return Object.keys(this._moduleDataContainer);
+  }
+
   /**
    * Remove the data in storage with the given key to the provided data,
    * @param {string} key the storage key to delete
