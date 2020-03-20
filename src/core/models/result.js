@@ -90,5 +90,10 @@ export default class Result {
      * @type {boolean}
      */
     this.collapsed = data.collapsed === undefined ? true : data.collapsed;
+
+    /**
+     * @type {number}
+     */
+    this.distance = data.distance || null;
   }
 }
