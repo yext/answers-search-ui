@@ -109,7 +109,6 @@ export default class Core {
       this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
-    // If no verticalKey is set try to get verticalKey from the common search config
     if (!verticalKey) {
       verticalKey = this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
     }
