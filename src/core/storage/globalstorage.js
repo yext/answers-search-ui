@@ -76,7 +76,7 @@ export default class GlobalStorage {
     return data;
   }
 
-  getKeys() {
+  getKeys () {
     return Object.keys(this._moduleDataContainer);
   }
 
