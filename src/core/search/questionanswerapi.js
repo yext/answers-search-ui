@@ -46,7 +46,7 @@ export default class QuestionAnswerApi {
   submitQuestion (question) {
     const requestConfig = {
       baseUrl: getKnowledgeApiUrl(this._environment),
-      endpoint: '/v2/accounts/me/questions',
+      endpoint: '/v2/accounts/me/createQuestion',
       apiKey: this._apiKey,
       params: {
         'entityId': question.entityId,
