@@ -145,6 +145,19 @@ class Answers {
       ? getMockServices()
       : getServices(parsedConfig, globalStorage);
 
+    this._eligibleForAnalytics = parsedConfig.businessId != null;
+    if (this._eligibleForAnalytics) {
+      // TODO(amullings): Initialize with other services
+      this._analyticsReporterService = parsedConfig.mock
+        ? new NoopAnalyticsReporter()
+        : new AnalyticsReporter(
+          parsedConfig.experienceKey,
+          parsedConfig.experienceVersion,
+          parsedConfig.businessId,
+          parsedConfig.analyticsOptions,
+          parsedConfig.environment);
+    }
+
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
       globalStorage: globalStorage,
@@ -155,8 +168,14 @@ class Answers {
       locale: parsedConfig.locale,
       searchService: this._services.searchService,
       autoCompleteService: this._services.autoCompleteService,
-      questionAnswerService: this._services.questionAnswerService
+      questionAnswerService: this._services.questionAnswerService,
+      analyticsReporter: this._analyticsReporterService,
+      onVerticalSearch: parsedConfig.onVerticalSearch,
+      onUniversalSearch: parsedConfig.onUniversalSearch
     });
+
+    // listen to query id updates
+    this.core.globalStorage.on('update', StorageKeys.QUERY_ID, id => this._analyticsReporterService.setQueryId(id));
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
       parsedConfig.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
@@ -164,26 +183,9 @@ class Answers {
 
     this.components
       .setCore(this.core)
-      .setRenderer(this.renderer);
-
-    this._eligibleForAnalytics = parsedConfig.businessId != null;
-    if (this._eligibleForAnalytics) {
-      // TODO(amullings): Initialize with other services
-      const reporter = parsedConfig.mock
-        ? new NoopAnalyticsReporter()
-        : new AnalyticsReporter(
-          this.core,
-          parsedConfig.experienceKey,
-          parsedConfig.experienceVersion,
-          parsedConfig.businessId,
-          parsedConfig.analyticsOptions,
-          parsedConfig.environment);
-
-      this._analyticsReporterService = reporter;
-
-      this.components.setAnalyticsReporter(reporter);
-      initScrollListener(reporter);
-    }
+      .setRenderer(this.renderer)
+      .setAnalyticsReporter(this._analyticsReporterService);
+    initScrollListener(this._analyticsReporterService);
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
@@ -253,6 +255,14 @@ class Answers {
 
     if (typeof config.experienceKey !== 'string') {
       throw new Error('Missing required `experienceKey`. Type must be {string}');
+    }
+
+    if (config.onVerticalSearch && typeof config.onVerticalSearch !== 'function') {
+      throw new Error('onVerticalSearch must be a function. Current type is: ' + typeof config.onVerticalSearch);
+    }
+
+    if (config.onUniversalSearch && typeof config.onUniversalSearch !== 'function') {
+      throw new Error('onUniversalSearch must be a function. Current type is: ' + typeof config.onUniversalSearch);
     }
   }
 

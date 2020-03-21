@@ -74,6 +74,8 @@ Below is a list of configuration options that can be used during initialization.
 | debug | boolean | Prints full Answers error details when set to `true` | optional |
 | sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
 | navigation | object | Provide navigation configuration including tab configurations | optional |
+| onVerticalSearch  | function   | analytics callback after a vertical search | optional |
+| onUniversalSearch | function   | analytics callback after a universal search | optional |
 
 ## Vertical Pages Configuration
 Below is a list of configuration options related to vertical pages in navigation and no results, used in the [base configuration](#configuration-options) above.
@@ -113,6 +115,80 @@ If you want to register custom template helpers to the handlebars render, you ca
 ```js
 ANSWERS.registerHelper('noop', function(options) {
   return options.fn(this);
+})
+```
+
+## onSearch Analytics
+
+Both onVerticalSearch and onUniversalSearch allow you to send an analytics event each time a search is run.
+These options expect functions that take in one parameter, which contains information about the search,
+and also return the desired analytics event. 
+
+The search information exposed to both options is shown below.
+
+#### onVerticalSearch
+
+```js
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  onVerticalSearch: searchParams => {
+    /**
+     * Vertical key used for the search.
+     * @type {string}
+     */
+    const verticalKey = searchParams.verticalKey;
+
+    /**
+     * The string being searched for.
+     * @type {string}
+     */
+    const queryString = searchParams.queryString;
+
+    /**
+     * The total number of results found.
+     * @type {number}
+     */
+    const resultsCount = searchParams.resultsCount;
+
+    /**
+     * Either 'normal' or 'no-results'.
+     * @type {string}
+     */
+    const resultsContext = searchParams.resultsCount
+    const analyticsEvent = {
+      type: 'ANALYTICS_EVENT_TYPE',
+      label: 'Sample analytics event',
+      query: queryString
+    };
+    return analyticsEvent;
+  },
+})
+```
+
+#### onUniversalSearch
+
+```js
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  onVerticalSearch: searchParams => {
+    /**
+     * The string being searched for.
+     * @type {string}
+     */
+    const queryString = searchParams.queryString;
+
+    /**
+     * The total number of results found.
+     * @type {number}
+     */
+    const sectionsCount = searchParams.sectionsCount;
+    const analyticsEvent = {
+      type: 'ANALYTICS_EVENT_TYPE',
+      label: 'Sample analytics event',
+      query: queryString
+    };
+    return analyticsEvent;
+  },
 })
 ```
 

@@ -9,12 +9,6 @@ jest.mock('../../../src/core/http/httprequester');
 
 describe('reporting events', () => {
   const mockedBeacon = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
-  const mockedStorageOn = jest.fn();
-  const mockedCore = {
-    globalStorage: {
-      on: mockedStorageOn
-    }
-  };
   let analyticsReporter;
 
   beforeEach(() => {
@@ -24,7 +18,7 @@ describe('reporting events', () => {
         beacon: mockedBeacon
       };
     });
-    analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', null, '213412');
+    analyticsReporter = new AnalyticsReporter('abc123', null, '213412');
   });
 
   it('throws an error if given a non-AnalyticsEvent', () => {
@@ -44,7 +38,7 @@ describe('reporting events', () => {
   });
 
   it('includes global options', () => {
-    const analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', null, '213412', { testOption: 'test' });
+    const analyticsReporter = new AnalyticsReporter('abc123', null, '213412', { testOption: 'test' });
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 
@@ -55,7 +49,7 @@ describe('reporting events', () => {
   });
 
   it('includes experienceVersion when supplied', () => {
-    const analyticsReporter = new AnalyticsReporter(mockedCore, 'abc123', 'PRODUCTION', '213412', { testOption: 'test' });
+    const analyticsReporter = new AnalyticsReporter('abc123', 'PRODUCTION', '213412', { testOption: 'test' });
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 
