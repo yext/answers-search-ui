@@ -3,7 +3,6 @@
 import AnalyticsEvent from './analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
 import { PRODUCTION } from '../constants';
-import StorageKeys from '../storage/storagekeys';
 import HttpRequester from '../http/httprequester';
 import { getAnalyticsUrl } from '../utils/urlutils';
 
@@ -16,7 +15,6 @@ import { getAnalyticsUrl } from '../utils/urlutils';
  */
 export default class AnalyticsReporter {
   constructor (
-    core,
     experienceKey,
     experienceVersion,
     businessId,
@@ -59,9 +57,6 @@ export default class AnalyticsReporter {
     if (experienceVersion) {
       this._globalOptions.experienceVersion = experienceVersion;
     }
-
-    // listen to query id updates
-    core.globalStorage.on('update', StorageKeys.QUERY_ID, id => this.setQueryId(id));
   }
 
   setQueryId (queryId) {
