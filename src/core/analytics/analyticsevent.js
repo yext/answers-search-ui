@@ -33,4 +33,15 @@ export default class AnalyticsEvent {
   toApiEvent () {
     return Object.assign({}, this);
   }
+
+  /**
+   * Creating an analytics event from raw data.
+   * @param {Object} data
+   */
+  static fromData (data) {
+    const { type, label, ...eventOptions } = data;
+    const analyticsEvent = new AnalyticsEvent(type, label);
+    analyticsEvent.addOptions(eventOptions);
+    return analyticsEvent;
+  }
 }
