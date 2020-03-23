@@ -7,6 +7,7 @@ import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
 import Filter from './models/filter';
+import AnalyticsEvent from './analytics/analyticsevent';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -90,6 +91,24 @@ export default class Core {
      * @private
      */
     this._questionAnswer = config.questionAnswerService;
+
+    /**
+     * A local reference to the analytics reporter, used to report events for this component
+     * @type {AnalyticsReporter}
+     */
+    this._analyticsReporter = config.analyticsReporter;
+
+    /**
+     * A user-given function that returns an analytics event to fire after a universal search.
+     * @type {Function}
+     */
+    this.onUniversalSearch = config.onUniversalSearch || function () {};
+
+    /**
+     * A user-given function that returns an analytics event to fire after a vertical search.
+     * @type {Function}
+     */
+    this.onVerticalSearch = config.onVerticalSearch || function () {};
   }
 
   /**
@@ -148,6 +167,17 @@ export default class Core {
         }
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete('queryTrigger');
+
+        const exposedParams = {
+          verticalKey: verticalKey,
+          queryString: query.input,
+          resultsCount: this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS).resultsCount,
+          resultsContext: data[StorageKeys.VERTICAL_RESULTS].resultsContext
+        };
+        const analyticsEvent = this.onVerticalSearch(exposedParams);
+        if (typeof analyticsEvent === 'object') {
+          this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
+        }
       });
   }
 
@@ -196,6 +226,15 @@ export default class Core {
         this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete('queryTrigger');
+
+        const exposedParams = {
+          queryString: queryString,
+          sectionsCount: data[StorageKeys.UNIVERSAL_RESULTS].sections.length
+        };
+        const analyticsEvent = this.onUniversalSearch(exposedParams);
+        if (typeof analyticsEvent === 'object') {
+          this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
+        }
       });
   }
 
