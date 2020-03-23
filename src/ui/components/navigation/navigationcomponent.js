@@ -99,7 +99,7 @@ export class Tab {
 
       // For tabs without config ids, map their URL to the configID
       // to avoid duplication of renders
-      if (tab.verticalKey === null && tabs[tab.verticalKey] === undefined) {
+      if (!tab.verticalKey && !tabs[tab.url]) {
         tab.verticalKey = tab.url;
       }
 
