@@ -146,16 +146,24 @@ class Answers {
       : getServices(parsedConfig, globalStorage);
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
-    if (this._eligibleForAnalytics) {
-      // TODO(amullings): Initialize with other services
-      this._analyticsReporterService = parsedConfig.mock
-        ? new NoopAnalyticsReporter()
-        : new AnalyticsReporter(
-          parsedConfig.experienceKey,
-          parsedConfig.experienceVersion,
-          parsedConfig.businessId,
-          parsedConfig.analyticsOptions,
-          parsedConfig.environment);
+    // TODO(amullings): Initialize with other services
+    if (this._eligibleForAnalytics && parsedConfig.mock) {
+      this._analyticsReporterService = new NoopAnalyticsReporter();
+    } else if (this._eligibleForAnalytics) {
+      this._analyticsReporterService = new AnalyticsReporter(
+        parsedConfig.experienceKey,
+        parsedConfig.experienceVersion,
+        parsedConfig.businessId,
+        parsedConfig.analyticsOptions,
+        parsedConfig.environment);
+
+      // listen to query id updates
+      globalStorage.on('update', StorageKeys.QUERY_ID, id =>
+        this._analyticsReporterService.setQueryId(id)
+      );
+
+      this.components.setAnalyticsReporter(this._analyticsReporterService);
+      initScrollListener(this._analyticsReporterService);
     }
 
     this.core = new Core({
@@ -174,18 +182,13 @@ class Answers {
       onUniversalSearch: parsedConfig.onUniversalSearch
     });
 
-    // listen to query id updates
-    this.core.globalStorage.on('update', StorageKeys.QUERY_ID, id => this._analyticsReporterService.setQueryId(id));
-
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
       parsedConfig.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
     }
 
     this.components
       .setCore(this.core)
-      .setRenderer(this.renderer)
-      .setAnalyticsReporter(this._analyticsReporterService);
-    initScrollListener(this._analyticsReporterService);
+      .setRenderer(this.renderer);
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
