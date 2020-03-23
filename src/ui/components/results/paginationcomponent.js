@@ -47,7 +47,6 @@ export default class PaginationComponent extends Component {
 
     /**
      * Label for a page of results.
-     * 
      * @type {string}
      * @private
      */
