@@ -64,6 +64,7 @@ Below is a list of configuration options that can be used during initialization.
 |-----------|------------|-------------------------------------------|---------------|
 | apiKey    | string     | Your API key                              | required      |
 | experienceKey   | string     | The key used for your answers experience     | required      |
+| businessId | number | Knowledge Graph businessId to use for analytics, required to send analytics events | optional
 | onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
 | onStateChange | function | Invoked when the sate changes | optional |
 | useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | optional  |
