@@ -800,7 +800,7 @@ const dataMappings = item => {
     image: item._raw.headshot ? item._raw.headshot.url : '',
     // Url for the title/subtitle, defaults to the entity's website url
     url: item.link || item._raw.website,
-    // Character limit to hide remaining details and display a show more button, defaults to 350
+    // Character limit to hide remaining details and display a show more button, defaults to not having a limit.
     showMoreLimit: 350,
     // Text for show more button, defaults to 'Show More'
     showMoreText: "show more",

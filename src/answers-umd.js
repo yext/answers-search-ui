@@ -1,6 +1,7 @@
 /** @module */
 
 import Core from './core/core';
+import formatRichText from './core/markdown/richtext';
 
 import {
   DefaultTemplatesLoader,
@@ -422,4 +423,5 @@ function initScrollListener (reporter) {
 }
 
 const ANSWERS = new Answers();
+ANSWERS.formatRichText = formatRichText;
 export default ANSWERS;
