@@ -63,7 +63,7 @@ export default class GlobalStorage {
     if (this._moduleDataContainer[moduleId]) {
       return this._moduleDataContainer[moduleId].raw();
     }
-    return null;
+    return undefined;
   }
 
   getAll (key) {

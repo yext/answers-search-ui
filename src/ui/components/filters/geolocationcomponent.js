@@ -2,7 +2,7 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import FilterView from '../../../core/models/filterview';
+import BasicFilterView from '../../../core/models/basicfilterview';
 import Filter from '../../../core/models/filter';
 import FilterMetadata from '../../../core/models/filtermetadata';
 import StorageKeys from '../../../core/storage/storagekeys';
@@ -97,30 +97,30 @@ export default class GeoLocationComponent extends Component {
      * The query string to use for the input box, provided to template for rendering.
      * @type {string}
      */
-    this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
     this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
       this.query = q;
       this.setState();
     });
-
-    /**
-     * The filter to use for the current query
-     * @type {Filter}
-     */
-    this.filterView = this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || {};
-    if (typeof this.filterView === 'string') {
-      try {
-        this.filterView = FilterView.from(JSON.parse(this.filterView));
-        this.core.globalStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, this.filterView);
-        if (Object.keys(this.filterView.filter['builtin.location'])[0] === '$near') {
-          this._enabled = true;
-        }
-      } catch (e) {}
-    }
-
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER_VIEW}.${this.name}`, f => { this.filterView = f; });
-
+    this._initializeFromPreviousState();
     this.searchParameters = buildSearchParameters(config.searchParameters);
+  }
+
+  _initializeFromPreviousState () {
+    let previousState = this.core.globalStorage.getState(this.name) || {};
+    this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
+    if (typeof previousState === 'string') {
+      try {
+        previousState = JSON.parse(previousState);
+        const { enabled, coords, filter } = previousState;
+        if (enabled) {
+          this._saveCoords(coords);
+        } else {
+          this._saveResponse(this.query, filter);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }
 
   static get type () {
@@ -183,21 +183,11 @@ export default class GeoLocationComponent extends Component {
       isFilterSearch: true,
       container: '.js-yxt-GeoLocationFilter-autocomplete',
       originalQuery: this.query,
-      originalFilter: this.filterView.filter,
+      originalFilter: this.filterView && this.filterView.getFilter(),
       inputEl: inputSelector,
       verticalKey: this._config.verticalKey,
       searchParameters: this.searchParameters,
-      onSubmit: (query, filter) => {
-        this.query = query;
-        const metadata = FilterMetadata.from({
-          fieldId: Filter.getFilterKey(filter),
-          fieldName: this._config.label || this._config.title || 'Location',
-          displayValues: query.split(',')[0]
-        });
-        this.filterView = new FilterView(Filter.fromResponse(filter), metadata);
-        this._saveDataToStorage(query, this.filterView);
-        this._enabled = false;
-      }
+      onSubmit: (query, filter) => this._saveResponse(query, filter)
     });
   }
 
@@ -214,38 +204,58 @@ export default class GeoLocationComponent extends Component {
     if (!this._enabled) {
       this.setState({ geoLoading: true });
       navigator.geolocation.getCurrentPosition(
-        position => {
-          this._enabled = true;
-          this.setState({});
-          this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-          this.core.persistentStorage.delete(`${StorageKeys.FILTER_VIEW}.${this.name}`);
-          const filterView = this._buildFilterView(position);
-          this._saveDataToStorage('', filterView, position);
-        },
+        position => this._saveCoords(position.coords),
         () => this.setState({ geoError: true })
       );
     }
   }
 
   /**
-   * Saves the provided filter under this component's name
-   * @param {string} query The query to save
-   * @param {FilterView} filterView The filter to save
+   * Saves the provided filter under this component's name.
+   * @param {Object} coords An object containing lat, long, and accuracy.
+   */
+  _saveCoords (coords) {
+    this._enabled = true;
+    this.setState({});
+    this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
+    const { latitude, longitude, accuracy } = coords;
+    this.core.persistentStorage.set(this.name, {
+      enabled: this._enabled,
+      coords: { latitude, longitude, accuracy }
+    });
+    const filterView = this._buildFilterView(coords);
+    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+      lat: latitude,
+      lng: longitude,
+      radius: accuracy
+    });
+    this._saveFilterViewToStorage(filterView);
+  }
+
+  /**
+   * @param {string} query query string from the autocomplete
+   * @param {Object} filter the filter received from the autocomplete response
    * @private
    */
-  _saveDataToStorage (query, filterView, position) {
+  _saveResponse (query, filter) {
+    this._enabled = false;
+    this.query = query;
+    this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
-    this.core.persistentStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, filterView);
+    this.core.persistentStorage.delete(this.name);
+    this.core.persistentStorage.set(this.name, {
+      enabled: this._enabled,
+      query: query,
+      filter: filter
+    });
+    const metadata = this._buildFilterMetadata(query);
+    const filterView = new BasicFilterView(Filter.fromResponse(filter), metadata);
+    this._saveFilterViewToStorage(filterView);
+  }
+
+  _saveFilterViewToStorage (filterView) {
+    this.filterView = filterView;
     this.core.setFilterView(this.name, filterView);
-
-    if (position) {
-      this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-        radius: position.coords.accuracy
-      });
-    }
-
     if (this._config.searchOnChange) {
       const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
 
@@ -255,21 +265,27 @@ export default class GeoLocationComponent extends Component {
     }
   }
 
+  _buildFilterMetadata (query) {
+    return FilterMetadata.from({
+      fieldName: this._config.label || this._config.title || 'Location',
+      displayValues: query.split(',')[0]
+    });
+  }
+
   /**
    * Given a position, construct a Filter object
-   * @param {Postition} position The position
+   * @param {Object} coords position.coords
    * @returns {Filter}
    * @private
    */
-  _buildFilterView (position) {
-    const { latitude, longitude, accuracy } = position.coords;
+  _buildFilterView (coords) {
+    const { latitude, longitude, accuracy } = coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
     const label = this._config.title || this._config.label || 'Location';
     const metadata = FilterMetadata.from({
-      fieldId: 'builtin.location',
       fieldName: label,
       displayValues: 'Near me'
     });
-    return new FilterView(Filter.position(latitude, longitude, radius), metadata);
+    return new BasicFilterView(Filter.position(latitude, longitude, radius), metadata);
   }
 }

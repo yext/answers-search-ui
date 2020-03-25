@@ -1,9 +1,9 @@
 {{#some shouldShowFilters _config.showResultCount}}
   <div class="yxt-ResultsHeader{{#if _config.isUniversal}} yxt-ResultsHeader--universal{{/if}}">
     {{> resultscount}}
-    {{#if showResultSeparator}}
+    {{#every _config.showResultCount resultsCount shouldShowFilters}}
       <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
-    {{/if}}
+    {{/every}}
     {{> appliedFilters}}
   </div>
 {{/some}}
@@ -23,7 +23,7 @@
 {{/inline}}
 
 {{#*inline "appliedFilters"}}
-  {{#some shouldShowFilters sortOptions}}
+  {{#if shouldShowFilters}}
     <div class="yxt-AppliedFilters js-yxt-AppliedFilters">
       <div class="yxt-AppliedFilters-content js-yxt-AppliedFilters-content">
         {{> sortedBy}}
@@ -35,7 +35,7 @@
         data-opts='{ "iconName": "chevron" }'>
       </div>
     </div>
-  {{/some}}
+  {{/if}}
 {{/inline}}
 
 {{#*inline "sortedBy"}}

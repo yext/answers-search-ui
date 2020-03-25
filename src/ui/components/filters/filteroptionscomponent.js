@@ -2,7 +2,8 @@
 
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
-import FilterView from '../../../core/models/filterview';
+import BasicFilterView from '../../../core/models/basicfilterview';
+import CombinedFilterView from '../../../core/models/combinedfilterview';
 import FilterMetadata from '../../../core/models/filtermetadata';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
@@ -103,12 +104,6 @@ class FilterOptionsConfig {
      */
     this.optionSelector = config.optionSelector || '.js-yext-filter-option';
 
-    /**
-     * Whether this filter is part of a dynamic facet.
-     * @type {boolean}
-     */
-    this.isDynamic = config.isDynamic || false;
-
     this.validate();
 
     if (typeof config.previousOptions === 'string') {
@@ -172,7 +167,7 @@ export default class FilterOptionsComponent extends Component {
     });
 
     const selectedCount = this.config.getSelectedCount();
-    if (selectedCount > 0 && !this.config.isDynamic) {
+    if (selectedCount > 0 && this.config.storeOnChange) {
       this.core.setFilterView(this.name, this._buildFilterView());
     }
 
@@ -287,7 +282,7 @@ export default class FilterOptionsComponent extends Component {
       this.core.setFilterView(this.name, filterView);
     }
 
-    this.config.onChange(filterView.filter, filterView.metadata);
+    this.config.onChange(filterView);
   }
 
   _updateOption (index, selected) {
@@ -313,25 +308,30 @@ export default class FilterOptionsComponent extends Component {
     this._applyFilter();
   }
 
+  _buildFilter (option) {
+    return option.filter ? option.filter : Filter.equal(option.field, option.value);
+  }
+
+  _buildFilterMetadata (option) {
+    return FilterMetadata.from({
+      fieldName: this.config.label,
+      displayValues: option.label
+    });
+  }
+
   /**
-   * Build and return the Filter that represents the current state
+   * Build and return the Filter that represents the current state.
+   * First, ORs together all filters filtering on the same field. Then, ANDs
+   * together the OR-ed filters.
    * @returns {FilterView}
    * @private
    */
   _buildFilterView () {
     const selectedOptions = this.config.options.filter(o => o.selected);
     this.core.persistentStorage.set(this.name, selectedOptions.map(o => o.label));
-    const filters = selectedOptions.map(o => o.filter
-      ? o.filter
-      : Filter.equal(o.field, o.value)
+    const filterViews = selectedOptions.map(o =>
+      new BasicFilterView(this._buildFilter(o), this._buildFilterMetadata(o))
     );
-    const filter = filters.length > 0 ? Filter.group(...filters) : {};
-    const selectedMetadata = selectedOptions.map(o => FilterMetadata.from({
-      fieldId: o.field || Filter.getFilterKey(o.filter),
-      fieldName: this.config.label,
-      displayValues: o.label
-    }));
-    const metadata = FilterMetadata.combine(selectedMetadata);
-    return new FilterView(filter, metadata);
+    return CombinedFilterView.group(filterViews);
   }
 }

@@ -4,9 +4,10 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
-import FilterView from '../../../core/models/filterview';
+import BasicFilterView from '../../../core/models/basicfilterview';
 import SearchParams from '../../dom/searchparams';
 import buildSearchParameters from '../../tools/searchparamsparser';
+import FilterMetadata from '../../../core/models/filtermetadata';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -101,20 +102,18 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    let storedFilterView = this.core.globalStorage.getState(`${StorageKeys.FILTER_VIEW}.${this.name}`) || {};
-    if (typeof storedFilterView === 'string') {
+    let storedFilter = this.core.globalStorage.getState(this.name) || {};
+    if (typeof storedFilter === 'string') {
       try {
-        storedFilterView = FilterView.from(JSON.parse(storedFilterView));
-        this.core.globalStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, storedFilterView);
+        storedFilter = BasicFilterView.from(JSON.parse(storedFilter));
+        this.core.globalStorage.set(this.name, storedFilter);
       } catch (e) {
         console.warn(e);
       }
     }
-    this.filter = config.filter || storedFilterView.filter || '';
+    this.filter = config.filter || storedFilter || Filter.empty();
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
-
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER_VIEW}.${this.name}`, fv => { this.filter = fv.filter; });
   }
 
   static get type () {
@@ -174,15 +173,7 @@ export default class FilterSearchComponent extends Component {
           window.location.href = this.redirectUrl + '?' + params.toString();
           return false;
         }
-
-        // save the filter to storage for the next search
-        this.query = query;
-        this.filter = Filter.fromResponse(filter);
-        const filterView = new FilterView(this.filter);
-        this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.FILTER_VIEW}.${this.name}`, filterView);
-        this.core.setFilterView(this.name, filterView);
-        this.search();
+        this._saveDataToStorage(query, filter);
       }
     });
   }
@@ -209,5 +200,26 @@ export default class FilterSearchComponent extends Component {
       query: this.query,
       filter: this.filter
     }, data));
+  }
+
+  _saveDataToStorage (query, responseFilter) {
+    this.query = query;
+    this.filter = Filter.fromResponse(responseFilter);
+    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+    this.core.persistentStorage.set(this.name, this.filter);
+    const filterView = this._buildFilterView(query);
+    this.core.setFilterView(this.name, filterView);
+    this.search();
+  }
+
+  _buildFilterView (query) {
+    return new BasicFilterView(this.filter, this._buildFilterMetadata(query));
+  }
+
+  _buildFilterMetadata (query) {
+    return FilterMetadata.from({
+      fieldName: this.title,
+      displayValues: query
+    });
   }
 }

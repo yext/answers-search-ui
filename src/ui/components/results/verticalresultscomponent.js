@@ -78,7 +78,7 @@ class VerticalResultsConfig {
      * If present, show the filters that were ultimately applied to this query
      * @type {boolean}
      */
-    this.showAppliedFilters = config.showAppliedFilters === undefined ? true : config.showResultCount;
+    this.showAppliedFilters = config.showAppliedFilters === undefined ? true : config.showAppliedFilters;
 
     /**
      * If showResultCount and showAppliedFilters are true,

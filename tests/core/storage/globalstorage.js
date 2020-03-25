@@ -42,7 +42,7 @@ describe('storing, retrieving and deleting', () => {
   });
 
   it('returns null for unset state', () => {
-    expect(storage.getState(StorageKeys.QUERY)).toBeNull();
+    expect(storage.getState(StorageKeys.QUERY)).toBeUndefined();
   });
 
   it('correctly stores primitives', () => {
@@ -61,7 +61,7 @@ describe('storing, retrieving and deleting', () => {
   it('remove data with delete()', () => {
     storage.setAll({ key1: 'val1', key2: 'val2' });
     storage.delete('key1');
-    expect(storage.getState('key1')).toBe(null);
+    expect(storage.getState('key1')).toBeUndefined();
     expect(storage.getState('key2')).toBe('val2');
   });
 });

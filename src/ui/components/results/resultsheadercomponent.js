@@ -2,8 +2,10 @@
 
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
-import { DOM } from '../..';
-import FilterMetadata from '../../../core/models/filtermetadata';
+import DOM from '../../dom/dom';
+import FacetView from '../../../core/models/facetview';
+import CombinedFilterView from '../../../core/models/combinedfilterview';
+import Filter from '../../../core/models/filter';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -15,16 +17,10 @@ const DEFAULT_CONFIG = {
   hiddenFields: ['builtin.entityType']
 };
 
-const DEFAULT_DATA = {
-  resultsCount: 0,
-  resultsLength: 0,
-  appliedQueryFilters: []
-};
-
 export default class ResultsHeaderComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
-    this.data = Object.assign({}, DEFAULT_DATA, config.data);
+    this.data = config.data;
     this.isExpanded = false;
     /**
      * Line height of the results header.
@@ -91,23 +87,23 @@ export default class ResultsHeaderComponent extends Component {
    * @returns {Array<Object>}
    */
   getAppliedFilters () {
-    const facets = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER_VIEW) || [];
-    const facetMetadata = facets.length > 0 ? facets[0].metadata : {};
-    const filterViews = this.core.globalStorage.getAll(StorageKeys.FILTER_VIEW) || [];
-    const filterMetadata = filterViews.map(fv => fv.metadata);
-    const metadata = FilterMetadata.combine([...filterMetadata, facetMetadata]);
-    const appliedFilters = {};
+    const facetView = FacetView.fromGlobalStorage(this.core.globalStorage);
+    const filterViews = CombinedFilterView.fromGlobalStorage(this.core.globalStorage);
 
-    Object.entries(metadata).forEach(([fieldId, labelToDisplayValues]) => {
-      if (this._config.hiddenFields.includes(fieldId)) {
-        return;
+    const appliedFilters = {};
+    const basicFilterViews = [
+      ...facetView.getBasicFilterViews(), ...filterViews.getBasicFilterViews()
+    ];
+    basicFilterViews.filter(fv => {
+      const filter = fv.getFilter();
+      const fieldId = Filter.getFilterKey(filter);
+      return fieldId && !this._config.hiddenFields.includes(fieldId);
+    }).forEach(fv => {
+      const { fieldName, displayValues } = fv.getMetadata();
+      if (!appliedFilters[fieldName]) {
+        appliedFilters[fieldName] = [];
       }
-      Object.entries(labelToDisplayValues).forEach(([label, displayValues]) => {
-        if (!appliedFilters[label]) {
-          appliedFilters[label] = [];
-        }
-        appliedFilters[label].push(...displayValues);
-      });
+      appliedFilters[fieldName].push([ ...displayValues ]);
     });
 
     // Also add nlp filters from the backend
@@ -149,16 +145,16 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   setState (data) {
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
+    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const appliedFilters = this.getAppliedFilters();
-    const shouldShowFilters = appliedFilters.length > 0 && this._config.showAppliedFilters;
+    const sortOptions = this.core.globalStorage.getState(StorageKeys.SORT_BYS) || [];
+    const shouldShowFilters = (appliedFilters.length > 0 || sortOptions.length > 0) && this._config.showAppliedFilters;
     return super.setState({
       ...data,
       resultsCount: this.data.resultsCount,
       resultsCountStart: offset + 1,
       resultsCountEnd: offset + this.data.resultsLength,
-      showResultSeparator: this._config.showResultCount && shouldShowFilters,
-      sortOptions: this.core.globalStorage.getState(StorageKeys.SORT_BYS) || [],
+      sortOptions,
       shouldShowFilters,
       appliedFilters
     });

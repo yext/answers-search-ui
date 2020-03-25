@@ -1,26 +1,39 @@
 /** @module FacetView */
 
 import Facet from './facet';
-import FilterMetadata from './filtermetadata';
+import StorageKeys from '../storage/storagekeys';
 
 /**
  * Contains a {@link Facet} and associated metadata.
  */
 export default class FacetView {
-  constructor (facet = {}, metadata = {}) {
+  constructor (filterViews = [], availableFieldIds = []) {
     /**
-     * The facet to send to the backend.
-     * @type {Facet}
+     * A list of all the filter views in this facet.
      */
-    this.facet = new Facet(facet);
+    this._filterViews = filterViews;
 
     /**
-     * Metadata for the facet, and is an object of
-     * field display name to array of field values.
+     * List of available field ids used in this facet.
      * @type {FilterMetadata}
      */
-    this.metadata = new FilterMetadata(metadata);
+    this._availableFieldIds = availableFieldIds;
     Object.freeze(this);
+  }
+
+  /**
+   * @returns {Facet}
+   */
+  getFacet () {
+    const filters = this.getBasicFilterViews().map(fv => fv.getFilter());
+    return Facet.fromFilters(this._availableFieldIds, filters);
+  }
+
+  /**
+   * @returns {Array<BasicFilterView>}
+   */
+  getBasicFilterViews () {
+    return this._filterViews.map(fv => fv.getBasicFilterViews()).flat();
   }
 
   /**
@@ -30,8 +43,16 @@ export default class FacetView {
    * @returns {Facet}
    */
   static fromFilterViews (availableFieldIds, ...filterViews) {
-    const facet = Facet.fromFilters(availableFieldIds, ...filterViews.map(fv => fv.filter));
-    const metadata = FilterMetadata.combine(filterViews.map(fv => fv.metadata));
-    return new FacetView(facet, metadata);
+    return new FacetView(filterViews, availableFieldIds);
+  }
+
+  static fromGlobalStorage (globalStorage) {
+    const facets = globalStorage.getAll(StorageKeys.FACET_VIEW) || [];
+    const facet = facets.length > 0 ? facets[0] : FacetView.empty();
+    return facet;
+  }
+
+  static empty () {
+    return new FacetView();
   }
 }

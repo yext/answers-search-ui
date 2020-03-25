@@ -1,49 +1,18 @@
-/** @module FilterView */
-
-import Filter from './filter';
-import FilterMetadata from './filtermetadata';
-
 /**
- * Contains a {@link Filter} and associated metadata.
+ * FilterView is an interface for storing and handling filter data and metadata.
+ *
+ * @interface
  */
 export default class FilterView {
-  constructor (filter = {}, metadata = {}) {
-    /**
-     * The exactly formatted filter to send to the backend.
-     * @type {Filter}
-     */
-    this.filter = new Filter(filter);
-
-    /**
-     * Metadata for the filter, and is an object of
-     * field display name to array of field values.
-     * @type {FilterMetadata}
-     */
-    this.metadata = new FilterMetadata(metadata);
-    Object.freeze(this);
-  }
+  /**
+   * Returns the filter data, formatted to send in a query.
+   * @returns {Filter} Filter to send in query.
+   */
+  getFilter () {}
 
   /**
-   * Wrap filterView data in the FilterView class
-   * @param {Object} filterView
+   * Returns a list of all of the {@link BasicFilterView} in this FilterView.
+   * @returns {List<FilterView>} The backend response
    */
-  static from (filterView) {
-    return new FilterView(filterView.filter, filterView.metadata);
-  }
-
-  /**
-   * Combines multiple filter views if more than one is provided.
-   * @param  {...FilterView} filterViews
-   */
-  static combineFilterViews (...filterViews) {
-    if (filterViews.length === 0) {
-      return {};
-    } else if (filterViews.length === 1) {
-      return filterViews[0];
-    } else {
-      const metadata = FilterMetadata.combine(filterViews.map(fv => fv.metadata));
-      const filters = filterViews.map(fv => fv.filter);
-      return new FilterView(Filter.and(...filters), metadata);
-    }
-  }
+  getBasicFilterViews () {}
 }

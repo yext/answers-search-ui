@@ -1,7 +1,7 @@
 /** @module RangeFilterComponent */
 
 import Component from '../component';
-import FilterView from '../../../core/models/filterview';
+import BasicFilterView from '../../../core/models/basicfilterview';
 import Filter from '../../../core/models/filter';
 import FilterMetadata from '../../../core/models/filtermetadata';
 import DOM from '../../dom/dom';
@@ -35,24 +35,40 @@ export default class RangeFilterComponent extends Component {
     if (typeof minVal === 'string') {
       try {
         minVal = Number.parseInt(minVal);
-      } catch (e) {}
+      } catch (e) {
+        minVal = null;
+        console.error(e);
+      }
     }
     let maxVal = this.core.globalStorage.getState(`${this.name}.max`);
-    if (typeof minVal === 'string') {
+    if (typeof maxVal === 'string') {
       try {
         maxVal = Number.parseInt(maxVal);
-      } catch (e) {}
+      } catch (e) {
+        maxVal = null;
+        console.error(e);
+      }
     }
 
     /**
-     * The current range represented
+     * The current range represented.
+     * A null value means the the value should be unset.
      * @type {object}
      * @private
      */
-    this._range = {
-      min: minVal || config.initialMin || 0,
-      max: maxVal || config.initialMax || 10
-    };
+    this._range = {};
+    for (const value of [minVal, config.initialMin, 0]) {
+      if (value || value === null) {
+        this._range.min = value;
+        break;
+      }
+    }
+    for (const value of [maxVal, config.initialMax, 10]) {
+      if (value || value === null) {
+        this._range.max = value;
+        break;
+      }
+    }
 
     /**
      * The title to display for the range control
@@ -134,19 +150,19 @@ export default class RangeFilterComponent extends Component {
     this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
 
-    this._onChange(filterView.filter, filterView.metadata);
+    this._onChange(filterView);
   }
 
   /**
    * Build the filter representation of the current state
-   * @returns {FilterView}
+   * @returns {BasicFilterView}
    */
   _buildFilterView () {
-    const metadata = FilterMetadata.from({
-      fieldId: this._field,
-      fieldName: this._title,
-      displayValues: `${this._range.min} - ${this._range.max}`
+    const { min, max } = this._range;
+    const metadata = FilterMetadata.range(min, max, true, {
+      fieldName: this._title
     });
-    return new FilterView(Filter.inclusiveRange(this._field, this._range.min, this._range.max), metadata);
+    const filter = Filter.range(this._field, min, max, true);
+    return new BasicFilterView(filter, metadata);
   }
 }

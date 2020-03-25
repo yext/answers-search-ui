@@ -6,7 +6,8 @@ import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
-import FilterView from './models/filterview';
+import FacetView from './models/facetview';
+import CombinedFilterView from './models/combinedfilterview';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -109,15 +110,9 @@ export default class Core {
       this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
-    if (!verticalKey) {
-      verticalKey = this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
-    }
-
     // Get filters and facet to send in the request
-    const allFilterViews = this.globalStorage.getAll(StorageKeys.FILTER_VIEW) || [];
-    const totalFilter = FilterView.combineFilterViews(...allFilterViews).filter || {};
-    const facets = this.globalStorage.getAll(StorageKeys.FACET_FILTER_VIEW);
-    const facetFilter = facets.length > 0 ? facets[0].facet : {};
+    const filter = CombinedFilterView.fromGlobalStorage(this.globalStorage).getFilter();
+    const facetFilter = FacetView.fromGlobalStorage(this.globalStorage).getFacet();
 
     // Get all sortBys that have a type and remove unwanted attributes (label) from the sortBys in the request
     const sortBys = (this.globalStorage.getState(StorageKeys.SORT_BYS) || []).filter(sortBy => sortBy.type);
@@ -130,7 +125,7 @@ export default class Core {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         ...query,
-        filter: JSON.stringify(totalFilter),
+        filter: JSON.stringify(filter),
         facetFilter: JSON.stringify(facetFilter),
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
@@ -320,7 +315,7 @@ export default class Core {
   }
 
   setFacetView (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FACET_FILTER_VIEW}.${namespace}`, filter);
+    this.globalStorage.set(`${StorageKeys.FACET_VIEW}.${namespace}`, filter);
   }
 
   enableDynamicFilters () {

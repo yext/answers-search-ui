@@ -1,5 +1,7 @@
 /** @module Filter */
 
+import FilterCombinators from './filtercombinators';
+
 /**
  * Represents an api filter and provides static methods for easily constructing Filters.
  * See https://developer.yext.com/docs/api-reference/#operation/listEntities for structure details
@@ -37,7 +39,7 @@ export default class Filter {
    */
   static or (...filters) {
     return new Filter({
-      '$or': filters
+      [FilterCombinators.OR]: filters
     });
   }
 
@@ -48,31 +50,8 @@ export default class Filter {
    */
   static and (...filters) {
     return new Filter({
-      '$and': filters
+      [FilterCombinators.AND]: filters
     });
-  }
-
-  /**
-   * OR filters with the same keys, then AND the resulting groups
-   * @param  {...Filter} filters The filters to group
-   * @returns {Filter}
-   */
-  static group (...filters) {
-    const groups = {};
-    for (const filter of filters) {
-      const key = Filter.getFilterKey(filter);
-      if (!groups[key]) {
-        groups[key] = [];
-      }
-      groups[key].push(filter);
-    }
-
-    const groupFilters = [];
-    for (const field of Object.keys(groups)) {
-      groupFilters.push(groups[field].length > 1 ? Filter.or(...groups[field]) : groups[field][0]);
-    }
-
-    return groupFilters.length > 1 ? Filter.and(...groupFilters) : groupFilters[0];
   }
 
   /**
@@ -155,6 +134,40 @@ export default class Filter {
         '$lt': max
       }
     });
+  }
+
+  /**
+   * Helper method for creating a range filter
+   * @param {string} field field id of the filter
+   * @param {*} min minimum value, can be falsy
+   * @param {*} max maximum value, can be falsy
+   * @param {boolean} isExclusive whether this is an inclusive or exclusive range
+   * @returns {Filter}
+   */
+  static range (field, min, max, isExclusive) {
+    if (!min && !max) {
+      return null;
+    } else if (min && !max) {
+      return isExclusive
+        ? Filter.greaterThan(field, min)
+        : Filter.greaterThanEqual(field, min);
+    } else if (max && !min) {
+      return isExclusive
+        ? Filter.lessThan(field, max)
+        : Filter.lessThanEqual(field, max);
+    } else if (max === min) {
+      return Filter.equal(field, min);
+    }
+    return isExclusive
+      ? Filter.exclusiveRange(field, min, max)
+      : Filter.inclusiveRange(field, min, max);
+  }
+
+  /**
+   * Creates an empty filter.
+   */
+  static empty () {
+    return new Filter();
   }
 
   /**

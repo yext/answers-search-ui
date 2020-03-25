@@ -1,7 +1,7 @@
 /** @module DateFilterComponent */
 
 import Component from '../component';
-import FilterView from '../../../core/models/filterview';
+import BasicFilterView from '../../../core/models/basicfilterview';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import FilterMetadata from '../../../core/models/filtermetadata';
@@ -70,17 +70,33 @@ export default class DateRangeFilterComponent extends Component {
 
     const today = new Date();
     const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
-    const minDate = this.core.globalStorage.getState(`${this.name}.min`);
-    const maxDate = this.core.globalStorage.getState(`${this.name}.max`);
+    let minDate = this.core.globalStorage.getState(`${this.name}.min`);
+    if (minDate === 'null') {
+      minDate = null;
+    }
+    let maxDate = this.core.globalStorage.getState(`${this.name}.max`);
+    if (maxDate === 'null') {
+      maxDate = null;
+    }
 
     /**
-     * The current date range
+     * The current date range.
+     * A null value means the value should be unset, rather than defaulting.
      * @private
      */
-    this._date = {
-      min: minDate || config.initialMin || todayString,
-      max: maxDate || config.initialMax || todayString
-    };
+    this._date = {};
+    for (const value of [minDate, config.initialMin, todayString]) {
+      if (value || value === null) {
+        this._date.min = value;
+        break;
+      }
+    }
+    for (const value of [maxDate, config.initialMax, todayString]) {
+      if (value || value === null) {
+        this._date.max = value;
+        break;
+      }
+    }
   }
 
   static get type () {
@@ -99,9 +115,9 @@ export default class DateRangeFilterComponent extends Component {
   }
 
   onCreate () {
-    DOM.delegate(this._container, '.js-yext-date', 'change', (event) => {
-      this._updateRange(event.target.dataset.key, event.target.value);
-    });
+    DOM.delegate(this._container, '.js-yext-date', 'change', event =>
+      this._updateRange(event.target.dataset.key, event.target.value)
+    );
 
     this.core.setFilterView(this.name, this._buildFilterView());
   }
@@ -127,13 +143,17 @@ export default class DateRangeFilterComponent extends Component {
   }
 
   /**
-   * Updates the current state of the date range
+   * Updates the current state of the date range.
    * @param {string} key The key for the date value
-   * @param {string} value The string date value
+   * @param {string} eventValue The string date value
    * @private
    */
-  _updateRange (key, value) {
-    this._date = Object.assign({}, this._date, { [key]: value });
+  _updateRange (key, eventValue) {
+    if (eventValue) {
+      this._date[key] = eventValue;
+    } else {
+      this._date[key] = null;
+    }
     this.setState();
 
     const filterView = this._buildFilterView();
@@ -151,16 +171,11 @@ export default class DateRangeFilterComponent extends Component {
    * @private
    */
   _buildFilterView () {
-    if (this._date.min === '' || this._date.max === '') {
-      return {};
-    }
-    const metadata = FilterMetadata.from({
-      fieldId: this._field,
-      fieldName: this._title,
-      displayValues: `${this._date.min} - ${this._date.max}`
+    const { min, max } = this._date;
+    const metadata = FilterMetadata.range(min, max, this._isExclusive, {
+      fieldName: this._title
     });
-    return this._isExclusive
-      ? new FilterView(Filter.exclusiveRange(this._field, this._date.min, this._date.max), metadata)
-      : new FilterView(Filter.inclusiveRange(this._field, this._date.min, this._date.max), metadata);
+    const filter = Filter.range(this._field, min, max, this._isExclusive);
+    return new BasicFilterView(filter, metadata);
   }
 }

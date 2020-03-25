@@ -497,7 +497,7 @@ ANSWERS.addComponent('VerticalResults', {
   // Possible values are 1, 2, 3 or 4. Defaults to 1
   maxNumberOfColumns: 3,
   // Whether to display the count of results at the very top of the results, default true.
-  showResultsCount: true,
+  showResultCount: true,
   // If present, show the filters that were ultimately applied to this query, default true.
   showAppliedFilters: false,
   // If showAppliedFilters is true, show the field name in the string followed by a colon. default false.
@@ -505,7 +505,7 @@ ANSWERS.addComponent('VerticalResults', {
   // If showAppliedFilters is true, this is list of filters that should not be displayed (common one is entity type).
   // Defaults to ["builtin.entityType"].
   hiddenFields: ["builtin.entityType"],
-  // If showResultsCount and showAppliedFilters are true, display this between the result count and the applied filters.
+  // If showResultCount and showAppliedFilters are true, display this between the result count and the applied filters.
   resultsCountSeparator: '|',
   // The card used to display each individual result, see Cards section for more details.
   card: {
@@ -1013,9 +1013,11 @@ ANSWERS.addComponent('RangeFilter', {
   minLabel: 'At Least',
   // The label to show next to the max value, optional
   maxLabel: 'Not More Than',
-  // The initial min value to show, defaults to 0
+  // The initial min value to show, defaults to 0.
+  // Having a value of null here will unset the min value.
   initialMin: 1,
-  // The initial max value to show, defaults to 10
+  // The initial max value to show, defaults to 10.
+  // Having a value of null here will unset the max value.
   initialMax: 5,
   // Optional, the callback function to call when changed
   onChange: function() {}
@@ -1063,7 +1065,7 @@ Displays a "Use My Location" button that filters results to a radius around the 
 ```js
 ANSWERS.addComponent('GeoLocationFilter', {
   container: '.geolocation-filter-container',
-  // Optional, the vertical key to use
+  // Required only if searchOnChange is true, the vertical key to use for the search
   verticalKey: 'verticalKey',
   // Optional, radius around the user, in miles, to find results, default 50
   radius: 50,

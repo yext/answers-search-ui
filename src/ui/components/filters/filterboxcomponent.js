@@ -5,8 +5,9 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
-import FilterView from '../../../core/models/filterview';
+import CombinedFilterView from '../../../core/models/combinedfilterview';
 import FacetView from '../../../core/models/facetview';
+import FilterCombinators from '../../../core/models/filtercombinators';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -204,10 +205,7 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
-          isDynamic: true,
-          onChange: (filter, metadata) => {
-            this.onFilterChange(i, filter, metadata);
-          }
+          onChange: filterView => this.onFilterChange(i, filterView)
         }));
       component.mount();
       this._filterComponents.push(component);
@@ -243,11 +241,10 @@ export default class FilterBoxComponent extends Component {
   /**
    * Handle changes to child filter components
    * @param {number} index The index of the changed filter
-   * @param {Filter} filter The new filter
-   * @param {FilterMetadata} metadata The new metadata
+   * @param {FilterView} filter The new {@link FilterView}
    */
-  onFilterChange (index, filter, metadata) {
-    this._filterViews[index] = new FilterView(filter, metadata);
+  onFilterChange (index, filterView) {
+    this._filterViews[index] = filterView;
     if (this.config.searchOnChange) {
       this._saveFilterViewsToStorage();
       this.search();
@@ -267,14 +264,14 @@ export default class FilterBoxComponent extends Component {
    * @private
    */
   _saveFilterViewsToStorage () {
-    const validFilters = this._filterViews.filter(fv => Filter.getFilterKey(fv.filter));
+    const validFilters = this._filterViews.filter(fv => Filter.getFilterKey(fv.getFilter()));
 
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
-      const combinedFilter = FacetView.fromFilterViews(availableFieldIds, ...validFilters);
-      this.core.setFacetView(this.name, combinedFilter);
+      const facetView = FacetView.fromFilterViews(availableFieldIds, ...validFilters);
+      this.core.setFacetView(this.name, facetView);
     } else if (validFilters.length !== 0) {
-      this.core.setFilterView(this.name, FilterView.combineFilterViews(...validFilters));
+      this.core.setFilterView(this.name, CombinedFilterView.from(validFilters, FilterCombinators.AND));
     }
   }
 
