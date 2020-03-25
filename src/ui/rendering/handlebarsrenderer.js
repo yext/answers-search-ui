@@ -142,9 +142,14 @@ export default class HandlebarsRenderer extends Renderer {
     });
 
     let self = this;
-    self.registerHelper('icon', function (name, value, options) {
+    self.registerHelper('icon', function (name, complexContentsParams, options) {
       let icon = Icons.default;
-      if (Icons[name]) {
+      if (!Icons[name]) {
+        return self.SafeString(icon);
+      }
+      if (typeof Icons[name] === 'function') {
+        icon = Icons[name](complexContentsParams);
+      } else {
         icon = Icons[name];
       }
       return self.SafeString(icon);

@@ -125,7 +125,9 @@ export default class SearchComponent extends Component {
     this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY);
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
       this.query = q;
-      this.setState();
+      if (this.queryEl) {
+        this.queryEl.value = q;
+      }
       this.debouncedSearch(q);
     });
 
@@ -204,6 +206,23 @@ export default class SearchComponent extends Component {
     if (this.autoFocus === true && !this.query && this.autocompleteOnLoad) {
       this.focusInputElement();
     }
+
+    const isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
+    if (isUsingYextAnimatedIcon) {
+      const staticIconEl = DOM.query(this._container, '.js-yxt-SearchIcon');
+      const forwardEl = DOM.query(this._container, '.js-yxt-AnimatedIcon--forward');
+      const reverseEl = DOM.query(this._container, '.js-yxt-AnimatedIcon--reverse');
+      DOM.on(this.queryEl, 'focus', () => {
+        forwardEl.style.display = 'block';
+        staticIconEl.style.display = 'none';
+        reverseEl.style.display = 'none';
+      });
+      DOM.on(this.queryEl, 'blur', () => {
+        reverseEl.style.display = 'block';
+        staticIconEl.style.display = 'none';
+        forwardEl.style.display = 'none';
+      });
+    }
   }
 
   remove () {
@@ -215,12 +234,14 @@ export default class SearchComponent extends Component {
     const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
     this._showClearButton = this._showClearButton || this.query;
     button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
+    this.queryEl = DOM.query(this._container, this._inputEl);
 
     DOM.on(button, 'click', () => {
       this.query = '';
       this._showClearButton = false;
       button.classList.add('yxt-SearchBar--hidden');
-      this.setState({});
+      this.queryEl.value = this.query;
+
       this.core.persistentStorage.set(StorageKeys.QUERY, this.query);
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
@@ -234,9 +255,10 @@ export default class SearchComponent extends Component {
       this.focusInputElement();
     });
 
-    const input = DOM.query(this._container, this._inputEl);
-    DOM.on(input, 'input', e => {
+    const inputEl = DOM.query(this._container, this._inputEl);
+    DOM.on(inputEl, 'input', e => {
       const input = e.target.value;
+      this.query = input;
       if (!this._showClearButton && input.length > 0) {
         this._showClearButton = true;
         button.classList.remove('yxt-SearchBar--hidden');
@@ -264,10 +286,8 @@ export default class SearchComponent extends Component {
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
 
-      let inputEl = form.querySelector(this._inputEl);
-
-      let query = inputEl.value;
-      let params = new SearchParams(window.location.search.substring(1));
+      const query = this.query;
+      const params = new SearchParams(window.location.search.substring(1));
       params.set('query', query);
 
       // If we have a redirectUrl, we want the form to be
@@ -277,13 +297,14 @@ export default class SearchComponent extends Component {
         return false;
       }
 
-      inputEl.blur();
+      this.queryEl.blur();
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(query);
       this.debouncedSearch(query);
+      this.focusInputElement();
       return false;
     });
   }
@@ -456,6 +477,18 @@ export default class SearchComponent extends Component {
   }
 
   setState (data) {
+    const forwardIconOpts = {
+      iconName: 'yext_animated_forward',
+      complexContentsParams: {
+        id: this.name
+      }
+    };
+    const reverseIconOpts = {
+      iconName: 'yext_animated_reverse',
+      complexContentsParams: {
+        id: this.name
+      }
+    };
     return super.setState(Object.assign({
       title: this.title,
       labelText: this.labelText,
@@ -464,7 +497,10 @@ export default class SearchComponent extends Component {
       clearText: this.clearText,
       showClearButton: this._showClearButton,
       query: this.query || '',
-      eventOptions: this.eventOptions()
+      eventOptions: this.eventOptions(),
+      iconId: this.name,
+      forwardIconOpts: forwardIconOpts,
+      reverseIconOpts: reverseIconOpts
     }, data));
   }
 

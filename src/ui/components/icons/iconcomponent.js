@@ -29,6 +29,12 @@ export default class IconComponent extends Component {
      * classes should be space delimited.
      */
     this.classNames = opts.classNames || null;
+
+    /**
+     * A unique id to pass to the icon.
+     * @type {Object}
+     */
+    this.complexContentsParams = opts.complexContentsParams || {};
   }
 
   static get type () {
@@ -63,7 +69,8 @@ export default class IconComponent extends Component {
       iconUrl: this.iconUrl,
       iconName: this.iconName,
       name: this.iconName ? this.iconName : 'custom',
-      classNames: this.classNames
+      classNames: this.classNames,
+      complexContentsParams: this.complexContentsParams
     }));
   }
 }

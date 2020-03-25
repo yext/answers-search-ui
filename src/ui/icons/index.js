@@ -25,6 +25,8 @@ import lightBulbIcon from './light_bulb.js';
 import starIcon from './star.js';
 import close from './close.js';
 import elements from './elements';
+import yextAnimatedForward from './yext_animated_forward';
+import yextAnimatedReverse from './yext_animated_reverse';
 
 const iconsArray = [
   thumbIcon,
@@ -53,6 +55,8 @@ const iconsArray = [
   lightBulbIcon,
   elements,
   close,
+  yextAnimatedForward,
+  yextAnimatedReverse,
   starIcon
 ];
 

@@ -1,0 +1,80 @@
+@keyframes a0_reverse_o { 0% { opacity: 0; } 89.82% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes a1_reverse_o { 0% { opacity: 0; } 80.24% { opacity: 0; } 89.82% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes a2_reverse_o { 0% { opacity: 0; } 70.06% { opacity: 0; } 80.24% { opacity: 1; } 89.82% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes a3_reverse_o { 0% { opacity: 0; } 59.88% { opacity: 0; } 70.06% { opacity: 1; } 80.24% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes a4_reverse_o { 0% { opacity: 0; } 50.299% { opacity: 0; } 59.88% { opacity: 1; } 70.06% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes a5_reverse_o { 0% { opacity: 0; } 40.12% { opacity: 0; } 50.299% { opacity: 1; } 59.88% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes a6_reverse_o { 0% { opacity: 0; } 29.94% { opacity: 0; } 40.12% { opacity: 1; } 50.299% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes a7_reverse_o { 0% { opacity: 0; } 20.359% { opacity: 0; } 29.94% { opacity: 1; } 40.12% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes a8_reverse_o { 0% { opacity: 0; } 10.18% { opacity: 0; } 20.359% { opacity: 1; } 29.94% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes a9_reverse_o { 0% { opacity: 0; } 10.18% { opacity: 1; } 20.359% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes a10_reverse_o { 0% { opacity: 1; } 10.18% { opacity: 0; } 100% { opacity: 0; } }
+
+.yxt-AnimatedReverse
+{
+  height: 1.5 * $base-spacing;
+  width: 1.5 * $base-spacing;
+  display: block;
+}
+
+.yxt-AnimatedReverse > g
+{
+  animation-duration: 0.17s;
+  animation-fill-mode: both;
+  animation-timing-function: linear;
+
+  &:nth-of-type(1) 
+  {
+    animation-name: a0_reverse_o;
+  }
+  
+  &:nth-of-type(2) 
+  {
+    animation-name: a1_reverse_o;
+  }
+  
+  &:nth-of-type(3) 
+  {
+    animation-name: a2_reverse_o;
+  }
+  
+  &:nth-of-type(4) 
+  {
+    animation-name: a3_reverse_o;
+  }
+  
+  &:nth-of-type(5) 
+  {
+    animation-name: a4_reverse_o;
+  }
+  
+  &:nth-of-type(6) 
+  {
+    animation-name: a5_reverse_o;
+  }
+  
+  &:nth-of-type(7) 
+  {
+    animation-name: a6_reverse_o;
+  }
+  
+  &:nth-of-type(8) 
+  {
+    animation-name: a7_reverse_o;
+  }
+  
+  &:nth-of-type(9) 
+  {
+    animation-name: a8_reverse_o;
+  }
+  
+  &:nth-of-type(10) 
+  {
+    animation-name: a9_reverse_o;
+  }
+  
+  &:nth-of-type(11) 
+  {
+    animation-name: a10_reverse_o;
+  }
+}
