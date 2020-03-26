@@ -90,6 +90,53 @@ function legacyBundle () {
     .pipe(dest('dist'));
 }
 
+function legacyBundleUMD () {
+  return rollup({
+    input: './src/answers-umd.js',
+    output: {
+      format: 'umd',
+      name: NAMESPACE,
+      exports: 'default',
+      sourcemap: true
+    },
+    plugins: [
+      resolve(),
+      insert.prepend(
+        fs.readFileSync('./conf/gulp-tasks/polyfill-prefix.js').toString(),
+        {
+          include: './src/answers-umd.js'
+        }),
+      commonjs({
+        include: './node_modules/**'
+      }),
+      babel({
+        runtimeHelpers: true,
+        babelrc: false,
+        exclude: 'node_modules/**',
+        presets: [
+          [
+            '@babel/preset-env',
+            {
+              'loose': true,
+              'modules': false
+            }
+          ]
+        ],
+        plugins: [
+          '@babel/syntax-dynamic-import',
+          ['@babel/plugin-transform-runtime', {
+            'corejs': 3
+          }],
+          '@babel/plugin-transform-arrow-functions',
+          '@babel/plugin-proposal-object-rest-spread'
+        ]
+      })
+    ]
+  })
+    .pipe(source('answers-umd.js'))
+    .pipe(dest('dist'));
+}
+
 function minifyJS () {
   return src('./dist/answers-modern.js')
     .pipe(rename('answers-modern.min.js'))
@@ -100,6 +147,13 @@ function minifyJS () {
 function minifyLegacy () {
   return src('./dist/answers.js')
     .pipe(rename('answers.min.js'))
+    .pipe(uglify())
+    .pipe(dest('dist'));
+}
+
+function minifyLegacyUMD () {
+  return src('./dist/answers-umd.js')
+    .pipe(rename('answers-umd.min.js'))
     .pipe(uglify())
     .pipe(dest('dist'));
 }
@@ -128,10 +182,11 @@ function watchCSS (cb) {
 exports.default = parallel(
   series(bundle, minifyJS),
   series(legacyBundle, minifyLegacy),
+  series(legacyBundleUMD, minifyLegacyUMD),
   series(compileCSS)
 );
 
 exports.dev = parallel(
-  series(bundle, legacyBundle, watchJS),
+  series(bundle, legacyBundle, legacyBundleUMD, watchJS),
   series(compileCSS, watchCSS)
 );
