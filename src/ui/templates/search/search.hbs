@@ -29,12 +29,12 @@
         {{#if submitIcon}}
           <div class="yxt-SearchBar-buttonImage"
               data-component="IconComponent"
-              data-opts='{ "iconName": "{{submitIcon}}" }'
+              data-opts='{ "iconName": "{{submitIcon}}", "classNames": "Icon--lg" }'
           ></div>
         {{else if _config.customIconUrl}}
           <div class="yxt-SearchBar-buttonImage"
               data-component="IconComponent"
-              data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
+              data-opts='{ "iconUrl": "{{_config.customIconUrl}}", "classNames": "Icon--lg" }'
           ></div>
         {{else}}
           <div data-component="IconComponent"

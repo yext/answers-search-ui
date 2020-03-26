@@ -1,20 +1,19 @@
-@keyframes a0_forward_o { 0% { opacity: 1; } 9.29% { opacity: 1; } 18.033% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a1_forward_o { 0% { opacity: 0; } 9.29% { opacity: 0; } 18.033% { opacity: 1; } 27.322% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a2_forward_o { 0% { opacity: 0; } 18.033% { opacity: 0; } 27.322% { opacity: 1; } 36.612% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a3_forward_o { 0% { opacity: 0; } 27.322% { opacity: 0; } 36.612% { opacity: 1; } 45.355% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a4_forward_o { 0% { opacity: 0; } 36.612% { opacity: 0; } 45.355% { opacity: 1; } 54.645% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a5_forward_o { 0% { opacity: 0; } 45.355% { opacity: 0; } 54.645% { opacity: 1; } 63.934% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a6_forward_o { 0% { opacity: 0; } 54.645% { opacity: 0; } 63.934% { opacity: 1; } 72.678% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a7_forward_o { 0% { opacity: 0; } 63.934% { opacity: 0; } 72.678% { opacity: 1; } 81.967% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a8_forward_o { 0% { opacity: 0; } 72.678% { opacity: 0; } 81.967% { opacity: 1; } 91.257% { opacity: 0; } 100% { opacity: 0; } }
-@keyframes a9_forward_o { 0% { opacity: 0; } 81.967% { opacity: 0; } 91.257% { opacity: 1; } 100% { opacity: 0; } }
-@keyframes a10_forward_o { 0% { opacity: 0; } 91.257% { opacity: 0; } 100% { opacity: 1; } }
+@keyframes forward-a0_o { 0% { opacity: 1; } 9.29% { opacity: 1; } 18.033% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a1_o { 0% { opacity: 0; } 9.29% { opacity: 0; } 18.033% { opacity: 1; } 27.322% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a2_o { 0% { opacity: 0; } 18.033% { opacity: 0; } 27.322% { opacity: 1; } 36.612% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a3_o { 0% { opacity: 0; } 27.322% { opacity: 0; } 36.612% { opacity: 1; } 45.355% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a4_o { 0% { opacity: 0; } 36.612% { opacity: 0; } 45.355% { opacity: 1; } 54.645% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a5_o { 0% { opacity: 0; } 45.355% { opacity: 0; } 54.645% { opacity: 1; } 63.934% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a6_o { 0% { opacity: 0; } 54.645% { opacity: 0; } 63.934% { opacity: 1; } 72.678% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a7_o { 0% { opacity: 0; } 63.934% { opacity: 0; } 72.678% { opacity: 1; } 81.967% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a8_o { 0% { opacity: 0; } 72.678% { opacity: 0; } 81.967% { opacity: 1; } 91.257% { opacity: 0; } 100% { opacity: 0; } }
+@keyframes forward-a9_o { 0% { opacity: 0; } 81.967% { opacity: 0; } 91.257% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes forward-a10_o { 0% { opacity: 0; } 91.257% { opacity: 0; } 100% { opacity: 1; } }
 
 .yxt-AnimatedForward
 {
-  height: 1.5 * $base-spacing;
-  width: 1.5 * $base-spacing;
   color: black;
+  background: rgba(255,255,255,0.00);
 
   & > g {
     animation-play-state: paused;
@@ -35,56 +34,56 @@
 
   &:nth-of-type(1) 
   {
-    animation-name: a0_forward_o;
+    animation-name: forward-a0_o;
   }
   
   &:nth-of-type(2) 
   {
-    animation-name: a1_forward_o;
+    animation-name: forward-a1_o;
   }
   
   &:nth-of-type(3) 
   {
-    animation-name: a2_forward_o;
+    animation-name: forward-a2_o;
   }
   
   &:nth-of-type(4) 
   {
-    animation-name: a3_forward_o;
+    animation-name: forward-a3_o;
   }
   
   &:nth-of-type(5) 
   {
-    animation-name: a4_forward_o;
+    animation-name: forward-a4_o;
   }
   
   &:nth-of-type(6) 
   {
-    animation-name: a5_forward_o;
+    animation-name: forward-a5_o;
   }
   
   &:nth-of-type(7) 
   {
-    animation-name: a6_forward_o;
+    animation-name: forward-a6_o;
   }
   
   &:nth-of-type(8) 
   {
-    animation-name: a7_forward_o;
+    animation-name: forward-a7_o;
   }
   
   &:nth-of-type(9) 
   {
-    animation-name: a8_forward_o;
+    animation-name: forward-a8_o;
   }
   
   &:nth-of-type(10) 
   {
-    animation-name: a9_forward_o;
+    animation-name: forward-a9_o;
   }
   
   &:nth-of-type(11) 
   {
-    animation-name: a10_forward_o;
+    animation-name: forward-a10_o;
   }
 }

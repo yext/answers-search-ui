@@ -11,16 +11,27 @@
     fill: currentColor;
   }
 
-  &-sm svg {
+  &--sm svg,
+  &--lg img
+  {
     height: 0.5em;
     width: 0.5em;
   }
 
-  &-collapseUp svg {
+  &--lg svg,
+  &--lg img
+  {
+    height: 2em;
+    width: 2em;
+  }
+
+  &-collapseUp svg
+  {
     transform: rotate(270deg);
   }
 
-  &-collapseDown svg {
+  &-collapseDown svg
+  {
     transform: rotate(90deg);
   }
 

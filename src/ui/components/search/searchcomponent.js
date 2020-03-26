@@ -188,10 +188,15 @@ export default class SearchComponent extends Component {
   }
 
   onMount () {
+    this.queryEl = DOM.query(this._container, this._inputEl);
+    const isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
+    if (isUsingYextAnimatedIcon) {
+      this.initAnimatedIcon();
+    }
     // NOTE(amullings): If autocompleteOnLoad is false, we focus the input
     // element before loading the autocomplete component so that its focus
     // handler won't be triggered
-    if (this.autoFocus === true && !this.query && !this.autocompleteOnLoad) {
+    if (this.autoFocus && !this.query && !this.autocompleteOnLoad) {
       this.focusInputElement();
     }
 
@@ -202,28 +207,27 @@ export default class SearchComponent extends Component {
     if (this.clearButton) {
       this.initClearButton();
     }
+  }
 
-    if (this.autoFocus === true && !this.query && this.autocompleteOnLoad) {
-      this.focusInputElement();
-    }
-
-    const isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
-    if (isUsingYextAnimatedIcon) {
-      const forwardSVG = DOM.query(this._container, '.yxt-AnimatedForward');
-      const reverseSVG = DOM.query(this._container, '.yxt-AnimatedReverse');
-      DOM.on(this.queryEl, 'focus', () => {
-        forwardSVG.classList.add('yxt-AnimatedForward--active');
-        forwardSVG.classList.remove('yxt-AnimatedForward--inactive');
-        reverseSVG.classList.remove('yxt-AnimatedReverse--active');
-        reverseSVG.classList.add('yxt-AnimatedReverse--inactive');
-      });
-      DOM.on(this.queryEl, 'blur', () => {
-        forwardSVG.classList.remove('yxt-AnimatedForward--active');
-        forwardSVG.classList.add('yxt-AnimatedForward--inactive');
-        reverseSVG.classList.add('yxt-AnimatedReverse--active');
-        reverseSVG.classList.remove('yxt-AnimatedReverse--inactive');
-      });
-    }
+  initAnimatedIcon () {
+    const forwardSVG = DOM.query(this._container, '.yxt-AnimatedForward');
+    const reverseSVG = DOM.query(this._container, '.yxt-AnimatedReverse');
+    DOM.on(this.queryEl, 'focus', () => {
+      forwardSVG.classList.add('yxt-AnimatedForward--active');
+      forwardSVG.classList.remove('yxt-AnimatedForward--inactive');
+      reverseSVG.classList.remove('yxt-AnimatedReverse--active');
+      reverseSVG.classList.add('yxt-AnimatedReverse--inactive');
+    });
+    DOM.on(this._container, 'focusout', e => {
+      const relatedTarget = e.relatedTarget;
+      if (relatedTarget && this._container.contains(relatedTarget)) {
+        return;
+      }
+      forwardSVG.classList.remove('yxt-AnimatedForward--active');
+      forwardSVG.classList.add('yxt-AnimatedForward--inactive');
+      reverseSVG.classList.add('yxt-AnimatedReverse--active');
+      reverseSVG.classList.remove('yxt-AnimatedReverse--inactive');
+    });
   }
 
   remove () {
@@ -235,7 +239,6 @@ export default class SearchComponent extends Component {
     const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
     this._showClearButton = this._showClearButton || this.query;
     button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
-    this.queryEl = DOM.query(this._container, this._inputEl);
 
     DOM.on(button, 'click', () => {
       this.query = '';
@@ -480,12 +483,14 @@ export default class SearchComponent extends Component {
   setState (data) {
     const forwardIconOpts = {
       iconName: 'yext_animated_forward',
+      classNames: 'Icon--lg',
       complexContentsParams: {
         id: this.name
       }
     };
     const reverseIconOpts = {
       iconName: 'yext_animated_reverse',
+      classNames: 'Icon--lg',
       complexContentsParams: {
         id: this.name
       }
