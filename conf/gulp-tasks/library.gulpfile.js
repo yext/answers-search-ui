@@ -140,7 +140,7 @@ function compileCSS () {
 function watchJS (cb) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
-  }, parallel(bundle, legacyBundleIIFE));
+  }, parallel(bundle, legacyBundleIIFE, legacyBundleUMD));
 }
 
 function watchCSS (cb) {
