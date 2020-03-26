@@ -157,6 +157,6 @@ exports.default = parallel(
 );
 
 exports.dev = parallel(
-  series(bundle, legacyBundleIIFE, watchJS),
+  series(bundle, legacyBundleIIFE, legacyBundleUMD, watchJS),
   series(compileCSS, watchCSS)
 );
