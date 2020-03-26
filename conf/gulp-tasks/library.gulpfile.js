@@ -46,22 +46,26 @@ function bundle () {
 
 function legacyBundleIIFE () {
   return legacyBundle({
-    format: 'iife',
-    name: NAMESPACE,
-    sourcemap: true
-  });
+      format: 'iife',
+      name: NAMESPACE,
+      sourcemap: true
+    },
+    'answers.js'
+  );
 }
 
 function legacyBundleUMD () {
   return legacyBundle({
-    format: 'umd',
-    name: NAMESPACE,
-    export: 'default',
-    sourcemap: true
-  });
+      format: 'umd',
+      name: NAMESPACE,
+      export: 'default',
+      sourcemap: true
+    },
+    'answers-umd.js'
+  );
 }
 
-function legacyBundle (outputConfig) {
+function legacyBundle (outputConfig, fileName) {
   return rollup({
     input: './src/answers-umd.js',
     output: outputConfig,
@@ -99,7 +103,7 @@ function legacyBundle (outputConfig) {
       })
     ]
   })
-    .pipe(source('answers.js'))
+    .pipe(source(fileName))
     .pipe(dest('dist'));
 }
 
