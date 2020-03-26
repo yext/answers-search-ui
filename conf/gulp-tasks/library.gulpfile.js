@@ -44,7 +44,24 @@ function bundle () {
     .pipe(dest('dist'));
 }
 
-function legacyBundle (outputConfig = {format: 'iife',name: NAMESPACE,sourcemap: true}) {
+function legacyBundleIIFE () {
+  return legacyBundle({
+    format: 'iife',
+    name: NAMESPACE,
+    sourcemap: true
+  });
+}
+
+function legacyBundleUMD () {
+  return legacyBundle({
+    format: 'umd',
+    name: NAMESPACE,
+    export: 'default',
+    sourcemap: true
+  });
+}
+
+function legacyBundle (outputConfig) {
   return rollup({
     input: './src/answers-umd.js',
     output: outputConfig,
@@ -119,7 +136,7 @@ function compileCSS () {
 function watchJS (cb) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
-  }, parallel(bundle, legacyBundle));
+  }, parallel(bundle, legacyBundleIIFE));
 }
 
 function watchCSS (cb) {
@@ -130,17 +147,12 @@ function watchCSS (cb) {
 
 exports.default = parallel(
   series(bundle, minifyJS),
-  series(legacyBundle, minifyLegacy),
-  series(legacyBundle({
-    format: 'umd',
-    name: NAMESPACE,
-    exports: 'default',
-    sourcemap: true
-  }), minifyLegacyUMD),
+  series(legacyBundleIIFE, minifyLegacy),
+  series(legacyBundleUMD, minifyLegacyUMD),
   series(compileCSS)
 );
 
 exports.dev = parallel(
-  series(bundle, legacyBundle, legacyBundleUMD, watchJS),
+  series(bundle, legacyBundleIIFE, watchJS),
   series(compileCSS, watchCSS)
 );
