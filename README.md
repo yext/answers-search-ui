@@ -773,7 +773,9 @@ ANSWERS.addComponent('Pagination', {
   // Display a double arrow allowing users to jump to the first page of results
   showFirst: true,
   // Display a double arrow allowing users to jump to the last page of results
-  showLast: true
+  showLast: true,
+  // Label for a page of results
+  pageLabel: 'Page'
 });
 ```
 
@@ -1164,7 +1166,9 @@ ANSWERS.addComponent('QASubmission', {
                                                   // Confirmation displayed once a question is submitted
   buttonLabel: 'Submit',                          // Label displayed on the button to submit a question
   entityId: 123,                                  // Required. Set this to the Entity ID of the organization entity in the Knowledge Graph
-  expanded: true                                  // Set this to whether or not the form is expanded by default when a user arrives on the page
+  expanded: true,                                 // Set this to whether or not the form is expanded by default when a user arrives on the page
+  networkErrorText: 'We\'re sorry, an error occurred.'
+                                                  // Error message displayed when there is an issue with the QA Submission request
 })
 ```
 
