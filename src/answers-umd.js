@@ -76,6 +76,12 @@ class Answers {
     this.renderer = new Renderers.Handlebars();
 
     /**
+     * A reference to the formatRichText function.
+     * @type {Function}
+     */
+    this.formatRichText = formatRichText;
+
+    /**
      * A local reference to the component manager
      * @type {ComponentManager}
      */
@@ -423,5 +429,4 @@ function initScrollListener (reporter) {
 }
 
 const ANSWERS = new Answers();
-ANSWERS.formatRichText = formatRichText;
 export default ANSWERS;

@@ -55,17 +55,17 @@ describe('formatting markdown with underlines in it', () => {
 
     const html = formatRichText(richText);
     const expectedResult =
-`<p><strong>I AM BOLD</strong> now I am not <em>I AM ITALICS</em> now I am not <u>BRASAAAAAP</u></p>
-<ul>
-<li><u>I am underline list</u></li>
-</ul>
-<ol>
-<li><u>I am number list</u></li>
-<li><u><a href="http://olivershi.io">I am link to site</a></u></li>
-</ol>
-<p><u><a href="http://google.com">url link</a></u></p>
-<p>++<a href="tel:+17326183404">phone link</a>++</p>
-<p><u><a href="mailto:oshi@yext.com">email link</a></u></p>\n`;
+      '<p><strong>I AM BOLD</strong> now I am not <em>I AM ITALICS</em> now I am not <u>BRASAAAAAP</u></p>\n' +
+      '<ul>\n' +
+      '<li><u>I am underline list</u></li>\n' +
+      '</ul>\n' +
+      '<ol>\n' +
+      '<li><u>I am number list</u></li>\n' +
+      '<li><u><a href="http://olivershi.io">I am link to site</a></u></li>\n' +
+      '</ol>\n' +
+      '<p><u><a href="http://google.com">url link</a></u></p>\n' +
+      '<p><u><a href="tel:+17326183404">phone link</a></u></p>\n' +
+      '<p><u><a href="mailto:oshi@yext.com">email link</a></u></p>\n';
     expect(html).toEqual(expectedResult);
   });
 });
