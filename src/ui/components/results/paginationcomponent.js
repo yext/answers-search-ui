@@ -46,6 +46,13 @@ export default class PaginationComponent extends Component {
       verticalKey: this._verticalKey
     };
 
+    /**
+     * Label for a page of results.
+     * @type {string}
+     * @private
+     */
+    this._pageLabel = config.pageLabel || 'Page';
+
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
     this.core.globalStorage.on('update', StorageKeys.SEARCH_OFFSET, offset => {
@@ -130,6 +137,7 @@ export default class PaginationComponent extends Component {
       firstPageButtonEnabled: this._firstPageButtonEnabled,
       lastPageButtonEnabled: this._lastPageButtonEnabled,
       pageNumber: pageNumber + 1,
+      pageLabel: this._pageLabel,
       showFirstPageButton: pageNumber > 1,
       showPreviousPageButton: pageNumber > 0,
       showNextPageButton: isMoreResults,

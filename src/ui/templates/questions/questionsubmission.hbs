@@ -36,7 +36,7 @@
     {{#if questionSubmitted}}
       <div id="yxt-QuestionSubmission-form-{{name}}" class="yxt-QuestionSubmission-form">
         <div class="yxt-QuestionSubmission-formRow">
-          {{_config.questionSubmissionConfirmationText}}
+          {{{_config.questionSubmissionConfirmationText}}}
         </div>
       </div>
     {{else}}
@@ -44,15 +44,15 @@
         {{#if errors.network}}
           <div class="yxt-QuestionSubmission-formRow">
             <div class="yxt-QuestionSubmission-formError" role="alert">
-              {{errors.network}}
+              {{_config.networkErrorText}}
             </div>
           </div>
         {{else}}
           <div class="yxt-QuestionSubmission-formRow">
-            {{_config.description}}
+            {{{_config.description}}}
           </div>
 
-          <div class="yxt-QuestionSubmission-formRow">
+          <div class="yxt-QuestionSubmission-formRow yxt-QuestionSubmission-formFieldWrapper">
             <div class="yxt-QuestionSubmission-formField">
               <label>
                 <span class="yxt-QuestionSubmission-formLabel">
@@ -66,7 +66,7 @@
             </div>
           </div>
 
-          <div class="yxt-QuestionSubmission-formRow">
+          <div class="yxt-QuestionSubmission-formRow yxt-QuestionSubmission-formFieldWrapper">
             <div class="yxt-QuestionSubmission-formField">
               <label>
                 <span class="yxt-QuestionSubmission-formLabel">
@@ -108,7 +108,7 @@
                 >
                 <span>
                   <label class="yxt-QuestionSubmission-privacyPolicyText" for="yxt-QuestionSubmission-ackCheckboxInput-{{name}}">
-                    {{_config.privacyPolicyText}}
+                    {{{_config.privacyPolicyText}}}
                     {{#if _config.privacyPolicyUrl}}
                       <a class="yxt-QuestionSubmission-privacyPolicyUrl" href="{{_config.privacyPolicyUrl}}" target="_blank">
                         {{_config.privacyPolicyUrlLabel}}

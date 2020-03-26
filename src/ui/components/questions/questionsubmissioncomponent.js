@@ -123,6 +123,13 @@ const DEFAULT_CONFIG = {
   'emailFormatErrorText': '* Please enter a valid email address.',
 
   /**
+   * The default network error text, shown when there is an issue with the QA Submission
+   * request.
+   * @type {string}
+   */
+  'networkErrorText': 'We\'re sorry, an error occurred.',
+
+  /**
    * Whether or not this component is expanded by default.
    * @type {boolean}
    */

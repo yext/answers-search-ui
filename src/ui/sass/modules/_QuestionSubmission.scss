@@ -145,14 +145,19 @@
 
   &-formRow
   {
-    display: flex;
-    flex-direction: row;
     margin: $base-spacing;
 
     & + &
     {
       margin-top: 0;
     }
+
+  }
+
+  &-formFieldWrapper
+  {
+    display: flex;
+    flex-direction: row;
 
     @media (max-width: $breakpoint-mobile-sm-max)
     {
