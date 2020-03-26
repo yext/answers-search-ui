@@ -46,22 +46,22 @@ function bundle () {
 
 function legacyBundleIIFE () {
   return legacyBundle({
-      format: 'iife',
-      name: NAMESPACE,
-      sourcemap: true
-    },
-    'answers.js'
+    format: 'iife',
+    name: NAMESPACE,
+    sourcemap: true
+  },
+  'answers.js'
   );
 }
 
 function legacyBundleUMD () {
   return legacyBundle({
-      format: 'umd',
-      name: NAMESPACE,
-      export: 'default',
-      sourcemap: true
-    },
-    'answers-umd.js'
+    format: 'umd',
+    name: NAMESPACE,
+    export: 'default',
+    sourcemap: true
+  },
+  'answers-umd.js'
   );
 }
 
