@@ -14,10 +14,15 @@
 {
   height: 1.5 * $base-spacing;
   width: 1.5 * $base-spacing;
-  display: block;
+  color: black;
 }
 
-.yxt-AnimatedReverse > g
+.yxt-AnimatedReverse--inactive
+{
+  display: none;
+}
+
+.yxt-AnimatedReverse--active > g
 {
   animation-duration: 0.17s;
   animation-fill-mode: both;

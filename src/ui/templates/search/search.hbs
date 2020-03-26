@@ -37,16 +37,10 @@
               data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
           ></div>
         {{else}}
-          <div class="yxt-SearchBar-buttonImage js-yxt-SearchIcon"
-            data-component="IconComponent"
-            data-opts='{ "iconName": "yext" }'>
-          </div>
-          <div class="yxt-SearchBar-buttonImageAnimated js-yxt-AnimatedIcon--forward"
-            data-component="IconComponent"
+          <div data-component="IconComponent"
             data-opts="{{json forwardIconOpts}}">
           </div>
-          <div class="yxt-SearchBar-buttonImageAnimated js-yxt-AnimatedIcon--reverse"
-            data-component="IconComponent"
+          <div data-component="IconComponent"
             data-opts="{{json reverseIconOpts}}">
           </div>
         {{/if}}

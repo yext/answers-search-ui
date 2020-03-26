@@ -209,18 +209,19 @@ export default class SearchComponent extends Component {
 
     const isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
     if (isUsingYextAnimatedIcon) {
-      const staticIconEl = DOM.query(this._container, '.js-yxt-SearchIcon');
-      const forwardEl = DOM.query(this._container, '.js-yxt-AnimatedIcon--forward');
-      const reverseEl = DOM.query(this._container, '.js-yxt-AnimatedIcon--reverse');
+      const forwardSVG = DOM.query(this._container, '.yxt-AnimatedForward');
+      const reverseSVG = DOM.query(this._container, '.yxt-AnimatedReverse');
       DOM.on(this.queryEl, 'focus', () => {
-        forwardEl.style.display = 'block';
-        staticIconEl.style.display = 'none';
-        reverseEl.style.display = 'none';
+        forwardSVG.classList.add('yxt-AnimatedForward--active');
+        forwardSVG.classList.remove('yxt-AnimatedForward--inactive');
+        reverseSVG.classList.remove('yxt-AnimatedReverse--active');
+        reverseSVG.classList.add('yxt-AnimatedReverse--inactive');
       });
       DOM.on(this.queryEl, 'blur', () => {
-        reverseEl.style.display = 'block';
-        staticIconEl.style.display = 'none';
-        forwardEl.style.display = 'none';
+        forwardSVG.classList.remove('yxt-AnimatedForward--active');
+        forwardSVG.classList.add('yxt-AnimatedForward--inactive');
+        reverseSVG.classList.add('yxt-AnimatedReverse--active');
+        reverseSVG.classList.remove('yxt-AnimatedReverse--inactive');
       });
     }
   }

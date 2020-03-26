@@ -14,14 +14,24 @@
 {
   height: 1.5 * $base-spacing;
   width: 1.5 * $base-spacing;
-  display: block;
+  color: black;
+
+  & > g {
+    animation-play-state: paused;
+  }
 }
 
-.yxt-AnimatedForward > g
+.yxt-AnimatedForward--inactive
+{
+  display: none;
+}
+
+.yxt-AnimatedForward--active > g
 {
   animation-duration: 0.18s;
   animation-fill-mode: both;
   animation-timing-function: linear;
+  animation-play-state: running;
 
   &:nth-of-type(1) 
   {

@@ -2,7 +2,7 @@ import SVGIcon from './icon.js';
 export default new SVGIcon({
   name: 'yext_animated_reverse',
   viewBox: '0 0 72 72',
-  svgClass: 'yxt-AnimatedReverse',
+  svgClass: 'yxt-AnimatedReverse yxt-AnimatedReverse--inactive',
   complexContents: (params = {}) => {
     const id = params.id || 'yxt';
     return `<defs>

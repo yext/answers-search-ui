@@ -27,6 +27,8 @@ import close from './close.js';
 import elements from './elements';
 import yextAnimatedForward from './yext_animated_forward';
 import yextAnimatedReverse from './yext_animated_reverse';
+import yexttest from './yexttest';
+import yexttest2 from './yexttest2';
 
 const iconsArray = [
   thumbIcon,
@@ -57,7 +59,9 @@ const iconsArray = [
   close,
   yextAnimatedForward,
   yextAnimatedReverse,
-  starIcon
+  starIcon,
+  yexttest,
+  yexttest2
 ];
 
 const Icons = {};
