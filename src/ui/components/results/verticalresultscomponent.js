@@ -161,7 +161,8 @@ export default class VerticalResultsComponent extends Component {
       showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
       placeholders: new Array(this._config.maxNumberOfColumns + 1),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
-      showResultsHeader: showResultsHeader
+      showResultsHeader: showResultsHeader,
+      useLegacyNoResults: this._config.isUniversal || !this._config.noResults
     }), val);
   }
 
