@@ -1,7 +1,7 @@
 /** @module */
 
 import Core from './core/core';
-import formatRichText from './core/markdown/richtext';
+import RichText from './core/utils/richtext';
 
 import {
   DefaultTemplatesLoader,
@@ -79,7 +79,7 @@ class Answers {
      * A reference to the formatRichText function.
      * @type {Function}
      */
-    this.formatRichText = formatRichText;
+    this.formatRichText = RichText.formatRichText;
 
     /**
      * A local reference to the component manager

@@ -1,4 +1,6 @@
-import formatRichText from '../../../src/core/markdown/richtext';
+import RichText from '../../../src/core/utils/richtext';
+
+const formatRichText = RichText.formatRichText;
 
 describe('formatting markdown with underlines in it', () => {
   it('works for the trival case', () => {
