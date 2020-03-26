@@ -1,12 +1,5 @@
 {{#if isSearchComplete}}
-  {{#if showNoResults}}
-    {{#if _config.isUniversal}}
-      {{> results/noresults}}
-    {{else}}
-      <div class="yxt-Results-alternativeVerticals"
-           data-component="AlternativeVerticals"></div>
-    {{/if}}
-  {{/if}}
+  {{> noResultsRouter}}
   {{#if resultsPresent}}
     <section class="yxt-Results yxt-Results--{{_config.modifier}}">
       {{#if _config.isUniversal}}
@@ -36,3 +29,16 @@
     </section>
   {{/if}}
 {{/if}}
+
+{{#*inline "noResultsRouter"}}
+  {{#if showNoResults}}
+    {{#if _config.isUniversal}}
+      {{> results/noresults}}
+    {{else if _config.noResults}}
+      <div class="yxt-Results-alternativeVerticals"
+           data-component="AlternativeVerticals"></div>
+    {{else}}
+      {{> results/noresults}}
+    {{/if}}
+  {{/if}}
+{{/inline}}
