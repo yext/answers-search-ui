@@ -16,9 +16,15 @@ const EventTypes = {
   THUMBS_DOWN: 'THUMBS_DOWN'
 };
 
+const DEFAULT_CONFIG = {
+  positiveFeedbackSrText: 'This answered my question',
+  negativeFeedbackSrText: 'This did not answer my question',
+  footerTextOnSubmission: 'Thank you for your feedback!'
+};
+
 export default class DirectAnswerComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
+    super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     /**
      * Recieve updates from storage based on this index

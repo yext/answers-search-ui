@@ -377,7 +377,10 @@ ANSWERS.addComponent('DirectAnswer', {
   formEl: '.js-directAnswer-feedback-form',         // optional, the form used for submitting the feedback
   thumbsUpSelector: '.js-directAnswer-thumbUp',      // optional, the selector to bind ui interaction to for reporting
   thumbsDownSelector: '.js-directAnswer-thumbDown', // optional, the selector to bind ui interaction to for reporting
-  viewDetailsText: 'View Details'                   // optional, the display text for the View Details click to action link
+  viewDetailsText: 'View Details',                  // optional, the display text for the View Details click to action link
+  positiveFeedbackSrText: 'This answered my question', //optional, the screen reader text for positive feedback on the answer
+  negativeFeedbackSrText: 'This did not answer my question', //optional, the screen reader text for negative feedback on the answer
+  footerTextOnSubmission: 'Thank you for your feedback!' //optional, the footer text to display on submission of feedback
 })
 ```
 
@@ -1021,8 +1024,12 @@ ANSWERS.addComponent('RangeFilter', {
   title: 'Number of Outdoor Pools',
   // The label to show next to the min value, optional
   minLabel: 'At Least',
+  // The placeholder text for the min value, optional
+  minPlaceholderText: 'Min',
   // The label to show next to the max value, optional
   maxLabel: 'Not More Than',
+  // The placeholder text for the max value, optional
+  maxPlaceholderText: 'Max',
   // The initial min value to show, defaults to 0
   initialMin: 1,
   // The initial max value to show, defaults to 10
@@ -1091,6 +1098,8 @@ ANSWERS.addComponent('GeoLocationFilter', {
   searchOnChange: true,
   // Optional, the icon url to show in the geo button
   geoButtonIcon: 'path/to/url',
+  // Optional, the alt text to use with the geo button's icon
+  geoButtonIconAltText: 'Use My Location',
   // Optional, the text to show in the geo button
   geoButtonText: 'Use my location',
   // Optional, Search parameters for the geolocation autocomplete
@@ -1182,7 +1191,8 @@ The spell check component shows spell check suggestions/autocorrect.
 
 ```js
 ANSWERS.addComponent('SpellCheck', {
-  container: '.spell-check-container'
+  container: '.spell-check-container',
+  suggestionHelpText: 'Did you mean:'   // Optional, the help text to display when suggesting a query
 })
 ```
 
@@ -1198,7 +1208,10 @@ The location bias component shows location that used for location bias and allow
 ANSWERS.addComponent('LocationBias', {
   container: '.location-bias-container',
   verticalKey: 'verticalKey',                             // Optional, the vertical key for the search, default null
-  updateLocationEl: '.js-locationBias-update-location'    // Optional, the element used for updating location
+  updateLocationEl: '.js-locationBias-update-location',   // Optional, the element used for updating location
+  ipAccuracyHelpText: 'based on your internet address',   // Optional, help text to inform someone their IP was used for location
+  deviceAccuracyHelpText: 'based on your device',         // Optional, help text to inform someone their device was used for location
+  updateLocationButtonText: 'Update your location'        // Optional, text used for the button to update location
 })
 ```
 

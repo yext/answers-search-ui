@@ -3,6 +3,12 @@ import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 
+const DEFAULT_CONFIG = {
+  ipAccuracyHelpText: 'based on your internet address',
+  deviceAccuracyHelpText: 'based on your device',
+  updateLocationButtonText: 'Update your location'
+};
+
 /**
  * LocationBiasComponent will show the user where is used for location bias and allow user to
  * improve accuracy with HTML5 geolocation.
@@ -11,7 +17,7 @@ import DOM from '../../dom/dom';
  */
 export default class LocationBiasComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
+    super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     /**
      * Recieve updates from storage based on this index
@@ -95,11 +101,12 @@ export default class LocationBiasComponent extends Component {
   }
 
   _getAccuracyHelpText (accuracy) {
+    accuracy = 'DEVICE';
     switch (accuracy) {
       case 'IP':
-        return 'based on your internet address';
+        return this._config.ipAccuracyHelpText;
       case 'DEVICE':
-        return 'based on your device';
+        return this._config.deviceAccuracyHelpText;
       default:
         return '';
     }

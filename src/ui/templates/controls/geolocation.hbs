@@ -9,7 +9,7 @@
         >
         <button type="button" class="js-yxt-GeoLocationFilter-button yxt-GeoLocationFilter-button" {{#if geoError}}disabled{{/if}}>
           {{#if geoButtonIcon}}
-            <img src="{{geoButtonIcon}}" class="yxt-GeoLocationFilter-buttonImage" alt="Use My Location">
+            <img src="{{geoButtonIcon}}" class="yxt-GeoLocationFilter-buttonImage" alt="{{_config.geoButtonIconAltText}}">
           {{/if}}
           <span class="yxt-GeoLocationFilter-buttonText {{#if geoButtonIcon}}sr-only{{/if}}">
             {{geoButtonText}}

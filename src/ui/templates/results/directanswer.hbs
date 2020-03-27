@@ -40,7 +40,7 @@
     <div class="yxt-DirectAnswer-footer">
       {{#if feedbackSubmitted}}
       <div class="yxt-DirectAnswer-footerText">
-          Thank you for your feedback!
+          {{_config.footerTextOnSubmission}}
       </div>
       {{else}}
         <div class="yxt-DirectAnswer-footerText">
@@ -58,7 +58,7 @@
                    value="true"
                    class="yxt-DirectAnswer-feedback yxt-DirectAnswer-thumbUpButton js-directAnswer-thumbUp">
             <span class="sr-only">
-              This answered my question
+              {{_config.positiveFeedbackSrText}}
             </span>
           </label>
           <label class="yxt-DirectAnswer-thumb">
@@ -72,7 +72,7 @@
                    value="false"
                    class="yxt-DirectAnswer-feedback yxt-DirectAnswer-thumbDownButton js-directAnswer-thumbDown">
             <span class="sr-only">
-              This did not answer my question
+              {{_config.negativeFeedbackSrText}}
             </span>
           </label>
           <button type="submit" class="sr-only sr-only-focusable">Send feedback</button>
