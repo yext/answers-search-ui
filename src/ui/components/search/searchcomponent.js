@@ -6,6 +6,11 @@ import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 
+const IconState = {
+  'FORWARD': 0,
+  'REVERSE': 1
+};
+
 /**
  * SearchComponent exposes an interface in order to create
  * a UI Search experience for vertical and universal search.
@@ -208,15 +213,31 @@ export default class SearchComponent extends Component {
     }
   }
 
-  initAnimatedIcon () {
-    const forwardSVG = DOM.query(this._container, '.yxt-AnimatedForward');
-    const reverseSVG = DOM.query(this._container, '.yxt-AnimatedReverse');
-    DOM.on(this.queryEl, 'focus', () => {
+  animateIcon (forwardSVG, reverseSVG) {
+    if (this.iconState === IconState.FORWARD) {
       forwardSVG.classList.add('yxt-AnimatedForward--active');
       forwardSVG.classList.remove('yxt-AnimatedForward--inactive');
       reverseSVG.classList.remove('yxt-AnimatedReverse--active');
       reverseSVG.classList.add('yxt-AnimatedReverse--inactive');
-    });
+    } else if (this.iconState === IconState.REVERSE) {
+      forwardSVG.classList.remove('yxt-AnimatedForward--active');
+      forwardSVG.classList.add('yxt-AnimatedForward--inactive');
+      reverseSVG.classList.add('yxt-AnimatedReverse--active');
+      reverseSVG.classList.remove('yxt-AnimatedReverse--inactive');
+    }
+    this.isRequestingAnimationFrame = false;
+  }
+
+  requestIconAnimationFrame (forwardSVG, reverseSVG) {
+    if (!this.isRequestingAnimationFrame) {
+      this.isRequestingAnimationFrame = true;
+      window.requestAnimationFrame(() => this.animateIcon(forwardSVG, reverseSVG));
+    }
+  }
+
+  initAnimatedIcon () {
+    const forwardSVG = DOM.query(this._container, '.yxt-AnimatedForward');
+    const reverseSVG = DOM.query(this._container, '.yxt-AnimatedReverse');
     const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
     for (const selector of clickableElementSelectors) {
       const clickableEl = DOM.query(this._container, selector);
@@ -229,6 +250,10 @@ export default class SearchComponent extends Component {
         });
       }
     }
+    DOM.on(this.queryEl, 'focus', () => {
+      this.iconState = IconState.FORWARD;
+      this.requestIconAnimationFrame(forwardSVG, reverseSVG);
+    });
     DOM.on(this._container, 'focusout', e => {
       let focusStillInSearchbar = false;
       if (e.relatedTarget) {
@@ -239,10 +264,8 @@ export default class SearchComponent extends Component {
       if (this.iconIsFrozen || focusStillInSearchbar) {
         return;
       }
-      forwardSVG.classList.remove('yxt-AnimatedForward--active');
-      forwardSVG.classList.add('yxt-AnimatedForward--inactive');
-      reverseSVG.classList.add('yxt-AnimatedReverse--active');
-      reverseSVG.classList.remove('yxt-AnimatedReverse--inactive');
+      this.iconState = IconState.REVERSE;
+      this.requestIconAnimationFrame(forwardSVG, reverseSVG);
     });
   }
 
