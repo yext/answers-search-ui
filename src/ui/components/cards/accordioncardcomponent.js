@@ -31,7 +31,7 @@ class AccordionCardConfig {
      * a card or an object that is the additional config.
      */
     const dataMappings = config.dataMappings || {};
-    Object.assign(this, CardComponent.applyDataMappings(result, dataMappings));
+    Object.assign(this, CardComponent.applyDataMappings(rawResult, dataMappings));
 
     /**
      * Vertical key for the card, added to analytics events sent by this component.
@@ -112,7 +112,7 @@ export default class AccordionCardComponent extends Component {
       result: this.result,
       isExpanded: this.isExpanded,
       id: `${this.name}-${id}-${this.verticalKey}`,
-      hasCTAs: CTACollectionComponent.hasCTAs(this.result, this._config.callsToAction)
+      hasCTAs: CTACollectionComponent.hasCTAs(this.result._raw, this._config.callsToAction)
     });
   }
 

@@ -29,7 +29,7 @@ class StandardCardConfig {
      * is either a function that returns additional config for
      * a card or an object that is the additional config.
      */
-    Object.assign(this, CardComponent.applyDataMappings(result, config.dataMappings || {}));
+    Object.assign(this, CardComponent.applyDataMappings(rawResult, config.dataMappings || {}));
 
     /**
      * The result data
@@ -161,7 +161,7 @@ export default class StandardCardComponent extends Component {
       ...data,
       hideExcessDetails: this.hideExcessDetails,
       result: this.result,
-      hasCTAs: CTACollectionComponent.hasCTAs(this.result, this._config.callsToAction),
+      hasCTAs: CTACollectionComponent.hasCTAs(this.result._raw, this._config.callsToAction),
       entityId: this.result._raw.id,
       verticalKey: this.verticalKey,
       details
