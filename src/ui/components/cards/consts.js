@@ -1,9 +1,11 @@
 export const cardTemplates = {
   'Standard': 'cards/standard',
-  'Accordion': 'cards/accordion'
+  'Accordion': 'cards/accordion',
+  'Legacy': 'cards/legacy'
 };
 
 export const cardTypes = {
   'Standard': 'StandardCard',
-  'Accordion': 'AccordionCard'
+  'Accordion': 'AccordionCard',
+  'Legacy': 'LegacyCard'
 };
