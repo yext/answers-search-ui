@@ -4,6 +4,10 @@ import Component from '../component';
 import SearchParams from '../../dom/searchparams';
 import StorageKeys from '../../../core/storage/storagekeys';
 
+const DEFAULT_CONFIG = {
+  suggestionHelpText: 'Did you mean:'
+};
+
 /**
  * SpellCheckComponent will support displaying suggestion, autocorrect and combined(maybe in the future)
  * provided from spelling correction.
@@ -12,7 +16,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
  */
 export default class SpellCheckComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
+    super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     this.moduleId = StorageKeys.SPELL_CHECK;
   }
@@ -52,7 +56,7 @@ export default class SpellCheckComponent extends Component {
   _getHelpText (type) {
     switch (type) {
       case 'SUGGEST':
-        return 'Did you mean:';
+        return this._config.suggestionHelpText;
       default:
         return '';
     }
