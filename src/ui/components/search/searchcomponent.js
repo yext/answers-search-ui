@@ -220,7 +220,9 @@ export default class SearchComponent extends Component {
     });
     DOM.on(this._container, 'focusout', e => {
       const relatedTarget = e.relatedTarget;
-      if (relatedTarget && this._container.contains(relatedTarget)) {
+      const focusStillInSearchBar = relatedTarget &&
+        this._container.contains(relatedTarget);
+      if (this.iconIsFrozen || focusStillInSearchBar) {
         return;
       }
       forwardSVG.classList.remove('yxt-AnimatedForward--active');
@@ -289,6 +291,7 @@ export default class SearchComponent extends Component {
 
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
+      this.iconIsFrozen = true;
 
       const query = this.query;
       const params = new SearchParams(window.location.search.substring(1));
@@ -309,6 +312,7 @@ export default class SearchComponent extends Component {
       this.core.setQuery(query);
       this.debouncedSearch(query);
       this.focusInputElement();
+      this.iconIsFrozen = false;
       return false;
     });
   }
