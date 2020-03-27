@@ -43,6 +43,7 @@
   &-item
   {
     $item-padding: 6px;
+    margin-bottom: -2px;
 
     @include Text(
       $size: $nav-text-font-size,

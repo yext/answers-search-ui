@@ -89,7 +89,6 @@
     padding: $base-spacing/2 $base-spacing;
     background-color: $results-filters-background;
     border-bottom: $results-border;
-    margin-bottom: $base-spacing-sm;
   }
 
   &-filter
@@ -145,7 +144,6 @@
     list-style: none;
     display: flex;
     flex-flow: row wrap;
-    margin-right: -1 * $results-cards-margin;
   }
 
   &-placeholder {
