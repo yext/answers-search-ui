@@ -132,6 +132,7 @@ export default class LegacyCardComponent extends Component {
       : this._config.details;
     return super.setState({
       ...data,
+      eventOptions: this._legacyEventOptions(this.result._raw.id, this.result.link),
       hideExcessDetails: this.hideExcessDetails,
       result: this.result,
       hasCTAs: CTACollectionComponent.hasCTAs(this.result._raw, this._config.callsToAction),
@@ -139,6 +140,21 @@ export default class LegacyCardComponent extends Component {
       verticalKey: this.verticalKey,
       details
     });
+  }
+
+  _legacyEventOptions (entityId, url) {
+    const options = {
+      verticalConfigId: this.verticalKey,
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+    };
+
+    if (entityId) {
+      options.entityId = entityId;
+    } else {
+      options.url = url;
+    }
+
+    return JSON.stringify(options);
   }
 
   addChild (data, type, opts) {
