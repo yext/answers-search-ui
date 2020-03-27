@@ -1,0 +1,62 @@
+<li class="yxt-Result{{#if _config.modifier}} yxt-Result--{{_config.modifier}}{{/if}} yxt-Result-item">
+  <div class="yxt-Result-wrapper">
+  {{#if _config.showOrdinal}}
+      <div class="yxt-Result-ordinalWrapper">
+        <div class="yxt-Result-ordinal">
+        {{result.ordinal}}
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if bigDate.day}}
+      <div class="yxt-Result-dateWrapper">
+        <div class="yxt-Result-dateInnerWrapper">
+          <span class="yxt-Result-day">{{bigDate.day}}</span>
+          <span class="yxt-Result-month">{{bigDate.month}}</span>
+        </div>
+      </div>
+    {{/if}}
+
+    {{#if _config.image.url}}
+        <div class="yxt-Result-imageWrapper">
+          <img class="yxt-Result-image" src="{{_config.image.url}}" alt="{{_config.image.alternateText}}">
+        </div>
+    {{/if}}
+
+    <div class="yxt-Result-infoCtasWrapper">
+      <div class="yxt-Result-info">
+        <h3 class="yxt-Result-title">
+          {{#if _config.url}}
+            <a class="yxt-Result-titleLink"
+               href="{{_config.url}}"
+               data-eventtype="TITLE_CLICK"
+               data-eventoptions='{{eventOptions}}'
+               target="{{#if _config.target}}{{_config.target}}{{else}}_blank{{/if}}"
+            >{{{_config.title}}}</a>
+          {{else}}
+            {{{_config.title}}}
+          {{/if}}
+        </h3>
+
+        {{#if _config.subtitle}}
+          <div class="yxt-Result-subtitle">
+            {{{_config.subtitle}}}
+          </div>
+        {{/if}}
+
+
+        {{#if details}}
+          <div class="yxt-Result-details">
+            {{{details}}}
+          </div>
+        {{/if}}
+      </div>
+
+      {{#if hasCTAs}}
+        <div class="yxt-Result-ctasWrapper">
+          <div class="yxt-Result-ctas" data-component="CTACollection" data-prop="result"></div>
+        </div>
+      {{/if}}
+    </div>
+  </div>
+</li>
