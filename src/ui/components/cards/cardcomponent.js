@@ -86,6 +86,7 @@ export default class CardComponent extends Component {
       result: data
     };
     const newOpts = {
+      showOrdinal: this._config.showOrdinal,
       dataMappings: this._config.dataMappings,
       callsToAction: this._config.callsToAction,
       verticalKey: this._config.verticalKey,
