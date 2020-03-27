@@ -47,6 +47,12 @@ const DEFAULT_CONFIG = {
   geoButtonIcon: '',
 
   /**
+   * The alt text to include with the geo button icon
+   * @type {string}
+   */
+  geoButtonIconAltText: 'Use My Location',
+
+  /**
    * The text to show in the geo button
    * @type {string}
    */

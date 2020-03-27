@@ -32,7 +32,7 @@
         <a class="yxt-Results-changeFilters" href="{{verticalURL}}"
            data-eventtype="FILTERING_WITHIN_SECTION"
            data-eventoptions='{{eventOptions}}'>
-          change
+          {{#if _config.changeFiltersText}}{{_config.changeFiltersText}}{{else}}change{{/if}}
         </a>
       {{/if}}
     {{/if}}

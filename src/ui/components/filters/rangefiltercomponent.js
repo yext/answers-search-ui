@@ -4,9 +4,14 @@ import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 
+const DEFAULT_CONFIG = {
+  minPlaceholderText: 'Min',
+  maxPlaceholderText: 'Max'
+};
+
 export default class RangeFilterComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
+    super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     /**
      * The field to filter on
