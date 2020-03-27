@@ -449,7 +449,7 @@ ANSWERS.addComponent('UniversalResults', {
 
 ### Custom options for specific Vertical Results
 
-You can also provide several config options to each vertical. 
+You can also provide several config options to each vertical.
 These are the supported options:
 
 ```js
@@ -591,7 +591,7 @@ const callsToAction = [{
       // The vertical key for the CTA. If unspecified, this defaults to the vertical key this cta is a part of
       verticalKey: "people",
       // The entity id of the result this cta is a part of, defaults to the entityId field in Knowledge Graph
-      entityId: result._raw.id,
+      entityId: result.id,
       // If the CTA is inside a vertical search, defaults to the value "VERTICAL",
       // if is inside a universal search, defaults to the value "UNIVERSAL"
       searcher: "VERTICAL"
@@ -605,19 +605,19 @@ NOTE: we do not allow multiple nested functions, to avoid messy user configurati
 
 ```js
 const callsToAction = item => [{
-  label: item._raw.name,
+  label: item.name,
   url: "https://yext.com",
   analyticsEventType: "CTA_CLICK",
   target: '_blank',
   icon: "briefcase",
-  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }, {
   label: 'call now',
   url: "https://maps.google.com",
   analyticsEventType: "CTA_CLICK",
   target: '_blank',
   icon: "phone",
-  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }]
 ```
 
@@ -625,12 +625,12 @@ const callsToAction = item => [{
 
 ```js
 const callsToAction = item => [{
-  label: item => item._raw.name,
+  label: item => item.name,
   url: "https://yext.com",
   analyticsEventType: "CTA_CLICK",
   target: '_self',
   icon: "briefcase",
-  eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+  eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }]
 ```
 
@@ -642,7 +642,7 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     /* ...other card config...*/
     callsToAction: item => [{
-      label: item => item._raw.name,
+      label: item => item.name,
       url: "https://yext.com",
     }]
   }
@@ -666,10 +666,10 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     /* ...other card config...*/
     dataMappings: item => ({
-      title: item._raw.name,
-      subtitle: `Department: ${item._raw.name} `,
-      details: item._raw.description,
-      image: item._raw.headshot ? item._raw.headshot.url : '',
+      title: item.name,
+      subtitle: `Department: ${item.name} `,
+      details: item.description,
+      image: item.headshot ? item.headshot.url : '',
       url: 'https://yext.com',
       showMoreLimit: 500,
       showMoreText: "show more",
@@ -690,10 +690,10 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     /* ...other card config...*/
     dataMappings: {
-      title: item => item._raw.name,
-      subtitle: item => `Department: ${item._raw.name} `,
-      details: item => item._raw.description,
-      image: item => item._raw.headshot ? item._raw.headshot.url : '',
+      title: item => item.name,
+      subtitle: item => `Department: ${item.name} `,
+      details: item => item.description,
+      image: item => item.headshot ? item.headshot.url : '',
       url: 'https://yext.com',
       showMoreLimit: 500,
       showMoreText: "show more",
@@ -716,13 +716,13 @@ const dataMappings = item => {
     // Title for the card, defaults to the name of the entity
     title: item.title,
     // Subtitle, defaults to null
-    subtitle: `Department: ${item._raw.name} `,
+    subtitle: `Department: ${item.name} `,
     // Details, defaults to the entity's description
-    details: item._raw.description,
+    details: item.description,
     // Image to display, defaults to null
-    image: item._raw.headshot ? item._raw.headshot.url : '',
+    image: item.headshot ? item.headshot.url : '',
     // Url for the title/subtitle, defaults to the entity's website url
-    url: item.link || item._raw.website,
+    url: item.link || item.website,
     // Character limit to hide remaining details and display a show more button, defaults to 350
     showMoreLimit: 350,
     // Text for show more button, defaults to 'Show More'
@@ -750,9 +750,9 @@ const dataMappings = item => {
     // Title for the card, defaults to the name of the entity
     title: item.title,
     // Subtitle, defaults to null
-    subtitle: `Department: ${item._raw.name} `,
+    subtitle: `Department: ${item.name} `,
     // Details, defaults to the entity's description
-    details: item._raw.description,
+    details: item.description,
     // Whether the first Accordion Card shown in vertical/universal results should be open on page load, defaults to false
     expanded: false
   };

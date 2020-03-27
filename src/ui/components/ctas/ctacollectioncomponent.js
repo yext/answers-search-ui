@@ -37,7 +37,7 @@ export default class CTACollectionComponent extends Component {
      * The config for each calls to action component to render.
      * @type {Array<Object>}
      */
-    this.callsToAction = CTACollectionComponent.resolveCTAMapping(this.result, ...callsToAction);
+    this.callsToAction = CTACollectionComponent.resolveCTAMapping(this.result._raw, ...callsToAction);
 
     // Assign any extra cta config that does not come from the cta mappings.
     const _ctaModifiers = this._config._ctaModifiers || [];
