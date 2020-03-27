@@ -47,7 +47,7 @@ class StandardCardConfig {
      * Details for the card
      * @type {string}
      */
-    this.details = this.details === undefined ? '' : (this.details || result.details || rawResult.description || '');
+    this.details = this.details === null ? null : (this.details || result.details || rawResult.description || '');
 
     /**
      * Url when you click the title
