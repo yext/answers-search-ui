@@ -42,3 +42,29 @@
     object-fit: contain;
   }
 }
+
+.yxt-AnimatedForward
+{
+  color: black;
+  background: rgba(255,255,255,0.00);
+
+  & > g {
+    animation-play-state: paused;
+  }
+}
+
+.yxt-AnimatedForward--inactive
+{
+  display: none;
+}
+
+.yxt-AnimatedReverse
+{
+  color: black;
+  background: rgba(255,255,255,0.00);
+}
+
+.yxt-AnimatedReverse--inactive
+{
+  display: none;
+}

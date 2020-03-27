@@ -220,20 +220,16 @@ export default class SearchComponent extends Component {
     const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
     for (const selector of clickableElementSelectors) {
       const clickableEl = DOM.query(this._container, selector);
-      console.log(clickableEl);
       if (clickableEl) {
         DOM.on(clickableEl, 'mousedown', () => {
-          console.log('mousedown');
           this.iconIsFrozen = true;
         });
         DOM.on(clickableEl, 'mouseup', () => {
-          console.log('mouseup');
           this.iconIsFrozen = false;
         });
       }
     }
     DOM.on(this._container, 'focusout', e => {
-      console.log('focusout', e);
       let focusStillInSearchbar = false;
       if (e.relatedTarget) {
         focusStillInSearchbar = this._container.contains(e.relatedTarget);
