@@ -29,10 +29,6 @@ export default class SVGIcon {
      * actual contents used
      */
     this.contents = this.pathDefinition();
-    /**
-     * actual contents used
-     */
-    this.svgClass = config.svgClass;
   }
 
   pathDefinition () {
@@ -47,9 +43,6 @@ export default class SVGIcon {
     let contents = this.contents;
     if (typeof contents === 'function') {
       contents = contents(complexContentsParams);
-    }
-    if (this.svgClass) {
-      return `<svg class="${this.svgClass}" viewBox="${this.viewBox}" xmlns="http://www.w3.org/2000/svg">${contents}</svg>`;
     }
     return `<svg viewBox="${this.viewBox}" xmlns="http://www.w3.org/2000/svg">${contents}</svg>`;
   }

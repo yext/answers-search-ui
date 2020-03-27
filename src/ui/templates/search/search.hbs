@@ -37,10 +37,12 @@
               data-opts='{ "iconUrl": "{{_config.customIconUrl}}", "classNames": "Icon--lg" }'
           ></div>
         {{else}}
-          <div data-component="IconComponent"
+          <div class="js-yxt-AnimatedForward yxt-SearchBar-AnimatedIcon"
+            data-component="IconComponent"
             data-opts="{{json forwardIconOpts}}">
           </div>
-          <div data-component="IconComponent"
+          <div class="js-yxt-AnimatedReverse yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--inactive"
+            data-component="IconComponent"
             data-opts="{{json reverseIconOpts}}">
           </div>
         {{/if}}

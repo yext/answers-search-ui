@@ -150,6 +150,11 @@
       margin-left: $base-spacing;
     }
   }
+
+  &-AnimatedIcon--inactive svg
+  {
+    display: none;
+  }
 }
 
 .yxt-GeoLocationFilter

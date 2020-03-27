@@ -213,31 +213,27 @@ export default class SearchComponent extends Component {
     }
   }
 
-  animateIcon (forwardSVG, reverseSVG) {
+  animateIcon (forwardIcon, reverseIcon) {
     if (this.iconState === IconState.FORWARD) {
-      forwardSVG.classList.add('yxt-AnimatedForward--active');
-      forwardSVG.classList.remove('yxt-AnimatedForward--inactive');
-      reverseSVG.classList.remove('yxt-AnimatedReverse--active');
-      reverseSVG.classList.add('yxt-AnimatedReverse--inactive');
+      forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+      reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
     } else if (this.iconState === IconState.REVERSE) {
-      forwardSVG.classList.remove('yxt-AnimatedForward--active');
-      forwardSVG.classList.add('yxt-AnimatedForward--inactive');
-      reverseSVG.classList.add('yxt-AnimatedReverse--active');
-      reverseSVG.classList.remove('yxt-AnimatedReverse--inactive');
+      forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+      reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
     }
     this.isRequestingAnimationFrame = false;
   }
 
-  requestIconAnimationFrame (forwardSVG, reverseSVG) {
+  requestIconAnimationFrame (forwardIcon, reverseIcon) {
     if (!this.isRequestingAnimationFrame) {
       this.isRequestingAnimationFrame = true;
-      window.requestAnimationFrame(() => this.animateIcon(forwardSVG, reverseSVG));
+      window.requestAnimationFrame(() => this.animateIcon(forwardIcon, reverseIcon));
     }
   }
 
   initAnimatedIcon () {
-    const forwardSVG = DOM.query(this._container, '.yxt-AnimatedForward');
-    const reverseSVG = DOM.query(this._container, '.yxt-AnimatedReverse');
+    const forwardIcon = DOM.query(this._container, '.js-yxt-AnimatedForward');
+    const reverseIcon = DOM.query(this._container, '.js-yxt-AnimatedReverse');
     const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
     for (const selector of clickableElementSelectors) {
       const clickableEl = DOM.query(this._container, selector);
@@ -252,7 +248,7 @@ export default class SearchComponent extends Component {
     }
     DOM.on(this.queryEl, 'focus', () => {
       this.iconState = IconState.FORWARD;
-      this.requestIconAnimationFrame(forwardSVG, reverseSVG);
+      this.requestIconAnimationFrame(forwardIcon, reverseIcon);
     });
     DOM.on(this._container, 'focusout', e => {
       let focusStillInSearchbar = false;
@@ -265,7 +261,7 @@ export default class SearchComponent extends Component {
         return;
       }
       this.iconState = IconState.REVERSE;
-      this.requestIconAnimationFrame(forwardSVG, reverseSVG);
+      this.requestIconAnimationFrame(forwardIcon, reverseIcon);
     });
   }
 
