@@ -522,14 +522,14 @@ export default class SearchComponent extends Component {
       iconName: 'yext_animated_forward',
       classNames: 'Icon--lg',
       complexContentsParams: {
-        id: this.name
+        iconPrefix: this.name
       }
     };
     const reverseIconOpts = {
       iconName: 'yext_animated_reverse',
       classNames: 'Icon--lg',
       complexContentsParams: {
-        id: this.name
+        iconPrefix: this.name
       }
     };
     return super.setState(Object.assign({
