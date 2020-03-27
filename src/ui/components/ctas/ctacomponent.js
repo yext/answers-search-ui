@@ -69,14 +69,16 @@ export default class CTAComponent extends Component {
 
   onMount () {
     const el = DOM.query(this._container, `.js-yxt-CTA`);
-    if (el && this._config.eventOptions) {
+    if (el) {
       DOM.on(el, 'click', () => this.reportAnalyticsEvent());
     }
   }
 
   reportAnalyticsEvent () {
     const analyticsEvent = new AnalyticsEvent(this._config.analyticsEventType);
-    analyticsEvent.addOptions(this._config.eventOptions);
+    if (this._config.eventOptions) {
+      analyticsEvent.addOptions(this._config.eventOptions);
+    }
     this.analyticsReporter.report(analyticsEvent);
   }
 
