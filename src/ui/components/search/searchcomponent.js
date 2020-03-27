@@ -189,15 +189,10 @@ export default class SearchComponent extends Component {
 
   onMount () {
     this.queryEl = DOM.query(this._container, this._inputEl);
+
     const isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
     if (isUsingYextAnimatedIcon) {
       this.initAnimatedIcon();
-    }
-    // NOTE(amullings): If autocompleteOnLoad is false, we focus the input
-    // element before loading the autocomplete component so that its focus
-    // handler won't be triggered
-    if (this.autoFocus && !this.query && !this.autocompleteOnLoad) {
-      this.focusInputElement();
     }
 
     // Wire up our search handling and auto complete
@@ -206,6 +201,10 @@ export default class SearchComponent extends Component {
 
     if (this.clearButton) {
       this.initClearButton();
+    }
+
+    if (this.autoFocus && !this.query && !this.autocompleteOnLoad) {
+      this.focusInputElement();
     }
   }
 
@@ -218,11 +217,30 @@ export default class SearchComponent extends Component {
       reverseSVG.classList.remove('yxt-AnimatedReverse--active');
       reverseSVG.classList.add('yxt-AnimatedReverse--inactive');
     });
+    const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
+    for (const selector of clickableElementSelectors) {
+      const clickableEl = DOM.query(this._container, selector);
+      console.log(clickableEl);
+      if (clickableEl) {
+        DOM.on(clickableEl, 'mousedown', () => {
+          console.log('mousedown');
+          this.iconIsFrozen = true;
+        });
+        DOM.on(clickableEl, 'mouseup', () => {
+          console.log('mouseup');
+          this.iconIsFrozen = false;
+        });
+      }
+    }
     DOM.on(this._container, 'focusout', e => {
-      const relatedTarget = e.relatedTarget;
-      const focusStillInSearchBar = relatedTarget &&
-        this._container.contains(relatedTarget);
-      if (this.iconIsFrozen || focusStillInSearchBar) {
+      console.log('focusout', e);
+      let focusStillInSearchbar = false;
+      if (e.relatedTarget) {
+        focusStillInSearchbar = this._container.contains(e.relatedTarget);
+      } else if (e.explicitOriginalTarget) {
+        focusStillInSearchbar = this._container.contains(e.explicitOriginalTarget);
+      }
+      if (this.iconIsFrozen || focusStillInSearchbar) {
         return;
       }
       forwardSVG.classList.remove('yxt-AnimatedForward--active');
