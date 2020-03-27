@@ -63,7 +63,22 @@ export default class CTACollectionComponent extends Component {
    * @returns {Array<Object>}
    */
   static resolveCTAMapping (result, ...ctas) {
-    ctas.forEach(cta => {
+    let parsedCTAs = [];
+    ctas.map(ctaMapping => {
+      if (typeof ctaMapping === 'function') {
+        parsedCTAs = parsedCTAs.concat(ctaMapping(result));
+      } else if (typeof ctaMapping === 'object') {
+        const ctaObject = { ...ctaMapping };
+        for (let [ctaAttribute, attributeMapping] of Object.entries(ctaMapping)) {
+          if (typeof attributeMapping === 'function') {
+            ctaObject[ctaAttribute] = attributeMapping(result);
+          }
+        }
+        parsedCTAs.push(ctaObject);
+      }
+    });
+
+    parsedCTAs.forEach(cta => {
       if (!cta.label && !cta.url) {
         console.warn('Call to Action:', cta, 'is missing both a label and url attribute and is being automatically hidden');
       } else if (!cta.label) {
@@ -72,19 +87,8 @@ export default class CTACollectionComponent extends Component {
         console.warn('Call to Action:', cta, 'is missing a url attribute and is being automatically hidden');
       }
     });
-    return ctas.map(ctaMapping => {
-      if (typeof ctaMapping === 'function') {
-        return ctaMapping(result);
-      } else if (typeof ctaMapping === 'object') {
-        const ctaObject = { ...ctaMapping };
-        for (let [ctaAttribute, attributeMapping] of Object.entries(ctaMapping)) {
-          if (typeof attributeMapping === 'function') {
-            ctaObject[ctaAttribute] = attributeMapping(result);
-          }
-        }
-        return ctaObject;
-      }
-    }).filter(cta => cta.url && cta.url.trim() && cta.label && cta.label.trim());
+
+    return parsedCTAs.filter(cta => cta.url && cta.url.trim() && cta.label && cta.label.trim());
   }
 
   static hasCTAs (result, ctas) {
