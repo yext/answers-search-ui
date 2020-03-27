@@ -582,7 +582,7 @@ const callsToAction = [{
   //       'EMAIL',
   //       'BOOK_APPOINTMENT',
   //       'RSVP'
-  analyticsEventType: 'CTA_CLICK',
+  analytics: 'CTA_CLICK',
   // The target attribute for the CTA link, defaults to '_self'. To open in a new window use '_blank'
   target: '_blank',
   // The eventOptions needed for the event to fire. Either a valid json string, an object, or a function that
@@ -610,14 +610,14 @@ NOTE: we do not allow multiple nested functions, to avoid messy user configurati
 const callsToAction = item => [{
   label: item.name,
   url: "https://yext.com",
-  analyticsEventType: "CTA_CLICK",
+  analytics: "CTA_CLICK",
   target: '_blank',
   icon: "briefcase",
   eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
 }, {
   label: 'call now',
   url: "https://maps.google.com",
-  analyticsEventType: "CTA_CLICK",
+  analytics: "CTA_CLICK",
   target: '_blank',
   icon: "phone",
   eventOptions: `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
@@ -630,7 +630,7 @@ const callsToAction = item => [{
 const callsToAction = item => [{
   label: item => item.name,
   url: "https://yext.com",
-  analyticsEventType: "CTA_CLICK",
+  analytics: "CTA_CLICK",
   target: '_self',
   icon: "briefcase",
   eventOptions: item => `{ "verticalKey": "credit-cards", "entityId": "${item.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
