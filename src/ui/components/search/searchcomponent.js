@@ -208,7 +208,7 @@ export default class SearchComponent extends Component {
       this.initClearButton();
     }
 
-    if (this.autoFocus && !this.query && !this.autocompleteOnLoad) {
+    if (this.autoFocus) {
       this.focusInputElement();
     }
   }
