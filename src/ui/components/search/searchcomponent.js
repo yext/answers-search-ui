@@ -6,6 +6,11 @@ import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 
+const IconState = {
+  'FORWARD': 0,
+  'REVERSE': 1
+};
+
 /**
  * SearchComponent exposes an interface in order to create
  * a UI Search experience for vertical and universal search.
@@ -125,7 +130,9 @@ export default class SearchComponent extends Component {
     this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY);
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
       this.query = q;
-      this.setState();
+      if (this.queryEl) {
+        this.queryEl.value = q;
+      }
       this.debouncedSearch(q);
     });
 
@@ -186,11 +193,11 @@ export default class SearchComponent extends Component {
   }
 
   onMount () {
-    // NOTE(amullings): If autocompleteOnLoad is false, we focus the input
-    // element before loading the autocomplete component so that its focus
-    // handler won't be triggered
-    if (this.autoFocus === true && !this.query && !this.autocompleteOnLoad) {
-      this.focusInputElement();
+    this.queryEl = DOM.query(this._container, this._inputEl);
+
+    const isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
+    if (isUsingYextAnimatedIcon) {
+      this.initAnimatedIcon();
     }
 
     // Wire up our search handling and auto complete
@@ -201,9 +208,61 @@ export default class SearchComponent extends Component {
       this.initClearButton();
     }
 
-    if (this.autoFocus === true && !this.query && this.autocompleteOnLoad) {
+    if (this.autoFocus) {
       this.focusInputElement();
     }
+  }
+
+  animateIcon (forwardIcon, reverseIcon) {
+    if (this.iconState === IconState.FORWARD) {
+      forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+      reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+    } else if (this.iconState === IconState.REVERSE) {
+      forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+      reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+    }
+    this.isRequestingAnimationFrame = false;
+  }
+
+  requestIconAnimationFrame (forwardIcon, reverseIcon) {
+    if (!this.isRequestingAnimationFrame) {
+      this.isRequestingAnimationFrame = true;
+      window.requestAnimationFrame(() => this.animateIcon(forwardIcon, reverseIcon));
+    }
+  }
+
+  initAnimatedIcon () {
+    const forwardIcon = DOM.query(this._container, '.js-yxt-AnimatedForward');
+    const reverseIcon = DOM.query(this._container, '.js-yxt-AnimatedReverse');
+    const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
+    for (const selector of clickableElementSelectors) {
+      const clickableEl = DOM.query(this._container, selector);
+      if (clickableEl) {
+        DOM.on(clickableEl, 'mousedown', () => {
+          this.iconIsFrozen = true;
+        });
+        DOM.on(clickableEl, 'mouseup', () => {
+          this.iconIsFrozen = false;
+        });
+      }
+    }
+    DOM.on(this.queryEl, 'focus', () => {
+      this.iconState = IconState.FORWARD;
+      this.requestIconAnimationFrame(forwardIcon, reverseIcon);
+    });
+    DOM.on(this._container, 'focusout', e => {
+      let focusStillInSearchbar = false;
+      if (e.relatedTarget) {
+        focusStillInSearchbar = this._container.contains(e.relatedTarget);
+      } else if (e.explicitOriginalTarget) {
+        focusStillInSearchbar = this._container.contains(e.explicitOriginalTarget);
+      }
+      if (this.iconIsFrozen || focusStillInSearchbar) {
+        return;
+      }
+      this.iconState = IconState.REVERSE;
+      this.requestIconAnimationFrame(forwardIcon, reverseIcon);
+    });
   }
 
   remove () {
@@ -220,7 +279,8 @@ export default class SearchComponent extends Component {
       this.query = '';
       this._showClearButton = false;
       button.classList.add('yxt-SearchBar--hidden');
-      this.setState({});
+      this.queryEl.value = this.query;
+
       this.core.persistentStorage.set(StorageKeys.QUERY, this.query);
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
@@ -234,9 +294,10 @@ export default class SearchComponent extends Component {
       this.focusInputElement();
     });
 
-    const input = DOM.query(this._container, this._inputEl);
-    DOM.on(input, 'input', e => {
+    const inputEl = DOM.query(this._container, this._inputEl);
+    DOM.on(inputEl, 'input', e => {
       const input = e.target.value;
+      this.query = input;
       if (!this._showClearButton && input.length > 0) {
         this._showClearButton = true;
         button.classList.remove('yxt-SearchBar--hidden');
@@ -263,11 +324,10 @@ export default class SearchComponent extends Component {
 
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
+      this.iconIsFrozen = true;
 
-      let inputEl = form.querySelector(this._inputEl);
-
-      let query = inputEl.value;
-      let params = new SearchParams(window.location.search.substring(1));
+      const query = this.query;
+      const params = new SearchParams(window.location.search.substring(1));
       params.set('query', query);
 
       // If we have a redirectUrl, we want the form to be
@@ -277,13 +337,15 @@ export default class SearchComponent extends Component {
         return false;
       }
 
-      inputEl.blur();
+      this.queryEl.blur();
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(query);
       this.debouncedSearch(query);
+      this.focusInputElement();
+      this.iconIsFrozen = false;
       return false;
     });
   }
@@ -456,6 +518,20 @@ export default class SearchComponent extends Component {
   }
 
   setState (data) {
+    const forwardIconOpts = {
+      iconName: 'yext_animated_forward',
+      classNames: 'Icon--lg',
+      complexContentsParams: {
+        iconPrefix: this.name
+      }
+    };
+    const reverseIconOpts = {
+      iconName: 'yext_animated_reverse',
+      classNames: 'Icon--lg',
+      complexContentsParams: {
+        iconPrefix: this.name
+      }
+    };
     return super.setState(Object.assign({
       title: this.title,
       labelText: this.labelText,
@@ -464,7 +540,10 @@ export default class SearchComponent extends Component {
       clearText: this.clearText,
       showClearButton: this._showClearButton,
       query: this.query || '',
-      eventOptions: this.eventOptions()
+      eventOptions: this.eventOptions(),
+      iconId: this.name,
+      forwardIconOpts: forwardIconOpts,
+      reverseIconOpts: reverseIconOpts
     }, data));
   }
 

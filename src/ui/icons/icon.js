@@ -39,10 +39,21 @@ export default class SVGIcon {
     return `<path d="${this.path}"></path>`;
   }
 
+  parseContents (complexContentsParams) {
+    let contents = this.contents;
+    if (typeof contents === 'function') {
+      contents = contents(complexContentsParams);
+    }
+    return `<svg viewBox="${this.viewBox}" xmlns="http://www.w3.org/2000/svg">${contents}</svg>`;
+  }
+
   /**
    * returns the svg markup
    */
   markup () {
-    return `<svg viewBox="${this.viewBox}" xmlns="http://www.w3.org/2000/svg">${this.contents}</svg>`;
+    if (typeof this.contents === 'function') {
+      return complexContentsParams => this.parseContents(complexContentsParams);
+    }
+    return this.parseContents();
   }
 }
