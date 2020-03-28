@@ -194,6 +194,9 @@ export default class SearchComponent extends Component {
 
   onMount () {
     this.queryEl = DOM.query(this._container, this._inputEl);
+    if (this.autoFocus && !this.query && !this.autocompleteOnLoad) {
+      this.focusInputElement();
+    }
 
     const isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
     if (isUsingYextAnimatedIcon) {
@@ -208,7 +211,7 @@ export default class SearchComponent extends Component {
       this.initClearButton();
     }
 
-    if (this.autoFocus) {
+    if (this.autoFocus && !this.query && this.autocompleteOnLoad) {
       this.focusInputElement();
     }
   }
@@ -294,8 +297,7 @@ export default class SearchComponent extends Component {
       this.focusInputElement();
     });
 
-    const inputEl = DOM.query(this._container, this._inputEl);
-    DOM.on(inputEl, 'input', e => {
+    DOM.on(this.queryEl, 'input', e => {
       const input = e.target.value;
       this.query = input;
       if (!this._showClearButton && input.length > 0) {
@@ -324,7 +326,6 @@ export default class SearchComponent extends Component {
 
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
-      this.iconIsFrozen = true;
 
       const query = this.query;
       const params = new SearchParams(window.location.search.substring(1));
@@ -338,14 +339,13 @@ export default class SearchComponent extends Component {
       }
 
       this.queryEl.blur();
+      DOM.query(this._container, '.js-yext-submit').blur();
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(query);
       this.debouncedSearch(query);
-      this.focusInputElement();
-      this.iconIsFrozen = false;
       return false;
     });
   }
