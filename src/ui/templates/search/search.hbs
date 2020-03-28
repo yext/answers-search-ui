@@ -26,14 +26,26 @@
         </span>
       </button>
       <button type="submit" class="js-yext-submit yxt-SearchBar-button">
-        <div class="yxt-SearchBar-buttonImage"
-             data-component="IconComponent"
-             data-opts='{
-                "iconName": "{{#if submitIcon}}{{submitIcon}}{{else}}magnifying_glass{{/if}}",
-                "iconUrl": "{{_config.customIconUrl}}"
-              }'
-             data-prop="icon"
-        ></div>
+        {{#if submitIcon}}
+          <div class="yxt-SearchBar-buttonImage"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "{{submitIcon}}", "classNames": "Icon--lg" }'
+          ></div>
+        {{else if _config.customIconUrl}}
+          <div class="yxt-SearchBar-buttonImage"
+              data-component="IconComponent"
+              data-opts='{ "iconUrl": "{{_config.customIconUrl}}", "classNames": "Icon--lg" }'
+          ></div>
+        {{else}}
+          <div class="js-yxt-AnimatedForward yxt-SearchBar-AnimatedIcon"
+            data-component="IconComponent"
+            data-opts="{{json forwardIconOpts}}">
+          </div>
+          <div class="js-yxt-AnimatedReverse yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--inactive"
+            data-component="IconComponent"
+            data-opts="{{json reverseIconOpts}}">
+          </div>
+        {{/if}}
         <span class="yxt-SearchBar-buttonText sr-only">
           {{submitText}}
         </span>
