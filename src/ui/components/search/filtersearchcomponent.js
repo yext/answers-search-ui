@@ -100,16 +100,18 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || '';
+    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`);
     if (typeof this.filter === 'string') {
       try {
         this.filter = JSON.parse(this.filter);
-      } catch (e) {}
+      } catch (e) {
+        console.warn(e);
+      }
     }
-
+    if (this.filter && this.query) {
+      this._saveFilterToStorage(this.query, this.filter);
+    }
     this.searchParameters = buildSearchParameters(config.searchParameters);
-
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
   }
 
   static get type () {
@@ -123,12 +125,6 @@ export default class FilterSearchComponent extends Component {
    */
   static defaultTemplateName () {
     return 'search/filtersearch';
-  }
-
-  onCreate () {
-    if (this.query && this.filter) {
-      this.search();
-    }
   }
 
   onMount () {
@@ -171,14 +167,22 @@ export default class FilterSearchComponent extends Component {
         }
 
         // save the filter to storage for the next search
-        this.query = query;
-        this.filter = Filter.fromResponse(filter);
-        this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, this.filter);
-        this.core.setFilter(this.name, this.filter);
+        this._saveFilterToStorage(query, filter);
         this.search();
       }
     });
+  }
+
+  _saveFilterToStorage (query, filter) {
+    this.query = query;
+    if (typeof filter === 'string') {
+      this.filter = Filter.fromResponse(filter);
+    } else {
+      this.filter = filter;
+    }
+    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+    this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, this.filter);
+    this.core.setFilter(this.name, this.filter);
   }
 
   /**
