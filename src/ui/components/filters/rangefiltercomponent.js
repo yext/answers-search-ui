@@ -105,6 +105,9 @@ export default class RangeFilterComponent extends Component {
     DOM.delegate(this._container, '.js-yext-range', 'change', (event) => {
       this._updateRange(event.target.dataset.key, Number.parseInt(event.target.value));
     });
+    if (this._storeOnChange) {
+      this.core.setFilter(this.name, this._buildFilter());
+    }
   }
 
   setMin (value) {
