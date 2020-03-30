@@ -6,7 +6,6 @@
   min-width: 210px;
 
   border: $border-default;
-
   margin-right: $cards-margin;
   margin-bottom: $cards-margin;
 
@@ -20,6 +19,12 @@
 
   &--universal + &--universal {
     border-top: 0;
+  }
+
+  // hack: Add 1px left padding on IE11 so child elements
+  // with background colors won't hide this elements border
+  _:-ms-fullscreen, :root & {
+    padding-left: 1px;
   }
 
   @media (max-width: $breakpoint-mobile-max) {
@@ -41,11 +46,11 @@
     &--2 > .yxt-Card {
       flex-basis: 45%;
     }
-  
+
     &--3 > .yxt-Card {
       flex-basis: 30%;
     }
-  
+
     &--4 > .yxt-Card {
       flex-basis: 22%;
     }
