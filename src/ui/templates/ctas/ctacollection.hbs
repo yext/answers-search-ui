@@ -1,6 +1,6 @@
 {{#each callsToAction}}
   {{#if this}}
-    <div class='yxt-CTACollection-item Result-ctaWrapper'
+    <div class='yxt-CTACollection-item{{#if includeLegacyClasses}} Result-ctaWrapper{{/if}}'
       data-component='CTA'
       data-opts='{{json this}}'>
     </div>

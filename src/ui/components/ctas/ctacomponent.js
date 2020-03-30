@@ -21,6 +21,12 @@ class CTAConfig {
     this.icon = config.icon;
 
     /**
+     * Whether the DOM should include legacy class names
+     * @type {boolean}
+     */
+    this.includeLegacyClasses = config.includeLegacyClasses || false;
+
+    /**
      * Click through url for the icon and label
      * @type {string}
      */
