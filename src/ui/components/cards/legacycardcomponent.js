@@ -106,8 +106,6 @@ class LegacyCardConfig {
 export default class LegacyCardComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new LegacyCardConfig(config), systemConfig);
-    this.hideExcessDetails = this._config.showToggle;
-
     /**
      * @type {Object}
      */
@@ -127,18 +125,13 @@ export default class LegacyCardComponent extends Component {
   }
 
   setState (data) {
-    const details = this.hideExcessDetails
-      ? `${this._config.details.substring(0, this._config.showMoreLimit)}...`
-      : this._config.details;
     return super.setState({
       ...data,
       eventOptions: this._legacyEventOptions(this.result._raw.id, this.result.link),
-      hideExcessDetails: this.hideExcessDetails,
       result: this.result,
       hasCTAs: CTACollectionComponent.hasCTAs(this.result._raw, this._config.callsToAction),
       entityId: this.result._raw.id,
-      verticalKey: this.verticalKey,
-      details
+      verticalKey: this.verticalKey
     });
   }
 
