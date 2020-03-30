@@ -31,6 +31,7 @@ export default class SearchDataTransformer {
   }
 
   static transformVertical (data, formatters, verticalKey) {
+    // TODO (tmeyer): SPR-1923, centralize the allResultsForVertical parsing here.
     return {
       [StorageKeys.QUERY_ID]: data.response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.

@@ -40,11 +40,12 @@ export default class VerticalResults {
    * @param {Object} response The server response
    */
   static _formResponseFromAllResultsForVertical (response) {
-    const { results, resultsCount } = response.allResultsForVertical || {};
+    const { results, resultsCount, facets } = response.allResultsForVertical || {};
     return {
       ...response,
       results: results || [],
-      resultsCount: resultsCount || 0
+      resultsCount: resultsCount || 0,
+      facets
     };
   }
 
