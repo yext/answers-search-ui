@@ -97,6 +97,12 @@ export default class GeoLocationComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
+    // If no verticalKey is present, initialize it from shared SEARCH_CONFIG
+    if (!this._config.verticalKey) {
+      this._config.verticalKey =
+        this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    }
+
     /**
      * The query string to use for the input box, provided to template for rendering.
      * @type {string}
@@ -107,22 +113,27 @@ export default class GeoLocationComponent extends Component {
       this.setState();
     });
 
-    /**
-     * The filter to use for the current query
-     * @type {Filter}
-     */
-    this.filter = this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || {};
-    if (typeof this.filter === 'string') {
-      try {
-        this.filter = JSON.parse(this.filter);
-      } catch (e) {}
-    }
-
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
-
+    this._initializeFromPreviousState();
     this.searchParameters = buildSearchParameters(config.searchParameters);
   }
 
+  _initializeFromPreviousState () {
+    let previousState = this.core.globalStorage.getState(this.name) || {};
+    this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
+    if (typeof previousState === 'string') {
+      try {
+        previousState = JSON.parse(previousState);
+        const { enabled, coords, filter } = previousState;
+        if (enabled) {
+          this._saveCurrentPosition(coords);
+        } else {
+          this._saveAutocompleteResponse(this.query, filter);
+        }
+      } catch (e) {
+        console.error(e);
+      }
+    }
+  }
   static get type () {
     return 'GeoLocationFilter';
   }
@@ -187,12 +198,7 @@ export default class GeoLocationComponent extends Component {
       inputEl: inputSelector,
       verticalKey: this._config.verticalKey,
       searchParameters: this.searchParameters,
-      onSubmit: (query, filter) => {
-        this.query = query;
-        this.filter = Filter.fromResponse(filter);
-        this._saveDataToStorage(query, this.filter);
-        this._enabled = false;
-      }
+      onSubmit: (query, filter) => this._saveAutocompleteResponse(query, filter)
     });
   }
 
@@ -209,66 +215,96 @@ export default class GeoLocationComponent extends Component {
     if (!this._enabled) {
       this.setState({ geoLoading: true });
       navigator.geolocation.getCurrentPosition(
-        position => {
-          const filter = this._buildFilter(position);
-          this._saveDataToStorage('', filter, position);
-          this._enabled = true;
-          this.setState({});
-          this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-          this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
-        },
-        () => this.setState({ geoError: true })
+        position => this._saveCurrentPosition(position.coords),
+        () => this.setState({ geoError: true }),
+        { maximumAge: 120000 }
       );
     }
   }
 
   /**
-   * Saves the provided filter under this component's name
-   * @param {string} query The query to save
-   * @param {Filter} filter The filter to save
-   * @param {Object} position The position to save
+   * Saves the provided filter under this component's name.
+   * @param {Object} coords An object containing lat, long, and accuracy.
+   */
+  _saveCurrentPosition (coords) {
+    this._enabled = true;
+    this.setState({});
+    this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
+    const { latitude, longitude, accuracy } = coords;
+    this.core.persistentStorage.set(this.name, {
+      enabled: this._enabled,
+      coords: { latitude, longitude, accuracy }
+    });
+    const filter = this._buildFilter(coords);
+    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+      lat: latitude,
+      lng: longitude,
+      radius: accuracy
+    });
+    this._saveFilterToStorage(filter);
+  }
+
+  /**
+   * @param {string} query query string from the autocomplete
+   * @param {Object} filter the filter received from the autocomplete response
    * @private
    */
-  _saveDataToStorage (query, filter, position) {
+  _saveAutocompleteResponse (query, filter) {
+    if (typeof filter === 'string') {
+      filter = Filter.fromResponse(filter);
+    }
+    this._enabled = false;
+    this.query = query;
+    this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
-    this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
+    this.core.persistentStorage.delete(this.name);
+    this.core.persistentStorage.set(this.name, {
+      enabled: this._enabled,
+      query: query,
+      filter: filter
+    });
+    this._saveFilterToStorage(filter);
+  }
+
+  /**
+   * Saves the provided filter under this component's name
+   * @param {Filter} filter The filter to save
+   * @private
+   */
+  _saveFilterToStorage (filter) {
+    this.filter = filter;
     this.core.setFilter(this.name, filter);
-
-    if (position) {
-      this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-        radius: position.coords.accuracy
-      });
-    }
-
     if (this._config.searchOnChange) {
-      const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-      let totalFilter = filters[0];
-      if (filters.length > 1) {
-        totalFilter = Filter.and(...filters);
-      }
-      const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
-      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-
-      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.verticalSearch(this._config.verticalKey, {
-        input: searchQuery,
-        filter: JSON.stringify(totalFilter),
-        facetFilter: JSON.stringify(facetFilter)
-      });
+      this._search();
     }
+  }
+
+  _search () {
+    const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
+    let totalFilter = filters[0];
+    if (filters.length > 1) {
+      totalFilter = Filter.and(...filters);
+    }
+    const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
+
+    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.verticalSearch(this._config.verticalKey, {
+      input: searchQuery,
+      filter: JSON.stringify(totalFilter),
+      facetFilter: JSON.stringify(facetFilter)
+    });
   }
 
   /**
    * Given a position, construct a Filter object
-   * @param {Postition} position The position
+   * @param {Object} coords position.coords
    * @returns {Filter}
    * @private
    */
-  _buildFilter (position) {
-    const { latitude, longitude, accuracy } = position.coords;
+  _buildFilter (coords) {
+    const { latitude, longitude, accuracy } = coords;
     const radius = Math.max(accuracy, this._config.radius * METERS_PER_MILE);
     return Filter.position(latitude, longitude, radius);
   }
