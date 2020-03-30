@@ -220,9 +220,11 @@ export default class SearchComponent extends Component {
     if (this.iconState === IconState.FORWARD) {
       forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
       reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+      forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
     } else if (this.iconState === IconState.REVERSE) {
       forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
       reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+      forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
     }
     this.isRequestingAnimationFrame = false;
   }
