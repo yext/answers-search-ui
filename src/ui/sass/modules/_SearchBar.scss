@@ -155,6 +155,11 @@
   {
     display: none;
   }
+
+  &-AnimatedIcon--paused svg > g
+  {
+    animation-play-state: paused;
+  }
 }
 
 .yxt-GeoLocationFilter
