@@ -520,7 +520,7 @@ ANSWERS.addComponent('VerticalResults', {
   showResultCount: true,
   // The card used to display each individual result, see the Cards section for more details,
   card: {
-    // Optional: The type of card, currently only 'Standard' and 'Accordion' are supported, defaults to 'Standard'
+    // Optional: The type of card, currently only 'Standard', 'Accordion', and 'Legacy' are supported, defaults to 'Standard'
     cardType: 'Standard',
     // Required, see Data Mappings for more details
     dataMappings: () => {},
@@ -548,7 +548,8 @@ attribute, which contains config for any callToAction buttons in the card.
 callsToAction config is common throughout all cards, whereas different cards such as Standard vs BigImage
 have specialized configuration depending on the card. See [Calls To Action](#Calls-To-Action)
 
-There are two built-in cards, the [Standard Card](#Standard-Card) and the [Accordion Card](#Accordion-Card).
+There are three built-in cards, the [Standard Card](#Standard-Card), the [Accordion Card](#Accordion-Card)
+and [Legacy Card](#Legacy-Card).
 
 ## Calls To Action
 
@@ -758,6 +759,35 @@ const dataMappings = item => {
     details: item.description,
     // Whether the first Accordion Card shown in vertical/universal results should be open on page load, defaults to false
     expanded: false
+  };
+}
+```
+
+## Legacy Card
+
+The Legacy Card is very similar to the Standard Card, but with the legacy DOM structure and class names
+from before v0.13.0. New users should not use the Legacy Card; instead, use the Standard Card.
+
+The data mappings for a legacy card has these attributes
+
+```js
+const dataMappings = item => {
+  return {
+    // Title for the card, defaults to the name of the entity
+    title: item.title,
+    // Subtitle, defaults to null
+    subtitle: `Department: ${item.name} `,
+    // Details, defaults to the entity's description
+    details: item.description,
+    // Image to display, defaults to null
+    image: item.headshot ? item.headshot.url : '',
+    // Url for the title/subtitle, defaults to the entity's website url
+    url: item.link || item.website,
+    // The target attribute for the title link, defaults to '_self'. To open in a new window use '_blank'
+    target: '_blank',
+    // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
+    // defaults to false
+    showOrdinal: false
   };
 }
 ```
