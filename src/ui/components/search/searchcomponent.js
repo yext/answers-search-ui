@@ -327,7 +327,13 @@ export default class SearchComponent extends Component {
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
 
-      const query = this.query;
+      // TODO(oshi) we should not use the same css selector (this._inputEl)
+      // For both the autocomplete AND the search bar input
+      // This is incredibly confusing, and also makes the first DOM.query
+      // Rely on the order of the input el and autocomplete in the template
+      const inputEl = form.querySelector(this._inputEl);
+      const query = inputEl.value;
+      this.query = query;
       const params = new SearchParams(window.location.search.substring(1));
       params.set('query', query);
 
@@ -338,7 +344,7 @@ export default class SearchComponent extends Component {
         return false;
       }
 
-      this.queryEl.blur();
+      inputEl.blur();
       DOM.query(this._container, '.js-yext-submit').blur();
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
