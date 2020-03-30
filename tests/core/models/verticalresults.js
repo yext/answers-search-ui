@@ -37,6 +37,13 @@ describe('forming no results response', () => {
     response = {
       results: [],
       resultsCount: 0,
+      facets: [
+        {
+          'fieldId': 'c_features',
+          'displayName': 'Features',
+          'options': []
+        }
+      ],
       allResultsForVertical: {
         resultsCount: 2,
         results: [
@@ -48,6 +55,24 @@ describe('forming no results response', () => {
               name: 'what is alexis\' favorite color?'
             },
             highlightedFields: {}
+          }
+        ],
+        facets: [
+          {
+            'fieldId': 'c_features',
+            'displayName': 'Features',
+            'options': [
+              {
+                'displayName': 'Dog Friendly',
+                'count': 1,
+                'selected': false,
+                'filter': {
+                  'c_features': {
+                    '$eq': 'Dog Friendly'
+                  }
+                }
+              }
+            ]
           }
         ]
       },
@@ -67,6 +92,7 @@ describe('forming no results response', () => {
 
     expect(convertedResponse).toEqual({
       resultsCount: 2,
+      facets: response.allResultsForVertical.facets,
       results: [
         {
           data: {
@@ -78,20 +104,7 @@ describe('forming no results response', () => {
           highlightedFields: {}
         }
       ],
-      allResultsForVertical: {
-        resultsCount: 2,
-        results: [
-          {
-            data: {
-              id: 'faq-0',
-              type: 'faq',
-              answer: 'black',
-              name: 'what is alexis\' favorite color?'
-            },
-            highlightedFields: {}
-          }
-        ]
-      },
+      allResultsForVertical: response.allResultsForVertical,
       appliedQueryFilters: []
     });
   });
