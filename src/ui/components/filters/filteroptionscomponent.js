@@ -110,7 +110,7 @@ class FilterOptionsConfig {
         config.previousOptions = [];
       }
     }
-    let selectedOptions = config.previousOptions || [];
+    const selectedOptions = config.previousOptions || [];
     this.options = this.setDefaultSelectedValues(this.options, selectedOptions);
   }
 
@@ -164,6 +164,9 @@ export default class FilterOptionsComponent extends Component {
     });
 
     const selectedCount = this.config.getSelectedCount();
+    if (selectedCount > 0 && this.config.storeOnChange) {
+      this.core.setFilter(this.name, this._buildFilter());
+    }
 
     /**
      * True if the option list is expanded and visible
