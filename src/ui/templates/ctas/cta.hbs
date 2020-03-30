@@ -1,14 +1,15 @@
-<a class='yxt-CTA js-yxt-CTA{{#each _config._ctaModifiers}} yxt-CTA--{{this}}{{/each}} yxt-Result-cta'
+<a class='yxt-CTA js-yxt-CTA{{#each _config._ctaModifiers}} yxt-CTA--{{this}}{{/each}}{{#if _config.includeLegacyClasses}} yxt-Result-cta{{/if}}'
   href="//{{_config.url}}"
   target="{{_config.target}}"
   rel="noopener noreferrer nofollow"
 >
   {{#if _config.icon}}
-    <div class='yxt-CTA-icon yxt-Result-ctaIconWrapper'
+    <div class='yxt-CTA-icon{{#if _config.includeLegacyClasses}} yxt-Result-ctaIconWrapper{{/if}}'
          data-component='IconComponent'
-         data-opts='{ "iconName": "{{_config.icon}}", "classNames": "yxt-Result-ctaIcon" }'></div>
+         data-opts='{ "iconName": "{{_config.icon}}"{{#if _config.includeLegacyClasses}}, "classNames": "yxt-Result-ctaIcon" }{{/if}}'
+         ></div>
   {{/if}}
-  <div class='yxt-CTA-iconLabel yxt-Result-ctaLabel'>
+  <div class='yxt-CTA-iconLabel{{#if _config.includeLegacyClasses}} yxt-Result-ctaLabel{{/if}}'>
     {{{_config.label}}}
   </div>
 </a>

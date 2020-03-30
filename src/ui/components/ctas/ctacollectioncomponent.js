@@ -15,6 +15,12 @@ export default class CTACollectionComponent extends Component {
     this.result = data.result || {};
 
     /**
+     * Whether the DOM should include legacy class names
+     * @type {boolean}
+     */
+    this.includeLegacyClasses = this._config.includeLegacyClasses || false;
+
+    /**
      * Vertical key for the search.
      * @type {string}
      */
@@ -47,6 +53,7 @@ export default class CTACollectionComponent extends Component {
     this.callsToAction = this.callsToAction.map(cta => ({
       eventOptions: this.defaultEventOptions(this.result),
       _ctaModifiers: _ctaModifiers,
+      includeLegacyClasses: this.includeLegacyClasses,
       ...cta
     }));
   }
@@ -109,6 +116,7 @@ export default class CTACollectionComponent extends Component {
   setState (data) {
     return super.setState({
       ...data,
+      includeLegacyClasses: this.includeLegacyClasses,
       callsToAction: this.callsToAction
     });
   }
