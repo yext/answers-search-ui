@@ -160,6 +160,7 @@ export default class LegacyCardComponent extends Component {
         callsToAction: this._config.callsToAction,
         isUniversal: this._config.isUniversal,
         _ctaModifiers: ['LegacyCard'],
+        includeLegacyClasses: true,
         ...opts
       });
     }
