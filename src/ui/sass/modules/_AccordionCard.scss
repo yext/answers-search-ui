@@ -152,6 +152,7 @@
   .yxt-AccordionCard-ctas
   {
     display: flex;
+    flex-direction: column;
   }
 
   .yxt-CTACollection-item:not(:last-child)
