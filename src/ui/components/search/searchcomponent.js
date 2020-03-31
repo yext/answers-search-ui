@@ -198,8 +198,8 @@ export default class SearchComponent extends Component {
       this.focusInputElement();
     }
 
-    const isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
-    if (isUsingYextAnimatedIcon) {
+    this.isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
+    if (this.isUsingYextAnimatedIcon) {
       this.initAnimatedIcon();
     }
 
@@ -216,29 +216,29 @@ export default class SearchComponent extends Component {
     }
   }
 
-  animateIcon (forwardIcon, reverseIcon) {
+  animateIcon () {
+    this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
     if (this.iconState === IconState.FORWARD) {
-      forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
-      reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
-      forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
+      this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+      this.reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
     } else if (this.iconState === IconState.REVERSE) {
-      forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
-      reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
-      forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
+      this.forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+      this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
     }
     this.isRequestingAnimationFrame = false;
   }
 
-  requestIconAnimationFrame (forwardIcon, reverseIcon) {
+  requestIconAnimationFrame (iconState) {
+    this.iconState = iconState;
     if (!this.isRequestingAnimationFrame) {
       this.isRequestingAnimationFrame = true;
-      window.requestAnimationFrame(() => this.animateIcon(forwardIcon, reverseIcon));
+      window.requestAnimationFrame(() => this.animateIcon());
     }
   }
 
   initAnimatedIcon () {
-    const forwardIcon = DOM.query(this._container, '.js-yxt-AnimatedForward');
-    const reverseIcon = DOM.query(this._container, '.js-yxt-AnimatedReverse');
+    this.forwardIcon = DOM.query(this._container, '.js-yxt-AnimatedForward');
+    this.reverseIcon = DOM.query(this._container, '.js-yxt-AnimatedReverse');
     const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
     for (const selector of clickableElementSelectors) {
       const clickableEl = DOM.query(this._container, selector);
@@ -252,8 +252,7 @@ export default class SearchComponent extends Component {
       }
     }
     DOM.on(this.queryEl, 'focus', () => {
-      this.iconState = IconState.FORWARD;
-      this.requestIconAnimationFrame(forwardIcon, reverseIcon);
+      this.requestIconAnimationFrame(IconState.FORWARD);
     });
     DOM.on(this._container, 'focusout', e => {
       let focusStillInSearchbar = false;
@@ -265,8 +264,7 @@ export default class SearchComponent extends Component {
       if (this.iconIsFrozen || focusStillInSearchbar) {
         return;
       }
-      this.iconState = IconState.REVERSE;
-      this.requestIconAnimationFrame(forwardIcon, reverseIcon);
+      this.requestIconAnimationFrame(IconState.REVERSE);
     });
   }
 
@@ -348,6 +346,9 @@ export default class SearchComponent extends Component {
 
       inputEl.blur();
       DOM.query(this._container, '.js-yext-submit').blur();
+      if (this.isUsingYextAnimatedIcon) {
+        this.requestIconAnimationFrame(IconState.REVERSE);
+      }
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
