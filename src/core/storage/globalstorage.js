@@ -32,10 +32,19 @@ export default class GlobalStorage {
    */
   setAll (data) {
     for (const [key, val] of Object.entries(data)) {
+      const isFilterKey =
+        key.startsWith(StorageKeys.FACET_FILTER) || key.startsWith(StorageKeys.FILTER);
       if (key === StorageKeys.QUERY) {
         continue;
+      } else if (isFilterKey && typeof val === 'string') {
+        try {
+          this.set(key, JSON.parse(val));
+        } catch (e) {
+          throw new AnswersStorageError(`Invalid filter JSON in URL with key ${key}`, val);
+        }
+      } else {
+        this.set(key, val);
       }
-      this.set(key, val);
     }
 
     // Update query last since it triggers a search

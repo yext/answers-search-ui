@@ -125,6 +125,8 @@ export default class FilterSearchComponent extends Component {
     return 'search/filtersearch';
   }
 
+  // TODO(oshi): SPR-1925 check that it is safe to remove this, it runs an extra search
+  // For no obvious reasons
   onCreate () {
     if (this.query && this.filter) {
       this.search();
