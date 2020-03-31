@@ -217,14 +217,13 @@ export default class SearchComponent extends Component {
   }
 
   animateIcon () {
+    this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
     if (this.iconState === IconState.FORWARD) {
       this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
       this.reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
-      this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
     } else if (this.iconState === IconState.REVERSE) {
       this.forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
       this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
-      this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
     }
     this.isRequestingAnimationFrame = false;
   }
