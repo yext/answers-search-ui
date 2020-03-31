@@ -228,10 +228,11 @@ export default class SearchComponent extends Component {
     this.isRequestingAnimationFrame = false;
   }
 
-  requestIconAnimationFrame (forwardIcon, reverseIcon) {
+  requestIconAnimationFrame (iconState) {
+    this.iconState = iconState;
     if (!this.isRequestingAnimationFrame) {
       this.isRequestingAnimationFrame = true;
-      window.requestAnimationFrame(() => this.animateIcon(forwardIcon, reverseIcon));
+      window.requestAnimationFrame(() => this.animateIcon());
     }
   }
 
@@ -251,8 +252,7 @@ export default class SearchComponent extends Component {
       }
     }
     DOM.on(this.queryEl, 'focus', () => {
-      this.iconState = IconState.FORWARD;
-      this.requestIconAnimationFrame();
+      this.requestIconAnimationFrame(IconState.FORWARD);
     });
     DOM.on(this._container, 'focusout', e => {
       let focusStillInSearchbar = false;
@@ -264,8 +264,7 @@ export default class SearchComponent extends Component {
       if (this.iconIsFrozen || focusStillInSearchbar) {
         return;
       }
-      this.iconState = IconState.REVERSE;
-      this.requestIconAnimationFrame();
+      this.requestIconAnimationFrame(IconState.REVERSE);
     });
   }
 
@@ -348,8 +347,7 @@ export default class SearchComponent extends Component {
       inputEl.blur();
       DOM.query(this._container, '.js-yext-submit').blur();
       if (this.isUsingYextAnimatedIcon) {
-        this.iconState = IconState.REVERSE;
-        this.animateIcon();
+        this.requestIconAnimationFrame(IconState.REVERSE);
       }
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
