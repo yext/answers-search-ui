@@ -437,7 +437,8 @@ export default class SearchComponent extends Component {
                   });
                   resolve(this.search(query));
                 },
-                () => resolve(this.search(query)))
+                () => resolve(this.search(query)),
+                { maximumAge: 300000, timeout: 2000 })
             );
           } else {
             return this.search(query);

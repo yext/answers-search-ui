@@ -217,7 +217,8 @@ export default class GeoLocationComponent extends Component {
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
           this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
         },
-        () => this.setState({ geoError: true })
+        () => this.setState({ geoError: true }),
+        { maximumAge: 300000 }
       );
     }
   }

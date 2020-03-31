@@ -74,7 +74,7 @@ export default class LocationBiasComponent extends Component {
           if (err.code === 1) {
             this._disableLocationUpdate();
           }
-        });
+        }, { maximumAge: 300000 });
       }
       // TODO: Should we throw error or warning here if no geolocation?
     });
