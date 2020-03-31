@@ -238,14 +238,14 @@ export default class SearchComponent extends Component {
     }
   }
 
-  animateIconToYext () {
+  animateIconToMagnifyingGlass () {
     if (this.iconIsFrozen) {
       return;
     }
     this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS);
   }
 
-  animateIconToMagnifyingGlass (e) {
+  animateIconToYext (e) {
     let focusStillInSearchbar = false;
     if (e && e.relatedTarget) {
       focusStillInSearchbar = this._container.contains(e.relatedTarget);
@@ -273,10 +273,10 @@ export default class SearchComponent extends Component {
       }
     }
     DOM.on(this.queryEl, 'focus', () => {
-      this.animateIconToYext();
+      this.animateIconToMagnifyingGlass();
     });
     DOM.on(this._container, 'focusout', e => {
-      this.animateIconToMagnifyingGlass(e);
+      this.animateIconToYext(e);
     });
   }
 
@@ -359,7 +359,7 @@ export default class SearchComponent extends Component {
       inputEl.blur();
       DOM.query(this._container, '.js-yext-submit').blur();
       if (this.isUsingYextAnimatedIcon) {
-        this.animateIconToMagnifyingGlass();
+        this.animateIconToYext();
       }
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
