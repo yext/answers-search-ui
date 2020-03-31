@@ -14,11 +14,18 @@ import Filter from '../../../core/models/filter';
 export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
+    // TODO SPR-1929 centralize this logic
+    this._config.verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
     this.options = this._config.options;
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
     this.options[this.selectedOptionIndex].isSelected = true;
-    this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex <= this._config.showMoreLimit;
+    this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
+
+    if (this.selectedOptionIndex && this.selectedOptionIndex !== 0) {
+      const option = this.options[this.selectedOptionIndex];
+      this.core.setSortBys(option);
+    }
   }
 
   setState (data) {
@@ -207,7 +214,7 @@ function assignDefaults (config) {
 
   updatedConfig.applyLabel = config.applyLabel || 'Apply';
 
-  updatedConfig.verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+  updatedConfig.verticalKey = config.verticalKey;
   if (!updatedConfig.verticalKey) {
     throw new AnswersBasicError('vertical key is required', 'SortOptions');
   }
