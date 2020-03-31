@@ -7,8 +7,8 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 
 const IconState = {
-  'FORWARD': 0,
-  'REVERSE': 1
+  'YEXT': 0,
+  'MAGNIFYING_GLASS': 1
 };
 
 /**
@@ -216,27 +216,48 @@ export default class SearchComponent extends Component {
     }
   }
 
-  animateIcon () {
-    this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
-    if (this.iconState === IconState.FORWARD) {
-      this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
-      this.reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
-    } else if (this.iconState === IconState.REVERSE) {
-      this.forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
-      this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
-    }
-    this.isRequestingAnimationFrame = false;
-  }
-
   requestIconAnimationFrame (iconState) {
+    if (this.iconState === iconState) {
+      return;
+    }
     this.iconState = iconState;
     if (!this.isRequestingAnimationFrame) {
       this.isRequestingAnimationFrame = true;
-      window.requestAnimationFrame(() => this.animateIcon());
+      window.requestAnimationFrame(() => {
+        this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
+        this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
+        if (this.iconState === IconState.MAGNIFYING_GLASS) {
+          this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+          this.reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+        } else if (this.iconState === IconState.YEXT) {
+          this.forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+          this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+        }
+        this.isRequestingAnimationFrame = false;
+      });
     }
   }
 
+  animateIconToMagnifyingGlass () {
+    if (this.iconIsFrozen) {
+      return;
+    }
+    this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS);
+  }
+
+  animateIconToYext (e) {
+    let focusStillInSearchbar = false;
+    if (e && e.relatedTarget) {
+      focusStillInSearchbar = this._container.contains(e.relatedTarget);
+    }
+    if (this.iconIsFrozen || focusStillInSearchbar) {
+      return;
+    }
+    this.requestIconAnimationFrame(IconState.YEXT);
+  }
+
   initAnimatedIcon () {
+    this.iconState = (this.autoFocus && !this.query) ? IconState.MAGNIFYING_GLASS : IconState.YEXT;
     this.forwardIcon = DOM.query(this._container, '.js-yxt-AnimatedForward');
     this.reverseIcon = DOM.query(this._container, '.js-yxt-AnimatedReverse');
     const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
@@ -252,19 +273,10 @@ export default class SearchComponent extends Component {
       }
     }
     DOM.on(this.queryEl, 'focus', () => {
-      this.requestIconAnimationFrame(IconState.FORWARD);
+      this.animateIconToMagnifyingGlass();
     });
     DOM.on(this._container, 'focusout', e => {
-      let focusStillInSearchbar = false;
-      if (e.relatedTarget) {
-        focusStillInSearchbar = this._container.contains(e.relatedTarget);
-      } else if (e.explicitOriginalTarget) {
-        focusStillInSearchbar = this._container.contains(e.explicitOriginalTarget);
-      }
-      if (this.iconIsFrozen || focusStillInSearchbar) {
-        return;
-      }
-      this.requestIconAnimationFrame(IconState.REVERSE);
+      this.animateIconToYext(e);
     });
   }
 
@@ -347,7 +359,7 @@ export default class SearchComponent extends Component {
       inputEl.blur();
       DOM.query(this._container, '.js-yext-submit').blur();
       if (this.isUsingYextAnimatedIcon) {
-        this.requestIconAnimationFrame(IconState.REVERSE);
+        this.animateIconToYext();
       }
 
       this.core.persistentStorage.set(StorageKeys.QUERY, query);
@@ -554,7 +566,8 @@ export default class SearchComponent extends Component {
       eventOptions: this.eventOptions(),
       iconId: this.name,
       forwardIconOpts: forwardIconOpts,
-      reverseIconOpts: reverseIconOpts
+      reverseIconOpts: reverseIconOpts,
+      autoFocus: this.autoFocus && !this.query
     }, data));
   }
 
