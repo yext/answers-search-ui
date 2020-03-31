@@ -14,6 +14,7 @@ import Filter from '../../../core/models/filter';
 export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
+    // TODO SPR-1929 centralize this logic
     this._config.verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
     this.options = this._config.options;
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
