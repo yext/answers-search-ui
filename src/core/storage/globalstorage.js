@@ -40,7 +40,7 @@ export default class GlobalStorage {
         try {
           this.set(key, JSON.parse(val));
         } catch (e) {
-          console.error(e);
+          throw new AnswersStorageError(`Invalid filter JSON in URL with key ${key}`, val);
         }
       } else {
         this.set(key, val);
