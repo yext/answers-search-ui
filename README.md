@@ -569,6 +569,9 @@ const callsToAction = [{
   label: 'cta label',
   // Icon name for the CTA that is one of the SDK icons, default to undefined (no icon)
   icon: 'star',
+  // URL to a custom icon for the cta. This takes priority over icon if both are present, default is
+  // no icon url.
+  iconUrl: 'https://urltomyicon.com/customicon.gif',
   // Click through url for the icon and label
   // Note, a protocol like https:// is required here.
   url: 'https://yext.com',
