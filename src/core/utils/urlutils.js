@@ -15,10 +15,7 @@ export function getLiveApiUrl (env = PRODUCTION) {
  * @param {string} env The desired environment.
  */
 export function getCachedLiveApiUrl (env = PRODUCTION) {
-  if (env !== PRODUCTION) {
-    throw new AnswersCoreError('Error: cannot use sandbox cached live API version'); // TODO verify this
-  }
-  return 'https://liveapi-cached.yext.com';
+  return env === SANDBOX ? 'https://liveapi-sandbox.yext.com' : 'https://liveapi-cached.yext.com';
 }
 
 /**
