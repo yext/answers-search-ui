@@ -82,7 +82,7 @@ export default class AutoCompleteApi {
      * @type {string}
      * @private
      */
-    this._baseUrl = getCachedLiveApiUrl(PRODUCTION);
+    this._baseUrl = getCachedLiveApiUrl(this._environment);
   }
 
   /** @inheritdoc */
@@ -92,7 +92,6 @@ export default class AutoCompleteApi {
       apiKey: this._apiKey,
       version: this._version,
       environment: this._environment,
-      baseUrl: this._baseUrl,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
