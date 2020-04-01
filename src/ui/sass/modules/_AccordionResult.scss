@@ -43,6 +43,11 @@
     );
   }
 
+  &-indicatorWrapper
+  {
+    flex-shrink: 0;
+  }
+
   &-details
   {
     @include Text(
