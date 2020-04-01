@@ -81,7 +81,9 @@ export default class CTACollectionComponent extends Component {
             ctaObject[ctaAttribute] = attributeMapping(result);
           }
         }
-        parsedCTAs.push(ctaObject);
+        if (ctaObject) {
+          parsedCTAs.push(ctaObject);
+        }
       }
     });
 
