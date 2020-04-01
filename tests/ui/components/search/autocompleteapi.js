@@ -6,7 +6,7 @@ import GlobalStorage from '../../../../src/core/storage/globalstorage';
 jest.mock('../../../../src/core/http/httprequester');
 jest.mock('../../../../src/core/storage/globalstorage');
 
-const baseUrl = 'https://liveapi.yext.com/v2/accounts/me';
+const baseUrl = 'https://liveapi-cached.yext.com/v2/accounts/me';
 
 describe('querying and responding', () => {
   const apiKey = 'abc123';
