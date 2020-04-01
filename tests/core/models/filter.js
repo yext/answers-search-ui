@@ -89,4 +89,12 @@ describe('creating filters', () => {
     const actualFilter = Filter._fromMatcher('myField', '$myMatcher', 'myValue');
     expect(actualFilter).toEqual(expectedFilter);
   });
+
+  it('can properly parse the key of a filter', () => {
+    const filter = new Filter({ 'myField': { '$myMatcher': 'myValue' } });
+    expect(Filter.getFilterKey(filter)).toEqual('myField');
+    expect(Filter.getFilterKey(null)).toBeFalsy();
+    expect(Filter.getFilterKey(undefined)).toBeFalsy();
+    expect(Filter.getFilterKey({})).toBeFalsy();
+  });
 });
