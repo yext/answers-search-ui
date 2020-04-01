@@ -438,25 +438,42 @@ export default class SearchComponent extends Component {
         .then(queryIntents => queryIntents.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
           if (queryHasNearMeIntent && !this.core.globalStorage.getState(StorageKeys.GEOLOCATION)) {
-            return new Promise((resolve, reject) =>
-              navigator.geolocation.getCurrentPosition(
-                position => {
-                  this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    radius: position.coords.accuracy
-                  });
-                  resolve(this.search(query));
-                },
-                () => resolve(this.search(query)),
-                { maximumAge: 300000, timeout: 2000 })
-            );
+            if (this.geolocationInProgress && this.geolocationTimeoutInProgress) {
+              return;
+            }
+            if (!this.geolocationTimeoutInProgress) {
+              this.geolocationTimeoutInProgress = true;
+              window.setTimeout(() => {
+                if (this.geolocationInProgress) {
+                  this.search(query);
+                }
+                this.geolocationTimeoutInProgress = false;
+              }, 2000);
+            }
+            if (this.geolocationInProgress) {
+              return;
+            }
+            this.geolocationInProgress = true;
+            navigator.geolocation.getCurrentPosition(
+              position => {
+                this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+                  lat: position.coords.latitude,
+                  lng: position.coords.longitude,
+                  radius: position.coords.accuracy
+                });
+                if (this.geolocationTimeoutInProgress) {
+                  this.search(query);
+                }
+                this.geolocationInProgress = false;
+              },
+              () => {},
+              { maximumAge: 300000 });
           } else {
-            return this.search(query);
+            this.search(query);
           }
         });
     } else {
-      return this.search(query);
+      this.search(query);
     }
   }
 
