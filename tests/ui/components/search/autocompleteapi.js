@@ -7,6 +7,7 @@ jest.mock('../../../../src/core/http/httprequester');
 jest.mock('../../../../src/core/storage/globalstorage');
 
 const baseUrl = 'https://liveapi-cached.yext.com/v2/accounts/me';
+const filtersBaseUrl = 'https://liveapi.yext.com/v2/accounts/me';
 
 describe('querying and responding', () => {
   const apiKey = 'abc123';
@@ -61,7 +62,7 @@ describe('querying and responding', () => {
   });
 
   describe('queryFilter', () => {
-    const expectedUrl = `${baseUrl}/answers/filtersearch`;
+    const expectedUrl = `${filtersBaseUrl}/answers/filtersearch`;
     const searchParameters = {
       sectioned: true,
       fields: [
