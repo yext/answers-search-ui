@@ -1,6 +1,5 @@
 import { PRODUCTION, SANDBOX } from '../constants';
 import SearchParams from '../../ui/dom/searchparams';
-import { AnswersCoreError } from '../errors/errors';
 
 /**
  * Returns the base url for the live api backend in the desired environment.
