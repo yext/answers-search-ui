@@ -41,6 +41,11 @@
     flex-grow: 1;
   }
 
+  &--1 > .yxt-Card
+  {
+    margin-right: 0;
+  }
+
   @media (min-width: $breakpoint-mobile-max) {
 
     &--2 > .yxt-Card {
