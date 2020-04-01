@@ -1,5 +1,6 @@
 import { PRODUCTION, SANDBOX } from '../constants';
 import SearchParams from '../../ui/dom/searchparams';
+import { AnswersCoreError } from '../errors/errors';
 
 /**
  * Returns the base url for the live api backend in the desired environment.
@@ -7,6 +8,17 @@ import SearchParams from '../../ui/dom/searchparams';
  */
 export function getLiveApiUrl (env = PRODUCTION) {
   return env === SANDBOX ? 'https://liveapi-sandbox.yext.com' : 'https://liveapi.yext.com';
+}
+
+/**
+ * Returns the base url for the live api backend in the desired environment.
+ * @param {string} env The desired environment.
+ */
+export function getCachedLiveApiUrl (env = PRODUCTION) {
+  if (env !== PRODUCTION) {
+    throw new AnswersCoreError('Error: cannot use sandbox cached live API version'); // TODO verify this
+  }
+  return 'https://liveapi-cached.yext.com';
 }
 
 /**
