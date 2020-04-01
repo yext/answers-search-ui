@@ -6,7 +6,9 @@ import DOM from '../dom/dom';
 import State from './state';
 import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused-vars
 import AnalyticsEvent from '../../core/analytics/analyticsevent';
-import { AnswersComponentError } from '../../core/errors/errors';
+import { AnswersComponentError, AnswersCoreError } from '../../core/errors/errors';
+import StorageKeys from '../../core/storage/storagekeys';
+import Filter from '../../core/models/filter';
 
 /**
  * Component is an abstraction that encapsulates state, behavior,
@@ -393,6 +395,36 @@ export default class Component {
 
     this.afterRender();
     return el.innerHTML;
+  }
+
+  /**
+   * Common interface between components to trigger a vertical search.
+   * TODO(oshi) SPR-1937: move all usages of globalStorage out of core.verticalSearch
+   * into Component.verticalSearch
+   */
+  verticalSearch (options = {}) {
+    const verticalKey = this._config.verticalKey ||
+      this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    if (!verticalKey) {
+      throw new AnswersCoreError('Trying to call vertical search with no verticalKey', this.name);
+    }
+    const { resetPagination, useFacets, input } = options;
+    if (resetPagination) {
+      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+    }
+    const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
+    const totalFilter = allFilters.length > 1
+      ? Filter.and(...allFilters)
+      : allFilters[0];
+    const facet = useFacets ? this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0] : {};
+    const queryParams = {
+      input: input || this.core.globalStorage.getState(StorageKeys.QUERY) || '',
+      filter: JSON.stringify(totalFilter),
+      facetFilter: JSON.stringify(facet),
+      offset: this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0
+    };
+    this.core.verticalSearch(verticalKey, queryParams, options);
   }
 
   _createSubcomponent (domComponent, data) {

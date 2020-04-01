@@ -14,7 +14,7 @@ const mockedCore = () => {
     verticalSearch: () => {},
     globalStorage: {
       getState: storageKey => {
-        expect(['SortOptions', StorageKeys.QUERY]).toContain(storageKey);
+        expect(['SortOptions', StorageKeys.QUERY, StorageKeys.SEARCH_OFFSET]).toContain(storageKey);
         return null;
       },
       getAll: storageKey => {
