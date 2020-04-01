@@ -10,6 +10,14 @@ export function getLiveApiUrl (env = PRODUCTION) {
 }
 
 /**
+ * Returns the base url for the live api backend in the desired environment.
+ * @param {string} env The desired environment.
+ */
+export function getCachedLiveApiUrl (env = PRODUCTION) {
+  return env === SANDBOX ? 'https://liveapi-sandbox.yext.com' : 'https://liveapi-cached.yext.com';
+}
+
+/**
  * Returns the base url for the knowledge api backend in the desired environment.
  * @param {string} env The desired environment.
  */
