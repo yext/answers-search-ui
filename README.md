@@ -570,6 +570,7 @@ const callsToAction = [{
   // Icon name for the CTA that is one of the SDK icons, default to undefined (no icon)
   icon: 'star',
   // Click through url for the icon and label
+  // Note, a protocol like https:// is required here.
   url: 'https://yext.com',
   // Analytics event that should fire, defaults to 'CTA_CLICK':
   //       'TITLE_CLICK',
@@ -726,6 +727,7 @@ const dataMappings = item => {
     // Image to display, defaults to null
     image: item.headshot ? item.headshot.url : '',
     // Url for the title/subtitle, defaults to the entity's website url
+    // Note, a protocol like https://yext.com is required, as opposed to just yext.com
     url: item.link || item.website,
     // Character limit to hide remaining details and display a show more button, defaults to 350
     showMoreLimit: 350,
