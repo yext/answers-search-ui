@@ -64,10 +64,10 @@
 
   &-title
   {
-    margin-top: $accordion-card-spacing * 4 / 9;
+    margin-top: $accordion-card-spacing / 2;
     margin-right: $accordion-card-spacing;
     margin-left: $accordion-card-spacing;
-    margin-bottom: $accordion-card-spacing * 4 / 9;
+    margin-bottom: $accordion-card-spacing * 5/8;
     text-align: left;
     @include Text(
       $size: $accordion-card-title-size,
@@ -109,7 +109,8 @@
 
   &-details
   {
-    margin-top: $accordion-card-spacing / 2;
+    padding-top: $base-spacing / 2;
+    padding-bottom: $accordion-card-spacing * 5/8;
     @include Text(
       $size: $accordion-card-details-size,
       $color: $accordion-card-details-color,
@@ -131,7 +132,6 @@
   $accordion-card-spacing--expanded: $base-spacing !default;
 
   background-color: $accordion-card-background-color--expanded;
-  margin-bottom: $accordion-card-spacing--expanded * 0.5;
 
   .yxt-AccordionCard-icon svg
   {
