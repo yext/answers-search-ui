@@ -82,6 +82,7 @@
     margin-left: auto;
     margin-right: $accordion-card-spacing / 2;
     margin-top: $accordion-card-spacing * 0.75;
+    flex-shrink: 0;
   }
 
   &-icon svg
