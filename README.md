@@ -571,7 +571,7 @@ const callsToAction = [{
   icon: 'star',
   // URL to a custom icon for the cta. This takes priority over icon if both are present, default is
   // no icon url.
-  icon: 'https://urltomyicon.com/customicon.gif',
+  iconUrl: 'https://urltomyicon.com/customicon.gif',
   // Click through url for the icon and label
   url: 'https://yext.com',
   // Analytics event that should fire, defaults to 'CTA_CLICK':
