@@ -81,11 +81,10 @@ export default class CTACollectionComponent extends Component {
             ctaObject[ctaAttribute] = attributeMapping(result);
           }
         }
-        if (ctaObject) {
-          parsedCTAs.push(ctaObject);
-        }
+        parsedCTAs.push(ctaObject);
       }
     });
+    parsedCTAs = parsedCTAs.filter(cta => cta);
 
     parsedCTAs.forEach(cta => {
       if (!cta.label && !cta.url) {
