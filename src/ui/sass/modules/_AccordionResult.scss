@@ -96,6 +96,11 @@
     transition: transform 400ms ease-in;
   }
 
+  &-indicatorWrapper
+  {
+    width: 100%;
+  }
+
   &-toggle
   {
     padding-top: $base-spacing / 2;
