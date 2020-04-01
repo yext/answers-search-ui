@@ -21,6 +21,12 @@ class CTAConfig {
     this.icon = config.icon;
 
     /**
+     * Url to custom icon, has priority over icon.
+     * @type {string}
+     */
+    this.iconUrl = config.iconUrl;
+
+    /**
      * Whether the DOM should include legacy class names
      * @type {boolean}
      */
