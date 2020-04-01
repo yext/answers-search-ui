@@ -3,6 +3,7 @@
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
+import { getCachedLiveApiUrl } from '../utils/urlutils';
 
 /** @typedef {import('./autocompleteservice').default} AutoCompleteService */
 
@@ -74,6 +75,13 @@ export default class AutoCompleteApi {
      * @private
      */
     this._environment = config.environment;
+
+    /**
+     * The base url for the autocomplete API request
+     * @type {string}
+     * @private
+     */
+    this._baseUrl = getCachedLiveApiUrl(this._environment);
   }
 
   /** @inheritdoc */
@@ -109,6 +117,7 @@ export default class AutoCompleteApi {
       apiKey: this._apiKey,
       version: this._version,
       environment: this._environment,
+      baseUrl: this._baseUrl,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -134,6 +143,7 @@ export default class AutoCompleteApi {
       apiKey: this._apiKey,
       version: this._version,
       environment: this._environment,
+      baseUrl: this._baseUrl,
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,
