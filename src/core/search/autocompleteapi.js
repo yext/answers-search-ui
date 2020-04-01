@@ -3,7 +3,6 @@
 import ApiRequest from '../http/apirequest';
 import AutoCompleteDataTransformer from './autocompletedatatransformer';
 import { AnswersBasicError, AnswersEndpointError } from '../errors/errors';
-import { PRODUCTION } from '../constants';
 import { getCachedLiveApiUrl } from '../utils/urlutils';
 
 /** @typedef {import('./autocompleteservice').default} AutoCompleteService */
