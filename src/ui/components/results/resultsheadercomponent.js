@@ -79,7 +79,7 @@ export default class ResultsHeaderComponent extends Component {
       resultsCount: this.resultsCount,
       resultsCountStart: offset + 1,
       resultsCountEnd: offset + this.resultsLength,
-      showResultSeparator: this._config.showResultsCount && shouldShowFilters,
+      showResultSeparator: this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
       appliedFiltersArray: this.getAppliedFiltersArray()
     });
