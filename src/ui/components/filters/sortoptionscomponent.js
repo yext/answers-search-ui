@@ -21,11 +21,6 @@ export default class SortOptionsComponent extends Component {
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
-
-    if (this.selectedOptionIndex && this.selectedOptionIndex !== 0) {
-      const option = this.options[this.selectedOptionIndex];
-      this.core.setSortBys(option);
-    }
   }
 
   setState (data) {
