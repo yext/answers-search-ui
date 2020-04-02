@@ -21,12 +21,6 @@ describe('reporting events', () => {
     analyticsReporter = new AnalyticsReporter('abc123', null, '213412');
   });
 
-  it('throws an error if given a non-AnalyticsEvent', () => {
-    expect(() => {
-      analyticsReporter.report({ event_type: 'fake event' });
-    }).toThrow(AnswersAnalyticsError);
-  });
-
   it('sends the event via beacon in the "data" property', () => {
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
@@ -34,7 +28,7 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expectedEvent.toApiEvent() }));
+      expect.objectContaining({ 'data': Object.assign({}, expectedEvent) }));
   });
 
   it('includes global options', () => {

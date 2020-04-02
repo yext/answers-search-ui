@@ -1,6 +1,5 @@
 /** @module AnalyticsReporter */
 
-import AnalyticsEvent from './analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
 import { PRODUCTION } from '../constants';
 import HttpRequester from '../http/httprequester';
@@ -73,15 +72,10 @@ export default class AnalyticsReporter {
       throw new AnswersAnalyticsError('Tried to enable conversion tracking without including ytag');
     }
 
-    if (!(event instanceof AnalyticsEvent)) {
-      throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
-    }
-
-    event.addOptions(this._globalOptions);
-
+    const apiEvent = Object.assign(event, this._globalOptions);
     return new HttpRequester().beacon(
       `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,
-      { data: event.toApiEvent(), ...cookieData }
+      { data: apiEvent, ...cookieData }
     );
   }
 

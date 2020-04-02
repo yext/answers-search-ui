@@ -28,13 +28,6 @@ export default class AnalyticsEvent {
   }
 
   /**
-   * Return the event in the api format, typically for reporting to the api
-   */
-  toApiEvent () {
-    return Object.assign({}, this);
-  }
-
-  /**
    * Creating an analytics event from raw data.
    * @param {Object} data
    */
