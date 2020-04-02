@@ -809,7 +809,7 @@ const dataMappings = item => {
     // Url for the title/subtitle, defaults to the entity's website url
     // Note, a protocol like https://yext.com is required, as opposed to just yext.com
     url: item.link || item.website,
-    // Character limit to hide remaining details and display a show more button, defaults to 350
+    // Character limit to hide remaining details and display a show more button, defaults to no limit.
     showMoreLimit: 350,
     // Text for show more button, defaults to 'Show More'
     showMoreText: "show more",

@@ -1,6 +1,7 @@
 /** @module */
 
 import Core from './core/core';
+import RichText from './core/utils/richtext';
 
 import {
   DefaultTemplatesLoader,
@@ -73,6 +74,12 @@ class Answers {
      * @type {Renderer}
      */
     this.renderer = new Renderers.Handlebars();
+
+    /**
+     * A reference to the formatRichText function.
+     * @type {Function}
+     */
+    this.formatRichText = RichText.formatRichText;
 
     /**
      * A local reference to the component manager

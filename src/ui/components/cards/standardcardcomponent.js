@@ -73,7 +73,7 @@ class StandardCardConfig {
      * Clicking show more should expand the results (but no “show less” link).
      * @type {number}
      */
-    this.showMoreLimit = this.showMoreLimit || 350;
+    this.showMoreLimit = this.showMoreLimit;
 
     /**
      * The target attribute for the title link.
@@ -154,9 +154,12 @@ export default class StandardCardComponent extends Component {
   }
 
   setState (data) {
-    const details = this.hideExcessDetails
-      ? `${this._config.details.substring(0, this._config.showMoreLimit)}...`
-      : this._config.details;
+    let details = this._config.details;
+    if (this._config.showMoreLimit) {
+      details = this.hideExcessDetails
+        ? `${this._config.details.substring(0, this._config.showMoreLimit)}...`
+        : this._config.details;
+    }
     return super.setState({
       ...data,
       hideExcessDetails: this.hideExcessDetails,
