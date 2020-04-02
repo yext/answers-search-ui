@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
+import { AnswersBasicError } from '../../../core/errors/errors';
 
 const IconState = {
   'YEXT': 0,
@@ -133,7 +134,7 @@ export default class SearchComponent extends Component {
       if (this.queryEl) {
         this.queryEl.value = q;
       }
-      this.debouncedSearch(q);
+      this.debouncedSearch();
     });
 
     /**
@@ -377,7 +378,7 @@ export default class SearchComponent extends Component {
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(query);
-      this.debouncedSearch(query);
+      this.debouncedSearch();
       return false;
     });
   }
@@ -415,10 +416,10 @@ export default class SearchComponent extends Component {
    * Performs a debounced query using the provided string input. Specifically, a new search is not
    * performed if we recently searched, if there's no query for universal search, or if this
    * is a twin searchbar.
-   * @param {string} query The string to query against.
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
-  debouncedSearch (query) {
+  debouncedSearch () {
+    const query = this.query;
     if (this._throttled ||
       (!query && !this._verticalKey) ||
       (!query && this._verticalKey && !this._allowEmptySearch) ||
@@ -429,6 +430,10 @@ export default class SearchComponent extends Component {
     this._throttled = true;
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
 
+    if (this.geolocationTimeoutInProgress) {
+      return;
+    }
+
     // If _promptForLocation is enabled, we will compute the query's intent and, from there,
     // determine if it's necessary to prompt the user for their location information. It will
     // be unnecessary if the query does not have near me intent or we already have their location
@@ -438,51 +443,51 @@ export default class SearchComponent extends Component {
         .then(queryIntents => queryIntents.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
           if (queryHasNearMeIntent && !this.core.globalStorage.getState(StorageKeys.GEOLOCATION)) {
-            if (this.geolocationInProgress && this.geolocationTimeoutInProgress) {
-              return;
-            }
+            const promises = [];
             if (!this.geolocationTimeoutInProgress) {
               this.geolocationTimeoutInProgress = true;
-              window.setTimeout(() => {
-                if (this.geolocationInProgress) {
-                  this.search(query);
-                }
-                this.geolocationTimeoutInProgress = false;
-              }, 2000);
+              const timeoutPromise = new Promise(resolve => {
+                window.setTimeout(() => {
+                  this.geolocationTimeoutInProgress = false;
+                  resolve();
+                }, 2000);
+                promises.push(timeoutPromise);
+              });
             }
-            if (this.geolocationInProgress) {
-              return;
+            if (!this.geolocationInProgress) {
+              this.geolocationInProgress = true;
+              const geolocationPromise = new Promise((resolve, reject) => {
+                navigator.geolocation.getCurrentPosition(
+                  position => {
+                    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+                      lat: position.coords.latitude,
+                      lng: position.coords.longitude,
+                      radius: position.coords.accuracy
+                    });
+                    this.geolocationInProgress = false;
+                    resolve();
+                  },
+                  () => { reject(new AnswersBasicError('Geolocation Error', 'SearchComponent')); },
+                  { maximumAge: 300000 });
+              });
+              promises.push(geolocationPromise);
             }
-            this.geolocationInProgress = true;
-            navigator.geolocation.getCurrentPosition(
-              position => {
-                this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
-                  lat: position.coords.latitude,
-                  lng: position.coords.longitude,
-                  radius: position.coords.accuracy
-                });
-                if (this.geolocationTimeoutInProgress) {
-                  this.search(query);
-                }
-                this.geolocationInProgress = false;
-              },
-              () => {},
-              { maximumAge: 300000 });
+            Promise.race(promises).then(() => this.search());
           } else {
-            this.search(query);
+            this.search();
           }
         });
     } else {
-      this.search(query);
+      this.search();
     }
   }
 
   /**
    * Performs a query using the provided string input.
-   * @param {string} query The string to query against.
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
-  search (query) {
+  search () {
+    const query = this.query;
     if (this._verticalKey) {
       const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
       const totalFilter = allFilters.length > 1
