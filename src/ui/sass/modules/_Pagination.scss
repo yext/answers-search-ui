@@ -8,6 +8,8 @@
   $pagination-text-font-weight: $font-weight-normal !default;
 
   display: flex;
+  justify-content: center;
+  align-items: center;
 
   @include Text(
     $size: $pagination-text-font-size,
@@ -18,6 +20,7 @@
 
   &-button
   {
+    display: flex;
     background: none;
     border: none;
     padding: 0 4px;
@@ -50,6 +53,6 @@
 
   &-doubleChevron, &-doubleChevron--left
   {
-    margin-right: -6px;
+    margin-right: -4px;
   }
 }
