@@ -1,7 +1,7 @@
 /** @module */
 
 import Core from './core/core';
-import RichText from './core/utils/richtext';
+import RtfConverter from '@yext/rtf-converter';
 
 import {
   DefaultTemplatesLoader,
@@ -15,7 +15,7 @@ import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
-import { AnswersComponentError } from './core/errors/errors';
+import { AnswersComponentError, AnswersCoreError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
 import SearchConfig from './core/models/searchconfig';
@@ -79,7 +79,14 @@ class Answers {
      * A reference to the formatRichText function.
      * @type {Function}
      */
-    this.formatRichText = RichText.formatRichText;
+    this.formatRichText = (markdown) => {
+      if (typeof markdown !== 'string') {
+        throw new AnswersCoreError(
+          `Rich text "${markdown}" needs to be a string. Currently is a ${typeof markdown}`
+        );
+      }
+      return RtfConverter.toHTML(markdown);
+    };
 
     /**
      * A local reference to the component manager
