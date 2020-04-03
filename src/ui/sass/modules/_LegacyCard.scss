@@ -101,16 +101,12 @@
   {
     display: flex;
     flex-wrap: nowrap;
+    width: 100%;
     padding-top: $base-spacing;
     padding-bottom: $base-spacing;
     padding-left: $base-spacing;
     padding-right: $base-spacing;
     background-color: $result-background-color;
-
-    @media (max-width: $breakpoint-mobile-max)
-    {
-      flex-wrap: wrap;
-    }
   }
 
   &-imageWrapper
