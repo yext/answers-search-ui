@@ -13,20 +13,18 @@
              value="{{query}}"
              {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
              aria-label="{{labelText}}">
-      {{#if showClearButton}}
-        <button type="button"
-                class="js-yxt-SearchBar-clear yxt-SearchBar-clear"
-                data-eventtype="SEARCH_CLEAR_BUTTON"
-                data-eventoptions="{{eventOptions}}"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "close" }'
-                data-prop="icon"
-        >
-          <span class="yxt-SearchBar-clearButtonText sr-only">
-            {{clearText}}
-          </span>
-        </button>
-      {{/if}}
+      <button type="button"
+              class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
+              data-eventtype="SEARCH_CLEAR_BUTTON"
+              data-eventoptions="{{eventOptions}}"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "close" }'
+              data-prop="icon"
+      >
+        <span class="yxt-SearchBar-clearButtonText sr-only">
+          {{clearText}}
+        </span>
+      </button>
       <button type="submit" class="js-yext-submit yxt-SearchBar-button">
         {{#if submitIcon}}
           <div class="yxt-SearchBar-buttonImage"

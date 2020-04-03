@@ -358,11 +358,13 @@ export default class SearchComponent extends Component {
 
       inputEl.blur();
       DOM.query(this._container, '.js-yext-submit').blur();
-      if (this.clearButton && this.query) {
+      if (this.clearButton) {
         const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
         if (this.query) {
+          this._showClearButton = true;
           button.classList.remove('yxt-SearchBar--hidden');
         } else {
+          this._showClearButton = false;
           button.classList.add('yxt-SearchBar--hidden');
         }
       }
@@ -567,7 +569,7 @@ export default class SearchComponent extends Component {
       submitIcon: this.submitIcon,
       submitText: this.submitText,
       clearText: this.clearText,
-      showClearButton: this.clearButton,
+      showClearButton: this._showClearButton,
       query: this.query || '',
       eventOptions: this.eventOptions(),
       iconId: this.name,
