@@ -1,5 +1,7 @@
 /** @module Filter */
 
+import FilterCombinators from './filtercombinators';
+
 /**
  * Represents an api filter and provides static methods for easily constructing Filters.
  * See https://developer.yext.com/docs/api-reference/#operation/listEntities for structure details
@@ -26,7 +28,7 @@ export default class Filter {
    */
   static or (...filters) {
     return new Filter({
-      '$or': filters
+      [FilterCombinators.OR]: filters
     });
   }
 
@@ -37,7 +39,7 @@ export default class Filter {
    */
   static and (...filters) {
     return new Filter({
-      '$and': filters
+      [FilterCombinators.AND]: filters
     });
   }
 
