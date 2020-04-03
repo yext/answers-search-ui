@@ -88,7 +88,9 @@
     display: flex;
     padding: $base-spacing/2 $base-spacing;
     background-color: $results-filters-background;
-    border-bottom: $results-border;
+    border-right: $border-legacy;
+    border-left: $border-legacy;
+    border-bottom: none;
   }
 
   &-filter
@@ -153,5 +155,10 @@
     * {
       display: none;
     }
+  }
+
+  &.yxt-Accordion
+  {
+    border: $border-legacy;
   }
 }
