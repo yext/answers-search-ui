@@ -358,6 +358,7 @@ export default class SearchComponent extends Component {
 
       inputEl.blur();
       DOM.query(this._container, '.js-yext-submit').blur();
+      // TODO: move this into initClearButton
       if (this.clearButton) {
         const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
         if (this.query) {
