@@ -122,17 +122,17 @@ export default class AccordionCardComponent extends Component {
    * it doesn't rip the whole component off of the page and remount it.
    * Also reports an analytics event.
    * @param {HTMLElement} toggleEl the toggle element
-   * @param {HTMLElement} bodyEl the body element
+   * @param {HTMLElement} accordionBodyEl the body element
    * @param {HTMLElement} accordionEl the root accordion element
    */
-  handleClick (toggleEl, bodyEl, accordionEl) {
+  handleClick (toggleEl, accordionBodyEl, accordionEl) {
     this.isExpanded = !this.isExpanded;
     accordionEl.classList.toggle('yxt-AccordionCard--expanded');
 
-    bodyEl.style.height = `${this.isExpanded ? bodyEl.scrollHeight : 0}px`;
+    accordionBodyEl.style.height = `${this.isExpanded ? accordionBodyEl.scrollHeight : 0}px`;
 
     toggleEl.setAttribute('aria-expanded', this.isExpanded ? 'true' : 'false');
-    bodyEl.setAttribute('aria-hidden', this.isExpanded ? 'false' : 'true');
+    accordionBodyEl.setAttribute('aria-hidden', this.isExpanded ? 'false' : 'true');
     const event = new AnalyticsEvent(this.isExpanded ? 'ROW_EXPAND' : 'ROW_COLLAPSE')
       .addOptions({
         verticalKey: this.verticalKey,
@@ -144,12 +144,12 @@ export default class AccordionCardComponent extends Component {
 
   onMount () {
     const toggleEl = DOM.query(this._container, '.js-yxt-AccordionCard-toggle');
-    const bodyEl = DOM.query(this._container, '.js-yxt-AccordionCard-body');
+    const accordionBodyEl = DOM.query(this._container, '.js-yxt-AccordionCard-body');
     const accordionEl = DOM.query(this._container, '.js-yxt-AccordionCard');
 
-    bodyEl.style.height = `${this.isExpanded ? bodyEl.scrollHeight : 0}px`;
+    accordionBodyEl.style.height = `${this.isExpanded ? accordionBodyEl.scrollHeight : 0}px`;
 
-    DOM.on(toggleEl, 'click', () => this.handleClick(toggleEl, bodyEl, accordionEl));
+    DOM.on(toggleEl, 'click', () => this.handleClick(toggleEl, accordionBodyEl, accordionEl));
   }
 
   /**
