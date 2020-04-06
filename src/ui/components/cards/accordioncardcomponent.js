@@ -122,7 +122,7 @@ export default class AccordionCardComponent extends Component {
    * it doesn't rip the whole component off of the page and remount it.
    * Also reports an analytics event.
    * @param {HTMLElement} toggleEl the toggle element
-   * @param {HTMLElement} accordionBodyEl the body element
+   * @param {HTMLElement} accordionBodyEl the .js-yxt-AccordionCard-body element
    * @param {HTMLElement} accordionEl the root accordion element
    */
   handleClick (toggleEl, accordionBodyEl, accordionEl) {
