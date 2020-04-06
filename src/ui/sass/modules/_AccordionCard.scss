@@ -123,7 +123,7 @@
     padding-bottom: $accordion-card-spacing / 2;
   }
 
-  &-ctas 
+  &-ctas .yxt-CTACollection-item
   {
     padding-bottom: $accordion-card-spacing / 2;
   }
@@ -157,10 +157,5 @@
   {
     display: flex;
     flex-direction: column;
-  }
-
-  .yxt-CTACollection-item:not(:last-child)
-  {
-    margin-bottom: $accordion-card-spacing--expanded / 2;
   }
 }
