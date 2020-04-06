@@ -112,11 +112,11 @@
       $size: $accordion-card-subtitle-size,
       $color: $accordion-card-subtitle-color,
     );
+    padding-bottom: $accordion-card-spacing / 2;
   }
 
   &-details
   {
-    padding-top: $accordion-card-spacing / 2;
     @include Text(
       $size: $accordion-card-details-size,
       $color: $accordion-card-details-color,
