@@ -1,6 +1,6 @@
 /** @define StandardCard */
 .yxt-StandardCard {
-  $standard-card-base-spacing: $base-spacing;
+  $standard-card-base-spacing: $base-spacing !default;
 
   $standard-card-link-color: $color-brand-primary !default;
   $standard-card-subtitle-color: $color-text-secondary !default;
@@ -12,7 +12,7 @@
   $standard-card-wrapper-width: 10 * $standard-card-base-spacing !default;
 
   $standard-card-ordinal-size: $base-spacing !default;
-  $standard-card-ordinal-font-size: $font-size-xs;
+  $standard-card-ordinal-font-size: $font-size-xs !default;
 
   padding: $standard-card-base-spacing;
   display: flex;

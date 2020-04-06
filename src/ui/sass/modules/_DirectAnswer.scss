@@ -26,7 +26,7 @@
   $direct-answer-footer-line-height: $line-height-md !default;
   $direct-answer-footer-font-weight: $font-weight-normal !default;
   $direct-answer-footer-color: $color-text-secondary !default;
-  $direct-answer-footer-height: $module-footer-height;
+  $direct-answer-footer-height: $module-footer-height !default;
 
   &-title
   {
