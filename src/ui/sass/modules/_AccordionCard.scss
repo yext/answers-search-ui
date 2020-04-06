@@ -13,14 +13,14 @@
   $accordion-card-title-color: $color-brand-primary !default;
   $accordion-card-title-color-hover: $color-background-highlight !default;
   $accordion-card-title-line-height: $line-height-lg !default;
-  $accordion-card-title-weight: $font-weight-semibold !default;
+  $accordion-card-title-weight: $font-weight-normal !default;
 
   $accordion-card-subtitle-size: $font-size-md !default;
   $accordion-card-subtitle-color: $color-text-secondary !default;
 
   $accordion-card-details-size: $font-size-md !default;
   $accordion-card-details-weight: $font-weight-normal !default;
-  $accordion-card-details-line-height: $line-height-md !default;
+  $accordion-card-details-line-height: 20px !default;
   $accordion-card-details-color: $color-text-primary !default;
 
   $accordion-card-margin: $base-spacing / 2 !default;
@@ -99,10 +99,10 @@
 
   &-content
   {
-    margin-top: $accordion-card-spacing * 0.5;
+    margin-top: $accordion-card-spacing / 2;
     margin-right: $accordion-card-spacing;
     margin-left: $accordion-card-spacing;
-    padding-bottom: $accordion-card-spacing * 5/8;
+    padding-bottom: $accordion-card-spacing / 2;
     height: 0;
   }
 
@@ -123,11 +123,12 @@
       $weight: $accordion-card-details-weight,
       $line-height: $accordion-card-details-line-height,
     );
+    padding-bottom: $accordion-card-spacing / 2;
   }
 
   &-ctas 
   {
-    margin-top: $accordion-card-spacing / 2;
+    margin-bottom: $accordion-card-spacing / 2;
   }
 }
 
