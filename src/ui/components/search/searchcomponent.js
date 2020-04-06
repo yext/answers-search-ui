@@ -423,16 +423,13 @@ export default class SearchComponent extends Component {
     if (this._throttled ||
       (!query && !this._verticalKey) ||
       (!query && this._verticalKey && !this._allowEmptySearch) ||
-      this._isTwin) {
-      return;
+      this._isTwin ||
+      this.geolocationTimeoutInProgress) {
+      return Promise.resolve();
     }
 
     this._throttled = true;
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
-
-    if (this.geolocationTimeoutInProgress) {
-      return;
-    }
 
     // If _promptForLocation is enabled, we will compute the query's intent and, from there,
     // determine if it's necessary to prompt the user for their location information. It will
@@ -472,13 +469,13 @@ export default class SearchComponent extends Component {
               });
               promises.push(geolocationPromise);
             }
-            Promise.race(promises).then(() => this.search());
+            return Promise.race(promises).then(() => this.search());
           } else {
-            this.search();
+            return this.search();
           }
         });
     } else {
-      this.search();
+      return this.search();
     }
   }
 
