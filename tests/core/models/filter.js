@@ -91,10 +91,9 @@ describe('creating filters', () => {
   });
 
   it('can properly parse the key of a filter', () => {
-    const filter = new Filter({ 'myField': { '$myMatcher': 'myValue' } });
-    expect(Filter.getFilterKey(filter)).toEqual('myField');
-    expect(Filter.getFilterKey(null)).toBeFalsy();
-    expect(Filter.getFilterKey(undefined)).toBeFalsy();
-    expect(Filter.getFilterKey({})).toBeFalsy();
+    let filter = new Filter({ 'myField': { '$myMatcher': 'myValue' } });
+    expect(filter.getFilterKey()).toEqual('myField');
+    filter = Filter.empty();
+    expect(filter.getFilterKey()).toBeFalsy();
   });
 });
