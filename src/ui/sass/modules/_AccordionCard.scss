@@ -99,10 +99,7 @@
 
   &-content
   {
-    margin-top: $accordion-card-spacing / 2;
-    margin-right: $accordion-card-spacing;
-    margin-left: $accordion-card-spacing;
-    padding-bottom: $accordion-card-spacing / 2;
+    padding: $accordion-card-spacing / 2 $accordion-card-spacing;
     height: 0;
   }
 
@@ -128,7 +125,7 @@
 
   &-ctas 
   {
-    margin-bottom: $accordion-card-spacing / 2;
+    padding-bottom: $accordion-card-spacing / 2;
   }
 }
 
