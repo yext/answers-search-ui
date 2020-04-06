@@ -20,7 +20,7 @@
 
   $accordion-card-details-size: $font-size-md !default;
   $accordion-card-details-weight: $font-weight-normal !default;
-  $accordion-card-details-line-height: $line-height-md !default;
+  $accordion-card-details-line-height: $accordion-card-details-size * 10/7 !default;
   $accordion-card-details-color: $color-text-primary !default;
 
   $accordion-card-margin: $base-spacing / 2 !default;
@@ -64,10 +64,10 @@
 
   &-title
   {
-    margin-top: $accordion-card-spacing * 4 / 9;
+    margin-top: $accordion-card-spacing / 2;
     margin-right: $accordion-card-spacing;
     margin-left: $accordion-card-spacing;
-    margin-bottom: $accordion-card-spacing * 4 / 9;
+    margin-bottom: $accordion-card-spacing * 5/8;
     text-align: left;
     @include Text(
       $size: $accordion-card-title-size,
@@ -88,14 +88,18 @@
   &-icon svg
   {
     transform: rotate(90deg);
-    transition: transform 400ms ease-in;
+    transition: all 400ms ease-in;
+  }
+
+  &-body
+  {
+    transition: all 400ms ease-in;
+    overflow: hidden;
   }
 
   &-content
   {
-    margin: 0 $accordion-card-spacing;
-    overflow: hidden;
-    transition: all 400ms ease;
+    padding: $accordion-card-spacing / 2 $accordion-card-spacing;
     height: 0;
   }
 
@@ -105,23 +109,23 @@
       $size: $accordion-card-subtitle-size,
       $color: $accordion-card-subtitle-color,
     );
+    padding-bottom: $accordion-card-spacing / 2;
   }
 
   &-details
   {
-    margin-top: $accordion-card-spacing / 2;
     @include Text(
       $size: $accordion-card-details-size,
       $color: $accordion-card-details-color,
       $weight: $accordion-card-details-weight,
       $line-height: $accordion-card-details-line-height,
     );
+    padding-bottom: $accordion-card-spacing / 2;
   }
 
-  &-ctas 
+  &-ctas .yxt-CTACollection-item
   {
-    margin-top: $accordion-card-spacing / 2;
-    display: none;
+    padding-bottom: $accordion-card-spacing / 2;
   }
 }
 
@@ -131,33 +135,27 @@
   $accordion-card-spacing--expanded: $base-spacing !default;
 
   background-color: $accordion-card-background-color--expanded;
-  margin-bottom: $accordion-card-spacing--expanded * 0.5;
 
   .yxt-AccordionCard-icon svg
   {
     transform: rotate(-90deg);
-    transition: transform 400ms ease-in;
+    transition: all 400ms ease-in;
+  }
+
+  .yxt-AccordionCard-body
+  {
+    transition: all 400ms ease-in;
   }
 
   .yxt-AccordionCard-content  
   {
-    margin-top: $accordion-card-spacing--expanded * 0.5;
-    margin-right: $accordion-card-spacing--expanded;
-    margin-left: $accordion-card-spacing--expanded;
-    margin-bottom: 0;
     height: auto;
     overflow: hidden;
-    transition: all 400ms ease;
   }
 
   .yxt-AccordionCard-ctas
   {
     display: flex;
     flex-direction: column;
-  }
-
-  .yxt-CTACollection-item:not(:last-child)
-  {
-    margin-bottom: $accordion-card-spacing--expanded / 2;
   }
 }

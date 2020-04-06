@@ -55,6 +55,7 @@
     $accordion-card-cta-font-size: $font-size-md !default;
     $accordion-card-cta-font-weight: $font-weight-normal !default;
     $accordion-card-cta-color: $color-brand-primary !default;
+    align-items: flex-end;
 
     @include Text(
       $size: $accordion-card-cta-font-size,
@@ -65,6 +66,6 @@
     .Icon {
       height: $accordion-card-cta-icon-size;
       width: $accordion-card-cta-icon-size;
-      margin-right: $accordion-card-cta-spacing * 0.3;
+      margin-right: $accordion-card-cta-spacing * 0.5;
     }
 }
