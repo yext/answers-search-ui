@@ -8,7 +8,7 @@
   $nav-text-color: $color-text-primary !default;
   $nav-text-hover-color: #c5cace !default;
   $nav-text-active-color: $color-brand-primary !default;
-  $nav-text-active-border-width: 2px;
+  $nav-text-active-border-width: 2px !default;
   $nav-text-active-border: $nav-text-active-border-width solid $color-brand-primary !default;
   $nav-text-focus-background-color: #e9e9e9 !default;
 
@@ -18,7 +18,7 @@
   $nav-dropdown-color: $nav-text-color !default;
   $nav-dropdown-hover-color: $nav-dropdown-color !default;
   $nav-dropdown-hover-background-color: #eeeff0 !default;
-  $nav-dropdown-width: 250px;
+  $nav-dropdown-width: 250px !default;
 
   $nav-border-color: $color-borders !default;
 

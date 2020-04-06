@@ -6,7 +6,7 @@
   background-color: $color-brand-white;
   border: $border-default;
 
-  $alternative-verticals-emphasized-font-weight: $font-weight-medium;
+  $alternative-verticals-emphasized-font-weight: $font-weight-medium !default;
 
   @media (min-width: $breakpoint-mobile-max) {
     margin-bottom: 24px;
