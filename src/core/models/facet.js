@@ -30,7 +30,7 @@ export default class Facet {
     });
     const flatFilters = filters.flatMap(f => f.$or || f);
     flatFilters.forEach(f => {
-      const key = Filter.getFilterKey(f);
+      const key = f.getFilterKey();
       if (!groups[key]) {
         groups[key] = [];
       }

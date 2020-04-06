@@ -84,7 +84,7 @@ class AppliedQueryFilter {
   constructor (appliedQueryFilter) {
     this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
     this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
-    this.fieldId = Filter.getFilterKey(appliedQueryFilter.filter);
+    this.fieldId = Object.keys(appliedQueryFilter.filter)[0];
   }
 
   static from (appliedQueryFilters) {

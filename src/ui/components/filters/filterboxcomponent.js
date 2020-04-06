@@ -264,7 +264,7 @@ export default class FilterBoxComponent extends Component {
    * @private
    */
   _saveFiltersToStorage () {
-    const validFilters = this._filters.filter(f => Filter.getFilterKey(f));
+    const validFilters = this._filters.filter(f => f.getFilterKey());
 
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);

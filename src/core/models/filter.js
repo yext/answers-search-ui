@@ -15,10 +15,25 @@ export default class Filter {
    * a special string such as $or or $and.
    * @type {string}
    */
-  static getFilterKey (filter) {
-    if (filter && Object.keys(filter).length > 0) {
-      return Object.keys(filter)[0];
+  getFilterKey () {
+    if (Object.keys(this).length > 0) {
+      return Object.keys(this)[0];
     }
+  }
+
+  /**
+   * Create an empty filter
+   */
+  static empty () {
+    return new Filter();
+  }
+
+  /**
+   * Wrap filter data in a Filter class
+   * @param {Object} filter 
+   */
+  static from (filter) {
+    return new Filter(filter);
   }
 
   /**
@@ -60,7 +75,7 @@ export default class Filter {
   static group (...filters) {
     const groups = {};
     for (const filter of filters) {
-      const key = Filter.getFilterKey(filter);
+      const key = filter.getFilterKey();
       if (!groups[key]) {
         groups[key] = [];
       }
