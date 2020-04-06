@@ -2,7 +2,6 @@
 
 import SearchStates from '../storage/searchstates';
 import ResultFactory from './resultfactory';
-import Filter from './filter';
 
 export default class Section {
   constructor (data, url, formatters) {

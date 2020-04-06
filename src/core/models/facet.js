@@ -1,7 +1,5 @@
 /** @module Facet */
 
-import Filter from './filter';
-
 /**
  * Model representing a facet filter with the format of
  * {

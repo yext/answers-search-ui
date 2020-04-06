@@ -30,7 +30,7 @@ export default class Filter {
 
   /**
    * Wrap filter data in a Filter class
-   * @param {Object} filter 
+   * @param {Object} filter
    */
   static from (filter) {
     return new Filter(filter);
