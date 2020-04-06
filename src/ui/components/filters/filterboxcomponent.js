@@ -281,7 +281,7 @@ export default class FilterBoxComponent extends Component {
    * Trigger a search with all filters in storage
    */
   _search () {
-    this.verticalSearch({
+    this.core.verticalSearch(this._config.verticalKey, {
       resetPagination: true,
       useFacets: true
     });

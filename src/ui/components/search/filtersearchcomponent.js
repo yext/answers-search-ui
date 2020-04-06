@@ -191,7 +191,7 @@ export default class FilterSearchComponent extends Component {
     if (this._storeOnChange) {
       return;
     }
-    this.verticalSearch({
+    this.core.verticalSearch(this._config.verticalKey, {
       resetPagination: true,
       useFacets: true
     });

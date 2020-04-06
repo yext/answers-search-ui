@@ -465,10 +465,7 @@ export default class SearchComponent extends Component {
    */
   search (query) {
     if (this._verticalKey) {
-      this.verticalSearch({
-        input: query,
-        resetPagination: true
-      });
+      this.core.verticalSearch(this._config.verticalKey, { resetPagination: true }, { input: query });
     } else {
       // NOTE(billy) Temporary hack for DEMO
       // Remove me after the demo

@@ -243,7 +243,7 @@ export default class GeoLocationComponent extends Component {
     }
 
     if (this._config.searchOnChange) {
-      this.verticalSearch({
+      this.core.verticalSearch(this._config.verticalKey, {
         resetPagination: true,
         useFacets: true
       });
