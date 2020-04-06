@@ -88,12 +88,12 @@
   &-icon svg
   {
     transform: rotate(90deg);
-    transition: all 300ms ease-in;
+    transition: all 400ms ease-in;
   }
 
   &-body
   {
-    transition: all 300ms ease-in;
+    transition: all 400ms ease-in;
     overflow: hidden;
   }
 
@@ -141,12 +141,12 @@
   .yxt-AccordionCard-icon svg
   {
     transform: rotate(-90deg);
-    transition: all 300ms ease-in;
+    transition: all 400ms ease-in;
   }
 
   .yxt-AccordionCard-body
   {
-    transition: all 300ms ease-in;
+    transition: all 400ms ease-in;
   }
 
   .yxt-AccordionCard-content  
