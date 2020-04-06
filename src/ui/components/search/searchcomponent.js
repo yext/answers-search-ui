@@ -469,7 +469,7 @@ export default class SearchComponent extends Component {
               });
               promises.push(geolocationPromise);
             }
-            return Promise.race(promises).then(() => this.search());
+            return Promise.race(promises).finally(() => this.search());
           } else {
             return this.search();
           }
