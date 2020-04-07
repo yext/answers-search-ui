@@ -312,12 +312,12 @@ export default class FilterOptionsComponent extends Component {
     const filters = this.config.options
       .filter(o => o.selected)
       .map(o => o.filter
-        ? o.filter
+        ? Filter.from(o.filter)
         : Filter.equal(o.field, o.value));
 
     this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
     return filters.length > 0
       ? Filter.group(...filters)
-      : {};
+      : Filter.empty();
   }
 }
