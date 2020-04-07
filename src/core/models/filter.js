@@ -11,6 +11,32 @@ export default class Filter {
   }
 
   /**
+   * A filter should have exactly ONE key. That key is EITHER the field name to filter by, or
+   * a special string such as $or or $and.
+   * @type {string}
+   */
+  getFilterKey () {
+    if (Object.keys(this).length > 0) {
+      return Object.keys(this)[0];
+    }
+  }
+
+  /**
+   * Create an empty filter
+   */
+  static empty () {
+    return new Filter();
+  }
+
+  /**
+   * Wrap filter data in a Filter class
+   * @param {Object} filter
+   */
+  static from (filter) {
+    return new Filter(filter);
+  }
+
+  /**
    * Parse a JSON format filter returned from the server into a Filter
    * @param {*} responseFilter A filter in JSON format returned from the backend
    * @returns {Filter}
@@ -49,7 +75,7 @@ export default class Filter {
   static group (...filters) {
     const groups = {};
     for (const filter of filters) {
-      const key = Object.keys(filter)[0];
+      const key = filter.getFilterKey();
       if (!groups[key]) {
         groups[key] = [];
       }
