@@ -101,7 +101,7 @@
   {
     display: flex;
     flex-wrap: nowrap;
-    width: 100%;
+    max-width: 100%;
     padding-top: $base-spacing;
     padding-bottom: $base-spacing;
     padding-left: $base-spacing;
