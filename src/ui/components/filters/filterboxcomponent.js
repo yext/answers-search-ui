@@ -263,10 +263,7 @@ export default class FilterBoxComponent extends Component {
    * @private
    */
   _saveFiltersToStorage () {
-    const validFilters = this._filters.filter(f =>
-      f !== undefined &&
-      f !== null &&
-      Object.keys(f).length > 0);
+    const validFilters = this._filters.filter(f => f.getFilterKey());
 
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
