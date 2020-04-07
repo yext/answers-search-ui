@@ -148,7 +148,7 @@ export default class DateRangeFilterComponent extends Component {
    */
   _buildFilter () {
     if (this._date.min === '' || this._date.max === '') {
-      return {};
+      return Filter.empty();
     }
     return this._isExclusive
       ? Filter.exclusiveRange(this._field, this._date.min, this._date.max)
