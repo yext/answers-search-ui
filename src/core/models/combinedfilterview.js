@@ -13,7 +13,7 @@ export default class CombinedFilterView {
   constructor (filterViews = [], combinator) {
     /**
      * The filter to send to the backend.
-     * @type {FilterView}
+     * @type {Array<FilterView>}
      */
     this._filterViews = filterViews;
 
@@ -52,6 +52,7 @@ export default class CombinedFilterView {
    * Creates a combined filter view, if given more than one {@link FilterView}.
    * @param {Array<FilterView>} filterViews
    * @param {string} combinator
+   * @returns {CombinedFilterView}
    */
   static from (filterViews = [], combinator) {
     if (filterViews.length === 0) {
