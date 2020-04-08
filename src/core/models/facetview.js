@@ -15,7 +15,7 @@ export default class FacetView {
 
     /**
      * List of available field ids used in this facet.
-     * @type {FilterMetadata}
+     * @type {Array<string>}
      */
     this._availableFieldIds = availableFieldIds;
     Object.freeze(this);
