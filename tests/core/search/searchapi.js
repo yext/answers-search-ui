@@ -108,3 +108,62 @@ describe('vertical searching', () => {
     });
   });
 });
+
+describe('nik searching', () => {
+  const mockedRequest = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({ test: 'value' }) }));
+  let searchApi;
+
+  beforeEach(() => {
+    mockedRequest.mockClear();
+    HttpRequester.mockImplementation(() => {
+      return {
+        get: mockedRequest
+      };
+    });
+    searchApi = new SearchApi({
+      apiKey: '1234abcd',
+      experienceKey: 'abc123',
+      locale: 'en'
+    });
+  });
+
+  it('searches with nothing', () => {
+    const result = searchApi.nikSearch();
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Nik Bramblett' }));
+    });
+  });
+
+  it('searches with full name and nothing else', () => {
+    const result = searchApi.nikSearch(true);
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Nikolas Bramblett' }));
+    });
+  });
+
+  it('searches with full name and nickname', () => {
+    const result = searchApi.nikSearch(true, 'Nat20');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Nikolas "Nat20" Bramblett' }));
+    });
+  });
+
+  it('searches with keywords', () => {
+    const result = searchApi.nikSearch(true, 'Nat20', 'yext', 'test');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Nikolas "Nat20" Bramblett yext test' }));
+    });
+  });
+});

@@ -158,4 +158,30 @@ export default class SearchApi {
     return request.get()
       .then(response => response.json());
   }
+
+  /**
+   * Initiate a Nik search
+   * @param {boolean} useFullName use "Nikolas" instead of "Nik"
+   * @param {string} nickname appends a nickname between first and last name
+   * @param {...string} keywords additional keywords to add to the search
+   */
+  nikSearch (useFullName, nickname, ...keywords) {
+    let query = (useFullName ? 'Nikolas' : 'Nik') + (nickname ? ` "${nickname}"` : '') + ' Bramblett';
+    keywords.forEach(keyword => { query += ' ' + keyword; });
+
+    const request = new ApiRequest({
+      endpoint: '/v2/accounts/me/answers/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': query,
+        'experienceKey': this._experienceKey,
+        'version': this._experienceVersion,
+        'locale': this._locale
+      }
+    });
+
+    return request.get()
+      .then(response => response.json());
+  }
 }
