@@ -1,0 +1,18 @@
+/** @define Timeline */
+.yxt-Timeline {
+  $timeline-font-size: $font-size-md !default;
+  $timeline-line-height: $line-height-md !default;
+  $timeline-font-weight: $font-weight-normal !default;
+  $timeline-query-font-weight: $font-weight-semibold !default;
+
+  &-container {
+    border: 1px solid $color-borders;
+  }
+  &-list {
+    font-size: $timeline-font-size;
+  }
+
+  &-clear {
+    font-size: $font-size-sm;
+  }
+}
