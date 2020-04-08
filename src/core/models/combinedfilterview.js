@@ -26,14 +26,6 @@ export default class CombinedFilterView {
   }
 
   /**
-   * Gets all stored {@link BasicFilterView}, flattened into an array of depth 1.
-   * @returns {Array<BasicFilterView>}
-   */
-  getBasicFilterViews () {
-    return this._filterViews.map(fv => fv.getBasicFilterViews()).flat();
-  }
-
-  /**
    * Gets all stored filterViews, flattened into an array of depth 1.
    * @returns {Filter}
    */
@@ -46,6 +38,14 @@ export default class CombinedFilterView {
       default:
         throw new AnswersCoreError(`Unrecognized filter combinator ${this._combinator}`);
     }
+  }
+
+  /**
+   * Gets all stored {@link FilterMetadata}, flattened into an array of depth 1.
+   * @returns {Array<FilterMetadata>}
+   */
+  getMetadata () {
+    return this._filterViews.map(fv => fv.getMetadata()).flat();
   }
 
   /**

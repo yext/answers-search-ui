@@ -5,7 +5,14 @@
  */
 export default class FilterMetadata {
   constructor (metadata = {}) {
-    const { fieldName, displayValues } = metadata;
+    const { fieldId, fieldName, displayValue } = metadata;
+
+    /**
+     * Field id for the associated {@link BasicFilterView}
+     * @type {string}
+     */
+    this.fieldId = fieldId;
+
     /**
      * Field display name for the {@link BasicFilterView} this is associated with.
      * @type {string}
@@ -13,13 +20,17 @@ export default class FilterMetadata {
     this.fieldName = fieldName;
 
     /**
-     * Display values for the {@link BasicFilterView} this is associated with.
-     * If displayValues is a single value not wrapped in an array, wrap it in an array.
+     * Display value for the {@link BasicFilterView} this is associated with.
      */
-    this.displayValues = [ ...displayValues ].flat();
+    this.displayValue = displayValue;
     Object.freeze(this);
   }
 
+  /**
+   * Wrap filterView data in the BasicFilterView class
+   * @param {Object} metadata
+   * @returns {FilterMetadata}
+   */
   static from (metadata) {
     return new FilterMetadata(metadata);
   }

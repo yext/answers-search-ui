@@ -25,15 +25,15 @@ export default class FacetView {
    * @returns {Facet}
    */
   getFacet () {
-    const filters = this.getBasicFilterViews().map(fv => fv.getFilter());
+    const filters = this._filterViews.map(fv => fv.getFilter());
     return Facet.fromFilters(this._availableFieldIds, filters);
   }
 
   /**
-   * @returns {Array<BasicFilterView>}
+   * @returns {Array<FilterMetadata>}
    */
-  getBasicFilterViews () {
-    return this._filterViews.map(fv => fv.getBasicFilterViews()).flat();
+  getMetadata () {
+    return this._filterViews.map(fv => fv.getMetadata()).flat();
   }
 
   /**

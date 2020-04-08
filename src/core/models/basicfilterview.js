@@ -23,10 +23,6 @@ export default class BasicFilterView {
     Object.freeze(this);
   }
 
-  getBasicFilterViews () {
-    return [ this ];
-  }
-
   getFilter () {
     return this._filter;
   }
@@ -37,7 +33,8 @@ export default class BasicFilterView {
 
   /**
    * Wrap filterView data in the BasicFilterView class
-   * @param {BasicFilterView} filterView
+   * @param {Object} filterView
+   * @returns {BasicFilterView}
    */
   static from (filterView) {
     return new BasicFilterView(filterView.filter, filterView.metadata);

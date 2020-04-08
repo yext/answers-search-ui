@@ -14,5 +14,5 @@ export default class FilterView {
    * Returns a list of all of the {@link BasicFilterView} in this FilterView.
    * @returns {List<FilterView>} The backend response
    */
-  getBasicFilterViews () {}
+  getMetadata () {}
 }
