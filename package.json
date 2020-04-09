@@ -59,7 +59,8 @@
     "dev": "gulp dev",
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "semistandard",
-    "test": "semistandard && jest && testcafe safari,chrome tests/acceptance/acceptancesuite.js",
+    "test": "semistandard && jest",
+    "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuite.js",
     "size": "size-limit",
     "fix": "semistandard --fix"
   },
