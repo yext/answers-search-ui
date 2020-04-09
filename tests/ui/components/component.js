@@ -7,6 +7,8 @@ import Handlebars from 'handlebars/dist/handlebars.min.js';
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
 import MockComponentManager from '../../setup/mockcomponentmanager';
 
+/* global MouseEvent */
+
 const DEFAULT_TEMPLATE = '<div>This is a default template {{name}}</div>';
 
 // Our render requires the native handlebars compiler,
@@ -77,7 +79,7 @@ describe('attaching analytics events', () => {
     const wrapper = mount(component);
     expect(domOn).toHaveBeenCalledTimes(1);
 
-    wrapper.find('#test').simulate('click');
+    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
     expect(mockAnalyticsReporter.report).toHaveBeenCalledTimes(1);
     const expectedEvent = new AnalyticsEvent('test_event');
     expectedEvent.addOptions({ name: 'Jesse' });
@@ -101,7 +103,7 @@ describe('attaching analytics events', () => {
     const wrapper = mount(component);
     expect(domOn).toHaveBeenCalledTimes(1);
 
-    wrapper.find('#test').simulate('click');
+    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
     expect(mockAnalyticsReporter.report).toHaveBeenCalledTimes(1);
     const expectedEvent = new AnalyticsEvent('test_event');
     expectedEvent.addOptions({ name: 'Vig' });
@@ -124,7 +126,7 @@ describe('attaching analytics events', () => {
     const wrapper = mount(component);
     expect(domOn).toHaveBeenCalledTimes(1);
 
-    wrapper.find('#test').simulate('click');
+    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
     expect(mockAnalyticsReporter.report).toHaveBeenCalledTimes(1);
     const expectedEvent = new AnalyticsEvent('test_event');
     expectedEvent.addOptions({
