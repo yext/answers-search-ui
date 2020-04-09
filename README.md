@@ -1381,6 +1381,7 @@ ANSWERS.addComponent('SortOptions', {
 # Analytics
 
 Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks. You may add additional, custom analytic events to templates using certain data attributes, explained below. You may also send analytics from external code with the below interface.
+If you do not include a business ID in your base config, no analytics will be tracked.
 
 ```js
   const event = new ANSWERS.AnalyticsEvent('CUSTOM');
