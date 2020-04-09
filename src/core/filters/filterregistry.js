@@ -5,12 +5,12 @@ import Facet from '../models/facet';
 import FilterView from './filterview';
 
 export default class FilterRegistry {
-  constructor (filterNodes = {}, facetFilterViews = {}, availableFieldIds = []) {
+  constructor (filterNodeMap = {}, facetFilterViews = {}, availableFieldIds = []) {
     /**
      * Map of filter namespace to FilterNode.
      * @type {Object<string, FilterNode>}
      */
-    this.filterNodeMap = filterNodes;
+    this.filterNodeMap = filterNodeMap;
 
     /**
      * Array of filter views used to generate the facets.
