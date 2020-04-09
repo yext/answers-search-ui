@@ -1,6 +1,6 @@
 /** @module DOM */
 
-/* global HTMLElement, HTMLDocument, Window, Event, Element */
+/* global HTMLElement, HTMLDocument, Window, Element */
 
 let document = window.document;
 
@@ -173,13 +173,6 @@ export default class DOM {
   // TODO (agrow) investigate removing this
   // Event constructor polyfill
   static _customEvent (event, settings) {
-    if (typeof window.CustomEvent === 'function') {
-      return new Event(event, Object.assign({
-        'bubbles': true,
-        'cancelable': true
-      }, settings || {}));
-    }
-
     settings = settings || { bubbles: false, cancelable: false, detail: null };
     var evt = document.createEvent('CustomEvent');
     evt.initCustomEvent(event, settings.bubbles, settings.cancelable, settings.detail);
