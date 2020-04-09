@@ -29,6 +29,7 @@
           {{#if _config.url}}
             <a class="yxt-Result-titleLink"
                href="{{_config.url}}"
+               data-middleclick="active"
                data-eventtype="TITLE_CLICK"
                data-eventoptions='{{eventOptions}}'
                target="{{#if _config.target}}{{_config.target}}{{else if _config._parentOpts.target}}{{_config._parentOpts.target}}{{else}}_blank{{/if}}"
