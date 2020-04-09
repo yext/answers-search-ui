@@ -170,6 +170,8 @@ export default class DOM {
     DOM.query(selector).dispatchEvent(e);
   }
 
+  // TODO (agrow) investigate removing this
+  // Event constructor polyfill
   static _customEvent (event, settings) {
     settings = settings || { bubbles: false, cancelable: false, detail: null };
     var evt = document.createEvent('CustomEvent');
