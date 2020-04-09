@@ -47,7 +47,9 @@
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^4.0.1",
     "semistandard": "^13.0.1",
+    "serve": "^11.3.0",
     "size-limit": "^0.21.1",
+    "testcafe": "^1.8.4",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "whatwg-fetch": "^3.0.0"
@@ -58,6 +60,7 @@
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "semistandard",
     "test": "semistandard && jest",
+    "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuite.js",
     "size": "size-limit",
     "fix": "semistandard --fix"
   },
@@ -80,7 +83,9 @@
       "expect",
       "jest",
       "DOMParser",
-      "ytag"
+      "ytag",
+      "test",
+      "fixture"
     ],
     "ignore": [
       "docs/"
