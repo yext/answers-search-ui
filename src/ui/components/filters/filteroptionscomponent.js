@@ -101,6 +101,18 @@ class FilterOptionsConfig {
      */
     this.optionSelector = config.optionSelector || '.js-yext-filter-option';
 
+    /**
+     * The placeholder text used for the filter option search input
+     * @type {string}
+     */
+    this.searchPlaceholderText = config.placeholderText || 'Search here...';
+
+    /**
+     * If true, display the filter option search input
+     * @type {boolean}
+     */
+    this.isSearchable = config.isSearchable || false;
+
     this.validate();
 
     if (typeof config.previousOptions === 'string') {
@@ -192,10 +204,6 @@ export default class FilterOptionsComponent extends Component {
   }
 
   setState (data) {
-    let options = this.config.options;
-    if (this.config.showMore && !this.allShown) {
-      options = this.config.options.slice(0, this.config.showMoreLimit);
-    }
     const selectedCount = this.config.getSelectedCount();
     super.setState(Object.assign({}, data, {
       name: this.name.toLowerCase(),
@@ -205,7 +213,7 @@ export default class FilterOptionsComponent extends Component {
       allShown: this.allShown,
       selectedCount,
       isSingleOption: this.config.control === 'singleoption',
-      options
+      options: this.config.options
     }));
   }
 
@@ -239,6 +247,26 @@ export default class FilterOptionsComponent extends Component {
         });
     }
 
+    // searchable option list
+    if (this.config.isSearchable) {
+      const filterSearchInputEl = DOM.query(this._container, '.js-yxt-FilterOptions-filter');
+      const filterOptionEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-option');
+      DOM.on(filterSearchInputEl,
+        'keyup',
+        event => {
+          const filter = event.target.value;
+          for (let filterOption of filterOptionEls) {
+            const label = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel');
+            const labelText = label.textContent || label.innerText;
+            if (!filter || this._doesOptionMatchFilter(labelText, filter)) {
+              filterOption.classList.remove('hidden');
+            } else {
+              filterOption.classList.add('hidden');
+            }
+        }
+      });
+    }
+
     // expand button
     if (this.config.showExpand) {
       const legend = DOM.query(this._container, '.yxt-FilterOptions-clickableLegend');
@@ -263,6 +291,10 @@ export default class FilterOptionsComponent extends Component {
           }
         });
     }
+  }
+
+  _doesOptionMatchFilter(option, filter) {
+    return option && filter && option.toLowerCase().indexOf(filter.toLowerCase()) > -1;
   }
 
   clearOptions () {

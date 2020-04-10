@@ -106,6 +106,18 @@ class FilterBoxConfig {
     this.filterConfigs = config.filters.filter(f => f.options.length !== 0);
 
     /**
+     * The placeholder text used for the filter option search input
+     * @type {string}
+     */
+    this.searchPlaceholderText = config.placeholderText || 'Search here...';
+
+    /**
+     * If true, display the filter option search input
+     * @type {boolean}
+     */
+    this.isSearchable = config.isSearchable || false;
+
+    /**
      * Whether or not this filterbox contains facets. This affects the
      * the way the filters are used in the search
      * @type {boolean}
@@ -203,6 +215,8 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
+          isSearchable: this.config.isSearchable,
+          placeholderText: this.config.searchPlaceholderText,
           onChange: (filter) => {
             this.onFilterChange(i, filter);
           }

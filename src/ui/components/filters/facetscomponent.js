@@ -97,6 +97,18 @@ class FacetsConfig {
     this.fieldControls = config.fieldControls || {};
 
     /**
+     * The placeholder text used for the filter option search input
+     * @type {string}
+     */
+    this.searchPlaceholderText = config.placeholderText || 'Search here...';
+
+    /**
+     * If true, display the filter option search input
+     * @type {boolean}
+     */
+    this.isSearchable = config.searchable || false;
+
+    /**
      * The selector of the apply button
      * @type {string}
      * @private
@@ -202,6 +214,8 @@ export default class FacetsComponent extends Component {
         resetFilterLabel: this.config.resetFacetLabel,
         resetFiltersLabel: this.config.resetFacetsLabel,
         isDynamic: true,
+        isSearchable: this.config.isSearchable,
+        placeholderText: this.config.searchPlaceholderText,
         filters
       })
     );
