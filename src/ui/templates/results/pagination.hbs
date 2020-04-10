@@ -7,12 +7,18 @@
         data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
         aria-label="Go to the first page of results"
       >
-        <span class="yxt-Pagination-doubleChevron--left"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
-        <span class="yxt-Pagination-chevron--left"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
+        {{#unless icons.firstButtonIcon}}
+          <span class="yxt-Pagination-doubleChevron--left"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "chevron" }'></span>
+          <span class="yxt-Pagination-chevron--left"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "chevron" }'></span>
+        {{else}}
+          <span class="yxt-Pagination-doubleChevron--left"
+                data-component="IconComponent"
+                data-opts='{ "iconUrl": "{{icons.firstButtonIcon}}" }'></span>
+        {{/unless}}
       </button>
     {{/if}}
     <button class="yxt-Pagination-button js-yxt-Pagination-previous {{#unless showPreviousPageButton}}yxt-Pagination--hidden{{/unless}}"
@@ -21,9 +27,15 @@
       data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
       aria-label="Go to the previous page of results"
     >
-      <span class="yxt-Pagination-chevron--left"
-            data-component="IconComponent"
-            data-opts='{ "iconName": "chevron" }'></span>
+      {{#unless icons.previousButtonIcon}}
+        <span class="yxt-Pagination-chevron--left"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "chevron" }'></span>
+      {{else}}
+        <span class="yxt-Pagination-chevron--left"
+              data-component="IconComponent"
+              data-opts='{ "iconUrl": "{{icons.previousButtonIcon}}" }'></span>
+      {{/unless}}
     </button>
 
     <span class="yxt-Pagination-page">{{pageLabel}} {{pageNumber}}</span>
@@ -34,9 +46,15 @@
       data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
         aria-label="Go to the next page of results"
     >
-      <span class="yxt-Pagination-chevron"
-            data-component="IconComponent"
-            data-opts='{ "iconName": "chevron" }'></span>
+      {{#unless icons.nextButtonIcon}}
+        <span class="yxt-Pagination-chevron"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "chevron" }'></span>
+      {{else}}
+        <span class="yxt-Pagination-chevron"
+              data-component="IconComponent"
+              data-opts='{ "iconUrl": "{{icons.nextButtonIcon}}" }'></span>
+      {{/unless}}
     </button>
     {{#if lastPageButtonEnabled}}
       <button class="yxt-Pagination-button js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
@@ -45,12 +63,18 @@
         data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
         aria-label="Go to the last page of results"
       >
+        {{#unless icons.lastButtonIcon}}
         <span class="yxt-Pagination-doubleChevron"
               data-component="IconComponent"
               data-opts='{ "iconName": "chevron" }'></span>
         <span class="yxt-Pagination-chevron"
               data-component="IconComponent"
               data-opts='{ "iconName": "chevron" }'></span>
+        {{else}}
+          <span class="yxt-Pagination-doubleChevron"
+              data-component="IconComponent"
+              data-opts='{ "iconUrl": "{{icons.lastButtonIcon}}" }'></span>
+        {{/unless}}
       </button>
     {{/if}}
   </div>

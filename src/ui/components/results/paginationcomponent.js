@@ -24,18 +24,37 @@ export default class PaginationComponent extends Component {
     }
 
     /**
-     * If true, displays the first page button
+     * DEPRECATED
      * @type {boolean}
      * @private
      */
-    this._firstPageButtonEnabled = config.showFirst === undefined ? true : config.showFirst;
+    this._firstPageButtonEnabled = config.showFirst !== false;
 
     /**
-     * If true, displays the last page button
+     * DEPRECATED
      * @type {boolean}
      * @private
      */
-    this._lastPageButtonEnabled = config.showLast === undefined ? true : config.showLast;
+    this._lastPageButtonEnabled = config.showLast !== false;
+
+    /**
+     * If true, displays the first and last page buttons
+     * @type {boolean}
+     * @private
+     */
+    this._showFirstAndLastPageButtons = !!config.showFirstAndLastButton;
+
+    /**
+     * Icons object for first, previous, next, and last page icons.
+     * @type {{
+     *  nextButtonIcon: (string | undefined),
+     *  previousButtonIcon: (string | undefined),
+     *  firstButtonIcon: (string | undefined),
+     *  lastButtonIcon: (string | undefined),
+     * }}
+     * @private
+     */
+    this._icons = config.icons;
 
     /**
      * Options to include with all analytic events sent by this component
@@ -52,6 +71,13 @@ export default class PaginationComponent extends Component {
      * @private
      */
     this._pageLabel = config.pageLabel || 'Page';
+
+    /**
+     * Function that is invoked on pagination
+     * @type {function(): {}}
+     * @private
+     */
+    this._onPaginate = config.onPaginate || this.scrollToTop;
 
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
@@ -113,7 +139,7 @@ export default class PaginationComponent extends Component {
   }
 
   updatePage (offset) {
-    this.scrollToTop();
+    this._onPaginate();
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.persistentStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.verticalPage(this._verticalKey, offset);
@@ -134,14 +160,15 @@ export default class PaginationComponent extends Component {
     const maxPage = Math.trunc((results.resultsCount - 1) / limit);
     return super.setState({
       showControls: this.shouldShowControls(results, limit),
-      firstPageButtonEnabled: this._firstPageButtonEnabled,
-      lastPageButtonEnabled: this._lastPageButtonEnabled,
+      firstPageButtonEnabled: this._firstPageButtonEnabled || this._showFirstAndLastPageButtons,
+      lastPageButtonEnabled: this._lastPageButtonEnabled || this._showFirstAndLastPageButtons,
       pageNumber: pageNumber + 1,
       pageLabel: this._pageLabel,
       showFirstPageButton: pageNumber > 1,
       showPreviousPageButton: pageNumber > 0,
       showNextPageButton: isMoreResults,
       showLastPageButton: pageNumber < maxPage - 1,
+      icons: this._icons,
       ...data
     });
   }
