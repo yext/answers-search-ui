@@ -884,11 +884,11 @@ ANSWERS.addComponent('Pagination', {
   // Must be assigned either here or in the search config.
   verticalKey: '',
   // Display double-arrows allowing users to jump to the first and last page of results.
-  showFirstAndLastButton: false,
+  showFirstAndLastButton: true,
   // DEPRECATED. Display a double arrow allowing users to jump to the first page of results.
-  showFirst: true,
+  showFirst: false,
   // DEPRECATED. Display a double arrow allowing users to jump to the last page of results.
-  showLast: true,
+  showLast: false,
   // Label for a page of results
   pageLabel: 'Page'
   // Function invoked when a user clicks to change pages. By default, scrolls the user to the top of the page.

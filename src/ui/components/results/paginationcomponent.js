@@ -28,21 +28,21 @@ export default class PaginationComponent extends Component {
      * @type {boolean}
      * @private
      */
-    this._firstPageButtonEnabled = config.showFirst !== false;
+    this._firstPageButtonEnabled = config.showFirst === undefined ? config.showFirstAndLastButton : config.showFirst;
 
     /**
      * DEPRECATED
      * @type {boolean}
      * @private
      */
-    this._lastPageButtonEnabled = config.showLast !== false;
+    this._lastPageButtonEnabled = config.showLast === undefined ? config.showFirstAndLastButton : config.showLast;
 
     /**
      * If true, displays the first and last page buttons
      * @type {boolean}
      * @private
      */
-    this._showFirstAndLastPageButtons = !!config.showFirstAndLastButton;
+    this._showFirstAndLastPageButtons = config.showFirstAndLastButton !== false;
 
     /**
      * Icons object for first, previous, next, and last page icons.
