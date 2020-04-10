@@ -123,7 +123,7 @@ ANSWERS.registerHelper('noop', function(options) {
 
 Both onVerticalSearch and onUniversalSearch allow you to send an analytics event each time a search is run.
 These options expect functions that take in one parameter, which contains information about the search,
-and also return the desired analytics event. 
+and also return the desired analytics event.
 
 The search information exposed to both options is shown below.
 
@@ -1376,7 +1376,6 @@ ANSWERS.addComponent('SortOptions', {
   // Optional: The label to use for the reset button, defaults to 'reset'
   resetLabel: 'reset',
   // Optional: Allow collapsing excess filter options after a limit, defaults to true
-  // Note: screen readers will not read options hidden by this flag, without clicking show more first
   showMore: true,
   // Optional: The max number of filter options to show before collapsing extras, defaults to 5
   showMoreLimit: 5,

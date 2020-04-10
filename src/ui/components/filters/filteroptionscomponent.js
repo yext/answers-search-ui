@@ -182,12 +182,6 @@ export default class FilterOptionsComponent extends Component {
      * @type {boolean}
      */
     this.expanded = this.config.showExpand ? selectedCount > 0 : true;
-
-    /**
-     * True if all options are shown, false if some are hidden based on config
-     * @type {boolean}
-     */
-    this.allShown = false;
   }
 
   static get type () {
@@ -210,7 +204,6 @@ export default class FilterOptionsComponent extends Component {
       ...this.config,
       showReset: this.config.showReset && selectedCount > 0,
       expanded: this.expanded,
-      allShown: this.allShown,
       selectedCount,
       isSingleOption: this.config.control === 'singleoption',
       options: this.config.options
@@ -238,33 +231,59 @@ export default class FilterOptionsComponent extends Component {
 
     // show more/less button
     if (this.config.showMore) {
+      const showLessEl = DOM.query(this._container, '.js-yxt-FilterOptions-showLess');
+      const showMoreEl = DOM.query(this._container, '.js-yxt-FilterOptions-showMore');
+      const optionsOverLimitEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-aboveShowMoreLimit');
       DOM.on(
-        DOM.query(this._container, '.yxt-FilterOptions-showToggle'),
+        showLessEl,
         'click',
         () => {
-          this.allShown = !this.allShown;
-          this.setState();
+          showLessEl.classList.add('hidden');
+          showMoreEl.classList.remove('hidden');
+          for (let optionEl of optionsOverLimitEls) {
+            optionEl.classList.add('hidden');
+          }
+        });
+      DOM.on(
+        showMoreEl,
+        'click',
+        () => {
+          showLessEl.classList.remove('hidden');
+          showMoreEl.classList.add('hidden');
+          for (let optionEl of optionsOverLimitEls) {
+            optionEl.classList.remove('hidden');
+          }
         });
     }
 
     // searchable option list
     if (this.config.isSearchable) {
-      const filterSearchInputEl = DOM.query(this._container, '.js-yxt-FilterOptions-filter');
       const filterOptionEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-option');
-      DOM.on(filterSearchInputEl,
+      const filterContainerEl = DOM.query(this._container, '.js-yxt-FilterOptions-container');
+      DOM.on(
+        DOM.query(this._container, '.js-yxt-FilterOptions-filter'),
         'keyup',
         event => {
           const filter = event.target.value;
+          filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
+
           for (let filterOption of filterOptionEls) {
             const label = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel');
             const labelText = label.textContent || label.innerText;
-            if (!filter || this._doesOptionMatchFilter(labelText, filter)) {
-              filterOption.classList.remove('hidden');
+            if (!filter) {
+              filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
+              filterOption.classList.remove('hiddenSearch');
+              filterOption.classList.remove('displaySearch');
+            } else if (this._doesOptionMatchFilter(labelText, filter)) {
+              filterOption.classList.add('displaySearch');
+              filterOption.classList.remove('hiddenSearch');
             } else {
-              filterOption.classList.add('hidden');
+              filterOption.classList.add('hiddenSearch');
+              filterOption.classList.remove('displaySearch');
             }
+          }
         }
-      });
+      );
     }
 
     // expand button
