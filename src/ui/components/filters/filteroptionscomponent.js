@@ -312,7 +312,7 @@ export default class FilterOptionsComponent extends Component {
     }
   }
 
-  _doesOptionMatchFilter(option, filter) {
+  _doesOptionMatchFilter (option, filter) {
     return option && filter && option.toLowerCase().indexOf(filter.toLowerCase()) > -1;
   }
 
