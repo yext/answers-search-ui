@@ -49,7 +49,7 @@ export default class FilterRegistry {
 
   /**
    * Gets the filter string to send in a search query.
-   * @return {string}
+   * @returns {string}
    */
   getRequestFilter () {
     return JSON.stringify(this._getRequestFilter());
@@ -67,7 +67,7 @@ export default class FilterRegistry {
 
   /**
    * Gets the facet filter string to send in a search query.
-   * @return {string}
+   * @returns {string}
    */
   getRequestFacet () {
     return JSON.stringify(this._getRequestFacet());

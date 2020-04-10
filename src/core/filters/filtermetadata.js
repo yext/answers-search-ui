@@ -1,7 +1,7 @@
 /** @module FilterMetadata */
 
 /**
- * FilterMetadat is a container for the metadata of a {@link FilterView}.
+ * FilterMetadata is a container for the metadata of a {@link FilterView}.
  */
 export default class FilterMetadata {
   constructor (metadata = {}) {
