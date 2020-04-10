@@ -120,5 +120,36 @@ describe('FilterNode with 2 filters with different', () => {
     expect(rootNode.getFilter()).toEqual(Filter.from({
       [ FilterCombinators.AND ]: [ filter1, filter3, filter4 ]
     }));
+
+    const actualFilterViews = rootNode.getFilterViews();
+    expect(actualFilterViews).toHaveLength(5);
+    const firstFilterViews = actualFilterViews.filter(fv => fv.filter.getFilterKey() === 'c_1');
+    expect(firstFilterViews).toHaveLength(3);
+    firstFilterViews.forEach(fv => {
+      expect(fv.filter).toEqual(filter1);
+      expect(fv.metadata).toEqual({
+        fieldId: 'c_1',
+        ...metadata1
+      });
+    });
+    const secondFilterViews = actualFilterViews.filter(fv => fv.filter.getFilterKey() === 'c_2');
+    expect(secondFilterViews).toHaveLength(2);
+    secondFilterViews.forEach(fv => {
+      expect(fv.filter).toEqual(filter2);
+      expect(fv.metadata).toEqual({
+        fieldId: 'c_2',
+        ...metadata2
+      });
+    });
+  });
+
+  it('can return filter views for a leaf node', () => {
+    expect(node1.getFilterViews()).toHaveLength(1);
+    const actualFilterView = node1.getFilterViews()[0];
+    expect(actualFilterView.filter).toEqual(filter1);
+    expect(actualFilterView.metadata).toEqual({
+      fieldId: 'c_1',
+      ...metadata1
+    });
   });
 });

@@ -44,13 +44,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterView>}
    */
   getFilterViews () {
-    const _getFilterViews = node => {
-      if (node.filterView) {
-        return [ node.filterView ];
-      }
-      return node.children.flatMap(_getFilterViews);
-    };
-    return Object.values(this.filterNodeMap).flatMap(node => _getFilterViews(node));
+    return Object.values(this.filterNodeMap).flatMap(node => node.getFilterViews());
   }
 
   /**

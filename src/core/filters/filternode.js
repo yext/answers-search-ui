@@ -10,10 +10,20 @@ import FilterCombinators from './filtercombinators';
 export default class FilterNode {
   /**
    * Returns the filter associated with this node.
-   * @type {Filter}
+   * Overriden by implementing classes below.
+   * @returns {Filter}
    */
   getFilter () {
     return Filter.empty();
+  }
+
+  /**
+   * Returns the filter views associated with this node.
+   * Overriden by implementing classes below.
+   * @returns {Array<FilterView>}
+   */
+  getFilterViews () {
+    return [];
   }
 
   /**
@@ -110,6 +120,14 @@ class _BranchNode extends FilterNode {
     }
     return Filter.empty();
   }
+
+  /**
+   * Returns a flattened array of the filter views associated with this node.
+   * @returns {Array<FilterView>}
+   */
+  getFilterViews () {
+    return this.children.flatMap(node => node.getFilterViews());
+  }
 }
 
 /**
@@ -133,5 +151,13 @@ class _LeafNode extends FilterNode {
    */
   getFilter () {
     return this.filterView.filter;
+  }
+
+  /**
+   * Returns the filter view of this node.
+   * @returns {Array<FilterView>}
+   */
+  getFilterViews () {
+    return [ this.filterView ];
   }
 }
