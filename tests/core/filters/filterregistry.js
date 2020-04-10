@@ -47,8 +47,8 @@ describe('FilterRegistry', () => {
 
     registry.setFilterNode('namespace2', node2);
     expect(registry.getFilterViews()).toHaveLength(2);
-    expect(registry.getFilterViews()).toContain(node1.filterView);
-    expect(registry.getFilterViews()).toContain(node2.filterView);
+    expect(registry.getFilterViews()).toContainEqual(node1.filterView);
+    expect(registry.getFilterViews()).toContainEqual(node2.filterView);
     const expectedFilter2 = {
       [ FilterCombinators.AND ]: [ filter1, filter2 ]
     };

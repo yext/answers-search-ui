@@ -41,12 +41,9 @@ describe('FilterNode with 2 filters with different', () => {
   });
 
   it('correctly instantiates a FilterNode with fromFilterView()', () => {
-    const expectedNode = new FilterNode({
-      filterView: filterView1,
-      combinator: undefined,
-      children: []
-    });
-    expect(node1).toEqual(expectedNode);
+    expect(node1.combinator).toBeUndefined();
+    expect(node1.children).toBeUndefined();
+    expect(node1.filterView).toBeTruthy();
     expect(node1.getFilter()).toEqual(Filter.from(filter1));
     expect(node1.getFilter().getFilterKey()).toEqual('c_1');
   });
@@ -57,7 +54,7 @@ describe('FilterNode with 2 filters with different', () => {
     expect(andNode.children.length).toEqual(2);
     expect(andNode.children).toContain(node1);
     expect(andNode.children).toContain(node2);
-    expect(andNode.filterView).toBeNull();
+    expect(andNode.filterView).toBeUndefined();
 
     const expectedFilter1 = Filter.and(Filter.from(filter1), Filter.from(filter2));
     const expectedFilter2 = Filter.from({
@@ -74,7 +71,7 @@ describe('FilterNode with 2 filters with different', () => {
     expect(orNode.children.length).toEqual(2);
     expect(orNode.children).toContain(node1);
     expect(orNode.children).toContain(node2);
-    expect(orNode.filterView).toBeNull();
+    expect(orNode.filterView).toBeUndefined();
 
     const expectedFilter1 = Filter.or(Filter.from(filter1), Filter.from(filter2));
     const expectedFilter2 = Filter.from({
@@ -87,12 +84,16 @@ describe('FilterNode with 2 filters with different', () => {
 
   it('performs a no-op when trying to combine a single node', () => {
     const orNode = FilterNode.or(node1);
-    expect(orNode).toBe(node1);
+    expect(orNode.combinator).toEqual(node1.combinator);
+    expect(orNode.filterView).toEqual(node1.filterView);
+    expect(orNode.children).toEqual(node1.children);
   });
 
   it('returns a blank FilterNode when trying to combine zero nodes', () => {
     const orNode = FilterNode.or();
-    expect(orNode).toEqual(new FilterNode());
+    expect(orNode.combinator).toBeUndefined();
+    expect(orNode.children).toBeUndefined();
+    expect(orNode.filterView).toBeUndefined();
   });
 
   it('can create a three-layer filter node', () => {
