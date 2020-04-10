@@ -408,6 +408,18 @@ class Answers {
     this.core.setQuery(searchConfig.defaultInitialSearch);
   }
 
+  /**
+   * Sets the geolocation tag in global storage, overriding other inputs. Do not use in conjunction
+   * with other components that will set the geolocation internally.
+   * @param {number} lat
+   * @param {number} long
+   */
+  setGeolocation (lat, lng) {
+    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+      lat, lng, radius: 0
+    });
+  }
+
   /*
    * Updates the css styles with new current variables. This is useful when the css
    * variables are updated dynamically (e.g. through js) or if the css variables are
