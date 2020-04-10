@@ -268,8 +268,8 @@ export default class FilterOptionsComponent extends Component {
           filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
 
           for (let filterOption of filterOptionEls) {
-            const label = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel');
-            const labelText = label.textContent || label.innerText;
+            const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel');
+            const labelText = labelEl.textContent || labelEl.innerText;
             if (!filter) {
               filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
               filterOption.classList.remove('hiddenSearch');
