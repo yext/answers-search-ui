@@ -360,6 +360,18 @@ class Answers {
     this.core.globalStorage.set('queryTrigger', 'initialize');
     this.core.setQuery(searchConfig.defaultInitialSearch);
   }
+
+  /**
+   * Sets the geolocation tag in global storage, overriding other inputs. Do not use in conjunction
+   * with other components that will set the geolocation internally.
+   * @param {number} lat
+   * @param {number} long
+   */
+  setGeolocation (lat, lng) {
+    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+      lat, lng, radius: 0
+    });
+  }
 }
 
 /**

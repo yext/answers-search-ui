@@ -12,6 +12,7 @@ Outline:
    - [Using a Custom Renderer](#using-a-custom-renderer)
    - [Custom Data Formatting](#custom-data-formatting)
    - [Custom Data Transforms](#custom-data-transforms)
+   - [Using a Custom Geolocation](#using-a-custom-geolocation)
    - [Creating Custom Components](#creating-custom-components)
    - [Using a Custom Template](#using-a-custom-template)
    - [Removing Components](#removing-components)
@@ -304,6 +305,18 @@ ANSWERS.addComponent('SearchBar', {
   }
 })
 ```
+
+## Using a Custom Geolocation
+
+Some answers components will automatically attempt to determine the geolocation and provide it
+to the search requests. You can instead choose to manually override this value with
+
+```js
+ANSWERS.setGeolocation(/** latitude */ 0, /** longitude */ 0);
+```
+
+It is ***not recommended*** to use this function alongside geolocation components, as their
+behavior may conflict.
 
 ## Creating Custom Components
 
