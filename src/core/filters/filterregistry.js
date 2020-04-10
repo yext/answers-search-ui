@@ -19,7 +19,7 @@ import FilterNode from './filternode';
 export default class FilterRegistry {
   constructor (filterNodeMap = {}, facetFilterViews = {}, availableFieldIds = []) {
     /**
-     * Map of filter namespace to FilterNode.
+     * Map of FilterNodes, with each node given a unique key.
      * @type {Object<string, FilterNode>}
      */
     this.filterNodeMap = filterNodeMap;

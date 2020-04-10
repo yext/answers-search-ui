@@ -93,7 +93,14 @@ describe('FilterNode with 2 filters with different', () => {
     const orNode = FilterNode.or();
     expect(orNode.combinator).toBeUndefined();
     expect(orNode.children).toBeUndefined();
-    expect(orNode.filterView).toBeUndefined();
+    expect(orNode.filterView).toEqual({
+      filter: {},
+      metadata: {
+        displayValue: undefined,
+        fieldId: undefined,
+        fieldName: undefined
+      }
+    });
   });
 
   it('can create a three-layer filter node', () => {

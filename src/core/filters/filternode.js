@@ -123,7 +123,7 @@ class _LeafNode extends FilterNode {
     /**
      * @type {FilterView}
      */
-    this.filterView = filterView && new FilterView(filterView);
+    this.filterView = new FilterView(filterView);
     Object.freeze(this);
   }
 
