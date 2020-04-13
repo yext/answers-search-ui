@@ -94,9 +94,9 @@ export default class FilterRegistry {
   /**
    * Sets the filter views used for the current facet filters.
    * @param {Array<string>} availableFieldIds
-   * @param  {Object|FilterView} filterViews
+   * @param  {Array<Object|FilterView>} filterViews
    */
-  setFacetFilterViews (availableFieldIds = [], ...filterViews) {
+  setFacetFilterViews (availableFieldIds = [], filterViews) {
     this.availableFieldIds = availableFieldIds;
     this.globalStorage.set(StorageKeys.FACET_FILTER, filterViews.map(fv => new FilterView(fv)));
   }

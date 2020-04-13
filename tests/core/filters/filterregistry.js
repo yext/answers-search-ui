@@ -111,7 +111,7 @@ describe('FilterRegistry', () => {
   });
 
   it('can set facet filter views, always overriding previous facets', () => {
-    registry.setFacetFilterViews([ 'random_field', 'another_field' ], node1.filterView, node2.filterView);
+    registry.setFacetFilterViews([ 'random_field', 'another_field' ], [node1.filterView, node2.filterView]);
     const expectedFacet = Facet.fromFilters(
       [ 'random_field', 'another_field' ],
       Filter.from(filter1),
