@@ -872,7 +872,7 @@ const dataMappings = item => {
 
 ## Pagination Component
 
-The Pagination component allows users to page through vertical search results. Pagination requires verticalKey to be provided in the [base configuration](#configuration-options).
+The Pagination component allows users to page through vertical search results. Pagination requires verticalKey to be provided in the [search configuration](#search-configuration), or in the pagination config.
 
 ```html
 <div class="pagination-container"></div>
@@ -881,12 +881,18 @@ The Pagination component allows users to page through vertical search results. P
 ```js
 ANSWERS.addComponent('Pagination', {
   container: '.pagination-component',
-  // Display a double arrow allowing users to jump to the first page of results
-  showFirst: true,
-  // Display a double arrow allowing users to jump to the last page of results
-  showLast: true,
+  // Must be assigned either here or in the search config.
+  verticalKey: '',
+  // Display double-arrows allowing users to jump to the first and last page of results.
+  showFirstAndLastButton: true,
+  // DEPRECATED. Display a double arrow allowing users to jump to the first page of results.
+  showFirst: false,
+  // DEPRECATED. Display a double arrow allowing users to jump to the last page of results.
+  showLast: false,
   // Label for a page of results
   pageLabel: 'Page'
+  // Function invoked when a user clicks to change pages. By default, scrolls the user to the top of the page.
+  onPaginate: () => {},
 });
 ```
 
