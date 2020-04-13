@@ -44,10 +44,10 @@
     {{#if searchable}}
       <input type="text" class="js-yxt-FilterOptions-filter" placeholder="{{placeholderText}}">
     {{/if}}
-    <ul class='yxt-FilterOptions-options'>
+    <div class='yxt-FilterOptions-options'>
       {{#each options}}
         {{#if ../isSingleOption}}
-          <li class="singleoption-option yxt-FilterOptions-option">
+          <div class="singleoption-option yxt-FilterOptions-option">
             <input
               type="radio"
               class="js-yext-filter-option yxt-FilterOptions-input"
@@ -57,9 +57,9 @@
               data-index="{{@index}}"
               {{#if selected}}checked{{/if}}>
             <label class="singleoption-label" for="js-yext-radio-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
-          </li>
+          </div>
         {{else}}
-          <li class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#ifgte @index ../showMoreLimit}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/ifgte}}">
+          <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#ifgte @index ../showMoreLimit}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/ifgte}}">
             <input
               type="checkbox"
               class="js-yext-filter-option yxt-FilterOptions-input"
@@ -70,7 +70,7 @@
             <label class="yxt-FilterOptions-optionLabel js-yxt-FilterOptions-optionLabel" for="js-yext-checkbox-{{../name}}-{{@index}}">
               {{label}} {{#if countLabel}}({{countLabel}}){{/if}}
             </label>
-          </li>
+          </div>
         {{/if}}
       {{/each}}
     </ul>

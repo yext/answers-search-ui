@@ -960,7 +960,7 @@ ANSWERS.addComponent('FilterBox', {
   // The label to show on the apply button
   applyLabel: 'apply',
   // Optional, whether or not this filterbox contains dynamic filters, default false
-  isDynamic: true,
+  isDynamic: true
 });
 ```
 
