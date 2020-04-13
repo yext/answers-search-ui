@@ -92,6 +92,9 @@ class FacetsConfig {
     /**
      * The controls to use for each field. Each type of filter has a default
      * $eq : multioption (checkbox)
+     *
+     * DEPRECATED: prefer putting this in config.fields
+     *
      * @type {Object}
      */
     this.fieldControls = config.fieldControls || {};
@@ -107,6 +110,16 @@ class FacetsConfig {
      * @type {boolean}
      */
     this.searchable = config.searchable || false;
+
+    /**
+     * An object that maps field API names to their filter options overrides,
+     * which have the same keys as the config options in FilterOptions component.
+     *
+     * Defaults: `control` defaults to multioption, `searchable` and `placeholderText` both
+     *   default to the config from the Facets component's config.
+     * @type {Object}
+     */
+    this.fields = config.fields || {};
 
     /**
      * The selector of the apply button
@@ -138,8 +151,6 @@ export default class FacetsComponent extends Component {
      * @private
      */
     this._verticalKey = config.verticalKey;
-
-    // config.verticalKey || null;
 
     /**
      * The selector of the apply button
@@ -196,11 +207,14 @@ export default class FacetsComponent extends Component {
     }
 
     filters = filters.map(f => {
+      const fieldOverrides = this.config.fields[f.fieldId] || {};
+      const control = fieldOverrides.control || this.config.fieldControls[f.fieldId] || 'multioption';
       return Object.assign({}, f, {
         type: 'FilterOptions',
-        control: this.config.fieldControls[f.fieldId] || 'multioption',
         searchable: this.config.searchable,
-        placeholderText: this.config.placeholderText
+        placeholderText: this.config.placeholderText,
+        ...fieldOverrides,
+        control: control
       });
     });
 
