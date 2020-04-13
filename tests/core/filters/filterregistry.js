@@ -1,8 +1,10 @@
-import FilterNode from '../../../src/core/filters/filternode';
+import CombinedFilterNode from '../../../src/core/filters/combinedfilternode';
+import SimpleFilterNode from '../../../src/core/filters/simplefilternode';
 import FilterCombinators from '../../../src/core/filters/filtercombinators';
 import FilterRegistry from '../../../src/core/filters/filterregistry';
 import Facet from '../../../src/core/models/facet';
 import Filter from '../../../src/core/models/filter';
+import GlobalStorage from '../../../src/core/storage/globalstorage';
 
 describe('FilterRegistry', () => {
   let node1, node2, filter1, filter2, registry;
@@ -17,7 +19,7 @@ describe('FilterRegistry', () => {
       fieldName: 'field name 1',
       displayValue: 'one'
     };
-    node1 = FilterNode.fromFilterView({
+    node1 = SimpleFilterNode.fromFilterView({
       filter: filter1,
       metadata: metadata1
     });
@@ -31,12 +33,12 @@ describe('FilterRegistry', () => {
       fieldName: 'field name 2',
       displayValue: 'two'
     };
-    node2 = FilterNode.fromFilterView({
+    node2 = SimpleFilterNode.fromFilterView({
       filter: filter2,
       metadata: metadata2
     });
 
-    registry = new FilterRegistry();
+    registry = new FilterRegistry(new GlobalStorage());
   });
 
   it('can correctly set simple filter nodes', () => {
@@ -65,7 +67,7 @@ describe('FilterRegistry', () => {
   });
 
   it('can correctly set nested filter nodes', () => {
-    const orNode = FilterNode.or(node1, node2);
+    const orNode = CombinedFilterNode.or(node1, node2);
     registry.setFilterNode('namespace1', orNode);
     expect(registry.getFilterViews()).toHaveLength(2);
     const expectedFilter1 = {
@@ -73,7 +75,7 @@ describe('FilterRegistry', () => {
     };
     expect(JSON.parse(registry.getRequestFilter())).toEqual(expectedFilter1);
 
-    const andNode = FilterNode.and(node1, node2);
+    const andNode = CombinedFilterNode.and(node1, node2);
     registry.setFilterNode('namespace2', andNode);
     expect(registry.getFilterViews()).toHaveLength(4);
     const expectedFilter2 = {
