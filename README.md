@@ -852,7 +852,9 @@ ANSWERS.addComponent('Pagination', {
     // Optional, whether pagination should be visible when displaying no results.
     // Defaults to false.
     visible: false
-  }
+  },
+  // Function invoked when a user clicks to change pages. By default, scrolls the user to the top of the page.
+  onPaginate: () => {},
 });
 ```
 
