@@ -40,7 +40,7 @@ export default class FilterNodeFactory {
       return new SimpleFilterNode();
     }
     if (children.length === 1) {
-      return filterNodes[0];
+      return children[0];
     }
     return new CombinedFilterNode({
       combinator: combinator,

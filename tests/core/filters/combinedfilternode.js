@@ -152,4 +152,9 @@ describe('FilterNode with 2 filters with different', () => {
     });
     expect(orNode.getFilter()).toEqual(expectedFilter);
   });
+
+  it('filters out nodes correctly when filtering out 1 child out of 2', () => {
+    const orNode = FilterNodeFactory.or(FilterNodeFactory.fromFilterView({}), node1);
+    expect(orNode.getFilter()).toEqual(filter1);
+  });
 });
