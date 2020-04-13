@@ -13,9 +13,9 @@ export default class FilterNode {
 
   /**
    * Returns the filter views associated with this node.
-   * @returns {Array<FilterView>}
+   * @returns {FilterView}
    */
-  getFilterViews () {}
+  getFilterView () {}
 
   /**
    * Returns the children of this node.

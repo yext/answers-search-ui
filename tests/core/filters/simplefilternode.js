@@ -24,6 +24,15 @@ describe('FilterNode with 2 filters with different', () => {
     node1 = FilterNodeFactory.fromFilterView(filterView1);
   });
 
+  function getFilterViews (node) {
+    const views = [];
+    if (node.getFilterView()) {
+      views.push(node.getFilterView());
+    }
+    views.push(...node.getChildren().flatMap(getFilterViews));
+    return views;
+  }
+
   it('correctly instantiates a FilterNode with fromFilterView()', () => {
     expect(node1.combinator).toBeUndefined();
     expect(node1.children).toBeUndefined();
@@ -33,8 +42,8 @@ describe('FilterNode with 2 filters with different', () => {
   });
 
   it('can return filter views for a simple filter node', () => {
-    expect(node1.getFilterViews()).toHaveLength(1);
-    const actualFilterView = node1.getFilterViews()[0];
+    expect(getFilterViews(node1)).toHaveLength(1);
+    const actualFilterView = getFilterViews(node1)[0];
     expect(actualFilterView.filter).toEqual(filter1);
     expect(actualFilterView.metadata).toEqual({
       fieldId: 'c_1',

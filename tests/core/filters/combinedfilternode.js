@@ -40,6 +40,15 @@ describe('FilterNode with 2 filters with different', () => {
     node2 = FilterNodeFactory.fromFilterView(filterView2);
   });
 
+  function getFilterViews (node) {
+    const views = [];
+    if (node.getFilterView()) {
+      views.push(node.getFilterView());
+    }
+    views.push(...node.getChildren().flatMap(getFilterViews));
+    return views;
+  }
+
   it('correctly creates a 1-layer AND node with 2 children', () => {
     const andNode = FilterNodeFactory.and(node1, node2);
     expect(andNode.combinator).toEqual(FilterCombinators.AND);
@@ -113,7 +122,7 @@ describe('FilterNode with 2 filters with different', () => {
       [ FilterCombinators.AND ]: [ filter1, filter3, filter4 ]
     }));
 
-    const actualFilterViews = rootNode.getFilterViews();
+    const actualFilterViews = getFilterViews(rootNode);
     expect(actualFilterViews).toHaveLength(5);
     const firstFilterViews = actualFilterViews.filter(fv => fv.filter.getFilterKey() === 'c_1');
     expect(firstFilterViews).toHaveLength(3);

@@ -41,7 +41,7 @@ export default class SimpleFilterNode extends FilterNode {
    * Returns the filter view of this node.
    * @returns {Array<FilterView>}
    */
-  getFilterViews () {
-    return [ this.filterView ];
+  getFilterView () {
+    return this.filterView;
   }
 }

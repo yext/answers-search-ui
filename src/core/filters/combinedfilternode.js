@@ -42,11 +42,12 @@ export default class CombinedFilterNode extends FilterNode {
   }
 
   /**
-   * Returns a flattened array of the filter views associated with this node.
-   * @returns {Array<FilterView>}
+   * Return the filter view for this node. Combined nodes do not have
+   * filter views, because their purpose is solely to join together other filter nodes.
+   * @returns {null}
    */
-  getFilterViews () {
-    return this.children.flatMap(node => node.getFilterViews());
+  getFilterView () {
+    return null;
   }
 
   /**
