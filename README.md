@@ -960,7 +960,11 @@ ANSWERS.addComponent('FilterBox', {
   // The label to show on the apply button
   applyLabel: 'apply',
   // Optional, whether or not this filterbox contains dynamic filters, default false
-  isDynamic: true
+  isDynamic: true,
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
 });
 ```
 
@@ -1002,7 +1006,11 @@ ANSWERS.addComponent('Facets', {
   // Show the number of applied facets when a group is collapsed
   showNumberApplied: true,
   // The label to show on the apply button
-  applyLabel: 'apply'
+  applyLabel: 'apply',
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
 });
 ```
 
@@ -1115,7 +1123,11 @@ ANSWERS.addComponent('FilterOptions', {
   // Optional, the callback function to call when changed
   onChange: function() {},
   // Optional, the label to be used in the legend
-  label: 'Filters'
+  label: 'Filters',
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
 });
 ```
 
@@ -1376,6 +1388,7 @@ ANSWERS.addComponent('SortOptions', {
   // Optional: The label to use for the reset button, defaults to 'reset'
   resetLabel: 'reset',
   // Optional: Allow collapsing excess filter options after a limit, defaults to true
+  // Note: screen readers will not read options hidden by this flag, without clicking show more first
   showMore: true,
   // Optional: The max number of filter options to show before collapsing extras, defaults to 5
   showMoreLimit: 5,
