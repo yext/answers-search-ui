@@ -86,7 +86,7 @@ export default class FilterRegistry {
    * set of facet filters, there can only be one active facet filter node
    * at a time.
    * @param {Array<string>} availableFieldIds
-   * @param  {Array<FilterNode>} filterNodes
+   * @param {Array<FilterNode>} filterNodes
    */
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;

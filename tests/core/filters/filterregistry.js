@@ -1,4 +1,3 @@
-
 import FilterCombinators from '../../../src/core/filters/filtercombinators';
 import FilterRegistry from '../../../src/core/filters/filterregistry';
 import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
