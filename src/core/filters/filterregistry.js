@@ -1,8 +1,7 @@
 /** @module FilterRegistry */
 
-import CombinedFilterNode from './combinedfilternode';
+import FilterNodeFactory from './filternodefactory';
 import Facet from '../models/facet';
-import FilterView from './filterview';
 import StorageKeys from '../storage/storagekeys';
 
 /**
@@ -11,7 +10,7 @@ import StorageKeys from '../storage/storagekeys';
  * Filters are stored in a tree structure, to allow combining of filters with
  * combinators $and and $or.
  *
- * Facets are stored as an array of {@link FilterView}s/
+ * Facets are stored as an array of {@link FilterView}s.
  * Because the search response only sends back one
  * set of facet filters, there can only be one set of active facet filters
  * at a time.
@@ -33,20 +32,19 @@ export default class FilterRegistry {
   }
 
   /**
-   * Get all of the active {@link FilterView}s. Each {@link FilterView} corresponds
-   * to a single atomic filter.
+   * Get all of the active {@link FilterNode}s.
    * @returns {Array<FilterView>}
    */
-  getFilterViews () {
-    return this.globalStorage.getAll(StorageKeys.FILTER).flatMap(node => node.getFilterViews());
+  getFilterNodes () {
+    return this.globalStorage.getAll(StorageKeys.FILTER);
   }
 
   /**
    * Get all of the active {@link FilterView}s used for facets. Each {@link FilterView} corresponds
    * to a single atomic filter.
-   * @returns {Array<FilterView>}
+   * @returns {Array<FilterNode>}
    */
-  getFacetFilterViews () {
+  getFacetFilterNodes () {
     return this.globalStorage.getState(StorageKeys.FACET_FILTER) || [];
   }
 
@@ -59,8 +57,8 @@ export default class FilterRegistry {
   }
 
   _getRequestFilter () {
-    const filterNodes = this.globalStorage.getAll(StorageKeys.FILTER);
-    const totalNode = CombinedFilterNode.and(...filterNodes);
+    const filterNodes = this.getFilterNodes();
+    const totalNode = FilterNodeFactory.and(...filterNodes);
     return totalNode.getFilter();
   }
 
@@ -73,7 +71,7 @@ export default class FilterRegistry {
   }
 
   _getRequestFacet () {
-    const filters = this.getFacetFilterViews().map(fv => fv.filter);
+    const filters = this.getFacetFilterNodes().map(fv => fv.getFilter());
     return Facet.fromFilters(this.availableFieldIds, ...filters);
   }
 
@@ -90,10 +88,10 @@ export default class FilterRegistry {
   /**
    * Sets the filter views used for the current facet filters.
    * @param {Array<string>} availableFieldIds
-   * @param  {Array<Object|FilterView>} filterViews
+   * @param  {Array<FilterNode>} filterNodes
    */
-  setFacetFilterViews (availableFieldIds = [], filterViews) {
+  setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
-    this.globalStorage.set(StorageKeys.FACET_FILTER, filterViews.map(fv => new FilterView(fv)));
+    this.globalStorage.set(StorageKeys.FACET_FILTER, filterNodes);
   }
 }

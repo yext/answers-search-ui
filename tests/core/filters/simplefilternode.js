@@ -1,4 +1,4 @@
-import SimpleFilterNode from '../../../src/core/filters/simplefilternode';
+import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
 import Filter from '../../../src/core/models/filter';
 
 describe('FilterNode with 2 filters with different', () => {
@@ -21,7 +21,7 @@ describe('FilterNode with 2 filters with different', () => {
       filter: filter1,
       metadata: metadata1
     };
-    node1 = SimpleFilterNode.fromFilterView(filterView1);
+    node1 = FilterNodeFactory.fromFilterView(filterView1);
   });
 
   it('correctly instantiates a FilterNode with fromFilterView()', () => {

@@ -1,12 +1,17 @@
 /** @module SimpleFilterNode */
 
 import FilterView from './filterview';
+import FilterNode from './filternode';
 
 /**
  * A SimpleFilterNode represents a single, atomic filter.
+ * An atomic filter is a filter that filters by a single value on a single field id,
+ * and does not contain any children filters.
+ * This is an implementation of {@link FilterNode}.
  */
-export default class SimpleFilterNode {
+export default class SimpleFilterNode extends FilterNode {
   constructor (filterNode = {}) {
+    super();
     const { filterView } = filterNode;
 
     /**
@@ -25,28 +30,18 @@ export default class SimpleFilterNode {
   }
 
   /**
+   * Returns the children associated with this node (no children).
+   * @returns {Array<FilterNode>}
+   */
+  getChildren () {
+    return [];
+  }
+
+  /**
    * Returns the filter view of this node.
    * @returns {Array<FilterView>}
    */
   getFilterViews () {
     return [ this.filterView ];
-  }
-
-  /**
-   * Creates a filterNode from the given data.
-   * @param {Object|FilterNode} filterNode
-   * @returns {FilterNode}
-   */
-  static from (filterNode) {
-    return new SimpleFilterNode(filterNode);
-  }
-
-  /**
-   * Creates a filterNode from the given {@link FilterView}.
-   * @param {Object|FilterView} filterView
-   * @returns {FilterNode}
-   */
-  static fromFilterView (filterView) {
-    return new SimpleFilterNode({ filterView: filterView });
   }
 }

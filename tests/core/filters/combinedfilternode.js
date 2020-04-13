@@ -1,5 +1,4 @@
-import CombinedFilterNode from '../../../src/core/filters/combinedfilternode';
-import SimpleFilterNode from '../../../src/core/filters/simplefilternode';
+import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
 import FilterCombinators from '../../../src/core/filters/filtercombinators';
 import Filter from '../../../src/core/models/filter';
 
@@ -23,7 +22,7 @@ describe('FilterNode with 2 filters with different', () => {
       filter: filter1,
       metadata: metadata1
     };
-    node1 = SimpleFilterNode.fromFilterView(filterView1);
+    node1 = FilterNodeFactory.fromFilterView(filterView1);
 
     filter2 = {
       c_2: {
@@ -38,11 +37,11 @@ describe('FilterNode with 2 filters with different', () => {
       filter: filter2,
       metadata: metadata2
     };
-    node2 = SimpleFilterNode.fromFilterView(filterView2);
+    node2 = FilterNodeFactory.fromFilterView(filterView2);
   });
 
   it('correctly creates a 1-layer AND node with 2 children', () => {
-    const andNode = CombinedFilterNode.and(node1, node2);
+    const andNode = FilterNodeFactory.and(node1, node2);
     expect(andNode.combinator).toEqual(FilterCombinators.AND);
     expect(andNode.children.length).toEqual(2);
     expect(andNode.children).toContain(node1);
@@ -59,7 +58,7 @@ describe('FilterNode with 2 filters with different', () => {
   });
 
   it('correctly creates a 1-layer OR node with 2 children', () => {
-    const orNode = CombinedFilterNode.or(node1, node2);
+    const orNode = FilterNodeFactory.or(node1, node2);
     expect(orNode.combinator).toEqual(FilterCombinators.OR);
     expect(orNode.children.length).toEqual(2);
     expect(orNode.children).toContain(node1);
@@ -76,14 +75,14 @@ describe('FilterNode with 2 filters with different', () => {
   });
 
   it('performs a no-op when trying to combine a single node', () => {
-    const orNode = CombinedFilterNode.or(node1);
+    const orNode = FilterNodeFactory.or(node1);
     expect(orNode.combinator).toEqual(node1.combinator);
     expect(orNode.filterView).toEqual(node1.filterView);
     expect(orNode.children).toEqual(node1.children);
   });
 
   it('returns a blank FilterNode when trying to combine zero nodes', () => {
-    const orNode = CombinedFilterNode.or();
+    const orNode = FilterNodeFactory.or();
     expect(orNode.combinator).toBeUndefined();
     expect(orNode.children).toBeUndefined();
     expect(orNode.filterView).toEqual({
@@ -99,17 +98,17 @@ describe('FilterNode with 2 filters with different', () => {
   it('can create a three-layer filter node', () => {
     filter1 = Filter.from(filter1);
     filter2 = Filter.from(filter2);
-    const node3 = CombinedFilterNode.or(node1, node2);
+    const node3 = FilterNodeFactory.or(node1, node2);
     const filter3 = Filter.from({
       [ FilterCombinators.OR ]: [ filter1, filter2 ]
     });
     expect(node3.getFilter()).toEqual(filter3);
-    const node4 = CombinedFilterNode.and(node1, node2);
+    const node4 = FilterNodeFactory.and(node1, node2);
     const filter4 = Filter.from({
       [ FilterCombinators.AND ]: [ filter1, filter2 ]
     });
     expect(node4.getFilter()).toEqual(filter4);
-    const rootNode = CombinedFilterNode.and(node1, node3, node4);
+    const rootNode = FilterNodeFactory.and(node1, node3, node4);
     expect(rootNode.getFilter()).toEqual(Filter.from({
       [ FilterCombinators.AND ]: [ filter1, filter3, filter4 ]
     }));
@@ -137,7 +136,7 @@ describe('FilterNode with 2 filters with different', () => {
   });
 
   it('filters out nodes with empty filters in getFilter', () => {
-    const orNode = CombinedFilterNode.or(node1, node2, SimpleFilterNode.fromFilterView({ filter: Filter.empty() }));
+    const orNode = FilterNodeFactory.or(node1, node2, FilterNodeFactory.fromFilterView({ filter: Filter.empty() }));
     expect(orNode.children).toHaveLength(2);
     const expectedFilter = Filter.from({
       [FilterCombinators.OR]: [ filter1, filter2 ]
