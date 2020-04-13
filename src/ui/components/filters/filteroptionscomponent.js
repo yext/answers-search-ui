@@ -5,6 +5,7 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 import HighlightedValue from '../../../core/models/highlightedvalue';
+import levenshtein from 'js-levenshtein';
 
 /**
  * The currently supported controls
@@ -269,14 +270,15 @@ export default class FilterOptionsComponent extends Component {
 
           for (let filterOption of filterOptionEls) {
             const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
-            const labelText = labelEl.textContent || labelEl.innerText;
+            let labelText = labelEl.textContent || labelEl.innerText || '';
+            labelText = labelText.trim();
             if (!filter) {
               filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
               filterOption.classList.remove('hiddenSearch');
               filterOption.classList.remove('displaySearch');
               labelEl.innerHTML = labelText;
             } else {
-              let matchedSubstrings = this._getMatchedSubstring(labelText, filter);
+              let matchedSubstrings = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
               if (matchedSubstrings) {
                 filterOption.classList.add('displaySearch');
                 filterOption.classList.remove('hiddenSearch');
@@ -322,12 +324,47 @@ export default class FilterOptionsComponent extends Component {
   }
 
   _getMatchedSubstring (option, filter) {
-    if (option && filter && option.toLowerCase().indexOf(filter.toLowerCase()) > -1) {
+    const arbitraryStringLength = 3; // Defined in spec
+    const arbitraryLevenshteinMax = 1; // Defined in spec
+    let offset = this._getOffset(option, filter);
+    if (offset > -1) {
       return [{
         length: filter.length,
-        offset: option.toLowerCase().indexOf(filter.toLowerCase())
+        offset: offset
       }];
     }
+
+    if (filter.length > arbitraryStringLength) {
+      // Break option into X filter.length size substrings
+      let substrings = [];
+      for (let start = 0; start <= (option.length - filter.length); start++) {
+        substrings.push(option.substr(start, filter.length));
+      }
+
+      // Find the substring that is the closest in levenshtein distance to filter
+      let minLevDist = filter.length;
+      let minLevSubstring = filter;
+      for (let substring of substrings) {
+        let levDist = this._calcLevenshteinDistance(substring, filter);
+        if (levDist < minLevDist) {
+          minLevDist = levDist;
+          minLevSubstring = substring;
+        }
+      }
+
+      // If the min levenshtein distance is below the spec's max, count it as a match
+      if (minLevDist <= arbitraryLevenshteinMax) {
+        offset = this._getOffset(option, minLevSubstring);
+      }
+    }
+  }
+
+  _calcLevenshteinDistance (a, b) {
+    return levenshtein(a, b);
+  }
+
+  _getOffset (option, filter) {
+    return (option && filter) ? option.indexOf(filter) : -1;
   }
 
   clearOptions () {
