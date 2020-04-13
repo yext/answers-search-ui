@@ -30,11 +30,12 @@ export default class CombinedFilterNode {
    * @type {Filter}
    */
   getFilter () {
+    const filters = this.children.map(childNode => childNode.getFilter());
     switch (this.combinator) {
       case (FilterCombinators.AND):
-        return Filter.and(...this.children.map(childNode => childNode.getFilter()));
+        return Filter.and(...filters);
       case (FilterCombinators.OR):
-        return Filter.or(...this.children.map(childNode => childNode.getFilter()));
+        return Filter.or(...filters);
     }
     return Filter.empty();
   }
@@ -77,19 +78,20 @@ export default class CombinedFilterNode {
   /**
    * Creates a branch filter node with children
    * @param {string} combinator
-   * @param {Object|FilterNode} filterNodes
+   * @param {Array<FilterNode>} filterNodes
    * @returns {FilterNode}
    */
   static _combine (combinator, filterNodes) {
-    if (!filterNodes.length) {
+    const children = filterNodes.filter(fn => fn.getFilter().getFilterKey());
+    if (!children.length) {
       return new SimpleFilterNode();
     }
-    if (filterNodes.length === 1) {
+    if (children.length === 1) {
       return new SimpleFilterNode(filterNodes[0]);
     }
     return new CombinedFilterNode({
       combinator: combinator,
-      children: filterNodes
+      children: children
     });
   }
 }

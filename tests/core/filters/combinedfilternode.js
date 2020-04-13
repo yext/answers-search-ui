@@ -135,4 +135,13 @@ describe('FilterNode with 2 filters with different', () => {
       });
     });
   });
+
+  it('filters out nodes with empty filters in getFilter', () => {
+    const orNode = CombinedFilterNode.or(node1, node2, SimpleFilterNode.fromFilterView({ filter: Filter.empty() }));
+    expect(orNode.children).toHaveLength(2);
+    const expectedFilter = Filter.from({
+      [FilterCombinators.OR]: [ filter1, filter2 ]
+    });
+    expect(orNode.getFilter()).toEqual(expectedFilter);
+  });
 });
