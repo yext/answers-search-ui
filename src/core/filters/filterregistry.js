@@ -47,7 +47,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterView>}
    */
   getFacetFilterViews () {
-    return this.globalStorage.getState(StorageKeys.FACET_FILTER);
+    return this.globalStorage.getState(StorageKeys.FACET_FILTER) || [];
   }
 
   /**
@@ -72,7 +72,7 @@ export default class FilterRegistry {
    * Gets the facet filter string to send in a search query.
    * @returns {string}
    */
-  getRequestFacet () {
+  getRequestFacetFilter () {
     return JSON.stringify(this._getRequestFacet());
   }
 

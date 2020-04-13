@@ -41,6 +41,14 @@ describe('FilterRegistry', () => {
     registry = new FilterRegistry(new GlobalStorage());
   });
 
+  it('returns empty array for getFilterViews when no values set', () => {
+    expect(registry.getFilterViews()).toEqual([]);
+  });
+
+  it('returns empty array for getFacetFilterViews when no values set', () => {
+    expect(registry.getFacetFilterViews()).toEqual([]);
+  });
+
   it('can correctly set simple filter nodes', () => {
     registry.setFilterNode('namespace1', node1);
     expect(registry.getFilterViews()).toHaveLength(1);
@@ -110,6 +118,6 @@ describe('FilterRegistry', () => {
       Filter.from(filter2)
     );
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
-    expect(JSON.parse(registry.getRequestFacet())).toEqual(JSON.parse(JSON.stringify(expectedFacet)));
+    expect(JSON.parse(registry.getRequestFacetFilter())).toEqual(JSON.parse(JSON.stringify(expectedFacet)));
   });
 });
