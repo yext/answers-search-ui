@@ -59,7 +59,7 @@ export default class CombinedFilterNode {
 
   /**
    * Create an AND filter node, with specified children.
-   * @param  {...Object|FilterNode} childrenNodes
+   * @param  {...FilterNode} childrenNodes
    * @returns {FilterNode}
    */
   static and (...childrenNodes) {
@@ -68,7 +68,7 @@ export default class CombinedFilterNode {
 
   /**
    * Create an OR filter node, with specified children.
-   * @param  {...Object|FilterNode} childrenNodes
+   * @param  {...FilterNode} childrenNodes
    * @returns {FilterNode}
    */
   static or (...childrenNodes) {
@@ -87,7 +87,7 @@ export default class CombinedFilterNode {
       return new SimpleFilterNode();
     }
     if (children.length === 1) {
-      return new SimpleFilterNode(filterNodes[0]);
+      return filterNodes[0];
     }
     return new CombinedFilterNode({
       combinator: combinator,

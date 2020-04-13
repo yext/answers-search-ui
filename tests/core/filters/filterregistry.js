@@ -81,6 +81,7 @@ describe('FilterRegistry', () => {
     const expectedFilter1 = {
       [ FilterCombinators.OR ]: [ filter1, filter2 ]
     };
+    expect(orNode.getFilter()).toEqual(expectedFilter1);
     expect(JSON.parse(registry.getRequestFilter())).toEqual(expectedFilter1);
 
     const andNode = CombinedFilterNode.and(node1, node2);

@@ -1,6 +1,6 @@
 /** @module FilterRegistry */
 
-import Filter from '../models/filter';
+import CombinedFilterNode from './combinedfilternode';
 import Facet from '../models/facet';
 import FilterView from './filterview';
 import StorageKeys from '../storage/storagekeys';
@@ -60,12 +60,8 @@ export default class FilterRegistry {
 
   _getRequestFilter () {
     const filterNodes = this.globalStorage.getAll(StorageKeys.FILTER);
-    if (!filterNodes.length) {
-      return Filter.empty();
-    } else if (filterNodes.length === 1) {
-      return filterNodes[0].getFilter();
-    }
-    return Filter.and(...filterNodes.map(node => node.getFilter()));
+    const totalNode = CombinedFilterNode.and(...filterNodes);
+    return totalNode.getFilter();
   }
 
   /**
