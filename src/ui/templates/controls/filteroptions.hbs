@@ -34,13 +34,16 @@
     </div>
   </legend>
 
-  <div class="yxt-FilterOptions-container {{#unless expanded}}yxt-FilterOptions--collapsed{{/unless}}">
+  <div class="yxt-FilterOptions-container js-yxt-FilterOptions-container{{#unless expanded}} yxt-FilterOptions--collapsed{{/unless}}">
     {{#if showReset}}
       {{#if showExpand}}
         <button class="yxt-FilterOptions-reset">{{resetLabel}}</button>
       {{/if}}
     {{/if}}
 
+    {{#if searchable}}
+      <input type="text" class="js-yxt-FilterOptions-filter" placeholder="{{placeholderText}}">
+    {{/if}}
     <div class='yxt-FilterOptions-options'>
       {{#each options}}
         {{#if ../isSingleOption}}
@@ -56,7 +59,7 @@
             <label class="singleoption-label" for="js-yext-radio-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
           </div>
         {{else}}
-          <div class="multioption-option yxt-FilterOptions-option">
+          <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#ifgte @index ../showMoreLimit}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/ifgte}}">
             <input
               type="checkbox"
               class="js-yext-filter-option yxt-FilterOptions-input"
@@ -64,25 +67,30 @@
               value="{{value}}"
               data-index="{{@index}}"
               {{#if selected}}checked{{/if}}>
-            <label class="yxt-FilterOptions-optionLabel" for="js-yext-checkbox-{{../name}}-{{@index}}">{{label}} {{#if countLabel}}({{countLabel}}){{/if}}</label>
+            <label class="yxt-FilterOptions-optionLabel js-yxt-FilterOptions-optionLabel" for="js-yext-checkbox-{{../name}}-{{@index}}">
+              {{label}} {{#if countLabel}}({{countLabel}}){{/if}}
+            </label>
           </div>
         {{/if}}
       {{/each}}
     </div>
 
     {{#if showMore}}
-      <button class="yxt-FilterOptions-showToggle">
-        {{#if allShown}}
+      <button class="yxt-FilterOptions-showToggle js-yxt-FilterOptions-showToggle js-yxt-FilterOptions-showLess hidden">
+        <span class="yxt-FilterOptions-showToggleLabel">
           {{showLessLabel}}
-          <span class="yxt-FilterOptions-collapseUp"
-            data-component="IconComponent"
-            data-opts='{ "iconName": "chevron" }'></span>
-        {{else}}
+        </span>
+        <span class="yxt-FilterOptions-collapseUp"
+          data-component="IconComponent"
+          data-opts='{ "iconName": "chevron" }'></span>
+      </button>
+      <button class="yxt-FilterOptions-showToggle js-yxt-FilterOptions-showToggle js-yxt-FilterOptions-showMore">
+        <span class="yxt-FilterOptions-showToggleLabel">
           {{showMoreLabel}}
-          <span class="yxt-FilterOptions-collapseDown"
-            data-component="IconComponent"
-            data-opts='{ "iconName": "chevron" }'></span>
-        {{/if}}
+        </span>
+        <span class="yxt-FilterOptions-collapseDown"
+          data-component="IconComponent"
+          data-opts='{ "iconName": "chevron" }'></span>
       </button>
     {{/if}}
   </div>

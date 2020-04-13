@@ -97,6 +97,18 @@ class FacetsConfig {
     this.fieldControls = config.fieldControls || {};
 
     /**
+     * The placeholder text used for the filter option search input
+     * @type {string}
+     */
+    this.placeholderText = config.placeholderText || 'Search here...';
+
+    /**
+     * If true, display the filter option search input
+     * @type {boolean}
+     */
+    this.searchable = config.searchable || false;
+
+    /**
      * The selector of the apply button
      * @type {string}
      * @private
@@ -186,7 +198,9 @@ export default class FacetsComponent extends Component {
     filters = filters.map(f => {
       return Object.assign({}, f, {
         type: 'FilterOptions',
-        control: this.config.fieldControls[f.fieldId] || 'multioption'
+        control: this.config.fieldControls[f.fieldId] || 'multioption',
+        searchable: this.config.searchable,
+        placeholderText: this.config.placeholderText
       });
     });
 

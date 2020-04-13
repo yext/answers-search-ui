@@ -123,7 +123,7 @@ ANSWERS.registerHelper('noop', function(options) {
 
 Both onVerticalSearch and onUniversalSearch allow you to send an analytics event each time a search is run.
 These options expect functions that take in one parameter, which contains information about the search,
-and also return the desired analytics event. 
+and also return the desired analytics event.
 
 The search information exposed to both options is shown below.
 
@@ -1002,7 +1002,11 @@ ANSWERS.addComponent('Facets', {
   // Show the number of applied facets when a group is collapsed
   showNumberApplied: true,
   // The label to show on the apply button
-  applyLabel: 'apply'
+  applyLabel: 'apply',
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
 });
 ```
 
@@ -1115,7 +1119,11 @@ ANSWERS.addComponent('FilterOptions', {
   // Optional, the callback function to call when changed
   onChange: function() {},
   // Optional, the label to be used in the legend
-  label: 'Filters'
+  label: 'Filters',
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
 });
 ```
 

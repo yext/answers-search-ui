@@ -103,6 +103,10 @@ export default class HandlebarsRenderer extends Renderer {
       return (arg1 !== arg2) ? options.fn(this) : options.inverse(this);
     });
 
+    this.registerHelper('ifgte', function (arg1, arg2, options) {
+      return (arg1 >= arg2) ? options.fn(this) : options.inverse(this);
+    });
+
     this.registerHelper('formatPhoneNumber', function (phoneNumberString) {
       var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
       var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
