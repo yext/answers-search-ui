@@ -8,19 +8,19 @@ export default class FilterMetadata {
     const { fieldId, fieldName, displayValue } = metadata;
 
     /**
-     * Field id the associated {@link Filter} filters on.
+     * The field id for the field being filtered on.
      * @type {string}
      */
     this.fieldId = fieldId;
 
     /**
-     * Display name for the field being filtered on.
+     * The display name for the field being filtered on.
      * @type {string}
      */
     this.fieldName = fieldName;
 
     /**
-     * Display value for the values of the {@link Filter}.
+     * The display value for the values being filtered on.
      * Even if there are multiple values within the data of a filter,
      * there should only be one display value for the whole filter.
      * @type {string}

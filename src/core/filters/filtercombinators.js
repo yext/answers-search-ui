@@ -1,7 +1,7 @@
 /** @module FilterCombinators */
 
 /**
- * FilterCombinators is an ENUM for valid  {@link Filter} combinators.
+ * FilterCombinators are enums for valid ways to combine {@link Filter}s.
  */
 const FilterCombinators = {
   AND: '$and',

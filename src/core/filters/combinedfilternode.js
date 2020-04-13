@@ -5,9 +5,10 @@ import FilterCombinators from './filtercombinators';
 import FilterNode from './filternode';
 
 /**
- * A CombinedFilterNode represents a combined filter. They do not have their own filterView,
- * and instead are defined by their children.
- * This is an implementation of {@link FilterNode}.
+ * A CombinedFilterNode represents a combined filter.
+ * A combined filter is a set of filters combined with a {@link FilterCombinators}
+ * ($and or $or). Since a combined filter is just a set of other filters,
+ * it does not have its own {@link FilterView}.
  */
 export default class CombinedFilterNode extends FilterNode {
   constructor (filterNode = {}) {
@@ -42,8 +43,9 @@ export default class CombinedFilterNode extends FilterNode {
   }
 
   /**
-   * Return the filter view for this node. Combined nodes do not have
-   * filter views, because their purpose is solely to join together other filter nodes.
+   * Returns node's filter view. Because a combined filter's purpose is
+   * solely to join together other filters, a combined filter does not
+   * have its own filter view, and this value is always null.
    * @returns {null}
    */
   getFilterView () {
@@ -51,7 +53,7 @@ export default class CombinedFilterNode extends FilterNode {
   }
 
   /**
-   * Returns the children associated with this node.
+   * Returns this node's children.
    * @returns {Array<FilterNode>}
    */
   getChildren () {

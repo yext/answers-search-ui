@@ -1,18 +1,22 @@
 /** @module FilterNode */
 
 /**
- * Represents a single node in the {@link FilterRegistry}.
+ * A FilterNode represents a single node in a filter tree.
+ * Each filter node has an associated filter, containing the filter
+ * data to send in a request, an associated filter view for the node,
+ * and any children nodes.
+ *
  * Implemented by {@link SimplerFilterNode} and {@link CombinedFilterNode}.
  */
 export default class FilterNode {
   /**
-   * Returns the filter associated with this node.
+   * Returns this node's filter.
    * @returns {Filter}
    */
   getFilter () {}
 
   /**
-   * Returns the filter views associated with this node.
+   * Returns this node's filter view.
    * @returns {FilterView}
    */
   getFilterView () {}

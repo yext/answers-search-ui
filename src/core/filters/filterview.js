@@ -17,7 +17,7 @@ export default class FilterView {
     this.filter = Filter.from(filter);
 
     /**
-     * Metadata associated with the filter.
+     * Display metadata associated with the filter data.
      * @type {FilterMetadata}
      */
     this.metadata = new FilterMetadata({

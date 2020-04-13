@@ -5,8 +5,8 @@ import SimpleFilterNode from './simplefilternode';
 import CombinedFilterNode from './combinedfilternode';
 
 /**
- * Represents a single node in the {@link FilterRegistry}.
- * Implemented by {@link SimplerFilterNode} and {@link CombinedFilterNode}.
+ * FilterNodeFactory is a class containing static helper methods for
+ * generating FilterNodes.
  */
 export default class FilterNodeFactory {
   /**

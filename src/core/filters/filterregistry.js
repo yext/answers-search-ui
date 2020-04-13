@@ -5,15 +5,9 @@ import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 
 /**
- * FilterRegistry is a structure that manages {@link Filter}s and {@link Facet}s.
+ * FilterRegistry is a structure that manages {@link Filter}s and {@link Facet} filters.
  *
- * Filters are stored in a tree structure, to allow combining of filters with
- * combinators $and and $or.
- *
- * Facets are stored as an array of {@link FilterView}s.
- * Because the search response only sends back one
- * set of facet filters, there can only be one set of active facet filters
- * at a time.
+ * Filters and facet filters are stored within global storage using FilterNodes.
  */
 export default class FilterRegistry {
   constructor (globalStorage, availableFieldIds = []) {
@@ -87,6 +81,10 @@ export default class FilterRegistry {
 
   /**
    * Sets the filter views used for the current facet filters.
+   *
+   * Because the search response only sends back one
+   * set of facet filters, there can only be one active facet filter node
+   * at a time.
    * @param {Array<string>} availableFieldIds
    * @param  {Array<FilterNode>} filterNodes
    */
