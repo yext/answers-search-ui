@@ -205,8 +205,7 @@ export default class FilterOptionsComponent extends Component {
       showReset: this.config.showReset && selectedCount > 0,
       expanded: this.expanded,
       selectedCount,
-      isSingleOption: this.config.control === 'singleoption',
-      options: this.config.options
+      isSingleOption: this.config.control === 'singleoption'
     }));
   }
 
