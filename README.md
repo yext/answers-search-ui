@@ -961,10 +961,6 @@ ANSWERS.addComponent('FilterBox', {
   applyLabel: 'apply',
   // Optional, whether or not this filterbox contains dynamic filters, default false
   isDynamic: true,
-  // Optional, the placeholder text used for the filter option search input
-  placeholderText: 'Search here...',
-  // Optional, if true, display the filter option search input
-  searchable: false,
 });
 ```
 

@@ -100,13 +100,13 @@ class FacetsConfig {
      * The placeholder text used for the filter option search input
      * @type {string}
      */
-    this.searchPlaceholderText = config.placeholderText || 'Search here...';
+    this.placeholderText = config.placeholderText || 'Search here...';
 
     /**
      * If true, display the filter option search input
      * @type {boolean}
      */
-    this.isSearchable = config.searchable || false;
+    this.searchable = config.searchable || false;
 
     /**
      * The selector of the apply button
@@ -198,7 +198,9 @@ export default class FacetsComponent extends Component {
     filters = filters.map(f => {
       return Object.assign({}, f, {
         type: 'FilterOptions',
-        control: this.config.fieldControls[f.fieldId] || 'multioption'
+        control: this.config.fieldControls[f.fieldId] || 'multioption',
+        searchable: this.config.searchable,
+        placeholderText: this.config.placeholderText
       });
     });
 
@@ -214,8 +216,6 @@ export default class FacetsComponent extends Component {
         resetFilterLabel: this.config.resetFacetLabel,
         resetFiltersLabel: this.config.resetFacetsLabel,
         isDynamic: true,
-        isSearchable: this.config.isSearchable,
-        placeholderText: this.config.searchPlaceholderText,
         filters
       })
     );

@@ -105,13 +105,13 @@ class FilterOptionsConfig {
      * The placeholder text used for the filter option search input
      * @type {string}
      */
-    this.searchPlaceholderText = config.placeholderText || 'Search here...';
+    this.placeholderText = config.placeholderText || 'Search here...';
 
     /**
      * If true, display the filter option search input
      * @type {boolean}
      */
-    this.isSearchable = config.isSearchable || false;
+    this.searchable = config.searchable || false;
 
     this.validate();
 
@@ -257,7 +257,7 @@ export default class FilterOptionsComponent extends Component {
     }
 
     // searchable option list
-    if (this.config.isSearchable) {
+    if (this.config.searchable) {
       const filterOptionEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-option');
       const filterContainerEl = DOM.query(this._container, '.js-yxt-FilterOptions-container');
       DOM.on(
