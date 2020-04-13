@@ -203,8 +203,6 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
-          searchable: this.config.searchable,
-          placeholderText: this.config.placeholderText,
           onChange: (filter) => {
             this.onFilterChange(i, filter);
           }
