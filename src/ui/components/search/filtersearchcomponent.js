@@ -191,21 +191,9 @@ export default class FilterSearchComponent extends Component {
     if (this._storeOnChange) {
       return;
     }
-
-    const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-    let totalFilter = filters[0];
-    if (filters.length > 1) {
-      totalFilter = Filter.and(...filters);
-    }
-    const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
-    const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-
-    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.verticalSearch(this._verticalKey, {
-      input: searchQuery,
-      filter: JSON.stringify(totalFilter),
-      facetFilter: JSON.stringify(facetFilter)
+    this.core.verticalSearch(this._config.verticalKey, {
+      resetPagination: true,
+      useFacets: true
     });
   }
 
