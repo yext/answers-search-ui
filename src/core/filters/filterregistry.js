@@ -30,7 +30,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getFilterNodes () {
-    return this.globalStorage.getAll(StorageKeys.FILTER);
+    return this.globalStorage.getAll(StorageKeys.FILTER_NODE);
   }
 
   /**
@@ -78,7 +78,7 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setFilterNode (key, filterNode) {
-    this.globalStorage.set(`${StorageKeys.FILTER}.${key}`, filterNode);
+    this.globalStorage.set(`${StorageKeys.FILTER_NODE}.${key}`, filterNode);
   }
 
   /**

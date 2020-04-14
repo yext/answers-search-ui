@@ -3,6 +3,8 @@
 import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
 
 /**
  * A filter for a range of dates
@@ -118,8 +120,11 @@ export default class DateRangeFilterComponent extends Component {
     this._updateRange('max', date);
   }
 
-  getFilter () {
-    return this._buildFilter();
+  getFilterNode () {
+    return FilterNodeFactory.from({
+      filter: this._buildFilter(),
+      metadata: this._buildFilterMetadata()
+    });
   }
 
   /**
@@ -132,14 +137,14 @@ export default class DateRangeFilterComponent extends Component {
     this._date = Object.assign({}, this._date, { [key]: value });
     this.setState();
 
-    const filter = this._buildFilter();
+    const filterNode = this.getFilterNode();
     if (this._storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.core.setFilterNode(this.name, filterNode);
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
-    this._onChange(filter);
+    this._onChange(filterNode);
   }
 
   /**
@@ -147,11 +152,38 @@ export default class DateRangeFilterComponent extends Component {
    * @private
    */
   _buildFilter () {
-    if (this._date.min === '' || this._date.max === '') {
-      return Filter.empty();
+    return Filter.range(this._field, this._date.min, this._date.max, this._isExclusive);
+  }
+
+  /**
+   * Helper method for creating a date range filter metadata
+   * @returns {FilterMetadata}
+   */
+  _buildFilterMetadata () {
+    const { min, max } = this._date;
+
+    if (!min && !max) {
+      return new FilterMetadata({
+        fieldName: this._title
+      });
     }
-    return this._isExclusive
-      ? Filter.exclusiveRange(this._field, this._date.min, this._date.max)
-      : Filter.inclusiveRange(this._field, this._date.min, this._date.max);
+    let displayValue;
+    if (min && !max) {
+      displayValue = this._isExclusive
+        ? `After ${min}`
+        : `${min} and later`;
+    } else if (max && !min) {
+      displayValue = this._isExclusive
+        ? `Before ${min}`
+        : `${min} and earlier`;
+    } else if (min === max) {
+      displayValue = min;
+    } else {
+      displayValue = `${min} - ${max}`;
+    }
+    return {
+      fieldName: this._title,
+      displayValue: displayValue
+    };
   }
 }

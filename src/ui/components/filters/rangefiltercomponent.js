@@ -1,8 +1,10 @@
 /** @module RangeFilterComponent */
 
-import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import Component from '../component';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
 
 const DEFAULT_CONFIG = {
   minPlaceholderText: 'Min',
@@ -115,8 +117,11 @@ export default class RangeFilterComponent extends Component {
     this._updateRange('max', value);
   }
 
-  getFilter () {
-    return this._buildFilter();
+  getFilterNode () {
+    return FilterNodeFactory.from({
+      filter: this._buildFilter(),
+      metadata: this._buildFilterMetadata()
+    });
   }
 
   /**
@@ -128,14 +133,14 @@ export default class RangeFilterComponent extends Component {
     this._range = Object.assign({}, this._range, { [key]: value });
     this.setState();
 
-    const filter = this._buildFilter();
+    const filterNode = this.getFilterNode();
     if (this._storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.core.setFilterNode(this.name, filterNode);
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
 
-    this._onChange(filter);
+    this._onChange(filterNode);
   }
 
   /**
@@ -143,6 +148,40 @@ export default class RangeFilterComponent extends Component {
    * @returns {Filter}
    */
   _buildFilter () {
-    return Filter.inclusiveRange(this._field, this._range.min, this._range.max);
+    return Filter.range(this._field, this._range.min, this._range.max, false);
+  }
+
+  /**
+   * Helper method for creating range filter metadata
+   * @returns {FilterMetadata}
+   */
+  _buildFilterMetadata () {
+    const { min, max } = this._range;
+
+    if (!min && !max) {
+      return new FilterMetadata({
+        fieldName: this._title
+      });
+    }
+    // TODO allow range filter to have exclusive ranges
+    const isExclusive = false;
+    let displayValue;
+    if (min && !max) {
+      displayValue = isExclusive
+        ? `> ${min}`
+        : `≥ ${min}`;
+    } else if (max && !min) {
+      displayValue = isExclusive
+        ? `< ${min}`
+        : `≤ ${min}`;
+    } else if (min === max) {
+      displayValue = min;
+    } else {
+      displayValue = `${min} - ${max}`;
+    }
+    return new FilterMetadata({
+      fieldName: this._title,
+      displayValue: displayValue
+    });
   }
 }

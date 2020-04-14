@@ -6,6 +6,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 import SearchParams from '../../dom/searchparams';
 import buildSearchParameters from '../../tools/searchparamsparser';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -178,6 +179,14 @@ export default class FilterSearchComponent extends Component {
         this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
         this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, this.filter);
         this.core.setFilter(this.name, this.filter);
+        const filterNode = FilterNodeFactory.from({
+          filter: this.filter,
+          metadata: {
+            fieldName: this.title,
+            displayValue: query.split(',')[0]
+          }
+        });
+        this.core.setFilterNode(this.name, filterNode);
         this.search();
       }
     });

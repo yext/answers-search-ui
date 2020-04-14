@@ -93,6 +93,33 @@ export default class Filter {
   }
 
   /**
+   * Helper method for creating a range filter
+   * @param {string} field field id of the filter
+   * @param {*} min minimum value, can be falsy
+   * @param {*} max maximum value, can be falsy
+   * @param {boolean} isExclusive whether this is an inclusive or exclusive range
+   * @returns {Filter}
+   */
+  static range (field, min, max, isExclusive) {
+    if (!min && !max) {
+      return null;
+    } else if (min && !max) {
+      return isExclusive
+        ? Filter.greaterThan(field, min)
+        : Filter.greaterThanEqual(field, min);
+    } else if (max && !min) {
+      return isExclusive
+        ? Filter.lessThan(field, max)
+        : Filter.lessThanEqual(field, max);
+    } else if (max === min) {
+      return Filter.equal(field, min);
+    }
+    return isExclusive
+      ? Filter.exclusiveRange(field, min, max)
+      : Filter.inclusiveRange(field, min, max);
+  }
+
+  /**
    * Create a new "equal to" filter for a field
    * @param {string} field The subject field of the filter
    * @param {*} value The value the field should be equal to

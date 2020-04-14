@@ -14,6 +14,7 @@ export default {
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter',
+  FILTER_NODE: 'filter-node',
   QUERY: 'query',
   QUERY_ID: 'query-id',
   FACET_FILTER: 'facet-filter',

@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import buildSearchParameters from '../../tools/searchparamsparser';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -211,7 +212,7 @@ export default class GeoLocationComponent extends Component {
       onSubmit: (query, filter) => {
         this.query = query;
         this.filter = Filter.fromResponse(filter);
-        this._saveDataToStorage(query, this.filter);
+        this._saveDataToStorage(query, this.filter, query.split(',')[0]);
         this._enabled = false;
       }
     });
@@ -232,7 +233,7 @@ export default class GeoLocationComponent extends Component {
       navigator.geolocation.getCurrentPosition(
         position => {
           const filter = this._buildFilter(position);
-          this._saveDataToStorage('', filter, position);
+          this._saveDataToStorage('', filter, 'near me', position);
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
@@ -256,13 +257,22 @@ export default class GeoLocationComponent extends Component {
    * Saves the provided filter under this component's name
    * @param {string} query The query to save
    * @param {Filter} filter The filter to save
+   * @param {string} displayValue The display value for the filter
    * @param {Object} position The position to save
    * @private
    */
-  _saveDataToStorage (query, filter, position) {
+  _saveDataToStorage (query, filter, displayValue, position) {
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
     this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
     this.core.setFilter(this.name, filter);
+    const filterNode = FilterNodeFactory.from({
+      filter: filter,
+      metadata: {
+        displayValue: displayValue,
+        fieldName: this._config.title || this._config.label || 'Location'
+      }
+    });
+    this.core.setFilterNode(this.name, filterNode);
 
     if (position) {
       this.core.globalStorage.set(StorageKeys.GEOLOCATION, {

@@ -6,8 +6,8 @@ import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
-import Filter from './models/filter';
 import AnalyticsEvent from './analytics/analyticsevent';
+import FilterRegistry from './filters/filterregistry';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -68,6 +68,13 @@ export default class Core {
      * @private
      */
     this.persistentStorage = config.persistentStorage;
+
+    /**
+     * The filterRegistry is in charge of setting, removing, and retrieving filters
+     * and facet filters from global storage.
+     * @type {FilterRegistry}
+     */
+    this.filterRegistry = new FilterRegistry(this.globalStorage);
 
     /**
      * An abstraction containing the integration with the RESTful search API
@@ -132,11 +139,6 @@ export default class Core {
       this.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     }
-    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
-    const totalFilter = allFilters.length > 1
-      ? Filter.and(...allFilters)
-      : allFilters[0];
-    const facet = useFacets ? this.globalStorage.getAll(StorageKeys.FACET_FILTER)[0] : {};
 
     return this._searcher
       .verticalSearch(verticalKey, {
@@ -144,8 +146,8 @@ export default class Core {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         input: this.globalStorage.getState(StorageKeys.QUERY) || '',
         ...query,
-        filter: JSON.stringify(totalFilter),
-        facetFilter: JSON.stringify(facet),
+        filter: this.filterRegistry.getRequestFilter(),
+        facetFilter: useFacets ? this.filterRegistry.getRequestFacetFilter() : null,
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
@@ -360,8 +362,12 @@ export default class Core {
     this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
   }
 
-  setFacetFilter (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FACET_FILTER}.${namespace}`, filter);
+  setFacetFilterNodes (availableFieldids = [], filterNodes = []) {
+    this.filterRegistry.setFacetFilterNodes(availableFieldids, filterNodes);
+  }
+
+  setFilterNode (namespace, filterNode) {
+    this.filterRegistry.setFilterNode(namespace, filterNode);
   }
 
   enableDynamicFilters () {
