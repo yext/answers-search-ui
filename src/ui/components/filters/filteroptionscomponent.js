@@ -323,9 +323,21 @@ export default class FilterOptionsComponent extends Component {
     }
   }
 
+  /**
+   * Finds the length and offset of the substring where (string) option and
+   * (string) filter "match".
+   *
+   * "Match" is defined as an exact text match, or -- if the length of filter
+   * is greater than the `minFilterSizeForLevenshtein` -- a "match" can occur if
+   * any "n length" substring of option (where "n length" is the length of filter)
+   * is within the `maxLevenshteinDistance` levenshtein distance of the filter.
+   *
+   * Note: this is case sensitive.
+   *
+   * @returns {Array}
+   * @private
+   */
   _getMatchedSubstring (option, filter) {
-    const arbitraryStringLength = 3; // Defined in spec
-    const arbitraryLevenshteinMax = 1; // Defined in spec
     let offset = this._getOffset(option, filter);
     if (offset > -1) {
       return [{
@@ -334,7 +346,9 @@ export default class FilterOptionsComponent extends Component {
       }];
     }
 
-    if (filter.length > arbitraryStringLength) {
+    const minFilterSizeForLevenshtein = 3;
+    const maxLevenshteinDistance = 1;
+    if (filter.length > minFilterSizeForLevenshtein) {
       // Break option into X filter.length size substrings
       let substrings = [];
       for (let start = 0; start <= (option.length - filter.length); start++) {
@@ -352,17 +366,32 @@ export default class FilterOptionsComponent extends Component {
         }
       }
 
-      // If the min levenshtein distance is below the spec's max, count it as a match
-      if (minLevDist <= arbitraryLevenshteinMax) {
-        offset = this._getOffset(option, minLevSubstring);
+      // If the min levenshtein distance is below the max, count it as a match
+      offset = this._getOffset(option, minLevSubstring);
+      if (minLevDist <= maxLevenshteinDistance && offset > -1) {
+        return [{
+          length: filter.length,
+          offset: offset
+        }];
       }
     }
   }
 
+  /**
+   * Calculate the levenshtein distance for two strings
+   * @returns {number}
+   * @private
+   */
   _calcLevenshteinDistance (a, b) {
     return levenshtein(a, b);
   }
 
+  /**
+   * Returns the starting index of first occurance of the (string) filter in
+   * the (string) option, or -1 if not present
+   * @returns {number}
+   * @private
+   */
   _getOffset (option, filter) {
     return (option && filter) ? option.indexOf(filter) : -1;
   }
