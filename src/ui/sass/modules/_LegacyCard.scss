@@ -76,6 +76,8 @@ $result-cta-color: var(--yxt-color-link-primary) !default;
 
 .yxt-Result
 {
+  list-style: none;
+
   & + &
   {
     border-top: var(--yxt-border-default);
