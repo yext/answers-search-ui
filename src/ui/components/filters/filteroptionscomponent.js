@@ -276,7 +276,7 @@ export default class FilterOptionsComponent extends Component {
               filterOption.classList.remove('displaySearch');
               labelEl.innerHTML = labelText;
             } else {
-              let matchedSubstrings = this._getMatchedSubstrings(labelText, filter);
+              let matchedSubstrings = this._getMatchedSubstring(labelText, filter);
               if (matchedSubstrings) {
                 filterOption.classList.add('displaySearch');
                 filterOption.classList.remove('hiddenSearch');
