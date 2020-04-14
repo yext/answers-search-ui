@@ -313,9 +313,10 @@ export default class FilterOptionsComponent extends Component {
   }
 
   /**
-   * Build and return the {@link FilterNode} that represents the current state.
+   * Returns this component's filter node.
+   * This method is exposed so that components like {@link FilterBoxComponent}
+   * can access them.
    * @returns {FilterNode}
-   * @private
    */
   getFilterNode () {
     const filterNodes = this.config.options

@@ -117,6 +117,12 @@ export default class RangeFilterComponent extends Component {
     this._updateRange('max', value);
   }
 
+  /**
+   * Returns this component's filter node.
+   * This method is exposed so that components like {@link FilterBoxComponent}
+   * can access them.
+   * @returns {FilterNode}
+   */
   getFilterNode () {
     return FilterNodeFactory.from({
       filter: this._buildFilter(),
