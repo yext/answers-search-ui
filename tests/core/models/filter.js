@@ -27,16 +27,6 @@ describe('creating filters', () => {
     expect(actualFilter).toEqual(expectedFilter);
   });
 
-  it('properly groups filters together', () => {
-    const filter1 = new Filter({ name: { '$eq': 'Billy Bastardi' } });
-    const filter2 = new Filter({ name: { '$eq': 'Jesse Sharps' } });
-    const filter3 = new Filter({ title: { '$eq': 'Software Engineer' } });
-    const expectedFilter = new Filter({ '$and': [ { '$or': [filter1, filter2] }, filter3 ] });
-
-    const actualFilter = Filter.group(filter1, filter2, filter3);
-    expect(actualFilter).toEqual(expectedFilter);
-  });
-
   it('properly creates "equal to" filters', () => {
     const expectedFilter = new Filter({ name: { '$eq': 'Billy Bastardi' } });
 

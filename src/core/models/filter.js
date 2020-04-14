@@ -70,29 +70,6 @@ export default class Filter {
   }
 
   /**
-   * OR filters with the same keys, then AND the resulting groups
-   * @param  {...Filter} filters The filters to group
-   * @returns {Filter}
-   */
-  static group (...filters) {
-    const groups = {};
-    for (const filter of filters) {
-      const key = filter.getFilterKey();
-      if (!groups[key]) {
-        groups[key] = [];
-      }
-      groups[key].push(filter);
-    }
-
-    const groupFilters = [];
-    for (const field of Object.keys(groups)) {
-      groupFilters.push(groups[field].length > 1 ? Filter.or(...groups[field]) : groups[field][0]);
-    }
-
-    return groupFilters.length > 1 ? Filter.and(...groupFilters) : groupFilters[0];
-  }
-
-  /**
    * Helper method for creating a range filter
    * @param {string} field field id of the filter
    * @param {*} min minimum value, can be falsy
