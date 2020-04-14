@@ -3,8 +3,8 @@
     {{#if firstPageButtonEnabled}}
       <button class="yxt-Pagination-button js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
         {{#unless showFirstPageButton}}disabled{{/unless}}
-        data-eventtype="BACKWARD_PAGINATE"
-        data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+        data-eventtype="PAGINATE"
+        data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the first page of results"
       >
         {{#unless icons.firstButtonIcon}}
@@ -23,8 +23,8 @@
     {{/if}}
     <button class="yxt-Pagination-button js-yxt-Pagination-previous {{#unless showPreviousPageButton}}yxt-Pagination--hidden{{/unless}}"
       {{#unless showPreviousPageButton}}disabled{{/unless}}
-      data-eventtype="BACKWARD_PAGINATE"
-      data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
+      data-eventtype="PAGINATE"
+      data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#sub pageNumber 1}}{{/sub}}, "totalPageCount":{{maxPage}} }'
       aria-label="Go to the previous page of results"
     >
       {{#unless icons.previousButtonIcon}}
@@ -38,12 +38,52 @@
       {{/unless}}
     </button>
 
-    <span class="yxt-Pagination-page">{{pageLabel}} {{pageNumber}}</span>
+    <a
+      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless (and pinPages ellipses.desktopBack)}} desktop-hidden{{/unless}}{{#unless (and pinPages ellipses.mobileBack)}} mobile-hidden{{/unless}}"
+      aria-label="Go to page 1 of results"
+      data-number="1"
+      data-eventtype="PAGINATE"
+      data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
+    >
+      1
+    </a>
+
+    <span class="yxt-Pagination-page{{#unless ellipses.desktopBack}} desktop-hidden{{/unless}}{{#unless ellipses.mobileBack}} mobile-hidden{{/unless}}">
+      ...
+    </span>
+
+    {{#each pageNumbers}}
+      {{#if this.active}}
+        <span id="active-page" class="yxt-Pagination-page">{{../pageLabel}} {{../pageNumber}}</span>
+      {{else}}
+        <a 
+          class="yxt-Pagination-link js-yxt-Pagination-link{{#if this.desktopHidden}} desktop-hidden{{/if}}{{#if this.mobileHidden}} mobile-hidden{{/if}}"
+          aria-label="Go to page {{this.number}} of results"
+          data-number="{{this.number}}"
+          data-eventtype="PAGINATE"
+          data-eventoptions='{"currentPage":{{../pageNumber}}, "newPage":{{this.number}}, "totalPageCount":{{../maxPage}} }'
+        >
+          {{this.number}}
+        </a>
+      {{/if}}
+    {{/each}}
+
+    <span class="yxt-Pagination-page{{#unless ellipses.desktopFront}} desktop-hidden{{/unless}}{{#unless ellipses.mobileFront}} mobile-hidden{{/unless}}">
+      ...
+    </span>
+
+    <a
+      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless (and pinPages ellipses.desktopFront)}} desktop-hidden{{/unless}}{{#unless (and pinPages ellipses.mobileFront)}} mobile-hidden{{/unless}}"
+      aria-label="Go to page {{maxPage}} of results"
+      data-number="{{maxPage}}"
+    >
+      {{maxPage}}
+    </a>
 
     <button class="yxt-Pagination-button js-yxt-Pagination-next {{#unless showNextPageButton}}yxt-Pagination--hidden{{/unless}}"
       {{#unless showNextPageButton}}disabled{{/unless}}
-      data-eventtype="FORWARD_PAGINATE"
-      data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
+      data-eventtype="PAGINATE"
+      data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#add pageNumber 1}}{{/add}}, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the next page of results"
     >
       {{#unless icons.nextButtonIcon}}
@@ -59,8 +99,8 @@
     {{#if lastPageButtonEnabled}}
       <button class="yxt-Pagination-button js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
         {{#unless showLastPageButton}}disabled{{/unless}}
-        data-eventtype="FORWARD_PAGINATE"
-        data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+        data-eventtype="PAGINATE"
+        data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{maxPage}}, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the last page of results"
       >
         {{#unless icons.lastButtonIcon}}
