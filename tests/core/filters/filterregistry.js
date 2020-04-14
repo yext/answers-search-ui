@@ -120,4 +120,34 @@ describe('FilterRegistry', () => {
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
     expect(JSON.parse(registry.getRequestFacetFilter())).toEqual(JSON.parse(JSON.stringify(expectedFacet)));
   });
+
+  it('can set facet filter nodes of more than 1 level', () => {
+    const filter3 = Filter.from({
+      c_1: {
+        $eq: '2'
+      }
+    });
+    const node3 = FilterNodeFactory.fromFilterView({
+      filter: filter3
+    });
+    const orNode = FilterNodeFactory.or(node1, node3);
+    const andNode = FilterNodeFactory.and(orNode, node2);
+
+    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [ andNode ]);
+    const expectedFacet = Facet.fromFilters(
+      [ 'random_field', 'another_field' ],
+      Filter.from(filter1),
+      Filter.from(filter2),
+      filter3
+    );
+    const expectedFacetRaw = {
+      random_field: [],
+      another_field: [],
+      c_1: [ filter1, filter3 ],
+      c_2: [ filter2 ]
+    };
+    expect(expectedFacet).toEqual(expectedFacetRaw);
+    expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
+    expect(JSON.parse(registry.getRequestFacetFilter())).toEqual(JSON.parse(JSON.stringify(expectedFacet)));
+  });
 });

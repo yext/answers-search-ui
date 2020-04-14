@@ -65,7 +65,9 @@ export default class FilterRegistry {
   }
 
   _getRequestFacet () {
-    const filters = this.getFacetFilterNodes().map(fv => fv.getFilter());
+    const getFilterViews = fn =>
+      fn.getFilterView() ? fn.getFilterView() : fn.getChildren().flatMap(getFilterViews);
+    const filters = this.getFacetFilterNodes().flatMap(getFilterViews).map(fv => fv.filter);
     return Facet.fromFilters(this.availableFieldIds, ...filters);
   }
 
