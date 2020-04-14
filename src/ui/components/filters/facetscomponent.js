@@ -207,8 +207,7 @@ export default class FacetsComponent extends Component {
         control: this.config.fieldControls[f.fieldId] || 'multioption',
         searchable: this.config.searchable,
         placeholderText: this.config.placeholderText,
-        ...fieldOverrides,
-        control: control
+        ...fieldOverrides
       });
     });
 
