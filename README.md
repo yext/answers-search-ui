@@ -891,9 +891,9 @@ ANSWERS.addComponent('Pagination', {
   pinFirstAndLastPage: false,
   // Display double-arrows allowing users to jump to the first and last page of results.
   showFirstAndLastButton: true,
-  // DEPRECATED. Display a double arrow allowing users to jump to the first page of results.
+  // DEPRECATED. Display a double arrow allowing users to jump to the first page of results. Defaults to showFirstAndLastButton's value.
   showFirst: false,
-  // DEPRECATED. Display a double arrow allowing users to jump to the last page of results.
+  // DEPRECATED. Display a double arrow allowing users to jump to the last page of results. Defaults to showFirstAndLastButton's value.
   showLast: false,
   // Label for a page of results
   pageLabel: 'Page'

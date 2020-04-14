@@ -170,14 +170,6 @@ export default class HandlebarsRenderer extends Renderer {
       options.data.root[name] = v;
     });
 
-    this.registerHelper('for', function (from, to, incr, block) {
-      var accum = '';
-      for (var i = from; i < to; i += incr) {
-        accum += block.fn(i);
-      }
-      return accum;
-    });
-
     this.registerHelper('json', function (name, value, options) {
       return name === undefined
         ? ''

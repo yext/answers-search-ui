@@ -177,8 +177,9 @@ export default class PaginationComponent extends Component {
   }
 
   /**
-   * Pagination should evenly allocate between front and back, unless one side hits the limit,
-   * in which case the remaining side should be allocated up to the max.
+   * Pagination should evenly add page numbers in the "forward" and "backward" directions, unless
+   * one side has reached the max/min value, in which case the remaining side should be the only
+   * one to get more pages.
    * @param {number} pageNumber the current page's number
    * @param {number} maxPage the highest page number, acts as the upper bound
    * @param {number} limit the maximum total number of pages that are allocated
@@ -206,6 +207,44 @@ export default class PaginationComponent extends Component {
     return [backLimit, frontLimit];
   }
 
+  /**
+   * Creates an object representing the view state of the page numbers and ellipses
+   * @param {number} pageNumber
+   * @param {number} maxPage
+   * @param {Array<number>} mobileLimits
+   * @param {Array<number>} desktopLimits
+   * @returns {Object}
+   */
+  _createPageNumbers (pageNumber, maxPage, mobileLimits, desktopLimits) {
+    const [mobileBackLimit, mobileFrontLimit] = mobileLimits;
+    const [desktopBackLimit, desktopFrontLimit] = desktopLimits;
+    const pageNumbers = [];
+    for (var i = 1; i <= maxPage + 1; i++) {
+      const num = { number: i };
+      if (i === pageNumber + 1) {
+        num.active = true;
+      } else {
+        if (i <= mobileBackLimit || i > mobileFrontLimit) {
+          num.mobileHidden = true;
+        }
+        if (i <= desktopBackLimit || i > desktopFrontLimit) {
+          num.desktopHidden = true;
+        }
+      }
+      pageNumbers.push(num);
+    }
+
+    return {
+      ellipses: {
+        mobileBack: mobileBackLimit > 0,
+        mobileFront: mobileFrontLimit < maxPage + 1,
+        desktopBack: desktopBackLimit > 0,
+        desktopFront: desktopFrontLimit < maxPage + 1
+      },
+      pageNumbers
+    };
+  }
+
   setState (data) {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
     let offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
@@ -213,13 +252,9 @@ export default class PaginationComponent extends Component {
     const pageNumber = offset / limit;
     const isMoreResults = results.resultsCount > offset + limit;
     const maxPage = Math.trunc((results.resultsCount - 1) / limit);
-    var mobileBackLimit, mobileFrontLimit, desktopBackLimit, desktopFrontLimit;
     var mobileLimits = this._allocate(pageNumber, maxPage, this._maxVisiblePagesMobile);
     var desktopLimits = this._allocate(pageNumber, maxPage, this._maxVisiblePagesDesktop);
-    mobileBackLimit = mobileLimits[0];
-    mobileFrontLimit = mobileLimits[1];
-    desktopBackLimit = desktopLimits[0];
-    desktopFrontLimit = desktopLimits[1];
+    const { ellipses, pageNumbers } = this._createPageNumbers(pageNumber, maxPage, mobileLimits, desktopLimits);
 
     return super.setState({
       showControls: this.shouldShowControls(results, limit),
@@ -232,16 +267,8 @@ export default class PaginationComponent extends Component {
       showNextPageButton: isMoreResults,
       showLastPageButton: pageNumber < maxPage - 1,
       icons: this._icons,
-      mobileBackLimit,
-      desktopBackLimit,
-      mobileFrontLimit,
-      desktopFrontLimit,
-      ellipses: {
-        mobileBack: mobileBackLimit > 0,
-        mobileFront: mobileFrontLimit < maxPage + 1,
-        desktopBack: desktopBackLimit > 0,
-        desktopFront: desktopFrontLimit < maxPage + 1
-      },
+      pageNumbers,
+      ellipses,
       pinPages: this._pinFirstAndLastPage,
       nextPage: pageNumber + 2,
       maxPage: maxPage + 1,
