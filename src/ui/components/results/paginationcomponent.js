@@ -24,6 +24,20 @@ export default class PaginationComponent extends Component {
     }
 
     /**
+     * The number of pages visible before/after the current page on desktop.
+     * @type {number}
+     * @private
+     */
+    this._maxVisiblePagesDesktop = config.maxVisiblePagesDesktop === undefined ? 1 : config.maxVisiblePagesDesktop;
+
+    /**
+     * The number of pages visible before/after the current page on mobile.
+     * @type {number}
+     * @private
+     */
+    this._maxVisiblePagesMobile = config.maxVisiblePagesMobile === undefined ? 1 : config.maxVisiblePagesMobile;
+
+    /**
      * DEPRECATED
      * @type {boolean}
      * @private
@@ -43,6 +57,13 @@ export default class PaginationComponent extends Component {
      * @private
      */
     this._showFirstAndLastPageButtons = config.showFirstAndLastButton !== false;
+
+    /**
+     * If true, always displays the page numbers for first and last page.
+     * @type {boolean}
+     * @private
+     */
+    this._pinFirstAndLastPage = !!config.pinFirstAndLastPage;
 
     /**
      * Icons object for first, previous, next, and last page icons.
@@ -70,7 +91,7 @@ export default class PaginationComponent extends Component {
      * @type {string}
      * @private
      */
-    this._pageLabel = config.pageLabel || 'Page';
+    this._pageLabel = config.pageLabel === undefined ? 'Page' : config.pageLabel;
 
     /**
      * Function that is invoked on pagination
@@ -136,6 +157,10 @@ export default class PaginationComponent extends Component {
       const lastPageButton = DOM.query(this._container, '.js-yxt-Pagination-last');
       DOM.on(lastPageButton, 'click', () => this.updatePage(maxPage * limit));
     }
+
+    DOM.queryAll('.js-yxt-Pagination-link').forEach(node => {
+      DOM.on(node, 'click', () => this.updatePage((parseInt(node.dataset.number) - 1) * limit));
+    });
   }
 
   updatePage (offset) {
@@ -151,24 +176,98 @@ export default class PaginationComponent extends Component {
     document.body.scrollTop = 0;
   }
 
+  /**
+   * Pagination should evenly add page numbers in the "forward" and "backward" directions, unless
+   * one side has reached the max/min value, in which case the remaining side should be the only
+   * one to get more pages.
+   * @param {number} pageNumber the current page's number
+   * @param {number} maxPage the highest page number, acts as the upper bound
+   * @param {number} limit the maximum total number of pages that are allocated
+   * @returns {Array<number>} the backLimit and frontLimit, respectively
+   */
+  _allocate (pageNumber, maxPage, limit) {
+    var backLimit = pageNumber;
+    var frontLimit = pageNumber;
+    for (var i = 0; i < limit; i++) {
+      if (i % 2 === 0) {
+        if (backLimit > 0) {
+          backLimit--;
+        } else if (frontLimit < maxPage) {
+          frontLimit++;
+        }
+      } else {
+        if (frontLimit < maxPage) {
+          frontLimit++;
+        } else if (backLimit > 0) {
+          backLimit--;
+        }
+      }
+    }
+
+    return [backLimit, frontLimit];
+  }
+
+  /**
+   * Creates an object representing the view state of the page numbers and ellipses
+   * @param {number} pageNumber refers to the page number, not the page index
+   * @param {number} maxPage
+   * @returns {Object}
+   */
+  _createPageNumbers (pageNumber, maxPage) {
+    const [mobileBackLimit, mobileFrontLimit] = this._allocate(pageNumber, maxPage, this._maxVisiblePagesMobile);
+    const [desktopBackLimit, desktopFrontLimit] = this._allocate(pageNumber, maxPage, this._maxVisiblePagesDesktop);
+    const pageNumbers = [];
+    for (var i = 1; i <= maxPage; i++) {
+      const num = { number: i };
+      if (i === pageNumber) {
+        num.active = true;
+      } else {
+        if (i <= mobileBackLimit || i > mobileFrontLimit) {
+          num.mobileHidden = true;
+        }
+        if (i <= desktopBackLimit || i > desktopFrontLimit) {
+          num.desktopHidden = true;
+        }
+      }
+      pageNumbers.push(num);
+    }
+
+    return {
+      ellipses: {
+        mobileBack: mobileBackLimit > 0,
+        mobileFront: mobileFrontLimit < maxPage,
+        desktopBack: desktopBackLimit > 0,
+        desktopFront: desktopFrontLimit < maxPage
+      },
+      pageNumbers
+    };
+  }
+
   setState (data) {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
     let offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
-    const pageNumber = offset / limit;
+    const pageNumber = (offset / limit) + 1;
     const isMoreResults = results.resultsCount > offset + limit;
-    const maxPage = Math.trunc((results.resultsCount - 1) / limit);
+    const maxPage = Math.trunc((results.resultsCount - 1) / limit) + 1;
+    const { ellipses, pageNumbers } = this._createPageNumbers(pageNumber, maxPage);
+
     return super.setState({
       showControls: this.shouldShowControls(results, limit),
-      firstPageButtonEnabled: this._firstPageButtonEnabled || this._showFirstAndLastPageButtons,
-      lastPageButtonEnabled: this._lastPageButtonEnabled || this._showFirstAndLastPageButtons,
-      pageNumber: pageNumber + 1,
+      firstPageButtonEnabled: this._firstPageButtonEnabled,
+      lastPageButtonEnabled: this._lastPageButtonEnabled,
+      pageNumber,
       pageLabel: this._pageLabel,
-      showFirstPageButton: pageNumber > 1,
-      showPreviousPageButton: pageNumber > 0,
+      showFirstPageButton: pageNumber > 2,
+      showPreviousPageButton: pageNumber > 1,
       showNextPageButton: isMoreResults,
       showLastPageButton: pageNumber < maxPage - 1,
       icons: this._icons,
+      pageNumbers,
+      ellipses,
+      pinPages: this._pinFirstAndLastPage,
+      nextPage: pageNumber + 1,
+      maxPage,
       ...data
     });
   }
