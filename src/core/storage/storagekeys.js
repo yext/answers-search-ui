@@ -17,7 +17,7 @@ export default {
   FILTER_NODE: 'filter-node',
   QUERY: 'query',
   QUERY_ID: 'query-id',
-  FACET_FILTER: 'facet-filter',
+  FACET_FILTER_NODE: 'facet-filter-node',
   DYNAMIC_FILTERS: 'dynamic-filters',
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',

@@ -38,7 +38,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getFacetFilterNodes () {
-    return this.globalStorage.getState(StorageKeys.FACET_FILTER) || [];
+    return this.globalStorage.getState(StorageKeys.FACET_FILTER_NODE) || [];
   }
 
   /**
@@ -92,6 +92,6 @@ export default class FilterRegistry {
    */
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
-    this.globalStorage.set(StorageKeys.FACET_FILTER, filterNodes);
+    this.globalStorage.set(StorageKeys.FACET_FILTER_NODE, filterNodes);
   }
 }
