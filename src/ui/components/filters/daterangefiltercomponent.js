@@ -6,12 +6,21 @@ import DOM from '../../dom/dom';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 
+const DEFAULT_CONFIG = {
+  lessThanText: min => `After ${min}`,
+  lessThanOrEqualText: min => `${min} or later`,
+  greaterThanText: max => `Before ${max}`,
+  greaterThanOrEqualText: max => `${max} and earlier`,
+  exclusiveRangeText: (min, max) => `${min} - ${max}`,
+  inclusiveRangeText: (min, max) => `Between ${min} and ${max}`
+};
+
 /**
  * A filter for a range of dates
  */
 export default class DateRangeFilterComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(config, systemConfig);
+    super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     /**
      * The api field this filter controls
@@ -174,18 +183,20 @@ export default class DateRangeFilterComponent extends Component {
       });
     }
     let displayValue;
-    if (min && !max) {
+    if (!max) {
       displayValue = this._isExclusive
-        ? `After ${min}`
-        : `${min} and later`;
-    } else if (max && !min) {
+        ? this._config.lessThanText(min)
+        : this._config.lessThanEqualText(min);
+    } else if (!min) {
       displayValue = this._isExclusive
-        ? `Before ${min}`
-        : `${min} and earlier`;
+        ? this._config.greaterThanText(max)
+        : this._config.greaterThanOrEqualText(max);
     } else if (min === max) {
       displayValue = min;
     } else {
-      displayValue = `${min} - ${max}`;
+      displayValue = this._isExclusive
+        ? this._config.exclusiveRangeText(min, max)
+        : this._config.inclusiveRangeText(min, max);
     }
     return {
       fieldName: this._title,

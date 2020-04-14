@@ -154,7 +154,10 @@ export default class RangeFilterComponent extends Component {
    * @returns {Filter}
    */
   _buildFilter () {
-    return Filter.range(this._field, this._range.min, this._range.max, false);
+    const { min, max } = this._range;
+    const _min = isNaN(min) ? null : min;
+    const _max = isNaN(max) ? null : max;
+    return Filter.range(this._field, _min, _max, false);
   }
 
   /**
@@ -163,27 +166,31 @@ export default class RangeFilterComponent extends Component {
    */
   _buildFilterMetadata () {
     const { min, max } = this._range;
-
-    if (!min && !max) {
+    const falsyMin = isNaN(min);
+    const falsyMax = isNaN(max);
+    if (falsyMin && falsyMax) {
       return new FilterMetadata({
         fieldName: this._title
       });
     }
-    // TODO allow range filter to have exclusive ranges
+    // TODO add config option to range filter component for exclusive ranges.
+    // Currently can only have inclusive ranges.
     const isExclusive = false;
     let displayValue;
-    if (min && !max) {
+    if (falsyMax) {
       displayValue = isExclusive
         ? `> ${min}`
         : `≥ ${min}`;
-    } else if (max && !min) {
+    } else if (falsyMin) {
       displayValue = isExclusive
-        ? `< ${min}`
-        : `≤ ${min}`;
+        ? `< ${max}`
+        : `≤ ${max}`;
     } else if (min === max) {
       displayValue = min;
     } else {
-      displayValue = `${min} - ${max}`;
+      displayValue = isExclusive
+        ? `> ${min}, < ${max}`
+        : `${min} - ${max}`;
     }
     return new FilterMetadata({
       fieldName: this._title,

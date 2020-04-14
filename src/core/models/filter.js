@@ -72,23 +72,29 @@ export default class Filter {
   /**
    * Helper method for creating a range filter
    * @param {string} field field id of the filter
-   * @param {*} min minimum value, can be falsy
-   * @param {*} max maximum value, can be falsy
+   * @param {number|string} min minimum value
+   * @param {number|string} max maximum value
    * @param {boolean} isExclusive whether this is an inclusive or exclusive range
    * @returns {Filter}
    */
   static range (field, min, max, isExclusive) {
-    if (!min && !max) {
-      return null;
-    } else if (min && !max) {
+    console.log(min, max);
+    const falsyMin = min === null || min === undefined || min === '';
+    const falsyMax = max === null || max === undefined || max === '';
+    if (falsyMin && falsyMax) {
+      return Filter.empty();
+    }
+    if (falsyMax) {
       return isExclusive
         ? Filter.greaterThan(field, min)
         : Filter.greaterThanEqual(field, min);
-    } else if (max && !min) {
+    }
+    if (falsyMin) {
       return isExclusive
         ? Filter.lessThan(field, max)
         : Filter.lessThanEqual(field, max);
-    } else if (max === min) {
+    }
+    if (min === max) {
       return Filter.equal(field, min);
     }
     return isExclusive
