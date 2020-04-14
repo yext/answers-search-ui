@@ -24,10 +24,7 @@ export default class SimpleFilterNode extends FilterNode {
      * Display metadata associated with the filter data.
      * @type {FilterMetadata}
      */
-    this.metadata = new FilterMetadata({
-      fieldId: this.filter.getFilterKey(),
-      ...metadata
-    });
+    this.metadata = new FilterMetadata(metadata);
     Object.freeze(this);
   }
 

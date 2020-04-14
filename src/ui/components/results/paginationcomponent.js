@@ -167,7 +167,7 @@ export default class PaginationComponent extends Component {
     this._onPaginate();
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.persistentStorage.set(StorageKeys.SEARCH_OFFSET, offset);
-    this.core.verticalPage(this._verticalKey, offset);
+    this.core.verticalPage(this._verticalKey);
   }
 
   scrollToTop () {

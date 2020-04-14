@@ -1,5 +1,4 @@
 import Component from '../component';
-import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 
@@ -113,20 +112,12 @@ export default class LocationBiasComponent extends Component {
   }
 
   _doSearch () {
-    let query = this.core.globalStorage.getState(StorageKeys.QUERY);
     if (this._verticalKey) {
-      const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-      const totalFilter = allFilters.length > 1
-        ? Filter.and(...allFilters)
-        : allFilters[0];
-      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-      this.core.verticalSearch(this._verticalKey, {
-        input: query,
-        filter: JSON.stringify(totalFilter),
-        offset: this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
-        facetFilter: JSON.stringify(facetFilter)
+      this.core.verticalSearch(this._config.verticalKey, {
+        useFacets: true
       });
     } else {
+      let query = this.core.globalStorage.getState(StorageKeys.QUERY);
       this.core.search(query);
     }
   }

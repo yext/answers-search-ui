@@ -2,7 +2,6 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 
@@ -466,15 +465,7 @@ export default class SearchComponent extends Component {
    */
   search (query) {
     if (this._verticalKey) {
-      const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-      const totalFilter = allFilters.length > 1
-        ? Filter.and(...allFilters)
-        : allFilters[0];
-      return this.core.verticalSearch(this._verticalKey, {
-        input: query,
-        filter: JSON.stringify(totalFilter),
-        offset: this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0
-      });
+      this.core.verticalSearch(this._config.verticalKey, { resetPagination: true }, { input: query });
     } else {
       // NOTE(billy) Temporary hack for DEMO
       // Remove me after the demo

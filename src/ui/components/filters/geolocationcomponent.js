@@ -243,20 +243,9 @@ export default class GeoLocationComponent extends Component {
     }
 
     if (this._config.searchOnChange) {
-      const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-      let totalFilter = filters[0];
-      if (filters.length > 1) {
-        totalFilter = Filter.and(...filters);
-      }
-      const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
-      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-
-      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.verticalSearch(this._config.verticalKey, {
-        input: searchQuery,
-        filter: JSON.stringify(totalFilter),
-        facetFilter: JSON.stringify(facetFilter)
+        resetPagination: true,
+        useFacets: true
       });
     }
   }
