@@ -5,13 +5,7 @@
  */
 export default class FilterMetadata {
   constructor (metadata = {}) {
-    const { fieldId, fieldName, displayValue } = metadata;
-
-    /**
-     * The field id for the field being filtered on.
-     * @type {string}
-     */
-    this.fieldId = fieldId;
+    const { fieldName, displayValue } = metadata;
 
     /**
      * The display name for the field being filtered on.

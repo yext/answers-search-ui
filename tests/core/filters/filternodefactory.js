@@ -48,34 +48,10 @@ describe('FilterNodeFactory', () => {
     return nodes;
   }
 
-  it('automatically gives FilterMetadata a fieldId attribute if not there', () => {
-    const filter = {
-      c_customField: {
-        $eq: '2B'
-      }
-    };
-    const metadata = {
-      fieldName: 'Custom Field',
-      displayValue: '2B'
-    };
-    const expectedMetadata = {
-      fieldId: 'c_customField',
-      ...metadata
-    };
-    const node = FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    });
-    expect(node.getMetadata()).toEqual(expectedMetadata);
-  });
-
   it('correctly instantiates a simple FilterNode with from', () => {
     expect(node1.combinator).toBeUndefined();
     expect(node1.children).toBeUndefined();
-    expect(node1.getMetadata()).toEqual({
-      fieldId: 'c_1',
-      ...metadata1
-    });
+    expect(node1.getMetadata()).toEqual(metadata1);
     expect(node1.getFilter()).toEqual(Filter.from(filter1));
     expect(node1.getFilter().getFilterKey()).toEqual('c_1');
   });
@@ -130,7 +106,6 @@ describe('FilterNodeFactory', () => {
     expect(orNode.filter).toEqual({});
     expect(orNode.metadata).toEqual({
       displayValue: undefined,
-      fieldId: undefined,
       fieldName: undefined
     });
   });
@@ -160,19 +135,13 @@ describe('FilterNodeFactory', () => {
     expect(firstNodes).toHaveLength(3);
     firstNodes.forEach(fn => {
       expect(fn.getFilter()).toEqual(filter1);
-      expect(fn.getMetadata()).toEqual({
-        fieldId: 'c_1',
-        ...metadata1
-      });
+      expect(fn.getMetadata()).toEqual(metadata1);
     });
     const secondNodes = leafNodes.filter(fv => fv.getFilter().getFilterKey() === 'c_2');
     expect(secondNodes).toHaveLength(2);
     secondNodes.forEach(fn => {
       expect(fn.getFilter()).toEqual(filter2);
-      expect(fn.getMetadata()).toEqual({
-        fieldId: 'c_2',
-        ...metadata2
-      });
+      expect(fn.getMetadata()).toEqual(metadata2);
     });
   });
 
