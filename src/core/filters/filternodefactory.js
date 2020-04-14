@@ -49,11 +49,14 @@ export default class FilterNodeFactory {
   }
 
   /**
-   * Creates a filterNode from the given {@link FilterView}.
-   * @param {Object|FilterView} filterView
+   * Creates a filterNode from the given data.
+   * @param {Object|FilterNode} filterNode
    * @returns {FilterNode}
    */
-  static fromFilterView (filterView) {
-    return new SimpleFilterNode({ filterView: filterView });
+  static from (filterNode = {}) {
+    if (filterNode.children && filterNode.children.length) {
+      return new CombinedFilterNode(filterNode);
+    }
+    return new SimpleFilterNode(filterNode);
   }
 }

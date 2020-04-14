@@ -27,15 +27,14 @@ export default class FilterRegistry {
 
   /**
    * Get all of the active {@link FilterNode}s.
-   * @returns {Array<FilterView>}
+   * @returns {Array<FilterNode>}
    */
   getFilterNodes () {
     return this.globalStorage.getAll(StorageKeys.FILTER);
   }
 
   /**
-   * Get all of the active {@link FilterView}s used for facets. Each {@link FilterView} corresponds
-   * to a single atomic filter.
+   * Get all of the active {@link FilterNode}s used for facets.
    * @returns {Array<FilterNode>}
    */
   getFacetFilterNodes () {
@@ -65,9 +64,10 @@ export default class FilterRegistry {
   }
 
   _getRequestFacet () {
-    const getFilterViews = fn =>
-      fn.getFilterView() ? fn.getFilterView() : fn.getChildren().flatMap(getFilterViews);
-    const filters = this.getFacetFilterNodes().flatMap(getFilterViews).map(fv => fv.filter);
+    const getFilters = fn => fn.getChildren().length
+      ? fn.getChildren().flatMap(getFilters)
+      : fn.getFilter();
+    const filters = this.getFacetFilterNodes().flatMap(getFilters);
     return Facet.fromFilters(this.availableFieldIds, ...filters);
   }
 
@@ -82,7 +82,7 @@ export default class FilterRegistry {
   }
 
   /**
-   * Sets the filter views used for the current facet filters.
+   * Sets the filter nodes used for the current facet filters.
    *
    * Because the search response only sends back one
    * set of facet filters, there can only be one active facet filter node

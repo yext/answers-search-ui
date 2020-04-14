@@ -8,7 +8,8 @@ import FilterNode from './filternode';
  * A CombinedFilterNode represents a combined filter.
  * A combined filter is a set of filters combined with a {@link FilterCombinators}
  * ($and or $or). Since a combined filter is just a set of other filters,
- * it does not have its own {@link FilterView}.
+ * it does not have its own {@link FilterMetadata}, and its filter is dervied from
+ * its children.
  */
 export default class CombinedFilterNode extends FilterNode {
   constructor (filterNode = {}) {
@@ -43,12 +44,12 @@ export default class CombinedFilterNode extends FilterNode {
   }
 
   /**
-   * Returns node's filter view. Because a combined filter's purpose is
-   * solely to join together other filters, a combined filter does not
-   * have its own filter view, and this value is always null.
+   * Returns the metadata associated with this node's filter.
+   * Because a combined filter's purpose is solely to join together other filters,
+   * and does not have its own filter, this value is always null.
    * @returns {null}
    */
-  getFilterView () {
+  getMetadata () {
     return null;
   }
 

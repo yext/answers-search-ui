@@ -1,6 +1,7 @@
 /** @module SimpleFilterNode */
 
-import FilterView from './filterview';
+import Filter from '../models/filter';
+import FilterMetadata from './filtermetadata';
 import FilterNode from './filternode';
 
 /**
@@ -11,12 +12,22 @@ import FilterNode from './filternode';
 export default class SimpleFilterNode extends FilterNode {
   constructor (filterNode = {}) {
     super();
-    const { filterView } = filterNode;
+    const { filter, metadata } = filterNode;
 
     /**
-     * @type {FilterView}
+     * The filter data.
+     * @type {Filter}
      */
-    this.filterView = new FilterView(filterView);
+    this.filter = Filter.from(filter);
+
+    /**
+     * Display metadata associated with the filter data.
+     * @type {FilterMetadata}
+     */
+    this.metadata = new FilterMetadata({
+      fieldId: this.filter.getFilterKey(),
+      ...metadata
+    });
     Object.freeze(this);
   }
 
@@ -25,7 +36,7 @@ export default class SimpleFilterNode extends FilterNode {
    * @type {Filter}
    */
   getFilter () {
-    return this.filterView.filter;
+    return this.filter;
   }
 
   /**
@@ -37,10 +48,10 @@ export default class SimpleFilterNode extends FilterNode {
   }
 
   /**
-   * Returns the filter view of this node.
-   * @returns {Array<FilterView>}
+   * Returns the filter metadata for this node's filter.
+   * @returns {FilterMetadata}
    */
-  getFilterView () {
-    return this.filterView;
+  getMetadata () {
+    return this.metadata;
   }
 }

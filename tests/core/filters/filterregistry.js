@@ -18,7 +18,7 @@ describe('FilterRegistry', () => {
       fieldName: 'field name 1',
       displayValue: 'one'
     };
-    node1 = FilterNodeFactory.fromFilterView({
+    node1 = FilterNodeFactory.from({
       filter: filter1,
       metadata: metadata1
     });
@@ -32,7 +32,7 @@ describe('FilterRegistry', () => {
       fieldName: 'field name 2',
       displayValue: 'two'
     };
-    node2 = FilterNodeFactory.fromFilterView({
+    node2 = FilterNodeFactory.from({
       filter: filter2,
       metadata: metadata2
     });
@@ -127,7 +127,7 @@ describe('FilterRegistry', () => {
         $eq: '2'
       }
     });
-    const node3 = FilterNodeFactory.fromFilterView({
+    const node3 = FilterNodeFactory.from({
       filter: filter3
     });
     const orNode = FilterNodeFactory.or(node1, node3);

@@ -1,11 +1,11 @@
 import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
-import FilterCombinators from '../../../src/core/filters/filtercombinators';
 import Filter from '../../../src/core/models/filter';
+import FilterCombinators from '../../../src/core/filters/filtercombinators';
+import SimpleFilterNode from '../../../src/core/filters/simplefilternode';
 
-describe('FilterNode with 2 filters with different', () => {
+describe('FilterNodeFactory', () => {
   let filter1, filter2,
     metadata1, metadata2,
-    filterView1, filterView2,
     node1, node2;
 
   beforeEach(() => {
@@ -18,11 +18,10 @@ describe('FilterNode with 2 filters with different', () => {
       fieldName: 'field name 1',
       displayValue: 'one'
     };
-    filterView1 = {
+    node1 = FilterNodeFactory.from({
       filter: filter1,
       metadata: metadata1
-    };
-    node1 = FilterNodeFactory.fromFilterView(filterView1);
+    });
 
     filter2 = {
       c_2: {
@@ -33,29 +32,61 @@ describe('FilterNode with 2 filters with different', () => {
       fieldName: 'field name 2',
       displayValue: 'two'
     };
-    filterView2 = {
+    node2 = FilterNodeFactory.from({
       filter: filter2,
       metadata: metadata2
-    };
-    node2 = FilterNodeFactory.fromFilterView(filterView2);
+    });
   });
 
-  function getFilterViews (node) {
-    const views = [];
-    if (node.getFilterView()) {
-      views.push(node.getFilterView());
+  function getLeafNodes (node) {
+    const nodes = [];
+    if (node.getChildren().length) {
+      nodes.push(...node.getChildren().flatMap(getLeafNodes));
+    } else {
+      nodes.push(node);
     }
-    views.push(...node.getChildren().flatMap(getFilterViews));
-    return views;
+    return nodes;
   }
+
+  it('automatically gives FilterMetadata a fieldId attribute if not there', () => {
+    const filter = {
+      c_customField: {
+        $eq: '2B'
+      }
+    };
+    const metadata = {
+      fieldName: 'Custom Field',
+      displayValue: '2B'
+    };
+    const expectedMetadata = {
+      fieldId: 'c_customField',
+      ...metadata
+    };
+    const node = FilterNodeFactory.from({
+      filter: filter,
+      metadata: metadata
+    });
+    expect(node.getMetadata()).toEqual(expectedMetadata);
+  });
+
+  it('correctly instantiates a simple FilterNode with from', () => {
+    expect(node1.combinator).toBeUndefined();
+    expect(node1.children).toBeUndefined();
+    expect(node1.getMetadata()).toEqual({
+      fieldId: 'c_1',
+      ...metadata1
+    });
+    expect(node1.getFilter()).toEqual(Filter.from(filter1));
+    expect(node1.getFilter().getFilterKey()).toEqual('c_1');
+  });
 
   it('correctly creates a 1-layer AND node with 2 children', () => {
     const andNode = FilterNodeFactory.and(node1, node2);
     expect(andNode.combinator).toEqual(FilterCombinators.AND);
     expect(andNode.children.length).toEqual(2);
     expect(andNode.children).toContain(node1);
-    expect(andNode.children).toContain(node2);
-    expect(andNode.filterView).toBeUndefined();
+    expect(andNode.filter).toBeUndefined();
+    expect(andNode.getMetadata()).toBeNull();
 
     const expectedFilter1 = Filter.and(Filter.from(filter1), Filter.from(filter2));
     const expectedFilter2 = Filter.from({
@@ -72,7 +103,8 @@ describe('FilterNode with 2 filters with different', () => {
     expect(orNode.children.length).toEqual(2);
     expect(orNode.children).toContain(node1);
     expect(orNode.children).toContain(node2);
-    expect(orNode.filterView).toBeUndefined();
+    expect(orNode.filter).toBeUndefined();
+    expect(orNode.getMetadata()).toBeNull();
 
     const expectedFilter1 = Filter.or(Filter.from(filter1), Filter.from(filter2));
     const expectedFilter2 = Filter.from({
@@ -86,7 +118,8 @@ describe('FilterNode with 2 filters with different', () => {
   it('performs a no-op when trying to combine a single node', () => {
     const orNode = FilterNodeFactory.or(node1);
     expect(orNode.combinator).toEqual(node1.combinator);
-    expect(orNode.filterView).toEqual(node1.filterView);
+    expect(orNode.filter).toEqual(node1.filter);
+    expect(orNode.metadata).toEqual(node1.metadata);
     expect(orNode.children).toEqual(node1.children);
   });
 
@@ -94,13 +127,11 @@ describe('FilterNode with 2 filters with different', () => {
     const orNode = FilterNodeFactory.or();
     expect(orNode.combinator).toBeUndefined();
     expect(orNode.children).toBeUndefined();
-    expect(orNode.filterView).toEqual({
-      filter: {},
-      metadata: {
-        displayValue: undefined,
-        fieldId: undefined,
-        fieldName: undefined
-      }
+    expect(orNode.filter).toEqual({});
+    expect(orNode.metadata).toEqual({
+      displayValue: undefined,
+      fieldId: undefined,
+      fieldName: undefined
     });
   });
 
@@ -122,22 +153,23 @@ describe('FilterNode with 2 filters with different', () => {
       [ FilterCombinators.AND ]: [ filter1, filter3, filter4 ]
     }));
 
-    const actualFilterViews = getFilterViews(rootNode);
-    expect(actualFilterViews).toHaveLength(5);
-    const firstFilterViews = actualFilterViews.filter(fv => fv.filter.getFilterKey() === 'c_1');
-    expect(firstFilterViews).toHaveLength(3);
-    firstFilterViews.forEach(fv => {
-      expect(fv.filter).toEqual(filter1);
-      expect(fv.metadata).toEqual({
+    const leafNodes = getLeafNodes(rootNode);
+    expect(leafNodes).toHaveLength(5);
+    leafNodes.forEach(node => expect(node).toBeInstanceOf(SimpleFilterNode));
+    const firstNodes = leafNodes.filter(fn => fn.getFilter().getFilterKey() === 'c_1');
+    expect(firstNodes).toHaveLength(3);
+    firstNodes.forEach(fn => {
+      expect(fn.getFilter()).toEqual(filter1);
+      expect(fn.getMetadata()).toEqual({
         fieldId: 'c_1',
         ...metadata1
       });
     });
-    const secondFilterViews = actualFilterViews.filter(fv => fv.filter.getFilterKey() === 'c_2');
-    expect(secondFilterViews).toHaveLength(2);
-    secondFilterViews.forEach(fv => {
-      expect(fv.filter).toEqual(filter2);
-      expect(fv.metadata).toEqual({
+    const secondNodes = leafNodes.filter(fv => fv.getFilter().getFilterKey() === 'c_2');
+    expect(secondNodes).toHaveLength(2);
+    secondNodes.forEach(fn => {
+      expect(fn.getFilter()).toEqual(filter2);
+      expect(fn.getMetadata()).toEqual({
         fieldId: 'c_2',
         ...metadata2
       });
@@ -145,7 +177,7 @@ describe('FilterNode with 2 filters with different', () => {
   });
 
   it('filters out nodes with empty filters in getFilter', () => {
-    const orNode = FilterNodeFactory.or(node1, node2, FilterNodeFactory.fromFilterView({ filter: Filter.empty() }));
+    const orNode = FilterNodeFactory.or(node1, node2, FilterNodeFactory.from({ filter: Filter.empty() }));
     expect(orNode.children).toHaveLength(2);
     const expectedFilter = Filter.from({
       [FilterCombinators.OR]: [ filter1, filter2 ]
@@ -154,7 +186,7 @@ describe('FilterNode with 2 filters with different', () => {
   });
 
   it('filters out nodes correctly when filtering out 1 child out of 2', () => {
-    const orNode = FilterNodeFactory.or(FilterNodeFactory.fromFilterView({}), node1);
+    const orNode = FilterNodeFactory.or(FilterNodeFactory.from(), node1);
     expect(orNode.getFilter()).toEqual(filter1);
   });
 });

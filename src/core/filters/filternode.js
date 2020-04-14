@@ -3,7 +3,7 @@
 /**
  * A FilterNode represents a single node in a filter tree.
  * Each filter node has an associated filter, containing the filter
- * data to send in a request, an associated filter view for the node,
+ * data to send in a request, any additional filter metadata for display,
  * and any children nodes.
  *
  * Implemented by {@link SimplerFilterNode} and {@link CombinedFilterNode}.
@@ -16,10 +16,10 @@ export default class FilterNode {
   getFilter () {}
 
   /**
-   * Returns this node's filter view.
-   * @returns {FilterView}
+   * Returns the metadata for this node's filter.
+   * @returns {FilterMetadata}
    */
-  getFilterView () {}
+  getFilterMetadata () {}
 
   /**
    * Returns the children of this node.
