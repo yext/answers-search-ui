@@ -6,6 +6,7 @@
   $pagination-text-font-size: $font-size-md-lg !default;
   $pagination-text-line-height: $line-height-lg !default;
   $pagination-text-font-weight: $font-weight-normal !default;
+  $pagination-color-active-page: #e1e5e8 !default;
 
   display: flex;
   justify-content: center;
@@ -40,10 +41,21 @@
     visibility: hidden;
   }
 
-  &-page
-  {
+  &-page, &-link {
     padding: 0;
     margin: 0 20px;
+  }
+
+  #active-page {
+    padding: 0 5px;
+    margin: 0 15px;
+    border-radius: 2px;
+    background-color: $pagination-color-active-page;
+  }
+
+  &-link:hover {
+    cursor: pointer;
+    color: $pagination-text-color-hover;
   }
 
   &-chevron--left svg, &-doubleChevron--left svg
@@ -54,5 +66,17 @@
   &-doubleChevron, &-doubleChevron--left
   {
     margin-right: -4px;
+  }
+}
+
+@media (max-width: $breakpoint-mobile-max) {
+  .mobile-hidden {
+    display: none;
+  }
+}
+
+@media (min-width: $breakpoint-mobile-max) {
+  .desktop-hidden {
+    display: none;
   }
 }

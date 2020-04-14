@@ -883,6 +883,12 @@ ANSWERS.addComponent('Pagination', {
   container: '.pagination-component',
   // Must be assigned either here or in the search config.
   verticalKey: '',
+  // The maximum number of pages visible to non-mobile users.
+  maxVisiblePagesDesktop: 1,
+  // The maximum number of pages visible to mobile users.
+  maxVisiblePagesMobile: 1,
+  // Ensure that the page numbers for first and last page are always shown. Not recommended to use with showFirstAndLastButton.
+  pinFirstAndLastPage: false,
   // Display double-arrows allowing users to jump to the first and last page of results.
   showFirstAndLastButton: true,
   // DEPRECATED. Display a double arrow allowing users to jump to the first page of results.
