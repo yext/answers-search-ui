@@ -268,7 +268,7 @@ export default class FilterOptionsComponent extends Component {
           filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
 
           for (let filterOption of filterOptionEls) {
-            const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--label');
+            const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
             const labelText = labelEl.textContent || labelEl.innerText;
             if (!filter) {
               filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
@@ -321,7 +321,7 @@ export default class FilterOptionsComponent extends Component {
     }
   }
 
-  _getMatchedSubstrings (option, filter) {
+  _getMatchedSubstring (option, filter) {
     if (option && filter && option.toLowerCase().indexOf(filter.toLowerCase()) > -1) {
       return [{
         length: filter.length,
