@@ -78,7 +78,6 @@ export default class Filter {
    * @returns {Filter}
    */
   static range (field, min, max, isExclusive) {
-    console.log(min, max);
     const falsyMin = min === null || min === undefined || min === '';
     const falsyMax = max === null || max === undefined || max === '';
     if (falsyMin && falsyMax) {
@@ -95,7 +94,9 @@ export default class Filter {
         : Filter.lessThanEqual(field, max);
     }
     if (min === max) {
-      return Filter.equal(field, min);
+      return isExclusive
+        ? Filter.empty()
+        : Filter.equal(field, min);
     }
     return isExclusive
       ? Filter.exclusiveRange(field, min, max)

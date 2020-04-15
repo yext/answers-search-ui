@@ -186,7 +186,7 @@ export default class RangeFilterComponent extends Component {
         ? `< ${max}`
         : `≤ ${max}`;
     } else if (min === max) {
-      displayValue = min;
+      displayValue = isExclusive ? '' : min;
     } else {
       displayValue = isExclusive
         ? `> ${min}, < ${max}`
