@@ -39,7 +39,7 @@
     </button>
 
     <a
-      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless (and pinPages ellipses.desktopBack)}} desktop-hidden{{/unless}}{{#unless (and pinPages ellipses.mobileBack)}} mobile-hidden{{/unless}}"
+      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless ellipses.desktopBack}} desktop-hidden{{/unless}}{{#unless ellipses.mobileBack}} mobile-hidden{{/unless}}"
       aria-label="Go to page 1 of results"
       data-number="1"
       data-eventtype="PAGINATE"
@@ -73,7 +73,7 @@
     </span>
 
     <a
-      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless (and pinPages ellipses.desktopFront)}} desktop-hidden{{/unless}}{{#unless (and pinPages ellipses.mobileFront)}} mobile-hidden{{/unless}}"
+      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless ellipses.desktopFront}} desktop-hidden{{/unless}}{{#unless ellipses.mobileFront}} mobile-hidden{{/unless}}"
       aria-label="Go to page {{maxPage}} of results"
       data-number="{{maxPage}}"
     >
