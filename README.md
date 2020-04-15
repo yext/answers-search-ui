@@ -75,7 +75,7 @@ Below is a list of configuration options that can be used during initialization.
 | experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
 | debug | boolean | Prints full Answers error details when set to `true` | optional |
 | sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
-| navigation | object | Provide navigation configuration including tab configurations | optional |
+| verticalPages | array | Provide navigation configuration including tab configurations | optional |
 | onVerticalSearch  | function   | analytics callback after a vertical search | optional |
 | onUniversalSearch | function   | analytics callback after a universal search | optional |
 

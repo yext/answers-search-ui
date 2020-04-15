@@ -37,10 +37,8 @@
     overflow: hidden;
     z-index: 1;
 
-    @media (min-width: $breakpoint-mobile-min) {
-      border-radius: $searchbar-form-border-radius;
-      border: 1px solid $searchbar-form-outline-color-base;
-    }
+    border-radius: $searchbar-form-border-radius;
+    border: 1px solid $searchbar-form-outline-color-base;
 
     background-color: $searchbar-form-background-color;
 
