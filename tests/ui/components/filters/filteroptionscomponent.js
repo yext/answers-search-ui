@@ -5,7 +5,7 @@ import FilterOptionsComponent from '../../../../src/ui/components/filters/filter
 import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
 import Filter from '../../../../src/core/models/filter';
 
-describe('sort options component', () => {
+describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
   let COMPONENT_MANAGER, defaultConfig, setFilterNode;
   const options = [
