@@ -55,10 +55,10 @@ describe('date range filter component', () => {
 
   it('correctly renders title, minLabel, maxLabel', () => {
     const config = {
+      ...defaultConfig,
       title: 'Flowers for m[A]chines',
       minLabel: 'or not to [B]e',
-      maxLabel: 'meaningless [C]ode',
-      ...defaultConfig
+      maxLabel: 'meaningless [C]ode'
     };
     const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
     const wrapper = mount(component);
@@ -71,11 +71,11 @@ describe('date range filter component', () => {
 
   it('correctly creates filter node when isExclusive is false', () => {
     const config = {
+      ...defaultConfig,
       field: 'yorha',
       title: 'Flowers for m[A]chines',
       initialMin: '2019-08-01',
-      initialMax: '2020-08-01',
-      ...defaultConfig
+      initialMax: '2020-08-01'
     };
     let min = config.initialMin;
     let max = config.initialMax;
@@ -196,12 +196,12 @@ describe('date range filter component', () => {
 
   it('correctly creates filter node when isExclusive is true', () => {
     const config = {
+      ...defaultConfig,
       field: 'yorha',
       title: 'Flowers for m[A]chines',
       initialMin: '2019-08-01',
       initialMax: '2020-08-01',
-      isExclusive: true,
-      ...defaultConfig
+      isExclusive: true
     };
     let min = config.initialMin;
     let max = config.initialMax;
@@ -322,12 +322,12 @@ describe('date range filter component', () => {
 
   it('correctly creates filter node when min and max are equal and isExclusive is true', () => {
     const config = {
+      ...defaultConfig,
       field: 'yorha',
       title: 'Flowers for m[A]chines',
       initialMin: '2019-08-01',
       initialMax: '2019-08-01',
-      isExclusive: true,
-      ...defaultConfig
+      isExclusive: true
     };
     const title = config.title;
 
@@ -347,12 +347,12 @@ describe('date range filter component', () => {
 
   it('correctly creates filter node when min equals max and isExclusive is false', () => {
     const config = {
+      ...defaultConfig,
       field: 'yorha',
       title: 'Flowers for m[A]chines',
       initialMin: '2019-08-01',
       initialMax: '2019-08-01',
-      isExclusive: false,
-      ...defaultConfig
+      isExclusive: false
     };
     const min = config.initialMin;
     const { field, title } = config;

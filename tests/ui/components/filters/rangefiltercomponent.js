@@ -53,10 +53,10 @@ describe('range filter component', () => {
 
   it('correctly renders title, minLabel, maxLabel', () => {
     const config = {
+      ...defaultConfig,
       title: 'Flowers for m[A]chines',
       minLabel: 'or not to [B]e',
-      maxLabel: 'meaningless [C]ode',
-      ...defaultConfig
+      maxLabel: 'meaningless [C]ode'
     };
     const component = COMPONENT_MANAGER.create('RangeFilter', config);
     const wrapper = mount(component);
@@ -69,11 +69,11 @@ describe('range filter component', () => {
 
   it('correctly creates filter nodes on change', () => {
     const config = {
+      ...defaultConfig,
       field: 'yorha',
       title: 'Flowers for m[A]chines',
       initialMin: -1,
-      initialMax: 1,
-      ...defaultConfig
+      initialMax: 1
     };
     let min = config.initialMin;
     let max = config.initialMax;
@@ -196,12 +196,12 @@ describe('range filter component', () => {
 
   it('correctly creates filter node when min equals max', () => {
     const config = {
+      ...defaultConfig,
       field: 'yorha',
       title: 'Flowers for m[A]chines',
       initialMin: 0,
       initialMax: 0,
-      isExclusive: false,
-      ...defaultConfig
+      isExclusive: false
     };
     const min = config.initialMin;
     const { field, title } = config;
