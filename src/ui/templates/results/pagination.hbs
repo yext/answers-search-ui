@@ -1,7 +1,7 @@
 {{#if showControls}}
   <div class="yxt-Pagination">
     {{#if firstPageButtonEnabled}}
-      <button class="yxt-Pagination-button js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
+      <button class="yxt-Pagination-button yxt-Pagination--wide js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
         {{#unless showFirstPageButton}}disabled{{/unless}}
         data-eventtype="PAGINATE"
         data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
@@ -54,7 +54,7 @@
 
     {{#each pageNumbers}}
       {{#if this.active}}
-        <span id="active-page" class="yxt-Pagination-page">{{../pageLabel}} {{../pageNumber}}</span>
+        <span id="active-page" class="yxt-Pagination-page" aria-label="Currently on page {{../pageNumber}}">{{../pageLabel}} {{../pageNumber}}</span>
       {{else}}
         <a 
           class="yxt-Pagination-link js-yxt-Pagination-link{{#if this.desktopHidden}} desktop-hidden{{/if}}{{#if this.mobileHidden}} mobile-hidden{{/if}}"
@@ -97,7 +97,7 @@
       {{/unless}}
     </button>
     {{#if lastPageButtonEnabled}}
-      <button class="yxt-Pagination-button js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
+      <button class="yxt-Pagination-button yxt-Pagination--wide js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
         {{#unless showLastPageButton}}disabled{{/unless}}
         data-eventtype="PAGINATE"
         data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{maxPage}}, "totalPageCount":{{maxPage}} }'

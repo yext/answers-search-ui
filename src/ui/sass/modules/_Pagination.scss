@@ -1,12 +1,13 @@
 /** @define Pagination */
 .yxt-Pagination
 {
-  $pagination-text-color: $color-text-primary !default;
-  $pagination-text-color-hover: $color-text-secondary !default;
+  $pagination-text-color: #616161 !default;
+  $pagination-text-color-hover: #FFFFFF;
   $pagination-text-font-size: $font-size-md-lg !default;
-  $pagination-text-line-height: $line-height-lg !default;
+  $pagination-text-line-height: $line-height-md !default;
   $pagination-text-font-weight: $font-weight-normal !default;
-  $pagination-color-active-page: #e1e5e8 !default;
+  $pagination-color-active-page: $color-borders !default;
+  $pagination-color-hover: $color-text-secondary !default;
 
   display: flex;
   justify-content: center;
@@ -24,7 +25,10 @@
     display: flex;
     background: none;
     border: none;
-    padding: 0 4px;
+    color: $pagination-text-color;
+    padding: 6px 7px;
+    margin: 0 2px;
+    border-radius: 2px;
 
     &:not(:disabled)
     {
@@ -33,6 +37,7 @@
       &:hover
       {
         color: $pagination-text-color-hover;
+        background-color: $pagination-color-hover;
       }
     }
   }
@@ -42,20 +47,19 @@
   }
 
   &-page, &-link {
-    padding: 0;
-    margin: 0 20px;
+    padding: 2px 8px;
+    margin: 0 2px;
+    border-radius: 2px;
   }
 
   #active-page {
-    padding: 0 5px;
-    margin: 0 15px;
-    border-radius: 2px;
     background-color: $pagination-color-active-page;
   }
 
   &-link:hover {
     cursor: pointer;
     color: $pagination-text-color-hover;
+    background-color: $pagination-color-hover;
   }
 
   &-chevron--left svg, &-doubleChevron--left svg
@@ -66,6 +70,11 @@
   &-doubleChevron, &-doubleChevron--left
   {
     margin-right: -4px;
+  }
+
+  &--wide {
+    padding: 6px 3.5px;
+    margin: 0 4px;
   }
 }
 
