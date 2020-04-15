@@ -5,44 +5,44 @@ import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import PaginationComponent from '../../../../src/ui/components/results/paginationcomponent';
 
-const mockedCore = () => {
-  // pagination will hide itself if there are no results, so we fake the relevant global storage.
-  const storage = {
-    'vertical-results': { searchState: 'search-complete', resultsCount: 21 },
-    'search-offset': 0,
-    'search-config': { limit: 5 },
-    'no-results-config': { displayAllResults: true }
-  };
-  return {
-    verticalSearch: () => {},
-    verticalPage: () => {},
-    globalStorage: {
-      getState: storageKey => storage[storageKey] || undefined,
-      getAll: () => [],
-      delete: storageKey => {},
-      set: (key, value) => {
-        storage[key] = value;
-      },
-      on: () => {}
-    },
-    persistentStorage: {
-      set: (namespace, offsetIndex) => {
-        expect(namespace).toBe(StorageKeys.SEARCH_OFFSET);
-        expect(typeof offsetIndex).toBe('number');
-      },
-      delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
-    }
-  };
-};
-
-DOM.setup(document, new DOMParser());
-
-const COMPONENT_MANAGER = mockManager(
-  mockedCore(),
-  PaginationComponent.defaultTemplateName()
-);
-
 describe('rendering the arrows', () => {
+  const mockedCore = () => {
+    // pagination will hide itself if there are no results, so we fake the relevant global storage.
+    const storage = {
+      'vertical-results': { searchState: 'search-complete', resultsCount: 21 },
+      'search-offset': 0,
+      'search-config': { limit: 5 },
+      'no-results-config': { displayAllResults: true }
+    };
+    return {
+      verticalSearch: () => {},
+      verticalPage: () => {},
+      globalStorage: {
+        getState: storageKey => storage[storageKey] || undefined,
+        getAll: () => [],
+        delete: storageKey => {},
+        set: (key, value) => {
+          storage[key] = value;
+        },
+        on: () => {}
+      },
+      persistentStorage: {
+        set: (namespace, offsetIndex) => {
+          expect(namespace).toBe(StorageKeys.SEARCH_OFFSET);
+          expect(typeof offsetIndex).toBe('number');
+        },
+        delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
+      }
+    };
+  };
+
+  DOM.setup(document, new DOMParser());
+
+  const COMPONENT_MANAGER = mockManager(
+    mockedCore(),
+    PaginationComponent.defaultTemplateName()
+  );
+
   let defaultConfig;
   beforeEach(() => {
     const bodyEl = DOM.query('body');
@@ -88,6 +88,43 @@ describe('rendering the arrows', () => {
 });
 
 describe('rendering the page numbers', () => {
+  const mockedCore = () => {
+    // pagination will hide itself if there are no results, so we fake the relevant global storage.
+    const storage = {
+      'vertical-results': { searchState: 'search-complete', resultsCount: 21 },
+      'search-offset': 0,
+      'search-config': { limit: 5 },
+      'no-results-config': { displayAllResults: true }
+    };
+    return {
+      verticalSearch: () => {},
+      verticalPage: () => {},
+      globalStorage: {
+        getState: storageKey => storage[storageKey] || undefined,
+        getAll: () => [],
+        delete: storageKey => {},
+        set: (key, value) => {
+          storage[key] = value;
+        },
+        on: () => {}
+      },
+      persistentStorage: {
+        set: (namespace, offsetIndex) => {
+          expect(namespace).toBe(StorageKeys.SEARCH_OFFSET);
+          expect(typeof offsetIndex).toBe('number');
+        },
+        delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
+      }
+    };
+  };
+
+  DOM.setup(document, new DOMParser());
+
+  const COMPONENT_MANAGER = mockManager(
+    mockedCore(),
+    PaginationComponent.defaultTemplateName()
+  );
+
   let defaultConfig;
   beforeEach(() => {
     const bodyEl = DOM.query('body');
