@@ -1,6 +1,7 @@
 import http from 'http';
 import handler from 'serve-handler';
 import UniversalPage from './pageobjects/universalpage';
+import VerticalPage from './pageobjects/verticalpage';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -36,4 +37,28 @@ test('Basic universal flow', async t => {
 
   const faqsSectionTitle = await sections[1].getTitle();
   await t.expect(faqsSectionTitle).contains('FAQ');
+});
+
+fixture`Vertical search page works as expected`
+  .before(async ctx => {
+    const server = http.createServer((request, response) => {
+      return handler(request, response);
+    });
+    server.listen(9999);
+    ctx.server = server;
+  })
+  .after(async ctx => {
+    ctx.server.close();
+  })
+  .page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`;
+
+test('pagination flow', async t => {
+  const searchComponent = VerticalPage.getSearchComponent();
+  await searchComponent.enterQuery('Virginia');
+  await searchComponent.submitQuery();
+  const paginationComponent = VerticalPage.getPaginationComponent();
+  await paginationComponent.clickNextPage();
+  const pageNum = await paginationComponent.getCurrentPage();
+  // t.wait(30000);
+  await t.expect(pageNum).eql('Page 2');
 });

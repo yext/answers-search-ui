@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <meta charset="utf-8" />
+    
+        <script src="http://localhost:9999/dist/answerstemplates.compiled.min.js"></script>
+        <script src="http://localhost:9999/dist/answers.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="http://localhost:9999/dist/answers.css">
+    </head>
+    <body>
+        <div class="answers-container">
+            <div class="search-bar-container"></div>
+            <div class="results-container"></div>
+            <div class="pagination-container"></div>
+        </div>
+    
+        <script>
+            ANSWERS.init({
+                apiKey: 'df4b24f4075800e5e9705090c54c6c13',
+                experienceKey: 'rosetest',
+                businessId: '2287528',
+                experienceVersion: 'PRODUCTION',
+                search: {
+                  verticalKey: 'KM',
+                  limit: 15,
+                },
+                onReady: function() {
+                    this.addComponent('SearchBar', {
+                        container: '.search-bar-container',
+                        verticalKey:'KM',
+                        clearButton: true,
+                        promptForLocation: true
+                    });
+
+                    this.addComponent('VerticalResults', {
+                        container: '.results-container',
+                        verticalKey:'KM',
+                    });
+
+                    this.addComponent('Pagination', {
+                      container:'.pagination-container',
+                    })
+                }
+            })
+        </script>
+    </body>
+</html>
