@@ -55,8 +55,8 @@ export default class RangeFilterComponent extends Component {
      * @private
      */
     this._range = {
-      min: minVal || config.initialMin || 0,
-      max: maxVal || config.initialMax || 10
+      min: this.getFirstValidValue(minVal, config.initialMin, 0),
+      max: this.getFirstValidValue(maxVal, config.initialMax, 10)
     };
 
     /**
@@ -79,17 +79,22 @@ export default class RangeFilterComponent extends Component {
      * @private
      */
     this._maxLabel = config.maxLabel || null;
+  }
 
-    /**
-     * The template to render
-     * @type {string}
-     * @private
-     */
-    this._templateName = `controls/range`;
+  getFirstValidValue (...values) {
+    for (const value of values) {
+      if (value || value === 0) {
+        return value;
+      }
+    }
   }
 
   static get type () {
     return 'RangeFilter';
+  }
+
+  static defaultTemplateName () {
+    return 'controls/range';
   }
 
   setState (data) {
@@ -104,7 +109,7 @@ export default class RangeFilterComponent extends Component {
   }
 
   onCreate () {
-    DOM.delegate(this._container, '.js-yext-range', 'change', (event) => {
+    DOM.delegate(this._container, '.js-yext-range', 'change', event => {
       this._updateRange(event.target.dataset.key, Number.parseInt(event.target.value));
     });
   }
@@ -155,8 +160,10 @@ export default class RangeFilterComponent extends Component {
    */
   _buildFilter () {
     const { min, max } = this._range;
-    const _min = isNaN(min) ? null : min;
-    const _max = isNaN(max) ? null : max;
+    const falsyMin = !min && min !== 0;
+    const falsyMax = !max && max !== 0;
+    const _min = falsyMin ? null : min;
+    const _max = falsyMax ? null : max;
     return Filter.range(this._field, _min, _max, false);
   }
 
@@ -166,8 +173,8 @@ export default class RangeFilterComponent extends Component {
    */
   _buildFilterMetadata () {
     const { min, max } = this._range;
-    const falsyMin = isNaN(min);
-    const falsyMax = isNaN(max);
+    const falsyMin = !min && min !== 0;
+    const falsyMax = !max && max !== 0;
     if (falsyMin && falsyMax) {
       return new FilterMetadata({
         fieldName: this._title

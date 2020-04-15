@@ -1148,24 +1148,6 @@ ANSWERS.addComponent('DateRangeFilter', {
   storeOnChange: true,
   // Optional, if true, this filter represents an exclusive range, rather than an inclusive one, defaults to false
   isExclusive: false,
-  // A function that generates the text to show when displaying a less than filter
-  // elsewhere in the ui, defaults to below.
-  lessThanText: min => `After ${min}`,
-  // A function that generates the text to show when displaying a less than or equal
-  // filter elsewhere in the ui, defaults to below.
-  lessThanOrEqualText: min => `${min} or later`,
-  // A function that generates the text to show when displaying a greater than
-  // filter elsewhere in the ui, defaults to below. 
-  greaterThanText: max => `Before ${max}`,
-  // A function that generates the text to show when displaying a greater than or
-  // equal filter elsewhere in the ui, defaults to below.
-  greaterThanOrEqualText: max => `${max} and earlier`,
-  // A function that generates the text to show whend isplaying an exclusive range
-  // filter, defaults to below.
-  exclusiveRangeText: (min, max) => `${min} - ${max}`,
-  // A function that generates the text to show when displaying an inclusive range
-  // filter, defaults to below.
-  inclusiveRangeText: (min, max) => `Between ${min} and ${max}`,
   // Optional, the callback function to call when changed
   onChange: function() {}
 });

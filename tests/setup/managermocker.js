@@ -7,6 +7,9 @@ import HandlebarsRenderer from '../../src/ui/rendering/handlebarsrenderer';
 import Handlebars from 'handlebars/dist/handlebars.min.js';
 import MockComponentManager from './mockcomponentmanager';
 import IconComponent from '../../src/ui/components/icons/iconcomponent';
+import GlobalStorage from '../../src/core/storage/globalstorage';
+import FilterRegistry from '../../src/core/filters/filterregistry';
+import PersistentStorage from '../../src/ui/storage/persistentstorage';
 /**
  * Generates a MockComponentManager with templates from the passed in template paths.
  * TODO(oshi): better module/method names
@@ -22,8 +25,15 @@ export default function mockManager (mockedCore, ...templatePaths) {
     rendererOpts[templatePath] = Handlebars.compile(loadTemplate(templatePath));
   }
 
+  const globalStorage = new GlobalStorage();
+  const persistentStorage = new PersistentStorage();
   const RENDERER = new HandlebarsRenderer(rendererOpts);
-  const COMPONENT_MANAGER = new MockComponentManager(mockedCore);
+  const COMPONENT_MANAGER = new MockComponentManager({
+    filterRegistry: new FilterRegistry(globalStorage),
+    globalStorage,
+    persistentStorage,
+    ...mockedCore
+  });
   COMPONENT_MANAGER.setRenderer(RENDERER);
 
   const mockAnalyticsReporter = {
