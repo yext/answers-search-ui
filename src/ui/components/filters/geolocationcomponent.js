@@ -186,7 +186,11 @@ export default class GeoLocationComponent extends Component {
     }
 
     this._initAutoComplete(this._config.inputSelector);
-    DOM.on(this._config.buttonSelector, 'click', () => this._toggleGeoFilter());
+    DOM.on(
+      DOM.query(this._container, this._config.buttonSelector),
+      'click',
+      () => this._toggleGeoFilter()
+    );
   }
 
   /**
