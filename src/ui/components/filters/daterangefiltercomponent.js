@@ -186,7 +186,7 @@ export default class DateRangeFilterComponent extends Component {
     if (!max) {
       displayValue = this._isExclusive
         ? this._config.lessThanText(min)
-        : this._config.lessThanEqualText(min);
+        : this._config.lessThanOrEqualText(min);
     } else if (!min) {
       displayValue = this._isExclusive
         ? this._config.greaterThanText(max)
