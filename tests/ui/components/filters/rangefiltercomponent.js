@@ -5,7 +5,7 @@ import RangeFilterComponent from '../../../../src/ui/components/filters/rangefil
 import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
 import Filter from '../../../../src/core/models/filter';
 
-describe('date range filter component', () => {
+describe('range filter component', () => {
   DOM.setup(document, new DOMParser());
 
   let COMPONENT_MANAGER, defaultConfig, setFilterNode;
