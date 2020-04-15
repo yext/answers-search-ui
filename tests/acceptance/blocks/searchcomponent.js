@@ -5,7 +5,7 @@ import { Selector, t } from 'testcafe';
  */
 class AutoCompleteComponentBlock {
   constructor () {
-    this._options = Selector('.yxt-AutoComplete-results');
+    this._options = Selector('.yxt-AutoComplete-option');
   }
 
   /**
@@ -16,7 +16,7 @@ class AutoCompleteComponentBlock {
      *                       select.
      */
   async selectOption (value) {
-    const option = this._options.withText(value);
+    const option = this._options.withExactText(value);
     await t.click(option);
   }
 }
