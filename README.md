@@ -562,6 +562,10 @@ ANSWERS.addComponent('UniversalResults', {
       mapConfig: {
         mapProvider: 'google',
         apiKey: '<<<< api key >>>>',
+        // Optional configuration for the map's behavior when a query returns no results.
+        noResults: {
+          displayAllResults: true
+        }
       }
     }
   }
