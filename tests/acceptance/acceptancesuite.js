@@ -1,6 +1,7 @@
 import UniversalPage from './pageobjects/universalpage';
 import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
+import FacetsPage from './pageobjects/facetspage';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -44,3 +45,30 @@ test('pagination flow', async t => {
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
+
+test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
+  `Facets load on the page, and then selecting and applying a filter option returns the number of \
+  results shown in that option's count label`,
+  async t => {
+    const searchComponent = FacetsPage.getSearchComponent();
+
+    let filterBox = await FacetsPage.getFacetsComponent().getFilterBox();
+    let count = await filterBox.getFilterCount();
+    await t.expect(count).eql(0);
+
+    await searchComponent.enterQuery('Virginia');
+    await searchComponent.submitQuery();
+    count = await filterBox.getFilterCount();
+    await t.expect(count).gt(0);
+
+    const filterOptions = await filterBox.getFilter(0);
+    await filterOptions.expand();
+    const expectedResultsCount = await filterOptions.getOptionCount(0);
+    await filterOptions.clickOption(0);
+
+    const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
+    await filterBox.applyFilters();
+    const resultsCount = await verticalResultsComponent.getResultsCount();
+    await t.expect(resultsCount).eql(expectedResultsCount);
+  }
+);

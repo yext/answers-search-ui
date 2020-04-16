@@ -27,4 +27,8 @@ export default class VerticalResultsComponentBlock {
     const title = await this._selector.find('.yxt-Results-title').innerText;
     return title;
   }
+
+  async getResultsCount () {
+    return Selector('.yxt-Card').count;
+  }
 }
