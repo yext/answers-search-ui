@@ -35,5 +35,5 @@ test('Basic universal flow', async t => {
   await t.expect(sections.length).eql(2);
 
   const faqsSectionTitle = await sections[1].getTitle();
-  await t.expect(faqsSectionTitle).eql('FAQS');
+  await t.expect(faqsSectionTitle).contains('FAQ');
 });
