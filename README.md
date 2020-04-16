@@ -904,7 +904,7 @@ ANSWERS.addComponent('Pagination', {
   // Label for a page of results
   pageLabel: 'Page'
   // Function invoked when a user clicks to change pages. By default, scrolls the user to the top of the page.
-  onPaginate: () => {},
+  onPaginate: (newPageNumber, oldPageNumber, totalPages) => {},
 });
 ```
 

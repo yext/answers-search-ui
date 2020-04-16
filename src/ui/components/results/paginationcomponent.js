@@ -38,6 +38,13 @@ export default class PaginationComponent extends Component {
     this._maxVisiblePagesMobile = config.maxVisiblePagesMobile === undefined ? 1 : config.maxVisiblePagesMobile;
 
     /**
+     * If true, displays the first and last page buttons
+     * @type {boolean}
+     * @private
+     */
+    this._showFirstAndLastPageButtons = config.showFirstAndLastButton === undefined ? true : config.showFirstAndLastButton;
+
+    /**
      * DEPRECATED
      * @type {boolean}
      * @private
@@ -52,18 +59,11 @@ export default class PaginationComponent extends Component {
     this._lastPageButtonEnabled = config.showLast === undefined ? config.showFirstAndLastButton : config.showLast;
 
     /**
-     * If true, displays the first and last page buttons
-     * @type {boolean}
-     * @private
-     */
-    this._showFirstAndLastPageButtons = config.showFirstAndLastButton !== false;
-
-    /**
      * If true, always displays the page numbers for first and last page.
      * @type {boolean}
      * @private
      */
-    this._pinFirstAndLastPage = !!config.pinFirstAndLastPage;
+    this._pinFirstAndLastPage = config.pinFirstAndLastPage === undefined ? false : config.pinFirstAndLastPage;
 
     /**
      * Icons object for first, previous, next, and last page icons.
@@ -164,7 +164,13 @@ export default class PaginationComponent extends Component {
   }
 
   updatePage (offset) {
-    this._onPaginate();
+    const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
+    let oldOffset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+    const oldPageNumber = (oldOffset / limit) + 1;
+    const pageNumber = (offset / limit) + 1;
+    const maxPageCount = Math.trunc((results.resultsCount - 1) / limit) + 1;
+    this._onPaginate(pageNumber, oldPageNumber, maxPageCount);
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.persistentStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.verticalPage(this._verticalKey, offset);
@@ -210,13 +216,13 @@ export default class PaginationComponent extends Component {
   /**
    * Creates an object representing the view state of the page numbers and ellipses
    * @param {number} pageNumber refers to the page number, not the page index
-   * @param {number} maxPage
-   * @returns {Object}
+   * @param {number} maxPage the highest page number, which also represents the total page count
+   * @returns {Object} the view-model for the page numbers displayed in the component, including whether to display ellipses
    */
-  _createPageNumbers (pageNumber, maxPage) {
+  _createPageNumberViews (pageNumber, maxPage) {
     const [mobileBackLimit, mobileFrontLimit] = this._allocate(pageNumber, maxPage, this._maxVisiblePagesMobile);
     const [desktopBackLimit, desktopFrontLimit] = this._allocate(pageNumber, maxPage, this._maxVisiblePagesDesktop);
-    const pageNumbers = [];
+    const pageNumberViews = [];
     for (var i = 1; i <= maxPage; i++) {
       const num = { number: i };
       if (i === pageNumber) {
@@ -229,7 +235,7 @@ export default class PaginationComponent extends Component {
           num.desktopHidden = true;
         }
       }
-      pageNumbers.push(num);
+      pageNumberViews.push(num);
     }
 
     return {
@@ -239,7 +245,7 @@ export default class PaginationComponent extends Component {
         desktopBack: this._pinFirstAndLastPage && desktopBackLimit > 0,
         desktopFront: this._pinFirstAndLastPage && desktopFrontLimit < maxPage
       },
-      pageNumbers
+      pageNumberViews
     };
   }
 
@@ -250,7 +256,7 @@ export default class PaginationComponent extends Component {
     const pageNumber = (offset / limit) + 1;
     const isMoreResults = results.resultsCount > offset + limit;
     const maxPage = Math.trunc((results.resultsCount - 1) / limit) + 1;
-    const { ellipses, pageNumbers } = this._createPageNumbers(pageNumber, maxPage);
+    const { ellipses, pageNumbers } = this._createPageNumberViews(pageNumber, maxPage);
 
     return super.setState({
       showControls: this.shouldShowControls(results, limit),
