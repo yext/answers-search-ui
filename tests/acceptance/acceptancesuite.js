@@ -1,6 +1,6 @@
 import UniversalPage from './pageobjects/universalpage';
 import VerticalPage from './pageobjects/verticalpage';
-import setupServer from './server';
+import { setupServer, shutdownServer } from './server';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -10,9 +10,7 @@ import setupServer from './server';
  */
 fixture`Universal search page works as expected`
   .before(setupServer)
-  .after(async ctx => {
-    ctx.server.close();
-  })
+  .after(shutdownServer)
   .page`http://localhost:9999/tests/acceptance/fixtures/html/universal`;
 
 test('Basic universal flow', async t => {
@@ -34,9 +32,7 @@ test('Basic universal flow', async t => {
 
 fixture`Vertical search page works as expected`
   .before(setupServer)
-  .after(async ctx => {
-    ctx.server.close();
-  })
+  .after(shutdownServer)
   .page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`;
 
 test('pagination flow', async t => {
@@ -45,6 +41,6 @@ test('pagination flow', async t => {
   await searchComponent.submitQuery();
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextPageButton();
-  const pageNum = await paginationComponent.getCurrentPageOfResults();
+  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });

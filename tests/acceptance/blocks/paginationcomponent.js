@@ -17,9 +17,9 @@ export default class PaginationComponentBlock {
   }
 
   /**
-   * Find the current page
+   * Find the current page label+number, if it exists
    */
-  async getCurrentPageOfResults () {
+  async getActivePageLabelAndNumber () {
     return this._currentPage.textContent;
   }
 }
