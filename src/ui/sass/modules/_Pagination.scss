@@ -38,7 +38,7 @@
   &-icon {
     font-size: $font-size-sm;
     span {
-      padding-top: 3px; // The icon SVGs are not aligned nicely.
+      display: flex;
     }
   }
 
