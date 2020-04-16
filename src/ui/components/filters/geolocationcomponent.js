@@ -109,17 +109,17 @@ export default class GeoLocationComponent extends Component {
     });
 
     /**
-     * The filter to use for the current query
-     * @type {Filter}
+     * The filter node to use for the current query
+     * @type {FilterNode}
      */
-    this.filter = this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || {};
-    if (typeof this.filter === 'string') {
+    let filterNode = this.core.globalStorage.getState(`${this.name}.${StorageKeys.FILTER_NODE}`) || {};
+    if (typeof filterNodeData === 'string') {
       try {
-        this.filter = JSON.parse(this.filter);
+        filterNode = JSON.parse(filterNode);
       } catch (e) {}
     }
 
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
+    this.filterNode = FilterNodeFactory.from({ ...filterNode });
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
 
@@ -241,7 +241,7 @@ export default class GeoLocationComponent extends Component {
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-          this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+          this.core.persistentStorage.delete(`${this.name}.${StorageKeys.FILTER_NODE}`);
         },
         () => this._handleGeolocationError(),
         this._geolocationOptions
@@ -267,8 +267,6 @@ export default class GeoLocationComponent extends Component {
    */
   _saveDataToStorage (query, filter, displayValue, position) {
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
-    this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
-    this.core.setFilter(this.name, filter);
     const filterNode = FilterNodeFactory.from({
       filter: filter,
       metadata: {
@@ -276,6 +274,7 @@ export default class GeoLocationComponent extends Component {
         fieldName: this._config.title || this._config.label || 'Location'
       }
     });
+    this.core.persistentStorage.set(`${this.name}.${StorageKeys.FILTER_NODE}`, filterNode);
     this.core.setFilterNode(this.name, filterNode);
 
     if (position) {

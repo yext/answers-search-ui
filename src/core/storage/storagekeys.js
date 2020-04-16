@@ -13,7 +13,6 @@ export default {
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
-  FILTER: 'filter',
   FILTER_NODE: 'filter-node',
   QUERY: 'query',
   QUERY_ID: 'query-id',

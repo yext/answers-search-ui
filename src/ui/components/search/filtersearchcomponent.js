@@ -99,18 +99,33 @@ export default class FilterSearchComponent extends Component {
     /**
      * The filter string to use for the provided query
      * Optionally provided
+     * TODO(oshi): config.filter is not in the readme. Do we need this?
      * @type {string}
      */
-    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || '';
-    if (typeof this.filter === 'string') {
+    let filter = config.filter || '';
+    if (typeof filter === 'string') {
       try {
-        this.filter = JSON.parse(this.filter);
+        filter = JSON.parse(filter);
       } catch (e) {}
     }
 
-    this.searchParameters = buildSearchParameters(config.searchParameters);
+    let filterNode = this.core.globalStorage.getState(`${this.name}.${StorageKeys.FILTER_NODE}`) || {};
+    if (typeof filterNode === 'string') {
+      try {
+        filterNode = JSON.parse(filterNode);
+      } catch (e) {}
+    }
 
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
+    if (filter) {
+      this.filterNode = FilterNodeFactory.from({
+        ...filterNode,
+        filter: filter
+      });
+    } else {
+      this.filterNode = FilterNodeFactory.from({ ...filterNode });
+    }
+
+    this.searchParameters = buildSearchParameters(config.searchParameters);
   }
 
   static get type () {
@@ -162,9 +177,18 @@ export default class FilterSearchComponent extends Component {
       verticalKey: this._verticalKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
+        this.query = query;
+        this.filterNode = FilterNodeFactory.from({
+          filter: Filter.fromResponse(filter),
+          metadata: {
+            fieldName: this.title,
+            displayValue: query.split(',')[0]
+          }
+        });
+
         const params = new SearchParams(window.location.search.substring(1));
-        params.set(`${this.name}.query`, query);
-        params.set(`${this.name}.filter`, filter);
+        params.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+        params.set(`${this.name}.${StorageKeys.FILTER_NODE}`, this.filterNode);
 
         // If we have a redirectUrl, we want the params to be
         // serialized and submitted.
@@ -174,19 +198,9 @@ export default class FilterSearchComponent extends Component {
         }
 
         // save the filter to storage for the next search
-        this.query = query;
-        this.filter = Filter.fromResponse(filter);
         this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, this.filter);
-        this.core.setFilter(this.name, this.filter);
-        const filterNode = FilterNodeFactory.from({
-          filter: this.filter,
-          metadata: {
-            fieldName: this.title,
-            displayValue: query.split(',')[0]
-          }
-        });
-        this.core.setFilterNode(this.name, filterNode);
+        this.core.persistentStorage.set(`${this.name}.${StorageKeys.FILTER_NODE}`, this.filterNode);
+        this.core.setFilterNode(this.name, this.filterNode);
         this.search();
       }
     });
