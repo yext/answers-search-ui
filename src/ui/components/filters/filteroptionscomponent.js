@@ -278,13 +278,13 @@ export default class FilterOptionsComponent extends Component {
               filterOption.classList.remove('displaySearch');
               labelEl.innerHTML = labelText;
             } else {
-              let matchedSubstrings = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
-              if (matchedSubstrings) {
+              let matchedSubstring = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
+              if (matchedSubstring) {
                 filterOption.classList.add('displaySearch');
                 filterOption.classList.remove('hiddenSearch');
                 labelEl.innerHTML = new HighlightedValue({
                   value: labelText,
-                  matchedSubstrings: matchedSubstrings
+                  matchedSubstrings: [matchedSubstring]
                 }).get();
               } else {
                 filterOption.classList.add('hiddenSearch');
@@ -334,16 +334,16 @@ export default class FilterOptionsComponent extends Component {
    *
    * Note: this is case sensitive.
    *
-   * @returns {Array}
+   * @returns {Object}
    * @private
    */
   _getMatchedSubstring (option, filter) {
     let offset = this._getOffset(option, filter);
     if (offset > -1) {
-      return [{
+      return {
         length: filter.length,
         offset: offset
-      }];
+      };
     }
 
     const minFilterSizeForLevenshtein = 3;
@@ -370,10 +370,10 @@ export default class FilterOptionsComponent extends Component {
       if (minLevDist <= maxLevenshteinDistance) {
         offset = this._getOffset(option, minLevSubstring);
         if (offset > -1) {
-          return [{
+          return {
             length: filter.length,
             offset: offset
-          }];
+          };
         }
       }
     }
