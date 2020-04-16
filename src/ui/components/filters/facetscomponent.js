@@ -92,6 +92,9 @@ class FacetsConfig {
     /**
      * The controls to use for each field. Each type of filter has a default
      * $eq : multioption (checkbox)
+     *
+     * DEPRECATED: prefer putting this in config.fields
+     *
      * @type {Object}
      */
     this.fieldControls = config.fieldControls || {};
