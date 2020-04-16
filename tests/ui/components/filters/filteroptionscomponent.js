@@ -61,7 +61,10 @@ describe('filter options component', () => {
     setFilterNode = jest.fn();
 
     const mockCore = {
-      setFilterNode: setFilterNode
+      setFilterNode: setFilterNode,
+      filterRegistry: {
+        setFilterNode: setFilterNode
+      }
     };
 
     COMPONENT_MANAGER = mockManager(

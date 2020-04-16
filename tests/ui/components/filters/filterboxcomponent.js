@@ -72,7 +72,10 @@ describe('filter box component', () => {
 
     const mockCore = {
       setFilterNode: setFilterNode,
-      verticalSearch: verticalSearch
+      verticalSearch: verticalSearch,
+      filterRegistry: {
+        setFilterNode: setFilterNode
+      }
     };
 
     COMPONENT_MANAGER = mockManager(
@@ -207,21 +210,22 @@ describe('filter box component', () => {
 
 describe('dynamic filterbox component', () => {
   DOM.setup(document, new DOMParser());
-  let COMPONENT_MANAGER, defaultConfig, setFilterNode, verticalSearch, setFacetFilterNodes;
+  let COMPONENT_MANAGER, defaultConfig, verticalSearch, setFacetFilterNodes;
   let node1, node2, node3, node4;
 
   beforeEach(() => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-    setFilterNode = jest.fn();
     verticalSearch = jest.fn();
     setFacetFilterNodes = jest.fn();
 
     const mockCore = {
-      setFilterNode,
-      verticalSearch,
-      setFacetFilterNodes
+      setFacetFilterNodes: setFacetFilterNodes,
+      verticalSearch: verticalSearch,
+      filterRegistry: {
+        setFacetFilterNodes: setFacetFilterNodes
+      }
     };
 
     COMPONENT_MANAGER = mockManager(
