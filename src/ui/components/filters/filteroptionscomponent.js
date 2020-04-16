@@ -367,12 +367,14 @@ export default class FilterOptionsComponent extends Component {
       }
 
       // If the min levenshtein distance is below the max, count it as a match
-      offset = this._getOffset(option, minLevSubstring);
-      if (minLevDist <= maxLevenshteinDistance && offset > -1) {
-        return [{
-          length: filter.length,
-          offset: offset
-        }];
+      if (minLevDist <= maxLevenshteinDistance) {
+        offset = this._getOffset(option, minLevSubstring);
+        if (offset > -1) {
+          return [{
+            length: filter.length,
+            offset: offset
+          }];
+        }
       }
     }
   }
