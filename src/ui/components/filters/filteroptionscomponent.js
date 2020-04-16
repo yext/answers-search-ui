@@ -5,6 +5,7 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 import HighlightedValue from '../../../core/models/highlightedvalue';
+import levenshtein from 'js-levenshtein';
 
 /**
  * The currently supported controls
@@ -269,20 +270,21 @@ export default class FilterOptionsComponent extends Component {
 
           for (let filterOption of filterOptionEls) {
             const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
-            const labelText = labelEl.textContent || labelEl.innerText;
+            let labelText = labelEl.textContent || labelEl.innerText || '';
+            labelText = labelText.trim();
             if (!filter) {
               filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
               filterOption.classList.remove('hiddenSearch');
               filterOption.classList.remove('displaySearch');
               labelEl.innerHTML = labelText;
             } else {
-              let matchedSubstrings = this._getMatchedSubstring(labelText, filter);
-              if (matchedSubstrings) {
+              let matchedSubstring = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
+              if (matchedSubstring) {
                 filterOption.classList.add('displaySearch');
                 filterOption.classList.remove('hiddenSearch');
                 labelEl.innerHTML = new HighlightedValue({
                   value: labelText,
-                  matchedSubstrings: matchedSubstrings
+                  matchedSubstrings: [matchedSubstring]
                 }).get();
               } else {
                 filterOption.classList.add('hiddenSearch');
@@ -321,13 +323,79 @@ export default class FilterOptionsComponent extends Component {
     }
   }
 
+  /**
+   * Finds the length and offset of the substring where (string) option and
+   * (string) filter "match".
+   *
+   * "Match" is defined as an exact text match, or -- if the length of filter
+   * is greater than the `minFilterSizeForLevenshtein` -- a "match" can occur if
+   * any "n length" substring of option (where "n length" is the length of filter)
+   * is within the `maxLevenshteinDistance` levenshtein distance of the filter.
+   *
+   * Note: this is case sensitive.
+   *
+   * @returns {Object}
+   * @private
+   */
   _getMatchedSubstring (option, filter) {
-    if (option && filter && option.toLowerCase().indexOf(filter.toLowerCase()) > -1) {
-      return [{
+    let offset = this._getOffset(option, filter);
+    if (offset > -1) {
+      return {
         length: filter.length,
-        offset: option.toLowerCase().indexOf(filter.toLowerCase())
-      }];
+        offset: offset
+      };
     }
+
+    const minFilterSizeForLevenshtein = 3;
+    const maxLevenshteinDistance = 1;
+    if (filter.length > minFilterSizeForLevenshtein) {
+      // Break option into X filter.length size substrings
+      let substrings = [];
+      for (let start = 0; start <= (option.length - filter.length); start++) {
+        substrings.push(option.substr(start, filter.length));
+      }
+
+      // Find the substring that is the closest in levenshtein distance to filter
+      let minLevDist = filter.length;
+      let minLevSubstring = filter;
+      for (let substring of substrings) {
+        let levDist = this._calcLevenshteinDistance(substring, filter);
+        if (levDist < minLevDist) {
+          minLevDist = levDist;
+          minLevSubstring = substring;
+        }
+      }
+
+      // If the min levenshtein distance is below the max, count it as a match
+      if (minLevDist <= maxLevenshteinDistance) {
+        offset = this._getOffset(option, minLevSubstring);
+        if (offset > -1) {
+          return {
+            length: filter.length,
+            offset: offset
+          };
+        }
+      }
+    }
+  }
+
+  /**
+   * Calculate the levenshtein distance for two strings
+   * @returns {number}
+   * @private
+   */
+  _calcLevenshteinDistance (a, b) {
+    return levenshtein(a, b);
+  }
+
+  /**
+   * Returns the starting index of first occurance of the (string) filter in
+   * the (string) option, or -1 if not present
+   * @returns {number}
+   * @private
+   */
+  _getOffset (option, filter) {
+    return (option && filter) ? option.indexOf(filter) : -1;
   }
 
   clearOptions () {
