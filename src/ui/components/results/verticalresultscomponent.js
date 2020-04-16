@@ -203,6 +203,7 @@ export default class VerticalResultsComponent extends Component {
         isUniversal: this._config.isUniversal,
         template: this._config.itemTemplate,
         render: this._config.renderItem,
+        target: this._config.target,
         ...opts
       };
       return super.addChild(updatedData, type, newOpts);

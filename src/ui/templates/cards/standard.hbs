@@ -35,7 +35,7 @@
   {{#if _config.title}}
     {{#if _config.url}}
       <a class="yxt-StandardCard-titleLink js-yxt-StandardCard-title"
-        href="{{_config.url}}" target="{{_config.target}}"
+        href="{{_config.url}}" {{#if _config.target}}target="{{_config.target}}"{{else if _config._parentOpts.target}}target="{{_config._parentOpts.target}}"{{/if}}
         rel="noopener noreferrer nofollow"
         data-eventtype="TITLE_CLICK"
         data-eventoptions='{
