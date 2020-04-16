@@ -1007,6 +1007,17 @@ ANSWERS.addComponent('Facets', {
   placeholderText: 'Search here...',
   // Optional, if true, display the filter option search input
   searchable: false,
+  // Optional, field-specific overrides for a filter
+  fields: {
+    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, buildin.location
+      // Optional, the placeholder text used for the filter option search input
+      placeholderText: 'Search here...',
+      // Optional, if true, display the filter option search input
+      searchable: false,
+      // Optional, control type, singleoption or multioption
+      control: false,
+    }
+  },
 });
 ```
 

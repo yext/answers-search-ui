@@ -4,6 +4,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import HighlightedValue from '../../../core/models/highlightedvalue';
 
 /**
  * The currently supported controls
@@ -267,18 +268,27 @@ export default class FilterOptionsComponent extends Component {
           filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
 
           for (let filterOption of filterOptionEls) {
-            const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel');
+            const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
             const labelText = labelEl.textContent || labelEl.innerText;
             if (!filter) {
               filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
               filterOption.classList.remove('hiddenSearch');
               filterOption.classList.remove('displaySearch');
-            } else if (this._doesOptionMatchFilter(labelText, filter)) {
-              filterOption.classList.add('displaySearch');
-              filterOption.classList.remove('hiddenSearch');
+              labelEl.innerHTML = labelText;
             } else {
-              filterOption.classList.add('hiddenSearch');
-              filterOption.classList.remove('displaySearch');
+              let matchedSubstrings = this._getMatchedSubstring(labelText, filter);
+              if (matchedSubstrings) {
+                filterOption.classList.add('displaySearch');
+                filterOption.classList.remove('hiddenSearch');
+                labelEl.innerHTML = new HighlightedValue({
+                  value: labelText,
+                  matchedSubstrings: matchedSubstrings
+                }).get();
+              } else {
+                filterOption.classList.add('hiddenSearch');
+                filterOption.classList.remove('displaySearch');
+                labelEl.innerHTML = labelText;
+              }
             }
           }
         }
@@ -311,8 +321,13 @@ export default class FilterOptionsComponent extends Component {
     }
   }
 
-  _doesOptionMatchFilter (option, filter) {
-    return option && filter && option.toLowerCase().indexOf(filter.toLowerCase()) > -1;
+  _getMatchedSubstring (option, filter) {
+    if (option && filter && option.toLowerCase().indexOf(filter.toLowerCase()) > -1) {
+      return [{
+        length: filter.length,
+        offset: option.toLowerCase().indexOf(filter.toLowerCase())
+      }];
+    }
   }
 
   clearOptions () {
