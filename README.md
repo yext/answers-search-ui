@@ -565,7 +565,9 @@ ANSWERS.addComponent('UniversalResults', {
         // Optional configuration for the map's behavior when a query returns no results.
         noResults: {
           displayAllResults: true
-        }
+        },
+        // Determines whether the map should still display itself when it recieves no data.
+        showEmptyMap: false,
       }
     }
   }
