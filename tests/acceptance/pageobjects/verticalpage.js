@@ -3,7 +3,7 @@ import VerticalResultsComponentBlock from '../blocks/verticalresultscomponent';
 import PaginationComponentBlock from '../blocks/paginationcomponent';
 
 /**
- * A model of a universal search page, containing block representations
+ * A model of a vertical search page, containing block representations
  * of the various {@link Component}s a user would interact with.
  */
 class VerticalPage {
@@ -28,7 +28,7 @@ class VerticalPage {
   }
 
   /**
-   * Returns the {@link} on the page.
+   * Returns the {@link PaginationComponentBlock} on the page.
    */
   getPaginationComponent () {
     return this._paginationComponent;

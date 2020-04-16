@@ -1,8 +1,7 @@
 {{#if showControls}}
   <div class="yxt-Pagination">
     {{#if firstPageButtonEnabled}}
-      <button class="yxt-Pagination-button yxt-Pagination--wide js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
-        {{#unless showFirstPageButton}}disabled{{/unless}}
+      <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
         data-eventtype="PAGINATE"
         data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the first page of results"
@@ -19,9 +18,9 @@
                 data-component="IconComponent"
                 data-opts='{ "iconUrl": "{{icons.firstButtonIcon}}" }'></span>
         {{/unless}}
-      </button>
+      </a>
     {{/if}}
-    <button class="yxt-Pagination-button js-yxt-Pagination-previous {{#unless showPreviousPageButton}}yxt-Pagination--hidden{{/unless}}"
+    <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-previous {{#unless showPreviousPageButton}}yxt-Pagination--hidden{{/unless}}"
       {{#unless showPreviousPageButton}}disabled{{/unless}}
       data-eventtype="PAGINATE"
       data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#sub pageNumber 1}}{{/sub}}, "totalPageCount":{{maxPage}} }'
@@ -36,7 +35,7 @@
               data-component="IconComponent"
               data-opts='{ "iconUrl": "{{icons.previousButtonIcon}}" }'></span>
       {{/unless}}
-    </button>
+    </a>
 
     <a
       class="yxt-Pagination-link js-yxt-Pagination-link{{#unless ellipses.desktopBack}} desktop-hidden{{/unless}}{{#unless ellipses.mobileBack}} mobile-hidden{{/unless}}"
@@ -80,7 +79,7 @@
       {{maxPage}}
     </a>
 
-    <button class="yxt-Pagination-button js-yxt-Pagination-next {{#unless showNextPageButton}}yxt-Pagination--hidden{{/unless}}"
+    <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-next {{#unless showNextPageButton}}yxt-Pagination--hidden{{/unless}}"
       {{#unless showNextPageButton}}disabled{{/unless}}
       data-eventtype="PAGINATE"
       data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#add pageNumber 1}}{{/add}}, "totalPageCount":{{maxPage}} }'
@@ -95,10 +94,9 @@
               data-component="IconComponent"
               data-opts='{ "iconUrl": "{{icons.nextButtonIcon}}" }'></span>
       {{/unless}}
-    </button>
+    </a>
     {{#if lastPageButtonEnabled}}
-      <button class="yxt-Pagination-button yxt-Pagination--wide js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
-        {{#unless showLastPageButton}}disabled{{/unless}}
+      <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
         data-eventtype="PAGINATE"
         data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{maxPage}}, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the last page of results"
@@ -115,7 +113,7 @@
               data-component="IconComponent"
               data-opts='{ "iconUrl": "{{icons.lastButtonIcon}}" }'></span>
         {{/unless}}
-      </button>
+      </a>
     {{/if}}
   </div>
 {{/if}}

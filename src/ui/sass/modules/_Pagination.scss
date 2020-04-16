@@ -1,8 +1,8 @@
 /** @define Pagination */
 .yxt-Pagination
 {
-  $pagination-text-color: #616161 !default;
-  $pagination-text-color-hover: #FFFFFF;
+  $pagination-text-color: $color-text-neutral !default;
+  $pagination-text-color-hover: $color-brand-white !default;
   $pagination-text-font-size: $font-size-md-lg !default;
   $pagination-text-line-height: $line-height-md !default;
   $pagination-text-font-weight: $font-weight-normal !default;
@@ -20,36 +20,26 @@
     $color: $pagination-text-color
   );
 
-  &-button
-  {
-    display: flex;
-    background: none;
-    border: none;
-    color: $pagination-text-color;
-    padding: 6px 7px;
-    margin: 0 2px;
-    border-radius: 2px;
-
-    &:not(:disabled)
-    {
-      cursor: pointer;
-
-      &:hover
-      {
-        color: $pagination-text-color-hover;
-        background-color: $pagination-color-hover;
-      }
-    }
-  }
-
-  &-button:disabled {
+  &--hidden {
     visibility: hidden;
   }
 
   &-page, &-link {
-    padding: 2px 8px;
-    margin: 0 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    width: 24px;
+    margin-right: 2px;
+    margin-left: 2px;
     border-radius: 2px;
+  }
+
+  &-icon {
+    font-size: $font-size-sm;
+    span {
+      padding-top: 3px; // The icon SVGs are not aligned nicely.
+    }
   }
 
   #active-page {
@@ -70,11 +60,6 @@
   &-doubleChevron, &-doubleChevron--left
   {
     margin-right: -4px;
-  }
-
-  &--wide {
-    padding: 6px 3.5px;
-    margin: 0 4px;
   }
 }
 
