@@ -35,7 +35,7 @@
                         {{#if this.url}}
                           <a class="yxt-AccordionResult-cta"
                              href="{{this.url}}"
-                             target="{{#if this.target}}{{this.target}}{{/if}}"
+                             target="{{#if this.target}}{{this.target}}{{else}}_blank{{/if}}"
                              data-eventtype="{{#if this.eventType}}{{this.eventType}}{{else}}CTA_CLICK{{/if}}"
                              data-eventoptions='{{this.eventOptions}}'
                           >
