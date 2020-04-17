@@ -139,6 +139,7 @@ export default class VerticalResultsComponent extends Component {
     this.results = data.results || [];
     this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
+    this.resultsContext = data.resultsContext;
     this.appliedQueryFilters = data.appliedQueryFilters;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
@@ -158,7 +159,7 @@ export default class VerticalResultsComponent extends Component {
       query: this.query,
       currentVerticalLabel: this._currentVerticalLabel,
       resultsPresent: displayResultsIfExist && this.results.length !== 0,
-      showNoResults: data.resultsContext === ResultsContext.NO_RESULTS,
+      showNoResults: this.resultsContext === ResultsContext.NO_RESULTS,
       placeholders: new Array(this._config.maxNumberOfColumns + 1),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
       showResultsHeader: showResultsHeader,
@@ -224,7 +225,11 @@ export default class VerticalResultsComponent extends Component {
         appliedQueryFilters: this.appliedQueryFilters,
         ...data
       };
-      return super.addChild(resultsHeaderData, type, opts);
+      const _opts = { ...opts };
+      if (this.resultsContext === ResultsContext.NO_RESULTS) {
+        _opts.showAppliedFilters = false;
+      }
+      return super.addChild(resultsHeaderData, type, _opts);
     }
     return super.addChild(data, type, opts);
   }
