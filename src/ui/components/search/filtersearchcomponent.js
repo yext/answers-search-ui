@@ -90,8 +90,8 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = config.query || this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
-    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
+    this.query = config.query || this.core.globalStorage.getState(`${this.name}.${StorageKeys.QUERY}`) || '';
+    this.core.globalStorage.on('update', `${this.name}.${StorageKeys.QUERY}`, q => {
       this.query = q;
       this.search();
     });
@@ -187,7 +187,7 @@ export default class FilterSearchComponent extends Component {
         });
 
         const params = new SearchParams(window.location.search.substring(1));
-        params.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+        params.set(`${this.name}.${StorageKeys.QUERY}`, this.query);
         params.set(`${this.name}.${StorageKeys.FILTER_NODE}`, this.filterNode);
 
         // If we have a redirectUrl, we want the params to be
@@ -198,7 +198,7 @@ export default class FilterSearchComponent extends Component {
         }
 
         // save the filter to storage for the next search
-        this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+        this.core.persistentStorage.set(`${this.name}.${StorageKeys.QUERY}`, this.query);
         this.core.persistentStorage.set(`${this.name}.${StorageKeys.FILTER_NODE}`, this.filterNode);
         this.core.setFilterNode(this.name, this.filterNode);
         this.search();

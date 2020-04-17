@@ -102,8 +102,8 @@ export default class GeoLocationComponent extends Component {
      * The query string to use for the input box, provided to template for rendering.
      * @type {string}
      */
-    this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
-    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
+    this.query = this.core.globalStorage.getState(`${this.name}.${StorageKeys.QUERY}`) || '';
+    this.core.globalStorage.on('update', `${this.name}.${StorageKeys.QUERY}`, q => {
       this.query = q;
       this.setState();
     });
@@ -113,7 +113,7 @@ export default class GeoLocationComponent extends Component {
      * @type {FilterNode}
      */
     let filterNode = this.core.globalStorage.getState(`${this.name}.${StorageKeys.FILTER_NODE}`) || {};
-    if (typeof filterNodeData === 'string') {
+    if (typeof filterNode === 'string') {
       try {
         filterNode = JSON.parse(filterNode);
       } catch (e) {}
@@ -240,7 +240,7 @@ export default class GeoLocationComponent extends Component {
           this._saveDataToStorage('', filter, 'near me', position);
           this._enabled = true;
           this.setState({});
-          this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
+          this.core.persistentStorage.delete(`${this.name}.${StorageKeys.QUERY}`);
           this.core.persistentStorage.delete(`${this.name}.${StorageKeys.FILTER_NODE}`);
         },
         () => this._handleGeolocationError(),
@@ -266,7 +266,7 @@ export default class GeoLocationComponent extends Component {
    * @private
    */
   _saveDataToStorage (query, filter, displayValue, position) {
-    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
+    this.core.persistentStorage.set(`${this.name}.${StorageKeys.QUERY}`, query);
     const filterNode = FilterNodeFactory.from({
       filter: filter,
       metadata: {
