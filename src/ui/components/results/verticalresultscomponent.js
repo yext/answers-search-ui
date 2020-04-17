@@ -199,6 +199,7 @@ export default class VerticalResultsComponent extends Component {
         verticalKey: this.verticalKey
       };
       const newOpts = {
+        target: this._config.target,
         ...this._config.card,
         isUniversal: this._config.isUniversal,
         template: this._config.itemTemplate,
