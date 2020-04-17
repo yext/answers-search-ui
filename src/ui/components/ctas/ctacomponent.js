@@ -86,6 +86,13 @@ export default class CTAComponent extends Component {
     }
   }
 
+  setState (data) {
+    return super.setState({
+      ...data,
+      hasIcon: this._config.icon || this._config.iconUrl
+    });
+  }
+
   reportAnalyticsEvent () {
     const analyticsEvent = new AnalyticsEvent(this._config.analyticsEventType);
     analyticsEvent.addOptions(this._config.eventOptions);
