@@ -79,7 +79,7 @@ class StandardCardConfig {
      * The target attribute for the title link.
      * @type {string}
      */
-    this.target = this.target || '_self';
+    this.target = this.target;
 
     /**
      * Image url to display
