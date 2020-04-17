@@ -40,6 +40,10 @@
     border-radius: 4px;
     padding: 4px 8px;
     margin-top: 10px;
+
+    &:hover {
+      border: $yxt-border-hover;
+    }
   }
 
   &-fieldSet {
@@ -188,6 +192,10 @@
   }
 
   &-input {
+    margin-left: 0;
+  }
+
+  &-checkboxInput {
     opacity: 0;
     height: 0;
     width: 0;
@@ -200,7 +208,7 @@
       }
 
       & + .yxt-FilterOptions-optionLabel::before {
-        border: $border-hover;
+        border: $yxt-border-hover;
       }
     }
   }
