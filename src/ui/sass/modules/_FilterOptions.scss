@@ -22,6 +22,26 @@
     }
   }
 
+  &-controls
+  {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-buttonWrapper
+  {
+    display: flex;
+  }
+
+  &-filter
+  {
+    font-size: $font-size-md;
+    border: $border-default;
+    border-radius: 4px;
+    padding: 4px 8px;
+    margin-top: 10px;
+  }
+
   &-fieldSet {
     border: 0;
     padding: 0;
@@ -51,7 +71,10 @@
   &-option {
     display: flex;
     align-items: flex-start;
-    margin: 2px 0;
+
+    &:not(:first-child) {
+      margin-top: 8px;
+    }
 
     &.hidden
     {
@@ -63,14 +86,44 @@
     }
   }
 
+  &-optionLabel
+  {
+    position: relative;
+    font-size: $font-size-md;
+    line-height: 20px;
+    align-items: center;
+    margin-left: 22px;
+
+    /* Checkmark outer box */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -22px;
+      height: 12px;
+      width: 12px;
+      transform: translateY(-50%);
+      border: $border-default;
+      border-radius: 2px;
+    }
+
+    /* Checkmark */
+    &::after {
+      content: none;
+      position: absolute;
+      top: 4px;
+      left: -17px;
+      width: 3px;
+      height: 9px;
+      transform: rotate(45deg);
+      border-right: 1px solid $color-brand-hover;
+      border-bottom: 1px solid $color-brand-hover;
+    }
+  }
+
   &-options {
     margin: 12px 0;
     padding-left: 0;
-  }
-
-  &-optionLabel {
-    display: block;
-    margin-left: 5px;
   }
 
   &-selectedCount {
@@ -135,7 +188,21 @@
   }
 
   &-input {
-    margin-left: 0;
+    opacity: 0;
+    height: 0;
+    width: 0;
+    margin: 0;
+
+    /* Set the custom checkmark's checked state */
+    &:checked {
+      & + .yxt-FilterOptions-optionLabel::after {
+        content: "";
+      }
+
+      & + .yxt-FilterOptions-optionLabel::before {
+        border: $border-hover;
+      }
+    }
   }
 
   &-reset--right {
