@@ -29,6 +29,7 @@ Outline:
    - [SpellCheck Component](#spell-check-component)
    - [LocationBias Component](#location-bias-component)
    - [SortOptions Component](#sort-options-component)
+   - [Map Component](#map-component)
 4. [Analytics](#analytics)
    - [Click Analytics](#click-analytics)
 # Install and Setup
@@ -1393,6 +1394,50 @@ ANSWERS.addComponent('SortOptions', {
   // only appears if searchOnChange is false, defaults to 'Apply'
   applyLabel: 'Apply'
 });
+```
+
+## Map Component
+The Map component displays a map with a pin for each result that has Yext display coordinates.
+
+```html
+<div class='map-container'></div>
+```
+
+```js
+ANSWERS.addComponent('Map', {
+  // Required. This is the class of the target HTML element the component will be mounted to
+  container: '.map-container',
+  // Required. Supported map providers include: `google` or `mapBox`, not case-sensitive
+  mapProvider: 'mapBox',
+  // The API Key used for interacting with the map provider; required (except for Google Maps if provided `clientId`)
+  apiKey: '',
+  // Optional, can be used for Google Maps in place of the API key
+  clientId: '',
+  // Optional, determines whether or not to collapse pins at the same lat/lng
+  collapsePins: false,
+  // Optional, the zoom level of the map, defaults to 14
+  zoom: 14,
+  // Optional, the default coordinates to display if there are no results returned used if showEmptyMap is set to true
+  defaultPosition: { lat: 37.0902, lng: -95.7129 },
+  // Optional, determines if an empty map should be shown when there are no results
+  showEmptyMap: false,
+  // Optional, callback to invoke when a pin is clicked. The clicked item(s) are passed to the callback
+  onPinClick: null,
+  // Optional, callback to invoke once the Javascript is loaded
+  onLoaded: function () {},
+  // Optional, the custom configuration override to use for the map markers, function
+  pin: function () {
+    return {
+      icon: {
+        anchor: null, // e.g. { x: 1, y: 1 }
+        svg: null,
+        url: null,
+        scaledSize: null // e.g. { w: 20, h: 20 }
+      },
+      labelType: 'numeric'
+    };
+  },
+};
 ```
 
 # Analytics
