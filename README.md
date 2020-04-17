@@ -553,6 +553,12 @@ ANSWERS.addComponent('UniversalResults', {
         mapProvider: 'google',
         // Api key for the map provider
         apiKey: '<<< enter your api key here >>>',
+        // Optional configuration for the map's behavior when a query returns no results.
+        noResults: {
+          displayAllResults: true
+        },
+        // Determines whether the map should still display itself when it recieves no data.
+        showEmptyMap: false,
       }
     }
   }

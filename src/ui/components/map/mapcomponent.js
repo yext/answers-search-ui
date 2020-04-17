@@ -6,6 +6,7 @@ import GoogleMapProvider from './providers/googlemapprovider';
 import MapBoxMapProvider from './providers/mapboxmapprovider';
 
 import StorageKeys from '../../../core/storage/storagekeys';
+import ResultsContext from '../../../core/storage/resultscontext';
 
 const ProviderTypes = {
   'google': GoogleMapProvider,
@@ -20,6 +21,11 @@ export default class MapComponent extends Component {
      * Bind this component to listen to the storage based on this key
      */
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
+
+    /**
+     * Configuration for the behavior when there are no vertical results.
+     */
+    this._noResults = opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG);
 
     /**
      * An aliased used to determine the type of map provider to use
@@ -69,6 +75,10 @@ export default class MapComponent extends Component {
   setState (data, val) {
     if (Object.keys(data).length === 0) {
       return this;
+    }
+
+    if (data.resultsContext !== ResultsContext.NORMAL && this._noResults && !this._noResults.displayAllResults) {
+      data = {};
     }
 
     return super.setState(data, val);
