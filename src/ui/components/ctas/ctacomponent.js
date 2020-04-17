@@ -48,7 +48,7 @@ class CTAConfig {
      * The target attribute for the CTA link.
      * @type {boolean}
      */
-    this.target = config.target || '_self';
+    this.target = config.target || '_blank';
 
     /**
      * The eventOptions needed for the event to fire, passed as a string or Object
