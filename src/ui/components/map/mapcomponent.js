@@ -77,7 +77,7 @@ export default class MapComponent extends Component {
       return this;
     }
 
-    if (data.resultsContext !== ResultsContext.NORMAL && !this._noResults.displayAllResults) {
+    if (data.resultsContext !== ResultsContext.NORMAL && this._noResults && !this._noResults.displayAllResults) {
       data = {};
     }
 
