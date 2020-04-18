@@ -1409,7 +1409,7 @@ ANSWERS.addComponent('Map', {
   container: '.map-container',
   // Required. Supported map providers include: `google` or `mapBox`, not case-sensitive
   mapProvider: 'mapBox',
-  // The API Key used for interacting with the map provider; required (except for Google Maps if provided `clientId`)
+  // Required*. The API Key used for interacting with the map provider; (*except for Google Maps if provided `clientId`)
   apiKey: '',
   // Optional, can be used for Google Maps in place of the API key
   clientId: '',
