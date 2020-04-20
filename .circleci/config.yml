@@ -98,6 +98,8 @@ jobs:
             echo "export MINOR_VERSION="$(echo "${CIRCLE_TAG}" | cut -d '.' -f 1,2)"" >> $BASH_ENV
             echo "export MAJOR_VERSION="$(echo "${CIRCLE_TAG}" | cut -d '.' -f 1)"" >> $BASH_ENV
       - deploy-to-aws:
+          subdirectory: '/${CIRCLE_TAG}'
+      - deploy-to-aws:
           subdirectory: '/${MINOR_VERSION}'
       - deploy-to-aws:
           subdirectory: '/${MAJOR_VERSION}'
