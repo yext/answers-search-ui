@@ -9,6 +9,13 @@ export default class FilterOptionsComponentBlock {
   }
 
   /**
+   * Returns whether this FilterOptions is expanded or not.
+   */
+  async isExpanded () {
+    return this._Selector('.yxt-FilterOptions--collapsed').exists;
+  }
+
+  /**
    * Return a selector within this block's container context.
    * @param {string} selector selector for desired element
    */
@@ -29,6 +36,12 @@ export default class FilterOptionsComponentBlock {
     return this._Selector(`[data-index="${index}"]`);
   }
 
+  /**
+   * Get the number of results associated with a particular option.
+   * This value is enclosed within parenthesis at the end of an option's
+   * label.
+   * @param {number} index
+   */
   async getOptionCount (index) {
     const option = await this.getOption(index);
     const optionId = await option.id;
@@ -39,10 +52,10 @@ export default class FilterOptionsComponentBlock {
   }
 
   /**
-   * Click the option at the given index.
+   * Toggle the option at the given index.
    * @param {number} index
    */
-  async clickOption (index) {
+  async toggleOption (index) {
     const option = this.getOption(index);
     await t.click(option);
   }
@@ -58,13 +71,5 @@ export default class FilterOptionsComponentBlock {
   async toggleShowMore () {
     const showMore = this._Selector('.yxt-FilterOptions-showToggle');
     await t.click(showMore);
-  }
-
-  /**
-   * Click the reset button.
-   */
-  async reset () {
-    const reset = this._Selector('.yxt-FilterOptions-reset');
-    await t.click(reset);
   }
 }

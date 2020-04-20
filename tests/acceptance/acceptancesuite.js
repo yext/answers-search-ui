@@ -47,28 +47,60 @@ test('pagination flow', async t => {
 });
 
 test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
-  `Facets load on the page, and then selecting and applying a filter option returns the number of \
-  results shown in that option's count label`,
+  `Facets load on the page, and then selecting facet filters correctly affects the search`,
   async t => {
     const searchComponent = FacetsPage.getSearchComponent();
-
-    let filterBox = await FacetsPage.getFacetsComponent().getFilterBox();
-    let count = await filterBox.getFilterCount();
-    await t.expect(count).eql(0);
-
-    await searchComponent.enterQuery('Virginia');
     await searchComponent.submitQuery();
-    count = await filterBox.getFilterCount();
-    await t.expect(count).gt(0);
 
-    const filterOptions = await filterBox.getFilter(0);
-    await filterOptions.expand();
-    const expectedResultsCount = await filterOptions.getOptionCount(0);
-    await filterOptions.clickOption(0);
+    const facets = FacetsPage.getFacetsComponent();
 
+    // Record the amount of results with no facets
     const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
-    await filterBox.applyFilters();
-    const resultsCount = await verticalResultsComponent.getResultsCount();
-    await t.expect(resultsCount).eql(expectedResultsCount);
+    const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
+
+    // Select the first option in the first FilterOptions
+    await facets.toggleOption(0, 0);
+    let expectedResultsCount = await facets.getOptionCount(0, 0);
+    await facets.applyFilters();
+
+    // Get the actual number of results and check that it equals the expected amount
+    let actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+    await t.expect(actualResultsCount).eql(expectedResultsCount);
+
+    // Reset the filters, and check that the number of results
+    // is the same as the initial amount
+    await facets.reset();
+    await facets.applyFilters();
+    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+    await t.expect(actualResultsCount).eql(initialResultsCount);
+
+    // Select the first option and second option in the first FilterOptions
+    await facets.toggleOption(0, 0);
+    await facets.toggleOption(0, 1);
+    expectedResultsCount = await facets.getOptionCount(0, 0) + await facets.getOptionCount(0, 1);
+    await facets.applyFilters();
+    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+    await t.expect(actualResultsCount).eql(expectedResultsCount);
+
+    // Select the third option in the first FilterOptions
+    await facets.toggleOption(0, 2);
+    expectedResultsCount += await facets.getOptionCount(0, 2);
+    await facets.applyFilters();
+    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+    await t.expect(actualResultsCount).eql(expectedResultsCount);
+
+    // Check that selecting form different FilterOptions works
+    await facets.toggleOption(1, 0);
+    expectedResultsCount = Math.min(expectedResultsCount, await facets.getOptionCount(1, 0));
+    await facets.applyFilters();
+    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+    await t.expect(actualResultsCount).eql(expectedResultsCount);
+
+    // Reset the filters, and check that the number of results
+    // is the same as the initial amount
+    await facets.reset();
+    await facets.applyFilters();
+    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+    await t.expect(actualResultsCount).eql(initialResultsCount);
   }
 );

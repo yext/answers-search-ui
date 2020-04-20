@@ -9,6 +9,29 @@ export default class FilterBoxComponentBlock {
   }
 
   /**
+   * Toggle the given option for the given filter.
+   */
+  async toggleOption (filterIndex, optionIndex) {
+    const filterOptions = await this.getFilter(filterIndex);
+    const isExpanded = await filterOptions.isExpanded();
+    if (isExpanded) {
+      await filterOptions.expand();
+    }
+    filterOptions.toggleOption(optionIndex);
+  }
+
+  /**
+   * Get the number of results associated with a particular option.
+   * This value is enclosed within parenthesis at the end of an option's
+   * label.
+   * @param {number} index
+   */
+  async getOptionCount (filterIndex, optionIndex) {
+    const filterOptions = await this.getFilter(filterIndex);
+    return filterOptions.getOptionCount(optionIndex);
+  }
+
+  /**
    * Return a selector within this block's container context.
    * @param {string} selector selector for desired element
    */
@@ -46,12 +69,20 @@ export default class FilterBoxComponentBlock {
   }
 
   /**
-   * Clicks the apply button.
+   * Apply the filters in this filter box.
    */
   async applyFilters () {
     const applyButton = this._Selector('.js-yext-filterbox-apply');
     await t.click(applyButton);
     // TODO more sophisticated waiting mechanism, docs suggest waiting for some DOM change
     await t.wait(1000);
+  }
+
+  /**
+   * Reset the child filters.
+   */
+  async reset () {
+    const reset = this._Selector('.js-yxt-FilterBox-reset');
+    await t.click(reset);
   }
 }

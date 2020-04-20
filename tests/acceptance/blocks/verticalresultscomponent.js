@@ -28,7 +28,9 @@ export default class VerticalResultsComponentBlock {
     return title;
   }
 
-  async getResultsCount () {
-    return Selector('.yxt-Card').count;
+  async getResultsCountTotal () {
+    const resultsCountTotal = Selector('.yxt-ResultsHeader-resultsCountTotal');
+    const countText = await resultsCountTotal.innerText;
+    return Number.parseInt(countText);
   }
 }
