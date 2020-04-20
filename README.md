@@ -652,7 +652,8 @@ Note: A CTA without both a label and icon will not be rendered.
 const callsToAction = [{
   // Label below the CTA icon, default null
   label: 'cta label',
-  // Icon name for the CTA that is one of the SDK icons, default to undefined (no icon)
+  // Icon name for the CTA that is one of the SDK icons, defaults to undefined (no icon). If your icon
+  // is not recognized it will default to 'star'.
   icon: 'star',
   // URL to a custom icon for the cta. This takes priority over icon if both are present, default is
   // no icon url.
