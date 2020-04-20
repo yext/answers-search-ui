@@ -179,7 +179,7 @@ export default class DOM {
       detail: null,
       ...settings
     };
-    var evt = document.createEvent('Event');
+    const evt = document.createEvent('Event');
     evt.initEvent(event, _settings.bubbles, _settings.cancelable, _settings.detail);
     return evt;
   }
