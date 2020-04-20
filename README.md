@@ -2,9 +2,9 @@
 Answers Javascript API Library.
 
 Outline:
-1. [Install / Setup](#install-and-setup)
+1. [Install / Setup](#install-and-setup) - TODO it'd be great to add a simple hello world with vertical results and a search bar here
    - [Configuration Options](#configuration-options)
-   - [Navigation Configuration](#navigation-configuration)
+   - [Navigation Configuration](#navigation-configuration) // TODO there is no way this is the only one here
    - [Template Helpers](#template-helpers)
 2. [Component Usage](#component-usage)
    - [Base Component Configuration](#base-component-configuration)
@@ -56,28 +56,53 @@ function initAnswers() {
 }
 ```
 
-Learn more about [getting you API key](https://developer.yext.com/docs/guides/get-started/).
+Learn more about [getting your API key](https://developer.yext.com/docs/guides/get-started/).
 
 ## Configuration Options
-Below is a list of configuration options that can be used during initialization.
+Below is a list of configuration options that can be used during initialization. // TODO missing any??
 
-|  option   | type       | description                               | required      |
-|-----------|------------|-------------------------------------------|---------------|
-| apiKey    | string     | Your API key                              | required      |
-| experienceKey   | string     | The key used for your answers experience     | required      |
-| businessId | number | Knowledge Graph businessId to use for analytics, required to send analytics events | optional
-| onReady  | function     | Invoked when the Answers component library is loaded/ready | required  |
-| onStateChange | function | Invoked when the sate changes | optional |
-| useTemplates | boolean   | default: `true`.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!  | optional  |
-| templateBundle  | object     | Provide the precompiled templates      | optional  |
-| search | object | Search specific settings, see [search configuration](#search-configuration) below | optional |
-| locale  | string | The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'. | optional |
-| experienceVersion | string or number | The Answers Experience version to use for api requests | optional |
-| debug | boolean | Prints full Answers error details when set to `true` | optional |
-| sessionTrackingEnabled | boolean | default: `true`. If true, the search session is tracked. If false, there is no tracking. | optional |
-| verticalPages | array | Provide navigation configuration including tab configurations | optional |
-| onVerticalSearch  | function   | analytics callback after a vertical search | optional |
-| onUniversalSearch | function   | analytics callback after a universal search | optional |
+```js
+function initAnswers() {
+  ANSWERS.init({
+    // Required, your Yext Answers API key
+    apiKey: '<API_KEY_HERE>',
+    // Required, the key used for your Answers experience
+    experienceKey: '<EXPERIENCE_KEY_HERE>',
+    // Required, invoked when the Answers component library is loaded/ready // TODO really?? required????
+    onReady: function() {
+      // Component creation logic here
+
+      // ## Template Helpers here
+    },
+    // Optional*, Yext businessId, *required to send analytics events
+    businessId: 'businessId',
+    // Optional, if false, the library will not fetch pre-made templates. Only use this option if you provide a template
+    useTemplates: true, bundle in the `templateBundle` config option or implement custom renders for every component
+    // Optional, used in place of the library's default template bundle // TODO does this replace??
+    templateBundle: {},
+    // Optional, provide configuration for each vertical that is shared across components // TODO see below
+    verticalPages: [],
+    // Optional, search specific settings, see [search configuration](#search-configuration) below
+    search: {},
+    // Optional, the locale will affect how queries are interpreted and the results returned. Defaults to 'en'.
+    locale: 'en',
+    // Optional, the Answers Experience version to use for api requests
+    experienceVersion: 'PRODUCTION',
+    // Optional, prints full Answers error details when set to `true`. Defaults to TODO
+    debug: false,
+    // Optional, If true, the search session is tracked. If false, there is no tracking. Defaults to true.
+    sessionTrackingEnabled: true,
+    // Optional, invoked when the state ** OF ANY COMPONENT? TODO ** changes
+    onStateChange: function() {},
+
+    // see ## onSearch Analytics
+    // Optional, analytics callback after a vertical search
+    onVerticalSearch: function() {},
+    // Optional, analytics callback after a universal search
+    onUniversalSearch: function() {},
+  })
+}
+```
 
 ## Vertical Pages Configuration
 Below is a list of configuration options related to vertical pages in navigation and no results, used in the [base configuration](#configuration-options) above.
@@ -92,12 +117,11 @@ verticalPages: [
     icon: 'star',           // optional, the name of an icon to use in no results, defaults to star
     iconUrl: '',            // optional, the URL icon to use in no results
     hideInNavigation: true  // optional, hide this tab in the navigation component if it’s been added, defaults to false
-
   },
   {
-    verticalKey: 'locations', // optional, the vertical search config id
+    verticalKey: 'locations', // The verticalKey
     label: 'Location',        // The label used for the navigation element
-    url: 'locations.html'     // The link for the navigation element
+    url: 'locations.html',    // The link for the navigation element
   }
 ]
 ```
@@ -105,13 +129,18 @@ verticalPages: [
 ## Search Configuration
 Below is a list of configuration options related to search, used in the [base configuration](#configuration-options) above.
 
-|  option   | type       | description                               | required      |
-|-----------|------------|-------------------------------------------|---------------|
-| verticalKey | string | The vertical key to use for searches | optional |
-| limit | number | The number of results to display per page | optional |
-| defaultInitialSearch | string | A default search to use on initialization for vertical searchers, when the user has't provided a query  | optional |
+```js
+    {
+      // Optional, the vertical key to use for searches
+      verticalKey: 'verticalKey',
+      // Optional, the number of results to display per page, defaults to 20 // TODO verify default
+      limit: '20',
+      // Optional, a default search to use on page load when the user hasn't provided a query
+      defaultInitialSearch: 'What is Yext Answers?', // TODO verticals only???
+    },
+```
 
-## Template Helpers
+## Template Helpers // TODO does this work if you specify a "templateBundle"????
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
 
 If you want to register custom template helpers to the handlebars render, you can do so like this:
@@ -120,6 +149,8 @@ ANSWERS.registerHelper('noop', function(options) {
   return options.fn(this);
 })
 ```
+
+You can learn more about the interface for registering helpers by taking a look at the [Handlebars Block Helpers](https://handlebarsjs.com/block_helpers.html) documentation.
 
 ## onSearch Analytics
 
@@ -158,7 +189,7 @@ ANSWERS.addComponent('SearchBar', {
      * @type {string}
      */
     const resultsContext = searchParams.resultsCount
-    const analyticsEvent = {
+    const analyticsEvent = { // TODO I don't think this works because I think we do a typeof assertion
       type: 'ANALYTICS_EVENT_TYPE',
       label: 'Sample analytics event',
       query: queryString
@@ -185,42 +216,53 @@ ANSWERS.addComponent('SearchBar', {
      * @type {number}
      */
     const sectionsCount = searchParams.sectionsCount;
-    const analyticsEvent = {
+
+    let event = new ANSWERS.AnalyticsEvent('CUSTOM'); // TODO what is this param lol, also add link to analytics section
+    event.addOptions({
       type: 'ANALYTICS_EVENT_TYPE',
       label: 'Sample analytics event',
       query: queryString
-    };
-    return analyticsEvent;
+      sectionsCount: sectionsCount,
+    });
+    ANSWERS.AnalyticsReporter.report(event);
   },
 })
 ```
-
-You can learn more about the interface for registering helpers by taking a look at the [Handlebars Block Helpers](https://handlebarsjs.com/block_helpers.html) documentation.
 
 # Component Usage
 
 The Answers Component Library exposes an easy to use interface for adding and customizing various types of UI components on your page.
 
-Every component requires a containing HTML element.
+What is a Component?
+At a high level, components are the building blocks of an Answers page. Each component is an independent, reusable piece of code. Each component fills an HTML element container that the implementer provides on the page. In the library, a component consists of logic
+in JS, and then HTML in the form of a handlebars template. Users can override either the JS or the handlebars template
+-- overwriting any built-in logic -- or can use config options to adjust the component without removing all of the built-in behavior.
+
+- Some components can be included multiple times on a single page, others can only be included once.
+- Some components are only compatible with Universal pages, some are only compatible with Vertical pages
+- Components work in isolation only to an extent
+- Components are updated from an API response, the Answers front end config (ANSWERS.init), and their individual config. Many
+components update and re-render with each new API response
 
 
 ## Base Component Configuration
 
 Every component has the same base configuration options.
+```js
+  {
+    container: 'container', // Required, the CSS selector to append the component // TODO append is not what's happening here
+    name: 'name', // Optional, a unique name for the component
+    class: 'class', // Optional, a custom HTML classname for the component
+    template: 'template', // Optional, handlebars template or HTML to override built-in handlebars template for the component
+    render: function(data) {}, // Optional, override render function
+    transformData: function(data) {}, // Optional, a hook for transforming data before it gets sent to render
+    onMount: function(data) {}, // Optional, invoked when the HTML is mounted to the DOM, TODO: This overrides the library's built-in onMount??
+    analyticsOptions: {}, // Optional, additional properties to send with every analytics event
+  }
+```
 
-|  option   | type       | description                               | required      |
-|-----------|------------|-------------------------------------------|---------------|
-| name          | string     | a unique name, if using multiple components of the same type  | optional      |
-| container     | string     | the CSS selector to append the component. | required      |
-| class         | string     | a custom class to apply to the component  | optional  |
-| template      | string     | override internal handlebars template       | optional  |
-| render        | function   | override render function. data provided   | optional  |
-| transformData | function   | A hook for transforming data before it gets sent to render | optional |
-| onMount       | function   | invoked when the HTML is mounted to the DOM | optional |
-| analyticsOptions | object | additional properties to send with every analytics event | optional |
 
-
-## Adding a Component
+## Adding a Component to Your Page
 Adding a component to your page is super easy!
 You can add many different [types](#types-of-components) of components to your page.
 Each component supports the base configuration options above, as well as their own unique configurations.
@@ -275,7 +317,7 @@ Below is an example usage.
 ANSWERS.init({
   apiKey: '<API_KEY_HERE>',
   experienceKey: '<EXPERIENCE_KEY_HERE>',
-  fieldFormatters: {
+  fieldFormatters: { // what is this a top level thing??
     'name': (formatterObject) => formatterObject.entityFieldValue.toUpperCase(),
     'description' : (formatterObject) => formatterObject.highlightedEntityFieldValue
   }
@@ -308,20 +350,22 @@ ANSWERS.addComponent('SearchBar', {
 ```
 
 ## Creating Custom Components
+// TODO I think we should also add a part about adding a template in here
 
-You can create custom Answers components with the same power of the builtin components. First, create a subtype of ANSWERS.Component:
+You can create custom Answers components with the same power of the builtin components. First, create
+a subtype of ANSWERS.Component and register it.
 
+For ES6:
 ```js
-// ES6
 class MyCustomComponent extends ANSWERS.Component {
   constructor (config) {
     super(config);
-
+    // Set template TODO
     this.myProperty = config.myProperty;
   }
 
   static defaultTemplateName () {
-    return 'default';
+    return 'default'; // wh does this do with no template lol TODO
   }
 
   static areDuplicateNamesAllowed () {
@@ -332,8 +376,11 @@ class MyCustomComponent extends ANSWERS.Component {
     return 'MyCustomComponent';
   }
 }
+ANSWERS.registerComponentType(MyCustomComponent); // Register the component with the library
+```
 
-// ES5
+For ES5:
+```js
 function MyCustomComponent (config) {
   ANSWERS.Component.call(this, config);
 
@@ -345,15 +392,11 @@ MyCustomComponent.prototype.constructor = MyCustomComponent;
 MyCustomComponent.defaultTemplateName = function () { return 'default' };
 MyCustomComponent.areDuplicateNamesAllowed = function () { return false };
 Object.defineProperty(MyCustomComponent, 'type', { get: function () { return 'MyCustomComponent' } });
+
+ANSWERS.registerComponentType(MyCustomComponent); // Register the component with the library
 ```
 
-Then, you can register your custom component with Answers:
-
-```js
-ANSWERS.registerComponentType(MyCustomComponent);
-```
-
-Now you can use your custom component like any builtin component:
+Now you can use your custom component like any built-in component:
 
 ```js
 ANSWERS.addComponent('MyCustomComponent', {
@@ -362,8 +405,8 @@ ANSWERS.addComponent('MyCustomComponent', {
 });
 ```
 
-## Using a Custom Template
-All component templates are written using handlebars.
+## Using a Custom Template for a Component
+All component templates are written using handlebars. // TODO what does this mean, when would you use
 
 It's easy to override these templates with your own templates.
 Keep in mind, that you must provide valid handlebars syntax here.
@@ -379,7 +422,9 @@ ANSWERS.addComponent('SearchBar', {
 ```
 
 ## Removing Components
-If you'd like to remove a component and all of its children, you can use `ANSWERS.removeComponent(<component name>)`:
+If you'd like to remove a component and all of its children, you can do it. // TODO why would you want to do this
+
+To do this, simply `ANSWERS.removeComponent(<component name>)`:
 
 ```js
 ANSWERS.addComponent('FilterSearch', {
@@ -392,8 +437,10 @@ ANSWERS.removeComponent('my-filter-search');
 ```
 
 # Types of Components
+The sdk comes with many types of components. We will provide a brief description below of (1) what each component does,
+(2) how to initialize (and outline what each config option is for, and (3) any limitations of the component.
 
-Each type of Component has it's own custom configurations. However, all components share the
+Each type of Component has its own custom configurations. Additionally, all components share the
 base configuration options defined above.
 
 ## SearchBar Component
@@ -406,7 +453,7 @@ types their query, as well as the autocomplete behavior.
 ```
 
 There are two types of search experiences. Universal Search and Vertical Search.
-Each provide a different way of auto complete.
+Each provide a different way of auto complete. // wh is this doing in this section lol?
 
 ### For Universal Search:
 
@@ -437,7 +484,7 @@ ANSWERS.addComponent('SearchBar', {
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-query-container',
-  verticalKey: '<VERTICAL_KEY>'       // required
+  verticalKey: '<VERTICAL_KEY>'       // required for Vertical Search
 })
 ```
 
@@ -453,13 +500,20 @@ based on the query.
 ```js
 ANSWERS.addComponent('DirectAnswer', {
   container: '.direct-answer-container',
-  formEl: '.js-directAnswer-feedback-form',         // optional, the form used for submitting the feedback
-  thumbsUpSelector: '.js-directAnswer-thumbUp',      // optional, the selector to bind ui interaction to for reporting
-  thumbsDownSelector: '.js-directAnswer-thumbDown', // optional, the selector to bind ui interaction to for reporting
-  viewDetailsText: 'View Details',                  // optional, the display text for the View Details click to action link
-  positiveFeedbackSrText: 'This answered my question', //optional, the screen reader text for positive feedback on the answer
-  negativeFeedbackSrText: 'This did not answer my question', //optional, the screen reader text for negative feedback on the answer
-  footerTextOnSubmission: 'Thank you for your feedback!' //optional, the footer text to display on submission of feedback
+  // Optional, the selector for the form used for submitting the feedback
+  formEl: '.js-directAnswer-feedback-form',
+  // Optional, the selector to bind ui interaction to for reporting
+  thumbsUpSelector: '.js-directAnswer-thumbUp',
+  // Optional, the selector to bind ui interaction to for reporting
+  thumbsDownSelector: '.js-directAnswer-thumbDown',
+  // Optional, the display text for the View Details click to action link
+  viewDetailsText: 'View Details',
+  // Optional, the screen reader text for positive feedback on the answer
+   positiveFeedbackSrText: 'This answered my question',
+  // Optional, the screen reader text for negative feedback on the answer
+   negativeFeedbackSrText: 'This did not answer my question',
+  // Optional, the footer text to display on submission of feedback
+   footerTextOnSubmission: 'Thank you for your feedback!'
 })
 ```
 
@@ -487,7 +541,8 @@ ANSWERS.addComponent('UniversalResults', {
 ### Custom Render for ALL Result Items
 
 You can override the render function for EACH item in the result list,
-as apposed to the entire component.
+as opposed to the entire component.
+// TODO wait wh is this supposed to override the VerticalResults vs AccordionResults????
 
 
 ```js
@@ -502,7 +557,7 @@ ANSWERS.addComponent('UniversalResults', {
 ### Custom Template for ALL Result Items
 
 You can override the handlebars template for EACH item in the result list,
-as apposed to the entire component.
+as opposed to the entire component.
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
@@ -514,13 +569,13 @@ ANSWERS.addComponent('UniversalResults', {
 ### Custom Render For Specific Vertical Result Items
 
 You can override the render function for a particular section within the results list,
-by providing a vertical search config id as the context, and using the same options as above.
+by providing a verticalKey as the context, and using the same options as above.
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   config: {
-    'locations': { // The vertical search config id
+    'locations': { // The vertical key
       renderItem: function(data) {
         return `my item ${data.name}`;
       }
@@ -538,7 +593,7 @@ These are the supported options:
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   config: {
-    'locations': { // The vertical search config id
+    'locations': { // The verticalKey
       renderItem: function(data) {
         return `my item ${data.name}`;
       },
@@ -570,13 +625,13 @@ ANSWERS.addComponent('UniversalResults', {
 ### Custom Template For Specific Vertical Result Items
 
 You can override the handlebars template for a particular section within the results list,
-by providing a vertical search config id as the context, and using the same options as above.
+by providing a verticalKey  as the context, and using the same options as above.
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   config: {
-    'locations': { // The vertical search config id
+    'locations': { // The verticalKey
       itemTemplate: `my item {{name}}`
     }
   }
@@ -596,29 +651,28 @@ You define all the options at the top level object.
 ```js
 ANSWERS.addComponent('VerticalResults', {
   container: '.vertical-results-container',
-  // Optional: function to give each result item custom rendering
+  // Optional, function to give each result item custom rendering
   renderItem: () => {},
-  // Optional: string to give custom template to result item
+  // Optional, string to give custom template to result item
   itemTemplate: `<div> Custom template </div>`,
-  // Set a maximum number of columns that will display at the widest breakpoint.
-  // Possible values are 1, 2, 3 or 4. defaults to 1
+  // Optional, set a max number of columns to display at the widest breakpoint. Possible values are 1, 2, 3 or 4, defaults to 1
   maxNumberOfColumns: 3,
-  // Whether to display the total number of results, default true
+  // Optional, whether to display the total number of results, default true
   showResultCount: true,
-  // The card used to display each individual result, see the Cards section for more details,
+  // Optional, the card used to display each individual result, see the Cards section for more details,
   card: {
-    // Optional: The type of card, currently only 'Standard', 'Accordion', and 'Legacy' are supported, defaults to 'Standard'
+    // Optional, The type of card, currently only 'Standard', 'Accordion', and 'Legacy' are supported, defaults to 'Standard'
     cardType: 'Standard',
-    // Required, see Data Mappings for more details
+    // Required, see Data Mappings for more details ?? is this required?
     dataMappings: () => {},
     // Optional, used as configuration for any calls to action buttons on the page, see Calls To Action for more details
     callsToAction: () => []
   },
-  // Configuration for what to display when no results are found.
+  // Optional, configuration for what to display when no results are found.
   noResults: {
-    // You can specify a custom template for the no results card, otherwise will use the built-in template.
+    // Optional, used to specify a custom template for the no results card, defaults to a built-in template.
     template: '<div> <em>No results found!</em> Try again? </div>',
-    // Whether to display all results in the vertical when no results are found. Defaults to false. In which
+    // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which
     // case only the no results card will be shown.
     displayAllResults: false
   }
@@ -1082,20 +1136,17 @@ ANSWERS.addComponent('FilterOptions', {
   // If true, the filter value is saved on change and sent with the next search.
   // Defaults to false.
   storeOnChange: true,
-  // List of options
+  // Required??? TODO list of options
   options: [
     {
-      // Label to show next to the filter option
+      // Required? TODO label to show next to the filter option
       label: 'Open Now',
-      // The api field to filter on, configured on the Yext platform
+      // Required? TODO The field's API name to filter on, configured in the Yext platform
       field: 'c_openNow',
-      // The value for the above field to filter by
-      value: true
-    },
-    {
-      label: 'Dog Friendly',
-      field: 'c_dogFriendly',
-      value: true
+      // Required? TODO The value for the above field to filter by
+      value: true,
+      // Optional, whether the default is selected
+      selected: true,
     },
     {
       label: 'Megastores',
@@ -1107,25 +1158,25 @@ ANSWERS.addComponent('FilterOptions', {
   optionSelector: '.js-option',
   // Optional, if true, triggers a search on each change to a filter, default false
   searchOnChange: true,
-  // Show a reset button
+  // Optional, if true, show a reset button
   showReset: false,
-  // The label to use for the reset button
+  // Optional, the label to use for the reset button, defaults to 'reset'
   resetLabel: 'reset',
-  // Allow collapsing excess filter options after a limit
+  // Optional, allow collapsing excess filter options after a limit, defaults to ???? TODO
   showMore: true,
-  // The max number of filter options to show before collapsing extras
+  // Optional, the max number of filter options to show before collapsing extras, defaults to ???? TODO
   showMoreLimit: 5,
-  // The label to show for displaying more options
+  // Optional, the label to show for displaying more options, defaults to 'show more'
   showMoreLabel: 'show more',
-  // The label to show for displaying less options
+  // Optional, the label to show for displaying less options, defaults to 'show less'
   showLessLabel: 'show less',
-  // Allow expanding and collapsing the filter
+  // Optional, allow expanding and collapsing the filter, defaults to ???? TODO
   showExpand: true,
-  // Show the number of applied options when a group is collapsed
+  // Optional, show the number of applied options when a group is collapsed, defaults to ???? TODO
   showNumberApplied: true,
-  // Optional, the callback function to call when changed
+  // Optional, the callback function to call when changed, defaults to ???? TODO
   onChange: function() {},
-  // Optional, the label to be used in the legend
+  // Optional, the label to be used in the legend, defaults to ???? TODO
   label: 'Filters'
 });
 ```
@@ -1141,21 +1192,21 @@ Displays two numeric inputs for selecting a number range.
 ```js
 ANSWERS.addComponent('RangeFilter', {
   container: '.range-filter-container',
-  // The api field to filter on
+  // Required, the API name of the field to filter on // TODO required??
   field: 'outdoorPoolCount',
-  // Title to display for the range
+  // TODO ??? Optional, title to display for the range
   title: 'Number of Outdoor Pools',
-  // The label to show next to the min value, optional
+  // Optional, the label to show next to the min value, // DEFAULTS TO?? TODO
   minLabel: 'At Least',
-  // The placeholder text for the min value, optional
+  // Optional, the placeholder text for the min value, // DEFAULTS TO?? TODO
   minPlaceholderText: 'Min',
-  // The label to show next to the max value, optional
+  // Optional, the label to show next to the max value, // DEFAULTS TO?? TODO
   maxLabel: 'Not More Than',
-  // The placeholder text for the max value, optional
+  // Optional, the placeholder text for the max value // DEFAULTS TO?? TODO
   maxPlaceholderText: 'Max',
-  // The initial min value to show, defaults to 0
+  // Optional, the initial min value to show, defaults to 0
   initialMin: 1,
-  // The initial max value to show, defaults to 10
+  // Optional, the initial max value to show, defaults to 10
   initialMax: 5,
   // Optional, the callback function to call when changed
   onChange: function() {}
@@ -1173,19 +1224,19 @@ Displays two date inputs for selecting a range of dates.
 ```js
 ANSWERS.addComponent('DateRangeFilter', {
   container: '.date-range-filter-container',
-  // The api field to filter on
+  // Required, the API name of the field to filter on, TOOD ????
   field: 'time.start',
-  // Title to display for the range
+  // Optional, title to display for the range // TODO???
   title: 'Event Start Date',
-  // The label to show next to the min date, optional
+  // Optional, the label to show next to the min date // TODO default
   minLabel: 'Earliest',
-  // The label to show next to the max date, optional
+  // Optional, the label to show next to the max date // TODO default
   maxLabel: 'Latest',
-  // The initial min date to show in yyyy-mm-dd format, defaults to today
+  // Optional, the initial min date to show in yyyy-mm-dd format, defaults to today
   initialMin: '2019-08-01',
-  // The initial max date to show in yyyy-mm-dd format, defaults to today
+  // Optional, the initial max date to show in yyyy-mm-dd format, defaults to today
   initialMax: '2019-09-01',
-  // If true, this filter represents an exclusive range, rather than an inclusive one
+  // Optional, if true, this filter represents an exclusive range, rather than an inclusive one // TODO default
   isExclusive: false,
   // Optional, the callback function to call when changed
   onChange: function() {}
@@ -1211,7 +1262,7 @@ ANSWERS.addComponent('GeoLocationFilter', {
   enabledText: 'Disable My Location',
   // Optional, the text to show ehn loading the user's location
   loadingText: 'Loading',
-  // The label to show when unable to get the user's location
+  // Optional, The label to show when unable to get the user's location // TODO optional??
   errorText: 'Unable To Use Location',
   // Optional, CSS selector of the button
   buttonSelector: '.js-yxt-GeoLocationFilter-button',
@@ -1227,7 +1278,7 @@ ANSWERS.addComponent('GeoLocationFilter', {
   geoButtonText: 'Use my location',
   // Optional, Search parameters for the geolocation autocomplete
   searchParameters: {
-    // List of fields to query for
+    // List of fields to query for // required?? TODO
     fields: [{
       // Field id to query for e.g. c_customFieldName, buildin.location
       fieldId: "builtin.location",
@@ -1246,7 +1297,7 @@ The Navigation Component adds a dynamic experience to your pages navigation expe
 
 When using multiple vertical searches in a universal search, the navigation ordering will be automatically updated based on the search results. By default, tabs that do not fit in the container will go inside a dropdown menu.
 
-Tab configurations should be provided in initial configuration.
+Tab configurations should be provided in initial configuration. // TODO ugh this is true for now
 
 
 ```html
@@ -1315,7 +1366,8 @@ The spell check component shows spell check suggestions/autocorrect.
 ```js
 ANSWERS.addComponent('SpellCheck', {
   container: '.spell-check-container',
-  suggestionHelpText: 'Did you mean:'   // Optional, the help text to display when suggesting a query
+  // Optional, the help text to display when suggesting a query
+  suggestionHelpText: 'Did you mean:',
 })
 ```
 
@@ -1330,11 +1382,16 @@ The location bias component shows location that used for location bias and allow
 ```js
 ANSWERS.addComponent('LocationBias', {
   container: '.location-bias-container',
-  verticalKey: 'verticalKey',                             // Optional, the vertical key for the search, default null
-  updateLocationEl: '.js-locationBias-update-location',   // Optional, the element used for updating location
-  ipAccuracyHelpText: 'based on your internet address',   // Optional, help text to inform someone their IP was used for location
-  deviceAccuracyHelpText: 'based on your device',         // Optional, help text to inform someone their device was used for location
-  updateLocationButtonText: 'Update your location'        // Optional, text used for the button to update location
+  // Optional, the vertical key for the search, default null
+  verticalKey: 'verticalKey',
+  // Optional, the element used for updating location // DEFAULT?? TODO
+  updateLocationEl: '.js-locationBias-update-location',
+  // Optional, help text to inform someone their IP was used for location
+  ipAccuracyHelpText: 'based on your internet address',
+  // Optional, help text to inform someone their device was used for location
+  deviceAccuracyHelpText: 'based on your device',
+  // Optional, text used for the button to update location
+  updateLocationButtonText: 'Update your location'
 })
 ```
 
