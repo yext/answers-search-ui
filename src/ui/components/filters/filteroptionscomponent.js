@@ -6,6 +6,7 @@ import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
+import { groupArray } from '../../../core/utils/arrayutils';
 
 /**
  * The currently supported controls
@@ -327,20 +328,15 @@ export default class FilterOptionsComponent extends Component {
       }));
 
     this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
-    const fieldIdToFilterNodes = {};
-    for (const fn of filterNodes) {
-      const fieldId = fn.getFilter().getFilterKey();
-      if (!fieldIdToFilterNodes[fieldId]) {
-        fieldIdToFilterNodes[fieldId] = [];
-      }
-      fieldIdToFilterNodes[fieldId].push(fn);
-    }
+    const fieldIdToFilterNodes = groupArray(filterNodes, fn => fn.getFilter().getFilterKey());
 
+    // OR together filter nodes for the same field id.
     const totalFilterNodes = [];
     for (const sameIdNodes of Object.values(fieldIdToFilterNodes)) {
       totalFilterNodes.push(FilterNodeFactory.or(...sameIdNodes));
     }
 
+    // AND all of the ORed together nodes.
     return FilterNodeFactory.and(...totalFilterNodes);
   }
 }
