@@ -12,7 +12,7 @@ export default class PaginationComponentBlock {
   /**
    * Find the next-page button and click it
    */
-  async clickNextPageButton () {
+  async clickNextButton () {
     await t.click(this._links.filter('.js-yxt-Pagination-next'));
   }
 

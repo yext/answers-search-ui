@@ -40,7 +40,7 @@ test('pagination flow', async t => {
   await searchComponent.enterQuery('Virginia');
   await searchComponent.submitQuery();
   const paginationComponent = VerticalPage.getPaginationComponent();
-  await paginationComponent.clickNextPageButton();
+  await paginationComponent.clickNextButton();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
