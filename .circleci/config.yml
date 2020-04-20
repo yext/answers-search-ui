@@ -93,11 +93,14 @@ jobs:
           subdirectory: '/${CIRCLE_TAG}'
           cache-control: 'max-age=31536000'
       - run:
-          name: "Get minor version substring"
+          name: "Get major and minor version substrings"
           command: |
             echo "export MINOR_VERSION="$(echo "${CIRCLE_TAG}" | cut -d '.' -f 1,2)"" >> $BASH_ENV
+            echo "export MAJOR_VERSION="$(echo "${CIRCLE_TAG}" | cut -d '.' -f 1)"" >> $BASH_ENV
       - deploy-to-aws:
           subdirectory: '/${MINOR_VERSION}'
+      - deploy-to-aws:
+          subdirectory: '/${MAJOR_VERSION}'
 workflows:
   version: 2
   build_and_deploy:
