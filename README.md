@@ -123,7 +123,7 @@ ANSWERS.registerHelper('noop', function(options) {
 
 Both onVerticalSearch and onUniversalSearch allow you to send an analytics event each time a search is run.
 These options expect functions that take in one parameter, which contains information about the search,
-and also return the desired analytics event. 
+and also return the desired analytics event.
 
 The search information exposed to both options is shown below.
 
@@ -545,6 +545,8 @@ ANSWERS.addComponent('UniversalResults', {
       viewAllText: "Go to this vertical's search",
       // Whether to include a map with this vertical's results.
       includeMap: true,
+      // Whether to use the AccordionResults component instead of VerticalResults for this vertical
+      useAccordion: false,
       // If includeMap is true, mapconfig that contains a mapProvider and apiKey is required
       mapConfig: {
         // Either 'mapbox' or 'google'
