@@ -2,20 +2,15 @@
 Answers Javascript API Library.
 
 Outline:
-1. [Install / Setup](#install-and-setup) - TODO it'd be great to add a simple hello world with vertical results and a search bar here
-   - [Configuration Options](#configuration-options)
-   - [Navigation Configuration](#navigation-configuration) // TODO there is no way this is the only one here
-   - [Template Helpers](#template-helpers)
-2. [Component Usage](#component-usage)
+1. [Install / Setup](#install-and-setup)
+2. [ANSWERS.init Configuration Options](#answers.init-configuration-options)
+   - [Vertical Pages Configuration](#vertical-pages-configuration)
+   - [Search Configuration](#search-configuration)
+3. [Component Usage](#component-usage)
    - [Base Component Configuration](#base-component-configuration)
-   - [Adding a Component](#adding-a-component)
-   - [Using a Custom Renderer](#using-a-custom-renderer)
-   - [Custom Data Formatting](#custom-data-formatting)
-   - [Custom Data Transforms](#custom-data-transforms)
-   - [Creating Custom Components](#creating-custom-components)
-   - [Using a Custom Template](#using-a-custom-template)
+   - [Adding a Component](#adding-a-component-to-your-page)
    - [Removing Components](#removing-components)
-3. [Types of Components](#types-of-components)
+4. [Types of Built-in Components](#types-of-built-in-components)
    - [SearchBar Component](#searchbar-component)
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
@@ -30,35 +25,53 @@ Outline:
    - [LocationBias Component](#location-bias-component)
    - [SortOptions Component](#sort-options-component)
    - [Map Component](#map-component)
-4. [Analytics](#analytics)
-   - [Click Analytics](#click-analytics)
+5. [Customizing Components](#customizing-components)
+   - [Using a Custom Renderer](#using-a-custom-renderer)
+   - [Custom Data Formatting](#custom-data-formatting)
+   - [Custom Data Transforms](#custom-data-transforms)
+   - [Using a Custom Template for a Component](#using-a-custom-template-for-a-component)
+   - [Creating Custom Components](#creating-custom-components)
+6. [Template Helpers](#template-helpers)
+7. [Analytics](#analytics)
+   - [Custom Analytics Using JavaScript](#custom-analytics-using-javascript)
+   - [Custom Analytics Using Data Attributes](#custom-analytics-using-data-attributes)
+   - [Conversion Tracking](#conversion-tracking)
+   - [On-Search Analytics](#on-search-analytics)
+
 # Install and Setup
 
-To include the answers base CSS (optional).
+In an .html page, add the Answers stylesheet, JS library and then an intialization script using the following instructions.
+After doing this, you can view your page in the browser.
+
+Include the Answers CSS
 ```html
 <link rel="stylesheet" type="text/css" href="https://assets.sitescdn.net/answers/answers.css">
 ```
 
-Adding the Javascript library
+Add the Javascript library
 ```html
-<script src="https://assets.sitescdn.net/answers/answers.min.js" onload="ANSWERS.domReady(initAnswers)" async></script>
+<script src="https://assets.sitescdn.net/answers/answers.min.js" onload="ANSWERS.domReady(initAnswers)" defer async></script>
 ```
 
+Add an initialization script with an apiKey, experienceKey and onReady function. In the example below, we've initialized two
+basic components: SearchBar and UniversalResults. (TODO links for the components).
 ```js
 function initAnswers() {
   ANSWERS.init({
-    apiKey: '<API_KEY_HERE>',
+    apiKey: '<API_KEY_HERE>', // See [1]
     experienceKey: '<EXPERIENCE_KEY_HERE>',
     onReady: function() {
-      // Component creation logic here
+      // TODO Add search bar
+
+      // TODO Add universal results?
     }
   })
 }
 ```
 
-Learn more about [getting your API key](https://developer.yext.com/docs/guides/get-started/).
+[1] Learn more about [getting your API key](https://developer.yext.com/docs/guides/get-started/).
 
-## Configuration Options
+# ANSWERS.init Configuration Options
 Below is a list of configuration options that can be used during initialization. // TODO missing any??
 
 ```js
@@ -110,19 +123,24 @@ Below is a list of configuration options related to vertical pages in navigation
 ```js
 verticalPages: [
   {
-    label: 'Home',          // The label used for the navigation element
-    url: './index.html',    // The link for the navigation element
-    isFirst: true,          // optional, will always show this item first
-    isActive: true,         // optional, will add a special class to the item
-    icon: 'star',           // optional, the name of an icon to use in no results, defaults to star
-    iconUrl: '',            // optional, the URL icon to use in no results
-    hideInNavigation: true  // optional, hide this tab in the navigation component if it’s been added, defaults to false
+    // Required, the label for this page
+    label: 'Home',
+    // Required, the link to this page
+    url: './index.html',
+    // Optional*, the verticalKey, *required for vertical pages (must omit this property for universal)
+    verticalKey: 'locations',
+    // Optional, the icon name to use in no results, defaults to no icon
+    icon: 'star',
+    // Optional, the URL icon to use in no results, defaults to no icon
+    iconUrl: '',
+    // Optional, if true, will show this page first in the Navigation Component, defaults to false
+    isFirst: false,
+    // Optional, if true, will add a special styling to this page in the Navigation Component, defaults to false
+    isActive: false,
+    // Optional, if true, hide this tab in the Navigation Component, defaults to false
+    hideInNavigation: false,
   },
-  {
-    verticalKey: 'locations', // The verticalKey
-    label: 'Location',        // The label used for the navigation element
-    url: 'locations.html',    // The link for the navigation element
-  }
+  ...
 ]
 ```
 
@@ -140,27 +158,161 @@ Below is a list of configuration options related to search, used in the [base co
     },
 ```
 
-## Template Helpers // TODO does this work if you specify a "templateBundle"????
-When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
+You can learn more about the interface for registering helpers by taking a look at the [Handlebars Block Helpers](https://handlebarsjs.com/block_helpers.html) documentation.
 
-If you want to register custom template helpers to the handlebars render, you can do so like this:
+# Component Usage
+
+The Answers Component Library exposes an easy to use interface for adding and customizing various types of UI components on your page.
+
+## What is a Component?
+
+At a high level, components are the building blocks of an Answers page. Each component is an independent, reusable piece of code. Each component fills an HTML element container that the implementer provides on the page. In the library, a component consists of logic
+in JS, and then HTML in the form of a handlebars template. Users can override either the JS or the handlebars template
+-- overwriting any built-in logic -- or can use config options to adjust the component without removing all of the built-in behavior.
+
+Some things to note
+- Some components can only be included once on single page
+- Some components are only compatible with Universal pages, some are only compatible with Vertical pages
+- Components do not know about each other. They do not interact with each other, but rather with the global config and API response only.
+- Components are updated from an API response, the Answers front end config (ANSWERS.init), and their individual config. Many
+components update and re-render with each new API response
+
+The sdk comes with many types of components. We will provide a brief description below of (1) what each component does,
+(2) how to initialize (and outline what each config option is for, and (3) any limitations of the component.
+
+Each type of Component has its own custom configurations. Additionally, all components share the
+base configuration options defined above.
+
+
+## Base Component Configuration
+
+Every component has the same base configuration options.
 ```js
-ANSWERS.registerHelper('noop', function(options) {
-  return options.fn(this);
+  {
+    // Required, the selector for the container element where the component will be injected
+    container: 'container',
+    // Optional, a unique name for the component
+    name: 'name',
+    // Optional, a custom HTML classname for the component
+    class: 'class',
+    // Optional, handlebars template or HTML to override built-in handlebars template for the component
+    template: 'template',
+    // Optional, override render function
+    render: function(data) {},
+    // Optional, a hook for transforming data before it gets sent to render
+    transformData: function(data) {},
+    // Optional, invoked when the HTML is mounted to the DOM, TODO: This overrides the library's built-in onMount??
+    onMount: function(data) {},
+    // Optional, additional properties to send with every analytics event
+    analyticsOptions: {},
+  }
+```
+
+
+## Adding a Component to Your Page
+Adding a component to your page is super easy!
+You can add many different [types](#types-of-components) of components to your page.
+Each component supports the base configuration options above, as well as their own unique configurations.
+
+To start, every component requires an HTML container.
+
+```html
+<div class="search-container"></div>
+```
+
+Then, you can add a component to your page through the ANSWERS add interface. You need to call `addComponent` from `onReady`.
+
+This is an example of the `SearchBar`. See [Types of Components](#types-of-components) below.
+
+```js
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  // -- other options --
 })
 ```
 
-You can learn more about the interface for registering helpers by taking a look at the [Handlebars Block Helpers](https://handlebarsjs.com/block_helpers.html) documentation.
+## Removing Components
+If you'd like to remove a component and all of its children, you can do it. // TODO why would you want to do this
 
-## onSearch Analytics
+To do this, simply `ANSWERS.removeComponent(<component name>)`:
 
-Both onVerticalSearch and onUniversalSearch allow you to send an analytics event each time a search is run.
-These options expect functions that take in one parameter, which contains information about the search,
-and also return the desired analytics event.
+```js
+ANSWERS.addComponent('FilterSearch', {
+  container: '.filter-search-container',
+  verticalKey: 'myvertical',
+  name: 'my-filter-search'
+});
 
-The search information exposed to both options is shown below.
+ANSWERS.removeComponent('my-filter-search');
+```
+
+# Types of Built-in Components
+
+## SearchBar Component
+
+The SearchBar component is the main entry point for search querying. It provides the input box, where the user
+types their query, as well as the autocomplete behavior.
+
+```html
+<div class="search-query-container"></div>
+```
+
+Universal Search and Vertical Search provide a different way of auto complete. // so what about them is diff?? also why here?
+
+```js
+ANSWERS.addComponent('SearchBar', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.search-query-container',
+  // Required* for Vertical pages, omit for Universal pages
+  verticalKey: '<VERTICAL_KEY>',
+  // Optional, title is not present by default
+  title: 'Search my Brand',
+  // Optional, the initial query string to use for the input box
+  query: 'query',
+  // Optional, defaults to 'Conduct a search'
+  labelText: 'What are you looking for?',
+  // Optional, used for labeling the submit button, also provided to the template
+  submitText: 'Submit',
+  // Optional, used for labeling the clear button, also provided to the template
+  clearText: 'Clear',
+  // Optional, used to specify a different built-in icon for the submit button
+  submitIcon: 'iconName',
+  // Optional, a url for a custom icon for the submit button
+  customIconUrl: 'path/to/icon',
+  // Optional, the query text to show as the first item for auto complete
+  promptHeader: 'Header',
+  // Optional, no default
+  placeholderText: 'Start typing...',
+  // Optional, defaults to false
+  autoFocus: true,
+  // Optional, when auto focus on load,  open the autocomplete
+  autoCompleteOnLoad: false,
+  // Optional, defaults to 300ms (0.3 seconds)
+  searchCooldown: 2000,
+  // Optional, asks the user for their geolocation when "near me" intent is detected
+  promptForLocation: true,
+  // Optional, displays an "x" button to clear the current query when true
+  clearButton: true,
+  // Optional, redirect search query to url
+  redirectUrl: 'path/to/url',
+  // Optional, defaults to native form node within container
+  formSelector: 'form',
+  // Optional, the input element used for searching and wires up the keyboard interaction
+  inputEl: '.js-yext-query'
+})
+```
+
+### On-Search Analytics
+
+There are two functions that allow custom analytics to be logged on-search: `onVerticalSearch()` and `onUniversalSearch()`.
+These functions are added as config options to the SearchBar Component.
 
 #### onVerticalSearch
+The onVerticalSearch function allows you to send an analytics event each time a search is run on a SearchBar component (TODO link) with a
+vertical key. This function should take in one parameter, `searchParams`, which contains information about the search, and return
+the desired analytics event.
+
+The search information exposed in `searchParams` is shown below.
 
 ```js
 ANSWERS.addComponent('SearchBar', {
@@ -188,19 +340,29 @@ ANSWERS.addComponent('SearchBar', {
      * Either 'normal' or 'no-results'.
      * @type {string}
      */
-    const resultsContext = searchParams.resultsCount
-    const analyticsEvent = { // TODO I don't think this works because I think we do a typeof assertion
+    const resultsContext = searchParams.resultsContext;
+
+    let analyticsEvent = new ANSWERS.AnalyticsEvent('CUSTOM'); // TODO what is this param lol, also add link to analytics section
+    analyticsEvent.addOptions({
       type: 'ANALYTICS_EVENT_TYPE',
       label: 'Sample analytics event',
-      query: queryString
-    };
+      searcher: 'VERTICAL',
+      query: queryString,
+      resultsCount: resultsCount,
+      resultsContext: resultsContext,
+    });
     return analyticsEvent;
   },
 })
 ```
 
 #### onUniversalSearch
+The onUniversalSearch function allows you to send an analytics event each time a search is run on a
+SearchBar component (TODO link) with a
+vertical key. This function should take in one parameter, `searchParams`, which contains information about the search, and return
+the desired analytics event.
 
+The search information exposed in `searchParams` is shown below.
 ```js
 ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
@@ -217,281 +379,24 @@ ANSWERS.addComponent('SearchBar', {
      */
     const sectionsCount = searchParams.sectionsCount;
 
-    let event = new ANSWERS.AnalyticsEvent('CUSTOM'); // TODO what is this param lol, also add link to analytics section
-    event.addOptions({
+    let analyticsEvent = new ANSWERS.AnalyticsEvent('CUSTOM'); // TODO what is this param lol, also add link to analytics section
+    analyticsEvent.addOptions({
       type: 'ANALYTICS_EVENT_TYPE',
       label: 'Sample analytics event',
+      searcher: 'UNIVERSAL',
       query: queryString
       sectionsCount: sectionsCount,
     });
-    ANSWERS.AnalyticsReporter.report(event);
+    return analyticsEvent;
   },
-})
-```
-
-# Component Usage
-
-The Answers Component Library exposes an easy to use interface for adding and customizing various types of UI components on your page.
-
-What is a Component?
-At a high level, components are the building blocks of an Answers page. Each component is an independent, reusable piece of code. Each component fills an HTML element container that the implementer provides on the page. In the library, a component consists of logic
-in JS, and then HTML in the form of a handlebars template. Users can override either the JS or the handlebars template
--- overwriting any built-in logic -- or can use config options to adjust the component without removing all of the built-in behavior.
-
-- Some components can be included multiple times on a single page, others can only be included once.
-- Some components are only compatible with Universal pages, some are only compatible with Vertical pages
-- Components work in isolation only to an extent
-- Components are updated from an API response, the Answers front end config (ANSWERS.init), and their individual config. Many
-components update and re-render with each new API response
-
-
-## Base Component Configuration
-
-Every component has the same base configuration options.
-```js
-  {
-    container: 'container', // Required, the CSS selector to append the component // TODO append is not what's happening here
-    name: 'name', // Optional, a unique name for the component
-    class: 'class', // Optional, a custom HTML classname for the component
-    template: 'template', // Optional, handlebars template or HTML to override built-in handlebars template for the component
-    render: function(data) {}, // Optional, override render function
-    transformData: function(data) {}, // Optional, a hook for transforming data before it gets sent to render
-    onMount: function(data) {}, // Optional, invoked when the HTML is mounted to the DOM, TODO: This overrides the library's built-in onMount??
-    analyticsOptions: {}, // Optional, additional properties to send with every analytics event
-  }
-```
-
-
-## Adding a Component to Your Page
-Adding a component to your page is super easy!
-You can add many different [types](#types-of-components) of components to your page.
-Each component supports the base configuration options above, as well as their own unique configurations.
-
-To start, every component requires an HTML container.
-
-```html
-<div class="search-container"></div>
-```
-
-Then, you can add a component to your page through the ANSWERS add interface. You need to call `addComponent` from `onReady`.
-
-This is an example of the `SearchBar`. See [Types of Components](#types-of-components) below.
-
-```js
-ANSWERS.addComponent('SearchBar', {
-  container: '.search-container',
-  // -- other options --
-})
-```
-
-## Using a Custom Renderer
-
-If you want to use a use your own template language (e.g. soy, mustache, groovy, etc),
-you should NOT use the template argument. Instead, you can provide a custom render function to the component.
-
-```js
-ANSWERS.addComponent('SearchBar', {
-  container: '.search-container',
-  render: function(data) {
-    // Using native ES6 templates -- but you can replace this with soy,
-    // or any other templating language as long as it returns a string.
-    return `<div class="my-search">${data.title}</div>`
-  }
-})
-```
-
-## Custom Data Formatting
-
-You can format specific entity fields using `fieldFormatters`.
-These formatters are applied before the `transformData` step.
-
-Each formatter takes in an object with the following properties :
-- `entityProfileData`
-- `entityFieldValue`
-- `highlightedEntityFieldValue`
-- `verticalId`
-- `isDirectAnswer`
-
-Below is an example usage.
-```js
-ANSWERS.init({
-  apiKey: '<API_KEY_HERE>',
-  experienceKey: '<EXPERIENCE_KEY_HERE>',
-  fieldFormatters: { // what is this a top level thing??
-    'name': (formatterObject) => formatterObject.entityFieldValue.toUpperCase(),
-    'description' : (formatterObject) => formatterObject.highlightedEntityFieldValue
-  }
-});
-```
-
-## Custom Data Transforms
-
-If you want to mutate the data thats provided to the render/template before it gets rendered,
-you can use the `transformData` hook.
-
-All properties and values that you return from here will be accessible from templates.
-
-
-```js
-ANSWERS.addComponent('SearchBar', {
-  container: '.search-container',
-  transformData: (data) => {
-    // Extend/overide the data object
-    return Object.assign({}, data, {
-      title: data.title.toLowerCase()
-    })
-  },
-  render: function(data) {
-    // Using native ES6 templates -- but you can replace this with soy,
-    // or any other templating language as long as it returns a string.
-    return `<div class="my-search">${data.title}</div>`
-  }
-})
-```
-
-## Creating Custom Components
-// TODO I think we should also add a part about adding a template in here
-
-You can create custom Answers components with the same power of the builtin components. First, create
-a subtype of ANSWERS.Component and register it.
-
-For ES6:
-```js
-class MyCustomComponent extends ANSWERS.Component {
-  constructor (config) {
-    super(config);
-    // Set template TODO
-    this.myProperty = config.myProperty;
-  }
-
-  static defaultTemplateName () {
-    return 'default'; // wh does this do with no template lol TODO
-  }
-
-  static areDuplicateNamesAllowed () {
-    return false;
-  }
-
-  static get type () {
-    return 'MyCustomComponent';
-  }
-}
-ANSWERS.registerComponentType(MyCustomComponent); // Register the component with the library
-```
-
-For ES5:
-```js
-function MyCustomComponent (config) {
-  ANSWERS.Component.call(this, config);
-
-  this.myProperty = config.myProperty;
-}
-
-MyCustomComponent.prototype = Object.create(ANSWERS.Component.prototype);
-MyCustomComponent.prototype.constructor = MyCustomComponent;
-MyCustomComponent.defaultTemplateName = function () { return 'default' };
-MyCustomComponent.areDuplicateNamesAllowed = function () { return false };
-Object.defineProperty(MyCustomComponent, 'type', { get: function () { return 'MyCustomComponent' } });
-
-ANSWERS.registerComponentType(MyCustomComponent); // Register the component with the library
-```
-
-Now you can use your custom component like any built-in component:
-
-```js
-ANSWERS.addComponent('MyCustomComponent', {
-  container: '.my-component-container',
-  myProperty: 'my property'
-});
-```
-
-## Using a Custom Template for a Component
-All component templates are written using handlebars. // TODO what does this mean, when would you use
-
-It's easy to override these templates with your own templates.
-Keep in mind, that you must provide valid handlebars syntax here.
-
-```js
-// Use handlebars syntax to create a template string
-let customTemplate = `<div class="my-search">{{title}}</div>`
-
-ANSWERS.addComponent('SearchBar', {
-  container: '.search-container',
-  template: customTemplate
-})
-```
-
-## Removing Components
-If you'd like to remove a component and all of its children, you can do it. // TODO why would you want to do this
-
-To do this, simply `ANSWERS.removeComponent(<component name>)`:
-
-```js
-ANSWERS.addComponent('FilterSearch', {
-  container: '.filter-search-container',
-  verticalKey: 'myvertical',
-  name: 'my-filter-search'
-});
-
-ANSWERS.removeComponent('my-filter-search');
-```
-
-# Types of Components
-The sdk comes with many types of components. We will provide a brief description below of (1) what each component does,
-(2) how to initialize (and outline what each config option is for, and (3) any limitations of the component.
-
-Each type of Component has its own custom configurations. Additionally, all components share the
-base configuration options defined above.
-
-## SearchBar Component
-
-The SearchBar component is the main entry point for search querying. It provides the input box, where the user
-types their query, as well as the autocomplete behavior.
-
-```html
-<div class="search-query-container"></div>
-```
-
-There are two types of search experiences. Universal Search and Vertical Search.
-Each provide a different way of auto complete. // wh is this doing in this section lol?
-
-### For Universal Search:
-
-```js
-ANSWERS.addComponent('SearchBar', {
-  container: '.search-query-container',
-  title: 'Search my Brand',                 // optional, title is not present by default
-  query: 'query',                           // optional, the initial query string to use for the input box
-  labelText: 'What are you looking for?',   // optional, defaults to 'Conduct a search'
-  submitText: 'Submit',                     // optional, used for labeling the submit button, also provided to the template
-  clearText: 'Clear',                       // optional, used for labeling the clear button, also provided to the template
-  submitIcon: 'iconName',                   // optional, used to specify a different built-in icon for the submit button
-  customIconUrl: 'path/to/icon',            // optional, a url for a custom icon for the submit button
-  promptHeader: 'Header',                   // optioanl, the query text to show as the first item for auto complete
-  placeholderText: 'Start typing...',       // optional, no default
-  autoFocus: true,                          // optional, defaults to false
-  autoCompleteOnLoad: false,                // optional, when auto focus on load, optionally open the autocomplete
-  searchCooldown: 2000,                     // optional, defaults to 300ms (0.3 seconds)
-  promptForLocation: true,                  // optional, asks the user for their geolocation when "near me" intent is detected
-  clearButton: true,                        // optional, displays an "x" button to clear the current query when true
-  redirectUrl: 'path/to/url',               // optional, redirect search query to url
-  formSelector: 'form',                     // optional, defaults to native form node within container
-  inputEl: '.js-yext-query'                 // optional, the input element used for searching and wires up the keyboard interaction
-})
-```
-
-### For Vertical Search:
-```js
-ANSWERS.addComponent('SearchBar', {
-  container: '.search-query-container',
-  verticalKey: '<VERTICAL_KEY>'       // required for Vertical Search
 })
 ```
 
 ## Direct Answer Component
 
-The Direct Answer Component will render the BEST result, if found,
-based on the query.
+The Direct Answer Component will render the BEST result, if found, based on the query. (TODO describe this more)
+
+** TODO Is this universal only??
 
 ```html
 <div class="direct-answer-container"></div>
@@ -499,6 +404,7 @@ based on the query.
 
 ```js
 ANSWERS.addComponent('DirectAnswer', {
+  // Required, the selector for the container element where the component will be injected
   container: '.direct-answer-container',
   // Optional, the selector for the form used for submitting the feedback
   formEl: '.js-directAnswer-feedback-form',
@@ -532,8 +438,9 @@ The most complex component has a ton of overridable configuration options.
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
+  // Required, the selector for the container element where the component will be injected
   container: '.universal-results-container',
-  // The max number of search results to return, defaults to 10
+  // Optional, the max number of search results to return, defaults to 10
   limit: 5,
 })
 ```
@@ -543,7 +450,7 @@ ANSWERS.addComponent('UniversalResults', {
 You can override the render function for EACH item in the result list,
 as opposed to the entire component.
 // TODO wait wh is this supposed to override the VerticalResults vs AccordionResults????
-
+// TODO I think they should just go to the custom render section for this???
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
@@ -558,6 +465,7 @@ ANSWERS.addComponent('UniversalResults', {
 
 You can override the handlebars template for EACH item in the result list,
 as opposed to the entire component.
+// TODO I think they should just go to the custom render section for this??? deleting?
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
@@ -570,6 +478,7 @@ ANSWERS.addComponent('UniversalResults', {
 
 You can override the render function for a particular section within the results list,
 by providing a verticalKey as the context, and using the same options as above.
+// TODO I think they should just go to the custom render section for this???
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
@@ -584,37 +493,33 @@ ANSWERS.addComponent('UniversalResults', {
 })
 ```
 
-### Custom options for specific Vertical Results
+### Config Options for Specific Verticals' Results
 
-You can also provide several config options to each vertical.
-These are the supported options:
+You can also provide several config options to each vertical. These are the supported options:
 
 ```js
 ANSWERS.addComponent('UniversalResults', {
+  // Required, the selector for the container element where the component will be injected
   container: '.universal-results-container',
   config: {
     'locations': { // The verticalKey
-      renderItem: function(data) {
-        return `my item ${data.name}`;
-      },
-      // Specific text for the view all button, which links to the vertical search for this vertical.
-      // Default is no text.
-      viewAllText: "Go to this vertical's search",
-      // Whether to include a map with this vertical's results.
-      includeMap: true,
-      // Whether to use the AccordionResults component instead of VerticalResults for this vertical
+      // Optional, whether to use the AccordionResults component instead of VerticalResults for this vertical
       useAccordion: false,
-      // If includeMap is true, mapconfig that contains a mapProvider and apiKey is required
+      // Optional, text for the view all links to the vertical page for this vertical. Default is no text
+      viewAllText: "Go to this vertical's search",
+      // Optional, whether to include a map with this vertical's results, defaults to false
+      includeMap: true,
+      // Optional, If includeMap is true, mapconfig that contains a mapProvider and apiKey is required
       mapConfig: {
-        // Either 'mapbox' or 'google'
+        // Required, either 'mapbox' or 'google', not case sensitive
         mapProvider: 'google',
-        // Api key for the map provider
+        // Required, API key for the map provider
         apiKey: '<<< enter your api key here >>>',
-        // Optional configuration for the map's behavior when a query returns no results.
+        // Optional, configuration for the map's behavior when a query returns no results
         noResults: {
-          displayAllResults: true
+          displayAllResults: true // TODO
         },
-        // Determines whether the map should still display itself when it recieves no data.
+        // Optional, whether the map should display itself when it recieves no result data
         showEmptyMap: false,
       }
     }
@@ -650,6 +555,7 @@ You define all the options at the top level object.
 
 ```js
 ANSWERS.addComponent('VerticalResults', {
+  // Required, the selector for the container element where the component will be injected
   container: '.vertical-results-container',
   // Optional, function to give each result item custom rendering
   renderItem: () => {},
@@ -663,7 +569,7 @@ ANSWERS.addComponent('VerticalResults', {
   card: {
     // Optional, The type of card, currently only 'Standard', 'Accordion', and 'Legacy' are supported, defaults to 'Standard'
     cardType: 'Standard',
-    // Required, see Data Mappings for more details ?? is this required?
+    // Required, see Data Mappings for more details ?? TODO is this required?
     dataMappings: () => {},
     // Optional, used as configuration for any calls to action buttons on the page, see Calls To Action for more details
     callsToAction: () => []
@@ -949,6 +855,7 @@ The Pagination component allows users to page through vertical search results. P
 
 ```js
 ANSWERS.addComponent('Pagination', {
+  // Required, the selector for the container element where the component will be injected
   container: '.pagination-component',
   // Display a double arrow allowing users to jump to the first page of results
   showFirst: true,
@@ -969,6 +876,7 @@ The FilterBox component shows a list of filters to apply to a search.
 
 ```js
 ANSWERS.addComponent('FilterBox', {
+  // Required, the selector for the container element where the component will be injected
   container: '.filters-container',
   // List of filter component configurations
   filters: [
@@ -1039,7 +947,10 @@ The Facets component displays filters relevant to the current search, configured
 
 ```js
 ANSWERS.addComponent('Facets', {
+  // Required, the selector for the container element where the component will be injected
   container: '.facets-container',
+  // Required
+  verticalKey: '<VERTICAL_KEY>',
   // Title to display above the facets
   title: 'Filters',
   // Show number of results for each facet
@@ -1081,9 +992,12 @@ The FilterSearch component provides a text input box for users to type a query a
 
 ```js
 ANSWERS.addComponent('FilterSearch', {
+  // Required, the selector for the container element where the component will be injected
   container: '.filter-search-container',
-  verticalKey: '<VERTICAL_KEY>',      // required
-  placeholderText: 'Start typing...', // optional, no default
+  // Required
+  verticalKey: '<VERTICAL_KEY>',
+  // optional, no default
+  placeholderText: 'Start typing...',
   // If true, the selected filter is saved and used for the next search,
   // but does not trigger a search itself. Defaults to false.
   storeOnChange: true,
@@ -1130,6 +1044,7 @@ FilterOptions displays a set of filters with either checkboxes or radio buttons.
 
 ```js
 ANSWERS.addComponent('FilterOptions', {
+  // Required, the selector for the container element where the component will be injected
   container: '.filter-container',
   // Control type, singleoption or multioption
   control: 'singleoption',
@@ -1191,6 +1106,7 @@ Displays two numeric inputs for selecting a number range.
 
 ```js
 ANSWERS.addComponent('RangeFilter', {
+  // Required, the selector for the container element where the component will be injected
   container: '.range-filter-container',
   // Required, the API name of the field to filter on // TODO required??
   field: 'outdoorPoolCount',
@@ -1223,6 +1139,7 @@ Displays two date inputs for selecting a range of dates.
 
 ```js
 ANSWERS.addComponent('DateRangeFilter', {
+  // Required, the selector for the container element where the component will be injected
   container: '.date-range-filter-container',
   // Required, the API name of the field to filter on, TOOD ????
   field: 'time.start',
@@ -1253,6 +1170,7 @@ Displays a "Use My Location" button that filters results to a radius around the 
 
 ```js
 ANSWERS.addComponent('GeoLocationFilter', {
+  // Required, the selector for the container element where the component will be injected
   container: '.geolocation-filter-container',
   // Optional, the vertical key to use
   verticalKey: 'verticalKey',
@@ -1306,6 +1224,7 @@ Tab configurations should be provided in initial configuration. // TODO ugh this
 
 ```js
 ANSWERS.addComponent('Navigation', {
+  // Required, the selector for the container element where the component will be injected
   container: '.navigation-container',
   mobileOverflowBehavior: 'COLLAPSE'     // optional, controls if navigation shows a scroll bar or dropdown for mobile. Options are COLLAPSE and INNERSCROLL
   ariaLabel: 'Search Page Navigation'    // optional, the aria-label to set on the navigation
@@ -1326,32 +1245,44 @@ when a search query is run.
 ```js
 // Unless noted, fields are optional and show default values
 ANSWERS.addComponent('QASubmission', {
-  container: '.question-submission-container',    // Required. This is the class of the target HTML element the component will be mounted to
-  formSelector: '.js-form',                       // Defaults to native form node within container
-  nameLabel: 'Name',                              // Label for name input
-  emailLabel: 'Email',                            // Label for email input
-  questionLabel: 'Question',                      // Label for question input
-  sectionTitle: 'Ask a question',                 // Title displayed for the form
+  // Required, the selector for the container element where the component will be injected
+  container: '.question-submission-container',
+  // Defaults to native form node within container
+  formSelector: '.js-form',
+  // Label for name input
+  nameLabel: 'Name',
+  // Label for email input
+  emailLabel: 'Email',
+  // Label for question input
+  questionLabel: 'Question',
+  // Title displayed for the form
+  sectionTitle: 'Ask a question',
+  // Teaser displayed for the form, next to the title
   teaser: 'Can\'t find what you’re looking for? Ask a question below.',
-                                                  // Teaser displayed for the form, next to the title
+  // Description for the form
   description: 'Enter your question and contact information, and we\'ll get back to you with a response shortly.'
-                                                  // Description for the form
+  // Text before the privacy policy link
   privacyPolicyText: 'By submitting my email address, I consent to being contacted via email at the address provided.',
-                                                  // Text before the privacy policy link
-  privacyPolicyUrlLabel: 'Learn more here.',      // Label for the privacy policy url
-  privacyPolicyUrl: 'https://mybiz.com/policy',   // Required. Defaults to ''
+  // Label for the privacy policy url
+  privacyPolicyUrlLabel: 'Learn more here.',
+  // Required. Defaults to ''
+  privacyPolicyUrl: 'https://mybiz.com/policy',
+  // Error message displayed when the privacy policy is not selected
   privacyPolicyErrorText: '* You must agree to the privacy policy to submit feedback.',
-                                                  // Error message displayed when the privacy policy is not selected
+  // Error message displayed when an invalid email is not submitted
   emailFormatErrorText: '* Please enter a valid email address.'
-                                                  // Error message displayed when an invalid email is not submitted
-  requiredInputPlaceholder: '(required)',         // Placeholder displayed in all required fields
+  // Placeholder displayed in all required fields
+  requiredInputPlaceholder: '(required)',
+  // Confirmation displayed once a question is submitted
   questionSubmissionConfirmationText: 'Thank you for your question!',
-                                                  // Confirmation displayed once a question is submitted
-  buttonLabel: 'Submit',                          // Label displayed on the button to submit a question
-  entityId: 123,                                  // Required. Set this to the Entity ID of the organization entity in the Knowledge Graph
-  expanded: true,                                 // Set this to whether or not the form is expanded by default when a user arrives on the page
+  // Label displayed on the button to submit a question
+  buttonLabel: 'Submit',
+  // Required. Set this to the Entity ID of the organization entity in the Knowledge Graph
+  entityId: 123,
+  // Set this to whether or not the form is expanded by default when a user arrives on the  page
+  expanded: true,
+  // Error message displayed when there is an issue with the QA Submission request
   networkErrorText: 'We\'re sorry, an error occurred.'
-                                                  // Error message displayed when there is an issue with the QA Submission request
 })
 ```
 
@@ -1365,6 +1296,7 @@ The spell check component shows spell check suggestions/autocorrect.
 
 ```js
 ANSWERS.addComponent('SpellCheck', {
+  // Required, the selector for the container element where the component will be injected
   container: '.spell-check-container',
   // Optional, the help text to display when suggesting a query
   suggestionHelpText: 'Did you mean:',
@@ -1381,6 +1313,7 @@ The location bias component shows location that used for location bias and allow
 
 ```js
 ANSWERS.addComponent('LocationBias', {
+  // Required, the selector for the container element where the component will be injected
   container: '.location-bias-container',
   // Optional, the vertical key for the search, default null
   verticalKey: 'verticalKey',
@@ -1408,6 +1341,7 @@ Currently, there may be only one sort options component per page.
 // note: showExpand and showNumberApplied options are explicitly not included:
 // sorting will always be exposed to the user if added.
 ANSWERS.addComponent('SortOptions', {
+  // Required, the selector for the container element where the component will be injected
   container: '.sort-options-container',
   // Optional: The label used for the “default” sort (aka sort the order provided by the config), defaults to 'Best Match'
   defaultSortLabel: 'Best Match',
@@ -1505,11 +1439,166 @@ ANSWERS.addComponent('Map', {
     };
   },
 };
+
+# Customizing Components
+// TODO list config options for this
+
+## Using a Custom Renderer
+
+If you want to use a use your own template language (e.g. soy, mustache, groovy, etc),
+you should NOT use the template argument. Instead, you can provide a custom render function to the component.
+
+```js
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  render: function(data) {
+    // Using native ES6 templates -- but you can replace this with soy,
+    // or any other templating language as long as it returns a string.
+    return `<div class="my-search">${data.title}</div>`
+  }
+})
+```
+
+## Custom Data Formatting
+
+You can format specific entity fields using `fieldFormatters`.
+These formatters are applied before the `transformData` step.
+
+Each formatter takes in an object with the following properties :
+- `entityProfileData`
+- `entityFieldValue`
+- `highlightedEntityFieldValue`
+- `verticalId`
+- `isDirectAnswer`
+
+Below is an example usage.
+```js
+ANSWERS.init({
+  apiKey: '<API_KEY_HERE>',
+  experienceKey: '<EXPERIENCE_KEY_HERE>',
+  fieldFormatters: { // what is this a top level thing??
+    'name': (formatterObject) => formatterObject.entityFieldValue.toUpperCase(),
+    'description' : (formatterObject) => formatterObject.highlightedEntityFieldValue
+  }
+});
+```
+
+## Custom Data Transforms
+
+If you want to mutate the data thats provided to the render/template before it gets rendered,
+you can use the `transformData` hook.
+
+All properties and values that you return from here will be accessible from templates.
+
+
+```js
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  transformData: (data) => {
+    // Extend/overide the data object
+    return Object.assign({}, data, {
+      title: data.title.toLowerCase()
+    })
+  },
+  render: function(data) {
+    // Using native ES6 templates -- but you can replace this with soy,
+    // or any other templating language as long as it returns a string.
+    return `<div class="my-search">${data.title}</div>`
+  }
+})
+```
+
+## Using a Custom Template for a Component
+All component templates are written using handlebars. // TODO what does this mean, when would you use
+
+It's easy to override these templates with your own templates.
+Keep in mind, that you must provide valid handlebars syntax here.
+
+```js
+// Use handlebars syntax to create a template string
+let customTemplate = `<div class="my-search">{{title}}</div>`
+
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  template: customTemplate
+})
+```
+
+## Creating Custom Components
+// TODO I think we should also add a part about adding a template in here
+
+You can create custom Answers components with the same power of the builtin components. First, create
+a subtype of ANSWERS.Component and register it.
+
+For ES6:
+```js
+class MyCustomComponent extends ANSWERS.Component {
+  constructor (config) {
+    super(config);
+    // Set template TODO
+    this.myProperty = config.myProperty;
+  }
+
+  static defaultTemplateName () {
+    return 'default'; // wh does this do with no template lol TODO
+  }
+
+  static areDuplicateNamesAllowed () {
+    return false;
+  }
+
+  static get type () {
+    return 'MyCustomComponent';
+  }
+}
+ANSWERS.registerComponentType(MyCustomComponent); // Register the component with the library
+```
+
+For ES5:
+```js
+function MyCustomComponent (config) {
+  ANSWERS.Component.call(this, config);
+
+  this.myProperty = config.myProperty;
+}
+
+MyCustomComponent.prototype = Object.create(ANSWERS.Component.prototype);
+MyCustomComponent.prototype.constructor = MyCustomComponent;
+MyCustomComponent.defaultTemplateName = function () { return 'default' };
+MyCustomComponent.areDuplicateNamesAllowed = function () { return false };
+Object.defineProperty(MyCustomComponent, 'type', { get: function () { return 'MyCustomComponent' } });
+
+ANSWERS.registerComponentType(MyCustomComponent); // Register the component with the library
+```
+
+Now you can use your custom component like any built-in component:
+
+```js
+ANSWERS.addComponent('MyCustomComponent', {
+  container: '.my-component-container',
+  myProperty: 'my property'
+});
+```
+
+# Template Helpers
+// TODO does this work if you specify a "templateBundle"????
+When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
+
+If you want to register custom template helpers to the handlebars render, you can do so like this:
+```js
+ANSWERS.registerHelper('noop', function(options) {
+  return options.fn(this);
+})
 ```
 
 # Analytics
 
-Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks. You may add additional, custom analytic events to templates using certain data attributes, explained below. You may also send analytics from external code with the below interface.
+Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks.
+If you would like to add custom analytics on top of the built-in ones, use the following: (TODO rephrase)
+
+## Custom Analytics Using JavaScript
+
+You may send analytics from external code with the below interface.
 
 ```js
   const event = new ANSWERS.AnalyticsEvent('CUSTOM');
@@ -1517,9 +1606,9 @@ Answers will track some basic interaction analytics automatically, such as searc
   ANSWERS.AnalyticsReporter.report(event)
 ```
 
-## Click Analytics
+## Custom Analytics Using Data Attributes
 
-Click analytics can be attached to an element by adding the `data-eventtype` attribute to the element you want to track clicks for. The provided string should be the type of the analytics event. You can optionally include metadata inside the `data-eventoptions` attribute, in a JSON format. Whenever the element is clicked, an analtyics event with that data will be sent to the server.
+You may add additional, custom analytic events to templates using certain data attributes. Click analytics can be attached to an element by adding the `data-eventtype` attribute to the element you want to track clicks for. The provided string should be the type of the analytics event. You can optionally include metadata inside the `data-eventoptions` attribute, in a JSON format. Whenever the element is clicked, an analtyics event with that data will be sent to the server.
 
 ```html
 <button class="driving-directions-button"
@@ -1544,3 +1633,8 @@ You must also add the following to your HTML:
 ```html
 <script src="https://assets.sitescdn.net/ytag/ytag.min.js"></script>
 ```
+
+## On-Search Analytics
+
+TODO add link here for the onSearch functions in the SearchBar component
+
