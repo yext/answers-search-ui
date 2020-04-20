@@ -160,6 +160,11 @@
   &.yxt-Accordion
   {
     border: $border-legacy;
+
+    .yxt-Results-filters {
+      border-left: none;
+      border-right: none;
+    }
   }
 
   & .yxt-Accordion-list
