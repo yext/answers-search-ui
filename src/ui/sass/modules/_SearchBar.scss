@@ -79,6 +79,11 @@
       padding: 0;
       margin: 0;
     }
+
+    &:-ms-input-placeholder
+    {
+      color: $color-text-secondary;
+    }
   }
 
   &-clear
