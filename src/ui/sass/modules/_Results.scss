@@ -43,7 +43,6 @@
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
     background-color: $results-title-bar-background;
-    border-bottom: $results-border;
   }
 
   &-left
@@ -90,9 +89,10 @@
     margin-bottom: 0;
     padding: $base-spacing * 1.5 $base-spacing;
     background-color: $results-filters-background;
+    border-top: $results-border;
     border-right: $border-legacy;
     border-left: $border-legacy;
-    border-bottom: $results-border;
+    border-bottom: none;
   }
 
   &-filter
@@ -167,5 +167,10 @@
       border-left: none;
       border-right: none;
     }
+  }
+
+  & .yxt-Accordion-list
+  {
+    border-top: $border-legacy;
   }
 }
