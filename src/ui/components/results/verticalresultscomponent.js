@@ -87,19 +87,19 @@ export default class VerticalResultsComponent extends Component {
     /**
      * A parsed version of the noResults config provided to the component.
      * Applies sensible defaults if certain values are not set.
-     * 
+     *
      * @type {Object}
      * @private
      */
     this._noResultsConfig = Object.assign(
       { displayAllResults: false, template: '' },
-      this._config.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG),
+      this._config.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG)
     );
 
     /**
      * _displayAllResults controls if all results for the vertical will display
      * when there are no results for a query.
-     * 
+     *
      * @type {boolean}
      * @private
      */
@@ -107,7 +107,7 @@ export default class VerticalResultsComponent extends Component {
 
     /**
      * Specifies a custom no results template.
-     * 
+     *
      * @type {string}
      * @private
      */
@@ -178,8 +178,8 @@ export default class VerticalResultsComponent extends Component {
       placeholders: new Array(this._config.maxNumberOfColumns + 1),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
       showResultsHeader: showResultsHeader,
-      useLegacyNoResults: this._config.isUniversal 
-        || !(this._noResultsConfig.template || this._noResultsConfig.displayAllResults)
+      useLegacyNoResults: this._config.isUniversal ||
+        !(this._noResultsConfig.template || this._noResultsConfig.displayAllResults)
     }), val);
   }
 

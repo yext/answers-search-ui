@@ -27,7 +27,7 @@ export default class MapComponent extends Component {
      */
     this._noResults = Object.assign(
       { displayAllResults: false, template: '' },
-      opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG),
+      opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG)
     );
 
     /**
