@@ -22,20 +22,6 @@ class VerticalResultsConfig {
      */
     this.isUniversal = config.isUniversal || false;
 
-    /**
-     * _displayAllResults is set to true if the config option noResults.displayAllResults is true,
-     * meaning that all results for the vertical will display when there are no results for a query
-     * @type {boolean}
-     * @private
-     */
-    this._displayAllResults = config.noResults && config.noResults.displayAllResults;
-
-    /**
-     * Custom no results template
-     * @type {string}
-     */
-    this.noResultsTemplate = config.noResults ? config.noResults.template : '';
-
     const parentOpts = config._parentOpts || {};
 
     /**
@@ -97,6 +83,41 @@ class VerticalResultsConfig {
 export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new VerticalResultsConfig(config), systemConfig);
+
+    const noResultsConfig = this._config.noResults ||
+      this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG);
+    /**
+     * A parsed version of the noResults config provided to the component.
+     * Applies sensible defaults if certain values are not set.
+     * @type {Object}
+     * @private
+     */
+    this._noResultsConfig = Object.assign(
+      { displayAllResults: false, template: '' }, noResultsConfig);
+
+    /**
+     * Boolean indicating if legacy no results display should be used.
+     * @type {boolean}
+     * @private
+     */
+    this._useLegacyNoResults = this._config.isUniversal || !noResultsConfig;
+
+    /**
+     * _displayAllResults controls if all results for the vertical will display
+     * when there are no results for a query.
+     * @type {boolean}
+     * @private
+     */
+    this._displayAllResults = this._noResultsConfig.displayAllResults;
+
+    /**
+     * Specifies a custom no results template.
+     *
+     * @type {string}
+     * @private
+     */
+    this._noResultsTemplate = this._noResultsConfig.template;
+
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
     this._verticalsConfig = this.core.globalStorage
       .getState(StorageKeys.VERTICAL_PAGES_CONFIG).get() || [];
@@ -105,7 +126,6 @@ export default class VerticalResultsComponent extends Component {
      */
     this.results = [];
     this.numColumns = this._config.maxNumberOfColumns;
-    this.core.globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, this._config.noResults || {});
   }
 
   mount () {
@@ -143,7 +163,7 @@ export default class VerticalResultsComponent extends Component {
     this.appliedQueryFilters = data.appliedQueryFilters;
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
-      this._config._displayAllResults ||
+      this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
     const showResultsHeader = this._config.resultsHeaderOpts.showResultCount ||
       this._config.resultsHeaderOpts.showAppliedFilters;
@@ -163,7 +183,7 @@ export default class VerticalResultsComponent extends Component {
       placeholders: new Array(this._config.maxNumberOfColumns + 1),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
       showResultsHeader: showResultsHeader,
-      useLegacyNoResults: this._config.isUniversal || !this._config.noResults
+      useLegacyNoResults: this._useLegacyNoResults
     }), val);
   }
 
@@ -192,7 +212,8 @@ export default class VerticalResultsComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === MapComponent.type) {
-      const newOpts = Object.assign({}, this._config.mapConfig, opts);
+      const newOpts = Object.assign(
+        {}, this._config.mapConfig, { noResults: this._noResultsConfig }, opts);
       return super.addChild({ map: data }, type, newOpts);
     } else if (type === CardComponent.type) {
       const updatedData = {
@@ -212,10 +233,10 @@ export default class VerticalResultsComponent extends Component {
       const hasResults = this.results && this.results.length > 0;
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
-        template: this._config.noResultsTemplate,
+        template: this._noResultsTemplate,
         universalUrl: this.getUniversalUrl(),
         verticalsConfig: this._verticalsConfig,
-        isShowingResults: this._config._displayAllResults && hasResults,
+        isShowingResults: this._displayAllResults && hasResults,
         ...opts
       };
       return super.addChild(data, type, newOpts);
