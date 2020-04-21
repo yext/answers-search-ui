@@ -154,6 +154,7 @@ class Answers {
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
     globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
+    parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
 
     this._services = parsedConfig.mock
       ? getMockServices()
