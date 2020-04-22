@@ -41,10 +41,6 @@ class VerticalResultsConfig {
      * @type {number}
      */
     this.maxNumberOfColumns = config.maxNumberOfColumns || 1;
-    if (this.maxNumberOfColumns > 4) { // Max
-      console.warn('VerticalResults maxNumberOfColumns is greater than 4, resetting to 1');
-      this.maxNumberOfColumns = 1;
-    }
 
     /**
      * The config to pass to the card
