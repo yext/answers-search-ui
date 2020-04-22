@@ -427,6 +427,11 @@ export default class FilterOptionsComponent extends Component {
     return this._buildFilter();
   }
 
+  floatSelected () {
+    this.config.options = this.config.options.sort((a, b) => b.selected - a.selected);
+    this.setState();
+  }
+
   /**
    * Clear all options
    */
