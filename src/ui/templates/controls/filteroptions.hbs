@@ -8,7 +8,7 @@
             {{#if showNumberApplied}}
               {{#unless expanded}}
                 {{#if selectedCount}}
-                  <span class="yxt-FilterOptions-selectedCount">{{selectedCount}}</span>
+                  <span class="yxt-FilterOptions-selectedCount js-yxt-FilterOptions-selectedCount">{{selectedCount}}</span>
                 {{/if}}
               {{/unless}}
             {{/if}}
@@ -69,7 +69,7 @@
           <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#ifgte @index ../showMoreLimit}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/ifgte}}">
             <input
               type="checkbox"
-              class="js-yext-filter-option yxt-FilterOptions-input"
+              class="js-yext-filter-option yxt-FilterOptions-input yxt-FilterOptions-checkboxInput js-yxt-FilterOptions-checkboxInput"
               id="js-yext-checkbox-{{../name}}-{{@index}}"
               value="{{value}}"
               data-index="{{@index}}"

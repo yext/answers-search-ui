@@ -137,7 +137,7 @@ class FilterOptionsConfig {
     }));
   }
 
-  getSelectedCount () {
+  getInitialSelectedCount () {
     return this.options.reduce(
       (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
       0);
@@ -177,7 +177,7 @@ export default class FilterOptionsComponent extends Component {
       ...config
     });
 
-    const selectedCount = this.config.getSelectedCount();
+    const selectedCount = this.config.getInitialSelectedCount();
 
     /**
      * True if the option list is expanded and visible
@@ -200,7 +200,7 @@ export default class FilterOptionsComponent extends Component {
   }
 
   setState (data) {
-    const selectedCount = this.config.getSelectedCount();
+    const selectedCount = this.config.getInitialSelectedCount();
     super.setState(Object.assign({}, data, {
       name: this.name.toLowerCase(),
       ...this.config,
@@ -212,15 +212,20 @@ export default class FilterOptionsComponent extends Component {
   }
 
   onMount () {
+    const selectedEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-checkboxInput:checked');
+    const selectedCount = selectedEls && selectedEls.length;
+
     DOM.delegate(
       DOM.query(this._container, `.yxt-FilterOptions-options`),
       this.config.optionSelector,
       'click',
       event => {
+        let selectedCountEl = DOM.query(this._container, '.js-yxt-FilterOptions-selectedCount');
+        if (selectedCountEl) {
+          selectedCountEl.innerText = selectedCount;
+        }
         this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
       });
-
-    const selectedCount = this.config.getSelectedCount();
 
     // reset button
     if (this.config.showReset && selectedCount > 0) {
@@ -420,7 +425,10 @@ export default class FilterOptionsComponent extends Component {
 
     this.config.options[index] = Object.assign({}, this.config.options[index], { selected });
     this.updateListeners();
-    this.setState();
+
+    if (this.config.storeOnChange) {
+      this.setState();
+    }
   }
 
   getFilter () {
