@@ -41,6 +41,10 @@ class VerticalResultsConfig {
      * @type {number}
      */
     this.maxNumberOfColumns = config.maxNumberOfColumns || 1;
+    if (this.maxNumberOfColumns > 4) { // Max
+      console.warn('VerticalResults maxNumberOfColumns is greater than 4, resetting to 1');
+      this.maxNumberOfColumns = 1;
+    }
 
     /**
      * The config to pass to the card
@@ -174,6 +178,9 @@ export default class VerticalResultsComponent extends Component {
     const showResultsHeader = this._config.resultsHeaderOpts.showResultCount ||
       this._config.resultsHeaderOpts.showAppliedFilters;
     this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
+    const numPlaceholders = this._getNumPlaceholders(
+      this.results.length,
+      this._config.maxNumberOfColumns);
 
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
@@ -186,11 +193,17 @@ export default class VerticalResultsComponent extends Component {
       currentVerticalLabel: this._currentVerticalLabel,
       resultsPresent: displayResultsIfExist && this.results.length !== 0,
       showNoResults: this.resultsContext === ResultsContext.NO_RESULTS,
-      placeholders: new Array(this._config.maxNumberOfColumns + 1),
+      placeholders: new Array(numPlaceholders),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
       showResultsHeader: showResultsHeader,
       useLegacyNoResults: this._useLegacyNoResults
     }), val);
+  }
+
+  _getNumPlaceholders(numResults, maxNumberOfColumns) {
+    return maxNumberOfColumns > 1
+      ? (maxNumberOfColumns - (numResults % maxNumberOfColumns)) + 1
+      : 0;
   }
 
   /**
