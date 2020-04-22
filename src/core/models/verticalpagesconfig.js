@@ -41,6 +41,12 @@ export class VerticalPageConfig {
     this.isActive = config.isActive || false;
 
     /**
+     * URL of an icon
+     * @type {string}
+     */
+    this.iconUrl = config.iconUrl;
+
+    /**
      * name of an icon from the default icon set
      * @type {string}
      */
