@@ -151,12 +151,7 @@
   }
 
   &-placeholder {
-    visibility: hidden;
-    height: 0;
-
-    * {
-      display: none;
-    }
+    display: none;
   }
 
   &.yxt-Accordion
