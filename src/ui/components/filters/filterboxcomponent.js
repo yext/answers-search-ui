@@ -207,10 +207,10 @@ export default class FilterBoxComponent extends Component {
             this.onFilterChange(i, filter);
           }
         }));
-      component.mount();
       if (this.config.isDynamic && typeof component.floatSelected === 'function') {
         component.floatSelected();
       }
+      component.mount();
       this._filterComponents.push(component);
       this._filters[i] = component.getFilter();
       this._saveFiltersToStorage();
