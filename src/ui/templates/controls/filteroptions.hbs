@@ -35,15 +35,19 @@
   </legend>
 
   <div class="yxt-FilterOptions-container js-yxt-FilterOptions-container{{#unless expanded}} yxt-FilterOptions--collapsed{{/unless}}">
-    {{#if showReset}}
-      {{#if showExpand}}
-        <button class="yxt-FilterOptions-reset">{{resetLabel}}</button>
+    <div class="yxt-FilterOptions-controls">
+      {{#if showReset}}
+        {{#if showExpand}}
+          <span class="yxt-FilterOptions-buttonWrapper">
+            <button class="yxt-FilterOptions-reset">{{resetLabel}}</button>
+          </span>
+        {{/if}}
       {{/if}}
-    {{/if}}
 
-    {{#if searchable}}
-      <input type="text" class="js-yxt-FilterOptions-filter" placeholder="{{placeholderText}}">
-    {{/if}}
+      {{#if searchable}}
+        <input type="text" class="yxt-FilterOptions-filter js-yxt-FilterOptions-filter" placeholder="{{placeholderText}}">
+      {{/if}}
+    </div>
     <div class='yxt-FilterOptions-options'>
       {{#each options}}
         {{#if ../isSingleOption}}
@@ -69,7 +73,7 @@
           <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#ifgte @index ../showMoreLimit}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/ifgte}}">
             <input
               type="checkbox"
-              class="js-yext-filter-option yxt-FilterOptions-input"
+              class="js-yext-filter-option yxt-FilterOptions-input yxt-FilterOptions-checkboxInput"
               id="js-yext-checkbox-{{../name}}-{{@index}}"
               value="{{value}}"
               data-index="{{@index}}"
