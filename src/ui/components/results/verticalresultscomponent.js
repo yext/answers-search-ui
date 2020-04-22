@@ -200,7 +200,11 @@ export default class VerticalResultsComponent extends Component {
     }), val);
   }
 
-  _getNumPlaceholders(numResults, maxNumberOfColumns) {
+  /**
+   * helper to return the number of placeholder cards to ensure correct column alignment
+   * @returns {string}
+   */
+  _getNumPlaceholders (numResults, maxNumberOfColumns) {
     return maxNumberOfColumns > 1
       ? (maxNumberOfColumns - (numResults % maxNumberOfColumns)) + 1
       : 0;
