@@ -42,7 +42,7 @@ class CTAConfig {
      * Analytics event that should fire:
      * @type {string}
      */
-    this.analyticsEventType = config.analytics || 'CTA_CLICK';
+    this.analyticsEventType = config.analytics || config.eventType || 'CTA_CLICK';
 
     /**
      * The target attribute for the CTA link.
