@@ -88,6 +88,7 @@ export default class CardComponent extends Component {
       verticalKey: this._config.verticalKey,
       _index: this._config._index,
       isUniversal: this._config.isUniversal,
+      modifier: this._config.modifier,
       ...opts
     };
     return super.addChild(updatedData, type, newOpts);
