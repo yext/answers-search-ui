@@ -3,11 +3,20 @@
 
   display: flex;
   flex-direction: column;
-  min-width: 210px;
-
-  border: $border-default;
-  margin-right: $cards-margin;
   margin-bottom: $cards-margin;
+
+  &,
+  &-placeholder {
+    min-width: 210px;
+    border: $border-default;
+    margin-right: $cards-margin;
+  }
+
+  &-placeholder {
+    visibility: hidden;
+    border-top: none;
+    border-bottom: none;
+  }
 
   &-child {
     flex-grow: 1;
@@ -37,7 +46,9 @@
 }
 
 .yxt-Results-items {
-  > .yxt-Card {
+  > .yxt-Card,
+  > .yxt-Card-placeholder
+  {
     flex-basis: 100%;
     flex-grow: 1;
   }
@@ -49,15 +60,18 @@
 
   @media (min-width: $breakpoint-mobile-max) {
 
-    &--2 > .yxt-Card {
+    &--2 > .yxt-Card
+    &--2 > .yxt-Card-placeholder {
       flex-basis: 45%;
     }
 
-    &--3 > .yxt-Card {
+    &--3 > .yxt-Card,
+    &--3 > .yxt-Card-placeholder {
       flex-basis: 30%;
     }
 
-    &--4 > .yxt-Card {
+    &--4 > .yxt-Card,
+    &--4 > .yxt-Card-placeholder {
       flex-basis: 22%;
     }
   }
