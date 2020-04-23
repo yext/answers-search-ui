@@ -3,11 +3,11 @@
 
   display: flex;
   flex-direction: column;
-  min-width: 210px;
   margin-bottom: $cards-margin;
 
   &,
   &-placeholder {
+    min-width: 210px;
     border: $border-default;
     margin-right: $cards-margin;
   }
