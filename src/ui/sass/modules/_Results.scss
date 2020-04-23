@@ -152,15 +152,6 @@
     flex-flow: row wrap;
   }
 
-  &-placeholder {
-    visibility: hidden;
-    height: 0;
-
-    * {
-      display: none;
-    }
-  }
-
   &.yxt-Accordion
   {
     border: $border-legacy;
