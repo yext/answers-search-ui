@@ -20,7 +20,7 @@
 
   &-child {
     flex-grow: 1;
-    height: auto;
+    min-height: 1px;
   }
 
   &--universal {
