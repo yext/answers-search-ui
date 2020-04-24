@@ -53,7 +53,7 @@ class StandardCardConfig {
      * Url when you click the title
      * @type {string}
      */
-    this.url = this.url || result.link || rawResult.website;
+    this.url = this.url === null ? '' : (this.url || result.link || rawResult.website);
 
     /**
      * If showMoreLimit is set, the text that displays beneath it
