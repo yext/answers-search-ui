@@ -38,6 +38,18 @@ export default class AlternativeVertical {
     this.iconName = config.iconName;
 
     /**
+     * URL of an icon
+     * @type {string}
+     */
+    this.iconUrl = config.iconUrl;
+
+    /**
+     * Whether the vertical has an icon
+     * @type {string}
+     */
+    this.hasIcon = this.iconName || this.iconUrl;
+
+    /**
      * The number of results to display next to each alternative
      * vertical
      * @type {number}
