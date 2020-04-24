@@ -34,7 +34,7 @@
     "gulp-sass": "^4.0.2",
     "gulp-uglify-es": "^1.0.4",
     "gulp-umd": "^2.0.0",
-    "gulp-wrap": "^0.14.0",
+    "gulp-wrap": "^0.15.0",
     "jest": "^24.8.0",
     "jsdoc": "^3.6.3",
     "node-sass": "^4.12.0",
