@@ -52,7 +52,7 @@ class LegacyCardConfig {
      * Url when you click the title
      * @type {string}
      */
-    this.url = this.url === null ? '' : this.url || result.link || rawResult.website;
+    this.url = this.url === null ? '' : (this.url || result.link || rawResult.website);
 
     /**
      * The target attribute for the title link.
