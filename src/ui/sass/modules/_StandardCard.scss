@@ -78,6 +78,7 @@
   &-img {
     height: $standard-card-base-spacing * 10;
     min-width: $standard-card-base-spacing * 10;
+    max-width: $standard-card-base-spacing * 15;
     flex-basis: 0;
     flex-grow: 1;
     background-size: cover;
@@ -154,7 +155,7 @@
     );
 
     &--noImage {
-      flex-basis: $standard-card-base-spacing * 11;
+      flex-basis: $standard-card-base-spacing * 16;
     }
 
     @media (max-width: $breakpoint-mobile-max) 
