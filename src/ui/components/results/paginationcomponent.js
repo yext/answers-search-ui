@@ -242,10 +242,10 @@ export default class PaginationComponent extends Component {
 
     return {
       ellipses: {
-        mobileBack: mobileBackLimit > 0,
-        mobileFront: mobileFrontLimit < maxPage,
-        desktopBack: desktopBackLimit > 0,
-        desktopFront: desktopFrontLimit < maxPage
+        mobileBack: this._pinFirstAndLastPage && mobileBackLimit > 0,
+        mobileFront: this._pinFirstAndLastPage && mobileFrontLimit < maxPage,
+        desktopBack: this._pinFirstAndLastPage && desktopBackLimit > 0,
+        desktopFront: this._pinFirstAndLastPage && desktopFrontLimit < maxPage
       },
       pageNumbers
     };

@@ -1,11 +1,12 @@
 /** @define Pagination */
 
-$pagination-text-color: var(--yxt-color-text-primary) !default;
-$pagination-text-color-hover: var(--yxt-color-text-secondary) !default;
+$pagination-text-color: var(--yxt-color-text-neutral) !default;
+$pagination-text-color-hover: var(--yxt-color-brand-white) !default;
 $pagination-text-font-size: var(--yxt-font-size-md-lg) !default;
-$pagination-text-line-height: var(--yxt-line-height-lg) !default;
+$pagination-text-line-height: var(--yxt-line-height-md) !default;
 $pagination-text-font-weight: var(--yxt-font-weight-normal) !default;
 $pagination-color-active-page: var(--yxt-color-borders) !default;
+$pagination-color-hover: var(--yxt-color-text-secondary) !default;
 
 :root {
   --yxt-pagination-text-color: #{$pagination-text-color};
@@ -29,43 +30,36 @@ $pagination-color-active-page: var(--yxt-color-borders) !default;
     $color: var(--yxt-pagination-text-color)
   );
 
-  &-button
-  {
-    display: flex;
-    background: none;
-    border: none;
-    padding: 0 4px;
-
-    &:not(:disabled)
-    {
-      cursor: pointer;
-
-      &:hover
-      {
-        color: var(--yxt-pagination-text-color-hover);
-      }
-    }
-  }
-
-  &-button:disabled {
+  &-hidden {
     visibility: hidden;
   }
 
   &-page, &-link {
-    padding: 0;
-    margin: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 24px;
+    min-width: 24px;
+    margin-right: 2px;
+    margin-left: 2px;
+    border-radius: 2px;
+  }
+
+  &-icon {
+    font-size: var(--yxt-font-size-sm);
+    span {
+      display: flex;
+    }
   }
 
   #active-page {
-    padding: 0 5px;
-    margin: 0 15px;
-    border-radius: 2px;
     background-color: var(--yxt-pagination-color-active-page);
   }
 
   &-link:hover {
     cursor: pointer;
     color: var(--yxt-pagination-text-color-hover);
+    background-color: var(--yxt-pagination-color-hover);
   }
 
   &-chevron--left svg, &-doubleChevron--left svg
