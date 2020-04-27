@@ -50,9 +50,12 @@ Include the Answers CSS
 <link rel="stylesheet" type="text/css" href="https://assets.sitescdn.net/answers/answers.css">
 ```
 
-Add the Javascript library
+Add the Javascript library and placeholder elements for [Answers components](#component-usage).
 ```html
 <script src="https://assets.sitescdn.net/answers/answers.min.js" onload="ANSWERS.domReady(initAnswers)" defer async></script>
+
+<div id="SearchBarContainer"></div>
+<div id="UniversalResultsContainer"></div>
 ```
 
 Add an initialization script with an apiKey, experienceKey and onReady function. In the example below, we've initialized two
@@ -63,9 +66,13 @@ function initAnswers() {
     apiKey: '<API_KEY_HERE>', // See [1]
     experienceKey: '<EXPERIENCE_KEY_HERE>',
     onReady: function() {
-      // TODO Add search bar
+      ANSWERS.addComponent('SearchBar', {
+        container: '#SearchBarContainer',
+      });
 
-      // TODO Add universal results?
+      ANSWERS.addComponent('UniversalResults', {
+        container: '#UniversalResultsContainer',
+      });
     }
   })
 }
@@ -243,22 +250,11 @@ The Answers Component Library exposes an easy to use interface for adding and cu
 
 ## What is a Component?
 
-At a high level, components are the building blocks of an Answers page. Each component is an independent, reusable piece of code. Each component fills an HTML element container that the implementer provides on the page. In the library, a component consists of logic
-in JS, and then HTML in the form of a handlebars template. Users can override either the JS or the handlebars template
--- overwriting any built-in logic -- or can use config options to adjust the component without removing all of the built-in behavior.
+At a high level, components are the individual pieces of an Answers page. The SDK comes with many types of components. Each component is an independent, reusable piece of code.
 
-Some things to note
-- Some components can only be included once on single page
-- Some components are only compatible with Universal pages, some are only compatible with Vertical pages
-- Components do not know about each other. They do not interact with each other, but rather with the global config and API response only.
-- Components are updated from an API response, the Answers front end config (ANSWERS.init), and their individual config. Many
-components update and re-render with each new API response
+A component fills an HTML element container that the implementer provides on the page. In the library, a component consists of logic in JS, and then markup in the form of a handlebars template. Components are updated from an API response, the Answers front end config (ANSWERS.init), and their individual config. Many components update and re-render with each new API response. Components do not know about each other. They do not interact with each other, but rather with the global config and API response only.
 
-The sdk comes with many types of components. We will provide a brief description below of (1) what each component does,
-(2) how to initialize (and outline what each config option is for, and (3) any limitations of the component.
-
-Each type of Component has its own custom configurations. Additionally, all components share the
-base configuration options defined above.
+Each type of Component has its own custom configurations. Additionally, all components share the base configuration options defined above. We will provide a brief description below of what each component does, along with describing how it can be configured.
 
 
 ## Base Component Configuration
@@ -331,7 +327,8 @@ types their query, as well as the autocomplete behavior.
 <div class="search-query-container"></div>
 ```
 
-Universal Search and Vertical Search provide a different way of auto complete. // so what about them is diff?? also why here?
+Universal Search and Vertical Search provide a different way of auto complete. If the `verticalKey` config
+option is omitted, the SearchBar will perform Universal searches.
 
 ```js
 ANSWERS.addComponent('SearchBar', {
@@ -441,7 +438,8 @@ ANSWERS.addComponent('UniversalResults', {
         apiKey: '<<< enter your api key here >>>',
         // Optional, configuration for the map's behavior when a query returns no results
         noResults: {
-          displayAllResults: true // TODO
+          // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
+          displayAllResults: true
         },
         // Optional, whether the map should display itself when it recieves no result data
         showEmptyMap: false,
@@ -494,8 +492,7 @@ ANSWERS.addComponent('VerticalResults', {
   noResults: {
     // Optional, used to specify a custom template for the no results card, defaults to a built-in template.
     template: '<div> <em>No results found!</em> Try again? </div>',
-    // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which
-    // case only the no results card will be shown.
+    // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
     displayAllResults: false
   }
 })
@@ -735,7 +732,8 @@ const dataMappings = item => {
 ## Legacy Card
 
 The Legacy Card is very similar to the Standard Card, but with the legacy DOM structure and class names
-from before v0.13.0. New users should not use the Legacy Card; instead, use the Standard Card.
+from before v0.13.0. New users should not use the Legacy Card; instead, use the Standard Card. Features
+added after v0.13.0 may not work with the Legacy Card.
 
 The data mappings for a legacy card has these attributes
 
@@ -1360,7 +1358,6 @@ ANSWERS.addComponent('Map', {
 };
 
 # Customizing Components
-// TODO list config options for this
 
 ## Using a Custom Renderer
 
@@ -1395,7 +1392,7 @@ Below is an example usage.
 ANSWERS.init({
   apiKey: '<API_KEY_HERE>',
   experienceKey: '<EXPERIENCE_KEY_HERE>',
-  fieldFormatters: { // what is this a top level thing??
+  fieldFormatters: {
     'name': (formatterObject) => formatterObject.entityFieldValue.toUpperCase(),
     'description' : (formatterObject) => formatterObject.highlightedEntityFieldValue
   }
@@ -1428,7 +1425,7 @@ ANSWERS.addComponent('SearchBar', {
 ```
 
 ## Using a Custom Template for a Component
-All component templates are written using handlebars. // TODO what does this mean, when would you use
+All component templates are written using [Handlebars templates](https://handlebarsjs.com/).
 
 It's easy to override these templates with your own templates.
 Keep in mind, that you must provide valid handlebars syntax here.
@@ -1444,8 +1441,6 @@ ANSWERS.addComponent('SearchBar', {
 ```
 
 ## Creating Custom Components
-// TODO I think we should also add a part about adding a template in here
-
 You can create custom Answers components with the same power of the builtin components. First, create
 a subtype of ANSWERS.Component and register it.
 
@@ -1454,12 +1449,11 @@ For ES6:
 class MyCustomComponent extends ANSWERS.Component {
   constructor (config) {
     super(config);
-    // Set template TODO
     this.myProperty = config.myProperty;
   }
 
   static defaultTemplateName () {
-    return 'default'; // wh does this do with no template lol TODO
+    return 'default';
   }
 
   static areDuplicateNamesAllowed () {
@@ -1495,6 +1489,7 @@ Now you can use your custom component like any built-in component:
 ```js
 ANSWERS.addComponent('MyCustomComponent', {
   container: '.my-component-container',
+  template: `<div>{{_config.myProperty}}</div>`,
   myProperty: 'my property'
 });
 ```
@@ -1514,10 +1509,8 @@ You can learn more about the interface for registering helpers by taking a look 
 
 # Analytics
 
-Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks.
-If you would like to add custom analytics on top of the built-in ones, use the following: (TODO rephrase)
-
-// TODO add note about ensuring there is a businessId in the ANSWERS.init config.
+If a businessId is supplied in the config, Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks.
+If you would like to add custom analytics on top of the built-in ones, use the following:
 
 ## Custom Analytics Using JavaScript
 
