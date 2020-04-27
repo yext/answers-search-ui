@@ -43,8 +43,8 @@ Outline:
 
 # Install and Setup
 
-The Answers Javascript API Library does not need to be installed locally. Instead, it can be called
-with script tags on an HTML page. The instructions below explain how to do this; they will walk you through
+The Answers Javascript API Library does not need to be installed locally. Instead, it can be used
+with script tags on a webpage. The instructions below explain how to do this; they will walk you through
 adding the Answers stylesheet, JS library, and an intialization script to an HTML page.
 After doing this, you can view your page in the browser.
 
@@ -456,13 +456,7 @@ ANSWERS.addComponent('UniversalResults', {
         mapProvider: 'google',
         // Required, API key for the map provider
         apiKey: '<<< enter your api key here >>>',
-        // Optional, configuration for the map's behavior when a query returns no results
-        noResults: {
-          // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
-          displayAllResults: true
-        },
-        // Optional, whether the map should display itself when it recieves no result data
-        showEmptyMap: false,
+        // ... Optional, any other config for the Map Component, find more info in the section "Map Component"
       },
       // Optional, override the render function for each result in this vertical
       renderItem: function(data) {},
@@ -1370,6 +1364,11 @@ ANSWERS.addComponent('Map', {
   onPinClick: null,
   // Optional, callback to invoke once the Javascript is loaded
   onLoaded: function () {},
+  // Optional, configuration for the map's behavior when a query returns no results
+  noResults: {
+    // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
+    displayAllResults: true
+  },
   // Optional, the custom configuration override to use for the map markers, function
   pin: function () {
     return {
