@@ -117,8 +117,7 @@ describe('rendering the page numbers', () => {
     });
     const wrapper = mount(component);
     // We expect 4 un-hidden links, combined with the active page for a total of 5, as configured.
-    expect(wrapper.find('.yxt-Pagination-link')).toHaveLength(6);
-    expect(wrapper.find('.yxt-Pagination-link.desktop-hidden')).toHaveLength(2);
+    expect(wrapper.find('.js-yxt-Pagination-link').not('.desktop-hidden')).toHaveLength(4);
   });
 
   it('does not duplicate the first/last page button when on that page', () => {
@@ -128,7 +127,8 @@ describe('rendering the page numbers', () => {
       pinFirstAndLastPage: true
     });
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-Pagination-link')).toHaveLength(6);
+    // The last-page button counts as a link as well.
+    expect(wrapper.find('.js-yxt-Pagination-link').not('.desktop-hidden')).toHaveLength(3);
     expect(wrapper.find('[data-number="1"]')).toHaveLength(1);
   });
 
@@ -141,7 +141,7 @@ describe('rendering the page numbers', () => {
       onPaginate: paginate
     });
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-Pagination-link')).toHaveLength(6);
+    expect(wrapper.find('.js-yxt-Pagination-link')).toHaveLength(6);
     const next = wrapper.find('.js-yxt-Pagination-next');
     expect(next).toHaveLength(1);
     next.first().simulate('click');
