@@ -6,6 +6,7 @@ Outline:
 2. [ANSWERS.init Configuration Options](#answersinit-configuration-options)
    - [Vertical Pages Configuration](#vertical-pages-configuration)
    - [Search Configuration](#search-configuration)
+   - [Vertical No Results Configuration](#vertical-no-results-configuration)
    - [onVerticalSearch Configuration](#onverticalsearch-configuration)
    - [onUniversalSearch Configuration](#onuniversalsearch-configuration)
 3. [Component Usage](#component-usage)
@@ -42,7 +43,9 @@ Outline:
 
 # Install and Setup
 
-In an .html page, add the Answers stylesheet, JS library and then an intialization script using the following instructions.
+The Answers Javascript API Library does not need to be installed locally. Instead, it can be called
+with script tags on an HTML page. The instructions below explain how to do this; they will walk you through
+adding the Answers stylesheet, JS library, and an intialization script to an HTML page.
 After doing this, you can view your page in the browser.
 
 Include the Answers CSS
@@ -104,6 +107,8 @@ function initAnswers() {
     verticalPages: [],
     // Optional, search specific settings, see Search Configuration below
     search: {},
+    // Optional, vertical no results settings, see Vertical No Results below
+    search: {},
     // Optional, the locale will affect how queries are interpreted and the results returned. Defaults to 'en'.
     locale: 'en',
     // Optional, the Answers Experience version to use for api requests
@@ -158,16 +163,30 @@ Below is a list of configuration options related to search, used in the [base co
       verticalKey: 'verticalKey',
       // Optional, the number of results to display per page, defaults to 20
       limit: '20',
-      // Optional, **Vertical Pages only**, a default search to use on page load when the user hasn't provided a query
+      // Optional, Vertical Pages only, a default search to use on page load when the user hasn't provided a query
       defaultInitialSearch: 'What is Yext Answers?',
+    },
+```
+
+## Vertical No Results Configuration
+Below is a list of configuration options related to no results on Vertical Pages, used in the [base configuration](#configuration-options) above.
+
+```js
+    {
+      // Optional, whether to display all results for the Vertical when a query has no results, defaults to false
+      displayAllResults: false,
+      // Optional, a custom template for the no results card
+      template: '',
     },
 ```
 
 ## onVerticalSearch Configuration
 
-The onVerticalSearch Configuration is a function that allows you to send an analytics event each time a search is run
-on a Vertical page. This function should take in one parameter, `searchParams`, which contains information about the
-search, and return the desired analytics event.
+The onVerticalSearch Configuration is a function, used in the [base configuration](#configuration-options) above.
+
+It allows you to send an analytics event each time a search is run on a Vertical page. This function should take in one parameter, `searchParams`, which contains information about the search, and return the desired analytics event.
+
+Like all Answers Javascript API Library analytics, this will only work if there is a businessId in the ANSWERS.init.
 
 The search information exposed in `searchParams` is shown below.
 
@@ -212,9 +231,13 @@ function (searchParams) => {
 
 ## onUniversalSearch Configuration
 
-The onUniversalSearch Configuration is a function that allows you to send an analytics event each time a search is run
+The onUniversalSearch Configuration is a function, used in the [base configuration](#configuration-options) above.
+
+It allows you to send an analytics event each time a search is run
 on a Universal page. This function should take in one parameter, `searchParams`, which contains information about the
 search, and return the desired analytics event.
+
+Like all Answers Javascript API Library analytics, this will only work if there is a businessId in the ANSWERS.init.
 
 The search information exposed in `searchParams` is shown below.
 ```js
@@ -250,9 +273,7 @@ The Answers Component Library exposes an easy to use interface for adding and cu
 
 ## What is a Component?
 
-At a high level, components are the individual pieces of an Answers page. The SDK comes with many types of components. Each component is an independent, reusable piece of code.
-
-A component fills an HTML element container that the implementer provides on the page. In the library, a component consists of logic in JS, and then markup in the form of a handlebars template. Components are updated from an API response, the Answers front end config (ANSWERS.init), and their individual config. Many components update and re-render with each new API response. Components do not know about each other. They do not interact with each other, but rather with the global config and API response only.
+At a high level, components are the individual pieces of an Answers page. The Answers Javascript API Library comes with many types of components. Each component is an independent, reusable piece of code. A component fills an HTML element container that the implementer provides on the page. Components are updated from their config, the config from the ANSWERS.init, and potentially an API response.
 
 Each type of Component has its own custom configurations. Additionally, all components share the base configuration options defined above. We will provide a brief description below of what each component does, along with describing how it can be configured.
 
@@ -299,8 +320,7 @@ This is an example of the `SearchBar`. See [Types of Built-in Components](#types
 
 ```js
 ANSWERS.addComponent('SearchBar', {
-  container: '.search-container',
-  // -- other options --
+  container: '.search-container'
 })
 ```
 
@@ -327,8 +347,8 @@ types their query, as well as the autocomplete behavior.
 <div class="search-query-container"></div>
 ```
 
-Universal Search and Vertical Search provide a different way of auto complete. If the `verticalKey` config
-option is omitted, the SearchBar will perform Universal searches.
+If the `verticalKey` config option is omitted, the SearchBar will perform Universal searches. Universal
+searches return results across multiple Verticals; Vertical searches search within one Vertical. Additionally, Universal search and Vertical search provide a different way of auto complete.
 
 ```js
 ANSWERS.addComponent('SearchBar', {
@@ -527,7 +547,7 @@ Note: A CTA without both a label and icon will not be rendered.
 const callsToAction = [{
   // Label below the CTA icon, default null
   label: 'cta label',
-  // Icon name for the CTA that is one of the SDK icons, defaults to undefined (no icon). If your icon
+  // Icon name for the CTA that is one of the built-in icons, defaults to undefined (no icon). If your icon
   // is not recognized it will default to 'star'.
   icon: 'star',
   // URL to a custom icon for the cta. This takes priority over icon if both are present, default is
@@ -677,7 +697,7 @@ ANSWERS.addComponent('VerticalResults', {
 
 ## Standard Card
 
-The data mappings for a standard card has these attributes
+The data mappings for a Standard Card has these attributes
 
 ```js
 const dataMappings = item => {
@@ -712,7 +732,7 @@ const dataMappings = item => {
 
 ## Accordion Card
 
-The data mappings for an accordion card has these attributes
+The data mappings for an Accordion Card has these attributes
 
 ```js
 const dataMappings = item => {
@@ -761,7 +781,9 @@ const dataMappings = item => {
 
 ## Pagination Component
 
-The Pagination component allows users to page through vertical search results. Pagination requires verticalKey to be provided in the [base configuration](#configuration-options).
+This component is only for Vertical pages.
+
+The Pagination component allows users to page through vertical search results.
 
 ```html
 <div class="pagination-container"></div>
@@ -771,16 +793,20 @@ The Pagination component allows users to page through vertical search results. P
 ANSWERS.addComponent('Pagination', {
   // Required, the selector for the container element where the component will be injected
   container: '.pagination-component',
-  // Display a double arrow allowing users to jump to the first page of results
+  // Required*, the vertical for pagination, *if omitted, will fall back to the search base config
+  verticalKey: 'verticalKey',
+  // Optional, display a double arrow allowing users to jump to the first page of results
   showFirst: true,
-  // Display a double arrow allowing users to jump to the last page of results
+  // Optional, display a double arrow allowing users to jump to the last page of results
   showLast: true,
-  // Label for a page of results
+  // Optional, label for a page of results
   pageLabel: 'Page'
 });
 ```
 
 ## FilterBox Component
+
+This component is only for Vertical pages.
 
 The FilterBox component shows a list of filters to apply to a search.
 
@@ -792,7 +818,7 @@ The FilterBox component shows a list of filters to apply to a search.
 ANSWERS.addComponent('FilterBox', {
   // Required, the selector for the container element where the component will be injected
   container: '.filters-container',
-  // List of filter component configurations
+  // Required, list of filter component configurations
   filters: [
     {
       type: 'FilterOptions',
@@ -818,33 +844,33 @@ ANSWERS.addComponent('FilterBox', {
   ],
   // Required, the vertical key for the search, default null
   verticalKey: 'verticalKey',
-  // Title to display above the filter
+  // Optional, title to display above the filter
   title: 'Filters',
-  // Show number of results for each filter
+  // Optional, show number of results for each filter
   showCount: true,
-  // Execute a new search whenever a filter selection changes
+  // Optional, execute a new search whenever a filter selection changes
   searchOnChange: false,
-  // Show a reset button per filter group
+  // Optional, show a reset button per filter group
   resetFilter: false,
-  // The label to use for the reset button above
+  // Optional, the label to use for the reset button above
   resetFilterLabel: 'reset',
-  // Show a reset-all button for the filter control
+  // Optional, show a reset-all button for the filter control
   resetFilters: true,
-  // The label to use for the reset-all button above
+  // Optional, the label to use for the reset-all button above
   resetFiltersLabel: 'reset-all',
-  // Allow collapsing excess filter options after a limit
+  // Optional, allow collapsing excess filter options after a limit
   showMore: true,
-  // The max number of filter to show before collapsing extras
+  // Optional, the max number of filter to show before collapsing extras
   showMoreLimit: 5,
-  // The label to show for displaying more filter
+  // Optional, the label to show for displaying more filter
   showMoreLabel: 'show more',
-  // The label to show for displaying less filter
+  // Optional, the label to show for displaying less filter
   showLessLabel: 'show less',
-  // Allow expanding and collapsing entire groups of filters
+  // Optional, allow expanding and collapsing entire groups of filters
   expand: true,
-  // Show the number of applied filter when a group is collapsed
+  // Optional, show the number of applied filter when a group is collapsed
   showNumberApplied: true,
-  // The label to show on the apply button
+  // Optional, the label to show on the apply button
   applyLabel: 'apply',
   // Optional, whether or not this filterbox contains dynamic filters, default false
   isDynamic: true
@@ -853,7 +879,9 @@ ANSWERS.addComponent('FilterBox', {
 
 ## Facets Component
 
-The Facets component displays filters relevant to the current search, configured on the server, automatically. Facets are only available for vertical searches.
+This component is only for Vertical pages.
+
+The Facets component displays filters relevant to the current search, configured on the server, automatically.
 
 ```html
 <div class="facets-container"></div>
@@ -865,33 +893,33 @@ ANSWERS.addComponent('Facets', {
   container: '.facets-container',
   // Required
   verticalKey: '<VERTICAL_KEY>',
-  // Title to display above the facets
+  // Optional, title to display above the facets
   title: 'Filters',
-  // Show number of results for each facet
+  // Optional, show number of results for each facet
   showCount: true,
-  // Execute a new search whenever a facet selection changes
+  // Optional, execute a new search whenever a facet selection changes
   searchOnChange: false,
-  // Show a reset button per facet group
+  // Optional, show a reset button per facet group
   resetFacet: false,
-  // The label to use for the reset button above
+  // Optional, the label to use for the reset button above
   resetFacetLabel: 'reset',
-  // Show a reset-all button for the facets control
+  // Optional, show a reset-all button for the facets control
   resetFacets: true,
-  // The label to use for the reset-all button above
+  // Optional, the label to use for the reset-all button above
   resetFacetsLabel: 'reset-all',
-  // Allow collapsing excess facet options after a limit
+  // Optional, allow collapsing excess facet options after a limit
   showMore: true,
-  // The max number of facets to show before collapsing extras
+  // Optional, the max number of facets to show before collapsing extras
   showMoreLimit: 5,
-  // The label to show for displaying more facets
+  // Optional, the label to show for displaying more facets
   showMoreLabel: 'show more',
-  // The label to show for displaying less facets
+  // Optional, the label to show for displaying less facets
   showLessLabel: 'show less',
-  // Allow expanding and collapsing entire groups of facets
+  // Optional, allow expanding and collapsing entire groups of facets
   expand: true,
-  // Show the number of applied facets when a group is collapsed
+  // Optional, show the number of applied facets when a group is collapsed
   showNumberApplied: true,
-  // The label to show on the apply button
+  // Optional, the label to show on the apply button
   applyLabel: 'apply'
 });
 ```
@@ -910,9 +938,9 @@ ANSWERS.addComponent('FilterSearch', {
   container: '.filter-search-container',
   // Required
   verticalKey: '<VERTICAL_KEY>',
-  // optional, no default
+  // Optional, no default
   placeholderText: 'Start typing...',
-  // If true, the selected filter is saved and used for the next search,
+  // Optional, if true, the selected filter is saved and used for the next search,
   // but does not trigger a search itself. Defaults to false.
   storeOnChange: true,
   // Optional, defaults to native form node within container
@@ -1160,45 +1188,44 @@ when a search query is run.
 ```
 
 ```js
-// Unless noted, fields are optional and show default values
 ANSWERS.addComponent('QASubmission', {
   // Required, the selector for the container element where the component will be injected
   container: '.question-submission-container',
-  // Defaults to native form node within container
-  formSelector: '.js-form',
-  // Label for name input
-  nameLabel: 'Name',
-  // Label for email input
-  emailLabel: 'Email',
-  // Label for question input
-  questionLabel: 'Question',
-  // Title displayed for the form
-  sectionTitle: 'Ask a question',
-  // Teaser displayed for the form, next to the title
-  teaser: 'Can\'t find what you’re looking for? Ask a question below.',
-  // Description for the form
-  description: 'Enter your question and contact information, and we\'ll get back to you with a response shortly.'
-  // Text before the privacy policy link
-  privacyPolicyText: 'By submitting my email address, I consent to being contacted via email at the address provided.',
-  // Label for the privacy policy url
-  privacyPolicyUrlLabel: 'Learn more here.',
-  // Required. Defaults to ''
-  privacyPolicyUrl: 'https://mybiz.com/policy',
-  // Error message displayed when the privacy policy is not selected
-  privacyPolicyErrorText: '* You must agree to the privacy policy to submit feedback.',
-  // Error message displayed when an invalid email is not submitted
-  emailFormatErrorText: '* Please enter a valid email address.'
-  // Placeholder displayed in all required fields
-  requiredInputPlaceholder: '(required)',
-  // Confirmation displayed once a question is submitted
-  questionSubmissionConfirmationText: 'Thank you for your question!',
-  // Label displayed on the button to submit a question
-  buttonLabel: 'Submit',
   // Required. Set this to the Entity ID of the organization entity in the Knowledge Graph
   entityId: 123,
-  // Set this to whether or not the form is expanded by default when a user arrives on the  page
+  // Required. Defaults to ''
+  privacyPolicyUrl: 'https://mybiz.com/policy',
+  // Optional, defaults to native form node within container
+  formSelector: '.js-form',
+  // Optional, ;abel for name input
+  nameLabel: 'Name',
+  // Optional, label for email input
+  emailLabel: 'Email',
+  // Optional, label for question input
+  questionLabel: 'Question',
+  // Optional, title displayed for the form
+  sectionTitle: 'Ask a question',
+  // Optional, teaser displayed for the form, next to the title
+  teaser: 'Can\'t find what you’re looking for? Ask a question below.',
+  // Optional, description for the form
+  description: 'Enter your question and contact information, and we\'ll get back to you with a response shortly.'
+  // Optional, text before the privacy policy link
+  privacyPolicyText: 'By submitting my email address, I consent to being contacted via email at the address provided.',
+  // Optional, label for the privacy policy url
+  privacyPolicyUrlLabel: 'Learn more here.',
+  // Optional, error message displayed when the privacy policy is not selected
+  privacyPolicyErrorText: '* You must agree to the privacy policy to submit feedback.',
+  // Optional, error message displayed when an invalid email is not submitted
+  emailFormatErrorText: '* Please enter a valid email address.'
+  // Optional, placeholder displayed in all required fields
+  requiredInputPlaceholder: '(required)',
+  // Optional, confirmation displayed once a question is submitted
+  questionSubmissionConfirmationText: 'Thank you for your question!',
+  // Optional, label displayed on the button to submit a question
+  buttonLabel: 'Submit',
+  // Optional, set this to whether or not the form is expanded by default when a user arrives on the  page
   expanded: true,
-  // Error message displayed when there is an issue with the QA Submission request
+  // Optional, error message displayed when there is an issue with the QA Submission request
   networkErrorText: 'We\'re sorry, an error occurred.'
 })
 ```
