@@ -40,6 +40,7 @@ Outline:
    - [Custom Analytics Using Data Attributes](#custom-analytics-using-data-attributes)
    - [Conversion Tracking](#conversion-tracking)
    - [On-Search Analytics](#on-search-analytics)
+8. [Rich Text Formatting](#rich-text-formatting) 
 
 # Install and Setup
 
@@ -1580,3 +1581,13 @@ You must also add the following to your HTML:
 
 You can find instructions for configuring on search analytics above in these sections: [onVerticalSearch Configuration](#onverticalsearch-configuration), [onUniversalSearch Configuration](#onuniversalsearch-configuration).
 
+# Rich Text Formatting
+
+The Answers SDK exposes a `formatRichText` function which translates CommonMark to HTML. This function will
+ensure that a Rich Text Formatted value is shown properly on the page. To use this function, call it like so:
+
+```js
+ANSWERS.formatRichText(rtfFieldValue)
+```
+
+For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute. When using this function, you must ensure that the relevant Handlebars template correctly unescapes the value's resultant HTML.
