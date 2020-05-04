@@ -161,7 +161,7 @@ Below is a list of configuration options related to search, used in the [base co
     {
       // Optional, the vertical key to use for searches
       verticalKey: 'verticalKey',
-      // Optional, the number of results to display per page, defaults to 20
+      // Optional, the number of results to display per page, defaults to 20. Maximum is 50.
       limit: '20',
       // Optional, Vertical Pages only, a default search to use on page load when the user hasn't provided a query
       defaultInitialSearch: 'What is Yext Answers?',
@@ -1382,6 +1382,7 @@ ANSWERS.addComponent('Map', {
     };
   },
 };
+```
 
 # Customizing Components
 
