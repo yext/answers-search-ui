@@ -332,7 +332,7 @@ export default class SearchComponent extends Component {
    * Registers the different event handlers that can issue a search. Note that
    * different handlers are used depending on whether or not a form is used as
    * context.
-   * 
+   *
    * @param {string} formSelector CSS selector to bind our form submit handling to
    */
   initSearch (formSelector) {
@@ -347,7 +347,7 @@ export default class SearchComponent extends Component {
           'Could not initialize SearchBar; Can not find {HTMLElement} `',
           this._formEl, '`.');
       }
-  
+
       DOM.on(form, 'submit', (e) => {
         e.preventDefault();
         // TODO(oshi) we should not use the same css selector (this._inputEl)
@@ -355,26 +355,26 @@ export default class SearchComponent extends Component {
         // This is incredibly confusing, and also makes the first DOM.query
         // Rely on the order of the input el and autocomplete in the template
         const inputEl = form.querySelector(this._inputEl);
-        this.onQuerySubmit(inputEl)
+        this.onQuerySubmit(inputEl);
       });
     } else {
       const inputEl = DOM.query(this._container, this._inputEl);
       if (!inputEl) {
         throw new Error(
-            'Could not initialize SearchBar; Can not find {HTMLElement} `',
-            this._inputEl, '`.');
+          'Could not initialize SearchBar; Can not find {HTMLElement} `',
+          this._inputEl, '`.');
       }
       DOM.on(inputEl, 'keydown', (e) => {
-          if (e.key === 'Enter') {
-              e.preventDefault();
-              this.onQuerySubmit(inputEl);      
-          }
-      });
-  
-      const submitButton = DOM.query(this._container, '.js-yext-submit');
-      DOM.on(submitButton, 'click', (e) => {
+        if (e.key === 'Enter') {
           e.preventDefault();
           this.onQuerySubmit(inputEl);
+        }
+      });
+
+      const submitButton = DOM.query(this._container, '.js-yext-submit');
+      DOM.on(submitButton, 'click', (e) => {
+        e.preventDefault();
+        this.onQuerySubmit(inputEl);
       });
     }
   }
@@ -382,10 +382,10 @@ export default class SearchComponent extends Component {
   /**
    * The handler for a query submission. This method first sets the new query in
    * persistent and global storage, than performs a debounced search.
-   * 
+   *
    * @param {Node} inputEl The input element containing the query.
    */
-  onQuerySubmit(inputEl) {
+  onQuerySubmit (inputEl) {
     const query = inputEl.value;
     this.query = query;
     const params = new SearchParams(window.location.search.substring(1));
@@ -421,7 +421,7 @@ export default class SearchComponent extends Component {
     this.core.setQuery(query);
     this.debouncedSearch(query);
     return false;
-}
+  }
 
   /**
    * A helper method to wire up our auto complete on an input selector
