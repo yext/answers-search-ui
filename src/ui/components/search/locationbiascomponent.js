@@ -101,7 +101,6 @@ export default class LocationBiasComponent extends Component {
   }
 
   _getAccuracyHelpText (accuracy) {
-    accuracy = 'DEVICE';
     switch (accuracy) {
       case 'IP':
         return this._config.ipAccuracyHelpText;
