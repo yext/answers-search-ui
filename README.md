@@ -40,7 +40,7 @@ Outline:
    - [Custom Analytics Using Data Attributes](#custom-analytics-using-data-attributes)
    - [Conversion Tracking](#conversion-tracking)
    - [On-Search Analytics](#on-search-analytics)
-8. [Rich Text Formatting](#rich-text-formatting) 
+8. [Rich Text Formatting](#rich-text-formatting)
 
 # Install and Setup
 
@@ -497,6 +497,8 @@ ANSWERS.addComponent('VerticalResults', {
   maxNumberOfColumns: 1,
   // Optional, whether to display the total number of results, default true
   showResultCount: true,
+  // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
+  modifier: '',
   // Optional, the card used to display each individual result, see the Cards section for more details,
   card: {
     // Optional, The type of card, built-in types are: 'Standard', 'Accordion', and 'Legacy'. Defaults to 'Standard'
