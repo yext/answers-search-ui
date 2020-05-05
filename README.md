@@ -28,6 +28,7 @@ Outline:
    - [LocationBias Component](#location-bias-component)
    - [SortOptions Component](#sort-options-component)
    - [Map Component](#map-component)
+   - [Icon Component](#icon-component)
 5. [Customizing Components](#customizing-components)
    - [Using a Custom Renderer](#using-a-custom-renderer)
    - [Custom Data Formatting](#custom-data-formatting)
@@ -1382,6 +1383,58 @@ ANSWERS.addComponent('Map', {
     };
   },
 };
+```
+
+## Icon Component
+The Icon Component will typically be created by other components, but it can be used as a standalone component as well.
+
+```html
+<div class='icon-container'></div>
+```
+
+```js
+ANSWERS.addComponent('IconComponent', {
+  // Required. This is the class of the target HTML element the component will be mounted to.
+  container: '.icon-container',
+  // Optional. Can be used to access an icon defined within the Answers system. See below for default icon names.
+  iconName: 'default',
+  // Optional. Sets the icon to reference an image URL. Overrides icon name.
+  iconUrl: '',
+  // Optional. Adds class names to the icon. Multiple classnames should be space-delimited.
+  classNames: '',
+});
+```
+The following is a list of names for the icons that are supported by default.
+
+- briefcase
+- calendar
+- callout
+- chevron
+- close
+- directions
+- document
+- elements
+- gear
+- info
+- kabob
+- light_bulb
+- link
+- magnifying_glass
+- mic
+- office
+- pantheon
+- person
+- phone
+- pin
+- receipt
+- star
+- support
+- tag
+- thumb
+- window
+- yext_animated_forward
+- yext_animated_reverse
+- yext
 
 # Customizing Components
 
