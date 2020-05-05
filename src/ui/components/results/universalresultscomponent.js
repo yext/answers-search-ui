@@ -10,7 +10,6 @@ export default class UniversalResultsComponent extends Component {
     super(opts, systemOpts);
 
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
-    this._limit = opts.limit || 10;
   }
 
   static get type () {
