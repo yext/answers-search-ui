@@ -389,6 +389,9 @@ ANSWERS.addComponent('SearchBar', {
   redirectUrl: 'path/to/url',
   // Optional, defaults to native form node within container
   formSelector: 'form',
+  // Optional, defaults to true. When true, a form is used as the query submission context.
+  // Note that WCAG compliance is not guaranteed if a form is not used as the context.
+  useForm: 'true',
   // Optional, the input element used for searching and wires up the keyboard interaction
   inputEl: '.js-yext-query'
 })
