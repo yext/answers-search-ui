@@ -443,8 +443,6 @@ The most complex component has a ton of overridable configuration options.
 ANSWERS.addComponent('UniversalResults', {
   // Required, the selector for the container element where the component will be injected
   container: '.universal-results-container',
-  // Optional, the max number of search results to return, defaults to 10
-  limit: 5,
   // Optional, configuration for each vertical's results
   config: {
     'locations': { // The verticalKey
