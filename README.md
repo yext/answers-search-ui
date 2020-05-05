@@ -494,6 +494,8 @@ ANSWERS.addComponent('VerticalResults', {
   maxNumberOfColumns: 1,
   // Optional, whether to display the total number of results, default true
   showResultCount: true,
+  // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
+  modifier: true,
   // Optional, the card used to display each individual result, see the Cards section for more details,
   card: {
     // Optional, The type of card, built-in types are: 'Standard', 'Accordion', and 'Legacy'. Defaults to 'Standard'
