@@ -109,7 +109,7 @@ function initAnswers() {
     // Optional, search specific settings, see Search Configuration below
     search: {},
     // Optional, vertical no results settings, see Vertical No Results below
-    search: {},
+    noResults: {},
     // Optional, the locale will affect how queries are interpreted and the results returned. Defaults to 'en'.
     locale: 'en',
     // Optional, the Answers Experience version to use for api requests
@@ -159,7 +159,7 @@ verticalPages: [
 Below is a list of configuration options related to search, used in the [base configuration](#configuration-options) above.
 
 ```js
-    {
+    search: {
       // Optional, the vertical key to use for searches
       verticalKey: 'verticalKey',
       // Optional, the number of results to display per page, defaults to 20
@@ -173,7 +173,7 @@ Below is a list of configuration options related to search, used in the [base co
 Below is a list of configuration options related to no results on Vertical Pages, used in the [base configuration](#configuration-options) above.
 
 ```js
-    {
+    noResults: {
       // Optional, whether to display all results for the Vertical when a query has no results, defaults to false
       displayAllResults: false,
       // Optional, a custom template for the no results card
