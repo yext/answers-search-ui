@@ -43,6 +43,12 @@
     padding-top: $base-spacing / 2;
     padding-bottom: $base-spacing / 2;
     background-color: $results-title-bar-background;
+    border: $border-default;
+    border-bottom: none;
+  }
+
+  .yxt-Accordion &-titleBar
+  {
     border: $border-legacy;
     border-bottom: none;
   }
