@@ -367,9 +367,9 @@ ANSWERS.addComponent('SearchBar', {
   submitText: 'Submit',
   // Optional, used for labeling the clear button, also provided to the template
   clearText: 'Clear',
-  // Optional, used to specify a different built-in icon for the submit button
+  // Optional, used to specify a different built-in icon for the submit button. Defaults to Animated Magnifying glass when CSS is included.
   submitIcon: 'iconName',
-  // Optional, a url for a custom icon for the submit button
+  // Optional, a url for a custom icon for the submit button. Defaults to Animated Magnifying glass when CSS is included.
   customIconUrl: 'path/to/icon',
   // Optional, the query text to show as the first item for auto complete
   promptHeader: 'Header',
