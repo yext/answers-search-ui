@@ -163,8 +163,8 @@
     border: $border-legacy;
 
     .yxt-Results-filters {
-      border-left: none;
-      border-right: none;
+      border-left: $border-legacy;
+      border-right: $border-legacy;
     }
   }
 
