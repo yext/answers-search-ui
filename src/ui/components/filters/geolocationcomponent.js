@@ -216,7 +216,7 @@ export default class GeoLocationComponent extends Component {
       onSubmit: (query, filter) => {
         this.query = query;
         this.filter = Filter.fromResponse(filter);
-        this._saveDataToStorage(query, this.filter, query.split(',')[0]);
+        this._saveDataToStorage(query, this.filter, `"${query}"`);
         this._enabled = false;
       }
     });
@@ -237,7 +237,7 @@ export default class GeoLocationComponent extends Component {
       navigator.geolocation.getCurrentPosition(
         position => {
           const filter = this._buildFilter(position);
-          this._saveDataToStorage('', filter, 'near me', position);
+          this._saveDataToStorage('', filter, 'Current Location', position);
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${this.name}.${StorageKeys.QUERY}`);

@@ -182,7 +182,7 @@ export default class FilterSearchComponent extends Component {
           filter: Filter.fromResponse(filter),
           metadata: {
             fieldName: this.title,
-            displayValue: query.split(',')[0]
+            displayValue: `"${query}"`
           }
         });
 
