@@ -352,16 +352,6 @@ export default class Core {
     this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
   }
 
-  /**
-   * Stores the given filter into storage, to be used for the next search
-   *
-   * @param {string} namespace the namespace to use for the storage key
-   * @param {Filter} filter    the filter to set
-   */
-  setFilter (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
-  }
-
   setFacetFilterNodes (availableFieldids = [], filterNodes = []) {
     this.filterRegistry.setFacetFilterNodes(availableFieldids, filterNodes);
   }
