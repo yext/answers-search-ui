@@ -5,30 +5,30 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
 import IconComponent from '../../../../src/ui/components/icons/iconcomponent';
 
-describe('vertical results component', () => {
-  const mockedCore = () => {
-    return {
-      globalStorage: {
-        set: () => {},
-        getState: (storageKey) => {
-          if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
-            return { get: () => { return []; } };
-          } else if (storageKey === StorageKeys.NO_RESULTS_CONFIG) {
-            return {};
-          }
+const mockedCore = () => {
+  return {
+    globalStorage: {
+      set: () => {},
+      getState: (storageKey) => {
+        if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
+          return { get: () => { return []; } };
+        } else if (storageKey === StorageKeys.NO_RESULTS_CONFIG) {
+          return {};
         }
       }
-    };
+    }
   };
+};
 
-  DOM.setup(document, new DOMParser());
+DOM.setup(document, new DOMParser());
 
-  const COMPONENT_MANAGER = mockManager(
-    mockedCore(),
-    VerticalResultsComponent.defaultTemplateName(),
-    IconComponent.defaultTemplateName()
-  );
+const COMPONENT_MANAGER = mockManager(
+  mockedCore(),
+  VerticalResultsComponent.defaultTemplateName(),
+  IconComponent.defaultTemplateName()
+);
 
+describe('vertical results component', () => {
   let defaultConfig;
 
   beforeEach(() => {

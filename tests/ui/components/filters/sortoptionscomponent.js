@@ -23,35 +23,30 @@ const mockedCore = () => {
         expect([StorageKeys.FACET_FILTER_NODE, StorageKeys.FILTER]).toContain(storageKey);
         return [];
       },
-      clearSortBys: () => {},
-      verticalSearch: () => {},
-      globalStorage: {
-        getState: storageKey => {
-          expect(['SortOptions', StorageKeys.QUERY]).toContain(storageKey);
-          return null;
-        },
-        getAll: storageKey => {
-          expect([StorageKeys.FACET_FILTER_NODE, StorageKeys.FILTER]).toContain(storageKey);
-          return [];
-        },
-        delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
+      getAll: storageKey => {
+        expect([StorageKeys.FACET_FILTER_NODE, StorageKeys.FILTER]).toContain(storageKey);
+        return [];
       },
-      persistentStorage: {
-        set: (namespace, optionIndex) => {
-          expect(namespace).toBe('SortOptions');
-          expect(typeof optionIndex).toBe('number');
-        },
-        delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
-      }
-    };
+      delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
+    },
+    persistentStorage: {
+      set: (namespace, optionIndex) => {
+        expect(namespace).toBe('SortOptions');
+        expect(typeof optionIndex).toBe('number');
+      },
+      delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
+    }
   };
+};
 
-  DOM.setup(document, new DOMParser());
+DOM.setup(document, new DOMParser());
 
-  const COMPONENT_MANAGER = mockManager(
-    mockedCore(),
-    SortOptionsComponent.defaultTemplateName()
-  );
+const COMPONENT_MANAGER = mockManager(
+  mockedCore(),
+  SortOptionsComponent.defaultTemplateName()
+);
+
+describe('sort options component', () => {
   const systemConfig = { core: mockedCore() };
   let defaultConfig;
   let threeOptions;
