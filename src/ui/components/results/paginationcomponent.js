@@ -256,7 +256,7 @@ export default class PaginationComponent extends Component {
     const pageNumber = (offset / limit) + 1;
     const isMoreResults = results.resultsCount > offset + limit;
     const maxPage = Math.trunc((results.resultsCount - 1) / limit) + 1;
-    const { ellipses, pageNumbers } = this._createPageNumberViews(pageNumber, maxPage);
+    const { ellipses, pageNumberViews } = this._createPageNumberViews(pageNumber, maxPage);
 
     return super.setState({
       showControls: this.shouldShowControls(results, limit),
@@ -269,7 +269,7 @@ export default class PaginationComponent extends Component {
       showNextPageButton: isMoreResults,
       showLastPageButton: pageNumber < maxPage - 1,
       icons: this._icons,
-      pageNumbers,
+      pageNumbers: pageNumberViews,
       ellipses,
       pinPages: this._pinFirstAndLastPage,
       nextPage: pageNumber + 1,
