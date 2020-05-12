@@ -8,9 +8,8 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 const mockedCore = () => {
   return {
     setSortBys: (...options) => {
-      options.forEach(opt => expect(opt).toHaveProperty('type'));
+      options.forEach(opt => expect(opt).toHaveProperty('label'));
     },
-    clearSortBys: () => {},
     verticalSearch: () => {},
     globalStorage: {
       getState: storageKey => {
