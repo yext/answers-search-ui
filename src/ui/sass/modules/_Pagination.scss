@@ -57,7 +57,9 @@
   }
 
   &-chevron,
-  &-doubleChevron
+  &-doubleChevron,
+  &-chevron--left,
+  &-doubleChevron--left
   {
     display: flex;
   }
