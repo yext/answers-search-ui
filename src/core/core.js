@@ -153,7 +153,7 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS)
+        sortBys: this._getRequestSortBys()
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -315,25 +315,37 @@ export default class Core {
   }
 
   /**
+   * Returns the current sort options state.
+   * @returns {Array<Object>}
+   */
+  getSortBys () {
+    return this.globalStorage.getState(StorageKeys.SORT_BYS) || [];
+  }
+
+  /**
    * Stores the given sortBy into storage, to be used for the next search
    * @param {Object} sortByOptions
    */
   setSortBys (...sortByOptions) {
-    const sortBys = sortByOptions.map(option => {
-      return {
-        type: option.type,
-        field: option.field,
-        direction: option.direction
-      };
-    });
-    this.globalStorage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+    const sortBys = sortByOptions.map(option => ({
+      direction: option.direction,
+      field: option.field,
+      label: option.label,
+      type: option.type
+    }));
+    this.globalStorage.set(StorageKeys.SORT_BYS, sortBys);
   }
 
   /**
-   * Clears the sortBys key in global storage.
+   * Returns the sortBys param for a search.
+   * Stringifies all sortBys that have a 'type' attribute and removes the 'label' attribute.
+   * @returns {string}
    */
-  clearSortBys () {
-    this.globalStorage.delete(StorageKeys.SORT_BYS);
+  _getRequestSortBys () {
+    const sortBys = this.getSortBys().filter(sortBy => sortBy.type);
+    return JSON.stringify(sortBys,
+      (key, value) => key === 'label' ? undefined : value
+    );
   }
 
   /**
