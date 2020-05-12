@@ -165,7 +165,7 @@ export default class PaginationComponent extends Component {
 
   updatePage (offset) {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
-    let oldOffset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const oldOffset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
     const oldPageNumber = (oldOffset / limit) + 1;
     const pageNumber = (offset / limit) + 1;
@@ -251,7 +251,7 @@ export default class PaginationComponent extends Component {
 
   setState (data) {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
-    let offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
     const pageNumber = (offset / limit) + 1;
     const isMoreResults = results.resultsCount > offset + limit;
