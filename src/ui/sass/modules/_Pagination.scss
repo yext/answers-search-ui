@@ -55,4 +55,12 @@
   {
     margin-right: -4px;
   }
+
+  &-chevron,
+  &-doubleChevron,
+  &-chevron--left,
+  &-doubleChevron--left
+  {
+    display: flex;
+  }
 }
