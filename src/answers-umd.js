@@ -165,7 +165,6 @@ class Answers {
 
     const masterSwitchApi = new MasterSwitchApi(globalStorage);
     masterSwitchApi.isDisabled(parsedConfig.apiKey, parsedConfig.experienceKey)
-      .then(isDisabled => { console.log(isDisabled); return isDisabled; })
       .then(isDisabled => !isDisabled && this._initInternal(parsedConfig, globalStorage, persistentStorage))
       .catch(() => this._initInternal(parsedConfig, globalStorage, persistentStorage));
   }
