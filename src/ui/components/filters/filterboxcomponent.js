@@ -226,12 +226,10 @@ export default class FilterBoxComponent extends Component {
     }
 
     // Initialize reset button
-    if (this.config.resetFilters) {
-      let resetEl = DOM.query(this._container, '.js-yxt-FilterBox-reset');
+    let resetEl = DOM.query(this._container, '.js-yxt-FilterBox-reset');
 
-      if (resetEl) {
-        DOM.on(resetEl, 'click', this.resetFilters.bind(this));
-      }
+    if (resetEl) {
+      DOM.on(resetEl, 'click', this.resetFilters.bind(this));
     }
   }
 
