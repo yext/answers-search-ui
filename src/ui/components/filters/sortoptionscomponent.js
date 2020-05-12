@@ -20,6 +20,8 @@ export default class SortOptionsComponent extends Component {
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
+    const option = this.options[this.selectedOptionIndex];
+    this.core.setSortBys(option);
   }
 
   setState (data) {
@@ -97,7 +99,9 @@ export default class SortOptionsComponent extends Component {
     // This was done to have a consistent option name between filters.
     this.core.persistentStorage.set(this.name, optionIndex);
     if (this._config.storeOnChange && optionIndex === 0) {
-      this.core.clearSortBys();
+      this.core.setSortBys({
+        label: this._config.defaultSortLabel
+      });
     } else if (this._config.storeOnChange) {
       this.core.setSortBys(option);
     }
