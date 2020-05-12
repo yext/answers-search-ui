@@ -48,6 +48,16 @@ export default class ResultsHeaderComponent extends Component {
       }
       groupedFilters[filter.key].push(filter.value);
     });
+
+    const sortOptions = this.core.getSortBys();
+    const sortedByLabel = 'Sorted By:';
+    sortOptions.forEach(sortBy => {
+      if (!groupedFilters[sortedByLabel]) {
+        groupedFilters[sortedByLabel] = [];
+      }
+      groupedFilters[sortedByLabel].push(sortBy.label);
+    });
+
     // Has to be parsed into an array because our handlebars can only loop through arrays, not objects.
     return Object.keys(groupedFilters).map(label => ({
       label: label, displayValues: groupedFilters[label]
@@ -55,8 +65,9 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   setState (data) {
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-    const shouldShowFilters = this.appliedQueryFilters.length > 0 && this._config.showAppliedFilters;
+    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const appliedFiltersArray = this.getAppliedFiltersArray();
+    const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
     return super.setState({
       ...data,
       resultsCount: this.resultsCount,
@@ -64,7 +75,7 @@ export default class ResultsHeaderComponent extends Component {
       resultsCountEnd: offset + this.resultsLength,
       showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
-      appliedFiltersArray: this.getAppliedFiltersArray()
+      appliedFiltersArray: appliedFiltersArray
     });
   }
 
