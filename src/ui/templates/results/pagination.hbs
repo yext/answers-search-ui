@@ -5,6 +5,7 @@
         data-eventtype="PAGINATE"
         data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the first page of results"
+        tabindex="0"
       >
         {{#unless icons.firstButtonIcon}}
           <span class="yxt-Pagination-doubleChevron--left"
@@ -25,6 +26,7 @@
       data-eventtype="PAGINATE"
       data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#sub pageNumber 1}}{{/sub}}, "totalPageCount":{{maxPage}} }'
       aria-label="Go to the previous page of results"
+      tabindex="0"
     >
       {{#unless icons.previousButtonIcon}}
         <span class="yxt-Pagination-chevron--left"
@@ -38,11 +40,12 @@
     </a>
 
     <a
-      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless ellipses.desktopBack}} desktop-hidden{{/unless}}{{#unless ellipses.mobileBack}} mobile-hidden{{/unless}}"
+      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless pinnedNumbers.desktopBack}} desktop-hidden{{/unless}}{{#unless pinnedNumbers.mobileBack}} mobile-hidden{{/unless}}"
       aria-label="Go to page 1 of results"
       data-number="1"
       data-eventtype="PAGINATE"
       data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
+      tabindex="0"
     >
       1
     </a>
@@ -61,6 +64,7 @@
           data-number="{{this.number}}"
           data-eventtype="PAGINATE"
           data-eventoptions='{"currentPage":{{../pageNumber}}, "newPage":{{this.number}}, "totalPageCount":{{../maxPage}} }'
+          tabindex="0"
         >
           {{this.number}}
         </a>
@@ -72,9 +76,10 @@
     </span>
 
     <a
-      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless ellipses.desktopFront}} desktop-hidden{{/unless}}{{#unless ellipses.mobileFront}} mobile-hidden{{/unless}}"
+      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless pinnedNumbers.desktopFront}} desktop-hidden{{/unless}}{{#unless pinnedNumbers.mobileFront}} mobile-hidden{{/unless}}"
       aria-label="Go to page {{maxPage}} of results"
       data-number="{{maxPage}}"
+      tabindex="0"
     >
       {{maxPage}}
     </a>
@@ -83,7 +88,8 @@
       {{#unless showNextPageButton}}disabled{{/unless}}
       data-eventtype="PAGINATE"
       data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#add pageNumber 1}}{{/add}}, "totalPageCount":{{maxPage}} }'
-        aria-label="Go to the next page of results"
+      aria-label="Go to the next page of results"
+      tabindex="0"
     >
       {{#unless icons.nextButtonIcon}}
         <span class="yxt-Pagination-chevron"
@@ -100,6 +106,7 @@
         data-eventtype="PAGINATE"
         data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{maxPage}}, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the last page of results"
+        tabindex="0"
       >
         {{#unless icons.lastButtonIcon}}
         <span class="yxt-Pagination-doubleChevron"

@@ -100,6 +100,13 @@ export default class PaginationComponent extends Component {
      */
     this._onPaginate = config.onPaginate || this.scrollToTop;
 
+    /**
+     * The maximum number of results per page
+     * @type {number}
+     * @private
+     */
+    this._limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
     this.core.globalStorage.on('update', StorageKeys.SEARCH_OFFSET, offset => {
@@ -165,12 +172,11 @@ export default class PaginationComponent extends Component {
 
   updatePage (offset) {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
-    const oldOffset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
-    const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
-    const oldPageNumber = (oldOffset / limit) + 1;
-    const pageNumber = (offset / limit) + 1;
-    const maxPageCount = Math.trunc((results.resultsCount - 1) / limit) + 1;
-    this._onPaginate(pageNumber, oldPageNumber, maxPageCount);
+    const currentOffset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const currentPageNumber = (currentOffset / this._limit) + 1;
+    const newPageNumber = (offset / this._limit) + 1;
+    const maxPageCount = Math.trunc((results.resultsCount - 1) / this._limit) + 1;
+    this._onPaginate(newPageNumber, currentPageNumber, maxPageCount);
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.persistentStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.verticalPage(this._verticalKey, offset);
@@ -180,6 +186,14 @@ export default class PaginationComponent extends Component {
     document.documentElement.scrollTop = 0;
     // Safari
     document.body.scrollTop = 0;
+  }
+
+  /**
+   * Computes the highest page number for a given amount of results
+   * @param {number} resultsCount
+   */
+  _computeMaxPage (resultsCount) {
+    return Math.trunc((resultsCount - 1) / this._limit) + 1;
   }
 
   /**
@@ -239,11 +253,17 @@ export default class PaginationComponent extends Component {
     }
 
     return {
-      ellipses: {
+      pinnedNumbers: {
         mobileBack: this._pinFirstAndLastPage && mobileBackLimit > 0,
         mobileFront: this._pinFirstAndLastPage && mobileFrontLimit < maxPage,
         desktopBack: this._pinFirstAndLastPage && desktopBackLimit > 0,
         desktopFront: this._pinFirstAndLastPage && desktopFrontLimit < maxPage
+      },
+      ellipses: {
+        mobileBack: this._pinFirstAndLastPage && mobileBackLimit > 1,
+        mobileFront: this._pinFirstAndLastPage && mobileFrontLimit < maxPage - 1,
+        desktopBack: this._pinFirstAndLastPage && desktopBackLimit > 1,
+        desktopFront: this._pinFirstAndLastPage && desktopFrontLimit < maxPage - 1
       },
       pageNumberViews
     };
@@ -252,14 +272,13 @@ export default class PaginationComponent extends Component {
   setState (data) {
     const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
-    const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
-    const pageNumber = (offset / limit) + 1;
-    const isMoreResults = results.resultsCount > offset + limit;
-    const maxPage = Math.trunc((results.resultsCount - 1) / limit) + 1;
-    const { ellipses, pageNumberViews } = this._createPageNumberViews(pageNumber, maxPage);
+    const pageNumber = (offset / this._limit) + 1;
+    const isMoreResults = results.resultsCount > offset + this._limit;
+    const maxPage = this._computeMaxPage(results.resultsCount);
+    const { pinnedNumbers, ellipses, pageNumberViews } = this._createPageNumberViews(pageNumber, maxPage);
 
     return super.setState({
-      showControls: this.shouldShowControls(results, limit),
+      showControls: this.shouldShowControls(results, this._limit),
       firstPageButtonEnabled: this._firstPageButtonEnabled,
       lastPageButtonEnabled: this._lastPageButtonEnabled,
       pageNumber,
@@ -270,6 +289,7 @@ export default class PaginationComponent extends Component {
       showLastPageButton: pageNumber < maxPage - 1,
       icons: this._icons,
       pageNumbers: pageNumberViews,
+      pinnedNumbers,
       ellipses,
       pinPages: this._pinFirstAndLastPage,
       nextPage: pageNumber + 1,
