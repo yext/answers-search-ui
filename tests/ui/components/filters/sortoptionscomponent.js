@@ -9,9 +9,8 @@ import ResultsContext from '../../../../src/core/storage/resultscontext';
 const mockedCore = () => {
   return {
     setSortBys: (...options) => {
-      options.forEach(opt => expect(opt).toHaveProperty('type'));
+      options.forEach(opt => expect(opt).toHaveProperty('label'));
     },
-    clearSortBys: () => {},
     verticalSearch: () => {},
     globalStorage: {
       on: () => {},
