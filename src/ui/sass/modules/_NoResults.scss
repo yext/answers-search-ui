@@ -1,26 +1,34 @@
 /** @define NoResults */
+
+$noresults-font-size: var(--font-size-md) !default;
+$noresults-line-height: var(--line-height-md) !default;
+$noresults-font-weight: var(--font-weight-normal) !default;
+$noresults-query-font-weight: var(--font-weight-semibold) !default;
+
+:root {
+  --noresults-font-size: #{$noresults-font-size};
+  --noresults-line-height: #{$noresults-line-height};
+  --noresults-font-weight: #{$noresults-font-weight};
+  --noresults-query-font-weight: #{$noresults-query-font-weight};
+}
+
 .yxt-NoResults
 {
-  $noresults-font-size: $font-size-md !default;
-  $noresults-line-height: $line-height-md !default;
-  $noresults-font-weight: $font-weight-normal !default;
-  $noresults-query-font-weight: $font-weight-semibold !default;
-
   &-wrapper
   {
-    font-size: $noresults-font-size;
-    line-height: $noresults-line-height;
-    font-weight: $noresults-font-weight;
+    font-size: var(--noresults-font-size);
+    line-height: var(--noresults-line-height);
+    font-weight: var(--noresults-font-weight);
   }
 
   &-query
   {
-    font-weight: $noresults-query-font-weight;
+    font-weight: var(--noresults-query-font-weight);
   }
 
   &-returnLinkWrapper
   {
-    margin-top: $base-spacing;
+    margin-top: var(--base-spacing);
   }
 
   &-returnLink
@@ -30,7 +38,7 @@
 
   &-suggestions
   {
-    margin-top: $base-spacing;
+    margin-top: var(--base-spacing);
   }
 
   &-suggestionsHeader
@@ -40,12 +48,12 @@
 
   &-suggestionsList
   {
-    margin-top: $base-spacing / 2;
+    margin-top: calc(var(--base-spacing) / 2);
   }
 
   &-suggestion
   {
-    margin-left: $base-spacing-sm * 2;
+    margin-left: calc(var(--base-spacing-sm) * 2);
     list-style-type: disc;
     list-style-position: inside;
   }

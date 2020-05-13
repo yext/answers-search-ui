@@ -1,63 +1,97 @@
 /** @define LegacyCard */
 
+$result-background-color: white !default;
+
+$result-event-background-color: var(--color-background-highlight) !default;
+
+$result-day-font-size: var(--font-size-xxlg) !default;
+$result-day-line-height: var(--line-height-sm) !default;
+$result-day-font-weight: var(--font-weight-semibold) !default;
+$result-day-color: var(--color-text-primary) !default;
+
+$result-month-font-size: var(--font-size-md) !default;
+$result-month-line-height: var(--line-height-md) !default;
+$result-month-font-weight: var(--font-weight-normal) !default;
+$result-month-color: var(--color-text-primary) !default;
+
+$result-ordinal-background-color: var(--color-brand-primary) !default;
+$result-ordinal-font-size: var(--font-size-xs) !default;
+$result-ordinal-line-height: var(--line-height-xs) !default;
+$result-ordinal-font-weight: var(--font-weight-bold) !default;
+$result-ordinal-color: white !default;
+
+$result-details-font-size: var(--font-size-md) !default;
+$result-details-line-height: var(--line-height-md) !default;
+$result-details-font-weight: var(--font-weight-normal) !default;
+$result-details-color: var(--color-text-primary) !default;
+
+$result-title-font-size: var(--font-size-lg) !default;
+$result-title-line-height: var(--line-height-lg) !default;
+$result-title-font-weight: var(--font-weight-semibold) !default;
+$result-title-color: var(--color-text-primary) !default;
+
+$result-subtitle-font-size: var(--font-size-md) !default;
+$result-subtitle-line-height: var(--line-height-md) !default;
+$result-subtitle-font-weight: var(--font-weight-normal) !default;
+$result-subtitle-color: var(--color-text-secondary) !default;
+
+$result-cta-font-size: var(--font-size-md) !default;
+$result-cta-line-height: var(--line-height-md) !default;
+$result-cta-font-weight: var(--font-weight-semibold) !default;
+$result-cta-color: var(--color-link-primary) !default;
+
+:root {
+  --result-background-color: #{$result-background-color};
+  --result-event-background-color: #{$result-event-background-color};
+  --result-day-font-size: #{$result-day-font-size};
+  --result-day-line-height: #{$result-day-line-height};
+  --result-day-font-weight: #{$result-day-font-weight};
+  --result-day-color: #{$result-day-color};
+  --result-month-font-size: #{$result-month-font-size};
+  --result-month-line-height: #{$result-month-line-height};
+  --result-month-font-weight: #{$result-month-font-weight};
+  --result-month-color: #{$result-month-color};
+  --result-ordinal-background-color: #{$result-ordinal-background-color};
+  --result-ordinal-font-size: #{$result-ordinal-font-size};
+  --result-ordinal-line-height: #{$result-ordinal-line-height};
+  --result-ordinal-font-weight: #{$result-ordinal-font-weight};
+  --result-ordinal-color: #{$result-ordinal-color};
+  --result-details-font-size: #{$result-details-font-size};
+  --result-details-line-height: #{$result-details-line-height};
+  --result-details-font-weight: #{$result-details-font-weight};
+  --result-details-color: #{$result-details-color};
+  --result-title-font-size: #{$result-title-font-size};
+  --result-title-line-height: #{$result-title-line-height};
+  --result-title-font-weight: #{$result-title-font-weight};
+  --result-title-color: #{$result-title-color};
+  --result-subtitle-font-size: #{$result-subtitle-font-size};
+  --result-subtitle-line-height: #{$result-subtitle-line-height};
+  --result-subtitle-font-weight: #{$result-subtitle-font-weight};
+  --result-subtitle-color: #{$result-subtitle-color};
+  --result-cta-font-size: #{$result-cta-font-size};
+  --result-cta-line-height: #{$result-cta-line-height};
+  --result-cta-font-weight: #{$result-cta-font-weight};
+  --result-cta-color: #{$result-cta-color};
+}
+
 .yxt-Result
 {
-  $result-background-color: white !default;
-
-  $result-event-background-color: $color-background-highlight !default;
-
-  $result-day-font-size: $font-size-xxlg !default;
-  $result-day-line-height: $line-height-sm !default;
-  $result-day-font-weight: $font-weight-semibold !default;
-  $result-day-color: $color-text-primary !default;
-
-  $result-month-font-size: $font-size-md !default;
-  $result-month-line-height: $line-height-md !default;
-  $result-month-font-weight: $font-weight-normal !default;
-  $result-month-color: $color-text-primary !default;
-
-  $result-ordinal-background-color: $color-brand-primary !default;
-  $result-ordinal-font-size: $font-size-xs !default;
-  $result-ordinal-line-height: $line-height-xs !default;
-  $result-ordinal-font-weight: $font-weight-bold !default;
-  $result-ordinal-color: white !default;
-
-  $result-details-font-size: $font-size-md !default;
-  $result-details-line-height: $line-height-md !default;
-  $result-details-font-weight: $font-weight-normal !default;
-  $result-details-color: $color-text-primary !default;
-
-  $result-title-font-size: $font-size-lg !default;
-  $result-title-line-height: $line-height-lg !default;
-  $result-title-font-weight: $font-weight-semibold !default;
-  $result-title-color: $color-text-primary !default;
-
-  $result-subtitle-font-size: $font-size-md !default;
-  $result-subtitle-line-height: $line-height-md !default;
-  $result-subtitle-font-weight: $font-weight-normal !default;
-  $result-subtitle-color: $color-text-secondary !default;
-
-  $result-cta-font-size: $font-size-md !default;
-  $result-cta-line-height: $line-height-md !default;
-  $result-cta-font-weight: $font-weight-semibold !default;
-  $result-cta-color: $color-link-primary !default;
-
   & + &
   {
-    border-top: $border-default;
+    border-top: var(--border-default);
   }
 
   &-title
   {
     @include Text(
-      $size: $result-title-font-size,
-      $line-height: $result-title-line-height,
-      $weight: $result-title-font-weight,
-      $color: $result-title-color
+      $size: var(--result-title-font-size),
+      $line-height: var(--result-title-line-height),
+      $weight: var(--result-title-font-weight),
+      $color: var(--result-title-color)
     );
 
     margin-top: 0;
-    margin-bottom: $base-spacing / 2;
+    margin-bottom: calc(var(--base-spacing) / 2);
   }
 
   &-titleLink
@@ -75,19 +109,19 @@
 
   &-ordinalWrapper
   {
-    margin-right: $base-spacing-sm;
+    margin-right: var(--base-spacing-sm);
   }
 
   &-ordinal
   {
     @include Text(
-      $size: $result-ordinal-font-size,
-      $line-height: $result-ordinal-line-height,
-      $weight: $result-ordinal-font-weight,
-      $color: $result-ordinal-color
+      $size: var(--result-ordinal-font-size),
+      $line-height: var(--result-ordinal-line-height),
+      $weight: var(--result-ordinal-font-weight),
+      $color: var(--result-ordinal-color)
     );
 
-    background-color: $result-ordinal-background-color;
+    background-color: var(--result-ordinal-background-color);
     height: 18px;
     width: 18px;
     border-radius: 50%;
@@ -102,11 +136,11 @@
     display: flex;
     flex-wrap: nowrap;
     max-width: 100%;
-    padding-top: $base-spacing;
-    padding-bottom: $base-spacing;
-    padding-left: $base-spacing;
-    padding-right: $base-spacing;
-    background-color: $result-background-color;
+    padding-top: var(--base-spacing);
+    padding-bottom: var(--base-spacing);
+    padding-left: var(--base-spacing);
+    padding-right: var(--base-spacing);
+    background-color: var(--result-background-color);
   }
 
   &-imageWrapper
@@ -153,10 +187,10 @@
   &-details
   {
     @include Text(
-      $size: $result-details-font-size,
-      $line-height: $result-details-line-height,
-      $weight: $result-details-font-weight,
-      $color: $result-details-color
+      $size: var(--result-details-font-size),
+      $line-height: var(--result-details-line-height),
+      $weight: var(--result-details-font-weight),
+      $color: var(--result-details-color)
     );
   }
 
@@ -170,12 +204,12 @@
     @media (min-width: $breakpoint-mobile-min)
     {
       justify-content: flex-end;
-      margin-left: $base-spacing-sm * 2;
+      margin-left: calc(var(--base-spacing-sm) * 2);
     }
 
     @media (max-width: $breakpoint-mobile-max)
     {
-      margin-top: $base-spacing / 2;
+      margin-top: calc(var(--base-spacing) / 2);
     }
   }
 
@@ -197,10 +231,10 @@
     flex-direction: column;
     align-items: center;
     cursor: pointer;
-    padding-top: $base-spacing / 2;
-    padding-left: $base-spacing / 2;
-    padding-right: $base-spacing / 2;
-    padding-bottom: $base-spacing / 2;
+    padding-top: calc(var(--base-spacing) / 2);
+    padding-left: calc(var(--base-spacing) / 2);
+    padding-right: calc(var(--base-spacing) / 2);
+    padding-bottom: calc(var(--base-spacing) / 2);
     border-radius: 4px;
     min-width: 60px;
     text-align: center;
@@ -213,16 +247,16 @@
 
     & + &
     {
-      margin-left: $base-spacing / 2;
+      margin-left: var(--base-spacing) / 2;
     }
   }
 
   &-ctaIconWrapper
   {
     display: flex;
-    padding-left: $base-spacing * 2;
-    padding-right: $base-spacing * 2;
-    margin-bottom: $base-spacing / 2;
+    padding-left: calc(var(--base-spacing) * 2);
+    padding-right: calc(var(--base-spacing) * 2);
+    margin-bottom: calc(var(--base-spacing) / 2);
 
     @media(max-width: $breakpoint-mobile-max)
     {
@@ -242,10 +276,10 @@
   &-ctaLabel
   {
     @include Text(
-      $size: $result-cta-font-size,
-      $line-height: $result-cta-line-height,
-      $weight: $result-cta-font-weight,
-      $color: $result-cta-color
+      $size: var(--result-cta-font-size),
+      $line-height: var(--result-cta-line-height),
+      $weight: var(--result-cta-font-weight),
+      $color: var(--result-cta-color)
     );
 
     letter-spacing: 0.5px;
@@ -257,10 +291,10 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: $base-spacing * 2;
-    margin-right: $base-spacing * 3;
-    padding-left: $base-spacing;
-    padding-right: $base-spacing;
+    margin-left: calc(var(--base-spacing) * 2);
+    margin-right: calc(var(--base-spacing) * 3);
+    padding-left: var(--base-spacing);
+    padding-right: var(--base-spacing);
 
     @media (max-width: $breakpoint-mobile-max)
     {
@@ -273,41 +307,41 @@
     display: flex;
     flex-direction: column;
     border-radius: 8px;
-    padding: $base-spacing / 4;
+    padding: calc(var(--base-spacing) / 4);
     text-align: center;
-    background-color: $result-event-background-color;
+    background-color: var(--result-event-background-color);
   }
 
   &-day
   {
     @include Text(
-      $size: $result-day-font-size,
-      $line-height: $result-day-line-height,
-      $weight: $result-day-font-weight,
-      $color: $result-day-color
+      $size: var(--result-day-font-size),
+      $line-height: var(--result-day-line-height),
+      $weight: var(--result-day-font-weight),
+      $color: var(--result-day-color)
     );
   }
 
   &-month
   {
     @include Text(
-      $size: $result-month-font-size,
-      $line-height: $result-month-line-height,
-      $weight: $result-month-font-weight,
-      $color: $result-month-color
+      $size: var(--result-month-font-size),
+      $line-height: var(--result-month-line-height),
+      $weight: var(--result-month-font-weight),
+      $color: var(--result-month-color)
     );
   }
 
   &-subtitle
   {
     @include Text(
-      $size: $result-subtitle-font-size,
-      $line-height: $result-subtitle-line-height,
-      $weight: $result-subtitle-font-weight,
-      $color: $result-subtitle-color
+      $size: var(--result-subtitle-font-size),
+      $line-height: var(--result-subtitle-line-height),
+      $weight: var(--result-subtitle-font-weight),
+      $color: var(--result-subtitle-color)
     );
 
-    margin-bottom: $base-spacing/2;
+    margin-bottom: calc(var(--base-spacing)/2);
   }
 
   &-features

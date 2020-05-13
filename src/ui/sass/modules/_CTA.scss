@@ -1,14 +1,35 @@
+$standard-card-cta-icon-size: calc(1.125 * var(--base-spacing)) !default;
+$standard-card-cta-icon-size-solo: calc(1.5 * var(--base-spacing)) !default;
+$standard-card-cta-spacing: var(--base-spacing) !default;
+
+$accordion-card-cta-spacing: var(--base-spacing) !default;
+$accordion-card-cta-icon-size: var(--base-spacing) !default;
+$accordion-card-cta-font-size: var(--font-size-md) !default;
+$accordion-card-cta-font-weight: var(--font-weight-normal) !default;
+$accordion-card-cta-color: var(--color-brand-primary) !default;
+
+:root {
+  --standard-card-cta-icon-size: #{$standard-card-cta-icon-size};
+  --standard-card-cta-icon-size-solo: #{$standard-card-cta-icon-size-solo};
+  --standard-card-cta-spacing: #{$standard-card-cta-spacing};
+  --accordion-card-cta-spacing: #{$accordion-card-cta-spacing};
+  --accordion-card-cta-icon-size: #{$accordion-card-cta-icon-size};
+  --accordion-card-cta-font-size: #{$accordion-card-cta-font-size};
+  --accordion-card-cta-font-weight: #{$accordion-card-cta-font-weight};
+  --accordion-card-cta-color: #{$accordion-card-cta-color};
+}
+
 .yxt-CTA {
   text-decoration: none;
-  color: $color-brand-primary;
+  color: var(--color-brand-primary);
   display: flex;
   align-items: center;
   word-break: break-word;
 
   @include Text(
-    $size: $font-size-md,
-    $weight: $font-weight-semibold,
-    $color: $color-brand-primary
+    $size: var(--font-size-md),
+    $weight: var(--font-weight-semibold),
+    $color: var(--color-brand-primary)
   );
 
   &:hover, &:focus, &:active {
@@ -16,21 +37,18 @@
   }
 
   .Icon svg {
-    height: $base-spacing * 1.125;
-    width: $base-spacing * 1.125;
+    height: calc(var(--base-spacing) * 1.125);
+    width: calc(var(--base-spacing) * 1.125);
   }
 }
 
 .yxt-CTA--StandardCard {
-  $standard-card-cta-icon-size: 1.125 * $base-spacing !default;
-  $standard-card-cta-icon-size-solo: 1.5 * $base-spacing !default;
-  $standard-card-cta-spacing: $base-spacing !default;
-  margin-bottom: $standard-card-cta-spacing * 0.5;
+  margin-bottom: calc(var(--standard-card-cta-spacing) * 0.5);
 
   .Icon {
-    height: $standard-card-cta-icon-size;
-    width: $standard-card-cta-icon-size;
-    margin-right: $base-spacing/2;
+    height: var(--standard-card-cta-icon-size);
+    width: var(--standard-card-cta-icon-size);
+    margin-right: calc(var(--base-spacing) / 2);
   }
 
   @media (min-width: $breakpoint-mobile-min) {
@@ -39,9 +57,9 @@
       flex-direction: column;
 
       .Icon {
-        height: $standard-card-cta-icon-size-solo;
-        width: $standard-card-cta-icon-size-solo;
-        margin-bottom: $standard-card-cta-spacing/2;
+        height: var(--standard-card-cta-icon-size-solo);
+        width: var(--standard-card-cta-icon-size-solo);
+        margin-bottom: calc(var(--standard-card-cta-spacing) / 2);
         margin-right: 0;
       }
     }
@@ -49,22 +67,17 @@
 }
 
 .yxt-CTA--AccordionCard {
-    $accordion-card-cta-spacing: $base-spacing !default;
-    $accordion-card-cta-icon-size: $base-spacing !default;
-    $accordion-card-cta-font-size: $font-size-md !default;
-    $accordion-card-cta-font-weight: $font-weight-normal !default;
-    $accordion-card-cta-color: $color-brand-primary !default;
     align-items: flex-end;
 
     @include Text(
-      $size: $accordion-card-cta-font-size,
-      $weight: $accordion-card-cta-font-weight,
-      $color: $accordion-card-cta-color,
+      $size: var(--accordion-card-cta-font-size),
+      $weight: var(--accordion-card-cta-font-weight),
+      $color: var(--accordion-card-cta-color),
     );
 
     .Icon {
-      height: $accordion-card-cta-icon-size;
-      width: $accordion-card-cta-icon-size;
-      margin-right: $accordion-card-cta-spacing * 0.5;
+      height: var(--accordion-card-cta-icon-size);
+      width: var(--accordion-card-cta-icon-size);
+      margin-right: calc(var(--accordion-card-cta-spacing) * 0.5);
     }
 }

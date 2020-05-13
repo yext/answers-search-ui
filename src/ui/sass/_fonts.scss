@@ -21,3 +21,26 @@ $line-height-xlg: 5/3 !default;
 $line-height-xxlg: 1.7 !default;
 
 $font-family: system-ui,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif !default;
+
+:root {
+  --font-weight-bold: #{$font-weight-bold};
+  --font-weight-semibold: #{$font-weight-semibold};
+  --font-weight-medium: #{$font-weight-medium};
+  --font-weight-normal: #{$font-weight-normal};
+  --font-weight-light: #{$font-weight-light};
+  --font-size-xs: #{$font-size-xs};
+  --font-size-sm: #{$font-size-sm};
+  --font-size-md: #{$font-size-md};
+  --font-size-md-lg: #{$font-size-md-lg};
+  --font-size-lg: #{$font-size-lg};
+  --font-size-xlg: #{$font-size-xlg};
+  --font-size-xxlg: #{$font-size-xxlg};
+  --line-height-xs: #{$line-height-xs};
+  --line-height-sm: #{$line-height-sm};
+  --line-height-md-sm: #{$line-height-md-sm};
+  --line-height-md: #{$line-height-md};
+  --line-height-lg: #{$line-height-lg};
+  --line-height-xlg: #{$line-height-xlg};
+  --line-height-xxlg: #{$line-height-xxlg};
+  --font-family: #{$font-family};
+}

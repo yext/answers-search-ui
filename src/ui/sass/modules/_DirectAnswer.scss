@@ -1,45 +1,68 @@
 /** @define yxt-DirectAnswer */
 
+$direct-answer-border: var(--border-default) !default;
+
+$direct-answer-title-background-color: var(--color-brand-primary) !default;
+$direct-answer-content-background-color: white !default;
+$direct-answer-footer-background-color: var(--color-background-highlight) !default;
+
+$direct-answer-title-font-size: var(--font-size-md-lg) !default;
+$direct-answer-title-line-height: var(--line-height-lg) !default;
+$direct-answer-title-font-weight: var(--font-weight-semibold) !default;
+$direct-answer-title-color: white !default;
+
+$direct-answer-content-font-size: var(--font-size-xlg) !default;
+$direct-answer-content-line-height: var(--line-height-md) !default;
+$direct-answer-content-font-weight: var(--font-weight-semibold) !default;
+$direct-answer-content-color: var(--color-text-primary) !default;
+
+$direct-answer-view-details-font-size: var(--font-size-md) !default;
+$direct-answer-view-details-line-height: var(--line-height-xxlg) !default;
+$direct-answer-view-details-font-weight: var(--font-weight-semibold) !default;
+
+$direct-answer-footer-font-size: var(--font-size-md) !default;
+$direct-answer-footer-line-height: var(--line-height-md) !default;
+$direct-answer-footer-font-weight: var(--font-weight-normal) !default;
+$direct-answer-footer-color: var(--color-text-secondary) !default;
+$direct-answer-footer-height: var(--module-footer-height) !default;
+
+:root {
+  --direct-answer-border: #{$direct-answer-border};
+  --direct-answer-title-background-color: #{$direct-answer-title-background-color};
+  --direct-answer-content-background-color: #{$direct-answer-content-background-color};
+  --direct-answer-footer-background-color: #{$direct-answer-footer-background-color};
+  --direct-answer-title-font-size: #{$direct-answer-title-font-size};
+  --direct-answer-title-line-height: #{$direct-answer-title-line-height};
+  --direct-answer-title-font-weight: #{$direct-answer-title-font-weight};
+  --direct-answer-title-color: #{$direct-answer-title-color};
+  --direct-answer-content-font-size: #{$direct-answer-content-font-size};
+  --direct-answer-content-line-height: #{$direct-answer-content-line-height};
+  --direct-answer-content-font-weight: #{$direct-answer-content-font-weight};
+  --direct-answer-content-color: #{$direct-answer-content-color};
+  --direct-answer-view-details-font-size: #{$direct-answer-view-details-font-size};
+  --direct-answer-view-details-line-height: #{$direct-answer-view-details-line-height};
+  --direct-answer-view-details-font-weight: #{$direct-answer-view-details-font-weight};
+  --direct-answer-footer-font-size: #{$direct-answer-footer-font-size};
+  --direct-answer-footer-line-height: #{$direct-answer-footer-line-height};
+  --direct-answer-footer-font-weight: #{$direct-answer-footer-font-weight};
+  --direct-answer-footer-color: #{$direct-answer-footer-color};
+  --direct-answer-footer-height: #{$direct-answer-footer-height};
+}
+
 .yxt-DirectAnswer
 {
-  $direct-answer-border: $border-default !default;
-
-  $direct-answer-title-background-color: $color-brand-primary !default;
-  $direct-answer-content-background-color: white !default;
-  $direct-answer-footer-background-color: $color-background-highlight !default;
-
-  $direct-answer-title-font-size: $font-size-md-lg !default;
-  $direct-answer-title-line-height: $line-height-lg !default;
-  $direct-answer-title-font-weight: $font-weight-semibold !default;
-  $direct-answer-title-color: white !default;
-
-  $direct-answer-content-font-size: $font-size-xlg !default;
-  $direct-answer-content-line-height: $line-height-md !default;
-  $direct-answer-content-font-weight: $font-weight-semibold !default;
-  $direct-answer-content-color: $color-text-primary !default;
-
-  $direct-answer-view-details-font-size: $font-size-md !default;
-  $direct-answer-view-details-line-height: $line-height-xxlg !default;
-  $direct-answer-view-details-font-weight: $font-weight-semibold !default;
-
-  $direct-answer-footer-font-size: $font-size-md !default;
-  $direct-answer-footer-line-height: $line-height-md !default;
-  $direct-answer-footer-font-weight: $font-weight-normal !default;
-  $direct-answer-footer-color: $color-text-secondary !default;
-  $direct-answer-footer-height: $module-footer-height !default;
-
   &-title
   {
-    padding-top: $base-spacing / 2;
-    padding-left: $base-spacing;
-    padding-bottom: $base-spacing / 2;
-    padding-right: $base-spacing;
+    padding-top: calc(var(--base-spacing) / 2);
+    padding-left: var(--base-spacing);
+    padding-bottom: calc(var(--base-spacing) / 2);
+    padding-right: var(--base-spacing);
     display: flex;
     align-items: center;
-    background-color: $direct-answer-title-background-color;
-    border: $direct-answer-border;
+    background-color: var(--direct-answer-title-background-color);
+    border: var(--direct-answer-border);
     @include Text(
-      $color: $direct-answer-title-color
+      $color: var(--direct-answer-title-color)
     )
   }
 
@@ -47,17 +70,17 @@
   {
     margin: 0;
     @include Text(
-      $size: $direct-answer-title-font-size,
-      $line-height: $direct-answer-title-line-height,
-      $weight: $direct-answer-title-font-weight,
-      $color: $direct-answer-title-color
+      $size: var(--direct-answer-title-font-size),
+      $line-height: var(--direct-answer-title-line-height),
+      $weight: var(--direct-answer-title-font-weight),
+      $color: var(--direct-answer-title-color)
     );
   }
 
   &-titleIconWrapper
   {
     display: flex;
-    margin-right: $base-spacing / 2;
+    margin-right: calc(var(--base-spacing) / 2);
     height: 18px;
   }
 
@@ -68,7 +91,7 @@
 
   &-iconWrapper
   {
-    margin-right: $base-spacing-sm;
+    margin-right: var(--base-spacing-sm);
     display: inline-flex;
   }
 
@@ -77,38 +100,38 @@
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: $base-spacing;
-    background-color: $direct-answer-content-background-color;
-    border-left: $direct-answer-border;
-    border-right: $direct-answer-border;
+    padding: var(--base-spacing);
+    background-color: var(--direct-answer-content-background-color);
+    border-left: var(--direct-answer-border);
+    border-right: var(--direct-answer-border);
   }
 
   &-footerWrapper
   {
-    background-color: $direct-answer-footer-background-color;
+    background-color: var(--direct-answer-footer-background-color);
   }
 
   &-footer
   {
     display: flex;
     justify-content: flex-end;
-    height: $direct-answer-footer-height;
+    height: var(--direct-answer-footer-height);
     align-items: center;
-    padding-left: $base-spacing;
-    padding-right: $base-spacing;
+    padding-left: var(--base-spacing);
+    padding-right: var(--base-spacing);
     padding-top: 10px;
     padding-bottom: 10px;
-    border: $direct-answer-border;
+    border: var(--direct-answer-border);
   }
 
   &-footerText
   {
-    margin-right: $base-spacing;
+    margin-right: var(--base-spacing);
     @include Text(
-      $size: $direct-answer-footer-font-size,
-      $line-height: $direct-answer-footer-line-height,
-      $weight: $direct-answer-footer-font-weight,
-      $color: $direct-answer-footer-color
+      $size: var(--direct-answer-footer-font-size),
+      $line-height: var(--direct-answer-footer-line-height),
+      $weight: var(--direct-answer-footer-font-weight),
+      $color: var(--direct-answer-footer-color)
     );
 
     font-style: italic;
@@ -129,7 +152,7 @@
   &-thumbDownIcon
   {
     display: inline-flex;
-    color: $color-text-secondary;
+    color: var(--color-text-secondary);
   }
 
   &-thumb
@@ -148,10 +171,10 @@
   &-fieldValue
   {
     @include Text(
-      $size: $direct-answer-content-font-size,
-      $line-height: $direct-answer-content-line-height,
-      $weight: $direct-answer-content-font-weight,
-      $color: $direct-answer-content-color
+      $size: var(--direct-answer-content-font-size),
+      $line-height: var(--direct-answer-content-line-height),
+      $weight: var(--direct-answer-content-font-weight),
+      $color: var(--direct-answer-content-color)
     );
 
     display: flex;
@@ -163,7 +186,7 @@
   {
     @include Link-1;
 
-    font-weight: $font-weight-semibold;
+    font-weight: var(--font-weight-semibold);
   }
 
   &-feedback
@@ -174,9 +197,9 @@
   &-viewMore
   {
     @include Text(
-      $size: $direct-answer-view-details-font-size,
-      $line-height: $direct-answer-view-details-line-height,
-      $weight: $direct-answer-view-details-font-weight,
+      $size: var(--direct-answer-view-details-font-size),
+      $line-height: var(--direct-answer-view-details-line-height),
+      $weight: var(--direct-answer-view-details-font-weight),
     )
     @include Link-1;
 
@@ -186,7 +209,7 @@
 
   &-viewMoreIcon
   {
-    $line-height: $direct-answer-view-details-line-height;
+    $line-height: var(--direct-answer-view-details-line-height);
     margin-left: 4px;
   }
 }

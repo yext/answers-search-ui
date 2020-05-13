@@ -1,33 +1,53 @@
 /** @define Nav */
 
+$nav-text-font-size: var(--font-size-md) !default;
+$nav-text-line-height: var(--line-height-md) !default;
+$nav-text-font-weight: var(--font-weight-semibold) !default;
+$nav-text-color: var(--color-text-primary) !default;
+$nav-text-hover-color: #c5cace !default;
+$nav-text-active-color: var(--color-brand-primary) !default;
+$nav-text-active-border-width: 2px !default;
+$nav-text-active-border: var(--nav-text-active-border-width) solid var(--color-brand-primary) !default;
+$nav-text-focus-background-color: #e9e9e9 !default;
+
+$nav-dropdown-font-size: 13px !default;
+$nav-dropdown-line-height: var(--line-height-sm) !default;
+$nav-dropdown-font-weight: var(--font-weight-semibold) !default;
+$nav-dropdown-color: var(--nav-text-color) !default;
+$nav-dropdown-hover-color: var(--nav-dropdown-color) !default;
+$nav-dropdown-hover-background-color: #eeeff0 !default;
+$nav-dropdown-width: 250px !default;
+
+$nav-border-color: var(--color-borders) !default;
+
+:root {
+  --nav-text-font-size: #{$nav-text-font-size};
+  --nav-text-line-height: #{$nav-text-line-height};
+  --nav-text-font-weight: #{$nav-text-font-weight};
+  --nav-text-color: #{$nav-text-color};
+  --nav-text-hover-color: #{$nav-text-hover-color};
+  --nav-text-active-color: #{$nav-text-active-color};
+  --nav-text-active-border-width: #{$nav-text-active-border-width};
+  --nav-text-active-border: #{$nav-text-active-border};
+  --nav-text-focus-background-color: #{$nav-text-focus-background-color};
+  --nav-dropdown-font-size: #{$nav-dropdown-font-size};
+  --nav-dropdown-line-height: #{$nav-dropdown-line-height};
+  --nav-dropdown-font-weight: #{$nav-dropdown-font-weight};
+  --nav-dropdown-color: #{$nav-dropdown-color};
+  --nav-dropdown-hover-color: #{$nav-dropdown-hover-color};
+  --nav-dropdown-hover-background-color: #{$nav-dropdown-hover-background-color};
+  --nav-dropdown-width: #{$nav-dropdown-width};
+  --nav-border-color: #{$nav-border-color};
+}
+
 .yxt-Nav
 {
-  $nav-text-font-size: $font-size-md !default;
-  $nav-text-line-height: $line-height-md !default;
-  $nav-text-font-weight: $font-weight-semibold !default;
-  $nav-text-color: $color-text-primary !default;
-  $nav-text-hover-color: #c5cace !default;
-  $nav-text-active-color: $color-brand-primary !default;
-  $nav-text-active-border-width: 2px !default;
-  $nav-text-active-border: $nav-text-active-border-width solid $color-brand-primary !default;
-  $nav-text-focus-background-color: #e9e9e9 !default;
-
-  $nav-dropdown-font-size: 13px !default;
-  $nav-dropdown-line-height: $line-height-sm !default;
-  $nav-dropdown-font-weight: $font-weight-semibold !default;
-  $nav-dropdown-color: $nav-text-color !default;
-  $nav-dropdown-hover-color: $nav-dropdown-color !default;
-  $nav-dropdown-hover-background-color: #eeeff0 !default;
-  $nav-dropdown-width: 250px !default;
-
-  $nav-border-color: $color-borders !default;
-
   &-container
   {
     display: flex;
     justify-content: flex-start;
     position: relative;
-    border-bottom: $nav-text-active-border-width solid $nav-border-color;
+    border-bottom: var(--nav-text-active-border-width) solid var(--nav-border-color);
   }
 
   &-expanded
@@ -46,16 +66,16 @@
     margin-bottom: -2px;
 
     @include Text(
-      $size: $nav-text-font-size,
-      $line-height: $nav-text-line-height,
-      $weight: $nav-text-font-weight,
-      $color: $nav-text-color
+      $size: var(--nav-text-font-size),
+      $line-height: var(--nav-text-line-height),
+      $weight: var(--nav-text-font-weight),
+      $color: var(--nav-text-color)
     );
 
     padding-top: $item-padding;
     padding-bottom: $item-padding;
-    padding-left: $base-spacing;
-    padding-right: $base-spacing;
+    padding-left: var(--base-spacing);
+    padding-right: var(--base-spacing);
     text-transform: uppercase;
     display: flex;
     align-items: center;
@@ -63,18 +83,18 @@
 
     &:hover
     {
-      color: $nav-text-active-color;
+      color: var(--nav-text-active-color);
 
       @media (hover: none)
       {
-        color: $nav-text-color;
+        color: var(--nav-text-color);
       }
     }
 
     &:focus
     {
-      background-color: $nav-text-focus-background-color;
-      color: $nav-text-color;
+      background-color: var(--nav-text-focus-background-color);
+      color: var(--nav-text-color);
     }
 
     &:not(:last-child)
@@ -90,10 +110,10 @@
 
     &.is-active
     {
-      color: $nav-text-active-color;
-      border-bottom: $nav-text-active-border;
-      font-weight: $font-weight-semibold;
-      padding-bottom: $item-padding + $nav-text-active-border-width;
+      color: var(--nav-text-active-color);
+      border-bottom: var(--nav-text-active-border);
+      font-weight: var(--font-weight-semibold);
+      padding-bottom: calc(#{$item-padding}+ var(--nav-text-active-border-width));
     }
   }
 
@@ -154,11 +174,11 @@
     border-radius: 8px;
     top: 30px;
     right: 0;
-    z-index: $z-index-nav-more-modal;
+    z-index: var(--z-index-nav-more-modal);
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: $nav-dropdown-width;
+    width: var(--nav-dropdown-width);
     word-break: break-all;
     white-space: normal;
 
@@ -171,10 +191,10 @@
   &-dropDownItem
   {
     @include Text(
-      $size: $nav-dropdown-font-size,
-      $line-height: $nav-dropdown-line-height,
-      $weight: $nav-dropdown-font-weight,
-      $color: $nav-dropdown-color
+      $size: var(--nav-dropdown-font-size),
+      $line-height: var(--nav-dropdown-line-height),
+      $weight: var(--nav-dropdown-font-weight),
+      $color: var(--nav-dropdown-color)
     );
 
     display: block;
@@ -187,8 +207,8 @@
     &:hover,
     &:focus
     {
-      color: $nav-dropdown-hover-color;
-      background-color: $nav-dropdown-hover-background-color;
+      color: var(--nav-dropdown-hover-color);
+      background-color: var(--nav-dropdown-hover-background-color);
     }
   }
 }

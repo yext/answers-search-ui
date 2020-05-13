@@ -1,32 +1,59 @@
 /** @define AccordionCard */
+
+$accordion-card-spacing: var(--base-spacing) !default;
+
+$accordion-card-background-color: white !default;
+$accordion-card-content-background-color: white !default;
+
+$accordion-card-toggle-icon-height: var(--accordion-card-spacing) !default;
+$accordion-card-toggle-icon-width: calc(var(--accordion-card-spacing) * 7/10) !default;
+
+$accordion-card-title-size: var(--font-size-md-lg) !default;
+$accordion-card-title-color: var(--color-brand-primary) !default;
+$accordion-card-title-color-hover: var(--color-background-highlight) !default;
+$accordion-card-title-line-height: var(--line-height-lg) !default;
+$accordion-card-title-weight: var(--font-weight-normal) !default;
+
+$accordion-card-subtitle-size: var(--font-size-md) !default;
+$accordion-card-subtitle-color: var(--color-text-secondary) !default;
+
+$accordion-card-details-size: var(--font-size-md) !default;
+$accordion-card-details-weight: var(--font-weight-normal) !default;
+$accordion-card-details-line-height: calc(var(--accordion-card-details-size) * 10/7) !default;
+$accordion-card-details-color: var(--color-text-primary) !default;
+
+$accordion-card-margin: calc(var(--base-spacing) / 2) !default;
+$accordion-card-border: var(--border-default) !default;
+
+$accordion-card-background-color--expanded: white !default;
+$accordion-card-spacing--expanded: var(--base-spacing) !default;
+
+:root {
+  --accordion-card-spacing: #{$accordion-card-spacing};
+  --accordion-card-background-color: #{$accordion-card-background-color};
+  --accordion-card-content-background-color: #{$accordion-card-content-background-color};
+  --accordion-card-toggle-icon-height: #{$accordion-card-toggle-icon-height};
+  --accordion-card-toggle-icon-width: #{$accordion-card-toggle-icon-width};
+  --accordion-card-title-size: #{$accordion-card-title-size};
+  --accordion-card-title-color: #{$accordion-card-title-color};
+  --accordion-card-title-color-hover: #{$accordion-card-title-color-hover};
+  --accordion-card-title-line-height: #{$accordion-card-title-line-height};
+  --accordion-card-title-weight: #{$accordion-card-title-weight};
+  --accordion-card-subtitle-size: #{$accordion-card-subtitle-size};
+  --accordion-card-subtitle-color: #{$accordion-card-subtitle-color};
+  --accordion-card-details-size: #{$accordion-card-details-size};
+  --accordion-card-details-weight: #{$accordion-card-details-weight};
+  --accordion-card-details-line-height: #{$accordion-card-details-line-height};
+  --accordion-card-details-color: #{$accordion-card-details-color};
+  --accordion-card-margin: #{$accordion-card-margin};
+  --accordion-card-border: #{$accordion-card-border};
+  --accordion-card-background-color--expanded: #{$accordion-card-spacing--expanded};
+  --accordion-card-spacing--expanded: #{$accordion-card-spacing--expanded};
+}
+
 .yxt-AccordionCard 
 {
-  $accordion-card-spacing: $base-spacing !default;
-
-  $accordion-card-background-color: white !default;
-  $accordion-card-content-background-color: white !default;
-
-  $accordion-card-toggle-icon-height: $accordion-card-spacing !default;
-  $accordion-card-toggle-icon-width: $accordion-card-spacing * 7/10 !default;
-
-  $accordion-card-title-size: $font-size-md-lg !default;
-  $accordion-card-title-color: $color-brand-primary !default;
-  $accordion-card-title-color-hover: $color-background-highlight !default;
-  $accordion-card-title-line-height: $line-height-lg !default;
-  $accordion-card-title-weight: $font-weight-normal !default;
-
-  $accordion-card-subtitle-size: $font-size-md !default;
-  $accordion-card-subtitle-color: $color-text-secondary !default;
-
-  $accordion-card-details-size: $font-size-md !default;
-  $accordion-card-details-weight: $font-weight-normal !default;
-  $accordion-card-details-line-height: $accordion-card-details-size * 10/7 !default;
-  $accordion-card-details-color: $color-text-primary !default;
-
-  $accordion-card-margin: $base-spacing / 2 !default;
-  $accordion-card-border: $border-default !default;
-
-  background-color: $accordion-card-background-color;
+  background-color: var(--accordion-card-background-color);
 
   @media (max-width: $breakpoint-mobile-max) 
   {
@@ -42,46 +69,47 @@
     background: none;
     border: 0;
     padding: 0;
-    padding-right: $accordion-card-spacing * 0.5;
+    padding-right: calc(var(--accordion-card-spacing) * 0.5);
     -webkit-tap-highlight-color: rgba(0,0,0,0);
 
     &:hover 
     { 
-      background-color: $accordion-card-title-color-hover;
+      background-color: var(--accordion-card-title-color-hover);
     }
 
     &:focus {
-      background-color: $accordion-card-title-color-hover;
+      background-color: var(--accordion-card-title-color-hover);
     }
   }
 
   &-toggle svg 
   {
-    height: $accordion-card-toggle-icon-height;
-    width: $accordion-card-toggle-icon-width;
-    color: $color-brand-primary;
+    height: var(--accordion-card-toggle-icon-height);
+    width: var(--accordion-card-toggle-icon-width);
+    color: var(--color-brand-primary);
   }
 
   &-title
   {
-    margin-top: $accordion-card-spacing / 2;
-    margin-right: $accordion-card-spacing;
-    margin-left: $accordion-card-spacing;
-    margin-bottom: $accordion-card-spacing * 5/8;
+    margin-top: calc(var(--accordion-card-spacing) / 2);
+    margin-right: var(--accordion-card-spacing);
+    margin-left: var(--accordion-card-spacing);
+    margin-bottom: calc(var(--accordion-card-spacing) * 5/8);
+
     text-align: left;
     @include Text(
-      $size: $accordion-card-title-size,
-      $color: $accordion-card-title-color,
-      $line-height: $accordion-card-title-line-height,
-      $weight: $accordion-card-title-weight,
+      $size: var(--accordion-card-title-size),
+      $color: var(--accordion-card-title-color),
+      $line-height: var(--accordion-card-title-line-height),
+      $weight: var(--accordion-card-title-weight),
     );
   }
 
   &-icon 
   {
     margin-left: auto;
-    margin-right: $accordion-card-spacing / 2;
-    margin-top: $accordion-card-spacing * 0.75;
+    margin-right: calc(var(--accordion-card-spacing) / 2);
+    margin-top: calc(var(--accordion-card-spacing) * 0.75);
     flex-shrink: 0;
   }
 
@@ -99,42 +127,39 @@
 
   &-content
   {
-    padding: $accordion-card-spacing / 2 $accordion-card-spacing;
+    padding: calc(var(--accordion-card-spacing) / 2) var(--accordion-card-spacing);
     height: 0;
   }
 
   &-subtitle
   {
     @include Text(
-      $size: $accordion-card-subtitle-size,
-      $color: $accordion-card-subtitle-color,
+      $size: var(--accordion-card-subtitle-size),
+      $color: var(--accordion-card-subtitle-color),
     );
-    padding-bottom: $accordion-card-spacing / 2;
+    padding-bottom: calc(var(--accordion-card-spacing) / 2);
   }
 
   &-details
   {
     @include Text(
-      $size: $accordion-card-details-size,
-      $color: $accordion-card-details-color,
-      $weight: $accordion-card-details-weight,
-      $line-height: $accordion-card-details-line-height,
+      $size: var(--accordion-card-details-size),
+      $color: var(--accordion-card-details-color),
+      $weight: var(--accordion-card-details-weight),
+      $line-height: var(--accordion-card-details-line-height),
     );
-    padding-bottom: $accordion-card-spacing / 2;
+    padding-bottom: calc(var(--accordion-card-spacing) / 2);
   }
 
   &-ctas .yxt-CTACollection-item
   {
-    padding-bottom: $accordion-card-spacing / 2;
+    padding-bottom: calc(var(--accordion-card-spacing) / 2);
   }
 }
 
 .yxt-AccordionCard--expanded 
 {
-  $accordion-card-background-color--expanded: white;
-  $accordion-card-spacing--expanded: $base-spacing !default;
-
-  background-color: $accordion-card-background-color--expanded;
+  background-color: var(--accordion-card-background-color--expanded);
 
   .yxt-AccordionCard-icon svg
   {

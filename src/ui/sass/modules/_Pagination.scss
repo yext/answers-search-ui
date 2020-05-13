@@ -1,21 +1,30 @@
 /** @define Pagination */
+
+$pagination-text-color: var(--color-text-primary) !default;
+$pagination-text-color-hover: var(--color-text-secondary) !default;
+$pagination-text-font-size: var(--font-size-md-lg) !default;
+$pagination-text-line-height: var(--line-height-lg) !default;
+$pagination-text-font-weight: var(--font-weight-normal) !default;
+
+:root {
+  --pagination-text-color: #{$pagination-text-color};
+  --pagination-text-color-hover: #{$pagination-text-color-hover};
+  --pagination-text-font-size: #{$pagination-text-font-size};
+  --pagination-text-line-height: #{$pagination-text-line-height};
+  --pagination-text-font-weight: #{$pagination-text-font-weight};
+}
+
 .yxt-Pagination
 {
-  $pagination-text-color: $color-text-primary !default;
-  $pagination-text-color-hover: $color-text-secondary !default;
-  $pagination-text-font-size: $font-size-md-lg !default;
-  $pagination-text-line-height: $line-height-lg !default;
-  $pagination-text-font-weight: $font-weight-normal !default;
-
   display: flex;
   justify-content: center;
   align-items: center;
 
   @include Text(
-    $size: $pagination-text-font-size,
-    $line-height: $pagination-text-line-height,
-    $weight: $pagination-text-font-weight,
-    $color: $pagination-text-color
+    $size: var(--pagination-text-font-size),
+    $line-height: var(--pagination-text-line-height),
+    $weight: var(--pagination-text-font-weight),
+    $color: var(--pagination-text-color)
   );
 
   &-button
@@ -31,7 +40,7 @@
 
       &:hover
       {
-        color: $pagination-text-color-hover;
+        color: var(--pagination-text-color-hover);
       }
     }
   }

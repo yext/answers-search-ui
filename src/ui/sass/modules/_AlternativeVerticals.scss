@@ -1,51 +1,56 @@
 /** @define AlternativeVerticals */
+
+$alternative-verticals-emphasized-font-weight: var(--font-weight-medium) !default;
+
+:root {
+  --alternative-verticals-emphasized-font-weight: #{$alternative-verticals-emphasized-font-weight}
+}
+
 .yxt-AlternativeVerticals
 {
-  font-family: $font-family;
-  font-weight: $font-weight-light;
-  background-color: $color-brand-white;
-  border: $border-default;
+  font-family: var(--font-family);
+  font-weight: var(--font-weight-light);
+  background-color: var(--color-brand-white);
+  border: var(--border-default);
 
-  $alternative-verticals-emphasized-font-weight: $font-weight-medium !default;
-
-  @media (min-width: $breakpoint-mobile-max) {
+  @media (min-width: var(--breakpoint-mobile-max)) {
     margin-bottom: 24px;
   }
 
   &--notShowingResults
   {
-    border-bottom: $border-default;
+    border-bottom: var(--border-default);
   }
 
   &-noResultsInfo {
-    background-color: $color-brand-primary;
-    color: $color-brand-white;
-    font-size: $font-size-md;
-    padding: $base-spacing / 2;
+    background-color: var(--color-brand-primary);
+    color: var(--color-brand-white);
+    font-size: var(--font-size-md);
+    padding: calc(var(--base-spacing) / 2);
 
     &--emphasized {
-      font-weight: $alternative-verticals-emphasized-font-weight;
+      font-weight: var(--alternative-verticals-emphasized-font-weight);
     }
 
-    @media (min-width: $breakpoint-mobile-max) {
-      font-size: $font-size-xlg;
+    @media (min-width: var(--breakpoint-mobile-max)) {
+      font-size: var(--font-size-xlg);
       padding: 10px 20px;
     }
   }
 
   &-suggestionsWrapper {
-    padding: $base-spacing;
+    padding: var(--base-spacing);
   }
 
   &-details {
-    font-size: $font-size-md;
+    font-size: var(--font-size-md);
 
     &--query {
-      font-weight: $font-weight-normal;
+      font-weight: var(--font-weight-normal);
     }
 
     @media (min-width: $breakpoint-mobile-max) {
-      font-size: $font-size-md-lg;
+      font-size: var(--font-size-md-lg);
     }
   }
 
@@ -58,10 +63,10 @@
 
   &-suggestion {
     display: flex;
-    margin: $base-spacing * 0.75 0;
+    margin: calc(var(--base-spacing) * 0.75) 0;
 
     @media (max-width: $breakpoint-mobile-max) {
-      margin: $base-spacing / 2 0;
+      margin: calc(var(--base-spacing) / 2) 0;
     }
   }
 
@@ -80,7 +85,7 @@
     }
 
     &--copy {
-      font-weight: $alternative-verticals-emphasized-font-weight;
+      font-weight: var(--alternative-verticals-emphasized-font-weight);
     }
   }
 
@@ -106,19 +111,19 @@
   }
 
   &-universalDetails {
-    font-size: $font-size-md;
+    font-size: var(--font-size-md);
 
     @media (min-width: $breakpoint-mobile-max) {
-      font-size: $font-size-md-lg;
+      font-size: var(--font-size-md-lg);
     }
   }
 
   a {
-    color: $color-brand-primary;
+    color: var(--color-brand-primary);
 
     &:hover,
     &:active {
-      color: $color-brand-hover;
+      color: var(--color-brand-hover);
     }
   }
 }
