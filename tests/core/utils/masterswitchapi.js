@@ -11,17 +11,13 @@ describe('checking Answers Status page', () => {
       getState: jest.fn(stateVar => true)
     };
   });
-  const masterSwitchApi = new MasterSwitchApi(new GlobalStorage());
 
   it('behaves correctly when JSON is present and disabled is true', () => {
     const mockedResponse =
       { json: jest.fn(() => Promise.resolve({ disabled: true })) };
     const mockedRequest = jest.fn(() => Promise.resolve(mockedResponse));
-    HttpRequester.mockImplementation(() => {
-      return {
-        get: mockedRequest
-      };
-    });
+    const masterSwitchApi = createMasterSwitchApi(mockedRequest);
+
     return masterSwitchApi.isDisabled('abc123', 'someexperience')
       .then(isDisabled => expect(isDisabled).toBeTruthy());
   });
@@ -30,11 +26,8 @@ describe('checking Answers Status page', () => {
     const mockedResponse =
       { json: jest.fn(() => Promise.resolve({ disabled: false })) };
     const mockedRequest = jest.fn(() => Promise.resolve(mockedResponse));
-    HttpRequester.mockImplementation(() => {
-      return {
-        get: mockedRequest
-      };
-    });
+    const masterSwitchApi = createMasterSwitchApi(mockedRequest);
+
     return masterSwitchApi.isDisabled('abc123', 'someexperience')
       .then(isDisabled => expect(isDisabled).toBeFalsy());
   });
@@ -42,11 +35,8 @@ describe('checking Answers Status page', () => {
   it('behaves correctly when status page contains JSON of empty object', () => {
     const mockedResponse = { json: jest.fn(() => Promise.resolve({ })) };
     const mockedRequest = jest.fn(() => Promise.resolve(mockedResponse));
-    HttpRequester.mockImplementation(() => {
-      return {
-        get: mockedRequest
-      };
-    });
+    const masterSwitchApi = createMasterSwitchApi(mockedRequest);
+
     return masterSwitchApi.isDisabled('abc123', 'someexperience')
       .then(isDisabled => expect(isDisabled).toBeFalsy());
   });
@@ -54,12 +44,23 @@ describe('checking Answers Status page', () => {
   it('behaves correctly when network call results in an error', () => {
     const mockedRequest =
       jest.fn(() => Promise.reject(new Error('Page does not exist')));
-    HttpRequester.mockImplementation(() => {
-      return {
-        get: mockedRequest
-      };
-    });
+    const masterSwitchApi = createMasterSwitchApi(mockedRequest);
+
     return masterSwitchApi.isDisabled('abc123', 'someexperience')
       .then(isDisabled => expect(isDisabled).toBeFalsy());
   });
 });
+
+/**
+ *
+ * @param {Function} mockedRequest
+ * @returns {MasterSwitchApi}
+ */
+function createMasterSwitchApi (mockedRequest) {
+  HttpRequester.mockImplementation(() => {
+    return {
+      get: mockedRequest
+    };
+  });
+  return MasterSwitchApi.from('apiKey', 'experienceKey', new GlobalStorage());
+}

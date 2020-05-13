@@ -143,8 +143,10 @@ class Answers {
    * is ever called, a check to the relevant Answers Status page is made.
    *
    * @param {Object} config The Answers configuration.
+   * @param {Object} statusPage An override for the baseUrl and endpoint of the
+   *                            experience's Answers Status page.
    */
-  init (config) {
+  init (config, statusPage) {
     const parsedConfig = this.parseConfig(config);
     this.validateConfig(parsedConfig);
 
@@ -163,7 +165,10 @@ class Answers {
     globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
 
-    const masterSwitchApi = new MasterSwitchApi(globalStorage);
+    const masterSwitchApi = statusPage
+      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, globalStorage)
+      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, globalStorage);
+
     masterSwitchApi.isDisabled(parsedConfig.apiKey, parsedConfig.experienceKey)
       .then(isDisabled => !isDisabled && this._initInternal(parsedConfig, globalStorage, persistentStorage))
       .catch(() => this._initInternal(parsedConfig, globalStorage, persistentStorage));
