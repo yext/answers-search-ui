@@ -169,7 +169,7 @@ export class MapBoxMarkerConfig {
           marker);
       }
 
-      const wrapper = pinConfigObj.wrapper ? pinConfigObj.wrapper : null;
+      const wrapper = MapBoxMarkerConfig.buildWrapper(pinConfigObj);
       const staticMapPin = pinConfigObj.staticMapPin ? pinConfigObj.staticMapPin : null;
 
       mapboxMapMarkerConfigs.push(
@@ -187,5 +187,17 @@ export class MapBoxMarkerConfig {
     });
 
     return mapboxMapMarkerConfigs;
+  }
+
+  static buildWrapper (pinConfigObj) {
+    if (pinConfigObj.wrapper) {
+      return pinConfigObj.wrapper;
+    }
+    if (pinConfigObj.svg) {
+      let el = document.createElement('img');
+      el.src = `data:image/svg+xml;charset=utf-8, ${encodeURIComponent(pinConfigObj.svg)}`;
+      return el;
+    }
+    return null;
   }
 }
