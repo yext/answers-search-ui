@@ -91,7 +91,7 @@ describe('querying and responding', () => {
         searchParameters: searchParameters
       });
       expect(mockedGet).toHaveBeenCalledTimes(1);
-      expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData);
+      expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData, undefined);
     });
 
     it('returns the right AutoCompleteData', () => {
@@ -123,7 +123,7 @@ describe('querying and responding', () => {
     it('creates a proper GET request for vertical search', () => {
       autocomplete.queryVertical('test', verticalKey);
       expect(mockedGet).toHaveBeenCalledTimes(1);
-      expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData);
+      expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData, undefined);
     });
 
     it('returns the right AutoCompleteData', () => {
@@ -151,7 +151,7 @@ describe('querying and responding', () => {
     it('creates a proper GET request for vertical search', () => {
       autocomplete.queryUniversal('test');
       expect(mockedGet).toHaveBeenCalledTimes(1);
-      expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData);
+      expect(mockedGet).toHaveBeenCalledWith(expectedUrl, expectedData, undefined);
     });
 
     it('returns the right AutoCompleteData', () => {
