@@ -28,6 +28,7 @@ import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION } from './core/constants';
+import MasterSwitchApi from './core/utils/masterswitchapi';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -137,7 +138,15 @@ class Answers {
     return this.instance;
   }
 
-  init (config) {
+  /**
+   * Initializes the SDK with the provided configuration. Note that before onReady
+   * is ever called, a check to the relevant Answers Status page is made.
+   *
+   * @param {Object} config The Answers configuration.
+   * @param {Object} statusPage An override for the baseUrl and endpoint of the
+   *                            experience's Answers Status page.
+   */
+  init (config, statusPage) {
     const parsedConfig = this.parseConfig(config);
     this.validateConfig(parsedConfig);
 
@@ -156,6 +165,24 @@ class Answers {
     globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
 
+    const masterSwitchApi = statusPage
+      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, globalStorage)
+      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, globalStorage);
+
+    masterSwitchApi.isDisabled(parsedConfig.apiKey, parsedConfig.experienceKey)
+      .then(isDisabled => !isDisabled && this._initInternal(parsedConfig, globalStorage, persistentStorage))
+      .catch(() => this._initInternal(parsedConfig, globalStorage, persistentStorage));
+  }
+
+  /**
+   * Initializes the AnalyticsReporter and Core. Also invokes the onReady function
+   * provided in the parsed configuration.
+   *
+   * @param {Object} parsedConfig The parsed Answers configuration.
+   * @param {GlobalStorage} globalStorage The {@link GlobalStorage} instance.
+   * @param {PersistentStorage} persistentStorage The {@link PersistentStorage} instance.
+   */
+  _initInternal (parsedConfig, globalStorage, persistentStorage) {
     this._services = parsedConfig.mock
       ? getMockServices()
       : getServices(parsedConfig, globalStorage);

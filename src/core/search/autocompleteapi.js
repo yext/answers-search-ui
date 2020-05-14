@@ -153,7 +153,7 @@ export default class AutoCompleteApi {
     };
     let request = new ApiRequest(requestConfig, this._globalStorage);
 
-    return request.get(queryString)
+    return request.get()
       .then(response => response.json())
       .then(response => AutoCompleteDataTransformer.universal(response.response))
       .catch(error => {
