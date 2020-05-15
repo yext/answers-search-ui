@@ -13,7 +13,7 @@ $alternative-verticals-emphasized-font-weight: var(--yxt-font-weight-medium) !de
   background-color: var(--yxt-color-brand-white);
   border: var(--yxt-border-default);
 
-  @media (min-width: var(--yxt-breakpoint-mobile-max)) {
+  @media (min-width: $breakpoint-mobile-max) {
     margin-bottom: 24px;
   }
 
@@ -32,7 +32,7 @@ $alternative-verticals-emphasized-font-weight: var(--yxt-font-weight-medium) !de
       font-weight: var(--yxt-alternative-verticals-emphasized-font-weight);
     }
 
-    @media (min-width: var(--yxt-breakpoint-mobile-max)) {
+    @media (min-width: $breakpoint-mobile-max) {
       font-size: var(--yxt-font-size-xlg);
       padding: 10px 20px;
     }
