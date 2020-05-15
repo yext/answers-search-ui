@@ -38,7 +38,7 @@ export default class SearchDataTransformer {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(response, formatters, verticalKey, resultsContext),
-      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(response.facets, resultsContext),
+      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(response.facets),
       [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
       [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
       [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(response, formatters),
