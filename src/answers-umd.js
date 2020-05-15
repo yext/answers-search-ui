@@ -2,6 +2,7 @@
 
 import Core from './core/core';
 import RtfConverter from '@yext/rtf-converter';
+import cssVars from 'css-vars-ponyfill';
 
 import {
   DefaultTemplatesLoader,
@@ -387,6 +388,19 @@ class Answers {
     }
     this.core.globalStorage.set('queryTrigger', 'initialize');
     this.core.setQuery(searchConfig.defaultInitialSearch);
+  }
+
+  /*
+   * Updates the css styles with new current variables. This is useful when the css
+   * variables are updated dynamically (e.g. through js).
+   * @param {Object} config Additional config to pass to the polyfill
+   */
+  polyfillCssVariables (config) {
+    cssVars(Object.assign(
+      {},
+      { onlyLegacy: true },
+      config
+    ));
   }
 }
 
