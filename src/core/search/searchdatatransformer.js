@@ -10,6 +10,7 @@ import DynamicFilters from '../models/dynamicfilters';
 import SearchIntents from '../models/searchintents';
 import LocationBias from '../models/locationbias';
 import AlternativeVerticals from '../models/alternativeverticals';
+import ResultsContext from '../storage/resultscontext';
 
 /**
  * A Data Transformer that takes the response object from a Search request
@@ -31,16 +32,44 @@ export default class SearchDataTransformer {
   }
 
   static transformVertical (data, formatters, verticalKey) {
-    // TODO (tmeyer): SPR-1923, centralize the allResultsForVertical parsing here.
+    const resultsContext = SearchDataTransformer._determineResultsContext(data.response);
+    const response = SearchDataTransformer._formResponseWithContext(data.response, resultsContext);
     return {
-      [StorageKeys.QUERY_ID]: data.response.queryId,
+      [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response, formatters, verticalKey),
-      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response),
-      [StorageKeys.INTENTS]: SearchIntents.from(data.response.searchIntents),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.response.spellCheck),
-      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(data.response, formatters),
-      [StorageKeys.LOCATION_BIAS]: LocationBias.from(data.response.locationBias)
+      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(response, formatters, verticalKey, resultsContext),
+      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(response.facets, resultsContext),
+      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
+      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(response, formatters),
+      [StorageKeys.LOCATION_BIAS]: LocationBias.from(response.locationBias)
     };
+  }
+
+  /**
+   * Determine the {@link ResultsContext} of the given vertical results.
+   * @param {Object} response
+   */
+  static _determineResultsContext (response) {
+    const hasResults = response.results && response.resultsCount > 0;
+    return hasResults ? ResultsContext.NORMAL : ResultsContext.NO_RESULTS;
+  }
+
+  /**
+   * Form response as if the results from `allResultsForVertical` were the actual
+   * results in `results`
+   * @param {Object} response The server response
+   */
+  static _formResponseWithContext (response, resultsContext) {
+    if (resultsContext === ResultsContext.NO_RESULTS) {
+      const { results, resultsCount, facets } = response.allResultsForVertical || {};
+      return {
+        ...response,
+        results: results || [],
+        resultsCount: resultsCount || 0,
+        facets
+      };
+    }
+    return response;
   }
 }
