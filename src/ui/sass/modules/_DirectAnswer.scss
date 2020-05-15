@@ -1,68 +1,68 @@
 /** @define yxt-DirectAnswer */
 
-$direct-answer-border: var(--border-default) !default;
+$direct-answer-border: var(--yxt-border-default) !default;
 
-$direct-answer-title-background-color: var(--color-brand-primary) !default;
+$direct-answer-title-background-color: var(--yxt-color-brand-primary) !default;
 $direct-answer-content-background-color: white !default;
-$direct-answer-footer-background-color: var(--color-background-highlight) !default;
+$direct-answer-footer-background-color: var(--yxt-color-background-highlight) !default;
 
-$direct-answer-title-font-size: var(--font-size-md-lg) !default;
-$direct-answer-title-line-height: var(--line-height-lg) !default;
-$direct-answer-title-font-weight: var(--font-weight-semibold) !default;
+$direct-answer-title-font-size: var(--yxt-font-size-md-lg) !default;
+$direct-answer-title-line-height: var(--yxt-line-height-lg) !default;
+$direct-answer-title-font-weight: var(--yxt-font-weight-semibold) !default;
 $direct-answer-title-color: white !default;
 
-$direct-answer-content-font-size: var(--font-size-xlg) !default;
-$direct-answer-content-line-height: var(--line-height-md) !default;
-$direct-answer-content-font-weight: var(--font-weight-semibold) !default;
-$direct-answer-content-color: var(--color-text-primary) !default;
+$direct-answer-content-font-size: var(--yxt-font-size-xlg) !default;
+$direct-answer-content-line-height: var(--yxt-line-height-md) !default;
+$direct-answer-content-font-weight: var(--yxt-font-weight-semibold) !default;
+$direct-answer-content-color: var(--yxt-color-text-primary) !default;
 
-$direct-answer-view-details-font-size: var(--font-size-md) !default;
-$direct-answer-view-details-line-height: var(--line-height-xxlg) !default;
-$direct-answer-view-details-font-weight: var(--font-weight-semibold) !default;
+$direct-answer-view-details-font-size: var(--yxt-font-size-md) !default;
+$direct-answer-view-details-line-height: var(--yxt-line-height-xxlg) !default;
+$direct-answer-view-details-font-weight: var(--yxt-font-weight-semibold) !default;
 
-$direct-answer-footer-font-size: var(--font-size-md) !default;
-$direct-answer-footer-line-height: var(--line-height-md) !default;
-$direct-answer-footer-font-weight: var(--font-weight-normal) !default;
-$direct-answer-footer-color: var(--color-text-secondary) !default;
-$direct-answer-footer-height: var(--module-footer-height) !default;
+$direct-answer-footer-font-size: var(--yxt-font-size-md) !default;
+$direct-answer-footer-line-height: var(--yxt-line-height-md) !default;
+$direct-answer-footer-font-weight: var(--yxt-font-weight-normal) !default;
+$direct-answer-footer-color: var(--yxt-color-text-secondary) !default;
+$direct-answer-footer-height: var(--yxt-module-footer-height) !default;
 
 :root {
-  --direct-answer-border: #{$direct-answer-border};
-  --direct-answer-title-background-color: #{$direct-answer-title-background-color};
-  --direct-answer-content-background-color: #{$direct-answer-content-background-color};
-  --direct-answer-footer-background-color: #{$direct-answer-footer-background-color};
-  --direct-answer-title-font-size: #{$direct-answer-title-font-size};
-  --direct-answer-title-line-height: #{$direct-answer-title-line-height};
-  --direct-answer-title-font-weight: #{$direct-answer-title-font-weight};
-  --direct-answer-title-color: #{$direct-answer-title-color};
-  --direct-answer-content-font-size: #{$direct-answer-content-font-size};
-  --direct-answer-content-line-height: #{$direct-answer-content-line-height};
-  --direct-answer-content-font-weight: #{$direct-answer-content-font-weight};
-  --direct-answer-content-color: #{$direct-answer-content-color};
-  --direct-answer-view-details-font-size: #{$direct-answer-view-details-font-size};
-  --direct-answer-view-details-line-height: #{$direct-answer-view-details-line-height};
-  --direct-answer-view-details-font-weight: #{$direct-answer-view-details-font-weight};
-  --direct-answer-footer-font-size: #{$direct-answer-footer-font-size};
-  --direct-answer-footer-line-height: #{$direct-answer-footer-line-height};
-  --direct-answer-footer-font-weight: #{$direct-answer-footer-font-weight};
-  --direct-answer-footer-color: #{$direct-answer-footer-color};
-  --direct-answer-footer-height: #{$direct-answer-footer-height};
+  --yxt-direct-answer-border: #{$direct-answer-border};
+  --yxt-direct-answer-title-background-color: #{$direct-answer-title-background-color};
+  --yxt-direct-answer-content-background-color: #{$direct-answer-content-background-color};
+  --yxt-direct-answer-footer-background-color: #{$direct-answer-footer-background-color};
+  --yxt-direct-answer-title-font-size: #{$direct-answer-title-font-size};
+  --yxt-direct-answer-title-line-height: #{$direct-answer-title-line-height};
+  --yxt-direct-answer-title-font-weight: #{$direct-answer-title-font-weight};
+  --yxt-direct-answer-title-color: #{$direct-answer-title-color};
+  --yxt-direct-answer-content-font-size: #{$direct-answer-content-font-size};
+  --yxt-direct-answer-content-line-height: #{$direct-answer-content-line-height};
+  --yxt-direct-answer-content-font-weight: #{$direct-answer-content-font-weight};
+  --yxt-direct-answer-content-color: #{$direct-answer-content-color};
+  --yxt-direct-answer-view-details-font-size: #{$direct-answer-view-details-font-size};
+  --yxt-direct-answer-view-details-line-height: #{$direct-answer-view-details-line-height};
+  --yxt-direct-answer-view-details-font-weight: #{$direct-answer-view-details-font-weight};
+  --yxt-direct-answer-footer-font-size: #{$direct-answer-footer-font-size};
+  --yxt-direct-answer-footer-line-height: #{$direct-answer-footer-line-height};
+  --yxt-direct-answer-footer-font-weight: #{$direct-answer-footer-font-weight};
+  --yxt-direct-answer-footer-color: #{$direct-answer-footer-color};
+  --yxt-direct-answer-footer-height: #{$direct-answer-footer-height};
 }
 
 .yxt-DirectAnswer
 {
   &-title
   {
-    padding-top: calc(var(--base-spacing) / 2);
-    padding-left: var(--base-spacing);
-    padding-bottom: calc(var(--base-spacing) / 2);
-    padding-right: var(--base-spacing);
+    padding-top: calc(var(--yxt-base-spacing) / 2);
+    padding-left: var(--yxt-base-spacing);
+    padding-bottom: calc(var(--yxt-base-spacing) / 2);
+    padding-right: var(--yxt-base-spacing);
     display: flex;
     align-items: center;
-    background-color: var(--direct-answer-title-background-color);
-    border: var(--direct-answer-border);
+    background-color: var(--yxt-direct-answer-title-background-color);
+    border: var(--yxt-direct-answer-border);
     @include Text(
-      $color: var(--direct-answer-title-color)
+      $color: var(--yxt-direct-answer-title-color)
     )
   }
 
@@ -70,17 +70,17 @@ $direct-answer-footer-height: var(--module-footer-height) !default;
   {
     margin: 0;
     @include Text(
-      $size: var(--direct-answer-title-font-size),
-      $line-height: var(--direct-answer-title-line-height),
-      $weight: var(--direct-answer-title-font-weight),
-      $color: var(--direct-answer-title-color)
+      $size: var(--yxt-direct-answer-title-font-size),
+      $line-height: var(--yxt-direct-answer-title-line-height),
+      $weight: var(--yxt-direct-answer-title-font-weight),
+      $color: var(--yxt-direct-answer-title-color)
     );
   }
 
   &-titleIconWrapper
   {
     display: flex;
-    margin-right: calc(var(--base-spacing) / 2);
+    margin-right: calc(var(--yxt-base-spacing) / 2);
     height: 18px;
   }
 
@@ -91,7 +91,7 @@ $direct-answer-footer-height: var(--module-footer-height) !default;
 
   &-iconWrapper
   {
-    margin-right: var(--base-spacing-sm);
+    margin-right: var(--yxt-base-spacing-sm);
     display: inline-flex;
   }
 
@@ -100,38 +100,38 @@ $direct-answer-footer-height: var(--module-footer-height) !default;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: var(--base-spacing);
-    background-color: var(--direct-answer-content-background-color);
-    border-left: var(--direct-answer-border);
-    border-right: var(--direct-answer-border);
+    padding: var(--yxt-base-spacing);
+    background-color: var(--yxt-direct-answer-content-background-color);
+    border-left: var(--yxt-direct-answer-border);
+    border-right: var(--yxt-direct-answer-border);
   }
 
   &-footerWrapper
   {
-    background-color: var(--direct-answer-footer-background-color);
+    background-color: var(--yxt-direct-answer-footer-background-color);
   }
 
   &-footer
   {
     display: flex;
     justify-content: flex-end;
-    height: var(--direct-answer-footer-height);
+    height: var(--yxt-direct-answer-footer-height);
     align-items: center;
-    padding-left: var(--base-spacing);
-    padding-right: var(--base-spacing);
+    padding-left: var(--yxt-base-spacing);
+    padding-right: var(--yxt-base-spacing);
     padding-top: 10px;
     padding-bottom: 10px;
-    border: var(--direct-answer-border);
+    border: var(--yxt-direct-answer-border);
   }
 
   &-footerText
   {
-    margin-right: var(--base-spacing);
+    margin-right: var(--yxt-base-spacing);
     @include Text(
-      $size: var(--direct-answer-footer-font-size),
-      $line-height: var(--direct-answer-footer-line-height),
-      $weight: var(--direct-answer-footer-font-weight),
-      $color: var(--direct-answer-footer-color)
+      $size: var(--yxt-direct-answer-footer-font-size),
+      $line-height: var(--yxt-direct-answer-footer-line-height),
+      $weight: var(--yxt-direct-answer-footer-font-weight),
+      $color: var(--yxt-direct-answer-footer-color)
     );
 
     font-style: italic;
@@ -152,7 +152,7 @@ $direct-answer-footer-height: var(--module-footer-height) !default;
   &-thumbDownIcon
   {
     display: inline-flex;
-    color: var(--color-text-secondary);
+    color: var(--yxt-color-text-secondary);
   }
 
   &-thumb
@@ -171,10 +171,10 @@ $direct-answer-footer-height: var(--module-footer-height) !default;
   &-fieldValue
   {
     @include Text(
-      $size: var(--direct-answer-content-font-size),
-      $line-height: var(--direct-answer-content-line-height),
-      $weight: var(--direct-answer-content-font-weight),
-      $color: var(--direct-answer-content-color)
+      $size: var(--yxt-direct-answer-content-font-size),
+      $line-height: var(--yxt-direct-answer-content-line-height),
+      $weight: var(--yxt-direct-answer-content-font-weight),
+      $color: var(--yxt-direct-answer-content-color)
     );
 
     display: flex;
@@ -186,7 +186,7 @@ $direct-answer-footer-height: var(--module-footer-height) !default;
   {
     @include Link-1;
 
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--yxt-font-weight-semibold);
   }
 
   &-feedback
@@ -197,9 +197,9 @@ $direct-answer-footer-height: var(--module-footer-height) !default;
   &-viewMore
   {
     @include Text(
-      $size: var(--direct-answer-view-details-font-size),
-      $line-height: var(--direct-answer-view-details-line-height),
-      $weight: var(--direct-answer-view-details-font-weight),
+      $size: var(--yxt-direct-answer-view-details-font-size),
+      $line-height: var(--yxt-direct-answer-view-details-line-height),
+      $weight: var(--yxt-direct-answer-view-details-font-weight),
     )
     @include Link-1;
 
@@ -209,7 +209,7 @@ $direct-answer-footer-height: var(--module-footer-height) !default;
 
   &-viewMoreIcon
   {
-    $line-height: var(--direct-answer-view-details-line-height);
+    $line-height: var(--yxt-direct-answer-view-details-line-height);
     margin-left: 4px;
   }
 }

@@ -4,25 +4,25 @@ $autocomplete-background-color: white !default;
 $autocomplete-box-shadow: 0 1px 6px 0 rgba(32,33,36,0.47) !default;;
 $autocomplete-selected-background-color: #f9f9f9 !default;
 $autocomplete-option-hover-background-color: #f9f9f9 !default;
-$autocomplete-separator-color: var(--color-borders) !default;
+$autocomplete-separator-color: var(--yxt-color-borders) !default;
 
-$autocomplete-text-font-size: var(--font-size-md-lg) !default;
-$autocomplete-text-line-height: var(--line-height-md) !default;
-$autocomplete-text-font-weight: var(--font-weight-normal) !default;
-$autocomplete-text-color: var(--color-text-primary) !default;
-$autocomplete-prompt-header-font-weight: var(--font-weight-light) !default;
+$autocomplete-text-font-size: var(--yxt-font-size-md-lg) !default;
+$autocomplete-text-line-height: var(--yxt-line-height-md) !default;
+$autocomplete-text-font-weight: var(--yxt-font-weight-normal) !default;
+$autocomplete-text-color: var(--yxt-color-text-primary) !default;
+$autocomplete-prompt-header-font-weight: var(--yxt-font-weight-light) !default;
 
 :root {
-  --autocomplete-background-color: #{$autocomplete-background-color};
-  --autocomplete-box-shadow: #{$autocomplete-box-shadow};
-  --autocomplete-selected-background-color: #{$autocomplete-selected-background-color};
-  --autocomplete-option-hover-background-color: #{$autocomplete-option-hover-background-color};
-  --autocomplete-separator-color: #{$autocomplete-separator-color};
-  --autocomplete-text-font-size: #{$autocomplete-text-font-size};
-  --autocomplete-text-line-height: #{$autocomplete-text-line-height};
-  --autocomplete-text-font-weight: #{$autocomplete-text-font-weight};
-  --autocomplete-text-color: #{$autocomplete-text-color};
-  --autocomplete-prompt-header-font-weight: #{$autocomplete-prompt-header-font-weight};
+  --yxt-autocomplete-background-color: #{$autocomplete-background-color};
+  --yxt-autocomplete-box-shadow: #{$autocomplete-box-shadow};
+  --yxt-autocomplete-selected-background-color: #{$autocomplete-selected-background-color};
+  --yxt-autocomplete-option-hover-background-color: #{$autocomplete-option-hover-background-color};
+  --yxt-autocomplete-separator-color: #{$autocomplete-separator-color};
+  --yxt-autocomplete-text-font-size: #{$autocomplete-text-font-size};
+  --yxt-autocomplete-text-line-height: #{$autocomplete-text-line-height};
+  --yxt-autocomplete-text-font-weight: #{$autocomplete-text-font-weight};
+  --yxt-autocomplete-text-color: #{$autocomplete-text-color};
+  --yxt-autocomplete-prompt-header-font-weight: #{$autocomplete-prompt-header-font-weight};
 }
 
 .yxt-AutoComplete
@@ -32,11 +32,11 @@ $autocomplete-prompt-header-font-weight: var(--font-weight-light) !default;
   &:before
   {
     @media (min-width: $breakpoint-mobile-min) {
-      margin-left: var(--base-spacing);
-      margin-right: var(--base-spacing);
-      margin-bottom: calc(0.625 * var(--base-spacing));
+      margin-left: var(--yxt-base-spacing);
+      margin-right: var(--yxt-base-spacing);
+      margin-bottom: calc(0.625 * var(--yxt-base-spacing));
       height: 1px;
-      background-color: var(--autocomplete-separator-color);
+      background-color: var(--yxt-autocomplete-separator-color);
       content: "";
       display: block;
     }
@@ -51,23 +51,23 @@ $autocomplete-prompt-header-font-weight: var(--font-weight-light) !default;
 
   &-wrapper
   {
-    background-color: var(--autocomplete-background-color);
+    background-color: var(--yxt-autocomplete-background-color);
   }
 
   &-option
   {
-    padding-left: var(--base-spacing);
-    padding-right: var(--base-spacing);
-    padding-top: calc(var(--base-spacing) / 4);
-    padding-bottom: calc(var(--base-spacing) / 4);
+    padding-left: var(--yxt-base-spacing);
+    padding-right: var(--yxt-base-spacing);
+    padding-top: calc(var(--yxt-base-spacing) / 4);
+    padding-bottom: calc(var(--yxt-base-spacing) / 4);
 
     &--promptHeader
     {
       @include Text(
-        $size: var(--autocomplete-text-font-size),
-        $line-height: var(--autocomplete-text-line-height),
-        $weight: var(--autocomplete-prompt-header-font-weight),
-        $color: var(--autocomplete-text-color),
+        $size: var(--yxt-autocomplete-text-font-size),
+        $line-height: var(--yxt-autocomplete-text-line-height),
+        $weight: var(--yxt-autocomplete-prompt-header-font-weight),
+        $color: var(--yxt-autocomplete-text-color),
         $style: italic
       );
     }
@@ -77,25 +77,25 @@ $autocomplete-prompt-header-font-weight: var(--font-weight-light) !default;
       cursor: pointer;
 
       @include Text(
-        $size: var(--autocomplete-text-font-size),
-        $line-height: var(--autocomplete-text-line-height),
-        $weight: var(--autocomplete-text-font-weight),
-        $color: var(--autocomplete-text-color)
+        $size: var(--yxt-autocomplete-text-font-size),
+        $line-height: var(--yxt-autocomplete-text-line-height),
+        $weight: var(--yxt-autocomplete-text-font-weight),
+        $color: var(--yxt-autocomplete-text-color)
       );
 
       &.yxt-selected
       {
-        background-color: var(--autocomplete-selected-background-color);
+        background-color: var(--yxt-autocomplete-selected-background-color);
       }
 
       strong
       {
-        font-weight: var(--font-weight-semibold);
+        font-weight: var(--yxt-font-weight-semibold);
       }
 
       &:hover
       {
-        background-color: var(--autocomplete-option-hover-background-color);
+        background-color: var(--yxt-autocomplete-option-hover-background-color);
       }
     }
   }

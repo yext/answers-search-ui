@@ -1,56 +1,56 @@
 /** @define AlternativeVerticals */
 
-$alternative-verticals-emphasized-font-weight: var(--font-weight-medium) !default;
+$alternative-verticals-emphasized-font-weight: var(--yxt-font-weight-medium) !default;
 
 :root {
-  --alternative-verticals-emphasized-font-weight: #{$alternative-verticals-emphasized-font-weight}
+  --yxt-alternative-verticals-emphasized-font-weight: #{$alternative-verticals-emphasized-font-weight}
 }
 
 .yxt-AlternativeVerticals
 {
-  font-family: var(--font-family);
-  font-weight: var(--font-weight-light);
-  background-color: var(--color-brand-white);
-  border: var(--border-default);
+  font-family: var(--yxt-font-family);
+  font-weight: var(--yxt-font-weight-light);
+  background-color: var(--yxt-color-brand-white);
+  border: var(--yxt-border-default);
 
-  @media (min-width: var(--breakpoint-mobile-max)) {
+  @media (min-width: var(--yxt-breakpoint-mobile-max)) {
     margin-bottom: 24px;
   }
 
   &--notShowingResults
   {
-    border-bottom: var(--border-default);
+    border-bottom: var(--yxt-border-default);
   }
 
   &-noResultsInfo {
-    background-color: var(--color-brand-primary);
-    color: var(--color-brand-white);
-    font-size: var(--font-size-md);
-    padding: calc(var(--base-spacing) / 2);
+    background-color: var(--yxt-color-brand-primary);
+    color: var(--yxt-color-brand-white);
+    font-size: var(--yxt-font-size-md);
+    padding: calc(var(--yxt-base-spacing) / 2);
 
     &--emphasized {
-      font-weight: var(--alternative-verticals-emphasized-font-weight);
+      font-weight: var(--yxt-alternative-verticals-emphasized-font-weight);
     }
 
-    @media (min-width: var(--breakpoint-mobile-max)) {
-      font-size: var(--font-size-xlg);
+    @media (min-width: var(--yxt-breakpoint-mobile-max)) {
+      font-size: var(--yxt-font-size-xlg);
       padding: 10px 20px;
     }
   }
 
   &-suggestionsWrapper {
-    padding: var(--base-spacing);
+    padding: var(--yxt-base-spacing);
   }
 
   &-details {
-    font-size: var(--font-size-md);
+    font-size: var(--yxt-font-size-md);
 
     &--query {
-      font-weight: var(--font-weight-normal);
+      font-weight: var(--yxt-font-weight-normal);
     }
 
     @media (min-width: $breakpoint-mobile-max) {
-      font-size: var(--font-size-md-lg);
+      font-size: var(--yxt-font-size-md-lg);
     }
   }
 
@@ -63,10 +63,10 @@ $alternative-verticals-emphasized-font-weight: var(--font-weight-medium) !defaul
 
   &-suggestion {
     display: flex;
-    margin: calc(var(--base-spacing) * 0.75) 0;
+    margin: calc(var(--yxt-base-spacing) * 0.75) 0;
 
     @media (max-width: $breakpoint-mobile-max) {
-      margin: calc(var(--base-spacing) / 2) 0;
+      margin: calc(var(--yxt-base-spacing) / 2) 0;
     }
   }
 
@@ -85,7 +85,7 @@ $alternative-verticals-emphasized-font-weight: var(--font-weight-medium) !defaul
     }
 
     &--copy {
-      font-weight: var(--alternative-verticals-emphasized-font-weight);
+      font-weight: var(--yxt-alternative-verticals-emphasized-font-weight);
     }
   }
 
@@ -111,19 +111,19 @@ $alternative-verticals-emphasized-font-weight: var(--font-weight-medium) !defaul
   }
 
   &-universalDetails {
-    font-size: var(--font-size-md);
+    font-size: var(--yxt-font-size-md);
 
     @media (min-width: $breakpoint-mobile-max) {
-      font-size: var(--font-size-md-lg);
+      font-size: var(--yxt-font-size-md-lg);
     }
   }
 
   a {
-    color: var(--color-brand-primary);
+    color: var(--yxt-color-brand-primary);
 
     &:hover,
     &:active {
-      color: var(--color-brand-hover);
+      color: var(--yxt-color-brand-hover);
     }
   }
 }

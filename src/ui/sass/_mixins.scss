@@ -1,11 +1,11 @@
 @mixin Text(
-  $size: var(--font-size-md),
-  $line-height: var(--line-height-xs),
-  $weight: var(--font-weight-normal),
+  $size: var(--yxt-font-size-md),
+  $line-height: var(--yxt-line-height-xs),
+  $weight: var(--yxt-font-weight-normal),
   $style: normal,
-  $color: var(--color-text-primary)
+  $color: var(--yxt-color-text-primary)
 ) {
-  font-family: var(--font-family);
+  font-family: var(--yxt-font-family);
   font-size: $size;
   line-height: $line-height;
   font-weight: $weight;
@@ -15,7 +15,7 @@
 
 @mixin TextButton(
   $padding: 5px 10px,
-  $focus-color: var(--color-brand-hover)
+  $focus-color: var(--yxt-color-brand-hover)
 ) {
   background: none;
   border: 1px solid transparent;
@@ -42,7 +42,7 @@
   border: 0;
   border-radius: 3px;
   margin-top: 16px;
-  background: var(--color-brand-primary);
+  background: var(--yxt-color-brand-primary);
   letter-spacing: 0.5px;
   text-transform: uppercase;
 
@@ -50,11 +50,11 @@
     cursor: pointer;
 
     &:hover, &:focus {
-      background: padding-box var(--color-brand-hover);
+      background: padding-box var(--yxt-color-brand-hover);
     }
 
     &:focus {
-      border: var(--button-focus-border-size) double #0c5ecb;
+      border: var(--yxt-button-focus-border-size) double #0c5ecb;
     }
   }
 }
@@ -89,13 +89,13 @@
 
 @mixin Link-1
 {
-  @include Link($base-color: var(--color-brand-primary));
+  @include Link($base-color: var(--yxt-color-brand-primary));
 }
 
 @mixin Link-2
 {
   @include Link(
-    $base-color: var(--color-brand-primary),
+    $base-color: var(--yxt-color-brand-primary),
     $base-decoration: underline,
     $hover-decoration: none
   );

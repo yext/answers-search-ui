@@ -1,59 +1,59 @@
 /** @define LocationBias */
 
-$locationBias-text-font-size: var(--font-size-md) !default;
-$locationBias-text-font-weight: var(--font-weight-normal) !default;
-$locationBias-text-color: var(--color-text-secondary) !default;
-$locationBias-bullet-size: calc(var(--font-size-sm) / 2) !default;
-$locationBias-bullet-color-default: var(--locationBias-text-color) !default;
+$locationBias-text-font-size: var(--yxt-font-size-md) !default;
+$locationBias-text-font-weight: var(--yxt-font-weight-normal) !default;
+$locationBias-text-color: var(--yxt-color-text-secondary) !default;
+$locationBias-bullet-size: calc(var(--yxt-font-size-sm) / 2) !default;
+$locationBias-bullet-color-default: var(--yxt-locationBias-text-color) !default;
 
 :root {
-  --locationBias-text-font-size: #{$locationBias-text-font-size};
-  --locationBias-text-font-weight: #{$locationBias-text-font-weight};
-  --locationBias-text-color: #{$locationBias-text-color};
-  --locationBias-bullet-size: #{$locationBias-bullet-size};
-  --locationBias-bullet-color-default: #{$locationBias-bullet-color-default};
+  --yxt-locationBias-text-font-size: #{$locationBias-text-font-size};
+  --yxt-locationBias-text-font-weight: #{$locationBias-text-font-weight};
+  --yxt-locationBias-text-color: #{$locationBias-text-color};
+  --yxt-locationBias-bullet-size: #{$locationBias-bullet-size};
+  --yxt-locationBias-bullet-color-default: #{$locationBias-bullet-color-default};
 }
 
 .yxt-LocationBias
 {
-  padding-bottom: var(--base-spacing);
+  padding-bottom: var(--yxt-base-spacing);
   display: block;
   text-align: center;
 
-  padding-top: var(--base-spacing);
-  padding-bottom: var(--base-spacing);
+  padding-top: var(--yxt-base-spacing);
+  padding-bottom: var(--yxt-base-spacing);
 
   @include Text(
-    $size: var(--locationBias-text-font-size),
-    $weight: var(--locationBias-text-font-weight),
-    $color: var(--locationBias-text-color)
+    $size: var(--yxt-locationBias-text-font-size),
+    $weight: var(--yxt-locationBias-text-font-weight),
+    $color: var(--yxt-locationBias-text-color)
   );
 
   strong
   {
-    font-weight: var(--font-weight-semibold);
+    font-weight: var(--yxt-font-weight-semibold);
   }
 
   &-bullet
   {
-    height:  var(--locationBias-bullet-size);
-    width:  var(--locationBias-bullet-size);
+    height:  var(--yxt-locationBias-bullet-size);
+    width:  var(--yxt-locationBias-bullet-size);
     display: inline-block;
     border-radius: 100%;
-    background: var(--locationBias-bullet-color-default);
+    background: var(--yxt-locationBias-bullet-color-default);
     margin-bottom: 2px;
   }
 
   &-unknownLoc
   {
     background-color: transparent;
-    border: 1px solid var(--locationBias-bullet-color-default);
+    border: 1px solid var(--yxt-locationBias-bullet-color-default);
   }
 
   &-preciseLoc
   {
-    background: var(--color-brand-primary);
-    border: 1px solid var(--color-brand-primary);
+    background: var(--yxt-color-brand-primary);
+    border: 1px solid var(--yxt-color-brand-primary);
   }
 
   &-locSource
@@ -68,10 +68,10 @@ $locationBias-bullet-color-default: var(--locationBias-text-color) !default;
   {
     @include Link-1;
     cursor: pointer;
-    color: var(--color-brand-primary);
+    color: var(--yxt-color-brand-primary);
     text-decoration: none;
     border: none;
-    font-size: var(--locationBias-text-font-size);
+    font-size: var(--yxt-locationBias-text-font-size);
     padding: 0;
     background: none;
   }

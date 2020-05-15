@@ -1,62 +1,62 @@
-$accordion-result-border: var(--border-default) !default;
+$accordion-result-border: var(--yxt-border-default) !default;
 
 $accordion-result-background-color: white !default;
-$accordion-result-hover-color: var(--color-background-highlight) !default;
+$accordion-result-hover-color: var(--yxt-color-background-highlight) !default;
 
-$accordion-result-title-font-size: var(--font-size-md-lg) !default;
-$accordion-result-title-line-height: var(--line-height-lg) !default;
-$accordion-result-title-font-weight: var(--font-weight-semibold) !default;
-$accordion-result-title-color: var(--color-brand-primary) !default;
+$accordion-result-title-font-size: var(--yxt-font-size-md-lg) !default;
+$accordion-result-title-line-height: var(--yxt-line-height-lg) !default;
+$accordion-result-title-font-weight: var(--yxt-font-weight-semibold) !default;
+$accordion-result-title-color: var(--yxt-color-brand-primary) !default;
 
-$accordion-result-details-font-size: var(--font-size-md) !default;
-$accordion-result-details-line-height: var(--line-height-md-sm) !default;
-$accordion-result-details-font-weight: var(--font-weight-normal) !default;
-$accordion-result-details-color: var(--color-text-primary) !default;
+$accordion-result-details-font-size: var(--yxt-font-size-md) !default;
+$accordion-result-details-line-height: var(--yxt-line-height-md-sm) !default;
+$accordion-result-details-font-weight: var(--yxt-font-weight-normal) !default;
+$accordion-result-details-color: var(--yxt-color-text-primary) !default;
 
-$accordion-result-cta-font-size: var(--font-size-md) !default;
-$accordion-result-cta-line-height: var(--line-height-xxlg) !default;
-$accordion-result-cta-font-weight: var(--font-weight-normal) !default;
+$accordion-result-cta-font-size: var(--yxt-font-size-md) !default;
+$accordion-result-cta-line-height: var(--yxt-line-height-xxlg) !default;
+$accordion-result-cta-font-weight: var(--yxt-font-weight-normal) !default;
 
 :root {
-  --accordion-result-border: #{$accordion-result-border};
-  --accordion-result-background-color: #{$accordion-result-background-color};
-  --accordion-result-hover-color: #{$accordion-result-hover-color};
-  --accordion-result-title-font-size: #{$accordion-result-title-font-size};
-  --accordion-result-title-line-height: #{$accordion-result-title-line-height};
-  --accordion-result-title-font-weight: #{$accordion-result-title-font-weight};
-  --accordion-result-title-color: #{$accordion-result-title-color};
-  --accordion-result-details-font-size: #{$accordion-result-details-font-size};
-  --accordion-result-details-line-height: #{$accordion-result-details-line-height};
-  --accordion-result-details-font-weight: #{$accordion-result-details-font-weight};
-  --accordion-result-details-color: #{$accordion-result-details-color};
-  --accordion-result-cta-font-size: #{$accordion-result-cta-font-size};
-  --accordion-result-cta-line-height: #{$accordion-result-cta-line-height};
-  --accordion-result-cta-font-weight: #{$accordion-result-cta-font-weight};
+  --yxt-accordion-result-border: #{$accordion-result-border};
+  --yxt-accordion-result-background-color: #{$accordion-result-background-color};
+  --yxt-accordion-result-hover-color: #{$accordion-result-hover-color};
+  --yxt-accordion-result-title-font-size: #{$accordion-result-title-font-size};
+  --yxt-accordion-result-title-line-height: #{$accordion-result-title-line-height};
+  --yxt-accordion-result-title-font-weight: #{$accordion-result-title-font-weight};
+  --yxt-accordion-result-title-color: #{$accordion-result-title-color};
+  --yxt-accordion-result-details-font-size: #{$accordion-result-details-font-size};
+  --yxt-accordion-result-details-line-height: #{$accordion-result-details-line-height};
+  --yxt-accordion-result-details-font-weight: #{$accordion-result-details-font-weight};
+  --yxt-accordion-result-details-color: #{$accordion-result-details-color};
+  --yxt-accordion-result-cta-font-size: #{$accordion-result-cta-font-size};
+  --yxt-accordion-result-cta-line-height: #{$accordion-result-cta-line-height};
+  --yxt-accordion-result-cta-font-weight: #{$accordion-result-cta-font-weight};
 }
 
 .yxt-AccordionResult
 {
-  background-color: var(--accordion-result-background-color);
+  background-color: var(--yxt-accordion-result-background-color);
   width: 100%;
 
   & + &
   {
-    border-top: var(--accordion-result-border);
+    border-top: var(--yxt-accordion-result-border);
   }
 
   &:hover,
   &:not(.is-collapsed)
   {
-    background-color: var(--accordion-result-hover-color);
+    background-color: var(--yxt-accordion-result-hover-color);
   }
 
   &-title
   {
     @include Text(
-      $size: var(--accordion-result-title-font-size),
-      $line-height: var(--accordion-result-title-line-height),
-      $weight: var(--accordion-result-title-font-weight),
-      $color: var(--accordion-result-title-color)
+      $size: var(--yxt-accordion-result-title-font-size),
+      $line-height: var(--yxt-accordion-result-title-line-height),
+      $weight: var(--yxt-accordion-result-title-font-weight),
+      $color: var(--yxt-accordion-result-title-color)
     );
   }
 
@@ -68,10 +68,10 @@ $accordion-result-cta-font-weight: var(--font-weight-normal) !default;
   &-details
   {
     @include Text(
-      $size: var(--accordion-result-details-font-size),
-      $line-height: var(--accordion-result-details-line-height),
-      $weight: var(--accordion-result-details-font-weight),
-      $color: var(--accordion-result-details-color)
+      $size: var(--yxt-accordion-result-details-font-size),
+      $line-height: var(--yxt-accordion-result-details-line-height),
+      $weight: var(--yxt-accordion-result-details-font-weight),
+      $color: var(--yxt-accordion-result-details-color)
     );
 
     white-space: pre-line;
@@ -79,7 +79,7 @@ $accordion-result-cta-font-weight: var(--font-weight-normal) !default;
 
   &-ctasWrapper
   {
-    margin-top: calc(var(--base-spacing) / 2);
+    margin-top: calc(var(--yxt-base-spacing) / 2);
   }
 
   &-ctas
@@ -92,9 +92,9 @@ $accordion-result-cta-font-weight: var(--font-weight-normal) !default;
   &-cta
   {
     @include Text(
-      $size: var(--accordion-result-cta-font-size),
-      $line-height: var(--accordion-result-cta-line-height),
-      $weight: var(--accordion-result-cta-font-weight),
+      $size: var(--yxt-accordion-result-cta-font-size),
+      $line-height: var(--yxt-accordion-result-cta-line-height),
+      $weight: var(--yxt-accordion-result-cta-font-weight),
     );
     @include Link-1;
 
@@ -120,7 +120,7 @@ $accordion-result-cta-font-weight: var(--font-weight-normal) !default;
 
   &-toggle
   {
-    padding-top: calc(var(--base-spacing) / 2);
+    padding-top: calc(var(--yxt-base-spacing) / 2);
     padding-bottom: 10px;
     padding-left: 1em;
     padding-right: 1em;
@@ -128,7 +128,7 @@ $accordion-result-cta-font-weight: var(--font-weight-normal) !default;
 
   &-content
   {
-    padding-top: calc(var(--base-spacing-sm) / 2);
+    padding-top: calc(var(--yxt-base-spacing-sm) / 2);
     padding-bottom: 1em;
     padding-right: 1em;
     padding-left: 1em;

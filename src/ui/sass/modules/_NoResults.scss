@@ -1,34 +1,34 @@
 /** @define NoResults */
 
-$noresults-font-size: var(--font-size-md) !default;
-$noresults-line-height: var(--line-height-md) !default;
-$noresults-font-weight: var(--font-weight-normal) !default;
-$noresults-query-font-weight: var(--font-weight-semibold) !default;
+$noresults-font-size: var(--yxt-font-size-md) !default;
+$noresults-line-height: var(--yxt-line-height-md) !default;
+$noresults-font-weight: var(--yxt-font-weight-normal) !default;
+$noresults-query-font-weight: var(--yxt-font-weight-semibold) !default;
 
 :root {
-  --noresults-font-size: #{$noresults-font-size};
-  --noresults-line-height: #{$noresults-line-height};
-  --noresults-font-weight: #{$noresults-font-weight};
-  --noresults-query-font-weight: #{$noresults-query-font-weight};
+  --yxt-noresults-font-size: #{$noresults-font-size};
+  --yxt-noresults-line-height: #{$noresults-line-height};
+  --yxt-noresults-font-weight: #{$noresults-font-weight};
+  --yxt-noresults-query-font-weight: #{$noresults-query-font-weight};
 }
 
 .yxt-NoResults
 {
   &-wrapper
   {
-    font-size: var(--noresults-font-size);
-    line-height: var(--noresults-line-height);
-    font-weight: var(--noresults-font-weight);
+    font-size: var(--yxt-noresults-font-size);
+    line-height: var(--yxt-noresults-line-height);
+    font-weight: var(--yxt-noresults-font-weight);
   }
 
   &-query
   {
-    font-weight: var(--noresults-query-font-weight);
+    font-weight: var(--yxt-noresults-query-font-weight);
   }
 
   &-returnLinkWrapper
   {
-    margin-top: var(--base-spacing);
+    margin-top: var(--yxt-base-spacing);
   }
 
   &-returnLink
@@ -38,7 +38,7 @@ $noresults-query-font-weight: var(--font-weight-semibold) !default;
 
   &-suggestions
   {
-    margin-top: var(--base-spacing);
+    margin-top: var(--yxt-base-spacing);
   }
 
   &-suggestionsHeader
@@ -48,12 +48,12 @@ $noresults-query-font-weight: var(--font-weight-semibold) !default;
 
   &-suggestionsList
   {
-    margin-top: calc(var(--base-spacing) / 2);
+    margin-top: calc(var(--yxt-base-spacing) / 2);
   }
 
   &-suggestion
   {
-    margin-left: calc(var(--base-spacing-sm) * 2);
+    margin-left: calc(var(--yxt-base-spacing-sm) * 2);
     list-style-type: disc;
     list-style-position: inside;
   }
