@@ -113,7 +113,7 @@ $nav-border-color: var(--yxt-color-borders) !default;
       color: var(--yxt-nav-text-active-color);
       border-bottom: var(--yxt-nav-text-active-border);
       font-weight: var(--yxt-font-weight-semibold);
-      padding-bottom: calc(#{$item-padding}+ var(--yxt-nav-text-active-border-width));
+      padding-bottom: calc(#{$item-padding} + var(--yxt-nav-text-active-border-width));
     }
   }
 
