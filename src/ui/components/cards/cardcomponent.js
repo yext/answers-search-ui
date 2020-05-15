@@ -1,7 +1,10 @@
 /** @module CardComponent */
 
 import Component from '../component';
+import DOM from '../../dom/dom';
 import { cardTypes } from './consts';
+import AnalyticsEvent from '../../../core/analytics/analyticsevent';
+import { AnswersAnalyticsError } from '../../../core/errors/errors';
 
 class CardConfig {
   constructor (config = {}) {
@@ -64,11 +67,52 @@ export default class CardComponent extends Component {
     this.verticalKey = data.verticalKey;
   }
 
+  onMount () {
+    const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
+    rtfElement && this._handleClickAnalytics(rtfElement);
+  }
+
+  /**
+   * Creates a handler for the click analytics of a Rich Text attribute.
+   *
+   * @param {Node} rtfElement The Rich Text attribute.
+   */
+  _handleClickAnalytics (rtfElement) {
+    const self = this;
+    const eventHandler = event => {
+      if (!event.target.hasAttribute('data-cta-type')) {
+        return;
+      }
+      const ctaType = event.target.getAttribute('data-cta-type');
+      const fieldName = rtfElement.getAttribute('data-field-name');
+      if (!fieldName) {
+        throw new AnswersAnalyticsError(
+          'Field name not provided for RTF click analytics');
+      }
+
+      const analyticsOptions = {
+        directAnswer: false,
+        verticalKey: self._config.data.verticalKey,
+        searcher: self._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
+        entityId: self._config.data.result.id,
+        fieldName
+      };
+      if (ctaType !== 'TAP_TO_CALL') {
+        analyticsOptions.url = event.target.href;
+      }
+
+      const analyticsEvent = new AnalyticsEvent(ctaType);
+      analyticsEvent.addOptions(analyticsOptions);
+      self.analyticsReporter.report(analyticsEvent);
+    };
+    DOM.on(rtfElement, 'click', eventHandler);
+  }
+
   setState (data) {
     const cardType = this._config.cardType;
 
     // Use the cardType as component name if it is not a built-in type
-    let cardComponentName = cardTypes[cardType] || cardType;
+    const cardComponentName = cardTypes[cardType] || cardType;
     return super.setState({
       ...data,
       result: this.result,
