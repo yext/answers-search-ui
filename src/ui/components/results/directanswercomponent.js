@@ -93,12 +93,12 @@ export default class DirectAnswerComponent extends Component {
 
     // For WCAG compliance, the feedback should be a submittable form
     DOM.on(this._formEl, 'submit', (e) => {
-      let formEl = e.target;
-      let checkedValue = DOM.query(formEl, 'input:checked').value === 'true';
+      const formEl = e.target;
+      const checkedValue = DOM.query(formEl, 'input:checked').value === 'true';
 
       this.reportQuality(checkedValue);
       this.updateState({
-        'feedbackSubmitted': true
+        feedbackSubmitted: true
       });
     });
 
@@ -106,6 +106,42 @@ export default class DirectAnswerComponent extends Component {
     // submit button is hidden.
     DOM.on(this._thumbsUpSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
     DOM.on(this._thumbsDownSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
+
+    const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
+    rtfElement && this._handleRtfClickAnalytics(rtfElement);
+  }
+
+  /**
+   * A handler for the click analytics of a Rich Text Direct Answer.
+   *
+   * @param {Node} rtfElement The {@link Node} containing the Rich
+   *                          Text Direct Answer.
+   */
+  _handleRtfClickAnalytics (rtfElement) {
+    const self = this;
+    const eventHandler = event => {
+      if (!event.target.hasAttribute('data-cta-type')) {
+        return;
+      }
+      const ctaType = event.target.getAttribute('data-cta-type');
+
+      const relatedItem = self.getState('relatedItem');
+      const analyticsOptions = {
+        verticalKey: relatedItem.verticalConfigId,
+        directAnswer: true,
+        fieldName: self.getState('answer').fieldApiName,
+        searcher: 'UNIVERSAL',
+        entityId: relatedItem.data.id
+      };
+      if (ctaType !== 'TAP_TO_CALL') {
+        analyticsOptions.url = event.target.href;
+      }
+
+      const analyticsEvent = new AnalyticsEvent(ctaType);
+      analyticsEvent.addOptions(analyticsOptions);
+      self.analyticsReporter.report(analyticsEvent);
+    };
+    DOM.on(rtfElement, 'click', eventHandler);
   }
 
   /**
@@ -144,7 +180,7 @@ export default class DirectAnswerComponent extends Component {
     const eventType = isGood === true ? EventTypes.THUMBS_UP : EventTypes.THUMBS_DOWN;
     const event = new AnalyticsEvent(eventType)
       .addOptions({
-        'directAnswer': true
+        directAnswer: true
       });
 
     this.analyticsReporter.report(event);
