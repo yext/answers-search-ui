@@ -78,7 +78,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   &-titleIconWrapper
   {
     display: flex;
-    margin-right: var(--yxt-base-spacing) / 2;
+    margin-right: calc(var(--yxt-base-spacing) / 2);
   }
 
   &-title

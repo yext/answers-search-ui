@@ -247,7 +247,7 @@ $result-cta-color: var(--yxt-color-link-primary) !default;
 
     & + &
     {
-      margin-left: var(--yxt-base-spacing) / 2;
+      margin-left: calc(var(--yxt-base-spacing) / 2);
     }
   }
 
