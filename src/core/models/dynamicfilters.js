@@ -18,10 +18,7 @@ export default class DynamicFilters {
    * @param {Object} response dynamic filter response from the api
    * @returns {DynamicFilters}
    */
-  static from (response) {
-    const facets = response.resultsCount === 0 && response.allResultsForVertical
-      ? response.allResultsForVertical.facets
-      : response.facets;
+  static from (facets) {
     const dynamicFilters = facets.map(f => ({
       label: f['displayName'],
       fieldId: f['fieldId'],
