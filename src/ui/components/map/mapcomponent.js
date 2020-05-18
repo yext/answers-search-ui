@@ -79,8 +79,11 @@ export default class MapComponent extends Component {
     if (Object.keys(data).length === 0) {
       return this;
     }
-
-    if (data.resultsContext === ResultsContext.NO_RESULTS && !this._noResults.displayAllResults) {
+    const isNoResults = data.resultsContext === ResultsContext.NO_RESULTS;
+    const isVisibleForNoResults = 'visible' in this._noResults
+      ? this._noResults.visible
+      : this._noResults.displayAllResults;
+    if (isNoResults && !isVisibleForNoResults) {
       data = {};
     }
 
