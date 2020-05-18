@@ -848,7 +848,7 @@ ANSWERS.addComponent('FilterBox', {
   showCount: true,
   // Optional, execute a new search whenever a filter selection changes
   searchOnChange: false,
-  // Optional, show a reset button per filter group
+  // Optional, show a reset button per filter group, this will only display if searchOnChange is false
   resetFilter: false,
   // Optional, the label to use for the reset button above
   resetFilterLabel: 'reset',
@@ -868,7 +868,7 @@ ANSWERS.addComponent('FilterBox', {
   expand: true,
   // Optional, show the number of applied filter when a group is collapsed
   showNumberApplied: true,
-  // Optional, the label to show on the apply button
+  // Optional, the label to show on the apply button, this will only display if searchOnChange is false
   applyLabel: 'apply',
   // Optional, whether or not this filterbox contains dynamic filters, default false
   isDynamic: true
