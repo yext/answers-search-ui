@@ -48,29 +48,42 @@ export default class SortOptionsComponent extends Component {
   onMount () {
     // Handle radio button selections
     const containerEl = DOM.query(this._container, '.yxt-SortOptions-fieldSet');
-    containerEl && DOM.on(containerEl, 'change', evt =>
-      this.handleOptionSelection(parseInt(evt.target.value))
+    containerEl && DOM.on(
+      containerEl,
+      'change',
+      evt => this.handleOptionSelection(parseInt(evt.target.value))
     );
 
     // Register more/less button
     if (this._config.showMore) {
       const toggleEl = DOM.query(this._container, '.yxt-SortOptions-showToggle');
-      toggleEl && DOM.on(toggleEl, 'click', () => {
-        this.hideExcessOptions = !this.hideExcessOptions;
-        this.setState();
-      });
+      toggleEl && DOM.on(
+        toggleEl,
+        'click', () => {
+          this.hideExcessOptions = !this.hideExcessOptions;
+          this.setState();
+        }
+      );
     }
 
     // Register show reset button
     if (this.showReset) {
       const resetEl = DOM.query(this._container, '.yxt-SortOptions-reset');
-      resetEl && DOM.on(resetEl, 'click', () => this.handleOptionSelection(0));
+      resetEl && DOM.on(
+        resetEl,
+        'click',
+        () => this.handleOptionSelection(0)
+      );
     }
 
     // Register apply button
     if (!this._config.searchOnChange) {
       const applyEl = DOM.query(this._container, '.yxt-SortOptions-apply');
-      applyEl && DOM.on(applyEl, 'click', () => this._sortResults());
+      applyEl && DOM.on(
+        applyEl,
+        'click',
+        () => this._sortResults()
+      );
     }
   }
 
