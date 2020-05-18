@@ -27,7 +27,7 @@ describe('tranform vertical search response', () => {
         [StorageKeys.QUERY_ID]: convertedResponse.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(convertedResponse, formatters),
-        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(convertedResponse.facets),
+        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(convertedResponse),
         [StorageKeys.INTENTS]: SearchIntents.from(convertedResponse.searchIntents),
         [StorageKeys.SPELL_CHECK]: SpellCheck.from(convertedResponse.spellCheck),
         [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(convertedResponse, formatters),
