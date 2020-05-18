@@ -1272,8 +1272,7 @@ ANSWERS.addComponent('LocationBias', {
 
 ## Sort Options Component
 
-The sort options component displays a list of radio buttons that allows users to sort the results of a vertical search.
-The sort options component will hide itself when itself when displaying no results.
+The sort options component displays a list of radio buttons that allows users to sort the results of a vertical search. When a query returns no results, the component will not be rendered on the page.
 Currently, there may be only one sort options component per page.
 
 ```html
