@@ -86,13 +86,13 @@ describe('forming no results response', () => {
 
   it('does not alter original response ', () => {
     const initialResponse = { ...response };
-    SearchDataTransformer._formVerticalResponseWithContext(response, ResultsContext.NO_RESULTS);
+    SearchDataTransformer._parseVerticalResponse(response, ResultsContext.NO_RESULTS);
 
     expect(response).toEqual(initialResponse);
   });
 
   it('properly converts response with data', () => {
-    const convertedResponse = SearchDataTransformer._formVerticalResponseWithContext(response, ResultsContext.NO_RESULTS);
+    const convertedResponse = SearchDataTransformer._parseVerticalResponse(response, ResultsContext.NO_RESULTS);
 
     expect(convertedResponse).toEqual({
       resultsCount: 2,
@@ -120,7 +120,7 @@ describe('forming no results response', () => {
       allResultsForVertical: [],
       appliedQueryFilters: []
     };
-    const convertedResponse = SearchDataTransformer._formVerticalResponseWithContext(responseEmptyResults, ResultsContext.NO_RESULTS);
+    const convertedResponse = SearchDataTransformer._parseVerticalResponse(responseEmptyResults, ResultsContext.NO_RESULTS);
 
     expect(convertedResponse).toEqual({
       results: [],
@@ -136,7 +136,7 @@ describe('forming no results response', () => {
       resultsCount: 0,
       appliedQueryFilters: []
     };
-    const convertedResponse = SearchDataTransformer._formVerticalResponseWithContext(responseEmptyResults, ResultsContext.NO_RESULTS);
+    const convertedResponse = SearchDataTransformer._parseVerticalResponse(responseEmptyResults, ResultsContext.NO_RESULTS);
 
     expect(convertedResponse).toEqual({
       results: [],

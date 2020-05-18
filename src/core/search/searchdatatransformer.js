@@ -33,7 +33,7 @@ export default class SearchDataTransformer {
 
   static transformVertical (data, formatters, verticalKey) {
     const resultsContext = SearchDataTransformer._determineResultsContext(data.response);
-    const response = SearchDataTransformer._formVerticalResponseWithContext(data.response, resultsContext);
+    const response = SearchDataTransformer._parseVerticalResponse(data.response, resultsContext);
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
@@ -60,7 +60,7 @@ export default class SearchDataTransformer {
    * results in `results`
    * @param {Object} response The server response
    */
-  static _formVerticalResponseWithContext (response, resultsContext) {
+  static _parseVerticalResponse (response, resultsContext) {
     if (resultsContext === ResultsContext.NO_RESULTS) {
       const { results, resultsCount, facets } = response.allResultsForVertical || {};
       return {
