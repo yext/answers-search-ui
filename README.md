@@ -879,7 +879,7 @@ ANSWERS.addComponent('FilterBox', {
 
 This component is only for Vertical pages.
 
-The Facets component displays filters relevant to the current search, configured on the server, automatically.
+The Facets component displays filters relevant to the current search, configured on the server, automatically. The Facets component will hide itself when itself when displaying no results.
 
 ```html
 <div class="facets-container"></div>

@@ -2,6 +2,7 @@
 
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import ResultsContext from '../../../core/storage/resultscontext';
 
 class FacetsConfig {
   constructor (config) {
@@ -163,6 +164,13 @@ export default class FacetsComponent extends Component {
     return 'filters/facets';
   }
 
+  setState (data) {
+    return super.setState({
+      ...data,
+      isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
+    });
+  }
+
   remove () {
     if (this._filterbox) {
       this._filterbox.remove();
@@ -177,9 +185,9 @@ export default class FacetsComponent extends Component {
       this._filterbox.remove();
     }
 
-    let { filters } = this._state.get();
+    let { filters, resultsContext } = this._state.get();
 
-    if (!filters) {
+    if (!filters || resultsContext === ResultsContext.NO_RESULTS) {
       return;
     }
 
