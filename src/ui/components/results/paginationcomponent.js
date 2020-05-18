@@ -71,13 +71,7 @@ export default class PaginationComponent extends Component {
     /**
      * Configuration for the behavior when there are no vertical results.
      */
-    this._noResults = config.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG);
-    if (typeof this._noResults !== 'object') {
-      throw new AnswersConfigError(
-        `No results config must be an object, received ${this._noResults}`,
-        'Pagination'
-      );
-    }
+    this._noResults = config.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) || {};
   }
 
   static get type () {
