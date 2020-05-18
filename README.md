@@ -20,6 +20,7 @@ Outline:
    - [VerticalResults Component](#vertical-results-component)
    - [Pagination Component](#pagination-component)
    - [FilterBox Component](#filterbox-component)
+   - [Facets Component](#facets-component)
    - [FilterSearch Component](#filtersearch-component)
    - [Filter Components](#filter-components)
    - [Navigation Component](#navigation-component)
