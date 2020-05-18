@@ -3,7 +3,7 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
-import { AnswersComponentError } from '../../../core/errors/errors';
+import { AnswersComponentError, AnswersConfigError } from '../../../core/errors/errors';
 import SearchStates from '../../../core/storage/searchstates';
 import ResultsContext from '../../../core/storage/resultscontext';
 
@@ -67,6 +67,17 @@ export default class PaginationComponent extends Component {
         this.setState();
       }
     });
+
+    /**
+     * Configuration for the behavior when there are no vertical results.
+     */
+    this._noResults = config.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG);
+    if (typeof this._noResults !== 'object') {
+      throw new AnswersConfigError(
+        `No results config must be an object, received ${this._noResults}`,
+        'Pagination'
+      );
+    }
   }
 
   static get type () {
@@ -79,10 +90,11 @@ export default class PaginationComponent extends Component {
 
   shouldShowControls (results, limit) {
     const hasResults = results.searchState === 'search-complete' && results.resultsCount > limit;
-    const noResultsConfig = this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) || {};
-    const showControls = hasResults &&
-      (results.resultsContext === ResultsContext.NORMAL || noResultsConfig.displayAllResults);
-    return showControls;
+    const isNormalResults = results.resultsContext === ResultsContext.NORMAL;
+    const isVisibleForNoResults = 'visible' in this._noResults
+      ? this._noResults.visible
+      : this._noResults.displayAllResults;
+    return hasResults && (isNormalResults || isVisibleForNoResults);
   }
 
   onMount () {
