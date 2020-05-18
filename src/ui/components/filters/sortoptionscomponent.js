@@ -46,6 +46,9 @@ export default class SortOptionsComponent extends Component {
   }
 
   onMount () {
+    if (this.getState('resultsContext') === ResultsContext.NO_RESULTS) {
+      return;
+    }
     // Handle radio button selections
     DOM.on(
       DOM.query(this._container, '.yxt-SortOptions-fieldSet'),
