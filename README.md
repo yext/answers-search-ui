@@ -799,7 +799,13 @@ ANSWERS.addComponent('Pagination', {
   // Optional, display a double arrow allowing users to jump to the last page of results
   showLast: true,
   // Optional, label for a page of results
-  pageLabel: 'Page'
+  pageLabel: 'Page',
+  // Optional, configuration for the pagination behavior when a query returns no results
+  noResults: {
+    // Optional, whether pagination should be visible when displaying no results.
+    // Defaults to false.
+    visible: false
+  }
 });
 ```
 
