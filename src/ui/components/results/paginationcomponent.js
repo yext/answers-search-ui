@@ -3,7 +3,7 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
-import { AnswersComponentError, AnswersConfigError } from '../../../core/errors/errors';
+import { AnswersComponentError } from '../../../core/errors/errors';
 import SearchStates from '../../../core/storage/searchstates';
 import ResultsContext from '../../../core/storage/resultscontext';
 
@@ -71,7 +71,9 @@ export default class PaginationComponent extends Component {
     /**
      * Configuration for the behavior when there are no vertical results.
      */
-    this._noResults = config.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) || {};
+    this._noResults = config.noResults ||
+      this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) ||
+      {};
   }
 
   static get type () {

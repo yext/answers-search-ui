@@ -799,7 +799,7 @@ ANSWERS.addComponent('Pagination', {
   showLast: true,
   // Optional, label for a page of results
   pageLabel: 'Page',
-  // Optional, configuration for the map's behavior when a query returns no results
+  // Optional, configuration for the pagination behavior when a query returns no results
   noResults: {
     // Optional, whether pagination should be visible when displaying no results.
     // Defaults to false.
