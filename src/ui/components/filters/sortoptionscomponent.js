@@ -5,6 +5,7 @@ import { AnswersBasicError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
+import ResultsContext from '../../../core/storage/resultscontext';
 
 /**
  * Renders configuration options for sorting Vertical Results.
@@ -21,9 +22,16 @@ export default class SortOptionsComponent extends Component {
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
+
+    /**
+     * This component listens to updates to vertical results, and sets its state to it when
+     * an update occurs.
+     * @type {string}
+     */
+    this.moduleId = StorageKeys.VERTICAL_RESULTS;
   }
 
-  setState (data) {
+  setState (data = {}) {
     let options = this.options;
     if (this.hideExcessOptions) {
       options = this.options.slice(0, this._config.showMoreLimit);
@@ -32,7 +40,8 @@ export default class SortOptionsComponent extends Component {
       options,
       hideExcessOptions: this.hideExcessOptions,
       name: this.name,
-      showReset: this.showReset
+      showReset: this.showReset,
+      isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     }));
   }
 
