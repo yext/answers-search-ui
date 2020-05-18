@@ -173,6 +173,10 @@ class Answers {
     masterSwitchApi.isDisabled(parsedConfig.apiKey, parsedConfig.experienceKey)
       .then(isDisabled => !isDisabled && this._initInternal(parsedConfig, globalStorage, persistentStorage))
       .catch(() => this._initInternal(parsedConfig, globalStorage, persistentStorage));
+
+    if (!parsedConfig.disableCssVariablesPolyfill) {
+      this.polyfillCssVariables();
+    }
   }
 
   /**
@@ -392,15 +396,20 @@ class Answers {
 
   /*
    * Updates the css styles with new current variables. This is useful when the css
-   * variables are updated dynamically (e.g. through js).
+   * variables are updated dynamically (e.g. through js) or if the css variables are
+   * added after the ANSWERS.init
    * @param {Object} config Additional config to pass to the polyfill
    */
-  polyfillCssVariables (config) {
-    cssVars(Object.assign(
-      {},
-      { onlyLegacy: true },
-      config
-    ));
+  polyfillCssVariables (config = {}) {
+    cssVars({
+      onlyLegacy: true,
+      onBeforeSend: config.onBeforeSend || function() {},
+      onError: config.onError || function() {},
+      onWarning: config.onWarning || function() {},
+      onSuccess: config.onSuccess || function() {},
+      onComplete: config.onComplete || function() {},
+      onFinally: config.onFinally || function() {}
+    });
   }
 }
 

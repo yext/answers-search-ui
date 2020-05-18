@@ -124,6 +124,8 @@ function initAnswers() {
     onVerticalSearch: function() {},
     // Optional, analytics callback after a universal search, see onUniversalSearch Configuration for additional details
     onUniversalSearch: function() {},
+    // Optional, opt-out of automatic css variable resolution on init for legacy browsers
+    disableCssVariablesPolyfill: false,
   })
 }
 ```
@@ -1594,3 +1596,43 @@ ANSWERS.formatRichText(rtfFieldValue)
 ```
 
 For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute. When using this function, you must ensure that the relevant Handlebars template correctly unescapes the value's resultant HTML.
+
+# CSS Variable Styling
+
+The Answers SDK supports styling specific elements with CSS variables for runtime styling.
+* All sdk variables are exposed in the `:root` ruleset
+* All overridden variables must be included the `:root` ruleset
+* All overrides should be defined after Answers CSS is imported and before ANSWERS.init is called
+* To see available variables, see the scss modules in the SDK
+* For example, to override:
+
+```html
+<style>
+  :root {
+    --yxt-font-font-family: sans-serif;
+    --yxt-color-brand-primary: green;
+    --yxt-color-text-primary: #212121;
+    --yxt-searchbar-button-background-color-hover: red;
+    --yxt-nav-border-color: #e9e9e9;
+  }
+</style>
+```
+
+Most browsers have native css variable support. In legacy browsers, 
+we use the [css-vars-ponyfill](https://github.com/jhildenbiddle/css-vars-ponyfill).
+* If you opt-out of automatic resolution of variables, you should call ANSWERS.polyfillCssVariables()
+after css variables are loaded and before components are added.
+* If you change a css variable value after initialization and wish to see the change in variable
+value in a legacy browser, you should call ANSWERS.polyfillCssVariables() after the value is changed.
+* We support all callback functions, described [here](https://jhildenbiddle.github.io/css-vars-ponyfill/#/?id=onbeforesend)
+
+```js
+ANSWERS.polyfillCssVariables({
+        onBeforeSend: function() {},
+        onError: function() {},
+        onWarning: function() {},
+        onSuccess: function() {},
+        onComplete: function() {},
+        onFinally: function() {},
+});
+```
