@@ -1,7 +1,7 @@
 /** @module */
 
 /** The current lib version, reported with errors and analytics */
-export const LIB_VERSION = 'v1.1.0';
+export const LIB_VERSION = 'v1.1.1';
 
 /** The identifier of the production environment */
 export const PRODUCTION = 'production';
