@@ -238,7 +238,7 @@ export default class Component {
     DOM.addClass(this._container, this._className);
 
     // We use this class to scope some of our styling.
-    DOM.addClass(this._container, 'yxt-Container');
+    DOM.addClass(this._container, 'yxt-ComponentContainer');
     return this;
   }
 
