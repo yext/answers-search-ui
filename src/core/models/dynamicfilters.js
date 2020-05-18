@@ -10,6 +10,12 @@ export default class DynamicFilters {
      * @type {{label: string, fieldId: string, options: object[]}}
      */
     this.filters = data.filters || [];
+
+    /**
+     * The {@link ResultsContext} of the facets.
+     * @type {ResultsContext}
+     */
+    this.resultsContext = data.resultsContext;
     Object.freeze(this);
   }
 
@@ -18,7 +24,8 @@ export default class DynamicFilters {
    * @param {Object} response dynamic filter response from the api
    * @returns {DynamicFilters}
    */
-  static from (facets) {
+  static from (response) {
+    const { facets, resultsContext } = response;
     const dynamicFilters = facets.map(f => ({
       label: f['displayName'],
       fieldId: f['fieldId'],
@@ -30,6 +37,9 @@ export default class DynamicFilters {
       }))
     }));
 
-    return new DynamicFilters({ filters: dynamicFilters });
+    return new DynamicFilters({
+      filters: dynamicFilters,
+      resultsContext: resultsContext
+    });
   }
 }
