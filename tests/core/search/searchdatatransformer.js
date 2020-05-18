@@ -8,6 +8,7 @@ import SearchIntents from '../../../src/core/models/searchintents';
 import LocationBias from '../../../src/core/models/locationbias';
 import Response from '../../fixtures/responseWithResults.json';
 import ResultsContext from '../../../src/core/storage/resultscontext';
+import AlternativeVerticals from '../../../src/core/models/alternativeverticals';
 
 describe('tranform vertical search response', () => {
   let response;
@@ -19,16 +20,18 @@ describe('tranform vertical search response', () => {
   it('transforms vertical response correctly', () => {
     const data = response;
     const formatters = [];
-    const result = SearchDataTransformer.transformVertical(data, formatters, 'vkey');
-    expect(result).toMatchObject(
+    const result = SearchDataTransformer.transformVertical(data, formatters);
+    const convertedResponse = SearchDataTransformer._parseVerticalResponse(data.response);
+    expect(result).toEqual(
       {
-        [StorageKeys.QUERY_ID]: data.response.queryId,
+        [StorageKeys.QUERY_ID]: convertedResponse.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(data.response, formatters, 'vkey', ResultsContext.NORMAL),
-        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.response.facets),
-        [StorageKeys.INTENTS]: SearchIntents.from(data.response.searchIntents),
-        [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.response.spellCheck),
-        [StorageKeys.LOCATION_BIAS]: LocationBias.from(data.response.locationBias)
+        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(convertedResponse, formatters),
+        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(convertedResponse.facets),
+        [StorageKeys.INTENTS]: SearchIntents.from(convertedResponse.searchIntents),
+        [StorageKeys.SPELL_CHECK]: SpellCheck.from(convertedResponse.spellCheck),
+        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(convertedResponse, formatters),
+        [StorageKeys.LOCATION_BIAS]: LocationBias.from(convertedResponse.locationBias)
       }
     );
   });
@@ -86,13 +89,13 @@ describe('forming no results response', () => {
 
   it('does not alter original response ', () => {
     const initialResponse = { ...response };
-    SearchDataTransformer._parseVerticalResponse(response, ResultsContext.NO_RESULTS);
+    SearchDataTransformer._parseVerticalResponse(response);
 
     expect(response).toEqual(initialResponse);
   });
 
   it('properly converts response with data', () => {
-    const convertedResponse = SearchDataTransformer._parseVerticalResponse(response, ResultsContext.NO_RESULTS);
+    const convertedResponse = SearchDataTransformer._parseVerticalResponse(response);
 
     expect(convertedResponse).toEqual({
       resultsCount: 2,
@@ -109,7 +112,8 @@ describe('forming no results response', () => {
         }
       ],
       allResultsForVertical: response.allResultsForVertical,
-      appliedQueryFilters: []
+      appliedQueryFilters: [],
+      resultsContext: ResultsContext.NO_RESULTS
     });
   });
 
@@ -120,13 +124,15 @@ describe('forming no results response', () => {
       allResultsForVertical: [],
       appliedQueryFilters: []
     };
-    const convertedResponse = SearchDataTransformer._parseVerticalResponse(responseEmptyResults, ResultsContext.NO_RESULTS);
+    const convertedResponse = SearchDataTransformer._parseVerticalResponse(responseEmptyResults);
 
     expect(convertedResponse).toEqual({
       results: [],
+      facets: undefined,
       resultsCount: 0,
       allResultsForVertical: [],
-      appliedQueryFilters: []
+      appliedQueryFilters: [],
+      resultsContext: ResultsContext.NO_RESULTS
     });
   });
 
@@ -136,12 +142,14 @@ describe('forming no results response', () => {
       resultsCount: 0,
       appliedQueryFilters: []
     };
-    const convertedResponse = SearchDataTransformer._parseVerticalResponse(responseEmptyResults, ResultsContext.NO_RESULTS);
+    const convertedResponse = SearchDataTransformer._parseVerticalResponse(responseEmptyResults);
 
     expect(convertedResponse).toEqual({
       results: [],
+      facets: undefined,
       resultsCount: 0,
-      appliedQueryFilters: []
+      appliedQueryFilters: [],
+      resultsContext: ResultsContext.NO_RESULTS
     });
   });
 });

@@ -38,13 +38,11 @@ export default class VerticalResults {
    * @param {Object} response The server response
    * @param {Object.<string, function>} formatters The field formatters to use
    * @param {string} verticalKey the vertical key
-   * @param {ResultsContext} resultsContext The context of the results
    */
-  static from (response, formatters, verticalKey, resultsContext) {
+  static from (response, formatters, verticalKey) {
     const data = Section.from(response, null, formatters);
     return new VerticalResults({ ...data,
-      verticalConfigId: verticalKey,
-      resultsContext: resultsContext
+      verticalConfigId: verticalKey
     });
   }
 

@@ -32,12 +32,11 @@ export default class SearchDataTransformer {
   }
 
   static transformVertical (data, formatters, verticalKey) {
-    const resultsContext = SearchDataTransformer._determineResultsContext(data.response);
-    const response = SearchDataTransformer._parseVerticalResponse(data.response, resultsContext);
+    const response = SearchDataTransformer._parseVerticalResponse(data.response);
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(response, formatters, verticalKey, resultsContext),
+      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(response, formatters, verticalKey),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(response.facets),
       [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
       [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
@@ -47,29 +46,27 @@ export default class SearchDataTransformer {
   }
 
   /**
-   * Determine the {@link ResultsContext} of the given vertical results.
-   * @param {Object} response
-   */
-  static _determineResultsContext (response) {
-    const hasResults = response.results && response.resultsCount > 0;
-    return hasResults ? ResultsContext.NORMAL : ResultsContext.NO_RESULTS;
-  }
-
-  /**
    * Form response as if the results from `allResultsForVertical` were the actual
    * results in `results`
    * @param {Object} response The server response
    */
-  static _parseVerticalResponse (response, resultsContext) {
+  static _parseVerticalResponse (response) {
+    const hasResults = response.results && response.resultsCount > 0;
+    const resultsContext = hasResults ? ResultsContext.NORMAL : ResultsContext.NO_RESULTS;
+
     if (resultsContext === ResultsContext.NO_RESULTS) {
       const { results, resultsCount, facets } = response.allResultsForVertical || {};
       return {
         ...response,
         results: results || [],
         resultsCount: resultsCount || 0,
+        resultsContext,
         facets
       };
     }
-    return response;
+    return {
+      ...response,
+      resultsContext
+    };
   }
 }
