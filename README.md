@@ -1273,6 +1273,7 @@ ANSWERS.addComponent('LocationBias', {
 ## Sort Options Component
 
 The sort options component displays a list of radio buttons that allows users to sort the results of a vertical search.
+The Facets component will hide itself when itself when displaying no results.
 Currently, there may be only one sort options component per page.
 
 ```html
