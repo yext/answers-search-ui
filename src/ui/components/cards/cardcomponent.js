@@ -69,43 +69,44 @@ export default class CardComponent extends Component {
 
   onMount () {
     const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
-    rtfElement && this._handleClickAnalytics(rtfElement);
+    if (rtfElement) {
+      const fieldName = rtfElement.dataset.fieldName;
+      DOM.on(rtfElement, 'click', e => this._handleRtfClickAnalytics(e, fieldName));
+    }
   }
 
   /**
-   * Creates a handler for the click analytics of a Rich Text attribute.
+   * A click handler for links in a Rich Text attriubte. When such a link is
+   * clicked, an {@link AnalyticsEvent} needs to be fired.
    *
-   * @param {Node} rtfElement The Rich Text attribute.
+   * @param {Event} event The click event.
+   * @param {string} fieldName The name of the Rich Text field used in the
+   *                           attriubte.
    */
-  _handleClickAnalytics (rtfElement) {
-    const self = this;
-    const eventHandler = event => {
-      if (!event.target.hasAttribute('data-cta-type')) {
-        return;
-      }
-      const ctaType = event.target.getAttribute('data-cta-type');
-      const fieldName = rtfElement.getAttribute('data-field-name');
-      if (!fieldName) {
-        throw new AnswersAnalyticsError(
-          'Field name not provided for RTF click analytics');
-      }
+  _handleRtfClickAnalytics (event, fieldName) {
+    if (!event.target.dataset.ctaType) {
+      return;
+    }
+    const ctaType = event.target.dataset.ctaType;
+    if (!fieldName) {
+      throw new AnswersAnalyticsError(
+        'Field name not provided for RTF click analytics');
+    }
 
-      const analyticsOptions = {
-        directAnswer: false,
-        verticalKey: self._config.data.verticalKey,
-        searcher: self._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
-        entityId: self._config.data.result.id,
-        fieldName
-      };
-      if (ctaType !== 'TAP_TO_CALL') {
-        analyticsOptions.url = event.target.href;
-      }
-
-      const analyticsEvent = new AnalyticsEvent(ctaType);
-      analyticsEvent.addOptions(analyticsOptions);
-      self.analyticsReporter.report(analyticsEvent);
+    const analyticsOptions = {
+      directAnswer: false,
+      verticalKey: this._config.data.verticalKey,
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
+      entityId: this._config.data.result.id,
+      fieldName
     };
-    DOM.on(rtfElement, 'click', eventHandler);
+    if (ctaType !== 'TAP_TO_CALL') {
+      analyticsOptions.url = event.target.href;
+    }
+
+    const analyticsEvent = new AnalyticsEvent(ctaType);
+    analyticsEvent.addOptions(analyticsOptions);
+    this.analyticsReporter.report(analyticsEvent);
   }
 
   setState (data) {
