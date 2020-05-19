@@ -32,6 +32,7 @@ export default class MapProvider {
 
     /**
      * Configuration for the behavior when there are no vertical results.
+     * @type {Object}
      */
     this._noResults = config.noResults || {};
 
