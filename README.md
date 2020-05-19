@@ -1377,8 +1377,10 @@ ANSWERS.addComponent('Map', {
   onLoaded: function () {},
   // Optional, configuration for the map's behavior when a query returns no results
   noResults: {
-    // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
-    displayAllResults: true
+    // Optional, whether to display map pins for all possible results when no results are found. Defaults to false.
+    displayAllResults: false,
+    // Optional, whether to display the map when no results are found, taking priority over showEmptyMap. If displayAllResults is false, this will be an empty map. Defaults to false.
+    visible: false
   },
   // Optional, the custom configuration override to use for the map markers, function
   pin: function () {
