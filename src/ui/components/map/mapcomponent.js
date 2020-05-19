@@ -26,7 +26,7 @@ export default class MapComponent extends Component {
      * Configuration for the behavior when there are no vertical results.
      */
     this._noResults = Object.assign(
-      { displayAllResults: false, visible: false, template: '' },
+      { displayAllResults: false, visible: this._config.showEmptyMap, template: '' },
       opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG)
     );
 

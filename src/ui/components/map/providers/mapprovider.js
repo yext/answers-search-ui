@@ -96,7 +96,7 @@ export default class MapProvider {
   }
 
   shouldHideMap (mapData, resultsContext) {
-    if (resultsContext === ResultsContext.NO_RESULTS) {
+    if (resultsContext === ResultsContext.NO_RESULTS && 'visible' in this._noResults) {
       return !this._noResults.visible;
     }
     const hasEmptyMap = !mapData || mapData.mapMarkers.length <= 0;
