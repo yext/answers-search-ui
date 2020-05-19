@@ -71,7 +71,7 @@ export default class MapComponent extends Component {
 
   onMount () {
     this._map.onLoaded(() => {
-      this._map.init(this._container, this.getState('map'));
+      this._map.init(this._container, this.getState('map'), this.getState('resultsContext'));
     });
   }
 
@@ -79,12 +79,11 @@ export default class MapComponent extends Component {
     if (Object.keys(data).length === 0) {
       return this;
     }
-    const isNoResults = data.resultsContext === ResultsContext.NO_RESULTS;
-    const isVisibleForNoResults = 'visible' in this._noResults
-      ? this._noResults.visible
-      : this._noResults.displayAllResults;
-    if (isNoResults && !isVisibleForNoResults) {
-      data = {};
+
+    if (data.resultsContext === ResultsContext.NO_RESULTS && !this._noResults.displayAllResults) {
+      data = {
+        resultsContext: data.resultsContext
+      };
     }
 
     return super.setState(data, val);

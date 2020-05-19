@@ -2,6 +2,7 @@
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
+import ResultsContext from '../../../../core/storage/resultscontext';
 
 /* global google */
 
@@ -74,8 +75,8 @@ export default class GoogleMapProvider extends MapProvider {
     return this._clientId;
   }
 
-  init (el, mapData) {
-    if ((!mapData || mapData.mapMarkers.length <= 0) && !this._showEmptyMap) {
+  init (el, mapData, resultsContext) {
+    if (this.shouldHideMap(mapData, resultsContext)) {
       this._map = null;
       return this;
     }
