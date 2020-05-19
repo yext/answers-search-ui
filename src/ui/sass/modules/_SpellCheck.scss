@@ -1,39 +1,46 @@
 /** @define SpellCheck */
 
+$spellCheck-text-font-size: var(--yxt-font-size-md-lg) !default;
+$spellCheck-text-font-weight: var(--yxt-font-weight-normal) !default;
+$spellCheck-text-color: var(--yxt-color-text-primary) !default;
+$spellCheck-container-height: var(--yxt-module-container-height) !default;
+
+:root {
+  --yxt-spellCheck-text-font-size: #{$spellCheck-text-font-size};
+  --yxt-spellCheck-text-font-weight: #{$spellCheck-text-font-weight};
+  --yxt-spellCheck-text-color: #{$spellCheck-text-color};
+  --yxt-spellCheck-container-height: #{$spellCheck-container-height};
+}
+
 .yxt-SpellCheck
 {
-  $spellCheck-text-font-size: $font-size-md-lg !default;
-  $spellCheck-text-font-weight: $font-weight-normal !default;
-  $spellCheck-text-color: $color-text-primary !default;
-  $spellCheck-container-height: $module-container-height !default;
-
   @media (max-width: $breakpoint-mobile-max)
   {
-    margin-left: $base-spacing;
+    margin-left: var(--yxt-base-spacing);
   }
 
-  margin-top: $base-spacing*2;
-  padding-bottom: $base-spacing;
+  margin-top: calc(var(--yxt-base-spacing)*2);
+  padding-bottom: var(--yxt-base-spacing);
   display: block;
 
   .yxt-SpellCheck-helpText {
-    font-size: $font-size-lg;
+    font-size: var(--yxt-font-size-lg);
   }
 
   .yxt-SpellCheck-container {
-    height: $spellCheck-container-height;
+    height: var(--yxt-spellCheck-container-height);
   }
 
   @include Text(
-    $size: $spellCheck-text-font-size,
-    $weight: $spellCheck-text-font-weight,
-    $color: $spellCheck-text-color
+    $size: var(--yxt-spellCheck-text-font-size),
+    $weight: var(--yxt-spellCheck-text-font-weight),
+    $color: var(--yxt-spellCheck-text-color)
   );
 
   strong
   {
     font-style: italic;
-    font-weight: $font-weight-semibold;
+    font-weight: var(--yxt-font-weight-semibold);
   }
 
   a

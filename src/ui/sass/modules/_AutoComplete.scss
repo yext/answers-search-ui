@@ -1,28 +1,42 @@
 /** @define AutoComplete */
+
+$autocomplete-background-color: white !default;
+$autocomplete-box-shadow: 0 1px 6px 0 rgba(32,33,36,0.47) !default;;
+$autocomplete-selected-background-color: #f9f9f9 !default;
+$autocomplete-option-hover-background-color: #f9f9f9 !default;
+$autocomplete-separator-color: var(--yxt-color-borders) !default;
+
+$autocomplete-text-font-size: var(--yxt-font-size-md-lg) !default;
+$autocomplete-text-line-height: var(--yxt-line-height-md) !default;
+$autocomplete-text-font-weight: var(--yxt-font-weight-normal) !default;
+$autocomplete-text-color: var(--yxt-color-text-primary) !default;
+$autocomplete-prompt-header-font-weight: var(--yxt-font-weight-light) !default;
+
+:root {
+  --yxt-autocomplete-background-color: #{$autocomplete-background-color};
+  --yxt-autocomplete-box-shadow: #{$autocomplete-box-shadow};
+  --yxt-autocomplete-selected-background-color: #{$autocomplete-selected-background-color};
+  --yxt-autocomplete-option-hover-background-color: #{$autocomplete-option-hover-background-color};
+  --yxt-autocomplete-separator-color: #{$autocomplete-separator-color};
+  --yxt-autocomplete-text-font-size: #{$autocomplete-text-font-size};
+  --yxt-autocomplete-text-line-height: #{$autocomplete-text-line-height};
+  --yxt-autocomplete-text-font-weight: #{$autocomplete-text-font-weight};
+  --yxt-autocomplete-text-color: #{$autocomplete-text-color};
+  --yxt-autocomplete-prompt-header-font-weight: #{$autocomplete-prompt-header-font-weight};
+}
+
 .yxt-AutoComplete
 {
-  $autocomplete-background-color: white !default;
-  $autocomplete-box-shadow: 0 1px 6px 0 rgba(32,33,36,0.47) !default;;
-  $autocomplete-selected-background-color: #f9f9f9 !default;
-  $autocomplete-option-hover-background-color: #f9f9f9 !default;
-  $autocomplete-separator-color: $color-borders !default;
-
-  $autocomplete-text-font-size: $font-size-md-lg !default;
-  $autocomplete-text-line-height: $line-height-md !default;
-  $autocomplete-text-font-weight: $font-weight-normal !default;
-  $autocomplete-text-color: $color-text-primary !default;
-  $autocomplete-prompt-header-font-weight: $font-weight-light !default;
-
   padding-bottom: 10px;
 
   &:before
   {
     @media (min-width: $breakpoint-mobile-min) {
-      margin-left: $base-spacing;
-      margin-right: $base-spacing;
-      margin-bottom: 0.625 * $base-spacing;
+      margin-left: var(--yxt-base-spacing);
+      margin-right: var(--yxt-base-spacing);
+      margin-bottom: calc(0.625 * var(--yxt-base-spacing));
       height: 1px;
-      background-color: $autocomplete-separator-color;
+      background-color: var(--yxt-autocomplete-separator-color);
       content: "";
       display: block;
     }
@@ -37,23 +51,23 @@
 
   &-wrapper
   {
-    background-color: $autocomplete-background-color;
+    background-color: var(--yxt-autocomplete-background-color);
   }
 
   &-option
   {
-    padding-left: $base-spacing;
-    padding-right: $base-spacing;
-    padding-top: $base-spacing / 4;
-    padding-bottom: $base-spacing / 4;
+    padding-left: var(--yxt-base-spacing);
+    padding-right: var(--yxt-base-spacing);
+    padding-top: calc(var(--yxt-base-spacing) / 4);
+    padding-bottom: calc(var(--yxt-base-spacing) / 4);
 
     &--promptHeader
     {
       @include Text(
-        $size: $autocomplete-text-font-size,
-        $line-height: $autocomplete-text-line-height,
-        $weight: $autocomplete-prompt-header-font-weight,
-        $color: $autocomplete-text-color,
+        $size: var(--yxt-autocomplete-text-font-size),
+        $line-height: var(--yxt-autocomplete-text-line-height),
+        $weight: var(--yxt-autocomplete-prompt-header-font-weight),
+        $color: var(--yxt-autocomplete-text-color),
         $style: italic
       );
     }
@@ -63,25 +77,25 @@
       cursor: pointer;
 
       @include Text(
-        $size: $autocomplete-text-font-size,
-        $line-height: $autocomplete-text-line-height,
-        $weight: $autocomplete-text-font-weight,
-        $color: $autocomplete-text-color
+        $size: var(--yxt-autocomplete-text-font-size),
+        $line-height: var(--yxt-autocomplete-text-line-height),
+        $weight: var(--yxt-autocomplete-text-font-weight),
+        $color: var(--yxt-autocomplete-text-color)
       );
 
       &.yxt-selected
       {
-        background-color: $autocomplete-selected-background-color;
+        background-color: var(--yxt-autocomplete-selected-background-color);
       }
 
       strong
       {
-        font-weight: $font-weight-semibold;
+        font-weight: var(--yxt-font-weight-semibold);
       }
 
       &:hover
       {
-        background-color: $autocomplete-option-hover-background-color;
+        background-color: var(--yxt-autocomplete-option-hover-background-color);
       }
     }
   }

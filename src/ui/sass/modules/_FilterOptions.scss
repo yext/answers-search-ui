@@ -1,65 +1,65 @@
-/** @define FilterOptions */
+  /** @define FilterOptions */
 
-.yxt-FilterOptions {
-  &-container {
-    @include Text($line-height: $line-height-md);
-  }
-
-  &-fieldSet {
-    border: 0;
-    padding: 0;
-    margin: 12px 0;
-  }
-
-  &-legend {
-    width: 100%;
-    padding: 0;
-  }
-
-  &-legendLabel {
-    @include Text(
-      $size: $font-size-md-lg,
-      $line-height: $line-height-lg,
-      $weight: $font-weight-semibold);
-    text-align: left;
-    width: 100%;
-    display: flex;
-    align-items: center;
-
-    &:hover button {
-      color: $color-text-secondary;
+  .yxt-FilterOptions {
+    &-container {
+      @include Text($line-height: var(--yxt-line-height-md));
     }
-  }
 
-  &-option {
-    display: flex;
-    align-items: flex-start;
-    margin: 2px 0;
-    @media (max-width: $breakpoint-mobile-max) {
-      margin: 22px 0;
+    &-fieldSet {
+      border: 0;
+      padding: 0;
+      margin: 12px 0;
     }
-  }
 
-  &-options {
-    margin: 12px 0;
-  }
+    &-legend {
+      width: 100%;
+      padding: 0;
+    }
 
-  &-optionLabel {
-    display: block;
+    &-legendLabel {
+      @include Text(
+        $size: var(--yxt-font-size-md-lg),
+        $line-height: var(--yxt-line-height-lg),
+        $weight: var(--yxt-font-weight-semibold));
+      text-align: left;
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      &:hover button {
+        color: var(--yxt-color-text-secondary);
+      }
+    }
+
+    &-option {
+      display: flex;
+      align-items: flex-start;
+      margin: 2px 0;
+      @media (max-width: $breakpoint-mobile-max) {
+        margin: 22px 0;
+      }
+    }
+
+    &-options {
+      margin: 12px 0;
+    }
+
+    &-optionLabel {
+      display: block;
     margin-left: 5px;
   }
 
   &-selectedCount {
     @include Text(
-      $size: $font-size-xs,
-      $weight: $font-weight-bold,
+      $size: var(--yxt-font-size-xs),
+      $weight: var(--yxt-font-weight-bold),
       $color: white);
 
     width: 20px;
     height: 20px;
     margin-left: 12px;
     display: flex;
-    background: $color-background-dark;
+    background: var(--yxt-color-background-dark);
     align-items: center;
     justify-content: center;
     border-radius: 4px;
@@ -67,7 +67,7 @@
 
   &-reset {
     @include Text(
-      $color: $color-brand-primary,
+      $color: var(--yxt-color-brand-primary),
       $style: italic);
     @include TextButton($padding: 0);
 
@@ -78,7 +78,7 @@
 
   &-showToggle {
     @include Text(
-      $color: $color-brand-primary,
+      $color: var(--yxt-color-brand-primary),
       $style: italic);
     @include TextButton($padding: 0);
 
@@ -97,11 +97,11 @@
     cursor: pointer;
 
     &:focus {
-      border: 1px solid $color-brand-hover;
+      border: 1px solid var(--yxt-color-brand-hover);
     }
 
     &:not(:disabled):hover {
-      color: $color-text-secondary;
+      color: var(--yxt-color-text-secondary);
     }
   }
 
