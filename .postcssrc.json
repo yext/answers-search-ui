@@ -1,6 +1,5 @@
 {
   "plugins": {
-    "postcss-line-height-px-to-unitless": {},
     "postcss-pxtorem": {
       "rootValue": 16,
       "propList": ["*"],
