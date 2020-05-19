@@ -242,7 +242,7 @@ class Answers {
         this.renderer.init(parsedConfig.templateBundle);
       }
 
-      this._handlePonyfillCssVariables(parsedConfig, this._onReady.bind(this));
+      this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill, this._onReady.bind(this));
       return this;
     }
 
@@ -250,14 +250,20 @@ class Answers {
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new DefaultTemplatesLoader(templates => {
       this.renderer.init(templates);
-      this._handlePonyfillCssVariables(parsedConfig, this._onReady.bind(this));
+      this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill, this._onReady.bind(this));
     });
 
     return this;
   }
 
-  _handlePonyfillCssVariables (parsedConfig, callback) {
-    if (!parsedConfig.disableCssVariablesPonyfill) {
+  /**
+   * Calls the CSS vars ponyfill, if opted-in, and invokes the callback
+   * regardless of if there was an error/success. If opted-out, only invokes the callback.
+   * @param {boolean} option to opt out of the css variables ponyfill
+   * @param callback {Function} always called after function
+   */
+  _handlePonyfillCssVariables (ponyfillDisabled, callback) {
+    if (!ponyfillDisabled) {
       this.ponyfillCssVariables({
         onFinally: () => {
           callback();
