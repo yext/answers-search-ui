@@ -125,7 +125,7 @@ function initAnswers() {
     // Optional, analytics callback after a universal search, see onUniversalSearch Configuration for additional details
     onUniversalSearch: function() {},
     // Optional, opt-out of automatic css variable resolution on init for legacy browsers
-    disableCssVariablesPolyfill: false,
+    disableCssVariablesPonyfill: false,
   })
 }
 ```
@@ -1620,14 +1620,14 @@ The Answers SDK supports styling specific elements with CSS variables for runtim
 
 Most browsers have native css variable support. In legacy browsers, 
 we use the [css-vars-ponyfill](https://github.com/jhildenbiddle/css-vars-ponyfill).
-* If you opt-out of automatic resolution of variables, you should call ANSWERS.polyfillCssVariables()
+* If you opt-out of automatic resolution of variables, you should call ANSWERS.ponyfillCssVariables()
 after css variables are loaded and before components are added.
 * If you change a css variable value after initialization and wish to see the change in variable
-value in a legacy browser, you should call ANSWERS.polyfillCssVariables() after the value is changed.
+value in a legacy browser, you should call ANSWERS.ponyfillCssVariables() after the value is changed.
 * We support all callback functions, described [here](https://jhildenbiddle.github.io/css-vars-ponyfill/#/?id=onbeforesend)
 
 ```js
-ANSWERS.polyfillCssVariables({
+ANSWERS.ponyfillCssVariables({
         onBeforeSend: function() {},
         onError: function() {},
         onWarning: function() {},

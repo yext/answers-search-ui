@@ -173,10 +173,6 @@ class Answers {
     masterSwitchApi.isDisabled(parsedConfig.apiKey, parsedConfig.experienceKey)
       .then(isDisabled => !isDisabled && this._initInternal(parsedConfig, globalStorage, persistentStorage))
       .catch(() => this._initInternal(parsedConfig, globalStorage, persistentStorage));
-
-    if (!parsedConfig.disableCssVariablesPolyfill) {
-      this.polyfillCssVariables();
-    }
   }
 
   /**
@@ -241,12 +237,24 @@ class Answers {
 
     this._onReady = parsedConfig.onReady || function () {};
 
+    const callPonyfillCssVariables = (callback) => {
+      if (!parsedConfig.disableCssVariablesPonyfill) {
+        this.ponyfillCssVariables({
+          onFinally: () => {
+            callback();
+          }
+        });
+      } else {
+        callback();
+      }
+    };
+
     if (parsedConfig.useTemplates === false || parsedConfig.templateBundle) {
       if (parsedConfig.templateBundle) {
         this.renderer.init(parsedConfig.templateBundle);
       }
 
-      this._onReady();
+      callPonyfillCssVariables(this._onReady.bind(this));
       return this;
     }
 
@@ -254,7 +262,7 @@ class Answers {
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new DefaultTemplatesLoader(templates => {
       this.renderer.init(templates);
-      this._onReady();
+      callPonyfillCssVariables(this._onReady.bind(this));
     });
 
     return this;
@@ -398,9 +406,9 @@ class Answers {
    * Updates the css styles with new current variables. This is useful when the css
    * variables are updated dynamically (e.g. through js) or if the css variables are
    * added after the ANSWERS.init
-   * @param {Object} config Additional config to pass to the polyfill
+   * @param {Object} config Additional config to pass to the ponyfill
    */
-  polyfillCssVariables (config = {}) {
+  ponyfillCssVariables (config = {}) {
     cssVars({
       onlyLegacy: true,
       onBeforeSend: config.onBeforeSend || function() {},
