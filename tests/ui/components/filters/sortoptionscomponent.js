@@ -14,6 +14,7 @@ const mockedCore = () => {
     clearSortBys: () => {},
     verticalSearch: () => {},
     globalStorage: {
+      on: () => {},
       getState: storageKey => {
         expect(['SortOptions', StorageKeys.QUERY]).toContain(storageKey);
         return null;
