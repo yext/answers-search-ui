@@ -95,9 +95,9 @@ export default class MapProvider {
     };
   }
 
-  shouldHideMap(mapData, resultsContext) {
+  shouldHideMap (mapData, resultsContext) {
     if (resultsContext === ResultsContext.NO_RESULTS) {
-      return !this._noResults.visible
+      return !this._noResults.visible;
     }
     const hasEmptyMap = !mapData || mapData.mapMarkers.length <= 0;
     return hasEmptyMap && !this._showEmptyMap;

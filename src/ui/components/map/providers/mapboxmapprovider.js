@@ -2,7 +2,6 @@
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
-import ResultsContext from '../../../../core/storage/resultscontext';
 
 /* global mapboxgl */
 
@@ -45,7 +44,7 @@ export default class MapBoxMapProvider extends MapProvider {
     DOM.append('body', script);
   }
 
-  init (el, mapData, resultsContext) {    
+  init (el, mapData, resultsContext) {
     if (this.shouldHideMap(mapData, resultsContext)) {
       this._map = null;
       return this;

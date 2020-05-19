@@ -2,7 +2,6 @@
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
-import ResultsContext from '../../../../core/storage/resultscontext';
 
 /* global google */
 
