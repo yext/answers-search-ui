@@ -32,6 +32,7 @@ export default class MapProvider {
 
     /**
      * Configuration for the behavior when there are no vertical results.
+     * @type {Object}
      */
     this._noResults = config.noResults || {};
 
@@ -96,7 +97,7 @@ export default class MapProvider {
   }
 
   shouldHideMap (mapData, resultsContext) {
-    if (resultsContext === ResultsContext.NO_RESULTS && 'visible' in this._noResults) {
+    if (resultsContext === ResultsContext.NO_RESULTS) {
       return !this._noResults.visible;
     }
     const hasEmptyMap = !mapData || mapData.mapMarkers.length <= 0;
