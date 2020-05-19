@@ -242,7 +242,7 @@ class Answers {
         this.renderer.init(parsedConfig.templateBundle);
       }
 
-      this._handlePonyfillCssVariables(this._onReady.bind(this));
+      this._handlePonyfillCssVariables(parsedConfig, this._onReady.bind(this));
       return this;
     }
 
@@ -250,13 +250,13 @@ class Answers {
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new DefaultTemplatesLoader(templates => {
       this.renderer.init(templates);
-      this._handlePonyfillCssVariables(this._onReady.bind(this));
+      this._handlePonyfillCssVariables(parsedConfig, this._onReady.bind(this));
     });
 
     return this;
   }
 
-  _handlePonyfillCssVariables (callback) {
+  _handlePonyfillCssVariables (parsedConfig, callback) {
     if (!parsedConfig.disableCssVariablesPonyfill) {
       this.ponyfillCssVariables({
         onFinally: () => {
