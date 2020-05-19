@@ -1429,6 +1429,7 @@ The following is a list of names for the icons that are supported by default.
 - directions
 - document
 - elements
+- email
 - gear
 - info
 - kabob
