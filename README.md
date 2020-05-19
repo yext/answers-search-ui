@@ -1371,7 +1371,7 @@ ANSWERS.addComponent('Map', {
   zoom: 14,
   // Optional, the default coordinates to display if there are no results returned used if showEmptyMap is set to true
   defaultPosition: { lat: 37.0902, lng: -95.7129 },
-  // Optional, determines if an empty map should be shown when there are no results
+  // Optional, determines if an empty map should be shown when there are no results. Defaults to false.
   showEmptyMap: false,
   // Optional, callback to invoke when a pin is clicked. The clicked item(s) are passed to the callback
   onPinClick: null,
@@ -1381,7 +1381,7 @@ ANSWERS.addComponent('Map', {
   noResults: {
     // Optional, whether to display map pins for all possible results when no results are found. Defaults to false.
     displayAllResults: false,
-    // Optional, whether to display the map when no results are found, taking priority over showEmptyMap. If displayAllResults is false, this will be an empty map. Defaults to false.
+    // Optional, whether to display the map when no results are found, taking priority over showEmptyMap. If displayAllResults is false, this will be an empty map. Defaults to showEmptyMap's value.
     visible: false
   },
   // Optional, the custom configuration override to use for the map markers, function
