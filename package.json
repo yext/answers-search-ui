@@ -6,6 +6,7 @@
   "dependencies": {
     "@yext/rtf-converter": "^1.0.0",
     "core-js": "^3.6.5",
+    "css-vars-ponyfill": "^2.3.1",
     "handlebars": "^4.7.2",
     "kind-of": "^6.0.3",
     "regenerator-runtime": "^0.13.3",
