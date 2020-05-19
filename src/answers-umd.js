@@ -266,7 +266,7 @@ class Answers {
     } else {
       callback();
     }
-  };
+  }
 
   domReady (cb) {
     DOM.onReady(cb);
@@ -411,9 +411,9 @@ class Answers {
   ponyfillCssVariables (config = {}) {
     cssVars({
       onlyLegacy: true,
-      onError: config.onError || function() {},
-      onSuccess: config.onSuccess || function() {},
-      onFinally: config.onFinally || function() {}
+      onError: config.onError || function () {},
+      onSuccess: config.onSuccess || function () {},
+      onFinally: config.onFinally || function () {}
     });
   }
 }
