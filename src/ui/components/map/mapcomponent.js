@@ -26,7 +26,7 @@ export default class MapComponent extends Component {
      * Configuration for the behavior when there are no vertical results.
      */
     this._noResults = Object.assign(
-      { displayAllResults: false, template: '' },
+      { displayAllResults: false, visible: false, template: '' },
       opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG)
     );
 
@@ -71,7 +71,7 @@ export default class MapComponent extends Component {
 
   onMount () {
     this._map.onLoaded(() => {
-      this._map.init(this._container, this.getState('map'));
+      this._map.init(this._container, this.getState('map'), this.getState('resultsContext'));
     });
   }
 
@@ -81,7 +81,9 @@ export default class MapComponent extends Component {
     }
 
     if (data.resultsContext === ResultsContext.NO_RESULTS && !this._noResults.displayAllResults) {
-      data = {};
+      data = {
+        resultsContext: data.resultsContext
+      };
     }
 
     return super.setState(data, val);
