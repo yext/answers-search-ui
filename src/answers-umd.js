@@ -2,6 +2,7 @@
 
 import Core from './core/core';
 import RtfConverter from '@yext/rtf-converter';
+import cssVars from 'css-vars-ponyfill';
 
 import {
   DefaultTemplatesLoader,
@@ -241,7 +242,7 @@ class Answers {
         this.renderer.init(parsedConfig.templateBundle);
       }
 
-      this._onReady();
+      this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill, this._onReady.bind(this));
       return this;
     }
 
@@ -249,10 +250,28 @@ class Answers {
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new DefaultTemplatesLoader(templates => {
       this.renderer.init(templates);
-      this._onReady();
+      this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill, this._onReady.bind(this));
     });
 
     return this;
+  }
+
+  /**
+   * Calls the CSS vars ponyfill, if opted-in, and invokes the callback
+   * regardless of if there was an error/success. If opted-out, only invokes the callback.
+   * @param {boolean} option to opt out of the css variables ponyfill
+   * @param callback {Function} always called after function
+   */
+  _handlePonyfillCssVariables (ponyfillDisabled, callback) {
+    if (!ponyfillDisabled) {
+      this.ponyfillCssVariables({
+        onFinally: () => {
+          callback();
+        }
+      });
+    } else {
+      callback();
+    }
   }
 
   domReady (cb) {
@@ -387,6 +406,21 @@ class Answers {
     }
     this.core.globalStorage.set('queryTrigger', 'initialize');
     this.core.setQuery(searchConfig.defaultInitialSearch);
+  }
+
+  /*
+   * Updates the css styles with new current variables. This is useful when the css
+   * variables are updated dynamically (e.g. through js) or if the css variables are
+   * added after the ANSWERS.init
+   * @param {Object} config Additional config to pass to the ponyfill
+   */
+  ponyfillCssVariables (config = {}) {
+    cssVars({
+      onlyLegacy: true,
+      onError: config.onError || function () {},
+      onSuccess: config.onSuccess || function () {},
+      onFinally: config.onFinally || function () {}
+    });
   }
 }
 
