@@ -6,6 +6,7 @@ import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 import ResultsContext from '../../../core/storage/resultscontext';
+import SearchStates from '../../../core/storage/searchstates';
 
 /**
  * Renders configuration options for sorting Vertical Results.
@@ -28,7 +29,11 @@ export default class SortOptionsComponent extends Component {
      * an update occurs.
      * @type {string}
      */
-    this.moduleId = StorageKeys.VERTICAL_RESULTS;
+    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, verticalResults => {
+      if (verticalResults.searchState === SearchStates.SEARCH_COMPLETE) {
+        this.setState(verticalResults);
+      }
+    });
   }
 
   setState (data = {}) {
