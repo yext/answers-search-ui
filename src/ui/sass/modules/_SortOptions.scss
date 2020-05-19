@@ -2,13 +2,13 @@
 
 .yxt-SortOptions {
   &-container {
-    @include Text($line-height: $line-height-md);
+    @include Text($line-height: var(--yxt-line-height-md));
   }
 
   &-fieldSet {
     border: 0;
     padding: 0;
-    margin: $base-spacing 0;
+    margin: var(--yxt-base-spacing) 0;
   }
 
   &-legend {
@@ -18,9 +18,9 @@
 
   &-legendLabel {
     @include Text(
-      $size: $font-size-md-lg,
-      $line-height: $line-height-lg,
-      $weight: $font-weight-semibold);
+      $size: var(--yxt-font-size-md-lg),
+      $line-height: var(--yxt-line-height-lg),
+      $weight: var(--yxt-font-weight-semibold));
     text-align: left;
     width: 100%;
     display: flex;
@@ -37,7 +37,7 @@
   }
 
   &-options {
-    margin: $base-spacing  0;
+    margin: var(--yxt-base-spacing) 0;
   }
 
   &-optionLabel {
@@ -47,18 +47,18 @@
 
   &-reset {
     @include Text(
-      $color: $color-brand-primary,
+      $color: var(--yxt-color-brand-primary),
       $style: italic);
     @include TextButton($padding: 0);
 
     @media (max-width: $breakpoint-mobile-max) {
-      margin-top: $base-spacing ;
+      margin-top: var(--yxt-base-spacing) ;
     }
   }
 
   &-showToggle {
     @include Text(
-      $color: $color-brand-primary,
+      $color: var(--yxt-color-brand-primary),
       $style: italic);
     @include TextButton($padding: 0);
 
@@ -90,24 +90,24 @@
 
   &-apply {
     @include Text(
-      $size: $font-size-md,
-      $weight: $font-weight-semibold,
+      $size: var(--yxt-font-size-md),
+      $weight: var(--yxt-font-weight-semibold),
       $color: white);
 
     @include Button;
 
     color: white;
     box-sizing: border-box;
-    padding: $base-spacing-sm;
+padding: var(--yxt-base-spacing-sm);
     letter-spacing: 0.5px;
-    font-size: $font-size-md;
-    font-weight: $font-weight-semibold;
+    font-size: var(--yxt-font-size-md);
+    font-weight: var(--yxt-font-weight-semibold);
     overflow-wrap: break-word;
-    margin-top: $base-spacing-sm;
+    margin-top: var(--yxt-base-spacing-sm);
 
     &:focus
     {
-      padding: $base-spacing-sm - $button-focus-border-size;
+      padding: calc(var(--yxt-base-spacing-sm) - var(--yxt-button-focus-border-size));
     }
   }
 }

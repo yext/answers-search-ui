@@ -7,8 +7,21 @@ $color-brand-white: #fff !default;
 $color-text-primary: #212121 !default;
 $color-text-secondary: #757575 !default;
 
-$color-link-primary: $color-brand-primary !default;
+$color-link-primary: var(--yxt-color-brand-primary) !default;
 
 $color-borders: #dcdcdc !default;
 
 $color-error: #940000 !default;
+
+:root {
+  --yxt-color-background-highlight: #{$color-background-highlight};
+  --yxt-color-background-dark: #{$color-background-dark};
+  --yxt-color-brand-primary: #{$color-brand-primary};
+  --yxt-color-brand-hover: #{$color-brand-hover};
+  --yxt-color-brand-white: #{$color-brand-white};
+  --yxt-color-text-primary: #{$color-text-primary};
+  --yxt-color-text-secondary: #{$color-text-secondary};
+  --yxt-color-link-primary: #{$color-link-primary};
+  --yxt-color-borders: #{$color-borders};
+  --yxt-color-error: #{$color-error};
+}

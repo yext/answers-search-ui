@@ -20,22 +20,22 @@
 
   &-title {
     @include Text(
-      $size: $font-size-md-lg,
-      $line-height: $line-height-lg,
-      $weight: $font-weight-semibold);
+      $size: var(--yxt-font-size-md-lg),
+      $line-height: var(--yxt-line-height-lg),
+      $weight: var(--yxt-font-weight-semibold));
 
     text-transform: uppercase;
     margin-left: 8px;
   }
 
   &-filter + &-filter {
-    border-top: 1px solid $color-borders;
+    border-top: 1px solid var(--yxt-color-borders);
   }
 
   &-apply {
     @include Text(
-      $size: $font-size-md,
-      $weight: $font-weight-semibold,
+      $size: var(--yxt-font-size-md),
+      $weight: var(--yxt-font-weight-semibold),
       $color: white);
 
     @include Button();
@@ -46,9 +46,9 @@
 
   &-reset {
     @include Text(
-      $size: $font-size-md,
-      $weight: $font-weight-semibold,
-      $color: $color-brand-primary);
+      $size: var(--yxt-font-size-md),
+      $weight: var(--yxt-font-weight-semibold),
+      $color: var(--yxt-color-brand-primary));
 
     @include TextButton();
 
