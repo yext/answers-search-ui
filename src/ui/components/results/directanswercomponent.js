@@ -108,40 +108,36 @@ export default class DirectAnswerComponent extends Component {
     DOM.on(this._thumbsDownSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
 
     const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
-    rtfElement && this._handleRtfClickAnalytics(rtfElement);
+    rtfElement && DOM.on(rtfElement, 'click', e => this._handleRtfClickAnalytics(e));
   }
 
   /**
-   * A handler for the click analytics of a Rich Text Direct Answer.
+   * A click handler for links in a Rich Text Direct Answer. When such a link
+   * is clicked, an {@link AnalyticsEvent} needs to be fired.
    *
-   * @param {Node} rtfElement The {@link Node} containing the Rich
-   *                          Text Direct Answer.
+   * @param {Event} event The click event.
    */
-  _handleRtfClickAnalytics (rtfElement) {
-    const self = this;
-    const eventHandler = event => {
-      if (!event.target.hasAttribute('data-cta-type')) {
-        return;
-      }
-      const ctaType = event.target.getAttribute('data-cta-type');
+  _handleRtfClickAnalytics (event) {
+    if (!event.target.dataset.ctaType) {
+      return;
+    }
+    const ctaType = event.target.dataset.ctaType;
 
-      const relatedItem = self.getState('relatedItem');
-      const analyticsOptions = {
-        verticalKey: relatedItem.verticalConfigId,
-        directAnswer: true,
-        fieldName: self.getState('answer').fieldApiName,
-        searcher: 'UNIVERSAL',
-        entityId: relatedItem.data.id
-      };
-      if (ctaType !== 'TAP_TO_CALL') {
-        analyticsOptions.url = event.target.href;
-      }
-
-      const analyticsEvent = new AnalyticsEvent(ctaType);
-      analyticsEvent.addOptions(analyticsOptions);
-      self.analyticsReporter.report(analyticsEvent);
+    const relatedItem = this.getState('relatedItem');
+    const analyticsOptions = {
+      verticalKey: relatedItem.verticalConfigId,
+      directAnswer: true,
+      fieldName: this.getState('answer').fieldApiName,
+      searcher: 'UNIVERSAL',
+      entityId: relatedItem.data.id
     };
-    DOM.on(rtfElement, 'click', eventHandler);
+    if (ctaType !== 'TAP_TO_CALL') {
+      analyticsOptions.url = event.target.href;
+    }
+
+    const analyticsEvent = new AnalyticsEvent(ctaType);
+    analyticsEvent.addOptions(analyticsOptions);
+    this.analyticsReporter.report(analyticsEvent);
   }
 
   /**
