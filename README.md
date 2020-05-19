@@ -1620,6 +1620,9 @@ The Answers SDK supports styling specific elements with CSS variables for runtim
 
 Most browsers have native css variable support. In legacy browsers, 
 we use the [css-vars-ponyfill](https://github.com/jhildenbiddle/css-vars-ponyfill).
+* The SDK will do automatic resolution of CSS variables on initialization. Variables should be loaded
+before initialization. Overrided variables should be loaded after sdk variables are loaded.
+* You can opt-out with the `disableCssVariablesPonyfill` flag in ANSWERS.init.
 * If you opt-out of automatic resolution of variables, you should call ANSWERS.ponyfillCssVariables()
 after css variables are loaded and before components are added.
 * If you change a css variable value after initialization and wish to see the change in variable
@@ -1628,11 +1631,8 @@ value in a legacy browser, you should call ANSWERS.ponyfillCssVariables() after 
 
 ```js
 ANSWERS.ponyfillCssVariables({
-        onBeforeSend: function() {},
         onError: function() {},
-        onWarning: function() {},
         onSuccess: function() {},
-        onComplete: function() {},
         onFinally: function() {},
 });
 ```

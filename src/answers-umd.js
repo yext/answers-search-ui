@@ -237,24 +237,12 @@ class Answers {
 
     this._onReady = parsedConfig.onReady || function () {};
 
-    const callPonyfillCssVariables = (callback) => {
-      if (!parsedConfig.disableCssVariablesPonyfill) {
-        this.ponyfillCssVariables({
-          onFinally: () => {
-            callback();
-          }
-        });
-      } else {
-        callback();
-      }
-    };
-
     if (parsedConfig.useTemplates === false || parsedConfig.templateBundle) {
       if (parsedConfig.templateBundle) {
         this.renderer.init(parsedConfig.templateBundle);
       }
 
-      callPonyfillCssVariables(this._onReady.bind(this));
+      this._handlePonyfillCssVariables(this._onReady.bind(this));
       return this;
     }
 
@@ -262,11 +250,23 @@ class Answers {
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new DefaultTemplatesLoader(templates => {
       this.renderer.init(templates);
-      callPonyfillCssVariables(this._onReady.bind(this));
+      this._handlePonyfillCssVariables(this._onReady.bind(this));
     });
 
     return this;
   }
+
+  _handlePonyfillCssVariables (callback) {
+    if (!parsedConfig.disableCssVariablesPonyfill) {
+      this.ponyfillCssVariables({
+        onFinally: () => {
+          callback();
+        }
+      });
+    } else {
+      callback();
+    }
+  };
 
   domReady (cb) {
     DOM.onReady(cb);
@@ -411,11 +411,8 @@ class Answers {
   ponyfillCssVariables (config = {}) {
     cssVars({
       onlyLegacy: true,
-      onBeforeSend: config.onBeforeSend || function() {},
       onError: config.onError || function() {},
-      onWarning: config.onWarning || function() {},
       onSuccess: config.onSuccess || function() {},
-      onComplete: config.onComplete || function() {},
       onFinally: config.onFinally || function() {}
     });
   }
