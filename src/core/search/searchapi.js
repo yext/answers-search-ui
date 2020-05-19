@@ -158,4 +158,35 @@ export default class SearchApi {
     return request.get()
       .then(response => response.json());
   }
+
+  /** Initiate a sara search
+   * @param {boolean} includeLastName include last name in the search
+   * @param {boolean} userUserName use username instead of real name
+   * @param {string} additionalSearchText more text to add to the search
+   */
+  saraSearch (includeLastName, useUserName, additionalSearchText) {
+    let name = includeLastName ? 'Sara Wong' : 'Sara';
+    name = useUserName ? 'sawong' : name;
+
+    if (additionalSearchText && typeof additionalSearchText !== 'string') {
+      throw new AnswersCoreError('additionalSearchText must be a string', 'saraSearch');
+    }
+
+    const query = `${name} ${additionalSearchText}`;
+
+    let request = new ApiRequest({
+      endpoint: '/v2/accounts/me/answers/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': query,
+        'experienceKey': this._experienceKey,
+        'version': this._experienceVersion,
+        'locale': this._locale
+      }
+    });
+
+    return request.get()
+      .then(response => response.json());
+  }
 }
