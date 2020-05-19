@@ -110,17 +110,36 @@ class FilterOptionsConfig {
         config.previousOptions = [];
       }
     }
-    let selectedOptions = config.previousOptions || [];
-    this.options = this.setDefaultSelectedValues(this.options, selectedOptions);
+    const previousOptions = config.previousOptions || [];
+    this.options = this.setDefaultSelectedValues(this.options, previousOptions);
   }
 
-  setDefaultSelectedValues (options, selectedOptions) {
-    return options.map(o => ({
-      ...o,
-      selected: selectedOptions.length
-        ? selectedOptions.includes(o.label)
-        : o.selected
-    }));
+  /**
+   * Sets selected options on load based on options stored in persistent storage,
+   * and if persisten storage is empty then the appliedOnLoad flag.
+   * @param {Array<Object>} options
+   * @param {Array<string>} previousOptions
+   * @returns {Array<Object>}
+   */
+  setDefaultSelectedValues (options, previousOptions) {
+    if (previousOptions.length) {
+      return options.map(o => ({
+        ...o,
+        selected: previousOptions.length
+          ? previousOptions.includes(o.label)
+          : o.selected
+      }));
+    }
+    for (let o of options) {
+      if (!o.appliedOnLoad) {
+        continue;
+      }
+      o.selected = true;
+      if (this.control === 'singleoption') {
+        break;
+      }
+    }
+    return options;
   }
 
   getSelectedCount () {
