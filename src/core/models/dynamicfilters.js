@@ -25,7 +25,7 @@ export default class DynamicFilters {
    * @returns {DynamicFilters}
    */
   static from (response) {
-    const { facets, resultsContext } = response;
+    const facets = response.facets || [];
     const dynamicFilters = facets.map(f => ({
       label: f['displayName'],
       fieldId: f['fieldId'],
@@ -39,7 +39,7 @@ export default class DynamicFilters {
 
     return new DynamicFilters({
       filters: dynamicFilters,
-      resultsContext: resultsContext
+      resultsContext: response.resultsContext
     });
   }
 }
