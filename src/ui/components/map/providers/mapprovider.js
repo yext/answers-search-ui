@@ -96,12 +96,12 @@ export default class MapProvider {
     };
   }
 
-  shouldHideMap (mapData, resultsContext) {
-    if (resultsContext === ResultsContext.NO_RESULTS) {
-      return !this._noResults.visible;
+  static shouldHideMap (mapData, resultsContext, showEmptyMap, visibleForNoResults) {
+    if (resultsContext === ResultsContext.NO_RESULTS && visibleForNoResults !== undefined) {
+      return !visibleForNoResults;
     }
     const hasEmptyMap = !mapData || mapData.mapMarkers.length <= 0;
-    return hasEmptyMap && !this._showEmptyMap;
+    return hasEmptyMap && !showEmptyMap;
   }
 
   onLoaded (cb) {
