@@ -22,17 +22,14 @@ export default class MapComponent extends Component {
      */
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
 
-    const noResults = opts.noResults ||
-      this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) ||
-      {};
     /**
      * Configuration for the behavior when there are no vertical results.
      */
     this._noResults = {
       displayAllResults: false,
-      visible: opts.showEmptyMap || noResults.displayAllResults,
+      visible: undefined,
       template: '',
-      ...noResults
+      ...(opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG))
     };
 
     /**

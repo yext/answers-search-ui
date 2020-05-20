@@ -14,44 +14,6 @@ describe('map component config', () => {
     };
   });
 
-  describe('noResults.visible defaults to true if displayAllResults OR showEmptyMap are true', () => {
-    it('displayAllResults: true, showEmptyMap: unset', () => {
-      const config = {
-        noResults: {
-          displayAllResults: true
-        },
-        ...defaultConfig
-      };
-      const component = new MapComponent(config, systemConfig);
-      const { visible } = component._noResults;
-      expect(visible).toBeTruthy();
-    });
-
-    it('displayAllResults: unset, showEmptyMap: true', () => {
-      const config = {
-        showEmptyMap: true,
-        noResults: {},
-        ...defaultConfig
-      };
-      const component = new MapComponent(config, systemConfig);
-      const { visible } = component._noResults;
-      expect(visible).toBeTruthy();
-    });
-
-    it('displayAllResults: true, showEmptyMap: true', () => {
-      const config = {
-        showEmptyMap: true,
-        noResults: {
-          displayAllResults: true
-        },
-        ...defaultConfig
-      };
-      const component = new MapComponent(config, systemConfig);
-      const { visible } = component._noResults;
-      expect(visible).toBeTruthy();
-    });
-  });
-
   describe('noResults.visible has priority over displayAllResults and showEmptyMap', () => {
     it('visible: true, displayAllResults: false, showEmptyMap: false', () => {
       const config = {
