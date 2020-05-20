@@ -45,7 +45,7 @@ export default class MapBoxMapProvider extends MapProvider {
   }
 
   init (el, mapData, resultsContext) {
-    if (this.shouldHideMap(mapData, resultsContext)) {
+    if (MapProvider.shouldHideMap(mapData, resultsContext, this._showEmptyMap, this._noResults.visible)) {
       this._map = null;
       return this;
     }
