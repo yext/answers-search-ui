@@ -1382,7 +1382,7 @@ ANSWERS.addComponent('Map', {
   noResults: {
     // Optional, whether to display map pins for all possible results when no results are found. Defaults to false.
     displayAllResults: false,
-    // Optional, whether to display the map when no results are found, taking priority over showEmptyMap. If displayAllResults is false, this will be an empty map. Defaults to showEmptyMap's value.
+    // Optional, whether to display the map when no results are found, taking priority over showEmptyMap. Defaults to true if showEmptyMap or noResults.displayAllResults are true, otherwise defaults to false.
     visible: false
   },
   // Optional, the custom configuration override to use for the map markers, function

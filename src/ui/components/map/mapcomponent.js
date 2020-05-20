@@ -22,13 +22,18 @@ export default class MapComponent extends Component {
      */
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
 
+    const noResults = opts.noResults ||
+      this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) ||
+      {};
     /**
      * Configuration for the behavior when there are no vertical results.
      */
-    this._noResults = Object.assign(
-      { displayAllResults: false, visible: this._config.showEmptyMap, template: '' },
-      opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG)
-    );
+    this._noResults = {
+      displayAllResults: false,
+      visible: opts.showEmptyMap || noResults.displayAllResults,
+      template: '',
+      ...noResults
+    };
 
     /**
      * An aliased used to determine the type of map provider to use
