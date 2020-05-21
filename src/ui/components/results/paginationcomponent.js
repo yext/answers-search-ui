@@ -175,7 +175,7 @@ export default class PaginationComponent extends Component {
     const currentOffset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const currentPageNumber = (currentOffset / this._limit) + 1;
     const newPageNumber = (offset / this._limit) + 1;
-    const maxPageCount = Math.trunc((results.resultsCount - 1) / this._limit) + 1;
+    const maxPageCount = this._computeMaxPage(results.resultsCount);
     this._onPaginate(newPageNumber, currentPageNumber, maxPageCount);
     this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, offset);
     this.core.persistentStorage.set(StorageKeys.SEARCH_OFFSET, offset);
