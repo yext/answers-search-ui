@@ -1,0 +1,45 @@
+/** @define SearchTimeline */
+.yxt-SearchTimeline
+{
+
+  $searchtimeline-outline-color-base: black !default;
+  $searchtimeline-background-color: lightyellow !default;
+
+  $searchtimeline-button-background-color-base: lightblue !default;
+  $searchtimeline-button-background-color-hover: pink !default;
+  $searchtimeline-button-background-color-active: white !default;
+
+  $searchtimeline-button-text-color-base: black !default;
+  $searchtimeline-button-text-color-hover: green!default;
+  $searchtimeline-button-text-color-active: black !default;
+
+  width: 25%;
+  margin-top: 15px;
+  margin-bottom: 15px;
+
+  &-container
+  {
+    border: 1px solid $searchtimeline-outline-color-base;
+    background-color: $searchtimeline-background-color;
+    padding: $base-spacing/2 $base-spacing;
+  }
+
+  &-clearButton
+  {
+    background-color: $searchtimeline-button-background-color-base;
+    color: $searchtimeline-button-text-color-base;
+
+    &:hover
+    {
+      background-color: $searchtimeline-button-background-color-hover;
+      color:$searchtimeline-button-text-color-hover;
+    }
+
+    &:active
+    {
+      background-color: $searchtimeline-button-background-color-active;
+      color: $searchtimeline-button-text-color-active;
+    }
+  }
+
+}
