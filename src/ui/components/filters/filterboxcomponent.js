@@ -3,7 +3,6 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
-import Filter from '../../../core/models/filter';
 import Facet from '../../../core/models/facet';
 
 class FilterBoxConfig {
@@ -102,7 +101,7 @@ class FilterBoxConfig {
      * The list of filters to display and control, ignoring empty sections
      * @type {object[]}
      */
-    this.filterConfigs = config.filters.filter(f => f.options.length !== 0);
+    this.filterConfigs = config.filters.filter(f => f.options.length);
 
     /**
      * Whether or not this filterbox contains facets. This affects the
@@ -270,10 +269,7 @@ export default class FilterBoxComponent extends Component {
       const combinedFilter = Facet.fromFilters(availableFieldIds, ...validFilters);
       this.core.setFacetFilter(this.name, combinedFilter || {});
     } else {
-      const combinedFilter = validFilters.length > 1
-        ? Filter.and(...validFilters)
-        : validFilters[0];
-      this.core.setFilter(this.name, combinedFilter || {});
+      this._filterComponents.forEach(fc => fc.apply());
     }
   }
 

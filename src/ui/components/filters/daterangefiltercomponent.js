@@ -122,6 +122,11 @@ export default class DateRangeFilterComponent extends Component {
     return this._buildFilter();
   }
 
+  apply () {
+    const filter = this._buildFilter();
+    this.core.setFilter(this.name, filter);
+  }
+
   /**
    * Updates the current state of the date range
    * @param {string} key The key for the date value
@@ -134,7 +139,7 @@ export default class DateRangeFilterComponent extends Component {
 
     const filter = this._buildFilter();
     if (this._storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.apply();
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);

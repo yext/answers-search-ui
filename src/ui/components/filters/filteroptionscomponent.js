@@ -274,7 +274,7 @@ export default class FilterOptionsComponent extends Component {
   updateListeners () {
     const filter = this._buildFilter();
     if (this.config.storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.apply();
     }
 
     this.config.onChange(filter);
@@ -294,8 +294,16 @@ export default class FilterOptionsComponent extends Component {
     return this._buildFilter();
   }
 
+  apply () {
+    const filter = this._buildFilter();
+    this.core.setFilter(this.name, filter);
+  }
+
   /**
    * Clear all options
+   * TODO(oshi): Investigate removing this, this is not referenced anywhere,
+   * even if you go back to the original commit (#42).
+   * Same thing with this._applyFilter().
    */
   clear () {
     const elements = DOM.queryAll(this._container, this.config.optionSelector);
