@@ -2,7 +2,6 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import SearchParams from '../../dom/searchparams';
 import StorageKeys from '../../../core/storage/storagekeys';
 
 /**
@@ -11,35 +10,34 @@ import StorageKeys from '../../../core/storage/storagekeys';
  * @extends Component
  */
 export default class TimelineComponent extends Component {
-    constructor (config = {}, systemConfig = {}) {
-        super(config, systemConfig);
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
-        this.timelineEvents = [];
-        this.core.globalStorage.on('update', StorageKeys.UNIVERSAL_RESULTS, r => {
-            this.timelineEvents.push(r.searchState);
-            this.setState();
-        });
-    }
+    this.timelineEvents = [];
+    this.core.globalStorage.on('update', StorageKeys.UNIVERSAL_RESULTS, r => {
+      this.timelineEvents.push(r.searchState);
+      this.setState();
+    });
+  }
 
-    static get type () {
-        return 'SearchTimeline';
-    }
-    
-    static defaultTemplateName () {
-        return 'search/timeline';
-    }
+  static get type () {
+    return 'SearchTimeline';
+  }
 
-    setState () {
-        return super.setState({
-          events: this.timelineEvents.map(event => event.toUpperCase())
-        });
-    }
+  static defaultTemplateName () {
+    return 'search/timeline';
+  }
 
-    onMount () {
-        DOM.on('.js-SearchTimeline-clearButton', 'click', e => {
-          this.timelineEvents = [];
-          this.setState();
-        });
-    }
+  setState () {
+    return super.setState({
+      events: this.timelineEvents.map(event => event.toUpperCase())
+    });
+  }
 
+  onMount () {
+    DOM.on('.js-SearchTimeline-clearButton', 'click', e => {
+      this.timelineEvents = [];
+      this.setState();
+    });
+  }
 }
