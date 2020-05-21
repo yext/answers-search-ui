@@ -116,7 +116,7 @@ class FilterOptionsConfig {
 
   /**
    * Sets selected options on load based on options stored in persistent storage,
-   * and if persisten storage is empty then the appliedOnLoad flag.
+   * and if persistent storage is empty then the appliedOnLoad flag.
    * @param {Array<Object>} options
    * @param {Array<string>} previousOptions
    * @returns {Array<Object>}
