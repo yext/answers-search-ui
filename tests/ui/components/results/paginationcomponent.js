@@ -145,6 +145,6 @@ describe('rendering the page numbers', () => {
     const next = wrapper.find('.js-yxt-Pagination-next');
     expect(next).toHaveLength(1);
     next.first().simulate('click');
-    expect(paginate).toHaveBeenCalled();
+    expect(paginate).toHaveBeenCalledWith(2, 1, 5);
   });
 });

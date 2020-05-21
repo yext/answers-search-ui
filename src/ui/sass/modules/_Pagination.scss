@@ -38,11 +38,13 @@ $pagination-color-hover: var(--yxt-color-text-secondary) !default;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 24px;
-    min-width: 24px;
-    margin-right: 2px;
-    margin-left: 2px;
-    border-radius: 2px;
+    height: 1.5rem;
+    min-width: 1.5rem;
+    margin-right: .125rem;
+    margin-left: .125rem;
+    border-radius: .125rem;
+    padding: 0 .25rem;
+    box-sizing: border-box;
   }
 
   &-icon {
@@ -56,7 +58,7 @@ $pagination-color-hover: var(--yxt-color-text-secondary) !default;
     background-color: var(--yxt-pagination-color-active-page);
   }
 
-  &-link:hover {
+  &-link:hover, &-link:focus {
     cursor: pointer;
     color: var(--yxt-pagination-text-color-hover);
     background-color: var(--yxt-pagination-color-hover);
