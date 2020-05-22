@@ -135,7 +135,7 @@ class FilterOptionsConfig {
   /**
    * If no previous options were stored in persistentStorage, default to options marked
    * as appliedOnLoad.
-   * @param {*} options 
+   * @param {*} options
    */
   setAppliedOnLoad (options) {
     if (this.control === 'singleoption') {
@@ -144,7 +144,7 @@ class FilterOptionsConfig {
       firstAppliedOption.selected = true;
       return _options;
     }
-    return options.map(o =>  ({
+    return options.map(o => ({
       ...o,
       selected: o.appliedOnLoad
     }));
