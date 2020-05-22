@@ -110,36 +110,44 @@ class FilterOptionsConfig {
         config.previousOptions = [];
       }
     }
-    const previousOptions = config.previousOptions || [];
-    this.options = this.setDefaultSelectedValues(this.options, previousOptions);
+    // previousOptions will be null if there were no previousOptions in persistentStorage
+    const previousOptions = config.previousOptions;
+    if (previousOptions) {
+      this.options = this.setPreviousOptions(this.options, previousOptions || []);
+    } else {
+      this.options = this.setAppliedOnLoad(this.options);
+    }
   }
 
   /**
-   * Sets selected options on load based on options stored in persistent storage,
-   * and if persistent storage is empty then the appliedOnLoad flag.
+   * Sets selected options on load based on options stored in persistent storage.
    * @param {Array<Object>} options
    * @param {Array<string>} previousOptions
    * @returns {Array<Object>}
    */
-  setDefaultSelectedValues (options, previousOptions) {
-    if (previousOptions.length) {
-      return options.map(o => ({
-        ...o,
-        selected: previousOptions.length
-          ? previousOptions.includes(o.label)
-          : o.selected
-      }));
+  setPreviousOptions (options, previousOptions) {
+    return options.map(o => ({
+      ...o,
+      selected: previousOptions.includes(o.label)
+    }));
+  }
+
+  /**
+   * If no previous options were stored in persistentStorage, default to options marked
+   * as appliedOnLoad.
+   * @param {*} options 
+   */
+  setAppliedOnLoad (options) {
+    if (this.control === 'singleoption') {
+      const _options = options.map(o => ({ ...o }));
+      const firstAppliedOption = _options.find(o => o.appliedOnLoad);
+      firstAppliedOption.selected = true;
+      return _options;
     }
-    for (let o of options) {
-      if (!o.appliedOnLoad) {
-        continue;
-      }
-      o.selected = true;
-      if (this.control === 'singleoption') {
-        break;
-      }
-    }
-    return options;
+    return options.map(o =>  ({
+      ...o,
+      selected: o.appliedOnLoad
+    }));
   }
 
   getSelectedCount () {
