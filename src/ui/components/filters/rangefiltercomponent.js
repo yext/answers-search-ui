@@ -119,11 +119,6 @@ export default class RangeFilterComponent extends Component {
     return this._buildFilter();
   }
 
-  apply () {
-    const filter = this._buildFilter();
-    this.core.setFilter(this.name, filter);
-  }
-
   /**
    * Update the current range state
    * @param {string} key The range key to update
@@ -135,7 +130,7 @@ export default class RangeFilterComponent extends Component {
 
     const filter = this._buildFilter();
     if (this._storeOnChange) {
-      this.apply();
+      this.core.setFilter(this.name, filter);
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
