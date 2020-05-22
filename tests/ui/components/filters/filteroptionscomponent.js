@@ -1,13 +1,13 @@
-import DOM from '../../../../src/ui/dom/dom';
+import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import FilterOptionsComponent from '../../../../src/ui/components/filters/filteroptionscomponent';
-import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
-import Filter from '../../../../src/core/models/filter';
+import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
+import FilterNodeFactory from 'src/core/filters/filternodefactory';
+import Filter from 'src/core/models/filter';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
-  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNode;
+  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes;
   const options = [
     {
       label: 'ciri',
@@ -58,12 +58,12 @@ describe('filter options component', () => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-    setStaticFilterNode = jest.fn();
+    setStaticFilterNodes = jest.fn();
 
     const mockCore = {
-      setStaticFilterNode: setStaticFilterNode,
+      setStaticFilterNodes: setStaticFilterNodes,
       filterRegistry: {
-        setStaticFilterNode: setStaticFilterNode
+        setStaticFilterNodes: setStaticFilterNodes
       }
     };
 
@@ -140,54 +140,54 @@ describe('filter options component', () => {
 
     component._updateOption(0, true);
     expect(component.getFilterNode()).toEqual(nodes[0]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
 
     component._updateOption(1, true);
     expect(component.getFilterNode()).toEqual(FilterNodeFactory.or(nodes[0], nodes[1]));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
 
     component._updateOption(1, false);
     expect(component.getFilterNode()).toEqual(nodes[0]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(3);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
 
     component._updateOption(3, true);
     expect(component.getFilterNode()).toEqual(FilterNodeFactory.and(nodes[0], nodes[3]));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(4);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
 
     component._updateOption(0, false);
     expect(component.getFilterNode()).toEqual(nodes[3]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(5);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(5);
 
     component._updateOption(3, false);
     expect(filterNode).toEqual(FilterNodeFactory.from());
-    expect(setStaticFilterNode.mock.calls).toHaveLength(6);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
 
     component._updateOption(5, true);
     expect(component.getFilterNode()).toEqual(nodes[5]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(7);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(7);
 
     component._updateOption(4, true);
     expect(component.getFilterNode()).toEqual(FilterNodeFactory.or(nodes[4], nodes[5]));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(8);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(8);
 
     component._updateOption(3, true);
     const orNode1 = FilterNodeFactory.or(nodes[3], nodes[4], nodes[5]);
     expect(component.getFilterNode()).toEqual(FilterNodeFactory.or(orNode1));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(9);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(9);
 
     component._updateOption(2, true);
     expect(component.getFilterNode()).toEqual(FilterNodeFactory.and(nodes[2], orNode1));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(10);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(10);
 
     component._updateOption(1, true);
     let orNode0 = FilterNodeFactory.or(nodes[1], nodes[2]);
     expect(component.getFilterNode()).toEqual(FilterNodeFactory.and(orNode0, orNode1));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(11);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(11);
 
     component._updateOption(0, true);
     orNode0 = FilterNodeFactory.or(nodes[0], nodes[1], nodes[2]);
     expect(component.getFilterNode()).toEqual(FilterNodeFactory.and(orNode0, orNode1));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(12);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(12);
   });
 
   it('renders correct number of single options', () => {
@@ -215,21 +215,21 @@ describe('filter options component', () => {
 
     component._updateOption(0, true);
     expect(component.getFilterNode()).toEqual(nodes[0]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
     component._updateOption(1, true);
     expect(component.getFilterNode()).toEqual(nodes[1]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
     component._updateOption(2, true);
     expect(component.getFilterNode()).toEqual(nodes[2]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(3);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
     component._updateOption(3, true);
     expect(component.getFilterNode()).toEqual(nodes[3]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(4);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
     component._updateOption(4, true);
     expect(component.getFilterNode()).toEqual(nodes[4]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(5);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(5);
     component._updateOption(5, true);
     expect(component.getFilterNode()).toEqual(nodes[5]);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(6);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
   });
 });

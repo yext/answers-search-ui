@@ -1,20 +1,17 @@
-import DOM from '../../../../src/ui/dom/dom';
+import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import RangeFilterComponent from '../../../../src/ui/components/filters/rangefiltercomponent';
-import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
-import Filter from '../../../../src/core/models/filter';
+import RangeFilterComponent from 'src/ui/components/filters/rangefiltercomponent';
+import FilterNodeFactory from 'src/core/filters/filternodefactory';
+import Filter from 'src/core/models/filter';
 
 describe('range filter component', () => {
   DOM.setup(document, new DOMParser());
 
-  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNode;
+  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes;
   const metadataFormatters = {
-    greaterThan: min => `> ${min}`,
     greaterThanEqual: min => `≥ ${min}`,
-    lessThan: max => `< ${max}`,
     lessThanEqual: max => `≤ ${max}`,
-    exclusiveRange: (min, max) => `> ${min}, < ${max}`,
     inclusiveRange: (min, max) => `${min} - ${max}`
   };
 
@@ -22,12 +19,12 @@ describe('range filter component', () => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-    setStaticFilterNode = jest.fn();
+    setStaticFilterNodes = jest.fn();
 
     const mockCore = {
-      setStaticFilterNode: setStaticFilterNode,
+      setStaticFilterNodes: setStaticFilterNodes,
       filterRegistry: {
-        setStaticFilterNode: setStaticFilterNode
+        setStaticFilterNodes: setStaticFilterNodes
       }
     };
 
@@ -111,7 +108,7 @@ describe('range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
 
     // Set the min value again
     min = 0;
@@ -127,7 +124,7 @@ describe('range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
 
     // Clear the max value
     max = '';
@@ -143,7 +140,7 @@ describe('range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(3);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
 
     // Set the max value again
     max = 2;
@@ -159,7 +156,7 @@ describe('range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(4);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
 
     // Clear both values
     min = '';
@@ -176,7 +173,7 @@ describe('range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(6);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
 
     // Set both values, finally done!
     min = -1;
@@ -194,7 +191,7 @@ describe('range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(8);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(8);
   });
 
   it('correctly creates filter node when min equals max', () => {
@@ -203,8 +200,7 @@ describe('range filter component', () => {
       field: 'yorha',
       title: 'Flowers for m[A]chines',
       initialMin: 0,
-      initialMax: 0,
-      isExclusive: false
+      initialMax: 0
     };
     const min = config.initialMin;
     const { field, title } = config;

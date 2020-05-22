@@ -24,10 +24,13 @@ export default function mockManager (mockedCore, ...templatePaths) {
   const core = {
     globalStorage: {
       getState: () => null,
-      delete: () => {}
+      delete: () => {},
+      on: () => {},
+      set: () => {}
     },
     persistentStorage: {
-      set: () => {}
+      set: () => {},
+      delete: () => {}
     },
     ...mockedCore
   };

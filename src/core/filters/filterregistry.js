@@ -77,7 +77,7 @@ export default class FilterRegistry {
    * @param {string} key
    * @param {FilterNode} filterNode
    */
-  setStaticFilterNode (key, filterNode) {
+  setStaticFilterNodes (key, filterNode) {
     this.globalStorage.set(`${StorageKeys.STATIC_FILTER_NODE}.${key}`, filterNode);
   }
 

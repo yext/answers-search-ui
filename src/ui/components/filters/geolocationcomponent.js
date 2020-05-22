@@ -213,13 +213,15 @@ export default class GeoLocationComponent extends Component {
       inputEl: inputSelector,
       verticalKey: this._config.verticalKey,
       searchParameters: this.searchParameters,
-      onSubmit: (query, filter) => {
-        this.query = query;
-        this.filter = Filter.fromResponse(filter);
-        this._saveDataToStorage(query, this.filter, `"${query}"`);
-        this._enabled = false;
-      }
+      onSubmit: (query, filter) => this._handleSubmit(query, filter)
     });
+  }
+
+  _handleSubmit (query, filter) {
+    this.query = query;
+    this.filter = Filter.fromResponse(filter);
+    this._saveDataToStorage(query, this.filter, `"${query}"`);
+    this._enabled = false;
   }
 
   /**
@@ -257,6 +259,16 @@ export default class GeoLocationComponent extends Component {
     }
   }
 
+  _buildFilterNode (filter, displayValue) {
+    return FilterNodeFactory.from({
+      filter: filter,
+      metadata: {
+        displayValue: displayValue,
+        fieldName: this._config.title || this._config.label || 'Location'
+      }
+    });
+  }
+
   /**
    * Saves the provided filter under this component's name
    * @param {string} query The query to save
@@ -267,15 +279,9 @@ export default class GeoLocationComponent extends Component {
    */
   _saveDataToStorage (query, filter, displayValue, position) {
     this.core.persistentStorage.set(`${this.name}.${StorageKeys.QUERY}`, query);
-    const filterNode = FilterNodeFactory.from({
-      filter: filter,
-      metadata: {
-        displayValue: displayValue,
-        fieldName: this._config.title || this._config.label || 'Location'
-      }
-    });
+    const filterNode = this._buildFilterNode(filter, displayValue);
     this.core.persistentStorage.set(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`, filterNode);
-    this.core.setStaticFilterNode(this.name, filterNode);
+    this.core.setStaticFilterNodes(this.name, filterNode);
 
     if (position) {
       this.core.globalStorage.set(StorageKeys.GEOLOCATION, {

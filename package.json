@@ -72,6 +72,13 @@
     "setupFilesAfterEnv": [
       "./tests/setup/setup.js"
     ],
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>"
+    ],
     "testMatch": [
       "**/tests/core/**/*.js",
       "**/tests/ui/**/*.js"

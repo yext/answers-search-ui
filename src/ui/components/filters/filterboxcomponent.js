@@ -268,7 +268,7 @@ export default class FilterBoxComponent extends Component {
       this.core.setFacetFilterNodes(availableFieldIds, validFilterNodes);
     } else {
       const filterNode = FilterNodeFactory.and(...validFilterNodes);
-      this.core.setStaticFilterNode(this.name, filterNode);
+      this.core.setStaticFilterNodes(this.name, filterNode);
     }
   }
 

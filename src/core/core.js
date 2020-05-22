@@ -356,8 +356,8 @@ export default class Core {
     this.filterRegistry.setFacetFilterNodes(availableFieldids, filterNodes);
   }
 
-  setStaticFilterNode (namespace, filterNode) {
-    this.filterRegistry.setStaticFilterNode(namespace, filterNode);
+  setStaticFilterNodes (namespace, filterNode) {
+    this.filterRegistry.setStaticFilterNodes(namespace, filterNode);
   }
 
   enableDynamicFilters () {

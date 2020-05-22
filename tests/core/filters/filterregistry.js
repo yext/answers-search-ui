@@ -49,12 +49,12 @@ describe('FilterRegistry', () => {
   });
 
   it('can correctly set simple filter nodes', () => {
-    registry.setStaticFilterNode('namespace1', node1);
+    registry.setStaticFilterNodes('namespace1', node1);
     expect(registry.getStaticFilterNodes()).toHaveLength(1);
     expect(registry.getStaticFilterNodes()[0]).toEqual(node1);
     expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(filter1);
 
-    registry.setStaticFilterNode('namespace2', node2);
+    registry.setStaticFilterNodes('namespace2', node2);
     expect(registry.getStaticFilterNodes()).toHaveLength(2);
     expect(registry.getStaticFilterNodes()).toContainEqual(node1);
     expect(registry.getStaticFilterNodes()).toContainEqual(node2);
@@ -63,7 +63,7 @@ describe('FilterRegistry', () => {
     };
     expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(expectedFilter2);
 
-    registry.setStaticFilterNode('namespace1', node2);
+    registry.setStaticFilterNodes('namespace1', node2);
     expect(registry.getStaticFilterNodes()).toHaveLength(2);
     expect(registry.getStaticFilterNodes()[0]).toEqual(node2);
     expect(registry.getStaticFilterNodes()[1]).toEqual(node2);
@@ -75,7 +75,7 @@ describe('FilterRegistry', () => {
 
   it('can correctly set nested filter nodes', () => {
     const orNode = FilterNodeFactory.or(node1, node2);
-    registry.setStaticFilterNode('namespace1', orNode);
+    registry.setStaticFilterNodes('namespace1', orNode);
     expect(registry.getStaticFilterNodes()).toHaveLength(1);
     const expectedFilter1 = {
       [ FilterCombinators.OR ]: [ filter1, filter2 ]
@@ -84,7 +84,7 @@ describe('FilterRegistry', () => {
     expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(expectedFilter1);
 
     const andNode = FilterNodeFactory.and(node1, node2);
-    registry.setStaticFilterNode('namespace2', andNode);
+    registry.setStaticFilterNodes('namespace2', andNode);
     expect(registry.getStaticFilterNodes()).toHaveLength(2);
     const expectedFilter2 = {
       [ FilterCombinators.AND ]: [
@@ -96,7 +96,7 @@ describe('FilterRegistry', () => {
     };
     expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(expectedFilter2);
 
-    registry.setStaticFilterNode('namespace3', node1);
+    registry.setStaticFilterNodes('namespace3', node1);
     expect(registry.getStaticFilterNodes()).toHaveLength(3);
     const expectedFilter3 = {
       [ FilterCombinators.AND ]: [

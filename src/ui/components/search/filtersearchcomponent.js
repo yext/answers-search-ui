@@ -158,6 +158,16 @@ export default class FilterSearchComponent extends Component {
     }
   }
 
+  _buildFilterNode (query, filter) {
+    return FilterNodeFactory.from({
+      filter: Filter.fromResponse(filter),
+      metadata: {
+        fieldName: this.title,
+        displayValue: `"${query}"`
+      }
+    });
+  }
+
   /**
    * A helper method to wire up our auto complete on an input selector
    * @param {string} inputSelector CSS selector to bind our auto complete component to
@@ -178,13 +188,7 @@ export default class FilterSearchComponent extends Component {
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
         this.query = query;
-        this.filterNode = FilterNodeFactory.from({
-          filter: Filter.fromResponse(filter),
-          metadata: {
-            fieldName: this.title,
-            displayValue: `"${query}"`
-          }
-        });
+        this.filterNode = this._buildFilterNode(query, filter);
 
         const params = new SearchParams(window.location.search.substring(1));
         params.set(`${this.name}.${StorageKeys.QUERY}`, this.query);
@@ -200,7 +204,7 @@ export default class FilterSearchComponent extends Component {
         // save the filter to storage for the next search
         this.core.persistentStorage.set(`${this.name}.${StorageKeys.QUERY}`, this.query);
         this.core.persistentStorage.set(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`, this.filterNode);
-        this.core.setStaticFilterNode(this.name, this.filterNode);
+        this.core.setStaticFilterNodes(this.name, this.filterNode);
         this.search();
       }
     });

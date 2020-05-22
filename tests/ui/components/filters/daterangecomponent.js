@@ -1,14 +1,14 @@
-import DOM from '../../../../src/ui/dom/dom';
+import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import DateRangeFilterComponent from '../../../../src/ui/components/filters/daterangefiltercomponent';
-import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
-import Filter from '../../../../src/core/models/filter';
+import DateRangeFilterComponent from 'src/ui/components/filters/daterangefiltercomponent';
+import FilterNodeFactory from 'src/core/filters/filternodefactory';
+import Filter from 'src/core/models/filter';
 
 describe('date range filter component', () => {
   DOM.setup(document, new DOMParser());
 
-  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNode;
+  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes;
   const metadataFormatters = {
     greaterThan: min => `After ${min}`,
     greaterThanEqual: min => `${min} or later`,
@@ -22,12 +22,12 @@ describe('date range filter component', () => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-    setStaticFilterNode = jest.fn();
+    setStaticFilterNodes = jest.fn();
 
     const mockCore = {
-      setStaticFilterNode: setStaticFilterNode,
+      setStaticFilterNodes: setStaticFilterNodes,
       filterRegistry: {
-        setStaticFilterNode: setStaticFilterNode
+        setStaticFilterNodes: setStaticFilterNodes
       }
     };
 
@@ -72,6 +72,68 @@ describe('date range filter component', () => {
     expect(labelEls.at(1).text()).toEqual(config.maxLabel);
   });
 
+  it('correctly creates filter node when isExclusive is true', () => {
+    const config = {
+      ...defaultConfig,
+      field: 'yorha',
+      title: 'Flowers for m[A]chines',
+      initialMin: '2019-08-01',
+      initialMax: '2020-08-01',
+      isExclusive: true
+    };
+    let min = config.initialMin;
+    let max = config.initialMax;
+    const { field, title } = config;
+
+    const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
+    let filter = Filter.exclusiveRange(field, min, max);
+    let metadata = {
+      fieldName: title,
+      displayValue: metadataFormatters.exclusiveRange(min, max)
+    };
+    expect(component._buildFilter()).toEqual(filter);
+    expect(component._buildFilterMetadata()).toEqual(metadata);
+    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
+      filter: filter,
+      metadata: metadata
+    }));
+
+    // Clear the min value
+    min = '';
+    component._updateRange('min', min);
+    filter = Filter.lessThan(field, max);
+    metadata = {
+      fieldName: title,
+      displayValue: metadataFormatters.lessThan(max)
+    };
+    expect(component._buildFilter()).toEqual(filter);
+    expect(component._buildFilterMetadata()).toEqual(metadata);
+    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
+      filter: filter,
+      metadata: metadata
+    }));
+
+    // Clear the max value, set the min value
+    // Set the min value again
+    min = '2020-07-30';
+    max = '';
+    component._updateRange('min', min);
+    component._updateRange('max', max);
+
+    // Clear the max value
+    filter = Filter.greaterThan(field, min);
+    metadata = {
+      fieldName: title,
+      displayValue: metadataFormatters.greaterThan(min)
+    };
+    expect(component._buildFilter()).toEqual(filter);
+    expect(component._buildFilterMetadata()).toEqual(metadata);
+    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
+      filter: filter,
+      metadata: metadata
+    }));
+  });
+
   it('correctly creates filter node when isExclusive is false', () => {
     const config = {
       ...defaultConfig,
@@ -111,7 +173,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
 
     // Set the min value again
     min = '2020-07-30';
@@ -127,7 +189,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
 
     // Clear the max value
     max = '';
@@ -143,7 +205,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(3);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
 
     // Set the max value again
     max = '2021-01-01';
@@ -159,7 +221,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(4);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
 
     // Clear both values
     min = '';
@@ -176,7 +238,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(6);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
 
     // Set both values, finally done!
     min = '2020-08-15';
@@ -194,7 +256,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(8);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(8);
   });
 
   it('correctly creates filter node when isExclusive is true', () => {
@@ -237,7 +299,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
 
     // Set the min value again
     min = '2020-07-30';
@@ -253,7 +315,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
 
     // Clear the max value
     max = '';
@@ -269,7 +331,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(3);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
 
     // Set the max value again
     max = '2021-01-01';
@@ -285,7 +347,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(4);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
 
     // Clear both values
     min = '';
@@ -302,7 +364,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(6);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
 
     // Set both values, finally done!
     min = '2020-08-15';
@@ -320,7 +382,7 @@ describe('date range filter component', () => {
       filter: filter,
       metadata: metadata
     }));
-    expect(setStaticFilterNode.mock.calls).toHaveLength(8);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(8);
   });
 
   it('correctly creates filter node when min and max are equal and isExclusive is true', () => {

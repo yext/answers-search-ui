@@ -1,15 +1,15 @@
-import DOM from '../../../../src/ui/dom/dom';
+import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import FilterBoxComponent from '../../../../src/ui/components/filters/filterboxcomponent';
-import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
-import Filter from '../../../../src/core/models/filter';
-import FilterOptionsComponent from '../../../../src/ui/components/filters/filteroptionscomponent';
-import FilterCombinators from '../../../../src/core/filters/filtercombinators';
+import FilterBoxComponent from 'src/ui/components/filters/filterboxcomponent';
+import FilterNodeFactory from 'src/core/filters/filternodefactory';
+import Filter from 'src/core/models/filter';
+import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
+import FilterCombinators from 'src/core/filters/filtercombinators';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
-  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNode, verticalSearch;
+  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes, verticalSearch;
   const options = [
     {
       label: 'ciri',
@@ -67,14 +67,14 @@ describe('filter box component', () => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-    setStaticFilterNode = jest.fn();
+    setStaticFilterNodes = jest.fn();
     verticalSearch = jest.fn();
 
     const mockCore = {
-      setStaticFilterNode: setStaticFilterNode,
+      setStaticFilterNodes: setStaticFilterNodes,
       verticalSearch: verticalSearch,
       filterRegistry: {
-        setStaticFilterNode: setStaticFilterNode
+        setStaticFilterNodes: setStaticFilterNodes
       }
     };
 
@@ -145,33 +145,33 @@ describe('filter box component', () => {
     expect(wrapper.find('.yxt-FilterBox-filter')).toHaveLength(2);
     const child0 = component._filterComponents[0];
     const child1 = component._filterComponents[1];
-    expect(setStaticFilterNode.mock.calls).toHaveLength(1);
-    expect(setStaticFilterNode.mock.calls[0][0]).toEqual('unique name');
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls[0][0]).toEqual('unique name');
     expect(child0.getFilterNode()).toEqual(FilterNodeFactory.from());
     let filterNode = FilterNodeFactory.and(child0.getFilterNode(), child1.getFilterNode());
-    expect(setStaticFilterNode.mock.calls[0][1]).toEqual(filterNode);
+    expect(setStaticFilterNodes.mock.calls[0][1]).toEqual(filterNode);
 
     child0._updateOption(0, true);
     expect(child0.getFilterNode()).toEqual(nodes0[0]);
     filterNode = FilterNodeFactory.and(child0.getFilterNode(), child1.getFilterNode());
-    expect(setStaticFilterNode.mock.calls[1][1]).toEqual(filterNode);
+    expect(setStaticFilterNodes.mock.calls[1][1]).toEqual(filterNode);
 
     child1._updateOption(0, true);
     expect(child1.getFilterNode()).toEqual(nodes1[0]);
     filterNode = FilterNodeFactory.and(child0.getFilterNode(), child1.getFilterNode());
-    expect(setStaticFilterNode.mock.calls[2][1]).toEqual(filterNode);
+    expect(setStaticFilterNodes.mock.calls[2][1]).toEqual(filterNode);
 
     child1._updateOption(3, true);
     expect(child1.getFilterNode()).toEqual(FilterNodeFactory.and(nodes1[0], nodes1[3]));
     filterNode = FilterNodeFactory.and(child0.getFilterNode(), child1.getFilterNode());
-    expect(setStaticFilterNode.mock.calls[3][1]).toEqual(filterNode);
+    expect(setStaticFilterNodes.mock.calls[3][1]).toEqual(filterNode);
 
     child1._updateOption(4, true);
     expect(child1.getFilterNode()).toEqual(
       FilterNodeFactory.and(nodes1[0], FilterNodeFactory.or(nodes1[3], nodes1[4]))
     );
     filterNode = FilterNodeFactory.and(child0.getFilterNode(), child1.getFilterNode());
-    expect(setStaticFilterNode.mock.calls[4][1]).toEqual(filterNode);
+    expect(setStaticFilterNodes.mock.calls[4][1]).toEqual(filterNode);
   });
 
   it('search on change = false works', () => {
@@ -197,13 +197,13 @@ describe('filter box component', () => {
     const wrapper = mount(component);
     expect(component._config.searchOnChange).toBeFalsy();
     const child0 = component._filterComponents[0];
-    expect(setStaticFilterNode.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
     expect(verticalSearch.mock.calls).toHaveLength(0);
     child0._updateOption(0, true);
-    expect(setStaticFilterNode.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
     expect(verticalSearch.mock.calls).toHaveLength(0);
     wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
-    expect(setStaticFilterNode.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
     expect(verticalSearch.mock.calls).toHaveLength(1);
   });
 });
