@@ -177,6 +177,27 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._autoCompleteName = `${this.name}.autocomplete`;
+
+    /**
+     * Options to pass to the geolocation api.
+     * @type {Object}
+     */
+    this._geolocationOptions = {
+      enableHighAccuracy: false,
+      timeout: 1000,
+      maximumAge: 300000,
+      ...config.geolocationOptions
+    };
+
+    /**
+     * Options for the geolocation timeout alert.
+     * @type {Object}
+     */
+    this._geolocationTimeoutAlert = {
+      enabled: false,
+      message: 'We are unable to determine your location',
+      ...config.geolocationTimeoutAlert
+    };
   }
 
   static get type () {
@@ -494,7 +515,13 @@ export default class SearchComponent extends Component {
                   });
                   resolve(this.search(query));
                 },
-                () => resolve(this.search(query)))
+                () => {
+                  resolve(this.search(query));
+                  const { enabled, message } = this._geolocationTimeoutAlert;
+                  if (enabled) {
+                    window.alert(message);
+                  }
+                }, this._geolocationOptions)
             );
           } else {
             return this.search(query);
