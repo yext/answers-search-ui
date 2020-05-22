@@ -5,9 +5,9 @@ import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 
 /**
- * FilterRegistry is a structure that manages {@link Filter}s and {@link Facet} filters.
+ * FilterRegistry is a structure that manages static {@link Filter}s and {@link Facet} filters.
  *
- * Filters and facet filters are stored within global storage using FilterNodes.
+ * Static filters and facet filters are stored within global storage using FilterNodes.
  */
 export default class FilterRegistry {
   constructor (globalStorage, availableFieldIds = []) {
@@ -26,15 +26,15 @@ export default class FilterRegistry {
   }
 
   /**
-   * Get all of the active {@link FilterNode}s.
+   * Get all of the {@link FilterNode}s for static filters.
    * @returns {Array<FilterNode>}
    */
-  getFilterNodes () {
-    return this.globalStorage.getAll(StorageKeys.FILTER_NODE);
+  getStaticFilterNodes () {
+    return this.globalStorage.getAll(StorageKeys.STATIC_FILTER_NODE);
   }
 
   /**
-   * Get all of the active {@link FilterNode}s used for facets.
+   * Get all of the active {@link FilterNode}s for facets.
    * @returns {Array<FilterNode>}
    */
   getFacetFilterNodes () {
@@ -45,12 +45,12 @@ export default class FilterRegistry {
    * Gets the filter string to send in a search query.
    * @returns {string}
    */
-  getRequestFilter () {
-    return JSON.stringify(this._getRequestFilter());
+  getStaticFilterPayload () {
+    return JSON.stringify(this._getStaticFilterPayload());
   }
 
-  _getRequestFilter () {
-    const filterNodes = this.getFilterNodes();
+  _getStaticFilterPayload () {
+    const filterNodes = this.getStaticFilterNodes();
     const totalNode = FilterNodeFactory.and(...filterNodes);
     return totalNode.getFilter();
   }
@@ -59,11 +59,11 @@ export default class FilterRegistry {
    * Gets the facet filter string to send in a search query.
    * @returns {string}
    */
-  getRequestFacetFilter () {
-    return JSON.stringify(this._getRequestFacet());
+  getFacetFilterPayload () {
+    return JSON.stringify(this._getFacetFilterPayload());
   }
 
-  _getRequestFacet () {
+  _getFacetFilterPayload () {
     const getFilters = fn => fn.getChildren().length
       ? fn.getChildren().flatMap(getFilters)
       : fn.getFilter();
@@ -77,8 +77,8 @@ export default class FilterRegistry {
    * @param {string} key
    * @param {FilterNode} filterNode
    */
-  setFilterNode (key, filterNode) {
-    this.globalStorage.set(`${StorageKeys.FILTER_NODE}.${key}`, filterNode);
+  setStaticFilterNode (key, filterNode) {
+    this.globalStorage.set(`${StorageKeys.STATIC_FILTER_NODE}.${key}`, filterNode);
   }
 
   /**

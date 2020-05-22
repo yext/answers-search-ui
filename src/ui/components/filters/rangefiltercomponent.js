@@ -146,7 +146,7 @@ export default class RangeFilterComponent extends Component {
 
     const filterNode = this.getFilterNode();
     if (this._storeOnChange) {
-      this.core.setFilterNode(this.name, filterNode);
+      this.core.setStaticFilterNode(this.name, filterNode);
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._range.max);

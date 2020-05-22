@@ -109,7 +109,7 @@ export default class FilterSearchComponent extends Component {
       } catch (e) {}
     }
 
-    let filterNode = this.core.globalStorage.getState(`${this.name}.${StorageKeys.FILTER_NODE}`) || {};
+    let filterNode = this.core.globalStorage.getState(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`) || {};
     if (typeof filterNode === 'string') {
       try {
         filterNode = JSON.parse(filterNode);
@@ -188,7 +188,7 @@ export default class FilterSearchComponent extends Component {
 
         const params = new SearchParams(window.location.search.substring(1));
         params.set(`${this.name}.${StorageKeys.QUERY}`, this.query);
-        params.set(`${this.name}.${StorageKeys.FILTER_NODE}`, this.filterNode);
+        params.set(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`, this.filterNode);
 
         // If we have a redirectUrl, we want the params to be
         // serialized and submitted.
@@ -199,8 +199,8 @@ export default class FilterSearchComponent extends Component {
 
         // save the filter to storage for the next search
         this.core.persistentStorage.set(`${this.name}.${StorageKeys.QUERY}`, this.query);
-        this.core.persistentStorage.set(`${this.name}.${StorageKeys.FILTER_NODE}`, this.filterNode);
-        this.core.setFilterNode(this.name, this.filterNode);
+        this.core.persistentStorage.set(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`, this.filterNode);
+        this.core.setStaticFilterNode(this.name, this.filterNode);
         this.search();
       }
     });

@@ -112,7 +112,7 @@ export default class GeoLocationComponent extends Component {
      * The filter node to use for the current query
      * @type {FilterNode}
      */
-    let filterNode = this.core.globalStorage.getState(`${this.name}.${StorageKeys.FILTER_NODE}`) || {};
+    let filterNode = this.core.globalStorage.getState(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`) || {};
     if (typeof filterNode === 'string') {
       try {
         filterNode = JSON.parse(filterNode);
@@ -241,7 +241,7 @@ export default class GeoLocationComponent extends Component {
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${this.name}.${StorageKeys.QUERY}`);
-          this.core.persistentStorage.delete(`${this.name}.${StorageKeys.FILTER_NODE}`);
+          this.core.persistentStorage.delete(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`);
         },
         () => this._handleGeolocationError(),
         this._geolocationOptions
@@ -274,8 +274,8 @@ export default class GeoLocationComponent extends Component {
         fieldName: this._config.title || this._config.label || 'Location'
       }
     });
-    this.core.persistentStorage.set(`${this.name}.${StorageKeys.FILTER_NODE}`, filterNode);
-    this.core.setFilterNode(this.name, filterNode);
+    this.core.persistentStorage.set(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`, filterNode);
+    this.core.setStaticFilterNode(this.name, filterNode);
 
     if (position) {
       this.core.globalStorage.set(StorageKeys.GEOLOCATION, {

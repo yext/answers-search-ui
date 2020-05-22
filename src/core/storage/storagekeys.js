@@ -13,7 +13,7 @@ export default {
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
-  FILTER_NODE: 'filter-node',
+  STATIC_FILTER_NODE: 'static-filter-node',
   QUERY: 'query',
   QUERY_ID: 'query-id',
   FACET_FILTER_NODE: 'facet-filter-node',

@@ -146,8 +146,8 @@ export default class Core {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         input: this.globalStorage.getState(StorageKeys.QUERY) || '',
         ...query,
-        filter: this.filterRegistry.getRequestFilter(),
-        facetFilter: useFacets ? this.filterRegistry.getRequestFacetFilter() : null,
+        filter: this.filterRegistry.getStaticFilterPayload(),
+        facetFilter: useFacets ? this.filterRegistry.getFacetFilterPayload() : null,
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
@@ -356,8 +356,8 @@ export default class Core {
     this.filterRegistry.setFacetFilterNodes(availableFieldids, filterNodes);
   }
 
-  setFilterNode (namespace, filterNode) {
-    this.filterRegistry.setFilterNode(namespace, filterNode);
+  setStaticFilterNode (namespace, filterNode) {
+    this.filterRegistry.setStaticFilterNode(namespace, filterNode);
   }
 
   enableDynamicFilters () {

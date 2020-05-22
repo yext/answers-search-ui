@@ -277,7 +277,7 @@ export default class FilterOptionsComponent extends Component {
   updateListeners () {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
-      this.core.setFilterNode(this.name, filterNode);
+      this.core.setStaticFilterNode(this.name, filterNode);
     }
 
     this.config.onChange(filterNode);
