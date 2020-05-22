@@ -46,6 +46,27 @@ export default class LocationBiasComponent extends Component {
     this._accuracy = '';
 
     this._allowUpdate = true;
+
+    /**
+     * Options to pass to the geolocation api.
+     * @type {Object}
+     */
+    this._geolocationOptions = {
+      enableHighAccuracy: false,
+      timeout: 6000,
+      maximumAge: 300000,
+      ...config.geolocationOptions
+    };
+
+    /**
+     * Options for the geolocation timeout alert.
+     * @type {Object}
+     */
+    this._geolocationTimeoutAlert = {
+      enabled: false,
+      message: 'We are unable to determine your location',
+      ...config.geolocationTimeoutAlert
+    };
   }
 
   static get type () {
@@ -70,14 +91,22 @@ export default class LocationBiasComponent extends Component {
             radius: position.coords.accuracy
           });
           this._doSearch();
-        }, (err) => {
-          if (err.code === 1) {
-            this._disableLocationUpdate();
-          }
-        });
+        },
+        (err) => this._handleGeolocationError(err),
+        this._geolocationOptions);
       }
       // TODO: Should we throw error or warning here if no geolocation?
     });
+  }
+
+  _handleGeolocationError (err) {
+    if (err.code === 1) {
+      this._disableLocationUpdate();
+    }
+    const { enabled, message } = this._geolocationTimeoutAlert;
+    if (enabled) {
+      window.alert(message);
+    }
   }
 
   setState (data, val) {
