@@ -46,61 +46,62 @@ test('pagination flow', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
-test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
-  `Facets load on the page, and then selecting facet filters correctly affects the search`,
-  async t => {
-    const searchComponent = FacetsPage.getSearchComponent();
-    await searchComponent.submitQuery();
+fixture`Facets page`
+  .before(setupServer)
+  .after(shutdownServer)
+  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
 
-    const facets = FacetsPage.getFacetsComponent();
+test(`Facets load on the page, and can affect the search`, async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
 
-    // Record the amount of results with no facets
-    const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
-    const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
+  const facets = FacetsPage.getFacetsComponent();
+  const filterBox = facets.getFilterBox();
 
-    // Select the first option in the first FilterOptions
-    await facets.toggleOption(0, 0);
-    let expectedResultsCount = await facets.getOptionCount(0, 0);
-    await facets.applyFilters();
+  // Record the amount of results with no facets
+  const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
+  const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
 
-    // Get the actual number of results and check that it equals the expected amount
-    let actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
-    await t.expect(actualResultsCount).eql(expectedResultsCount);
+  // Select the first option in the first FilterOptions
+  const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
+  await employeeDepartment.toggleOption('Client Delivery');
+  let expectedResultsCount = await employeeDepartment.getOptionCount('Client Delivery');
 
-    // Reset the filters, and check that the number of results
-    // is the same as the initial amount
-    await facets.reset();
-    await facets.applyFilters();
-    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
-    await t.expect(actualResultsCount).eql(initialResultsCount);
+  await filterBox.applyFilters();
 
-    // Select the first option and second option in the first FilterOptions
-    await facets.toggleOption(0, 0);
-    await facets.toggleOption(0, 1);
-    expectedResultsCount = await facets.getOptionCount(0, 0) + await facets.getOptionCount(0, 1);
-    await facets.applyFilters();
-    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
-    await t.expect(actualResultsCount).eql(expectedResultsCount);
+  // Get the actual number of results and check that it equals the expected amount
+  let actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+  await t.expect(actualResultsCount).eql(expectedResultsCount);
 
-    // Select the third option in the first FilterOptions
-    await facets.toggleOption(0, 2);
-    expectedResultsCount += await facets.getOptionCount(0, 2);
-    await facets.applyFilters();
-    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
-    await t.expect(actualResultsCount).eql(expectedResultsCount);
+  // Reset the filters, and check that the number of results
+  // is the same as the initial amount
+  await filterBox.reset();
+  await filterBox.applyFilters();
+  actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+  await t.expect(actualResultsCount).eql(initialResultsCount);
 
-    // Check that selecting form different FilterOptions works
-    await facets.toggleOption(1, 0);
-    expectedResultsCount = Math.min(expectedResultsCount, await facets.getOptionCount(1, 0));
-    await facets.applyFilters();
-    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
-    await t.expect(actualResultsCount).eql(expectedResultsCount);
+  // Select the first option and second option in the first FilterOptions
+  await employeeDepartment.toggleOption('Client Delivery');
+  await employeeDepartment.toggleOption('Technology');
+  const clientDeliveryCount = await employeeDepartment.getOptionCount('Client Delivery');
+  const technologyCount = await employeeDepartment.getOptionCount('Technology');
+  expectedResultsCount = clientDeliveryCount + technologyCount;
+  await filterBox.applyFilters();
+  actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+  await t.expect(actualResultsCount).eql(expectedResultsCount);
 
-    // Reset the filters, and check that the number of results
-    // is the same as the initial amount
-    await facets.reset();
-    await facets.applyFilters();
-    actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
-    await t.expect(actualResultsCount).eql(initialResultsCount);
-  }
-);
+  // Check that selecting multiple FilterOptions works
+  const brands = await filterBox.getFilterOptions('Brands');
+  await brands.toggleOption('E');
+  expectedResultsCount = await brands.getOptionCount('E');
+  await filterBox.applyFilters();
+  actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+  await t.expect(actualResultsCount).eql(expectedResultsCount);
+
+  // Reset the filters, and check that the number of results
+  // is the same as the initial amount
+  await filterBox.reset();
+  await filterBox.applyFilters();
+  actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+  await t.expect(actualResultsCount).eql(initialResultsCount);
+});

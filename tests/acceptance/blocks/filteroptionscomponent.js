@@ -4,72 +4,66 @@ import { Selector, t } from 'testcafe';
  * This class models user interactions with the {@link FilterOptionsComponent}.
  */
 export default class FilterOptionsComponentBlock {
-  constructor (container) {
-    this._container = container || '';
+  constructor (selector) {
+    this._container = '.yxt-FilterOptions-fieldSet';
+    this._selector = selector || Selector(this._container);
   }
 
   /**
-   * Returns whether this FilterOptions is expanded or not.
+   * Returns whether this FilterOptions is collapsed or not.
    */
-  async isExpanded () {
-    return this._Selector('.yxt-FilterOptions--collapsed').exists;
+  async isCollapsed () {
+    return this._selector.find('.yxt-FilterOptions--collapsed').exists;
+  }
+
+  async getLabel (label) {
+    return this._selector.find('label').withText(label);
   }
 
   /**
-   * Return a selector within this block's container context.
-   * @param {string} selector selector for desired element
+   * Return a selector for the option with the given label.
+   * @param {String} label
    */
-  _Selector (selector) {
-    return Selector(`${this._container} ${selector}`);
-  }
-
-  async clickApply () {
-    const applyButton = this._Selector('.js-yxt-FilterBox-reset');
-    await t.click(applyButton);
-  }
-
-  /**
-   * Return a selector for the option with the given index
-   * @param {number} index
-   */
-  getOption (index) {
-    return this._Selector(`[data-index="${index}"]`);
+  async getOption (label) {
+    const labelNode = await this.getLabel(label);
+    const attributes = await labelNode.attributes;
+    const inputId = attributes.for;
+    // We have to use withAttribute here instead of a css selector
+    // because the sdk is dumb and uses a period in its element ids.
+    return Selector('input').withAttribute('id', inputId);
   }
 
   /**
    * Get the number of results associated with a particular option.
    * This value is enclosed within parenthesis at the end of an option's
    * label.
-   * @param {number} index
+   * @param {string} label
    */
-  async getOptionCount (index) {
-    const option = await this.getOption(index);
-    const optionId = await option.id;
-    const label = this._Selector(`[for="${optionId}"]`);
-    const labelText = await label.innerText;
+  async getOptionCount (label) {
+    const labelNode = await this.getLabel(label);
+    const labelText = await labelNode.innerText;
     const countString = labelText.substring(0, labelText.length - 1).split('(')[1];
     return Number.parseInt(countString);
   }
 
   /**
-   * Toggle the option at the given index.
-   * @param {number} index
+   * Toggle the option with the given label.
+   * @param {Stromg} label
    */
-  async toggleOption (index) {
-    const option = this.getOption(index);
+  async toggleOption (label) {
+    const isCollapsed = await this.isCollapsed();
+    if (isCollapsed) {
+      await this.toggleExpand();
+    }
+    const option = await this.getOption(label);
     await t.click(option);
   }
 
-  async expand () {
-    const clickableLegend = this._Selector('.yxt-FilterOptions-clickableLegend');
-    await t.click(clickableLegend);
-  }
-
   /**
-   * Toggle the show more button.
+   * Expand the FilterOptions if collapsed, otherwise collapse it.
    */
-  async toggleShowMore () {
-    const showMore = this._Selector('.yxt-FilterOptions-showToggle');
-    await t.click(showMore);
+  async toggleExpand () {
+    const clickableLegend = await this._selector.find('.yxt-FilterOptions-clickableLegend');
+    await t.click(clickableLegend);
   }
 }
