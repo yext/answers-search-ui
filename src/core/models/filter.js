@@ -82,18 +82,15 @@ export default class Filter {
     const falsyMax = max === null || max === undefined || max === '';
     if (falsyMin && falsyMax) {
       return Filter.empty();
-    }
-    if (falsyMax) {
+    } else if (falsyMax) {
       return isExclusive
         ? Filter.greaterThan(field, min)
         : Filter.greaterThanEqual(field, min);
-    }
-    if (falsyMin) {
+    } else if (falsyMin) {
       return isExclusive
         ? Filter.lessThan(field, max)
         : Filter.lessThanEqual(field, max);
-    }
-    if (min === max) {
+    } else if (min === max) {
       return isExclusive
         ? Filter.empty()
         : Filter.equal(field, min);
