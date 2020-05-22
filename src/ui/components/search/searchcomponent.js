@@ -521,7 +521,8 @@ export default class SearchComponent extends Component {
                   if (enabled) {
                     window.alert(message);
                   }
-                }, this._geolocationOptions)
+                },
+                this._geolocationOptions)
             );
           } else {
             return this.search(query);

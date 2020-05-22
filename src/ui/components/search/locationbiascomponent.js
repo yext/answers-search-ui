@@ -91,7 +91,8 @@ export default class LocationBiasComponent extends Component {
             radius: position.coords.accuracy
           });
           this._doSearch();
-        }, (err) => this._handleGeolocationError(err),
+        },
+        (err) => this._handleGeolocationError(err),
         this._geolocationOptions);
       }
       // TODO: Should we throw error or warning here if no geolocation?
