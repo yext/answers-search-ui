@@ -397,7 +397,24 @@ ANSWERS.addComponent('SearchBar', {
   // Note that WCAG compliance is not guaranteed if a form is not used as the context.
   useForm: 'true',
   // Optional, the input element used for searching and wires up the keyboard interaction
-  inputEl: '.js-yext-query'
+  inputEl: '.js-yext-query',  
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 1 second.
+    timeout: 1000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: "We are unable to determine your location"
+  }
 })
 ```
 
@@ -1155,6 +1172,23 @@ ANSWERS.addComponent('GeoLocationFilter', {
       sectioned: false,
     }]
   },
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 6 seconds.
+    timeout: 6000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: "We are unable to determine your location"
+  }
 });
 ```
 
@@ -1276,7 +1310,24 @@ ANSWERS.addComponent('LocationBias', {
   // Optional, help text to inform someone their device was used for location
   deviceAccuracyHelpText: 'based on your device',
   // Optional, text used for the button to update location
-  updateLocationButtonText: 'Update your location'
+  updateLocationButtonText: 'Update your location',
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 6 seconds.
+    timeout: 6000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: "We are unable to determine your location"
+  }
 })
 ```
 
