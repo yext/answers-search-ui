@@ -487,7 +487,9 @@ function initScrollListener (reporter) {
   const sendEvent = () => {
     if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight) {
       const event = new AnalyticsEvent('SCROLL_TO_BOTTOM_OF_PAGE');
-      reporter.report(event);
+      if (reporter.getQueryId()) {
+        reporter.report(event);
+      }
     }
   };
 
