@@ -1072,6 +1072,9 @@ Filter components can be used in a FilterBox or on their own to affect a search.
 ### FilterOptions
 
 FilterOptions displays a set of filters with either checkboxes or radio buttons.
+As a user interacts with FilterOptions, information on which options are selected
+is stored in the url. Returning to that same url will load the page with those saved
+options already selected.
 
 ```html
 <div class="filter-container"></div>
@@ -1093,12 +1096,16 @@ ANSWERS.addComponent('FilterOptions', {
       // The api field to filter on, configured on the Yext platform
       field: 'c_openNow',
       // The value for the above field to filter by
-      value: true
+      value: true,
+      // Whether this option will be selected on page load. Selected options stored in the url
+      // will take priority over appliedOnLoad. Defaults to false.
+      appliedOnLoad: false
     },
     {
       label: 'Dog Friendly',
       field: 'c_dogFriendly',
-      value: true
+      value: true,
+      appliedOnLoad: true
     },
     {
       label: 'Megastores',
