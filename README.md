@@ -1098,26 +1098,26 @@ The options config varies depending on whether the optionType is 'STATIC_FILTER'
 {
   options: [
     {
-      // Label to show next to the filter option
-      label: 'Open Now',
-      // The api field to filter on, configured on the Yext platform
+      // Required, the api field to filter on, configured on the Yext platform.
       field: 'c_openNow',
-      // The value for the above field to filter by
+      // Required, the value for the above field to filter by.
       value: true,
-      // Whether this option will be selected on page load. Selected options stored in the url
+      // Optional, the label to show next to the filter option.
+      label: 'Open Now',
+      // Optional, whether this option will be selected on page load. Selected options stored in the url
       // take priority over appliedOnLoad. Defaults to false.
       appliedOnLoad: false
     },
     {
-      label: 'Dog Friendly',
       field: 'c_dogFriendly',
       value: true,
+      label: 'Dog Friendly',
       appliedOnLoad: true
     },
     {
-      label: 'Megastores',
       field: 'c_storeType',
-      value: 'Megastore'
+      value: 'Megastore',
+      label: 'Megastores'
     }
   ]
 }
@@ -1129,30 +1129,30 @@ The options config varies depending on whether the optionType is 'STATIC_FILTER'
 {    
   options: [
     {
-      // Label to show next to the filter option
-      label: '5 miles', 
-      // The value of the radius to apply (in meters). If this value is 0, will not filter by radius.
+      // Required, the value of the radius to apply (in meters). If this value is 0, will not filter by radius.
       value: 8046.72,
-      // Whether this option will be selected on page load. Selected options stored in the url
-      // will take priority over appliedOnLoad. Defaults to false.
+      // Optional, the label to show next to the filter option.
+      label: '5 miles',
+      // Optional, whether this option will be selected on page load. Selected options stored in the url
+      // take priority over appliedOnLoad. Defaults to false.
       appliedOnLoad: false
     },
     {
-      label: '10 miles',
       value: 16093.4,
+      label: '10 miles',
       appliedOnLoad: true
     },
     {
-      label: '25 miles',
-      value: 40233.6
+      value: 40233.6,
+      label: '25 miles'
     },
     { 
-      label: '50 miles',
-      value: 80467.2
+      value: 80467.2,
+      label: '50 miles'
     },
     {
-      label: "Do not filter by radius",
-      value: 0
+      value: 0,
+      label: "Do not filter by radius"
     }
   ],
 }
