@@ -198,6 +198,8 @@ export default class FacetsComponent extends Component {
       });
     });
 
+    // TODO: pass an apply() method to FilterBox, that will override its default behavior,
+    // and remove the isDynamic config option.
     this._filterbox = this.componentManager.create(
       'FilterBox',
       Object.assign({}, this.config, {
