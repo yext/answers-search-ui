@@ -17,6 +17,14 @@ const SUPPORTED_CONTROLS = [
   'multioption'
 ];
 
+/**
+ * The currently supported option types.
+ */
+const OptionTypes = {
+  RADIUS_FILTER: 'RADIUS_FILTER',
+  STATIC_FILTER: 'STATIC_FILTER'
+};
+
 class FilterOptionsConfig {
   constructor (config) {
     /**
@@ -24,6 +32,12 @@ class FilterOptionsConfig {
      * @type {string}
      */
     this.control = config.control;
+
+    /**
+     * The type of filtering to apply to the options.
+     * @type {string}
+     */
+    this.optionType = config.optionType || OptionTypes.STATIC_FILTER;
 
     /**
      * The list of filter options to display with checked status
@@ -144,7 +158,9 @@ class FilterOptionsConfig {
     if (this.control === 'singleoption') {
       const _options = options.map(o => ({ ...o }));
       const firstAppliedOption = _options.find(o => o.appliedOnLoad);
-      firstAppliedOption.selected = true;
+      if (firstAppliedOption) {
+        firstAppliedOption.selected = true;
+      }
       return _options;
     }
     return options.map(o => ({
@@ -163,6 +179,19 @@ class FilterOptionsConfig {
     if (!this.control || !SUPPORTED_CONTROLS.includes(this.control)) {
       throw new AnswersComponentError(
         'FilterOptions requires a valid "control" to be provided',
+        'FilterOptions');
+    }
+
+    if (!(this.optionType in OptionTypes)) {
+      const possibleTypes = Object.values(OptionTypes).join(', ');
+      throw new AnswersComponentError(
+        `Invalid optionType ${this.optionType} passed to FilterOptions. Expected one of ${possibleTypes}`,
+        'FilterOptions');
+    }
+
+    if (this.optionType === OptionTypes.RADIUS_FILTER && this.control !== 'singleoption') {
+      throw new AnswersComponentError(
+        `FilterOptions of optionType ${OptionTypes.RADIUS_FILTER} requires control "singleoption"`,
         'FilterOptions');
     }
 
@@ -326,8 +355,22 @@ export default class FilterOptionsComponent extends Component {
   }
 
   apply () {
-    const filter = this._buildFilter();
-    this.core.setFilter(this.name, filter);
+    switch (this.config.optionType) {
+      case OptionTypes.RADIUS_FILTER:
+        const selectedOption = this.config.options.find(o => o.selected);
+        if (selectedOption && selectedOption.value !== 0) {
+          this.core.setLocationRadius(selectedOption.value);
+        } else {
+          this.core.clearLocationRadius();
+        }
+        break;
+      case OptionTypes.STATIC_FILTER:
+        const filter = this._buildFilter();
+        this.core.setFilter(this.name, filter);
+        break;
+      default:
+        throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
+    }
   }
 
   /**

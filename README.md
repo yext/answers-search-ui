@@ -1059,17 +1059,7 @@ ANSWERS.addComponent('FilterOptions', {
   control: 'singleoption',
   // Required, list of options
   options: [
-    {
-      // Required, label to show next to the filter option
-      label: 'Open Now',
-      // Required, the field's API name to filter on, configured in the Yext platform
-      field: 'c_openNow',
-      // Required, the value for the above field to filter by
-      value: true,
-      // Optional, whether the option is selected by default
-      selected: true,
-    },
-    ...
+    /** Depends on the above optionType, either 'STATIC_FILTER' or 'RADIUS_FILTER', see below. **/
   ],
   // Optional, if true, the filter value is saved on change and sent with the next search. Defaults to false.
   storeOnChange: false,
@@ -1098,6 +1088,74 @@ ANSWERS.addComponent('FilterOptions', {
   // Optional, the label to be used in the legend, defaults to 'Filters'
   label: 'Filters'
 });
+```
+
+The options config varies depending on whether the optionType is 'STATIC_FILTER' or 'RADIUS_FILTER'.
+
+##### STATIC_FILTER
+
+```js
+{
+  options: [
+    {
+      // Label to show next to the filter option
+      label: 'Open Now',
+      // The api field to filter on, configured on the Yext platform
+      field: 'c_openNow',
+      // The value for the above field to filter by
+      value: true,
+      // Whether this option will be selected on page load. Selected options stored in the url
+      // take priority over appliedOnLoad. Defaults to false.
+      appliedOnLoad: false
+    },
+    {
+      label: 'Dog Friendly',
+      field: 'c_dogFriendly',
+      value: true,
+      appliedOnLoad: true
+    },
+    {
+      label: 'Megastores',
+      field: 'c_storeType',
+      value: 'Megastore'
+    }
+  ]
+}
+```
+
+##### RADIUS_FILTER
+
+```js
+{    
+  options: [
+    {
+      // Label to show next to the filter option
+      label: '5 miles', 
+      // The value of the radius to apply (in meters). If this value is 0, will not filter by radius.
+      value: 8046.72,
+      // Whether this option will be selected on page load. Selected options stored in the url
+      // will take priority over appliedOnLoad. Defaults to false.
+      appliedOnLoad: false
+    },
+    {
+      label: '10 miles',
+      value: 16093.4,
+      appliedOnLoad: true
+    },
+    {
+      label: '25 miles',
+      value: 40233.6
+    },
+    { 
+      label: '50 miles',
+      value: 80467.2
+    },
+    {
+      label: "Do not filter by radius",
+      value: 0
+    }
+  ],
+}
 ```
 
 ### RangeFilter

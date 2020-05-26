@@ -153,7 +153,8 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS)
+        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
+        locationRadius: this.globalStorage.getState(StorageKeys.LOCATION_RADIUS)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -358,6 +359,21 @@ export default class Core {
 
   setStaticFilterNodes (namespace, filterNode) {
     this.filterRegistry.setStaticFilterNodes(namespace, filterNode);
+  }
+
+  /**
+   * Sets the locationRadius param for vertical searches.
+   * @param {number} locationRadius
+   */
+  setLocationRadius (locationRadius) {
+    this.globalStorage.set(StorageKeys.LOCATION_RADIUS, locationRadius);
+  }
+
+  /**
+   * Clears the locationRadius param for vertical searches.
+   */
+  clearLocationRadius () {
+    this.globalStorage.delete(StorageKeys.LOCATION_RADIUS);
   }
 
   enableDynamicFilters () {
