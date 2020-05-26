@@ -325,6 +325,11 @@ export default class FilterOptionsComponent extends Component {
     this.core.setStaticFilterNodes(this.name, filterNode);
   }
 
+  apply () {
+    const filter = this._buildFilter();
+    this.core.setFilter(this.name, filter);
+  }
+
   /**
    * Clear all options
    * TODO(oshi): Investigate removing this, this is not referenced anywhere,
