@@ -146,7 +146,7 @@ class FilterOptionsConfig {
     }
     return options.map(o => ({
       ...o,
-      selected: o.appliedOnLoad
+      selected: o.appliedOnLoad || o.selected
     }));
   }
 
