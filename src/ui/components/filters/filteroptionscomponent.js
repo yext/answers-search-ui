@@ -277,7 +277,7 @@ export default class FilterOptionsComponent extends Component {
   updateListeners () {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
-      this.core.setStaticFilterNodes(this.name, filterNode);
+      this.apply();
     }
 
     this.config.onChange(filterNode);
@@ -293,8 +293,16 @@ export default class FilterOptionsComponent extends Component {
     this.setState();
   }
 
+  apply () {
+    const filterNode = this.getFilterNode();
+    this.core.setStaticFilterNodes(this.name, filterNode);
+  }
+
   /**
    * Clear all options
+   * TODO(oshi): Investigate removing this, this is not referenced anywhere,
+   * even if you go back to the original commit (#42).
+   * Same thing with this._applyFilter().
    */
   clear () {
     const elements = DOM.queryAll(this._container, this.config.optionSelector);
