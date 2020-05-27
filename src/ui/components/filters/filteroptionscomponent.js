@@ -212,7 +212,6 @@ export default class FilterOptionsComponent extends Component {
   }
 
   onMount () {
-
     DOM.delegate(
       DOM.query(this._container, `.yxt-FilterOptions-options`),
       this.config.optionSelector,
@@ -220,7 +219,7 @@ export default class FilterOptionsComponent extends Component {
       event => {
         let selectedCountEl = DOM.query(this._container, '.js-yxt-FilterOptions-selectedCount');
         if (selectedCountEl) {
-          selectedCountEl.innerText = this._getSelectedCount();;
+          selectedCountEl.innerText = this._getSelectedCount();
         }
         this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
       });
