@@ -966,7 +966,7 @@ ANSWERS.addComponent('FilterBox', {
 
 ## Facets Component
 
-The Facets component displays filters relevant to the current search, configured on the server, automatically. Facets are only available for vertical searches.
+The Facets component displays filters relevant to the current search, configured on the server, automatically. Facets are only available for vertical searches. The selected options in a facets component will float to the top.
 
 ```html
 <div class="facets-container"></div>
