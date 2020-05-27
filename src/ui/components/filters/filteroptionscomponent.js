@@ -331,7 +331,7 @@ export default class FilterOptionsComponent extends Component {
    * @returns {number}
    * @private
    */
-  _getSelectedCount() {
+  _getSelectedCount () {
     const selectedEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-checkboxInput:checked');
     return selectedEls && selectedEls.length;
   }
@@ -345,7 +345,7 @@ export default class FilterOptionsComponent extends Component {
    * @returns {number}
    * @private
    */
-  _toggleResetIfPresent() {
+  _toggleResetIfPresent () {
     const resetEl = DOM.query(this._container, '.js-yxt-FilterOptions-reset');
     if (!resetEl) {
       return;
