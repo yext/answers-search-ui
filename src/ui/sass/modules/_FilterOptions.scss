@@ -91,6 +91,10 @@
   }
 
   &-reset {
+    &.js-hidden {
+      display: none;
+    }
+
     @include Text(
       $color: $color-brand-primary,
       $style: italic);

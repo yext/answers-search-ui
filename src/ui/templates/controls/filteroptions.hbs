@@ -28,7 +28,7 @@
       {{/if}}
       {{#if showReset}}
         {{#unless showExpand}}
-          <button class="yxt-FilterOptions-reset yxt-FilterOptions-reset--right">{{resetLabel}}</button>
+          <button class="yxt-FilterOptions-reset js-yxt-FilterOptions-reset yxt-FilterOptions-reset--right{{#unless displayReset}} js-hidden{{/unless}}">{{resetLabel}}</button>
         {{/unless}}
       {{/if}}
     </div>
@@ -37,7 +37,7 @@
   <div class="yxt-FilterOptions-container js-yxt-FilterOptions-container{{#unless expanded}} yxt-FilterOptions--collapsed{{/unless}}">
     {{#if showReset}}
       {{#if showExpand}}
-        <button class="yxt-FilterOptions-reset">{{resetLabel}}</button>
+        <button class="yxt-FilterOptions-reset js-yxt-FilterOptions-reset{{#unless displayReset}} js-hidden{{/unless}}">{{resetLabel}}</button>
       {{/if}}
     {{/if}}
 
