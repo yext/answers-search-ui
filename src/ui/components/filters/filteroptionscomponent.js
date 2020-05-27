@@ -342,12 +342,8 @@ export default class FilterOptionsComponent extends Component {
    * @returns {number}
    * @private
    */
-  _toggleResetIfPresent () {
+  _toggleReset () {
     const resetEl = DOM.query(this._container, '.js-yxt-FilterOptions-reset');
-    if (!resetEl) {
-      return;
-    }
-
     const selectedCount = this._getSelectedCount();
     if (selectedCount > 0) {
       resetEl.classList.remove('js-hidden');
@@ -447,7 +443,9 @@ export default class FilterOptionsComponent extends Component {
   }
 
   _updateOption (index, selected) {
-    this._toggleResetIfPresent();
+    if (this.config.showReset) {
+      this._toggleReset();
+    }
 
     if (this.config.control === 'singleoption') {
       this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
