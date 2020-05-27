@@ -8,7 +8,7 @@
             {{#if showNumberApplied}}
               {{#unless expanded}}
                 {{#if selectedCount}}
-                  <span class="yxt-FilterOptions-selectedCount">{{selectedCount}}</span>
+                  <span class="yxt-FilterOptions-selectedCount js-yxt-FilterOptions-selectedCount">{{selectedCount}}</span>
                 {{/if}}
               {{/unless}}
             {{/if}}
@@ -26,27 +26,24 @@
         {{else}}
           <span class="yxt-FilterOptions-label">{{label}}</span>
       {{/if}}
-      {{#if showReset}}
-        {{#unless showExpand}}
-          <button class="yxt-FilterOptions-reset yxt-FilterOptions-reset--right">{{resetLabel}}</button>
-        {{/unless}}
-      {{/if}}
+      {{#unless showExpand}}
+        <button class="yxt-FilterOptions-reset js-yxt-FilterOptions-reset yxt-FilterOptions-reset--right{{#unless displayReset}} js-hidden{{/unless}}">{{resetLabel}}</button>
+      {{/unless}}
     </div>
   </legend>
 
   <div class="yxt-FilterOptions-container js-yxt-FilterOptions-container{{#unless expanded}} yxt-FilterOptions--collapsed{{/unless}}">
+
     <div class="yxt-FilterOptions-controls">
-      {{#if showReset}}
-        {{#if showExpand}}
-          <span class="yxt-FilterOptions-buttonWrapper">
-            <button class="yxt-FilterOptions-reset">{{resetLabel}}</button>
-          </span>
-        {{/if}}
+      {{#if showExpand}}
+        <span class="yxt-FilterOptions-buttonWrapper">
+          <button class="yxt-FilterOptions-reset js-yxt-FilterOptions-reset{{#unless displayReset}} js-hidden{{/unless}}">{{resetLabel}}</button>
+        </span>
       {{/if}}
 
-      {{#if searchable}}
-        <input type="text" class="yxt-FilterOptions-filter js-yxt-FilterOptions-filter" placeholder="{{placeholderText}}">
-      {{/if}}
+    {{#if searchable}}
+      <input type="text" class="yxt-FilterOptions-filter js-yxt-FilterOptions-filter" placeholder="{{placeholderText}}">
+    {{/if}}
     </div>
     <div class='yxt-FilterOptions-options'>
       {{#each options}}
@@ -73,7 +70,7 @@
           <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#ifgte @index ../showMoreLimit}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/ifgte}}">
             <input
               type="checkbox"
-              class="js-yext-filter-option yxt-FilterOptions-input yxt-FilterOptions-checkboxInput"
+              class="js-yext-filter-option yxt-FilterOptions-input yxt-FilterOptions-checkboxInput js-yxt-FilterOptions-checkboxInput"
               id="js-yext-checkbox-{{../name}}-{{@index}}"
               value="{{value}}"
               data-index="{{@index}}"

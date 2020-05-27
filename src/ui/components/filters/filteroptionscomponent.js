@@ -137,7 +137,7 @@ class FilterOptionsConfig {
     }));
   }
 
-  getSelectedCount () {
+  getInitialSelectedCount () {
     return this.options.reduce(
       (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
       0);
@@ -177,7 +177,7 @@ export default class FilterOptionsComponent extends Component {
       ...config
     });
 
-    const selectedCount = this.config.getSelectedCount();
+    const selectedCount = this.config.getInitialSelectedCount();
 
     /**
      * True if the option list is expanded and visible
@@ -200,11 +200,11 @@ export default class FilterOptionsComponent extends Component {
   }
 
   setState (data) {
-    const selectedCount = this.config.getSelectedCount();
+    const selectedCount = this.config.getInitialSelectedCount();
     super.setState(Object.assign({}, data, {
       name: this.name.toLowerCase(),
       ...this.config,
-      showReset: this.config.showReset && selectedCount > 0,
+      displayReset: this.config.showReset && selectedCount > 0,
       expanded: this.expanded,
       selectedCount,
       isSingleOption: this.config.control === 'singleoption'
@@ -217,17 +217,17 @@ export default class FilterOptionsComponent extends Component {
       this.config.optionSelector,
       'click',
       event => {
+        let selectedCountEl = DOM.query(this._container, '.js-yxt-FilterOptions-selectedCount');
+        if (selectedCountEl) {
+          selectedCountEl.innerText = this._getSelectedCount();
+        }
         this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
       });
 
-    const selectedCount = this.config.getSelectedCount();
-
-    // reset button
-    if (this.config.showReset && selectedCount > 0) {
-      DOM.on(
-        DOM.query(this._container, '.yxt-FilterOptions-reset'),
-        'click',
-        this.clearOptions.bind(this));
+    // Initialize reset element if present
+    const resetEl = DOM.query(this._container, '.js-yxt-FilterOptions-reset');
+    if (resetEl) {
+      DOM.on(resetEl, 'click', this.clearOptions.bind(this));
     }
 
     // show more/less button
@@ -324,6 +324,35 @@ export default class FilterOptionsComponent extends Component {
   }
 
   /**
+   * Returns the count of currently selected options
+   * @returns {number}
+   * @private
+   */
+  _getSelectedCount () {
+    const selectedEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-checkboxInput:checked');
+    return selectedEls && selectedEls.length;
+  }
+
+  /**
+   * Toggles the display of the reset element based on the selected count. If there are selected
+   * options, show the reset element, if not, hide it.
+   *
+   * Note: this will not have any effect if the reset element isn't in the DOM.
+   *
+   * @returns {number}
+   * @private
+   */
+  _toggleReset () {
+    const resetEl = DOM.query(this._container, '.js-yxt-FilterOptions-reset');
+    const selectedCount = this._getSelectedCount();
+    if (selectedCount > 0) {
+      resetEl.classList.remove('js-hidden');
+    } else if (!resetEl.classList.contains('js-hidden')) {
+      resetEl.classList.add('js-hidden');
+    }
+  }
+
+  /**
    * Finds the length and offset of the substring where (string) option and
    * (string) filter "match".
    *
@@ -414,13 +443,20 @@ export default class FilterOptionsComponent extends Component {
   }
 
   _updateOption (index, selected) {
+    if (this.config.showReset) {
+      this._toggleReset();
+    }
+
     if (this.config.control === 'singleoption') {
       this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
     }
 
     this.config.options[index] = Object.assign({}, this.config.options[index], { selected });
     this.updateListeners();
-    this.setState();
+
+    if (this.config.storeOnChange) {
+      this.setState();
+    }
   }
 
   getFilter () {

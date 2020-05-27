@@ -97,6 +97,7 @@
     line-height: 20px;
     align-items: center;
     margin-left: 22px;
+    cursor: pointer;
 
     /* Checkmark outer box */
     &::before {
@@ -147,6 +148,10 @@
   }
 
   &-reset {
+    &.js-hidden {
+      display: none;
+    }
+
     @include Text(
       $color: $color-brand-primary,
       $style: italic);
