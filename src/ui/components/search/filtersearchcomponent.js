@@ -157,11 +157,11 @@ export default class FilterSearchComponent extends Component {
       verticalKey: this._verticalKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
-        this.filterNode = this._buildFilterNode(query, filter);
+        const filterNode = this._buildFilterNode(query, filter);
 
         const params = new SearchParams(window.location.search.substring(1));
         params.set(`${this.name}.query`, query);
-        params.set(`${this.name}.filter`, this.filterNode.getFilter());
+        params.set(`${this.name}.filter`, filterNode.getFilter());
 
         // If we have a redirectUrl, we want the params to be
         // serialized and submitted.
@@ -173,7 +173,8 @@ export default class FilterSearchComponent extends Component {
         // save the filter to storage for the next search
         this.query = query;
         this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.setStaticFilterNodes(this.name, this.filterNode);
+        this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
+        this.core.setStaticFilterNodes(this.name, filterNode);
         this.search();
       }
     });
