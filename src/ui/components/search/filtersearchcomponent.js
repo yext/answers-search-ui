@@ -177,7 +177,7 @@ export default class FilterSearchComponent extends Component {
 
         const params = new SearchParams(window.location.search.substring(1));
         params.set(`${this.name}.query`, query);
-        params.set(`${this.name}.filter`, filterNode.getFilter());
+        params.set(`${this.name}.filter`, filter);
 
         // If we have a redirectUrl, we want the params to be
         // serialized and submitted.
