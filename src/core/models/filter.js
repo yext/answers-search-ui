@@ -70,26 +70,34 @@ export default class Filter {
   }
 
   /**
-   * OR filters with the same keys, then AND the resulting groups
-   * @param  {...Filter} filters The filters to group
+   * Helper method for creating a range filter
+   * @param {string} field field id of the filter
+   * @param {number|string} min minimum value
+   * @param {number|string} max maximum value
+   * @param {boolean} isExclusive whether this is an inclusive or exclusive range
    * @returns {Filter}
    */
-  static group (...filters) {
-    const groups = {};
-    for (const filter of filters) {
-      const key = filter.getFilterKey();
-      if (!groups[key]) {
-        groups[key] = [];
-      }
-      groups[key].push(filter);
+  static range (field, min, max, isExclusive) {
+    const falsyMin = min === null || min === undefined || min === '';
+    const falsyMax = max === null || max === undefined || max === '';
+    if (falsyMin && falsyMax) {
+      return Filter.empty();
+    } else if (falsyMax) {
+      return isExclusive
+        ? Filter.greaterThan(field, min)
+        : Filter.greaterThanEqual(field, min);
+    } else if (falsyMin) {
+      return isExclusive
+        ? Filter.lessThan(field, max)
+        : Filter.lessThanEqual(field, max);
+    } else if (min === max) {
+      return isExclusive
+        ? Filter.empty()
+        : Filter.equal(field, min);
     }
-
-    const groupFilters = [];
-    for (const field of Object.keys(groups)) {
-      groupFilters.push(groups[field].length > 1 ? Filter.or(...groups[field]) : groups[field][0]);
-    }
-
-    return groupFilters.length > 1 ? Filter.and(...groupFilters) : groupFilters[0];
+    return isExclusive
+      ? Filter.exclusiveRange(field, min, max)
+      : Filter.inclusiveRange(field, min, max);
   }
 
   /**
