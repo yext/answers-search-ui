@@ -11,7 +11,7 @@ $cards-margin: calc(var(--yxt-base-spacing)) / 2 !default;
 
   &,
   &-placeholder {
-    min-width: 210px;
+    min-width: var(--yxt-cards-min-width);
     border: var(--yxt-border-default);
     margin-right: var(--yxt-cards-margin);
   }
@@ -80,3 +80,11 @@ $cards-margin: calc(var(--yxt-base-spacing)) / 2 !default;
     }
   }
 }
+
+.yxt-Card--universal
+{
+  border: var(--yxt-border-default);
+  border-top: 0;
+  margin: 0;
+}
+
