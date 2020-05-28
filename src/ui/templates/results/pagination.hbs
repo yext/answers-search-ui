@@ -1,57 +1,126 @@
 {{#if showControls}}
   <div class="yxt-Pagination">
     {{#if firstPageButtonEnabled}}
-      <button class="yxt-Pagination-button js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
-        {{#unless showFirstPageButton}}disabled{{/unless}}
-        data-eventtype="BACKWARD_PAGINATE"
-        data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+      <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
+        data-eventtype="PAGINATE"
+        data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the first page of results"
+        tabindex="0"
       >
-        <span class="yxt-Pagination-doubleChevron--left"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
+        {{#unless icons.firstButtonIcon}}
+          <span class="yxt-Pagination-doubleChevron--left"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "chevron" }'></span>
+          <span class="yxt-Pagination-chevron--left"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "chevron" }'></span>
+        {{else}}
+          <span class="yxt-Pagination-doubleChevron--left"
+                data-component="IconComponent"
+                data-opts='{ "iconUrl": "{{icons.firstButtonIcon}}" }'></span>
+        {{/unless}}
+      </a>
+    {{/if}}
+    <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-previous {{#unless showPreviousPageButton}}yxt-Pagination--hidden{{/unless}}"
+      {{#unless showPreviousPageButton}}disabled{{/unless}}
+      data-eventtype="PAGINATE"
+      data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#sub pageNumber 1}}{{/sub}}, "totalPageCount":{{maxPage}} }'
+      aria-label="Go to the previous page of results"
+      tabindex="0"
+    >
+      {{#unless icons.previousButtonIcon}}
         <span class="yxt-Pagination-chevron--left"
               data-component="IconComponent"
               data-opts='{ "iconName": "chevron" }'></span>
-      </button>
-    {{/if}}
-    <button class="yxt-Pagination-button js-yxt-Pagination-previous {{#unless showPreviousPageButton}}yxt-Pagination--hidden{{/unless}}"
-      {{#unless showPreviousPageButton}}disabled{{/unless}}
-      data-eventtype="BACKWARD_PAGINATE"
-      data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
-      aria-label="Go to the previous page of results"
+      {{else}}
+        <span class="yxt-Pagination-chevron--left"
+              data-component="IconComponent"
+              data-opts='{ "iconUrl": "{{icons.previousButtonIcon}}" }'></span>
+      {{/unless}}
+    </a>
+
+    <a
+      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless pinnedNumbers.desktopBack}} desktop-hidden{{/unless}}{{#unless pinnedNumbers.mobileBack}} mobile-hidden{{/unless}}"
+      aria-label="Go to page 1 of results"
+      data-number="1"
+      data-eventtype="PAGINATE"
+      data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
+      tabindex="0"
     >
-      <span class="yxt-Pagination-chevron--left"
-            data-component="IconComponent"
-            data-opts='{ "iconName": "chevron" }'></span>
-    </button>
+      1
+    </a>
 
-    <span class="yxt-Pagination-page">{{pageLabel}} {{pageNumber}}</span>
+    <span class="yxt-Pagination-page{{#unless ellipses.desktopBack}} desktop-hidden{{/unless}}{{#unless ellipses.mobileBack}} mobile-hidden{{/unless}}">
+      ...
+    </span>
 
-    <button class="yxt-Pagination-button js-yxt-Pagination-next {{#unless showNextPageButton}}yxt-Pagination--hidden{{/unless}}"
+    {{#each pageNumbers}}
+      {{#if this.active}}
+        <span id="active-page" class="yxt-Pagination-page" aria-label="Currently on page {{../pageNumber}}">{{../pageLabel}} {{../pageNumber}}</span>
+      {{else}}
+        <a 
+          class="yxt-Pagination-link js-yxt-Pagination-link{{#if this.desktopHidden}} desktop-hidden{{/if}}{{#if this.mobileHidden}} mobile-hidden{{/if}}"
+          aria-label="Go to page {{this.number}} of results"
+          data-number="{{this.number}}"
+          data-eventtype="PAGINATE"
+          data-eventoptions='{"currentPage":{{../pageNumber}}, "newPage":{{this.number}}, "totalPageCount":{{../maxPage}} }'
+          tabindex="0"
+        >
+          {{this.number}}
+        </a>
+      {{/if}}
+    {{/each}}
+
+    <span class="yxt-Pagination-page{{#unless ellipses.desktopFront}} desktop-hidden{{/unless}}{{#unless ellipses.mobileFront}} mobile-hidden{{/unless}}">
+      ...
+    </span>
+
+    <a
+      class="yxt-Pagination-link js-yxt-Pagination-link{{#unless pinnedNumbers.desktopFront}} desktop-hidden{{/unless}}{{#unless pinnedNumbers.mobileFront}} mobile-hidden{{/unless}}"
+      aria-label="Go to page {{maxPage}} of results"
+      data-number="{{maxPage}}"
+      tabindex="0"
+    >
+      {{maxPage}}
+    </a>
+
+    <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-next {{#unless showNextPageButton}}yxt-Pagination--hidden{{/unless}}"
       {{#unless showNextPageButton}}disabled{{/unless}}
-      data-eventtype="FORWARD_PAGINATE"
-      data-eventoptions='{"furthermost":false, "pageNumber":{{pageNumber}} }'
-        aria-label="Go to the next page of results"
+      data-eventtype="PAGINATE"
+      data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#add pageNumber 1}}{{/add}}, "totalPageCount":{{maxPage}} }'
+      aria-label="Go to the next page of results"
+      tabindex="0"
     >
-      <span class="yxt-Pagination-chevron"
-            data-component="IconComponent"
-            data-opts='{ "iconName": "chevron" }'></span>
-    </button>
+      {{#unless icons.nextButtonIcon}}
+        <span class="yxt-Pagination-chevron"
+              data-component="IconComponent"
+              data-opts='{ "iconName": "chevron" }'></span>
+      {{else}}
+        <span class="yxt-Pagination-chevron"
+              data-component="IconComponent"
+              data-opts='{ "iconUrl": "{{icons.nextButtonIcon}}" }'></span>
+      {{/unless}}
+    </a>
     {{#if lastPageButtonEnabled}}
-      <button class="yxt-Pagination-button js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
-        {{#unless showLastPageButton}}disabled{{/unless}}
-        data-eventtype="FORWARD_PAGINATE"
-        data-eventoptions='{"furthermost":true, "pageNumber":{{pageNumber}} }'
+      <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
+        data-eventtype="PAGINATE"
+        data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{maxPage}}, "totalPageCount":{{maxPage}} }'
         aria-label="Go to the last page of results"
+        tabindex="0"
       >
+        {{#unless icons.lastButtonIcon}}
         <span class="yxt-Pagination-doubleChevron"
               data-component="IconComponent"
               data-opts='{ "iconName": "chevron" }'></span>
         <span class="yxt-Pagination-chevron"
               data-component="IconComponent"
               data-opts='{ "iconName": "chevron" }'></span>
-      </button>
+        {{else}}
+          <span class="yxt-Pagination-doubleChevron"
+              data-component="IconComponent"
+              data-opts='{ "iconUrl": "{{icons.lastButtonIcon}}" }'></span>
+        {{/unless}}
+      </a>
     {{/if}}
   </div>
 {{/if}}

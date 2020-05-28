@@ -4,9 +4,8 @@ $base-spacing: 16px !default;
 $module-footer-height: 24px !default;
 $module-container-height: 20px !default;
 
-$border-default: 1px solid $color-borders !default;
-$yxt-border-hover: 1px solid $color-brand-hover !default;
-$border-legacy: 1px solid #e9e9e9;
+$border-default: 1px solid var(--yxt-color-borders)!default;
+$border-legacy: 1px solid #e9e9e9 !default;
 
 $breakpoint-mobile-max: 767px !default;
 $breakpoint-mobile-min: 768px !default;
@@ -17,4 +16,18 @@ $z-index-nav-more-modal: 2 !default;
 
 $button-focus-border-size: 3px !default;
 
+$cards-min-width: 210px !default;
 $container-desktop-base: 400px !default;
+
+:root {
+  --yxt-base-spacing-sm: #{$base-spacing-sm};
+  --yxt-base-spacing: #{$base-spacing};
+  --yxt-module-footer-height: #{$module-footer-height};
+  --yxt-module-container-height: #{$module-container-height};
+  --yxt-border-default: #{$border-default};
+  --yxt-border-legacy: #{$border-legacy};
+  --yxt-z-index-nav-more-modal: #{$z-index-nav-more-modal};
+  --yxt-button-focus-border-size: #{$button-focus-border-size};
+  --yxt-cards-min-width: #{$cards-min-width};
+  --yxt-container-desktop-base: #{$container-desktop-base};
+}

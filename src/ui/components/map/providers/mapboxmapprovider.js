@@ -44,8 +44,8 @@ export default class MapBoxMapProvider extends MapProvider {
     DOM.append('body', script);
   }
 
-  init (el, mapData) {
-    if ((!mapData || mapData.mapMarkers.length <= 0) && !this._showEmptyMap) {
+  init (el, mapData, resultsContext) {
+    if (MapProvider.shouldHideMap(mapData, resultsContext, this._showEmptyMap, this._noResults.visible)) {
       this._map = null;
       return this;
     }

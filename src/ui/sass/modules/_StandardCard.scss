@@ -1,20 +1,32 @@
 /** @define StandardCard */
+
+$standard-card-base-spacing: var(--yxt-base-spacing) !default;
+
+$standard-card-link-color: var(--yxt-color-brand-primary) !default;
+$standard-card-subtitle-color: var(--yxt-color-text-secondary) !default;
+$standard-card-link-hover-color: var(--yxt-color-brand-hover) !default;
+
+$standard-card-text-min-width: calc(8 * var(--yxt-standard-card-base-spacing));
+
+$standard-card-cta-width: calc(8 * var(--yxt-standard-card-base-spacing)) !default;
+$standard-card-wrapper-width: calc(10 * var(--yxt-standard-card-base-spacing)) !default;
+
+$standard-card-ordinal-size: var(--yxt-base-spacing) !default;
+$standard-card-ordinal-font-size: var(--yxt-font-size-xs) !default;
+
+:root {
+  --yxt-standard-card-base-spacing: #{$standard-card-base-spacing};
+  --yxt-standard-card-link-color: #{$standard-card-link-color};
+  --yxt-standard-card-subtitle-color: #{$standard-card-subtitle-color};
+  --yxt-standard-card-link-hover-color: #{$standard-card-link-hover-color};
+  --yxt-standard-card-cta-width: #{$standard-card-cta-width};
+  --yxt-standard-card-wrapper-width: #{$standard-card-wrapper-width};
+  --yxt-standard-card-ordinal-size: #{$standard-card-ordinal-size};
+  --yxt-standard-card-ordinal-font-size: #{$standard-card-ordinal-font-size};
+}
+
 .yxt-StandardCard {
-  $standard-card-base-spacing: $base-spacing !default;
-
-  $standard-card-link-color: $color-brand-primary !default;
-  $standard-card-subtitle-color: $color-text-secondary !default;
-  $standard-card-link-hover-color: $color-brand-hover !default;
-
-  $standard-card-text-min-width: 8 * $standard-card-base-spacing;
-
-  $standard-card-cta-width: 8 * $standard-card-base-spacing !default;
-  $standard-card-wrapper-width: 10 * $standard-card-base-spacing !default;
-
-  $standard-card-ordinal-size: $base-spacing !default;
-  $standard-card-ordinal-font-size: $font-size-xs !default;
-
-  padding: $standard-card-base-spacing;
+  padding: var(--yxt-standard-card-base-spacing);
   display: flex;
 
   @include Text();
@@ -28,33 +40,33 @@
   }
 
   &-ordinalWrapper {
-    margin-right: $standard-card-base-spacing * 3/4;
+    margin-right: calc(var(--yxt-standard-card-base-spacing) * 3/4);
   }
 
   &-ordinal {
-    padding-top: $standard-card-ordinal-size * 3/16;
-    padding-right: $standard-card-ordinal-size * 1/8;
-    padding-bottom: $standard-card-ordinal-size * 5/16;
-    padding-left: $standard-card-ordinal-size * 1/8;
-    border-radius: $standard-card-ordinal-size;
-    min-width: $standard-card-ordinal-size * 7/8;
-    height: $standard-card-ordinal-size * 5/8;
-    background-color: $color-brand-primary;
+    padding-top: calc(var(--yxt-standard-card-ordinal-size) * 3/16);
+    padding-right: calc(var(--yxt-standard-card-ordinal-size) * 1/8);
+    padding-bottom: calc(var(--yxt-standard-card-ordinal-size) * 5/16);
+    padding-left: calc(var(--yxt-standard-card-ordinal-size) * 1/8);
+    border-radius: var(--yxt-standard-card-ordinal-size);
+    min-width: calc(var(--yxt-standard-card-ordinal-size) * 7/8);
+    height: calc(var(--yxt-standard-card-ordinal-size) * 5/8);
+    background-color: var(--yxt-color-brand-primary);
     border: solid black 1px;
     text-align: center;
     @include Text(
       $color: white,
-      $size: $standard-card-ordinal-font-size,
-      $line-height: $line-height-xs,
-      $weight: $font-weight-bold,
+      $size: var(--yxt-standard-card-ordinal-font-size),
+      $line-height: var(--yxt-line-height-xs),
+      $weight: var(--yxt-font-weight-bold),
     );
   }
 
   &-imgTagWrapper {
     display: flex;
     background-color: black;
-    padding-top: $base-spacing-sm/4;
-    padding-bottom: $base-spacing-sm/4;
+    padding-top: calc(var(--yxt-base-spacing-sm)/4);
+    padding-bottom: calc(var(--yxt-base-spacing-sm)/4);
     position: relative;
     top: 10%;
     width: 80%;
@@ -69,22 +81,23 @@
     word-break: break-word;
     @include Text(
       $color: white,
-      $size: $font-size-md,
+      $size: var(--yxt-font-size-md),
       $line-height: 20px,
-      $weight: $font-weight-semibold,
+      $weight: var(--yxt-font-weight-semibold),
     );
   }
 
   &-img {
-    height: $standard-card-base-spacing * 10;
-    min-width: $standard-card-base-spacing * 10;
+    height: calc(var(--yxt-standard-card-base-spacing) * 10);
+    min-width: calc(var(--yxt-standard-card-base-spacing) * 10);
+    max-width: calc(var(--yxt-standard-card-base-spacing) * 15);
     flex-basis: 0;
     flex-grow: 1;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top left;
-    margin-bottom: $standard-card-base-spacing / 2;
-    margin-right: $standard-card-base-spacing;
+    margin-bottom: calc(var(--yxt-standard-card-base-spacing) / 2);
+    margin-right: var(--yxt-standard-card-base-spacing);
   }
 
   &-contentWrapper {
@@ -96,10 +109,10 @@
 
   &-title {
     @include Text(
-      $size: $font-size-md-lg,
-      $line-height: $line-height-lg,
-      $weight: $font-weight-bold,
-      $color: $color-text-primary
+      $size: var(--yxt-font-size-md-lg),
+      $line-height: var(--yxt-line-height-lg),
+      $weight: var(--yxt-font-weight-bold),
+      $color: var(--yxt-color-text-primary)
     );
   }
 
@@ -107,25 +120,25 @@
     text-decoration: none;
     display: block;
     @include Text(
-      $size: $font-size-md-lg,
-      $line-height: $line-height-lg,
-      $weight: $font-weight-semibold,
-      $color: $standard-card-link-color
+      $size: var(--yxt-font-size-md-lg),
+      $line-height: var(--yxt-line-height-lg),
+      $weight: var(--yxt-font-weight-semibold),
+      $color: var(--yxt-standard-card-link-color)
     );
 
     &:hover, &:focus {
-      color: $standard-card-link-hover-color;
+      color: var(--yxt-standard-card-link-hover-color);
       text-decoration: underline;
     }
   }
 
   &-subtitle {
-    padding-bottom: $standard-card-base-spacing/2;
+    padding-bottom: calc(var(--yxt-standard-card-base-spacing)/2);
     text-decoration: none;
     @include Text(
       $line-height: 20px,
-      $weight: $font-weight-normal,
-      $color: $standard-card-subtitle-color,
+      $weight: var(--yxt-font-weight-normal),
+      $color: var(--yxt-standard-card-subtitle-color),
     );
   }
 
@@ -138,23 +151,23 @@
   }
 
   &-details {
-    min-width: $standard-card-base-spacing * 6;
+    min-width: calc(var(--yxt-standard-card-base-spacing) * 6);
     display: flex;
     flex-direction: column;
-    margin-bottom: $standard-card-base-spacing / 2;
-    margin-right: $standard-card-base-spacing;
+    margin-bottom: calc(var(--yxt-standard-card-base-spacing) / 2);
+    margin-right: var(--yxt-standard-card-base-spacing);
     flex-basis: 0;
     flex-grow: 2;
     word-break: break-word;
     @include Text(
-      $size: $font-size-md,
-      $line-height: $line-height-md,
-      $weight: $font-weight-normal,
-      $color: $color-text-primary
+      $size: var(--yxt-font-size-md),
+      $line-height: var(--yxt-line-height-md),
+      $weight: var(--yxt-font-weight-normal),
+      $color: var(--yxt-color-text-primary)
     );
 
     &--noImage {
-      flex-basis: $standard-card-base-spacing * 11;
+      flex-basis: calc(var(--yxt-standard-card-base-spacing) * 16);
     }
 
     @media (max-width: $breakpoint-mobile-max) 
@@ -166,14 +179,14 @@
   &-toggle {
     text-align: left;
     @include Text(
-      $color: $color-brand-primary,
-      $line-height: $line-height-md,
+      $color: var(--yxt-color-brand-primary),
+      $line-height: var(--yxt-line-height-md),
       $style: italic);
     @include TextButton($padding: 0);
   }
 
   &-ctas {
-    min-width: $standard-card-base-spacing * 8;
+    min-width: calc(var(--yxt-standard-card-base-spacing) * 8);
     width: 30%;
     align-self: flex-start;
     display: flex;

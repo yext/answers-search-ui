@@ -14,6 +14,7 @@ export default class Section {
     this.results = ResultFactory.from(data.results, formatters, this.verticalConfigId, data.source);
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
+    this.resultsContext = data.resultsContext;
   }
 
   static parseMap (results) {
@@ -83,6 +84,7 @@ class AppliedQueryFilter {
   constructor (appliedQueryFilter) {
     this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
     this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
+    this.fieldId = Object.keys(appliedQueryFilter.filter)[0];
   }
 
   static from (appliedQueryFilters) {

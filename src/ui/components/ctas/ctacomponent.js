@@ -42,13 +42,13 @@ class CTAConfig {
      * Analytics event that should fire:
      * @type {string}
      */
-    this.analyticsEventType = config.analytics || 'CTA_CLICK';
+    this.analyticsEventType = config.analytics || config.eventType || 'CTA_CLICK';
 
     /**
      * The target attribute for the CTA link.
      * @type {boolean}
      */
-    this.target = config.target || '_self';
+    this.target = config.target || '_blank';
 
     /**
      * The eventOptions needed for the event to fire, passed as a string or Object
@@ -82,8 +82,19 @@ export default class CTAComponent extends Component {
   onMount () {
     const el = DOM.query(this._container, `.js-yxt-CTA`);
     if (el && this._config.eventOptions) {
-      DOM.on(el, 'click', () => this.reportAnalyticsEvent());
+      DOM.on(el, 'mousedown', e => {
+        if (e.button === 0 || e.button === 1) {
+          this.reportAnalyticsEvent();
+        }
+      });
     }
+  }
+
+  setState (data) {
+    return super.setState({
+      ...data,
+      hasIcon: this._config.icon || this._config.iconUrl
+    });
   }
 
   reportAnalyticsEvent () {

@@ -121,6 +121,27 @@ export default class GeoLocationComponent extends Component {
     this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
+
+    /**
+     * Options to pass to the geolocation api.
+     * @type {Object}
+     */
+    this._geolocationOptions = {
+      enableHighAccuracy: false,
+      timeout: 6000,
+      maximumAge: 300000,
+      ...config.geolocationOptions
+    };
+
+    /**
+     * Options for the geolocation timeout alert.
+     * @type {Object}
+     */
+    this._geolocationTimeoutAlert = {
+      enabled: false,
+      message: 'We are unable to determine your location',
+      ...config.geolocationTimeoutAlert
+    };
   }
 
   static get type () {
@@ -217,8 +238,17 @@ export default class GeoLocationComponent extends Component {
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
           this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
         },
-        () => this.setState({ geoError: true })
+        () => this._handleGeolocationError(),
+        this._geolocationOptions
       );
+    }
+  }
+
+  _handleGeolocationError () {
+    this.setState({ geoError: true });
+    const { enabled, message } = this._geolocationTimeoutAlert;
+    if (enabled) {
+      window.alert(message);
     }
   }
 

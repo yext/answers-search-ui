@@ -10,6 +10,7 @@
         <div class="answers-container">
             <div class="search-bar-container"></div>
             <div class="results-container"></div>
+            <div class="pagination-container"></div>
         </div>
     
         <script>
@@ -17,31 +18,28 @@
                 apiKey: 'df4b24f4075800e5e9705090c54c6c13',
                 experienceKey: 'rosetest',
                 businessId: '2287528',
-                experienceVersion: 'PRODUCTION',
                 templateBundle: TemplateBundle.default,
+                experienceVersion: 'PRODUCTION',
+                search: {
+                  verticalKey: 'KM',
+                  limit: 15,
+                },
                 onReady: function() {
                     this.addComponent('SearchBar', {
                         container: '.search-bar-container',
+                        verticalKey:'KM',
                         clearButton: true,
                         promptForLocation: true
                     });
 
-                    this.addComponent('UniversalResults', {
+                    this.addComponent('VerticalResults', {
                         container: '.results-container',
-                        config: {
-                            "people": {
-                                includeMap: true,
-                                mapConfig: {
-                                    mapProvider: 'google',
-                                    apiKey: 'AIzaSyB5D45ghF1YMfqTLSzWubmlCN1euBVPhFw',
-                                }
-                            },
-                            "faq": {
-                                viewAllText: "View More faqs",
-                                sectionTitleIconName: 'briefcase',
-                            },
-                        }
+                        verticalKey:'KM',
                     });
+
+                    this.addComponent('Pagination', {
+                      container:'.pagination-container',
+                    })
                 }
             })
         </script>

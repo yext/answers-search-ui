@@ -6,6 +6,7 @@ import GoogleMapProvider from './providers/googlemapprovider';
 import MapBoxMapProvider from './providers/mapboxmapprovider';
 
 import StorageKeys from '../../../core/storage/storagekeys';
+import ResultsContext from '../../../core/storage/resultscontext';
 
 const ProviderTypes = {
   'google': GoogleMapProvider,
@@ -20,6 +21,16 @@ export default class MapComponent extends Component {
      * Bind this component to listen to the storage based on this key
      */
     this.moduleId = StorageKeys.VERTICAL_RESULTS;
+
+    /**
+     * Configuration for the behavior when there are no vertical results.
+     */
+    this._noResults = {
+      displayAllResults: false,
+      visible: undefined,
+      template: '',
+      ...(opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG))
+    };
 
     /**
      * An aliased used to determine the type of map provider to use
@@ -52,7 +63,11 @@ export default class MapComponent extends Component {
 
   // TODO(billy) Make ProviderTypes a factory class
   getProviderInstance (type) {
-    return new ProviderTypes[type.toLowerCase()](this._config);
+    const _config = {
+      ...this._config,
+      noResults: this._noResults
+    };
+    return new ProviderTypes[type.toLowerCase()](_config);
   }
 
   onCreate () {
@@ -62,13 +77,19 @@ export default class MapComponent extends Component {
 
   onMount () {
     this._map.onLoaded(() => {
-      this._map.init(this._container, this.getState('map'));
+      this._map.init(this._container, this.getState('map'), this.getState('resultsContext'));
     });
   }
 
   setState (data, val) {
     if (Object.keys(data).length === 0) {
       return this;
+    }
+
+    if (data.resultsContext === ResultsContext.NO_RESULTS && !this._noResults.displayAllResults) {
+      data = {
+        resultsContext: data.resultsContext
+      };
     }
 
     return super.setState(data, val);

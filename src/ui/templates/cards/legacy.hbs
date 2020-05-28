@@ -8,11 +8,11 @@
       </div>
     {{/if}}
 
-    {{#if bigDate.day}}
+    {{#if _config.bigDate.day}}
       <div class="yxt-Result-dateWrapper">
         <div class="yxt-Result-dateInnerWrapper">
-          <span class="yxt-Result-day">{{bigDate.day}}</span>
-          <span class="yxt-Result-month">{{bigDate.month}}</span>
+          <span class="yxt-Result-day">{{_config.bigDate.day}}</span>
+          <span class="yxt-Result-month">{{_config.bigDate.month}}</span>
         </div>
       </div>
     {{/if}}
@@ -29,9 +29,10 @@
           {{#if _config.url}}
             <a class="yxt-Result-titleLink"
                href="{{_config.url}}"
+               data-middleclick="active"
                data-eventtype="TITLE_CLICK"
                data-eventoptions='{{eventOptions}}'
-               target="{{#if _config.target}}{{_config.target}}{{else}}_blank{{/if}}"
+               target="{{#if _config.target}}{{_config.target}}{{else if _config._parentOpts.target}}{{_config._parentOpts.target}}{{else}}_blank{{/if}}"
             >{{{_config.title}}}</a>
           {{else}}
             {{{_config.title}}}
