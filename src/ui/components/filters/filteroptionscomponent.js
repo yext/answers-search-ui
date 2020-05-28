@@ -142,7 +142,18 @@ class FilterOptionsConfig {
    * @returns {Array<Object>}
    */
   setSelectedOptions (options, previousOptions) {
-    if (previousOptions) {
+    if (previousOptions && this.control === 'singleoption') {
+      let hasSeenSelectedOption = false;
+      return options.map(o => {
+        if (previousOptions.includes(o.label) && !hasSeenSelectedOption) {
+          o.selected = true;
+          hasSeenSelectedOption = true;
+        } else {
+          o.selected = false;
+        }
+        return o;
+      });
+    } else if (previousOptions && this.control === 'multioption') {
       return options.map(o => ({
         ...o,
         selected: previousOptions.includes(o.label)
@@ -151,10 +162,7 @@ class FilterOptionsConfig {
       let hasSeenSelectedOption = false;
       return options.map(o => {
         if (hasSeenSelectedOption) {
-          return {
-            ...o,
-            selected: false
-          };
+          o.selected = false;
         } else if (o.selected) {
           hasSeenSelectedOption = true;
         }
