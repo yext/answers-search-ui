@@ -129,35 +129,25 @@ class FilterOptionsConfig {
     }
     // previousOptions will be null if there were no previousOptions in persistentStorage
     const previousOptions = config.previousOptions;
-    if (previousOptions) {
-      this.options = this.setPreviousOptions(this.options, previousOptions || []);
-    } else {
-      this.options = this.setSelected(this.options);
-    }
+    this.options = this.setSelectedOptions(this.options, previousOptions);
   }
 
   /**
-   * Sets selected options on load based on options stored in persistent storage.
+   * Sets selected options on load based on options stored in persistent storage and options with selected: true.
+   * If no previous options were stored in persistentStorage, default to options marked
+   * as selected. If multiple options are marked as selected for 'singleoption', only the
+   * first should be selected.
    * @param {Array<Object>} options
    * @param {Array<string>} previousOptions
    * @returns {Array<Object>}
    */
-  setPreviousOptions (options, previousOptions) {
-    return options.map(o => ({
-      ...o,
-      selected: previousOptions.includes(o.label)
-    }));
-  }
-
-  /**
-   * If no previous options were stored in persistentStorage, default to options marked
-   * as selected. If multiple options are marked as selected for 'singleoption', only the
-   * first should be selected.
-   * @param {*} options
-   * @returns {Array<Object>}
-   */
-  setSelected (options) {
-    if (this.control === 'singleoption') {
+  setSelectedOptions (options, previousOptions) {
+    if (previousOptions) {
+      return options.map(o => ({
+        ...o,
+        selected: previousOptions.includes(o.label)
+      }));
+    } else if (this.control === 'singleoption') {
       let hasSeenSelectedOption = false;
       return options.map(o => {
         if (hasSeenSelectedOption) {
