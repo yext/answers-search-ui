@@ -1111,14 +1111,14 @@ The options config varies depending on whether the optionType is 'STATIC_FILTER'
       // Optional, the label to show next to the filter option.
       label: 'Open Now',
       // Optional, whether this option will be selected on page load. Selected options stored in the url
-      // take priority over appliedOnLoad. Defaults to false.
-      appliedOnLoad: false
+      // take priority over this. Defaults to false.
+      selected: false
     },
     {
       field: 'c_dogFriendly',
       value: true,
       label: 'Dog Friendly',
-      appliedOnLoad: true
+      selected: true
     },
     {
       field: 'c_storeType',
@@ -1140,13 +1140,13 @@ The options config varies depending on whether the optionType is 'STATIC_FILTER'
       // Optional, the label to show next to the filter option.
       label: '5 miles',
       // Optional, whether this option will be selected on page load. Selected options stored in the url
-      // take priority over appliedOnLoad. Defaults to false.
-      appliedOnLoad: false
+      // take priority over this. Defaults to false.
+      selected: false
     },
     {
       value: 16093.4,
       label: '10 miles',
-      appliedOnLoad: true
+      selected: true
     },
     {
       value: 40233.6,

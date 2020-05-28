@@ -132,7 +132,7 @@ class FilterOptionsConfig {
     if (previousOptions) {
       this.options = this.setPreviousOptions(this.options, previousOptions || []);
     } else {
-      this.options = this.setAppliedOnLoad(this.options);
+      this.options = this.setSelected(this.options);
     }
   }
 
@@ -151,21 +151,27 @@ class FilterOptionsConfig {
 
   /**
    * If no previous options were stored in persistentStorage, default to options marked
-   * as appliedOnLoad.
+   * as selected. If multiple options are marked as selected for 'singleoption', only the
+   * first should be selected.
    * @param {*} options
+   * @returns {Array<Object>}
    */
-  setAppliedOnLoad (options) {
+  setSelected (options) {
     if (this.control === 'singleoption') {
-      const firstAppliedOption = options.find(o => o.appliedOnLoad);
-      if (firstAppliedOption) {
-        firstAppliedOption.selected = true;
-      }
-      return options;
+      let hasSeenSelectedOption = false;
+      return options.map(o => {
+        if (hasSeenSelectedOption) {
+          return {
+            ...o,
+            selected: false
+          };
+        } else if (o.selected) {
+          hasSeenSelectedOption = true;
+        }
+        return o;
+      });
     }
-    return options.map(o => ({
-      ...o,
-      selected: o.appliedOnLoad || o.selected
-    }));
+    return options;
   }
 
   getSelectedCount () {
