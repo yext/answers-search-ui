@@ -1,0 +1,39 @@
+<html>
+  <head>
+    <script src="../answers.js"></script>
+    <link rel="stylesheet" type="text/css" href="../answers.css">
+  </head>
+  <body>
+    <div class="search-bar">
+    </div>
+    <div class="vertical-results">
+    </div>
+
+    <script>
+      window.addEventListener('load', function() { 
+        console.log('page loaded');
+        ANSWERS.init({
+          apiKey: 'df4b24f4075800e5e9705090c54c6c13',
+          experienceKey: 'rosetest',
+          experienceVersion: 'STAGING',
+          businessId: '2287528',
+          templateUrl: "../answerstemplates.compiled.min.js",
+          onReady: function() {
+            this.addComponent('SearchBar', {
+              container: '.search-bar',
+              verticalKey: 'people',
+              allowEmptySerach: true,
+            });
+
+            this.addComponent('VerticalResults', {
+              sectionTitle: 'hello',
+              sectionTitleIconName: 'phone',
+              container: '.vertical-results',
+              maxNumberOfColumns: 2
+            });
+          },
+        });
+      }, false)
+    </script>
+  </body>
+</html>

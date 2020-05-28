@@ -1,0 +1,202 @@
+<head>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-153784351-1"></script>
+	<script>
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
+
+	  gtag('config', 'UA-153784351-1');
+	</script>
+	<meta charset="utf-8" />
+
+ <link rel="stylesheet" type="text/css" href="./answers.css">
+ <meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+	<link rel="icon" href="">
+	<title>Rose Test</title>
+  <script src="./answerstemplates.compiled.min.js" sync></script>
+	<script src="answers.js"></script>
+</head>
+
+<body>
+
+
+	<div class="header-bar">
+		<div class="logo">
+			<span class="icon-yext" style="font-size: 35px; color: black"></span>		
+		</div>
+        <div class="answers-name">
+            Navigation - Test Page
+        </div>
+		<div class="icon">
+			<span class="icon-hamburger-menu menu" style="color: black"></span>
+			<span class="icon-close closeout" onclick="window.history.back()"></span>
+		</div>
+	</div>
+
+	<div class="answers-container">
+		<div class="search-bar-container"></div>
+		<div class="navigation-container-container">
+			<div class="navigation-container"></div>
+		</div>
+		<div class="spell-check-container"></div>
+		<div class="direct-answer-container"></div>
+		<div class="results-container"></div>
+		<div class="question-submission-container"></div>
+		<div class="location-bias-container"></div>
+
+	</div>
+
+
+	<script>
+ANSWERS.init({
+	apiKey: 'df4b24f4075800e5e9705090c54c6c13',
+	experienceKey: 'rosetest',
+	useTemplates: false,
+	templateBundle: TemplateBundle.default,
+	businessId: '2287528',
+	experienceVersion: 'STAGING',
+  noResults: {
+    displayAllResults: true
+  },
+
+  verticalPages: [
+    {
+      icon: 'star',
+      label: 'Home',
+      url: './dev.html',
+      hideInNavigation: false,
+      isFirst: true,
+    },
+    {
+      icon: 'tag',
+      label: 'Location',
+      url: 'locations.html',
+      hideInNavigation: false,
+      verticalKey: 'KM',
+      isActive: true
+    },
+    {
+      icon: 'link',
+      label: 'Links',
+      url: 'person.html',
+      verticalKey: 'links',
+      isActive: false
+    },
+    {
+      icon: 'support',
+      label: 'Event',
+      url: 'person.html',
+      verticalKey: 'events',
+      isActive: false
+    },
+    {
+      icon: 'support',
+      label: 'People',
+      url: 'person.html',
+      verticalKey: 'people',
+      isActive: false
+    }
+  ],
+
+	onReady: function () {
+		// init components
+
+		this.addComponent('SearchBar', {
+			container: '.search-bar-container',
+			// template: searchBar,
+			autoFocus: true,
+			clearButton: true,
+			// query: "My query",
+			labelText: "Hi",
+			promptHeader: "yolo",
+			autoCompleteOnLoad: false,
+		})
+
+		this.addComponent('Navigation', {
+			container: '.navigation-container',
+			// mobileOverflowBehavior: 'INNERSCROLL',
+			// ariaLabel: "My Label",
+			// overflowIcon: 'person',
+		})
+
+		this.addComponent('UniversalResults', {
+			container: '.results-container',
+			// "people": {
+			// 	includeMap: true,
+			// 	mapConfig: {
+			// 		mapProvider: 'google',
+			// 		apiKey: 'AIzaSyB5D45ghF1YMfqTLSzWubmlCN1euBVPhFw',
+			// 	},
+			// 	card: {
+			// 		cardType: 'Accordion',
+			// 		cardMappings: function (item) {
+			// 			return {
+			// 				// expanded: true, 
+			// 				title: 'bobs diner',
+			// 				subtitle: 'bobs subtitle',
+			// 				details: item._raw.description || ' LSKDJFLKSDJF LKSD FJSD LKFJSDLKF SKDLJF LKDSJF LKSDJF SLKDJF LKSDJFLKSDJFLKSJ DFLKJSD LKFJ'.repeat(Math.floor(Math.random() * 5)),
+			// 				image: item._raw.headshot ? item._raw.headshot.url : '',
+			// 				url: 'https://yext.com',
+			// 				showMoreLimit: 500,
+			// 				showMoreText: "show more",
+			// 				showLessText: "put it back",
+			// 				newWindow: true,
+			// 				showOrdinal: true,
+			// 				tagLabel: item => item.title,
+			// 				// result:'poopresult'
+			// 			}
+			// 		},
+			// 		callsToActionFields: ['c_oliverCta']
+			// 	},
+			// 	section: {
+			// 		template: "<div> poop </div>",
+			// 		title: "Credit Cards",
+			// 		showAppliedFilters: true,
+			// 		icon: "star",
+			// 		viewMore: true,
+			// 		viewMoreLabel: 'View More',
+			// 		changeFilters: true,
+			// 		showFieldNames: true,
+			// 		url: '/credit-cards.html',
+			// 	}
+			// }
+			config: {
+				// useAccordion: true,
+				"KM": {
+					transformData: (data, raw) => {
+						console.log(data);
+						return {									
+							...data,
+							verticalURL: "www.google.com",
+							// results: data.results.map(item => {
+
+							// 	return {
+
+							// 		title: item._raw.name,
+							// 		details: item._highlighted.description,
+							// 		subtitle: `<span class="yxt-Result-phone">+441478612798</span>`
+							// 	}
+							// })
+						}
+					},
+					includeMap: true,
+					mapConfig: {
+						mapProvider: 'google',
+						apiKey: 'AIzaSyB5D45ghF1YMfqTLSzWubmlCN1euBVPhFw',
+					}
+				}
+			}
+
+		});
+
+		this.addComponent('UniversalResults', {
+    });
+
+	}
+});
+
+	</script>
+</body>

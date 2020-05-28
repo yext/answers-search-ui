@@ -1,0 +1,410 @@
+<head>
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-153784351-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'UA-153784351-1');
+  </script>
+  <meta charset="utf-8" />
+  <!-- Mobile Styling -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <!-- <link rel="stylesheet" href="/css/retail.css"> -->
+  <link rel="stylesheet" type="text/css" href="./answers.css">
+
+  <link rel="icon" href="">
+  <script src="./answers.js"></script>
+</head>
+
+<body>
+  <div class="header-bar">
+    <div class="logo">
+      <span class="icon-yext" style="font-size: 35px; color: black"></span>
+    </div>
+    <div class="answers-name">
+      Rose Test, Using dev/vertical-cards/6/cta
+    </div>
+
+    <div class="icon">
+      <span class="icon-hamburger-menu menu" style="color: black"></span>
+      <span class="icon-close closeout" onclick="window.history.back()"></span>
+    </div>
+  </div>
+
+  <div class="answers-container">
+    <div class="search-bar-container"></div>
+    <div class="navigation-container"></div>
+
+    <div class="spell-check-container"></div>
+
+    <div class="filtersearch-container"></div>
+
+
+  </div>
+
+
+  <div class="vertical-results-container full-width fixed" style='width: 100%'>
+    <div class="absolute-full">
+      <div class="sort-options-container"></div>
+      <div class="facets-container"></div>
+      <div class="filters-container"></div>
+      <div class="staticfilter-container"></div>
+      <div class="staticfilter-container2"></div>
+      <div class="date-range-filter-container"></div>
+      <div class="geolocation-filter-container"></div>
+
+      <div class="results-container"></div>
+      <div class="pagination-container"></div>
+
+    </div>
+  </div>
+
+
+
+  <script>
+    ANSWERS.init({
+      apiKey: 'df4b24f4075800e5e9705090c54c6c13',
+      experienceKey: 'rosetest',
+      answersKey: 'rosetest',
+      experienceVersion: 'STAGING',
+      search: {
+        verticalKey: 'people',
+        limit: 20
+      },
+      templateUrl: "./answerstemplates.compiled.min.js",
+      businessId: '2287528',
+      navigation: {
+        tabs: [
+          {
+            label: 'Home',
+            url: './index.html',
+            isFirst: true,
+
+          },
+          {
+            configId: 'locations',
+            label: 'Location',
+            url: 'locations.html'
+          },
+          {
+            configId: 'people',
+            label: 'Employees',
+            url: 'employees.html',
+            isActive: true
+          }
+
+        ]
+      },
+      onReady: function () {
+        this.addComponent('SearchBar', {
+          container: '.search-bar-container',
+          verticalKey: 'people',
+          autoFocus: true,
+          autoCompleteOnLoad: true,
+          allowEmptySearch: true,
+        });
+        function b() {
+          return {
+            label: (item) => {
+              let t = Math.floor(Math.random() * 8 + 1)
+              let n = Math.floor(Math.random() * 4 + 3)
+              if (t > 5) {
+                return '';
+              }
+              return item._raw.name + ['!', '2', '$', "%", "<", "111"][t].repeat(n)
+            },
+            url: "www.yext.com",
+            analyticsEventType: "CTA_CLICK",
+            newWindow: false,
+            icon: "briefcase",
+            eventOptions: (item) => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+          };
+        }
+
+        let ctas_arr = [{
+          label: item => item._raw.name,
+          url: "https://yext.com",
+          analyticsEventType: "CTA_CLICK",
+          newWindow: false,
+          // icon: "briefcase",
+          eventOptions: (item) => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+        }, {
+          label: 'call now',
+          url: "https://maps.google.com",
+          analyticsEventType: "CTA_CLICK",
+          newWindow: false,
+          icon: "phone",
+          eventOptions: (item) => `{ "verticalKey": "credit-cards", "entityId": "${item._raw.id}", "searcher":"UNIVERSAL", "ctaLabel": "cards"}`
+        }];
+
+        ctas = () => ctas_arr;
+
+        ANSWERS.addComponent('Pagination', {
+          container: '.pagination-container',
+          // Display a double arrow allowing users to jump to the first page of results
+          showFirst: true,
+          // Display a double arrow allowing users to jump to the last page of results
+          showLast: true
+        });
+
+        const sortOptions = [
+          {
+            type: 'FIELD',
+            field: 'c_popularity',
+            direction: 'ASC',
+            label: 'Popularity',
+          },
+          {
+            type: 'FIELD',
+            field: 'c_price',
+            direction: 'ASC',
+            label: 'Price - Low to High',
+          },
+          {
+            type: 'FIELD',
+            field: 'c_price',
+            direction: 'DESC',
+            label: 'Price - High to Low',
+          },
+          {
+            type: "ENTITY_DISTANCE",
+            label: 'Distance'
+          },
+          {
+            type: 'RELEVANCE',
+            label: 'Relevance'
+          },
+          {
+            type: 'RELEVANCE',
+            label: 'Relevance2'
+          },
+          {
+            type: 'RELEVANCE',
+            label: 'Relevance2'
+          }
+        ];
+
+        this.addComponent('SortOptions', {
+          container: '.sort-options-container',
+          label: 'Sort Me',
+          defaultSortLabel: 'Bestest Match',
+          showReset: true,
+          showMoreLimit: 4,
+          options: sortOptions,
+          searchOnChange: true,
+          verticalKey: 'people'
+        });
+
+        // this.addComponent('Facets', {
+        //   container: '.facets-container',
+        //   // Title to display above the facets
+        //   title: 'Filters',
+        //   // Show number of results for each facet
+        //   showCount: true,
+        //   // Execute a new search whenever a facet selection changes
+        //   searchOnChange: false,
+        //   // Show a reset button per facet group
+        //   resetFacet: false,
+        //   // The label to use for the reset button above
+        //   resetFacetLabel: 'reset',
+        //   // Show a reset-all button for the facets control
+        //   resetFacets: true,
+        //   // The label to use for the reset-all button above
+        //   resetFacetsLabel: 'reset-all',
+        //   // Allow collapsing excess facet options after a limit
+        //   showMore: true,
+        //   // The max number of facets to show before collapsing extras
+        //   showMoreLimit: 5,
+        //   // The label to show for displaying more facets
+        //   showMoreLabel: 'show more',
+        //   // The label to show for displaying less facets
+        //   showLessLabel: 'show less',
+        //   // Allow expanding and collapsing entire groups of facets
+        //   expand: true,
+        //   // Show the number of applied facets when a group is collapsed
+        //   showNumberApplied: true,
+        //   // The label to show on the apply button
+        //   applyLabel: 'apply'
+        // })
+
+        this.addComponent('GeoLocationFilter', {
+          container: '.geolocation-filter-container',
+          title: "Geolocation Filter",
+          radius: 50,
+          loadingText: 'Loading',
+          errorText: 'Unable To Use Location',
+          searchOnChange: false,
+          geoButtonText: 'Use my location',
+          verticalKey: 'people',
+          // verticalKey: 'publishers',
+          searchParameters: {
+            fields: [{
+              fieldId: "builtin.location",
+              entityTypeId: "ce_person"
+            }]
+          },
+        });
+
+
+        ANSWERS.addComponent('FilterBox', {
+          container: '.staticfilter-container2',
+          // List of filter component configurations
+          applyLabel: 'apply filterion',
+          filters: [
+            {
+              type: 'FilterOptions',
+              control: 'multioption',
+              options: [
+                {
+                  // Label to show next to the filter option
+                  label: 'Roses Friend',
+                  // The api field to filter on, configured on the Yext platform
+                  field: 'c_awards',
+                  // The value for the above field to filter by
+                  value: 'Roses Friend'
+                },
+                {
+                  label: 'Pres Club',
+                  field: 'c_awards',
+                  value: 'Presidents Club'
+                },
+                {
+                  label: 'Bot',
+                  field: 'c_awards',
+                  value: 'Bot'
+                },
+                {
+                  label: 'Marty',
+                  field: 'c_puppyPreference',
+                  value: 'Marty'
+                },
+                {
+                  label: 'Frodo',
+                  field: 'c_puppyPreference',
+                  value: 'Frodo'
+                },
+                {
+                  label: 'Bleecker',
+                  field: 'c_puppyPreference',
+                  value: 'Bleecker'
+                }
+              ]
+            }],
+          // Required, the vertical key for the search, default null
+          verticalKey: 'people',
+          // Title to display above the filter
+          title: 'Filters',
+          // Show number of results for each filter
+        });
+
+        ANSWERS.addComponent('FilterOptions', {
+          showReset: true,
+          showMore: true,
+          container: '.staticfilter-container',
+          // Control type, singleoption or multioption
+          control: 'singleoption',
+          // List of options
+          storeOnChange: true,
+          options: [
+            {
+              // Label to show next to the filter option
+              label: 'Roses Friend',
+              // The api field to filter on, configured on the Yext platform
+              field: 'c_awards',
+              // The value for the above field to filter by
+              value: 'Roses Friend'
+            },
+            {
+              label: 'Pres Club',
+              field: 'c_awards',
+              value: 'Presidents Club'
+            },
+            {
+              // Label to show next to the filter option
+              label: 'Roses Friend',
+              // The api field to filter on, configured on the Yext platform
+              field: 'c_awards',
+              // The value for the above field to filter by
+              value: 'Roses Friend'
+            },
+            {
+              label: 'Pres Club',
+              field: 'c_awards',
+              value: 'Presidents Club'
+            },
+            {
+              // Label to show next to the filter option
+              label: 'Roses Friend',
+              // The api field to filter on, configured on the Yext platform
+              field: 'c_awards',
+              // The value for the above field to filter by
+              value: 'Roses Friend'
+            },
+            {
+              label: 'Pres Club',
+              field: 'c_awards',
+              value: 'Presidents Club'
+            }
+          ],
+          label: 'Award',
+          searchOnChange: 'true'
+        });
+
+        ANSWERS.addComponent('DateRangeFilter', {
+          container: '.date-range-filter-container',
+          // The api field to filter on
+          field: 'c_startDate',
+          // Title to display for the range
+          title: 'Time.start',
+          // The label to show next to the min date, optional
+          minLabel: 'Earliest',
+          // The label to show next to the max date, optional
+          maxLabel: 'Latest',
+          // The initial min date to show in yyyy-mm-dd format, defaults to today
+          initialMin: '2019-04-01',
+          // The initial max date to show in yyyy-mm-dd format, defaults to today
+          initialMax: '2020-09-01',
+          // If true, this filter represents an exclusive range, rather than an inclusive one
+          isExclusive: false,
+          // Optional, if true, triggers a search on each change to a filter, default false
+          searchOnChange: false,
+        });
+
+        this.addComponent('VerticalResults', {
+          container: '.results-container',
+          limit: 105,
+          footer: {
+            url: 'https://olivershi.io',
+            logo: 'emil.png'
+          },
+          showFieldNames: true,
+          maxNumberOfColumns: 4,
+          card: {
+            cardType: 'Standard',
+            cardMappings: (item) => {
+              return {
+                title: item.title || item._raw.name,
+                subtitle: `Department: ${item._raw.name} `,
+                details: item._raw.description || ' LSKDJFLKSDJF LKSD FJSD LKFJSDLKF SKDLJF LKDSJF LKSDJF SLKDJF LKSDJFLKSDJFLKSJ DFLKJSD LKFJ'.repeat(Math.floor(Math.random() * 5)),
+                image: item._raw.headshot ? item._raw.headshot.url : '',
+                url: 'https://yext.com',
+                showMoreLimit: 500,
+                showMoreText: "show more",
+                showLessText: "put it back",
+                newWindow: true,
+                showOrdinal: false
+              }
+            },
+            callsToAction: ctas_arr,
+            callsToActionFields: ['c_oliverCta']
+          },
+          verticalKey: 'people',
+          resultsCountSeparator: ' bob '
+        });
+      }
+    });
+
+  </script>
+</body>
