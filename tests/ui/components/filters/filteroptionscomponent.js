@@ -8,6 +8,7 @@ import Filter from 'src/core/models/filter';
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
   let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes;
+
   const options = [
     {
       label: 'ciri',
@@ -75,7 +76,7 @@ describe('filter options component', () => {
     defaultConfig = {
       container: '#test-component',
       control: 'singleoption',
-      options: [],
+      options: options,
       label: filterOptionsLabel
     };
   });
@@ -89,8 +90,7 @@ describe('filter options component', () => {
   it('renders correct number of options + show more with default showMoreLimit of 5', () => {
     const config = {
       ...defaultConfig,
-      control: 'multioption',
-      options: options
+      control: 'multioption'
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     const wrapper = mount(component);
@@ -103,7 +103,6 @@ describe('filter options component', () => {
     const config = {
       ...defaultConfig,
       control: 'multioption',
-      options: options,
       showMoreLimit: options.length
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -116,7 +115,6 @@ describe('filter options component', () => {
     const config = {
       ...defaultConfig,
       control: 'multioption',
-      options: options,
       showMoreLimit: options.length
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -194,7 +192,6 @@ describe('filter options component', () => {
     const config = {
       ...defaultConfig,
       control: 'singleoption',
-      options: options,
       showMoreLimit: options.length
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -206,7 +203,6 @@ describe('filter options component', () => {
     const config = {
       ...defaultConfig,
       control: 'singleoption',
-      options: options,
       showMoreLimit: options.length
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -377,7 +373,7 @@ describe('filter options component selected options', () => {
 });
 
 describe('filter options component - works with different optionTypes', () => {
-  let COMPONENT_MANAGER, defaultConfig, setLocationRadius, clearLocationRadius, setFilter;
+  let COMPONENT_MANAGER, defaultConfig, setLocationRadius, clearLocationRadius, setStaticFilterNodes;
 
   beforeEach(() => {
     const bodyEl = DOM.query('body');
@@ -385,7 +381,7 @@ describe('filter options component - works with different optionTypes', () => {
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
     setLocationRadius = jest.fn();
     clearLocationRadius = jest.fn();
-    setFilter = jest.fn();
+    setStaticFilterNodes = jest.fn();
 
     COMPONENT_MANAGER = mockManager(
       {
@@ -398,7 +394,7 @@ describe('filter options component - works with different optionTypes', () => {
         },
         setLocationRadius,
         clearLocationRadius,
-        setFilter
+        setStaticFilterNodes
       },
       FilterOptionsComponent.defaultTemplateName()
     );
@@ -422,11 +418,11 @@ describe('filter options component - works with different optionTypes', () => {
     };
 
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
-    expect(setFilter.mock.calls).toHaveLength(0);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
     expect(setLocationRadius.mock.calls).toHaveLength(0);
     expect(clearLocationRadius.mock.calls).toHaveLength(0);
     component.apply();
-    expect(setFilter.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
     expect(setLocationRadius.mock.calls).toHaveLength(0);
     expect(clearLocationRadius.mock.calls).toHaveLength(0);
   });
@@ -446,14 +442,38 @@ describe('filter options component - works with different optionTypes', () => {
     };
 
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
-    expect(setFilter.mock.calls).toHaveLength(0);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
     expect(setLocationRadius.mock.calls).toHaveLength(0);
     expect(clearLocationRadius.mock.calls).toHaveLength(0);
     component.apply();
-    expect(setFilter.mock.calls).toHaveLength(0);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
     expect(setLocationRadius.mock.calls).toHaveLength(1);
     expect(setLocationRadius.mock.calls[0][0]).toEqual(12345);
     expect(clearLocationRadius.mock.calls).toHaveLength(0);
+  });
+
+  it('clears locationRadius when radius = 0', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'singleoption',
+      optionType: 'RADIUS_FILTER',
+      options: [
+        {
+          label: 'le 0 metres',
+          value: 0,
+          selected: true
+        }
+      ]
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
+    expect(setLocationRadius.mock.calls).toHaveLength(0);
+    expect(clearLocationRadius.mock.calls).toHaveLength(0);
+    component.apply();
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
+    expect(setLocationRadius.mock.calls).toHaveLength(0);
+    expect(clearLocationRadius.mock.calls).toHaveLength(1);
   });
 
   it('throws error when trying to use multioption with RADIUS_FILTER', () => {

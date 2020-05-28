@@ -43,7 +43,7 @@ class FilterOptionsConfig {
      * The list of filter options to display with checked status
      * @type {object[]}
      */
-    this.options = config.options;
+    this.options = config.options.map(o => ({ ...o }));
 
     /**
      * The label to be used in the legend
@@ -146,12 +146,10 @@ class FilterOptionsConfig {
       let hasSeenSelectedOption = false;
       return options.map(o => {
         if (previousOptions.includes(o.label) && !hasSeenSelectedOption) {
-          o.selected = true;
           hasSeenSelectedOption = true;
-        } else {
-          o.selected = false;
+          return { ...o, selected: true };
         }
-        return o;
+        return { ...o, selected: false };
       });
     } else if (previousOptions && this.control === 'multioption') {
       return options.map(o => ({
@@ -162,11 +160,11 @@ class FilterOptionsConfig {
       let hasSeenSelectedOption = false;
       return options.map(o => {
         if (hasSeenSelectedOption) {
-          o.selected = false;
+          return { ...o, selected: false };
         } else if (o.selected) {
           hasSeenSelectedOption = true;
         }
-        return o;
+        return { ...o };
       });
     }
     return options;
