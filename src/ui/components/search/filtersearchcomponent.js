@@ -96,19 +96,6 @@ export default class FilterSearchComponent extends Component {
       this.search();
     });
 
-    /**
-     * The filter string to use for the provided query
-     * Optionally provided
-     * TODO(oshi): config.filter is not in the readme. Do we need this?
-     * @type {string}
-     */
-    this.filter = config.filter || '';
-    if (typeof filter === 'string') {
-      try {
-        this.filter = JSON.parse(this.filter);
-      } catch (e) {}
-    }
-
     this.searchParameters = buildSearchParameters(config.searchParameters);
   }
 
@@ -128,7 +115,7 @@ export default class FilterSearchComponent extends Component {
   // TODO(oshi): SPR-1925 check that it is safe to remove this, it runs an extra search
   // For no obvious reasons
   onCreate () {
-    if (this.query && this.filter) {
+    if (this.query) {
       this.search();
     }
   }
@@ -166,7 +153,6 @@ export default class FilterSearchComponent extends Component {
       container: '.yxt-SearchBar-autocomplete',
       promptHeader: this.promptHeader,
       originalQuery: this.query,
-      originalFilter: this.filter,
       inputEl: inputSelector,
       verticalKey: this._verticalKey,
       searchParameters: this.searchParameters,
@@ -175,8 +161,8 @@ export default class FilterSearchComponent extends Component {
         this.filterNode = this._buildFilterNode(query, filter);
 
         const params = new SearchParams(window.location.search.substring(1));
-        params.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        params.set(`${StorageKeys.STATIC_FILTER_NODE}.${this.name}`, this.filterNode);
+        params.set(`${this.name}.query`, query);
+        params.set(`${this.name}.filter`, this.filterNode.getFilter());
 
         // If we have a redirectUrl, we want the params to be
         // serialized and submitted.
@@ -186,6 +172,7 @@ export default class FilterSearchComponent extends Component {
         }
 
         // save the filter to storage for the next search
+        this.query = query;
         this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
         this.core.persistentStorage.set(`${StorageKeys.STATIC_FILTER_NODE}.${this.name}`, this.filterNode);
         this.core.setStaticFilterNodes(this.name, this.filterNode);
@@ -213,7 +200,6 @@ export default class FilterSearchComponent extends Component {
       title: this.title,
       searchText: this.searchText,
       query: this.query,
-      filter: this.filter
     }, data));
   }
 }
