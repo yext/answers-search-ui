@@ -62,6 +62,7 @@ jobs:
   unit_test:
     docker:
       - image: circleci/node:7.10
+    resource_class: large
     working_directory: ~/answers
     steps:
       - setup-workspace

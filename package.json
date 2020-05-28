@@ -51,6 +51,7 @@
     "serve": "^11.3.0",
     "size-limit": "^0.21.1",
     "testcafe": "^1.8.4",
+    "string.prototype.padstart": "^3.1.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "whatwg-fetch": "^3.0.0"
@@ -70,6 +71,13 @@
     "verbose": true,
     "setupFilesAfterEnv": [
       "./tests/setup/setup.js"
+    ],
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>"
     ],
     "testMatch": [
       "**/tests/core/**/*.js",

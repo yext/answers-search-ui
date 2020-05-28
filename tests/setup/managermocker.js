@@ -21,9 +21,21 @@ export default function mockManager (mockedCore, ...templatePaths) {
     const templatePath = templatePaths[i];
     rendererOpts[templatePath] = Handlebars.compile(loadTemplate(templatePath));
   }
-
+  const core = {
+    globalStorage: {
+      getState: () => null,
+      delete: () => {},
+      on: () => {},
+      set: () => {}
+    },
+    persistentStorage: {
+      set: () => {},
+      delete: () => {}
+    },
+    ...mockedCore
+  };
   const RENDERER = new HandlebarsRenderer(rendererOpts);
-  const COMPONENT_MANAGER = new MockComponentManager(mockedCore);
+  const COMPONENT_MANAGER = new MockComponentManager(core);
   COMPONENT_MANAGER.setRenderer(RENDERER);
 
   const mockAnalyticsReporter = {
