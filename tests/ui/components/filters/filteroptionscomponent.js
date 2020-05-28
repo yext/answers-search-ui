@@ -230,7 +230,7 @@ describe('filter options component', () => {
   });
 });
 
-describe('filter options component selected options', () => {
+describe('filter options when setting selected options in config', () => {
   let COMPONENT_MANAGER, defaultConfig;
 
   beforeEach(() => {
@@ -311,7 +311,7 @@ describe('filter options component selected options', () => {
     expect(options.filter(o => o.selected)).toHaveLength(0);
   });
 
-  it('can choose selected options for multioption', () => {
+  it('properly sets selected options for multioption', () => {
     const config = {
       ...defaultConfig,
       control: 'multioption'
@@ -326,7 +326,7 @@ describe('filter options component selected options', () => {
     expect(selectedOptions[1].label).toEqual('label4');
   });
 
-  it('prioritizes previous options over selected config for multioption', () => {
+  it('prioritizes previously selected options over config\'s selected options for multioption', () => {
     const config = {
       ...defaultConfig,
       name: 'test-previous-options',
@@ -342,7 +342,7 @@ describe('filter options component selected options', () => {
     expect(selectedOptions[1].label).toEqual('label2');
   });
 
-  it('can choose selected option for singleoption', () => {
+  it('properly sets selected option for singleoption', () => {
     const config = {
       ...defaultConfig,
       control: 'singleoption'
@@ -356,7 +356,7 @@ describe('filter options component selected options', () => {
     expect(selectedOptions[0].label).toEqual('label3');
   });
 
-  it('prioritizes previous options over selected config for singleoption', () => {
+  it('prioritizes previously selected option over config\'s selected options for singleoption', () => {
     const config = {
       ...defaultConfig,
       name: 'test-previous-options',
@@ -372,7 +372,7 @@ describe('filter options component selected options', () => {
   });
 });
 
-describe('filter options component - works with different optionTypes', () => {
+describe('filter options works with different optionTypes', () => {
   let COMPONENT_MANAGER, defaultConfig, setLocationRadius, clearLocationRadius, setStaticFilterNodes;
 
   beforeEach(() => {
