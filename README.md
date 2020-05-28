@@ -980,7 +980,7 @@ ANSWERS.addComponent('Facets', {
 
 ## FilterSearch Component
 
-The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.
+The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed, and the filter and query are stored in the url. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.
 
 ```html
 <div class="filter-search-container"></div>
@@ -1011,6 +1011,16 @@ ANSWERS.addComponent('FilterSearch', {
   autoFocus: true,
   // Optional, redirect search query to url
   redirectUrl: 'path/to/url',
+  // Optional, the query displayed on load. Defaults to the query stored in the url (if any).
+  query: 'Green Ice Cream Flavor',
+  // Optional, the filter for filtersearch to apply on load, defaults to the filter stored in the url (if any).
+  // An example filter is shown below. For more information see the filter section of
+  // https://developer.yext.com/docs/api-reference/#operation/KnowledgeApiServer.listEntities
+  filter: {
+    c_iceCreamFlavors: {
+      $eq: 'pistachio'
+    }
+  },
   // Optional, the search parameters for autocompletion
   searchParameters: {
     // List of fields to query for
