@@ -157,7 +157,6 @@ export default class FilterSearchComponent extends Component {
       verticalKey: this._verticalKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
-        this.query = query;
         this.filterNode = this._buildFilterNode(query, filter);
 
         const params = new SearchParams(window.location.search.substring(1));
