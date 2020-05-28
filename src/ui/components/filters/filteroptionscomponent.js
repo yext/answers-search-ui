@@ -353,11 +353,6 @@ export default class FilterOptionsComponent extends Component {
   }
 
   apply () {
-    const filterNode = this.getFilterNode();
-    this.core.setStaticFilterNodes(this.name, filterNode);
-  }
-
-  apply () {
     switch (this.config.optionType) {
       case OptionTypes.RADIUS_FILTER:
         const selectedOption = this.config.options.find(o => o.selected);
@@ -368,8 +363,8 @@ export default class FilterOptionsComponent extends Component {
         }
         break;
       case OptionTypes.STATIC_FILTER:
-        const filter = this._buildFilter();
-        this.core.setFilter(this.name, filter);
+        const filterNode = this.getFilterNode();
+        this.core.setStaticFilterNodes(this.name, filterNode);
         break;
       default:
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
