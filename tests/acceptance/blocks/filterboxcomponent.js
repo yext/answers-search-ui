@@ -24,8 +24,6 @@ export default class FilterBoxComponentBlock {
   async applyFilters () {
     const applyButton = await this._selector.find('.js-yext-filterbox-apply');
     await t.click(applyButton);
-    // TODO more sophisticated waiting mechanism, docs suggest waiting for a specific DOM change
-    await t.wait(1000);
   }
 
   /**
