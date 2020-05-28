@@ -87,11 +87,44 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   {
     color: var(--yxt-results-header-filters-color);
     margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
+    @include Text(
+      $size: var(--yxt-results-header-filters-font-size),
+      $line-height: var(--yxt-results-header-filters-line-height),
+      $color: var(--yxt-results-header-filters-color),
+    );
   }
 
   &-filterSeparator
   {
     color: var(--yxt-results-header-filters-color);
     margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
+    @include Text(
+      $size: var(--yxt-results-header-filters-font-size),
+      $line-height: var(--yxt-results-header-filters-line-height),
+      $color: var(--yxt-results-header-filters-color),
+    );
   }
+
+  &-changeFilters 
+  {
+    margin-left: calc(var(--yxt-base-spacing) / 2);
+    padding-right: var(--yxt-base-spacing);
+    @include Link(
+      $base-color: var(--yxt-color-brand-primary)
+    );
+    @include Text(
+      $line-height: 20px
+    );
+  }
+}
+
+.yxt-ResultsHeader--universal
+{
+  padding: calc(var(--yxt-base-spacing) / 16) var(--yxt-base-spacing);
+  margin-bottom: 0;
+  border: var(--yxt-border-default);
+  border-top: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
 }

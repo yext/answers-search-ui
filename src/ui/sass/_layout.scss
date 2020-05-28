@@ -16,6 +16,7 @@ $z-index-nav-more-modal: 2 !default;
 
 $button-focus-border-size: 3px !default;
 
+$cards-min-width: 210px !default;
 $container-desktop-base: 400px !default;
 
 :root {
@@ -27,5 +28,6 @@ $container-desktop-base: 400px !default;
   --yxt-border-legacy: #{$border-legacy};
   --yxt-z-index-nav-more-modal: #{$z-index-nav-more-modal};
   --yxt-button-focus-border-size: #{$button-focus-border-size};
+  --yxt-cards-min-width: #{$cards-min-width};
   --yxt-container-desktop-base: #{$container-desktop-base};
 }
