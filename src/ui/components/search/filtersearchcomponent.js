@@ -86,12 +86,6 @@ export default class FilterSearchComponent extends Component {
     this.redirectUrl = config.redirectUrl || null;
 
     /**
-     * Whether to execute a search when the page is loaded
-     * @type {boolean}
-     */
-    this.searchOnLoad = config.searchOnLoad;
-
-    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string}
@@ -101,6 +95,21 @@ export default class FilterSearchComponent extends Component {
       this.query = q;
       this.search();
     });
+
+    /**
+     * The filter string to use for the provided query	
+     * Optionally provided	
+     * @type {string}	
+     */	
+    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || Filter.empty();	
+    if (typeof this.filter === 'string') {	
+      try {	
+        this.filter = JSON.parse(this.filter);	
+      } catch (e) {}	
+    }
+
+    const filterNode = this._buildFilterNode(this.query, this.filter);
+    this.core.setStaticFilterNodes(this.name, filterNode);
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
   }
@@ -121,7 +130,7 @@ export default class FilterSearchComponent extends Component {
   // TODO(oshi): SPR-1925 check that it is safe to remove this, it runs an extra search
   // For no obvious reasons
   onCreate () {
-    if (this.query || this.searchOnLoad) {
+    if (this.query && this.filter) {
       this.search();
     }
   }
@@ -137,7 +146,7 @@ export default class FilterSearchComponent extends Component {
 
   _buildFilterNode (query, filter) {
     return FilterNodeFactory.from({
-      filter: Filter.fromResponse(filter),
+      filter: filter,
       metadata: {
         fieldName: this.title,
         displayValue: `"${query}"`
@@ -163,7 +172,8 @@ export default class FilterSearchComponent extends Component {
       verticalKey: this._verticalKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {
-        const filterNode = this._buildFilterNode(query, filter);
+        this.filter = Filter.fromResponse(filter);
+        const filterNode = this._buildFilterNode(query, this.filter);
 
         const params = new SearchParams(window.location.search.substring(1));
         params.set(`${this.name}.query`, query);
@@ -188,16 +198,19 @@ export default class FilterSearchComponent extends Component {
 
   /**
    * Perform the vertical search with all saved filters and query,
-   * optionally redirecting based on config
+   * optionally redirecting based on config. Uses window.setTimeout to allow
+   * other filters to finish rendering before searching.
    */
   search () {
     if (this._storeOnChange) {
       return;
     }
-    this.core.verticalSearch(this._config.verticalKey, {
-      resetPagination: true,
-      useFacets: true
-    });
+    window.setTimeout(() => {
+      this.core.verticalSearch(this._config.verticalKey, {
+        resetPagination: true,
+        useFacets: true
+      });
+    })
   }
 
   setState (data) {
