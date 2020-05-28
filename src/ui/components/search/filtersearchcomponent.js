@@ -173,7 +173,6 @@ export default class FilterSearchComponent extends Component {
         // save the filter to storage for the next search
         this.query = query;
         this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.STATIC_FILTER_NODE}.${this.name}`, this.filterNode);
         this.core.setStaticFilterNodes(this.name, this.filterNode);
         this.search();
       }
