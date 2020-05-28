@@ -4,6 +4,9 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
+import { groupArray } from '../../../core/utils/arrayutils';
 
 /**
  * The currently supported controls
@@ -272,12 +275,12 @@ export default class FilterOptionsComponent extends Component {
   }
 
   updateListeners () {
-    const filter = this._buildFilter();
+    const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.core.setStaticFilterNodes(this.name, filterNode);
     }
 
-    this.config.onChange(filter);
+    this.config.onChange(filterNode);
   }
 
   _updateOption (index, selected) {
@@ -290,10 +293,6 @@ export default class FilterOptionsComponent extends Component {
     this.setState();
   }
 
-  getFilter () {
-    return this._buildFilter();
-  }
-
   /**
    * Clear all options
    */
@@ -303,21 +302,41 @@ export default class FilterOptionsComponent extends Component {
     this._applyFilter();
   }
 
+  _buildFilter (option) {
+    return option.filter ? option.filter : Filter.equal(option.field, option.value);
+  }
+
+  _buildFilterMetadata (option) {
+    return new FilterMetadata({
+      fieldName: this.config.label,
+      displayValue: option.label
+    });
+  }
+
   /**
-   * Build and return the Filter that represents the current state
-   * @returns {Filter}
-   * @private
+   * Returns this component's filter node.
+   * This method is exposed so that components like {@link FilterBoxComponent}
+   * can access them.
+   * @returns {FilterNode}
    */
-  _buildFilter () {
-    const filters = this.config.options
+  getFilterNode () {
+    const filterNodes = this.config.options
       .filter(o => o.selected)
-      .map(o => o.filter
-        ? Filter.from(o.filter)
-        : Filter.equal(o.field, o.value));
+      .map(o => FilterNodeFactory.from({
+        filter: this._buildFilter(o),
+        metadata: this._buildFilterMetadata(o)
+      }));
 
     this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
-    return filters.length > 0
-      ? Filter.group(...filters)
-      : Filter.empty();
+    const fieldIdToFilterNodes = groupArray(filterNodes, fn => fn.getFilter().getFilterKey());
+
+    // OR together filter nodes for the same field id.
+    const totalFilterNodes = [];
+    for (const sameIdNodes of Object.values(fieldIdToFilterNodes)) {
+      totalFilterNodes.push(FilterNodeFactory.or(...sameIdNodes));
+    }
+
+    // AND all of the ORed together nodes.
+    return FilterNodeFactory.and(...totalFilterNodes);
   }
 }

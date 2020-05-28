@@ -13,10 +13,11 @@ export default {
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
-  FILTER: 'filter',
+  FILTER: 'filter', // DEPRECATED
+  STATIC_FILTER_NODE: 'static-filter-node',
   QUERY: 'query',
   QUERY_ID: 'query-id',
-  FACET_FILTER: 'facet-filter',
+  FACET_FILTER_NODE: 'facet-filter-node',
   DYNAMIC_FILTERS: 'dynamic-filters',
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',

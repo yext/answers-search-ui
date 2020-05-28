@@ -1,8 +1,10 @@
 /** @module RangeFilterComponent */
 
-import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import Component from '../component';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
 
 const DEFAULT_CONFIG = {
   minPlaceholderText: 'Min',
@@ -53,8 +55,8 @@ export default class RangeFilterComponent extends Component {
      * @private
      */
     this._range = {
-      min: minVal || config.initialMin || 0,
-      max: maxVal || config.initialMax || 10
+      min: this.getFirstValidValue(minVal, config.initialMin, 0),
+      max: this.getFirstValidValue(maxVal, config.initialMax, 10)
     };
 
     /**
@@ -77,17 +79,22 @@ export default class RangeFilterComponent extends Component {
      * @private
      */
     this._maxLabel = config.maxLabel || null;
+  }
 
-    /**
-     * The template to render
-     * @type {string}
-     * @private
-     */
-    this._templateName = `controls/range`;
+  getFirstValidValue (...values) {
+    for (const value of values) {
+      if (value || value === 0) {
+        return value;
+      }
+    }
   }
 
   static get type () {
     return 'RangeFilter';
+  }
+
+  static defaultTemplateName () {
+    return 'controls/range';
   }
 
   setState (data) {
@@ -102,7 +109,7 @@ export default class RangeFilterComponent extends Component {
   }
 
   onCreate () {
-    DOM.delegate(this._container, '.js-yext-range', 'change', (event) => {
+    DOM.delegate(this._container, '.js-yext-range', 'change', event => {
       this._updateRange(event.target.dataset.key, Number.parseInt(event.target.value));
     });
   }
@@ -115,8 +122,17 @@ export default class RangeFilterComponent extends Component {
     this._updateRange('max', value);
   }
 
-  getFilter () {
-    return this._buildFilter();
+  /**
+   * Returns this component's filter node.
+   * This method is exposed so that components like {@link FilterBoxComponent}
+   * can access them.
+   * @returns {FilterNode}
+   */
+  getFilterNode () {
+    return FilterNodeFactory.from({
+      filter: this._buildFilter(),
+      metadata: this._buildFilterMetadata()
+    });
   }
 
   /**
@@ -128,14 +144,14 @@ export default class RangeFilterComponent extends Component {
     this._range = Object.assign({}, this._range, { [key]: value });
     this.setState();
 
-    const filter = this._buildFilter();
+    const filterNode = this.getFilterNode();
     if (this._storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.core.setStaticFilterNodes(this.name, filterNode);
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
 
-    this._onChange(filter);
+    this._onChange(filterNode);
   }
 
   /**
@@ -143,6 +159,49 @@ export default class RangeFilterComponent extends Component {
    * @returns {Filter}
    */
   _buildFilter () {
-    return Filter.inclusiveRange(this._field, this._range.min, this._range.max);
+    const { min, max } = this._range;
+    const falsyMin = !min && min !== 0;
+    const falsyMax = !max && max !== 0;
+    const _min = falsyMin ? null : min;
+    const _max = falsyMax ? null : max;
+    return Filter.range(this._field, _min, _max, false);
+  }
+
+  /**
+   * Helper method for creating range filter metadata
+   * @returns {FilterMetadata}
+   */
+  _buildFilterMetadata () {
+    const { min, max } = this._range;
+    const falsyMin = !min && min !== 0;
+    const falsyMax = !max && max !== 0;
+    if (falsyMin && falsyMax) {
+      return new FilterMetadata({
+        fieldName: this._title
+      });
+    }
+    // TODO add config option to range filter component for exclusive ranges.
+    // Currently can only have inclusive ranges.
+    const isExclusive = false;
+    let displayValue;
+    if (falsyMax) {
+      displayValue = isExclusive
+        ? `> ${min}`
+        : `≥ ${min}`;
+    } else if (falsyMin) {
+      displayValue = isExclusive
+        ? `< ${max}`
+        : `≤ ${max}`;
+    } else if (min === max) {
+      displayValue = isExclusive ? '' : min;
+    } else {
+      displayValue = isExclusive
+        ? `> ${min}, < ${max}`
+        : `${min} - ${max}`;
+    }
+    return new FilterMetadata({
+      fieldName: this._title,
+      displayValue: displayValue
+    });
   }
 }
