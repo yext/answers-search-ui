@@ -10,6 +10,7 @@ import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
+import Icons from '../../icons/index';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -49,40 +50,58 @@ class VerticalResultsConfig {
     this.card = config.card || {};
 
     /**
-     * Config options used in the {@link ResultsHeaderComponent}
+     * Vertical URL for view more link
      */
-    this.resultsHeaderOpts = {
-      /**
-       * Whether to display the number of results.
-       * @type {boolean}
-       */
-      showResultCount: config.showResultCount === undefined ? true : config.showResultCount,
+    this.verticalURL = config.verticalURL;
 
-      /**
-       * If present, show the filters that were ultimately applied to this query
-       * @type {boolean}
-       */
-      showAppliedFilters: config.showAppliedFilters === undefined ? true : config.showAppliedFilters,
+    /**
+     * Whether to display the number of results.
+     * @type {boolean}
+     */
+    this.showResultCount = config.showResultCount === undefined ? true : config.showResultCount;
 
-      /**
-       * If showResultCount and showAppliedFilters are true,
-       * display this separator between the result count and the applied query filters
-       * @type {string}
-       */
-      resultsCountSeparator: config.resultsCountSeparator || '|',
+    /**
+     * If present, show the filters that were ultimately applied to this query
+     * @type {boolean}
+     */
+    this.showAppliedFilters = config.showAppliedFilters === undefined ? true : config.showAppliedFilters;
 
-      /**
-       * If showAppliedFilters is true, show the field name in the string followed by a colon.
-       * @type {boolean}
-       */
-      showFieldNames: config.showFieldNames || false
-    };
+    /**
+     * If showResultCount and showAppliedFilters are true,
+     * display this separator between the result count and the applied query filters
+     * @type {string}
+     */
+    this.resultsCountSeparator = config.resultsCountSeparator || '|';
+
+    /**
+     * If showAppliedFilters is true, show the field name in the string followed by a colon.
+     * @type {boolean}
+     */
+    this.showFieldNames = config.showFieldNames || false;
+
+    /**
+     * Any fieldIds in hiddenFields will be hidden from the list of appied filters.
+     * @type {Array<string>}
+     */
+    this.hiddenFields = config.hiddenFields || ['builtin.entityType'];
+
+    /**
+     * Text for the view more button.
+     * @type {string}
+     */
+    this.viewMoreLabel = config.viewMoreLabel;
+
+    /**
+     * Whether to show the change filters link.
+     * @type {boolean}
+     **/
+    this.showChangeFilters = config.showChangeFilters;
   }
 }
 
 export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
-    super(new VerticalResultsConfig(config), systemConfig);
+    super(new VerticalResultsConfig(APPLY_SYNONYMS(config)), systemConfig);
 
     const noResultsConfig = this._config.noResults ||
       this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG);
@@ -132,6 +151,12 @@ export default class VerticalResultsComponent extends Component {
      */
     this.results = [];
     this.numColumns = this._config.maxNumberOfColumns;
+
+    /**
+     * Config options used in the {@link ResultsHeaderComponent}
+     */
+    const { showFieldNames, resultsCountSeparator, showResultCount, showAppliedFilters, showChangeFilters } = this._config;
+    this.resultsHeaderOpts = { showFieldNames, resultsCountSeparator, showResultCount, showAppliedFilters, showChangeFilters };
   }
 
   mount () {
@@ -141,7 +166,7 @@ export default class VerticalResultsComponent extends Component {
     return this;
   }
 
-  static get duplicatesAllowed () {
+  static areDuplicateNamesAllowed () {
     return true;
   }
 
@@ -152,7 +177,7 @@ export default class VerticalResultsComponent extends Component {
     }
   }
 
-  getVerticalURL (data) {
+  getVerticalURL (data = {}) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
     return addParamsToUrl(verticalURL, { query: this.query });
@@ -166,13 +191,14 @@ export default class VerticalResultsComponent extends Component {
     this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
     this.resultsContext = data.resultsContext;
-    this.appliedQueryFilters = data.appliedQueryFilters;
+    this.appliedQueryFilters = (data.appliedQueryFilters || [])
+      .filter(f => !this._config.hiddenFields.includes(f.fieldId));
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    const showResultsHeader = this._config.resultsHeaderOpts.showResultCount ||
-      this._config.resultsHeaderOpts.showAppliedFilters;
+    const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
+      (this.resultsHeaderOpts.showAppliedFilters && this.appliedQueryFilters.length > 0);
     this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
 
     return super.setState(Object.assign({ results: [] }, data, {
@@ -189,7 +215,8 @@ export default class VerticalResultsComponent extends Component {
       placeholders: new Array(this._config.maxNumberOfColumns - 1),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
       showResultsHeader: showResultsHeader,
-      useLegacyNoResults: this._useLegacyNoResults
+      useLegacyNoResults: this._useLegacyNoResults,
+      iconIsBuiltIn: Icons[this._config.icon]
     }), val);
   }
 
@@ -265,8 +292,20 @@ export default class VerticalResultsComponent extends Component {
       if (this.resultsContext === ResultsContext.NO_RESULTS) {
         _opts.showAppliedFilters = false;
       }
-      return super.addChild(resultsHeaderData, type, _opts);
+      return super.addChild(resultsHeaderData, type, {
+        isUniversal: this._config.isUniversal,
+        verticalURL: this.getVerticalURL(),
+        ...this.resultsHeaderOpts,
+        ..._opts
+      });
     }
     return super.addChild(data, type, opts);
   }
 }
+
+const APPLY_SYNONYMS = (config) => ({
+  icon: config.sectionTitleIconName || config.sectionTitleIconUrl,
+  title: config.sectionTitle,
+  viewMoreLabel: config.viewAllText,
+  ...config
+});

@@ -200,7 +200,7 @@ $direct-answer-footer-height: var(--yxt-module-footer-height) !default;
       $size: var(--yxt-direct-answer-view-details-font-size),
       $line-height: var(--yxt-direct-answer-view-details-line-height),
       $weight: var(--yxt-direct-answer-view-details-font-weight),
-    )
+    );
     @include Link-1;
 
     display: inline-flex;
