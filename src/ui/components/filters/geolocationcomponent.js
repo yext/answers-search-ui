@@ -102,24 +102,11 @@ export default class GeoLocationComponent extends Component {
      * The query string to use for the input box, provided to template for rendering.
      * @type {string}
      */
-    this.query = this.core.globalStorage.getState(`${this.name}.${StorageKeys.QUERY}`) || '';
-    this.core.globalStorage.on('update', `${this.name}.${StorageKeys.QUERY}`, q => {
+    this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
+    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
       this.query = q;
       this.setState();
     });
-
-    /**
-     * The filter node to use for the current query
-     * @type {FilterNode}
-     */
-    let filterNode = this.core.globalStorage.getState(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`) || {};
-    if (typeof filterNode === 'string') {
-      try {
-        filterNode = JSON.parse(filterNode);
-      } catch (e) {}
-    }
-
-    this.filterNode = FilterNodeFactory.from({ ...filterNode });
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
 
@@ -209,7 +196,6 @@ export default class GeoLocationComponent extends Component {
       isFilterSearch: true,
       container: '.js-yxt-GeoLocationFilter-autocomplete',
       originalQuery: this.query,
-      originalFilter: this.filter,
       inputEl: inputSelector,
       verticalKey: this._config.verticalKey,
       searchParameters: this.searchParameters,
@@ -219,8 +205,7 @@ export default class GeoLocationComponent extends Component {
 
   _handleSubmit (query, filter) {
     this.query = query;
-    this.filter = Filter.fromResponse(filter);
-    this._saveDataToStorage(query, this.filter, `"${query}"`);
+    this._saveDataToStorage(query, Filter.fromResponse(filter), `"${query}"`);
     this._enabled = false;
   }
 
@@ -242,8 +227,7 @@ export default class GeoLocationComponent extends Component {
           this._saveDataToStorage('', filter, 'Current Location', position);
           this._enabled = true;
           this.setState({});
-          this.core.persistentStorage.delete(`${this.name}.${StorageKeys.QUERY}`);
-          this.core.persistentStorage.delete(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`);
+          this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
         },
         () => this._handleGeolocationError(),
         this._geolocationOptions
@@ -278,9 +262,8 @@ export default class GeoLocationComponent extends Component {
    * @private
    */
   _saveDataToStorage (query, filter, displayValue, position) {
-    this.core.persistentStorage.set(`${this.name}.${StorageKeys.QUERY}`, query);
+    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
     const filterNode = this._buildFilterNode(filter, displayValue);
-    this.core.persistentStorage.set(`${this.name}.${StorageKeys.STATIC_FILTER_NODE}`, filterNode);
     this.core.setStaticFilterNodes(this.name, filterNode);
 
     if (position) {

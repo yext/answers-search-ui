@@ -198,7 +198,7 @@ export default class FilterSearchComponent extends Component {
     return super.setState(Object.assign({
       title: this.title,
       searchText: this.searchText,
-      query: this.query,
+      query: this.query
     }, data));
   }
 }
