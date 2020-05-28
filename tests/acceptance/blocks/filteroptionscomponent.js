@@ -24,7 +24,7 @@ export default class FilterOptionsComponentBlock {
    * Return a selector for the option with the given label.
    * @param {String} label
    */
-  async getOption (label) {
+  async _getOption (label) {
     const labelNode = await this.getLabel(label);
     const attributes = await labelNode.attributes;
     const inputId = attributes.for;
@@ -37,7 +37,7 @@ export default class FilterOptionsComponentBlock {
    * Get the number of results associated with a particular option.
    * This value is enclosed within parenthesis at the end of an option's
    * label.
-   * @param {string} label
+   * @param {String} label
    */
   async getOptionCount (label) {
     const labelNode = await this.getLabel(label);
@@ -48,14 +48,14 @@ export default class FilterOptionsComponentBlock {
 
   /**
    * Toggle the option with the given label.
-   * @param {Stromg} label
+   * @param {String} label
    */
   async toggleOption (label) {
     const isCollapsed = await this.isCollapsed();
     if (isCollapsed) {
       await this.toggleExpand();
     }
-    const option = await this.getOption(label);
+    const option = await this._getOption(label);
     await t.click(option);
   }
 

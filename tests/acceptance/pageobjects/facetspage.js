@@ -3,7 +3,7 @@ import VerticalResultsComponentBlock from '../blocks/verticalresultscomponent';
 import FacetsComponentBlock from '../blocks/facetscomponent';
 
 /**
- * A model of a universal search page, containing block representations
+ * A model of a vertical search page with facets, containing block representations
  * of the various {@link Component}s a user would interact with.
  */
 class FacetsPage {
