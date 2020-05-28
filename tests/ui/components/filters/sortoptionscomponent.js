@@ -20,7 +20,7 @@ const mockedCore = () => {
         return null;
       },
       getAll: storageKey => {
-        expect([StorageKeys.FACET_FILTER, StorageKeys.FILTER]).toContain(storageKey);
+        expect([StorageKeys.FACET_FILTER_NODE, StorageKeys.STATIC_FILTER_NODE]).toContain(storageKey);
         return [];
       },
       delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
