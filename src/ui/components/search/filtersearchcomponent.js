@@ -86,6 +86,12 @@ export default class FilterSearchComponent extends Component {
     this.redirectUrl = config.redirectUrl || null;
 
     /**
+     * Whether to execute a search when the page is loaded
+     * @type {boolean}
+     */
+    this.searchOnLoad = config.searchOnLoad;
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string}
@@ -115,7 +121,7 @@ export default class FilterSearchComponent extends Component {
   // TODO(oshi): SPR-1925 check that it is safe to remove this, it runs an extra search
   // For no obvious reasons
   onCreate () {
-    if (this.query) {
+    if (this.query || this.searchOnLoad) {
       this.search();
     }
   }

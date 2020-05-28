@@ -1011,6 +1011,8 @@ ANSWERS.addComponent('FilterSearch', {
   autoFocus: true,
   // Optional, redirect search query to url
   redirectUrl: 'path/to/url',
+  // Optional, whether to execute a search when the page is loaded, default false
+  searchOnLoad: false,
   // Optional, the search parameters for autocompletion
   searchParameters: {
     // List of fields to query for
