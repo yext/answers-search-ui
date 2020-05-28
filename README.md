@@ -1057,6 +1057,12 @@ ANSWERS.addComponent('FilterOptions', {
   container: '.filter-container',
   // Required, control type: 'singleoption' or 'multioption'
   control: 'singleoption',
+  // The type of options to filter by, either 'STATIC_FILTER' or 'RADIUS_FILTER'.
+  // Defaults to 'STATIC_FILTER'.
+  optionType: 'STATIC_FILTER',
+  // If true, the filter value is saved on change and sent with the next search.
+  // Defaults to false.
+  storeOnChange: true,
   // Required, list of options
   options: [
     /** Depends on the above optionType, either 'STATIC_FILTER' or 'RADIUS_FILTER', see below. **/

@@ -156,12 +156,11 @@ class FilterOptionsConfig {
    */
   setAppliedOnLoad (options) {
     if (this.control === 'singleoption') {
-      const _options = options.map(o => ({ ...o }));
-      const firstAppliedOption = _options.find(o => o.appliedOnLoad);
+      const firstAppliedOption = options.find(o => o.appliedOnLoad);
       if (firstAppliedOption) {
         firstAppliedOption.selected = true;
       }
-      return _options;
+      return options;
     }
     return options.map(o => ({
       ...o,
