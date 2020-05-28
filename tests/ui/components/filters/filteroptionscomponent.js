@@ -4,6 +4,7 @@ import mockManager from '../../../setup/managermocker';
 import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
+import FilterMetadata from 'src/core/filters/filtermetadata';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
@@ -373,14 +374,13 @@ describe('filter options when setting selected options in config', () => {
 });
 
 describe('filter options works with different optionTypes', () => {
-  let COMPONENT_MANAGER, defaultConfig, setLocationRadius, clearLocationRadius, setStaticFilterNodes;
+  let COMPONENT_MANAGER, defaultConfig, setLocationRadiusFilterNode, setStaticFilterNodes;
 
   beforeEach(() => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-    setLocationRadius = jest.fn();
-    clearLocationRadius = jest.fn();
+    setLocationRadiusFilterNode = jest.fn();
     setStaticFilterNodes = jest.fn();
 
     COMPONENT_MANAGER = mockManager(
@@ -392,15 +392,15 @@ describe('filter options works with different optionTypes', () => {
         persistentStorage: {
           set: () => {}
         },
-        setLocationRadius,
-        clearLocationRadius,
+        setLocationRadiusFilterNode,
         setStaticFilterNodes
       },
       FilterOptionsComponent.defaultTemplateName()
     );
 
     defaultConfig = {
-      container: '#test-component'
+      container: '#test-component',
+      label: 'filterOptionsLabel'
     };
   });
 
@@ -419,12 +419,10 @@ describe('filter options works with different optionTypes', () => {
 
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-    expect(setLocationRadius.mock.calls).toHaveLength(0);
-    expect(clearLocationRadius.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
     component.apply();
     expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
-    expect(setLocationRadius.mock.calls).toHaveLength(0);
-    expect(clearLocationRadius.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
   });
 
   it('works with RADIUS_FILTER', () => {
@@ -443,13 +441,18 @@ describe('filter options works with different optionTypes', () => {
 
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-    expect(setLocationRadius.mock.calls).toHaveLength(0);
-    expect(clearLocationRadius.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
     component.apply();
     expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-    expect(setLocationRadius.mock.calls).toHaveLength(1);
-    expect(setLocationRadius.mock.calls[0][0]).toEqual(12345);
-    expect(clearLocationRadius.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(1);
+    const filterNode = FilterNodeFactory.from({
+      metadata: new FilterMetadata({
+        fieldName: 'filterOptionsLabel',
+        displayValue: '12345 meters'
+      }),
+      filter: Filter.locationRadius(12345)
+    });
+    expect(setLocationRadiusFilterNode.mock.calls[0][0]).toEqual(filterNode);
   });
 
   it('clears locationRadius when radius = 0', () => {
@@ -468,12 +471,18 @@ describe('filter options works with different optionTypes', () => {
 
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-    expect(setLocationRadius.mock.calls).toHaveLength(0);
-    expect(clearLocationRadius.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
     component.apply();
     expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-    expect(setLocationRadius.mock.calls).toHaveLength(0);
-    expect(clearLocationRadius.mock.calls).toHaveLength(1);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(1);
+    const filterNode = FilterNodeFactory.from({
+      metadata: new FilterMetadata({
+        fieldName: 'filterOptionsLabel',
+        displayValue: 'le 0 metres'
+      }),
+      filter: Filter.empty()
+    });
+    expect(setLocationRadiusFilterNode.mock.calls[0][0]).toEqual(filterNode);
   });
 
   it('throws error when trying to use multioption with RADIUS_FILTER', () => {

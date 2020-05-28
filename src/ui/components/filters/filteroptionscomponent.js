@@ -353,16 +353,10 @@ export default class FilterOptionsComponent extends Component {
   apply () {
     switch (this.config.optionType) {
       case OptionTypes.RADIUS_FILTER:
-        const selectedOption = this.config.options.find(o => o.selected);
-        if (selectedOption && selectedOption.value !== 0) {
-          this.core.setLocationRadius(selectedOption.value);
-        } else {
-          this.core.clearLocationRadius();
-        }
+        this.core.setLocationRadiusFilterNode(this.getLocationRadiusFilterNode());
         break;
       case OptionTypes.STATIC_FILTER:
-        const filterNode = this.getFilterNode();
-        this.core.setStaticFilterNodes(this.name, filterNode);
+        this.core.setStaticFilterNodes(this.name, this.getFilterNode());
         break;
       default:
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
@@ -390,6 +384,28 @@ export default class FilterOptionsComponent extends Component {
       fieldName: this.config.label,
       displayValue: option.label
     });
+  }
+
+  getLocationRadiusFilterNode () {
+    const selectedOption = this.config.options.find(o => o.selected);
+    if (!selectedOption) {
+      return FilterNodeFactory.from();
+    }
+    const metadata = new FilterMetadata({
+      fieldName: this.config.label,
+      displayValue: selectedOption.label
+    });
+    if (selectedOption.value !== 0) {
+      return FilterNodeFactory.from({
+        metadata: metadata,
+        filter: Filter.locationRadius(selectedOption.value)
+      });
+    } else {
+      return FilterNodeFactory.from({
+        metadata: metadata,
+        filter: Filter.empty()
+      });
+    }
   }
 
   /**

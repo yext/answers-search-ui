@@ -77,6 +77,16 @@ export default class FilterRegistry {
   }
 
   /**
+   * Gets the locationRadius to send in a search query.
+   * @returns {number}
+   */
+  getLocationRadiusPayload () {
+    const filterNode =
+      this.globalStorage.getState(`${this.filterRegistryId}.${StorageKeys.LOCATION_RADIUS}`);
+    return filterNode.getFilter().value;
+  }
+
+  /**
    * Sets the specified {@link FilterNode} under the given key.
    * Will replace a preexisting node if there is one.
    * @param {string} key
@@ -98,5 +108,14 @@ export default class FilterRegistry {
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
     this.globalStorage.set(`${this.filterRegistryId}.${StorageKeys.FACET_FILTER_NODE}`, filterNodes);
+  }
+
+  /**
+   * Sets the locationRadius filterNode. There may only be one locationRadius active
+   * at a time.
+   * @param {FilterNode} filterNode
+   */
+  setLocationRadiusFilterNode (filterNode) {
+    this.globalStorage.set(`${this.filterRegistryId}.${StorageKeys.LOCATION_RADIUS}`, filterNode);
   }
 }

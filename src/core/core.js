@@ -154,7 +154,7 @@ export default class Core {
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
-        locationRadius: this.globalStorage.getState(StorageKeys.LOCATION_RADIUS)
+        locationRadius: this.filterRegistry.getLocationRadiusPayload()
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -362,18 +362,18 @@ export default class Core {
   }
 
   /**
-   * Sets the locationRadius param for vertical searches.
-   * @param {number} locationRadius
+   * Sets the locationRadius filterNode.
+   * @param {FilterNode} filterNode
    */
-  setLocationRadius (locationRadius) {
-    this.globalStorage.set(StorageKeys.LOCATION_RADIUS, locationRadius);
+  setLocationRadiusFilterNode (filterNode) {
+    this.filterRegistry.setLocationRadiusFilterNode(filterNode);
   }
 
   /**
-   * Clears the locationRadius param for vertical searches.
+   * Clears the locationRadius filterNode.
    */
-  clearLocationRadius () {
-    this.globalStorage.delete(StorageKeys.LOCATION_RADIUS);
+  clearLocationRadiusFilterNode () {
+    this.filterRegistry.clearLocationRadiusFilterNode();
   }
 
   enableDynamicFilters () {
