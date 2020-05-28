@@ -97,15 +97,15 @@ export default class FilterSearchComponent extends Component {
     });
 
     /**
-     * The filter string to use for the provided query	
-     * Optionally provided	
-     * @type {string}	
-     */	
-    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || Filter.empty();	
-    if (typeof this.filter === 'string') {	
-      try {	
-        this.filter = JSON.parse(this.filter);	
-      } catch (e) {}	
+     * The filter string to use for the provided query
+     * Optionally provided
+     * @type {string}
+     */
+    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || Filter.empty();
+    if (typeof this.filter === 'string') {
+      try {
+        this.filter = JSON.parse(this.filter);
+      } catch (e) {}
     }
 
     const filterNode = this._buildFilterNode(this.query, this.filter);
@@ -210,7 +210,7 @@ export default class FilterSearchComponent extends Component {
         resetPagination: true,
         useFacets: true
       });
-    })
+    });
   }
 
   setState (data) {
