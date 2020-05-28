@@ -15,8 +15,6 @@ $results-header-filters-font-size: var(--yxt-font-size-md) !default;
 $results-header-filters-color: var(--yxt-color-text-secondary) !default;
 $results-header-filters-line-height: var(--yxt-line-height-md) !default;
 
-$results-header-horizontal-spacing: calc(var(--yxt-results-header-spacing) / 2) !default;
-
 :root {
   --yxt-results-header-font-size: #{$results-header-font-size};
   --yxt-results-header-spacing: #{$results-header-spacing};
@@ -29,10 +27,9 @@ $results-header-horizontal-spacing: calc(var(--yxt-results-header-spacing) / 2) 
   --yxt-results-header-filters-font-size: #{$results-header-filters-font-size};
   --yxt-results-header-filters-color: #{$results-header-filters-color};
   --yxt-results-header-filters-line-height: #{$results-header-filters-line-height};
-  --yxt-results-header-horizontal-spacing: #{$results-header-horizontal-spacing};
 }
 .yxt-ResultsHeader {
-  padding: calc(var(--yxt-results-header-spacing) / 2) calc(var(--yxt-results-header-horizontal-spacing) * 2);
+  padding: calc(var(--yxt-results-header-spacing) / 2) var(--yxt-results-header-spacing);
   display: flex;
   align-items: baseline;
   height: 20px;
@@ -45,7 +42,7 @@ $results-header-horizontal-spacing: calc(var(--yxt-results-header-spacing) / 2) 
 
   &-resultsCount
   {
-    margin-right: var(--yxt-results-header-horizontal-spacing);
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
     white-space: nowrap;
     @include Text(
       $size: var(--yxt-results-header-font-size),
@@ -57,17 +54,16 @@ $results-header-horizontal-spacing: calc(var(--yxt-results-header-spacing) / 2) 
 
   &-appliedFilters
   {
-    margin-right: calc(var(--yxt-results-header-horizontal-spacing) * 2);
+    margin-right: var(--yxt-results-header-spacing);
     border-top: 0;
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
   }
 
   &-filterLabel
   {
     display: flex;
-    margin-right: var(--yxt-results-header-horizontal-spacing);
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
@@ -77,7 +73,7 @@ $results-header-horizontal-spacing: calc(var(--yxt-results-header-spacing) / 2) 
 
   &-filterValue
   {
-    margin-right: var(--yxt-results-header-horizontal-spacing);
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
@@ -88,7 +84,7 @@ $results-header-horizontal-spacing: calc(var(--yxt-results-header-spacing) / 2) 
   &-resultsCountSeparator
   {
     color: var(--yxt-results-header-filters-color);
-    margin-right: var(--yxt-results-header-horizontal-spacing);
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
@@ -99,7 +95,7 @@ $results-header-horizontal-spacing: calc(var(--yxt-results-header-spacing) / 2) 
   &-filterSeparator
   {
     color: var(--yxt-results-header-filters-color);
-    margin-right: var(--yxt-results-header-horizontal-spacing);
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
@@ -109,8 +105,8 @@ $results-header-horizontal-spacing: calc(var(--yxt-results-header-spacing) / 2) 
 
   &-changeFilters 
   {
-    margin-left: var(--yxt-results-header-horizontal-spacing);
-    padding-right: calc(var(--yxt-results-header-horizontal-spacing) * 2);
+    margin-left: calc(var(--yxt-results-header-spacing) / 2);
+    padding-right: var(--yxt-results-header-spacing);
     @include Link(
       $base-color: var(--yxt-color-brand-primary)
     );
