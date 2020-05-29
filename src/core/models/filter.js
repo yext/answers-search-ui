@@ -193,13 +193,6 @@ export default class Filter {
   }
 
   /**
-   * Create a new RADIUS_FILTER.
-   * @param {number} radius
-   */
-  static locationRadius (radius) {
-  }
-
-  /**
    * Create a new filter with the given matcher
    * @private
    * @param {string} field The subject field of the filter

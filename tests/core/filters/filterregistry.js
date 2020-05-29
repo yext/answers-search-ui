@@ -5,6 +5,7 @@ import Facet from '../../../src/core/models/facet';
 import Filter from '../../../src/core/models/filter';
 import GlobalStorage from '../../../src/core/storage/globalstorage';
 import FilterMetadata from '../../../src/core/filters/filtermetadata';
+import StorageKeys from '../../../src/core/storage/storagekeys';
 
 describe('FilterRegistry', () => {
   let node1, node2, filter1, filter2, registry;
@@ -165,8 +166,10 @@ describe('FilterRegistry', () => {
       filter: filter
     });
     registry.setLocationRadiusFilterNode(filterNode);
-    expect(registry.getLocationRadiusPayload()).toEqual(1234);
+    let locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    expect(locationRadiusFilterNode.getFilter().value).toEqual(1234);
     registry.setLocationRadiusFilterNode(FilterNodeFactory.from());
-    expect(registry.getLocationRadiusPayload()).toBeUndefined();
+    locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    expect(locationRadiusFilterNode).toEqual(FilterNodeFactory.from());
   });
 });
