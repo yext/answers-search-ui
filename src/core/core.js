@@ -140,6 +140,10 @@ export default class Core {
       this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
+    if (!useFacets) {
+      this.filterRegistry.setFacetFilterNodes([], []);
+    }
+
     const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
 
     return this._searcher
@@ -149,7 +153,7 @@ export default class Core {
         input: this.globalStorage.getState(StorageKeys.QUERY) || '',
         ...query,
         filter: this.filterRegistry.getStaticFilterPayload(),
-        facetFilter: useFacets ? this.filterRegistry.getFacetFilterPayload() : null,
+        facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
