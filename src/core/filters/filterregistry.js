@@ -10,7 +10,7 @@ import StorageKeys from '../storage/storagekeys';
  * Static filters and facet filters are stored within global storage using FilterNodes.
  */
 export default class FilterRegistry {
-  constructor (globalStorage, availableFieldIds = [], filterRegistryId) {
+  constructor (globalStorage, availableFieldIds = []) {
     /**
      * FilterRegistry uses {@link GlobalStorage} for storing FilterNodes.
      * Each node is given a unique key in global storage.
@@ -23,11 +23,6 @@ export default class FilterRegistry {
      * @type {Array<string>}
      */
     this.availableFieldIds = availableFieldIds;
-
-    /**
-     * This FilterRegistry's unique id.
-     */
-    this.filterRegistryId = filterRegistryId || 'FILTER_REGISTRY';
   }
 
   /**
@@ -35,7 +30,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getStaticFilterNodes () {
-    return this.globalStorage.getAll(`${this.filterRegistryId}.${StorageKeys.STATIC_FILTER_NODE}`);
+    return this.globalStorage.getAll(StorageKeys.STATIC_FILTER_NODE);
   }
 
   /**
@@ -43,7 +38,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getFacetFilterNodes () {
-    return this.globalStorage.getState(`${this.filterRegistryId}.${StorageKeys.FACET_FILTER_NODE}`) || [];
+    return this.globalStorage.getState(StorageKeys.FACET_FILTER_NODE) || [];
   }
 
   /**
@@ -82,7 +77,7 @@ export default class FilterRegistry {
    * @param {string} key
    */
   getFilterNodeByKey (key) {
-    return this.globalStorage.getState(`${this.filterRegistryId}.${key}`);
+    return this.globalStorage.getState(key);
   }
 
   /**
@@ -92,7 +87,7 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setStaticFilterNodes (key, filterNode) {
-    this.globalStorage.set(`${this.filterRegistryId}.${StorageKeys.STATIC_FILTER_NODE}.${key}`, filterNode);
+    this.globalStorage.set(`${StorageKeys.STATIC_FILTER_NODE}.${key}`, filterNode);
   }
 
   /**
@@ -106,7 +101,7 @@ export default class FilterRegistry {
    */
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
-    this.globalStorage.set(`${this.filterRegistryId}.${StorageKeys.FACET_FILTER_NODE}`, filterNodes);
+    this.globalStorage.set(`${StorageKeys.FACET_FILTER_NODE}`, filterNodes);
   }
 
   /**
@@ -115,6 +110,6 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setLocationRadiusFilterNode (filterNode) {
-    this.globalStorage.set(`${this.filterRegistryId}.${StorageKeys.LOCATION_RADIUS}`, filterNode);
+    this.globalStorage.set(`${StorageKeys.LOCATION_RADIUS}`, filterNode);
   }
 }
