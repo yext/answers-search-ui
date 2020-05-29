@@ -17,6 +17,14 @@ const SUPPORTED_CONTROLS = [
   'multioption'
 ];
 
+/**
+ * The currently supported option types.
+ */
+const OptionTypes = {
+  RADIUS_FILTER: 'RADIUS_FILTER',
+  STATIC_FILTER: 'STATIC_FILTER'
+};
+
 class FilterOptionsConfig {
   constructor (config) {
     /**
@@ -26,10 +34,16 @@ class FilterOptionsConfig {
     this.control = config.control;
 
     /**
+     * The type of filtering to apply to the options.
+     * @type {string}
+     */
+    this.optionType = config.optionType || OptionTypes.STATIC_FILTER;
+
+    /**
      * The list of filter options to display with checked status
      * @type {object[]}
      */
-    this.options = config.options;
+    this.options = config.options.map(o => ({ ...o }));
 
     /**
      * The label to be used in the legend
@@ -115,42 +129,45 @@ class FilterOptionsConfig {
     }
     // previousOptions will be null if there were no previousOptions in persistentStorage
     const previousOptions = config.previousOptions;
-    if (previousOptions) {
-      this.options = this.setPreviousOptions(this.options, previousOptions || []);
-    } else {
-      this.options = this.setAppliedOnLoad(this.options);
-    }
+    this.options = this.setSelectedOptions(this.options, previousOptions);
   }
 
   /**
-   * Sets selected options on load based on options stored in persistent storage.
+   * Sets selected options on load based on options stored in persistent storage and options with selected: true.
+   * If no previous options were stored in persistentStorage, default to options marked
+   * as selected. If multiple options are marked as selected for 'singleoption', only the
+   * first should be selected.
    * @param {Array<Object>} options
    * @param {Array<string>} previousOptions
    * @returns {Array<Object>}
    */
-  setPreviousOptions (options, previousOptions) {
-    return options.map(o => ({
-      ...o,
-      selected: previousOptions.includes(o.label)
-    }));
-  }
-
-  /**
-   * If no previous options were stored in persistentStorage, default to options marked
-   * as appliedOnLoad.
-   * @param {*} options
-   */
-  setAppliedOnLoad (options) {
-    if (this.control === 'singleoption') {
-      const _options = options.map(o => ({ ...o }));
-      const firstAppliedOption = _options.find(o => o.appliedOnLoad);
-      firstAppliedOption.selected = true;
-      return _options;
+  setSelectedOptions (options, previousOptions) {
+    if (previousOptions && this.control === 'singleoption') {
+      let hasSeenSelectedOption = false;
+      return options.map(o => {
+        if (previousOptions.includes(o.label) && !hasSeenSelectedOption) {
+          hasSeenSelectedOption = true;
+          return { ...o, selected: true };
+        }
+        return { ...o, selected: false };
+      });
+    } else if (previousOptions && this.control === 'multioption') {
+      return options.map(o => ({
+        ...o,
+        selected: previousOptions.includes(o.label)
+      }));
+    } else if (this.control === 'singleoption') {
+      let hasSeenSelectedOption = false;
+      return options.map(o => {
+        if (hasSeenSelectedOption) {
+          return { ...o, selected: false };
+        } else if (o.selected) {
+          hasSeenSelectedOption = true;
+        }
+        return { ...o };
+      });
     }
-    return options.map(o => ({
-      ...o,
-      selected: o.appliedOnLoad || o.selected
-    }));
+    return options;
   }
 
   getSelectedCount () {
@@ -163,6 +180,19 @@ class FilterOptionsConfig {
     if (!this.control || !SUPPORTED_CONTROLS.includes(this.control)) {
       throw new AnswersComponentError(
         'FilterOptions requires a valid "control" to be provided',
+        'FilterOptions');
+    }
+
+    if (!(this.optionType in OptionTypes)) {
+      const possibleTypes = Object.values(OptionTypes).join(', ');
+      throw new AnswersComponentError(
+        `Invalid optionType ${this.optionType} passed to FilterOptions. Expected one of ${possibleTypes}`,
+        'FilterOptions');
+    }
+
+    if (this.optionType === OptionTypes.RADIUS_FILTER && this.control !== 'singleoption') {
+      throw new AnswersComponentError(
+        `FilterOptions of optionType ${OptionTypes.RADIUS_FILTER} requires control "singleoption"`,
         'FilterOptions');
     }
 
@@ -321,8 +351,16 @@ export default class FilterOptionsComponent extends Component {
   }
 
   apply () {
-    const filterNode = this.getFilterNode();
-    this.core.setStaticFilterNodes(this.name, filterNode);
+    switch (this.config.optionType) {
+      case OptionTypes.RADIUS_FILTER:
+        this.core.setLocationRadiusFilterNode(this.getLocationRadiusFilterNode());
+        break;
+      case OptionTypes.STATIC_FILTER:
+        this.core.setStaticFilterNodes(this.name, this.getFilterNode());
+        break;
+      default:
+        throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
+    }
   }
 
   /**
@@ -346,6 +384,28 @@ export default class FilterOptionsComponent extends Component {
       fieldName: this.config.label,
       displayValue: option.label
     });
+  }
+
+  getLocationRadiusFilterNode () {
+    const selectedOption = this.config.options.find(o => o.selected);
+    if (!selectedOption) {
+      return FilterNodeFactory.from();
+    }
+    const metadata = new FilterMetadata({
+      fieldName: this.config.label,
+      displayValue: selectedOption.label
+    });
+    if (selectedOption.value !== 0) {
+      return FilterNodeFactory.from({
+        metadata: metadata,
+        filter: { value: selectedOption.value }
+      });
+    } else {
+      return FilterNodeFactory.from({
+        metadata: metadata,
+        filter: Filter.empty()
+      });
+    }
   }
 
   /**
