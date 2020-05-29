@@ -1057,19 +1057,15 @@ ANSWERS.addComponent('FilterOptions', {
   container: '.filter-container',
   // Required, control type: 'singleoption' or 'multioption'
   control: 'singleoption',
+  // The type of options to filter by, either 'STATIC_FILTER' or 'RADIUS_FILTER'.
+  // Defaults to 'STATIC_FILTER'.
+  optionType: 'STATIC_FILTER',
+  // If true, the filter value is saved on change and sent with the next search.
+  // Defaults to false.
+  storeOnChange: true,
   // Required, list of options
   options: [
-    {
-      // Required, label to show next to the filter option
-      label: 'Open Now',
-      // Required, the field's API name to filter on, configured in the Yext platform
-      field: 'c_openNow',
-      // Required, the value for the above field to filter by
-      value: true,
-      // Optional, whether the option is selected by default
-      selected: true,
-    },
-    ...
+    /** Depends on the above optionType, either 'STATIC_FILTER' or 'RADIUS_FILTER', see below. **/
   ],
   // Optional, if true, the filter value is saved on change and sent with the next search. Defaults to false.
   storeOnChange: false,
@@ -1098,6 +1094,74 @@ ANSWERS.addComponent('FilterOptions', {
   // Optional, the label to be used in the legend, defaults to 'Filters'
   label: 'Filters'
 });
+```
+
+The options config varies depending on whether the optionType is 'STATIC_FILTER' or 'RADIUS_FILTER'.
+
+##### STATIC_FILTER
+
+```js
+{
+  options: [
+    {
+      // Required, the api field to filter on, configured on the Yext platform.
+      field: 'c_openNow',
+      // Required, the value for the above field to filter by.
+      value: true,
+      // Optional, the label to show next to the filter option.
+      label: 'Open Now',
+      // Optional, whether this option will be selected on page load. Selected options stored in the url
+      // take priority over this. Defaults to false.
+      selected: false
+    },
+    {
+      field: 'c_dogFriendly',
+      value: true,
+      label: 'Dog Friendly',
+      selected: true
+    },
+    {
+      field: 'c_storeType',
+      value: 'Megastore',
+      label: 'Megastores'
+    }
+  ]
+}
+```
+
+##### RADIUS_FILTER
+
+```js
+{    
+  options: [
+    {
+      // Required, the value of the radius to apply (in meters). If this value is 0, will not filter by radius.
+      value: 8046.72,
+      // Optional, the label to show next to the filter option.
+      label: '5 miles',
+      // Optional, whether this option will be selected on page load. Selected options stored in the url
+      // take priority over this. Defaults to false.
+      selected: false
+    },
+    {
+      value: 16093.4,
+      label: '10 miles',
+      selected: true
+    },
+    {
+      value: 40233.6,
+      label: '25 miles'
+    },
+    { 
+      value: 80467.2,
+      label: '50 miles'
+    },
+    {
+      value: 0,
+      label: "Do not filter by radius"
+    }
+  ],
+}
 ```
 
 ### RangeFilter
