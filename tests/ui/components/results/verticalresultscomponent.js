@@ -47,4 +47,73 @@ describe('vertical results component', () => {
     const wrapper = mount(component);
     expect(wrapper).toBeTruthy();
   });
+
+  it('has correct default config for the results header', () => {
+    const resultsHeaderOpts = COMPONENT_MANAGER.create('VerticalResults', {}).resultsHeaderOpts;
+    const {
+      showFieldNames,
+      resultsCountSeparator,
+      showResultCount,
+      showAppliedFilters,
+      showChangeFilters,
+      hiddenFields,
+      removable,
+      delimiter
+    } = resultsHeaderOpts;
+    expect(showFieldNames).toBeFalsy();
+    expect(resultsCountSeparator).toEqual('|');
+    expect(showResultCount).toBeTruthy();
+    expect(showAppliedFilters).toBeTruthy();
+    expect(showChangeFilters).toBeFalsy();
+    expect(hiddenFields).toEqual(['builtin.location']);
+    expect(removable).toBeFalsy();
+    expect(delimiter).toEqual('|');
+  });
+
+  it('prefers appliedFilters config over deprecated config', () => {
+    const component = COMPONENT_MANAGER.create('VerticalResults', {
+      appliedFilters: {
+        showFieldNames: null,
+        resultsCountSeparator: '',
+        show: null,
+        hiddenFields: ['higher_priority']
+      },
+      showFieldNames: true,
+      resultsCountSeparator: '|',
+      showAppliedFilters: true,
+      hiddenFields: ['builtin.location']
+    });
+    const resultsHeaderOpts = component.resultsHeaderOpts;
+    const {
+      showFieldNames,
+      resultsCountSeparator,
+      showAppliedFilters,
+      hiddenFields
+    } = resultsHeaderOpts;
+    expect(showFieldNames).toBeNull();
+    expect(resultsCountSeparator).toEqual('');
+    expect(showAppliedFilters).toBeNull();
+    expect(hiddenFields).toEqual(['higher_priority']);
+  });
+
+  it('will still use deprecated config over defaults', () => {
+    const component = COMPONENT_MANAGER.create('VerticalResults', {
+      appliedFilters: {},
+      showFieldNames: false,
+      resultsCountSeparator: '',
+      showAppliedFilters: null,
+      hiddenFields: ['better_than_default']
+    });
+    const resultsHeaderOpts = component.resultsHeaderOpts;
+    const {
+      showFieldNames,
+      resultsCountSeparator,
+      showAppliedFilters,
+      hiddenFields
+    } = resultsHeaderOpts;
+    expect(showFieldNames).toEqual(false);
+    expect(resultsCountSeparator).toEqual('');
+    expect(showAppliedFilters).toBeNull();
+    expect(hiddenFields).toEqual(['better_than_default']);
+  });
 });

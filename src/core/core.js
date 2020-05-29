@@ -140,7 +140,7 @@ export default class Core {
       this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
-    const locationRadiusFilterNode = this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
 
     return this._searcher
       .verticalSearch(verticalKey, {
@@ -353,6 +353,18 @@ export default class Core {
    */
   setQueryId (queryId) {
     this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
+  }
+
+  getStaticFilterNodes () {
+    return this.filterRegistry.getStaticFilterNodes();
+  }
+
+  getFacetFilterNodes () {
+    return this.filterRegistry.getFacetFilterNodes();
+  }
+
+  getLocationRadiusFilterNode () {
+    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
   }
 
   setFacetFilterNodes (availableFieldids = [], filterNodes = []) {

@@ -11,6 +11,7 @@ import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
+import { parseConfig } from '../../../core/utils/configutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -61,29 +62,33 @@ class VerticalResultsConfig {
     this.showResultCount = config.showResultCount === undefined ? true : config.showResultCount;
 
     /**
+     * DEPRECATED for appliedFilters.show
      * If present, show the filters that were ultimately applied to this query
      * @type {boolean}
      */
     this.showAppliedFilters = config.showAppliedFilters === undefined ? true : config.showAppliedFilters;
 
     /**
+     * DEPRECATED for appliedFilters.resultsCountSeparator
      * If showResultCount and showAppliedFilters are true,
      * display this separator between the result count and the applied query filters
      * @type {string}
      */
-    this.resultsCountSeparator = config.resultsCountSeparator || '|';
+    this.resultsCountSeparator = config.resultsCountSeparator === undefined ? '|' : config.resultsCountSeparator;
 
     /**
+     * DEPRECATED for appliedFilters.showFieldNames
      * If showAppliedFilters is true, show the field name in the string followed by a colon.
      * @type {boolean}
      */
     this.showFieldNames = config.showFieldNames || false;
 
     /**
+     * DEPRECATED for appliedFilters.hiddenFields
      * Any fieldIds in hiddenFields will be hidden from the list of appied filters.
      * @type {Array<string>}
      */
-    this.hiddenFields = config.hiddenFields || ['builtin.entityType'];
+    this.hiddenFields = config.hiddenFields || ['builtin.location'];
 
     /**
      * Text for the view more button.
@@ -96,6 +101,12 @@ class VerticalResultsConfig {
      * @type {boolean}
      **/
     this.showChangeFilters = config.showChangeFilters;
+
+    /**
+     * Config for the applied filters in the results header.
+     * @type {Object}
+     */
+    this.appliedFilters = config.appliedFilters || {};
   }
 }
 
@@ -152,11 +163,21 @@ export default class VerticalResultsComponent extends Component {
     this.results = [];
     this.numColumns = this._config.maxNumberOfColumns;
 
+    const appliedFiltersOpts = this._config.appliedFilters || {};
+
     /**
      * Config options used in the {@link ResultsHeaderComponent}
      */
-    const { showFieldNames, resultsCountSeparator, showResultCount, showAppliedFilters, showChangeFilters } = this._config;
-    this.resultsHeaderOpts = { showFieldNames, resultsCountSeparator, showResultCount, showAppliedFilters, showChangeFilters };
+    this.resultsHeaderOpts = {
+      showFieldNames: parseConfig(this._config, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
+      resultsCountSeparator: parseConfig(this._config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
+      showResultCount: this._config.showResultCount,
+      showAppliedFilters: parseConfig(this._config, ['appliedFilters.show', 'showAppliedFilters'], true),
+      showChangeFilters: this._config.showChangeFilters,
+      hiddenFields: appliedFiltersOpts.hiddenFields || this._config.hiddenFields || ['builtin.location'],
+      removable: appliedFiltersOpts.removable, // TODO implement
+      delimiter: appliedFiltersOpts.delimiter || '|'
+    };
   }
 
   mount () {

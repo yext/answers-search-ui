@@ -9,7 +9,11 @@ const DEFAULT_CONFIG = {
   showFieldNames: false,
   resultsCountSeparator: '|',
   verticalURL: undefined,
-  showChangeFilters: false
+  showChangeFilters: false,
+  hiddenFields: ['builtin.location'],
+  removable: false, // TODO implement
+  delimiter: '|',
+  isUniversal: false
 };
 
 export default class ResultsHeaderComponent extends Component {
@@ -40,13 +44,50 @@ export default class ResultsHeaderComponent extends Component {
     return true;
   }
 
-  getAppliedFiltersArray () {
+  /**
+   * Recursively get all of the root FilterNodes of the given array,
+   * which will all be SimpleFilterNodes
+   * @param {Array<FilterNode>} filterNodes
+   * @returns {Array<SimpleFilterNode>}
+   */
+  _getSimpleFilterNodes (filterNodes) {
+    return filterNodes.flatMap(fn =>
+      fn.getChildren().length ? this._getSimpleFilterNodes(fn.getChildren()) : fn
+    );
+  }
+
+  /**
+   * Combine all of the applied filters into a format the handlebars
+   * template can work with.
+   * @param {Array<AppliedQueryFilter>} appliedQueryFilters
+   * @param {Array<SimpleFilterNode>} simpleFilterNodes
+   * @returns {Array<Object>}
+   */
+  getAppliedFiltersArray (appliedQueryFilters, simpleFilterNodes) {
     const groupedFilters = {};
-    this.appliedQueryFilters.forEach(filter => {
+    appliedQueryFilters.forEach(filter => {
+      if (this._config.hiddenFields.includes(filter.fieldId)) {
+        return;
+      }
       if (!groupedFilters[filter.key]) {
         groupedFilters[filter.key] = [];
       }
       groupedFilters[filter.key].push(filter.value);
+    });
+    simpleFilterNodes.forEach(fn => {
+      const metadata = fn.getMetadata();
+      const { fieldName, displayValue } = metadata;
+      if (!fieldName || !displayValue) {
+        return;
+      }
+      const fieldId = fn.getFilter().getFilterKey();
+      if (fieldId && this._config.hiddenFields.includes(fieldId)) {
+        return;
+      }
+      if (!groupedFilters[fieldName]) {
+        groupedFilters[fieldName] = [];
+      }
+      groupedFilters[fieldName].push(displayValue);
     });
     // Has to be parsed into an array because our handlebars can only loop through arrays, not objects.
     return Object.keys(groupedFilters).map(label => ({
@@ -56,7 +97,13 @@ export default class ResultsHeaderComponent extends Component {
 
   setState (data) {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-    const shouldShowFilters = this.appliedQueryFilters.length > 0 && this._config.showAppliedFilters;
+    const simpleFilterNodes = this._getSimpleFilterNodes([
+      ...this.core.getStaticFilterNodes(),
+      ...this.core.getFacetFilterNodes(),
+      this.core.getLocationRadiusFilterNode()
+    ]);
+    const appliedFiltersArray = this.getAppliedFiltersArray(this.appliedQueryFilters, simpleFilterNodes);
+    const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
     return super.setState({
       ...data,
       resultsCount: this.resultsCount,
@@ -64,7 +111,7 @@ export default class ResultsHeaderComponent extends Component {
       resultsCountEnd: offset + this.resultsLength,
       showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
-      appliedFiltersArray: this.getAppliedFiltersArray()
+      appliedFiltersArray: appliedFiltersArray
     });
   }
 
