@@ -47,8 +47,7 @@ export default class ResultsHeaderComponent extends Component {
   /**
    * Combine all of the applied filters into a format the handlebars
    * template can work with.
-   * @param {Array<AppliedQueryFilter>} appliedQueryFilters
-   * @param {Array<SimpleFilterNode>} simpleFilterNodes
+   * @param {Array<SimpleFilterNode>} appliedFilterNodes
    * @returns {Array<Object>}
    */
   getAppliedFiltersArray (appliedFilterNodes) {

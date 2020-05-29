@@ -2,8 +2,6 @@
 
 import SearchStates from '../storage/searchstates';
 import ResultFactory from './resultfactory';
-import FilterMetadata from '../filters/filtermetadata';
-import Filter from './filter';
 
 export default class Section {
   constructor (data, url, formatters) {
@@ -87,12 +85,8 @@ class AppliedQueryFilter {
   constructor (appliedQueryFilter) {
     this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
     this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
-    this.filter = Filter.from(appliedQueryFilter.filter);
+    this.filter = appliedQueryFilter.filter;
     this.fieldId = this.filter.getFilterKey();
-    this.metadata = new FilterMetadata({
-      fieldName: this.key,
-      displayValue: this.value
-    });
   }
 
   static from (appliedQueryFilters) {

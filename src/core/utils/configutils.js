@@ -7,14 +7,14 @@
  * This is mostly needed for boolean config values, since boolean operators,
  * which we commonly use for defaulting config options, do not work properly
  * in those cases.
- * @param {Object} topLevelConfig
- * @param  {Array<string>}
+ * @param {Object} config
+ * @param {Array<string>}
  * @param {any} defaultValue
  */
-export function parseConfig (topLevelConfig, synonyms, defaultValue) {
+export function defaultConfigOption (config, synonyms, defaultValue) {
   for (let name of synonyms) {
     const accessors = name.split('.');
-    let parentConfig = topLevelConfig;
+    let parentConfig = config;
     let skip = false;
     for (let childConfigAccessor of accessors.slice(0, -1)) {
       if (!(childConfigAccessor in parentConfig)) {

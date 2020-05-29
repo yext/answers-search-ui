@@ -26,4 +26,10 @@ export default class FilterNode {
    * @returns {Array<FilterNode>}
    */
   getChildren () {}
+
+  /**
+   * Recursively get all of the leaf SimpleFilterNodes.
+   * @returns {Array<SimpleFilterNode>}
+   */
+  getSimpleAncesors () {}
 }

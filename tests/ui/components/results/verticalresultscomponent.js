@@ -1,34 +1,30 @@
-/* eslint camelcase: 0 */
 import DOM from '../../../../src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
-import IconComponent from '../../../../src/ui/components/icons/iconcomponent';
-import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
-import Filter from '../../../../src/core/models/filter';
 
-const mockedCore = () => {
-  return {
-    globalStorage: {
-      set: () => {},
-      getState: (storageKey) => {
-        if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
-          return { get: () => { return []; } };
-        } else if (storageKey === StorageKeys.NO_RESULTS_CONFIG) {
-          return {};
-        }
+const mockCore = {
+  globalStorage: {
+    set: () => {},
+    getState: (storageKey) => {
+      if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
+        return { get: () => { return []; } };
+      } else if (storageKey === StorageKeys.NO_RESULTS_CONFIG) {
+        return {};
       }
     }
-  };
+  },
+  getStaticFilterNodes: () => [],
+  getFacetFilterNodes: () => [],
+  getLocationRadiusFilterNode: () => null
 };
 
 DOM.setup(document, new DOMParser());
 
 const COMPONENT_MANAGER = mockManager(
-  mockedCore(),
-  VerticalResultsComponent.defaultTemplateName(),
-  IconComponent.defaultTemplateName()
+  mockCore,
+  VerticalResultsComponent.defaultTemplateName()
 );
 
 describe('vertical results component', () => {
@@ -109,47 +105,5 @@ describe('vertical results component', () => {
     expect(showFieldNames).toEqual(false);
     expect(resultsCountSeparator).toEqual('');
     expect(showAppliedFilters).toBeNull();
-  });
-
-  it('can parse CombinedFilterNodes into SimpleFilterNodes', () => {
-    const component = COMPONENT_MANAGER.create('VerticalResults', {});
-    const node_f0_v0 = FilterNodeFactory.from({
-      filter: Filter.equal('field0', 'value0'),
-      metadata: {
-        fieldName: 'name0',
-        displayValue: 'display0'
-      }
-    });
-    const node_f0_v1 = FilterNodeFactory.from({
-      filter: Filter.equal('field0', 'value1'),
-      metadata: {
-        fieldName: 'name0',
-        displayValue: 'display1'
-      }
-    });
-    const node_f1_v0 = FilterNodeFactory.from({
-      filter: Filter.equal('field1', 'value0'),
-      metadata: {
-        fieldName: 'name1',
-        displayValue: 'display0'
-      }
-    });
-    const node_f1_v1 = FilterNodeFactory.from({
-      filter: Filter.equal('field1', 'value1'),
-      metadata: {
-        fieldName: 'name1',
-        displayValue: 'display1'
-      }
-    });
-    const combinedNode = FilterNodeFactory.and(
-      FilterNodeFactory.and(node_f0_v0, node_f0_v1),
-      FilterNodeFactory.or(node_f1_v0, node_f1_v1)
-    );
-    const simpleFilterNodes = component._getSimpleFilterNodes([combinedNode]);
-    expect(simpleFilterNodes).toHaveLength(4);
-    expect(simpleFilterNodes).toContainEqual(node_f0_v0);
-    expect(simpleFilterNodes).toContainEqual(node_f1_v0);
-    expect(simpleFilterNodes).toContainEqual(node_f0_v1);
-    expect(simpleFilterNodes).toContainEqual(node_f1_v1);
   });
 });

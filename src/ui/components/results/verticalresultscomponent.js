@@ -11,8 +11,10 @@ import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
-import { parseConfig } from '../../../core/utils/configutils';
+import { defaultConfigOption } from '../../../core/utils/configutils';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import Filter from '../../../core/models/filter';
+import FilterMetadata from '../../../core/filters/filtermetadata';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -71,26 +73,38 @@ class VerticalResultsConfig {
        * If present, show the filters that were ultimately applied to this query
        * @type {boolean}
        */
-      show: parseConfig(this, ['appliedFilters.show', 'showAppliedFilters'], true),
+      show: defaultConfigOption(config, ['appliedFilters.show', 'showAppliedFilters'], true),
 
       /**
        * If showResultCount and showAppliedFilters are true,
        * display this separator between the result count and the applied query filters
        * @type {string}
        */
-      resultsCountSeparator: parseConfig(this, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
+      resultsCountSeparator: defaultConfigOption(config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
 
       /**
        * If showAppliedFilters is true, show the field name in the string followed by a colon.
        * @type {boolean}
        */
-      showFieldNames: parseConfig(this, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
+      showFieldNames: defaultConfigOption(config, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
 
       /**
        * Any fieldIds in hiddenFields will be hidden from the list of appied filters.
        * @type {Array<string>}
        */
-      hiddenFields: parseConfig(this, ['appliedFiltersOpts.hiddenFields', 'hiddenFields'], ['builtin.location'])
+      hiddenFields: defaultConfigOption(config, ['appliedFiltersOpts.hiddenFields', 'hiddenFields'], ['builtin.location']),
+
+      /**
+       * The character that should separate each field (and its associated filters) within the applied filter bar
+       * @type {string}
+       */
+      delimiter: defaultConfigOption(config, ['appliedFilters.delimiter'], '|'),
+
+      /**
+       * If the filters are shown, whether or not they should be removable from within the applied filter bar.
+       * @type {boolean}
+       */
+      removable: defaultConfigOption(config, ['appliedFilters.removable'], false)
     };
 
     /**
@@ -170,7 +184,7 @@ export default class VerticalResultsComponent extends Component {
       showChangeFilters: this._config.showChangeFilters,
       showResultCount: this._config.showResultCount,
       removable: this._config.appliedFilters.removable, // TODO implement
-      delimiter: this._config.appliedFilters.delimiter || '|'
+      delimiter: this._config.appliedFilters.delimiter
     };
   }
 
@@ -206,16 +220,15 @@ export default class VerticalResultsComponent extends Component {
     this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
     this.resultsContext = data.resultsContext;
-    this.nlpFilters = (data.appliedQueryFilters || [])
-      .filter(f => !this._config.hiddenFields.includes(f.fieldId));
+    this.nlpFilters = data.appliedQueryFilters || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
+    this.appliedFilterNodes = this._getAppliedFilterNodes(this._convertNlpFiltersToFilterNodes(this.nlpFilters));
     const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
-      (this.resultsHeaderOpts.showAppliedFilters && this.nlpFilters.length > 0);
+      (this.resultsHeaderOpts.showAppliedFilters && this.appliedFilterNodes.length > 0);
     this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
-
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -259,27 +272,18 @@ export default class VerticalResultsComponent extends Component {
   }
 
   /**
-   * Given an array of nlp filters from the backend (see class AppliedQueryFilter within section.js),
-   * turn them into an array of SimpleFilterNodes
-   * @param {Array<Object>} nlpFilters
+   * Given an array of nlp filters from the backend turn them into an array of SimpleFilterNodes
+   * @param {Array<AppliedQueryFilter>} nlpFilters
    * @returns {Array<SimpleFilterNode>}
    */
   _convertNlpFiltersToFilterNodes (nlpFilters) {
     return nlpFilters.map(nlpFilter => FilterNodeFactory.from({
-      filter: nlpFilter.filter, metadata: nlpFilter.metadata
+      filter: Filter.from(nlpFilter.filter),
+      metadata: new FilterMetadata({
+        fieldName: nlpFilter.key,
+        displayValue: nlpFilter.value
+      })
     }));
-  }
-
-  /**
-   * Recursively get all of the root FilterNodes of the given array,
-   * which will all be SimpleFilterNodes
-   * @param {Array<FilterNode>} filterNodes
-   * @returns {Array<SimpleFilterNode>}
-   */
-  _getSimpleFilterNodes (filterNodes) {
-    return filterNodes.flatMap(fn =>
-      fn.getChildren().length ? this._getSimpleFilterNodes(fn.getChildren()) : fn
-    );
   }
 
   /**
@@ -290,19 +294,25 @@ export default class VerticalResultsComponent extends Component {
    * @returns {Array<FilterNode>}
    */
   _getAppliedFilterNodes (filterNodes) {
-    return this._getSimpleFilterNodes([
+    const allFilterNodes = [
       ...filterNodes,
       ...this.core.getStaticFilterNodes(),
-      ...this.core.getFacetFilterNodes(),
-      this.core.getLocationRadiusFilterNode()
-    ]).filter(fn => {
-      const { fieldName, displayValue } = fn.getMetadata();
-      if (!fieldName || !displayValue) {
-        return false;
-      }
-      const fieldId = fn.getFilter().getFilterKey();
-      return !this._config.appliedFilters.hiddenFields.includes(fieldId);
-    });
+      ...this.core.getFacetFilterNodes()
+    ];
+    const locationRadiusFilterNode = this.core.getLocationRadiusFilterNode();
+    if (locationRadiusFilterNode) {
+      allFilterNodes.push(locationRadiusFilterNode);
+    }
+    return allFilterNodes
+      .flatMap(fn => fn.getSimpleAncestors())
+      .filter(fn => {
+        const { fieldName, displayValue } = fn.getMetadata();
+        if (!fieldName || !displayValue) {
+          return false;
+        }
+        const fieldId = fn.getFilter().getFilterKey();
+        return !this._config.appliedFilters.hiddenFields.includes(fieldId);
+      });
   }
 
   addChild (data, type, opts) {
@@ -347,7 +357,7 @@ export default class VerticalResultsComponent extends Component {
       const resultsHeaderData = {
         resultsLength: this.results.length,
         resultsCount: this.resultsCount,
-        appliedFilterNodes: this._getAppliedFilterNodes(this._convertNlpFiltersToFilterNodes(this.nlpFilters)),
+        appliedFilterNodes: this.appliedFilterNodes,
         ...data
       };
       const _opts = { ...opts };
