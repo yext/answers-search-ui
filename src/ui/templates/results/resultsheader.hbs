@@ -34,7 +34,7 @@
           <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
         {{/each}}
         {{#unless @last}}
-          <div class="yxt-ResultsHeader-filterSeparator">|</div>
+          <div class="yxt-ResultsHeader-filterSeparator">{{../_config.delimiter}}</div>
         {{/unless}}
       {{/each}}
     {{#every _config.isUniversal _config.verticalURL _config.showChangeFilters}}

@@ -60,4 +60,12 @@ export default class CombinedFilterNode extends FilterNode {
   getChildren () {
     return this.children;
   }
+
+  /**
+   * Recursively get all of the leaf SimpleFilterNodes.
+   * @returns {Array<SimpleFilterNode>}
+   */
+  getSimpleAncestors () {
+    return this.getChildren().flatMap(fn => fn.getSimpleAncestors());
+  }
 }
