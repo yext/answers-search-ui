@@ -2,6 +2,8 @@
 
 import SearchStates from '../storage/searchstates';
 import ResultFactory from './resultfactory';
+import FilterMetadata from '../filters/filtermetadata';
+import Filter from './filter';
 
 export default class Section {
   constructor (data, url, formatters) {
@@ -81,10 +83,16 @@ export default class Section {
 class AppliedQueryFilter {
   // Support legacy model and new model until fully migrated.
   // TODO(billy) Remove the left expression during assignment when migrated.
+  // TODO(SPR-2394): convert this into a FilterNode here instead of in VerticalResults
   constructor (appliedQueryFilter) {
     this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
     this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
-    this.fieldId = Object.keys(appliedQueryFilter.filter)[0];
+    this.filter = Filter.from(appliedQueryFilter.filter);
+    this.fieldId = this.filter.getFilterKey();
+    this.metadata = new FilterMetadata({
+      fieldName: this.key,
+      displayValue: this.value
+    });
   }
 
   static from (appliedQueryFilters) {

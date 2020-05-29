@@ -10,7 +10,6 @@ const DEFAULT_CONFIG = {
   resultsCountSeparator: '|',
   verticalURL: undefined,
   showChangeFilters: false,
-  hiddenFields: ['builtin.location'],
   removable: false, // TODO implement
   delimiter: '|',
   isUniversal: false
@@ -35,25 +34,14 @@ export default class ResultsHeaderComponent extends Component {
     this.resultsLength = data.resultsLength || 0;
 
     /**
-     * @type {Array<AppliedQueryFilter>}
+     * Array of filterNodes to display in the applied filters bar.
+     * @type {Array<FilterNode>}
      */
-    this.appliedQueryFilters = data.appliedQueryFilters || [];
+    this.appliedFilterNodes = data.appliedFilterNodes || [];
   }
 
   static areDuplicateNamesAllowed () {
     return true;
-  }
-
-  /**
-   * Recursively get all of the root FilterNodes of the given array,
-   * which will all be SimpleFilterNodes
-   * @param {Array<FilterNode>} filterNodes
-   * @returns {Array<SimpleFilterNode>}
-   */
-  _getSimpleFilterNodes (filterNodes) {
-    return filterNodes.flatMap(fn =>
-      fn.getChildren().length ? this._getSimpleFilterNodes(fn.getChildren()) : fn
-    );
   }
 
   /**
@@ -63,27 +51,10 @@ export default class ResultsHeaderComponent extends Component {
    * @param {Array<SimpleFilterNode>} simpleFilterNodes
    * @returns {Array<Object>}
    */
-  getAppliedFiltersArray (appliedQueryFilters, simpleFilterNodes) {
+  getAppliedFiltersArray (appliedFilterNodes) {
     const groupedFilters = {};
-    appliedQueryFilters.forEach(filter => {
-      if (this._config.hiddenFields.includes(filter.fieldId)) {
-        return;
-      }
-      if (!groupedFilters[filter.key]) {
-        groupedFilters[filter.key] = [];
-      }
-      groupedFilters[filter.key].push(filter.value);
-    });
-    simpleFilterNodes.forEach(fn => {
-      const metadata = fn.getMetadata();
-      const { fieldName, displayValue } = metadata;
-      if (!fieldName || !displayValue) {
-        return;
-      }
-      const fieldId = fn.getFilter().getFilterKey();
-      if (fieldId && this._config.hiddenFields.includes(fieldId)) {
-        return;
-      }
+    appliedFilterNodes.forEach(fn => {
+      const { fieldName, displayValue } = fn.getMetadata();
       if (!groupedFilters[fieldName]) {
         groupedFilters[fieldName] = [];
       }
@@ -97,12 +68,7 @@ export default class ResultsHeaderComponent extends Component {
 
   setState (data) {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-    const simpleFilterNodes = this._getSimpleFilterNodes([
-      ...this.core.getStaticFilterNodes(),
-      ...this.core.getFacetFilterNodes(),
-      this.core.getLocationRadiusFilterNode()
-    ]);
-    const appliedFiltersArray = this.getAppliedFiltersArray(this.appliedQueryFilters, simpleFilterNodes);
+    const appliedFiltersArray = this.getAppliedFiltersArray(this.appliedFilterNodes);
     const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
     return super.setState({
       ...data,
