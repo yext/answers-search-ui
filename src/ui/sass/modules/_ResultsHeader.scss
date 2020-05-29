@@ -32,7 +32,6 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   padding: calc(var(--yxt-results-header-spacing) / 2) var(--yxt-results-header-spacing);
   display: flex;
   align-items: baseline;
-  height: 20px;
 
   &-wrapper {
     display: flex;
@@ -63,7 +62,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   &-filterLabel
   {
     display: flex;
-    margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    margin-right: 5px;
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),

@@ -51,4 +51,13 @@ export default class SimpleFilterNode extends FilterNode {
   getMetadata () {
     return this.metadata;
   }
+
+  /**
+   * Recursively get all of the leaf SimpleFilterNodes.
+   * Since SimpleFilterNodes have no children this just returns itself.
+   * @returns {Array<SimpleFilterNode>}
+   */
+  getSimpleAncestors () {
+    return this;
+  }
 }

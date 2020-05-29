@@ -19,11 +19,17 @@ export default class FilterNode {
    * Returns the metadata for this node's filter.
    * @returns {FilterMetadata}
    */
-  getFilterMetadata () {}
+  getMetadata () {}
 
   /**
    * Returns the children of this node.
    * @returns {Array<FilterNode>}
    */
   getChildren () {}
+
+  /**
+   * Recursively get all of the leaf SimpleFilterNodes.
+   * @returns {Array<SimpleFilterNode>}
+   */
+  getSimpleAncestors () {}
 }
