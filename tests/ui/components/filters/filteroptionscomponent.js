@@ -450,7 +450,7 @@ describe('filter options works with different optionTypes', () => {
         fieldName: 'filterOptionsLabel',
         displayValue: '12345 meters'
       }),
-      filter: Filter.locationRadius(12345)
+      filter: new Filter({ value: 12345 })
     });
     expect(setLocationRadiusFilterNode.mock.calls[0][0]).toEqual(filterNode);
   });

@@ -398,7 +398,7 @@ export default class FilterOptionsComponent extends Component {
     if (selectedOption.value !== 0) {
       return FilterNodeFactory.from({
         metadata: metadata,
-        filter: Filter.locationRadius(selectedOption.value)
+        filter: { value: selectedOption.value }
       });
     } else {
       return FilterNodeFactory.from({

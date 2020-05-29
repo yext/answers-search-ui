@@ -157,7 +157,9 @@ describe('FilterRegistry', () => {
       fieldName: 'label1',
       displayValue: 'displayvalue1'
     });
-    const filter = Filter.locationRadius(1234);
+    const filter = new Filter({
+      value: 1234
+    });
     const filterNode = FilterNodeFactory.from({
       metadata: metadata,
       filter: filter

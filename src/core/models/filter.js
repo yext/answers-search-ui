@@ -197,9 +197,6 @@ export default class Filter {
    * @param {number} radius
    */
   static locationRadius (radius) {
-    return new Filter({
-      value: radius
-    });
   }
 
   /**
