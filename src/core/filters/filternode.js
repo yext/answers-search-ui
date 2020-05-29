@@ -31,5 +31,5 @@ export default class FilterNode {
    * Recursively get all of the leaf SimpleFilterNodes.
    * @returns {Array<SimpleFilterNode>}
    */
-  getSimpleAncesors () {}
+  getSimpleAncestors () {}
 }

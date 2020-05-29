@@ -225,7 +225,7 @@ export default class VerticalResultsComponent extends Component {
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    this.appliedFilterNodes = this._getAppliedFilterNodes(this._convertNlpFiltersToFilterNodes(this.nlpFilters));
+    this.appliedFilterNodes = this._getAppliedFilterNodes(this.nlpFilters);
     const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
       (this.resultsHeaderOpts.showAppliedFilters && this.appliedFilterNodes.length > 0);
     this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
@@ -295,7 +295,7 @@ export default class VerticalResultsComponent extends Component {
    */
   _getAppliedFilterNodes (filterNodes) {
     const allFilterNodes = [
-      ...filterNodes,
+      ...this._convertNlpFiltersToFilterNodes(filterNodes),
       ...this.core.getStaticFilterNodes(),
       ...this.core.getFacetFilterNodes()
     ];
