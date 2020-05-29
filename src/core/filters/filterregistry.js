@@ -48,6 +48,8 @@ export default class FilterRegistry {
 
   /**
    * Gets the filter string to send in a search query.
+   * TODO: move payload method logic into core.js, since it is only used there.
+   * Add something like a getFilterNodeByKey method.
    * @returns {string}
    */
   getStaticFilterPayload () {
