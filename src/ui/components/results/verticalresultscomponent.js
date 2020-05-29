@@ -289,13 +289,14 @@ export default class VerticalResultsComponent extends Component {
   /**
    * Returns an array of all filter nodes currently being applied to the search.
    * Filters out filterNodes without fieldName or displayValue, or that have a
-   * fieldId listed in this._config.hiddenFields.
-   * @param {Array<FilterNode>} filterNodes
+   * fieldId listed in this._config.hiddenFields. Any AppliedQueryFilters are first
+   * converted into a FilterNode.
+   * @param {Array<AppliedQueryFilter>} nlpFilters
    * @returns {Array<FilterNode>}
    */
-  _getAppliedFilterNodes (filterNodes) {
+  _getAppliedFilterNodes (nlpFilters) {
     const allFilterNodes = [
-      ...this._convertNlpFiltersToFilterNodes(filterNodes),
+      ...this._convertNlpFiltersToFilterNodes(nlpFilters),
       ...this.core.getStaticFilterNodes(),
       ...this.core.getFacetFilterNodes()
     ];
