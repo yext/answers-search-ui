@@ -140,6 +140,8 @@ export default class Core {
       this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
+    const locationRadiusFilterNode = this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
@@ -153,7 +155,8 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS)
+        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
+        locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -358,6 +361,21 @@ export default class Core {
 
   setStaticFilterNodes (namespace, filterNode) {
     this.filterRegistry.setStaticFilterNodes(namespace, filterNode);
+  }
+
+  /**
+   * Sets the locationRadius filterNode.
+   * @param {FilterNode} filterNode
+   */
+  setLocationRadiusFilterNode (filterNode) {
+    this.filterRegistry.setLocationRadiusFilterNode(filterNode);
+  }
+
+  /**
+   * Clears the locationRadius filterNode.
+   */
+  clearLocationRadiusFilterNode () {
+    this.filterRegistry.clearLocationRadiusFilterNode();
   }
 
   enableDynamicFilters () {

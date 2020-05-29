@@ -48,6 +48,7 @@ export default class FilterRegistry {
 
   /**
    * Gets the filter string to send in a search query.
+   * TODO: move payload method logic into core.js, since it is only used there.
    * @returns {string}
    */
   getStaticFilterPayload () {
@@ -77,6 +78,14 @@ export default class FilterRegistry {
   }
 
   /**
+   * Get the FilterNode with the corresponding key. Defaults to null.
+   * @param {string} key
+   */
+  getFilterNodeByKey (key) {
+    return this.globalStorage.getState(`${this.filterRegistryId}.${key}`);
+  }
+
+  /**
    * Sets the specified {@link FilterNode} under the given key.
    * Will replace a preexisting node if there is one.
    * @param {string} key
@@ -98,5 +107,14 @@ export default class FilterRegistry {
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
     this.globalStorage.set(`${this.filterRegistryId}.${StorageKeys.FACET_FILTER_NODE}`, filterNodes);
+  }
+
+  /**
+   * Sets the locationRadius filterNode. There may only be one locationRadius active
+   * at a time.
+   * @param {FilterNode} filterNode
+   */
+  setLocationRadiusFilterNode (filterNode) {
+    this.globalStorage.set(`${this.filterRegistryId}.${StorageKeys.LOCATION_RADIUS}`, filterNode);
   }
 }
