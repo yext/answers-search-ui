@@ -11,6 +11,10 @@ import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
+import { defaultConfigOption } from '../../../core/utils/configutils';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import Filter from '../../../core/models/filter';
+import FilterMetadata from '../../../core/filters/filtermetadata';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -61,29 +65,47 @@ class VerticalResultsConfig {
     this.showResultCount = config.showResultCount === undefined ? true : config.showResultCount;
 
     /**
-     * If present, show the filters that were ultimately applied to this query
-     * @type {boolean}
+     * Config for the applied filters in the results header.
+     * @type {Object}
      */
-    this.showAppliedFilters = config.showAppliedFilters === undefined ? true : config.showAppliedFilters;
+    this.appliedFilters = {
+      /**
+       * If present, show the filters that were ultimately applied to this query
+       * @type {boolean}
+       */
+      show: defaultConfigOption(config, ['appliedFilters.show', 'showAppliedFilters'], true),
 
-    /**
-     * If showResultCount and showAppliedFilters are true,
-     * display this separator between the result count and the applied query filters
-     * @type {string}
-     */
-    this.resultsCountSeparator = config.resultsCountSeparator || '|';
+      /**
+       * If showResultCount and showAppliedFilters are true,
+       * display this separator between the result count and the applied query filters
+       * @type {string}
+       */
+      resultsCountSeparator: defaultConfigOption(config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
 
-    /**
-     * If showAppliedFilters is true, show the field name in the string followed by a colon.
-     * @type {boolean}
-     */
-    this.showFieldNames = config.showFieldNames || false;
+      /**
+       * If showAppliedFilters is true, show the field name in the string followed by a colon.
+       * @type {boolean}
+       */
+      showFieldNames: defaultConfigOption(config, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
 
-    /**
-     * Any fieldIds in hiddenFields will be hidden from the list of appied filters.
-     * @type {Array<string>}
-     */
-    this.hiddenFields = config.hiddenFields || ['builtin.entityType'];
+      /**
+       * Any fieldIds in hiddenFields will be hidden from the list of appied filters.
+       * @type {Array<string>}
+       */
+      hiddenFields: defaultConfigOption(config, ['appliedFilters.hiddenFields', 'hiddenFields'], ['builtin.location']),
+
+      /**
+       * The character that should separate each field (and its associated filters) within the applied filter bar
+       * @type {string}
+       */
+      delimiter: defaultConfigOption(config, ['appliedFilters.delimiter'], '|'),
+
+      /**
+       * If the filters are shown, whether or not they should be removable from within the applied filter bar.
+       * @type {boolean}
+       */
+      removable: defaultConfigOption(config, ['appliedFilters.removable'], false)
+    };
 
     /**
      * Text for the view more button.
@@ -155,8 +177,15 @@ export default class VerticalResultsComponent extends Component {
     /**
      * Config options used in the {@link ResultsHeaderComponent}
      */
-    const { showFieldNames, resultsCountSeparator, showResultCount, showAppliedFilters, showChangeFilters } = this._config;
-    this.resultsHeaderOpts = { showFieldNames, resultsCountSeparator, showResultCount, showAppliedFilters, showChangeFilters };
+    this.resultsHeaderOpts = {
+      showFieldNames: this._config.appliedFilters.showFieldNames,
+      resultsCountSeparator: this._config.appliedFilters.resultsCountSeparator,
+      showAppliedFilters: this._config.appliedFilters.show,
+      showChangeFilters: this._config.showChangeFilters,
+      showResultCount: this._config.showResultCount,
+      removable: this._config.appliedFilters.removable, // TODO implement
+      delimiter: this._config.appliedFilters.delimiter
+    };
   }
 
   mount () {
@@ -191,16 +220,15 @@ export default class VerticalResultsComponent extends Component {
     this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
     this.resultsContext = data.resultsContext;
-    this.appliedQueryFilters = (data.appliedQueryFilters || [])
-      .filter(f => !this._config.hiddenFields.includes(f.fieldId));
+    this.nlpFilters = data.appliedQueryFilters || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
+    this.appliedFilterNodes = this._getAppliedFilterNodes(this.nlpFilters);
     const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
-      (this.resultsHeaderOpts.showAppliedFilters && this.appliedQueryFilters.length > 0);
+      (this.resultsHeaderOpts.showAppliedFilters && this.appliedFilterNodes.length > 0);
     this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
-
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -241,6 +269,51 @@ export default class VerticalResultsComponent extends Component {
    */
   static defaultTemplateName (config) {
     return 'results/verticalresults';
+  }
+
+  /**
+   * Given an array of nlp filters from the backend turn them into an array of SimpleFilterNodes
+   * @param {Array<AppliedQueryFilter>} nlpFilters
+   * @returns {Array<SimpleFilterNode>}
+   */
+  _convertNlpFiltersToFilterNodes (nlpFilters) {
+    return nlpFilters.map(nlpFilter => FilterNodeFactory.from({
+      filter: Filter.from(nlpFilter.filter),
+      metadata: new FilterMetadata({
+        fieldName: nlpFilter.key,
+        displayValue: nlpFilter.value
+      })
+    }));
+  }
+
+  /**
+   * Returns an array of all filter nodes currently being applied to the search.
+   * Filters out filterNodes without fieldName or displayValue, or that have a
+   * fieldId listed in this._config.hiddenFields. Any AppliedQueryFilters are first
+   * converted into a FilterNode.
+   * @param {Array<AppliedQueryFilter>} nlpFilters
+   * @returns {Array<FilterNode>}
+   */
+  _getAppliedFilterNodes (nlpFilters) {
+    const allFilterNodes = [
+      ...this._convertNlpFiltersToFilterNodes(nlpFilters),
+      ...this.core.getStaticFilterNodes(),
+      ...this.core.getFacetFilterNodes()
+    ];
+    const locationRadiusFilterNode = this.core.getLocationRadiusFilterNode();
+    if (locationRadiusFilterNode) {
+      allFilterNodes.push(locationRadiusFilterNode);
+    }
+    return allFilterNodes
+      .flatMap(fn => fn.getSimpleAncestors())
+      .filter(fn => {
+        const { fieldName, displayValue } = fn.getMetadata();
+        if (!fieldName || !displayValue) {
+          return false;
+        }
+        const fieldId = fn.getFilter().getFilterKey();
+        return !this._config.appliedFilters.hiddenFields.includes(fieldId);
+      });
   }
 
   addChild (data, type, opts) {
@@ -285,7 +358,7 @@ export default class VerticalResultsComponent extends Component {
       const resultsHeaderData = {
         resultsLength: this.results.length,
         resultsCount: this.resultsCount,
-        appliedQueryFilters: this.appliedQueryFilters,
+        appliedFilterNodes: this.appliedFilterNodes,
         ...data
       };
       const _opts = { ...opts };

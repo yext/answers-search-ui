@@ -9,7 +9,10 @@ const DEFAULT_CONFIG = {
   showFieldNames: false,
   resultsCountSeparator: '|',
   verticalURL: undefined,
-  showChangeFilters: false
+  showChangeFilters: false,
+  removable: false, // TODO implement
+  delimiter: '|',
+  isUniversal: false
 };
 
 export default class ResultsHeaderComponent extends Component {
@@ -31,22 +34,30 @@ export default class ResultsHeaderComponent extends Component {
     this.resultsLength = data.resultsLength || 0;
 
     /**
-     * @type {Array<AppliedQueryFilter>}
+     * Array of filterNodes to display in the applied filters bar.
+     * @type {Array<FilterNode>}
      */
-    this.appliedQueryFilters = data.appliedQueryFilters || [];
+    this.appliedFilterNodes = data.appliedFilterNodes || [];
   }
 
   static areDuplicateNamesAllowed () {
     return true;
   }
 
-  getAppliedFiltersArray () {
+  /**
+   * Combine all of the applied filters into a format the handlebars
+   * template can work with.
+   * @param {Array<SimpleFilterNode>} appliedFilterNodes
+   * @returns {Array<Object>}
+   */
+  getAppliedFiltersArray (appliedFilterNodes) {
     const groupedFilters = {};
-    this.appliedQueryFilters.forEach(filter => {
-      if (!groupedFilters[filter.key]) {
-        groupedFilters[filter.key] = [];
+    appliedFilterNodes.forEach(fn => {
+      const { fieldName, displayValue } = fn.getMetadata();
+      if (!groupedFilters[fieldName]) {
+        groupedFilters[fieldName] = [];
       }
-      groupedFilters[filter.key].push(filter.value);
+      groupedFilters[fieldName].push(displayValue);
     });
     // Has to be parsed into an array because our handlebars can only loop through arrays, not objects.
     return Object.keys(groupedFilters).map(label => ({
@@ -56,7 +67,8 @@ export default class ResultsHeaderComponent extends Component {
 
   setState (data) {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-    const shouldShowFilters = this.appliedQueryFilters.length > 0 && this._config.showAppliedFilters;
+    const appliedFiltersArray = this.getAppliedFiltersArray(this.appliedFilterNodes);
+    const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
     return super.setState({
       ...data,
       resultsCount: this.resultsCount,
@@ -64,7 +76,7 @@ export default class ResultsHeaderComponent extends Component {
       resultsCountEnd: offset + this.resultsLength,
       showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
-      appliedFiltersArray: this.getAppliedFiltersArray()
+      appliedFiltersArray: appliedFiltersArray
     });
   }
 
