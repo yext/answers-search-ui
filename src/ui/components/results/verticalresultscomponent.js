@@ -92,7 +92,7 @@ class VerticalResultsConfig {
        * Any fieldIds in hiddenFields will be hidden from the list of appied filters.
        * @type {Array<string>}
        */
-      hiddenFields: defaultConfigOption(config, ['appliedFiltersOpts.hiddenFields', 'hiddenFields'], ['builtin.location']),
+      hiddenFields: defaultConfigOption(config, ['appliedFilters.hiddenFields', 'hiddenFields'], ['builtin.location']),
 
       /**
        * The character that should separate each field (and its associated filters) within the applied filter bar
