@@ -4,6 +4,8 @@ import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
 import Facet from '../../../src/core/models/facet';
 import Filter from '../../../src/core/models/filter';
 import GlobalStorage from '../../../src/core/storage/globalstorage';
+import FilterMetadata from '../../../src/core/filters/filtermetadata';
+import StorageKeys from '../../../src/core/storage/storagekeys';
 
 describe('FilterRegistry', () => {
   let node1, node2, filter1, filter2, registry;
@@ -149,5 +151,25 @@ describe('FilterRegistry', () => {
     expect(expectedFacet).toEqual(expectedFacetRaw);
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
     expect(JSON.parse(registry.getFacetFilterPayload())).toEqual(JSON.parse(JSON.stringify(expectedFacet)));
+  });
+
+  it('can set locationRadius FilterNodes', () => {
+    const metadata = new FilterMetadata({
+      fieldName: 'label1',
+      displayValue: 'displayvalue1'
+    });
+    const filter = new Filter({
+      value: 1234
+    });
+    const filterNode = FilterNodeFactory.from({
+      metadata: metadata,
+      filter: filter
+    });
+    registry.setLocationRadiusFilterNode(filterNode);
+    let locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    expect(locationRadiusFilterNode.getFilter().value).toEqual(1234);
+    registry.setLocationRadiusFilterNode(FilterNodeFactory.from());
+    locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    expect(locationRadiusFilterNode).toEqual(FilterNodeFactory.from());
   });
 });

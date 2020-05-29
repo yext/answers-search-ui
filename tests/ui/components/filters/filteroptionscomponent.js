@@ -4,10 +4,12 @@ import mockManager from '../../../setup/managermocker';
 import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
+import FilterMetadata from 'src/core/filters/filtermetadata';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
   let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes;
+
   const options = [
     {
       label: 'ciri',
@@ -75,7 +77,7 @@ describe('filter options component', () => {
     defaultConfig = {
       container: '#test-component',
       control: 'singleoption',
-      options: [],
+      options: options,
       label: filterOptionsLabel
     };
   });
@@ -89,8 +91,7 @@ describe('filter options component', () => {
   it('renders correct number of options + show more with default showMoreLimit of 5', () => {
     const config = {
       ...defaultConfig,
-      control: 'multioption',
-      options: options
+      control: 'multioption'
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     const wrapper = mount(component);
@@ -103,7 +104,6 @@ describe('filter options component', () => {
     const config = {
       ...defaultConfig,
       control: 'multioption',
-      options: options,
       showMoreLimit: options.length
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -116,7 +116,6 @@ describe('filter options component', () => {
     const config = {
       ...defaultConfig,
       control: 'multioption',
-      options: options,
       showMoreLimit: options.length
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -194,7 +193,6 @@ describe('filter options component', () => {
     const config = {
       ...defaultConfig,
       control: 'singleoption',
-      options: options,
       showMoreLimit: options.length
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -206,7 +204,6 @@ describe('filter options component', () => {
     const config = {
       ...defaultConfig,
       control: 'singleoption',
-      options: options,
       showMoreLimit: options.length
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -231,5 +228,277 @@ describe('filter options component', () => {
     component._updateOption(5, true);
     expect(component.getFilterNode()).toEqual(nodes[5]);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
+  });
+});
+
+describe('filter options when setting selected options in config', () => {
+  let COMPONENT_MANAGER, defaultConfig;
+
+  beforeEach(() => {
+    const bodyEl = DOM.query('body');
+    DOM.empty(bodyEl);
+    DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
+
+    COMPONENT_MANAGER = mockManager(
+      {
+        globalStorage: {
+          getState: key => {
+            if (key === 'test-previous-options') {
+              return ['label1', 'label2'];
+            }
+          },
+          delete: () => {}
+        }
+      },
+      FilterOptionsComponent.defaultTemplateName()
+    );
+
+    defaultConfig = {
+      container: '#test-component',
+      options: [
+        {
+          label: 'label1',
+          field: 'field',
+          value: 'val1'
+        },
+        {
+          label: 'label2',
+          field: 'field',
+          value: 'val2',
+          selected: false
+        },
+        {
+          label: 'label3',
+          field: 'field',
+          value: 'val3',
+          selected: true
+        },
+        {
+          label: 'label4',
+          field: 'field',
+          value: 'val4',
+          selected: true
+        }
+      ]
+    };
+  });
+
+  it('has no selected options by default', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'singleoption',
+      options: [
+        {
+          label: 'label1',
+          field: 'field',
+          value: 'val1'
+        },
+        {
+          label: 'label2',
+          field: 'field',
+          value: 'val2'
+        },
+        {
+          label: 'label3',
+          field: 'field',
+          value: 'val3'
+        }
+      ]
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    const options = component.config.options;
+    expect(options).toHaveLength(3);
+    expect(options.filter(o => o.selected)).toHaveLength(0);
+  });
+
+  it('properly sets selected options for multioption', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'multioption'
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    const options = component.config.options;
+    expect(options).toHaveLength(4);
+    const selectedOptions = options.filter(o => o.selected);
+    expect(selectedOptions).toHaveLength(2);
+    expect(selectedOptions[0].label).toEqual('label3');
+    expect(selectedOptions[1].label).toEqual('label4');
+  });
+
+  it('prioritizes previously selected options over config\'s selected options for multioption', () => {
+    const config = {
+      ...defaultConfig,
+      name: 'test-previous-options',
+      control: 'multioption'
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    const options = component.config.options;
+    expect(options).toHaveLength(4);
+    const selectedOptions = options.filter(o => o.selected);
+    expect(selectedOptions).toHaveLength(2);
+    expect(selectedOptions[0].label).toEqual('label1');
+    expect(selectedOptions[1].label).toEqual('label2');
+  });
+
+  it('properly sets selected option for singleoption', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'singleoption'
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    const options = component.config.options;
+    expect(options).toHaveLength(4);
+    const selectedOptions = options.filter(o => o.selected);
+    expect(selectedOptions).toHaveLength(1);
+    expect(selectedOptions[0].label).toEqual('label3');
+  });
+
+  it('prioritizes previously selected option over config\'s selected options for singleoption', () => {
+    const config = {
+      ...defaultConfig,
+      name: 'test-previous-options',
+      control: 'singleoption'
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    const options = component.config.options;
+    expect(options).toHaveLength(4);
+    const selectedOptions = options.filter(o => o.selected);
+    expect(selectedOptions).toHaveLength(1);
+    expect(selectedOptions[0].label).toEqual('label1');
+  });
+});
+
+describe('filter options works with different optionTypes', () => {
+  let COMPONENT_MANAGER, defaultConfig, setLocationRadiusFilterNode, setStaticFilterNodes;
+
+  beforeEach(() => {
+    const bodyEl = DOM.query('body');
+    DOM.empty(bodyEl);
+    DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
+    setLocationRadiusFilterNode = jest.fn();
+    setStaticFilterNodes = jest.fn();
+
+    COMPONENT_MANAGER = mockManager(
+      {
+        globalStorage: {
+          getState: () => {},
+          delete: () => {}
+        },
+        persistentStorage: {
+          set: () => {}
+        },
+        setLocationRadiusFilterNode,
+        setStaticFilterNodes
+      },
+      FilterOptionsComponent.defaultTemplateName()
+    );
+
+    defaultConfig = {
+      container: '#test-component',
+      label: 'filterOptionsLabel'
+    };
+  });
+
+  it('defaults to STATIC_FILTER', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'singleoption',
+      options: [
+        {
+          label: 'label1',
+          field: 'field',
+          value: 'val1'
+        }
+      ]
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
+    component.apply();
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
+  });
+
+  it('works with RADIUS_FILTER', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'singleoption',
+      optionType: 'RADIUS_FILTER',
+      options: [
+        {
+          label: '12345 meters',
+          value: 12345,
+          selected: true
+        }
+      ]
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
+    component.apply();
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(1);
+    const filterNode = FilterNodeFactory.from({
+      metadata: new FilterMetadata({
+        fieldName: 'filterOptionsLabel',
+        displayValue: '12345 meters'
+      }),
+      filter: new Filter({ value: 12345 })
+    });
+    expect(setLocationRadiusFilterNode.mock.calls[0][0]).toEqual(filterNode);
+  });
+
+  it('clears locationRadius when radius = 0', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'singleoption',
+      optionType: 'RADIUS_FILTER',
+      options: [
+        {
+          label: 'le 0 metres',
+          value: 0,
+          selected: true
+        }
+      ]
+    };
+
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
+    component.apply();
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
+    expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(1);
+    const filterNode = FilterNodeFactory.from({
+      metadata: new FilterMetadata({
+        fieldName: 'filterOptionsLabel',
+        displayValue: 'le 0 metres'
+      }),
+      filter: Filter.empty()
+    });
+    expect(setLocationRadiusFilterNode.mock.calls[0][0]).toEqual(filterNode);
+  });
+
+  it('throws error when trying to use multioption with RADIUS_FILTER', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'multioption',
+      optionType: 'RADIUS_FILTER',
+      options: [
+        {
+          label: '12345 meters',
+          value: 12345,
+          selected: true
+        }
+      ]
+    };
+
+    expect(() => COMPONENT_MANAGER.create('FilterOptions', config)).toThrow();
   });
 });
