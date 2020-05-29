@@ -140,7 +140,11 @@ export default class Core {
       this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
-    const locationRadiusFilterNode = this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    if (!useFacets) {
+      this.filterRegistry.setFacetFilterNodes([], []);
+    }
+
+    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
 
     return this._searcher
       .verticalSearch(verticalKey, {
@@ -149,7 +153,7 @@ export default class Core {
         input: this.globalStorage.getState(StorageKeys.QUERY) || '',
         ...query,
         filter: this.filterRegistry.getStaticFilterPayload(),
-        facetFilter: useFacets ? this.filterRegistry.getFacetFilterPayload() : null,
+        facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
@@ -353,6 +357,18 @@ export default class Core {
    */
   setQueryId (queryId) {
     this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
+  }
+
+  getStaticFilterNodes () {
+    return this.filterRegistry.getStaticFilterNodes();
+  }
+
+  getFacetFilterNodes () {
+    return this.filterRegistry.getFacetFilterNodes();
+  }
+
+  getLocationRadiusFilterNode () {
+    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
   }
 
   setFacetFilterNodes (availableFieldids = [], filterNodes = []) {

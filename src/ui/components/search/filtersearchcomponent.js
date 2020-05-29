@@ -101,15 +101,17 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || Filter.empty();
+    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`);
     if (typeof this.filter === 'string') {
       try {
         this.filter = JSON.parse(this.filter);
       } catch (e) {}
     }
 
-    const filterNode = this._buildFilterNode(this.query, this.filter);
-    this.core.setStaticFilterNodes(this.name, filterNode);
+    if (this.query && this.filter) {
+      const filterNode = this._buildFilterNode(this.query, this.filter);
+      this.core.setStaticFilterNodes(this.name, filterNode);
+    }
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
   }
