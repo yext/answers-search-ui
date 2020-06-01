@@ -67,7 +67,7 @@
             </label>
           </div>
         {{else}}
-          <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#ifgte @index ../showMoreLimit}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/ifgte}}">
+          <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#if (gte @index ../showMoreLimit)}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/if}}">
             <input
               type="checkbox"
               class="js-yext-filter-option yxt-FilterOptions-input yxt-FilterOptions-checkboxInput js-yxt-FilterOptions-checkboxInput"
