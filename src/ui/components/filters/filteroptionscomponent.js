@@ -6,6 +6,9 @@ import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 import HighlightedValue from '../../../core/models/highlightedvalue';
 import levenshtein from 'js-levenshtein';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
+import { groupArray } from '../../../core/utils/arrayutils';
 
 /**
  * The currently supported controls
@@ -16,6 +19,14 @@ const SUPPORTED_CONTROLS = [
   'multioption'
 ];
 
+/**
+ * The currently supported option types.
+ */
+const OptionTypes = {
+  RADIUS_FILTER: 'RADIUS_FILTER',
+  STATIC_FILTER: 'STATIC_FILTER'
+};
+
 class FilterOptionsConfig {
   constructor (config) {
     /**
@@ -25,10 +36,16 @@ class FilterOptionsConfig {
     this.control = config.control;
 
     /**
+     * The type of filtering to apply to the options.
+     * @type {string}
+     */
+    this.optionType = config.optionType || OptionTypes.STATIC_FILTER;
+
+    /**
      * The list of filter options to display with checked status
      * @type {object[]}
      */
-    this.options = config.options;
+    this.options = config.options.map(o => ({ ...o }));
 
     /**
      * The label to be used in the legend
@@ -124,17 +141,47 @@ class FilterOptionsConfig {
         config.previousOptions = [];
       }
     }
-    let selectedOptions = config.previousOptions || [];
-    this.options = this.setDefaultSelectedValues(this.options, selectedOptions);
+    // previousOptions will be null if there were no previousOptions in persistentStorage
+    const previousOptions = config.previousOptions;
+    this.options = this.setSelectedOptions(this.options, previousOptions);
   }
 
-  setDefaultSelectedValues (options, selectedOptions) {
-    return options.map(o => ({
-      ...o,
-      selected: selectedOptions.length
-        ? selectedOptions.includes(o.label)
-        : o.selected
-    }));
+  /**
+   * Sets selected options on load based on options stored in persistent storage and options with selected: true.
+   * If no previous options were stored in persistentStorage, default to options marked
+   * as selected. If multiple options are marked as selected for 'singleoption', only the
+   * first should be selected.
+   * @param {Array<Object>} options
+   * @param {Array<string>} previousOptions
+   * @returns {Array<Object>}
+   */
+  setSelectedOptions (options, previousOptions) {
+    if (previousOptions && this.control === 'singleoption') {
+      let hasSeenSelectedOption = false;
+      return options.map(o => {
+        if (previousOptions.includes(o.label) && !hasSeenSelectedOption) {
+          hasSeenSelectedOption = true;
+          return { ...o, selected: true };
+        }
+        return { ...o, selected: false };
+      });
+    } else if (previousOptions && this.control === 'multioption') {
+      return options.map(o => ({
+        ...o,
+        selected: previousOptions.includes(o.label)
+      }));
+    } else if (this.control === 'singleoption') {
+      let hasSeenSelectedOption = false;
+      return options.map(o => {
+        if (hasSeenSelectedOption) {
+          return { ...o, selected: false };
+        } else if (o.selected) {
+          hasSeenSelectedOption = true;
+        }
+        return { ...o };
+      });
+    }
+    return options;
   }
 
   getInitialSelectedCount () {
@@ -147,6 +194,19 @@ class FilterOptionsConfig {
     if (!this.control || !SUPPORTED_CONTROLS.includes(this.control)) {
       throw new AnswersComponentError(
         'FilterOptions requires a valid "control" to be provided',
+        'FilterOptions');
+    }
+
+    if (!(this.optionType in OptionTypes)) {
+      const possibleTypes = Object.values(OptionTypes).join(', ');
+      throw new AnswersComponentError(
+        `Invalid optionType ${this.optionType} passed to FilterOptions. Expected one of ${possibleTypes}`,
+        'FilterOptions');
+    }
+
+    if (this.optionType === OptionTypes.RADIUS_FILTER && this.control !== 'singleoption') {
+      throw new AnswersComponentError(
+        `FilterOptions of optionType ${OptionTypes.RADIUS_FILTER} requires control "singleoption"`,
         'FilterOptions');
     }
 
@@ -434,12 +494,12 @@ export default class FilterOptionsComponent extends Component {
   }
 
   updateListeners () {
-    const filter = this._buildFilter();
+    const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.apply();
     }
 
-    this.config.onChange(filter);
+    this.config.onChange(filterNode);
   }
 
   _updateOption (index, selected) {
@@ -459,8 +519,17 @@ export default class FilterOptionsComponent extends Component {
     }
   }
 
-  getFilter () {
-    return this._buildFilter();
+  apply () {
+    switch (this.config.optionType) {
+      case OptionTypes.RADIUS_FILTER:
+        this.core.setLocationRadiusFilterNode(this.getLocationRadiusFilterNode());
+        break;
+      case OptionTypes.STATIC_FILTER:
+        this.core.setStaticFilterNodes(this.name, this.getFilterNode());
+        break;
+      default:
+        throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
+    }
   }
 
   floatSelected () {
@@ -469,6 +538,9 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Clear all options
+   * TODO(oshi): Investigate removing this, this is not referenced anywhere,
+   * even if you go back to the original commit (#42).
+   * Same thing with this._applyFilter().
    */
   clear () {
     const elements = DOM.queryAll(this._container, this.config.optionSelector);
@@ -476,21 +548,63 @@ export default class FilterOptionsComponent extends Component {
     this._applyFilter();
   }
 
+  _buildFilter (option) {
+    return option.filter ? option.filter : Filter.equal(option.field, option.value);
+  }
+
+  _buildFilterMetadata (option) {
+    return new FilterMetadata({
+      fieldName: this.config.label,
+      displayValue: option.label
+    });
+  }
+
+  getLocationRadiusFilterNode () {
+    const selectedOption = this.config.options.find(o => o.selected);
+    if (!selectedOption) {
+      return FilterNodeFactory.from();
+    }
+    const metadata = new FilterMetadata({
+      fieldName: this.config.label,
+      displayValue: selectedOption.label
+    });
+    if (selectedOption.value !== 0) {
+      return FilterNodeFactory.from({
+        metadata: metadata,
+        filter: { value: selectedOption.value }
+      });
+    } else {
+      return FilterNodeFactory.from({
+        metadata: metadata,
+        filter: Filter.empty()
+      });
+    }
+  }
+
   /**
-   * Build and return the Filter that represents the current state
-   * @returns {Filter}
-   * @private
+   * Returns this component's filter node.
+   * This method is exposed so that components like {@link FilterBoxComponent}
+   * can access them.
+   * @returns {FilterNode}
    */
-  _buildFilter () {
-    const filters = this.config.options
+  getFilterNode () {
+    const filterNodes = this.config.options
       .filter(o => o.selected)
-      .map(o => o.filter
-        ? o.filter
-        : Filter.equal(o.field, o.value));
+      .map(o => FilterNodeFactory.from({
+        filter: this._buildFilter(o),
+        metadata: this._buildFilterMetadata(o)
+      }));
 
     this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
-    return filters.length > 0
-      ? Filter.group(...filters)
-      : {};
+    const fieldIdToFilterNodes = groupArray(filterNodes, fn => fn.getFilter().getFilterKey());
+
+    // OR together filter nodes for the same field id.
+    const totalFilterNodes = [];
+    for (const sameIdNodes of Object.values(fieldIdToFilterNodes)) {
+      totalFilterNodes.push(FilterNodeFactory.or(...sameIdNodes));
+    }
+
+    // AND all of the ORed together nodes.
+    return FilterNodeFactory.and(...totalFilterNodes);
   }
 }

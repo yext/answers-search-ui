@@ -59,6 +59,10 @@ export default class AnalyticsReporter {
     }
   }
 
+  getQueryId () {
+    return this._globalOptions.queryId;
+  }
+
   setQueryId (queryId) {
     this._globalOptions.queryId = queryId;
   }

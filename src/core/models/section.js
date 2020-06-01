@@ -81,9 +81,14 @@ export default class Section {
 class AppliedQueryFilter {
   // Support legacy model and new model until fully migrated.
   // TODO(billy) Remove the left expression during assignment when migrated.
+  // TODO(SPR-2394): convert this into a FilterNode here instead of in VerticalResults
   constructor (appliedQueryFilter) {
     this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
     this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
+<<<<<<< HEAD
+=======
+    this.filter = appliedQueryFilter.filter;
+>>>>>>> v1.4.0
     this.fieldId = Object.keys(appliedQueryFilter.filter)[0];
   }
 

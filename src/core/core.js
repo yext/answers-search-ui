@@ -6,8 +6,8 @@ import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
-import Filter from './models/filter';
 import AnalyticsEvent from './analytics/analyticsevent';
+import FilterRegistry from './filters/filterregistry';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -70,6 +70,13 @@ export default class Core {
     this.persistentStorage = config.persistentStorage;
 
     /**
+     * The filterRegistry is in charge of setting, removing, and retrieving filters
+     * and facet filters from global storage.
+     * @type {FilterRegistry}
+     */
+    this.filterRegistry = new FilterRegistry(this.globalStorage);
+
+    /**
      * An abstraction containing the integration with the RESTful search API
      * For both vertical and universal search
      * @type {SearchService}
@@ -114,32 +121,46 @@ export default class Core {
   /**
    * Search in the context of a vertical
    * @param {string} verticalKey vertical ID for the search
-   * @param {object} query The query details
+   * @param {Object} options additional settings for the search.
+   * @param {Object} query The query details
    * @param {string} query.input The input to search for
-   * @param {string} query.filter The filter to use in the search
-   * @param {string} query.facetFilter The facet filter to use in the search
-   * @param {number} query.limit The max number of results to include, max of 50
-   * @param {number} query.offset The results offset, for fetching more results of the same query
    * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
-  verticalSearch (verticalKey, query) {
+  verticalSearch (verticalKey, options = {}, query = {}) {
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
       this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
+    const { resetPagination, useFacets } = options;
+    if (resetPagination) {
+      this.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+    }
+
+    if (!useFacets) {
+      this.filterRegistry.setFacetFilterNodes([], []);
+    }
+
+    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
+
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+        input: this.globalStorage.getState(StorageKeys.QUERY) || '',
         ...query,
+        filter: this.filterRegistry.getStaticFilterPayload(),
+        facetFilter: this.filterRegistry.getFacetFilterPayload(),
+        offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS)
+        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
+        locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -183,21 +204,13 @@ export default class Core {
 
   /**
    * Page within the results of the last query
+   * TODO: Should id be in all searches? Currently is only in searches done by the pagination
+   * component
    * @param {string} verticalKey The vertical key to use in the search
-   * @param {number} offset The offset to use in the search
    */
-  verticalPage (verticalKey, offset) {
-    const allFilters = this.globalStorage.getAll(StorageKeys.FILTER);
-    const totalFilter = allFilters.length > 1
-      ? Filter.and(...allFilters)
-      : allFilters[0];
-    const facetFilter = this.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-    this.verticalSearch(verticalKey, {
-      input: this.globalStorage.getState(StorageKeys.QUERY),
-      id: this.globalStorage.getState(StorageKeys.QUERY_ID),
-      filter: JSON.stringify(totalFilter),
-      facetFilter: JSON.stringify(facetFilter),
-      offset
+  verticalPage (verticalKey) {
+    this.verticalSearch(verticalKey, {}, {
+      id: this.globalStorage.getState(StorageKeys.QUERY_ID)
     });
   }
 
@@ -346,18 +359,39 @@ export default class Core {
     this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
   }
 
-  /**
-   * Stores the given filter into storage, to be used for the next search
-   *
-   * @param {string} namespace the namespace to use for the storage key
-   * @param {Filter} filter    the filter to set
-   */
-  setFilter (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FILTER}.${namespace}`, filter);
+  getStaticFilterNodes () {
+    return this.filterRegistry.getStaticFilterNodes();
   }
 
-  setFacetFilter (namespace, filter) {
-    this.globalStorage.set(`${StorageKeys.FACET_FILTER}.${namespace}`, filter);
+  getFacetFilterNodes () {
+    return this.filterRegistry.getFacetFilterNodes();
+  }
+
+  getLocationRadiusFilterNode () {
+    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+  }
+
+  setFacetFilterNodes (availableFieldids = [], filterNodes = []) {
+    this.filterRegistry.setFacetFilterNodes(availableFieldids, filterNodes);
+  }
+
+  setStaticFilterNodes (namespace, filterNode) {
+    this.filterRegistry.setStaticFilterNodes(namespace, filterNode);
+  }
+
+  /**
+   * Sets the locationRadius filterNode.
+   * @param {FilterNode} filterNode
+   */
+  setLocationRadiusFilterNode (filterNode) {
+    this.filterRegistry.setLocationRadiusFilterNode(filterNode);
+  }
+
+  /**
+   * Clears the locationRadius filterNode.
+   */
+  clearLocationRadiusFilterNode () {
+    this.filterRegistry.clearLocationRadiusFilterNode();
   }
 
   enableDynamicFilters () {

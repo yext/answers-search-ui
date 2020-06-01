@@ -121,6 +121,7 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   &-clear
   {
     display: flex;
+    align-items: center;
     font: inherit;
     padding-top: calc(var(--yxt-base-spacing) / 2);
     padding-bottom: calc(var(--yxt-base-spacing) / 2);
