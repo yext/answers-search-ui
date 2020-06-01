@@ -11,7 +11,6 @@ import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
-
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import Filter from '../../../core/models/filter';

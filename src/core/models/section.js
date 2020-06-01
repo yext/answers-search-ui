@@ -85,10 +85,7 @@ class AppliedQueryFilter {
   constructor (appliedQueryFilter) {
     this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
     this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
-<<<<<<< HEAD
-=======
     this.filter = appliedQueryFilter.filter;
->>>>>>> v1.4.0
     this.fieldId = Object.keys(appliedQueryFilter.filter)[0];
   }
 

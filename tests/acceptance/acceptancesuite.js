@@ -1,7 +1,6 @@
 import UniversalPage from './pageobjects/universalpage';
 import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
-
 import FacetsPage from './pageobjects/facetspage';
 
 /**

@@ -69,7 +69,6 @@ export default class ResultsHeaderComponent extends Component {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
     const appliedFiltersArray = this.getAppliedFiltersArray(this.appliedFilterNodes);
     const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
-
     return super.setState({
       ...data,
       resultsCount: this.resultsCount,
