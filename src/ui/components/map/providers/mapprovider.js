@@ -61,6 +61,19 @@ export default class MapProvider {
     this._onPinClick = config.onPinClick || null;
 
     /**
+     * Callback to invoke when a pin is hovered. The hovered item is passed to the callback
+     * @type {function}
+     */
+    this._onPinMouseOver = config.onPinMouseOver || null;
+
+    /**
+     * Callback to invoke when a pin is no longer hovered after being hovered.
+     * The hovered item is passed to the callback
+     * @type {function}
+     */
+    this._onPinMouseOut = config.onPinMouseOut || null;
+
+    /**
      * Callback to invoke once the Javascript is loaded
      * @type {function}
      */
