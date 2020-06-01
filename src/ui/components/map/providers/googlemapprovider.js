@@ -105,6 +105,9 @@ export default class GoogleMapProvider extends MapProvider {
           if (this._onPinClick) {
             marker.addListener('click', () => this._onPinClick(collapsedMarkers[i].item));
           }
+          if (this._onPinHover) {
+            marker.addListener('mouseover', () => this._onPinHover(collapsedMarkers[i].item));
+          }
           bounds.extend(marker.position);
         }
 

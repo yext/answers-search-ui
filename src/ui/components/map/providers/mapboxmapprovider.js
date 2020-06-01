@@ -79,6 +79,9 @@ export default class MapBoxMapProvider extends MapProvider {
         if (this._onPinClick) {
           marker.getElement().addEventListener('click', () => this._onPinClick(collapsedMarkers[i].item));
         }
+        if (this._onPinHover) {
+          marker.getElement().addEventListener('mouseover', () => this._onPinHover(collapsedMarkers[i].item));
+        }
       }
       if (mapboxMapMarkerConfigs.length >= 2) {
         this._map.fitBounds(bounds, { padding: 50 });
