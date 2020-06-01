@@ -2,6 +2,7 @@ import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
 import Filter from '../../../src/core/models/filter';
 import FilterCombinators from '../../../src/core/filters/filtercombinators';
 import SimpleFilterNode from '../../../src/core/filters/simplefilternode';
+import FilterMetadata from '../../../src/core/filters/filtermetadata';
 
 describe('FilterNodeFactory', () => {
   let filter1, filter2,
@@ -16,7 +17,9 @@ describe('FilterNodeFactory', () => {
     };
     metadata1 = {
       fieldName: 'field name 1',
-      displayValue: 'one'
+      displayValue: 'one',
+      originComponent: undefined,
+      optionType: 'STATIC_FILTER'
     };
     node1 = FilterNodeFactory.from({
       filter: filter1,
@@ -30,7 +33,8 @@ describe('FilterNodeFactory', () => {
     };
     metadata2 = {
       fieldName: 'field name 2',
-      displayValue: 'two'
+      displayValue: 'two',
+      optionType: 'STATIC_FILTER'
     };
     node2 = FilterNodeFactory.from({
       filter: filter2,
@@ -104,10 +108,10 @@ describe('FilterNodeFactory', () => {
     expect(orNode.combinator).toBeUndefined();
     expect(orNode.children).toBeUndefined();
     expect(orNode.filter).toEqual({});
-    expect(orNode.metadata).toEqual({
+    expect(orNode.metadata).toEqual(new FilterMetadata({
       displayValue: undefined,
       fieldName: undefined
-    });
+    }));
   });
 
   it('can create a three-layer filter node', () => {

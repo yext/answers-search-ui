@@ -193,10 +193,10 @@ export default class DateRangeFilterComponent extends Component {
         ? `${min} - ${max}`
         : `Between ${min} and ${max}`;
     }
-    return {
+    return new FilterMetadata({
       fieldName: this._title,
       displayValue: displayValue,
       originComponent: DateRangeFilterComponent.type
-    };
+    });
   }
 }

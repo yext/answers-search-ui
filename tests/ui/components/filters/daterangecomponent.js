@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
 import DateRangeFilterComponent from 'src/ui/components/filters/daterangefiltercomponent';
 import Filter from 'src/core/models/filter';
+import FilterMetadata from '../../../../src/core/filters/filtermetadata';
 
 describe('date range filter component', () => {
   DOM.setup(document, new DOMParser());
@@ -86,11 +87,11 @@ describe('date range filter component', () => {
 
     const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
     let filter = Filter.exclusiveRange(field, min, max);
-    let metadata = {
+    let metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.exclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -100,11 +101,11 @@ describe('date range filter component', () => {
     min = '';
     component._updateRange('min', min);
     filter = Filter.lessThan(field, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.lessThan(max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -119,11 +120,11 @@ describe('date range filter component', () => {
 
     // Clear the max value
     filter = Filter.greaterThan(field, min);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.greaterThan(min),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -144,11 +145,11 @@ describe('date range filter component', () => {
 
     const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
     let filter = Filter.inclusiveRange(field, min, max);
-    let metadata = {
+    let metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.inclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -158,11 +159,11 @@ describe('date range filter component', () => {
     min = '';
     component._updateRange('min', min);
     filter = Filter.lessThanEqual(field, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.lessThanEqual(max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -173,11 +174,11 @@ describe('date range filter component', () => {
     min = '2020-07-30';
     component._updateRange('min', min);
     filter = Filter.inclusiveRange(field, min, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.inclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -188,11 +189,11 @@ describe('date range filter component', () => {
     max = '';
     component._updateRange('max', max);
     filter = Filter.greaterThanEqual(field, min);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.greaterThanEqual(min),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -203,11 +204,11 @@ describe('date range filter component', () => {
     max = '2021-01-01';
     component._updateRange('max', max);
     filter = Filter.inclusiveRange(field, min, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.inclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -220,9 +221,9 @@ describe('date range filter component', () => {
     component._updateRange('max', min);
     component._updateRange('min', max);
     filter = Filter.empty();
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -235,11 +236,11 @@ describe('date range filter component', () => {
     component._updateRange('min', min);
     component._updateRange('max', max);
     filter = Filter.inclusiveRange(field, min, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.inclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -262,11 +263,11 @@ describe('date range filter component', () => {
 
     const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
     let filter = Filter.exclusiveRange(field, min, max);
-    let metadata = {
+    let metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.exclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -276,11 +277,11 @@ describe('date range filter component', () => {
     min = '';
     component._updateRange('min', min);
     filter = Filter.lessThan(field, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.lessThan(max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -291,11 +292,11 @@ describe('date range filter component', () => {
     min = '2020-07-30';
     component._updateRange('min', min);
     filter = Filter.exclusiveRange(field, min, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.exclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -306,11 +307,11 @@ describe('date range filter component', () => {
     max = '';
     component._updateRange('max', max);
     filter = Filter.greaterThan(field, min);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.greaterThan(min),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -321,11 +322,11 @@ describe('date range filter component', () => {
     max = '2021-01-01';
     component._updateRange('max', max);
     filter = Filter.exclusiveRange(field, min, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.exclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -338,9 +339,9 @@ describe('date range filter component', () => {
     component._updateRange('max', min);
     component._updateRange('min', max);
     filter = Filter.empty();
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -353,11 +354,11 @@ describe('date range filter component', () => {
     component._updateRange('min', min);
     component._updateRange('max', max);
     filter = Filter.exclusiveRange(field, min, max);
-    metadata = {
+    metadata = new FilterMetadata({
       fieldName: title,
       displayValue: metadataFormatters.exclusiveRange(min, max),
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
@@ -379,11 +380,11 @@ describe('date range filter component', () => {
     const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
     const filter = Filter.empty();
     expect(component._buildFilter()).toEqual(filter);
-    const metadata = {
+    const metadata = new FilterMetadata({
       fieldName: title,
       displayValue: '',
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
@@ -404,11 +405,11 @@ describe('date range filter component', () => {
     const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
     const filter = Filter.equal(field, min);
     expect(component._buildFilter()).toEqual(filter);
-    const metadata = {
+    const metadata = new FilterMetadata({
       fieldName: title,
       displayValue: min,
       originComponent: 'DateRangeFilter'
-    };
+    });
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);

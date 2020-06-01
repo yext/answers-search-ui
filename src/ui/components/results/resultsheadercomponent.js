@@ -66,13 +66,17 @@ export default class ResultsHeaderComponent extends Component {
   _removeFilterTag (tag) {
     const { filterId } = tag.dataset;
     const simpleFilterNode = this.removableFilterNodes[filterId];
+    const { originComponent, optionType } = simpleFilterNode.getMetadata();
     simpleFilterNode.remove();
     const analyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
+    const removedFilter = optionType === 'STATIC_FILTER'
+      ? JSON.stringify(simpleFilterNode.getFilter())
+      : simpleFilterNode.getFilter().value || 0;
     analyticsEvent.addOptions({
       verticalKey: this._config.verticalKey,
-      removedFromComponent: simpleFilterNode.getMetadata().originComponent,
-      filterField: simpleFilterNode.getFilter().getFilterKey(),
-      removedFilter: JSON.stringify(simpleFilterNode.getFilter())
+      removedFromComponent: originComponent,
+      optionType: optionType,
+      removedFilter: removedFilter
     });
     this.analyticsReporter.report(analyticsEvent);
     this.core.verticalSearch(this._config.verticalKey, {

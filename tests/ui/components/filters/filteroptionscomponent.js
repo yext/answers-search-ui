@@ -488,7 +488,8 @@ describe('filter options works with different optionTypes', () => {
       metadata: new FilterMetadata({
         fieldName: 'filterOptionsLabel',
         displayValue: '12345 meters',
-        originComponent: 'FilterOptions'
+        originComponent: 'FilterOptions',
+        optionType: 'RADIUS_FILTER'
       }),
       filter: new Filter({ value: 12345 })
     });
@@ -521,7 +522,8 @@ describe('filter options works with different optionTypes', () => {
       metadata: new FilterMetadata({
         fieldName: 'filterOptionsLabel',
         displayValue: 'le 0 metres',
-        originComponent: 'FilterOptions'
+        originComponent: 'FilterOptions',
+        optionType: 'RADIUS_FILTER'
       }),
       filter: Filter.empty()
     });

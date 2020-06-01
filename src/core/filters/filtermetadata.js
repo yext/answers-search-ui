@@ -5,7 +5,7 @@
  */
 export default class FilterMetadata {
   constructor (metadata = {}) {
-    const { fieldName, displayValue, originComponent } = metadata;
+    const { fieldName, displayValue, originComponent, optionType } = metadata;
 
     /**
      * The display name for the field being filtered on.
@@ -27,6 +27,12 @@ export default class FilterMetadata {
      * @type {string}
      */
     this.originComponent = originComponent;
+
+    /**
+     * The type of filter this is, either 'RADIUS_FILTER' or 'STATIC_FILTER'.
+     * @type {string}
+     */
+    this.optionType = optionType || 'STATIC_FILTER';
     Object.freeze(this);
   }
 }

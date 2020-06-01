@@ -584,7 +584,8 @@ export default class FilterOptionsComponent extends Component {
     return new FilterMetadata({
       fieldName: this.config.label,
       displayValue: option.label,
-      originComponent: this.config.originComponent
+      originComponent: this.config.originComponent,
+      optionType: this.config.optionType
     });
   }
 
