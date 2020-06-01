@@ -387,6 +387,14 @@ export default class Core {
     this.filterRegistry.setLocationRadiusFilterNode(filterNode);
   }
 
+  clearStaticFilterNode (namespace) {
+    this.filterRegistry.clearStaticFilterNode(namespace);
+  }
+
+  clearFacetFilterNodes () {
+    this.filterRegistry.clearFacetFilterNodes();
+  }
+
   /**
    * Clears the locationRadius filterNode.
    */

@@ -249,7 +249,7 @@ export default class GeoLocationComponent extends Component {
     this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
     this._enabled = false;
     this.query = '';
-    this.core.setStaticFilterNodes(this.name, FilterNodeFactory.from());
+    this.core.clearStaticFilterNode(this.name);
     this.setState();
   }
 

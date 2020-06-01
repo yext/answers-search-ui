@@ -173,4 +173,16 @@ describe('FilterRegistry', () => {
     expect(locationRadiusFilterNode.getFilter()).toEqual(FilterNodeFactory.from().getFilter());
     expect(locationRadiusFilterNode.getMetadata()).toEqual(FilterNodeFactory.from().getMetadata());
   });
+
+  it('can clear facet filter nodes', () => {
+    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
+    registry.clearFacetFilterNodes();
+    expect(registry.getFacetFilterNodes()).toEqual([]);
+  });
+
+  it('can clear static filter nodes', () => {
+    registry.setStaticFilterNodes('namespace1', node1);
+    registry.clearStaticFilterNode('namespace1');
+    expect(registry.getStaticFilterNodes()).toEqual([]);
+  });
 });

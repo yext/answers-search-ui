@@ -15,8 +15,7 @@ const DEFAULT_CONFIG = {
   showChangeFilters: false,
   removable: false,
   delimiter: '|',
-  isUniversal: false,
-  verticalKey: undefined
+  isUniversal: false
 };
 
 export default class ResultsHeaderComponent extends Component {
@@ -96,16 +95,14 @@ export default class ResultsHeaderComponent extends Component {
    */
   _groupAppliedFilters () {
     const keyFunc = filterNode => filterNode.getMetadata().fieldName;
-    const irremovableValueFunc = (filterNode, index) => ({
-      displayValue: filterNode.getMetadata().displayValue,
-      dataFilterId: index,
-      removable: false
+    const irremovableValueFunc = filterNode => ({
+      displayValue: filterNode.getMetadata().displayValue
     });
     const irremovableGrouped = groupArray(this.irremovableFilterNodes, keyFunc, irremovableValueFunc);
     const removableValueFunc = (filterNode, index) => ({
       displayValue: filterNode.getMetadata().displayValue,
       dataFilterId: index,
-      removable: true
+      removable: this._config.removable
     });
     return groupArray(this.removableFilterNodes, keyFunc, removableValueFunc, irremovableGrouped);
   }

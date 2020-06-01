@@ -207,12 +207,12 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
-          isDynamic: this.config.isDynamic,
           originComponent: this.config.originComponent,
-          onChange: filterNode => {
-            this.onFilterNodeChange(i, filterNode);
-          },
-          onFilterNodeRemoval: filterNode => this.onFilterNodeRemoval(i, filterNode)
+          onChange: (filterNode, saveFilterNodes, blockSearchOnChange) => {
+            const _saveFilterNodes = this.config.searchOnChange || saveFilterNodes;
+            const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
+            this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
+          }
         }));
       if (this.config.isDynamic && typeof component.floatSelected === 'function') {
         component.floatSelected();
@@ -251,23 +251,16 @@ export default class FilterBoxComponent extends Component {
    * Handle changes to child filter components
    * @param {number} index The index of the changed filter
    * @param {FilterNode} filterNode The new filter node
+   * @param {boolean} options
    */
-  onFilterNodeChange (index, filterNode) {
+  onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
     this._filterNodes[index] = filterNode;
-    if (this.config.searchOnChange) {
+    if (saveFilterNodes) {
       this._saveFilterNodesToStorage();
+    }
+    if (searchOnChange) {
       this._search();
     }
-  }
-
-  /**
-   * Handle filter node removal in a child FilterOptions component.
-   * @param {number} index
-   * @param {FilterNode} filterNode
-   */
-  onFilterNodeRemoval (index, filterNode) {
-    this._filterNodes[index] = filterNode;
-    this._saveFilterNodesToStorage();
   }
 
   /**

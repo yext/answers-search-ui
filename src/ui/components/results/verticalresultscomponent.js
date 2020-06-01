@@ -288,6 +288,11 @@ export default class VerticalResultsComponent extends Component {
     }));
   }
 
+  /**
+   * Gets all applied {@link FilterNode}s stored in the {@link FilterRegistry}, which
+   * uses manages FilterNodes in globalStorage.
+   * @returns {Array<FilterNode>}
+   */
   _getAppliedFilterNodes () {
     const globalStorageFilterNodes = [
       ...this.core.getStaticFilterNodes(),

@@ -123,8 +123,13 @@ export default class RangeFilterComponent extends Component {
   }
 
   _removeFilterNode () {
-    this._updateRange('min', null);
-    this._updateRange('max', null);
+    this._date = Object.assign({}, this._date, { 'min': null });
+    this._date = Object.assign({}, this._date, { 'max': null });
+    this.setState();
+    this._onChange(FilterNodeFactory.from());
+    this.core.clearStaticFilterNode(this.name);
+    this.core.persistentStorage.delete(`${this.name}.min`);
+    this.core.persistentStorage.delete(`${this.name}.max`);
   }
 
   /**

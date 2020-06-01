@@ -152,7 +152,7 @@ export default class FilterSearchComponent extends Component {
   _removeFilterNode () {
     this.query = '';
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-    this.core.setStaticFilterNodes(this.name, FilterNodeFactory.from());
+    this.core.clearStaticFilterNode(this.name);
     this.setState();
   }
 
