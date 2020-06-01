@@ -109,6 +109,13 @@ class FilterBoxConfig {
      */
     this.isDynamic = config.isDynamic || false;
 
+    /**
+     * In the FilterMetadata of FilterNodes created, the component
+     * name to use as the origin component.
+     * @type {string}
+     */
+    this.originComponent = config.originComponent || FilterBoxComponent.type;
+
     this.validate();
   }
 
@@ -200,9 +207,12 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
+          isDynamic: this.config.isDynamic,
+          originComponent: this.config.originComponent,
           onChange: filterNode => {
             this.onFilterNodeChange(i, filterNode);
-          }
+          },
+          onFilterNodeRemoval: filterNode => this.onFilterNodeRemoval(i, filterNode)
         }));
       if (this.config.isDynamic && typeof component.floatSelected === 'function') {
         component.floatSelected();
@@ -251,6 +261,16 @@ export default class FilterBoxComponent extends Component {
   }
 
   /**
+   * Handle filter node removal in a child FilterOptions component.
+   * @param {number} index
+   * @param {FilterNode} filterNode
+   */
+  onFilterNodeRemoval (index, filterNode) {
+    this._filterNodes[index] = filterNode;
+    this._saveFilterNodesToStorage();
+  }
+
+  /**
    * Remove all filter components along with this component
    */
   remove () {
@@ -263,9 +283,8 @@ export default class FilterBoxComponent extends Component {
    * @private
    */
   _saveFilterNodesToStorage () {
-    const validFilterNodes = this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
-
     if (this.config.isDynamic) {
+      const validFilterNodes = this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
       this.core.setFacetFilterNodes(availableFieldIds, validFilterNodes);
     } else {

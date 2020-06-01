@@ -5,7 +5,7 @@
  */
 export default class FilterMetadata {
   constructor (metadata = {}) {
-    const { fieldName, displayValue } = metadata;
+    const { fieldName, displayValue, originComponent } = metadata;
 
     /**
      * The display name for the field being filtered on.
@@ -20,6 +20,13 @@ export default class FilterMetadata {
      * @type {string}
      */
     this.displayValue = displayValue;
+
+    /**
+     * The origin component type of this filter, such as FilterOptions or
+     * DateRangeFilter.
+     * @type {string}
+     */
+    this.originComponent = originComponent;
     Object.freeze(this);
   }
 }

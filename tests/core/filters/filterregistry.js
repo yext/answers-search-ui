@@ -170,6 +170,7 @@ describe('FilterRegistry', () => {
     expect(locationRadiusFilterNode.getFilter().value).toEqual(1234);
     registry.setLocationRadiusFilterNode(FilterNodeFactory.from());
     locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
-    expect(locationRadiusFilterNode).toEqual(FilterNodeFactory.from());
+    expect(locationRadiusFilterNode.getFilter()).toEqual(FilterNodeFactory.from().getFilter());
+    expect(locationRadiusFilterNode.getMetadata()).toEqual(FilterNodeFactory.from().getMetadata());
   });
 });

@@ -138,6 +138,9 @@ export default class FilterSearchComponent extends Component {
   }
 
   onMount () {
+    if (this.autoCompleteComponent) {
+      this.autoCompleteComponent.remove();
+    }
     // Wire up our search handling and auto complete
     this.initAutoComplete(this._inputEl);
 
@@ -146,13 +149,22 @@ export default class FilterSearchComponent extends Component {
     }
   }
 
+  _removeFilterNode () {
+    this.query = '';
+    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+    this.core.setStaticFilterNodes(this.name, FilterNodeFactory.from());
+    this.setState();
+  }
+
   _buildFilterNode (query, filter) {
     return FilterNodeFactory.from({
       filter: filter,
       metadata: {
         fieldName: this.title,
-        displayValue: `"${query}"`
-      }
+        displayValue: `"${query}"`,
+        originComponent: FilterSearchComponent.type
+      },
+      remove: () => this._removeFilterNode()
     });
   }
 
@@ -163,7 +175,7 @@ export default class FilterSearchComponent extends Component {
   initAutoComplete (inputSelector) {
     this._inputEl = inputSelector;
 
-    this.componentManager.create('AutoComplete', {
+    this.autoCompleteComponent = this.componentManager.create('AutoComplete', {
       parentContainer: this._container,
       name: `${this.name}.autocomplete`,
       isFilterSearch: true,

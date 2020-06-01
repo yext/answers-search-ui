@@ -12,7 +12,7 @@ import FilterNode from './filternode';
 export default class SimpleFilterNode extends FilterNode {
   constructor (filterNode = {}) {
     super();
-    const { filter, metadata } = filterNode;
+    const { filter, metadata, remove } = filterNode;
 
     /**
      * The filter data.
@@ -25,6 +25,12 @@ export default class SimpleFilterNode extends FilterNode {
      * @type {FilterMetadata}
      */
     this.metadata = new FilterMetadata(metadata);
+
+    /**
+     * Remove callback function.
+     * @type {Function}
+     */
+    this._remove = remove || function () {};
     Object.freeze(this);
   }
 
@@ -59,5 +65,12 @@ export default class SimpleFilterNode extends FilterNode {
    */
   getSimpleAncestors () {
     return this;
+  }
+
+  /**
+   * Removes this filter node from the FilterRegistry.
+   */
+  remove () {
+    this._remove();
   }
 }

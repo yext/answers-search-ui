@@ -30,8 +30,16 @@
             <span class="yxt-ResultsHeader-filterLabelColon">:</span>
           </div>
         {{/if}}
-        {{#each this.displayValues}}
-          <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
+        {{#each filterDataArray}}
+          {{#if removable}}
+            <div class="yxt-ResultsHeader-removableFilterTag js-yxt-ResultsHeader-removableFilterTag"
+              data-filter-id={{dataFilterId}}>
+              <span class="yxt-ResultsHeader-removableFilterValue">{{displayValue}}</span>
+              <span class="yxt-ResultsHeader-removableFilterX">&times;</span>
+            </div>
+          {{else}}
+            <div class="yxt-ResultsHeader-filterValue">{{displayValue}}{{#unless @last}}, {{/unless}}</div>
+          {{/if}}
         {{/each}}
         {{#unless @last}}
           <div class="yxt-ResultsHeader-filterSeparator">{{../_config.delimiter}}</div>

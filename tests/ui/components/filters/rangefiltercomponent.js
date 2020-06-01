@@ -2,7 +2,6 @@ import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
 import RangeFilterComponent from 'src/ui/components/filters/rangefiltercomponent';
-import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
 
 describe('range filter component', () => {
@@ -83,16 +82,15 @@ describe('range filter component', () => {
     let filter = Filter.inclusiveRange(field, min, max);
     let metadata = {
       fieldName: title,
-      displayValue: metadataFormatters.inclusiveRange(min, max)
+      displayValue: metadataFormatters.inclusiveRange(min, max),
+      originComponent: 'RangeFilter'
     };
     min = component._range.min;
     max = component._range.max;
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
-    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    }));
+    expect(component.getFilterNode().getFilter()).toEqual(filter);
+    expect(component.getFilterNode().getMetadata()).toEqual(metadata);
 
     // Clear the min value
     min = '';
@@ -100,14 +98,13 @@ describe('range filter component', () => {
     filter = Filter.lessThanEqual(field, max);
     metadata = {
       fieldName: title,
-      displayValue: metadataFormatters.lessThanEqual(max)
+      displayValue: metadataFormatters.lessThanEqual(max),
+      originComponent: 'RangeFilter'
     };
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
-    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    }));
+    expect(component.getFilterNode().getFilter()).toEqual(filter);
+    expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
 
     // Set the min value again
@@ -116,14 +113,13 @@ describe('range filter component', () => {
     filter = Filter.inclusiveRange(field, min, max);
     metadata = {
       fieldName: title,
-      displayValue: metadataFormatters.inclusiveRange(min, max)
+      displayValue: metadataFormatters.inclusiveRange(min, max),
+      originComponent: 'RangeFilter'
     };
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
-    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    }));
+    expect(component.getFilterNode().getFilter()).toEqual(filter);
+    expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
 
     // Clear the max value
@@ -132,14 +128,13 @@ describe('range filter component', () => {
     filter = Filter.greaterThanEqual(field, min);
     metadata = {
       fieldName: title,
-      displayValue: metadataFormatters.greaterThanEqual(min)
+      displayValue: metadataFormatters.greaterThanEqual(min),
+      originComponent: 'RangeFilter'
     };
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
-    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    }));
+    expect(component.getFilterNode().getFilter()).toEqual(filter);
+    expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
 
     // Set the max value again
@@ -148,14 +143,13 @@ describe('range filter component', () => {
     filter = Filter.inclusiveRange(field, min, max);
     metadata = {
       fieldName: title,
-      displayValue: metadataFormatters.inclusiveRange(min, max)
+      displayValue: metadataFormatters.inclusiveRange(min, max),
+      originComponent: 'RangeFilter'
     };
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
-    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    }));
+    expect(component.getFilterNode().getFilter()).toEqual(filter);
+    expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
 
     // Clear both values
@@ -165,14 +159,13 @@ describe('range filter component', () => {
     component._updateRange('min', max);
     filter = Filter.empty();
     metadata = {
-      fieldName: title
+      fieldName: title,
+      originComponent: 'RangeFilter'
     };
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
-    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    }));
+    expect(component.getFilterNode().getFilter()).toEqual(filter);
+    expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
 
     // Set both values, finally done!
@@ -183,14 +176,13 @@ describe('range filter component', () => {
     filter = Filter.inclusiveRange(field, min, max);
     metadata = {
       fieldName: title,
-      displayValue: metadataFormatters.inclusiveRange(min, max)
+      displayValue: metadataFormatters.inclusiveRange(min, max),
+      originComponent: 'RangeFilter'
     };
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
-    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    }));
+    expect(component.getFilterNode().getFilter()).toEqual(filter);
+    expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(8);
   });
 
@@ -210,12 +202,11 @@ describe('range filter component', () => {
     expect(component._buildFilter()).toEqual(filter);
     const metadata = {
       fieldName: title,
-      displayValue: min
+      displayValue: min,
+      originComponent: 'RangeFilter'
     };
     expect(component._buildFilterMetadata()).toEqual(metadata);
-    expect(component.getFilterNode()).toEqual(FilterNodeFactory.from({
-      filter: filter,
-      metadata: metadata
-    }));
+    expect(component.getFilterNode().getFilter()).toEqual(filter);
+    expect(component.getFilterNode().getMetadata()).toEqual(metadata);
   });
 });

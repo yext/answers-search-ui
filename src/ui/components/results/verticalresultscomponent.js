@@ -220,14 +220,16 @@ export default class VerticalResultsComponent extends Component {
     this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
     this.resultsContext = data.resultsContext;
-    this.nlpFilters = data.appliedQueryFilters || [];
+    const nlpFilters = data.appliedQueryFilters || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    this.appliedFilterNodes = this._getAppliedFilterNodes(this.nlpFilters);
+    this.appliedFilterNodes = this._processFilterNodes(this._getAppliedFilterNodes());
+    this.nlpFilterNodes = this._processFilterNodes(this._convertNlpFiltersToFilterNodes(nlpFilters));
+    const hasAppliedFilters = this.appliedFilterNodes.length || this.nlpFilterNodes.length;
     const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
-      (this.resultsHeaderOpts.showAppliedFilters && this.appliedFilterNodes.length > 0);
+      (this.resultsHeaderOpts.showAppliedFilters && hasAppliedFilters);
     this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
@@ -286,25 +288,28 @@ export default class VerticalResultsComponent extends Component {
     }));
   }
 
-  /**
-   * Returns an array of all filter nodes currently being applied to the search.
-   * Filters out filterNodes without fieldName or displayValue, or that have a
-   * fieldId listed in this._config.hiddenFields. Any AppliedQueryFilters are first
-   * converted into a FilterNode.
-   * @param {Array<AppliedQueryFilter>} nlpFilters
-   * @returns {Array<FilterNode>}
-   */
-  _getAppliedFilterNodes (nlpFilters) {
-    const allFilterNodes = [
-      ...this._convertNlpFiltersToFilterNodes(nlpFilters),
+  _getAppliedFilterNodes () {
+    const globalStorageFilterNodes = [
       ...this.core.getStaticFilterNodes(),
       ...this.core.getFacetFilterNodes()
     ];
     const locationRadiusFilterNode = this.core.getLocationRadiusFilterNode();
     if (locationRadiusFilterNode) {
-      allFilterNodes.push(locationRadiusFilterNode);
+      globalStorageFilterNodes.push(locationRadiusFilterNode);
     }
-    return allFilterNodes
+    return globalStorageFilterNodes;
+  }
+
+  /**
+   * Returns an array of all filter nodes currently being applied to the search.
+   * Filters out filterNodes without fieldName or displayValue, or that have a
+   * fieldId listed in this._config.hiddenFields. Any AppliedQueryFilters are first
+   * converted into a FilterNode.
+   * @param {Array<FilterNode>} filterNodes
+   * @returns {Array<FilterNode>}
+   */
+  _processFilterNodes (filterNodes) {
+    return filterNodes
       .flatMap(fn => fn.getSimpleAncestors())
       .filter(fn => {
         const { fieldName, displayValue } = fn.getMetadata();
@@ -358,7 +363,8 @@ export default class VerticalResultsComponent extends Component {
       const resultsHeaderData = {
         resultsLength: this.results.length,
         resultsCount: this.resultsCount,
-        appliedFilterNodes: this.appliedFilterNodes,
+        removableFilterNodes: this.appliedFilterNodes,
+        irremovableFilterNodes: this.nlpFilterNodes,
         ...data
       };
       const _opts = { ...opts };
@@ -368,6 +374,7 @@ export default class VerticalResultsComponent extends Component {
       return super.addChild(resultsHeaderData, type, {
         isUniversal: this._config.isUniversal,
         verticalURL: this.getVerticalURL(),
+        verticalKey: this.verticalKey,
         ...this.resultsHeaderOpts,
         ..._opts
       });

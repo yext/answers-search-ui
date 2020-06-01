@@ -50,29 +50,79 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
   });
 
   it('works for empty case', () => {
-    const groupedFilters = resultsHeaderComponent.getAppliedFiltersArray([], []);
-    expect(groupedFilters).toEqual([]);
+    const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
+    expect(groupedFilters).toEqual({});
   });
 
   it('works with simpleFilterNodes', () => {
     const simpleFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
-    const groupedFilters = resultsHeaderComponent.getAppliedFiltersArray(simpleFilterNodes);
-    expect(groupedFilters).toHaveLength(2);
-    expect(groupedFilters.find(f => f.label === 'name0')).toEqual({
-      label: 'name0',
-      displayValues: ['display0', 'display1']
-    });
-    expect(groupedFilters.find(f => f.label === 'name1')).toEqual({
-      label: 'name1',
-      displayValues: ['display0']
-    });
+    resultsHeaderComponent.removableFilterNodes = simpleFilterNodes;
+    const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
+    expect(Object.keys(groupedFilters)).toHaveLength(2);
+    expect(groupedFilters['name0']).toEqual([
+      {
+        displayValue: 'display0',
+        dataFilterId: 0,
+        removable: true
+      },
+      {
+        displayValue: 'display1',
+        dataFilterId: 1,
+        removable: true
+      }
+    ]);
+    expect(groupedFilters['name1']).toEqual([
+      {
+        displayValue: 'display0',
+        dataFilterId: 2,
+        removable: true
+      }
+    ]);
   });
 
-  it('duplicate disply values should still be repeated', () => {
+  it('duplicate display values should still be repeated', () => {
     const simpleFilterNodes = [ node_f1_v1, node_f1_v1 ];
-    const groupedFilters = resultsHeaderComponent.getAppliedFiltersArray(simpleFilterNodes);
-    expect(groupedFilters).toHaveLength(1);
-    expect(groupedFilters[0].label).toEqual('name1');
-    expect(groupedFilters[0].displayValues).toEqual(['display1', 'display1']);
+    resultsHeaderComponent.removableFilterNodes = simpleFilterNodes;
+    const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
+    expect(Object.keys(groupedFilters)).toHaveLength(1);
+    expect(groupedFilters['name1']).toHaveLength(2);
+  });
+
+  it('irremovable filter nodes come first', () => {
+    const removableFilterNodes = [ node_f0_v0, node_f1_v0 ];
+    const irremovableFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
+    resultsHeaderComponent.removableFilterNodes = removableFilterNodes;
+    resultsHeaderComponent.irremovableFilterNodes = irremovableFilterNodes;
+    const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
+    expect(Object.keys(groupedFilters)).toHaveLength(2);
+    expect(groupedFilters['name0']).toEqual([
+      {
+        displayValue: 'display0',
+        dataFilterId: 0,
+        removable: false
+      },
+      {
+        displayValue: 'display1',
+        dataFilterId: 1,
+        removable: false
+      },
+      {
+        displayValue: 'display0',
+        dataFilterId: 0,
+        removable: true
+      }
+    ]);
+    expect(groupedFilters['name1']).toEqual([
+      {
+        displayValue: 'display0',
+        dataFilterId: 2,
+        removable: false
+      },
+      {
+        displayValue: 'display0',
+        dataFilterId: 1,
+        removable: true
+      }
+    ]);
   });
 });

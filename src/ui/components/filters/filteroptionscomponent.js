@@ -42,6 +42,19 @@ class FilterOptionsConfig {
     this.optionType = config.optionType || OptionTypes.STATIC_FILTER;
 
     /**
+     * Whether this FilterOptions stores facet or static filters.
+     * @type {boolean}
+     */
+    this.isDynamic = config.isDynamic;
+
+    /**
+     * In the FilterMetadata of FilterNodes created, the component
+     * name to use as the origin component.
+     * @type {string}
+     */
+    this.originComponent = config.originComponent || FilterOptionsComponent.type;
+
+    /**
      * The list of filter options to display with checked status
      * @type {object[]}
      */
@@ -58,6 +71,12 @@ class FilterOptionsConfig {
      * @type {function}
      */
     this.onChange = config.onChange || function () {};
+
+    /**
+     * The callback function to call when a filternode is removed
+     * @type {function}
+     */
+    this.onFilterNodeRemoval = config.onFilterNodeRemoval || function () {};
 
     /**
      * If true, stores the filter to storage on each change
@@ -244,6 +263,15 @@ export default class FilterOptionsComponent extends Component {
      * @type {boolean}
      */
     this.expanded = this.config.showExpand ? selectedCount > 0 : true;
+
+    /**
+     * True if all options are shown, false if some are hidden based on config
+     * @type {boolean}
+     */
+    this.allShown = false;
+    if (this.config.storeOnChange) {
+      this.apply();
+    }
   }
 
   static get type () {
@@ -555,7 +583,8 @@ export default class FilterOptionsComponent extends Component {
   _buildFilterMetadata (option) {
     return new FilterMetadata({
       fieldName: this.config.label,
-      displayValue: option.label
+      displayValue: option.label,
+      originComponent: this.config.originComponent
     });
   }
 
@@ -564,21 +593,29 @@ export default class FilterOptionsComponent extends Component {
     if (!selectedOption) {
       return FilterNodeFactory.from();
     }
-    const metadata = new FilterMetadata({
-      fieldName: this.config.label,
-      displayValue: selectedOption.label
-    });
+    const filterNode = {
+      metadata: this._buildFilterMetadata(selectedOption),
+      filter: { value: selectedOption.value },
+      remove: () => this._removeFilterNode(selectedOption)
+    };
     if (selectedOption.value !== 0) {
-      return FilterNodeFactory.from({
-        metadata: metadata,
-        filter: { value: selectedOption.value }
-      });
+      return FilterNodeFactory.from(filterNode);
     } else {
       return FilterNodeFactory.from({
-        metadata: metadata,
+        ...filterNode,
         filter: Filter.empty()
       });
     }
+  }
+
+  _removeFilterNode (option) {
+    option.selected = false;
+    if (this.config.isDynamic) {
+      this.config.onFilterNodeRemoval(this.getFilterNode());
+    } else {
+      this.apply();
+    }
+    this.setState();
   }
 
   /**
@@ -592,7 +629,8 @@ export default class FilterOptionsComponent extends Component {
       .filter(o => o.selected)
       .map(o => FilterNodeFactory.from({
         filter: this._buildFilter(o),
-        metadata: this._buildFilterMetadata(o)
+        metadata: this._buildFilterMetadata(o),
+        remove: () => this._removeFilterNode(o)
       }));
 
     this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));

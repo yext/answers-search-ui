@@ -21,7 +21,8 @@ describe('FilterSearch', () => {
       filter: filter,
       metadata: {
         fieldName: title,
-        displayValue: `"${query}"`
+        displayValue: `"${query}"`,
+        originComponent: 'FilterSearch'
       }
     });
     expect(filterNode.filter).toEqual(expectedFilterNode.filter);
