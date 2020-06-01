@@ -397,7 +397,7 @@ ANSWERS.addComponent('SearchBar', {
   // Note that WCAG compliance is not guaranteed if a form is not used as the context.
   useForm: 'true',
   // Optional, the input element used for searching and wires up the keyboard interaction
-  inputEl: '.js-yext-query',  
+  inputEl: '.js-yext-query',
   // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
   // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
   geolocationOptions: {
@@ -935,7 +935,7 @@ ANSWERS.addComponent('FilterBox', {
 
 This component is only for Vertical pages.
 
-The Facets component displays filters relevant to the current search, configured on the server, automatically. The Facets component will be hidden when a query returns no results.
+The Facets component displays filters relevant to the current search, configured on the server, automatically. The Facets component will be hidden when a query returns no results. The selected options in a facets component will float to the top.
 
 ```html
 <div class="facets-container"></div>
@@ -973,6 +973,21 @@ ANSWERS.addComponent('Facets', {
   expand: true,
   // Optional, show the number of applied facets when a group is collapsed
   showNumberApplied: true,
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
+  // Optional, field-specific overrides for a filter
+  fields: {
+    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, buildin.location
+      // Optional, the placeholder text used for the filter option search input
+      placeholderText: 'Search here...',
+      // Optional, if true, display the filter option search input
+      searchable: false,
+      // Optional, control type, singleoption or multioption
+      control: false,
+    }
+  },
   // Optional, the label to show on the apply button
   applyLabel: 'apply'
 });
@@ -1092,7 +1107,11 @@ ANSWERS.addComponent('FilterOptions', {
   // Optional, the callback function to call when changed
   onChange: function() {},
   // Optional, the label to be used in the legend, defaults to 'Filters'
-  label: 'Filters'
+  label: 'Filters',
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
 });
 ```
 

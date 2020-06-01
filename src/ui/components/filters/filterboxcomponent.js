@@ -204,6 +204,9 @@ export default class FilterBoxComponent extends Component {
             this.onFilterNodeChange(i, filterNode);
           }
         }));
+      if (this.config.isDynamic && typeof component.floatSelected === 'function') {
+        component.floatSelected();
+      }
       component.mount();
       this._filterComponents.push(component);
       this._filterNodes[i] = component.getFilterNode();
