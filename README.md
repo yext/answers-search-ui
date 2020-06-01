@@ -1428,7 +1428,9 @@ ANSWERS.addComponent('Map', {
   // Optional, callback to invoke when a pin is clicked. The clicked item(s) are passed to the callback
   onPinClick: null,
   // Optional, callback to invoke when a pin is hovered. The clicked item(s) are passed to the callback
-  onPinHover: null,
+  onPinMouseOver: null,
+  // Optional, callback to invoke when a pin is no longer hovered after being hovered. The clicked item(s) are passed to the callback
+  onPinMouseOut: null,
   // Optional, callback to invoke once the Javascript is loaded
   onLoaded: function () {},
   // Optional, configuration for the map's behavior when a query returns no results
