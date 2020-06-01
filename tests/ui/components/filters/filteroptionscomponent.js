@@ -96,8 +96,8 @@ describe('filter options component', () => {
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     const wrapper = mount(component);
     expect(options).toHaveLength(6);
-    expect(wrapper.find('.multioption-option')).toHaveLength(5);
-    expect(wrapper.find('.yxt-FilterOptions-showToggle')).toHaveLength(1);
+    expect(wrapper.find('.js-yxt-FilterOptions-option.hidden')).toHaveLength(1);
+    expect(wrapper.find('.js-yxt-FilterOptions-showMore')).toHaveLength(1);
   });
 
   it('renders correct number of multi options', () => {
