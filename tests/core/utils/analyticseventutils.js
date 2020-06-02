@@ -1,4 +1,4 @@
-import { createRemovedFilterEvent, optionTypeFromFilterType } from 'src/core/utils/eventutils';
+import { createRemovedFilterEvent, optionTypeFromFilterType } from 'src/core/utils/analyticseventutils';
 import AnalyticsEvent from 'src/core/analytics/analyticsevent';
 import FilterType from 'src/core/filters/filtertype';
 

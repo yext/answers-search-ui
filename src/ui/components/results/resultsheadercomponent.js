@@ -4,7 +4,7 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { groupArray } from '../../../core/utils/arrayutils';
-import { createRemovedFilterEvent, optionTypeFromFilterType } from '../../../core/utils/eventutils';
+import { createRemovedFilterEvent, optionTypeFromFilterType } from '../../../core/utils/analyticseventutils';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,

@@ -4,7 +4,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import FacetsComponent from './facetscomponent';
-import { createRemovedFilterEvent } from '../../../core/utils/eventutils';
+import { createRemovedFilterEvent } from '../../../core/utils/analyticseventutils';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 
 class FilterBoxConfig {
@@ -239,9 +239,12 @@ export default class FilterBoxComponent extends Component {
     }
   }
 
+  _getValidFilterNodes () {
+    return this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
+  }
+
   resetFilters () {
-    const validFilterNodes = this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
-    const removedFilterNode = FilterNodeFactory.and(...validFilterNodes);
+    const removedFilterNode = FilterNodeFactory.and(...this._getValidFilterNodes());
     const removedFromComponent = this.config.isDynamic
       ? FacetsComponent.type
       : FilterBoxComponent.type;
@@ -287,9 +290,8 @@ export default class FilterBoxComponent extends Component {
    */
   _saveFilterNodesToStorage () {
     if (this.config.isDynamic) {
-      const validFilterNodes = this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
-      this.core.setFacetFilterNodes(availableFieldIds, validFilterNodes);
+      this.core.setFacetFilterNodes(availableFieldIds, this._getValidFilterNodes());
     } else {
       this._filterComponents.forEach(fc => fc.apply());
     }

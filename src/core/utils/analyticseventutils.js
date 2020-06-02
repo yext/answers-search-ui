@@ -3,7 +3,7 @@ import AnalyticsEvent from '../analytics/analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
 
 /**
- * Create the 'REMOVED_FILTER' analytics event, using the given {@link FilterNode}.
+ * Create the 'REMOVED_FILTER' analytics event using the given params.
  * @param {Filter} removedFilter The {@link Filter} that was removed.
  * @param {string} optionType The optionType to send in the request, either STATIC_FILTER, FACET_FILTER, or RADIUS_FILTER.
  * @param {string} removedFromComponent The component type that removed/reset this filter.
@@ -22,7 +22,7 @@ export function createRemovedFilterEvent (removedFilter, optionType, removedFrom
 }
 
 /**
- * Parse the 'optionType' analytics event param.
+ * Parse a {@link FilterType} into the 'optionType' analytics event param.
  * @param {FilterType} filterType
  * @returns {string}
  */

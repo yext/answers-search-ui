@@ -9,7 +9,7 @@ import levenshtein from 'js-levenshtein';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import { groupArray } from '../../../core/utils/arrayutils';
-import { createRemovedFilterEvent } from '../../../core/utils/eventutils';
+import { createRemovedFilterEvent } from '../../../core/utils/analyticseventutils';
 import StorageKeys from '../../../core/storage/storagekeys';
 import FilterType from '../../../core/filters/filtertype';
 
