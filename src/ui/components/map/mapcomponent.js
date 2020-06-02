@@ -25,10 +25,12 @@ export default class MapComponent extends Component {
     /**
      * Configuration for the behavior when there are no vertical results.
      */
-    this._noResults = Object.assign(
-      { displayAllResults: false, template: '' },
-      opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG)
-    );
+    this._noResults = {
+      displayAllResults: false,
+      visible: undefined,
+      template: '',
+      ...(opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG))
+    };
 
     /**
      * An aliased used to determine the type of map provider to use
@@ -61,7 +63,11 @@ export default class MapComponent extends Component {
 
   // TODO(billy) Make ProviderTypes a factory class
   getProviderInstance (type) {
-    return new ProviderTypes[type.toLowerCase()](this._config);
+    const _config = {
+      ...this._config,
+      noResults: this._noResults
+    };
+    return new ProviderTypes[type.toLowerCase()](_config);
   }
 
   onCreate () {
@@ -71,7 +77,7 @@ export default class MapComponent extends Component {
 
   onMount () {
     this._map.onLoaded(() => {
-      this._map.init(this._container, this.getState('map'));
+      this._map.init(this._container, this.getState('map'), this.getState('resultsContext'));
     });
   }
 
@@ -81,7 +87,9 @@ export default class MapComponent extends Component {
     }
 
     if (data.resultsContext === ResultsContext.NO_RESULTS && !this._noResults.displayAllResults) {
-      data = {};
+      data = {
+        resultsContext: data.resultsContext
+      };
     }
 
     return super.setState(data, val);

@@ -29,6 +29,7 @@ Outline:
    - [LocationBias Component](#location-bias-component)
    - [SortOptions Component](#sort-options-component)
    - [Map Component](#map-component)
+   - [Icon Component](#icon-component)
 5. [Customizing Components](#customizing-components)
    - [Using a Custom Renderer](#using-a-custom-renderer)
    - [Custom Data Formatting](#custom-data-formatting)
@@ -125,6 +126,8 @@ function initAnswers() {
     onVerticalSearch: function() {},
     // Optional, analytics callback after a universal search, see onUniversalSearch Configuration for additional details
     onUniversalSearch: function() {},
+    // Optional, opt-out of automatic css variable resolution on init for legacy browsers
+    disableCssVariablesPonyfill: false,
   })
 }
 ```
@@ -394,7 +397,24 @@ ANSWERS.addComponent('SearchBar', {
   // Note that WCAG compliance is not guaranteed if a form is not used as the context.
   useForm: 'true',
   // Optional, the input element used for searching and wires up the keyboard interaction
-  inputEl: '.js-yext-query'
+  inputEl: '.js-yext-query',  
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 1 second.
+    timeout: 1000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: "We are unable to determine your location"
+  }
 })
 ```
 
@@ -799,7 +819,13 @@ ANSWERS.addComponent('Pagination', {
   // Optional, display a double arrow allowing users to jump to the last page of results
   showLast: true,
   // Optional, label for a page of results
-  pageLabel: 'Page'
+  pageLabel: 'Page',
+  // Optional, configuration for the pagination behavior when a query returns no results
+  noResults: {
+    // Optional, whether pagination should be visible when displaying no results.
+    // Defaults to false.
+    visible: false
+  }
 });
 ```
 
@@ -880,7 +906,7 @@ ANSWERS.addComponent('FilterBox', {
 
 This component is only for Vertical pages.
 
-The Facets component displays filters relevant to the current search, configured on the server, automatically.
+The Facets component displays filters relevant to the current search, configured on the server, automatically. The Facets component will be hidden when a query returns no results.
 
 ```html
 <div class="facets-container"></div>
@@ -1146,6 +1172,23 @@ ANSWERS.addComponent('GeoLocationFilter', {
       sectioned: false,
     }]
   },
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 6 seconds.
+    timeout: 6000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: "We are unable to determine your location"
+  }
 });
 ```
 
@@ -1267,13 +1310,30 @@ ANSWERS.addComponent('LocationBias', {
   // Optional, help text to inform someone their device was used for location
   deviceAccuracyHelpText: 'based on your device',
   // Optional, text used for the button to update location
-  updateLocationButtonText: 'Update your location'
+  updateLocationButtonText: 'Update your location',
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 6 seconds.
+    timeout: 6000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: "We are unable to determine your location"
+  }
 })
 ```
 
 ## Sort Options Component
 
-The sort options component displays a list of radio buttons that allows users to sort the results of a vertical search.
+The sort options component displays a list of radio buttons that allows users to sort the results of a vertical search. When a query returns no results, the component will not be rendered on the page.
 Currently, there may be only one sort options component per page.
 
 ```html
@@ -1363,7 +1423,7 @@ ANSWERS.addComponent('Map', {
   zoom: 14,
   // Optional, the default coordinates to display if there are no results returned used if showEmptyMap is set to true
   defaultPosition: { lat: 37.0902, lng: -95.7129 },
-  // Optional, determines if an empty map should be shown when there are no results
+  // Optional, determines if an empty map should be shown when there are no results. Defaults to false.
   showEmptyMap: false,
   // Optional, callback to invoke when a pin is clicked. The clicked item(s) are passed to the callback
   onPinClick: null,
@@ -1371,8 +1431,10 @@ ANSWERS.addComponent('Map', {
   onLoaded: function () {},
   // Optional, configuration for the map's behavior when a query returns no results
   noResults: {
-    // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
-    displayAllResults: true
+    // Optional, whether to display map pins for all possible results when no results are found. Defaults to false.
+    displayAllResults: false,
+    // Optional, whether to display the map when no results are found, taking priority over showEmptyMap. If unset, a map will be visible if showEmptyMap is true OR if displayAllResults is true and alternative results are returned.
+    visible: false
   },
   // Optional, the custom configuration override to use for the map markers, function
   pin: function () {
@@ -1387,6 +1449,59 @@ ANSWERS.addComponent('Map', {
     };
   },
 };
+```
+
+## Icon Component
+The Icon Component will typically be created by other components, but it can be used as a standalone component as well.
+
+```html
+<div class='icon-container'></div>
+```
+
+```js
+ANSWERS.addComponent('IconComponent', {
+  // Required. This is the class of the target HTML element the component will be mounted to.
+  container: '.icon-container',
+  // Optional. Can be used to access an icon defined within the Answers system. See below for default icon names.
+  iconName: 'default',
+  // Optional. Sets the icon to reference an image URL. Overrides icon name.
+  iconUrl: '',
+  // Optional. Adds class names to the icon. Multiple classnames should be space-delimited.
+  classNames: '',
+});
+```
+The following is a list of names for the icons that are supported by default.
+
+- briefcase
+- calendar
+- callout
+- chevron
+- close
+- directions
+- document
+- elements
+- email
+- gear
+- info
+- kabob
+- light_bulb
+- link
+- magnifying_glass
+- mic
+- office
+- pantheon
+- person
+- phone
+- pin
+- receipt
+- star
+- support
+- tag
+- thumb
+- window
+- yext_animated_forward
+- yext_animated_reverse
+- yext
 
 # Customizing Components
 
@@ -1595,3 +1710,43 @@ ANSWERS.formatRichText(rtfFieldValue)
 ```
 
 For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute. When using this function, you must ensure that the relevant Handlebars template correctly unescapes the value's resultant HTML.
+
+# CSS Variable Styling
+
+The Answers SDK supports styling specific elements with CSS variables for runtime styling.
+* All sdk variables are exposed in the `:root` ruleset
+* All overridden variables must be included the `:root` ruleset
+* All overrides should be defined after Answers CSS is imported and before ANSWERS.init is called
+* To see available variables, see the scss modules in the SDK
+* For example, to override:
+
+```html
+<style>
+  :root {
+    --yxt-font-font-family: sans-serif;
+    --yxt-color-brand-primary: green;
+    --yxt-color-text-primary: #212121;
+    --yxt-searchbar-button-background-color-hover: red;
+    --yxt-nav-border-color: #e9e9e9;
+  }
+</style>
+```
+
+Most browsers have native css variable support. In legacy browsers,
+we use the [css-vars-ponyfill](https://github.com/jhildenbiddle/css-vars-ponyfill).
+* The SDK will do automatic resolution of CSS variables on initialization. Variables should be loaded
+before initialization. Overrided variables should be loaded after sdk variables are loaded.
+* You can opt-out with the `disableCssVariablesPonyfill` flag in ANSWERS.init.
+* If you opt-out of automatic resolution of variables, you should call ANSWERS.ponyfillCssVariables()
+after css variables are loaded and before components are added.
+* If you change a css variable value after initialization and wish to see the change in variable
+value in a legacy browser, you should call ANSWERS.ponyfillCssVariables() after the value is changed.
+* We support all callback functions, described [here](https://jhildenbiddle.github.io/css-vars-ponyfill/#/?id=onbeforesend)
+
+```js
+ANSWERS.ponyfillCssVariables({
+        onError: function() {},
+        onSuccess: function() {},
+        onFinally: function() {},
+});
+```

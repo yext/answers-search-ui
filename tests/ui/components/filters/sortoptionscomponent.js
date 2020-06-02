@@ -4,6 +4,7 @@ import { mount } from 'enzyme';
 import { AnswersBasicError } from '../../../../src/core/errors/errors';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
+import ResultsContext from '../../../../src/core/storage/resultscontext';
 
 const mockedCore = () => {
   return {
@@ -13,6 +14,7 @@ const mockedCore = () => {
     clearSortBys: () => {},
     verticalSearch: () => {},
     globalStorage: {
+      on: () => {},
       getState: storageKey => {
         expect(['SortOptions', StorageKeys.QUERY]).toContain(storageKey);
         return null;
@@ -186,5 +188,19 @@ describe('sort options component', () => {
     const wrapper = mount(component);
     expect(component._config.searchOnChange).toBeFalsy();
     expect(wrapper.find('.yxt-SortOptions-apply')).toHaveLength(1);
+  });
+
+  it('does not render for no results', () => {
+    const opts = {
+      ...defaultConfig,
+      options: threeOptions,
+      searchOnChange: false
+    };
+    const component = COMPONENT_MANAGER.create('SortOptions', opts);
+    component.setState({
+      resultsContext: ResultsContext.NO_RESULTS
+    });
+    const wrapper = mount(component);
+    expect(wrapper.text()).toEqual('');
   });
 });

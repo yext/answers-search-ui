@@ -14,6 +14,7 @@ export default class Section {
     this.results = ResultFactory.from(data.results, formatters, this.verticalConfigId, data.source);
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
+    this.resultsContext = data.resultsContext;
   }
 
   static parseMap (results) {

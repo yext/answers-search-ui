@@ -218,9 +218,16 @@ export default class VerticalResultsComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === MapComponent.type) {
-      const newOpts = Object.assign(
-        {}, this._config.mapConfig, { noResults: this._noResultsConfig }, opts);
-      return super.addChild({ map: data }, type, newOpts);
+      const _opts = {
+        noResults: this._noResultsConfig,
+        ...this._config.mapConfig,
+        ...opts
+      };
+      const _data = {
+        resultsContext: this.getState('resultsContext'),
+        map: data
+      };
+      return super.addChild(_data, type, _opts);
     } else if (type === CardComponent.type) {
       const updatedData = {
         result: this.results[opts._index],

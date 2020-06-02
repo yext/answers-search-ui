@@ -76,12 +76,15 @@ export default class ApiRequest {
 
   /**
    * get creates a new `GET` request to the server using the configuration of the request class
+   *
+   * @param {Object} opts Any configuration options to use for the GET request.
    * @returns {Promise<Response>}
    */
-  get () {
+  get (opts) {
     return this._requester.get(
       this._baseUrl + this._endpoint,
-      Object.assign({}, this.baseParams(), this.sanitizeParams(this._params))
+      Object.assign({}, this.baseParams(), this.sanitizeParams(this._params)),
+      opts
     );
   }
 

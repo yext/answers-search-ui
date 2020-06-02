@@ -1,21 +1,36 @@
 /** @define ResultsHeader */
+
+$results-header-font-size: var(--yxt-font-size-md) !default;
+$results-header-spacing: var(--yxt-base-spacing) !default;
+
+$results-header-color: var(--yxt-color-text-secondary) !default;
+$results-header-font-weight: var(--yxt-font-weight-normal) !default;
+$results-header-line-height: var(--yxt-line-height-md) !default;
+$results-header-margin-bottom: calc(var(--yxt-base-spacing) / 4) !default;
+
+$results-header-count-color: var(--yxt-color-text-secondary) !default;
+$results-header-count-weight: var(--yxt-font-weight-bold) !default;
+
+$results-header-filters-font-size: var(--yxt-font-size-md) !default;
+$results-header-filters-color: var(--yxt-color-text-secondary) !default;
+$results-header-filters-line-height: var(--yxt-line-height-md) !default;
+
+:root {
+  --yxt-results-header-font-size: #{$results-header-font-size};
+  --yxt-results-header-spacing: #{$results-header-spacing};
+  --yxt-results-header-color: #{$results-header-color};
+  --yxt-results-header-font-weight: #{$results-header-font-weight};
+  --yxt-results-header-line-height: #{$results-header-line-height};
+  --yxt-results-header-margin-bottom: #{$results-header-margin-bottom};
+  --yxt-results-header-count-color: #{$results-header-count-color};
+  --yxt-results-header-count-weight: #{$results-header-count-weight};
+  --yxt-results-header-filters-font-size: #{$results-header-filters-font-size};
+  --yxt-results-header-filters-color: #{$results-header-filters-color};
+  --yxt-results-header-filters-line-height: #{$results-header-filters-line-height};
+}
+
 .yxt-ResultsHeader {
-  $results-header-font-size: $font-size-md !default;
-  $results-header-spacing: $base-spacing !default;
-
-  $results-header-color: $color-text-secondary !default;
-  $results-header-font-weight: $font-weight-normal !default;
-  $results-header-line-height: $line-height-md !default;
-  $results-header-margin-bottom: $base-spacing / 4 !default;
-
-  $results-header-count-color: $color-text-secondary !default;
-  $results-header-count-weight: $font-weight-bold !default;
-
-  $results-header-filters-font-size: $font-size-md !default;
-  $results-header-filters-color: $color-text-secondary !default;
-  $results-header-filters-line-height: $line-height-md !default;
-
-  padding: $results-header-spacing / 2 $results-header-spacing;
+  padding: calc(var(--yxt-results-header-spacing) / 2) var(--yxt-results-header-spacing);
   display: flex;
   align-items: baseline;
 
@@ -27,21 +42,21 @@
 
   &-resultsCount
   {
-    margin-right: $results-header-spacing / 4;
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
     white-space: nowrap;
     @include Text(
-      $size: $results-header-font-size,
-      $line-height: $results-header-line-height,
-      $weight: $results-header-count-weight,
-      $color: $results-header-count-color
+      $size: var(--yxt-results-header-font-size),
+      $line-height: var(--yxt-results-header-line-height),
+      $weight: var(--yxt-results-header-count-weight),
+      $color: var(--yxt-results-header-count-color)
     );
   }
 
   &-appliedFilters
   {
-    padding-top: $results-header-spacing / 2;
-    padding-bottom: $results-header-spacing / 2;
-    padding-right: $results-header-spacing;
+    padding-top: calc(var(--yxt-results-header-spacing) / 2);
+    padding-bottom: calc(var(--yxt-results-header-spacing) / 2);
+    padding-right: var(--yxt-results-header-spacing);
     border-top: 0;
     display: flex;
     align-items: center;
@@ -51,32 +66,32 @@
   &-filterLabel
   {
     display: flex;
-    margin-right: $results-header-spacing * 3 / 8;
+    margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
     @include Text(
-      $size: $results-header-filters-font-size,
-      $line-height: $results-header-filters-line-height,
-      $color: $results-header-filters-color,
+      $size: var(--yxt-results-header-filters-font-size),
+      $line-height: var(--yxt-results-header-filters-line-height),
+      $color: var(--yxt-results-header-filters-color),
     )
   }
 
   &-filterValue
   {
-    margin-right:$results-header-spacing  * 3 / 8;
+    margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
     @include Text(
-      $size: $results-header-filters-font-size,
-      $line-height: $results-header-filters-line-height,
-      $color: $results-header-filters-color,
+      $size: var(--yxt-results-header-filters-font-size),
+      $line-height: var(--yxt-results-header-filters-line-height),
+      $color: var(--yxt-results-header-filters-color),
     );
   }
   &-resultsCountSeparator
   {
-    color: $results-header-filters-color;
-    margin-right: $results-header-spacing * 3 / 8;
+    color: var(--yxt-results-header-filters-color);
+    margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
   }
 
   &-filterSeparator
   {
-    color: $results-header-filters-color;
-    margin-right: $results-header-spacing * 3 / 8;
+    color: var(--yxt-results-header-filters-color);
+    margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
   }
 }
