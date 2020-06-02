@@ -5,7 +5,7 @@ import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscompo
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
 import FilterMetadata from 'src/core/filters/filtermetadata';
-import FilterType from '../../../../src/core/filters/FilterType';
+import FilterType from '../../../../src/core/filters/filtertype';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import AnalyticsEvent from 'src/core/analytics/analyticsevent';
 

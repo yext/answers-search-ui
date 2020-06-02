@@ -407,7 +407,7 @@ export default class Core {
   /**
    * Sets the specified {@link FilterNode} under the given key.
    * Will replace a preexisting node if there is one.
-   * @param {string} key
+   * @param {string} namespace
    * @param {FilterNode} filterNode
    */
   setStaticFilterNodes (namespace, filterNode) {
@@ -424,7 +424,7 @@ export default class Core {
 
   /**
    * Remove the static FilterNode with this namespace.
-   * @param {string} key
+   * @param {string} namespace
    */
   clearStaticFilterNode (namespace) {
     this.filterRegistry.clearStaticFilterNode(namespace);

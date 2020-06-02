@@ -204,8 +204,8 @@ export default class FilterBoxComponent extends Component {
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
           isDynamic: this.config.isDynamic,
-          onChange: (filterNode, saveFilterNodes, blockSearchOnChange) => {
-            const _saveFilterNodes = this.config.searchOnChange || saveFilterNodes;
+          onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
+            const _saveFilterNodes = this.config.searchOnChange || alwaysSaveFilterNodes;
             const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
             this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
           }
@@ -265,7 +265,7 @@ export default class FilterBoxComponent extends Component {
    */
   onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
     this._filterNodes[index] = filterNode;
-    if (saveFilterNodes) {
+    if (saveFilterNodes || searchOnChange) {
       this._saveFilterNodesToStorage();
     }
     if (searchOnChange) {

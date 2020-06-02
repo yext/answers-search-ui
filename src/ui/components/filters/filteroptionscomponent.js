@@ -521,13 +521,13 @@ export default class FilterOptionsComponent extends Component {
     this.setState();
   }
 
-  updateListeners (saveFilterNodes, blockSearchOnChange) {
+  updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
       this.apply();
     }
 
-    this.config.onChange(filterNode, saveFilterNodes, blockSearchOnChange);
+    this.config.onChange(filterNode, alwaysSaveFilterNodes, blockSearchOnChange);
   }
 
   _updateOption (index, selected) {
