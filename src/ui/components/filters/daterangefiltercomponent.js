@@ -119,8 +119,10 @@ export default class DateRangeFilterComponent extends Component {
   }
 
   _removeFilterNode () {
-    this._date = Object.assign({}, this._date, { 'min': null });
-    this._date = Object.assign({}, this._date, { 'max': null });
+    this._date = {
+      min: null,
+      max: null
+    };
     this.setState();
     this._onChange(FilterNodeFactory.from());
     this.core.clearStaticFilterNode(this.name);
@@ -200,8 +202,7 @@ export default class DateRangeFilterComponent extends Component {
     }
     return new FilterMetadata({
       fieldName: this._title,
-      displayValue: displayValue,
-      originComponent: DateRangeFilterComponent.type
+      displayValue: displayValue
     });
   }
 }

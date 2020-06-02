@@ -368,8 +368,8 @@ export default class VerticalResultsComponent extends Component {
       const resultsHeaderData = {
         resultsLength: this.results.length,
         resultsCount: this.resultsCount,
-        removableFilterNodes: this.appliedFilterNodes,
-        irremovableFilterNodes: this.nlpFilterNodes,
+        appliedFilterNodes: this.appliedFilterNodes,
+        nlpFilterNodes: this.nlpFilterNodes,
         ...data
       };
       const _opts = { ...opts };

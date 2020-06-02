@@ -236,7 +236,6 @@ export default class FacetsComponent extends Component {
         resetFilterLabel: this.config.resetFacetLabel,
         resetFiltersLabel: this.config.resetFacetsLabel,
         isDynamic: true,
-        originComponent: FacetsComponent.type,
         filters
       })
     );

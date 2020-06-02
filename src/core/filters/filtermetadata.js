@@ -1,11 +1,13 @@
 /** @module FilterMetadata */
 
+import FilterType from "./filtertype";
+
 /**
  * FilterMetadata is a container for additional display data for a {@link Filter}.
  */
 export default class FilterMetadata {
   constructor (metadata = {}) {
-    const { fieldName, displayValue, originComponent, optionType } = metadata;
+    const { fieldName, displayValue, optionType } = metadata;
 
     /**
      * The display name for the field being filtered on.
@@ -22,17 +24,10 @@ export default class FilterMetadata {
     this.displayValue = displayValue;
 
     /**
-     * The origin component type of this filter, such as FilterOptions or
-     * DateRangeFilter.
-     * @type {string}
+     * What type of filter this is.
+     * @type {FilterType}
      */
-    this.originComponent = originComponent;
-
-    /**
-     * The type of filter this is, either 'RADIUS_FILTER' or 'STATIC_FILTER'.
-     * @type {string}
-     */
-    this.optionType = optionType || 'STATIC_FILTER';
+    this.filterType = filterType || FilterType.STATIC;
     Object.freeze(this);
   }
 }

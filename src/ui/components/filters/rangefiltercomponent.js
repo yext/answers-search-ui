@@ -123,8 +123,10 @@ export default class RangeFilterComponent extends Component {
   }
 
   _removeFilterNode () {
-    this._date = Object.assign({}, this._date, { 'min': null });
-    this._date = Object.assign({}, this._date, { 'max': null });
+    this._range = {
+      min: null,
+      max: null
+    };
     this.setState();
     this._onChange(FilterNodeFactory.from());
     this.core.clearStaticFilterNode(this.name);
@@ -188,8 +190,7 @@ export default class RangeFilterComponent extends Component {
     const falsyMax = !max && max !== 0;
     if (falsyMin && falsyMax) {
       return new FilterMetadata({
-        fieldName: this._title,
-        originComponent: 'RangeFilter'
+        fieldName: this._title
       });
     }
     // TODO add config option to range filter component for exclusive ranges.
@@ -213,8 +214,7 @@ export default class RangeFilterComponent extends Component {
     }
     return new FilterMetadata({
       fieldName: this._title,
-      displayValue: displayValue,
-      originComponent: RangeFilterComponent.type
+      displayValue: displayValue
     });
   }
 }

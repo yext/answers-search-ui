@@ -109,13 +109,6 @@ class FilterBoxConfig {
      */
     this.isDynamic = config.isDynamic || false;
 
-    /**
-     * In the FilterMetadata of FilterNodes created, the component
-     * name to use as the origin component.
-     * @type {string}
-     */
-    this.originComponent = config.originComponent || FilterBoxComponent.type;
-
     this.validate();
   }
 
@@ -207,7 +200,6 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
-          originComponent: this.config.originComponent,
           onChange: (filterNode, saveFilterNodes, blockSearchOnChange) => {
             const _saveFilterNodes = this.config.searchOnChange || saveFilterNodes;
             const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
@@ -251,7 +243,8 @@ export default class FilterBoxComponent extends Component {
    * Handle changes to child filter components
    * @param {number} index The index of the changed filter
    * @param {FilterNode} filterNode The new filter node
-   * @param {boolean} options
+   * @param {boolean} saveFilterNodes Whether to save filternodes to storage
+   * @param {boolean} searchOnChange Whether to conduct a search
    */
   onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
     this._filterNodes[index] = filterNode;

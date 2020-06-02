@@ -18,7 +18,6 @@ describe('FilterNodeFactory', () => {
     metadata1 = {
       fieldName: 'field name 1',
       displayValue: 'one',
-      originComponent: undefined,
       optionType: 'STATIC_FILTER'
     };
     node1 = FilterNodeFactory.from({

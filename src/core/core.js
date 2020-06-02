@@ -359,22 +359,49 @@ export default class Core {
     this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
   }
 
+  /**
+   * Get all of the {@link FilterNode}s for static filters.
+   * @returns {Array<FilterNode>}
+   */
   getStaticFilterNodes () {
     return this.filterRegistry.getStaticFilterNodes();
   }
 
+  /**
+   * Get all of the active {@link FilterNode}s for facets.
+   * @returns {Array<FilterNode>}
+   */
   getFacetFilterNodes () {
     return this.filterRegistry.getFacetFilterNodes();
   }
 
+  /**
+   * Get the {@link FilterNode} affecting the locationRadius url parameter.
+   * @returns {FilterNode}
+   */
   getLocationRadiusFilterNode () {
     return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
   }
 
+  /**
+   * Sets the filter nodes used for the current facet filters.
+   *
+   * Because the search response only sends back one
+   * set of facet filters, there can only be one active facet filter node
+   * at a time.
+   * @param {Array<string>} availableFieldIds
+   * @param {Array<FilterNode>} filterNodes
+   */
   setFacetFilterNodes (availableFieldids = [], filterNodes = []) {
     this.filterRegistry.setFacetFilterNodes(availableFieldids, filterNodes);
   }
 
+  /**
+   * Sets the specified {@link FilterNode} under the given key.
+   * Will replace a preexisting node if there is one.
+   * @param {string} key
+   * @param {FilterNode} filterNode
+   */
   setStaticFilterNodes (namespace, filterNode) {
     this.filterRegistry.setStaticFilterNodes(namespace, filterNode);
   }
@@ -387,10 +414,17 @@ export default class Core {
     this.filterRegistry.setLocationRadiusFilterNode(filterNode);
   }
 
+  /**
+   * Remove the static FilterNode with this namespace.
+   * @param {string} key
+   */
   clearStaticFilterNode (namespace) {
     this.filterRegistry.clearStaticFilterNode(namespace);
   }
 
+  /**
+   * Remove all facet FilterNodes.
+   */
   clearFacetFilterNodes () {
     this.filterRegistry.clearFacetFilterNodes();
   }

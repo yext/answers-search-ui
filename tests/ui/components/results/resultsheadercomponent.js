@@ -56,7 +56,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
 
   it('works with simpleFilterNodes, removable = false by default', () => {
     const simpleFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
-    resultsHeaderComponent.removableFilterNodes = simpleFilterNodes;
+    resultsHeaderComponent.appliedFilterNodes = simpleFilterNodes;
     const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
     expect(Object.keys(groupedFilters)).toHaveLength(2);
     expect(groupedFilters['name0']).toEqual([
@@ -82,17 +82,17 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
 
   it('duplicate display values should still be repeated', () => {
     const simpleFilterNodes = [ node_f1_v1, node_f1_v1 ];
-    resultsHeaderComponent.removableFilterNodes = simpleFilterNodes;
+    resultsHeaderComponent.appliedFilterNodes = simpleFilterNodes;
     const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
     expect(Object.keys(groupedFilters)).toHaveLength(1);
     expect(groupedFilters['name1']).toHaveLength(2);
   });
 
   it('irremovable filter nodes come first, and removable: false by default', () => {
-    const removableFilterNodes = [ node_f0_v0, node_f1_v0 ];
-    const irremovableFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
-    resultsHeaderComponent.removableFilterNodes = removableFilterNodes;
-    resultsHeaderComponent.irremovableFilterNodes = irremovableFilterNodes;
+    const appliedFilterNodes = [ node_f0_v0, node_f1_v0 ];
+    const nlpFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
+    resultsHeaderComponent.appliedFilterNodes = appliedFilterNodes;
+    resultsHeaderComponent.nlpFilterNodes = nlpFilterNodes;
     console.log(resultsHeaderComponent._config);
     const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
     expect(Object.keys(groupedFilters)).toHaveLength(2);
@@ -124,7 +124,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
   it('can display removable filters', () => {
     const simpleFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
     resultsHeaderComponent._config.removable = true;
-    resultsHeaderComponent.removableFilterNodes = simpleFilterNodes;
+    resultsHeaderComponent.appliedFilterNodes = simpleFilterNodes;
     const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
     expect(Object.keys(groupedFilters)).toHaveLength(2);
     expect(groupedFilters['name0']).toEqual([

@@ -4,7 +4,7 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { groupArray } from '../../../core/utils/arrayutils';
-import AnalyticsEvent from '../../../core/analytics/analyticsevent';
+import { createRemovedFilterEvent } from '../../../core/utils/eventutils';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -37,18 +37,18 @@ export default class ResultsHeaderComponent extends Component {
     this.resultsLength = data.resultsLength || 0;
 
     /**
-     * Array of potentially removable filterNodes to display.
-     * If config.removable is set as false these will not render as removable.
+     * Array of applied filterNodes. These are allowed to be removable, but
+     * if config.removable is set as false these will not render as removable.
      * @type {Array<FilterNode>}
      */
-    this.removableFilterNodes = data.removableFilterNodes || [];
+    this.appliedFilterNodes = data.appliedFilterNodes || [];
 
     /**
-     * Array of irremovable filterNodes to display.
+     * Array of nlp filterNodes to display.
      * These will not render as removable even if config.removable is true.
      * @type {Array<FilterNode>}
      */
-    this.irremovableFilterNodes = data.irremovableFilterNodes || [];
+    this.nlpFilterNodes = data.nlpFilterNodes || [];
   }
 
   static areDuplicateNamesAllowed () {
@@ -56,27 +56,25 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   onMount () {
-    const removableFilterTags = DOM.queryAll(this._container, '.js-yxt-ResultsHeader-removableFilterTag');
+    const removableFilterTags =
+      DOM.queryAll(this._container, '.js-yxt-ResultsHeader-removableFilterTag');
     removableFilterTags.forEach(tag => {
       DOM.on(tag, 'click', () => this._removeFilterTag(tag));
     });
   }
 
+
+  /**
+   * Call remove callback for the {@link FilterNode} corresponding to a specific
+   * removable filter tag.
+   * @param {HTMLElement} tag
+   */
   _removeFilterTag (tag) {
     const { filterId } = tag.dataset;
-    const simpleFilterNode = this.removableFilterNodes[filterId];
-    const { originComponent, optionType } = simpleFilterNode.getMetadata();
-    simpleFilterNode.remove();
-    const analyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
-    const removedFilter = optionType === 'STATIC_FILTER'
-      ? JSON.stringify(simpleFilterNode.getFilter())
-      : simpleFilterNode.getFilter().value || 0;
-    analyticsEvent.addOptions({
-      verticalKey: this._config.verticalKey,
-      removedFromComponent: originComponent,
-      optionType: optionType,
-      removedFilter: removedFilter
-    });
+    const filterNode = this.appliedFilterNodes[filterId];
+    filterNode.remove();
+    const analyticsEvent =
+      createRemovedFilterEvent(filterNode, 'VerticalResults', this._config.verticalKey);
     this.analyticsReporter.report(analyticsEvent);
     this.core.verticalSearch(this._config.verticalKey, {
       resetPagination: true,
@@ -98,13 +96,13 @@ export default class ResultsHeaderComponent extends Component {
     const irremovableValueFunc = filterNode => ({
       displayValue: filterNode.getMetadata().displayValue
     });
-    const irremovableGrouped = groupArray(this.irremovableFilterNodes, keyFunc, irremovableValueFunc);
+    const irremovableGrouped = groupArray(this.nlpFilterNodes, keyFunc, irremovableValueFunc);
     const removableValueFunc = (filterNode, index) => ({
       displayValue: filterNode.getMetadata().displayValue,
       dataFilterId: index,
       removable: this._config.removable
     });
-    return groupArray(this.removableFilterNodes, keyFunc, removableValueFunc, irremovableGrouped);
+    return groupArray(this.appliedFilterNodes, keyFunc, removableValueFunc, irremovableGrouped);
   }
 
   /**

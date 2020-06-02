@@ -51,16 +51,14 @@ describe('filter box component', () => {
       filter: Filter.equal(o.field, o.value),
       metadata: {
         fieldName: 'first filter options',
-        displayValue: o.label,
-        originComponent: 'FilterBox'
+        displayValue: o.label
       }
     });
     nodes1[index] = FilterNodeFactory.from({
       filter: Filter.equal(o.field, o.value),
       metadata: {
         fieldName: 'second filter options',
-        displayValue: o.label,
-        originComponent: 'FilterBox'
+        displayValue: o.label
       }
     });
   }
@@ -326,8 +324,7 @@ describe('dynamic filterbox component', () => {
       },
       metadata: {
         fieldName: 'Employee Department',
-        displayValue: 'label 1',
-        originComponent: 'FilterBox'
+        displayValue: 'label 1'
       }
     });
 
@@ -339,8 +336,7 @@ describe('dynamic filterbox component', () => {
       },
       metadata: {
         fieldName: 'Employee Department',
-        displayValue: 'label 2',
-        originComponent: 'FilterBox'
+        displayValue: 'label 2'
       }
     });
 
@@ -352,8 +348,7 @@ describe('dynamic filterbox component', () => {
       },
       metadata: {
         fieldName: 'Other Department',
-        displayValue: 'label 3',
-        originComponent: 'FilterBox'
+        displayValue: 'label 3'
       }
     });
 
@@ -365,8 +360,7 @@ describe('dynamic filterbox component', () => {
       },
       metadata: {
         fieldName: 'Other Department',
-        displayValue: 'label 4',
-        originComponent: 'FilterBox'
+        displayValue: 'label 4'
       }
     });
   });

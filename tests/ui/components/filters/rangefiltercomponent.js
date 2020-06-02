@@ -83,8 +83,7 @@ describe('range filter component', () => {
     let filter = Filter.inclusiveRange(field, min, max);
     let metadata = new FilterMetadata({
       fieldName: title,
-      displayValue: metadataFormatters.inclusiveRange(min, max),
-      originComponent: 'RangeFilter'
+      displayValue: metadataFormatters.inclusiveRange(min, max)
     });
     min = component._range.min;
     max = component._range.max;
@@ -99,8 +98,7 @@ describe('range filter component', () => {
     filter = Filter.lessThanEqual(field, max);
     metadata = new FilterMetadata({
       fieldName: title,
-      displayValue: metadataFormatters.lessThanEqual(max),
-      originComponent: 'RangeFilter'
+      displayValue: metadataFormatters.lessThanEqual(max)
     });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
@@ -114,8 +112,7 @@ describe('range filter component', () => {
     filter = Filter.inclusiveRange(field, min, max);
     metadata = new FilterMetadata({
       fieldName: title,
-      displayValue: metadataFormatters.inclusiveRange(min, max),
-      originComponent: 'RangeFilter'
+      displayValue: metadataFormatters.inclusiveRange(min, max)
     });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
@@ -129,8 +126,7 @@ describe('range filter component', () => {
     filter = Filter.greaterThanEqual(field, min);
     metadata = new FilterMetadata({
       fieldName: title,
-      displayValue: metadataFormatters.greaterThanEqual(min),
-      originComponent: 'RangeFilter'
+      displayValue: metadataFormatters.greaterThanEqual(min)
     });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
@@ -144,8 +140,7 @@ describe('range filter component', () => {
     filter = Filter.inclusiveRange(field, min, max);
     metadata = new FilterMetadata({
       fieldName: title,
-      displayValue: metadataFormatters.inclusiveRange(min, max),
-      originComponent: 'RangeFilter'
+      displayValue: metadataFormatters.inclusiveRange(min, max)
     });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
@@ -160,8 +155,7 @@ describe('range filter component', () => {
     component._updateRange('min', max);
     filter = Filter.empty();
     metadata = new FilterMetadata({
-      fieldName: title,
-      originComponent: 'RangeFilter'
+      fieldName: title
     });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
@@ -177,8 +171,7 @@ describe('range filter component', () => {
     filter = Filter.inclusiveRange(field, min, max);
     metadata = new FilterMetadata({
       fieldName: title,
-      displayValue: metadataFormatters.inclusiveRange(min, max),
-      originComponent: 'RangeFilter'
+      displayValue: metadataFormatters.inclusiveRange(min, max)
     });
     expect(component._buildFilter()).toEqual(filter);
     expect(component._buildFilterMetadata()).toEqual(metadata);
@@ -203,8 +196,7 @@ describe('range filter component', () => {
     expect(component._buildFilter()).toEqual(filter);
     const metadata = new FilterMetadata({
       fieldName: title,
-      displayValue: min,
-      originComponent: 'RangeFilter'
+      displayValue: min
     });
     expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);

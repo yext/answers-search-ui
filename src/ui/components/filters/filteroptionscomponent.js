@@ -42,13 +42,6 @@ class FilterOptionsConfig {
     this.optionType = config.optionType || OptionTypes.STATIC_FILTER;
 
     /**
-     * In the FilterMetadata of FilterNodes created, the component
-     * name to use as the origin component.
-     * @type {string}
-     */
-    this.originComponent = config.originComponent || FilterOptionsComponent.type;
-
-    /**
      * The list of filter options to display with checked status
      * @type {object[]}
      */
@@ -572,7 +565,6 @@ export default class FilterOptionsComponent extends Component {
     return new FilterMetadata({
       fieldName: this.config.label,
       displayValue: option.label,
-      originComponent: this.config.originComponent,
       optionType: this.config.optionType
     });
   }

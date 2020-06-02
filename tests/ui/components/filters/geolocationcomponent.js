@@ -32,8 +32,7 @@ describe('GeoLocationFilter', () => {
       filter: Filter.fromResponse(filter),
       metadata: {
         fieldName: title,
-        displayValue: `"${query}"`,
-        originComponent: 'GeoLocationFilter'
+        displayValue: `"${query}"`
       }
     });
     expect(filterNode.filter).toEqual(expectedFilterNode.filter);
@@ -62,8 +61,7 @@ describe('GeoLocationFilter', () => {
     expect(filterNode.filter).toEqual(Filter.position(123, 456, 999999));
     expect(filterNode.metadata).toEqual(new FilterMetadata({
       displayValue: 'Current Location',
-      fieldName: title,
-      originComponent: 'GeoLocationFilter'
+      fieldName: title
     }));
   });
 });

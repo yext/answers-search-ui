@@ -258,8 +258,7 @@ export default class GeoLocationComponent extends Component {
       filter: filter,
       metadata: {
         displayValue: displayValue,
-        fieldName: this._config.title || this._config.label || 'Location',
-        originComponent: GeoLocationComponent.type
+        fieldName: this._config.title || this._config.label || 'Location'
       },
       remove: () => this._removeFilterNode()
     });
