@@ -4,14 +4,14 @@ import { AnswersAnalyticsError } from '../errors/errors';
 
 /**
  * Create the 'REMOVED_FILTER' analytics event, using the given {@link FilterNode}.
- * @param {SimpleFilterNode} filterNode
+ * @param {Filter} removedFilter The {@link Filter} that was removed.
+ * @param {string} optionType The optionType to send in the request, either STATIC_FILTER, FACET_FILTER, or RADIUS_FILTER.
+ * @param {string} removedFromComponent The component type that removed/reset this filter.
+ * @param {string} verticalKey The current verticalKey
  * @returns {AnalyticsEvent}
  */
-export function createRemovedFilterEvent (filterNode, removedFromComponent, verticalKey) {
-  const { filterType } = filterNode.getMetadata();
+export function createRemovedFilterEvent (removedFilter, optionType, removedFromComponent, verticalKey) {
   const analyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
-  const optionType = _parseOptionType(filterType);
-  const removedFilter = _parseRemovedFilter(filterNode.getFilter(), filterType);
   analyticsEvent.addOptions({
     verticalKey: verticalKey,
     removedFromComponent: removedFromComponent,
@@ -22,31 +22,18 @@ export function createRemovedFilterEvent (filterNode, removedFromComponent, vert
 }
 
 /**
- * Parse the 'removedFilter' analytics event param.
- * @param {Filter} filter 
- * @param {FilterType} filterType 
- */
-function _parseRemovedFilter (filter, filterType) {
-  switch (filterType) {
-    case (FilterType.RADIUS):
-      return filter.value || 0
-    default:
-      return JSON.stringify(filter);
-  }
-}
-
-/**
  * Parse the 'optionType' analytics event param.
- * @param {FilterType} filterType 
+ * @param {FilterType} filterType
+ * @returns {string}
  */
-function _parseOptionType (filterType) {
+export function optionTypeFromFilterType (filterType) {
   switch (filterType) {
     case (FilterType.FACET):
-      return 'FACET_FILTER'
+      return 'FACET_FILTER';
     case (FilterType.STATIC):
-      return 'STATIC_FILTER'
+      return 'STATIC_FILTER';
     case (FilterType.RADIUS):
-      return 'RADIUS_FILTER'
+      return 'RADIUS_FILTER';
     default:
       throw new AnswersAnalyticsError(`Cannot parse filterType ${filterType}`);
   }

@@ -6,6 +6,8 @@ import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
 import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
 import FilterCombinators from 'src/core/filters/filtercombinators';
+import FilterType from 'src/core/filters/filtertype';
+import AnalyticsEvent from 'src/core/analytics/analyticsevent';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
@@ -224,6 +226,26 @@ describe('filter box component', () => {
     expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
     expect(verticalSearch.mock.calls).toHaveLength(1);
   });
+
+  it('sends REMOVED_FILTER event when reset', () => {
+    const reportFn = jest.fn();
+    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
+    const component = COMPONENT_MANAGER.create('FilterBox', {
+      ...defaultConfig,
+      verticalKey: 'a vertical key'
+    });
+    expect(reportFn.mock.calls).toHaveLength(0);
+    component.resetFilters();
+    expect(reportFn.mock.calls).toHaveLength(1);
+    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
+    expectedAnalyticsEvent.addOptions({
+      removedFilter: '{}',
+      optionType: 'STATIC_FILTER',
+      removedFromComponent: 'FilterBox',
+      verticalKey: 'a vertical key'
+    });
+    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
+  });
 });
 
 describe('dynamic filterbox component', () => {
@@ -324,7 +346,8 @@ describe('dynamic filterbox component', () => {
       },
       metadata: {
         fieldName: 'Employee Department',
-        displayValue: 'label 1'
+        displayValue: 'label 1',
+        filterType: FilterType.FACET
       }
     });
 
@@ -336,7 +359,8 @@ describe('dynamic filterbox component', () => {
       },
       metadata: {
         fieldName: 'Employee Department',
-        displayValue: 'label 2'
+        displayValue: 'label 2',
+        filterType: FilterType.FACET
       }
     });
 
@@ -348,7 +372,8 @@ describe('dynamic filterbox component', () => {
       },
       metadata: {
         fieldName: 'Other Department',
-        displayValue: 'label 3'
+        displayValue: 'label 3',
+        filterType: FilterType.FACET
       }
     });
 
@@ -360,7 +385,8 @@ describe('dynamic filterbox component', () => {
       },
       metadata: {
         fieldName: 'Other Department',
-        displayValue: 'label 4'
+        displayValue: 'label 4',
+        filterType: FilterType.FACET
       }
     });
   });
@@ -398,5 +424,25 @@ describe('dynamic filterbox component', () => {
     expect(setFacetFilterNodes.mock.calls[2][1][1].children[0].getMetadata()).toEqual(node3.getMetadata());
     expect(setFacetFilterNodes.mock.calls[2][1][1].children[1].getFilter()).toEqual(node4.getFilter());
     expect(setFacetFilterNodes.mock.calls[2][1][1].children[1].getMetadata()).toEqual(node4.getMetadata());
+  });
+
+  it('sends REMOVED_FILTER event when reset', () => {
+    const reportFn = jest.fn();
+    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
+    const component = COMPONENT_MANAGER.create('FilterBox', {
+      ...defaultConfig,
+      verticalKey: 'a vertical key'
+    });
+    expect(reportFn.mock.calls).toHaveLength(0);
+    component.resetFilters();
+    expect(reportFn.mock.calls).toHaveLength(1);
+    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
+    expectedAnalyticsEvent.addOptions({
+      removedFilter: '{}',
+      optionType: 'FACET_FILTER',
+      removedFromComponent: 'Facets',
+      verticalKey: 'a vertical key'
+    });
+    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
   });
 });

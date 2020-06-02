@@ -3,6 +3,9 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
+import FacetsComponent from './facetscomponent';
+import { createRemovedFilterEvent } from '../../../core/utils/eventutils';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -200,6 +203,7 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
+          isDynamic: this.config.isDynamic,
           onChange: (filterNode, saveFilterNodes, blockSearchOnChange) => {
             const _saveFilterNodes = this.config.searchOnChange || saveFilterNodes;
             const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
@@ -236,6 +240,19 @@ export default class FilterBoxComponent extends Component {
   }
 
   resetFilters () {
+    const validFilterNodes = this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
+    const removedFilterNode = FilterNodeFactory.and(...validFilterNodes);
+    const removedFromComponent = this.config.isDynamic
+      ? FacetsComponent.type
+      : FilterBoxComponent.type;
+    const optionType = this.config.isDynamic ? 'FACET_FILTER' : 'STATIC_FILTER';
+    const analyticsEvent = createRemovedFilterEvent(
+      JSON.stringify(removedFilterNode.getFilter()),
+      optionType,
+      removedFromComponent,
+      this._verticalKey
+    );
+    this.analyticsReporter.report(analyticsEvent);
     this._filterComponents.forEach(filter => filter.clearOptions());
   }
 

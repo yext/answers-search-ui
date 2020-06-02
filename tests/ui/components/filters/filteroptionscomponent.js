@@ -5,6 +5,9 @@ import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscompo
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
 import FilterMetadata from 'src/core/filters/filtermetadata';
+import FilterType from '../../../../src/core/filters/FilterType';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
+import AnalyticsEvent from 'src/core/analytics/analyticsevent';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
@@ -64,8 +67,20 @@ describe('filter options component', () => {
 
     const mockCore = {
       setStaticFilterNodes: setStaticFilterNodes,
+      setLocationRadiusFilterNode: () => {},
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
+      },
+      globalStorage: {
+        getState: (key) => {
+          if (key === StorageKeys.SEARCH_CONFIG) {
+            return {
+              verticalKey: 'a vertical key'
+            };
+          }
+          return null;
+        },
+        delete: () => {}
       }
     };
 
@@ -235,6 +250,61 @@ describe('filter options component', () => {
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     const wrapper = mount(component);
     expect(wrapper.find('.singleoption-option')).toHaveLength(options.length);
+  });
+
+  it('FilterOptions with optionType: STATIC_FILTER sends REMOVED_FILTER event when reset', () => {
+    const reportFn = jest.fn();
+    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
+    const component = COMPONENT_MANAGER.create('FilterOptions', {
+      ...defaultConfig,
+      showReset: true
+    });
+    const wrapper = mount(component);
+    const resetSelector = wrapper.find('.js-yxt-FilterOptions-reset');
+    expect(resetSelector).toHaveLength(1);
+    expect(reportFn.mock.calls).toHaveLength(0);
+    component._updateOption(0, true);
+    const filterNode = component.getFilterNode();
+    resetSelector.at(0).simulate('click');
+    expect(reportFn.mock.calls).toHaveLength(1);
+    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
+    expectedAnalyticsEvent.addOptions({
+      removedFilter: JSON.stringify(filterNode.getFilter()),
+      optionType: 'STATIC_FILTER',
+      removedFromComponent: 'FilterOptions',
+      verticalKey: 'a vertical key'
+    });
+    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
+  });
+
+  it('FilterOptions with optionType: RADIUS_FILTER sends REMOVED_FILTER event when reset', () => {
+    const reportFn = jest.fn();
+    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
+    const component = COMPONENT_MANAGER.create('FilterOptions', {
+      ...defaultConfig,
+      options: [
+        {
+          label: '12345 meters',
+          value: 12345,
+          selected: true
+        }
+      ],
+      optionType: 'RADIUS_FILTER',
+      showReset: true
+    });
+    const wrapper = mount(component);
+    expect(reportFn.mock.calls).toHaveLength(0);
+    const resetSelector = wrapper.find('.js-yxt-FilterOptions-reset');
+    resetSelector.at(0).simulate('click');
+    expect(reportFn.mock.calls).toHaveLength(1);
+    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
+    expectedAnalyticsEvent.addOptions({
+      removedFilter: 12345,
+      optionType: 'RADIUS_FILTER',
+      removedFromComponent: 'FilterOptions',
+      verticalKey: 'a vertical key'
+    });
+    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
   });
 
   it('creates filternodes correctly from single options', () => {
@@ -487,7 +557,7 @@ describe('filter options works with different optionTypes', () => {
       metadata: new FilterMetadata({
         fieldName: 'filterOptionsLabel',
         displayValue: '12345 meters',
-        optionType: 'RADIUS_FILTER'
+        filterType: FilterType.RADIUS
       }),
       filter: new Filter({ value: 12345 })
     });
@@ -520,7 +590,7 @@ describe('filter options works with different optionTypes', () => {
       metadata: new FilterMetadata({
         fieldName: 'filterOptionsLabel',
         displayValue: 'le 0 metres',
-        optionType: 'RADIUS_FILTER'
+        filterType: FilterType.RADIUS
       }),
       filter: Filter.empty()
     });

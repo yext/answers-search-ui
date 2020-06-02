@@ -9,6 +9,9 @@ import levenshtein from 'js-levenshtein';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import { groupArray } from '../../../core/utils/arrayutils';
+import { createRemovedFilterEvent } from '../../../core/utils/eventutils';
+import StorageKeys from '../../../core/storage/storagekeys';
+import FilterType from '../../../core/filters/filtertype';
 
 /**
  * The currently supported controls
@@ -70,6 +73,13 @@ class FilterOptionsConfig {
      * @type {boolean}
      */
     this.showReset = config.showReset && this.options.length > 0;
+
+    /**
+     * Whether this FilterOptions is part of a dynamic FilterBox component (i.e. is
+     * part of a FacetsComponent). Used to correctly set the {@link FilterType} of
+     * the created {@link FilterNode}.
+     */
+    this.isDynamic = config.isDynamic;
 
     /**
      * The label to show for the reset button
@@ -497,6 +507,15 @@ export default class FilterOptionsComponent extends Component {
   }
 
   clearOptions () {
+    if (this.config.storeOnChange) {
+      const removedFilterParam = this.config.optionType === 'RADIUS_FILTER'
+        ? this.getLocationRadiusFilterNode().getFilter().value
+        : JSON.stringify(this.getFilterNode().getFilter());
+      const { verticalKey } = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+      const analyticsEvent =
+        createRemovedFilterEvent(removedFilterParam, this.config.optionType, 'FilterOptions', verticalKey);
+      this.analyticsReporter.report(analyticsEvent);
+    }
     this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
     this.updateListeners();
     this.setState();
@@ -561,11 +580,20 @@ export default class FilterOptionsComponent extends Component {
     return option.filter ? option.filter : Filter.equal(option.field, option.value);
   }
 
+  _getFilterType () {
+    if (this.config.isDynamic) {
+      return FilterType.FACET;
+    }
+    return this.config.optionType === 'RADIUS_FILTER'
+      ? FilterType.RADIUS
+      : FilterType.STATIC;
+  }
+
   _buildFilterMetadata (option) {
     return new FilterMetadata({
       fieldName: this.config.label,
       displayValue: option.label,
-      optionType: this.config.optionType
+      filterType: this._getFilterType()
     });
   }
 

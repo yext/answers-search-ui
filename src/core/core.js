@@ -144,6 +144,14 @@ export default class Core {
       this.filterRegistry.setFacetFilterNodes([], []);
     }
 
+    const searchConfig = this.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+    if (!searchConfig.verticalKey) {
+      this.globalStorage.set(StorageKeys.SEARCH_CONFIG, {
+        ...searchConfig,
+        verticalKey: verticalKey
+      });
+    }
+
     const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
 
     return this._searcher
