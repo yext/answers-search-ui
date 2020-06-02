@@ -78,6 +78,7 @@ class FilterOptionsConfig {
      * Whether this FilterOptions is part of a dynamic FilterBox component (i.e. is
      * part of a FacetsComponent). Used to correctly set the {@link FilterType} of
      * the created {@link FilterNode}.
+     * @type {boolean}
      */
     this.isDynamic = config.isDynamic;
 
@@ -506,8 +507,12 @@ export default class FilterOptionsComponent extends Component {
     return (option && filter) ? option.indexOf(filter) : -1;
   }
 
+  /**
+   * Clears all selected options. If this component is not part of a FilterBox,
+   * also send the REMOVED_FILTER analytics event. Otherwise, let FilterBox do it.
+   */
   clearOptions () {
-    if (this.config.storeOnChange) {
+    if (!this.config.isDynamic) {
       const removedFilterParam = this.config.optionType === 'RADIUS_FILTER'
         ? this.getLocationRadiusFilterNode().getFilter().value
         : JSON.stringify(this.getFilterNode().getFilter());
@@ -521,6 +526,12 @@ export default class FilterOptionsComponent extends Component {
     this.setState();
   }
 
+  /**
+   * Call the config.onChange callback with the FilterNode corresponding to the
+   * component state.
+   * @param {boolean} alwaysSaveFilterNodes 
+   * @param {boolean} blockSearchOnChange 
+   */
   updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
