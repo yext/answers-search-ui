@@ -529,8 +529,8 @@ export default class FilterOptionsComponent extends Component {
   /**
    * Call the config.onChange callback with the FilterNode corresponding to the
    * component state.
-   * @param {boolean} alwaysSaveFilterNodes 
-   * @param {boolean} blockSearchOnChange 
+   * @param {boolean} alwaysSaveFilterNodes
+   * @param {boolean} blockSearchOnChange
    */
   updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
     const filterNode = this.getFilterNode();
