@@ -7,7 +7,6 @@ import Filter from 'src/core/models/filter';
 import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
 import FilterCombinators from 'src/core/filters/filtercombinators';
 import FilterType from 'src/core/filters/filtertype';
-import AnalyticsEvent from 'src/core/analytics/analyticsevent';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
@@ -227,24 +226,39 @@ describe('filter box component', () => {
     expect(verticalSearch.mock.calls).toHaveLength(1);
   });
 
-  it('sends REMOVED_FILTER event when reset', () => {
-    const reportFn = jest.fn();
-    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
+  it('reset button resets filter node', () => {
     const component = COMPONENT_MANAGER.create('FilterBox', {
       ...defaultConfig,
-      verticalKey: 'a vertical key'
+      searchOnChange: true,
+      name: 'unique name',
+      filters: [
+        {
+          type: 'FilterOptions',
+          label: 'first filter options',
+          control: 'singleoption',
+          options: options
+        }
+      ]
     });
-    expect(reportFn.mock.calls).toHaveLength(0);
+    mount(component);
+    let actualFilterNode = setStaticFilterNodes.mock.calls[0][1];
+    let expectedFilterNode = FilterNodeFactory.from();
+    expect(actualFilterNode.getFilter()).toEqual(expectedFilterNode.getFilter());
+    expect(actualFilterNode.getMetadata()).toEqual(expectedFilterNode.getMetadata());
+
+    // Click the first option of the first child FilterOptions
+    component._filterComponents[0]._updateOption(0, true);
+    actualFilterNode = setStaticFilterNodes.mock.calls[1][1];
+    expectedFilterNode = nodes0[0];
+    expect(actualFilterNode.getFilter()).toEqual(expectedFilterNode.getFilter());
+    expect(actualFilterNode.getMetadata()).toEqual(expectedFilterNode.getMetadata());
+
+    // Reset FilterBox
     component.resetFilters();
-    expect(reportFn.mock.calls).toHaveLength(1);
-    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
-    expectedAnalyticsEvent.addOptions({
-      removedFilter: '{}',
-      optionType: 'STATIC_FILTER',
-      removedFromComponent: 'FilterBox',
-      verticalKey: 'a vertical key'
-    });
-    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
+    actualFilterNode = setStaticFilterNodes.mock.calls[2][1];
+    expectedFilterNode = FilterNodeFactory.from();
+    expect(actualFilterNode.getFilter()).toEqual(expectedFilterNode.getFilter());
+    expect(actualFilterNode.getMetadata()).toEqual(expectedFilterNode.getMetadata());
   });
 });
 
@@ -424,25 +438,5 @@ describe('dynamic filterbox component', () => {
     expect(setFacetFilterNodes.mock.calls[2][1][1].children[0].getMetadata()).toEqual(node3.getMetadata());
     expect(setFacetFilterNodes.mock.calls[2][1][1].children[1].getFilter()).toEqual(node4.getFilter());
     expect(setFacetFilterNodes.mock.calls[2][1][1].children[1].getMetadata()).toEqual(node4.getMetadata());
-  });
-
-  it('sends REMOVED_FILTER event when reset', () => {
-    const reportFn = jest.fn();
-    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
-    const component = COMPONENT_MANAGER.create('FilterBox', {
-      ...defaultConfig,
-      verticalKey: 'a vertical key'
-    });
-    expect(reportFn.mock.calls).toHaveLength(0);
-    component.resetFilters();
-    expect(reportFn.mock.calls).toHaveLength(1);
-    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
-    expectedAnalyticsEvent.addOptions({
-      removedFilter: '{}',
-      optionType: 'FACET_FILTER',
-      removedFromComponent: 'Facets',
-      verticalKey: 'a vertical key'
-    });
-    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
   });
 });

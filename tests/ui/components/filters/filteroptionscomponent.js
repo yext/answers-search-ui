@@ -7,7 +7,6 @@ import Filter from 'src/core/models/filter';
 import FilterMetadata from 'src/core/filters/filtermetadata';
 import FilterType from '../../../../src/core/filters/filtertype';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
-import AnalyticsEvent from 'src/core/analytics/analyticsevent';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
@@ -252,9 +251,7 @@ describe('filter options component', () => {
     expect(wrapper.find('.singleoption-option')).toHaveLength(options.length);
   });
 
-  it('FilterOptions with optionType: STATIC_FILTER sends REMOVED_FILTER event when reset', () => {
-    const reportFn = jest.fn();
-    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
+  it('reset button clears the filternode', () => {
     const component = COMPONENT_MANAGER.create('FilterOptions', {
       ...defaultConfig,
       showReset: true
@@ -262,49 +259,16 @@ describe('filter options component', () => {
     const wrapper = mount(component);
     const resetSelector = wrapper.find('.js-yxt-FilterOptions-reset');
     expect(resetSelector).toHaveLength(1);
-    expect(reportFn.mock.calls).toHaveLength(0);
     component._updateOption(0, true);
-    const filterNode = component.getFilterNode();
+    let actualNode = component.getFilterNode();
+    let expectedNode = nodes[0];
+    expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
+    expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
     resetSelector.at(0).simulate('click');
-    expect(reportFn.mock.calls).toHaveLength(1);
-    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
-    expectedAnalyticsEvent.addOptions({
-      removedFilter: JSON.stringify(filterNode.getFilter()),
-      optionType: 'STATIC_FILTER',
-      removedFromComponent: 'FilterOptions',
-      verticalKey: 'a vertical key'
-    });
-    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
-  });
-
-  it('FilterOptions with optionType: RADIUS_FILTER sends REMOVED_FILTER event when reset', () => {
-    const reportFn = jest.fn();
-    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
-    const component = COMPONENT_MANAGER.create('FilterOptions', {
-      ...defaultConfig,
-      options: [
-        {
-          label: '12345 meters',
-          value: 12345,
-          selected: true
-        }
-      ],
-      optionType: 'RADIUS_FILTER',
-      showReset: true
-    });
-    const wrapper = mount(component);
-    expect(reportFn.mock.calls).toHaveLength(0);
-    const resetSelector = wrapper.find('.js-yxt-FilterOptions-reset');
-    resetSelector.at(0).simulate('click');
-    expect(reportFn.mock.calls).toHaveLength(1);
-    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
-    expectedAnalyticsEvent.addOptions({
-      removedFilter: 12345,
-      optionType: 'RADIUS_FILTER',
-      removedFromComponent: 'FilterOptions',
-      verticalKey: 'a vertical key'
-    });
-    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
+    actualNode = component.getFilterNode();
+    expectedNode = FilterNodeFactory.from();
+    expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
+    expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
   });
 
   it('creates filternodes correctly from single options', () => {

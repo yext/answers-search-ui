@@ -3,9 +3,6 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
-import FacetsComponent from './facetscomponent';
-import { createRemovedFilterEvent } from '../../../core/utils/analyticseventutils';
-import FilterNodeFactory from '../../../core/filters/filternodefactory';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -244,18 +241,6 @@ export default class FilterBoxComponent extends Component {
   }
 
   resetFilters () {
-    const removedFilterNode = FilterNodeFactory.and(...this._getValidFilterNodes());
-    const removedFromComponent = this.config.isDynamic
-      ? FacetsComponent.type
-      : FilterBoxComponent.type;
-    const optionType = this.config.isDynamic ? 'FACET_FILTER' : 'STATIC_FILTER';
-    const analyticsEvent = createRemovedFilterEvent(
-      JSON.stringify(removedFilterNode.getFilter()),
-      optionType,
-      removedFromComponent,
-      this._verticalKey
-    );
-    this.analyticsReporter.report(analyticsEvent);
     this._filterComponents.forEach(filter => filter.clearOptions());
   }
 

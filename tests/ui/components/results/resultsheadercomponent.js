@@ -6,7 +6,6 @@ import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
 import Filter from '../../../../src/core/models/filter';
 import { mount } from 'enzyme';
 import DOM from 'src/ui/dom/dom';
-import AnalyticsEvent from 'src/core/analytics/analyticsevent';
 
 describe('ResultsHeaderComponent\'s applied filters', () => {
   let resultsHeaderComponent;
@@ -168,7 +167,6 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
 
     // Mock src/core.js functionality
     const verticalSearchFn = jest.fn();
-    const reportFn = jest.fn();
     COMPONENT_MANAGER = mockManager(
       {
         getStaticFilterNodes: () => [],
@@ -178,7 +176,6 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
       },
       ResultsHeaderComponent.defaultTemplateName()
     );
-    COMPONENT_MANAGER.setAnalyticsReporter({ report: reportFn });
 
     // Initialize and mount component
     const simpleFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
@@ -196,7 +193,6 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     expect(wrapper.find('.yxt-ResultsHeader-removableFilterValue')).toHaveLength(3);
     expect(wrapper.find('.yxt-ResultsHeader-removableFilterX')).toHaveLength(3);
     expect(wrapper.find('.yxt-ResultsHeader-removableFilterTag')).toHaveLength(3);
-    expect(reportFn.mock.calls).toHaveLength(0);
     expect(verticalSearchFn.mock.calls).toHaveLength(0);
     expect(remove_f0_v0_fn.mock.calls).toHaveLength(0);
     expect(remove_f0_v1_fn.mock.calls).toHaveLength(0);
@@ -211,14 +207,5 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     expect(remove_f0_v0_fn.mock.calls).toHaveLength(1);
     expect(remove_f0_v1_fn.mock.calls).toHaveLength(0);
     expect(remove_f1_v0_fn.mock.calls).toHaveLength(0);
-    expect(reportFn.mock.calls).toHaveLength(1);
-    const expectedAnalyticsEvent = new AnalyticsEvent('REMOVED_FILTER');
-    expectedAnalyticsEvent.addOptions({
-      removedFilter: JSON.stringify(node_f0_v0.getFilter()),
-      optionType: 'STATIC_FILTER',
-      removedFromComponent: 'VerticalResults',
-      verticalKey: 'a vertical key'
-    });
-    expect(reportFn.mock.calls[0][0]).toEqual(expectedAnalyticsEvent);
   });
 });

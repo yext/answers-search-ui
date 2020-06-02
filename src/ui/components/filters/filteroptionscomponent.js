@@ -9,8 +9,6 @@ import levenshtein from 'js-levenshtein';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import { groupArray } from '../../../core/utils/arrayutils';
-import { createRemovedFilterEvent } from '../../../core/utils/analyticseventutils';
-import StorageKeys from '../../../core/storage/storagekeys';
 import FilterType from '../../../core/filters/filtertype';
 
 /**
@@ -512,15 +510,6 @@ export default class FilterOptionsComponent extends Component {
    * also send the REMOVED_FILTER analytics event. Otherwise, let FilterBox do it.
    */
   clearOptions () {
-    if (!this.config.isDynamic) {
-      const removedFilterParam = this.config.optionType === 'RADIUS_FILTER'
-        ? this.getLocationRadiusFilterNode().getFilter().value
-        : JSON.stringify(this.getFilterNode().getFilter());
-      const { verticalKey } = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
-      const analyticsEvent =
-        createRemovedFilterEvent(removedFilterParam, this.config.optionType, 'FilterOptions', verticalKey);
-      this.analyticsReporter.report(analyticsEvent);
-    }
     this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
     this.updateListeners();
     this.setState();

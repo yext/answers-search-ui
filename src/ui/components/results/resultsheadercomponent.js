@@ -4,7 +4,6 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { groupArray } from '../../../core/utils/arrayutils';
-import { createRemovedFilterEvent, optionTypeFromFilterType } from '../../../core/utils/analyticseventutils';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -72,13 +71,6 @@ export default class ResultsHeaderComponent extends Component {
     const { filterId } = tag.dataset;
     const filterNode = this.appliedFilterNodes[filterId];
     filterNode.remove();
-    const analyticsEvent = createRemovedFilterEvent(
-      JSON.stringify(filterNode.getFilter()),
-      optionTypeFromFilterType(filterNode.getMetadata().filterType),
-      'VerticalResults',
-      this._config.verticalKey
-    );
-    this.analyticsReporter.report(analyticsEvent);
     this.core.verticalSearch(this._config.verticalKey, {
       resetPagination: true,
       useFacets: true
