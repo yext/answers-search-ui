@@ -154,22 +154,29 @@ describe('FilterRegistry', () => {
   });
 
   it('can set locationRadius FilterNodes', () => {
-    const metadata = new FilterMetadata({
-      fieldName: 'label1',
-      displayValue: 'displayvalue1'
-    });
-    const filter = new Filter({
-      value: 1234
-    });
     const filterNode = FilterNodeFactory.from({
-      metadata: metadata,
-      filter: filter
+      metadata: new FilterMetadata({
+        fieldName: 'label1',
+        displayValue: 'displayvalue1'
+      }),
+      filter: new Filter({ value: 1234 })
     });
     registry.setLocationRadiusFilterNode(filterNode);
-    let locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
     expect(locationRadiusFilterNode.getFilter().value).toEqual(1234);
+  });
+
+  it('can clear locationRadius FilterNodes', () => {
+    const filterNode = FilterNodeFactory.from({
+      metadata: new FilterMetadata({
+        fieldName: 'label1',
+        displayValue: 'displayvalue1'
+      }),
+      filter: new Filter({ value: 1234 })
+    });
+    registry.setLocationRadiusFilterNode(filterNode);
     registry.setLocationRadiusFilterNode(FilterNodeFactory.from());
-    locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
     expect(locationRadiusFilterNode.getFilter()).toEqual(FilterNodeFactory.from().getFilter());
     expect(locationRadiusFilterNode.getMetadata()).toEqual(FilterNodeFactory.from().getMetadata());
   });

@@ -121,7 +121,7 @@ describe('filter box component', () => {
     expect(component._filterComponents[1]._config.options).toEqual(options);
   });
 
-  it('correctly combines filternodes from child filters', () => {
+  describe('can correctly create filternodes from child filters', () => {
     const config = {
       ...defaultConfig,
       name: 'unique name',
@@ -141,56 +141,51 @@ describe('filter box component', () => {
         }
       ]
     };
-    const component = COMPONENT_MANAGER.create('FilterBox', config);
-    const wrapper = mount(component);
-    expect(wrapper.find('.yxt-FilterBox-filter')).toHaveLength(2);
-    const child0 = component._filterComponents[0];
-    const child1 = component._filterComponents[1];
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
-    expect(setStaticFilterNodes.mock.calls[0][0]).toEqual('unique name.filter0');
-    expect(setStaticFilterNodes.mock.calls[1][0]).toEqual('unique name.filter1');
-    expect(child0.getFilterNode().getFilter()).toEqual(FilterNodeFactory.from().getFilter());
-    expect(child0.getFilterNode().getMetadata()).toEqual(FilterNodeFactory.from().getMetadata());
-    expect(setStaticFilterNodes.mock.calls[0][1].getFilter()).toEqual(child0.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[0][1].getMetadata()).toEqual(child0.getFilterNode().getMetadata());
-    expect(setStaticFilterNodes.mock.calls[1][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[1][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
 
-    child0._updateOption(0, true);
-    expect(child0.getFilterNode().getFilter()).toEqual(nodes0[0].getFilter());
-    expect(child0.getFilterNode().getMetadata()).toEqual(nodes0[0].getMetadata());
-    expect(setStaticFilterNodes.mock.calls[2][1].getFilter()).toEqual(child0.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[2][1].getMetadata()).toEqual(child0.getFilterNode().getMetadata());
-    expect(setStaticFilterNodes.mock.calls[3][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[3][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
+    it('creates and saves filternodes on page load', () => {
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      const wrapper = mount(component);
+      expect(wrapper.find('.yxt-FilterBox-filter')).toHaveLength(2);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
+      expect(setStaticFilterNodes.mock.calls[0][0]).toEqual('unique name.filter0');
+      expect(setStaticFilterNodes.mock.calls[1][0]).toEqual('unique name.filter1');
+      const expectedFilterNode = FilterNodeFactory.from();
+      const actualFilterNode0 = setStaticFilterNodes.mock.calls[0][1];
+      const actualFilterNode1 = setStaticFilterNodes.mock.calls[1][1];
+      expect(actualFilterNode0.getFilter()).toEqual(expectedFilterNode.getFilter());
+      expect(actualFilterNode0.getMetadata()).toEqual(expectedFilterNode.getMetadata());
+      expect(actualFilterNode1.getFilter()).toEqual(expectedFilterNode.getFilter());
+      expect(actualFilterNode1.getMetadata()).toEqual(expectedFilterNode.getMetadata());
+    });
 
-    child1._updateOption(0, true);
-    expect(child1.getFilterNode().getFilter()).toEqual(nodes1[0].getFilter());
-    expect(child1.getFilterNode().getMetadata()).toEqual(nodes1[0].getMetadata());
-    expect(setStaticFilterNodes.mock.calls[4][1].getFilter()).toEqual(child0.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[4][1].getMetadata()).toEqual(child0.getFilterNode().getMetadata());
-    expect(setStaticFilterNodes.mock.calls[5][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[5][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
+    it('can save simple filternodes', () => {
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      mount(component);
+      let child0 = component._filterComponents[0];
+      let child1 = component._filterComponents[1];
+      child0._updateOption(0, true);
+      expect(child0.getFilterNode().getFilter()).toEqual(nodes0[0].getFilter());
+      expect(child0.getFilterNode().getMetadata()).toEqual(nodes0[0].getMetadata());
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
+      expect(setStaticFilterNodes.mock.calls[2][1].getFilter()).toEqual(child0.getFilterNode().getFilter());
+      expect(setStaticFilterNodes.mock.calls[2][1].getMetadata()).toEqual(child0.getFilterNode().getMetadata());
+      expect(setStaticFilterNodes.mock.calls[3][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
+      expect(setStaticFilterNodes.mock.calls[3][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
+    });
 
-    child1._updateOption(3, true);
-    expect(child1.getFilterNode().getFilter()).toEqual(FilterNodeFactory.and(nodes1[0], nodes1[3]).getFilter());
-    expect(child1.getFilterNode().getMetadata()).toEqual(FilterNodeFactory.and(nodes1[0], nodes1[3]).getMetadata());
-    expect(setStaticFilterNodes.mock.calls[6][1].getFilter()).toEqual(child0.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[6][1].getMetadata()).toEqual(child0.getFilterNode().getMetadata());
-    expect(setStaticFilterNodes.mock.calls[7][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[7][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
-
-    child1._updateOption(4, true);
-    expect(child1.getFilterNode().getFilter()).toEqual(
-      FilterNodeFactory.and(nodes1[0], FilterNodeFactory.or(nodes1[3], nodes1[4])).getFilter()
-    );
-    expect(child1.getFilterNode().getMetadata()).toEqual(
-      FilterNodeFactory.and(nodes1[0], FilterNodeFactory.or(nodes1[3], nodes1[4])).getMetadata()
-    );
-    expect(setStaticFilterNodes.mock.calls[8][1].getFilter()).toEqual(child0.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[8][1].getMetadata()).toEqual(child0.getFilterNode().getMetadata());
-    expect(setStaticFilterNodes.mock.calls[9][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
-    expect(setStaticFilterNodes.mock.calls[9][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
+    it('can save combined filternodes', () => {
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      mount(component);
+      let child0 = component._filterComponents[0];
+      let child1 = component._filterComponents[1];
+      child0._updateOption(0, true);
+      child1._updateOption(0, true);
+      child1._updateOption(3, true);
+      child1._updateOption(4, true);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(10);
+      expect(setStaticFilterNodes.mock.calls[9][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
+      expect(setStaticFilterNodes.mock.calls[9][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
+    });
   });
 
   it('search on change = false works', () => {
@@ -405,38 +400,50 @@ describe('dynamic filterbox component', () => {
     });
   });
 
-  it('renders with default values', () => {
+  it('calls setFacetFilterNodes on page load', () => {
     const component = COMPONENT_MANAGER.create('FilterBox', defaultConfig);
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-FilterBox-container')).toHaveLength(1);
     expect(setFacetFilterNodes.mock.calls).toHaveLength(1);
-    expect(setFacetFilterNodes.mock.calls[0][0]).toEqual([ 'c_employeeDepartment', 'c_otherDepartment' ]);
+    expect(setFacetFilterNodes.mock.calls[0][0]).toEqual(['c_employeeDepartment', 'c_otherDepartment']);
     expect(setFacetFilterNodes.mock.calls[0][1]).toEqual([]);
+  });
+
+  it('can create and set simple filter nodes', () => {
+    const component = COMPONENT_MANAGER.create('FilterBox', defaultConfig);
+    const wrapper = mount(component);
     component._filterComponents[0]._updateOption(0, true);
     component._filterComponents[1]._updateOption(0, true);
     expect(setFacetFilterNodes.mock.calls).toHaveLength(1);
     wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
     expect(setFacetFilterNodes.mock.calls).toHaveLength(2);
-    expect(setFacetFilterNodes.mock.calls[1][0]).toEqual([ 'c_employeeDepartment', 'c_otherDepartment' ]);
+    const expectedFacetFilterNodes = setFacetFilterNodes.mock.calls[1][1];
+    expect(setFacetFilterNodes.mock.calls[1][0]).toEqual(['c_employeeDepartment', 'c_otherDepartment']);
+    expect(expectedFacetFilterNodes[0].getFilter()).toEqual(node1.getFilter());
+    expect(expectedFacetFilterNodes[0].getMetadata()).toEqual(node1.getMetadata());
+    expect(expectedFacetFilterNodes[1].getFilter()).toEqual(node3.getFilter());
+    expect(expectedFacetFilterNodes[1].getMetadata()).toEqual(node3.getMetadata());
+  });
 
-    expect(setFacetFilterNodes.mock.calls[1][1][0].getFilter()).toEqual(node1.getFilter());
-    expect(setFacetFilterNodes.mock.calls[1][1][0].getMetadata()).toEqual(node1.getMetadata());
-    expect(setFacetFilterNodes.mock.calls[1][1][1].getFilter()).toEqual(node3.getFilter());
-    expect(setFacetFilterNodes.mock.calls[1][1][1].getMetadata()).toEqual(node3.getMetadata());
-
+  it('can create and set combined filter nodes', () => {
+    const component = COMPONENT_MANAGER.create('FilterBox', defaultConfig);
+    const wrapper = mount(component);
+    component._filterComponents[0]._updateOption(0, true);
+    component._filterComponents[1]._updateOption(0, true);
     component._filterComponents[0]._updateOption(1, true);
     component._filterComponents[1]._updateOption(1, true);
     wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
-    expect(setFacetFilterNodes.mock.calls).toHaveLength(3);
-    expect(setFacetFilterNodes.mock.calls[2][1][0].combinator).toEqual(FilterCombinators.OR);
-    expect(setFacetFilterNodes.mock.calls[2][1][1].combinator).toEqual(FilterCombinators.OR);
-    expect(setFacetFilterNodes.mock.calls[2][1][0].children[0].getFilter()).toEqual(node1.getFilter());
-    expect(setFacetFilterNodes.mock.calls[2][1][0].children[0].getMetadata()).toEqual(node1.getMetadata());
-    expect(setFacetFilterNodes.mock.calls[2][1][0].children[1].getFilter()).toEqual(node2.getFilter());
-    expect(setFacetFilterNodes.mock.calls[2][1][0].children[1].getMetadata()).toEqual(node2.getMetadata());
-    expect(setFacetFilterNodes.mock.calls[2][1][1].children[0].getFilter()).toEqual(node3.getFilter());
-    expect(setFacetFilterNodes.mock.calls[2][1][1].children[0].getMetadata()).toEqual(node3.getMetadata());
-    expect(setFacetFilterNodes.mock.calls[2][1][1].children[1].getFilter()).toEqual(node4.getFilter());
-    expect(setFacetFilterNodes.mock.calls[2][1][1].children[1].getMetadata()).toEqual(node4.getMetadata());
+    expect(setFacetFilterNodes.mock.calls).toHaveLength(2);
+    const expectedFacetFilterNodes = setFacetFilterNodes.mock.calls[1][1];
+    expect(expectedFacetFilterNodes[0].combinator).toEqual(FilterCombinators.OR);
+    expect(expectedFacetFilterNodes[0].children[0].getFilter()).toEqual(node1.getFilter());
+    expect(expectedFacetFilterNodes[0].children[0].getMetadata()).toEqual(node1.getMetadata());
+    expect(expectedFacetFilterNodes[0].children[1].getFilter()).toEqual(node2.getFilter());
+    expect(expectedFacetFilterNodes[0].children[1].getMetadata()).toEqual(node2.getMetadata());
+    expect(expectedFacetFilterNodes[1].combinator).toEqual(FilterCombinators.OR);
+    expect(expectedFacetFilterNodes[1].children[0].getFilter()).toEqual(node3.getFilter());
+    expect(expectedFacetFilterNodes[1].children[0].getMetadata()).toEqual(node3.getMetadata());
+    expect(expectedFacetFilterNodes[1].children[1].getFilter()).toEqual(node4.getFilter());
+    expect(expectedFacetFilterNodes[1].children[1].getMetadata()).toEqual(node4.getMetadata());
   });
 });

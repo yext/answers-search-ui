@@ -87,8 +87,6 @@ describe('range filter component', () => {
     });
     min = component._range.min;
     max = component._range.max;
-    expect(component._buildFilter()).toEqual(filter);
-    expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
 
@@ -100,8 +98,6 @@ describe('range filter component', () => {
       fieldName: title,
       displayValue: metadataFormatters.lessThanEqual(max)
     });
-    expect(component._buildFilter()).toEqual(filter);
-    expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
@@ -114,8 +110,6 @@ describe('range filter component', () => {
       fieldName: title,
       displayValue: metadataFormatters.inclusiveRange(min, max)
     });
-    expect(component._buildFilter()).toEqual(filter);
-    expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
@@ -128,8 +122,6 @@ describe('range filter component', () => {
       fieldName: title,
       displayValue: metadataFormatters.greaterThanEqual(min)
     });
-    expect(component._buildFilter()).toEqual(filter);
-    expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
@@ -142,8 +134,6 @@ describe('range filter component', () => {
       fieldName: title,
       displayValue: metadataFormatters.inclusiveRange(min, max)
     });
-    expect(component._buildFilter()).toEqual(filter);
-    expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
@@ -157,8 +147,6 @@ describe('range filter component', () => {
     metadata = new FilterMetadata({
       fieldName: title
     });
-    expect(component._buildFilter()).toEqual(filter);
-    expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
@@ -173,8 +161,6 @@ describe('range filter component', () => {
       fieldName: title,
       displayValue: metadataFormatters.inclusiveRange(min, max)
     });
-    expect(component._buildFilter()).toEqual(filter);
-    expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(8);
@@ -198,7 +184,6 @@ describe('range filter component', () => {
       fieldName: title,
       displayValue: min
     });
-    expect(component._buildFilterMetadata()).toEqual(metadata);
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
   });

@@ -113,10 +113,18 @@ export default class ResultsHeaderComponent extends Component {
     }));
   }
 
+  /**
+   * Returns an array of object the handlebars can understand and render
+   * the applied filters bar from.
+   * @returns {Array<Object>}
+   */
+  _getAppliedFiltersArray () {
+    return this._convertGroupedFiltersToArray(this._groupAppliedFilters());
+  }
+
   setState (data) {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-    const groupedAppliedFilters = this._groupAppliedFilters();
-    const appliedFiltersArray = this._convertGroupedFiltersToArray(groupedAppliedFilters);
+    const appliedFiltersArray = this._getAppliedFiltersArray();
     const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
     return super.setState({
       ...data,
