@@ -188,7 +188,7 @@ describe('filter box component', () => {
     });
   });
 
-  it('search on change = false works', () => {
+  it('searches only when apply button if search on change = false', () => {
     const config = {
       ...defaultConfig,
       name: 'unique name',
@@ -209,10 +209,7 @@ describe('filter box component', () => {
     };
     const component = COMPONENT_MANAGER.create('FilterBox', config);
     const wrapper = mount(component);
-    expect(component._config.searchOnChange).toBeFalsy();
     const child0 = component._filterComponents[0];
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
-    expect(verticalSearch.mock.calls).toHaveLength(0);
     child0._updateOption(0, true);
     expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
     expect(verticalSearch.mock.calls).toHaveLength(0);
@@ -236,22 +233,12 @@ describe('filter box component', () => {
       ]
     });
     mount(component);
-    let actualFilterNode = setStaticFilterNodes.mock.calls[0][1];
-    let expectedFilterNode = FilterNodeFactory.from();
-    expect(actualFilterNode.getFilter()).toEqual(expectedFilterNode.getFilter());
-    expect(actualFilterNode.getMetadata()).toEqual(expectedFilterNode.getMetadata());
-
     // Click the first option of the first child FilterOptions
     component._filterComponents[0]._updateOption(0, true);
-    actualFilterNode = setStaticFilterNodes.mock.calls[1][1];
-    expectedFilterNode = nodes0[0];
-    expect(actualFilterNode.getFilter()).toEqual(expectedFilterNode.getFilter());
-    expect(actualFilterNode.getMetadata()).toEqual(expectedFilterNode.getMetadata());
-
     // Reset FilterBox
     component.resetFilters();
-    actualFilterNode = setStaticFilterNodes.mock.calls[2][1];
-    expectedFilterNode = FilterNodeFactory.from();
+    const actualFilterNode = setStaticFilterNodes.mock.calls[2][1];
+    const expectedFilterNode = FilterNodeFactory.from();
     expect(actualFilterNode.getFilter()).toEqual(expectedFilterNode.getFilter());
     expect(actualFilterNode.getMetadata()).toEqual(expectedFilterNode.getMetadata());
   });

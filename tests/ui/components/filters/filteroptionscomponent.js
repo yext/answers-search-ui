@@ -502,13 +502,8 @@ describe('filter options component', () => {
         ]
       };
 
-      expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-      expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(1);
       component.apply();
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-      expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(2);
       const filterNode = FilterNodeFactory.from({
         metadata: new FilterMetadata({
           fieldName: 'filterOptionsLabel',
@@ -535,13 +530,8 @@ describe('filter options component', () => {
         ]
       };
 
-      expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-      expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(1);
       component.apply();
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
-      expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(2);
       const filterNode = FilterNodeFactory.from({
         metadata: new FilterMetadata({
           fieldName: 'filterOptionsLabel',
