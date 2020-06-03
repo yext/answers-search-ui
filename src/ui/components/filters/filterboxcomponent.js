@@ -187,6 +187,8 @@ export default class FilterBoxComponent extends Component {
     }
 
     // Initialize filters from configs
+    // TODO: the FilterOptions config, which is more specific, should probably
+    // take priority over the FilterBox config. This is not the case below.
     for (let i = 0; i < this.config.filterConfigs.length; i++) {
       const config = this.config.filterConfigs[i];
       const component = this.componentManager.create(config.type, Object.assign({},
