@@ -115,6 +115,8 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
 
   &-icon svg
   {
+    height: 12px;
+    width: 8px;
     transform: rotate(90deg);
     transition: all 400ms ease-in;
   }
@@ -163,6 +165,8 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
 
   .yxt-AccordionCard-icon svg
   {
+    height: 12px;
+    width: 8px;
     transform: rotate(-90deg);
     transition: all 400ms ease-in;
   }
