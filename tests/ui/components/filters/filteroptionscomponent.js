@@ -140,6 +140,66 @@ describe('filter options component', () => {
     }
   });
 
+  describe('hides options if the number of options exceeds the show more limit', () => {
+    it('works for singleoption', () => {
+      const config = {
+        ...defaultConfig,
+        control: 'singleoption',
+        showMoreLimit: 2
+      };
+      const component = COMPONENT_MANAGER.create('FilterOptions', config);
+      const wrapper = mount(component);
+      const displayedOptions = wrapper.find('.singleoption-option:not(.hidden)');
+      const hiddenOptions = wrapper.find('.singleoption-option.hidden');
+      expect(displayedOptions).toHaveLength(2);
+      expect(hiddenOptions).toHaveLength(4);
+    });
+
+    it('works for multioption', () => {
+      const config = {
+        ...defaultConfig,
+        control: 'multioption',
+        showMoreLimit: 2
+      };
+      const component = COMPONENT_MANAGER.create('FilterOptions', config);
+      const wrapper = mount(component);
+      const displayedOptions = wrapper.find('.multioption-option:not(.hidden)');
+      const hiddenOptions = wrapper.find('.multioption-option.hidden');
+      expect(displayedOptions).toHaveLength(2);
+      expect(hiddenOptions).toHaveLength(4);
+    });
+
+    it('ignores showMoreLimit if showMore is false (singleoption)', () => {
+      const config = {
+        ...defaultConfig,
+        control: 'singleoption',
+        showMore: false,
+        showMoreLimit: 2
+      };
+      const component = COMPONENT_MANAGER.create('FilterOptions', config);
+      const wrapper = mount(component);
+      const displayedOptions = wrapper.find('.singleoption-option:not(.hidden)');
+      const hiddenOptions = wrapper.find('.singleoption-option.hidden');
+      expect(displayedOptions).toHaveLength(6);
+      expect(hiddenOptions).toHaveLength(0);
+    });
+
+    it('ignores showMoreLimit if showMore is false (singleoption)', () => {
+      const config = {
+        ...defaultConfig,
+        control: 'multioption',
+        showMore: false,
+        showMoreLimit: 2
+      };
+      const component = COMPONENT_MANAGER.create('FilterOptions', config);
+      const wrapper = mount(component);
+      const displayedOptions = wrapper.find('.multioption-option:not(.hidden)');
+      const hiddenOptions = wrapper.find('.multioption-option.hidden');
+      expect(displayedOptions).toHaveLength(6);
+      expect(hiddenOptions).toHaveLength(0);
+    });
+  });
+
   describe('can create filter nodes', () => {
     let config;
 

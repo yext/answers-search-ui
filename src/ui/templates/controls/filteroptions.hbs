@@ -48,7 +48,7 @@
     <div class='yxt-FilterOptions-options'>
       {{#each options}}
         {{#if ../isSingleOption}}
-          <div class="singleoption-option yxt-FilterOptions-option">
+          <div class="singleoption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#if (and ../showMore (gte @index ../showMoreLimit))}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/if}}">
             <input
               type="radio"
               class="js-yext-filter-option yxt-FilterOptions-input"
@@ -57,7 +57,7 @@
               value="{{value}}"
               data-index="{{@index}}"
               {{#if selected}}checked{{/if}}>
-            <label class="singleoption-label" for="js-yext-radio-{{../name}}-{{@index}}">
+            <label class="singleoption-label" for="js-yext-radio-{{../name}}-{{@index}} js-yxt-FilterOptions-optionLabel">
               <span class="yxt-FilterOptions-optionLabel--name js-yxt-FilterOptions-optionLabel--name">
                 {{label}}
               </span>
@@ -67,7 +67,7 @@
             </label>
           </div>
         {{else}}
-          <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#if (gte @index ../showMoreLimit)}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/if}}">
+          <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#if (and ../showMore (gte @index ../showMoreLimit))}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/if}}">
             <input
               type="checkbox"
               class="js-yext-filter-option yxt-FilterOptions-input yxt-FilterOptions-checkboxInput js-yxt-FilterOptions-checkboxInput"
