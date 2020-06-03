@@ -115,7 +115,7 @@ export default class DirectAnswerComponent extends Component {
    * A click handler for links in a Rich Text Direct Answer. When such a link
    * is clicked, an {@link AnalyticsEvent} needs to be fired.
    *
-   * @param {Event} event The click event.
+   * @param {MouseEvent} event The click event.
    */
   _handleRtfClickAnalytics (event) {
     if (!event.target.dataset.ctaType) {

@@ -78,15 +78,15 @@ export default class CardComponent extends Component {
    * A click handler for links in a Rich Text attriubte. When such a link is
    * clicked, an {@link AnalyticsEvent} needs to be fired.
    *
-   * @param {Event} event The click event.
+   * @param {MouseEvent} event The click event.
    * @param {string} fieldName The name of the Rich Text field used in the
    *                           attriubte.
    */
   _handleRtfClickAnalytics (event, fieldName) {
-    if (!event.target.dataset.ctaType) {
+    const ctaType = event.target.dataset.ctaType;
+    if (!ctaType) {
       return;
     }
-    const ctaType = event.target.dataset.ctaType;
 
     const analyticsOptions = {
       directAnswer: false,
