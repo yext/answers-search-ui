@@ -15,6 +15,7 @@ $pagination-color-hover: var(--yxt-color-text-secondary) !default;
   --yxt-pagination-text-line-height: #{$pagination-text-line-height};
   --yxt-pagination-text-font-weight: #{$pagination-text-font-weight};
   --yxt-pagination-color-active-page: #{$pagination-color-active-page};
+  --yxt-pagination-color-hover: #{$pagination-color-hover};
 }
 
 .yxt-Pagination
