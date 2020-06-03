@@ -101,7 +101,7 @@ export default class FilterRegistry {
    */
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
-    this.globalStorage.set(`${StorageKeys.FACET_FILTER_NODE}`, filterNodes);
+    this.globalStorage.set(StorageKeys.FACET_FILTER_NODE, filterNodes);
   }
 
   /**
@@ -110,6 +110,21 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setLocationRadiusFilterNode (filterNode) {
-    this.globalStorage.set(`${StorageKeys.LOCATION_RADIUS}`, filterNode);
+    this.globalStorage.set(StorageKeys.LOCATION_RADIUS, filterNode);
+  }
+
+  /**
+   * Remove the static FilterNode with this namespace.
+   * @param {string} key
+   */
+  clearStaticFilterNode (key) {
+    this.globalStorage.delete(`${StorageKeys.STATIC_FILTER_NODE}.${key}`);
+  }
+
+  /**
+   * Remove all facet FilterNodes.
+   */
+  clearFacetFilterNodes () {
+    this.globalStorage.delete(StorageKeys.FACET_FILTER_NODE);
   }
 }

@@ -9,6 +9,7 @@ import levenshtein from 'js-levenshtein';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import { groupArray } from '../../../core/utils/arrayutils';
+import FilterType from '../../../core/filters/filtertype';
 
 /**
  * The currently supported controls
@@ -57,7 +58,7 @@ class FilterOptionsConfig {
      * The callback function to call when changed
      * @type {function}
      */
-    this.onChange = config.onChange || function () {};
+    this.onChange = config.onChange || function () { };
 
     /**
      * If true, stores the filter to storage on each change
@@ -70,6 +71,14 @@ class FilterOptionsConfig {
      * @type {boolean}
      */
     this.showReset = config.showReset && this.options.length > 0;
+
+    /**
+     * Whether this FilterOptions is part of a dynamic FilterBox component (i.e. is
+     * part of a FacetsComponent). Used to correctly set the {@link FilterType} of
+     * the created {@link FilterNode}.
+     * @type {boolean}
+     */
+    this.isDynamic = config.isDynamic;
 
     /**
      * The label to show for the reset button
@@ -244,6 +253,15 @@ export default class FilterOptionsComponent extends Component {
      * @type {boolean}
      */
     this.expanded = this.config.showExpand ? selectedCount > 0 : true;
+
+    /**
+     * True if all options are shown, false if some are hidden based on config
+     * @type {boolean}
+     */
+    this.allShown = false;
+    if (this.config.storeOnChange) {
+      this.apply();
+    }
   }
 
   static get type () {
@@ -487,19 +505,28 @@ export default class FilterOptionsComponent extends Component {
     return (option && filter) ? option.indexOf(filter) : -1;
   }
 
+  /**
+   * Clears all selected options.
+   */
   clearOptions () {
     this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
     this.updateListeners();
     this.setState();
   }
 
-  updateListeners () {
+  /**
+   * Call the config.onChange callback with the FilterNode corresponding to the
+   * component state.
+   * @param {boolean} alwaysSaveFilterNodes
+   * @param {boolean} blockSearchOnChange
+   */
+  updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
       this.apply();
     }
 
-    this.config.onChange(filterNode);
+    this.config.onChange(filterNode, alwaysSaveFilterNodes, blockSearchOnChange);
   }
 
   _updateOption (index, selected) {
@@ -552,37 +579,55 @@ export default class FilterOptionsComponent extends Component {
     return option.filter ? option.filter : Filter.equal(option.field, option.value);
   }
 
+  _getFilterType () {
+    if (this.config.isDynamic) {
+      return FilterType.FACET;
+    }
+    return this.config.optionType === 'RADIUS_FILTER'
+      ? FilterType.RADIUS
+      : FilterType.STATIC;
+  }
+
   _buildFilterMetadata (option) {
     return new FilterMetadata({
       fieldName: this.config.label,
-      displayValue: option.label
+      displayValue: option.label,
+      filterType: this._getFilterType()
     });
   }
 
+  /**
+   * Return the FilterNode when this is a RADIUS_FILTER.
+   * @type {FilterNode}
+   */
   getLocationRadiusFilterNode () {
     const selectedOption = this.config.options.find(o => o.selected);
     if (!selectedOption) {
       return FilterNodeFactory.from();
     }
-    const metadata = new FilterMetadata({
-      fieldName: this.config.label,
-      displayValue: selectedOption.label
-    });
-    if (selectedOption.value !== 0) {
+    const filterNode = {
+      metadata: this._buildFilterMetadata(selectedOption),
+      filter: { value: selectedOption.value },
+      remove: () => this._clearSingleOption(selectedOption)
+    };
+    if (selectedOption.value === 0) {
       return FilterNodeFactory.from({
-        metadata: metadata,
-        filter: { value: selectedOption.value }
-      });
-    } else {
-      return FilterNodeFactory.from({
-        metadata: metadata,
+        ...filterNode,
         filter: Filter.empty()
       });
+    } else {
+      return FilterNodeFactory.from(filterNode);
     }
   }
 
+  _clearSingleOption (option) {
+    option.selected = false;
+    this.updateListeners(true, true);
+    this.setState();
+  }
+
   /**
-   * Returns this component's filter node.
+   * Returns this component's filter node when it is a STATIC_FILTER.
    * This method is exposed so that components like {@link FilterBoxComponent}
    * can access them.
    * @returns {FilterNode}
@@ -592,7 +637,8 @@ export default class FilterOptionsComponent extends Component {
       .filter(o => o.selected)
       .map(o => FilterNodeFactory.from({
         filter: this._buildFilter(o),
-        metadata: this._buildFilterMetadata(o)
+        metadata: this._buildFilterMetadata(o),
+        remove: () => this._clearSingleOption(o)
       }));
 
     this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));

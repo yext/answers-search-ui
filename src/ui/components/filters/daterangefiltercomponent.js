@@ -118,6 +118,18 @@ export default class DateRangeFilterComponent extends Component {
     this._updateRange('max', date);
   }
 
+  _removeFilterNode () {
+    this._date = {
+      min: null,
+      max: null
+    };
+    this.setState();
+    this._onChange(FilterNodeFactory.from());
+    this.core.clearStaticFilterNode(this.name);
+    this.core.persistentStorage.delete(`${this.name}.min`);
+    this.core.persistentStorage.delete(`${this.name}.max`);
+  }
+
   /**
    * Returns this component's filter node.
    * This method is exposed so that components like {@link FilterBoxComponent}
@@ -127,7 +139,8 @@ export default class DateRangeFilterComponent extends Component {
   getFilterNode () {
     return FilterNodeFactory.from({
       filter: this._buildFilter(),
-      metadata: this._buildFilterMetadata()
+      metadata: this._buildFilterMetadata(),
+      remove: () => this._removeFilterNode()
     });
   }
 
@@ -187,9 +200,9 @@ export default class DateRangeFilterComponent extends Component {
         ? `${min} - ${max}`
         : `Between ${min} and ${max}`;
     }
-    return {
+    return new FilterMetadata({
       fieldName: this._title,
       displayValue: displayValue
-    };
+    });
   }
 }

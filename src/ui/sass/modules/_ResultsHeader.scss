@@ -29,7 +29,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   --yxt-results-header-filters-line-height: #{$results-header-filters-line-height};
 }
 .yxt-ResultsHeader {
-  padding: calc(var(--yxt-results-header-spacing) / 2) var(--yxt-results-header-spacing);
+  padding: calc(var(--yxt-results-header-spacing) / 4) var(--yxt-results-header-spacing);
   display: flex;
   align-items: baseline;
 
@@ -42,6 +42,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   &-resultsCount
   {
     margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    margin-bottom: 4px;
     white-space: nowrap;
     @include Text(
       $size: var(--yxt-results-header-font-size),
@@ -63,6 +64,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   {
     display: flex;
     margin-right: 5px;
+    margin-bottom: 4px;
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
@@ -73,6 +75,13 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   &-filterValue
   {
     margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    margin-bottom: 4px;
+    display: flex;
+  }
+
+  &-filterValueText,
+  &-filterValueComma
+  {
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
@@ -80,6 +89,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
       $style: italic
     );
   }
+
   &-resultsCountSeparator
   {
     color: var(--yxt-results-header-filters-color);
@@ -112,6 +122,35 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
     @include Text(
       $line-height: 20px
     );
+  }
+
+  &-removableFilterTag
+  {
+    background-color: var(--yxt-color-borders);
+    border-radius: 2px;
+    margin-bottom: 4px;
+    padding-left: 5px;
+    padding-right: 4px;
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    @include Text(
+      $size: var(--yxt-font-size-sm),
+      $color: var(--yxt-color-text-neutral),
+      $line-height: 20px,
+      $style: italic,
+    );
+  }
+
+
+  &-removableFilterTag:hover
+  {
+    color: var(--yxt-color-brand-white);
+    background-color: var(--yxt-color-text-secondary);
+    cursor: pointer;
+  }
+
+  &-removableFilterX
+  {
+    font-style: normal;
   }
 }
 
