@@ -38,7 +38,10 @@
               <span class="yxt-ResultsHeader-removableFilterX">&times;</span>
             </div>
           {{else}}
-            <div class="yxt-ResultsHeader-filterValue">{{displayValue}}{{#unless @last}}, {{/unless}}</div>
+            <div class="yxt-ResultsHeader-filterValue">
+              <span class="yxt-ResultsHeader-filterValueText">{{displayValue}}</span>
+              {{#unless @last}}<span class="yxt-ResultsHeader-filterValueComma">,</span>{{/unless}}
+            </div>
           {{/if}}
         {{/each}}
         {{#unless @last}}

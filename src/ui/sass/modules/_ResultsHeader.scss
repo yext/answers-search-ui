@@ -76,6 +76,12 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   {
     margin-right: calc(var(--yxt-results-header-spacing) / 2);
     margin-bottom: 4px;
+    display: flex;
+  }
+
+  &-filterValueText,
+  &-filterValueComma
+  {
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
@@ -83,6 +89,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
       $style: italic
     );
   }
+
   &-resultsCountSeparator
   {
     color: var(--yxt-results-header-filters-color);
