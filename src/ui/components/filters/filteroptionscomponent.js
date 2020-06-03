@@ -506,7 +506,7 @@ export default class FilterOptionsComponent extends Component {
   }
 
   /**
-   * Clears all selected options. 
+   * Clears all selected options.
    */
   clearOptions () {
     this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
