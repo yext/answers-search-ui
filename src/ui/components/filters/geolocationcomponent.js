@@ -140,7 +140,7 @@ export default class GeoLocationComponent extends Component {
     return 'controls/geolocation';
   }
 
-  setState (data) {
+  setState (data = {}) {
     let placeholder = '';
     if (this._enabled) {
       placeholder = this._config.enabledText;
@@ -244,13 +244,23 @@ export default class GeoLocationComponent extends Component {
     }
   }
 
+  _removeFilterNode () {
+    this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
+    this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+    this._enabled = false;
+    this.query = '';
+    this.core.clearStaticFilterNode(this.name);
+    this.setState();
+  }
+
   _buildFilterNode (filter, displayValue) {
     return FilterNodeFactory.from({
       filter: filter,
       metadata: {
         displayValue: displayValue,
         fieldName: this._config.title || this._config.label || 'Location'
-      }
+      },
+      remove: () => this._removeFilterNode()
     });
   }
 

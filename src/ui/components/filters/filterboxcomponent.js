@@ -200,8 +200,11 @@ export default class FilterBoxComponent extends Component {
           showReset: this.config.resetFilter,
           resetLabel: this.config.resetFilterLabel,
           showExpand: this.config.expand,
-          onChange: filterNode => {
-            this.onFilterNodeChange(i, filterNode);
+          isDynamic: this.config.isDynamic,
+          onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
+            const _saveFilterNodes = this.config.searchOnChange || alwaysSaveFilterNodes;
+            const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
+            this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
           }
         }));
       if (this.config.isDynamic && typeof component.floatSelected === 'function') {
@@ -233,6 +236,10 @@ export default class FilterBoxComponent extends Component {
     }
   }
 
+  _getValidFilterNodes () {
+    return this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
+  }
+
   resetFilters () {
     this._filterComponents.forEach(filter => filter.clearOptions());
   }
@@ -241,11 +248,15 @@ export default class FilterBoxComponent extends Component {
    * Handle changes to child filter components
    * @param {number} index The index of the changed filter
    * @param {FilterNode} filterNode The new filter node
+   * @param {boolean} saveFilterNodes Whether to save filternodes to storage
+   * @param {boolean} searchOnChange Whether to conduct a search
    */
-  onFilterNodeChange (index, filterNode) {
+  onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
     this._filterNodes[index] = filterNode;
-    if (this.config.searchOnChange) {
+    if (saveFilterNodes || searchOnChange) {
       this._saveFilterNodesToStorage();
+    }
+    if (searchOnChange) {
       this._search();
     }
   }
@@ -263,11 +274,9 @@ export default class FilterBoxComponent extends Component {
    * @private
    */
   _saveFilterNodesToStorage () {
-    const validFilterNodes = this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
-
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
-      this.core.setFacetFilterNodes(availableFieldIds, validFilterNodes);
+      this.core.setFacetFilterNodes(availableFieldIds, this._getValidFilterNodes());
     } else {
       this._filterComponents.forEach(fc => fc.apply());
     }

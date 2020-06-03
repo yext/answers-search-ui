@@ -122,6 +122,18 @@ export default class RangeFilterComponent extends Component {
     this._updateRange('max', value);
   }
 
+  _removeFilterNode () {
+    this._range = {
+      min: null,
+      max: null
+    };
+    this.setState();
+    this._onChange(FilterNodeFactory.from());
+    this.core.clearStaticFilterNode(this.name);
+    this.core.persistentStorage.delete(`${this.name}.min`);
+    this.core.persistentStorage.delete(`${this.name}.max`);
+  }
+
   /**
    * Returns this component's filter node.
    * This method is exposed so that components like {@link FilterBoxComponent}
@@ -131,7 +143,8 @@ export default class RangeFilterComponent extends Component {
   getFilterNode () {
     return FilterNodeFactory.from({
       filter: this._buildFilter(),
-      metadata: this._buildFilterMetadata()
+      metadata: this._buildFilterMetadata(),
+      remove: () => this._removeFilterNode()
     });
   }
 
@@ -162,8 +175,8 @@ export default class RangeFilterComponent extends Component {
     const { min, max } = this._range;
     const falsyMin = !min && min !== 0;
     const falsyMax = !max && max !== 0;
-    const _min = falsyMin ? null : min;
-    const _max = falsyMax ? null : max;
+    const _min = falsyMin ? null : parseInt(min);
+    const _max = falsyMax ? null : parseInt(max);
     return Filter.range(this._field, _min, _max, false);
   }
 
