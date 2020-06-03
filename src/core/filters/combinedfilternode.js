@@ -68,4 +68,14 @@ export default class CombinedFilterNode extends FilterNode {
   getSimpleAncestors () {
     return this.getChildren().flatMap(fn => fn.getSimpleAncestors());
   }
+
+  /**
+   * Removes this filter node from the FilterRegistry by calling remove on each of its
+   * child FilterNodes.
+   */
+  remove () {
+    this.children.forEach(child => {
+      child.remove();
+    });
+  }
 }

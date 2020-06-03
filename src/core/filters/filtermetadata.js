@@ -1,11 +1,13 @@
 /** @module FilterMetadata */
 
+import FilterType from './filtertype';
+
 /**
  * FilterMetadata is a container for additional display data for a {@link Filter}.
  */
 export default class FilterMetadata {
   constructor (metadata = {}) {
-    const { fieldName, displayValue } = metadata;
+    const { fieldName, displayValue, filterType } = metadata;
 
     /**
      * The display name for the field being filtered on.
@@ -20,6 +22,12 @@ export default class FilterMetadata {
      * @type {string}
      */
     this.displayValue = displayValue;
+
+    /**
+     * What type of filter this is.
+     * @type {FilterType}
+     */
+    this.filterType = filterType || FilterType.STATIC;
     Object.freeze(this);
   }
 }

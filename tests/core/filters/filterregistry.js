@@ -154,22 +154,42 @@ describe('FilterRegistry', () => {
   });
 
   it('can set locationRadius FilterNodes', () => {
-    const metadata = new FilterMetadata({
-      fieldName: 'label1',
-      displayValue: 'displayvalue1'
-    });
-    const filter = new Filter({
-      value: 1234
-    });
     const filterNode = FilterNodeFactory.from({
-      metadata: metadata,
-      filter: filter
+      metadata: new FilterMetadata({
+        fieldName: 'label1',
+        displayValue: 'displayvalue1'
+      }),
+      filter: new Filter({ value: 1234 })
     });
     registry.setLocationRadiusFilterNode(filterNode);
-    let locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
     expect(locationRadiusFilterNode.getFilter().value).toEqual(1234);
+  });
+
+  it('can clear locationRadius FilterNodes', () => {
+    const filterNode = FilterNodeFactory.from({
+      metadata: new FilterMetadata({
+        fieldName: 'label1',
+        displayValue: 'displayvalue1'
+      }),
+      filter: new Filter({ value: 1234 })
+    });
+    registry.setLocationRadiusFilterNode(filterNode);
     registry.setLocationRadiusFilterNode(FilterNodeFactory.from());
-    locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
-    expect(locationRadiusFilterNode).toEqual(FilterNodeFactory.from());
+    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    expect(locationRadiusFilterNode.getFilter()).toEqual(FilterNodeFactory.from().getFilter());
+    expect(locationRadiusFilterNode.getMetadata()).toEqual(FilterNodeFactory.from().getMetadata());
+  });
+
+  it('can clear facet filter nodes', () => {
+    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
+    registry.clearFacetFilterNodes();
+    expect(registry.getFacetFilterNodes()).toEqual([]);
+  });
+
+  it('can clear static filter nodes', () => {
+    registry.setStaticFilterNodes('namespace1', node1);
+    registry.clearStaticFilterNode('namespace1');
+    expect(registry.getStaticFilterNodes()).toEqual([]);
   });
 });

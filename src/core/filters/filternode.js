@@ -6,7 +6,7 @@
  * data to send in a request, any additional filter metadata for display,
  * and any children nodes.
  *
- * Implemented by {@link SimplerFilterNode} and {@link CombinedFilterNode}.
+ * Implemented by {@link SimpleFilterNode} and {@link CombinedFilterNode}.
  */
 export default class FilterNode {
   /**
@@ -32,4 +32,9 @@ export default class FilterNode {
    * @returns {Array<SimpleFilterNode>}
    */
   getSimpleAncestors () {}
+
+  /**
+   * Remove this FilterNode from the FilterRegistry.
+   */
+  remove () {}
 }

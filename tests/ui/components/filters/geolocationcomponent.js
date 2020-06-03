@@ -2,6 +2,7 @@ import GeolocationComponent from 'src/ui/components/filters/geolocationcomponent
 import mockManager from '../../../setup/managermocker';
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
+import FilterMetadata from '../../../../src/core/filters/filtermetadata';
 
 describe('GeoLocationFilter', () => {
   let setStaticFilterNodes, COMPONENT_MANAGER, getCurrentPosition;
@@ -58,9 +59,9 @@ describe('GeoLocationFilter', () => {
     expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
     const filterNode = setStaticFilterNodes.mock.calls[0][1];
     expect(filterNode.filter).toEqual(Filter.position(123, 456, 999999));
-    expect(filterNode.metadata).toEqual({
+    expect(filterNode.metadata).toEqual(new FilterMetadata({
       displayValue: 'Current Location',
       fieldName: title
-    });
+    }));
   });
 });
