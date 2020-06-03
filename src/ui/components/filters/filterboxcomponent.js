@@ -40,13 +40,13 @@ class FilterBoxConfig {
      * If true, show a "reset all" button to reset all facets
      * @type {boolean}
      */
-    this.resetFilters = config.resetFacets === undefined ? true : config.resetFacets;
+    this.resetFilters = config.resetFilters === undefined ? !config.searchOnChange : config.resetFilters;
 
     /**
      * The label to show for the "reset all" button
      * @type {string}
      */
-    this.resetFiltersLabel = config.resetFacetsLabel || 'reset all';
+    this.resetFiltersLabel = config.resetFiltersLabel || 'reset all';
 
     /**
      * The max number of facets to show before displaying "show more"/"show less"

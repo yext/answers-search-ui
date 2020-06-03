@@ -908,9 +908,9 @@ ANSWERS.addComponent('FilterBox', {
   resetFilter: false,
   // Optional, the label to use for the reset button above, this will only display if searchOnChange is false
   resetFilterLabel: 'reset',
-  // Optional, show a reset-all button for the filter control, this will only display if searchOnChange is false
+  // Optional, show a reset-all button for the filter control. Defaults to displaying a reset button if searchOnChange is false.
   resetFilters: true,
-  // Optional, the label to use for the reset-all button above, this will only display if searchOnChange is false
+  // Optional, the label to use for the reset-all button above, this will only display if resetFilters is true.
   resetFiltersLabel: 'reset-all',
   // Optional, allow collapsing excess filter options after a limit
   showMore: true,
