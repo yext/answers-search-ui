@@ -506,8 +506,7 @@ export default class FilterOptionsComponent extends Component {
   }
 
   /**
-   * Clears all selected options. If this component is not part of a FilterBox,
-   * also send the REMOVED_FILTER analytics event. Otherwise, let FilterBox do it.
+   * Clears all selected options. 
    */
   clearOptions () {
     this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
