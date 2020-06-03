@@ -101,25 +101,17 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   /**
-   * Our handlebars can only loop through arrays, not objects, so we need to reformat
-   * the grouped applied filters.
-   * @param {Object} groupedFilters
+   * Returns an array of object the handlebars can understand and render
+   * the applied filters bar from. Our handlebars can only loop through arrays,
+   * not objects, so we need to reformat the grouped applied filters.
    * @returns {Array<Object>}
    */
-  _convertGroupedFiltersToArray (groupedFilters) {
+  _getAppliedFiltersArray () {
+    const groupedFilters = this._groupAppliedFilters();
     return Object.keys(groupedFilters).map(label => ({
       label: label,
       filterDataArray: groupedFilters[label]
     }));
-  }
-
-  /**
-   * Returns an array of object the handlebars can understand and render
-   * the applied filters bar from.
-   * @returns {Array<Object>}
-   */
-  _getAppliedFiltersArray () {
-    return this._convertGroupedFiltersToArray(this._groupAppliedFilters());
   }
 
   setState (data) {

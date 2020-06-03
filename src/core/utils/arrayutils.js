@@ -1,7 +1,7 @@
 
 /**
  * Groups an array into an object using a given key and value function, and an initial object
- * to add to. By default the key and value functions will perform not perform any transformations
+ * to add to. By default the key and value functions will not perform any transformations
  * on the array elements.
  * @param {Array<any>} arr array to be grouped
  * @param {Function} keyFunc function that evaluates what key to give an array element.
