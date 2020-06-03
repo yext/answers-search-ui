@@ -977,6 +977,8 @@ ANSWERS.addComponent('Facets', {
   placeholderText: 'Search here...',
   // Optional, if true, display the filter option search input
   searchable: false,
+  // Optional, the form label text for the search input, defaults to 'Search for a filter option'
+  searchLabelText: 'Search for a filter option',
   // Optional, field-specific overrides for a filter
   fields: {
     'c_customFieldName':  { // Field id to override e.g. c_customFieldName, buildin.location
@@ -1112,6 +1114,8 @@ ANSWERS.addComponent('FilterOptions', {
   placeholderText: 'Search here...',
   // Optional, if true, display the filter option search input
   searchable: false,
+  // Optional, the form label text for the search input, defaults to 'Search for a filter option'
+  searchLabelText: 'Search for a filter option',
 });
 ```
 

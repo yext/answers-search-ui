@@ -141,6 +141,12 @@ class FilterOptionsConfig {
      */
     this.searchable = config.searchable || false;
 
+    /**
+     * The form label text for the search input
+     * @type {boolean}
+     */
+    this.searchLabelText = config.searchLabelText || 'Search for a filter option';
+
     this.validate();
 
     if (typeof config.previousOptions === 'string') {
