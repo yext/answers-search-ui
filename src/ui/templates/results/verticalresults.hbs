@@ -3,7 +3,12 @@
     {{> noResults}}
   {{/if}}
   {{#if resultsPresent}}
-    {{> results}}
+    <section class="yxt-Results yxt-Results--{{_config.modifier}}{{#if _config.isUniversal}} yxt-Results--universal{{/if}}">
+      {{> header}}
+      {{> map}}
+      {{> results}}
+      {{> viewMore}}
+    </section>
   {{/if}}
 {{/if}}
 
@@ -16,31 +21,53 @@
   {{/if}}
 {{/inline}}
 
-{{#*inline "results"}}
-  <section class="yxt-Results yxt-Results--{{_config.modifier}}">
-    {{#if _config.isUniversal}}
-      {{> results/resultssectionheader}}
-    {{else}}
-      {{#if showResultsHeader}}
-        <div data-component="ResultsHeader" data-opts='{{json _config.resultsHeaderOpts}}'></div>
+
+{{#*inline "header"}}
+  {{#if _config.isUniversal}}
+    <div class="yxt-Results-title">
+      {{#if iconIsBuiltIn}}
+        <div data-component="IconComponent" data-opts='{ "iconName": "{{ _config.icon }}" }'></div>
+      {{else}}
+        <div data-component="IconComponent" data-opts='{ "iconUrl": "{{ _config.icon }}" }'></div>
       {{/if}}
-    {{/if}}
-    {{#if _config.includeMap}}
-      <div class="yxt-Results-map"
-            data-component="Map"
-            data-prop="map">
-      </div>
-    {{/if}}
-    <div class="yxt-Results-items js-yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
-      {{#each results}}
-        <div class="yxt-Card{{#if ../_config.isUniversal}} yxt-Card--universal{{/if}}"
-          data-component="Card"
-          data-opts='{ "_index": {{@index}} }'>
-        </div>
-      {{/each}}
-      {{#each placeholders}}
-        <div class="yxt-Card-placeholder" aria-hidden="true"></div>
-      {{/each}}
+      <div class="yxt-Results-titleLabel">{{_config.title}}</div>
     </div>
-  </section>
+  {{/if}}
+  {{#if showResultsHeader}}
+    <div data-component="ResultsHeader"></div>
+  {{/if}}
+{{/inline}}
+
+{{#*inline "results"}}
+  <div class="yxt-Results-items js-yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
+    {{#each results}}
+      <div class="yxt-Card{{#if ../_config.isUniversal}} yxt-Card--universal{{/if}}"
+        data-component="Card"
+        data-opts='{ "_index": {{@index}} }'>
+      </div>
+    {{/each}}
+    {{#each placeholders}}
+      <div class="yxt-Card-placeholder" aria-hidden="true"></div>
+    {{/each}}
+  </div>
+{{/inline}}
+
+{{#*inline "map"}}
+  {{#if _config.includeMap}}
+    <div class="yxt-Results-map"
+          data-component="Map"
+          data-prop="map">
+    </div>
+  {{/if}}
+{{/inline}}
+
+{{#*inline "viewMore"}}
+  {{#if _config.isUniversal}}
+    <div class="yxt-Results-viewMore">
+      <a class="yxt-Results-viewMoreLink" href="{{ verticalURL }}">
+        <div class="yxt-Results-viewMoreLabel">{{_config.viewMoreLabel}}</div>
+        <div data-component="IconComponent" data-opts='{ "iconName": "chevron" }'></div>
+      </a>
+    </div>
+  {{/if}}
 {{/inline}}

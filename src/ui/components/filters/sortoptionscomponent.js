@@ -4,7 +4,8 @@ import Component from '../component';
 import { AnswersBasicError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
-import Filter from '../../../core/models/filter';
+import ResultsContext from '../../../core/storage/resultscontext';
+import SearchStates from '../../../core/storage/searchstates';
 
 /**
  * Renders configuration options for sorting Vertical Results.
@@ -21,9 +22,20 @@ export default class SortOptionsComponent extends Component {
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
+
+    /**
+     * This component listens to updates to vertical results, and sets its state to it when
+     * an update occurs.
+     * @type {string}
+     */
+    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, verticalResults => {
+      if (verticalResults.searchState === SearchStates.SEARCH_COMPLETE) {
+        this.setState(verticalResults);
+      }
+    });
   }
 
-  setState (data) {
+  setState (data = {}) {
     let options = this.options;
     if (this.hideExcessOptions) {
       options = this.options.slice(0, this._config.showMoreLimit);
@@ -32,24 +44,26 @@ export default class SortOptionsComponent extends Component {
       options,
       hideExcessOptions: this.hideExcessOptions,
       name: this.name,
-      showReset: this.showReset
+      showReset: this.showReset,
+      isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     }));
   }
 
   onMount () {
     // Handle radio button selections
-    DOM.on(
-      DOM.query(this._container, '.yxt-SortOptions-fieldSet'),
+    const containerEl = DOM.query(this._container, '.yxt-SortOptions-fieldSet');
+    containerEl && DOM.on(
+      containerEl,
       'change',
       evt => this.handleOptionSelection(parseInt(evt.target.value))
     );
 
     // Register more/less button
     if (this._config.showMore) {
-      DOM.on(
-        DOM.query(this._container, '.yxt-SortOptions-showToggle'),
-        'click',
-        () => {
+      const toggleEl = DOM.query(this._container, '.yxt-SortOptions-showToggle');
+      toggleEl && DOM.on(
+        toggleEl,
+        'click', () => {
           this.hideExcessOptions = !this.hideExcessOptions;
           this.setState();
         }
@@ -58,8 +72,9 @@ export default class SortOptionsComponent extends Component {
 
     // Register show reset button
     if (this.showReset) {
-      DOM.on(
-        DOM.query(this._container, '.yxt-SortOptions-reset'),
+      const resetEl = DOM.query(this._container, '.yxt-SortOptions-reset');
+      resetEl && DOM.on(
+        resetEl,
         'click',
         () => this.handleOptionSelection(0)
       );
@@ -67,8 +82,9 @@ export default class SortOptionsComponent extends Component {
 
     // Register apply button
     if (!this._config.searchOnChange) {
-      DOM.on(
-        DOM.query(this._container, '.yxt-SortOptions-apply'),
+      const applyEl = DOM.query(this._container, '.yxt-SortOptions-apply');
+      applyEl && DOM.on(
+        applyEl,
         'click',
         () => this._sortResults()
       );
@@ -111,18 +127,9 @@ export default class SortOptionsComponent extends Component {
    * Trigger a search with all filters in storage
    */
   _search () {
-    const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-    const totalFilter = allFilters.length > 1
-      ? Filter.and(...allFilters)
-      : allFilters[0];
-    const input = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
-    const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.verticalSearch(this._config.verticalKey, {
-      input,
-      filter: JSON.stringify(totalFilter),
-      facetFilter: JSON.stringify(facetFilter)
+      resetPagination: true,
+      useFacets: true
     });
   }
 

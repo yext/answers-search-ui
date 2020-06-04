@@ -1,15 +1,19 @@
-.yxt-Card {
-  $cards-margin: $base-spacing / 2 !default;
+$cards-margin: calc(var(--yxt-base-spacing)) / 2 !default;
 
+:root {
+  --yxt-cards-margin: #{$cards-margin};
+}
+
+.yxt-Card {
   display: flex;
   flex-direction: column;
-  margin-bottom: $cards-margin;
+  margin-bottom: var(--yxt-cards-margin);
 
   &,
   &-placeholder {
-    min-width: 210px;
-    border: $border-default;
-    margin-right: $cards-margin;
+    min-width: var(--yxt-cards-min-width);
+    border: var(--yxt-border-default);
+    margin-right: var(--yxt-cards-margin);
   }
 
   &-placeholder {
@@ -76,3 +80,11 @@
     }
   }
 }
+
+.yxt-Card--universal
+{
+  border: var(--yxt-border-default);
+  border-top: 0;
+  margin: 0;
+}
+

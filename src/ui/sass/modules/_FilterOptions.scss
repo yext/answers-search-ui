@@ -1,73 +1,177 @@
-/** @define FilterOptions */
+  /** @define FilterOptions */
 
-.yxt-FilterOptions {
-  &-container {
-    @include Text($line-height: $line-height-md);
-  }
+  .yxt-FilterOptions {
+    &-container {
+      @include Text($line-height: var(--yxt-line-height-md));
 
-  &-fieldSet {
-    border: 0;
-    padding: 0;
-    margin: 12px 0;
-  }
+      &--searching {
+        .yxt-FilterOptions-showToggle {
+          display: none;
+        }
 
-  &-legend {
-    width: 100%;
-    padding: 0;
-  }
+        .yxt-FilterOptions-option {
+          &.displaySearch {
+            display: flex;
+          }
 
-  &-legendLabel {
-    @include Text(
-      $size: $font-size-md-lg,
-      $line-height: $line-height-lg,
-      $weight: $font-weight-semibold);
-    text-align: left;
-    width: 100%;
-    display: flex;
-    align-items: center;
-
-    &:hover button {
-      color: $color-text-secondary;
+          &.hiddenSearch {
+            display: none;
+          }
+        }
+      }
     }
-  }
 
-  &-option {
-    display: flex;
-    align-items: flex-start;
-    margin: 2px 0;
-    @media (max-width: $breakpoint-mobile-max) {
-      margin: 22px 0;
+    &-controls {
+      display: flex;
+      flex-direction: column;
     }
+
+    &-buttonWrapper {
+      display: flex;
+    }
+
+    &-filter {
+      font-size: $font-size-md;
+      border: $border-default;
+      border-radius: 4px;
+      padding: 4px 8px;
+      width: 100%;
+
+      &:hover,
+      &:active,
+      &:focus {
+        border: var(--yxt-border-hover);
+      }
+    }
+
+    &-fieldSet {
+      border: 0;
+      padding: 0;
+      margin: 12px 0;
+    }
+
+    &-legend {
+      width: 100%;
+      padding: 0;
+    }
+
+    &-legendLabel {
+      @include Text(
+        $size: var(--yxt-font-size-md-lg),
+        $line-height: var(--yxt-line-height-lg),
+        $weight: var(--yxt-font-weight-semibold));
+      text-align: left;
+      width: 100%;
+      display: flex;
+      align-items: center;
+
+      &:hover button {
+        color: var(--yxt-color-text-secondary);
+      }
+    }
+
+    &-option {
+      display: flex;
+      align-items: flex-start;
+
+      &:not(:first-child) {
+        margin-top: 8px;
+      }
+
+      &.hidden {
+        display: none;
+      }
+
+      @media (max-width: $breakpoint-mobile-max) {
+        margin: 22px 0;
+      }
+    }
+
+    &-options {
+      margin: 12px 0;
+      padding-left: 0;
+    }
+
+  &-search {
+    position: relative;
+    margin-top: 10px;
   }
 
-  &-options {
-    margin: 12px 0;
+  &-clearSearch {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--yxt-color-text-secondary);
+
+    &.js-hidden {
+      display: none;
+    }
   }
 
   &-optionLabel {
-    display: block;
-    margin-left: 5px;
+    position: relative;
+    font-size: $font-size-md;
+    line-height: 20px;
+    align-items: center;
+    margin-left: 22px;
+    cursor: pointer;
+
+    /* Checkmark outer box */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -22px;
+      height: 12px;
+      width: 12px;
+      transform: translateY(-50%);
+      border: $border-default;
+      border-radius: 2px;
+    }
+
+    /* Checkmark */
+    &::after {
+      content: none;
+      position: absolute;
+      top: calc(50% - 3px);
+      left: -20px;
+      width: 3px;
+      height: 9px;
+      transform: rotate(45deg) translateY(-50%);
+      border-right: 1px solid $color-brand-hover;
+      border-bottom: 1px solid $color-brand-hover;
+    }
   }
 
   &-selectedCount {
     @include Text(
-      $size: $font-size-xs,
-      $weight: $font-weight-bold,
+      $size: var(--yxt-font-size-xs),
+      $weight: var(--yxt-font-weight-bold),
       $color: white);
 
     width: 20px;
     height: 20px;
     margin-left: 12px;
     display: flex;
-    background: $color-background-dark;
+    background: var(--yxt-color-background-dark);
     align-items: center;
     justify-content: center;
     border-radius: 4px;
   }
 
   &-reset {
+    &.js-hidden {
+      display: none;
+    }
+
     @include Text(
-      $color: $color-brand-primary,
+      $color: var(--yxt-color-brand-primary),
       $style: italic);
     @include TextButton($padding: 0);
 
@@ -78,9 +182,13 @@
 
   &-showToggle {
     @include Text(
-      $color: $color-brand-primary,
+      $color: var(--yxt-color-brand-primary),
       $style: italic);
     @include TextButton($padding: 0);
+
+    &.hidden {
+      display: none;
+    }
 
     svg {
       width: 6px;
@@ -97,16 +205,42 @@
     cursor: pointer;
 
     &:focus {
-      border: 1px solid $color-brand-hover;
+      border: 1px solid var(--yxt-color-brand-hover);
     }
 
     &:not(:disabled):hover {
-      color: $color-text-secondary;
+      color: var(--yxt-color-text-secondary);
     }
   }
 
   &-input {
     margin-left: 0;
+  }
+
+  &-checkboxInput {
+    opacity: 0;
+    height: 0;
+    width: 0;
+    margin: 0;
+
+    /* Set the custom checkmark's checked state */
+    &:checked {
+      & + .yxt-FilterOptions-optionLabel::after {
+        content: "";
+      }
+
+      & + .yxt-FilterOptions-optionLabel::before {
+        border: var(--yxt-border-hover);
+      }
+    }
+
+    /* Add focus styles on the outer-box of the fake checkbox */
+    &:focus {
+      & + .yxt-FilterOptions-optionLabel::before {
+        border: 1px solid black;
+        box-shadow: var(--yxt-searchbar-focus-shadow);
+      }
+    }
   }
 
   &-reset--right {

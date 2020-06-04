@@ -2,7 +2,6 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 
@@ -27,6 +26,12 @@ export default class SearchComponent extends Component {
      * @type {string}
      */
     this._verticalKey = config.verticalKey || null;
+
+    /**
+     * Query submission can optionally be based on a form as context. Note that if
+     * a form is not used, the component has no guarantee of WCAG compliance.
+     */
+    this._useForm = config.useForm !== undefined ? config.useForm : true;
 
     /**
      * Query submission is based on a form as context.
@@ -171,6 +176,27 @@ export default class SearchComponent extends Component {
      * @private
      */
     this._autoCompleteName = `${this.name}.autocomplete`;
+
+    /**
+     * Options to pass to the geolocation api.
+     * @type {Object}
+     */
+    this._geolocationOptions = {
+      enableHighAccuracy: false,
+      timeout: 1000,
+      maximumAge: 300000,
+      ...config.geolocationOptions
+    };
+
+    /**
+     * Options for the geolocation timeout alert.
+     * @type {Object}
+     */
+    this._geolocationTimeoutAlert = {
+      enabled: false,
+      message: 'We are unable to determine your location',
+      ...config.geolocationTimeoutAlert
+    };
   }
 
   static get type () {
@@ -323,63 +349,98 @@ export default class SearchComponent extends Component {
   }
 
   /**
-   * A helper method to use for wiring up searching on form submission
-   * @param {string} formSelector CSS selector to bind our submit handling to
+   * Registers the different event handlers that can issue a search. Note that
+   * different handlers are used depending on whether or not a form is used as
+   * context.
+   *
+   * @param {string} formSelector CSS selector to bind our form submit handling to
    */
   initSearch (formSelector) {
     this._formEl = formSelector;
 
     this._container.classList.add('yxt-SearchBar-wrapper');
 
-    let form = DOM.query(this._container, formSelector);
-    if (!form) {
-      throw new Error('Could not initialize SearchBar; Can not find {HTMLElement} `', this._formEl, '`.');
+    if (this._useForm) {
+      let form = DOM.query(this._container, formSelector);
+      if (!form) {
+        throw new Error(
+          'Could not initialize SearchBar; Can not find {HTMLElement} `',
+          this._formEl, '`.');
+      }
+
+      DOM.on(form, 'submit', (e) => {
+        e.preventDefault();
+        // TODO(oshi) we should not use the same css selector (this._inputEl)
+        // For both the autocomplete AND the search bar input
+        // This is incredibly confusing, and also makes the first DOM.query
+        // Rely on the order of the input el and autocomplete in the template
+        const inputEl = form.querySelector(this._inputEl);
+        this.onQuerySubmit(inputEl);
+      });
+    } else {
+      const inputEl = DOM.query(this._container, this._inputEl);
+      if (!inputEl) {
+        throw new Error(
+          'Could not initialize SearchBar; Can not find {HTMLElement} `',
+          this._inputEl, '`.');
+      }
+      DOM.on(inputEl, 'keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.onQuerySubmit(inputEl);
+        }
+      });
+
+      const submitButton = DOM.query(this._container, '.js-yext-submit');
+      DOM.on(submitButton, 'click', (e) => {
+        e.preventDefault();
+        this.onQuerySubmit(inputEl);
+      });
+    }
+  }
+
+  /**
+   * The handler for a query submission. This method first sets the new query in
+   * persistent and global storage, than performs a debounced search.
+   *
+   * @param {Node} inputEl The input element containing the query.
+   */
+  onQuerySubmit (inputEl) {
+    const query = inputEl.value;
+    this.query = query;
+    const params = new SearchParams(window.location.search.substring(1));
+    params.set('query', query);
+
+    // If we have a redirectUrl, we want the form to be
+    // serialized and submitted.
+    if (typeof this.redirectUrl === 'string') {
+      window.location.href = this.redirectUrl + '?' + params.toString();
+      return false;
     }
 
-    DOM.on(form, 'submit', (e) => {
-      e.preventDefault();
-
-      // TODO(oshi) we should not use the same css selector (this._inputEl)
-      // For both the autocomplete AND the search bar input
-      // This is incredibly confusing, and also makes the first DOM.query
-      // Rely on the order of the input el and autocomplete in the template
-      const inputEl = form.querySelector(this._inputEl);
-      const query = inputEl.value;
-      this.query = query;
-      const params = new SearchParams(window.location.search.substring(1));
-      params.set('query', query);
-
-      // If we have a redirectUrl, we want the form to be
-      // serialized and submitted.
-      if (typeof this.redirectUrl === 'string') {
-        window.location.href = this.redirectUrl + '?' + params.toString();
-        return false;
+    inputEl.blur();
+    DOM.query(this._container, '.js-yext-submit').blur();
+    // TODO: move this into initClearButton
+    if (this.clearButton) {
+      const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
+      if (this.query) {
+        this._showClearButton = true;
+        button.classList.remove('yxt-SearchBar--hidden');
+      } else {
+        this._showClearButton = false;
+        button.classList.add('yxt-SearchBar--hidden');
       }
+    }
+    if (this.isUsingYextAnimatedIcon) {
+      this.animateIconToYext();
+    }
 
-      inputEl.blur();
-      DOM.query(this._container, '.js-yext-submit').blur();
-      // TODO: move this into initClearButton
-      if (this.clearButton) {
-        const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
-        if (this.query) {
-          this._showClearButton = true;
-          button.classList.remove('yxt-SearchBar--hidden');
-        } else {
-          this._showClearButton = false;
-          button.classList.add('yxt-SearchBar--hidden');
-        }
-      }
-      if (this.isUsingYextAnimatedIcon) {
-        this.animateIconToYext();
-      }
-
-      this.core.persistentStorage.set(StorageKeys.QUERY, query);
-      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.setQuery(query);
-      this.debouncedSearch(query);
-      return false;
-    });
+    this.core.persistentStorage.set(StorageKeys.QUERY, query);
+    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.setQuery(query);
+    this.debouncedSearch(query);
+    return false;
   }
 
   /**
@@ -403,7 +464,12 @@ export default class SearchComponent extends Component {
       originalQuery: this.query,
       inputEl: inputSelector,
       onSubmit: () => {
-        DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
+        if (this._useForm) {
+          DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
+        } else {
+          const inputEl = DOM.query(this._container, inputSelector);
+          this.onQuerySubmit(inputEl);
+        }
       },
       onChange: () => {
         DOM.trigger(DOM.query(this._container, inputSelector), 'input');
@@ -448,7 +514,14 @@ export default class SearchComponent extends Component {
                   });
                   resolve(this.search(query));
                 },
-                () => resolve(this.search(query)))
+                () => {
+                  resolve(this.search(query));
+                  const { enabled, message } = this._geolocationTimeoutAlert;
+                  if (enabled) {
+                    window.alert(message);
+                  }
+                },
+                this._geolocationOptions)
             );
           } else {
             return this.search(query);
@@ -466,15 +539,7 @@ export default class SearchComponent extends Component {
    */
   search (query) {
     if (this._verticalKey) {
-      const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-      const totalFilter = allFilters.length > 1
-        ? Filter.and(...allFilters)
-        : allFilters[0];
-      return this.core.verticalSearch(this._verticalKey, {
-        input: query,
-        filter: JSON.stringify(totalFilter),
-        offset: this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0
-      });
+      this.core.verticalSearch(this._config.verticalKey, { resetPagination: true }, { input: query });
     } else {
       // NOTE(billy) Temporary hack for DEMO
       // Remove me after the demo
@@ -576,7 +641,8 @@ export default class SearchComponent extends Component {
       iconId: this.name,
       forwardIconOpts: forwardIconOpts,
       reverseIconOpts: reverseIconOpts,
-      autoFocus: this.autoFocus && !this.query
+      autoFocus: this.autoFocus && !this.query,
+      useForm: this._useForm
     }, data));
   }
 

@@ -2,6 +2,7 @@
 
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import ResultsContext from '../../../core/storage/resultscontext';
 
 class FacetsConfig {
   constructor (config) {
@@ -92,9 +93,37 @@ class FacetsConfig {
     /**
      * The controls to use for each field. Each type of filter has a default
      * $eq : multioption (checkbox)
+     *
+     * DEPRECATED: prefer putting this in config.fields
+     *
      * @type {Object}
      */
     this.fieldControls = config.fieldControls || {};
+
+    /**
+     * The placeholder text used for the filter option search input
+     * @type {string}
+     */
+    this.placeholderText = config.placeholderText || 'Search here...';
+
+    /**
+     * If true, display the filter option search input
+     * @type {boolean}
+     */
+    this.searchable = config.searchable || false;
+
+    /**
+     * The form label text for the search input
+     * @type {boolean}
+     */
+    this.searchLabelText = config.searchLabelText || 'Search for a filter option';
+
+    /**
+     * An object that maps field API names to their filter options overrides,
+     * which have the same keys as the config options in FilterOptions component.
+     * @type {Object}
+     */
+    this.fields = config.fields || {};
 
     /**
      * The selector of the apply button
@@ -126,8 +155,6 @@ export default class FacetsComponent extends Component {
      * @private
      */
     this._verticalKey = config.verticalKey;
-
-    // config.verticalKey || null;
 
     /**
      * The selector of the apply button
@@ -163,6 +190,13 @@ export default class FacetsComponent extends Component {
     return 'filters/facets';
   }
 
+  setState (data) {
+    return super.setState({
+      ...data,
+      isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
+    });
+  }
+
   remove () {
     if (this._filterbox) {
       this._filterbox.remove();
@@ -177,19 +211,26 @@ export default class FacetsComponent extends Component {
       this._filterbox.remove();
     }
 
-    let { filters } = this._state.get();
+    let { filters, resultsContext } = this._state.get();
 
-    if (!filters) {
+    if (!filters || resultsContext === ResultsContext.NO_RESULTS) {
       return;
     }
 
     filters = filters.map(f => {
+      const fieldOverrides = this.config.fields[f.fieldId] || {};
       return Object.assign({}, f, {
         type: 'FilterOptions',
-        control: this.config.fieldControls[f.fieldId] || 'multioption'
+        control: this.config.fieldControls[f.fieldId] || 'multioption',
+        searchable: this.config.searchable,
+        searchLabelText: this.config.searchLabelText,
+        placeholderText: this.config.placeholderText,
+        ...fieldOverrides
       });
     });
 
+    // TODO: pass an apply() method to FilterBox, that will override its default behavior,
+    // and remove the isDynamic config option.
     this._filterbox = this.componentManager.create(
       'FilterBox',
       Object.assign({}, this.config, {

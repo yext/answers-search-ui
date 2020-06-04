@@ -93,8 +93,8 @@ export default class DirectAnswerComponent extends Component {
 
     // For WCAG compliance, the feedback should be a submittable form
     DOM.on(this._formEl, 'submit', (e) => {
-      let formEl = e.target;
-      let checkedValue = DOM.query(formEl, 'input:checked').value === 'true';
+      const formEl = e.target;
+      const checkedValue = DOM.query(formEl, 'input:checked').value === 'true';
 
       this.reportQuality(checkedValue);
       this.updateState({
@@ -106,6 +106,38 @@ export default class DirectAnswerComponent extends Component {
     // submit button is hidden.
     DOM.on(this._thumbsUpSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
     DOM.on(this._thumbsDownSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
+
+    const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
+    rtfElement && DOM.on(rtfElement, 'click', e => this._handleRtfClickAnalytics(e));
+  }
+
+  /**
+   * A click handler for links in a Rich Text Direct Answer. When such a link
+   * is clicked, an {@link AnalyticsEvent} needs to be fired.
+   *
+   * @param {MouseEvent} event The click event.
+   */
+  _handleRtfClickAnalytics (event) {
+    if (!event.target.dataset.ctaType) {
+      return;
+    }
+    const ctaType = event.target.dataset.ctaType;
+
+    const relatedItem = this.getState('relatedItem');
+    const analyticsOptions = {
+      verticalKey: relatedItem.verticalConfigId,
+      directAnswer: true,
+      fieldName: this.getState('answer').fieldApiName,
+      searcher: 'UNIVERSAL',
+      entityId: relatedItem.data.id
+    };
+    if (ctaType !== 'TAP_TO_CALL') {
+      analyticsOptions.url = event.target.href;
+    }
+
+    const analyticsEvent = new AnalyticsEvent(ctaType);
+    analyticsEvent.addOptions(analyticsOptions);
+    this.analyticsReporter.report(analyticsEvent);
   }
 
   /**

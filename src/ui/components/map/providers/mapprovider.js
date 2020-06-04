@@ -1,5 +1,7 @@
 /** @module MapProvider */
 
+import ResultsContext from '../../../../core/storage/resultscontext';
+
 /**
  * A MapProvider is an interface that represents that should be implemented
  * in order to integrate with a Third Party Map provider for
@@ -29,6 +31,12 @@ export default class MapProvider {
     this._defaultPosition = config.defaultPosition || { lat: 37.0902, lng: -95.7129 };
 
     /**
+     * Configuration for the behavior when there are no vertical results.
+     * @type {Object}
+     */
+    this._noResults = config.noResults || {};
+
+    /**
      * Determines if an empty map should be shown when there are no results
      * @type {boolean}
      */
@@ -51,6 +59,19 @@ export default class MapProvider {
      * @type {function}
      */
     this._onPinClick = config.onPinClick || null;
+
+    /**
+     * Callback to invoke when a pin is hovered. The hovered item is passed to the callback
+     * @type {function}
+     */
+    this._onPinMouseOver = config.onPinMouseOver || null;
+
+    /**
+     * Callback to invoke when a pin is no longer hovered after being hovered.
+     * The hovered item is passed to the callback
+     * @type {function}
+     */
+    this._onPinMouseOut = config.onPinMouseOut || null;
 
     /**
      * Callback to invoke once the Javascript is loaded
@@ -86,6 +107,14 @@ export default class MapProvider {
       },
       labelType: 'numeric'
     };
+  }
+
+  static shouldHideMap (mapData, resultsContext, showEmptyMap, visibleForNoResults) {
+    if (resultsContext === ResultsContext.NO_RESULTS && visibleForNoResults !== undefined) {
+      return !visibleForNoResults;
+    }
+    const hasEmptyMap = !mapData || mapData.mapMarkers.length <= 0;
+    return hasEmptyMap && !showEmptyMap;
   }
 
   onLoaded (cb) {

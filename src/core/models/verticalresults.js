@@ -1,7 +1,6 @@
 /** @module VerticalResults */
 
 import { AnswersCoreError } from '../errors/errors';
-import ResultsContext from '../storage/resultscontext';
 import Section from './section';
 import SearchStates from '../storage/searchstates';
 
@@ -35,40 +34,16 @@ export default class VerticalResults {
   }
 
   /**
-   * Form response as if the results from `allResultsForVertical` were the actual
-   * results in `results`
-   * @param {Object} response The server response
-   */
-  static _formResponseFromAllResultsForVertical (response) {
-    const { results, resultsCount, facets } = response.allResultsForVertical || {};
-    return {
-      ...response,
-      results: results || [],
-      resultsCount: resultsCount || 0,
-      facets
-    };
-  }
-
-  /**
    * Create vertical results from server data
    * @param {Object} response The server response
    * @param {Object.<string, function>} formatters The field formatters to use
+   * @param {string} verticalKey the vertical key
    */
   static from (response, formatters, verticalKey) {
-    const hasResults = response.results && response.results.length > 0;
-    if (!hasResults) {
-      const data = Section.from(VerticalResults._formResponseFromAllResultsForVertical(response), null, formatters);
-      return new VerticalResults({ ...data,
-        verticalConfigId: verticalKey,
-        resultsContext: ResultsContext.NO_RESULTS
-      });
-    } else {
-      const data = Section.from(response, null, formatters);
-      return new VerticalResults({ ...data,
-        verticalConfigId: verticalKey,
-        resultsContext: ResultsContext.NORMAL
-      });
-    }
+    const data = Section.from(response, null, formatters);
+    return new VerticalResults({ ...data,
+      verticalConfigId: verticalKey
+    });
   }
 
   /**

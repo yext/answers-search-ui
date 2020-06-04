@@ -74,8 +74,8 @@ export default class GoogleMapProvider extends MapProvider {
     return this._clientId;
   }
 
-  init (el, mapData) {
-    if ((!mapData || mapData.mapMarkers.length <= 0) && !this._showEmptyMap) {
+  init (el, mapData, resultsContext) {
+    if (MapProvider.shouldHideMap(mapData, resultsContext, this._showEmptyMap, this._noResults.visible)) {
       this._map = null;
       return this;
     }
@@ -104,6 +104,12 @@ export default class GoogleMapProvider extends MapProvider {
           let marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
           if (this._onPinClick) {
             marker.addListener('click', () => this._onPinClick(collapsedMarkers[i].item));
+          }
+          if (this._onPinMouseOver) {
+            marker.addListener('mouseover', () => this._onPinMouseOver(collapsedMarkers[i].item));
+          }
+          if (this._onPinMouseOut) {
+            marker.addListener('mouseout', () => this._onPinMouseOut(collapsedMarkers[i].item));
           }
           bounds.extend(marker.position);
         }

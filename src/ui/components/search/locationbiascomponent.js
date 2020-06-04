@@ -1,5 +1,4 @@
 import Component from '../component';
-import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 
@@ -46,6 +45,27 @@ export default class LocationBiasComponent extends Component {
     this._accuracy = '';
 
     this._allowUpdate = true;
+
+    /**
+     * Options to pass to the geolocation api.
+     * @type {Object}
+     */
+    this._geolocationOptions = {
+      enableHighAccuracy: false,
+      timeout: 6000,
+      maximumAge: 300000,
+      ...config.geolocationOptions
+    };
+
+    /**
+     * Options for the geolocation timeout alert.
+     * @type {Object}
+     */
+    this._geolocationTimeoutAlert = {
+      enabled: false,
+      message: 'We are unable to determine your location',
+      ...config.geolocationTimeoutAlert
+    };
   }
 
   static get type () {
@@ -70,14 +90,22 @@ export default class LocationBiasComponent extends Component {
             radius: position.coords.accuracy
           });
           this._doSearch();
-        }, (err) => {
-          if (err.code === 1) {
-            this._disableLocationUpdate();
-          }
-        });
+        },
+        (err) => this._handleGeolocationError(err),
+        this._geolocationOptions);
       }
       // TODO: Should we throw error or warning here if no geolocation?
     });
+  }
+
+  _handleGeolocationError (err) {
+    if (err.code === 1) {
+      this._disableLocationUpdate();
+    }
+    const { enabled, message } = this._geolocationTimeoutAlert;
+    if (enabled) {
+      window.alert(message);
+    }
   }
 
   setState (data, val) {
@@ -101,7 +129,6 @@ export default class LocationBiasComponent extends Component {
   }
 
   _getAccuracyHelpText (accuracy) {
-    accuracy = 'DEVICE';
     switch (accuracy) {
       case 'IP':
         return this._config.ipAccuracyHelpText;
@@ -113,20 +140,12 @@ export default class LocationBiasComponent extends Component {
   }
 
   _doSearch () {
-    let query = this.core.globalStorage.getState(StorageKeys.QUERY);
     if (this._verticalKey) {
-      const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-      const totalFilter = allFilters.length > 1
-        ? Filter.and(...allFilters)
-        : allFilters[0];
-      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-      this.core.verticalSearch(this._verticalKey, {
-        input: query,
-        filter: JSON.stringify(totalFilter),
-        offset: this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
-        facetFilter: JSON.stringify(facetFilter)
+      this.core.verticalSearch(this._config.verticalKey, {
+        useFacets: true
       });
     } else {
+      let query = this.core.globalStorage.getState(StorageKeys.QUERY);
       this.core.search(query);
     }
   }

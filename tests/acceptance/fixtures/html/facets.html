@@ -1,0 +1,63 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+
+  <script src="http://localhost:9999/dist/answerstemplates.compiled.min.js"></script>
+  <script src="http://localhost:9999/dist/answers.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://localhost:9999/dist/answers.css">
+</head>
+
+<body>
+  <div class="answers-container">
+    <div class="search-bar-container"></div>
+    <div class="facets-container"></div>
+    <div class="filter-search-container"></div>
+    <div class="results-container"></div>
+  </div>
+
+  <script>
+    ANSWERS.init({
+      apiKey: 'df4b24f4075800e5e9705090c54c6c13',
+      experienceKey: 'rosetest',
+      businessId: '2287528',
+      experienceVersion: 'PRODUCTION',
+      templateBundle: TemplateBundle.default,
+      search: {
+        verticalKey: 'people',
+      },
+      onReady: function () {
+        this.addComponent('SearchBar', {
+          container: '.search-bar-container',
+          clearButton: true,
+          promptForLocation: true,
+          verticalKey: 'people',
+          allowEmptySearch: true
+        });
+
+        this.addComponent('VerticalResults', {
+          container: '.results-container',
+        });
+
+        this.addComponent('Facets', {
+          container: '.facets-container',
+          verticalKey: 'people'
+        });
+
+        ANSWERS.addComponent('FilterSearch', {
+          container: '.filter-search-container',
+          verticalKey: 'people',
+          searchParameters: {
+            fields: [{
+              fieldId: 'builtin.location',
+              entityTypeId: 'ce_person',
+              sectioned: false,
+            }]
+          }
+        });
+      }
+    })
+  </script>
+</body>
+
+</html>

@@ -4,10 +4,13 @@
   "description": "Javascript Answers Programming Interface",
   "main": "gulpfile.js",
   "dependencies": {
-    "@yext/rtf-converter": "^1.0.0",
+    "@yext/rtf-converter": "^1.1.1",
     "core-js": "^3.6.5",
+    "css-vars-ponyfill": "^2.3.1",
     "handlebars": "^4.7.2",
+    "js-levenshtein": "^1.1.6",
     "kind-of": "^6.0.3",
+    "markdown-it-for-inline": "^0.1.1",
     "regenerator-runtime": "^0.13.3",
     "template-helpers": "^1.0.1"
   },
@@ -20,6 +23,7 @@
     "@babel/preset-env": "^7.6.0",
     "@babel/runtime-corejs3": "^7.8.4",
     "@types/jest": "^24.0.15",
+    "array.prototype.flatmap": "^1.2.3",
     "autoprefixer": "7.2.5",
     "cssnano": "^4.1.10",
     "enzyme": "^3.10.0",
@@ -38,7 +42,6 @@
     "jest": "^24.8.0",
     "jsdoc": "^3.6.3",
     "node-sass": "^4.12.0",
-    "postcss-line-height-px-to-unitless": "0.2.1",
     "postcss-pxtorem": "4.0.1",
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.3.2",
@@ -50,6 +53,7 @@
     "serve": "^11.3.0",
     "size-limit": "^0.21.1",
     "testcafe": "^1.8.4",
+    "string.prototype.padstart": "^3.1.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
     "whatwg-fetch": "^3.0.0"
@@ -69,6 +73,13 @@
     "verbose": true,
     "setupFilesAfterEnv": [
       "./tests/setup/setup.js"
+    ],
+    "moduleFileExtensions": [
+      "js"
+    ],
+    "moduleDirectories": [
+      "node_modules",
+      "<rootDir>"
     ],
     "testMatch": [
       "**/tests/core/**/*.js",

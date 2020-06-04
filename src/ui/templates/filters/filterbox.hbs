@@ -12,14 +12,16 @@
     <div class="js-yext-filterbox-filter{{@index}} yxt-FilterBox-filter">
     </div>
   {{/each}}
-  {{#if showApplyButton}}
+  {{#if (or showApplyButton showReset)}}
     <div class="yxt-FilterBox-controls">
-      <button type="button"
-              class="js-yext-filterbox-apply yxt-FilterBox-apply">
-        {{applyLabel}}
-      </button>
+      {{#if showApplyButton}}
+        <button type="button"
+                class="js-yext-filterbox-apply yxt-FilterBox-apply">
+          {{applyLabel}}
+        </button>
+      {{/if}}
       {{~#if showReset ~}}
-        <button type="button" class="js-yxt-FilterBox-reset yxt-FilterBox-reset">
+        <button type="button" class="js-yxt-FilterBox-reset yxt-FilterBox-reset{{#unless showApplyButton}} yxt-FilterBox-reset--noApplyButton{{/unless}}">
           {{resetLabel}}
         </button>
       {{/if}}
