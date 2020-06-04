@@ -25,11 +25,15 @@ function getLibVersion () {
     .execSync('git rev-parse HEAD')
     .toString().trim();
 
-  const versionTag = require('child_process')
-    .execSync('git describe --tags --match "v[0-9]*" --abbrev=0 HEAD --always')
-    .toString().trim();
+  let versionTag = hash;
 
-  if (hash !== versionTag) {
+  try {
+    versionTag = require('child_process')
+      .execSync('git describe --tags --match "v[0-9]*" --abbrev=0 HEAD --exact-match')
+      .toString().trim();
+  } catch (err) {}
+
+  if (versionTag !== hash) {
     return versionTag;
   }
 
