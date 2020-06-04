@@ -29,7 +29,7 @@ function getLibVersion () {
     .execSync('git describe --tags --match "v[0-9]*" --abbrev=0 HEAD --always')
     .toString().trim();
 
-  if (hash !== version) {
+  if (hash !== versionTag) {
     return versionTag;
   }
 
