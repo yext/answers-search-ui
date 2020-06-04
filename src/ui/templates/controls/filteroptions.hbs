@@ -27,7 +27,9 @@
           <span class="yxt-FilterOptions-label">{{label}}</span>
       {{/if}}
       {{#unless showExpand}}
-        <button class="yxt-FilterOptions-reset js-yxt-FilterOptions-reset yxt-FilterOptions-reset--right{{#unless displayReset}} js-hidden{{/unless}}">{{resetLabel}}</button>
+        <button class="yxt-FilterOptions-reset js-yxt-FilterOptions-reset yxt-FilterOptions-reset--right{{#unless displayReset}} js-hidden{{/unless}}">
+          {{resetLabel}}
+        </button>
       {{/unless}}
     </div>
   </legend>
@@ -37,7 +39,9 @@
     <div class="yxt-FilterOptions-controls">
       {{#if showExpand}}
         <span class="yxt-FilterOptions-buttonWrapper">
-          <button class="yxt-FilterOptions-reset js-yxt-FilterOptions-reset{{#unless displayReset}} js-hidden{{/unless}}">{{resetLabel}}</button>
+          <button class="yxt-FilterOptions-reset js-yxt-FilterOptions-reset{{#unless displayReset}} js-hidden{{/unless}}">
+            {{resetLabel}}
+          </button>
         </span>
       {{/if}}
 
@@ -54,7 +58,11 @@
     <div class='yxt-FilterOptions-options'>
       {{#each options}}
         {{#if ../isSingleOption}}
-          <div class="singleoption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#if (and ../showMore (gte @index ../showMoreLimit))}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/if}}">
+          <div class="singleoption-option yxt-FilterOptions-option js-yxt-FilterOptions-option
+            {{#if (and ../showMore (gte @index ../showMoreLimit))}}
+              js-yxt-FilterOptions-aboveShowMoreLimit
+              {{#if ../showMoreState}} hidden{{/if}}
+            {{/if}}">
             <input
               type="radio"
               class="js-yext-filter-option yxt-FilterOptions-input"
@@ -73,7 +81,11 @@
             </label>
           </div>
         {{else}}
-          <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option{{#if (and ../showMore (gte @index ../showMoreLimit))}} js-yxt-FilterOptions-aboveShowMoreLimit hidden{{/if}}">
+          <div class="multioption-option yxt-FilterOptions-option js-yxt-FilterOptions-option
+            {{#if (and ../showMore (gte @index ../showMoreLimit))}}
+              js-yxt-FilterOptions-aboveShowMoreLimit
+              {{#if ../showMoreState}} hidden{{/if}}
+            {{/if}}">
             <input
               type="checkbox"
               class="js-yext-filter-option yxt-FilterOptions-input yxt-FilterOptions-checkboxInput js-yxt-FilterOptions-checkboxInput"
@@ -95,7 +107,7 @@
     </div>
 
     {{#if showMore}}
-      <button class="yxt-FilterOptions-showToggle js-yxt-FilterOptions-showToggle js-yxt-FilterOptions-showLess hidden">
+      <button class="yxt-FilterOptions-showToggle js-yxt-FilterOptions-showToggle js-yxt-FilterOptions-showLess{{#if showMoreState}} hidden{{/if}}">
         <span class="yxt-FilterOptions-showToggleLabel">
           {{showLessLabel}}
         </span>
@@ -103,7 +115,7 @@
           data-component="IconComponent"
           data-opts='{ "iconName": "chevron" }'></span>
       </button>
-      <button class="yxt-FilterOptions-showToggle js-yxt-FilterOptions-showToggle js-yxt-FilterOptions-showMore">
+      <button class="yxt-FilterOptions-showToggle js-yxt-FilterOptions-showToggle js-yxt-FilterOptions-showMore{{#unless showMoreState}} hidden{{/unless}}">
         <span class="yxt-FilterOptions-showToggleLabel">
           {{showMoreLabel}}
         </span>
