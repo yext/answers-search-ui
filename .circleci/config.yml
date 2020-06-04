@@ -87,7 +87,7 @@ jobs:
           command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
       - deploy-to-aws:
           subdirectory: '/dev/${FORMATTED_CIRCLE_BRANCH}'
-  # deploys assets to an long-lived-cache folder in the S3 bucket named by hash
+  # deploys assets to a long-lived-cache folder in the S3 bucket named by hash
   deploy_canary:
     docker:
       - image: circleci/python:2.7
