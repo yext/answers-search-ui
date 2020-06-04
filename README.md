@@ -493,8 +493,8 @@ ANSWERS.addComponent('UniversalResults', {
         hiddenFields: ['builtin.entityType'],
         // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
         resultsCountSeparator: '|',
-        // Whether to display the change filters link in universal results. Defaults to true.
-        showChangeFilters: true,
+        // Whether to display the change filters link in universal results. Defaults to false.
+        showChangeFilters: false,
         // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
         delimiter: '|'
       },
