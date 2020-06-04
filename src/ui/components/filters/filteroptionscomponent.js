@@ -568,7 +568,7 @@ export default class FilterOptionsComponent extends Component {
     }
 
     this.config.options[index] = Object.assign({}, this.config.options[index], { selected });
-  
+
     if (this.config.showReset) {
       this._toggleReset();
     }
