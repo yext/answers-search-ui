@@ -111,6 +111,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   &-viewMore
   {
     display: flex;
+    justify-content: center;
     margin-top: 0;
     margin-bottom: 0;
     padding: calc(var(--yxt-base-spacing) / 2) var(--yxt-base-spacing);
