@@ -113,6 +113,12 @@ class FacetsConfig {
     this.searchable = config.searchable || false;
 
     /**
+     * The form label text for the search input
+     * @type {boolean}
+     */
+    this.searchLabelText = config.searchLabelText || 'Search for a filter option';
+
+    /**
      * An object that maps field API names to their filter options overrides,
      * which have the same keys as the config options in FilterOptions component.
      * @type {Object}
@@ -217,6 +223,7 @@ export default class FacetsComponent extends Component {
         type: 'FilterOptions',
         control: this.config.fieldControls[f.fieldId] || 'multioption',
         searchable: this.config.searchable,
+        searchLabelText: this.config.searchLabelText,
         placeholderText: this.config.placeholderText,
         ...fieldOverrides
       });
