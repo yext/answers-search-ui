@@ -168,9 +168,3 @@ workflows:
               only: master
           requires:
             - hold
-      - my_test:
-          filters:
-            tags:
-              only: /^b.*/
-            branches:
-              ignore: /.*/
