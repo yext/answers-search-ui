@@ -37,7 +37,9 @@
       padding: 4px 8px;
       width: 100%;
 
-      &:hover {
+      &:hover,
+      &:active,
+      &:focus {
         border: var(--yxt-border-hover);
       }
     }
@@ -229,6 +231,14 @@
 
       & + .yxt-FilterOptions-optionLabel::before {
         border: var(--yxt-border-hover);
+      }
+    }
+
+    /* Add focus styles on the outer-box of the fake checkbox */
+    &:focus {
+      & + .yxt-FilterOptions-optionLabel::before {
+        border: 1px solid black;
+        box-shadow: var(--yxt-searchbar-focus-shadow);
       }
     }
   }
