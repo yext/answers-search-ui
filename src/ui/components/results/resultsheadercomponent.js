@@ -14,7 +14,9 @@ const DEFAULT_CONFIG = {
   showChangeFilters: false,
   removable: false,
   delimiter: '|',
-  isUniversal: false
+  isUniversal: false,
+  labelText: 'Filters applied to this search:',
+  removableLabelText: 'Remove'
 };
 
 export default class ResultsHeaderComponent extends Component {
