@@ -337,25 +337,35 @@ export default class FilterOptionsComponent extends Component {
 
     // searchable option list
     if (this.config.searchable) {
+      const clearSearchEl = DOM.query(this._container, '.js-yxt-FilterOptions-clearSearch');
+      const searchInputEl = DOM.query(this._container, '.js-yxt-FilterOptions-filter');
       const filterOptionEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-option');
       const filterContainerEl = DOM.query(this._container, '.js-yxt-FilterOptions-container');
+
+      // On clearSearchEl click, clear search
+      if (clearSearchEl && searchInputEl) {
+        DOM.on(clearSearchEl, 'click', event => {
+          searchInputEl.value = '';
+          searchInputEl.focus();
+          this._clearFilterStyling(filterOptionEls, filterContainerEl, clearSearchEl);
+        });
+      }
+
       DOM.on(
-        DOM.query(this._container, '.js-yxt-FilterOptions-filter'),
+        searchInputEl,
         'keyup',
         event => {
           const filter = event.target.value;
-          filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
 
-          for (let filterOption of filterOptionEls) {
-            const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
-            let labelText = labelEl.textContent || labelEl.innerText || '';
-            labelText = labelText.trim();
-            if (!filter) {
-              filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
-              filterOption.classList.remove('hiddenSearch');
-              filterOption.classList.remove('displaySearch');
-              labelEl.innerHTML = labelText;
-            } else {
+          if (!filter) {
+            this._clearFilterStyling(filterOptionEls, filterContainerEl, clearSearchEl);
+          } else {
+            filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
+            clearSearchEl.classList.remove('js-hidden');
+            // Filter/unfilter options
+            for (let filterOption of filterOptionEls) {
+              const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
+              const labelText = this._getOptionLabelText(labelEl);
               let matchedSubstring = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
               if (matchedSubstring) {
                 filterOption.classList.add('displaySearch');
@@ -400,6 +410,33 @@ export default class FilterOptionsComponent extends Component {
         });
     }
   }
+
+  /**
+   * Returns label of a given filter option
+   * @returns {string}
+   * @private
+   */
+  _clearFilterStyling (filterOptionEls, filterContainerEl, clearSearchEl) {
+    filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
+
+    for (let option of filterOptionEls) {
+      const labelEl = DOM.query(option, '.js-yxt-FilterOptions-optionLabel--name');
+      clearSearchEl.classList.add('js-hidden');
+      option.classList.remove('hiddenSearch');
+      option.classList.remove('displaySearch');
+      labelEl.innerHTML = this._getOptionLabelText(labelEl);
+    }
+  };
+
+  /**
+   * Returns label of a given filter option
+   * @returns {string}
+   * @private
+   */
+  _getOptionLabelText (labelEl) {
+    let labelText = labelEl.textContent || labelEl.innerText || '';
+    return labelText.trim();
+  };
 
   /**
    * Returns the count of currently selected options
