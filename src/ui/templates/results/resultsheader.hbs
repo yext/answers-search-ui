@@ -32,11 +32,11 @@
         {{/if}}
         {{#each filterDataArray}}
           {{#if removable}}
-            <div class="yxt-ResultsHeader-removableFilterTag js-yxt-ResultsHeader-removableFilterTag"
-              data-filter-id={{dataFilterId}}>
+            <button class="yxt-ResultsHeader-removableFilterTag js-yxt-ResultsHeader-removableFilterTag"
+              data-filter-id={{dataFilterId}} tabindex="0">
               <span class="yxt-ResultsHeader-removableFilterValue">{{displayValue}}</span>
               <span class="yxt-ResultsHeader-removableFilterX">&times;</span>
-            </div>
+            </button>
           {{else}}
             <div class="yxt-ResultsHeader-filterValue">
               <span class="yxt-ResultsHeader-filterValueText">{{displayValue}}</span>
