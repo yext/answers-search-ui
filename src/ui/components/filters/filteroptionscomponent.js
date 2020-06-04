@@ -263,10 +263,12 @@ export default class FilterOptionsComponent extends Component {
     this.expanded = this.config.showExpand ? selectedCount > 0 : true;
 
     /**
-     * True if all options are shown, false if some are hidden based on config
+     * Whether the current is currently showing more or less. If true, is currently "show more".
+     * Only used if config.showMore is true.
      * @type {boolean}
      */
-    this.allShown = false;
+    this.showMoreState = this.config.showMore;
+
     if (this.config.storeOnChange) {
       this.apply();
     }
@@ -286,10 +288,11 @@ export default class FilterOptionsComponent extends Component {
   }
 
   setState (data) {
-    const selectedCount = this.config.getInitialSelectedCount();
+    const selectedCount = this._getSelectedCount();
     super.setState(Object.assign({}, data, {
       name: this.name.toLowerCase(),
       ...this.config,
+      showMoreState: this.showMoreState,
       displayReset: this.config.showReset && selectedCount > 0,
       expanded: this.expanded,
       selectedCount,
@@ -325,6 +328,7 @@ export default class FilterOptionsComponent extends Component {
         showLessEl,
         'click',
         () => {
+          this.showMoreState = true;
           showLessEl.classList.add('hidden');
           showMoreEl.classList.remove('hidden');
           for (let optionEl of optionsOverLimitEls) {
@@ -335,6 +339,7 @@ export default class FilterOptionsComponent extends Component {
         showMoreEl,
         'click',
         () => {
+          this.showMoreState = false;
           showLessEl.classList.remove('hidden');
           showMoreEl.classList.add('hidden');
           for (let optionEl of optionsOverLimitEls) {
@@ -436,8 +441,7 @@ export default class FilterOptionsComponent extends Component {
    * @private
    */
   _getSelectedCount () {
-    const selectedEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-checkboxInput:checked');
-    return selectedEls && selectedEls.length;
+    return this.config.options.filter(o => o.selected).length;
   }
 
   /**
@@ -570,9 +574,7 @@ export default class FilterOptionsComponent extends Component {
     this.config.options[index] = Object.assign({}, this.config.options[index], { selected });
     this.updateListeners();
 
-    if (this.config.storeOnChange) {
-      this.setState();
-    }
+    this.setState();
   }
 
   apply () {
@@ -590,18 +592,6 @@ export default class FilterOptionsComponent extends Component {
 
   floatSelected () {
     this.config.options = this.config.options.sort((a, b) => b.selected - a.selected);
-  }
-
-  /**
-   * Clear all options
-   * TODO(oshi): Investigate removing this, this is not referenced anywhere,
-   * even if you go back to the original commit (#42).
-   * Same thing with this._applyFilter().
-   */
-  clear () {
-    const elements = DOM.queryAll(this._container, this.config.optionSelector);
-    elements.forEach(e => e.setAttribute('checked', 'false'));
-    this._applyFilter();
   }
 
   _buildFilter (option) {

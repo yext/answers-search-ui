@@ -102,10 +102,22 @@ describe('filter options component', () => {
     expect(wrapper.find('.yxt-FilterOptions-fieldSet')).toHaveLength(1);
   });
 
-  it('renders correct number of options + show more with default showMoreLimit of 5', () => {
+  it('renders correct number of options + show more with default showMoreLimit of 5 (multioption)', () => {
     const config = {
       ...defaultConfig,
       control: 'multioption'
+    };
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    const wrapper = mount(component);
+    expect(options).toHaveLength(6);
+    expect(wrapper.find('.js-yxt-FilterOptions-option.hidden')).toHaveLength(1);
+    expect(wrapper.find('.js-yxt-FilterOptions-showMore')).toHaveLength(1);
+  });
+
+  it('renders correct number of options + show more with default showMoreLimit of 5 (singleoption)', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'singleoption'
     };
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     const wrapper = mount(component);
