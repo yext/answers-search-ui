@@ -25,8 +25,15 @@ function getLibVersion () {
     .execSync('git rev-parse HEAD')
     .toString().trim();
 
-  let versionTag = hash;
+  const branch = require('child_process')
+    .execSync('git rev-parse --abbrev-ref HEAD')
+    .toString().trim();
 
+  if (branch === 'develop') {
+    return `canary-${hash}`;
+  }
+
+  let versionTag = hash;
   try {
     versionTag = require('child_process')
       .execSync('git describe --tags --match "v[0-9]*" --abbrev=0 HEAD --exact-match')
@@ -35,14 +42,6 @@ function getLibVersion () {
 
   if (versionTag !== hash) {
     return versionTag;
-  }
-
-  const branch = require('child_process')
-    .execSync('git rev-parse --abbrev-ref HEAD')
-    .toString().trim();
-
-  if (branch === 'develop') {
-    return `canary-${hash}`;
   }
 
   return branch.replace(/\//g, '-');
