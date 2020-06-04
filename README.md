@@ -565,6 +565,22 @@ ANSWERS.addComponent('VerticalResults', {
     template: '<div> <em>No results found!</em> Try again? </div>',
     // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
     displayAllResults: false
+  },
+  // Configuration for the applied filters bar in the header.
+  appliedFilters: {
+    // If true, show any applied filters that were applied to the universal search. Defaults to false
+    show: true,
+    // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
+    showFieldNames: false,
+    // If appliedFilters.show is true, this is list of filters that should not be displayed.
+    // By default, builtin.entityType will be hidden
+    hiddenFields: ['builtin.location'],
+    // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
+    resultsCountSeparator: '|',
+    // If the filters are shown, whether or not they should be removable from within the applied filter bar. Defaults to false.
+    removable: false,
+    // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
+    delimiter: '|'
   }
 })
 ```
