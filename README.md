@@ -496,7 +496,9 @@ ANSWERS.addComponent('UniversalResults', {
         // Whether to display the change filters link in universal results. Defaults to false.
         showChangeFilters: false,
         // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
-        delimiter: '|'
+        delimiter: '|',
+        // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
+        labelText: 'Filters applied to this search:',
       },
       // If true, display the count of results at the very top of the results. Defaults to false.
       showResultCount: true,
@@ -577,10 +579,14 @@ ANSWERS.addComponent('VerticalResults', {
     hiddenFields: ['builtin.entityType'],
     // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
     resultsCountSeparator: '|',
-    // If the filters are shown, whether or not they should be removable from within the applied filter bar. Defaults to false.
+    // If the filters are shown, whether or not they should be removable buttons. Defaults to false.
     removable: false,
     // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
-    delimiter: '|'
+    delimiter: '|',
+    // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
+    labelText: 'Filters applied to this search:',
+    // The aria-label given to the removable filter buttons.
+    removableLabelText: 'Remove'
   }
 })
 ```
