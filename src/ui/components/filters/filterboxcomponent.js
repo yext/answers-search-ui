@@ -187,12 +187,9 @@ export default class FilterBoxComponent extends Component {
     }
 
     // Initialize filters from configs
-    // TODO: the FilterOptions config, which is more specific, should probably
-    // take priority over the FilterBox config. This is not the case below.
     for (let i = 0; i < this.config.filterConfigs.length; i++) {
       const config = this.config.filterConfigs[i];
       const component = this.componentManager.create(config.type, Object.assign({},
-        config,
         this.config,
         {
           parentContainer: this._container,
@@ -208,7 +205,9 @@ export default class FilterBoxComponent extends Component {
             const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
             this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
           }
-        }));
+        },
+        config,
+      ));
       if (this.config.isDynamic && typeof component.floatSelected === 'function') {
         component.floatSelected();
       }
