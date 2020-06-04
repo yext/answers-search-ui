@@ -434,3 +434,82 @@ describe('dynamic filterbox component', () => {
     expect(expectedFacetFilterNodes[1].children[1].getMetadata()).toEqual(node4.getMetadata());
   });
 });
+
+describe('FilterBox reset button', () => {
+  DOM.setup(document, new DOMParser());
+  let COMPONENT_MANAGER, defaultConfig;
+
+  beforeEach(() => {
+    const bodyEl = DOM.query('body');
+    DOM.empty(bodyEl);
+    DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
+
+    COMPONENT_MANAGER = mockManager(
+      {},
+      FilterBoxComponent.defaultTemplateName(),
+      FilterOptionsComponent.defaultTemplateName()
+    );
+
+    defaultConfig = {
+      container: '#test-component',
+      filters: [{ type: 'FilterOptions', options: [] }, { type: 'FilterOptions', options: [] }]
+    };
+  });
+
+  it('does not render by default if searchOnChange', () => {
+    const component = COMPONENT_MANAGER.create('FilterBox', {
+      ...defaultConfig,
+      searchOnChange: true
+    });
+    const wrapper = mount(component);
+    expect(wrapper.find('.js-yxt-FilterBox-reset')).toHaveLength(0);
+  });
+
+  it('renders by default if not searchOnChange', () => {
+    const component = COMPONENT_MANAGER.create('FilterBox', {
+      ...defaultConfig,
+      searchOnChange: false
+    });
+    const wrapper = mount(component);
+    expect(wrapper.find('.js-yxt-FilterBox-reset')).toHaveLength(1);
+  });
+
+  it('does not render if false', () => {
+    const component = COMPONENT_MANAGER.create('FilterBox', {
+      ...defaultConfig,
+      resetFilters: false,
+      searchOnChange: false
+    });
+    const wrapper = mount(component);
+    expect(wrapper.find('.js-yxt-FilterBox-reset')).toHaveLength(0);
+  });
+
+  it('renders if true', () => {
+    const component = COMPONENT_MANAGER.create('FilterBox', {
+      ...defaultConfig,
+      resetFilters: true,
+      searchOnChange: true
+    });
+    const wrapper = mount(component);
+    expect(wrapper.find('.js-yxt-FilterBox-reset')).toHaveLength(1);
+  });
+
+  it('renders with correct default text', () => {
+    const component = COMPONENT_MANAGER.create('FilterBox', {
+      ...defaultConfig,
+      resetFilters: true
+    });
+    const wrapper = mount(component);
+    expect(wrapper.find('.js-yxt-FilterBox-reset').at(0).text().trim()).toEqual('reset all');
+  });
+
+  it('renders with correct text', () => {
+    const component = COMPONENT_MANAGER.create('FilterBox', {
+      ...defaultConfig,
+      resetFilters: true,
+      resetFiltersLabel: 'WE THE BEST MUSIC'
+    });
+    const wrapper = mount(component);
+    expect(wrapper.find('.js-yxt-FilterBox-reset').at(0).text().trim()).toEqual('WE THE BEST MUSIC');
+  });
+});
