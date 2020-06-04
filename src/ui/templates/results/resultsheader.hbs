@@ -22,7 +22,7 @@
 
 {{#*inline "filters"}}
   {{#if shouldShowFilters}}
-    <div class="yxt-ResultsHeader-appliedFilters">
+    <div class="yxt-ResultsHeader-appliedFilters" aria-label="{{_config.labelText}}">
       {{#each appliedFiltersArray}}
         {{#if ../_config.showFieldNames}}
           <div class="yxt-ResultsHeader-filterLabel">
@@ -33,7 +33,7 @@
         {{#each filterDataArray}}
           {{#if removable}}
             <button class="yxt-ResultsHeader-removableFilterTag js-yxt-ResultsHeader-removableFilterTag"
-              data-filter-id={{dataFilterId}} tabindex="0">
+              data-filter-id={{dataFilterId}} tabindex="0" aria-label="{{../../_config.removableLabelText}}">
               <span class="yxt-ResultsHeader-removableFilterValue">{{displayValue}}</span>
               <span class="yxt-ResultsHeader-removableFilterX">&times;</span>
             </button>

@@ -110,7 +110,19 @@ class VerticalResultsConfig {
        * Whether to show the change filters link on universal results.
        * @type {boolean}
        **/
-      showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false)
+      showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
+
+      /**
+       * The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
+       * @type {string}
+       **/
+      labelText: defaultConfigOption(config, ['appliedFilters.labelText'], 'Filters applied to this search:'),
+
+      /**
+       * The aria-label given to the removable filter buttons.
+       * @type {string}
+       */
+      removableLabelText: defaultConfigOption(config, ['appliedFilters.removableLabelText'], 'Remove')
     };
 
     /**
@@ -183,8 +195,10 @@ export default class VerticalResultsComponent extends Component {
       showAppliedFilters: this._config.appliedFilters.show,
       showChangeFilters: this._config.appliedFilters.showChangeFilters,
       showResultCount: this._config.showResultCount,
-      removable: this._config.appliedFilters.removable, // TODO implement
-      delimiter: this._config.appliedFilters.delimiter
+      removable: this._config.appliedFilters.removable,
+      delimiter: this._config.appliedFilters.delimiter,
+      labelText: this._config.appliedFilters.labelText,
+      removableLabelText: this._config.appliedFilters.removableLabelText
     };
   }
 
