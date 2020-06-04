@@ -563,18 +563,16 @@ export default class FilterOptionsComponent extends Component {
   }
 
   _updateOption (index, selected) {
-    if (this.config.showReset) {
-      this._toggleReset();
-    }
-
     if (this.config.control === 'singleoption') {
       this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
     }
 
     this.config.options[index] = Object.assign({}, this.config.options[index], { selected });
+  
+    if (this.config.showReset) {
+      this._toggleReset();
+    }
     this.updateListeners();
-
-    this.setState();
   }
 
   apply () {
