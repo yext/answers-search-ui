@@ -104,7 +104,13 @@ class VerticalResultsConfig {
        * If the filters are shown, whether or not they should be removable from within the applied filter bar.
        * @type {boolean}
        */
-      removable: defaultConfigOption(config, ['appliedFilters.removable'], false)
+      removable: defaultConfigOption(config, ['appliedFilters.removable'], false),
+
+      /**
+       * Whether to show the change filters link on universal results.
+       * @type {boolean}
+       **/
+      showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false)
     };
 
     /**
@@ -112,12 +118,6 @@ class VerticalResultsConfig {
      * @type {string}
      */
     this.viewMoreLabel = config.viewMoreLabel;
-
-    /**
-     * Whether to show the change filters link.
-     * @type {boolean}
-     **/
-    this.showChangeFilters = config.showChangeFilters;
   }
 }
 
@@ -181,7 +181,7 @@ export default class VerticalResultsComponent extends Component {
       showFieldNames: this._config.appliedFilters.showFieldNames,
       resultsCountSeparator: this._config.appliedFilters.resultsCountSeparator,
       showAppliedFilters: this._config.appliedFilters.show,
-      showChangeFilters: this._config.showChangeFilters,
+      showChangeFilters: this._config.appliedFilters.showChangeFilters,
       showResultCount: this._config.showResultCount,
       removable: this._config.appliedFilters.removable, // TODO implement
       delimiter: this._config.appliedFilters.delimiter
