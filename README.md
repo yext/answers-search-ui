@@ -574,7 +574,7 @@ ANSWERS.addComponent('VerticalResults', {
     showFieldNames: false,
     // If appliedFilters.show is true, this is list of filters that should not be displayed.
     // By default, builtin.entityType will be hidden
-    hiddenFields: ['builtin.location'],
+    hiddenFields: ['builtin.entityType'],
     // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
     resultsCountSeparator: '|',
     // If the filters are shown, whether or not they should be removable from within the applied filter bar. Defaults to false.
