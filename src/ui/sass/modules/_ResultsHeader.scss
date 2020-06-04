@@ -128,6 +128,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   {
     background-color: var(--yxt-color-borders);
     border-radius: 2px;
+    border-width: 0;
     margin-bottom: 4px;
     padding-left: 5px;
     padding-right: 4px;
@@ -138,14 +139,14 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
       $line-height: 20px,
       $style: italic,
     );
-  }
 
-
-  &-removableFilterTag:hover
-  {
-    color: var(--yxt-color-brand-white);
-    background-color: var(--yxt-color-text-secondary);
-    cursor: pointer;
+    &:hover,
+    &:focus
+    {
+      color: var(--yxt-color-brand-white);
+      background-color: var(--yxt-color-text-secondary);
+      cursor: pointer;
+    }
   }
 
   &-removableFilterX
