@@ -486,9 +486,9 @@ ANSWERS.addComponent('UniversalResults', {
       appliedFilters: {
         // If true, show any applied filters that were applied to the universal search. Defaults to false
         show: true,
-        // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
+        // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
         showFieldNames: false,
-        // If showAppliedFilters is true, this is list of filters that should not be displayed.
+        // If appliedFilters.show is true, this is list of filters that should not be displayed.
         // By default, builtin.entityType will be hidden
         hiddenFields: ['builtin.entityType'],
         // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
