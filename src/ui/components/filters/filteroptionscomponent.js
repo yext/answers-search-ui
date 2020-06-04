@@ -1,5 +1,7 @@
 /** @module FilterOptionsComponent */
 
+/* global Event */
+
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
@@ -337,21 +339,42 @@ export default class FilterOptionsComponent extends Component {
 
     // searchable option list
     if (this.config.searchable) {
+      const clearSearchEl = DOM.query(this._container, '.js-yxt-FilterOptions-clearSearch');
+      const searchInputEl = DOM.query(this._container, '.js-yxt-FilterOptions-filter');
       const filterOptionEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-option');
       const filterContainerEl = DOM.query(this._container, '.js-yxt-FilterOptions-container');
+
+      // On clearSearchEl click, clear search input
+      if (clearSearchEl && searchInputEl) {
+        DOM.on(clearSearchEl, 'click', event => {
+          searchInputEl.value = '';
+          searchInputEl.dispatchEvent(new Event('input', {
+            'bubbles': true,
+            'cancelable': true
+          }));
+          searchInputEl.focus();
+        });
+      }
+
       DOM.on(
-        DOM.query(this._container, '.js-yxt-FilterOptions-filter'),
-        'keyup',
+        searchInputEl,
+        'input',
         event => {
           const filter = event.target.value;
-          filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
+
+          if (!filter) {
+            filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
+            clearSearchEl.classList.add('js-hidden');
+          } else {
+            filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
+            clearSearchEl.classList.remove('js-hidden');
+          }
 
           for (let filterOption of filterOptionEls) {
             const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
             let labelText = labelEl.textContent || labelEl.innerText || '';
             labelText = labelText.trim();
             if (!filter) {
-              filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
               filterOption.classList.remove('hiddenSearch');
               filterOption.classList.remove('displaySearch');
               labelEl.innerHTML = labelText;
