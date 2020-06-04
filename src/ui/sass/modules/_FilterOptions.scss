@@ -137,11 +137,11 @@
     &::after {
       content: none;
       position: absolute;
-      top: 4px;
-      left: -17px;
+      top: calc(50% - 3px);
+      left: -20px;
       width: 3px;
       height: 9px;
-      transform: rotate(45deg);
+      transform: rotate(45deg) translateY(-50%);
       border-right: 1px solid $color-brand-hover;
       border-bottom: 1px solid $color-brand-hover;
     }
