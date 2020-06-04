@@ -41,7 +41,7 @@ function getLibVersion () {
     return `canary-${hash}`;
   }
 
-  return branch.replace(/\//g,'-');
+  return branch.replace(/\//g, '-');
 }
 
 function bundle () {
