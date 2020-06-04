@@ -28,13 +28,13 @@ class FilterBoxConfig {
      * If true, show a button to reset for each facet group
      * @type {boolean}
      */
-    this.resetFilter = config.resetFacet || false;
+    this.resetFilter = config.resetFilter || false;
 
     /**
      * The label to show for the reset button
      * @type {string}
      */
-    this.resetFilterLabel = config.resetFacetLabel || 'reset';
+    this.resetFilterLabel = config.resetFilterLabel || 'reset';
 
     /**
      * If true, show a "reset all" button to reset all facets
