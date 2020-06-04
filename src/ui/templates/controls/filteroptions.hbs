@@ -42,7 +42,13 @@
       {{/if}}
 
     {{#if searchable}}
-      <input type="text" class="yxt-FilterOptions-filter js-yxt-FilterOptions-filter" aria-label="{{searchLabelText}}" placeholder="{{placeholderText}}">
+      <div class="yxt-FilterOptions-search js-yxt-FilterOptions-search">
+        <input type="text" class="yxt-FilterOptions-filter js-yxt-FilterOptions-filter" aria-label="{{searchLabelText}}" placeholder="{{placeholderText}}">
+        <button class="yxt-FilterOptions-clearSearch js-yxt-FilterOptions-clearSearch js-hidden"
+          data-component="IconComponent"
+          data-opts='{ "iconName": "close" }'
+          data-prop="icon"></button>
+      </div>
     {{/if}}
     </div>
     <div class='yxt-FilterOptions-options'>
