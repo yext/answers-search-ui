@@ -1,26 +1,41 @@
 <div class="yxt-AccordionCard js-yxt-AccordionCard{{#if isExpanded}} yxt-AccordionCard--expanded{{/if}}"
-  id="{{id}}">
-  <button class="yxt-AccordionCard-toggle js-yxt-AccordionCard-toggle"
-    aria-expanded="{{#if isExpanded}}true{{else}}false{{/if}}"
-    aria-controls="{{id}}"
-    tabindex="0"
-  >
-    <h3 class="yxt-AccordionCard-title">
-      {{{_config.title}}}
-    </h3>
-    <div class="yxt-AccordionCard-icon js-yxt-AccordionCard-icon{{#if isExpanded}} yxt-AccordionCard-icon--expanded{{/if}}"
-      data-component="IconComponent"
-      data-opts='{"iconName": "chevron"}'
-      data-prop="icon">
+id="{{id}}">
+
+  {{#if _config.details}}
+    <button class="yxt-AccordionCard-toggle js-yxt-AccordionCard-toggle"
+      aria-expanded="{{#if isExpanded}}true{{else}}false{{/if}}"
+      aria-controls="{{id}}"
+      tabindex="0"
+    >
+      <h3 class="yxt-AccordionCard-title">
+        {{{_config.title}}}
+      </h3>
+      <div class="yxt-AccordionCard-icon js-yxt-AccordionCard-icon{{#if isExpanded}} yxt-AccordionCard-icon--expanded{{/if}}"
+        data-component="IconComponent"
+        data-opts='{"iconName": "chevron"}'
+        data-prop="icon">
+      </div>
+    </button>
+  {{else}}
+    <div class="yxt-AccordionCard-toggle">
+      <h3 class="yxt-AccordionCard-title">
+        {{{_config.title}}}
+      </h3>
     </div>
-  </button>
-  <div class="yxt-AccordionCard-body js-yxt-AccordionCard-body" aria-hidden="{{#if isExpanded}}false{{else}}true{{/if}}">
-    <div class="yxt-AccordionCard-content">
-      <div class="yxt-AccordionCard-subtitle">{{{_config.subtitle}}}</div>
-      <div class="yxt-AccordionCard-details">{{{_config.details}}}</div>
-      {{#if hasCTAs}}
-        <div class="yxt-AccordionCard-ctas" data-component="CTACollection" data-prop="result"></div>
-      {{/if}}
+  {{/if}}
+
+  {{#if _config.details}}
+    <div class="yxt-AccordionCard-body js-yxt-AccordionCard-body" aria-hidden="{{#if isExpanded}}false{{else}}true{{/if}}">
+      <div class="yxt-AccordionCard-content">
+        <div class="yxt-AccordionCard-subtitle">{{{_config.subtitle}}}</div>
+        <div class="yxt-AccordionCard-details">{{{_config.details}}}</div>
+        {{#if hasCTAs}}
+          <div class="yxt-AccordionCard-ctas" data-component="CTACollection" data-prop="result"></div>
+        {{/if}}
+      </div>
     </div>
-  </div>
+  {{/if}}
 </div>
+    
+
+

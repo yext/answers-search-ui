@@ -61,6 +61,18 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
     border-top: 0;
   }
   
+  &-empty-header
+  {
+    width: 100%;
+    display: flex;
+    cursor: pointer;
+    background: none;
+    border: 0;
+    padding: 0;
+    padding-right: calc(var(--yxt-accordion-card-spacing) * 0.5);
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+  }
+
   &-toggle
   {
     width: 100%;
