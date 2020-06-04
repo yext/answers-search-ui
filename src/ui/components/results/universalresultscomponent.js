@@ -5,6 +5,7 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
+import { defaultConfigOption } from '../../../core/utils/configutils';
 
 export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -67,22 +68,26 @@ export default class UniversalResultsComponent extends Component {
       viewMore: true,
       // By default, the view more link has a label of 'View More'.
       viewMoreLabel: config.viewAllText || 'View More',
-      // By default, do not show a change filters button next to the applied filters.
-      // Also links to verticalURL
-      changeFilters: false,
-      // Whether to show the applied filters.
-      showAppliedFilters: true,
-      // Whether to show field names in the applied filters, e.g. 'Location: Virginia' vs just 'Virginia'.
-      showFieldNames: false,
-      // Field ids to hide in the applied filters.
-      hiddenFields: ['builtin.entityType'],
       // Whether to show a result count.
       showResultCount: false,
-      // Whether to show the change filters link.
-      showChangeFilters: true,
       // Whether to use AccordionResults (DEPRECATED)
       useAccordion: false,
-      ...config
+      ...config,
+      // Config for the applied filters bar. Must be placed after ...config to not override defaults.
+      appliedFilters: {
+        // Whether to display applied filters.
+        show: defaultConfigOption(config, ['appliedFilters.show', 'showAppliedFilters'], true),
+        // Whether to show field names, e.g. Location in Location: Virginia.
+        showFieldNames: defaultConfigOption(config, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
+        // Hide filters with these field ids.
+        hiddenFields: defaultConfigOption(config, ['appliedFilters.hiddenFields', 'hiddenFields'], ['builtin.entityType']),
+        // Symbol placed between the result count and the applied filters.
+        resultsCountSeparator: defaultConfigOption(config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
+        // Whether to show a 'change filters' link, linking back to verticalURL.
+        showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
+        // The symbol placed between different filters with the same fieldName. e.g. Location: Virginia | New York | Miami.
+        delimiter: defaultConfigOption(config, ['appliedFilters.delimiter'], '|')
+      }
     };
   }
 }

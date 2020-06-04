@@ -482,18 +482,23 @@ ANSWERS.addComponent('UniversalResults', {
       viewMore: true,
       // The text for the view more link, if viewMore is true. Defaults to 'View More'
       viewMoreLabel: 'View More!',
-      // Whether or not to display the change-filters link, which links to the url config option
-      changeFilters: true,
-      // If true, show any applied back-end filters that were applied to the universal search. Defaults to false
-      showAppliedFilters: true,
-      // If showAppliedFilters is true, whether to display the field name of an applied filter, e.g.
-      // if a filter on 'Location' by the value 'Virginia', display 'Location: Virginia' if true,
-      // otherwise display just 'Virginia'. Defaults to false.
-      showFieldNames: false,
-      // If showAppliedFilters is true, this is list of filters that should not be displayed.
-      // By default, builtin.entityType will be hidden
-      hiddenFields: ['builtin.entityType'],
-      // If true, adds a map to the vertical using the provided mapConfig. Defaults to false
+      // Config for the applied filters bar in the results header.
+      appliedFilters: {
+        // If true, show any applied filters that were applied to the universal search. Defaults to false
+        show: true,
+        // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
+        showFieldNames: false,
+        // If appliedFilters.show is true, this is list of filters that should not be displayed.
+        // By default, builtin.entityType will be hidden
+        hiddenFields: ['builtin.entityType'],
+        // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
+        resultsCountSeparator: '|',
+        // Whether to display the change filters link in universal results. Defaults to false.
+        showChangeFilters: false,
+        // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
+        delimiter: '|'
+      },
+      // If true, display the count of results at the very top of the results. Defaults to false.
       showResultCount: true,
       // If true, display the total number of results. Defaults to true
       // Optional, whether to use the AccordionResults component instead of VerticalResults for this vertical
