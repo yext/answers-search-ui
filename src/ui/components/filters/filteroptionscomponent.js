@@ -426,7 +426,7 @@ export default class FilterOptionsComponent extends Component {
       option.classList.remove('displaySearch');
       labelEl.innerHTML = this._getOptionLabelText(labelEl);
     }
-  };
+  }
 
   /**
    * Returns label of a given filter option
@@ -436,7 +436,7 @@ export default class FilterOptionsComponent extends Component {
   _getOptionLabelText (labelEl) {
     let labelText = labelEl.textContent || labelEl.innerText || '';
     return labelText.trim();
-  };
+  }
 
   /**
    * Returns the count of currently selected options
