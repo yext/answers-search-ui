@@ -35,7 +35,7 @@
       border: $border-default;
       border-radius: 4px;
       padding: 4px 8px;
-      margin-top: 10px;
+      width: 100%;
 
       &:hover {
         border: var(--yxt-border-hover);
@@ -89,6 +89,28 @@
       margin: 12px 0;
       padding-left: 0;
     }
+
+  &-search {
+    position: relative;
+    margin-top: 10px;
+  }
+
+  &-clearSearch {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--yxt-color-text-secondary);
+
+    &.js-hidden {
+      display: none;
+    }
+  }
 
   &-optionLabel {
     position: relative;
