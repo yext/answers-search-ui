@@ -25,16 +25,23 @@ function getLibVersion () {
     .execSync('git rev-parse HEAD')
     .toString().trim();
 
-  const version = require('child_process')
-    .execSync('git describe --match "v[0-9]*" --abbrev=0 HEAD --always')
+  const versionTag = require('child_process')
+    .execSync('git describe --tags --match "v[0-9]*" --abbrev=0 HEAD --always')
     .toString().trim();
 
-  let libVersion = `canary-${hash}`;
   if (hash !== version) {
-    libVersion = `${version}`;
+    return versionTag;
   }
 
-  return libVersion;
+  const branch = require('child_process')
+    .execSync('git rev-parse --abbrev-ref HEAD')
+    .toString().trim();
+
+  if (branch === 'develop') {
+    return `canary-${hash}`;
+  }
+
+  return branch.replace(/\//g,'-');
 }
 
 function bundle () {

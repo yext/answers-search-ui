@@ -1,6 +1,6 @@
 /** @module */
 
-/** The current lib version, reported with errors and analytics */
+/** The current lib version, reported with errors and analytics, injected by the build process */
 export const LIB_VERSION = '@@LIB_VERSION';
 
 /** The identifier of the production environment */
