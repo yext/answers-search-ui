@@ -114,6 +114,10 @@
     }
   }
 
+  &-radioButtonLabel {
+    cursor: pointer;
+  }
+
   &-optionLabel {
     position: relative;
     font-size: $font-size-md;
@@ -215,6 +219,10 @@
 
   &-input {
     margin-left: 0;
+  }
+
+  &-radioButtonInput {
+    cursor: pointer;
   }
 
   &-checkboxInput {
