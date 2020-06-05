@@ -1,7 +1,7 @@
 import RichTextFormatter from '../../../src/core/utils/richtextformatter';
 
 describe('formats rich text to HTML', () => {
-  it('adds correct data attributes for links', () => {
+  it('adds cta-type data attribute correctly', () => {
     const richText =
         '**I AM BOLD** now I am not *I AM ITALICS* now I am not ++BRASAAAAAP++\n\n' +
         '* ++I am underline list++\n\n' +
@@ -24,6 +24,15 @@ describe('formats rich text to HTML', () => {
         '<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL">phone link</a></u></p>\n' +
         '<p><u><a href="mailto:oshi@yext.com" data-cta-type="EMAIL">email link</a></u></p>\n' +
         '</div>';
-    expect(RichTextFormatter.format(richText, 'someField')).toEqual(expectedHTML);
+    expect(RichTextFormatter.format(richText, null, 'someField')).toEqual(expectedHTML);
+  });
+
+  it('adds target attribute correctly', () => {
+    const richText = '++[url link](http://google.com)++';
+    const expectedHTML =
+        '<div class="js-yxt-rtfValue" data-field-name="someField">\n' +
+        '<p><u><a href="http://google.com" data-cta-type="VIEW_WEBSITE" target="_blank">url link</a></u></p>\n' +
+        '</div>';
+    expect(RichTextFormatter.format(richText, '_blank', 'someField')).toEqual(expectedHTML);
   });
 });

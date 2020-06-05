@@ -1860,13 +1860,16 @@ The Answers SDK exposes a `formatRichText` function which translates CommonMark 
 ensure that a Rich Text Formatted value is shown properly on the page. To use this function, call it like so:
 
 ```js
-ANSWERS.formatRichText(rtfFieldValue, eventOptionsFieldName)
+ANSWERS.formatRichText(rtfFieldValue, target, eventOptionsFieldName)
 ```
 
 For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute. 
 
 When clicking any link in the resultant HTML, an `AnalyticsEvent` will be fired. If the `eventOptionsFieldName` has been
-specified, the `eventOptions` will include a `fieldName` attribute with the given value. Note that when using this function, you must ensure that the relevant Handlebars template correctly unescapes the output HTML.
+specified, the `eventOptions` will include a `fieldName` attribute with the given value. The `target` parameter dictates
+where the link is opened: the current window, a new tab, etc. This parameter, like `eventOptionsFieldName`, is optional.
+
+Note that when using this function, you must ensure that the relevant Handlebars template correctly unescapes the output HTML.
 
 # CSS Variable Styling
 
