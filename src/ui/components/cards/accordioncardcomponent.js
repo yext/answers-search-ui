@@ -142,7 +142,6 @@ export default class AccordionCardComponent extends Component {
     this.analyticsReporter.report(event);
   }
 
-  //!(this._config.details == null || this._config.details === '')
   onMount () {
     const accordionEl = DOM.query(this._container, '.js-yxt-AccordionCard');
     if (this._config.details) {
