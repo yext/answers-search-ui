@@ -21,30 +21,9 @@ const uglify = require('gulp-uglify-es').default;
 const NAMESPACE = 'ANSWERS';
 
 function getLibVersion () {
-  const hash = require('child_process')
-    .execSync('git rev-parse HEAD')
+  return require('child_process')
+    .execSync('git describe --tags')
     .toString().trim();
-
-  const branch = require('child_process')
-    .execSync('git rev-parse --abbrev-ref HEAD')
-    .toString().trim();
-
-  if (branch === 'develop') {
-    return `canary-${hash}`;
-  }
-
-  let versionTag = hash;
-  try {
-    versionTag = require('child_process')
-      .execSync('git describe --tags --match "v[0-9]*" --abbrev=0 HEAD --exact-match')
-      .toString().trim();
-  } catch (err) {}
-
-  if (versionTag !== hash) {
-    return versionTag;
-  }
-
-  return branch.replace(/\//g, '-');
 }
 
 function bundle () {

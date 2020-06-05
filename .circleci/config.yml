@@ -94,10 +94,10 @@ jobs:
     working_directory: ~/answers
     steps:
       - deploy-to-aws:
-          subdirectory: '/canary-${CIRCLE_SHA1}'
+          subdirectory: '/canary/${CIRCLE_SHA1}'
           cache-control: 'max-age=31536000'
       - deploy-to-aws:
-          subdirectory: '/canary-latest'
+          subdirectory: '/canary/latest'
           cache-control: 'max-age=31536000'
   # deploys assets to a long-lived-cache folder in the S3 bucket named by release tag
   deploy_version:
