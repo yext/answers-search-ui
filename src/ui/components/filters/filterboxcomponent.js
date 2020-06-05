@@ -189,25 +189,23 @@ export default class FilterBoxComponent extends Component {
     // Initialize filters from configs
     for (let i = 0; i < this.config.filterConfigs.length; i++) {
       const config = this.config.filterConfigs[i];
-      const component = this.componentManager.create(config.type, Object.assign({},
-        this.config,
-        {
-          parentContainer: this._container,
-          name: `${this.name}.filter${i}`,
-          storeOnChange: false,
-          container: `.js-yext-filterbox-filter${i}`,
-          showReset: this.config.resetFilter,
-          resetLabel: this.config.resetFilterLabel,
-          showExpand: this.config.expand,
-          isDynamic: this.config.isDynamic,
-          onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
-            const _saveFilterNodes = this.config.searchOnChange || alwaysSaveFilterNodes;
-            const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
-            this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
-          }
+      const component = this.componentManager.create(config.type, {
+        ...this.config,
+        parentContainer: this._container,
+        name: `${this.name}.filter${i}`,
+        storeOnChange: false,
+        container: `.js-yext-filterbox-filter${i}`,
+        showReset: this.config.resetFilter,
+        resetLabel: this.config.resetFilterLabel,
+        showExpand: this.config.expand,
+        isDynamic: this.config.isDynamic,
+        ...config,
+        onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
+          const _saveFilterNodes = this.config.searchOnChange || alwaysSaveFilterNodes;
+          const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
+          this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange, config.onChange);
         },
-        config
-      ));
+      });
       if (this.config.isDynamic && typeof component.floatSelected === 'function') {
         component.floatSelected();
       }
@@ -251,8 +249,9 @@ export default class FilterBoxComponent extends Component {
    * @param {FilterNode} filterNode The new filter node
    * @param {boolean} saveFilterNodes Whether to save filternodes to storage
    * @param {boolean} searchOnChange Whether to conduct a search
+   * @param {Function} onChange onChange callback
    */
-  onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
+  onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange, onChange) {
     this._filterNodes[index] = filterNode;
     if (saveFilterNodes || searchOnChange) {
       this._saveFilterNodesToStorage();
@@ -260,6 +259,7 @@ export default class FilterBoxComponent extends Component {
     if (searchOnChange) {
       this._search();
     }
+    onChange && onChange();
   }
 
   /**
