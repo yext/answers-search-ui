@@ -137,6 +137,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
     padding-left: 5px;
     padding-right: 4px;
     margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    white-space: nowrap;
     @include Text(
       $size: var(--yxt-font-size-sm),
       $color: var(--yxt-color-text-neutral),
