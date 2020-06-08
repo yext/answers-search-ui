@@ -189,25 +189,24 @@ export default class FilterBoxComponent extends Component {
     // Initialize filters from configs
     for (let i = 0; i < this.config.filterConfigs.length; i++) {
       const config = this.config.filterConfigs[i];
-      const component = this.componentManager.create(config.type, Object.assign({},
-        this.config,
-        {
-          parentContainer: this._container,
-          name: `${this.name}.filter${i}`,
-          storeOnChange: false,
-          container: `.js-yext-filterbox-filter${i}`,
-          showReset: this.config.resetFilter,
-          resetLabel: this.config.resetFilterLabel,
-          showExpand: this.config.expand,
-          isDynamic: this.config.isDynamic,
-          onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
-            const _saveFilterNodes = this.config.searchOnChange || alwaysSaveFilterNodes;
-            const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
-            this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
-          }
-        },
-        config
-      ));
+      const component = this.componentManager.create(config.type, {
+        ...this.config,
+        parentContainer: this._container,
+        name: `${this.name}.filter${i}`,
+        storeOnChange: false,
+        container: `.js-yext-filterbox-filter${i}`,
+        showReset: this.config.resetFilter,
+        resetLabel: this.config.resetFilterLabel,
+        showExpand: this.config.expand,
+        isDynamic: this.config.isDynamic,
+        ...config,
+        onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
+          const _saveFilterNodes = this.config.searchOnChange || alwaysSaveFilterNodes;
+          const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
+          this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
+          config.onChange && config.onChange();
+        }
+      });
       if (this.config.isDynamic && typeof component.floatSelected === 'function') {
         component.floatSelected();
       }
