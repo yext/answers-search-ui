@@ -42,7 +42,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
 
   &-resultsCount
   {
-    margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
     margin-bottom: 4px;
     white-space: nowrap;
     @include Text(
@@ -64,7 +64,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   &-filterLabel
   {
     display: flex;
-    margin-right: 5px;
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
     margin-bottom: 4px;
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
@@ -94,7 +94,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   &-resultsCountSeparator
   {
     color: var(--yxt-results-header-filters-color);
-    margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
     margin-bottom: calc(var(--yxt-results-header-spacing) / 4);
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
@@ -106,7 +106,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   &-filterSeparator
   {
     color: var(--yxt-results-header-filters-color);
-    margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
     margin-bottom: calc(var(--yxt-results-header-spacing) / 4);
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
@@ -168,4 +168,16 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+}
+
+.yxt-ResultsHeader--removable .yxt-ResultsHeader
+{
+  &-resultsCount,
+  &-filterLabel,
+  &-filterValue,
+  &-resultsCountSeparator,
+  &-filterSeparator
+  {
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
+  }
 }
