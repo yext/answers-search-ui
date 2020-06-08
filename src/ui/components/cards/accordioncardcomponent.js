@@ -143,10 +143,10 @@ export default class AccordionCardComponent extends Component {
   }
 
   onMount () {
-    const accordionEl = DOM.query(this._container, '.js-yxt-AccordionCard');
     if (this._config.details) {
       const toggleEl = DOM.query(this._container, '.js-yxt-AccordionCard-toggle');
       const accordionBodyEl = DOM.query(this._container, '.js-yxt-AccordionCard-body');
+      const accordionEl = DOM.query(this._container, '.js-yxt-AccordionCard');
       accordionBodyEl.style.height = `${this.isExpanded ? accordionBodyEl.scrollHeight : 0}px`;
       DOM.on(toggleEl, 'click', () => this.handleClick(toggleEl, accordionBodyEl, accordionEl));
     }
