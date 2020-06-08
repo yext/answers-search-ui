@@ -203,7 +203,8 @@ export default class FilterBoxComponent extends Component {
         onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
           const _saveFilterNodes = this.config.searchOnChange || alwaysSaveFilterNodes;
           const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
-          this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange, config.onChange);
+          this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
+          config.onChange && config.onChange();
         }
       });
       if (this.config.isDynamic && typeof component.floatSelected === 'function') {
@@ -259,7 +260,6 @@ export default class FilterBoxComponent extends Component {
     if (searchOnChange) {
       this._search();
     }
-    onChange && onChange();
   }
 
   /**
