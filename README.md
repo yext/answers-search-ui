@@ -432,6 +432,8 @@ The Direct Answer Component will render the BEST result, if found, based on the 
 ANSWERS.addComponent('DirectAnswer', {
   // Required, the selector for the container element where the component will be injected
   container: '.direct-answer-container',
+  // Optional, a custom card component to use.
+  defaultCard: 'MyCustomCard',
   // Optional, the selector for the form used for submitting the feedback
   formEl: '.js-directAnswer-feedback-form',
   // Optional, the selector to bind ui interaction to for reporting

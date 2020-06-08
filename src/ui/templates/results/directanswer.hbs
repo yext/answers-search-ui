@@ -1,3 +1,6 @@
+{{#if _config.defaultCard}}
+<div class="yxt-DirectAnswer" data-component="{{_config.defaultCard}}"></div>
+{{else}}
 <div class="yxt-DirectAnswer">
   <div class="yxt-DirectAnswer-title">
     <div class="yxt-Results-titleIconWrapper"
@@ -82,3 +85,4 @@
     </div>
   </div>
 </div>
+{{/if}}

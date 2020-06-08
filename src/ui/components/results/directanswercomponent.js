@@ -86,8 +86,10 @@ export default class DirectAnswerComponent extends Component {
    * we want to wire up the behavior for interacting with the quality feedback reporting (thumbsup/down)
    */
   onMount () {
-    // Avoid bindings if the feedback has previously been submitted
-    if (this.getState('feedbackSubmitted') === true) {
+    const isUsingCustomCard = this._config.defaultCard;
+    const feedbackSubmitted = this.getState('feedbackSubmitted') === true;
+    // Avoid bindings if the feedback has previously been submitted or is using a custom card.
+    if (isUsingCustomCard || feedbackSubmitted) {
       return this;
     }
 
@@ -180,5 +182,12 @@ export default class DirectAnswerComponent extends Component {
       });
 
     this.analyticsReporter.report(event);
+  }
+
+  addChild (data, type, opts) {
+    if (type === this._config.defaultCard) {
+      return super.addChild(this.getState(), type, opts);
+    }
+    return super.addChild(data, type, opts);
   }
 }
