@@ -16,7 +16,7 @@ const DEFAULT_CONFIG = {
   delimiter: '|',
   isUniversal: false,
   labelText: 'Filters applied to this search:',
-  removableLabelText: 'Remove'
+  removableLabelText: 'Remove this filter'
 };
 
 export default class ResultsHeaderComponent extends Component {
