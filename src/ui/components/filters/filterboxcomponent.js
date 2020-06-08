@@ -154,16 +154,10 @@ export default class FilterBoxComponent extends Component {
      */
     this._filterNodes = [];
 
-    if (!this.config.showCount) {
-      this.config.filterConfigs.forEach(config => {
-        config.options.forEach(option => {
-          option.countLabel = null;
-        });
-      });
-    }
-
     this.config.filterConfigs.forEach(config => {
-      if (config.showCount !== undefined && !config.showCount) {
+      let hideCount = config.showCount === undefined ? !this.config.showCount : !config.showCount;
+
+      if (hideCount) {
         config.options.forEach(option => {
           option.countLabel = null;
         });
