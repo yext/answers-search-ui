@@ -137,7 +137,9 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              only: master
+              only: 
+                - master
+                - develop
           requires:
             - unit_test
       - deploy_latest:
