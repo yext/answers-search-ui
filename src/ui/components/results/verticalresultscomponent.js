@@ -122,7 +122,7 @@ class VerticalResultsConfig {
        * The aria-label given to the removable filter buttons.
        * @type {string}
        */
-      removableLabelText: defaultConfigOption(config, ['appliedFilters.removableLabelText'], 'Remove')
+      removableLabelText: defaultConfigOption(config, ['appliedFilters.removableLabelText'], 'Remove this filter')
     };
 
     /**

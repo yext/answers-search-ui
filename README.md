@@ -586,7 +586,7 @@ ANSWERS.addComponent('VerticalResults', {
     // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
     labelText: 'Filters applied to this search:',
     // The aria-label given to the removable filter buttons.
-    removableLabelText: 'Remove'
+    removableLabelText: 'Remove this filter'
   }
 })
 ```
