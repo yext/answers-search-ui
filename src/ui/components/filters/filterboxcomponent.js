@@ -161,6 +161,14 @@ export default class FilterBoxComponent extends Component {
         });
       });
     }
+
+    this.config.filterConfigs.forEach(config => {
+      if (config.showCount !== undefined && !config.showCount) {
+        config.options.forEach(option => {
+          option.countLabel = null;
+        });
+      }
+    });
   }
 
   static get type () {
