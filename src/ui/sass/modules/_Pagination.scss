@@ -31,7 +31,7 @@ $pagination-color-hover: var(--yxt-color-text-secondary) !default;
     $color: var(--yxt-pagination-text-color)
   );
 
-  &-hidden {
+  &--hidden {
     visibility: hidden;
   }
 
