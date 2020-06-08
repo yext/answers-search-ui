@@ -154,13 +154,15 @@ export default class FilterBoxComponent extends Component {
      */
     this._filterNodes = [];
 
-    if (!this.config.showCount) {
-      this.config.filterConfigs.forEach(config => {
+    this.config.filterConfigs.forEach(config => {
+      let hideCount = config.showCount === undefined ? !this.config.showCount : !config.showCount;
+
+      if (hideCount) {
         config.options.forEach(option => {
           option.countLabel = null;
         });
-      });
-    }
+      }
+    });
   }
 
   static get type () {
