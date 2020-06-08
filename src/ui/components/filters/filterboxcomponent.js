@@ -250,9 +250,8 @@ export default class FilterBoxComponent extends Component {
    * @param {FilterNode} filterNode The new filter node
    * @param {boolean} saveFilterNodes Whether to save filternodes to storage
    * @param {boolean} searchOnChange Whether to conduct a search
-   * @param {Function} onChange onChange callback
    */
-  onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange, onChange) {
+  onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
     this._filterNodes[index] = filterNode;
     if (saveFilterNodes || searchOnChange) {
       this._saveFilterNodesToStorage();
