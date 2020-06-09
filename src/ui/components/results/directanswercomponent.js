@@ -4,6 +4,7 @@ import Component from '../component';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
+import { getOrDefault } from '../../../core/utils/configutils';
 
 /**
  * EventTypes are explicit strings defined
@@ -101,22 +102,21 @@ export default class DirectAnswerComponent extends Component {
 
   /**
    * Check whether a given cardOverride matches a given directAnswer.
-   * @param {Object} directAnswer 
-   * @param {Object} override 
+   * @param {Object} directAnswer
+   * @param {Object} override
    */
   _overrideMatchesAnswer (directAnswer, override) {
-    const answer = directAnswer.answer || {};
     const directAnswerPropeties = {
-      entityType: answer.entityType,
-      fieldName: answer.fieldName,
+      entityType: getOrDefault(directAnswer, ['relatedItem.data.type']),
+      fieldName: getOrDefault(directAnswer, ['answer.fieldName']),
       fieldType: directAnswer.fieldType
-    }
+    };
     for (let [property, overrideValue] of Object.entries(override)) {
       if (property === 'cardType') {
         continue;
       }
       if (directAnswerPropeties[property] !== overrideValue) {
-        return false
+        return false;
       }
     }
     return true;

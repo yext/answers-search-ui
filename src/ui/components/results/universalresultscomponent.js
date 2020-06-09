@@ -5,7 +5,7 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
-import { defaultConfigOption } from '../../../core/utils/configutils';
+import { getOrDefault } from '../../../core/utils/configutils';
 
 export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -76,19 +76,19 @@ export default class UniversalResultsComponent extends Component {
       // Config for the applied filters bar. Must be placed after ...config to not override defaults.
       appliedFilters: {
         // Whether to display applied filters.
-        show: defaultConfigOption(config, ['appliedFilters.show', 'showAppliedFilters'], true),
+        show: getOrDefault(config, ['appliedFilters.show', 'showAppliedFilters'], true),
         // Whether to show field names, e.g. Location in Location: Virginia.
-        showFieldNames: defaultConfigOption(config, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
+        showFieldNames: getOrDefault(config, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
         // Hide filters with these field ids.
-        hiddenFields: defaultConfigOption(config, ['appliedFilters.hiddenFields', 'hiddenFields'], ['builtin.entityType']),
+        hiddenFields: getOrDefault(config, ['appliedFilters.hiddenFields', 'hiddenFields'], ['builtin.entityType']),
         // Symbol placed between the result count and the applied filters.
-        resultsCountSeparator: defaultConfigOption(config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
+        resultsCountSeparator: getOrDefault(config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
         // Whether to show a 'change filters' link, linking back to verticalURL.
-        showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
+        showChangeFilters: getOrDefault(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
         // The symbol placed between different filters with the same fieldName. e.g. Location: Virginia | New York | Miami.
-        delimiter: defaultConfigOption(config, ['appliedFilters.delimiter'], '|'),
+        delimiter: getOrDefault(config, ['appliedFilters.delimiter'], '|'),
         // The aria-label given to the applied filters bar.
-        labelText: defaultConfigOption(config, ['appliedFilters.labelText'], 'Filters applied to this search:')
+        labelText: getOrDefault(config, ['appliedFilters.labelText'], 'Filters applied to this search:')
       }
     };
   }
