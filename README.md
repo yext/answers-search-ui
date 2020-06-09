@@ -432,8 +432,8 @@ The Direct Answer Component will render the BEST result, if found, based on the 
 ANSWERS.addComponent('DirectAnswer', {
   // Required, the selector for the container element where the component will be injected
   container: '.direct-answer-container',
-  // Optional, a custom card component to use.
-  defaultCard: 'MyCustomCard',
+  // Optional, a custom direct answer card to use, which is the default when there are no matching card overrides.
+  defaultCard: 'MyDefaultDirectAnswer',
   // Optional, the selector for the form used for submitting the feedback
   formEl: '.js-directAnswer-feedback-form',
   // Optional, the selector to bind ui interaction to for reporting
@@ -447,7 +447,24 @@ ANSWERS.addComponent('DirectAnswer', {
   // Optional, the screen reader text for negative feedback on the answer
    negativeFeedbackSrText: 'This did not answer my question',
   // Optional, the footer text to display on submission of feedback
-   footerTextOnSubmission: 'Thank you for your feedback!'
+  footerTextOnSubmission: 'Thank you for your feedback!',
+  // Optional, card overrides that allow you to specify a specific direct answers card depending on the direct answer. The first matching card will be used, otherwise defaultCard will be used.
+  cardOverrides: [
+    {
+      cardType: 'MenuItemDescriptionDirectAnswer',
+      fieldName: 'description',
+      entityType: 'ce_menuItem',
+      fieldType: 'rich_text'
+    },
+    {
+      cardType: 'DeliveryHoursDirectAnswer',
+      fieldName: 'c_deliveryHours'
+    },
+    {
+      cardType: 'PhoneDirectAnswer',
+      fieldType: 'phone'
+    }
+  ]
 })
 ```
 
