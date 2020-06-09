@@ -82,8 +82,23 @@ jobs:
       - image: circleci/python:2.7
     working_directory: ~/answers
     steps:
+      - run:
+          name: "Setup branch formatting, replace / with -"
+          command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
       - deploy-to-aws:
-          subdirectory: '/dev/${CIRCLE_BRANCH}'
+          subdirectory: '/dev/${FORMATTED_CIRCLE_BRANCH}'
+  # deploys assets to a long-lived-cache folder in the S3 bucket named by hash
+  deploy_canary:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/answers
+    steps:
+      - deploy-to-aws:
+          subdirectory: '/canary/${CIRCLE_SHA1}'
+          cache-control: 'max-age=31536000'
+      - deploy-to-aws:
+          subdirectory: '/canary/latest'
+          cache-control: 'max-age=31536000'
   # deploys assets to a long-lived-cache folder in the S3 bucket named by release tag
   deploy_version:
     docker:
@@ -122,7 +137,9 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              only: master
+              only: 
+                - master
+                - develop
           requires:
             - unit_test
       - deploy_latest:
@@ -134,7 +151,9 @@ workflows:
       - deploy_branch:
           filters:
             branches:
-              ignore: master
+              ignore:
+                - master
+                - develop
           requires:
             - unit_test
       - deploy_version:
@@ -143,5 +162,11 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+          requires:
+            - hold
+      - deploy_canary:
+          filters:
+            branches:
+              only: develop
           requires:
             - hold

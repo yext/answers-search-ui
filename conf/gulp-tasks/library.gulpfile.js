@@ -10,6 +10,7 @@ const insert = require('rollup-plugin-insert');
 
 const source = require('vinyl-source-stream');
 const rename = require('gulp-rename');
+const replace = require('gulp-replace');
 
 const sass = require('gulp-sass');
 
@@ -18,6 +19,12 @@ const postcss = require('gulp-postcss');
 const uglify = require('gulp-uglify-es').default;
 
 const NAMESPACE = 'ANSWERS';
+
+function getLibVersion () {
+  return require('child_process')
+    .execSync('git describe --tags')
+    .toString().trim();
+}
 
 function bundle () {
   return rollup({
@@ -41,6 +48,7 @@ function bundle () {
     ]
   })
     .pipe(source('answers-modern.js'))
+    .pipe(replace('@@LIB_VERSION', getLibVersion()))
     .pipe(dest('dist'));
 }
 
@@ -104,6 +112,7 @@ function legacyBundle (outputConfig, fileName) {
     ]
   })
     .pipe(source(fileName))
+    .pipe(replace('@@LIB_VERSION', getLibVersion()))
     .pipe(dest('dist'));
 }
 
