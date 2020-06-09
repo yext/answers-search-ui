@@ -100,18 +100,37 @@ export default class DirectAnswerComponent extends Component {
   }
 
   /**
+   * Check whether a given cardOverride matches a given directAnswer.
+   * @param {Object} directAnswer 
+   * @param {Object} override 
+   */
+  _overrideMatchesAnswer (directAnswer, override) {
+    const answer = directAnswer.answer || {};
+    const directAnswerPropeties = {
+      entityType: answer.entityType,
+      fieldName: answer.fieldName,
+      fieldType: directAnswer.fieldType
+    }
+    for (let [property, overrideValue] of Object.entries(override)) {
+      if (property === 'cardType') {
+        continue;
+      }
+      if (directAnswerPropeties[property] !== overrideValue) {
+        return false
+      }
+    }
+    return true;
+  }
+
+  /**
    * Returns the custom card that should be used for the given direct answer.
    * First, checks user given cardOverrides for a matching override, if there are none
    * then returns the default card.
    * @returns {string}
    */
   _getCustomCard (directAnswer) {
-    const answer = directAnswer.answer || {};
     const matchingOverrides = this._cardOverrides.filter(override => {
-      const { fieldType, fieldName, entityType } = override;
-      return directAnswer.fieldType === fieldType &&
-        answer.fieldName === fieldName &&
-        answer.entityType === entityType;
+      return this._overrideMatchesAnswer(directAnswer, override);
     });
     return matchingOverrides.length ? matchingOverrides[0].cardType : this._defaultCard;
   }
