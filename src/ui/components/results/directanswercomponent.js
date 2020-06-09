@@ -27,6 +27,12 @@ export default class DirectAnswerComponent extends Component {
     super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     /**
+     * The user given config, without any defaults applied.
+     * @type {Object}
+     */
+    this._userConfig = { ...config };
+
+    /**
      * Recieve updates from storage based on this index
      * @type {StorageKey}
      */
@@ -187,7 +193,10 @@ export default class DirectAnswerComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === this._config.defaultCard) {
-      return super.addChild(this.directAnswer, type, opts);
+      return super.addChild(this.directAnswer, type, {
+        ...this._userConfig,
+        ...opts
+      });
     }
     return super.addChild(data, type, opts);
   }
