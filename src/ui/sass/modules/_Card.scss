@@ -1,4 +1,4 @@
-$cards-margin: calc(var(--yxt-base-spacing)) / 2 !default;
+$cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
 
 :root {
   --yxt-cards-margin: #{$cards-margin};
