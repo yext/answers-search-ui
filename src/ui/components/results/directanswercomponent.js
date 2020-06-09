@@ -86,14 +86,15 @@ export default class DirectAnswerComponent extends Component {
    * we want to wire up the behavior for interacting with the quality feedback reporting (thumbsup/down)
    */
   onMount () {
-    // Avoid bindings if the feedback has previously been submitted
-    if (this.getState('feedbackSubmitted') === true) {
+    const isUsingCustomCard = this._config.defaultCard;
+    const feedbackSubmitted = this.getState('feedbackSubmitted') === true;
+    // Avoid bindings if the feedback has previously been submitted or is using a custom card.
+    if (isUsingCustomCard || feedbackSubmitted) {
       return this;
     }
 
     // For WCAG compliance, the feedback should be a submittable form
-    const formEl = DOM.query(this._container, this._formEl);
-    formEl && DOM.on(this._formEl, 'submit', (e) => {
+    DOM.on(this._formEl, 'submit', (e) => {
       const formEl = e.target;
       const checkedValue = DOM.query(formEl, 'input:checked').value === 'true';
 
@@ -105,10 +106,8 @@ export default class DirectAnswerComponent extends Component {
 
     // Is this actually necessary? I guess it's only necessary if the
     // submit button is hidden.
-    const thumbsUpEl = DOM.query(this._container, this._thumbsUpSelector);
-    thumbsUpEl && DOM.on(this._thumbsUpSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
-    const thumbsDownEl = DOM.query(this._container, this._thumbsDownSelector);
-    thumbsDownEl && DOM.on(this._thumbsDownSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
+    DOM.on(this._thumbsUpSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
+    DOM.on(this._thumbsDownSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
 
     const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
     rtfElement && DOM.on(rtfElement, 'click', e => this._handleRtfClickAnalytics(e));
