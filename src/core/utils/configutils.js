@@ -1,5 +1,5 @@
 /**
- * Used to parse config options, defaulting to different synonyms and
+ * Used to get the value in an object, defaulting to different synonyms and
  * finally a default value. Option names with periods will be parsed
  * as multiple child object accessors, i.e. trying to access 'first.second.option'
  * will first look for config['first']['second']['option'].
@@ -11,7 +11,7 @@
  * @param {Array<string>}
  * @param {any} defaultValue
  */
-export function defaultConfigOption (config, synonyms, defaultValue) {
+export function getOrDefault (config, synonyms, defaultValue) {
   for (let name of synonyms) {
     const accessors = name.split('.');
     let parentConfig = config;
