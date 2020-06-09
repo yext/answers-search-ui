@@ -1,84 +1,88 @@
-<div class="yxt-DirectAnswer">
-  <div class="yxt-DirectAnswer-title">
-    <div class="yxt-Results-titleIconWrapper"
-         data-component="IconComponent"
-         data-opts='{
-            "iconName": "{{iconName}}",
-            "iconUrl": "{{customIconUrl}}"
-          }'
-         data-prop="icon"
-    ></div>
-    <h2 class="yxt-DirectAnswer-titleText">
-      <span class="yxt-DirectAnswer-entityName">
-        {{answer.entityName}}
-      </span>
-      <span class="yxt-DirectAnswer-slash">
-        /
-      </span>
-      <span class="yxt-DirectAnswer-fieldName">
-        {{answer.fieldName}}
-      </span>
-    </h2>
-  </div>
-  <div class="yxt-DirectAnswer-content">
-    <div class="yxt-DirectAnswer-fieldValue">
-      {{{answer.value}}}
+{{#if _config.defaultCard}}
+  <div class="yxt-DirectAnswer--customComponent" data-component="{{_config.defaultCard}}"></div>
+{{else}}
+  <div class="yxt-DirectAnswer">
+    <div class="yxt-DirectAnswer-title">
+      <div class="yxt-Results-titleIconWrapper"
+          data-component="IconComponent"
+          data-opts='{
+              "iconName": "{{iconName}}",
+              "iconUrl": "{{customIconUrl}}"
+            }'
+          data-prop="icon"
+      ></div>
+      <h2 class="yxt-DirectAnswer-titleText">
+        <span class="yxt-DirectAnswer-entityName">
+          {{answer.entityName}}
+        </span>
+        <span class="yxt-DirectAnswer-slash">
+          /
+        </span>
+        <span class="yxt-DirectAnswer-fieldName">
+          {{answer.fieldName}}
+        </span>
+      </h2>
     </div>
-    {{#if relatedItem.data.website}}
-      <div class="yxt-DirectAnswer-viewMoreWrapper">
-        <a class="yxt-DirectAnswer-viewMore"
-           href="{{relatedItem.data.website}}"
-           data-middleclick="active"
-           data-eventtype="CTA_CLICK"
-           data-eventoptions="{{eventOptions}}"
-           target="{{#if _config.linkTarget}}{{_config.linkTarget}}{{else}}_blank{{/if}}">
-          {{viewDetailsText}}
-        </a>
+    <div class="yxt-DirectAnswer-content">
+      <div class="yxt-DirectAnswer-fieldValue">
+        {{{answer.value}}}
       </div>
-    {{/if}}
-  </div>
-  <div class="yxt-DirectAnswer-footerWrapper">
-    <div class="yxt-DirectAnswer-footer">
-      {{#if feedbackSubmitted}}
-      <div class="yxt-DirectAnswer-footerText">
-          {{_config.footerTextOnSubmission}}
-      </div>
-      {{else}}
-        <div class="yxt-DirectAnswer-footerText">
-          {{_config.footerText}}
+      {{#if relatedItem.data.website}}
+        <div class="yxt-DirectAnswer-viewMoreWrapper">
+          <a class="yxt-DirectAnswer-viewMore"
+            href="{{relatedItem.data.website}}"
+            data-middleclick="active"
+            data-eventtype="CTA_CLICK"
+            data-eventoptions="{{eventOptions}}"
+            target="{{#if _config.linkTarget}}{{_config.linkTarget}}{{else}}_blank{{/if}}">
+            {{viewDetailsText}}
+          </a>
         </div>
-        <form class="yxt-DirectAnswer-thumbs js-directAnswer-feedback-form">
-          <label class="yxt-DirectAnswer-thumb">
-            <span class="yxt-DirectAnswer-thumbUpIcon"
-                 data-component="IconComponent"
-                 data-opts='{"iconName": "thumb"}'
-                 data-prop="icon"
-            ></span>
-            <input type="radio"
-                   name="feedback"
-                   value="true"
-                   class="yxt-DirectAnswer-feedback yxt-DirectAnswer-thumbUpButton js-directAnswer-thumbUp">
-            <span class="sr-only">
-              {{_config.positiveFeedbackSrText}}
-            </span>
-          </label>
-          <label class="yxt-DirectAnswer-thumb">
-            <span class="yxt-DirectAnswer-thumbDownIcon"
-                 data-component="IconComponent"
-                 data-opts='{"iconName": "thumb"}'
-                 data-prop="icon"
-            ></span>
-            <input type="radio"
-                   name="feedback"
-                   value="false"
-                   class="yxt-DirectAnswer-feedback yxt-DirectAnswer-thumbDownButton js-directAnswer-thumbDown">
-            <span class="sr-only">
-              {{_config.negativeFeedbackSrText}}
-            </span>
-          </label>
-          <button type="submit" class="sr-only sr-only-focusable">Send feedback</button>
-        </form>
       {{/if}}
     </div>
+    <div class="yxt-DirectAnswer-footerWrapper">
+      <div class="yxt-DirectAnswer-footer">
+        {{#if feedbackSubmitted}}
+        <div class="yxt-DirectAnswer-footerText">
+            {{_config.footerTextOnSubmission}}
+        </div>
+        {{else}}
+          <div class="yxt-DirectAnswer-footerText">
+            {{_config.footerText}}
+          </div>
+          <form class="yxt-DirectAnswer-thumbs js-directAnswer-feedback-form">
+            <label class="yxt-DirectAnswer-thumb">
+              <span class="yxt-DirectAnswer-thumbUpIcon"
+                  data-component="IconComponent"
+                  data-opts='{"iconName": "thumb"}'
+                  data-prop="icon"
+              ></span>
+              <input type="radio"
+                    name="feedback"
+                    value="true"
+                    class="yxt-DirectAnswer-feedback yxt-DirectAnswer-thumbUpButton js-directAnswer-thumbUp">
+              <span class="sr-only">
+                {{_config.positiveFeedbackSrText}}
+              </span>
+            </label>
+            <label class="yxt-DirectAnswer-thumb">
+              <span class="yxt-DirectAnswer-thumbDownIcon"
+                  data-component="IconComponent"
+                  data-opts='{"iconName": "thumb"}'
+                  data-prop="icon"
+              ></span>
+              <input type="radio"
+                    name="feedback"
+                    value="false"
+                    class="yxt-DirectAnswer-feedback yxt-DirectAnswer-thumbDownButton js-directAnswer-thumbDown">
+              <span class="sr-only">
+                {{_config.negativeFeedbackSrText}}
+              </span>
+            </label>
+            <button type="submit" class="sr-only sr-only-focusable">Send feedback</button>
+          </form>
+        {{/if}}
+      </div>
+    </div>
   </div>
-</div>
+{{/if}}
