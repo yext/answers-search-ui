@@ -448,7 +448,7 @@ ANSWERS.addComponent('DirectAnswer', {
    negativeFeedbackSrText: 'This did not answer my question',
   // Optional, the footer text to display on submission of feedback
   footerTextOnSubmission: 'Thank you for your feedback!',
-  // Optional, card overrides that allow you to specify a specific direct answers card depending on the direct answer. The first matching card will be used, otherwise defaultCard will be used.
+  // Optional, card overrides that allow you to specify a specific direct answers card depending on the fieldName, entityType, and fieldType of the direct answer. The first matching card will be used, otherwise defaultCard will be used.
   cardOverrides: [
     {
       cardType: 'MenuItemDescriptionDirectAnswer',
