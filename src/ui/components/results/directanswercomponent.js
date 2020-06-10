@@ -4,7 +4,6 @@ import Component from '../component';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
-import { getOrDefault } from '../../../core/utils/configutils';
 
 /**
  * EventTypes are explicit strings defined
@@ -106,9 +105,12 @@ export default class DirectAnswerComponent extends Component {
    * @param {Object} override
    */
   _overrideMatchesAnswer (directAnswer, override) {
+    if (!Object.keys(directAnswer).length) {
+      return true;
+    }
     const directAnswerPropeties = {
-      entityType: getOrDefault(directAnswer, ['relatedItem.data.type']),
-      fieldName: getOrDefault(directAnswer, ['answer.fieldName']),
+      entityType: directAnswer.relatedItem.data.type,
+      fieldName: directAnswer.answer.fieldName,
       fieldType: directAnswer.fieldType
     };
     for (let [property, overrideValue] of Object.entries(override)) {
