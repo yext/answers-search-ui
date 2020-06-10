@@ -1010,7 +1010,7 @@ ANSWERS.addComponent('Facets', {
   searchLabelText: 'Search for a filter option',
   // Optional, field-specific overrides for a filter
   fields: {
-    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, buildin.location
+    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
       // Optional, the placeholder text used for the filter option search input
       placeholderText: 'Search here...',
       // Optional, if true, display the filter option search input
@@ -1071,7 +1071,7 @@ ANSWERS.addComponent('FilterSearch', {
   searchParameters: {
     // List of fields to query for
     fields: [{
-      // Field id to query for e.g. c_customFieldName, buildin.location
+      // Field id to query for e.g. c_customFieldName, builtin.location
       fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
       entityTypeId: 'ce_person',
@@ -1322,7 +1322,7 @@ ANSWERS.addComponent('GeoLocationFilter', {
   searchParameters: {
     // List of fields to query for
     fields: [{
-      // Field id to query for e.g. c_customFieldName, buildin.location
+      // Field id to query for e.g. c_customFieldName, builtin.location
       fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
       entityTypeId: 'ce_person',
