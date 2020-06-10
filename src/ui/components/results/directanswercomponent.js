@@ -131,9 +131,10 @@ export default class DirectAnswerComponent extends Component {
    * @returns {string}
    */
   _getCustomCard (directAnswer) {
-    return this._cardOverrides.find(override => {
+    const cardOverride = this._cardOverrides.find(override => {
       return this._overrideMatchesAnswer(directAnswer, override);
-    }).cardType || this._defaultCard;
+    });
+    return cardOverride ? cardOverride.cardType : this._defaultCard;
   }
 
   /**
