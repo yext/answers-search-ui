@@ -2,7 +2,6 @@
 
 $results-header-font-size: var(--yxt-font-size-md) !default;
 $results-header-spacing: var(--yxt-base-spacing) !default;
-$results-header-background: var(--yxt-color-brand-white) !default;
 
 $results-header-color: var(--yxt-color-text-secondary) !default;
 $results-header-font-weight: var(--yxt-font-weight-normal) !default;
@@ -16,10 +15,11 @@ $results-header-filters-font-size: var(--yxt-font-size-md) !default;
 $results-header-filters-color: var(--yxt-color-text-secondary) !default;
 $results-header-filters-line-height: var(--yxt-line-height-md) !default;
 
+$results-header-universal-background: var(--yxt-color-brand-white) !default;
+
 :root {
   --yxt-results-header-font-size: #{$results-header-font-size};
   --yxt-results-header-spacing: #{$results-header-spacing};
-  --yxt-results-header-background: #{$results-header-background};
   --yxt-results-header-color: #{$results-header-color};
   --yxt-results-header-font-weight: #{$results-header-font-weight};
   --yxt-results-header-line-height: #{$results-header-line-height};
@@ -29,6 +29,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   --yxt-results-header-filters-font-size: #{$results-header-filters-font-size};
   --yxt-results-header-filters-color: #{$results-header-filters-color};
   --yxt-results-header-filters-line-height: #{$results-header-filters-line-height};
+  --yxt-results-header-universal-background: #{$results-header-universal-background};
 }
 
 .yxt-ResultsHeader {
@@ -36,7 +37,6 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   padding-bottom: 0;
   display: flex;
   align-items: baseline;
-  background-color: var(--yxt-results-header-background);
 
   &-wrapper {
     display: flex;
@@ -172,6 +172,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   display: flex;
   align-items: center;
   flex-wrap: wrap;
+  background-color: var(--yxt-results-header-universal-background);
 }
 
 .yxt-ResultsHeader--removable .yxt-ResultsHeader
