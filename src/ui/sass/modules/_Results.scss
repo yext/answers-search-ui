@@ -82,6 +82,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   {
     display: flex;
     margin-right: calc(var(--yxt-base-spacing) / 2);
+    font-size: var(--yxt-results-title-bar-icon-size);
   }
 
   &-title
@@ -167,8 +168,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   &-title svg, &-title img 
   {
     color: var(--yxt-color-brand-primary);
-    height: var(--yxt-results-title-bar-icon-size);
-    width: var(--yxt-results-title-bar-icon-size);
   }
 
   &-titleLabel 
