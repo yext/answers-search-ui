@@ -15,7 +15,7 @@ $results-header-filters-font-size: var(--yxt-font-size-md) !default;
 $results-header-filters-color: var(--yxt-color-text-secondary) !default;
 $results-header-filters-line-height: var(--yxt-line-height-md) !default;
 
-$results-header-universal-background: var(--yxt-color-brand-white) !default;
+$results-header-universal-background: white !default;
 
 :root {
   --yxt-results-header-font-size: #{$results-header-font-size};
