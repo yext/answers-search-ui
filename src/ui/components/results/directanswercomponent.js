@@ -113,11 +113,11 @@ export default class DirectAnswerComponent extends Component {
       fieldName: directAnswer.answer.fieldName,
       fieldType: directAnswer.fieldType
     };
-    for (let [property, overrideValue] of Object.entries(override)) {
-      if (property === 'cardType') {
+    for (let [propertyToMatch, propertyValue] of Object.entries(override)) {
+      if (propertyToMatch === 'cardType') {
         continue;
       }
-      if (directAnswerPropeties[property] !== overrideValue) {
+      if (directAnswerPropeties[propertyToMatch] !== propertyValue) {
         return false;
       }
     }
@@ -131,10 +131,9 @@ export default class DirectAnswerComponent extends Component {
    * @returns {string}
    */
   _getCustomCard (directAnswer) {
-    const matchingOverrides = this._cardOverrides.filter(override => {
+    return this._cardOverrides.find(override => {
       return this._overrideMatchesAnswer(directAnswer, override);
-    });
-    return matchingOverrides.length ? matchingOverrides[0].cardType : this._defaultCard;
+    }).cardType || this._defaultCard;
   }
 
   /**
