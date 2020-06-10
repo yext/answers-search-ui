@@ -26,9 +26,13 @@
   {{#if _config.isUniversal}}
     <div class="yxt-Results-title">
       {{#if iconIsBuiltIn}}
-        <div data-component="IconComponent" data-opts='{ "iconName": "{{ _config.icon }}" }'></div>
+        <div class="yxt-Results-titleIconWrapper"
+          data-component="IconComponent"
+          data-opts='{ "iconName": "{{ _config.icon }}" }'></div>
       {{else}}
-        <div data-component="IconComponent" data-opts='{ "iconUrl": "{{ _config.icon }}" }'></div>
+        <div  class="yxt-Results-titleIconWrapper"
+          data-component="IconComponent"
+          data-opts='{ "iconUrl": "{{ _config.icon }}" }'></div>
       {{/if}}
       <div class="yxt-Results-titleLabel">{{_config.title}}</div>
     </div>
