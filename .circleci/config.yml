@@ -62,13 +62,19 @@ jobs:
   unit_test:
     docker:
       - image: circleci/node:7.10
+    parallelism: 4
     resource_class: large
     working_directory: ~/answers
     steps:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: npm run test
+      - run:
+          name: Run Jest tests using test splitting
+          command: |
+            TESTFILES=$(circleci tests glob "tests/**/*.js" | circleci tests split --split-by=timings)
+            echo $TESTFILES
+            npm test $TESTFILES
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
