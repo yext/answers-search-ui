@@ -1,6 +1,6 @@
-import { getOrDefault } from 'src/core/utils/configutils.js';
+import { defaultConfigOption } from 'src/core/utils/configutils.js';
 
-describe('getOrDefault helper method', () => {
+describe('defaultConfigOption helper method', () => {
   it('works for nested config', () => {
     const testConfig = {
       a: {
@@ -9,7 +9,7 @@ describe('getOrDefault helper method', () => {
         }
       }
     };
-    expect(getOrDefault(testConfig, ['a.b.c'], 'default')).toEqual(1234);
+    expect(defaultConfigOption(testConfig, ['a.b.c'], 'default')).toEqual(1234);
   });
 
   it('defaults when config option is not found', () => {
@@ -20,7 +20,7 @@ describe('getOrDefault helper method', () => {
         }
       }
     };
-    expect(getOrDefault(testConfig, ['a.b.c'], 'default')).toEqual('default');
+    expect(defaultConfigOption(testConfig, ['a.b.c'], 'default')).toEqual('default');
   });
 
   it('works for multiple config synonyms', () => {
@@ -32,6 +32,6 @@ describe('getOrDefault helper method', () => {
       },
       LOL: 'not me'
     };
-    expect(getOrDefault(testConfig, ['a.b.c', 'a.b.LOL', 'LOL', 'default'], 'default')).toEqual('yes');
+    expect(defaultConfigOption(testConfig, ['a.b.c', 'a.b.LOL', 'LOL', 'default'], 'default')).toEqual('yes');
   });
 });
