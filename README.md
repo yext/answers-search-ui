@@ -870,10 +870,14 @@ ANSWERS.addComponent('Pagination', {
   container: '.pagination-component',
   // Required*, the vertical for pagination, *if omitted, will fall back to the search base config
   verticalKey: 'verticalKey',
-  // Optional, display a double arrow allowing users to jump to the first page of results
-  showFirst: true,
-  // Optional, display a double arrow allowing users to jump to the last page of results
-  showLast: true,
+  // The maximum number of pages visible to non-mobile users.
+  maxVisiblePagesDesktop: 1,
+  // The maximum number of pages visible to mobile users.
+  maxVisiblePagesMobile: 1,
+  // Ensure that the page numbers for first and last page are always shown. Not recommended to use with showFirstAndLastButton.
+  pinFirstAndLastPage: false,
+  // Display double-arrows allowing users to jump to the first and last page of results.
+  showFirstAndLastButton: true,
   // Optional, label for a page of results
   pageLabel: 'Page',
   // Optional, configuration for the pagination behavior when a query returns no results
