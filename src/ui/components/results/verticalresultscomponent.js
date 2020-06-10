@@ -11,7 +11,7 @@ import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
-import { getOrDefault } from '../../../core/utils/configutils';
+import { defaultConfigOption } from '../../../core/utils/configutils';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import Filter from '../../../core/models/filter';
 import FilterMetadata from '../../../core/filters/filtermetadata';
@@ -73,56 +73,56 @@ class VerticalResultsConfig {
        * If present, show the filters that were ultimately applied to this query
        * @type {boolean}
        */
-      show: getOrDefault(config, ['appliedFilters.show', 'showAppliedFilters'], true),
+      show: defaultConfigOption(config, ['appliedFilters.show', 'showAppliedFilters'], true),
 
       /**
        * If showResultCount and showAppliedFilters are true,
        * display this separator between the result count and the applied query filters
        * @type {string}
        */
-      resultsCountSeparator: getOrDefault(config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
+      resultsCountSeparator: defaultConfigOption(config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
 
       /**
        * If showAppliedFilters is true, show the field name in the string followed by a colon.
        * @type {boolean}
        */
-      showFieldNames: getOrDefault(config, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
+      showFieldNames: defaultConfigOption(config, ['appliedFilters.showFieldNames', 'showFieldNames'], false),
 
       /**
        * Any fieldIds in hiddenFields will be hidden from the list of appied filters.
        * @type {Array<string>}
        */
-      hiddenFields: getOrDefault(config, ['appliedFilters.hiddenFields', 'hiddenFields'], ['builtin.entityType']),
+      hiddenFields: defaultConfigOption(config, ['appliedFilters.hiddenFields', 'hiddenFields'], ['builtin.entityType']),
 
       /**
        * The character that should separate each field (and its associated filters) within the applied filter bar
        * @type {string}
        */
-      delimiter: getOrDefault(config, ['appliedFilters.delimiter'], '|'),
+      delimiter: defaultConfigOption(config, ['appliedFilters.delimiter'], '|'),
 
       /**
        * If the filters are shown, whether or not they should be removable from within the applied filter bar.
        * @type {boolean}
        */
-      removable: getOrDefault(config, ['appliedFilters.removable'], false),
+      removable: defaultConfigOption(config, ['appliedFilters.removable'], false),
 
       /**
        * Whether to show the change filters link on universal results.
        * @type {boolean}
        **/
-      showChangeFilters: getOrDefault(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
+      showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
 
       /**
        * The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
        * @type {string}
        **/
-      labelText: getOrDefault(config, ['appliedFilters.labelText'], 'Filters applied to this search:'),
+      labelText: defaultConfigOption(config, ['appliedFilters.labelText'], 'Filters applied to this search:'),
 
       /**
        * The aria-label given to the removable filter buttons.
        * @type {string}
        */
-      removableLabelText: getOrDefault(config, ['appliedFilters.removableLabelText'], 'Remove this filter')
+      removableLabelText: defaultConfigOption(config, ['appliedFilters.removableLabelText'], 'Remove this filter')
     };
 
     /**
