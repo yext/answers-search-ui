@@ -3,6 +3,7 @@
 import Core from './core/core';
 import RtfConverter from '@yext/rtf-converter';
 import cssVars from 'css-vars-ponyfill';
+import URI from 'urijs';
 
 import {
   DefaultTemplatesLoader,
@@ -419,7 +420,11 @@ class Answers {
       onlyLegacy: true,
       onError: config.onError || function () {},
       onSuccess: config.onSuccess || function () {},
-      onFinally: config.onFinally || function () {}
+      onFinally: config.onFinally || function () {},
+      onBeforeSend: (xhr, node, url) => {
+        const uri = new URI(url).addQuery('_', new Date().getTime());
+        xhr.open('GET', uri.toString());
+      }
     });
   }
 }
