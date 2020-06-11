@@ -870,15 +870,15 @@ ANSWERS.addComponent('Pagination', {
   container: '.pagination-component',
   // Required*, the vertical for pagination, *if omitted, will fall back to the search base config
   verticalKey: 'verticalKey',
-  // The maximum number of pages visible to non-mobile users.
+  // Optional, the maximum number of pages visible to non-mobile users. Defaults to 1.
   maxVisiblePagesDesktop: 1,
-  // The maximum number of pages visible to mobile users.
+  // Optional, the maximum number of pages visible to mobile users. Defaults to 1.
   maxVisiblePagesMobile: 1,
-  // Ensure that the page numbers for first and last page are always shown. Not recommended to use with showFirstAndLastButton.
+  // Optional, ensure that the page numbers for first and last page are always shown. Not recommended to use with showFirstAndLastButton. Defaults to false.
   pinFirstAndLastPage: false,
-  // Display double-arrows allowing users to jump to the first and last page of results.
+  // Optional, display double-arrows allowing users to jump to the first and last page of results. Defaults to true.
   showFirstAndLastButton: true,
-  // Optional, label for a page of results
+  // Optional, label for a page of results. Defaults to 'Page'.
   pageLabel: 'Page',
   // Optional, configuration for the pagination behavior when a query returns no results
   noResults: {
@@ -889,10 +889,10 @@ ANSWERS.addComponent('Pagination', {
   // Function invoked when a user clicks to change pages. By default, scrolls the user to the top of the page.
   onPaginate: (newPageNumber, oldPageNumber, totalPages) => {},
   // DEPRECATED with showFirstAndLastButton.
-  // Display a double arrow allowing users to jump to the first page of results
+  // Display a double arrow allowing users to jump to the first page of results. Defaults to showFirstAndLastButton.
   showFirst: true,
   // DEPRECATED with showFirstAndLastButton.
-  // Display a double arrow allowing users to jump to the last page of results
+  // Display a double arrow allowing users to jump to the last page of results. Defaults to showFirstAndLastButton.
   showLast: true,
 });
 ```
