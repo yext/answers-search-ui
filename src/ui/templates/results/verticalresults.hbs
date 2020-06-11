@@ -70,7 +70,7 @@
 {{/inline}}
 
 {{#*inline "viewMore"}}
-  {{#if _config.isUniversal}}
+  {{#if (and _config.isUniversal _config.viewMore)}}
     <div class="yxt-Results-viewMore">
       <a class="yxt-Results-viewMoreLink" href="{{ verticalURL }}">
         <div class="yxt-Results-viewMoreLabel">{{_config.viewMoreLabel}}</div>
