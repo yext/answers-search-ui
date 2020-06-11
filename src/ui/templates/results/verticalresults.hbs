@@ -8,7 +8,7 @@
       {{> resultsHeader }}
       {{> map}}
       {{> results}}
-      {{> viewMore}}
+      {{> viewAll}}
     </section>
   {{/if}}
 {{/if}}
@@ -69,11 +69,11 @@
   {{/if}}
 {{/inline}}
 
-{{#*inline "viewMore"}}
+{{#*inline "viewAll"}}
   {{#if (and _config.isUniversal _config.viewMore)}}
-    <div class="yxt-Results-viewMore">
-      <a class="yxt-Results-viewMoreLink" href="{{ verticalURL }}">
-        <div class="yxt-Results-viewMoreLabel">{{_config.viewMoreLabel}}</div>
+    <div class="yxt-Results-viewAll">
+      <a class="yxt-Results-viewAllLink" href="{{ verticalURL }}">
+        <div class="yxt-Results-viewAllLabel">{{_config.viewMoreLabel}}</div>
         <div data-component="IconComponent" data-opts='{ "iconName": "chevron" }'></div>
       </a>
     </div>
