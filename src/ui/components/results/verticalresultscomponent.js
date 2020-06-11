@@ -171,7 +171,12 @@ export default class VerticalResultsComponent extends Component {
      */
     this._noResultsTemplate = this._noResultsConfig.template;
 
-    this.moduleId = StorageKeys.VERTICAL_RESULTS;
+    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
+      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+        this.setState(results);
+      }
+    });
+
     /**
      * Vertical config from config, if not present, fall back to global verticalPagesConfig
      * @type {Array.<object>}

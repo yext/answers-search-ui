@@ -7,6 +7,7 @@ import VerticalResultsComponent from '../../../../src/ui/components/results/vert
 const mockCore = {
   globalStorage: {
     set: () => {},
+    on: () => {},
     getState: (storageKey) => {
       if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
         return { get: () => { return []; } };
