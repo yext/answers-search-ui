@@ -213,6 +213,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
 
   &-title
   {
+    margin: 0;
     text-transform: uppercase;
     @include Text(
       $color: var(--yxt-color-text-primary),
