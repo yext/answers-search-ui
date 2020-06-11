@@ -166,24 +166,10 @@ class Answers {
     globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
 
-    const masterSwitchApi = statusPage
+    this._masterSwitchApi = statusPage
       ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, globalStorage)
       : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, globalStorage);
 
-    masterSwitchApi.isDisabled(parsedConfig.apiKey, parsedConfig.experienceKey)
-      .then(isDisabled => !isDisabled && this._initInternal(parsedConfig, globalStorage, persistentStorage))
-      .catch(() => this._initInternal(parsedConfig, globalStorage, persistentStorage));
-  }
-
-  /**
-   * Initializes the AnalyticsReporter and Core. Also invokes the onReady function
-   * provided in the parsed configuration.
-   *
-   * @param {Object} parsedConfig The parsed Answers configuration.
-   * @param {GlobalStorage} globalStorage The {@link GlobalStorage} instance.
-   * @param {PersistentStorage} persistentStorage The {@link PersistentStorage} instance.
-   */
-  _initInternal (parsedConfig, globalStorage, persistentStorage) {
     this._services = parsedConfig.mock
       ? getMockServices()
       : getServices(parsedConfig, globalStorage);
@@ -242,7 +228,9 @@ class Answers {
         this.renderer.init(parsedConfig.templateBundle);
       }
 
-      this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill, this._onReady.bind(this));
+      this._handlePonyfillCssVariables(
+        parsedConfig.disableCssVariablesPonyfill, 
+        this._invokeOnReady.bind(this));
       return this;
     }
 
@@ -250,10 +238,22 @@ class Answers {
     // Future enhancement is to ship the components with templates in a separate bundle.
     this.templates = new DefaultTemplatesLoader(templates => {
       this.renderer.init(templates);
-      this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill, this._onReady.bind(this));
+      this._handlePonyfillCssVariables(
+        parsedConfig.disableCssVariablesPonyfill, 
+        this._invokeOnReady.bind(this));
     });
 
     return this;
+  }
+
+  /**
+   * Checks the experience's Answer Status page before invoking onReady. If the status is
+   * disabled, onReady is not called.
+   */
+  _invokeOnReady () {
+    this._masterSwitchApi.isDisabled()
+      .then(isDisabled => !isDisabled && this._onReady())
+      .catch(() => this._onReady());
   }
 
   /**
