@@ -59,19 +59,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     margin-top: var(--yxt-base-spacing);
   }
 
-  &-titleBar
-  {
-    display: flex;
-    justify-content: space-between;
-    padding-left: var(--yxt-base-spacing);
-    padding-right: var(--yxt-base-spacing);
-    padding-top: calc(var(--yxt-base-spacing) / 2);
-    padding-bottom: calc(var(--yxt-base-spacing) / 2);
-    background-color: var(--yxt-results-title-bar-background);
-    border: var(--yxt-border-legacy);
-    border-bottom: none;
-  }
-
   &-left
   {
     display: flex;
@@ -83,18 +70,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     display: flex;
     margin-right: calc(var(--yxt-base-spacing) / 2);
     font-size: var(--yxt-results-title-bar-icon-size);
-  }
-
-  &-title
-  {
-    @include Text(
-      var(--yxt-results-title-bar-text-font-size),
-      var(--yxt-results-title-bar-text-line-height),
-      var(--yxt-results-title-bar-text-font-weight),
-      $color: var(--yxt-results-title-bar-text-color)
-    );
-
-    text-transform: uppercase;
   }
 
   &-map
@@ -156,7 +131,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     );
   }
 
-  &-title
+  &-titleBar
   {
     border: var(--yxt-results-border);
     display: flex;
@@ -165,12 +140,12 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     background-color:  var(--yxt-color-background-highlight);
   }
 
-  &-title svg, &-title img 
+  &-titleBar svg, &-titleBar img 
   {
     color: var(--yxt-color-brand-primary);
   }
 
-  &-titleLabel 
+  &-title
   {
     text-transform: uppercase;
     @include Text(
@@ -209,5 +184,34 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     border-top: var(--yxt-border-legacy);
     border-left: var(--yxt-border-legacy);
     border-right: var(--yxt-border-legacy);
+  }
+}
+
+// Legacy AccordionResults specific styling
+.yxt-Accordion .yxt-Results
+{
+  &-titleBar
+  {
+    display: flex;
+    justify-content: space-between;
+    padding-left: var(--yxt-base-spacing);
+    padding-right: var(--yxt-base-spacing);
+    padding-top: calc(var(--yxt-base-spacing) / 2);
+    padding-bottom: calc(var(--yxt-base-spacing) / 2);
+    background-color: var(--yxt-results-title-bar-background);
+    border: var(--yxt-border-legacy);
+    border-bottom: none;
+  }
+
+  &-title
+  {
+    @include Text(
+      var(--yxt-results-title-bar-text-font-size),
+      var(--yxt-results-title-bar-text-line-height),
+      var(--yxt-results-title-bar-text-font-weight),
+      $color: var(--yxt-results-title-bar-text-color)
+    );
+
+    text-transform: uppercase;
   }
 }
