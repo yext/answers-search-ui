@@ -4,7 +4,8 @@
   {{/if}}
   {{#if resultsPresent}}
     <section class="yxt-Results yxt-Results--{{_config.modifier}}{{#if _config.isUniversal}} yxt-Results--universal{{/if}}">
-      {{> header}}
+      {{> titleBar}}
+      {{> resultsHeader }}
       {{> map}}
       {{> results}}
       {{> viewMore}}
@@ -22,9 +23,9 @@
 {{/inline}}
 
 
-{{#*inline "header"}}
+{{#*inline "titleBar"}}
   {{#if _config.isUniversal}}
-    <div class="yxt-Results-title">
+    <div class="yxt-Results-titleBar">
       {{#if iconIsBuiltIn}}
         <div class="yxt-Results-titleIconWrapper"
           data-component="IconComponent"
@@ -34,9 +35,12 @@
           data-component="IconComponent"
           data-opts='{ "iconUrl": "{{ _config.icon }}" }'></div>
       {{/if}}
-      <div class="yxt-Results-titleLabel">{{_config.title}}</div>
+      <div class="yxt-Results-title">{{_config.title}}</div>
     </div>
   {{/if}}
+{{/inline}}
+
+{{#*inline 'resultsHeader'}}
   {{#if showResultsHeader}}
     <div data-component="ResultsHeader"></div>
   {{/if}}
