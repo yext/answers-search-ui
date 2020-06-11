@@ -115,7 +115,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     margin-top: 0;
     margin-bottom: 0;
     padding: calc(var(--yxt-base-spacing) / 2) var(--yxt-base-spacing);
-    background-color: $results-filters-background;
+    background-color: var(--yxt-results-filters-background);
     border-right: var(--yxt-results-border);
     border-left: var(--yxt-results-border);
     border-bottom: var(--yxt-results-border);
