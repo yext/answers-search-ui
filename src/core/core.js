@@ -217,7 +217,7 @@ export default class Core {
    * @param {string} verticalKey The vertical key to use in the search
    */
   verticalPage (verticalKey) {
-    this.verticalSearch(verticalKey, {}, {
+    this.verticalSearch(verticalKey, { useFacets: true }, {
       id: this.globalStorage.getState(StorageKeys.QUERY_ID)
     });
   }
