@@ -888,6 +888,12 @@ ANSWERS.addComponent('Pagination', {
   },
   // Function invoked when a user clicks to change pages. By default, scrolls the user to the top of the page.
   onPaginate: (newPageNumber, oldPageNumber, totalPages) => {},
+  // DEPRECATED with showFirstAndLastButton.
+  // Display a double arrow allowing users to jump to the first page of results
+  showFirst: true,
+  // DEPRECATED with showFirstAndLastButton.
+  // Display a double arrow allowing users to jump to the last page of results
+  showLast: true,
 });
 ```
 
