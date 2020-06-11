@@ -72,19 +72,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     font-size: var(--yxt-results-title-bar-icon-size);
   }
 
-  &-viewAllLink
-  {
-    display: flex;
-    align-items: center;
-
-    @include Text(
-      var(--yxt-results-title-bar-link-font-size),
-      var(--yxt-results-title-bar-link-line-height),
-      var(--yxt-results-title-bar-link-font-weight),
-    );
-    @include Link-1;
-  }
-
   &-filters
   {
     display: flex;
@@ -153,7 +140,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     flex-flow: row wrap;
   }
 
-  &-viewMore
+  &-viewAll
   {
     display: flex;
     justify-content: center;
@@ -166,17 +153,16 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     border-bottom: var(--yxt-results-border);
   }
 
-  &-viewMore svg
+  &-viewAll svg
   {
     height: calc(var(--yxt-base-spacing) / 2);
     width: calc(var(--yxt-base-spacing) / 2);
     color: var(--yxt-color-brand-primary);
   }
 
-  &-viewMoreLink
+  &-viewAllLink
   {
     text-decoration: none;
-    justify-content: center;
     display: flex;
     align-items: center;
     &:hover, &:focus 
@@ -186,7 +172,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     }
   }
 
-  &-viewMoreLabel
+  &-viewAllLabel
   {
     margin-right: calc(var(--yxt-base-spacing) / 2);
     @include Text(
@@ -280,5 +266,18 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     );
 
     text-transform: uppercase;
+  }
+
+  &-viewAllLink
+  {
+    display: flex;
+    align-items: center;
+
+    @include Text(
+      var(--yxt-results-title-bar-link-font-size),
+      var(--yxt-results-title-bar-link-line-height),
+      var(--yxt-results-title-bar-link-font-weight),
+    );
+    @include Link-1;
   }
 }
