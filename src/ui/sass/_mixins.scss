@@ -100,3 +100,21 @@
     $hover-decoration: none
   );
 }
+
+// Generally, it is preferable to use an IconComponent when an icon is desired.
+// This mixin is for cases when we want to add an icon in a place where 
+// SDK implementors commonly would add an icon with ::after. Using an IconComponent
+// in those cases would result in a double icon, while adding the desired icon with ::after
+// will only result in the new SDK icon being overriden.
+@mixin Chevron-Icon
+{
+  &::after
+  {
+    background-image: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMTYiIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAxNiAyNCI+CiAgICA8ZGVmcz4KICAgICAgICA8cGF0aCBpZD0iYSIgZD0iTTEuNTUgOS41NmEuNjguNjggMCAwIDEgLjAwNS0xLjAyM2wuMDI2LS4wMjRhLjgyOC44MjggMCAwIDEgMS4xMDMtLjAwNmwzLjc2OCAzLjQ4NmMuMzAzLjI4LjMuNzM2IDAgMS4wMTRsLTMuNzY4IDMuNDg2YS44MTguODE4IDAgMCAxLTEuMTAzLS4wMDZsLS4wMjYtLjAyNGEuNjg0LjY4NCAwIDAgMS0uMDA0LTEuMDIyTDQuNzMgMTIuNSAxLjU1IDkuNTZ6Ii8+CiAgICA8L2RlZnM+CiAgICA8ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPgogICAgICAgIDxwYXRoIGQ9Ik0wIDBoOHYyNEgweiIvPgogICAgICAgIDxnIHRyYW5zZm9ybT0idHJhbnNsYXRlKDgpIj4KICAgICAgICAgICAgPHBhdGggZD0iTTAgMGg4djI0SDB6Ii8+CiAgICAgICAgICAgIDxtYXNrIGlkPSJiIiBmaWxsPSIjZmZmIj4KICAgICAgICAgICAgICAgIDx1c2UgeGxpbms6aHJlZj0iI2EiLz4KICAgICAgICAgICAgPC9tYXNrPgogICAgICAgICAgICA8dXNlIGZpbGw9IiMxMjEzMUUiIHhsaW5rOmhyZWY9IiNhIi8+CiAgICAgICAgICAgIDxnIGZpbGw9IiMwZjcwZjAiIG1hc2s9InVybCgjYikiPgogICAgICAgICAgICAgICAgPHBhdGggZD0iTTAgMGg4djI0SDB6Ii8+CiAgICAgICAgICAgIDwvZz4KICAgICAgICA8L2c+CiAgICA8L2c+Cjwvc3ZnPgo=');
+    background-repeat: no-repeat;
+    background-position: 100%;
+    content: "";
+    height: 1em;
+    width: 1em;
+  }
+}

@@ -153,13 +153,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     border-bottom: var(--yxt-results-border);
   }
 
-  &-viewAll svg
-  {
-    height: calc(var(--yxt-base-spacing) / 2);
-    width: calc(var(--yxt-base-spacing) / 2);
-    color: var(--yxt-color-brand-primary);
-  }
-
   &-viewAllLink
   {
     text-decoration: none;
@@ -170,11 +163,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
       color: $color-brand-hover;
       text-decoration: underline;
     }
-  }
-
-  &-viewAllLabel
-  {
-    margin-right: calc(var(--yxt-base-spacing) / 2);
+    @include Chevron-Icon();
     @include Text(
       $color: var(--yxt-color-brand-primary),
       $weight: var(--yxt-font-weight-semibold),
