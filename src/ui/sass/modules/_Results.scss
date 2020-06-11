@@ -72,6 +72,72 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     font-size: var(--yxt-results-title-bar-icon-size);
   }
 
+  &-viewAllLink
+  {
+    display: flex;
+    align-items: center;
+
+    @include Text(
+      var(--yxt-results-title-bar-link-font-size),
+      var(--yxt-results-title-bar-link-line-height),
+      var(--yxt-results-title-bar-link-font-weight),
+    );
+    @include Link-1;
+  }
+
+  &-filters
+  {
+    display: flex;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: calc(var(--yxt-base-spacing) / 2) var(--yxt-base-spacing);
+    background-color: var(--yxt-results-filters-background);
+    border-top: var(--yxt-results-border);
+    border-right: var(--yxt-border-default);
+    border-left: var(--yxt-border-default);
+    border-bottom: none;
+  }
+
+  &-filter
+  {
+    display: flex;
+    align-items: center;
+
+    &:not(:first-child)::before
+    {
+      content: '';
+      width: 1px;
+      top: 0;
+      height: 40%;
+      margin-left: var(--yxt-base-spacing);
+      margin-right: var(--yxt-base-spacing);
+      display: inline-block;
+    }
+  }
+
+  &-filterValue
+  {
+    @include Text(
+      var(--yxt-results-filters-text-font-size),
+      var(--yxt-results-filters-text-line-height),
+      var(--yxt-results-filters-text-font-weight),
+      $color: var(--yxt-results-filters-text-color)
+    );
+  }
+
+  &-changeFilters
+  {
+    @include Text(
+      var(--yxt-results-filters-link-font-size),
+      var(--yxt-results-filters-link-line-height),
+      var(--yxt-results-filters-link-font-weight),
+      $color: var(--yxt-color-brand-primary)
+    );
+    @include Link-2;
+
+    margin-left: calc(var(--yxt-base-spacing) / 2);
+  }
+
   &-map
   {
     height: 300px;

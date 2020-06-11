@@ -125,11 +125,14 @@ $results-header-universal-background: var(--yxt-color-brand-white) !default;
     margin-left: calc(var(--yxt-results-header-spacing) / 2);
     margin-bottom: calc(var(--yxt-results-header-spacing) / 4);
     padding-right: var(--yxt-results-header-spacing);
+    @include Text(
+      var(--yxt-results-filters-link-font-size),
+      var(--yxt-results-filters-link-line-height),
+      var(--yxt-results-filters-link-font-weight),
+      $color: var(--yxt-color-brand-primary)
+    );
     @include Link(
       $base-color: var(--yxt-color-brand-primary)
-    );
-    @include Text(
-      $line-height: 20px
     );
   }
 
