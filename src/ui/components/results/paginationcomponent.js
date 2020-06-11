@@ -49,14 +49,14 @@ export default class PaginationComponent extends Component {
      * @type {boolean}
      * @private
      */
-    this._firstPageButtonEnabled = config.showFirst === undefined ? config.showFirstAndLastButton : config.showFirst;
+    this._firstPageButtonEnabled = config.showFirst === undefined ? this._showFirstAndLastPageButtons : config.showFirst;
 
     /**
      * DEPRECATED
      * @type {boolean}
      * @private
      */
-    this._lastPageButtonEnabled = config.showLast === undefined ? config.showFirstAndLastButton : config.showLast;
+    this._lastPageButtonEnabled = config.showLast === undefined ? this._showFirstAndLastPageButtons : config.showLast;
 
     /**
      * If true, always displays the page numbers for first and last page.

@@ -870,11 +870,15 @@ ANSWERS.addComponent('Pagination', {
   container: '.pagination-component',
   // Required*, the vertical for pagination, *if omitted, will fall back to the search base config
   verticalKey: 'verticalKey',
-  // Optional, display a double arrow allowing users to jump to the first page of results
-  showFirst: true,
-  // Optional, display a double arrow allowing users to jump to the last page of results
-  showLast: true,
-  // Optional, label for a page of results
+  // Optional, the maximum number of pages visible to non-mobile users. Defaults to 1.
+  maxVisiblePagesDesktop: 1,
+  // Optional, the maximum number of pages visible to mobile users. Defaults to 1.
+  maxVisiblePagesMobile: 1,
+  // Optional, ensure that the page numbers for first and last page are always shown. Not recommended to use with showFirstAndLastButton. Defaults to false.
+  pinFirstAndLastPage: false,
+  // Optional, display double-arrows allowing users to jump to the first and last page of results. Defaults to true.
+  showFirstAndLastButton: true,
+  // Optional, label for a page of results. Defaults to 'Page'.
   pageLabel: 'Page',
   // Optional, configuration for the pagination behavior when a query returns no results
   noResults: {
@@ -884,6 +888,12 @@ ANSWERS.addComponent('Pagination', {
   },
   // Function invoked when a user clicks to change pages. By default, scrolls the user to the top of the page.
   onPaginate: (newPageNumber, oldPageNumber, totalPages) => {},
+  // DEPRECATED, please use showFirstAndLastButton instead.
+  // Display a double arrow allowing users to jump to the first page of results. Defaults to showFirstAndLastButton.
+  showFirst: true,
+  // DEPRECATED, please use showFirstAndLastButton instead.
+  // Display a double arrow allowing users to jump to the last page of results. Defaults to showFirstAndLastButton.
+  showLast: true,
 });
 ```
 
