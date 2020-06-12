@@ -521,6 +521,8 @@ ANSWERS.addComponent('UniversalResults', {
       renderItem: function(data) {},
       // Optional, override the handlebars template for each item in this vertical
       itemTemplate: `my item {{name}}`,
+      // DEPCREATED, please use viewMoreLabel instead. The text for the view more link. Has the same effect as viewMoreLabel, and is out-prioritized by viewMoreLabel. Defaults to 'View More'.
+      viewAllText: 'View All Results For Vertical'
     }
   },
   // Optional, override the render function for each item in the result list
