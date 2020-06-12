@@ -12,16 +12,21 @@ export default class MasterSwitchApi {
 
   /**
    * Checks if the front-end for the given experience should be temporarily disabled.
-   * Note that this check errs on the side of enabling the front-end. If there are any
-   * issues with the resultant network call, those failures are caught. In this failure
-   * case, the assumption is that things are enabled.
+   * Note that this check errs on the side of enabling the front-end. If the network call
+   * does not complete successfully, due to timeout or other error, those failures are caught.
+   * In these failure cases, the assumption is that things are enabled.
    *
    * @returns {Promise<boolean>} A Promise containing a boolean indicating if the front-end
    *                             should be disabled.
    */
   isDisabled () {
+    // A 100ms timeout is enforced on the status call.
+    const timeout = new Promise((resolve, reject) => {
+      setTimeout(reject, 100);
+    });
+
     return new Promise((resolve, reject) => {
-      this._request.get({ credentials: 'omit' })
+      Promise.race([this._request.get({ credentials: 'omit' }), timeout])
         .then(response => response.json())
         .then(status => status && status.disabled)
         .then(isDisabled => resolve(!!isDisabled))
