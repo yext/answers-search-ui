@@ -70,6 +70,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     display: flex;
     margin-right: calc(var(--yxt-base-spacing) / 2);
     font-size: var(--yxt-results-title-bar-icon-size);
+    color: var(--yxt-color-brand-primary);
   }
 
   &-filters
@@ -192,11 +193,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     background-color:  var(--yxt-color-background-highlight);
   }
 
-  &-titleBar svg, &-titleBar img 
-  {
-    color: var(--yxt-color-brand-primary);
-  }
-
   &-title
   {
     margin: 0;
@@ -279,5 +275,10 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
       var(--yxt-results-title-bar-link-font-weight),
     );
     @include Link-1;
+  }
+
+  &-titleIconWrapper
+  {
+    color: inherit;
   }
 }
