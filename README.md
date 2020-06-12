@@ -521,6 +521,8 @@ ANSWERS.addComponent('UniversalResults', {
       renderItem: function(data) {},
       // Optional, override the handlebars template for each item in this vertical
       itemTemplate: `my item {{name}}`,
+      // DEPRECATED, please use viewMoreLabel instead. viewAllText is a synonym for viewMoreLabel, where viewMoreLabel takes precedence over viewAllText. Defaults to 'View More'.
+      viewAllText: 'View All Results For Vertical'
     }
   },
   // Optional, override the render function for each item in the result list
