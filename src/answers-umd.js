@@ -229,7 +229,7 @@ class Answers {
       }
 
       this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill, 
+        parsedConfig.disableCssVariablesPonyfill,
         this._invokeOnReady.bind(this));
       return this;
     }
@@ -239,7 +239,7 @@ class Answers {
     this.templates = new DefaultTemplatesLoader(templates => {
       this.renderer.init(templates);
       this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill, 
+        parsedConfig.disableCssVariablesPonyfill,
         this._invokeOnReady.bind(this));
     });
 
