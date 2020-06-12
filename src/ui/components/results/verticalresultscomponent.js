@@ -129,7 +129,7 @@ class VerticalResultsConfig {
      * Text for the view more button.
      * @type {string}
      */
-    this.viewMoreLabel = config.viewMoreLabel;
+    this.viewMoreLabel = defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], 'View More');
   }
 }
 
@@ -410,6 +410,5 @@ export default class VerticalResultsComponent extends Component {
 const APPLY_SYNONYMS = (config) => ({
   icon: config.sectionTitleIconName || config.sectionTitleIconUrl,
   title: config.sectionTitle,
-  viewMoreLabel: config.viewAllText,
   ...config
 });
