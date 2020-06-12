@@ -21,8 +21,8 @@ const uglify = require('gulp-uglify-es').default;
 const NAMESPACE = 'ANSWERS';
 
 function getLibVersion () {
-  try { 
-    let insideWorkTree  = require('child_process')
+  try {
+    let insideWorkTree = require('child_process')
       .execSync('git rev-parse --is-inside-work-tree 2>/dev/null')
       .toString().trim();
     if (insideWorkTree) {
