@@ -1028,7 +1028,7 @@ ANSWERS.addComponent('Facets', {
       // Optional, if true, display the filter option search input
       searchable: false,
       // Optional, control type, singleoption or multioption
-      control: false,
+      control: 'singleoption',
     }
   },
   // Optional, the label to show on the apply button
