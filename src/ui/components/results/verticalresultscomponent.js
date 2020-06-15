@@ -226,11 +226,8 @@ export default class VerticalResultsComponent extends Component {
   }
 
   getVerticalURL (data = {}) {
-    if ('verticalURL' in this._config) {
-      return addParamsToUrl(this._config.verticalURL || '', { query: this.query });
-    }
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
-    const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
+    const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
     return addParamsToUrl(verticalURL, { query: this.query });
   }
 
@@ -252,7 +249,7 @@ export default class VerticalResultsComponent extends Component {
     const hasAppliedFilters = this.appliedFilterNodes.length || this.nlpFilterNodes.length;
     const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
       (this.resultsHeaderOpts.showAppliedFilters && hasAppliedFilters);
-    this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
+    this.query = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
