@@ -205,7 +205,7 @@ export default class GeoLocationComponent extends Component {
 
   _handleSubmit (query, filter) {
     this.query = query;
-    this._saveDataToStorage(query, Filter.fromResponse(filter), `"${query}"`);
+    this._saveDataToStorage(query, Filter.fromResponse(filter), `${query}`);
     this._enabled = false;
   }
 
