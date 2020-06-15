@@ -199,7 +199,7 @@ export default class FilterBoxComponent extends Component {
         container: `.js-yext-filterbox-filter${i}`,
         showReset: this.config.resetFilter,
         resetLabel: this.config.resetFilterLabel,
-        showExpand: config.expand === undefined ? this.config.expand : config.expand,
+        showExpand: config.showExpand === undefined ? this.config.expand : config.showExpand,
         isDynamic: this.config.isDynamic,
         ...config,
         onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
