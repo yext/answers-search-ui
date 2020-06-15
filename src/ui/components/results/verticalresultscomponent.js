@@ -227,7 +227,7 @@ export default class VerticalResultsComponent extends Component {
 
   getVerticalURL (data = {}) {
     if ('verticalURL' in this._config) {
-      return this._config.verticalURL;
+      return addParamsToUrl(this._config.verticalURL, { query: this.query });
     }
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
