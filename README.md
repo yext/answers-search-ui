@@ -998,7 +998,7 @@ ANSWERS.addComponent('Facets', {
   resetFacet: false,
   // Optional, the label to use for the reset button above
   resetFacetLabel: 'reset',
-  // Optional, show a reset-all button for the facets control
+  // Optional, show a reset-all button for the facets control. Defaults to showing a reset-all button if searchOnChange is false.
   resetFacets: true,
   // Optional, the label to use for the reset-all button above
   resetFacetsLabel: 'reset-all',
