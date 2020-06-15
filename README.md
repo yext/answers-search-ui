@@ -486,7 +486,7 @@ ANSWERS.addComponent('UniversalResults', {
       viewMoreLabel: 'View More!',
       // Config for the applied filters bar in the results header.
       appliedFilters: {
-        // If true, show any applied filters that were applied to the universal search. Defaults to false
+        // If true, show any applied filters that were applied to the universal search. Defaults to true
         show: true,
         // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
         showFieldNames: false,
@@ -574,7 +574,7 @@ ANSWERS.addComponent('VerticalResults', {
   },
   // Configuration for the applied filters bar in the header.
   appliedFilters: {
-    // If true, show any applied filters that were applied to the universal search. Defaults to false
+    // If true, show any applied filters that were applied to the vertical search. Defaults to true
     show: true,
     // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
     showFieldNames: false,
