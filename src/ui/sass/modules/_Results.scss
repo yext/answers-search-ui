@@ -2,6 +2,7 @@
 
 $results-title-bar-background: var(--yxt-color-background-highlight) !default;
 $results-filters-background: white !default;
+$results-view-more-background: var(--yxt-color-background-highlight);
 
 $results-title-bar-text-color: var(--yxt-color-text-primary) !default;
 $results-title-bar-text-font-size: var(--yxt-font-size-md-lg) !default;
@@ -30,6 +31,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
 :root {
   --yxt-results-title-bar-background: #{$results-title-bar-background};
   --yxt-results-filters-background: #{$results-filters-background};
+  --yxt-results-view-more-background: #{$results-view-more-background};
   --yxt-results-title-bar-text-color: #{$results-title-bar-text-color};
   --yxt-results-title-bar-text-font-size: #{$results-title-bar-text-font-size};
   --yxt-results-title-bar-text-line-height: #{$results-title-bar-text-line-height};
@@ -148,7 +150,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     margin-top: 0;
     margin-bottom: 0;
     padding: calc(var(--yxt-base-spacing) / 2) var(--yxt-base-spacing);
-    background-color: var(--yxt-results-filters-background);
+    background-color: var(--yxt-results-view-more-background);
     border-right: var(--yxt-results-border);
     border-left: var(--yxt-results-border);
     border-bottom: var(--yxt-results-border);

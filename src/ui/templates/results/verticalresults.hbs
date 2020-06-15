@@ -71,11 +71,9 @@
 
 {{#*inline "viewAll"}}
   {{#if (and _config.isUniversal _config.viewMore _config.viewMoreLabel)}}
-    <div class="yxt-Results-viewAll">
-      <a class="yxt-Results-viewAllLink" href="{{ verticalURL }}">
-        <div class="yxt-Results-viewAllLabel">{{_config.viewMoreLabel}}</div>
-        <div data-component="IconComponent" data-opts='{ "iconName": "chevron" }'></div>
-      </a>
-    </div>
+    <a class="yxt-Results-viewAll yxt-Results-viewAllLink" href="{{ verticalURL }}">
+      <div class="yxt-Results-viewAllLabel">{{_config.viewMoreLabel}}</div>
+      <div data-component="IconComponent" data-opts='{ "iconName": "chevron" }'></div>
+    </a>
   {{/if}}
 {{/inline}}
