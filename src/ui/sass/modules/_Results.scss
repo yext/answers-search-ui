@@ -2,7 +2,7 @@
 
 $results-title-bar-background: var(--yxt-color-background-highlight) !default;
 $results-filters-background: white !default;
-$results-view-more-background: var(--yxt-color-background-highlight);
+$results-view-more-background: var(--yxt-color-background-highlight) !default;
 
 $results-title-bar-text-color: var(--yxt-color-text-primary) !default;
 $results-title-bar-text-font-size: var(--yxt-font-size-md-lg) !default;
