@@ -1022,7 +1022,7 @@ ANSWERS.addComponent('Facets', {
   searchLabelText: 'Search for a filter option',
   // Optional, field-specific overrides for a filter
   fields: {
-    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, buildin.location
+    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
       // Optional, the placeholder text used for the filter option search input
       placeholderText: 'Search here...',
       // Optional, if true, display the filter option search input
@@ -1083,7 +1083,7 @@ ANSWERS.addComponent('FilterSearch', {
   searchParameters: {
     // List of fields to query for
     fields: [{
-      // Field id to query for e.g. c_customFieldName, buildin.location
+      // Field id to query for e.g. c_customFieldName, builtin.location
       fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
       entityTypeId: 'ce_person',
@@ -1118,9 +1118,6 @@ ANSWERS.addComponent('FilterOptions', {
   // The type of options to filter by, either 'STATIC_FILTER' or 'RADIUS_FILTER'.
   // Defaults to 'STATIC_FILTER'.
   optionType: 'STATIC_FILTER',
-  // If true, the filter value is saved on change and sent with the next search.
-  // Defaults to false.
-  storeOnChange: true,
   // Required, list of options
   options: [
     /** Depends on the above optionType, either 'STATIC_FILTER' or 'RADIUS_FILTER', see below. **/
@@ -1334,7 +1331,7 @@ ANSWERS.addComponent('GeoLocationFilter', {
   searchParameters: {
     // List of fields to query for
     fields: [{
-      // Field id to query for e.g. c_customFieldName, buildin.location
+      // Field id to query for e.g. c_customFieldName, builtin.location
       fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
       entityTypeId: 'ce_person',
