@@ -225,7 +225,7 @@ export default class FacetsComponent extends Component {
         searchable: this.config.searchable,
         searchLabelText: this.config.searchLabelText,
         placeholderText: this.config.placeholderText,
-        showExpand: fieldOverrides.expand || this.config.expand,
+        showExpand: fieldOverrides.expand === undefined ? this.config.expand : fieldOverrides.expand,
         ...fieldOverrides
       });
     });
