@@ -22,10 +22,10 @@ const NAMESPACE = 'ANSWERS';
 
 function getLibVersion () {
   try {
-    let insideWorkTree = require('child_process')
+    const insideWorkTree = require('child_process')
       .execSync('git rev-parse --is-inside-work-tree 2>/dev/null')
       .toString().trim();
-    if (insideWorkTree) {
+    if (insideWorkTree === 'true') {
       return require('child_process')
         .execSync('git describe --tags')
         .toString().trim();
