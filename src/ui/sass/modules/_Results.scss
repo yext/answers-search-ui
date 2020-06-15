@@ -12,8 +12,6 @@ $results-title-bar-link-font-size: var(--yxt-font-size-md) !default;
 $results-title-bar-link-line-height: var(--yxt-line-height-xxlg) !default;
 $results-title-bar-link-font-weight: var(--yxt-font-weight-semibold) !default;
 
-$results-title-bar-icon-size: 18px !default;
-
 $results-filters-text-color: var(--yxt-color-text-primary) !default;
 $results-filters-text-font-size: var(--yxt-font-size-md) !default;
 $results-filters-text-line-height: var(--yxt-line-height-md) !default;
@@ -37,7 +35,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   --yxt-results-title-bar-link-font-size: #{$results-title-bar-link-font-size};
   --yxt-results-title-bar-link-line-height: #{$results-title-bar-link-line-height};
   --yxt-results-title-bar-link-font-weight: #{$results-title-bar-link-font-weight};
-  --yxt-results-title-bar-icon-size: #{$results-title-bar-icon-size};
   --yxt-results-filters-text-color: #{$results-filters-text-color};
   --yxt-results-filters-text-font-size: #{$results-filters-text-font-size};
   --yxt-results-filters-text-line-height: #{$results-filters-text-line-height};
@@ -69,7 +66,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   {
     display: flex;
     margin-right: calc(var(--yxt-base-spacing) / 2);
-    font-size: var(--yxt-results-title-bar-icon-size);
     color: var(--yxt-color-brand-primary);
   }
 
