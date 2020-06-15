@@ -154,6 +154,15 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     border-right: var(--yxt-results-border);
     border-left: var(--yxt-results-border);
     border-bottom: var(--yxt-results-border);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+
+    &:hover .yxt-Results-viewAllLabel,
+    &:focus .yxt-Results-viewAllLabel
+    {
+      text-decoration: underline;
+    }
   }
 
   &-viewAll svg
@@ -165,14 +174,15 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
 
   &-viewAllLink
   {
-    text-decoration: none;
     display: flex;
     align-items: center;
-    &:hover .yxt-Results-viewAllLabel,
-    &:focus .yxt-Results-viewAllLabel
-    {
-      text-decoration: underline;
-    }
+
+    @include Text(
+      var(--yxt-results-title-bar-link-font-size),
+      var(--yxt-results-title-bar-link-line-height),
+      var(--yxt-results-title-bar-link-font-weight),
+    );
+    @include Link-1;
   }
 
   &-viewAllLabel
@@ -264,19 +274,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     );
 
     text-transform: uppercase;
-  }
-
-  &-viewAllLink
-  {
-    display: flex;
-    align-items: center;
-
-    @include Text(
-      var(--yxt-results-title-bar-link-font-size),
-      var(--yxt-results-title-bar-link-line-height),
-      var(--yxt-results-title-bar-link-font-weight),
-    );
-    @include Link-1;
   }
 
   &-titleIconWrapper
