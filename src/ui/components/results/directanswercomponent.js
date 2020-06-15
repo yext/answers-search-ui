@@ -137,11 +137,9 @@ export default class DirectAnswerComponent extends Component {
       directAnswer: true,
       fieldName: this.getState('answer').fieldApiName,
       searcher: 'UNIVERSAL',
-      entityId: relatedItem.data.id
+      entityId: relatedItem.data.id,
+      url: event.target.href
     };
-    if (ctaType !== 'TAP_TO_CALL') {
-      analyticsOptions.url = event.target.href;
-    }
 
     const analyticsEvent = new AnalyticsEvent(ctaType);
     analyticsEvent.addOptions(analyticsOptions);

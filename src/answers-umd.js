@@ -81,8 +81,8 @@ class Answers {
      * A reference to the formatRichText function.
      * @type {Function}
      */
-    this.formatRichText = (markdown, targetConfig, eventOptionsFieldName) =>
-      RichTextFormatter.format(markdown, targetConfig, eventOptionsFieldName);
+    this.formatRichText = (markdown, eventOptionsFieldName, targetConfig) =>
+      RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig);
 
     /**
      * A local reference to the component manager

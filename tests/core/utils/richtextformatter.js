@@ -24,7 +24,7 @@ describe('adds cta-type data attribute to links', () => {
         '<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL">phone link</a></u></p>\n' +
         '<p><u><a href="mailto:oshi@yext.com" data-cta-type="EMAIL">email link</a></u></p>\n' +
         '</div>';
-    expect(RichTextFormatter.format(richText, null, 'someField')).toEqual(expectedHTML);
+    expect(RichTextFormatter.format(richText, 'someField')).toEqual(expectedHTML);
   });
 });
 
@@ -40,7 +40,7 @@ describe('adds target attribute to links', () => {
       '<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL" target="_blank">phone link</a></u></p>\n' +
       '<p><u><a href="mailto:oshi@yext.com" data-cta-type="EMAIL" target="_blank">email link</a></u></p>\n' +
       '</div>';
-    expect(RichTextFormatter.format(richText, '_blank', 'someField')).toEqual(expectedHTML);
+    expect(RichTextFormatter.format(richText, 'someField', '_blank')).toEqual(expectedHTML);
   });
 
   it('adds attributes correctly when targetConfig is an object', () => {
@@ -54,7 +54,7 @@ describe('adds target attribute to links', () => {
       '<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL" target="_blank">phone link</a></u></p>\n' +
       '<p><u><a href="mailto:oshi@yext.com" data-cta-type="EMAIL">email link</a></u></p>\n' +
       '</div>';
-    const targetConfig = { phone: '_blank', link: '_self' };
-    expect(RichTextFormatter.format(richText, targetConfig, 'someField')).toEqual(expectedHTML);
+    const targetConfig = { phone: '_blank', url: '_self' };
+    expect(RichTextFormatter.format(richText, 'someField', targetConfig)).toEqual(expectedHTML);
   });
 });
