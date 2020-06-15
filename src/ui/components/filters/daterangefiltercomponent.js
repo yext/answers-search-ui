@@ -196,9 +196,7 @@ export default class DateRangeFilterComponent extends Component {
     } else if (min === max) {
       displayValue = this._isExclusive ? '' : min;
     } else {
-      displayValue = this._isExclusive
-        ? `${min} - ${max}`
-        : `Between ${min} and ${max}`;
+      displayValue = `${min} - ${max}`;
     }
     return new FilterMetadata({
       fieldName: this._title,
