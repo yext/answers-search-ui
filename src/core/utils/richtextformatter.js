@@ -13,14 +13,14 @@ class RichTextFormatterImpl {
    * links.
    *
    * @param {string} fieldValue A Rich Text field value.
-   * @param {Object|string} targetConfig Configuration object specifying the 'target' behavior for
-   *                        the various types of links. If a string is provided, it is assumed that
-   *                        is the 'target' behavior across all types of links. This parameter is optional.
    * @param {string} fieldName The name of the field, to be included in the payload of a click
    *                           analytics event. This parameter is optional.
+   * @param {Object|string} targetConfig Configuration object specifying the 'target' behavior for
+   *                          the various types of links. If a string is provided, it is assumed that
+   *                          is the 'target' behavior across all types of links. This parameter is optional.
    * @returns {string} The HTML representation of the field value, serialized as a string.
    */
-  format (fieldValue, targetConfig, fieldName) {
+  format (fieldValue, fieldName, targetConfig) {
     if (typeof fieldValue !== 'string') {
       throw new AnswersCoreError(
         `Rich text "${fieldValue}" needs to be a string. Currently is a ${typeof fieldValue}`
@@ -68,7 +68,7 @@ class RichTextFormatterImpl {
       target = target || targetConfig.phone;
     } else {
       ctaType = 'VIEW_WEBSITE';
-      target = target || targetConfig.link;
+      target = target || targetConfig.url;
     }
 
     tokens[idx].attrSet('data-cta-type', ctaType);

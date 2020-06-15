@@ -1880,7 +1880,7 @@ The Answers SDK exposes a `formatRichText` function which translates CommonMark 
 ensure that a Rich Text Formatted value is shown properly on the page. To use this function, call it like so:
 
 ```js
-ANSWERS.formatRichText(rtfFieldValue, targetConfig, eventOptionsFieldName)
+ANSWERS.formatRichText(rtfFieldValue, eventOptionsFieldName, targetConfig)
 ```
 
 For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute. 
@@ -1891,7 +1891,7 @@ specified, the `eventOptions` will include a `fieldName` attribute with the give
 The `targetConfig` parameter dictates where the link is opened: the current window, a new tab, etc. It can have the following forms:
 
 ```js
-targetConfig = { link: '_blank', phone: '_self', email: '_parent' }
+targetConfig = { url: '_blank', phone: '_self', email: '_parent' }
 targetConfig = '_blank'
 ```
 

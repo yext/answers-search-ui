@@ -92,11 +92,9 @@ export default class CardComponent extends Component {
       directAnswer: false,
       verticalKey: this._config.data.verticalKey,
       searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
-      entityId: this._config.data.result.id
+      entityId: this._config.data.result.id,
+      url: event.target.href
     };
-    if (ctaType !== 'TAP_TO_CALL') {
-      analyticsOptions.url = event.target.href;
-    }
     if (!fieldName) {
       console.warn('Field name not provided for RTF click analytics');
     } else {
