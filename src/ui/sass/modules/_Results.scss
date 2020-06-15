@@ -168,7 +168,8 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     text-decoration: none;
     display: flex;
     align-items: center;
-    &:hover, &:focus 
+    &:hover .yxt-Results-viewAllLabel,
+    &:focus .yxt-Results-viewAllLabel
     {
       color: $color-brand-hover;
       text-decoration: underline;
