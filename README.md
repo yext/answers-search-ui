@@ -483,7 +483,7 @@ ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   // Optional, configuration for each vertical's results
   config: {
-    'locations': { // The verticalKey
+    'people': { // The verticalKey
       card: {
         // Configuration for the cards in this vertical, see Cards
       },
@@ -494,9 +494,9 @@ ANSWERS.addComponent('UniversalResults', {
       title: 'People',
       // Icon to display to the left of the title. Must be one of our built-in icons, defaults to 'star'
       icon: 'star',
-      // The url for both the viewMore link and the change-filters link. Defaults to '/{{VERTICAL_KEY}}.html',
-      // in this case that is '/people.html'
-      url: '/people/about.html',
+      // The url for both the viewMore link and the change-filters link. Defaults to '{{VERTICAL_KEY}}.html',
+      // in this case that is 'people.html'
+      url: 'people.html',
       // Whether to display a view more link. Defaults to true
       viewMore: true,
       // The text for the view more link, if viewMore is true. Defaults to 'View More'
