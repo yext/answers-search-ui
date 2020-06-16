@@ -34,11 +34,6 @@ $results-header-universal-background: var(--yxt-color-brand-white) !default;
 
 .yxt-ResultsHeader
 {
-  // reset styling from yxt-Results-filters, a css class added for backwards compatibility
-  margin: inherit;
-  background-color: inherit;
-  border: inherit;
-
   padding: calc(var(--yxt-results-header-spacing) / 4) var(--yxt-results-header-spacing);
   padding-bottom: 0;
   display: flex;
