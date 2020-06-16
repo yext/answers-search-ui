@@ -300,8 +300,10 @@ Every component has the same base configuration options.
     render: function(data) {},
     // Optional, a hook for transforming data before it gets sent to render
     transformData: function(data) {},
-    // Optional, invoked when the HTML is mounted to the DOM, note, this overrides any built-in onMount function for a component
+    // Optional, invoked when the HTML is mounted to the DOM, this will not override any built-in onMount function for a component
     onMount: function(data) {},
+    // Optional, invoked when the HTML is mounted to the DOM, this will override any built-in onMount function for a component
+    onMountOverride: function(data) {},
     // Optional, additional properties to send with every analytics event
     analyticsOptions: {},
   }
