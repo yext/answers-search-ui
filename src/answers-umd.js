@@ -3,12 +3,12 @@
 import Core from './core/core';
 import RtfConverter from '@yext/rtf-converter';
 import cssVars from 'css-vars-ponyfill';
-import URI from 'urijs';
 
 import {
   DefaultTemplatesLoader,
   Renderers,
-  DOM
+  DOM,
+  SearchParams
 } from './ui/index';
 import Component from './ui/components/component';
 
@@ -422,7 +422,10 @@ class Answers {
       onSuccess: config.onSuccess || function () {},
       onFinally: config.onFinally || function () {},
       onBeforeSend: (xhr, node, url) => {
-        const uri = new URI(url).addQuery('_', new Date().getTime());
+        const uri = new URL(url);
+        const params = new SearchParams(uri.search);
+        params.set('_', new Date().getTime());
+        uri.search = params.toString();
         xhr.open('GET', uri.toString());
       }
     });
