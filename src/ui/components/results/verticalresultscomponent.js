@@ -249,7 +249,7 @@ export default class VerticalResultsComponent extends Component {
     const hasAppliedFilters = this.appliedFilterNodes.length || this.nlpFilterNodes.length;
     const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
       (this.resultsHeaderOpts.showAppliedFilters && hasAppliedFilters);
-    this.query = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
+    this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
