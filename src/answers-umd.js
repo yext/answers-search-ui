@@ -413,6 +413,10 @@ class Answers {
    * Updates the css styles with new current variables. This is useful when the css
    * variables are updated dynamically (e.g. through js) or if the css variables are
    * added after the ANSWERS.init
+   *
+   * To solve issues with non-zero max-age cache controls for link/script assets in IE11,
+   * we add a cache busting parameter so that XMLHttpRequests succeed.
+   *
    * @param {Object} config Additional config to pass to the ponyfill
    */
   ponyfillCssVariables (config = {}) {
@@ -422,11 +426,11 @@ class Answers {
       onSuccess: config.onSuccess || function () {},
       onFinally: config.onFinally || function () {},
       onBeforeSend: (xhr, node, url) => {
-        const uri = new URL(url);
-        const params = new SearchParams(uri.search);
+        const uriWithCacheBust = new URL(url);
+        const params = new SearchParams(uriWithCacheBust.search);
         params.set('_', new Date().getTime());
-        uri.search = params.toString();
-        xhr.open('GET', uri.toString());
+        uriWithCacheBust.search = params.toString();
+        xhr.open('GET', uriWithCacheBust.toString());
       }
     });
   }
