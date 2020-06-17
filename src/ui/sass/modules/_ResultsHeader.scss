@@ -15,6 +15,8 @@ $results-header-filters-font-size: var(--yxt-font-size-md) !default;
 $results-header-filters-color: var(--yxt-color-text-secondary) !default;
 $results-header-filters-line-height: var(--yxt-line-height-md) !default;
 
+$results-header-universal-background: var(--yxt-color-brand-white) !default;
+
 :root {
   --yxt-results-header-font-size: #{$results-header-font-size};
   --yxt-results-header-spacing: #{$results-header-spacing};
@@ -27,14 +29,18 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   --yxt-results-header-filters-font-size: #{$results-header-filters-font-size};
   --yxt-results-header-filters-color: #{$results-header-filters-color};
   --yxt-results-header-filters-line-height: #{$results-header-filters-line-height};
+  --yxt-results-header-universal-background: #{$results-header-universal-background};
 }
 
-.yxt-ResultsHeader {
-  padding: calc(var(--yxt-results-header-spacing) / 2) var(--yxt-results-header-spacing);
+.yxt-ResultsHeader
+{
+  padding: calc(var(--yxt-results-header-spacing) / 4) var(--yxt-results-header-spacing);
+  padding-bottom: 0;
   display: flex;
   align-items: baseline;
 
-  &-wrapper {
+  &-wrapper
+  {
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
@@ -43,6 +49,7 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
   &-resultsCount
   {
     margin-right: calc(var(--yxt-results-header-spacing) / 4);
+    margin-bottom: 4px;
     white-space: nowrap;
     @include Text(
       $size: var(--yxt-results-header-font-size),
@@ -54,19 +61,18 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
 
   &-appliedFilters
   {
-    padding-top: calc(var(--yxt-results-header-spacing) / 2);
-    padding-bottom: calc(var(--yxt-results-header-spacing) / 2);
-    padding-right: var(--yxt-results-header-spacing);
+    margin-right: var(--yxt-results-header-spacing);
     border-top: 0;
     display: flex;
-    align-items: center;
     flex-wrap: wrap;
+    align-items: center;
   }
 
   &-filterLabel
   {
     display: flex;
-    margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
+    margin-bottom: 4px;
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
@@ -76,22 +82,113 @@ $results-header-filters-line-height: var(--yxt-line-height-md) !default;
 
   &-filterValue
   {
-    margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
+    margin-bottom: 4px;
+    display: flex;
+  }
+
+  &-filterValueText,
+  &-filterValueComma
+  {
+    @include Text(
+      $size: var(--yxt-results-header-filters-font-size),
+      $line-height: var(--yxt-results-header-filters-line-height),
+      $color: var(--yxt-results-header-filters-color),
+      $style: italic
+    );
+  }
+
+  &-resultsCountSeparator
+  {
+    color: var(--yxt-results-header-filters-color);
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
+    margin-bottom: calc(var(--yxt-results-header-spacing) / 4);
     @include Text(
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
       $color: var(--yxt-results-header-filters-color),
     );
   }
-  &-resultsCountSeparator
-  {
-    color: var(--yxt-results-header-filters-color);
-    margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
-  }
 
   &-filterSeparator
   {
     color: var(--yxt-results-header-filters-color);
-    margin-right: calc(var(--yxt-results-header-spacing) * 3 / 8);
+    margin-right: calc(var(--yxt-results-header-spacing) / 4);
+    margin-bottom: calc(var(--yxt-results-header-spacing) / 4);
+    @include Text(
+      $size: var(--yxt-results-header-filters-font-size),
+      $line-height: var(--yxt-results-header-filters-line-height),
+      $color: var(--yxt-results-header-filters-color),
+    );
+  }
+
+  &-changeFilters
+  {
+    margin-left: calc(var(--yxt-results-header-spacing) / 2);
+    margin-bottom: calc(var(--yxt-results-header-spacing) / 4);
+    padding-right: var(--yxt-results-header-spacing);
+    @include Text(
+      var(--yxt-results-filters-link-font-size),
+      var(--yxt-results-filters-link-line-height),
+      var(--yxt-results-filters-link-font-weight),
+      $color: var(--yxt-color-brand-primary)
+    );
+    @include Link(
+      $base-color: var(--yxt-color-brand-primary)
+    );
+  }
+
+  &-removableFilterTag
+  {
+    background-color: var(--yxt-color-borders);
+    border-radius: 2px;
+    border-width: 0;
+    margin-bottom: 4px;
+    padding-left: 5px;
+    padding-right: 4px;
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
+    white-space: nowrap;
+    @include Text(
+      $size: var(--yxt-font-size-sm),
+      $color: var(--yxt-color-text-neutral),
+      $line-height: 20px,
+      $style: italic,
+    );
+
+    &:hover,
+    &:focus
+    {
+      color: var(--yxt-color-brand-white);
+      background-color: var(--yxt-color-text-secondary);
+      cursor: pointer;
+    }
+  }
+
+  &-removableFilterX
+  {
+    font-style: normal;
+  }
+}
+
+.yxt-ResultsHeader--universal
+{
+  margin-bottom: 0;
+  border: var(--yxt-border-default);
+  border-top: 0;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  background-color: var(--yxt-results-header-universal-background);
+}
+
+.yxt-ResultsHeader--removable .yxt-ResultsHeader
+{
+  &-resultsCount,
+  &-filterLabel,
+  &-filterValue,
+  &-resultsCountSeparator,
+  &-filterSeparator
+  {
+    margin-right: calc(var(--yxt-results-header-spacing) / 2);
   }
 }

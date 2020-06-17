@@ -3,6 +3,8 @@
 import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
 
 /**
  * A filter for a range of dates
@@ -60,12 +62,6 @@ export default class DateRangeFilterComponent extends Component {
      */
     this._isExclusive = config.isExclusive;
 
-    /**
-     * The template for this component
-     * @private
-     */
-    this._templateName = `controls/date`;
-
     const today = new Date();
     const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
     const minDate = this.core.globalStorage.getState(`${this.name}.min`);
@@ -79,6 +75,10 @@ export default class DateRangeFilterComponent extends Component {
       min: minDate || config.initialMin || todayString,
       max: maxDate || config.initialMax || todayString
     };
+  }
+
+  static defaultTemplateName () {
+    return 'controls/date';
   }
 
   static get type () {
@@ -118,8 +118,30 @@ export default class DateRangeFilterComponent extends Component {
     this._updateRange('max', date);
   }
 
-  getFilter () {
-    return this._buildFilter();
+  _removeFilterNode () {
+    this._date = {
+      min: null,
+      max: null
+    };
+    this.setState();
+    this._onChange(FilterNodeFactory.from());
+    this.core.clearStaticFilterNode(this.name);
+    this.core.persistentStorage.delete(`${this.name}.min`);
+    this.core.persistentStorage.delete(`${this.name}.max`);
+  }
+
+  /**
+   * Returns this component's filter node.
+   * This method is exposed so that components like {@link FilterBoxComponent}
+   * can access them.
+   * @returns {FilterNode}
+   */
+  getFilterNode () {
+    return FilterNodeFactory.from({
+      filter: this._buildFilter(),
+      metadata: this._buildFilterMetadata(),
+      remove: () => this._removeFilterNode()
+    });
   }
 
   /**
@@ -132,14 +154,14 @@ export default class DateRangeFilterComponent extends Component {
     this._date = Object.assign({}, this._date, { [key]: value });
     this.setState();
 
-    const filter = this._buildFilter();
+    const filterNode = this.getFilterNode();
     if (this._storeOnChange) {
-      this.core.setFilter(this.name, filter);
+      this.core.setStaticFilterNodes(this.name, filterNode);
     }
     this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
     this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
 
-    this._onChange(filter);
+    this._onChange(filterNode);
   }
 
   /**
@@ -147,11 +169,38 @@ export default class DateRangeFilterComponent extends Component {
    * @private
    */
   _buildFilter () {
-    if (this._date.min === '' || this._date.max === '') {
-      return {};
+    return Filter.range(this._field, this._date.min, this._date.max, this._isExclusive);
+  }
+
+  /**
+   * Helper method for creating a date range filter metadata
+   * @returns {FilterMetadata}
+   */
+  _buildFilterMetadata () {
+    const { min, max } = this._date;
+
+    if (!min && !max) {
+      return new FilterMetadata({
+        fieldName: this._title
+      });
     }
-    return this._isExclusive
-      ? Filter.exclusiveRange(this._field, this._date.min, this._date.max)
-      : Filter.inclusiveRange(this._field, this._date.min, this._date.max);
+    let displayValue;
+    if (!max) {
+      displayValue = this._isExclusive
+        ? `After ${min}`
+        : `${min} or later`;
+    } else if (!min) {
+      displayValue = this._isExclusive
+        ? `Before ${max}`
+        : `${max} and earlier`;
+    } else if (min === max) {
+      displayValue = this._isExclusive ? '' : min;
+    } else {
+      displayValue = `${min} - ${max}`;
+    }
+    return new FilterMetadata({
+      fieldName: this._title,
+      displayValue: displayValue
+    });
   }
 }

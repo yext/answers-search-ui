@@ -1,10 +1,12 @@
 /** @define Pagination */
 
-$pagination-text-color: var(--yxt-color-text-primary) !default;
-$pagination-text-color-hover: var(--yxt-color-text-secondary) !default;
+$pagination-text-color: var(--yxt-color-text-neutral) !default;
+$pagination-text-color-hover: var(--yxt-color-brand-white) !default;
 $pagination-text-font-size: var(--yxt-font-size-md-lg) !default;
-$pagination-text-line-height: var(--yxt-line-height-lg) !default;
+$pagination-text-line-height: var(--yxt-line-height-md) !default;
 $pagination-text-font-weight: var(--yxt-font-weight-normal) !default;
+$pagination-color-active-page: var(--yxt-color-borders) !default;
+$pagination-color-hover: var(--yxt-color-text-secondary) !default;
 
 :root {
   --yxt-pagination-text-color: #{$pagination-text-color};
@@ -12,6 +14,8 @@ $pagination-text-font-weight: var(--yxt-font-weight-normal) !default;
   --yxt-pagination-text-font-size: #{$pagination-text-font-size};
   --yxt-pagination-text-line-height: #{$pagination-text-line-height};
   --yxt-pagination-text-font-weight: #{$pagination-text-font-weight};
+  --yxt-pagination-color-active-page: #{$pagination-color-active-page};
+  --yxt-pagination-color-hover: #{$pagination-color-hover};
 }
 
 .yxt-Pagination
@@ -27,32 +31,38 @@ $pagination-text-font-weight: var(--yxt-font-weight-normal) !default;
     $color: var(--yxt-pagination-text-color)
   );
 
-  &-button
-  {
-    display: flex;
-    background: none;
-    border: none;
-    padding: 0 4px;
-
-    &:not(:disabled)
-    {
-      cursor: pointer;
-
-      &:hover
-      {
-        color: var(--yxt-pagination-text-color-hover);
-      }
-    }
-  }
-
-  &-button:disabled {
+  &--hidden {
     visibility: hidden;
   }
 
-  &-page
-  {
-    padding: 0;
-    margin: 0 20px;
+  &-page, &-link {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 1.5rem;
+    min-width: 1.5rem;
+    margin-right: .125rem;
+    margin-left: .125rem;
+    border-radius: .125rem;
+    padding: 0 .25rem;
+    box-sizing: border-box;
+  }
+
+  &-icon {
+    font-size: var(--yxt-font-size-sm);
+    span {
+      display: flex;
+    }
+  }
+
+  #active-page {
+    background-color: var(--yxt-pagination-color-active-page);
+  }
+
+  &-link:hover, &-link:focus {
+    cursor: pointer;
+    color: var(--yxt-pagination-text-color-hover);
+    background-color: var(--yxt-pagination-color-hover);
   }
 
   &-chevron--left svg, &-doubleChevron--left svg
@@ -71,5 +81,17 @@ $pagination-text-font-weight: var(--yxt-font-weight-normal) !default;
   &-doubleChevron--left
   {
     display: flex;
+  }
+}
+
+@media (max-width: $breakpoint-mobile-max) {
+  .mobile-hidden {
+    display: none;
+  }
+}
+
+@media (min-width: $breakpoint-mobile-max) {
+  .desktop-hidden {
+    display: none;
   }
 }

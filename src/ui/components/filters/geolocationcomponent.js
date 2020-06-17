@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import buildSearchParameters from '../../tools/searchparamsparser';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -107,19 +108,6 @@ export default class GeoLocationComponent extends Component {
       this.setState();
     });
 
-    /**
-     * The filter to use for the current query
-     * @type {Filter}
-     */
-    this.filter = this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`) || {};
-    if (typeof this.filter === 'string') {
-      try {
-        this.filter = JSON.parse(this.filter);
-      } catch (e) {}
-    }
-
-    this.core.globalStorage.on('update', `${StorageKeys.FILTER}.${this.name}`, f => { this.filter = f; });
-
     this.searchParameters = buildSearchParameters(config.searchParameters);
 
     /**
@@ -152,7 +140,7 @@ export default class GeoLocationComponent extends Component {
     return 'controls/geolocation';
   }
 
-  setState (data) {
+  setState (data = {}) {
     let placeholder = '';
     if (this._enabled) {
       placeholder = this._config.enabledText;
@@ -185,7 +173,11 @@ export default class GeoLocationComponent extends Component {
     }
 
     this._initAutoComplete(this._config.inputSelector);
-    DOM.on(this._config.buttonSelector, 'click', () => this._toggleGeoFilter());
+    DOM.on(
+      DOM.query(this._container, this._config.buttonSelector),
+      'click',
+      () => this._toggleGeoFilter()
+    );
   }
 
   /**
@@ -204,17 +196,17 @@ export default class GeoLocationComponent extends Component {
       isFilterSearch: true,
       container: '.js-yxt-GeoLocationFilter-autocomplete',
       originalQuery: this.query,
-      originalFilter: this.filter,
       inputEl: inputSelector,
       verticalKey: this._config.verticalKey,
       searchParameters: this.searchParameters,
-      onSubmit: (query, filter) => {
-        this.query = query;
-        this.filter = Filter.fromResponse(filter);
-        this._saveDataToStorage(query, this.filter);
-        this._enabled = false;
-      }
+      onSubmit: (query, filter) => this._handleSubmit(query, filter)
     });
+  }
+
+  _handleSubmit (query, filter) {
+    this.query = query;
+    this._saveDataToStorage(query, Filter.fromResponse(filter), `${query}`);
+    this._enabled = false;
   }
 
   /**
@@ -232,7 +224,7 @@ export default class GeoLocationComponent extends Component {
       navigator.geolocation.getCurrentPosition(
         position => {
           const filter = this._buildFilter(position);
-          this._saveDataToStorage('', filter, position);
+          this._saveDataToStorage('', filter, 'Current Location', position);
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
@@ -252,17 +244,39 @@ export default class GeoLocationComponent extends Component {
     }
   }
 
+  _removeFilterNode () {
+    this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
+    this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+    this._enabled = false;
+    this.query = '';
+    this.core.clearStaticFilterNode(this.name);
+    this.setState();
+  }
+
+  _buildFilterNode (filter, displayValue) {
+    return FilterNodeFactory.from({
+      filter: filter,
+      metadata: {
+        displayValue: displayValue,
+        fieldName: this._config.title || this._config.label || 'Location'
+      },
+      remove: () => this._removeFilterNode()
+    });
+  }
+
   /**
    * Saves the provided filter under this component's name
    * @param {string} query The query to save
    * @param {Filter} filter The filter to save
+   * @param {string} displayValue The display value for the filter
    * @param {Object} position The position to save
    * @private
    */
-  _saveDataToStorage (query, filter, position) {
+  _saveDataToStorage (query, filter, displayValue, position) {
     this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
     this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
-    this.core.setFilter(this.name, filter);
+    const filterNode = this._buildFilterNode(filter, displayValue);
+    this.core.setStaticFilterNodes(this.name, filterNode);
 
     if (position) {
       this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
@@ -273,20 +287,9 @@ export default class GeoLocationComponent extends Component {
     }
 
     if (this._config.searchOnChange) {
-      const filters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-      let totalFilter = filters[0];
-      if (filters.length > 1) {
-        totalFilter = Filter.and(...filters);
-      }
-      const searchQuery = this.core.globalStorage.getState(StorageKeys.QUERY) || '';
-      const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-
-      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.verticalSearch(this._config.verticalKey, {
-        input: searchQuery,
-        filter: JSON.stringify(totalFilter),
-        facetFilter: JSON.stringify(facetFilter)
+        resetPagination: true,
+        useFacets: true
       });
     }
   }

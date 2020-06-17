@@ -1,7 +1,9 @@
 /** @module CardComponent */
 
 import Component from '../component';
+import DOM from '../../dom/dom';
 import { cardTypes } from './consts';
+import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 
 class CardConfig {
   constructor (config = {}) {
@@ -64,11 +66,51 @@ export default class CardComponent extends Component {
     this.verticalKey = data.verticalKey;
   }
 
+  onMount () {
+    const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
+    if (rtfElement) {
+      const fieldName = rtfElement.dataset.fieldName;
+      DOM.on(rtfElement, 'click', e => this._handleRtfClickAnalytics(e, fieldName));
+    }
+  }
+
+  /**
+   * A click handler for links in a Rich Text attriubte. When such a link is
+   * clicked, an {@link AnalyticsEvent} needs to be fired.
+   *
+   * @param {MouseEvent} event The click event.
+   * @param {string} fieldName The name of the Rich Text field used in the
+   *                           attriubte.
+   */
+  _handleRtfClickAnalytics (event, fieldName) {
+    const ctaType = event.target.dataset.ctaType;
+    if (!ctaType) {
+      return;
+    }
+
+    const analyticsOptions = {
+      directAnswer: false,
+      verticalKey: this._config.data.verticalKey,
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
+      entityId: this._config.data.result.id,
+      url: event.target.href
+    };
+    if (!fieldName) {
+      console.warn('Field name not provided for RTF click analytics');
+    } else {
+      analyticsOptions.fieldName = fieldName;
+    }
+
+    const analyticsEvent = new AnalyticsEvent(ctaType);
+    analyticsEvent.addOptions(analyticsOptions);
+    this.analyticsReporter.report(analyticsEvent);
+  }
+
   setState (data) {
     const cardType = this._config.cardType;
 
     // Use the cardType as component name if it is not a built-in type
-    let cardComponentName = cardTypes[cardType] || cardType;
+    const cardComponentName = cardTypes[cardType] || cardType;
     return super.setState({
       ...data,
       result: this.result,

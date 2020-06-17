@@ -2,6 +2,7 @@
 
 $results-title-bar-background: var(--yxt-color-background-highlight) !default;
 $results-filters-background: white !default;
+$results-view-more-background: var(--yxt-color-background-highlight) !default;
 
 $results-title-bar-text-color: var(--yxt-color-text-primary) !default;
 $results-title-bar-text-font-size: var(--yxt-font-size-md-lg) !default;
@@ -28,6 +29,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
 :root {
   --yxt-results-title-bar-background: #{$results-title-bar-background};
   --yxt-results-filters-background: #{$results-filters-background};
+  --yxt-results-view-more-background: #{$results-view-more-background};
   --yxt-results-title-bar-text-color: #{$results-title-bar-text-color};
   --yxt-results-title-bar-text-font-size: #{$results-title-bar-text-font-size};
   --yxt-results-title-bar-text-line-height: #{$results-title-bar-text-line-height};
@@ -56,19 +58,6 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     margin-top: var(--yxt-base-spacing);
   }
 
-  &-titleBar
-  {
-    display: flex;
-    justify-content: space-between;
-    padding-left: var(--yxt-base-spacing);
-    padding-right: var(--yxt-base-spacing);
-    padding-top: calc(var(--yxt-base-spacing) / 2);
-    padding-bottom: calc(var(--yxt-base-spacing) / 2);
-    background-color: var(--yxt-results-title-bar-background);
-    border: var(--yxt-border-legacy);
-    border-bottom: none;
-  }
-
   &-left
   {
     display: flex;
@@ -79,31 +68,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   {
     display: flex;
     margin-right: calc(var(--yxt-base-spacing) / 2);
-  }
-
-  &-title
-  {
-    @include Text(
-      var(--yxt-results-title-bar-text-font-size),
-      var(--yxt-results-title-bar-text-line-height),
-      var(--yxt-results-title-bar-text-font-weight),
-      $color: var(--yxt-results-title-bar-text-color)
-    );
-
-    text-transform: uppercase;
-  }
-
-  &-viewAllLink
-  {
-    display: flex;
-    align-items: center;
-
-    @include Text(
-      var(--yxt-results-title-bar-link-font-size),
-      var(--yxt-results-title-bar-link-line-height),
-      var(--yxt-results-title-bar-link-font-weight),
-    );
-    @include Link-1;
+    color: var(--yxt-color-brand-primary);
   }
 
   &-filters
@@ -174,6 +139,93 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     flex-flow: row wrap;
   }
 
+  &-viewAll
+  {
+    display: flex;
+    justify-content: center;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: calc(var(--yxt-base-spacing) / 2) var(--yxt-base-spacing);
+    background-color: var(--yxt-results-view-more-background);
+    border-right: var(--yxt-results-border);
+    border-left: var(--yxt-results-border);
+    border-bottom: var(--yxt-results-border);
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+
+    &:hover .yxt-Results-viewAllLabel,
+    &:focus .yxt-Results-viewAllLabel
+    {
+      text-decoration: underline;
+    }
+  }
+
+  &-viewAll svg
+  {
+    height: calc(var(--yxt-base-spacing) / 2);
+    width: calc(var(--yxt-base-spacing) / 2);
+    color: var(--yxt-color-brand-primary);
+  }
+
+  &-viewAllLink
+  {
+    display: flex;
+    align-items: center;
+
+    @include Text(
+      var(--yxt-results-title-bar-link-font-size),
+      var(--yxt-results-title-bar-link-line-height),
+      var(--yxt-results-title-bar-link-font-weight),
+    );
+    @include Link-1;
+  }
+
+  &-viewAllLabel
+  {
+    margin-right: calc(var(--yxt-base-spacing) / 2);
+    @include Text(
+      $color: var(--yxt-color-brand-primary),
+      $weight: var(--yxt-font-weight-semibold),
+      $line-height: $line-height-lg,
+      $size: $font-size-md,
+    );
+  }
+
+  &-titleBar
+  {
+    border: var(--yxt-results-border);
+    display: flex;
+    padding: calc(var(--yxt-base-spacing) / 2) var(--yxt-base-spacing);
+    align-items: center;
+    background-color:  var(--yxt-color-background-highlight);
+  }
+
+  &-title
+  {
+    margin: 0;
+    text-transform: uppercase;
+    @include Text(
+      $color: var(--yxt-color-text-primary),
+      $weight: var(--yxt-font-weight-semibold),
+      $line-height: var(--yxt-line-height-lg),
+      $size: var(--yxt-font-size-md-lg),
+    );
+  }
+}
+
+.yxt-Results--universal
+{
+  margin-top: var(--yxt-base-spacing);
+
+  .yxt-Results 
+  {
+    &-items 
+    {
+      margin-right: 0;
+    }
+  }
+
   &.yxt-Accordion
   {
     border: var(--yxt-border-legacy);
@@ -189,5 +241,39 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     border-top: var(--yxt-border-legacy);
     border-left: var(--yxt-border-legacy);
     border-right: var(--yxt-border-legacy);
+  }
+}
+
+// Legacy AccordionResults specific styling
+.yxt-Accordion .yxt-Results
+{
+  &-titleBar
+  {
+    display: flex;
+    justify-content: space-between;
+    padding-left: var(--yxt-base-spacing);
+    padding-right: var(--yxt-base-spacing);
+    padding-top: calc(var(--yxt-base-spacing) / 2);
+    padding-bottom: calc(var(--yxt-base-spacing) / 2);
+    background-color: var(--yxt-results-title-bar-background);
+    border: var(--yxt-border-legacy);
+    border-bottom: none;
+  }
+
+  &-title
+  {
+    @include Text(
+      var(--yxt-results-title-bar-text-font-size),
+      var(--yxt-results-title-bar-text-line-height),
+      var(--yxt-results-title-bar-text-font-weight),
+      $color: var(--yxt-results-title-bar-text-color)
+    );
+
+    text-transform: uppercase;
+  }
+
+  &-titleIconWrapper
+  {
+    color: inherit;
   }
 }

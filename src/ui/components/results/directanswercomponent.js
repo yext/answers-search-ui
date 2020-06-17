@@ -27,6 +27,12 @@ export default class DirectAnswerComponent extends Component {
     super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     /**
+     * The user given config, without any defaults applied.
+     * @type {Object}
+     */
+    this._userConfig = { ...config };
+
+    /**
      * Recieve updates from storage based on this index
      * @type {StorageKey}
      */
@@ -86,15 +92,17 @@ export default class DirectAnswerComponent extends Component {
    * we want to wire up the behavior for interacting with the quality feedback reporting (thumbsup/down)
    */
   onMount () {
-    // Avoid bindings if the feedback has previously been submitted
-    if (this.getState('feedbackSubmitted') === true) {
+    const isUsingCustomCard = this._config.defaultCard;
+    const feedbackSubmitted = this.getState('feedbackSubmitted') === true;
+    // Avoid bindings if the feedback has previously been submitted or is using a custom card.
+    if (isUsingCustomCard || feedbackSubmitted) {
       return this;
     }
 
     // For WCAG compliance, the feedback should be a submittable form
     DOM.on(this._formEl, 'submit', (e) => {
-      let formEl = e.target;
-      let checkedValue = DOM.query(formEl, 'input:checked').value === 'true';
+      const formEl = e.target;
+      const checkedValue = DOM.query(formEl, 'input:checked').value === 'true';
 
       this.reportQuality(checkedValue);
       this.updateState({
@@ -106,6 +114,36 @@ export default class DirectAnswerComponent extends Component {
     // submit button is hidden.
     DOM.on(this._thumbsUpSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
     DOM.on(this._thumbsDownSelector, 'click', () => { DOM.trigger(this._formEl, 'submit'); });
+
+    const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
+    rtfElement && DOM.on(rtfElement, 'click', e => this._handleRtfClickAnalytics(e));
+  }
+
+  /**
+   * A click handler for links in a Rich Text Direct Answer. When such a link
+   * is clicked, an {@link AnalyticsEvent} needs to be fired.
+   *
+   * @param {MouseEvent} event The click event.
+   */
+  _handleRtfClickAnalytics (event) {
+    if (!event.target.dataset.ctaType) {
+      return;
+    }
+    const ctaType = event.target.dataset.ctaType;
+
+    const relatedItem = this.getState('relatedItem');
+    const analyticsOptions = {
+      verticalKey: relatedItem.verticalConfigId,
+      directAnswer: true,
+      fieldName: this.getState('answer').fieldApiName,
+      searcher: 'UNIVERSAL',
+      entityId: relatedItem.data.id,
+      url: event.target.href
+    };
+
+    const analyticsEvent = new AnalyticsEvent(ctaType);
+    analyticsEvent.addOptions(analyticsOptions);
+    this.analyticsReporter.report(analyticsEvent);
   }
 
   /**
@@ -118,6 +156,7 @@ export default class DirectAnswerComponent extends Component {
   }
 
   setState (data) {
+    this.directAnswer = data;
     return super.setState(Object.assign({}, data, {
       eventOptions: this.eventOptions(data),
       viewDetailsText: this._viewDetailsText
@@ -148,5 +187,15 @@ export default class DirectAnswerComponent extends Component {
       });
 
     this.analyticsReporter.report(event);
+  }
+
+  addChild (data, type, opts) {
+    if (type === this._config.defaultCard) {
+      return super.addChild(this.directAnswer, type, {
+        ...this._userConfig,
+        ...opts
+      });
+    }
+    return super.addChild(data, type, opts);
   }
 }

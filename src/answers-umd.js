@@ -1,7 +1,6 @@
 /** @module */
 
 import Core from './core/core';
-import RtfConverter from '@yext/rtf-converter';
 import cssVars from 'css-vars-ponyfill';
 
 import {
@@ -16,7 +15,7 @@ import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
-import { AnswersComponentError, AnswersCoreError } from './core/errors/errors';
+import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
 import SearchConfig from './core/models/searchconfig';
@@ -30,6 +29,7 @@ import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION } from './core/constants';
 import MasterSwitchApi from './core/utils/masterswitchapi';
+import RichTextFormatter from './core/utils/richtextformatter';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -81,14 +81,8 @@ class Answers {
      * A reference to the formatRichText function.
      * @type {Function}
      */
-    this.formatRichText = (markdown) => {
-      if (typeof markdown !== 'string') {
-        throw new AnswersCoreError(
-          `Rich text "${markdown}" needs to be a string. Currently is a ${typeof markdown}`
-        );
-      }
-      return RtfConverter.toHTML(markdown);
-    };
+    this.formatRichText = (markdown, eventOptionsFieldName, targetConfig) =>
+      RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig);
 
     /**
      * A local reference to the component manager
@@ -406,6 +400,18 @@ class Answers {
     }
     this.core.globalStorage.set('queryTrigger', 'initialize');
     this.core.setQuery(searchConfig.defaultInitialSearch);
+  }
+
+  /**
+   * Sets the geolocation tag in global storage, overriding other inputs. Do not use in conjunction
+   * with other components that will set the geolocation internally.
+   * @param {number} lat
+   * @param {number} long
+   */
+  setGeolocation (lat, lng) {
+    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+      lat, lng, radius: 0
+    });
   }
 
   /*

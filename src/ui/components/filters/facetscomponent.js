@@ -40,7 +40,7 @@ class FacetsConfig {
      * If true, show a "reset all" button to reset all facets
      * @type {boolean}
      */
-    this.resetFacets = config.resetFacets === undefined ? true : config.resetFacets;
+    this.resetFacets = config.resetFacets;
 
     /**
      * The label to show for the "reset all" button
@@ -93,9 +93,37 @@ class FacetsConfig {
     /**
      * The controls to use for each field. Each type of filter has a default
      * $eq : multioption (checkbox)
+     *
+     * DEPRECATED: prefer putting this in config.fields
+     *
      * @type {Object}
      */
     this.fieldControls = config.fieldControls || {};
+
+    /**
+     * The placeholder text used for the filter option search input
+     * @type {string}
+     */
+    this.placeholderText = config.placeholderText || 'Search here...';
+
+    /**
+     * If true, display the filter option search input
+     * @type {boolean}
+     */
+    this.searchable = config.searchable || false;
+
+    /**
+     * The form label text for the search input
+     * @type {boolean}
+     */
+    this.searchLabelText = config.searchLabelText || 'Search for a filter option';
+
+    /**
+     * An object that maps field API names to their filter options overrides,
+     * which have the same keys as the config options in FilterOptions component.
+     * @type {Object}
+     */
+    this.fields = config.fields || {};
 
     /**
      * The selector of the apply button
@@ -127,8 +155,6 @@ export default class FacetsComponent extends Component {
      * @private
      */
     this._verticalKey = config.verticalKey;
-
-    // config.verticalKey || null;
 
     /**
      * The selector of the apply button
@@ -192,12 +218,20 @@ export default class FacetsComponent extends Component {
     }
 
     filters = filters.map(f => {
+      const fieldOverrides = this.config.fields[f.fieldId] || {};
       return Object.assign({}, f, {
         type: 'FilterOptions',
-        control: this.config.fieldControls[f.fieldId] || 'multioption'
+        control: this.config.fieldControls[f.fieldId] || 'multioption',
+        searchable: this.config.searchable,
+        searchLabelText: this.config.searchLabelText,
+        placeholderText: this.config.placeholderText,
+        showExpand: fieldOverrides.expand === undefined ? this.config.expand : fieldOverrides.expand,
+        ...fieldOverrides
       });
     });
 
+    // TODO: pass an apply() method to FilterBox, that will override its default behavior,
+    // and remove the isDynamic config option.
     this._filterbox = this.componentManager.create(
       'FilterBox',
       Object.assign({}, this.config, {

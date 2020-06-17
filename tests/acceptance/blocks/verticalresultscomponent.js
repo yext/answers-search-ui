@@ -27,4 +27,10 @@ export default class VerticalResultsComponentBlock {
     const title = await this._selector.find('.yxt-Results-title').innerText;
     return title;
   }
+
+  async getResultsCountTotal () {
+    const resultsCountTotal = Selector('.yxt-ResultsHeader-resultsCountTotal');
+    const countText = await resultsCountTotal.innerText;
+    return Number.parseInt(countText);
+  }
 }

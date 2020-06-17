@@ -3,6 +3,45 @@
   .yxt-FilterOptions {
     &-container {
       @include Text($line-height: var(--yxt-line-height-md));
+
+      &--searching {
+        .yxt-FilterOptions-showToggle {
+          display: none;
+        }
+
+        .yxt-FilterOptions-option {
+          &.displaySearch {
+            display: flex;
+          }
+
+          &.hiddenSearch {
+            display: none;
+          }
+        }
+      }
+    }
+
+    &-controls {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &-buttonWrapper {
+      display: flex;
+    }
+
+    &-filter {
+      font-size: $font-size-md;
+      border: $border-default;
+      border-radius: 4px;
+      padding: 4px 8px;
+      width: 100%;
+
+      &:hover,
+      &:active,
+      &:focus {
+        border: var(--yxt-border-hover);
+      }
     }
 
     &-fieldSet {
@@ -34,7 +73,15 @@
     &-option {
       display: flex;
       align-items: flex-start;
-      margin: 2px 0;
+
+      &:not(:first-child) {
+        margin-top: 8px;
+      }
+
+      &.hidden {
+        display: none;
+      }
+
       @media (max-width: $breakpoint-mobile-max) {
         margin: 22px 0;
       }
@@ -42,11 +89,68 @@
 
     &-options {
       margin: 12px 0;
+      padding-left: 0;
     }
 
-    &-optionLabel {
-      display: block;
-    margin-left: 5px;
+  &-search {
+    position: relative;
+    margin-top: 10px;
+  }
+
+  &-clearSearch {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    border: none;
+    background: none;
+    padding: 0;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--yxt-color-text-secondary);
+
+    &.js-hidden {
+      display: none;
+    }
+  }
+
+  &-radioButtonLabel {
+    cursor: pointer;
+  }
+
+  &-optionLabel {
+    position: relative;
+    font-size: $font-size-md;
+    line-height: 20px;
+    align-items: center;
+    margin-left: 22px;
+    cursor: pointer;
+
+    /* Checkmark outer box */
+    &::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: -22px;
+      height: 12px;
+      width: 12px;
+      transform: translateY(-50%);
+      border: $border-default;
+      border-radius: 2px;
+    }
+
+    /* Checkmark */
+    &::after {
+      content: none;
+      position: absolute;
+      top: calc(50% - 3px);
+      left: -20px;
+      width: 3px;
+      height: 9px;
+      transform: rotate(45deg) translateY(-50%);
+      border-right: 1px solid $color-brand-hover;
+      border-bottom: 1px solid $color-brand-hover;
+    }
   }
 
   &-selectedCount {
@@ -66,6 +170,10 @@
   }
 
   &-reset {
+    &.js-hidden {
+      display: none;
+    }
+
     @include Text(
       $color: var(--yxt-color-brand-primary),
       $style: italic);
@@ -81,6 +189,10 @@
       $color: var(--yxt-color-brand-primary),
       $style: italic);
     @include TextButton($padding: 0);
+
+    &.hidden {
+      display: none;
+    }
 
     svg {
       width: 6px;
@@ -107,6 +219,40 @@
 
   &-input {
     margin-left: 0;
+  }
+
+  &-radioButtonInput {
+    cursor: pointer;
+
+    &:focus {
+      outline: 1px solid black;
+    }
+  }
+
+  &-checkboxInput {
+    opacity: 0;
+    height: 0;
+    width: 0;
+    margin: 0;
+
+    /* Set the custom checkmark's checked state */
+    &:checked {
+      & + .yxt-FilterOptions-optionLabel::after {
+        content: "";
+      }
+
+      & + .yxt-FilterOptions-optionLabel::before {
+        border: var(--yxt-border-hover);
+      }
+    }
+
+    /* Add focus styles on the outer-box of the fake checkbox */
+    &:focus {
+      & + .yxt-FilterOptions-optionLabel::before {
+        border: 1px solid black;
+        box-shadow: var(--yxt-searchbar-focus-shadow);
+      }
+    }
   }
 
   &-reset--right {

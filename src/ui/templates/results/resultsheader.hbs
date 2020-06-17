@@ -1,22 +1,30 @@
-<div class="yxt-ResultsHeader">
-  {{#if _config.showResultCount}}
-    {{#if resultsCount}}
-      <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} through {{resultsCountEnd}} of {{resultsCount}}">
-        <div aria-hidden="true">
-          <span class="yxt-ResultsHeader-resultsCountStart">{{resultsCountStart}}</span>
-          <span class="yxt-ResultsHeader-resultsCountDash">-</span>
-          <span class="yxt-ResultsHeader-resultsCountEnd">{{resultsCountEnd}}</span>
-          <span class="yxt-ResultsHeader-resultsCountOf">of</span>
-          <span class="yxt-ResultsHeader-resultsCountTotal">{{resultsCount}}</span>
-        </div>
-      </div>
-      {{#if showResultSeparator}}
-        <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
-      {{/if}}
-    {{/if}}
+<div class="yxt-ResultsHeader
+  {{~#if _config.isUniversal}} yxt-ResultsHeader--universal yxt-Results-filters{{/if}}
+  {{~#if _config.removable}} yxt-ResultsHeader--removable{{/if}}">
+  {{> resultscount}}
+  {{#if showResultSeparator}}
+    <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
   {{/if}}
+  {{> filters}}
+</div>
+
+{{#*inline "resultscount"}}
+  {{#every _config.showResultCount resultsCount}}
+    <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} through {{resultsCountEnd}} of {{resultsCount}}">
+      <div aria-hidden="true">
+        <span class="yxt-ResultsHeader-resultsCountStart">{{resultsCountStart}}</span>
+        <span class="yxt-ResultsHeader-resultsCountDash">-</span>
+        <span class="yxt-ResultsHeader-resultsCountEnd">{{resultsCountEnd}}</span>
+        <span class="yxt-ResultsHeader-resultsCountOf">of</span>
+        <span class="yxt-ResultsHeader-resultsCountTotal">{{resultsCount}}</span>
+      </div>
+    </div>
+  {{/every}}
+{{/inline}}
+
+{{#*inline "filters"}}
   {{#if shouldShowFilters}}
-    <div class="yxt-ResultsHeader-appliedFilters">
+    <div class="yxt-ResultsHeader-appliedFilters" aria-label="{{_config.labelText}}">
       {{#each appliedFiltersArray}}
         {{#if ../_config.showFieldNames}}
           <div class="yxt-ResultsHeader-filterLabel">
@@ -24,13 +32,33 @@
             <span class="yxt-ResultsHeader-filterLabelColon">:</span>
           </div>
         {{/if}}
-        {{#each this.displayValues}}
-          <div class="yxt-ResultsHeader-filterValue">{{this}}{{#unless @last}}, {{/unless}}</div>
+        {{#each filterDataArray}}
+          {{#if removable}}
+            <button class="yxt-ResultsHeader-removableFilterTag js-yxt-ResultsHeader-removableFilterTag"
+              data-filter-id={{dataFilterId}} tabindex="0" aria-label="{{../../_config.removableLabelText}}">
+              <span class="yxt-ResultsHeader-removableFilterValue">{{displayValue}}</span>
+              <span class="yxt-ResultsHeader-removableFilterX">&times;</span>
+            </button>
+          {{else}}
+            <div class="yxt-ResultsHeader-filterValue">
+              <span class="yxt-ResultsHeader-filterValueText">{{displayValue}}</span>
+              {{#unless @last}}<span class="yxt-ResultsHeader-filterValueComma">,</span>{{/unless}}
+            </div>
+          {{/if}}
         {{/each}}
         {{#unless @last}}
-          <div class="yxt-ResultsHeader-filterSeparator">|</div>
+          <div class="yxt-ResultsHeader-filterSeparator">{{../_config.delimiter}}</div>
         {{/unless}}
       {{/each}}
+    {{#every _config.isUniversal _config.verticalURL _config.showChangeFilters}}
+      <a class="yxt-ResultsHeader-changeFilters" href="{{ _config.verticalURL }}"
+        data-middleclick="active"
+        data-eventtype="FILTERING_WITHIN_SECTION"
+        data-eventoptions='{{eventOptions}}'
+      >
+        change filters
+      </a>
+    {{/every}}
     </div>
   {{/if}}
-</div>
+{{/inline}}

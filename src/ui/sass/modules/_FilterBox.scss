@@ -50,7 +50,9 @@
       $weight: var(--yxt-font-weight-semibold),
       $color: var(--yxt-color-brand-primary));
 
-    @include TextButton();
+    @include TextButton(
+      $padding: 5px 10px 5px 0px
+    );
 
     text-decoration: underline;
 
@@ -58,7 +60,11 @@
       text-decoration: none;
     }
 
-    margin-left: 10px;
     letter-spacing: 0.5px;
+  }
+
+  &-apply + &-reset {
+    padding-left: 5px;
+    margin-left: 10px;
   }
 }

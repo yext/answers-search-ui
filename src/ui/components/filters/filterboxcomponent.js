@@ -3,9 +3,6 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
-import StorageKeys from '../../../core/storage/storagekeys';
-import Filter from '../../../core/models/filter';
-import Facet from '../../../core/models/facet';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -31,25 +28,25 @@ class FilterBoxConfig {
      * If true, show a button to reset for each facet group
      * @type {boolean}
      */
-    this.resetFilter = config.resetFacet || false;
+    this.resetFilter = config.resetFilter || false;
 
     /**
      * The label to show for the reset button
      * @type {string}
      */
-    this.resetFilterLabel = config.resetFacetLabel || 'reset';
+    this.resetFilterLabel = config.resetFilterLabel || 'reset';
 
     /**
      * If true, show a "reset all" button to reset all facets
      * @type {boolean}
      */
-    this.resetFilters = config.resetFacets === undefined ? true : config.resetFacets;
+    this.resetFilters = config.resetFilters === undefined ? !config.searchOnChange : config.resetFilters;
 
     /**
      * The label to show for the "reset all" button
      * @type {string}
      */
-    this.resetFiltersLabel = config.resetFacetsLabel || 'reset all';
+    this.resetFiltersLabel = config.resetFiltersLabel || 'reset all';
 
     /**
      * The max number of facets to show before displaying "show more"/"show less"
@@ -103,7 +100,7 @@ class FilterBoxConfig {
      * The list of filters to display and control, ignoring empty sections
      * @type {object[]}
      */
-    this.filterConfigs = config.filters.filter(f => f.options.length !== 0);
+    this.filterConfigs = config.filters.filter(f => f.options.length);
 
     /**
      * Whether or not this filterbox contains facets. This affects the
@@ -152,18 +149,20 @@ export default class FilterBoxComponent extends Component {
 
     /**
      * The current state of the filter components in the box
-     * @type {Filter}
+     * @type {Array<FilterNode>}
      * @private
      */
-    this._filters = [];
+    this._filterNodes = [];
 
-    if (!this.config.showCount) {
-      this.config.filterConfigs.forEach(config => {
+    this.config.filterConfigs.forEach(config => {
+      let hideCount = config.showCount === undefined ? !this.config.showCount : !config.showCount;
+
+      if (hideCount) {
         config.options.forEach(option => {
           option.countLabel = null;
         });
-      });
-    }
+      }
+    });
   }
 
   static get type () {
@@ -186,32 +185,38 @@ export default class FilterBoxComponent extends Component {
     if (this._filterComponents.length) {
       this._filterComponents.forEach(c => c.remove());
       this._filterComponents = [];
-      this._filters = [];
+      this._filterNodes = [];
     }
 
     // Initialize filters from configs
     for (let i = 0; i < this.config.filterConfigs.length; i++) {
       const config = this.config.filterConfigs[i];
-      const component = this.componentManager.create(config.type, Object.assign({},
-        config,
-        this.config,
-        {
-          parentContainer: this._container,
-          name: `${this.name}.filter${i}`,
-          storeOnChange: false,
-          container: `.js-yext-filterbox-filter${i}`,
-          showReset: this.config.resetFilter,
-          resetLabel: this.config.resetFilterLabel,
-          showExpand: this.config.expand,
-          onChange: (filter) => {
-            this.onFilterChange(i, filter);
-          }
-        }));
+      const component = this.componentManager.create(config.type, {
+        ...this.config,
+        parentContainer: this._container,
+        name: `${this.name}.filter${i}`,
+        storeOnChange: false,
+        container: `.js-yext-filterbox-filter${i}`,
+        showReset: this.config.resetFilter,
+        resetLabel: this.config.resetFilterLabel,
+        isDynamic: this.config.isDynamic,
+        ...config,
+        showExpand: config.showExpand === undefined ? this.config.expand : config.showExpand,
+        onChange: (filterNode, alwaysSaveFilterNodes, blockSearchOnChange) => {
+          const _saveFilterNodes = this.config.searchOnChange || alwaysSaveFilterNodes;
+          const _searchOnChange = this.config.searchOnChange && !blockSearchOnChange;
+          this.onFilterNodeChange(i, filterNode, _saveFilterNodes, _searchOnChange);
+          config.onChange && config.onChange();
+        }
+      });
+      if (this.config.isDynamic && typeof component.floatSelected === 'function') {
+        component.floatSelected();
+      }
       component.mount();
       this._filterComponents.push(component);
-      this._filters[i] = component.getFilter();
-      this._saveFiltersToStorage();
+      this._filterNodes[i] = component.getFilterNode();
     }
+    this._saveFilterNodesToStorage();
 
     // Initialize apply button
     if (!this.config.searchOnChange) {
@@ -219,7 +224,7 @@ export default class FilterBoxComponent extends Component {
 
       if (button) {
         DOM.on(button, 'click', () => {
-          this._saveFiltersToStorage();
+          this._saveFilterNodesToStorage();
           this._search();
         });
       }
@@ -233,6 +238,10 @@ export default class FilterBoxComponent extends Component {
     }
   }
 
+  _getValidFilterNodes () {
+    return this._filterNodes.filter(fn => fn.getFilter().getFilterKey());
+  }
+
   resetFilters () {
     this._filterComponents.forEach(filter => filter.clearOptions());
   }
@@ -240,12 +249,16 @@ export default class FilterBoxComponent extends Component {
   /**
    * Handle changes to child filter components
    * @param {number} index The index of the changed filter
-   * @param {Filter} filter The new filter
+   * @param {FilterNode} filterNode The new filter node
+   * @param {boolean} saveFilterNodes Whether to save filternodes to storage
+   * @param {boolean} searchOnChange Whether to conduct a search
    */
-  onFilterChange (index, filter) {
-    this._filters[index] = filter;
-    if (this.config.searchOnChange) {
-      this._saveFiltersToStorage();
+  onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
+    this._filterNodes[index] = filterNode;
+    if (saveFilterNodes || searchOnChange) {
+      this._saveFilterNodesToStorage();
+    }
+    if (searchOnChange) {
       this._search();
     }
   }
@@ -262,21 +275,12 @@ export default class FilterBoxComponent extends Component {
    * Save current filters to storage to be used in the next search
    * @private
    */
-  _saveFiltersToStorage () {
-    const validFilters = this._filters.filter(f =>
-      f !== undefined &&
-      f !== null &&
-      Object.keys(f).length > 0);
-
+  _saveFilterNodesToStorage () {
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
-      const combinedFilter = Facet.fromFilters(availableFieldIds, ...validFilters);
-      this.core.setFacetFilter(this.name, combinedFilter || {});
+      this.core.setFacetFilterNodes(availableFieldIds, this._getValidFilterNodes());
     } else {
-      const combinedFilter = validFilters.length > 1
-        ? Filter.and(...validFilters)
-        : validFilters[0];
-      this.core.setFilter(this.name, combinedFilter || {});
+      this._filterComponents.forEach(fc => fc.apply());
     }
   }
 
@@ -284,21 +288,9 @@ export default class FilterBoxComponent extends Component {
    * Trigger a search with all filters in storage
    */
   _search () {
-    const allFilters = this.core.globalStorage.getAll(StorageKeys.FILTER);
-    const totalFilter = allFilters.length > 1
-      ? Filter.and(...allFilters)
-      : allFilters[0];
-
-    const query = this.core.globalStorage.getState(StorageKeys.QUERY);
-
-    const facetFilter = this.core.globalStorage.getAll(StorageKeys.FACET_FILTER)[0];
-
-    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.verticalSearch(this._verticalKey, {
-      input: query,
-      filter: JSON.stringify(totalFilter),
-      facetFilter: JSON.stringify(facetFilter)
+    this.core.verticalSearch(this._config.verticalKey, {
+      resetPagination: true,
+      useFacets: true
     });
   }
 }

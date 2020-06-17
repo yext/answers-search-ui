@@ -81,7 +81,11 @@ $direct-answer-footer-height: var(--yxt-module-footer-height) !default;
   {
     display: flex;
     margin-right: calc(var(--yxt-base-spacing) / 2);
-    height: 18px;
+
+    &.yxt-Results-titleIconWrapper
+    {
+      color: inherit;
+    }
   }
 
   &-entityName
@@ -200,7 +204,7 @@ $direct-answer-footer-height: var(--yxt-module-footer-height) !default;
       $size: var(--yxt-direct-answer-view-details-font-size),
       $line-height: var(--yxt-direct-answer-view-details-line-height),
       $weight: var(--yxt-direct-answer-view-details-font-weight),
-    )
+    );
     @include Link-1;
 
     display: inline-flex;

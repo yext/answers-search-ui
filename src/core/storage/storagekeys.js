@@ -13,10 +13,11 @@ export default {
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
-  FILTER: 'filter',
+  FILTER: 'filter', // DEPRECATED
+  STATIC_FILTER_NODE: 'static-filter-node',
   QUERY: 'query',
   QUERY_ID: 'query-id',
-  FACET_FILTER: 'facet-filter',
+  FACET_FILTER_NODE: 'facet-filter-node',
   DYNAMIC_FILTERS: 'dynamic-filters',
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',
@@ -30,5 +31,6 @@ export default {
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',
   SORT_BYS: 'sort-bys',
-  NO_RESULTS_CONFIG: 'no-results-config'
+  NO_RESULTS_CONFIG: 'no-results-config',
+  LOCATION_RADIUS: 'location-radius'
 };
