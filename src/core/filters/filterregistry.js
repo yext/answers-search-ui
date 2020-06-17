@@ -26,6 +26,22 @@ export default class FilterRegistry {
   }
 
   /**
+   * Returns an array containing all of the filternodes stored in global storage.
+   * @returns {Array<FilterNode>}
+   */
+  getAppliedFilterNodes () {
+    const globalStorageFilterNodes = [
+      ...this.getStaticFilterNodes(),
+      ...this.getFacetFilterNodes()
+    ];
+    const locationRadiusFilterNode = this.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    if (locationRadiusFilterNode) {
+      globalStorageFilterNodes.push(locationRadiusFilterNode);
+    }
+    return globalStorageFilterNodes;
+  }
+
+  /**
    * Get all of the {@link FilterNode}s for static filters.
    * @returns {Array<FilterNode>}
    */

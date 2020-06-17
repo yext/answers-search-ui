@@ -13,9 +13,9 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
   let remove_f0_v0_fn, remove_f0_v1_fn, remove_f1_v0_fn, remove_f1_v1_fn;
   let COMPONENT_MANAGER = mockManager(
     {
-      getStaticFilterNodes: () => [],
-      getFacetFilterNodes: () => [],
-      getLocationRadiusFilterNode: () => null
+      filterRegistry: {
+        getAppliedFilterNodes: () => []
+      }
     },
     ResultsHeaderComponent.defaultTemplateName()
   );
@@ -169,23 +169,21 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     const verticalSearchFn = jest.fn();
     COMPONENT_MANAGER = mockManager(
       {
-        getStaticFilterNodes: () => [],
-        getFacetFilterNodes: () => [],
-        getLocationRadiusFilterNode: () => null,
-        verticalSearch: verticalSearchFn
+        verticalSearch: verticalSearchFn,
+        filterRegistry: {
+          getAppliedFilterNodes: () => [ node_f0_v0, node_f0_v1, node_f1_v0 ]
+        }
       },
       ResultsHeaderComponent.defaultTemplateName()
     );
 
     // Initialize and mount component
-    const simpleFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
     resultsHeaderComponent = COMPONENT_MANAGER.create('ResultsHeader', {
       container: '#test-component',
       removable: true,
       verticalKey: 'a vertical key',
       data: {
-        appliedFilterNodes: simpleFilterNodes,
-        nlpFilterNodes: []
+        nlpFilters: []
       }
     });
     const wrapper = mount(resultsHeaderComponent);

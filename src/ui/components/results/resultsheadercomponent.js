@@ -4,6 +4,11 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { groupArray } from '../../../core/utils/arrayutils';
+import {
+  convertNlpFiltersToFilterNodes,
+  flattenIntoSimpleFilterNodes,
+  purifyFilterNodes
+} from '../../../core/utils/filternodeutils';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -16,7 +21,8 @@ const DEFAULT_CONFIG = {
   delimiter: '|',
   isUniversal: false,
   labelText: 'Filters applied to this search:',
-  removableLabelText: 'Remove this filter'
+  removableLabelText: 'Remove this filter',
+  hiddenFields: []
 };
 
 export default class ResultsHeaderComponent extends Component {
@@ -38,18 +44,14 @@ export default class ResultsHeaderComponent extends Component {
     this.resultsLength = data.resultsLength || 0;
 
     /**
-     * Array of applied filterNodes. These are allowed to be removable, but
-     * if config.removable is set as false these will not render as removable.
-     * @type {Array<FilterNode>}
+     * Array of nlp filters in the search response.
+     * @type {Array<AppliedQueryFilter>}
      */
-    this.appliedFilterNodes = data.appliedFilterNodes || [];
+    this.nlpFilterNodes = convertNlpFiltersToFilterNodes(data.nlpFilters || []);
 
-    /**
-     * Array of nlp filterNodes to display.
-     * These will not render as removable even if config.removable is true.
-     * @type {Array<FilterNode>}
-     */
-    this.nlpFilterNodes = data.nlpFilterNodes || [];
+    this.core.globalStorage.on('update', StorageKeys.FACET_FILTER_NODE, () => {
+      this.setState();
+    });
   }
 
   static areDuplicateNamesAllowed () {
@@ -108,7 +110,7 @@ export default class ResultsHeaderComponent extends Component {
    * not objects, so we need to reformat the grouped applied filters.
    * @returns {Array<Object>}
    */
-  _getAppliedFiltersArray () {
+  _parseAppliedFiltersToArray () {
     const groupedFilters = this._groupAppliedFilters();
     return Object.keys(groupedFilters).map(label => ({
       label: label,
@@ -116,9 +118,21 @@ export default class ResultsHeaderComponent extends Component {
     }));
   }
 
+  /**
+   * Pulls applied filter nodes from {@link FilterRegistry}, then retrives an array of
+   * the leaf nodes, and then removes hidden or empty {@link FilterNode}s. Then appends
+   * the currently applied nlp filters.
+   */
+  _calculateAppliedFilterNodes () {
+    const filterNodes = this.core.filterRegistry.getAppliedFilterNodes();
+    const simpleFilterNodes = flattenIntoSimpleFilterNodes(filterNodes);
+    return purifyFilterNodes(simpleFilterNodes, this._config.hiddenFields);
+  }
+
   setState (data) {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-    const appliedFiltersArray = this._getAppliedFiltersArray();
+    this.appliedFilterNodes = this._calculateAppliedFilterNodes();
+    const appliedFiltersArray = this._parseAppliedFiltersToArray();
     const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
     return super.setState({
       ...data,
