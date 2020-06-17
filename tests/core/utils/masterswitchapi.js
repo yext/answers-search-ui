@@ -49,6 +49,15 @@ describe('checking Answers Status page', () => {
     return masterSwitchApi.isDisabled('abc123', 'someexperience')
       .then(isDisabled => expect(isDisabled).toBeFalsy());
   });
+
+  it('behaves correctly when timeout is reached', () => {
+    const mockedRequest =
+      jest.fn(() => new Promise(resolve => setTimeout(resolve, 200)));
+    const masterSwitchApi = createMasterSwitchApi(mockedRequest);
+
+    return masterSwitchApi.isDisabled('abc123', 'someexperience')
+      .then(isDisabled => expect(isDisabled).toBeFalsy());
+  });
 });
 
 /**
