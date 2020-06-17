@@ -40,7 +40,7 @@ class FacetsConfig {
      * If true, show a "reset all" button to reset all facets
      * @type {boolean}
      */
-    this.resetFacets = config.resetFacets === undefined ? true : config.resetFacets;
+    this.resetFacets = config.resetFacets;
 
     /**
      * The label to show for the "reset all" button
@@ -225,7 +225,7 @@ export default class FacetsComponent extends Component {
         searchable: this.config.searchable,
         searchLabelText: this.config.searchLabelText,
         placeholderText: this.config.placeholderText,
-        showExpand: fieldOverrides.expand || this.config.expand,
+        showExpand: fieldOverrides.expand === undefined ? this.config.expand : fieldOverrides.expand,
         ...fieldOverrides
       });
     });

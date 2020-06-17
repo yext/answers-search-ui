@@ -15,7 +15,7 @@ describe('date range filter component', () => {
     lessThan: max => `Before ${max}`,
     lessThanEqual: max => `${max} and earlier`,
     exclusiveRange: (min, max) => `${min} - ${max}`,
-    inclusiveRange: (min, max) => `Between ${min} and ${max}`
+    inclusiveRange: (min, max) => `${min} - ${max}`
   };
 
   beforeEach(() => {

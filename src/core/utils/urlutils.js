@@ -42,9 +42,10 @@ export function getAnalyticsUrl (env = PRODUCTION, conversionTrackingEnabled = f
 }
 
 /**
- * Returns the passed in url with the query appended to it.
+ * Returns the passed in url, with all url params from the current url, as well as any
+ * pasased in params, appended to it.
  * @param {string} url
- * @param {params} Object
+ * @param {Object} params
  * @returns {string}
  */
 export function addParamsToUrl (url, params = {}) {

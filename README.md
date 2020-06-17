@@ -483,7 +483,7 @@ ANSWERS.addComponent('UniversalResults', {
   container: '.universal-results-container',
   // Optional, configuration for each vertical's results
   config: {
-    'locations': { // The verticalKey
+    'people': { // The verticalKey
       card: {
         // Configuration for the cards in this vertical, see Cards
       },
@@ -494,16 +494,16 @@ ANSWERS.addComponent('UniversalResults', {
       title: 'People',
       // Icon to display to the left of the title. Must be one of our built-in icons, defaults to 'star'
       icon: 'star',
-      // The url for both the viewMore link and the change-filters link. Defaults to '/{{VERTICAL_KEY}}.html',
-      // in this case that is '/people.html'
-      url: '/people/about.html',
+      // The url for both the viewMore link and the change-filters link. Defaults to '{{VERTICAL_KEY}}.html',
+      // in this case that is 'people.html'
+      url: 'people.html',
       // Whether to display a view more link. Defaults to true
       viewMore: true,
       // The text for the view more link, if viewMore is true. Defaults to 'View More'
       viewMoreLabel: 'View More!',
       // Config for the applied filters bar in the results header.
       appliedFilters: {
-        // If true, show any applied filters that were applied to the universal search. Defaults to false
+        // If true, show any applied filters that were applied to the universal search. Defaults to true
         show: true,
         // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
         showFieldNames: false,
@@ -591,7 +591,7 @@ ANSWERS.addComponent('VerticalResults', {
   },
   // Configuration for the applied filters bar in the header.
   appliedFilters: {
-    // If true, show any applied filters that were applied to the universal search. Defaults to false
+    // If true, show any applied filters that were applied to the vertical search. Defaults to true
     show: true,
     // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
     showFieldNames: false,
@@ -1015,7 +1015,7 @@ ANSWERS.addComponent('Facets', {
   resetFacet: false,
   // Optional, the label to use for the reset button above
   resetFacetLabel: 'reset',
-  // Optional, show a reset-all button for the facets control
+  // Optional, show a reset-all button for the facets control. Defaults to showing a reset-all button if searchOnChange is false.
   resetFacets: true,
   // Optional, the label to use for the reset-all button above
   resetFacetsLabel: 'reset-all',
@@ -1039,13 +1039,13 @@ ANSWERS.addComponent('Facets', {
   searchLabelText: 'Search for a filter option',
   // Optional, field-specific overrides for a filter
   fields: {
-    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, buildin.location
+    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
       // Optional, the placeholder text used for the filter option search input
       placeholderText: 'Search here...',
       // Optional, if true, display the filter option search input
       searchable: false,
       // Optional, control type, singleoption or multioption
-      control: false,
+      control: 'singleoption',
     }
   },
   // Optional, the label to show on the apply button
@@ -1100,7 +1100,7 @@ ANSWERS.addComponent('FilterSearch', {
   searchParameters: {
     // List of fields to query for
     fields: [{
-      // Field id to query for e.g. c_customFieldName, buildin.location
+      // Field id to query for e.g. c_customFieldName, builtin.location
       fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
       entityTypeId: 'ce_person',
@@ -1135,9 +1135,6 @@ ANSWERS.addComponent('FilterOptions', {
   // The type of options to filter by, either 'STATIC_FILTER' or 'RADIUS_FILTER'.
   // Defaults to 'STATIC_FILTER'.
   optionType: 'STATIC_FILTER',
-  // If true, the filter value is saved on change and sent with the next search.
-  // Defaults to false.
-  storeOnChange: true,
   // Required, list of options
   options: [
     /** Depends on the above optionType, either 'STATIC_FILTER' or 'RADIUS_FILTER', see below. **/
@@ -1351,7 +1348,7 @@ ANSWERS.addComponent('GeoLocationFilter', {
   searchParameters: {
     // List of fields to query for
     fields: [{
-      // Field id to query for e.g. c_customFieldName, buildin.location
+      // Field id to query for e.g. c_customFieldName, builtin.location
       fieldId: 'builtin.location',
       // Entity type api name e.g. healthcareProfessional, location, ce_person
       entityTypeId: 'ce_person',
