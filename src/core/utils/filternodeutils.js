@@ -17,7 +17,7 @@ export function convertNlpFiltersToFilterNodes (nlpFilters) {
   }));
 }
 
-export function flattenIntoSimpleFilterNodes (filterNodes) {
+export function flattenFilterNodes (filterNodes) {
   return filterNodes.flatMap(fn => fn.getSimpleAncestors());
 }
 
@@ -28,7 +28,7 @@ export function flattenIntoSimpleFilterNodes (filterNodes) {
  * @param {Array<string>} hiddenFields
  * @returns {Array<FilterNode>}
  */
-export function purifyFilterNodes (filterNodes, hiddenFields) {
+export function pruneFilterNodes (filterNodes, hiddenFields) {
   return filterNodes
     .filter(fn => {
       const { fieldName, displayValue } = fn.getMetadata();

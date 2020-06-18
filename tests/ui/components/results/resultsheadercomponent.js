@@ -14,7 +14,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
   let COMPONENT_MANAGER = mockManager(
     {
       filterRegistry: {
-        getAppliedFilterNodes: () => []
+        getAllFilterNodes: () => []
       }
     },
     ResultsHeaderComponent.defaultTemplateName()
@@ -171,7 +171,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
       {
         verticalSearch: verticalSearchFn,
         filterRegistry: {
-          getAppliedFilterNodes: () => [ node_f0_v0, node_f0_v1, node_f1_v0 ]
+          getAllFilterNodes: () => [ node_f0_v0, node_f0_v1, node_f1_v0 ]
         }
       },
       ResultsHeaderComponent.defaultTemplateName()

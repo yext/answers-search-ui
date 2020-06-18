@@ -29,7 +29,7 @@ export default class FilterRegistry {
    * Returns an array containing all of the filternodes stored in global storage.
    * @returns {Array<FilterNode>}
    */
-  getAppliedFilterNodes () {
+  getAllFilterNodes () {
     const globalStorageFilterNodes = [
       ...this.getStaticFilterNodes(),
       ...this.getFacetFilterNodes()
