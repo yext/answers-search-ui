@@ -161,7 +161,7 @@ export default class FilterSearchComponent extends Component {
       filter: filter,
       metadata: {
         fieldName: this.title,
-        displayValue: `"${query}"`
+        displayValue: `${query}`
       },
       remove: () => this._removeFilterNode()
     });

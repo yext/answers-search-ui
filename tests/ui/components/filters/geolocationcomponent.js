@@ -32,7 +32,7 @@ describe('GeoLocationFilter', () => {
       filter: Filter.fromResponse(filter),
       metadata: {
         fieldName: title,
-        displayValue: `"${query}"`
+        displayValue: `${query}`
       }
     });
     expect(filterNode.filter).toEqual(expectedFilterNode.filter);

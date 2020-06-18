@@ -81,7 +81,11 @@ $direct-answer-footer-height: var(--yxt-module-footer-height) !default;
   {
     display: flex;
     margin-right: calc(var(--yxt-base-spacing) / 2);
-    height: 18px;
+
+    &.yxt-Results-titleIconWrapper
+    {
+      color: inherit;
+    }
   }
 
   &-entityName

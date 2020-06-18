@@ -1,5 +1,5 @@
 <div class="yxt-ResultsHeader
-  {{~#if _config.isUniversal}} yxt-ResultsHeader--universal{{/if}}
+  {{~#if _config.isUniversal}} yxt-ResultsHeader--universal yxt-Results-filters{{/if}}
   {{~#if _config.removable}} yxt-ResultsHeader--removable{{/if}}">
   {{> resultscount}}
   {{#if showResultSeparator}}
@@ -51,7 +51,11 @@
         {{/unless}}
       {{/each}}
     {{#every _config.isUniversal _config.verticalURL _config.showChangeFilters}}
-      <a class="yxt-ResultsHeader-changeFilters" href="{{ _config.verticalURL }}">
+      <a class="yxt-ResultsHeader-changeFilters" href="{{ _config.verticalURL }}"
+        data-middleclick="active"
+        data-eventtype="FILTERING_WITHIN_SECTION"
+        data-eventoptions='{{eventOptions}}'
+      >
         change filters
       </a>
     {{/every}}
