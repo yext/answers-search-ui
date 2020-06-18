@@ -20,7 +20,7 @@ export function convertNlpFiltersToFilterNodes (nlpFilters) {
 /**
  * Flattens an array of {@link FilterNode}s into an array
  * of their constituent leaf {@link SimpleFilterNode}s.
- * @param {Array<FilterNode>} filterNodes 
+ * @param {Array<FilterNode>} filterNodes
  * @returns {Array<SimpleFilterNode>}
  */
 export function flattenFilterNodes (filterNodes) {
