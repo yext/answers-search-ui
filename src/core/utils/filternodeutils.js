@@ -17,6 +17,12 @@ export function convertNlpFiltersToFilterNodes (nlpFilters) {
   }));
 }
 
+/**
+ * Flattens an array of {@link FilterNode}s into an array of all of their
+ * leaf {@link SimpleFilterNode}s.
+ * @param {Array<FilterNode>} filterNodes 
+ * @returns {Array<SimpleFilterNode>}
+ */
 export function flattenFilterNodes (filterNodes) {
   return filterNodes.flatMap(fn => fn.getSimpleAncestors());
 }
