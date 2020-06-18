@@ -80,6 +80,7 @@ $question-submission-acknowledgement-bar-bg: var(--yxt-color-background-highligh
   display: flex;
   flex-direction: column;
   border: var(--yxt-question-submission-border);
+  background-color: var(--yxt-color-brand-white);
   margin-top: var(--yxt-base-spacing);
 
   &-titleBar
