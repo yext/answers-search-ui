@@ -112,17 +112,17 @@ export default class ResultsHeaderComponent extends Component {
    */
   _groupAppliedFilters () {
     const getFieldName = filterNode => filterNode.getMetadata().fieldName;
-    const parseIrremovableDisplayObject = filterNode => ({
+    const parseNlpFilterDisplay = filterNode => ({
       displayValue: filterNode.getMetadata().displayValue
     });
-    const parseRemovableDisplayObject = (filterNode, index) => ({
+    const parseRemovableFilterDisplay = (filterNode, index) => ({
       displayValue: filterNode.getMetadata().displayValue,
       dataFilterId: index,
       removable: this._config.removable
     });
-    const removableNodes = groupArray(this.appliedFilterNodes, getFieldName, parseRemovableDisplayObject);
+    const removableNodes = groupArray(this.appliedFilterNodes, getFieldName, parseRemovableFilterDisplay);
     const prunedNlpFilterNodes = this._pruneDuplicateNlpFilterNodes();
-    return groupArray(prunedNlpFilterNodes, getFieldName, parseIrremovableDisplayObject, removableNodes);
+    return groupArray(prunedNlpFilterNodes, getFieldName, parseNlpFilterDisplay, removableNodes);
   }
 
   /**
