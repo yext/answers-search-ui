@@ -87,6 +87,21 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   /**
+   * Returns the currently applied nlp filter nodes, with nlp filter nodes that
+   * are duplicates of other static filter nodes removed.
+   * @returns {Array<FilterNode>}
+   */
+  _pruneDuplicateNlpFilterNodes () {
+    return this.nlpFilterNodes.filter(filterNode => {
+      const isDuplicate = this.appliedFilterNodes.find(node =>
+        filterNode.getFilter().getFilterKey() === node.getFilter().getFilterKey() &&
+        filterNode.getMetadata().displayValue === node.getMetadata().displayValue
+      );
+      return !isDuplicate;
+    });
+  }
+
+  /**
    * Combine all of the applied filters into a format the handlebars
    * template can work with.
    * Keys are the fieldName of the filter. Values are an array of objects with a
@@ -97,23 +112,17 @@ export default class ResultsHeaderComponent extends Component {
    */
   _groupAppliedFilters () {
     const getFieldName = filterNode => filterNode.getMetadata().fieldName;
-    const getIrremovableDisplay = filterNode => ({
+    const parseIrremovableDisplayObject = filterNode => ({
       displayValue: filterNode.getMetadata().displayValue
     });
-    const getRemovableDisplay = (filterNode, index) => ({
+    const parseRemovableDisplayObject = (filterNode, index) => ({
       displayValue: filterNode.getMetadata().displayValue,
       dataFilterId: index,
       removable: this._config.removable
     });
-    const removableNodes = groupArray(this.appliedFilterNodes, getFieldName, getRemovableDisplay);
-    const skipDuplicateFilterNodes = filterNode => {
-      return this.appliedFilterNodes.find(node =>
-        filterNode.getFilter().getFilterKey() === node.getFilter().getFilterKey() &&
-        filterNode.getMetadata().displayValue === node.getMetadata().displayValue
-      );
-    };
-    return groupArray(
-      this.nlpFilterNodes, getFieldName, getIrremovableDisplay, removableNodes, skipDuplicateFilterNodes);
+    const removableNodes = groupArray(this.appliedFilterNodes, getFieldName, parseRemovableDisplayObject);
+    const prunedNlpFilterNodes = this._pruneDuplicateNlpFilterNodes();
+    return groupArray(prunedNlpFilterNodes, getFieldName, parseIrremovableDisplayObject, removableNodes);
   }
 
   /**
