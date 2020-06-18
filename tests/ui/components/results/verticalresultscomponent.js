@@ -16,6 +16,9 @@ const mockCore = {
       }
     }
   },
+  filterRegistry: {
+    getAppliedFilterNodes: () => []
+  },
   getStaticFilterNodes: () => [],
   getFacetFilterNodes: () => [],
   getLocationRadiusFilterNode: () => null

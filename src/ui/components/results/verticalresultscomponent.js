@@ -12,9 +12,11 @@ import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
-import FilterNodeFactory from '../../../core/filters/filternodefactory';
-import Filter from '../../../core/models/filter';
-import FilterMetadata from '../../../core/filters/filtermetadata';
+import {
+  convertNlpFiltersToFilterNodes,
+  flattenIntoSimpleFilterNodes,
+  purifyFilterNodes
+} from '../../../core/utils/filternodeutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -231,6 +233,28 @@ export default class VerticalResultsComponent extends Component {
     return addParamsToUrl(verticalURL, { query: this.query });
   }
 
+  /**
+   * Pulls applied filter nodes from {@link FilterRegistry}, then retrives an array of
+   * the leaf nodes, and then removes {@link FilterNode}s that are empty or have fieldIds
+   * listed in hiddenFields.
+   * @returns {Array<FilterNode}
+   */
+  _calculateAppliedFilterNodes () {
+    const filterNodes = this.core.filterRegistry.getAppliedFilterNodes();
+    const simpleFilterNodes = flattenIntoSimpleFilterNodes(filterNodes);
+    return purifyFilterNodes(simpleFilterNodes, this._config.appliedFilters.hiddenFields);
+  }
+
+  /**
+   * Converts nlpFilters (aka {@link AppliedQueryFilter}s) into filternodes, then
+   * removes FilterNodes that are empty or have fieldIds listed in hiddenFields.
+   * @returns {Array<FilterNode}
+   */
+  _calculateNlpFilterNodes (nlpFilters) {
+    const nlpFilterNodes = convertNlpFiltersToFilterNodes(nlpFilters);
+    return purifyFilterNodes(nlpFilterNodes, this._config.appliedFilters.hiddenFields);
+  }
+
   setState (data = {}, val) {
     /**
      * @type {Array<Result>}
@@ -244,8 +268,8 @@ export default class VerticalResultsComponent extends Component {
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    this.appliedFilterNodes = this._processFilterNodes(this._getAppliedFilterNodes());
-    this.nlpFilterNodes = this._processFilterNodes(this._convertNlpFiltersToFilterNodes(nlpFilters));
+    this.appliedFilterNodes = this._calculateAppliedFilterNodes();
+    this.nlpFilterNodes = this._calculateNlpFilterNodes(nlpFilters);
     const hasAppliedFilters = this.appliedFilterNodes.length || this.nlpFilterNodes.length;
     const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
       (this.resultsHeaderOpts.showAppliedFilters && hasAppliedFilters);
@@ -290,59 +314,6 @@ export default class VerticalResultsComponent extends Component {
    */
   static defaultTemplateName (config) {
     return 'results/verticalresults';
-  }
-
-  /**
-   * Given an array of nlp filters from the backend turn them into an array of SimpleFilterNodes
-   * @param {Array<AppliedQueryFilter>} nlpFilters
-   * @returns {Array<SimpleFilterNode>}
-   */
-  _convertNlpFiltersToFilterNodes (nlpFilters) {
-    return nlpFilters.map(nlpFilter => FilterNodeFactory.from({
-      filter: Filter.from(nlpFilter.filter),
-      metadata: new FilterMetadata({
-        fieldName: nlpFilter.key,
-        displayValue: nlpFilter.value
-      })
-    }));
-  }
-
-  /**
-   * Gets all applied {@link FilterNode}s stored in the {@link FilterRegistry}, which
-   * uses manages FilterNodes in globalStorage.
-   * @returns {Array<FilterNode>}
-   */
-  _getAppliedFilterNodes () {
-    const globalStorageFilterNodes = [
-      ...this.core.getStaticFilterNodes(),
-      ...this.core.getFacetFilterNodes()
-    ];
-    const locationRadiusFilterNode = this.core.getLocationRadiusFilterNode();
-    if (locationRadiusFilterNode) {
-      globalStorageFilterNodes.push(locationRadiusFilterNode);
-    }
-    return globalStorageFilterNodes;
-  }
-
-  /**
-   * Returns an array of all filter nodes currently being applied to the search.
-   * Filters out filterNodes without fieldName or displayValue, or that have a
-   * fieldId listed in this._config.hiddenFields. Any AppliedQueryFilters are first
-   * converted into a FilterNode.
-   * @param {Array<FilterNode>} filterNodes
-   * @returns {Array<FilterNode>}
-   */
-  _processFilterNodes (filterNodes) {
-    return filterNodes
-      .flatMap(fn => fn.getSimpleAncestors())
-      .filter(fn => {
-        const { fieldName, displayValue } = fn.getMetadata();
-        if (!fieldName || !displayValue) {
-          return false;
-        }
-        const fieldId = fn.getFilter().getFilterKey();
-        return !this._config.appliedFilters.hiddenFields.includes(fieldId);
-      });
   }
 
   addChild (data, type, opts) {
