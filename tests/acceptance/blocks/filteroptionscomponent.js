@@ -55,7 +55,7 @@ export default class FilterOptionsComponentBlock {
     if (isCollapsed) {
       await this.toggleExpand();
     }
-    const labelSelector = await this.getLabel(label)
+    const labelSelector = await this.getLabel(label);
     await t.click(labelSelector);
   }
 
