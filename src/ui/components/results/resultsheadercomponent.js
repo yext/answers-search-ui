@@ -50,19 +50,13 @@ export default class ResultsHeaderComponent extends Component {
     this.nlpFilterNodes = convertNlpFiltersToFilterNodes(data.nlpFilters || []);
 
     /**
-     * TODO (SPR-2455): Child components cannot set manual event listeners to globalStorage
-     * without duplicate listeners, and cannot set a moduleId if any other components
-     * also listen to the same StorageKey, otherwise those components can have their listeners
-     * erased if said child component's parent rerenders. One workaround is to create
-     * a unique StorageKey as needed, and so that cleaning up these listeners does not have
-     * adverse affects on other components.
+     * TODO (SPR-2455): Ideally, we would be able to set moduleId to DYNAMIC_FILTERS, the actual data
+     * we are listening to changes to, instead of this bespoke RESULTS_HEADER storage key.
+     * The issue is that when two components share a moduleId, if that moduleId listener is ever
+     * unregistered with the off() method, all listeners to that moduleId are unregistered.
+     * With child components, this is something that happens whenever the parent component rerenders.
      */
-    this.core.globalStorage.on('update', StorageKeys.RESULTS_HEADER, () => this.setState());
-  }
-
-  remove () {
-    this.core.globalStorage.off('update', StorageKeys.RESULTS_HEADER);
-    return super.remove();
+    this.moduleId = StorageKeys.RESULTS_HEADER;
   }
 
   static areDuplicateNamesAllowed () {
