@@ -31,6 +31,7 @@ import { SANDBOX, PRODUCTION } from './core/constants';
 import MasterSwitchApi from './core/utils/masterswitchapi';
 import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
+import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -166,6 +167,12 @@ class Answers {
       persistentStorage.delete(StorageKeys.API_CONTEXT, true);
       globalStorage.delete(StorageKeys.API_CONTEXT);
       console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
+    }
+
+    if (globalStorage.getState(StorageKeys.REFERRER_PAGE_URL) === null) {
+      const referrer = urlWithoutQueryParamsAndHash(document.referrer || '');
+      persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrer, true);
+      globalStorage.set(StorageKeys.REFERRER_PAGE_URL, referrer);
     }
 
     this._masterSwitchApi = statusPage

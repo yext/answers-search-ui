@@ -33,5 +33,6 @@ export default {
   SORT_BYS: 'sort-bys',
   NO_RESULTS_CONFIG: 'no-results-config',
   LOCATION_RADIUS: 'location-radius',
-  API_CONTEXT: 'context'
+  API_CONTEXT: 'context',
+  REFERRER_PAGE_URL: 'referrerPageUrl'
 };
