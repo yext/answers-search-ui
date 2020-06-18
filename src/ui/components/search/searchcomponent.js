@@ -141,6 +141,10 @@ export default class SearchComponent extends Component {
       this.debouncedSearch(q);
     });
 
+    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
+      this.debouncedSearch(this.query);
+    });
+
     /**
      * The minimum time allowed in milliseconds between searches to prevent
      * many duplicate searches back-to-back

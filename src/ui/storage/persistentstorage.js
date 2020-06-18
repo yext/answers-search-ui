@@ -102,4 +102,20 @@ export default class PersistentStorage {
     }
     return allParams;
   }
+
+  /**
+   * Get the value of the provided key in persistent storage
+   *
+   * @param {string} key The storage key to get the value of
+   */
+  get (key) {
+    if (typeof key !== 'string') {
+      throw new AnswersStorageError('Storage data key must be a string', key);
+    }
+
+    if (this._params && this._params.has(key)) {
+      return this._params.get(key);
+    }
+    return undefined;
+  }
 }

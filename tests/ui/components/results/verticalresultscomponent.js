@@ -16,6 +16,15 @@ const mockCore = {
       }
     }
   },
+  persistentStorage: {
+    get: (key) => {
+      const storage = {
+        context: undefined,
+        referrerPageUrl: ''
+      };
+      return storage[key];
+    }
+  },
   getStaticFilterNodes: () => [],
   getFacetFilterNodes: () => [],
   getLocationRadiusFilterNode: () => null

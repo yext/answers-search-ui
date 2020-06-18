@@ -228,7 +228,15 @@ export default class VerticalResultsComponent extends Component {
   getVerticalURL (data = {}) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    return addParamsToUrl(verticalURL, { query: this.query });
+
+    const params = {
+      query: this.query
+    };
+    const context = this.core.persistentStorage.get(StorageKeys.API_CONTEXT);
+    if (context) {
+      params.context = context;
+    }
+    return addParamsToUrl(verticalURL, params);
   }
 
   setState (data = {}, val) {

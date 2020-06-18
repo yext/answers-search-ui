@@ -428,6 +428,22 @@ class Answers {
       onFinally: config.onFinally || function () {}
     });
   }
+
+  /*
+   * Adds context as a parameter for the query API calls.
+   * @param {Object} context The context object passed in the API calls
+   */
+  setContext (context = {}) {
+    this.core.persistentStorage.set(
+      StorageKeys.API_CONTEXT,
+      JSON.stringify(Object.assign({}, context)),
+      true
+    );
+    this.core.globalStorage.set(
+      StorageKeys.API_CONTEXT,
+      JSON.stringify(Object.assign({}, context))
+    );
+  }
 }
 
 /**
