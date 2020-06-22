@@ -7,9 +7,9 @@ import { groupArray } from '../../../core/utils/arrayutils';
 import {
   convertNlpFiltersToFilterNodes,
   flattenFilterNodes,
-  pruneFilterNodes
+  pruneFilterNodes,
+  haveEqualSimpleFilters
 } from '../../../core/utils/filternodeutils';
-import Filter from '../../../core/models/filter';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -93,9 +93,9 @@ export default class ResultsHeaderComponent extends Component {
    * @returns {Array<FilterNode>}
    */
   _pruneDuplicateNlpFilterNodes () {
-    return this.nlpFilterNodes.filter(filterNode => {
-      const isDuplicate = this.appliedFilterNodes.find(node =>
-        Filter.areEqualSimpleFilters(node.getFilter(), filterNode.getFilter())
+    return this.nlpFilterNodes.filter(nlpNode => {
+      const isDuplicate = this.appliedFilterNodes.find(appliedNode =>
+        haveEqualSimpleFilters(appliedNode, nlpNode)
       );
       return !isDuplicate;
     });
