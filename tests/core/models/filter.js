@@ -140,37 +140,3 @@ describe('creating filters', () => {
       .toEqual(Filter.equal('myField', max));
   });
 });
-
-describe('checking filter equality', () => {
-  const filter1 = new Filter({ name: { '$eq': 'Alexis' } });
-  const filter2 = new Filter({ name: { '$eq': 'Christian' } });
-  const filter3 = new Filter({ name: { '$eq': 'Sara' } });
-  const filter4 = new Filter({ name: { '$eq': 'Tom' } });
-
-  it('works for equivalent filters', () => {
-    const filter4Clone = new Filter({ name: { '$eq': 'Tom' } });
-    expect(filter4.equals(filter4Clone)).toBeTruthy();
-    expect(filter4Clone.equals(filter4)).toBeTruthy();
-  });
-
-  it('returns false for different filters', () => {
-    expect(filter2.equals(filter3)).toBeFalsy();
-  });
-
-  it('works for 2 equivalent combined filters, ignoring combination order', () => {
-    const filter4And3 = Filter.and(filter4, filter3);
-    const filter3And4 = Filter.and(filter3, filter4);
-    expect(filter4And3.equals(filter3And4)).toBeTruthy();
-  });
-
-  it('returns false for 2 different combined filters', () => {
-    const filter4And3 = Filter.and(filter4, filter3);
-    const filter4Or3 = Filter.or(filter4, filter3);
-    expect(filter4And3.equals(filter4Or3)).toBeFalsy();
-  });
-
-  it('returns false when comparing a combined and simple filter', () => {
-    const filter2And3 = Filter.and(filter2, filter3);
-    expect(filter1.equals(filter2And3)).toBeFalsy();
-  });
-});
