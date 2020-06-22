@@ -63,7 +63,7 @@ export default class SimpleFilterNode extends FilterNode {
    * Since SimpleFilterNodes have no children this just returns itself.
    * @returns {Array<SimpleFilterNode>}
    */
-  getSimpleAncestors () {
+  getSimpleDescendants () {
     return this;
   }
 

@@ -24,7 +24,7 @@ export function convertNlpFiltersToFilterNodes (nlpFilters) {
  * @returns {Array<SimpleFilterNode>}
  */
 export function flattenFilterNodes (filterNodes) {
-  return filterNodes.flatMap(fn => fn.getSimpleAncestors());
+  return filterNodes.flatMap(fn => fn.getSimpleDescendants());
 }
 
 /**
