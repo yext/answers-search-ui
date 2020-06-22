@@ -11,6 +11,10 @@ export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
+
+    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
+      this.setState(this.getState());
+    });
   }
 
   static get type () {

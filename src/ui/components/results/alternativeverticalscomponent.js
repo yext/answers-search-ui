@@ -3,6 +3,7 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
@@ -39,7 +40,8 @@ export default class AlternativeVerticalsComponent extends Component {
      */
     this.verticalSuggestions = AlternativeVerticalsComponent._buildVerticalSuggestions(
       this._alternativeVerticals,
-      this._verticalsConfig
+      this._verticalsConfig,
+      this.core.globalStorage.getState(StorageKeys.API_CONTEXT)
     );
 
     /**
@@ -53,6 +55,15 @@ export default class AlternativeVerticalsComponent extends Component {
      * @type {boolean}
      */
     this._isShowingResults = opts.isShowingResults || false;
+
+    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
+      this.verticalSuggestions = AlternativeVerticalsComponent._buildVerticalSuggestions(
+        this._alternativeVerticals,
+        this._verticalsConfig,
+        this.core.globalStorage.getState(StorageKeys.API_CONTEXT)
+      );
+      this.setState(this.getState());
+    });
   }
 
   static get type () {
@@ -96,9 +107,14 @@ export default class AlternativeVerticalsComponent extends Component {
    * @param {object} alternativeVerticals alternativeVerticals server response
    * @param {object} verticalsConfig the configuration to use
    */
-  static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
+  static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context) {
     let verticals = [];
-    let queryParams = window.location.search;
+
+    const params = new SearchParams(window.location.search.substring(1));
+    if (context) {
+      params.set(StorageKeys.API_CONTEXT, context);
+    }
+    let queryParams = '?' + params.toString();
 
     for (let alternativeVertical of alternativeVerticals) {
       const verticalKey = alternativeVertical.verticalConfigId;
