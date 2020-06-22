@@ -1,7 +1,8 @@
 /** @module Filter */
 
 import FilterCombinators from '../filters/filtercombinators';
-import _ from 'lodash';
+import isEqual from 'lodash.isequal';
+import sortBy from 'lodash.sortby';
 
 /**
  * Represents an api filter and provides static methods for easily constructing Filters.
@@ -36,7 +37,7 @@ export default class Filter {
       if (Array.isArray(thisValue) && Array.isArray(otherValue)) {
         return Filter._arrayOfFiltersContainEqualElements(thisValue, otherValue);
       }
-      return _.isEqual(thisValue, otherValue);
+      return isEqual(thisValue, otherValue);
     }
     return false;
   }
@@ -49,8 +50,8 @@ export default class Filter {
    */
   static _arrayOfFiltersContainEqualElements (thisArray, otherArray) {
     const sortByFilterKey = filter => filter.getFilterKey();
-    const array1 = _.sortBy(thisArray, sortByFilterKey);
-    const array2 = _.sortBy(otherArray, sortByFilterKey);
+    const array1 = sortBy(thisArray, sortByFilterKey);
+    const array2 = sortBy(otherArray, sortByFilterKey);
     if (array1.length !== array2.length) {
       return false;
     }
