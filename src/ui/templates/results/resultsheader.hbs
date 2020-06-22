@@ -56,7 +56,11 @@
         data-eventtype="FILTERING_WITHIN_SECTION"
         data-eventoptions='{{eventOptions}}'
       >
-        {{_config.changeFiltersText}}
+        {{#if _config.changeFiltersText}}
+          {{_config.changeFiltersText}}
+        {{else}}
+          change filters
+        {{/if}}
       </a>
     {{/every}}
     </div>

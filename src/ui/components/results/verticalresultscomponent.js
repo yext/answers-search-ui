@@ -116,7 +116,7 @@ class VerticalResultsConfig {
        * The text for the change filters link.
        * @type {string}
        */
-      changeFiltersText: defaultConfigOption(config, ['appliedFilters.changeFiltersText', 'changeFiltersText'], 'change filters'),
+      changeFiltersText: defaultConfigOption(config, ['appliedFilters.changeFiltersText', 'changeFiltersText']),
 
       /**
        * The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
