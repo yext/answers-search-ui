@@ -26,6 +26,7 @@ export default class Filter {
   /**
    * Check whether this simple filter is equal to another simple filter.
    * @param {Filter} filter
+   * @returns {boolean}
    */
   isEqualToSimpleFilter (filter) {
     if (this.getFilterKey() !== filter.getFilterKey()) {
