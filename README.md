@@ -433,6 +433,7 @@ ANSWERS.addComponent('DirectAnswer', {
   // Required, the selector for the container element where the component will be injected
   container: '.direct-answer-container',
   // Optional, a custom direct answer card to use, which is the default when there are no matching card overrides.
+  // See the Custom Direct Answer Card section below.
   defaultCard: 'MyDefaultDirectAnswer',
   // Optional, the selector for the form used for submitting the feedback
   formEl: '.js-directAnswer-feedback-form',
@@ -466,6 +467,72 @@ ANSWERS.addComponent('DirectAnswer', {
     }
   ]
 })
+```
+
+## Custom Direct Answer Card
+
+```js
+  class MyClassName extends ANSWERS.Component {
+    constructor(config = {}, systemConfig = {}) {
+      super(config, systemConfig);
+
+      // Add your Handlebars template here.
+      this.setTemplate(`
+        <div class="myDirectAnswer">
+          My Direct Answer Custom Template
+          <div class="myDirectAnswer-type">
+            {{type}}
+          </div>
+          <div class="myDirectAnswer-value">
+            {{directAnswerPrefix}}
+            {{answer.value}}
+          </div>
+        </div>
+      `)
+    }
+
+    /**
+     * Here, data is the directAnswer data from the query. You can expect an object that looks something
+     * like.
+     * {
+     *   type: "FIELD_VALUE",
+     *   answer: {
+     *     entityName: "Entity Name",
+     *     fieldName: "Phone Number",
+     *     fieldApiName: "mainPhone",
+     *     value: "+11234567890",
+     *     fieldType: "phone" 
+     *   },
+     *   relatedItem: { 
+     *     verticalConfigId: 'people',
+     *     data: { ... }
+     *   }
+     * }
+     * The variables returned by setState can be used directly in your template.
+     * Below, we pass through a custom variable called directAnswerPrefix, in addition to the direct answer
+     * data, which can be acecssed in the template with {{directAnswerPrefix}}.
+     * @param {Object} data
+     * @returns {Object}
+     */ 
+    setState(data) {
+      return super.setState({
+        ...data,
+        directAnswerPrefix: data.answer.fieldApiName === 'mainPhone' ? 'Please Call: ' : 'Your Answer: '
+      });
+    }
+
+    /**
+     * The name of your custom direct answer card. This is the value you will use in any config when
+     * specifying this card.
+     * @returns {string}
+     */
+    static get type() {
+      return 'MyCustomDirectAnswerCard';
+    }
+  }
+
+  // Register your component class within the SDK. This is necessary for the SDK to recognize your custom card.
+  ANSWERS.registerComponentType(MyClassName);
 ```
 
 ## Universal Results Component
