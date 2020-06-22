@@ -73,4 +73,15 @@ export default class SimpleFilterNode extends FilterNode {
   remove () {
     this._remove();
   }
+
+  /**
+   * Returns whether this SimpleFilterNode's filter is equal to another SimpleFilterNode's
+   * @param {SimpleFilterNode} node
+   * @returns {boolean}
+   */
+  hasSameFilterAs (node) {
+    const filter1 = this.getFilter();
+    const filter2 = node.getFilter();
+    return filter1.isEqualToSimpleFilter(filter2);
+  }
 }

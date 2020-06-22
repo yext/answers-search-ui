@@ -24,6 +24,33 @@ export default class Filter {
   }
 
   /**
+   * Check whether this simple filter is equal to another simple filter.
+   * @param {Filter} filter
+   */
+  isEqualToSimpleFilter (filter) {
+    if (this.getFilterKey() !== filter.getFilterKey()) {
+      return false;
+    }
+    const fieldIdsToValues1 = this[this.getFilterKey()];
+    const fieldIdsToValues2 = filter[filter.getFilterKey()];
+    const fieldIds1 = Object.keys(fieldIdsToValues1).sort();
+    const fieldIds2 = Object.keys(fieldIdsToValues2).sort();
+    if (fieldIds1.length !== fieldIds2.length) {
+      return false;
+    }
+    for (let i = 0; i < fieldIds1.length; i++) {
+      const fieldId1 = fieldIds1[i];
+      const fieldId2 = fieldIds2[i];
+      const value1 = fieldIdsToValues1[fieldId1];
+      const value2 = fieldIdsToValues2[fieldId2];
+      if (fieldId1 !== fieldId2 || value1 !== value2) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
    * Create an empty filter
    */
   static empty () {

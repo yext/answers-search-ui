@@ -1,4 +1,3 @@
-import { haveEqualSimpleFilters } from '../../../src/core/utils/filternodeutils';
 import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
 
 describe('haveEqualSimpleFilters helper', () => {
@@ -11,12 +10,12 @@ describe('haveEqualSimpleFilters helper', () => {
 
   it('works for equivalent simple filters', () => {
     const joeClone = FilterNodeFactory.from(joeFilterNode);
-    expect(haveEqualSimpleFilters(joeFilterNode, joeClone)).toBeTruthy();
-    expect(haveEqualSimpleFilters(joeClone, joeFilterNode)).toBeTruthy();
+    expect(joeFilterNode.hasSameFilterAs(joeClone)).toBeTruthy();
+    expect(joeClone.hasSameFilterAs(joeFilterNode)).toBeTruthy();
   });
 
   it('returns false for different simple filters', () => {
-    expect(haveEqualSimpleFilters(joeFilterNode, bobFilterNode)).toBeFalsy();
+    expect(bobFilterNode.hasSameFilterAs(joeFilterNode)).toBeFalsy();
   });
 
   it('does not care about order within filter object', () => {
@@ -37,7 +36,7 @@ describe('haveEqualSimpleFilters helper', () => {
         }
       }
     });
-    expect(haveEqualSimpleFilters(rangeFilterNode, rangeFilterNodeReverse)).toBeTruthy();
+    expect(rangeFilterNode.hasSameFilterAs(rangeFilterNodeReverse)).toBeTruthy();
   });
 
   it('returns false for different fieldId', () => {
@@ -58,6 +57,6 @@ describe('haveEqualSimpleFilters helper', () => {
         }
       }
     });
-    expect(haveEqualSimpleFilters(rangeFilterNode, rangeFilterNodeReverse)).toBeFalsy();
+    expect(rangeFilterNode.hasSameFilterAs(rangeFilterNodeReverse)).toBeFalsy();
   });
 });
