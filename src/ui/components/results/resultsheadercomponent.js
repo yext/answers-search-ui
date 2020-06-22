@@ -9,6 +9,7 @@ import {
   flattenFilterNodes,
   pruneFilterNodes
 } from '../../../core/utils/filternodeutils';
+import Filter from '../../../core/models/filter';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -94,8 +95,7 @@ export default class ResultsHeaderComponent extends Component {
   _pruneDuplicateNlpFilterNodes () {
     return this.nlpFilterNodes.filter(filterNode => {
       const isDuplicate = this.appliedFilterNodes.find(node =>
-        filterNode.getFilter().getFilterKey() === node.getFilter().getFilterKey() &&
-        filterNode.getMetadata().displayValue === node.getMetadata().displayValue
+        Filter.areEqualSimpleFilters(node.getFilter(), filterNode.getFilter())
       );
       return !isDuplicate;
     });

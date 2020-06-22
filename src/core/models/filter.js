@@ -24,6 +24,36 @@ export default class Filter {
   }
 
   /**
+   * Check whether two non-combined (i.e. do not contain an array of child Filters) filters
+   * are equal to each other.
+   * @param {Filter} filter1
+   * @param {Filter} filter2
+   * @returns {boolean}
+   */
+  static areEqualSimpleFilters (filter1, filter2) {
+    if (filter1.getFilterKey() !== filter2.getFilterKey()) {
+      return false;
+    }
+    const fieldIdsToValues1 = filter1[filter1.getFilterKey()];
+    const fieldIdsToValues2 = filter2[filter2.getFilterKey()];
+    const fieldIds1 = Object.keys(fieldIdsToValues1).sort();
+    const fieldIds2 = Object.keys(fieldIdsToValues2).sort();
+    if (fieldIds1.length !== fieldIds2.length) {
+      return false;
+    }
+    for (let i = 0; i < fieldIds1.length; i++) {
+      const fieldId1 = fieldIds1[i];
+      const fieldId2 = fieldIds2[i];
+      const value1 = fieldIdsToValues1[fieldId1];
+      const value2 = fieldIdsToValues2[fieldId2];
+      if (fieldId1 !== fieldId2 || value1 !== value2) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
    * Create an empty filter
    */
   static empty () {
