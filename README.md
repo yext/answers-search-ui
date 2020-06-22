@@ -471,54 +471,139 @@ ANSWERS.addComponent('DirectAnswer', {
 
 ## Custom Direct Answer Card
 
+If you need the full power of an SDK component, you can specificy a custom Direct Answers card.
+This component will be given the directAnswer data from the query, the same data the built-in component
+operates on. You can expect that object to look something like the below:
+
+```js
+{
+  type: "FIELD_VALUE",
+  answer: {
+    entityName: "Entity Name",
+    fieldName: "Phone Number",
+    fieldApiName: "mainPhone",
+    value: "+11234567890",
+    fieldType: "phone" 
+  },
+  relatedItem: { 
+    verticalConfigId: 'people',
+    data: { ... }
+  }
+}
+```
+
+An SDK component needs a corresponding template. This can be added either inline by changing the constructor to
+```js
+    constructor(config, systemConfig) {
+      super(config, systemConfig);
+      this.setTemplate(`<div> your template here </div>`)
+    }
+```
+
+Or by including a custom template bundle, and adding
+
+```js
+  static defaultTemplateName () {
+    return 'YourTemplateName';
+  }
+```
+
+Where 'YourTemplateName' is the name of the template registered onto the Handlebars renderer.
+
+The example component will use the Handlebars template below.
+
+```hbs
+  <div class="customDirectAnswer">
+    <div class="customDirectAnswer-type">
+      {{type}}
+    </div>
+    <div class="customDirectAnswer-value">
+      {{#if customValue.url}}
+        {{> valueLink }}
+      {{else}}
+        {{{customValue}}}
+      {{/if}}
+    </div>
+  </div>
+
+  {{#*inline 'valueLink'}}
+  <a class="customDirectAnswer-fieldValueLink"
+    href="{{{customValue.url}}}"
+    {{#if eventType}}data-eventtype="{{eventType}}"{{/if}}
+    {{#if eventOptions}}data-eventoptions='{{{ json eventOptions }}}'{{/if}}>
+    {{{customValue.displayText}}}
+  </a>
+  {{/inline}}
+```
+
+This is an example of a possible custom DirectAnswers card. It has custom rendering, depending on
+the fieldType of the directAnswer, as well as custom analytics event logic.
+
 ```js
   class MyClassName extends ANSWERS.Component {
-    constructor(config = {}, systemConfig = {}) {
+    constructor(config, systemConfig) {
+      // If you need to override the constructor, make sure to call super(config, systemConfig) first.
       super(config, systemConfig);
-
-      // Add your Handlebars template here.
-      this.setTemplate(`
-        <div class="myDirectAnswer">
-          My Direct Answer Custom Template
-          <div class="myDirectAnswer-type">
-            {{type}}
-          </div>
-          <div class="myDirectAnswer-value">
-            {{directAnswerPrefix}}
-            {{answer.value}}
-          </div>
-        </div>
-      `)
     }
 
     /**
-     * Here, data is the directAnswer data from the query. You can expect an object that looks something
-     * like:
-     * {
-     *   type: "FIELD_VALUE",
-     *   answer: {
-     *     entityName: "Entity Name",
-     *     fieldName: "Phone Number",
-     *     fieldApiName: "mainPhone",
-     *     value: "+11234567890",
-     *     fieldType: "phone" 
-     *   },
-     *   relatedItem: { 
-     *     verticalConfigId: 'people',
-     *     data: { ... }
-     *   }
-     * }
-     * The variables returned by setState can be used directly in your template.
-     * Below, we pass through a custom variable called directAnswerPrefix, in addition to the direct answer
-     * data, which can be acecssed in the template with {{directAnswerPrefix}}.
+     * The setState method allows you to pass variables directly into your template.
+     * Here, data is the directAnswer data from the query.
+     * Below, we pass through a custom direct answers value, customValue.
      * @param {Object} data
      * @returns {Object}
      */ 
     setState(data) {
+      const { type, answer, relatedItem } = data;
+      this.associatedEntityId = data.relatedItem && data.relatedItem.data && data.relatedItem.data.id;
+      this.verticalConfigId = data.relatedItem && data.relatedItem.verticalConfigId;
       return super.setState({
         ...data,
-        directAnswerPrefix: data.answer.fieldApiName === 'mainPhone' ? 'Please Call: ' : 'Your Answer: '
+        customValue: this.getCustomValue(answer),
+        eventType: 'CUSTOM_EVENT',
+        eventOptions: {
+          searcher: "UNIVERSAL",
+          verticalConfigId: this.verticalConfigId,
+          entityId: this.associatedEntityId,
+        }
       });
+    }
+
+    /**
+     * Formats a directAnswer answer based on its fieldType.
+     * @param {Object} answer the answer property in the directAnswer model
+     * @returns {string}
+     */ 
+    formatValue(answer) {
+      const { fieldType, value } = answer;
+      switch (fieldType) {
+        case "phone":
+          return {
+              url: 'http://myCustomWebsite.com/?mainPhone=' + value,
+              displayText: value,
+            };
+        case "rich_text":
+          return ANSWERS.formatRichText(value);
+        case "single_line_text":
+        case "multi_line_text":
+        default:
+          return value;
+      }
+    }
+
+    /**
+     * Computes a custom direct answer. If answer.value is an array, this method
+     * formats every value in the array and returns it, otherwise it just formats the single
+     * given value.
+     * @param {Object} answer
+     * @returns {string}
+     */ 
+    getCustomValue(answer) {
+      if (Array.isArray(answer.value)) {
+        return answer.value.map(value => this.formatValue(answer))
+      } else {
+        return this.formatValue(answer);
+      }
     }
 
     /**
@@ -531,7 +616,7 @@ ANSWERS.addComponent('DirectAnswer', {
     }
   }
 
-  // Register your component class within the SDK. This is necessary for the SDK to recognize your custom card.
+  // Don't forget to register your component class within the SDK. Otherwise the SDK won't recognize your custom card!
   ANSWERS.registerComponentType(MyClassName);
 ```
 
