@@ -1175,6 +1175,7 @@ ANSWERS.addComponent('FilterOptions', {
 ```
 
 The options config varies depending on whether the optionType is 'STATIC_FILTER' or 'RADIUS_FILTER'.
+A STATIC_FILTER allows you to filter on a custom specified field, while a RADIUS_FILTER will add separate `locationRadius` parameter to your request, set to the currently selected value.
 
 ##### STATIC_FILTER
 
@@ -1213,7 +1214,7 @@ The options config varies depending on whether the optionType is 'STATIC_FILTER'
 {    
   options: [
     {
-      // Required, the value of the radius to apply (in meters). If this value is 0, will not filter by radius.
+      // Required, the value of the radius to apply (in meters). If this value is 0, no explicit locationRadius parameter will be applied to the request.
       value: 8046.72,
       // Optional, the label to show next to the filter option.
       label: '5 miles',
