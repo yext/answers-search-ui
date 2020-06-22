@@ -94,8 +94,7 @@ export default class ResultsHeaderComponent extends Component {
   _pruneDuplicateNlpFilterNodes () {
     return this.nlpFilterNodes.filter(filterNode => {
       const isDuplicate = this.appliedFilterNodes.find(node =>
-        filterNode.getFilter().getFilterKey() === node.getFilter().getFilterKey() &&
-        filterNode.getMetadata().displayValue === node.getMetadata().displayValue
+        filterNode.getFilter().equals(node.getFilter())
       );
       return !isDuplicate;
     });

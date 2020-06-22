@@ -1,6 +1,7 @@
 /** @module Filter */
 
 import FilterCombinators from '../filters/filtercombinators';
+import _ from 'lodash';
 
 /**
  * Represents an api filter and provides static methods for easily constructing Filters.
@@ -21,6 +22,44 @@ export default class Filter {
     if (Object.keys(this).length > 0) {
       return Object.keys(this)[0];
     }
+  }
+
+  /**
+   * Check whether two simple (i.e. non-combined) filters are logically equivalent.
+   * @param {Filter} otherFilter
+   * @returns {boolean}
+   */
+  equals (otherFilter) {
+    if (otherFilter instanceof Filter && otherFilter.getFilterKey() === this.getFilterKey()) {
+      let thisValue = this[this.getFilterKey()];
+      let otherValue = otherFilter[otherFilter.getFilterKey()];
+      if (Array.isArray(thisValue) && Array.isArray(otherValue)) {
+        return Filter._arrayOfFiltersContainEqualElements(thisValue, otherValue);
+      }
+      return _.isEqual(thisValue, otherValue);
+    }
+    return false;
+  }
+
+  /**
+   * Check whether two arrays of filters contain equal filters, disregarding order.
+   * @param {Array<Filter>} thisArray
+   * @param {Array<Filter>} otherArray
+   * @return {boolean}
+   */
+  static _arrayOfFiltersContainEqualElements (thisArray, otherArray) {
+    const sortByFilterKey = filter => filter.getFilterKey();
+    const array1 = _.sortBy(thisArray, sortByFilterKey);
+    const array2 = _.sortBy(otherArray, sortByFilterKey);
+    if (array1.length !== array2.length) {
+      return false;
+    }
+    for (let i = 0; i < array1.length; i++) {
+      if (array1[i].equals(array2[i])) {
+        return false;
+      }
+    }
+    return true;
   }
 
   /**
