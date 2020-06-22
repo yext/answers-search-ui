@@ -56,7 +56,7 @@
 
     {{#each pageNumbers}}
       {{#if this.active}}
-        <span id="active-page" class="yxt-Pagination-page" aria-label="Currently on page {{../pageNumber}}">{{../pageLabel}} {{../pageNumber}}</span>
+        <span id="active-page{{this.onePageDesktop}}{{this.onePageMobile}}" class="yxt-Pagination-page" aria-label="Currently on page {{../pageNumber}}">{{../pageLabel}} {{../pageNumber}}</span>
       {{else}}
         <a 
           class="yxt-Pagination-link js-yxt-Pagination-link{{#if this.desktopHidden}} desktop-hidden{{/if}}{{#if this.mobileHidden}} mobile-hidden{{/if}}"
