@@ -12,6 +12,7 @@ const DEFAULT_CONFIG = {
   resultsCountSeparator: '|',
   verticalURL: undefined,
   showChangeFilters: false,
+  changeFiltersText: 'change filters',
   removable: false,
   delimiter: '|',
   isUniversal: false,

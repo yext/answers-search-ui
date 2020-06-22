@@ -85,6 +85,8 @@ export default class UniversalResultsComponent extends Component {
         resultsCountSeparator: defaultConfigOption(config, ['appliedFilters.resultsCountSeparator', 'resultsCountSeparator'], '|'),
         // Whether to show a 'change filters' link, linking back to verticalURL.
         showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
+        // The text for the change filters link.
+        changeFiltersText: defaultConfigOption(config, ['appliedFilters.changeFiltersText', 'changeFiltersText'], 'change filters'),
         // The symbol placed between different filters with the same fieldName. e.g. Location: Virginia | New York | Miami.
         delimiter: defaultConfigOption(config, ['appliedFilters.delimiter'], '|'),
         // The aria-label given to the applied filters bar.

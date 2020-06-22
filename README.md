@@ -497,6 +497,8 @@ ANSWERS.addComponent('UniversalResults', {
         resultsCountSeparator: '|',
         // Whether to display the change filters link in universal results. Defaults to false.
         showChangeFilters: false,
+        // The text for the change filters link. Defaults to 'change filters'.
+        changeFiltersText: 'change filters',
         // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
         delimiter: '|',
         // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
