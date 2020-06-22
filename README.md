@@ -493,7 +493,7 @@ ANSWERS.addComponent('DirectAnswer', {
 
     /**
      * Here, data is the directAnswer data from the query. You can expect an object that looks something
-     * like.
+     * like:
      * {
      *   type: "FIELD_VALUE",
      *   answer: {
