@@ -434,7 +434,7 @@ ANSWERS.addComponent('DirectAnswer', {
   container: '.direct-answer-container',
   // Optional, a custom direct answer card to use, which is the default when there are no matching card overrides.
   // See the Custom Direct Answer Card section below.
-  defaultCard: 'MyDefaultDirectAnswer',
+  defaultCard: 'MyCustomDirectAnswerCard',
   // Optional, the selector for the form used for submitting the feedback
   formEl: '.js-directAnswer-feedback-form',
   // Optional, the selector to bind ui interaction to for reporting
@@ -471,9 +471,10 @@ ANSWERS.addComponent('DirectAnswer', {
 
 ## Custom Direct Answer Card
 
-If you need the full power of an SDK component, you can specificy a custom Direct Answers card.
-This component will be given the directAnswer data from the query, the same data the built-in component
-operates on. You can expect that object to look something like the below:
+You can customize the look and behavior of your DirectAnswer, you can create a custom Direct Answer card.
+
+A custom Direct Answer card is given the directAnswer data from the query, the same data the built-in component
+operates on. That object will look something like the below:
 
 ```js
 {
@@ -487,12 +488,23 @@ operates on. You can expect that object to look something like the below:
   },
   relatedItem: { 
     verticalConfigId: 'people',
-    data: { ... }
+    data: { 
+      id: "Employee-2116",
+      type: "ce_person",
+      fieldValues: {
+        description: "This is the description field.",
+        name: "First Last",
+        firstName: "First",
+        lastName: "Last",
+        mainPhone: "+1234567890",
+      }
+    }
   }
 }
 ```
 
-An SDK component needs a corresponding template. This can be added either inline by changing the constructor to
+A Direct Answer custom card needs a corresponding template. This can be added either inline by changing the component's constructor to:
+
 ```js
     constructor(config, systemConfig) {
       super(config, systemConfig);
@@ -500,7 +512,7 @@ An SDK component needs a corresponding template. This can be added either inline
     }
 ```
 
-Or by including a custom template bundle, and adding
+Or by including a custom template bundle, and adding:
 
 ```js
   static defaultTemplateName () {
@@ -510,7 +522,7 @@ Or by including a custom template bundle, and adding
 
 Where 'YourTemplateName' is the name of the template registered onto the Handlebars renderer.
 
-The example component will use the Handlebars template below.
+The example custom Direct Answer card will use the Handlebars template below.
 
 ```hbs
   <div class="customDirectAnswer">
@@ -537,11 +549,11 @@ The example component will use the Handlebars template below.
   {{/inline}}
 ```
 
-This is an example of a possible custom DirectAnswers card. It has custom rendering that depends on
+This is an example of a possible custom Direct Answer card. It has custom rendering that depends on
 the fieldType of the directAnswer, as well as a a custom analytics event.
 
 ```js
-  class MyClassName extends ANSWERS.Component {
+  class CustomDirectAnswerClassName extends ANSWERS.Component {
     constructor(config, systemConfig) {
       // If you need to override the constructor, make sure to call super(config, systemConfig) first.
       super(config, systemConfig);
@@ -608,8 +620,8 @@ the fieldType of the directAnswer, as well as a a custom analytics event.
     }
 
     /**
-     * The name of your custom direct answer card. This is the value you will use in any config when
-     * specifying this card.
+     * The name of your custom direct answer card. THIS is the value you will use in any config,
+     * such as defaultCard, when you want to specify this custom Direct Answer card.
      * @returns {string}
      */
     static get type() {
@@ -617,8 +629,8 @@ the fieldType of the directAnswer, as well as a a custom analytics event.
     }
   }
 
-  // Don't forget to register your component class within the SDK. Otherwise the SDK won't recognize your custom card!
-  ANSWERS.registerComponentType(MyClassName);
+  // Don't forget to register your Direct Answer card within the SDK. Otherwise the SDK won't recognize your card name!
+  ANSWERS.registerComponentType(CustomDirectAnswerClassName);
 ```
 
 ## Universal Results Component
