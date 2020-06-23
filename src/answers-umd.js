@@ -441,19 +441,21 @@ class Answers {
    * Adds context as a parameter for the query API calls.
    * @param {Object} context The context object passed in the API calls
    */
-  setContext (context = {}) {
-    if (context && !isValidContext(JSON.stringify(context))) {
+  setContext (context) {
+    const contextString = JSON.stringify(context);
+    if (!isValidContext(contextString)) {
+      console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
       return;
     }
 
     this.core.persistentStorage.set(
       StorageKeys.API_CONTEXT,
-      JSON.stringify(Object.assign({}, context)),
+      contextString,
       true
     );
     this.core.globalStorage.set(
       StorageKeys.API_CONTEXT,
-      JSON.stringify(Object.assign({}, context))
+      contextString
     );
   }
 }
