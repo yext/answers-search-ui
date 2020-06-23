@@ -169,4 +169,4 @@ workflows:
             branches:
               only: develop
           requires:
-            - hold
+            - unit_test
