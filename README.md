@@ -383,6 +383,8 @@ ANSWERS.addComponent('SearchBar', {
   autoFocus: true,
   // Optional, when auto focus on load,  open the autocomplete
   autoCompleteOnLoad: false,
+  // Optional, on vertical search, allow a user to conduct an empty search. Should be set to true if the defaultInitialSearch is "".
+  allowEmptySearch: false,
   // Optional, defaults to 300ms (0.3 seconds)
   searchCooldown: 2000,
   // Optional, asks the user for their geolocation when "near me" intent is detected
