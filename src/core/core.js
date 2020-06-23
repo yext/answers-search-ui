@@ -169,7 +169,7 @@ export default class Core {
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
-        context: this.persistentStorage.get(StorageKeys.API_CONTEXT)
+        context: this.globalStorage.getState(StorageKeys.API_CONTEXT)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -236,7 +236,7 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
-        context: this.persistentStorage.get(StorageKeys.API_CONTEXT)
+        context: this.globalStorage.getState(StorageKeys.API_CONTEXT)
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {

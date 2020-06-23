@@ -231,7 +231,7 @@ export default class VerticalResultsComponent extends Component {
     }
 
     const params = { query: this.query };
-    const context = this.core.persistentStorage.get(StorageKeys.API_CONTEXT);
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
       params.context = context;
     }
@@ -243,7 +243,7 @@ export default class VerticalResultsComponent extends Component {
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
 
     const params = { query: this.query };
-    const context = this.core.persistentStorage.get(StorageKeys.API_CONTEXT);
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
       params.context = context;
     }
