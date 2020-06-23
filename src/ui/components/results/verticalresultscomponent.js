@@ -113,6 +113,12 @@ class VerticalResultsConfig {
       showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
 
       /**
+       * The text for the change filters link.
+       * @type {string}
+       */
+      changeFiltersText: defaultConfigOption(config, ['appliedFilters.changeFiltersText', 'changeFiltersText']),
+
+      /**
        * The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
        * @type {string}
        **/
@@ -199,6 +205,7 @@ export default class VerticalResultsComponent extends Component {
       resultsCountSeparator: this._config.appliedFilters.resultsCountSeparator,
       showAppliedFilters: this._config.appliedFilters.show,
       showChangeFilters: this._config.appliedFilters.showChangeFilters,
+      changeFiltersText: this._config.appliedFilters.changeFiltersText,
       showResultCount: this._config.showResultCount,
       removable: this._config.appliedFilters.removable,
       delimiter: this._config.appliedFilters.delimiter,
