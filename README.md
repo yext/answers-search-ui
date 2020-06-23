@@ -541,15 +541,15 @@ The example custom Direct Answer card will use the Handlebars template below.
     {{> feedback}}
   </div>
 
-	{{#*inline 'feedback'}}
-		<span class="customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon"
-				data-component="IconComponent"
-				data-opts='{"iconName": "thumb"}'
-		></span>
-		<span class="customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon"
-				data-component="IconComponent"
-				data-opts='{"iconName": "thumb"}'
-		></span>
+  {{#*inline 'feedback'}}
+    <span class="customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon"
+      data-component="IconComponent"
+      data-opts='{"iconName": "thumb"}'
+    ></span>
+    <span class="customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon"
+      data-component="IconComponent"
+      data-opts='{"iconName": "thumb"}'
+    ></span>
   {{/inline}}
 
   {{#*inline 'valueLink'}}
