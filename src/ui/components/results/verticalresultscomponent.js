@@ -208,7 +208,7 @@ export default class VerticalResultsComponent extends Component {
 
     if (!this._config.isUniversal) {
       this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
-        this.setState(this.getState());
+        this.setState(this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS));
       });
     }
   }

@@ -62,7 +62,7 @@ export default class AlternativeVerticalsComponent extends Component {
         this._verticalsConfig,
         this.core.globalStorage.getState(StorageKeys.API_CONTEXT)
       );
-      this.setState(this.getState());
+      this.setState(this.core.globalStorage.getState(StorageKeys.ALERNATIVE_VERTICALS));
     });
   }
 
