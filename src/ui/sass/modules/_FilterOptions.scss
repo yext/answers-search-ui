@@ -116,6 +116,11 @@
 
   &-expand {
     margin-left: auto;
+
+    >.Icon--chevron svg {
+      height: .75em;
+      width: .75rem;
+    }
   }
 
   &--collapsed {
