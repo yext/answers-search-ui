@@ -448,15 +448,8 @@ class Answers {
       return;
     }
 
-    this.core.persistentStorage.set(
-      StorageKeys.API_CONTEXT,
-      contextString,
-      true
-    );
-    this.core.globalStorage.set(
-      StorageKeys.API_CONTEXT,
-      contextString
-    );
+    this.core.persistentStorage.set(StorageKeys.API_CONTEXT, contextString, true);
+    this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
   }
 }
 
