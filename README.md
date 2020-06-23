@@ -518,26 +518,27 @@ The example component will use the Handlebars template below.
       {{type}}
     </div>
     <div class="customDirectAnswer-value">
-      {{#if customValue.url}}
-        {{> valueLink }}
-      {{else}}
-        {{{customValue}}}
-      {{/if}}
+      {{#each customValue}}
+        {{#if url}}
+          {{> valueLink }}
+        {{else}}
+          {{{this}}}
+        {{/if}}
+      {{/each}}
     </div>
   </div>
 
   {{#*inline 'valueLink'}}
-  <a class="customDirectAnswer-fieldValueLink"
-    href="{{{customValue.url}}}"
-    {{#if eventType}}data-eventtype="{{eventType}}"{{/if}}
-    {{#if eventOptions}}data-eventoptions='{{{ json eventOptions }}}'{{/if}}>
-    {{{customValue.displayText}}}
+  <a class="customDirectAnswer-fieldValueLink" href="{{{url}}}"
+    {{#if @root/eventType}}data-eventtype="{{@root/eventType}}"{{/if}}
+    {{#if @root/eventOptions}}data-eventoptions='{{{ json @root/eventOptions }}}'{{/if}}>
+    {{{displayText}}}
   </a>
   {{/inline}}
 ```
 
-This is an example of a possible custom DirectAnswers card. It has custom rendering, depending on
-the fieldType of the directAnswer, as well as custom analytics event logic.
+This is an example of a possible custom DirectAnswers card. It has custom rendering that depends on
+the fieldType of the directAnswer, as well as a a custom analytics event.
 
 ```js
   class MyClassName extends ANSWERS.Component {
@@ -596,13 +597,13 @@ the fieldType of the directAnswer, as well as custom analytics event logic.
      * formats every value in the array and returns it, otherwise it just formats the single
      * given value.
      * @param {Object} answer
-     * @returns {string}
+     * @returns {Array<string>}
      */ 
     getCustomValue(answer) {
       if (Array.isArray(answer.value)) {
         return answer.value.map(value => this.formatValue(answer))
       } else {
-        return this.formatValue(answer);
+        return [ this.formatValue(answer) ];
       }
     }
 
