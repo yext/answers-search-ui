@@ -249,10 +249,10 @@ export default class PaginationComponent extends Component {
       const num = { number: i };
       if (i === pageNumber) {
         num.active = true;
-        if (this._maxVisiblePagesMobile == 1) {
+        if (this._maxVisiblePagesMobile === 1) {
           num.onePageMobile = '-onepage-mobile';
         }
-        if (this._maxVisiblePagesDesktop == 1) {
+        if (this._maxVisiblePagesDesktop === 1) {
           num.onePageDesktop = '-onepage-desktop';
         }
       } else {
