@@ -538,7 +538,19 @@ The example custom Direct Answer card will use the Handlebars template below.
         {{/if}}
       {{/each}}
     </div>
+    {{> feedback}}
   </div>
+
+	{{#*inline 'feedback'}}
+		<span class="customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon"
+				data-component="IconComponent"
+				data-opts='{"iconName": "thumb"}'
+		></span>
+		<span class="customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon"
+				data-component="IconComponent"
+				data-opts='{"iconName": "thumb"}'
+		></span>
+  {{/inline}}
 
   {{#*inline 'valueLink'}}
   <a class="customDirectAnswer-fieldValueLink" href="{{{url}}}"
@@ -549,8 +561,16 @@ The example custom Direct Answer card will use the Handlebars template below.
   {{/inline}}
 ```
 
+Some css to flip the thumbs up icon the right way.
+
+```css
+  .customDirectAnswer-thumbsUpIcon svg {
+    transform: rotate(180deg);
+  }
+```
+
 This is an example of a possible custom Direct Answer card. It has custom rendering that depends on
-the fieldType of the directAnswer, as well as a a custom analytics event.
+the fieldType of the directAnswer, as well as a custom analytics event.
 
 ```js
   class CustomDirectAnswerClassName extends ANSWERS.Component {
@@ -580,6 +600,29 @@ the fieldType of the directAnswer, as well as a a custom analytics event.
           entityId: this.associatedEntityId,
         }
       });
+    }
+
+    /**
+     * onMount() lets you register event listeners. Here, we register the thumbs up and thumbs
+     * down buttons to fire an analytics event on click.
+     */ 
+    onMount() {
+      const thumbsUpIcon = this._container.querySelector('.js-customDirectAnswer-thumbsUpIcon');
+      const thumbsDownIcon = this._container.querySelector('.js-customDirectAnswer-thumbsDownIcon');
+      thumbsUpIcon.addEventListener('click', () => this.reportQuality(true));
+      thumbsDownIcon.addEventListener('click', () => this.reportQuality(false));
+    }
+
+    /**
+     * reportQuality will send the quality feedback to analytics
+     * @param {boolean} isGood true if the answer is what you were looking for
+     */
+    reportQuality(isGood) {
+      const eventType = isGood === true ? 'THUMBS_UP' : 'THUMBS_DOWN';
+      const event = new ANSWERS.AnalyticsEvent(eventType).addOptions({
+        directAnswer: true
+      });
+      this.analyticsReporter.report(event);
     }
 
     /**
