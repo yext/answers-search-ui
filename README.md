@@ -1215,7 +1215,7 @@ results based on their distance from the user.
 {    
   options: [
     {
-      // Required, the value of the radius to apply (in meters). If this value is 0, the SDK will not add explicit radius filtering to the request.
+      // Required, the value of the radius to apply (in meters). If this value is 0, the SDK will not add explicit radius filtering to the request. The backend may still perform its own filtering depending on the query given.
       value: 8046.72,
       // Optional, the label to show next to the filter option.
       label: '5 miles',
