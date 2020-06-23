@@ -32,5 +32,6 @@ export default {
   LOCALE: 'locale',
   SORT_BYS: 'sort-bys',
   NO_RESULTS_CONFIG: 'no-results-config',
-  LOCATION_RADIUS: 'location-radius'
+  LOCATION_RADIUS: 'location-radius',
+  API_CONTEXT: 'context'
 };

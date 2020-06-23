@@ -205,6 +205,12 @@ export default class VerticalResultsComponent extends Component {
       labelText: this._config.appliedFilters.labelText,
       removableLabelText: this._config.appliedFilters.removableLabelText
     };
+
+    if (!this._config.isUniversal) {
+      this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
+        this.setState(this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS));
+      });
+    }
   }
 
   mount () {
@@ -220,15 +226,28 @@ export default class VerticalResultsComponent extends Component {
 
   getUniversalUrl () {
     const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
-    if (universalConfig.url) {
-      return addParamsToUrl(universalConfig.url, { query: this.query });
+    if (!universalConfig.url) {
+      return undefined;
     }
+
+    const params = { query: this.query };
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    if (context) {
+      params.context = context;
+    }
+    return addParamsToUrl(universalConfig.url, params);
   }
 
   getVerticalURL (data = {}) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    return addParamsToUrl(verticalURL, { query: this.query });
+
+    const params = { query: this.query };
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    if (context) {
+      params.context = context;
+    }
+    return addParamsToUrl(verticalURL, params);
   }
 
   setState (data = {}, val) {

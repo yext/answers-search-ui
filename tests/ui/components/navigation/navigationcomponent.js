@@ -111,7 +111,8 @@ describe('navigation component configuration', () => {
         getState: (storageKey) => {
           expect(storageKey).toEqual(StorageKeys.VERTICAL_PAGES_CONFIG);
           return verticalsConfig;
-        }
+        },
+        on: () => {}
       }
     };
   };
