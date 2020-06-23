@@ -1175,6 +1175,8 @@ ANSWERS.addComponent('FilterOptions', {
 ```
 
 The options config varies depending on whether the optionType is 'STATIC_FILTER' or 'RADIUS_FILTER'.
+A STATIC_FILTER allows you to filter on a specified field, while a RADIUS_FILTER allows you to filter
+results based on their distance from the user.
 
 ##### STATIC_FILTER
 
@@ -1213,7 +1215,7 @@ The options config varies depending on whether the optionType is 'STATIC_FILTER'
 {    
   options: [
     {
-      // Required, the value of the radius to apply (in meters). If this value is 0, will not filter by radius.
+      // Required, the value of the radius to apply (in meters). If this value is 0, the SDK will not add explicit radius filtering to the request. The backend may still perform its own filtering depending on the query given.
       value: 8046.72,
       // Optional, the label to show next to the filter option.
       label: '5 miles',
