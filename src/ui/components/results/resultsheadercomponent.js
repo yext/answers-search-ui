@@ -88,7 +88,7 @@ export default class ResultsHeaderComponent extends Component {
 
   /**
    * Returns the currently applied nlp filter nodes, with nlp filter nodes that
-   * are duplicates of other static filter nodes removed.
+   * are duplicates of other filter nodes removed.
    * @returns {Array<FilterNode>}
    */
   _pruneDuplicateNlpFilterNodes () {

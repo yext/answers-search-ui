@@ -94,8 +94,8 @@ export default class SimpleFilterNode extends FilterNode {
     if (thisMatchers.length !== otherMatchers.length) {
       return false;
     }
-    return thisMatchers.every(m => {
-      return otherMatchersToValues.hasOwnProperty(m) && otherMatchersToValues[m] === thisMatchersToValues[m];
-    });
+    return thisMatchers.every(m =>
+      otherMatchersToValues.hasOwnProperty(m) && otherMatchersToValues[m] === thisMatchersToValues[m]
+    );
   }
 }
