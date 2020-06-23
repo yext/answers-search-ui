@@ -17,7 +17,7 @@ export default class FilterOptionsComponentBlock {
   }
 
   async getLabel (label) {
-    return this._selector.find('label').withText(label);
+    return this._selector.find('.yxt-FilterOptions-optionLabel--name').withText(label).parent(0);
   }
 
   /**
@@ -55,8 +55,8 @@ export default class FilterOptionsComponentBlock {
     if (isCollapsed) {
       await this.toggleExpand();
     }
-    const option = await this._getOption(label);
-    await t.click(option);
+    const labelSelector = await this.getLabel(label);
+    await t.click(labelSelector);
   }
 
   /**
