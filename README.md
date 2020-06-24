@@ -516,7 +516,7 @@ Or by including a custom template bundle, and adding:
 
 ```js
   static defaultTemplateName () {
-    return 'YourTemplateName';
+    return 'CustomDirectAnswerTemplateName';
   }
 ```
 
@@ -531,25 +531,25 @@ The example custom Direct Answer card will use the Handlebars template below.
     </div>
     <div class="customDirectAnswer-value">
       {{#each customValue}}
-        {{#if url}}
-          {{> valueLink }}
-        {{else}}
-          {{{this}}}
-        {{/if}}
+      {{#if url}}
+        {{> valueLink }}
+      {{else}}
+        {{{this}}}
+      {{/if}}
       {{/each}}
     </div>
     {{> feedback}}
   </div>
 
   {{#*inline 'feedback'}}
-    <span class="customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon"
-      data-component="IconComponent"
-      data-opts='{"iconName": "thumb"}'
-    ></span>
-    <span class="customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon"
-      data-component="IconComponent"
-      data-opts='{"iconName": "thumb"}'
-    ></span>
+  <span class="customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon"
+    data-component="IconComponent"
+    data-opts='{"iconName": "thumb"}'
+  ></span>
+  <span class="customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon"
+    data-component="IconComponent"
+    data-opts='{"iconName": "thumb"}'
+  ></span>
   {{/inline}}
 
   {{#*inline 'valueLink'}}
@@ -577,6 +577,45 @@ the fieldType of the directAnswer, as well as a custom analytics event.
     constructor(config, systemConfig) {
       // If you need to override the constructor, make sure to call super(config, systemConfig) first.
       super(config, systemConfig);
+
+      // For simplicity's sake, this custom Direct Answer card sets the template using setTemplate(), as opposed to
+      // a custom template bundle.
+      this.setTemplate(`
+        <div class="customDirectAnswer">
+          <div class="customDirectAnswer-type">
+            {{type}}
+          </div>
+          <div class="customDirectAnswer-value">
+            {{#each customValue}}
+            {{#if url}}
+              {{> valueLink }}
+            {{else}}
+              {{{this}}}
+            {{/if}}
+            {{/each}}
+          </div>
+          {{> feedback}}
+        </div>
+
+        {{#*inline 'feedback'}}
+        <span class="customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon"
+          data-component="IconComponent"
+          data-opts='{"iconName": "thumb"}'
+        ></span>
+        <span class="customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon"
+          data-component="IconComponent"
+          data-opts='{"iconName": "thumb"}'
+        ></span>
+        {{/inline}}
+
+        {{#*inline 'valueLink'}}
+        <a class="customDirectAnswer-fieldValueLink" href="{{{url}}}"
+          {{#if @root/eventType}}data-eventtype="{{@root/eventType}}"{{/if}}
+          {{#if @root/eventOptions}}data-eventoptions='{{{ json @root/eventOptions }}}'{{/if}}>
+          {{{displayText}}}
+        </a>
+        {{/inline}}
+      `);
     }
 
     /**
@@ -595,7 +634,7 @@ the fieldType of the directAnswer, as well as a custom analytics event.
         customValue: this.getCustomValue(answer),
         eventType: 'CUSTOM_EVENT',
         eventOptions: {
-          searcher: "UNIVERSAL",
+          searcher: 'UNIVERSAL',
           verticalConfigId: this.verticalConfigId,
           entityId: this.associatedEntityId,
         }
@@ -633,15 +672,15 @@ the fieldType of the directAnswer, as well as a custom analytics event.
     formatValue(answer) {
       const { fieldType, value } = answer;
       switch (fieldType) {
-        case "phone":
+        case 'phone':
           return {
               url: 'http://myCustomWebsite.com/?mainPhone=' + value,
               displayText: value,
             };
-        case "rich_text":
+        case 'rich_text':
           return ANSWERS.formatRichText(value);
-        case "single_line_text":
-        case "multi_line_text":
+        case 'single_line_text':
+        case 'multi_line_text':
         default:
           return value;
       }
