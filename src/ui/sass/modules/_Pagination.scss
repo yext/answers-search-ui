@@ -55,25 +55,25 @@ $pagination-color-hover: var(--yxt-color-text-secondary) !default;
     }
   }
 
-  &-active {
+  &--active-all {
     background-color: var(--yxt-pagination-color-active-page);
   }
 
-  &-active-onepage-desktop {
+  &--active-mobile {
     background-color: inherit;
     @media (max-width: $breakpoint-mobile-max) {
       background-color: var(--yxt-pagination-color-active-page);
     }
   }
 
-  &-active-onepage-mobile {
+  &--active-desktop {
     background-color: var(--yxt-pagination-color-active-page);
     @media (max-width: $breakpoint-mobile-max) {
       background-color: inherit;
     }
   }
 
-  &-active-onepage-mobile-onepage-desktop {
+  &--onepage-all {
     background-color: inherit;
   }
 
