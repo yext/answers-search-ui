@@ -469,12 +469,12 @@ ANSWERS.addComponent('DirectAnswer', {
 })
 ```
 
-## Custom Direct Answer Card
+## Creating a Custom Direct Answer Card
 
-You can customize the look and behavior of your DirectAnswer, you can create a custom Direct Answer card.
+You can customize the look and behavior of your Direct Answer by creating a custom Direct Answer card.
 
-A custom Direct Answer card is given the directAnswer data from the query, the same data the built-in component
-operates on. That object will look something like the below:
+A custom Direct Answer card is given the same data as the built-in card.
+That data will look something like the below:
 
 ```js
 {
@@ -503,7 +503,8 @@ operates on. That object will look something like the below:
 }
 ```
 
-A Direct Answer custom card needs a corresponding template. This can be added either inline by changing the component's constructor to:
+A custom Direct Answer card needs a corresponding template.
+This can be added either inline by changing the component's constructor to:
 
 ```js
     constructor(config, systemConfig) {
@@ -516,13 +517,13 @@ Or by including a custom template bundle, and adding:
 
 ```js
   static defaultTemplateName () {
-    return 'CustomDirectAnswerTemplateName';
+    return 'CustomDirectAnswerTemplate';
   }
 ```
 
-Where 'YourTemplateName' is the name of the template registered onto the Handlebars renderer.
+Where 'CustomDirectAnswerTemplate' is the name the template is registered under.
 
-The example custom Direct Answer card will use the Handlebars template below.
+We will use the following template for our example card.
 
 ```hbs
   <div class="customDirectAnswer">
@@ -561,7 +562,7 @@ The example custom Direct Answer card will use the Handlebars template below.
   {{/inline}}
 ```
 
-Some css to flip the thumbs up icon the right way.
+This specific example needs some css to flip the thumbs up icon the right way.
 
 ```css
   .customDirectAnswer-thumbsUpIcon svg {
@@ -569,57 +570,23 @@ Some css to flip the thumbs up icon the right way.
   }
 ```
 
-This is an example of a possible custom Direct Answer card. It has custom rendering that depends on
-the fieldType of the directAnswer, as well as a custom analytics event.
+This is the javascript class for our custom Direct Answer card.
+It applies custom formatting to the Direct Answer, registers analytics events
+to the thumbs up/down icons, and passes custom event options into the template.
 
 ```js
-  class CustomDirectAnswerClassName extends ANSWERS.Component {
+  class CustomDirectAnswerClass extends ANSWERS.Component {
     constructor(config, systemConfig) {
       // If you need to override the constructor, make sure to call super(config, systemConfig) first.
       super(config, systemConfig);
 
-      // For simplicity's sake, this custom Direct Answer card sets the template using setTemplate(), as opposed to
+      // For simplicity's sake, we set this card's template using setTemplate(), as opposed to
       // a custom template bundle.
-      this.setTemplate(`
-        <div class="customDirectAnswer">
-          <div class="customDirectAnswer-type">
-            {{type}}
-          </div>
-          <div class="customDirectAnswer-value">
-            {{#each customValue}}
-            {{#if url}}
-              {{> valueLink }}
-            {{else}}
-              {{{this}}}
-            {{/if}}
-            {{/each}}
-          </div>
-          {{> feedback}}
-        </div>
-
-        {{#*inline 'feedback'}}
-        <span class="customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon"
-          data-component="IconComponent"
-          data-opts='{"iconName": "thumb"}'
-        ></span>
-        <span class="customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon"
-          data-component="IconComponent"
-          data-opts='{"iconName": "thumb"}'
-        ></span>
-        {{/inline}}
-
-        {{#*inline 'valueLink'}}
-        <a class="customDirectAnswer-fieldValueLink" href="{{{url}}}"
-          {{#if @root/eventType}}data-eventtype="{{@root/eventType}}"{{/if}}
-          {{#if @root/eventOptions}}data-eventoptions='{{{ json @root/eventOptions }}}'{{/if}}>
-          {{{displayText}}}
-        </a>
-        {{/inline}}
-      `);
+      this.setTemplate(`<div> your template here </div>`)
     }
 
     /**
-     * The setState method allows you to pass variables directly into your template.
+     * setState() lets you pass variables directly into your template.
      * Here, data is the directAnswer data from the query.
      * Below, we pass through a custom direct answers value, customValue.
      * @param {Object} data
@@ -653,7 +620,7 @@ the fieldType of the directAnswer, as well as a custom analytics event.
     }
 
     /**
-     * reportQuality will send the quality feedback to analytics
+     * reportQuality() sends an analytics event (either THUMBS_UP or THUMBS_DOWN).
      * @param {boolean} isGood true if the answer is what you were looking for
      */
     reportQuality(isGood) {
@@ -665,7 +632,7 @@ the fieldType of the directAnswer, as well as a custom analytics event.
     }
 
     /**
-     * Formats a directAnswer answer based on its fieldType.
+     * Formats a Direct Answer value based on its fieldType.
      * @param {Object} answer the answer property in the directAnswer model
      * @returns {string}
      */ 
@@ -687,7 +654,7 @@ the fieldType of the directAnswer, as well as a custom analytics event.
     }
 
     /**
-     * Computes a custom direct answer. If answer.value is an array, this method
+     * Computes a custom Direct Answer. If answer.value is an array, this method
      * formats every value in the array and returns it, otherwise it just formats the single
      * given value.
      * @param {Object} answer
@@ -712,7 +679,7 @@ the fieldType of the directAnswer, as well as a custom analytics event.
   }
 
   // Don't forget to register your Direct Answer card within the SDK. Otherwise the SDK won't recognize your card name!
-  ANSWERS.registerComponentType(CustomDirectAnswerClassName);
+  ANSWERS.registerComponentType(CustomDirectAnswerClass);
 ```
 
 ## Universal Results Component
