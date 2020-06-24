@@ -99,7 +99,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     expect(groupedFilters['name1']).toHaveLength(2);
   });
 
-  it('irremovable filter nodes come first, and removable: false by default', () => {
+  it('nlp filter nodes that are duplicates are removed', () => {
     const appliedFilterNodes = [ node_f0_v0, node_f1_v0 ];
     const nlpFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
     resultsHeaderComponent.appliedFilterNodes = appliedFilterNodes;
@@ -108,21 +108,15 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     expect(Object.keys(groupedFilters)).toHaveLength(2);
     expect(groupedFilters['name0']).toEqual([
       {
-        displayValue: 'display0'
-      },
-      {
-        displayValue: 'display1'
-      },
-      {
         displayValue: 'display0',
         dataFilterId: 0,
         removable: false
+      },
+      {
+        displayValue: 'display1'
       }
     ]);
     expect(groupedFilters['name1']).toEqual([
-      {
-        displayValue: 'display0'
-      },
       {
         displayValue: 'display0',
         dataFilterId: 1,

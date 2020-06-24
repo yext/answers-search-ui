@@ -87,6 +87,20 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   /**
+   * Returns the currently applied nlp filter nodes, with nlp filter nodes that
+   * are duplicates of other filter nodes removed.
+   * @returns {Array<FilterNode>}
+   */
+  _pruneDuplicateNlpFilterNodes () {
+    return this.nlpFilterNodes.filter(nlpNode => {
+      const isDuplicate = this.appliedFilterNodes.find(appliedNode =>
+        appliedNode.hasSameFilterAs(nlpNode)
+      );
+      return !isDuplicate;
+    });
+  }
+
+  /**
    * Combine all of the applied filters into a format the handlebars
    * template can work with.
    * Keys are the fieldName of the filter. Values are an array of objects with a
@@ -96,17 +110,18 @@ export default class ResultsHeaderComponent extends Component {
    * @returns {Array<Object>}
    */
   _groupAppliedFilters () {
-    const keyFunc = filterNode => filterNode.getMetadata().fieldName;
-    const irremovableValueFunc = filterNode => ({
+    const getFieldName = filterNode => filterNode.getMetadata().fieldName;
+    const parseNlpFilterDisplay = filterNode => ({
       displayValue: filterNode.getMetadata().displayValue
     });
-    const irremovableGrouped = groupArray(this.nlpFilterNodes, keyFunc, irremovableValueFunc);
-    const removableValueFunc = (filterNode, index) => ({
+    const parseRemovableFilterDisplay = (filterNode, index) => ({
       displayValue: filterNode.getMetadata().displayValue,
       dataFilterId: index,
       removable: this._config.removable
     });
-    return groupArray(this.appliedFilterNodes, keyFunc, removableValueFunc, irremovableGrouped);
+    const removableNodes = groupArray(this.appliedFilterNodes, getFieldName, parseRemovableFilterDisplay);
+    const prunedNlpFilterNodes = this._pruneDuplicateNlpFilterNodes();
+    return groupArray(prunedNlpFilterNodes, getFieldName, parseNlpFilterDisplay, removableNodes);
   }
 
   /**

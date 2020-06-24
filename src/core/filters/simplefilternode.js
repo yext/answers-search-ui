@@ -73,4 +73,30 @@ export default class SimpleFilterNode extends FilterNode {
   remove () {
     this._remove();
   }
+
+  /**
+   * Returns whether this SimpleFilterNode's filter is equal to another SimpleFilterNode's
+   * @param {SimpleFilterNode} node
+   * @returns {boolean}
+   */
+  hasSameFilterAs (otherNode) {
+    const thisFilter = this.getFilter();
+    const otherFilter = otherNode.getFilter();
+    const thisFieldId = thisFilter.getFilterKey();
+    const otherFieldId = otherFilter.getFilterKey();
+    if (thisFieldId !== otherFieldId) {
+      return false;
+    }
+    const thisMatchersToValues = thisFilter[thisFieldId];
+    const otherMatchersToValues = otherFilter[otherFieldId];
+    const thisMatchers = Object.keys(thisMatchersToValues);
+    const otherMatchers = Object.keys(otherMatchersToValues);
+    if (thisMatchers.length !== otherMatchers.length) {
+      return false;
+    }
+    return thisMatchers.every(m =>
+      otherMatchersToValues.hasOwnProperty(m) &&
+      otherMatchersToValues[m] === thisMatchersToValues[m]
+    );
+  }
 }
