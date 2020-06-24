@@ -1,3 +1,5 @@
+import percySnapshot from "@percy/testcafe";
+
 import UniversalPage from './pageobjects/universalpage';
 import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
@@ -29,6 +31,8 @@ test('Basic universal flow', async t => {
 
   const faqsSectionTitle = await sections[1].getTitle();
   await t.expect(faqsSectionTitle).contains('FAQ');
+
+  await percySnapshot(t, 'Universal flow');
 });
 
 fixture`Vertical search page works as expected`
@@ -44,6 +48,8 @@ test('pagination flow', async t => {
   await paginationComponent.clickNextButton();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
+
+  await percySnapshot(t, 'Pagination flow');
 });
 
 fixture`Facets page`
