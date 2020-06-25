@@ -414,6 +414,9 @@ export default class SearchComponent extends Component {
     // If we have a redirectUrl, we want the form to be
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
+      if (params.has(StorageKeys.REFERRER_PAGE_URL)) {
+        params.delete(StorageKeys.REFERRER_PAGE_URL);
+      }
       window.location.href = this.redirectUrl + '?' + params.toString();
       return false;
     }
