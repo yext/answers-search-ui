@@ -1,5 +1,5 @@
 import { setupServer, shutdownServer } from '../server';
-import FacetsPage from '../pageobjects/facetspage';
+import VerticalPage from '../pageobjects/verticalpage';
 
 fixture`Facets page`
   .before(setupServer)
@@ -7,14 +7,14 @@ fixture`Facets page`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
 
 test(`Facets load on the page, and can affect the search`, async t => {
-  const searchComponent = FacetsPage.getSearchComponent();
+  const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.submitQuery();
 
-  const facets = FacetsPage.getFacetsComponent();
+  const facets = VerticalPage.getFacetsComponent();
   const filterBox = facets.getFilterBox();
 
   // Record the amount of results with no facets
-  const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
+  const verticalResultsComponent = VerticalPage.getVerticalResultsComponent();
   const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
 
   // Select the first option in the first FilterOptions
@@ -60,4 +60,3 @@ test(`Facets load on the page, and can affect the search`, async t => {
   actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(initialResultsCount);
 });
-
