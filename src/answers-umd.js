@@ -246,8 +246,7 @@ class Answers {
    */
   _invokeOnReady () {
     this._masterSwitchApi.isDisabled()
-      .then(isDisabled => !isDisabled && this._onReady())
-      .catch(() => this._onReady());
+      .then(isDisabled => !isDisabled && this._onReady(), () => this._onReady());
   }
 
   /**
