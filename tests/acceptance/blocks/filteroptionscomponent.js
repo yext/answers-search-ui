@@ -17,7 +17,7 @@ export default class FilterOptionsComponentBlock {
   }
 
   async getLabel (label) {
-    return this._selector.find('.yxt-FilterOptions-optionLabel--name').withText(label).parent(0);
+    return this._selector.find('.yxt-FilterOptions-optionLabel--name').withExactText(label).parent(0);
   }
 
   /**

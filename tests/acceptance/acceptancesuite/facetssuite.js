@@ -19,8 +19,8 @@ test(`Facets load on the page, and can affect the search`, async t => {
 
   // Select the first option in the first FilterOptions
   const employeeDepartment = await filterBox.getFilterOptionsWithTitle('Employee Department');
-  await employeeDepartment.toggleOption('Client Delivery');
-  let expectedResultsCount = await employeeDepartment.getOptionCount('Client Delivery');
+  await employeeDepartment.toggleOption('Client Delivery [SO]');
+  let expectedResultsCount = await employeeDepartment.getOptionCount('Client Delivery [SO]');
 
   await filterBox.applyFilters();
 
@@ -36,9 +36,9 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await t.expect(actualResultsCount).eql(initialResultsCount);
 
   // Select the first option and second option in the first FilterOptions
-  await employeeDepartment.toggleOption('Client Delivery');
+  await employeeDepartment.toggleOption('Client Delivery [SO]');
   await employeeDepartment.toggleOption('Technology');
-  const clientDeliveryCount = await employeeDepartment.getOptionCount('Client Delivery');
+  const clientDeliveryCount = await employeeDepartment.getOptionCount('Client Delivery [SO]');
   const technologyCount = await employeeDepartment.getOptionCount('Technology');
   expectedResultsCount = clientDeliveryCount + technologyCount;
   await filterBox.applyFilters();

@@ -49,6 +49,15 @@ export default class SearchComponentBlock {
   }
 
   /**
+     * Clears the query by manually deleting the text (as opposed to using the clear button).
+     */
+  async deleteQuery () {
+    await t
+      .click(this._input)
+      .pressKey('ctrl+a delete');
+  }
+
+  /**
      * Clears whatever query is presently in the search bar.
      */
   async clearQuery () {

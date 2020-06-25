@@ -9,15 +9,18 @@ export default class ResultsHeaderComponentBlock {
     this._selector = selector || Selector(this._container);
   }
 
-  getAllFilterTags () {
+  getFilterTagWithLabel (label) {
+    return this._selector
+      .find('.yxt-ResultsHeader-removableFilterValue')
+      .withExactText(label)
+      .parent(0);
+  }
+
+  getFilterTags () {
     return this._selector.find('.js-yxt-ResultsHeader-removableFilterTag');
   }
 
-  getFilterTag (displayValue) {
-    return this._selector.find('.js-yxt-ResultsHeader-removableFilterTag').withText(displayValue);
-  }
-
   async removeFilterTag (displayValue) {
-    await t.click(this.getFilterTag(displayValue));
+    await t.click(this.getFilterTagWithLabel(displayValue));
   }
 }

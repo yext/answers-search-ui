@@ -20,6 +20,7 @@
     <div>
       <div class="facets"></div>
       <div class="filter-search"></div>
+      <div class="filter-box"></div>
     </div>
     <div">
       <div class="vertical-results"></div>
@@ -69,6 +70,70 @@
               sectioned: false,
             }]
           }
+        });
+
+        ANSWERS.addComponent('FilterBox', {
+          container: '.filter-box',
+          searchOnChange: true,
+          verticalKey: 'people',
+          filters: [
+            {
+              type: 'FilterOptions',
+              label: 'Awards',
+              control: 'singleoption',
+              options: [
+                {
+                  label: 'Roses Friend Static',
+                  field: 'c_awards',
+                  value: 'Roses Friend',
+                },
+                {
+                  label: 'Pres Club Static',
+                  field: 'c_awards',
+                  value: 'Presidents Club',
+                },
+              ]
+            },
+            {
+              type: 'FilterOptions',
+              optionType: 'RADIUS_FILTER',
+              label: 'Radius Filter',
+              control: 'singleoption',
+              options: [
+                {
+                  label: "empty",
+                  value: 0,
+                },
+                {
+                  label: "one",
+                  value: 1,
+                },
+              ],
+            },
+            {
+              type: 'FilterOptions',
+              optionType: 'STATIC_FILTER',
+              label: 'Location',
+              control: 'multioption',
+              options: [
+                {
+                  label: 'canada',
+                  field: 'c_employeeCountry',
+                  value: 'Canada',
+                },
+                {
+                  label: 'remote',
+                  field: 'c_employeeCountry',
+                  value: 'Remote'
+                },
+                {
+                  label: 'usa',
+                  field: 'c_employeeCountry',
+                  value: 'United States'
+                }
+              ]
+            }
+          ],
         });
       }
     })

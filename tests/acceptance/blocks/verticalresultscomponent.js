@@ -43,9 +43,9 @@ export default class VerticalResultsComponentBlock {
   }
 
   /**
-   * Gets the ResultsHeader child component block.
-   * @returns {ResultsHeaderComponentBlock}
-   */
+     * Gets the ResultsHeader child component block.
+     * @returns {ResultsHeaderComponentBlock}
+     */
   async getResultsHeader () {
     const resultsHeader = await this._selector.find('.yxt-ResultsHeader');
     return new ResultsHeaderComponentBlock(resultsHeader);
