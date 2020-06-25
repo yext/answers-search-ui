@@ -111,7 +111,7 @@ export default class DirectAnswerComponent extends Component {
     const directAnswerPropeties = {
       entityType: directAnswer.relatedItem.data.type,
       fieldName: directAnswer.answer.fieldName,
-      fieldType: directAnswer.fieldType
+      fieldType: directAnswer.answer.fieldType
     };
     for (let [propertyToMatch, propertyValue] of Object.entries(override)) {
       if (propertyToMatch === 'cardType') {
