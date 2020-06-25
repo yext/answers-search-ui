@@ -249,6 +249,12 @@ export default class PaginationComponent extends Component {
       const num = { number: i };
       if (i === pageNumber) {
         num.active = true;
+        if (this._maxVisiblePagesDesktop > 1) {
+          num.activeDesktop = true;
+        }
+        if (this._maxVisiblePagesMobile > 1) {
+          num.activeMobile = true;
+        }
       } else {
         if (i <= mobileBackLimit || i > mobileFrontLimit) {
           num.mobileHidden = true;
