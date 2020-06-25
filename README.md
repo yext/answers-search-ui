@@ -594,16 +594,16 @@ to the thumbs up/down icons, and passes custom event options into the template.
      */ 
     setState(data) {
       const { type, answer, relatedItem } = data;
-      this.associatedEntityId = data.relatedItem && data.relatedItem.data && data.relatedItem.data.id;
-      this.verticalConfigId = data.relatedItem && data.relatedItem.verticalConfigId;
+      const associatedEntityId = data.relatedItem && data.relatedItem.data && data.relatedItem.data.id;
+      const verticalConfigId = data.relatedItem && data.relatedItem.verticalConfigId;
       return super.setState({
         ...data,
         customValue: this.getCustomValue(answer),
         eventType: 'CUSTOM_EVENT',
         eventOptions: {
           searcher: 'UNIVERSAL',
-          verticalConfigId: this.verticalConfigId,
-          entityId: this.associatedEntityId,
+          verticalConfigId: verticalConfigId,
+          entityId: associatedEntityId,
         }
       });
     }
