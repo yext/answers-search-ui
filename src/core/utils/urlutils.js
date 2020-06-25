@@ -55,3 +55,7 @@ export function addParamsToUrl (url, params = {}) {
   }
   return url.split('?')[0] + '?' + urlParams;
 }
+
+export function urlWithoutQueryParamsAndHash (url) {
+  return url.split('?')[0].split('#')[0];
+}

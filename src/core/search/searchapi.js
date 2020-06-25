@@ -66,7 +66,7 @@ export default class SearchApi {
   }
 
   /** @inheritdoc */
-  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled, sortBys, locationRadius, context }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled, sortBys, locationRadius, context, referrerPageUrl }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -93,7 +93,8 @@ export default class SearchApi {
         'sessionTrackingEnabled': sessionTrackingEnabled,
         'sortBys': sortBys,
         'locationRadius': locationRadius,
-        'context': context
+        'context': context,
+        'referrerPageUrl': referrerPageUrl
       }
     };
     let request = new ApiRequest(requestConfig, { getState: () => sessionTrackingEnabled });
@@ -117,7 +118,8 @@ export default class SearchApi {
         'locale': this._locale,
         'skipSpellCheck': params.skipSpellCheck,
         'queryTrigger': params.queryTrigger,
-        'context': params.context
+        'context': params.context,
+        'referrerPageUrl': params.referrerPageUrl
       }
     };
     let request = new ApiRequest(requestConfig, { getState: () => params.sessionTrackingEnabled });
