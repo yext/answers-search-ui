@@ -1,5 +1,6 @@
 import { Selector, t } from 'testcafe';
 import FilterOptionsComponentBlock from './filteroptionscomponent';
+
 /**
  * This class models user interactions with the {@link FilterBoxComponent}.
  */
@@ -10,10 +11,20 @@ export default class FilterBoxComponentBlock {
   }
 
   /**
+   * Gets all child FilterOptions blocks.
+   * @returns {FilterOptionsComponentBlock}
+   */
+  async getFilterOptionsCount () {
+    const filterOptions = await this._selector.find('.yxt-FilterOptions-fieldSet');
+    return filterOptions.count;
+  }
+
+  /**
    * Gets the child FilterOptions block with the given title.
    * @param {String} title
+   * @returns {FilterOptionsComponentBlock}
    */
-  async getFilterOptions (title) {
+  async getFilterOptionsWithTitle (title) {
     const filterOptions = await this._selector.find('.yxt-FilterOptions-fieldSet').withText(title);
     return new FilterOptionsComponentBlock(filterOptions);
   }
@@ -23,7 +34,7 @@ export default class FilterBoxComponentBlock {
    */
   async applyFilters () {
     const applyButton = await this._selector.find('.js-yext-filterbox-apply');
-    await t.click(applyButton);
+    return t.click(applyButton);
   }
 
   /**

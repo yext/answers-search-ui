@@ -18,7 +18,7 @@ test(`Facets load on the page, and can affect the search`, async t => {
   const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
 
   // Select the first option in the first FilterOptions
-  const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
+  const employeeDepartment = await filterBox.getFilterOptionsWithTitle('Employee Department');
   await employeeDepartment.toggleOption('Client Delivery');
   let expectedResultsCount = await employeeDepartment.getOptionCount('Client Delivery');
 
@@ -46,7 +46,7 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await t.expect(actualResultsCount).eql(expectedResultsCount);
 
   // Check that selecting multiple FilterOptions works
-  const brands = await filterBox.getFilterOptions('Brands');
+  const brands = await filterBox.getFilterOptionsWithTitle('Brands');
   await brands.toggleOption('E');
   expectedResultsCount = await brands.getOptionCount('E');
   await filterBox.applyFilters();

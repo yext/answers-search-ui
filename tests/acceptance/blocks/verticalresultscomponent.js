@@ -1,4 +1,5 @@
 import { Selector } from 'testcafe';
+import ResultsHeaderComponentBlock from './resultsheadercomponent';
 
 /**
  * Models the user interaction with a {@link VerticalResultsComponent}.
@@ -17,6 +18,13 @@ export default class VerticalResultsComponentBlock {
   }
 
   /**
+     * Returns this block's selector.
+     */
+  getSelector () {
+    return this._selector;
+  }
+
+  /**
      * Returns the title of this vertical results section, wrapped in a
      * {@link Promise}.
      *
@@ -32,5 +40,14 @@ export default class VerticalResultsComponentBlock {
     const resultsCountTotal = Selector('.yxt-ResultsHeader-resultsCountTotal');
     const countText = await resultsCountTotal.innerText;
     return Number.parseInt(countText);
+  }
+
+  /**
+   * Gets the ResultsHeader child component block.
+   * @returns {ResultsHeaderComponentBlock}
+   */
+  async getResultsHeader () {
+    const resultsHeader = await this._selector.find('.yxt-ResultsHeader');
+    return new ResultsHeaderComponentBlock(resultsHeader);
   }
 }
