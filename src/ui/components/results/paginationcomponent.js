@@ -255,15 +255,6 @@ export default class PaginationComponent extends Component {
         if (this._maxVisiblePagesMobile > 1) {
           num.activeMobile = true;
         }
-        // if (this._maxVisiblePagesDesktop === 1 && this._maxVisiblePagesMobile === 1) {
-        //   num.onePageAll = true;
-        // } else if (this._maxVisiblePagesMobile === 1) {
-        //   num.activeDesktop = true;
-        // } else if (this._maxVisiblePagesDesktop === 1) {
-        //   num.activeMobile = true;
-        // } else {
-        //   num.activeAll = true;
-        // }
       } else {
         if (i <= mobileBackLimit || i > mobileFrontLimit) {
           num.mobileHidden = true;
