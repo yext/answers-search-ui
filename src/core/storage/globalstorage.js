@@ -35,6 +35,10 @@ export default class GlobalStorage {
       if (key === StorageKeys.QUERY) {
         continue;
       }
+      if (key.startsWith(StorageKeys.FILTER)) {
+        this.set(key, JSON.parse(val));
+        continue;
+      }
       this.set(key, val);
     }
 
