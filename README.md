@@ -300,8 +300,10 @@ Every component has the same base configuration options.
     render: function(data) {},
     // Optional, a hook for transforming data before it gets sent to render
     transformData: function(data) {},
-    // Optional, invoked when the HTML is mounted to the DOM, note, this overrides any built-in onMount function for a component
+    // Optional, invoked when the HTML is mounted to the DOM, this will not override any built-in onMount function for a component
     onMount: function(data) {},
+    // Optional, invoked when the HTML is mounted to the DOM, this will override any built-in onMount function for a component
+    onMountOverride: function(data) {},
     // Optional, additional properties to send with every analytics event
     analyticsOptions: {},
   }
@@ -1426,7 +1428,7 @@ results based on their distance from the user.
 ##### RADIUS_FILTER
 
 ```js
-{    
+{
   options: [
     {
       // Required, the value of the radius to apply (in meters). If this value is 0, the SDK will not add explicit radius filtering to the request. The backend may still perform its own filtering depending on the query given.
@@ -1446,7 +1448,7 @@ results based on their distance from the user.
       value: 40233.6,
       label: '25 miles'
     },
-    { 
+    {
       value: 80467.2,
       label: '50 miles'
     },
@@ -2113,10 +2115,10 @@ ensure that a Rich Text Formatted value is shown properly on the page. To use th
 ANSWERS.formatRichText(rtfFieldValue, eventOptionsFieldName, targetConfig)
 ```
 
-For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute. 
+For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute.
 
 When clicking any link in the resultant HTML, an `AnalyticsEvent` will be fired. If the `eventOptionsFieldName` has been
-specified, the `eventOptions` will include a `fieldName` attribute with the given value. 
+specified, the `eventOptions` will include a `fieldName` attribute with the given value.
 
 The `targetConfig` parameter dictates where the link is opened: the current window, a new tab, etc. It can have the following forms:
 
