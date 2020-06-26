@@ -1,15 +1,17 @@
-<div class="yxt-ResultsHeader
-  {{~#if _config.isUniversal}} yxt-ResultsHeader--universal yxt-Results-filters{{/if}}
-  {{~#if _config.removable}} yxt-ResultsHeader--removable{{/if}}">
-  {{> resultscount}}
-  {{#if showResultSeparator}}
-    <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
-  {{/if}}
-  {{> filters}}
-</div>
+{{#if (or shouldShowFilters (and _config.showResultCount resultsCount))}}
+  <div class="yxt-ResultsHeader
+    {{~#if _config.isUniversal}} yxt-ResultsHeader--universal yxt-Results-filters{{/if}}
+    {{~#if _config.removable}} yxt-ResultsHeader--removable{{/if}}">
+    {{> resultscount}}
+    {{#if showResultSeparator}}
+      <div class="yxt-ResultsHeader-resultsCountSeparator">{{_config.resultsCountSeparator}}</div>
+    {{/if}}
+    {{> filters}}
+  </div>
+{{/if}}
 
 {{#*inline "resultscount"}}
-  {{#every _config.showResultCount resultsCount}}
+  {{#if (and _config.showResultCount resultsCount)}}
     <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} through {{resultsCountEnd}} of {{resultsCount}}">
       <div aria-hidden="true">
         <span class="yxt-ResultsHeader-resultsCountStart">{{resultsCountStart}}</span>
@@ -19,7 +21,7 @@
         <span class="yxt-ResultsHeader-resultsCountTotal">{{resultsCount}}</span>
       </div>
     </div>
-  {{/every}}
+  {{/if}}
 {{/inline}}
 
 {{#*inline "filters"}}
@@ -56,7 +58,11 @@
         data-eventtype="FILTERING_WITHIN_SECTION"
         data-eventoptions='{{eventOptions}}'
       >
-        change filters
+        {{#if _config.changeFiltersText}}
+          {{_config.changeFiltersText}}
+        {{else}}
+          change filters
+        {{/if}}
       </a>
     {{/every}}
     </div>

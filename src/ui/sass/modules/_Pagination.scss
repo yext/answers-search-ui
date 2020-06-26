@@ -55,8 +55,16 @@ $pagination-color-hover: var(--yxt-color-text-secondary) !default;
     }
   }
 
-  #active-page {
-    background-color: var(--yxt-pagination-color-active-page);
+  &--activeMobile{
+    @media (max-width: $breakpoint-mobile-max) {
+      background-color: var(--yxt-pagination-color-active-page);
+    }
+  }
+
+  &--activeDesktop {
+    @media (min-width: $breakpoint-mobile-min) {
+      background-color: var(--yxt-pagination-color-active-page);
+    }
   }
 
   &-link:hover, &-link:focus {

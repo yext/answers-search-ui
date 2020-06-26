@@ -6,7 +6,8 @@ import cssVars from 'css-vars-ponyfill';
 import {
   DefaultTemplatesLoader,
   Renderers,
-  DOM
+  DOM,
+  SearchParams
 } from './ui/index';
 import Component from './ui/components/component';
 
@@ -246,8 +247,7 @@ class Answers {
    */
   _invokeOnReady () {
     this._masterSwitchApi.isDisabled()
-      .then(isDisabled => !isDisabled && this._onReady())
-      .catch(() => this._onReady());
+      .then(isDisabled => !isDisabled && this._onReady(), () => this._onReady());
   }
 
   /**
@@ -418,6 +418,10 @@ class Answers {
    * Updates the css styles with new current variables. This is useful when the css
    * variables are updated dynamically (e.g. through js) or if the css variables are
    * added after the ANSWERS.init
+   *
+   * To solve issues with non-zero max-age cache controls for link/script assets in IE11,
+   * we add a cache busting parameter so that XMLHttpRequests succeed.
+   *
    * @param {Object} config Additional config to pass to the ponyfill
    */
   ponyfillCssVariables (config = {}) {
@@ -425,7 +429,18 @@ class Answers {
       onlyLegacy: true,
       onError: config.onError || function () {},
       onSuccess: config.onSuccess || function () {},
-      onFinally: config.onFinally || function () {}
+      onFinally: config.onFinally || function () {},
+      onBeforeSend: (xhr, node, url) => {
+        try {
+          const uriWithCacheBust = new URL(url);
+          const params = new SearchParams(uriWithCacheBust.search);
+          params.set('_', new Date().getTime());
+          uriWithCacheBust.search = params.toString();
+          xhr.open('GET', uriWithCacheBust.toString());
+        } catch (e) {
+          // Catch the error and continue if the URL provided in the asset is not a valid URL
+        }
+      }
     });
   }
 }
