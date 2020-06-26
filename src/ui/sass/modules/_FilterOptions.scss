@@ -42,6 +42,12 @@
       &:focus {
         border: var(--yxt-border-hover);
       }
+
+      &::-ms-clear {
+        display: none;
+        height: 0;
+        width: 0;
+      }
     }
 
     &-fieldSet {
