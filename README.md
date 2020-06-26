@@ -133,7 +133,7 @@ function initAnswers() {
 ```
 
 ## Vertical Pages Configuration
-Below is a list of configuration options related to vertical pages in navigation and no results, used in the [base configuration](#configuration-options) above.
+Below is a list of configuration options related to vertical pages in navigation and no results, used in the [base configuration](#answersinit-configuration-options) above.
 
 ```js
 verticalPages: [
@@ -160,7 +160,7 @@ verticalPages: [
 ```
 
 ## Search Configuration
-Below is a list of configuration options related to search, used in the [base configuration](#configuration-options) above.
+Below is a list of configuration options related to search, used in the [base configuration](#answersinit-configuration-options) above.
 
 ```js
     search: {
@@ -174,7 +174,7 @@ Below is a list of configuration options related to search, used in the [base co
 ```
 
 ## Vertical No Results Configuration
-Below is a list of configuration options related to no results on Vertical Pages, used in the [base configuration](#configuration-options) above.
+Below is a list of configuration options related to no results on Vertical Pages, used in the [base configuration](#answersinit-configuration-options) above.
 
 ```js
     noResults: {
@@ -187,7 +187,7 @@ Below is a list of configuration options related to no results on Vertical Pages
 
 ## onVerticalSearch Configuration
 
-The onVerticalSearch Configuration is a function, used in the [base configuration](#configuration-options) above.
+The onVerticalSearch Configuration is a function, used in the [base configuration](#answersinit-configuration-options) above.
 
 It allows you to send an analytics event each time a search is run on a Vertical page. This function should take in one parameter, `searchParams`, which contains information about the search, and return the desired analytics event.
 
@@ -236,7 +236,7 @@ function (searchParams) => {
 
 ## onUniversalSearch Configuration
 
-The onUniversalSearch Configuration is a function, used in the [base configuration](#configuration-options) above.
+The onUniversalSearch Configuration is a function, used in the [base configuration](#answersinit-configuration-options) above.
 
 It allows you to send an analytics event each time a search is run
 on a Universal page. This function should take in one parameter, `searchParams`, which contains information about the
