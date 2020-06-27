@@ -159,46 +159,41 @@ class FilterOptionsConfig {
       }
     }
     // previousOptions will be null if there were no previousOptions in persistentStorage
-    const previousOptions = config.previousOptions;
-    this.options = this.setSelectedOptions(this.options, previousOptions);
+    this.previousOptions = config.previousOptions;
+    this.options = this.setSelectedOptions(this.options);
   }
 
   /**
-   * Sets selected options on load based on options stored in persistent storage and options with selected: true.
-   * If no previous options were stored in persistentStorage, default to options marked
-   * as selected. If multiple options are marked as selected for 'singleoption', only the
-   * first should be selected.
+   * Marks selected options as selected: true.
    * @param {Array<Object>} options
    * @param {Array<string>} previousOptions
    * @returns {Array<Object>}
    */
-  setSelectedOptions (options, previousOptions) {
-    if (previousOptions && this.control === 'singleoption') {
-      let hasSeenSelectedOption = false;
-      return options.map(o => {
-        if (previousOptions.includes(o.label) && !hasSeenSelectedOption) {
-          hasSeenSelectedOption = true;
-          return { ...o, selected: true };
-        }
-        return { ...o, selected: false };
-      });
-    } else if (previousOptions && this.control === 'multioption') {
-      return options.map(o => ({
-        ...o,
-        selected: previousOptions.includes(o.label)
-      }));
-    } else if (this.control === 'singleoption') {
-      let hasSeenSelectedOption = false;
-      return options.map(o => {
-        if (hasSeenSelectedOption) {
-          return { ...o, selected: false };
-        } else if (o.selected) {
-          hasSeenSelectedOption = true;
-        }
-        return { ...o };
-      });
+  setSelectedOptions (options) {
+    let alreadySelected = false;
+    return options.map(o => {
+      o = { ...o, selected: this.optionIsSelected(o, alreadySelected) };
+      alreadySelected = alreadySelected || o.selected;
+      return o;
+    });
+  }
+
+  /**
+   * Whether a given option should be set to selected: true.
+   * @param {Object} o the given option
+   * @param {boolean} alreadySelected whether there is already a selected option
+   * @return {boolean}
+   */
+  optionIsSelected (o, alreadySelected) {
+    if (this.control === 'singleoption' && alreadySelected) {
+      return false;
     }
-    return options;
+    if (this.previousOptions) {
+      const isPreviousOption = this.previousOptions.includes(o.label);
+      const isDynamicallySelected = this.isDynamic && o.selected;
+      return isPreviousOption || isDynamicallySelected;
+    }
+    return o.selected;
   }
 
   getInitialSelectedCount () {
