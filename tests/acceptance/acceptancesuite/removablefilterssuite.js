@@ -243,3 +243,16 @@ test(`Queries ('Consulting', 'Technology') that trigger an NLP Filter and also s
   // Check that the applied filters bar has the correct tags
   await t.expect(filterTags.count).eql(0);
 });
+
+test(`By default, VerticalResults.appliedFilters.hiddenFields hides builtin.entityType`, async t => {
+  const verticalResults = VerticalPage.getVerticalResultsComponent();
+  const searchBar = VerticalPage.getSearchComponent();
+  const resultsHeader = await verticalResults.getResultsHeader();
+  const filterTags = resultsHeader.getFilterTags();
+
+  // Search for 'Person'
+  await searchBar.enterQuery('Person');
+  await searchBar.submitQuery();
+  // Check that ResultsHeader does not display the builtin.entityType NLP filter
+  await t.expect(filterTags.count).eql(0);
+});

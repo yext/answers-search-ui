@@ -1,0 +1,143 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+
+  <script src="http://localhost:9999/dist/answerstemplates.compiled.min.js"></script>
+  <script src="http://localhost:9999/dist/answers.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://localhost:9999/dist/answers.css">
+</head>
+
+<style>
+  .flex {
+    display: flex;
+  }
+</style>
+
+<body>
+  <div class="search-bar"></div>
+  <div class="flex">
+    <div>
+      <div class="facets"></div>
+      <div class="filter-search"></div>
+      <div class="filter-box"></div>
+    </div>
+    <div">
+      <div class="vertical-results"></div>
+  </div>
+  </div>
+
+  <script>
+    ANSWERS.init({
+      apiKey: 'df4b24f4075800e5e9705090c54c6c13',
+      experienceKey: 'sdkacceptancetests',
+      businessId: '2287528',
+      experienceVersion: 'PRODUCTION',
+      templateBundle: TemplateBundle.default,
+      search: {
+        verticalKey: 'people',
+        defaultInitialSearch: ''
+      },
+      onReady: function () {
+        this.addComponent('SearchBar', {
+          container: '.search-bar',
+          clearButton: true,
+          promptForLocation: true,
+          verticalKey: 'people',
+          allowEmptySearch: true
+        });
+
+        this.addComponent('VerticalResults', {
+          container: '.vertical-results',
+          appliedFilters: {
+            removable: true
+          }
+        });
+
+        this.addComponent('Facets', {
+          container: '.facets',
+          verticalKey: 'people',
+          searchOnChange: true
+        });
+
+        ANSWERS.addComponent('FilterSearch', {
+          container: '.filter-search',
+          verticalKey: 'people',
+          searchParameters: {
+            fields: [{
+              fieldId: 'builtin.location',
+              entityTypeId: 'ce_person',
+              sectioned: false,
+            }]
+          }
+        });
+
+        ANSWERS.addComponent('FilterBox', {
+          container: '.filter-box',
+          searchOnChange: true,
+          verticalKey: 'people',
+          filters: [
+            {
+              type: 'FilterOptions',
+              label: 'Awards',
+              control: 'singleoption',
+              options: [
+                {
+                  label: 'Roses Friend Static',
+                  field: 'c_awards',
+                  value: 'Roses Friend',
+                },
+                {
+                  label: 'Pres Club Static',
+                  field: 'c_awards',
+                  value: 'Presidents Club',
+                },
+              ]
+            },
+            {
+              type: 'FilterOptions',
+              optionType: 'RADIUS_FILTER',
+              label: 'Radius Filter',
+              control: 'singleoption',
+              options: [
+                {
+                  label: "empty",
+                  value: 0,
+                },
+                {
+                  label: "one",
+                  value: 1,
+                },
+              ],
+            },
+            {
+              type: 'FilterOptions',
+              optionType: 'STATIC_FILTER',
+              label: 'Location',
+              control: 'multioption',
+              options: [
+                {
+                  label: 'canada',
+                  field: 'c_employeeCountry',
+                  value: 'Canada',
+                },
+                {
+                  label: 'remote',
+                  field: 'c_employeeCountry',
+                  value: 'Remote'
+                },
+                {
+                  label: 'usa',
+                  field: 'c_employeeCountry',
+                  value: 'United States'
+                }
+              ]
+            }
+          ],
+        });
+      }
+    })
+  </script>
+</body>
+
+</html>
