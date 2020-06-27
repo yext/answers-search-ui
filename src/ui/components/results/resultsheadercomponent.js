@@ -47,7 +47,7 @@ export default class ResultsHeaderComponent extends Component {
      * Array of nlp filters in the search response.
      * @type {Array<AppliedQueryFilter>}
      */
-    this.nlpFilterNodes = convertNlpFiltersToFilterNodes(data.nlpFilters || []);
+    this.nlpFilterNodes = this._convertNlpFiltersToFilterNodes(data.nlpFilters || []);
 
     /**
      * TODO (SPR-2455): Ideally, we would be able to set moduleId to DYNAMIC_FILTERS, the actual data
@@ -84,6 +84,15 @@ export default class ResultsHeaderComponent extends Component {
       resetPagination: true,
       useFacets: true
     });
+  }
+
+  /**
+   * Converts an array of {@link AppliedQueryFilter}s into equivalent {@link FilterNode}s, then
+   * removes filternodes that are either blank, or have a fieldId listed in config.hiddenFields.
+   * @param {Array<AppliedQueryFilter>} nlpFilters
+   */
+  _convertNlpFiltersToFilterNodes (nlpFilters) {
+    return pruneFilterNodes(convertNlpFiltersToFilterNodes(nlpFilters), this._config.hiddenFields);
   }
 
   /**
