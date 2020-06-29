@@ -465,7 +465,7 @@ export default class NavigationComponent extends Component {
     return tabOrder;
   }
 
-  generateTabUrl (baseUrl, params = new URLSearchParams(), context) {
+  generateTabUrl (baseUrl, params, context) {
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }

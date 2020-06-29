@@ -234,7 +234,7 @@ describe('navigation component configuration', () => {
       core: mockedCore(tabConfig)
     });
 
-    const url = navComponent.generateTabUrl(tabConfig[0].url);
+    const url = navComponent.generateTabUrl(tabConfig[0].url, navComponent.getUrlParams());
     expect(url).toEqual('/tab1/?tabOrder=tab1');
   });
 });
