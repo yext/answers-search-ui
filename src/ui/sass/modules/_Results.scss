@@ -198,7 +198,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     display: flex;
     padding: calc(var(--yxt-base-spacing) / 2) var(--yxt-base-spacing);
     align-items: center;
-    background-color:  var(--yxt-color-background-highlight);
+    background-color:  var(--yxt-results-title-bar-background);
   }
 
   &-title
@@ -206,10 +206,10 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     margin: 0;
     text-transform: uppercase;
     @include Text(
-      $color: var(--yxt-color-text-primary),
-      $weight: var(--yxt-font-weight-semibold),
-      $line-height: var(--yxt-line-height-lg),
-      $size: var(--yxt-font-size-md-lg),
+      var(--yxt-results-title-bar-text-font-size),
+      var(--yxt-results-title-bar-text-line-height),
+      var(--yxt-font-weight-semibold),
+      $color: var(--yxt-results-title-bar-text-color)
     );
   }
 }

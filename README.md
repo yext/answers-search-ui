@@ -730,6 +730,8 @@ ANSWERS.addComponent('UniversalResults', {
         resultsCountSeparator: '|',
         // Whether to display the change filters link in universal results. Defaults to false.
         showChangeFilters: false,
+        // The text for the change filters link. Defaults to 'change filters'.
+        changeFiltersText: 'change filters',
         // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
         delimiter: '|',
         // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
@@ -2115,10 +2117,10 @@ ensure that a Rich Text Formatted value is shown properly on the page. To use th
 ANSWERS.formatRichText(rtfFieldValue, eventOptionsFieldName, targetConfig)
 ```
 
-For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute.
+For instance, this function can be used in the `dataMappings` of a Card to display an RTF attribute. 
 
 When clicking any link in the resultant HTML, an `AnalyticsEvent` will be fired. If the `eventOptionsFieldName` has been
-specified, the `eventOptions` will include a `fieldName` attribute with the given value.
+specified, the `eventOptions` will include a `fieldName` attribute with the given value. 
 
 The `targetConfig` parameter dictates where the link is opened: the current window, a new tab, etc. It can have the following forms:
 

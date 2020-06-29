@@ -134,7 +134,8 @@ $results-header-universal-background: var(--yxt-color-brand-white) !default;
       $color: var(--yxt-color-brand-primary)
     );
     @include Link(
-      $base-color: var(--yxt-color-brand-primary)
+      $base-color: var(--yxt-color-brand-primary),
+      $base-decoration: underline
     );
   }
 
