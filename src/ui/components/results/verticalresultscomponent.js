@@ -12,9 +12,6 @@ import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
-import FilterNodeFactory from '../../../core/filters/filternodefactory';
-import Filter from '../../../core/models/filter';
-import FilterMetadata from '../../../core/filters/filtermetadata';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -113,6 +110,12 @@ class VerticalResultsConfig {
       showChangeFilters: defaultConfigOption(config, ['appliedFilters.showChangeFilters', 'showChangeFilters'], false),
 
       /**
+       * The text for the change filters link.
+       * @type {string}
+       */
+      changeFiltersText: defaultConfigOption(config, ['appliedFilters.changeFiltersText', 'changeFiltersText']),
+
+      /**
        * The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
        * @type {string}
        **/
@@ -199,18 +202,14 @@ export default class VerticalResultsComponent extends Component {
       resultsCountSeparator: this._config.appliedFilters.resultsCountSeparator,
       showAppliedFilters: this._config.appliedFilters.show,
       showChangeFilters: this._config.appliedFilters.showChangeFilters,
+      changeFiltersText: this._config.appliedFilters.changeFiltersText,
       showResultCount: this._config.showResultCount,
       removable: this._config.appliedFilters.removable,
       delimiter: this._config.appliedFilters.delimiter,
       labelText: this._config.appliedFilters.labelText,
-      removableLabelText: this._config.appliedFilters.removableLabelText
+      removableLabelText: this._config.appliedFilters.removableLabelText,
+      hiddenFields: this._config.appliedFilters.hiddenFields
     };
-
-    if (!this._config.isUniversal) {
-      this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
-        this.setState(this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS));
-      });
-    }
   }
 
   mount () {
@@ -258,16 +257,10 @@ export default class VerticalResultsComponent extends Component {
     this.resultsCount = data.resultsCount;
     this.verticalKey = data.verticalConfigId;
     this.resultsContext = data.resultsContext;
-    const nlpFilters = data.appliedQueryFilters || [];
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    this.appliedFilterNodes = this._processFilterNodes(this._getAppliedFilterNodes());
-    this.nlpFilterNodes = this._processFilterNodes(this._convertNlpFiltersToFilterNodes(nlpFilters));
-    const hasAppliedFilters = this.appliedFilterNodes.length || this.nlpFilterNodes.length;
-    const showResultsHeader = this.resultsHeaderOpts.showResultCount ||
-      (this.resultsHeaderOpts.showAppliedFilters && hasAppliedFilters);
     this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
@@ -282,9 +275,9 @@ export default class VerticalResultsComponent extends Component {
       showNoResults: this.resultsContext === ResultsContext.NO_RESULTS,
       placeholders: new Array(this._config.maxNumberOfColumns - 1),
       numColumns: Math.min(this._config.maxNumberOfColumns, this.results.length),
-      showResultsHeader: showResultsHeader,
       useLegacyNoResults: this._useLegacyNoResults,
-      iconIsBuiltIn: Icons[this._config.icon]
+      iconIsBuiltIn: Icons[this._config.icon],
+      nlpFilters: data.appliedQueryFilters || []
     }), val);
   }
 
@@ -309,59 +302,6 @@ export default class VerticalResultsComponent extends Component {
    */
   static defaultTemplateName (config) {
     return 'results/verticalresults';
-  }
-
-  /**
-   * Given an array of nlp filters from the backend turn them into an array of SimpleFilterNodes
-   * @param {Array<AppliedQueryFilter>} nlpFilters
-   * @returns {Array<SimpleFilterNode>}
-   */
-  _convertNlpFiltersToFilterNodes (nlpFilters) {
-    return nlpFilters.map(nlpFilter => FilterNodeFactory.from({
-      filter: Filter.from(nlpFilter.filter),
-      metadata: new FilterMetadata({
-        fieldName: nlpFilter.key,
-        displayValue: nlpFilter.value
-      })
-    }));
-  }
-
-  /**
-   * Gets all applied {@link FilterNode}s stored in the {@link FilterRegistry}, which
-   * uses manages FilterNodes in globalStorage.
-   * @returns {Array<FilterNode>}
-   */
-  _getAppliedFilterNodes () {
-    const globalStorageFilterNodes = [
-      ...this.core.getStaticFilterNodes(),
-      ...this.core.getFacetFilterNodes()
-    ];
-    const locationRadiusFilterNode = this.core.getLocationRadiusFilterNode();
-    if (locationRadiusFilterNode) {
-      globalStorageFilterNodes.push(locationRadiusFilterNode);
-    }
-    return globalStorageFilterNodes;
-  }
-
-  /**
-   * Returns an array of all filter nodes currently being applied to the search.
-   * Filters out filterNodes without fieldName or displayValue, or that have a
-   * fieldId listed in this._config.hiddenFields. Any AppliedQueryFilters are first
-   * converted into a FilterNode.
-   * @param {Array<FilterNode>} filterNodes
-   * @returns {Array<FilterNode>}
-   */
-  _processFilterNodes (filterNodes) {
-    return filterNodes
-      .flatMap(fn => fn.getSimpleAncestors())
-      .filter(fn => {
-        const { fieldName, displayValue } = fn.getMetadata();
-        if (!fieldName || !displayValue) {
-          return false;
-        }
-        const fieldId = fn.getFilter().getFilterKey();
-        return !this._config.appliedFilters.hiddenFields.includes(fieldId);
-      });
   }
 
   addChild (data, type, opts) {
@@ -406,8 +346,7 @@ export default class VerticalResultsComponent extends Component {
       const resultsHeaderData = {
         resultsLength: this.results.length,
         resultsCount: this.resultsCount,
-        appliedFilterNodes: this.appliedFilterNodes,
-        nlpFilterNodes: this.nlpFilterNodes,
+        nlpFilters: this.getState('nlpFilters'),
         ...data
       };
       const _opts = { ...opts };

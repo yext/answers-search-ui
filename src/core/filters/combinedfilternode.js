@@ -65,8 +65,8 @@ export default class CombinedFilterNode extends FilterNode {
    * Recursively get all of the leaf SimpleFilterNodes.
    * @returns {Array<SimpleFilterNode>}
    */
-  getSimpleAncestors () {
-    return this.getChildren().flatMap(fn => fn.getSimpleAncestors());
+  getSimpleDescendants () {
+    return this.getChildren().flatMap(fn => fn.getSimpleDescendants());
   }
 
   /**

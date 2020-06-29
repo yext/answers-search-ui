@@ -36,7 +36,7 @@ describe('CombinedFilterNode', () => {
       FilterNodeFactory.and(node_f0_v0, node_f0_v1),
       FilterNodeFactory.or(node_f1_v0, node_f1_v1)
     );
-    const simpleFilterNodes = combinedNode.getSimpleAncestors();
+    const simpleFilterNodes = combinedNode.getSimpleDescendants();
     expect(simpleFilterNodes).toHaveLength(4);
     expect(simpleFilterNodes).toContainEqual(node_f0_v0);
     expect(simpleFilterNodes).toContainEqual(node_f1_v0);
