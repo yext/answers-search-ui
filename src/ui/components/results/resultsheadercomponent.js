@@ -47,7 +47,7 @@ export default class ResultsHeaderComponent extends Component {
      * Array of nlp filters in the search response.
      * @type {Array<AppliedQueryFilter>}
      */
-    this.nlpFilterNodes = this._convertNlpFiltersToFilterNodes(data.nlpFilters || []);
+    this.nlpFilterNodes = convertNlpFiltersToFilterNodes(data.nlpFilters || []);
 
     /**
      * TODO (SPR-2455): Ideally, we would be able to set moduleId to DYNAMIC_FILTERS, the actual data
@@ -87,26 +87,18 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   /**
-   * Converts an array of {@link AppliedQueryFilter}s into equivalent {@link FilterNode}s, then
-   * removes filternodes that are either blank, or have a fieldId listed in config.hiddenFields.
-   * @param {Array<AppliedQueryFilter>} nlpFilters
-   */
-  _convertNlpFiltersToFilterNodes (nlpFilters) {
-    return pruneFilterNodes(convertNlpFiltersToFilterNodes(nlpFilters), this._config.hiddenFields);
-  }
-
-  /**
    * Returns the currently applied nlp filter nodes, with nlp filter nodes that
-   * are duplicates of other filter nodes removed.
+   * are duplicates of other filter nodes removed or filter on hiddenFields removed.
    * @returns {Array<FilterNode>}
    */
-  _pruneDuplicateNlpFilterNodes () {
-    return this.nlpFilterNodes.filter(nlpNode => {
+  _pruneNlpFilterNodes () {
+    const duplicatesRemoved = this.nlpFilterNodes.filter(nlpNode => {
       const isDuplicate = this.appliedFilterNodes.find(appliedNode =>
         appliedNode.hasSameFilterAs(nlpNode)
       );
       return !isDuplicate;
     });
+    return pruneFilterNodes(duplicatesRemoved, this._config.hiddenFields);
   }
 
   /**
@@ -129,7 +121,7 @@ export default class ResultsHeaderComponent extends Component {
       removable: this._config.removable
     });
     const removableNodes = groupArray(this.appliedFilterNodes, getFieldName, parseRemovableFilterDisplay);
-    const prunedNlpFilterNodes = this._pruneDuplicateNlpFilterNodes();
+    const prunedNlpFilterNodes = this._pruneNlpFilterNodes();
     return groupArray(prunedNlpFilterNodes, getFieldName, parseNlpFilterDisplay, removableNodes);
   }
 
