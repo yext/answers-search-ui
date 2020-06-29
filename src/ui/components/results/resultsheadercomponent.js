@@ -88,16 +88,17 @@ export default class ResultsHeaderComponent extends Component {
 
   /**
    * Returns the currently applied nlp filter nodes, with nlp filter nodes that
-   * are duplicates of other filter nodes removed.
+   * are duplicates of other filter nodes removed or filter on hiddenFields removed.
    * @returns {Array<FilterNode>}
    */
-  _pruneDuplicateNlpFilterNodes () {
-    return this.nlpFilterNodes.filter(nlpNode => {
+  _getPrunedNlpFilterNodes () {
+    const duplicatesRemoved = this.nlpFilterNodes.filter(nlpNode => {
       const isDuplicate = this.appliedFilterNodes.find(appliedNode =>
         appliedNode.hasSameFilterAs(nlpNode)
       );
       return !isDuplicate;
     });
+    return pruneFilterNodes(duplicatesRemoved, this._config.hiddenFields);
   }
 
   /**
@@ -120,7 +121,7 @@ export default class ResultsHeaderComponent extends Component {
       removable: this._config.removable
     });
     const removableNodes = groupArray(this.appliedFilterNodes, getFieldName, parseRemovableFilterDisplay);
-    const prunedNlpFilterNodes = this._pruneDuplicateNlpFilterNodes();
+    const prunedNlpFilterNodes = this._getPrunedNlpFilterNodes();
     return groupArray(prunedNlpFilterNodes, getFieldName, parseNlpFilterDisplay, removableNodes);
   }
 
