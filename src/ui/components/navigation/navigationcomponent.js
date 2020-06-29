@@ -457,7 +457,7 @@ export default class NavigationComponent extends Component {
     return tabOrder;
   }
 
-  generateTabUrl (baseUrl, params = new URLSearchParams()) {
+  generateTabUrl (baseUrl, params) {
     // We want to persist the params from the existing URL to the new
     // URLS we create.
     params.set('tabOrder', this._tabOrder);
