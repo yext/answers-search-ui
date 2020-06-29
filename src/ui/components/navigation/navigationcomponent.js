@@ -180,6 +180,10 @@ export default class NavigationComponent extends Component {
 
     this.checkOutsideClick = this.checkOutsideClick.bind(this);
     this.checkMobileOverflowBehavior = this.checkMobileOverflowBehavior.bind(this);
+
+    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
+      this.setState(this.core.globalStorage.getState(StorageKeys.NAVIGATION));
+    });
   }
 
   static get type () {
@@ -334,7 +338,11 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < this._tabOrder.length; i++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
-        tab.url = this.generateTabUrl(tab.baseUrl, this.getUrlParams());
+        tab.url = this.generateTabUrl(
+          tab.baseUrl,
+          this.getUrlParams(),
+          this.core.globalStorage.getState(StorageKeys.API_CONTEXT)
+        );
         tabs.push(tab);
       }
     }
@@ -457,7 +465,11 @@ export default class NavigationComponent extends Component {
     return tabOrder;
   }
 
-  generateTabUrl (baseUrl, params) {
+  generateTabUrl (baseUrl, params, context) {
+    if (context) {
+      params.set(StorageKeys.API_CONTEXT, context);
+    }
+
     // We want to persist the params from the existing URL to the new
     // URLS we create.
     params.set('tabOrder', this._tabOrder);

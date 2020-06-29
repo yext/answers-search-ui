@@ -139,7 +139,6 @@ workflows:
             branches:
               only: 
                 - master
-                - develop
           requires:
             - unit_test
       - deploy_latest:
@@ -169,4 +168,4 @@ workflows:
             branches:
               only: develop
           requires:
-            - hold
+            - unit_test

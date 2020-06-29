@@ -61,6 +61,18 @@ export default class DirectAnswerComponent extends Component {
      * @type {string}
      */
     this._viewDetailsText = config.viewDetailsText || 'View Details';
+
+    /**
+     * The default custom direct answer card to use, when there are no matching card overrides.
+     * @type {string}
+     */
+    this._defaultCard = config.defaultCard;
+
+    /**
+     * Card overrides, which choose a custom direct answer card based on fieldName, fieldType, and entityType.
+     * @type {Array<Object>}
+     */
+    this._cardOverrides = config.cardOverrides || [];
   }
 
   static get type () {
@@ -88,14 +100,52 @@ export default class DirectAnswerComponent extends Component {
   }
 
   /**
+   * Check whether a given cardOverride matches a given directAnswer.
+   * @param {Object} directAnswer
+   * @param {Object} override
+   */
+  _overrideMatchesAnswer (directAnswer, override) {
+    if (!Object.keys(directAnswer).length) {
+      return true;
+    }
+    const directAnswerPropeties = {
+      entityType: directAnswer.relatedItem.data.type,
+      fieldName: directAnswer.answer.fieldName,
+      fieldType: directAnswer.answer.fieldType
+    };
+    for (let [propertyToMatch, propertyValue] of Object.entries(override)) {
+      if (propertyToMatch === 'cardType') {
+        continue;
+      }
+      if (directAnswerPropeties[propertyToMatch] !== propertyValue) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Returns the custom card that should be used for the given direct answer.
+   * First, checks user given cardOverrides for a matching override, if there are none
+   * then returns the default card.
+   * @returns {string}
+   */
+  _getCustomCard (directAnswer) {
+    const cardOverride = this._cardOverrides.find(override => {
+      return this._overrideMatchesAnswer(directAnswer, override);
+    });
+    return cardOverride ? cardOverride.cardType : this._defaultCard;
+  }
+
+  /**
    * When the DOM is constructed,
    * we want to wire up the behavior for interacting with the quality feedback reporting (thumbsup/down)
    */
   onMount () {
-    const isUsingCustomCard = this._config.defaultCard;
+    const customCard = this.getState('customCard');
     const feedbackSubmitted = this.getState('feedbackSubmitted') === true;
     // Avoid bindings if the feedback has previously been submitted or is using a custom card.
-    if (isUsingCustomCard || feedbackSubmitted) {
+    if (customCard || feedbackSubmitted) {
       return this;
     }
 
@@ -156,10 +206,11 @@ export default class DirectAnswerComponent extends Component {
   }
 
   setState (data) {
-    this.directAnswer = data;
     return super.setState(Object.assign({}, data, {
       eventOptions: this.eventOptions(data),
-      viewDetailsText: this._viewDetailsText
+      viewDetailsText: this._viewDetailsText,
+      directAnswer: data,
+      customCard: this._getCustomCard(data)
     }));
   }
 
@@ -190,8 +241,8 @@ export default class DirectAnswerComponent extends Component {
   }
 
   addChild (data, type, opts) {
-    if (type === this._config.defaultCard) {
-      return super.addChild(this.directAnswer, type, {
+    if (type === this.getState('customCard')) {
+      return super.addChild(this.getState('directAnswer'), type, {
         ...this._userConfig,
         ...opts
       });

@@ -13,6 +13,8 @@ const mockCore = {
         return { get: () => { return []; } };
       } else if (storageKey === StorageKeys.NO_RESULTS_CONFIG) {
         return {};
+      } else if (storageKey === StorageKeys.API_CONTEXT) {
+        return undefined;
       }
     }
   },

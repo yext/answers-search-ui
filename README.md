@@ -133,7 +133,7 @@ function initAnswers() {
 ```
 
 ## Vertical Pages Configuration
-Below is a list of configuration options related to vertical pages in navigation and no results, used in the [base configuration](#configuration-options) above.
+Below is a list of configuration options related to vertical pages in navigation and no results, used in the [base configuration](#answersinit-configuration-options) above.
 
 ```js
 verticalPages: [
@@ -160,7 +160,7 @@ verticalPages: [
 ```
 
 ## Search Configuration
-Below is a list of configuration options related to search, used in the [base configuration](#configuration-options) above.
+Below is a list of configuration options related to search, used in the [base configuration](#answersinit-configuration-options) above.
 
 ```js
     search: {
@@ -174,7 +174,7 @@ Below is a list of configuration options related to search, used in the [base co
 ```
 
 ## Vertical No Results Configuration
-Below is a list of configuration options related to no results on Vertical Pages, used in the [base configuration](#configuration-options) above.
+Below is a list of configuration options related to no results on Vertical Pages, used in the [base configuration](#answersinit-configuration-options) above.
 
 ```js
     noResults: {
@@ -187,7 +187,7 @@ Below is a list of configuration options related to no results on Vertical Pages
 
 ## onVerticalSearch Configuration
 
-The onVerticalSearch Configuration is a function, used in the [base configuration](#configuration-options) above.
+The onVerticalSearch Configuration is a function, used in the [base configuration](#answersinit-configuration-options) above.
 
 It allows you to send an analytics event each time a search is run on a Vertical page. This function should take in one parameter, `searchParams`, which contains information about the search, and return the desired analytics event.
 
@@ -236,7 +236,7 @@ function (searchParams) => {
 
 ## onUniversalSearch Configuration
 
-The onUniversalSearch Configuration is a function, used in the [base configuration](#configuration-options) above.
+The onUniversalSearch Configuration is a function, used in the [base configuration](#answersinit-configuration-options) above.
 
 It allows you to send an analytics event each time a search is run
 on a Universal page. This function should take in one parameter, `searchParams`, which contains information about the
@@ -300,8 +300,10 @@ Every component has the same base configuration options.
     render: function(data) {},
     // Optional, a hook for transforming data before it gets sent to render
     transformData: function(data) {},
-    // Optional, invoked when the HTML is mounted to the DOM, note, this overrides any built-in onMount function for a component
+    // Optional, invoked when the HTML is mounted to the DOM, this will not override any built-in onMount function for a component
     onMount: function(data) {},
+    // Optional, invoked when the HTML is mounted to the DOM, this will override any built-in onMount function for a component
+    onMountOverride: function(data) {},
     // Optional, additional properties to send with every analytics event
     analyticsOptions: {},
   }
@@ -432,8 +434,9 @@ The Direct Answer Component will render the BEST result, if found, based on the 
 ANSWERS.addComponent('DirectAnswer', {
   // Required, the selector for the container element where the component will be injected
   container: '.direct-answer-container',
-  // Optional, a custom card component to use.
-  defaultCard: 'MyCustomCard',
+  // Optional, a custom direct answer card to use, which is the default when there are no matching card overrides.
+  // See the Custom Direct Answer Card section below.
+  defaultCard: 'MyCustomDirectAnswerCard',
   // Optional, the selector for the form used for submitting the feedback
   formEl: '.js-directAnswer-feedback-form',
   // Optional, the selector to bind ui interaction to for reporting
@@ -447,8 +450,238 @@ ANSWERS.addComponent('DirectAnswer', {
   // Optional, the screen reader text for negative feedback on the answer
    negativeFeedbackSrText: 'This did not answer my question',
   // Optional, the footer text to display on submission of feedback
-   footerTextOnSubmission: 'Thank you for your feedback!'
+  footerTextOnSubmission: 'Thank you for your feedback!',
+  // Optional, card overrides that allow you to specify a specific direct answers card depending on the fieldName, entityType, and fieldType of the direct answer. The first matching card will be used, otherwise defaultCard will be used.
+  cardOverrides: [
+    {
+      cardType: 'MenuItemDescriptionDirectAnswer',
+      fieldName: 'description',
+      entityType: 'ce_menuItem',
+      fieldType: 'rich_text'
+    },
+    {
+      cardType: 'DeliveryHoursDirectAnswer',
+      fieldName: 'c_deliveryHours'
+    },
+    {
+      cardType: 'PhoneDirectAnswer',
+      fieldType: 'phone'
+    }
+  ]
 })
+```
+
+## Creating a Custom Direct Answer Card
+
+You can customize the look and behavior of your Direct Answer by creating a custom Direct Answer card.
+
+A custom Direct Answer card is given the same data as the built-in card.
+That data will look something like the below:
+
+```js
+{
+  type: "FIELD_VALUE",
+  answer: {
+    entityName: "Entity Name",
+    fieldName: "Phone Number",
+    fieldApiName: "mainPhone",
+    value: "+11234567890",
+    fieldType: "phone" 
+  },
+  relatedItem: { 
+    verticalConfigId: 'people',
+    data: { 
+      id: "Employee-2116",
+      type: "ce_person",
+      fieldValues: {
+        description: "This is the description field.",
+        name: "First Last",
+        firstName: "First",
+        lastName: "Last",
+        mainPhone: "+1234567890",
+      }
+    }
+  }
+}
+```
+
+A custom Direct Answer card needs a corresponding template.
+This can be added either inline by changing the component's constructor to:
+
+```js
+    constructor(config, systemConfig) {
+      super(config, systemConfig);
+      this.setTemplate(`<div> your template here </div>`)
+    }
+```
+
+Or by including a custom template bundle, and adding:
+
+```js
+  static defaultTemplateName () {
+    return 'CustomDirectAnswerTemplate';
+  }
+```
+
+Where 'CustomDirectAnswerTemplate' is the name the template is registered under.
+
+We will use the following template for our example card.
+
+```hbs
+  <div class="customDirectAnswer">
+    <div class="customDirectAnswer-type">
+      {{type}}
+    </div>
+    <div class="customDirectAnswer-value">
+      {{#each customValue}}
+      {{#if url}}
+        {{> valueLink }}
+      {{else}}
+        {{{this}}}
+      {{/if}}
+      {{/each}}
+    </div>
+    {{> feedback}}
+  </div>
+
+  {{#*inline 'feedback'}}
+  <span class="customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon"
+    data-component="IconComponent"
+    data-opts='{"iconName": "thumb"}'
+  ></span>
+  <span class="customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon"
+    data-component="IconComponent"
+    data-opts='{"iconName": "thumb"}'
+  ></span>
+  {{/inline}}
+
+  {{#*inline 'valueLink'}}
+  <a class="customDirectAnswer-fieldValueLink" href="{{{url}}}"
+    {{#if @root/eventType}}data-eventtype="{{@root/eventType}}"{{/if}}
+    {{#if @root/eventOptions}}data-eventoptions='{{{ json @root/eventOptions }}}'{{/if}}>
+    {{{displayText}}}
+  </a>
+  {{/inline}}
+```
+
+This specific example needs some css to flip the thumbs up icon the right way.
+
+```css
+  .customDirectAnswer-thumbsUpIcon svg {
+    transform: rotate(180deg);
+  }
+```
+
+This is the javascript class for our custom Direct Answer card.
+It applies custom formatting to the Direct Answer, registers analytics events
+to the thumbs up/down icons, and passes custom event options into the template.
+
+```js
+  class CustomDirectAnswerClass extends ANSWERS.Component {
+    constructor(config, systemConfig) {
+      // If you need to override the constructor, make sure to call super(config, systemConfig) first.
+      super(config, systemConfig);
+
+      // For simplicity's sake, we set this card's template using setTemplate(), as opposed to
+      // a custom template bundle.
+      this.setTemplate(`<div> your template here </div>`)
+    }
+
+    /**
+     * setState() lets you pass variables directly into your template.
+     * Here, data is the directAnswer data from the query.
+     * Below, we pass through a custom direct answers value, customValue.
+     * @param {Object} data
+     * @returns {Object}
+     */ 
+    setState(data) {
+      const { type, answer, relatedItem } = data;
+      const associatedEntityId = data.relatedItem && data.relatedItem.data && data.relatedItem.data.id;
+      const verticalConfigId = data.relatedItem && data.relatedItem.verticalConfigId;
+      return super.setState({
+        ...data,
+        customValue: this.getCustomValue(answer),
+        eventType: 'CUSTOM_EVENT',
+        eventOptions: {
+          searcher: 'UNIVERSAL',
+          verticalConfigId: verticalConfigId,
+          entityId: associatedEntityId,
+        }
+      });
+    }
+
+    /**
+     * onMount() lets you register event listeners. Here, we register the thumbs up and thumbs
+     * down buttons to fire an analytics event on click.
+     */ 
+    onMount() {
+      const thumbsUpIcon = this._container.querySelector('.js-customDirectAnswer-thumbsUpIcon');
+      const thumbsDownIcon = this._container.querySelector('.js-customDirectAnswer-thumbsDownIcon');
+      thumbsUpIcon.addEventListener('click', () => this.reportQuality(true));
+      thumbsDownIcon.addEventListener('click', () => this.reportQuality(false));
+    }
+
+    /**
+     * reportQuality() sends an analytics event (either THUMBS_UP or THUMBS_DOWN).
+     * @param {boolean} isGood true if the answer is what you were looking for
+     */
+    reportQuality(isGood) {
+      const eventType = isGood === true ? 'THUMBS_UP' : 'THUMBS_DOWN';
+      const event = new ANSWERS.AnalyticsEvent(eventType).addOptions({
+        directAnswer: true
+      });
+      this.analyticsReporter.report(event);
+    }
+
+    /**
+     * Formats a Direct Answer value based on its fieldType.
+     * @param {Object} answer the answer property in the directAnswer model
+     * @returns {string}
+     */ 
+    formatValue(answer) {
+      const { fieldType, value } = answer;
+      switch (fieldType) {
+        case 'phone':
+          return {
+              url: 'http://myCustomWebsite.com/?mainPhone=' + value,
+              displayText: value,
+            };
+        case 'rich_text':
+          return ANSWERS.formatRichText(value);
+        case 'single_line_text':
+        case 'multi_line_text':
+        default:
+          return value;
+      }
+    }
+
+    /**
+     * Computes a custom Direct Answer. If answer.value is an array, this method
+     * formats every value in the array and returns it, otherwise it just formats the single
+     * given value.
+     * @param {Object} answer
+     * @returns {Array<string>}
+     */ 
+    getCustomValue(answer) {
+      if (Array.isArray(answer.value)) {
+        return answer.value.map(value => this.formatValue(answer))
+      } else {
+        return [ this.formatValue(answer) ];
+      }
+    }
+
+    /**
+     * The name of your custom direct answer card. THIS is the value you will use in any config,
+     * such as defaultCard, when you want to specify this custom Direct Answer card.
+     * @returns {string}
+     */
+    static get type() {
+      return 'MyCustomDirectAnswerCard';
+    }
+  }
+
+  // Don't forget to register your Direct Answer card within the SDK. Otherwise the SDK won't recognize your card name!
+  ANSWERS.registerComponentType(CustomDirectAnswerClass);
 ```
 
 ## Universal Results Component
@@ -1160,6 +1393,8 @@ ANSWERS.addComponent('FilterOptions', {
 ```
 
 The options config varies depending on whether the optionType is 'STATIC_FILTER' or 'RADIUS_FILTER'.
+A STATIC_FILTER allows you to filter on a specified field, while a RADIUS_FILTER allows you to filter
+results based on their distance from the user.
 
 ##### STATIC_FILTER
 
@@ -1195,10 +1430,10 @@ The options config varies depending on whether the optionType is 'STATIC_FILTER'
 ##### RADIUS_FILTER
 
 ```js
-{    
+{
   options: [
     {
-      // Required, the value of the radius to apply (in meters). If this value is 0, will not filter by radius.
+      // Required, the value of the radius to apply (in meters). If this value is 0, the SDK will not add explicit radius filtering to the request. The backend may still perform its own filtering depending on the query given.
       value: 8046.72,
       // Optional, the label to show next to the filter option.
       label: '5 miles',
@@ -1215,7 +1450,7 @@ The options config varies depending on whether the optionType is 'STATIC_FILTER'
       value: 40233.6,
       label: '25 miles'
     },
-    { 
+    {
       value: 80467.2,
       label: '50 miles'
     },
