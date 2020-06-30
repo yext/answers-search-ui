@@ -241,7 +241,10 @@ export default class VerticalResultsComponent extends Component {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
 
-    const params = { query: this.query };
+    const params = {
+      query: this.query,
+      referrerPageUrl: this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+    };
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
       params.context = context;
