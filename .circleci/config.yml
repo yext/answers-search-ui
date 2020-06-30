@@ -13,7 +13,11 @@ commands:
             - v1-dependencies-{{ checksum "package.json" }}
             # fallback to using the latest cache if no exact match is found
             - v1-dependencies-
-      - run: npm install
+      - run: 
+          name: install dependencies
+          command: |
+            npm install
+            npm rebuild node-sass
       - save_cache:
           paths:
             - node_modules
@@ -48,7 +52,7 @@ jobs:
   # generate bundles
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:14.5
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -61,7 +65,7 @@ jobs:
   # run the jest unit tests
   unit_test:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:14.5
     resource_class: xlarge
     working_directory: ~/answers
     steps:
