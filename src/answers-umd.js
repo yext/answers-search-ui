@@ -32,6 +32,7 @@ import { SANDBOX, PRODUCTION } from './core/constants';
 import MasterSwitchApi from './core/utils/masterswitchapi';
 import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
+import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
@@ -72,6 +73,11 @@ class Answers {
      * custom analytics
      */
     this.AnalyticsEvent = AnalyticsEvent;
+
+    /**
+     * A reference to the FilterNodeFactory class for creating {@link FilterNode}s.
+     */
+    this.FilterNodeFactory = FilterNodeFactory;
 
     /**
      * A reference of the renderer to use for the components
