@@ -13,7 +13,7 @@ export default class UniversalResultsComponent extends Component {
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
 
     this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
-      this.setState(this.core.globalStorage.getState(StorageKeys.UNIVERSAL_RESULTS));
+      this.setState(this.core.globalStorage.getState(StorageKeys.UNIVERSAL_RESULTS) || {});
     });
   }
 
