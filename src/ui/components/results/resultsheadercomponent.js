@@ -81,6 +81,7 @@ export default class ResultsHeaderComponent extends Component {
     const filterNode = this.appliedFilterNodes[filterId];
     filterNode.remove();
     this.core.verticalSearch(this._config.verticalKey, {
+      setQueryParams: true,
       resetPagination: true,
       useFacets: true
     });

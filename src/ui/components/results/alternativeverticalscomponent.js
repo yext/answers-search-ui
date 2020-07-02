@@ -41,7 +41,8 @@ export default class AlternativeVerticalsComponent extends Component {
     this.verticalSuggestions = AlternativeVerticalsComponent._buildVerticalSuggestions(
       this._alternativeVerticals,
       this._verticalsConfig,
-      this.core.globalStorage.getState(StorageKeys.API_CONTEXT)
+      this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
+      this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
     );
 
     /**
@@ -60,7 +61,8 @@ export default class AlternativeVerticalsComponent extends Component {
       this.verticalSuggestions = AlternativeVerticalsComponent._buildVerticalSuggestions(
         this._alternativeVerticals,
         this._verticalsConfig,
-        this.core.globalStorage.getState(StorageKeys.API_CONTEXT)
+        this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
+        this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
       );
       this.setState(this.core.globalStorage.getState(StorageKeys.ALERNATIVE_VERTICALS));
     });
@@ -106,13 +108,18 @@ export default class AlternativeVerticalsComponent extends Component {
    * from alternative verticals and verticalPages configuration
    * @param {object} alternativeVerticals alternativeVerticals server response
    * @param {object} verticalsConfig the configuration to use
+   * @param {string} context the API context query parameter to add to the urls
+   * @param {string} referrerPageUrl the referrerPageUrl query parameter to add to the urls
    */
-  static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context) {
+  static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context, referrerPageUrl) {
     let verticals = [];
 
     const params = {};
     if (context) {
       params[StorageKeys.API_CONTEXT] = context;
+    }
+    if (typeof referrerPageUrl === 'string') {
+      params[StorageKeys.REFERRER_PAGE_URL] = referrerPageUrl;
     }
 
     for (let alternativeVertical of alternativeVerticals) {

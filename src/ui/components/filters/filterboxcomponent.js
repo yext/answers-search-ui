@@ -289,6 +289,7 @@ export default class FilterBoxComponent extends Component {
    */
   _search () {
     this.core.verticalSearch(this._config.verticalKey, {
+      setQueryParams: true,
       resetPagination: true,
       useFacets: true
     });

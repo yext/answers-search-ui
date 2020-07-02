@@ -177,9 +177,10 @@ class Answers {
     }
 
     if (globalStorage.getState(StorageKeys.REFERRER_PAGE_URL) === null) {
-      const referrer = urlWithoutQueryParamsAndHash(document.referrer);
-      persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrer, true);
-      globalStorage.set(StorageKeys.REFERRER_PAGE_URL, referrer);
+      globalStorage.set(
+        StorageKeys.REFERRER_PAGE_URL,
+        urlWithoutQueryParamsAndHash(document.referrer)
+      );
     }
 
     this._masterSwitchApi = statusPage
@@ -476,7 +477,6 @@ class Answers {
       return;
     }
 
-    this.core.persistentStorage.set(StorageKeys.API_CONTEXT, contextString, true);
     this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
   }
 }
