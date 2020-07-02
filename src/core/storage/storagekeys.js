@@ -34,5 +34,6 @@ export default {
   NO_RESULTS_CONFIG: 'no-results-config',
   LOCATION_RADIUS: 'location-radius',
   RESULTS_HEADER: 'results-header',
-  API_CONTEXT: 'context'
+  API_CONTEXT: 'context',
+  REFERRER_PAGE_URL: 'referrerPageUrl'
 };

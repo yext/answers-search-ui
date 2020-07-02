@@ -15,6 +15,8 @@ const mockCore = {
         return {};
       } else if (storageKey === StorageKeys.API_CONTEXT) {
         return undefined;
+      } else if (storageKey === StorageKeys.REFERRER_PAGE_URL) {
+        return '';
       }
     }
   },
@@ -125,7 +127,7 @@ describe('vertical results component', () => {
     });
 
     it('if unset defaults to vertical key', () => {
-      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123');
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&referrerPageUrl=');
     });
 
     it('if null defaults to vertical key', () => {
@@ -134,13 +136,13 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123');
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&referrerPageUrl=');
     });
 
     it('works with transformData', () => {
       expect(component.getVerticalURL({
         verticalURL: 'transform-data'
-      })).toEqual('transform-data?query=my-query&otherParam=123');
+      })).toEqual('transform-data?query=my-query&otherParam=123&referrerPageUrl=');
     });
 
     it('defaults to matching config in verticalPages', () => {
@@ -148,7 +150,7 @@ describe('vertical results component', () => {
         verticalKey: 'key',
         url: 'vertical-pages'
       }];
-      expect(component.getVerticalURL()).toEqual('vertical-pages?query=my-query&otherParam=123');
+      expect(component.getVerticalURL()).toEqual('vertical-pages?query=my-query&otherParam=123&referrerPageUrl=');
     });
 
     it('can be set', () => {
@@ -157,7 +159,7 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('vertical-url?query=my-query&otherParam=123');
+      expect(component.getVerticalURL()).toEqual('vertical-url?query=my-query&otherParam=123&referrerPageUrl=');
     });
   });
 });
