@@ -67,7 +67,7 @@ export default class UniversalResultsComponent extends Component {
       // Icon in the titlebar
       icon: config.sectionTitleIconName || config.sectionTitleIconUrl || 'star',
       // Url that links to the vertical search for this vertical.
-      verticalURL: 'url' in config ? config.url : verticalKey + '.html',
+      verticalURL: config.url,
       // Show a view more link by default, which also links to verticalURL.
       viewMore: true,
       // By default, the view more link has a label of 'View More'.
