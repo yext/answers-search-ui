@@ -48,7 +48,7 @@ jobs:
   # generate bundles
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:14.5
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -61,7 +61,7 @@ jobs:
   # run the jest unit tests
   unit_test:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:14.5
     resource_class: xlarge
     working_directory: ~/answers
     steps:
