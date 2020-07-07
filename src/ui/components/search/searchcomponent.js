@@ -413,7 +413,7 @@ export default class SearchComponent extends Component {
 
     // If we have a redirectUrl, we want the form to be
     // serialized and submitted.
-    if (typeof this.redirectUrl === 'string' && this._verticalKey) {
+    if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
         window.location.href = this.redirectUrl + '?' + params.toString();
         return false;
