@@ -110,13 +110,10 @@ describe('navigation component configuration', () => {
       globalStorage: {
         getState: (storageKey) => {
           switch (storageKey) {
-            case StorageKeys.REFERRER_PAGE_URL:
-              return null;
-            case StorageKeys.API_CONTEXT:
-              return null;
-            default:
-              expect(storageKey).toEqual(StorageKeys.VERTICAL_PAGES_CONFIG);
+            case StorageKeys.VERTICAL_PAGES_CONFIG:
               return verticalsConfig;
+            default:
+              return null;
           }
         },
         on: () => {}
