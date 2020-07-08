@@ -2066,6 +2066,7 @@ You can learn more about the interface for registering helpers by taking a look 
 # Analytics
 
 If a businessId is supplied in the config, Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks.
+
 If you would like to add custom analytics on top of the built-in ones, use the following:
 
 ## Custom Analytics Using JavaScript
@@ -2090,6 +2091,22 @@ You may add additional, custom analytic events to templates using certain data a
     Drive to {{store}}
 </button>
 ```
+
+## Built-In Analytics Events For CTAs
+Here are the possible Event Types for CTAs:
+- TITLE_CLICK
+- CTA_CLICK
+- TAP_TO_CALL
+- ORDER_NOW
+- ADD_TO_CART
+- APPLY_NOW
+- DRIVING_DIRECTIONS
+- VIEW_WEBSITE
+- EMAIL
+- BOOK_APPOINTMENT
+- RSVP
+
+These types are accepted as the `analytics` attribute in [Calls To Action](#Calls-To-Action).
 
 ## Conversion Tracking
 
