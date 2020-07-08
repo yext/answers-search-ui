@@ -697,9 +697,30 @@ across all configured verticals, with one section per vertical.
 ANSWERS.addComponent('UniversalResults', {
   // Required, the selector for the container element where the component will be injected
   container: '.universal-results-container',
+  // Settings for the applied filters bar in the results header. These settings can be overriden in the
+  // "config" option below on a per-vertical basis.
+  appliedFilters: {
+    // If true, show any applied filters that were applied to the universal search. Defaults to true
+    show: true,
+    // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
+    showFieldNames: false,
+    // If appliedFilters.show is true, this is list of filters that should not be displayed.
+    // By default, builtin.entityType will be hidden
+    hiddenFields: ['builtin.entityType'],
+    // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
+    resultsCountSeparator: '|',
+    // Whether to display the change filters link in universal results. Defaults to false.
+    showChangeFilters: false,
+    // The text for the change filters link. Defaults to 'change filters'.
+    changeFiltersText: 'change filters',
+    // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
+    delimiter: '|',
+    // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
+    labelText: 'Filters applied to this search:',
+  },
   // Optional, configuration for each vertical's results
   config: {
-    'people': { // The verticalKey
+    people: { // The verticalKey
       card: {
         // Configuration for the cards in this vertical, see Cards
       },
@@ -719,23 +740,7 @@ ANSWERS.addComponent('UniversalResults', {
       viewMoreLabel: 'View More!',
       // Config for the applied filters bar in the results header.
       appliedFilters: {
-        // If true, show any applied filters that were applied to the universal search. Defaults to true
-        show: true,
-        // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. "Location: Virginia" vs just "Virginia". Defaults to false.
-        showFieldNames: false,
-        // If appliedFilters.show is true, this is list of filters that should not be displayed.
-        // By default, builtin.entityType will be hidden
-        hiddenFields: ['builtin.entityType'],
-        // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
-        resultsCountSeparator: '|',
-        // Whether to display the change filters link in universal results. Defaults to false.
-        showChangeFilters: false,
-        // The text for the change filters link. Defaults to 'change filters'.
-        changeFiltersText: 'change filters',
-        // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
-        delimiter: '|',
-        // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
-        labelText: 'Filters applied to this search:',
+        // Same as appliedFilters settings above. Settings specified here will override any top level settings.
       },
       // If true, display the count of results at the very top of the results. Defaults to false.
       showResultCount: true,
