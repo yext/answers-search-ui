@@ -557,7 +557,7 @@ ANSWERS.addComponent('VerticalResults', {
   // Optional, whether to display the total number of results, default true
   showResultCount: true,
   // Optional, custom text for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount with the double bracket notation e.g. {{resultsCount}}.
-  resultsCountTemplateString: '{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}',
+  resultsCountText: '{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}',
   // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
   modifier: '',
   // Optional, the card used to display each individual result, see the Cards section for more details,
