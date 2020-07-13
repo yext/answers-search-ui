@@ -109,8 +109,12 @@ describe('navigation component configuration', () => {
     return {
       globalStorage: {
         getState: (storageKey) => {
-          expect(storageKey).toEqual(StorageKeys.VERTICAL_PAGES_CONFIG);
-          return verticalsConfig;
+          switch (storageKey) {
+            case StorageKeys.VERTICAL_PAGES_CONFIG:
+              return verticalsConfig;
+            default:
+              return null;
+          }
         },
         on: () => {}
       }

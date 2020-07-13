@@ -411,13 +411,15 @@ export default class SearchComponent extends Component {
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
 
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    if (context) {
+      params.set(StorageKeys.API_CONTEXT, context);
+    }
+
     // If we have a redirectUrl, we want the form to be
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        if (params.has(StorageKeys.REFERRER_PAGE_URL)) {
-          params.delete(StorageKeys.REFERRER_PAGE_URL);
-        }
         window.location.href = this.redirectUrl + '?' + params.toString();
         return false;
       }
@@ -544,7 +546,14 @@ export default class SearchComponent extends Component {
    */
   search (query) {
     if (this._verticalKey) {
-      this.core.verticalSearch(this._config.verticalKey, { resetPagination: true }, { input: query });
+      this.core.verticalSearch(
+        this._config.verticalKey,
+        {
+          resetPagination: true,
+          setQueryParams: true
+        },
+        { input: query }
+      );
     } else {
       // NOTE(billy) Temporary hack for DEMO
       // Remove me after the demo
@@ -567,10 +576,10 @@ export default class SearchComponent extends Component {
             urls[tabs[i].configId] = url;
           }
         }
-        return this.core.search(query, urls);
+        return this.core.search(query, urls, { setQueryParams: true });
       }
 
-      return this.core.search(query);
+      return this.core.search(query, undefined, { setQueryParams: true });
     }
   }
 

@@ -338,11 +338,7 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < this._tabOrder.length; i++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
-        tab.url = this.generateTabUrl(
-          tab.baseUrl,
-          this.getUrlParams(),
-          this.core.globalStorage.getState(StorageKeys.API_CONTEXT)
-        );
+        tab.url = this.generateTabUrl(tab.baseUrl, this.getUrlParams());
         tabs.push(tab);
       }
     }
@@ -465,9 +461,14 @@ export default class NavigationComponent extends Component {
     return tabOrder;
   }
 
-  generateTabUrl (baseUrl, params, context) {
+  generateTabUrl (baseUrl, params) {
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
+    }
+    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    if (referrerPageUrl !== null) {
+      params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 
     // We want to persist the params from the existing URL to the new

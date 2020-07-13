@@ -232,8 +232,13 @@ export default class VerticalResultsComponent extends Component {
     const params = { query: this.query };
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
-      params.context = context;
+      params[StorageKeys.API_CONTEXT] = context;
     }
+    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    if (referrerPageUrl !== null) {
+      params[StorageKeys.REFERRER_PAGE_URL] = referrerPageUrl;
+    }
+
     return addParamsToUrl(universalConfig.url, params);
   }
 

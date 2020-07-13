@@ -193,6 +193,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     expect(verticalSearchFn.mock.calls).toHaveLength(1);
     expect(verticalSearchFn.mock.calls[0][0]).toEqual('a vertical key');
     expect(verticalSearchFn.mock.calls[0][1]).toEqual({
+      setQueryParams: true,
       resetPagination: true,
       useFacets: true
     });
