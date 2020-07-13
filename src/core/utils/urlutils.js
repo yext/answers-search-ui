@@ -59,3 +59,21 @@ export function addParamsToUrl (url, params = {}) {
 export function urlWithoutQueryParamsAndHash (url) {
   return url.split('?')[0].split('#')[0];
 }
+
+/**
+ * returns if two SearchParams objects have the same key,value entries
+ * @param {SearchParams} params1
+ * @param {SearchParams} params2
+ * @return {boolean} true if params1 and params2 have the same key,value entries, false otherwise
+ */
+export function equivalentParams (params1, params2) {
+  if (params1.entries().length !== params2.entries().length) {
+    return false;
+  }
+  for (const [key, val] of params1.entries()) {
+    if (val !== params2.get(key)) {
+      return false;
+    }
+  }
+  return true;
+}

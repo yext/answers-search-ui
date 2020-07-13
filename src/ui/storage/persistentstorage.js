@@ -1,5 +1,6 @@
 import SearchParams from '../dom/searchparams';
 import { AnswersStorageError } from '../../core/errors/errors';
+import { equivalentParams } from '../../core/utils/urlutils';
 
 /** @module PersistentStorage */
 
@@ -66,6 +67,11 @@ export default class PersistentStorage {
   }
 
   _updateHistory (replaceHistory = false) {
+    const currentParams = new SearchParams(window.location.search.substring(1));
+    if (equivalentParams(this._params, currentParams)) {
+      return;
+    }
+
     if (this._historyTimer) {
       clearTimeout(this._historyTimer);
     }
