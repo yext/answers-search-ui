@@ -22,7 +22,7 @@ const DEFAULT_CONFIG = {
   isUniversal: false,
   labelText: 'Filters applied to this search:',
   removableLabelText: 'Remove this filter',
-  resultsCountTemplate: '',
+  resultsCountTemplateString: '',
   hiddenFields: []
 };
 

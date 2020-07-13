@@ -14,8 +14,10 @@
   {{#if (and _config.showResultCount resultsCount)}}
     <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} through {{resultsCountEnd}} of {{resultsCount}}">
       <div aria-hidden="true">
-        {{#if _config.resultsCountTemplate}}
-          {{renderTemplate _config.resultsCountTemplate}}
+        {{#if _config.resultsCountTemplateString}}
+          <span class="yxt-ResultsHeader-resultsCountTemplateString">
+            {{hydrateString _config.resultsCountTemplateString}}
+          </span>
         {{else}}
           <span class="yxt-ResultsHeader-resultsCountStart">{{resultsCountStart}}</span>
           <span class="yxt-ResultsHeader-resultsCountDash">-</span>
