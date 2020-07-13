@@ -214,6 +214,7 @@ export default class SearchComponent extends Component {
 
   onCreate () {
     if (this.query != null && !this.redirectUrl) {
+      this.core.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL), true);
       this.core.setQuery(this.query);
     }
   }
