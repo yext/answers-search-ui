@@ -208,7 +208,8 @@ export default class VerticalResultsComponent extends Component {
       delimiter: this._config.appliedFilters.delimiter,
       labelText: this._config.appliedFilters.labelText,
       removableLabelText: this._config.appliedFilters.removableLabelText,
-      hiddenFields: this._config.appliedFilters.hiddenFields
+      hiddenFields: this._config.appliedFilters.hiddenFields,
+      resultsCountTemplate: this._config.resultsCountTemplate
     };
   }
 
