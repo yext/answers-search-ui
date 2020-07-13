@@ -150,10 +150,10 @@ export default class Core {
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+        this.persistentStorage.set(StorageKeys.API_CONTEXT, context);
       }
       if (referrerPageUrl !== null) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
       }
     }
 
