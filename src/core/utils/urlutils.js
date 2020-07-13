@@ -70,11 +70,8 @@ export function equivalentParams (params1, params2) {
   if (params1.entries().length !== params2.entries().length) {
     return false;
   }
-  for (let entry of params1.entries()) {
-    if (!params2.has(entry[0])) {
-      return false;
-    }
-    if (entry[1] !== params2.get(entry[0])) {
+  for (const [key, val] of params1.entries()) {
+    if (val !== params2.get(key)) {
       return false;
     }
   }
