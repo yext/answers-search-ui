@@ -1,5 +1,13 @@
   /** @define FilterOptions */
 
+  $filter-options-checkmark-color: $color-brand-primary !default;
+  $filter-options-checkbox-focus-color: black !default;
+
+  :root {
+    --yxt-filter-options-checkmark-color: #{$filter-options-checkmark-color};
+    --yxt-filter-options-checkbox-focus-color: #{$filter-options-checkbox-focus-color};
+  }
+
   .yxt-FilterOptions {
     &-container {
       @include Text($line-height: var(--yxt-line-height-md));
@@ -157,6 +165,7 @@
       transform: rotate(45deg) translateY(-50%);
       border-right: 1px solid $color-brand-hover;
       border-bottom: 1px solid $color-brand-hover;
+      border-color: var(--yxt-filter-options-checkmark-color);
     }
   }
 
@@ -250,13 +259,14 @@
 
       & + .yxt-FilterOptions-optionLabel::before {
         border: var(--yxt-border-hover);
+        border-color: var(--yxt-filter-options-checkmark-color);
       }
     }
 
     /* Add focus styles on the outer-box of the fake checkbox */
     &:focus {
       & + .yxt-FilterOptions-optionLabel::before {
-        border: 1px solid black;
+        border: 1px solid var(--yxt-filter-options-checkbox-focus-color);
         box-shadow: var(--yxt-searchbar-focus-shadow);
       }
     }
