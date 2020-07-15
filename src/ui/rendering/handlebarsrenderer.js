@@ -208,8 +208,8 @@ export default class HandlebarsRenderer extends Renderer {
         : self.SafeString(highlightedVal.get());
     });
 
-    self.registerHelper('hydrateString', function (templateString) {
-      return self.compile(templateString)(this);
+    self.registerHelper('renderTemplate', function (template) {
+      return self.SafeString(self.compile(template)(this));
     });
   }
 }

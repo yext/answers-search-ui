@@ -209,7 +209,7 @@ export default class VerticalResultsComponent extends Component {
       labelText: this._config.appliedFilters.labelText,
       removableLabelText: this._config.appliedFilters.removableLabelText,
       hiddenFields: this._config.appliedFilters.hiddenFields,
-      resultsCountText: this._config.resultsCountText
+      resultsCountTemplate: this._config.resultsCountTemplate
     };
   }
 
