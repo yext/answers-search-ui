@@ -7,10 +7,8 @@ describe('adding and removing data', () => {
 
   beforeEach(() => {
     delete global.window.location;
-    global.window = Object.create(global.window);
     global.window.location = {};
     global.window.location.search = '';
-    global.window.history = {};
 
     updateCb = jest.fn();
     storage = new PersistentStorage({ updateListener: updateCb });
