@@ -6,19 +6,19 @@ describe('adding and removing data', () => {
   let updateCb;
 
   beforeEach(() => {
-    delete window.location;
-    window = Object.create(window);
-    window.location = {};
-    window.location.search = '';
-    window.history = {};
+    delete global.window.location;
+    global.window = Object.create(global.window);
+    global.window.location = {};
+    global.window.location.search = '';
+    global.window.history = {};
 
     updateCb = jest.fn();
     storage = new PersistentStorage({ updateListener: updateCb });
     mockPushState = jest.fn((state, title, url) => {
-      window.location.search = url;
+      global.window.location.search = url;
     });
 
-    window.history.pushState = mockPushState;
+    global.window.history.pushState = mockPushState;
   });
 
   it('pushes history after set', () => {
