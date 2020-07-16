@@ -123,7 +123,7 @@ function minifyTemplatesIIFE (cb) {
 function watchTemplates (cb) {
   return watch(['./src/ui/templates/**/*.hbs'], {
     ignored: './dist/'
-  }, series(precompileTemplates, bundleTemplates));
+  }, series(precompileTemplates, bundleTemplatesUMD));
 }
 
 exports.default = series(
@@ -133,4 +133,4 @@ exports.default = series(
     series(bundleTemplatesUMD, minifyTemplatesUMD)
   )
 );
-exports.dev = series(precompileTemplates, bundleTemplates, watchTemplates);
+exports.dev = series(precompileTemplates, bundleTemplatesUMD, watchTemplates);
