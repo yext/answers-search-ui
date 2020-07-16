@@ -150,10 +150,10 @@ export default class Core {
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context);
+        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
       }
       if (referrerPageUrl !== null) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
+        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
       }
     }
 
@@ -245,10 +245,10 @@ export default class Core {
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context);
+        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
       }
       if (referrerPageUrl !== null) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
+        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
       }
     }
 

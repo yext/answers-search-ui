@@ -67,7 +67,10 @@ export function urlWithoutQueryParamsAndHash (url) {
  * @return {boolean} true if params1 and params2 have the same key,value entries, false otherwise
  */
 export function equivalentParams (params1, params2) {
-  if (params1.entries().length !== params2.entries().length) {
+  const entries1 = Array.from(params1.entries());
+  const entries2 = Array.from(params2.entries());
+
+  if (entries1.length !== entries2.length) {
     return false;
   }
   for (const [key, val] of params1.entries()) {

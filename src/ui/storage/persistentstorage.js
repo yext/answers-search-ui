@@ -13,12 +13,6 @@ export default class PersistentStorage {
     this._params = new SearchParams(window.location.search.substring(1));
 
     /**
-     * The current history edit timer, if any
-     * @type {number}
-     */
-    this._historyTimer = null;
-
-    /**
      * The list of listeners to every storage update
      * @type {function[]}
      */
@@ -72,21 +66,12 @@ export default class PersistentStorage {
       return;
     }
 
-    if (this._historyTimer) {
-      clearTimeout(this._historyTimer);
+    if (replaceHistory) {
+      window.history.replaceState(null, null, `?${this._params.toString()}`);
+    } else {
+      window.history.pushState(null, null, `?${this._params.toString()}`);
     }
-
-    // batch update calls across components to avoid updating the url too much
-    this._historyTimer = setTimeout(
-      () => {
-        this._historyTimer = null;
-        if (replaceHistory) {
-          window.history.replaceState(null, null, `?${this._params.toString()}`);
-        } else {
-          window.history.pushState(null, null, `?${this._params.toString()}`);
-        }
-        this._callListener(this._updateListener);
-      });
+    this._callListener(this._updateListener);
   }
 
   /**
