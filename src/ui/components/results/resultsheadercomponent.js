@@ -22,6 +22,7 @@ const DEFAULT_CONFIG = {
   isUniversal: false,
   labelText: 'Filters applied to this search:',
   removableLabelText: 'Remove this filter',
+  resultsCountTemplate: '',
   hiddenFields: []
 };
 
@@ -42,6 +43,12 @@ export default class ResultsHeaderComponent extends Component {
      * @type {number}
      */
     this.resultsLength = data.resultsLength || 0;
+
+    /**
+     * The compiled custom results count template, if the user specifies one.
+     * @type {Function}
+     */
+    this._compiledResultsCountTemplate = this._renderer.compile(this._config.resultsCountTemplate);
 
     /**
      * Array of nlp filters in the search response.
@@ -155,14 +162,18 @@ export default class ResultsHeaderComponent extends Component {
     this.appliedFilterNodes = this._calculateAppliedFilterNodes();
     const appliedFiltersArray = this._createAppliedFiltersArray();
     const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
-    return super.setState({
-      ...data,
+    const resultsCountData = {
       resultsCount: this.resultsCount,
       resultsCountStart: offset + 1,
-      resultsCountEnd: offset + this.resultsLength,
+      resultsCountEnd: offset + this.resultsLength
+    };
+    return super.setState({
+      ...data,
+      ...resultsCountData,
       showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
-      appliedFiltersArray: appliedFiltersArray
+      appliedFiltersArray: appliedFiltersArray,
+      customResultsCount: this._compiledResultsCountTemplate(resultsCountData)
     });
   }
 
