@@ -40,6 +40,7 @@ Outline:
 7. [Analytics](#analytics)
    - [Custom Analytics Using JavaScript](#custom-analytics-using-javascript)
    - [Custom Analytics Using Data Attributes](#custom-analytics-using-data-attributes)
+   - [Built-In Analytics Events For CTAs](#built-in-analytics-events-for-ctas)
    - [Conversion Tracking](#conversion-tracking)
    - [On-Search Analytics](#on-search-analytics)
 8. [Rich Text Formatting](#rich-text-formatting)
@@ -870,18 +871,7 @@ const callsToAction = [{
   // Click through url for the icon and label
   // Note, a protocol like https:// is required here.
   url: 'https://yext.com',
-  // Analytics event that should fire, defaults to 'CTA_CLICK':
-  //       'TITLE_CLICK',
-  //       'CTA_CLICK',
-  //       'TAP_TO_CALL',
-  //       'ORDER_NOW',
-  //       'ADD_TO_CART',
-  //       'APPLY_NOW',
-  //       'DRIVING_DIRECTIONS',
-  //       'VIEW_WEBSITE',
-  //       'EMAIL',
-  //       'BOOK_APPOINTMENT',
-  //       'RSVP'
+  // Analytics event that should fire, defaults to 'CTA_CLICK'. Other events outlined in the Analytics section.
   analytics: 'CTA_CLICK',
   // The target attribute for the CTA link, defaults to '_blank'. To open in a new window use '_blank'
   target: '_blank',
