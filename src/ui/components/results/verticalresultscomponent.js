@@ -52,6 +52,7 @@ class VerticalResultsConfig {
 
     /**
      * Vertical URL for view more link
+     * @type {string}
      */
     this.verticalURL = config.verticalURL;
 
@@ -60,6 +61,12 @@ class VerticalResultsConfig {
      * @type {boolean}
      */
     this.showResultCount = config.showResultCount === undefined ? true : config.showResultCount;
+
+    /**
+     * A custom results count template.
+     * @type {string}
+     */
+    this.resultsCountTemplate = config.resultsCountTemplate || '';
 
     /**
      * Config for the applied filters in the results header.

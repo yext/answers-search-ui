@@ -207,9 +207,5 @@ export default class HandlebarsRenderer extends Renderer {
       return getInverted ? self.SafeString(highlightedVal.getInverted())
         : self.SafeString(highlightedVal.get());
     });
-
-    self.registerHelper('renderTemplate', function (template) {
-      return self.SafeString(self.compile(template)(this));
-    });
   }
 }
