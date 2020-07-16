@@ -1,4 +1,4 @@
-const { series, src, dest, watch } = require('gulp');
+const { parallel, series, src, dest, watch } = require('gulp');
 
 const fs = require('fs');
 const insert = require('rollup-plugin-insert');
@@ -17,6 +17,9 @@ const declare = require('gulp-declare');
 const wrap = require('gulp-wrap');
 
 const source = require('vinyl-source-stream');
+
+const filenameUMD = 'answerstemplates.compiled.min.js';
+const filenameIIFE = 'answerstemplates-iife.compiled.min.js';
 
 function precompileTemplates () {
   return src('./src/ui/templates/**/*.hbs')
@@ -55,19 +58,15 @@ function precompileTemplates () {
         return declare.processNameByPath(path, '').replace('.', '/');
       }
     }))
-    .pipe(concat('answerstemplates.compiled.min.js'))
+    .pipe(concat('answerstemplates.precompiled.min.js'))
     .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
     .pipe(dest('dist'));
 }
 
-function bundleTemplates () {
+function bundleTemplates (outputConfig, fileName) {
   return rollup({
-    input: './dist/answerstemplates.compiled.min.js',
-    output: {
-      format: 'umd',
-      name: 'TemplateBundle',
-      exports: 'named'
-    },
+    input: './dist/answerstemplates.precompiled.min.js',
+    output: outputConfig,
     plugins: [
       resolve(),
       insert.prepend(
@@ -84,12 +83,39 @@ function bundleTemplates () {
       })
     ]
   })
-    .pipe(source('answerstemplates.compiled.min.js'))
+    .pipe(source(fileName))
     .pipe(dest('dist'));
 }
 
-function minifyTemplates (cb) {
-  return src('./dist/answerstemplates.compiled.min.js')
+function bundleTemplatesUMD () {
+  return bundleTemplates(
+    {
+      format: 'umd',
+      name: 'TemplateBundle',
+      exports: 'named'
+    },
+    filenameUMD
+  );
+}
+
+function bundleTemplatesIIFE () {
+  return bundleTemplates(
+    {
+      format: 'iife',
+      name: 'TemplateBundle'
+    },
+    filenameIIFE
+  );
+}
+
+function minifyTemplatesUMD (cb) {
+  return src(`./dist/${filenameUMD}`)
+    .pipe(uglify())
+    .pipe(dest('dist'));
+}
+
+function minifyTemplatesIIFE (cb) {
+  return src(`./dist/${filenameIIFE}`)
     .pipe(uglify())
     .pipe(dest('dist'));
 }
@@ -100,5 +126,11 @@ function watchTemplates (cb) {
   }, series(precompileTemplates, bundleTemplates));
 }
 
-exports.default = series(precompileTemplates, bundleTemplates, minifyTemplates);
+exports.default = series(
+  precompileTemplates,
+  parallel(
+    series(bundleTemplatesIIFE, minifyTemplatesIIFE),
+    series(bundleTemplatesUMD, minifyTemplatesUMD)
+  )
+);
 exports.dev = series(precompileTemplates, bundleTemplates, watchTemplates);
