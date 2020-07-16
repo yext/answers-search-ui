@@ -128,6 +128,8 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   {
     height: 300px;
     border-bottom: var(--yxt-results-border);
+    border-left: var(--yxt-results-border);
+    border-right: var(--yxt-results-border);
   }
 
   &-items {
