@@ -46,6 +46,7 @@ export default class ResultsHeaderComponent extends Component {
 
     /**
      * The compiled custom results count template, if the user specifies one.
+     * @type {Function}
      */
     this._compiledResultsCountTemplate = this._renderer.compile(this._config.resultsCountTemplate);
 
