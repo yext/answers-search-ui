@@ -142,6 +142,7 @@ export default class LocationBiasComponent extends Component {
   _doSearch () {
     if (this._verticalKey) {
       this.core.verticalSearch(this._config.verticalKey, {
+        setQueryParams: true,
         useFacets: true
       });
     } else {

@@ -220,6 +220,7 @@ export default class FilterSearchComponent extends Component {
     }
     window.setTimeout(() => {
       this.core.verticalSearch(this._config.verticalKey, {
+        setQueryParams: true,
         resetPagination: true,
         useFacets: true
       });

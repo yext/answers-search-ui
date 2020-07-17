@@ -31,6 +31,9 @@ import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION } from './core/constants';
 import MasterSwitchApi from './core/utils/masterswitchapi';
 import RichTextFormatter from './core/utils/richtextformatter';
+import { isValidContext } from './core/utils/apicontext';
+import FilterNodeFactory from './core/filters/filternodefactory';
+import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -70,6 +73,11 @@ class Answers {
      * custom analytics
      */
     this.AnalyticsEvent = AnalyticsEvent;
+
+    /**
+     * A reference to the FilterNodeFactory class for creating {@link FilterNode}s.
+     */
+    this.FilterNodeFactory = FilterNodeFactory;
 
     /**
      * A reference of the renderer to use for the components
@@ -160,6 +168,20 @@ class Answers {
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
     globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
+
+    const context = globalStorage.getState(StorageKeys.API_CONTEXT);
+    if (context && !isValidContext(context)) {
+      persistentStorage.delete(StorageKeys.API_CONTEXT, true);
+      globalStorage.delete(StorageKeys.API_CONTEXT);
+      console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
+    }
+
+    if (globalStorage.getState(StorageKeys.REFERRER_PAGE_URL) === null) {
+      globalStorage.set(
+        StorageKeys.REFERRER_PAGE_URL,
+        urlWithoutQueryParamsAndHash(document.referrer)
+      );
+    }
 
     this._masterSwitchApi = statusPage
       ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, globalStorage)
@@ -442,6 +464,20 @@ class Answers {
         }
       }
     });
+  }
+
+  /*
+   * Adds context as a parameter for the query API calls.
+   * @param {Object} context The context object passed in the API calls
+   */
+  setContext (context) {
+    const contextString = JSON.stringify(context);
+    if (!isValidContext(contextString)) {
+      console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
+      return;
+    }
+
+    this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
   }
 }
 

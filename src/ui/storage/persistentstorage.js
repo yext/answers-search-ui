@@ -1,5 +1,6 @@
 import SearchParams from '../dom/searchparams';
 import { AnswersStorageError } from '../../core/errors/errors';
+import { equivalentParams } from '../../core/utils/urlutils';
 
 /** @module PersistentStorage */
 
@@ -10,12 +11,6 @@ export default class PersistentStorage {
      * @type {SearchParams}
      */
     this._params = new SearchParams(window.location.search.substring(1));
-
-    /**
-     * The current history edit timer, if any
-     * @type {number}
-     */
-    this._historyTimer = null;
 
     /**
      * The list of listeners to every storage update
@@ -66,21 +61,17 @@ export default class PersistentStorage {
   }
 
   _updateHistory (replaceHistory = false) {
-    if (this._historyTimer) {
-      clearTimeout(this._historyTimer);
+    const currentParams = new SearchParams(window.location.search.substring(1));
+    if (equivalentParams(this._params, currentParams)) {
+      return;
     }
 
-    // batch update calls across components to avoid updating the url too much
-    this._historyTimer = setTimeout(
-      () => {
-        this._historyTimer = null;
-        if (replaceHistory) {
-          window.history.replaceState(null, null, `?${this._params.toString()}`);
-        } else {
-          window.history.pushState(null, null, `?${this._params.toString()}`);
-        }
-        this._callListener(this._updateListener);
-      });
+    if (replaceHistory) {
+      window.history.replaceState(null, null, `?${this._params.toString()}`);
+    } else {
+      window.history.pushState(null, null, `?${this._params.toString()}`);
+    }
+    this._callListener(this._updateListener);
   }
 
   /**

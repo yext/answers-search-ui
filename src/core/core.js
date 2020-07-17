@@ -144,6 +144,19 @@ export default class Core {
       this.filterRegistry.setFacetFilterNodes([], []);
     }
 
+    const { setQueryParams } = options;
+    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+
+    if (setQueryParams) {
+      if (context) {
+        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+      }
+      if (referrerPageUrl !== null) {
+        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+      }
+    }
+
     const searchConfig = this.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
     if (!searchConfig.verticalKey) {
       this.globalStorage.set(StorageKeys.SEARCH_CONFIG, {
@@ -168,7 +181,9 @@ export default class Core {
         queryTrigger: this.globalStorage.getState('queryTrigger'),
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
-        locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null
+        locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
+        context: context,
+        referrerPageUrl: referrerPageUrl
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -218,12 +233,25 @@ export default class Core {
    * @param {string} verticalKey The vertical key to use in the search
    */
   verticalPage (verticalKey) {
-    this.verticalSearch(verticalKey, { useFacets: true }, {
+    this.verticalSearch(verticalKey, { useFacets: true, setQueryParams: true }, {
       id: this.globalStorage.getState(StorageKeys.QUERY_ID)
     });
   }
 
-  search (queryString, urls) {
+  search (queryString, urls, options = {}) {
+    const { setQueryParams } = options;
+    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+
+    if (setQueryParams) {
+      if (context) {
+        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+      }
+      if (referrerPageUrl !== null) {
+        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+      }
+    }
+
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
@@ -235,7 +263,9 @@ export default class Core {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
+        context: context,
+        referrerPageUrl: referrerPageUrl
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {

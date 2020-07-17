@@ -109,9 +109,14 @@ describe('navigation component configuration', () => {
     return {
       globalStorage: {
         getState: (storageKey) => {
-          expect(storageKey).toEqual(StorageKeys.VERTICAL_PAGES_CONFIG);
-          return verticalsConfig;
-        }
+          switch (storageKey) {
+            case StorageKeys.VERTICAL_PAGES_CONFIG:
+              return verticalsConfig;
+            default:
+              return null;
+          }
+        },
+        on: () => {}
       }
     };
   };
@@ -233,7 +238,7 @@ describe('navigation component configuration', () => {
       core: mockedCore(tabConfig)
     });
 
-    const url = navComponent.generateTabUrl(tabConfig[0].url);
+    const url = navComponent.generateTabUrl(tabConfig[0].url, navComponent.getUrlParams());
     expect(url).toEqual('/tab1/?tabOrder=tab1');
   });
 });
