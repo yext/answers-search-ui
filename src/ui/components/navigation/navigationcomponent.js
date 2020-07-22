@@ -5,7 +5,6 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
-import SearchParams from '../../dom/searchparams';
 import DOM from '../../dom/dom';
 
 /**
@@ -157,7 +156,7 @@ export default class NavigationComponent extends Component {
      * @type {Array.<String>} The list of VS verticalKeys
      * @private
      */
-    this._tabOrder = this.core.getDefaultTabOrder(this._tabsConfig, this.getUrlParams());
+    this._tabOrder = this.core.getDefaultTabOrder(this._tabsConfig, this.core.getUrlParams());
 
     /**
      * Breakpoints at which navigation items move to the "more" dropdown
@@ -337,7 +336,7 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < this._tabOrder.length; i++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
-        tab.url = this.core.generateTabUrl(tab.baseUrl, this.getUrlParams(), this._tabs, this._tabOrder);
+        tab.url = this.core.generateTabUrl(tab.baseUrl, this.core.getUrlParams(), this._tabs, this._tabOrder);
         tabs.push(tab);
       }
     }
@@ -379,10 +378,6 @@ export default class NavigationComponent extends Component {
       return null;
     }
     return el.closest(closestElSelector);
-  }
-
-  getUrlParams () {
-    return new SearchParams(window.location.search.substring(1));
   }
 
   shouldCollapse () {

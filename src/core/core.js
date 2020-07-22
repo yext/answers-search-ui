@@ -9,6 +9,8 @@ import QuestionSubmission from './models/questionsubmission';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
 
+import SearchParams from '../../src/ui/dom/searchparams';
+
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
 /** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
@@ -116,7 +118,10 @@ export default class Core {
      * @type {Function}
      */
     this.onVerticalSearch = config.onVerticalSearch || function () {};
+  }
 
+  getUrlParams () {
+    return new SearchParams(window.location.search.substring(1));
   }
 
   getDefaultTabOrder (tabsConfig, urlParams) {
@@ -208,7 +213,6 @@ export default class Core {
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, options = {}, query = {}) {
-
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});

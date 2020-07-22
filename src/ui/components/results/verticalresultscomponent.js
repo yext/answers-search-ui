@@ -12,7 +12,6 @@ import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
-import SearchParams from '../../dom/searchparams';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -251,16 +250,21 @@ export default class VerticalResultsComponent extends Component {
     return addParamsToUrl(universalConfig.url, params);
   }
 
-  getUrlParams () {
-    return new SearchParams(window.location.search.substring(1));
-  }
-
   getVerticalURL (data = {}) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
 
-    let tabOrder = this.core.getDefaultTabOrder(this._verticalsConfig, this.getUrlParams());
-    return this.core.generateTabUrl(verticalURL, this.getUrlParams(), this._verticalsConfig, tabOrder);
+    const params = {
+      query: this.query,
+      referrerPageUrl: this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+    };
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    if (context) {
+      params.context = context;
+    }
+
+    let tabOrder = this.core.getDefaultTabOrder(this._verticalsConfig, this.core.getUrlParams());
+    return this.core.generateTabUrl(verticalURL, this.core.getUrlParams(), this._verticalsConfig, tabOrder);
   }
 
   setState (data = {}, val) {
