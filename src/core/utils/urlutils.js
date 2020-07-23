@@ -42,20 +42,22 @@ export function getAnalyticsUrl (env = PRODUCTION, conversionTrackingEnabled = f
 }
 
 /**
- * Returns the passed in url, with all url params from the current url, as well as any
- * pasased in params, appended to it.
+ * Returns the passed in url with the passed in params appended as query params
+ * Note: query parameters in the url are stripped, you should include those query parameters
+ * in `params` if you want to keep them
  * @param {string} url
- * @param {Object} params
+ * @param {SearchParams} params to add to the url
  * @returns {string}
  */
-export function addParamsToUrl (url, params = {}) {
-  const urlParams = new SearchParams(window.location.search.substring(1));
-  for (const paramKey in params) {
-    urlParams.set(paramKey, params[paramKey]);
-  }
-  return url.split('?')[0] + '?' + urlParams;
+export function replaceUrlParams (url, params = new SearchParams()) {
+  return url.split('?')[0] + '?' + params.toString();
 }
 
+/**
+ * Returns the given url without query params and hashes
+ * @param {string} url Full url e.g. https://yext.com/?query=hello#Footer
+ * @returns {string} Url without query params and hashes e.g. https://yext.com/
+ */
 export function urlWithoutQueryParamsAndHash (url) {
   return url.split('?')[0].split('#')[0];
 }
