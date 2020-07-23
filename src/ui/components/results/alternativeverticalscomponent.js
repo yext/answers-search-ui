@@ -3,7 +3,8 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
-import { addParamsToUrl } from '../../../core/utils/urlutils';
+import { replaceUrlParams } from '../../../core/utils/urlutils';
+import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
@@ -114,12 +115,12 @@ export default class AlternativeVerticalsComponent extends Component {
   static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context, referrerPageUrl) {
     let verticals = [];
 
-    const params = {};
+    const params = new SearchParams(window.location.search.substring(1));
     if (context) {
-      params[StorageKeys.API_CONTEXT] = context;
+      params.set(StorageKeys.API_CONTEXT, context);
     }
     if (typeof referrerPageUrl === 'string') {
-      params[StorageKeys.REFERRER_PAGE_URL] = referrerPageUrl;
+      params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 
     for (let alternativeVertical of alternativeVerticals) {
@@ -135,7 +136,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
       verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
-        url: addParamsToUrl(matchingVerticalConfig.url, params),
+        url: replaceUrlParams(matchingVerticalConfig.url, params),
         iconName: matchingVerticalConfig.icon,
         iconUrl: matchingVerticalConfig.iconUrl,
         resultsCount: alternativeVertical.resultsCount
