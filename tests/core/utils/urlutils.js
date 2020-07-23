@@ -5,7 +5,7 @@ import {
   getCachedLiveApiUrl,
   getKnowledgeApiUrl,
   getAnalyticsUrl,
-  addParamsToUrl,
+  replaceUrlParams,
   urlWithoutQueryParamsAndHash,
   equivalentParams
 } from '../../../src/core/utils/urlutils';
@@ -32,40 +32,32 @@ describe('getUrlFunctions work', () => {
   });
 });
 
-describe('addParamsToUrl works', () => {
-  it('adds params when currentParams is undefined', () => {
-    expect(addParamsToUrl('https://yext.com/', { referrerPageUrl: '' }))
-      .toEqual('https://yext.com/?referrerPageUrl=');
+describe('replaceUrlParams works', () => {
+  const baseUrl = 'https://yext.com/';
+  it('adds params to a url without query params', () => {
+    expect(replaceUrlParams(baseUrl, new SearchParams('?referrerPageUrl=')))
+      .toEqual(baseUrl + '?referrerPageUrl=');
   });
 
-  it('adds params when params already exist', () => {
-    expect(addParamsToUrl(
-      'https://yext.com/',
-      { query: 'all', referrerPageUrl: '' },
-      new SearchParams('?page=10&facets=true')
-    )).toEqual('https://yext.com/?page=10&facets=true&query=all&referrerPageUrl=');
-
-    expect(addParamsToUrl(
-      'https://yext.com/?query=hello&page=5',
-      { query: 'all', referrerPageUrl: '' },
-      new SearchParams('?page=10&facets=true')
-    )).toEqual('https://yext.com/?page=10&facets=true&query=all&referrerPageUrl=');
+  it('replaces params when params already exist in url', () => {
+    const params = 'page=10&facets=true&query=all&referrerPageUrl=';
+    expect(replaceUrlParams(
+      'https://yext.com/?query=test&page=5&context=%7B%7D',
+      new SearchParams(params)
+    )).toEqual(`https://yext.com/?${params}`);
   });
 
   it('adds params when new params are empty', () => {
-    expect(addParamsToUrl(
-      'https://yext.com/',
-      {},
-      new SearchParams('?page=10&facets=true')
-    )).toEqual('https://yext.com/?page=10&facets=true');
+    expect(replaceUrlParams('https://yext.com/', new SearchParams())).
+      toEqual('https://yext.com/?');
   });
 
   it('encodes new params correctly', () => {
-    expect(addParamsToUrl(
-      'https://yext.com/',
-      { query: 'all', referrerPageUrl: 'https://www.yext.com/' },
-      new SearchParams('?page=10&facets=true')
-    )).toEqual('https://yext.com/?page=10&facets=true&query=all&referrerPageUrl=https%3A%2F%2Fwww.yext.com%2F');
+    const params = new SearchParams('?page=10&facets=true');
+    params.set('query', 'all');
+    params.set('referrerPageUrl', 'https://www.yext.com/');
+    expect(replaceUrlParams('https://yext.com/', params))
+      .toEqual('https://yext.com/?page=10&facets=true&query=all&referrerPageUrl=https%3A%2F%2Fwww.yext.com%2F');
   });
 });
 
