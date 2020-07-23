@@ -254,6 +254,11 @@ export default class VerticalResultsComponent extends Component {
     if (context) {
       params.context = context;
     }
+    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    if (sessionsOptIn.setDynamically) {
+      params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
+    }
+
     return addParamsToUrl(verticalURL, params);
   }
 

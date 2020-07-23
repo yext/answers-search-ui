@@ -112,6 +112,8 @@ describe('navigation component configuration', () => {
           switch (storageKey) {
             case StorageKeys.VERTICAL_PAGES_CONFIG:
               return verticalsConfig;
+            case StorageKeys.SESSIONS_OPT_IN:
+              return {};
             default:
               return null;
           }

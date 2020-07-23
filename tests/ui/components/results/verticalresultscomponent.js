@@ -17,6 +17,8 @@ const mockCore = {
         return undefined;
       } else if (storageKey === StorageKeys.REFERRER_PAGE_URL) {
         return '';
+      } else if (storageKey === StorageKeys.SESSIONS_OPT_IN) {
+        return {};
       }
     }
   },

@@ -22,9 +22,10 @@ export default class UniversalResultsComponent extends Component {
       ...config.appliedFilters
     };
 
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
+    const reRender = () =>
       this.setState(this.core.globalStorage.getState(StorageKeys.UNIVERSAL_RESULTS) || {});
-    });
+    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
+    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
   }
 
   static get type () {
