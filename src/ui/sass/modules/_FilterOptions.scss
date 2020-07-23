@@ -132,6 +132,8 @@
     align-items: center;
     margin-left: 22px;
     cursor: pointer;
+    word-break: break-word;
+    hyphens: auto;
 
     /* Checkmark outer box */
     &::before {
