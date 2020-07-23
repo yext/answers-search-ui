@@ -18,11 +18,7 @@ const mockCore = {
   },
   getStaticFilterNodes: () => [],
   getFacetFilterNodes: () => [],
-  getLocationRadiusFilterNode: () => null,
-  getDefaultTabOrder: () => [],
-  mergeTabOrder: () => [],
-  getUrlParams: () => [],
-  generateTabUrl: () => 'defaultTabUrl'
+  getLocationRadiusFilterNode: () => null
 };
 
 DOM.setup(document, new DOMParser());
@@ -127,7 +123,7 @@ describe('vertical results component', () => {
     });
 
     it('if unset defaults to vertical key', () => {
-      expect(component.getVerticalURL()).toEqual('defaultTabUrl');
+      expect(component.getVerticalURL()).toEqual('key.html?query=virginia&otherParam=123&tabOrder=');
     });
 
     it('if null defaults to vertical key', () => {
@@ -136,13 +132,13 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('defaultTabUrl');
+      expect(component.getVerticalURL()).toEqual('key.html?query=virginia&otherParam=123&tabOrder=');
     });
 
     it('works with transformData', () => {
       expect(component.getVerticalURL({
         verticalURL: 'transform-data'
-      })).toEqual('defaultTabUrl');
+      })).toEqual('transform-data?query=virginia&otherParam=123&tabOrder=');
     });
 
     it('defaults to matching config in verticalPages', () => {
@@ -150,7 +146,7 @@ describe('vertical results component', () => {
         verticalKey: 'key',
         url: 'vertical-pages'
       }];
-      expect(component.getVerticalURL()).toEqual('defaultTabUrl');
+      expect(component.getVerticalURL()).toEqual('vertical-pages?query=virginia&otherParam=123&tabOrder=key');
     });
 
     it('can be set', () => {
@@ -159,7 +155,7 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('defaultTabUrl');
+      expect(component.getVerticalURL()).toEqual('vertical-url?query=virginia&otherParam=123&tabOrder=');
     });
   });
 });

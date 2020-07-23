@@ -12,6 +12,7 @@ import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
+import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/urlutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -242,8 +243,17 @@ export default class VerticalResultsComponent extends Component {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
 
-    let tabOrder = this.core.getDefaultTabOrder(this._verticalsConfig, this.core.getUrlParams());
-    return this.core.generateTabUrl(verticalURL, this.core.getUrlParams(), this._verticalsConfig, tabOrder);
+    let tabOrder = getDefaultTabOrder(this._verticalsConfig, getUrlParams());
+    let dataTabOrder = [];
+    if (this.core.globalStorage.getState(StorageKeys.NAVIGATION)) {
+      dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder;
+    }
+    // We want to persist the params from the existing URL to the new
+    // URLS we create.
+    if (tabOrder !== undefined && dataTabOrder !== undefined) {
+      tabOrder = mergeTabOrder(dataTabOrder, tabOrder, this._verticalsConfig);
+    }
+    return generateTabUrl(verticalURL, getUrlParams(), tabOrder);
   }
 
   setState (data = {}, val) {

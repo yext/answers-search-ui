@@ -1,6 +1,5 @@
-import DOM from '../../src/ui/dom/dom';
-import GlobalStorage from '../../src/core/storage/globalstorage';
-import Core from '../../src/core/core.js';
+import DOM from '../../../src/ui/dom/dom';
+import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../../src/ui/tools/urlutils';
 // The DOM doesn't exist within components in the JEST environment,
 // so we have to provide it to our DOM API properly.
 DOM.setup(
@@ -33,12 +32,7 @@ describe('core configuration', () => {
       }
     ];
 
-    // Finally construct our component
-    let core = new Core({
-      container: '.test-component'
-    });
-
-    const defaultOrder = core.getDefaultTabOrder(tabConfig);
+    const defaultOrder = getDefaultTabOrder(tabConfig);
     expect(defaultOrder).toMatchObject(['tab2', 'tab1']);
   });
 
@@ -56,13 +50,8 @@ describe('core configuration', () => {
       }
     ];
 
-    // Finally construct our component
-    let core = new Core({
-      container: '.test-component'
-    });
-
     let params = new URLSearchParams('tabOrder=tab2,tab1');
-    const defaultOrder = core.getDefaultTabOrder(tabConfig, params);
+    const defaultOrder = getDefaultTabOrder(tabConfig, params);
     expect(defaultOrder).toMatchObject(['tab2', 'tab1']);
   });
 
@@ -80,15 +69,10 @@ describe('core configuration', () => {
       }
     ];
 
-    // Finally construct our component
-    let core = new Core({
-      container: '.test-component'
-    });
-
     const tabOrder1 = ['tab1', 'tab2'];
     const tabOrder2 = ['tab2', 'tab3'];
 
-    const defaultOrder = core.mergeTabOrder(tabOrder1, tabOrder2, tabConfig);
+    const defaultOrder = mergeTabOrder(tabOrder1, tabOrder2, tabConfig);
     expect(defaultOrder).toMatchObject(['tab1', 'tab2', 'tab3']);
   });
 
@@ -101,15 +85,9 @@ describe('core configuration', () => {
       }
     ];
 
-    // Finally construct our component
-    let core = new Core({
-      container: '.test-component'
-    });
-
-    core.globalStorage = new GlobalStorage();
     const params = new URLSearchParams('query=yes');
-    const defaultOrder = core.getDefaultTabOrder(tabConfig, params);
-    const url = core.generateTabUrl(tabConfig[0].url, params, tabConfig, defaultOrder);
+    const defaultOrder = getDefaultTabOrder(tabConfig, params);
+    const url = generateTabUrl(tabConfig[0].url, params, defaultOrder);
     expect(url).toEqual('/tab1/?query=yes&tabOrder=tab1');
   });
 
@@ -122,14 +100,8 @@ describe('core configuration', () => {
       }
     ];
 
-    // Finally construct our component
-    let core = new Core({
-      container: '.test-component'
-    });
-
-    core.globalStorage = new GlobalStorage();
-    const defaultOrder = core.getDefaultTabOrder(tabConfig, core.getUrlParams());
-    const url = core.generateTabUrl(tabConfig[0].url, core.getUrlParams(), tabConfig, defaultOrder);
+    const defaultOrder = getDefaultTabOrder(tabConfig, getUrlParams());
+    const url = generateTabUrl(tabConfig[0].url, getUrlParams(), defaultOrder);
     expect(url).toEqual('/tab1/?tabOrder=tab1');
   });
 });
