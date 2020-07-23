@@ -10,6 +10,8 @@ import {
   equivalentParams
 } from '../../../src/core/utils/urlutils';
 
+const baseUrl = 'https://yext.com/';
+
 describe('getUrlFunctions work', () => {
   it('differentiates sandbox from prod', () => {
     expect(getLiveApiUrl()).not.toEqual(expect.stringContaining('sandbox'));
@@ -33,7 +35,6 @@ describe('getUrlFunctions work', () => {
 });
 
 describe('replaceUrlParams works', () => {
-  const baseUrl = 'https://yext.com/';
   it('adds params to a url without query params', () => {
     expect(replaceUrlParams(baseUrl, new SearchParams('?referrerPageUrl=')))
       .toEqual(baseUrl + '?referrerPageUrl=');
@@ -48,8 +49,7 @@ describe('replaceUrlParams works', () => {
   });
 
   it('adds params when new params are empty', () => {
-    expect(replaceUrlParams('https://yext.com/', new SearchParams())).
-      toEqual('https://yext.com/?');
+    expect(replaceUrlParams(baseUrl, new SearchParams())).toEqual(`${baseUrl}?`);
   });
 
   it('encodes new params correctly', () => {
@@ -63,12 +63,12 @@ describe('replaceUrlParams works', () => {
 
 describe('urlWithoutQueryParamsAndHash works', () => {
   it('removes query params and hashes', () => {
-    expect(urlWithoutQueryParamsAndHash('https://yext.com/?query=hello&referrerPageUrl=#Footer'))
-      .toEqual('https://yext.com/');
+    expect(urlWithoutQueryParamsAndHash(baseUrl + '?query=hello&referrerPageUrl=#Footer'))
+      .toEqual(baseUrl);
   });
 
   it('handles urls without params and hashes', () => {
-    expect(urlWithoutQueryParamsAndHash('https://yext.com/')).toEqual('https://yext.com/');
+    expect(urlWithoutQueryParamsAndHash(baseUrl)).toEqual(baseUrl);
   });
 });
 
@@ -87,16 +87,18 @@ describe('equivalentParams works', () => {
   });
 
   it('checks when they have different param values', () => {
-    const params2 = new SearchParams('?query=hello&referrerPageUrl=');
-    const params3 = new SearchParams('?query=hello&referrerPageUrl=');
+    const paramsString = '?query=hello&referrerPageUrl=';
+    const params2 = new SearchParams(paramsString);
+    const params3 = new SearchParams(paramsString);
     params3.set('referrerPageUrl', 'https%3A%2F%2Fwww.yext.com%2F');
     expect(equivalentParams(params2, params3)).toEqual(false);
     expect(equivalentParams(params3, params2)).toEqual(false);
   });
 
   it('checks when they are the exact same', () => {
-    const params2 = new SearchParams('query=all&referrerPageUrl=&Facets.filterbox.filter0=%5B%5D&Facets.filterbox.filter1=%5B%5D&Facets.filterbox.filter2=%5B%5D&Facets.filterbox.filter3=%5B%5D&Facets.filterbox.filter4=%5B%5D&Facets.filterbox.filter5=%5B%5D&Facets.filterbox.filter6=%5B%5D&Facets.filterbox.filter7=%5B%5D&Facets.filterbox.filter8=%5B%5D&Facets.filterbox.filter9=%5B%5D&Facets.filterbox.filter10=%5B%5D&context=%7B"state"%3A"hx"%7D&tabOrder=index.html%2CKM%2Cevents%2Cfaq%2Cjob%2Clinks%2Cpeople%2Crestaurant');
-    const params3 = new SearchParams('query=all&referrerPageUrl=&Facets.filterbox.filter0=%5B%5D&Facets.filterbox.filter1=%5B%5D&Facets.filterbox.filter2=%5B%5D&Facets.filterbox.filter3=%5B%5D&Facets.filterbox.filter4=%5B%5D&Facets.filterbox.filter5=%5B%5D&Facets.filterbox.filter6=%5B%5D&Facets.filterbox.filter7=%5B%5D&Facets.filterbox.filter8=%5B%5D&Facets.filterbox.filter9=%5B%5D&Facets.filterbox.filter10=%5B%5D&context=%7B"state"%3A"hx"%7D&tabOrder=index.html%2CKM%2Cevents%2Cfaq%2Cjob%2Clinks%2Cpeople%2Crestaurant');
+    const paramsString = 'query=all&referrerPageUrl=&Facets.filterbox.filter0=%5B%5D&Facets.filterbox.filter1=%5B%5D&Facets.filterbox.filter2=%5B%5D&Facets.filterbox.filter3=%5B%5D&Facets.filterbox.filter4=%5B%5D&Facets.filterbox.filter5=%5B%5D&Facets.filterbox.filter6=%5B%5D&Facets.filterbox.filter7=%5B%5D&Facets.filterbox.filter8=%5B%5D&Facets.filterbox.filter9=%5B%5D&Facets.filterbox.filter10=%5B%5D&context=%7B"state"%3A"hx"%7D&tabOrder=index.html%2CKM%2Cevents%2Cfaq%2Cjob%2Clinks%2Cpeople%2Crestaurant';
+    const params2 = new SearchParams(paramsString);
+    const params3 = new SearchParams(paramsString);
     expect(equivalentParams(params2, params3)).toEqual(true);
     expect(equivalentParams(params3, params2)).toEqual(true);
   });
