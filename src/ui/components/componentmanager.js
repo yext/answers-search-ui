@@ -41,6 +41,11 @@ export default class ComponentManager {
      * A local reference to the analytics reporter dependency
      */
     this._analyticsReporter = null;
+
+    /**
+     * A mapping from component types to component names, as these may be configured by a user
+     */
+    this._componentTypeToComponentNames = {};
   }
 
   static getInstance () {
@@ -134,6 +139,10 @@ export default class ComponentManager {
         .init(config);
 
     this._activeComponents.push(component);
+    if (!this._componentTypeToComponentNames[componentType]) {
+      this._componentTypeToComponentNames[componentType] = [];
+    }
+    this._componentTypeToComponentNames[componentType].push(component.name);
 
     // If there is a global storage to power state, apply the state
     // from the storage to the component, and then bind the component
@@ -176,5 +185,15 @@ export default class ComponentManager {
 
   getActiveComponent (type) {
     return this._activeComponents.find(c => c.constructor.type === type);
+  }
+
+  getComponentNamesForComponentType (type) {
+    return this._componentTypeToComponentNames[type];
+  }
+
+  getComponentNamesForComponentTypes (types) {
+    return types.reduce((names, type) => {
+      return names.concat(this.getComponentNamesForComponentType(type) || []);
+    }, []);
   }
 }

@@ -7,6 +7,7 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 import DOM from '../../dom/dom';
+import { removeParamsWithPrefixes } from '../../../core/utils/urlutils.js';
 
 /**
  * The debounce duration for resize events
@@ -479,8 +480,23 @@ export default class NavigationComponent extends Component {
     }
 
     // We want to persist the params from the existing URL to the new
-    // URLS we create.
+    // URLS we create, except for facets/filters/pagination
     params.set('tabOrder', this._tabOrder);
+
+    params.delete(StorageKeys.SEARCH_OFFSET);
+    params.delete(StorageKeys.FILTER);
+    removeParamsWithPrefixes(
+      params,
+      this.componentManager.getComponentNamesForComponentTypes([
+        'Facets',
+        'FilterBox',
+        'FilterOptions',
+        'RangeFilter',
+        'DateRangeFilter',
+        'SortOptions'
+      ])
+    );
+
     return baseUrl + '?' + params.toString();
   }
 }

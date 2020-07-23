@@ -82,3 +82,19 @@ export function equivalentParams (params1, params2) {
   }
   return true;
 }
+
+/**
+ * Removes params that begin with the given prefixes
+ * Note: modifies the params parameter
+ * @param {SearchParams} params The parameters to remove from
+ * @param {string[]} prefixes The prefixes of parameters to remove
+ */
+export function removeParamsWithPrefixes (params, prefixes) {
+  for (const [key] of Array.from(params.entries())) {
+    for (const prefix of prefixes) {
+      if (key.startsWith(prefix)) {
+        params.delete(key);
+      }
+    }
+  }
+}
