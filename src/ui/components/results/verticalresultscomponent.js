@@ -12,6 +12,7 @@ import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
+import SearchParams from '../../dom/searchparams';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -229,14 +230,15 @@ export default class VerticalResultsComponent extends Component {
       return undefined;
     }
 
-    const params = { query: this.query };
+    const params = new SearchParams(window.location.search.substring(1));
+    params.set(StorageKeys.QUERY, this.query);
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
-      params[StorageKeys.API_CONTEXT] = context;
+      params.set(StorageKeys.API_CONTEXT, context);
     }
     const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
     if (referrerPageUrl !== null) {
-      params[StorageKeys.REFERRER_PAGE_URL] = referrerPageUrl;
+      params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 
     return addParamsToUrl(universalConfig.url, params);
@@ -246,13 +248,15 @@ export default class VerticalResultsComponent extends Component {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
 
-    const params = {
-      query: this.query,
-      referrerPageUrl: this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
-    };
+    const params = new SearchParams(window.location.search.substring(1));
+    params.set(StorageKeys.QUERY, this.query);
+    params.set(
+      StorageKeys.REFERRER_PAGE_URL,
+      this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+    );
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
-      params.context = context;
+      params.set(StorageKeys.API_CONTEXT, context);
     }
     return addParamsToUrl(verticalURL, params);
   }
