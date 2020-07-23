@@ -483,19 +483,24 @@ export default class NavigationComponent extends Component {
     // URLS we create, except for facets/filters/pagination
     params.set('tabOrder', this._tabOrder);
 
+    const prefixes = this.componentManager.getComponentNamesForComponentTypes([
+      'Facets',
+      'FilterBox',
+      'FilterOptions',
+      'RangeFilter',
+      'DateRangeFilter',
+      'SortOptions'
+    ]);
+    prefixes.concat(this.componentManager.getComponentNamesForComponentTypes(['GeoLocationFilter'])
+      .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
+    );
+    prefixes.concat(this.componentManager.getComponentNamesForComponentTypes(['FilterSearch'])
+      .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
+    );
+
     params.delete(StorageKeys.SEARCH_OFFSET);
     params.delete(StorageKeys.FILTER);
-    removeParamsWithPrefixes(
-      params,
-      this.componentManager.getComponentNamesForComponentTypes([
-        'Facets',
-        'FilterBox',
-        'FilterOptions',
-        'RangeFilter',
-        'DateRangeFilter',
-        'SortOptions'
-      ])
-    );
+    removeParamsWithPrefixes(params, prefixes);
 
     return baseUrl + '?' + params.toString();
   }
