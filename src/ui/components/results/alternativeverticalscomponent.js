@@ -3,7 +3,7 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
-import { addParamsToUrl } from '../../../core/utils/urlutils';
+import { replaceUrlParams } from '../../../core/utils/urlutils';
 import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
@@ -136,7 +136,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
       verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
-        url: addParamsToUrl(matchingVerticalConfig.url, params),
+        url: replaceUrlParams(matchingVerticalConfig.url, params),
         iconName: matchingVerticalConfig.icon,
         iconUrl: matchingVerticalConfig.iconUrl,
         resultsCount: alternativeVertical.resultsCount

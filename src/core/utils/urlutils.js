@@ -49,7 +49,7 @@ export function getAnalyticsUrl (env = PRODUCTION, conversionTrackingEnabled = f
  * @param {SearchParams} params to add to the url
  * @returns {string}
  */
-export function addParamsToUrl (url, params = new SearchParams()) {
+export function replaceUrlParams (url, params = new SearchParams()) {
   return url.split('?')[0] + '?' + params.toString();
 }
 

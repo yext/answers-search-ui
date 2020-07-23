@@ -9,7 +9,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
-import { addParamsToUrl } from '../../../core/utils/urlutils';
+import { replaceUrlParams } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import SearchParams from '../../dom/searchparams';
@@ -241,7 +241,7 @@ export default class VerticalResultsComponent extends Component {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 
-    return addParamsToUrl(universalConfig.url, params);
+    return replaceUrlParams(universalConfig.url, params);
   }
 
   getVerticalURL (data = {}) {
@@ -258,7 +258,7 @@ export default class VerticalResultsComponent extends Component {
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
-    return addParamsToUrl(verticalURL, params);
+    return replaceUrlParams(verticalURL, params);
   }
 
   setState (data = {}, val) {
