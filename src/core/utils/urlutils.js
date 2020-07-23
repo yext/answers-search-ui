@@ -53,6 +53,11 @@ export function replaceUrlParams (url, params = new SearchParams()) {
   return url.split('?')[0] + '?' + params.toString();
 }
 
+/**
+ * Returns the given url without query params and hashes
+ * @param {string} url Full url e.g. https://yext.com/?query=hello#Footer
+ * @returns {string} Url without query params and hashes e.g. https://yext.com/
+ */
 export function urlWithoutQueryParamsAndHash (url) {
   return url.split('?')[0].split('#')[0];
 }
