@@ -93,6 +93,25 @@ describe('vertical searching', () => {
         undefined);
     });
   });
+});
+
+describe('codelab people searches', () => {
+  const mockedRequest = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({ test: 'value' }) }));
+  let searchApi;
+
+  beforeEach(() => {
+    mockedRequest.mockClear();
+    HttpRequester.mockImplementation(() => {
+      return {
+        get: mockedRequest
+      };
+    });
+    searchApi = new SearchApi({
+      apiKey: '1234abcd',
+      experienceKey: 'abc123',
+      locale: 'en'
+    });
+  });
 
   it('searches with kelly full name and no additional text', () => {
     const result = searchApi.kellySearch(true, false, '');
@@ -111,6 +130,26 @@ describe('vertical searching', () => {
       expect(mockedRequest).toBeCalledWith(
         expect.anything(),
         expect.objectContaining({ input: 'kyu additional' }));
+    });
+  });
+
+  it('performs a search for Connor', () => {
+    const result = searchApi.connorSearch();
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Connor' }));
+    });
+  });
+
+  it('searches for Connor number 9398', () => {
+    const result = searchApi.searchForConnorNumber(9398);
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Connor9398' }));
     });
   });
 });
