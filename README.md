@@ -2143,7 +2143,7 @@ targetConfig = { url: '_blank', phone: '_self', email: '_parent' }
 targetConfig = '_blank'
 ```
 
-When `targetConfig` is a string, it is assumed that any link, regardless of type, has the specified `target` behavior. This parameter, like `eventOptionsFieldName`, is optional. When not provided, no `target` attribute is supplied to the links.
+When `targetConfig` is a string, it is assumed that any link, regardless of type, has the specified `target` behavior. This parameter, like `eventOptionsFieldName`, is optional. When not provided, no `target` attribute is supplied to the links, and it will use the browser default of `_self`.
 
 Note that when using this function, you must ensure that the relevant Handlebars template correctly unescapes the output HTML.
 
