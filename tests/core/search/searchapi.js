@@ -144,7 +144,7 @@ describe('codelab people searches', () => {
   });
 
   it('searches for Connor number 9398', () => {
-    const result = searchApi.searchForConnorNumber(9398);
+    const result = searchApi.connorNumberSearch(9398);
     expect.assertions(1);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
