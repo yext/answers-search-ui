@@ -3,7 +3,7 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
-import { replaceUrlParams } from '../../../core/utils/urlutils';
+import { replaceUrlParams, removeParamsWithPrefixes } from '../../../core/utils/urlutils';
 import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
@@ -123,7 +123,18 @@ export default class AlternativeVerticalsComponent extends Component {
       params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
     }
 
-    for (const alternativeVertical of alternativeVerticals) {
+    let prefixes = this.componentManager.getComponentNamesForComponentTypes([
+      'Facets', 'FilterBox', 'FilterOptions', 'RangeFilter', 'DateRangeFilter', 'SortOptions'
+    ]);
+    prefixes = prefixes.concat(
+      this.componentManager
+        .getComponentNamesForComponentTypes(['GeoLocationFilter', 'FilterSearch'])
+        .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
+    );
+    prefixes.push(StorageKeys.FILTER);
+    removeParamsWithPrefixes(params, prefixes);
+
+    for (let alternativeVertical of alternativeVerticals) {
       const verticalKey = alternativeVertical.verticalConfigId;
 
       const matchingVerticalConfig = verticalsConfig.find(config => {

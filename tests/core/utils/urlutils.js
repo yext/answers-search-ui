@@ -7,7 +7,8 @@ import {
   getAnalyticsUrl,
   replaceUrlParams,
   urlWithoutQueryParamsAndHash,
-  equivalentParams
+  equivalentParams,
+  removeParamsWithPrefixes
 } from '../../../src/core/utils/urlutils';
 
 const baseUrl = 'https://yext.com/';
@@ -101,5 +102,33 @@ describe('equivalentParams works', () => {
     const params3 = new SearchParams(paramsString);
     expect(equivalentParams(params2, params3)).toEqual(true);
     expect(equivalentParams(params3, params2)).toEqual(true);
+  });
+});
+
+describe('removeParamsWithPrefixes works', () => {
+  const baseParams = new SearchParams('?query=all&referrerPageUrl=&search-offset=10&Facets.filterbox.filter1=hello&Facets.filterbox.filter2=bye&FilterBox.filter1=what');
+
+  it('does not blow up on empty function parameters', () => {
+    const params2 = new SearchParams(baseParams.toString());
+    removeParamsWithPrefixes(params2, []);
+    expect(params2).toEqual(baseParams);
+
+    const params3 = new SearchParams();
+    removeParamsWithPrefixes(params3, ['query', 'Facets']);
+    expect(params3).toEqual(new SearchParams());
+
+    const params4 = new SearchParams();
+    removeParamsWithPrefixes(params4, []);
+    expect(params4).toEqual(new SearchParams());
+  });
+
+  it('removes params with multiple prefixes', () => {
+    const params2 = new SearchParams(baseParams.toString());
+    removeParamsWithPrefixes(params2, ['search', 'Facets', 'referrer']);
+    expect(params2).toEqual(new SearchParams('?query=all&FilterBox.filter1=what'));
+
+    const params3 = new SearchParams(baseParams.toString());
+    removeParamsWithPrefixes(params3, ['search', 'Facets', 'referrer', 'search']);
+    expect(params2).toEqual(new SearchParams('?query=all&FilterBox.filter1=what'));
   });
 });

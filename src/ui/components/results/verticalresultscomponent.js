@@ -9,7 +9,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
-import { replaceUrlParams } from '../../../core/utils/urlutils';
+import { replaceUrlParams, removeParamsWithPrefixes } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import SearchParams from '../../dom/searchparams';
@@ -237,9 +237,26 @@ export default class VerticalResultsComponent extends Component {
     if (!universalConfig.url) {
       return undefined;
     }
+    return this._getExperienceURL(universalConfig.url);
+  }
 
+  getVerticalURL (data = {}) {
+    const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
+    const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
+    return this._getExperienceURL(verticalURL);
+  }
+
+  /**
+   * Adds parameters that are dynamically set. Removes parameters for facets,
+   * filters, and pagination, which should not persist across the experience.
+   * @param {string} baseUrl The url append the appropriate params to. Note:
+   *    params already on the baseUrl will be stripped
+   * @return {string} The formatted experience URL with appropriate query params
+   */
+  _getExperienceURL (baseUrl) {
     const params = new SearchParams(window.location.search.substring(1));
     params.set(StorageKeys.QUERY, this.query);
+
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
@@ -254,30 +271,18 @@ export default class VerticalResultsComponent extends Component {
       params.set(StorageKeys.SESSIONS_OPT_IN, sessionsOptIn.value);
     }
 
-    return replaceUrlParams(universalConfig.url, params);
-  }
-
-  getVerticalURL (data = {}) {
-    const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
-    const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-
-    const params = new SearchParams(window.location.search.substring(1));
-    params.set(StorageKeys.QUERY, this.query);
-    params.set(
-      StorageKeys.REFERRER_PAGE_URL,
-      this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+    let prefixes = this.componentManager.getComponentNamesForComponentTypes([
+      'Facets', 'FilterBox', 'FilterOptions', 'RangeFilter', 'DateRangeFilter', 'SortOptions'
+    ]);
+    prefixes = prefixes.concat(
+      this.componentManager
+        .getComponentNamesForComponentTypes(['GeoLocationFilter', 'FilterSearch'])
+        .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
     );
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
-    if (context) {
-      params.set(StorageKeys.API_CONTEXT, context);
-    }
+    prefixes.push(StorageKeys.FILTER);
+    removeParamsWithPrefixes(params, prefixes);
 
-    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
-    if (sessionsOptIn && sessionsOptIn.setDynamically) {
-      params.set(StorageKeys.SESSIONS_OPT_IN, sessionsOptIn.value);
-    }
-
-    return replaceUrlParams(verticalURL, params);
+    return replaceUrlParams(baseUrl, params);
   }
 
   setState (data = {}, val) {

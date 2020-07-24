@@ -46,6 +46,15 @@ test('pagination flow', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
+fixture`Experience links work as expected`
+  .before(setupServer)
+  .after(shutdownServer)
+  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+
+test('Facets, pagination, and filters do not persist accross experience links', async t => {
+  // TODO
+});
+
 fixture`Facets page`
   .before(setupServer)
   .after(shutdownServer)
