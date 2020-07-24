@@ -253,7 +253,14 @@ export default class VerticalResultsComponent extends Component {
     if (tabOrder !== undefined && dataTabOrder !== undefined) {
       tabOrder = mergeTabOrder(dataTabOrder, tabOrder, this._verticalsConfig);
     }
-    return generateTabUrl(verticalURL, getUrlParams(), tabOrder);
+
+    const params = { query: this.query };
+    const urlParams = getUrlParams();
+    for (const paramKey in params) {
+      urlParams.set(paramKey, params[paramKey]);
+    }
+    return generateTabUrl(verticalURL, urlParams, tabOrder);
+    // return generateTabUrl(verticalURL, getUrlParams(), tabOrder);
   }
 
   setState (data = {}, val) {

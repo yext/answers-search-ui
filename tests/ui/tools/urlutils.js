@@ -1,20 +1,4 @@
-import DOM from '../../../src/ui/dom/dom';
 import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../../src/ui/tools/urlutils';
-// The DOM doesn't exist within components in the JEST environment,
-// so we have to provide it to our DOM API properly.
-DOM.setup(
-  document,
-  new DOMParser()
-);
-
-beforeEach(() => {
-  // Always reset the DOM before each component render test
-  let bodyEl = DOM.query('body');
-  DOM.empty(bodyEl);
-
-  // Create the container that our component will be injected into
-  DOM.append(bodyEl, DOM.createEl('div', { class: 'test-component' }));
-});
 
 describe('core configuration', () => {
   it('core supports default tab ordering from config', () => {

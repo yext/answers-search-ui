@@ -123,7 +123,7 @@ describe('vertical results component', () => {
     });
 
     it('if unset defaults to vertical key', () => {
-      expect(component.getVerticalURL()).toEqual('key.html?query=virginia&otherParam=123&tabOrder=');
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&tabOrder=');
     });
 
     it('if null defaults to vertical key', () => {
@@ -132,13 +132,13 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('key.html?query=virginia&otherParam=123&tabOrder=');
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&tabOrder=');
     });
 
     it('works with transformData', () => {
       expect(component.getVerticalURL({
         verticalURL: 'transform-data'
-      })).toEqual('transform-data?query=virginia&otherParam=123&tabOrder=');
+      })).toEqual('transform-data?query=my-query&otherParam=123&tabOrder=');
     });
 
     it('defaults to matching config in verticalPages', () => {
@@ -146,7 +146,7 @@ describe('vertical results component', () => {
         verticalKey: 'key',
         url: 'vertical-pages'
       }];
-      expect(component.getVerticalURL()).toEqual('vertical-pages?query=virginia&otherParam=123&tabOrder=key');
+      expect(component.getVerticalURL()).toEqual('vertical-pages?query=my-query&otherParam=123&tabOrder=key');
     });
 
     it('can be set', () => {
@@ -155,7 +155,7 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('vertical-url?query=virginia&otherParam=123&tabOrder=');
+      expect(component.getVerticalURL()).toEqual('vertical-url?query=my-query&otherParam=123&tabOrder=');
     });
   });
 });
