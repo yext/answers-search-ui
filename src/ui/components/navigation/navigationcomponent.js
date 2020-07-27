@@ -482,7 +482,6 @@ export default class NavigationComponent extends Component {
     // We want to persist the params from the existing URL to the new
     // URLS we create, except for facets/filters/pagination
     params.set('tabOrder', this._tabOrder);
-
     params.delete(StorageKeys.SEARCH_OFFSET);
 
     let prefixes = this.componentManager.getComponentNamesForComponentTypes([

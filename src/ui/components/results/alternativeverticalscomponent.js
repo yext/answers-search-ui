@@ -123,6 +123,7 @@ export default class AlternativeVerticalsComponent extends Component {
       params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
     }
 
+    params.delete(StorageKeys.SEARCH_OFFSET);
     let prefixes = this.componentManager.getComponentNamesForComponentTypes([
       'Facets', 'FilterBox', 'FilterOptions', 'RangeFilter', 'DateRangeFilter', 'SortOptions'
     ]);
