@@ -158,13 +158,13 @@ test('Facets, pagination, and filters do not persist accross experience links', 
   await searchComponent.enterQuery('virginia');
   await searchComponent.submitQuery();
 
-  const changeFiltersLink = await
-    Selector('.yxt-ResultsHeader-changeFilters').nth(0).getAttribute('href');
+  const changeFiltersLink = await Selector('.yxt-ResultsHeader-changeFilters')
+    .nth(0).getAttribute('href');
   await t.expect(changeFiltersLink).contains('referrerPageUrl');
   await verifyCleanLink(changeFiltersLink);
 
-  const viewAllLink = await
-    Selector('.yxt-ResultsHeader-changeFilters').nth(0).getAttribute('href');
+  const viewAllLink = await Selector('.yxt-ResultsHeader-changeFilters')
+    .nth(0).getAttribute('href');
   await t.expect(viewAllLink).contains('referrerPageUrl');
   await verifyCleanLink(viewAllLink);
 });
