@@ -11,6 +11,7 @@
 <body>
   <div class="answers-container">
     <div class="search-bar-container"></div>
+    <div class="navigation-container"></div>
     <div class="facets-container"></div>
     <div class="filter-search-container"></div>
     <div class="results-container"></div>
@@ -33,6 +34,26 @@
           promptForLocation: true,
           verticalKey: 'people',
           allowEmptySearch: true
+        });
+
+        this.addComponent('Navigation', {
+          container: '.navigation-container',
+          verticalPages: [
+            {
+              label: 'Home',
+              url: './universal',
+              isFirst: true
+            },
+            {
+              label: 'Facets',
+              url: './links',
+              isActive: true
+            },
+            {
+              label: 'Vertical',
+              url: './vertical',
+            }
+          ],
         });
 
         this.addComponent('VerticalResults', {
