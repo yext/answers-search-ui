@@ -1,0 +1,10 @@
+/** @define yxt-Timeline */
+
+.yxt-Timeline
+{
+  $timeline-border: $border-default !default;
+
+  $timeline-title-background-color: $color-brand-primary !default;
+  $timeline-content-background-color: white !default;
+  $timeline-footer-background-color: $color-background-highlight !default;
+}

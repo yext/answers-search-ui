@@ -9,6 +9,7 @@ import FilterSearchComponent from './search/filtersearchcomponent';
 import AutoCompleteComponent from './search/autocompletecomponent';
 import SpellCheckComponent from './search/spellcheckcomponent';
 import LocationBiasComponent from './search/locationbiascomponent';
+import TimelineComponent from './search/timeline';
 
 import FilterBoxComponent from './filters/filterboxcomponent';
 import FilterOptionsComponent from './filters/filteroptionscomponent';
@@ -51,6 +52,7 @@ const COMPONENT_CLASS_LIST = [
   AutoCompleteComponent,
   SpellCheckComponent,
   LocationBiasComponent,
+  TimelineComponent,
 
   // Filter Components
   FilterBoxComponent,
