@@ -3,7 +3,8 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
-import { addParamsToUrl } from '../../../core/utils/urlutils';
+import { replaceUrlParams } from '../../../core/utils/urlutils';
+import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
@@ -111,12 +112,12 @@ export default class AlternativeVerticalsComponent extends Component {
     const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
     const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
 
-    const params = {};
+    const params = new SearchParams(window.location.search.substring(1));
     if (context) {
-      params[StorageKeys.API_CONTEXT] = context;
+      params.set(StorageKeys.API_CONTEXT, context);
     }
     if (typeof referrerPageUrl === 'string') {
-      params[StorageKeys.REFERRER_PAGE_URL] = referrerPageUrl;
+      params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
     if (sessionsOptIn && sessionsOptIn.setDynamically) {
       params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
@@ -135,7 +136,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
       verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
-        url: addParamsToUrl(matchingVerticalConfig.url, params),
+        url: replaceUrlParams(matchingVerticalConfig.url, params),
         iconName: matchingVerticalConfig.icon,
         iconUrl: matchingVerticalConfig.iconUrl,
         resultsCount: alternativeVertical.resultsCount
