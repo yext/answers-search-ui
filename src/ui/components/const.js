@@ -10,6 +10,7 @@ import SearchComponent from './search/searchcomponent';
 import FilterSearchComponent from './search/filtersearchcomponent';
 import AutoCompleteComponent from './search/autocompletecomponent';
 import SpellCheckComponent from './search/spellcheckcomponent';
+import TimelineComponent from './search/timeline';
 
 import FilterBoxComponent from './filters/filterboxcomponent';
 import FilterOptionsComponent from './filters/filteroptionscomponent';
@@ -46,6 +47,7 @@ export const COMPONENT_MANAGER = new ComponentManager()
   .register(FilterSearchComponent)
   .register(AutoCompleteComponent)
   .register(SpellCheckComponent)
+  .register(TimelineComponent)
 
 // Filter Components
   .register(FilterBoxComponent)
