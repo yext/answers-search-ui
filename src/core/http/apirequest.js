@@ -109,9 +109,8 @@ export default class ApiRequest {
       'v': this._version,
       'api_key': this._apiKey,
       'jsLibVersion': LIB_VERSION,
-      'sessionTrackingEnabled': this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
+      'sessionTrackingEnabled': this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value
     };
-
     const urlParams = new SearchParams(window.location.search.substring(1));
     if (urlParams.has('beta')) {
       baseParams['beta'] = urlParams.get('beta');

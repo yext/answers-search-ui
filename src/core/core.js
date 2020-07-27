@@ -179,7 +179,7 @@ export default class Core {
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
@@ -257,13 +257,12 @@ export default class Core {
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
-
     return this._searcher
       .universalSearch(queryString, {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
         referrerPageUrl: referrerPageUrl
       })

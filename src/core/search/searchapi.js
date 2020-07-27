@@ -76,28 +76,31 @@ export default class SearchApi {
       version: this._version,
       environment: this._environment,
       params: {
-        'input': input,
-        'experienceKey': this._experienceKey,
-        'version': this._experienceVersion,
-        'filters': filter,
-        'facetFilters': facetFilter,
-        'verticalKey': verticalKey,
-        'limit': limit,
-        'offset': offset,
-        'location': geolocation ? `${geolocation.lat},${geolocation.lng}` : null,
-        'queryId': id,
-        'retrieveFacets': isDynamicFiltersEnabled,
-        'locale': this._locale,
-        'skipSpellCheck': skipSpellCheck,
-        'queryTrigger': queryTrigger,
-        'sessionTrackingEnabled': sessionTrackingEnabled,
-        'sortBys': sortBys,
-        'locationRadius': locationRadius,
-        'context': context,
-        'referrerPageUrl': referrerPageUrl
+        input: input,
+        experienceKey: this._experienceKey,
+        version: this._experienceVersion,
+        filters: filter,
+        facetFilters: facetFilter,
+        verticalKey: verticalKey,
+        limit: limit,
+        offset: offset,
+        location: geolocation ? `${geolocation.lat},${geolocation.lng}` : null,
+        queryId: id,
+        retrieveFacets: isDynamicFiltersEnabled,
+        locale: this._locale,
+        skipSpellCheck: skipSpellCheck,
+        queryTrigger: queryTrigger,
+        sessionTrackingEnabled: sessionTrackingEnabled,
+        sortBys: sortBys,
+        locationRadius: locationRadius,
+        context: context,
+        referrerPageUrl: referrerPageUrl
       }
     };
-    let request = new ApiRequest(requestConfig, { getState: () => sessionTrackingEnabled });
+    const getState = () => {
+      return { value: sessionTrackingEnabled };
+    };
+    const request = new ApiRequest(requestConfig, { getState });
 
     return request.get()
       .then(response => response.json());
@@ -111,18 +114,21 @@ export default class SearchApi {
       version: this._version,
       environment: this._environment,
       params: {
-        'input': queryString,
-        'experienceKey': this._experienceKey,
-        'location': params.geolocation ? `${params.geolocation.lat},${params.geolocation.lng}` : null,
-        'version': this._experienceVersion,
-        'locale': this._locale,
-        'skipSpellCheck': params.skipSpellCheck,
-        'queryTrigger': params.queryTrigger,
-        'context': params.context,
-        'referrerPageUrl': params.referrerPageUrl
+        input: queryString,
+        experienceKey: this._experienceKey,
+        location: params.geolocation ? `${params.geolocation.lat},${params.geolocation.lng}` : null,
+        version: this._experienceVersion,
+        locale: this._locale,
+        skipSpellCheck: params.skipSpellCheck,
+        queryTrigger: params.queryTrigger,
+        context: params.context,
+        referrerPageUrl: params.referrerPageUrl
       }
     };
-    let request = new ApiRequest(requestConfig, { getState: () => params.sessionTrackingEnabled });
+    const getState = () => {
+      return { value: params.sessionTrackingEnabled };
+    };
+    const request = new ApiRequest(requestConfig, { getState });
 
     return request.get()
       .then(response => response.json());
