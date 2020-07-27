@@ -21,7 +21,7 @@ export default class TimelineComponent extends Component {
   }
 
   onMount () {
-    DOM.on('.js-TimeLine-clearButton', 'click', e => {
+    DOM.on('.js-Timeline-clearButton', 'click', e => {
       this.timelineEvents = [];
       this.setState();
     });
