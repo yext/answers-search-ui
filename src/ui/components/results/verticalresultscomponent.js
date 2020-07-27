@@ -241,6 +241,11 @@ export default class VerticalResultsComponent extends Component {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 
+    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    if (sessionsOptIn && sessionsOptIn.setDynamically) {
+      params.set(StorageKeys.SESSIONS_OPT_IN, sessionsOptIn.value);
+    }
+
     return replaceUrlParams(universalConfig.url, params);
   }
 
@@ -258,6 +263,12 @@ export default class VerticalResultsComponent extends Component {
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
+
+    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    if (sessionsOptIn && sessionsOptIn.setDynamically) {
+      params.set(StorageKeys.SESSIONS_OPT_IN, sessionsOptIn.value);
+    }
+
     return replaceUrlParams(verticalURL, params);
   }
 

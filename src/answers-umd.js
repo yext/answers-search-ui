@@ -166,7 +166,22 @@ class Answers {
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
-    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
+
+    // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
+    // what is in parsedConfig.
+    const sessionOptIn = globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    if (!sessionOptIn) {
+      globalStorage.set(
+        StorageKeys.SESSIONS_OPT_IN,
+        { value: parsedConfig.sessionTrackingEnabled, setDynamically: false });
+    } else {
+      // If sessionsOptIn was stored in the URL, it was stored only as a string.
+      // Parse this value and add it back to globalStorage.
+      globalStorage.set(
+        StorageKeys.SESSIONS_OPT_IN,
+        { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
+    }
+
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
 
     const context = globalStorage.getState(StorageKeys.API_CONTEXT);
@@ -402,7 +417,8 @@ class Answers {
    * @param {boolean} optIn
    */
   setSessionsOptIn (optIn) {
-    this.core.globalStorage.set(StorageKeys.SESSIONS_OPT_IN, optIn);
+    this.core.globalStorage.set(
+      StorageKeys.SESSIONS_OPT_IN, { value: optIn, setDynamically: true });
   }
 
   /**
