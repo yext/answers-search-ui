@@ -52,6 +52,7 @@ class VerticalResultsConfig {
 
     /**
      * Vertical URL for view more link
+     * @type {string}
      */
     this.verticalURL = config.verticalURL;
 
@@ -60,6 +61,12 @@ class VerticalResultsConfig {
      * @type {boolean}
      */
     this.showResultCount = config.showResultCount === undefined ? true : config.showResultCount;
+
+    /**
+     * A custom results count template.
+     * @type {string}
+     */
+    this.resultsCountTemplate = config.resultsCountTemplate || '';
 
     /**
      * Config for the applied filters in the results header.
@@ -208,7 +215,8 @@ export default class VerticalResultsComponent extends Component {
       delimiter: this._config.appliedFilters.delimiter,
       labelText: this._config.appliedFilters.labelText,
       removableLabelText: this._config.appliedFilters.removableLabelText,
-      hiddenFields: this._config.appliedFilters.hiddenFields
+      hiddenFields: this._config.appliedFilters.hiddenFields,
+      resultsCountTemplate: this._config.resultsCountTemplate
     };
   }
 

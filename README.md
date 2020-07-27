@@ -797,6 +797,8 @@ ANSWERS.addComponent('VerticalResults', {
   maxNumberOfColumns: 1,
   // Optional, whether to display the total number of results, default true
   showResultCount: true,
+  // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
+  resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
   modifier: '',
   // Optional, the card used to display each individual result, see the Cards section for more details,
