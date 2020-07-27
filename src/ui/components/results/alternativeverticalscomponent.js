@@ -3,7 +3,7 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
-import { replaceUrlParams, removeParamsWithPrefixes } from '../../../core/utils/urlutils';
+import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
 import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
@@ -123,17 +123,10 @@ export default class AlternativeVerticalsComponent extends Component {
       params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
     }
 
-    params.delete(StorageKeys.SEARCH_OFFSET);
-    let prefixes = this.componentManager.getComponentNamesForComponentTypes([
-      'Facets', 'FilterBox', 'FilterOptions', 'RangeFilter', 'DateRangeFilter', 'SortOptions'
-    ]);
-    prefixes = prefixes.concat(
-      this.componentManager
-        .getComponentNamesForComponentTypes(['GeoLocationFilter', 'FilterSearch'])
-        .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
+    const filteredParams = filterParamsForExperienceLink(
+      params,
+      this.componentManager.getComponentNamesForComponentTypes
     );
-    prefixes.push(StorageKeys.FILTER);
-    removeParamsWithPrefixes(params, prefixes);
 
     for (let alternativeVertical of alternativeVerticals) {
       const verticalKey = alternativeVertical.verticalConfigId;
@@ -148,7 +141,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
       verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
-        url: replaceUrlParams(matchingVerticalConfig.url, params),
+        url: replaceUrlParams(matchingVerticalConfig.url, filteredParams),
         iconName: matchingVerticalConfig.icon,
         iconUrl: matchingVerticalConfig.iconUrl,
         resultsCount: alternativeVertical.resultsCount

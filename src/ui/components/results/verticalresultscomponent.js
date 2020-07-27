@@ -9,7 +9,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
-import { replaceUrlParams, removeParamsWithPrefixes } from '../../../core/utils/urlutils';
+import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import SearchParams from '../../dom/searchparams';
@@ -271,19 +271,12 @@ export default class VerticalResultsComponent extends Component {
       params.set(StorageKeys.SESSIONS_OPT_IN, sessionsOptIn.value);
     }
 
-    params.delete(StorageKeys.SEARCH_OFFSET);
-    let prefixes = this.componentManager.getComponentNamesForComponentTypes([
-      'Facets', 'FilterBox', 'FilterOptions', 'RangeFilter', 'DateRangeFilter', 'SortOptions'
-    ]);
-    prefixes = prefixes.concat(
-      this.componentManager
-        .getComponentNamesForComponentTypes(['GeoLocationFilter', 'FilterSearch'])
-        .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
+    const filteredParams = filterParamsForExperienceLink(
+      params,
+      this.componentManager.getComponentNamesForComponentTypes
     );
-    prefixes.push(StorageKeys.FILTER);
-    removeParamsWithPrefixes(params, prefixes);
 
-    return replaceUrlParams(baseUrl, params);
+    return replaceUrlParams(baseUrl, filteredParams);
   }
 
   setState (data = {}, val) {

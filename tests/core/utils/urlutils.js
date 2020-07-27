@@ -109,26 +109,21 @@ describe('removeParamsWithPrefixes works', () => {
   const baseParams = new SearchParams('?query=all&referrerPageUrl=&search-offset=10&Facets.filterbox.filter1=hello&Facets.filterbox.filter2=bye&FilterBox.filter1=what');
 
   it('does not blow up on empty function parameters', () => {
-    const params2 = new SearchParams(baseParams.toString());
-    removeParamsWithPrefixes(params2, []);
+    const params2 = removeParamsWithPrefixes(new SearchParams(baseParams.toString()), []);
     expect(params2).toEqual(baseParams);
 
-    const params3 = new SearchParams();
-    removeParamsWithPrefixes(params3, ['query', 'Facets']);
+    const params3 = removeParamsWithPrefixes(new SearchParams(), ['query', 'Facets']);
     expect(params3).toEqual(new SearchParams());
 
-    const params4 = new SearchParams();
-    removeParamsWithPrefixes(params4, []);
+    const params4 = removeParamsWithPrefixes(new SearchParams(), []);
     expect(params4).toEqual(new SearchParams());
   });
 
   it('removes params with multiple prefixes', () => {
-    const params2 = new SearchParams(baseParams.toString());
-    removeParamsWithPrefixes(params2, ['search', 'Facets', 'referrer']);
+    const params2 = removeParamsWithPrefixes(new SearchParams(baseParams.toString()), ['search', 'Facets', 'referrer']);
     expect(params2).toEqual(new SearchParams('?query=all&FilterBox.filter1=what'));
 
-    const params3 = new SearchParams(baseParams.toString());
-    removeParamsWithPrefixes(params3, ['search', 'Facets', 'referrer', 'search']);
-    expect(params2).toEqual(new SearchParams('?query=all&FilterBox.filter1=what'));
+    const params3 = removeParamsWithPrefixes(new SearchParams(baseParams.toString()), ['search', 'Facets', 'referrer', 'search']);
+    expect(params3).toEqual(new SearchParams('?query=all&FilterBox.filter1=what'));
   });
 });

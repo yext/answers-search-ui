@@ -1,5 +1,6 @@
 import { PRODUCTION, SANDBOX } from '../constants';
 import SearchParams from '../../ui/dom/searchparams';
+import StorageKeys from '../storage/storagekeys';
 
 /**
  * Returns the base url for the live api backend in the desired environment.
@@ -84,17 +85,52 @@ export function equivalentParams (params1, params2) {
 }
 
 /**
- * Removes params that begin with the given prefixes
- * Note: modifies the params parameter
+ * Creates a new params object without params that begin with the given prefixes
  * @param {SearchParams} params The parameters to remove from
  * @param {string[]} prefixes The prefixes of parameters to remove
+ * @return {SearchParams} A new instance of SearchParams without removed params
+ *   from the params parameter
  */
 export function removeParamsWithPrefixes (params, prefixes) {
-  for (const [key] of Array.from(params.entries())) {
+  const newParams = new SearchParams();
+  for (const [key, val] of params.entries()) {
+    let includeEntry = true;
     for (const prefix of prefixes) {
       if (key.startsWith(prefix)) {
-        params.delete(key);
+        includeEntry = false;
       }
     }
+    if (includeEntry) {
+      newParams.set(key, val);
+    }
   }
+  return newParams;
+}
+
+/**
+ * Removes parameters for filters, facets, sort options, and pagination
+ * from the params provided. This is useful for constructing
+ * inter-experience answers links.
+ * @param {SearchParams} params The parameters to remove from
+ * @param {function} getComponentNamesForComponentTypes Given string[]
+ *   component types, returns string[] component names for those types
+ * @return {SearchParams} Parameters that have filtered out params that
+ *   should not persist across the answers experience
+ */
+export function filterParamsForExperienceLink (
+  params,
+  getComponentNamesForComponentTypes
+) {
+  let prefixes = getComponentNamesForComponentTypes([
+    'Facets', 'FilterBox', 'FilterOptions', 'RangeFilter', 'DateRangeFilter', 'SortOptions'
+  ]);
+  prefixes = prefixes.concat(
+    getComponentNamesForComponentTypes(['GeoLocationFilter', 'FilterSearch'])
+      .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
+  );
+  prefixes.push(StorageKeys.FILTER);
+
+  const newParams = removeParamsWithPrefixes(params, prefixes);
+  newParams.delete(StorageKeys.SEARCH_OFFSET);
+  return newParams;
 }
