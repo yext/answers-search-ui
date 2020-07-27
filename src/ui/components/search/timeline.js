@@ -9,7 +9,7 @@ export default class TimelineComponent extends Component {
     super(opts, systemOpts);
     this.timelineEvents = [];
     this.core.globalStorage.on('update', StorageKeys.UNIVERSAL_RESULTS, r => {
-      this.timelineEvents.push([r.searchState, Date.now()]);
+      this.timelineEvents.push([r.searchState, new Date().toLocaleString()]);
       this.setState();
     });
   }
