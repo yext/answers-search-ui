@@ -474,7 +474,7 @@ export default class NavigationComponent extends Component {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
     const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
-    if (sessionsOptIn.setDynamically) {
+    if (sessionsOptIn && sessionsOptIn.setDynamically) {
       params.set(StorageKeys.SESSIONS_OPT_IN, sessionsOptIn.value);
     }
 

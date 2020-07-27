@@ -255,7 +255,7 @@ export default class VerticalResultsComponent extends Component {
       params.context = context;
     }
     const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
-    if (sessionsOptIn.setDynamically) {
+    if (sessionsOptIn && sessionsOptIn.setDynamically) {
       params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
     }
 

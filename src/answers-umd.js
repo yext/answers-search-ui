@@ -179,7 +179,7 @@ class Answers {
       // Parse this value and add it back to globalStorage.
       globalStorage.set(
         StorageKeys.SESSIONS_OPT_IN,
-        { value: (/true/i).test(sessionOptIn), setDynamically: true });
+        { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
     }
 
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
