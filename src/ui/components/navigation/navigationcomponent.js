@@ -323,8 +323,11 @@ export default class NavigationComponent extends Component {
    * @override
    */
   setState (data = {}) {
-    if (data.tabOrder !== undefined) {
-      this._tabOrder = mergeTabOrder(data.tabOrder, this._tabOrder, this._tabs);
+    // if (data.tabOrder !== undefined) {
+    //   this._tabOrder = mergeTabOrder(data.tabOrder, this._tabOrder, this._tabs);
+    // }
+    if (this.core.globalStorage.getState(StorageKeys.NAVIGATION)) {
+      this._tabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder;
     }
 
     // Since the tab ordering can change based on the server data
