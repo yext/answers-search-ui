@@ -139,6 +139,18 @@ test('Facets, pagination, and filters do not persist accross experience links', 
   await t.expect(universalUrl).contains('referrerPageUrl');
   await verifyCleanLink(universalUrl);
 
+  // When you apply sort options, nav links should be clean
+  await t.click(await Selector('.yxt-SortOptions-optionSelector').nth(2)); // Click search option
+  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await t.expect(universalUrl).contains('referrerPageUrl');
+  await verifyCleanLink(universalUrl);
+
+  // When you apply static filters, nav links should be clean
+  await t.click(await Selector('.filterbox-container .js-yext-filter-option').nth(2)); // Click static filter
+  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await t.expect(universalUrl).contains('referrerPageUrl');
+  await verifyCleanLink(universalUrl);
+
   // When you navigate with pagination, nav links should not have the
   // Facets/filter/pagination parameters
   await searchComponent.enterQuery('all');
