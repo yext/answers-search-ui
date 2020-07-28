@@ -158,4 +158,24 @@ export default class SearchApi {
     return request.get()
       .then(response => response.json());
   }
+
+  /**
+   * Initiate a search for Connor
+   */
+  connorSearch () {
+    const query = 'Connor';
+    return this.universalSearch(query, {});
+  }
+
+  /**
+   * Initiate a search for Connor concatenated by a number
+   * @param {number} number the number which is concatenated to the string 'Connor'
+   */
+  connorNumberSearch (number) {
+    if (number && typeof number !== 'number') {
+      throw new AnswersCoreError('number is not of type number', 'connorNumberSearch');
+    }
+    const query = `Connor${number.toString()}`;
+    return this.universalSearch(query, {});
+  }
 }
