@@ -188,22 +188,13 @@ export default class ComponentManager {
   }
 
   /**
-   * Returns a list of all names associated with a given component type
-   * @param {string} type The type of the component
-   * @returns {string[]} The component names for the component type
-   */
-  getComponentNamesForComponentType (type) {
-    return this._componentTypeToComponentNames[type];
-  }
-
-  /**
    * Returns a concatenated list of all names associated with the given component types
    * @param {string[]} type The types of the component
    * @returns {string[]} The component names for the component types
    */
   getComponentNamesForComponentTypes (types) {
     return types.reduce((names, type) => {
-      return names.concat(this.getComponentNamesForComponentType(type) || []);
+      return names.concat(this._componentTypeToComponentNames[type] || []);
     }, []);
   }
 }
