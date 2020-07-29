@@ -125,9 +125,6 @@ describe('navigation component configuration', () => {
   };
   const mockedComponentManager = (config) => {
     const manager = mockManager(mockedCore(config));
-    manager.getComponentNamesForComponentType = () => {
-      return [];
-    };
     manager.getComponentNamesForComponentTypes = () => {
       return [];
     };
