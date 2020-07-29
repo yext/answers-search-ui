@@ -260,7 +260,6 @@ export default class VerticalResultsComponent extends Component {
       urlParams.set(paramKey, params[paramKey]);
     }
     return generateTabUrl(verticalURL, urlParams, tabOrder);
-    // return generateTabUrl(verticalURL, getUrlParams(), tabOrder);
   }
 
   setState (data = {}, val) {
