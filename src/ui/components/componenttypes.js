@@ -10,4 +10,4 @@ export default {
   GEOLOCATION_FILTER: 'GeoLocationFilter',
   SORT_OPTIONS: 'SortOptions',
   FILTER_SEARCH: 'FilterSearch'
-}
+};
