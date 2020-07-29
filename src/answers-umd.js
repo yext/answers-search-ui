@@ -259,50 +259,26 @@ class Answers {
       if (parsedConfig.templateBundle) {
         this.renderer.init(parsedConfig.templateBundle);
       }
-
-      this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
-      return this;
+    } else {
+      // Templates are currently downloaded separately from the CORE and UI bundle.
+      // Future enhancement is to ship the components with templates in a separate bundle.
+      this.templates = new DefaultTemplatesLoader(templates => {
+        this.renderer.init(templates);
+      });
     }
 
-    // Templates are currently downloaded separately from the CORE and UI bundle.
-    // Future enhancement is to ship the components with templates in a separate bundle.
-    this.templates = new DefaultTemplatesLoader(templates => {
-      this.renderer.init(templates);
-      this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
+    this.promise = new Promise((resolve, reject) => {
+      this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
+        .then(this._masterSwitchApi.isDisabled())
+        .then((isDisabled) => {
+          if (!isDisabled) {
+            this._onReady();
+            resolve();
+          }
+        });
     });
 
     return this;
-  }
-
-  /**
-   * Checks the experience's Answer Status page before invoking onReady. If the status is
-   * disabled, onReady is not called.
-   */
-  _invokeOnReady () {
-    this._masterSwitchApi.isDisabled()
-      .then(isDisabled => !isDisabled && this._onReady(), () => this._onReady());
-  }
-
-  /**
-   * Calls the CSS vars ponyfill, if opted-in, and invokes the callback
-   * regardless of if there was an error/success. If opted-out, only invokes the callback.
-   * @param {boolean} option to opt out of the css variables ponyfill
-   * @param callback {Function} always called after function
-   */
-  _handlePonyfillCssVariables (ponyfillDisabled, callback) {
-    if (!ponyfillDisabled) {
-      this.ponyfillCssVariables({
-        onFinally: () => {
-          callback();
-        }
-      });
-    } else {
-      callback();
-    }
   }
 
   domReady (cb) {
@@ -452,8 +428,23 @@ class Answers {
     });
   }
 
+  /**
+   * A promise that resolves when ponyfillCssVariables resolves,
+   * or resolves immediately if ponyfill is disabled
+   * @param {boolean} option to opt out of the css variables ponyfill
+   */
+  _handlePonyfillCssVariables (ponyfillDisabled) {
+    return new Promise((resolve, reject) => {
+      if (!ponyfillDisabled) {
+        this.ponyfillCssVariables()
+          .then(resolve());
+      }
+      resolve();
+    });
+  }
+
   /*
-   * Updates the css styles with new current variables. This is useful when the css
+   * A promise that updates the css styles with new current variables. This is useful when the css
    * variables are updated dynamically (e.g. through js) or if the css variables are
    * added after the ANSWERS.init
    *
@@ -461,24 +452,32 @@ class Answers {
    * we add a cache busting parameter so that XMLHttpRequests succeed.
    *
    * @param {Object} config Additional config to pass to the ponyfill
+   * @return {Promise} resolves after onFinally
    */
   ponyfillCssVariables (config = {}) {
-    cssVars({
-      onlyLegacy: true,
-      onError: config.onError || function () {},
-      onSuccess: config.onSuccess || function () {},
-      onFinally: config.onFinally || function () {},
-      onBeforeSend: (xhr, node, url) => {
-        try {
-          const uriWithCacheBust = new URL(url);
-          const params = new SearchParams(uriWithCacheBust.search);
-          params.set('_', new Date().getTime());
-          uriWithCacheBust.search = params.toString();
-          xhr.open('GET', uriWithCacheBust.toString());
-        } catch (e) {
-          // Catch the error and continue if the URL provided in the asset is not a valid URL
+    return new Promise((resolve, reject) => {
+      cssVars({
+        onlyLegacy: true,
+        onError: config.onError || function () {},
+        onSuccess: config.onSuccess || function () {},
+        onFinally: () => {
+          if (config.onFinally) {
+            config.onFinally();
+          }
+          resolve();
+        },
+        onBeforeSend: (xhr, node, url) => {
+          try {
+            const uriWithCacheBust = new URL(url);
+            const params = new SearchParams(uriWithCacheBust.search);
+            params.set('_', new Date().getTime());
+            uriWithCacheBust.search = params.toString();
+            xhr.open('GET', uriWithCacheBust.toString());
+          } catch (e) {
+            // Catch the error and continue if the URL provided in the asset is not a valid URL
+          }
         }
-      }
+      });
     });
   }
 
