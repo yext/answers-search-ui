@@ -12,6 +12,7 @@ import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import { groupArray } from '../../../core/utils/arrayutils';
 import FilterType from '../../../core/filters/filtertype';
+import ComponentTypes from '../../components/componenttypes';
 
 /**
  * The currently supported controls
@@ -275,7 +276,7 @@ export default class FilterOptionsComponent extends Component {
   }
 
   static get type () {
-    return 'FilterOptions';
+    return ComponentTypes.FILTER_OPTIONS;
   }
 
   /**

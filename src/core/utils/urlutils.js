@@ -1,6 +1,7 @@
 import { PRODUCTION, SANDBOX } from '../constants';
 import SearchParams from '../../ui/dom/searchparams';
 import StorageKeys from '../storage/storagekeys';
+import ComponentTypes from '../../ui/components/componenttypes';
 
 /**
  * Returns the base url for the live api backend in the desired environment.
@@ -121,11 +122,23 @@ export function filterParamsForExperienceLink (
   params,
   getComponentNamesForComponentTypes
 ) {
-  let prefixes = getComponentNamesForComponentTypes([
-    'Facets', 'FilterBox', 'FilterOptions', 'RangeFilter', 'DateRangeFilter', 'SortOptions'
-  ]);
+  const prefixComponentTypes = [
+    'FACETS',
+    'FILTER_BOX',
+    'FILTER_OPTIONS',
+    'RANGE_FILTER',
+    'DATE_RANGE_FILTER',
+    'SORT_OPTIONS'
+  ].map((component) => {
+    return ComponentTypes[component];
+  });
+  const queryPrefixComponentComponentTypes = [
+    ComponentTypes['GEOLOCATION_FILTER'],
+    ComponentTypes['FILTER_SEARCH']
+  ];
+  let prefixes = getComponentNamesForComponentTypes(prefixComponentTypes);
   prefixes = prefixes.concat(
-    getComponentNamesForComponentTypes(['GeoLocationFilter', 'FilterSearch'])
+    getComponentNamesForComponentTypes(queryPrefixComponentComponentTypes)
       .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
   );
   prefixes.push(StorageKeys.FILTER);

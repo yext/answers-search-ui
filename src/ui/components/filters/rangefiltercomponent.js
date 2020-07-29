@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import Component from '../component';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
+import ComponentTypes from '../../components/componenttypes';
 
 const DEFAULT_CONFIG = {
   minPlaceholderText: 'Min',
@@ -90,7 +91,7 @@ export default class RangeFilterComponent extends Component {
   }
 
   static get type () {
-    return 'RangeFilter';
+    return ComponentTypes.RANGE_FILTER;
   }
 
   static defaultTemplateName () {
