@@ -123,6 +123,8 @@
 
   &-radioButtonLabel {
     cursor: pointer;
+    word-break: break-word;
+    hyphens: auto;
   }
 
   &-optionLabel {
