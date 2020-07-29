@@ -128,7 +128,7 @@ export default class AlternativeVerticalsComponent extends Component {
       this.componentManager.getComponentNamesForComponentTypes.bind(this.componentManager)
     );
 
-    for (let alternativeVertical of alternativeVerticals) {
+    for (const alternativeVertical of alternativeVerticals) {
       const verticalKey = alternativeVertical.verticalConfigId;
 
       const matchingVerticalConfig = verticalsConfig.find(config => {
