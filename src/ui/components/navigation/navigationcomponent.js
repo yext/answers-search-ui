@@ -6,7 +6,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
-import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/urlutils';
+import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../../core/utils/taborder';
 
 /**
  * The debounce duration for resize events
@@ -323,11 +323,8 @@ export default class NavigationComponent extends Component {
    * @override
    */
   setState (data = {}) {
-    // if (data.tabOrder !== undefined) {
-    //   this._tabOrder = mergeTabOrder(data.tabOrder, this._tabOrder, this._tabs);
-    // }
-    if (this.core.globalStorage.getState(StorageKeys.NAVIGATION)) {
-      this._tabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder;
+    if (data.tabOrder !== undefined) {
+      this._tabOrder = mergeTabOrder(data.tabOrder, this._tabOrder, this._tabs);
     }
 
     // Since the tab ordering can change based on the server data

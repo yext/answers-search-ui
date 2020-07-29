@@ -1,4 +1,4 @@
-import SearchParams from '../dom/searchparams';
+import SearchParams from '../../ui/dom/searchparams';
 
 export function getUrlParams () {
   return new SearchParams(window.location.search.substring(1));

@@ -1,4 +1,4 @@
-import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../../src/ui/tools/urlutils';
+import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../../src/core/utils/taborder';
 
 describe('core configuration', () => {
   it('core supports default tab ordering from config', () => {
