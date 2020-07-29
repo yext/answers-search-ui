@@ -432,6 +432,7 @@ class Answers {
    * A promise that resolves when ponyfillCssVariables resolves,
    * or resolves immediately if ponyfill is disabled
    * @param {boolean} option to opt out of the css variables ponyfill
+   * @param {Promise} resolves after ponyfillCssVariables, or immediately if disabled
    */
   _handlePonyfillCssVariables (ponyfillDisabled) {
     return new Promise((resolve, reject) => {
