@@ -270,10 +270,12 @@ class Answers {
     const onReadyPromise = new Promise((resolve, reject) => {
       this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
         .then(this._masterSwitchApi.isDisabled())
-        .then((isDisabled) => {
+        .then(isDisabled => {
           if (!isDisabled) {
             this._onReady();
             resolve();
+          } else {
+            reject(new Error('MasterSwitchApi determined the front-end should be disabled'));
           }
         }, () => {
           this._onReady();
