@@ -267,7 +267,7 @@ class Answers {
       });
     }
 
-    this.promise = new Promise((resolve, reject) => {
+    const onReadyPromise = new Promise((resolve, reject) => {
       this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
         .then(this._masterSwitchApi.isDisabled())
         .then((isDisabled) => {
@@ -275,10 +275,13 @@ class Answers {
             this._onReady();
             resolve();
           }
+        }, () => {
+          this._onReady();
+          resolve();
         });
     });
 
-    return this;
+    return onReadyPromise;
   }
 
   domReady (cb) {
