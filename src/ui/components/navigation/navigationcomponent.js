@@ -6,7 +6,8 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
-import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../../core/utils/taborder';
+import { mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../../core/utils/taborder';
+import { addParamsToUrl } from '../../../core/utils/urlutils';
 
 /**
  * The debounce duration for resize events
@@ -334,7 +335,7 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < this._tabOrder.length; i++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
-        tab.url = generateTabUrl(tab.baseUrl, getUrlParams(), this._tabOrder);
+        tab.url = addParamsToUrl(tab.baseUrl, { tabOrder: this._tabOrder });
         tabs.push(tab);
       }
     }

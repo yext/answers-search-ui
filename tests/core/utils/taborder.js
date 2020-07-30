@@ -1,4 +1,4 @@
-import { generateTabUrl, mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../../src/core/utils/taborder';
+import { mergeTabOrder, getDefaultTabOrder } from '../../../src/core/utils/taborder';
 
 describe('core configuration', () => {
   it('core supports default tab ordering from config', () => {
@@ -58,34 +58,5 @@ describe('core configuration', () => {
 
     const defaultOrder = mergeTabOrder(tabOrder1, tabOrder2, tabConfig);
     expect(defaultOrder).toMatchObject(['tab1', 'tab2', 'tab3']);
-  });
-
-  it('generates tab url', () => {
-    const tabConfig = [
-      {
-        label: 'This this is my second label',
-        url: '/tab1/',
-        verticalKey: 'tab1'
-      }
-    ];
-
-    const params = new URLSearchParams('query=yes');
-    const defaultOrder = getDefaultTabOrder(tabConfig, params);
-    const url = generateTabUrl(tabConfig[0].url, params, defaultOrder);
-    expect(url).toEqual('/tab1/?query=yes&tabOrder=tab1');
-  });
-
-  it('generates tab url without params', () => {
-    const tabConfig = [
-      {
-        label: 'This this is my second label',
-        url: '/tab1/',
-        verticalKey: 'tab1'
-      }
-    ];
-
-    const defaultOrder = getDefaultTabOrder(tabConfig, getUrlParams());
-    const url = generateTabUrl(tabConfig[0].url, getUrlParams(), defaultOrder);
-    expect(url).toEqual('/tab1/?tabOrder=tab1');
   });
 });

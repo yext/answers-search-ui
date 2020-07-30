@@ -58,7 +58,12 @@ export function mergeTabOrder (tabOrder, otherTabOrder, tabs) {
   return tabOrder;
 }
 
-export function generateTabUrl (baseUrl, params, tabOrder) {
-  params.set('tabOrder', tabOrder);
-  return baseUrl + '?' + params.toString();
+export function getTabOrder (tabsConfig, dataTabOrder) {
+  let tabOrder = getDefaultTabOrder(tabsConfig, getUrlParams());
+  // We want to persist the params from the existing URL to the new
+  // URLS we create.
+  if (tabOrder !== undefined && dataTabOrder !== undefined) {
+    tabOrder = mergeTabOrder(dataTabOrder, tabOrder, tabsConfig);
+  }
+  return tabOrder;
 }
