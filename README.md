@@ -116,8 +116,8 @@ function initAnswers() {
     apiKey: '<API_KEY_HERE>',
     // Required, the key used for your Answers experience
     experienceKey: '<EXPERIENCE_KEY_HERE>',
-    // Required, initialize components here, invoked when the Answers component library is loaded/ready.
-    //   Components may instead be initialized after the init promise resolves.
+    // Optional, initialize components here, invoked when the Answers component library is loaded/ready.
+    //    If components are not added here, they must be added when the init promise resolves
     onReady: function() {},
     // Optional*, Yext businessId, *required to send analytics events
     businessId: 'businessId',
