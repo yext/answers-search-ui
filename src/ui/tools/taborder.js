@@ -6,16 +6,12 @@ export function getUrlParams () {
 
 export function getDefaultTabOrder (tabsConfig, urlParams) {
   let tabOrder = [];
-
   // Use the ordering from the URL as the primary configuration
   // And then merge it with the local configuration, if provided.
   if (urlParams && urlParams.has('tabOrder')) {
     tabOrder = urlParams.get('tabOrder').split(',');
   }
-
-  for (let i = 0; i < tabsConfig.length; i++) {
-    const tab = tabsConfig[i];
-    // Some tabs don't have verticalKey, so we map it from URL
+  for (const tab of tabsConfig) {
     if (!tab.verticalKey) {
       tab.verticalKey = tab.url;
     }
@@ -31,7 +27,6 @@ export function getDefaultTabOrder (tabsConfig, urlParams) {
       tabOrder.push(tab.verticalKey);
     }
   }
-
   return tabOrder;
 }
 
@@ -43,8 +38,7 @@ export function getDefaultTabOrder (tabsConfig, urlParams) {
  * @return {string[]}
  */
 export function mergeTabOrder (tabOrder, otherTabOrder, tabs) {
-  for (let i = 0; i < otherTabOrder.length; i++) {
-    const tabConfig = otherTabOrder[i];
+  for (const tabConfig of otherTabOrder) {
     if (tabOrder.includes(tabConfig)) {
       continue;
     }
@@ -62,7 +56,7 @@ export function getTabOrder (tabsConfig, dataTabOrder) {
   let tabOrder = getDefaultTabOrder(tabsConfig, getUrlParams());
   // We want to persist the params from the existing URL to the new
   // URLS we create.
-  if (tabOrder !== undefined && dataTabOrder !== undefined) {
+  if (tabOrder && dataTabOrder) {
     tabOrder = mergeTabOrder(dataTabOrder, tabOrder, tabsConfig);
   }
   return tabOrder;
