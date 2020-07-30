@@ -332,6 +332,16 @@ export default class NavigationComponent extends Component {
       this._tabOrder = mergeTabOrder(data.tabOrder, this._tabOrder, this._tabs);
     }
 
+    const params = { tabOrder: this._tabOrder };
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    if (context) {
+      params.set(StorageKeys.API_CONTEXT, context);
+    }
+    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    if (referrerPageUrl !== null) {
+      params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
+    }
+
     // Since the tab ordering can change based on the server data
     // we need to update each tabs URL to include the order as part of their params.
     // This helps with persisting state across verticals.
@@ -339,7 +349,7 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < this._tabOrder.length; i++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
-        tab.url = addParamsToUrl(tab.baseUrl, { tabOrder: this._tabOrder });
+        tab.url = addParamsToUrl(tab.baseUrl, params);
         tabs.push(tab);
       }
     }
