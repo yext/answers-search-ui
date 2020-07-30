@@ -85,6 +85,24 @@ function initAnswers() {
 }
 ```
 
+ANSWERS.init() returns a promise which optionally allows components to be added using promise syntax
+```js
+function initAnswers() {
+  ANSWERS.init({
+    apiKey: '<API_KEY_HERE>', // See [1]
+    experienceKey: '<EXPERIENCE_KEY_HERE>',
+  }).then(function() {
+    ANSWERS.addComponent('SearchBar', {
+      container: '#SearchBarContainer',
+    });
+
+    ANSWERS.addComponent('UniversalResults', {
+      container: '#UniversalResultsContainer',
+    });
+  });
+}
+```
+
 [1] Learn more about [getting your API key](https://developer.yext.com/docs/guides/get-started/).
 
 # ANSWERS.init Configuration Options
@@ -98,7 +116,8 @@ function initAnswers() {
     apiKey: '<API_KEY_HERE>',
     // Required, the key used for your Answers experience
     experienceKey: '<EXPERIENCE_KEY_HERE>',
-    // Required, initialize components here, invoked when the Answers component library is loaded/ready
+    // Required, initialize components here, invoked when the Answers component library is loaded/ready.
+    //   Components may instead be initialized after the init promise resolves.
     onReady: function() {},
     // Optional*, Yext businessId, *required to send analytics events
     businessId: 'businessId',
