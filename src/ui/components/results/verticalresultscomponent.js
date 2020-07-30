@@ -244,7 +244,16 @@ export default class VerticalResultsComponent extends Component {
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
     const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION) ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder : [];
     const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
-    return addParamsToUrl(verticalURL, { query: this.query, tabOrder: tabOrder });
+    const params = {
+      query: this.query,
+      referrerPageUrl: this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL),
+      tabOrder: tabOrder
+    };
+    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    if (context) {
+      params.context = context;
+    }
+    return addParamsToUrl(verticalURL, params);
   }
 
   setState (data = {}, val) {
