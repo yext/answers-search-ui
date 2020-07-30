@@ -12,6 +12,7 @@ import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
+import { getTabOrder } from '../../tools/taborder';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -233,36 +234,17 @@ export default class VerticalResultsComponent extends Component {
 
   getUniversalUrl () {
     const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
-    if (!universalConfig.url) {
-      return undefined;
+    if (universalConfig.url) {
+      return addParamsToUrl(universalConfig.url, { query: this.query });
     }
-
-    const params = { query: this.query };
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
-    if (context) {
-      params[StorageKeys.API_CONTEXT] = context;
-    }
-    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
-    if (referrerPageUrl !== null) {
-      params[StorageKeys.REFERRER_PAGE_URL] = referrerPageUrl;
-    }
-
-    return addParamsToUrl(universalConfig.url, params);
   }
 
   getVerticalURL (data = {}) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-
-    const params = {
-      query: this.query,
-      referrerPageUrl: this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
-    };
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
-    if (context) {
-      params.context = context;
-    }
-    return addParamsToUrl(verticalURL, params);
+    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION) ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder : [];
+    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
+    return addParamsToUrl(verticalURL, { query: this.query, tabOrder: tabOrder });
   }
 
   setState (data = {}, val) {
