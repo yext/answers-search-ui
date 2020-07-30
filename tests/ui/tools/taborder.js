@@ -1,4 +1,4 @@
-import { mergeTabOrder, getDefaultTabOrder, getTabOrder } from '../../../src/core/utils/taborder';
+import { mergeTabOrder, getDefaultTabOrder, getTabOrder } from '../../../src/ui/tools/taborder';
 
 describe('core configuration', () => {
   it('core supports default tab ordering from config', () => {

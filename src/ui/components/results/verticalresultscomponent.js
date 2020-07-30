@@ -12,7 +12,7 @@ import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
-import { getTabOrder } from '../../../core/utils/taborder';
+import { getTabOrder } from '../../tools/taborder';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
