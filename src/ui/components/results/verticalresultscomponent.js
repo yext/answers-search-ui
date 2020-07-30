@@ -10,6 +10,7 @@ import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import { addParamsToUrl } from '../../../core/utils/urlutils';
+import { getTabOrder } from '../../tools/taborder';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -152,10 +153,12 @@ export default class VerticalResultsComponent extends Component {
     }
   }
 
-  getVerticalURL (data) {
+  getVerticalURL (data = {}) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
-    const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    return addParamsToUrl(verticalURL, { query: this.query });
+    const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
+    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION) ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder : [];
+    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
+    return addParamsToUrl(verticalURL, { query: this.query, tabOrder: tabOrder });
   }
 
   setState (data = {}, val) {
