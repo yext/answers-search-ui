@@ -47,4 +47,55 @@ describe('vertical results component', () => {
     const wrapper = mount(component);
     expect(wrapper).toBeTruthy();
   });
+
+  describe('creates verticalURL correctly', () => {
+    let component;
+    delete global.window.location;
+    global.window = Object.create(window);
+    global.window.location = {
+      search: '?query=virginia&otherParam=123'
+    };
+
+    beforeEach(() => {
+      component = COMPONENT_MANAGER.create('VerticalResults', {});
+      component.query = 'my-query';
+      component.verticalKey = 'key';
+    });
+
+    it('if unset defaults to vertical key', () => {
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&tabOrder=');
+    });
+
+    it('if null defaults to vertical key', () => {
+      component = COMPONENT_MANAGER.create('VerticalResults', {
+        verticalURL: null
+      });
+      component.query = 'my-query';
+      component.verticalKey = 'key';
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&tabOrder=');
+    });
+
+    it('works with transformData', () => {
+      expect(component.getVerticalURL({
+        verticalURL: 'transform-data'
+      })).toEqual('transform-data?query=my-query&otherParam=123&tabOrder=');
+    });
+
+    it('defaults to matching config in verticalPages', () => {
+      component._verticalsConfig = [{
+        verticalKey: 'key',
+        url: 'vertical-pages'
+      }];
+      expect(component.getVerticalURL()).toEqual('vertical-pages?query=my-query&otherParam=123&tabOrder=key');
+    });
+
+    it('can be set', () => {
+      component = COMPONENT_MANAGER.create('VerticalResults', {
+        verticalURL: 'vertical-url'
+      });
+      component.query = 'my-query';
+      component.verticalKey = 'key';
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&tabOrder=');
+    });
+  });
 });
