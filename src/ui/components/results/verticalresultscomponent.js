@@ -155,7 +155,7 @@ export default class VerticalResultsComponent extends Component {
 
   getVerticalURL (data = {}) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
-    const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
+    const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
     const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION) ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder : [];
     const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
     return addParamsToUrl(verticalURL, { query: this.query, tabOrder: tabOrder });

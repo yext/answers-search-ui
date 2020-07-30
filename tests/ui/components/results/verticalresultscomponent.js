@@ -95,7 +95,7 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('vertical-url?query=my-query&otherParam=123&tabOrder=');
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&tabOrder=');
     });
   });
 });
