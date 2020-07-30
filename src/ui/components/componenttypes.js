@@ -1,8 +1,7 @@
 /** @module */
 
 /**
- * The component types is a map that contains the types for all components
- * given some unique key.
+ * An enum listing the different Component types supported in the SDK
  * TODO: add all component types
  * @type {Object.<string, string>}
  */

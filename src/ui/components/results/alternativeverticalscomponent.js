@@ -125,7 +125,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
     const filteredParams = filterParamsForExperienceLink(
       params,
-      this.componentManager.getComponentNamesForComponentTypes.bind(this.componentManager)
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
     );
 
     for (const alternativeVertical of alternativeVerticals) {

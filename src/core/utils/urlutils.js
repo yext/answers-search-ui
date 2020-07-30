@@ -126,7 +126,7 @@ export function filterParamsForExperienceLink (
     ComponentTypes.DATE_RANGE_FILTER,
     ComponentTypes.SORT_OPTIONS
   ];
-  const queryPrefixComponentComponentTypes = [
+  const queryPrefixComponentTypes = [
     ComponentTypes.GEOLOCATION_FILTER,
     ComponentTypes.FILTER_SEARCH
   ];
@@ -135,7 +135,7 @@ export function filterParamsForExperienceLink (
   ];
   prefixes = prefixes.concat(getComponentNamesForComponentTypes(prefixComponentTypes));
   prefixes = prefixes.concat(
-    getComponentNamesForComponentTypes(queryPrefixComponentComponentTypes)
+    getComponentNamesForComponentTypes(queryPrefixComponentTypes)
       .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
   );
 

@@ -276,7 +276,7 @@ export default class VerticalResultsComponent extends Component {
 
     const filteredParams = filterParamsForExperienceLink(
       params,
-      this.componentManager.getComponentNamesForComponentTypes.bind(this.componentManager)
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
     );
 
     return replaceUrlParams(baseUrl, filteredParams);

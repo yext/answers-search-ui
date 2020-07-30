@@ -484,7 +484,7 @@ export default class NavigationComponent extends Component {
     params.set('tabOrder', this._tabOrder);
     const filteredParams = filterParamsForExperienceLink(
       params,
-      this.componentManager.getComponentNamesForComponentTypes.bind(this.componentManager)
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
     );
 
     return baseUrl + '?' + filteredParams.toString();
