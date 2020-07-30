@@ -118,28 +118,26 @@ export function filterParamsForExperienceLink (
   params,
   getComponentNamesForComponentTypes
 ) {
-  const prefixComponentTypes = [
+  const componentTypesToExclude = [
     ComponentTypes.FACETS,
     ComponentTypes.FILTER_BOX,
     ComponentTypes.FILTER_OPTIONS,
     ComponentTypes.RANGE_FILTER,
     ComponentTypes.DATE_RANGE_FILTER,
-    ComponentTypes.SORT_OPTIONS
-  ];
-  const queryPrefixComponentTypes = [
+    ComponentTypes.SORT_OPTIONS,
     ComponentTypes.GEOLOCATION_FILTER,
     ComponentTypes.FILTER_SEARCH
   ];
-  let prefixes = [
-    StorageKeys.FILTER
-  ];
-  prefixes = prefixes.concat(getComponentNamesForComponentTypes(prefixComponentTypes));
-  prefixes = prefixes.concat(
-    getComponentNamesForComponentTypes(queryPrefixComponentTypes)
-      .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
-  );
+  let paramsToFilter = componentTypesToExclude.flatMap(type => {
+    let params = getComponentNamesForComponentTypes([type]);
+    if (type === ComponentTypes.GEOLOCATION_FILTER || type === ComponentTypes.FILTER_SEARCH) {
+      params = params.map(param => `${StorageKeys.QUERY}.${param}`);
+    }
+    return params;
+  });
+  paramsToFilter = paramsToFilter.concat([StorageKeys.FILTER]);
 
-  const newParams = removeParamsWithPrefixes(params, prefixes);
+  const newParams = removeParamsWithPrefixes(params, paramsToFilter);
   newParams.delete(StorageKeys.SEARCH_OFFSET);
   return newParams;
 }
