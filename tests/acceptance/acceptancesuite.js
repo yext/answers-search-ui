@@ -175,7 +175,7 @@ test('Facets, pagination, and filters do not persist accross experience links', 
   await t.expect(changeFiltersLink).contains('referrerPageUrl');
   await verifyCleanLink(changeFiltersLink);
 
-  const viewAllLink = await Selector('.yxt-ResultsHeader-changeFilters')
+  const viewAllLink = await Selector('.yxt-Results-viewAllLink')
     .nth(0).getAttribute('href');
   await t.expect(viewAllLink).contains('referrerPageUrl');
   await verifyCleanLink(viewAllLink);

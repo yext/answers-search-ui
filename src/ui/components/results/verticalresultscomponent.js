@@ -241,8 +241,11 @@ export default class VerticalResultsComponent extends Component {
   }
 
   getVerticalURL (data = {}) {
-    const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
-    const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
+    const verticalConfig = this._verticalsConfig.find(
+      config => config.verticalKey === this.verticalKey
+    ) || {};
+    const verticalURL = this._config.verticalURL || verticalConfig.url ||
+      data.verticalURL || this.verticalKey + '.html';
     return this._getExperienceURL(verticalURL);
   }
 

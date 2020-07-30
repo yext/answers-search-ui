@@ -86,7 +86,8 @@ export function equivalentParams (params1, params2) {
 }
 
 /**
- * Creates a new params object without params that begin with the given prefixes
+ * Creates a copy of the provided {@link SearchParams}, with the specified
+ * attributes filtered out
  * @param {SearchParams} params The parameters to remove from
  * @param {string[]} prefixes The prefixes of parameters to remove
  * @return {SearchParams} A new instance of SearchParams without removed params
@@ -95,12 +96,7 @@ export function equivalentParams (params1, params2) {
 export function removeParamsWithPrefixes (params, prefixes) {
   const newParams = new SearchParams();
   for (const [key, val] of params.entries()) {
-    let includeEntry = true;
-    for (const prefix of prefixes) {
-      if (key.startsWith(prefix)) {
-        includeEntry = false;
-      }
-    }
+    const includeEntry = prefixes.every(prefix => !key.startsWith(prefix));
     if (includeEntry) {
       newParams.set(key, val);
     }
@@ -110,7 +106,7 @@ export function removeParamsWithPrefixes (params, prefixes) {
 
 /**
  * Removes parameters for filters, facets, sort options, and pagination
- * from the params provided. This is useful for constructing
+ * from the provided {@link SearchParams}. This is useful for constructing
  * inter-experience answers links.
  * @param {SearchParams} params The parameters to remove from
  * @param {function} getComponentNamesForComponentTypes Given string[]
@@ -123,25 +119,25 @@ export function filterParamsForExperienceLink (
   getComponentNamesForComponentTypes
 ) {
   const prefixComponentTypes = [
-    'FACETS',
-    'FILTER_BOX',
-    'FILTER_OPTIONS',
-    'RANGE_FILTER',
-    'DATE_RANGE_FILTER',
-    'SORT_OPTIONS'
-  ].map((component) => {
-    return ComponentTypes[component];
-  });
-  const queryPrefixComponentComponentTypes = [
-    ComponentTypes['GEOLOCATION_FILTER'],
-    ComponentTypes['FILTER_SEARCH']
+    ComponentTypes.FACETS,
+    ComponentTypes.FILTER_BOX,
+    ComponentTypes.FILTER_OPTIONS,
+    ComponentTypes.RANGE_FILTER,
+    ComponentTypes.DATE_RANGE_FILTER,
+    ComponentTypes.SORT_OPTIONS
   ];
-  let prefixes = getComponentNamesForComponentTypes(prefixComponentTypes);
+  const queryPrefixComponentComponentTypes = [
+    ComponentTypes.GEOLOCATION_FILTER,
+    ComponentTypes.FILTER_SEARCH
+  ];
+  let prefixes = [
+    StorageKeys.FILTER
+  ];
+  prefixes = prefixes.concat(getComponentNamesForComponentTypes(prefixComponentTypes));
   prefixes = prefixes.concat(
     getComponentNamesForComponentTypes(queryPrefixComponentComponentTypes)
       .map((name) => { return `${StorageKeys.QUERY}.${name}`; })
   );
-  prefixes.push(StorageKeys.FILTER);
 
   const newParams = removeParamsWithPrefixes(params, prefixes);
   newParams.delete(StorageKeys.SEARCH_OFFSET);
