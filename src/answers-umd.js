@@ -267,23 +267,17 @@ class Answers {
       });
     }
 
-    const onReadyPromise = new Promise((resolve, reject) => {
-      this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
-        .then(this._masterSwitchApi.isDisabled())
-        .then(isDisabled => {
-          if (!isDisabled) {
-            this._onReady();
-            resolve();
-          } else {
-            reject(new Error('MasterSwitchApi determined the front-end should be disabled'));
-          }
-        }, () => {
+    return this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
+      .then(() => this._masterSwitchApi.isDisabled())
+      .then(isDisabled => {
+        if (!isDisabled) {
           this._onReady();
-          resolve();
-        });
-    });
-
-    return onReadyPromise;
+        } else {
+          throw new Error('MasterSwitchApi determined the front-end should be disabled');
+        }
+      }, () => {
+        this._onReady();
+      });
   }
 
   domReady (cb) {
@@ -437,7 +431,7 @@ class Answers {
    * A promise that resolves when ponyfillCssVariables resolves,
    * or resolves immediately if ponyfill is disabled
    * @param {boolean} option to opt out of the css variables ponyfill
-   * @param {Promise} resolves after ponyfillCssVariables, or immediately if disabled
+   * @return {Promise} resolves after ponyfillCssVariables, or immediately if disabled
    */
   _handlePonyfillCssVariables (ponyfillDisabled) {
     return new Promise((resolve, reject) => {
