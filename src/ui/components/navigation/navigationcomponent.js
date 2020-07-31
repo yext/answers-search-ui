@@ -7,7 +7,7 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/taborder';
-import { addParamsToUrl } from '../../../core/utils/urlutils';
+import { filterParamsForExperienceLink } from '../../../core/utils/urlutils.js';
 
 /**
  * The debounce duration for resize events
