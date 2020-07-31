@@ -238,7 +238,10 @@ export default class VerticalResultsComponent extends Component {
     if (!universalConfig.url) {
       return undefined;
     }
-    return this._getExperienceURL(universalConfig.url);
+    return this._getExperienceURL(
+      universalConfig.url,
+      new SearchParams(window.location.search.substring(1))
+    );
   }
 
   getVerticalURL (data = {}) {
@@ -247,7 +250,15 @@ export default class VerticalResultsComponent extends Component {
     ) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url ||
       data.verticalURL || this.verticalKey + '.html';
-    return this._getExperienceURL(verticalURL);
+
+    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION)
+      ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder
+      : [];
+    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
+    const params = new SearchParams(window.location.search.substring(1));
+    params.set('tabOrder', tabOrder);
+
+    return this._getExperienceURL(verticalURL, params);
   }
 
   /**
@@ -255,15 +266,10 @@ export default class VerticalResultsComponent extends Component {
    * filters, and pagination, which should not persist across the experience.
    * @param {string} baseUrl The url append the appropriate params to. Note:
    *    params already on the baseUrl will be stripped
+   * @param {SearchParams} params The parameters to include in the experience URL
    * @return {string} The formatted experience URL with appropriate query params
    */
-  _getExperienceURL (baseUrl) {
-    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION)
-      ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder
-      : [];
-    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
-    const params = new SearchParams(window.location.search.substring(1));
-    params.set('tabOrder', tabOrder);
+  _getExperienceURL (baseUrl, params) {
     params.set(StorageKeys.QUERY, this.query);
 
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
