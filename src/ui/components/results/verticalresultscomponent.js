@@ -11,8 +11,7 @@ import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
-import { replaceUrlParams } from '../../../core/utils/urlutils';
-import { getTabOrder } from '../../tools/taborder';
+import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
 import SearchParams from '../../dom/searchparams';
 
 class VerticalResultsConfig {
@@ -238,22 +237,35 @@ export default class VerticalResultsComponent extends Component {
     if (!universalConfig.url) {
       return undefined;
     }
-
-    const params = new SearchParams(window.location.search.substring(1));
-    params.set(StorageKeys.QUERY, this.query);
-    return replaceUrlParams(universalConfig.url, params);
+    return this._getExperienceURL(universalConfig.url);
   }
 
   getVerticalURL (data = {}) {
-    const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
-    const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION) ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder : [];
-    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
+    const verticalConfig = this._verticalsConfig.find(
+      config => config.verticalKey === this.verticalKey
+    ) || {};
+    const verticalURL = this._config.verticalURL || verticalConfig.url ||
+      data.verticalURL || this.verticalKey + '.html';
+    return this._getExperienceURL(verticalURL);
+  }
 
+  /**
+   * Adds parameters that are dynamically set. Removes parameters for facets,
+   * filters, and pagination, which should not persist across the experience.
+   * @param {string} baseUrl The url append the appropriate params to. Note:
+   *    params already on the baseUrl will be stripped
+   * @return {string} The formatted experience URL with appropriate query params
+   */
+  _getExperienceURL (baseUrl) {
     const params = new SearchParams(window.location.search.substring(1));
-    params.set('tabOrder', tabOrder);
     params.set(StorageKeys.QUERY, this.query);
-    return replaceUrlParams(verticalURL, params);
+
+    const filteredParams = filterParamsForExperienceLink(
+      params,
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
+    );
+
+    return replaceUrlParams(baseUrl, filteredParams);
   }
 
   setState (data = {}, val) {
