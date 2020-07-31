@@ -37,7 +37,8 @@
       {{clearText}}
     </span>
   </button>
-  <button {{#if useForm}}type="submit" {{/if}}class="js-yext-submit yxt-SearchBar-button">
+  <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
+    class="js-yext-submit yxt-SearchBar-button">
     {{#if submitIcon}}
       <div class="yxt-SearchBar-buttonImage"
           data-component="IconComponent"
