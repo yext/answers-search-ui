@@ -42,16 +42,43 @@ export function getAnalyticsUrl (env = PRODUCTION, conversionTrackingEnabled = f
 }
 
 /**
- * Returns the passed in url, with all url params from the current url, as well as any
- * pasased in params, appended to it.
+ * Returns the passed in url with the passed in params appended as query params
+ * Note: query parameters in the url are stripped, you should include those query parameters
+ * in `params` if you want to keep them
  * @param {string} url
- * @param {Object} params
+ * @param {SearchParams} params to add to the url
  * @returns {string}
  */
-export function addParamsToUrl (url, params = {}) {
-  const urlParams = new SearchParams(window.location.search.substring(1));
-  for (const paramKey in params) {
-    urlParams.set(paramKey, params[paramKey]);
+export function replaceUrlParams (url, params = new SearchParams()) {
+  return url.split('?')[0] + '?' + params.toString();
+}
+
+/**
+ * Returns the given url without query params and hashes
+ * @param {string} url Full url e.g. https://yext.com/?query=hello#Footer
+ * @returns {string} Url without query params and hashes e.g. https://yext.com/
+ */
+export function urlWithoutQueryParamsAndHash (url) {
+  return url.split('?')[0].split('#')[0];
+}
+
+/**
+ * returns if two SearchParams objects have the same key,value entries
+ * @param {SearchParams} params1
+ * @param {SearchParams} params2
+ * @return {boolean} true if params1 and params2 have the same key,value entries, false otherwise
+ */
+export function equivalentParams (params1, params2) {
+  const entries1 = Array.from(params1.entries());
+  const entries2 = Array.from(params2.entries());
+
+  if (entries1.length !== entries2.length) {
+    return false;
   }
-  return url.split('?')[0] + '?' + urlParams;
+  for (const [key, val] of params1.entries()) {
+    if (val !== params2.get(key)) {
+      return false;
+    }
+  }
+  return true;
 }

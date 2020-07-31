@@ -7,6 +7,8 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 import DOM from '../../dom/dom';
+import { replaceUrlParams } from '../../../core/utils/urlutils';
+import SearchParams from '../../dom/searchparams';
 
 /**
  * The debounce duration for resize events
@@ -334,7 +336,9 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < this._tabOrder.length; i++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
-        tab.url = this.generateTabUrl(tab.baseUrl, this.getUrlParams());
+        const params = new SearchParams(window.location.search);
+        params.set('tabOrder', this._tabOrder);
+        tab.url = replaceUrlParams(tab.baseUrl, params);
         tabs.push(tab);
       }
     }

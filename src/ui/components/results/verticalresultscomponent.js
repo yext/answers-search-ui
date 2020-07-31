@@ -9,9 +9,11 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
-import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
+import { replaceUrlParams } from '../../../core/utils/urlutils';
+import { getTabOrder } from '../../tools/taborder';
+import SearchParams from '../../dom/searchparams';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -233,15 +235,25 @@ export default class VerticalResultsComponent extends Component {
 
   getUniversalUrl () {
     const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
-    if (universalConfig.url) {
-      return addParamsToUrl(universalConfig.url, { query: this.query });
+    if (!universalConfig.url) {
+      return undefined;
     }
+
+    const params = new SearchParams(window.location.search.substring(1));
+    params.set(StorageKeys.QUERY, this.query);
+    return replaceUrlParams(universalConfig.url, params);
   }
 
   getVerticalURL (data = {}) {
     const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
     const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    return addParamsToUrl(verticalURL, { query: this.query });
+    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION) ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder : [];
+    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
+
+    const params = new SearchParams(window.location.search.substring(1));
+    params.set('tabOrder', tabOrder);
+    params.set(StorageKeys.QUERY, this.query);
+    return replaceUrlParams(verticalURL, params);
   }
 
   setState (data = {}, val) {
