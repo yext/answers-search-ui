@@ -75,6 +75,15 @@ export default class HandlebarsRenderer extends Renderer {
   }
 
   /**
+   * compile a template and then add it to the current template bundle
+   * @param {string} templateName The unique name for the template
+   * @param {string} template The handlebars template string
+   */
+  registerTemplate (templateName, template) {
+    this._templates[templateName] = this.compile(template);
+  }
+
+  /**
    * render will render a template with data
    * @param {Object} config Provide either a templateName or a pre-compiled template
    * @param {Object} data The data to provide to the template
