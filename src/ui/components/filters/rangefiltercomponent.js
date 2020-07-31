@@ -3,6 +3,7 @@
 import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import ComponentTypes from '../../components/componenttypes';
 
 const DEFAULT_CONFIG = {
   minPlaceholderText: 'Min',
@@ -87,7 +88,7 @@ export default class RangeFilterComponent extends Component {
   }
 
   static get type () {
-    return 'RangeFilter';
+    return ComponentTypes.RANGE_FILTER;
   }
 
   setState (data) {

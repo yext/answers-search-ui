@@ -6,6 +6,7 @@ import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 import Facet from '../../../core/models/facet';
+import ComponentTypes from '../../components/componenttypes';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -167,7 +168,7 @@ export default class FilterBoxComponent extends Component {
   }
 
   static get type () {
-    return 'FilterBox';
+    return ComponentTypes.FILTER_BOX;
   }
 
   static defaultTemplateName () {

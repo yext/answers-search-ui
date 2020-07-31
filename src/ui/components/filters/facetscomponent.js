@@ -3,6 +3,7 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import ResultsContext from '../../../core/storage/resultscontext';
+import ComponentTypes from '../../components/componenttypes';
 
 class FacetsConfig {
   constructor (config) {
@@ -152,7 +153,7 @@ export default class FacetsComponent extends Component {
   }
 
   static get type () {
-    return 'Facets';
+    return ComponentTypes.FACETS;
   }
 
   /**
