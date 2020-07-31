@@ -3,6 +3,8 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import { replaceUrlParams } from '../../../core/utils/urlutils';
+import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
@@ -98,7 +100,7 @@ export default class AlternativeVerticalsComponent extends Component {
    */
   static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
     let verticals = [];
-    let queryParams = window.location.search;
+    let queryParams = new SearchParams(window.location.search);
 
     for (let alternativeVertical of alternativeVerticals) {
       const verticalKey = alternativeVertical.verticalConfigId;
@@ -113,7 +115,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
       verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
-        url: matchingVerticalConfig.url + queryParams,
+        url: replaceUrlParams(matchingVerticalConfig.url, queryParams),
         iconName: matchingVerticalConfig.icon,
         iconUrl: matchingVerticalConfig.iconUrl,
         resultsCount: alternativeVertical.resultsCount
