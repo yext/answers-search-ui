@@ -6,6 +6,7 @@ import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import ResultsContext from '../../../core/storage/resultscontext';
 import SearchStates from '../../../core/storage/searchstates';
+import ComponentTypes from '../../components/componenttypes';
 
 /**
  * Renders configuration options for sorting Vertical Results.
@@ -135,7 +136,7 @@ export default class SortOptionsComponent extends Component {
   }
 
   static get type () {
-    return 'SortOptions';
+    return ComponentTypes.SORT_OPTIONS;
   }
 
   static defaultTemplateName () {
