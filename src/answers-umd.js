@@ -259,50 +259,25 @@ class Answers {
       if (parsedConfig.templateBundle) {
         this.renderer.init(parsedConfig.templateBundle);
       }
-
-      this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
-      return this;
-    }
-
-    // Templates are currently downloaded separately from the CORE and UI bundle.
-    // Future enhancement is to ship the components with templates in a separate bundle.
-    this.templates = new DefaultTemplatesLoader(templates => {
-      this.renderer.init(templates);
-      this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
-    });
-
-    return this;
-  }
-
-  /**
-   * Checks the experience's Answer Status page before invoking onReady. If the status is
-   * disabled, onReady is not called.
-   */
-  _invokeOnReady () {
-    this._masterSwitchApi.isDisabled()
-      .then(isDisabled => !isDisabled && this._onReady(), () => this._onReady());
-  }
-
-  /**
-   * Calls the CSS vars ponyfill, if opted-in, and invokes the callback
-   * regardless of if there was an error/success. If opted-out, only invokes the callback.
-   * @param {boolean} option to opt out of the css variables ponyfill
-   * @param callback {Function} always called after function
-   */
-  _handlePonyfillCssVariables (ponyfillDisabled, callback) {
-    if (!ponyfillDisabled) {
-      this.ponyfillCssVariables({
-        onFinally: () => {
-          callback();
-        }
-      });
     } else {
-      callback();
+      // Templates are currently downloaded separately from the CORE and UI bundle.
+      // Future enhancement is to ship the components with templates in a separate bundle.
+      this.templates = new DefaultTemplatesLoader(templates => {
+        this.renderer.init(templates);
+      });
     }
+
+    return this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
+      .then(() => this._masterSwitchApi.isDisabled())
+      .then(isDisabled => {
+        if (!isDisabled) {
+          this._onReady();
+        } else {
+          throw new Error('MasterSwitchApi determined the front-end should be disabled');
+        }
+      }, () => {
+        this._onReady();
+      });
   }
 
   domReady (cb) {
@@ -449,6 +424,23 @@ class Answers {
   setGeolocation (lat, lng) {
     this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
       lat, lng, radius: 0
+    });
+  }
+
+  /**
+   * A promise that resolves when ponyfillCssVariables resolves,
+   * or resolves immediately if ponyfill is disabled
+   * @param {boolean} option to opt out of the css variables ponyfill
+   * @return {Promise} resolves after ponyfillCssVariables, or immediately if disabled
+   */
+  _handlePonyfillCssVariables (ponyfillDisabled) {
+    if (ponyfillDisabled) {
+      return Promise.resolve();
+    }
+    return new Promise((resolve, reject) => {
+      this.ponyfillCssVariables({
+        onFinally: resolve
+      });
     });
   }
 
