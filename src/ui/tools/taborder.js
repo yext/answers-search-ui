@@ -12,19 +12,17 @@ export function getDefaultTabOrder (tabsConfig, urlParams) {
     tabOrder = urlParams.get('tabOrder').split(',');
   }
   for (const tab of tabsConfig) {
-    if (!tab.verticalKey) {
-      tab.verticalKey = tab.url;
-    }
+    const verticalKeyOrUrl = tab.verticalKey || tab.url;
     // Avoid duplicates if config was provided from URL
-    if (tabOrder.includes(tab.verticalKey)) {
+    if (tabOrder.includes(verticalKeyOrUrl)) {
       continue;
     }
 
     // isFirst should always be the first element in the list
     if (tab.isFirst) {
-      tabOrder.unshift(tab.verticalKey);
+      tabOrder.unshift(verticalKeyOrUrl);
     } else {
-      tabOrder.push(tab.verticalKey);
+      tabOrder.push(verticverticalKeyOrUrlalKey);
     }
   }
   return tabOrder;
