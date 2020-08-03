@@ -3,6 +3,8 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
+import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
@@ -37,7 +39,7 @@ export default class AlternativeVerticalsComponent extends Component {
      * This gets updated based on the server results
      * @type {AlternativeVertical[]}
      */
-    this.verticalSuggestions = AlternativeVerticalsComponent._buildVerticalSuggestions(
+    this.verticalSuggestions = this._buildVerticalSuggestions(
       this._alternativeVerticals,
       this._verticalsConfig
     );
@@ -96,11 +98,16 @@ export default class AlternativeVerticalsComponent extends Component {
    * @param {object} alternativeVerticals alternativeVerticals server response
    * @param {object} verticalsConfig the configuration to use
    */
-  static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
+  _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
     let verticals = [];
-    let queryParams = window.location.search;
+    let queryParams = new SearchParams(window.location.search);
 
-    for (let alternativeVertical of alternativeVerticals) {
+    const filteredParams = filterParamsForExperienceLink(
+      queryParams,
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
+    );
+
+    for (const alternativeVertical of alternativeVerticals) {
       const verticalKey = alternativeVertical.verticalConfigId;
 
       const matchingVerticalConfig = verticalsConfig.find(config => {
@@ -113,7 +120,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
       verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
-        url: matchingVerticalConfig.url + queryParams,
+        url: replaceUrlParams(matchingVerticalConfig.url, filteredParams),
         iconName: matchingVerticalConfig.icon,
         iconUrl: matchingVerticalConfig.iconUrl,
         resultsCount: alternativeVertical.resultsCount

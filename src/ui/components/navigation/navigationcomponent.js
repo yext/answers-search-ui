@@ -7,6 +7,7 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 import DOM from '../../dom/dom';
+import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
 
 /**
  * The debounce duration for resize events
@@ -327,6 +328,14 @@ export default class NavigationComponent extends Component {
       this._tabOrder = this.mergeTabOrder(data.tabOrder, this._tabOrder);
     }
 
+    const params = this.getUrlParams();
+    params.set('tabOrder', this._tabOrder);
+
+    const filteredParams = filterParamsForExperienceLink(
+      params,
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
+    );
+
     // Since the tab ordering can change based on the server data
     // we need to update each tabs URL to include the order as part of their params.
     // This helps with persisting state across verticals.
@@ -334,7 +343,7 @@ export default class NavigationComponent extends Component {
     for (let i = 0; i < this._tabOrder.length; i++) {
       let tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
-        tab.url = this.generateTabUrl(tab.baseUrl, this.getUrlParams());
+        tab.url = replaceUrlParams(tab.baseUrl, filteredParams);
         tabs.push(tab);
       }
     }

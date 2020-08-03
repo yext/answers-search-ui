@@ -27,6 +27,9 @@ const COMPONENT_MANAGER = mockManager(
   mockCore,
   VerticalResultsComponent.defaultTemplateName()
 );
+COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => {
+  return [];
+};
 
 describe('vertical results component', () => {
   let defaultConfig;

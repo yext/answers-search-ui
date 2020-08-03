@@ -9,9 +9,10 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
-import { addParamsToUrl } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
+import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
+import SearchParams from '../../dom/searchparams';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -233,15 +234,43 @@ export default class VerticalResultsComponent extends Component {
 
   getUniversalUrl () {
     const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
-    if (universalConfig.url) {
-      return addParamsToUrl(universalConfig.url, { query: this.query });
+    if (!universalConfig.url) {
+      return undefined;
     }
+    return this._getExperienceURL(
+      universalConfig.url,
+      new SearchParams(window.location.search.substring(1))
+    );
   }
 
   getVerticalURL (data = {}) {
-    const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
-    const verticalURL = this._config.verticalURL || verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
-    return addParamsToUrl(verticalURL, { query: this.query });
+    const verticalConfig = this._verticalsConfig.find(
+      config => config.verticalKey === this.verticalKey
+    ) || {};
+    const verticalURL = this._config.verticalURL || verticalConfig.url ||
+      data.verticalURL || this.verticalKey + '.html';
+
+    const params = new SearchParams(window.location.search.substring(1));
+    return this._getExperienceURL(verticalURL, params);
+  }
+
+  /**
+   * Adds parameters that are dynamically set. Removes parameters for facets,
+   * filters, and pagination, which should not persist across the experience.
+   * @param {string} baseUrl The url append the appropriate params to. Note:
+   *    params already on the baseUrl will be stripped
+   * @param {SearchParams} params The parameters to include in the experience URL
+   * @return {string} The formatted experience URL with appropriate query params
+   */
+  _getExperienceURL (baseUrl, params) {
+    params.set(StorageKeys.QUERY, this.query);
+
+    const filteredParams = filterParamsForExperienceLink(
+      params,
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
+    );
+
+    return replaceUrlParams(baseUrl, filteredParams);
   }
 
   setState (data = {}, val) {

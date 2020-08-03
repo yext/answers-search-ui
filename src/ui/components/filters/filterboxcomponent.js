@@ -3,6 +3,7 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
+import ComponentTypes from '../../components/componenttypes';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -166,7 +167,7 @@ export default class FilterBoxComponent extends Component {
   }
 
   static get type () {
-    return 'FilterBox';
+    return ComponentTypes.FILTER_BOX;
   }
 
   static defaultTemplateName () {
