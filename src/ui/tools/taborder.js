@@ -22,7 +22,7 @@ export function getDefaultTabOrder (tabsConfig, urlParams) {
     if (tab.isFirst) {
       tabOrder.unshift(verticalKeyOrUrl);
     } else {
-      tabOrder.push(verticverticalKeyOrUrlalKey);
+      tabOrder.push(verticalKeyOrUrl);
     }
   }
   return tabOrder;
