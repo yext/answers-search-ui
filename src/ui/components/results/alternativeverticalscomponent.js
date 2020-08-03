@@ -59,7 +59,7 @@ export default class AlternativeVerticalsComponent extends Component {
     this._isShowingResults = opts.isShowingResults || false;
 
     this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
-      this.verticalSuggestions = AlternativeVerticalsComponent._buildVerticalSuggestions(
+      this.verticalSuggestions = this._buildVerticalSuggestions(
         this._alternativeVerticals,
         this._verticalsConfig,
         this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
@@ -112,7 +112,7 @@ export default class AlternativeVerticalsComponent extends Component {
    * @param {string} context the API context query parameter to add to the urls
    * @param {string} referrerPageUrl the referrerPageUrl query parameter to add to the urls
    */
-  _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
+  _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context, referrerPageUrl) {
     let verticals = [];
 
     const params = new SearchParams(window.location.search.substring(1));
