@@ -13,11 +13,13 @@
     </h2>
   </div>
   {{#if verticalURL}}
-    <a class="yxt-Results-viewAllLink" href="{{verticalURL}}"
-       data-eventtype="VERTICAL_VIEW_ALL"
-       data-eventoptions='{{eventOptions}}'>
-      {{_config.viewAllText}}
-    </a>
+    {{#if _config.viewAllText}}
+      <a class="yxt-Results-viewAllLink" href="{{verticalURL}}"
+        data-eventtype="VERTICAL_VIEW_ALL"
+        data-eventoptions='{{eventOptions}}'>
+        {{_config.viewAllText}}
+      </a>
+    {{/if}}
   {{/if}}
 </div>
 {{#if appliedQueryFilters}}

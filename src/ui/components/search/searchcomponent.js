@@ -570,7 +570,8 @@ export default class SearchComponent extends Component {
             if (params.toString().length > 0) {
               url += '?' + params.toString();
             }
-            urls[tabs[i].configId] = url;
+            const verticalKey = tabs[i].configId || tabs[i].verticalKey;
+            urls[verticalKey] = url;
           }
         }
         return this.core.search(query, urls);
