@@ -3,6 +3,7 @@
 import Component from '../component';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import ComponentTypes from '../../components/componenttypes';
 
 /**
  * A filter for a range of dates
@@ -82,7 +83,7 @@ export default class DateRangeFilterComponent extends Component {
   }
 
   static get type () {
-    return 'DateRangeFilter';
+    return ComponentTypes.DATE_RANGE_FILTER;
   }
 
   setState (data) {

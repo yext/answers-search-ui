@@ -9,8 +9,9 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
-import { addParamsToUrl } from '../../../core/utils/urlutils';
 import { getTabOrder } from '../../tools/taborder';
+import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
+import SearchParams from '../../dom/searchparams';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -148,17 +149,51 @@ export default class VerticalResultsComponent extends Component {
 
   getUniversalUrl () {
     const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
-    if (universalConfig.url) {
-      return addParamsToUrl(universalConfig.url, { query: this.query });
+    if (!universalConfig.url) {
+      return undefined;
     }
+    return this._getExperienceURL(
+      universalConfig.url,
+      new SearchParams(window.location.search.substring(1))
+    );
   }
 
   getVerticalURL (data = {}) {
-    const verticalConfig = this._verticalsConfig.find(config => config.verticalKey === this.verticalKey) || {};
+    const verticalConfig = this._verticalsConfig.find(
+      config => config.verticalKey === this.verticalKey
+    ) || {};
     const verticalURL = verticalConfig.url || data.verticalURL || this.verticalKey + '.html';
+
+    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION)
+      ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder
+      : [];
+    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
+    const params = new SearchParams(window.location.search.substring(1));
+    params.set('tabOrder', tabOrder);
+
+    return this._getExperienceURL(verticalURL, params);
+  }
+
+  /**
+   * Adds parameters that are dynamically set. Removes parameters for facets,
+   * filters, and pagination, which should not persist across the experience.
+   * @param {string} baseUrl The url append the appropriate params to. Note:
+   *    params already on the baseUrl will be stripped
+   * @param {SearchParams} params The parameters to include in the experience URL
+   * @return {string} The formatted experience URL with appropriate query params
+   */
+  _getExperienceURL (baseUrl, params) {
+    params.set(StorageKeys.QUERY, this.query);
     const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION) ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder : [];
     const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
-    return addParamsToUrl(verticalURL, { query: this.query, tabOrder: tabOrder });
+
+    params.set('tabOrder', tabOrder);
+    const filteredParams = filterParamsForExperienceLink(
+      params,
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
+    );
+
+    return replaceUrlParams(baseUrl, filteredParams);
   }
 
   setState (data = {}, val) {

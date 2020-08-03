@@ -4,6 +4,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import ComponentTypes from '../../components/componenttypes';
 
 /**
  * The currently supported controls
@@ -179,7 +180,7 @@ export default class FilterOptionsComponent extends Component {
   }
 
   static get type () {
-    return 'FilterOptions';
+    return ComponentTypes.FILTER_OPTIONS;
   }
 
   /**

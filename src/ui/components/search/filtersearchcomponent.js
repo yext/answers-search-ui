@@ -6,6 +6,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import Filter from '../../../core/models/filter';
 import SearchParams from '../../dom/searchparams';
 import buildSearchParameters from '../../tools/searchparamsparser';
+import ComponentTypes from '../../components/componenttypes';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -113,7 +114,7 @@ export default class FilterSearchComponent extends Component {
   }
 
   static get type () {
-    return 'FilterSearch';
+    return ComponentTypes.FILTER_SEARCH;
   }
 
   /**

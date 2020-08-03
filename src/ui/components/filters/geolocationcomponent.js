@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
 import buildSearchParameters from '../../tools/searchparamsparser';
+import ComponentTypes from '../../components/componenttypes';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -145,7 +146,7 @@ export default class GeoLocationComponent extends Component {
   }
 
   static get type () {
-    return 'GeoLocationFilter';
+    return ComponentTypes.GEOLOCATION_FILTER;
   }
 
   static defaultTemplateName () {
