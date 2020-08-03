@@ -90,8 +90,8 @@ export function equivalentParams (params1, params2) {
  * attributes filtered out
  * @param {SearchParams} params The parameters to remove from
  * @param {string[]} prefixes The prefixes of parameters to remove
- * @return {SearchParams} A new instance of SearchParams without removed params
- *   from the params parameter
+ * @return {SearchParams} A new instance of SearchParams without entries with
+ *   keys that start with the given prefixes
  */
 export function removeParamsWithPrefixes (params, prefixes) {
   const newParams = new SearchParams();
