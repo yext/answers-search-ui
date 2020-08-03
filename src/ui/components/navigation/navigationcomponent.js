@@ -5,9 +5,9 @@
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import StorageKeys from '../../../core/storage/storagekeys';
-import SearchParams from '../../dom/searchparams';
 import DOM from '../../dom/dom';
 import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
+import { mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/taborder';
 
 /**
  * The debounce duration for resize events
@@ -158,7 +158,7 @@ export default class NavigationComponent extends Component {
      * @type {Array.<String>} The list of VS verticalKeys
      * @private
      */
-    this._tabOrder = this.getDefaultTabOrder(this._tabsConfig, this.getUrlParams());
+    this._tabOrder = getDefaultTabOrder(this._tabsConfig, getUrlParams());
 
     /**
      * Breakpoints at which navigation items move to the "more" dropdown
@@ -325,10 +325,10 @@ export default class NavigationComponent extends Component {
    */
   setState (data = {}) {
     if (data.tabOrder !== undefined) {
-      this._tabOrder = this.mergeTabOrder(data.tabOrder, this._tabOrder);
+      this._tabOrder = mergeTabOrder(data.tabOrder, this._tabOrder, this._tabs);
     }
 
-    const params = this.getUrlParams();
+    const params = getUrlParams();
     params.set('tabOrder', this._tabOrder);
 
     const filteredParams = filterParamsForExperienceLink(
@@ -387,10 +387,6 @@ export default class NavigationComponent extends Component {
     return el.closest(closestElSelector);
   }
 
-  getUrlParams () {
-    return new SearchParams(window.location.search.substring(1));
-  }
-
   shouldCollapse () {
     switch (this._mobileOverflowBehavior) {
       case MOBILE_OVERFLOW_BEHAVIOR_OPTION.COLLAPSE:
@@ -400,76 +396,5 @@ export default class NavigationComponent extends Component {
         const navWidth = container.offsetWidth;
         return navWidth > MOBILE_BREAKPOINT;
     }
-  }
-
-  /**
-   * getDefaultTabOrder will compute the initial tab ordering based
-   * on a combination of the configuration provided directly to the component
-   * and the url params.
-   * @param {Object[]} tabsConfig
-   * @param {SearchParams}
-   */
-  getDefaultTabOrder (tabsConfig, urlParams) {
-    let tabOrder = [];
-
-    // Use the ordering from the URL as the primary configuration
-    // And then merge it with the local configuration, if provided.
-    if (urlParams && urlParams.has('tabOrder')) {
-      tabOrder = urlParams.get('tabOrder').split(',');
-    }
-
-    for (let i = 0; i < tabsConfig.length; i++) {
-      const tab = tabsConfig[i];
-      // Some tabs don't have verticalKey, so we map it from URL
-      if (!tab.verticalKey) {
-        tab.verticalKey = tab.url;
-      }
-
-      // Avoid duplicates if config was provided from URL
-      if (tabOrder.includes(tab.verticalKey)) {
-        continue;
-      }
-
-      // isFirst should always be the first element in the list
-      if (tab.isFirst) {
-        tabOrder.unshift(tab.verticalKey);
-      } else {
-        tabOrder.push(tab.verticalKey);
-      }
-    }
-
-    return tabOrder;
-  }
-
-  /**
-   * mergeTabOrder merges two arrays into one
-   * by appending additional tabs to the end of the original array
-   * @param {string[]} tabOrder Tab order provided by the server
-   * @param {string[]} otherTabOrder Tab order provided by configuration
-   * @return {string[]}
-   */
-  mergeTabOrder (tabOrder, otherTabOrder) {
-    for (let i = 0; i < otherTabOrder.length; i++) {
-      const tabConfig = otherTabOrder[i];
-      if (tabOrder.includes(tabConfig)) {
-        continue;
-      }
-
-      // isFirst should be an override to dynamic tab ordering.
-      if (this._tabs[tabConfig] && this._tabs[tabConfig].isFirst) {
-        tabOrder.unshift(tabConfig);
-      } else {
-        tabOrder.push(tabConfig);
-      }
-    }
-
-    return tabOrder;
-  }
-
-  generateTabUrl (baseUrl, params = new URLSearchParams()) {
-    // We want to persist the params from the existing URL to the new
-    // URLS we create.
-    params.set('tabOrder', this._tabOrder);
-    return baseUrl + '?' + params.toString();
   }
 }

@@ -13,6 +13,7 @@ import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
 import SearchParams from '../../dom/searchparams';
+import { getTabOrder } from '../../tools/taborder';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -251,6 +252,11 @@ export default class VerticalResultsComponent extends Component {
       data.verticalURL || this.verticalKey + '.html';
 
     const params = new SearchParams(window.location.search.substring(1));
+    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION)
+      ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder
+      : [];
+    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
+    params.set('tabOrder', tabOrder);
     return this._getExperienceURL(verticalURL, params);
   }
 
