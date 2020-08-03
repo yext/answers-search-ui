@@ -39,7 +39,7 @@ export default class AlternativeVerticalsComponent extends Component {
      * This gets updated based on the server results
      * @type {AlternativeVertical[]}
      */
-    this.verticalSuggestions = AlternativeVerticalsComponent._buildVerticalSuggestions(
+    this.verticalSuggestions = this._buildVerticalSuggestions(
       this._alternativeVerticals,
       this._verticalsConfig
     );
@@ -98,7 +98,7 @@ export default class AlternativeVerticalsComponent extends Component {
    * @param {object} alternativeVerticals alternativeVerticals server response
    * @param {object} verticalsConfig the configuration to use
    */
-  static _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
+  _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
     let verticals = [];
     let queryParams = new SearchParams(window.location.search);
 
