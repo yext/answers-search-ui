@@ -9,6 +9,7 @@
     <body>
         <div class="answers-container">
             <div class="search-bar-container"></div>
+            <div class="navigation-container"></div>
             <div class="results-container"></div>
             <div class="pagination-container"></div>
         </div>
@@ -30,6 +31,26 @@
                         verticalKey:'KM',
                         clearButton: true,
                         promptForLocation: true
+                    });
+
+                    this.addComponent('Navigation', {
+                      container: '.navigation-container',
+                      verticalPages: [
+                        {
+                          label: 'Home',
+                          url: './universal',
+                          isFirst: true
+                        },
+                        {
+                          label: 'Facets',
+                          url: './links',
+                          isActive: true
+                        },
+                        {
+                          label: 'Vertical',
+                          url: './vertical',
+                        }
+                      ],
                     });
 
                     this.addComponent('VerticalResults', {
