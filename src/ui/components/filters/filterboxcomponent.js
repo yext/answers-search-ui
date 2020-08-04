@@ -282,6 +282,7 @@ export default class FilterBoxComponent extends Component {
     } else {
       this._filterComponents.forEach(fc => fc.apply());
     }
+    this._filterComponents.forEach(fc => fc.saveSelectedToPersistentStorage());
   }
 
   /**

@@ -63,7 +63,7 @@ class FilterOptionsConfig {
     this.onChange = config.onChange || function () { };
 
     /**
-     * If true, stores the filter to storage on each change
+     * If true, stores the filter to global storage on each change
      * @type {boolean}
      */
     this.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
@@ -642,6 +642,12 @@ export default class FilterOptionsComponent extends Component {
     this.updateListeners(true, true);
     this.setState();
   }
+  /**
+   * Saves selected options to persistent storage
+   */
+  saveSelectedToPersistentStorage () {
+    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
+  }
 
   /**
    * Returns this component's filter node when it is a STATIC_FILTER.
@@ -658,7 +664,6 @@ export default class FilterOptionsComponent extends Component {
         remove: () => this._clearSingleOption(o)
       }));
 
-    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
     const fieldIdToFilterNodes = groupArray(filterNodes, fn => fn.getFilter().getFilterKey());
 
     // OR together filter nodes for the same field id.
