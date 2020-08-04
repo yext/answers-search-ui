@@ -1,6 +1,7 @@
 const { parallel, series, src, dest, watch } = require('gulp');
 
 const fs = require('fs');
+const del = require('del');
 const insert = require('rollup-plugin-insert');
 
 const rollup = require('gulp-rollup-lightweight');
@@ -18,6 +19,7 @@ const wrap = require('gulp-wrap');
 
 const source = require('vinyl-source-stream');
 
+const filenamePrecompiled = 'answerstemplates.precompiled.min.js';
 const filenameUMD = 'answerstemplates.compiled.min.js';
 const filenameIIFE = 'answerstemplates-iife.compiled.min.js';
 
@@ -58,7 +60,7 @@ function precompileTemplates () {
         return declare.processNameByPath(path, '').replace('.', '/');
       }
     }))
-    .pipe(concat('answerstemplates.precompiled.min.js'))
+    .pipe(concat(filenamePrecompiled))
     .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
     .pipe(dest('dist'));
 }
@@ -120,10 +122,16 @@ function minifyTemplatesIIFE (cb) {
     .pipe(dest('dist'));
 }
 
+function cleanFiles () {
+  return del([
+    `./dist/${filenamePrecompiled}`
+  ]);
+}
+
 function watchTemplates (cb) {
   return watch(['./src/ui/templates/**/*.hbs'], {
     ignored: './dist/'
-  }, series(precompileTemplates, bundleTemplatesUMD));
+  }, series(precompileTemplates, bundleTemplatesUMD, cleanFiles));
 }
 
 exports.default = series(
@@ -131,6 +139,7 @@ exports.default = series(
   parallel(
     series(bundleTemplatesIIFE, minifyTemplatesIIFE),
     series(bundleTemplatesUMD, minifyTemplatesUMD)
-  )
+  ),
+  cleanFiles
 );
-exports.dev = series(precompileTemplates, bundleTemplatesUMD, watchTemplates);
+exports.dev = series(precompileTemplates, bundleTemplatesUMD, cleanFiles, watchTemplates);
