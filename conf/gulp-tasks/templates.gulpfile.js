@@ -67,14 +67,14 @@ function precompileTemplates () {
 
 function bundleTemplates (outputConfig, fileName) {
   return rollup({
-    input: './dist/answerstemplates.precompiled.min.js',
+    input: `./dist/${filenamePrecompiled}`,
     output: outputConfig,
     plugins: [
       resolve(),
       insert.prepend(
         fs.readFileSync('./conf/gulp-tasks/templates-polyfill-prefix.js').toString(),
         {
-          include: './dist/answerstemplates.compiled.min.js'
+          include: `./dist/${filenamePrecompiled}`
         }),
       builtins(),
       commonjs({
