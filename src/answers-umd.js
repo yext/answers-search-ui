@@ -378,6 +378,15 @@ class Answers {
   }
 
   /**
+   * Compile and add a template to the current renderer
+   * @param {string} templateName The unique name for the template
+   * @param {string} template The handlebars template string
+   */
+  registerTemplate (templateName, template) {
+    this.renderer.registerTemplate(templateName, template);
+  }
+
+  /**
    * Opt in or out of convertion tracking analytics
    * @param {boolean} optIn
    */

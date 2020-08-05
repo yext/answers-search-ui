@@ -9,6 +9,7 @@
     <body>
         <div class="answers-container">
             <div class="search-bar-container"></div>
+            <div class="navigation-container"></div>
             <div class="results-container"></div>
         </div>
     
@@ -26,8 +27,31 @@
                         promptForLocation: true
                     });
 
+                    this.addComponent('Navigation', {
+                      container: '.navigation-container',
+                      verticalPages: [
+                        {
+                          label: 'Home',
+                          url: './universal',
+                          isFirst: true
+                        },
+                        {
+                          label: 'Facets',
+                          url: './links',
+                          isActive: true
+                        },
+                        {
+                          label: 'Vertical',
+                          url: './vertical',
+                        }
+                      ],
+                    });
+
                     this.addComponent('UniversalResults', {
                         container: '.results-container',
+                        appliedFilters: {
+                          showChangeFilters: true,
+                        },
                         config: {
                             "people": {
                                 includeMap: true,
