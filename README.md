@@ -1375,12 +1375,10 @@ ANSWERS.addComponent('FilterOptions', {
   options: [
     /** Depends on the above optionType, either 'STATIC_FILTER' or 'RADIUS_FILTER', see below. **/
   ],
-  // Optional, if true, the filter value is saved on change and sent with the next search. Defaults to false.
-  storeOnChange: false,
+  // Optional, if true, the filter value is saved on change and sent with the next search. Defaults to true.
+  storeOnChange: true,
   // Optional, the selector used for options in the template, defaults to '.js-yext-filter-option'
   optionSelector: '.js-yext-filter-option',
-  // Optional, if true, triggers a search on each change to a filter, default false
-  searchOnChange: true,
   // Optional, if true, show a reset button
   showReset: false,
   // Optional, the label to use for the reset button, defaults to 'reset'
