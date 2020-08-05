@@ -63,7 +63,7 @@ class FilterOptionsConfig {
     this.onChange = config.onChange || function () { };
 
     /**
-     * If true, stores the filter to global storage on each change
+     * If true, stores the filter to global and persistent storage on each change
      * @type {boolean}
      */
     this.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
@@ -586,6 +586,8 @@ export default class FilterOptionsComponent extends Component {
       default:
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
+
+    this.saveSelectedToPersistentStorage();
   }
 
   floatSelected () {
@@ -642,6 +644,7 @@ export default class FilterOptionsComponent extends Component {
     this.updateListeners(true, true);
     this.setState();
   }
+
   /**
    * Saves selected options to persistent storage
    */

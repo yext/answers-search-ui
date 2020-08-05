@@ -190,7 +190,7 @@ describe('filter box component', () => {
     });
   });
 
-  describe('interaction with the URL', () => {
+  describe('properly interacts with the URL', () => {
     const oneFilterConfig = {
       ...defaultConfig,
       name: 'unique name',
