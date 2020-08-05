@@ -2,6 +2,7 @@ import UniversalPage from './pageobjects/universalpage';
 import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
+import { ClientFunction } from 'testcafe';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -58,13 +59,19 @@ test(`Facets load on the page, and can affect the search`, async t => {
   const facets = FacetsPage.getFacetsComponent();
   const filterBox = facets.getFilterBox();
 
+  const getPageUrl = ClientFunction(() => window.location.href);
+
   // Record the amount of results with no facets
   const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
   const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
 
   // Select the first option in the first FilterOptions
+  // and make sure the URL doesn't change when searchOnChange = false
   const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
+  const urlBeforeSelection = await getPageUrl();
   await employeeDepartment.toggleOption('Client Delivery');
+  const urlAfterSelection = await getPageUrl();
+  await t.expect(urlBeforeSelection).eql(urlAfterSelection);
   let expectedResultsCount = await employeeDepartment.getOptionCount('Client Delivery');
 
   await filterBox.applyFilters();
