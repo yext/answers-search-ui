@@ -7,6 +7,7 @@ import Filter from 'src/core/models/filter';
 import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
 import FilterCombinators from 'src/core/filters/filtercombinators';
 import FilterType from 'src/core/filters/filtertype';
+import PersistentStorage from 'src/ui/storage/persistentstorage';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
@@ -76,7 +77,8 @@ describe('filter box component', () => {
       verticalSearch: verticalSearch,
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
-      }
+      },
+      persistentStorage: new PersistentStorage()
     };
 
     COMPONENT_MANAGER = mockManager(
@@ -185,6 +187,64 @@ describe('filter box component', () => {
       expect(setStaticFilterNodes.mock.calls).toHaveLength(10);
       expect(setStaticFilterNodes.mock.calls[9][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
       expect(setStaticFilterNodes.mock.calls[9][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
+    });
+  });
+
+  describe('interaction with the URL', () => {
+    const oneFilterConfig = {
+      ...defaultConfig,
+      name: 'unique name',
+      filters: [
+        {
+          type: 'FilterOptions',
+          label: 'first filter options',
+          control: 'singleoption',
+          options: options
+        }
+      ]
+    };
+
+    it('persistent storage does not change after the filter is selected when searchOnChange = false', () => {
+      const config = {
+        ...oneFilterConfig,
+        searchOnChange: false
+      };
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      mount(component);
+      const filterComponent = component._filterComponents[0];
+      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      filterComponent._updateOption(0, true);
+      const storageAfterSelection = component.core.persistentStorage.getAll();
+      expect(storageBeforeSelection).toEqual(storageAfterSelection);
+    });
+
+    it('persistent storage changes after the apply button is clicked when searchOnChange = false', () => {
+      const config = {
+        ...oneFilterConfig,
+        searchOnChange: false
+      };
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      const wrapper = mount(component);
+      const filterComponent = component._filterComponents[0];
+      filterComponent._updateOption(0, true);
+      const storageBeforeApply = component.core.persistentStorage.getAll();
+      wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
+      const storageAfterApply = component.core.persistentStorage.getAll();
+      expect(storageBeforeApply).not.toEqual(storageAfterApply);
+    });
+
+    it('persistent storage changes after filter selection when searchOnChange = true', () => {
+      const config = {
+        ...oneFilterConfig,
+        searchOnChange: true
+      };
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      mount(component);
+      const filterComponent = component._filterComponents[0];
+      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      filterComponent._updateOption(0, true);
+      const storageAfterSelection = component.core.persistentStorage.getAll();
+      expect(storageBeforeSelection).not.toEqual(storageAfterSelection);
     });
   });
 
