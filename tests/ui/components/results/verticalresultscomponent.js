@@ -33,6 +33,9 @@ const COMPONENT_MANAGER = mockManager(
   mockCore,
   VerticalResultsComponent.defaultTemplateName()
 );
+COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => {
+  return [];
+};
 
 describe('vertical results component', () => {
   let defaultConfig;
@@ -129,7 +132,7 @@ describe('vertical results component', () => {
     });
 
     it('if unset defaults to vertical key', () => {
-      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&referrerPageUrl=');
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&tabOrder=&referrerPageUrl=');
     });
 
     it('if null defaults to vertical key', () => {
@@ -138,13 +141,13 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&referrerPageUrl=');
+      expect(component.getVerticalURL()).toEqual('key.html?query=my-query&otherParam=123&tabOrder=&referrerPageUrl=');
     });
 
     it('works with transformData', () => {
       expect(component.getVerticalURL({
         verticalURL: 'transform-data'
-      })).toEqual('transform-data?query=my-query&otherParam=123&referrerPageUrl=');
+      })).toEqual('transform-data?query=my-query&otherParam=123&tabOrder=&referrerPageUrl=');
     });
 
     it('defaults to matching config in verticalPages', () => {
@@ -152,7 +155,7 @@ describe('vertical results component', () => {
         verticalKey: 'key',
         url: 'vertical-pages'
       }];
-      expect(component.getVerticalURL()).toEqual('vertical-pages?query=my-query&otherParam=123&referrerPageUrl=');
+      expect(component.getVerticalURL()).toEqual('vertical-pages?query=my-query&otherParam=123&tabOrder=key&referrerPageUrl=');
     });
 
     it('can be set', () => {
@@ -161,7 +164,7 @@ describe('vertical results component', () => {
       });
       component.query = 'my-query';
       component.verticalKey = 'key';
-      expect(component.getVerticalURL()).toEqual('vertical-url?query=my-query&otherParam=123&referrerPageUrl=');
+      expect(component.getVerticalURL()).toEqual('vertical-url?query=my-query&otherParam=123&tabOrder=&referrerPageUrl=');
     });
   });
 });

@@ -3,6 +3,7 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -111,4 +112,78 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await filterBox.applyFilters();
   actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(initialResultsCount);
+});
+
+fixture`Experience links work as expected`
+  .before(setupServer)
+  .after(shutdownServer)
+  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+
+test('Facets, pagination, and filters do not persist accross experience links', async t => {
+  const verifyCleanLink = async (link) => {
+    await t.expect(universalUrl).notContains('Facets');
+    await t.expect(universalUrl).notContains('filter');
+    await t.expect(universalUrl).notContains('search-offset');
+  };
+
+  // When you land, nav links should not have the Facets/filter/pagination parameters
+  let universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await t.expect(universalUrl).contains('universal');
+  await t.expect(universalUrl).contains('referrerPageUrl');
+  await verifyCleanLink(universalUrl);
+
+  // When you search, nav links should not have the Facets/filter/pagination parameters
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
+
+  const facets = FacetsPage.getFacetsComponent();
+  const filterBox = facets.getFilterBox();
+  const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
+  await employeeDepartment.toggleOption('Client Delivery');
+  await filterBox.applyFilters();
+
+  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await t.expect(universalUrl).contains('referrerPageUrl');
+  await verifyCleanLink(universalUrl);
+
+  // When you apply sort options, nav links should be clean
+  await t.click(await Selector('.yxt-SortOptions-optionSelector').nth(2)); // Click search option
+  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await t.expect(universalUrl).contains('referrerPageUrl');
+  await verifyCleanLink(universalUrl);
+
+  // When you apply static filters, nav links should be clean
+  await t.click(await Selector('.filterbox-container .js-yext-filter-option').nth(2)); // Click static filter
+  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await t.expect(universalUrl).contains('referrerPageUrl');
+  await verifyCleanLink(universalUrl);
+
+  // When you navigate with pagination, nav links should not have the
+  // Facets/filter/pagination parameters
+  await searchComponent.enterQuery('all');
+  await searchComponent.submitQuery();
+
+  await t.click(await Selector('.js-yxt-navItem').nth(2)); // Go to vertical page
+  await t.click(await Selector('.js-yxt-Pagination-next').nth(0)); // Page forward
+  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await t.expect(universalUrl).contains('referrerPageUrl');
+  await verifyCleanLink(universalUrl);
+
+  // View All links AND Change Filters links should not have
+  // Facets/filter/pagination parameters (though those components are not
+  // allowed on universal currently)
+  await t.click(await Selector('.js-yxt-navItem').nth(0)); // Go to universal page
+  await searchComponent.clearQuery();
+  await searchComponent.enterQuery('virginia');
+  await searchComponent.submitQuery();
+
+  const changeFiltersLink = await Selector('.yxt-ResultsHeader-changeFilters')
+    .nth(0).getAttribute('href');
+  await t.expect(changeFiltersLink).contains('referrerPageUrl');
+  await verifyCleanLink(changeFiltersLink);
+
+  const viewAllLink = await Selector('.yxt-Results-viewAllLink')
+    .nth(0).getAttribute('href');
+  await t.expect(viewAllLink).contains('referrerPageUrl');
+  await verifyCleanLink(viewAllLink);
 });

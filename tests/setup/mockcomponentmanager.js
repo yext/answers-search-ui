@@ -68,4 +68,8 @@ export default class MockComponentManager {
   getActiveComponent () {
     throw new Error('getActiveComponent is not implemented');
   }
+
+  getComponentNamesForComponentTypes () {
+    throw new Error('getComponentNamesForComponentTypes is not implemented');
+  }
 }

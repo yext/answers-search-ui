@@ -3,7 +3,7 @@
 import AlternativeVertical from '../../../core/models/alternativevertical';
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
-import { replaceUrlParams } from '../../../core/utils/urlutils';
+import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
 import SearchParams from '../../dom/searchparams';
 
 export default class AlternativeVerticalsComponent extends Component {
@@ -39,8 +39,12 @@ export default class AlternativeVerticalsComponent extends Component {
      * This gets updated based on the server results
      * @type {AlternativeVertical[]}
      */
-    this.verticalSuggestions =
-      this._buildVerticalSuggestions(this._alternativeVerticals, this._verticalsConfig);
+    this.verticalSuggestions = this._buildVerticalSuggestions(
+      this._alternativeVerticals,
+      this._verticalsConfig,
+      this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
+      this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+    );
 
     /**
      * The url to the universal page to link back to with current query
@@ -55,8 +59,12 @@ export default class AlternativeVerticalsComponent extends Component {
     this._isShowingResults = opts.isShowingResults || false;
 
     const reRender = () => {
-      this.verticalSuggestions =
-        this._buildVerticalSuggestions(this._alternativeVerticals, this._verticalsConfig);
+      this.verticalSuggestions = this._buildVerticalSuggestions(
+        this._alternativeVerticals,
+        this._verticalsConfig,
+        this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
+        this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+      );
       this.setState(this.core.globalStorage.getState(StorageKeys.ALERNATIVE_VERTICALS));
     };
 
@@ -105,12 +113,8 @@ export default class AlternativeVerticalsComponent extends Component {
    * @param {object} alternativeVerticals alternativeVerticals server response
    * @param {object} verticalsConfig the configuration to use
    */
-  _buildVerticalSuggestions (alternativeVerticals, verticalsConfig) {
-    const verticals = [];
-
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
-    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
-    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+  _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context, referrerPageUrl) {
+    let verticals = [];
 
     const params = new SearchParams(window.location.search.substring(1));
     if (context) {
@@ -119,9 +123,15 @@ export default class AlternativeVerticalsComponent extends Component {
     if (typeof referrerPageUrl === 'string') {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
+    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
     if (sessionsOptIn && sessionsOptIn.setDynamically) {
       params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
     }
+
+    const filteredParams = filterParamsForExperienceLink(
+      params,
+      types => this.componentManager.getComponentNamesForComponentTypes(types)
+    );
 
     for (const alternativeVertical of alternativeVerticals) {
       const verticalKey = alternativeVertical.verticalConfigId;
@@ -136,7 +146,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
       verticals.push(new AlternativeVertical({
         label: matchingVerticalConfig.label,
-        url: replaceUrlParams(matchingVerticalConfig.url, params),
+        url: replaceUrlParams(matchingVerticalConfig.url, filteredParams),
         iconName: matchingVerticalConfig.icon,
         iconUrl: matchingVerticalConfig.iconUrl,
         resultsCount: alternativeVertical.resultsCount

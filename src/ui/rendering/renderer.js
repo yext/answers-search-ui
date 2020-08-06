@@ -18,6 +18,10 @@ export default class Renderer {
 
   }
 
+  registerTemplate (templateName, template) {
+
+  }
+
   compile (template) {
 
   }

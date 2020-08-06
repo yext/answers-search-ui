@@ -11,6 +11,9 @@
 <body>
   <div class="answers-container">
     <div class="search-bar-container"></div>
+    <div class="navigation-container"></div>
+    <div class="sort-options-container"></div>
+    <div class="filterbox-container"></div>
     <div class="facets-container"></div>
     <div class="filter-search-container"></div>
     <div class="results-container"></div>
@@ -33,6 +36,80 @@
           promptForLocation: true,
           verticalKey: 'people',
           allowEmptySearch: true
+        });
+
+        this.addComponent('Navigation', {
+          container: '.navigation-container',
+          verticalPages: [
+            {
+              label: 'Home',
+              url: './universal',
+              isFirst: true
+            },
+            {
+              label: 'Facets',
+              url: './links',
+              isActive: true
+            },
+            {
+              label: 'Vertical',
+              url: './vertical',
+            }
+          ],
+        });
+
+        this.addComponent('SortOptions', {
+          container: '.sort-options-container',
+          options: [
+            {
+              type: 'FIELD',
+                field: 'c_popularity',
+                direction: 'DESC',
+                label: 'Popularity'
+            },
+            {
+              type: "ENTITY_DISTANCE",
+              label: 'Recently Released'
+            },
+            {
+              type: 'RELEVANCE',
+              label: 'Price - Low to High'
+            },
+            {
+              type: 'RELEVANCE',
+              label: 'Price - High to Low'
+            }  
+          ],
+          verticalKey: 'people'
+        });
+
+        ANSWERS.addComponent('FilterBox', {
+          container: '.filterbox-container',
+          filters: [
+            {
+              type: "FilterOptions",
+              label: "DISTANCE",
+              optionType: "RADIUS_FILTER",
+              control: "singleoption",
+              options: [
+                {
+                  "label": "5 miles",
+                  "value": 8046.72, //NEW
+                },
+                {
+                  "label": "10 miles",
+                  "value": 16093.4, //NEW
+                },
+                {
+                  "label": "25 miles",
+                  "value": 40233.6, //NEW
+                },
+              ]
+            },
+          ],
+          verticalKey: 'people',
+          searchOnChange: true,
+          expand: false
         });
 
         this.addComponent('VerticalResults', {
