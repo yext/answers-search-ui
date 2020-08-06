@@ -1,6 +1,7 @@
-const { series, src, dest, watch } = require('gulp');
+const { parallel, series, src, dest, watch } = require('gulp');
 
 const fs = require('fs');
+const del = require('del');
 const insert = require('rollup-plugin-insert');
 
 const rollup = require('gulp-rollup-lightweight');
@@ -17,6 +18,10 @@ const declare = require('gulp-declare');
 const wrap = require('gulp-wrap');
 
 const source = require('vinyl-source-stream');
+
+const filenamePrecompiled = 'answerstemplates.precompiled.min.js';
+const filenameUMD = 'answerstemplates.compiled.min.js';
+const filenameIIFE = 'answerstemplates-iife.compiled.min.js';
 
 function precompileTemplates () {
   return src('./src/ui/templates/**/*.hbs')
@@ -55,25 +60,21 @@ function precompileTemplates () {
         return declare.processNameByPath(path, '').replace('.', '/');
       }
     }))
-    .pipe(concat('answerstemplates.compiled.min.js'))
+    .pipe(concat(filenamePrecompiled))
     .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
     .pipe(dest('dist'));
 }
 
-function bundleTemplates () {
+function bundleTemplates (outputConfig, fileName) {
   return rollup({
-    input: './dist/answerstemplates.compiled.min.js',
-    output: {
-      format: 'umd',
-      name: 'TemplateBundle',
-      exports: 'named'
-    },
+    input: `./dist/${filenamePrecompiled}`,
+    output: outputConfig,
     plugins: [
       resolve(),
       insert.prepend(
         fs.readFileSync('./conf/gulp-tasks/templates-polyfill-prefix.js').toString(),
         {
-          include: './dist/answerstemplates.compiled.min.js'
+          include: `./dist/${filenamePrecompiled}`
         }),
       builtins(),
       commonjs({
@@ -84,21 +85,61 @@ function bundleTemplates () {
       })
     ]
   })
-    .pipe(source('answerstemplates.compiled.min.js'))
+    .pipe(source(fileName))
     .pipe(dest('dist'));
 }
 
-function minifyTemplates (cb) {
-  return src('./dist/answerstemplates.compiled.min.js')
+function bundleTemplatesUMD () {
+  return bundleTemplates(
+    {
+      format: 'umd',
+      name: 'TemplateBundle',
+      exports: 'named'
+    },
+    filenameUMD
+  );
+}
+
+function bundleTemplatesIIFE () {
+  return bundleTemplates(
+    {
+      format: 'iife',
+      name: 'TemplateBundle'
+    },
+    filenameIIFE
+  );
+}
+
+function minifyTemplatesUMD (cb) {
+  return src(`./dist/${filenameUMD}`)
     .pipe(uglify())
     .pipe(dest('dist'));
+}
+
+function minifyTemplatesIIFE (cb) {
+  return src(`./dist/${filenameIIFE}`)
+    .pipe(uglify())
+    .pipe(dest('dist'));
+}
+
+function cleanFiles () {
+  return del([
+    `./dist/${filenamePrecompiled}`
+  ]);
 }
 
 function watchTemplates (cb) {
   return watch(['./src/ui/templates/**/*.hbs'], {
     ignored: './dist/'
-  }, series(precompileTemplates, bundleTemplates));
+  }, series(precompileTemplates, bundleTemplatesUMD, cleanFiles));
 }
 
-exports.default = series(precompileTemplates, bundleTemplates, minifyTemplates);
-exports.dev = series(precompileTemplates, bundleTemplates, watchTemplates);
+exports.default = series(
+  precompileTemplates,
+  parallel(
+    series(bundleTemplatesIIFE, minifyTemplatesIIFE),
+    series(bundleTemplatesUMD, minifyTemplatesUMD)
+  ),
+  cleanFiles
+);
+exports.dev = series(precompileTemplates, bundleTemplatesUMD, cleanFiles, watchTemplates);
