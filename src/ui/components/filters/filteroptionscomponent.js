@@ -635,7 +635,7 @@ export default class FilterOptionsComponent extends Component {
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
 
-    this.saveSelectedToPersistentStorage(replaceHistory);
+    this.saveSelectedToPersistentStorage();
   }
 
   floatSelected () {
@@ -695,14 +695,13 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Saves selected options to persistent storage
-   * @param {boolean} replaceHistory Whether we replace or push a new history
-   *                                 state for the associated changes
    */
-  saveSelectedToPersistentStorage (replaceHistory) {
+  saveSelectedToPersistentStorage () {
+    const replaceHistory = (this.core.persistentStorage.get(this.name) === null);
     this.core.persistentStorage.set(
       this.name,
       this.config.options.filter(o => o.selected).map(o => o.label),
-      replaceHistory || (this.core.persistentStorage.get(this.name) === null)
+      replaceHistory
     );
   }
 

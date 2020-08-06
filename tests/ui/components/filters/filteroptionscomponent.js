@@ -79,8 +79,7 @@ describe('filter options component', () => {
           }
           return null;
         },
-        delete: () => { },
-        on: () => {}
+        delete: () => { }
       },
       persistentStorage: new PersistentStorage()
     };
