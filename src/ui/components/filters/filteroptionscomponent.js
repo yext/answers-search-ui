@@ -42,7 +42,7 @@ class FilterOptionsConfig {
     this.onChange = config.onChange || function () {};
 
     /**
-     * If true, stores the filter to storage on each change
+     * If true, stores the filter to global and persistent storage on each change
      * @type {boolean}
      */
     this.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
@@ -305,6 +305,18 @@ export default class FilterOptionsComponent extends Component {
   }
 
   /**
+   * Saves selected options to persistent storage
+   */
+  saveSelectedToPersistentStorage () {
+    const replaceHistory = (this.core.persistentStorage.get(this.name) === null);
+    this.core.persistentStorage.set(
+      this.name,
+      this.config.options.filter(o => o.selected).map(o => o.label),
+      replaceHistory
+    );
+  }
+
+  /**
    * Build and return the Filter that represents the current state
    * @returns {Filter}
    * @private
@@ -316,18 +328,8 @@ export default class FilterOptionsComponent extends Component {
         ? o.filter
         : Filter.equal(o.field, o.value));
 
-    this.saveFilterToPersistentStorage();
     return filters.length > 0
       ? Filter.group(...filters)
       : {};
-  }
-
-  saveFilterToPersistentStorage () {
-    const replaceHistory = (this.core.persistentStorage.get(this.name) === null);
-    this.core.persistentStorage.set(
-      this.name,
-      this.config.options.filter(o => o.selected).map(o => o.label),
-      replaceHistory
-    );
   }
 }

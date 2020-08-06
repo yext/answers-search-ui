@@ -273,6 +273,7 @@ export default class FilterBoxComponent extends Component {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
       const combinedFilter = Facet.fromFilters(availableFieldIds, ...validFilters);
       this.core.setFacetFilter(this.name, combinedFilter || {});
+      this._filterComponents.forEach(fc => fc.saveSelectedToPersistentStorage());
     } else {
       const combinedFilter = validFilters.length > 1
         ? Filter.and(...validFilters)
