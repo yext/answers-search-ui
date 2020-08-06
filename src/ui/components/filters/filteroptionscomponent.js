@@ -64,7 +64,7 @@ class FilterOptionsConfig {
     this.onChange = config.onChange || function () { };
 
     /**
-     * If true, stores the filter to storage on each change
+     * If true, stores the filter to global and persistent storage on each change
      * @type {boolean}
      */
     this.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
@@ -587,6 +587,8 @@ export default class FilterOptionsComponent extends Component {
       default:
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
+
+    this.saveSelectedToPersistentStorage();
   }
 
   floatSelected () {
@@ -645,6 +647,13 @@ export default class FilterOptionsComponent extends Component {
   }
 
   /**
+   * Saves selected options to persistent storage
+   */
+  saveSelectedToPersistentStorage () {
+    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
+  }
+
+  /**
    * Returns this component's filter node when it is a STATIC_FILTER.
    * This method is exposed so that components like {@link FilterBoxComponent}
    * can access them.
@@ -659,7 +668,6 @@ export default class FilterOptionsComponent extends Component {
         remove: () => this._clearSingleOption(o)
       }));
 
-    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
     const fieldIdToFilterNodes = groupArray(filterNodes, fn => fn.getFilter().getFilterKey());
 
     // OR together filter nodes for the same field id.
