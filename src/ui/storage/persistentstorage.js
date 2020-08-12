@@ -107,4 +107,11 @@ export default class PersistentStorage {
     }
     return allParams;
   }
+
+  /**
+   * Get a value for a given key in storage
+   */
+  get (query) {
+    return this._params.get(query);
+  }
 }
