@@ -160,9 +160,7 @@ class Answers {
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: parsedConfig.onStateChange,
-      resetListener: data => {
-        globalStorage.setAll(data)
-      }
+      resetListener: data => globalStorage.setAll(data)
     });
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
