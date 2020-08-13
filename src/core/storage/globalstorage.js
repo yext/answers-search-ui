@@ -44,20 +44,6 @@ export default class GlobalStorage {
       this.set(StorageKeys.QUERY, data[StorageKeys.QUERY]);
     } else if (this.getState(StorageKeys.QUERY)) {
       this.set(StorageKeys.QUERY, null);
-
-      /* IGNORE
-      this.set(StorageKeys.VERTICAL_RESULTS, {
-        searchState: 'search-complete'
-      });
-      this.set(StorageKeys.ALTERNATIVE_VERTICALS, {});
-      */
-      /*t
-      for (const dataKey of Object.keys(this._moduleDataContainer)) {
-        this.set(dataKey, null);
-
-      }
-      */
-      //this.set(StorageKeys.QUERY, '');
     }
   }
 
@@ -118,11 +104,6 @@ export default class GlobalStorage {
 
     this._moduleDataContainer[moduleId].on(evt, cb);
     return this;
-  }
-
-  setAllAndPrune (data) {
-    this.setAll(data);
-
   }
 
   off (evt, moduleId, cb) {
