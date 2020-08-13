@@ -42,6 +42,22 @@ export default class GlobalStorage {
     // TODO: move listeners up so all of storage can be updated at the same time
     if (data[StorageKeys.QUERY]) {
       this.set(StorageKeys.QUERY, data[StorageKeys.QUERY]);
+    } else if (this.getState(StorageKeys.QUERY)) {
+      this.set(StorageKeys.QUERY, null);
+
+      /* IGNORE
+      this.set(StorageKeys.VERTICAL_RESULTS, {
+        searchState: 'search-complete'
+      });
+      this.set(StorageKeys.ALTERNATIVE_VERTICALS, {});
+      */
+      /*t
+      for (const dataKey of Object.keys(this._moduleDataContainer)) {
+        this.set(dataKey, null);
+
+      }
+      */
+      //this.set(StorageKeys.QUERY, '');
     }
   }
 
@@ -49,7 +65,7 @@ export default class GlobalStorage {
     if (key === undefined || key === null || typeof key !== 'string') {
       throw new AnswersStorageError('Invalid storage key provided', key, data);
     }
-    if (data === undefined || data === null) {
+    if (data === undefined) {
       throw new AnswersStorageError('No data provided', key, data);
     }
 
@@ -102,6 +118,11 @@ export default class GlobalStorage {
 
     this._moduleDataContainer[moduleId].on(evt, cb);
     return this;
+  }
+
+  setAllAndPrune (data) {
+    this.setAll(data);
+
   }
 
   off (evt, moduleId, cb) {
