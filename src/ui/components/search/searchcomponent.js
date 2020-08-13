@@ -135,9 +135,7 @@ export default class SearchComponent extends Component {
     this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY);
     this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
       this.query = q;
-      console.log('QUERY: ' + q);
       if (this.queryEl) {
-        console.log('entered');
         this.queryEl.value = q;
       }
       if (q === null) {
@@ -456,12 +454,7 @@ export default class SearchComponent extends Component {
     this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.setQuery(query);
-    if ((!query && !this._verticalKey) ||
-      (!query && this._verticalKey && !this._allowEmptySearch) ||
-      this._isTwin) {
-    } else {
-      this.debouncedSearch(query);
-    }
+    this.debouncedSearch(query);
     return false;
   }
 
@@ -507,7 +500,10 @@ export default class SearchComponent extends Component {
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
   debouncedSearch (query) {
-    if (this._throttled) {
+    if (this._throttled ||
+      (!query && !this._verticalKey) ||
+      (!query && this._verticalKey && !this._allowEmptySearch) ||
+      this._isTwin) {
       return;
     }
 
