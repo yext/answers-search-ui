@@ -143,6 +143,7 @@ export default class SearchComponent extends Component {
           searchState: 'search-complete'
         });
         this.core.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, {});
+        this.core.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {});
         this.core.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
         return;
       }
