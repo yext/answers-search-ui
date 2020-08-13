@@ -80,6 +80,10 @@ describe('filter options component', () => {
           return null;
         },
         delete: () => { }
+      },
+      persistentStorage: {
+        get: () => { },
+        set: () => { }
       }
     };
 
@@ -524,7 +528,8 @@ describe('filter options component', () => {
             delete: () => { }
           },
           persistentStorage: {
-            set: () => { }
+            set: () => { },
+            get: () => { }
           },
           setLocationRadiusFilterNode,
           setStaticFilterNodes
