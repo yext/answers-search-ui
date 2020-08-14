@@ -127,6 +127,13 @@ export default class SearchComponent extends Component {
      */
     this._isTwin = config.isTwin;
 
+    this._searchConfig = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG);
+    this._defaultInitialSearch = this._searchConfig &&
+      this._searchConfig.defaultInitialSearch !== null &&
+      this._searchConfig.defaultInitialSearch !== undefined
+      ? this._searchConfig.defaultInitialSearch
+      : null;
+
     /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
@@ -139,12 +146,10 @@ export default class SearchComponent extends Component {
         this.queryEl.value = q;
       }
       if (q === null) {
-        this.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS, {
-          searchState: 'search-complete'
-        });
-        this.core.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, {});
-        this.core.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {});
-        this.core.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
+        this.core.clearResults();
+        if (this._defaultInitialSearch !== null) {
+          this.core.setQuery(this._defaultInitialSearch);
+        }
         return;
       }
       this.debouncedSearch(q);

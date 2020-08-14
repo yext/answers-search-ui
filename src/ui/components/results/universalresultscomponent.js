@@ -41,13 +41,14 @@ export default class UniversalResultsComponent extends Component {
 
   setState (data, val) {
     const sections = data.sections || [];
+    const query = this.core.globalStorage.getState(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      showNoResults: sections.length === 0,
-      query: this.core.globalStorage.getState(StorageKeys.QUERY),
+      showNoResults: sections.length === 0 && query,
+      query: query,
       sections: sections
     }, val));
   }
@@ -92,7 +93,7 @@ export default class UniversalResultsComponent extends Component {
       // Override vertical config defaults with user given config.
       ...config,
       // Config for the applied filters bar. Must be placed after ...config to not override defaults.
-      appliedFilters: {
+     appliedFilters: {
         // Whether to display applied filters.
         show: defaultConfigOption(config, ['appliedFilters.show', 'showAppliedFilters'], topLevelAppliedFilters.show),
         // Whether to show field names, e.g. Location in Location: Virginia.
