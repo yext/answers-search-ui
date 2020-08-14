@@ -93,7 +93,7 @@ export default class UniversalResultsComponent extends Component {
       // Override vertical config defaults with user given config.
       ...config,
       // Config for the applied filters bar. Must be placed after ...config to not override defaults.
-     appliedFilters: {
+      appliedFilters: {
         // Whether to display applied filters.
         show: defaultConfigOption(config, ['appliedFilters.show', 'showAppliedFilters'], topLevelAppliedFilters.show),
         // Whether to show field names, e.g. Location in Location: Virginia.

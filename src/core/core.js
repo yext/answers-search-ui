@@ -8,9 +8,7 @@ import QuestionSubmission from './models/questionsubmission';
 import SearchIntents from './models/searchintents';
 import Navigation from './models/navigation';
 import AlternativeVerticals from './models/alternativeverticals';
-import SpellCheck from './models/spellcheck';
 import DirectAnswer from './models/directanswer';
-import DynamicFilters from './models/dynamicfilters';
 import LocationBias from './models/locationbias';
 
 import StorageKeys from './storage/storagekeys';
