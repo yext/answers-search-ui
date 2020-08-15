@@ -233,6 +233,7 @@ export default class Core {
   }
 
   clearResults () {
+    this.globalStorage.set(StorageKeys.QUERY, null);
     this.globalStorage.set(StorageKeys.QUERY_ID, '');
     this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new

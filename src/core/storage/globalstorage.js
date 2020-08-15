@@ -42,8 +42,6 @@ export default class GlobalStorage {
     // TODO: move listeners up so all of storage can be updated at the same time
     if (data[StorageKeys.QUERY]) {
       this.set(StorageKeys.QUERY, data[StorageKeys.QUERY]);
-    } else if (this.getState(StorageKeys.QUERY)) {
-      this.set(StorageKeys.QUERY, null);
     }
   }
 

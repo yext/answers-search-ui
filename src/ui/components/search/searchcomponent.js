@@ -146,7 +146,6 @@ export default class SearchComponent extends Component {
         this.queryEl.value = q;
       }
       if (q === null) {
-        this.core.clearResults();
         if (this._defaultInitialSearch !== null) {
           this.core.setQuery(this._defaultInitialSearch);
         }
