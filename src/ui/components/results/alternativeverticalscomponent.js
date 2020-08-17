@@ -168,7 +168,7 @@ export default class AlternativeVerticalsComponent extends Component {
    * Adds parameters that are dynamically set. Removes parameters for facets,
    * filters, and pagination, which should not persist across the experience.
    * @param {string} baseUrl The url append the appropriate params to. Note:
-   *    params already on the baseUrl will be stripped
+   *                         params already on the baseUrl will be stripped
    * @param {SearchParams} params The parameters to include in the experience URL
    * @return {string} The formatted experience URL with appropriate query params
    */
