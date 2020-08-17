@@ -128,6 +128,16 @@ export default class SearchComponent extends Component {
     this._isTwin = config.isTwin;
 
     /**
+     * The search config from ANSWERS.init configuration
+     */
+    this._globalSearchConfig = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+
+    /**
+     * The default initial search query, can be an empty string
+     */
+    this._defaultInitialSearch = this._globalSearchConfig.defaultInitialSearch;
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string|null}
@@ -137,6 +147,12 @@ export default class SearchComponent extends Component {
       this.query = q;
       if (this.queryEl) {
         this.queryEl.value = q;
+      }
+      if (q === null) {
+        if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
+          this.core.setQuery(this._defaultInitialSearch);
+        }
+        return;
       }
       this.debouncedSearch(q);
     });
