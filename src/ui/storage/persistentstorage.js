@@ -66,9 +66,6 @@ export default class PersistentStorage {
       return;
     }
 
-    console.log('updating history w replaceHistory ' + replaceHistory);
-    console.log('before ' + currentParams);
-    console.log('after ' + this._params);
     if (replaceHistory) {
       window.history.replaceState(null, null, `?${this._params.toString()}`);
     } else {
