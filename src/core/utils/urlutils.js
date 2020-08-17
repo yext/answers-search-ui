@@ -141,3 +141,24 @@ export function filterParamsForExperienceLink (
   newParams.delete(StorageKeys.SEARCH_OFFSET);
   return newParams;
 }
+
+/**
+ * returns if two SearchParams objects have the same key,value entries
+ * @param {SearchParams} params1
+ * @param {SearchParams} params2
+ * @return {boolean} true if params1 and params2 have the same key,value entries, false otherwise
+ */
+export function equivalentParams (params1, params2) {
+  const entries1 = Array.from(params1.entries());
+  const entries2 = Array.from(params2.entries());
+
+  if (entries1.length !== entries2.length) {
+    return false;
+  }
+  for (const [key, val] of params1.entries()) {
+    if (val !== params2.get(key)) {
+      return false;
+    }
+  }
+  return true;
+}

@@ -47,11 +47,12 @@ describe('adding and removing data', () => {
 
   it('removes data with delete()', () => {
     storage.set('key1', 'val1');
+    storage.set('key2', 'val2');
     storage.delete('key1');
 
     expect.assertions(1);
     return new Promise(resolve => setTimeout(() => {
-      expect(mockPushState).toBeCalledWith(null, null, '?');
+      expect(mockPushState).toBeCalledWith(null, null, '?key2=val2');
       resolve();
     }, 200));
   });

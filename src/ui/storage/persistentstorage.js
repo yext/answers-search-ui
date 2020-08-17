@@ -1,5 +1,6 @@
 import SearchParams from '../dom/searchparams';
 import { AnswersStorageError } from '../../core/errors/errors';
+import { equivalentParams } from '../../core/utils/urlutils';
 
 /** @module PersistentStorage */
 
@@ -69,6 +70,10 @@ export default class PersistentStorage {
     if (this._historyTimer) {
       clearTimeout(this._historyTimer);
     }
+    const currentParams = new SearchParams(window.location.search.substring(1));
+    if (equivalentParams(this._params, currentParams)) {
+      return;
+    }
 
     // batch update calls across components to avoid updating the url too much
     this._historyTimer = setTimeout(
@@ -101,5 +106,12 @@ export default class PersistentStorage {
       allParams[key] = val;
     }
     return allParams;
+  }
+
+  /**
+   * Get a value for a given key in storage
+   */
+  get (query) {
+    return this._params.get(query);
   }
 }
