@@ -26,7 +26,11 @@ export default class ModuleData extends EventEmitter {
   set (data) {
     this.capturePrevious();
 
-    if (typeof data !== 'object' || Array.isArray(data) || Object.keys(data).length !== Object.keys(this._data).length) {
+    if (data === null ||
+      typeof data !== 'object' ||
+      Array.isArray(data) ||
+      Object.keys(data).length !== Object.keys(this._data).length
+    ) {
       this._data = data;
       this.emit('update', this._data);
       return;

@@ -49,7 +49,7 @@ export default class GlobalStorage {
     if (key === undefined || key === null || typeof key !== 'string') {
       throw new AnswersStorageError('Invalid storage key provided', key, data);
     }
-    if (data === undefined || data === null) {
+    if (data === undefined) {
       throw new AnswersStorageError('No data provided', key, data);
     }
 
