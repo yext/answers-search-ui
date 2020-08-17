@@ -674,6 +674,10 @@ export default class FilterOptionsComponent extends Component {
 
   saveFilterToPersistentStorage () {
     const replaceHistory = (this.core.persistentStorage.get(this.name) === null);
-    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label), replaceHistory);
+    this.core.persistentStorage.set(
+      this.name,
+      this.config.options.filter(o => o.selected).map(o => o.label),
+      replaceHistory
+    );
   }
 }
