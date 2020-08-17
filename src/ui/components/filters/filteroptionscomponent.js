@@ -316,9 +316,18 @@ export default class FilterOptionsComponent extends Component {
         ? o.filter
         : Filter.equal(o.field, o.value));
 
-    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
+    this.saveFilterToPersistentStorage();
     return filters.length > 0
       ? Filter.group(...filters)
       : {};
+  }
+
+  saveFilterToPersistentStorage () {
+    const replaceHistory = (this.core.persistentStorage.get(this.name) === null);
+    this.core.persistentStorage.set(
+      this.name,
+      this.config.options.filter(o => o.selected).map(o => o.label),
+      replaceHistory
+    );
   }
 }
