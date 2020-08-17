@@ -110,8 +110,9 @@ export default class PersistentStorage {
 
   /**
    * Get a value for a given key in storage
+   * @param {string} key The unique key to get value for
    */
-  get (query) {
-    return this._params.get(query);
+  get (key) {
+    return this._params.get(key);
   }
 }
