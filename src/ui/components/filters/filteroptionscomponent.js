@@ -659,7 +659,7 @@ export default class FilterOptionsComponent extends Component {
         remove: () => this._clearSingleOption(o)
       }));
 
-    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
+    this.saveFilterToPersistentStorage();
     const fieldIdToFilterNodes = groupArray(filterNodes, fn => fn.getFilter().getFilterKey());
 
     // OR together filter nodes for the same field id.
@@ -670,5 +670,14 @@ export default class FilterOptionsComponent extends Component {
 
     // AND all of the ORed together nodes.
     return FilterNodeFactory.and(...totalFilterNodes);
+  }
+
+  saveFilterToPersistentStorage () {
+    const replaceHistory = (this.core.persistentStorage.get(this.name) === null);
+    this.core.persistentStorage.set(
+      this.name,
+      this.config.options.filter(o => o.selected).map(o => o.label),
+      replaceHistory
+    );
   }
 }

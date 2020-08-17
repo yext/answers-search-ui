@@ -30,6 +30,7 @@ export default function mockManager (mockedCore, ...templatePaths) {
     },
     persistentStorage: {
       set: () => {},
+      get: () => {},
       delete: () => {}
     },
     ...mockedCore
