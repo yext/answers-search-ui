@@ -61,7 +61,7 @@ describe('adding and removing data', () => {
     storage.set('key1', 'val1');
     expect.assertions(1);
     return new Promise(resolve => setTimeout(() => {
-      expect(updateCb).toBeCalledWith({ key1: 'val1' }, 'key1=val1');
+      expect(updateCb).toBeCalledWith({ key1: 'val1' }, 'key1=val1', false);
       resolve();
     }, 200));
   });
