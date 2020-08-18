@@ -34,6 +34,7 @@ import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
+import translateJS from './core/i18n/translateJS';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -104,6 +105,11 @@ class Answers {
      * @type {Core}
      */
     this.core = null;
+
+    /**
+     * A local reference to translateJS
+     */
+    this.translateJS = translateJS;
 
     /**
      * A callback function to invoke once the library is ready.
