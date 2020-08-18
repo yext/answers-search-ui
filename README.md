@@ -332,7 +332,7 @@ Every component has the same base configuration options.
 
 ## Adding a Component to Your Page
 Adding a component to your page is super easy!
-You can add many different [types](#types-of-components) of components to your page.
+You can add many different [types](#types-of-built-in-components) of components to your page.
 Each component supports the base configuration options above, as well as their own unique configurations.
 
 To start, every component requires an HTML container.
