@@ -66,6 +66,7 @@ export default class HandlebarsRenderer extends Renderer {
    * compile a handlebars template so that it can be rendered,
    * using the {Handlebars} compiler
    * @param {string} template The template string to compile
+   * @returns {Function}
    */
   compile (template) {
     if (typeof template !== 'string') {
@@ -189,6 +190,19 @@ export default class HandlebarsRenderer extends Renderer {
       return number === 1
         ? singularText
         : pluralText;
+    });
+
+    this.registerHelper('runtimeTranslation', function (options) {
+      let { phrase, count } = options.hash;
+      try {
+        const pluralForms = JSON.parse(phrase);
+        phrase = count > 1 ? pluralForms['plural'] : pluralForms['1'];
+      } catch (e) {}
+      const interpolationRegex = /\{\{([a-zA-Z0-9]+)\}\}/g;
+      phrase = phrase.replace(interpolationRegex, (match, interpolationName) => {
+        return options.hash[interpolationName];
+      });
+      return phrase;
     });
 
     let self = this;
