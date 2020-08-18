@@ -3,7 +3,7 @@
  * interpolation, pluralization, or both
  * @param {string} translations The translations, or a stringified JSON of possible translations
  * @param {Object} interpolationParams Params to use during interpolation
- * @param {number} The count associated with the pluralization
+ * @param {number} count The count associated with the pluralization
  */
 export default function translateJS (translations, interpolationParams, count) {
   let stringToInterpolate;
