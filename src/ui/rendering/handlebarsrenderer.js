@@ -199,10 +199,9 @@ export default class HandlebarsRenderer extends Renderer {
         phrase = count > 1 ? pluralForms['plural'] : pluralForms['1'];
       } catch (e) {}
       const interpolationRegex = /\{\{([a-zA-Z0-9]+)\}\}/g;
-      phrase = phrase.replace(interpolationRegex, (match, interpolationName) => {
+      return phrase.replace(interpolationRegex, (match, interpolationName) => {
         return options.hash[interpolationName];
       });
-      return phrase;
     });
 
     let self = this;
