@@ -17,9 +17,7 @@ export default function translateJS (translations, interpolationParams, count) {
 
   const interpolationRegex = new RegExp(/\{\{([a-zA-Z0-9]+)\}\}/, 'g');
 
-  const finalTranslation = stringToInterpolate.replace(interpolationRegex, (match, interpolationKey) => {
+  return stringToInterpolate.replace(interpolationRegex, (match, interpolationKey) => {
     return interpolationParams[interpolationKey];
   });
-
-  return finalTranslation;
 }
