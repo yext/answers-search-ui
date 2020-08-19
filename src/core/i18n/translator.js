@@ -9,7 +9,7 @@ export default class Translator {
    * @param {number} count The count associated with the pluralization
    */
   static translate (translations, interpolationParams, count) {
-    const stringToInterpolate = this._selectPluralization(translations, count);
+    const stringToInterpolate = this._selectStringToInterpolate(translations, count);
     return this._interpolate(stringToInterpolate, interpolationParams);
   }
 
@@ -20,7 +20,7 @@ export default class Translator {
    * @param {number} count
    * @returns {string}
    */
-  static _selectPluralization (translations, count) {
+  static _selectStringToInterpolate (translations, count) {
     try {
       translations = JSON.parse(translations);
     } catch (e) {
