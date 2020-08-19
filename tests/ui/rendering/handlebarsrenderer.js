@@ -9,7 +9,7 @@ describe('the handlebars runtimeTranslation helper', () => {
 
   it('can translate a string phrase', () => {
     const template = `{{runtimeTranslation
-      phrase='Hello my name is {{firstName}} {{lastName}}'
+      phrase='Hello my name is [[firstName]] [[lastName]]'
       firstName=myFirstName
       lastName=myLastName
     }}`;
@@ -24,8 +24,8 @@ describe('the handlebars runtimeTranslation helper', () => {
   describe('when translating plural phrase', () => {
     const template = `{{runtimeTranslation
       phrase='{
-        "1":"a {{size}} {{color}} cow tried to make a {{food}}",
-        "plural":"{{count}} {{size}} {{color}} cows tried to make a {{food}}"
+        "1":"a [[size]] [[color]] cow tried to make a [[food]]",
+        "plural":"[[count]] [[size]] [[color]] cows tried to make a [[food]]"
       }'
       size=mySize
       color=myColor
