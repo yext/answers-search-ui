@@ -1,4 +1,4 @@
-import { getNPlurals, getPluralFunc } from 'plural-forms/dist/minimal';
+import { getNPlurals, getPluralFunc, hasLang } from 'plural-forms/dist/minimal';
 
 export default class Translator {
   /**
@@ -36,7 +36,10 @@ export default class Translator {
    * @returns {string}
    */
   static _selectPluralForm (parsedTranslations, count) {
-    const locale = parsedTranslations.locale;
+    let locale = parsedTranslations.locale;
+    if (!hasLang(locale)) {
+      locale = 'en';
+    }
     const oneToNArray = this._generateArrayOneToN(locale);
     const pluralFormIndex = getPluralFunc(locale)(count, oneToNArray);
     return parsedTranslations[pluralFormIndex];

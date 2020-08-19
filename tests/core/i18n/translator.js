@@ -55,4 +55,13 @@ describe('selecting the correct plural form', () => {
     const translation = Translator.translate(translations, { count: 0 }, 0);
     expect(translation).toEqual('Pasirinkta 0 tinklalapių');
   });
+
+  it('defaults locale to en when given a bogus locale', () => {
+    const bogusTranslations = JSON.stringify({
+      ...phrase,
+      locale: 'hawaii'
+    });
+    const translation = Translator.translate(bogusTranslations, { count: 100 }, 100);
+    expect(translation).toEqual('Pasirinkta 100 tinklalapiai');
+  });
 });
