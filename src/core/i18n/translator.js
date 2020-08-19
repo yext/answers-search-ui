@@ -15,7 +15,7 @@ export default class Translator {
 
   /**
    * If translations is json, parse it and choose the correct plural form. Otherwise it is
-   * just a the non-interpolated translation string.
+   * just the non-interpolated translation string.
    * @param {string} translations
    * @param {number} count
    * @returns {string}
