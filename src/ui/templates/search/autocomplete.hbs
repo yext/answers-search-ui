@@ -8,8 +8,17 @@
         </li>
       </ul>
     {{/if}}
+    <label class="sr-only" id="yxt-AutoComplete-listLabel--{{listLabelIdModifier}}">
+      {{listLabel}}
+    </label>
     {{#each sections}}
-      <ul class="yxt-AutoComplete-results">
+      <span class="yxt-AutoComplete-resultsCount sr-only" aria-live="assertive">
+        {{resultsCount}} results found
+      </span>
+      <ul role="listbox"
+          class="yxt-AutoComplete-results"
+          aria-labelledby="yxt-AutoComplete-listLabel--{{listLabelClassModifier}}"
+      >
       {{#if label}}
         <li class="yxt-AutoComplete-resultHeader">{{label}}</li>
       {{/if}}
@@ -21,6 +30,7 @@
             data-filter='{{json filter}}'
             data-eventtype="AUTO_COMPLETE_SELECTION"
             data-eventoptions='{"suggestedSearchText": "{{value}}"}'
+            role="option"
         >
             {{highlightValue this true}}
         </li>

@@ -106,6 +106,12 @@ export default class AutoCompleteComponent extends Component {
     this._onChange = opts.onChange || function () {};
 
     this._searchParameters = opts.searchParameters || null;
+
+    /**
+     * Aria-label for the autocomplete list
+     * @type {string}
+     */
+    this._listLabel = 'Conduct a search by entering in a phrase or selecting an option from the autocomplete';
   }
 
   /**
@@ -139,7 +145,9 @@ export default class AutoCompleteComponent extends Component {
       hasResults: this.hasResults(data),
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
-      promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null
+      promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
+      listLabel: this._listLabel,
+      listLabelIdModifier: this.name.replace('.', '_')
     }));
   }
 

@@ -644,7 +644,8 @@ export default class SearchComponent extends Component {
       forwardIconOpts: forwardIconOpts,
       reverseIconOpts: reverseIconOpts,
       autoFocus: this.autoFocus && !this.query,
-      useForm: this._useForm
+      useForm: this._useForm,
+      autocompleteContainerIdModifier: this.name
     }, data));
   }
 
