@@ -21,12 +21,14 @@ describe('the handlebars runtimeTranslation helper', () => {
     expect(translation).toEqual('Hello my name is Cat Lady');
   });
 
-  describe('when translating plural phrase', () => {
+  describe('when translating a plural phrase in en', () => {
+    const phrase = {
+      0: 'a [[size]] [[color]] cow tried to make a [[food]]',
+      1: '[[count]] [[size]] [[color]] cows tried to make a [[food]]',
+      locale: 'en'
+    };
     const template = `{{runtimeTranslation
-      phrase='{
-        "1":"a [[size]] [[color]] cow tried to make a [[food]]",
-        "plural":"[[count]] [[size]] [[color]] cows tried to make a [[food]]"
-      }'
+      phrase='${JSON.stringify(phrase)}'
       size=mySize
       color=myColor
       food=myFood
@@ -58,6 +60,40 @@ describe('the handlebars runtimeTranslation helper', () => {
         myCount: '82'
       });
       expect(translation).toEqual('82 large red cows tried to make a pizza');
+    });
+  });
+
+  describe('when translating a plural phrase in a locale with multiple plural forms', () => {
+    const phrase = {
+      0: 'Pasirinkta [[count]] tinklalapis',
+      1: 'Pasirinkta [[count]] tinklalapiai',
+      2: 'Pasirinkta [[count]] tinklalapių',
+      locale: 'lt-LT'
+    };
+    const template = `{{runtimeTranslation
+      phrase='${JSON.stringify(phrase)}'
+      count=myCount
+    }}`;
+
+    it('uses key_0 when count = 1', () => {
+      const translation = renderer.compile(template)({
+        myCount: 1
+      });
+      expect(translation).toEqual('Pasirinkta 1 tinklalapis');
+    });
+
+    it('uses key_1 when count = 2', () => {
+      const translation = renderer.compile(template)({
+        myCount: 2
+      });
+      expect(translation).toEqual('Pasirinkta 2 tinklalapiai');
+    });
+
+    it('uses key_2 when count = 0', () => {
+      const translation = renderer.compile(template)({
+        myCount: 0
+      });
+      expect(translation).toEqual('Pasirinkta 0 tinklalapių');
     });
   });
 });

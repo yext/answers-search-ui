@@ -1,3 +1,5 @@
+import { getNPlurals, getPluralFunc } from 'plural-forms/dist/minimal';
+
 export default class Translator {
   /**
    * Performs a translation which supports
@@ -11,13 +13,42 @@ export default class Translator {
     return this._interpolate(stringToInterpolate, interpolationParams);
   }
 
+  /**
+   * If translations is json, parse it and choose the correct plural form. Otherwise it is
+   * just a the non-interpolated translation string.
+   * @param {string} translations
+   * @param {number} count
+   * @returns {string}
+   */
   static _selectPluralization (translations, count) {
     try {
       translations = JSON.parse(translations);
-      return count > 1 ? translations.plural : translations['1'];
     } catch (e) {
       return translations;
     }
+    return this._selectPluralForm(translations, count);
+  }
+
+  /**
+   * Returns the correct plural form given a parsed translations object and count.
+   * @param {Object} parsedTranslations
+   * @param {number} count
+   * @returns {string}
+   */
+  static _selectPluralForm (parsedTranslations, count) {
+    const locale = parsedTranslations.locale;
+    const oneToNArray = this._generateArrayOneToN(locale);
+    const pluralFormIndex = getPluralFunc(locale)(count, oneToNArray);
+    return parsedTranslations[pluralFormIndex];
+  }
+
+  /**
+   * @param {string} locale
+   * @returns {Array} an array of the form [0, 1, 2, ..., nPluralForms]
+   */
+  static _generateArrayOneToN (locale) {
+    const numberOfPluralForms = getNPlurals(locale);
+    return Array.from((new Array(numberOfPluralForms)).keys());
   }
 
   static _interpolate (stringToInterpolate, interpolationParams) {

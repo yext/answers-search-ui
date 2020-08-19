@@ -12,22 +12,47 @@ describe('translateJS usage', () => {
   });
 
   it('simple pluralization with singular count', () => {
-    const translation = Translator.translate('{"1":"fleur","plural":"fleurs"}', {}, 1);
+    const translation = Translator.translate('{"0":"fleur","1":"fleurs","locale":"fr-FR"}', {}, 1);
     expect(translation).toEqual('fleur');
   });
 
   it('simple pluralization with plural count', () => {
-    const translation = Translator.translate('{"1":"fleur","plural":"fleurs"}', {}, 2);
+    const translation = Translator.translate('{"0":"fleur","1":"fleurs","locale":"fr-FR"}', {}, 2);
     expect(translation).toEqual('fleurs');
   });
 
   it('pluralization with singular count and interpolation', () => {
-    const translation = Translator.translate('{"1":"Un article [[name]]","plural":"Les articles [[name]]"}', { name: 'de presse' }, 1);
+    const translation = Translator.translate('{"0":"Un article [[name]]","1":"Les articles [[name]]","locale":"fr-FR"}', { name: 'de presse' }, 1);
     expect(translation).toEqual('Un article de presse');
   });
 
   it('pluralization with plural count and interpolation', () => {
-    const translation = Translator.translate('{"1":"Un article [[name]]","plural":"Les articles [[name]]"}', { name: 'de presse' }, 2);
+    const translation = Translator.translate('{"0":"Un article [[name]]","1":"Les articles [[name]]","locale":"fr-FR"}', { name: 'de presse' }, 2);
     expect(translation).toEqual('Les articles de presse');
+  });
+});
+
+describe('selecting the correct plural form', () => {
+  const phrase = {
+    0: 'Pasirinkta [[count]] tinklalapis',
+    1: 'Pasirinkta [[count]] tinklalapiai',
+    2: 'Pasirinkta [[count]] tinklalapių',
+    locale: 'lt-LT'
+  };
+  const translations = JSON.stringify(phrase);
+
+  it('uses key_0 when count = 1', () => {
+    const translation = Translator.translate(translations, { count: 1 }, 1);
+    expect(translation).toEqual('Pasirinkta 1 tinklalapis');
+  });
+
+  it('uses key_1 when count = 2', () => {
+    const translation = Translator.translate(translations, { count: 2 }, 2);
+    expect(translation).toEqual('Pasirinkta 2 tinklalapiai');
+  });
+
+  it('uses key_2 when count = 0', () => {
+    const translation = Translator.translate(translations, { count: 0 }, 0);
+    expect(translation).toEqual('Pasirinkta 0 tinklalapių');
   });
 });
