@@ -14,19 +14,26 @@
         {{> inputAndButtons}}
       </div>
     {{/if}}
-    <div id="yxt-SearchBar-autocomplete--{{autocompleteContainerIdModifier}}" class="yxt-SearchBar-autocomplete yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper"></div>
+    <div id="{{autocompleteContainerIdName}}" class="yxt-SearchBar-autocomplete yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper"></div>
   </div>
 </div>
 
 {{#*inline "inputAndButtons"}}
+  <label class="sr-only" 
+         for="{{inputIdName}}"
+         id="{{inputLabelIdName}}"
+  >
+    {{labelText}}
+  </label>
   <input class="js-yext-query yxt-SearchBar-input"
+          id="{{inputIdName}}"
           type="text"
           name="query"
           value="{{query}}"
           {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
           aria-label="{{labelText}}"
           aria-autocomplete="list"
-          aria-controls="yxt-SearchBar-autocomplete--{{autocompleteContainerIdModifier}}"
+          aria-controls="{{autocompleteContainerIdName}}"
           aria-haspopup="listbox"
   >
   <button type="button"

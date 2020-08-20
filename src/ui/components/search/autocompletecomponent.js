@@ -108,10 +108,10 @@ export default class AutoCompleteComponent extends Component {
     this._searchParameters = opts.searchParameters || null;
 
     /**
-     * Aria-label for the autocomplete list
+     * HTML id for the aria-labelledby in the autocomplete list
      * @type {string}
      */
-    this._listLabel = 'Conduct a search by entering in a phrase or selecting an option from the autocomplete';
+    this.listLabelIdName = opts.listLabelIdName || 'yxt-SearchBar-listLabel--SearchBar';
   }
 
   /**
@@ -146,8 +146,7 @@ export default class AutoCompleteComponent extends Component {
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
-      listLabel: this._listLabel,
-      listLabelIdModifier: this.name.replace('.', '_')
+      listLabelIdName: this.listLabelIdName
     }));
   }
 
