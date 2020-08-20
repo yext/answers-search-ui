@@ -214,7 +214,7 @@ export default class SearchComponent extends Component {
      * The unique HTML id name for the search input
      * @type {string}
      */
-    this.inputIdName = `yxt-SearchBar-inputLabel--${this.name}`;
+    this.inputIdName = `yxt-SearchBar-input--${this.name}`;
   }
 
   static get type () {
