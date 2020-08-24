@@ -5,20 +5,21 @@ const sass = require('gulp-sass');
 const postcss = require('gulp-postcss');
 const uglify = require('gulp-uglify-es').default;
 
-const { BundleType, BundleAbstractFactory } = require('./bundle/bundleabstractfactory');
+const getLibraryVersion = require('./utils/libversion');
+const { BundleType, BundleTaskFactory } = require('./bundle/bundletaskfactory');
 
-const bundleAbstractFactory = new BundleAbstractFactory();
+const bundleTaskFactory = new BundleTaskFactory(getLibraryVersion());
 
 function bundle () {
-  return bundleAbstractFactory.create(BundleType.MODERN)();
+  return bundleTaskFactory.create(BundleType.MODERN)();
 }
 
 function legacyBundleIIFE () {
-  return bundleAbstractFactory.create(BundleType.LEGACY_IIFE)();
+  return bundleTaskFactory.create(BundleType.LEGACY_IIFE)();
 }
 
 function legacyBundleUMD () {
-  return bundleAbstractFactory.create(BundleType.LEGACY_UMD)();
+  return bundleTaskFactory.create(BundleType.LEGACY_UMD)();
 }
 
 function minifyJS () {
