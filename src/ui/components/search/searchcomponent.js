@@ -482,6 +482,7 @@ export default class SearchComponent extends Component {
         DOM.trigger(DOM.query(this._container, inputSelector), 'input');
       }
     });
+    this._autocomplete.mount();
   }
 
   /**
