@@ -23,18 +23,18 @@ Object.freeze(BundleType);
  * A class providing factories for building different types of SDK bundle.
  */
 class BundleAbstractFactory {
-  constructor() {
+  constructor () {
     this._namespace = 'ANSWERS';
   }
 
   /**
    * Creates a factory for building a specific type of SDK bundle.
-   * 
+   *
    * @param {BundleType} bundleType The type of SDK bundle to build.
    * @returns {Function} Factory method for building an SDK bundle of the
    *                     the specified type.
    */
-  create(bundleType) {
+  create (bundleType) {
     switch (bundleType) {
       case BundleType.MODERN:
         return () => this._modernBundle();
@@ -49,10 +49,10 @@ class BundleAbstractFactory {
 
   /**
    * A factory method for producing the modern SDK bundle.
-   * 
+   *
    * @returns {File} The modern SDK bundle.
    */
-  _modernBundle() {
+  _modernBundle () {
     const rollupConfig = {
       input: './src/answers-umd.js',
       output: {
@@ -81,10 +81,10 @@ class BundleAbstractFactory {
 
   /**
    * A factory method for producing the legacy, IIFE-style SDK bundle.
-   * 
+   *
    * @returns {File} The legacy, IIFE-style SDK bundle.
    */
-  _legacyBundleIIFE() {
+  _legacyBundleIIFE () {
     const legacyBundleConfig = {
       format: 'iife',
       name: this._namespace,
@@ -95,28 +95,28 @@ class BundleAbstractFactory {
 
   /**
    * A factory method for producing the legacy, UMD-style SDK bundle.
-   * 
+   *
    * @returns {File} The legacy, UMD-style SDK bundle.
    */
-  _legacyBundleUMD() {
+  _legacyBundleUMD () {
     const legacyBundleConfig = {
       format: 'umd',
       name: this._namespace,
       export: 'default',
       sourcemap: true
     };
-    return this._legacyBundle(legacyBundleConfig,'answers-umd.js');
+    return this._legacyBundle(legacyBundleConfig, 'answers-umd.js');
   }
 
   /**
-   * A helper method that can produce either variant of the legacy SDK bundle. 
-   * 
+   * A helper method that can produce either variant of the legacy SDK bundle.
+   *
    * @param {Object<string, ?>} outputConfig Any variant-specific configuration
    *                                         for the legacy bundle.
    * @param {string} fileName The filename of the created bundle.
    * @returns {File} The legacy SDK bundle.
    */
-  _legacyBundle(outputConfig, fileName) {
+  _legacyBundle (outputConfig, fileName) {
     const rollupConfig = {
       input: './src/answers-umd.js',
       output: outputConfig,
@@ -138,15 +138,15 @@ class BundleAbstractFactory {
             [
               '@babel/preset-env',
               {
-                'loose': true,
-                'modules': false
+                loose: true,
+                modules: false
               }
             ]
           ],
           plugins: [
             '@babel/syntax-dynamic-import',
             ['@babel/plugin-transform-runtime', {
-              'corejs': 3
+              corejs: 3
             }],
             '@babel/plugin-transform-arrow-functions',
             '@babel/plugin-proposal-object-rest-spread'
@@ -162,7 +162,7 @@ class BundleAbstractFactory {
 
   /**
    * Attempts to compute the correct library version for an SDK bundle.
-   * 
+   *
    * @returns {string} The SDK bundle's library version.
    */
   _getLibVersion () {
@@ -178,11 +178,11 @@ class BundleAbstractFactory {
     } catch (e) {
       // if above command fails, catch error and continue, as we are not in a git repository
     }
-  
+
     console.warn('Warning: Not in a github repository, using default hardcoded library version.');
     return 'TEST';
   }
-};
+}
 
 exports.BundleType = BundleType;
 exports.BundleAbstractFactory = BundleAbstractFactory;
