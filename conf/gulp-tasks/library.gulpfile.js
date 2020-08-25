@@ -1,5 +1,7 @@
 const { series, parallel, src, dest, watch } = require('gulp');
 
+const path = require('path');
+
 const rename = require('gulp-rename');
 const sass = require('gulp-sass');
 const postcss = require('gulp-postcss');
@@ -7,10 +9,25 @@ const uglify = require('gulp-uglify-es').default;
 
 const getLibraryVersion = require('./utils/libversion');
 const { BundleType, BundleTaskFactory } = require('./bundle/bundletaskfactory');
+const LocalFileParser = require('../i18n/localfileparser');
+const Translator = require('../i18n/translator');
+const TranslationResolver = require('../i18n/translationresolver');
 
-const bundleTaskFactory = new BundleTaskFactory(getLibraryVersion());
+async function bundle () {
+  const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
+  const translation = await localFileParser.fetch('fr-FR');
+  
+  const translator = await Translator.create('fr-FR', [], { 'fr-FR': { translation } });
+  const translationResolver = new TranslationResolver(
+    translator, 
+    (translationResult, interpValues, count) => {
+      let parsedParams = JSON.stringify(interpValues);
+      parsedParams = parsedParams.replace(/[\'\"]/g, '');
+      return `ANSWERS.translateJS(${JSON.stringify(translationResult)}, ${parsedParams}, ${count});`
+    });
 
-function bundle () {
+  const bundleTaskFactory = new BundleTaskFactory(getLibraryVersion(), translationResolver);
+
   return bundleTaskFactory.create(BundleType.MODERN)();
 }
 
@@ -25,7 +42,9 @@ function legacyBundleUMD () {
 function minifyJS () {
   return src('./dist/answers-modern.js')
     .pipe(rename('answers-modern.min.js'))
-    .pipe(uglify())
+    .pipe(uglify({
+      mangle: { reserved: ['ANSWERS'] }
+    }))
     .pipe(dest('dist'));
 }
 

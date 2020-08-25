@@ -11,6 +11,8 @@ const insert = require('rollup-plugin-insert');
 const source = require('vinyl-source-stream');
 const replace = require('gulp-replace');
 
+const TranslationPlaceholder = require('../../i18n/models/translationplaceholder');
+
 // An enum describing the different types of SDK bundle.
 const BundleType = {
   MODERN: 'modern',
@@ -23,8 +25,9 @@ Object.freeze(BundleType);
  * A factory class that provides Gulp tasks for the different kinds of SDK bundle.
  */
 class BundleTaskFactory {
-  constructor (libVersion) {
+  constructor (libVersion, translationResolver) {
     this._libVersion = libVersion;
+    this._translationResolver = translationResolver;
     this._namespace = 'ANSWERS';
   }
 
@@ -77,6 +80,15 @@ class BundleTaskFactory {
     return rollup(rollupConfig)
       .pipe(source('answers-modern.js'))
       .pipe(replace('@@LIB_VERSION', this._libVersion))
+      .pipe(replace(/translatePluralJS\([^;]+\);/, translateCall => {
+        const translationPlaceholder = new TranslationPlaceholder({
+          phrase: "There is {{count}} item {{name}}",
+          pluralPhrase: "There are {{count}} items {{name}}",
+          count: 'this._config.details.length', 
+          interpolationValues: { name: 'this._config.title' }
+        });
+        return this._translationResolver.resolveWithPlural(translationPlaceholder);
+      }))
       .pipe(dest('dist'));
   }
 

@@ -1,0 +1,42 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"mime-version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"POT-Creation-Date: 2020-08-04T20:43:15.907Z\n"
+"PO-Revision-Date: 2020-08-04T20:43:15.907Z\n"
+"Language: fr\n"
+
+msgid "Item"
+msgid_plural "Item"
+msgstr[0] "Article"
+msgstr[1] "Articles"
+
+msgid "Hello {{name}}"
+msgstr "Bonjour {{name}}"
+
+msgid "Unfortunately search engines don't always work in your&nbsp;favor.<br/><br/><span class=\"fw-bold\">{{name}}</span> can."
+msgstr "Malheureusement, l'expérience de recherche sur votre site laisse la plupart des questions&nbsp;sans réponse.​<br/>​​<br/>​​<span class=\"fw-bold\">{{name}}</span>​ peut."
+
+msgid "There is {{count}} item {{name}}"
+msgid_plural "There are {{count}} items {{name}}"
+msgstr[0] "Il y a {{count}} article {{name}}"
+msgstr[1] "Il y a {{count}} articles {{name}}"
+
+msgctxt "male"
+msgid "Child"
+msgstr "fils"
+
+msgctxt "female"
+msgid "Child"
+msgstr "fille"
+
+msgctxt "male"
+msgid "I am looking for my child named {{name}}"
+msgstr "Je cherche mon fils nommé {{name}}"
+
+msgctxt "female"
+msgid "I am looking for my child named {{name}}"
+msgstr "Je cherche mon fille nommé {{name}}"

@@ -160,6 +160,7 @@ export default class StandardCardComponent extends Component {
         ? `${this._config.details.substring(0, this._config.showMoreLimit)}...`
         : this._config.details;
     }
+    const temp = translatePluralJS("There is {{count}} item {{name}}", "There are {{count}} items {{name}}", this._config.details.length, { name: this._config.title });
     return super.setState({
       ...data,
       hideExcessDetails: this.hideExcessDetails,
@@ -167,7 +168,8 @@ export default class StandardCardComponent extends Component {
       hasCTAs: CTACollectionComponent.hasCTAs(this.result._raw, this._config.callsToAction),
       entityId: this.result._raw.id,
       verticalKey: this.verticalKey,
-      details
+      details,
+      translatedText: temp
     });
   }
 
