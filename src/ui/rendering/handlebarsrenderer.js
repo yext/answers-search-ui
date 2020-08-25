@@ -3,6 +3,7 @@
 import Renderer from './renderer';
 import Icons from '../icons';
 import HighlightedValue from '../../core/models/highlightedvalue';
+import Translator from '../../core/i18n/translator';
 
 /**
  * HandlebarsRenderer is a wrapper around the nativate handlebars renderer.
@@ -66,6 +67,7 @@ export default class HandlebarsRenderer extends Renderer {
    * compile a handlebars template so that it can be rendered,
    * using the {Handlebars} compiler
    * @param {string} template The template string to compile
+   * @returns {Function}
    */
   compile (template) {
     if (typeof template !== 'string') {
@@ -189,6 +191,11 @@ export default class HandlebarsRenderer extends Renderer {
       return number === 1
         ? singularText
         : pluralText;
+    });
+
+    this.registerHelper('runtimeTranslation', function (options) {
+      let { phrase, count } = options.hash;
+      return Translator.translate(phrase, options.hash, count);
     });
 
     let self = this;

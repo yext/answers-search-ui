@@ -11,6 +11,7 @@
     "js-levenshtein": "^1.1.6",
     "kind-of": "^6.0.3",
     "markdown-it-for-inline": "^0.1.1",
+    "plural-forms": "^0.5.1",
     "regenerator-runtime": "^0.13.3",
     "template-helpers": "^1.0.1"
   },
