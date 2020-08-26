@@ -1,5 +1,7 @@
 /** @module Component */
 
+import cloneDeep from 'lodash.clonedeep';
+
 import { Renderers } from '../rendering/const';
 
 import DOM from '../dom/dom';
@@ -342,7 +344,7 @@ export default class Component {
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     const domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');
-    const data = this.transformData(JSON.parse(JSON.stringify(this._state.get())));
+    const data = this.transformData(cloneDeep(this._state.get()));
     domComponents.forEach(c => this._createSubcomponent(c, data));
 
     this._children.forEach(child => {
@@ -369,7 +371,7 @@ export default class Component {
   render (data = this._state.get()) {
     this.beforeRender();
     // Temporary fix for passing immutable data to transformData().
-    data = this.transformData(JSON.parse(JSON.stringify(data)));
+    data = this.transformData(cloneDeep(data));
 
     let html = '';
     // Use either the custom render function or the internal renderer
