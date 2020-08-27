@@ -1,5 +1,5 @@
 const Handlebars = require('handlebars');
-const TranslationPlaceholder = require('./models/translationplaceholder');
+const TranslationPlaceholderFactory = require('./translationplaceholderfactory');
 
 /**
  * TranslateHelperVisitor accepts a handlebars AST, and replaces all translate placeholders
@@ -36,10 +36,11 @@ class TranslateHelperVisitor {
    * @returns {hbs.AST.MustacheStatment|undefined}
    */
   _MustacheStatement (statement) {
-    if (!this._validHelpers.includes(statement.path.original)) {
+    const isTranslationHelper = this._validHelpers.includes(statement.path.original);
+    if (!isTranslationHelper) {
       return;
     }
-    const placeholder = TranslationPlaceholder.fromMustacheStatementNode(statement);
+    const placeholder = TranslationPlaceholderFactory.fromMustacheStatementNode(statement);
     const translatedPhrase = this._resolveTranslationPlaceholder(placeholder);
     const canBeTranslatedStatically =
       typeof translatedPhrase === 'string' && placeholder.hasNoInterpolation();
@@ -51,6 +52,11 @@ class TranslateHelperVisitor {
     }
   }
 
+  /**
+   * Given a {@link TranslationPlaceholder}, resolve its translation result.
+   * @param {TranslationPlaceholder} placeholder
+   * @returns {any}
+   */
   _resolveTranslationPlaceholder (placeholder) {
     const count = placeholder.getCount();
     const context = placeholder.getContext();

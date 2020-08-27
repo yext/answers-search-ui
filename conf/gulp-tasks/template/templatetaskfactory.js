@@ -14,31 +14,35 @@ class TemplateTaskFactory {
   constructor (translationResolver, locale = 'en') {
     this.locale = locale;
     this.translationResolver = translationResolver;
-    if (locale === 'en') {
-      this.filenamePrecompiled = 'answerstemplates.precompiled.min.js';
-      this.filenameUMD = 'answerstemplates.compiled.min.js';
-      this.filenameIIFE = 'answerstemplates-iife.compiled.min.js';
-    } else {
-      this.filenamePrecompiled = `${locale}-answerstemplates.precompiled.min.js`;
-      this.filenameUMD = `${locale}-answerstemplates.compiled.min.js`;
-      this.filenameIIFE = `${locale}-answerstemplates-iife.compiled.min.js`;
-    }
+
+    const { PRECOMPILED, UMD, IIFE } = this._getFileNames();
+    this.filenamePrecompiled = PRECOMPILED;
+    this.filenameUMD = UMD;
+    this.filenameIIFE = IIFE;
+
+    this._bindTasks();
+    this._customizeTaskNames(locale);
+  }
+
+  _bindTasks () {
     this.precompileTemplates = this.precompileTemplates.bind(this);
-    Object.defineProperty(this.precompileTemplates, 'name', { value: `${locale}-precompileTemplates` });
-
     this.bundleTemplatesUMD = this.bundleTemplatesUMD.bind(this);
-    Object.defineProperty(this.bundleTemplatesUMD, 'name', { value: `${locale}-bundleTemplatesUMD` });
-
     this.bundleTemplatesIIFE = this.bundleTemplatesIIFE.bind(this);
-    Object.defineProperty(this.bundleTemplatesIIFE, 'name', { value: `${locale}-bundleTemplatesIIFE` });
-
     this.minifyTemplatesIIFE = this.minifyTemplatesIIFE.bind(this);
-    Object.defineProperty(this.minifyTemplatesIIFE, 'name', { value: `${locale}-minifyTemplatesIIFE` });
-
     this.minifyTemplatesUMD = this.minifyTemplatesUMD.bind(this);
-    Object.defineProperty(this.minifyTemplatesUMD, 'name', { value: `${locale}-minifyTemplatesUMD` });
-
     this.cleanFiles = this.cleanFiles.bind(this);
+  }
+
+  /**
+   * Customize the gulp task names, e.g. "bound precompileTemplates" becomes "en-precompileTemplates".
+   * @param {string} locale
+   */
+  _customizeTaskNames (locale) {
+    Object.defineProperty(this.precompileTemplates, 'name', { value: `${locale}-precompileTemplates` });
+    Object.defineProperty(this.bundleTemplatesUMD, 'name', { value: `${locale}-bundleTemplatesUMD` });
+    Object.defineProperty(this.bundleTemplatesIIFE, 'name', { value: `${locale}-bundleTemplatesIIFE` });
+    Object.defineProperty(this.minifyTemplatesIIFE, 'name', { value: `${locale}-minifyTemplatesIIFE` });
+    Object.defineProperty(this.minifyTemplatesUMD, 'name', { value: `${locale}-minifyTemplatesUMD` });
     Object.defineProperty(this.cleanFiles, 'name', { value: `${locale}-cleanFiles` });
   }
 
@@ -74,6 +78,22 @@ class TemplateTaskFactory {
 
   cleanFiles () {
     return del([ `./dist/${this.filenamePrecompiled}` ]);
+  }
+
+  _getFileNames () {
+    const locale = this.locale;
+    if (locale === 'en') {
+      return {
+        PRECOMPILED: 'answerstemplates.precompiled.min.js',
+        UMD: 'answerstemplates.compiled.min.js',
+        IIFE: 'answerstemplates-iife.compiled.min.js'
+      };
+    }
+    return {
+      PRECOMPILED: `${locale}-answerstemplates.precompiled.min.js`,
+      UMD: `${locale}-answerstemplates.compiled.min.js`,
+      IIFE: `${locale}-answerstemplates-iife.compiled.min.js`
+    };
   }
 }
 
