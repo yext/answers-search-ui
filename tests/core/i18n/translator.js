@@ -30,6 +30,11 @@ describe('translateJS usage', () => {
     const translation = Translator.translate('{"0":"Un article [[name]]","1":"Les articles [[name]]","locale":"fr-FR"}', { name: 'de presse' }, 2);
     expect(translation).toEqual('Les articles de presse');
   });
+
+  it('handles escaped single quotes with simple interpolation', () => {
+    const translation = Translator.translate('L\'homme nommé [[name]]', { name: 'Samuel' });
+    expect(translation).toEqual('L\'homme nommé Samuel');
+  });
 });
 
 describe('selecting the correct plural form', () => {
