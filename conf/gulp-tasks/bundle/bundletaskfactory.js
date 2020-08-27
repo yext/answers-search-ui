@@ -26,16 +26,22 @@ class BundleTaskFactory {
    * @returns {Function} Gulp task for producing the requested SDK bundle.
    */
   create (bundleType) {
+    let bundleFunction;
     switch (bundleType) {
       case BundleType.MODERN:
-        return (callback) => this._modernBundle(callback);
+        bundleFunction = (callback) => this._modernBundle(callback);
+        break;
       case BundleType.LEGACY_IIFE:
-        return (callback) => this._legacyBundleIIFE(callback);
+        bundleFunction = (callback) => this._legacyBundleIIFE(callback);
+        break;
       case BundleType.LEGACY_UMD:
-        return (callback) => this._legacyBundleUMD(callback);
+        bundleFunction = (callback) => this._legacyBundleUMD(callback);
+        break;
       default:
         throw new Error('Unrecognized BundleType');
     }
+    Object.defineProperty(bundleFunction, 'name', { value: this._getBundleName(bundleType) });
+    return bundleFunction;
   }
 
   /**
@@ -45,16 +51,22 @@ class BundleTaskFactory {
    * @returns {Function} Gulp task for minifying the requested SDK bundle.
    */
   minify (bundleType) {
+    let minifyFunction;
     switch (bundleType) {
       case BundleType.MODERN:
-        return (callback) => this._minifyModern(callback);
+        minifyFunction = (callback) => this._minifyModern(callback);
+        break;
       case BundleType.LEGACY_IIFE:
-        return (callback) => this._minifyLegacy(callback);
+        minifyFunction = (callback) => this._minifyLegacy(callback);
+        break;
       case BundleType.LEGACY_UMD:
-        return (callback) => this._minifyLegacyUMD(callback);
+        minifyFunction = (callback) => this._minifyLegacyUMD(callback);
+        break;
       default:
         throw new Error('Unrecognized BundleType');
     }
+    Object.defineProperty(minifyFunction, 'name', { value: this._getBundleName(bundleType) });
+    return minifyFunction;
   }
 
   /**
