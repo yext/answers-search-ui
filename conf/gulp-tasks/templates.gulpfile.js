@@ -40,7 +40,7 @@ async function devTemplates () {
 exports.dev = devTemplates;
 
 async function defaultTask () {
-  const locales = ['fr'];
+  const locales = ['en'];
   const localizedTemplateTasks = await Promise.all(locales.map(async locale => {
     const taskFactory = await createTaskFactory(locale);
     return series(
