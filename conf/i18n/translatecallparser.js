@@ -1,0 +1,72 @@
+const TranslationPlaceholder = require('./models/translationplaceholder');
+
+/**
+ * TranslateCallParser is responsible for parsing translate calls from Javascript
+ * and converting them into the domain model {@link TranslationPlaceholder}
+ */
+class TranslateCallParser {
+  /**
+   * TranslateCallParser accepts a string translationCall, and parses its arguments
+   * to return a {@link TranslationPlaceholder}
+   *
+   * @param {string} translateCall
+   * @returns {TranslationPlaceholder}
+   */
+  parse(translateCall) {
+    const parsedTranslateCall = this._convertToObject(translateCall);
+
+    return new TranslationPlaceholder({
+      phrase: parsedTranslateCall.phrase,
+      pluralPhrase: parsedTranslateCall.pluralPhrase,
+      count: parsedTranslateCall.count,
+      context: parsedTranslateCall.context,
+      interpolationValues: parsedTranslateCall.interpolationValues
+    });
+  }
+
+  /**
+   * Converts the translateCall from a string into an Object, keyed by the
+   * parameter names.
+   * TODO (agrow): Use a JS parsing library to construct ASTs instead instead of regex here.
+   *
+   * @param {string} translateCall
+   * @returns {Object}
+   */
+  _convertToObject(translateCall) {
+    const parsedTranslationCall = this._parseParams(translateCall);
+
+    const interpolationValuesRegex = /interpolationValues: \{[\s]*([a-zA-Z0-9]+:[\s]*([a-zA-Z\d\_\.]+)[,]*[\s]*)+\}/g;
+    const interpolationValues = (translateCall.match(interpolationValuesRegex) || [])[0] || '';
+    const parsedInterpolationValues = this._parseParams(interpolationValues);
+
+    return {
+      ...parsedTranslationCall,
+      interpolationValues: parsedInterpolationValues
+    };
+  }
+
+  /**
+   * Parses params with the general format `key: value` from a string, returning an object.
+   * TODO (agrow): Use a JS parsing library to construct ASTs instead instead of regex here.
+   *
+   * @param {string} translateCall
+   * @returns {Object}
+   */
+  _parseParams(str) {
+    const paramRegex =
+      /[a-zA-Z0-9]+:[\s]*(([\'\"\`][a-zA-Z\s\d\[\]\.]+[\'\"\`])|\d+|([a-zA-Z\d\_\.]+))/g;
+    return (str.match(paramRegex) || [])
+      .reduce((accumulator, params) => {
+        const paramOperands = params.split(':');
+        const paramName = paramOperands[0];
+
+        // Strip the wrapper quotes (" ' or `) for string params
+        const paramValue = paramOperands[1] && paramOperands[1]
+          .trim()
+          .replace(/(^[\'\"\`])|([\'\"\`]$)/g, '');
+        accumulator[paramName] = paramValue;
+        return accumulator;
+      }, {});
+  }
+}
+module.exports = TranslateCallParser;

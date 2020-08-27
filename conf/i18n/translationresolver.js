@@ -17,6 +17,32 @@ class TranslationResolver {
   }
 
   /**
+   * Converts the {@link TranslationPlaceholder} of into either an exact translation
+   *  or the appropriate run-time call.
+   *
+   * @param {TranslationPlaceholder} placeholder The {@link TranslationPlaceholder}.
+   * @returns {string} A fully translated string or the correct call for getting the
+   *                   translated string at run-time.
+   */
+  resolve (placeholder) {
+    const count = placeholder.getCount();
+    const context = placeholder.getContext();
+    if (count && context) {
+      throw new Error('Translate plural with context not currently supported');
+    }
+
+    if (count) {
+      return this._resolveWithPlural(placeholder);
+    }
+
+    if (context) {
+      return this._resolveWithContext(placeholder);
+    }
+
+    return this._resolve(placeholder);
+  }
+
+  /**
    * Converts the {@link TranslationPlaceholder} of a simple phrase into either
    * an exact translation or the appropriate run-time call.
    *
@@ -24,7 +50,7 @@ class TranslationResolver {
    * @returns {string} A fully translated string or the correct call for getting the
    *                   translated string at run-time.
    */
-  resolve (placeholder) {
+  _resolve (placeholder) {
     const translationResult = this._translator.translate(placeholder.getPhrase());
     const interpValues = placeholder.getInterpolationValues();
     return this._resolveInternal(translationResult, interpValues);
@@ -38,7 +64,7 @@ class TranslationResolver {
    * @returns {string} A fully translated string or the correct call for getting the
    *                   translated string at run-time.
    */
-  resolveWithContext (placeholder) {
+  _resolveWithContext (placeholder) {
     const translationResult = this._translator.translateWithContext(
       placeholder.getPhrase(), placeholder.getContext());
     const interpValues = placeholder.getInterpolationValues();
@@ -53,7 +79,7 @@ class TranslationResolver {
    * @returns {string} The correct call for getting the translated, pluralized
    *                   string at run-time.
    */
-  resolveWithPlural (placeholder) {
+  _resolveWithPlural (placeholder) {
     const translationResult = this._translator.translatePlural(
       placeholder.getPhrase(), placeholder.getPluralForm());
     const interpValues = placeholder.getInterpolationValues();

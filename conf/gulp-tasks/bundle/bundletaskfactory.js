@@ -1,21 +1,10 @@
-const fs = require('fs');
-
-const { dest } = require('gulp');
-
-const rollup = require('gulp-rollup-lightweight');
-const babel = require('rollup-plugin-babel');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const insert = require('rollup-plugin-insert');
-
-const source = require('vinyl-source-stream');
-const replace = require('gulp-replace');
+const { modernBundle, legacyBundle, minifyBundle } = require('./bundle');
 
 // An enum describing the different types of SDK bundle.
 const BundleType = {
-  MODERN: 'modern',
-  LEGACY_IIFE: 'legacy-iife',
-  LEGACY_UMD: 'legacy-umd'
+  MODERN: 'answers-modern',
+  LEGACY_IIFE: 'answers',
+  LEGACY_UMD: 'answers-umd'
 };
 Object.freeze(BundleType);
 
@@ -23,8 +12,10 @@ Object.freeze(BundleType);
  * A factory class that provides Gulp tasks for the different kinds of SDK bundle.
  */
 class BundleTaskFactory {
-  constructor (libVersion) {
+  constructor (libVersion, translationResolver, locale) {
     this._libVersion = libVersion;
+    this._localePrefix = locale && locale !== 'en' ? `${locale}-` : '';
+    this._translationResolver = translationResolver;
     this._namespace = 'ANSWERS';
   }
 
@@ -37,11 +28,30 @@ class BundleTaskFactory {
   create (bundleType) {
     switch (bundleType) {
       case BundleType.MODERN:
-        return () => this._modernBundle();
+        return (callback) => this._modernBundle(callback);
       case BundleType.LEGACY_IIFE:
-        return () => this._legacyBundleIIFE();
+        return (callback) => this._legacyBundleIIFE(callback);
       case BundleType.LEGACY_UMD:
-        return () => this._legacyBundleUMD();
+        return (callback) => this._legacyBundleUMD(callback);
+      default:
+        throw new Error('Unrecognized BundleType');
+    }
+  }
+
+  /**
+   * Provides a Gulp task to minify an SDK bundle of the specified type.
+   *
+   * @param {BundleType} bundleType The type of SDK bundle to minify.
+   * @returns {Function} Gulp task for minifying the requested SDK bundle.
+   */
+  minify (bundleType) {
+    switch (bundleType) {
+      case BundleType.MODERN:
+        return (callback) => this._minifyModern(callback);
+      case BundleType.LEGACY_IIFE:
+        return (callback) => this._minifyLegacy(callback);
+      case BundleType.LEGACY_UMD:
+        return (callback) => this._minifyLegacyUMD(callback);
       default:
         throw new Error('Unrecognized BundleType');
     }
@@ -53,31 +63,30 @@ class BundleTaskFactory {
    * @returns {stream.Writable} A {@link Writable} stream containing the modern
    *                            SDK bundle.
    */
-  _modernBundle () {
-    const rollupConfig = {
-      input: './src/answers-umd.js',
-      output: {
-        format: 'umd',
-        name: this._namespace,
-        exports: 'default',
-        sourcemap: true
-      },
-      plugins: [
-        resolve(),
-        commonjs({
-          include: './node_modules/**'
-        }),
-        babel({
-          babelrc: false,
-          exclude: 'node_modules/**',
-          presets: ['@babel/env']
-        })
-      ]
+  _modernBundle (callback) {
+    const modernBundleConfig = {
+      format: 'umd',
+      name: this._namespace,
+      exports: 'default',
+      sourcemap: true
     };
-    return rollup(rollupConfig)
-      .pipe(source('answers-modern.js'))
-      .pipe(replace('@@LIB_VERSION', this._libVersion))
-      .pipe(dest('dist'));
+    return modernBundle(
+      callback,
+      modernBundleConfig,
+      this._getBundleName(BundleType.MODERN),
+      this._libVersion,
+      this._translationResolver
+    );
+  }
+
+  /**
+   * The Gulp task for minifying the modern version of the SDK bundle.
+   *
+   * @returns {stream.Writable} A {@link Writable} stream containing the modern
+   *                            SDK bundle.
+   */
+  _minifyModern (callback) {
+    return minifyBundle(callback, this._getBundleName(BundleType.MODERN));
   }
 
   /**
@@ -86,13 +95,29 @@ class BundleTaskFactory {
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            IIFE-style SDK bundle.
    */
-  _legacyBundleIIFE () {
+  _legacyBundleIIFE (callback) {
     const legacyBundleConfig = {
       format: 'iife',
       name: this._namespace,
       sourcemap: true
     };
-    return this._legacyBundle(legacyBundleConfig, 'answers.js');
+    return legacyBundle(
+      callback,
+      legacyBundleConfig,
+      this._getBundleName(BundleType.LEGACY_IIFE),
+      this._libVersion,
+      this._translationResolver
+    );
+  }
+
+  /**
+   * The Gulp task for minifying the legacy, IIFE-style SDK bundle.
+   *
+   * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
+   *                            IIFE-style SDK bundle.
+   */
+  _minifyLegacy (callback) {
+    return minifyBundle(callback, this._getBundleName(BundleType.LEGACY_IIFE));
   }
 
   /**
@@ -101,67 +126,40 @@ class BundleTaskFactory {
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            UMD-style SDK bundle.
    */
-  _legacyBundleUMD () {
+  _legacyBundleUMD (callback) {
     const legacyBundleConfig = {
       format: 'umd',
       name: this._namespace,
       export: 'default',
       sourcemap: true
     };
-    return this._legacyBundle(legacyBundleConfig, 'answers-umd.js');
+    return legacyBundle(
+      callback,
+      legacyBundleConfig,
+      this._getBundleName(BundleType.LEGACY_UMD),
+      this._libVersion,
+      this._translationResolver
+    );
   }
 
   /**
-   * The Gulp task for producing either variant of the legacy SDK bundle.
+   * The Gulp task for minifying the legacy, UMD-style SDK bundle.
    *
-   * @param {Object<string, ?>} outputConfig Any variant-specific configuration
-   *                                         for the legacy bundle.
-   * @param {string} fileName The filename of the created bundle.
-   * @returns {stream.Writable} A {@link Writable} stream cotaining the legacy
-   *                            SDK bundle.
+   * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
+   *                            UMD-style SDK bundle.
    */
-  _legacyBundle (outputConfig, fileName) {
-    const rollupConfig = {
-      input: './src/answers-umd.js',
-      output: outputConfig,
-      plugins: [
-        resolve(),
-        insert.prepend(
-          fs.readFileSync('./conf/gulp-tasks/polyfill-prefix.js').toString(),
-          {
-            include: './src/answers-umd.js'
-          }),
-        commonjs({
-          include: './node_modules/**'
-        }),
-        babel({
-          runtimeHelpers: true,
-          babelrc: false,
-          exclude: 'node_modules/**',
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                loose: true,
-                modules: false
-              }
-            ]
-          ],
-          plugins: [
-            '@babel/syntax-dynamic-import',
-            ['@babel/plugin-transform-runtime', {
-              corejs: 3
-            }],
-            '@babel/plugin-transform-arrow-functions',
-            '@babel/plugin-proposal-object-rest-spread'
-          ]
-        })
-      ]
-    };
-    return rollup(rollupConfig)
-      .pipe(source(fileName))
-      .pipe(replace('@@LIB_VERSION', this._libVersion))
-      .pipe(dest('dist'));
+  _minifyLegacyUMD (callback) {
+    return minifyBundle(callback, this._getBundleName(BundleType.LEGACY_UMD));
+  }
+
+  /**
+   * Gets the name of the bundle based on its type
+   *
+   * @param {BundleType} bundleType
+   * @returns {string}
+   */
+  _getBundleName (bundleType) {
+    return `${this._localePrefix}${bundleType}`;
   }
 }
 
