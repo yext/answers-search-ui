@@ -15,7 +15,7 @@ async function createTaskFactory (locale) {
   return new TemplateTaskFactory(translationResolver, locale);
 }
 
-exports.dev = function () {
+function devTemplates () {
   return createTaskFactory(DEV_LOCALE).then(devTaskFactory => {
     const { precompileTemplates, bundleTemplatesUMD, cleanFiles } = devTaskFactory;
 
@@ -36,6 +36,8 @@ exports.dev = function () {
   });
 }
 
+exports.dev = devTemplates;
+
 function createDefaultTask(taskFactory) {
   return series(
     taskFactory.precompileTemplates,
@@ -47,11 +49,13 @@ function createDefaultTask(taskFactory) {
   );
 }
 
-exports.default = function () {
+function defaultTemplates () {
   const localizedTaskPromises = BUILD_LOCALES.map(locale => {
     return createTaskFactory(locale).then(createDefaultTask);
   });
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
     return new Promise(resolve => parallel(...localizedTasks)(resolve));
   });
-};
+}
+
+exports.default = defaultTemplates;

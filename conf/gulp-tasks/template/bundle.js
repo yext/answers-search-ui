@@ -23,6 +23,7 @@ exports.bundleTemplatesUMD = function (done, filenameUMD, filenamePrecompiled) {
     filenamePrecompiled
   );
 }
+
 exports.bundleTemplatesIIFE = function (done, filenameIIFE, filenamePrecompiled) {
   return bundleTemplates(
     done,
@@ -34,6 +35,7 @@ exports.bundleTemplatesIIFE = function (done, filenameIIFE, filenamePrecompiled)
     filenamePrecompiled
   );
 }
+
 function bundleTemplates (done, outputConfig, fileName, filenamePrecompiled) {
   return rollup({
     input: `./dist/${filenamePrecompiled}`,
