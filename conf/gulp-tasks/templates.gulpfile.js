@@ -5,9 +5,8 @@ const TemplateTaskFactory = require('./template/templatetaskfactory');
 const Translator = require('../i18n/translator');
 const TranslationResolver = require('../i18n/translationresolver');
 
-let devTaskFactory;
 const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
-const devLocale = 'en';
+const { DEV_LOCALE, BUILD_LOCALES } = require('../i18n/constants')
 
 async function createTaskFactory (locale) {
   const translation = await localFileParser.fetch(locale);
@@ -16,43 +15,43 @@ async function createTaskFactory (locale) {
   return new TemplateTaskFactory(translationResolver, locale);
 }
 
-async function watchTemplates () {
-  devTaskFactory = devTaskFactory || await createTaskFactory(devLocale);
-  return watch(['./src/ui/templates/**/*.hbs'], {
-    ignored: './dist/'
-  }, series(
-    devTaskFactory.precompileTemplates,
-    devTaskFactory.bundleTemplatesUMD,
-    devTaskFactory.cleanFiles
-  ));
+exports.dev = function () {
+  return createTaskFactory(DEV_LOCALE).then(devTaskFactory => {
+    const { precompileTemplates, bundleTemplatesUMD, cleanFiles } = devTaskFactory;
+
+    function watchTemplates () {
+      return watch(['./src/ui/templates/**/*.hbs'], {
+        ignored: './dist/'
+      }, series(precompileTemplates, bundleTemplatesUMD, cleanFiles));
+    }
+
+    return new Promise(resolve => {
+      return series(
+        precompileTemplates, 
+        bundleTemplatesUMD, 
+        cleanFiles, 
+        watchTemplates
+      )(resolve)
+    });
+  });
 }
 
-async function devTemplates () {
-  devTaskFactory = devTaskFactory || await createTaskFactory(devLocale);
+function createDefaultTask(taskFactory) {
   return series(
-    devTaskFactory.precompileTemplates,
-    devTaskFactory.bundleTemplatesUMD,
-    devTaskFactory.cleanFiles,
-    watchTemplates
-  )();
+    taskFactory.precompileTemplates,
+    parallel(
+      series(taskFactory.bundleTemplatesIIFE, taskFactory.minifyTemplatesIIFE),
+      series(taskFactory.bundleTemplatesUMD, taskFactory.minifyTemplatesUMD)
+    ),
+    taskFactory.cleanFiles
+  );
 }
 
-exports.dev = devTemplates;
-
-async function defaultTask () {
-  const locales = ['en'];
-  const localizedTemplateTasks = await Promise.all(locales.map(async locale => {
-    const taskFactory = await createTaskFactory(locale);
-    return series(
-      taskFactory.precompileTemplates,
-      parallel(
-        series(taskFactory.bundleTemplatesIIFE, taskFactory.minifyTemplatesIIFE),
-        series(taskFactory.bundleTemplatesUMD, taskFactory.minifyTemplatesUMD)
-      ),
-      taskFactory.cleanFiles
-    );
-  }));
-  return new Promise(resolve => parallel(...localizedTemplateTasks)(resolve));
-}
-
-exports.default = defaultTask;
+exports.default = function () {
+  const localizedTaskPromises = BUILD_LOCALES.map(locale => {
+    return createTaskFactory(locale).then(createDefaultTask);
+  });
+  return Promise.all(localizedTaskPromises).then(localizedTasks => {
+    return new Promise(resolve => parallel(...localizedTasks)(resolve));
+  });
+};
