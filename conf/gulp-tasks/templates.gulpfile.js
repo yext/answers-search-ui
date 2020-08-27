@@ -1,145 +1,58 @@
-const { parallel, series, src, dest, watch } = require('gulp');
+const { parallel, series, watch } = require('gulp');
+const path = require('path');
+const LocalFileParser = require('../i18n/localfileparser');
+const TemplateTaskFactory = require('./template/templatetaskfactory');
+const Translator = require('../i18n/translator');
+const TranslationResolver = require('../i18n/translationresolver');
 
-const fs = require('fs');
-const del = require('del');
-const insert = require('rollup-plugin-insert');
+let devTaskFactory;
+const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
+const devLocale = 'en';
 
-const rollup = require('gulp-rollup-lightweight');
-const babel = require('rollup-plugin-babel');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const builtins = require('rollup-plugin-node-builtins');
-
-const uglify = require('gulp-uglify-es').default;
-
-const handlebars = require('gulp-handlebars');
-const concat = require('gulp-concat');
-const declare = require('gulp-declare');
-const wrap = require('gulp-wrap');
-
-const source = require('vinyl-source-stream');
-
-const filenamePrecompiled = 'answerstemplates.precompiled.min.js';
-const filenameUMD = 'answerstemplates.compiled.min.js';
-const filenameIIFE = 'answerstemplates-iife.compiled.min.js';
-
-function precompileTemplates () {
-  return src('./src/ui/templates/**/*.hbs')
-    .pipe(handlebars())
-    .pipe(wrap(`Handlebars.template(<%= contents %>);
-        Handlebars.registerPartial(<%= processPartialName(file.relative) %>, <%= customContext(file.relative) %> )`, {}, {
-      imports: {
-        processPartialName: function (fileName, a, b, c) {
-          // Strip the extension and the underscore
-          // Escape the output with JSON.stringify
-          let name = fileName.split('.')[0];
-          if (name.charAt(0) === '_') {
-            return JSON.stringify(name.substr(1));
-          } else {
-            return JSON.stringify(name);
-          }
-        },
-        // TBH, this isn't really needed anymore since we don't name files like so 'foo.bar.js', but this is here to
-        // support that use case.
-        customContext: function (fileName) {
-          let name = fileName.split('.')[0];
-          let keys = name.split('.');
-          let context = 'context';
-          for (let i = 0; i < keys.length; i++) {
-            context = context += '["' + keys[i] + '"]';
-          }
-          return context;
-        }
-      }
-    }))
-    .pipe(declare({
-      root: 'context',
-      noRedeclare: true,
-      processName: function (filePath) {
-        let path = filePath.replace('src/ui/templates', '');
-        return declare.processNameByPath(path, '').replace('.', '/');
-      }
-    }))
-    .pipe(concat(filenamePrecompiled))
-    .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
-    .pipe(dest('dist'));
+async function createTaskFactory (locale) {
+  const translation = await localFileParser.fetch(locale);
+  const translator = await Translator.create(locale, [], { [locale]: { translation } });
+  const translationResolver = new TranslationResolver(translator, translationResult => translationResult);
+  return new TemplateTaskFactory(translationResolver, locale);
 }
 
-function bundleTemplates (outputConfig, fileName) {
-  return rollup({
-    input: `./dist/${filenamePrecompiled}`,
-    output: outputConfig,
-    plugins: [
-      resolve(),
-      insert.prepend(
-        fs.readFileSync('./conf/gulp-tasks/templates-polyfill-prefix.js').toString(),
-        {
-          include: `./dist/${filenamePrecompiled}`
-        }),
-      builtins(),
-      commonjs({
-        include: './node_modules/**'
-      }),
-      babel({
-        presets: ['@babel/env']
-      })
-    ]
-  })
-    .pipe(source(fileName))
-    .pipe(dest('dist'));
-}
-
-function bundleTemplatesUMD () {
-  return bundleTemplates(
-    {
-      format: 'umd',
-      name: 'TemplateBundle',
-      exports: 'named'
-    },
-    filenameUMD
-  );
-}
-
-function bundleTemplatesIIFE () {
-  return bundleTemplates(
-    {
-      format: 'iife',
-      name: 'TemplateBundle'
-    },
-    filenameIIFE
-  );
-}
-
-function minifyTemplatesUMD (cb) {
-  return src(`./dist/${filenameUMD}`)
-    .pipe(uglify())
-    .pipe(dest('dist'));
-}
-
-function minifyTemplatesIIFE (cb) {
-  return src(`./dist/${filenameIIFE}`)
-    .pipe(uglify())
-    .pipe(dest('dist'));
-}
-
-function cleanFiles () {
-  return del([
-    `./dist/${filenamePrecompiled}`
-  ]);
-}
-
-function watchTemplates (cb) {
+async function watchTemplates () {
+  devTaskFactory = devTaskFactory || await createTaskFactory(devLocale);
   return watch(['./src/ui/templates/**/*.hbs'], {
     ignored: './dist/'
-  }, series(precompileTemplates, bundleTemplatesUMD, cleanFiles));
+  }, series(
+    devTaskFactory.precompileTemplates,
+    devTaskFactory.bundleTemplatesUMD,
+    devTaskFactory.cleanFiles
+  ));
 }
 
-exports.default = series(
-  precompileTemplates,
-  parallel(
-    series(bundleTemplatesIIFE, minifyTemplatesIIFE),
-    series(bundleTemplatesUMD, minifyTemplatesUMD)
-  ),
-  cleanFiles
-);
-exports.dev = series(precompileTemplates, bundleTemplatesUMD, cleanFiles, watchTemplates);
+async function devTemplates () {
+  devTaskFactory = devTaskFactory || await createTaskFactory(devLocale);
+  return series(
+    devTaskFactory.precompileTemplates,
+    devTaskFactory.bundleTemplatesUMD,
+    devTaskFactory.cleanFiles,
+    watchTemplates
+  )();
+}
+
+exports.dev = devTemplates;
+
+async function defaultTask () {
+  const locales = ['fr'];
+  const localizedTemplateTasks = await Promise.all(locales.map(async locale => {
+    const taskFactory = await createTaskFactory(locale);
+    return series(
+      taskFactory.precompileTemplates,
+      parallel(
+        series(taskFactory.bundleTemplatesIIFE, taskFactory.minifyTemplatesIIFE),
+        series(taskFactory.bundleTemplatesUMD, taskFactory.minifyTemplatesUMD)
+      ),
+      taskFactory.cleanFiles
+    );
+  }));
+  return new Promise(resolve => parallel(...localizedTemplateTasks)(resolve));
+}
+
+exports.default = defaultTask;
