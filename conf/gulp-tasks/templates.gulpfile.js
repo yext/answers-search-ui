@@ -45,7 +45,7 @@ function devTemplates () {
 exports.dev = devTemplates;
 
 /**
- * Creates a template build task for a specific locale.
+ * Creates a template build task for a specific {@link TemplateTaskFactory}.
  * @param {TemplateTaskFactory} taskFactory
  * @returns {Function}
  */
