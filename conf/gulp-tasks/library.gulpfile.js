@@ -18,12 +18,12 @@ exports.dev = function devJSBundle () {
   return createTaskFactory(DEV_LOCALE).then(devTaskFactory => {
     return new Promise(resolve => {
       return parallel(
-        series(devTaskFactory.create(BundleType.LEGACY_IIFE), watchJS),
+        series(devTaskFactory.create(BundleType.LEGACY_IIFE), watchJS(devTaskFactory)),
         series(compileCSS, watchCSS)
-      )
+      );
     });
   });
-}
+};
 
 /**
  * Creates a build task per locale, and combines them into a parallel task.
@@ -36,7 +36,7 @@ exports.default = function defaultJSBundle () {
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
     return new Promise(resolve => parallel(...localizedTasks)(resolve));
   });
-}
+};
 
 /**
  * Creates modern, legacy and legacyUMD bundles in parallel.
@@ -59,7 +59,7 @@ async function createBundles (bundleTaskFactory) {
     ),
     series(compileCSS)
   );
-};
+}
 
 /**
  * Creates a BundleTaskFactory configured with translations for the given locale.
@@ -67,7 +67,7 @@ async function createBundles (bundleTaskFactory) {
  * @param {string} locale
  * @returns {BundleTaskFactory} bundleTaskFactory
  */
-async function createTaskFactory(locale) {
+async function createTaskFactory (locale) {
   const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
   const translation = await localFileParser.fetch(locale);
 
@@ -76,8 +76,8 @@ async function createTaskFactory(locale) {
     translator,
     (translationResult, interpValues, count) => {
       let parsedParams = JSON.stringify(interpValues);
-      parsedParams = parsedParams.replace(/[\'\"]/g, '');
-      return `ANSWERS.translateJS(${JSON.stringify(translationResult)}, ${parsedParams}, ${count});`
+      parsedParams = parsedParams.replace(/['"]/g, '');
+      return `ANSWERS.translateJS(${JSON.stringify(translationResult)}, ${parsedParams}, ${count});`;
     });
 
   return new BundleTaskFactory(getLibraryVersion(), translationResolver, locale);
@@ -92,10 +92,15 @@ function compileCSS () {
     .pipe(dest('./dist/'));
 }
 
-function watchJS (cb) {
+/**
+ * Creates a new legacy bundle on JS file updates
+ *
+ * @param {BundleTaskFactory} bundleTaskFactory
+ */
+function watchJS (bundleTaskFactory) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
-  }, parallel(legacyBundleIIFE));
+  }, parallel(bundleTaskFactory.create(BundleType.LEGACY_IIFE)));
 }
 
 function watchCSS (cb) {

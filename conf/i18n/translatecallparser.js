@@ -12,7 +12,7 @@ class TranslateCallParser {
    * @param {string} translateCall
    * @returns {TranslationPlaceholder}
    */
-  parse(translateCall) {
+  parse (translateCall) {
     const parsedTranslateCall = this._convertToObject(translateCall);
 
     return new TranslationPlaceholder({
@@ -32,10 +32,10 @@ class TranslateCallParser {
    * @param {string} translateCall
    * @returns {Object}
    */
-  _convertToObject(translateCall) {
+  _convertToObject (translateCall) {
     const parsedTranslationCall = this._parseParams(translateCall);
 
-    const interpolationValuesRegex = /interpolationValues: \{[\s]*([a-zA-Z0-9]+:[\s]*([a-zA-Z\d\_\.]+)[,]*[\s]*)+\}/g;
+    const interpolationValuesRegex = /interpolationValues: \{[\s]*([a-zA-Z0-9]+:[\s]*([a-zA-Z\d_.]+)[,]*[\s]*)+\}/g;
     const interpolationValues = (translateCall.match(interpolationValuesRegex) || [])[0] || '';
     const parsedInterpolationValues = this._parseParams(interpolationValues);
 
@@ -52,9 +52,9 @@ class TranslateCallParser {
    * @param {string} translateCall
    * @returns {Object}
    */
-  _parseParams(str) {
+  _parseParams (str) {
     const paramRegex =
-      /[a-zA-Z0-9]+:[\s]*(([\'\"\`][a-zA-Z\s\d\[\]\.]+[\'\"\`])|\d+|([a-zA-Z\d\_\.]+))/g;
+      /[a-zA-Z0-9]+:[\s]*((['"`][a-zA-Z\s\d[\].]+['"`])|\d+|([a-zA-Z\d_.]+))/g;
     return (str.match(paramRegex) || [])
       .reduce((accumulator, params) => {
         const paramOperands = params.split(':');
@@ -63,7 +63,7 @@ class TranslateCallParser {
         // Strip the wrapper quotes (" ' or `) for string params
         const paramValue = paramOperands[1] && paramOperands[1]
           .trim()
-          .replace(/(^[\'\"\`])|([\'\"\`]$)/g, '');
+          .replace(/(^['"`])|(['"`]$)/g, '');
         accumulator[paramName] = paramValue;
         return accumulator;
       }, {});

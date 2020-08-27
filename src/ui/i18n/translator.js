@@ -14,4 +14,4 @@
  */
 export function replaceWithTranslation ({ phrase, pluralPhrase, count, context, interpolationValues }) {
   return phrase;
-};
+}
