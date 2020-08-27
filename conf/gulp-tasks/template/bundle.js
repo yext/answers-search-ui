@@ -11,9 +11,9 @@ const builtins = require('rollup-plugin-node-builtins');
 
 const source = require('vinyl-source-stream');
 
-exports.bundleTemplatesUMD = function (done, filenameUMD, filenamePrecompiled) {
+exports.bundleTemplatesUMD = function (callback, filenameUMD, filenamePrecompiled) {
   return bundleTemplates(
-    done,
+    callback,
     {
       format: 'umd',
       name: 'TemplateBundle',
@@ -24,9 +24,9 @@ exports.bundleTemplatesUMD = function (done, filenameUMD, filenamePrecompiled) {
   );
 }
 
-exports.bundleTemplatesIIFE = function (done, filenameIIFE, filenamePrecompiled) {
+exports.bundleTemplatesIIFE = function (callback, filenameIIFE, filenamePrecompiled) {
   return bundleTemplates(
-    done,
+    callback,
     {
       format: 'iife',
       name: 'TemplateBundle'
@@ -36,7 +36,7 @@ exports.bundleTemplatesIIFE = function (done, filenameIIFE, filenamePrecompiled)
   );
 }
 
-function bundleTemplates (done, outputConfig, fileName, filenamePrecompiled) {
+function bundleTemplates (callback, outputConfig, fileName, filenamePrecompiled) {
   return rollup({
     input: `./dist/${filenamePrecompiled}`,
     output: outputConfig,
@@ -58,5 +58,5 @@ function bundleTemplates (done, outputConfig, fileName, filenamePrecompiled) {
   })
     .pipe(source(fileName))
     .pipe(dest('dist'))
-    .on('end', done);
+    .on('end', callback);
 }

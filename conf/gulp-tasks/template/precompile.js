@@ -5,7 +5,7 @@ const concat = require('gulp-concat');
 const declare = require('gulp-declare');
 const wrap = require('gulp-wrap');
 
-function precompileTemplates (done, outputFile, processAST) {
+function precompileTemplates (callback, outputFile, processAST) {
   return src('./src/ui/templates/**/*.hbs')
     .pipe(handlebars({ processAST: processAST }))
     .pipe(wrap(`Handlebars.template(<%= contents %>);
@@ -45,7 +45,7 @@ function precompileTemplates (done, outputFile, processAST) {
     .pipe(concat(outputFile))
     .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
     .pipe(dest('dist'))
-    .on('end', done);
+    .on('end', callback);
 }
 
 module.exports = precompileTemplates;

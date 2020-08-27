@@ -42,34 +42,34 @@ class TemplateTaskFactory {
     Object.defineProperty(this.cleanFiles, 'name', { value: `${locale}-cleanFiles` });
   }
 
-  precompileTemplates (done) {
+  precompileTemplates (callback) {
     if (this.locale === 'en') {
-      return precompileTemplates(done, this.filenamePrecompiled);
+      return precompileTemplates(callback, this.filenamePrecompiled);
     }
     const processAST = ast => new TranslateHelperVisitor(this.translationResolver).accept(ast);
-    return precompileTemplates(done, this.filenamePrecompiled, processAST);
+    return precompileTemplates(callback, this.filenamePrecompiled, processAST);
   }
 
-  bundleTemplatesUMD (done) {
-    return bundleTemplatesUMD(done, this.filenameUMD, this.filenamePrecompiled);
+  bundleTemplatesUMD (callback) {
+    return bundleTemplatesUMD(callback, this.filenameUMD, this.filenamePrecompiled);
   }
 
-  bundleTemplatesIIFE (done) {
-    return bundleTemplatesIIFE(done, this.filenameIIFE, this.filenamePrecompiled);
+  bundleTemplatesIIFE (callback) {
+    return bundleTemplatesIIFE(callback, this.filenameIIFE, this.filenamePrecompiled);
   }
 
-  minifyTemplatesUMD (done) {
+  minifyTemplatesUMD (callback) {
     return src(`./dist/${this.filenameUMD}`)
       .pipe(uglify())
       .pipe(dest('dist'))
-      .on('end', done);
+      .on('end', callback);
   }
 
-  minifyTemplatesIIFE (done) {
+  minifyTemplatesIIFE (callback) {
     return src(`./dist/${this.filenameIIFE}`)
       .pipe(uglify())
       .pipe(dest('dist'))
-      .on('end', done);
+      .on('end', callback);
   }
 
   cleanFiles () {
