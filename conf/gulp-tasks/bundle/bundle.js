@@ -1,4 +1,3 @@
-
 const { src, dest } = require('gulp');
 
 const babel = require('rollup-plugin-babel');
@@ -133,8 +132,12 @@ function _buildBundle (callback, rollupConfig, bundleName, libVersion, translati
     .pipe(source(`${bundleName}.js`))
     .pipe(replace('@@LIB_VERSION', libVersion))
     .pipe(replace(/replaceWithTranslation\([^;]+\);/g, translateCall => {
-      const translationPlaceholder = new TranslateCallParser().parse(translateCall);
-      return translationResolver.resolve(translationPlaceholder);
+      const placeholder = new TranslateCallParser().parse(translateCall);
+      const translatedValue = translationResolver.resolve(placeholder);
+      const canBeTranslatedStatically = typeof translatedValue === 'string'
+        && !placeholder.getPluralForm()
+        && placeholder.hasNoInterpolation();
+      return canBeTranslatedStatically ? `"${translatedValue}";` : translatedValue;
      }))
     .pipe(dest('dist'))
     .on('end', callback);
