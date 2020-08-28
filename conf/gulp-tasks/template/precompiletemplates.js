@@ -6,9 +6,10 @@ const declare = require('gulp-declare');
 const wrap = require('gulp-wrap');
 
 /**
- * @param {Function} callback called when the stream ends
+ * @param {Function} callback called when the task is finished
  * @param {string} outputFile
  * @param {Function} processAST a function that takes in and mutates a handlebars AST
+ * @returns {stream.Readable}
  */
 function precompileTemplates (callback, outputFile, processAST) {
   return src('./src/ui/templates/**/*.hbs')

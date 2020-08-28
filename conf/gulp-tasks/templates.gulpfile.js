@@ -1,62 +1,80 @@
 const { parallel, series, watch } = require('gulp');
 const path = require('path');
-const LocalFileParser = require('../i18n/localfileparser');
-const TemplateTaskFactory = require('./template/templatetaskfactory');
-const Translator = require('../i18n/translator');
-const TranslationResolver = require('../i18n/translationresolver');
 
-const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
+const LocalFileParser = require('../i18n/localfileparser');
+const Translator = require('../i18n/translator');
 const { DEV_LOCALE, BUILD_LOCALES } = require('../i18n/constants');
 
-async function createTaskFactory (locale) {
+const TemplateType = require('./template/templatetype');
+const PrecompileTemplatesTaskFactory = require('./template/precompiletemplatestaskfactory');
+const BundleTemplatesTaskFactory = require('./template/bundletemplatestaskfactory');
+const MinifyTemplatesTaskFactory = require('./template/minifytemplatestaskfactory');
+const createCleanFilesTask = require('./template/createcleanfilestask');
+
+const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
+
+async function createPrecompileTaskFactory (locale) {
   const translation = await localFileParser.fetch(locale);
   const translator = await Translator.create(locale, [], { [locale]: { translation } });
-  const passThroughRuntimeGenerator = translationResult => translationResult;
-  const translationResolver = new TranslationResolver(translator, passThroughRuntimeGenerator);
-  return new TemplateTaskFactory(translationResolver, locale);
+  return new PrecompileTemplatesTaskFactory(translator, locale);
 }
 
 /**
- * Precompiles templates together, bundles them together, deletes the precompiled template
- * file, and kicks off the watch task.
+ * Precompiles templates together, bundles them together,
+ * cleans up any intermediary files, and kicks off the watch task.
  * @returns {Promise<Function>}
  */
-function devTemplates () {
-  return createTaskFactory(DEV_LOCALE).then(devTaskFactory => {
-    const { precompileTemplates, bundleTemplatesUMD, cleanFiles } = devTaskFactory;
+async function devTemplates () {
+  const bundleTemplatesUMD =
+    new BundleTemplatesTaskFactory(DEV_LOCALE).create(TemplateType.UMD);
+  const cleanFiles = createCleanFilesTask(DEV_LOCALE);
+  const precompileTaskFactory = await createPrecompileTaskFactory(DEV_LOCALE);
+  const precompileTemplates = precompileTaskFactory.create();
 
-    function watchTemplates () {
-      return watch(['./src/ui/templates/**/*.hbs'], {
-        ignored: './dist/'
-      }, series(precompileTemplates, bundleTemplatesUMD, cleanFiles));
-    }
+  function watchTemplates () {
+    return watch(['./src/ui/templates/**/*.hbs'], {
+      ignored: './dist/'
+    }, series(precompileTemplates, bundleTemplatesUMD, cleanFiles));
+  }
 
-    return new Promise(resolve => {
-      return series(
-        precompileTemplates,
-        bundleTemplatesUMD,
-        cleanFiles,
-        watchTemplates
-      )(resolve);
-    });
+  return new Promise(resolve => {
+    return series(
+      precompileTemplates,
+      bundleTemplatesUMD,
+      cleanFiles,
+      watchTemplates
+    )(resolve);
   });
 }
 
 exports.dev = devTemplates;
 
 /**
- * Creates a template build task for a specific {@link TemplateTaskFactory}.
- * @param {TemplateTaskFactory} taskFactory
+ * Creates a template build task for a specific {@link PrecompileTemplatesTaskFactory} and locale.
+ * @param {PrecompileTemplatesTaskFactory} precompileTaskFactory
+ * @param {string} locale
  * @returns {Function}
  */
-function createDefaultTask (taskFactory) {
+function createDefaultTask (precompileTaskFactory, locale) {
+  const precompileTemplates = precompileTaskFactory.create();
+
+  const bundleFactory = new BundleTemplatesTaskFactory(locale);
+  const bundleTemplatesIIFE = bundleFactory.create(TemplateType.IIFE);
+  const bundleTemplatesUMD = bundleFactory.create(TemplateType.UMD);
+
+  const minifyFactory = new MinifyTemplatesTaskFactory(locale);
+  const minifyTemplatesIIFE = minifyFactory.create(TemplateType.IIFE);
+  const minifyTemplatesUMD = minifyFactory.create(TemplateType.UMD);
+
+  const cleanFiles = createCleanFilesTask(locale);
+
   return series(
-    taskFactory.precompileTemplates,
+    precompileTemplates,
     parallel(
-      series(taskFactory.bundleTemplatesIIFE, taskFactory.minifyTemplatesIIFE),
-      series(taskFactory.bundleTemplatesUMD, taskFactory.minifyTemplatesUMD)
+      series(bundleTemplatesIIFE, minifyTemplatesIIFE),
+      series(bundleTemplatesUMD, minifyTemplatesUMD)
     ),
-    taskFactory.cleanFiles
+    cleanFiles
   );
 }
 
@@ -64,13 +82,13 @@ function createDefaultTask (taskFactory) {
  * Creates a build task per locale, and combines them into a parallel task.
  * @returns {Promise<Function>}
  */
-function defaultTemplates () {
-  const localizedTaskPromises = BUILD_LOCALES.map(locale => {
-    return createTaskFactory(locale).then(createDefaultTask);
+async function defaultTemplates () {
+  const localizedTaskPromises = BUILD_LOCALES.map(async locale => {
+    const precompileTaskFactory = await createPrecompileTaskFactory(locale);
+    return createDefaultTask(precompileTaskFactory, locale);
   });
-  return Promise.all(localizedTaskPromises).then(localizedTasks => {
-    return new Promise(resolve => parallel(...localizedTasks)(resolve));
-  });
+  const localizedTasks = await Promise.all(localizedTaskPromises);
+  return new Promise(resolve => parallel(...localizedTasks)(resolve));
 }
 
 exports.default = defaultTemplates;
