@@ -30,7 +30,7 @@ exports.getFileName = function (templateType, locale) {
 
 /**
  * Gets the precompiled templates fileName for the given locale.
- * @param {*} locale
+ * @param {string} locale
  * @returns {string}
  */
 exports.getPrecompiledFileName = function (locale) {
