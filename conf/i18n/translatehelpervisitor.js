@@ -11,7 +11,7 @@ class TranslateHelperVisitor {
     // This line puts the Handlebars.Visitor instance into mutation mode.
     // https://github.com/handlebars-lang/handlebars.js/blob/master/docs/compiler-api.md#ast-visitor.
     this._visitor.mutating = true;
-    this._visitor.MustacheStatement = this._MustacheStatement.bind(this);
+    this._visitor.MustacheStatement = this._handleMustacheStatement.bind(this);
 
     this._translationResolver = translationResolver;
     this._validHelpers = ['translate'];
@@ -35,7 +35,7 @@ class TranslateHelperVisitor {
    * @param {hbs.AST.MustacheStatement} statement
    * @returns {hbs.AST.MustacheStatment|undefined}
    */
-  _MustacheStatement (statement) {
+  _handleMustacheStatement (statement) {
     const isTranslationHelper = this._validHelpers.includes(statement.path.original);
     if (!isTranslationHelper) {
       return;

@@ -1,7 +1,7 @@
 
 const TranslateHelperVisitor = require('../../i18n/translatehelpervisitor');
 
-const precompileTemplates = require('./precompile');
+const precompileTemplates = require('./precompiletemplates');
 const { addLocalePrefix, getPrecompiledFileName } = require('./filenameutils');
 
 /**

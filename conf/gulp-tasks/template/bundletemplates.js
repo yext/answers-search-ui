@@ -12,7 +12,7 @@ const builtins = require('rollup-plugin-node-builtins');
 const source = require('vinyl-source-stream');
 
 /**
-  * @param {Function} callback
+  * @param {Function} callback called when the task is finished
   * @param {Object} bundleConfig
   * @param {string} precompiledFile
   * @param {string} outputFile
