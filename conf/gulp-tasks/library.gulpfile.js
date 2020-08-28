@@ -100,7 +100,7 @@ function compileCSS () {
 function watchJS (bundleTaskFactory) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
-  }, parallel(bundleTaskFactory.create(BundleType.LEGACY_IIFE)));
+  }, bundleTaskFactory.create(BundleType.LEGACY_IIFE));
 }
 
 function watchCSS (cb) {

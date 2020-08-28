@@ -34,6 +34,7 @@ exports.minifyBundle = function (callback, bundleName) {
 
 /**
  * The Gulp task for producing the modern version of the SDK bundle.
+ *
  * @param {Function} callback
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the modern bundle.
@@ -124,8 +125,7 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, libVersion,
  * @param {string} bundleName The filename of the created bundle.
  * @param {string} libVersion The current JS library version
  * @param {TranslationResolver} translationResolver for the given locale
- * @returns {stream.Writable} A {@link Writable} stream cotaining the legacy
- *                            SDK bundle.
+ * @returns {stream.Writable} A {@link Writable} stream containing the SDK bundle.
  */
 function _buildBundle (callback, rollupConfig, bundleName, libVersion, translationResolver) {
   return rollup(rollupConfig)
@@ -133,11 +133,11 @@ function _buildBundle (callback, rollupConfig, bundleName, libVersion, translati
     .pipe(replace('@@LIB_VERSION', libVersion))
     .pipe(replace(/replaceWithTranslation\([^;]+\);/g, translateCall => {
       const placeholder = new TranslateCallParser().parse(translateCall);
-      const translatedValue = translationResolver.resolve(placeholder);
-      const canBeTranslatedStatically = typeof translatedValue === 'string'
+      const translationResult = translationResolver.resolve(placeholder);
+      const canBeTranslatedStatically = typeof translationResult === 'string'
         && !placeholder.getPluralForm()
         && placeholder.hasNoInterpolation();
-      return canBeTranslatedStatically ? `"${translatedValue}";` : translatedValue;
+      return canBeTranslatedStatically ? `"${translationResult}";` : translationResult;
      }))
     .pipe(dest('dist'))
     .on('end', callback);

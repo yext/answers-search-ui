@@ -72,6 +72,7 @@ class BundleTaskFactory {
   /**
    * The Gulp task for producing the modern version of the SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the modern
    *                            SDK bundle.
    */
@@ -94,6 +95,7 @@ class BundleTaskFactory {
   /**
    * The Gulp task for minifying the modern version of the SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the modern
    *                            SDK bundle.
    */
@@ -104,6 +106,7 @@ class BundleTaskFactory {
   /**
    * The Gulp task for producing the legacy, IIFE-style SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            IIFE-style SDK bundle.
    */
@@ -125,6 +128,7 @@ class BundleTaskFactory {
   /**
    * The Gulp task for minifying the legacy, IIFE-style SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            IIFE-style SDK bundle.
    */
@@ -135,6 +139,7 @@ class BundleTaskFactory {
   /**
    * The Gulp task for producing the legacy, UMD-style SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            UMD-style SDK bundle.
    */
@@ -157,6 +162,7 @@ class BundleTaskFactory {
   /**
    * The Gulp task for minifying the legacy, UMD-style SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            UMD-style SDK bundle.
    */
