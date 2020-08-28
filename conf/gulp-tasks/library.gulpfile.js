@@ -19,9 +19,9 @@ exports.dev = function devJSBundle () {
   return createBundleTaskFactory(DEV_LOCALE).then(devTaskFactory => {
     return new Promise(resolve => {
       return parallel(
-        series(devTaskFactory.create(BundleType.LEGACY_IIFE), watchJS(devTaskFactory)),
+        series(devTaskFactory.create(BundleType.LEGACY_IIFE), getWatchJSTask(devTaskFactory)),
         series(compileCSS, watchCSS)
-      );
+      )(resolve);
     });
   });
 };
@@ -97,14 +97,16 @@ function compileCSS () {
 }
 
 /**
- * Creates a new legacy bundle on JS file updates
+ * Returns a watchJS task that creates a new legacy bundle on JS file updates
  *
  * @param {BundleTaskFactory} bundleTaskFactory
  */
-function watchJS (bundleTaskFactory) {
-  return watch(['./src/**/*.js'], {
-    ignored: './dist/'
-  }, bundleTaskFactory.create(BundleType.LEGACY_IIFE));
+function getWatchJSTask (bundleTaskFactory) {
+  return function watchJS() {
+    return watch(['./src/**/*.js'], {
+      ignored: './dist/'
+    }, bundleTaskFactory.create(BundleType.LEGACY_IIFE))
+  };
 }
 
 function watchCSS (cb) {
