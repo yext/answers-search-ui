@@ -7,6 +7,7 @@ const getLibraryVersion = require('./utils/libversion');
 const { BundleType, BundleTaskFactory } = require('./bundle/bundletaskfactory');
 const { DEV_LOCALE, BUILD_LOCALES } = require('../i18n/constants');
 const LocalFileParser = require('../i18n/localfileparser');
+const MinifyTaskFactory = require('./bundle/minifytaskfactory');
 const TranslationResolver = require('../i18n/translationresolver');
 const Translator = require('../i18n/translator');
 
@@ -15,7 +16,7 @@ const Translator = require('../i18n/translator');
  * @returns {Promise<Function>}
  */
 exports.dev = function devJSBundle () {
-  return createTaskFactory(DEV_LOCALE).then(devTaskFactory => {
+  return createBundleTaskFactory(DEV_LOCALE).then(devTaskFactory => {
     return new Promise(resolve => {
       return parallel(
         series(devTaskFactory.create(BundleType.LEGACY_IIFE), watchJS(devTaskFactory)),
@@ -31,7 +32,9 @@ exports.dev = function devJSBundle () {
  */
 exports.default = function defaultJSBundle () {
   const localizedTaskPromises = BUILD_LOCALES.map(locale => {
-    return createTaskFactory(locale).then(createBundles);
+    const minifyTaskFactory = new MinifyTaskFactory(locale);
+    return createBundleTaskFactory(locale)
+      .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory));
   });
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
     return new Promise(resolve => parallel(...localizedTasks)(resolve));
@@ -42,20 +45,21 @@ exports.default = function defaultJSBundle () {
  * Creates modern, legacy and legacyUMD bundles in parallel.
  *
  * @param {BundleTaskFactory} bundleTaskFactory
+ * @param {MinifyTaskFactory} minifyTaskFactory
  */
-async function createBundles (bundleTaskFactory) {
+async function createBundles (bundleTaskFactory, minifyTaskFactory) {
   return parallel(
     series(
       bundleTaskFactory.create(BundleType.MODERN),
-      bundleTaskFactory.minify(BundleType.MODERN)
+      minifyTaskFactory.minify(BundleType.MODERN)
     ),
     series(
       bundleTaskFactory.create(BundleType.LEGACY_IIFE),
-      bundleTaskFactory.minify(BundleType.LEGACY_IIFE)
+      minifyTaskFactory.minify(BundleType.LEGACY_IIFE)
     ),
     series(
       bundleTaskFactory.create(BundleType.LEGACY_UMD),
-      bundleTaskFactory.minify(BundleType.LEGACY_UMD)
+      minifyTaskFactory.minify(BundleType.LEGACY_UMD)
     ),
     series(compileCSS)
   );
@@ -67,7 +71,7 @@ async function createBundles (bundleTaskFactory) {
  * @param {string} locale
  * @returns {BundleTaskFactory} bundleTaskFactory
  */
-async function createTaskFactory (locale) {
+async function createBundleTaskFactory (locale) {
   const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
   const translation = await localFileParser.fetch(locale);
 
