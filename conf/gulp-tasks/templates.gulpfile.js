@@ -21,8 +21,8 @@ async function createPrecompileTaskFactory (locale) {
 }
 
 /**
- * Precompiles templates together, bundles them together, deletes the precompiled template
- * file, and kicks off the watch task.
+ * Precompiles templates together, bundles them together,
+ * cleans up any intermediary files, and kicks off the watch task.
  * @returns {Promise<Function>}
  */
 async function devTemplates () {
