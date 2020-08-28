@@ -102,10 +102,10 @@ function compileCSS () {
  * @param {BundleTaskFactory} bundleTaskFactory
  */
 function getWatchJSTask (bundleTaskFactory) {
-  return function watchJS() {
+  return function watchJS () {
     return watch(['./src/**/*.js'], {
       ignored: './dist/'
-    }, bundleTaskFactory.create(BundleType.LEGACY_IIFE))
+    }, bundleTaskFactory.create(BundleType.LEGACY_IIFE));
   };
 }
 
