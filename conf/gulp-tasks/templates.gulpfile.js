@@ -3,7 +3,6 @@ const path = require('path');
 
 const LocalFileParser = require('../i18n/localfileparser');
 const Translator = require('../i18n/translator');
-const TranslationResolver = require('../i18n/translationresolver');
 const { DEV_LOCALE, BUILD_LOCALES } = require('../i18n/constants');
 
 const TemplateType = require('./template/templatetype');
@@ -17,9 +16,7 @@ const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/transl
 async function createPrecompileTaskFactory (locale) {
   const translation = await localFileParser.fetch(locale);
   const translator = await Translator.create(locale, [], { [locale]: { translation } });
-  const passThroughRuntimeGenerator = translationResult => translationResult;
-  const translationResolver = new TranslationResolver(translator, passThroughRuntimeGenerator);
-  return new PrecompileTemplatesTaskFactory(translationResolver, locale);
+  return new PrecompileTemplatesTaskFactory(translator, locale);
 }
 
 /**

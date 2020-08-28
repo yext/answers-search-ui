@@ -1,4 +1,5 @@
 const Handlebars = require('handlebars');
+const TranslationResolver = require('../i18n/translationresolver');
 const { fromMustacheStatementNode } = require('./translationplaceholderutils');
 
 /**
@@ -6,14 +7,15 @@ const { fromMustacheStatementNode } = require('./translationplaceholderutils');
  * with either static translations, or a runtime translation helper.
  */
 class TranslateHelperVisitor {
-  constructor (translationResolver) {
+  constructor (translator) {
     this._visitor = new Handlebars.Visitor();
     // This line puts the Handlebars.Visitor instance into mutation mode.
     // https://github.com/handlebars-lang/handlebars.js/blob/master/docs/compiler-api.md#ast-visitor.
     this._visitor.mutating = true;
     this._visitor.MustacheStatement = this._handleMustacheStatement.bind(this);
 
-    this._translationResolver = translationResolver;
+    const passThroughRuntimeGenerator = translationResult => translationResult;
+    this._translationResolver = new TranslationResolver(translator, passThroughRuntimeGenerator);
     this._validHelpers = ['translate'];
     this._runtimeTranslationHelper = 'runtimeTranslation';
     this._contextParam = 'context';
@@ -33,7 +35,7 @@ class TranslateHelperVisitor {
    * Returning undefined leaves the node unaffected, otherwise it replaces it with the
    * returned value.
    * @param {hbs.AST.MustacheStatement} statement
-   * @returns {hbs.AST.MustacheStatment|undefined}
+   * @returns {hbs.AST.MustacheStatment|undefined} Either the new node, or undefined to leave the node as is
    */
   _handleMustacheStatement (statement) {
     const isTranslationHelper = this._validHelpers.includes(statement.path.original);
@@ -55,7 +57,7 @@ class TranslateHelperVisitor {
   /**
    * Given a {@link TranslationPlaceholder}, resolve its translation result.
    * @param {TranslationPlaceholder} placeholder
-   * @returns {any}
+   * @returns {string|Object} Either the translated string, or the plural phrase data
    */
   _resolveTranslationPlaceholder (placeholder) {
     const count = placeholder.getCount();
@@ -81,6 +83,7 @@ class TranslateHelperVisitor {
    * that are not needed for runtime translations.
    * @param {hbs.AST.MustacheStatement} statement
    * @param {Object} translatedPhrase
+   * @returns {hbs.AST.MustacheStatement} the updated mustache statement
    */
   _updateHashPairsForRuntimeTranslations (statement, translatedPhrase) {
     const translatedPairs = this._updatePhraseHashPair(statement.hash.pairs, translatedPhrase);
@@ -99,7 +102,7 @@ class TranslateHelperVisitor {
    * static content.
    * @param {hbs.AST.MustacheStatement} statement
    * @param {string} staticTranslatedPhrase
-   * @returns {hbs.AST.ContentStatement}
+   * @returns {hbs.AST.ContentStatement} the new statement
    */
   _replaceHelperWithStaticTranslation (statement, staticTranslatedPhrase) {
     return {

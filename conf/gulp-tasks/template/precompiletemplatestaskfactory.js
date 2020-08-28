@@ -8,9 +8,9 @@ const { addLocalePrefix, getPrecompiledFileName } = require('./filenameutils');
  * PrecompileTemplatesTaskFactory is a class for generating localized template bundle tasks.
  */
 class PrecompileTemplatesTaskFactory {
-  constructor (translationResolver, locale) {
+  constructor (translator, locale) {
     this._locale = locale;
-    this._translationResolver = translationResolver;
+    this._translator = translator;
   }
 
   /**
@@ -37,7 +37,7 @@ class PrecompileTemplatesTaskFactory {
     if (this._locale === 'en') {
       return precompileTemplates(callback, precompiledFileName);
     }
-    const processAST = ast => new TranslateHelperVisitor(this._translationResolver).accept(ast);
+    const processAST = ast => new TranslateHelperVisitor(this._translator).accept(ast);
     return precompileTemplates(callback, precompiledFileName, processAST);
   }
 }
