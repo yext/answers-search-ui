@@ -1,4 +1,3 @@
-
 const TranslateHelperVisitor = require('../../i18n/translatehelpervisitor');
 
 const precompileTemplates = require('./precompiletemplates');
