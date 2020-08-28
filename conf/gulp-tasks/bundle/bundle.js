@@ -1,36 +1,16 @@
-const { src, dest } = require('gulp');
+const { dest } = require('gulp');
 
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const fs = require('fs');
 const insert = require('rollup-plugin-insert');
-const rename = require('gulp-rename');
 const replace = require('gulp-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const rollup = require('gulp-rollup-lightweight');
 const source = require('vinyl-source-stream');
-const uglify = require('gulp-uglify-es').default;
 
 const TranslateCallParser = require('../../i18n/translatecallparser');
 const TranslationResolver = require('../../i18n/translationresolver');
-
-/**
- * The Gulp task for minifying a version of the SDK bundle.
- *
- * @param {function} callback
- * @param {string} bundleName The name of the JS bundle
- * @returns {stream.Writable} A {@link Writable} stream containing the minified
- *                            SDK bundle.
- */
-exports.minifyBundle = function (callback, bundleName) {
-  return src(`./dist/${bundleName}.js`)
-    .pipe(rename(`${bundleName}.min.js`))
-    .pipe(uglify({
-      mangle: { reserved: ['ANSWERS'] }
-    }))
-    .pipe(dest('dist'))
-    .on('end', callback);
-}
 
 /**
  * The Gulp task for producing the modern version of the SDK bundle.
