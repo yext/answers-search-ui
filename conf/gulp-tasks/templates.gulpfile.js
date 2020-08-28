@@ -1,16 +1,18 @@
 const { parallel, series, watch } = require('gulp');
 const path = require('path');
+
 const LocalFileParser = require('../i18n/localfileparser');
-const PrecompileTemplatesTaskFactory = require('./template/precompiletemplatestaskfactory');
 const Translator = require('../i18n/translator');
 const TranslationResolver = require('../i18n/translationresolver');
+const { DEV_LOCALE, BUILD_LOCALES } = require('../i18n/constants');
+
+const TemplateType = require('./template/templatetype');
+const PrecompileTemplatesTaskFactory = require('./template/precompiletemplatestaskfactory');
+const BundleTemplatesTaskFactory = require('./template/bundletemplatestaskfactory');
+const MinifyTemplatesTaskFactory = require('./template/minifytemplatestaskfactory');
+const createCleanFilesTask = require('./template/createcleanfilestask');
 
 const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
-const { DEV_LOCALE, BUILD_LOCALES } = require('../i18n/constants');
-const createCleanFilesTask = require('./template/createcleanfilestask');
-const BundleTemplatesTaskFactory = require('./template/bundletemplatestaskfactory');
-const TemplateType = require('./template/templatetype');
-const MinifyTemplatesTaskFactory = require('./template/minifytemplatestaskfactory');
 
 async function createPrecompileTaskFactory (locale) {
   const translation = await localFileParser.fetch(locale);
