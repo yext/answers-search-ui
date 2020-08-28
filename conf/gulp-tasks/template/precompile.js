@@ -9,6 +9,7 @@ const wrap = require('gulp-wrap');
  * @param {Function} callback called when the stream ends
  * @param {string} outputFile
  * @param {Function} processAST a function that takes in and mutates a handlebars AST
+ * @returns {stream.Readable}
  */
 function precompileTemplates (callback, outputFile, processAST) {
   return src('./src/ui/templates/**/*.hbs')
