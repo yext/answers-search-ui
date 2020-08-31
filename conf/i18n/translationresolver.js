@@ -25,8 +25,7 @@ class TranslationResolver {
    *                   translated string at run-time.
    */
   resolve (placeholder) {
-    const translationResult =
-      this._translator.translate(placeholder.getPhrase());
+    const translationResult = this._translator.translate(placeholder.getPhrase());
     const interpValues = placeholder.getInterpolationValues();
     return this._resolveInternal(translationResult, interpValues);
   }
@@ -40,7 +39,7 @@ class TranslationResolver {
    *                   translated string at run-time.
    */
   resolveWithContext (placeholder) {
-    const translationResult = this._translator.translate(
+    const translationResult = this._translator.translateWithContext(
       placeholder.getPhrase(), placeholder.getContext());
     const interpValues = placeholder.getInterpolationValues();
     return this._resolveInternal(translationResult, interpValues);
@@ -75,10 +74,10 @@ class TranslationResolver {
    *                   translated string at run-time.
    */
   _resolveInternal (translationResult, interpValues, count) {
-    const isRuntimeTranslation = count || interpValues;
-    return !isRuntimeTranslation
-      ? translationResult
-      : this._runtimeCallGenerator(translationResult, interpValues, count);
+    const isRuntimeTranslation = count || Object.keys(interpValues).length > 0;
+    return isRuntimeTranslation
+      ? this._runtimeCallGenerator(translationResult, interpValues, count)
+      : translationResult;
   }
 }
 

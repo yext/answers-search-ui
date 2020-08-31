@@ -61,6 +61,14 @@ class TranslationPlaceholder {
   getInterpolationValues () {
     return this._interpolationValues;
   }
+
+  /**
+   * Returns true if there are no interpolation values.
+   * @returns {boolean}
+   */
+  hasNoInterpolation () {
+    return Object.keys(this._interpolationValues).length === 0;
+  }
 }
 
 module.exports = TranslationPlaceholder;
