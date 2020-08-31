@@ -8,6 +8,7 @@ const replace = require('gulp-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const rollup = require('gulp-rollup-lightweight');
 const source = require('vinyl-source-stream');
+const { TRANSLATION_FLAGGER_REGEX } = require('../../i18n/constants');
 
 const TranslateCallParser = require('../../i18n/translatecallparser');
 const TranslationResolver = require('../../i18n/translationresolver');
@@ -115,7 +116,7 @@ function _buildBundle (callback, rollupConfig, bundleName, locale, libVersion, t
     .pipe(source(`${bundleName}.js`))
     .pipe(replace('@@LIB_VERSION', libVersion))
     .pipe(replace('@@LOCALE', locale))
-    .pipe(replace(/TranslationFlagger.flag\([^;]+?\)/g, translateCall => {
+    .pipe(replace(TRANSLATION_FLAGGER_REGEX, translateCall => {
       const placeholder = new TranslateCallParser().parse(translateCall);
       const translationResult = translationResolver.resolve(placeholder);
       const canBeTranslatedStatically = typeof translationResult === 'string'

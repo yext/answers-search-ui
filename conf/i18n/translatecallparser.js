@@ -10,17 +10,19 @@ class TranslateCallParser {
    * to return a {@link TranslationPlaceholder}
    *
    * @param {string} translateCall
+   * @param {number}
    * @returns {TranslationPlaceholder}
    */
-  parse (translateCall) {
+  parse (translateCall, lineNumber) {
     const parsedTranslateCall = this._convertToObject(translateCall);
 
     return new TranslationPlaceholder({
       phrase: parsedTranslateCall.phrase,
-      pluralPhrase: parsedTranslateCall.pluralPhrase,
+      pluralForm: parsedTranslateCall.pluralForm,
       count: parsedTranslateCall.count,
       context: parsedTranslateCall.context,
-      interpolationValues: parsedTranslateCall.interpolationValues
+      interpolationValues: parsedTranslateCall.interpolationValues,
+      lineNumber: lineNumber
     });
   }
 
