@@ -24,6 +24,7 @@ class TranslateHelperVisitor {
 
   /**
    * Dispatches TranslateHelperVisitor on a Handlebars AST.
+   *
    * @param {hbs.AST.Program} ast
    */
   accept (ast) {
@@ -34,6 +35,7 @@ class TranslateHelperVisitor {
    * _MustacheStatement() is automatically called on any MustacheStatement nodes by the visitor.
    * Returning undefined leaves the node unaffected, otherwise it replaces it with the
    * returned value.
+   *
    * @param {hbs.AST.MustacheStatement} statement
    * @returns {hbs.AST.MustacheStatment|undefined} Either the new node, or undefined to leave the node as is
    */
@@ -56,6 +58,7 @@ class TranslateHelperVisitor {
 
   /**
    * Given a {@link TranslationPlaceholder}, resolve its translation result.
+   *
    * @param {TranslationPlaceholder} placeholder
    * @returns {string|Object} Either the translated string, or the plural phrase data
    */
@@ -81,6 +84,7 @@ class TranslateHelperVisitor {
    * Updates the hash pairs of the given statement, first updating the
    * phrase param with the resolved translation, then removing params
    * that are not needed for runtime translations.
+   *
    * @param {hbs.AST.MustacheStatement} statement
    * @param {Object} translatedPhrase
    * @returns {hbs.AST.MustacheStatement} the updated mustache statement
@@ -100,6 +104,7 @@ class TranslateHelperVisitor {
   /**
    * Transforms the given translation helper mustache statement into
    * static content.
+   *
    * @param {hbs.AST.MustacheStatement} statement
    * @param {string} staticTranslatedPhrase
    * @returns {hbs.AST.ContentStatement} the new statement
@@ -116,6 +121,7 @@ class TranslateHelperVisitor {
   /**
    * Renames the name of the translation helper to the designated
    * runtime translation helper name.
+   *
    * @param {hbs.AST.MustacheStatement} statement
    */
   _renameHelperToRuntimeTranslation (statement) {
@@ -131,6 +137,7 @@ class TranslateHelperVisitor {
 
   /**
    * Translates the phrase param, updates its hash pair, and returns the updated array.
+   *
    * @param {Array<hbs.AST.HashPair} hashPairs
    * @param {Object|string} translatedPhrase
    * @returns {Array<hbs.AST.HashPair}
@@ -158,6 +165,7 @@ class TranslateHelperVisitor {
   /**
    * Removes parameters from the runtime translation helper that are only
    * needed for its resolution and not execution.
+   *
    * @param {Array<hbs.AST.HashPair} hashPairs
    * @returns {Array<hbs.AST.HashPair}
    */

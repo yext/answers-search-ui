@@ -23,6 +23,7 @@ exports.fromMustacheStatementNode = fromMustacheStatementNode;
 /**
  * Converts an array of Handlebars HashPair parameters into a map of keys to values.
  * Errors out when given a parameter that is a SubExpression.
+ *
  * @param {Array<hbs.AST.HashPair>} hashPairs
  * @returns {Object}
  */
