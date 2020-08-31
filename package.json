@@ -5,14 +5,12 @@
   "main": "gulpfile.js",
   "dependencies": {
     "@yext/rtf-converter": "^1.2.0",
-    "core-js": "^3.6.5",
     "css-vars-ponyfill": "^2.3.1",
     "handlebars": "^4.7.2",
     "js-levenshtein": "^1.1.6",
     "kind-of": "^6.0.3",
     "markdown-it-for-inline": "^0.1.1",
     "plural-forms": "^0.5.1",
-    "regenerator-runtime": "^0.13.3",
     "template-helpers": "^1.0.1"
   },
   "devDependencies": {
@@ -20,6 +18,7 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-arrow-functions": "^7.8.3",
+    "@babel/plugin-transform-object-assign": "^7.10.4",
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.6.0",
     "@babel/runtime-corejs3": "^7.8.4",
@@ -48,7 +47,6 @@
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.2.1",
-    "rollup-plugin-insert": "1.2.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^4.0.1",
     "semistandard": "^13.0.1",
