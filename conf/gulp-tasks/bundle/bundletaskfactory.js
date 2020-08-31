@@ -41,7 +41,9 @@ class BundleTaskFactory {
       default:
         throw new Error('Unrecognized BundleType');
     }
-    Object.defineProperty(bundleFunction, 'name', { value: getBundleName(bundleType, this._locale) });
+    Object.defineProperty(bundleFunction, 'name', {
+      value: `bundle ${getBundleName(bundleType, this._locale)}`
+    });
     return bundleFunction;
   }
 

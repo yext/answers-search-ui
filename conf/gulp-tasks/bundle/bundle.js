@@ -111,13 +111,13 @@ function _buildBundle (callback, rollupConfig, bundleName, libVersion, translati
   return rollup(rollupConfig)
     .pipe(source(`${bundleName}.js`))
     .pipe(replace('@@LIB_VERSION', libVersion))
-    .pipe(replace(/replaceWithTranslation\([^;]+?\);/g, translateCall => {
+    .pipe(replace(/TranslationFlagger.flag\([^;]+?\)/g, translateCall => {
       const placeholder = new TranslateCallParser().parse(translateCall);
       const translationResult = translationResolver.resolve(placeholder);
       const canBeTranslatedStatically = typeof translationResult === 'string'
         && !placeholder.getPluralForm()
         && placeholder.hasNoInterpolation();
-      return canBeTranslatedStatically ? `"${translationResult}";` : translationResult;
+      return canBeTranslatedStatically ? `"${translationResult}"` : translationResult;
      }))
     .pipe(dest('dist'))
     .on('end', callback);

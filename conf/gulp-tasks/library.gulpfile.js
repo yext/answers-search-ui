@@ -47,7 +47,7 @@ exports.default = function defaultJSBundle () {
  * @param {BundleTaskFactory} bundleTaskFactory
  * @param {MinifyTaskFactory} minifyTaskFactory
  */
-async function createBundles (bundleTaskFactory, minifyTaskFactory) {
+function createBundles (bundleTaskFactory, minifyTaskFactory) {
   return parallel(
     series(
       bundleTaskFactory.create(BundleType.MODERN),
@@ -81,7 +81,7 @@ async function createBundleTaskFactory (locale) {
     (translationResult, interpValues, count) => {
       let parsedParams = JSON.stringify(interpValues);
       parsedParams = parsedParams.replace(/['"]/g, '');
-      return `ANSWERS.translateJS(${JSON.stringify(translationResult)}, ${parsedParams}, ${count});`;
+      return `ANSWERS.translateJS(${JSON.stringify(translationResult)}, ${parsedParams}, ${count})`;
     });
 
   return new BundleTaskFactory(getLibraryVersion(), translationResolver, locale);
