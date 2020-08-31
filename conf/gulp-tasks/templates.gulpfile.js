@@ -21,6 +21,7 @@ async function createTranslator (locale) {
 /**
  * Precompiles templates together, bundles them together,
  * cleans up any intermediary files, and kicks off the watch task.
+ *
  * @returns {Promise<Function>}
  */
 async function devTemplates () {
@@ -50,6 +51,7 @@ exports.dev = devTemplates;
 
 /**
  * Creates a template build task for a specific locale and translator.
+ *
  * @param {string} locale
  * @param {Translator} translator
  * @returns {Function}
@@ -79,6 +81,7 @@ function createDefaultTask (locale, translator) {
 
 /**
  * Creates a build task per locale, and combines them into a parallel task.
+ *
  * @returns {Promise<Function>}
  */
 async function defaultTemplates () {
