@@ -45,7 +45,7 @@ class TranslateHelperVisitor {
       return;
     }
     const placeholder = fromMustacheStatementNode(statement);
-    const translatedPhrase = this._resolveTranslationPlaceholder(placeholder);
+    const translatedPhrase = this._translationResolver.resolve(placeholder);
     const canBeTranslatedStatically =
       typeof translatedPhrase === 'string' && placeholder.hasNoInterpolation();
     if (canBeTranslatedStatically) {
@@ -54,30 +54,6 @@ class TranslateHelperVisitor {
       const renamedStatement = this._renameHelperToRuntimeTranslation(statement);
       return this._updateHashPairsForRuntimeTranslations(renamedStatement, translatedPhrase);
     }
-  }
-
-  /**
-   * Given a {@link TranslationPlaceholder}, resolve its translation result.
-   *
-   * @param {TranslationPlaceholder} placeholder
-   * @returns {string|Object} Either the translated string, or the plural phrase data
-   */
-  _resolveTranslationPlaceholder (placeholder) {
-    const count = placeholder.getCount();
-    const context = placeholder.getContext();
-    if (count && context) {
-      throw new Error('Translate plural with context not currently supported');
-    }
-
-    if (count) {
-      return this._translationResolver.resolveWithPlural(placeholder);
-    }
-
-    if (context) {
-      return this._translationResolver.resolveWithContext(placeholder);
-    }
-
-    return this._translationResolver.resolve(placeholder);
   }
 
   /**

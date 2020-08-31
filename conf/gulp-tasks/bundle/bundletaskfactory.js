@@ -1,21 +1,11 @@
-const fs = require('fs');
-
-const { dest } = require('gulp');
-
-const rollup = require('gulp-rollup-lightweight');
-const babel = require('rollup-plugin-babel');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const insert = require('rollup-plugin-insert');
-
-const source = require('vinyl-source-stream');
-const replace = require('gulp-replace');
+const getBundleName = require('../utils/bundlename');
+const { modernBundle, legacyBundle } = require('./bundle');
 
 // An enum describing the different types of SDK bundle.
 const BundleType = {
-  MODERN: 'modern',
-  LEGACY_IIFE: 'legacy-iife',
-  LEGACY_UMD: 'legacy-umd'
+  MODERN: 'answers-modern',
+  LEGACY_IIFE: 'answers',
+  LEGACY_UMD: 'answers-umd'
 };
 Object.freeze(BundleType);
 
@@ -23,8 +13,10 @@ Object.freeze(BundleType);
  * A factory class that provides Gulp tasks for the different kinds of SDK bundle.
  */
 class BundleTaskFactory {
-  constructor (libVersion) {
+  constructor (libVersion, translationResolver, locale) {
     this._libVersion = libVersion;
+    this._locale = locale;
+    this._translationResolver = translationResolver;
     this._namespace = 'ANSWERS';
   }
 
@@ -35,133 +27,92 @@ class BundleTaskFactory {
    * @returns {Function} Gulp task for producing the requested SDK bundle.
    */
   create (bundleType) {
+    let bundleFunction;
     switch (bundleType) {
       case BundleType.MODERN:
-        return () => this._modernBundle();
+        bundleFunction = (callback) => this._modernBundle(callback);
+        break;
       case BundleType.LEGACY_IIFE:
-        return () => this._legacyBundleIIFE();
+        bundleFunction = (callback) => this._legacyBundleIIFE(callback);
+        break;
       case BundleType.LEGACY_UMD:
-        return () => this._legacyBundleUMD();
+        bundleFunction = (callback) => this._legacyBundleUMD(callback);
+        break;
       default:
         throw new Error('Unrecognized BundleType');
     }
+    Object.defineProperty(bundleFunction, 'name', {
+      value: `bundle ${getBundleName(bundleType, this._locale)}`
+    });
+    return bundleFunction;
   }
 
   /**
    * The Gulp task for producing the modern version of the SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the modern
    *                            SDK bundle.
    */
-  _modernBundle () {
-    const rollupConfig = {
-      input: './src/answers-umd.js',
-      output: {
-        format: 'umd',
-        name: this._namespace,
-        exports: 'default',
-        sourcemap: true
-      },
-      plugins: [
-        resolve(),
-        commonjs({
-          include: './node_modules/**'
-        }),
-        babel({
-          babelrc: false,
-          exclude: 'node_modules/**',
-          presets: ['@babel/env']
-        })
-      ]
+  _modernBundle (callback) {
+    const modernBundleConfig = {
+      format: 'umd',
+      name: this._namespace,
+      exports: 'default',
+      sourcemap: true
     };
-    return rollup(rollupConfig)
-      .pipe(source('answers-modern.js'))
-      .pipe(replace('@@LIB_VERSION', this._libVersion))
-      .pipe(dest('dist'));
+    return modernBundle(
+      callback,
+      modernBundleConfig,
+      getBundleName(BundleType.MODERN, this._locale),
+      this._libVersion,
+      this._translationResolver
+    );
   }
 
   /**
    * The Gulp task for producing the legacy, IIFE-style SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            IIFE-style SDK bundle.
    */
-  _legacyBundleIIFE () {
+  _legacyBundleIIFE (callback) {
     const legacyBundleConfig = {
       format: 'iife',
       name: this._namespace,
       sourcemap: true
     };
-    return this._legacyBundle(legacyBundleConfig, 'answers.js');
+    return legacyBundle(
+      callback,
+      legacyBundleConfig,
+      getBundleName(BundleType.LEGACY_IIFE, this._locale),
+      this._libVersion,
+      this._translationResolver
+    );
   }
 
   /**
    * The Gulp task for producing the legacy, UMD-style SDK bundle.
    *
+   * @param {function} callback function that will run after the Gulp task
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            UMD-style SDK bundle.
    */
-  _legacyBundleUMD () {
+  _legacyBundleUMD (callback) {
     const legacyBundleConfig = {
       format: 'umd',
       name: this._namespace,
       export: 'default',
       sourcemap: true
     };
-    return this._legacyBundle(legacyBundleConfig, 'answers-umd.js');
-  }
-
-  /**
-   * The Gulp task for producing either variant of the legacy SDK bundle.
-   *
-   * @param {Object<string, ?>} outputConfig Any variant-specific configuration
-   *                                         for the legacy bundle.
-   * @param {string} fileName The filename of the created bundle.
-   * @returns {stream.Writable} A {@link Writable} stream cotaining the legacy
-   *                            SDK bundle.
-   */
-  _legacyBundle (outputConfig, fileName) {
-    const rollupConfig = {
-      input: './src/answers-umd.js',
-      output: outputConfig,
-      plugins: [
-        resolve(),
-        insert.prepend(
-          fs.readFileSync('./conf/gulp-tasks/polyfill-prefix.js').toString(),
-          {
-            include: './src/answers-umd.js'
-          }),
-        commonjs({
-          include: './node_modules/**'
-        }),
-        babel({
-          runtimeHelpers: true,
-          babelrc: false,
-          exclude: 'node_modules/**',
-          presets: [
-            [
-              '@babel/preset-env',
-              {
-                loose: true,
-                modules: false
-              }
-            ]
-          ],
-          plugins: [
-            '@babel/syntax-dynamic-import',
-            ['@babel/plugin-transform-runtime', {
-              corejs: 3
-            }],
-            '@babel/plugin-transform-arrow-functions',
-            '@babel/plugin-proposal-object-rest-spread'
-          ]
-        })
-      ]
-    };
-    return rollup(rollupConfig)
-      .pipe(source(fileName))
-      .pipe(replace('@@LIB_VERSION', this._libVersion))
-      .pipe(dest('dist'));
+    return legacyBundle(
+      callback,
+      legacyBundleConfig,
+      getBundleName(BundleType.LEGACY_UMD, this._locale),
+      this._libVersion,
+      this._translationResolver
+    );
   }
 }
 
