@@ -33,9 +33,6 @@ function createPrecompileTemplatesTask (locale, translator) {
  */
 function _precompileTemplates (callback, locale, translator) {
   const precompiledFileName = getPrecompiledFileName(locale);
-  if (locale === 'en') {
-    return precompileTemplates(callback, precompiledFileName);
-  }
   const processAST = ast => new TranslateHelperVisitor(translator).accept(ast);
   return precompileTemplates(callback, precompiledFileName, processAST);
 }
