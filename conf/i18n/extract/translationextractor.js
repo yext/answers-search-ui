@@ -6,7 +6,7 @@ const { TRANSLATION_FLAGGER_REGEX } = require('../constants');
 const TranslateCallParser = require('../translatecallparser');
 
 /**
- * TranslationExtractor extracts translation invocations from a file.
+ * TranslationExtractor extracts translations to a gettext style file.
  */
 class TranslationExtractor {
   constructor () {
@@ -14,6 +14,12 @@ class TranslationExtractor {
     this._translateHelpers = ['translate'];
   }
 
+  /**
+   * Extracts messages from a given hbs template.
+   * 
+   * @param {string} template 
+   * @param {string} filepath 
+   */
   extractFromHBS (template, filepath) {
     const tree = Handlebars.parseWithoutProcessing(template);
     const visitor = new Handlebars.Visitor();
@@ -23,6 +29,8 @@ class TranslationExtractor {
   }
 
   /**
+   * Extracts messages from javascript code.
+   * 
    * @param {string} code
    * @param {string} filepath
    */
@@ -31,6 +39,42 @@ class TranslationExtractor {
     for (const match of matches) {
       this._extractFromJSCall(match, filepath);
     }
+  }
+
+  /**
+   * Returns the extracted messages as a string.
+   *
+   * @returns {Array<Object>}
+   */
+  getPotString () {
+    return this._extractor.getPotString();
+  }
+
+  /**
+   * Saves the currently extracted messages to te given output path.
+   * Creates any parent directories as necessary.
+   *
+   * @param {string} outputPath
+   */
+  savePotFile (outputPath) {
+    const parentDirectory = outputPath.substring(0, outputPath.lastIndexOf('/'));
+    parentDirectory && fsExtra.mkdirpSync(parentDirectory);
+    this._extractor.savePotFile(outputPath);
+  }
+
+  /**
+   * Register a given {@link TranslationPlaceholder}'s message.
+   * 
+   * @param {TranslationPlaceholder} placeholder 
+   * @param {string} filepath 
+   */
+  _registerTranslationPlaceholder (placeholder, filepath) {
+    this._extractor.addMessage({
+      text: placeholder.getPhrase(),
+      textPlural: placeholder.getPluralForm(),
+      context: placeholder.getContext(),
+      references: [`${filepath}:${placeholder.getLineNumber()}`]
+    });
   }
 
   /**
@@ -46,36 +90,7 @@ class TranslationExtractor {
   }
 
   /**
-   * Returns the extracted messages as a pot file string.
-   * @returns {Array<Object>}
-   */
-  getPotString () {
-    return this._extractor.getPotString();
-  }
-
-  /**
-   * Saves the currently extracted messages to a pot file with the designed path.
-   * Creates any parent directories as necessary.
-   *
-   * @param {string} outputPath
-   */
-  savePotFile (outputPath) {
-    const parentDirectory = outputPath.substring(0, outputPath.lastIndexOf('/'));
-    parentDirectory && fsExtra.mkdirpSync(parentDirectory);
-    this._extractor.savePotFile(outputPath);
-  }
-
-  _registerTranslationPlaceholder (placeholder, filepath) {
-    this._extractor.addMessage({
-      text: placeholder.getPhrase(),
-      textPlural: placeholder.getPluralForm(),
-      context: placeholder.getContext(),
-      references: [`${filepath}:${placeholder.getLineNumber()}`]
-    });
-  }
-
-  /**
-   * Extracts translations from a given mustache node.
+   * Extracts translations from a given handlebars mustache node.
    *
    * @param {hbs.AST.MustacheStatement} statement
    * @param {string} filepath
