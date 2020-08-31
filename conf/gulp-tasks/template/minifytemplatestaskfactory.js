@@ -16,6 +16,7 @@ class MinifyTemplatesTaskFactory {
   /**
    * Creates a template minify task for the specified TemplateType,
    * and customizes the task's name.
+   *
    * @param {TemplateType} templateType
    * @returns {Function}
    */
@@ -29,6 +30,7 @@ class MinifyTemplatesTaskFactory {
 
   /**
    * Returns the minify task for the specified TemplateType.
+   *
    * @param {TemplateType} templateType
    * @returns {Function}
    */
@@ -39,6 +41,7 @@ class MinifyTemplatesTaskFactory {
 
   /**
    * Minifies the designated js file.
+   *
    * @param {Function} callback
    * @param {string} filename
    * @returns {stream.Readable}
@@ -52,6 +55,7 @@ class MinifyTemplatesTaskFactory {
 
   /**
    * Returns the customized task name for the templateType.
+   *
    * @param {TemplateType} templateType
    * @returns {string}
    */

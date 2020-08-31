@@ -6,6 +6,7 @@ const del = require('del');
  * Creates a cleanFiles task for the specified locale, which will
  * clear away any intermediary files in the template build chain.
  * Also customizes the task's name for display in the command line.
+ *
  * @param {string} locale
  * @returns {Function}
  */
@@ -20,6 +21,7 @@ function createCleanFilesTask (locale) {
 
 /**
  * The cleanFiles task for a specified locale.
+ *
  * @param {Function} callback
  * @param {string} locale
  */

@@ -1,11 +1,45 @@
 const { src, dest } = require('gulp');
-
 const handlebars = require('gulp-handlebars');
 const concat = require('gulp-concat');
 const declare = require('gulp-declare');
 const wrap = require('gulp-wrap');
 
+const TranslateHelperVisitor = require('../../i18n/translatehelpervisitor');
+const { addLocalePrefix, getPrecompiledFileName } = require('./filenameutils');
+
 /**
+ * Creates the precompileTemplates task for a given locale and translator.
+ *
+ * @param {string} locale
+ * @param {Translator} translator
+ * @returns {Function}
+ */
+function createPrecompileTemplatesTask (locale, translator) {
+  const precompileTask = callback => _precompileTemplates(callback, locale, translator);
+  const taskName = addLocalePrefix('precompileTemplates', locale);
+  Object.defineProperty(precompileTask, 'name', {
+    value: taskName
+  });
+  return precompileTask;
+}
+
+/**
+ * The precompileTemplates task for this factory's locale.
+ *
+ * @param {Function} callback called when the task is finished
+ * @param {string} locale
+ * @param {Translator} translator
+ * @returns {stream.Readable}
+ */
+function _precompileTemplates (callback, locale, translator) {
+  const precompiledFileName = getPrecompiledFileName(locale);
+  const processAST = ast => new TranslateHelperVisitor(translator).accept(ast);
+  return precompileTemplates(callback, precompiledFileName, processAST);
+}
+
+/**
+ * Precopmiles SDK templates to the given output file.
+ *
  * @param {Function} callback called when the task is finished
  * @param {string} outputFile
  * @param {Function} processAST a function that takes in and mutates a handlebars AST
@@ -54,4 +88,4 @@ function precompileTemplates (callback, outputFile, processAST) {
     .on('end', callback);
 }
 
-module.exports = precompileTemplates;
+module.exports = createPrecompileTemplatesTask;
