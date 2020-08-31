@@ -7,6 +7,7 @@ const fileNames = {
 
 /**
  * Prefixes the given fileName with the locale.
+ *
  * @param {string} fileName
  * @param {string} locale
  * @returns {string}
@@ -19,6 +20,7 @@ exports.addLocalePrefix = addLocalePrefix;
 
 /**
  * Gets the output fileName for the specified templateType and locale.
+ *
  * @param {TemplateType} templateType
  * @param {string} locale
  * @returns {string}
@@ -30,6 +32,7 @@ exports.getFileName = function (templateType, locale) {
 
 /**
  * Gets the precompiled templates fileName for the given locale.
+ *
  * @param {string} locale
  * @returns {string}
  */
