@@ -10,17 +10,21 @@ class TranslateCallParser {
    * to return a {@link TranslationPlaceholder}
    *
    * @param {string} translateCall
+   * @param {number} lineNumber
+   * @param {string} filepath
    * @returns {TranslationPlaceholder}
    */
-  parse (translateCall) {
+  parse (translateCall, lineNumber, filepath) {
     const parsedTranslateCall = this._convertToObject(translateCall);
 
     return new TranslationPlaceholder({
       phrase: parsedTranslateCall.phrase,
-      pluralPhrase: parsedTranslateCall.pluralPhrase,
+      pluralForm: parsedTranslateCall.pluralForm,
       count: parsedTranslateCall.count,
       context: parsedTranslateCall.context,
-      interpolationValues: parsedTranslateCall.interpolationValues
+      interpolationValues: parsedTranslateCall.interpolationValues,
+      lineNumber: lineNumber,
+      filepath: filepath
     });
   }
 
@@ -54,7 +58,7 @@ class TranslateCallParser {
    */
   _parseParams (str) {
     const paramRegex =
-      /[a-zA-Z0-9]+:[\s]*((['"`][a-zA-Z\s\d[\].]+['"`])|\d+|([a-zA-Z\d_.]+))/g;
+      /[a-zA-Z0-9]+:[\s]*((['"`][^'"`]+['"`])|\d+|([a-zA-Z\d_.]+))/g;
     return (str.match(paramRegex) || [])
       .reduce((accumulator, params) => {
         const paramOperands = params.split(':');
