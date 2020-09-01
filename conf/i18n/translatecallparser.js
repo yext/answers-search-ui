@@ -56,7 +56,7 @@ class TranslateCallParser {
    */
   _parseParams (str) {
     const paramRegex =
-      /[a-zA-Z0-9]+:[\s]*((['"`][a-zA-Z\s\d[\].]+['"`])|\d+|([a-zA-Z\d_.]+))/g;
+      /[a-zA-Z0-9]+:[\s]*((['"`][^'"`]+['"`])|\d+|([a-zA-Z\d_.]+))/g;
     return (str.match(paramRegex) || [])
       .reduce((accumulator, params) => {
         const paramOperands = params.split(':');
