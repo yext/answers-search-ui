@@ -6,6 +6,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -18,7 +19,9 @@ export default class UniversalResultsComponent extends Component {
       resultsCountSeparator: '|',
       showChangeFilters: false,
       delimiter: '|',
-      labelText: 'Filters applied to this search:',
+      labelText: TranslationFlagger.flag({
+        phrase: 'Filters applied to this search:'
+      }),
       ...config.appliedFilters
     };
 
@@ -85,7 +88,9 @@ export default class UniversalResultsComponent extends Component {
       // Show a view more link by default, which also links to verticalURL.
       viewMore: true,
       // By default, the view more link has a label of 'View More'.
-      viewMoreLabel: defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], 'View More'),
+      viewMoreLabel: defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], TranslationFlagger.flag({
+        phrase: 'View More'
+      })),
       // Whether to show a result count.
       showResultCount: false,
       // Whether to use AccordionResults (DEPRECATED)

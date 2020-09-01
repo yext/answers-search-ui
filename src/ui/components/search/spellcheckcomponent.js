@@ -3,9 +3,13 @@
 import Component from '../component';
 import SearchParams from '../../dom/searchparams';
 import StorageKeys from '../../../core/storage/storagekeys';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 const DEFAULT_CONFIG = {
-  suggestionHelpText: 'Did you mean:'
+  suggestionHelpText: TranslationFlagger.flag({
+    phrase: 'Did you mean:',
+    context: 'Suggestion help text, labels a suggested phrase'
+  })
 };
 
 /**

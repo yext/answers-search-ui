@@ -6,6 +6,7 @@ import DOM from '../../dom/dom';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import SearchStates from '../../../core/storage/searchstates';
 import ResultsContext from '../../../core/storage/resultscontext';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 export default class PaginationComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -91,7 +92,11 @@ export default class PaginationComponent extends Component {
      * @type {string}
      * @private
      */
-    this._pageLabel = config.pageLabel === undefined ? 'Page' : config.pageLabel;
+    this._pageLabel = config.pageLabel !== undefined
+      ? config.pageLabel
+      : TranslationFlagger.flag({
+        phrase: 'Page'
+      });
 
     /**
      * Function that is invoked on pagination

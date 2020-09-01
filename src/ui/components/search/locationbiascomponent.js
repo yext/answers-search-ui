@@ -1,11 +1,20 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 const DEFAULT_CONFIG = {
-  ipAccuracyHelpText: 'based on your internet address',
-  deviceAccuracyHelpText: 'based on your device',
-  updateLocationButtonText: 'Update your location'
+  ipAccuracyHelpText: TranslationFlagger.flag({
+    phrase: 'based on your internet address',
+    context: 'Describes the accuracy of user\'s assumed current location'
+  }),
+  deviceAccuracyHelpText: TranslationFlagger.flag({
+    phrase: 'based on your device',
+    context: 'Describes the accuracy of user\'s assumed current location'
+  }),
+  updateLocationButtonText: TranslationFlagger.flag({
+    phrase: 'Update your location'
+  })
 };
 
 /**
@@ -63,7 +72,9 @@ export default class LocationBiasComponent extends Component {
      */
     this._geolocationTimeoutAlert = {
       enabled: false,
-      message: 'We are unable to determine your location',
+      message: TranslationFlagger.flag({
+        phrase: 'We are unable to determine your location'
+      }),
       ...config.geolocationTimeoutAlert
     };
   }
@@ -123,7 +134,9 @@ export default class LocationBiasComponent extends Component {
 
   _getLocationDisplayName (data) {
     if (data.accuracy === 'UNKNOWN') {
-      return 'Unknown Location';
+      return TranslationFlagger.flag({
+        phrase: 'Unknown Location'
+      });
     }
     return data.locationDisplayName;
   }

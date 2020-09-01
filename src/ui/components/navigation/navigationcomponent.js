@@ -8,6 +8,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/taborder';
 import { filterParamsForExperienceLink, replaceUrlParams } from '../../../core/utils/urlutils.js';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * The debounce duration for resize events
@@ -123,7 +124,9 @@ export default class NavigationComponent extends Component {
      * The label to show on the dropdown menu button when overflow
      * @type {string}
      */
-    this.overflowLabel = config.overflowLabel || 'More';
+    this.overflowLabel = config.overflowLabel || TranslationFlagger.flag({
+      phrase: 'More'
+    });
 
     /**
      * The optional icon to show on the dropdown menu button when overflow
@@ -177,7 +180,9 @@ export default class NavigationComponent extends Component {
      *  The ARIA label
      *  @type {string}
      */
-    this._ariaLabel = config.ariaLabel || 'Search Page Navigation';
+    this._ariaLabel = config.ariaLabel || TranslationFlagger.flag({
+      phrase: 'Search Page Navigation'
+    });
 
     this.checkOutsideClick = this.checkOutsideClick.bind(this);
     this.checkMobileOverflowBehavior = this.checkMobileOverflowBehavior.bind(this);

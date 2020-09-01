@@ -4,6 +4,7 @@ import Component from '../component';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * EventTypes are explicit strings defined
@@ -17,9 +18,15 @@ const EventTypes = {
 };
 
 const DEFAULT_CONFIG = {
-  positiveFeedbackSrText: 'This answered my question',
-  negativeFeedbackSrText: 'This did not answer my question',
-  footerTextOnSubmission: 'Thank you for your feedback!'
+  positiveFeedbackSrText: TranslationFlagger.flag({
+    phrase: 'This answered my question'
+  }),
+  negativeFeedbackSrText: TranslationFlagger.flag({
+    phrase: 'This did not answer my question'
+  }),
+  footerTextOnSubmission: TranslationFlagger.flag({
+    phrase: 'Thank you for your feedback!'
+  })
 };
 
 export default class DirectAnswerComponent extends Component {
@@ -60,7 +67,9 @@ export default class DirectAnswerComponent extends Component {
      * The display text for the View Details click to action link
      * @type {string}
      */
-    this._viewDetailsText = config.viewDetailsText || 'View Details';
+    this._viewDetailsText = config.viewDetailsText || TranslationFlagger.flag({
+      phrase: 'View Details'
+    });
 
     /**
      * The default custom direct answer card to use, when there are no matching card overrides.

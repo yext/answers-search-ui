@@ -4,6 +4,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -11,7 +12,10 @@ class FilterBoxConfig {
      * The title to display above the controls
      * @type {string}
      */
-    this.title = config.title || 'Filters';
+    this.title = config.title || TranslationFlagger.flag({
+      phrase: 'Filters',
+      context: 'Title for Filters component'
+    });
 
     /**
      * If true, display the number of results next to each facet
@@ -35,7 +39,10 @@ class FilterBoxConfig {
      * The label to show for the reset button
      * @type {string}
      */
-    this.resetFilterLabel = config.resetFilterLabel || 'reset';
+    this.resetFilterLabel = config.resetFilterLabel || TranslationFlagger.flag({
+      phrase: 'reset',
+      context: 'Deselects the selected filters in this filter group'
+    });
 
     /**
      * If true, show a "reset all" button to reset all facets
@@ -47,7 +54,10 @@ class FilterBoxConfig {
      * The label to show for the "reset all" button
      * @type {string}
      */
-    this.resetFiltersLabel = config.resetFiltersLabel || 'reset all';
+    this.resetFiltersLabel = config.resetFiltersLabel || TranslationFlagger.flag({
+      phrase: 'reset all',
+      context: 'Deselects the selected filters in all filter groups'
+    });
 
     /**
      * The max number of facets to show before displaying "show more"/"show less"
@@ -59,13 +69,19 @@ class FilterBoxConfig {
      * The label to show for displaying more facets
      * @type {string}
      */
-    this.showMoreLabel = config.showMoreLabel || 'show more';
+    this.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({
+      phrase: 'show more',
+      context: 'Displays more filters'
+    });
 
     /**
      * The label to show for displaying less facets
      * @type {string}
      */
-    this.showLessLabel = config.showLessLabel || 'show less';
+    this.showLessLabel = config.showLessLabel || TranslationFlagger.flag({
+      phrase: 'show less',
+      context: 'Displays less filters'
+    });
 
     /**
      * If true, enable hiding excess facets in each group with a "show more"/"show less" button
@@ -89,7 +105,10 @@ class FilterBoxConfig {
      * Text to display on the apply button
      * @type {string}
      */
-    this.applyLabel = config.applyLabel || 'apply';
+    this.applyLabel = config.applyLabel || TranslationFlagger.flag({
+      phrase: 'apply',
+      context: 'Applies selected filters'
+    });
 
     /**
      * The selector of the apply button

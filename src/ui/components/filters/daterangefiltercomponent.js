@@ -6,6 +6,7 @@ import DOM from '../../dom/dom';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * A filter for a range of dates
@@ -188,16 +189,47 @@ export default class DateRangeFilterComponent extends Component {
     let displayValue;
     if (!max) {
       displayValue = this._isExclusive
-        ? `After ${min}`
-        : `${min} or later`;
+        ? TranslationFlagger.flag({
+          phrase: 'After [[dateOrTime]]',
+          context: 'Starting date/time with no end date/time',
+          interpolationValues: {
+            dateOrTime: min
+          }
+        })
+        : TranslationFlagger.flag({
+          phrase: `[[dateOrTime]] or later`,
+          context: 'Starting date/time with no end date/time',
+          interpolationValues: {
+            dateOrTime: min
+          }
+        });
     } else if (!min) {
       displayValue = this._isExclusive
-        ? `Before ${max}`
-        : `${max} and earlier`;
+        ? TranslationFlagger.flag({
+          phrase: 'Before [[dateOrTime]]',
+          context: 'Ending date/time with no start date/time',
+          interpolationValues: {
+            dateOrTime: max
+          }
+        })
+        : TranslationFlagger.flag({
+          phrase: '[[dateOrTime]] and earlier',
+          context: 'Ending date/time with no start date/time',
+          interpolationValues: {
+            dateOrTime: max
+          }
+        });
     } else if (min === max) {
       displayValue = this._isExclusive ? '' : min;
     } else {
-      displayValue = `${min} - ${max}`;
+      displayValue = TranslationFlagger.flag({
+        phrase: '[[start]] - [[end]]',
+        context: 'Start date/time to end date/time',
+        interpolationValues: {
+          start: min,
+          end: max
+        }
+      });
     }
     return new FilterMetadata({
       fieldName: this._title,

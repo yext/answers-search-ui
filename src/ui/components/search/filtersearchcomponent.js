@@ -8,6 +8,7 @@ import SearchParams from '../../dom/searchparams';
 import buildSearchParameters from '../../tools/searchparamsparser';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -59,7 +60,10 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.searchText = config.searchText || 'What are you interested in?';
+    this.searchText = config.searchText || TranslationFlagger.flag({
+      phrase: 'What are you interested in?',
+      context: 'Placeholder text to search for filters'
+    });
 
     /**
      * The query text to show as the first item for auto complete.

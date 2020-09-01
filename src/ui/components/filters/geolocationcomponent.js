@@ -7,6 +7,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import buildSearchParameters from '../../tools/searchparamsparser';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -34,13 +35,17 @@ const DEFAULT_CONFIG = {
    * The title to display
    * @type {string}
    */
-  title: 'Location',
+  title: TranslationFlagger.flag({
+    phrase: 'Location'
+  }),
 
   /**
    * The label to display
    * @type {string}
    */
-  label: 'Location',
+  label: TranslationFlagger.flag({
+    phrase: 'Location'
+  }),
 
   /**
    * The icon url to show in the geo button
@@ -52,31 +57,46 @@ const DEFAULT_CONFIG = {
    * The alt text to include with the geo button icon
    * @type {string}
    */
-  geoButtonIconAltText: 'Use My Location',
+  geoButtonIconAltText: TranslationFlagger.flag({
+    phrase: 'Use My Location',
+    context: 'Attempts to find the user\'s current location'
+  }),
 
   /**
    * The text to show in the geo button
    * @type {string}
    */
-  geoButtonText: 'Use My Location',
+  geoButtonText: TranslationFlagger.flag({
+    phrase: 'Use My Location',
+    context: 'Attempts to find the user\'s current location'
+  }),
 
   /**
    * The text to show when geolocation is enabled
    * @type {string}
    */
-  enabledText: 'Current Location',
+  enabledText: TranslationFlagger.flag({
+    phrase: 'Current Location',
+    context: 'Shows when geolocation is enabled'
+  }),
 
   /**
    * The text to show when loading the user's location
    * @type {string}
    */
-  loadingText: 'Finding Your Location...',
+  loadingText: TranslationFlagger.flag({
+    phrase: 'Finding Your Location...',
+    context: 'Loading the user\'s location'
+  }),
 
   /**
    * The text to show if the user's location cannot be found
    * @type {string}
    */
-  errorText: 'Could Not Find Your Location',
+  errorText: TranslationFlagger.flag({
+    phrase: 'Could Not Find Your Location',
+    context: 'Shows when geolocation failed'
+  }),
 
   /**
    * The CSS selector of the toggle button
@@ -128,7 +148,9 @@ export default class GeoLocationComponent extends Component {
      */
     this._geolocationTimeoutAlert = {
       enabled: false,
-      message: 'We are unable to determine your location',
+      message: TranslationFlagger.flag({
+        phrase: 'We are unable to determine your location'
+      }),
       ...config.geolocationTimeoutAlert
     };
   }
@@ -225,7 +247,7 @@ export default class GeoLocationComponent extends Component {
       navigator.geolocation.getCurrentPosition(
         position => {
           const filter = this._buildFilter(position);
-          this._saveDataToStorage('', filter, 'Current Location', position);
+          this._saveDataToStorage('', filter, 'Current Location', position); // TODO is this surfaced on the front end?
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
@@ -259,7 +281,9 @@ export default class GeoLocationComponent extends Component {
       filter: filter,
       metadata: {
         displayValue: displayValue,
-        fieldName: this._config.title || this._config.label || 'Location'
+        fieldName: this._config.title || this._config.label || TranslationFlagger.flag({
+          phrase: 'Location'
+        })
       },
       remove: () => this._removeFilterNode()
     });
