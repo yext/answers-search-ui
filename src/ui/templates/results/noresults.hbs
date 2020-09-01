@@ -4,7 +4,7 @@
       {{#if _config.noResultsMessage}}
         {{_config.noResultsMessage}}
       {{else}}
-        Your search - <span class="yxt-NoResults-query">{{query}}</span> - did not match any answers we have.
+        {{translate phrase='Your search - <span class="yxt-NoResults-query">[[query]]</span> - did not match any answers we have.' query=query }}
       {{/if}}
     </p>
     {{#if universalUrl}}
@@ -12,7 +12,7 @@
         {{#if _config.noResultsTryUniversalMessage}}
           {{{_config.noResultsTryUniversalMessage}}}
         {{else}}
-          Try refining your query or <a href="{{universalUrl}}" class="yxt-NoResults-returnLink">search all content.</a>
+          {{translate phrase='Try refining your query or <a href="[[universalUrl]]" class="yxt-NoResults-returnLink">search all content.</a>' universalUrl=universalUrl }}
         {{/if}}
       </p>
     {{/if}}
@@ -21,17 +21,17 @@
         {{#if _config.noResultsSuggestionsTitle}}
           {{_config.noResultsSuggestionsTitle}}
         {{else}}
-          Suggestions:
+          {{translate phrase='Suggestions:' }}
         {{/if}}
       </p>
       <ul class="yxt-NoResults-suggestionsList">
         {{#each _config.noResultsSuggestions}}
           <li class="yxt-NoResults-suggestion">{{this}}</li>
         {{else}}
-          <li class="yxt-NoResults-suggestion">Make sure all words are spelled correctly.</li>
-          <li class="yxt-NoResults-suggestion">Try to ask your question a different way.</li>
-          <li class="yxt-NoResults-suggestion">Try more general words.</li>
-          <li class="yxt-NoResults-suggestion">Try fewer words.</li>
+          <li class="yxt-NoResults-suggestion">{{translate phrase='Make sure all words are spelled correctly.' }}</li>
+          <li class="yxt-NoResults-suggestion">{{translate phrase='Try to ask your question a different way.' }}</li>
+          <li class="yxt-NoResults-suggestion">{{translate phrase='Try more general words.' }}</li>
+          <li class="yxt-NoResults-suggestion">{{translate phrase='Try fewer words.' }}</li>
         {{/each}}
       </ul>
     </div>

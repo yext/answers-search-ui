@@ -4,7 +4,7 @@
       <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-first {{#unless showFirstPageButton}}yxt-Pagination--hidden{{/unless}}"
         data-eventtype="PAGINATE"
         data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
-        aria-label="Go to the first page of results"
+        aria-label="{{translate phrase='Go to the first page of results' }}"
         tabindex="0"
       >
         {{#unless icons.firstButtonIcon}}
@@ -41,7 +41,7 @@
 
     <a
       class="yxt-Pagination-link js-yxt-Pagination-link{{#unless pinnedNumbers.desktopBack}} desktop-hidden{{/unless}}{{#unless pinnedNumbers.mobileBack}} mobile-hidden{{/unless}}"
-      aria-label="Go to page 1 of results"
+      aria-label="{{translate phrase='Go to page 1 of results' }}"
       data-number="1"
       data-eventtype="PAGINATE"
       data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":1, "totalPageCount":{{maxPage}} }'
@@ -56,12 +56,12 @@
 
     {{#each pageNumbers}}
       {{#if this.active}}
-        <span id="active-page" class="yxt-Pagination-page{{#if this.activeMobile}} yxt-Pagination--activeMobile{{/if}}{{#if this.activeDesktop}} yxt-Pagination--activeDesktop{{/if}}" 
-        aria-label="Currently on page {{../pageNumber}}">{{../pageLabel}} {{../pageNumber}}</span>
+        <span id="active-page" class="yxt-Pagination-page{{#if this.activeMobile}} yxt-Pagination--activeMobile{{/if}}{{#if this.activeDesktop}} yxt-Pagination--activeDesktop{{/if}}"
+        aria-label="{{translate phrase='Currently on page [[pageNumber]]' pageNumber=../pageNumber }}">{{../pageLabel}} {{../pageNumber}}</span>
       {{else}}
-        <a 
+        <a
           class="yxt-Pagination-link js-yxt-Pagination-link{{#if this.desktopHidden}} desktop-hidden{{/if}}{{#if this.mobileHidden}} mobile-hidden{{/if}}"
-          aria-label="Go to page {{this.number}} of results"
+          aria-label="{{translate phrase='Go to page {{pageNumber}} of results' pageNumber=this.number }}"
           data-number="{{this.number}}"
           data-eventtype="PAGINATE"
           data-eventoptions='{"currentPage":{{../pageNumber}}, "newPage":{{this.number}}, "totalPageCount":{{../maxPage}} }'
@@ -78,7 +78,7 @@
 
     <a
       class="yxt-Pagination-link js-yxt-Pagination-link{{#unless pinnedNumbers.desktopFront}} desktop-hidden{{/unless}}{{#unless pinnedNumbers.mobileFront}} mobile-hidden{{/unless}}"
-      aria-label="Go to page {{maxPage}} of results"
+      aria-label="{{translate phrase='Go to page [[maxPage]] of results' maxPage=maxPage }}"
       data-number="{{maxPage}}"
       tabindex="0"
     >
@@ -89,7 +89,7 @@
       {{#unless showNextPageButton}}disabled{{/unless}}
       data-eventtype="PAGINATE"
       data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{#add pageNumber 1}}{{/add}}, "totalPageCount":{{maxPage}} }'
-      aria-label="Go to the next page of results"
+      aria-label="{{translate phrase='Go to the next page of results' }}"
       tabindex="0"
     >
       {{#unless icons.nextButtonIcon}}
@@ -106,7 +106,7 @@
       <a class="yxt-Pagination-link yxt-Pagination-icon js-yxt-Pagination-last {{#unless showLastPageButton}}yxt-Pagination--hidden{{/unless}}"
         data-eventtype="PAGINATE"
         data-eventoptions='{"currentPage":{{pageNumber}}, "newPage":{{maxPage}}, "totalPageCount":{{maxPage}} }'
-        aria-label="Go to the last page of results"
+        aria-label="{{translate phrase='Go to the last page of results' }}"
         tabindex="0"
       >
         {{#unless icons.lastButtonIcon}}
