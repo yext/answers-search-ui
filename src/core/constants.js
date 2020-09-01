@@ -3,6 +3,9 @@
 /** The current lib version, reported with errors and analytics, injected by the build process */
 export const LIB_VERSION = '@@LIB_VERSION';
 
+/** The current locale, injected by the build process */
+export const LOCALE = '@@LOCALE';
+
 /** The identifier of the production environment */
 export const PRODUCTION = 'production';
 

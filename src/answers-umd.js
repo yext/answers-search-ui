@@ -28,7 +28,7 @@ import SearchApi from './core/search/searchapi';
 import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
-import { SANDBOX, PRODUCTION } from './core/constants';
+import { SANDBOX, PRODUCTION, LOCALE } from './core/constants';
 import MasterSwitchApi from './core/utils/masterswitchapi';
 import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
@@ -51,7 +51,7 @@ import Translator from './core/i18n/translator';
  */
 
 const DEFAULTS = {
-  locale: 'en'
+  locale: LOCALE
 };
 
 /**
