@@ -12,15 +12,15 @@ export default class TranslationFlagger {
    * and pluralized value based on the information given.
    *
    * @param {string} phrase
-   * @param {string} pluralPhrase
+   * @param {string} pluralForm
    * @param {string | number} count
    * @param {string} context
    * @param {Object} interpolationValues
    * @returns {string}
    */
-  static flag ({ phrase, pluralPhrase, count, context, interpolationValues }) {
-    const isPlural = count && count > 1 && pluralPhrase;
-    const declensionOfPhrase = isPlural ? pluralPhrase : phrase;
+  static flag ({ phrase, pluralForm, count, context, interpolationValues }) {
+    const isPlural = count && count > 1 && pluralForm;
+    const declensionOfPhrase = isPlural ? pluralForm : phrase;
     if (!interpolationValues) {
       return declensionOfPhrase;
     }

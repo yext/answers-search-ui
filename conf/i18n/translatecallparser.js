@@ -17,7 +17,7 @@ class TranslateCallParser {
 
     return new TranslationPlaceholder({
       phrase: parsedTranslateCall.phrase,
-      pluralPhrase: parsedTranslateCall.pluralPhrase,
+      pluralForm: parsedTranslateCall.pluralForm,
       count: parsedTranslateCall.count,
       context: parsedTranslateCall.context,
       interpolationValues: parsedTranslateCall.interpolationValues
