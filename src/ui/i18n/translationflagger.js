@@ -26,9 +26,9 @@ export default class TranslationFlagger {
     }
 
     let interpolatedPhrase = declensionOfPhrase;
-    Object.entries(interpolationValues).forEach((key, value) => {
-      interpolatedPhrase = declensionOfPhrase.replace(`[[${key}]]`, value);
-    });
+    for (const [key, value] of Object.entries(interpolationValues)) {
+      interpolatedPhrase = interpolatedPhrase.replace(`[[${key}]]`, value);
+    }
     return interpolatedPhrase;
   }
 }
