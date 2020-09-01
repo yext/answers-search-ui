@@ -8,6 +8,7 @@ const replace = require('gulp-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const rollup = require('gulp-rollup-lightweight');
 const source = require('vinyl-source-stream');
+const { TRANSLATION_FLAGGER_REGEX } = require('../../i18n/constants');
 
 const TranslateCallParser = require('../../i18n/translatecallparser');
 const TranslationResolver = require('../../i18n/translationresolver');
@@ -19,13 +20,14 @@ const TranslationResolver = require('../../i18n/translationresolver');
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the modern bundle.
  * @param {string} bundleName The name of the created bundle.
+ * @param {string} locale The current locale
  * @param {string} libVersion The current JS library version
  * @param {TranslationResolver} translationResolver
  *
  * @returns {stream.Writable} A {@link Writable} stream containing the modern
  *                            SDK bundle.
  */
-exports.modernBundle = function (callback, outputConfig, bundleName, libVersion, translationResolver) {
+exports.modernBundle = function (callback, outputConfig, bundleName, locale, libVersion, translationResolver) {
   const rollupConfig = {
     input: './src/answers-umd.js',
     output: outputConfig,
@@ -41,7 +43,7 @@ exports.modernBundle = function (callback, outputConfig, bundleName, libVersion,
       })
     ]
   };
-  return _buildBundle(callback, rollupConfig, bundleName, libVersion, translationResolver);
+  return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
 }
 
 /**
@@ -51,12 +53,13 @@ exports.modernBundle = function (callback, outputConfig, bundleName, libVersion,
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the legacy bundle.
  * @param {string} bundleName The name of the created bundle.
+ * @param {string} locale The current locale
  * @param {string} libVersion The current JS library version
  * @param {TranslationResolver} translationResolver
  * @returns {stream.Writable} A {@link Writable} stream containing the legacy
  *                            SDK bundle.
  */
-exports.legacyBundle = function (callback, outputConfig, bundleName, libVersion, translationResolver) {
+exports.legacyBundle = function (callback, outputConfig, bundleName, locale, libVersion, translationResolver) {
   const rollupConfig = {
     input: './src/answers-umd.js',
     output: outputConfig,
@@ -94,7 +97,7 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, libVersion,
       })
     ]
   };
-  return _buildBundle(callback, rollupConfig, bundleName, libVersion, translationResolver);
+  return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
 }
 
 /**
@@ -103,15 +106,17 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, libVersion,
  * @param {Function} callback
  * @param {Object} rollupConfig config for the Rollup plugin used for JS module bundling
  * @param {string} bundleName The filename of the created bundle.
+ * @param {string} locale The current locale
  * @param {string} libVersion The current JS library version
  * @param {TranslationResolver} translationResolver for the given locale
  * @returns {stream.Writable} A {@link Writable} stream containing the SDK bundle.
  */
-function _buildBundle (callback, rollupConfig, bundleName, libVersion, translationResolver) {
+function _buildBundle (callback, rollupConfig, bundleName, locale, libVersion, translationResolver) {
   return rollup(rollupConfig)
     .pipe(source(`${bundleName}.js`))
     .pipe(replace('@@LIB_VERSION', libVersion))
-    .pipe(replace(/TranslationFlagger.flag\([^;]+?\)/g, translateCall => {
+    .pipe(replace('@@LOCALE', locale))
+    .pipe(replace(TRANSLATION_FLAGGER_REGEX, translateCall => {
       const placeholder = new TranslateCallParser().parse(translateCall);
       const translationResult = translationResolver.resolve(placeholder);
       const canBeTranslatedStatically = typeof translationResult === 'string'

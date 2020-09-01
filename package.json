@@ -28,6 +28,8 @@
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
     "enzyme": "^3.11.0",
+    "fs-extra": "^9.0.1",
+    "gettext-extractor": "^3.5.2",
     "gulp": "^4.0.1",
     "gulp-concat": "^2.6.1",
     "gulp-declare": "^0.3.0",
@@ -69,7 +71,8 @@
     "test": "semistandard && jest",
     "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuite.js",
     "size": "size-limit",
-    "fix": "semistandard --fix"
+    "fix": "semistandard --fix",
+    "extract-translations": "gulp extractTranslations"
   },
   "jest": {
     "bail": 0,

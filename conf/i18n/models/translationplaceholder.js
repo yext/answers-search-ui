@@ -4,12 +4,14 @@
  * or pluralization as well.
  */
 class TranslationPlaceholder {
-  constructor ({ phrase, pluralForm, context, count, interpolationValues }) {
+  constructor ({ phrase, pluralForm, context, count, interpolationValues, lineNumber, filepath }) {
     this._phrase = phrase;
     this._pluralForm = pluralForm;
     this._context = context;
     this._count = count;
     this._interpolationValues = interpolationValues;
+    this._lineNumber = lineNumber;
+    this._filepath = filepath;
   }
 
   /**
@@ -60,6 +62,24 @@ class TranslationPlaceholder {
    */
   getInterpolationValues () {
     return this._interpolationValues;
+  }
+
+  /**
+   * The line number of this translation placeholder in its source file.
+   *
+   * @returns {number}
+   */
+  getLineNumber () {
+    return this._lineNumber;
+  }
+
+  /**
+   * The filepath of the original source file.
+   *
+   * @returns {number}
+   */
+  getFilePath () {
+    return this._filepath;
   }
 
   /**
