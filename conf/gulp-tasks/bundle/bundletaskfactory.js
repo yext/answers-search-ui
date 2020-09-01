@@ -65,6 +65,7 @@ class BundleTaskFactory {
       callback,
       modernBundleConfig,
       getBundleName(BundleType.MODERN, this._locale),
+      this._locale,
       this._libVersion,
       this._translationResolver
     );
@@ -87,6 +88,7 @@ class BundleTaskFactory {
       callback,
       legacyBundleConfig,
       getBundleName(BundleType.LEGACY_IIFE, this._locale),
+      this._locale,
       this._libVersion,
       this._translationResolver
     );
@@ -110,6 +112,7 @@ class BundleTaskFactory {
       callback,
       legacyBundleConfig,
       getBundleName(BundleType.LEGACY_UMD, this._locale),
+      this._locale,
       this._libVersion,
       this._translationResolver
     );
