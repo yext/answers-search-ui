@@ -7,26 +7,16 @@ module.exports = function extractTranslations () {
   const extractor = new TranslationExtractor();
 
   /**
-   * Extracts messages from a given source file.
-   * 
-   * @param {vinyl.File} file 
-   * @param {string} encoding 
-   * @param {Function} next 
+   * Extracts messages from a given source file into the extractor.
+   *
+   * @param {vinyl.File} file
+   * @param {string} encoding
+   * @param {Function} next
    */
-  function extractMessagesFromFile(file, encoding, next) {
+  function extractMessagesFromFile (file, encoding, next) {
     const contents = file.contents.toString();
-    const extname = path.extname(file.path);
     const pathFromBase = path.relative('./', file.path);
-    switch (extname) {
-      case '.js':
-        extractor.extractFromJS(contents, pathFromBase);
-        break;
-      case '.hbs':
-        extractor.extractFromHBS(contents, pathFromBase);
-        break;
-      default: 
-        throw new Error(`Unknown file extension for ${pathFromBase}`);
-    }
+    extractor.extract(contents, pathFromBase);
     next();
   }
 

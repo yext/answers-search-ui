@@ -3,8 +3,9 @@ const TranslationPlaceholder = require('./models/translationplaceholder');
 /**
  * Creates a {@link TranslateInvocation} from a Handlebars MustacheStatement.
  * @param {hbs.AST.MustacheStatement} mustacheStatement
+ * @param {string} filepath
  */
-function fromMustacheStatementNode (mustacheStatement) {
+function fromMustacheStatementNode (mustacheStatement, filepath) {
   const hashPairs = mustacheStatement.hash.pairs;
   const params = _convertHashPairsToParamsMap(hashPairs);
   // Exclude phrase, pluralForm, and context (but not count) from interpolationValues.
@@ -16,7 +17,8 @@ function fromMustacheStatementNode (mustacheStatement) {
     context: context,
     count: params.count,
     interpolationValues: interpolationValues,
-    lineNumber: lineNumber
+    lineNumber: lineNumber,
+    filepath: filepath
   });
 }
 

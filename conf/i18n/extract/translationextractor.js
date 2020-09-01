@@ -1,9 +1,9 @@
-const { GettextExtractor } = require('gettext-extractor');
-const Handlebars = require('handlebars');
+const path = require('path');
 const fsExtra = require('fs-extra');
-const { fromMustacheStatementNode } = require('../translationplaceholderutils');
-const { TRANSLATION_FLAGGER_REGEX } = require('../constants');
-const TranslateCallParser = require('../translatecallparser');
+const { GettextExtractor } = require('gettext-extractor');
+
+const HbsPlaceholderParser = require('./hbsplaceholderparser');
+const JsPlaceholderParser = require('./jsplaceholderparser');
 
 /**
  * TranslationExtractor extracts translations to a gettext style file.
@@ -11,47 +11,35 @@ const TranslateCallParser = require('../translatecallparser');
 class TranslationExtractor {
   constructor () {
     this._extractor = new GettextExtractor();
-    this._translateHelpers = ['translate'];
   }
 
   /**
-   * Extracts messages from a given hbs template.
-   * 
-   * @param {string} template 
-   * @param {string} filepath 
-   */
-  extractFromHBS (template, filepath) {
-    const tree = Handlebars.parseWithoutProcessing(template);
-    const visitor = new Handlebars.Visitor();
-    visitor.MustacheStatement = statement =>
-      this._extractFromMustacheNode(statement, filepath);
-    visitor.accept(tree);
-  }
-
-  /**
-   * Extracts messages from javascript code.
-   * 
-   * @param {string} code
+   * Extracts translations from a specific file's contents.
+   *
+   * @param {string} contents
    * @param {string} filepath
    */
-  extractFromJS (code, filepath) {
-    const matches = [...code.matchAll(TRANSLATION_FLAGGER_REGEX)];
-    for (const match of matches) {
-      this._extractFromJSCall(match, filepath);
+  extract (contents, filepath) {
+    const extname = path.extname(filepath);
+    let parser;
+    switch (extname) {
+      case '.js':
+        parser = new JsPlaceholderParser();
+        break;
+      case '.hbs':
+        parser = new HbsPlaceholderParser();
+        break;
+      default:
+        throw new Error(`Unknown file extension for ${filepath}`);
+    }
+    const placeholders = parser.parse(contents, filepath);
+    for (const placeholder of placeholders) {
+      this._registerTranslationPlaceholder(placeholder);
     }
   }
 
   /**
-   * Returns the extracted messages as a string.
-   *
-   * @returns {Array<Object>}
-   */
-  getPotString () {
-    return this._extractor.getPotString();
-  }
-
-  /**
-   * Saves the currently extracted messages to te given output path.
+   * Exports the currently extracted messages to the given output file.
    * Creates any parent directories as necessary.
    *
    * @param {string} outputPath
@@ -63,45 +51,17 @@ class TranslationExtractor {
   }
 
   /**
-   * Register a given {@link TranslationPlaceholder}'s message.
-   * 
-   * @param {TranslationPlaceholder} placeholder 
-   * @param {string} filepath 
+   * Registers a given {@link TranslationPlaceholder}'s message.
+   *
+   * @param {TranslationPlaceholder} placeholder
    */
-  _registerTranslationPlaceholder (placeholder, filepath) {
+  _registerTranslationPlaceholder (placeholder) {
     this._extractor.addMessage({
       text: placeholder.getPhrase(),
       textPlural: placeholder.getPluralForm(),
       context: placeholder.getContext(),
-      references: [`${filepath}:${placeholder.getLineNumber()}`]
+      references: [`${placeholder.getFilePath()}:${placeholder.getLineNumber()}`]
     });
-  }
-
-  /**
-   * @param {Array<string>} match also contains additional index and input properties
-   * @param {string} filepath
-   */
-  _extractFromJSCall (match, filepath) {
-    const { index, input } = match;
-    const translateCall = match[0];
-    const lineNumber = input.substring(0, index).match(/\n/g).length + 1;
-    const placeholder = new TranslateCallParser().parse(translateCall, lineNumber);
-    this._registerTranslationPlaceholder(placeholder, filepath);
-  }
-
-  /**
-   * Extracts translations from a given handlebars mustache node.
-   *
-   * @param {hbs.AST.MustacheStatement} statement
-   * @param {string} filepath
-   */
-  _extractFromMustacheNode (statement, filepath) {
-    const isTranslationHelper = this._translateHelpers.includes(statement.path.original);
-    if (!isTranslationHelper) {
-      return;
-    }
-    const placeholder = fromMustacheStatementNode(statement);
-    this._registerTranslationPlaceholder(placeholder, filepath);
   }
 }
 

@@ -10,10 +10,11 @@ class TranslateCallParser {
    * to return a {@link TranslationPlaceholder}
    *
    * @param {string} translateCall
-   * @param {number}
+   * @param {number} lineNumber
+   * @param {string} filepath
    * @returns {TranslationPlaceholder}
    */
-  parse (translateCall, lineNumber) {
+  parse (translateCall, lineNumber, filepath) {
     const parsedTranslateCall = this._convertToObject(translateCall);
 
     return new TranslationPlaceholder({
@@ -22,7 +23,8 @@ class TranslateCallParser {
       count: parsedTranslateCall.count,
       context: parsedTranslateCall.context,
       interpolationValues: parsedTranslateCall.interpolationValues,
-      lineNumber: lineNumber
+      lineNumber: lineNumber,
+      filepath: filepath
     });
   }
 
