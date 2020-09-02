@@ -44,16 +44,15 @@ class TranslateHelperVisitor {
     if (!isTranslationHelper) {
       return;
     }
-    const translationHelper = statement;
-    translationHelper.escaped = false;
-    const placeholder = fromMustacheStatementNode(translationHelper);
+    statement.escaped = false;
+    const placeholder = fromMustacheStatementNode(statement);
     const translatedPhrase = this._translationResolver.resolve(placeholder);
     const canBeTranslatedStatically =
       typeof translatedPhrase === 'string' && placeholder.hasNoInterpolation();
     if (canBeTranslatedStatically) {
-      return this._replaceHelperWithStaticTranslation(translationHelper, translatedPhrase);
+      return this._replaceHelperWithStaticTranslation(statement, translatedPhrase);
     } else {
-      const renamedStatement = this._renameHelperToRuntimeTranslation(translationHelper);
+      const renamedStatement = this._renameHelperToRuntimeTranslation(statement);
       return this._updateHashPairsForRuntimeTranslations(renamedStatement, translatedPhrase);
     }
   }
