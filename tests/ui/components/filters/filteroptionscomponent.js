@@ -554,7 +554,8 @@ describe('filter options component', () => {
             delete: () => { }
           },
           persistentStorage: {
-            set: () => { }
+            set: () => { },
+            get: () => { }
           },
           setLocationRadiusFilterNode,
           setStaticFilterNodes

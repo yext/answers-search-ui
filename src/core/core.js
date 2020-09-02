@@ -2,10 +2,16 @@
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
-import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
+import SearchIntents from './models/searchintents';
+import Navigation from './models/navigation';
+import AlternativeVerticals from './models/alternativeverticals';
+import DirectAnswer from './models/directanswer';
+import LocationBias from './models/locationbias';
+
+import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
 
@@ -224,6 +230,22 @@ export default class Core {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
       });
+  }
+
+  clearResults () {
+    this.globalStorage.set(StorageKeys.QUERY, null);
+    this.globalStorage.set(StorageKeys.QUERY_ID, '');
+    this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
+    this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
+    this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
+    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
+    this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
+    this.globalStorage.set(StorageKeys.NAVIGATION, new Navigation());
+    this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
+    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
+    this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
+    this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
+    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
   }
 
   /**
