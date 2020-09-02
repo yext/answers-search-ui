@@ -61,7 +61,7 @@
       {{else}}
         <a
           class="yxt-Pagination-link js-yxt-Pagination-link{{#if this.desktopHidden}} desktop-hidden{{/if}}{{#if this.mobileHidden}} mobile-hidden{{/if}}"
-          aria-label="{{translate phrase='Go to page {{pageNumber}} of results' pageNumber=this.number }}"
+          aria-label="{{translate phrase='Go to page [[pageNumber]] of results' pageNumber=this.number }}"
           data-number="{{this.number}}"
           data-eventtype="PAGINATE"
           data-eventoptions='{"currentPage":{{../pageNumber}}, "newPage":{{this.number}}, "totalPageCount":{{../maxPage}} }'
