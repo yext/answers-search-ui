@@ -191,14 +191,14 @@ export default class DateRangeFilterComponent extends Component {
       displayValue = this._isExclusive
         ? TranslationFlagger.flag({
           phrase: 'After [[dateOrTime]]',
-          context: 'Starting date/time with no end date/time',
+          context: 'After a date. Example: After [August 15th]',
           interpolationValues: {
             dateOrTime: min
           }
         })
         : TranslationFlagger.flag({
           phrase: `[[dateOrTime]] or later`,
-          context: 'Starting date/time with no end date/time',
+          context: 'Beginning at a date (with no end date). Example: [August 15th] or later',
           interpolationValues: {
             dateOrTime: min
           }
@@ -207,14 +207,14 @@ export default class DateRangeFilterComponent extends Component {
       displayValue = this._isExclusive
         ? TranslationFlagger.flag({
           phrase: 'Before [[dateOrTime]]',
-          context: 'Ending date/time with no start date/time',
+          context: 'Before a date. Example: Before [August 15th]',
           interpolationValues: {
             dateOrTime: max
           }
         })
         : TranslationFlagger.flag({
           phrase: '[[dateOrTime]] and earlier',
-          context: 'Ending date/time with no start date/time',
+          context: 'Ending at a date with (no start date). Example: [August 15th] or earlier',
           interpolationValues: {
             dateOrTime: max
           }
@@ -224,7 +224,7 @@ export default class DateRangeFilterComponent extends Component {
     } else {
       displayValue = TranslationFlagger.flag({
         phrase: '[[start]] - [[end]]',
-        context: 'Start date/time to end date/time',
+        context: 'Start date to end date. Example: [August 15th] - [August 16th]',
         interpolationValues: {
           start: min,
           end: max

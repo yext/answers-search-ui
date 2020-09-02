@@ -25,7 +25,8 @@ const DEFAULT_CONFIG = {
     phrase: 'Filters applied to this search:'
   }),
   removableLabelText: TranslationFlagger.flag({
-    phrase: 'Remove this filter'
+    phrase: 'Remove this filter',
+    context: 'Button label'
   }),
   resultsCountTemplate: '',
   hiddenFields: []

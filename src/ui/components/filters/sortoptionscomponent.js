@@ -195,7 +195,8 @@ function assignDefaults (config) {
 
   // Optional, the label to use for the reset button
   updatedConfig.resetLabel = config.resetLabel || TranslationFlagger.flag({
-    phrase: 'reset'
+    phrase: 'reset',
+    context: 'Deselects the selected options'
   });
 
   // Optional, the max number of filter options to show before collapsing extras
@@ -223,7 +224,7 @@ function assignDefaults (config) {
   // Optional, Top title for the sorting component
   updatedConfig.label = config.label || TranslationFlagger.flag({
     phrase: 'Sorting',
-    context: 'Title for Sorting component'
+    context: 'Title for a group of controls that sort results'
   });
 
   // Optional, when true component does not update globalStorage

@@ -58,8 +58,7 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   geoButtonIconAltText: TranslationFlagger.flag({
-    phrase: 'Use My Location',
-    context: 'Attempts to find the user\'s current location'
+    phrase: 'Use My Location'
   }),
 
   /**
@@ -67,8 +66,7 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   geoButtonText: TranslationFlagger.flag({
-    phrase: 'Use My Location',
-    context: 'Attempts to find the user\'s current location'
+    phrase: 'Use My Location'
   }),
 
   /**
@@ -77,7 +75,7 @@ const DEFAULT_CONFIG = {
    */
   enabledText: TranslationFlagger.flag({
     phrase: 'Current Location',
-    context: 'Shows when geolocation is enabled'
+    context: 'Labels the user\'s current location'
   }),
 
   /**
@@ -85,8 +83,7 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   loadingText: TranslationFlagger.flag({
-    phrase: 'Finding Your Location...',
-    context: 'Loading the user\'s location'
+    phrase: 'Finding Your Location...'
   }),
 
   /**
@@ -94,8 +91,7 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   errorText: TranslationFlagger.flag({
-    phrase: 'Could Not Find Your Location',
-    context: 'Shows when geolocation failed'
+    phrase: 'Could Not Find Your Location'
   }),
 
   /**
@@ -247,7 +243,7 @@ export default class GeoLocationComponent extends Component {
       navigator.geolocation.getCurrentPosition(
         position => {
           const filter = this._buildFilter(position);
-          this._saveDataToStorage('', filter, 'Current Location', position); // TODO is this surfaced on the front end?
+          this._saveDataToStorage('', filter, 'Current Location', position);
           this._enabled = true;
           this.setState({});
           this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);

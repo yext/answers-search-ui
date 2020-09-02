@@ -62,7 +62,7 @@ export default class SearchComponent extends Component {
      */
     this.labelText = config.labelText || TranslationFlagger.flag({
       phrase: 'Conduct a search',
-      context: 'Labels the search input'
+      context: 'Labels an input field'
     });
 
     /**
@@ -71,7 +71,7 @@ export default class SearchComponent extends Component {
      */
     this.submitText = config.submitText || TranslationFlagger.flag({
       phrase: 'Submit',
-      context: 'Submits a search term'
+      context: 'Button label'
     });
 
     /**
@@ -80,7 +80,7 @@ export default class SearchComponent extends Component {
      */
     this.clearText = config.clearText || TranslationFlagger.flag({
       phrase: 'Clear',
-      context: 'Clear search'
+      context: 'Verb, clears search'
     });
 
     /**

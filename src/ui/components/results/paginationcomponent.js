@@ -95,7 +95,8 @@ export default class PaginationComponent extends Component {
     this._pageLabel = config.pageLabel !== undefined
       ? config.pageLabel
       : TranslationFlagger.flag({
-        phrase: 'Page'
+        phrase: 'Page',
+        context: 'Noun, a page of results'
       });
 
     /**

@@ -8,7 +8,7 @@ import TranslationFlagger from '../../i18n/translationflagger';
 const DEFAULT_CONFIG = {
   suggestionHelpText: TranslationFlagger.flag({
     phrase: 'Did you mean:',
-    context: 'Suggestion help text, labels a suggested phrase'
+    context: 'Help text, labels a suggested phrase'
   })
 };
 

@@ -138,7 +138,8 @@ class VerticalResultsConfig {
        * @type {string}
        */
       removableLabelText: defaultConfigOption(config, ['appliedFilters.removableLabelText'], TranslationFlagger.flag({
-        phrase: 'Remove this filter'
+        phrase: 'Remove this filter',
+        context: 'Button label'
       }))
     };
 
@@ -147,7 +148,8 @@ class VerticalResultsConfig {
      * @type {string}
      */
     this.viewMoreLabel = defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], TranslationFlagger.flag({
-      phrase: 'View More'
+      phrase: 'View More',
+      context: 'Button label, view more [results]'
     }));
   }
 }

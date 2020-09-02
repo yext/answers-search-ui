@@ -14,7 +14,7 @@ class FacetsConfig {
      */
     this.title = config.title || TranslationFlagger.flag({
       phrase: 'Filters',
-      context: 'Title for Filters component'
+      context: 'Plural noun, title for a group of controls that remove unwanted results'
     });
 
     /**
@@ -71,7 +71,7 @@ class FacetsConfig {
      */
     this.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({
       phrase: 'show more',
-      context: 'Displays more filters'
+      context: 'Displays more options'
     });
 
     /**
@@ -80,7 +80,7 @@ class FacetsConfig {
      */
     this.showLessLabel = config.showLessLabel || TranslationFlagger.flag({
       phrase: 'show less',
-      context: 'Displays less filters'
+      context: 'Displays less options'
     });
 
     /**
@@ -126,7 +126,7 @@ class FacetsConfig {
      */
     this.placeholderText = config.placeholderText || TranslationFlagger.flag({
       phrase: 'Search here...',
-      context: 'Placeholder text in the search bar for searching filters'
+      context: 'Placeholder text for searching'
     });
 
     /**
@@ -141,7 +141,7 @@ class FacetsConfig {
      */
     this.searchLabelText = config.searchLabelText || TranslationFlagger.flag({
       phrase: 'Search for a filter option',
-      context: 'Labels the search bar for searching filters'
+      context: 'Labels the search bar' // TODO
     });
 
     /**

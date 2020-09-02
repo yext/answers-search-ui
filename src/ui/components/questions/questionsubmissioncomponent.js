@@ -32,7 +32,8 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   'emailLabel': TranslationFlagger.flag({
-    phrase: 'Email'
+    phrase: 'Email',
+    context: 'Label for an input field'
   }),
 
   /**
@@ -41,7 +42,7 @@ const DEFAULT_CONFIG = {
    */
   'nameLabel': TranslationFlagger.flag({
     phrase: 'Name',
-    context: 'Label for an input field where a user should enter their name'
+    context: 'Label for an input field'
   }),
 
   /**
@@ -50,7 +51,7 @@ const DEFAULT_CONFIG = {
    */
   'questionLabel': TranslationFlagger.flag({
     phrase: 'Question',
-    context: 'Label for an input field where a user should enter their question'
+    context: 'Label for an input field'
   }),
 
   /**
@@ -67,7 +68,7 @@ const DEFAULT_CONFIG = {
    */
   'buttonLabel': TranslationFlagger.flag({
     phrase: 'Submit',
-    context: 'Button that submits a question'
+    context: 'Button label'
   }),
 
   /**
@@ -76,7 +77,7 @@ const DEFAULT_CONFIG = {
    */
   'sectionTitle': TranslationFlagger.flag({
     phrase: 'Ask a Question',
-    context: 'Title of section that can be used to submit a question'
+    context: 'Title of section'
   }),
 
   /**
@@ -107,7 +108,7 @@ const DEFAULT_CONFIG = {
    */
   'requiredInputPlaceholder': '(' + TranslationFlagger.flag({
     phrase: 'required',
-    context: 'Denotes that entering input is mandatory'
+    context: 'Indicates that entering input is mandatory'
   }) + ')',
 
   /**
@@ -132,7 +133,8 @@ const DEFAULT_CONFIG = {
    * @type {string}
   */
   'privacyPolicyUrlLabel': TranslationFlagger.flag({
-    phrase: 'Learn more here.'
+    phrase: 'Learn more here.',
+    context: 'Labels a link'
   }),
 
   /**
@@ -146,8 +148,7 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   'privacyPolicyErrorText': TranslationFlagger.flag({
-    phrase: '* You must agree to the privacy policy to submit a question.',
-    context: 'Error message that requires further user action'
+    phrase: '* You must agree to the privacy policy to submit a question.'
   }),
 
   /**
@@ -155,8 +156,7 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   'emailFormatErrorText': TranslationFlagger.flag({
-    phrase: '* Please enter a valid email address.',
-    context: 'Error message that requires further user action'
+    phrase: '* Please enter a valid email address.'
   }),
 
   /**
@@ -165,8 +165,7 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   'networkErrorText': TranslationFlagger.flag({
-    phrase: 'We\'re sorry, an error occurred.',
-    context: 'Error message that indicates system error'
+    phrase: 'We\'re sorry, an error occurred.'
   }),
 
   /**

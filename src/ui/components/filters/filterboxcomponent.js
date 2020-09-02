@@ -14,7 +14,7 @@ class FilterBoxConfig {
      */
     this.title = config.title || TranslationFlagger.flag({
       phrase: 'Filters',
-      context: 'Title for Filters component'
+      context: 'Plural noun, title for a group of controls that remove unwanted results'
     });
 
     /**
@@ -71,7 +71,7 @@ class FilterBoxConfig {
      */
     this.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({
       phrase: 'show more',
-      context: 'Displays more filters'
+      context: 'Displays more options'
     });
 
     /**
@@ -80,7 +80,7 @@ class FilterBoxConfig {
      */
     this.showLessLabel = config.showLessLabel || TranslationFlagger.flag({
       phrase: 'show less',
-      context: 'Displays less filters'
+      context: 'Displays less options'
     });
 
     /**

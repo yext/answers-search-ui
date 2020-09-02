@@ -58,7 +58,7 @@ class FilterOptionsConfig {
      */
     this.label = config.label || TranslationFlagger.flag({
       phrase: 'Filters',
-      context: 'Title for Filters component'
+      context: 'Plural noun, title for a group of controls that remove unwanted results'
     });
 
     /**
@@ -93,7 +93,7 @@ class FilterOptionsConfig {
      */
     this.resetLabel = config.resetLabel || TranslationFlagger.flag({
       phrase: 'reset',
-      context: 'Deselects the selected filters'
+      context: 'Deselects the selected options'
     });
 
     /**
@@ -108,7 +108,7 @@ class FilterOptionsConfig {
      */
     this.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({
       phrase: 'show more',
-      context: 'Displays more filters'
+      context: 'Displays more options'
     });
 
     /**
@@ -117,7 +117,7 @@ class FilterOptionsConfig {
      */
     this.showLessLabel = config.showLessLabel || TranslationFlagger.flag({
       phrase: 'show less',
-      context: 'Displays less filters'
+      context: 'Displays less options'
     });
 
     /**
@@ -151,7 +151,7 @@ class FilterOptionsConfig {
      */
     this.placeholderText = config.placeholderText || TranslationFlagger.flag({
       phrase: 'Search here...',
-      context: 'Placeholder text in the search bar for searching filters'
+      context: 'Placeholder text for searching'
     });
 
     /**
@@ -166,7 +166,7 @@ class FilterOptionsConfig {
      */
     this.searchLabelText = config.searchLabelText || TranslationFlagger.flag({
       phrase: 'Search for a filter option',
-      context: 'Labels the search bar for searching filters'
+      context: 'Labels the search bar'
     });
 
     this.validate();

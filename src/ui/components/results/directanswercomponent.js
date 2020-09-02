@@ -68,7 +68,8 @@ export default class DirectAnswerComponent extends Component {
      * @type {string}
      */
     this._viewDetailsText = config.viewDetailsText || TranslationFlagger.flag({
-      phrase: 'View Details'
+      phrase: 'View Details',
+      context: 'Call to action, button label'
     });
 
     /**

@@ -89,7 +89,8 @@ export default class UniversalResultsComponent extends Component {
       viewMore: true,
       // By default, the view more link has a label of 'View More'.
       viewMoreLabel: defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], TranslationFlagger.flag({
-        phrase: 'View More'
+        phrase: 'View More',
+        context: 'Button label, view more [results]'
       })),
       // Whether to show a result count.
       showResultCount: false,
