@@ -69,7 +69,7 @@ export default class DirectAnswerComponent extends Component {
      */
     this._viewDetailsText = config.viewDetailsText || TranslationFlagger.flag({
       phrase: 'View Details',
-      context: 'Button label, call to action'
+      context: 'Button label, view is a verb'
     });
 
     /**

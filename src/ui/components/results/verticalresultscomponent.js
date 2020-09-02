@@ -141,7 +141,8 @@ class VerticalResultsConfig {
        * The aria-label given to the removable filter buttons.
        * @type {string}
        */
-      removableLabelText: defaultConfigOption(config,
+      removableLabelText: defaultConfigOption(
+        config,
         ['appliedFilters.removableLabelText'],
         TranslationFlagger.flag({
           phrase: 'Remove this filter',
