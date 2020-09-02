@@ -4,6 +4,7 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import ResultsContext from '../../../core/storage/resultscontext';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 class FacetsConfig {
   constructor (config) {
@@ -11,7 +12,10 @@ class FacetsConfig {
      * The title to display above the controls
      * @type {string}
      */
-    this.title = config.title || 'Filters';
+    this.title = config.title || TranslationFlagger.flag({
+      phrase: 'Filters',
+      context: 'Plural noun, title for a group of controls that filter results'
+    });
 
     /**
      * If true, display the number of results next to each facet
@@ -35,7 +39,10 @@ class FacetsConfig {
      * The label to show for the reset button
      * @type {string}
      */
-    this.resetFacetLabel = config.resetFacetLabel || 'reset';
+    this.resetFacetLabel = config.resetFacetLabel || TranslationFlagger.flag({
+      phrase: 'reset',
+      context: 'Button label, deselects one or more options'
+    });
 
     /**
      * If true, show a "reset all" button to reset all facets
@@ -47,7 +54,10 @@ class FacetsConfig {
      * The label to show for the "reset all" button
      * @type {string}
      */
-    this.resetFacetsLabel = config.resetFacetsLabel || 'reset all';
+    this.resetFacetsLabel = config.resetFacetsLabel || TranslationFlagger.flag({
+      phrase: 'reset all',
+      context: 'Button label, deselects all options'
+    });
 
     /**
      * The max number of facets to show before displaying "show more"/"show less"
@@ -59,13 +69,19 @@ class FacetsConfig {
      * The label to show for displaying more facets
      * @type {string}
      */
-    this.showMoreLabel = config.showMoreLabel || 'show more';
+    this.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({
+      phrase: 'show more',
+      context: 'Displays more options'
+    });
 
     /**
      * The label to show for displaying less facets
      * @type {string}
      */
-    this.showLessLabel = config.showLessLabel || 'show less';
+    this.showLessLabel = config.showLessLabel || TranslationFlagger.flag({
+      phrase: 'show less',
+      context: 'Displays less options'
+    });
 
     /**
      * If true, enable hiding excess facets in each group with a "show more"/"show less" button
@@ -89,7 +105,10 @@ class FacetsConfig {
      * Text to display on the apply button
      * @type {string}
      */
-    this.applyLabel = config.applyLabel || 'apply';
+    this.applyLabel = config.applyLabel || TranslationFlagger.flag({
+      phrase: 'apply',
+      context: 'Button label, effectuates changes'
+    });
 
     /**
      * The controls to use for each field. Each type of filter has a default
@@ -105,7 +124,10 @@ class FacetsConfig {
      * The placeholder text used for the filter option search input
      * @type {string}
      */
-    this.placeholderText = config.placeholderText || 'Search here...';
+    this.placeholderText = config.placeholderText || TranslationFlagger.flag({
+      phrase: 'Search here...',
+      context: 'Placeholder text for input field'
+    });
 
     /**
      * If true, display the filter option search input
@@ -117,7 +139,10 @@ class FacetsConfig {
      * The form label text for the search input
      * @type {boolean}
      */
-    this.searchLabelText = config.searchLabelText || 'Search for a filter option';
+    this.searchLabelText = config.searchLabelText || TranslationFlagger.flag({
+      phrase: 'Search for a filter option',
+      context: 'Labels an input field'
+    });
 
     /**
      * An object that maps field API names to their filter options overrides,

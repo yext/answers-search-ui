@@ -13,6 +13,7 @@ import FilterMetadata from '../../../core/filters/filtermetadata';
 import { groupArray } from '../../../core/utils/arrayutils';
 import FilterType from '../../../core/filters/filtertype';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * The currently supported controls
@@ -55,7 +56,10 @@ class FilterOptionsConfig {
      * The label to be used in the legend
      * @type {string}
      */
-    this.label = config.label || 'Filters';
+    this.label = config.label || TranslationFlagger.flag({
+      phrase: 'Filters',
+      context: 'Plural noun, title for a group of controls that filter results'
+    });
 
     /**
      * The callback function to call when changed
@@ -87,7 +91,10 @@ class FilterOptionsConfig {
      * The label to show for the reset button
      * @type {string}
      */
-    this.resetLabel = config.resetLabel || 'reset';
+    this.resetLabel = config.resetLabel || TranslationFlagger.flag({
+      phrase: 'reset',
+      context: 'Button label, deselects one or more options'
+    });
 
     /**
      * The max number of facets to show before displaying "show more"/"show less"
@@ -99,13 +106,19 @@ class FilterOptionsConfig {
      * The label to show for displaying more facets
      * @type {string}
      */
-    this.showMoreLabel = config.showMoreLabel || 'show more';
+    this.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({
+      phrase: 'show more',
+      context: 'Displays more options'
+    });
 
     /**
      * The label to show for displaying less facets
      * @type {string}
      */
-    this.showLessLabel = config.showLessLabel || 'show less';
+    this.showLessLabel = config.showLessLabel || TranslationFlagger.flag({
+      phrase: 'show less',
+      context: 'Displays less options'
+    });
 
     /**
      * If true, enable hiding excess facets with a "show more"/"show less" button
@@ -136,7 +149,10 @@ class FilterOptionsConfig {
      * The placeholder text used for the filter option search input
      * @type {string}
      */
-    this.placeholderText = config.placeholderText || 'Search here...';
+    this.placeholderText = config.placeholderText || TranslationFlagger.flag({
+      phrase: 'Search here...',
+      context: 'Placeholder text for input field'
+    });
 
     /**
      * If true, display the filter option search input
@@ -148,7 +164,10 @@ class FilterOptionsConfig {
      * The form label text for the search input
      * @type {boolean}
      */
-    this.searchLabelText = config.searchLabelText || 'Search for a filter option';
+    this.searchLabelText = config.searchLabelText || TranslationFlagger.flag({
+      phrase: 'Search for a filter option',
+      context: 'Labels an input field'
+    });
 
     this.validate();
 

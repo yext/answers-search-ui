@@ -6,10 +6,17 @@ import Component from '../component';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 const DEFAULT_CONFIG = {
-  minPlaceholderText: 'Min',
-  maxPlaceholderText: 'Max'
+  minPlaceholderText: TranslationFlagger.flag({
+    phrase: 'Min',
+    context: 'Minimum'
+  }),
+  maxPlaceholderText: TranslationFlagger.flag({
+    phrase: 'Max',
+    context: 'Maximum'
+  })
 };
 
 export default class RangeFilterComponent extends Component {

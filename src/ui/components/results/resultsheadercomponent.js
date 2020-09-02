@@ -9,6 +9,7 @@ import {
   flattenFilterNodes,
   pruneFilterNodes
 } from '../../../core/utils/filternodeutils';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -20,8 +21,13 @@ const DEFAULT_CONFIG = {
   removable: false,
   delimiter: '|',
   isUniversal: false,
-  labelText: 'Filters applied to this search:',
-  removableLabelText: 'Remove this filter',
+  labelText: TranslationFlagger.flag({
+    phrase: 'Filters applied to this search:'
+  }),
+  removableLabelText: TranslationFlagger.flag({
+    phrase: 'Remove this filter',
+    context: 'Button label'
+  }),
   resultsCountTemplate: '',
   hiddenFields: []
 };

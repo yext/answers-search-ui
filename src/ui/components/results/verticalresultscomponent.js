@@ -14,6 +14,7 @@ import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import { getTabOrder } from '../../tools/taborder';
 import SearchParams from '../../dom/searchparams';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -128,20 +129,40 @@ class VerticalResultsConfig {
        * The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
        * @type {string}
        **/
-      labelText: defaultConfigOption(config, ['appliedFilters.labelText'], 'Filters applied to this search:'),
+      labelText: defaultConfigOption(
+        config,
+        ['appliedFilters.labelText'],
+        TranslationFlagger.flag({
+          phrase: 'Filters applied to this search:'
+        })
+      ),
 
       /**
        * The aria-label given to the removable filter buttons.
        * @type {string}
        */
-      removableLabelText: defaultConfigOption(config, ['appliedFilters.removableLabelText'], 'Remove this filter')
+      removableLabelText: defaultConfigOption(
+        config,
+        ['appliedFilters.removableLabelText'],
+        TranslationFlagger.flag({
+          phrase: 'Remove this filter',
+          context: 'Button label'
+        })
+      )
     };
 
     /**
      * Text for the view more button.
      * @type {string}
      */
-    this.viewMoreLabel = defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], 'View More');
+    this.viewMoreLabel = defaultConfigOption(
+      config,
+      ['viewMoreLabel', 'viewAllText'],
+      TranslationFlagger.flag({
+        phrase: 'View More',
+        context: 'Button label, view more [results]'
+      })
+    );
   }
 }
 

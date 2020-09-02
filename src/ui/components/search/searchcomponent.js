@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 const IconState = {
   'YEXT': 0,
@@ -59,19 +60,28 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.labelText = config.labelText || 'Conduct a search';
+    this.labelText = config.labelText || TranslationFlagger.flag({
+      phrase: 'Conduct a search',
+      context: 'Labels an input field'
+    });
 
     /**
      * The submit text is used for labeling the submit button, also provided to the template.
      * @type {string}
      */
-    this.submitText = config.submitText || 'Submit';
+    this.submitText = config.submitText || TranslationFlagger.flag({
+      phrase: 'Submit',
+      context: 'Button label'
+    });
 
     /**
      * The clear text is used for labeling the clear button, also provided to the template.
      * @type {string}
      */
-    this.clearText = config.clearText || 'Clear';
+    this.clearText = config.clearText || TranslationFlagger.flag({
+      phrase: 'Clear',
+      context: 'Verb, clears search'
+    });
 
     /**
      * The submit icon is an icon for the submit button, if provided it will be displayed and the
@@ -194,7 +204,9 @@ export default class SearchComponent extends Component {
      */
     this._geolocationTimeoutAlert = {
       enabled: false,
-      message: 'We are unable to determine your location',
+      message: TranslationFlagger.flag({
+        phrase: 'We are unable to determine your location'
+      }),
       ...config.geolocationTimeoutAlert
     };
   }

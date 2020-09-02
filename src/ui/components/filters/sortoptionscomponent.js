@@ -7,6 +7,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import ResultsContext from '../../../core/storage/resultscontext';
 import SearchStates from '../../../core/storage/searchstates';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * Renders configuration options for sorting Vertical Results.
@@ -148,7 +149,10 @@ function assignDefaults (config) {
   const updatedConfig = Object.assign({}, config);
 
   // Optional, The label used for the “default” sort (aka the sort specified by the experience config").
-  updatedConfig.defaultSortLabel = config.defaultSortLabel || 'Best Match';
+  updatedConfig.defaultSortLabel = config.defaultSortLabel || TranslationFlagger.flag({
+    phrase: 'Best Match',
+    context: 'Best match (i.e. most relevant), describing results'
+  });
 
   // Array of search options, where an option has type, label, and if is type FIELD also a label and direction
   if (!config.options) {
@@ -191,7 +195,10 @@ function assignDefaults (config) {
   updatedConfig.showReset = config.showReset || false;
 
   // Optional, the label to use for the reset button
-  updatedConfig.resetLabel = config.resetLabel || 'reset';
+  updatedConfig.resetLabel = config.resetLabel || TranslationFlagger.flag({
+    phrase: 'reset',
+    context: 'Button label, deselects one or more options'
+  });
 
   // Optional, the max number of filter options to show before collapsing extras
   updatedConfig.showMoreLimit = config.showMoreLimit || 5;
@@ -201,22 +208,34 @@ function assignDefaults (config) {
   updatedConfig.showMore = updatedConfig.showMore && (updatedConfig.options.length > updatedConfig.showMoreLimit);
 
   // Optional, the label to show for displaying more options
-  updatedConfig.showMoreLabel = config.showMoreLabel || 'Show more';
+  updatedConfig.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({
+    phrase: 'Show more',
+    context: 'Displays more options'
+  });
 
   // Optional, the label to show for displaying less options
-  updatedConfig.showLessLabel = config.showLessLabel || 'Show less';
+  updatedConfig.showLessLabel = config.showLessLabel || TranslationFlagger.flag({
+    phrase: 'Show less',
+    context: 'Displays less options'
+  });
 
   // Optional, the callback function to call when changed
   updatedConfig.onChange = config.onChange || function () {};
 
   // Optional, Top title for the sorting component
-  updatedConfig.label = config.label || 'Sorting';
+  updatedConfig.label = config.label || TranslationFlagger.flag({
+    phrase: 'Sorting',
+    context: 'Title for a group of controls that sort results'
+  });
 
   // Optional, when true component does not update globalStorage
   // possibly delegating that to a higher-order/composite component
   updatedConfig.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
-  updatedConfig.applyLabel = config.applyLabel || 'Apply';
+  updatedConfig.applyLabel = config.applyLabel || TranslationFlagger.flag({
+    phrase: 'Apply',
+    context: 'Button label, effectuates changes'
+  });
 
   updatedConfig.verticalKey = config.verticalKey;
   if (!updatedConfig.verticalKey) {
