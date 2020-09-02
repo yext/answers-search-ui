@@ -125,7 +125,8 @@ export default class NavigationComponent extends Component {
      * @type {string}
      */
     this.overflowLabel = config.overflowLabel || TranslationFlagger.flag({
-      phrase: 'More'
+      phrase: 'More',
+      context: 'Button label, displays more items'
     });
 
     /**
@@ -181,7 +182,8 @@ export default class NavigationComponent extends Component {
      *  @type {string}
      */
     this._ariaLabel = config.ariaLabel || TranslationFlagger.flag({
-      phrase: 'Search Page Navigation'
+      phrase: 'Search Page Navigation',
+      context: 'Noun, labels the navigation for the search page'
     });
 
     this.checkOutsideClick = this.checkOutsideClick.bind(this);

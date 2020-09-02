@@ -197,7 +197,7 @@ export default class DateRangeFilterComponent extends Component {
           }
         })
         : TranslationFlagger.flag({
-          phrase: `[[dateOrTime]] or later`,
+          phrase: '[[dateOrTime]] or later',
           context: 'Beginning at a date (with no end date). Example: [August 15th] or later',
           interpolationValues: {
             dateOrTime: min
