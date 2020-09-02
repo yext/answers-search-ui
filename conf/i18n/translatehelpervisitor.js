@@ -36,10 +36,12 @@ class TranslateHelperVisitor {
    * Returning undefined leaves the node unaffected, otherwise it replaces it with the
    * returned value.
    *
-   * @param {hbs.AST.MustacheStatement} statement
-   * @returns {hbs.AST.MustacheStatment|undefined} Either the new node, or undefined to leave the node as is
+   * @param {hbs.AST.MustacheStatement} handlebarsStatement
+   * @returns {hbs.AST.MustacheStatement|undefined} Either the new node, or undefined to leave the node as is
    */
-  _handleMustacheStatement (statement) {
+  _handleMustacheStatement (handlebarsStatement) {
+    const statement = handlebarsStatement;
+    statement.escaped = false;
     const isTranslationHelper = this._validHelpers.includes(statement.path.original);
     if (!isTranslationHelper) {
       return;
