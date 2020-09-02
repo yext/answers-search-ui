@@ -36,24 +36,24 @@ class TranslateHelperVisitor {
    * Returning undefined leaves the node unaffected, otherwise it replaces it with the
    * returned value.
    *
-   * @param {hbs.AST.MustacheStatement} handlebarsStatement
+   * @param {hbs.AST.MustacheStatement} statement
    * @returns {hbs.AST.MustacheStatement|undefined} Either the new node, or undefined to leave the node as is
    */
-  _handleMustacheStatement (handlebarsStatement) {
-    const statement = handlebarsStatement;
-    statement.escaped = false;
+  _handleMustacheStatement (statement) {
     const isTranslationHelper = this._validHelpers.includes(statement.path.original);
     if (!isTranslationHelper) {
       return;
     }
-    const placeholder = fromMustacheStatementNode(statement);
+    const translationHelper = statement;
+    translationHelper.escaped = false;
+    const placeholder = fromMustacheStatementNode(translationHelper);
     const translatedPhrase = this._translationResolver.resolve(placeholder);
     const canBeTranslatedStatically =
       typeof translatedPhrase === 'string' && placeholder.hasNoInterpolation();
     if (canBeTranslatedStatically) {
-      return this._replaceHelperWithStaticTranslation(statement, translatedPhrase);
+      return this._replaceHelperWithStaticTranslation(translationHelper, translatedPhrase);
     } else {
-      const renamedStatement = this._renameHelperToRuntimeTranslation(statement);
+      const renamedStatement = this._renameHelperToRuntimeTranslation(translationHelper);
       return this._updateHashPairsForRuntimeTranslations(renamedStatement, translatedPhrase);
     }
   }
