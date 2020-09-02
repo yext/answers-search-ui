@@ -58,7 +58,7 @@ class FilterOptionsConfig {
      */
     this.label = config.label || TranslationFlagger.flag({
       phrase: 'Filters',
-      context: 'Plural noun, title for a group of controls that remove unwanted results'
+      context: 'Plural noun, title for a group of controls that filter results'
     });
 
     /**

@@ -150,7 +150,8 @@ function assignDefaults (config) {
 
   // Optional, The label used for the “default” sort (aka the sort specified by the experience config").
   updatedConfig.defaultSortLabel = config.defaultSortLabel || TranslationFlagger.flag({
-    phrase: 'Best Match'
+    phrase: 'Best Match',
+    context: 'Best match (i.e. most relevant), describing results'
   });
 
   // Array of search options, where an option has type, label, and if is type FIELD also a label and direction

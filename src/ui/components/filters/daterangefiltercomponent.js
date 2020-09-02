@@ -190,33 +190,33 @@ export default class DateRangeFilterComponent extends Component {
     if (!max) {
       displayValue = this._isExclusive
         ? TranslationFlagger.flag({
-          phrase: 'After [[dateOrTime]]',
+          phrase: 'After [[date]]',
           context: 'After a date. Example: After [August 15th]',
           interpolationValues: {
-            dateOrTime: min
+            date: min
           }
         })
         : TranslationFlagger.flag({
-          phrase: '[[dateOrTime]] or later',
+          phrase: '[[date]] or later',
           context: 'Beginning at a date (with no end date). Example: [August 15th] or later',
           interpolationValues: {
-            dateOrTime: min
+            date: min
           }
         });
     } else if (!min) {
       displayValue = this._isExclusive
         ? TranslationFlagger.flag({
-          phrase: 'Before [[dateOrTime]]',
+          phrase: 'Before [[date]]',
           context: 'Before a date. Example: Before [August 15th]',
           interpolationValues: {
-            dateOrTime: max
+            date: max
           }
         })
         : TranslationFlagger.flag({
-          phrase: '[[dateOrTime]] and earlier',
+          phrase: '[[date]] and earlier',
           context: 'Ending at a date with (no start date). Example: [August 15th] or earlier',
           interpolationValues: {
-            dateOrTime: max
+            date: max
           }
         });
     } else if (min === max) {

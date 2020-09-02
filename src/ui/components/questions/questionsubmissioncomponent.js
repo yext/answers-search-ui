@@ -85,7 +85,7 @@ const DEFAULT_CONFIG = {
    * @type {string}
    */
   'teaser': TranslationFlagger.flag({
-    phrase: 'Can\'t find what you\'re looking for? Ask a question below.'
+    phrase: 'Can’t find what you\'re looking for? Ask a question below.'
   }),
 
   /**
