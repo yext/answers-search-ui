@@ -6,11 +6,11 @@ import TranslationFlagger from '../../i18n/translationflagger';
 const DEFAULT_CONFIG = {
   ipAccuracyHelpText: TranslationFlagger.flag({
     phrase: 'based on your internet address',
-    context: 'Describes the accuracy [of location]. Example: [Salt Lake City, Utah] based on your internet address'
+    context: 'Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your internet address'
   }),
   deviceAccuracyHelpText: TranslationFlagger.flag({
     phrase: 'based on your device',
-    context: 'Describes the accuracy [of location]. Example: [Salt Lake City, Utah] based on your device'
+    context: 'Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your device'
   }),
   updateLocationButtonText: TranslationFlagger.flag({
     phrase: 'Update your location',

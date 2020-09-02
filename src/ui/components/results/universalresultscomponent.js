@@ -88,10 +88,14 @@ export default class UniversalResultsComponent extends Component {
       // Show a view more link by default, which also links to verticalURL.
       viewMore: true,
       // By default, the view more link has a label of 'View More'.
-      viewMoreLabel: defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], TranslationFlagger.flag({
-        phrase: 'View More',
-        context: 'Button label, view more [results]'
-      })),
+      viewMoreLabel: defaultConfigOption(
+        config,
+        ['viewMoreLabel', 'viewAllText'],
+        TranslationFlagger.flag({
+          phrase: 'View More',
+          context: 'Button label, view more [results]'
+        })
+      ),
       // Whether to show a result count.
       showResultCount: false,
       // Whether to use AccordionResults (DEPRECATED)

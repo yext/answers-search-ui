@@ -33,7 +33,7 @@ const DEFAULT_CONFIG = {
    */
   'emailLabel': TranslationFlagger.flag({
     phrase: 'Email',
-    context: 'Label for an input field'
+    context: 'Labels the email value provided as an argument'
   }),
 
   /**
@@ -42,7 +42,7 @@ const DEFAULT_CONFIG = {
    */
   'nameLabel': TranslationFlagger.flag({
     phrase: 'Name',
-    context: 'Label for an input field'
+    context: 'Labels the name value provided as an argument'
   }),
 
   /**
@@ -51,7 +51,7 @@ const DEFAULT_CONFIG = {
    */
   'questionLabel': TranslationFlagger.flag({
     phrase: 'Question',
-    context: 'Label for an input field'
+    context: 'Labels the question value provided as an argument'
   }),
 
   /**
