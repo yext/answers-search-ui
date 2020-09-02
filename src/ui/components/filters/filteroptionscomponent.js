@@ -360,10 +360,7 @@ export default class FilterOptionsComponent extends Component {
       if (clearSearchEl && searchInputEl) {
         DOM.on(clearSearchEl, 'click', event => {
           searchInputEl.value = '';
-          searchInputEl.dispatchEvent(new Event('input', {
-            'bubbles': true,
-            'cancelable': true
-          }));
+          DOM.trigger(searchInputEl, 'input');
           searchInputEl.focus();
         });
       }
