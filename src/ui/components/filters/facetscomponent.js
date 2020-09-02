@@ -41,7 +41,7 @@ class FacetsConfig {
      */
     this.resetFacetLabel = config.resetFacetLabel || TranslationFlagger.flag({
       phrase: 'reset',
-      context: 'Deselects the selected filters in this filter group'
+      context: 'Button label, deselects one or more options'
     });
 
     /**
@@ -56,7 +56,7 @@ class FacetsConfig {
      */
     this.resetFacetsLabel = config.resetFacetsLabel || TranslationFlagger.flag({
       phrase: 'reset all',
-      context: 'Deselects the selected filters in all filter groups'
+      context: 'Button label, deselects all options'
     });
 
     /**
@@ -107,7 +107,7 @@ class FacetsConfig {
      */
     this.applyLabel = config.applyLabel || TranslationFlagger.flag({
       phrase: 'apply',
-      context: 'Applies selected filters'
+      context: 'Button label, effectuates changes'
     });
 
     /**
@@ -126,7 +126,7 @@ class FacetsConfig {
      */
     this.placeholderText = config.placeholderText || TranslationFlagger.flag({
       phrase: 'Search here...',
-      context: 'Placeholder text for searching'
+      context: 'Placeholder text for input field'
     });
 
     /**
@@ -141,7 +141,7 @@ class FacetsConfig {
      */
     this.searchLabelText = config.searchLabelText || TranslationFlagger.flag({
       phrase: 'Search for a filter option',
-      context: 'Labels the search bar' // TODO
+      context: 'Labels an input field'
     });
 
     /**

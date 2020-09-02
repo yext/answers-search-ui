@@ -196,7 +196,7 @@ function assignDefaults (config) {
   // Optional, the label to use for the reset button
   updatedConfig.resetLabel = config.resetLabel || TranslationFlagger.flag({
     phrase: 'reset',
-    context: 'Deselects the selected options'
+    context: 'Button label, deselects one or more options'
   });
 
   // Optional, the max number of filter options to show before collapsing extras
@@ -233,7 +233,7 @@ function assignDefaults (config) {
 
   updatedConfig.applyLabel = config.applyLabel || TranslationFlagger.flag({
     phrase: 'Apply',
-    context: 'Applies selected sorting order'
+    context: 'Button label, effectuates changes'
   });
 
   updatedConfig.verticalKey = config.verticalKey;

@@ -62,7 +62,7 @@ export default class FilterSearchComponent extends Component {
      */
     this.searchText = config.searchText || TranslationFlagger.flag({
       phrase: 'What are you interested in?',
-      context: 'Placeholder text for searching'
+      context: 'Placeholder text for input field'
     });
 
     /**

@@ -106,10 +106,10 @@ const DEFAULT_CONFIG = {
    * The placeholder text for required inputs
    * @type {string}
    */
-  'requiredInputPlaceholder': '(' + TranslationFlagger.flag({
-    phrase: 'required',
+  'requiredInputPlaceholder': TranslationFlagger.flag({
+    phrase: '(required)',
     context: 'Indicates that entering input is mandatory'
-  }) + ')',
+  }),
 
   /**
    * The placeholder text for the question text area
@@ -117,7 +117,7 @@ const DEFAULT_CONFIG = {
    */
   'questionInputPlaceholder': TranslationFlagger.flag({
     phrase: 'Enter your question here',
-    context: 'Placeholder text for the question input'
+    context: 'Placeholder text for input field'
   }),
 
   /**

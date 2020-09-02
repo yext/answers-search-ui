@@ -93,7 +93,7 @@ class FilterOptionsConfig {
      */
     this.resetLabel = config.resetLabel || TranslationFlagger.flag({
       phrase: 'reset',
-      context: 'Deselects the selected options'
+      context: 'Button label, deselects one or more options'
     });
 
     /**
@@ -151,7 +151,7 @@ class FilterOptionsConfig {
      */
     this.placeholderText = config.placeholderText || TranslationFlagger.flag({
       phrase: 'Search here...',
-      context: 'Placeholder text for searching'
+      context: 'Placeholder text for input field'
     });
 
     /**
@@ -166,7 +166,7 @@ class FilterOptionsConfig {
      */
     this.searchLabelText = config.searchLabelText || TranslationFlagger.flag({
       phrase: 'Search for a filter option',
-      context: 'Labels the search bar'
+      context: 'Labels an input field'
     });
 
     this.validate();

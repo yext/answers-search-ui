@@ -41,7 +41,7 @@ class FilterBoxConfig {
      */
     this.resetFilterLabel = config.resetFilterLabel || TranslationFlagger.flag({
       phrase: 'reset',
-      context: 'Deselects the selected filters in this filter group'
+      context: 'Button label, deselects one or more options'
     });
 
     /**
@@ -56,7 +56,7 @@ class FilterBoxConfig {
      */
     this.resetFiltersLabel = config.resetFiltersLabel || TranslationFlagger.flag({
       phrase: 'reset all',
-      context: 'Deselects the selected filters in all filter groups'
+      context: 'Button label, deselects all options'
     });
 
     /**
@@ -107,7 +107,7 @@ class FilterBoxConfig {
      */
     this.applyLabel = config.applyLabel || TranslationFlagger.flag({
       phrase: 'apply',
-      context: 'Applies selected filters'
+      context: 'Button label, effectuates changes'
     });
 
     /**
