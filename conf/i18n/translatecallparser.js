@@ -70,7 +70,7 @@ class TranslateCallParser {
           .trim()
           .replace(/(^['"`])|(['"`]$)/g, '')
           .replace('\\\'', '\'')
-          .replace('\`', '`');
+          .replace('\\`', '`');
         accumulator[paramName] = paramValue;
         return accumulator;
       }, {});
