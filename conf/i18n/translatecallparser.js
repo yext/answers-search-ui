@@ -64,10 +64,13 @@ class TranslateCallParser {
         const paramOperands = params.split(/:(.+)/);
         const paramName = paramOperands[0];
 
-        // Strip the wrapper quotes (" ' or `) for string params
+        // Strip the wrapper quotes (" ' or `) for string params and unescape any other
+        // single quotes and backticks
         const paramValue = paramOperands[1] && paramOperands[1]
           .trim()
-          .replace(/(^['"`])|(['"`]$)/g, '');
+          .replace(/(^['"`])|(['"`]$)/g, '')
+          .replace('\\\'', '\'')
+          .replace('\`', '`');
         accumulator[paramName] = paramValue;
         return accumulator;
       }, {});
