@@ -154,6 +154,8 @@ class Translator {
     await i18nextInstance.init({
       lng: locale,
       fallbackLng: fallbacks,
+      nsSeparator: false, // Allow phrases to contain ':'
+      keySeparator: false, // Allow phrases to contain '.'
       resources: translations
     });
     const translator = new Translator(i18nextInstance);

@@ -37,13 +37,14 @@ class TranslateHelperVisitor {
    * returned value.
    *
    * @param {hbs.AST.MustacheStatement} statement
-   * @returns {hbs.AST.MustacheStatment|undefined} Either the new node, or undefined to leave the node as is
+   * @returns {hbs.AST.MustacheStatement|undefined} Either the new node, or undefined to leave the node as is
    */
   _handleMustacheStatement (statement) {
     const isTranslationHelper = this._validHelpers.includes(statement.path.original);
     if (!isTranslationHelper) {
       return;
     }
+    statement.escaped = false;
     const placeholder = fromMustacheStatementNode(statement);
     const translatedPhrase = this._translationResolver.resolve(placeholder);
     const canBeTranslatedStatically =

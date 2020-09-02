@@ -1,28 +1,14 @@
 <div class="yxt-AlternativeVerticals{{#unless isShowingResults}} yxt-AlternativeVerticals--notShowingResults{{/unless}}">
   <div class="yxt-AlternativeVerticals-noResultsInfo">
-    <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">
-      No results found
-    </em>
-    in {{currentVerticalLabel}}.
+    {{translate phrase='<em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">No results found</em> in [[currentVerticalLabel]].' currentVerticalLabel=currentVerticalLabel }}
     {{#if isShowingResults}}
-      Showing
-      <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">
-        all {{currentVerticalLabel}}
-      </em>
-      instead.
+      {{translate phrase='Showing <em class="yxt-AlternativeVerticals-noResultsInfo--emphasized">all [[currentVerticalLabel]]</em> instead.' currentVerticalLabel=currentVerticalLabel }}
     {{/if}}
   </div>
   {{#if verticalSuggestions}}
     <div class="yxt-AlternativeVerticals-suggestionsWrapper">
       <div class="yxt-AlternativeVerticals-details">
-        The following search
-        {{plural verticalSuggestions.length 'category' 'categories'}}
-        yielded results
-        {{#if query}}
-          for
-          <span class="yxt-AlternativeVerticals-details--query">
-            "{{query}}"</span>:
-        {{/if}}
+        {{translate phrase='The following search category yielded results for <span class="yxt-AlternativeVerticals-details--query">[[query]]</span>:' pluralForm='The following search categories yielded results for <span class="yxt-AlternativeVerticals-details--query">[[query]]</span>:' count=verticalSuggestions.length query=query }}
       </div>
       <ul class="yxt-AlternativeVerticals-suggestionsList">
         {{#each verticalSuggestions}}
@@ -43,7 +29,7 @@
                   {{label}}
                 </span>
                 <span class="yxt-AlternativeVerticals-suggestionLink--copyResults">
-                  ({{resultsCount}} {{plural resultsCount 'result' 'results'}})
+                  {{translate phrase='([[resultsCount]] result)' pluralForm='([[resultsCount]] results)' count=resultsCount resultsCount=resultsCount }}
                 </span>
               </div>
               <div class="yxt-AlternativeVerticals-arrowIconWrapper"
@@ -58,10 +44,7 @@
       </ul>
       {{#if universalUrl}}
         <div class="yxt-AlternativeVerticals-universalDetails">
-          Alternatively, you can
-          <a class="yxt-AlternativeVerticals-universalLink"
-             href={{universalUrl}}>
-            view results across all search categories</a>.
+          {{translate phrase='Alternatively, you can <a class="yxt-AlternativeVerticals-universalLink" href="[[universalUrl]]"> view results across all search categories</a>.' universalUrl=universalUrl }}
         </div>
       {{/if}}
     </div>
