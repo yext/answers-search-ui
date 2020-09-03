@@ -1,7 +1,5 @@
 /** @module FilterOptionsComponent */
 
-/* global Event */
-
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
