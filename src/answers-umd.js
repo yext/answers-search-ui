@@ -169,7 +169,7 @@ class Answers {
         }
 
         if (!data[StorageKeys.SEARCH_OFFSET]) {
-          this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+          this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
         globalStorage.setAll(data);
       }
