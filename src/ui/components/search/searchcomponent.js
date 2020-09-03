@@ -160,16 +160,20 @@ export default class SearchComponent extends Component {
       }
       if (q === null) {
         if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
+          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
           this.core.setQuery(this._defaultInitialSearch);
         }
         return;
       }
 
       const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
+      const resetPagination = this._verticalKey &&
+        queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
+        queryTrigger !== QueryTriggers.INITIALIZE;
       const searchOptions = Object.assign(
         {},
         this._defaultSearchOptions,
-        { resetPagination: this._verticalKey && queryTrigger !== QueryTriggers.QUERY_PARAMETER }
+        { resetPagination: resetPagination }
       );
       this.debouncedSearch(q, searchOptions);
     });
