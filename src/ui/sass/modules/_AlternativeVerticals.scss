@@ -70,6 +70,11 @@ $alternative-verticals-emphasized-font-weight: var(--yxt-font-weight-medium) !de
     }
   }
 
+  &-suggestionLink:focus, &-universalLink:focus {
+    color: var(--yxt-color-brand-primary);
+    text-decoration: underline; 
+  }
+
   &-suggestionLink {
     display: flex;
     text-decoration: none;
