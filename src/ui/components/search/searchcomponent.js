@@ -139,6 +139,15 @@ export default class SearchComponent extends Component {
     this._defaultInitialSearch = this._globalSearchConfig.defaultInitialSearch;
 
     /**
+     * The default options for core search
+     * @type {Object}
+     */
+    this._defaultSearchOptions = {
+      setQueryParams: true,
+      resetPagination: !!this._verticalKey
+    };
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string|null}
@@ -157,8 +166,12 @@ export default class SearchComponent extends Component {
       }
 
       const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
-      const resetPagination = this._verticalKey && queryTrigger !== QueryTriggers.QUERY_PARAMETER;
-      this.debouncedSearch(q, { resetPagination: resetPagination });
+      const searchOptions = Object.assign(
+        {},
+        this._defaultSearchOptions,
+        { resetPagination: this._verticalKey && queryTrigger !== QueryTriggers.QUERY_PARAMETER }
+      );
+      this.debouncedSearch(q, searchOptions);
     });
 
     /**
@@ -466,7 +479,7 @@ export default class SearchComponent extends Component {
     this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.setQuery(query);
-    this.debouncedSearch(query, {});
+    this.debouncedSearch(query, this._defaultSearchOptions);
     return false;
   }
 
@@ -509,10 +522,10 @@ export default class SearchComponent extends Component {
    * performed if we recently searched, if there's no query for universal search, or if this
    * is a twin searchbar.
    * @param {string} query The string to query against.
-   * @param {Object} searchOptionsOverrides The options to pass for core search
+   * @param {Object} searchOptions The options to pass for core search
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
-  debouncedSearch (query, searchOptionsOverrides) {
+  debouncedSearch (query, searchOptions) {
     if (this._throttled ||
       (!query && !this._verticalKey) ||
       (!query && this._verticalKey && !this._allowEmptySearch) ||
@@ -540,10 +553,10 @@ export default class SearchComponent extends Component {
                     lng: position.coords.longitude,
                     radius: position.coords.accuracy
                   });
-                  resolve(this.search(query, searchOptionsOverrides));
+                  resolve(this.search(query, searchOptions));
                 },
                 () => {
-                  resolve(this.search(query, searchOptionsOverrides));
+                  resolve(this.search(query, searchOptions));
                   const { enabled, message } = this._geolocationTimeoutAlert;
                   if (enabled) {
                     window.alert(message);
@@ -552,27 +565,22 @@ export default class SearchComponent extends Component {
                 this._geolocationOptions)
             );
           } else {
-            return this.search(query, searchOptionsOverrides);
+            return this.search(query, searchOptions);
           }
         });
     } else {
-      return this.search(query, searchOptionsOverrides);
+      return this.search(query, searchOptions);
     }
   }
 
   /**
    * Performs a query using the provided string input.
    * @param {string} query The string to query against.
-   * @param {Object} searchOptionsOverrides The options to pass for core search
+   * @param {Object} searchOptions The options to pass for core search
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
-  search (query, searchOptionsOverrides) {
-    const defaultSearchOptions = {
-      setQueryParams: true,
-      resetPagination: !!this._verticalKey
-    };
+  search (query, searchOptions) {
     if (this._verticalKey) {
-      const searchOptions = Object.assign({}, defaultSearchOptions, searchOptionsOverrides);
       this.core.verticalSearch(this._config.verticalKey, searchOptions, { input: query });
     } else {
       // NOTE(billy) Temporary hack for DEMO
@@ -596,10 +604,10 @@ export default class SearchComponent extends Component {
             urls[tabs[i].configId] = url;
           }
         }
-        return this.core.search(query, urls, defaultSearchOptions);
+        return this.core.search(query, urls, searchOptions);
       }
 
-      return this.core.search(query, undefined, defaultSearchOptions);
+      return this.core.search(query, undefined, searchOptions);
     }
   }
 
