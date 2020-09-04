@@ -288,11 +288,11 @@ class Answers {
 
     const handleFulfilledMasterSwitch = (isDisabled) => {
       window.performance.mark('yext.answers.statusEnd');
-      !isDisabled && this._onReady();
+      return !isDisabled && this._onReady();
     };
     const handleRejectedMasterSwitch = () => {
       window.performance.mark('yext.answers.statusEnd');
-      this._onReady();
+      return this._onReady();
     };
     this._masterSwitchApi.isDisabled()
       .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch);
