@@ -288,7 +288,7 @@ export default class FilterOptionsComponent extends Component {
     this.showMoreState = this.config.showMore;
 
     if (this.config.storeOnChange) {
-      this.apply();
+      this.apply(this.config.isDynamic);
     }
   }
 
@@ -571,7 +571,7 @@ export default class FilterOptionsComponent extends Component {
   updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
-      this.apply();
+      this.apply(false);
     }
 
     this.config.onChange(filterNode, alwaysSaveFilterNodes, blockSearchOnChange);
@@ -590,7 +590,12 @@ export default class FilterOptionsComponent extends Component {
     this.updateListeners();
   }
 
-  apply () {
+  /**
+   * Apply filter changes
+   * @param {boolean} replaceHistory Whether we replace or push a new history
+   *                                 state for the associated changes
+   */
+  apply (replaceHistory) {
     switch (this.config.optionType) {
       case OptionTypes.RADIUS_FILTER:
         this.core.setLocationRadiusFilterNode(this.getLocationRadiusFilterNode());
@@ -602,7 +607,7 @@ export default class FilterOptionsComponent extends Component {
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
 
-    this.saveSelectedToPersistentStorage();
+    this.saveSelectedToPersistentStorage(replaceHistory);
   }
 
   floatSelected () {
@@ -662,9 +667,15 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Saves selected options to persistent storage
+   * @param {boolean} replaceHistory Whether we replace or push a new history
+   *                                 state for the associated changes
    */
-  saveSelectedToPersistentStorage () {
-    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
+  saveSelectedToPersistentStorage (replaceHistory) {
+    this.core.persistentStorage.set(
+      this.name,
+      this.config.options.filter(o => o.selected).map(o => o.label),
+      replaceHistory || (this.core.persistentStorage.get(this.name) === null)
+    );
   }
 
   /**
