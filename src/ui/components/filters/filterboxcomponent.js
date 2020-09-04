@@ -217,7 +217,7 @@ export default class FilterBoxComponent extends Component {
       this._filterComponents.push(component);
       this._filterNodes[i] = component.getFilterNode();
     }
-    this._saveFilterNodesToStorage();
+    this._saveFilterNodesToStorage(true);
 
     // Initialize apply button
     if (!this.config.searchOnChange) {
@@ -225,7 +225,7 @@ export default class FilterBoxComponent extends Component {
 
       if (button) {
         DOM.on(button, 'click', () => {
-          this._saveFilterNodesToStorage();
+          this._saveFilterNodesToStorage(false);
           this._search();
         });
       }
@@ -257,7 +257,7 @@ export default class FilterBoxComponent extends Component {
   onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
     this._filterNodes[index] = filterNode;
     if (saveFilterNodes || searchOnChange) {
-      this._saveFilterNodesToStorage();
+      this._saveFilterNodesToStorage(false);
     }
     if (searchOnChange) {
       this._search();
@@ -275,14 +275,16 @@ export default class FilterBoxComponent extends Component {
   /**
    * Save current filters to storage to be used in the next search
    * @private
+   * @param {boolean} replaceHistory Whether we replace or push a new history
+   *                                 state for the associated changes
    */
-  _saveFilterNodesToStorage () {
+  _saveFilterNodesToStorage (replaceHistory) {
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
       this.core.setFacetFilterNodes(availableFieldIds, this._getValidFilterNodes());
-      this._filterComponents.forEach(fc => fc.saveSelectedToPersistentStorage());
+      this._filterComponents.forEach(fc => fc.saveSelectedToPersistentStorage(replaceHistory));
     } else {
-      this._filterComponents.forEach(fc => fc.apply());
+      this._filterComponents.forEach(fc => fc.apply(replaceHistory));
     }
   }
 
