@@ -213,6 +213,7 @@ export default class FilterBoxComponent extends Component {
       this._filters[i] = component.getFilter();
       this._saveFiltersToStorage();
     }
+    this._saveFiltersToStorage(this.config.isDynamic);
 
     // Initialize apply button
     if (!this.config.searchOnChange) {
@@ -220,7 +221,7 @@ export default class FilterBoxComponent extends Component {
 
       if (button) {
         DOM.on(button, 'click', () => {
-          this._saveFiltersToStorage();
+          this._saveFiltersToStorage(false);
           this._search();
         });
       }
@@ -246,7 +247,7 @@ export default class FilterBoxComponent extends Component {
   onFilterChange (index, filter) {
     this._filters[index] = filter;
     if (this.config.searchOnChange) {
-      this._saveFiltersToStorage();
+      this._saveFiltersToStorage(false);
       this._search();
     }
   }
@@ -262,8 +263,10 @@ export default class FilterBoxComponent extends Component {
   /**
    * Save current filters to storage to be used in the next search
    * @private
+   * @param {boolean} replaceHistory Whether we replace or push a new history
+   *                                 state for the associated changes
    */
-  _saveFiltersToStorage () {
+  _saveFiltersToStorage (replaceHistory) {
     const validFilters = this._filters.filter(f =>
       f !== undefined &&
       f !== null &&
@@ -273,12 +276,13 @@ export default class FilterBoxComponent extends Component {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
       const combinedFilter = Facet.fromFilters(availableFieldIds, ...validFilters);
       this.core.setFacetFilter(this.name, combinedFilter || {});
-      this._filterComponents.forEach(fc => fc.saveSelectedToPersistentStorage());
+      this._filterComponents.forEach(fc => fc.saveSelectedToPersistentStorage(replaceHistory));
     } else {
       const combinedFilter = validFilters.length > 1
         ? Filter.and(...validFilters)
         : validFilters[0];
       this.core.setFilter(this.name, combinedFilter || {});
+      this._filterComponents.forEach(fc => fc.apply(replaceHistory));
     }
   }
 

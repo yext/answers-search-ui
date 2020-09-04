@@ -276,6 +276,7 @@ export default class FilterOptionsComponent extends Component {
     const filter = this._buildFilter();
     if (this.config.storeOnChange) {
       this.core.setFilter(this.name, filter);
+      this.apply(false);
     }
 
     this.config.onChange(filter);
@@ -289,6 +290,15 @@ export default class FilterOptionsComponent extends Component {
     this.config.options[index] = Object.assign({}, this.config.options[index], { selected });
     this.updateListeners();
     this.setState();
+  }
+
+  /**
+   * Apply filter changes
+   * @param {boolean} replaceHistory Whether we replace or push a new history
+   *                                 state for the associated changes
+   */
+  applyFilter (replaceHistory, filter) {
+    this.saveSelectedToPersistentStorage(replaceHistory);
   }
 
   getFilter () {
@@ -306,13 +316,14 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Saves selected options to persistent storage
+   * @param {boolean} replaceHistory Whether we replace or push a new history
+   *                                 state for the associated changes
    */
-  saveSelectedToPersistentStorage () {
-    const replaceHistory = (this.core.persistentStorage.get(this.name) === null);
+  saveSelectedToPersistentStorage (replaceHistory) {
     this.core.persistentStorage.set(
       this.name,
       this.config.options.filter(o => o.selected).map(o => o.label),
-      replaceHistory
+      replaceHistory || (this.core.persistentStorage.get(this.name) === null)
     );
   }
 
