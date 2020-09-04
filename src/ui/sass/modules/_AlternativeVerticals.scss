@@ -70,11 +70,6 @@ $alternative-verticals-emphasized-font-weight: var(--yxt-font-weight-medium) !de
     }
   }
 
-  &-suggestionLink:focus, &-universalLink:focus {
-    color: var(--yxt-color-brand-primary);
-    text-decoration: underline; 
-  }
-
   &-suggestionLink {
     display: flex;
     text-decoration: none;
@@ -83,7 +78,7 @@ $alternative-verticals-emphasized-font-weight: var(--yxt-font-weight-medium) !de
       margin-right: 5px;
     }
 
-    &:hover {
+    &:hover, &:focus {
       .yxt-AlternativeVerticals-suggestionLink--copy {
         text-decoration: underline;
       }
@@ -110,7 +105,7 @@ $alternative-verticals-emphasized-font-weight: var(--yxt-font-weight-medium) !de
   &-universalLink {
     text-decoration: none;
 
-    &:hover {
+    &:hover, &:focus {
       text-decoration: underline;
     }
   }
