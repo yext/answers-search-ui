@@ -135,6 +135,7 @@ export default class Core {
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, options = {}, query = {}) {
+    window.performance.mark('yext.answers.queryStart');
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
@@ -232,6 +233,7 @@ export default class Core {
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        window.performance.mark('yext.answers.queryResponseRendered');
       });
   }
 
@@ -264,6 +266,7 @@ export default class Core {
   }
 
   search (queryString, urls, options = {}) {
+    window.performance.mark('yext.answers.queryStart');
     const { setQueryParams } = options;
     const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
@@ -315,6 +318,7 @@ export default class Core {
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        window.performance.mark('yext.answers.queryResponseRendered');
       });
   }
 

@@ -152,6 +152,7 @@ class Answers {
    *                            experience's Answers Status page.
    */
   init (config, statusPage) {
+    window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
     this.validateConfig(parsedConfig);
 
@@ -283,8 +284,18 @@ class Answers {
    * disabled, onReady is not called.
    */
   _invokeOnReady () {
+    window.performance.mark('yext.answers.statusStart');
+
+    const handleFulfilledMasterSwitch = (isDisabled) => {
+      window.performance.mark('yext.answers.statusEnd');
+      !isDisabled && this._onReady();
+    };
+    const handleRejectedMasterSwitch = () => {
+      window.performance.mark('yext.answers.statusEnd');
+      this._onReady();
+    };
     this._masterSwitchApi.isDisabled()
-      .then(isDisabled => !isDisabled && this._onReady(), () => this._onReady());
+      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch);
   }
 
   /**
@@ -294,13 +305,16 @@ class Answers {
    * @param callback {Function} always called after function
    */
   _handlePonyfillCssVariables (ponyfillDisabled, callback) {
+    window.performance.mark('yext.answers.ponyfillStart');
     if (!ponyfillDisabled) {
       this.ponyfillCssVariables({
         onFinally: () => {
+          window.performance.mark('yext.answers.ponyfillEnd');
           callback();
         }
       });
     } else {
+      window.performance.mark('yext.answers.ponyfillEnd');
       callback();
     }
   }
