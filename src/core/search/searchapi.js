@@ -99,10 +99,10 @@ export default class SearchApi {
     };
     let request = new ApiRequest(requestConfig, { getState: () => sessionTrackingEnabled });
 
-    window.performance.mark('yext.answers.querySent');
+    window.performance.mark('yext.answers.verticalQuerySent');
     return request.get()
       .then(response => {
-        window.performance.mark('yext.answers.queryResponseReceived');
+        window.performance.mark('yext.answers.verticalQueryResponseReceived');
         return response.json();
       });
   }
@@ -128,10 +128,10 @@ export default class SearchApi {
     };
     let request = new ApiRequest(requestConfig, { getState: () => params.sessionTrackingEnabled });
 
-    window.performance.mark('yext.answers.querySent');
+    window.performance.mark('yext.answers.universalQuerySent');
     return request.get()
       .then(response => {
-        window.performance.mark('yext.answers.queryResponseReceived');
+        window.performance.mark('yext.answers.universalQueryResponseReceived');
         return response.json();
       });
   }
