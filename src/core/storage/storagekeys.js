@@ -30,5 +30,6 @@ export default {
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',
   SORT_BYS: 'sort-bys',
-  NO_RESULTS_CONFIG: 'no-results-config'
+  NO_RESULTS_CONFIG: 'no-results-config',
+  QUERY_TRIGGER: 'queryTrigger'
 };

@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
+import QueryTriggers from '../../../core/models/querytriggers';
 import SearchParams from '../../dom/searchparams';
 
 const IconState = {
@@ -139,6 +140,15 @@ export default class SearchComponent extends Component {
     this._defaultInitialSearch = this._globalSearchConfig.defaultInitialSearch;
 
     /**
+     * The default options for core search
+     * @type {Object}
+     */
+    this._defaultSearchOptions = {
+      setQueryParams: true,
+      resetPagination: !!this._verticalKey
+    };
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string|null}
@@ -151,10 +161,16 @@ export default class SearchComponent extends Component {
       }
       if (q === null) {
         if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
+          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
           this.core.setQuery(this._defaultInitialSearch);
         }
         return;
       }
+
+      const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
+      const resetPagination = this._verticalKey &&
+        queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
+        queryTrigger !== QueryTriggers.INITIALIZE;
       this.debouncedSearch(q);
     });
 
@@ -458,7 +474,7 @@ export default class SearchComponent extends Component {
     this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.setQuery(query);
-    this.debouncedSearch(query);
+    this.debouncedSearch(query, this._defaultSearchOptions);
     return false;
   }
 
