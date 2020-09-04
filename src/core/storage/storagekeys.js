@@ -33,5 +33,6 @@ export default {
   SORT_BYS: 'sort-bys',
   NO_RESULTS_CONFIG: 'no-results-config',
   LOCATION_RADIUS: 'location-radius',
-  RESULTS_HEADER: 'results-header'
+  RESULTS_HEADER: 'results-header',
+  QUERY_TRIGGER: 'queryTrigger'
 };
