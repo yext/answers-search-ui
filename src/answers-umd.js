@@ -312,6 +312,46 @@ class Answers {
     }
   }
 
+  /**
+   * Checks the experience's Answer Status page before invoking onReady. If the status is
+   * disabled, onReady is not called.
+   */
+  _invokeOnReady () {
+    window.performance.mark('yext.answers.statusStart');
+
+    const handleFulfilledMasterSwitch = (isDisabled) => {
+      window.performance.mark('yext.answers.statusEnd');
+      return !isDisabled && this._onReady();
+    };
+    const handleRejectedMasterSwitch = () => {
+      window.performance.mark('yext.answers.statusEnd');
+      return this._onReady();
+    };
+    this._masterSwitchApi.isDisabled()
+      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch);
+  }
+
+  /**
+   * Calls the CSS vars ponyfill, if opted-in, and invokes the callback
+   * regardless of if there was an error/success. If opted-out, only invokes the callback.
+   * @param {boolean} option to opt out of the css variables ponyfill
+   * @param callback {Function} always called after function
+   */
+  _handlePonyfillCssVariables (ponyfillDisabled, callback) {
+    window.performance.mark('yext.answers.ponyfillStart');
+    if (!ponyfillDisabled) {
+      this.ponyfillCssVariables({
+        onFinally: () => {
+          window.performance.mark('yext.answers.ponyfillEnd');
+          callback();
+        }
+      });
+    } else {
+      window.performance.mark('yext.answers.ponyfillEnd');
+      callback();
+    }
+  }
+
   _checkMasterSwitch () {
     window.performance.mark('yext.answers.statusStart');
     const handleFulfilledMasterSwitch = (isDisabled) => {
