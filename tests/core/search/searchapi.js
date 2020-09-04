@@ -10,6 +10,10 @@ describe('vertical searching', () => {
   let searchApi;
 
   beforeEach(() => {
+    delete global.window.performance;
+    global.window.performance = {
+      mark: () => {}
+    };
     mockedRequest.mockClear();
     HttpRequester.mockImplementation(() => {
       return {
