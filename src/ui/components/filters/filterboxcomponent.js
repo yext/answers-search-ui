@@ -217,7 +217,7 @@ export default class FilterBoxComponent extends Component {
       this._filterComponents.push(component);
       this._filterNodes[i] = component.getFilterNode();
     }
-    this._saveFilterNodesToStorage(true);
+    this._saveFilterNodesToStorage(this.config.isDynamic);
 
     // Initialize apply button
     if (!this.config.searchOnChange) {

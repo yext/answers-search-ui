@@ -269,7 +269,7 @@ export default class FilterOptionsComponent extends Component {
     this.showMoreState = this.config.showMore;
 
     if (this.config.storeOnChange) {
-      this.apply(true);
+      this.apply(this.config.isDynamic);
     }
   }
 
@@ -655,7 +655,7 @@ export default class FilterOptionsComponent extends Component {
     this.core.persistentStorage.set(
       this.name,
       this.config.options.filter(o => o.selected).map(o => o.label),
-      replaceHistory
+      replaceHistory || (this.core.persistentStorage.get(this.name) === null)
     );
   }
 
