@@ -30,6 +30,20 @@ describe('translateJS usage', () => {
     const translation = Translator.translate('{"0":"Un article [[name]]","1":"Les articles [[name]]","locale":"fr-FR"}', { name: 'de presse' }, 2);
     expect(translation).toEqual('Les articles de presse');
   });
+
+  it('intermixed markdown with interpolation', () => {
+    const translation = Translator.translate('<a href="https://www.yext.com">Voir notre site web [[name]]</a>', { name: 'Howard' });
+    expect(translation).toEqual('<a href="https://www.yext.com">Voir notre site web Howard</a>');
+  });
+
+  it('intermixed markdown with pluralization', () => {
+    const count = 2;
+    const translation = Translator.translate(
+      '{"0":"<b>Voir notre site web [[name]]</b>","1":"<b>Voir nos sites web [[name]]</b>","locale":"fr-FR"}',
+      { name: 'Howard' },
+      count);
+    expect(translation).toEqual('<b>Voir nos sites web Howard</b>');
+  });
 });
 
 describe('selecting the correct plural form', () => {
