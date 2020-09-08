@@ -509,6 +509,7 @@ class Answers {
    * @param {string} translations The translations, or a stringified JSON of possible translations
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
+   * @returns {SafeString} The translation as a Handlebars SafeString
    */
   translateJS (translations, interpolationParams, count) {
     const translation = Translator.translate(translations, interpolationParams, count);
