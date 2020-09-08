@@ -511,7 +511,8 @@ class Answers {
    * @param {number} count The count associated with the pluralization
    */
   translateJS (translations, interpolationParams, count) {
-    return Translator.translate(translations, interpolationParams, count);
+    const translation = Translator.translate(translations, interpolationParams, count);
+    return this.renderer.SafeString(translation);
   }
 }
 
