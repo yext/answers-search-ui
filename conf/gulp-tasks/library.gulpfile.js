@@ -37,7 +37,7 @@ exports.default = function defaultJSBundle () {
       .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory));
   });
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
-    return new Promise(resolve => parallel(...localizedTasks)(resolve));
+    return new Promise(resolve => parallel(compileCSS, ...localizedTasks)(resolve));
   });
 };
 
@@ -60,8 +60,7 @@ function createBundles (bundleTaskFactory, minifyTaskFactory) {
     series(
       bundleTaskFactory.create(BundleType.LEGACY_UMD),
       minifyTaskFactory.minify(BundleType.LEGACY_UMD)
-    ),
-    series(compileCSS)
+    )
   );
 }
 
