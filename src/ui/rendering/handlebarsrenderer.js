@@ -195,8 +195,7 @@ export default class HandlebarsRenderer extends Renderer {
 
     this.registerHelper('runtimeTranslation', function (options) {
       let { phrase, count } = options.hash;
-      const translation = Translator.translate(phrase, options.hash, count);
-      return self.SafeString(translation);
+      return Translator.translate(phrase, options.hash, count);
     });
 
     let self = this;
