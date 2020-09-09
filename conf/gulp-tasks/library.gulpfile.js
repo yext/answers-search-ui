@@ -68,8 +68,7 @@ function legacyBundleIIFE () {
   return legacyBundle({
     format: 'iife',
     name: NAMESPACE,
-    sourcemap: true,
-    strict: false
+    sourcemap: true
   },
   'answers.js'
   );
@@ -80,8 +79,7 @@ function legacyBundleUMD () {
     format: 'umd',
     name: NAMESPACE,
     export: 'default',
-    sourcemap: true,
-    strict: false
+    sourcemap: true
   },
   'answers-umd.js'
   );
