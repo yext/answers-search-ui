@@ -12,7 +12,7 @@
     "kind-of": "^6.0.3",
     "lodash.clonedeep": "^4.5.0",
     "markdown-it-for-inline": "^0.1.1",
-    "regenerator-runtime": "^0.13.3",
+    "regenerator-runtime": "0.13.1",
     "template-helpers": "^1.0.1"
   },
   "devDependencies": {
