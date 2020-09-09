@@ -509,6 +509,7 @@ class Answers {
    * @param {string} translations The translations, or a stringified JSON of possible translations
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
+   * @returns {string} The translation
    */
   translateJS (translations, interpolationParams, count) {
     return Translator.translate(translations, interpolationParams, count);
