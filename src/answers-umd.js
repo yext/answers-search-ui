@@ -19,6 +19,7 @@ import GlobalStorage from './core/storage/globalstorage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
+import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
 import AutoCompleteApi from './core/search/autocompleteapi';
 import MockAutoCompleteService from './core/search/mockautocompleteservice';
@@ -164,6 +165,12 @@ class Answers {
       resetListener: data => {
         if (!data[StorageKeys.QUERY]) {
           this.core.clearResults();
+        } else {
+          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+        }
+
+        if (!data[StorageKeys.SEARCH_OFFSET]) {
+          this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
         globalStorage.setAll(data);
       }
@@ -189,6 +196,9 @@ class Answers {
     }
 
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
+    if (globalStorage.getState(StorageKeys.QUERY)) {
+      globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+    }
 
     const context = globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context && !isValidContext(context)) {
@@ -426,7 +436,7 @@ class Answers {
     if (prepopulatedQuery != null) {
       return;
     }
-    this.core.globalStorage.set('queryTrigger', 'initialize');
+    this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
     this.core.setQuery(searchConfig.defaultInitialSearch);
   }
 

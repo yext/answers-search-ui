@@ -10,6 +10,7 @@ import Navigation from './models/navigation';
 import AlternativeVerticals from './models/alternativeverticals';
 import DirectAnswer from './models/directanswer';
 import LocationBias from './models/locationbias';
+import QueryTriggers from './models/querytriggers';
 
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
@@ -172,7 +173,9 @@ export default class Core {
     }
 
     const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
-
+    const queryTrigger = this.getQueryTriggerForSearchApi(
+      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+    );
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
@@ -184,8 +187,8 @@ export default class Core {
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
+        queryTrigger: queryTrigger,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
@@ -217,7 +220,7 @@ export default class Core {
           this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         }
         this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete('queryTrigger');
+        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = {
           verticalKey: verticalKey,
@@ -279,12 +282,16 @@ export default class Core {
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
+
+    const queryTrigger = this.getQueryTriggerForSearchApi(
+      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+    );
     return this._searcher
       .universalSearch(queryString, {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
+        queryTrigger: queryTrigger,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         context: context,
         referrerPageUrl: referrerPageUrl
       })
@@ -298,7 +305,7 @@ export default class Core {
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete('queryTrigger');
+        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = {
           queryString: queryString,
@@ -494,6 +501,18 @@ export default class Core {
    */
   clearLocationRadiusFilterNode () {
     this.filterRegistry.clearLocationRadiusFilterNode();
+  }
+
+  /**
+   * Returns the query trigger for the search API given the SDK query trigger
+   * @param {QueryTriggers} queryTrigger SDK query trigger
+   * @returns {QueryTriggers} query trigger if accepted by the search API, null o/w
+   */
+  getQueryTriggerForSearchApi (queryTrigger) {
+    if (queryTrigger === QueryTriggers.QUERY_PARAMETER) {
+      return null;
+    }
+    return queryTrigger;
   }
 
   enableDynamicFilters () {
