@@ -1838,6 +1838,8 @@ ANSWERS.addComponent('Map', {
   apiKey: '',
   // Optional, can be used for Google Maps in place of the API key
   clientId: '',
+  // Optional, used to determine the language of the map
+  locale: 'en-US',
   // Optional, determines whether or not to collapse pins at the same lat/lng
   collapsePins: false,
   // Optional, the zoom level of the map, defaults to 14
