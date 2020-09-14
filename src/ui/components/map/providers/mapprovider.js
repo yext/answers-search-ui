@@ -94,6 +94,7 @@ export default class MapProvider {
     /**
      * Locale of the map. Defaults to 'en'
      * @type {string}
+     * TODO(cea2aj) Default to the locale of the bundle
      */
     this._locale = config.locale || 'en';
 
