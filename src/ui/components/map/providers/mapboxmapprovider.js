@@ -1,9 +1,11 @@
 /** @module MapBoxMapProvider */
 
+import MapboxLanguage from '@mapbox/mapbox-gl-language';
+
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
-/* global mapboxgl, MapboxLanguage */
+/* global mapboxgl */
 
 /**
  * MapBoxMapProvider is an implementation of a MapProvider
@@ -13,33 +15,28 @@ import DOM from '../../../dom/dom';
 export default class MapBoxMapProvider extends MapProvider {
   constructor (opts = {}, systemOpts = {}) {
     super(opts, systemOpts);
-
-    this._isMapboxLoaded = false;
-    this._isMapboxLanguageLoaded = false;
   }
   /**
    * Load the external JS Library
    * @param {function} onLoad An optional callback to invoke once the JS is loaded.
    */
   loadJS (onLoad) {
-    let mapboxScript = DOM.createEl('script', {
+    let script = DOM.createEl('script', {
       id: 'yext-map-js',
       onload: () => {
-        this._isMapboxLoaded = true;
-        this._onScriptLoad(onLoad);
+        this._isLoaded = true;
+        mapboxgl.accessToken = this._apiKey;
+
+        if (typeof onLoad === 'function') {
+          onLoad();
+        }
+
+        if (typeof this._onLoaded === 'function') {
+          this._onLoaded();
+        }
       },
       async: true,
       src: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'
-    });
-
-    let mapboxLanguageScript = DOM.createEl('script', {
-      id: 'yext-map-language-js',
-      onload: () => {
-        this._isMapboxLanguageLoaded = true;
-        this._onScriptLoad(onLoad);
-      },
-      async: true,
-      src: 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v0.10.1/mapbox-gl-language.js'
     });
 
     let css = DOM.createEl('link', {
@@ -49,25 +46,7 @@ export default class MapBoxMapProvider extends MapProvider {
     });
 
     DOM.append('body', css);
-    DOM.append('body', mapboxScript);
-    DOM.append('body', mapboxLanguageScript);
-  }
-
-  _onScriptLoad (onLoadCB) {
-    if (!this._isMapboxLoaded || !this._isMapboxLanguageLoaded) {
-      return;
-    }
-
-    this._isLoaded = true;
-    mapboxgl.accessToken = this._apiKey;
-
-    if (typeof onLoad === 'function') {
-      onLoadCB();
-    }
-
-    if (typeof this._onLoaded === 'function') {
-      this._onLoaded();
-    }
+    DOM.append('body', script);
   }
 
   init (el, mapData, resultsContext) {
