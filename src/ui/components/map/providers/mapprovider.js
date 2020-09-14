@@ -103,6 +103,12 @@ export default class MapProvider {
      * @type {string}
      */
     this._language = this._locale.substring(0, 2) || 'en';
+
+    /**
+     * Fallback which is used if _language is not supported
+     * @type {string}
+     */
+    this._languageFallback = 'en';
   }
 
   /**

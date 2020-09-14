@@ -5,6 +5,9 @@ import MapboxLanguage from '@mapbox/mapbox-gl-language';
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
+const supportedLanguages =
+      ['en', 'es', 'fr', 'de', 'ar', 'ja', 'ko', 'pt', 'ru', 'zh'];
+
 /* global mapboxgl */
 
 /**
@@ -15,7 +18,12 @@ import DOM from '../../../dom/dom';
 export default class MapBoxMapProvider extends MapProvider {
   constructor (opts = {}, systemOpts = {}) {
     super(opts, systemOpts);
+
+    this._language = supportedLanguages.includes(this._language)
+      ? this._language
+      : this._languageFallback;
   }
+
   /**
    * Load the external JS Library
    * @param {function} onLoad An optional callback to invoke once the JS is loaded.
