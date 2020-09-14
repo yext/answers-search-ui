@@ -241,7 +241,7 @@ export default class Core {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
