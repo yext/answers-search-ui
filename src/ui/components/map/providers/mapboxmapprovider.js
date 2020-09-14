@@ -85,7 +85,7 @@ export default class MapBoxMapProvider extends MapProvider {
     });
 
     this._map.addControl(new MapboxLanguage({
-      defaultLanguage: this._locale
+      defaultLanguage: this._language
     }));
 
     if (mapData && mapData.mapMarkers.length) {

@@ -96,6 +96,12 @@ export default class MapProvider {
      * @type {string}
      */
     this._locale = config.locale || 'en';
+
+    /**
+     * Language of the map. Defaults to 'en'
+     * @type {string}
+     */
+    this._language = this._locale.substring(0, 2) || 'en';
   }
 
   /**
