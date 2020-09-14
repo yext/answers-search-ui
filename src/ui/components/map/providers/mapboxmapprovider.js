@@ -11,27 +11,35 @@ import DOM from '../../../dom/dom';
  * @extends MapProvider
  */
 export default class MapBoxMapProvider extends MapProvider {
+  constructor (opts = {}, systemOpts = {}) {
+    super(opts, systemOpts);
+
+    this._isMapboxLoaded = false;
+    this._isMapboxLanguageLoaded = false;
+  }
   /**
    * Load the external JS Library
    * @param {function} onLoad An optional callback to invoke once the JS is loaded.
    */
   loadJS (onLoad) {
-    let script = DOM.createEl('script', {
+    let mapboxScript = DOM.createEl('script', {
       id: 'yext-map-js',
       onload: () => {
-        this._isLoaded = true;
-        mapboxgl.accessToken = this._apiKey;
-
-        if (typeof onLoad === 'function') {
-          onLoad();
-        }
-
-        if (typeof this._onLoaded === 'function') {
-          this._onLoaded();
-        }
+        this._isMapboxLoaded = true;
+        this._onScriptLoad(onLoad);
       },
       async: true,
       src: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'
+    });
+
+    let mapboxLanguageScript = DOM.createEl('script', {
+      id: 'yext-map-language-js',
+      onload: () => {
+        this._isMapboxLanguageLoaded = true;
+        this._onScriptLoad(onLoad);
+      },
+      async: true,
+      src: 'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-language/v0.10.1/mapbox-gl-language.js'
     });
 
     let css = DOM.createEl('link', {
@@ -41,7 +49,25 @@ export default class MapBoxMapProvider extends MapProvider {
     });
 
     DOM.append('body', css);
-    DOM.append('body', script);
+    DOM.append('body', mapboxScript);
+    DOM.append('body', mapboxLanguageScript);
+  }
+
+  _onScriptLoad (onLoadCB) {
+    if (!this._isMapboxLoaded || !this._isMapboxLanguageLoaded) {
+      return;
+    }
+
+    this._isLoaded = true;
+    mapboxgl.accessToken = this._apiKey;
+
+    if (typeof onLoad === 'function') {
+      onLoadCB();
+    }
+
+    if (typeof this._onLoaded === 'function') {
+      this._onLoaded();
+    }
   }
 
   init (el, mapData, resultsContext) {
@@ -57,6 +83,10 @@ export default class MapBoxMapProvider extends MapProvider {
       style: 'mapbox://styles/mapbox/streets-v9',
       center: this.getCenterMarker(mapData)
     });
+
+    this._map.addControl(new MapboxLanguage({
+      defaultLanguage: this._locale
+    }));
 
     if (mapData && mapData.mapMarkers.length) {
       const collapsedMarkers = this._collapsePins

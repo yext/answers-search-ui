@@ -90,6 +90,12 @@ export default class MapProvider {
      * @type {boolean}
      */
     this._collapsePins = config.collapsePins || false;
+
+    /**
+     * Locale of the map. Defaults to 'en'
+     * @type {string}
+     */
+    this._locale = config.locale || 'en';
   }
 
   /**
