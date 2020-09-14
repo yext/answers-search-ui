@@ -3,7 +3,7 @@
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
-/* global mapboxgl */
+/* global mapboxgl, MapboxLanguage */
 
 /**
  * MapBoxMapProvider is an implementation of a MapProvider
