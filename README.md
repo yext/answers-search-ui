@@ -312,7 +312,8 @@ Every component has the same base configuration options.
     container: 'container',
     // Optional, a unique name for the component
     name: 'name',
-    // Optional, a custom HTML classname for the component
+    // Optional, an additional, custom HTML classname for the component. The component will already have a
+    // classname of 'component' applied.
     class: 'class',
     // Optional, handlebars template or HTML to override built-in handlebars template for the component
     template: 'template',

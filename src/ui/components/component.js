@@ -109,10 +109,11 @@ export default class Component {
     }
 
     /**
-     * A custom class to be applied to {this._container} node
+     * A custom class to be applied to {this._container} node. Note that the class
+     * 'component' will be included already.
      * @type {string}
      */
-    this._className = config.class || 'component';
+    this._className = config.class;
 
     /**
      * A custom render function to be used instead of using the default renderer
@@ -237,7 +238,8 @@ export default class Component {
       }
     });
 
-    DOM.addClass(this._container, this._className);
+    this._className && DOM.addClass(this._container, this._className);
+    DOM.addClass(this._container, 'component');
     return this;
   }
 
