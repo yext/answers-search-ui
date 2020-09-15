@@ -1,0 +1,84 @@
+/** @define AppliedFilter */
+
+.yxt-AppliedFilters
+{
+  margin-right: var(--yxt-base-spacing);
+  border-top: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+
+  &-filterLabel
+  {
+    display: flex;
+    margin-right: calc(var(--yxt-base-spacing) / 4);
+    margin-bottom: 4px;
+    @include Text(
+      $size: var(--yxt-font-size-md),
+      $line-height: var(--yxt-line-height-md),
+      $color: var(--yxt-color-text-secondary),
+    );
+  }
+
+  &-filterValue
+  {
+    margin-right: calc(var(--yxt-base-spacing) / 4);
+    margin-bottom: 4px;
+    display: flex;
+  }
+
+  &-filterValueText,
+  &-filterValueComma
+  {
+    @include Text(
+      $size: var(--yxt-font-size-md),
+      $line-height: var(--yxt-line-height-md),
+      $color: var(--yxt-color-text-secondary),
+      $style: italic
+    );
+  }
+
+  &-filterSeparator
+  {
+    color: var(--yxt-color-text-secondary);
+    margin-right: calc(var(--yxt-base-spacing) / 4);
+    margin-bottom: calc(var(--yxt-base-spacing) / 4);
+    @include Text(
+      $size: var(--yxt-font-size-md),
+      $line-height: var(--yxt-line-height-md),
+      $color: var(--yxt-color-text-secondary),
+    );
+  }
+
+  &-removableFilterTag
+  {
+    background-color: var(--yxt-color-borders);
+    border-radius: 2px;
+    border-width: 0;
+    margin-bottom: 4px;
+    padding-left: 5px;
+    padding-right: 4px;
+    margin-right: calc(var(--yxt-base-spacing) / 2);
+    white-space: nowrap;
+    @include Text(
+      $size: var(--yxt-font-size-sm),
+      $color: var(--yxt-color-text-neutral),
+      $line-height: 20px,
+      $style: italic,
+    );
+
+    &:hover,
+    &:focus
+    {
+      color: var(--yxt-color-brand-white);
+      background-color: var(--yxt-color-text-secondary);
+      cursor: pointer;
+    }
+  }
+
+  &-removableFilterX
+  {
+    font-style: normal;
+  }
+}
+
