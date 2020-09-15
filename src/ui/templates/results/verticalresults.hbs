@@ -41,7 +41,9 @@
 {{/inline}}
 
 {{#*inline 'resultsHeader'}}
-  <div data-component="ResultsHeader"></div>
+  {{#unless _config.hideResultsHeader}}
+    <div data-component="ResultsHeader"></div>
+  {{/unless}}
 {{/inline}}
 
 {{#*inline "results"}}
