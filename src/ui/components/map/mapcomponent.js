@@ -46,6 +46,12 @@ export default class MapComponent extends Component {
      * @type {MapProvider}
      */
     this._map = null;
+
+    /**
+     * A configurable method for criteria to not update the map.
+     * @type {Function}
+     */
+    this._shouldFreezeMap = opts.shouldFreezeMap || (() => {});
   }
 
   static get type () {
@@ -82,7 +88,7 @@ export default class MapComponent extends Component {
   }
 
   setState (data, val) {
-    if (Object.keys(data).length === 0) {
+    if (Object.keys(data).length === 0 || this._shouldFreezeMap()) {
       return this;
     }
 
