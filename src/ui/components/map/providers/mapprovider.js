@@ -92,10 +92,11 @@ export default class MapProvider {
     this._collapsePins = config.collapsePins || false;
 
     /**
-     * Locale of the map. Defaults to the locale specified in ANSWERS.init()
+     * Locale of the map. Defaults to the locale specified in ANSWERS.init() or to 'en'
+     * if a locale is not provided in the init.
      * @type {string}
      */
-    const locale = config.locale || config.initLocale;
+    const locale = config.locale || config.initLocale || 'en';
 
     /**
      * Language of the map. Defaults to 'en'
