@@ -65,7 +65,8 @@ export default class MapComponent extends Component {
   getProviderInstance (type) {
     const _config = {
       ...this._config,
-      noResults: this._noResults
+      noResults: this._noResults,
+      initLocale: this.core.globalStorage.getState(StorageKeys.LOCALE)
     };
     return new ProviderTypes[type.toLowerCase()](_config);
   }
