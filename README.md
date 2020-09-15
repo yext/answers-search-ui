@@ -313,7 +313,7 @@ Every component has the same base configuration options.
     // Optional, a unique name for the component
     name: 'name',
     // Optional, an additional, custom HTML classname for the component. The component will also have a
-    // classname of 'component' applied.
+    // classname of 'yxt-Answers-component' applied.
     class: 'class',
     // Optional, handlebars template or HTML to override built-in handlebars template for the component
     template: 'template',

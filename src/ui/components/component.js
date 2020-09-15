@@ -110,10 +110,10 @@ export default class Component {
 
     /**
      * A custom class to be applied to {this._container} node. Note that the class
-     * 'component' will be included also.
+     * 'yxt-Answers-component' will be included as well.
      * @type {string}
      */
-    this._className = config.class;
+    this._className = config.class || 'component';
 
     /**
      * A custom render function to be used instead of using the default renderer
@@ -238,8 +238,8 @@ export default class Component {
       }
     });
 
-    this._className && DOM.addClass(this._container, this._className);
-    DOM.addClass(this._container, 'component');
+    DOM.addClass(this._container, this._className);
+    DOM.addClass(this._container, 'yxt-Answers-component');
     return this;
   }
 
