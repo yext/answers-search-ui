@@ -1847,6 +1847,8 @@ ANSWERS.addComponent('Map', {
   // Optional, determines if an empty map should be shown when there are no results. Defaults to false.
   showEmptyMap: false,
   // Optional, callback to invoke when a pin is clicked. The clicked item(s) are passed to the callback
+  shouldFreezeMap: function() {},
+  // Optional, when this function returns true, the map will not update when new searches are made. When this returns false, it will not have any impact on the map's behavior.
   onPinClick: null,
   // Optional, callback to invoke when a pin is hovered. The clicked item(s) are passed to the callback
   onPinMouseOver: null,
