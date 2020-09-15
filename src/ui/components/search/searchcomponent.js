@@ -234,6 +234,8 @@ export default class SearchComponent extends Component {
       message: 'We are unable to determine your location',
       ...config.geolocationTimeoutAlert
     };
+
+    this._onSearchComplete = config.onSearchComplete;
   }
 
   static get type () {
@@ -581,39 +583,54 @@ export default class SearchComponent extends Component {
   /**
    * Performs a query using the provided string input.
    * @param {string} query The string to query against.
-   * @param {Object} searchOptions The options to pass for core search
+   * @param {Object} searchOptions The options to pass for core search.
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
   search (query, searchOptions) {
+    let promise;
     if (this._verticalKey) {
-      this.core.verticalSearch(this._config.verticalKey, searchOptions, { input: query });
+      promise = this.core.verticalSearch(this._verticalKey, searchOptions, { input: query });
     } else {
-      // NOTE(billy) Temporary hack for DEMO
-      // Remove me after the demo
-      let nav = this.componentManager
-        .getActiveComponent('Navigation');
-
-      if (nav) {
-        let tabs = nav.getState('tabs');
-        let urls = {};
-
-        if (tabs && Array.isArray(tabs)) {
-          for (let i = 0; i < tabs.length; i++) {
-            let params = new SearchParams(tabs[i].url.split('?')[1]);
-            params.set('query', query);
-
-            let url = tabs[i].baseUrl;
-            if (params.toString().length > 0) {
-              url += '?' + params.toString();
-            }
-            urls[tabs[i].configId] = url;
-          }
-        }
-        return this.core.search(query, urls, searchOptions);
-      }
-
-      return this.core.search(query, undefined, searchOptions);
+      promise = this._universalSearch(query, searchOptions);
     }
+    if (this._onSearchComplete) {
+      return promise.then(this._onSearchComplete);
+    }
+    return promise;
+  }
+
+  /**
+   * Performs a universal search using the provided string input.
+   * @param {string} query The string to query against.
+   * @param {Object} searchOptions The options to pass for core search.
+   * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
+   */
+  _universalSearch (query, searchOptions) {
+    // NOTE(billy) Temporary hack for DEMO
+    // Remove me after the demo
+    let nav = this.componentManager
+      .getActiveComponent('Navigation');
+
+    if (nav) {
+      let tabs = nav.getState('tabs');
+      let urls = {};
+
+      if (tabs && Array.isArray(tabs)) {
+        for (let i = 0; i < tabs.length; i++) {
+          let params = new SearchParams(tabs[i].url.split('?')[1]);
+          params.set('query', query);
+
+          let url = tabs[i].baseUrl;
+          if (params.toString().length > 0) {
+            url += '?' + params.toString();
+          }
+          urls[tabs[i].configId] = url;
+        }
+      }
+      return this.core.search(query, urls, searchOptions);
+    }
+
+    return this.core.search(query, undefined, searchOptions);
   }
 
   /**
