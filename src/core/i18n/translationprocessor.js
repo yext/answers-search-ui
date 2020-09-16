@@ -1,14 +1,14 @@
 import { getNPlurals, getPluralFunc, hasLang } from 'plural-forms/dist/minimal';
 
-export default class Translator {
+export default class TranslationProcessor {
   /**
-   * Performs a translation which supports
+   * Processes a translation which includes performing
    * interpolation, pluralization, or both
    * @param {string} translations The translations, or a stringified JSON of possible translations
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
    */
-  static translate (translations, interpolationParams, count) {
+  static process (translations, interpolationParams, count) {
     const stringToInterpolate = this._selectStringToInterpolate(translations, count);
     return this._interpolate(stringToInterpolate, interpolationParams);
   }
