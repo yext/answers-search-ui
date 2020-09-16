@@ -90,16 +90,16 @@ $pagination-color-hover: var(--yxt-color-text-secondary) !default;
   {
     display: flex;
   }
-}
 
-@media (max-width: $breakpoint-mobile-max) {
-  .mobile-hidden {
-    display: none;
+  @media (max-width: $breakpoint-mobile-max) {
+    .mobile-hidden {
+      display: none;
+    }
   }
-}
-
-@media (min-width: $breakpoint-mobile-max) {
-  .desktop-hidden {
-    display: none;
+  
+  @media (min-width: $breakpoint-mobile-max) {
+    .desktop-hidden {
+      display: none;
+    }
   }
 }
