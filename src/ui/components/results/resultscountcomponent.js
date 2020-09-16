@@ -1,9 +1,10 @@
 import Component from '../component';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 export default class ResultsCountComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
-    this.moduleId = 'results-header';
+    this.moduleId = StorageKeys.RESULTS_HEADER;
   }
 
   static areDuplicateNamesAllowed () {
@@ -11,7 +12,7 @@ export default class ResultsCountComponent extends Component {
   }
 
   setState (data) {
-    const verticalResults = this.core.globalStorage.getState('vertical-results') || {};
+    const verticalResults = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
 
     /**
      * Total number of results.
@@ -25,10 +26,9 @@ export default class ResultsCountComponent extends Component {
      */
     const resultsLength = (verticalResults.results || []).length;
 
-    const offset = this.core.globalStorage.getState('search-offset');
+    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     return super.setState({
       ...data,
-      noResults: resultsCount === 0,
       total: resultsCount,
       pageStart: offset + 1,
       pageEnd: offset + resultsLength

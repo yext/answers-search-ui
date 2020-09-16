@@ -18,6 +18,7 @@ Outline:
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
+   - [ResultsCount Component](#results-count-component)
    - [Pagination Component](#pagination-component)
    - [FilterBox Component](#filterbox-component)
    - [Facets Component](#facets-component)
@@ -858,6 +859,16 @@ ANSWERS.addComponent('VerticalResults', {
     removableLabelText: 'Remove this filter'
   }
 })
+```
+
+## Results Count Component
+
+The results count component displays the current results count on a vertical page.
+
+```js
+ANSWERS.addComponent('ResultsCount', {
+  container: '.results-count-container'
+});
 ```
 
 ## Cards
