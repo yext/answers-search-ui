@@ -53,6 +53,7 @@
     "semistandard": "^13.0.1",
     "serve": "^11.3.0",
     "size-limit": "^0.21.1",
+    "stylelint": "^13.7.1",
     "testcafe": "^1.8.4",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0",
@@ -63,7 +64,7 @@
     "dev": "gulp dev",
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "semistandard",
-    "test": "semistandard && jest",
+    "test": "semistandard && stylelint src/**/*.scss && jest",
     "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuite.js",
     "size": "size-limit",
     "fix": "semistandard --fix"

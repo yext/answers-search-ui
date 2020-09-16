@@ -4,6 +4,7 @@ $cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   --yxt-cards-margin: #{$cards-margin};
 }
 
+/* stylelint-disable no-duplicate-selectors */
 .yxt-Card {
   display: flex;
   flex-direction: column;
