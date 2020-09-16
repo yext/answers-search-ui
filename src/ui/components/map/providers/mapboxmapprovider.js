@@ -5,9 +5,6 @@ import MapboxLanguage from '@mapbox/mapbox-gl-language';
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
-const SUPPORTED_LANGUAGES =
-      ['en', 'es', 'fr', 'de', 'ar', 'ja', 'ko', 'pt', 'ru', 'zh'];
-
 /* global mapboxgl */
 
 /**
@@ -19,9 +16,7 @@ export default class MapBoxMapProvider extends MapProvider {
   constructor (opts = {}, systemOpts = {}) {
     super(opts, systemOpts);
 
-    this._language = SUPPORTED_LANGUAGES.includes(this._language)
-      ? this._language
-      : this._languageFallback;
+    this._language = this._language;
   }
 
   /**
