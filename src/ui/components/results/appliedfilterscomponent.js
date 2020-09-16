@@ -11,31 +11,23 @@ import {
 } from '../../../core/utils/filternodeutils';
 
 const DEFAULT_CONFIG = {
-  showAppliedFilters: true,
   showFieldNames: false,
-  verticalURL: undefined,
   showChangeFilters: false,
   removable: false,
   delimiter: '|',
-  isUniversal: false,
   labelText: 'Filters applied to this search:',
   removableLabelText: 'Remove this filter',
-  moduleId: StorageKeys.RESULTS_HEADER,
-  hiddenFields: []
+  hiddenFields: ['builtin.entityType']
 };
 
 export default class AppliedFiltersComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
-    /**
-     * TODO (SPR-2455): Ideally, we would be able to set moduleId to DYNAMIC_FILTERS, the actual data
-     * we are listening to changes to, instead of this bespoke RESULTS_HEADER storage key.
-     * The issue is that when two components share a moduleId, if that moduleId listener is ever
-     * unregistered with the off() method, all listeners to that moduleId are unregistered.
-     * With child components, this is something that happens whenever the parent component rerenders.
-     */
-    this.moduleId = this._config.moduleId;
+    this._verticalKey = this._config.verticalKey ||
+      this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+
+    this.moduleId = StorageKeys.RESULTS_HEADER;
   }
 
   static areDuplicateNamesAllowed () {
@@ -59,7 +51,7 @@ export default class AppliedFiltersComponent extends Component {
     const { filterId } = tag.dataset;
     const filterNode = this.appliedFilterNodes[filterId];
     filterNode.remove();
-    this.core.verticalSearch(this._config.verticalKey, {
+    this.core.verticalSearch(this._verticalKey, {
       setQueryParams: true,
       resetPagination: true,
       useFacets: true
@@ -86,8 +78,6 @@ export default class AppliedFiltersComponent extends Component {
    * template can work with.
    * Keys are the fieldName of the filter. Values are an array of objects with a
    * displayValue and dataFilterId.
-   * TODO (SPR-2350): give every node a unique id, and use that instead of index for
-   * dataFilterId.
    * @returns {Array<Object>}
    */
   _groupAppliedFilters () {
@@ -142,7 +132,7 @@ export default class AppliedFiltersComponent extends Component {
 
     this.appliedFilterNodes = this._calculateAppliedFilterNodes();
     const appliedFiltersArray = this._createAppliedFiltersArray();
-    const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
+    const shouldShowFilters = appliedFiltersArray.length > 0;
 
     return super.setState({
       ...data,

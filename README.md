@@ -24,6 +24,7 @@ Outline:
    - [Facets Component](#facets-component)
    - [FilterSearch Component](#filtersearch-component)
    - [Filter Components](#filter-components)
+   - [Applied Filters Component](#applied-filters-component)
    - [Navigation Component](#navigation-component)
    - [QASubmission Component](#qa-submission-component)
    - [SpellCheck Component](#spell-check-component)
@@ -1623,6 +1624,33 @@ ANSWERS.addComponent('GeoLocationFilter', {
     // Optional, the message in the alert. Defaults to the below
     message: "We are unable to determine your location"
   }
+});
+```
+
+## Applied Filters Component
+
+The Applied Filters Component displays your currently applied filters as a row of text tags, labeled
+by filter display value. If the "removable" config option is set to true, these text tags will instead
+be "removable filters", which, when clicked, will remove the clicked filter from the search.
+Only intended for vertical pages.
+
+```js
+ANSWERS.addComponent('AppliedFilters', {
+  container: '.applied-filters-container',
+  // The vertical key of your search, will default to the vertical key specified in the search config.
+  verticalKey: 'aVerticalKey',
+  // Whether to display the field name of each group of applied filters. e.g. "Location: Virginia, New York" vs just "Virginia, New York". Defaults to false.
+  showFieldNames: false,
+  // This is list of filters that should not be displayed. By default, builtin.entityType will be hidden
+  hiddenFields: ['builtin.entityType'],
+  // Whether or not the displayed filters should be removable filters, or just simple text tags. Defaults to false (text tags).
+  removable: false,
+  // The character that separates each group of filters (grouped by field name). Defaults to '|'
+  delimiter: '|',
+  // The aria-label given to the component. Defaults to 'Filters applied to this search:'.
+  labelText: 'Filters applied to this search:',
+  // The aria-label given to the removable filters.
+  removableLabelText: 'Remove this filter'
 });
 ```
 
