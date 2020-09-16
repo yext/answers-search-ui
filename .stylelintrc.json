@@ -1,0 +1,10 @@
+{
+    "rules": {
+        "color-no-invalid-hex": true,
+        "function-calc-no-invalid": true,
+        "unit-no-unknown": true,
+        "property-no-unknown": true,
+        "declaration-block-no-duplicate-properties": true,
+        "no-duplicate-selectors": true
+    }
+}
