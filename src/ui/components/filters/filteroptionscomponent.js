@@ -44,10 +44,18 @@ class FilterOptionsConfig {
     this.optionType = config.optionType || OptionTypes.STATIC_FILTER;
 
     /**
-     * The list of filter options to display with checked status
+     * The list of filter options to display with checked status as
+     * initially specified in the user configuration
      * @type {object[]}
      */
-    this.options = config.options.map(o => ({ ...o }));
+    this.initialOptions = config.options.map(o => ({ ...o }));
+
+    /**
+     * The list of filter options to display with checked status,
+     * changing with changes in the persistent storage.
+     * @type {object[]}
+     */
+    this.options = Array.from(this.initialOptions);
 
     /**
      * The label to be used in the legend
@@ -270,6 +278,23 @@ export default class FilterOptionsComponent extends Component {
 
     if (this.config.storeOnChange) {
       this.apply(this.config.isDynamic);
+    }
+
+    if (!this.config.isDynamic) {
+      this.core.globalStorage.on('update', this.name, (data) => {
+        let previousOptions;
+        try {
+          previousOptions = JSON.parse(data);
+        } catch (e) {
+          console.warn(`Filter option ${data} could not be parsed`);
+        }
+        this.config.options = this.config.setSelectedOptions(
+          this.config.initialOptions,
+          previousOptions
+        );
+        this.updateListeners();
+        this.setState();
+      });
     }
   }
 

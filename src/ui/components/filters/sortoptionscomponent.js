@@ -34,6 +34,11 @@ export default class SortOptionsComponent extends Component {
         this.setState(verticalResults);
       }
     });
+
+    this.core.globalStorage.on('update', this.name, (data) => {
+      this._updateSelectedOption(data);
+      this._sortResults();
+    });
   }
 
   setState (data = {}) {
