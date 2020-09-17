@@ -1,7 +1,7 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 
-export default class ResultsCountComponent extends Component {
+export default class VerticalResultsCountComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
     this.moduleId = StorageKeys.RESULTS_HEADER;
@@ -36,7 +36,7 @@ export default class ResultsCountComponent extends Component {
   }
 
   static get type () {
-    return 'ResultsCount';
+    return 'VerticalResultsCount';
   }
 
   /**
@@ -45,6 +45,6 @@ export default class ResultsCountComponent extends Component {
    * @override
    */
   static defaultTemplateName (config) {
-    return 'results/resultscount';
+    return 'results/verticalresultscount';
   }
 }

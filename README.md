@@ -18,7 +18,7 @@ Outline:
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
-   - [ResultsCount Component](#results-count-component)
+   - [VerticalResultsCount Component](#vertical-results-count-component)
    - [Pagination Component](#pagination-component)
    - [FilterBox Component](#filterbox-component)
    - [Facets Component](#facets-component)
@@ -861,12 +861,12 @@ ANSWERS.addComponent('VerticalResults', {
 })
 ```
 
-## Results Count Component
+## Vertical Results Count Component
 
 The results count component displays the current results count on a vertical page.
 
 ```js
-ANSWERS.addComponent('ResultsCount', {
+ANSWERS.addComponent('VerticalResultsCount', {
   container: '.results-count-container'
 });
 ```

@@ -38,7 +38,7 @@ import CTAComponent from './ctas/ctacomponent';
 import CTACollectionComponent from './ctas/ctacollectioncomponent';
 import ResultsHeaderComponent from './results/resultsheadercomponent';
 
-import ResultsCountComponent from './results/resultscountcomponent';
+import VerticalResultsCountComponent from './results/verticalresultscountcomponent';
 
 const COMPONENT_CLASS_LIST = [
   // Core Component
@@ -86,7 +86,7 @@ const COMPONENT_CLASS_LIST = [
   IconComponent,
   CTAComponent,
   CTACollectionComponent,
-  ResultsCountComponent
+  VerticalResultsCountComponent
 ];
 
 /**
