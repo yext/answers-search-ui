@@ -122,13 +122,14 @@ export default class AppliedFiltersComponent extends Component {
 
   setState (data) {
     const verticalResults = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
-    const nlpFilters = verticalResults.appliedQueryFilters || [];
 
     /**
      * Array of nlp filters in the search response.
      * @type {Array<AppliedQueryFilter>}
      */
-    this.nlpFilterNodes = convertNlpFiltersToFilterNodes(nlpFilters || []);
+    const nlpFilters = verticalResults.appliedQueryFilters || [];
+
+    this.nlpFilterNodes = convertNlpFiltersToFilterNodes(nlpFilters);
 
     this.appliedFilterNodes = this._calculateAppliedFilterNodes();
     const appliedFiltersArray = this._createAppliedFiltersArray();
