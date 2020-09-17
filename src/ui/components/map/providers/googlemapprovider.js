@@ -41,16 +41,12 @@ export default class GoogleMapProvider extends MapProvider {
     const googleMapsCustomLanguages =
       ['zh-CN', 'zn-HK', 'zh-TW', 'en-AU', 'en-GB', 'fr-CA', 'pt-BR', 'pt-PT', 'es-419'];
     const locale = localeStr.replace('_', '-');
-    const language = locale.substring(0, 2);
 
     if (googleMapsCustomLanguages.includes(locale)) {
       return locale;
-    } else if (locale.length < 2) {
-      console.error(`Locale '${locale}' must include at least two characters. Falling back to 'en'`);
-      return 'en';
-    } else if (locale.length > 2) {
-      console.warn(`Locale '${locale}' is not supported by Google Maps as a language. Falling back to '${language}'`);
     }
+
+    const language = locale.substring(0, 2);
     return language;
   }
 

@@ -96,7 +96,15 @@ export default class MapProvider {
      * ANSWERS.init() by default
      * @type {string}
      */
-    this._locale = config.locale;
+    this._locale = this._getSupportedLocale(config.locale);
+  }
+
+  _getSupportedLocale (locale) {
+    if (locale.length < 2) {
+      console.error(`Locale '${locale}' must include at least two characters. Falling back to 'en'`);
+      return 'en';
+    }
+    return locale;
   }
 
   /**
