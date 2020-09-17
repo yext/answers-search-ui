@@ -1637,19 +1637,19 @@ Only intended for vertical pages.
 ```js
 ANSWERS.addComponent('AppliedFilters', {
   container: '.applied-filters-container',
-  // The vertical key of your search, will default to the vertical key specified in the search config.
+  // Optional, The vertical key of your search. Defaults to the vertical key specified in the search config.
   verticalKey: 'aVerticalKey',
-  // Whether to display the field name of each group of applied filters. e.g. "Location: Virginia, New York" vs just "Virginia, New York". Defaults to false.
+  // Optional, Whether to display the field name of each group of applied filters. e.g. "Location: Virginia, New York" vs just "Virginia, New York". Defaults to false.
   showFieldNames: false,
-  // This is list of filters that should not be displayed. By default, builtin.entityType will be hidden
+  // Optional, This is list of filters that should not be displayed. Defaults to hiding ['builtin.entityType'].
   hiddenFields: ['builtin.entityType'],
-  // Whether or not the displayed filters should be removable filters, or just simple text tags. Defaults to false (text tags).
+  // Optional, Whether or not the displayed filters should be removable filters, or just simple text tags. Defaults to false (text tags).
   removable: false,
-  // The character that separates each group of filters (grouped by field name). Defaults to '|'
+  // Optional, The character that separates each group of filters (grouped by field name). Defaults to '|'.
   delimiter: '|',
-  // The aria-label given to the component. Defaults to 'Filters applied to this search:'.
+  // Optional, The aria-label given to the component. Defaults to 'Filters applied to this search:'.
   labelText: 'Filters applied to this search:',
-  // The aria-label given to the removable filters.
+  // Optional, The aria-label given to the removable filters. Defaults to 'Remove this filter'.
   removableLabelText: 'Remove this filter'
 });
 ```
