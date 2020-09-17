@@ -831,6 +831,8 @@ ANSWERS.addComponent('VerticalResults', {
   resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
   modifier: '',
+  // Optional, whether to hide the default results header that VerticalResults provides. Defaults to false.
+  hideResultsHeader: false,
   // Optional, the card used to display each individual result, see the Cards section for more details,
   card: {
     // Optional, The type of card, built-in types are: 'Standard', 'Accordion', and 'Legacy'. Defaults to 'Standard'
