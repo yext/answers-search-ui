@@ -96,13 +96,7 @@ export default class MapProvider {
      * ANSWERS.init() by default
      * @type {string}
      */
-    const locale = config.locale;
-
-    /**
-     * Language of the map. Defaults to 'en'
-     * @type {string}
-     */
-    this._language = locale.substring(0, 2) || 'en';
+    this._locale = config.locale;
   }
 
   /**
