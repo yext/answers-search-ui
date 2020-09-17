@@ -24,10 +24,17 @@ class FilterOptionsConfig {
     this.control = config.control;
 
     /**
+     * The list of filter options to display with checked status as
+     * initially specified in the user configuration
+     * @type {object[]}
+     */
+    this.initialOptions = config.options.map(o => ({ ...o }));
+
+    /**
      * The list of filter options to display with checked status
      * @type {object[]}
      */
-    this.options = config.options;
+    this.options = config.options.map(o => ({ ...o }));
 
     /**
      * The label to be used in the legend
@@ -112,10 +119,11 @@ class FilterOptionsConfig {
       }
     }
     let selectedOptions = config.previousOptions || [];
-    this.options = this.setDefaultSelectedValues(this.options, selectedOptions);
+    this.options = this.getDefaultSelectedValues(this.options, selectedOptions);
   }
 
-  setDefaultSelectedValues (options, selectedOptions) {
+  getDefaultSelectedValues (initialOptions, selectedOptions) {
+    const options = initialOptions.map(o => ({ ...o }));
     return options.map(o => ({
       ...o,
       selected: selectedOptions.length
@@ -177,6 +185,22 @@ export default class FilterOptionsComponent extends Component {
      * @type {boolean}
      */
     this.allShown = false;
+
+    if (!this.config.isDynamic) {
+      this.core.globalStorage.on('update', this.name, (data) => {
+        try {
+          const newOptions = JSON.parse(data);
+          this.config.options = this.config.getDefaultSelectedValues(
+            this.config.initialOptions,
+            newOptions
+          );
+          this.updateListeners();
+          this.setState();
+        } catch (e) {
+          console.warn(`Filter option ${data} could not be parsed`);
+        }
+      });
+    }
   }
 
   static get type () {

@@ -282,7 +282,7 @@ export default class FilterBoxComponent extends Component {
         ? Filter.and(...validFilters)
         : validFilters[0];
       this.core.setFilter(this.name, combinedFilter || {});
-      this._filterComponents.forEach(fc => fc.apply(replaceHistory));
+      this._filterComponents.forEach(fc => fc.applyFilter(replaceHistory));
     }
   }
 
