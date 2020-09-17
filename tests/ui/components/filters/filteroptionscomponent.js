@@ -80,7 +80,8 @@ describe('filter options component', () => {
           }
           return null;
         },
-        delete: () => { }
+        delete: () => { },
+        on: () => {}
       },
       persistentStorage: new PersistentStorage()
     };
@@ -410,7 +411,8 @@ describe('filter options component', () => {
                 return ['label1', 'label2'];
               }
             },
-            delete: () => { }
+            delete: () => { },
+            on: () => {}
           },
           setStaticFilterNodes: () => { }
         },
@@ -551,7 +553,8 @@ describe('filter options component', () => {
         {
           globalStorage: {
             getState: () => { },
-            delete: () => { }
+            delete: () => { },
+            on: () => {}
           },
           persistentStorage: {
             set: () => { },
