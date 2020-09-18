@@ -35,7 +35,7 @@ import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
-import Translator from './core/i18n/translator';
+import TranslationProcessor from './core/i18n/translationprocessor';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -514,15 +514,14 @@ class Answers {
   }
 
   /**
-   * Performs a translation which supports
-   * interpolation, pluralization, or both
+   * Processes a translation which includes performing interpolation, pluralization, or both
    * @param {string} translations The translations, or a stringified JSON of possible translations
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
-   * @returns {string} The translation
+   * @returns {string} The translation with any interpolation or pluralization applied
    */
-  translateJS (translations, interpolationParams, count) {
-    return Translator.translate(translations, interpolationParams, count);
+  processTranslation (translations, interpolationParams, count) {
+    return TranslationProcessor.process(translations, interpolationParams, count);
   }
 }
 
