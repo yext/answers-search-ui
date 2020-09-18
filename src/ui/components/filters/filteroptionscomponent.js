@@ -55,7 +55,7 @@ class FilterOptionsConfig {
      * changing with changes in the persistent storage.
      * @type {object[]}
      */
-    this.options = Array.from(this.initialOptions);
+    this.options = config.options.map(o => ({ ...o }));
 
     /**
      * The label to be used in the legend
@@ -171,28 +171,30 @@ class FilterOptionsConfig {
   }
 
   /**
-   * Sets selected options on load based on options stored in persistent storage and options with selected: true.
-   * If no previous options were stored in persistentStorage, default to options marked
-   * as selected. If multiple options are marked as selected for 'singleoption', only the
-   * first should be selected.
-   * @param {Array<Object>} options
-   * @param {Array<string>} previousOptions
-   * @returns {Array<Object>}
+   * Returns a list of options with `selected` determined by initialOptions and
+   * optionsOverrides. optionsOverrides take precedence over options. If the
+   * control is singleoption and `selected` appears more than once in either
+   * options or previousOptions then the first instance is used.
+   * @param {Array<Object>} initialOptions Options from the component configuration
+   * @param {Array<string>} optionsOverrides Overrides as they appear in persistentStorage
+   * @returns {Array<Object>} The options is the same format as initialOptions with updated
+   *                          selected values
    */
-  setSelectedOptions (options, previousOptions) {
-    if (previousOptions && this.control === 'singleoption') {
+  setSelectedOptions (initialOptions, optionsOverrides) {
+    const options = initialOptions.map(o => ({ ...o }));
+    if (optionsOverrides && this.control === 'singleoption') {
       let hasSeenSelectedOption = false;
       return options.map(o => {
-        if (previousOptions.includes(o.label) && !hasSeenSelectedOption) {
+        if (optionsOverrides.includes(o.label) && !hasSeenSelectedOption) {
           hasSeenSelectedOption = true;
           return { ...o, selected: true };
         }
         return { ...o, selected: false };
       });
-    } else if (previousOptions && this.control === 'multioption') {
+    } else if (optionsOverrides && this.control === 'multioption') {
       return options.map(o => ({
         ...o,
-        selected: previousOptions.includes(o.label)
+        selected: optionsOverrides.includes(o.label)
       }));
     } else if (this.control === 'singleoption') {
       let hasSeenSelectedOption = false;
@@ -282,18 +284,17 @@ export default class FilterOptionsComponent extends Component {
 
     if (!this.config.isDynamic) {
       this.core.globalStorage.on('update', this.name, (data) => {
-        let previousOptions;
         try {
-          previousOptions = JSON.parse(data);
+          const newOptions = JSON.parse(data);
+          this.config.options = this.config.setSelectedOptions(
+            this.config.initialOptions,
+            newOptions
+          );
+          this.updateListeners();
+          this.setState();
         } catch (e) {
           console.warn(`Filter option ${data} could not be parsed`);
         }
-        this.config.options = this.config.setSelectedOptions(
-          this.config.initialOptions,
-          previousOptions
-        );
-        this.updateListeners();
-        this.setState();
       });
     }
   }
