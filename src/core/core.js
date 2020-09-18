@@ -15,7 +15,6 @@ import QueryTriggers from './models/querytriggers';
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
-import Section from './models/section';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -309,7 +308,7 @@ export default class Core {
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = this._getOnUniversalSearchParams(
-          data[StorageKeys.UNIVERSAL_RESULTS].sections, 
+          data[StorageKeys.UNIVERSAL_RESULTS].sections,
           queryString);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
@@ -321,12 +320,12 @@ export default class Core {
   /**
    * Builds the object passed as a parameter to onUniversalSearch. This object
    * contains information about the universal search's query and result counts.
-   * 
+   *
    * @param {Array<Section>} sections The sections of results.
-   * @param {string} queryString The search query. 
+   * @param {string} queryString The search query.
    * @return {Object<string, ?>}
    */
-  _getOnUniversalSearchParams(sections, queryString) {
+  _getOnUniversalSearchParams (sections, queryString) {
     const resultsCountByVertical = sections.reduce(
       (resultsCountMap, section) => {
         const { verticalConfigId, resultsCount, results } = section;
