@@ -51,8 +51,7 @@ class FilterOptionsConfig {
     this.initialOptions = config.options.map(o => ({ ...o }));
 
     /**
-     * The list of filter options to display with checked status,
-     * changing with changes in the persistent storage.
+     * The list of filter options to display.
      * @type {object[]}
      */
     this.options = config.options.map(o => ({ ...o }));
@@ -174,9 +173,9 @@ class FilterOptionsConfig {
    * Returns a list of options with `selected` determined by initialOptions and
    * optionsOverrides. optionsOverrides take precedence over initialOptions. If the
    * control is singleoption and `selected` appears more than once in either
-   * initialOptions or previousOptions then the first instance is used.
+   * initialOptions or optionsOverrides then the first instance is used.
    * @param {Array<Object>} initialOptions Options from the component configuration
-   * @param {Array<string>} optionsOverrides Overrides as they appear in persistentStorage
+   * @param {Array<string>} optionsOverrides Options as they are formatted for persistentStorage
    * @returns {Array<Object>} The options in the same format as initialOptions with updated
    *                          selected values
    */
@@ -283,6 +282,9 @@ export default class FilterOptionsComponent extends Component {
     }
 
     if (!this.config.isDynamic) {
+      // Update listener for when navigating backwards in history. When we back nav, the
+      // globalStorage is updated with the previous URL filter values. We should not update
+      // this.name otherwise, instead opt for this.core.setStaticFilterNodes()
       this.core.globalStorage.on('update', this.name, (data) => {
         try {
           const newOptions = JSON.parse(data);
