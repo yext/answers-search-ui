@@ -23,6 +23,31 @@ export default class GoogleMapProvider extends MapProvider {
     if (!this.hasValidClientCredentials() && !this._apiKey) {
       throw new Error('GoogleMapsProvider: Missing `apiKey` or {`clientId`, `signature`}');
     }
+
+    /**
+     * Language of the map.
+     * @type {string}
+     */
+    this._language = this.getLanguage(this._locale);
+  }
+
+  /**
+   * Google Maps supports some language codes that are longer than two characters. If the
+   * locale matches one of these edge cases, use it. Otherwise, fallback on the first two
+   * characters of the locale.
+   * @param {string} localeStr Unicode locale
+   */
+  getLanguage (localeStr) {
+    const googleMapsCustomLanguages =
+      ['zh-CN', 'zn-HK', 'zh-TW', 'en-AU', 'en-GB', 'fr-CA', 'pt-BR', 'pt-PT', 'es-419'];
+    const locale = localeStr.replace('_', '-');
+
+    if (googleMapsCustomLanguages.includes(locale)) {
+      return locale;
+    }
+
+    const language = locale.substring(0, 2);
+    return language;
   }
 
   loadJS () {
@@ -56,7 +81,7 @@ export default class GoogleMapProvider extends MapProvider {
         onLoad();
       },
       async: true,
-      src: `https://maps.googleapis.com/maps/api/js?${self.generateCredentials()}`
+      src: `https://maps.googleapis.com/maps/api/js?${self.generateCredentials()}&language=${self._language}`
     });
 
     DOM.append('body', script);

@@ -90,6 +90,25 @@ export default class MapProvider {
      * @type {boolean}
      */
     this._collapsePins = config.collapsePins || false;
+
+    /**
+     * Locale of the map. MapComponent supplies the locale specifed by
+     * ANSWERS.init() by default
+     * @type {string}
+     */
+    this._locale = this._getValidatedLocale(config.locale);
+  }
+
+  /**
+   * Returns the locale if it passes validation, otherwise returns 'en'
+   * @param {string} locale
+   */
+  _getValidatedLocale (locale) {
+    if (locale.length < 2) {
+      console.error(`Locale '${locale}' must include at least two characters. Falling back to 'en'`);
+      return 'en';
+    }
+    return locale;
   }
 
   /**
