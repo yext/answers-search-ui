@@ -133,11 +133,9 @@ export default class AppliedFiltersComponent extends Component {
 
     this.appliedFilterNodes = this._calculateAppliedFilterNodes();
     const appliedFiltersArray = this._createAppliedFiltersArray();
-    const shouldShowFilters = appliedFiltersArray.length > 0;
 
     return super.setState({
       ...data,
-      shouldShowFilters: shouldShowFilters,
       appliedFiltersArray: appliedFiltersArray
     });
   }
