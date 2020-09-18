@@ -504,12 +504,11 @@ class Answers {
   }
 
   /**
-   * Processes a translation which includes performing
-   * interpolation, pluralization, or both
+   * Processes a translation which includes performing interpolation, pluralization, or both
    * @param {string} translations The translations, or a stringified JSON of possible translations
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
-   * @returns {string} The translation
+   * @returns {string} The translation with any interpolation or pluralization applied
    */
   processTranslation (translations, interpolationParams, count) {
     return TranslationProcessor.process(translations, interpolationParams, count);
