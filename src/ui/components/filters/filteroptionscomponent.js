@@ -167,20 +167,20 @@ class FilterOptionsConfig {
     }
     // previousOptions will be null if there were no previousOptions in persistentStorage
     const previousOptions = config.previousOptions;
-    this.options = this.setSelectedOptions(this.options, previousOptions);
+    this.options = this.getSelectedOptions(this.options, previousOptions);
   }
 
   /**
    * Returns a list of options with `selected` determined by initialOptions and
-   * optionsOverrides. optionsOverrides take precedence over options. If the
+   * optionsOverrides. optionsOverrides take precedence over initialOptions. If the
    * control is singleoption and `selected` appears more than once in either
-   * options or previousOptions then the first instance is used.
+   * initialOptions or previousOptions then the first instance is used.
    * @param {Array<Object>} initialOptions Options from the component configuration
    * @param {Array<string>} optionsOverrides Overrides as they appear in persistentStorage
-   * @returns {Array<Object>} The options is the same format as initialOptions with updated
+   * @returns {Array<Object>} The options in the same format as initialOptions with updated
    *                          selected values
    */
-  setSelectedOptions (initialOptions, optionsOverrides) {
+  getSelectedOptions (initialOptions, optionsOverrides) {
     const options = initialOptions.map(o => ({ ...o }));
     if (optionsOverrides && this.control === 'singleoption') {
       let hasSeenSelectedOption = false;
@@ -286,7 +286,7 @@ export default class FilterOptionsComponent extends Component {
       this.core.globalStorage.on('update', this.name, (data) => {
         try {
           const newOptions = JSON.parse(data);
-          this.config.options = this.config.setSelectedOptions(
+          this.config.options = this.config.getSelectedOptions(
             this.config.initialOptions,
             newOptions
           );
