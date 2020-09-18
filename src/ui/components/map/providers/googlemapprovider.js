@@ -32,7 +32,7 @@ export default class GoogleMapProvider extends MapProvider {
   }
 
   /**
-   * Google Maps supports some langauge codes that are longer than two characters. If the
+   * Google Maps supports some language codes that are longer than two characters. If the
    * locale matches one of these edge cases, use it. Otherwise, fallback on the first two
    * characters of the locale.
    * @param {string} localeStr Unicode locale
