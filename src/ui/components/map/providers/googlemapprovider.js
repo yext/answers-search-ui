@@ -28,16 +28,16 @@ export default class GoogleMapProvider extends MapProvider {
      * Language of the map.
      * @type {string}
      */
-    this._language = this.getValidatedLanguage(this._locale);
+    this._language = this.getLanguage(this._locale);
   }
 
   /**
    * Google Maps supports some langauge codes that are longer than two characters. If the
    * locale matches one of these edge cases, use it. Otherwise, fallback on the first two
-   * characters of the locale and print a warning.
+   * characters of the locale.
    * @param {string} localeStr Unicode locale
    */
-  getValidatedLanguage (localeStr) {
+  getLanguage (localeStr) {
     const googleMapsCustomLanguages =
       ['zh-CN', 'zn-HK', 'zh-TW', 'en-AU', 'en-GB', 'fr-CA', 'pt-BR', 'pt-PT', 'es-419'];
     const locale = localeStr.replace('_', '-');

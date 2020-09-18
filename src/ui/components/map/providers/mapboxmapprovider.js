@@ -17,10 +17,10 @@ export default class MapBoxMapProvider extends MapProvider {
     super(opts, systemOpts);
 
     /**
-     * Language of the map. Defaults to 'en'
+     * Language of the map.
      * @type {string}
      */
-    this._language = this._locale.substring(0, 2) || 'en';
+    this._language = this._locale.substring(0, 2);
   }
 
   /**
