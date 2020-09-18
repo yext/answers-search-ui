@@ -307,9 +307,22 @@ export default class Core {
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
+        const universalSections = data[StorageKeys.UNIVERSAL_RESULTS].sections;
+        const resultsCountByVertical = universalSections.reduce(
+          (resultsCountMap, section) => {
+            const { verticalConfigId, resultsCount, results } = section;
+            resultsCountMap[verticalConfigId] = {
+              totalResultsCount: resultsCount,
+              displayedResultsCount: results.length
+            };
+            return resultsCountMap;
+          },
+          {});
+
         const exposedParams = {
-          queryString: queryString,
-          sectionsCount: data[StorageKeys.UNIVERSAL_RESULTS].sections.length
+          queryString,
+          sectionsCount: universalSections.length,
+          resultsCountByVertical
         };
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
