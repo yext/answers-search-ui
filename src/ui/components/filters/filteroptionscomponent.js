@@ -31,7 +31,7 @@ class FilterOptionsConfig {
     this.initialOptions = config.options.map(o => ({ ...o }));
 
     /**
-     * The list of filter options to display with checked status
+     * The list of filter options to display.
      * @type {object[]}
      */
     this.options = config.options.map(o => ({ ...o }));
@@ -187,6 +187,9 @@ export default class FilterOptionsComponent extends Component {
     this.allShown = false;
 
     if (!this.config.isDynamic) {
+      // Update listener for when navigating backwards in history. When we back nav, the
+      // globalStorage is updated with the previous URL filter values. We should not update
+      // this.name otherwise, instead opt for this.core.setStaticFilterNodes()
       this.core.globalStorage.on('update', this.name, (data) => {
         try {
           const newOptions = JSON.parse(data);
