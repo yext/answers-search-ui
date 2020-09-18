@@ -28,7 +28,7 @@ export default class GoogleMapProvider extends MapProvider {
      * Language of the map.
      * @type {string}
      */
-    this._language = this.getSupportedLanguage(this._locale);
+    this._language = this.getValidatedLanguage(this._locale);
   }
 
   /**
@@ -37,7 +37,7 @@ export default class GoogleMapProvider extends MapProvider {
    * characters of the locale and print a warning.
    * @param {string} localeStr Unicode locale
    */
-  getSupportedLanguage (localeStr) {
+  getValidatedLanguage (localeStr) {
     const googleMapsCustomLanguages =
       ['zh-CN', 'zn-HK', 'zh-TW', 'en-AU', 'en-GB', 'fr-CA', 'pt-BR', 'pt-PT', 'es-419'];
     const locale = localeStr.replace('_', '-');
