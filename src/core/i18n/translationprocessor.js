@@ -11,23 +11,11 @@ export default class TranslationProcessor {
    * @returns {string} The translation with any interpolation or pluralization applied
    */
   static process (translations, interpolationParams, count) {
-    const stringToInterpolate = this._selectStringToInterpolate(translations, count);
+    const stringToInterpolate = (typeof translations === 'string')
+      ? translations
+      : this._selectPluralForm(translations, count);
+
     return this._interpolate(stringToInterpolate, interpolationParams);
-  }
-
-  /**
-   * If translations is a string, return it
-   * Otherwise select the correct plural form based on count
-   * @param {string | Object } translations
-   * @param {number} count
-   * @returns {string}
-   */
-  static _selectStringToInterpolate (translations, count) {
-    if (typeof translations === 'string') {
-      return translations;
-    }
-
-    return this._selectPluralForm(translations, count);
   }
 
   /**

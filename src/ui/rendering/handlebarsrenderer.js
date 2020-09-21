@@ -199,19 +199,22 @@ export default class HandlebarsRenderer extends Renderer {
       let { phrase, count } = options.hash;
 
       Object.entries(options.hash).forEach(([key, value]) => {
+        const isPluralFormParam = key.length > 10 && key.substring(0, 10) === 'pluralForm';
         if (key === 'locale') {
           pluralizationInfo['locale'] = value;
-        } else if (key.length > 10 && key.substring(0, 10) === 'pluralForm') {
-          const pluralFormNum = parseInt(key.substring(10));
-          pluralizationInfo[pluralFormNum] = value;
+        } else if (isPluralFormParam) {
+          const pluralFormIndex = parseInt(key.substring(10));
+          pluralizationInfo[pluralFormIndex] = value;
         } else {
           interpolationParams[key] = value;
         }
       });
 
-      return typeof phrase === 'string'
-        ? TranslationProcessor.process(phrase, interpolationParams, count)
-        : TranslationProcessor.process(pluralizationInfo, interpolationParams, count);
+      const isUsingPluralization = (typeof phrase !== 'string');
+
+      return isUsingPluralization
+        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count)
+        : TranslationProcessor.process(phrase, interpolationParams);
     });
 
     let self = this;
