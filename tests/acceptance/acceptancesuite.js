@@ -92,9 +92,9 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await t.expect(actualResultsCount).eql(expectedResultsCount);
 
   // Check that selecting multiple FilterOptions works
-  const brands = await filterBox.getFilterOptions('Brands');
-  await brands.toggleOption('E');
-  expectedResultsCount = await brands.getOptionCount('E');
+  const brands = await filterBox.getFilterOptions('Puppy Preference');
+  await brands.toggleOption('Frodo');
+  expectedResultsCount = await brands.getOptionCount('Frodo');
   await filterBox.applyFilters();
   actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(expectedResultsCount);
