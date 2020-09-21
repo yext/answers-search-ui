@@ -12,22 +12,22 @@ describe('processTranslation usage', () => {
   });
 
   it('simple pluralization with singular count', () => {
-    const translation = TranslationProcessor.process('{"0":"fleur","1":"fleurs","locale":"fr-FR"}', {}, 1);
+    const translation = TranslationProcessor.process({ 0: 'fleur', 1: 'fleurs', locale: 'fr-FR' }, {}, 1);
     expect(translation).toEqual('fleur');
   });
 
   it('simple pluralization with plural count', () => {
-    const translation = TranslationProcessor.process('{"0":"fleur","1":"fleurs","locale":"fr-FR"}', {}, 2);
+    const translation = TranslationProcessor.process({ 0: 'fleur', 1: 'fleurs', locale: 'fr-FR' }, {}, 2);
     expect(translation).toEqual('fleurs');
   });
 
   it('pluralization with singular count and interpolation', () => {
-    const translation = TranslationProcessor.process('{"0":"Un article [[name]]","1":"Les articles [[name]]","locale":"fr-FR"}', { name: 'de presse' }, 1);
+    const translation = TranslationProcessor.process({ 0: 'Un article [[name]]', 1: 'Les articles [[name]]', locale: 'fr-FR' }, { name: 'de presse' }, 1);
     expect(translation).toEqual('Un article de presse');
   });
 
   it('pluralization with plural count and interpolation', () => {
-    const translation = TranslationProcessor.process('{"0":"Un article [[name]]","1":"Les articles [[name]]","locale":"fr-FR"}', { name: 'de presse' }, 2);
+    const translation = TranslationProcessor.process({ 0: 'Un article [[name]]', 1: 'Les articles [[name]]', locale: 'fr-FR' }, { name: 'de presse' }, 2);
     expect(translation).toEqual('Les articles de presse');
   });
 
@@ -39,7 +39,7 @@ describe('processTranslation usage', () => {
   it('intermixed markdown with pluralization', () => {
     const count = 2;
     const translation = TranslationProcessor.process(
-      '{"0":"<b>Voir notre site web [[name]]</b>","1":"<b>Voir nos sites web [[name]]</b>","locale":"fr-FR"}',
+      { 0: '<b>Voir notre site web [[name]]</b>', 1: '<b>Voir nos sites web [[name]]</b>', locale: 'fr-FR' },
       { name: 'Howard' },
       count);
     expect(translation).toEqual('<b>Voir nos sites web Howard</b>');
@@ -47,13 +47,12 @@ describe('processTranslation usage', () => {
 });
 
 describe('selecting the correct plural form', () => {
-  const phrase = {
+  const translations = {
     0: 'Pasirinkta [[count]] tinklalapis',
     1: 'Pasirinkta [[count]] tinklalapiai',
     2: 'Pasirinkta [[count]] tinklalapių',
     locale: 'lt-LT'
   };
-  const translations = JSON.stringify(phrase);
 
   it('uses key_0 when count = 1', () => {
     const translation = TranslationProcessor.process(translations, { count: 1 }, 1);
@@ -71,10 +70,10 @@ describe('selecting the correct plural form', () => {
   });
 
   it('defaults locale to en when given a bogus locale', () => {
-    const bogusTranslations = JSON.stringify({
-      ...phrase,
+    const bogusTranslations = {
+      ...translations,
       locale: 'hawaii'
-    });
+    };
     const translation = TranslationProcessor.process(bogusTranslations, { count: 100 }, 100);
     expect(translation).toEqual('Pasirinkta 100 tinklalapiai');
   });

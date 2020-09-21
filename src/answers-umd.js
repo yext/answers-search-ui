@@ -514,8 +514,10 @@ class Answers {
   }
 
   /**
-   * Processes a translation which includes performing interpolation, pluralization, or both
-   * @param {string} translations The translations, or a stringified JSON of possible translations
+   * Processes a translation which includes performing interpolation, pluralization, or
+   * both
+   * @param {string | Object} translations The translation, or an object containing
+   * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
    * @returns {string} The translation with any interpolation or pluralization applied

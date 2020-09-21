@@ -194,8 +194,24 @@ export default class HandlebarsRenderer extends Renderer {
     });
 
     this.registerHelper('processTranslation', function (options) {
+      const pluralizationInfo = {};
+      const interpolationParams = {};
       let { phrase, count } = options.hash;
-      return TranslationProcessor.process(phrase, options.hash, count);
+
+      Object.entries(options.hash).forEach(([key, value]) => {
+        if (key === 'locale') {
+          pluralizationInfo['locale'] = value;
+        } else if (key.length > 10 && key.substring(0, 10) === 'pluralForm') {
+          const pluralFormNum = parseInt(key.substring(10));
+          pluralizationInfo[pluralFormNum] = value;
+        } else {
+          interpolationParams[key] = value;
+        }
+      });
+
+      return typeof phrase === 'string'
+        ? TranslationProcessor.process(phrase, interpolationParams, count)
+        : TranslationProcessor.process(pluralizationInfo, interpolationParams, count);
     });
 
     let self = this;

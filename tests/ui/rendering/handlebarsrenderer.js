@@ -22,13 +22,10 @@ describe('the handlebars processTranslation helper', () => {
   });
 
   describe('when translating a plural phrase in en', () => {
-    const phrase = {
-      0: 'a [[size]] [[color]] cow tried to make a [[food]]',
-      1: '[[count]] [[size]] [[color]] cows tried to make a [[food]]',
-      locale: 'en'
-    };
     const template = `{{processTranslation
-      phrase='${JSON.stringify(phrase)}'
+      pluralForm0='a [[size]] [[color]] cow tried to make a [[food]]'
+      pluralForm1='[[count]] [[size]] [[color]] cows tried to make a [[food]]'
+      locale='en'
       size=mySize
       color=myColor
       food=myFood
@@ -64,14 +61,11 @@ describe('the handlebars processTranslation helper', () => {
   });
 
   describe('when translating a plural phrase in a locale with multiple plural forms', () => {
-    const phrase = {
-      0: 'Pasirinkta [[count]] tinklalapis',
-      1: 'Pasirinkta [[count]] tinklalapiai',
-      2: 'Pasirinkta [[count]] tinklalapių',
-      locale: 'lt-LT'
-    };
     const template = `{{processTranslation
-      phrase='${JSON.stringify(phrase)}'
+      pluralForm0='Pasirinkta [[count]] tinklalapis'
+      pluralForm1='Pasirinkta [[count]] tinklalapiai'
+      pluralForm2='Pasirinkta [[count]] tinklalapių'
+      locale='lt-LT'
       count=myCount
     }}`;
 
