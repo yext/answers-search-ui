@@ -199,10 +199,9 @@ export default class HandlebarsRenderer extends Renderer {
       let { phrase, count } = options.hash;
 
       Object.entries(options.hash).forEach(([key, value]) => {
-        const isPluralFormParam = key.length > 10 && key.substring(0, 10) === 'pluralForm';
         if (key === 'locale') {
           pluralizationInfo['locale'] = value;
-        } else if (isPluralFormParam) {
+        } else if (key.startsWith('pluralForm')) {
           const pluralFormIndex = parseInt(key.substring(10));
           pluralizationInfo[pluralFormIndex] = value;
         } else {
