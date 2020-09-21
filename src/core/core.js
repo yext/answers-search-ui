@@ -307,15 +307,42 @@ export default class Core {
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
-        const exposedParams = {
-          queryString: queryString,
-          sectionsCount: data[StorageKeys.UNIVERSAL_RESULTS].sections.length
-        };
+        const exposedParams = this._getOnUniversalSearchParams(
+          data[StorageKeys.UNIVERSAL_RESULTS].sections,
+          queryString);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
       });
+  }
+
+  /**
+   * Builds the object passed as a parameter to onUniversalSearch. This object
+   * contains information about the universal search's query and result counts.
+   *
+   * @param {Array<Section>} sections The sections of results.
+   * @param {string} queryString The search query.
+   * @return {Object<string, ?>}
+   */
+  _getOnUniversalSearchParams (sections, queryString) {
+    const resultsCountByVertical = sections.reduce(
+      (resultsCountMap, section) => {
+        const { verticalConfigId, resultsCount, results } = section;
+        resultsCountMap[verticalConfigId] = {
+          totalResultsCount: resultsCount,
+          displayedResultsCount: results.length
+        };
+        return resultsCountMap;
+      },
+      {});
+    const exposedParams = {
+      queryString,
+      sectionsCount: sections.length,
+      resultsCountByVertical
+    };
+
+    return exposedParams;
   }
 
   /**

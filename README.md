@@ -279,6 +279,16 @@ function (searchParams) => {
      */
     const sectionsCount = searchParams.sectionsCount;
 
+    /**
+     * A map containing entries of the form:
+     * { totalResultsCount: 150, displayedResultsCount: 10}
+     * for each returned vertical. The totalResultsCount indicates how many results
+     * are present in the vertical. The displayResultsCount indicates how many of
+     * those results are actually displayed.
+     * @type {Object<string,Object>}
+     */
+    const resultsCountByVertical = searchParams.resultsCountByVertical;
+
     let analyticsEvent = new ANSWERS.AnalyticsEvent('ANALYTICS_EVENT_TYPE');
     analyticsEvent.addOptions({
       type: 'ANALYTICS_EVENT_TYPE',
