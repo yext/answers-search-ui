@@ -34,6 +34,7 @@ describe('results count component', () => {
     const COMPONENT_MANAGER = mockManager(
       {
         globalStorage: {
+          on: () => {},
           getState: key => {
             if (key === StorageKeys.VERTICAL_RESULTS) {
               return {
@@ -58,6 +59,7 @@ describe('results count component', () => {
     const COMPONENT_MANAGER = mockManager(
       {
         globalStorage: {
+          on: () => {},
           getState: key => {
             if (key === StorageKeys.VERTICAL_RESULTS) {
               return {
