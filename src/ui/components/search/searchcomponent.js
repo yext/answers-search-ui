@@ -3,6 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
+import QueryTriggers from '../../../core/models/querytriggers';
 import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
 
@@ -138,6 +139,25 @@ export default class SearchComponent extends Component {
     this._isTwin = config.isTwin;
 
     /**
+     * The search config from ANSWERS.init configuration
+     */
+    this._globalSearchConfig = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+
+    /**
+     * The default initial search query, can be an empty string
+     */
+    this._defaultInitialSearch = this._globalSearchConfig.defaultInitialSearch;
+
+    /**
+     * The default options for core search
+     * @type {Object}
+     */
+    this._defaultSearchOptions = {
+      setQueryParams: true,
+      resetPagination: !!this._verticalKey
+    };
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string|null}
@@ -148,7 +168,24 @@ export default class SearchComponent extends Component {
       if (this.queryEl) {
         this.queryEl.value = q;
       }
-      this.debouncedSearch(q);
+      if (q === null) {
+        if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
+          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+          this.core.setQuery(this._defaultInitialSearch);
+        }
+        return;
+      }
+
+      const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
+      const resetPagination = this._verticalKey &&
+        queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
+        queryTrigger !== QueryTriggers.INITIALIZE;
+      const searchOptions = Object.assign(
+        {},
+        this._defaultSearchOptions,
+        { resetPagination: resetPagination }
+      );
+      this.debouncedSearch(q, searchOptions);
     });
 
     /**
@@ -458,7 +495,7 @@ export default class SearchComponent extends Component {
     this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.setQuery(query);
-    this.debouncedSearch(query);
+    this.debouncedSearch(query, this._defaultSearchOptions);
     return false;
   }
 
@@ -502,9 +539,10 @@ export default class SearchComponent extends Component {
    * performed if we recently searched, if there's no query for universal search, or if this
    * is a twin searchbar.
    * @param {string} query The string to query against.
+   * @param {Object} searchOptions The options to pass for core search
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
-  debouncedSearch (query) {
+  debouncedSearch (query, searchOptions) {
     if (this._throttled ||
       (!query && !this._verticalKey) ||
       (!query && this._verticalKey && !this._allowEmptySearch) ||
@@ -532,10 +570,10 @@ export default class SearchComponent extends Component {
                     lng: position.coords.longitude,
                     radius: position.coords.accuracy
                   });
-                  resolve(this.search(query));
+                  resolve(this.search(query, searchOptions));
                 },
                 () => {
-                  resolve(this.search(query));
+                  resolve(this.search(query, searchOptions));
                   const { enabled, message } = this._geolocationTimeoutAlert;
                   if (enabled) {
                     window.alert(message);
@@ -544,29 +582,23 @@ export default class SearchComponent extends Component {
                 this._geolocationOptions)
             );
           } else {
-            return this.search(query);
+            return this.search(query, searchOptions);
           }
         });
     } else {
-      return this.search(query);
+      return this.search(query, searchOptions);
     }
   }
 
   /**
    * Performs a query using the provided string input.
    * @param {string} query The string to query against.
+   * @param {Object} searchOptions The options to pass for core search
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
-  search (query) {
+  search (query, searchOptions) {
     if (this._verticalKey) {
-      this.core.verticalSearch(
-        this._config.verticalKey,
-        {
-          resetPagination: true,
-          setQueryParams: true
-        },
-        { input: query }
-      );
+      this.core.verticalSearch(this._config.verticalKey, searchOptions, { input: query });
     } else {
       // NOTE(billy) Temporary hack for DEMO
       // Remove me after the demo
@@ -589,10 +621,10 @@ export default class SearchComponent extends Component {
             urls[tabs[i].configId] = url;
           }
         }
-        return this.core.search(query, urls, { setQueryParams: true });
+        return this.core.search(query, urls, searchOptions);
       }
 
-      return this.core.search(query, undefined, { setQueryParams: true });
+      return this.core.search(query, undefined, searchOptions);
     }
   }
 

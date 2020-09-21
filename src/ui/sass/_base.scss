@@ -1,15 +1,14 @@
-*:focus
-{
-  outline: none;
-}
+.yxt-Answers-component {
+  *:focus
+  {
+    outline: none;
+  }
 
-input[type='checkbox']:focus
-{
-  outline: black solid 1px;
-}
+  input[type='checkbox']:focus
+  {
+    outline: black solid 1px;
+  }
 
-body
-{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

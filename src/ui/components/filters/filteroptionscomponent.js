@@ -1,7 +1,5 @@
 /** @module FilterOptionsComponent */
 
-/* global Event */
-
 import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
@@ -379,10 +377,7 @@ export default class FilterOptionsComponent extends Component {
       if (clearSearchEl && searchInputEl) {
         DOM.on(clearSearchEl, 'click', event => {
           searchInputEl.value = '';
-          searchInputEl.dispatchEvent(new Event('input', {
-            'bubbles': true,
-            'cancelable': true
-          }));
+          DOM.trigger(searchInputEl, 'input');
           searchInputEl.focus();
         });
       }

@@ -164,6 +164,11 @@ $result-cta-color: var(--yxt-color-link-primary) !default;
   &-info
   {
     flex-basis: 100%;
+    @media (max-width: $breakpoint-mobile-max)
+    {
+      // IE 11 needs this or it will not update the height of the info component correctly, and the text/CTA will overflow.
+      flex-basis: auto;
+    }
   }
 
   &-infoCtasWrapper
@@ -175,14 +180,6 @@ $result-cta-color: var(--yxt-color-link-primary) !default;
     @media (max-width: $breakpoint-mobile-max)
     {
       flex-direction: column;
-    }
-  }
-
-  &-info {
-    @media (max-width: $breakpoint-mobile-max)
-    {
-      // IE 11 needs this or it will not update the height of the info component correctly, and the text/CTA will overflow.
-      flex-basis: auto;
     }
   }
 

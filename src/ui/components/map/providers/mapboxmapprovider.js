@@ -1,5 +1,7 @@
 /** @module MapBoxMapProvider */
 
+import MapboxLanguage from '@mapbox/mapbox-gl-language';
+
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
 
@@ -11,6 +13,16 @@ import DOM from '../../../dom/dom';
  * @extends MapProvider
  */
 export default class MapBoxMapProvider extends MapProvider {
+  constructor (opts = {}, systemOpts = {}) {
+    super(opts, systemOpts);
+
+    /**
+     * Language of the map.
+     * @type {string}
+     */
+    this._language = this._locale.substring(0, 2);
+  }
+
   /**
    * Load the external JS Library
    * @param {function} onLoad An optional callback to invoke once the JS is loaded.
@@ -57,6 +69,10 @@ export default class MapBoxMapProvider extends MapProvider {
       style: 'mapbox://styles/mapbox/streets-v9',
       center: this.getCenterMarker(mapData)
     });
+
+    this._map.addControl(new MapboxLanguage({
+      defaultLanguage: this._language
+    }));
 
     if (mapData && mapData.mapMarkers.length) {
       const collapsedMarkers = this._collapsePins

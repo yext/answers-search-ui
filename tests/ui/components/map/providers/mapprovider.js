@@ -24,7 +24,9 @@ describe('collapsing markers', () => {
       }
     ];
 
-    const mapProvider = new MapProvider();
+    const mapProvider = new MapProvider({
+      locale: 'en'
+    });
 
     const collapsedMarkers = mapProvider._collapseMarkers(markers);
 

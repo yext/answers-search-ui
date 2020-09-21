@@ -19,6 +19,7 @@ import GlobalStorage from './core/storage/globalstorage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
+import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
 import AutoCompleteApi from './core/search/autocompleteapi';
 import MockAutoCompleteService from './core/search/mockautocompleteservice';
@@ -34,7 +35,7 @@ import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
-import Translator from './core/i18n/translator';
+import TranslationProcessor from './core/i18n/translationprocessor';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -161,7 +162,18 @@ class Answers {
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: parsedConfig.onStateChange,
-      resetListener: data => globalStorage.setAll(data)
+      resetListener: data => {
+        if (!data[StorageKeys.QUERY]) {
+          this.core.clearResults();
+        } else {
+          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+        }
+
+        if (!data[StorageKeys.SEARCH_OFFSET]) {
+          this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+        }
+        globalStorage.setAll(data);
+      }
     });
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
@@ -184,6 +196,9 @@ class Answers {
     }
 
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
+    if (globalStorage.getState(StorageKeys.QUERY)) {
+      globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+    }
 
     const context = globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context && !isValidContext(context)) {
@@ -421,7 +436,7 @@ class Answers {
     if (prepopulatedQuery != null) {
       return;
     }
-    this.core.globalStorage.set('queryTrigger', 'initialize');
+    this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
     this.core.setQuery(searchConfig.defaultInitialSearch);
   }
 
@@ -499,14 +514,14 @@ class Answers {
   }
 
   /**
-   * Performs a translation which supports
-   * interpolation, pluralization, or both
+   * Processes a translation which includes performing interpolation, pluralization, or both
    * @param {string} translations The translations, or a stringified JSON of possible translations
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
+   * @returns {string} The translation with any interpolation or pluralization applied
    */
-  translateJS (translations, interpolationParams, count) {
-    return Translator.translate(translations, interpolationParams, count);
+  processTranslation (translations, interpolationParams, count) {
+    return TranslationProcessor.process(translations, interpolationParams, count);
   }
 }
 

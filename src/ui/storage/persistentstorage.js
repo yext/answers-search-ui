@@ -26,8 +26,8 @@ export default class PersistentStorage {
 
     window.onpopstate = () => {
       this._params = new SearchParams(window.location.search.substring(1));
-      this._callListener(this._updateListener);
-      this._callListener(this._resetListener);
+      this._callListener(this._updateListener, false);
+      this._callListener(this._resetListener, false);
     };
   }
 
@@ -71,16 +71,17 @@ export default class PersistentStorage {
     } else {
       window.history.pushState(null, null, `?${this._params.toString()}`);
     }
-    this._callListener(this._updateListener);
+    this._callListener(this._updateListener, replaceHistory);
   }
 
   /**
    * Invoke the given list of callbacks with the current storage data
    * @param {function[]} listeners The callbacks to invoke
+   * @param {boolean} replaceHistory Whether to replace the history state in the browser
    * @private
    */
-  _callListener (listener) {
-    listener(this.getAll(), this._params.toString());
+  _callListener (listener, replaceHistory) {
+    listener(this.getAll(), this._params.toString(), replaceHistory);
   }
 
   /**
@@ -92,5 +93,13 @@ export default class PersistentStorage {
       allParams[key] = val;
     }
     return allParams;
+  }
+
+  /**
+   * Get a value for a given key in storage
+   * @param {string} key The unique key to get value for
+   */
+  get (key) {
+    return this._params.get(key);
   }
 }
