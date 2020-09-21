@@ -1,10 +1,15 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchStates from '../../../core/storage/searchstates';
 
 export default class VerticalResultsCountComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
-    this.moduleId = StorageKeys.RESULTS_HEADER;
+    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
+      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+        this.setState();
+      }
+    });
   }
 
   static areDuplicateNamesAllowed () {
