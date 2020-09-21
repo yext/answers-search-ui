@@ -71,6 +71,13 @@ class VerticalResultsConfig {
     this.resultsCountTemplate = config.resultsCountTemplate || '';
 
     /**
+     * Whether to display the results header (assuming there is something like the results count
+     * or applied filters to display).
+     * @type {boolean}
+     */
+    this.hideResultsHeader = config.hideResultsHeader;
+
+    /**
      * Config for the applied filters in the results header.
      * @type {Object}
      */

@@ -11,59 +11,23 @@ import {
 } from '../../../core/utils/filternodeutils';
 
 const DEFAULT_CONFIG = {
-  showResultCount: true,
-  showAppliedFilters: true,
   showFieldNames: false,
-  resultsCountSeparator: '|',
-  verticalURL: undefined,
   showChangeFilters: false,
   removable: false,
   delimiter: '|',
-  isUniversal: false,
   labelText: 'Filters applied to this search:',
   removableLabelText: 'Remove this filter',
-  resultsCountTemplate: '',
-  hiddenFields: []
+  hiddenFields: ['builtin.entityType']
 };
 
-export default class ResultsHeaderComponent extends Component {
+export default class AppliedFiltersComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
-    const data = config.data || {};
+    this._verticalKey = this._config.verticalKey ||
+      this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
 
-    /**
-     * Total number of results.
-     * @type {number}
-     */
-    this.resultsCount = data.resultsCount || 0;
-
-    /**
-     * Number of results displayed on the page.
-     * @type {number}
-     */
-    this.resultsLength = data.resultsLength || 0;
-
-    /**
-     * The compiled custom results count template, if the user specifies one.
-     * @type {Function}
-     */
-    this._compiledResultsCountTemplate = this._renderer.compile(this._config.resultsCountTemplate);
-
-    /**
-     * Array of nlp filters in the search response.
-     * @type {Array<AppliedQueryFilter>}
-     */
-    this.nlpFilterNodes = convertNlpFiltersToFilterNodes(data.nlpFilters || []);
-
-    /**
-     * TODO (SPR-2455): Ideally, we would be able to set moduleId to DYNAMIC_FILTERS, the actual data
-     * we are listening to changes to, instead of this bespoke RESULTS_HEADER storage key.
-     * The issue is that when two components share a moduleId, if that moduleId listener is ever
-     * unregistered with the off() method, all listeners to that moduleId are unregistered.
-     * With child components, this is something that happens whenever the parent component rerenders.
-     */
-    this.moduleId = StorageKeys.RESULTS_HEADER;
+    this.moduleId = StorageKeys.DYNAMIC_FILTERS;
   }
 
   static areDuplicateNamesAllowed () {
@@ -72,7 +36,7 @@ export default class ResultsHeaderComponent extends Component {
 
   onMount () {
     const removableFilterTags =
-      DOM.queryAll(this._container, '.js-yxt-ResultsHeader-removableFilterTag');
+      DOM.queryAll(this._container, '.js-yxt-AppliedFilters-removableFilterTag');
     removableFilterTags.forEach(tag => {
       DOM.on(tag, 'click', () => this._removeFilterTag(tag));
     });
@@ -87,7 +51,7 @@ export default class ResultsHeaderComponent extends Component {
     const { filterId } = tag.dataset;
     const filterNode = this.appliedFilterNodes[filterId];
     filterNode.remove();
-    this.core.verticalSearch(this._config.verticalKey, {
+    this.core.verticalSearch(this._verticalKey, {
       setQueryParams: true,
       resetPagination: true,
       useFacets: true
@@ -114,8 +78,6 @@ export default class ResultsHeaderComponent extends Component {
    * template can work with.
    * Keys are the fieldName of the filter. Values are an array of objects with a
    * displayValue and dataFilterId.
-   * TODO (SPR-2350): give every node a unique id, and use that instead of index for
-   * dataFilterId.
    * @returns {Array<Object>}
    */
   _groupAppliedFilters () {
@@ -159,27 +121,27 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   setState (data) {
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const verticalResults = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
+
+    /**
+     * Array of nlp filters in the search response.
+     * @type {Array<AppliedQueryFilter>}
+     */
+    const nlpFilters = verticalResults.appliedQueryFilters || [];
+
+    this.nlpFilterNodes = convertNlpFiltersToFilterNodes(nlpFilters);
+
     this.appliedFilterNodes = this._calculateAppliedFilterNodes();
     const appliedFiltersArray = this._createAppliedFiltersArray();
-    const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;
-    const resultsCountData = {
-      resultsCount: this.resultsCount,
-      resultsCountStart: offset + 1,
-      resultsCountEnd: offset + this.resultsLength
-    };
+
     return super.setState({
       ...data,
-      ...resultsCountData,
-      showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
-      shouldShowFilters: shouldShowFilters,
-      appliedFiltersArray: appliedFiltersArray,
-      customResultsCount: this._compiledResultsCountTemplate(resultsCountData)
+      appliedFiltersArray: appliedFiltersArray
     });
   }
 
   static get type () {
-    return 'ResultsHeader';
+    return 'AppliedFilters';
   }
 
   /**
@@ -188,6 +150,6 @@ export default class ResultsHeaderComponent extends Component {
    * @override
    */
   static defaultTemplateName (config) {
-    return 'results/resultsheader';
+    return 'results/appliedfilters';
   }
 }
