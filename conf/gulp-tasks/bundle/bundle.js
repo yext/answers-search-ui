@@ -2,8 +2,6 @@ const { dest } = require('gulp');
 
 const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
-const fs = require('fs');
-const insert = require('rollup-plugin-insert');
 const replace = require('gulp-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const rollup = require('gulp-rollup-lightweight');
@@ -64,18 +62,13 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
     output: outputConfig,
     plugins: [
       resolve(),
-      insert.prepend(
-        fs.readFileSync('./conf/gulp-tasks/polyfill-prefix.js').toString(),
-        {
-          include: './src/answers-umd.js'
-        }),
       commonjs({
         include: './node_modules/**'
       }),
       babel({
         runtimeHelpers: true,
         babelrc: false,
-        exclude: 'node_modules/**',
+        exclude: /node_modules\/(?!whatwg-fetch).*/,
         presets: [
           [
             '@babel/preset-env',
@@ -91,7 +84,8 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
             corejs: 3
           }],
           '@babel/plugin-transform-arrow-functions',
-          '@babel/plugin-proposal-object-rest-spread'
+          '@babel/plugin-proposal-object-rest-spread',
+          '@babel/plugin-transform-object-assign'
         ]
       })
     ]

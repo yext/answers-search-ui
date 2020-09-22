@@ -1,7 +1,5 @@
 const { dest } = require('gulp');
-const fs = require('fs');
 const rollup = require('gulp-rollup-lightweight');
-const insert = require('rollup-plugin-insert');
 const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
 const commonjs = require('rollup-plugin-commonjs');
@@ -99,17 +97,26 @@ class BundleTemplatesTaskFactory {
       output: bundleConfig,
       plugins: [
         resolve(),
-        insert.prepend(
-          fs.readFileSync('./conf/gulp-tasks/templates-polyfill-prefix.js').toString(),
-          {
-            include: `./dist/${precompiledFile}`
-          }),
         builtins(),
         commonjs({
           include: './node_modules/**'
         }),
         babel({
-          presets: ['@babel/env']
+          runtimeHelpers: true,
+          babelrc: false,
+          exclude: /node_modules\/(@babel|core-js).*/,
+          presets: [
+            '@babel/preset-env'
+          ],
+          plugins: [
+            '@babel/syntax-dynamic-import',
+            ['@babel/plugin-transform-runtime', {
+              'corejs': 3
+            }],
+            '@babel/plugin-transform-arrow-functions',
+            '@babel/plugin-proposal-object-rest-spread',
+            '@babel/plugin-transform-object-assign'
+          ]
         })
       ]
     })
