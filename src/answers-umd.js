@@ -524,7 +524,7 @@ class Answers {
    * @returns {string} The translation with any interpolation or pluralization applied
    */
   processTranslation (translations, interpolationParams, count, language) {
-    const initLocale = this.core.globalStorage.get(StorageKeys.LOCALE);
+    const initLocale = this.core.globalStorage.getState(StorageKeys.LOCALE);
     language = language || initLocale.substring(0, 2);
 
     return TranslationProcessor.process(translations, interpolationParams, count, language);
