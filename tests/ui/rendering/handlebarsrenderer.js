@@ -12,6 +12,7 @@ describe('the handlebars processTranslation helper', () => {
       phrase='Hello my name is [[firstName]] [[lastName]]'
       firstName=myFirstName
       lastName=myLastName
+      locale='en'
     }}`;
     const data = {
       myFirstName: 'Cat',

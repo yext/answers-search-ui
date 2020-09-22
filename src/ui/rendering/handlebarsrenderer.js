@@ -28,11 +28,14 @@ export default class HandlebarsRenderer extends Renderer {
     this._templates = templates || {};
   }
 
-  init (templates) {
+  init (templates, locale) {
     // Assign the handlebars compiler and templates based on
     // information provided from external dep (in default case, it comes from external server request)
     this._handlebars = templates._hb;
     this._templates = templates;
+
+    // Store the locale that ANSWERS was initialized with
+    this._initLocale = locale;
 
     // TODO(billy) Once we re-write templates using the new helpers library
     // we probably don't need these custom helpers anymore
@@ -209,8 +212,11 @@ export default class HandlebarsRenderer extends Renderer {
 
       const isUsingPluralization = (typeof phrase !== 'string');
 
+      locale = locale || this._initLocale;
+      const language = locale.substring(0, 2);
+
       return isUsingPluralization
-        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, locale)
+        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, language)
         : TranslationProcessor.process(phrase, interpolationParams);
     });
 

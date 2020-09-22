@@ -8,14 +8,10 @@ export default class TranslationProcessor {
    * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
-   * @param {string} locale The locale associated with the pluralization
+   * @param {string} language The langauge associated with the pluralization
    * @returns {string} The translation with any interpolation or pluralization applied
    */
-  static process (translations, interpolationParams, count, locale) {
-    const localeFromInit = 'en';
-    locale = locale || localeFromInit;
-    const language = locale.substring(0, 2);
-
+  static process (translations, interpolationParams, count, language) {
     const stringToInterpolate = (typeof translations === 'string')
       ? translations
       : this._selectPluralForm(translations, count, language);
@@ -30,7 +26,7 @@ export default class TranslationProcessor {
    * @param {string} language
    * @returns {string}
    */
-  static _selectPluralForm (translations, count, language = 'en') {
+  static _selectPluralForm (translations, count, language) {
     if (!hasLang(language)) {
       language = 'en';
     }

@@ -273,13 +273,13 @@ class Answers {
 
     if (parsedConfig.useTemplates === false || parsedConfig.templateBundle) {
       if (parsedConfig.templateBundle) {
-        this.renderer.init(parsedConfig.templateBundle);
+        this.renderer.init(parsedConfig.templateBundle, parsedConfig.locale);
       }
     } else {
       // Templates are currently downloaded separately from the CORE and UI bundle.
       // Future enhancement is to ship the components with templates in a separate bundle.
       this.templates = new DefaultTemplatesLoader(templates => {
-        this.renderer.init(templates);
+        this.renderer.init(templates, parsedConfig.locale);
       });
     }
 
@@ -520,10 +520,14 @@ class Answers {
    * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
+   * @param {string} language The langauge associated with the pluralization
    * @returns {string} The translation with any interpolation or pluralization applied
    */
-  processTranslation (translations, interpolationParams, count) {
-    return TranslationProcessor.process(translations, interpolationParams, count);
+  processTranslation (translations, interpolationParams, count, language) {
+    const initLocale = this.core.globalStorage.get(StorageKeys.LOCALE);
+    language = language || initLocale.substring(0, 2);
+
+    return TranslationProcessor.process(translations, interpolationParams, count, language);
   }
 }
 
