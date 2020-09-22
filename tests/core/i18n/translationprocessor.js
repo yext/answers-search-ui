@@ -50,31 +50,26 @@ describe('selecting the correct plural form', () => {
   const translations = {
     0: 'Pasirinkta [[count]] tinklalapis',
     1: 'Pasirinkta [[count]] tinklalapiai',
-    2: 'Pasirinkta [[count]] tinklalapių',
-    locale: 'lt-LT'
+    2: 'Pasirinkta [[count]] tinklalapių'
   };
 
   it('uses key_0 when count = 1', () => {
-    const translation = TranslationProcessor.process(translations, { count: 1 }, 1);
+    const translation = TranslationProcessor.process(translations, { count: 1 }, 1, 'lt-LT');
     expect(translation).toEqual('Pasirinkta 1 tinklalapis');
   });
 
   it('uses key_1 when count = 2', () => {
-    const translation = TranslationProcessor.process(translations, { count: 2 }, 2);
+    const translation = TranslationProcessor.process(translations, { count: 2 }, 2, 'lt-LT');
     expect(translation).toEqual('Pasirinkta 2 tinklalapiai');
   });
 
   it('uses key_2 when count = 0', () => {
-    const translation = TranslationProcessor.process(translations, { count: 0 }, 0);
+    const translation = TranslationProcessor.process(translations, { count: 0 }, 0, 'lt-LT');
     expect(translation).toEqual('Pasirinkta 0 tinklalapių');
   });
 
   it('defaults locale to en when given a bogus locale', () => {
-    const bogusTranslations = {
-      ...translations,
-      locale: 'hawaii'
-    };
-    const translation = TranslationProcessor.process(bogusTranslations, { count: 100 }, 100);
+    const translation = TranslationProcessor.process(translations, { count: 100 }, 100, 'hawaii');
     expect(translation).toEqual('Pasirinkta 100 tinklalapiai');
   });
 });

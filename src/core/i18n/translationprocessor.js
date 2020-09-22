@@ -8,12 +8,17 @@ export default class TranslationProcessor {
    * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
+   * @param {string} locale The locale associated with the pluralization
    * @returns {string} The translation with any interpolation or pluralization applied
    */
-  static process (translations, interpolationParams, count) {
+  static process (translations, interpolationParams, count, locale) {
+    const localeFromInit = 'en';
+    locale = locale || localeFromInit;
+    const language = locale.substring(0, 2);
+
     const stringToInterpolate = (typeof translations === 'string')
       ? translations
-      : this._selectPluralForm(translations, count);
+      : this._selectPluralForm(translations, count, language);
 
     return this._interpolate(stringToInterpolate, interpolationParams);
   }
@@ -22,24 +27,24 @@ export default class TranslationProcessor {
    * Returns the correct plural form given a translations object and count.
    * @param {Object} translations
    * @param {number} count
+   * @param {string} language
    * @returns {string}
    */
-  static _selectPluralForm (translations, count) {
-    let locale = translations.locale;
-    if (!hasLang(locale)) {
-      locale = 'en';
+  static _selectPluralForm (translations, count, language = 'en') {
+    if (!hasLang(language)) {
+      language = 'en';
     }
-    const oneToNArray = this._generateArrayOneToN(locale);
-    const pluralFormIndex = getPluralFunc(locale)(count, oneToNArray);
+    const oneToNArray = this._generateArrayOneToN(language);
+    const pluralFormIndex = getPluralFunc(language)(count, oneToNArray);
     return translations[pluralFormIndex];
   }
 
   /**
-   * @param {string} locale
+   * @param {string} language
    * @returns {Array} an array of the form [0, 1, 2, ..., nPluralForms]
    */
-  static _generateArrayOneToN (locale) {
-    const numberOfPluralForms = getNPlurals(locale);
+  static _generateArrayOneToN (language) {
+    const numberOfPluralForms = getNPlurals(language);
     return Array.from((new Array(numberOfPluralForms)).keys());
   }
 

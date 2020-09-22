@@ -196,12 +196,10 @@ export default class HandlebarsRenderer extends Renderer {
     this.registerHelper('processTranslation', function (options) {
       const pluralizationInfo = {};
       const interpolationParams = {};
-      let { phrase, count } = options.hash;
+      let { phrase, count, locale } = options.hash;
 
       Object.entries(options.hash).forEach(([key, value]) => {
-        if (key === 'locale') {
-          pluralizationInfo['locale'] = value;
-        } else if (key.startsWith('pluralForm')) {
+        if (key.startsWith('pluralForm')) {
           const pluralFormIndex = parseInt(key.substring(10));
           pluralizationInfo[pluralFormIndex] = value;
         } else {
@@ -212,7 +210,7 @@ export default class HandlebarsRenderer extends Renderer {
       const isUsingPluralization = (typeof phrase !== 'string');
 
       return isUsingPluralization
-        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count)
+        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, locale)
         : TranslationProcessor.process(phrase, interpolationParams);
     });
 
