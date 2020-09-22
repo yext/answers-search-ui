@@ -5,7 +5,7 @@ describe('the handlebars processTranslation helper', () => {
   const renderer = new HandlebarsRenderer();
   renderer.init({
     '_hb': Handlebars
-  });
+  }, 'en');
 
   it('can translate a string phrase', () => {
     const template = `{{processTranslation
@@ -86,6 +86,47 @@ describe('the handlebars processTranslation helper', () => {
 
     it('uses key_2 when count = 0', () => {
       const translation = renderer.compile(template)({
+        myCount: 0
+      });
+      expect(translation).toEqual('Pasirinkta 0 tinklalapių');
+    });
+  });
+
+  describe('locale fallback behavior works as expected', () => {
+    it('use locale specified in the renderer init', () => {
+      const rendererWithLocale = new HandlebarsRenderer();
+      rendererWithLocale.init({
+        '_hb': Handlebars
+      }, 'lt-LT');
+
+      const template = `{{processTranslation
+        pluralForm0='Pasirinkta [[count]] tinklalapis'
+        pluralForm1='Pasirinkta [[count]] tinklalapiai'
+        pluralForm2='Pasirinkta [[count]] tinklalapių'
+        count=myCount
+      }}`;
+
+      const translation = rendererWithLocale.compile(template)({
+        myCount: 0
+      });
+      expect(translation).toEqual('Pasirinkta 0 tinklalapių');
+    });
+
+    it('locale in the template overrides the one in the init if specified', () => {
+      const rendererWithLocale = new HandlebarsRenderer();
+      rendererWithLocale.init({
+        '_hb': Handlebars
+      }, 'en');
+
+      const template = `{{processTranslation
+        pluralForm0='Pasirinkta [[count]] tinklalapis'
+        pluralForm1='Pasirinkta [[count]] tinklalapiai'
+        pluralForm2='Pasirinkta [[count]] tinklalapių'
+        locale='lt-LT'
+        count=myCount
+      }}`;
+
+      const translation = rendererWithLocale.compile(template)({
         myCount: 0
       });
       expect(translation).toEqual('Pasirinkta 0 tinklalapių');

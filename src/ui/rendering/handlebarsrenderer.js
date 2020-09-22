@@ -196,6 +196,8 @@ export default class HandlebarsRenderer extends Renderer {
         : pluralText;
     });
 
+    let self = this;
+
     this.registerHelper('processTranslation', function (options) {
       const pluralizationInfo = {};
       const interpolationParams = {};
@@ -212,7 +214,7 @@ export default class HandlebarsRenderer extends Renderer {
 
       const isUsingPluralization = (typeof phrase !== 'string');
 
-      locale = locale || this._initLocale;
+      locale = locale || self._initLocale;
       const language = locale.substring(0, 2);
 
       return isUsingPluralization
@@ -220,7 +222,6 @@ export default class HandlebarsRenderer extends Renderer {
         : TranslationProcessor.process(phrase, interpolationParams);
     });
 
-    let self = this;
     self.registerHelper('icon', function (name, complexContentsParams, options) {
       let icon = Icons.default;
       if (!Icons[name]) {
