@@ -17,7 +17,7 @@ class TranslateHelperVisitor {
     const passThroughRuntimeGenerator = translationResult => translationResult;
     this._translationResolver = new TranslationResolver(translator, passThroughRuntimeGenerator);
     this._validHelpers = ['translate'];
-    this._runtimeTranslationHelper = 'runtimeTranslation';
+    this._processTranslationHelper = 'processTranslation';
     this._contextParam = 'context';
     this._pluralFormParam = 'pluralForm';
   }
@@ -52,7 +52,7 @@ class TranslateHelperVisitor {
     if (canBeTranslatedStatically) {
       return this._replaceHelperWithStaticTranslation(statement, translatedPhrase);
     } else {
-      const renamedStatement = this._renameHelperToRuntimeTranslation(statement);
+      const renamedStatement = this._renameHelperToProcessTranslation(statement);
       return this._updateHashPairsForRuntimeTranslations(renamedStatement, translatedPhrase);
     }
   }
@@ -101,13 +101,13 @@ class TranslateHelperVisitor {
    *
    * @param {hbs.AST.MustacheStatement} statement
    */
-  _renameHelperToRuntimeTranslation (statement) {
+  _renameHelperToProcessTranslation (statement) {
     return {
       ...statement,
       path: {
         ...statement.path,
-        parts: [ this._runtimeTranslationHelper ],
-        original: this._runtimeTranslationHelper
+        parts: [ this._processTranslationHelper ],
+        original: this._processTranslationHelper
       }
     };
   }

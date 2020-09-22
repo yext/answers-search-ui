@@ -80,7 +80,7 @@ async function createBundleTaskFactory (locale) {
     (translationResult, interpValues, count) => {
       let parsedParams = JSON.stringify(interpValues);
       parsedParams = parsedParams.replace(/['"]/g, '');
-      return `ANSWERS.translateJS(${JSON.stringify(translationResult)}, ${parsedParams}, ${count})`;
+      return `ANSWERS.processTranslation(${JSON.stringify(translationResult)}, ${parsedParams}, ${count})`;
     });
 
   return new BundleTaskFactory(getLibraryVersion(), translationResolver, locale);
