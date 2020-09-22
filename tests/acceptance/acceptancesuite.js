@@ -211,6 +211,6 @@ test('window.performance calls are marked for a normal search', async t => {
     const marksFoundWithName = await t.eval(() => {
       return JSON.stringify(window.performance.getEntriesByName(markName));
     }, { dependencies: { markName } });
-    await t.expect(JSON.parse(marksFoundWithName).length > 0).eql(true);
+    await t.expect(JSON.parse(marksFoundWithName.length)).gt(0);
   }
 });
