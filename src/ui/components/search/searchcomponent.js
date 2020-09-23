@@ -234,6 +234,24 @@ export default class SearchComponent extends Component {
       message: 'We are unable to determine your location',
       ...config.geolocationTimeoutAlert
     };
+
+    /**
+     * The unique HTML id name for the autocomplete container
+     * @type {string}
+     */
+    this.autocompleteContainerIdName = `yxt-SearchBar-autocomplete--${this.name}`;
+
+    /**
+     * The unique HTML id name for the search input label
+     * @type {string}
+     */
+    this.inputLabelIdName = `yxt-SearchBar-inputLabel--${this.name}`;
+
+    /**
+     * The unique HTML id name for the search input
+     * @type {string}
+     */
+    this.inputIdName = `yxt-SearchBar-input--${this.name}`;
   }
 
   static get type () {
@@ -507,6 +525,7 @@ export default class SearchComponent extends Component {
       promptHeader: this.promptHeader,
       originalQuery: this.query,
       inputEl: inputSelector,
+      listLabelIdName: this.inputLabelIdName,
       onSubmit: () => {
         if (this._useForm) {
           DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
@@ -678,7 +697,9 @@ export default class SearchComponent extends Component {
     };
     return super.setState(Object.assign({
       title: this.title,
+      inputIdName: this.inputIdName,
       labelText: this.labelText,
+      inputLabelIdName: this.inputLabelIdName,
       submitIcon: this.submitIcon,
       submitText: this.submitText,
       clearText: this.clearText,
@@ -689,7 +710,8 @@ export default class SearchComponent extends Component {
       forwardIconOpts: forwardIconOpts,
       reverseIconOpts: reverseIconOpts,
       autoFocus: this.autoFocus && !this.query,
-      useForm: this._useForm
+      useForm: this._useForm,
+      autocompleteContainerIdName: this.autocompleteContainerIdName
     }, data));
   }
 
