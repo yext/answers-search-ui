@@ -531,12 +531,12 @@ class Answers {
   }
 
   /**
-   * Gets the locale that ANSWERS was initialized to. Defaults to 'en'
+   * Gets the locale that ANSWERS was initialized to
    *
    * @returns {string}
    */
   _getInitLocale () {
-    return this.core.globalStorage.getState(StorageKeys.LOCALE) || 'en';
+    return this.core.globalStorage.getState(StorageKeys.LOCALE);
   }
 }
 
