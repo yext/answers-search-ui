@@ -17,7 +17,7 @@ function generateProcessTranslationJsCall (translationResult, interpValues, coun
   }
 
   const escapedTranslatorResult = escapeSingleQuotes(translationResult);
-  return `ANSWERS.processTranslation('${escapedTranslatorResult}, ${parsedParams}')`;
+  return `ANSWERS.processTranslation('${escapedTranslatorResult}', ${parsedParams})`;
 }
 
 exports.generateProcessTranslationJsCall = generateProcessTranslationJsCall;
