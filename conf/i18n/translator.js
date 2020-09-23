@@ -11,7 +11,7 @@ class Translator {
    *
    * @param {i18next} i18nextInstance The instance to wrap.
    */
-  constructor(i18nextInstance) {
+  constructor (i18nextInstance) {
     this._i18next = i18nextInstance;
   }
 
@@ -23,7 +23,7 @@ class Translator {
    * @param {string} phrase The phrase to translate.
    * @returns {string} The translated phrase or format string.
    */
-  translate(phrase) {
+  translate (phrase) {
     const interpPlaceholders = this._getInterpolationPlaceholders(phrase);
 
     return this._i18next.t(phrase, interpPlaceholders);
@@ -38,10 +38,10 @@ class Translator {
    * @param {string} context The context of the translation.
    * @returns {string} The translated phrase or format string.
    */
-  translateWithContext(phrase, context) {
+  translateWithContext (phrase, context) {
     const interpPlaceholders = this._getInterpolationPlaceholders(phrase);
 
-    return this._i18next.t(phrase, { context, ...interpPlaceholders});
+    return this._i18next.t(phrase, { context, ...interpPlaceholders });
   }
 
   /**
@@ -54,7 +54,7 @@ class Translator {
    *   well as the locale. A form is keyed by its gettext plural form count see
    *   https://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html
    */
-  translatePlural(phrase, pluralForm) {
+  translatePlural (phrase, pluralForm) {
     const escapedPhrase = this._escapeInterpolationBrackets(phrase);
     const pluralKeyRegex = new RegExp(`${escapedPhrase}_([0-9]+|plural)`);
     const i18nextOptions = this._i18next.options;
@@ -85,7 +85,7 @@ class Translator {
    *   well as the locale. A form is keyed by its gettext plural form count, see
    *   https://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html
    */
-  translatePluralWithContext(phrase, pluralForm, context) {
+  translatePluralWithContext (phrase, pluralForm, context) {
     const escapedPhrase = this._escapeInterpolationBrackets(phrase);
     const pluralWithContextKeyRegex = new RegExp(
       `${escapedPhrase}_${context}_([0-9]+|plural)`);
@@ -106,7 +106,6 @@ class Translator {
     return this._getUntranslatedPluralizations(phrase, pluralForm);
   }
 
-
   /**
    * Constructs a pluralization dictionary without translating any strings
    * TODO (cea2aj) This will need to be updated if we want to support developing in
@@ -117,7 +116,7 @@ class Translator {
    * @returns {Object<string|number, string>} A map containing the various forms as
    *   well as the locale.
    */
-  _getUntranslatedPluralizations(phrase, pluralForm){
+  _getUntranslatedPluralizations (phrase, pluralForm) {
     return {
       0: phrase,
       1: pluralForm
@@ -133,7 +132,7 @@ class Translator {
    * @returns {Object<string|number, string>} A map containing the various forms as
    *   well as the locale.
    */
-  _generateMapOfPluralizationsToTranslations(locale, pluralRegex, translationKey) {
+  _generateMapOfPluralizationsToTranslations (locale, pluralRegex, translationKey) {
     const localeTranslations =
         this._i18next.options.resources[locale].translation;
 
@@ -142,7 +141,7 @@ class Translator {
       .reduce(
         (pluralForms, translationKey) => {
           const splitTranslationKeys = translationKey.split('_');
-          const keySuffix = splitTranslationKeys[splitTranslationKeys.length-1];
+          const keySuffix = splitTranslationKeys[splitTranslationKeys.length - 1];
           const pluralFormIndex = keySuffix === 'plural' ? '1' : keySuffix;
           pluralForms[pluralFormIndex] = localeTranslations[translationKey];
           return pluralForms;
@@ -156,7 +155,7 @@ class Translator {
    * @param {string} phrase
    * @returns {string}
    */
-  _escapeInterpolationBrackets(phrase) {
+  _escapeInterpolationBrackets (phrase) {
     return phrase
       .replace(/\[\[/g, '\\[\\[')
       .replace(/\]\]/g, '\\]\\]');
@@ -172,7 +171,7 @@ class Translator {
    *                                   As an example, if the phrase was: 'My [[name]] is',
    *                                   the object would contains { name: '[[name]]' }.
    */
-  _getInterpolationPlaceholders(phrase) {
+  _getInterpolationPlaceholders (phrase) {
     const placeholders = {};
     let placeholderMatch;
 
@@ -194,7 +193,7 @@ class Translator {
    * @param {RegExp} keyRegex The pattern to match translation keys against.
    * @returns {string} The first matching locale.
    */
-  _findLocaleWithTranslationKey(locales, keyRegex) {
+  _findLocaleWithTranslationKey (locales, keyRegex) {
     const i18nextOptions = this._i18next.options;
 
     return locales.find(locale => {
@@ -217,14 +216,14 @@ class Translator {
    *                                  for the locale.
    * @param {Object<string, Object>} translations A map of locales to translations
    */
-  static async create(locale, fallbacks, translations) {
+  static async create (locale, fallbacks, translations) {
     const i18nextInstance = i18next.createInstance();
     await i18nextInstance.init({
       lng: locale,
-      nsSeparator: false,     // allow keys to be phrases having `:`
-      keySeparator: false,    // allow keys to be phrases having `.`
+      nsSeparator: false, // allow keys to be phrases having `:`
+      keySeparator: false, // allow keys to be phrases having `.`
       fallbackLng: fallbacks,
-      resources: translations,
+      resources: translations
     });
     const translator = new Translator(i18nextInstance);
 

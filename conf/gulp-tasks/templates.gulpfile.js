@@ -95,10 +95,9 @@ async function defaultTemplates () {
 
 exports.default = defaultTemplates;
 
-
 /**
  * A test build  task used for testing the precompile task
- * 
+ *
  * @returns {Promise<Function>}
  */
 async function test () {

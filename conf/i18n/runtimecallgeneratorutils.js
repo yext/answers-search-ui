@@ -1,9 +1,9 @@
 /**
  * Generates a runtime call to the translation processor
- * 
- * @param {string|Object} translationResult 
- * @param {Object} interpValues 
- * @param {number} count 
+ *
+ * @param {string|Object} translationResult
+ * @param {Object} interpValues
+ * @param {number} count
  * @returns {string}
  */
 function generateProcessTranslationJsCall (translationResult, interpValues, count) {
@@ -13,7 +13,7 @@ function generateProcessTranslationJsCall (translationResult, interpValues, coun
 
   if (needsPluralization) {
     const pluralForms = formatPluralForms(translationResult);
-    return `ANSWERS.processTranslation(${pluralForms}, ${parsedParams}, ${count}, ${locale})`
+    return `ANSWERS.processTranslation(${pluralForms}, ${parsedParams}, ${count})`;
   }
 
   const escapedTranslatorResult = escapeSingleQuotes(translationResult);
@@ -51,7 +51,7 @@ function formatPluralForms (translatorResult) {
  *
  * @returns {string}
  */
-function escapeSingleQuotes(str) {
+function escapeSingleQuotes (str) {
   const regex = new RegExp('\'', 'g');
   return str.replace(regex, '\\\'');
 }

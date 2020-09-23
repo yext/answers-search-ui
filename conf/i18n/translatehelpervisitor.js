@@ -125,7 +125,7 @@ class TranslateHelperVisitor {
 
     return isUsingPluralization
       ? this._getPluralizedHashPairs(hashPairs, translatedPhrase)
-      : this._getNonPluralizedHashPairs(hashPairs, translatedPhrase) 
+      : this._getNonPluralizedHashPairs(hashPairs, translatedPhrase);
   }
 
   /**
@@ -137,7 +137,7 @@ class TranslateHelperVisitor {
    * @param {Object} translatedPhrase
    * @returns {Array<hbs.AST.HashPair}
    */
-  _getPluralizedHashPairs(hashPairs, translatedPhrase) {
+  _getPluralizedHashPairs (hashPairs, translatedPhrase) {
     const hashPluralizations = Object.entries(translatedPhrase)
       .map(([key, value]) => {
         return {
@@ -145,17 +145,17 @@ class TranslateHelperVisitor {
           key: `pluralForm${key}`,
           value: {
             type: 'StringLiteral',
-            value: value,
+            value: value
           }
         };
-    });
+      });
 
     const updatedHashPairs = cloneDeep(hashPairs);
     updatedHashPairs.push(...hashPluralizations);
     return updatedHashPairs.filter(pair => pair.key !== 'phrase');
   }
 
-   /**
+  /**
    * Returns an updated array of hash pairs which changes the hashPair with key 'phrase'
    * to have the translatedPhrase as its value
    *
@@ -163,7 +163,7 @@ class TranslateHelperVisitor {
    * @param {Object} translatedPhrase
    * @returns {Array<hbs.AST.HashPair}
    */
-  _getNonPluralizedHashPairs(hashPairs, translatedPhrase) {
+  _getNonPluralizedHashPairs (hashPairs, translatedPhrase) {
     return hashPairs.map(pair => {
       if (pair.key !== 'phrase') {
         return pair;
