@@ -32,23 +32,14 @@ describe('results count component', () => {
 
   it('renders the current results count', () => {
     const COMPONENT_MANAGER = mockManager(
-      {
-        globalStorage: {
-          on: () => {},
-          getState: key => {
-            if (key === StorageKeys.VERTICAL_RESULTS) {
-              return {
-                results: new Array(20),
-                resultsCount: 100
-              };
-            }
-            return null;
-          }
-        }
-      },
+      {},
       VerticalResultsCountComponent.defaultTemplateName()
     );
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
+    component.setState({
+      results: new Array(20),
+      resultsCount: 100
+    });
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-VerticalResultsCount-start').text()).toEqual('1');
     expect(wrapper.find('.yxt-VerticalResultsCount-end').text()).toEqual('20');
@@ -61,12 +52,7 @@ describe('results count component', () => {
         globalStorage: {
           on: () => {},
           getState: key => {
-            if (key === StorageKeys.VERTICAL_RESULTS) {
-              return {
-                results: new Array(10),
-                resultsCount: 200
-              };
-            } else if (key === StorageKeys.SEARCH_OFFSET) {
+            if (key === StorageKeys.SEARCH_OFFSET) {
               return 40;
             }
             return null;
@@ -76,6 +62,10 @@ describe('results count component', () => {
       VerticalResultsCountComponent.defaultTemplateName()
     );
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
+    component.setState({
+      results: new Array(10),
+      resultsCount: 200
+    });
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-VerticalResultsCount-start').text()).toEqual('41');
     expect(wrapper.find('.yxt-VerticalResultsCount-end').text()).toEqual('50');
