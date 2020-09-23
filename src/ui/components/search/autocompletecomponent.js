@@ -106,6 +106,12 @@ export default class AutoCompleteComponent extends Component {
     this._onChange = opts.onChange || function () {};
 
     this._searchParameters = opts.searchParameters || null;
+
+    /**
+     * HTML id for the aria-labelledby in the autocomplete list
+     * @type {string}
+     */
+    this.listLabelIdName = opts.listLabelIdName || 'yxt-SearchBar-listLabel--SearchBar';
   }
 
   /**
@@ -139,7 +145,8 @@ export default class AutoCompleteComponent extends Component {
       hasResults: this.hasResults(data),
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
-      promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null
+      promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
+      listLabelIdName: this.listLabelIdName
     }));
   }
 

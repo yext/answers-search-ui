@@ -153,6 +153,7 @@ class Answers {
    *                            experience's Answers Status page.
    */
   init (config, statusPage) {
+    window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
     this.validateConfig(parsedConfig);
 
@@ -283,17 +284,25 @@ class Answers {
       });
     }
 
-    return this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
-      .then(() => this._masterSwitchApi.isDisabled())
-      .then(isDisabled => {
-        if (!isDisabled) {
-          this._onReady();
-        } else {
-          throw new Error('MasterSwitchApi determined the front-end should be disabled');
-        }
-      }, () => {
+    const handleFulfilledMasterSwitch = (isDisabled) => {
+      window.performance.mark('yext.answers.statusEnd');
+      if (!isDisabled) {
         this._onReady();
-      });
+      } else {
+        throw new Error('MasterSwitchApi determined the front-end should be disabled');
+      }
+    };
+    const handleRejectedMasterSwitch = () => {
+      window.performance.mark('yext.answers.statusEnd');
+      this._onReady();
+    };
+
+    return this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
+      .then(() => {
+        window.performance.mark('yext.answers.statusStart');
+        return this._masterSwitchApi.isDisabled();
+      })
+      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch);
   }
 
   domReady (cb) {
@@ -459,12 +468,17 @@ class Answers {
    * @return {Promise} resolves after ponyfillCssVariables, or immediately if disabled
    */
   _handlePonyfillCssVariables (ponyfillDisabled) {
+    window.performance.mark('yext.answers.ponyfillStart');
     if (ponyfillDisabled) {
+      window.performance.mark('yext.answers.ponyfillEnd');
       return Promise.resolve();
     }
     return new Promise((resolve, reject) => {
       this.ponyfillCssVariables({
-        onFinally: resolve
+        onFinally: () => {
+          window.performance.mark('yext.answers.ponyfillEnd');
+          resolve();
+        }
       });
     });
   }
