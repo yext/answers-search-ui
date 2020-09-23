@@ -10,6 +10,7 @@ const LocalFileParser = require('../i18n/localfileparser');
 const MinifyTaskFactory = require('./bundle/minifytaskfactory');
 const TranslationResolver = require('../i18n/translationresolver');
 const Translator = require('../i18n/translator');
+const { generateProcessTranslationJsCall } = require('../i18n/runtimecallgeneratorutils');
 
 /**
  * Creates the un-minified legacy JS bundle, compiles CSS, and kicks off the watch task.
@@ -77,11 +78,7 @@ async function createBundleTaskFactory (locale) {
   const translator = await Translator.create(locale, [], { [locale]: { translation } });
   const translationResolver = new TranslationResolver(
     translator,
-    (translationResult, interpValues, count) => {
-      let parsedParams = JSON.stringify(interpValues);
-      parsedParams = parsedParams.replace(/['"]/g, '');
-      return `ANSWERS.processTranslation(${JSON.stringify(translationResult)}, ${parsedParams}, ${count})`;
-    });
+    generateProcessTranslationJsCall);
 
   return new BundleTaskFactory(getLibraryVersion(), translationResolver, locale);
 }

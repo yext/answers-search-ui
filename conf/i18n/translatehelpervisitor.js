@@ -1,6 +1,7 @@
 const Handlebars = require('handlebars');
 const TranslationResolver = require('../i18n/translationresolver');
 const { fromMustacheStatementNode } = require('./translationplaceholderutils');
+const cloneDeep = require('lodash.clonedeep');
 
 /**
  * TranslateHelperVisitor accepts a handlebars AST, and replaces all translate placeholders
@@ -120,9 +121,49 @@ class TranslateHelperVisitor {
    * @returns {Array<hbs.AST.HashPair}
    */
   _updatePhraseHashPair (hashPairs, translatedPhrase) {
-    const value = typeof translatedPhrase === 'object'
-      ? JSON.stringify(translatedPhrase)
-      : translatedPhrase;
+    const isUsingPluralization = (typeof translatedPhrase === 'object');
+
+    return isUsingPluralization
+      ? this._getPluralizedHashPairs(hashPairs, translatedPhrase)
+      : this._getNonPluralizedHashPairs(hashPairs, translatedPhrase) 
+  }
+
+  /**
+   * Returns an updated array of hash pairs which includes new hashPairs added for each
+   * of the translated plural forms. The updated array also removes the original hashPair
+   * with the key 'phrase'
+   *
+   * @param {Array<hbs.AST.HashPair} hashPairs
+   * @param {Object} translatedPhrase
+   * @returns {Array<hbs.AST.HashPair}
+   */
+  _getPluralizedHashPairs(hashPairs, translatedPhrase) {
+    const hashPluralizations = Object.entries(translatedPhrase)
+      .map(([key, value]) => {
+        return {
+          type: 'HashPair',
+          key: `pluralForm${key}`,
+          value: {
+            type: 'StringLiteral',
+            value: value,
+          }
+        };
+    });
+
+    const updatedHashPairs = cloneDeep(hashPairs);
+    updatedHashPairs.push(...hashPluralizations);
+    return updatedHashPairs.filter(pair => pair.key !== 'phrase');
+  }
+
+   /**
+   * Returns an updated array of hash pairs which changes the hashPair with key 'phrase'
+   * to have the translatedPhrase as its value
+   *
+   * @param {Array<hbs.AST.HashPair} hashPairs
+   * @param {Object} translatedPhrase
+   * @returns {Array<hbs.AST.HashPair}
+   */
+  _getNonPluralizedHashPairs(hashPairs, translatedPhrase) {
     return hashPairs.map(pair => {
       if (pair.key !== 'phrase') {
         return pair;
@@ -131,8 +172,8 @@ class TranslateHelperVisitor {
         ...pair,
         value: {
           type: 'StringLiteral',
-          value: value,
-          original: value,
+          value: translatedPhrase,
+          original: translatedPhrase,
           loc: pair.value.loc
         }
       };

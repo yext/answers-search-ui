@@ -94,3 +94,27 @@ async function defaultTemplates () {
 }
 
 exports.default = defaultTemplates;
+
+
+/**
+ * A test build  task used for testing the precompile task
+ * 
+ * @returns {Promise<Function>}
+ */
+async function test () {
+  const bundleTemplatesUMD =
+    new BundleTemplatesTaskFactory(DEV_LOCALE).create(TemplateType.UMD);
+  const cleanFiles = createCleanFilesTask(DEV_LOCALE);
+  const translator = await createTranslator(DEV_LOCALE);
+  const precompileTemplates = createPrecompileTemplatesTask(DEV_LOCALE, translator);
+
+  return new Promise(resolve => {
+    return series(
+      precompileTemplates,
+      bundleTemplatesUMD,
+      cleanFiles
+    )(resolve);
+  });
+}
+
+exports.test = test;
