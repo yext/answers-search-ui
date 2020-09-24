@@ -269,6 +269,12 @@ msgctxt "Button label, displays more items"
 msgid "More"
 msgstr "Altro"
 
+#: src/ui/components/filters/facetscomponent.js:108
+#: src/ui/components/filters/filterboxcomponent.js:108
+msgctxt "Button label, effectuates changes"
+msgid "apply"
+msgstr "filtra"
+
 #: src/ui/components/filters/sortoptionscomponent.js:235
 msgctxt "Button label, effectuates changes"
 msgid "Apply"

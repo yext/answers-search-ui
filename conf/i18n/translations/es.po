@@ -273,7 +273,7 @@ msgstr "Más"
 #: src/ui/components/filters/filterboxcomponent.js:108
 msgctxt "Button label, effectuates changes"
 msgid "apply"
-msgstr ""
+msgstr "aplicar"
 
 #: src/ui/components/filters/sortoptionscomponent.js:235
 msgctxt "Button label, effectuates changes"
