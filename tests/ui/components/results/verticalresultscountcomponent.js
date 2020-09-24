@@ -35,7 +35,6 @@ describe('results count component', () => {
       resultsCount: 100
     });
     const wrapper = mount(component);
-    console.log(wrapper.debug());
     expect(wrapper.find('.yxt-VerticalResultsCount-start').text()).toEqual('1');
     expect(wrapper.find('.yxt-VerticalResultsCount-end').text()).toEqual('20');
     expect(wrapper.find('.yxt-VerticalResultsCount-total').text()).toEqual('100');
@@ -59,7 +58,6 @@ describe('results count component', () => {
       resultsCount: 200
     });
     const wrapper = mount(component);
-    console.log(wrapper.debug());
     expect(wrapper.find('.yxt-VerticalResultsCount-start').text()).toEqual('41');
     expect(wrapper.find('.yxt-VerticalResultsCount-end').text()).toEqual('50');
     expect(wrapper.find('.yxt-VerticalResultsCount-total').text()).toEqual('200');
