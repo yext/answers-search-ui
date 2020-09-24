@@ -2,54 +2,45 @@ import { getNPlurals, getPluralFunc, hasLang } from 'plural-forms/dist/minimal';
 
 export default class TranslationProcessor {
   /**
-   * Processes a translation which includes performing interpolation, pluralization, or both
-   * @param {string} translations The translations, or a stringified JSON of possible translations
+   * Processes a translation which includes performing interpolation, pluralization, or
+   * both
+   * @param {string | Object} translations The translation, or an object containing
+   * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
+   * @param {string} language The langauge associated with the pluralization
+   * @returns {string} The translation with any interpolation or pluralization applied
    */
-  static process (translations, interpolationParams, count) {
-    const stringToInterpolate = this._selectStringToInterpolate(translations, count);
+  static process (translations, interpolationParams, count, language) {
+    const stringToInterpolate = (typeof translations === 'string')
+      ? translations
+      : this._selectPluralForm(translations, count, language);
+
     return this._interpolate(stringToInterpolate, interpolationParams);
   }
 
   /**
-   * If translations is json, parse it and choose the correct plural form.
-   * Otherwise just return the non-interpolated translation string.
-   * @param {string} translations
+   * Returns the correct plural form given a translations object and count.
+   * @param {Object} translations
    * @param {number} count
+   * @param {string} language
    * @returns {string}
    */
-  static _selectStringToInterpolate (translations, count) {
-    try {
-      translations = JSON.parse(translations);
-    } catch (e) {
-      return translations;
+  static _selectPluralForm (translations, count, language) {
+    if (!hasLang(language)) {
+      language = 'en';
     }
-    return this._selectPluralForm(translations, count);
+    const oneToNArray = this._generateArrayOneToN(language);
+    const pluralFormIndex = getPluralFunc(language)(count, oneToNArray);
+    return translations[pluralFormIndex];
   }
 
   /**
-   * Returns the correct plural form given a parsed translations object and count.
-   * @param {Object} parsedTranslations
-   * @param {number} count
-   * @returns {string}
-   */
-  static _selectPluralForm (parsedTranslations, count) {
-    let locale = parsedTranslations.locale;
-    if (!hasLang(locale)) {
-      locale = 'en';
-    }
-    const oneToNArray = this._generateArrayOneToN(locale);
-    const pluralFormIndex = getPluralFunc(locale)(count, oneToNArray);
-    return parsedTranslations[pluralFormIndex];
-  }
-
-  /**
-   * @param {string} locale
+   * @param {string} language
    * @returns {Array} an array of the form [0, 1, 2, ..., nPluralForms]
    */
-  static _generateArrayOneToN (locale) {
-    const numberOfPluralForms = getNPlurals(locale);
+  static _generateArrayOneToN (language) {
+    const numberOfPluralForms = getNPlurals(language);
     return Array.from((new Array(numberOfPluralForms)).keys());
   }
 
