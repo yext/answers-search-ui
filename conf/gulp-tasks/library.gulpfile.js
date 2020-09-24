@@ -28,7 +28,7 @@ exports.dev = function devJSBundle () {
 };
 
 /**
- * Creates a build task per locale, and combines them into a parallel task.
+ * Creates a build task per locale, and combines them into a series task.
  * @returns {Promise<Function>}
  */
 exports.default = function defaultJSBundle () {
@@ -38,7 +38,7 @@ exports.default = function defaultJSBundle () {
       .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory));
   });
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
-    return new Promise(resolve => parallel(compileCSS, ...localizedTasks)(resolve));
+    return new Promise(resolve => series(compileCSS, ...localizedTasks)(resolve));
   });
 };
 
