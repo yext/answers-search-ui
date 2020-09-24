@@ -3,11 +3,17 @@
     aria-label="{{translate phrase='[[start]] through [[end]] of [[resultsCount]]' start=pageStart end=pageEnd resultsCount=total }}">
     <div aria-hidden="true">
       {{translate
-        phrase='[[start]] through [[end]] of [[resultsCount]]'
+        phrase=
+         '<span class="yxt-ResultsHeader-resultsCountStart">[[start]]</span>
+          <span class="yxt-ResultsHeader-resultsCountDash">-</span>
+          <span class="yxt-ResultsHeader-resultsCountEnd">[[end]]</span>
+          <span class="yxt-ResultsHeader-resultsCountOf">of</span>
+          <span class="yxt-ResultsHeader-resultsCountTotal">[[resultsCount]]</span>'
+        context='Example: 1-10 of 50'
         start=pageStart
         end=pageEnd
         resultsCount=total
-      }}
+      }}  
     </div>
   </div>
 {{/unless}}
