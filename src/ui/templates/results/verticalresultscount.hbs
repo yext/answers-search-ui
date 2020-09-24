@@ -1,11 +1,13 @@
 {{#unless (eq total 0)}}
-  <div class="yxt-VerticalResultsCount" aria-label="{{pageStart}} through {{pageEnd}} of {{total}}">
+  <div class="yxt-VerticalResultsCount"
+    aria-label="{{translate phrase='[[start]] through [[end]] of [[resultsCount]]' start=pageStart end=pageEnd resultsCount=total }}">
     <div aria-hidden="true">
-      <span class="yxt-VerticalResultsCount-start">{{pageStart}}</span>
-      <span class="yxt-VerticalResultsCount-dash">-</span>
-      <span class="yxt-VerticalResultsCount-end">{{pageEnd}}</span>
-      <span class="yxt-VerticalResultsCount-of">of</span>
-      <span class="yxt-VerticalResultsCount-total">{{total}}</span>
+      {{translate
+        phrase='[[start]] through [[end]] of [[resultsCount]]'
+        start=pageStart
+        end=pageEnd
+        resultsCount=total
+      }}
     </div>
   </div>
 {{/unless}}
