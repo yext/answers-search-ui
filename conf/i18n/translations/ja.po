@@ -1,0 +1,418 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: src/ui/templates/results/resultsheader.hbs:19
+msgid "[[start]] through [[end]] of [[resultsCount]]"
+msgstr "[[start]]～[[end]]/[[resultsCount]]"
+
+#: src/ui/templates/questions/questionsubmission.hbs:7
+msgid "expand question form"
+msgstr "質問フォームを展開する"
+
+#: src/ui/templates/results/pagination.hbs:44
+msgid "Go to page 1 of results"
+msgstr "検索結果の1ページ目へ移動する"
+
+#: src/ui/templates/results/resultsheader.hbs:65
+msgctxt "Change is a verb, filters are a set of fixed values or criteria that limit results"
+msgid "change filters"
+msgstr "フィルタを変更する"
+
+#: src/ui/templates/results/resultssectionheader.hbs:41
+msgctxt "Change is a verb. Example: change filtering logic"
+msgid "change"
+msgstr "変更する"
+
+#: src/ui/templates/results/resultsheader.hbs:21
+msgctxt "Example: 1-10 of 50"
+msgid "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">of</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
+msgstr "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">/</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
+
+#: src/ui/components/filters/geolocationcomponent.js:93
+msgid "Could Not Find Your Location"
+msgstr "ロケーションが見つかりませんでした"
+
+#: src/ui/components/filters/geolocationcomponent.js:85
+msgid "Finding Your Location..."
+msgstr "ロケーションを探しています..."
+
+#: src/ui/components/filters/geolocationcomponent.js:280
+#: src/ui/components/filters/geolocationcomponent.js:38
+#: src/ui/components/filters/geolocationcomponent.js:46
+msgid "Location"
+msgstr "ロケーション"
+
+#: src/ui/components/search/locationbiascomponent.js:138
+msgid "Unknown Location"
+msgstr "不明なロケーション"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:192
+msgctxt "After a date. Example: After [August 15th]"
+msgid "After [[date]]"
+msgstr "[[date]]より後"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:208
+msgctxt "Before a date. Example: Before [August 15th]"
+msgid "Before [[date]]"
+msgstr "[[date]]より前"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:199
+msgctxt "Beginning at a date (with no end date). Example: [August 15th] or later"
+msgid "[[date]] or later"
+msgstr "[[date]]以降"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:215
+msgctxt "Ending at a date with (no start date). Example: [August 15th] or earlier"
+msgid "[[date]] and earlier"
+msgstr "[[date]]以前"
+
+#: src/ui/components/search/filtersearchcomponent.js:63
+msgctxt "Labels an input field"
+msgid "What are you interested in?"
+msgstr "関心がある内容を教えてください。"
+
+#: src/ui/components/filters/geolocationcomponent.js:76
+msgctxt "Labels the user's current location"
+msgid "Current Location"
+msgstr "現在のロケーション"
+
+#: src/ui/templates/results/alternativeverticals.hbs:32
+msgid "([[resultsCount]] result)"
+msgid_plural "([[resultsCount]] results)"
+msgstr[0] "（[[resultsCount]]件の結果）"
+
+#: src/ui/templates/results/alternativeverticals.hbs:3
+msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
+msgstr "[[currentVerticalLabel]] で<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">結果は見つかりませんでした</em>。"
+
+#: src/ui/templates/results/alternativeverticals.hbs:47
+msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
+msgstr "代わりに<a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\">すべての検索カテゴリーの結果を表示することもできます</a>。"
+
+#: src/ui/templates/results/pagination.hbs:60
+msgid "Currently on page [[pageNumber]]"
+msgstr "現在表示中のページ [[pageNumber]]"
+
+#: src/ui/templates/results/pagination.hbs:81
+msgid "Go to page [[maxPage]] of results"
+msgstr "検索結果の[[maxPage]]ページ目へ移動する"
+
+#: src/ui/templates/results/pagination.hbs:64
+msgid "Go to page [[pageNumber]] of results"
+msgstr "検索結果の[[pageNumber]]ページ目へ移動する"
+
+#: src/ui/templates/results/pagination.hbs:7
+msgid "Go to the first page of results"
+msgstr "検索結果の最初のページに移動する"
+
+#: src/ui/templates/results/pagination.hbs:109
+msgid "Go to the last page of results"
+msgstr "検索結果の最後のページへ移動する"
+
+#: src/ui/templates/results/pagination.hbs:92
+msgid "Go to the next page of results"
+msgstr "検索結果の次のページへ移動する"
+
+#: src/ui/templates/cards/standard.hbs:24
+msgid "Image for [[title]]"
+msgstr "[[title]]の画像"
+
+#: src/ui/templates/results/noresults.hbs:31
+msgid "Make sure all words are spelled correctly."
+msgstr "すべての単語の綴りが正しいことを確認してください。"
+
+#: src/ui/templates/results/directanswer.hbs:83
+msgid "Send feedback"
+msgstr "フィードバックを送信する"
+
+#: src/ui/templates/results/alternativeverticals.hbs:5
+msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
+msgstr "代わりに<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">すべての[[currentVerticalLabel]]</em>を表示しています。"
+
+#: src/ui/templates/results/noresults.hbs:24
+msgid "Suggestions:"
+msgstr "提案："
+
+#: src/ui/templates/results/alternativeverticals.hbs:11
+msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgstr[0] "以下の検索カテゴリーで<span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>の検索結果が見つかりました。"
+
+#: src/ui/templates/results/noresults.hbs:34
+msgid "Try fewer words."
+msgstr "単語を減らしてみてください。"
+
+#: src/ui/templates/results/noresults.hbs:33
+msgid "Try more general words."
+msgstr "より一般的な言葉を試してみてください。"
+
+#: src/ui/templates/results/noresults.hbs:15
+msgid "Try refining your query or <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">search all content.</a>"
+msgstr "クエリを絞り込むか、<a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">すべてのコンテンツを検索してみてください。</a>"
+
+#: src/ui/templates/results/noresults.hbs:32
+msgid "Try to ask your question a different way."
+msgstr "別の方法で質問してみてください。"
+
+#: src/ui/templates/results/noresults.hbs:7
+msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
+msgstr "検索内容 - <span class=\"yxt-NoResults-query\">[[query]]</span> - に一致する回答はありませんでした。"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:158
+msgid "* Please enter a valid email address."
+msgstr "メールアドレスを正しく入力してください。"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:150
+msgid "* You must agree to the privacy policy to submit a question."
+msgstr "フィードバックいただく際は、プライバシーポリシーへの同意が必要です。"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:61
+msgid "By submitting my email address, I consent to being contacted via email at the address provided."
+msgstr "お知らせをメールで受け取ることを同意します。"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:87
+msgid "Can’t find what you're looking for? Ask a question below."
+msgstr "お探しの情報が見つからない場合はこちらからお問い合わせください。"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:101
+msgid "Enter your question and contact information, and we'll get back to you with a response shortly."
+msgstr "お問い合わせ内容とご連絡先を記入いただければ、ご返答いたしますので少々お待ちください。"
+
+#: src/ui/components/results/resultsheadercomponent.js:24
+#: src/ui/components/results/universalresultscomponent.js:22
+#: src/ui/components/results/verticalresultscomponent.js:135
+msgid "Filters applied to this search:"
+msgstr "適用済みの絞り込み条件:"
+
+#: src/ui/components/results/directanswercomponent.js:27
+msgid "Thank you for your feedback!"
+msgstr "フィードバックありがとうございます"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:127
+msgid "Thank you for your question!"
+msgstr "お問い合わせありがとうございます！"
+
+#: src/ui/components/results/directanswercomponent.js:21
+msgid "This answered my question"
+msgstr "役に立たなかった"
+
+#: src/ui/components/results/directanswercomponent.js:24
+msgid "This did not answer my question"
+msgstr "役に立たなかった"
+
+#: src/ui/components/filters/geolocationcomponent.js:60
+#: src/ui/components/filters/geolocationcomponent.js:68
+msgid "Use My Location"
+msgstr "現在地を使用する"
+
+#: src/ui/components/filters/geolocationcomponent.js:147
+#: src/ui/components/search/locationbiascomponent.js:76
+#: src/ui/components/search/searchcomponent.js:207
+msgid "We are unable to determine your location"
+msgstr "現在地を特定できません"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:167
+msgid "We're sorry, an error occurred."
+msgstr "エラーが発生しました。"
+
+#: src/ui/components/filters/sortoptionscomponent.js:152
+msgctxt "Best match (i.e. most relevant), describing results"
+msgid "Best Match"
+msgstr "最も関連性が高い"
+
+#: src/ui/components/results/resultsheadercomponent.js:27
+#: src/ui/components/results/verticalresultscomponent.js:147
+msgctxt "Button label"
+msgid "Remove this filter"
+msgstr "絞り込み条件を解除する"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:69
+#: src/ui/components/search/searchcomponent.js:72
+msgctxt "Button label"
+msgid "Submit"
+msgstr "送信する"
+
+#: src/ui/components/search/locationbiascomponent.js:15
+msgctxt "Button label"
+msgid "Update your location"
+msgstr "現在地を更新する"
+
+#: src/ui/components/filters/facetscomponent.js:57
+#: src/ui/components/filters/filterboxcomponent.js:57
+msgctxt "Button label, deselects all options"
+msgid "reset all"
+msgstr "すべてリセット"
+
+#: src/ui/components/filters/facetscomponent.js:42
+#: src/ui/components/filters/filterboxcomponent.js:42
+#: src/ui/components/filters/filteroptionscomponent.js:94
+#: src/ui/components/filters/sortoptionscomponent.js:198
+msgctxt "Button label, deselects one or more options"
+msgid "reset"
+msgstr "リセット"
+
+#: src/ui/components/navigation/navigationcomponent.js:127
+msgctxt "Button label, displays more items"
+msgid "More"
+msgstr "詳細"
+
+#: src/ui/components/filters/facetscomponent.js:108
+#: src/ui/components/filters/filterboxcomponent.js:108
+msgctxt "Button label, effectuates changes"
+msgid "apply"
+msgstr "適用する"
+
+#: src/ui/components/filters/sortoptionscomponent.js:235
+msgctxt "Button label, effectuates changes"
+msgid "Apply"
+msgstr "適用する"
+
+#: src/ui/components/results/directanswercomponent.js:70
+msgctxt "Button label, view is a verb"
+msgid "View Details"
+msgstr "詳細をみる"
+
+#: src/ui/components/results/universalresultscomponent.js:94
+#: src/ui/components/results/verticalresultscomponent.js:161
+msgctxt "Button label, view more [results]"
+msgid "View More"
+msgstr "更に表示する"
+
+#: src/ui/components/search/locationbiascomponent.js:11
+msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your device"
+msgid "based on your device"
+msgstr "デバイスの位置情報を使用する"
+
+#: src/ui/components/search/locationbiascomponent.js:7
+msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your internet address"
+msgid "based on your internet address"
+msgstr "インターネットアドレスの位置情報を使用する"
+
+#: src/ui/components/cards/standardcardcomponent.js:72
+msgctxt "Displays less details for the result"
+msgid "Show Less"
+msgstr "非表示にする"
+
+#: src/ui/components/filters/facetscomponent.js:81
+#: src/ui/components/filters/filterboxcomponent.js:81
+#: src/ui/components/filters/filteroptionscomponent.js:118
+msgctxt "Displays less options"
+msgid "show less"
+msgstr "非表示にする"
+
+#: src/ui/components/filters/sortoptionscomponent.js:217
+msgctxt "Displays less options"
+msgid "Show less"
+msgstr "非表示にする"
+
+#: src/ui/components/cards/standardcardcomponent.js:63
+msgctxt "Displays more details for the result"
+msgid "Show More"
+msgstr "さらに表示する"
+
+#: src/ui/components/filters/facetscomponent.js:72
+#: src/ui/components/filters/filterboxcomponent.js:72
+#: src/ui/components/filters/filteroptionscomponent.js:109
+msgctxt "Displays more options"
+msgid "show more"
+msgstr "さらに表示する"
+
+#: src/ui/components/filters/sortoptionscomponent.js:211
+msgctxt "Displays more options"
+msgid "Show more"
+msgstr "さらに表示する"
+
+#: src/ui/components/search/spellcheckcomponent.js:9
+msgctxt "Help text, labels a suggested phrase"
+msgid "Did you mean:"
+msgstr "もしかして:"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:109
+msgctxt "Indicates that entering input is mandatory"
+msgid "(required)"
+msgstr "（必須）"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:135
+msgctxt "Labels a link"
+msgid "Learn more here."
+msgstr "詳細はこちら"
+
+#: src/ui/components/search/searchcomponent.js:63
+msgctxt "Labels an input field"
+msgid "Conduct a search"
+msgstr "検索する"
+
+#: src/ui/components/filters/facetscomponent.js:142
+#: src/ui/components/filters/filteroptionscomponent.js:167
+msgctxt "Labels an input field"
+msgid "Search for a filter option"
+msgstr "条件で絞り込む"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:34
+msgctxt "Labels the email value provided as an argument"
+msgid "Email"
+msgstr "Eメール"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:43
+msgctxt "Labels the name value provided as an argument"
+msgid "Name"
+msgstr "名前"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:52
+msgctxt "Labels the question value provided as an argument"
+msgid "Question"
+msgstr "お問い合わせ"
+
+#: src/ui/components/filters/rangefiltercomponent.js:16
+msgctxt "Maximum"
+msgid "Max"
+msgstr "最大"
+
+#: src/ui/components/filters/rangefiltercomponent.js:12
+msgctxt "Minimum"
+msgid "Min"
+msgstr "最小"
+
+#: src/ui/components/results/paginationcomponent.js:97
+msgctxt "Noun, a page of results"
+msgid "Page"
+msgstr "ページ"
+
+#: src/ui/components/navigation/navigationcomponent.js:184
+msgctxt "Noun, labels the navigation for the search page"
+msgid "Search Page Navigation"
+msgstr "検索ページ"
+
+#: src/ui/components/filters/facetscomponent.js:127
+#: src/ui/components/filters/filteroptionscomponent.js:152
+msgctxt "Placeholder text for input field"
+msgid "Search here..."
+msgstr "検索する"
+
+#: src/ui/components/filters/facetscomponent.js:15
+#: src/ui/components/filters/filterboxcomponent.js:15
+#: src/ui/components/filters/filteroptionscomponent.js:59
+msgctxt "Plural noun, title for a group of controls that filter results"
+msgid "Filters"
+msgstr "絞り込み条件"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:225
+msgctxt "Start date to end date. Example: [August 15th] - [August 16th]"
+msgid "[[start]] - [[end]]"
+msgstr "[[start]] - [[end]]"
+
+#: src/ui/components/filters/sortoptionscomponent.js:226
+msgctxt "Title for a group of controls that sort results"
+msgid "Sorting"
+msgstr "並び替え"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:78
+msgctxt "Title of section"
+msgid "Ask a Question"
+msgstr "問い合わせる"
+
+#: src/ui/components/search/searchcomponent.js:81
+msgctxt "Verb, clears search"
+msgid "Clear"
+msgstr "クリア"

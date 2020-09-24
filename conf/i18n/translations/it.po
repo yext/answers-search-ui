@@ -1,0 +1,414 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: src/ui/templates/results/resultsheader.hbs:19
+msgid "[[start]] through [[end]] of [[resultsCount]]"
+msgstr "[[start]] a [[end]] di [[resultsCount]]"
+
+#: src/ui/templates/questions/questionsubmission.hbs:7
+msgid "expand question form"
+msgstr "espandi il modulo per le domande"
+
+#: src/ui/templates/results/pagination.hbs:44
+msgid "Go to page 1 of results"
+msgstr "Vai a pagina 1 dei risultati"
+
+#: src/ui/templates/results/resultsheader.hbs:65
+msgctxt "Change is a verb, filters are a set of fixed values or criteria that limit results"
+msgid "change filters"
+msgstr "modifica i filtri"
+
+#: src/ui/templates/results/resultssectionheader.hbs:41
+msgctxt "Change is a verb. Example: change filtering logic"
+msgid "change"
+msgstr "modifica"
+
+#: src/ui/templates/results/resultsheader.hbs:21
+msgctxt "Example: 1-10 of 50"
+msgid "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">of</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
+msgstr "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">di</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
+
+#: src/ui/components/filters/geolocationcomponent.js:93
+msgid "Could Not Find Your Location"
+msgstr "Impossibile trovare la sede"
+
+#: src/ui/components/filters/geolocationcomponent.js:85
+msgid "Finding Your Location..."
+msgstr "Ricerca della sede in corso"
+
+#: src/ui/components/filters/geolocationcomponent.js:280
+#: src/ui/components/filters/geolocationcomponent.js:38
+#: src/ui/components/filters/geolocationcomponent.js:46
+msgid "Location"
+msgstr "Sede"
+
+#: src/ui/components/search/locationbiascomponent.js:138
+msgid "Unknown Location"
+msgstr "Sede sconosciuta"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:192
+msgctxt "After a date. Example: After [August 15th]"
+msgid "After [[date]]"
+msgstr "Dopo il [[date]]"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:208
+msgctxt "Before a date. Example: Before [August 15th]"
+msgid "Before [[date]]"
+msgstr "Prima del [[date]]"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:199
+msgctxt "Beginning at a date (with no end date). Example: [August 15th] or later"
+msgid "[[date]] or later"
+msgstr "[[date]] o dopo"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:215
+msgctxt "Ending at a date with (no start date). Example: [August 15th] or earlier"
+msgid "[[date]] and earlier"
+msgstr "[[date]] e prima"
+
+#: src/ui/components/search/filtersearchcomponent.js:63
+msgctxt "Labels an input field"
+msgid "What are you interested in?"
+msgstr "Che cosa ti interessa?"
+
+#: src/ui/components/filters/geolocationcomponent.js:76
+msgctxt "Labels the user's current location"
+msgid "Current Location"
+msgstr "Sede attuale"
+
+#: src/ui/templates/results/alternativeverticals.hbs:32
+msgid "([[resultsCount]] result)"
+msgid_plural "([[resultsCount]] results)"
+msgstr[0] "[[resultsCount]] risultato"
+msgstr[1] "[[resultsCount]] risultati"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:158
+msgid "* Please enter a valid email address."
+msgstr "* Digitare un indirizzo email valido"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:150
+msgid "* You must agree to the privacy policy to submit a question."
+msgstr "* Accetti le norme di privacy per inviare il suo feedback."
+
+#: src/ui/templates/results/alternativeverticals.hbs:3
+msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
+msgstr "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">Non ci sono risultati disponibili</em> in [[currentVerticalLabel]]."
+
+#: src/ui/templates/results/alternativeverticals.hbs:47
+msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
+msgstr "Altrimenti, può <a class=\"yxt-AlternativeVerticals-universalLink\" href=[[universalUrl]]> vedere i risultati su tutte le categorie di ricerca</a>."
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:61
+msgid "By submitting my email address, I consent to being contacted via email at the address provided."
+msgstr "Do il mio consenso per essere contattato all'indirizzo email fornito"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:87
+msgid "Can’t find what you're looking for? Ask a question below."
+msgstr "Non trova quello che cercavi? Inserisca la sua domanda qui sotto."
+
+#: src/ui/templates/results/pagination.hbs:60
+msgid "Currently on page [[pageNumber]]"
+msgstr "Ora in pagina [[pageNumber]]"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:101
+msgid "Enter your question and contact information, and we'll get back to you with a response shortly."
+msgstr "Ci invii la sua domanda insieme ai suoi dati e la contatteremo a breve"
+
+#: src/ui/components/results/resultsheadercomponent.js:24
+#: src/ui/components/results/universalresultscomponent.js:22
+#: src/ui/components/results/verticalresultscomponent.js:135
+msgid "Filters applied to this search:"
+msgstr "Filtri utilizzati in questa ricerca:"
+
+#: src/ui/templates/results/pagination.hbs:81
+msgid "Go to page [[maxPage]] of results"
+msgstr "Vada a pagina [[maxPage]] dei rusultati"
+
+#: src/ui/templates/results/pagination.hbs:64
+msgid "Go to page [[pageNumber]] of results"
+msgstr "Vada a pagina [[pageNumber]] dei rusultati"
+
+#: src/ui/templates/results/pagination.hbs:7
+msgid "Go to the first page of results"
+msgstr "Vada alla prima pagina dei risultati"
+
+#: src/ui/templates/results/pagination.hbs:109
+msgid "Go to the last page of results"
+msgstr "Vada all'ultima pagina dei risultati"
+
+#: src/ui/templates/results/pagination.hbs:92
+msgid "Go to the next page of results"
+msgstr "Vada alla pagina successiva dei risultati"
+
+#: src/ui/templates/cards/standard.hbs:24
+msgid "Image for [[title]]"
+msgstr "Imagine per [[title]]"
+
+#: src/ui/templates/results/noresults.hbs:31
+msgid "Make sure all words are spelled correctly."
+msgstr "Controlli che le parole siano scritte correttamente"
+
+#: src/ui/templates/results/directanswer.hbs:83
+msgid "Send feedback"
+msgstr "inviare feedback"
+
+#: src/ui/templates/results/alternativeverticals.hbs:5
+msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
+msgstr "Mostrando <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">invece che [[currentVerticalLabel]] </em>."
+
+#: src/ui/templates/results/noresults.hbs:24
+msgid "Suggestions:"
+msgstr "Suggerimenti:"
+
+#: src/ui/components/results/directanswercomponent.js:27
+msgid "Thank you for your feedback!"
+msgstr "Grazie per il suo feedback"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:127
+msgid "Thank you for your question!"
+msgstr "Grazie per la sua domanda"
+
+#: src/ui/templates/results/alternativeverticals.hbs:11
+msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgstr[0] "La categoria di ricerca ha generato risultati per <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgstr[1] "La categorie di ricerca ha generato risultati per <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+
+#: src/ui/components/results/directanswercomponent.js:21
+msgid "This answered my question"
+msgstr "Ha risposto alla mia domanda"
+
+#: src/ui/components/results/directanswercomponent.js:24
+msgid "This did not answer my question"
+msgstr "Non ha risposto alla mia domanda"
+
+#: src/ui/templates/results/noresults.hbs:34
+msgid "Try fewer words."
+msgstr "Provi con meno parole."
+
+#: src/ui/templates/results/noresults.hbs:33
+msgid "Try more general words."
+msgstr "Provi con parole più generiche."
+
+#: src/ui/templates/results/noresults.hbs:15
+msgid "Try refining your query or <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">search all content.</a>"
+msgstr "Provi a modificare la sua ricerca o <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">cerchi tutte le informazioni disponibili.</a>"
+
+#: src/ui/templates/results/noresults.hbs:32
+msgid "Try to ask your question a different way."
+msgstr "Provi a fare la domanda in modo diverso."
+
+#: src/ui/components/filters/geolocationcomponent.js:60
+#: src/ui/components/filters/geolocationcomponent.js:68
+msgid "Use My Location"
+msgstr "utilizza la mia posizione"
+
+#: src/ui/components/filters/geolocationcomponent.js:147
+#: src/ui/components/search/locationbiascomponent.js:76
+#: src/ui/components/search/searchcomponent.js:207
+msgid "We are unable to determine your location"
+msgstr "Non siamo riusciti a trovare la sua posizione esatta"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:167
+msgid "We're sorry, an error occurred."
+msgstr "Ci scusiamo, ci è stato un errore"
+
+#: src/ui/templates/results/noresults.hbs:7
+msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
+msgstr "La sua ricerca - <span class=\"yxt-NoResults-query\">[[query]]</span> - non ha trovato una risposta disponibile."
+
+#: src/ui/components/filters/sortoptionscomponent.js:152
+msgctxt "Best match (i.e. most relevant), describing results"
+msgid "Best Match"
+msgstr "Miglior risultato"
+
+#: src/ui/components/results/resultsheadercomponent.js:27
+#: src/ui/components/results/verticalresultscomponent.js:147
+msgctxt "Button label"
+msgid "Remove this filter"
+msgstr "Rimuovere filtro"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:69
+#: src/ui/components/search/searchcomponent.js:72
+msgctxt "Button label"
+msgid "Submit"
+msgstr "Invia"
+
+#: src/ui/components/search/locationbiascomponent.js:15
+msgctxt "Button label"
+msgid "Update your location"
+msgstr "Aggiornare posizione"
+
+#: src/ui/components/filters/facetscomponent.js:57
+#: src/ui/components/filters/filterboxcomponent.js:57
+msgctxt "Button label, deselects all options"
+msgid "reset all"
+msgstr "Cancella tutto"
+
+#: src/ui/components/filters/facetscomponent.js:42
+#: src/ui/components/filters/filterboxcomponent.js:42
+#: src/ui/components/filters/filteroptionscomponent.js:94
+#: src/ui/components/filters/sortoptionscomponent.js:198
+msgctxt "Button label, deselects one or more options"
+msgid "reset"
+msgstr "Cancella"
+
+#: src/ui/components/navigation/navigationcomponent.js:127
+msgctxt "Button label, displays more items"
+msgid "More"
+msgstr "Altro"
+
+#: src/ui/components/filters/sortoptionscomponent.js:235
+msgctxt "Button label, effectuates changes"
+msgid "Apply"
+msgstr "Filtra"
+
+#: src/ui/components/results/directanswercomponent.js:70
+msgctxt "Button label, view is a verb"
+msgid "View Details"
+msgstr "Più detagli"
+
+#: src/ui/components/results/universalresultscomponent.js:94
+#: src/ui/components/results/verticalresultscomponent.js:161
+msgctxt "Button label, view more [results]"
+msgid "View More"
+msgstr "vedi altro"
+
+#: src/ui/components/search/locationbiascomponent.js:11
+msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your device"
+msgid "based on your device"
+msgstr "In base al suo dispositivo"
+
+#: src/ui/components/search/locationbiascomponent.js:7
+msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your internet address"
+msgid "based on your internet address"
+msgstr "In base al suo indirizzo IP"
+
+#: src/ui/components/cards/standardcardcomponent.js:72
+msgctxt "Displays less details for the result"
+msgid "Show Less"
+msgstr "Vedi meno"
+
+#: src/ui/components/filters/facetscomponent.js:81
+#: src/ui/components/filters/filterboxcomponent.js:81
+#: src/ui/components/filters/filteroptionscomponent.js:118
+msgctxt "Displays less options"
+msgid "show less"
+msgstr "Vedi meno"
+
+#: src/ui/components/filters/sortoptionscomponent.js:217
+msgctxt "Displays less options"
+msgid "Show less"
+msgstr "Vedi meno"
+
+#: src/ui/components/cards/standardcardcomponent.js:63
+msgctxt "Displays more details for the result"
+msgid "Show More"
+msgstr "vedi di più"
+
+#: src/ui/components/filters/facetscomponent.js:72
+#: src/ui/components/filters/filterboxcomponent.js:72
+#: src/ui/components/filters/filteroptionscomponent.js:109
+msgctxt "Displays more options"
+msgid "show more"
+msgstr "vedi di più"
+
+#: src/ui/components/filters/sortoptionscomponent.js:211
+msgctxt "Displays more options"
+msgid "Show more"
+msgstr "vedi di più"
+
+#: src/ui/components/search/spellcheckcomponent.js:9
+msgctxt "Help text, labels a suggested phrase"
+msgid "Did you mean:"
+msgstr "Forse intendeva:"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:109
+msgctxt "Indicates that entering input is mandatory"
+msgid "(required)"
+msgstr "(Obbligatorio)"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:135
+msgctxt "Labels a link"
+msgid "Learn more here."
+msgstr "Maggiori informazioni qui."
+
+#: src/ui/components/search/searchcomponent.js:63
+msgctxt "Labels an input field"
+msgid "Conduct a search"
+msgstr "Digitare la domanda qui"
+
+#: src/ui/components/filters/facetscomponent.js:142
+#: src/ui/components/filters/filteroptionscomponent.js:167
+msgctxt "Labels an input field"
+msgid "Search for a filter option"
+msgstr "Trova più filtri"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:34
+msgctxt "Labels the email value provided as an argument"
+msgid "Email"
+msgstr "Email"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:43
+msgctxt "Labels the name value provided as an argument"
+msgid "Name"
+msgstr "Nome"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:52
+msgctxt "Labels the question value provided as an argument"
+msgid "Question"
+msgstr "Domanda"
+
+#: src/ui/components/filters/rangefiltercomponent.js:16
+msgctxt "Maximum"
+msgid "Max"
+msgstr "Massimo"
+
+#: src/ui/components/filters/rangefiltercomponent.js:12
+msgctxt "Minimum"
+msgid "Min"
+msgstr "Minimo"
+
+#: src/ui/components/results/paginationcomponent.js:97
+msgctxt "Noun, a page of results"
+msgid "Page"
+msgstr "Pagina"
+
+#: src/ui/components/navigation/navigationcomponent.js:184
+msgctxt "Noun, labels the navigation for the search page"
+msgid "Search Page Navigation"
+msgstr "Pagina di ricerca"
+
+#: src/ui/components/filters/facetscomponent.js:127
+#: src/ui/components/filters/filteroptionscomponent.js:152
+msgctxt "Placeholder text for input field"
+msgid "Search here..."
+msgstr "Cerca qui..."
+
+#: src/ui/components/filters/facetscomponent.js:15
+#: src/ui/components/filters/filterboxcomponent.js:15
+#: src/ui/components/filters/filteroptionscomponent.js:59
+msgctxt "Plural noun, title for a group of controls that filter results"
+msgid "Filters"
+msgstr "Filtri"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:225
+msgctxt "Start date to end date. Example: [August 15th] - [August 16th]"
+msgid "[[start]] - [[end]]"
+msgstr "[[start]] - [[end]]"
+
+#: src/ui/components/filters/sortoptionscomponent.js:226
+msgctxt "Title for a group of controls that sort results"
+msgid "Sorting"
+msgstr "Classificare"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:78
+msgctxt "Title of section"
+msgid "Ask a Question"
+msgstr "Fai una domanda"
+
+#: src/ui/components/search/searchcomponent.js:81
+msgctxt "Verb, clears search"
+msgid "Clear"
+msgstr "Cancellare"
