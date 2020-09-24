@@ -1,7 +1,6 @@
 import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
 import FilterMetadata from 'src/core/filters/filtermetadata';
@@ -85,10 +84,7 @@ describe('filter options component', () => {
       persistentStorage: new PersistentStorage()
     };
 
-    COMPONENT_MANAGER = mockManager(
-      mockCore,
-      FilterOptionsComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager(mockCore);
 
     defaultConfig = {
       container: '#test-component',
@@ -402,20 +398,17 @@ describe('filter options component', () => {
       DOM.empty(bodyEl);
       DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
-      COMPONENT_MANAGER = mockManager(
-        {
-          globalStorage: {
-            getState: key => {
-              if (key === 'test-previous-options') {
-                return ['label1', 'label2'];
-              }
-            },
-            delete: () => { }
+      COMPONENT_MANAGER = mockManager({
+        globalStorage: {
+          getState: key => {
+            if (key === 'test-previous-options') {
+              return ['label1', 'label2'];
+            }
           },
-          setStaticFilterNodes: () => { }
+          delete: () => { }
         },
-        FilterOptionsComponent.defaultTemplateName()
-      );
+        setStaticFilterNodes: () => { }
+      });
 
       defaultConfig = {
         container: '#test-component',
@@ -547,21 +540,18 @@ describe('filter options component', () => {
       setLocationRadiusFilterNode = jest.fn();
       setStaticFilterNodes = jest.fn();
 
-      COMPONENT_MANAGER = mockManager(
-        {
-          globalStorage: {
-            getState: () => { },
-            delete: () => { }
-          },
-          persistentStorage: {
-            set: () => { },
-            get: () => { }
-          },
-          setLocationRadiusFilterNode,
-          setStaticFilterNodes
+      COMPONENT_MANAGER = mockManager({
+        globalStorage: {
+          getState: () => { },
+          delete: () => { }
         },
-        FilterOptionsComponent.defaultTemplateName()
-      );
+        persistentStorage: {
+          set: () => { },
+          get: () => { }
+        },
+        setLocationRadiusFilterNode,
+        setStaticFilterNodes
+      });
 
       defaultConfig = {
         container: '#test-component',

@@ -21,20 +21,14 @@ describe('results count component', () => {
   });
 
   it('does not render before a search is made', () => {
-    const COMPONENT_MANAGER = mockManager(
-      {},
-      VerticalResultsCountComponent.defaultTemplateName()
-    );
+    const COMPONENT_MANAGER = mockManager();
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
     const wrapper = mount(component);
     expect(wrapper.exists('.yxt-VerticalResultsCount')).toBeFalsy();
   });
 
   it('renders the current results count', () => {
-    const COMPONENT_MANAGER = mockManager(
-      {},
-      VerticalResultsCountComponent.defaultTemplateName()
-    );
+    const COMPONENT_MANAGER = mockManager();
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
     component.setState({
       results: new Array(20),
@@ -47,20 +41,17 @@ describe('results count component', () => {
   });
 
   it('works with search offset', () => {
-    const COMPONENT_MANAGER = mockManager(
-      {
-        globalStorage: {
-          on: () => {},
-          getState: key => {
-            if (key === StorageKeys.SEARCH_OFFSET) {
-              return 40;
-            }
-            return null;
+    const COMPONENT_MANAGER = mockManager({
+      globalStorage: {
+        on: () => {},
+        getState: key => {
+          if (key === StorageKeys.SEARCH_OFFSET) {
+            return 40;
           }
+          return null;
         }
-      },
-      VerticalResultsCountComponent.defaultTemplateName()
-    );
+      }
+    });
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
     component.setState({
       results: new Array(10),

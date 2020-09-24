@@ -17,7 +17,7 @@ export default class MockComponentManager {
     this.core = mockCore;
 
     this.renderer = new Renderers.Handlebars();
-    this.renderer.init(templates);
+    this.renderer.init(templates, 'en');
   }
 
   /**

@@ -29,10 +29,7 @@ const mockCore = {
 
 DOM.setup(document, new DOMParser());
 
-const COMPONENT_MANAGER = mockManager(
-  mockCore,
-  VerticalResultsComponent.defaultTemplateName()
-);
+const COMPONENT_MANAGER = mockManager(mockCore);
 COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => {
   return [];
 };
