@@ -29,6 +29,16 @@ msgctxt "Example: 1-10 of 50"
 msgid "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">of</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
 msgstr "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">/</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
 
+#: src/ui/templates/results/verticalresultscount.hbs:5
+msgctxt "Example: 1-10 of 50"
+msgid ""
+"<span class=\"yxt-VerticalResultsCount-start\">[[start]]</span>\n"
+"<span class=\"yxt-VerticalResultsCount-dash\">-</span>\n"
+"<span class=\"yxt-VerticalResultsCount-end\">[[end]]</span>\n"
+"<span class=\"yxt-VerticalResultsCount-of\">/</span>\n"
+"<span class=\"yxt-VerticalResultsCount-total\">[[resultsCount]]</span>"
+msgstr ""
+
 #: src/ui/components/filters/geolocationcomponent.js:93
 msgid "Could Not Find Your Location"
 msgstr "ロケーションが見つかりませんでした"
