@@ -72,6 +72,13 @@ class VerticalResultsConfig {
     this.resultsCountTemplate = config.resultsCountTemplate || '';
 
     /**
+     * Whether to display the results header (assuming there is something like the results count
+     * or applied filters to display).
+     * @type {boolean}
+     */
+    this.hideResultsHeader = config.hideResultsHeader;
+
+    /**
      * Config for the applied filters in the results header.
      * @type {Object}
      */
@@ -254,13 +261,18 @@ export default class VerticalResultsComponent extends Component {
     return true;
   }
 
-  getUniversalUrl () {
+  getBaseUniversalUrl () {
     const universalConfig = this._verticalsConfig.find(config => !config.verticalKey) || {};
-    if (!universalConfig.url) {
+    return universalConfig.url;
+  }
+
+  getUniversalUrl () {
+    const baseUniversalUrl = this.getBaseUniversalUrl();
+    if (!baseUniversalUrl) {
       return undefined;
     }
     return this._getExperienceURL(
-      universalConfig.url,
+      baseUniversalUrl,
       new SearchParams(window.location.search.substring(1))
     );
   }
@@ -402,7 +414,7 @@ export default class VerticalResultsComponent extends Component {
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
         template: this._noResultsTemplate,
-        universalUrl: this.getUniversalUrl(),
+        baseUniversalUrl: this.getBaseUniversalUrl(),
         verticalsConfig: this._verticalsConfig,
         isShowingResults: this._displayAllResults && hasResults,
         ...opts

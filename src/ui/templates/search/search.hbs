@@ -7,62 +7,125 @@
   <div class="yxt-SearchBar-container">
     {{#if useForm}}
       <form class="yxt-SearchBar-form">
-        {{> inputAndButtons}}
-      </form>
-    {{else}}
-      <div class="yxt-SearchBar-input-wrapper">
-        {{> inputAndButtons}}
-      </div>
-    {{/if}}
-    <div class="yxt-SearchBar-autocomplete"></div>
-  </div>
-</div>
-
-{{#*inline "inputAndButtons"}}
-  <input class="js-yext-query yxt-SearchBar-input"
+        <label class="sr-only" 
+               for="{{inputIdName}}"
+               id="{{inputLabelIdName}}"
+        >
+          {{labelText}}
+        </label>
+        <input class="js-yext-query yxt-SearchBar-input"
+          id="{{inputIdName}}"
           type="text"
           name="query"
           value="{{query}}"
           {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
-          aria-label="{{labelText}}">
-  <button type="button"
-          class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
-          data-eventtype="SEARCH_CLEAR_BUTTON"
-          data-eventoptions="{{eventOptions}}"
-          data-component="IconComponent"
-          data-opts='{ "iconName": "close" }'
-          data-prop="icon"
-  >
-    <span class="yxt-SearchBar-clearButtonText sr-only">
-      {{clearText}}
-    </span>
-  </button>
-  <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
-    class="js-yext-submit yxt-SearchBar-button">
-    {{#if submitIcon}}
-      <div class="yxt-SearchBar-buttonImage"
-          data-component="IconComponent"
-          data-opts='{ "iconName": "{{submitIcon}}" }'
-      ></div>
-    {{else if _config.customIconUrl}}
-      <div class="yxt-SearchBar-buttonImage"
-          data-component="IconComponent"
-          data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
-      ></div>
+          aria-label="{{labelText}}"
+          aria-autocomplete="list"
+          aria-controls="{{autocompleteContainerIdName}}"
+          aria-haspopup="listbox"
+        >
+        <button type="button"
+                class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
+                data-eventtype="SEARCH_CLEAR_BUTTON"
+                data-eventoptions="{{eventOptions}}"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "close" }'
+                data-prop="icon"
+        >
+          <span class="yxt-SearchBar-clearButtonText sr-only">
+            {{clearText}}
+          </span>
+        </button>
+        <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
+          class="js-yext-submit yxt-SearchBar-button">
+          {{#if submitIcon}}
+            <div class="yxt-SearchBar-buttonImage"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "{{submitIcon}}" }'
+            ></div>
+          {{else if _config.customIconUrl}}
+            <div class="yxt-SearchBar-buttonImage"
+                data-component="IconComponent"
+                data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
+            ></div>
+          {{else}}
+            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
+              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
+              data-component="IconComponent"
+              data-opts="{{json forwardIconOpts}}">
+            </div>
+            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
+              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
+              data-component="IconComponent"
+              data-opts="{{json reverseIconOpts}}">
+            </div>
+          {{/if}}
+          <span class="yxt-SearchBar-buttonText sr-only">
+            {{submitText}}
+          </span>
+        </button>
+      </form>
     {{else}}
-      <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-        {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
-        data-component="IconComponent"
-        data-opts="{{json forwardIconOpts}}">
-      </div>
-      <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-        {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
-        data-component="IconComponent"
-        data-opts="{{json reverseIconOpts}}">
+      <div class="yxt-SearchBar-input-wrapper">
+        <label class="sr-only" 
+               for="{{inputIdName}}"
+               id="{{inputLabelIdName}}"
+        >
+          {{labelText}}
+        </label>
+        <input class="js-yext-query yxt-SearchBar-input"
+          id="{{inputIdName}}"
+          type="text"
+          name="query"
+          value="{{query}}"
+          {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
+          aria-label="{{labelText}}"
+          aria-autocomplete="list"
+          aria-controls="{{autocompleteContainerIdName}}"
+          aria-haspopup="listbox"
+        >
+        <button type="button"
+                class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
+                data-eventtype="SEARCH_CLEAR_BUTTON"
+                data-eventoptions="{{eventOptions}}"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "close" }'
+                data-prop="icon"
+        >
+          <span class="yxt-SearchBar-clearButtonText sr-only">
+            {{clearText}}
+          </span>
+        </button>
+        <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
+          class="js-yext-submit yxt-SearchBar-button">
+          {{#if submitIcon}}
+            <div class="yxt-SearchBar-buttonImage"
+                data-component="IconComponent"
+                data-opts='{ "iconName": "{{submitIcon}}" }'
+            ></div>
+          {{else if _config.customIconUrl}}
+            <div class="yxt-SearchBar-buttonImage"
+                data-component="IconComponent"
+                data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
+            ></div>
+          {{else}}
+            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
+              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
+              data-component="IconComponent"
+              data-opts="{{json forwardIconOpts}}">
+            </div>
+            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
+              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
+              data-component="IconComponent"
+              data-opts="{{json reverseIconOpts}}">
+            </div>
+          {{/if}}
+          <span class="yxt-SearchBar-buttonText sr-only">
+            {{submitText}}
+          </span>
+        </button>
       </div>
     {{/if}}
-    <span class="yxt-SearchBar-buttonText sr-only">
-      {{submitText}}
-    </span>
-  </button>
-{{/inline}}
+    <div id="{{autocompleteContainerIdName}}" class="yxt-SearchBar-autocomplete"></div>
+  </div>
+</div>

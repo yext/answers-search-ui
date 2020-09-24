@@ -13,10 +13,14 @@ export default class AutoCompleteData {
     if (response.sections) {
       sections = response.sections.map(s => ({
         label: s.label,
-        results: s.results.map(r => new AutoCompleteResult(r))
+        results: s.results.map(r => new AutoCompleteResult(r)),
+        resultsCount: s.results.length
       }));
     } else {
-      sections = [{ results: response.results.map(r => new AutoCompleteResult(r)) }];
+      sections = [{
+        results: response.results.map(r => new AutoCompleteResult(r)),
+        resultsCount: response.results.length
+      }];
     }
     let inputIntents = response.input ? response.input.queryIntents : [];
     return new AutoCompleteData({

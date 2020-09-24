@@ -21,7 +21,6 @@ $locationBias-bullet-color-default: var(--yxt-locationBias-text-color) !default;
   text-align: center;
 
   padding-top: var(--yxt-base-spacing);
-  padding-bottom: var(--yxt-base-spacing);
 
   @include Text(
     $size: var(--yxt-locationBias-text-font-size),

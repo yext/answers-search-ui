@@ -37,7 +37,7 @@ export default class SearchParams {
     let params = {};
     let search = url;
 
-    if (search === '') {
+    if (!search) {
       return params;
     }
 

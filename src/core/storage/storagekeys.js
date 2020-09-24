@@ -35,5 +35,6 @@ export default {
   LOCATION_RADIUS: 'location-radius',
   RESULTS_HEADER: 'results-header',
   API_CONTEXT: 'context',
-  REFERRER_PAGE_URL: 'referrerPageUrl'
+  REFERRER_PAGE_URL: 'referrerPageUrl',
+  QUERY_TRIGGER: 'queryTrigger'
 };

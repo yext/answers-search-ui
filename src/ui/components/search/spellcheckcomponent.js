@@ -35,7 +35,7 @@ export default class SpellCheckComponent extends Component {
 
   onCreate () {
     this.core.persistentStorage.delete('skipSpellCheck', true);
-    this.core.persistentStorage.delete('queryTrigger', true);
+    this.core.persistentStorage.delete(StorageKeys.QUERY_TRIGGER, true);
   }
 
   setState (data, val) {
@@ -53,7 +53,7 @@ export default class SpellCheckComponent extends Component {
     let params = new SearchParams(window.location.search.substring(1));
     params.set('query', query.value);
     params.set('skipSpellCheck', true);
-    params.set('queryTrigger', type.toLowerCase());
+    params.set(StorageKeys.QUERY_TRIGGER, type.toLowerCase());
     return '?' + params.toString();
   }
 

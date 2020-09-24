@@ -1,14 +1,14 @@
 import HandlebarsRenderer from '../../../src/ui/rendering/handlebarsrenderer';
 import Handlebars from 'handlebars';
 
-describe('the handlebars runtimeTranslation helper', () => {
+describe('the handlebars processTranslation helper', () => {
   const renderer = new HandlebarsRenderer();
   renderer.init({
     '_hb': Handlebars
   });
 
   it('can translate a string phrase', () => {
-    const template = `{{runtimeTranslation
+    const template = `{{processTranslation
       phrase='Hello my name is [[firstName]] [[lastName]]'
       firstName=myFirstName
       lastName=myLastName
@@ -27,7 +27,7 @@ describe('the handlebars runtimeTranslation helper', () => {
       1: '[[count]] [[size]] [[color]] cows tried to make a [[food]]',
       locale: 'en'
     };
-    const template = `{{runtimeTranslation
+    const template = `{{processTranslation
       phrase='${JSON.stringify(phrase)}'
       size=mySize
       color=myColor
@@ -70,7 +70,7 @@ describe('the handlebars runtimeTranslation helper', () => {
       2: 'Pasirinkta [[count]] tinklalapių',
       locale: 'lt-LT'
     };
-    const template = `{{runtimeTranslation
+    const template = `{{processTranslation
       phrase='${JSON.stringify(phrase)}'
       count=myCount
     }}`;

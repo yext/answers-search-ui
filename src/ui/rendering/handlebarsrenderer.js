@@ -3,7 +3,7 @@
 import Renderer from './renderer';
 import Icons from '../icons';
 import HighlightedValue from '../../core/models/highlightedvalue';
-import Translator from '../../core/i18n/translator';
+import TranslationProcessor from '../../core/i18n/translationprocessor';
 
 /**
  * HandlebarsRenderer is a wrapper around the nativate handlebars renderer.
@@ -193,9 +193,9 @@ export default class HandlebarsRenderer extends Renderer {
         : pluralText;
     });
 
-    this.registerHelper('runtimeTranslation', function (options) {
+    this.registerHelper('processTranslation', function (options) {
       let { phrase, count } = options.hash;
-      return Translator.translate(phrase, options.hash, count);
+      return TranslationProcessor.process(phrase, options.hash, count);
     });
 
     let self = this;

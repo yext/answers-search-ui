@@ -2,10 +2,17 @@
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
-import StorageKeys from './storage/storagekeys';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
+import SearchIntents from './models/searchintents';
+import Navigation from './models/navigation';
+import AlternativeVerticals from './models/alternativeverticals';
+import DirectAnswer from './models/directanswer';
+import LocationBias from './models/locationbias';
+import QueryTriggers from './models/querytriggers';
+
+import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
 
@@ -128,6 +135,7 @@ export default class Core {
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, options = {}, query = {}) {
+    window.performance.mark('yext.answers.verticalQueryStart');
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
@@ -166,7 +174,9 @@ export default class Core {
     }
 
     const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
-
+    const queryTrigger = this.getQueryTriggerForSearchApi(
+      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+    );
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
@@ -178,8 +188,8 @@ export default class Core {
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
+        queryTrigger: queryTrigger,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
@@ -211,7 +221,7 @@ export default class Core {
           this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         }
         this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete('queryTrigger');
+        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = {
           verticalKey: verticalKey,
@@ -223,7 +233,24 @@ export default class Core {
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        window.performance.mark('yext.answers.verticalQueryResponseRendered');
       });
+  }
+
+  clearResults () {
+    this.globalStorage.set(StorageKeys.QUERY, null);
+    this.globalStorage.set(StorageKeys.QUERY_ID, '');
+    this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
+    this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
+    this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
+    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
+    this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
+    this.globalStorage.set(StorageKeys.NAVIGATION, new Navigation());
+    this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
+    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
+    this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
+    this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
+    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
   }
 
   /**
@@ -239,6 +266,7 @@ export default class Core {
   }
 
   search (queryString, urls, options = {}) {
+    window.performance.mark('yext.answers.universalQueryStart');
     const { setQueryParams } = options;
     const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
@@ -257,12 +285,16 @@ export default class Core {
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
+
+    const queryTrigger = this.getQueryTriggerForSearchApi(
+      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+    );
     return this._searcher
       .universalSearch(queryString, {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
-        queryTrigger: this.globalStorage.getState('queryTrigger'),
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
+        queryTrigger: queryTrigger,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         context: context,
         referrerPageUrl: referrerPageUrl
       })
@@ -276,17 +308,45 @@ export default class Core {
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete('queryTrigger');
+        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
-        const exposedParams = {
-          queryString: queryString,
-          sectionsCount: data[StorageKeys.UNIVERSAL_RESULTS].sections.length
-        };
+        const exposedParams = this._getOnUniversalSearchParams(
+          data[StorageKeys.UNIVERSAL_RESULTS].sections,
+          queryString);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        window.performance.mark('yext.answers.universalQueryResponseRendered');
       });
+  }
+
+  /**
+   * Builds the object passed as a parameter to onUniversalSearch. This object
+   * contains information about the universal search's query and result counts.
+   *
+   * @param {Array<Section>} sections The sections of results.
+   * @param {string} queryString The search query.
+   * @return {Object<string, ?>}
+   */
+  _getOnUniversalSearchParams (sections, queryString) {
+    const resultsCountByVertical = sections.reduce(
+      (resultsCountMap, section) => {
+        const { verticalConfigId, resultsCount, results } = section;
+        resultsCountMap[verticalConfigId] = {
+          totalResultsCount: resultsCount,
+          displayedResultsCount: results.length
+        };
+        return resultsCountMap;
+      },
+      {});
+    const exposedParams = {
+      queryString,
+      sectionsCount: sections.length,
+      resultsCountByVertical
+    };
+
+    return exposedParams;
   }
 
   /**
@@ -472,6 +532,18 @@ export default class Core {
    */
   clearLocationRadiusFilterNode () {
     this.filterRegistry.clearLocationRadiusFilterNode();
+  }
+
+  /**
+   * Returns the query trigger for the search API given the SDK query trigger
+   * @param {QueryTriggers} queryTrigger SDK query trigger
+   * @returns {QueryTriggers} query trigger if accepted by the search API, null o/w
+   */
+  getQueryTriggerForSearchApi (queryTrigger) {
+    if (queryTrigger === QueryTriggers.QUERY_PARAMETER) {
+      return null;
+    }
+    return queryTrigger;
   }
 
   enableDynamicFilters () {
