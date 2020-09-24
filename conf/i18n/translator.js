@@ -2,8 +2,8 @@ const i18next = require('i18next');
 
 /**
  * This class wraps an instance of the i18next library and provides methods supporting
- * run-time and compile-time translation. These methods allow for interpolation, pluralization,
- * and added context.
+ * run-time and compile-time translation. These methods allow for interpolation,
+ * pluralization, and added context.
  */
 class Translator {
   /**
@@ -30,56 +30,6 @@ class Translator {
   }
 
   /**
-   * Provides all the translated singular and plural forms of the given phrase.
-   * The forms will include any of the needed interpolation placeholders.
-   *
-   * @param {string} phrase The phrase to translate.
-   * @param {string} pluralForm The untranslated, plural form of the phrase.
-   * @param {string} originalLocale The original locale of the passed in phrase.
-   * @returns {Object<string|number, string>} A map containing the various forms as well as the locale.
-   *                                          A form is keyed by its gettext plural form count
-   *                                          see https://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html
-   */
-  translatePlural (phrase, pluralForm, originalLocale = 'en') {
-    const escapedPhrase = phrase
-      .replace(/\[\[/g, '\\[\\[')
-      .replace(/\]\]/g, '\\]\\]');
-    const pluralKeyRegex = new RegExp(`${escapedPhrase}_([0-9]+|plural)`);
-
-    const i18nextOptions = this._i18next.options;
-
-    // We first look for the translations in the given locale. If none can be
-    // found there, we iterate through the fallbacks, in order.
-    const localeWithPluralTranslations = this._findLocaleWithTranslationKey(
-      [i18nextOptions.lng, ...i18nextOptions.fallbackLng], pluralKeyRegex);
-
-    if (localeWithPluralTranslations) {
-      const localeTranslations =
-        i18nextOptions.resources[localeWithPluralTranslations].translation;
-
-      // Create a map of count (or 'plural') to the correct translated form.
-      return Object.keys(localeTranslations)
-        .filter(translationKey => pluralKeyRegex.test(translationKey))
-        .reduce(
-          (pluralForms, translationKey) => {
-            const keySuffix = translationKey.split('_')[1];
-            const pluralFormIndex = keySuffix === 'plural' ? '1' : keySuffix;
-            pluralForms[pluralFormIndex] = localeTranslations[translationKey];
-            return pluralForms;
-          },
-          { 0: localeTranslations[phrase], locale: localeWithPluralTranslations });
-    }
-
-    // If no translations can be found, we return a map containing the provided
-    // singular and plural forms.
-    return {
-      0: phrase,
-      1: pluralForm,
-      locale: originalLocale
-    };
-  }
-
-  /**
    * Translates the provided phrase depending on the context. If the phrase includes
    * interpolation, a translated format string, with the relevant placeholders,
    * is returned.
@@ -92,6 +42,123 @@ class Translator {
     const interpPlaceholders = this._getInterpolationPlaceholders(phrase);
 
     return this._i18next.t(phrase, { context, ...interpPlaceholders });
+  }
+
+  /**
+   * Provides all the translated singular and plural forms of the given phrase.
+   * The forms will include any of the needed interpolation placeholders.
+   *
+   * @param {string} phrase The phrase to translate.
+   * @param {string} pluralForm The untranslated, plural form of the phrase.
+   * @returns {Object<string|number, string>} A map containing the various forms as
+   *   well as the locale. A form is keyed by its gettext plural form count see
+   *   https://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html
+   */
+  translatePlural (phrase, pluralForm) {
+    const escapedPhrase = this._escapeInterpolationBrackets(phrase);
+    const pluralKeyRegex = new RegExp(`${escapedPhrase}_([0-9]+|plural)`);
+    const i18nextOptions = this._i18next.options;
+
+    // We first look for the translations in the given locale. If none can be
+    // found there, we iterate through the fallbacks, in order.
+    const localeWithPluralTranslations = this._findLocaleWithTranslationKey(
+      [i18nextOptions.lng, ...i18nextOptions.fallbackLng], pluralKeyRegex);
+
+    if (localeWithPluralTranslations) {
+      return this._generateMapOfPluralizationsToTranslations(
+        localeWithPluralTranslations,
+        pluralKeyRegex,
+        phrase);
+    }
+
+    return this._getUntranslatedPluralizations(phrase, pluralForm);
+  }
+
+  /**
+   * Provides all the translated singular and plural forms of the given phrase and context
+   * The forms will include any of the needed interpolation placeholders.
+   *
+   * @param {string} phrase The phrase to translate.
+   * @param {string} pluralForm The untranslated, plural form of the phrase.
+   * @param {string} context The translation context
+   * @returns {Object<string|number, string>} A map containing the various forms as
+   *   well as the locale. A form is keyed by its gettext plural form count, see
+   *   https://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html
+   */
+  translatePluralWithContext (phrase, pluralForm, context) {
+    const escapedPhrase = this._escapeInterpolationBrackets(phrase);
+    const pluralWithContextKeyRegex = new RegExp(
+      `${escapedPhrase}_${context}_([0-9]+|plural)`);
+    const i18nextOptions = this._i18next.options;
+
+    // We first look for the translations in the given locale. If none can be
+    // found there, we iterate through the fallbacks, in order.
+    const localeWithPluralTranslations = this._findLocaleWithTranslationKey(
+      [i18nextOptions.lng, ...i18nextOptions.fallbackLng], pluralWithContextKeyRegex);
+
+    if (localeWithPluralTranslations) {
+      return this._generateMapOfPluralizationsToTranslations(
+        localeWithPluralTranslations,
+        pluralWithContextKeyRegex,
+        `${phrase}_${context}`);
+    }
+
+    return this._getUntranslatedPluralizations(phrase, pluralForm);
+  }
+
+  /**
+   * Constructs a pluralization dictionary without translating any strings
+   * TODO (cea2aj) This will need to be updated if we want to support developing in
+   * languages with more than two plural forms
+   *
+   * @param {string} phrase
+   * @param {string} pluralForm
+   * @returns {Object<string|number, string>} A map containing the various forms as
+   *   well as the locale.
+   */
+  _getUntranslatedPluralizations (phrase, pluralForm) {
+    return {
+      0: phrase,
+      1: pluralForm
+    };
+  }
+
+  /**
+   * Creates a map of count (or 'plural') to the correct translated form
+   *
+   * @param {string} locale The locale used when creating the map
+   * @param {RegExp} pluralRegex Regex that matches pluralized keys
+   * @param {string} translationKey The key for the singular form of the phrase
+   * @returns {Object<string|number, string>} A map containing the various forms as
+   *   well as the locale.
+   */
+  _generateMapOfPluralizationsToTranslations (locale, pluralRegex, translationKey) {
+    const localeTranslations =
+        this._i18next.options.resources[locale].translation;
+
+    return Object.keys(localeTranslations)
+      .filter(translationKey => pluralRegex.test(translationKey))
+      .reduce(
+        (pluralForms, translationKey) => {
+          const splitTranslationKeys = translationKey.split('_');
+          const keySuffix = splitTranslationKeys[splitTranslationKeys.length - 1];
+          const pluralFormIndex = keySuffix === 'plural' ? '1' : keySuffix;
+          pluralForms[pluralFormIndex] = localeTranslations[translationKey];
+          return pluralForms;
+        },
+        { 0: localeTranslations[translationKey] });
+  }
+
+  /**
+   * Escapes the interpolation brackets in a phrase
+   *
+   * @param {string} phrase
+   * @returns {string}
+   */
+  _escapeInterpolationBrackets (phrase) {
+    return phrase
+      .replace(/\[\[/g, '\\[\\[')
+      .replace(/\]\]/g, '\\]\\]');
   }
 
   /**
@@ -153,9 +220,9 @@ class Translator {
     const i18nextInstance = i18next.createInstance();
     await i18nextInstance.init({
       lng: locale,
+      nsSeparator: false, // allow keys to be phrases having `:`
+      keySeparator: false, // allow keys to be phrases having `.`
       fallbackLng: fallbacks,
-      nsSeparator: false, // Allow phrases to contain ':'
-      keySeparator: false, // Allow phrases to contain '.'
       resources: translations
     });
     const translator = new Translator(i18nextInstance);

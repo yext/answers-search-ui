@@ -28,11 +28,14 @@ export default class HandlebarsRenderer extends Renderer {
     this._templates = templates || {};
   }
 
-  init (templates) {
+  init (templates, locale) {
     // Assign the handlebars compiler and templates based on
     // information provided from external dep (in default case, it comes from external server request)
     this._handlebars = templates._hb;
     this._templates = templates;
+
+    // Store the locale that ANSWERS was initialized with
+    this._initLocale = locale;
 
     // TODO(billy) Once we re-write templates using the new helpers library
     // we probably don't need these custom helpers anymore
@@ -193,12 +196,32 @@ export default class HandlebarsRenderer extends Renderer {
         : pluralText;
     });
 
+    let self = this;
+
     this.registerHelper('processTranslation', function (options) {
-      let { phrase, count } = options.hash;
-      return TranslationProcessor.process(phrase, options.hash, count);
+      const pluralizationInfo = {};
+      const interpolationParams = {};
+      let { phrase, count, locale } = options.hash;
+
+      Object.entries(options.hash).forEach(([key, value]) => {
+        if (key.startsWith('pluralForm')) {
+          const pluralFormIndex = parseInt(key.substring(10));
+          pluralizationInfo[pluralFormIndex] = value;
+        } else {
+          interpolationParams[key] = value;
+        }
+      });
+
+      const isUsingPluralization = (typeof phrase !== 'string');
+
+      locale = locale || self._initLocale;
+      const language = locale.substring(0, 2);
+
+      return isUsingPluralization
+        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, language)
+        : TranslationProcessor.process(phrase, interpolationParams);
     });
 
-    let self = this;
     self.registerHelper('icon', function (name, complexContentsParams, options) {
       let icon = Icons.default;
       if (!Icons[name]) {

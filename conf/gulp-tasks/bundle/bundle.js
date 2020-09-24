@@ -41,7 +41,7 @@ exports.modernBundle = function (callback, outputConfig, bundleName, locale, lib
     ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
-}
+};
 
 /**
  * The Gulp task for producing either variant of the legacy SDK bundle.
@@ -91,7 +91,7 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
     ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
-}
+};
 
 /**
  * Bundles the JS based on the given Rollup config.
@@ -112,11 +112,11 @@ function _buildBundle (callback, rollupConfig, bundleName, locale, libVersion, t
     .pipe(replace(TRANSLATION_FLAGGER_REGEX, translateCall => {
       const placeholder = new TranslateCallParser().parse(translateCall);
       const translationResult = translationResolver.resolve(placeholder);
-      const canBeTranslatedStatically = typeof translationResult === 'string'
-        && !placeholder.getPluralForm()
-        && placeholder.hasNoInterpolation();
+      const canBeTranslatedStatically = typeof translationResult === 'string' &&
+        !placeholder.getPluralForm() &&
+        placeholder.hasNoInterpolation();
       return canBeTranslatedStatically ? `"${translationResult}"` : translationResult;
-     }))
+    }))
     .pipe(dest('dist'))
     .on('end', callback);
 }

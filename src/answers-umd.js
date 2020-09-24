@@ -274,13 +274,13 @@ class Answers {
 
     if (parsedConfig.useTemplates === false || parsedConfig.templateBundle) {
       if (parsedConfig.templateBundle) {
-        this.renderer.init(parsedConfig.templateBundle);
+        this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
       }
     } else {
       // Templates are currently downloaded separately from the CORE and UI bundle.
       // Future enhancement is to ship the components with templates in a separate bundle.
       this.templates = new DefaultTemplatesLoader(templates => {
-        this.renderer.init(templates);
+        this.renderer.init(templates, this._getInitLocale());
       });
     }
 
@@ -528,14 +528,29 @@ class Answers {
   }
 
   /**
-   * Processes a translation which includes performing interpolation, pluralization, or both
-   * @param {string} translations The translations, or a stringified JSON of possible translations
+   * Processes a translation which includes performing interpolation, pluralization, or
+   * both
+   * @param {string | Object} translations The translation, or an object containing
+   * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
+   * @param {string} language The langauge associated with the pluralization
    * @returns {string} The translation with any interpolation or pluralization applied
    */
-  processTranslation (translations, interpolationParams, count) {
-    return TranslationProcessor.process(translations, interpolationParams, count);
+  processTranslation (translations, interpolationParams, count, language) {
+    const initLocale = this._getInitLocale();
+    language = language || initLocale.substring(0, 2);
+
+    return TranslationProcessor.process(translations, interpolationParams, count, language);
+  }
+
+  /**
+   * Gets the locale that ANSWERS was initialized to
+   *
+   * @returns {string}
+   */
+  _getInitLocale () {
+    return this.core.globalStorage.getState(StorageKeys.LOCALE);
   }
 }
 

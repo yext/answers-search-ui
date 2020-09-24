@@ -32,7 +32,7 @@
     "enzyme": "^3.11.0",
     "fs-extra": "^9.0.1",
     "gettext-extractor": "^3.5.2",
-    "gulp": "^4.0.1",
+    "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
     "gulp-declare": "^0.3.0",
     "gulp-handlebars": "^5.0.2",

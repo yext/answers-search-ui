@@ -5,13 +5,14 @@ describe('the handlebars processTranslation helper', () => {
   const renderer = new HandlebarsRenderer();
   renderer.init({
     '_hb': Handlebars
-  });
+  }, 'en');
 
   it('can translate a string phrase', () => {
     const template = `{{processTranslation
       phrase='Hello my name is [[firstName]] [[lastName]]'
       firstName=myFirstName
       lastName=myLastName
+      locale='en'
     }}`;
     const data = {
       myFirstName: 'Cat',
@@ -22,13 +23,10 @@ describe('the handlebars processTranslation helper', () => {
   });
 
   describe('when translating a plural phrase in en', () => {
-    const phrase = {
-      0: 'a [[size]] [[color]] cow tried to make a [[food]]',
-      1: '[[count]] [[size]] [[color]] cows tried to make a [[food]]',
-      locale: 'en'
-    };
     const template = `{{processTranslation
-      phrase='${JSON.stringify(phrase)}'
+      pluralForm0='a [[size]] [[color]] cow tried to make a [[food]]'
+      pluralForm1='[[count]] [[size]] [[color]] cows tried to make a [[food]]'
+      locale='en'
       size=mySize
       color=myColor
       food=myFood
@@ -64,14 +62,11 @@ describe('the handlebars processTranslation helper', () => {
   });
 
   describe('when translating a plural phrase in a locale with multiple plural forms', () => {
-    const phrase = {
-      0: 'Pasirinkta [[count]] tinklalapis',
-      1: 'Pasirinkta [[count]] tinklalapiai',
-      2: 'Pasirinkta [[count]] tinklalapių',
-      locale: 'lt-LT'
-    };
     const template = `{{processTranslation
-      phrase='${JSON.stringify(phrase)}'
+      pluralForm0='Pasirinkta [[count]] tinklalapis'
+      pluralForm1='Pasirinkta [[count]] tinklalapiai'
+      pluralForm2='Pasirinkta [[count]] tinklalapių'
+      locale='lt-LT'
       count=myCount
     }}`;
 
@@ -91,6 +86,47 @@ describe('the handlebars processTranslation helper', () => {
 
     it('uses key_2 when count = 0', () => {
       const translation = renderer.compile(template)({
+        myCount: 0
+      });
+      expect(translation).toEqual('Pasirinkta 0 tinklalapių');
+    });
+  });
+
+  describe('locale fallback behavior works as expected', () => {
+    it('use locale specified in the renderer init', () => {
+      const rendererWithLocale = new HandlebarsRenderer();
+      rendererWithLocale.init({
+        '_hb': Handlebars
+      }, 'lt-LT');
+
+      const template = `{{processTranslation
+        pluralForm0='Pasirinkta [[count]] tinklalapis'
+        pluralForm1='Pasirinkta [[count]] tinklalapiai'
+        pluralForm2='Pasirinkta [[count]] tinklalapių'
+        count=myCount
+      }}`;
+
+      const translation = rendererWithLocale.compile(template)({
+        myCount: 0
+      });
+      expect(translation).toEqual('Pasirinkta 0 tinklalapių');
+    });
+
+    it('locale in the template overrides the one in the init if specified', () => {
+      const rendererWithLocale = new HandlebarsRenderer();
+      rendererWithLocale.init({
+        '_hb': Handlebars
+      }, 'en');
+
+      const template = `{{processTranslation
+        pluralForm0='Pasirinkta [[count]] tinklalapis'
+        pluralForm1='Pasirinkta [[count]] tinklalapiai'
+        pluralForm2='Pasirinkta [[count]] tinklalapių'
+        locale='lt-LT'
+        count=myCount
+      }}`;
+
+      const translation = rendererWithLocale.compile(template)({
         myCount: 0
       });
       expect(translation).toEqual('Pasirinkta 0 tinklalapių');
