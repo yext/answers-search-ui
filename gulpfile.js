@@ -13,3 +13,5 @@ exports.dev = parallel(
   library.dev
 );
 exports.extractTranslations = extractTranslations;
+
+exports.test = templates.test;
