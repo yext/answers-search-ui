@@ -1,7 +1,6 @@
 import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import RangeFilterComponent from 'src/ui/components/filters/rangefiltercomponent';
 import Filter from 'src/core/models/filter';
 import FilterMetadata from '../../../../src/core/filters/filtermetadata';
 
@@ -28,10 +27,7 @@ describe('range filter component', () => {
       }
     };
 
-    COMPONENT_MANAGER = mockManager(
-      mockCore,
-      RangeFilterComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager(mockCore);
 
     defaultConfig = {
       container: '#test-component'

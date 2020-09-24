@@ -1,7 +1,6 @@
 import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import DateRangeFilterComponent from 'src/ui/components/filters/daterangefiltercomponent';
 import Filter from 'src/core/models/filter';
 import FilterMetadata from '../../../../src/core/filters/filtermetadata';
 
@@ -31,10 +30,7 @@ describe('date range filter component', () => {
       }
     };
 
-    COMPONENT_MANAGER = mockManager(
-      mockCore,
-      DateRangeFilterComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager(mockCore);
 
     defaultConfig = {
       container: '#test-component'

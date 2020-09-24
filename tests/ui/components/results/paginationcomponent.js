@@ -3,7 +3,6 @@ import { mount } from 'enzyme';
 import DOM from '../../../../src/ui/dom/dom';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
-import PaginationComponent from '../../../../src/ui/components/results/paginationcomponent';
 
 const mockedCore = () => {
   // pagination will hide itself if there are no results, so we fake the relevant global storage.
@@ -37,10 +36,7 @@ const mockedCore = () => {
 
 DOM.setup(document, new DOMParser());
 
-const COMPONENT_MANAGER = mockManager(
-  mockedCore(),
-  PaginationComponent.defaultTemplateName()
-);
+const COMPONENT_MANAGER = mockManager(mockedCore());
 
 describe('rendering the arrows', () => {
   let defaultConfig;

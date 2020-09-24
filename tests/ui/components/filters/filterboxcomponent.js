@@ -1,10 +1,8 @@
 import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import FilterBoxComponent from 'src/ui/components/filters/filterboxcomponent';
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
-import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
 import FilterCombinators from 'src/core/filters/filtercombinators';
 import FilterType from 'src/core/filters/filtertype';
 import PersistentStorage from 'src/ui/storage/persistentstorage';
@@ -81,11 +79,7 @@ describe('filter box component', () => {
       persistentStorage: new PersistentStorage()
     };
 
-    COMPONENT_MANAGER = mockManager(
-      mockCore,
-      FilterBoxComponent.defaultTemplateName(),
-      FilterOptionsComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager(mockCore);
 
     defaultConfig = {
       container: '#test-component',
@@ -324,11 +318,7 @@ describe('dynamic filterbox component', () => {
       }
     };
 
-    COMPONENT_MANAGER = mockManager(
-      mockCore,
-      FilterBoxComponent.defaultTemplateName(),
-      FilterOptionsComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager(mockCore);
 
     defaultConfig = {
       container: '#test-component',
@@ -504,11 +494,7 @@ describe('FilterBox reset button', () => {
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
-    COMPONENT_MANAGER = mockManager(
-      {},
-      FilterBoxComponent.defaultTemplateName(),
-      FilterOptionsComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager();
 
     defaultConfig = {
       container: '#test-component',

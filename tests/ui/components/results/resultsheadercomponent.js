@@ -1,6 +1,5 @@
 /* eslint camelcase: 0 */
 
-import ResultsHeaderComponent from 'src/ui/components/results/resultsheadercomponent';
 import mockManager from '../../../setup/managermocker';
 import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
 import Filter from '../../../../src/core/models/filter';
@@ -11,14 +10,11 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
   let resultsHeaderComponent;
   let node_f0_v0, node_f0_v1, node_f1_v0, node_f1_v1;
   let remove_f0_v0_fn, remove_f0_v1_fn, remove_f1_v0_fn, remove_f1_v1_fn;
-  let COMPONENT_MANAGER = mockManager(
-    {
-      filterRegistry: {
-        getAllFilterNodes: () => []
-      }
-    },
-    ResultsHeaderComponent.defaultTemplateName()
-  );
+  let COMPONENT_MANAGER = mockManager({
+    filterRegistry: {
+      getAllFilterNodes: () => []
+    }
+  });
 
   beforeEach(() => {
     resultsHeaderComponent = COMPONENT_MANAGER.create('ResultsHeader', {});
@@ -161,15 +157,12 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
 
     // Mock src/core.js functionality
     const verticalSearchFn = jest.fn();
-    COMPONENT_MANAGER = mockManager(
-      {
-        verticalSearch: verticalSearchFn,
-        filterRegistry: {
-          getAllFilterNodes: () => [ node_f0_v0, node_f0_v1, node_f1_v0 ]
-        }
-      },
-      ResultsHeaderComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager({
+      verticalSearch: verticalSearchFn,
+      filterRegistry: {
+        getAllFilterNodes: () => [ node_f0_v0, node_f0_v1, node_f1_v0 ]
+      }
+    });
 
     // Initialize and mount component
     resultsHeaderComponent = COMPONENT_MANAGER.create('ResultsHeader', {
