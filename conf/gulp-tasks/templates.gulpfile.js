@@ -80,7 +80,7 @@ function createDefaultTask (locale, translator) {
 }
 
 /**
- * Creates a build task per locale, and combines them into a parallel task.
+ * Creates a build task per locale, and combines them into a series task.
  *
  * @returns {Promise<Function>}
  */
@@ -90,7 +90,7 @@ async function defaultTemplates () {
     return createDefaultTask(locale, translator);
   });
   const localizedTasks = await Promise.all(localizedTaskPromises);
-  return new Promise(resolve => parallel(...localizedTasks)(resolve));
+  return new Promise(resolve => series(...localizedTasks)(resolve));
 }
 
 exports.default = defaultTemplates;
