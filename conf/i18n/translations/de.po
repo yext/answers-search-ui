@@ -22,7 +22,7 @@ msgstr "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">Keine E
 
 #: src/ui/templates/results/alternativeverticals.hbs:47
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
-msgstr "Sehen Sie alternativ <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> Ergebnisse aus alle Kategorien</a>."
+msgstr "Sehen Sie alternativ <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> Ergebnisse aus allen Kategorien</a>."
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:61
 msgid "By submitting my email address, I consent to being contacted via email at the address provided."

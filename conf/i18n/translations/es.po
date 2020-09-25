@@ -6,6 +6,12 @@ msgstr ""
 msgid "[[start]] through [[end]] of [[resultsCount]]"
 msgstr "Desde [[start]] hasta [[end]] de [[resultsCount]]"
 
+#: src/ui/templates/search/autocomplete.hbs:14
+msgid "[[resultsCount]] autocomplete option found"
+msgid_plural "[[resultsCount]] autocomplete options found"
+msgstr[0] "[[resultsCount]] resultado de autocompletar encontrado"
+msgstr[1] "[[resultsCount]] resultados de autocompletar encontrados"
+
 #: src/ui/templates/questions/questionsubmission.hbs:7
 msgid "expand question form"
 msgstr "expandir formulario de preguntas"
@@ -116,11 +122,11 @@ msgstr "En su defecto, puede <a class=\"yxt-AlternativeVerticals-universalLink\"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:61
 msgid "By submitting my email address, I consent to being contacted via email at the address provided."
-msgstr "Doy mi consentimiento para ser contactado/a al correo proporcionado"
+msgstr "Doy mi consentimiento para ser contactado/a al correo proporcionado."
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:87
 msgid "Can’t find what you're looking for? Ask a question below."
-msgstr "No puede encontrar lo que estabas buscando? Describa su prolema debajo"
+msgstr "¿No se puede encontrar los que estaba buscando? Describa su prolema debajo."
 
 #: src/ui/templates/results/pagination.hbs:60
 msgid "Currently on page [[pageNumber]]"
@@ -182,13 +188,13 @@ msgstr "Gracias por su comentario"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:127
 msgid "Thank you for your question!"
-msgstr "Gracias por su pregunta"
+msgstr "Gracias por su pregunta."
 
 #: src/ui/templates/results/alternativeverticals.hbs:11
 msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
 msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
-msgstr[0] "La siguiente búsquedaha generado categoría resultados para <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
-msgstr[1] "La siguiente búsquedaha generado categorias resultados para <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgstr[0] "La siguiente búsqueda ha generado categoría resultados para <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgstr[1] "La siguiente búsqueda ha generado categorias resultados para <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
 
 #: src/ui/components/results/directanswercomponent.js:21
 msgid "This answered my question"
@@ -400,6 +406,11 @@ msgstr "Página"
 msgctxt "Noun, labels the navigation for the search page"
 msgid "Search Page Navigation"
 msgstr "Página de búsqueda"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:118
+msgctxt "Placeholder text for input field"
+msgid "Enter your question here"
+msgstr "Escribe tu pregunta aquí"
 
 #: src/ui/components/filters/facetscomponent.js:127
 #: src/ui/components/filters/filteroptionscomponent.js:152
