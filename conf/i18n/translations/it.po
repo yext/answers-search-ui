@@ -176,7 +176,7 @@ msgstr "inviare feedback"
 
 #: src/ui/templates/results/alternativeverticals.hbs:5
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
-msgstr "Mostrando <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">tutte le [[currentVerticalLabel]] disponibili.</em>."
+msgstr "Mostrando <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">tutte le [[currentVerticalLabel]] disponibili</em>."
 
 #: src/ui/templates/results/noresults.hbs:24
 msgid "Suggestions:"
