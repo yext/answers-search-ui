@@ -9,8 +9,8 @@ msgstr "Desde [[start]] hasta [[end]] de [[resultsCount]]"
 #: src/ui/templates/search/autocomplete.hbs:14
 msgid "[[resultsCount]] autocomplete option found"
 msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "[[resultsCount]] resultado de autocompletar encontrado"
-msgstr[1] "[[resultsCount]] resultados de autocompletar encontrados"
+msgstr[0] "[[resultsCount]] opción de autocompletar encontrada"
+msgstr[1] "[[resultsCount]] opciones de autocompletar encontradas"
 
 #: src/ui/templates/questions/questionsubmission.hbs:7
 msgid "expand question form"
