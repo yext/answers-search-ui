@@ -21,6 +21,7 @@ export default class ResultFactory {
     for (let i = 0; i < resultsData.length; i++) {
       const data = resultsData[i].data || resultsData[i];
       const distance = resultsData[i].distance;
+      const distanceFromFilter = resultsData[i].distanceFromFilter;
 
       switch (source) {
         case 'GOOGLE_CSE':
@@ -39,7 +40,7 @@ export default class ResultFactory {
           const highlightedFields = resultsData[i].highlightedFields || {};
 
           results.push(ResultFactory.fromKnowledgeManager(
-            data, formatters, verticalId, highlightedFields, i, distance));
+            data, formatters, verticalId, highlightedFields, i, distance, distanceFromFilter));
           break;
         default:
           results.push(ResultFactory.fromGeneric(data, i));
@@ -165,9 +166,10 @@ export default class ResultFactory {
    * @param {Object} highlightedFields
    * @param {number} index
    * @param {number} distance
+   * @param {number} distanceFromFilter
    * @returns {Result}
    */
-  static fromKnowledgeManager (data, formatters, verticalId, highlightedFields, index, distance) {
+  static fromKnowledgeManager (data, formatters, verticalId, highlightedFields, index, distance, distanceFromFilter) {
     // compute highlighted entity profile data
     let highlightedEntityProfileData = ResultFactory.computeHighlightedData(data, highlightedFields);
     // compute formatted entity profile data
@@ -193,7 +195,8 @@ export default class ResultFactory {
       link: data.website,
       id: data.id,
       ordinal: index + 1,
-      distance: distance
+      distance: distance,
+      distanceFromFilter: distanceFromFilter
     });
   }
 
