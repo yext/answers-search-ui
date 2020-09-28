@@ -168,7 +168,6 @@ export default class ResultFactory {
    * @param {number} distance
    * @param {number} distanceFromFilter
    * @returns {Result}
-   * @param {number} distanceFromFilter
    */
   static fromKnowledgeManager (data, formatters, verticalId, highlightedFields, index, distance, distanceFromFilter) {
     // compute highlighted entity profile data
