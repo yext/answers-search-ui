@@ -442,9 +442,5 @@ msgstr "Posez votre question ici"
 #: src/ui/templates/search/autocomplete.hbs:14
 msgid "[[resultsCount]] autocomplete option found"
 msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] ""
-msgstr[1] ""
-
-
-
-
+msgstr[0] "[[resultsCount]] option de saisie automatique trouvée"
+msgstr[1] "[[resultsCount]] options de saisie automatique trouvées"
