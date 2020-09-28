@@ -3,7 +3,8 @@ const path = require('path');
 
 const LocalFileParser = require('../i18n/localfileparser');
 const Translator = require('../i18n/translator');
-const { DEV_LOCALE, BUILD_LOCALES } = require('../i18n/constants');
+const { DEV_LOCALE, DEFAULT_LOCALES, ALL_LANGUAGES } = require('../i18n/constants');
+const { createLocaleFilesPerLanguage } = require('../i18n/localebuildutils');
 
 const TemplateType = require('./template/templatetype');
 const createPrecompileTemplatesTask = require('./template/createprecompiletemplates');
@@ -81,11 +82,11 @@ function createDefaultTask (locale, translator) {
 
 /**
  * Creates a build task per locale, and combines them into a series task.
- *
+ * @param {Array<string>} locales
  * @returns {Promise<Function>}
  */
-async function defaultTemplates () {
-  const localizedTaskPromises = BUILD_LOCALES.map(async locale => {
+async function createTemplatesForLocales (locales) {
+  const localizedTaskPromises = locales.map(async locale => {
     const translator = await createTranslator(locale);
     return createDefaultTask(locale, translator);
   });
@@ -93,4 +94,20 @@ async function defaultTemplates () {
   return new Promise(resolve => series(...localizedTasks)(resolve));
 }
 
-exports.default = defaultTemplates;
+exports.default = function defaultTemplates () {
+  return createTemplatesForLocales(DEFAULT_LOCALES);
+};
+
+exports.buildLanguages = function allLanguageTemplates () {
+  return createTemplatesForLocales(ALL_LANGUAGES);
+};
+
+exports.buildLocales = function allLocaleTemplates () {
+  const baseFileNames = [
+    'answerstemplates-iife.compiled.min.js',
+    'answerstemplates.compiled.min.js'];
+
+  return createTemplatesForLocales(ALL_LANGUAGES).then(() => {
+    createLocaleFilesPerLanguage(baseFileNames);
+  });
+};
