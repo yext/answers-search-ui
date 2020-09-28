@@ -45,7 +45,7 @@ export default class TranslationProcessor {
   }
 
   static _interpolate (stringToInterpolate, interpolationParams) {
-    const interpolationRegex = new RegExp(/\[\[([a-zA-Z0-9]+)\]\]/, 'g');
+    const interpolationRegex = /\[\[([a-zA-Z0-9]+)\]\]/g;
 
     return stringToInterpolate.replace(interpolationRegex, (match, interpolationKey) => {
       return interpolationParams[interpolationKey];
