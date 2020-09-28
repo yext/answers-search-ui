@@ -95,5 +95,10 @@ export default class Result {
      * @type {number}
      */
     this.distance = data.distance || null;
+    
+    /**
+     * @type {number}
+     */
+    this.distanceFromFilter = data.distanceFromFilter || null;
   }
 }
