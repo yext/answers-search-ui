@@ -7,9 +7,9 @@ const fs = require('fs');
  * new one.
  *
  * For example, if assetNames includes 'answers.js' and LANGUAGES_TO_LOCALES includes
- * 'fr_CA' and 'fr_FR' for the language 'fr', the file 'fr-answers.js' will be copied to
- * 'fr_CA-answers.js' and 'fr_FR-answers.js'. Builds for each language must be created
- * before this function is run.
+ * 'fr_CA' and 'fr_FR' for the language 'fr', symlinks named 'fr_CA-answers.js' and
+ * 'fr_FR-answers.js' will be created which point to 'fr-answers.js'. Builds for each
+ * language must be created before this function is run.
  *
  * @param {Array<string>} assetNames File names used for iteration and file generation
  */
