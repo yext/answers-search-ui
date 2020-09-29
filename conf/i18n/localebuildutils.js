@@ -2,8 +2,9 @@ const { LANGUAGES_TO_LOCALES, ALL_LANGUAGES } = require('./constants');
 const fs = require('fs');
 
 /**
- * Iterate through SDK language build files and create copies for each locale defined in
- * LANGUAGES_TO_LOCALES.
+ * Iterate through SDK language build files and create symlinks for each locale defined
+ * in LANGUAGES_TO_LOCALES. If the symlink already exists, delete it before creating a
+ * new one.
  *
  * For example, if assetNames includes 'answers.js' and LANGUAGES_TO_LOCALES includes
  * 'fr_CA' and 'fr_FR' for the language 'fr', the file 'fr-answers.js' will be copied to
@@ -20,8 +21,10 @@ function copyAssetsForLocales (assetNames) {
         : `${assetName}`;
       LANGUAGES_TO_LOCALES[language].forEach((locale) => {
         const localeBundleName = `${locale}-${assetName}`;
-        fs.symlinkSync(`./${languageBundleName}`,
-          `./dist/${localeBundleName}`);
+        if (fs.existsSync(`./dist/${localeBundleName}`)) {
+          fs.unlinkSync(`./dist/${localeBundleName}`);
+        }
+        fs.symlinkSync(`./${languageBundleName}`, `./dist/${localeBundleName}`);
       });
     });
   });
