@@ -11,6 +11,7 @@
     "js-levenshtein": "^1.1.6",
     "kind-of": "^6.0.3",
     "lodash.clonedeep": "^4.5.0",
+    "lodash.escaperegexp": "^4.1.2",
     "markdown-it-for-inline": "^0.1.1",
     "plural-forms": "^0.5.1",
     "stylelint-scss": "^3.18.0",

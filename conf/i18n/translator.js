@@ -1,4 +1,5 @@
 const i18next = require('i18next');
+const escapeRegExp = require('lodash.escaperegexp');
 
 /**
  * This class wraps an instance of the i18next library and provides methods supporting
@@ -55,7 +56,7 @@ class Translator {
    *   https://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html
    */
   translatePlural (phrase, pluralForm) {
-    const escapedPhrase = this._escapeInterpolationBrackets(phrase);
+    const escapedPhrase = escapeRegExp(phrase);
     const pluralKeyRegex = new RegExp(`${escapedPhrase}_([0-9]+|plural)`);
     const i18nextOptions = this._i18next.options;
 
@@ -86,9 +87,9 @@ class Translator {
    *   https://www.gnu.org/software/gettext/manual/html_node/Plural-forms.html
    */
   translatePluralWithContext (phrase, pluralForm, context) {
-    const escapedPhrase = this._escapeInterpolationBrackets(phrase);
+    const escapedPhraseAndContext = escapeRegExp(`${phrase}_${context}`);
     const pluralWithContextKeyRegex = new RegExp(
-      `${escapedPhrase}_${context}_([0-9]+|plural)`);
+      `${escapedPhraseAndContext}_([0-9]+|plural)`);
     const i18nextOptions = this._i18next.options;
 
     // We first look for the translations in the given locale. If none can be
@@ -147,18 +148,6 @@ class Translator {
           return pluralForms;
         },
         { 0: localeTranslations[translationKey] });
-  }
-
-  /**
-   * Escapes the interpolation brackets in a phrase
-   *
-   * @param {string} phrase
-   * @returns {string}
-   */
-  _escapeInterpolationBrackets (phrase) {
-    return phrase
-      .replace(/\[\[/g, '\\[\\[')
-      .replace(/\]\]/g, '\\]\\]');
   }
 
   /**
