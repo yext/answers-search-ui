@@ -138,9 +138,9 @@ workflows:
             branches:
               ignore:
                 - master
-                - /^support*/
-                - /^feature\/*-i18n/
-                - /^release*/
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
       - build_i18n:
           filters:
             tags:
@@ -148,17 +148,17 @@ workflows:
             branches:
               only:
                 - master
-                - /^support*/
-                - /^feature\/*-i18n/
-                - /^release*/
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
       - unit_test:
           filters:
             branches:
               ignore:
                 - master
-                - /^support*/
-                - /^feature\/*-i18n/
-                - /^release*/
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
           requires:
             - build
       - unit_test:
@@ -169,9 +169,9 @@ workflows:
             branches:
               only:
                 - master
-                - /^support*/
-                - /^feature\/*-i18n/
-                - /^release*/
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
           requires:
             - build_i18n
       - deploy_canary:
@@ -186,9 +186,9 @@ workflows:
               ignore:
                 - master
                 - develop
-                - /^support*/
-                - /^feature\/*-i18n/
-                - /^release*/
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
           requires:
             - unit_test
       - deploy_branch:
@@ -196,9 +196,9 @@ workflows:
           filters:
             branches:
               only:
-                - /^support*/
-                - /^feature\/*-i18n/
-                - /^release*/
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
           requires:
             - unit_test_i18n
       - hold:
