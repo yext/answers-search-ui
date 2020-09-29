@@ -1,6 +1,6 @@
 exports.TRANSLATION_FLAGGER_REGEX = /TranslationFlagger.flag\((\s)*\{[^;]+?\}(\s)*\)/g;
 
-exports.DEFAULT_LOCALES = ['en'];
+exports.DEFAULT_LOCALE = 'en';
 
 exports.LANGUAGES_TO_LOCALES = {
   'en': [

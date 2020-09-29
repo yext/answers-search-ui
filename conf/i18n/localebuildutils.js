@@ -1,6 +1,5 @@
 const { LANGUAGES_TO_LOCALES, ALL_LANGUAGES } = require('./constants');
-const { src, dest } = require('gulp');
-const rename = require('gulp-rename');
+const fs = require('fs');
 
 /**
  * Iterate through SDK language build files and create copies for each locale defined in
@@ -21,9 +20,8 @@ function copyAssetsForLocales (assetNames) {
         : `${assetName}`;
       LANGUAGES_TO_LOCALES[language].forEach((locale) => {
         const localeBundleName = `${locale}-${assetName}`;
-        src(`./dist/${languageBundleName}`)
-          .pipe(rename(localeBundleName))
-          .pipe(dest('./dist/'));
+        fs.symlinkSync(`./${languageBundleName}`,
+          `./dist/${localeBundleName}`);
       });
     });
   });

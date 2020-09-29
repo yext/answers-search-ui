@@ -3,7 +3,7 @@ const path = require('path');
 
 const LocalFileParser = require('../i18n/localfileparser');
 const Translator = require('../i18n/translator');
-const { DEFAULT_LOCALES, ALL_LANGUAGES } = require('../i18n/constants');
+const { DEFAULT_LOCALE, ALL_LANGUAGES } = require('../i18n/constants');
 const { copyAssetsForLocales } = require('../i18n/localebuildutils');
 
 const TemplateType = require('./template/templatetype');
@@ -27,10 +27,10 @@ async function createTranslator (locale) {
  */
 async function devTemplates () {
   const bundleTemplatesUMD =
-    new BundleTemplatesTaskFactory(DEFAULT_LOCALES[0]).create(TemplateType.UMD);
-  const cleanFiles = createCleanFilesTask(DEFAULT_LOCALES[0]);
-  const translator = await createTranslator(DEFAULT_LOCALES[0]);
-  const precompileTemplates = createPrecompileTemplatesTask(DEFAULT_LOCALES[0], translator);
+    new BundleTemplatesTaskFactory(DEFAULT_LOCALE).create(TemplateType.UMD);
+  const cleanFiles = createCleanFilesTask(DEFAULT_LOCALE);
+  const translator = await createTranslator(DEFAULT_LOCALE);
+  const precompileTemplates = createPrecompileTemplatesTask(DEFAULT_LOCALE, translator);
 
   function watchTemplates () {
     return watch(['./src/ui/templates/**/*.hbs'], {
@@ -97,7 +97,7 @@ async function createTemplatesForLanguages (languages) {
 }
 
 exports.default = function defaultTemplates () {
-  return createTemplatesForLanguages(DEFAULT_LOCALES);
+  return createTemplatesForLanguages([DEFAULT_LOCALE]);
 };
 
 exports.buildLanguages = function allLanguageTemplates () {

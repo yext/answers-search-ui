@@ -5,7 +5,7 @@ const sass = require('gulp-sass');
 
 const getLibraryVersion = require('./utils/libversion');
 const { BundleType, BundleTaskFactory } = require('./bundle/bundletaskfactory');
-const { DEFAULT_LOCALES, ALL_LANGUAGES } = require('../i18n/constants');
+const { DEFAULT_LOCALE, ALL_LANGUAGES } = require('../i18n/constants');
 const { copyAssetsForLocales } = require('../i18n/localebuildutils');
 const LocalFileParser = require('../i18n/localfileparser');
 const MinifyTaskFactory = require('./bundle/minifytaskfactory');
@@ -18,7 +18,7 @@ const { generateProcessTranslationJsCall } = require('../i18n/runtimecallgenerat
  * @returns {Promise<Function>}
  */
 exports.dev = function devJSBundle () {
-  return createBundleTaskFactory(DEFAULT_LOCALES[0]).then(devTaskFactory => {
+  return createBundleTaskFactory(DEFAULT_LOCALE).then(devTaskFactory => {
     return new Promise(resolve => {
       return parallel(
         series(devTaskFactory.create(BundleType.LEGACY_IIFE), getWatchJSTask(devTaskFactory)),
@@ -46,8 +46,8 @@ function createJSBundlesForLanguages (languages) {
   });
 }
 
-exports.default = function defaultJSBundles () {
-  return createJSBundlesForLanguages(DEFAULT_LOCALES);
+exports.default = function defaultLanguageJSBundle () {
+  return createJSBundlesForLanguages([DEFAULT_LOCALE]);
 };
 
 exports.buildLanguages = function allLanguageJSBundles () {
