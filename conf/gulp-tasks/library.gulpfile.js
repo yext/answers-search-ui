@@ -5,8 +5,8 @@ const sass = require('gulp-sass');
 
 const getLibraryVersion = require('./utils/libversion');
 const { BundleType, BundleTaskFactory } = require('./bundle/bundletaskfactory');
-const { DEV_LOCALE, DEFAULT_LOCALES, ALL_LANGUAGES } = require('../i18n/constants');
-const { createLocaleFilesPerLanguage } = require('../i18n/localebuildutils');
+const { DEFAULT_LOCALES, ALL_LANGUAGES } = require('../i18n/constants');
+const { copyAssetsForLocales } = require('../i18n/localebuildutils');
 const LocalFileParser = require('../i18n/localfileparser');
 const MinifyTaskFactory = require('./bundle/minifytaskfactory');
 const TranslationResolver = require('../i18n/translationresolver');
@@ -18,7 +18,7 @@ const { generateProcessTranslationJsCall } = require('../i18n/runtimecallgenerat
  * @returns {Promise<Function>}
  */
 exports.dev = function devJSBundle () {
-  return createBundleTaskFactory(DEV_LOCALE).then(devTaskFactory => {
+  return createBundleTaskFactory(DEFAULT_LOCALES[0]).then(devTaskFactory => {
     return new Promise(resolve => {
       return parallel(
         series(devTaskFactory.create(BundleType.LEGACY_IIFE), getWatchJSTask(devTaskFactory)),
@@ -29,14 +29,16 @@ exports.dev = function devJSBundle () {
 };
 
 /**
- * Creates a build task for each provided locale and combines them into a series task.
- * @param {Array<string>} locales
+ * Creates a build task for each provided language and combines them into a series task.
+ * This function also supports locales, but it is named to reflect the current use case
+ * of creating bundles for just languages.
+ * @param {Array<string>} languages
  * @returns {Promise<Function>}
  */
-function createJSBundlesForLocales (locales) {
-  const localizedTaskPromises = locales.map(locale => {
-    const minifyTaskFactory = new MinifyTaskFactory(locale);
-    return createBundleTaskFactory(locale)
+function createJSBundlesForLanguages (languages) {
+  const localizedTaskPromises = languages.map(language => {
+    const minifyTaskFactory = new MinifyTaskFactory(language);
+    return createBundleTaskFactory(language)
       .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory));
   });
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
@@ -45,15 +47,15 @@ function createJSBundlesForLocales (locales) {
 }
 
 exports.default = function defaultJSBundles () {
-  return createJSBundlesForLocales(DEFAULT_LOCALES);
+  return createJSBundlesForLanguages(DEFAULT_LOCALES);
 };
 
 exports.buildLanguages = function allLanguageJSBundles () {
-  return createJSBundlesForLocales(ALL_LANGUAGES);
+  return createJSBundlesForLanguages(ALL_LANGUAGES);
 };
 
 exports.buildLocales = function allLocaleJSBundles () {
-  const baseFileNames = [
+  const assetNames = [
     'answers.js',
     'answers.min.js',
     'answers-modern.js',
@@ -61,8 +63,8 @@ exports.buildLocales = function allLocaleJSBundles () {
     'answers-umd.js',
     'answers-umd.min.js'];
 
-  return createJSBundlesForLocales(ALL_LANGUAGES).then(() => {
-    createLocaleFilesPerLanguage(baseFileNames);
+  return createJSBundlesForLanguages(ALL_LANGUAGES).then(() => {
+    copyAssetsForLocales(assetNames);
   });
 };
 

@@ -1,10 +1,8 @@
 exports.TRANSLATION_FLAGGER_REGEX = /TranslationFlagger.flag\((\s)*\{[^;]+?\}(\s)*\)/g;
 
-exports.DEV_LOCALE = 'en';
-
 exports.DEFAULT_LOCALES = ['en'];
 
-exports.ALL_LOCALES = {
+exports.LANGUAGES_TO_LOCALES = {
   'en': [
     'en_AE',
     'en_AI',
@@ -107,4 +105,4 @@ exports.ALL_LOCALES = {
   ]
 };
 
-exports.ALL_LANGUAGES = Object.keys(this.ALL_LOCALES);
+exports.ALL_LANGUAGES = Object.keys(this.LANGUAGES_TO_LOCALES);
