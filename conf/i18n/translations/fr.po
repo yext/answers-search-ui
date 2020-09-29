@@ -104,7 +104,7 @@ msgstr "* Merci de renseigner une adresse email valide"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:150
 msgid "* You must agree to the privacy policy to submit a question."
-msgstr "* Vous devez accepter la politique de confidentialité pour soumettre vos feedbacks."
+msgstr "* Vous devez accepter la politique de confidentialité pour soumettre vos feedbacks"
 
 #: src/ui/templates/results/alternativeverticals.hbs:3
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
@@ -162,7 +162,7 @@ msgstr "Image pour [[title]]"
 
 #: src/ui/templates/results/noresults.hbs:31
 msgid "Make sure all words are spelled correctly."
-msgstr "Assurez vous que les mots sont épelés correctement."
+msgstr "Assurez vous que les mots sont épelés correctement"
 
 #: src/ui/templates/results/directanswer.hbs:83
 msgid "Send feedback"
@@ -187,8 +187,8 @@ msgstr "Merci pour votre question !"
 #: src/ui/templates/results/alternativeverticals.hbs:11
 msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
 msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
-msgstr[0] "La catégory de recherche suivante a produit des résultats pour <span class=\"yxt-AlternativeVerticals-details--query\"> [[query]]</span>:"
-msgstr[1] "Les catégories de recherche suivante a produit des résultats pour <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgstr[0] "La catégorie de recherche suivante a produit des résultats pour <span class=\"yxt-AlternativeVerticals-details--query\"> [[query]]</span>:"
+msgstr[1] "Les catégories de recherche suivantes ont produit des résultats pour <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
 
 #: src/ui/components/results/directanswercomponent.js:21
 msgid "This answered my question"
@@ -200,7 +200,7 @@ msgstr "Cela n'a pas répondu à ma question"
 
 #: src/ui/templates/results/noresults.hbs:34
 msgid "Try fewer words."
-msgstr "Essayez avec moins de mots"
+msgstr "Essayez avec moins de mots."
 
 #: src/ui/templates/results/noresults.hbs:33
 msgid "Try more general words."
@@ -212,7 +212,7 @@ msgstr "Essayez d'affiner votre recherche ou <a href=\"[[universalUrl]]\" class=
 
 #: src/ui/templates/results/noresults.hbs:32
 msgid "Try to ask your question a different way."
-msgstr "Essayez de poser votre question différement."
+msgstr "Essayez de poser votre question différement"
 
 #: src/ui/components/filters/geolocationcomponent.js:60
 #: src/ui/components/filters/geolocationcomponent.js:68
@@ -433,3 +433,14 @@ msgstr "Poser une question"
 msgctxt "Verb, clears search"
 msgid "Clear"
 msgstr "Supprimer"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:118
+msgctxt "Placeholder text for input field"
+msgid "Enter your question here"
+msgstr "Posez votre question ici"
+
+#: src/ui/templates/search/autocomplete.hbs:14
+msgid "[[resultsCount]] autocomplete option found"
+msgid_plural "[[resultsCount]] autocomplete options found"
+msgstr[0] "[[resultsCount]] option de saisie automatique trouvée"
+msgstr[1] "[[resultsCount]] options de saisie automatique trouvées"
