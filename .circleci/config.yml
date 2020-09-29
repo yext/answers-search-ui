@@ -160,7 +160,7 @@ workflows:
             tags:
               only: /^v.*/
       - build_all_locales:
-          filter:
+          filters:
             tags:
               only: /^v.*/
             branches:
