@@ -59,7 +59,7 @@ jobs:
             - dist
             - .circleci
   # generate bundles for all languages and locales
-  build_all_locales:
+  build_i18n:
     docker:
       - image: circleci/node:14.5
     working_directory: ~/answers
@@ -91,28 +91,6 @@ jobs:
       - deploy-to-aws
   # deploys assets to an uncached folder in the S3 bucket named by branch
   deploy_branch:
-    docker:
-      - image: circleci/python:2.7
-    working_directory: ~/answers
-    steps:
-      - run:
-          name: "Setup branch formatting, replace / with -"
-          command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
-      - deploy-to-aws:
-          subdirectory: '/dev/${FORMATTED_CIRCLE_BRANCH}'
-  # deploys support branch assets to an uncached folder in the S3 bucket named by branch
-  deploy_support:
-    docker:
-      - image: circleci/python:2.7
-    working_directory: ~/answers
-    steps:
-      - run:
-          name: "Setup branch formatting, replace / with -"
-          command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
-      - deploy-to-aws:
-          subdirectory: '/dev/${FORMATTED_CIRCLE_BRANCH}'
-  # deploys assets from feature branches ending in i18n to an uncached folder in the S3 bucket named by branch
-  deploy_feature_i18n:
     docker:
       - image: circleci/python:2.7
     working_directory: ~/answers
@@ -157,9 +135,13 @@ workflows:
     jobs:
       - build:
           filters:
-            tags:
-              only: /^v.*/
-      - build_all_locales:
+            branches:
+              ignore:
+                - master
+                - /^support*/
+                - /^feature\/*-i18n/
+                - /^release*/
+      - build_i18n:
           filters:
             tags:
               only: /^v.*/
@@ -168,12 +150,57 @@ workflows:
                 - master
                 - /^support*/
                 - /^feature\/*-i18n/
+                - /^release*/
       - unit_test:
+          filters:
+            branches:
+              ignore:
+                - master
+                - /^support*/
+                - /^feature\/*-i18n/
+                - /^release*/
+          requires:
+            - build
+      - unit_test:
+          name: unit_test_i18n
           filters:
             tags:
               only: /^v.*/
+            branches:
+              only:
+                - master
+                - /^support*/
+                - /^feature\/*-i18n/
+                - /^release*/
           requires:
-            - build
+            - build_i18n
+      - deploy_canary:
+          filters:
+            branches:
+              only: develop
+          requires:
+            - unit_test
+      - deploy_branch:
+          filters:
+            branches:
+              ignore:
+                - master
+                - develop
+                - /^support*/
+                - /^feature\/*-i18n/
+                - /^release*/
+          requires:
+            - unit_test
+      - deploy_branch:
+          name: deploy_branch_i18n
+          filters:
+            branches:
+              only:
+                - /^support*/
+                - /^feature\/*-i18n/
+                - /^release*/
+          requires:
+            - unit_test_i18n
       - hold:
           type: approval
           filters:
@@ -183,40 +210,13 @@ workflows:
               only: 
                 - master
           requires:
-            - unit_test
-            - build_all_locales
+            - unit_test_i18n
       - deploy_latest:
           filters:
             branches:
               only: master
           requires:
             - hold
-      - deploy_branch:
-          filters:
-            branches:
-              ignore:
-                - master
-                - develop
-                - /^support*/
-                - /^feature\/*-i18n/
-          requires:
-            - unit_test
-      - deploy_feature_i18n:
-          filters:
-            branches:
-              only:
-                - /^feature\/*-i18n/
-          requires:
-            - unit_test
-            - build_all_locales
-      - deploy_support:
-          filters:
-            branches:
-              only:
-                - /^support*/
-          requires:
-            - unit_test
-            - build_all_locales
       - deploy_version:
           filters:
             tags:
@@ -225,9 +225,4 @@ workflows:
               ignore: /.*/
           requires:
             - hold
-      - deploy_canary:
-          filters:
-            branches:
-              only: develop
-          requires:
-            - unit_test
+      
