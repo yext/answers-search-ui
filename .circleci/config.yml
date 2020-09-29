@@ -134,13 +134,13 @@ workflows:
   build_and_deploy:
     jobs:
       - build:
-        filters:
-          branches:
-            ignore:
-              - master
-              - /^support.*/
-              - /^feature\/.*-i18n/
-              - /^release.*/
+          filters:
+            branches:
+              ignore:
+                - master
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
       - unit_test:
           requires:
             - build
