@@ -68,6 +68,8 @@
   },
   "scripts": {
     "build": "gulp && size-limit",
+    "build-languages": "gulp buildLanguages && size-limit",
+    "build-locales": "gulp buildLocales && size-limit",
     "dev": "gulp dev",
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "semistandard",
