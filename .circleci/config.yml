@@ -133,7 +133,14 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build
+      - build:
+        filters:
+            branches:
+              ignore:
+                - master
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
       - unit_test:
           requires:
             - build
@@ -160,6 +167,12 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              only:
+                - master
+                - /^support.*/
+                - /^feature\/.*-i18n/
+                - /^release.*/
       - unit_test:
           name: unit_test_i18n
           filters:
