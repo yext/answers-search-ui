@@ -133,47 +133,10 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - master
-                - /^support.*/
-                - /^feature\/.*-i18n/
-                - /^release.*/
-      - build_i18n:
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              only:
-                - master
-                - /^support.*/
-                - /^feature\/.*-i18n/
-                - /^release.*/
+      - build
       - unit_test:
-          filters:
-            branches:
-              ignore:
-                - master
-                - /^support.*/
-                - /^feature\/.*-i18n/
-                - /^release.*/
           requires:
             - build
-      - unit_test:
-          name: unit_test_i18n
-          filters:
-            tags:
-              only: /^v.*/
-            branches:
-              only:
-                - master
-                - /^support.*/
-                - /^feature\/.*-i18n/
-                - /^release.*/
-          requires:
-            - build_i18n
       - deploy_canary:
           filters:
             branches:
@@ -191,6 +154,19 @@ workflows:
                 - /^release.*/
           requires:
             - unit_test
+  build_and_deploy_i18n:
+    jobs:
+      - build_i18n:
+          filters:
+            tags:
+              only: /^v.*/
+      - unit_test:
+          name: unit_test_i18n
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - build_i18n
       - deploy_branch:
           name: deploy_branch_i18n
           filters:
@@ -225,4 +201,4 @@ workflows:
               ignore: /.*/
           requires:
             - hold
-      
+
