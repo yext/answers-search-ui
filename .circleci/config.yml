@@ -58,6 +58,19 @@ jobs:
           paths:
             - dist
             - .circleci
+  # generate bundles for all languages and locales
+  build_all_locales:
+    docker:
+      - image: circleci/node:14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - run: npm run build-locales
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+            - .circleci
   # run the jest unit tests
   unit_test:
     docker:
@@ -78,6 +91,28 @@ jobs:
       - deploy-to-aws
   # deploys assets to an uncached folder in the S3 bucket named by branch
   deploy_branch:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/answers
+    steps:
+      - run:
+          name: "Setup branch formatting, replace / with -"
+          command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
+      - deploy-to-aws:
+          subdirectory: '/dev/${FORMATTED_CIRCLE_BRANCH}'
+  # deploys support branch assets to an uncached folder in the S3 bucket named by branch
+  deploy_support:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/answers
+    steps:
+      - run:
+          name: "Setup branch formatting, replace / with -"
+          command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
+      - deploy-to-aws:
+          subdirectory: '/dev/${FORMATTED_CIRCLE_BRANCH}'
+  # deploys assets from feature branches ending in i18n to an uncached folder in the S3 bucket named by branch
+  deploy_feature_i18n:
     docker:
       - image: circleci/python:2.7
     working_directory: ~/answers
@@ -124,6 +159,15 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+      - build_all_locales:
+          filter:
+            tags:
+              only: /^v.*/
+            branches:
+              only:
+                - master
+                - /^support*/
+                - /^feature\/*-i18n/
       - unit_test:
           filters:
             tags:
@@ -140,6 +184,7 @@ workflows:
                 - master
           requires:
             - unit_test
+            - build_all_locales
       - deploy_latest:
           filters:
             branches:
@@ -152,8 +197,26 @@ workflows:
               ignore:
                 - master
                 - develop
+                - /^support*/
+                - /^feature\/*-i18n/
           requires:
             - unit_test
+      - deploy_feature_i18n:
+          filters:
+            branches:
+              only:
+                - /^feature\/*-i18n/
+          requires:
+            - unit_test
+            - build_all_locales
+      - deploy_support:
+          filters:
+            branches:
+              only:
+                - /^support*/
+          requires:
+            - unit_test
+            - build_all_locales
       - deploy_version:
           filters:
             tags:
