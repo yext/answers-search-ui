@@ -27,7 +27,7 @@ export default class AppliedFiltersComponent extends Component {
     this._verticalKey = this._config.verticalKey ||
       this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
 
-    this.moduleId = StorageKeys.DYNAMIC_FILTERS;
+    this.moduleId = StorageKeys.VERTICAL_SEARCH_LOADED;
   }
 
   static areDuplicateNamesAllowed () {

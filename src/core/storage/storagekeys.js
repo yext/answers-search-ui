@@ -36,5 +36,6 @@ export default {
   RESULTS_HEADER: 'results-header',
   API_CONTEXT: 'context',
   REFERRER_PAGE_URL: 'referrerPageUrl',
-  QUERY_TRIGGER: 'queryTrigger'
+  QUERY_TRIGGER: 'queryTrigger',
+  VERTICAL_SEARCH_LOADED: 'vertical-search-loaded'
 };

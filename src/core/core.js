@@ -233,6 +233,7 @@ export default class Core {
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        this.globalStorage.set(StorageKeys.VERTICAL_SEARCH_LOADED, true);
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       });
   }
