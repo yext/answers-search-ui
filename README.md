@@ -46,6 +46,7 @@ Outline:
    - [Conversion Tracking](#conversion-tracking)
    - [On-Search Analytics](#on-search-analytics)
 8. [Rich Text Formatting](#rich-text-formatting)
+9. [Performance Metrics](#performance-metrics)
 
 # Install and Setup
 
@@ -2260,3 +2261,40 @@ ANSWERS.ponyfillCssVariables({
         onFinally: function() {},
 });
 ```
+
+# Performance Metrics
+
+The SDK uses the Performance API, via `window.performance.mark()`, to create performance metrics regarding ANSWERS.init(), vertical search, and universal search. These marks can be viewed through browser developer tools, or programmatically through `window.performance.getEntries()`.
+
+## ANSWERS.init()
+
+1. `'yext.answers.initStart'` called when ANSWERS.init beings
+
+2. `'yext.answers.ponyfillStart'` called when css-variables ponyfill starts
+
+3. `'yext.answers.ponyfillEnd'` called when css-variables ponyfill ends.
+
+4. `'yext.answers.statusStart'` called when the ANSWERS status call is made
+
+5. `'yext.answers.statusEnd'` called when the ANSWERS status check is done
+
+## Vertical Search
+
+1. `'yext.answers.verticalQueryStart'` called when a vertical query begins
+
+2. `'yext.answers.verticalQuerySent'` called right before the vertical query API call is made
+
+3. `'yext.answers.verticalQueryResponseReceived'` called immediately after a vertical query response is received
+
+4. `'yext.answers.verticalQueryResponseRendered'` called after a vertial query is finished, and all components have finished rendering
+
+## Universal Search
+
+1. `'yext.answers.universalQueryStart'` called when a universal query starts
+
+2. `'yext.answers.universalQuerySent'` called right before the universal query API call is made
+
+3. `'yext.answers.universalQueryResponseReceived'` called immediately after a universal query response is received
+
+4. `'yext.answers.universalQueryResponseRendered'` called after a universal query is finished and all components have finished rendering
+
