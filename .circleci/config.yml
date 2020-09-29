@@ -135,12 +135,12 @@ workflows:
     jobs:
       - build:
         filters:
-            branches:
-              ignore:
-                - master
-                - /^support.*/
-                - /^feature\/.*-i18n/
-                - /^release.*/
+          branches:
+            ignore:
+              - master
+              - /^support.*/
+              - /^feature\/.*-i18n/
+              - /^release.*/
       - unit_test:
           requires:
             - build
