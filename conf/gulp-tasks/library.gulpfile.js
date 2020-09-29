@@ -5,7 +5,8 @@ const sass = require('gulp-sass');
 
 const getLibraryVersion = require('./utils/libversion');
 const { BundleType, BundleTaskFactory } = require('./bundle/bundletaskfactory');
-const { DEV_LOCALE, BUILD_LOCALES } = require('../i18n/constants');
+const { DEFAULT_LOCALE, ALL_LANGUAGES } = require('../i18n/constants');
+const { copyAssetsForLocales } = require('../i18n/localebuildutils');
 const LocalFileParser = require('../i18n/localfileparser');
 const MinifyTaskFactory = require('./bundle/minifytaskfactory');
 const TranslationResolver = require('../i18n/translationresolver');
@@ -17,7 +18,7 @@ const { generateProcessTranslationJsCall } = require('../i18n/runtimecallgenerat
  * @returns {Promise<Function>}
  */
 exports.dev = function devJSBundle () {
-  return createBundleTaskFactory(DEV_LOCALE).then(devTaskFactory => {
+  return createBundleTaskFactory(DEFAULT_LOCALE).then(devTaskFactory => {
     return new Promise(resolve => {
       return parallel(
         series(devTaskFactory.create(BundleType.LEGACY_IIFE), getWatchJSTask(devTaskFactory)),
@@ -28,17 +29,42 @@ exports.dev = function devJSBundle () {
 };
 
 /**
- * Creates a build task per locale, and combines them into a series task.
+ * Creates a build task for each provided language and combines them into a series task.
+ * This function also supports locales, but it is named to reflect the current use case
+ * of creating bundles for just languages.
+ * @param {Array<string>} languages
  * @returns {Promise<Function>}
  */
-exports.default = function defaultJSBundle () {
-  const localizedTaskPromises = BUILD_LOCALES.map(locale => {
-    const minifyTaskFactory = new MinifyTaskFactory(locale);
-    return createBundleTaskFactory(locale)
+function createJSBundlesForLanguages (languages) {
+  const localizedTaskPromises = languages.map(language => {
+    const minifyTaskFactory = new MinifyTaskFactory(language);
+    return createBundleTaskFactory(language)
       .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory));
   });
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
     return new Promise(resolve => series(compileCSS, ...localizedTasks)(resolve));
+  });
+}
+
+exports.default = function defaultLanguageJSBundles () {
+  return createJSBundlesForLanguages([DEFAULT_LOCALE]);
+};
+
+exports.buildLanguages = function allLanguageJSBundles () {
+  return createJSBundlesForLanguages(ALL_LANGUAGES);
+};
+
+exports.buildLocales = function allLocaleJSBundles () {
+  const assetNames = [
+    'answers.js',
+    'answers.min.js',
+    'answers-modern.js',
+    'answers-modern.min.js',
+    'answers-umd.js',
+    'answers-umd.min.js'];
+
+  return createJSBundlesForLanguages(ALL_LANGUAGES).then(() => {
+    copyAssetsForLocales(assetNames);
   });
 };
 
