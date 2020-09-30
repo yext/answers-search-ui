@@ -114,7 +114,7 @@ msgstr "* Aceptar las normas de privacidad para enviar su opinión."
 
 #: src/ui/templates/results/alternativeverticals.hbs:3
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
-msgstr "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">Ningún resultado disponible</em> in [[currentVerticalLabel]]."
+msgstr "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">Ningún resultado disponible</em> en [[currentVerticalLabel]]."
 
 #: src/ui/templates/results/alternativeverticals.hbs:47
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
@@ -176,7 +176,7 @@ msgstr "enviar feedback"
 
 #: src/ui/templates/results/alternativeverticals.hbs:5
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
-msgstr "Mostrando <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\"> en vez que [[currentVerticalLabel]] </em>."
+msgstr "Mostrando <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\"> en vez que [[currentVerticalLabel]]</em>."
 
 #: src/ui/templates/results/noresults.hbs:24
 msgid "Suggestions:"
