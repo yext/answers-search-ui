@@ -828,10 +828,6 @@ ANSWERS.addComponent('VerticalResults', {
   itemTemplate: `<div> Custom template </div>`,
   // Optional, set a max number of columns to display at the widest breakpoint. Possible values are 1, 2, 3 or 4, defaults to 1
   maxNumberOfColumns: 1,
-  // Optional, whether to display the total number of results, default true
-  showResultCount: true,
-  // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
-  resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
   modifier: '',
   // Optional, whether to hide the default results header that VerticalResults provides. Defaults to false.
@@ -852,6 +848,17 @@ ANSWERS.addComponent('VerticalResults', {
     // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
     displayAllResults: false
   },
+
+  /**
+   * NOTE: The config options below are DEPRECATED.
+   * They will still work as expected, and the defaults will still be applied,
+   * but future major versions of the SDK will remove them.
+   * We recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
+   */
+  // Optional, whether to display the total number of results, default true
+  showResultCount: true,
+  // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
+  resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Configuration for the applied filters bar in the header.
   appliedFilters: {
     // If true, show any applied filters that were applied to the vertical search. Defaults to true
