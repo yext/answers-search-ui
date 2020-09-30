@@ -2,6 +2,7 @@
 
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchStates from '../../../core/storage/searchstates';
 import DOM from '../../dom/dom';
 import { groupArray } from '../../../core/utils/arrayutils';
 import {
@@ -27,7 +28,13 @@ export default class AppliedFiltersComponent extends Component {
     this._verticalKey = this._config.verticalKey ||
       this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
 
-    this.moduleId = StorageKeys.VERTICAL_SEARCH_LOADED;
+    this.moduleId = StorageKeys.FACETS_LOADED;
+
+    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
+      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+        this.setState();
+      }
+    });
   }
 
   static areDuplicateNamesAllowed () {
