@@ -849,9 +849,9 @@ ANSWERS.addComponent('VerticalResults', {
   },
 
   /**
-   * DEPRECATED: The config below is DEPRECATED.
-   * It will still work as expected, and the defaults will still be applied,
-   * but future major versions of the SDK will remove this config.
+   * NOTE: The config options below are DEPRECATED.
+   * They will still work as expected, and the defaults will still be applied,
+   * but future major versions of the SDK will remove them.
    * We recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
    */
   // Optional, whether to display the total number of results, default true
