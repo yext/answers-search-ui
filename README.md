@@ -847,14 +847,18 @@ ANSWERS.addComponent('VerticalResults', {
     // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
     displayAllResults: false
   },
+
+  /**
+   * DEPRECATED: The config below is DEPRECATED.
+   * It will still work as expected, and the defaults will still be applied,
+   * but future major versions of the SDK will remove this config.
+   * We recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
+   */
   // Optional, whether to display the total number of results, default true
-  // DEPRECATED: we recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
   showResultCount: true,
   // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
-  // DEPRECATED: we recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
   resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Configuration for the applied filters bar in the header.
-  // DEPRECATED: we recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
   appliedFilters: {
     // If true, show any applied filters that were applied to the vertical search. Defaults to true
     show: true,
