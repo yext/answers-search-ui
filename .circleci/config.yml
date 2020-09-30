@@ -138,9 +138,9 @@ workflows:
             branches:
               ignore:
                 - master
-                - /^support.*/
+                - /^support\/.*/
                 - /^feature\/.*-i18n/
-                - /^release.*/
+                - /^release\/.*/
       - unit_test:
           requires:
             - build
@@ -154,14 +154,25 @@ workflows:
           filters:
             branches:
               ignore:
-                - master
                 - develop
-                - /^support.*/
-                - /^feature\/.*-i18n/
-                - /^release.*/
           requires:
             - unit_test
   build_and_deploy_i18n:
+    jobs:
+      - build_i18n:
+          filters:
+            branches:
+              only:
+                - /^support\/.*/
+                - /^feature\/.*-i18n/
+                - /^release\/.*/
+      - unit_test:
+          requires:
+            - build_i18n
+      - deploy_branch:
+          requires:
+            - unit_test
+  build_and_deploy_hold:
     jobs:
       - build_i18n:
           filters:
@@ -170,36 +181,19 @@ workflows:
             branches:
               only:
                 - master
-                - /^support.*/
-                - /^feature\/.*-i18n/
-                - /^release.*/
       - unit_test:
-          name: unit_test_i18n
           filters:
             tags:
               only: /^v.*/
           requires:
             - build_i18n
-      - deploy_branch:
-          name: deploy_branch_i18n
-          filters:
-            branches:
-              only:
-                - /^support.*/
-                - /^feature\/.*-i18n/
-                - /^release.*/
-          requires:
-            - unit_test_i18n
       - hold:
           type: approval
           filters:
             tags:
               only: /^v.*/
-            branches:
-              only: 
-                - master
           requires:
-            - unit_test_i18n
+            - unit_test
       - deploy_latest:
           filters:
             branches:
@@ -214,4 +208,3 @@ workflows:
               ignore: /.*/
           requires:
             - hold
-

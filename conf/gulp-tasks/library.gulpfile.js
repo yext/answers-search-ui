@@ -46,7 +46,7 @@ function createJSBundlesForLanguages (languages) {
   });
 }
 
-exports.default = function defaultLanguageJSBundle () {
+exports.default = function defaultLanguageJSBundles () {
   return createJSBundlesForLanguages([DEFAULT_LOCALE]);
 };
 
