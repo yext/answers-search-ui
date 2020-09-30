@@ -202,6 +202,11 @@ export default class Core {
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
         this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
 
+        if (data[StorageKeys.DYNAMIC_FILTERS]) {
+          this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.globalStorage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
+        }
+
         if (query.append) {
           const mergedResults = this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
@@ -210,10 +215,6 @@ export default class Core {
           this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
         }
 
-        if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
-          this.globalStorage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
-        }
         if (data[StorageKeys.SPELL_CHECK]) {
           this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         }

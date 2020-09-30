@@ -28,8 +28,6 @@ export default class AppliedFiltersComponent extends Component {
     this._verticalKey = this._config.verticalKey ||
       this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
 
-    this.moduleId = StorageKeys.FACETS_LOADED;
-
     this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
       if (results.searchState === SearchStates.SEARCH_COMPLETE) {
         this.setState();
