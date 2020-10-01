@@ -2296,7 +2296,7 @@ Pluralization makes it possible to select the plural form of a translation depen
 qualifying count. Different languages have different plural rules, which is the method of
 selecting a plural form based on a count. An optional third parameter 'count' and an optional
 fourth parameter 'locale' may be used for pluralization. The locale parameter determines the
-possible plural forms and the plural rules used. If locale is not defined but the first
+plural forms and the plural rules used. If locale is not defined but the first
 parameter is an object containing pluralizations, the locale supplied in the ANSWERS.init() will be
 used. For more information on plural forms, see this [doc](https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals):
 
