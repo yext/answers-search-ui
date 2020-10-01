@@ -397,7 +397,7 @@ class Answers {
     return this.components.create('Component', opts).mount();
   }
 
-  search(query) {
+  search (query) {
     this.core.setQuery(query);
   }
 
