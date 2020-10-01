@@ -2295,8 +2295,7 @@ qualifying count. Different languages have different plural rules, which is the 
 selecting a plural form based on a count. An optional third parameter 'count' and an optional
 fourth parameter 'locale' may be used for pluralization. If locale is not defined but the first
 parameter is an object containing pluralizations, the locale supplied in the ANSWERS.init() will be
-used. For more information on plural forms, see this doc: 
-https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals
+used. For more information on plural forms, see this [doc](https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals):
 
 The following example will use the singular form keyed by '0' for a count of 1, and the plural
 form keyed by '1' for any other count. A count of 0 will return '0 results':
