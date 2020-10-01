@@ -2284,7 +2284,7 @@ ANSWERS.processTranslation('Bonjour [[name]]', { name: myName });
 ```
 
 The translation processor is also available though a Handlebars helper:
-```js
+```hbs
 {{ processTranslation phrase='Bonjour [[name1]] et [[name2]]' name1=name1 name2=name2}}
 ```
 
@@ -2310,7 +2310,7 @@ ANSWERS.processTranslation({ 0: '[[resultsCount]] résultat', 1: '[[resultsCount
 ```
 
 Here's what the usage looks like in a Handlebars helper:
-```js
+```hbs
 {{ processTranslation pluralForm0='[[resultsCount]] résultat' pluralForm1='[[resultsCount]] résultats' resultsCount=count count=count locale='fr' }}
 ```
 
