@@ -106,6 +106,11 @@ export default class AutoCompleteComponent extends Component {
     this._onChange = opts.onChange || function () {};
 
     this._searchParameters = opts.searchParameters || null;
+
+    this._onOpen = opts.onOpen || function () {};
+    this._onClose = opts.onClose || function () {};
+    this._shouldHideOnEmptySearch = opts.shouldHideOnEmptySearch || false;
+    this._isOpen = false;
   }
 
   /**
@@ -130,11 +135,32 @@ export default class AutoCompleteComponent extends Component {
    * those are client-interaction specific values and aren't returned from the server.
    */
   setState (data) {
-    if (!this.isQueryInputFocused()) {
+    let isChanging = false;
+    let queryInputEl = DOM.query(this._parentContainer, this._inputEl);
+    let forceHide = this._shouldHideOnEmptySearch && !queryInputEl.value;
+    if (!this.isQueryInputFocused() || forceHide) {
+      if (this._isOpen) {
+        isChanging = true;
+      }
       this._sectionIndex = 0;
       this._resultIndex = -1;
       data = {};
+    } else if (!this._isOpen) {
+      isChanging = true;
     }
+
+    if (isChanging) {
+      console.log('changed!');
+      if (this._isOpen) {
+        console.log('was open, closing');
+        this._onClose();
+      } else {
+        console.log('was closed, opening');
+        this._onOpen();
+      }
+      this._isOpen = !this._isOpen;
+    }
+
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
       sectionIndex: this._sectionIndex,

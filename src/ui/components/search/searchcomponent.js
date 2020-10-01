@@ -234,6 +234,10 @@ export default class SearchComponent extends Component {
       message: 'We are unable to determine your location',
       ...config.geolocationTimeoutAlert
     };
+
+    this.onSubmit = config.onSubmit || function () {};
+    this.redirectUrlTarget = config.redirectUrlTarget;
+    this.autoCompleteConfig = config.autocomplete || {};
   }
 
   static get type () {
@@ -457,7 +461,12 @@ export default class SearchComponent extends Component {
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        window.location.href = this.redirectUrl + '?' + params.toString();
+        const newUrl = this.redirectUrl + '?' + params.toString();
+        if (this.redirectUrlTarget && typeof this.redirectUrlTarget) {
+          window[this.redirectUrlTarget].location.href = newUrl;
+        } else {
+          window.location.href = newUrl;
+        }
         return false;
       }
     }
@@ -507,6 +516,7 @@ export default class SearchComponent extends Component {
       promptHeader: this.promptHeader,
       originalQuery: this.query,
       inputEl: inputSelector,
+      ...this.autoCompleteConfig,
       onSubmit: () => {
         if (this._useForm) {
           DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
@@ -584,6 +594,7 @@ export default class SearchComponent extends Component {
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
   search (query, searchOptions) {
+    this.onSubmit(query);
     if (this._verticalKey) {
       this.core.verticalSearch(this._config.verticalKey, searchOptions, { input: query });
     } else {
