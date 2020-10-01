@@ -2,8 +2,6 @@
 
 .yxt-VerticalResultsCount
 {
-  margin-right: calc(var(--yxt-base-spacing) / 4);
-  margin-bottom: 4px;
   white-space: nowrap;
   @include Text(
     $size: var(--yxt-font-size-md),

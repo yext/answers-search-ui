@@ -2,7 +2,6 @@
 
 .yxt-AppliedFilters
 {
-  margin-right: var(--yxt-base-spacing);
   border-top: 0;
   display: flex;
   flex-wrap: wrap;
@@ -10,7 +9,6 @@
 
   &-filterLabel, &-filterValue, &-filterSeparator {
     margin-right: calc(var(--yxt-base-spacing) / 4);
-    margin-bottom: calc(var(--yxt-base-spacing) / 4);
     display: flex;
   }
 
