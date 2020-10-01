@@ -2303,18 +2303,34 @@ used. For more information on plural forms, see this [doc](https://developer.moz
 The following example will use the singular form keyed by '0' for a count of 1, and the plural
 form keyed by '1' for any other count. A count of 0 will return '0 results':
 ```js
-ANSWERS.processTranslation({ 0: '[[resultsCount]] result', 1: '[[resultsCount]] results' }, { resultsCount: count }, count, 'en');
+ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] result', 1: '[[resultsCount]] results' }, 
+  { resultsCount: count }, 
+  count, 
+  'en'
+);
 ```
 
 French is different than English in that a count of zero uses the same plural form as a count
 of one. For example, a count of 0 will return '0 résultat':
 ```js
-ANSWERS.processTranslation({ 0: '[[resultsCount]] résultat', 1: '[[resultsCount]] résultats' }, { resultsCount: count }, count, 'fr');
+ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] résultat', 1: '[[resultsCount]] résultats' }, 
+  { resultsCount: count }, 
+  count, 
+  'fr'
+);
 ```
 
 Here's what the usage looks like in a Handlebars helper:
 ```hbs
-{{ processTranslation pluralForm0='[[resultsCount]] résultat' pluralForm1='[[resultsCount]] résultats' resultsCount=count count=count locale='fr' }}
+{{ processTranslation 
+  pluralForm0='[[resultsCount]] résultat' 
+  pluralForm1='[[resultsCount]] résultats' 
+  resultsCount=count 
+  count=count 
+  locale='fr' 
+}}
 ```
 
 # Performance Metrics
