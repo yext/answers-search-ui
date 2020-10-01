@@ -397,37 +397,8 @@ class Answers {
     return this.components.create('Component', opts).mount();
   }
 
-  search(query, searchOptions, verticalKey) {
-    console.log('hello from answers search');
-    if (verticalKey) {
-      this.core.verticalSearch(verticalKey, searchOptions, { input: query });
-    } else {
-      // NOTE(billy) Temporary hack for DEMO
-      // Remove me after the demo
-      let nav = this.components
-        .getActiveComponent('Navigation');
-
-      if (nav) {
-        let tabs = nav.getState('tabs');
-        let urls = {};
-
-        if (tabs && Array.isArray(tabs)) {
-          for (let i = 0; i < tabs.length; i++) {
-            let params = new SearchParams(tabs[i].url.split('?')[1]);
-            params.set('query', query);
-
-            let url = tabs[i].baseUrl;
-            if (params.toString().length > 0) {
-              url += '?' + params.toString();
-            }
-            urls[tabs[i].configId] = url;
-          }
-        }
-        return this.core.search(query, urls, searchOptions);
-      }
-
-      return this.core.search(query, undefined, searchOptions);
-    }
+  search(query) {
+    this.core.setQuery(query);
   }
 
   registerHelper (name, cb) {
