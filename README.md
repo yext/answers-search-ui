@@ -46,7 +46,9 @@ Outline:
    - [Conversion Tracking](#conversion-tracking)
    - [On-Search Analytics](#on-search-analytics)
 8. [Rich Text Formatting](#rich-text-formatting)
-9. [Performance Metrics](#performance-metrics)
+9. [Processing Translations](#processing-translations)
+10. [Performance Metrics](#performance-metrics)
+
 
 # Install and Setup
 
