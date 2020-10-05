@@ -398,7 +398,7 @@ class Answers {
   }
 
   search (query) {
-    this.core.setQuery(query);
+    this.core.setQuery(query, { setQueryParams: true });
   }
 
   registerHelper (name, cb) {

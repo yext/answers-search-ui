@@ -264,6 +264,8 @@ export default class Core {
   }
 
   search (queryString, urls, options = {}) {
+    console.log('search options in core');
+    console.log(options);
     const { setQueryParams } = options;
     const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
