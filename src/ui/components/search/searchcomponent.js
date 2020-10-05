@@ -236,6 +236,7 @@ export default class SearchComponent extends Component {
     };
 
     this.onSubmit = config.onSubmit || function () {};
+    this.onClearSearch = config.onClearSearch || function () {};
     this.redirectUrlTarget = config.redirectUrlTarget;
     this.autoCompleteConfig = config.autocomplete || {};
   }
@@ -358,6 +359,7 @@ export default class SearchComponent extends Component {
     button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
 
     DOM.on(button, 'click', () => {
+      this.onClearSearch();
       this.query = '';
       this._showClearButton = false;
       button.classList.add('yxt-SearchBar--hidden');
