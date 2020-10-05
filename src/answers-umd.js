@@ -399,6 +399,7 @@ class Answers {
 
   search (query) {
     this.core.setQuery(query, { setQueryParams: true });
+    this.core.persistentStorage.set(StorageKeys.QUERY, query);
   }
 
   registerHelper (name, cb) {
