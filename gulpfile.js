@@ -12,4 +12,12 @@ exports.dev = parallel(
   templates.dev,
   library.dev
 );
+exports.buildLanguages = parallel(
+  templates.buildLanguages,
+  library.buildLanguages
+);
+exports.buildLocales = parallel(
+  library.buildLocales,
+  templates.buildLocales
+);
 exports.extractTranslations = extractTranslations;

@@ -46,6 +46,9 @@ Outline:
    - [Conversion Tracking](#conversion-tracking)
    - [On-Search Analytics](#on-search-analytics)
 8. [Rich Text Formatting](#rich-text-formatting)
+9. [Processing Translations](#processing-translations)
+10. [Performance Metrics](#performance-metrics)
+
 
 # Install and Setup
 
@@ -827,10 +830,6 @@ ANSWERS.addComponent('VerticalResults', {
   itemTemplate: `<div> Custom template </div>`,
   // Optional, set a max number of columns to display at the widest breakpoint. Possible values are 1, 2, 3 or 4, defaults to 1
   maxNumberOfColumns: 1,
-  // Optional, whether to display the total number of results, default true
-  showResultCount: true,
-  // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
-  resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
   modifier: '',
   // Optional, whether to hide the default results header that VerticalResults provides. Defaults to false.
@@ -851,6 +850,17 @@ ANSWERS.addComponent('VerticalResults', {
     // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
     displayAllResults: false
   },
+
+  /**
+   * NOTE: The config options below are DEPRECATED.
+   * They will still work as expected, and the defaults will still be applied,
+   * but future major versions of the SDK will remove them.
+   * We recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
+   */
+  // Optional, whether to display the total number of results, default true
+  showResultCount: true,
+  // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
+  resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Configuration for the applied filters bar in the header.
   appliedFilters: {
     // If true, show any applied filters that were applied to the vertical search. Defaults to true
@@ -2260,3 +2270,102 @@ ANSWERS.ponyfillCssVariables({
         onFinally: function() {},
 });
 ```
+
+# Processing Translations
+
+The Answers SDK provides functionality to perform translation interpolation, pluralization, or both.
+
+## Interpolation 
+
+Interpolation allows the use of dynamic values in translations. Interpolation parameters are defined 
+inside double brackets, and they must also be defined in an object in the second parameter.
+
+The following example will return 'Bonjour Howard' provided the variable `myName` equals 'Howard':
+```js
+ANSWERS.processTranslation('Bonjour [[name]]', { name: myName });
+```
+
+The translation processor is also available though a Handlebars helper:
+```hbs
+{{ processTranslation phrase='Bonjour [[name1]] et [[name2]]' name1=name1 name2=name2}}
+```
+
+## Pluralization
+
+Pluralization makes it possible to select the plural form of a translation depending on a
+qualifying count. Different languages have different plural rules, which is the method of
+selecting a plural form based on a count. An optional third parameter 'count' and an optional
+fourth parameter 'locale' may be used for pluralization. The locale parameter determines the
+plural forms and the plural rule used. If locale is not defined but the first
+parameter is an object containing pluralizations, the locale supplied in the ANSWERS.init() will be
+used. For more information on plural forms, see this [doc](https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals):
+
+The following example will use the singular form keyed by '0' for a count of 1, and the plural
+form keyed by '1' for any other count. A count of 0 will return '0 results':
+```js
+ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] result', 1: '[[resultsCount]] results' }, 
+  { resultsCount: count }, 
+  count, 
+  'en'
+);
+```
+
+French is different than English in that a count of zero uses the same plural form as a count
+of one. For example, a count of 0 will return '0 résultat':
+```js
+ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] résultat', 1: '[[resultsCount]] résultats' }, 
+  { resultsCount: count }, 
+  count, 
+  'fr'
+);
+```
+
+Here's what the usage looks like in a Handlebars helper:
+```hbs
+{{ processTranslation 
+  pluralForm0='[[resultsCount]] résultat' 
+  pluralForm1='[[resultsCount]] résultats' 
+  resultsCount=count 
+  count=count 
+  locale='fr' 
+}}
+```
+
+# Performance Metrics
+
+The SDK uses the Performance API, via `window.performance.mark()`, to create performance metrics regarding ANSWERS.init(), vertical search, and universal search. These marks can be viewed through browser developer tools, or programmatically through `window.performance.getEntries()`.
+
+## ANSWERS.init()
+
+1. `'yext.answers.initStart'` called when ANSWERS.init beings
+
+2. `'yext.answers.ponyfillStart'` called when css-variables ponyfill starts
+
+3. `'yext.answers.ponyfillEnd'` called when css-variables ponyfill ends.
+
+4. `'yext.answers.statusStart'` called when the ANSWERS status call is made
+
+5. `'yext.answers.statusEnd'` called when the ANSWERS status check is done
+
+## Vertical Search
+
+1. `'yext.answers.verticalQueryStart'` called when a vertical query begins
+
+2. `'yext.answers.verticalQuerySent'` called right before the vertical query API call is made
+
+3. `'yext.answers.verticalQueryResponseReceived'` called immediately after a vertical query response is received
+
+4. `'yext.answers.verticalQueryResponseRendered'` called after a vertial query is finished, and all components have finished rendering
+
+## Universal Search
+
+1. `'yext.answers.universalQueryStart'` called when a universal query starts
+
+2. `'yext.answers.universalQuerySent'` called right before the universal query API call is made
+
+3. `'yext.answers.universalQueryResponseReceived'` called immediately after a universal query response is received
+
+4. `'yext.answers.universalQueryResponseRendered'` called after a universal query is finished and all components have finished rendering
+
