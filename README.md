@@ -46,7 +46,9 @@ Outline:
    - [Conversion Tracking](#conversion-tracking)
    - [On-Search Analytics](#on-search-analytics)
 8. [Rich Text Formatting](#rich-text-formatting)
-9. [Performance Metrics](#performance-metrics)
+9. [Processing Translations](#processing-translations)
+10. [Performance Metrics](#performance-metrics)
+
 
 # Install and Setup
 
@@ -2267,6 +2269,68 @@ ANSWERS.ponyfillCssVariables({
         onSuccess: function() {},
         onFinally: function() {},
 });
+```
+
+# Processing Translations
+
+The Answers SDK provides functionality to perform translation interpolation, pluralization, or both.
+
+## Interpolation 
+
+Interpolation allows the use of dynamic values in translations. Interpolation parameters are defined 
+inside double brackets, and they must also be defined in an object in the second parameter.
+
+The following example will return 'Bonjour Howard' provided the variable `myName` equals 'Howard':
+```js
+ANSWERS.processTranslation('Bonjour [[name]]', { name: myName });
+```
+
+The translation processor is also available though a Handlebars helper:
+```hbs
+{{ processTranslation phrase='Bonjour [[name1]] et [[name2]]' name1=name1 name2=name2}}
+```
+
+## Pluralization
+
+Pluralization makes it possible to select the plural form of a translation depending on a
+qualifying count. Different languages have different plural rules, which is the method of
+selecting a plural form based on a count. An optional third parameter 'count' and an optional
+fourth parameter 'locale' may be used for pluralization. The locale parameter determines the
+plural forms and the plural rule used. If locale is not defined but the first
+parameter is an object containing pluralizations, the locale supplied in the ANSWERS.init() will be
+used. For more information on plural forms, see this [doc](https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals):
+
+The following example will use the singular form keyed by '0' for a count of 1, and the plural
+form keyed by '1' for any other count. A count of 0 will return '0 results':
+```js
+ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] result', 1: '[[resultsCount]] results' }, 
+  { resultsCount: count }, 
+  count, 
+  'en'
+);
+```
+
+French is different than English in that a count of zero uses the same plural form as a count
+of one. For example, a count of 0 will return '0 résultat':
+```js
+ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] résultat', 1: '[[resultsCount]] résultats' }, 
+  { resultsCount: count }, 
+  count, 
+  'fr'
+);
+```
+
+Here's what the usage looks like in a Handlebars helper:
+```hbs
+{{ processTranslation 
+  pluralForm0='[[resultsCount]] résultat' 
+  pluralForm1='[[resultsCount]] résultats' 
+  resultsCount=count 
+  count=count 
+  locale='fr' 
+}}
 ```
 
 # Performance Metrics
