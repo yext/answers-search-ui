@@ -146,4 +146,34 @@ describe('codelab people searches', () => {
         expect.objectContaining({ input: 'Connor9398' }));
     });
   });
+
+  it('searches with Nan first name and no additional text', () => {
+    const result = searchApi.nanSearch(false, false, '');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything,
+        expect.objectContaining({ input: 'Nan ' }));
+    });
+  });
+
+  it('searches with Nan full name and no additional text', () => {
+    const result = searchApi.nanSearch(true, false, '');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything,
+        expect.objectContaining({ input: 'Nan Hu ' }));
+    });
+  });
+
+  it('searches with Nan username and additional text', () => {
+    const result = searchApi.nanSearch(false, true, 'extra text');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything,
+        expect.objectContaining({ input: 'nhu extra text ' }));
+    });
+  });
 });

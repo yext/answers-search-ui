@@ -178,4 +178,36 @@ export default class SearchApi {
     const query = `Connor${number.toString()}`;
     return this.universalSearch(query, {});
   }
+
+  /**
+  * Initiate a search for Nan
+  * @param {boolean} includeLastName include last name in the search
+  * @param {boolean} useUserName use the username in the search
+  * @param {string} additionalSearchText more text to add to the search
+  */
+  nanSearch (includeLastName, useUserName, additionalSearchText) {
+    let name = includeLastName ? 'Nan Hu' : 'Nan';
+    name = useUserName ? 'nhu' : name;
+
+    if (additionalSearchText && typeof additionalSearchText !== 'string') {
+      throw new AnswersCoreError('addtionalSearchText must be a string', 'nanSearch');
+    }
+
+    const query = `${name} ${additionalSearchText}`;
+
+    let request = new ApiRequest({
+      endpoint: '/v2/accounts/me/answers/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': query,
+        'experienceKey': this._experienceKey,
+        'version': this._experienceVersion,
+        'locale': this._locale
+      }
+    });
+
+    return request.get()
+      .then(response => response.json());
+  }
 }
