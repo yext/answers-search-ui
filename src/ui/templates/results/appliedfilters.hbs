@@ -1,0 +1,29 @@
+{{#if appliedFiltersArray.length}}
+  <div class="yxt-AppliedFilters" aria-label="{{_config.labelText}}">
+    {{#each appliedFiltersArray}}
+      {{#if ../_config.showFieldNames}}
+        <div class="yxt-AppliedFilters-filterLabel">
+          <span class="yxt-AppliedFilters-filterLabelText">{{this.label}}</span>
+          <span class="yxt-AppliedFilters-filterLabelColon">:</span>
+        </div>
+      {{/if}}
+      {{#each filterDataArray}}
+        {{#if removable}}
+          <button class="yxt-AppliedFilters-removableFilterTag js-yxt-AppliedFilters-removableFilterTag"
+            data-filter-id={{dataFilterId}} tabindex="0" aria-label="{{../../_config.removableLabelText}}">
+            <span class="yxt-AppliedFilters-removableFilterValue">{{displayValue}}</span>
+            <span class="yxt-AppliedFilters-removableFilterX">&times;</span>
+          </button>
+        {{else}}
+          <div class="yxt-AppliedFilters-filterValue">
+            <span class="yxt-AppliedFilters-filterValueText">{{displayValue}}</span>
+            {{#unless @last}}<span class="yxt-AppliedFilters-filterValueComma">,</span>{{/unless}}
+          </div>
+        {{/if}}
+      {{/each}}
+      {{#unless @last}}
+        <div class="yxt-AppliedFilters-filterSeparator">{{../_config.delimiter}}</div>
+      {{/unless}}
+    {{/each}}
+  </div>
+{{/if}}

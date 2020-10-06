@@ -29,12 +29,13 @@ import SearchApi from './core/search/searchapi';
 import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
-import { SANDBOX, PRODUCTION } from './core/constants';
+import { SANDBOX, PRODUCTION, LOCALE } from './core/constants';
 import MasterSwitchApi from './core/utils/masterswitchapi';
 import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
+import TranslationProcessor from './core/i18n/translationprocessor';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -51,7 +52,7 @@ import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
  */
 
 const DEFAULTS = {
-  locale: 'en'
+  locale: LOCALE
 };
 
 /**
@@ -152,6 +153,7 @@ class Answers {
    *                            experience's Answers Status page.
    */
   init (config, statusPage) {
+    window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
     this.validateConfig(parsedConfig);
 
@@ -178,7 +180,22 @@ class Answers {
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
-    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
+
+    // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
+    // what is in parsedConfig.
+    const sessionOptIn = globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    if (!sessionOptIn) {
+      globalStorage.set(
+        StorageKeys.SESSIONS_OPT_IN,
+        { value: parsedConfig.sessionTrackingEnabled, setDynamically: false });
+    } else {
+      // If sessionsOptIn was stored in the URL, it was stored only as a string.
+      // Parse this value and add it back to globalStorage.
+      globalStorage.set(
+        StorageKeys.SESSIONS_OPT_IN,
+        { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
+    }
+
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
     if (globalStorage.getState(StorageKeys.QUERY)) {
       globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
@@ -257,52 +274,35 @@ class Answers {
 
     if (parsedConfig.useTemplates === false || parsedConfig.templateBundle) {
       if (parsedConfig.templateBundle) {
-        this.renderer.init(parsedConfig.templateBundle);
+        this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
       }
-
-      this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
-      return this;
-    }
-
-    // Templates are currently downloaded separately from the CORE and UI bundle.
-    // Future enhancement is to ship the components with templates in a separate bundle.
-    this.templates = new DefaultTemplatesLoader(templates => {
-      this.renderer.init(templates);
-      this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
-    });
-
-    return this;
-  }
-
-  /**
-   * Checks the experience's Answer Status page before invoking onReady. If the status is
-   * disabled, onReady is not called.
-   */
-  _invokeOnReady () {
-    this._masterSwitchApi.isDisabled()
-      .then(isDisabled => !isDisabled && this._onReady(), () => this._onReady());
-  }
-
-  /**
-   * Calls the CSS vars ponyfill, if opted-in, and invokes the callback
-   * regardless of if there was an error/success. If opted-out, only invokes the callback.
-   * @param {boolean} option to opt out of the css variables ponyfill
-   * @param callback {Function} always called after function
-   */
-  _handlePonyfillCssVariables (ponyfillDisabled, callback) {
-    if (!ponyfillDisabled) {
-      this.ponyfillCssVariables({
-        onFinally: () => {
-          callback();
-        }
-      });
     } else {
-      callback();
+      // Templates are currently downloaded separately from the CORE and UI bundle.
+      // Future enhancement is to ship the components with templates in a separate bundle.
+      this.templates = new DefaultTemplatesLoader(templates => {
+        this.renderer.init(templates, this._getInitLocale());
+      });
     }
+
+    const handleFulfilledMasterSwitch = (isDisabled) => {
+      window.performance.mark('yext.answers.statusEnd');
+      if (!isDisabled) {
+        this._onReady();
+      } else {
+        throw new Error('MasterSwitchApi determined the front-end should be disabled');
+      }
+    };
+    const handleRejectedMasterSwitch = () => {
+      window.performance.mark('yext.answers.statusEnd');
+      this._onReady();
+    };
+
+    return this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
+      .then(() => {
+        window.performance.mark('yext.answers.statusStart');
+        return this._masterSwitchApi.isDisabled();
+      })
+      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch);
   }
 
   domReady (cb) {
@@ -426,7 +426,8 @@ class Answers {
    * @param {boolean} optIn
    */
   setSessionsOptIn (optIn) {
-    this.core.globalStorage.set(StorageKeys.SESSIONS_OPT_IN, optIn);
+    this.core.globalStorage.set(
+      StorageKeys.SESSIONS_OPT_IN, { value: optIn, setDynamically: true });
   }
 
   /**
@@ -457,6 +458,28 @@ class Answers {
   setGeolocation (lat, lng) {
     this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
       lat, lng, radius: 0
+    });
+  }
+
+  /**
+   * A promise that resolves when ponyfillCssVariables resolves,
+   * or resolves immediately if ponyfill is disabled
+   * @param {boolean} option to opt out of the css variables ponyfill
+   * @return {Promise} resolves after ponyfillCssVariables, or immediately if disabled
+   */
+  _handlePonyfillCssVariables (ponyfillDisabled) {
+    window.performance.mark('yext.answers.ponyfillStart');
+    if (ponyfillDisabled) {
+      window.performance.mark('yext.answers.ponyfillEnd');
+      return Promise.resolve();
+    }
+    return new Promise((resolve, reject) => {
+      this.ponyfillCssVariables({
+        onFinally: () => {
+          window.performance.mark('yext.answers.ponyfillEnd');
+          resolve();
+        }
+      });
     });
   }
 
@@ -502,6 +525,32 @@ class Answers {
     }
 
     this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
+  }
+
+  /**
+   * Processes a translation which includes performing interpolation, pluralization, or
+   * both
+   * @param {string | Object} translations The translation, or an object containing
+   * translated plural forms
+   * @param {Object} interpolationParams Params to use during interpolation
+   * @param {number} count The count associated with the pluralization
+   * @param {string} language The langauge associated with the pluralization
+   * @returns {string} The translation with any interpolation or pluralization applied
+   */
+  processTranslation (translations, interpolationParams, count, language) {
+    const initLocale = this._getInitLocale();
+    language = language || initLocale.substring(0, 2);
+
+    return TranslationProcessor.process(translations, interpolationParams, count, language);
+  }
+
+  /**
+   * Gets the locale that ANSWERS was initialized to
+   *
+   * @returns {string}
+   */
+  _getInitLocale () {
+    return this.core.globalStorage.getState(StorageKeys.LOCALE);
   }
 }
 

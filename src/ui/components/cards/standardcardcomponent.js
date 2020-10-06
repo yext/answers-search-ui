@@ -5,6 +5,7 @@ import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 class StandardCardConfig {
   constructor (config = {}) {
@@ -59,13 +60,19 @@ class StandardCardConfig {
      * If showMoreLimit is set, the text that displays beneath it
      * @type {string}
      */
-    this.showMoreText = this.showMoreText || 'Show More';
+    this.showMoreText = this.showMoreText || TranslationFlagger.flag({
+      phrase: 'Show More',
+      context: 'Displays more details for the result'
+    });
 
     /**
      * If showMoreLimit is set, the text that displays beneath it when all text is shown
      * @type {string}
      */
-    this.showLessText = this.showLessText || 'Show Less';
+    this.showLessText = this.showLessText || TranslationFlagger.flag({
+      phrase: 'Show Less',
+      context: 'Displays less details for the result'
+    });
 
     /**
      * Add a show more link if this number of characters is shown,

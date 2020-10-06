@@ -6,6 +6,7 @@ import DOM from '../../dom/dom';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * A filter for a range of dates
@@ -188,16 +189,47 @@ export default class DateRangeFilterComponent extends Component {
     let displayValue;
     if (!max) {
       displayValue = this._isExclusive
-        ? `After ${min}`
-        : `${min} or later`;
+        ? TranslationFlagger.flag({
+          phrase: 'After [[date]]',
+          context: 'After a date. Example: After [August 15th]',
+          interpolationValues: {
+            date: min
+          }
+        })
+        : TranslationFlagger.flag({
+          phrase: '[[date]] or later',
+          context: 'Beginning at a date (with no end date). Example: [August 15th] or later',
+          interpolationValues: {
+            date: min
+          }
+        });
     } else if (!min) {
       displayValue = this._isExclusive
-        ? `Before ${max}`
-        : `${max} and earlier`;
+        ? TranslationFlagger.flag({
+          phrase: 'Before [[date]]',
+          context: 'Before a date. Example: Before [August 15th]',
+          interpolationValues: {
+            date: max
+          }
+        })
+        : TranslationFlagger.flag({
+          phrase: '[[date]] and earlier',
+          context: 'Ending at a date with (no start date). Example: [August 15th] or earlier',
+          interpolationValues: {
+            date: max
+          }
+        });
     } else if (min === max) {
       displayValue = this._isExclusive ? '' : min;
     } else {
-      displayValue = `${min} - ${max}`;
+      displayValue = TranslationFlagger.flag({
+        phrase: '[[start]] - [[end]]',
+        context: 'Start date to end date. Example: [August 15th] - [August 16th]',
+        interpolationValues: {
+          start: min,
+          end: max
+        }
+      });
     }
     return new FilterMetadata({
       fieldName: this._title,

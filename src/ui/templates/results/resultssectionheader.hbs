@@ -35,7 +35,11 @@
           data-eventtype="FILTERING_WITHIN_SECTION"
           data-eventoptions='{{eventOptions}}'
         >
-          {{#if _config.changeFiltersText}}{{_config.changeFiltersText}}{{else}}change{{/if}}
+          {{#if _config.changeFiltersText}}
+            {{_config.changeFiltersText}}
+          {{else}}
+            {{translate phrase='change' context='Change is a verb. Example: change filtering logic' }}
+          {{/if}}
         </a>
       {{/if}}
     {{/if}}

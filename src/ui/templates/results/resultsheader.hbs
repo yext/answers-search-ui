@@ -15,13 +15,10 @@
     {{#if customResultsCount}}
       {{{customResultsCount}}}
     {{else}}
-      <div class="yxt-ResultsHeader-resultsCount" aria-label="{{resultsCountStart}} through {{resultsCountEnd}} of {{resultsCount}}">
+      <div class="yxt-ResultsHeader-resultsCount"
+           aria-label="{{translate phrase='[[start]] through [[end]] of [[resultsCount]]' start=resultsCountStart end=resultsCountEnd resultsCount=resultsCount }}">
         <div aria-hidden="true">
-          <span class="yxt-ResultsHeader-resultsCountStart">{{resultsCountStart}}</span>
-          <span class="yxt-ResultsHeader-resultsCountDash">-</span>
-          <span class="yxt-ResultsHeader-resultsCountEnd">{{resultsCountEnd}}</span>
-          <span class="yxt-ResultsHeader-resultsCountOf">of</span>
-          <span class="yxt-ResultsHeader-resultsCountTotal">{{resultsCount}}</span>
+          {{translate phrase='<span class="yxt-ResultsHeader-resultsCountStart">[[start]]</span> <span class="yxt-ResultsHeader-resultsCountDash">-</span> <span class="yxt-ResultsHeader-resultsCountEnd">[[end]]</span> <span class="yxt-ResultsHeader-resultsCountOf">of</span> <span class="yxt-ResultsHeader-resultsCountTotal">[[resultsCount]]</span>' context='Example: 1-10 of 50' start=resultsCountStart end=resultsCountEnd resultsCount=resultsCount }}
         </div>
       </div>
     {{/if}}
@@ -65,7 +62,7 @@
         {{#if _config.changeFiltersText}}
           {{_config.changeFiltersText}}
         {{else}}
-          change filters
+          {{translate phrase='change filters' context='Change is a verb, filters are a set of fixed values or criteria that limit results' }}
         {{/if}}
       </a>
     {{/every}}

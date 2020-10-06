@@ -58,6 +58,19 @@ jobs:
           paths:
             - dist
             - .circleci
+  # generate bundles for all languages and locales
+  build_i18n:
+    docker:
+      - image: circleci/node:14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - run: npm run build-locales
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+            - .circleci
   # run the jest unit tests
   unit_test:
     docker:
@@ -122,22 +135,63 @@ workflows:
     jobs:
       - build:
           filters:
+            branches:
+              ignore:
+                - master
+                - /^support\/.*/
+                - /^feature\/.*-i18n/
+                - /^release\/.*/
+      - unit_test:
+          requires:
+            - build
+      - deploy_canary:
+          filters:
+            branches:
+              only: develop
+          requires:
+            - unit_test
+      - deploy_branch:
+          filters:
+            branches:
+              ignore:
+                - develop
+          requires:
+            - unit_test
+  build_and_deploy_i18n:
+    jobs:
+      - build_i18n:
+          filters:
+            branches:
+              only:
+                - /^support\/.*/
+                - /^feature\/.*-i18n/
+                - /^release\/.*/
+      - unit_test:
+          requires:
+            - build_i18n
+      - deploy_branch:
+          requires:
+            - unit_test
+  build_and_deploy_hold:
+    jobs:
+      - build_i18n:
+          filters:
             tags:
               only: /^v.*/
+            branches:
+              only:
+                - master
       - unit_test:
           filters:
             tags:
               only: /^v.*/
           requires:
-            - build
+            - build_i18n
       - hold:
           type: approval
           filters:
             tags:
               only: /^v.*/
-            branches:
-              only: 
-                - master
           requires:
             - unit_test
       - deploy_latest:
@@ -146,14 +200,6 @@ workflows:
               only: master
           requires:
             - hold
-      - deploy_branch:
-          filters:
-            branches:
-              ignore:
-                - master
-                - develop
-          requires:
-            - unit_test
       - deploy_version:
           filters:
             tags:
@@ -162,9 +208,3 @@ workflows:
               ignore: /.*/
           requires:
             - hold
-      - deploy_canary:
-          filters:
-            branches:
-              only: develop
-          requires:
-            - unit_test

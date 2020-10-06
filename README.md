@@ -18,11 +18,13 @@ Outline:
    - [DirectAnswer Component](#direct-answer-component)
    - [UniversalResults Component](#universal-results-component)
    - [VerticalResults Component](#vertical-results-component)
+   - [VerticalResultsCount Component](#vertical-results-count-component)
    - [Pagination Component](#pagination-component)
    - [FilterBox Component](#filterbox-component)
    - [Facets Component](#facets-component)
    - [FilterSearch Component](#filtersearch-component)
    - [Filter Components](#filter-components)
+   - [Applied Filters Component](#applied-filters-component)
    - [Navigation Component](#navigation-component)
    - [QASubmission Component](#qa-submission-component)
    - [SpellCheck Component](#spell-check-component)
@@ -44,6 +46,9 @@ Outline:
    - [Conversion Tracking](#conversion-tracking)
    - [On-Search Analytics](#on-search-analytics)
 8. [Rich Text Formatting](#rich-text-formatting)
+9. [Processing Translations](#processing-translations)
+10. [Performance Metrics](#performance-metrics)
+
 
 # Install and Setup
 
@@ -85,6 +90,24 @@ function initAnswers() {
 }
 ```
 
+ANSWERS.init() returns a promise which optionally allows components to be added using promise syntax
+```js
+function initAnswers() {
+  ANSWERS.init({
+    apiKey: '<API_KEY_HERE>', // See [1]
+    experienceKey: '<EXPERIENCE_KEY_HERE>',
+  }).then(function() {
+    ANSWERS.addComponent('SearchBar', {
+      container: '#SearchBarContainer',
+    });
+
+    ANSWERS.addComponent('UniversalResults', {
+      container: '#UniversalResultsContainer',
+    });
+  });
+}
+```
+
 [1] Learn more about [getting your API key](https://developer.yext.com/docs/guides/get-started/).
 
 # ANSWERS.init Configuration Options
@@ -98,7 +121,8 @@ function initAnswers() {
     apiKey: '<API_KEY_HERE>',
     // Required, the key used for your Answers experience
     experienceKey: '<EXPERIENCE_KEY_HERE>',
-    // Required, initialize components here, invoked when the Answers component library is loaded/ready
+    // Optional, initialize components here, invoked when the Answers component library is loaded/ready.
+    //    If components are not added here, they can also be added when the init promise resolves
     onReady: function() {},
     // Optional*, Yext businessId, *required to send analytics events
     businessId: 'businessId',
@@ -260,6 +284,16 @@ function (searchParams) => {
      */
     const sectionsCount = searchParams.sectionsCount;
 
+    /**
+     * A map containing entries of the form:
+     * { totalResultsCount: 150, displayedResultsCount: 10}
+     * for each returned vertical. The totalResultsCount indicates how many results
+     * are present in the vertical. The displayResultsCount indicates how many of
+     * those results are actually displayed.
+     * @type {Object<string,Object>}
+     */
+    const resultsCountByVertical = searchParams.resultsCountByVertical;
+
     let analyticsEvent = new ANSWERS.AnalyticsEvent('ANALYTICS_EVENT_TYPE');
     analyticsEvent.addOptions({
       type: 'ANALYTICS_EVENT_TYPE',
@@ -293,7 +327,8 @@ Every component has the same base configuration options.
     container: 'container',
     // Optional, a unique name for the component
     name: 'name',
-    // Optional, a custom HTML classname for the component
+    // Optional, an additional, custom HTML classname for the component. The component will also 
+    // have a classname of 'yxt-Answers-component' applied.
     class: 'class',
     // Optional, handlebars template or HTML to override built-in handlebars template for the component
     template: 'template',
@@ -313,7 +348,7 @@ Every component has the same base configuration options.
 
 ## Adding a Component to Your Page
 Adding a component to your page is super easy!
-You can add many different [types](#types-of-components) of components to your page.
+You can add many different [types](#types-of-built-in-components) of components to your page.
 Each component supports the base configuration options above, as well as their own unique configurations.
 
 To start, every component requires an HTML container.
@@ -795,12 +830,10 @@ ANSWERS.addComponent('VerticalResults', {
   itemTemplate: `<div> Custom template </div>`,
   // Optional, set a max number of columns to display at the widest breakpoint. Possible values are 1, 2, 3 or 4, defaults to 1
   maxNumberOfColumns: 1,
-  // Optional, whether to display the total number of results, default true
-  showResultCount: true,
-  // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
-  resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
   modifier: '',
+  // Optional, whether to hide the default results header that VerticalResults provides. Defaults to false.
+  hideResultsHeader: false,
   // Optional, the card used to display each individual result, see the Cards section for more details,
   card: {
     // Optional, The type of card, built-in types are: 'Standard', 'Accordion', and 'Legacy'. Defaults to 'Standard'
@@ -817,6 +850,17 @@ ANSWERS.addComponent('VerticalResults', {
     // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
     displayAllResults: false
   },
+
+  /**
+   * NOTE: The config options below are DEPRECATED.
+   * They will still work as expected, and the defaults will still be applied,
+   * but future major versions of the SDK will remove them.
+   * We recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
+   */
+  // Optional, whether to display the total number of results, default true
+  showResultCount: true,
+  // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
+  resultsCountTemplate: '<div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}</div>',
   // Configuration for the applied filters bar in the header.
   appliedFilters: {
     // If true, show any applied filters that were applied to the vertical search. Defaults to true
@@ -838,6 +882,16 @@ ANSWERS.addComponent('VerticalResults', {
     removableLabelText: 'Remove this filter'
   }
 })
+```
+
+## Vertical Results Count Component
+
+The results count component displays the current results count on a vertical page.
+
+```js
+ANSWERS.addComponent('VerticalResultsCount', {
+  container: '.results-count-container'
+});
 ```
 
 ## Cards
@@ -1356,12 +1410,10 @@ ANSWERS.addComponent('FilterOptions', {
   options: [
     /** Depends on the above optionType, either 'STATIC_FILTER' or 'RADIUS_FILTER', see below. **/
   ],
-  // Optional, if true, the filter value is saved on change and sent with the next search. Defaults to false.
-  storeOnChange: false,
+  // Optional, if true, the filter value is saved on change and sent with the next search. Defaults to true.
+  storeOnChange: true,
   // Optional, the selector used for options in the template, defaults to '.js-yext-filter-option'
   optionSelector: '.js-yext-filter-option',
-  // Optional, if true, triggers a search on each change to a filter, default false
-  searchOnChange: true,
   // Optional, if true, show a reset button
   showReset: false,
   // Optional, the label to use for the reset button, defaults to 'reset'
@@ -1595,6 +1647,33 @@ ANSWERS.addComponent('GeoLocationFilter', {
 });
 ```
 
+## Applied Filters Component
+
+The Applied Filters Component displays your currently applied filters as a row of text tags, labeled
+by filter display value. If the "removable" config option is set to true, these text tags will instead
+be "removable filters", which, when clicked, will remove the clicked filter from the search.
+Only intended for vertical pages.
+
+```js
+ANSWERS.addComponent('AppliedFilters', {
+  container: '.applied-filters-container',
+  // Optional, The vertical key of your search. Defaults to the vertical key specified in the search config.
+  verticalKey: 'aVerticalKey',
+  // Optional, Whether to display the field name of each group of applied filters. e.g. "Location: Virginia, New York" vs just "Virginia, New York". Defaults to false.
+  showFieldNames: false,
+  // Optional, This is list of filters that should not be displayed. Defaults to hiding ['builtin.entityType'].
+  hiddenFields: ['builtin.entityType'],
+  // Optional, Whether or not the displayed filters should be removable filters, or just simple text tags. Defaults to false (text tags).
+  removable: false,
+  // Optional, The character that separates each group of filters (grouped by field name). Defaults to '|'.
+  delimiter: '|',
+  // Optional, The aria-label given to the component. Defaults to 'Filters applied to this search:'.
+  labelText: 'Filters applied to this search:',
+  // Optional, The aria-label given to the removable filters. Defaults to 'Remove this filter'.
+  removableLabelText: 'Remove this filter'
+});
+```
+
 ## Navigation Component
 
 The Navigation Component adds a dynamic experience to your pages navigation experience.
@@ -1758,7 +1837,8 @@ ANSWERS.addComponent('SortOptions', {
       type: 'FIELD',
       // Required only if type is FIELD, field name to sort by
       field: 'c_popularity',
-      // Required only if type is FIELD, direction to sort by
+      // Direction to sort by, either 'ASC' or 'DESC'
+      // Required only if type is FIELD
       direction: 'ASC',
       // Required: Label for the sort option's radio button
       label: 'Popularity',
@@ -1820,6 +1900,8 @@ ANSWERS.addComponent('Map', {
   apiKey: '',
   // Optional, can be used for Google Maps in place of the API key
   clientId: '',
+  // Optional, used to determine the language of the map. Defaults to the locale specified in the ANSWERS init.
+  locale: 'en',
   // Optional, determines whether or not to collapse pins at the same lat/lng
   collapsePins: false,
   // Optional, the zoom level of the map, defaults to 14
@@ -2188,3 +2270,102 @@ ANSWERS.ponyfillCssVariables({
         onFinally: function() {},
 });
 ```
+
+# Processing Translations
+
+The Answers SDK provides functionality to perform translation interpolation, pluralization, or both.
+
+## Interpolation 
+
+Interpolation allows the use of dynamic values in translations. Interpolation parameters are defined 
+inside double brackets, and they must also be defined in an object in the second parameter.
+
+The following example will return 'Bonjour Howard' provided the variable `myName` equals 'Howard':
+```js
+ANSWERS.processTranslation('Bonjour [[name]]', { name: myName });
+```
+
+The translation processor is also available though a Handlebars helper:
+```hbs
+{{ processTranslation phrase='Bonjour [[name1]] et [[name2]]' name1=name1 name2=name2}}
+```
+
+## Pluralization
+
+Pluralization makes it possible to select the plural form of a translation depending on a
+qualifying count. Different languages have different plural rules, which is the method of
+selecting a plural form based on a count. An optional third parameter 'count' and an optional
+fourth parameter 'locale' may be used for pluralization. The locale parameter determines the
+plural forms and the plural rule used. If locale is not defined but the first
+parameter is an object containing pluralizations, the locale supplied in the ANSWERS.init() will be
+used. For more information on plural forms, see this [doc](https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals):
+
+The following example will use the singular form keyed by '0' for a count of 1, and the plural
+form keyed by '1' for any other count. A count of 0 will return '0 results':
+```js
+ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] result', 1: '[[resultsCount]] results' }, 
+  { resultsCount: count }, 
+  count, 
+  'en'
+);
+```
+
+French is different than English in that a count of zero uses the same plural form as a count
+of one. For example, a count of 0 will return '0 résultat':
+```js
+ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] résultat', 1: '[[resultsCount]] résultats' }, 
+  { resultsCount: count }, 
+  count, 
+  'fr'
+);
+```
+
+Here's what the usage looks like in a Handlebars helper:
+```hbs
+{{ processTranslation 
+  pluralForm0='[[resultsCount]] résultat' 
+  pluralForm1='[[resultsCount]] résultats' 
+  resultsCount=count 
+  count=count 
+  locale='fr' 
+}}
+```
+
+# Performance Metrics
+
+The SDK uses the Performance API, via `window.performance.mark()`, to create performance metrics regarding ANSWERS.init(), vertical search, and universal search. These marks can be viewed through browser developer tools, or programmatically through `window.performance.getEntries()`.
+
+## ANSWERS.init()
+
+1. `'yext.answers.initStart'` called when ANSWERS.init beings
+
+2. `'yext.answers.ponyfillStart'` called when css-variables ponyfill starts
+
+3. `'yext.answers.ponyfillEnd'` called when css-variables ponyfill ends.
+
+4. `'yext.answers.statusStart'` called when the ANSWERS status call is made
+
+5. `'yext.answers.statusEnd'` called when the ANSWERS status check is done
+
+## Vertical Search
+
+1. `'yext.answers.verticalQueryStart'` called when a vertical query begins
+
+2. `'yext.answers.verticalQuerySent'` called right before the vertical query API call is made
+
+3. `'yext.answers.verticalQueryResponseReceived'` called immediately after a vertical query response is received
+
+4. `'yext.answers.verticalQueryResponseRendered'` called after a vertial query is finished, and all components have finished rendering
+
+## Universal Search
+
+1. `'yext.answers.universalQueryStart'` called when a universal query starts
+
+2. `'yext.answers.universalQuerySent'` called right before the universal query API call is made
+
+3. `'yext.answers.universalQueryResponseReceived'` called immediately after a universal query response is received
+
+4. `'yext.answers.universalQueryResponseRendered'` called after a universal query is finished and all components have finished rendering
+

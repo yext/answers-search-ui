@@ -1,14 +1,10 @@
-import FilterSearchComponent from 'src/ui/components/search/filtersearchcomponent';
 import mockManager from '../../../setup/managermocker';
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 
 describe('FilterSearch', () => {
-  const COMPONENT_MANAGER = mockManager(
-    {
-      setStaticFilterNodes: () => {}
-    },
-    FilterSearchComponent.defaultTemplateName()
-  );
+  const COMPONENT_MANAGER = mockManager({
+    setStaticFilterNodes: () => {}
+  });
 
   it('builds FilterNodes correctly', () => {
     const title = 'abcdefg';

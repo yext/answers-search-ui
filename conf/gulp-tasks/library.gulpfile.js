@@ -1,152 +1,112 @@
 const { series, parallel, src, dest, watch } = require('gulp');
-
-const fs = require('fs');
-
-const rollup = require('gulp-rollup-lightweight');
-const babel = require('rollup-plugin-babel');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const insert = require('rollup-plugin-insert');
-
-const source = require('vinyl-source-stream');
-const rename = require('gulp-rename');
-const replace = require('gulp-replace');
-
+const path = require('path');
+const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
 
-const postcss = require('gulp-postcss');
+const getLibraryVersion = require('./utils/libversion');
+const { BundleType, BundleTaskFactory } = require('./bundle/bundletaskfactory');
+const { DEFAULT_LOCALE, ALL_LANGUAGES } = require('../i18n/constants');
+const { copyAssetsForLocales } = require('../i18n/localebuildutils');
+const LocalFileParser = require('../i18n/localfileparser');
+const MinifyTaskFactory = require('./bundle/minifytaskfactory');
+const TranslationResolver = require('../i18n/translationresolver');
+const Translator = require('../i18n/translator');
+const { generateProcessTranslationJsCall } = require('../i18n/runtimecallgeneratorutils');
 
-const uglify = require('gulp-uglify-es').default;
+/**
+ * Creates the un-minified legacy JS bundle, compiles CSS, and kicks off the watch task.
+ * @returns {Promise<Function>}
+ */
+exports.dev = function devJSBundle () {
+  return createBundleTaskFactory(DEFAULT_LOCALE).then(devTaskFactory => {
+    return new Promise(resolve => {
+      return parallel(
+        series(devTaskFactory.create(BundleType.LEGACY_IIFE), getWatchJSTask(devTaskFactory)),
+        series(compileCSS, watchCSS)
+      )(resolve);
+    });
+  });
+};
 
-const NAMESPACE = 'ANSWERS';
-
-function getLibVersion () {
-  try {
-    const insideWorkTree = require('child_process')
-      .execSync('git rev-parse --is-inside-work-tree 2>/dev/null')
-      .toString().trim();
-    if (insideWorkTree === 'true') {
-      return require('child_process')
-        .execSync('git describe --tags')
-        .toString().trim();
-    }
-  } catch (e) {
-    // if above command fails, catch error and continue, as we are not in a git repository
-  }
-
-  console.warn('Warning: Not in a github repository, using default hardcoded library version.');
-  return 'TEST';
+/**
+ * Creates a build task for each provided language and combines them into a series task.
+ * This function also supports locales, but it is named to reflect the current use case
+ * of creating bundles for just languages.
+ * @param {Array<string>} languages
+ * @returns {Promise<Function>}
+ */
+function createJSBundlesForLanguages (languages) {
+  const localizedTaskPromises = languages.map(language => {
+    const minifyTaskFactory = new MinifyTaskFactory(language);
+    return createBundleTaskFactory(language)
+      .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory));
+  });
+  return Promise.all(localizedTaskPromises).then(localizedTasks => {
+    return new Promise(resolve => series(compileCSS, ...localizedTasks)(resolve));
+  });
 }
 
-function bundle () {
-  return rollup({
-    input: './src/answers-umd.js',
-    output: {
-      format: 'umd',
-      name: NAMESPACE,
-      exports: 'default',
-      sourcemap: true
-    },
-    plugins: [
-      resolve(),
-      commonjs({
-        include: './node_modules/**'
-      }),
-      babel({
-        babelrc: false,
-        exclude: 'node_modules/**',
-        presets: ['@babel/env']
-      })
-    ]
-  })
-    .pipe(source('answers-modern.js'))
-    .pipe(replace('@@LIB_VERSION', getLibVersion()))
-    .pipe(dest('dist'));
-}
+exports.default = function defaultLanguageJSBundles () {
+  return createJSBundlesForLanguages([DEFAULT_LOCALE]);
+};
 
-function legacyBundleIIFE () {
-  return legacyBundle({
-    format: 'iife',
-    name: NAMESPACE,
-    sourcemap: true
-  },
-  'answers.js'
+exports.buildLanguages = function allLanguageJSBundles () {
+  return createJSBundlesForLanguages(ALL_LANGUAGES);
+};
+
+exports.buildLocales = function allLocaleJSBundles () {
+  const assetNames = [
+    'answers.js',
+    'answers.min.js',
+    'answers-modern.js',
+    'answers-modern.min.js',
+    'answers-umd.js',
+    'answers-umd.min.js'];
+
+  return createJSBundlesForLanguages(ALL_LANGUAGES).then(() => {
+    copyAssetsForLocales(assetNames);
+  });
+};
+
+/**
+ * Creates modern, legacy and legacyUMD bundles in parallel.
+ *
+ * @param {BundleTaskFactory} bundleTaskFactory
+ * @param {MinifyTaskFactory} minifyTaskFactory
+ */
+function createBundles (bundleTaskFactory, minifyTaskFactory) {
+  return parallel(
+    series(
+      bundleTaskFactory.create(BundleType.MODERN),
+      minifyTaskFactory.minify(BundleType.MODERN)
+    ),
+    series(
+      bundleTaskFactory.create(BundleType.LEGACY_IIFE),
+      minifyTaskFactory.minify(BundleType.LEGACY_IIFE)
+    ),
+    series(
+      bundleTaskFactory.create(BundleType.LEGACY_UMD),
+      minifyTaskFactory.minify(BundleType.LEGACY_UMD)
+    )
   );
 }
 
-function legacyBundleUMD () {
-  return legacyBundle({
-    format: 'umd',
-    name: NAMESPACE,
-    export: 'default',
-    sourcemap: true
-  },
-  'answers-umd.js'
-  );
-}
+/**
+ * Creates a BundleTaskFactory configured with translations for the given locale.
+ *
+ * @param {string} locale
+ * @returns {BundleTaskFactory} bundleTaskFactory
+ */
+async function createBundleTaskFactory (locale) {
+  const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
+  const translation = await localFileParser.fetch(locale);
 
-function legacyBundle (outputConfig, fileName) {
-  return rollup({
-    input: './src/answers-umd.js',
-    output: outputConfig,
-    plugins: [
-      resolve(),
-      insert.prepend(
-        fs.readFileSync('./conf/gulp-tasks/polyfill-prefix.js').toString(),
-        {
-          include: './src/answers-umd.js'
-        }),
-      commonjs({
-        include: './node_modules/**'
-      }),
-      babel({
-        runtimeHelpers: true,
-        babelrc: false,
-        exclude: 'node_modules/**',
-        presets: [
-          [
-            '@babel/preset-env',
-            {
-              'loose': true,
-              'modules': false
-            }
-          ]
-        ],
-        plugins: [
-          '@babel/syntax-dynamic-import',
-          ['@babel/plugin-transform-runtime', {
-            'corejs': 3
-          }],
-          '@babel/plugin-transform-arrow-functions',
-          '@babel/plugin-proposal-object-rest-spread'
-        ]
-      })
-    ]
-  })
-    .pipe(source(fileName))
-    .pipe(replace('@@LIB_VERSION', getLibVersion()))
-    .pipe(dest('dist'));
-}
+  const translator = await Translator.create(locale, [], { [locale]: { translation } });
+  const translationResolver = new TranslationResolver(
+    translator,
+    generateProcessTranslationJsCall);
 
-function minifyJS () {
-  return src('./dist/answers-modern.js')
-    .pipe(rename('answers-modern.min.js'))
-    .pipe(uglify())
-    .pipe(dest('dist'));
-}
-
-function minifyLegacy () {
-  return src('./dist/answers.js')
-    .pipe(rename('answers.min.js'))
-    .pipe(uglify())
-    .pipe(dest('dist'));
-}
-
-function minifyLegacyUMD () {
-  return src('./dist/answers-umd.js')
-    .pipe(rename('answers-umd.min.js'))
-    .pipe(uglify())
-    .pipe(dest('dist'));
+  return new BundleTaskFactory(getLibraryVersion(), translationResolver, locale);
 }
 
 function compileCSS () {
@@ -158,10 +118,17 @@ function compileCSS () {
     .pipe(dest('./dist/'));
 }
 
-function watchJS (cb) {
-  return watch(['./src/**/*.js'], {
-    ignored: './dist/'
-  }, parallel(legacyBundleIIFE));
+/**
+ * Returns a watchJS task that creates a new legacy bundle on JS file updates
+ *
+ * @param {BundleTaskFactory} bundleTaskFactory
+ */
+function getWatchJSTask (bundleTaskFactory) {
+  return function watchJS () {
+    return watch(['./src/**/*.js'], {
+      ignored: './dist/'
+    }, bundleTaskFactory.create(BundleType.LEGACY_IIFE));
+  };
 }
 
 function watchCSS (cb) {
@@ -169,15 +136,3 @@ function watchCSS (cb) {
     ignored: './dist/'
   }, series(compileCSS));
 }
-
-exports.default = parallel(
-  series(bundle, minifyJS),
-  series(legacyBundleIIFE, minifyLegacy),
-  series(legacyBundleUMD, minifyLegacyUMD),
-  series(compileCSS)
-);
-
-exports.dev = parallel(
-  series(legacyBundleIIFE, watchJS),
-  series(compileCSS, watchCSS)
-);

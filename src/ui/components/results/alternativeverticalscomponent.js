@@ -67,7 +67,7 @@ export default class AlternativeVerticalsComponent extends Component {
      */
     this._isShowingResults = opts.isShowingResults || false;
 
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
+    const reRender = () => {
       this.verticalSuggestions = this._buildVerticalSuggestions(
         this._alternativeVerticals,
         this._verticalsConfig,
@@ -79,7 +79,10 @@ export default class AlternativeVerticalsComponent extends Component {
         new SearchParams(window.location.search.substring(1))
       );
       this.setState(this.core.globalStorage.getState(StorageKeys.ALERNATIVE_VERTICALS));
-    });
+    };
+
+    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
+    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
   }
 
   static get type () {
@@ -122,8 +125,6 @@ export default class AlternativeVerticalsComponent extends Component {
    * from alternative verticals and verticalPages configuration
    * @param {object} alternativeVerticals alternativeVerticals server response
    * @param {object} verticalsConfig the configuration to use
-   * @param {string} context the API context query parameter to add to the urls
-   * @param {string} referrerPageUrl the referrerPageUrl query parameter to add to the urls
    */
   _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context, referrerPageUrl) {
     let verticals = [];
@@ -134,6 +135,10 @@ export default class AlternativeVerticalsComponent extends Component {
     }
     if (typeof referrerPageUrl === 'string') {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
+    }
+    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    if (sessionsOptIn && sessionsOptIn.setDynamically) {
+      params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
     }
 
     const filteredParams = filterParamsForExperienceLink(

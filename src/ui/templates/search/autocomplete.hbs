@@ -1,31 +1,46 @@
-{{#if hasResults}}
-  <div class="yxt-AutoComplete">
-    {{assign 'currentSelected' sectionIndex resultIndex}}
-    {{#if promptHeader}}
-      <ul class="yxt-AutoComplete-results">
-        <li class="yxt-AutoComplete-option yxt-AutoComplete-option--promptHeader">
-          {{promptHeader}}
-        </li>
-      </ul>
-    {{/if}}
-    {{#each sections}}
-      <ul class="yxt-AutoComplete-results">
-      {{#if label}}
-        <li class="yxt-AutoComplete-resultHeader">{{label}}</li>
+<div class="yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper" aria-expanded="{{hasResults}}">
+  {{#if hasResults}}
+    <div class="yxt-AutoComplete">
+      {{assign 'currentSelected' sectionIndex resultIndex}}
+      {{#if promptHeader}}
+        <ul class="yxt-AutoComplete-results">
+          <li class="yxt-AutoComplete-option yxt-AutoComplete-option--promptHeader">
+            {{promptHeader}}
+          </li>
+        </ul>
       {{/if}}
-      {{#each results}}
-        {{assign 'currentIndex' @../index @index}}
-        <li class="js-yext-autocomplete-option yxt-AutoComplete-option yxt-AutoComplete-option--item{{#ifeq ../../currentSelected ../../currentIndex}} yxt-selected{{/ifeq}}"
-            data-value="{{value}}"
-            data-short="{{shortValue}}"
-            data-filter='{{json filter}}'
-            data-eventtype="AUTO_COMPLETE_SELECTION"
-            data-eventoptions='{"suggestedSearchText": "{{value}}"}'
+      {{#each sections}}
+        <span class="yxt-AutoComplete-resultsCount sr-only" aria-live="assertive">
+          {{translate
+            phrase='[[resultsCount]] autocomplete option found'
+            pluralForm='[[resultsCount]] autocomplete options found'
+            resultsCount=resultsCount
+            count=resultsCount
+          }}
+        </span>
+        <ul role="listbox"
+            class="yxt-AutoComplete-results"
+            aria-labelledby="{{../listLabelIdName}}"
         >
-            {{highlightValue this true}}
-        </li>
+        {{#if label}}
+          <li class="yxt-AutoComplete-resultHeader">{{label}}</li>
+        {{/if}}
+        {{#each results}}
+          {{assign 'currentIndex' @../index @index}}
+          <li class="js-yext-autocomplete-option yxt-AutoComplete-option yxt-AutoComplete-option--item{{#ifeq ../../currentSelected ../../currentIndex}} yxt-selected{{/ifeq}}"
+              data-value="{{value}}"
+              data-short="{{shortValue}}"
+              data-filter='{{json filter}}'
+              data-eventtype="AUTO_COMPLETE_SELECTION"
+              data-eventoptions='{"suggestedSearchText": "{{value}}"}'
+              role="option"
+              id="yxt-AutoComplete-option-{{../../_config.name}}-{{@../index}}-{{@index}}"
+          >
+              {{highlightValue this true}}
+          </li>
+        {{/each}}
+        </ul>
       {{/each}}
-      </ul>
-    {{/each}}
-  </div>
-{{/if}}
+    </div>
+  {{/if}}
+</div>

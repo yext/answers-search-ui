@@ -1,12 +1,11 @@
 import DOM from 'src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
-import FilterBoxComponent from 'src/ui/components/filters/filterboxcomponent';
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
-import FilterOptionsComponent from 'src/ui/components/filters/filteroptionscomponent';
 import FilterCombinators from 'src/core/filters/filtercombinators';
 import FilterType from 'src/core/filters/filtertype';
+import PersistentStorage from 'src/ui/storage/persistentstorage';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
@@ -76,14 +75,11 @@ describe('filter box component', () => {
       verticalSearch: verticalSearch,
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
-      }
+      },
+      persistentStorage: new PersistentStorage()
     };
 
-    COMPONENT_MANAGER = mockManager(
-      mockCore,
-      FilterBoxComponent.defaultTemplateName(),
-      FilterOptionsComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager(mockCore);
 
     defaultConfig = {
       container: '#test-component',
@@ -188,6 +184,64 @@ describe('filter box component', () => {
     });
   });
 
+  describe('properly interacts with the URL', () => {
+    const oneFilterConfig = {
+      ...defaultConfig,
+      name: 'unique name',
+      filters: [
+        {
+          type: 'FilterOptions',
+          label: 'first filter options',
+          control: 'singleoption',
+          options: options
+        }
+      ]
+    };
+
+    it('persistent storage does not change after the filter is selected when searchOnChange = false', () => {
+      const config = {
+        ...oneFilterConfig,
+        searchOnChange: false
+      };
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      mount(component);
+      const filterComponent = component._filterComponents[0];
+      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      filterComponent._updateOption(0, true);
+      const storageAfterSelection = component.core.persistentStorage.getAll();
+      expect(storageBeforeSelection).toEqual(storageAfterSelection);
+    });
+
+    it('persistent storage changes after the apply button is clicked when searchOnChange = false', () => {
+      const config = {
+        ...oneFilterConfig,
+        searchOnChange: false
+      };
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      const wrapper = mount(component);
+      const filterComponent = component._filterComponents[0];
+      filterComponent._updateOption(0, true);
+      const storageBeforeApply = component.core.persistentStorage.getAll();
+      wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
+      const storageAfterApply = component.core.persistentStorage.getAll();
+      expect(storageBeforeApply).not.toEqual(storageAfterApply);
+    });
+
+    it('persistent storage changes after filter selection when searchOnChange = true', () => {
+      const config = {
+        ...oneFilterConfig,
+        searchOnChange: true
+      };
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      mount(component);
+      const filterComponent = component._filterComponents[0];
+      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      filterComponent._updateOption(0, true);
+      const storageAfterSelection = component.core.persistentStorage.getAll();
+      expect(storageBeforeSelection).not.toEqual(storageAfterSelection);
+    });
+  });
+
   it('searches only when apply button if search on change = false', () => {
     const config = {
       ...defaultConfig,
@@ -264,11 +318,7 @@ describe('dynamic filterbox component', () => {
       }
     };
 
-    COMPONENT_MANAGER = mockManager(
-      mockCore,
-      FilterBoxComponent.defaultTemplateName(),
-      FilterOptionsComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager(mockCore);
 
     defaultConfig = {
       container: '#test-component',
@@ -444,11 +494,7 @@ describe('FilterBox reset button', () => {
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
-    COMPONENT_MANAGER = mockManager(
-      {},
-      FilterBoxComponent.defaultTemplateName(),
-      FilterOptionsComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager();
 
     defaultConfig = {
       container: '#test-component',

@@ -135,6 +135,7 @@ export default class Core {
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, options = {}, query = {}) {
+    window.performance.mark('yext.answers.verticalQueryStart');
     if (!query.append) {
       this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
@@ -188,7 +189,7 @@ export default class Core {
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
@@ -232,6 +233,7 @@ export default class Core {
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        window.performance.mark('yext.answers.verticalQueryResponseRendered');
       });
   }
 
@@ -264,6 +266,7 @@ export default class Core {
   }
 
   search (queryString, urls, options = {}) {
+    window.performance.mark('yext.answers.universalQueryStart');
     const { setQueryParams } = options;
     const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
@@ -291,7 +294,7 @@ export default class Core {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
         referrerPageUrl: referrerPageUrl
       })
@@ -307,15 +310,43 @@ export default class Core {
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
-        const exposedParams = {
-          queryString: queryString,
-          sectionsCount: data[StorageKeys.UNIVERSAL_RESULTS].sections.length
-        };
+        const exposedParams = this._getOnUniversalSearchParams(
+          data[StorageKeys.UNIVERSAL_RESULTS].sections,
+          queryString);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        window.performance.mark('yext.answers.universalQueryResponseRendered');
       });
+  }
+
+  /**
+   * Builds the object passed as a parameter to onUniversalSearch. This object
+   * contains information about the universal search's query and result counts.
+   *
+   * @param {Array<Section>} sections The sections of results.
+   * @param {string} queryString The search query.
+   * @return {Object<string, ?>}
+   */
+  _getOnUniversalSearchParams (sections, queryString) {
+    const resultsCountByVertical = sections.reduce(
+      (resultsCountMap, section) => {
+        const { verticalConfigId, resultsCount, results } = section;
+        resultsCountMap[verticalConfigId] = {
+          totalResultsCount: resultsCount,
+          displayedResultsCount: results.length
+        };
+        return resultsCountMap;
+      },
+      {});
+    const exposedParams = {
+      queryString,
+      sectionsCount: sections.length,
+      resultsCountByVertical
+    };
+
+    return exposedParams;
   }
 
   /**

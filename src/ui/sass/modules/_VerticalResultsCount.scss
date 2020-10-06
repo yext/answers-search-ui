@@ -1,0 +1,13 @@
+/** @define VerticalResultsCount */
+
+.yxt-VerticalResultsCount
+{
+  white-space: nowrap;
+  @include Text(
+    $size: var(--yxt-font-size-md),
+    $line-height: var(--yxt-line-height-md),
+    $weight: var(--yxt-font-weight-bold),
+    $color: var(--yxt-color-text-secondary)
+  );
+}
+

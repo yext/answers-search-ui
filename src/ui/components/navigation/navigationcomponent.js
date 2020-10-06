@@ -8,6 +8,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/taborder';
 import { filterParamsForExperienceLink, replaceUrlParams } from '../../../core/utils/urlutils.js';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * The debounce duration for resize events
@@ -87,10 +88,10 @@ export class Tab {
    * @param {object} tabsConfig the configuration to use
    */
   static from (tabsConfig) {
-    let tabs = {};
+    const tabs = {};
     // Parse the options and build out our tabs and
     for (let i = 0; i < tabsConfig.length; i++) {
-      let tab = { ...tabsConfig[i] };
+      const tab = { ...tabsConfig[i] };
 
       // If a tab is configured to be hidden in this component,
       // do not process it
@@ -123,7 +124,10 @@ export default class NavigationComponent extends Component {
      * The label to show on the dropdown menu button when overflow
      * @type {string}
      */
-    this.overflowLabel = config.overflowLabel || 'More';
+    this.overflowLabel = config.overflowLabel || TranslationFlagger.flag({
+      phrase: 'More',
+      context: 'Button label, displays more items'
+    });
 
     /**
      * The optional icon to show on the dropdown menu button when overflow
@@ -177,14 +181,20 @@ export default class NavigationComponent extends Component {
      *  The ARIA label
      *  @type {string}
      */
-    this._ariaLabel = config.ariaLabel || 'Search Page Navigation';
+    this._ariaLabel = config.ariaLabel || TranslationFlagger.flag({
+      phrase: 'Search Page Navigation',
+      context: 'Noun, labels the navigation for the search page'
+    });
 
     this.checkOutsideClick = this.checkOutsideClick.bind(this);
     this.checkMobileOverflowBehavior = this.checkMobileOverflowBehavior.bind(this);
 
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, () => {
+    const reRender = () => {
       this.setState(this.core.globalStorage.getState(StorageKeys.NAVIGATION) || {});
-    });
+    };
+
+    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
+    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
   }
 
   static get type () {
@@ -245,7 +255,7 @@ export default class NavigationComponent extends Component {
     // sum child widths instead of using parent's width to avoid
     // browser inconsistencies
     let mainLinksWidth = 0;
-    for (let el of mainLinks.children) {
+    for (const el of mainLinks.children) {
       mainLinksWidth += el.offsetWidth;
     }
 
@@ -351,9 +361,9 @@ export default class NavigationComponent extends Component {
     // Since the tab ordering can change based on the server data
     // we need to update each tabs URL to include the order as part of their params.
     // This helps with persisting state across verticals.
-    let tabs = [];
+    const tabs = [];
     for (let i = 0; i < this._tabOrder.length; i++) {
-      let tab = this._tabs[this._tabOrder[i]];
+      const tab = this._tabs[this._tabOrder[i]];
       if (tab !== undefined) {
         tab.url = replaceUrlParams(tab.baseUrl, filteredParams);
         tabs.push(tab);
@@ -374,8 +384,8 @@ export default class NavigationComponent extends Component {
   // https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend#Polyfill
   _prepend (collapsedLinks, lastLink) {
     if (!collapsedLinks.hasOwnProperty('prepend')) {
-      let docFrag = document.createDocumentFragment();
-      let isNode = lastLink instanceof Node;
+      const docFrag = document.createDocumentFragment();
+      const isNode = lastLink instanceof Node;
       docFrag.appendChild(isNode ? lastLink : document.createTextNode(String(lastLink)));
 
       collapsedLinks.insertBefore(docFrag, collapsedLinks.firstChild);

@@ -1,104 +1,115 @@
-const { series, src, dest, watch } = require('gulp');
+const { parallel, series, watch } = require('gulp');
+const path = require('path');
 
-const fs = require('fs');
-const insert = require('rollup-plugin-insert');
+const LocalFileParser = require('../i18n/localfileparser');
+const Translator = require('../i18n/translator');
+const { DEFAULT_LOCALE, ALL_LANGUAGES } = require('../i18n/constants');
+const { copyAssetsForLocales } = require('../i18n/localebuildutils');
 
-const rollup = require('gulp-rollup-lightweight');
-const babel = require('rollup-plugin-babel');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
-const builtins = require('rollup-plugin-node-builtins');
+const TemplateType = require('./template/templatetype');
+const createPrecompileTemplatesTask = require('./template/createprecompiletemplates');
+const BundleTemplatesTaskFactory = require('./template/bundletemplatestaskfactory');
+const MinifyTemplatesTaskFactory = require('./template/minifytemplatestaskfactory');
+const createCleanFilesTask = require('./template/createcleanfiles');
 
-const uglify = require('gulp-uglify-es').default;
+const localFileParser = new LocalFileParser(path.join(__dirname, '../i18n/translations'));
 
-const handlebars = require('gulp-handlebars');
-const concat = require('gulp-concat');
-const declare = require('gulp-declare');
-const wrap = require('gulp-wrap');
-
-const source = require('vinyl-source-stream');
-
-function precompileTemplates () {
-  return src('./src/ui/templates/**/*.hbs')
-    .pipe(handlebars())
-    .pipe(wrap(`Handlebars.template(<%= contents %>);
-        Handlebars.registerPartial(<%= processPartialName(file.relative) %>, <%= customContext(file.relative) %> )`, {}, {
-      imports: {
-        processPartialName: function (fileName, a, b, c) {
-          // Strip the extension and the underscore
-          // Escape the output with JSON.stringify
-          let name = fileName.split('.')[0];
-          if (name.charAt(0) === '_') {
-            return JSON.stringify(name.substr(1));
-          } else {
-            return JSON.stringify(name);
-          }
-        },
-        // TBH, this isn't really needed anymore since we don't name files like so 'foo.bar.js', but this is here to
-        // support that use case.
-        customContext: function (fileName) {
-          let name = fileName.split('.')[0];
-          let keys = name.split('.');
-          let context = 'context';
-          for (let i = 0; i < keys.length; i++) {
-            context = context += '["' + keys[i] + '"]';
-          }
-          return context;
-        }
-      }
-    }))
-    .pipe(declare({
-      root: 'context',
-      noRedeclare: true,
-      processName: function (filePath) {
-        let path = filePath.replace('src/ui/templates', '');
-        return declare.processNameByPath(path, '').replace('.', '/');
-      }
-    }))
-    .pipe(concat('answerstemplates.compiled.min.js'))
-    .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
-    .pipe(dest('dist'));
+async function createTranslator (locale) {
+  const translation = await localFileParser.fetch(locale);
+  return Translator.create(locale, [], { [locale]: { translation } });
 }
 
-function bundleTemplates () {
-  return rollup({
-    input: './dist/answerstemplates.compiled.min.js',
-    output: {
-      format: 'umd',
-      name: 'TemplateBundle',
-      exports: 'named'
-    },
-    plugins: [
-      resolve(),
-      insert.prepend(
-        fs.readFileSync('./conf/gulp-tasks/templates-polyfill-prefix.js').toString(),
-        {
-          include: './dist/answerstemplates.compiled.min.js'
-        }),
-      builtins(),
-      commonjs({
-        include: './node_modules/**'
-      }),
-      babel({
-        presets: ['@babel/env']
-      })
-    ]
-  })
-    .pipe(source('answerstemplates.compiled.min.js'))
-    .pipe(dest('dist'));
+/**
+ * Precompiles templates together, bundles them together,
+ * cleans up any intermediary files, and kicks off the watch task.
+ *
+ * @returns {Promise<Function>}
+ */
+async function devTemplates () {
+  const bundleTemplatesUMD =
+    new BundleTemplatesTaskFactory(DEFAULT_LOCALE).create(TemplateType.UMD);
+  const cleanFiles = createCleanFilesTask(DEFAULT_LOCALE);
+  const translator = await createTranslator(DEFAULT_LOCALE);
+  const precompileTemplates = createPrecompileTemplatesTask(DEFAULT_LOCALE, translator);
+
+  function watchTemplates () {
+    return watch(['./src/ui/templates/**/*.hbs'], {
+      ignored: './dist/'
+    }, series(precompileTemplates, bundleTemplatesUMD, cleanFiles));
+  }
+
+  return new Promise(resolve => {
+    return series(
+      precompileTemplates,
+      bundleTemplatesUMD,
+      cleanFiles,
+      watchTemplates
+    )(resolve);
+  });
 }
 
-function minifyTemplates (cb) {
-  return src('./dist/answerstemplates.compiled.min.js')
-    .pipe(uglify())
-    .pipe(dest('dist'));
+exports.dev = devTemplates;
+
+/**
+ * Creates a template build task for a specific locale and translator.
+ *
+ * @param {string} locale
+ * @param {Translator} translator
+ * @returns {Function}
+ */
+function createDefaultTask (locale, translator) {
+  const precompileTemplates = createPrecompileTemplatesTask(locale, translator);
+
+  const bundleFactory = new BundleTemplatesTaskFactory(locale);
+  const bundleTemplatesIIFE = bundleFactory.create(TemplateType.IIFE);
+  const bundleTemplatesUMD = bundleFactory.create(TemplateType.UMD);
+
+  const minifyFactory = new MinifyTemplatesTaskFactory(locale);
+  const minifyTemplatesIIFE = minifyFactory.create(TemplateType.IIFE);
+  const minifyTemplatesUMD = minifyFactory.create(TemplateType.UMD);
+
+  const cleanFiles = createCleanFilesTask(locale);
+
+  return series(
+    precompileTemplates,
+    parallel(
+      series(bundleTemplatesIIFE, minifyTemplatesIIFE),
+      series(bundleTemplatesUMD, minifyTemplatesUMD)
+    ),
+    cleanFiles
+  );
 }
 
-function watchTemplates (cb) {
-  return watch(['./src/ui/templates/**/*.hbs'], {
-    ignored: './dist/'
-  }, series(precompileTemplates, bundleTemplates));
+/**
+ * Creates a build task per language, and combines them into a series task. This function
+ * also supports locales, but it is named to reflect the current use case of creating
+ * bundles for just languages.
+ * @param {Array<string>} languages
+ * @returns {Promise<Function>}
+ */
+async function createTemplatesForLanguages (languages) {
+  const localizedTaskPromises = languages.map(async language => {
+    const translator = await createTranslator(language);
+    return createDefaultTask(language, translator);
+  });
+  const localizedTasks = await Promise.all(localizedTaskPromises);
+  return new Promise(resolve => series(...localizedTasks)(resolve));
 }
 
-exports.default = series(precompileTemplates, bundleTemplates, minifyTemplates);
-exports.dev = series(precompileTemplates, bundleTemplates, watchTemplates);
+exports.default = function defaultTemplates () {
+  return createTemplatesForLanguages([DEFAULT_LOCALE]);
+};
+
+exports.buildLanguages = function allLanguageTemplates () {
+  return createTemplatesForLanguages(ALL_LANGUAGES);
+};
+
+exports.buildLocales = function allLocaleTemplates () {
+  const assetNames = [
+    'answerstemplates-iife.compiled.min.js',
+    'answerstemplates.compiled.min.js'];
+
+  return createTemplatesForLanguages(ALL_LANGUAGES).then(() => {
+    copyAssetsForLocales(assetNames);
+  });
+};

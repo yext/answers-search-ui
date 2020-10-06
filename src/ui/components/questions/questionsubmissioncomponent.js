@@ -7,6 +7,7 @@ import QuestionSubmission from '../../../core/models/questionsubmission';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import SearchStates from '../../../core/storage/searchstates';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
  * Configurable options for the component
@@ -30,43 +31,62 @@ const DEFAULT_CONFIG = {
    * An optional label to use for the e-mail address input
    * @type {string}
    */
-  'emailLabel': 'Email',
+  'emailLabel': TranslationFlagger.flag({
+    phrase: 'Email',
+    context: 'Labels the email value provided as an argument'
+  }),
 
   /**
    * An optional label to use for the name input
    * @type {string}
    */
-  'nameLabel': 'Name',
+  'nameLabel': TranslationFlagger.flag({
+    phrase: 'Name',
+    context: 'Labels the name value provided as an argument'
+  }),
 
   /**
    * An optional label to use for the question
    * @type {string}
    */
-  'questionLabel': 'Question',
+  'questionLabel': TranslationFlagger.flag({
+    phrase: 'Question',
+    context: 'Labels the question value provided as an argument'
+  }),
 
   /**
    * An optional label to use for the Privacy Policy
    * @type {string}
    */
-  'privacyPolicyText': 'By submitting my email address, I consent to being contacted via email at the address provided.',
+  'privacyPolicyText': TranslationFlagger.flag({
+    phrase: 'By submitting my email address, I consent to being contacted via email at the address provided.'
+  }),
 
   /**
    * The label to use for the Submit button
    * @type {string}
    */
-  'buttonLabel': 'Submit',
+  'buttonLabel': TranslationFlagger.flag({
+    phrase: 'Submit',
+    context: 'Button label'
+  }),
 
   /**
    * The title to display in the title bar
    * @type {string}
    */
-  'sectionTitle': 'Ask a Question',
+  'sectionTitle': TranslationFlagger.flag({
+    phrase: 'Ask a Question',
+    context: 'Title of section'
+  }),
 
   /**
    * The description to display in the title bar
    * @type {string}
    */
-  'teaser': 'Can’t find what you\'re looking for? Ask a question below.',
+  'teaser': TranslationFlagger.flag({
+    phrase: 'Can’t find what you\'re looking for? Ask a question below.'
+  }),
 
   /**
    * The name of the icon to use in the title bar
@@ -78,31 +98,44 @@ const DEFAULT_CONFIG = {
    * The text to display in the feedback form ahead of the Question input
    * @type {string}
    */
-  'description': 'Enter your question and contact information, and we\'ll get back to you with a response shortly.',
+  'description': TranslationFlagger.flag({
+    phrase: 'Enter your question and contact information, and we\'ll get back to you with a response shortly.'
+  }),
 
   /**
    * The placeholder text for required inputs
    * @type {string}
    */
-  'requiredInputPlaceholder': '(required)',
+  'requiredInputPlaceholder': TranslationFlagger.flag({
+    phrase: '(required)',
+    context: 'Indicates that entering input is mandatory'
+  }),
 
   /**
    * The placeholder text for the question text area
    * @type {string}
    */
-  'questionInputPlaceholder': 'Enter your question here',
+  'questionInputPlaceholder': TranslationFlagger.flag({
+    phrase: 'Enter your question here',
+    context: 'Placeholder text for input field'
+  }),
 
   /**
    * The confirmation text to display after successfully submitting feedback
    * @type {string}
    */
-  'questionSubmissionConfirmationText': 'Thank you for your question!',
+  'questionSubmissionConfirmationText': TranslationFlagger.flag({
+    phrase: 'Thank you for your question!'
+  }),
 
   /**
    * The default privacy policy url label
    * @type {string}
   */
-  'privacyPolicyUrlLabel': 'Learn more here.',
+  'privacyPolicyUrlLabel': TranslationFlagger.flag({
+    phrase: 'Learn more here.',
+    context: 'Labels a link'
+  }),
 
   /**
    * The default privacy policy url
@@ -114,20 +147,26 @@ const DEFAULT_CONFIG = {
    * The default privacy policy error text, shown when the user does not agree
    * @type {string}
    */
-  'privacyPolicyErrorText': '* You must agree to the privacy policy to submit a question.',
+  'privacyPolicyErrorText': TranslationFlagger.flag({
+    phrase: '* You must agree to the privacy policy to submit a question.'
+  }),
 
   /**
    * The default email format error text, shown when the user submits an invalid email
    * @type {string}
    */
-  'emailFormatErrorText': '* Please enter a valid email address.',
+  'emailFormatErrorText': TranslationFlagger.flag({
+    phrase: '* Please enter a valid email address.'
+  }),
 
   /**
    * The default network error text, shown when there is an issue with the QA Submission
    * request.
    * @type {string}
    */
-  'networkErrorText': 'We\'re sorry, an error occurred.',
+  'networkErrorText': TranslationFlagger.flag({
+    phrase: 'We\'re sorry, an error occurred.'
+  }),
 
   /**
    * Whether or not this component is expanded by default.

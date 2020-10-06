@@ -14,6 +14,7 @@ import Icons from '../../icons/index';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import { getTabOrder } from '../../tools/taborder';
 import SearchParams from '../../dom/searchparams';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -69,6 +70,13 @@ class VerticalResultsConfig {
      * @type {string}
      */
     this.resultsCountTemplate = config.resultsCountTemplate || '';
+
+    /**
+     * Whether to display the results header (assuming there is something like the results count
+     * or applied filters to display).
+     * @type {boolean}
+     */
+    this.hideResultsHeader = config.hideResultsHeader;
 
     /**
      * Config for the applied filters in the results header.
@@ -128,20 +136,40 @@ class VerticalResultsConfig {
        * The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
        * @type {string}
        **/
-      labelText: defaultConfigOption(config, ['appliedFilters.labelText'], 'Filters applied to this search:'),
+      labelText: defaultConfigOption(
+        config,
+        ['appliedFilters.labelText'],
+        TranslationFlagger.flag({
+          phrase: 'Filters applied to this search:'
+        })
+      ),
 
       /**
        * The aria-label given to the removable filter buttons.
        * @type {string}
        */
-      removableLabelText: defaultConfigOption(config, ['appliedFilters.removableLabelText'], 'Remove this filter')
+      removableLabelText: defaultConfigOption(
+        config,
+        ['appliedFilters.removableLabelText'],
+        TranslationFlagger.flag({
+          phrase: 'Remove this filter',
+          context: 'Button label'
+        })
+      )
     };
 
     /**
      * Text for the view more button.
      * @type {string}
      */
-    this.viewMoreLabel = defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], 'View More');
+    this.viewMoreLabel = defaultConfigOption(
+      config,
+      ['viewMoreLabel', 'viewAllText'],
+      TranslationFlagger.flag({
+        phrase: 'View More',
+        context: 'Button label, view more [results]'
+      })
+    );
   }
 }
 
@@ -284,6 +312,11 @@ export default class VerticalResultsComponent extends Component {
     const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
     if (referrerPageUrl !== null) {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
+    }
+
+    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    if (sessionsOptIn && sessionsOptIn.setDynamically) {
+      params.set(StorageKeys.SESSIONS_OPT_IN, sessionsOptIn.value);
     }
 
     const filteredParams = filterParamsForExperienceLink(

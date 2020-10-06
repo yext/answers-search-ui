@@ -37,10 +37,7 @@ const mockedCore = () => {
 
 DOM.setup(document, new DOMParser());
 
-const COMPONENT_MANAGER = mockManager(
-  mockedCore(),
-  SortOptionsComponent.defaultTemplateName()
-);
+const COMPONENT_MANAGER = mockManager(mockedCore());
 
 describe('sort options component', () => {
   const systemConfig = { core: mockedCore() };

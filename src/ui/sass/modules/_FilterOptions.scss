@@ -2,10 +2,12 @@
 
   $filter-options-checkmark-color: $color-brand-primary !default;
   $filter-options-checkbox-focus-color: black !default;
+  $filter-options-options-max-height: none !default;
 
   :root {
     --yxt-filter-options-checkmark-color: #{$filter-options-checkmark-color};
     --yxt-filter-options-checkbox-focus-color: #{$filter-options-checkbox-focus-color};
+    --yxt-filter-options-options-max-height: #{$filter-options-options-max-height};
   }
 
   .yxt-FilterOptions {
@@ -104,6 +106,8 @@
     &-options {
       margin: 12px 0;
       padding-left: 0;
+      max-height: var(--yxt-filter-options-options-max-height);
+      overflow-y: auto;
     }
 
   &-search {
@@ -149,11 +153,11 @@
     &::before {
       content: '';
       position: absolute;
-      top: 50%;
+      bottom: 50%;
       left: -22px;
       height: 12px;
       width: 12px;
-      transform: translateY(-50%);
+      transform: translateY(50%);
       border: $border-default;
       border-radius: 2px;
     }

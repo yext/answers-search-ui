@@ -9,6 +9,7 @@ import {
   flattenFilterNodes,
   pruneFilterNodes
 } from '../../../core/utils/filternodeutils';
+import TranslationFlagger from '../../i18n/translationflagger';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -20,8 +21,13 @@ const DEFAULT_CONFIG = {
   removable: false,
   delimiter: '|',
   isUniversal: false,
-  labelText: 'Filters applied to this search:',
-  removableLabelText: 'Remove this filter',
+  labelText: TranslationFlagger.flag({
+    phrase: 'Filters applied to this search:'
+  }),
+  removableLabelText: TranslationFlagger.flag({
+    phrase: 'Remove this filter',
+    context: 'Button label'
+  }),
   resultsCountTemplate: '',
   hiddenFields: []
 };
@@ -159,7 +165,7 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   setState (data) {
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
+    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     this.appliedFilterNodes = this._calculateAppliedFilterNodes();
     const appliedFiltersArray = this._createAppliedFiltersArray();
     const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;

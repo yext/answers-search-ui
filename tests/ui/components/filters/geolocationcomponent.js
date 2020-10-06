@@ -1,4 +1,3 @@
-import GeolocationComponent from 'src/ui/components/filters/geolocationcomponent';
 import mockManager from '../../../setup/managermocker';
 import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
@@ -10,10 +9,7 @@ describe('GeoLocationFilter', () => {
   beforeEach(() => {
     setStaticFilterNodes = jest.fn();
     getCurrentPosition = jest.fn();
-    COMPONENT_MANAGER = mockManager(
-      { setStaticFilterNodes },
-      GeolocationComponent.defaultTemplateName()
-    );
+    COMPONENT_MANAGER = mockManager({ setStaticFilterNodes });
 
     const mockGeolocation = { getCurrentPosition };
     global.navigator.geolocation = mockGeolocation;

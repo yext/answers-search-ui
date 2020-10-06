@@ -17,6 +17,8 @@ const mockCore = {
         return undefined;
       } else if (storageKey === StorageKeys.REFERRER_PAGE_URL) {
         return '';
+      } else if (storageKey === StorageKeys.SESSIONS_OPT_IN) {
+        return {};
       }
     }
   },
@@ -27,10 +29,7 @@ const mockCore = {
 
 DOM.setup(document, new DOMParser());
 
-const COMPONENT_MANAGER = mockManager(
-  mockCore,
-  VerticalResultsComponent.defaultTemplateName()
-);
+const COMPONENT_MANAGER = mockManager(mockCore);
 COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => {
   return [];
 };

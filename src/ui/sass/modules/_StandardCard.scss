@@ -6,7 +6,7 @@ $standard-card-link-color: var(--yxt-color-brand-primary) !default;
 $standard-card-subtitle-color: var(--yxt-color-text-secondary) !default;
 $standard-card-link-hover-color: var(--yxt-color-brand-hover) !default;
 
-$standard-card-text-min-width: calc(8 * var(--yxt-standard-card-base-spacing));
+$standard-card-text-min-width: calc(8 * var(--yxt-standard-card-base-spacing)) !default;
 
 $standard-card-cta-width: calc(8 * var(--yxt-standard-card-base-spacing)) !default;
 $standard-card-wrapper-width: calc(10 * var(--yxt-standard-card-base-spacing)) !default;
