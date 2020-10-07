@@ -71,7 +71,7 @@ jobs:
           paths:
             - dist
             - .circleci
-  # run the jest unit tests
+  # run our automated tests
   unit_test:
     docker:
       - image: circleci/node:14.5
@@ -82,6 +82,8 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: npm run test
+      - run: ./.circleci/run_acceptance.sh
+        
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:

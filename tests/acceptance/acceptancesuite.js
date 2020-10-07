@@ -29,7 +29,7 @@ test('Basic universal flow', async t => {
   await t.expect(sections.length).eql(2);
 
   const faqsSectionTitle = await sections[1].getTitle();
-  await t.expect(faqsSectionTitle).contains('FAQ');
+  await t.expect(faqsSectionTitle.toUpperCase()).contains('FAQ');
 });
 
 fixture`Vertical search page works as expected`
