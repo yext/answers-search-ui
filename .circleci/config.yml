@@ -71,7 +71,7 @@ jobs:
           paths:
             - dist
             - .circleci
-  # run our jest unit tests
+  # run the jest unit tests
   unit_test:
     docker:
       - image: circleci/node:14.5
@@ -82,7 +82,7 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: npm run test
-  # run our testcafe acceptance tests
+  # run the testcafe acceptance tests
   acceptance_test:
     docker:
       - image: circleci/node:14.5
