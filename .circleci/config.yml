@@ -83,7 +83,7 @@ jobs:
           at: ~/answers
       - run: npm run test
   # run our testcafe acceptance tests
-  unit_test:
+  acceptance_test:
     docker:
       - image: circleci/node:14.5
     working_directory: ~/answers
