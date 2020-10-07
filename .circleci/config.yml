@@ -71,8 +71,8 @@ jobs:
           paths:
             - dist
             - .circleci
-  # run our automated tests
-  test:
+  # run our jest unit tests
+  unit_test:
     docker:
       - image: circleci/node:14.5
     resource_class: xlarge
@@ -82,6 +82,15 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: npm run test
+  # run our testcafe acceptance tests
+  unit_test:
+    docker:
+      - image: circleci/node:14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
       - run: ./.circleci/run_acceptance.sh
         
   # deploy to S3 in the root folder, overwriting the existing latest version
@@ -143,7 +152,10 @@ workflows:
                 - /^support\/.*/
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
-      - test:
+      - unit_test:
+          requires:
+            - build
+      - acceptance_test:
           requires:
             - build
       - deploy_canary:
@@ -151,14 +163,16 @@ workflows:
             branches:
               only: develop
           requires:
-            - test
+            - unit_test
+            - acceptance_test
       - deploy_branch:
           filters:
             branches:
               ignore:
                 - develop
           requires:
-            - test
+            - unit_test
+            - acceptance_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
@@ -168,12 +182,12 @@ workflows:
                 - /^support\/.*/
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
-      - test:
+      - unit_test:
           requires:
             - build_i18n
       - deploy_branch:
           requires:
-            - test
+            - unit_test
   build_and_deploy_hold:
     jobs:
       - build_i18n:
@@ -183,7 +197,7 @@ workflows:
             branches:
               only:
                 - master
-      - test:
+      - unit_test:
           filters:
             tags:
               only: /^v.*/
@@ -195,7 +209,7 @@ workflows:
             tags:
               only: /^v.*/
           requires:
-            - test
+            - unit_test
       - deploy_latest:
           filters:
             branches:
