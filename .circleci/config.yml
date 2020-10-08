@@ -208,6 +208,9 @@ workflows:
           requires:
             - build_i18n
       - acceptance_test:
+          filters:
+            tags:
+              only: /^v.*/
           requires:
             - build_i18n
       - hold:
