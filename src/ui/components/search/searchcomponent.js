@@ -133,6 +133,17 @@ export default class SearchComponent extends Component {
     this.redirectUrl = config.redirectUrl || null;
 
     /**
+     * redirectUrlTarget will force the search query submission to open in a new tab if
+     * redirectUrl is also supplied.
+     * Optional, defaults to current page.
+     *
+     * If no redirectUrlTarget provided, we keep the page as a single page app.
+     *
+     * @type {boolean}
+     */
+    this.redirectUrlTarget = config.redirectUrlTarget || null;
+
+    /**
      * true if there is another search bar present on the page.
      * Twins only update the query, and do not search
      */
@@ -487,7 +498,12 @@ export default class SearchComponent extends Component {
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        window.location.href = this.redirectUrl + '?' + params.toString();
+        const newUrl = this.redirectUrl + '?' + params.toString();
+        if (this.redirectUrlTarget) {
+          window[this.redirectUrlTarget].location.href = newUrl;
+        } else {
+          window.location.href = newUrl;
+        }
         return false;
       }
     }
