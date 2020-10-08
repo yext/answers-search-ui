@@ -95,7 +95,7 @@ jobs:
   # verify all translations are present
   translation_test:
     docker:
-      - image: circleci/node.14.5
+      - image: circleci/node:14.5
     working_directory: ~/answers
     steps:
       - setup-workspace
