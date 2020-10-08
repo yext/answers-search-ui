@@ -444,4 +444,4 @@ msgstr "Eine Fragen stellen"
 #: src/ui/components/search/searchcomponent.js:81
 msgctxt "Verb, clears search"
 msgid "Clear"
-
+msgstr "entfernen"
