@@ -92,7 +92,21 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: ./.circleci/run_acceptance.sh
-        
+  # verify all translations are present
+  translation_test:
+    docker:
+      - image: circleci/node.14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: 
+        name: Verify translation files
+        command: |
+          npm run extract-translations
+          cd conf/i18n/translations
+          find . -type f -name "*.po" | xargs -n1 -I {{po_file}} msgcmp {{po_file}} messages.pot
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
@@ -158,6 +172,9 @@ workflows:
       - acceptance_test:
           requires:
             - build
+      - translation_test:
+          requires:
+            - build
       - deploy_canary:
           filters:
             branches:
@@ -165,6 +182,7 @@ workflows:
           requires:
             - unit_test
             - acceptance_test
+            - translation_test
       - deploy_branch:
           filters:
             branches:
@@ -188,10 +206,14 @@ workflows:
       - acceptance_test:
           requires:
             - build_i18n
+      - translation_test:
+          requires:
+            - build_i18n
       - deploy_branch:
           requires:
             - unit_test
             - acceptance_test
+            - translation_test
   build_and_deploy_hold:
     jobs:
       - build_i18n:
@@ -213,6 +235,12 @@ workflows:
               only: /^v.*/
           requires:
             - build_i18n
+      - translation_test:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - build_i18n
       - hold:
           type: approval
           filters:
@@ -221,6 +249,7 @@ workflows:
           requires:
             - unit_test
             - acceptance_test
+            - translation_test
       - deploy_latest:
           filters:
             branches:
