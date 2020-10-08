@@ -77,7 +77,8 @@
     "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuite.js",
     "size": "size-limit",
     "fix": "semistandard --fix",
-    "extract-translations": "gulp extractTranslations"
+    "extract-translations": "gulp extractTranslations",
+    "verify-translations": "gulp extractTranslations && node ./conf/i18n/validation/verifytranslations.js"
   },
   "jest": {
     "bail": 0,
