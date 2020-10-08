@@ -102,11 +102,11 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: 
-        name: Verify translation files
-        command: |
-          npm run extract-translations
-          cd conf/i18n/translations
-          find . -type f -name "*.po" | xargs -n1 -I {{po_file}} msgcmp {{po_file}} messages.pot
+          name: Verify translation files
+          command: |
+            npm run extract-translations
+            cd conf/i18n/translations
+            find . -type f -name "*.po" | xargs -n1 -I {{po_file}} msgcmp {{po_file}} messages.pot
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
