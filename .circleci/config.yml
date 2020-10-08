@@ -82,6 +82,17 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: npm run test
+  # run the testcafe acceptance tests
+  acceptance_test:
+    docker:
+      - image: circleci/node:14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: ./.circleci/run_acceptance.sh
+        
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
@@ -144,12 +155,16 @@ workflows:
       - unit_test:
           requires:
             - build
+      - acceptance_test:
+          requires:
+            - build
       - deploy_canary:
           filters:
             branches:
               only: develop
           requires:
             - unit_test
+            - acceptance_test
       - deploy_branch:
           filters:
             branches:
@@ -157,6 +172,7 @@ workflows:
                 - develop
           requires:
             - unit_test
+            - acceptance_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
@@ -169,9 +185,13 @@ workflows:
       - unit_test:
           requires:
             - build_i18n
+      - acceptance_test:
+          requires:
+            - build_i18n
       - deploy_branch:
           requires:
             - unit_test
+            - acceptance_test
   build_and_deploy_hold:
     jobs:
       - build_i18n:
@@ -187,6 +207,12 @@ workflows:
               only: /^v.*/
           requires:
             - build_i18n
+      - acceptance_test:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - build_i18n
       - hold:
           type: approval
           filters:
@@ -194,6 +220,7 @@ workflows:
               only: /^v.*/
           requires:
             - unit_test
+            - acceptance_test
       - deploy_latest:
           filters:
             branches:
