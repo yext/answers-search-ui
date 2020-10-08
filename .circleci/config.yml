@@ -105,7 +105,7 @@ jobs:
           name: Verify translation files
           command: |
             npm run extract-translations
-            apt-get install gettext
+            sudo apt-get install gettext
             cd conf/i18n/translations
             find . -type f -name "*.po" | xargs -n1 -I {{po_file}} msgcmp {{po_file}} messages.pot
   # deploy to S3 in the root folder, overwriting the existing latest version
