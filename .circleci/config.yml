@@ -191,6 +191,7 @@ workflows:
           requires:
             - unit_test
             - acceptance_test
+            - translation_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
