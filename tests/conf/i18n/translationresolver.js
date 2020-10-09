@@ -14,8 +14,8 @@ async function createTranslator () {
     'Hello': 'Bonjour',
     'result': 'résultat',
     'result_plural': 'résultats',
-    'result_a number': 'résultat',
-    'result_a number_plural': 'résultats',
+    'object_noun': 'objet',
+    'object_noun_plural': 'objets',
     'mail_noun': 'courrier'
   } } });
 }
@@ -61,15 +61,15 @@ describe('TranslationResolver usage', () => {
   it('resolves plural forms with context', async () => {
     const translationResolver = await createTranslationResolver();
     const placeholder = new TranslationPlaceholder({
-      phrase: 'result',
-      pluralForm: 'results',
+      phrase: 'object',
+      pluralForm: 'objects',
       count: 'myCount',
-      context: 'a number',
+      context: 'noun',
       interpolationValues: {}
     });
     const expectedResult = {
-      '0': 'résultat',
-      '1': 'résultats'
+      '0': 'objet',
+      '1': 'objets'
     };
     const resolverResult = translationResolver.resolve(placeholder);
     expect(resolverResult).toMatchObject(expectedResult);
