@@ -139,6 +139,7 @@ workflows:
               ignore:
                 - master
                 - /^support\/.*/
+                - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
       - unit_test:
@@ -164,6 +165,7 @@ workflows:
             branches:
               only:
                 - /^support\/.*/
+                - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
       - unit_test:
