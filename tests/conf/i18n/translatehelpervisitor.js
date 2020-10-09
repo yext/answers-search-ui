@@ -6,7 +6,9 @@ const _ = require('lodash');
 async function createTranslator () {
   const locale = 'fr';
   return Translator.create(locale, [], { [locale]: { translation: {
-    'Hello': 'Bonjour'
+    'Hello': 'Bonjour',
+    'result': 'résultat',
+    'result_plural': 'résultats'
   } } });
 }
 
@@ -23,7 +25,32 @@ describe('TranslateHelperVisitor usage', () => {
     expect(translatedValue).toEqual('Bonjour');
   });
 
-  it('non-translate helper', async () => {
+  it('plural translation', async () => {
+    const template = `{{ translate phrase='result' pluralForm='results' count='resultCount' }}`;
+    const ast = Handlebars.parse(template);
+    const translator = await createTranslator();
+
+    new TranslateHelperVisitor(translator).accept(ast);
+    const indexOfFirstStatement = 0;
+    const hashPairs = ast.body[indexOfFirstStatement].hash.pairs;
+
+    const expectedHashValues = {
+      count: 'resultCount',
+      pluralForm0: 'résultat',
+      pluralForm1: 'résultats'
+    };
+
+    Object.entries(expectedHashValues)
+      .map(([expectedHashKey, expectedHashValue]) => {
+        expect(hashPairs.some(hashPair => {
+          const keysMatch = hashPair.key === expectedHashKey;
+          const valuesMatch = hashPair.value.value === expectedHashValue;
+          return keysMatch && valuesMatch;
+        })).toBeTruthy();
+      });
+  });
+
+  it('a non-translate helper should not be modified', async () => {
     const template = `{{ yext phrase='Hello' }}`;
     const ast = Handlebars.parse(template);
     const nonVisitedAst = _.cloneDeep(ast);
@@ -33,16 +60,4 @@ describe('TranslateHelperVisitor usage', () => {
 
     expect(nonVisitedAst).toMatchObject(ast);
   });
-
-  /* it('plural translation', async () => {
-    const template = `{{ translate phrase='result' pluralForm='results'}}`;
-    const ast = Handlebars.parse(template);
-    const translator = await createTranslator();
-
-    new TranslateHelperVisitor(translator).accept(ast);
-    const indexOfFirstStatement = 0;
-    const translatedValue = ast.body[indexOfFirstStatement].value;
-
-    expect(translatedValue).toEqual('Bonjour');
-  }); */
 });
