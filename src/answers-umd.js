@@ -294,19 +294,6 @@ class Answers {
     return Promise.all([loadTemplates, ponyfillCssVariables, masterSwitch]);
   }
 
-  _checkMasterSwitch () {
-    window.performance.mark('yext.answers.statusStart');
-    const handleFulfilledMasterSwitch = (isDisabled) => {
-      this._disabledByMasterSwitch = isDisabled;
-    };
-    const handleRejectedMasterSwitch = () => {
-      this._disabledByMasterSwitch = false;
-    };
-    return this._masterSwitchApi.isDisabled()
-      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch)
-      .finally(() => window.performance.mark('yext.answers.statusEnd'));
-  }
-
   _loadTemplates ({ useTemplates, templateBundle }) {
     if (useTemplates === false || templateBundle) {
       if (templateBundle) {
@@ -321,6 +308,19 @@ class Answers {
       });
       return this.templates.fetchTemplates();
     }
+  }
+
+  _checkMasterSwitch () {
+    window.performance.mark('yext.answers.statusStart');
+    const handleFulfilledMasterSwitch = (isDisabled) => {
+      this._disabledByMasterSwitch = isDisabled;
+    };
+    const handleRejectedMasterSwitch = () => {
+      this._disabledByMasterSwitch = false;
+    };
+    return this._masterSwitchApi.isDisabled()
+      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch)
+      .finally(() => window.performance.mark('yext.answers.statusEnd'));
   }
 
   domReady (cb) {
