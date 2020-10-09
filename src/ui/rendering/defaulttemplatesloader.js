@@ -33,7 +33,7 @@ export default class DefaultTemplatesLoader {
     // If template have already been loaded, do nothing
     let node = DOM.query('#yext-answers-templates');
     if (node) {
-      return;
+      return Promise.resolve();
     }
 
     // Inject a script to fetch the compiled templates,
