@@ -500,7 +500,7 @@ export default class SearchComponent extends Component {
       if (this._allowEmptySearch || query) {
         const newUrl = this.redirectUrl + '?' + params.toString();
         if (this.redirectUrlTarget) {
-          window[this.redirectUrlTarget].location.href = newUrl;
+          window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
         } else {
           window.location.href = newUrl;
         }
