@@ -28,7 +28,7 @@ class TranslationResolver {
     const count = placeholder.getCount();
     const context = placeholder.getContext();
     if (count && context) {
-      throw new Error('Translate plural with context not currently supported');
+      return this._resolveWithPluralAndContext(placeholder);
     }
 
     if (count) {
@@ -82,6 +82,22 @@ class TranslationResolver {
   _resolveWithPlural (placeholder) {
     const translationResult = this._translator.translatePlural(
       placeholder.getPhrase(), placeholder.getPluralForm());
+    const interpValues = placeholder.getInterpolationValues();
+    return this._resolveInternal(
+      translationResult, interpValues, placeholder.getCount());
+  }
+
+  /**
+   * Converts the {@link TranslationPlaceholder} of a phrase with context needing both
+   * translation and pluralization into the appropriate run-time call.
+   *
+   * @param {TranslationPlaceholder} placeholder The {@link TranslationPlaceholder}.
+   * @returns {string} The correct call for getting the translated, pluralized
+   *                   string at run-time.
+   */
+  _resolveWithPluralAndContext (placeholder) {
+    const translationResult = this._translator.translatePluralWithContext(
+      placeholder.getPhrase(), placeholder.getPluralForm(), placeholder.getContext());
     const interpValues = placeholder.getInterpolationValues();
     return this._resolveInternal(
       translationResult, interpValues, placeholder.getCount());
