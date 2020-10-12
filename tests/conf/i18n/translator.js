@@ -3,11 +3,9 @@ const path = require('path');
 const LocalFileParser = require('../../../conf/i18n/localfileparser');
 const Translator = require('../../../conf/i18n/translator');
 
-/* global beforeAll */
-
 describe('translations with one plural form (French)', () => {
   let translator;
-  beforeAll(async () => {
+  beforeEach(async () => {
     const translationsPath = path.join(__dirname, '../../fixtures/translations');
     const localFileParser = new LocalFileParser(translationsPath);
 
@@ -219,7 +217,7 @@ describe('translations with one plural form (French)', () => {
 
 describe('translations with multiple plural forms (Lithuanian)', () => {
   let translator;
-  beforeAll(async () => {
+  beforeEach(async () => {
     const translationsPath = path.join(__dirname, '../../fixtures/translations');
     const localFileParser = new LocalFileParser(translationsPath);
 
