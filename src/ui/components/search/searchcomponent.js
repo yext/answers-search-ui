@@ -128,7 +128,7 @@ export default class SearchComponent extends Component {
      *
      * If no redirectUrl provided, we keep the page as a single page app.
      *
-     * @type {boolean}
+     * @type {string}
      */
     this.redirectUrl = config.redirectUrl || null;
 
@@ -139,7 +139,7 @@ export default class SearchComponent extends Component {
      *
      * If no redirectUrlTarget provided, we keep the page as a single page app.
      *
-     * @type {boolean}
+     * @type {string}
      */
     this.redirectUrlTarget = config.redirectUrlTarget || '_self';
 
