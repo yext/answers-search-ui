@@ -141,7 +141,7 @@ export default class SearchComponent extends Component {
      *
      * @type {boolean}
      */
-    this.redirectUrlTarget = config.redirectUrlTarget || null;
+    this.redirectUrlTarget = config.redirectUrlTarget || '_self';
 
     /**
      * true if there is another search bar present on the page.
@@ -499,11 +499,7 @@ export default class SearchComponent extends Component {
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
         const newUrl = this.redirectUrl + '?' + params.toString();
-        if (this.redirectUrlTarget) {
-          window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
-        } else {
-          window.location.href = newUrl;
-        }
+        window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
         return false;
       }
     }
