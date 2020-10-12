@@ -150,9 +150,9 @@ msgid "Suggestions:"
 msgstr "提案："
 
 #: src/ui/templates/results/alternativeverticals.hbs:11
-msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
-msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
-msgstr[0] "以下の検索カテゴリーで<span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>の検索結果が見つかりました。"
+msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgstr[0] "以下の検索カテゴリーで<span class=\"yxt-AlternativeVerticals-details--query\">「[[query]]」</span>の検索結果が見つかりました。"
 
 #: src/ui/templates/results/noresults.hbs:34
 msgid "Try fewer words."
