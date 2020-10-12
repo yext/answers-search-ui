@@ -105,7 +105,7 @@ jobs:
           name: Verify translation files
           command: |
             npm run extract-translations
-            sudo apt-get install -qq -d gettext
+            sudo apt-get install -qq gettext
             cd conf/i18n/translations
             for po_file in *.po
               do msgcmp $po_file messages.pot
