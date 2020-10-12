@@ -34,13 +34,15 @@ describe('TranslateHelperVisitor usage', () => {
     const indexOfFirstStatement = 0;
     const hashPairs = ast.body[indexOfFirstStatement].hash.pairs;
 
-    const expectedHashValues = {
+    const expectedHashPairs = {
       count: 'resultCount',
       pluralForm0: 'résultat',
       pluralForm1: 'résultats'
     };
 
-    Object.entries(expectedHashValues)
+    // For each expected hash pair, confirm that a hash pair with the same key and value
+    // exists in the visited AST
+    Object.entries(expectedHashPairs)
       .map(([expectedHashKey, expectedHashValue]) => {
         expect(hashPairs.some(hashPair => {
           const keysMatch = hashPair.key === expectedHashKey;
@@ -53,11 +55,11 @@ describe('TranslateHelperVisitor usage', () => {
   it('a non-translate helper should not be modified', async () => {
     const template = `{{ yext phrase='Hello' }}`;
     const ast = Handlebars.parse(template);
-    const nonVisitedAst = _.cloneDeep(ast);
+    const originalAst = _.cloneDeep(ast);
     const translator = await createTranslator();
 
     new TranslateHelperVisitor(translator).accept(ast);
 
-    expect(nonVisitedAst).toMatchObject(ast);
+    expect(originalAst).toMatchObject(ast);
   });
 });
