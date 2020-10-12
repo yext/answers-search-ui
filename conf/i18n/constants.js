@@ -105,4 +105,4 @@ exports.LANGUAGES_TO_LOCALES = {
   ]
 };
 
-exports.ALL_LANGUAGES = Object.keys(this.LANGUAGES_TO_LOCALES);
+exports.ALL_LANGUAGES = Object.keys('en', 'es', 'fr', 'it', 'de', 'ja');
