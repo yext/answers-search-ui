@@ -133,7 +133,7 @@ export default class SearchComponent extends Component {
     this.redirectUrl = config.redirectUrl || null;
 
     /**
-     * redirectUrlTarget will force the search query submission to open in the frame specified, if
+     * redirectUrlTarget will force the search query submission to open in the frame specified if
      * redirectUrl is also supplied.
      * Optional, defaults to current frame.
      *
