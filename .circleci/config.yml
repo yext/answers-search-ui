@@ -104,12 +104,8 @@ jobs:
       - run: 
           name: Verify translation files
           command: |
-            npm run extract-translations
             sudo apt-get install -qq gettext
-            cd conf/i18n/translations
-            for po_file in *.po
-              do msgcmp $po_file messages.pot
-            done
+            ./.circleci/run_translation_verification.sh
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
