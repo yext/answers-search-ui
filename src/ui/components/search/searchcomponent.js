@@ -137,8 +137,6 @@ export default class SearchComponent extends Component {
      * redirectUrl is also supplied.
      * Optional, defaults to current frame.
      *
-     * If no redirectUrlTarget provided, we keep the page as a single page app.
-     *
      * @type {string}
      */
     this.redirectUrlTarget = config.redirectUrlTarget || '_self';
