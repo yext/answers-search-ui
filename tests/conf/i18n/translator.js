@@ -244,7 +244,7 @@ describe('translations with multiple plural forms (Lithuanian)', () => {
   it('pluralization with interpolation works as expected', () => {
     const translation = translator.translatePlural(
       '1 location selected',
-      '[[count]] locations selected]'
+      '[[count]] locations selected'
     );
     const expectedResult = {
       0: 'Pasirinkta [[count]] tinklalapis',

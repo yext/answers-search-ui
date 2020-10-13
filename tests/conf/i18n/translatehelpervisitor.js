@@ -26,7 +26,7 @@ describe('TranslateHelperVisitor usage', () => {
   });
 
   it('plural translation', async () => {
-    const template = `{{ translate phrase='result' pluralForm='results' count='resultCount' }}`;
+    const template = `{{ translate phrase='result' pluralForm='results' count=resultCount }}`;
     const ast = Handlebars.parse(template);
     const translator = await createTranslator();
 
@@ -34,22 +34,28 @@ describe('TranslateHelperVisitor usage', () => {
     const indexOfFirstStatement = 0;
     const hashPairs = ast.body[indexOfFirstStatement].hash.pairs;
 
-    const expectedHashPairs = {
-      count: 'resultCount',
-      pluralForm0: 'résultat',
-      pluralForm1: 'résultats'
+    const expectedPluralForm0 = {
+      key: 'pluralForm0',
+      value: { type: 'StringLiteral', value: 'résultat' }
     };
 
-    // For each expected hash pair, confirm that a hash pair with the same key and value
-    // exists in the visited AST
-    Object.entries(expectedHashPairs)
-      .map(([expectedHashKey, expectedHashValue]) => {
-        expect(hashPairs.some(hashPair => {
-          const keysMatch = hashPair.key === expectedHashKey;
-          const valuesMatch = hashPair.value.value === expectedHashValue;
-          return keysMatch && valuesMatch;
-        })).toBeTruthy();
-      });
+    const expectedPluralForm1 = {
+      key: 'pluralForm1',
+      value: { type: 'StringLiteral', value: 'résultats' }
+    };
+
+    const expectedCount = {
+      key: 'count',
+      value: { type: 'PathExpression', parts: ['resultCount'] }
+    };
+
+    const actualPluralForm0 = hashPairs.find(hashPair => hashPair.key === 'pluralForm0');
+    const actualPluralForm1 = hashPairs.find(hashPair => hashPair.key === 'pluralForm1');
+    const actualCount = hashPairs.find(hashPair => hashPair.key === 'count');
+
+    expect(actualPluralForm0).toMatchObject(expectedPluralForm0);
+    expect(actualPluralForm1).toMatchObject(expectedPluralForm1);
+    expect(actualCount).toMatchObject(expectedCount);
   });
 
   it('a non-translate helper should not be modified', async () => {
