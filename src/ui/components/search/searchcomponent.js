@@ -273,6 +273,11 @@ export default class SearchComponent extends Component {
      * @type {string}
      */
     this.inputIdName = `yxt-SearchBar-input--${this.name}`;
+
+    /**
+     * Callback invoked when a search is submitted via this component
+     */
+    this.onSubmit = config.onSubmit || function () {};
   }
 
   static get type () {
@@ -626,6 +631,7 @@ export default class SearchComponent extends Component {
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
   search (query, searchOptions) {
+    this.onSubmit(query);
     if (this._verticalKey) {
       this.core.verticalSearch(this._config.verticalKey, searchOptions, { input: query });
     } else {
