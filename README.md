@@ -431,6 +431,8 @@ ANSWERS.addComponent('SearchBar', {
   clearButton: true,
   // Optional, redirect search query to url
   redirectUrl: 'path/to/url',
+  // Optional, target frame for the redirect url, defaults to current frame. Expects a valid target: "_blank", "_self", "_parent", "_top" or the name of a frame
+  redirectUrlTarget: '_self',
   // Optional, defaults to native form node within container
   formSelector: 'form',
   // Optional, defaults to true. When true, a form is used as the query submission context.

@@ -128,9 +128,18 @@ export default class SearchComponent extends Component {
      *
      * If no redirectUrl provided, we keep the page as a single page app.
      *
-     * @type {boolean}
+     * @type {string}
      */
     this.redirectUrl = config.redirectUrl || null;
+
+    /**
+     * redirectUrlTarget will force the search query submission to open in the frame specified if
+     * redirectUrl is also supplied.
+     * Optional, defaults to current frame.
+     *
+     * @type {string}
+     */
+    this.redirectUrlTarget = config.redirectUrlTarget || '_self';
 
     /**
      * true if there is another search bar present on the page.
@@ -487,7 +496,8 @@ export default class SearchComponent extends Component {
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        window.location.href = this.redirectUrl + '?' + params.toString();
+        const newUrl = this.redirectUrl + '?' + params.toString();
+        window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
         return false;
       }
     }
