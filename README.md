@@ -456,7 +456,9 @@ ANSWERS.addComponent('SearchBar', {
     enabled: false,
     // Optional, the message in the alert. Defaults to the below
     message: "We are unable to determine your location"
-  }
+  },
+  // Optional, a callback invoked when the clear search button is clicked
+  onClearSearch: function() {}
 })
 ```
 

@@ -273,6 +273,11 @@ export default class SearchComponent extends Component {
      * @type {string}
      */
     this.inputIdName = `yxt-SearchBar-input--${this.name}`;
+
+    /**
+     * Callback invoked when the clear search button is clicked
+     */
+    this.onClearSearch = config.onClearSearch || function () {};
   }
 
   static get type () {
@@ -393,6 +398,7 @@ export default class SearchComponent extends Component {
     button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
 
     DOM.on(button, 'click', () => {
+      this.onClearSearch();
       this.query = '';
       this._showClearButton = false;
       button.classList.add('yxt-SearchBar--hidden');
