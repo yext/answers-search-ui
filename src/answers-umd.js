@@ -397,6 +397,16 @@ class Answers {
     return this.components.create('Component', opts).mount();
   }
 
+  /**
+   * Conducts a search in the Answers experience
+   *
+   * @param {string} query
+   */
+  search (query) {
+    this.core.setQuery(query, { setQueryParams: true });
+    this.core.persistentStorage.set(StorageKeys.QUERY, query);
+  }
+
   registerHelper (name, cb) {
     this.renderer.registerHelper(name, cb);
     return this;
