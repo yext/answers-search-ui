@@ -2,7 +2,7 @@ exports.TRANSLATION_FLAGGER_REGEX = /TranslationFlagger.flag\((\s)*\{[^;]+?\}(\s
 
 exports.DEFAULT_LOCALE = 'en';
 
-exports.LANGUAGES_TO_LOCALES = {
+const LANGUAGES_TO_LOCALES = {
   'en': [
     'en_AE',
     'en_AI',
@@ -104,5 +104,6 @@ exports.LANGUAGES_TO_LOCALES = {
     'ja_JP'
   ]
 };
+exports.LANGUAGES_TO_LOCALES = LANGUAGES_TO_LOCALES;
 
-exports.ALL_LANGUAGES = ['en', 'es', 'fr', 'it', 'de', 'ja'];
+exports.ALL_LANGUAGES = Object.keys(LANGUAGES_TO_LOCALES);
