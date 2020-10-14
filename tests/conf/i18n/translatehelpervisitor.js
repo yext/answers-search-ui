@@ -13,10 +13,14 @@ async function createTranslator () {
 }
 
 describe('TranslateHelperVisitor translates visited nodes', () => {
-  it('static translation', async () => {
+  let translator;
+  beforeEach(async () => {
+    translator = await createTranslator();
+  });
+
+  it('static translation', () => {
     const template = `{{ translate phrase='Hello' }}`;
     const ast = Handlebars.parse(template);
-    const translator = await createTranslator();
 
     new TranslateHelperVisitor(translator).accept(ast);
     const indexOfFirstStatement = 0;
@@ -25,10 +29,9 @@ describe('TranslateHelperVisitor translates visited nodes', () => {
     expect(translatedValue).toEqual('Bonjour');
   });
 
-  it('plural translation', async () => {
+  it('plural translation', () => {
     const template = `{{ translate phrase='result' pluralForm='results' count=resultCount }}`;
     const ast = Handlebars.parse(template);
-    const translator = await createTranslator();
 
     new TranslateHelperVisitor(translator).accept(ast);
     const indexOfFirstStatement = 0;
@@ -50,11 +53,10 @@ describe('TranslateHelperVisitor translates visited nodes', () => {
     expect(hashPairs).toMatchObject([expectedCount, expectedPluralForm0, expectedPluralForm1]);
   });
 
-  it('a non-translate helper should not be modified', async () => {
+  it('a non-translate helper should not be modified', () => {
     const template = `{{ yext phrase='Hello' }}`;
     const ast = Handlebars.parse(template);
     const originalAst = _.cloneDeep(ast);
-    const translator = await createTranslator();
 
     new TranslateHelperVisitor(translator).accept(ast);
 
