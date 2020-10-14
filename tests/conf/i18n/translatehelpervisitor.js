@@ -34,28 +34,20 @@ describe('TranslateHelperVisitor translates visited nodes', () => {
     const indexOfFirstStatement = 0;
     const hashPairs = ast.body[indexOfFirstStatement].hash.pairs;
 
+    const expectedCount = {
+      key: 'count',
+      value: { type: 'PathExpression', parts: ['resultCount'] }
+    };
     const expectedPluralForm0 = {
       key: 'pluralForm0',
       value: { type: 'StringLiteral', value: 'résultat' }
     };
-
     const expectedPluralForm1 = {
       key: 'pluralForm1',
       value: { type: 'StringLiteral', value: 'résultats' }
     };
 
-    const expectedCount = {
-      key: 'count',
-      value: { type: 'PathExpression', parts: ['resultCount'] }
-    };
-
-    const actualPluralForm0 = hashPairs.find(hashPair => hashPair.key === 'pluralForm0');
-    const actualPluralForm1 = hashPairs.find(hashPair => hashPair.key === 'pluralForm1');
-    const actualCount = hashPairs.find(hashPair => hashPair.key === 'count');
-
-    expect(actualPluralForm0).toMatchObject(expectedPluralForm0);
-    expect(actualPluralForm1).toMatchObject(expectedPluralForm1);
-    expect(actualCount).toMatchObject(expectedCount);
+    expect(hashPairs).toMatchObject([expectedCount, expectedPluralForm0, expectedPluralForm1]);
   });
 
   it('a non-translate helper should not be modified', async () => {
