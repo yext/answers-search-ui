@@ -1,8 +1,8 @@
 const Handlebars = require('handlebars');
 const { fromMustacheStatementNode } = require('../../../conf/i18n/translationplaceholderutils');
 const TranslationPlaceholder = require('../../../conf/i18n/models/translationplaceholder');
-describe('fromMustacheStatementNode usage', () => {
-  it('standard usage', () => {
+describe('Creating a translation placeholder from a HBS template', () => {
+  it('fromMustacheStatementNode usage', () => {
     const template = `{{ 
       translate 
       phrase='result' 

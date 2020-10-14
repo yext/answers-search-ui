@@ -1,6 +1,6 @@
 const { generateProcessTranslationJsCall } = require('../../../conf/i18n/runtimecallgeneratorutils');
 
-describe('generateProcessTranslationJsCall usage', () => {
+describe('generateProcessTranslationJsCall works as expected', () => {
   it('simple translation', () => {
     const translation = 'Bonjour';
     const interpolationValues = {};

@@ -1,6 +1,6 @@
 const TranslateCallParser = require('../../../conf/i18n/translatecallparser');
 
-describe('TranslateCallParser usage', () => {
+describe('TranslateCallParser creates a TranslationPlaceholder from a TranslationFlagger', () => {
   const translateCallParser = new TranslateCallParser();
   it('All params parse properly', () => {
     const translateCall = `TranslationFlagger.flag({

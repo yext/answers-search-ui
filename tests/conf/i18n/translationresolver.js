@@ -20,7 +20,7 @@ async function createTranslator () {
   } } });
 }
 
-describe('TranslationResolver usage', () => {
+describe('TranslationResolver can resolve various TranslationPlaceholders', () => {
   it('resolves a simple phrase', async () => {
     const translationResolver = await createTranslationResolver();
     const placeholder = new TranslationPlaceholder({

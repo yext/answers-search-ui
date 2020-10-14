@@ -2,7 +2,7 @@ const TranslationExtractor = require('../../../../conf/i18n/extract/translatione
 const path = require('path');
 const fs = require('fs');
 
-describe('TranslationExtractor', () => {
+describe('TranslationExtractor generates proper POT files', () => {
   function readFile (filename) {
     const fixturesDir = path.resolve(__dirname, '../../../fixtures');
     return fs.readFileSync(path.join(fixturesDir, filename)).toString();

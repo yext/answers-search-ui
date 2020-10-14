@@ -12,7 +12,7 @@ async function createTranslator () {
   } } });
 }
 
-describe('TranslateHelperVisitor usage', () => {
+describe('TranslateHelperVisitor translates visited nodes', () => {
   it('static translation', async () => {
     const template = `{{ translate phrase='Hello' }}`;
     const ast = Handlebars.parse(template);
