@@ -46,7 +46,7 @@ test('pagination flow', async t => {
   await paginationComponent.clickNextButton();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
-  await percySnapshot(t, "beep boop my name is PARCY");
+  await percySnapshot(t, 'beep boop my name is PARCY');
 });
 
 fixture`Facets page`
