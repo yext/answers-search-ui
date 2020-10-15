@@ -167,7 +167,7 @@ export default class AutoCompleteComponent extends Component {
     if (wasOpen && !this._isOpen) {
       this._onClose();
     } else if (!wasOpen && this._isOpen) {
-      this.onOpen();
+      this._onOpen();
     }
 
     super.setState(Object.assign({}, data, {
