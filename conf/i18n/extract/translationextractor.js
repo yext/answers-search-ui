@@ -51,6 +51,15 @@ class TranslationExtractor {
   }
 
   /**
+   * Returns the extracted messages as a pot file string.
+   * //github.com/lukasgeiter/gettext-extractor/wiki/API-Reference#getpotstringheaders
+   * @returns {Array<Object>}
+   */
+  getPotString () {
+    return this._extractor.getPotString();
+  }
+
+  /**
    * Registers a given {@link TranslationPlaceholder}'s message.
    *
    * @param {TranslationPlaceholder} placeholder
