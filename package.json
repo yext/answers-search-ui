@@ -103,6 +103,7 @@
   "semistandard": {
     "globals": [
       "beforeEach",
+      "beforeAll",
       "describe",
       "it",
       "expect",

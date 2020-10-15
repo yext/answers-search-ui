@@ -14,7 +14,6 @@ async function createTranslator () {
 
 describe('TranslateHelperVisitor translates visited nodes', () => {
   let translator;
-  /* global beforeAll */
   beforeAll(async () => {
     translator = await createTranslator();
   });
