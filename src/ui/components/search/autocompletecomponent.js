@@ -112,6 +112,12 @@ export default class AutoCompleteComponent extends Component {
      * @type {string}
      */
     this.listLabelIdName = opts.listLabelIdName || 'yxt-SearchBar-listLabel--SearchBar';
+
+    /**
+     * Whether to hide the autocomplete when the search input is empty
+     * @type {boolean}
+     */
+    this._shouldHideOnEmptySearch = opts.shouldHideOnEmptySearch || false;
   }
 
   /**
@@ -136,7 +142,9 @@ export default class AutoCompleteComponent extends Component {
    * those are client-interaction specific values and aren't returned from the server.
    */
   setState (data) {
-    if (!this.isQueryInputFocused()) {
+    const queryInputEl = DOM.query(this._parentContainer, this._inputEl);
+    const shouldHideAutocomplete = this._shouldHideOnEmptySearch && !queryInputEl.value;
+    if (!this.isQueryInputFocused() || shouldHideAutocomplete) {
       this._sectionIndex = 0;
       this._resultIndex = -1;
       data = {};

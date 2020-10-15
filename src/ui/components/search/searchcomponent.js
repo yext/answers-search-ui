@@ -273,6 +273,14 @@ export default class SearchComponent extends Component {
      * @type {string}
      */
     this.inputIdName = `yxt-SearchBar-input--${this.name}`;
+
+    /**
+     * Options to pass to the autocomplete component
+     * @type {Object}
+     */
+    this._autocompleteConfig = {
+      shouldHideOnEmptySearch: config.autocomplete && config.autocomplete.shouldHideOnEmptySearch,
+    };
   }
 
   static get type () {
@@ -548,6 +556,7 @@ export default class SearchComponent extends Component {
       originalQuery: this.query,
       inputEl: inputSelector,
       listLabelIdName: this.inputLabelIdName,
+      ...this._autocompleteConfig,
       onSubmit: () => {
         if (this._useForm) {
           DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
