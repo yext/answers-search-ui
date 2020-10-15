@@ -457,9 +457,12 @@ ANSWERS.addComponent('SearchBar', {
     // Optional, the message in the alert. Defaults to the below
     message: "We are unable to determine your location"
   },
-  // Optional, a callback invoked when a search is submitted via this component. The users search
-  //           is passed in as a string
-  onSubmit: function(searchTerms) {}
+  // Optional, functions invoked when certain events occur
+  customHooks: {
+    // Optional, a function invoked when a search is submitted via this component. The users search
+    // is passed in as a string
+    onSubmit: function(searchTerms) {}
+  }
 })
 ```
 
