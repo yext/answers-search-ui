@@ -278,7 +278,10 @@ export default class SearchComponent extends Component {
      * Options to pass to the autocomplete component
      * @type {Object}
      */
-    this._autocompleteConfig = config.autocomplete || {};
+    this._autocompleteConfig = {
+      onOpen: config.autocomplete && config.autocomplete.onOpen,
+      onClose: config.autocomplete && config.autocomplete.onClose
+    };
   }
 
   static get type () {
