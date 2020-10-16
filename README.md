@@ -462,6 +462,10 @@ ANSWERS.addComponent('SearchBar', {
     // Optional, boolean used to hide the autocomplete when the search input is empty (even if the
     // input is focused). Defaults to false.
     shouldHideOnEmptySearch: false,
+    // Optional, callback invoked when the autocomplete component changes from open to closed.
+    onClose: function() {},
+    // Optional, callback invoked when the autocomplete component changes from closed to open.
+    onOpen: function() {},
   }
 })
 ```
