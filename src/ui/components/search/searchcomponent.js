@@ -279,7 +279,7 @@ export default class SearchComponent extends Component {
        * Callback invoked when the clear search button is clicked
        */
       onClearSearch: config.onClearSearch || function () {}
-    }
+    };
 
     /**
      * Options to pass to the autocomplete component
