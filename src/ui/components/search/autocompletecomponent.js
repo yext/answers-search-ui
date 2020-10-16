@@ -119,7 +119,7 @@ export default class AutoCompleteComponent extends Component {
      */
     this._shouldHideOnEmptySearch = opts.shouldHideOnEmptySearch || false;
 
-    /*
+    /**
      * Callback invoked when the autocomplete component changes from closed to open.
      * @type {function}
      */
