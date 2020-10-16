@@ -279,6 +279,15 @@ export default class SearchComponent extends Component {
        * Callback invoked when the clear search button is clicked
        */
       onClearSearch: config.onClearSearch || function () {}
+    }
+
+    /**
+     * Options to pass to the autocomplete component
+     * @type {Object}
+     */
+    this._autocompleteConfig = {
+      onOpen: config.autocomplete && config.autocomplete.onOpen,
+      onClose: config.autocomplete && config.autocomplete.onClose
     };
   }
 
@@ -556,6 +565,7 @@ export default class SearchComponent extends Component {
       originalQuery: this.query,
       inputEl: inputSelector,
       listLabelIdName: this.inputLabelIdName,
+      ...this._autocompleteConfig,
       onSubmit: () => {
         if (this._useForm) {
           DOM.trigger(DOM.query(this._container, this._formEl), 'submit');

@@ -461,6 +461,13 @@ ANSWERS.addComponent('SearchBar', {
   customHooks: {
     // Optional, a callback invoked when the clear search button is clicked
     onClearSearch: function() {}
+  },
+  // Optional, options to pass to the autocomplete component
+  autocomplete: {
+    // Optional, callback invoked when the autocomplete component changes from open to closed.
+    onClose: function() {},
+    // Optional, callback invoked when the autocomplete component changes from closed to open.
+    onOpen: function() {},
   }
 })
 ```

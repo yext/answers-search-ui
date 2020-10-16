@@ -130,6 +130,12 @@ class Answers {
      * @private
      */
     this._analyticsReporterService = null;
+
+    /**
+     * @type {boolean}
+     * @private
+     */
+    this._disabledByMasterSwitch = false;
   }
 
   static setInstance (instance) {
@@ -272,9 +278,27 @@ class Answers {
 
     this._onReady = parsedConfig.onReady || function () {};
 
-    if (parsedConfig.useTemplates === false || parsedConfig.templateBundle) {
-      if (parsedConfig.templateBundle) {
-        this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
+    const asyncDeps = this._loadAsyncDependencies(parsedConfig);
+    return asyncDeps.finally(() => {
+      if (this._disabledByMasterSwitch) {
+        throw new Error('MasterSwitchApi determined the front-end should be disabled');
+      }
+      this._onReady();
+    });
+  }
+
+  _loadAsyncDependencies (parsedConfig) {
+    const loadTemplates = this._loadTemplates(parsedConfig);
+    const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
+    const masterSwitch = this._checkMasterSwitch();
+    return Promise.all([loadTemplates, ponyfillCssVariables, masterSwitch]);
+  }
+
+  _loadTemplates ({ useTemplates, templateBundle }) {
+    if (useTemplates === false || templateBundle) {
+      if (templateBundle) {
+        this.renderer.init(templateBundle, this._getInitLocale());
+        return Promise.resolve();
       }
     } else {
       // Templates are currently downloaded separately from the CORE and UI bundle.
@@ -282,27 +306,21 @@ class Answers {
       this.templates = new DefaultTemplatesLoader(templates => {
         this.renderer.init(templates, this._getInitLocale());
       });
+      return this.templates.fetchTemplates();
     }
+  }
 
+  _checkMasterSwitch () {
+    window.performance.mark('yext.answers.statusStart');
     const handleFulfilledMasterSwitch = (isDisabled) => {
-      window.performance.mark('yext.answers.statusEnd');
-      if (!isDisabled) {
-        this._onReady();
-      } else {
-        throw new Error('MasterSwitchApi determined the front-end should be disabled');
-      }
+      this._disabledByMasterSwitch = isDisabled;
     };
     const handleRejectedMasterSwitch = () => {
-      window.performance.mark('yext.answers.statusEnd');
-      this._onReady();
+      this._disabledByMasterSwitch = false;
     };
-
-    return this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
-      .then(() => {
-        window.performance.mark('yext.answers.statusStart');
-        return this._masterSwitchApi.isDisabled();
-      })
-      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch);
+    return this._masterSwitchApi.isDisabled()
+      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch)
+      .finally(() => window.performance.mark('yext.answers.statusEnd'));
   }
 
   domReady (cb) {
