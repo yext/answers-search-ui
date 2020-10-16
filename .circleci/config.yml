@@ -48,7 +48,7 @@ jobs:
   # generate bundles
   build:
     docker:
-      - image: circleci/node:14.5
+      - image: cimg/node:14.13.1
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -61,7 +61,7 @@ jobs:
   # generate bundles for all languages and locales
   build_i18n:
     docker:
-      - image: circleci/node:14.5
+      - image: cimg/node:14.13.1
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -74,7 +74,7 @@ jobs:
   # run the jest unit tests
   unit_test:
     docker:
-      - image: circleci/node:14.5
+      - image: cimg/node:14.13.1
     resource_class: xlarge
     working_directory: ~/answers
     steps:
@@ -85,7 +85,7 @@ jobs:
   # run the testcafe acceptance tests
   acceptance_test:
     docker:
-      - image: circleci/node:14.5
+      - image: cimg/node:14.13.1
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -95,7 +95,7 @@ jobs:
   # verify all translations are present
   translation_test:
     docker:
-      - image: circleci/node:14.5
+      - image: cimg/node:14.13.1
     working_directory: ~/answers
     steps:
       - setup-workspace

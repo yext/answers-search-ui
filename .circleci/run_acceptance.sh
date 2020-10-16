@@ -4,7 +4,7 @@ export BROWSERSTACK_PROJECT_NAME="Answers SDK"
 export BROWSERSTACK_BUILD_ID="${CIRCLE_BRANCH} - ${CIRCLE_BUILD_NUM}"
 COMMIT_MSG_TITLE=$(git log -n 1 --pretty=format:%s)
 export BROWSERSTACK_TEST_RUN_NAME=$COMMIT_MSG_TITLE
-
+sudo apt-get install chromium-browser
 # Browserstack only allows for 2 threads to run at once, so we have to break up the browsers
 npx percy exec -- npx testcafe "chrome" tests/acceptance/acceptancesuite.js
 npx percy exec -- npx testcafe "browserstack:chrome" tests/acceptance/acceptancesuite.js
