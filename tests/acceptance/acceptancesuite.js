@@ -3,6 +3,7 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector } from 'testcafe';
+import percySnapshot from '@percy/testcafe';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -45,6 +46,7 @@ test('pagination flow', async t => {
   await paginationComponent.clickNextButton();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
+  await percySnapshot(t, 'beep boop my name is PARCY');
 });
 
 fixture`Facets page`
