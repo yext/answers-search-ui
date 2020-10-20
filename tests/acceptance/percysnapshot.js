@@ -14,31 +14,31 @@ fixture`Universal search page works as expected`
   .before(setupServer)
   .after(shutdownServer);
 
-// test.page`http://localhost:9999/tests/acceptance/fixtures/html/universal`(
-//   'Universal page',
-//   async t => {
-//     await percySnapshot(t, `universal page pre search`);
+test.page`http://localhost:9999/tests/acceptance/fixtures/html/universal`(
+  'Universal page',
+  async t => {
+    await percySnapshot(t, `universal page pre search`);
 
-//     const searchComponent = UniversalPage.getSearchComponent();
-//     await searchComponent.enterQuery('Tom');
-//     await searchComponent.submitQuery();
-//     await Selector('.yxt-Results');
+    const searchComponent = UniversalPage.getSearchComponent();
+    await searchComponent.enterQuery('Tom');
+    await searchComponent.submitQuery();
+    await t.expect(Selector('.yxt-Results').exists).ok();
 
-//     await percySnapshot(t, `universal page post search`);
-//   });
+    await percySnapshot(t, `universal page post search`);
+  });
 
-// test.page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`(
-//   'Vertical page',
-//   async t => {
-//     await percySnapshot(t, `vertical page pre search`);
+test.page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`(
+  'Vertical page',
+  async t => {
+    await percySnapshot(t, `vertical page pre search`);
 
-//     const searchComponent = VerticalPage.getSearchComponent();
-//     await searchComponent.enterQuery('Virginia');
-//     await searchComponent.submitQuery();
-//     await Selector('.yxt-Results');
+    const searchComponent = VerticalPage.getSearchComponent();
+    await searchComponent.enterQuery('Virginia');
+    await searchComponent.submitQuery();
+    await t.expect(Selector('.yxt-Results').exists).ok();
 
-//     await percySnapshot(t, `vertical page post search`);
-//   });
+    await percySnapshot(t, `vertical page post search`);
+  });
 
 test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
   'Facets page',
@@ -52,11 +52,12 @@ test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
     await percySnapshot(t, `facets page post search`);
 
     // Select the first option in the first FilterOptions
-    // const facets = FacetsPage.getFacetsComponent();
-    // const filterBox = facets.getFilterBox();
-    // const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
-    // await employeeDepartment.toggleOption('Client Delivery');
-    // await filterBox.applyFilters();
+    const facets = FacetsPage.getFacetsComponent();
+    const filterBox = facets.getFilterBox();
+    const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
+    await employeeDepartment.toggleOption('Client Delivery');
+    await filterBox.applyFilters();
+    await t.expect(Selector('.yxt-ResultsHeader-appliedFilters').exists).ok();
 
-    // await percySnapshot(t, `facets page post filtering`);
+    await percySnapshot(t, `facets page post filtering`);
   });
