@@ -47,16 +47,16 @@ test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
 
     const searchComponent = FacetsPage.getSearchComponent();
     await searchComponent.submitQuery();
-    await Selector('.yxt-Results').with({ visibilityCheck: true });
+    await t.expect(Selector('.yxt-Results').exists).ok();
 
     await percySnapshot(t, `facets page post search`);
 
     // Select the first option in the first FilterOptions
-    const facets = FacetsPage.getFacetsComponent();
-    const filterBox = facets.getFilterBox();
-    const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
-    await employeeDepartment.toggleOption('Client Delivery');
-    await filterBox.applyFilters();
+    // const facets = FacetsPage.getFacetsComponent();
+    // const filterBox = facets.getFilterBox();
+    // const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
+    // await employeeDepartment.toggleOption('Client Delivery');
+    // await filterBox.applyFilters();
 
-    await percySnapshot(t, `facets page post filtering`);
+    // await percySnapshot(t, `facets page post filtering`);
   });
