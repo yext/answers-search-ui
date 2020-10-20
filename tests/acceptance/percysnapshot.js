@@ -1,11 +1,8 @@
 import { setupServer, shutdownServer } from './server';
 import percySnapshot from '@percy/testcafe';
-import { LIB_VERSION } from '../../src/core/constants';
 import UniversalPage from './pageobjects/universalpage';
 import VerticalPage from './pageobjects/verticalpage';
 import FacetsPage from './pageobjects/facetspage';
-
-const libVersionWithoutHash = LIB_VERSION.split('-')[0];
 
 /**
  * This file contains testcafe tests that take percy snapshots.
@@ -19,36 +16,36 @@ fixture`Universal search page works as expected`
 test.page`http://localhost:9999/tests/acceptance/fixtures/html/universal`(
   'Universal page',
   async t => {
-    await percySnapshot(t, `universal page pre search - ${libVersionWithoutHash}`);
+    await percySnapshot(t, `universal page pre search`);
 
     const searchComponent = UniversalPage.getSearchComponent();
     await searchComponent.enterQuery('Tom');
-    await searchComponent.clearQuery();
+    await searchComponent.submitQuery();
 
-    await percySnapshot(t, `universal page post search - ${libVersionWithoutHash}`);
+    await percySnapshot(t, `universal page post search`);
   });
 
 test.page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`(
   'Vertical page',
   async t => {
-    await percySnapshot(t, `vertical page pre search - ${libVersionWithoutHash}`);
+    await percySnapshot(t, `vertical page pre search`);
 
     const searchComponent = VerticalPage.getSearchComponent();
-    await searchComponent.enterQuery('Tom');
-    await searchComponent.clearQuery();
+    await searchComponent.enterQuery('Virginia');
+    await searchComponent.submitQuery();
 
-    await percySnapshot(t, `vertical page post search - ${libVersionWithoutHash}`);
+    await percySnapshot(t, `vertical page post search`);
   });
 
 test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
   'Facets page',
   async t => {
-    await percySnapshot(t, `facets page pre search - ${libVersionWithoutHash}`);
+    await percySnapshot(t, `facets page pre search`);
 
     const searchComponent = FacetsPage.getSearchComponent();
     await searchComponent.submitQuery();
 
-    await percySnapshot(t, `facets page post search - ${libVersionWithoutHash}`);
+    await percySnapshot(t, `facets page post search`);
 
     // Select the first option in the first FilterOptions
     const facets = FacetsPage.getFacetsComponent();
@@ -57,5 +54,5 @@ test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
     await employeeDepartment.toggleOption('Client Delivery');
     await filterBox.applyFilters();
 
-    await percySnapshot(t, `facets page post filtering - ${libVersionWithoutHash}`);
+    await percySnapshot(t, `facets page post filtering`);
   });
