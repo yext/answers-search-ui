@@ -1,6 +1,7 @@
 import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
+import ResultsContext from '../../../core/storage/resultscontext';
 
 export default class VerticalResultsCountComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -10,6 +11,8 @@ export default class VerticalResultsCountComponent extends Component {
         this.setState(verticalResults);
       }
     });
+
+    this._visibleForNoResults = (config.noResults || {}).visible;
   }
 
   static areDuplicateNamesAllowed () {
@@ -36,7 +39,9 @@ export default class VerticalResultsCountComponent extends Component {
       ...data,
       total: resultsCount,
       pageStart: offset + 1,
-      pageEnd: offset + resultsLength
+      pageEnd: offset + resultsLength,
+      hiddenForNoResults: !this._visibleForNoResults,
+      isNoResults: verticalResults.resultsContext === ResultsContext.NO_RESULTS
     });
   }
 

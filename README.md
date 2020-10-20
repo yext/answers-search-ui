@@ -890,7 +890,12 @@ The results count component displays the current results count on a vertical pag
 
 ```js
 ANSWERS.addComponent('VerticalResultsCount', {
-  container: '.results-count-container'
+  container: '.results-count-container',
+  noResults: {
+    // Optional, whether the results count should be visible when displaying no results.
+    // Defaults to false.
+    visible: false
+  }
 });
 ```
 
