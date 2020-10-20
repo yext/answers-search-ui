@@ -3,6 +3,7 @@ import percySnapshot from '@percy/testcafe';
 import UniversalPage from './pageobjects/universalpage';
 import VerticalPage from './pageobjects/verticalpage';
 import FacetsPage from './pageobjects/facetspage';
+import { Selector } from 'testcafe';
 
 /**
  * This file contains testcafe tests that take percy snapshots.
@@ -13,37 +14,40 @@ fixture`Universal search page works as expected`
   .before(setupServer)
   .after(shutdownServer);
 
-test.page`http://localhost:9999/tests/acceptance/fixtures/html/universal`(
-  'Universal page',
-  async t => {
-    await percySnapshot(t, `universal page pre search`);
+// test.page`http://localhost:9999/tests/acceptance/fixtures/html/universal`(
+//   'Universal page',
+//   async t => {
+//     await percySnapshot(t, `universal page pre search`);
 
-    const searchComponent = UniversalPage.getSearchComponent();
-    await searchComponent.enterQuery('Tom');
-    await searchComponent.submitQuery();
+//     const searchComponent = UniversalPage.getSearchComponent();
+//     await searchComponent.enterQuery('Tom');
+//     await searchComponent.submitQuery();
+//     await Selector('.yxt-Results');
 
-    await percySnapshot(t, `universal page post search`);
-  });
+//     await percySnapshot(t, `universal page post search`);
+//   });
 
-test.page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`(
-  'Vertical page',
-  async t => {
-    await percySnapshot(t, `vertical page pre search`);
+// test.page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`(
+//   'Vertical page',
+//   async t => {
+//     await percySnapshot(t, `vertical page pre search`);
 
-    const searchComponent = VerticalPage.getSearchComponent();
-    await searchComponent.enterQuery('Virginia');
-    await searchComponent.submitQuery();
+//     const searchComponent = VerticalPage.getSearchComponent();
+//     await searchComponent.enterQuery('Virginia');
+//     await searchComponent.submitQuery();
+//     await Selector('.yxt-Results');
 
-    await percySnapshot(t, `vertical page post search`);
-  });
+//     await percySnapshot(t, `vertical page post search`);
+//   });
 
 test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
   'Facets page',
   async t => {
-    await percySnapshot(t, `facets page pre search`);
+    // await percySnapshot(t, `facets page pre search`);
 
     const searchComponent = FacetsPage.getSearchComponent();
     await searchComponent.submitQuery();
+    await Selector('.yxt-Results').with({ visibilityCheck: true });
 
     await percySnapshot(t, `facets page post search`);
 
