@@ -12,7 +12,12 @@ export default class VerticalResultsCountComponent extends Component {
       }
     });
 
-    this._visibleForNoResults = (config.noResults || {}).visible;
+    /**
+     * When the page is in a No Results state, whether to display the 
+     * vertical results count.
+     * @type {boolean}
+     */
+    this._visibleForNoResults = !!(config.noResults || {}).visible;
   }
 
   static areDuplicateNamesAllowed () {
@@ -35,13 +40,15 @@ export default class VerticalResultsCountComponent extends Component {
     const resultsLength = (verticalResults.results || []).length;
 
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
+    const hasZeroResults = resultsCount === 0;
+    const isHidden = hasZeroResults || !this._visibleForNoResults && isNoResults;
     return super.setState({
       ...data,
       total: resultsCount,
       pageStart: offset + 1,
       pageEnd: offset + resultsLength,
-      hiddenForNoResults: !this._visibleForNoResults,
-      isNoResults: verticalResults.resultsContext === ResultsContext.NO_RESULTS
+      isHidden: isHidden
     });
   }
 

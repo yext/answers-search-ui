@@ -1,21 +1,19 @@
-{{#unless (eq total 0)}}
-  {{#unless (and isNoResults hiddenForNoResults)}}
-    <div class="yxt-VerticalResultsCount"
-      aria-label="{{translate phrase='[[start]] through [[end]] of [[resultsCount]]' start=pageStart end=pageEnd resultsCount=total }}">
-      <div aria-hidden="true">
-        {{translate
-          phrase=
+{{#unless isHidden}}
+  <div class="yxt-VerticalResultsCount"
+    aria-label="{{translate phrase='[[start]] through [[end]] of [[resultsCount]]' start=pageStart end=pageEnd resultsCount=total }}">
+    <div aria-hidden="true">
+      {{translate
+        phrase=
 '<span class="yxt-VerticalResultsCount-start">[[start]]</span>
 <span class="yxt-VerticalResultsCount-dash">-</span>
 <span class="yxt-VerticalResultsCount-end">[[end]]</span>
 <span class="yxt-VerticalResultsCount-of">of</span>
 <span class="yxt-VerticalResultsCount-total">[[resultsCount]]</span>'
-          context='Example: 1-10 of 50'
-          start=pageStart
-          end=pageEnd
-          resultsCount=total
-        }}
-      </div>
+        context='Example: 1-10 of 50'
+        start=pageStart
+        end=pageEnd
+        resultsCount=total
+      }}
     </div>
-  {{/unless}}
+  </div>
 {{/unless}}
