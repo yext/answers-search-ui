@@ -13,7 +13,7 @@ export default class VerticalResultsCountComponent extends Component {
     });
 
     /**
-     * When the page is in a No Results state, whether to display the 
+     * When the page is in a No Results state, whether to display the
      * vertical results count.
      * @type {boolean}
      */
@@ -42,7 +42,7 @@ export default class VerticalResultsCountComponent extends Component {
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
     const hasZeroResults = resultsCount === 0;
-    const isHidden = hasZeroResults || !this._visibleForNoResults && isNoResults;
+    const isHidden = (!this._visibleForNoResults && isNoResults) || hasZeroResults;
     return super.setState({
       ...data,
       total: resultsCount,
