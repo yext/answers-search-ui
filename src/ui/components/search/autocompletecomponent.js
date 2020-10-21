@@ -112,6 +112,30 @@ export default class AutoCompleteComponent extends Component {
      * @type {string}
      */
     this.listLabelIdName = opts.listLabelIdName || 'yxt-SearchBar-listLabel--SearchBar';
+
+    /**
+     * Whether to hide the autocomplete when the search input is empty
+     * @type {boolean}
+     */
+    this._shouldHideOnEmptySearch = opts.shouldHideOnEmptySearch || false;
+
+    /**
+     * Callback invoked when the autocomplete component changes from closed to open.
+     * @type {function}
+     */
+    this._onOpen = opts.onOpen || function () {};
+
+    /**
+     * Callback invoked when the autocomplete component changes from open to closed.
+     * @type {function}
+     */
+    this._onClose = opts.onClose || function () {};
+
+    /**
+     * Indicates the initial open/closed status of this component
+     * @type {boolean}
+     */
+    this._isOpen = false;
   }
 
   /**
@@ -136,11 +160,24 @@ export default class AutoCompleteComponent extends Component {
    * those are client-interaction specific values and aren't returned from the server.
    */
   setState (data) {
-    if (!this.isQueryInputFocused()) {
+    const queryInputEl = DOM.query(this._parentContainer, this._inputEl);
+    const shouldHideAutocomplete = this._shouldHideOnEmptySearch && !queryInputEl.value;
+    const wasOpen = this._isOpen;
+    if (!this.isQueryInputFocused() || shouldHideAutocomplete) {
+      this._isOpen = false;
       this._sectionIndex = 0;
       this._resultIndex = -1;
       data = {};
+    } else {
+      this._isOpen = true;
     }
+
+    if (wasOpen && !this._isOpen) {
+      this._onClose();
+    } else if (!wasOpen && this._isOpen) {
+      this._onOpen();
+    }
+
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
       sectionIndex: this._sectionIndex,

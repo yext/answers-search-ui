@@ -1,0 +1,88 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: i18next-conv\n"
+"mime-version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
+"POT-Creation-Date: 2020-08-04T20:43:15.907Z\n"
+"PO-Revision-Date: 2020-08-04T20:43:15.907Z\n"
+"Language: fr\n"
+
+msgid "Item"
+msgid_plural "Item"
+msgstr[0] "Article"
+msgstr[1] "Articles"
+
+msgid "Hello [[name]]"
+msgstr "Bonjour [[name]]"
+
+msgid "There is [[count]] item [[name]]"
+msgid_plural "There are [[count]] items [[name]]"
+msgstr[0] "Il y a [[count]] article [[name]]"
+msgstr[1] "Il y a [[count]] articles [[name]]"
+
+msgctxt "male"
+msgid "Child"
+msgstr "fils"
+
+msgctxt "female"
+msgid "Child"
+msgstr "fille"
+
+msgctxt "male"
+msgid "I am looking for my child named [[name]]"
+msgstr "Je cherche mon fils nommé [[name]]"
+
+msgctxt "female"
+msgid "I am looking for my child named [[name]]"
+msgstr "Je cherche mon fille nommé [[name]]"
+
+msgctxt "male"
+msgid "The person"
+msgid_plural "The people"
+msgstr[0] "L'homme"
+msgstr[1] "Les hommes"
+
+msgctxt "female"
+msgid "The person"
+msgid_plural "The people"
+msgstr[0] "La femme"
+msgstr[1] "Les femmes"
+
+msgctxt "male"
+msgid "The [[count]] person went on a walk"
+msgid_plural "The [[count]] people went on a walk"
+msgstr[0] "Le [[count]] homme est parti en promenade"
+msgstr[1] "Les [[count]] Hommes fait une promenade"
+
+msgctxt "female"
+msgid "The [[count]] person went on a walk"
+msgid_plural "The [[count]] people went on a walk"
+msgstr[0] "La [[count]] femme a fait une promenade"
+msgstr[1] "Les [[count]] femmes fait une promenade"
+
+msgid "The dog."
+msgstr "Le chien."
+
+msgid "The: dog"
+msgstr "Le: chien"
+
+msgid "<a href=\"https://www.yext.com\">View our website [[name]]</a>"
+msgstr "<a href=\"https://www.yext.com\">Voir notre site web [[name]]</a>"
+
+msgid "<a href=\"https://www.yext.com\">View our website [[name]]</a>"
+msgid_plural "<a href=\"https://www.yext.com\">View our websites [[name]]</a>"
+msgstr[0] "<a href=\"https://www.yext.com\">Voir notre site web [[name]]</a>"
+msgstr[1] "<a href=\"https://www.yext.com\">Voir nos sites web [[name]]</a>"
+
+msgctxt "internet web, not spider web"
+msgid "<a href=\"https://www.yext.com\">View our website [[name]]</a>"
+msgid_plural "<a href=\"https://www.yext.com\">View our websites [[name]]</a>"
+msgstr[0] "<a href=\"https://www.yext.com\">Voir notre site web [[name]]</a>"
+msgstr[1] "<a href=\"https://www.yext.com\">Voir nos sites web [[name]]</a>"
+
+msgid "([[resultsCount]] result)"
+msgid_plural "([[resultsCount]] results)"
+msgstr[0] "([[resultsCount]] résultat)"
+msgstr[1] "([[resultsCount]] résultats)"

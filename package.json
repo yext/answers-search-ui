@@ -52,6 +52,7 @@
     "jsdoc": "^3.6.3",
     "node-sass": "^4.12.0",
     "postcss-pxtorem": "4.0.1",
+    "regenerator-runtime": "^0.13.7",
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.3.2",
     "rollup-plugin-commonjs": "^9.2.1",
@@ -95,12 +96,14 @@
     ],
     "testMatch": [
       "**/tests/core/**/*.js",
-      "**/tests/ui/**/*.js"
+      "**/tests/ui/**/*.js",
+      "**/tests/conf/**/*.js"
     ]
   },
   "semistandard": {
     "globals": [
       "beforeEach",
+      "beforeAll",
       "describe",
       "it",
       "expect",

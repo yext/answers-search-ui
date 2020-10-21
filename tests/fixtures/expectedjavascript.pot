@@ -1,0 +1,29 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: rawjavascript.js:18
+msgid "([[resultsCount]] result)"
+msgid_plural "([[resultsCount]] results)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: rawjavascript.js:11
+msgid "Go to page [[maxPage]] of results"
+msgstr ""
+
+#: rawjavascript.js:7
+msgid "We are unable to determine your location"
+msgstr ""
+
+#: rawjavascript.js:32
+msgctxt "Alt-text"
+msgid "[[resultsCount]] autocomplete option found"
+msgid_plural "[[resultsCount]] autocomplete options found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: rawjavascript.js:27
+msgctxt "Labels an input field"
+msgid "What are you interested in?"
+msgstr ""
