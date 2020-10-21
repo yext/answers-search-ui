@@ -48,7 +48,7 @@ jobs:
   # generate bundles
   build:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:14.5-browsers
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -61,7 +61,7 @@ jobs:
   # generate bundles for all languages and locales
   build_i18n:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:14.5-browsers
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -74,7 +74,7 @@ jobs:
   # run the jest unit tests
   unit_test:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:14.5-browsers
     resource_class: xlarge
     working_directory: ~/answers
     steps:
@@ -85,7 +85,7 @@ jobs:
   # run the testcafe acceptance tests
   acceptance_test:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:14.5-browsers
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -95,7 +95,7 @@ jobs:
   # verify all translations are present
   translation_test:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:14.5-browsers
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -106,6 +106,20 @@ jobs:
           command: |
             sudo apt-get install -qq gettext
             ./.circleci/run_translation_verification.sh
+  # take percy snapshots
+  percy_snapshots:
+    docker:
+      - image: circleci/node:14.5-browsers
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: 
+          name: Take Percy snapshots
+          command: |
+            export PERCY_TOKEN=445e64916245d7908b1076a1fe84713a684be8c0fb5a679cecfb87aab5c3b735
+            npx percy exec -- npx testcafe "chrome" tests/acceptance/percysnapshot.js
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
@@ -175,6 +189,9 @@ workflows:
       - translation_test:
           requires:
             - build
+      - percy_snapshots:
+          requires:
+            - build
       - deploy_canary:
           filters:
             branches:
@@ -183,6 +200,7 @@ workflows:
             - unit_test
             - acceptance_test
             - translation_test
+            - percy_snapshots
       - deploy_branch:
           filters:
             branches:
@@ -211,11 +229,15 @@ workflows:
       - translation_test:
           requires:
             - build_i18n
+      - percy_snapshots:
+          requires:
+            - build_i18n
       - deploy_branch:
           requires:
             - unit_test
             - acceptance_test
             - translation_test
+            - percy_snapshots
   build_and_deploy_hold:
     jobs:
       - build_i18n:
@@ -243,6 +265,12 @@ workflows:
               only: /^v.*/
           requires:
             - build_i18n
+      - percy_snapshots:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - build_i18n
       - hold:
           type: approval
           filters:
@@ -252,6 +280,7 @@ workflows:
             - unit_test
             - acceptance_test
             - translation_test
+            - percy_snapshots
       - deploy_latest:
           filters:
             branches:
