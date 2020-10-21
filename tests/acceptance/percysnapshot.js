@@ -43,7 +43,7 @@ test.page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`(
 test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
   'Facets page',
   async t => {
-    // await percySnapshot(t, `facets page pre search`);
+    await percySnapshot(t, `facets page pre search`);
 
     const searchComponent = FacetsPage.getSearchComponent();
     await searchComponent.submitQuery();
