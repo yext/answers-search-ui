@@ -279,6 +279,7 @@ export default class SearchComponent extends Component {
      * @type {Object}
      */
     this._autocompleteConfig = {
+      shouldHideOnEmptySearch: config.autocomplete && config.autocomplete.shouldHideOnEmptySearch,
       onOpen: config.autocomplete && config.autocomplete.onOpen,
       onClose: config.autocomplete && config.autocomplete.onClose
     };
