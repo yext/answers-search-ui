@@ -19,6 +19,16 @@ export default class HighlightedValue {
   }
 
   /**
+   * get highlighted value string
+   * @param {Function} transformFunction takes a string and returns the transformed string
+   * @returns {string} The value interpolated with highlighting markup and transformed in between
+   */
+  getWithTransformFunction (transformFunction) {
+    this._sortMatchedSubstrings();
+    return this.buildHighlightedValue(this.value, this.matchedSubstrings, transformFunction);
+  }
+
+  /**
    * get inverted highlighted value string
    * @returns {string}
    */
@@ -26,6 +36,17 @@ export default class HighlightedValue {
     this._sortMatchedSubstrings();
     const invertedSubstrings = this._getInvertedSubstrings(this.matchedSubstrings, this.value.length);
     return this.buildHighlightedValue(this.value, invertedSubstrings);
+  }
+
+  /**
+   * get inverted highlighted value string
+   * @param {Function} transformFunction takes a string and returns the transformed string
+   * @returns {string} The value interpolated with highlighting markup and transformed in between
+   */
+  getInvertedWithTransformFunction (transformFunction) {
+    this._sortMatchedSubstrings();
+    const invertedSubstrings = this._getInvertedSubstrings(this.matchedSubstrings, this.value.length);
+    return this.buildHighlightedValue(this.value, invertedSubstrings, transformFunction);
   }
 
   /**
@@ -63,6 +84,13 @@ export default class HighlightedValue {
    *    }
    *  }
    *
+   * @param {Function} transformFunction function to apply to strings in between highlighting markup
+   *
+   *  example function :
+   *  function (string) {
+   *    return handlebars.escapeExpression(string);
+   *  }
+   *
    * @returns {string} copy of input value with highlighting applied
    *
    *  example object :
@@ -74,22 +102,31 @@ export default class HighlightedValue {
    *  }
    *
    */
-  buildHighlightedValue (val, highlightedSubstrings) {
+  buildHighlightedValue (
+    val,
+    highlightedSubstrings,
+    transformFunction = function (x) { return x; }
+  ) {
     let highlightedValue = '';
     let nextStart = 0;
 
     if (highlightedSubstrings.length === 0) {
-      return val;
+      return transformFunction(val);
     }
 
     for (let j = 0; j < highlightedSubstrings.length; j++) {
       let start = Number(highlightedSubstrings[j].offset);
       let end = start + highlightedSubstrings[j].length;
 
-      highlightedValue += [val.slice(nextStart, start), '<strong>', val.slice(start, end), '</strong>'].join('');
+      highlightedValue += [
+        transformFunction(val.slice(nextStart, start)),
+        '<strong>',
+        transformFunction(val.slice(start, end)),
+        '</strong>'
+      ].join('');
 
       if (j === highlightedSubstrings.length - 1 && end < val.length) {
-        highlightedValue += val.slice(end);
+        highlightedValue += transformFunction(val.slice(end));
       }
 
       nextStart = end;

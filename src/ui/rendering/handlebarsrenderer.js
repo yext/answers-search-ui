@@ -206,15 +206,17 @@ export default class HandlebarsRenderer extends Renderer {
     });
 
     self.registerHelper('highlightValue', function (value, getInverted) {
-      const escapedInput = self.escapeExpression(value.value || value.shortValue);
+      const input = value.value || value.shortValue;
 
       const highlightedVal = new HighlightedValue({
-        value: escapedInput,
+        value: input,
         matchedSubstrings: value.matchedSubstrings
       });
+      const escapeFunction = (val) => self.escapeExpression(val);
 
-      return getInverted ? self.SafeString(highlightedVal.getInverted())
-        : self.SafeString(highlightedVal.get());
+      return getInverted
+        ? self.SafeString(highlightedVal.getInvertedWithTransformFunction(escapeFunction))
+        : self.SafeString(highlightedVal.getWithTransformFunction(escapeFunction));
     });
   }
 }
