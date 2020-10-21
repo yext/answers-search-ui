@@ -17,7 +17,7 @@
         <script>
             ANSWERS.init({
                 apiKey: 'df4b24f4075800e5e9705090c54c6c13',
-                experienceKey: 'rosetest',
+                experienceKey: 'sdkacceptancetests',
                 businessId: '2287528',
                 templateBundle: TemplateBundle.default,
                 experienceVersion: 'PRODUCTION',
@@ -26,6 +26,9 @@
                   limit: 15,
                 },
                 onReady: function() {
+                    // Manually set the geolocation to the Yext VA office,
+                    // otherwise the API will use the ip address of the circle ci container
+                    this.setGeolocation(38.89, -77.06)
                     this.addComponent('SearchBar', {
                         container: '.search-bar-container',
                         verticalKey:'KM',
