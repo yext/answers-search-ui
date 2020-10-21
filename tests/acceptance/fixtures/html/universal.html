@@ -21,6 +21,7 @@
                 experienceVersion: 'PRODUCTION',
                 templateBundle: TemplateBundle.default,
                 onReady: function() {
+                    this.setGeolocation(38.89, -77.06)
                     this.addComponent('SearchBar', {
                         container: '.search-bar-container',
                         clearButton: true,
