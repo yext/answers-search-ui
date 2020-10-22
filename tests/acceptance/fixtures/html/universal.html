@@ -21,9 +21,6 @@
                 experienceVersion: 'PRODUCTION',
                 templateBundle: TemplateBundle.default,
                 onReady: function() {
-                    // Manually set the geolocation to the Yext VA office,
-                    // otherwise the API will use the ip address of the circle ci container
-                    this.setGeolocation(38.89, -77.06)
                     this.addComponent('SearchBar', {
                         container: '.search-bar-container',
                         clearButton: true,
