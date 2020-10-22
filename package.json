@@ -118,6 +118,11 @@
       "docs/"
     ]
   },
+  "percy": {
+    "snapshot": {
+      "enable-javascript": true
+    }
+  },
   "author": "Billy",
   "license": "ISC"
 }
