@@ -119,8 +119,10 @@
     ]
   },
   "percy": {
-    "snapshot": {
-      "enable-javascript": true
+    "agent": {
+      "agent-discovery": {
+        "network-idle-timeout": 500
+      }
     }
   },
   "author": "Billy",

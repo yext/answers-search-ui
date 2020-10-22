@@ -31,7 +31,6 @@ test('Basic universal flow', async t => {
 
   const faqsSectionTitle = await sections[1].getTitle();
   await t.expect(faqsSectionTitle.toUpperCase()).contains('FAQ');
-  await percySnapshot(t, `universal page post search`);
 });
 
 fixture`Vertical search page works as expected`
@@ -47,7 +46,6 @@ test('pagination flow', async t => {
   await paginationComponent.clickNextButton();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
-  await percySnapshot(t, `vertical page post search`);
 });
 
 fixture`Facets page`
@@ -56,6 +54,7 @@ fixture`Facets page`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
 
 test(`Facets load on the page, and can affect the search`, async t => {
+  await percySnapshot(t, `facets page pre search`);
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
 
@@ -65,7 +64,6 @@ test(`Facets load on the page, and can affect the search`, async t => {
   // Record the amount of results with no facets
   const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
   const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
-  await percySnapshot(t, `facets page post search`);
 
   // Select the first option in the first FilterOptions
   const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
@@ -77,7 +75,6 @@ test(`Facets load on the page, and can affect the search`, async t => {
   // Get the actual number of results and check that it equals the expected amount
   let actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(expectedResultsCount);
-  await percySnapshot(t, `facets page post filtering`);
 
   // Reset the filters, and check that the number of results
   // is the same as the initial amount
