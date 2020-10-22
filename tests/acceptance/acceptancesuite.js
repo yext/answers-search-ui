@@ -3,6 +3,7 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector } from 'testcafe';
+import percySnapshot from '@percy/testcafe';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -16,6 +17,7 @@ fixture`Universal search page works as expected`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/universal`;
 
 test('Basic universal flow', async t => {
+  await percySnapshot(t, `universal page pre search`);
   const searchComponent = UniversalPage.getSearchComponent();
 
   await searchComponent.enterQuery('Tom');
@@ -30,6 +32,7 @@ test('Basic universal flow', async t => {
 
   const faqsSectionTitle = await sections[1].getTitle();
   await t.expect(faqsSectionTitle.toUpperCase()).contains('FAQ');
+  await percySnapshot(t, `universal page post search`);
 });
 
 fixture`Vertical search page works as expected`
@@ -38,6 +41,7 @@ fixture`Vertical search page works as expected`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`;
 
 test('pagination flow', async t => {
+  await percySnapshot(t, `vertical page pre search`);
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('Virginia');
   await searchComponent.submitQuery();
@@ -45,6 +49,7 @@ test('pagination flow', async t => {
   await paginationComponent.clickNextButton();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
+  await percySnapshot(t, `vertical page post search`);
 });
 
 fixture`Facets page`
@@ -53,6 +58,7 @@ fixture`Facets page`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
 
 test(`Facets load on the page, and can affect the search`, async t => {
+  await percySnapshot(t, `facets page pre search`);
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
 
@@ -62,6 +68,7 @@ test(`Facets load on the page, and can affect the search`, async t => {
   // Record the amount of results with no facets
   const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
   const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
+  await percySnapshot(t, `facets page post search`);
 
   // Select the first option in the first FilterOptions
   const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
@@ -105,6 +112,7 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await filterBox.applyFilters();
   actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(initialResultsCount);
+  await percySnapshot(t, `facets page post filtering`);
 });
 
 fixture`Experience links work as expected`
