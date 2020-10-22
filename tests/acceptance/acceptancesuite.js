@@ -17,7 +17,6 @@ fixture`Universal search page works as expected`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/universal`;
 
 test('Basic universal flow', async t => {
-  await percySnapshot(t, `universal page pre search`);
   const searchComponent = UniversalPage.getSearchComponent();
 
   await searchComponent.enterQuery('Tom');
@@ -41,7 +40,6 @@ fixture`Vertical search page works as expected`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`;
 
 test('pagination flow', async t => {
-  await percySnapshot(t, `vertical page pre search`);
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('Virginia');
   await searchComponent.submitQuery();
@@ -58,7 +56,6 @@ fixture`Facets page`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
 
 test(`Facets load on the page, and can affect the search`, async t => {
-  await percySnapshot(t, `facets page pre search`);
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
 
@@ -80,6 +77,7 @@ test(`Facets load on the page, and can affect the search`, async t => {
   // Get the actual number of results and check that it equals the expected amount
   let actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(expectedResultsCount);
+  await percySnapshot(t, `facets page post filtering`);
 
   // Reset the filters, and check that the number of results
   // is the same as the initial amount
@@ -112,7 +110,6 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await filterBox.applyFilters();
   actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(initialResultsCount);
-  await percySnapshot(t, `facets page post filtering`);
 });
 
 fixture`Experience links work as expected`
