@@ -68,4 +68,25 @@ describe('createing highlighted values', () => {
     expect(result).toEqual(expectedResult);
     expect(invertedResult).toEqual(expectedInvertedResult);
   });
+
+  it('properly handles a transformFunction', () => {
+    const data = {
+      key: 'jesse',
+      value: 'Jes\'se Sharps',
+      matchedSubstrings: [ { offset: 8, length: 4 }, { offset: 1, length: 4 } ]
+    };
+
+    const expectedResult = 'J<strong>es%27s</strong>e S<strong>harp</strong>s';
+    const expectedInvertedResult = '<strong>J</strong>es%27s<strong>e S</strong>harp<strong>s</strong>';
+
+    let highlightedValue = new HighlightedValue(data);
+    const transformFn = (string) => {
+      return string.replace(/'/gi, '%27');
+    };
+    const result = highlightedValue.getWithTransformFunction(transformFn);
+    const invertedResult = highlightedValue.getInvertedWithTransformFunction(transformFn);
+
+    expect(result).toEqual(expectedResult);
+    expect(invertedResult).toEqual(expectedInvertedResult);
+  });
 });
