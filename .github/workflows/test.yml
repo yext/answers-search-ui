@@ -22,6 +22,6 @@ jobs:
     - name: Percy
       uses: percy/exec-action@v0.3.1
       with:
-        command: npx percy exec -- npx testcafe "chrome:headless" tests/acceptance/percysnapshots.js
+        command: npx testcafe "chrome:headless" tests/acceptance/percysnapshots.js
       env:
         PERCY_TOKEN: 1b2a74b07a76e9b532ebd2e68f63ddfd35d278f928fac791f25022f80cdfb160
