@@ -21,5 +21,4 @@ jobs:
         PERCY_TOKEN: 1b2a74b07a76e9b532ebd2e68f63ddfd35d278f928fac791f25022f80cdfb160
     - run: npm ci
     - run: npm run build
-    - run: npm test
-    - run: npx percy exec -- npx testcafe "chrome" tests/acceptance/percysnapshots.js
+    - run: npx percy exec -- npx testcafe "chrome:headless" tests/acceptance/percysnapshots.js
