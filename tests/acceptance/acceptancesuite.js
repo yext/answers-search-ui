@@ -3,7 +3,6 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector } from 'testcafe';
-import percySnapshot from '@percy/testcafe';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -54,7 +53,6 @@ fixture`Facets page`
   .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
 
 test(`Facets load on the page, and can affect the search`, async t => {
-  await percySnapshot(t, `facets page pre search`);
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
 

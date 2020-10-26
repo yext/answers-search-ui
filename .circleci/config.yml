@@ -106,19 +106,6 @@ jobs:
           command: |
             sudo apt-get install -qq gettext
             ./.circleci/run_translation_verification.sh
-  # take percy snapshots
-  percy_snapshots:
-    docker:
-      - image: circleci/node:14.5-browsers
-    working_directory: ~/answers
-    steps:
-      - setup-workspace
-      - attach_workspace:
-          at: ~/answers
-      - run: 
-          name: Take Percy snapshots
-          command: |
-            npx percy exec -- npx testcafe "chrome" tests/acceptance/acceptancesuite.js
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
@@ -188,9 +175,6 @@ workflows:
       - translation_test:
           requires:
             - build
-      - percy_snapshots:
-          requires:
-            - build
       - deploy_canary:
           filters:
             branches:
@@ -199,7 +183,6 @@ workflows:
             - unit_test
             - acceptance_test
             - translation_test
-            - percy_snapshots
       - deploy_branch:
           filters:
             branches:
@@ -209,7 +192,6 @@ workflows:
             - unit_test
             - acceptance_test
             - translation_test
-            - percy_snapshots
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
@@ -229,15 +211,11 @@ workflows:
       - translation_test:
           requires:
             - build_i18n
-      - percy_snapshots:
-          requires:
-            - build_i18n
       - deploy_branch:
           requires:
             - unit_test
             - acceptance_test
             - translation_test
-            - percy_snapshots
   build_and_deploy_hold:
     jobs:
       - build_i18n:
@@ -265,12 +243,6 @@ workflows:
               only: /^v.*/
           requires:
             - build_i18n
-      - percy_snapshots:
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - build_i18n
       - hold:
           type: approval
           filters:
@@ -280,7 +252,6 @@ workflows:
             - unit_test
             - acceptance_test
             - translation_test
-            - percy_snapshots
       - deploy_latest:
           filters:
             branches:
