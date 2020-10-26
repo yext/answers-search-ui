@@ -1,6 +1,9 @@
-name: Run Tests
+name: Percy Snapshots
 
-on: [pull_request]
+on: 
+  push:
+    branches-ignore: dev/*
+  pull_request:
 
 jobs:
   build:
@@ -19,7 +22,7 @@ jobs:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build
-    - name: Percy
+    - name: Percy Snapshots
       uses: percy/exec-action@v0.3.1
       with:
         command: npx testcafe "chrome:headless" tests/acceptance/percysnapshots.js
