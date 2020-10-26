@@ -118,7 +118,7 @@ jobs:
       - run: 
           name: Take Percy snapshots
           command: |
-            npx percy exec -- npx testcafe "chrome" tests/acceptance/acceptancesuite.js
+            npx percy exec -- npx testcafe "chrome" tests/acceptance/percysnapshots.js
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
