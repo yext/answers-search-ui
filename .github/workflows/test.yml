@@ -17,9 +17,10 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: ${{ matrix.node-version }}
-      env:
-        PERCY_TOKEN: 1b2a74b07a76e9b532ebd2e68f63ddfd35d278f928fac791f25022f80cdfb160
     - run: npm ci
     - run: npm run build
-    - run: npx percy exec -- npx testcafe "chrome:headless" tests/acceptance/percysnapshots.js
-    - run: echo $PERCY_TOKEN
+    - name: Percy Snapshots
+      run: npx percy exec -- npx testcafe "chrome:headless" tests/acceptance/percysnapshots.js
+      run: echo $PERCY_TOKEN
+      env:
+        PERCY_TOKEN: 1b2a74b07a76e9b532ebd2e68f63ddfd35d278f928fac791f25022f80cdfb160
