@@ -457,6 +457,11 @@ ANSWERS.addComponent('SearchBar', {
     // Optional, the message in the alert. Defaults to the below
     message: "We are unable to determine your location"
   },
+  // Optional, functions invoked when certain events occur
+  customHooks: {
+    // Optional, a callback invoked when the clear search button is clicked
+    onClearSearch: function() {}
+  },
   // Optional, options to pass to the autocomplete component
   autocomplete: {
     // Optional, boolean used to hide the autocomplete when the search input is empty (even if the
