@@ -1,0 +1,30 @@
+name: Percy Snapshots
+
+on: 
+  push:
+    branches-ignore: dev/*
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [15.x]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - run: npm run build
+    - name: Percy Snapshots
+      uses: percy/exec-action@v0.3.1
+      with:
+        command: npx testcafe "chrome:headless" tests/acceptance/percysnapshots.js
+      env:
+        PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}

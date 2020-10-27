@@ -23,7 +23,7 @@ class VerticalPage {
   /**
      * Returns the {@link VerticalResultsComponentBlock} on the page.
      */
-  getUniversalResultsComponent () {
+  getVerticalResultsComponent () {
     return this._verticalResultsComponent;
   }
 
