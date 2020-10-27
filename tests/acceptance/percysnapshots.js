@@ -3,10 +3,11 @@ import percySnapshot from '@percy/testcafe';
 
 /**
  * This file contains testcafe tests that take percy snapshots.
- * These have to be separated out because taking percy snapshots
- * on browserstack:ie, even without percy exec, will error.
+ * These have to be separated out because having percy snapshots
+ * in a testcafe tests, even without percy exec, will error out
+ * on browserstack:ie .
  */
-fixture`Universal search page works as expected`
+fixture`Percy Snapshots for the Facets Page`
   .before(setupServer)
   .after(shutdownServer);
 
