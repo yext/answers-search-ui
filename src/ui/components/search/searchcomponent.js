@@ -184,6 +184,8 @@ export default class SearchComponent extends Component {
         }
         return;
       }
+      const clearButton = DOM.query(this._container, '.js-yxt-SearchBar-clear');
+      this._updateClearButton(clearButton, q);
 
       const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
       const resetPagination = this._verticalKey &&
@@ -432,13 +434,7 @@ export default class SearchComponent extends Component {
     DOM.on(this.queryEl, 'input', e => {
       const input = e.target.value;
       this.query = input;
-      if (!this._showClearButton && input.length > 0) {
-        this._showClearButton = true;
-        button.classList.remove('yxt-SearchBar--hidden');
-      } else if (this._showClearButton && input.length === 0) {
-        this._showClearButton = false;
-        button.classList.add('yxt-SearchBar--hidden');
-      }
+      this._updateClearButton(button, input);
     });
   }
 
@@ -758,5 +754,25 @@ export default class SearchComponent extends Component {
 
   focusInputElement () {
     DOM.query(this._container, this._inputEl).focus();
+  }
+
+  /**
+   * Updates the Search inputs clear button based on the current input value
+   *
+   * @param {Element} button
+   * @param {string} input
+   */
+  _updateClearButton (button, input) {
+    if (!button) {
+      return;
+    }
+
+    if (!this._showClearButton && input.length > 0) {
+      this._showClearButton = true;
+      button.classList.remove('yxt-SearchBar--hidden');
+    } else if (this._showClearButton && input.length === 0) {
+      this._showClearButton = false;
+      button.classList.add('yxt-SearchBar--hidden');
+    }
   }
 }
