@@ -274,6 +274,13 @@ export default class SearchComponent extends Component {
      */
     this.inputIdName = `yxt-SearchBar-input--${this.name}`;
 
+    this.customHooks = {
+      /**
+       * Callback invoked when the clear search button is clicked
+       */
+      onClearSearch: config.onClearSearch || function () {}
+    };
+
     /**
      * Options to pass to the autocomplete component
      * @type {Object}
@@ -410,6 +417,7 @@ export default class SearchComponent extends Component {
     button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
 
     DOM.on(button, 'click', () => {
+      this.customHooks.onClearSearch();
       this.query = '';
       this._showClearButton = false;
       button.classList.add('yxt-SearchBar--hidden');
