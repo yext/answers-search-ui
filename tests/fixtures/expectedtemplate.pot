@@ -1,0 +1,29 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: rawtemplate.hbs:3
+msgid "([[resultsCount]] result)"
+msgid_plural "([[resultsCount]] results)"
+msgstr[0] ""
+msgstr[1] ""
+
+#: rawtemplate.hbs:2
+msgid "Go to page [[maxPage]] of results"
+msgstr ""
+
+#: rawtemplate.hbs:1
+msgid "Go to the next page of results"
+msgstr ""
+
+#: rawtemplate.hbs:5
+msgctxt "Alt-text"
+msgid "[[resultsCount]] autocomplete option found"
+msgid_plural "[[resultsCount]] autocomplete options found"
+msgstr[0] ""
+msgstr[1] ""
+
+#: rawtemplate.hbs:4
+msgctxt "Change is a verb. Example: change filtering logic"
+msgid "change"
+msgstr ""

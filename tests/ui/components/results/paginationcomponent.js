@@ -137,7 +137,7 @@ describe('rendering the page numbers', () => {
       onPaginate: paginate
     });
     const wrapper = mount(component);
-    expect(wrapper.find('.js-yxt-Pagination-link')).toHaveLength(6);
+    expect(wrapper.find('.js-yxt-Pagination-link')).toHaveLength(4);
     const next = wrapper.find('.js-yxt-Pagination-next');
     expect(next).toHaveLength(1);
     next.first().simulate('click');

@@ -15,7 +15,6 @@ export default class DefaultTemplatesLoader {
     }
     this._templates = {};
     this._onLoaded = onLoaded || function () {};
-    this._fetchTemplates();
   }
 
   static setInstance (instance) {
@@ -30,11 +29,11 @@ export default class DefaultTemplatesLoader {
     return this.instance;
   }
 
-  _fetchTemplates () {
+  fetchTemplates () {
     // If template have already been loaded, do nothing
     let node = DOM.query('#yext-answers-templates');
     if (node) {
-      return;
+      return Promise.resolve();
     }
 
     // Inject a script to fetch the compiled templates,
@@ -55,7 +54,7 @@ export default class DefaultTemplatesLoader {
    * register the templates internally so that they can be later consumed
    * (e.g. by components and renderers) with convienience.
    *
-   * `fetchTemplates` will automatically call this, providing the compiled templates from the server.
+   * This is called from inside handlebarswrapper.txt.
    */
   register (templates) {
     this._templates = templates;

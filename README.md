@@ -457,6 +457,16 @@ ANSWERS.addComponent('SearchBar', {
     // Optional, the message in the alert. Defaults to the below
     message: "We are unable to determine your location"
   },
+  // Optional, options to pass to the autocomplete component
+  autocomplete: {
+    // Optional, boolean used to hide the autocomplete when the search input is empty (even if the
+    // input is focused). Defaults to false.
+    shouldHideOnEmptySearch: false,
+    // Optional, callback invoked when the autocomplete component changes from open to closed.
+    onClose: function() {},
+    // Optional, callback invoked when the autocomplete component changes from closed to open.
+    onOpen: function() {},
+  },
   // Optional, functions invoked when certain events occur
   customHooks: {
     // Optional, a function invoked when a search is submitted via this component. The users search
