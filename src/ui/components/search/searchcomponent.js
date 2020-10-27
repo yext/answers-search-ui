@@ -278,11 +278,11 @@ export default class SearchComponent extends Component {
       /**
        * Callback invoked when the clear search button is clicked
        */
-      onClearSearch: config.onClearSearch || function () {},
+      onClearSearch: (config.customHooks && config.customHooks.onClearSearch) || function () {},
       /**
        * Callback invoked when a search is submitted via this component
        */
-      onSubmit: config.onSubmit || function () {}
+      onSubmit: (config.customHooks && config.customHooks.onSubmit) || function () {}
     };
 
     /**
