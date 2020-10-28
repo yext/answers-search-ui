@@ -278,7 +278,11 @@ export default class SearchComponent extends Component {
       /**
        * Callback invoked when the clear search button is clicked
        */
-      onClearSearch: config.onClearSearch || function () {}
+      onClearSearch: (config.customHooks && config.customHooks.onClearSearch) || function () {},
+      /**
+       * Callback invoked when a search is submitted via this component
+       */
+      onSubmit: (config.customHooks && config.customHooks.onSubmit) || function () {}
     };
 
     /**
@@ -504,6 +508,8 @@ export default class SearchComponent extends Component {
     this.query = query;
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
+
+    this.customHooks.onSubmit(query);
 
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
