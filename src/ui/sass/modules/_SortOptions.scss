@@ -45,6 +45,12 @@
     margin-left: 5px;
   }
 
+  &-optionSelector {
+    &:focus {
+      outline: .0625rem solid var(--yxt-color-brand-hover);
+    }
+  }
+
   &-reset {
     @include Text(
       $color: var(--yxt-color-brand-primary),
@@ -53,6 +59,10 @@
 
     @media (max-width: $breakpoint-mobile-max) {
       margin-top: var(--yxt-base-spacing) ;
+    }
+
+    &.js-hidden {
+      display: none;
     }
   }
 

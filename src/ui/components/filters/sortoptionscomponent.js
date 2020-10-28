@@ -73,12 +73,15 @@ export default class SortOptionsComponent extends Component {
     }
 
     // Register show reset button
-    if (this.showReset) {
+    if (this._config.showReset) {
       const resetEl = DOM.query(this._container, '.yxt-SortOptions-reset');
       resetEl && DOM.on(
         resetEl,
         'click',
-        () => this.handleOptionSelection(0)
+        () => {
+          this.handleOptionSelection(0);
+          this.setState();
+        }
       );
     }
 
@@ -93,8 +96,13 @@ export default class SortOptionsComponent extends Component {
     }
   }
 
-  handleOptionSelection (optionIndex) {
-    this._updateSelectedOption(optionIndex);
+  handleOptionSelection (selectedOptionIndex) {
+    this._updateSelectedOption(selectedOptionIndex);
+    this._updateCheckedAttributes();
+
+    this.showReset = this._config.showReset && selectedOptionIndex !== 0;
+    this._setVisibilityOfResetButton();
+
     if (this._config.searchOnChange) {
       this._sortResults();
     }
@@ -104,8 +112,35 @@ export default class SortOptionsComponent extends Component {
     this.options[this.selectedOptionIndex].isSelected = false;
     this.options[optionIndex].isSelected = true;
     this.selectedOptionIndex = optionIndex;
-    this.showReset = this._config.showReset && optionIndex !== 0;
-    this.setState();
+  }
+
+  /**
+   * Set the 'checked' attribute for the selected option and remove it for all others
+   */
+  _updateCheckedAttributes () {
+    this.options.forEach((option, optionIndex) => {
+      const optionId = `#yxt-SortOptions-option_SortOptions_${optionIndex}`;
+      const optionEl = DOM.query(this._container, optionId);
+
+      if(this.selectedOptionIndex === optionIndex){
+        optionEl && optionEl.setAttribute('checked', '');
+      } else {
+        optionEl && optionEl.removeAttribute('checked', '');
+      }
+    });
+  }
+
+  /**
+   * Set the visibility of the reset button based on this.showReset
+   */
+  _setVisibilityOfResetButton () {
+    const resetEl = DOM.query(this._container, '.yxt-SortOptions-reset');
+
+    if (this.showReset) {
+      resetEl.classList.remove('js-hidden');
+    } else if (!resetEl.classList.contains('js-hidden')) {
+      resetEl.classList.add('js-hidden');
+    }
   }
 
   _sortResults () {
@@ -122,7 +157,6 @@ export default class SortOptionsComponent extends Component {
     }
     this._search();
     this._config.onChange(option);
-    this.setState();
   }
 
   /**
