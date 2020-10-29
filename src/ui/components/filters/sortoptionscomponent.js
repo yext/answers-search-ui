@@ -23,7 +23,9 @@ export default class SortOptionsComponent extends Component {
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
-    this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
+    this.searchOnChangeIsEnabled = this._config.searchOnChange;
+    this.showResetIsEnabled = this._config.showReset;
+    this.showReset = this.showResetIsEnabled && this.selectedOptionIndex !== 0;
 
     /**
      * This component listens to updates to vertical results, and sets its state to it when
@@ -32,7 +34,7 @@ export default class SortOptionsComponent extends Component {
      */
     this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, verticalResults => {
       if (verticalResults.searchState === SearchStates.SEARCH_COMPLETE) {
-        this.setState(verticalResults);
+        //this.setState(verticalResults);
       }
     });
   }
@@ -86,7 +88,7 @@ export default class SortOptionsComponent extends Component {
     }
 
     // Register apply button
-    if (!this._config.searchOnChange) {
+    if (!this.searchOnChangeIsEnabled) {
       const applyEl = DOM.query(this._container, '.yxt-SortOptions-apply');
       applyEl && DOM.on(
         applyEl,
@@ -100,10 +102,12 @@ export default class SortOptionsComponent extends Component {
     this._updateSelectedOption(selectedOptionIndex);
     this._updateCheckedAttributes();
 
-    this.showReset = this._config.showReset && selectedOptionIndex !== 0;
-    this._setVisibilityOfResetButton();
+    if (this.showResetIsEnabled){
+      this.showReset = (selectedOptionIndex !== 0);
+      this._setVisibilityOfResetButton();
+    }
 
-    if (this._config.searchOnChange) {
+    if (this.searchOnChangeIsEnabled) {
       this._sortResults();
     }
   }
