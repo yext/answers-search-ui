@@ -19,7 +19,7 @@ describe('querying and responding', () => {
   const sessionTrackingEnabled = false;
   const source = 'STANDARD';
   const storage = {
-    'query-source': { value: source },
+    'query-source': source,
     'sessions-opt-in': { value: sessionTrackingEnabled }
   };
 
