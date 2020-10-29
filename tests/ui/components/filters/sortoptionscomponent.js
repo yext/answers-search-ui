@@ -91,7 +91,7 @@ describe('sort options component', () => {
   it('renders correctly for default values', () => {
     const component = COMPONENT_MANAGER.create('SortOptions', defaultConfig);
     expect(component.selectedOptionIndex).toEqual(0);
-    component.handleSearchResults(); // The component will only render if it thinks there are search results
+    component.handleSearchResults(); // The component will only render if there are search results
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(2);
     expect(wrapper.find('.yxt-SortOptions-reset').hasClass('js-hidden')).toBeTruthy();
