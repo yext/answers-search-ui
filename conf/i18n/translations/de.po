@@ -128,10 +128,10 @@ msgid "Thank you for your question!"
 msgstr "Danke für Ihre Frage!"
 
 #: src/ui/templates/results/alternativeverticals.hbs:11
-msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
-msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
-msgstr[0] "Die folgenden Kategorie liefert Suchergebnisse für <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
-msgstr[1] "Die folgenden Kategorien liefern Suchergebnisse für <span class=\"yxt-AlternativeVerticals-details--query\">[[query]]</span>:"
+msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgstr[0] "Die folgenden Kategorie liefert Suchergebnisse für <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgstr[1] "Die folgenden Kategorien liefern Suchergebnisse für <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
 
 #: src/ui/components/results/directanswercomponent.js:21
 msgid "This answered my question"
