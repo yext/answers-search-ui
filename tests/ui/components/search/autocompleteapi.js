@@ -17,6 +17,11 @@ describe('querying and responding', () => {
   const version = 20190101;
   const locale = 'fr_CA';
   const sessionTrackingEnabled = false;
+  const source = 'STANDARD';
+  const storage = {
+    'query-source': { value: source },
+    'sessions-opt-in': { value: sessionTrackingEnabled }
+  };
 
   const expectedResponse = {
     response: {
@@ -43,7 +48,7 @@ describe('querying and responding', () => {
   let autocomplete;
   const mockedGet = jest.fn(() => Promise.resolve({ json: () => Promise.resolve(expectedResponse) }));
 
-  const mockedGetState = jest.fn(() => { return { value: sessionTrackingEnabled }; });
+  const mockedGetState = jest.fn((storageKey) => (storage[storageKey] || undefined));
   GlobalStorage.mockImplementation(() => {
     return {
       getState: mockedGetState
@@ -82,6 +87,7 @@ describe('querying and responding', () => {
       v: version,
       locale: locale,
       sessionTrackingEnabled,
+      source: source,
       search_parameters: JSON.stringify(searchParameters)
     };
 
@@ -117,6 +123,7 @@ describe('querying and responding', () => {
       input,
       v: version,
       locale: locale,
+      source: source,
       sessionTrackingEnabled
     };
 
@@ -145,6 +152,7 @@ describe('querying and responding', () => {
       input,
       v: version,
       locale: locale,
+      source: source,
       sessionTrackingEnabled
     };
 
