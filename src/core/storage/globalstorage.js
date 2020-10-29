@@ -53,6 +53,10 @@ export default class GlobalStorage {
       throw new AnswersStorageError('No data provided', key, data);
     }
 
+    if (key === StorageKeys.QUERY_SOURCE) {
+      console.log('Changing query source');
+      console.log(data);
+    }
     if (this._moduleDataContainer[key] === undefined) {
       this._moduleDataContainer[key] = new ModuleData(key);
       this._applyFutureListeners(key);

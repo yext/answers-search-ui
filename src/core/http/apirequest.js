@@ -105,12 +105,16 @@ export default class ApiRequest {
    * @private
    */
   baseParams () {
+    const querySource = this._globalStorage.getState(StorageKeys.QUERY_SOURCE);
+    console.log('querySource');
+    console.log(querySource);
+
     let baseParams = {
       'v': this._version,
       'api_key': this._apiKey,
       'jsLibVersion': LIB_VERSION,
       'sessionTrackingEnabled': this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
-      'source': this._globalStorage.getState(StorageKeys.QUERY_SOURCE)
+      'source': this._globalStorage.getState(StorageKeys.QUERY_SOURCE).value
     };
     const urlParams = new SearchParams(window.location.search.substring(1));
     if (urlParams.has('beta')) {

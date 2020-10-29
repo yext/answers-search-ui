@@ -187,7 +187,7 @@ class Answers {
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
-    globalStorage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
+    globalStorage.set(StorageKeys.QUERY_SOURCE, { value: parsedConfig.querySource });
 
     // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
     // what is in parsedConfig.
