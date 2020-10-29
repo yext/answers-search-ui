@@ -47,7 +47,13 @@
 
   &-optionSelector {
     &:focus {
-      outline: .0625rem auto var(--yxt-color-brand-hover);
+      outline: .0625rem auto black;
+
+      /* IE11 specific styling */  
+      _:-ms-fullscreen, :root & { 
+        // IE11 does not support auto, so use solid here
+        outline-style: solid;
+     }
     }
   }
 
