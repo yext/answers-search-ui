@@ -91,7 +91,7 @@ describe('sort options component', () => {
   it('renders correctly for default values', () => {
     const component = COMPONENT_MANAGER.create('SortOptions', defaultConfig);
     expect(component.selectedOptionIndex).toEqual(0);
-    component.handleSearchResults();  // The component will only render if it thinks there are search results
+    component.handleSearchResults(); // The component will only render if it thinks there are search results
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(2);
     expect(wrapper.find('.yxt-SortOptions-reset').hasClass('js-hidden')).toBeTruthy();
@@ -165,10 +165,10 @@ describe('sort options component', () => {
     const wrapper = mount(component);
 
     const firstOption = wrapper.find('.yxt-SortOptions-optionSelector').first();
-    const thirdOption = wrapper.find('.yxt-SortOptions-optionSelector').at(3);
+    const fourthOption = wrapper.find('.yxt-SortOptions-optionSelector').at(3);
 
     expect(firstOption.getDOMNode().checked).toBeTruthy();
-    thirdOption.simulate('click');
+    fourthOption.simulate('click');
     expect(wrapper.find('.yxt-SortOptions-optionSelector').at(3).getDOMNode().checked).toBeTruthy();
   });
 
