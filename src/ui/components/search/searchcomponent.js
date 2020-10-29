@@ -184,6 +184,7 @@ export default class SearchComponent extends Component {
         }
         return;
       }
+      this._updateClearButtonVisibility(q);
 
       const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
       const resetPagination = this._verticalKey &&
@@ -409,7 +410,7 @@ export default class SearchComponent extends Component {
   }
 
   initClearButton () {
-    const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
+    const button = this._getClearButton();
     this._showClearButton = this._showClearButton || this.query;
     button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
 
@@ -436,13 +437,7 @@ export default class SearchComponent extends Component {
     DOM.on(this.queryEl, 'input', e => {
       const input = e.target.value;
       this.query = input;
-      if (!this._showClearButton && input.length > 0) {
-        this._showClearButton = true;
-        button.classList.remove('yxt-SearchBar--hidden');
-      } else if (this._showClearButton && input.length === 0) {
-        this._showClearButton = false;
-        button.classList.add('yxt-SearchBar--hidden');
-      }
+      this._updateClearButtonVisibility(input);
     });
   }
 
@@ -764,5 +759,31 @@ export default class SearchComponent extends Component {
 
   focusInputElement () {
     DOM.query(this._container, this._inputEl).focus();
+  }
+
+  /**
+   * Returns the clear button element, if exists
+   *
+   * @returns {Element}
+   */
+  _getClearButton () {
+    return DOM.query(this._container, '.js-yxt-SearchBar-clear');
+  }
+
+  /**
+   * Updates the Search inputs clear button based on the current input value
+   *
+   * @param {string} input
+   */
+  _updateClearButtonVisibility (input) {
+    const clearButton = this._getClearButton();
+
+    if (!this._showClearButton && input.length > 0) {
+      this._showClearButton = true;
+      clearButton.classList.remove('yxt-SearchBar--hidden');
+    } else if (this._showClearButton && input.length === 0) {
+      this._showClearButton = false;
+      clearButton.classList.add('yxt-SearchBar--hidden');
+    }
   }
 }
