@@ -99,7 +99,7 @@ export default class SortOptionsComponent extends Component {
     }
 
     // Register show reset button
-    if (this._config.showReset) {
+    if (this.showResetIsEnabled) {
       const resetEl = DOM.query(this._container, '.yxt-SortOptions-reset');
       resetEl && DOM.on(
         resetEl,
