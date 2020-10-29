@@ -26,6 +26,7 @@ export default class SortOptionsComponent extends Component {
     this.searchOnChangeIsEnabled = this._config.searchOnChange;
     this.showResetIsEnabled = this._config.showReset;
     this.showReset = this.showResetIsEnabled && this.selectedOptionIndex !== 0;
+    this.isSearchResults = false;
 
     /**
      * This component listens to updates to vertical results, and sets its state to it when
@@ -33,23 +34,47 @@ export default class SortOptionsComponent extends Component {
      * @type {string}
      */
     this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, verticalResults => {
-      if (verticalResults.searchState === SearchStates.SEARCH_COMPLETE) {
-        //this.setState(verticalResults);
+      const isSearchComplete = verticalResults.searchState === SearchStates.SEARCH_COMPLETE;
+
+      if (isSearchComplete) {
+        const isSearchResults = verticalResults.resultsContext !== ResultsContext.NO_RESULTS;
+
+        if (isSearchResults) {
+          this.handleSearchResults();
+        } else {
+          this.handleNoSearchResults();
+        }
       }
     });
   }
 
-  setState (data = {}) {
+  handleSearchResults () {
+    const isPreviousSearchResults = this.isSearchResults;
+
+    // Only set state (and therefore trigger a re-render) if previously there were no
+    // search results. This maintains focus on sort options by not re-rendering the component.
+    if (!isPreviousSearchResults) {
+      this.isSearchResults = true;
+      this.setState();
+    }
+  }
+
+  handleNoSearchResults () {
+    this.isSearchResults = false;
+    this.setState();
+  }
+
+  setState () {
     let options = this.options;
     if (this.hideExcessOptions) {
       options = this.options.slice(0, this._config.showMoreLimit);
     }
-    super.setState(Object.assign({}, data, {
+    super.setState(Object.assign({}, {
       options,
       hideExcessOptions: this.hideExcessOptions,
       name: this.name,
       showReset: this.showReset,
-      isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
+      isNoResults: !this.isSearchResults
     }));
   }
 
@@ -102,7 +127,7 @@ export default class SortOptionsComponent extends Component {
     this._updateSelectedOption(selectedOptionIndex);
     this._updateCheckedAttributes();
 
-    if (this.showResetIsEnabled){
+    if (this.showResetIsEnabled) {
       this.showReset = (selectedOptionIndex !== 0);
       this._setVisibilityOfResetButton();
     }
@@ -126,7 +151,7 @@ export default class SortOptionsComponent extends Component {
       const optionId = `#yxt-SortOptions-option_SortOptions_${optionIndex}`;
       const optionEl = DOM.query(this._container, optionId);
 
-      if(this.selectedOptionIndex === optionIndex){
+      if (this.selectedOptionIndex === optionIndex) {
         optionEl && optionEl.setAttribute('checked', '');
       } else {
         optionEl && optionEl.removeAttribute('checked', '');
