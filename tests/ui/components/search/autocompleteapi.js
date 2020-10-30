@@ -17,9 +17,6 @@ describe('querying and responding', () => {
   const version = 20190101;
   const locale = 'fr_CA';
   const sessionTrackingEnabled = false;
-  const storage = {
-    'sessions-opt-in': { value: sessionTrackingEnabled }
-  };
 
   const expectedResponse = {
     response: {
@@ -46,7 +43,7 @@ describe('querying and responding', () => {
   let autocomplete;
   const mockedGet = jest.fn(() => Promise.resolve({ json: () => Promise.resolve(expectedResponse) }));
 
-  const mockedGetState = jest.fn((storageKey) => (storage[storageKey] || undefined));
+  const mockedGetState = jest.fn(() => { return { value: sessionTrackingEnabled }; });
   GlobalStorage.mockImplementation(() => {
     return {
       getState: mockedGetState
