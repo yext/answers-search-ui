@@ -91,7 +91,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: npx testcafe chrome:headless,firefox:headless,safari tests/acceptance/acceptancesuite.js
+      - run: npx testcafe chrome:headless,firefox:headless tests/acceptance/acceptancesuite.js
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
