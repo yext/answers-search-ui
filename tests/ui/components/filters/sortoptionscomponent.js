@@ -91,7 +91,6 @@ describe('sort options component', () => {
   it('renders correctly for default values', () => {
     const component = COMPONENT_MANAGER.create('SortOptions', defaultConfig);
     expect(component.selectedOptionIndex).toEqual(0);
-    component.handleSearchResults(); // The component will only render if there are search results
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(2);
     expect(wrapper.find('.yxt-SortOptions-reset').hasClass('js-hidden')).toBeTruthy();
@@ -101,7 +100,6 @@ describe('sort options component', () => {
   it('reset button correctly resets', () => {
     const opts = { ...defaultConfig, showReset: true };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
-    component.handleSearchResults();
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-reset').hasClass('js-hidden')).toBeTruthy();
     expect(component.selectedOptionIndex).toEqual(0);
@@ -123,7 +121,6 @@ describe('sort options component', () => {
       showLessLabel: 'show less label!'
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
-    component.handleSearchResults();
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(4);
   });
@@ -138,7 +135,6 @@ describe('sort options component', () => {
       showLessLabel: 'show less label!'
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
-    component.handleSearchResults();
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-showToggle')).toHaveLength(1);
     expect(wrapper.find('.yxt-SortOptions-showToggle').text()).toContain('show more label!');
@@ -161,7 +157,6 @@ describe('sort options component', () => {
       options: threeOptions
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
-    component.handleSearchResults();
     const wrapper = mount(component);
 
     const firstOption = wrapper.find('.yxt-SortOptions-optionSelector').first();
@@ -190,7 +185,6 @@ describe('sort options component', () => {
       searchOnChange: false
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
-    component.handleSearchResults();
     const wrapper = mount(component);
     expect(component._config.searchOnChange).toBeFalsy();
     expect(wrapper.find('.yxt-SortOptions-apply')).toHaveLength(1);
@@ -203,7 +197,8 @@ describe('sort options component', () => {
       searchOnChange: false
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
-    component.handleNoSearchResults();
+    const isNoResults = true;
+    component.handleVerticalResultsUpdate(isNoResults);
     const wrapper = mount(component);
     expect(wrapper.text()).toEqual('');
   });

@@ -52,7 +52,7 @@
       /* IE11 specific styling */  
       _:-ms-fullscreen, :root & { 
         // IE11 does not support auto, so use solid here
-        outline-style: solid;
+        outline: 1px solid black;
      }
     }
   }

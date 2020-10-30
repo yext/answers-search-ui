@@ -26,7 +26,7 @@ export default class SortOptionsComponent extends Component {
     this.searchOnChangeIsEnabled = this._config.searchOnChange;
     this.showResetIsEnabled = this._config.showReset;
     this.showReset = this.showResetIsEnabled && this.selectedOptionIndex !== 0;
-    this.isSearchResults = false;
+    this.isNoResults = false;
 
     /**
      * This component should only render if there are search results, so it should listen
@@ -36,31 +36,26 @@ export default class SortOptionsComponent extends Component {
       const isSearchComplete = verticalResults.searchState === SearchStates.SEARCH_COMPLETE;
 
       if (isSearchComplete) {
-        const isSearchResults = verticalResults.resultsContext !== ResultsContext.NO_RESULTS;
-
-        if (isSearchResults) {
-          this.handleSearchResults();
-        } else {
-          this.handleNoSearchResults();
-        }
+        const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
+        this.handleVerticalResultsUpdate(isNoResults);
       }
     });
   }
 
-  handleSearchResults () {
-    const isPreviousSearchResults = this.isSearchResults;
+  handleVerticalResultsUpdate (isNoResults) {
+    const isPreviousSearchResults = !this.isNoResults;
+    this.isNoResults = isNoResults;
 
-    // Only set state (and therefore trigger a re-render) if previously there were no
-    // search results. This maintains focus on sort options by not re-rendering the component.
+    if (isNoResults) {
+      this.setState();
+      return;
+    }
+
+    // If previously there were search results, don't re-render the component. This
+    // maintains focus on sort options by not re-rendering the component.
     if (!isPreviousSearchResults) {
-      this.isSearchResults = true;
       this.setState();
     }
-  }
-
-  handleNoSearchResults () {
-    this.isSearchResults = false;
-    this.setState();
   }
 
   setState () {
@@ -73,7 +68,7 @@ export default class SortOptionsComponent extends Component {
       hideExcessOptions: this.hideExcessOptions,
       name: this.name,
       showReset: this.showReset,
-      isNoResults: !this.isSearchResults
+      isNoResults: this.isNoResults
     }));
   }
 
@@ -128,7 +123,7 @@ export default class SortOptionsComponent extends Component {
 
     if (this.showResetIsEnabled) {
       this.showReset = (selectedOptionIndex !== 0);
-      this._setVisibilityOfResetButton();
+      this._showOrHideResetButton();
     }
 
     if (this.searchOnChangeIsEnabled) {
@@ -159,9 +154,9 @@ export default class SortOptionsComponent extends Component {
   }
 
   /**
-   * Set the visibility of the reset button based on this.showReset
+   * Show or hide the reset button based on this.showReset
    */
-  _setVisibilityOfResetButton () {
+  _showOrHideResetButton () {
     const resetEl = DOM.query(this._container, '.yxt-SortOptions-reset');
 
     if (this.showReset) {

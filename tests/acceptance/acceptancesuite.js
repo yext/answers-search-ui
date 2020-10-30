@@ -224,13 +224,8 @@ test('Sort options focus state works', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
 
-  const firstOption = Selector('.yxt-SortOptions-optionSelector').nth(0);
-  const secondOption = Selector('.yxt-SortOptions-optionSelector').nth(1);
+  const firstOption = await Selector('.yxt-SortOptions-optionSelector').nth(0);
 
-  await t.click(await firstOption);
-  await t.pressKey('down');
-
-  const isSecondOptionFocused = await secondOption().focused;
-
-  await t.expect(isSecondOptionFocused).ok();
+  await t.click(firstOption);
+  await t.expect(firstOption.focused).ok();
 });
