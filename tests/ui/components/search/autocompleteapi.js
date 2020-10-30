@@ -17,9 +17,7 @@ describe('querying and responding', () => {
   const version = 20190101;
   const locale = 'fr_CA';
   const sessionTrackingEnabled = false;
-  const source = 'STANDARD';
   const storage = {
-    'query-source': source,
     'sessions-opt-in': { value: sessionTrackingEnabled }
   };
 
@@ -87,7 +85,6 @@ describe('querying and responding', () => {
       v: version,
       locale: locale,
       sessionTrackingEnabled,
-      source: source,
       search_parameters: JSON.stringify(searchParameters)
     };
 
@@ -123,7 +120,6 @@ describe('querying and responding', () => {
       input,
       v: version,
       locale: locale,
-      source: source,
       sessionTrackingEnabled
     };
 
@@ -152,7 +148,6 @@ describe('querying and responding', () => {
       input,
       v: version,
       locale: locale,
-      source: source,
       sessionTrackingEnabled
     };
 
