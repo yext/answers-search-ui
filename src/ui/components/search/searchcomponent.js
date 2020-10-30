@@ -566,7 +566,7 @@ export default class SearchComponent extends Component {
       inputEl: inputSelector,
       listLabelIdName: this.inputLabelIdName,
       ...this._autocompleteConfig,
-      onConductSearch: () => {
+      onSubmit: () => {
         if (this._useForm) {
           DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
         } else {
