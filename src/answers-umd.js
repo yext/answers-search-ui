@@ -29,7 +29,7 @@ import SearchApi from './core/search/searchapi';
 import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
-import { SANDBOX, PRODUCTION, LOCALE } from './core/constants';
+import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
 import MasterSwitchApi from './core/utils/masterswitchapi';
 import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
@@ -52,7 +52,8 @@ import TranslationProcessor from './core/i18n/translationprocessor';
  */
 
 const DEFAULTS = {
-  locale: LOCALE
+  locale: LOCALE,
+  querySource: QUERY_SOURCE
 };
 
 /**
@@ -186,6 +187,7 @@ class Answers {
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
+    globalStorage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
 
     // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
     // what is in parsedConfig.

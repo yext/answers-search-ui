@@ -153,6 +153,8 @@ function initAnswers() {
     onUniversalSearch: function() {},
     // Optional, opt-out of automatic css variable resolution on init for legacy browsers
     disableCssVariablesPonyfill: false,
+    // Optional, the analytics key describing the Answers integration type. Accepts 'STANDARD' or 'OVERLAY', defaults to 'STANDARD'
+    querySource: 'STANDARD',
   })
 }
 ```

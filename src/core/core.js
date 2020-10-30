@@ -193,7 +193,8 @@ export default class Core {
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
-        referrerPageUrl: referrerPageUrl
+        referrerPageUrl: referrerPageUrl,
+        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -296,7 +297,8 @@ export default class Core {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
-        referrerPageUrl: referrerPageUrl
+        referrerPageUrl: referrerPageUrl,
+        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
