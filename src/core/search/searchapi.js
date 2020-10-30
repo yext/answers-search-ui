@@ -66,7 +66,7 @@ export default class SearchApi {
   }
 
   /** @inheritdoc */
-  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled, sortBys, locationRadius, context, referrerPageUrl }) {
+  verticalSearch (verticalKey, { input, filter, facetFilter, limit, offset, id, geolocation, isDynamicFiltersEnabled, skipSpellCheck, queryTrigger, sessionTrackingEnabled, sortBys, locationRadius, context, referrerPageUrl, querySource }) {
     if (limit > 50) {
       throw new AnswersCoreError('Provided search limit unsupported', 'SearchApi');
     }
@@ -94,7 +94,8 @@ export default class SearchApi {
         sortBys: sortBys,
         locationRadius: locationRadius,
         context: context,
-        referrerPageUrl: referrerPageUrl
+        referrerPageUrl: referrerPageUrl,
+        source: querySource
       }
     };
     const getState = () => {
@@ -126,7 +127,8 @@ export default class SearchApi {
         skipSpellCheck: params.skipSpellCheck,
         queryTrigger: params.queryTrigger,
         context: params.context,
-        referrerPageUrl: params.referrerPageUrl
+        referrerPageUrl: params.referrerPageUrl,
+        source: params.querySource
       }
     };
     const getState = () => {
