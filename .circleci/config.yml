@@ -82,8 +82,18 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: npm run test
-  # run the testcafe acceptance tests
-  acceptance_test:
+  # run acceptance tests directly in the container
+  headless_acceptance_test:
+    docker:
+      - image: circleci/node:14.5-browsers
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: npx testcafe chrome:headless,firefox:headless tests/acceptance/acceptancesuite.js
+  # run the browserstack testcafe acceptance tests
+  browserstack_acceptance_test:
     docker:
       - image: circleci/node:14.5
     working_directory: ~/answers
@@ -91,7 +101,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: ./.circleci/run_acceptance.sh
+      - run: ./.circleci/run_browserstack_acceptance.sh
   # verify all translations are present
   translation_test:
     docker:
@@ -169,7 +179,10 @@ workflows:
       - unit_test:
           requires:
             - build
-      - acceptance_test:
+      - headless_acceptance_test:
+          requires:
+            - build
+      - browserstack_acceptance_test:
           requires:
             - build
       - translation_test:
@@ -181,7 +194,8 @@ workflows:
               only: develop
           requires:
             - unit_test
-            - acceptance_test
+            - headless_acceptance_test
+            - browserstack_acceptance_test
             - translation_test
       - deploy_branch:
           filters:
@@ -190,7 +204,8 @@ workflows:
                 - develop
           requires:
             - unit_test
-            - acceptance_test
+            - browserstack_acceptance_test
+            - headless_acceptance_test
             - translation_test
   build_and_deploy_i18n:
     jobs:
@@ -205,7 +220,10 @@ workflows:
       - unit_test:
           requires:
             - build_i18n
-      - acceptance_test:
+      - headless_acceptance_test:
+          requires:
+            - build_i18n
+      - browserstack_acceptance_test:
           requires:
             - build_i18n
       - translation_test:
@@ -214,7 +232,8 @@ workflows:
       - deploy_branch:
           requires:
             - unit_test
-            - acceptance_test
+            - browserstack_acceptance_test
+            - headless_acceptance_test
             - translation_test
   build_and_deploy_hold:
     jobs:
@@ -231,7 +250,13 @@ workflows:
               only: /^v.*/
           requires:
             - build_i18n
-      - acceptance_test:
+      - headless_acceptance_test:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - build_i18n
+      - browserstack_acceptance_test:
           filters:
             tags:
               only: /^v.*/
@@ -250,7 +275,8 @@ workflows:
               only: /^v.*/
           requires:
             - unit_test
-            - acceptance_test
+            - browserstack_acceptance_test
+            - headless_acceptance_test
             - translation_test
       - deploy_latest:
           filters:
