@@ -281,9 +281,9 @@ export default class SearchComponent extends Component {
        */
       onClearSearch: (config.customHooks && config.customHooks.onClearSearch) || function () {},
       /**
-       * Callback invoked when a search is submitted via this component
+       * Callback invoked when a search is conducted
        */
-      onSubmit: (config.customHooks && config.customHooks.onSubmit) || function () {}
+      onConductSearch: (config.customHooks && config.customHooks.onConductSearch) || function () {}
     };
 
     /**
@@ -504,8 +504,6 @@ export default class SearchComponent extends Component {
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
 
-    this.customHooks.onSubmit(query);
-
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
@@ -568,7 +566,7 @@ export default class SearchComponent extends Component {
       inputEl: inputSelector,
       listLabelIdName: this.inputLabelIdName,
       ...this._autocompleteConfig,
-      onSubmit: () => {
+      onConductSearch: () => {
         if (this._useForm) {
           DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
         } else {
@@ -602,6 +600,7 @@ export default class SearchComponent extends Component {
     this._throttled = true;
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
 
+    this.customHooks.onConductSearch(query);
     // If _promptForLocation is enabled, we will compute the query's intent and, from there,
     // determine if it's necessary to prompt the user for their location information. It will
     // be unnecessary if the query does not have near me intent or we already have their location
