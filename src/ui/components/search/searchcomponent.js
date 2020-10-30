@@ -504,8 +504,6 @@ export default class SearchComponent extends Component {
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
 
-    this.customHooks.onSubmit(query);
-
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
@@ -602,6 +600,7 @@ export default class SearchComponent extends Component {
     this._throttled = true;
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
 
+    this.customHooks.onSubmit(query);
     // If _promptForLocation is enabled, we will compute the query's intent and, from there,
     // determine if it's necessary to prompt the user for their location information. It will
     // be unnecessary if the query does not have near me intent or we already have their location
