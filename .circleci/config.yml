@@ -195,7 +195,7 @@ workflows:
           requires:
             - unit_test
             - headless_acceptance_test
-            - browerstack_translation_test
+            - browserstack_translation_test
             - translation_test
       - deploy_branch:
           filters:
@@ -204,7 +204,7 @@ workflows:
                 - develop
           requires:
             - unit_test
-            - browerstack_translation_test
+            - browserstack_translation_test
             - headless_acceptance_test
             - translation_test
   build_and_deploy_i18n:
@@ -232,7 +232,7 @@ workflows:
       - deploy_branch:
           requires:
             - unit_test
-            - browerstack_translation_test
+            - browserstack_translation_test
             - headless_acceptance_test
             - translation_test
   build_and_deploy_hold:
@@ -275,7 +275,7 @@ workflows:
               only: /^v.*/
           requires:
             - unit_test
-            - browerstack_translation_test
+            - browserstack_translation_test
             - headless_acceptance_test
             - translation_test
       - deploy_latest:
