@@ -600,7 +600,6 @@ export default class SearchComponent extends Component {
     this._throttled = true;
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
 
-    this.customHooks.onConductSearch(query);
     // If _promptForLocation is enabled, we will compute the query's intent and, from there,
     // determine if it's necessary to prompt the user for their location information. It will
     // be unnecessary if the query does not have near me intent or we already have their location
@@ -645,6 +644,8 @@ export default class SearchComponent extends Component {
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
   search (query, searchOptions) {
+    this.customHooks.onConductSearch(query);
+
     if (this._verticalKey) {
       this.core.verticalSearch(this._config.verticalKey, searchOptions, { input: query });
     } else {
