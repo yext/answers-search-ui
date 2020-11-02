@@ -42,19 +42,19 @@ export default class SortOptionsComponent extends Component {
     });
   }
 
+  /**
+   * Handle updates to vertical results and trigger a re-render if necessary
+   *
+   * @param {boolean} isNoResults
+   */
   handleVerticalResultsUpdate (isNoResults) {
-    const isPreviousSearchResults = !this.isNoResults;
+    const wasNoResults = this.isNoResults;
     this.isNoResults = isNoResults;
 
-    if (isNoResults) {
-      this.setState(); // Call setState to trigger a re-render
-      return;
-    }
-
-    // If previously there weren't any search results, but now there are, re-render by
-    // calling setState. Otherwise, don't re-render in order to maintain focus on the
-    // selected sort option.
-    if (!isPreviousSearchResults) {
+    // Call setState (and therefore trigger a re-render) if the presence of search
+    // results has changed. By not always re-rendering, we maintain focus on the selected
+    // selected sort option
+    if (isNoResults !== wasNoResults) {
       this.setState();
     }
   }
