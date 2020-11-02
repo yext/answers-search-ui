@@ -281,9 +281,9 @@ export default class SearchComponent extends Component {
        */
       onClearSearch: (config.customHooks && config.customHooks.onClearSearch) || function () {},
       /**
-       * Callback invoked when a search is submitted via this component
+       * Callback invoked when a search is conducted
        */
-      onSubmit: (config.customHooks && config.customHooks.onSubmit) || function () {}
+      onConductSearch: (config.customHooks && config.customHooks.onConductSearch) || function () {}
     };
 
     /**
@@ -504,8 +504,6 @@ export default class SearchComponent extends Component {
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
 
-    this.customHooks.onSubmit(query);
-
     const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
@@ -646,6 +644,8 @@ export default class SearchComponent extends Component {
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
   search (query, searchOptions) {
+    this.customHooks.onConductSearch(query);
+
     if (this._verticalKey) {
       this.core.verticalSearch(this._config.verticalKey, searchOptions, { input: query });
     } else {

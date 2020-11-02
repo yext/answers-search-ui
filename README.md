@@ -463,9 +463,8 @@ ANSWERS.addComponent('SearchBar', {
   customHooks: {
     // Optional, a callback invoked when the clear search button is clicked
     onClearSearch: function() {},
-    // Optional, a function invoked when a search is submitted via this component. The users search
-    // is passed in as a string
-    onSubmit: function(searchTerms) {}
+    // Optional, a function invoked when a search is conducted. The search terms are passed in as a string
+    onConductSearch: function(searchTerms) {}
   },
   // Optional, options to pass to the autocomplete component
   autocomplete: {
