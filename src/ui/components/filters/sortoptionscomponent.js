@@ -59,12 +59,12 @@ export default class SortOptionsComponent extends Component {
     }
   }
 
-  setState () {
+  setState (data = {}) {
     let options = this.options;
     if (this.hideExcessOptions) {
       options = this.options.slice(0, this._config.showMoreLimit);
     }
-    super.setState(Object.assign({}, {
+    super.setState(Object.assign({}, data, {
       options,
       hideExcessOptions: this.hideExcessOptions,
       name: this.name,
