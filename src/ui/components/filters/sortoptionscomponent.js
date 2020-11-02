@@ -47,12 +47,13 @@ export default class SortOptionsComponent extends Component {
     this.isNoResults = isNoResults;
 
     if (isNoResults) {
-      this.setState();
+      this.setState(); // Call setState to trigger a re-render
       return;
     }
 
-    // If previously there were search results, don't re-render the component. This
-    // maintains focus on sort options by not re-rendering the component.
+    // If previously there weren't any search results, but now there are, re-render by
+    // calling setState. Otherwise, don't re-render in order to maintain focus on the
+    // selected sort option.
     if (!isPreviousSearchResults) {
       this.setState();
     }
