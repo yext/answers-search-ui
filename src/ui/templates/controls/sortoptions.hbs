@@ -6,9 +6,7 @@
     </div>
   </legend>
 
-  {{#if showReset}}
-    <button class='yxt-SortOptions-reset'>{{_config.resetLabel}}</button>
-  {{/if}}
+  <button class='yxt-SortOptions-reset {{#unless showReset}}js-hidden{{/unless}}'>{{_config.resetLabel}}</button>
 
   <div class='yxt-SortOptions-container'>
     <div class='yxt-SortOptions-options'>

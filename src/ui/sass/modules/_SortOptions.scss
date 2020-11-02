@@ -45,6 +45,18 @@
     margin-left: 5px;
   }
 
+  &-optionSelector {
+    &:focus {
+      outline: .0625rem auto black;
+
+      /* IE11 specific styling */  
+      _:-ms-fullscreen, :root & { 
+        // IE11 does not support auto, so use solid here
+        outline: 1px solid black;
+     }
+    }
+  }
+
   &-reset {
     @include Text(
       $color: var(--yxt-color-brand-primary),
@@ -53,6 +65,10 @@
 
     @media (max-width: $breakpoint-mobile-max) {
       margin-top: var(--yxt-base-spacing) ;
+    }
+
+    &.js-hidden {
+      display: none;
     }
   }
 

@@ -4,7 +4,6 @@ import { mount } from 'enzyme';
 import { AnswersBasicError } from '../../../../src/core/errors/errors';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
-import ResultsContext from '../../../../src/core/storage/resultscontext';
 
 const mockedCore = () => {
   return {
@@ -94,7 +93,7 @@ describe('sort options component', () => {
     expect(component.selectedOptionIndex).toEqual(0);
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-SortOptions-option')).toHaveLength(2);
-    expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(0);
+    expect(wrapper.find('.yxt-SortOptions-reset').hasClass('js-hidden')).toBeTruthy();
     expect(wrapper.find('.yxt-SortOptions-showToggle')).toHaveLength(0);
   });
 
@@ -102,13 +101,13 @@ describe('sort options component', () => {
     const opts = { ...defaultConfig, showReset: true };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(0);
+    expect(wrapper.find('.yxt-SortOptions-reset').hasClass('js-hidden')).toBeTruthy();
     expect(component.selectedOptionIndex).toEqual(0);
     wrapper.find('.yxt-SortOptions-optionSelector').at(1).simulate('click');
-    expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(1);
+    expect(wrapper.find('.yxt-SortOptions-reset').hasClass('js-hidden')).toBeFalsy();
     expect(component.selectedOptionIndex).toEqual(1);
     wrapper.find('.yxt-SortOptions-reset').first().simulate('click');
-    expect(wrapper.find('.yxt-SortOptions-reset')).toHaveLength(0);
+    expect(wrapper.find('.yxt-SortOptions-reset').hasClass('js-hidden')).toBeTruthy();
     expect(component.selectedOptionIndex).toEqual(0);
   });
 
@@ -159,9 +158,13 @@ describe('sort options component', () => {
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
     const wrapper = mount(component);
-    expect('checked' in wrapper.find('.yxt-SortOptions-optionSelector').first().props()).toBeTruthy();
-    wrapper.find('.yxt-SortOptions-optionSelector').at(3).simulate('click');
-    expect('checked' in wrapper.find('.yxt-SortOptions-optionSelector').at(3).props()).toBeTruthy();
+
+    const firstOption = wrapper.find('.yxt-SortOptions-optionSelector').first();
+    const fourthOption = wrapper.find('.yxt-SortOptions-optionSelector').at(3);
+
+    expect(firstOption.getDOMNode().checked).toBeTruthy();
+    fourthOption.simulate('click');
+    expect(wrapper.find('.yxt-SortOptions-optionSelector').at(3).getDOMNode().checked).toBeTruthy();
   });
 
   it('no apply button when default searchOnChange value (true)', () => {
@@ -194,9 +197,8 @@ describe('sort options component', () => {
       searchOnChange: false
     };
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
-    component.setState({
-      resultsContext: ResultsContext.NO_RESULTS
-    });
+    const isNoResults = true;
+    component.handleVerticalResultsUpdate(isNoResults);
     const wrapper = mount(component);
     expect(wrapper.text()).toEqual('');
   });

@@ -214,3 +214,18 @@ test('window.performance calls are marked for a normal search', async t => {
     await t.expect(JSON.parse(marksFoundWithName.length)).gt(0);
   }
 });
+
+fixture`W3C Accessibility standards are met`
+  .before(setupServer)
+  .after(shutdownServer)
+  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+
+test('Sort options focus state works', async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
+
+  const firstOption = await Selector('.yxt-SortOptions-optionSelector').nth(0);
+
+  await t.click(firstOption);
+  await t.expect(firstOption.focused).ok();
+});
