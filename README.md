@@ -2096,6 +2096,37 @@ ANSWERS.addComponent('SearchBar', {
 })
 ```
 
+The SDK also offers an `ANSWERS.registerTemplate` function. This is to register
+a template string to any given template name in our template bundle.
+
+```js
+  /**
+   * Compile and add a template
+   * @param {string} templateName The unique name for the template
+   * @param {string} template The handlebars template string
+   */
+  registerTemplate (templateName, template)
+```
+
+If the template name does not exist, a new template name is created. If
+it does exist, it overrides the current template for the template name. This
+allows you override default template names.
+
+For example:
+```js
+  // override current SpellCheck template
+  ANSWERS.registerTemplate(
+    'search/spellcheck',
+    '<div class="Mine">Did you mean {{correctedQuery}}?</div>'
+  );
+
+  // create new Card template
+  ANSWERS.registerTemplate(
+    'cards/custom',
+    '<p>Card content</p>'
+  );
+```
+
 ## Creating Custom Components
 You can create custom Answers components with the same power of the builtin components. First, create
 a subtype of ANSWERS.Component and register it.
