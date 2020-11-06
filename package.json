@@ -7,6 +7,7 @@
     "@mapbox/mapbox-gl-language": "^0.10.1",
     "@yext/rtf-converter": "^1.2.0",
     "css-vars-ponyfill": "^2.3.1",
+    "gulp-sourcemaps": "^2.6.5",
     "handlebars": "^4.7.2",
     "js-levenshtein": "^1.1.6",
     "kind-of": "^6.0.3",
