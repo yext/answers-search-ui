@@ -1338,6 +1338,8 @@ ANSWERS.addComponent('Facets', {
       searchable: false,
       // Optional, control type, singleoption or multioption
       control: 'singleoption',
+      // Optional, override the field name for this facet
+      label: 'My custom field'
     }
   },
   // Optional, the label to show on the apply button
