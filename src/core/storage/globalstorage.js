@@ -3,6 +3,8 @@
 import ModuleData from './moduledata';
 import { AnswersStorageError } from '../errors/errors';
 import StorageKeys from './storagekeys';
+import CombinedFilterNode from '../filters/combinedfilternode';
+import SimpleFilterNode from '../filters/simplefilternode';
 
 /**
  * Storage is a container around application state.
@@ -32,10 +34,15 @@ export default class GlobalStorage {
    */
   setAll (data) {
     for (const [key, val] of Object.entries(data)) {
-      if (key === StorageKeys.QUERY) {
+      if (key === StorageKeys.QUERY || key === StorageKeys.FACET_FILTER_NODE) {
         continue;
       }
       this.set(key, val);
+    }
+
+    if (data[StorageKeys.FACET_FILTER_NODE]) {
+      this._applyPersistedFacets(data[StorageKeys.FACET_FILTER_NODE]);
+      this.set(StorageKeys.FORCE_USE_FACETS_ONCE, true);
     }
 
     // Update query last since it triggers a search
@@ -43,6 +50,21 @@ export default class GlobalStorage {
     if (data[StorageKeys.QUERY]) {
       this.set(StorageKeys.QUERY, data[StorageKeys.QUERY]);
     }
+  }
+
+  _applyPersistedFacets (persistedFacets) {
+    const rawNodes = JSON.parse(persistedFacets) || [];
+    const filterNodify = node => {
+      if (node.children && node.children.length) {
+        node.children = node.children.map(childNode => {
+          return filterNodify(childNode);
+        });
+        return new CombinedFilterNode(node);
+      }
+      return new SimpleFilterNode(node);
+    };
+    const filterNodes = rawNodes.map(filterNodify);
+    this.set(StorageKeys.FACET_FILTER_NODE, filterNodes);
   }
 
   _initDataContainer (key, data) {
