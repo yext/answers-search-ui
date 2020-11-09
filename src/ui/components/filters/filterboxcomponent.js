@@ -279,6 +279,7 @@ export default class FilterBoxComponent extends Component {
    *                                 state for the associated changes
    */
   _saveFilterNodesToStorage (replaceHistory) {
+    console.log('custom build');
     if (this.config.isDynamic) {
       const availableFieldIds = this.config.filterConfigs.map(config => config.fieldId);
       this.core.setFacetFilterNodes(availableFieldIds, this._getValidFilterNodes());
