@@ -36,5 +36,8 @@ export default {
   RESULTS_HEADER: 'results-header',
   API_CONTEXT: 'context',
   REFERRER_PAGE_URL: 'referrerPageUrl',
-  QUERY_TRIGGER: 'queryTrigger'
+  QUERY_TRIGGER: 'queryTrigger',
+  FACETS_LOADED: 'facets-loaded',
+  QUERY_SOURCE: 'query-source',
+  FORCE_USE_FACETS_ONCE: 'force-use-facets-once'
 };

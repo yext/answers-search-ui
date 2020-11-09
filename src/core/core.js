@@ -147,10 +147,14 @@ export default class Core {
       this.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     }
-
-    if (!useFacets) {
+    const forceUseFacetsOnce = this.globalStorage.getState(StorageKeys.FORCE_USE_FACETS_ONCE);
+    if (!useFacets && !forceUseFacetsOnce) {
       this.filterRegistry.setFacetFilterNodes([], []);
     }
+    if (forceUseFacetsOnce) {
+      this.globalStorage.set(StorageKeys.FORCE_USE_FACETS_ONCE, false);
+    }
+    this._updatePersistedFacets();
 
     const { setQueryParams } = options;
     const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
@@ -235,6 +239,14 @@ export default class Core {
         }
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       });
+  }
+
+  _updatePersistedFacets () {
+    const facetNodesWithoutMetadata = JSON.parse(JSON.stringify(
+      this.globalStorage.getState(StorageKeys.FACET_FILTER_NODE),
+      (key, value) => key === 'metadata' ? undefined : value
+    ));
+    this.persistentStorage.set(StorageKeys.FACET_FILTER_NODE, facetNodesWithoutMetadata);
   }
 
   clearResults () {
