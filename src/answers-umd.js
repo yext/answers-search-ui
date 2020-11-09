@@ -173,6 +173,7 @@ class Answers {
           this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
         globalStorage.setAll(data);
+        globalStorage.set(StorageKeys.POP_STATE, true);
       }
     });
     globalStorage.setAll(persistentStorage.getAll());

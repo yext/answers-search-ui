@@ -4,6 +4,7 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import ComponentTypes from '../../components/componenttypes';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -164,6 +165,12 @@ export default class FilterBoxComponent extends Component {
         });
       }
     });
+
+    if (!this._config.isDynamic) {
+      this.core.globalStorage.on('update', StorageKeys.POP_STATE, () => {
+        this.setState();
+      });
+    }
   }
 
   static get type () {
