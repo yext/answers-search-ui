@@ -664,7 +664,8 @@ export default class FilterOptionsComponent extends Component {
    * Saves selected options to persistent storage
    */
   saveSelectedToPersistentStorage () {
-    this.core.persistentStorage.set(this.name, this.config.options.filter(o => o.selected).map(o => o.label));
+    const selectedOptions = this.config.options.filter(o => o.selected).map(o => o.label);
+    this.core.persistentStorage.set(this.name, selectedOptions);
   }
 
   /**
