@@ -34,14 +34,14 @@ export default class GlobalStorage {
    */
   setAll (data) {
     for (const [key, val] of Object.entries(data)) {
-      if (key === StorageKeys.QUERY || key === StorageKeys.FACET_FILTER_NODE) {
+      if (key === StorageKeys.QUERY || key === StorageKeys.PERSISTED_FACETS) {
         continue;
       }
       this.set(key, val);
     }
 
-    if (data[StorageKeys.FACET_FILTER_NODE]) {
-      this._applyPersistedFacets(data[StorageKeys.FACET_FILTER_NODE]);
+    if (data[StorageKeys.PERSISTED_FACETS]) {
+      this._applyPersistedFacets(data[StorageKeys.PERSISTED_FACETS]);
       this.set(StorageKeys.FORCE_USE_FACETS_ONCE, true);
     }
 
