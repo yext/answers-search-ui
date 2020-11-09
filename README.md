@@ -2096,8 +2096,8 @@ ANSWERS.addComponent('SearchBar', {
 })
 ```
 
-The SDK also offers an `ANSWERS.registerTemplate` function. This is to register
-a template string to any given template name in our template bundle.
+The SDK also offers an `ANSWERS.registerTemplate` function. This will map
+a template string to an entry in the Answers handlebars renderer.
 
 ```js
   /**
@@ -2108,8 +2108,10 @@ a template string to any given template name in our template bundle.
   registerTemplate (templateName, template)
 ```
 
-If the template name does not exist, a new template name is created. If
-it does exist, it overrides the current template for the template name. This
+The default handlebars renderer uses a mapping from template name strings to
+handlebars template strings. If, while trying to register a template, the
+template name does not exist, a new template entry is created. If the name
+already exists, the current template for the template name is overriden. This
 allows you override default template names.
 
 For example:
