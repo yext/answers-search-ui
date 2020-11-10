@@ -175,16 +175,8 @@ export default class SearchComponent extends Component {
         this._defaultSearchOptions,
         { resetPagination: resetPagination }
       );
-      this.debouncedSearch(q, searchOptions);
+      this.guardedSearch(q, searchOptions);
     });
-
-    /**
-     * The minimum time allowed in milliseconds between searches to prevent
-     * many duplicate searches back-to-back
-     * @type {number}
-     * @private
-     */
-    this._searchCooldown = config.searchCooldown || 300;
 
     /**
      * When true and "near me" intent is expressed, prompt the user for their geolocation
@@ -483,7 +475,6 @@ export default class SearchComponent extends Component {
     this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.setQuery(query);
-    this.debouncedSearch(query, this._defaultSearchOptions);
     return false;
   }
 
@@ -522,23 +513,18 @@ export default class SearchComponent extends Component {
   }
 
   /**
-   * Performs a debounced query using the provided string input. Specifically, a new search is not
-   * performed if we recently searched, if there's no query for universal search, or if this
+   * A new search is not performed if there's no query for universal search, or if this
    * is a twin searchbar.
    * @param {string} query The string to query against.
    * @param {Object} searchOptions The options to pass for core search
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
-  debouncedSearch (query, searchOptions) {
-    if (this._throttled ||
-      (!query && !this._verticalKey) ||
+  guardedSearch (query, searchOptions) {
+    if ((!query && !this._verticalKey) ||
       (!query && this._verticalKey && !this._allowEmptySearch) ||
       this._isTwin) {
       return;
     }
-
-    this._throttled = true;
-    setTimeout(() => { this._throttled = false; }, this._searchCooldown);
 
     // If _promptForLocation is enabled, we will compute the query's intent and, from there,
     // determine if it's necessary to prompt the user for their location information. It will
