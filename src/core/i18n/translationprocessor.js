@@ -1,4 +1,4 @@
-import { getNPlurals, getPluralFunc, hasLang } from 'plural-forms/dist/minimal';
+import { getNPlurals, getPluralFunc, hasLang } from 'plural-forms/dist/minimal-safe';
 
 export default class TranslationProcessor {
   /**
