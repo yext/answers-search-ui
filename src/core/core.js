@@ -249,7 +249,7 @@ export default class Core {
       this.globalStorage.getState(StorageKeys.FACET_FILTER_NODE),
       (key, value) => key === 'metadata' ? undefined : value
     ));
-    this.persistentStorage.set(StorageKeys.PERSISTED_FACETS, facetNodesWithoutMetadata);
+    this.persistentStorage.set(StorageKeys.PERSISTED_FACETS, facetNodesWithoutMetadata, true);
   }
 
   clearResults () {
