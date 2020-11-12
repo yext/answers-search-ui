@@ -3,4 +3,4 @@
 # with the short README we have for NPM.
 
 mv ./README.md ./README.tmp
-cp ./ci/npm/README.md ./README.md
+cp ./conf/npm/README.md ./README.md
