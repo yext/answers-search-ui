@@ -1,8 +1,16 @@
 {
   "name": "answers",
-  "version": "1.0.0",
+  "version": "1.6.2",
   "description": "Javascript Answers Programming Interface",
-  "main": "gulpfile.js",
+  "main": "dist/answers-umd.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yext/answers.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yext/answers/issues"
+  },
+  "homepage": "https://github.com/yext/answers#readme",
   "dependencies": {
     "@mapbox/mapbox-gl-language": "^0.10.1",
     "@yext/rtf-converter": "^1.2.0",
@@ -127,5 +135,5 @@
     }
   },
   "author": "Billy",
-  "license": "ISC"
+  "license": "BSD-3-Clause"
 }
