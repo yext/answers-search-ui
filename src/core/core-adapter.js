@@ -1,4 +1,5 @@
 /** @module Core */
+import provideCore from '@yext/answers-core';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -21,10 +22,11 @@ import FilterRegistry from './filters/filterregistry';
 /** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
 
 /**
- * Core is the main application container for all of the network and storage
- * related behaviors of the application.
+ * CoreAdapter is the main application container for all of the network and storage
+ * related behaviors of the application. It uses an instance of the external Core
+ * library to perform the actual network calls.
  */
-export default class Core {
+export default class CoreAdapter {
   constructor (config = {}) {
     /**
      * A reference to the client API Key used for all requests
@@ -123,6 +125,24 @@ export default class Core {
      * @type {Function}
      */
     this.onVerticalSearch = config.onVerticalSearch || function () {};
+  }
+
+  /**
+   * Initializes the {@link CoreAdapter} by providing it with an instance of the Core library.
+   */
+  init () {
+    const params = { apiKey: this._apiKey, experienceKey: this._experienceKey };
+    return provideCore(params).then(coreLibrary => {
+      this._coreLibrary = coreLibrary;
+    });
+  }
+
+  /**
+   * @returns {boolean} A boolean indicating if the {@link CoreAdapter} has been
+   *                    initailized.
+   */
+  isInitialized () {
+    return !!this._coreLibrary;
   }
 
   /**
