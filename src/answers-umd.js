@@ -1,6 +1,6 @@
 /** @module */
 
-import Core from './core/core';
+import CoreAdapter from './core/core-adapter';
 import cssVars from 'css-vars-ponyfill';
 
 import {
@@ -106,7 +106,7 @@ class Answers {
      * A local reference to the core api
      * @type {Core}
      */
-    this.core = null;
+    this.coreAdapter = null;
 
     /**
      * A callback function to invoke once the library is ready.
@@ -172,13 +172,13 @@ class Answers {
       updateListener: parsedConfig.onStateChange,
       resetListener: data => {
         if (!data[StorageKeys.QUERY]) {
-          this.core.clearResults();
+          this.coreAdapter.clearResults();
         } else {
-          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+          this.coreAdapter.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
 
         if (!data[StorageKeys.SEARCH_OFFSET]) {
-          this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+          this.coreAdapter.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
         globalStorage.setAll(data);
       }
@@ -252,7 +252,7 @@ class Answers {
       initScrollListener(this._analyticsReporterService);
     }
 
-    this.core = new Core({
+    this.coreAdapter = new CoreAdapter({
       apiKey: parsedConfig.apiKey,
       globalStorage: globalStorage,
       persistentStorage: persistentStorage,
@@ -273,7 +273,7 @@ class Answers {
     }
 
     this.components
-      .setCore(this.core)
+      .setCore(this.coreAdapter)
       .setRenderer(this.renderer);
 
     this._setDefaultInitialSearch(parsedConfig.search);
@@ -282,8 +282,9 @@ class Answers {
 
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
     return asyncDeps.finally(() => {
-      if (this._disabledByMasterSwitch) {
-        throw new Error('MasterSwitchApi determined the front-end should be disabled');
+      if (!this.coreAdapter.isInitialized()) {
+        throw new Error(
+          'Failed to initialize Core, likely because the experience\'s front-end has been disabled.');
       }
       this._onReady();
     });
@@ -292,8 +293,8 @@ class Answers {
   _loadAsyncDependencies (parsedConfig) {
     const loadTemplates = this._loadTemplates(parsedConfig);
     const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
-    const masterSwitch = this._checkMasterSwitch();
-    return Promise.all([loadTemplates, ponyfillCssVariables, masterSwitch]);
+    const initializeCoreAdapter = this.coreAdapter.init();
+    return Promise.all([loadTemplates, ponyfillCssVariables, initializeCoreAdapter]);
   }
 
   _loadTemplates ({ useTemplates, templateBundle }) {
@@ -310,19 +311,6 @@ class Answers {
       });
       return this.templates.fetchTemplates();
     }
-  }
-
-  _checkMasterSwitch () {
-    window.performance.mark('yext.answers.statusStart');
-    const handleFulfilledMasterSwitch = (isDisabled) => {
-      this._disabledByMasterSwitch = isDisabled;
-    };
-    const handleRejectedMasterSwitch = () => {
-      this._disabledByMasterSwitch = false;
-    };
-    return this._masterSwitchApi.isDisabled()
-      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch)
-      .finally(() => window.performance.mark('yext.answers.statusEnd'));
   }
 
   domReady (cb) {
@@ -423,8 +411,8 @@ class Answers {
    * @param {string} query
    */
   search (query) {
-    this.core.setQuery(query, { setQueryParams: true });
-    this.core.persistentStorage.set(StorageKeys.QUERY, query);
+    this.coreAdapter.setQuery(query, { setQueryParams: true });
+    this.coreAdapter.persistentStorage.set(StorageKeys.QUERY, query);
   }
 
   registerHelper (name, cb) {
@@ -456,7 +444,7 @@ class Answers {
    * @param {boolean} optIn
    */
   setSessionsOptIn (optIn) {
-    this.core.globalStorage.set(
+    this.coreAdapter.globalStorage.set(
       StorageKeys.SESSIONS_OPT_IN, { value: optIn, setDynamically: true });
   }
 
@@ -471,12 +459,12 @@ class Answers {
     if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
       return;
     }
-    const prepopulatedQuery = this.core.globalStorage.getState(StorageKeys.QUERY);
+    const prepopulatedQuery = this.coreAdapter.globalStorage.getState(StorageKeys.QUERY);
     if (prepopulatedQuery != null) {
       return;
     }
-    this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-    this.core.setQuery(searchConfig.defaultInitialSearch);
+    this.coreAdapter.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+    this.coreAdapter.setQuery(searchConfig.defaultInitialSearch);
   }
 
   /**
@@ -486,7 +474,7 @@ class Answers {
    * @param {number} long
    */
   setGeolocation (lat, lng) {
-    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+    this.coreAdapter.globalStorage.set(StorageKeys.GEOLOCATION, {
       lat, lng, radius: 0
     });
   }
@@ -554,7 +542,7 @@ class Answers {
       return;
     }
 
-    this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
+    this.coreAdapter.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
   }
 
   /**
@@ -580,7 +568,7 @@ class Answers {
    * @returns {string}
    */
   _getInitLocale () {
-    return this.core.globalStorage.getState(StorageKeys.LOCALE);
+    return this.coreAdapter.globalStorage.getState(StorageKeys.LOCALE);
   }
 }
 
