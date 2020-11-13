@@ -130,18 +130,18 @@ export default class CoreAdapter {
   /**
    * Initializes the {@link CoreAdapter} by providing it with an instance of the Core library.
    */
-  init() {
+  init () {
     const params = { apiKey: this._apiKey, experienceKey: this._experienceKey };
     return provideCore(params).then(coreLibrary => {
       this._coreLibrary = coreLibrary;
-    })
+    });
   }
 
   /**
    * @returns {boolean} A boolean indicating if the {@link CoreAdapter} has been
    *                    initailized.
    */
-  isInitialized() {
+  isInitialized () {
     return !!this._coreLibrary;
   }
 
