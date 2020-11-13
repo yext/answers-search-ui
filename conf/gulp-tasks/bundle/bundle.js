@@ -31,11 +31,11 @@ exports.modernBundle = function (callback, outputConfig, bundleName, locale, lib
     plugins: [
       resolve(),
       commonjs({
-        include: [/^(\.\/)?node_modules\/.*$/, /answers-core/]
+        include: [/node_modules/, /answers-core/]
       }),
       babel({
         babelrc: false,
-        exclude: [/^(\.\/)?node_modules\/.*$/, /answers-core/],
+        exclude: [/node_modules/, /answers-core/],
         presets: ['@babel/env']
       })
     ]
@@ -63,7 +63,7 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
     plugins: [
       resolve(),
       commonjs({
-        include: [/^(\.\/)?node_modules\/.*$/, /answers-core/]
+        include: [/node_modules/, /answers-core/]
       }),
       babel({
         runtimeHelpers: true,
