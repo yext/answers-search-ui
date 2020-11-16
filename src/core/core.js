@@ -156,6 +156,9 @@ export default class Core {
     const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
 
+    const defaultQueryInput = this.globalStorage.getState(StorageKeys.QUERY) || '';
+    const parsedQuery = Object.assign({}, { input: defaultQueryInput }, query);
+
     if (setQueryParams) {
       if (context) {
         this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
@@ -181,8 +184,7 @@ export default class Core {
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
-        input: this.globalStorage.getState(StorageKeys.QUERY) || '',
-        ...query,
+        ...parsedQuery,
         filter: this.filterRegistry.getStaticFilterPayload(),
         facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
@@ -226,7 +228,7 @@ export default class Core {
 
         const exposedParams = {
           verticalKey: verticalKey,
-          queryString: query.input,
+          queryString: parsedQuery.input,
           resultsCount: this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS).resultsCount,
           resultsContext: data[StorageKeys.VERTICAL_RESULTS].resultsContext
         };
