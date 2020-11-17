@@ -39,6 +39,14 @@ export default class SVGIcon {
     return `<path d="${this.path}"></path>`;
   }
 
+  pathDefinitionOther () {
+    if (this.complexContents) {
+      return this.complexContents;
+    }
+
+    return `<path d="${this.path}"></path>`;
+  }
+
   parseContents (complexContentsParams) {
     let contents = this.contents;
     if (typeof contents === 'function') {
