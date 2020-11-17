@@ -1,0 +1,23 @@
+name: Test Coverage
+
+on: pull_request
+
+jobs:
+  build:
+    strategy:
+      matrix:
+        node-version: [14.x]
+        platform: [ubuntu-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - name: TestCoverage
+      id: testCovergae
+      uses: anuraag016/Jest-Coverage-Diff@master
+      with:
+        fullCoverageDiff: false // defaults to false, if made true whole coverage report is commented with the diff
