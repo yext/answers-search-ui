@@ -104,6 +104,10 @@
   "jest": {
     "bail": 0,
     "verbose": true,
+    "collectCoverageFrom": [
+      "src/**/*.js",
+      "!(src/ui/icons/!(index|icon).js)"
+    ],
     "setupFilesAfterEnv": [
       "./tests/setup/setup.js"
     ],
