@@ -16,6 +16,7 @@ import QueryTriggers from './models/querytriggers';
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
+import adaptUniversalResults from './adapters/adaptuniversalresults';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -131,7 +132,7 @@ export default class CoreAdapter {
    * Initializes the {@link CoreAdapter} by providing it with an instance of the Core library.
    */
   init () {
-    const params = { apiKey: this._apiKey, experienceKey: this._experienceKey };
+    const params = { apiKey: this._apiKey, experienceKey: this._experienceKey, locale: this._locale };
     return provideCore(params).then(coreLibrary => {
       this._coreLibrary = coreLibrary;
     });
@@ -312,27 +313,35 @@ export default class CoreAdapter {
     const queryTrigger = this.getQueryTriggerForSearchApi(
       this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
     );
-    return this._searcher
-      .universalSearch(queryString, {
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+    return this._coreLibrary
+      .universalSearch({
+        query: queryString,
+        coordinates: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
         referrerPageUrl: referrerPageUrl,
-        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+        //querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+      }).then(data => {
+        //console.log(data);
+        return data;
       })
-      .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
-        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
-        this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
+        this.globalStorage.set(StorageKeys.QUERY_ID, data.queryId);
+        //this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        //this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        const adaptedResults = adaptUniversalResults(data);
+        console.log('core adapted data');
+        console.log(adaptedResults);
+        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, adaptedResults);
+        //this.globalStorage.set(StorageKeys.INTENTS, data.searchIntents); # It looks like only auto complete intents are used
+        //this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck); # need to account for no data
+        this.globalStorage.set(StorageKeys.LOCATION_BIAS, data.locationBias);
+
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+        /*
 
         const exposedParams = this._getOnUniversalSearchParams(
           data[StorageKeys.UNIVERSAL_RESULTS].sections,
@@ -340,7 +349,7 @@ export default class CoreAdapter {
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
-        }
+        }*/
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       });
   }

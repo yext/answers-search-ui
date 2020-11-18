@@ -121,14 +121,14 @@ export default class LocationBiasComponent extends Component {
   }
 
   setState (data, val) {
-    this._locationDisplayName = data.locationDisplayName;
-    this._accuracy = data.accuracy;
+    this._locationDisplayName = data.displayName;
+    this._accuracy = data.method;
     return super.setState(Object.assign({}, data, {
       locationDisplayName: this._getLocationDisplayName(data),
-      accuracyText: this._getAccuracyHelpText(data.accuracy),
-      isPreciseLocation: data.accuracy === 'DEVICE' && this._allowUpdate,
-      isUnknownLocation: data.accuracy === 'UNKNOWN',
-      shouldShow: data.accuracy !== undefined,
+      accuracyText: this._getAccuracyHelpText(data.method),
+      isPreciseLocation: data.method === 'DEVICE' && this._allowUpdate,
+      isUnknownLocation: data.method === 'UNKNOWN',
+      shouldShow: data.method !== undefined,
       allowUpdate: this._allowUpdate
     }, val));
   }
@@ -139,7 +139,7 @@ export default class LocationBiasComponent extends Component {
         phrase: 'Unknown Location'
       });
     }
-    return data.locationDisplayName;
+    return data.displayName;
   }
 
   _getAccuracyHelpText (accuracy) {

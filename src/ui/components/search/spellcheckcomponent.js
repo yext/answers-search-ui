@@ -51,7 +51,7 @@ export default class SpellCheckComponent extends Component {
       return '';
     }
     let params = new SearchParams(window.location.search.substring(1));
-    params.set('query', query.value);
+    params.set('query', query);
     params.set('skipSpellCheck', true);
     params.set(StorageKeys.QUERY_TRIGGER, type.toLowerCase());
     return '?' + params.toString();
