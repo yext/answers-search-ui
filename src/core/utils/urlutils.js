@@ -20,14 +20,6 @@ export function getCachedLiveApiUrl (env = PRODUCTION) {
 }
 
 /**
- * Returns the base url for the knowledge api backend in the desired environment.
- * @param {string} env The desired environment.
- */
-export function getKnowledgeApiUrl (env = PRODUCTION) {
-  return env === SANDBOX ? 'https://api-sandbox.yext.com' : 'https://api.yext.com';
-}
-
-/**
  * Returns the base url for the analytics backend in the desired environment.
  * @param {string} env The desired environment.
  * @param {boolean} conversionTrackingEnabled If conversion tracking has been opted into.

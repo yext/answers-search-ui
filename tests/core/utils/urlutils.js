@@ -3,7 +3,6 @@ import { PRODUCTION, SANDBOX } from '../../../src/core/constants';
 import {
   getLiveApiUrl,
   getCachedLiveApiUrl,
-  getKnowledgeApiUrl,
   getAnalyticsUrl,
   replaceUrlParams,
   urlWithoutQueryParamsAndHash,
@@ -17,12 +16,10 @@ describe('getUrlFunctions work', () => {
   it('differentiates sandbox from prod', () => {
     expect(getLiveApiUrl()).not.toEqual(expect.stringContaining('sandbox'));
     expect(getCachedLiveApiUrl()).not.toEqual(expect.stringContaining('sandbox'));
-    expect(getKnowledgeApiUrl()).not.toEqual(expect.stringContaining('sandbox'));
     expect(getAnalyticsUrl()).not.toEqual(expect.stringContaining('sandbox'));
 
     expect(getLiveApiUrl(SANDBOX)).toEqual(expect.stringContaining('sandbox'));
     expect(getCachedLiveApiUrl(SANDBOX)).toEqual(expect.stringContaining('sandbox'));
-    expect(getKnowledgeApiUrl(SANDBOX)).toEqual(expect.stringContaining('sandbox'));
     expect(getAnalyticsUrl(SANDBOX)).toEqual(expect.stringContaining('sandbox'));
   });
 

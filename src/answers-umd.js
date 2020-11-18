@@ -23,8 +23,6 @@ import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
 import AutoCompleteApi from './core/search/autocompleteapi';
 import MockAutoCompleteService from './core/search/mockautocompleteservice';
-import QuestionAnswerApi from './core/search/questionanswerapi';
-import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
 import SearchApi from './core/search/searchapi';
 import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
@@ -595,9 +593,6 @@ function getServices (config, globalStorage) {
         environment: config.environment
       },
       globalStorage),
-    questionAnswerService: new QuestionAnswerApi(
-      { apiKey: config.apiKey, environment: config.environment },
-      globalStorage),
     errorReporterService: new ErrorReporter(
       {
         apiKey: config.apiKey,
@@ -618,7 +613,6 @@ function getMockServices () {
   return {
     searchService: new MockSearchService(),
     autoCompleteService: new MockAutoCompleteService(),
-    questionAnswerService: new MockQuestionAnswerService(),
     errorReporterService: new ConsoleErrorReporter()
   };
 }
