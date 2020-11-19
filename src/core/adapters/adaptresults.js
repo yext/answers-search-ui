@@ -1,6 +1,6 @@
 import Result from '../models/result';
-import ResultFactory from '../models/resultfactory';
 import adaptHighlightInfoArray from './adapthighlightinfoarray';
+import { truncate } from '../utils/strings';
 
 /**
  * Constructs an SDK Result from an answers-core Result
@@ -11,7 +11,7 @@ import adaptHighlightInfoArray from './adapthighlightinfoarray';
 export default function adaptResult(result) {
   const highlightedData = adaptHighlightInfoArray(result.highlightedValues);
   const details = highlightedData.description || result.description;
-  const truncatedDetails = ResultFactory.truncate(details);
+  const truncatedDetails = truncate(details);
 
   return new Result({
     raw: result.rawData,
