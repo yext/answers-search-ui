@@ -1,7 +1,7 @@
 import HighlightedValue from '../models/highlightedvalue';
 
 /**
- * Constructs an highlighted data object with highlighting applied from an array of
+ * Constructs a highlighted data object with highlighting applied from an array of
  * answers-core HighlightInfo models
  *
  * @param {HighlightInfo[]} highlightInfoArray from answers-core
