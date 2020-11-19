@@ -1,5 +1,10 @@
 import HighlightedValue from '../models/highlightedvalue';
 
+/**
+ * Constructs an SDK highlighted data object model from an array of answers-core HighlighedValue models
+ * 
+ * @param {HighlighedValue[]} highlightInfoArray
+ */
 export default function adaptHighlightData(highlightInfoArray){
   if (highlightInfoArray === undefined || highlightInfoArray.length === 0) {
     return {};

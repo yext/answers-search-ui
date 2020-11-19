@@ -2,6 +2,11 @@ import Result from '../models/result';
 import ResultFactory from '../models/resultfactory';
 import adaptHighlightData from './adapthighlightdata';
 
+/**
+ * Constructs an SDK Result from an answers-core Result
+ * 
+ * @param {Result} result 
+ */
 export default function adaptResult(result) {
   const highlightedData = adaptHighlightData(result.highlightedValues);
   const details = highlightedData.description || result.description;
