@@ -321,29 +321,28 @@ export default class CoreAdapter {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
-        referrerPageUrl: referrerPageUrl,
-        //querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+        referrerPageUrl: referrerPageUrl
+        // querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data.queryId);
-        //this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        //this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        // this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        // this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, adaptUniversalResults(data, urls));
-        //this.globalStorage.set(StorageKeys.INTENTS, data.searchIntents); # It looks like only auto complete intents are used
-        //this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck);
+        // this.globalStorage.set(StorageKeys.INTENTS, data.searchIntents); # It looks like only auto complete intents are used
+        // this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck);
         this.globalStorage.set(StorageKeys.LOCATION_BIAS, data.locationBias);
 
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
         /*
-
         const exposedParams = this._getOnUniversalSearchParams(
           data[StorageKeys.UNIVERSAL_RESULTS].sections,
           queryString);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
-        }*/
+        } */
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       });
   }

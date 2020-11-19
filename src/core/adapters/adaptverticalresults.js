@@ -1,15 +1,15 @@
-import Section from "../models/section"
-import adaptAppliedQueryFilter from "./adaptappliedqueryfilter";
-import adaptResult from './adaptresults'
+import Section from '../models/section';
+import adaptAppliedQueryFilter from './adaptappliedqueryfilter';
+import adaptResult from './adaptresults';
 
 /**
  * Constructs an SDK Section model from an answers-core VerticalResult array
- * 
+ *
  * @param {VerticalResults[]} verticalResults
  * @param {Object<string, string>} urls keyed by vertical key
  * @returns {@link Section}
  */
-export default function adaptVerticalResults(verticalResults, urls) {
+export default function adaptVerticalResults (verticalResults, urls) {
   return verticalResults.map(verticalResults => {
     return new Section({
       verticalConfigId: verticalResults.verticalKey,
@@ -18,5 +18,5 @@ export default function adaptVerticalResults(verticalResults, urls) {
       results: verticalResults.results.map(adaptResult),
       url: urls[verticalResults.verticalKey]
     });
-  })
+  });
 }

@@ -4,11 +4,11 @@ import { truncate } from '../utils/strings';
 
 /**
  * Constructs an SDK Result from an answers-core Result
- * 
+ *
  * @param {Result} result from answers-core
  * @returns {@link Result}
  */
-export default function adaptResult(result) {
+export default function adaptResult (result) {
   const highlightedData = adaptHighlightInfoArray(result.highlightedValues);
   const details = highlightedData.description || result.description;
   const truncatedDetails = truncate(details);
@@ -23,5 +23,5 @@ export default function adaptResult(result) {
     distance: result.distance,
     distanceFromFilter: result.distanceFromFilter,
     highlighted: highlightedData
-  })
+  });
 }

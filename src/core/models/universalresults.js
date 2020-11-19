@@ -1,6 +1,5 @@
 /** @module UniversalResults */
 
-import Section from './section';
 import SearchStates from '../storage/searchstates';
 
 export default class UniversalResults {

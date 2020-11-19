@@ -8,7 +8,7 @@ export default class Section {
     this.verticalConfigId = data.verticalConfigId || null;
     this.resultsCount = data.resultsCount || 0;
     this.encodedState = data.encodedState || '';
-    this.appliedQueryFilters = data.appliedQueryFilters
+    this.appliedQueryFilters = data.appliedQueryFilters;
     this.facets = data.facets || null;
     this.results = data.results;
     this.map = Section.parseMap(data.results);
