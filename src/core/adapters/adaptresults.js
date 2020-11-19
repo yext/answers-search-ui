@@ -1,14 +1,21 @@
 import Result from '../models/result';
+import ResultFactory from '../models/resultfactory';
+import adaptHighlightData from './adapthighlightdata';
 
 export default function adaptResult(result) {
+  const highlightedData = adaptHighlightData(result.highlightedValues);
+  const details = highlightedData.description || result.description;
+  const truncatedDetails = ResultFactory.truncate(details);
+
   return new Result({
     raw: result.rawData,
     ordinal: result.index,
-    title: result.title,
-    details: result.details,
+    title: result.name,
+    details: truncatedDetails,
     link: result.link,
     id: result.id,
     distance: result.distance,
-    distanceFromFilter: result.distanceFromFilter
+    distanceFromFilter: result.distanceFromFilter,
+    highlighted: highlightedData
   })
 }
