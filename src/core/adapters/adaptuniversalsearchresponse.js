@@ -8,7 +8,7 @@ import adaptVerticalResults from './adaptverticalresults';
  * @param {Object<string, string>} urls keyed by vertical key
  * @returns {@link UniversalResults}
  */
-export default function adaptUniversalResults (response, urls) {
+export default function adaptUniversalSearchResponse (response, urls) {
   return new UniversalResults({
     queryId: response.queryId,
     sections: adaptVerticalResults(response.verticalResults, urls)

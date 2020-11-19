@@ -16,7 +16,7 @@ import QueryTriggers from './models/querytriggers';
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
-import adaptUniversalResults from './adapters/adaptuniversalresults';
+import adaptUniversalSearchResponse from './adapters/adaptuniversalsearchresponse';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -328,7 +328,7 @@ export default class CoreAdapter {
         this.globalStorage.set(StorageKeys.QUERY_ID, data.queryId);
         // this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         // this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, adaptUniversalResults(data, urls));
+        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, adaptUniversalSearchResponse(data, urls));
         // this.globalStorage.set(StorageKeys.INTENTS, data.searchIntents);
         // this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck);
         // this.globalStorage.set(StorageKeys.LOCATION_BIAS, data.locationBias);
