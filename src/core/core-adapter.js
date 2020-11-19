@@ -331,7 +331,7 @@ export default class CoreAdapter {
         this.globalStorage.set(StorageKeys.QUERY_ID, data.queryId);
         //this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         //this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        const adaptedResults = adaptUniversalResults(data);
+        const adaptedResults = adaptUniversalResults(data, urls);
         console.log('core adapted data');
         console.log(adaptedResults);
         this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, adaptedResults);
