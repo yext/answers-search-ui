@@ -17,19 +17,6 @@ export default class UniversalResults {
   }
 
   /**
-   * Create universal results from server data
-   * @param {Object} response The server response
-   * @param {Object} urls The tab urls
-   * @param {Object.<string, function>} formatters The field formatters to use
-   */
-  static from (response, urls, formatters) {
-    return new UniversalResults({
-      queryId: response.queryId,
-      sections: Section.from(response.modules, urls, formatters)
-    });
-  }
-
-  /**
    * Construct a UnivervalResults object representing loading results
    * @return {UniversalResults}
    */
