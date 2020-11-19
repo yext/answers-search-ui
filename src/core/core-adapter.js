@@ -323,20 +323,14 @@ export default class CoreAdapter {
         context: context,
         referrerPageUrl: referrerPageUrl,
         //querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
-      }).then(data => {
-        //console.log(data);
-        return data;
       })
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data.queryId);
         //this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         //this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        const adaptedResults = adaptUniversalResults(data, urls);
-        console.log('core adapted data');
-        console.log(adaptedResults);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, adaptedResults);
+        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, adaptUniversalResults(data, urls));
         //this.globalStorage.set(StorageKeys.INTENTS, data.searchIntents); # It looks like only auto complete intents are used
-        //this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck); # need to account for no data
+        //this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck);
         this.globalStorage.set(StorageKeys.LOCATION_BIAS, data.locationBias);
 
         this.globalStorage.delete('skipSpellCheck');
