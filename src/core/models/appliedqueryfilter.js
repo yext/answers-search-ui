@@ -1,16 +1,8 @@
 export default class AppliedQueryFilter {
   constructor (appliedQueryFilter) {
-    this.key =  appliedQueryFilter.displayKey;
-    this.value = appliedQueryFilter.displayValue;
+    this.key =  appliedQueryFilter.key;
+    this.value = appliedQueryFilter.value;
     this.filter = appliedQueryFilter.filter;
     this.fieldId = appliedQueryFilter.fieldId;
-  }
-
-  static from (appliedQueryFilters) {
-    let filters = [];
-    for (let i = 0; i < appliedQueryFilters.length; i++) {
-      filters.push(new AppliedQueryFilter(appliedQueryFilters[i]));
-    }
-    return filters;
   }
 }
