@@ -1,14 +1,15 @@
 import Result from '../models/result';
 import ResultFactory from '../models/resultfactory';
-import adaptHighlightData from './adapthighlightdata';
+import adaptHighlightInfoArray from './adapthighlightinfoarray';
 
 /**
  * Constructs an SDK Result from an answers-core Result
  * 
- * @param {Result} result 
+ * @param {Result} result from answers-core
+ * @returns {@link Result}
  */
 export default function adaptResult(result) {
-  const highlightedData = adaptHighlightData(result.highlightedValues);
+  const highlightedData = adaptHighlightInfoArray(result.highlightedValues);
   const details = highlightedData.description || result.description;
   const truncatedDetails = ResultFactory.truncate(details);
 

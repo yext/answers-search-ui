@@ -1,16 +1,17 @@
-import adaptFilter from './adaptfilter';
+import adaptSimpleFilter from './adaptsimplefilter';
 import AppliedQueryFilter from '../models/appliedqueryfilter';
 
 /**
  * Constructs an SDK AppliedQueryFilter from an answers-core AppliedQueryFilter
  * 
- * @param {AppliedQueryFilter} appliedFilter
+ * @param {AppliedQueryFilter} appliedFilter from answers-core
+ * @returns {@link AppliedQueryFilter}
  */
-export default function adaptAppliedFilter(appliedFilter) {
+export default function adaptAppliedQueryFilter(appliedFilter) {
   return new AppliedQueryFilter({
     key: appliedFilter.displayKey,
     value: appliedFilter.displayValue,
-    filter: adaptFilter(appliedFilter.filter),
+    filter: adaptSimpleFilter(appliedFilter.filter),
     fieldId: appliedFilter.filter.fieldId
   })
 }

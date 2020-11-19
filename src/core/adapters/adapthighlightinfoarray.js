@@ -1,10 +1,10 @@
 import HighlightedValue from '../models/highlightedvalue';
 
 /**
- * Constructs an SDK highlighted data object model with highlighting applied from an
- * array of answers-core HighlighedValue models
+ * Constructs an highlighted data object with highlighting applied from an array of
+ * answers-core HighlightInfo models
  * 
- * @param {HighlighedValue[]} highlightInfoArray
+ * @param {HighlightInfo[]} highlightInfoArray from answers-core
  * @returns {Object<string, string|object>} The object is keyed by fieldName, and it may consist of nested fields
  * 
  * Example return object: 
@@ -16,7 +16,7 @@ import HighlightedValue from '../models/highlightedvalue';
  *   }
  * }
  */
-export default function adaptHighlightData(highlightInfoArray){
+export default function adaptHighlightInfoArray(highlightInfoArray){
   if (highlightInfoArray === undefined || highlightInfoArray.length === 0) {
     return {};
   }

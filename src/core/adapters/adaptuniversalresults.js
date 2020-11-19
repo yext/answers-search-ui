@@ -1,14 +1,16 @@
 import UniversalResults from '../models/universalresults';
-import adaptSections from './adaptsections'
+import adaptVerticalResults from './adaptverticalresults'
 
 /**
  * Constructs an SDK UniversalResults model from an answers-core UniversalSearchResponse
  * 
- * @param {UniversalSearchResponse} response
+ * @param {UniversalSearchResponse} response from answers-core
+ * @param {Object<string, string>} urls keyed by vertical key
+ * @returns {@link UniversalResults}
  */
-export default function adaptUniversalResults(response, urls, formatters) {
+export default function adaptUniversalResults(response, urls) {
   return new UniversalResults({
     queryId: response.queryId,
-    sections: adaptSections(response.verticalResults, urls, formatters)
+    sections: adaptVerticalResults(response.verticalResults, urls)
   })
 }
