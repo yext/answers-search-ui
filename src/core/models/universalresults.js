@@ -1,6 +1,7 @@
 /** @module UniversalResults */
 
 import SearchStates from '../storage/searchstates';
+import VerticalResults from './verticalresults';
 
 export default class UniversalResults {
   constructor (data) {
@@ -21,5 +22,21 @@ export default class UniversalResults {
    */
   static searchLoading () {
     return new UniversalResults({ searchState: SearchStates.SEARCH_LOADING });
+  }
+
+  /**
+   * Constructs an SDK UniversalResults model from an answers-core UniversalSearchResponse
+   *
+   * @param {UniversalSearchResponse} response from answers-core
+   * @param {Object<string, string>} urls keyed by vertical key
+   * @returns {@link UniversalResults}
+   */
+  static fromCore (response, urls) {
+    return new UniversalResults({
+      queryId: response.queryId,
+      sections: response.verticalResults.map(verticalResults => {
+        return VerticalResults.fromCore(verticalResults, urls);
+      })
+    });
   }
 }
