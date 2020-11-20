@@ -39,6 +39,24 @@ export default class Filter {
   }
 
   /**
+   * Constructs an SDK Filter model from an answers-core SimpleFilter model
+   *
+   * @param {SimpleFilter} filter from answers-core
+   * @returns {Filter}
+   */
+  static fromCoreSimpleFilter (filter) {
+    if (!filter) {
+      return this.empty();
+    }
+
+    return new Filter({
+      [filter.fieldId]: {
+        [filter.comparator]: filter.comparedValue
+      }
+    });
+  }
+
+  /**
    * Parse a JSON format filter returned from the server into a Filter
    * @param {*} responseFilter A filter in JSON format returned from the backend
    * @returns {Filter}

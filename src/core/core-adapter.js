@@ -17,9 +17,9 @@ import SpellCheck from './models/spellcheck';
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
-import adaptUniversalSearchResponse from './adapters/adaptuniversalsearchresponse';
 import adaptDirectAnswer from './adapters/adaptdirectanswer';
 import adaptLocationBias from './adapters/adaptlocationbias';
+import { AnswersEndpointError } from './errors/errors';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -106,13 +106,6 @@ export default class CoreAdapter {
     this._autoComplete = config.autoCompleteService;
 
     /**
-     * An abstraction for interacting with the Q&A rest interface
-     * @type {QuestionAnswerService}
-     * @private
-     */
-    this._questionAnswer = config.questionAnswerService;
-
-    /**
      * A local reference to the analytics reporter, used to report events for this component
      * @type {AnalyticsReporter}
      */
@@ -135,7 +128,11 @@ export default class CoreAdapter {
    * Initializes the {@link CoreAdapter} by providing it with an instance of the Core library.
    */
   init () {
-    const params = { apiKey: this._apiKey, experienceKey: this._experienceKey, locale: this._locale };
+    const params = {
+      apiKey: this._apiKey,
+      experienceKey: this._experienceKey,
+      locale: this._locale
+    };
     return provideCore(params).then(coreLibrary => {
       this._coreLibrary = coreLibrary;
     });
@@ -328,7 +325,7 @@ export default class CoreAdapter {
         // querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(data => {
-        const universalResults = adaptUniversalSearchResponse(data, urls);
+        const universalResults = UniversalResults.fromCore(data, urls);
         const navigation = Navigation.fromVerticalResults(data.verticalResults);
         const directAnswer = adaptDirectAnswer(data.directAnswer);
         const searchIntents = SearchIntents.from(data.searchIntents);
@@ -439,7 +436,6 @@ export default class CoreAdapter {
    * Submits a question to the server and updates the underlying question model
    * @param {object} question The question object to submit to the server
    * @param {number} question.entityId The entity to associate with the question (required)
-   * @param {string} question.lanuage The language of the question
    * @param {string} question.site The "publisher" of the (e.g. 'FIRST_PARTY')
    * @param {string} question.name The name of the author
    * @param {string} question.email The email address of the author
@@ -447,9 +443,18 @@ export default class CoreAdapter {
    * @param {string} question.questionDescription Additional information about the question
    */
   submitQuestion (question) {
-    return this._questionAnswer
-      .submitQuestion(question)
-      .then(data => {
+    return this._coreLibrary
+      .submitQuestion({
+        ...question,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .catch(error => {
+        throw new AnswersEndpointError(
+          'Question submit failed',
+          'QuestionAnswerApi',
+          error);
+      })
+      .then(() => {
         this.globalStorage.set(
           StorageKeys.QUESTION_SUBMISSION,
           QuestionSubmission.submitted());

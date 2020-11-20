@@ -3,6 +3,8 @@
 import { AnswersCoreError } from '../errors/errors';
 import Section from './section';
 import SearchStates from '../storage/searchstates';
+import AppliedQueryFilter from './appliedqueryfilter';
+import Result from './Result';
 
 export default class VerticalResults {
   constructor (data = {}) {
@@ -43,6 +45,27 @@ export default class VerticalResults {
     const data = Section.from(response, null, formatters);
     return new VerticalResults({ ...data,
       verticalConfigId: verticalKey
+    });
+  }
+
+  /**
+   * Constructs an SDK Section model from an answers-core VerticalResult
+   *
+   * @param {VerticalResults} verticalResults
+   * @param {Object<string, string>} urls keyed by vertical key
+   * @returns {@link Section}
+   */
+  static fromCore (verticalResults, urls) {
+    if (!verticalResults) {
+      return new Section({});
+    }
+
+    return new Section({
+      verticalConfigId: verticalResults.verticalKey,
+      resultsCount: verticalResults.resultsCount,
+      appliedQueryFilters: verticalResults.appliedQueryFilters.map(AppliedQueryFilter.fromCore),
+      results: verticalResults.results.map(Result.fromCore),
+      url: urls[verticalResults.verticalKey]
     });
   }
 
