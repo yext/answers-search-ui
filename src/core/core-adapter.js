@@ -1,5 +1,5 @@
 /** @module Core */
-import provideCore from '@yext/answers-core';
+import provideCore from '../../answers-core/dist/index.js';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -198,26 +198,30 @@ export default class CoreAdapter {
     const queryTrigger = this.getQueryTriggerForSearchApi(
       this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
     );
-    return this._searcher
-      .verticalSearch(verticalKey, {
+
+    return this._coreLibrary
+      .verticalSearch({
+        verticalKey: verticalKey,
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
-        ...parsedQuery,
-        filter: this.filterRegistry.getStaticFilterPayload(),
-        facetFilter: this.filterRegistry.getFacetFilterPayload(),
+        coordinates: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+        query: parsedQuery.input,
+        // filter: this.filterRegistry.getStaticFilterPayload(),
+        // facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
+        // sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
         referrerPageUrl: referrerPageUrl,
         querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
-      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
+      .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
+        console.log('data');
+        console.log(data);
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);

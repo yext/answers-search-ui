@@ -19,19 +19,18 @@ describe('tranform vertical search response', () => {
 
   it('transforms vertical response correctly', () => {
     const data = response;
-    const formatters = [];
-    const result = SearchDataTransformer.transformVertical(data, formatters);
-    const convertedResponse = SearchDataTransformer._parseVerticalResponse(data.response);
+    const result = SearchDataTransformer.transformVertical(data);
+    const convertedResponse = SearchDataTransformer._reshapeForNoResults(data.response);
     expect(result).toEqual(
       {
         [StorageKeys.QUERY_ID]: convertedResponse.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(convertedResponse, formatters),
-        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(convertedResponse),
-        [StorageKeys.INTENTS]: SearchIntents.from(convertedResponse.searchIntents),
+        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(convertedResponse),
+        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(convertedResponse, ResultsContext.NORMAL),
+        [StorageKeys.INTENTS]: SearchIntents.fromCore(convertedResponse.searchIntents),
         [StorageKeys.SPELL_CHECK]: SpellCheck.from(convertedResponse.spellCheck),
-        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(convertedResponse, formatters),
-        [StorageKeys.LOCATION_BIAS]: LocationBias.from(convertedResponse.locationBias)
+        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(convertedResponse),
+        [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(convertedResponse.locationBias)
       }
     );
   });
@@ -89,13 +88,13 @@ describe('forming no results response', () => {
 
   it('does not alter original response ', () => {
     const initialResponse = { ...response };
-    SearchDataTransformer._parseVerticalResponse(response);
+    SearchDataTransformer._reshapeForNoResults(response);
 
     expect(response).toEqual(initialResponse);
   });
 
   it('properly converts response with data', () => {
-    const convertedResponse = SearchDataTransformer._parseVerticalResponse(response);
+    const convertedResponse = SearchDataTransformer._reshapeForNoResults(response);
 
     expect(convertedResponse).toEqual({
       resultsCount: 2,
@@ -124,7 +123,7 @@ describe('forming no results response', () => {
       allResultsForVertical: [],
       appliedQueryFilters: []
     };
-    const convertedResponse = SearchDataTransformer._parseVerticalResponse(responseEmptyResults);
+    const convertedResponse = SearchDataTransformer._reshapeForNoResults(responseEmptyResults);
 
     expect(convertedResponse).toEqual({
       results: [],
@@ -142,7 +141,7 @@ describe('forming no results response', () => {
       resultsCount: 0,
       appliedQueryFilters: []
     };
-    const convertedResponse = SearchDataTransformer._parseVerticalResponse(responseEmptyResults);
+    const convertedResponse = SearchDataTransformer._reshapeForNoResults(responseEmptyResults);
 
     expect(convertedResponse).toEqual({
       results: [],

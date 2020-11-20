@@ -31,25 +31,6 @@ export default class LocationBias {
     this.locationDisplayName = data.locationDisplayName || null;
   }
 
-  /**
-   * Create a location bias model from the provided data
-   * @param {Object} response The location bias response
-   */
-  static from (response) {
-    if (!response) {
-      return new LocationBias({
-        accuracy: 'UNKNOWN'
-      });
-    }
-
-    return new LocationBias({
-      accuracy: response.accuracy,
-      latitude: response.latitude,
-      longitude: response.longitude,
-      locationDisplayName: response.locationDisplayName
-    });
-  }
-
   /*
   * Constructs an SDK LocationBias model from an answers-core LocationBias
   *

@@ -5,6 +5,7 @@ import Section from './section';
 import SearchStates from '../storage/searchstates';
 import AppliedQueryFilter from './appliedqueryfilter';
 import Result from './Result';
+import ResultsContext from '../storage/resultscontext';
 
 export default class VerticalResults {
   constructor (data = {}) {
@@ -36,37 +37,28 @@ export default class VerticalResults {
   }
 
   /**
-   * Create vertical results from server data
-   * @param {Object} response The server response
-   * @param {Object.<string, function>} formatters The field formatters to use
-   * @param {string} verticalKey the vertical key
-   */
-  static from (response, formatters, verticalKey) {
-    const data = Section.from(response, null, formatters);
-    return new VerticalResults({ ...data,
-      verticalConfigId: verticalKey
-    });
-  }
-
-  /**
    * Constructs an SDK Section model from an answers-core VerticalResult
    *
    * @param {VerticalResults} verticalResults
    * @param {Object<string, string>} urls keyed by vertical key
+   * @param {ResultsContext} resultsContext
    * @returns {@link Section}
    */
-  static fromCore (verticalResults, urls) {
+  static fromCore (verticalResults, urls = {}, resultsContext = ResultsContext.NORMAL) {
     if (!verticalResults) {
-      return new Section({});
+      return new Section();
     }
 
-    return new Section({
-      verticalConfigId: verticalResults.verticalKey,
-      resultsCount: verticalResults.resultsCount,
-      appliedQueryFilters: verticalResults.appliedQueryFilters.map(AppliedQueryFilter.fromCore),
-      results: verticalResults.results.map(Result.fromCore),
-      url: urls[verticalResults.verticalKey]
-    });
+    return new Section(
+      {
+        verticalConfigId: verticalResults.verticalKey,
+        resultsCount: verticalResults.resultsCount,
+        appliedQueryFilters: verticalResults.appliedQueryFilters.map(AppliedQueryFilter.fromCore),
+        results: verticalResults.results.map(Result.fromCore)
+      },
+      urls[verticalResults.verticalKey],
+      resultsContext
+    );
   }
 
   /**
