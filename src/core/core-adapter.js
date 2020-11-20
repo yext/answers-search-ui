@@ -9,16 +9,12 @@ import QuestionSubmission from './models/questionsubmission';
 import SearchIntents from './models/searchintents';
 import Navigation from './models/navigation';
 import AlternativeVerticals from './models/alternativeverticals';
-import DirectAnswer from './models/directanswer';
 import LocationBias from './models/locationbias';
 import QueryTriggers from './models/querytriggers';
-import SpellCheck from './models/spellcheck';
 
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
-import adaptDirectAnswer from './adapters/adaptdirectanswer';
-import adaptLocationBias from './adapters/adaptlocationbias';
 import { AnswersEndpointError } from './errors/errors';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
@@ -271,7 +267,7 @@ export default class CoreAdapter {
     this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
     this.globalStorage.set(StorageKeys.NAVIGATION, new Navigation());
     this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
-    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
+    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
     this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
@@ -324,29 +320,22 @@ export default class CoreAdapter {
         referrerPageUrl: referrerPageUrl
         // querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
+      .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
-        const universalResults = UniversalResults.fromCore(data, urls);
-        const navigation = Navigation.fromVerticalResults(data.verticalResults);
-        const directAnswer = adaptDirectAnswer(data.directAnswer);
-        const searchIntents = SearchIntents.from(data.searchIntents);
-        const spellCheck = SpellCheck.from(data.spellCheck);
-        const locationBias = adaptLocationBias(data.locationBias);
-
         this.globalStorage.set(StorageKeys.QUERY_ID, data.queryId);
-        this.globalStorage.set(StorageKeys.NAVIGATION, navigation);
-        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, directAnswer);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, universalResults);
-        this.globalStorage.set(StorageKeys.INTENTS, searchIntents);
-        this.globalStorage.set(StorageKeys.SPELL_CHECK, spellCheck);
-        this.globalStorage.set(StorageKeys.LOCATION_BIAS, locationBias);
+        this.globalStorage.set(StorageKeys.NAVIGATION, data.navigation);
+        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data.directAnswer);
+        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data.universalResults);
+        this.globalStorage.set(StorageKeys.INTENTS, data.searchIntents);
+        this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck);
+        this.globalStorage.set(StorageKeys.LOCATION_BIAS, data.locationBias);
 
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = this._getOnUniversalSearchParams(
-          data.verticalResults,
+          data.universalResults.sections,
           queryString);
-        console.log(exposedParams);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
@@ -359,15 +348,15 @@ export default class CoreAdapter {
    * Builds the object passed as a parameter to onUniversalSearch. This object
    * contains information about the universal search's query and result counts.
    *
-   * @param {Array<VerticalResults>} verticalResults from answers-core
+   * @param {Array<Section>} sections The sections of results.
    * @param {string} queryString The search query.
    * @return {Object<string, ?>}
    */
-  _getOnUniversalSearchParams (verticalResultsArray, queryString) {
-    const resultsCountByVertical = verticalResultsArray.reduce(
-      (resultsCountMap, verticalResults) => {
-        const { verticalKey, resultsCount, results } = verticalResults;
-        resultsCountMap[verticalKey] = {
+  _getOnUniversalSearchParams (sections, queryString) {
+    const resultsCountByVertical = sections.reduce(
+      (resultsCountMap, section) => {
+        const { verticalConfigId, resultsCount, results } = section;
+        resultsCountMap[verticalConfigId] = {
           totalResultsCount: resultsCount,
           displayedResultsCount: results.length
         };
@@ -376,7 +365,7 @@ export default class CoreAdapter {
       {});
     const exposedParams = {
       queryString,
-      sectionsCount: verticalResultsArray.length,
+      sectionsCount: sections.length,
       resultsCountByVertical
     };
 

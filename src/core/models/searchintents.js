@@ -23,4 +23,18 @@ export default class SearchIntents {
       nearMe: intents.includes('NEAR_ME')
     });
   }
+
+  /**
+   * Create SearchIntents from an answers-core SearchIntent array
+   *
+   * @param {SearchIntent[]} searchIntents from answers-core
+   * @returns {@link SearchIntents}
+   */
+  static fromCore (searchIntents) {
+    const intents = searchIntents || [];
+
+    return new SearchIntents({
+      nearMe: intents.includes('NEAR_ME')
+    });
+  }
 }

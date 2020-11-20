@@ -22,7 +22,7 @@ export default class Navigation {
    *
    * @param {VerticalResults[]} verticalResults
    */
-  static fromVerticalResults (verticalResults) {
+  static fromCore (verticalResults) {
     const verticalKeys = verticalResults.map(result => result.verticalKey);
     return new Navigation(verticalKeys);
   }
