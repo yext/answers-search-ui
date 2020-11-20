@@ -12,11 +12,14 @@ import AlternativeVerticals from './models/alternativeverticals';
 import DirectAnswer from './models/directanswer';
 import LocationBias from './models/locationbias';
 import QueryTriggers from './models/querytriggers';
+import SpellCheck from './models/spellcheck';
 
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
 import adaptUniversalSearchResponse from './adapters/adaptuniversalsearchresponse';
+import adaptDirectAnswer from './adapters/adaptdirectanswer';
+import adaptLocationBias from './adapters/adaptlocationbias';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -325,24 +328,32 @@ export default class CoreAdapter {
         // querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(data => {
+        const universalResults = adaptUniversalSearchResponse(data, urls);
+        const navigation = Navigation.fromVerticalResults(data.verticalResults);
+        const directAnswer = adaptDirectAnswer(data.directAnswer);
+        const searchIntents = SearchIntents.from(data.searchIntents);
+        const spellCheck = SpellCheck.from(data.spellCheck);
+        const locationBias = adaptLocationBias(data.locationBias);
+
         this.globalStorage.set(StorageKeys.QUERY_ID, data.queryId);
-        // this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        // this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, adaptUniversalSearchResponse(data, urls));
-        // this.globalStorage.set(StorageKeys.INTENTS, data.searchIntents);
-        // this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck);
-        // this.globalStorage.set(StorageKeys.LOCATION_BIAS, data.locationBias);
+        this.globalStorage.set(StorageKeys.NAVIGATION, navigation);
+        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, directAnswer);
+        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, universalResults);
+        this.globalStorage.set(StorageKeys.INTENTS, searchIntents);
+        this.globalStorage.set(StorageKeys.SPELL_CHECK, spellCheck);
+        this.globalStorage.set(StorageKeys.LOCATION_BIAS, locationBias);
 
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
-        /*
+
         const exposedParams = this._getOnUniversalSearchParams(
-          data[StorageKeys.UNIVERSAL_RESULTS].sections,
+          data.verticalResults,
           queryString);
+        console.log(exposedParams);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
-        } */
+        }
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       });
   }
@@ -351,15 +362,15 @@ export default class CoreAdapter {
    * Builds the object passed as a parameter to onUniversalSearch. This object
    * contains information about the universal search's query and result counts.
    *
-   * @param {Array<Section>} sections The sections of results.
+   * @param {Array<VerticalResults>} verticalResults from answers-core
    * @param {string} queryString The search query.
    * @return {Object<string, ?>}
    */
-  _getOnUniversalSearchParams (sections, queryString) {
-    const resultsCountByVertical = sections.reduce(
-      (resultsCountMap, section) => {
-        const { verticalConfigId, resultsCount, results } = section;
-        resultsCountMap[verticalConfigId] = {
+  _getOnUniversalSearchParams (verticalResultsArray, queryString) {
+    const resultsCountByVertical = verticalResultsArray.reduce(
+      (resultsCountMap, verticalResults) => {
+        const { verticalKey, resultsCount, results } = verticalResults;
+        resultsCountMap[verticalKey] = {
           totalResultsCount: resultsCount,
           displayedResultsCount: results.length
         };
@@ -368,7 +379,7 @@ export default class CoreAdapter {
       {});
     const exposedParams = {
       queryString,
-      sectionsCount: sections.length,
+      sectionsCount: verticalResultsArray.length,
       resultsCountByVertical
     };
 
