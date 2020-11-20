@@ -18,7 +18,7 @@ export default class Navigation {
   }
 
   /**
-   * Constructs a Navigation component from an answers-core VerticalResults array
+   * Constructs a Navigation model from an answers-core VerticalResults array
    *
    * @param {VerticalResults[]} verticalResults
    */
