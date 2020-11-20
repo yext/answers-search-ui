@@ -30,8 +30,8 @@ export default class HighlightedFieldMap {
    * @returns {HighlightedFieldMap}
    */
   static fromCore (highlightInfoArray) {
-    if (highlightInfoArray === undefined || highlightInfoArray.length === 0) {
-      return {};
+    if (!highlightInfoArray || !Array.isArray(highlightInfoArray)) {
+      return new HighlightedFieldMap();
     }
 
     return highlightInfoArray.reduce((highlightedFieldMappings, highlightInfo) => {

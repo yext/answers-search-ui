@@ -17,6 +17,10 @@ export default class Section {
   }
 
   static parseMap (results) {
+    if (!results) {
+      return {};
+    }
+
     let mapMarkers = [];
 
     let centerCoordinates = {};

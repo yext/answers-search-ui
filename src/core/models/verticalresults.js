@@ -56,6 +56,10 @@ export default class VerticalResults {
    * @returns {@link Section}
    */
   static fromCore (verticalResults, urls) {
+    if (!verticalResults) {
+      return new Section({});
+    }
+
     return new Section({
       verticalConfigId: verticalResults.verticalKey,
       resultsCount: verticalResults.resultsCount,

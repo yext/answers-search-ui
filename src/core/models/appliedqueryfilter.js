@@ -1,7 +1,7 @@
 import Filter from './filter';
 
 export default class AppliedQueryFilter {
-  constructor (appliedQueryFilter) {
+  constructor (appliedQueryFilter = {}) {
     this.key = appliedQueryFilter.key;
     this.value = appliedQueryFilter.value;
     this.filter = appliedQueryFilter.filter;
@@ -15,6 +15,10 @@ export default class AppliedQueryFilter {
  * @returns {@link AppliedQueryFilter}
  */
   static fromCore (appliedFilter) {
+    if (!appliedFilter) {
+      return new AppliedQueryFilter();
+    }
+
     return new AppliedQueryFilter({
       key: appliedFilter.displayKey,
       value: appliedFilter.displayValue,

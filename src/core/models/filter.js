@@ -42,9 +42,13 @@ export default class Filter {
    * Constructs an SDK Filter model from an answers-core SimpleFilter model
    *
    * @param {SimpleFilter} filter from answers-core
-   * @returns {@link Filter}
+   * @returns {Filter}
    */
   static fromCoreSimpleFilter (filter) {
+    if (!filter) {
+      return this.empty();
+    }
+
     return new Filter({
       [filter.fieldId]: {
         [filter.comparator]: filter.comparedValue

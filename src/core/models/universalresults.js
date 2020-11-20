@@ -32,6 +32,10 @@ export default class UniversalResults {
    * @returns {@link UniversalResults}
    */
   static fromCore (response, urls) {
+    if (!response) {
+      return new UniversalResults();
+    }
+
     return new UniversalResults({
       queryId: response.queryId,
       sections: response.verticalResults.map(verticalResults => {
