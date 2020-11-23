@@ -49,6 +49,7 @@ export default class SpellCheck {
 
   /**
    * Create a spell check model from the provided data
+   *
    * @param {Object} response The spell check response
    */
   static fromCore (response) {
