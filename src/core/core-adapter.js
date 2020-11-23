@@ -16,6 +16,7 @@ import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
 import { AnswersEndpointError } from './errors/errors';
+import DirectAnswer from './models/directanswer';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -267,7 +268,7 @@ export default class CoreAdapter {
     this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
     this.globalStorage.set(StorageKeys.NAVIGATION, new Navigation());
     this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
-    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
+    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
     this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
