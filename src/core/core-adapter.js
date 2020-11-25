@@ -318,8 +318,8 @@ export default class CoreAdapter {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
-        referrerPageUrl: referrerPageUrl
-        // querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+        referrerPageUrl: referrerPageUrl,
+        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
