@@ -1,6 +1,6 @@
 import AppliedQueryFilter from '../../../src/core/models/appliedqueryfilter';
 
-it('constructs an applied query filter from an answers-core model', () => {
+it('constructs an applied query filter from an answers-core applied query filter', () => {
   const coreFilter = {
     displayKey: 'key1',
     displayValue: '23',
