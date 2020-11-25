@@ -20,13 +20,13 @@ import ResultsContext from '../storage/resultscontext';
 export default class SearchDataTransformer {
   static transformUniversal (data, urls = {}, formatters) {
     return {
-      queryId: data.queryId,
-      navigation: Navigation.fromCore(data.verticalResults),
-      directAnswer: DirectAnswer.fromCore(data.directAnswer),
-      universalResults: UniversalResults.fromCore(data, urls),
-      searchIntents: SearchIntents.fromCore(data.searchIntents),
-      spellCheck: SpellCheck.fromCore(data.spellCheck),
-      locationBias: LocationBias.fromCore(data.locationBias)
+      [StorageKeys.QUERY_ID]: data.queryId,
+      [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer),
+      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.fromCore(data, urls),
+      [StorageKeys.INTENTS]: SearchIntents.fromCore(data.searchIntents),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
+      [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(data.locationBias)
     };
   }
 

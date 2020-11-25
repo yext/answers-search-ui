@@ -323,19 +323,19 @@ export default class CoreAdapter {
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data.queryId);
-        this.globalStorage.set(StorageKeys.NAVIGATION, data.navigation);
-        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data.directAnswer);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data.universalResults);
-        this.globalStorage.set(StorageKeys.INTENTS, data.searchIntents);
-        this.globalStorage.set(StorageKeys.SPELL_CHECK, data.spellCheck);
-        this.globalStorage.set(StorageKeys.LOCATION_BIAS, data.locationBias);
+        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS]);
+        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
+        this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+        this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
 
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = this._getOnUniversalSearchParams(
-          data.universalResults.sections,
+          data[StorageKeys.UNIVERSAL_RESULTS].sections,
           queryString);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
