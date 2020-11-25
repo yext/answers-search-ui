@@ -1,7 +1,6 @@
 /** @module Section */
 
 import SearchStates from '../storage/searchstates';
-import ResultFactory from './resultfactory';
 
 export default class Section {
   constructor (data, url, formatters) {
@@ -9,22 +8,25 @@ export default class Section {
     this.verticalConfigId = data.verticalConfigId || null;
     this.resultsCount = data.resultsCount || 0;
     this.encodedState = data.encodedState || '';
-    this.appliedQueryFilters = AppliedQueryFilter.from(data.appliedQueryFilters);
+    this.appliedQueryFilters = data.appliedQueryFilters;
     this.facets = data.facets || null;
-    this.results = ResultFactory.from(data.results, formatters, this.verticalConfigId, data.source);
+    this.results = data.results;
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
     this.resultsContext = data.resultsContext;
   }
 
   static parseMap (results) {
+    if (!results) {
+      return {};
+    }
+
     let mapMarkers = [];
 
     let centerCoordinates = {};
 
     for (let j = 0; j < results.length; j++) {
-      // TODO(billy) Remove legacy fallback from all data format
-      let result = results[j].data || results[j];
+      let result = results[j]._raw;
       if (result && result.yextDisplayCoordinate) {
         if (!centerCoordinates.latitude) {
           centerCoordinates = {
@@ -75,25 +77,5 @@ export default class Section {
     }
 
     return sections;
-  }
-}
-
-class AppliedQueryFilter {
-  // Support legacy model and new model until fully migrated.
-  // TODO(billy) Remove the left expression during assignment when migrated.
-  // TODO(SPR-2394): convert this into a FilterNode here instead of in VerticalResults
-  constructor (appliedQueryFilter) {
-    this.key = appliedQueryFilter.key || appliedQueryFilter.displayKey;
-    this.value = appliedQueryFilter.value || appliedQueryFilter.displayValue;
-    this.filter = appliedQueryFilter.filter;
-    this.fieldId = Object.keys(appliedQueryFilter.filter)[0];
-  }
-
-  static from (appliedQueryFilters) {
-    let filters = [];
-    for (let i = 0; i < appliedQueryFilters.length; i++) {
-      filters.push(new AppliedQueryFilter(appliedQueryFilters[i]));
-    }
-    return filters;
   }
 }
