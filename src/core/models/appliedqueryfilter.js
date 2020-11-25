@@ -9,11 +9,11 @@ export default class AppliedQueryFilter {
   }
 
   /**
- * Constructs an SDK AppliedQueryFilter from an answers-core AppliedQueryFilter
- *
- * @param {AppliedQueryFilter} appliedFilter from answers-core
- * @returns {@link AppliedQueryFilter}
- */
+   * Constructs an SDK AppliedQueryFilter from an answers-core AppliedQueryFilter
+   *
+   * @param {AppliedQueryFilter} appliedFilter from answers-core
+   * @returns {@link AppliedQueryFilter}
+   */
   static fromCore (appliedFilter) {
     if (!appliedFilter) {
       return new AppliedQueryFilter();
