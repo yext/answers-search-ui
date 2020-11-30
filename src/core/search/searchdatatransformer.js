@@ -18,16 +18,15 @@ import ResultsContext from '../storage/resultscontext';
  * component library and core storage understand.
  */
 export default class SearchDataTransformer {
-  static transform (data, urls = {}, formatters) {
-    let response = data.response;
+  static transformUniversal (data, urls = {}, formatters) {
     return {
-      [StorageKeys.QUERY_ID]: response.queryId,
-      [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
-      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.from(response.directAnswer, formatters),
-      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters),
-      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
-      [StorageKeys.LOCATION_BIAS]: LocationBias.from(response.locationBias)
+      [StorageKeys.QUERY_ID]: data.queryId,
+      [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer),
+      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.fromCore(data, urls),
+      [StorageKeys.INTENTS]: SearchIntents.fromCore(data.searchIntents),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
+      [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(data.locationBias)
     };
   }
 
