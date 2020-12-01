@@ -1,5 +1,5 @@
 {
-  "name": "answers",
+  "name": "@yext/answers",
   "version": "1.6.2",
   "description": "Javascript Answers Programming Interface",
   "main": "dist/answers-umd.js",
