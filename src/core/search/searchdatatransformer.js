@@ -68,7 +68,6 @@ export default class SearchDataTransformer {
       ...response,
       results: results || [],
       resultsCount: resultsCount || 0,
-      resultsContext: ResultsContext.NO_RESULTS,
       verticalResults: allResultsForVertical.verticalResults,
       facets: allResultsForVertical.facets
     };

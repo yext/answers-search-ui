@@ -23,8 +23,6 @@ describe('tranform vertical search response', () => {
   it('transforms vertical response correctly with results', () => {
     const data = response;
     const result = SearchDataTransformer.transformVertical(data);
-    console.log('data.alternativeVerticals');
-    console.log(data.alternativeVerticals);
     expect(result).toEqual(
       {
         [StorageKeys.QUERY_ID]: data.queryId,
@@ -130,8 +128,7 @@ describe('forming no results response', () => {
       facets: undefined,
       resultsCount: 0,
       allResultsForVertical: [],
-      appliedQueryFilters: [],
-      resultsContext: ResultsContext.NO_RESULTS
+      appliedQueryFilters: []
     });
   });
 
@@ -147,8 +144,7 @@ describe('forming no results response', () => {
       results: [],
       facets: undefined,
       resultsCount: 0,
-      appliedQueryFilters: [],
-      resultsContext: ResultsContext.NO_RESULTS
+      appliedQueryFilters: []
     });
   });
 });

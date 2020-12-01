@@ -23,7 +23,7 @@ export default class DynamicFilters {
 
   /**
    * Organize 'facets' from the answers-core into dynamic filters
-   * @param {Object[]} response dynamic filter response from the answers-core
+   * @param {Facet[]} facets from answers-core
    * @param {ResultsContext} resultsContext
    * @returns {DynamicFilters}
    */

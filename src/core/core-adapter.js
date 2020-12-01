@@ -205,6 +205,7 @@ export default class CoreAdapter {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         coordinates: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         query: parsedQuery.input,
+        // TODO (agrow) Add filter support in separate PR
         // filter: this.filterRegistry.getStaticFilterPayload(),
         // facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
@@ -220,8 +221,6 @@ export default class CoreAdapter {
       })
       .then(response => SearchDataTransformer.transformVertical(response))
       .then(data => {
-        console.log('data');
-        console.log(data);
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
