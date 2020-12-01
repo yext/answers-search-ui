@@ -42,21 +42,22 @@ export default class VerticalResults {
    * @param {VerticalResults} verticalResults
    * @param {Object<string, string>} urls keyed by vertical key
    * @param {ResultsContext} resultsContext
+   * @param {String} verticalKey
    * @returns {@link Section}
    */
-  static fromCore (verticalResults, urls = {}, resultsContext = ResultsContext.NORMAL) {
+  static fromCore (verticalResults, urls = {}, resultsContext = ResultsContext.NORMAL, verticalKey) {
     if (!verticalResults) {
       return new Section();
     }
 
     return new Section(
       {
-        verticalConfigId: verticalResults.verticalKey,
+        verticalConfigId: verticalResults.verticalKey || verticalKey,
         resultsCount: verticalResults.resultsCount,
         appliedQueryFilters: verticalResults.appliedQueryFilters.map(AppliedQueryFilter.fromCore),
         results: verticalResults.results.map(Result.fromCore)
       },
-      urls[verticalResults.verticalKey],
+      urls[verticalResults.verticalKey || verticalKey],
       resultsContext
     );
   }
