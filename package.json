@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers",
-  "version": "1.6.2",
+  "version": "1.7.0",
   "description": "Javascript Answers Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
