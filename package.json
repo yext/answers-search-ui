@@ -35,7 +35,7 @@
     "template-helpers": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/core": "^7.3.4",
+    "@babel/core": "^7.12.9",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-arrow-functions": "^7.8.3",
