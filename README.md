@@ -153,6 +153,8 @@ function initAnswers() {
     onUniversalSearch: function() {},
     // Optional, opt-out of automatic css variable resolution on init for legacy browsers
     disableCssVariablesPonyfill: false,
+    // Optional, the analytics key describing the Answers integration type. Accepts 'STANDARD' or 'OVERLAY', defaults to 'STANDARD'
+    querySource: 'STANDARD',
   })
 }
 ```
@@ -431,6 +433,8 @@ ANSWERS.addComponent('SearchBar', {
   clearButton: true,
   // Optional, redirect search query to url
   redirectUrl: 'path/to/url',
+  // Optional, target frame for the redirect url, defaults to current frame. Expects a valid target: "_blank", "_self", "_parent", "_top" or the name of a frame
+  redirectUrlTarget: '_self',
   // Optional, defaults to native form node within container
   formSelector: 'form',
   // Optional, defaults to true. When true, a form is used as the query submission context.
@@ -454,6 +458,23 @@ ANSWERS.addComponent('SearchBar', {
     enabled: false,
     // Optional, the message in the alert. Defaults to the below
     message: "We are unable to determine your location"
+  },
+  // Optional, functions invoked when certain events occur
+  customHooks: {
+    // Optional, a callback invoked when the clear search button is clicked
+    onClearSearch: function() {},
+    // Optional, a function invoked when a search is conducted. The search terms are passed in as a string
+    onConductSearch: function(searchTerms) {}
+  },
+  // Optional, options to pass to the autocomplete component
+  autocomplete: {
+    // Optional, boolean used to hide the autocomplete when the search input is empty (even if the
+    // input is focused). Defaults to false.
+    shouldHideOnEmptySearch: false,
+    // Optional, callback invoked when the autocomplete component changes from open to closed.
+    onClose: function() {},
+    // Optional, callback invoked when the autocomplete component changes from closed to open.
+    onOpen: function() {},
   }
 })
 ```
@@ -1322,6 +1343,8 @@ ANSWERS.addComponent('Facets', {
       searchable: false,
       // Optional, control type, singleoption or multioption
       control: 'singleoption',
+      // Optional, override the field name for this facet
+      label: 'My custom field'
     }
   },
   // Optional, the label to show on the apply button
@@ -2078,6 +2101,39 @@ ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
   template: customTemplate
 })
+```
+
+The SDK also offers an `ANSWERS.registerTemplate` function. This will map
+a template string to an entry in the Answers handlebars renderer.
+
+```js
+  /**
+   * Compile and add a template
+   * @param {string} templateName The unique name for the template
+   * @param {string} template The handlebars template string
+   */
+  registerTemplate (templateName, template)
+```
+
+The default handlebars renderer uses a mapping from template name strings to
+handlebars template strings. If, while trying to register a template, the
+template name does not exist, a new template entry is created. If the name
+already exists, the current template for the template name is overriden. This
+allows you override default template names.
+
+For example:
+```js
+  // override current SpellCheck template
+  ANSWERS.registerTemplate(
+    'search/spellcheck',
+    '<div class="Mine">Did you mean {{correctedQuery}}?</div>'
+  );
+
+  // create new Card template
+  ANSWERS.registerTemplate(
+    'cards/custom',
+    '<p>Card content</p>'
+  );
 ```
 
 ## Creating Custom Components

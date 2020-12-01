@@ -23,18 +23,40 @@ export default class SortOptionsComponent extends Component {
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
-    this.showReset = this._config.showReset && this.selectedOptionIndex !== 0;
+    this.searchOnChangeIsEnabled = this._config.searchOnChange;
+    this.showResetIsEnabled = this._config.showReset;
+    this.showReset = this.showResetIsEnabled && this.selectedOptionIndex !== 0;
+    this.isNoResults = false;
 
     /**
-     * This component listens to updates to vertical results, and sets its state to it when
-     * an update occurs.
-     * @type {string}
+     * This component should only render if there are search results, so it should listen
+     * to updates to vertical results and handle them accordingly.
      */
     this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, verticalResults => {
-      if (verticalResults.searchState === SearchStates.SEARCH_COMPLETE) {
-        this.setState(verticalResults);
+      const isSearchComplete = verticalResults.searchState === SearchStates.SEARCH_COMPLETE;
+
+      if (isSearchComplete) {
+        const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
+        this.handleVerticalResultsUpdate(isNoResults);
       }
     });
+  }
+
+  /**
+   * Handle updates to vertical results and trigger a re-render if necessary
+   *
+   * @param {boolean} isNoResults
+   */
+  handleVerticalResultsUpdate (isNoResults) {
+    const wasNoResults = this.isNoResults;
+    this.isNoResults = isNoResults;
+
+    // Call setState (and therefore trigger a re-render) if the presence of search
+    // results has changed. By not always re-rendering, we maintain focus on the selected
+    // selected sort option
+    if (isNoResults !== wasNoResults) {
+      this.setState();
+    }
   }
 
   setState (data = {}) {
@@ -47,7 +69,7 @@ export default class SortOptionsComponent extends Component {
       hideExcessOptions: this.hideExcessOptions,
       name: this.name,
       showReset: this.showReset,
-      isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
+      isNoResults: this.isNoResults
     }));
   }
 
@@ -73,17 +95,20 @@ export default class SortOptionsComponent extends Component {
     }
 
     // Register show reset button
-    if (this.showReset) {
+    if (this.showResetIsEnabled) {
       const resetEl = DOM.query(this._container, '.yxt-SortOptions-reset');
       resetEl && DOM.on(
         resetEl,
         'click',
-        () => this.handleOptionSelection(0)
+        () => {
+          this.handleOptionSelection(0);
+          this.setState();
+        }
       );
     }
 
     // Register apply button
-    if (!this._config.searchOnChange) {
+    if (!this.searchOnChangeIsEnabled) {
       const applyEl = DOM.query(this._container, '.yxt-SortOptions-apply');
       applyEl && DOM.on(
         applyEl,
@@ -93,9 +118,16 @@ export default class SortOptionsComponent extends Component {
     }
   }
 
-  handleOptionSelection (optionIndex) {
-    this._updateSelectedOption(optionIndex);
-    if (this._config.searchOnChange) {
+  handleOptionSelection (selectedOptionIndex) {
+    this._updateSelectedOption(selectedOptionIndex);
+    this._updateCheckedAttributes();
+
+    if (this.showResetIsEnabled) {
+      this.showReset = (selectedOptionIndex !== 0);
+      this._showOrHideResetButton();
+    }
+
+    if (this.searchOnChangeIsEnabled) {
       this._sortResults();
     }
   }
@@ -104,8 +136,35 @@ export default class SortOptionsComponent extends Component {
     this.options[this.selectedOptionIndex].isSelected = false;
     this.options[optionIndex].isSelected = true;
     this.selectedOptionIndex = optionIndex;
-    this.showReset = this._config.showReset && optionIndex !== 0;
-    this.setState();
+  }
+
+  /**
+   * Set the 'checked' attribute for the selected option and remove it for all others
+   */
+  _updateCheckedAttributes () {
+    this.options.forEach((option, optionIndex) => {
+      const optionId = `#yxt-SortOptions-option_SortOptions_${optionIndex}`;
+      const optionEl = DOM.query(this._container, optionId);
+
+      if (this.selectedOptionIndex === optionIndex) {
+        optionEl && optionEl.setAttribute('checked', '');
+      } else {
+        optionEl && optionEl.removeAttribute('checked', '');
+      }
+    });
+  }
+
+  /**
+   * Show or hide the reset button based on this.showReset
+   */
+  _showOrHideResetButton () {
+    const resetEl = DOM.query(this._container, '.yxt-SortOptions-reset');
+
+    if (this.showReset) {
+      resetEl.classList.remove('js-hidden');
+    } else if (!resetEl.classList.contains('js-hidden')) {
+      resetEl.classList.add('js-hidden');
+    }
   }
 
   _sortResults () {
@@ -122,7 +181,6 @@ export default class SortOptionsComponent extends Component {
     }
     this._search();
     this._config.onChange(option);
-    this.setState();
   }
 
   /**

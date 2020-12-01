@@ -3,6 +3,7 @@ const getBundleName = require('../utils/bundlename');
 const { src, dest } = require('gulp');
 const rename = require('gulp-rename');
 const uglify = require('gulp-uglify-es').default;
+const sourcemaps = require('gulp-sourcemaps');
 
 /**
  * A factory class that provides Gulp tasks to minify the SDK bundles.
@@ -35,10 +36,12 @@ class MinifyTaskFactory {
    */
   _minifyBundle (callback, bundleName) {
     return src(`./dist/${bundleName}.js`)
+      .pipe(sourcemaps.init())
       .pipe(rename(`${bundleName}.min.js`))
       .pipe(uglify({
         mangle: { reserved: ['ANSWERS'] }
       }))
+      .pipe(sourcemaps.write('./'))
       .pipe(dest('dist'))
       .on('end', callback);
   }

@@ -128,7 +128,7 @@ export default class LocationBiasComponent extends Component {
       accuracyText: this._getAccuracyHelpText(data.accuracy),
       isPreciseLocation: data.accuracy === 'DEVICE' && this._allowUpdate,
       isUnknownLocation: data.accuracy === 'UNKNOWN',
-      shouldShow: data.accuracy !== undefined,
+      shouldShow: data.accuracy !== undefined && data.accuracy !== null,
       allowUpdate: this._allowUpdate
     }, val));
   }

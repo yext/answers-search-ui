@@ -128,9 +128,18 @@ export default class SearchComponent extends Component {
      *
      * If no redirectUrl provided, we keep the page as a single page app.
      *
-     * @type {boolean}
+     * @type {string}
      */
     this.redirectUrl = config.redirectUrl || null;
+
+    /**
+     * redirectUrlTarget will force the search query submission to open in the frame specified if
+     * redirectUrl is also supplied.
+     * Optional, defaults to current frame.
+     *
+     * @type {string}
+     */
+    this.redirectUrlTarget = config.redirectUrlTarget || '_self';
 
     /**
      * true if there is another search bar present on the page.
@@ -175,6 +184,7 @@ export default class SearchComponent extends Component {
         }
         return;
       }
+      this._updateClearButtonVisibility(q);
 
       const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
       const resetPagination = this._verticalKey &&
@@ -264,6 +274,27 @@ export default class SearchComponent extends Component {
      * @type {string}
      */
     this.inputIdName = `yxt-SearchBar-input--${this.name}`;
+
+    this.customHooks = {
+      /**
+       * Callback invoked when the clear search button is clicked
+       */
+      onClearSearch: (config.customHooks && config.customHooks.onClearSearch) || function () {},
+      /**
+       * Callback invoked when a search is conducted
+       */
+      onConductSearch: (config.customHooks && config.customHooks.onConductSearch) || function () {}
+    };
+
+    /**
+     * Options to pass to the autocomplete component
+     * @type {Object}
+     */
+    this._autocompleteConfig = {
+      shouldHideOnEmptySearch: config.autocomplete && config.autocomplete.shouldHideOnEmptySearch,
+      onOpen: config.autocomplete && config.autocomplete.onOpen,
+      onClose: config.autocomplete && config.autocomplete.onClose
+    };
   }
 
   static get type () {
@@ -379,11 +410,12 @@ export default class SearchComponent extends Component {
   }
 
   initClearButton () {
-    const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
+    const button = this._getClearButton();
     this._showClearButton = this._showClearButton || this.query;
     button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
 
     DOM.on(button, 'click', () => {
+      this.customHooks.onClearSearch();
       this.query = '';
       this._showClearButton = false;
       button.classList.add('yxt-SearchBar--hidden');
@@ -405,13 +437,7 @@ export default class SearchComponent extends Component {
     DOM.on(this.queryEl, 'input', e => {
       const input = e.target.value;
       this.query = input;
-      if (!this._showClearButton && input.length > 0) {
-        this._showClearButton = true;
-        button.classList.remove('yxt-SearchBar--hidden');
-      } else if (this._showClearButton && input.length === 0) {
-        this._showClearButton = false;
-        button.classList.add('yxt-SearchBar--hidden');
-      }
+      this._updateClearButtonVisibility(input);
     });
   }
 
@@ -487,7 +513,8 @@ export default class SearchComponent extends Component {
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        window.location.href = this.redirectUrl + '?' + params.toString();
+        const newUrl = this.redirectUrl + '?' + params.toString();
+        window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
         return false;
       }
     }
@@ -538,6 +565,7 @@ export default class SearchComponent extends Component {
       originalQuery: this.query,
       inputEl: inputSelector,
       listLabelIdName: this.inputLabelIdName,
+      ...this._autocompleteConfig,
       onSubmit: () => {
         if (this._useForm) {
           DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
@@ -616,6 +644,8 @@ export default class SearchComponent extends Component {
    * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
    */
   search (query, searchOptions) {
+    this.customHooks.onConductSearch(query);
+
     if (this._verticalKey) {
       this.core.verticalSearch(this._config.verticalKey, searchOptions, { input: query });
     } else {
@@ -729,5 +759,31 @@ export default class SearchComponent extends Component {
 
   focusInputElement () {
     DOM.query(this._container, this._inputEl).focus();
+  }
+
+  /**
+   * Returns the clear button element, if exists
+   *
+   * @returns {Element}
+   */
+  _getClearButton () {
+    return DOM.query(this._container, '.js-yxt-SearchBar-clear');
+  }
+
+  /**
+   * Updates the Search inputs clear button based on the current input value
+   *
+   * @param {string} input
+   */
+  _updateClearButtonVisibility (input) {
+    const clearButton = this._getClearButton();
+
+    if (!this._showClearButton && input.length > 0) {
+      this._showClearButton = true;
+      clearButton.classList.remove('yxt-SearchBar--hidden');
+    } else if (this._showClearButton && input.length === 0) {
+      this._showClearButton = false;
+      clearButton.classList.add('yxt-SearchBar--hidden');
+    }
   }
 }

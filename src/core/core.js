@@ -156,6 +156,9 @@ export default class Core {
     const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
 
+    const defaultQueryInput = this.globalStorage.getState(StorageKeys.QUERY) || '';
+    const parsedQuery = Object.assign({}, { input: defaultQueryInput }, query);
+
     if (setQueryParams) {
       if (context) {
         this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
@@ -181,8 +184,7 @@ export default class Core {
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
-        input: this.globalStorage.getState(StorageKeys.QUERY) || '',
-        ...query,
+        ...parsedQuery,
         filter: this.filterRegistry.getStaticFilterPayload(),
         facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
@@ -193,7 +195,8 @@ export default class Core {
         sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
-        referrerPageUrl: referrerPageUrl
+        referrerPageUrl: referrerPageUrl,
+        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -225,7 +228,7 @@ export default class Core {
 
         const exposedParams = {
           verticalKey: verticalKey,
-          queryString: query.input,
+          queryString: parsedQuery.input,
           resultsCount: this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS).resultsCount,
           resultsContext: data[StorageKeys.VERTICAL_RESULTS].resultsContext
         };
@@ -296,7 +299,8 @@ export default class Core {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
-        referrerPageUrl: referrerPageUrl
+        referrerPageUrl: referrerPageUrl,
+        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {

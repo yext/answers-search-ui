@@ -1,0 +1,13 @@
+#: js/yext/pages/common/sitefields.js:36
+msgid "1 location selected"
+msgid_plural "[[count]] locations selected"
+msgstr[0] "Pasirinkta [[count]] tinklalapis"
+msgstr[1] "Pasirinkta [[count]] tinklalapiai"
+msgstr[2] "Pasirinkta [[count]] tinklalapių"
+
+#: js/yext/reviewsstorm/reviews.js:672
+msgid "Unable to email review"
+msgid_plural "Unable to email reviews"
+msgstr[0] "Nepavyksta nusiųsti apžvalgos el. paštu"
+msgstr[1] "Nepavyksta nusiųsti apžvalgų el. paštu"
+msgstr[2] "Nepavyksta nusiųsti apžvalgų el. paštu"
