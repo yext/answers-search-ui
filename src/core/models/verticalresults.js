@@ -4,7 +4,7 @@ import { AnswersCoreError } from '../errors/errors';
 import Section from './section';
 import SearchStates from '../storage/searchstates';
 import AppliedQueryFilter from './appliedqueryfilter';
-import Result from './Result';
+import Result from './result';
 import ResultsContext from '../storage/resultscontext';
 
 export default class VerticalResults {
