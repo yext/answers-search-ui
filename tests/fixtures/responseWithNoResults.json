@@ -1,16 +1,22 @@
 {
+  "verticalResults": {
+    "appliedQueryFilters": [],
+    "results": [],
+    "resultsCount": 0,
+    "source": "KNOWLEDGE_MANAGER"
+  },
+  "queryId": "94c572c7-8fa5-4435-a956-7c13667af173",
+  "searchIntents": [],
+  "facets": [],
+  "locationBias": {
+    "latitude": 43.6349,
+    "longitude": -116.2023,
+    "displayName": "Boise, Idaho, United States",
+    "method": "IP"
+  },
+  "allResultsForVertical": {
     "verticalResults": {
-      "appliedQueryFilters": [
-        {
-          "displayKey": "Entity Type",
-          "displayValue": "Locations",
-          "filter": {
-            "fieldId": "builtin.entityType",
-            "comparator": "$eq",
-            "comparedValue": "Locations"
-          }
-        }
-      ],
+      "appliedQueryFilters": [],
       "results": [
         {
           "rawData": {
@@ -1980,13 +1986,243 @@
       "resultsCount": 2465,
       "source": "KNOWLEDGE_MANAGER"
     },
-    "queryId": "8cfe84e6-eb15-42e0-9370-bd5ccf2ab389",
+    "queryId": "94c572c7-8fa5-4435-a956-7c13667af173",
     "searchIntents": [],
-    "facets": [],
-    "locationBias": {
-      "latitude": 43.6349,
-      "longitude": -116.2023,
-      "displayName": "Boise, Idaho, United States",
-      "method": "IP"
+    "facets": []
+  },
+  "alternativeVerticals": [
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 23,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "events"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 43,
+      "results": [],
+      "resultsCount": 7,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "faq"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 23,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "financial_professionals"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 32,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "healthcare-professionals"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 36,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "job"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 38,
+      "results": [],
+      "resultsCount": 1,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "people"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 31,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "products"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 42,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "restaurant"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 29,
+      "results": [],
+      "resultsCount": 0,
+      "source": "ALGOLIA",
+      "verticalKey": "algoliatest1"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 292,
+      "results": [
+        {
+          "rawData": {
+            "htmlTitle": "Sumdex NeoMetro Link 13\" MacBook Pro Slim Brief - FREE ...",
+            "link": "https://www.shoes.com/sumdex-neometro-link-13-macbook-pro-slim-brief/482756",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Oops! The NeoMetro Link 13\" MacBook Pro Slim Brief is currently Out of Stock. Check out these other great items! Or notify me when my size is available if you ...",
+            "index": 1
+          },
+          "index": 1,
+          "name": "Sumdex NeoMetro Link 13\" MacBook Pro Slim Brief - FREE ...",
+          "description": "Oops! The NeoMetro Link 13\" MacBook Pro Slim Brief is currently Out of Stock. Check out these other great items! Or notify me when my size is available if you ...",
+          "link": "https://www.shoes.com/sumdex-neometro-link-13-macbook-pro-slim-brief/482756"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Womens Geranium City Elegance Chain Link Earrings CEE001 ...",
+            "link": "https://www.shoes.com/geranium-city-elegance-chain-link-earrings-cee001/583310",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Oops! The City Elegance Chain Link Earrings CEE001 is currently Out of Stock. Find Similar Products, check out these other great items, or notify me when my ...",
+            "index": 2
+          },
+          "index": 2,
+          "name": "Womens Geranium City Elegance Chain Link Earrings CEE001 ...",
+          "description": "Oops! The City Elegance Chain Link Earrings CEE001 is currently Out of Stock. Find Similar Products, check out these other great items, or notify me when my ...",
+          "link": "https://www.shoes.com/geranium-city-elegance-chain-link-earrings-cee001/583310"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Womens Geranium Chain Link Necklace w/ Faceted Beads JN3150 ...",
+            "link": "https://www.shoes.com/geranium-chain-link-necklace-w-faceted-beads-jn3150/676673",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Women's Geranium Chain Link Necklace w/ Faceted Beads JN3150 with FREE Shipping & Exchanges. Add a touch of unique beauty to your look with this gold ...",
+            "index": 3
+          },
+          "index": 3,
+          "name": "Womens Geranium Chain Link Necklace w/ Faceted Beads JN3150 ...",
+          "description": "Women's Geranium Chain Link Necklace w/ Faceted Beads JN3150 with FREE Shipping & Exchanges. Add a touch of unique beauty to your look with this gold ...",
+          "link": "https://www.shoes.com/geranium-chain-link-necklace-w-faceted-beads-jn3150/676673"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Womens Geranium Chunky Gold Chain Link Bracelet JB3054 ...",
+            "link": "https://www.shoes.com/geranium-chunky-gold-chain-link-bracelet-jb3054/676674",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Women's Geranium Chunky Gold Chain Link Bracelet JB3054 with FREE Shipping & Exchanges. Add a touch of unique beauty to your look with this gold plated ...",
+            "index": 4
+          },
+          "index": 4,
+          "name": "Womens Geranium Chunky Gold Chain Link Bracelet JB3054 ...",
+          "description": "Women's Geranium Chunky Gold Chain Link Bracelet JB3054 with FREE Shipping & Exchanges. Add a touch of unique beauty to your look with this gold plated ...",
+          "link": "https://www.shoes.com/geranium-chunky-gold-chain-link-bracelet-jb3054/676674"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Savings & Updates - Shoes.com - FREE Shipping & Exchanges",
+            "link": "https://www.shoes.com/info/savings-updates",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "You can learn more about Shoes.com Rewards and sign up to join or check your account status by clicking on the links below: About the Program · Sign Up or ...",
+            "index": 5
+          },
+          "index": 5,
+          "name": "Savings & Updates - Shoes.com - FREE Shipping & Exchanges",
+          "description": "You can learn more about Shoes.com Rewards and sign up to join or check your account status by clicking on the links below: About the Program · Sign Up or ...",
+          "link": "https://www.shoes.com/info/savings-updates"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Fitting - Charts - Shoes.com - FREE Shipping & Exchanges",
+            "link": "https://www.shoes.com/info/charts",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Please choose a printable fitting chart by clicking one of the links below. In order to get an accurate printout, your printer's Fit to Page option should be ...",
+            "index": 6
+          },
+          "index": 6,
+          "name": "Fitting - Charts - Shoes.com - FREE Shipping & Exchanges",
+          "description": "Please choose a printable fitting chart by clicking one of the links below. In order to get an accurate printout, your printer's Fit to Page option should be ...",
+          "link": "https://www.shoes.com/info/charts"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Chain Strap Womens Knee High Boots - FREE Shipping ...",
+            "link": "https://www.shoes.com/chain-strap-womens-knee-high-boots.htm?displayEFG=True",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Ann Creek Tunita Rhinestone Glittering Chain Link Boot (Women's). New! Sale ... Ann Creek Libolo Croc Accent Chain-Link Trim Boot (Women's). New! Sale.",
+            "index": 7
+          },
+          "index": 7,
+          "name": "Chain Strap Womens Knee High Boots - FREE Shipping ...",
+          "description": "Ann Creek Tunita Rhinestone Glittering Chain Link Boot (Women's). New! Sale ... Ann Creek Libolo Croc Accent Chain-Link Trim Boot (Women's). New! Sale.",
+          "link": "https://www.shoes.com/chain-strap-womens-knee-high-boots.htm?displayEFG=True"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Chain Strap Womens Boots - FREE Shipping & Exchanges | Shoes ...",
+            "link": "https://www.shoes.com/chain-strap-womens-boots.htm",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Items 1 - 9 of 9 ... Ann Creek Yucas Rhinestone Glittering Chain Link Boot (Women's). New! Sale ... Ann Creek Libolo Croc Accent Chain-Link Trim Boot (Women's).",
+            "index": 8
+          },
+          "index": 8,
+          "name": "Chain Strap Womens Boots - FREE Shipping & Exchanges | Shoes ...",
+          "description": "Items 1 - 9 of 9 ... Ann Creek Yucas Rhinestone Glittering Chain Link Boot (Women's). New! Sale ... Ann Creek Libolo Croc Accent Chain-Link Trim Boot (Women's).",
+          "link": "https://www.shoes.com/chain-strap-womens-boots.htm"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Rubber Sole Chain Strap Womens Knee High Boots - FREE ...",
+            "link": "https://www.shoes.com/rubber-sole-chain-strap-womens-knee-high-boots.htm",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Ann Creek Yucas Rhinestone Glittering Chain Link Boot (Women's). New! Sale ... Ann Creek Libolo Croc Accent Chain-Link Trim Boot (Women's). New! Sale.",
+            "index": 9
+          },
+          "index": 9,
+          "name": "Rubber Sole Chain Strap Womens Knee High Boots - FREE ...",
+          "description": "Ann Creek Yucas Rhinestone Glittering Chain Link Boot (Women's). New! Sale ... Ann Creek Libolo Croc Accent Chain-Link Trim Boot (Women's). New! Sale.",
+          "link": "https://www.shoes.com/rubber-sole-chain-strap-womens-knee-high-boots.htm"
+        },
+        {
+          "rawData": {
+            "htmlTitle": "Payment Options",
+            "link": "https://www.shoes.com/sb/customer/payment.jsp",
+            "displayLink": "www.shoes.com",
+            "htmlSnippet": "Click one of the links below to learn more about how to pay for, change, or cancel your orders. NOTE: Over the phone orders are only available for Credit Cards.",
+            "index": 10
+          },
+          "index": 10,
+          "name": "Payment Options",
+          "description": "Click one of the links below to learn more about how to pay for, change, or cancel your orders. NOTE: Over the phone orders are only available for Credit Cards.",
+          "link": "https://www.shoes.com/sb/customer/payment.jsp"
+        }
+      ],
+      "resultsCount": 2310,
+      "source": "GOOGLE_CSE",
+      "verticalKey": "links"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 278,
+      "results": [
+        {
+          "rawData": {
+            "htmlTitle": "The Goods & Services Tax Act",
+            "link": "https://services.gst.gov.in/services/gstlaw/gstlawlist",
+            "displayLink": "services.gst.gov.in",
+            "htmlSnippet": "",
+            "index": 1
+          },
+          "index": 1,
+          "name": "The Goods & Services Tax Act",
+          "description": "",
+          "link": "https://services.gst.gov.in/services/gstlaw/gstlawlist"
+        }
+      ],
+      "resultsCount": 1,
+      "source": "GOOGLE_CSE",
+      "verticalKey": "links2"
     }
-  }
+  ]
+}

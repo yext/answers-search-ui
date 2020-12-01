@@ -40,8 +40,6 @@ export default class SearchDataTransformer {
     if (!hasResults) {
       resultsContext = ResultsContext.NO_RESULTS;
       response = SearchDataTransformer._reshapeForNoResults(coreResponse);
-      console.log('reshaped response:');
-      console.log(response);
     }
 
     return {

@@ -6,30 +6,53 @@ import SpellCheck from '../../../src/core/models/spellcheck';
 import DynamicFilters from '../../../src/core/models/dynamicfilters';
 import SearchIntents from '../../../src/core/models/searchintents';
 import LocationBias from '../../../src/core/models/locationbias';
-import Response from '../../fixtures/responseWithResults.json';
+import ResponseWithResults from '../../fixtures/responseWithResults.json';
+import ResponseWithoutResults from '../../fixtures/responseWithNoResults.json';
 import ResultsContext from '../../../src/core/storage/resultscontext';
 import AlternativeVerticals from '../../../src/core/models/alternativeverticals';
 
 describe('tranform vertical search response', () => {
   let response;
+  let responseWithNoResults;
 
   beforeEach(() => {
-    response = Response;
+    response = ResponseWithResults;
+    responseWithNoResults = ResponseWithoutResults;
   });
 
-  it('transforms vertical response correctly', () => {
+  it('transforms vertical response correctly with results', () => {
     const data = response;
     const result = SearchDataTransformer.transformVertical(data);
-    const convertedResponse = SearchDataTransformer._reshapeForNoResults(data.response);
+    console.log('data.alternativeVerticals');
+    console.log(data.alternativeVerticals);
+    expect(result).toEqual(
+      {
+        [StorageKeys.QUERY_ID]: data.queryId,
+        [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
+        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(data.verticalResults, {}, ResultsContext.NORMAL),
+        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(data.facets, ResultsContext.NORMAL),
+        [StorageKeys.INTENTS]: SearchIntents.fromCore(data.searchIntents),
+        [StorageKeys.SPELL_CHECK]: SpellCheck.from(data.spellCheck),
+        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(data.alternativeVerticals),
+        [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(data.locationBias)
+      }
+    );
+  });
+
+  it('transforms vertical response correctly with no results', () => {
+    const data = responseWithNoResults;
+    const result = SearchDataTransformer.transformVertical(data);
+    const convertedResponse = SearchDataTransformer._reshapeForNoResults(data);
     expect(result).toEqual(
       {
         [StorageKeys.QUERY_ID]: convertedResponse.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(convertedResponse),
-        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(convertedResponse, ResultsContext.NORMAL),
+        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
+          convertedResponse.verticalResults, {}, ResultsContext.NO_RESULTS),
+        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(convertedResponse.facets, ResultsContext.NO_RESULTS),
         [StorageKeys.INTENTS]: SearchIntents.fromCore(convertedResponse.searchIntents),
         [StorageKeys.SPELL_CHECK]: SpellCheck.from(convertedResponse.spellCheck),
-        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(convertedResponse),
+        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(convertedResponse.alternativeVerticals),
         [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(convertedResponse.locationBias)
       }
     );
@@ -91,29 +114,6 @@ describe('forming no results response', () => {
     SearchDataTransformer._reshapeForNoResults(response);
 
     expect(response).toEqual(initialResponse);
-  });
-
-  it('properly converts response with data', () => {
-    const convertedResponse = SearchDataTransformer._reshapeForNoResults(response);
-
-    expect(convertedResponse).toEqual({
-      resultsCount: 2,
-      facets: response.allResultsForVertical.facets,
-      results: [
-        {
-          data: {
-            id: 'faq-0',
-            type: 'faq',
-            answer: 'black',
-            name: 'what is alexis\' favorite color?'
-          },
-          highlightedFields: {}
-        }
-      ],
-      allResultsForVertical: response.allResultsForVertical,
-      appliedQueryFilters: [],
-      resultsContext: ResultsContext.NO_RESULTS
-    });
   });
 
   it('properly converts response with empty results', () => {

@@ -1,5 +1,5 @@
 /** @module Core */
-import provideCore from '../../answers-core/dist/index.js';
+import provideCore from '@yext/answers-core';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -212,7 +212,7 @@ export default class CoreAdapter {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
-        // sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
+        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
         referrerPageUrl: referrerPageUrl,

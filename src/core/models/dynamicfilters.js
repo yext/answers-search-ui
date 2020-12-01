@@ -1,5 +1,7 @@
 /** @module DynamicFilters */
 
+import ResultsContext from '../storage/resultscontext';
+
 /**
  * Model representing a set of dynamic filters
  */
@@ -22,9 +24,10 @@ export default class DynamicFilters {
   /**
    * Organize 'facets' from the answers-core into dynamic filters
    * @param {Object[]} response dynamic filter response from the answers-core
+   * @param {ResultsContext} resultsContext
    * @returns {DynamicFilters}
    */
-  static from (facets = [], resultsContext) {
+  static from (facets = [], resultsContext = ResultsContext.NORMAL) {
     const dynamicFilters = facets.map(f => ({
       label: f['displayName'],
       fieldId: f['fieldId'],
