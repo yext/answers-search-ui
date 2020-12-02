@@ -335,7 +335,7 @@ export default class CoreAdapter {
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = this._getOnUniversalSearchParams(
-          data.universalResults.sections,
+          data[StorageKeys.UNIVERSAL_RESULTS].sections,
           queryString);
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
