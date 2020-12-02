@@ -1,7 +1,6 @@
 import FilterCombinators from '../../../src/core/filters/filtercombinators';
 import FilterRegistry from '../../../src/core/filters/filterregistry';
 import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
-import Facet from '../../../src/core/models/facet';
 import Filter from '../../../src/core/models/filter';
 import GlobalStorage from '../../../src/core/storage/globalstorage';
 import FilterMetadata from '../../../src/core/filters/filtermetadata';
@@ -114,16 +113,12 @@ describe('FilterRegistry', () => {
 
   it('can set facet filter nodes, always overriding previous facets', () => {
     registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
-    const expectedFacet = Facet.fromFilters(
-      [ 'random_field', 'another_field' ],
-      Filter.from(filter1),
-      Filter.from(filter2)
-    );
+    const expectedFacets = [ filter1, filter2 ];
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
-    expect(JSON.parse(registry.getFacetFilterPayload())).toEqual(JSON.parse(JSON.stringify(expectedFacet)));
+    expect(registry.getFacetFilterPayload()).toEqual(expectedFacets);
   });
 
-  it('can set facet filter nodes of more than 1 level', () => {
+  it('facets can combine multiple filter nodes', () => {
     const filter3 = Filter.from({
       c_1: {
         $eq: '2'
@@ -132,25 +127,17 @@ describe('FilterRegistry', () => {
     const node3 = FilterNodeFactory.from({
       filter: filter3
     });
-    const orNode = FilterNodeFactory.or(node1, node3);
-    const andNode = FilterNodeFactory.and(orNode, node2);
+    const facetNodes = [ FilterNodeFactory.or(node1, node3), node2 ];
 
-    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [ andNode ]);
-    const expectedFacet = Facet.fromFilters(
-      [ 'random_field', 'another_field' ],
+    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], facetNodes);
+    const expectedFacets = [
       Filter.from(filter1),
-      Filter.from(filter2),
-      filter3
-    );
-    const expectedFacetRaw = {
-      random_field: [],
-      another_field: [],
-      c_1: [ filter1, filter3 ],
-      c_2: [ filter2 ]
-    };
-    expect(expectedFacet).toEqual(expectedFacetRaw);
+      Filter.from(filter3),
+      Filter.from(filter2)
+    ];
+    expect(registry.getFacetFilterNodes()).toEqual(facetNodes);
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
-    expect(JSON.parse(registry.getFacetFilterPayload())).toEqual(JSON.parse(JSON.stringify(expectedFacet)));
+    expect(registry.getFacetFilterPayload()).toEqual(expectedFacets);
   });
 
   it('can set locationRadius FilterNodes', () => {

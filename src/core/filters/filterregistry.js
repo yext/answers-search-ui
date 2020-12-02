@@ -1,7 +1,6 @@
 /** @module FilterRegistry */
 
 import FilterNodeFactory from './filternodefactory';
-import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 
 /**
@@ -73,19 +72,17 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the facet filter string to send in a search query.
-   * @returns {string}
+   * Gets the facet filters as an array of SimpleFilters to send to the answers-core.
+   *
+   * @returns {SimpleFilter[]} from the answers-core
    */
   getFacetFilterPayload () {
-    return JSON.stringify(this._getFacetFilterPayload());
-  }
-
-  _getFacetFilterPayload () {
-    const getFilters = fn => fn.getChildren().length
-      ? fn.getChildren().flatMap(getFilters)
-      : fn.getFilter();
-    const filters = this.getFacetFilterNodes().flatMap(getFilters);
-    return Facet.fromFilters(this.availableFieldIds, ...filters);
+    return this.getFacetFilterNodes()
+      .flatMap(filterNode => {
+        const childNodes = filterNode.getChildren();
+        return childNodes.length > 0 ? childNodes : filterNode;
+      })
+      .map(simpleFilterNode => simpleFilterNode.getFilter());
   }
 
   /**

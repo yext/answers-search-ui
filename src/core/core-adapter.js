@@ -201,15 +201,15 @@ export default class CoreAdapter {
 
     return this._coreLibrary
       .verticalSearch({
-        verticalKey: verticalKey,
+        verticalKey: verticalKey || searchConfig.verticalKey,
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         coordinates: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         query: parsedQuery.input,
-        // TODO (agrow) Add filter support in separate PR
+        retrieveFacets: this._isDynamicFiltersEnabled,
+        facetFilters: this.filterRegistry.getFacetFilterPayload(),
+        // TODO (agrow) Add static filter support in separate PR
         // filter: this.filterRegistry.getStaticFilterPayload(),
-        // facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
-        isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
