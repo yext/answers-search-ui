@@ -219,7 +219,7 @@ export default class CoreAdapter {
         referrerPageUrl: referrerPageUrl,
         querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
-      .then(response => SearchDataTransformer.transformVertical(response, verticalKey))
+      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
