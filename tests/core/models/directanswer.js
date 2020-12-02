@@ -1,6 +1,6 @@
 import DirectAnswer from '../../../src/core/models/directanswer';
 
-it('constructs an direct answer from an answers-core direct answer', () => {
+it('constructs a direct answer from an answers-core direct answer', () => {
   const coreRelatedResult = {
     rawData: {
       food_type: 'fruit'
