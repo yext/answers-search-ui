@@ -78,11 +78,10 @@ export default class FilterRegistry {
   _transformFilterNodes (filterNodes, combinator) {
     const filters = filterNodes.flatMap(filterNode => {
       if (filterNode.children) {
-        return this._hasFilters(filterNode) &&
-          this._transformFilterNodes(filterNode.children, filterNode.combinator);
+        return this._transformFilterNodes(filterNode.children, filterNode.combinator);
       }
 
-      return this._hasFilters(filterNode) && this._transformSimpleFilterNode(filterNode);
+      return !this._isEmpty(filterNode) && this._transformSimpleFilterNode(filterNode);
     }).filter(filter => filter);
 
     return filters.length > 1
@@ -112,13 +111,13 @@ export default class FilterRegistry {
   }
 
   /**
-   * Determines whether a filterNode has filtering logic or is empty
+   * Determines whether a {@link SimpleFilterNode} has filtering logic or is empty
    *
-   * @param {CombinedFilterNode|SimpleFilterNode} filterNode
+   * @param {SimpleFilterNode} filterNode
    * @returns {boolean}
    */
-  _hasFilters (filterNode) {
-    return filterNode.children || (filterNode.filter && Object.entries(filterNode.filter).length > 0);
+  _isEmpty (filterNode) {
+    return !filterNode.filter || Object.entries(filterNode.filter).length === 0;
   }
 
   /**
