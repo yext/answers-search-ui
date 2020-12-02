@@ -58,8 +58,8 @@ export default class FilterRegistry {
 
   /**
    * Gets the static filters as a {@link SimpleFilter|CombinedFilter} to send to the answers-core
-   * @returns {CombinedFilter|SimpleFilter|undefined} Returns undefined if no filters with
-   *                                                  filtering logic are present.
+   * @returns {CombinedFilter|SimpleFilter|null} Returns null if no filters with
+   *                                             filtering logic are present.
    */
   getStaticFilterPayload () {
     const filterNodes = this.getStaticFilterNodes();
@@ -72,8 +72,8 @@ export default class FilterRegistry {
    *
    * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
    * @param {FilterCombinator} combinator from answers-core
-   * @returns {CombinedFilter|SimpleFilter|undefined} Returns undefined if no filters with
-   *                                                  filtering logic are present.
+   * @returns {CombinedFilter|SimpleFilter|null} Returns null if no filters with
+   *                                             filtering logic are present.
    */
   _transformFilterNodes (filterNodes, combinator) {
     const filters = filterNodes.flatMap(filterNode => {
@@ -89,7 +89,7 @@ export default class FilterRegistry {
         filters: filters,
         combinator: combinator
       }
-      : filters[0];
+      : (filters[0] || null);
   }
 
   /**
