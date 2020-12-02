@@ -1,0 +1,213 @@
+{
+  "verticalResults": {
+    "appliedQueryFilters": [],
+    "results": [],
+    "resultsCount": 0,
+    "source": "KNOWLEDGE_MANAGER"
+  },
+  "queryId": "QUERY_ID",
+  "searchIntents": [],
+  "facets": [],
+  "locationBias": {
+    "latitude": 90.0,
+    "longitude": 135.0,
+    "displayName": "North Pole",
+    "method": "IP"
+  },
+  "allResultsForVertical": {
+    "verticalResults": {
+      "appliedQueryFilters": [],
+      "results": [
+        {
+          "rawData": {
+            "id": "1234",
+            "type": "location",
+            "website": "example.com",
+            "address": {
+              "line1": "123 N 456 S",
+              "line2": "Apt 608",
+              "city": "City",
+              "region": "State",
+              "postalCode": "12345",
+              "countryCode": "US"
+            },
+            "addressHidden": false,
+            "description": "description here",
+            "name": "North Pole Office Space",
+            "yextDisplayCoordinate": {
+              "latitude": 90.0,
+              "longitude": 135.0
+            },
+            "yextRoutableCoordinate": {
+              "latitude": 90.0,
+              "longitude": 135.0
+            },
+            "categoryIds": [
+              "123"
+            ],
+            "timeZoneUtcOffset": "-01:00"
+          },
+          "index": 1,
+          "name": "Office Space",
+          "description": "description here",
+          "link": "example.com",
+          "id": "1234",
+          "distance": 0,
+          "highlightedValues": []
+        },
+        {
+          "rawData": {
+            "id": "4321",
+            "type": "location",
+            "website": "example2.com",
+            "address": {
+              "line1": "1600 Penn Ave",
+              "city": "Washington DC",
+              "region": "",
+              "postalCode": "POSTAL CODE WITH LETTERS",
+              "countryCode": "USA"
+            },
+            "addressHidden": false,
+            "description": "description",
+            "name": "Office Space 1",
+            "yextDisplayCoordinate": {
+              "latitude": 38,
+              "longitude": -77
+            },
+            "timeZoneUtcOffset": "+00:00"
+          },
+          "index": 2,
+          "name": "Office Space 1",
+          "description": "description",
+          "link": "example2.com",
+          "id": "4321",
+          "distance": 7782826,
+          "highlightedValues": []
+        }
+      ],
+      "resultsCount": 2465,
+      "source": "KNOWLEDGE_MANAGER"
+    },
+    "queryId": "QUERY_ID",
+    "searchIntents": [],
+    "facets": []
+  },
+  "alternativeVerticals": [
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 23,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "events"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 43,
+      "results": [],
+      "resultsCount": 7,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "faq"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 23,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "financial_professionals"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 32,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "healthcare-professionals"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 36,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "job"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 38,
+      "results": [],
+      "resultsCount": 1,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "people"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 31,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "products"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 42,
+      "results": [],
+      "resultsCount": 0,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "restaurant"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 29,
+      "results": [],
+      "resultsCount": 0,
+      "source": "ALGOLIA",
+      "verticalKey": "algoliatest1"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 292,
+      "results": [
+        {
+          "rawData": {
+            "htmlTitle": "Payment Options",
+            "link": "http://example.com",
+            "displayLink": "www.example.com",
+            "htmlSnippet": "HTML SNIPPET",
+            "index": 10
+          },
+          "index": 10,
+          "name": "Payment Options",
+          "description": "HTML SNIPPET",
+          "link": "http://example.com"
+        }
+      ],
+      "resultsCount": 2310,
+      "source": "GOOGLE_CSE",
+      "verticalKey": "links"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 278,
+      "results": [
+        {
+          "rawData": {
+            "htmlTitle": "Title",
+            "link": "https://example.com",
+            "displayLink": "example.com",
+            "htmlSnippet": "",
+            "index": 1
+          },
+          "index": 1,
+          "name": "Title",
+          "description": "",
+          "link": "https://example.com"
+        }
+      ],
+      "resultsCount": 1,
+      "source": "GOOGLE_CSE",
+      "verticalKey": "links2"
+    }
+  ]
+}

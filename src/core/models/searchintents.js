@@ -12,19 +12,6 @@ export default class SearchIntents {
   }
 
   /**
-   * Create SearchIntents from server response
-   * @param {Object} response The server response intents
-   * @returns {SearchIntents}
-   */
-  static from (response) {
-    const intents = response || [];
-
-    return new SearchIntents({
-      nearMe: intents.includes('NEAR_ME')
-    });
-  }
-
-  /**
    * Create SearchIntents from an answers-core SearchIntent array
    *
    * @param {SearchIntent[]} searchIntents from answers-core

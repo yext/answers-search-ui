@@ -1,5 +1,7 @@
 /** @module DynamicFilters */
 
+import ResultsContext from '../storage/resultscontext';
+
 /**
  * Model representing a set of dynamic filters
  */
@@ -20,12 +22,12 @@ export default class DynamicFilters {
   }
 
   /**
-   * Organize 'facets' from the api response into dynamic filters
-   * @param {Object} response dynamic filter response from the api
+   * Organize 'facets' from the answers-core into dynamic filters
+   * @param {Facet[]} facets from answers-core
+   * @param {ResultsContext} resultsContext
    * @returns {DynamicFilters}
    */
-  static from (response) {
-    const facets = response.facets || [];
+  static fromCore (facets = [], resultsContext = ResultsContext.NORMAL) {
     const dynamicFilters = facets.map(f => ({
       label: f['displayName'],
       fieldId: f['fieldId'],
@@ -39,7 +41,7 @@ export default class DynamicFilters {
 
     return new DynamicFilters({
       filters: dynamicFilters,
-      resultsContext: response.resultsContext
+      resultsContext: resultsContext
     });
   }
 }

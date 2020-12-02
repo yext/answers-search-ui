@@ -198,13 +198,16 @@ export default class CoreAdapter {
     const queryTrigger = this.getQueryTriggerForSearchApi(
       this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
     );
-    return this._searcher
-      .verticalSearch(verticalKey, {
+
+    return this._coreLibrary
+      .verticalSearch({
+        verticalKey: verticalKey,
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
-        ...parsedQuery,
-        filter: this.filterRegistry.getStaticFilterPayload(),
-        facetFilter: this.filterRegistry.getFacetFilterPayload(),
+        coordinates: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+        query: parsedQuery.input,
+        // TODO (agrow) Add filter support in separate PR
+        // filter: this.filterRegistry.getStaticFilterPayload(),
+        // facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),

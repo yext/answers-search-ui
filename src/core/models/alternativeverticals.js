@@ -1,6 +1,6 @@
 /** @module AlternativeVerticals */
 
-import Section from './section';
+import VerticalResults from './verticalresults';
 
 export default class AlternativeVerticals {
   constructor (data) {
@@ -13,15 +13,15 @@ export default class AlternativeVerticals {
 
   /**
    * Create alternative verticals from server data
-   * @param {Object} response The server response
-   * @param {Object.<string, function>} formatters The field formatters to use
+   * @param {Object[]} alternativeVerticals
    */
-  static from (response, formatters) {
-    const alternativeVerticals = response.alternativeVerticals;
-    if (!alternativeVerticals || !alternativeVerticals.modules) {
+  static fromCore (alternativeVerticals) {
+    if (!alternativeVerticals || alternativeVerticals.length === 0) {
       return new AlternativeVerticals();
     }
 
-    return new AlternativeVerticals(Section.from(alternativeVerticals.modules, {}, formatters));
+    return new AlternativeVerticals(alternativeVerticals.map(alternativeVertical => {
+      return VerticalResults.fromCore(alternativeVertical);
+    }));
   }
 }

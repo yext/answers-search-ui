@@ -30,42 +30,46 @@ export default class SearchDataTransformer {
     };
   }
 
-  static transformVertical (data, formatters, verticalKey) {
-    const response = SearchDataTransformer._parseVerticalResponse(data.response);
+  static transformVertical (coreResponse, formatters, verticalKey) {
+    const hasResults = coreResponse.verticalResults &&
+      coreResponse.verticalResults.results &&
+      coreResponse.verticalResults.resultsCount > 0;
+
+    let resultsContext = ResultsContext.NORMAL;
+    let response = coreResponse;
+    if (!hasResults) {
+      resultsContext = ResultsContext.NO_RESULTS;
+      response = SearchDataTransformer._reshapeForNoResults(coreResponse);
+    }
+
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(response, formatters, verticalKey),
-      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(response),
-      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
-      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(response, formatters),
-      [StorageKeys.LOCATION_BIAS]: LocationBias.from(response.locationBias)
+      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
+        response.verticalResults, {}, formatters, resultsContext, verticalKey),
+      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(response.facets, resultsContext),
+      [StorageKeys.INTENTS]: SearchIntents.fromCore(response.searchIntents),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(response.spellCheck),
+      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(response.alternativeVerticals),
+      [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(response.locationBias)
     };
   }
 
   /**
    * Form response as if the results from `allResultsForVertical` were the actual
    * results in `results`
+   *
    * @param {Object} response The server response
    */
-  static _parseVerticalResponse (response) {
-    const hasResults = response.results && response.resultsCount > 0;
-    const resultsContext = hasResults ? ResultsContext.NORMAL : ResultsContext.NO_RESULTS;
-
-    if (resultsContext === ResultsContext.NO_RESULTS) {
-      const { results, resultsCount, facets } = response.allResultsForVertical || {};
-      return {
-        ...response,
-        results: results || [],
-        resultsCount: resultsCount || 0,
-        resultsContext,
-        facets
-      };
-    }
+  static _reshapeForNoResults (response) {
+    const allResultsForVertical = response.allResultsForVertical || {};
+    const { results, resultsCount } = allResultsForVertical.verticalResults || {};
     return {
       ...response,
-      resultsContext
+      results: results || [],
+      resultsCount: resultsCount || 0,
+      verticalResults: allResultsForVertical.verticalResults,
+      facets: allResultsForVertical.facets
     };
   }
 }

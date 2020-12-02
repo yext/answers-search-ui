@@ -14,7 +14,7 @@ it('constructs a spellcheck from an answers-core spellcheck', () => {
     shouldShow: true
   };
 
-  const actualSpellCheck = SpellCheck.from(coreSpellCheck);
+  const actualSpellCheck = SpellCheck.fromCore(coreSpellCheck);
 
   expect(actualSpellCheck).toMatchObject(expectedSpellCheck);
 });
