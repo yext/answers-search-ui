@@ -27,7 +27,7 @@ export default class DynamicFilters {
    * @param {ResultsContext} resultsContext
    * @returns {DynamicFilters}
    */
-  static from (facets = [], resultsContext = ResultsContext.NORMAL) {
+  static fromCore (facets = [], resultsContext = ResultsContext.NORMAL) {
     const dynamicFilters = facets.map(f => ({
       label: f['displayName'],
       fieldId: f['fieldId'],

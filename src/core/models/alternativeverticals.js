@@ -15,8 +15,8 @@ export default class AlternativeVerticals {
    * Create alternative verticals from server data
    * @param {Object[]} alternativeVerticals
    */
-  static from (alternativeVerticals) {
-    if (!alternativeVerticals || alternativeVerticals.length < 0) {
+  static fromCore (alternativeVerticals) {
+    if (!alternativeVerticals || alternativeVerticals.length === 0) {
       return new AlternativeVerticals();
     }
 

@@ -30,7 +30,7 @@ export default class SearchDataTransformer {
     };
   }
 
-  static transformVertical (coreResponse, verticalKey) {
+  static transformVertical (coreResponse, formatters, verticalKey) {
     const hasResults = coreResponse.verticalResults &&
       coreResponse.verticalResults.results &&
       coreResponse.verticalResults.resultsCount > 0;
@@ -46,11 +46,11 @@ export default class SearchDataTransformer {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
-        response.verticalResults, {}, resultsContext, verticalKey),
-      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(response.facets, resultsContext),
+        response.verticalResults, {}, formatters, resultsContext, verticalKey),
+      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(response.facets, resultsContext),
       [StorageKeys.INTENTS]: SearchIntents.fromCore(response.searchIntents),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
-      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(response.alternativeVerticals),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(response.spellCheck),
+      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(response.alternativeVerticals),
       [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(response.locationBias)
     };
   }
