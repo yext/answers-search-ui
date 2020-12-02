@@ -62,7 +62,7 @@ export default class FilterRegistry {
     const filterNodes = this.getStaticFilterNodes();
 
     const transformedFilterNodes = filterNodes.map(filterNode => {
-      return this._transformFilter(filterNode);
+      return this._transformFilterNode(filterNode);
     }).filter(filter => filter);
 
     if (transformedFilterNodes.length > 1) {
@@ -74,7 +74,15 @@ export default class FilterRegistry {
     return transformedFilterNodes[0];
   }
 
-  _transformFilter (filterNode) {
+  /**
+   * Transforms a filter node {@link CombinedFilterNode} or {@link SimpleFilterNode} to
+   * answers-core's {@link SimpleFilter} or {@link CombinedFilter}
+   *
+   * @param {CombinedFilterNode|SimpleFilterNode} filterNode
+   * @returns {CombinedFilter|SimpleFilter}
+   */
+
+  _transformFilterNode (filterNode) {
     if (filterNode.children) {
       return this._recurseCombinedFilterNodes(filterNode.children, filterNode.combinator);
     }
@@ -85,7 +93,7 @@ export default class FilterRegistry {
       return;
     }
 
-    return this._transformSimpleFilter(filterNode);
+    return this._transformSimpleFilterNode(filterNode);
   }
 
   /**
@@ -99,13 +107,19 @@ export default class FilterRegistry {
   _recurseCombinedFilterNodes (filterNodes, combinator) {
     return {
       filters: filterNodes.flatMap(filterNode => {
-        return this._transformFilter(filterNode);
+        return this._transformFilterNode(filterNode);
       }).filter(filter => filter),
       combinator: combinator
     };
   }
 
-  _transformSimpleFilter (filterNode) {
+  /**
+   * Transforms a {@link SimpleFilterNode} to answers-core's {@link SimpleFilter}
+   *
+   * @param {SimpleFilterNode} filterNode
+   * @returns {SimpleFilter}
+   */
+  _transformSimpleFilterNode (filterNode) {
     const fieldId = Object.keys(filterNode.filter)[0];
     const filterComparison = filterNode.filter[fieldId];
     const comparator = Object.keys(filterComparison)[0];
