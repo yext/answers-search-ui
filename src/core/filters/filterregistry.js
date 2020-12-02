@@ -1,6 +1,6 @@
 /** @module FilterRegistry */
 
-import FilterNodeFactory from './filternodefactory';
+import FilterCombinators from './filtercombinators';
 import StorageKeys from '../storage/storagekeys';
 
 /**
@@ -57,18 +57,62 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the filter string to send in a search query.
-   * TODO: move payload method logic into core.js, since it is only used there.
-   * @returns {string}
+   * Gets the static filters as a {@link SimpleFilter|CombinedFilter} to send to the answers-core
+   *
+   * @returns {CombinedFilter|SimpleFilter|null} Returns null if no filters with
+   *                                             filtering logic are present.
    */
   getStaticFilterPayload () {
-    return JSON.stringify(this._getStaticFilterPayload());
+    const filterNodes = this.getStaticFilterNodes()
+      .filter(filterNode => {
+        return filterNode.getChildren().length > 0 || filterNode.getFilter().getFilterKey();
+      });
+    return filterNodes.length > 0
+      ? this._transformFilterNodes(filterNodes, FilterCombinators.AND)
+      : null;
   }
 
-  _getStaticFilterPayload () {
-    const filterNodes = this.getStaticFilterNodes();
-    const totalNode = FilterNodeFactory.and(...filterNodes);
-    return totalNode.getFilter();
+  /**
+   * Transforms a list of filter nodes {@link CombinedFilterNode} or {@link SimpleFilterNode} to
+   * answers-core's {@link SimpleFilter} or {@link CombinedFilter}
+   *
+   * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
+   * @param {FilterCombinator} combinator from answers-core
+   * @returns {CombinedFilter|SimpleFilter} from answers-core
+   */
+  _transformFilterNodes (filterNodes, combinator) {
+    const filters = filterNodes.flatMap(filterNode => {
+      if (filterNode.children) {
+        return this._transformFilterNodes(filterNode.children, filterNode.combinator);
+      }
+
+      return this._transformSimpleFilterNode(filterNode);
+    });
+
+    return filters.length === 1
+      ? filters[0]
+      : {
+        filters: filters,
+        combinator: combinator
+      };
+  }
+
+  /**
+   * Transforms a {@link SimpleFilterNode} to answers-core's {@link SimpleFilter}
+   *
+   * @param {SimpleFilterNode} filterNode
+   * @returns {SimpleFilter}
+   */
+  _transformSimpleFilterNode (filterNode) {
+    const fieldId = Object.keys(filterNode.filter)[0];
+    const filterComparison = filterNode.filter[fieldId];
+    const comparator = Object.keys(filterComparison)[0];
+    const comparedValue = filterComparison[comparator];
+    return {
+      fieldId: fieldId,
+      comparator: comparator,
+      comparedValue: comparedValue
+    };
   }
 
   /**
