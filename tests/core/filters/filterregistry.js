@@ -169,7 +169,7 @@ describe('FilterRegistry', () => {
     const node3 = FilterNodeFactory.from({
       filter: filter3
     });
-    const facetNodes = [ FilterNodeFactory.and(node1, node3), node2 ];
+    const facetNodes = [ FilterNodeFactory.or(node1, node3), node2 ];
 
     registry.setFacetFilterNodes([ 'random_field', 'another_field' ], facetNodes);
     const expectedFacets = [

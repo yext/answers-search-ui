@@ -41,23 +41,26 @@ export default class VerticalResults {
    *
    * @param {VerticalResults} verticalResults
    * @param {Object<string, string>} urls keyed by vertical key
+   * @param {Object.<string, function>} formatters Field formatters for results
    * @param {ResultsContext} resultsContext
-   * @param {String} verticalKey
+   * @param {string} verticalKeyFromRequest
    * @returns {@link Section}
    */
-  static fromCore (verticalResults, urls = {}, resultsContext = ResultsContext.NORMAL, verticalKey) {
+  static fromCore (verticalResults, urls = {}, formatters, resultsContext = ResultsContext.NORMAL, verticalKeyFromRequest) {
     if (!verticalResults) {
       return new Section();
     }
 
+    const verticalKey = verticalResults.verticalKey || verticalKeyFromRequest;
     return new Section(
       {
-        verticalConfigId: verticalResults.verticalKey || verticalKey,
+        verticalConfigId: verticalKey,
         resultsCount: verticalResults.resultsCount,
         appliedQueryFilters: verticalResults.appliedQueryFilters.map(AppliedQueryFilter.fromCore),
         results: verticalResults.results.map(Result.fromCore)
       },
-      urls[verticalResults.verticalKey || verticalKey],
+      urls[verticalKey],
+      formatters,
       resultsContext
     );
   }
