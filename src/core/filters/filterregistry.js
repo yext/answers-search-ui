@@ -1,6 +1,7 @@
 /** @module FilterRegistry */
 
 import StorageKeys from '../storage/storagekeys';
+import FilterCombinators from './filtercombinators';
 
 /**
  * FilterRegistry is a structure that manages static {@link Filter}s and {@link Facet} filters.
@@ -67,7 +68,7 @@ export default class FilterRegistry {
 
     if (transformedFilterNodes.length > 1) {
       return {
-        combinator: '$and',
+        combinator: FilterCombinators.AND,
         filters: transformedFilterNodes
       };
     }
@@ -101,7 +102,7 @@ export default class FilterRegistry {
    * {@link CombinedFilter}.
    *
    * @param {Array<SimpleFilterNode|CombinedFilterNode>} filterNodes
-   * @param {string} combinator
+   * @param {FilterCombinators} combinator
    * @returns {CombinedFilter} from the answers-core library
    */
   _recurseCombinedFilterNodes (filterNodes, combinator) {
