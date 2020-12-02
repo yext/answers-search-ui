@@ -41,11 +41,12 @@ export default class VerticalResults {
    *
    * @param {VerticalResults} verticalResults
    * @param {Object<string, string>} urls keyed by vertical key
+   * @param {Object.<string, function>} formatters Field formatters for results
    * @param {ResultsContext} resultsContext
    * @param {string} verticalKeyFromRequest
    * @returns {@link Section}
    */
-  static fromCore (verticalResults, urls = {}, resultsContext = ResultsContext.NORMAL, verticalKeyFromRequest) {
+  static fromCore (verticalResults, urls = {}, formatters, resultsContext = ResultsContext.NORMAL, verticalKeyFromRequest) {
     if (!verticalResults) {
       return new Section();
     }
@@ -59,6 +60,7 @@ export default class VerticalResults {
         results: verticalResults.results.map(Result.fromCore)
       },
       urls[verticalKey],
+      formatters,
       resultsContext
     );
   }
