@@ -1,5 +1,8 @@
 import Filter from './filter';
 
+/**
+ * A model that represents a filter that the backend applied to a search
+ */
 export default class AppliedQueryFilter {
   constructor (appliedQueryFilter = {}) {
     this.key = appliedQueryFilter.key;
