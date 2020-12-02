@@ -74,12 +74,15 @@ export default class FilterRegistry {
   /**
    * Gets the facet filters as an array of SimpleFilters to send to the answers-core.
    *
-   * @returns {SimpleFilter[]}
+   * @returns {SimpleFilter[]} from the answers-core
    */
   getFacetFilterPayload () {
     return this.getFacetFilterNodes()
-      .flatMap(filterNode => filterNode.children || filterNode)
-      .map(simpleFilterNode => simpleFilterNode.filter);
+      .flatMap(filterNode => {
+        const childNodes = filterNode.getChildren();
+        return childNodes.length > 0 ? childNodes : filterNode;
+      })
+      .map(simpleFilterNode => simpleFilterNode.getFilter());
   }
 
   /**
