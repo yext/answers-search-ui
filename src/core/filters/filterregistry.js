@@ -1,6 +1,6 @@
 /** @module FilterRegistry */
 
-import { FilterCombinator } from '@yext/answers-core/dist/models/searchservice/request/CombinedFilter';
+import FilterCombinators from './filtercombinators';
 import StorageKeys from '../storage/storagekeys';
 
 /**
@@ -58,22 +58,27 @@ export default class FilterRegistry {
 
   /**
    * Gets the static filters as a {@link SimpleFilter|CombinedFilter} to send to the answers-core
+   *
    * @returns {CombinedFilter|SimpleFilter|null} Returns null if no filters with
    *                                             filtering logic are present.
    */
   getStaticFilterPayload () {
-    const filterNodes = this.getStaticFilterNodes();
-    return this._transformFilterNodes(filterNodes, FilterCombinator.AND);
+    const filterNodes = this.getStaticFilterNodes()
+      .filter(filterNode => {
+        return filterNode.getChildren().length > 0 || filterNode.getFilter().getFilterKey();
+      });
+    return filterNodes.length > 0
+      ? this._transformFilterNodes(filterNodes, FilterCombinators.AND)
+      : null;
   }
 
   /**
-   * Transforms a filter node {@link CombinedFilterNode} or {@link SimpleFilterNode} to
+   * Transforms a list of filter nodes {@link CombinedFilterNode} or {@link SimpleFilterNode} to
    * answers-core's {@link SimpleFilter} or {@link CombinedFilter}
    *
    * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
    * @param {FilterCombinator} combinator from answers-core
-   * @returns {CombinedFilter|SimpleFilter|null} Returns null if no filters with
-   *                                             filtering logic are present.
+   * @returns {CombinedFilter|SimpleFilter} from answers-core
    */
   _transformFilterNodes (filterNodes, combinator) {
     const filters = filterNodes.flatMap(filterNode => {
@@ -81,15 +86,15 @@ export default class FilterRegistry {
         return this._transformFilterNodes(filterNode.children, filterNode.combinator);
       }
 
-      return !this._isEmpty(filterNode) && this._transformSimpleFilterNode(filterNode);
-    }).filter(filter => filter);
+      return this._transformSimpleFilterNode(filterNode);
+    });
 
-    return filters.length > 1
-      ? {
+    return filters.length === 1
+      ? filters[0]
+      : {
         filters: filters,
         combinator: combinator
-      }
-      : (filters[0] || null);
+      };
   }
 
   /**
@@ -108,16 +113,6 @@ export default class FilterRegistry {
       comparator: comparator,
       comparedValue: comparedValue
     };
-  }
-
-  /**
-   * Determines whether a {@link SimpleFilterNode} has filtering logic or is empty
-   *
-   * @param {SimpleFilterNode} filterNode
-   * @returns {boolean}
-   */
-  _isEmpty (filterNode) {
-    return !filterNode.filter || Object.entries(filterNode.filter).length === 0;
   }
 
   /**
