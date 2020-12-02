@@ -1,6 +1,5 @@
 /** @module FilterRegistry */
 
-import FilterNodeFactory from './filternodefactory';
 import StorageKeys from '../storage/storagekeys';
 
 /**
@@ -57,18 +56,65 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the filter string to send in a search query.
-   * TODO: move payload method logic into core.js, since it is only used there.
-   * @returns {string}
+   * Gets the static filters as a {@link CombinedFilter} to send to the answers-core
    */
   getStaticFilterPayload () {
-    return JSON.stringify(this._getStaticFilterPayload());
+    const filterNodes = this.getStaticFilterNodes();
+
+    const transformedFilterNodes = filterNodes.map(filterNode => {
+      return this._transformFilter(filterNode);
+    }).filter(filter => filter);
+
+    if (transformedFilterNodes.length > 1) {
+      return {
+        combinator: '$and',
+        filters: transformedFilterNodes
+      };
+    }
+    return transformedFilterNodes[0];
   }
 
-  _getStaticFilterPayload () {
-    const filterNodes = this.getStaticFilterNodes();
-    const totalNode = FilterNodeFactory.and(...filterNodes);
-    return totalNode.getFilter();
+  _transformFilter (filterNode) {
+    if (filterNode.children) {
+      return this._recurseCombinedFilterNodes(filterNode.children, filterNode.combinator);
+    }
+
+    // All static filters come through this code path, even if the filters have not been
+    // interacted with. We should ignore filters that effectively don't filter anything.
+    if (!filterNode.filter || Object.entries(filterNode.filter).length === 0) {
+      return;
+    }
+
+    return this._transformSimpleFilter(filterNode);
+  }
+
+  /**
+   * Converts a list of combined and simple filter nodes to the answers-core library's
+   * {@link CombinedFilter}.
+   *
+   * @param {Array<SimpleFilterNode|CombinedFilterNode>} filterNodes
+   * @param {string} combinator
+   * @returns {CombinedFilter} from the answers-core library
+   */
+  _recurseCombinedFilterNodes (filterNodes, combinator) {
+    return {
+      filters: filterNodes.flatMap(filterNode => {
+        return this._transformFilter(filterNode);
+      }).filter(filter => filter),
+      combinator: combinator
+    };
+  }
+
+  _transformSimpleFilter (filterNode) {
+    const fieldId = Object.keys(filterNode.filter)[0];
+    const filterComparison = filterNode.filter[fieldId];
+    const comparator = Object.keys(filterComparison)[0];
+    const comparedValue = filterComparison[comparator];
+    return {
+      fieldId: fieldId,
+      comparator: comparator,
+      comparedValue: comparedValue
+    };
   }
 
   /**

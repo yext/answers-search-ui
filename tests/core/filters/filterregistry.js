@@ -50,31 +50,59 @@ describe('FilterRegistry', () => {
   });
 
   it('can correctly set simple filter nodes', () => {
+    const transformedFilter1 = {
+      fieldId: 'c_1',
+      comparator: '$eq',
+      comparedValue: filter1.c_1['$eq']
+    };
+    const transformedFilter2 = {
+      fieldId: 'c_2',
+      comparator: '$eq',
+      comparedValue: filter2.c_2['$eq']
+    };
     registry.setStaticFilterNodes('namespace1', node1);
     expect(registry.getStaticFilterNodes()).toHaveLength(1);
     expect(registry.getStaticFilterNodes()[0]).toEqual(node1);
-    expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(filter1);
+    expect(registry.getStaticFilterPayload()).toEqual(transformedFilter1);
 
     registry.setStaticFilterNodes('namespace2', node2);
     expect(registry.getStaticFilterNodes()).toHaveLength(2);
     expect(registry.getStaticFilterNodes()).toContainEqual(node1);
     expect(registry.getStaticFilterNodes()).toContainEqual(node2);
     const expectedFilter2 = {
-      [ FilterCombinators.AND ]: [ filter1, filter2 ]
+      combinator: FilterCombinators.AND,
+      filters: [
+        transformedFilter1,
+        transformedFilter2
+      ]
     };
-    expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(expectedFilter2);
+    expect(registry.getStaticFilterPayload()).toEqual(expectedFilter2);
 
     registry.setStaticFilterNodes('namespace1', node2);
     expect(registry.getStaticFilterNodes()).toHaveLength(2);
     expect(registry.getStaticFilterNodes()[0]).toEqual(node2);
     expect(registry.getStaticFilterNodes()[1]).toEqual(node2);
     const expectedFilter3 = {
-      [ FilterCombinators.AND ]: [ filter2, filter2 ]
+      combinator: FilterCombinators.AND,
+      filters: [
+        transformedFilter2,
+        transformedFilter2
+      ]
     };
-    expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(expectedFilter3);
+    expect(registry.getStaticFilterPayload()).toEqual(expectedFilter3);
   });
 
   it('can correctly set nested filter nodes', () => {
+    const transformedFilter1 = {
+      fieldId: 'c_1',
+      comparator: '$eq',
+      comparedValue: filter1.c_1['$eq']
+    };
+    const transformedFilter2 = {
+      fieldId: 'c_2',
+      comparator: '$eq',
+      comparedValue: filter2.c_2['$eq']
+    };
     const orNode = FilterNodeFactory.or(node1, node2);
     registry.setStaticFilterNodes('namespace1', orNode);
     expect(registry.getStaticFilterNodes()).toHaveLength(1);
@@ -82,33 +110,47 @@ describe('FilterRegistry', () => {
       [ FilterCombinators.OR ]: [ filter1, filter2 ]
     };
     expect(orNode.getFilter()).toEqual(expectedFilter1);
-    expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(expectedFilter1);
+    const expectedTransformedFilter1 = {
+      combinator: FilterCombinators.OR,
+      filters: [
+        transformedFilter1,
+        transformedFilter2
+      ]
+    };
+    expect(registry.getStaticFilterPayload()).toEqual(expectedTransformedFilter1);
 
     const andNode = FilterNodeFactory.and(node1, node2);
     registry.setStaticFilterNodes('namespace2', andNode);
     expect(registry.getStaticFilterNodes()).toHaveLength(2);
     const expectedFilter2 = {
-      [ FilterCombinators.AND ]: [
-        expectedFilter1,
+      combinator: FilterCombinators.AND,
+      filters: [
+        expectedTransformedFilter1,
         {
-          [ FilterCombinators.AND ]: [ filter1, filter2 ]
+          combinator: FilterCombinators.AND,
+          filters: [
+            transformedFilter1,
+            transformedFilter2
+          ]
         }
       ]
     };
-    expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(expectedFilter2);
+    expect(registry.getStaticFilterPayload()).toEqual(expectedFilter2);
 
     registry.setStaticFilterNodes('namespace3', node1);
     expect(registry.getStaticFilterNodes()).toHaveLength(3);
     const expectedFilter3 = {
-      [ FilterCombinators.AND ]: [
-        expectedFilter1,
+      combinator: FilterCombinators.AND,
+      filters: [
+        expectedTransformedFilter1,
         {
-          [ FilterCombinators.AND ]: [ filter1, filter2 ]
+          combinator: FilterCombinators.AND,
+          filters: [ transformedFilter1, transformedFilter2 ]
         },
-        filter1
+        transformedFilter1
       ]
     };
-    expect(JSON.parse(registry.getStaticFilterPayload())).toEqual(expectedFilter3);
+    expect(registry.getStaticFilterPayload()).toEqual(expectedFilter3);
   });
 
   it('can set facet filter nodes, always overriding previous facets', () => {

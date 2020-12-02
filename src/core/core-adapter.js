@@ -207,8 +207,7 @@ export default class CoreAdapter {
         query: parsedQuery.input,
         retrieveFacets: this._isDynamicFiltersEnabled,
         facetFilters: this.filterRegistry.getFacetFilterPayload(),
-        // TODO (agrow) Add static filter support in separate PR
-        // filter: this.filterRegistry.getStaticFilterPayload(),
+        staticFilters: this.filterRegistry.getStaticFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
