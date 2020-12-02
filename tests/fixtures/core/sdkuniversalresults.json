@@ -173,7 +173,7 @@
           }
         ]
       },
-      "verticalURL": null
+      "verticalURL": "./people.html"
     },
     {
       "searchState": "search-complete",
@@ -235,7 +235,7 @@
         "mapCenter": {},
         "mapMarkers": []
       },
-      "verticalURL": null
+      "verticalURL": "./faq.html"
     }
   ],
   "searchState": "search-complete"
