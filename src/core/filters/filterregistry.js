@@ -1,7 +1,7 @@
 /** @module FilterRegistry */
 
+import { FilterCombinator } from '@yext/answers-core/dist/models/searchservice/request/CombinedFilter';
 import StorageKeys from '../storage/storagekeys';
-import FilterCombinators from './filtercombinators';
 
 /**
  * FilterRegistry is a structure that manages static {@link Filter}s and {@link Facet} filters.
@@ -57,61 +57,40 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the static filters as a {@link CombinedFilter} to send to the answers-core
+   * Gets the static filters as a {@link SimpleFilter|CombinedFilter} to send to the answers-core
+   * @returns {CombinedFilter|SimpleFilter|undefined} Returns undefined if no filters with
+   *                                                  filtering logic are present.
    */
   getStaticFilterPayload () {
     const filterNodes = this.getStaticFilterNodes();
-
-    const transformedFilterNodes = filterNodes.map(filterNode => {
-      return this._transformFilterNode(filterNode);
-    }).filter(filter => filter);
-
-    if (transformedFilterNodes.length > 1) {
-      return {
-        combinator: FilterCombinators.AND,
-        filters: transformedFilterNodes
-      };
-    }
-    return transformedFilterNodes[0];
+    return this._transformFilterNodes(filterNodes, FilterCombinator.AND);
   }
 
   /**
    * Transforms a filter node {@link CombinedFilterNode} or {@link SimpleFilterNode} to
    * answers-core's {@link SimpleFilter} or {@link CombinedFilter}
    *
-   * @param {CombinedFilterNode|SimpleFilterNode} filterNode
-   * @returns {CombinedFilter|SimpleFilter}
+   * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
+   * @param {FilterCombinator} combinator from answers-core
+   * @returns {CombinedFilter|SimpleFilter|undefined} Returns undefined if no filters with
+   *                                                  filtering logic are present.
    */
+  _transformFilterNodes (filterNodes, combinator) {
+    const filters = filterNodes.flatMap(filterNode => {
+      if (filterNode.children) {
+        return this._hasFilters(filterNode) &&
+          this._transformFilterNodes(filterNode.children, filterNode.combinator);
+      }
 
-  _transformFilterNode (filterNode) {
-    if (filterNode.children) {
-      return this._recurseCombinedFilterNodes(filterNode.children, filterNode.combinator);
-    }
+      return this._hasFilters(filterNode) && this._transformSimpleFilterNode(filterNode);
+    }).filter(filter => filter);
 
-    // All static filters come through this code path, even if the filters have not been
-    // interacted with. We should ignore filters that effectively don't filter anything.
-    if (!filterNode.filter || Object.entries(filterNode.filter).length === 0) {
-      return;
-    }
-
-    return this._transformSimpleFilterNode(filterNode);
-  }
-
-  /**
-   * Converts a list of combined and simple filter nodes to the answers-core library's
-   * {@link CombinedFilter}.
-   *
-   * @param {Array<SimpleFilterNode|CombinedFilterNode>} filterNodes
-   * @param {FilterCombinators} combinator
-   * @returns {CombinedFilter} from the answers-core library
-   */
-  _recurseCombinedFilterNodes (filterNodes, combinator) {
-    return {
-      filters: filterNodes.flatMap(filterNode => {
-        return this._transformFilterNode(filterNode);
-      }).filter(filter => filter),
-      combinator: combinator
-    };
+    return filters.length > 1
+      ? {
+        filters: filters,
+        combinator: combinator
+      }
+      : filters[0];
   }
 
   /**
@@ -130,6 +109,16 @@ export default class FilterRegistry {
       comparator: comparator,
       comparedValue: comparedValue
     };
+  }
+
+  /**
+   * Determines whether a filterNode has filtering logic or is empty
+   *
+   * @param {CombinedFilterNode|SimpleFilterNode} filterNode
+   * @returns {boolean}
+   */
+  _hasFilters (filterNode) {
+    return filterNode.children || (filterNode.filter && Object.entries(filterNode.filter).length > 0);
   }
 
   /**
