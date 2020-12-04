@@ -133,7 +133,7 @@ export default class Result {
   /**
    * Applies formatters to the result
    *
-   * @param {Object.<string, function>} formatters applied to the result fields
+   * @param {Object.<string, function>} formatters to apply to the result fields
    * @param {string} verticalKey
    */
   format (formatters, verticalKey) {
