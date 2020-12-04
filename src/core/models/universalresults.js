@@ -29,9 +29,10 @@ export default class UniversalResults {
    *
    * @param {UniversalSearchResponse} response from answers-core
    * @param {Object<string, string>} urls keyed by vertical key
+   * @param {Object.<string, function>} formatters to apply to the result fields
    * @returns {@link UniversalResults}
    */
-  static fromCore (response, urls) {
+  static fromCore (response, urls, formatters) {
     if (!response) {
       return new UniversalResults();
     }
@@ -39,7 +40,7 @@ export default class UniversalResults {
     return new UniversalResults({
       queryId: response.queryId,
       sections: response.verticalResults.map(verticalResults => {
-        return VerticalResults.fromCore(verticalResults, urls);
+        return VerticalResults.fromCore(verticalResults, urls, formatters);
       })
     });
   }

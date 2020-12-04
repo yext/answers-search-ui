@@ -13,15 +13,17 @@ export default class AlternativeVerticals {
 
   /**
    * Create alternative verticals from server data
+   *
    * @param {Object[]} alternativeVerticals
+   * @param {Object.<string, function>} formatters to apply to the result fields
    */
-  static fromCore (alternativeVerticals) {
+  static fromCore (alternativeVerticals, formatters) {
     if (!alternativeVerticals || alternativeVerticals.length === 0) {
       return new AlternativeVerticals();
     }
 
     return new AlternativeVerticals(alternativeVerticals.map(alternativeVertical => {
-      return VerticalResults.fromCore(alternativeVertical);
+      return VerticalResults.fromCore(alternativeVertical, {}, formatters);
     }));
   }
 }

@@ -52,15 +52,17 @@ export default class VerticalResults {
     }
 
     const verticalKey = verticalResults.verticalKey || verticalKeyFromRequest;
+
     return new Section(
       {
         verticalConfigId: verticalKey,
         resultsCount: verticalResults.resultsCount,
         appliedQueryFilters: verticalResults.appliedQueryFilters.map(AppliedQueryFilter.fromCore),
-        results: verticalResults.results.map(Result.fromCore)
+        results: verticalResults.results.map(result => {
+          return Result.fromCore(result).format(formatters, verticalKey);
+        })
       },
       urls[verticalKey],
-      formatters,
       resultsContext
     );
   }

@@ -2,6 +2,7 @@
 
 import HighlightedFieldMap from './highlightedfieldmap';
 import { truncate } from '../utils/strings';
+import { AnswersCoreError } from '../errors/errors';
 
 export default class Result {
   constructor (data = {}) {
@@ -127,5 +128,58 @@ export default class Result {
       distanceFromFilter: result.distanceFromFilter,
       highlighted: highlightedData
     });
+  }
+
+  /**
+   * Applies formatters to the result
+   *
+   * @param {Object.<string, function>} formatters applied to the result fields
+   * @param {string} verticalKey
+   */
+  format (formatters, verticalKey) {
+    if (!formatters || !this._raw) {
+      return this;
+    }
+
+    if (Object.keys(formatters).length === 0) {
+      return this;
+    }
+
+    const formattedData = {};
+
+    Object.entries(this._raw).forEach(([fieldName, fieldVal]) => {
+      // check if a field formatter exists for the current entity profile field
+      if (formatters[fieldName] === undefined) {
+        return;
+      }
+      // verify the field formatter provided is a formatter function as expected
+      if (typeof formatters[fieldName] !== 'function') {
+        throw new AnswersCoreError('Field formatter is not of expected type function', 'Result');
+      }
+
+      // if highlighted version of field value is available, make it available to field formatter
+      let highlightedFieldVal = null;
+      if (this._highlighted && this._highlighted[fieldName]) {
+        highlightedFieldVal = this._highlighted[fieldName];
+      }
+
+      // call formatter function associated with the field name
+      // the input object defines the interface that field formatter functions work with
+      formattedData[fieldName] = formatters[fieldName]({
+        entityProfileData: this._raw,
+        entityFieldValue: fieldVal,
+        highlightedEntityFieldValue: highlightedFieldVal,
+        verticalId: verticalKey,
+        isDirectAnswer: false
+      });
+    });
+
+    this._formatted = formattedData;
+
+    if (this._formatted.description !== undefined) {
+      this.details = this._formatted.description;
+    }
+
+    return this;
   }
 }

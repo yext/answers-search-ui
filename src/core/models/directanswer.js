@@ -38,4 +38,28 @@ export default class DirectAnswer {
       }
     });
   }
+
+  /**
+   * Applies a formatter to the direct answer if a formatter exists for the direct answer field
+   *
+   * @param {Object.<string, function>} formatters
+   */
+  format (formatters) {
+    if (!this.answer || !this.relateditem) {
+      return this;
+    }
+
+    const answer = this.answer;
+    const relatedItem = this.relatedItem;
+
+    if (formatters[answer.fieldApiName]) {
+      answer.value = formatters[answer.fieldApiName](
+        answer.value,
+        relatedItem.data.fieldValues,
+        relatedItem.verticalConfigId,
+        true);
+    }
+
+    return this;
+  }
 }
