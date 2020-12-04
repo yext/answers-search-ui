@@ -45,7 +45,7 @@ export default class DirectAnswer {
    * @param {Object.<string, function>} formatters
    */
   format (formatters) {
-    if (!this.answer || !this.relateditem) {
+    if (!this.answer || !this.relatedItem) {
       return this;
     }
 
