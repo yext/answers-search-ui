@@ -311,3 +311,29 @@ describe('flushPersist', () => {
     expect(stateResetListener).not.toBeCalled();
   });
 });
+
+describe('getUrlWithCurrentState', () => {
+  it('passes from persistent storage', () => {
+    storage.setWithPersist(StorageKeys.QUERY, 'val1');
+    storage.flushPersist();
+    expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
+  });
+
+  it('adds buffer entries to the url', () => {
+    storage.setWithPersist(StorageKeys.QUERY, 'val1');
+    expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
+    storage.flushPersist();
+
+    storage.setWithPersist(StorageKeys.AUTOCOMPLETE, 'val2');
+    expect(storage.getUrlWithCurrentState()).toEqual('query=val1&autocomplete=val2');
+  });
+
+  it('overrides params from persistent storage with buffer', () => {
+    storage.setWithPersist(StorageKeys.QUERY, 'val1');
+    expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
+    storage.flushPersist();
+
+    storage.setWithPersist(StorageKeys.QUERY, 'val2');
+    expect(storage.getUrlWithCurrentState()).toEqual('query=val2');
+  });
+});
