@@ -2,6 +2,7 @@
  * GlobalStorage is a container around application state.  It
  * exposes an interface for CRUD operations as well as listening
  * for stateful changes.
+ *
  * @param {Function} callback for state (persistent store) updates
  * @param {Function} callback for state (persistent store) reset
  */
