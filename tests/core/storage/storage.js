@@ -19,24 +19,33 @@ it('calls update and reset listeners onpopstate', () => {
 });
 
 describe('init', () => {
-  it('should be initialized with the correct formats', () => {
+  it('should be initialized with empty map w/o init', () => {
     expect(storage.getAll()).toEqual({});
+  });
 
+  it('should be initialized with empty map with empty string', () => {
     storage.init('');
     expect(storage.getAll()).toEqual({});
+  });
 
-    const expectedResult = {
-      key1: 'val1',
-      key2: 'val2'
-    };
+  const expectedResult = {
+    key1: 'val1',
+    key2: 'val2'
+  };
+
+  it('should be initialized with an absolute url', () => {
     storage = new GlobalStorage();
     storage.init('https://www.yext.com/?key1=val1&key2=val2');
     expect(storage.getAll()).toEqual(expectedResult);
+  });
 
+  it('should be initialized with a query param string w/ ?', () => {
     storage = new GlobalStorage();
     storage.init('?key1=val1&key2=val2');
     expect(storage.getAll()).toEqual(expectedResult);
+  });
 
+  it('should be initialized with a query param string w/o ?', () => {
     storage = new GlobalStorage();
     storage.init('key1=val1&key2=val2');
     expect(storage.getAll()).toEqual(expectedResult);
@@ -45,37 +54,58 @@ describe('init', () => {
 
 describe('set', () => {
   describe('vanilla set', () => {
-    it('correctly stores primitives', () => {
-      storage.set(StorageKeys.QUERY, 'tested');
-      expect(storage.get(StorageKeys.QUERY)).toEqual('tested');
+    describe('correctly stores various data types', () => {
+      it('correctly stores primitive string', () => {
+        storage.set(StorageKeys.QUERY, 'tested');
+        expect(storage.get(StorageKeys.QUERY)).toEqual('tested');
+      });
 
-      storage.set(StorageKeys.QUERY, true);
-      expect(storage.get(StorageKeys.QUERY)).toEqual(true);
+      it('correctly stores primitive boolean', () => {
+        storage.set(StorageKeys.QUERY, true);
+        expect(storage.get(StorageKeys.QUERY)).toEqual(true);
+      });
 
-      storage.set(StorageKeys.QUERY, 100);
-      expect(storage.get(StorageKeys.QUERY)).toEqual(100);
-    });
+      it('correctly stores primitive number', () => {
+        storage.set(StorageKeys.QUERY, 100);
+        expect(storage.get(StorageKeys.QUERY)).toEqual(100);
+      });
 
-    it('correctly stores structures', () => {
-      storage.set(StorageKeys.QUERY, { key1: { key2: 'val2' } });
-      expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+      it('correctly stores js object', () => {
+        storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
+        storage.set(StorageKeys.NAVIGATION, { test: 'test navigation data' });
+        expect(storage.get(StorageKeys.AUTOCOMPLETE).test).toBe('test autocomplete data');
+        expect(storage.get(StorageKeys.NAVIGATION).test).toBe('test navigation data');
+      });
 
-      storage.set(StorageKeys.QUERY, [1, 2, 3, 4, 5, 6]);
-      expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+      it('correct stores nested js object', () => {
+        storage.set(StorageKeys.QUERY, { key1: { key2: 'val2' } });
+        expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+      });
 
-      storage.set(StorageKeys.QUERY, new Map());
-      expect(storage.get(StorageKeys.QUERY)).toEqual(new Map());
-    });
+      it('correctly stores javascript array', () => {
+        storage.set(StorageKeys.QUERY, [1, 2, 3, 4, 5, 6]);
+        expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+      });
 
-    it('correctly handles empties', () => {
-      storage.set(StorageKeys.QUERY, null);
-      expect(storage.get(StorageKeys.QUERY)).toEqual(null);
+      it('correctly stores javascript map', () => {
+        storage.set(StorageKeys.QUERY, new Map());
+        expect(storage.get(StorageKeys.QUERY)).toEqual(new Map());
+      });
 
-      storage.set(StorageKeys.QUERY, undefined);
-      expect(storage.get(StorageKeys.QUERY)).toEqual(undefined);
+      it('correctly handles null', () => {
+        storage.set(StorageKeys.QUERY, null);
+        expect(storage.get(StorageKeys.QUERY)).toEqual(null);
+      });
 
-      storage.set(StorageKeys.QUERY, '');
-      expect(storage.get(StorageKeys.QUERY)).toEqual('');
+      it('correctly handles undefined', () => {
+        storage.set(StorageKeys.QUERY, undefined);
+        expect(storage.get(StorageKeys.QUERY)).toEqual(undefined);
+      });
+
+      it('correctly handles empty string', () => {
+        storage.set(StorageKeys.QUERY, '');
+        expect(storage.get(StorageKeys.QUERY)).toEqual('');
+      });
     });
 
     it('stores data by the provided key', () => {
@@ -99,44 +129,58 @@ describe('set', () => {
   });
   describe('set with persist', () => {
     describe('does everything set does', () => {
-      it('correctly stores primitives', () => {
-        storage.setWithPersist(StorageKeys.QUERY, 'tested');
-        expect(storage.get(StorageKeys.QUERY)).toEqual('tested');
+      describe('correctly stores various data types', () => {
+        it('correctly stores primitive string', () => {
+          storage.setWithPersist(StorageKeys.QUERY, 'tested');
+          expect(storage.get(StorageKeys.QUERY)).toEqual('tested');
+        });
 
-        storage.setWithPersist(StorageKeys.QUERY, true);
-        expect(storage.get(StorageKeys.QUERY)).toEqual(true);
+        it('correctly stores primitive boolean', () => {
+          storage.setWithPersist(StorageKeys.QUERY, true);
+          expect(storage.get(StorageKeys.QUERY)).toEqual(true);
+        });
 
-        storage.setWithPersist(StorageKeys.QUERY, 100);
-        expect(storage.get(StorageKeys.QUERY)).toEqual(100);
-      });
+        it('correctly stores primitive number', () => {
+          storage.setWithPersist(StorageKeys.QUERY, 100);
+          expect(storage.get(StorageKeys.QUERY)).toEqual(100);
+        });
 
-      it('correctly stores structures', () => {
-        storage.setWithPersist(StorageKeys.QUERY, { key1: { key2: 'val2' } });
-        expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+        it('correctly stores js object', () => {
+          storage.setWithPersist(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
+          storage.setWithPersist(StorageKeys.NAVIGATION, { test: 'test navigation data' });
+          expect(storage.get(StorageKeys.AUTOCOMPLETE).test).toBe('test autocomplete data');
+          expect(storage.get(StorageKeys.NAVIGATION).test).toBe('test navigation data');
+        });
 
-        storage.setWithPersist(StorageKeys.QUERY, [1, 2, 3, 4, 5, 6]);
-        expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+        it('correct stores nested js object', () => {
+          storage.setWithPersist(StorageKeys.QUERY, { key1: { key2: 'val2' } });
+          expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+        });
 
-        storage.setWithPersist(StorageKeys.QUERY, new Map());
-        expect(storage.get(StorageKeys.QUERY)).toEqual(new Map());
-      });
+        it('correctly stores javascript array', () => {
+          storage.setWithPersist(StorageKeys.QUERY, [1, 2, 3, 4, 5, 6]);
+          expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+        });
 
-      it('correctly handles empties', () => {
-        storage.setWithPersist(StorageKeys.QUERY, null);
-        expect(storage.get(StorageKeys.QUERY)).toEqual(null);
+        it('correctly stores javascript map', () => {
+          storage.setWithPersist(StorageKeys.QUERY, new Map());
+          expect(storage.get(StorageKeys.QUERY)).toEqual(new Map());
+        });
 
-        storage.setWithPersist(StorageKeys.QUERY, undefined);
-        expect(storage.get(StorageKeys.QUERY)).toEqual(undefined);
+        it('correctly handles null', () => {
+          storage.setWithPersist(StorageKeys.QUERY, null);
+          expect(storage.get(StorageKeys.QUERY)).toEqual(null);
+        });
 
-        storage.setWithPersist(StorageKeys.QUERY, '');
-        expect(storage.get(StorageKeys.QUERY)).toEqual('');
-      });
+        it('correctly handles undefined', () => {
+          storage.setWithPersist(StorageKeys.QUERY, undefined);
+          expect(storage.get(StorageKeys.QUERY)).toEqual(undefined);
+        });
 
-      it('stores data by the provided key', () => {
-        storage.setWithPersist(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
-        storage.setWithPersist(StorageKeys.NAVIGATION, { test: 'test navigation data' });
-        expect(storage.get(StorageKeys.AUTOCOMPLETE).test).toBe('test autocomplete data');
-        expect(storage.get(StorageKeys.NAVIGATION).test).toBe('test navigation data');
+        it('correctly handles empty string', () => {
+          storage.setWithPersist(StorageKeys.QUERY, '');
+          expect(storage.get(StorageKeys.QUERY)).toEqual('');
+        });
       });
 
       it('overwrites old data', () => {
@@ -301,7 +345,7 @@ describe('flushPersist', () => {
   });
 
   it('can flush an empty buffer', () => {
-    storage.flush();
+    storage.flushPersist();
   });
 
   it('calls update listeners on flush', () => {

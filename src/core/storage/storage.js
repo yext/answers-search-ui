@@ -80,7 +80,7 @@ export default class GlobalStorage {
    *                  current state encoded
    *                  e.g. ?query=all&context=%7Bkey:'hello'%7D
    */
-  getUrlForNewPageMaintainingState () {}
+  getUrlWithCurrentState () {}
 
   /**
    * Adds a listener to the given module for a given event
