@@ -29,7 +29,7 @@ export default class UniversalResults {
    *
    * @param {UniversalSearchResponse} response from answers-core
    * @param {Object<string, string>} urls keyed by vertical key
-   * @param {Object.<string, function>} formatters to apply to the result fields
+   * @param {Object<string, function>} formatters applied to the result fields
    * @returns {@link UniversalResults}
    */
   static fromCore (response, urls, formatters) {

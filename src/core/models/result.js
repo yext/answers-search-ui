@@ -110,14 +110,16 @@ export default class Result {
    * Constructs an SDK Result from an answers-core Result
    *
    * @param {Result} result from answers-core
+   * @param {Object<string, function>} formatters applied to the result fields
+   * @param {string} verticalKey the verticalKey associated with the result
    * @returns {@link Result}
    */
-  static fromCore (result) {
+  static fromCore (result, formatters, verticalKey) {
     const highlightedData = HighlightedFieldMap.fromCore(result.highlightedValues);
     const details = highlightedData.description || result.description;
     const truncatedDetails = truncate(details);
 
-    return new Result({
+    const resultData = {
       raw: result.rawData,
       ordinal: result.index,
       title: result.name,
@@ -127,27 +129,37 @@ export default class Result {
       distance: result.distance,
       distanceFromFilter: result.distanceFromFilter,
       highlighted: highlightedData
-    });
+    };
+
+    const formattedData = this._getFormattedData(resultData, formatters, verticalKey);
+    resultData.formatted = formattedData;
+
+    if (formattedData.description !== undefined) {
+      resultData.details = formattedData.description;
+    }
+
+    return new Result(resultData);
   }
 
   /**
-   * Applies formatters to the result
+   * Returns an object which contains formatted fields
    *
-   * @param {Object.<string, function>} formatters to apply to the result fields
-   * @param {string} verticalKey
+   * @param {Object<string, function>} formatters to apply to the result fields
+   * @param {string} verticalKey the verticalKey associated with the result
+   * @returns {Object<string, string>} keys are field names and values are the formatted data
    */
-  format (formatters, verticalKey) {
-    if (!formatters || !this._raw) {
-      return this;
+  static _getFormattedData (resultData, formatters, verticalKey) {
+    const formattedData = {};
+
+    if (!formatters || !resultData.raw) {
+      return formattedData;
     }
 
     if (Object.keys(formatters).length === 0) {
-      return this;
+      return formattedData;
     }
 
-    const formattedData = {};
-
-    Object.entries(this._raw).forEach(([fieldName, fieldVal]) => {
+    Object.entries(resultData.raw).forEach(([fieldName, fieldVal]) => {
       // check if a field formatter exists for the current entity profile field
       if (formatters[fieldName] === undefined) {
         return;
@@ -159,14 +171,14 @@ export default class Result {
 
       // if highlighted version of field value is available, make it available to field formatter
       let highlightedFieldVal = null;
-      if (this._highlighted && this._highlighted[fieldName]) {
-        highlightedFieldVal = this._highlighted[fieldName];
+      if (resultData.highlighted && resultData.highlighted[fieldName]) {
+        highlightedFieldVal = resultData.highlighted[fieldName];
       }
 
       // call formatter function associated with the field name
       // the input object defines the interface that field formatter functions work with
       formattedData[fieldName] = formatters[fieldName]({
-        entityProfileData: this._raw,
+        entityProfileData: resultData.raw,
         entityFieldValue: fieldVal,
         highlightedEntityFieldValue: highlightedFieldVal,
         verticalId: verticalKey,
@@ -174,12 +186,6 @@ export default class Result {
       });
     });
 
-    this._formatted = formattedData;
-
-    if (this._formatted.description !== undefined) {
-      this.details = this._formatted.description;
-    }
-
-    return this;
+    return formattedData;
   }
 }

@@ -15,7 +15,7 @@ export default class AlternativeVerticals {
    * Create alternative verticals from server data
    *
    * @param {Object[]} alternativeVerticals
-   * @param {Object.<string, function>} formatters to apply to the result fields
+   * @param {Object<string, function>} formatters applied to the result fields
    */
   static fromCore (alternativeVerticals, formatters) {
     if (!alternativeVerticals || alternativeVerticals.length === 0) {

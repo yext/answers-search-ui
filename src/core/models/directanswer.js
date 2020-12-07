@@ -7,19 +7,21 @@ export default class DirectAnswer {
   }
 
   /**
-   * Constructs an SDK DirectAnswer from an answers-core DirectAnswer
+   * Constructs an SDK DirectAnswer from an answers-core DirectAnswer and applies formatting
    *
    * @param {DirectAnswer} directAnswer from answers-core
+   * @param {Object<string, function>} formatters keyed by fieldApiName. If a formatter matches the fieldApiName
+   * of the direct answer, it will be applied to the direct answer value.
    * @returns {DirectAnswer}
    */
-  static fromCore (directAnswer) {
+  static fromCore (directAnswer, formatters) {
     if (!directAnswer) {
       return new DirectAnswer();
     }
 
     const relatedResult = directAnswer.relatedResult || {};
 
-    return new DirectAnswer({
+    const directAnswerData = {
       answer: {
         entityName: directAnswer.entityName,
         fieldName: directAnswer.fieldName,
@@ -36,30 +38,33 @@ export default class DirectAnswer {
         },
         verticalConfigId: directAnswer.verticalKey
       }
-    });
+    };
+
+    const directAnswerFieldApiName = directAnswerData.answer.fieldApiName;
+    const formatterExistsForDirectAnswer = formatters && directAnswerFieldApiName in formatters;
+
+    if (formatterExistsForDirectAnswer) {
+      directAnswerData.answer.value = this._getFormattedValue(directAnswerData, formatters[directAnswerFieldApiName]);
+    }
+
+    return new DirectAnswer(directAnswerData);
   }
 
   /**
-   * Applies a formatter to the direct answer if a formatter exists for the direct answer field
+   * Applies a formatter to a direct answer value
    *
-   * @param {Object.<string, function>} formatters
+   * @param {Object} data directAnswerData
+   * @param {function} formatter a field formatter to apply to the answer value field
    */
-  format (formatters) {
-    if (!this.answer || !this.relatedItem) {
-      return this;
+  static _getFormattedValue (data, formatter) {
+    if (!data.answer || !data.relatedItem) {
+      return null;
     }
 
-    const answer = this.answer;
-    const relatedItem = this.relatedItem;
-
-    if (formatters[answer.fieldApiName]) {
-      answer.value = formatters[answer.fieldApiName](
-        answer.value,
-        relatedItem.data.fieldValues,
-        relatedItem.verticalConfigId,
-        true);
-    }
-
-    return this;
+    return formatter(
+      data.answer.value,
+      data.relatedItem.data.fieldValues,
+      data.relatedItem.verticalConfigId,
+      true);
   }
 }

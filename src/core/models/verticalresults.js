@@ -41,7 +41,7 @@ export default class VerticalResults {
    *
    * @param {VerticalResults} verticalResults
    * @param {Object<string, string>} urls keyed by vertical key
-   * @param {Object.<string, function>} formatters Field formatters for results
+   * @param {Object<string, function>} formatters applied to the result fields
    * @param {ResultsContext} resultsContext
    * @param {string} verticalKeyFromRequest
    * @returns {@link Section}
@@ -59,7 +59,7 @@ export default class VerticalResults {
         resultsCount: verticalResults.resultsCount,
         appliedQueryFilters: verticalResults.appliedQueryFilters.map(AppliedQueryFilter.fromCore),
         results: verticalResults.results.map(result => {
-          return Result.fromCore(result).format(formatters, verticalKey);
+          return Result.fromCore(result, formatters, verticalKey);
         })
       },
       urls[verticalKey],

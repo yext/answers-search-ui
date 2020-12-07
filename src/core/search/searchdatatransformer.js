@@ -22,7 +22,7 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: data.queryId,
       [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),
-      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer).format(formatters),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer, formatters),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.fromCore(data, urls, formatters),
       [StorageKeys.INTENTS]: SearchIntents.fromCore(data.searchIntents),
       [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),

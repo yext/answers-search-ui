@@ -60,7 +60,7 @@ export default class CoreAdapter {
 
     /**
      * A map of field formatters used to format results, if present
-     * @type {Object.<string, function>}
+     * @type {Object<string, function>}
      * @private
      */
     this._fieldFormatters = config.fieldFormatters || {};
