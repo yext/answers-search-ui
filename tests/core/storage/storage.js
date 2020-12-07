@@ -20,18 +20,18 @@ it('calls update and reset listeners onpopstate', () => {
 
 describe('init', () => {
   it('should be initialized with empty map w/o init', () => {
-    expect(storage.getAll()).toEqual({});
+    expect(storage.getAll()).toEqual(new Map());
   });
 
   it('should be initialized with empty map with empty string', () => {
     storage.init('');
-    expect(storage.getAll()).toEqual({});
+    expect(storage.getAll()).toEqual(new Map());
   });
 
-  const expectedResult = {
-    key1: 'val1',
-    key2: 'val2'
-  };
+  const expectedResult = new Map([
+    ['key1', 'val1'],
+    ['key2', 'val2']
+  ]);
 
   it('should be initialized with an absolute url', () => {
     storage = new GlobalStorage();
@@ -84,7 +84,7 @@ describe('set', () => {
 
       it('correctly stores javascript array', () => {
         storage.set(StorageKeys.QUERY, [1, 2, 3, 4, 5, 6]);
-        expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+        expect(storage.get(StorageKeys.QUERY)).toEqual([1, 2, 3, 4, 5, 6]);
       });
 
       it('correctly stores javascript map', () => {
@@ -98,8 +98,7 @@ describe('set', () => {
       });
 
       it('correctly handles undefined', () => {
-        storage.set(StorageKeys.QUERY, undefined);
-        expect(storage.get(StorageKeys.QUERY)).toEqual(undefined);
+        expect(() => storage.set(StorageKeys.QUERY, undefined)).toThrow();
       });
 
       it('correctly handles empty string', () => {
@@ -159,7 +158,7 @@ describe('set', () => {
 
         it('correctly stores javascript array', () => {
           storage.setWithPersist(StorageKeys.QUERY, [1, 2, 3, 4, 5, 6]);
-          expect(storage.get(StorageKeys.QUERY)).toEqual({ key1: { key2: 'val2' } });
+          expect(storage.get(StorageKeys.QUERY)).toEqual([1, 2, 3, 4, 5, 6]);
         });
 
         it('correctly stores javascript map', () => {
@@ -173,8 +172,7 @@ describe('set', () => {
         });
 
         it('correctly handles undefined', () => {
-          storage.setWithPersist(StorageKeys.QUERY, undefined);
-          expect(storage.get(StorageKeys.QUERY)).toEqual(undefined);
+          expect(() => storage.set(StorageKeys.QUERY, undefined)).toThrow();
         });
 
         it('correctly handles empty string', () => {
@@ -216,8 +214,8 @@ describe('set', () => {
 });
 
 describe('get', () => {
-  it('returns null for unset state', () => {
-    expect(storage.get(StorageKeys.QUERY)).toBeNull();
+  it('returns undefined for unset state', () => {
+    expect(storage.get(StorageKeys.QUERY)).toBeUndefined();
   });
 });
 
@@ -226,20 +224,18 @@ describe('getAll', () => {
     storage.set('key1', 'val1');
     storage.set('key2', 'val2');
     storage.set('key3', '');
-    storage.set('key4', undefined);
-    storage.set('key5', null);
-    storage.set('key6', {});
-    storage.set('key7', []);
+    storage.set('key4', null);
+    storage.set('key5', {});
+    storage.set('key6', []);
 
-    expect(storage.getAll()).toEqual({
-      key1: 'val1',
-      key2: 'val2',
-      key3: '',
-      key4: undefined,
-      key5: null,
-      key6: {},
-      key7: []
-    });
+    expect(storage.getAll()).toEqual(new Map([
+      ['key1', 'val1'],
+      ['key2', 'val2'],
+      ['key3', ''],
+      ['key4', null],
+      ['key5', {}],
+      ['key6', []]
+    ]));
   });
 
   it('returns empty map for empty get all', () => {
@@ -252,7 +248,7 @@ describe('delete', () => {
     storage.set('key1', 'val1');
     storage.set('key2', 'val2');
     storage.delete('key1');
-    expect(storage.get('key1')).toBeNull();
+    expect(storage.get('key1')).toBeUndefined();
     expect(storage.get('key2')).toEqual('val2');
   });
 
@@ -260,6 +256,7 @@ describe('delete', () => {
     storage.set('key1', 'val1');
     storage.set('key2', 'val2');
     storage.delete('key1');
+    storage.flushPersist();
     expect(storage.persistentStorage.get('key1')).toBeUndefined();
     expect(storage.persistentStorage.get('key2')).toEqual('val2');
   });
@@ -341,7 +338,7 @@ describe('flushPersist', () => {
     storage.flushPersist();
     expect(storage.persistentStorage.get('key1')).toEqual('val1');
     expect(storage.persistentStorage.get('key2')).toEqual('val2');
-    expect(storage.persistentStorageBuffer).toEqual(new Map());
+    expect(storage.persistentStorageBuffer).toEqual([]);
   });
 
   it('can flush an empty buffer', () => {
@@ -349,8 +346,8 @@ describe('flushPersist', () => {
   });
 
   it('calls update listeners on flush', () => {
-    storage = new GlobalStorage(stateUpdateListener, stateResetListener);
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
+    storage.flushPersist();
     expect(stateUpdateListener).toBeCalled();
     expect(stateResetListener).not.toBeCalled();
   });
