@@ -1,3 +1,8 @@
+import DefaultPersistentStorage from '../../../node_modules/@yext/answers-storage/dist/index';
+import PersistentStorageBufferEntry from './persistentstoragebufferentry';
+import PersistentStorageActionType from './persistentstorageactiontype';
+import SearchParams from '../../ui/dom/searchparams';
+
 /**
  * GlobalStorage is a container around application state.  It
  * exposes an interface for CRUD operations as well as listening
@@ -8,12 +13,33 @@
  */
 export default class GlobalStorage {
   constructor (stateUpdateListener, stateResetListener) {
+    this.stateUpdateListener = stateUpdateListener || function () {};
+    this.stateResetListener = stateResetListener || function () {};
+
+    const popListener = (queryParamsObject, queryParamsString) => {
+      this.stateUpdateListener(queryParamsObject, queryParamsString);
+      this.stateResetListener(queryParamsObject, queryParamsString);
+    };
+
+    /**
+     * The core data for the global storage
+     * @type {Map}
+     */
+    this.data = new Map();
+
     /**
      * The persistent storage implementation to store state
      * across browser sessions and URLs
      * @type {PersistentStorage}
      */
-    this.persistentStorage = undefined;
+    this.persistentStorage = new DefaultPersistentStorage(popListener);
+
+    /**
+     * The persistent storage buffer used to keep persistent
+     * entries until a flush is called
+     * @type {PersistentStorage}
+     */
+    this.persistentStorageBuffer = [];
   }
 
   /**
@@ -23,7 +49,10 @@ export default class GlobalStorage {
    *
    * @param {string} url The starting URL
    */
-  init (url) {}
+  init (url) {
+    this.persistentStorage.init(url);
+    this.data = this.persistentStorage.getAll();
+  }
 
   /**
    * Set the data in storage with the given key to the provided
@@ -32,7 +61,13 @@ export default class GlobalStorage {
    * @param {string} key The storage key to set
    * @param {*} data The data to set
    */
-  set (key, data) {}
+  set (key, data) {
+    if (typeof data === 'undefined') {
+      throw new Error('undefined is not a valid storage value');
+    }
+
+    this.data.set(key, data);
+  }
 
   /**
    * Updates the storage and adds the entry to a persistent storage
@@ -41,13 +76,48 @@ export default class GlobalStorage {
    * @param {string} key The storage key to set
    * @param {*} data The data to set
    */
-  setWithPersist (key, data, replaceHistory) {}
+  setWithPersist (key, data) {
+    if (typeof data === 'undefined') {
+      throw new Error('undefined is not a valid storage value');
+    }
+
+    this.set(key, data);
+
+    let serializedData = data;
+    if (typeof data !== 'string') {
+      serializedData = JSON.stringify(data);
+    }
+
+    this.persistentStorageBuffer.push(new PersistentStorageBufferEntry(
+      PersistentStorageActionType.SET,
+      key,
+      serializedData
+    ));
+  }
 
   /**
    * Flushes the persistent storage buffer and adds all entries
    * to the persistent storage.
    */
-  flushPersist () {}
+  flushPersist () {
+    this.persistentStorageBuffer.forEach((entry) => {
+      switch (entry.actionType) {
+        case PersistentStorageActionType.SET:
+          this.persistentStorage.set(entry.key, entry.value);
+          break;
+        case PersistentStorageActionType.DELETE:
+          this.persistentStorage.delete(entry.key);
+          break;
+        default:
+          throw Error('Unimplemented action type ' + entry.actionType);
+      }
+    });
+    this.persistentStorageBuffer = [];
+    this.stateUpdateListener(
+      this.persistentStorage.getAll(),
+      this.persistentStorage.getUrlWithCurrentState()
+    );
+  }
 
   /**
    * Get the current state for the provided key
@@ -55,7 +125,9 @@ export default class GlobalStorage {
    * @param {string} key The storage key to get
    * @return {*} The state for the provided key
    */
-  get (key) {}
+  get (key) {
+    return this.data.get(key);
+  }
 
   /**
    * Get the current state for all key/value pairs in storage
@@ -63,7 +135,9 @@ export default class GlobalStorage {
    * @return {Object} mapping from key to value representing the
    *                  current state
    */
-  getAll () {}
+  getAll () {
+    return this.data;
+  }
 
   /**
    * Remove the data in storage with the given key to the
@@ -71,7 +145,14 @@ export default class GlobalStorage {
    *
    * @param {string} key The storage key to delete
    */
-  delete (key) {}
+  delete (key) {
+    this.data.delete(key);
+
+    this.persistentStorageBuffer.push(new PersistentStorageBufferEntry(
+      PersistentStorageActionType.DELETE,
+      key
+    ));
+  }
 
   /**
    * Returns the query parameters to encode the current state
@@ -80,7 +161,22 @@ export default class GlobalStorage {
    *                  current state encoded
    *                  e.g. ?query=all&context=%7Bkey:'hello'%7D
    */
-  getUrlWithCurrentState () {}
+  getUrlWithCurrentState () {
+    const urlParams = new SearchParams(this.persistentStorage.getUrlWithCurrentState());
+    this.persistentStorageBuffer.forEach((entry) => {
+      switch (entry.actionType) {
+        case PersistentStorageActionType.SET:
+          urlParams.set(entry.key, entry.value);
+          break;
+        case PersistentStorageActionType.DELETE:
+          urlParams.delete(entry.key);
+          break;
+        default:
+          throw Error('Unimplemented action type ' + entry.actionType);
+      }
+    });
+    return urlParams.toString();
+  }
 
   /**
    * Adds a listener to the given module for a given event
