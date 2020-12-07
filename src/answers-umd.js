@@ -16,6 +16,7 @@ import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
+import NewGlobalStorage from './core/storage/storage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
@@ -160,6 +161,8 @@ class Answers {
    *                            experience's Answers Status page.
    */
   init (config, statusPage) {
+    const storage = new NewGlobalStorage();
+    console.log(storage);
     window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
     this.validateConfig(parsedConfig);
