@@ -346,6 +346,7 @@ describe('flushPersist', () => {
   });
 
   it('calls update listeners on flush', () => {
+    storage = new GlobalStorage(stateUpdateListener, stateResetListener);
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
     storage.flushPersist();
     expect(stateUpdateListener).toBeCalled();
