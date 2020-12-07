@@ -44,7 +44,8 @@ export default class DirectAnswer {
     const formatterExistsForDirectAnswer = formatters && directAnswerFieldApiName in formatters;
 
     if (formatterExistsForDirectAnswer) {
-      directAnswerData.answer.value = this._getFormattedValue(directAnswerData, formatters[directAnswerFieldApiName]);
+      const formattedValue = this._getFormattedValue(directAnswerData, formatters[directAnswerFieldApiName]);
+      directAnswerData.answer.value = formattedValue || directAnswerData.answer.value;
     }
 
     return new DirectAnswer(directAnswerData);
@@ -55,6 +56,7 @@ export default class DirectAnswer {
    *
    * @param {Object} data directAnswerData
    * @param {function} formatter a field formatter to apply to the answer value field
+   * @returns {string|null} the formatted value, or null if the formatter could not be applied
    */
   static _getFormattedValue (data, formatter) {
     if (!data.answer || !data.relatedItem) {

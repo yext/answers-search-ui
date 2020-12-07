@@ -131,6 +131,10 @@ export default class Result {
       highlighted: highlightedData
     };
 
+    if (result.source !== 'KNOWLEDGE_MANAGER') {
+      return new Result(resultData);
+    }
+
     const formattedData = this._getFormattedData(resultData, formatters, verticalKey);
     resultData.formatted = formattedData;
 
@@ -144,6 +148,7 @@ export default class Result {
   /**
    * Returns an object which contains formatted fields
    *
+   * @param {Object} resultData the same shape as the input to the Result constructor
    * @param {Object<string, function>} formatters to apply to the result fields
    * @param {string} verticalKey the verticalKey associated with the result
    * @returns {Object<string, string>} keys are field names and values are the formatted data
