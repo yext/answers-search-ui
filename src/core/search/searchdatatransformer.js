@@ -22,8 +22,8 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: data.queryId,
       [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),
-      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer),
-      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.fromCore(data, urls),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer, formatters),
+      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.fromCore(data, urls, formatters),
       [StorageKeys.INTENTS]: SearchIntents.fromCore(data.searchIntents),
       [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
       [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(data.locationBias)
@@ -50,7 +50,7 @@ export default class SearchDataTransformer {
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(response.facets, resultsContext),
       [StorageKeys.INTENTS]: SearchIntents.fromCore(response.searchIntents),
       [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(response.spellCheck),
-      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(response.alternativeVerticals),
+      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(response.alternativeVerticals, formatters),
       [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(response.locationBias)
     };
   }

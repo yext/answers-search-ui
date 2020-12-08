@@ -3,14 +3,14 @@
 import SearchStates from '../storage/searchstates';
 
 export default class Section {
-  constructor (data = {}, url, formatters, resultsContext) {
+  constructor (data = {}, url, resultsContext) {
     this.searchState = SearchStates.SEARCH_COMPLETE;
     this.verticalConfigId = data.verticalConfigId || null;
     this.resultsCount = data.resultsCount || 0;
     this.encodedState = data.encodedState || '';
     this.appliedQueryFilters = data.appliedQueryFilters;
     this.facets = data.facets || null;
-    this.results = data.results; // TODO use formatters on results
+    this.results = data.results;
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
     this.resultsContext = resultsContext;
