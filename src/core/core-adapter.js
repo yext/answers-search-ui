@@ -1,5 +1,5 @@
 /** @module Core */
-import provideCore from '@yext/answers-core';
+import { provideCore } from '@yext/answers-core';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
