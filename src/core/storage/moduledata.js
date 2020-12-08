@@ -36,6 +36,11 @@ export default class ModuleData extends EventEmitter {
       return;
     }
 
+    if (data instanceof Map && !(this._data instanceof Map)) {
+      this._data = data;
+      this.emit('update', this._data);
+    }
+
     // check for shallow equality
     for (const key of Object.keys(data)) {
       if (this._data[key] !== data[key]) {

@@ -1,7 +1,6 @@
 import DefaultPersistentStorage from '../../../node_modules/@yext/answers-storage/dist/index';
-import PersistentStorageBufferEntry from './persistentstoragebufferentry';
-import PersistentStorageActionType from './persistentstorageactiontype';
-import SearchParams from '../../ui/dom/searchparams';
+import { AnswersStorageError } from '../errors/errors';
+import ModuleData from './moduledata';
 
 /**
  * GlobalStorage is a container around application state.  It
@@ -13,33 +12,59 @@ import SearchParams from '../../ui/dom/searchparams';
  */
 export default class GlobalStorage {
   constructor (stateUpdateListener, stateResetListener) {
+    /**
+     * The update listener for changes in state (persistent storage changes)
+     *
+     * @type {Function}
+     */
     this.stateUpdateListener = stateUpdateListener || function () {};
+
+    /**
+     * The reset listener for changes in state (persistent storage changes)
+     *
+     * @type {Function}
+     */
     this.stateResetListener = stateResetListener || function () {};
 
-    const popListener = (queryParamsObject, queryParamsString) => {
+    /**
+     * The listener for window.pop in the persistent storage
+     *
+     * @type {Function}
+     */
+    this.popListener = (queryParamsObject, queryParamsString) => {
       this.stateUpdateListener(queryParamsObject, queryParamsString);
       this.stateResetListener(queryParamsObject, queryParamsString);
     };
 
     /**
      * The core data for the global storage
-     * @type {Map}
+     *
+     * @type {Map<string, ModuleData}
      */
-    this.data = new Map();
+    this.moduleDataContainer = new Map();
 
     /**
      * The persistent storage implementation to store state
      * across browser sessions and URLs
+     *
      * @type {PersistentStorage}
      */
-    this.persistentStorage = new DefaultPersistentStorage(popListener);
+    this.persistentStorage = new DefaultPersistentStorage(this.popListener);
 
     /**
      * The persistent storage buffer used to keep persistent
      * entries until a flush is called
+     *
      * @type {PersistentStorage}
      */
-    this.persistentStorageBuffer = [];
+    this.persistentStorageBuffer = new DefaultPersistentStorage(this.popListener);
+
+    /**
+     * The listeners to apply to uninitialized storage modules
+     *
+     * @type {Map<string, Object>}
+     */
+    this.futureListeners = new Map();
   }
 
   /**
@@ -51,7 +76,9 @@ export default class GlobalStorage {
    */
   init (url) {
     this.persistentStorage.init(url);
-    this.data = this.persistentStorage.getAll();
+    this.persistentStorage.getAll().forEach((value, key) => {
+      this.set(key, value);
+    });
   }
 
   /**
@@ -62,25 +89,30 @@ export default class GlobalStorage {
    * @param {*} data The data to set
    */
   set (key, data) {
-    if (typeof data === 'undefined') {
-      throw new Error('undefined is not a valid storage value');
+    if (key === undefined || key === null || typeof key !== 'string') {
+      throw new AnswersStorageError('Invalid storage key provided', key, data);
     }
 
-    this.data.set(key, data);
+    if (typeof data === 'undefined') {
+      throw new AnswersStorageError('Invalid storage key provided', key, data);
+    }
+
+    if (this.moduleDataContainer.get(key) === undefined) {
+      this.moduleDataContainer.set(key, new ModuleData(key));
+      this._applyFutureListeners(key);
+    }
+    this.moduleDataContainer.get(key).set(data);
   }
 
   /**
    * Updates the storage and adds the entry to a persistent storage
-   * buffer. The entry is not yet added to the persistent storage.
+   * buffer. The entry is not added to the persistent storage until
+   * the buffer is flushed.
    *
    * @param {string} key The storage key to set
    * @param {*} data The data to set
    */
   setWithPersist (key, data) {
-    if (typeof data === 'undefined') {
-      throw new Error('undefined is not a valid storage value');
-    }
-
     this.set(key, data);
 
     let serializedData = data;
@@ -88,11 +120,7 @@ export default class GlobalStorage {
       serializedData = JSON.stringify(data);
     }
 
-    this.persistentStorageBuffer.push(new PersistentStorageBufferEntry(
-      PersistentStorageActionType.SET,
-      key,
-      serializedData
-    ));
+    this.persistentStorageBuffer.set(key, serializedData);
   }
 
   /**
@@ -100,19 +128,15 @@ export default class GlobalStorage {
    * to the persistent storage.
    */
   flushPersist () {
-    this.persistentStorageBuffer.forEach((entry) => {
-      switch (entry.actionType) {
-        case PersistentStorageActionType.SET:
-          this.persistentStorage.set(entry.key, entry.value);
-          break;
-        case PersistentStorageActionType.DELETE:
-          this.persistentStorage.delete(entry.key);
-          break;
-        default:
-          throw Error('Unimplemented action type ' + entry.actionType);
-      }
+    this.persistentStorage = this.persistentStorageBuffer;
+
+    const persistentStorageClone = new DefaultPersistentStorage(this.popListener);
+    this.persistentStorage.getAll().forEach((value, key) => {
+      persistentStorageClone.set(key, value);
     });
-    this.persistentStorageBuffer = [];
+
+    this.persistentStorageBuffer = persistentStorageClone;
+
     this.stateUpdateListener(
       this.persistentStorage.getAll(),
       this.persistentStorage.getUrlWithCurrentState()
@@ -123,35 +147,36 @@ export default class GlobalStorage {
    * Get the current state for the provided key
    *
    * @param {string} key The storage key to get
-   * @return {*} The state for the provided key
+   * @return {*} The state for the provided key, undefined if key doesn't exist
    */
   get (key) {
-    return this.data.get(key);
+    if (!this.moduleDataContainer.get(key)) {
+      return this.moduleDataContainer.get(key);
+    }
+    return this.moduleDataContainer.get(key).raw();
   }
 
   /**
    * Get the current state for all key/value pairs in storage
    *
-   * @return {Object} mapping from key to value representing the
-   *                  current state
+   * @return {Map<string, ModuleData>} mapping from key to value representing the current state
    */
   getAll () {
-    return this.data;
+    const entries = new Map();
+    this.moduleDataContainer.forEach((value, key) => {
+      entries.set(key, this.get(key));
+    });
+    return entries;
   }
 
   /**
-   * Remove the data in storage with the given key to the
-   * provided data
+   * Remove the data in storage with the given key
    *
    * @param {string} key The storage key to delete
    */
   delete (key) {
-    this.data.delete(key);
-
-    this.persistentStorageBuffer.push(new PersistentStorageBufferEntry(
-      PersistentStorageActionType.DELETE,
-      key
-    ));
+    this.moduleDataContainer.delete(key);
+    this.persistentStorageBuffer.delete(key);
   }
 
   /**
@@ -159,34 +184,66 @@ export default class GlobalStorage {
    *
    * @return {string} The query parameters for a page link with the
    *                  current state encoded
-   *                  e.g. ?query=all&context=%7Bkey:'hello'%7D
+   *                  e.g. query=all&context=%7Bkey:'hello'%7D
    */
   getUrlWithCurrentState () {
-    const urlParams = new SearchParams(this.persistentStorage.getUrlWithCurrentState());
-    this.persistentStorageBuffer.forEach((entry) => {
-      switch (entry.actionType) {
-        case PersistentStorageActionType.SET:
-          urlParams.set(entry.key, entry.value);
-          break;
-        case PersistentStorageActionType.DELETE:
-          urlParams.delete(entry.key);
-          break;
-        default:
-          throw Error('Unimplemented action type ' + entry.actionType);
-      }
-    });
-    return urlParams.toString();
+    return this.persistentStorageBuffer.getUrlWithCurrentState();
   }
 
   /**
    * Adds a listener to the given module for a given event
    *
    * @param {string} event The event to listen to, e.g. ‘update’
-   * @param {string} module The module key to listen for e.g. Pagination
+   * @param {string} moduleId The module key to listen for e.g. Pagination
    * @param {Function} callback The callback when an event is called,
    *                   function is given the data if relevant
    */
-  on (event, module, callback) {}
+  on (event, moduleId, callback) {
+    const moduleData = this.moduleDataContainer.get(moduleId);
+    if (moduleData === undefined) {
+      if (this.futureListeners.get(moduleId) === undefined) {
+        this.futureListeners.set(moduleId, []);
+      }
+      this.futureListeners.get(moduleId).push({ event, callback });
+      return;
+    }
 
-  off (event, module, callback) {}
+    moduleData.on(event, callback);
+  }
+
+  /**
+   * Removes a listener for the given moduleId for a given event
+   *
+   * @param {string} event The event being listened to, e.g. ‘update’
+   * @param {string} moduleId The module key being listened for e.g. Pagination
+   * @param {Function} callback The callback to be removed
+   */
+  off (event, moduleId, callback) {
+    const moduleData = this.moduleDataContainer.get(moduleId);
+    if (moduleData === undefined) {
+      if (this.futureListeners.get(moduleId) !== undefined) {
+        this.futureListeners.get(moduleId).pop(); // Is this right?
+      }
+      return;
+    }
+
+    moduleData.off(event, callback);
+  }
+
+  /**
+   * Applies all future listeners to the given moduleId
+   *
+   * @param {string} moduleId
+   */
+  _applyFutureListeners (moduleId) {
+    const futures = this.futureListeners.get(moduleId);
+    if (!futures) {
+      return;
+    }
+
+    futures.forEach((listener) => {
+      this.on(listener.event, moduleId, listener.callback);
+    });
+    this.futureListeners.delete(moduleId);
+  }
 }

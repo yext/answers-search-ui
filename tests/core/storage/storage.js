@@ -92,18 +92,30 @@ describe('set', () => {
         expect(storage.get(StorageKeys.QUERY)).toEqual(new Map());
       });
 
-      it('correctly handles null', () => {
+      it('correctly handles null value', () => {
         storage.set(StorageKeys.QUERY, null);
         expect(storage.get(StorageKeys.QUERY)).toEqual(null);
       });
 
-      it('correctly handles undefined', () => {
+      it('correctly handles undefined value', () => {
         expect(() => storage.set(StorageKeys.QUERY, undefined)).toThrow();
       });
 
-      it('correctly handles empty string', () => {
+      it('correctly handles empty string value', () => {
         storage.set(StorageKeys.QUERY, '');
         expect(storage.get(StorageKeys.QUERY)).toEqual('');
+      });
+
+      it('correctly handles null key', () => {
+        expect(() => storage.set(null, 'string')).toThrow();
+      });
+
+      it('correctly handles undefined key', () => {
+        expect(() => storage.set(undefined, 'string')).toThrow();
+      });
+
+      it('correctly handles non-string key', () => {
+        expect(() => storage.set({}, 'string')).toThrow();
       });
     });
 
@@ -248,13 +260,14 @@ describe('delete', () => {
     storage.set('key1', 'val1');
     storage.set('key2', 'val2');
     storage.delete('key1');
+    storage.flushPersist();
     expect(storage.get('key1')).toBeUndefined();
     expect(storage.get('key2')).toEqual('val2');
   });
 
   it('deletes data from persistent storage', () => {
-    storage.set('key1', 'val1');
-    storage.set('key2', 'val2');
+    storage.setWithPersist('key1', 'val1');
+    storage.setWithPersist('key2', 'val2');
     storage.delete('key1');
     storage.flushPersist();
     expect(storage.persistentStorage.get('key1')).toBeUndefined();
@@ -338,7 +351,7 @@ describe('flushPersist', () => {
     storage.flushPersist();
     expect(storage.persistentStorage.get('key1')).toEqual('val1');
     expect(storage.persistentStorage.get('key2')).toEqual('val2');
-    expect(storage.persistentStorageBuffer).toEqual([]);
+    expect(storage.persistentStorageBuffer).toEqual(storage.persistentStorage);
   });
 
   it('can flush an empty buffer', () => {
