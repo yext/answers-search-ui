@@ -1,4 +1,5 @@
 import GlobalStorage from '../../../src/core/storage/storage';
+import StorageListener from '../../../src/core/storage/listener';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 let storage;
@@ -286,15 +287,17 @@ describe('delete', () => {
 describe('on', () => {
   it('publishes to subscribers when a new key is added', () => {
     const spy = jest.fn();
-    storage.on('update', StorageKeys.AUTOCOMPLETE, spy);
+    const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
+    storage.on(listener);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
     expect(spy).toHaveBeenCalled();
   });
 
   it('publishes to subscribers on existing keys', () => {
     const spy = jest.fn();
+    const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
-    storage.on('update', StorageKeys.AUTOCOMPLETE, spy);
+    storage.on(listener);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(spy).toHaveBeenCalled();
   });
@@ -302,9 +305,11 @@ describe('on', () => {
   it('publishes to all subscribers', () => {
     const spy1 = jest.fn();
     const spy2 = jest.fn();
+    const listener1 = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy1);
+    const listener2 = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
-    storage.on('update', StorageKeys.AUTOCOMPLETE, spy1);
-    storage.on('update', StorageKeys.AUTOCOMPLETE, spy2);
+    storage.on(listener1);
+    storage.on(listener2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(spy1).toHaveBeenCalled();
     expect(spy2).toHaveBeenCalled();
@@ -313,30 +318,48 @@ describe('on', () => {
   it('only publishes to listeners on the key', () => {
     const key1Spy = jest.fn();
     const key2Spy = jest.fn();
+    const listener1 = new StorageListener('update', StorageKeys.AUTOCOMPLETE, key1Spy);
+    const listener2 = new StorageListener('update', StorageKeys.UNIVERSAL_RESULTS, key2Spy);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
     storage.set(StorageKeys.UNIVERSAL_RESULTS, { test: 'test results data' });
-    storage.on('update', StorageKeys.AUTOCOMPLETE, key1Spy);
-    storage.on('update', StorageKeys.UNIVERSAL_RESULTS, key2Spy);
+    storage.on(listener1);
+    storage.on(listener2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(key1Spy).toHaveBeenCalled();
     expect(key2Spy).not.toHaveBeenCalled();
+  });
+
+  it('throws on incorrect event type', () => {
+    const listener1 = new StorageListener(null, StorageKeys.QUERY, jest.fn());
+    const listener2 = new StorageListener(undefined, StorageKeys.QUERY, jest.fn());
+    expect(() => storage.on(listener1)).toThrow();
+    expect(() => storage.on(listener2)).toThrow();
+  });
+
+  it('throws on incorrect storage key', () => {
+    const listener1 = new StorageListener('update', null, jest.fn());
+    const listener2 = new StorageListener('update', undefined, jest.fn());
+    expect(() => storage.on(listener1)).toThrow();
+    expect(() => storage.on(listener2)).toThrow();
   });
 });
 
 describe('off', () => {
   it('can be unsubscribed from a new key', () => {
     const spy = jest.fn();
-    storage.on('update', StorageKeys.VERTICAL_RESULTS, spy);
-    storage.off('update', StorageKeys.VERTICAL_RESULTS, spy);
+    const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
+    storage.on(listener);
+    storage.off(listener);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'test results data' });
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('can be unsubscribed from an existing key', () => {
     const spy = jest.fn();
+    const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'test results data' });
-    storage.on('update', StorageKeys.VERTICAL_RESULTS, spy);
-    storage.off('update', StorageKeys.VERTICAL_RESULTS, spy);
+    storage.on(listener);
+    storage.off(listener);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'new test results data' });
     expect(spy).not.toHaveBeenCalled();
   });

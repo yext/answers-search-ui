@@ -1,6 +1,5 @@
 import DefaultPersistentStorage from '../../../node_modules/@yext/answers-storage/dist/index';
 import { AnswersStorageError } from '../errors/errors';
-import ModuleData from './moduledata';
 
 /**
  * GlobalStorage is a container around application state.  It
@@ -39,9 +38,9 @@ export default class GlobalStorage {
     /**
      * The core data for the global storage
      *
-     * @type {Map<string, ModuleData}
+     * @type {Map<string, *}
      */
-    this.moduleDataContainer = new Map();
+    this.storage = new Map();
 
     /**
      * The persistent storage implementation to store state
@@ -60,11 +59,11 @@ export default class GlobalStorage {
     this.persistentStorageBuffer = new DefaultPersistentStorage(this.popListener);
 
     /**
-     * The listeners to apply to uninitialized storage modules
+     * The listeners to apply on changes to global storage
      *
-     * @type {Map<string, Object>}
+     * @type {Listener[]}
      */
-    this.futureListeners = new Map();
+    this.listeners = [];
   }
 
   /**
@@ -97,11 +96,8 @@ export default class GlobalStorage {
       throw new AnswersStorageError('Invalid storage key provided', key, data);
     }
 
-    if (this.moduleDataContainer.get(key) === undefined) {
-      this.moduleDataContainer.set(key, new ModuleData(key));
-      this._applyFutureListeners(key);
-    }
-    this.moduleDataContainer.get(key).set(data);
+    this.storage.set(key, data);
+    this._callListeners('update', key);
   }
 
   /**
@@ -150,23 +146,16 @@ export default class GlobalStorage {
    * @return {*} The state for the provided key, undefined if key doesn't exist
    */
   get (key) {
-    if (!this.moduleDataContainer.get(key)) {
-      return this.moduleDataContainer.get(key);
-    }
-    return this.moduleDataContainer.get(key).raw();
+    return this.storage.get(key);
   }
 
   /**
    * Get the current state for all key/value pairs in storage
    *
-   * @return {Map<string, ModuleData>} mapping from key to value representing the current state
+   * @return {Map<string, *>} mapping from key to value representing the current state
    */
   getAll () {
-    const entries = new Map();
-    this.moduleDataContainer.forEach((value, key) => {
-      entries.set(key, this.get(key));
-    });
-    return entries;
+    return this.storage;
   }
 
   /**
@@ -175,7 +164,7 @@ export default class GlobalStorage {
    * @param {string} key The storage key to delete
    */
   delete (key) {
-    this.moduleDataContainer.delete(key);
+    this.storage.delete(key);
     this.persistentStorageBuffer.delete(key);
   }
 
@@ -193,57 +182,33 @@ export default class GlobalStorage {
   /**
    * Adds a listener to the given module for a given event
    *
-   * @param {string} event The event to listen to, e.g. ‘update’
-   * @param {string} moduleId The module key to listen for e.g. Pagination
-   * @param {Function} callback The callback when an event is called,
-   *                   function is given the data if relevant
+   * @param {Listener} the listener to add
    */
-  on (event, moduleId, callback) {
-    const moduleData = this.moduleDataContainer.get(moduleId);
-    if (moduleData === undefined) {
-      if (this.futureListeners.get(moduleId) === undefined) {
-        this.futureListeners.set(moduleId, []);
-      }
-      this.futureListeners.get(moduleId).push({ event, callback });
-      return;
+  addListener (listener) {
+    if (!listener.eventType || !listener.storageKey || !listener.callback) {
+      throw new AnswersStorageError(`Invalid listener applied in storage: ${listener}`);
     }
-
-    moduleData.on(event, callback);
+    this.listeners.push(listener);
   }
 
   /**
    * Removes a listener for the given moduleId for a given event
    *
-   * @param {string} event The event being listened to, e.g. ‘update’
-   * @param {string} moduleId The module key being listened for e.g. Pagination
-   * @param {Function} callback The callback to be removed
+   * @param {Listener} the listener to remove
    */
-  off (event, moduleId, callback) {
-    const moduleData = this.moduleDataContainer.get(moduleId);
-    if (moduleData === undefined) {
-      if (this.futureListeners.get(moduleId) !== undefined) {
-        this.futureListeners.get(moduleId).pop(); // Is this right?
-      }
-      return;
-    }
-
-    moduleData.off(event, callback);
+  removeListener (listener) {
+    this.listeners = this.listeners.filter(l => l !== listener);
   }
 
   /**
-   * Applies all future listeners to the given moduleId
-   *
-   * @param {string} moduleId
+   * @param {string} eventType
+   * @param {string} storageKey
    */
-  _applyFutureListeners (moduleId) {
-    const futures = this.futureListeners.get(moduleId);
-    if (!futures) {
-      return;
-    }
-
-    futures.forEach((listener) => {
-      this.on(listener.event, moduleId, listener.callback);
+  _callListeners (eventType, storageKey) {
+    this.listeners.forEach((listener) => {
+      if (listener.storageKey === storageKey && listener.eventType === eventType) {
+        listener.callback(this.get(storageKey));
+      }
     });
-    this.futureListeners.delete(moduleId);
   }
 }
