@@ -17,6 +17,7 @@ import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
 import { AnswersEndpointError } from './errors/errors';
 import DirectAnswer from './models/directanswer';
+import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
@@ -382,8 +383,11 @@ export default class CoreAdapter {
    * @param {string} namespace the namespace to use for the storage key
    */
   autoCompleteUniversal (input, namespace) {
-    return this._autoComplete
-      .queryUniversal(input)
+    return this._coreLibrary
+      .universalAutoComplete({
+        input: input
+      })
+      .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
@@ -399,8 +403,12 @@ export default class CoreAdapter {
    * @param {string} verticalKey the vertical key for the experience
    */
   autoCompleteVertical (input, namespace, verticalKey) {
-    return this._autoComplete
-      .queryVertical(input, verticalKey)
+    return this._coreLibrary
+      .verticalAutoComplete({
+        input: input,
+        verticalKey: verticalKey
+      })
+      .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
@@ -417,10 +425,16 @@ export default class CoreAdapter {
    * @param {object} config.searchParameters  the search parameters for the config v2
    */
   autoCompleteFilter (input, config) {
-    return this._autoComplete
-      .queryFilter(input, config)
+    return this._coreLibrary
+      .verticalAutoComplete({
+        input: input,
+        verticalKey: config.verticalKey,
+        searchParameters: config.searchParameters
+      })
+      .then(response => AutoCompleteResponseTransformer.transformFilterAutoCompleteResponse(response))
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
+        return data;
       });
   }
 
