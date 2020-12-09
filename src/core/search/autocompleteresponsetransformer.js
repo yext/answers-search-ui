@@ -6,7 +6,6 @@ import AutoCompleteData, { AutoCompleteResult } from '../models/autocompletedata
  * data structure that our component library and core storage understand.
  */
 export default class AutoCompleteResponseTransformer {
-
   /**
    * Converts a universal or vertical autocomplete response from the
    * core library into an object that the SDK understands.
@@ -17,7 +16,7 @@ export default class AutoCompleteResponseTransformer {
    */
   static transformAutoCompleteResponse (response) {
     const sections = [{
-      results: response.results.map(result => new AutoCompleteResult(result)),
+      results: response.results.map(result => this._transformAutoCompleteResult(result)),
       resultsCount: response.results.length
     }];
     return new AutoCompleteData({
@@ -39,7 +38,7 @@ export default class AutoCompleteResponseTransformer {
     if (response.sectioned && response.sections) {
       const transformedSections = response.sections.map(section => ({
         label: section.label,
-        results: section.results.map(result => new AutoCompleteResult(result)),
+        results: section.results.map(result => this._transformAutoCompleteResult(result)),
         resultsCount: section.results.length
       }));
       return new AutoCompleteData({
@@ -50,5 +49,23 @@ export default class AutoCompleteResponseTransformer {
     } else {
       return this.transformAutoCompleteResponse(response);
     }
+  }
+
+  static _transformAutoCompleteResult (result) {
+    if (result.filter) {
+      result.filter = this._transformFilter(result.filter);
+    }
+    return new AutoCompleteResult(result);
+  }
+
+  static _transformFilter (filter) {
+    const fieldId = filter.fieldId;
+    const comparator = filter.comparator;
+    const comparedValue = filter.comparedValue;
+    return {
+      [fieldId]: {
+        [comparator]: comparedValue
+      }
+    };
   }
 }

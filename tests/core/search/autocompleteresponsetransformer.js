@@ -83,9 +83,9 @@ describe('transform autocomplete response', () => {
           results: [
             {
               filter: {
-                comparator: '$eq',
-                comparedValue: 'Virginia Beach',
-                fieldId: 'name'
+                name: {
+                  $eq: 'Virginia Beach'
+                }
               },
               intents: [],
               key: 'name',

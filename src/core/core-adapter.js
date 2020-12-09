@@ -425,16 +425,24 @@ export default class CoreAdapter {
    * @param {object} config.searchParameters  the search parameters for the config v2
    */
   autoCompleteFilter (input, config) {
+    const searchParamFields = config.searchParameters.fields.map(field => ({
+      fieldApiName: field.fieldId,
+      entityType: field.entityTypeId,
+      fetchEntities: field.shouldFetchEntities
+    }));
+    const searchParams = {
+      sectioned: config.searchParameters.sectioned,
+      fields: searchParamFields
+    };
     return this._coreLibrary
-      .verticalAutoComplete({
+      .filterAutoComplete({
         input: input,
         verticalKey: config.verticalKey,
-        searchParameters: config.searchParameters
+        searchParameters: searchParams
       })
       .then(response => AutoCompleteResponseTransformer.transformFilterAutoCompleteResponse(response))
       .then(data => {
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
-        return data;
       });
   }
 
