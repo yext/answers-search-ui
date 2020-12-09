@@ -155,7 +155,7 @@ export default class GlobalStorage {
    * @return {Map<string, *>} mapping from key to value representing the current state
    */
   getAll () {
-    return this.storage;
+    return new Map(this.storage);
   }
 
   /**
