@@ -19,7 +19,7 @@ export default class AutoCompleteResponseTransformer {
   }
 
   static transformFilterAutoCompleteResponse (response) {
-    if (response.sections) {
+    if (response.sectioned && response.sections) {
       const transformedSections = response.sections.map(section => ({
         label: section.label,
         results: section.results.map(result => new AutoCompleteResult(result)),
