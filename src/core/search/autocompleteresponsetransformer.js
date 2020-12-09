@@ -6,6 +6,14 @@ import AutoCompleteData, { AutoCompleteResult } from '../models/autocompletedata
  * data structure that our component library and core storage understand.
  */
 export default class AutoCompleteResponseTransformer {
+
+  /**
+   * Converts a universal or vertical autocomplete response from the
+   * core library into an object that the SDK understands.
+   *
+   * @param {import('@yext/answers-core').AutoCompleteResponse} response
+   *  the response passed from the core library
+   */
   static transformAutoCompleteResponse (response) {
     const sections = [{
       results: response.results.map(result => new AutoCompleteResult(result)),
@@ -18,6 +26,13 @@ export default class AutoCompleteResponseTransformer {
     });
   }
 
+  /**
+   * Converts a filter autocomplete response from the
+   * core library into an object that the SDK understands.
+   *
+   * @param {import('@yext/answers-core').FilterAutoCompleteResponse} response
+   *  the response passed from the core library
+   */
   static transformFilterAutoCompleteResponse (response) {
     if (response.sectioned && response.sections) {
       const transformedSections = response.sections.map(section => ({
