@@ -288,7 +288,7 @@ describe('on', () => {
   it('publishes to subscribers when a new key is added', () => {
     const spy = jest.fn();
     const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
-    storage.on(listener);
+    storage.addListener(listener);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
     expect(spy).toHaveBeenCalled();
   });
@@ -297,7 +297,7 @@ describe('on', () => {
     const spy = jest.fn();
     const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
-    storage.on(listener);
+    storage.addListener(listener);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(spy).toHaveBeenCalled();
   });
@@ -308,8 +308,8 @@ describe('on', () => {
     const listener1 = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy1);
     const listener2 = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
-    storage.on(listener1);
-    storage.on(listener2);
+    storage.addListener(listener1);
+    storage.addListener(listener2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(spy1).toHaveBeenCalled();
     expect(spy2).toHaveBeenCalled();
@@ -322,8 +322,8 @@ describe('on', () => {
     const listener2 = new StorageListener('update', StorageKeys.UNIVERSAL_RESULTS, key2Spy);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
     storage.set(StorageKeys.UNIVERSAL_RESULTS, { test: 'test results data' });
-    storage.on(listener1);
-    storage.on(listener2);
+    storage.addListener(listener1);
+    storage.addListener(listener2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(key1Spy).toHaveBeenCalled();
     expect(key2Spy).not.toHaveBeenCalled();
@@ -332,15 +332,15 @@ describe('on', () => {
   it('throws on incorrect event type', () => {
     const listener1 = new StorageListener(null, StorageKeys.QUERY, jest.fn());
     const listener2 = new StorageListener(undefined, StorageKeys.QUERY, jest.fn());
-    expect(() => storage.on(listener1)).toThrow();
-    expect(() => storage.on(listener2)).toThrow();
+    expect(() => storage.addListener(listener1)).toThrow();
+    expect(() => storage.addListener(listener2)).toThrow();
   });
 
   it('throws on incorrect storage key', () => {
     const listener1 = new StorageListener('update', null, jest.fn());
     const listener2 = new StorageListener('update', undefined, jest.fn());
-    expect(() => storage.on(listener1)).toThrow();
-    expect(() => storage.on(listener2)).toThrow();
+    expect(() => storage.addListener(listener1)).toThrow();
+    expect(() => storage.addListener(listener2)).toThrow();
   });
 });
 
@@ -348,8 +348,8 @@ describe('off', () => {
   it('can be unsubscribed from a new key', () => {
     const spy = jest.fn();
     const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
-    storage.on(listener);
-    storage.off(listener);
+    storage.addListener(listener);
+    storage.removeListener(listener);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'test results data' });
     expect(spy).not.toHaveBeenCalled();
   });
@@ -358,8 +358,8 @@ describe('off', () => {
     const spy = jest.fn();
     const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'test results data' });
-    storage.on(listener);
-    storage.off(listener);
+    storage.addListener(listener);
+    storage.removeListener(listener);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'new test results data' });
     expect(spy).not.toHaveBeenCalled();
   });
