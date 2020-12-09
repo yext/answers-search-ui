@@ -1,4 +1,4 @@
-import DefaultPersistentStorage from '../../../node_modules/@yext/answers-storage/dist/index';
+import DefaultPersistentStorage from '@yext/answers-storage';
 import { AnswersStorageError } from '../errors/errors';
 
 /**
