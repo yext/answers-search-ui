@@ -126,12 +126,10 @@ export default class GlobalStorage {
   flushPersist () {
     this.persistentStorage = this.persistentStorageBuffer;
 
-    const persistentStorageClone = new DefaultPersistentStorage(this.popListener);
+    this.persistentStorageBuffer = new DefaultPersistentStorage(this.popListener);
     this.persistentStorage.getAll().forEach((value, key) => {
-      persistentStorageClone.set(key, value);
+      this.persistentStorageBuffer.set(key, value);
     });
-
-    this.persistentStorageBuffer = persistentStorageClone;
 
     this.stateUpdateListener(
       this.persistentStorage.getAll(),
