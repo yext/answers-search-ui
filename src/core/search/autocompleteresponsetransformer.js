@@ -13,7 +13,7 @@ export default class AutoCompleteResponseTransformer {
    *
    * @param {import('@yext/answers-core').AutoCompleteResponse} response
    *  the response passed from the core library
-   * @return {AutoCompleteData}
+   * @returns {AutoCompleteData}
    */
   static transformAutoCompleteResponse (response) {
     const sections = [{
@@ -33,7 +33,7 @@ export default class AutoCompleteResponseTransformer {
    *
    * @param {import('@yext/answers-core').FilterAutoCompleteResponse} response
    *  the response passed from the core library
-   * @return {AutoCompleteData}
+   * @returns {AutoCompleteData}
    */
   static transformFilterAutoCompleteResponse (response) {
     if (response.sectioned && response.sections) {
