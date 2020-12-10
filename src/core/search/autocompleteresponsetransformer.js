@@ -52,10 +52,17 @@ export default class AutoCompleteResponseTransformer {
   }
 
   static _transformAutoCompleteResult (result) {
+    let transformedFilter = {};
     if (result.filter) {
-      result.filter = this._transformFilter(result.filter);
+      transformedFilter = this._transformFilter(result.filter);
     }
-    return new AutoCompleteResult(result);
+    return new AutoCompleteResult({
+      filter: transformedFilter,
+      key: result.key,
+      matchedSubstrings: result.matchedSubstrings,
+      value: result.value,
+      shortValue: result.shortValue
+    });
   }
 
   static _transformFilter (filter) {
