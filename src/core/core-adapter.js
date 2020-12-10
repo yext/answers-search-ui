@@ -445,7 +445,6 @@ export default class CoreAdapter {
       })
       .then(response => AutoCompleteResponseTransformer.transformFilterAutoCompleteResponse(response))
       .then(data => {
-        console.log(data);
         this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });
   }

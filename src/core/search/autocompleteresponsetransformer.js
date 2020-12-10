@@ -52,10 +52,7 @@ export default class AutoCompleteResponseTransformer {
   }
 
   static _transformAutoCompleteResult (result) {
-    let transformedFilter = {};
-    if (result.filter) {
-      transformedFilter = this._transformFilter(result.filter);
-    }
+    const transformedFilter = result.filter ? this._transformFilter(result.filter) : {};
     return new AutoCompleteResult({
       filter: transformedFilter,
       key: result.key,
