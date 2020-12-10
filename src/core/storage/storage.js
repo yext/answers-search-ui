@@ -10,20 +10,14 @@ import { AnswersStorageError } from '../errors/errors';
  * @param {Function} callback for state (persistent store) reset
  */
 export default class GlobalStorage {
-  constructor (stateUpdateListener, stateResetListener) {
+  constructor (persistedStateListeners = {}) {
     /**
-     * The update listener for changes in state (persistent storage changes)
-     *
-     * @type {Function}
+     * The listeners for changes in state (persistent storage changes)
      */
-    this.stateUpdateListener = stateUpdateListener || function () {};
-
-    /**
-     * The reset listener for changes in state (persistent storage changes)
-     *
-     * @type {Function}
-     */
-    this.stateResetListener = stateResetListener || function () {};
+    this.persistedStateListeners = {
+      update: persistedStateListeners.update || function () {},
+      reset: persistedStateListeners.reset || function () {}
+    };
 
     /**
      * The listener for window.pop in the persistent storage
@@ -31,14 +25,14 @@ export default class GlobalStorage {
      * @type {Function}
      */
     this.popListener = (queryParamsObject, queryParamsString) => {
-      this.stateUpdateListener(queryParamsObject, queryParamsString);
-      this.stateResetListener(queryParamsObject, queryParamsString);
+      this.persistedStateListeners.update(queryParamsObject, queryParamsString);
+      this.persistedStateListeners.reset(queryParamsObject, queryParamsString);
     };
 
     /**
      * The core data for the global storage
      *
-     * @type {Map<string, *}
+     * @type {Map<string, *>}
      */
     this.storage = new Map();
 
@@ -61,7 +55,7 @@ export default class GlobalStorage {
     /**
      * The listeners to apply on changes to global storage
      *
-     * @type {Listener[]}
+     * @type {StorageListener[]}
      */
     this.listeners = [];
   }
@@ -131,7 +125,7 @@ export default class GlobalStorage {
       this.persistentStorageBuffer.set(key, value);
     });
 
-    this.stateUpdateListener(
+    this.persistedStateListeners.update(
       this.persistentStorage.getAll(),
       this.persistentStorage.getUrlWithCurrentState()
     );
@@ -180,19 +174,20 @@ export default class GlobalStorage {
   /**
    * Adds a listener to the given module for a given event
    *
-   * @param {Listener} the listener to add
+   * @param {StorageListener} the listener to add
    */
-  addListener (listener) {
-    if (!listener.eventType || !listener.storageKey || !listener.callback) {
+  registerListener (listener) {
+    if (!listener.eventType || !listener.storageKey ||
+      !listener.callback || typeof listener.callback !== 'function') {
       throw new AnswersStorageError(`Invalid listener applied in storage: ${listener}`);
     }
     this.listeners.push(listener);
   }
 
   /**
-   * Removes a listener for the given moduleId for a given event
+   * Removes a given listener from the set of listeners
    *
-   * @param {Listener} the listener to remove
+   * @param {StorageListener} the listener to remove
    */
   removeListener (listener) {
     this.listeners = this.listeners.filter(l => l !== listener);

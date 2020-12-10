@@ -10,6 +10,6 @@ export default class StorageListener {
   constructor (eventType, storageKey, callback) {
     this.eventType = eventType;
     this.storageKey = storageKey;
-    this.callback = callback || function () {};
+    this.callback = callback;
   }
 }
