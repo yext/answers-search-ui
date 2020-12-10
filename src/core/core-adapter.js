@@ -385,7 +385,8 @@ export default class CoreAdapter {
   autoCompleteUniversal (input, namespace) {
     return this._coreLibrary
       .universalAutoComplete({
-        input: input
+        input: input,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -406,7 +407,8 @@ export default class CoreAdapter {
     return this._coreLibrary
       .verticalAutoComplete({
         input: input,
-        verticalKey: verticalKey
+        verticalKey: verticalKey,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -438,7 +440,8 @@ export default class CoreAdapter {
       .filterAutoComplete({
         input: input,
         verticalKey: config.verticalKey,
-        searchParameters: searchParams
+        searchParameters: searchParams,
+        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value
       })
       .then(response => AutoCompleteResponseTransformer.transformFilterAutoCompleteResponse(response))
       .then(data => {
