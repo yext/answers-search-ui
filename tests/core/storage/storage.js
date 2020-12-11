@@ -207,12 +207,15 @@ describe('set', () => {
       });
     });
 
-    it('does not push to persistent storage until flush', () => {
-      storage.setWithPersist(StorageKeys.QUERY, 'something');
-      storage.setWithPersist(StorageKeys.QUERY, 'else');
-      storage.setWithPersist(StorageKeys.AUTOCOMPLETE, 'other');
-      expect(storage.persistentStorage.get(StorageKeys.QUERY)).toBeUndefined();
-      expect(storage.persistentStorage.get(StorageKeys.AUTOCOMPLETE)).toBeUndefined();
+    it('stringifies non-strings for persistent storage', () => {
+      const val = { test: 'val1' };
+      storage.setWithPersist(StorageKeys.AUTOCOMPLETE, val);
+      expect(storage.persistentStorage.get(StorageKeys.AUTOCOMPLETE)).toEqual(JSON.stringify(val));
+    });
+
+    it('changes persistent storage', () => {
+      storage.setWithPersist(StorageKeys.AUTOCOMPLETE, 'val1');
+      expect(storage.persistentStorage.get(StorageKeys.AUTOCOMPLETE)).toEqual('val1');
     });
   });
 
@@ -261,7 +264,7 @@ describe('delete', () => {
     storage.set('key1', 'val1');
     storage.set('key2', 'val2');
     storage.delete('key1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
     expect(storage.get('key1')).toBeUndefined();
     expect(storage.get('key2')).toEqual('val2');
   });
@@ -270,7 +273,7 @@ describe('delete', () => {
     storage.setWithPersist('key1', 'val1');
     storage.setWithPersist('key2', 'val2');
     storage.delete('key1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
     expect(storage.persistentStorage.get('key1')).toBeUndefined();
     expect(storage.persistentStorage.get('key2')).toEqual('val2');
   });
@@ -279,8 +282,8 @@ describe('delete', () => {
     storage.setWithPersist('key1', 'val1');
     storage.setWithPersist('key2', 'val2');
     storage.delete('key1');
-    expect(storage.persistentStorageBuffer.get('key1')).toBeUndefined();
-    expect(storage.persistentStorageBuffer.get('key2')).toEqual('val2');
+    expect(storage.persistentStorage.get('key1')).toBeUndefined();
+    expect(storage.persistentStorage.get('key2')).toEqual('val2');
   });
 });
 
@@ -377,26 +380,24 @@ describe('removeListener', () => {
   });
 });
 
-describe('flushPersist', () => {
+describe('pushStateToHistory', () => {
   it('can flush the persistent storage buffer', () => {
     storage.setWithPersist('key1', 'val1');
     storage.setWithPersist('key2', 'val2');
-    expect(storage.persistentStorage.get('key1')).toBeUndefined();
-    expect(storage.persistentStorage.get('key2')).toBeUndefined();
-    storage.flushPersist();
     expect(storage.persistentStorage.get('key1')).toEqual('val1');
     expect(storage.persistentStorage.get('key2')).toEqual('val2');
-    expect(storage.persistentStorageBuffer).toEqual(storage.persistentStorage);
+    storage.pushStateToHistory();
+    expect(storage.persistentStorage.get('key1'));
   });
 
-  it('can flush an empty buffer', () => {
-    storage.flushPersist();
+  it('can push state when nothing has been set', () => {
+    expect(() => storage.pushStateToHistory()).not.toThrow();
   });
 
-  it('calls update listeners on flush', () => {
+  it('calls update listeners on push', () => {
     storage = new GlobalStorage({ update: stateUpdateListener, reset: stateResetListener });
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
     expect(stateUpdateListener).toBeCalled();
     expect(stateResetListener).not.toBeCalled();
   });
@@ -405,14 +406,14 @@ describe('flushPersist', () => {
 describe('getUrlWithCurrentState', () => {
   it('passes from persistent storage', () => {
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
     expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
   });
 
   it('adds buffer entries to the url', () => {
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
     expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
 
     storage.setWithPersist(StorageKeys.AUTOCOMPLETE, 'val2');
     expect(storage.getUrlWithCurrentState()).toEqual('query=val1&autocomplete=val2');
@@ -421,7 +422,7 @@ describe('getUrlWithCurrentState', () => {
   it('overrides params from persistent storage with buffer', () => {
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
     expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
 
     storage.setWithPersist(StorageKeys.QUERY, 'val2');
     expect(storage.getUrlWithCurrentState()).toEqual('query=val2');

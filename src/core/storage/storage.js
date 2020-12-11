@@ -45,14 +45,6 @@ export default class GlobalStorage {
     this.persistentStorage = new DefaultPersistentStorage(this.popListener);
 
     /**
-     * The persistent storage buffer used to keep persistent
-     * entries until a flush is called
-     *
-     * @type {PersistentStorage}
-     */
-    this.persistentStorageBuffer = new DefaultPersistentStorage(this.popListener);
-
-    /**
      * The listeners to apply on changes to global storage
      *
      * @type {StorageListener[]}
@@ -95,9 +87,8 @@ export default class GlobalStorage {
   }
 
   /**
-   * Updates the storage and adds the entry to a persistent storage
-   * buffer. The entry is not added to the persistent storage until
-   * the buffer is flushed.
+   * Updates the storage with a new entry of [key, data].  The entry
+   * is not added to the URL until the history is updated.
    *
    * @param {string} key The storage key to set
    * @param {*} data The data to set
@@ -110,21 +101,14 @@ export default class GlobalStorage {
       serializedData = JSON.stringify(data);
     }
 
-    this.persistentStorageBuffer.set(key, serializedData);
+    this.persistentStorage.set(key, serializedData);
   }
 
   /**
-   * Flushes the persistent storage buffer and adds all entries
-   * to the persistent storage.
+   * Adds all entries of the persistent storage to the URL.
    */
-  flushPersist () {
-    this.persistentStorage = this.persistentStorageBuffer;
-
-    this.persistentStorageBuffer = new DefaultPersistentStorage(this.popListener);
-    this.persistentStorage.getAll().forEach((value, key) => {
-      this.persistentStorageBuffer.set(key, value);
-    });
-
+  pushStateToHistory () {
+    this.persistentStorage.pushStateToHistory();
     this.persistedStateListeners.update(
       this.persistentStorage.getAll(),
       this.persistentStorage.getUrlWithCurrentState()
@@ -157,7 +141,7 @@ export default class GlobalStorage {
    */
   delete (key) {
     this.storage.delete(key);
-    this.persistentStorageBuffer.delete(key);
+    this.persistentStorage.delete(key);
   }
 
   /**
@@ -168,7 +152,7 @@ export default class GlobalStorage {
    *                  e.g. query=all&context=%7Bkey:'hello'%7D
    */
   getUrlWithCurrentState () {
-    return this.persistentStorageBuffer.getUrlWithCurrentState();
+    return this.persistentStorage.getUrlWithCurrentState();
   }
 
   /**
