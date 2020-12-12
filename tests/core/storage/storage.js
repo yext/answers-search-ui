@@ -285,6 +285,18 @@ describe('delete', () => {
     expect(storage.persistentStorage.get('key1')).toBeUndefined();
     expect(storage.persistentStorage.get('key2')).toEqual('val2');
   });
+
+  it('correctly handles null key', () => {
+    expect(() => storage.delete(null, 'string')).toThrow();
+  });
+
+  it('correctly handles undefined key', () => {
+    expect(() => storage.delete(undefined, 'string')).toThrow();
+  });
+
+  it('correctly handles non-string key', () => {
+    expect(() => storage.delete({}, 'string')).toThrow();
+  });
 });
 
 describe('registerListener', () => {

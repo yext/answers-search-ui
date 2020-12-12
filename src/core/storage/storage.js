@@ -75,11 +75,11 @@ export default class GlobalStorage {
    */
   set (key, data) {
     if (key === undefined || key === null || typeof key !== 'string') {
-      throw new AnswersStorageError('Invalid storage key provided', key, data);
+      throw new AnswersStorageError('Storage key must be of type string', key, data);
     }
 
     if (typeof data === 'undefined') {
-      throw new AnswersStorageError('Invalid storage key provided', key, data);
+      throw new AnswersStorageError('Data cannot be of type undefined', key, data);
     }
 
     this.storage.set(key, data);
@@ -140,6 +140,10 @@ export default class GlobalStorage {
    * @param {string} key The storage key to delete
    */
   delete (key) {
+    if (key === undefined || key === null || typeof key !== 'string') {
+      throw new AnswersStorageError('Storage key must be of type string', key);
+    }
+
     this.storage.delete(key);
     this.persistentStorage.delete(key);
   }
