@@ -1968,6 +1968,27 @@ ANSWERS.addComponent('Map', {
 };
 ```
 
+When using MapBox (`mapBox`) as the `mapProvider`, the valid locale options
+are the ones listed here:
+
++ Arabic: `ar`
++ Chinese: `zh`
++ English: `en`
++ French: `fr`
++ German: `de`
++ Japanese: `ja`
++ Korean: `ko`
++ Portuguese: `pt`
++ Russian: `ru`
++ Spanish: `es`
+
+If using a locale not listed above, there are two options:
+
+1. Use Google Maps (`google`) as the `mapProvider`.
+2. Specify a locale from the list above in the map component's config. This is
+not ideal, but if there is a standard fallback language, then this may be an
+acceptable option.
+
 ## Icon Component
 The Icon Component will typically be created by other components, but it can be used as a standalone component as well.
 
