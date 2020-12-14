@@ -1,4 +1,5 @@
 import GlobalStorage from '../../../src/core/storage/storage';
+import StorageListener from '../../../src/core/storage/listener';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 let storage;
@@ -12,7 +13,7 @@ beforeEach(() => {
 });
 
 it('calls update and reset listeners onpopstate', () => {
-  storage = new GlobalStorage(stateUpdateListener, stateResetListener);
+  storage = new GlobalStorage({ update: stateUpdateListener, reset: stateResetListener });
   window.onpopstate();
   expect(stateUpdateListener).toBeCalled();
   expect(stateResetListener).toBeCalled();
@@ -92,18 +93,30 @@ describe('set', () => {
         expect(storage.get(StorageKeys.QUERY)).toEqual(new Map());
       });
 
-      it('correctly handles null', () => {
+      it('correctly handles null value', () => {
         storage.set(StorageKeys.QUERY, null);
         expect(storage.get(StorageKeys.QUERY)).toEqual(null);
       });
 
-      it('correctly handles undefined', () => {
+      it('correctly handles undefined value', () => {
         expect(() => storage.set(StorageKeys.QUERY, undefined)).toThrow();
       });
 
-      it('correctly handles empty string', () => {
+      it('correctly handles empty string value', () => {
         storage.set(StorageKeys.QUERY, '');
         expect(storage.get(StorageKeys.QUERY)).toEqual('');
+      });
+
+      it('correctly handles null key', () => {
+        expect(() => storage.set(null, 'string')).toThrow();
+      });
+
+      it('correctly handles undefined key', () => {
+        expect(() => storage.set(undefined, 'string')).toThrow();
+      });
+
+      it('correctly handles non-string key', () => {
+        expect(() => storage.set({}, 'string')).toThrow();
       });
     });
 
@@ -194,12 +207,15 @@ describe('set', () => {
       });
     });
 
-    it('does not push to persistent storage until flush', () => {
-      storage.setWithPersist(StorageKeys.QUERY, 'something');
-      storage.setWithPersist(StorageKeys.QUERY, 'else');
-      storage.setWithPersist(StorageKeys.AUTOCOMPLETE, 'other');
-      expect(storage.persistentStorage.get(StorageKeys.QUERY)).toBeUndefined();
-      expect(storage.persistentStorage.get(StorageKeys.AUTOCOMPLETE)).toBeUndefined();
+    it('stringifies non-strings for persistent storage', () => {
+      const val = { test: 'val1' };
+      storage.setWithPersist(StorageKeys.AUTOCOMPLETE, val);
+      expect(storage.persistentStorage.get(StorageKeys.AUTOCOMPLETE)).toEqual(JSON.stringify(val));
+    });
+
+    it('changes persistent storage', () => {
+      storage.setWithPersist(StorageKeys.AUTOCOMPLETE, 'val1');
+      expect(storage.persistentStorage.get(StorageKeys.AUTOCOMPLETE)).toEqual('val1');
     });
   });
 
@@ -248,15 +264,16 @@ describe('delete', () => {
     storage.set('key1', 'val1');
     storage.set('key2', 'val2');
     storage.delete('key1');
+    storage.pushStateToHistory();
     expect(storage.get('key1')).toBeUndefined();
     expect(storage.get('key2')).toEqual('val2');
   });
 
   it('deletes data from persistent storage', () => {
-    storage.set('key1', 'val1');
-    storage.set('key2', 'val2');
+    storage.setWithPersist('key1', 'val1');
+    storage.setWithPersist('key2', 'val2');
     storage.delete('key1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
     expect(storage.persistentStorage.get('key1')).toBeUndefined();
     expect(storage.persistentStorage.get('key2')).toEqual('val2');
   });
@@ -265,23 +282,37 @@ describe('delete', () => {
     storage.setWithPersist('key1', 'val1');
     storage.setWithPersist('key2', 'val2');
     storage.delete('key1');
-    expect(storage.persistentStorageBuffer.get('key1')).toBeUndefined();
-    expect(storage.persistentStorageBuffer.get('key2')).toEqual('val2');
+    expect(storage.persistentStorage.get('key1')).toBeUndefined();
+    expect(storage.persistentStorage.get('key2')).toEqual('val2');
+  });
+
+  it('correctly handles null key', () => {
+    expect(() => storage.delete(null, 'string')).toThrow();
+  });
+
+  it('correctly handles undefined key', () => {
+    expect(() => storage.delete(undefined, 'string')).toThrow();
+  });
+
+  it('correctly handles non-string key', () => {
+    expect(() => storage.delete({}, 'string')).toThrow();
   });
 });
 
-describe('on', () => {
+describe('registerListener', () => {
   it('publishes to subscribers when a new key is added', () => {
     const spy = jest.fn();
-    storage.on('update', StorageKeys.AUTOCOMPLETE, spy);
+    const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
+    storage.registerListener(listener);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
     expect(spy).toHaveBeenCalled();
   });
 
   it('publishes to subscribers on existing keys', () => {
     const spy = jest.fn();
+    const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
-    storage.on('update', StorageKeys.AUTOCOMPLETE, spy);
+    storage.registerListener(listener);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(spy).toHaveBeenCalled();
   });
@@ -289,9 +320,11 @@ describe('on', () => {
   it('publishes to all subscribers', () => {
     const spy1 = jest.fn();
     const spy2 = jest.fn();
+    const listener1 = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy1);
+    const listener2 = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
-    storage.on('update', StorageKeys.AUTOCOMPLETE, spy1);
-    storage.on('update', StorageKeys.AUTOCOMPLETE, spy2);
+    storage.registerListener(listener1);
+    storage.registerListener(listener2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(spy1).toHaveBeenCalled();
     expect(spy2).toHaveBeenCalled();
@@ -300,54 +333,83 @@ describe('on', () => {
   it('only publishes to listeners on the key', () => {
     const key1Spy = jest.fn();
     const key2Spy = jest.fn();
+    const listener1 = new StorageListener('update', StorageKeys.AUTOCOMPLETE, key1Spy);
+    const listener2 = new StorageListener('update', StorageKeys.UNIVERSAL_RESULTS, key2Spy);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'test autocomplete data' });
     storage.set(StorageKeys.UNIVERSAL_RESULTS, { test: 'test results data' });
-    storage.on('update', StorageKeys.AUTOCOMPLETE, key1Spy);
-    storage.on('update', StorageKeys.UNIVERSAL_RESULTS, key2Spy);
+    storage.registerListener(listener1);
+    storage.registerListener(listener2);
     storage.set(StorageKeys.AUTOCOMPLETE, { test: 'new test autocomplete data' });
     expect(key1Spy).toHaveBeenCalled();
     expect(key2Spy).not.toHaveBeenCalled();
   });
+
+  it('throws on incorrect event type', () => {
+    const listener1 = new StorageListener(null, StorageKeys.QUERY, jest.fn());
+    const listener2 = new StorageListener(undefined, StorageKeys.QUERY, jest.fn());
+    expect(() => storage.registerListener(listener1)).toThrow();
+    expect(() => storage.registerListener(listener2)).toThrow();
+  });
+
+  it('throws on incorrect storage key', () => {
+    const listener1 = new StorageListener('update', null, jest.fn());
+    const listener2 = new StorageListener('update', undefined, jest.fn());
+    expect(() => storage.registerListener(listener1)).toThrow();
+    expect(() => storage.registerListener(listener2)).toThrow();
+  });
+
+  it('throws on incorrect callback', () => {
+    const listener1 = new StorageListener('update', 'QUERY', undefined);
+    const listener2 = new StorageListener('update', 'AUTOCOMPLETE', null);
+    expect(() => storage.registerListener(listener1)).toThrow();
+    expect(() => storage.registerListener(listener2)).toThrow();
+  });
+
+  it('throws on non-function callback', () => {
+    const listener = new StorageListener('update', 'QUERY', 'string');
+    expect(() => storage.registerListener(listener)).toThrow();
+  });
 });
 
-describe('off', () => {
+describe('removeListener', () => {
   it('can be unsubscribed from a new key', () => {
     const spy = jest.fn();
-    storage.on('update', StorageKeys.VERTICAL_RESULTS, spy);
-    storage.off('update', StorageKeys.VERTICAL_RESULTS, spy);
+    const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
+    storage.registerListener(listener);
+    storage.removeListener(listener);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'test results data' });
     expect(spy).not.toHaveBeenCalled();
   });
 
   it('can be unsubscribed from an existing key', () => {
     const spy = jest.fn();
+    const listener = new StorageListener('update', StorageKeys.AUTOCOMPLETE, spy);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'test results data' });
-    storage.on('update', StorageKeys.VERTICAL_RESULTS, spy);
-    storage.off('update', StorageKeys.VERTICAL_RESULTS, spy);
+    storage.registerListener(listener);
+    storage.removeListener(listener);
     storage.set(StorageKeys.VERTICAL_RESULTS, { test: 'new test results data' });
     expect(spy).not.toHaveBeenCalled();
   });
 });
 
-describe('flushPersist', () => {
+describe('pushStateToHistory', () => {
   it('can flush the persistent storage buffer', () => {
     storage.setWithPersist('key1', 'val1');
     storage.setWithPersist('key2', 'val2');
-    expect(storage.persistentStorage.get('key1')).toBeUndefined();
-    expect(storage.persistentStorage.get('key2')).toBeUndefined();
-    storage.flushPersist();
     expect(storage.persistentStorage.get('key1')).toEqual('val1');
     expect(storage.persistentStorage.get('key2')).toEqual('val2');
-    expect(storage.persistentStorageBuffer).toEqual([]);
+    storage.pushStateToHistory();
+    expect(storage.persistentStorage.get('key1'));
   });
 
-  it('can flush an empty buffer', () => {
-    storage.flushPersist();
+  it('can push state when nothing has been set', () => {
+    expect(() => storage.pushStateToHistory()).not.toThrow();
   });
 
-  it('calls update listeners on flush', () => {
+  it('calls update listeners on push', () => {
+    storage = new GlobalStorage({ update: stateUpdateListener, reset: stateResetListener });
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
     expect(stateUpdateListener).toBeCalled();
     expect(stateResetListener).not.toBeCalled();
   });
@@ -356,14 +418,14 @@ describe('flushPersist', () => {
 describe('getUrlWithCurrentState', () => {
   it('passes from persistent storage', () => {
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
     expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
   });
 
   it('adds buffer entries to the url', () => {
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
     expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
 
     storage.setWithPersist(StorageKeys.AUTOCOMPLETE, 'val2');
     expect(storage.getUrlWithCurrentState()).toEqual('query=val1&autocomplete=val2');
@@ -372,7 +434,7 @@ describe('getUrlWithCurrentState', () => {
   it('overrides params from persistent storage with buffer', () => {
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
     expect(storage.getUrlWithCurrentState()).toEqual('query=val1');
-    storage.flushPersist();
+    storage.pushStateToHistory();
 
     storage.setWithPersist(StorageKeys.QUERY, 'val2');
     expect(storage.getUrlWithCurrentState()).toEqual('query=val2');

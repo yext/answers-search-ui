@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "@mapbox/mapbox-gl-language": "^0.10.1",
+    "@yext/answers-storage": "yext/answers-storage#main",
     "@yext/rtf-converter": "^1.2.0",
     "css-vars-ponyfill": "^2.3.1",
     "gulp-sourcemaps": "^2.6.5",
