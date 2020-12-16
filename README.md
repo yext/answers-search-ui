@@ -1339,12 +1339,32 @@ ANSWERS.addComponent('Facets', {
     'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
       // Optional, the placeholder text used for the filter option search input
       placeholderText: 'Search here...',
+      // Optional, show a reset button per facet group
+      showReset: false,
+      // Optional, the label to use for the reset button above
+      resetLabel: 'reset',
       // Optional, if true, display the filter option search input
       searchable: false,
+      // Optional, the form label text for the search input, defaults to 'Search for a filter option'
+      searchLabelText: 'Search for a filter option',
       // Optional, control type, singleoption or multioption
       control: 'singleoption',
       // Optional, override the field name for this facet
       label: 'My custom field'
+      // Optional, allow collapsing excess facet options after a limit
+      showMore: true,
+      // Optional, the max number of facets to show before collapsing extras
+      showMoreLimit: 5,
+      // Optional, the label to show for displaying more facets
+      showMoreLabel: 'show more',
+      // Optional, the label to show for displaying less facets
+      showLessLabel: 'show less',
+      // Optional, allow expanding and collapsing entire groups of facets
+      expand: true,
+      // Optional, callback function for when a facet is changed
+      onChange: function() { console.log('Facet changed'); },
+      // Optional, the selector used for options in the template, defaults to '.js-yext-filter-option'
+      optionSelector: '.js-yext-filter-option',
     }
   },
   // Optional, the label to show on the apply button
