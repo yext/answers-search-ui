@@ -57,8 +57,7 @@ export default class AutoCompleteResponseTransformer {
       filter: transformedFilter,
       key: result.key,
       matchedSubstrings: result.matchedSubstrings,
-      value: result.value,
-      shortValue: result.shortValue
+      value: result.value
     });
   }
 
