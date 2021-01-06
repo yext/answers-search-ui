@@ -3,6 +3,11 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector } from 'testcafe';
+import { getURLSearchParams, hitBrowserBackButton, reloadPage, waitForResultsToRender } from './utils';
+
+const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
+const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/vertical';
+const FACETS_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/facets';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -13,7 +18,7 @@ import { Selector } from 'testcafe';
 fixture`Universal search page works as expected`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/universal`;
+  .page`${UNIVERSAL_PAGE}`;
 
 test('Basic universal flow', async t => {
   const searchComponent = UniversalPage.getSearchComponent();
@@ -35,9 +40,9 @@ test('Basic universal flow', async t => {
 fixture`Vertical search page works as expected`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`;
+  .page`${VERTICAL_PAGE}`;
 
-test('pagination flow', async t => {
+test('navigating pages works', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('Virginia');
   await searchComponent.submitQuery();
@@ -47,10 +52,29 @@ test('pagination flow', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
+test('navigating and refreshing mantains that page number', async t => {
+  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  const paginationComponent = VerticalPage.getPaginationComponent();
+  await paginationComponent.clickNextButton();
+  await reloadPage();
+  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+});
+test('navigating pages and hitting the browser back button lands you on the right page', async t => {
+  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  const paginationComponent = VerticalPage.getPaginationComponent();
+  await paginationComponent.clickNextButton();
+  await paginationComponent.clickNextButton();
+  await t.eval(() => window.history.back());
+  await t.wait(1000);
+  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+});
+
 fixture`Facets page`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+  .page`${FACETS_PAGE}`;
 
 test(`Facets load on the page, and can affect the search`, async t => {
   const searchComponent = FacetsPage.getSearchComponent();
@@ -110,7 +134,7 @@ test(`Facets load on the page, and can affect the search`, async t => {
 fixture`Experience links work as expected`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+  .page`${FACETS_PAGE}`;
 
 test('Facets, pagination, and filters do not persist accross experience links', async t => {
   const verifyCleanLink = async (link) => {
@@ -181,10 +205,98 @@ test('Facets, pagination, and filters do not persist accross experience links', 
   await verifyCleanLink(viewAllLink);
 });
 
+fixture`Persistent Storage behavior for various components`
+  .before(setupServer)
+  .after(shutdownServer)
+  .page`${UNIVERSAL_PAGE}`;
+
+test('Navigation tab order respects persistent storage tab order', async t => {
+  const navigationComponent = UniversalPage.getNavigationComponent();
+
+  const expectedDefaultTabLabels = ['HOME', 'FACETS', 'VERTICAL'];
+  const actualDefaultTabLabels = await navigationComponent.getTabLabels();
+
+  await t.expect(actualDefaultTabLabels).eql(expectedDefaultTabLabels);
+
+  await t.navigateTo(`${UNIVERSAL_PAGE}?tabOrder=./universal,./vertical,./facets`);
+
+  const expectedCustomTabLabels = ['HOME', 'VERTICAL', 'FACETS'];
+  const actualCustomTabLabels = await navigationComponent.getTabLabels();
+
+  await t.expect(actualCustomTabLabels).eql(expectedCustomTabLabels);
+});
+
+test('Navigation tab links contain the persistent storage referrerPageUrl', async t => {
+  await t.navigateTo(`${UNIVERSAL_PAGE}?referrerPageUrl=yext.com`);
+
+  const navigationComponent = UniversalPage.getNavigationComponent();
+
+  const firstTabLink = (await navigationComponent.getTabLinks())[0];
+  const indexOfQuestionMark = firstTabLink.indexOf('?');
+  const queryString = firstTabLink.substring(indexOfQuestionMark);
+  const urlParams = new URLSearchParams(queryString);
+
+  await t.expect(urlParams.get('referrerPageUrl')).eql('yext.com');
+});
+
+test('the spell check component deletes skipSpellCheck and queryTrigger url params', async t => {
+  await t.navigateTo(`${VERTICAL_PAGE}?query=mansfield&referrerPageUrl=yext.com&skipSpellCheck=true&queryTrigger=suggest`);
+
+  const urlParams = await getURLSearchParams();
+
+  await t.expect(urlParams.get('skipSpellCheck')).eql(null);
+  await t.expect(urlParams.get('queryTrigger')).eql(null);
+});
+
+fixture`Persistent Storage works as expected for Sorts and Filters`
+  .before(setupServer)
+  .after(shutdownServer)
+  .page`${FACETS_PAGE}`;
+
+test(`selecting a facet option updates persistent storage`, async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
+
+  const facets = FacetsPage.getFacetsComponent();
+  const filterBox = facets.getFilterBox();
+
+  const employeeDepartment = await filterBox.getFilterOptions('Puppy Preference');
+  await employeeDepartment.toggleOption('Frodo');
+
+  const urlParamsBeforeApply = await getURLSearchParams();
+  const filterBeforeApply = urlParamsBeforeApply.get('Facets.filterbox.filter0');
+
+  await t.expect(filterBeforeApply).eql('[]');
+
+  await filterBox.applyFilters();
+
+  const urlParamsAfterApply = await getURLSearchParams();
+  const filterAfterApply = urlParamsAfterApply.get('Facets.filterbox.filter0');
+
+  await t.expect(filterAfterApply).eql('["Frodo"]');
+});
+
+test(`selecting a sort option updates persistent storage`, async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
+
+  const urlParamsBeforeApply = await getURLSearchParams();
+  const sortOptionsBeforeApply = urlParamsBeforeApply.get('SortOptions');
+
+  await t.expect(sortOptionsBeforeApply).eql(null);
+
+  await t.click(await Selector('.yxt-SortOptions-optionSelector').nth(2));
+
+  const urlParamsAfterApply = await getURLSearchParams();
+  const sortOptionsAfterApply = urlParamsAfterApply.get('SortOptions');
+
+  await t.expect(sortOptionsAfterApply).eql('2');
+});
+
 fixture`Performance marks on search`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+  .page`${FACETS_PAGE}`;
 
 test('window.performance calls are marked for a normal search', async t => {
   const marksToCheck = [
@@ -218,7 +330,7 @@ test('window.performance calls are marked for a normal search', async t => {
 fixture`W3C Accessibility standards are met`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+  .page`${FACETS_PAGE}`;
 
 test('Sort options focus state works', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
