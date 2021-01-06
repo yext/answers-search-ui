@@ -3,7 +3,7 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector } from 'testcafe';
-import { getURLSearchParams, hitBrowserBackButton, reloadPage, waitForResultsToRender } from './utils';
+import { getURLSearchParams, browserBackButton, browserRefreshPage } from './utils';
 
 const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
 const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/vertical';
@@ -15,6 +15,7 @@ const FACETS_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/facets
  * up to serve the search page and the dist directory of Answers.
  * This server is closed once all tests have completed.
  */
+
 fixture`Universal search page works as expected`
   .before(setupServer)
   .after(shutdownServer)
@@ -56,7 +57,7 @@ test('navigating and refreshing mantains that page number', async t => {
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
-  await reloadPage();
+  await browserRefreshPage();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
@@ -65,8 +66,7 @@ test('navigating pages and hitting the browser back button lands you on the righ
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   await paginationComponent.clickNextButton();
-  await t.eval(() => window.history.back());
-  await t.wait(1000);
+  await browserBackButton();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });

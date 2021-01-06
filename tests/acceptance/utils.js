@@ -12,4 +12,12 @@ exports.getURLSearchParams = async () => {
   return new URLSearchParams(queryString);
 };
 
-exports.reloadPage = ClientFunction(() => location.reload());
+exports.browserRefreshPage = async () => {
+  await ClientFunction(() => location.reload())();
+  await new Promise(resolve => setTimeout(resolve, 1500));
+};
+
+exports.browserBackButton = async () => {
+  await ClientFunction(() => window.history.back())();
+  await new Promise(resolve => setTimeout(resolve, 1500));
+};
