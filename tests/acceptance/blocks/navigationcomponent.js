@@ -21,7 +21,7 @@ export default class NavigationComponentBlock {
     for (let i = 0; i < tabListCount; i++) {
       const nthTab = tabList.nth(i);
       const innerText = await nthTab.find('a').innerText;
-      tabLabels[i] = innerText.toLowerCase();
+      tabLabels[i] = innerText.toLowerCase().trim();
     }
 
     return tabLabels;
