@@ -213,15 +213,15 @@ fixture`Persistent Storage behavior for various components`
 test('Navigation tab order respects persistent storage tab order', async t => {
   const navigationComponent = UniversalPage.getNavigationComponent();
 
-  const expectedDefaultTabLabels = ['HOME', 'FACETS', 'VERTICAL'];
-  const actualDefaultTabLabels = await navigationComponent.getTabLabels();
+  const expectedDefaultTabLabels = ['home', 'facets', 'vertical'];
+  const actualDefaultTabLabels = await navigationComponent.getTabLabelsLowerCase();
 
   await t.expect(actualDefaultTabLabels).eql(expectedDefaultTabLabels);
 
   await t.navigateTo(`${UNIVERSAL_PAGE}?tabOrder=./universal,./vertical,./facets`);
 
-  const expectedCustomTabLabels = ['HOME', 'VERTICAL', 'FACETS'];
-  const actualCustomTabLabels = await navigationComponent.getTabLabels();
+  const expectedCustomTabLabels = ['home', 'vertical', 'facets'];
+  const actualCustomTabLabels = await navigationComponent.getTabLabelsLowerCase();
 
   await t.expect(actualCustomTabLabels).eql(expectedCustomTabLabels);
 });

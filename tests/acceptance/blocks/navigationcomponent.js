@@ -13,14 +13,15 @@ export default class NavigationComponentBlock {
    *
    * @returns {Array<string>}
    */
-  async getTabLabels () {
+  async getTabLabelsLowerCase () {
     const tabList = this._navList.child();
     const tabListCount = await tabList.count;
     const tabLabels = [];
 
     for (let i = 0; i < tabListCount; i++) {
       const nthTab = tabList.nth(i);
-      tabLabels[i] = await nthTab.find('a').innerText;
+      const innerText = await nthTab.find('a').innerText;
+      tabLabels[i] = innerText.toLowerCase();
     }
 
     return tabLabels;
