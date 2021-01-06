@@ -43,7 +43,7 @@ fixture`Vertical search page works as expected`
   .after(shutdownServer)
   .page`${VERTICAL_PAGE}`;
 
-test('navigating pages works', async t => {
+test('pagination flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('Virginia');
   await searchComponent.submitQuery();
@@ -55,14 +55,17 @@ test('navigating pages works', async t => {
 
 test('navigating and refreshing mantains that page number', async t => {
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   await browserRefreshPage();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
+
 test('navigating pages and hitting the browser back button lands you on the right page', async t => {
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   await paginationComponent.clickNextButton();
@@ -215,14 +218,11 @@ test('Navigation tab order respects persistent storage tab order', async t => {
 
   const expectedDefaultTabLabels = ['home', 'facets', 'vertical'];
   const actualDefaultTabLabels = await navigationComponent.getTabLabelsLowerCase();
-
   await t.expect(actualDefaultTabLabels).eql(expectedDefaultTabLabels);
 
   await t.navigateTo(`${UNIVERSAL_PAGE}?tabOrder=./universal,./vertical,./facets`);
-
   const expectedCustomTabLabels = ['home', 'vertical', 'facets'];
   const actualCustomTabLabels = await navigationComponent.getTabLabelsLowerCase();
-
   await t.expect(actualCustomTabLabels).eql(expectedCustomTabLabels);
 });
 
@@ -230,12 +230,10 @@ test('Navigation tab links contain the persistent storage referrerPageUrl', asyn
   await t.navigateTo(`${UNIVERSAL_PAGE}?referrerPageUrl=yext.com`);
 
   const navigationComponent = UniversalPage.getNavigationComponent();
-
   const firstTabLink = (await navigationComponent.getTabLinks())[0];
   const indexOfQuestionMark = firstTabLink.indexOf('?');
   const queryString = firstTabLink.substring(indexOfQuestionMark);
   const urlParams = new URLSearchParams(queryString);
-
   await t.expect(urlParams.get('referrerPageUrl')).eql('yext.com');
 });
 
@@ -243,7 +241,6 @@ test('the spell check component deletes skipSpellCheck and queryTrigger url para
   await t.navigateTo(`${VERTICAL_PAGE}?query=mansfield&referrerPageUrl=yext.com&skipSpellCheck=true&queryTrigger=suggest`);
 
   const urlParams = await getURLSearchParams();
-
   await t.expect(urlParams.get('skipSpellCheck')).eql(null);
   await t.expect(urlParams.get('queryTrigger')).eql(null);
 });
@@ -256,20 +253,16 @@ fixture`Persistent Storage works as expected for Sorts and Filters`
 test(`selecting a facet option updates persistent storage`, async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
-
   const facets = FacetsPage.getFacetsComponent();
   const filterBox = facets.getFilterBox();
-
   const employeeDepartment = await filterBox.getFilterOptions('Puppy Preference');
   await employeeDepartment.toggleOption('Frodo');
-
   const urlParamsBeforeApply = await getURLSearchParams();
   const filterBeforeApply = urlParamsBeforeApply.get('Facets.filterbox.filter0');
 
   await t.expect(filterBeforeApply).eql('[]');
 
   await filterBox.applyFilters();
-
   const urlParamsAfterApply = await getURLSearchParams();
   const filterAfterApply = urlParamsAfterApply.get('Facets.filterbox.filter0');
 
@@ -279,14 +272,12 @@ test(`selecting a facet option updates persistent storage`, async t => {
 test(`selecting a sort option updates persistent storage`, async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
-
   const urlParamsBeforeApply = await getURLSearchParams();
   const sortOptionsBeforeApply = urlParamsBeforeApply.get('SortOptions');
 
   await t.expect(sortOptionsBeforeApply).eql(null);
 
   await t.click(await Selector('.yxt-SortOptions-optionSelector').nth(2));
-
   const urlParamsAfterApply = await getURLSearchParams();
   const sortOptionsAfterApply = urlParamsAfterApply.get('SortOptions');
 
