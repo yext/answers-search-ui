@@ -4,20 +4,20 @@ import { ClientFunction } from 'testcafe';
 
 const getPageUrl = ClientFunction(() => window.location.href);
 
-exports.getURLSearchParams = async () => {
+export async function getURLSearchParams () {
   const pageUrl = await getPageUrl();
   const indexOfQuestionMark = pageUrl.indexOf('?');
   const queryString = pageUrl.substring(indexOfQuestionMark);
 
   return new URLSearchParams(queryString);
-};
+}
 
-exports.browserRefreshPage = async () => {
+export async function browserRefreshPage () {
   await ClientFunction(() => location.reload())();
   await new Promise(resolve => setTimeout(resolve, 2500));
-};
+}
 
-exports.browserBackButton = async () => {
+export async function browserBackButton () {
   await ClientFunction(() => window.history.back())();
   await new Promise(resolve => setTimeout(resolve, 2500));
-};
+}
