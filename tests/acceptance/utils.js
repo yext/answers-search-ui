@@ -14,10 +14,10 @@ exports.getURLSearchParams = async () => {
 
 exports.browserRefreshPage = async () => {
   await ClientFunction(() => location.reload())();
-  await new Promise(resolve => setTimeout(resolve, 1500));
+  await new Promise(resolve => setTimeout(resolve, 2500));
 };
 
 exports.browserBackButton = async () => {
   await ClientFunction(() => window.history.back())();
-  await new Promise(resolve => setTimeout(resolve, 1500));
+  await new Promise(resolve => setTimeout(resolve, 2500));
 };
