@@ -3,7 +3,7 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector } from 'testcafe';
-import { getURLSearchParams, browserBackButton, browserRefreshPage } from './utils';
+import { browserBackButton, browserRefreshPage } from './utils';
 
 const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
 const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/vertical';
@@ -134,6 +134,17 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await t.expect(actualResultsCount).eql(initialResultsCount);
 });
 
+test(`selecting a sort option and refreshing mantains that sort selection`, async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
+
+  const thirdSortOption = await Selector('.yxt-SortOptions-optionSelector').nth(2);
+  await t.click(thirdSortOption);
+  await browserRefreshPage();
+
+  await t.expect(thirdSortOption.checked).ok();
+});
+
 fixture`Experience links work as expected`
   .before(setupServer)
   .after(shutdownServer)
@@ -206,82 +217,6 @@ test('Facets, pagination, and filters do not persist accross experience links', 
     .nth(0).getAttribute('href');
   await t.expect(viewAllLink).contains('referrerPageUrl');
   await verifyCleanLink(viewAllLink);
-});
-
-fixture`Persistent Storage behavior for various components`
-  .before(setupServer)
-  .after(shutdownServer)
-  .page`${UNIVERSAL_PAGE}`;
-
-test('Navigation tab order respects persistent storage tab order', async t => {
-  const navigationComponent = UniversalPage.getNavigationComponent();
-
-  const expectedDefaultTabLabels = ['home', 'facets', 'vertical'];
-  const actualDefaultTabLabels = await navigationComponent.getTabLabelsLowerCase();
-  await t.expect(actualDefaultTabLabels).eql(expectedDefaultTabLabels);
-
-  await t.navigateTo(`${UNIVERSAL_PAGE}?tabOrder=./universal,./vertical,./facets`);
-  const expectedCustomTabLabels = ['home', 'vertical', 'facets'];
-  const actualCustomTabLabels = await navigationComponent.getTabLabelsLowerCase();
-  await t.expect(actualCustomTabLabels).eql(expectedCustomTabLabels);
-});
-
-test('Navigation tab links contain the persistent storage referrerPageUrl', async t => {
-  await t.navigateTo(`${UNIVERSAL_PAGE}?referrerPageUrl=yext.com`);
-
-  const navigationComponent = UniversalPage.getNavigationComponent();
-  const firstTabLink = (await navigationComponent.getTabLinks())[0];
-  const indexOfQuestionMark = firstTabLink.indexOf('?');
-  const queryString = firstTabLink.substring(indexOfQuestionMark);
-  const urlParams = new URLSearchParams(queryString);
-  await t.expect(urlParams.get('referrerPageUrl')).eql('yext.com');
-});
-
-test('the spell check component deletes skipSpellCheck and queryTrigger url params', async t => {
-  await t.navigateTo(`${VERTICAL_PAGE}?query=mansfield&referrerPageUrl=yext.com&skipSpellCheck=true&queryTrigger=suggest`);
-
-  const urlParams = await getURLSearchParams();
-  await t.expect(urlParams.get('skipSpellCheck')).eql(null);
-  await t.expect(urlParams.get('queryTrigger')).eql(null);
-});
-
-fixture`Persistent Storage works as expected for Sorts and Filters`
-  .before(setupServer)
-  .after(shutdownServer)
-  .page`${FACETS_PAGE}`;
-
-test(`selecting a facet option updates persistent storage`, async t => {
-  const searchComponent = FacetsPage.getSearchComponent();
-  await searchComponent.submitQuery();
-  const facets = FacetsPage.getFacetsComponent();
-  const filterBox = facets.getFilterBox();
-  const employeeDepartment = await filterBox.getFilterOptions('Puppy Preference');
-  await employeeDepartment.toggleOption('Frodo');
-  const urlParamsBeforeApply = await getURLSearchParams();
-  const filterBeforeApply = urlParamsBeforeApply.get('Facets.filterbox.filter0');
-
-  await t.expect(filterBeforeApply).eql('[]');
-
-  await filterBox.applyFilters();
-  const urlParamsAfterApply = await getURLSearchParams();
-  const filterAfterApply = urlParamsAfterApply.get('Facets.filterbox.filter0');
-
-  await t.expect(filterAfterApply).eql('["Frodo"]');
-});
-
-test(`selecting a sort option updates persistent storage`, async t => {
-  const searchComponent = FacetsPage.getSearchComponent();
-  await searchComponent.submitQuery();
-  const urlParamsBeforeApply = await getURLSearchParams();
-  const sortOptionsBeforeApply = urlParamsBeforeApply.get('SortOptions');
-
-  await t.expect(sortOptionsBeforeApply).eql(null);
-
-  await t.click(await Selector('.yxt-SortOptions-optionSelector').nth(2));
-  const urlParamsAfterApply = await getURLSearchParams();
-  const sortOptionsAfterApply = urlParamsAfterApply.get('SortOptions');
-
-  await t.expect(sortOptionsAfterApply).eql('2');
 });
 
 fixture`Performance marks on search`
