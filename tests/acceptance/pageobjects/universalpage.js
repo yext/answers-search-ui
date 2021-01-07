@@ -1,4 +1,3 @@
-import NavigationComponentBlock from '../blocks/navigationcomponent';
 import SearchComponentBlock from '../blocks/searchcomponent';
 import UniversalResultsComponentBlock from '../blocks/universalresultscomponent';
 
@@ -10,7 +9,6 @@ class UniversalPage {
   constructor () {
     this._searchComponent = new SearchComponentBlock();
     this._universalResultsComponent = new UniversalResultsComponentBlock();
-    this._navigationComponent = new NavigationComponentBlock();
   }
 
   /**
@@ -25,13 +23,6 @@ class UniversalPage {
      */
   getUniversalResultsComponent () {
     return this._universalResultsComponent;
-  }
-
-  /**
-   * Returns the {@link NavigationComponentBlock} on the page.
-   */
-  getNavigationComponent () {
-    return this._navigationComponent;
   }
 }
 
