@@ -31,6 +31,7 @@ Outline:
    - [LocationBias Component](#location-bias-component)
    - [SortOptions Component](#sort-options-component)
    - [Map Component](#map-component)
+     - [Supported Map Locales](#supported-map-locales)
    - [Icon Component](#icon-component)
 5. [Customizing Components](#customizing-components)
    - [Using a Custom Renderer](#using-a-custom-renderer)
@@ -1949,6 +1950,7 @@ ANSWERS.addComponent('Map', {
   // Optional, can be used for Google Maps in place of the API key
   clientId: '',
   // Optional, used to determine the language of the map. Defaults to the locale specified in the ANSWERS init.
+  // Refer to the section "Supported Map Locales" below for the list of supported locales.
   locale: 'en',
   // Optional, determines whether or not to collapse pins at the same lat/lng
   collapsePins: false,
@@ -1987,6 +1989,24 @@ ANSWERS.addComponent('Map', {
   },
 };
 ```
+
+### Supported Map Locales
+
+When using MapBox (`mapBox`) as the `mapProvider`, the valid locale options
+are the ones listed here:
+
++ Arabic: `ar`
++ Chinese: `zh`
++ English: `en`
++ French: `fr`
++ German: `de`
++ Japanese: `ja`
++ Korean: `ko`
++ Portuguese: `pt`
++ Russian: `ru`
++ Spanish: `es`
+
+When using Google Maps (`google`) as the `mapProvider`, the valid locale options can be found [here](https://developers.google.com/maps/faq#languagesupport).
 
 ## Icon Component
 The Icon Component will typically be created by other components, but it can be used as a standalone component as well.
