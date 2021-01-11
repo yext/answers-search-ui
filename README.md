@@ -420,10 +420,10 @@ ANSWERS.addComponent('SearchBar', {
   promptHeader: 'Header',
   // Optional, no default
   placeholderText: 'Start typing...',
-  // Optional, defaults to false
-  autoFocus: true,
-  // Optional, when auto focus on load,  open the autocomplete
-  autoCompleteOnLoad: false,
+  // Optional, auto focuses the search bar. Defaults to false
+  autoFocus: false,
+  // Optional, opens the autocomplete suggestions on page load. Defaults to false. Requires autoFocus to be set to true
+  autocompleteOnLoad: false,
   // Optional, on vertical search, allow a user to conduct an empty search. Should be set to true if the defaultInitialSearch is "".
   allowEmptySearch: false,
   // Optional, defaults to 300ms (0.3 seconds)
