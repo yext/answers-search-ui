@@ -8,5 +8,6 @@
  */
 export default {
   INITIALIZE: 'initialize',
-  QUERY_PARAMETER: 'query-parameter'
+  QUERY_PARAMETER: 'query-parameter',
+  SUGGEST: 'suggest'
 };

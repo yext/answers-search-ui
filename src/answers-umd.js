@@ -205,7 +205,9 @@ class Answers {
     }
 
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
-    if (globalStorage.getState(StorageKeys.QUERY)) {
+    const isSuggestQueryTrigger =
+      globalStorage.getState(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
+    if (globalStorage.getState(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
       globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 
