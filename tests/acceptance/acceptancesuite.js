@@ -2,7 +2,7 @@ import UniversalPage from './pageobjects/universalpage';
 import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
-import { Selector } from 'testcafe';
+import { Selector, RequestLogger } from 'testcafe';
 import { browserBackButton, browserRefreshPage } from './utils';
 
 const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
@@ -62,6 +62,33 @@ test('navigating and refreshing mantains that page number', async t => {
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
+
+const spellCheckLogger = RequestLogger({
+  url: /v2\/accounts\/me\/answers\/vertical\/query/
+});
+test
+  .requestHooks(spellCheckLogger)
+  ('spell check flow', async t => {
+    const searchComponent = VerticalPage.getSearchComponent();
+    await searchComponent.enterQuery('varginia');
+    await searchComponent.submitQuery();
+
+    // Check that clicking spell check resets pagination to page 1
+    const paginationComponent = VerticalPage.getPaginationComponent();
+    await paginationComponent.clickNextButton();
+    let pageNum = await paginationComponent.getActivePageLabelAndNumber();
+    await t.expect(pageNum).eql('Page 2');
+
+    const spellCheckComponent = VerticalPage.getSpellCheckComponent();
+    await spellCheckComponent.clickLink();
+    pageNum = await paginationComponent.getActivePageLabelAndNumber();
+    await t.expect(pageNum).eql('Page 1');
+
+    // Check that clicking spell check sends a queryTrigger=suggest url param
+    const requestUrl = spellCheckLogger.requests[spellCheckLogger.requests.length - 1].request.url;
+    const queryTriggerParam = new URLSearchParams(requestUrl).get('queryTrigger');
+    await t.expect(queryTriggerParam).eql('suggest');
+  });
 
 test('navigating pages and hitting the browser back button lands you on the right page', async t => {
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
