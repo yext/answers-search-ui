@@ -83,6 +83,7 @@ test.requestHooks(spellCheckLogger)('spell check flow', async t => {
   await t.expect(pageNum).eql('Page 1');
 
   // Check that clicking spell check sends a queryTrigger=suggest url param
+  // TODO(oshi) investigate making this an integration test
   const requestUrl = spellCheckLogger.requests[spellCheckLogger.requests.length - 1].request.url;
   const queryTriggerParam = new URLSearchParams(requestUrl).get('queryTrigger');
   await t.expect(queryTriggerParam).eql('suggest');
