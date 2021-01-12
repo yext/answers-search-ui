@@ -73,10 +73,6 @@ describe('results count component', () => {
       }
     });
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
-    component.setState({
-      resultsCount: 3,
-      results: ['result1', 'result2', 'result3']
-    });
     expect(component.getState('pageStart')).toEqual(16);
   });
 
