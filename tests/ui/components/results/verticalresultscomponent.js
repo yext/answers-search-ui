@@ -81,9 +81,7 @@ describe('vertical results component', () => {
 
     component.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS, verticalResults);
 
-    const results = component.results;
-
-    expect(results).toEqual('yext search results');
+    expect(component.results).toEqual('yext search results');
   });
 
   it('renders with only default config', () => {
