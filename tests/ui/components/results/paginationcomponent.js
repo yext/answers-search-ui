@@ -161,7 +161,7 @@ describe('properly interacts with storage', () => {
     };
   });
 
-  it('the limit property is set to the value in global storage after the component is created', () => {
+  it('the limit property is set to the global storage search-config.limit after being created', () => {
     const component = COMPONENT_MANAGER.create('Pagination', {
       ...defaultConfig
     });
