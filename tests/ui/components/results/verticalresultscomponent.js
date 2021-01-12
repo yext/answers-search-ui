@@ -2,12 +2,23 @@ import DOM from '../../../../src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
+import SearchStates from '../../../../src/core/storage/searchstates';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
+
+const updateEvents = {};
 
 const mockCore = {
   globalStorage: {
-    set: () => {},
-    on: () => {},
+    set: (storageKey, value) => {
+      if (storageKey in updateEvents) {
+        updateEvents[storageKey](value);
+      }
+    },
+    on: (event, storageKey, cb) => {
+      if (event === 'update') {
+        updateEvents[storageKey] = cb;
+      }
+    },
     getState: (storageKey) => {
       if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
         return { get: () => { return []; } };
@@ -19,6 +30,8 @@ const mockCore = {
         return '';
       } else if (storageKey === StorageKeys.SESSIONS_OPT_IN) {
         return {};
+      } else if (storageKey === StorageKeys.QUERY) {
+        return 'yext';
       }
     }
   },
@@ -46,6 +59,31 @@ describe('vertical results component', () => {
       container: '#test-component',
       verticalKey: 'verticalKey'
     };
+  });
+
+  it('the query propery is based on global storage when the component is created', () => {
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
+    const query = component.query;
+
+    expect(query).toEqual('yext');
+  });
+
+  it('updates to global storage vertical results update the component results', () => {
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
+
+    const verticalResults = {
+      searchState: SearchStates.SEARCH_COMPLETE,
+      resultsCount: 15,
+      results: 'yext search results',
+      verticalConfigId: 'verticalKey',
+      resultsContext: {}
+    };
+
+    component.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS, verticalResults);
+
+    const results = component.results;
+
+    expect(results).toEqual('yext search results');
   });
 
   it('renders with only default config', () => {
