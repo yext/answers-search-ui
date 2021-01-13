@@ -162,9 +162,7 @@ describe('properly interacts with storage', () => {
   });
 
   it('the limit property is set to the global storage search-config.limit after being created', () => {
-    const component = COMPONENT_MANAGER.create('Pagination', {
-      ...defaultConfig
-    });
+    const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
 
     const limit = component._limit;
 
@@ -172,23 +170,27 @@ describe('properly interacts with storage', () => {
   });
 
   it('updating the page sets global storage searchOffset', () => {
-    const component = COMPONENT_MANAGER.create('Pagination', {
-      ...defaultConfig
-    });
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
 
-    component.updatePage(5);
+    const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
+    const wrapper = mount(component);
+
+    const nextPageButton = wrapper.find('.js-yxt-Pagination-next');
+    nextPageButton.simulate('click');
+
     const searchOffset = component.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
-
     expect(searchOffset).toEqual(5);
   });
 
   it('updating the page sets persistent storage searchOffset', () => {
-    const component = COMPONENT_MANAGER.create('Pagination', {
-      ...defaultConfig
-    });
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+    const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
+    const wrapper = mount(component);
 
-    component.updatePage(4);
+    const nextPageButton = wrapper.find('.js-yxt-Pagination-next');
+    nextPageButton.simulate('click');
+
     const searchOffset = component.core.persistentStorage.get(StorageKeys.SEARCH_OFFSET);
-    expect(searchOffset).toEqual(4);
+    expect(searchOffset).toEqual(5);
   });
 });
