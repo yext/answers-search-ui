@@ -1,5 +1,11 @@
 import DOM from '../../../../src/ui/dom/dom';
 import { Tab } from '../../../../src/ui/components/navigation/navigationcomponent';
+import mockManager from '../../../setup/managermocker';
+import { mount } from 'enzyme';
+import GlobalStorage from '../../../../src/core/storage/globalstorage';
+import PersistentStorage from '../../../../src/ui/storage/persistentstorage';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
+import VerticalPagesConfig from '../../../../src/core/models/verticalpagesconfig';
 
 // The DOM doesn't exist within components in the JEST environment,
 // so we have to provide it to our DOM API properly.
@@ -14,7 +20,11 @@ beforeEach(() => {
   DOM.empty(bodyEl);
 
   // Create the container that our component will be injected into
-  DOM.append(bodyEl, DOM.createEl('div', { class: 'test-component' }));
+  DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
+
+  // Mock DOM.on and DOM.off because they will not work in this test environment
+  DOM.on = jest.fn();
+  DOM.off = jest.fn();
 });
 
 describe('navigation component configuration', () => {
@@ -100,5 +110,72 @@ describe('navigation component configuration', () => {
 
     const tab = Tab.from([tab1Config, tab2Config, tab3Config]);
     expect(tab).toMatchObject(expected);
+  });
+});
+
+describe('navigation tab links are correct', () => {
+  let COMPONENT_MANAGER;
+
+  const defaultConfig = {
+    container: '#test-component',
+    verticalKey: 'verticalKey',
+    verticalPages: [
+      { verticalKey: 'vertical', url: './vertical', label: 'Vertical' },
+      { verticalKey: 'facets', url: './facets', label: 'Facets' }
+    ]
+  };
+
+  beforeEach(() => {
+    COMPONENT_MANAGER = mockManager({
+      globalStorage: new GlobalStorage(),
+      persistentStorage: new PersistentStorage()
+    });
+
+    COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
+  });
+
+  it('tab links contain the referrerPageUrl from global storage', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.REFERRER_PAGE_URL, 'yext.com');
+
+    const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
+    const wrapper = mount(component);
+
+    const navItem = wrapper.find('.js-yxt-navItem').first();
+    const tabLink = navItem.prop('href');
+
+    expect(tabLink).toContain('referrerPageUrl=yext.com');
+  });
+
+  it('tab links contain the context from global storage', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.API_CONTEXT, 'some context');
+
+    const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
+    const wrapper = mount(component);
+
+    const navItem = wrapper.find('.js-yxt-navItem').first();
+    const tabLink = navItem.prop('href');
+
+    expect(tabLink).toContain('context=some+context');
+  });
+
+  it('tab links default to the tab order from global storage', () => {
+    const verticalPagesConfig = new VerticalPagesConfig([
+      { label: 'Home', url: './index.html' },
+      { label: 'People', url: './people.html', verticalKey: 'people' }
+    ]);
+
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, verticalPagesConfig);
+
+    const component = COMPONENT_MANAGER.create('Navigation', {
+      container: '#test-component',
+      verticalKey: 'verticalKey',
+      verticalPages: null
+    });
+    const wrapper = mount(component);
+
+    const navItem = wrapper.find('.js-yxt-navItem').first();
+    const tabLink = navItem.prop('href');
+
+    expect(tabLink).toContain('tabOrder=.%2Findex.html%2Cpeople');
   });
 });
