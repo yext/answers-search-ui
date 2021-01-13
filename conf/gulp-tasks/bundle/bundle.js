@@ -68,7 +68,7 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
       babel({
         runtimeHelpers: true,
         babelrc: false,
-        exclude: /node_modules\/(?!whatwg-fetch).*/,
+        exclude: /node_modules\/(?!whatwg-fetch)(?!@yext\/answers-storage).*/,
         presets: [
           [
             '@babel/preset-env',
