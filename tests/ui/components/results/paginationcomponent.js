@@ -161,12 +161,31 @@ describe('properly interacts with storage', () => {
     };
   });
 
-  it('the limit property is set to the global storage search-config.limit after being created', () => {
+  it('the global storage search-config.limit and results.resultsCount are used to calculate the total page count', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS, { searchState: 'search-complete', resultsCount: 20 });
+
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
 
-    const limit = component._limit;
+    const wrapper = mount(component);
 
-    expect(limit).toEqual(5);
+    const paginationLink = wrapper.find('.yxt-Pagination-link').first();
+    const paginationInfo = JSON.parse(paginationLink.prop('data-eventoptions'));
+
+    expect(paginationInfo.totalPageCount).toEqual(4);
+  });
+
+  it('the global storage search-config.limit and search-offset are used to calculate the current page number', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 10);
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
+
+    const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
+
+    const wrapper = mount(component);
+
+    const activePageSpan = wrapper.find('#active-page');
+
+    expect(activePageSpan.text()).toEqual('Page 3');
   });
 
   it('updating the page sets global storage searchOffset', () => {
