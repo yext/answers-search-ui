@@ -62,4 +62,34 @@ describe('results count component', () => {
     expect(wrapper.find('.yxt-VerticalResultsCount-end').text()).toEqual('50');
     expect(wrapper.find('.yxt-VerticalResultsCount-total').text()).toEqual('200');
   });
+
+  it('page start is equal to the global storage search offset plus one', () => {
+    const COMPONENT_MANAGER = mockManager({
+      globalStorage: {
+        on: () => {},
+        getState: key => {
+          return key === StorageKeys.SEARCH_OFFSET ? 15 : null;
+        }
+      }
+    });
+    const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
+    expect(component.getState('pageStart')).toEqual(16);
+  });
+
+  it('page end is equal to the global storage search offset plus the number of results', () => {
+    const COMPONENT_MANAGER = mockManager({
+      globalStorage: {
+        on: () => {},
+        getState: key => {
+          return key === StorageKeys.SEARCH_OFFSET ? 15 : null;
+        }
+      }
+    });
+    const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
+    component.setState({
+      resultsCount: 3,
+      results: ['result1', 'result2', 'result3']
+    });
+    expect(component.getState('pageEnd')).toEqual(18);
+  });
 });
