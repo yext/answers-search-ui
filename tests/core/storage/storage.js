@@ -14,7 +14,7 @@ beforeEach(() => {
 
 it('calls update and reset listeners onpopstate', () => {
   storage = new GlobalStorage({ update: stateUpdateListener, reset: stateResetListener });
-  window.onpopstate();
+  window.dispatchEvent(new CustomEvent('popstate'))
   expect(stateUpdateListener).toBeCalled();
   expect(stateResetListener).toBeCalled();
 });
