@@ -2,16 +2,10 @@ import DOM from '../../../../src/ui/dom/dom';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import SpellCheckComponent from '../../../../src/ui/components/search/spellcheckcomponent';
-
-const globalStorage = {};
+import GlobalStorage from '../../../../src/core/storage/globalstorage';
 
 const mockCore = {
-  globalStorage: {
-    getState: key => globalStorage[key] || undefined,
-    set: (key, value) => {
-      globalStorage[key] = value;
-    }
-  }
+  globalStorage: new GlobalStorage()
 };
 
 const COMPONENT_MANAGER = mockManager(mockCore);
@@ -19,21 +13,19 @@ const COMPONENT_MANAGER = mockManager(mockCore);
 describe('spellcheck redirect links', () => {
   let linkUrlParams;
 
-  beforeEach(() => {
-    setupDOM();
+  setupDOM();
 
-    const component = createSpellcheckComponent();
+  const component = createSpellcheckComponent();
 
-    component.setState({
-      correctedQuery: {
-        value: 'What is Yext Answers?'
-      },
-      type: 'SUGGEST'
-    });
-
-    const correctedQueryUrl = component.getState('correctedQueryUrl');
-    linkUrlParams = new URLSearchParams(correctedQueryUrl);
+  component.setState({
+    correctedQuery: {
+      value: 'What is Yext Answers?'
+    },
+    type: 'SUGGEST'
   });
+
+  const correctedQueryUrl = component.getState('correctedQueryUrl');
+  linkUrlParams = new URLSearchParams(correctedQueryUrl);
 
   it('redirect links contain a query url param', () => {
     const query = linkUrlParams.get('query');
