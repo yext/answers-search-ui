@@ -19,6 +19,7 @@ import FilterRegistry from './filters/filterregistry';
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
 /** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
+/** @typedef {import('./storage/storage').default} Storage */
 
 /**
  * Core is the main application container for all of the network and storage
@@ -75,6 +76,12 @@ export default class Core {
      * @private
      */
     this.persistentStorage = config.persistentStorage;
+
+    /**
+     * A reference to the core data storage that powers the UI
+     * @type {Storage}
+     */
+    this.storage = config.storage;
 
     /**
      * The filterRegistry is in charge of setting, removing, and retrieving filters
@@ -192,7 +199,7 @@ export default class Core {
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
+        sortBys: this.storage.get(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
         referrerPageUrl: referrerPageUrl,
@@ -435,14 +442,14 @@ export default class Core {
         direction: option.direction
       };
     });
-    this.globalStorage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+    this.storage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
   }
 
   /**
    * Clears the sortBys key in global storage.
    */
   clearSortBys () {
-    this.globalStorage.delete(StorageKeys.SORT_BYS);
+    this.storage.delete(StorageKeys.SORT_BYS);
   }
 
   /**

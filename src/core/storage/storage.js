@@ -40,7 +40,7 @@ export default class GlobalStorage {
      * The persistent storage implementation to store state
      * across browser sessions and URLs
      *
-     * @type {PersistentStorage}
+     * @type {DefaultPersistentStorage}
      */
     this.persistentStorage = new DefaultPersistentStorage(this.popListener);
 
@@ -58,12 +58,14 @@ export default class GlobalStorage {
    * could fetch a sessionId from some backend
    *
    * @param {string} url The starting URL
+   * @returns {GlobalStorage}
    */
   init (url) {
     this.persistentStorage.init(url);
     this.persistentStorage.getAll().forEach((value, key) => {
       this.set(key, value);
     });
+    return this;
   }
 
   /**
