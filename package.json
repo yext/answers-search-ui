@@ -133,7 +133,8 @@
       "DOMParser",
       "ytag",
       "test",
-      "fixture"
+      "fixture",
+      "CustomEvent"
     ],
     "ignore": [
       "docs/"
