@@ -16,6 +16,7 @@ import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
+import Storage from './core/storage/storage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
@@ -254,10 +255,13 @@ class Answers {
       initScrollListener(this._analyticsReporterService);
     }
 
+    const storage = new Storage().init(window.location.search);
+
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
       globalStorage: globalStorage,
       persistentStorage: persistentStorage,
+      storage: storage,
       experienceKey: parsedConfig.experienceKey,
       fieldFormatters: parsedConfig.fieldFormatters,
       experienceVersion: parsedConfig.experienceVersion,
