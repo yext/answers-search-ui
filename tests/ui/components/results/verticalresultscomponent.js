@@ -4,43 +4,19 @@ import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import SearchStates from '../../../../src/core/storage/searchstates';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
-
-const updateEvents = {};
+import GlobalStorage from '../../../../src/core/storage/globalstorage';
 
 const mockCore = {
-  globalStorage: {
-    set: (storageKey, value) => {
-      if (storageKey in updateEvents) {
-        updateEvents[storageKey](value);
-      }
-    },
-    on: (event, storageKey, cb) => {
-      if (event === 'update') {
-        updateEvents[storageKey] = cb;
-      }
-    },
-    getState: (storageKey) => {
-      if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
-        return { get: () => { return []; } };
-      } else if (storageKey === StorageKeys.NO_RESULTS_CONFIG) {
-        return {};
-      } else if (storageKey === StorageKeys.API_CONTEXT) {
-        return undefined;
-      } else if (storageKey === StorageKeys.REFERRER_PAGE_URL) {
-        return '';
-      } else if (storageKey === StorageKeys.SESSIONS_OPT_IN) {
-        return {};
-      } else if (storageKey === StorageKeys.QUERY) {
-        return 'yext';
-      }
-    }
-  },
+  globalStorage: new GlobalStorage(),
   getStaticFilterNodes: () => [],
   getFacetFilterNodes: () => [],
   getLocationRadiusFilterNode: () => null
 };
 
 DOM.setup(document, new DOMParser());
+
+mockCore.globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, { get: () => [] });
+mockCore.globalStorage.set(StorageKeys.REFERRER_PAGE_URL, '');
 
 const COMPONENT_MANAGER = mockManager(mockCore);
 COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => {
@@ -61,11 +37,11 @@ describe('vertical results component', () => {
     };
   });
 
-  it('the query propery is based on global storage when the component is created', () => {
+  it('getVerticalUrl encodes the global storage query when the component is created', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.QUERY, 'yext');
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
-    const query = component.query;
 
-    expect(query).toEqual('yext');
+    expect(component.getVerticalURL()).toContain('query=yext');
   });
 
   it('updates to global storage vertical results update the component results', () => {
@@ -81,7 +57,7 @@ describe('vertical results component', () => {
 
     component.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS, verticalResults);
 
-    expect(component.results).toEqual('yext search results');
+    expect(component.getState('results')).toEqual('yext search results');
   });
 
   it('renders with only default config', () => {
