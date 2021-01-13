@@ -264,7 +264,7 @@ class Answers {
       analyticsReporter: this._analyticsReporterService,
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch
-    });
+    }).init();
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
       parsedConfig.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
@@ -280,10 +280,6 @@ class Answers {
 
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
     return asyncDeps.finally(() => {
-      if (!this.coreAdapter.isInitialized()) {
-        throw new Error(
-          'Failed to initialize Core, likely because the experience\'s front-end has been disabled.');
-      }
       this._onReady();
     });
   }
@@ -291,8 +287,7 @@ class Answers {
   _loadAsyncDependencies (parsedConfig) {
     const loadTemplates = this._loadTemplates(parsedConfig);
     const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
-    const initializeCoreAdapter = this.coreAdapter.init();
-    return Promise.all([loadTemplates, ponyfillCssVariables, initializeCoreAdapter]);
+    return Promise.all([loadTemplates, ponyfillCssVariables]);
   }
 
   _loadTemplates ({ useTemplates, templateBundle }) {
