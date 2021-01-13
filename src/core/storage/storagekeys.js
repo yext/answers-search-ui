@@ -30,7 +30,7 @@ export default {
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',
-  SORT_BYS: 'sort-bys', // Cut over to new global storage
+  SORT_BYS: 'sort-bys', // Has been cut over to new global storage
   NO_RESULTS_CONFIG: 'no-results-config',
   LOCATION_RADIUS: 'location-radius',
   RESULTS_HEADER: 'results-header',
