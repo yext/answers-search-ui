@@ -370,7 +370,7 @@ export default class Core {
     return this._autoComplete
       .queryUniversal(input)
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
       });
   }
@@ -387,7 +387,7 @@ export default class Core {
     return this._autoComplete
       .queryVertical(input, verticalKey)
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
       });
   }
@@ -405,7 +405,7 @@ export default class Core {
     return this._autoComplete
       .queryFilter(input, config)
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });
   }
 

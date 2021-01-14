@@ -687,7 +687,7 @@ export default class SearchComponent extends Component {
    */
   fetchQueryIntents (query) {
     const autocompleteData =
-      this.core.globalStorage.getState(`${StorageKeys.AUTOCOMPLETE}.${this._autoCompleteName}`);
+      this.core.storage.get(`${StorageKeys.AUTOCOMPLETE}.${this._autoCompleteName}`);
     if (!autocompleteData) {
       const autocompleteRequest = this._verticalKey
         ? this.core.autoCompleteVertical(
