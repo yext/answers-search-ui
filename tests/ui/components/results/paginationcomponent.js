@@ -3,16 +3,21 @@ import { mount } from 'enzyme';
 import DOM from '../../../../src/ui/dom/dom';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
+import Storage from '../../../../src/core/storage/storage';
+import PaginationComponent from '../../../../src/ui/components/results/paginationcomponent';
+import SearchStates from '../../../../src/core/storage/searchstates';
 
-const mockedCore = () => {
+const createCore = () => {
   // pagination will hide itself if there are no results, so we fake the relevant global storage.
   const globalStorage = {
-    'vertical-results': { searchState: 'search-complete', resultsCount: 21 },
-    'search-offset': 0,
-    'search-config': { limit: 5 },
-    'no-results-config': { displayAllResults: true }
+    [StorageKeys.SEARCH_OFFSET]: 0,
+    [StorageKeys.SEARCH_CONFIG]: { limit: 5 },
+    [StorageKeys.NO_RESULTS_CONFIG]: { displayAllResults: true }
   };
   const persistentStorage = {};
+  const storage = new Storage().init();
+  storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 21 });
+
   return {
     verticalSearch: () => {},
     verticalPage: () => {},
@@ -33,26 +38,29 @@ const mockedCore = () => {
       },
       get: storageKey => persistentStorage[storageKey] || undefined,
       delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
-    }
+    },
+    storage: storage
   };
 };
 
 DOM.setup(document, new DOMParser());
 
-const COMPONENT_MANAGER = mockManager(mockedCore());
+let COMPONENT_MANAGER;
+let defaultConfig;
+
+beforeEach(() => {
+  COMPONENT_MANAGER = mockManager(createCore());
+  const bodyEl = DOM.query('body');
+  DOM.empty(bodyEl);
+  DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
+
+  defaultConfig = {
+    container: '#test-component',
+    verticalKey: 'verticalKey'
+  };
+});
 
 describe('rendering the arrows', () => {
-  let defaultConfig;
-  beforeEach(() => {
-    const bodyEl = DOM.query('body');
-    DOM.empty(bodyEl);
-    DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-
-    defaultConfig = {
-      container: '#test-component',
-      verticalKey: 'verticalKey'
-    };
-  });
 
   it('renders no arrows correctly', () => {
     const component = COMPONENT_MANAGER.create('Pagination', {
@@ -87,18 +95,6 @@ describe('rendering the arrows', () => {
 });
 
 describe('rendering the page numbers', () => {
-  let defaultConfig;
-  beforeEach(() => {
-    const bodyEl = DOM.query('body');
-    DOM.empty(bodyEl);
-    DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-
-    defaultConfig = {
-      container: '#test-component',
-      verticalKey: 'verticalKey'
-    };
-  });
-
   it('renders the current page', () => {
     const component = COMPONENT_MANAGER.create('Pagination', {
       ...defaultConfig,
@@ -149,22 +145,10 @@ describe('rendering the page numbers', () => {
 });
 
 describe('properly interacts with storage', () => {
-  let defaultConfig;
-  beforeEach(() => {
-    const bodyEl = DOM.query('body');
-    DOM.empty(bodyEl);
-    DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-
-    defaultConfig = {
-      container: '#test-component',
-      verticalKey: 'verticalKey'
-    };
-  });
-
   it('the global storage search-config.limit and results.resultsCount determine the total page count', () => {
     COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS,
-      { searchState: 'search-complete', resultsCount: 20 }
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.VERTICAL_RESULTS,
+      { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 20 }
     );
 
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
@@ -213,5 +197,20 @@ describe('properly interacts with storage', () => {
 
     const searchOffset = component.core.persistentStorage.get(StorageKeys.SEARCH_OFFSET);
     expect(searchOffset).toEqual(5);
+  });
+
+  it('listens to updates to VERTICAL_RESULTS in global storage', () => {
+    const storage = COMPONENT_MANAGER.core.storage;
+    storage.delete(StorageKeys.VERTICAL_RESULTS);
+    const component = COMPONENT_MANAGER.create(PaginationComponent.type, defaultConfig);
+    const wrapper = mount(component);
+    expect(wrapper.find('.yxt-Pagination')).toHaveLength(0);
+    storage.set(StorageKeys.VERTICAL_RESULTS, {
+      searchState: SearchStates.SEARCH_COMPLETE,
+      resultsCount: 21,
+      results: Array.from({ length: 21 })
+    });
+    wrapper.update();
+    expect(wrapper.find('.yxt-Pagination')).toHaveLength(1);
   });
 });

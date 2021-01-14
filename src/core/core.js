@@ -144,7 +144,7 @@ export default class Core {
   verticalSearch (verticalKey, options = {}, query = {}) {
     window.performance.mark('yext.answers.verticalQueryStart');
     if (!query.append) {
-      this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
       this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }
@@ -213,11 +213,11 @@ export default class Core {
         this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
 
         if (query.append) {
-          const mergedResults = this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS)
+          const mergedResults = this.storage.get(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
-          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+          this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
         } else {
-          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+          this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
         }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
@@ -236,7 +236,7 @@ export default class Core {
         const exposedParams = {
           verticalKey: verticalKey,
           queryString: parsedQuery.input,
-          resultsCount: this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS).resultsCount,
+          resultsCount: this.storage.get(StorageKeys.VERTICAL_RESULTS).resultsCount,
           resultsContext: data[StorageKeys.VERTICAL_RESULTS].resultsContext
         };
         const analyticsEvent = this.onVerticalSearch(exposedParams);
@@ -259,7 +259,7 @@ export default class Core {
     this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
-    this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
+    this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
   }
 

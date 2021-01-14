@@ -32,12 +32,16 @@ export default class SortOptionsComponent extends Component {
      * This component should only render if there are search results, so it should listen
      * to updates to vertical results and handle them accordingly.
      */
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, verticalResults => {
-      const isSearchComplete = verticalResults.searchState === SearchStates.SEARCH_COMPLETE;
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: verticalResults => {
+        const isSearchComplete = verticalResults.searchState === SearchStates.SEARCH_COMPLETE;
 
-      if (isSearchComplete) {
-        const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
-        this.handleVerticalResultsUpdate(isNoResults);
+        if (isSearchComplete) {
+          const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
+          this.handleVerticalResultsUpdate(isNoResults);
+        }
       }
     });
   }

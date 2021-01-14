@@ -9,7 +9,7 @@
 export default {
   NAVIGATION: 'navigation', // Has been cut over to the new global storage
   UNIVERSAL_RESULTS: 'universal-results',
-  VERTICAL_RESULTS: 'vertical-results',
+  VERTICAL_RESULTS: 'vertical-results', // Has been cut over to the new global storage
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
