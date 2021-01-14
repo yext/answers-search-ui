@@ -6,21 +6,22 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 const mockedCore = () => {
   // pagination will hide itself if there are no results, so we fake the relevant global storage.
-  const storage = {
+  const globalStorage = {
     'vertical-results': { searchState: 'search-complete', resultsCount: 21 },
     'search-offset': 0,
     'search-config': { limit: 5 },
     'no-results-config': { displayAllResults: true }
   };
+  const persistentStorage = {};
   return {
     verticalSearch: () => {},
     verticalPage: () => {},
     globalStorage: {
-      getState: storageKey => storage[storageKey] || undefined,
+      getState: storageKey => globalStorage[storageKey] || undefined,
       getAll: () => [],
       delete: storageKey => {},
       set: (key, value) => {
-        storage[key] = value;
+        globalStorage[key] = value;
       },
       on: () => {}
     },
@@ -28,7 +29,9 @@ const mockedCore = () => {
       set: (namespace, offsetIndex) => {
         expect(namespace).toBe(StorageKeys.SEARCH_OFFSET);
         expect(typeof offsetIndex).toBe('number');
+        persistentStorage[namespace] = offsetIndex;
       },
+      get: storageKey => persistentStorage[storageKey] || undefined,
       delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
     }
   };
@@ -142,5 +145,73 @@ describe('rendering the page numbers', () => {
     expect(next).toHaveLength(1);
     next.first().simulate('click');
     expect(paginate).toHaveBeenCalledWith(2, 1, 5);
+  });
+});
+
+describe('properly interacts with storage', () => {
+  let defaultConfig;
+  beforeEach(() => {
+    const bodyEl = DOM.query('body');
+    DOM.empty(bodyEl);
+    DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
+
+    defaultConfig = {
+      container: '#test-component',
+      verticalKey: 'verticalKey'
+    };
+  });
+
+  it('the global storage search-config.limit and results.resultsCount determine the total page count', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS,
+      { searchState: 'search-complete', resultsCount: 20 }
+    );
+
+    const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
+
+    const wrapper = mount(component);
+
+    const paginationLink = wrapper.find('.yxt-Pagination-link').first();
+    const paginationInfo = JSON.parse(paginationLink.prop('data-eventoptions'));
+
+    expect(paginationInfo.totalPageCount).toEqual(4);
+  });
+
+  it('the global storage search-config.limit and search-offset determine the current page number', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 10);
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
+
+    const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
+
+    const wrapper = mount(component);
+
+    const activePageSpan = wrapper.find('#active-page');
+
+    expect(activePageSpan.text()).toEqual('Page 3');
+  });
+
+  it('updating the page sets global storage searchOffset', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+
+    const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
+    const wrapper = mount(component);
+
+    const nextPageButton = wrapper.find('.js-yxt-Pagination-next');
+    nextPageButton.simulate('click');
+
+    const searchOffset = component.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
+    expect(searchOffset).toEqual(5);
+  });
+
+  it('updating the page sets persistent storage searchOffset', () => {
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+    const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
+    const wrapper = mount(component);
+
+    const nextPageButton = wrapper.find('.js-yxt-Pagination-next');
+    nextPageButton.simulate('click');
+
+    const searchOffset = component.core.persistentStorage.get(StorageKeys.SEARCH_OFFSET);
+    expect(searchOffset).toEqual(5);
   });
 });
