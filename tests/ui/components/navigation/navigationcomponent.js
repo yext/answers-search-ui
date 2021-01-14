@@ -194,3 +194,49 @@ describe('navigation tab links are correct', () => {
     expect(tabLink).toContain('tabOrder=.%2Findex.html%2Cpeople');
   });
 });
+
+describe('navigation tab order', () => {
+  let COMPONENT_MANAGER;
+
+  const defaultConfig = {
+    container: '#test-component',
+    verticalKey: 'verticalKey',
+    verticalPages: [
+      { verticalKey: 'first', url: './first', label: 'first' },
+      { verticalKey: 'second', url: './second', label: 'second' },
+      { verticalKey: 'third', url: './third', label: 'third' }
+    ]
+  };
+
+  COMPONENT_MANAGER = mockManager({
+    globalStorage: new GlobalStorage(),
+    persistentStorage: new PersistentStorage()
+  });
+
+  COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
+
+  it('tab order changes in response to the server', () => {
+    const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
+    const wrapper = mount(component);
+
+    const navStateWithReversedTabs = {
+      tabOrder: ['third', 'second', 'first']
+    };
+
+    component.core.globalStorage.set(StorageKeys.NAVIGATION, navStateWithReversedTabs);
+    wrapper.update();
+
+    const firstTab = wrapper.find('.js-yxt-navItem').at(0);
+    const firstTabText = (firstTab.text()).trim();
+
+    const secondTab = wrapper.find('.js-yxt-navItem').at(1);
+    const secondTabText = (secondTab.text()).trim();
+
+    const thirdTab = wrapper.find('.js-yxt-navItem').at(2);
+    const thirdTabText = (thirdTab.text()).trim();
+
+    expect(firstTabText).toEqual('third');
+    expect(secondTabText).toEqual('second');
+    expect(thirdTabText).toEqual('first');
+  });
+});
