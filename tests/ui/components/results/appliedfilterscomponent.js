@@ -42,4 +42,4 @@ describe('AppliedFilters component', () => {
     wrapper.update();
     expect(wrapper.find('.yxt-AppliedFilters')).toHaveLength(1);
   });
-})
+});

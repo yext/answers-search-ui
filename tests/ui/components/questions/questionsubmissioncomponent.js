@@ -33,4 +33,4 @@ describe('QASubmission component', () => {
     wrapper.update();
     expect(wrapper.find('.yxt-QuestionSubmission')).toHaveLength(1);
   });
-})
+});

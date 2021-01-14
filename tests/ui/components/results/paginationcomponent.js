@@ -61,7 +61,6 @@ beforeEach(() => {
 });
 
 describe('rendering the arrows', () => {
-
   it('renders no arrows correctly', () => {
     const component = COMPONENT_MANAGER.create('Pagination', {
       ...defaultConfig,
