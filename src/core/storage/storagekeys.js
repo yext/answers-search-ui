@@ -11,7 +11,7 @@ export default {
   UNIVERSAL_RESULTS: 'universal-results',
   VERTICAL_RESULTS: 'vertical-results',
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
-  AUTOCOMPLETE: 'autocomplete',
+  AUTOCOMPLETE: 'autocomplete', // Has been cut over to the new global storage
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter', // DEPRECATED
   STATIC_FILTER_NODE: 'static-filter-node',
