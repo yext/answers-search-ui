@@ -1,6 +1,8 @@
 import DefaultPersistentStorage from '@yext/answers-storage';
 import { AnswersStorageError } from '../errors/errors';
 
+/** @typedef {import('./listener').default} StorageListener */
+
 /**
  * GlobalStorage is a container around application state.  It
  * exposes an interface for CRUD operations as well as listening
@@ -164,7 +166,7 @@ export default class GlobalStorage {
   /**
    * Adds a listener to the given module for a given event
    *
-   * @param {StorageListener} the listener to add
+   * @param {StorageListener} listener the listener to add
    */
   registerListener (listener) {
     if (!listener.eventType || !listener.storageKey ||
@@ -177,7 +179,7 @@ export default class GlobalStorage {
   /**
    * Removes a given listener from the set of listeners
    *
-   * @param {StorageListener} the listener to remove
+   * @param {StorageListener} listener the listener to remove
    */
   removeListener (listener) {
     this.listeners = this.listeners.filter(l => l !== listener);

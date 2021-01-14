@@ -284,9 +284,8 @@ export default class VerticalResultsComponent extends Component {
     const verticalURL = this._config.verticalURL || verticalConfig.url ||
       data.verticalURL || this.verticalKey + '.html';
 
-    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION)
-      ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder
-      : [];
+    const navigationData = this.core.storage.get(StorageKeys.NAVIGATION);
+    const dataTabOrder = navigationData ? navigationData.tabOrder : [];
     const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
     const params = new SearchParams(window.location.search.substring(1));
     params.set('tabOrder', tabOrder);

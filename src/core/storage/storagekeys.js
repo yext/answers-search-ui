@@ -7,7 +7,7 @@
  * @enum {string}
  */
 export default {
-  NAVIGATION: 'navigation',
+  NAVIGATION: 'navigation', // Has been cut over to the new global storage
   UNIVERSAL_RESULTS: 'universal-results',
   VERTICAL_RESULTS: 'vertical-results',
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
@@ -30,7 +30,7 @@ export default {
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',
-  SORT_BYS: 'sort-bys', // Has been cut over to new global storage
+  SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
   NO_RESULTS_CONFIG: 'no-results-config',
   LOCATION_RADIUS: 'location-radius',
   RESULTS_HEADER: 'results-header',
