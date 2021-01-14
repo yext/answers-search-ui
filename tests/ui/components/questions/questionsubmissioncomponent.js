@@ -26,9 +26,19 @@ describe('QASubmission component', () => {
     const wrapper = mount(component);
     expect(wrapper.find('.yxt-QuestionSubmission')).toHaveLength(0);
     storage.set(StorageKeys.VERTICAL_RESULTS, {
-      searchState: SearchStates.SEARCH_COMPLETE,
-      resultsCount: 1,
-      results: ['result0']
+      searchState: SearchStates.SEARCH_COMPLETE
+    });
+    wrapper.update();
+    expect(wrapper.find('.yxt-QuestionSubmission')).toHaveLength(1);
+  });
+
+  it('listens to updates to UNIVERSAL_RESULTS in global storage', () => {
+    const storage = COMPONENT_MANAGER.core.storage;
+    const component = COMPONENT_MANAGER.create(QuestionSubmissionComponent.type, defaultConfig);
+    const wrapper = mount(component);
+    expect(wrapper.find('.yxt-QuestionSubmission')).toHaveLength(0);
+    storage.set(StorageKeys.UNIVERSAL_RESULTS, {
+      searchState: SearchStates.SEARCH_COMPLETE
     });
     wrapper.update();
     expect(wrapper.find('.yxt-QuestionSubmission')).toHaveLength(1);
