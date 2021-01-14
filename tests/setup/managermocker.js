@@ -18,6 +18,11 @@ export default function mockManager (mockedCore) {
       get: () => {},
       delete: () => {}
     },
+    storage: {
+      set: () => {},
+      get: () => {},
+      registerListener: () => {}
+    },
     ...mockedCore
   };
   const COMPONENT_MANAGER = new MockComponentManager(core);

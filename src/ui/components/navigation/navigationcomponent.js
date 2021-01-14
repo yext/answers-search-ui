@@ -190,7 +190,7 @@ export default class NavigationComponent extends Component {
     this.checkMobileOverflowBehavior = this.checkMobileOverflowBehavior.bind(this);
 
     const reRender = () => {
-      this.setState(this.core.globalStorage.getState(StorageKeys.NAVIGATION) || {});
+      this.setState(this.core.storage.get(StorageKeys.NAVIGATION) || {});
     };
 
     this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
