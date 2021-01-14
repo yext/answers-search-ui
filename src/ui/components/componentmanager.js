@@ -4,6 +4,8 @@ import { AnswersComponentError } from '../../core/errors/errors';
 import DOM from '../dom/dom';
 import { COMPONENT_REGISTRY } from './registry';
 
+/** @typedef {import('../../core/core').default} Core */
+
 /**
  * ComponentManager is a Singletone that contains both an internal registry of
  * eligible components to be created, as well as keeps track of the current
@@ -152,6 +154,16 @@ export default class ComponentManager {
         return component;
       }
 
+      this._core.storage.registerListener({
+        eventType: 'update',
+        storageKey: component.moduleId,
+        callback: (data) => {
+          component.setState(data);
+        }
+      });
+
+      // TODO(SLAP-869) remove this._core.globalStorage.on()
+      // when the new global storage is fully cut over
       this._core.globalStorage
         .on('update', component.moduleId, (data) => {
           component.setState(data);
