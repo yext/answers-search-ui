@@ -26,7 +26,7 @@ export default class UniversalResultsComponent extends Component {
     };
 
     const reRender = () =>
-      this.setState(this.core.globalStorage.getState(StorageKeys.UNIVERSAL_RESULTS) || {});
+      this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
     this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
     this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
   }
