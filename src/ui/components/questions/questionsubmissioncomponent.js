@@ -223,7 +223,12 @@ export default class QuestionSubmissionComponent extends Component {
       storageKey: StorageKeys.VERTICAL_RESULTS,
       callback: onResultsUpdate
     });
-    this.core.globalStorage.on('update', StorageKeys.UNIVERSAL_RESULTS, onResultsUpdate);
+
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.UNIVERSAL_RESULTS,
+      callback: onResultsUpdate
+    });
   }
 
   /**
