@@ -161,9 +161,11 @@ describe('properly interacts with storage', () => {
     };
   });
 
-  it('the global storage search-config.limit and results.resultsCount are used to calculate the total page count', () => {
+  it('the global storage search-config.limit and results.resultsCount determine the total page count', () => {
     COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS, { searchState: 'search-complete', resultsCount: 20 });
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS,
+      { searchState: 'search-complete', resultsCount: 20 }
+    );
 
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
 
@@ -175,7 +177,7 @@ describe('properly interacts with storage', () => {
     expect(paginationInfo.totalPageCount).toEqual(4);
   });
 
-  it('the global storage search-config.limit and search-offset are used to calculate the current page number', () => {
+  it('the global storage search-config.limit and search-offset determine the current page number', () => {
     COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 10);
     COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
 
