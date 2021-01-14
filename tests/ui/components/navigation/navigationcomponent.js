@@ -158,6 +158,21 @@ describe('navigation tab links are correct', () => {
     expect(tabLink).toContain('context=some+context');
   });
 
+  it('updating the context in global storage updates the context in tab links', () => {
+    const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
+    const wrapper = mount(component);
+
+    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.API_CONTEXT, 'new context');
+
+    // Re-render because the component state changed
+    wrapper.update();
+
+    const navItem = wrapper.find('.js-yxt-navItem').first();
+    const tabLink = navItem.prop('href');
+
+    expect(tabLink).toContain('context=new+context');
+  });
+
   it('tab links default to the tab order from global storage', () => {
     const verticalPagesConfig = new VerticalPagesConfig([
       { label: 'Home', url: './index.html' },
