@@ -203,13 +203,13 @@ describe('properly interacts with storage', () => {
     storage.delete(StorageKeys.VERTICAL_RESULTS);
     const component = COMPONENT_MANAGER.create(PaginationComponent.type, defaultConfig);
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-Pagination')).toHaveLength(0);
+    expect(wrapper.exists('.yxt-Pagination')).toBeFalsy;
     storage.set(StorageKeys.VERTICAL_RESULTS, {
       searchState: SearchStates.SEARCH_COMPLETE,
       resultsCount: 21,
       results: Array.from({ length: 21 })
     });
     wrapper.update();
-    expect(wrapper.find('.yxt-Pagination')).toHaveLength(1);
+    expect(wrapper.exists('.yxt-Pagination')).toBeTruthy();
   });
 });

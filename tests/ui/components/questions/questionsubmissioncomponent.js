@@ -24,11 +24,11 @@ describe('QASubmission component', () => {
     const storage = COMPONENT_MANAGER.core.storage;
     const component = COMPONENT_MANAGER.create(QuestionSubmissionComponent.type, defaultConfig);
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-QuestionSubmission').exists()).toBeFalsy();
+    expect(wrapper.exists('.yxt-QuestionSubmission')).toBeFalsy();
     storage.set(StorageKeys.VERTICAL_RESULTS, {
       searchState: SearchStates.SEARCH_COMPLETE
     });
     wrapper.update();
-    expect(wrapper.find('.yxt-QuestionSubmission').exists()).toBeTruthy();
+    expect(wrapper.exists('.yxt-QuestionSubmission')).toBeTruthy();
   });
 });

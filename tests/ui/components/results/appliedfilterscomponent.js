@@ -28,7 +28,7 @@ describe('AppliedFilters component', () => {
     const storage = COMPONENT_MANAGER.core.storage;
     const component = COMPONENT_MANAGER.create(AppliedFiltersComponent.type, defaultConfig);
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-AppliedFilters')).toHaveLength(0);
+    expect(wrapper.exists('.yxt-AppliedFilters')).toBeFalsy();
     storage.set(StorageKeys.VERTICAL_RESULTS, {
       searchState: SearchStates.SEARCH_COMPLETE,
       appliedQueryFilters: [
@@ -40,6 +40,6 @@ describe('AppliedFilters component', () => {
       ]
     });
     wrapper.update();
-    expect(wrapper.find('.yxt-AppliedFilters')).toHaveLength(1);
+    expect(wrapper.exists('.yxt-AppliedFilters')).toBeTruthy();
   });
 });

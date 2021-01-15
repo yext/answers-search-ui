@@ -99,13 +99,13 @@ describe('results count component', () => {
     const storage = COMPONENT_MANAGER.core.storage;
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
     const wrapper = mount(component);
-    expect(wrapper.find('.yxt-VerticalResultsCount')).toHaveLength(0);
+    expect(wrapper.exists('.yxt-VerticalResultsCount')).toBeFalsy();
     storage.set(StorageKeys.VERTICAL_RESULTS, {
       searchState: SearchStates.SEARCH_COMPLETE,
       resultsCount: 3,
       results: ['a', 'b', 'cOoOoOkie']
     });
     wrapper.update();
-    expect(wrapper.find('.yxt-VerticalResultsCount')).toHaveLength(1);
+    expect(wrapper.exists('.yxt-VerticalResultsCount')).toBeTruthy();
   });
 });
