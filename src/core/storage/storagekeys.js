@@ -13,7 +13,7 @@ export default {
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
-  FILTER: 'filter', // DEPRECATED
+  FILTER: 'filter', // DEPRECATED // Has been cut over to the new global storage
   STATIC_FILTER_NODE: 'static-filter-node',
   QUERY: 'query',
   QUERY_ID: 'query-id',
