@@ -42,11 +42,11 @@ export default class MockComponentManager {
 
     const component = new COMPONENT_REGISTRY[componentType](componentConfig, systemConfig).init(componentConfig);
 
-    if (component.moduleId === undefined || component.moduleId === null) {
-      return component;
-    }
-
     if (this.core && this.core.globalStorage) {
+      if (component.moduleId === undefined || component.moduleId === null) {
+        return component;
+      }
+
       this.core.globalStorage
         .on('update', component.moduleId, (data) => {
           component.setState(data);
