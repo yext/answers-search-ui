@@ -203,7 +203,7 @@ describe('properly interacts with storage', () => {
     storage.delete(StorageKeys.VERTICAL_RESULTS);
     const component = COMPONENT_MANAGER.create(PaginationComponent.type, defaultConfig);
     const wrapper = mount(component);
-    expect(wrapper.exists('.yxt-Pagination')).toBeFalsy;
+    expect(wrapper.exists('.yxt-Pagination')).toBeFalsy();
     storage.set(StorageKeys.VERTICAL_RESULTS, {
       searchState: SearchStates.SEARCH_COMPLETE,
       resultsCount: 21,
