@@ -257,7 +257,7 @@ export default class Core {
     this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
     this.storage.set(StorageKeys.NAVIGATION, new Navigation());
     this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
-    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
+    this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
     this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
@@ -290,7 +290,7 @@ export default class Core {
       }
     }
 
-    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
+    this.storage.set(StorageKeys.DIRECT_ANSWER, {});
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
@@ -313,7 +313,7 @@ export default class Core {
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
