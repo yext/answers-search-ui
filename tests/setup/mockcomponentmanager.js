@@ -41,6 +41,15 @@ export default class MockComponentManager {
     };
 
     const component = new COMPONENT_REGISTRY[componentType](componentConfig, systemConfig).init(componentConfig);
+    if (component.moduleId) {
+      this.core.storage.registerListener({
+        eventType: 'update',
+        storageKey: component.moduleId,
+        callback: data => {
+          component.setState(data);
+        }
+      });
+    }
     return component;
   }
 

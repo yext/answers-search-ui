@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
 import VerticalResultsCountComponent from '../../../../src/ui/components/results/verticalresultscountcomponent';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
+import SearchStates from '../../../../src/core/storage/searchstates';
 
 DOM.setup(document, new DOMParser());
 
@@ -91,5 +92,20 @@ describe('results count component', () => {
       results: ['result1', 'result2', 'result3']
     });
     expect(component.getState('pageEnd')).toEqual(18);
+  });
+
+  it('listens to updates to VERTICAL_RESULTS in global storage', () => {
+    const COMPONENT_MANAGER = mockManager();
+    const storage = COMPONENT_MANAGER.core.storage;
+    const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
+    const wrapper = mount(component);
+    expect(wrapper.exists('.yxt-VerticalResultsCount')).toBeFalsy();
+    storage.set(StorageKeys.VERTICAL_RESULTS, {
+      searchState: SearchStates.SEARCH_COMPLETE,
+      resultsCount: 3,
+      results: ['a', 'b', 'cOoOoOkie']
+    });
+    wrapper.update();
+    expect(wrapper.exists('.yxt-VerticalResultsCount')).toBeTruthy();
   });
 });
