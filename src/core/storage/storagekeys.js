@@ -14,10 +14,10 @@ export default {
   AUTOCOMPLETE: 'autocomplete', // Has been cut over to the new global storage
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter', // DEPRECATED // Has been cut over to the new global storage
-  STATIC_FILTER_NODE: 'static-filter-node',
+  STATIC_FILTER_NODE: 'static-filter-node', // Has been cut over to the new global storage
   QUERY: 'query',
   QUERY_ID: 'query-id',
-  FACET_FILTER_NODE: 'facet-filter-node',
+  FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
   DYNAMIC_FILTERS: 'dynamic-filters',
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',
@@ -32,7 +32,7 @@ export default {
   LOCALE: 'locale',
   SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
   NO_RESULTS_CONFIG: 'no-results-config',
-  LOCATION_RADIUS: 'location-radius',
+  LOCATION_RADIUS: 'location-radius', // Has been cut over to the new global storage
   RESULTS_HEADER: 'results-header',
   API_CONTEXT: 'context',
   REFERRER_PAGE_URL: 'referrerPageUrl',

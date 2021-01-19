@@ -4,6 +4,8 @@ import FilterNodeFactory from './filternodefactory';
 import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 
+/** @typedef {import('../storage/storage').default} GlobalStorage */
+
 /**
  * FilterRegistry is a structure that manages static {@link Filter}s and {@link Facet} filters.
  *
@@ -14,6 +16,7 @@ export default class FilterRegistry {
     /**
      * FilterRegistry uses {@link GlobalStorage} for storing FilterNodes.
      * Each node is given a unique key in global storage.
+     * @type {GlobalStorage}
      */
     this.globalStorage = globalStorage;
 
@@ -46,7 +49,13 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getStaticFilterNodes () {
-    return this.globalStorage.getAll(StorageKeys.STATIC_FILTER_NODE);
+    const staticFilterNodes = [];
+    this.globalStorage.getAll().forEach((value, key) => {
+      if (key.startsWith(StorageKeys.STATIC_FILTER_NODE)) {
+        staticFilterNodes.push(value);
+      }
+    });
+    return staticFilterNodes;
   }
 
   /**
@@ -54,7 +63,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getFacetFilterNodes () {
-    return this.globalStorage.getState(StorageKeys.FACET_FILTER_NODE) || [];
+    return this.globalStorage.get(StorageKeys.FACET_FILTER_NODE) || [];
   }
 
   /**
@@ -93,7 +102,7 @@ export default class FilterRegistry {
    * @param {string} key
    */
   getFilterNodeByKey (key) {
-    return this.globalStorage.getState(key);
+    return this.globalStorage.get(key);
   }
 
   /**
