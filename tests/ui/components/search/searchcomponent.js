@@ -27,19 +27,18 @@ COMPONENT_MANAGER = mockManager({
   persistentStorage: new PersistentStorage()
 });
 
-it('test works', () => {
+const globalStorage = COMPONENT_MANAGER.core.globalStorage;
+
+it('clicking the submit button deletes SEARCH_OFFSET from global storage', () => {
+  globalStorage.set(StorageKeys.SEARCH_OFFSET, 15);
+
   const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
-  // component.core.autoCompleteVertical = () => Promise.resolve({ inputIntents: ['NEAR_ME'] });
   const wrapper = mount(component);
 
-  const spy = jest.spyOn(component, 'onQuerySubmit');
+  expect(globalStorage.getState(StorageKeys.SEARCH_OFFSET)).toBeTruthy();
 
-  const searchBarButton = wrapper.find('.js-yext-submit');
-  searchBarButton.simulate('click');
+  const searchButton = wrapper.find('.js-yext-submit');
+  searchButton.simulate('click');
 
-  expect(spy).toHaveBeenCalled();
-
-  // const storedQuery = component.core.persistentStorage.get(StorageKeys.QUERY);
-
-  // expect(storedQuery).toEqual('abc');
+  expect(globalStorage.getState(StorageKeys.SEARCH_OFFSET)).toBeFalsy();
 });
