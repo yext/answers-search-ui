@@ -50,7 +50,7 @@ export default class GlobalStorage {
      * A map of storage key to StorageListener, which apply on
      * changes to global storage.
      *
-     * @type {Map<string, Array<StorageListener[]>}
+     * @type {Map<string, StorageListener[]>}
      */
     this.listeners = new Map();
   }
