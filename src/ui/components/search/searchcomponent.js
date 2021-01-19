@@ -150,7 +150,7 @@ export default class SearchComponent extends Component {
     /**
      * The search config from ANSWERS.init configuration
      */
-    this._globalSearchConfig = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+    this._globalSearchConfig = this.core.storage.get(StorageKeys.SEARCH_CONFIG) || {};
 
     /**
      * The default initial search query, can be an empty string

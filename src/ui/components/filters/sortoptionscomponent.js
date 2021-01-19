@@ -17,8 +17,6 @@ import TranslationFlagger from '../../i18n/translationflagger';
 export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
-    // TODO SPR-1929 centralize this logic
-    this._config.verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
     this.options = this._config.options;
     this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
     this.options[this.selectedOptionIndex].isSelected = true;
@@ -299,7 +297,8 @@ function assignDefaults (config) {
     context: 'Button label, effectuates changes'
   });
 
-  updatedConfig.verticalKey = config.verticalKey;
+  updatedConfig.verticalKey = config.verticalKey ||
+    ANSWERS.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey;
   if (!updatedConfig.verticalKey) {
     throw new AnswersBasicError('vertical key is required', 'SortOptions');
   }

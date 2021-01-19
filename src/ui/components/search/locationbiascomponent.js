@@ -41,7 +41,7 @@ export default class LocationBiasComponent extends Component {
      * @type {string}
      */
     // TODO: Remove config.verticalKey
-    this._verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey || null;
+    this._verticalKey = config.verticalKey || this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey || null;
 
     /**
      * The element used for updating location

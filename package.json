@@ -134,7 +134,8 @@
       "ytag",
       "test",
       "fixture",
-      "CustomEvent"
+      "CustomEvent",
+      "ANSWERS"
     ],
     "ignore": [
       "docs/"

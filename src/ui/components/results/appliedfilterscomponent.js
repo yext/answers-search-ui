@@ -26,7 +26,7 @@ export default class AppliedFiltersComponent extends Component {
     super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     this._verticalKey = this._config.verticalKey ||
-      this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+      this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey;
 
     this.moduleId = StorageKeys.FACETS_LOADED;
 

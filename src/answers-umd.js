@@ -168,6 +168,7 @@ class Answers {
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
+    const storage = new Storage().init(window.location.search);
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: parsedConfig.onStateChange,
@@ -185,7 +186,7 @@ class Answers {
       }
     });
     globalStorage.setAll(persistentStorage.getAll());
-    globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
+    storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
     globalStorage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
@@ -254,8 +255,6 @@ class Answers {
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
     }
-
-    const storage = new Storage().init(window.location.search);
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
