@@ -211,9 +211,13 @@ export default class VerticalResultsComponent extends Component {
      */
     this._noResultsTemplate = this._noResultsConfig.template;
 
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
-      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
-        this.setState(results);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: results => {
+        if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+          this.setState(results);
+        }
       }
     });
 

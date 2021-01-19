@@ -122,9 +122,13 @@ export default class PaginationComponent extends Component {
       this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
     });
 
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
-      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
-        this.setState();
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: results => {
+        if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+          this.setState();
+        }
       }
     });
 
@@ -154,7 +158,7 @@ export default class PaginationComponent extends Component {
   }
 
   onMount () {
-    const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
+    const results = this.core.storage.get(StorageKeys.VERTICAL_RESULTS) || {};
     const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
     const showControls = this.shouldShowControls(results, limit);
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
@@ -185,7 +189,7 @@ export default class PaginationComponent extends Component {
   }
 
   updatePage (offset) {
-    const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
+    const results = this.core.storage.get(StorageKeys.VERTICAL_RESULTS) || {};
     const currentOffset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const currentPageNumber = (currentOffset / this._limit) + 1;
     const newPageNumber = (offset / this._limit) + 1;
@@ -290,7 +294,7 @@ export default class PaginationComponent extends Component {
   }
 
   setState (data) {
-    const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
+    const results = this.core.storage.get(StorageKeys.VERTICAL_RESULTS) || {};
     const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
     const pageNumber = (offset / this._limit) + 1;
     const isMoreResults = results.resultsCount > offset + this._limit;
