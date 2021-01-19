@@ -210,7 +210,7 @@ export default class Core {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
+        this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
 
         if (query.append) {
           const mergedResults = this.storage.get(StorageKeys.VERTICAL_RESULTS)
@@ -256,7 +256,7 @@ export default class Core {
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
     this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
     this.storage.set(StorageKeys.NAVIGATION, new Navigation());
-    this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
+    this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
     this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
