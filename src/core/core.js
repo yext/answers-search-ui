@@ -88,7 +88,7 @@ export default class Core {
      * and facet filters from global storage.
      * @type {FilterRegistry}
      */
-    this.filterRegistry = new FilterRegistry(this.globalStorage);
+    this.filterRegistry = new FilterRegistry(this.storage);
 
     /**
      * An abstraction containing the integration with the RESTful search API
