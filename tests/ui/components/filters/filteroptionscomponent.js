@@ -689,7 +689,7 @@ describe('filter options component', () => {
     it('deletes the global storage FilterOptions key when constructed', () => {
       globalStorage.set('FilterOptions', 'test data');
 
-      expect(globalStorage.getState('FilterOptions')).toEqual('test data');
+      expect(globalStorage.getState('FilterOptions')).toBeTruthy();
 
       const component = COMPONENT_MANAGER.create('FilterOptions', defaultConfig);
 
