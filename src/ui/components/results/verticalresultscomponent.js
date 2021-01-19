@@ -410,7 +410,7 @@ export default class VerticalResultsComponent extends Component {
       return super.addChild(updatedData, type, newOpts);
     } else if (type === AlternativeVerticalsComponent.type) {
       const hasResults = this.results && this.results.length > 0;
-      data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
+      data = this.core.storage.get(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
         template: this._noResultsTemplate,
         baseUniversalUrl: this.getBaseUniversalUrl(),
