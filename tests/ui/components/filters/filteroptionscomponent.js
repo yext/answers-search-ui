@@ -7,6 +7,7 @@ import FilterMetadata from 'src/core/filters/filtermetadata';
 import FilterType from '../../../../src/core/filters/filtertype';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import PersistentStorage from 'src/ui/storage/persistentstorage';
+import GlobalStorage from '../../../../src/core/storage/globalstorage';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
@@ -655,6 +656,44 @@ describe('filter options component', () => {
       };
 
       expect(() => COMPONENT_MANAGER.create('FilterOptions', config)).toThrow();
+    });
+  });
+
+  describe('interaction with global storage', () => {
+    let globalStorage;
+    let COMPONENT_MANAGER;
+
+    beforeEach(() => {
+      const mockCore = {
+        setStaticFilterNodes: setStaticFilterNodes,
+        setLocationRadiusFilterNode: () => { },
+        filterRegistry: {
+          setStaticFilterNodes: setStaticFilterNodes
+        },
+        globalStorage: new GlobalStorage(),
+        persistentStorage: new PersistentStorage()
+      };
+
+      COMPONENT_MANAGER = mockManager(mockCore);
+
+      defaultConfig = {
+        container: '#test-component',
+        control: 'singleoption',
+        options: options,
+        label: filterOptionsLabel
+      };
+
+      globalStorage = COMPONENT_MANAGER.core.globalStorage;
+    });
+
+    it('deletes the global storage FilterOptions key when constructed', () => {
+      globalStorage.set('FilterOptions', 'test data');
+
+      expect(globalStorage.getState('FilterOptions')).toEqual('test data');
+
+      const component = COMPONENT_MANAGER.create('FilterOptions', defaultConfig);
+
+      expect(component.core.globalStorage.getState('FilterOptions')).toBeFalsy();
     });
   });
 });
