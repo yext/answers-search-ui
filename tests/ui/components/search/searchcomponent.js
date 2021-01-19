@@ -8,14 +8,12 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 DOM.setup(document, new DOMParser());
 
 describe('SearchBar component', () => {
-  let COMPONENT_MANAGER;
-
   const defaultConfig = {
     container: '#test-component',
     verticalKey: 'verticalKey'
   };
 
-  COMPONENT_MANAGER = mockManager({
+  const COMPONENT_MANAGER = mockManager({
     globalStorage: new GlobalStorage(),
     persistentStorage: new PersistentStorage(),
     setQuery: jest.fn(),
