@@ -58,7 +58,7 @@ describe('SearchBar component', () => {
       expect(persistentStorage.get(StorageKeys.SEARCH_OFFSET)).toBeFalsy();
     });
 
-    it('clear button deletes QUERY from global storage', () => {
+    it('clear button sets QUERY to the empty string in global storage', () => {
       const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
       const wrapper = mount(component);
 
@@ -68,10 +68,10 @@ describe('SearchBar component', () => {
       const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
       clearButton.simulate('click');
 
-      expect(globalStorage.getState(StorageKeys.QUERY)).toBeFalsy();
+      expect(globalStorage.getState(StorageKeys.QUERY)).toEqual('');
     });
 
-    it('clear button deletes QUERY from persistent storage', () => {
+    it('clear button sets QUERY to the empty string in persistent storage', () => {
       const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
       const wrapper = mount(component);
 
@@ -81,7 +81,7 @@ describe('SearchBar component', () => {
       const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
       clearButton.simulate('click');
 
-      expect(persistentStorage.get(StorageKeys.QUERY)).toBeFalsy();
+      expect(persistentStorage.get(StorageKeys.QUERY)).toEqual('');
     });
   });
 });
