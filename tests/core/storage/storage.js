@@ -445,14 +445,20 @@ describe('setEntries', () => {
   it('calls listeners only AFTER all data has been updated', () => {
     const callbackA = jest.fn();
     const callbackB = jest.fn();
-    storage.registerListener(new StorageListener('update', 'aKey', () => callbackA(storage.get('bKey'))));
-    storage.registerListener(new StorageListener('update', 'bKey', () => callbackB(storage.get('bKey'))));
+    const listenerA = new StorageListener('update', 'aKey', () => {
+      callbackA(storage.get('aKey'), storage.get('bKey'));
+    });
+    const listenerB = new StorageListener('update', 'bKey', () => {
+      callbackB(storage.get('aKey'), storage.get('bKey'));
+    });
+    storage.registerListener(listenerA);
+    storage.registerListener(listenerB);
     const entries = new Map(Object.entries({
       'aKey': 'aa',
       'bKey': 'bb'
     }));
     storage.setEntries(entries);
-    expect(callbackA).toHaveBeenCalledWith('bb');
-    expect(callbackB).toHaveBeenCalledWith('bb');
+    expect(callbackA).toHaveBeenCalledWith('aa', 'bb');
+    expect(callbackB).toHaveBeenCalledWith('aa', 'bb');
   });
 });
