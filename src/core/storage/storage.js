@@ -47,7 +47,7 @@ export default class GlobalStorage {
     this.persistentStorage = new DefaultPersistentStorage(this.popListener);
 
     /**
-     * A map of storage key to StorageListener, which apply on
+     * A map of storage key to StorageListener[], which apply on
      * changes to global storage.
      *
      * @type {Map<string, StorageListener[]>}
