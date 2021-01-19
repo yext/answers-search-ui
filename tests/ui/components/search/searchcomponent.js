@@ -16,11 +16,14 @@ describe('SearchBar component', () => {
   const COMPONENT_MANAGER = mockManager({
     globalStorage: new GlobalStorage(),
     persistentStorage: new PersistentStorage(),
-    setQuery: jest.fn(),
-    autoCompleteVertical: jest.fn()
+    setQuery: function (query) {
+      this.globalStorage.set(StorageKeys.QUERY, query);
+    },
+    autoCompleteVertical: jest.fn(() => Promise.resolve())
   });
 
   const globalStorage = COMPONENT_MANAGER.core.globalStorage;
+  const persistentStorage = COMPONENT_MANAGER.core.persistentStorage;
 
   beforeEach(() => {
     let bodyEl = DOM.query('body');
@@ -28,16 +31,57 @@ describe('SearchBar component', () => {
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
   });
 
-  it('clicking the clear button deletes SEARCH_OFFSET from global storage', () => {
-    globalStorage.set(StorageKeys.SEARCH_OFFSET, 15);
-    const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
-    const wrapper = mount(component);
+  describe('Clicking the clear button updates storage properly', () => {
+    it('clear button deletes SEARCH_OFFSET from global storage', () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
+      const wrapper = mount(component);
 
-    expect(globalStorage.getState(StorageKeys.SEARCH_OFFSET)).toBeTruthy();
+      globalStorage.set(StorageKeys.SEARCH_OFFSET, 15);
+      expect(globalStorage.getState(StorageKeys.SEARCH_OFFSET)).toBeTruthy();
 
-    const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
-    clearButton.simulate('click');
+      const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
+      clearButton.simulate('click');
 
-    expect(globalStorage.getState(StorageKeys.SEARCH_OFFSET)).toBeFalsy();
+      expect(globalStorage.getState(StorageKeys.SEARCH_OFFSET)).toBeFalsy();
+    });
+
+    it('clear button deletes SEARCH_OFFSET from persistent storage', () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
+      const wrapper = mount(component);
+
+      persistentStorage.set(StorageKeys.SEARCH_OFFSET, 15);
+      expect(persistentStorage.get(StorageKeys.SEARCH_OFFSET)).toBeTruthy();
+
+      const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
+      clearButton.simulate('click');
+
+      expect(persistentStorage.get(StorageKeys.SEARCH_OFFSET)).toBeFalsy();
+    });
+
+    it('clear button deletes QUERY from global storage', () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
+      const wrapper = mount(component);
+
+      globalStorage.set(StorageKeys.QUERY, 'what does yext do?');
+      expect(globalStorage.getState(StorageKeys.QUERY)).toBeTruthy();
+
+      const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
+      clearButton.simulate('click');
+
+      expect(globalStorage.getState(StorageKeys.QUERY)).toBeFalsy();
+    });
+
+    it('clear button deletes QUERY from persistent storage', () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
+      const wrapper = mount(component);
+
+      persistentStorage.set(StorageKeys.QUERY, 'what does yext do?');
+      expect(persistentStorage.get(StorageKeys.QUERY)).toBeTruthy();
+
+      const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
+      clearButton.simulate('click');
+
+      expect(persistentStorage.get(StorageKeys.QUERY)).toBeFalsy();
+    });
   });
 });
