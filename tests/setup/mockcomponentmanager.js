@@ -47,6 +47,13 @@ export default class MockComponentManager {
         return component;
       }
 
+      this.core.storage.registerListener({
+        eventType: 'update',
+        storageKey: component.moduleId,
+        callback: data => {
+          component.setState(data);
+        }
+      });
       this.core.globalStorage
         .on('update', component.moduleId, (data) => {
           component.setState(data);

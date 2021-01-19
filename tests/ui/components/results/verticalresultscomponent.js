@@ -55,7 +55,7 @@ describe('vertical results component', () => {
       resultsContext: {}
     };
 
-    component.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS, verticalResults);
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, verticalResults);
 
     expect(component.getState('results')).toEqual('yext search results');
   });

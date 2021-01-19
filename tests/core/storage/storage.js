@@ -1,5 +1,5 @@
 import GlobalStorage from '../../../src/core/storage/storage';
-import StorageListener from '../../../src/core/storage/listener';
+import StorageListener from '../../../src/core/storage/storagelistener';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 let storage;

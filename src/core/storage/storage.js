@@ -1,7 +1,7 @@
 import DefaultPersistentStorage from '@yext/answers-storage';
 import { AnswersStorageError } from '../errors/errors';
 
-/** @typedef {import('./listener').default} StorageListener */
+/** @typedef {import('./storagelistener').default} StorageListener */
 
 /**
  * GlobalStorage is a container around application state.  It
