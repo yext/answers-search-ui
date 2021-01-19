@@ -47,11 +47,12 @@ export default class GlobalStorage {
     this.persistentStorage = new DefaultPersistentStorage(this.popListener);
 
     /**
-     * The listeners to apply on changes to global storage
+     * A map of storage key to StorageListener, which apply on
+     * changes to global storage.
      *
-     * @type {StorageListener[]}
+     * @type {Map<string, Array<StorageListener[]?>}
      */
-    this.listeners = [];
+    this.listeners = new Map();
   }
 
   /**
@@ -88,6 +89,20 @@ export default class GlobalStorage {
 
     this.storage.set(key, data);
     this._callListeners('update', key);
+  }
+
+  /**
+   * Sets all of the given entries before calling 'update' event listeners.
+   *
+   * @param {Map} entries the data to set
+   */
+  setEntries (entries) {
+    const updatedKeys = new Set();
+    entries.forEach((value, storageKey) => {
+      this.storage.set(storageKey, value);
+      updatedKeys.add(storageKey);
+    });
+    updatedKeys.forEach(storageKey => this._callListeners('update', storageKey));
   }
 
   /**
@@ -169,11 +184,17 @@ export default class GlobalStorage {
    * @param {StorageListener} listener the listener to add
    */
   registerListener (listener) {
-    if (!listener.eventType || !listener.storageKey ||
-      !listener.callback || typeof listener.callback !== 'function') {
+    const { eventType, storageKey, callback } = listener;
+    if (!eventType || !storageKey ||
+      !callback || typeof callback !== 'function') {
       throw new AnswersStorageError(`Invalid listener applied in storage: ${listener}`);
     }
-    this.listeners.push(listener);
+    const listenersForKey = this.listeners.get(storageKey);
+    if (!listenersForKey) {
+      this.listeners.set(storageKey, [ listener ]);
+    } else {
+      listenersForKey.push(listener);
+    }
   }
 
   /**
@@ -182,7 +203,11 @@ export default class GlobalStorage {
    * @param {StorageListener} listener the listener to remove
    */
   removeListener (listener) {
-    this.listeners = this.listeners.filter(l => l !== listener);
+    const { storageKey } = listener;
+    const listenersForKey = this.listeners.get(storageKey);
+    if (listenersForKey) {
+      this.listeners.set(storageKey, listenersForKey.filter(l => l !== listener));
+    }
   }
 
   /**
@@ -190,10 +215,13 @@ export default class GlobalStorage {
    * @param {string} storageKey
    */
   _callListeners (eventType, storageKey) {
-    this.listeners.forEach((listener) => {
-      if (listener.storageKey === storageKey && listener.eventType === eventType) {
-        listener.callback(this.get(storageKey));
-      }
-    });
+    const listenersForKey = this.listeners.get(storageKey);
+    if (listenersForKey) {
+      listenersForKey.forEach((listener) => {
+        if (listener.eventType === eventType) {
+          listener.callback(this.get(storageKey));
+        }
+      });
+    }
   }
 }

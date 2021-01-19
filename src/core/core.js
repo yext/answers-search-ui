@@ -207,17 +207,18 @@ export default class Core {
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
+        const storageData = new Map();
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        storageData.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
+        storageData.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
 
         if (query.append) {
           const mergedResults = this.storage.get(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
-          this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+          storageData.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
         } else {
-          this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+          storageData.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
         }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
@@ -232,6 +233,7 @@ export default class Core {
         }
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+        this.storage.setEntries(storageData);
 
         const exposedParams = {
           verticalKey: verticalKey,
@@ -248,6 +250,7 @@ export default class Core {
   }
 
   clearResults () {
+    const storageData = new Map();
     this.globalStorage.set(StorageKeys.QUERY, null);
     this.globalStorage.set(StorageKeys.QUERY_ID, '');
     this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
@@ -255,12 +258,13 @@ export default class Core {
     this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
     this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
-    this.storage.set(StorageKeys.NAVIGATION, new Navigation());
-    this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
+    storageData.set(StorageKeys.NAVIGATION, new Navigation());
+    storageData.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
-    this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
+    storageData.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
+    this.storage.setEntries(storageData);
   }
 
   /**

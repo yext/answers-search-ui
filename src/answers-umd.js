@@ -182,6 +182,7 @@ class Answers {
           this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
         globalStorage.setAll(data);
+        this.core.storage.setEntries(new Map(Object.entries(data)));
       }
     });
     globalStorage.setAll(persistentStorage.getAll());

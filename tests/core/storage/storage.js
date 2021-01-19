@@ -440,3 +440,19 @@ describe('getUrlWithCurrentState', () => {
     expect(storage.getUrlWithCurrentState()).toEqual('query=val2');
   });
 });
+
+describe('setEntries', () => {
+  it('calls listeners only AFTER all data has been updated', () => {
+    const callbackA = jest.fn();
+    const callbackB = jest.fn();
+    storage.registerListener(new StorageListener('update', 'aKey', callbackA));
+    storage.registerListener(new StorageListener('update', 'bKey', callbackB));
+    const entries = new Map(Object.entries({
+      'aKey': 'aa',
+      'bKey': 'bb'
+    }));
+    storage.setEntries(entries);
+    expect(callbackA).toHaveBeenCalledWith('aa');
+    expect(callbackB).toHaveBeenCalledWith('bb');
+  });
+});
