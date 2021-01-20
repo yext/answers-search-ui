@@ -3,8 +3,8 @@ import MapComponent from '../../../../src/ui/components/map/mapcomponent';
 describe('map component config', () => {
   let defaultConfig;
   const core = {
-    globalStorage: {
-      getState: () => {}
+    storage: {
+      get: () => {}
     }
   };
   const systemConfig = { core };
