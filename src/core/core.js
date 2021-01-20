@@ -257,7 +257,7 @@ export default class Core {
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
     this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
     this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
-    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
   }
 
   /**
@@ -288,7 +288,7 @@ export default class Core {
     }
 
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
-    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {});
     this.storage.set(StorageKeys.LOCATION_BIAS, {});
@@ -311,7 +311,7 @@ export default class Core {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
+        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
         this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
