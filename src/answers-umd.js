@@ -231,8 +231,8 @@ class Answers {
       console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
     }
 
-    if (globalStorage.getState(StorageKeys.REFERRER_PAGE_URL) === null) {
-      globalStorage.set(
+    if (storage.get(StorageKeys.REFERRER_PAGE_URL) === undefined) {
+      storage.set(
         StorageKeys.REFERRER_PAGE_URL,
         urlWithoutQueryParamsAndHash(document.referrer)
       );

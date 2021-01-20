@@ -160,7 +160,7 @@ export default class Core {
 
     const { setQueryParams } = options;
     const context = this.storage.get(StorageKeys.API_CONTEXT);
-    const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    const referrerPageUrl = this.storage.get(StorageKeys.REFERRER_PAGE_URL);
 
     const defaultQueryInput = this.storage.get(StorageKeys.QUERY) || '';
     const parsedQuery = Object.assign({}, { input: defaultQueryInput }, query);
@@ -169,7 +169,7 @@ export default class Core {
       if (context) {
         this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
       }
-      if (referrerPageUrl !== null) {
+      if (referrerPageUrl !== undefined) {
         this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
       }
     }
@@ -276,13 +276,13 @@ export default class Core {
     window.performance.mark('yext.answers.universalQueryStart');
     const { setQueryParams } = options;
     const context = this.storage.get(StorageKeys.API_CONTEXT);
-    const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    const referrerPageUrl = this.storage.get(StorageKeys.REFERRER_PAGE_URL);
 
     if (setQueryParams) {
       if (context) {
         this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
       }
-      if (referrerPageUrl !== null) {
+      if (referrerPageUrl !== undefined) {
         this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
       }
     }
