@@ -7,7 +7,6 @@ import VerticalResults from '../models/verticalresults';
 import SpellCheck from '../models/spellcheck';
 import StorageKeys from '../storage/storagekeys';
 import DynamicFilters from '../models/dynamicfilters';
-import SearchIntents from '../models/searchintents';
 import LocationBias from '../models/locationbias';
 import AlternativeVerticals from '../models/alternativeverticals';
 import ResultsContext from '../storage/resultscontext';
@@ -25,7 +24,6 @@ export default class SearchDataTransformer {
       [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
       [StorageKeys.DIRECT_ANSWER]: DirectAnswer.from(response.directAnswer, formatters),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters),
-      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
       [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
       [StorageKeys.LOCATION_BIAS]: LocationBias.from(response.locationBias)
     };
@@ -38,7 +36,6 @@ export default class SearchDataTransformer {
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(response, formatters, verticalKey),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(response),
-      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
       [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
       [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(response, formatters),
       [StorageKeys.LOCATION_BIAS]: LocationBias.from(response.locationBias)

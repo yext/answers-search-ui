@@ -8,25 +8,24 @@
  */
 export default {
   NAVIGATION: 'navigation', // Has been cut over to the new global storage
-  UNIVERSAL_RESULTS: 'universal-results',
+  UNIVERSAL_RESULTS: 'universal-results', // Has been cut over to the new global storage
   VERTICAL_RESULTS: 'vertical-results', // Has been cut over to the new global storage
   ALTERNATIVE_VERTICALS: 'alternative-verticals', // Has been cut over to the new global storage
   AUTOCOMPLETE: 'autocomplete', // Has been cut over to the new global storage
-  DIRECT_ANSWER: 'direct-answer',
+  DIRECT_ANSWER: 'direct-answer', // Has been cut over to the new global storage
   FILTER: 'filter', // DEPRECATED // Has been cut over to the new global storage
   STATIC_FILTER_NODE: 'static-filter-node', // Has been cut over to the new global storage
   QUERY: 'query',
   QUERY_ID: 'query-id',
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
   DYNAMIC_FILTERS: 'dynamic-filters',
-  PARAMS: 'params',
-  GEOLOCATION: 'geolocation',
+  GEOLOCATION: 'geolocation', // Has been cut over to the new global storage
   INTENTS: 'intents',
-  QUESTION_SUBMISSION: 'question-submission',
+  QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check',
-  LOCATION_BIAS: 'location-bias',
+  LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale', // Has been cut over to the new global storage
@@ -38,5 +37,5 @@ export default {
   REFERRER_PAGE_URL: 'referrerPageUrl',
   QUERY_TRIGGER: 'queryTrigger',
   FACETS_LOADED: 'facets-loaded',
-  QUERY_SOURCE: 'query-source'
+  QUERY_SOURCE: 'query-source' // Has been cut over to the new global storage
 };

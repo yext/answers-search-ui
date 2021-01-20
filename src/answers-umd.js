@@ -189,7 +189,7 @@ class Answers {
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     storage.set(StorageKeys.LOCALE, parsedConfig.locale);
-    globalStorage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
+    storage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
 
     // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
     // what is in parsedConfig.
@@ -491,7 +491,7 @@ class Answers {
    * @param {number} long
    */
   setGeolocation (lat, lng) {
-    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+    this.core.storage.set(StorageKeys.GEOLOCATION, {
       lat, lng, radius: 0
     });
   }
