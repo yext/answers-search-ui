@@ -116,7 +116,7 @@ export default class AlternativeVerticalsComponent extends Component {
       verticalSuggestions: this.verticalSuggestions,
       currentVerticalLabel: this._currentVerticalLabel,
       isShowingResults: this._isShowingResults,
-      query: this.core.globalStorage.getState(StorageKeys.QUERY)
+      query: this.core.storage.get(StorageKeys.QUERY)
     }));
   }
 
@@ -190,7 +190,7 @@ export default class AlternativeVerticalsComponent extends Component {
       return '';
     }
 
-    params.set(StorageKeys.QUERY, this.core.globalStorage.getState(StorageKeys.QUERY));
+    params.set(StorageKeys.QUERY, this.core.storage.get(StorageKeys.QUERY));
 
     const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {

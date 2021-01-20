@@ -9,27 +9,16 @@ import SearchStates from '../../../../src/core/storage/searchstates';
 
 const createCore = () => {
   // pagination will hide itself if there are no results, so we fake the relevant global storage.
-  const globalStorage = {
-    [StorageKeys.SEARCH_OFFSET]: 0
-  };
   const persistentStorage = {};
   const storage = new Storage().init();
   storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 21 });
+  storage.set(StorageKeys.SEARCH_OFFSET, 0);
   storage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
   storage.set(StorageKeys.NO_RESULTS_CONFIG, { displayAllResults: true });
 
   return {
     verticalSearch: () => {},
     verticalPage: () => {},
-    globalStorage: {
-      getState: storageKey => globalStorage[storageKey] || undefined,
-      getAll: () => [],
-      delete: storageKey => {},
-      set: (key, value) => {
-        globalStorage[key] = value;
-      },
-      on: () => {}
-    },
     persistentStorage: {
       set: (namespace, offsetIndex) => {
         expect(namespace).toBe(StorageKeys.SEARCH_OFFSET);
@@ -145,7 +134,6 @@ describe('rendering the page numbers', () => {
 
 describe('properly interacts with storage', () => {
   it('the global storage search-config.limit and results.resultsCount determine the total page count', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
     COMPONENT_MANAGER.core.storage.set(StorageKeys.VERTICAL_RESULTS,
       { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 20 }
     );
@@ -161,8 +149,7 @@ describe('properly interacts with storage', () => {
   });
 
   it('the global storage search-config.limit and search-offset determine the current page number', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 10);
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 10);
 
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
 
@@ -174,7 +161,7 @@ describe('properly interacts with storage', () => {
   });
 
   it('updating the page sets global storage searchOffset', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
 
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
     const wrapper = mount(component);
@@ -182,12 +169,12 @@ describe('properly interacts with storage', () => {
     const nextPageButton = wrapper.find('.js-yxt-Pagination-next');
     nextPageButton.simulate('click');
 
-    const searchOffset = component.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET);
+    const searchOffset = component.core.storage.get(StorageKeys.SEARCH_OFFSET);
     expect(searchOffset).toEqual(5);
   });
 
   it('updating the page sets persistent storage searchOffset', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
     const wrapper = mount(component);
 
