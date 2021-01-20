@@ -176,7 +176,7 @@ class Answers {
         if (!data[StorageKeys.QUERY]) {
           this.core.clearResults();
         } else {
-          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+          this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
 
         if (!data[StorageKeys.SEARCH_OFFSET]) {
@@ -219,9 +219,9 @@ class Answers {
 
     parsedConfig.noResults && storage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
     const isSuggestQueryTrigger =
-      globalStorage.getState(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
+      storage.get(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
     if (storage.get(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
-      globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+      storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 
     const context = storage.get(StorageKeys.API_CONTEXT);
@@ -493,7 +493,7 @@ class Answers {
     if (prepopulatedQuery != null) {
       return;
     }
-    this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+    this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
     this.core.setQuery(searchConfig.defaultInitialSearch);
   }
 

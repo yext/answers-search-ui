@@ -184,7 +184,7 @@ export default class Core {
 
     const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
     const queryTrigger = this.getQueryTriggerForSearchApi(
-      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+      this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
     return this._searcher
       .verticalSearch(verticalKey, {
@@ -229,7 +229,7 @@ export default class Core {
           this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         }
         this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
-        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+        this.storage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = {
           verticalKey: verticalKey,
@@ -294,7 +294,7 @@ export default class Core {
     this.storage.set(StorageKeys.LOCATION_BIAS, {});
 
     const queryTrigger = this.getQueryTriggerForSearchApi(
-      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+      this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
     return this._searcher
       .universalSearch(queryString, {
@@ -315,7 +315,7 @@ export default class Core {
         this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
-        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+        this.storage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = this._getOnUniversalSearchParams(
           data[StorageKeys.UNIVERSAL_RESULTS].sections,
