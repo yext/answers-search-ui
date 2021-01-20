@@ -43,7 +43,7 @@ export default class AlternativeVerticalsComponent extends Component {
       this._alternativeVerticals,
       this._verticalsConfig,
       this.core.storage.get(StorageKeys.API_CONTEXT),
-      this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+      this.core.storage.get(StorageKeys.REFERRER_PAGE_URL)
     );
 
     /**
@@ -72,7 +72,7 @@ export default class AlternativeVerticalsComponent extends Component {
         this._alternativeVerticals,
         this._verticalsConfig,
         this.core.storage.get(StorageKeys.API_CONTEXT),
-        this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+        this.core.storage.get(StorageKeys.REFERRER_PAGE_URL)
       );
       this._universalUrl = this._getUniversalURL(
         this._baseUniversalUrl,
@@ -192,8 +192,8 @@ export default class AlternativeVerticalsComponent extends Component {
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
-    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
-    if (referrerPageUrl !== null) {
+    const referrerPageUrl = this.core.storage.get(StorageKeys.REFERRER_PAGE_URL);
+    if (referrerPageUrl !== undefined) {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 
