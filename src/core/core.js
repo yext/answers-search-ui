@@ -557,7 +557,12 @@ export default class Core {
     this._isDynamicFiltersEnabled = true;
   }
 
-  on (evt, moduleId, cb) {
-    return this.globalStorage.on(evt, moduleId, cb);
+  on (evt, storageKey, cb) {
+    this.storage.registerListener({
+      eventType: evt,
+      storageKey: storageKey,
+      callback: cb
+    });
+    return this.storage;
   }
 }
