@@ -315,8 +315,6 @@ export default class Core {
         this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
-        this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
-        this.globalStorage.delete(StorageKeys.SKIP_SPELL_CHECK);
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = this._getOnUniversalSearchParams(
