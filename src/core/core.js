@@ -203,7 +203,7 @@ export default class Core {
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
         referrerPageUrl: referrerPageUrl,
-        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
+        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {

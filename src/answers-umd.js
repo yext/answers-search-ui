@@ -228,8 +228,8 @@ class Answers {
     }
 
     this._masterSwitchApi = statusPage
-      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, globalStorage)
-      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, globalStorage);
+      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, storage)
+      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, storage);
 
     this._services = parsedConfig.mock
       ? getMockServices()
