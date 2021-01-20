@@ -38,5 +38,5 @@ export default {
   REFERRER_PAGE_URL: 'referrerPageUrl',
   QUERY_TRIGGER: 'queryTrigger',
   FACETS_LOADED: 'facets-loaded',
-  QUERY_SOURCE: 'query-source'
+  QUERY_SOURCE: 'query-source' // Has been cut over to the new global storage
 };
