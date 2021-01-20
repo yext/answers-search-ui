@@ -5,9 +5,11 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 import SearchStates from '../../../../src/core/storage/searchstates';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
 import GlobalStorage from '../../../../src/core/storage/globalstorage';
+import Storage from '../../../../src/core/storage/storage';
 
 const mockCore = {
   globalStorage: new GlobalStorage(),
+  storage: new Storage().init(),
   getStaticFilterNodes: () => [],
   getFacetFilterNodes: () => [],
   getLocationRadiusFilterNode: () => null
@@ -15,7 +17,7 @@ const mockCore = {
 
 DOM.setup(document, new DOMParser());
 
-mockCore.globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, { get: () => [] });
+mockCore.storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, { get: () => [] });
 mockCore.globalStorage.set(StorageKeys.REFERRER_PAGE_URL, '');
 
 const COMPONENT_MANAGER = mockManager(mockCore);

@@ -226,8 +226,8 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array.<object>}
      * @private
      */
-    this._verticalsConfig = config.verticalPages || this.core.globalStorage
-      .getState(StorageKeys.VERTICAL_PAGES_CONFIG)
+    this._verticalsConfig = config.verticalPages || this.core.storage
+      .get(StorageKeys.VERTICAL_PAGES_CONFIG)
       .get() || [];
     /**
      * @type {Array<Result>}
