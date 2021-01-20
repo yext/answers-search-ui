@@ -342,7 +342,7 @@ export default class VerticalResultsComponent extends Component {
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
+    this.query = this.core.storage.get(StorageKeys.QUERY);
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,

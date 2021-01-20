@@ -38,7 +38,7 @@ describe('vertical results component', () => {
   });
 
   it('getVerticalUrl encodes the global storage query when the component is created', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.QUERY, 'yext');
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.QUERY, 'yext');
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
 
     expect(component.getVerticalURL()).toContain('query=yext');

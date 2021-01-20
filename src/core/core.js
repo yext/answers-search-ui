@@ -163,7 +163,7 @@ export default class Core {
     const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
 
-    const defaultQueryInput = this.globalStorage.getState(StorageKeys.QUERY) || '';
+    const defaultQueryInput = this.storage.get(StorageKeys.QUERY) || '';
     const parsedQuery = Object.assign({}, { input: defaultQueryInput }, query);
 
     if (setQueryParams) {
@@ -248,7 +248,7 @@ export default class Core {
   }
 
   clearResults () {
-    this.globalStorage.set(StorageKeys.QUERY, null);
+    this.storage.set(StorageKeys.QUERY, null);
     this.globalStorage.set(StorageKeys.QUERY_ID, '');
     this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
@@ -457,7 +457,7 @@ export default class Core {
    * @param {string} query the query to store
    */
   setQuery (query) {
-    this.globalStorage.set(StorageKeys.QUERY, query);
+    this.storage.set(StorageKeys.QUERY, query);
   }
 
   /**

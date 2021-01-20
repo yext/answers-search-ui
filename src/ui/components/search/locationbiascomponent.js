@@ -160,7 +160,7 @@ export default class LocationBiasComponent extends Component {
         useFacets: true
       });
     } else {
-      let query = this.core.globalStorage.getState(StorageKeys.QUERY);
+      let query = this.core.storage.get(StorageKeys.QUERY);
       this.core.search(query);
     }
   }

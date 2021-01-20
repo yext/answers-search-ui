@@ -95,10 +95,14 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = config.query || this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
-    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
-      this.query = q;
-      this.search();
+    this.query = config.query || this.core.storage.get(`${StorageKeys.QUERY}.${this.name}`) || '';
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: `${StorageKeys.QUERY}.${this.name}`,
+      callback: q => {
+        this.query = q;
+        this.search();
+      }
     });
 
     /**

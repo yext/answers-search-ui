@@ -168,6 +168,7 @@ class Answers {
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
+    const storage = new Storage().init(window.location.search);
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: parsedConfig.onStateChange,
@@ -182,6 +183,17 @@ class Answers {
           this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
         globalStorage.setAll(data);
+
+        for (const [key, val] of Object.entries(data)) {
+          if (key === StorageKeys.QUERY) {
+            continue;
+          }
+          storage.set(key, val);
+        }
+
+        if (data[StorageKeys.QUERY]) {
+          storage.set(StorageKeys.QUERY, data[StorageKeys.QUERY]);
+        }
       }
     });
     globalStorage.setAll(persistentStorage.getAll());
@@ -208,7 +220,7 @@ class Answers {
     parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
     const isSuggestQueryTrigger =
       globalStorage.getState(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
-    if (globalStorage.getState(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
+    if (storage.get(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
       globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 
@@ -254,8 +266,6 @@ class Answers {
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
     }
-
-    const storage = new Storage().init(window.location.search);
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
@@ -477,7 +487,7 @@ class Answers {
     if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
       return;
     }
-    const prepopulatedQuery = this.core.globalStorage.getState(StorageKeys.QUERY);
+    const prepopulatedQuery = this.core.storage.get(StorageKeys.QUERY);
     if (prepopulatedQuery != null) {
       return;
     }

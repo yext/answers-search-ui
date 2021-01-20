@@ -119,10 +119,14 @@ export default class GeoLocationComponent extends Component {
      * The query string to use for the input box, provided to template for rendering.
      * @type {string}
      */
-    this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
-    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
-      this.query = q;
-      this.setState();
+    this.query = this.core.storage.get(`${StorageKeys.QUERY}.${this.name}`) || '';
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: `${StorageKeys.QUERY}.${this.name}`,
+      callback: q => {
+        this.query = q;
+        this.setState();
+      }
     });
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
