@@ -504,7 +504,7 @@ export default class SearchComponent extends Component {
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
 
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
