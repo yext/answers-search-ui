@@ -219,8 +219,8 @@ export default class Core {
         }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
-          this.globalStorage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.storage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
         }
         if (data[StorageKeys.SPELL_CHECK]) {
           this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
@@ -248,9 +248,9 @@ export default class Core {
   clearResults () {
     this.storage.set(StorageKeys.QUERY, null);
     this.storage.set(StorageKeys.QUERY_ID, '');
-    this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
+    this.storage.set(StorageKeys.RESULTS_HEADER, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
-    this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
+    this.storage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
     this.storage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
     this.storage.set(StorageKeys.NAVIGATION, new Navigation());
     this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
