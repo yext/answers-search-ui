@@ -168,6 +168,7 @@ class Answers {
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
+    const storage = new Storage().init(window.location.search);
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: parsedConfig.onStateChange,
@@ -247,15 +248,15 @@ class Answers {
         parsedConfig.environment);
 
       // listen to query id updates
-      globalStorage.on('update', StorageKeys.QUERY_ID, id =>
-        this._analyticsReporterService.setQueryId(id)
-      );
+      storage.registerListener({
+        eventType: 'update',
+        storageKey: StorageKeys.QUERY_ID,
+        callback: id => this._analyticsReporterService.setQueryId(id)
+      });
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
     }
-
-    const storage = new Storage().init(window.location.search);
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,

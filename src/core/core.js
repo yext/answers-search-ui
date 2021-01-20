@@ -207,7 +207,7 @@ export default class Core {
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
         this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
@@ -249,7 +249,7 @@ export default class Core {
 
   clearResults () {
     this.globalStorage.set(StorageKeys.QUERY, null);
-    this.globalStorage.set(StorageKeys.QUERY_ID, '');
+    this.storage.set(StorageKeys.QUERY_ID, '');
     this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
     this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
@@ -271,7 +271,7 @@ export default class Core {
    */
   verticalPage (verticalKey) {
     this.verticalSearch(verticalKey, { useFacets: true, setQueryParams: true }, {
-      id: this.globalStorage.getState(StorageKeys.QUERY_ID)
+      id: this.storage.get(StorageKeys.QUERY_ID)
     });
   }
 
@@ -311,7 +311,7 @@ export default class Core {
       })
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
@@ -465,7 +465,7 @@ export default class Core {
    * @param {string} queryId The query id to store
    */
   setQueryId (queryId) {
-    this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
+    this.storage.set(StorageKeys.QUERY_ID, queryId);
   }
 
   /**

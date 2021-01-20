@@ -16,7 +16,7 @@ export default {
   FILTER: 'filter', // DEPRECATED // Has been cut over to the new global storage
   STATIC_FILTER_NODE: 'static-filter-node', // Has been cut over to the new global storage
   QUERY: 'query',
-  QUERY_ID: 'query-id',
+  QUERY_ID: 'query-id', // Has been cut over to the new global storage
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
   DYNAMIC_FILTERS: 'dynamic-filters',
   PARAMS: 'params',
