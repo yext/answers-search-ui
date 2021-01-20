@@ -22,7 +22,7 @@ export default {
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',
   INTENTS: 'intents',
-  QUESTION_SUBMISSION: 'question-submission',
+  QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check',
