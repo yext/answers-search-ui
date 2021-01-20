@@ -32,7 +32,7 @@ beforeEach(() => {
         url: 'locations.html'
       }
     ],
-    baseUniversalUrl: './index.html?query=office+space',
+    baseUniversalUrl: './index.html',
     data: {
       alternativeVerticals: [{
         resultsCount: 2,
@@ -43,14 +43,14 @@ beforeEach(() => {
 });
 
 describe('AlternativeVerticals component', () => {
-  it('uses query from the url in suggestLinks', () => {
+  it('constructs vertical suggest link properly', () => {
     const component = COMPONENT_MANAGER.create(AlternativeVerticalsComponent.type, defaultConfig);
     const wrapper = mount(component);
     const suggestionHref = wrapper.find('.yxt-AlternativeVerticals-suggestionLink').prop('href');
     expect(suggestionHref).toEqual('locations.html?query=office+space');
   });
 
-  it('uses query from storage in universal links', () => {
+  it('constructs universal link properly', () => {
     storage.set(StorageKeys.QUERY, 'office space');
     const component = COMPONENT_MANAGER.create(AlternativeVerticalsComponent.type, defaultConfig);
     const wrapper = mount(component);
@@ -58,7 +58,7 @@ describe('AlternativeVerticals component', () => {
     expect(universalHref).toEqual('./index.html?query=office+space');
   });
 
-  it('uses query from storage when displaying your query', () => {
+  it('displays current query correctly', () => {
     storage.set(StorageKeys.QUERY, 'office space');
     const component = COMPONENT_MANAGER.create(AlternativeVerticalsComponent.type, defaultConfig);
     const wrapper = mount(component);
