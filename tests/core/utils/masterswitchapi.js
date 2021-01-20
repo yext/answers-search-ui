@@ -1,17 +1,12 @@
 import MasterSwitchApi from '../../../src/core/utils/masterswitchapi';
-import GlobalStorage from '../../../src/core/storage/globalstorage';
+import GlobalStorage from '../../../src/core/storage/storage';
 import HttpRequester from '../../../src/core/http/httprequester';
+import StorageKeys from '../../../src/core/storage/storagekeys';
 
 jest.mock('../../../src/core/http/httprequester');
 jest.mock('../../../src/core/storage/globalstorage');
 
 describe('checking Answers Status page', () => {
-  GlobalStorage.mockImplementation(() => {
-    return {
-      getState: jest.fn(stateVar => true)
-    };
-  });
-
   it('behaves correctly when JSON is present and disabled is true', () => {
     const mockedResponse =
       { json: jest.fn(() => Promise.resolve({ disabled: true })) };
@@ -71,5 +66,7 @@ function createMasterSwitchApi (mockedRequest) {
       get: mockedRequest
     };
   });
-  return MasterSwitchApi.from('apiKey', 'experienceKey', new GlobalStorage());
+  const globalStorage = new GlobalStorage().init();
+  globalStorage.set(StorageKeys.SESSIONS_OPT_IN, { value: true });
+  return MasterSwitchApi.from('apiKey', 'experienceKey', globalStorage);
 }
