@@ -151,7 +151,7 @@ export default class Core {
     const { resetPagination, useFacets } = options;
     if (resetPagination) {
       this.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.storage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
     if (!useFacets) {
@@ -162,7 +162,7 @@ export default class Core {
     const context = this.storage.get(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
 
-    const defaultQueryInput = this.globalStorage.getState(StorageKeys.QUERY) || '';
+    const defaultQueryInput = this.storage.get(StorageKeys.QUERY) || '';
     const parsedQuery = Object.assign({}, { input: defaultQueryInput }, query);
 
     if (setQueryParams) {
@@ -193,7 +193,7 @@ export default class Core {
         ...parsedQuery,
         filter: this.filterRegistry.getStaticFilterPayload(),
         facetFilter: this.filterRegistry.getFacetFilterPayload(),
-        offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
+        offset: this.storage.get(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTrigger,
@@ -246,7 +246,7 @@ export default class Core {
   }
 
   clearResults () {
-    this.globalStorage.set(StorageKeys.QUERY, null);
+    this.storage.set(StorageKeys.QUERY, null);
     this.storage.set(StorageKeys.QUERY_ID, '');
     this.storage.set(StorageKeys.RESULTS_HEADER, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
@@ -453,7 +453,7 @@ export default class Core {
    * @param {string} query the query to store
    */
   setQuery (query) {
-    this.globalStorage.set(StorageKeys.QUERY, query);
+    this.storage.set(StorageKeys.QUERY, query);
   }
 
   /**

@@ -15,16 +15,14 @@ export default {
   DIRECT_ANSWER: 'direct-answer', // Has been cut over to the new global storage
   FILTER: 'filter', // DEPRECATED // Has been cut over to the new global storage
   STATIC_FILTER_NODE: 'static-filter-node', // Has been cut over to the new global storage
-  QUERY: 'query',
+  QUERY: 'query', // Has been cut over to the new global storage
   QUERY_ID: 'query-id', // Has been cut over to the new global storage
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
   DYNAMIC_FILTERS: 'dynamic-filters', // Has been cut over to the new global storage
-  PARAMS: 'params',
   GEOLOCATION: 'geolocation', // Has been cut over to the new global storage
-  INTENTS: 'intents',
   QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
-  SEARCH_CONFIG: 'search-config',
-  SEARCH_OFFSET: 'search-offset',
+  SEARCH_CONFIG: 'search-config', // Has been cut over to the new global storage
+  SEARCH_OFFSET: 'search-offset', // Has been cut over to the new global storage
   SPELL_CHECK: 'spell-check', // Has been cut over to the new global storage
   SKIP_SPELL_CHECK: 'skipSpellCheck', // Has been cut over to the new global storage
   LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage

@@ -50,6 +50,17 @@ export default class MockComponentManager {
         }
       });
     }
+
+    if (this.core && this.core.globalStorage) {
+      if (component.moduleId === undefined || component.moduleId === null) {
+        return component;
+      }
+      this.core.globalStorage
+        .on('update', component.moduleId, (data) => {
+          component.setState(data);
+        });
+    }
+
     return component;
   }
 
