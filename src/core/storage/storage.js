@@ -11,7 +11,7 @@ import { AnswersStorageError } from '../errors/errors';
  * @param {Function} callback for state (persistent store) updates
  * @param {Function} callback for state (persistent store) reset
  */
-export default class GlobalStorage {
+export default class Storage {
   constructor (persistedStateListeners = {}) {
     /**
      * The listeners for changes in state (persistent storage changes)

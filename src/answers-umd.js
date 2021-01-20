@@ -15,7 +15,6 @@ import ErrorReporter from './core/errors/errorreporter';
 import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
-import GlobalStorage from './core/storage/globalstorage';
 import Storage from './core/storage/storage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
@@ -169,7 +168,6 @@ class Answers {
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
     const storage = new Storage().init(window.location.search);
-    const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: parsedConfig.onStateChange,
       resetListener: data => {
@@ -182,7 +180,6 @@ class Answers {
         if (!data[StorageKeys.SEARCH_OFFSET]) {
           this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
-        globalStorage.setAll(data);
 
         for (const [key, val] of Object.entries(data)) {
           if (key === StorageKeys.QUERY) {
@@ -196,7 +193,6 @@ class Answers {
         }
       }
     });
-    globalStorage.setAll(persistentStorage.getAll());
     storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     storage.set(StorageKeys.LOCALE, parsedConfig.locale);
@@ -271,7 +267,6 @@ class Answers {
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
-      globalStorage: globalStorage,
       persistentStorage: persistentStorage,
       storage: storage,
       experienceKey: parsedConfig.experienceKey,
