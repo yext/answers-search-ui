@@ -6,6 +6,7 @@ import Handlebars from 'handlebars/dist/handlebars.min.js';
 
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
 import MockComponentManager from '../../setup/mockcomponentmanager';
+import GlobalStorage from '../../../src/core/storage/storage';
 
 /* global MouseEvent */
 
@@ -134,5 +135,18 @@ describe('attaching analytics events', () => {
       testOption: 'test'
     });
     expect(mockAnalyticsReporter.report).toHaveBeenCalledWith(expectedEvent);
+  });
+
+  it('calls setState() when there is a storage change for its moduleId', () => {
+    COMPONENT_MANAGER.core.storage = new GlobalStorage().init();
+    const component = COMPONENT_MANAGER.create('Component', {
+      onCreate: function () {
+        this.moduleId = 'testModuleId';
+      }
+    });
+    component.setState = jest.fn();
+    expect(component.setState).toHaveBeenCalledTimes(0);
+    COMPONENT_MANAGER.core.storage.set('testModuleId', 123);
+    expect(component.setState).toHaveBeenCalledTimes(1);
   });
 });
