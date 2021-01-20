@@ -147,7 +147,7 @@ describe('navigation tab links are correct', () => {
   });
 
   it('tab links contain the context from global storage', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.API_CONTEXT, 'some context');
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.API_CONTEXT, 'some context');
 
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
     const wrapper = mount(component);
@@ -162,7 +162,7 @@ describe('navigation tab links are correct', () => {
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
     const wrapper = mount(component);
 
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.API_CONTEXT, 'new context');
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.API_CONTEXT, 'new context');
 
     // Re-render because the component state changed
     wrapper.update();
@@ -179,7 +179,7 @@ describe('navigation tab links are correct', () => {
       { label: 'People', url: './people.html', verticalKey: 'people' }
     ]);
 
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, verticalPagesConfig);
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, verticalPagesConfig);
 
     const component = COMPONENT_MANAGER.create('Navigation', {
       container: '#test-component',
@@ -223,7 +223,7 @@ describe('navigation tab order', () => {
       tabOrder: ['third', 'second', 'first']
     };
 
-    component.core.globalStorage.set(StorageKeys.NAVIGATION, navStateWithReversedTabs);
+    component.core.storage.set(StorageKeys.NAVIGATION, navStateWithReversedTabs);
     wrapper.update();
 
     const firstTab = wrapper.find('.js-yxt-navItem').at(0);

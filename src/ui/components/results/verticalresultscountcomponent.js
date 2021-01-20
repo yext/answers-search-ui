@@ -44,7 +44,7 @@ export default class VerticalResultsCountComponent extends Component {
      */
     const resultsLength = (verticalResults.results || []).length;
 
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const offset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
     const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
     const hasZeroResults = resultsCount === 0;
     const isHidden = (!this._visibleForNoResults && isNoResults) || hasZeroResults;

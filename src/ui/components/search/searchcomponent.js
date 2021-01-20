@@ -427,7 +427,7 @@ export default class SearchComponent extends Component {
 
       this.core.persistentStorage.set(StorageKeys.QUERY, this.query);
       this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.setQuery(this.query);
 
       // Focus the input element after clearing the query, regardless of whether
@@ -542,7 +542,7 @@ export default class SearchComponent extends Component {
 
     this.core.persistentStorage.set(StorageKeys.QUERY, query);
     this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.setQuery(query);
     this.debouncedSearch(query, this._defaultSearchOptions);
     return false;
