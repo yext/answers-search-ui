@@ -24,6 +24,7 @@ describe('SearchBar component', () => {
 
   const globalStorage = COMPONENT_MANAGER.core.globalStorage;
   const persistentStorage = COMPONENT_MANAGER.core.persistentStorage;
+  const storage = COMPONENT_MANAGER.core.storage;
 
   beforeEach(() => {
     let bodyEl = DOM.query('body');
@@ -36,13 +37,13 @@ describe('SearchBar component', () => {
       const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
       const wrapper = mount(component);
 
-      globalStorage.set(StorageKeys.SEARCH_OFFSET, 15);
-      expect(globalStorage.getState(StorageKeys.SEARCH_OFFSET)).toBeTruthy();
+      storage.set(StorageKeys.SEARCH_OFFSET, 15);
+      expect(storage.get(StorageKeys.SEARCH_OFFSET)).toBeTruthy();
 
       const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
       clearButton.simulate('click');
 
-      expect(globalStorage.getState(StorageKeys.SEARCH_OFFSET)).toBeFalsy();
+      expect(storage.get(StorageKeys.SEARCH_OFFSET)).toBeFalsy();
     });
 
     it('clear button deletes SEARCH_OFFSET from persistent storage', () => {

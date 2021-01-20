@@ -42,17 +42,8 @@ describe('results count component', () => {
   });
 
   it('works with search offset', () => {
-    const COMPONENT_MANAGER = mockManager({
-      globalStorage: {
-        on: () => {},
-        getState: key => {
-          if (key === StorageKeys.SEARCH_OFFSET) {
-            return 40;
-          }
-          return null;
-        }
-      }
-    });
+    const COMPONENT_MANAGER = mockManager();
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 40);
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
     component.setState({
       results: new Array(10),
@@ -65,27 +56,15 @@ describe('results count component', () => {
   });
 
   it('page start is equal to the global storage search offset plus one', () => {
-    const COMPONENT_MANAGER = mockManager({
-      globalStorage: {
-        on: () => {},
-        getState: key => {
-          return key === StorageKeys.SEARCH_OFFSET ? 15 : null;
-        }
-      }
-    });
+    const COMPONENT_MANAGER = mockManager();
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 15);
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
     expect(component.getState('pageStart')).toEqual(16);
   });
 
   it('page end is equal to the global storage search offset plus the number of results', () => {
-    const COMPONENT_MANAGER = mockManager({
-      globalStorage: {
-        on: () => {},
-        getState: key => {
-          return key === StorageKeys.SEARCH_OFFSET ? 15 : null;
-        }
-      }
-    });
+    const COMPONENT_MANAGER = mockManager();
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 15);
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
     component.setState({
       resultsCount: 3,

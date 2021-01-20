@@ -41,12 +41,7 @@ export default class MockComponentManager {
     };
 
     const component = new COMPONENT_REGISTRY[componentType](componentConfig, systemConfig).init(componentConfig);
-
-    if (this.core && this.core.globalStorage) {
-      if (component.moduleId === undefined || component.moduleId === null) {
-        return component;
-      }
-
+    if (component.moduleId) {
       this.core.storage.registerListener({
         eventType: 'update',
         storageKey: component.moduleId,
@@ -54,6 +49,12 @@ export default class MockComponentManager {
           component.setState(data);
         }
       });
+    }
+
+    if (this.core && this.core.globalStorage) {
+      if (component.moduleId === undefined || component.moduleId === null) {
+        return component;
+      }
       this.core.globalStorage
         .on('update', component.moduleId, (data) => {
           component.setState(data);

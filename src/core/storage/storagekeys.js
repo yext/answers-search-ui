@@ -21,8 +21,8 @@ export default {
   DYNAMIC_FILTERS: 'dynamic-filters',
   GEOLOCATION: 'geolocation', // Has been cut over to the new global storage
   QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
-  SEARCH_CONFIG: 'search-config',
-  SEARCH_OFFSET: 'search-offset',
+  SEARCH_CONFIG: 'search-config', // Has been cut over to the new global storage
+  SEARCH_OFFSET: 'search-offset', // Has been cut over to the new global storage
   SPELL_CHECK: 'spell-check', // Has been cut over to the new global storage
   SKIP_SPELL_CHECK: 'skipSpellCheck', // Has been cut over to the new global storage
   LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage
