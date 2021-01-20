@@ -300,7 +300,7 @@ export default class GeoLocationComponent extends Component {
     this.core.setStaticFilterNodes(this.name, filterNode);
 
     if (position) {
-      this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+      this.core.storage.set(StorageKeys.GEOLOCATION, {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
         radius: position.coords.accuracy

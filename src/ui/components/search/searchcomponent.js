@@ -608,11 +608,11 @@ export default class SearchComponent extends Component {
       this.fetchQueryIntents(query)
         .then(queryIntents => queryIntents.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
-          if (queryHasNearMeIntent && !this.core.globalStorage.getState(StorageKeys.GEOLOCATION)) {
+          if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {
             return new Promise((resolve, reject) =>
               navigator.geolocation.getCurrentPosition(
                 position => {
-                  this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+                  this.core.storage.set(StorageKeys.GEOLOCATION, {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
                     radius: position.coords.accuracy

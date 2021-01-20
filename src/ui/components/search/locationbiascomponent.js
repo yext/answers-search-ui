@@ -96,7 +96,7 @@ export default class LocationBiasComponent extends Component {
     DOM.on(this._updateLocationEl, 'click', (e) => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition((position) => {
-          this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+          this.core.storage.set(StorageKeys.GEOLOCATION, {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
             radius: position.coords.accuracy
@@ -177,7 +177,7 @@ export default class LocationBiasComponent extends Component {
   }
 
   _disableLocationUpdate () {
-    this.core.globalStorage.delete(StorageKeys.GEOLOCATION);
+    this.core.storage.delete(StorageKeys.GEOLOCATION);
     this._allowUpdate = false;
     this.setState({
       locationDisplayName: this._locationDisplayName,
