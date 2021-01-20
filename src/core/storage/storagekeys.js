@@ -19,14 +19,13 @@ export default {
   QUERY_ID: 'query-id',
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
   DYNAMIC_FILTERS: 'dynamic-filters',
-  PARAMS: 'params',
-  GEOLOCATION: 'geolocation',
+  GEOLOCATION: 'geolocation', // Has been cut over to the new global storage
   INTENTS: 'intents',
-  QUESTION_SUBMISSION: 'question-submission',
+  QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check',
-  LOCATION_BIAS: 'location-bias',
+  LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',

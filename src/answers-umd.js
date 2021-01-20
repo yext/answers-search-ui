@@ -492,7 +492,7 @@ class Answers {
    * @param {number} long
    */
   setGeolocation (lat, lng) {
-    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+    this.core.storage.set(StorageKeys.GEOLOCATION, {
       lat, lng, radius: 0
     });
   }
