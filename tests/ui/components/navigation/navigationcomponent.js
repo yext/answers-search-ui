@@ -135,7 +135,7 @@ describe('navigation tab links are correct', () => {
   });
 
   it('tab links contain the referrerPageUrl from global storage', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.REFERRER_PAGE_URL, 'yext.com');
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.REFERRER_PAGE_URL, 'yext.com');
 
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
     const wrapper = mount(component);
