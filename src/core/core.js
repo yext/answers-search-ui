@@ -196,7 +196,7 @@ export default class Core {
         facetFilter: this.filterRegistry.getFacetFilterPayload(),
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
-        skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
+        skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
@@ -230,7 +230,7 @@ export default class Core {
         if (data[StorageKeys.LOCATION_BIAS]) {
           this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         }
-        this.globalStorage.delete('skipSpellCheck');
+        this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = {
@@ -302,7 +302,7 @@ export default class Core {
     return this._searcher
       .universalSearch(queryString, {
         geolocation: this.storage.get(StorageKeys.GEOLOCATION),
-        skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
+        skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
@@ -318,7 +318,7 @@ export default class Core {
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
         this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
-        this.globalStorage.delete('skipSpellCheck');
+        this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = this._getOnUniversalSearchParams(
