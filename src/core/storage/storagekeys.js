@@ -12,7 +12,7 @@ export default {
   VERTICAL_RESULTS: 'vertical-results', // Has been cut over to the new global storage
   ALTERNATIVE_VERTICALS: 'alternative-verticals', // Has been cut over to the new global storage
   AUTOCOMPLETE: 'autocomplete', // Has been cut over to the new global storage
-  DIRECT_ANSWER: 'direct-answer',
+  DIRECT_ANSWER: 'direct-answer', // Has been cut over to the new global storage
   FILTER: 'filter', // DEPRECATED // Has been cut over to the new global storage
   STATIC_FILTER_NODE: 'static-filter-node', // Has been cut over to the new global storage
   QUERY: 'query',
