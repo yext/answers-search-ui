@@ -78,7 +78,7 @@ export default class AlternativeVerticalsComponent extends Component {
         this._baseUniversalUrl,
         new SearchParams(window.location.search.substring(1))
       );
-      this.setState(this.core.globalStorage.getState(StorageKeys.ALERNATIVE_VERTICALS));
+      this.setState(this.core.storage.get(StorageKeys.ALTERNATIVE_VERTICALS));
     };
 
     this.core.storage.registerListener({
