@@ -21,7 +21,7 @@ export default {
   DYNAMIC_FILTERS: 'dynamic-filters',
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',
-  INTENTS: 'intents',
+  INTENTS: 'intents', // Has been cut over to the new global storage
   QUESTION_SUBMISSION: 'question-submission',
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
