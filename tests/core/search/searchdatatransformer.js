@@ -4,7 +4,6 @@ import Navigation from '../../../src/core/models/navigation';
 import VerticalResults from '../../../src/core/models/verticalresults';
 import SpellCheck from '../../../src/core/models/spellcheck';
 import DynamicFilters from '../../../src/core/models/dynamicfilters';
-import SearchIntents from '../../../src/core/models/searchintents';
 import LocationBias from '../../../src/core/models/locationbias';
 import Response from '../../fixtures/responseWithResults.json';
 import ResultsContext from '../../../src/core/storage/resultscontext';
@@ -28,7 +27,6 @@ describe('tranform vertical search response', () => {
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(convertedResponse, formatters),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(convertedResponse),
-        [StorageKeys.INTENTS]: SearchIntents.from(convertedResponse.searchIntents),
         [StorageKeys.SPELL_CHECK]: SpellCheck.from(convertedResponse.spellCheck),
         [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(convertedResponse, formatters),
         [StorageKeys.LOCATION_BIAS]: LocationBias.from(convertedResponse.locationBias)
