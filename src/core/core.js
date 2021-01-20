@@ -159,7 +159,7 @@ export default class Core {
     }
 
     const { setQueryParams } = options;
-    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.storage.get(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
 
     const defaultQueryInput = this.globalStorage.getState(StorageKeys.QUERY) || '';
@@ -275,7 +275,7 @@ export default class Core {
   search (queryString, urls, options = {}) {
     window.performance.mark('yext.answers.universalQueryStart');
     const { setQueryParams } = options;
-    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.storage.get(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
 
     if (setQueryParams) {
