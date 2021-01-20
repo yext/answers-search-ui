@@ -145,7 +145,7 @@ export default class Core {
     window.performance.mark('yext.answers.verticalQueryStart');
     if (!query.append) {
       this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
-      this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
+      this.storage.set(StorageKeys.SPELL_CHECK, {});
       this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
@@ -225,7 +225,7 @@ export default class Core {
           this.globalStorage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
         }
         if (data[StorageKeys.SPELL_CHECK]) {
-          this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+          this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         }
         if (data[StorageKeys.LOCATION_BIAS]) {
           this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
@@ -251,7 +251,7 @@ export default class Core {
     this.globalStorage.set(StorageKeys.QUERY, null);
     this.globalStorage.set(StorageKeys.QUERY_ID, '');
     this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
-    this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
+    this.storage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
     this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
     this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
@@ -293,7 +293,7 @@ export default class Core {
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
-    this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
+    this.storage.set(StorageKeys.SPELL_CHECK, {});
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
 
     const queryTrigger = this.getQueryTriggerForSearchApi(
@@ -316,7 +316,7 @@ export default class Core {
         this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
         this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+        this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.globalStorage.delete('skipSpellCheck');
         this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
