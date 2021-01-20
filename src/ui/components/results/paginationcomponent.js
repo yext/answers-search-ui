@@ -136,7 +136,7 @@ export default class PaginationComponent extends Component {
      * Configuration for the behavior when there are no vertical results.
      */
     this._noResults = config.noResults ||
-      this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) ||
+      this.core.storage.get(StorageKeys.NO_RESULTS_CONFIG) ||
       {};
   }
 

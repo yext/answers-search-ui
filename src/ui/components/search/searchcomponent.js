@@ -713,7 +713,7 @@ export default class SearchComponent extends Component {
    * analytics event.
    */
   eventOptions () {
-    const queryId = this.core.globalStorage.getState(StorageKeys.QUERY_ID);
+    const queryId = this.core.storage.get(StorageKeys.QUERY_ID);
     const options = Object.assign(
       {},
       queryId && { queryId },
