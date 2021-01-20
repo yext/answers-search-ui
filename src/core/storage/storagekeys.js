@@ -26,7 +26,7 @@ export default {
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check',
-  LOCATION_BIAS: 'location-bias',
+  LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',
