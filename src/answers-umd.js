@@ -188,7 +188,7 @@ class Answers {
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
-    globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
+    storage.set(StorageKeys.LOCALE, parsedConfig.locale);
     storage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
 
     // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
@@ -587,7 +587,7 @@ class Answers {
    * @returns {string}
    */
   _getInitLocale () {
-    return this.core.globalStorage.getState(StorageKeys.LOCALE);
+    return this.core.storage.get(StorageKeys.LOCALE);
   }
 }
 
