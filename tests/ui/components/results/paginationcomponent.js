@@ -19,15 +19,6 @@ const createCore = () => {
   return {
     verticalSearch: () => {},
     verticalPage: () => {},
-    globalStorage: {
-      getState: storageKey => globalStorage[storageKey] || undefined,
-      getAll: () => [],
-      delete: storageKey => {},
-      set: (key, value) => {
-        globalStorage[key] = value;
-      },
-      on: () => {}
-    },
     persistentStorage: {
       set: (namespace, offsetIndex) => {
         expect(namespace).toBe(StorageKeys.SEARCH_OFFSET);
@@ -143,7 +134,6 @@ describe('rendering the page numbers', () => {
 
 describe('properly interacts with storage', () => {
   it('the global storage search-config.limit and results.resultsCount determine the total page count', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
     COMPONENT_MANAGER.core.storage.set(StorageKeys.VERTICAL_RESULTS,
       { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 20 }
     );
@@ -160,7 +150,6 @@ describe('properly interacts with storage', () => {
 
   it('the global storage search-config.limit and search-offset determine the current page number', () => {
     COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 10);
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
 
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
 
