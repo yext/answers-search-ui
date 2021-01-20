@@ -16,7 +16,7 @@ beforeEach(() => {
   storage = COMPONENT_MANAGER.core.storage;
   delete global.window.location;
   global.window.location = {
-    search: "?query=office+space"
+    search: '?query=office+space'
   };
 
   defaultConfig = {
@@ -24,12 +24,12 @@ beforeEach(() => {
     verticalsConfig: [
       {
         label: 'Home',
-        url: 'index.html'              
+        url: 'index.html'
       },
       {
         verticalKey: 'KM',
         label: 'Locations',
-        url: 'locations.html',
+        url: 'locations.html'
       }
     ],
     baseUniversalUrl: './index.html?query=office+space',
@@ -38,7 +38,7 @@ beforeEach(() => {
         resultsCount: 2,
         verticalConfigId: 'KM'
       }]
-    },
+    }
   };
 });
 
