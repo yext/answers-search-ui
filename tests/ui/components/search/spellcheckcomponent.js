@@ -36,7 +36,7 @@ describe('spellcheck redirect links', () => {
   });
 
   it('redirect links contain a skipSpellCheck url param', () => {
-    const skipSpellCheck = linkUrlParams.get('skipSpellCheck');
+    const skipSpellCheck = linkUrlParams.get(StorageKeys.SKIP_SPELL_CHECK);
     expect(skipSpellCheck).toEqual('true');
   });
 
@@ -52,14 +52,13 @@ describe('spellcheck interaction with storage', () => {
   const persistentStorage = COMPONENT_MANAGER.core.persistentStorage;
 
   it('creating a spellcheck component deletes skipSpellCheck from persistent storage', () => {
-    const SKIP_SPELL_CHECK = 'skipSpellCheck';
-    persistentStorage.set(SKIP_SPELL_CHECK, true);
+    persistentStorage.set(StorageKeys.SKIP_SPELL_CHECK, true);
 
-    expect(persistentStorage.get(SKIP_SPELL_CHECK)).toBeTruthy();
+    expect(persistentStorage.get(StorageKeys.SKIP_SPELL_CHECK)).toBeTruthy();
 
     createSpellcheckComponent();
 
-    expect(persistentStorage.get(SKIP_SPELL_CHECK)).toBeFalsy();
+    expect(persistentStorage.get(StorageKeys.SKIP_SPELL_CHECK)).toBeFalsy();
   });
 
   it('creating a spellcheck component deletes queryTrigger from persistent storage', () => {

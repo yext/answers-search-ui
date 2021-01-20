@@ -24,16 +24,17 @@ export default {
   QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset', // Has been cut over to the new global storage
-  SPELL_CHECK: 'spell-check',
+  SPELL_CHECK: 'spell-check', // Has been cut over to the new global storage
+  SKIP_SPELL_CHECK: 'skipSpellCheck', // Has been cut over to the new global storage
   LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage
   SESSIONS_OPT_IN: 'sessions-opt-in',
-  VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
+  VERTICAL_PAGES_CONFIG: 'vertical-pages-config', // Has been cut over to the new global storage
   LOCALE: 'locale', // Has been cut over to the new global storage
   SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
   NO_RESULTS_CONFIG: 'no-results-config', // Has been cut over to the new global storage
   LOCATION_RADIUS: 'location-radius', // Has been cut over to the new global storage
   RESULTS_HEADER: 'results-header',
-  API_CONTEXT: 'context',
+  API_CONTEXT: 'context', // Has been cut over to the new global storage
   REFERRER_PAGE_URL: 'referrerPageUrl',
   QUERY_TRIGGER: 'queryTrigger',
   FACETS_LOADED: 'facets-loaded',

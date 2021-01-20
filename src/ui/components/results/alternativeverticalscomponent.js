@@ -42,7 +42,7 @@ export default class AlternativeVerticalsComponent extends Component {
     this.verticalSuggestions = this._buildVerticalSuggestions(
       this._alternativeVerticals,
       this._verticalsConfig,
-      this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
+      this.core.storage.get(StorageKeys.API_CONTEXT),
       this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
     );
 
@@ -71,7 +71,7 @@ export default class AlternativeVerticalsComponent extends Component {
       this.verticalSuggestions = this._buildVerticalSuggestions(
         this._alternativeVerticals,
         this._verticalsConfig,
-        this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
+        this.core.storage.get(StorageKeys.API_CONTEXT),
         this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
       );
       this._universalUrl = this._getUniversalURL(
@@ -81,7 +81,11 @@ export default class AlternativeVerticalsComponent extends Component {
       this.setState(this.core.globalStorage.getState(StorageKeys.ALERNATIVE_VERTICALS));
     };
 
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.API_CONTEXT,
+      callback: reRender
+    });
     this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
   }
 
@@ -184,7 +188,7 @@ export default class AlternativeVerticalsComponent extends Component {
 
     params.set(StorageKeys.QUERY, this.core.storage.get(StorageKeys.QUERY));
 
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }

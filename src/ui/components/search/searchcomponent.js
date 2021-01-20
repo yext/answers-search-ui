@@ -150,7 +150,7 @@ export default class SearchComponent extends Component {
     /**
      * The search config from ANSWERS.init configuration
      */
-    this._globalSearchConfig = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+    this._globalSearchConfig = this.core.storage.get(StorageKeys.SEARCH_CONFIG) || {};
 
     /**
      * The default initial search query, can be an empty string
@@ -508,7 +508,7 @@ export default class SearchComponent extends Component {
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
 
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }

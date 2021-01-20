@@ -17,7 +17,7 @@ export default class PaginationComponent extends Component {
      * @type {string}
      * @private
      */
-    this._verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    this._verticalKey = config.verticalKey || this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey;
     if (typeof this._verticalKey !== 'string') {
       throw new AnswersComponentError(
         'verticalKey not provided, but necessary for pagination',
@@ -111,7 +111,7 @@ export default class PaginationComponent extends Component {
      * @type {number}
      * @private
      */
-    this._limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+    this._limit = this.core.storage.get(StorageKeys.SEARCH_CONFIG).limit;
 
     const offset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
     this.core.storage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
@@ -163,7 +163,7 @@ export default class PaginationComponent extends Component {
 
   onMount () {
     const results = this.core.storage.get(StorageKeys.VERTICAL_RESULTS) || {};
-    const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+    const limit = this.core.storage.get(StorageKeys.SEARCH_CONFIG).limit;
     const showControls = this.shouldShowControls(results, limit);
     const offset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
     if (!showControls) {

@@ -226,8 +226,8 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array.<object>}
      * @private
      */
-    this._verticalsConfig = config.verticalPages || this.core.globalStorage
-      .getState(StorageKeys.VERTICAL_PAGES_CONFIG)
+    this._verticalsConfig = config.verticalPages || this.core.storage
+      .get(StorageKeys.VERTICAL_PAGES_CONFIG)
       .get() || [];
     /**
      * @type {Array<Result>}
@@ -308,7 +308,7 @@ export default class VerticalResultsComponent extends Component {
   _getExperienceURL (baseUrl, params) {
     params.set(StorageKeys.QUERY, this.query);
 
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
