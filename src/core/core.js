@@ -5,7 +5,6 @@ import SearchDataTransformer from './search/searchdatatransformer';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
-import SearchIntents from './models/searchintents';
 import Navigation from './models/navigation';
 import AlternativeVerticals from './models/alternativeverticals';
 import DirectAnswer from './models/directanswer';
@@ -209,7 +208,6 @@ export default class Core {
       .then(data => {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
         this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
 
         if (query.append) {
@@ -254,13 +252,12 @@ export default class Core {
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
     this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
     this.storage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
-    this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
     this.storage.set(StorageKeys.NAVIGATION, new Navigation());
     this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
     this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
     this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
     this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
-    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
   }
 
   /**
@@ -291,7 +288,7 @@ export default class Core {
     }
 
     this.storage.set(StorageKeys.DIRECT_ANSWER, {});
-    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
     this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
     this.storage.set(StorageKeys.LOCATION_BIAS, {});
@@ -314,8 +311,8 @@ export default class Core {
         this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
-        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
+        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
+        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         this.globalStorage.delete('skipSpellCheck');
