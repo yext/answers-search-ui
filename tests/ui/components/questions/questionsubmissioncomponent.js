@@ -31,4 +31,15 @@ describe('QASubmission component', () => {
     wrapper.update();
     expect(wrapper.exists('.yxt-QuestionSubmission')).toBeTruthy();
   });
+
+  it('sets the question text to the current query in global storage', () => {
+    const storage = COMPONENT_MANAGER.core.storage;
+    storage.set(StorageKeys.QUERY, 'is this a pigeon?');
+    const component = COMPONENT_MANAGER.create(QuestionSubmissionComponent.type, defaultConfig);
+    storage.set(StorageKeys.VERTICAL_RESULTS, {
+      searchState: SearchStates.SEARCH_COMPLETE
+    });
+    const wrapper = mount(component);
+    expect(wrapper.find('.js-question-text').text()).toEqual('is this a pigeon?');
+  });
 });

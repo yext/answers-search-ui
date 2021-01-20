@@ -208,7 +208,7 @@ export default class QuestionSubmissionComponent extends Component {
      */
     const onResultsUpdate = results => {
       if (results.searchState !== SearchStates.SEARCH_LOADING) {
-        const questionText = this.core.globalStorage.getState(StorageKeys.QUERY);
+        const questionText = this.core.storage.get(StorageKeys.QUERY);
         this.setState(new QuestionSubmission({
           questionText: questionText,
           expanded: this._config.expanded

@@ -171,31 +171,35 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string|null}
      */
-    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY);
-    this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
-      this.query = q;
-      if (this.queryEl) {
-        this.queryEl.value = q;
-      }
-      if (q === null) {
-        if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
-          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-          this.core.setQuery(this._defaultInitialSearch);
+    this.query = config.query || this.core.storage.get(StorageKeys.QUERY);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.QUERY,
+      callback: q => {
+        this.query = q;
+        if (this.queryEl) {
+          this.queryEl.value = q;
         }
-        return;
-      }
-      this._updateClearButtonVisibility(q);
+        if (q === null) {
+          if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
+            this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+            this.core.setQuery(this._defaultInitialSearch);
+          }
+          return;
+        }
+        this._updateClearButtonVisibility(q);
 
-      const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
-      const resetPagination = this._verticalKey &&
-        queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
-        queryTrigger !== QueryTriggers.INITIALIZE;
-      const searchOptions = Object.assign(
-        {},
-        this._defaultSearchOptions,
-        { resetPagination: resetPagination }
-      );
-      this.debouncedSearch(q, searchOptions);
+        const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
+        const resetPagination = this._verticalKey &&
+          queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
+          queryTrigger !== QueryTriggers.INITIALIZE;
+        const searchOptions = Object.assign(
+          {},
+          this._defaultSearchOptions,
+          { resetPagination: resetPagination }
+        );
+        this.debouncedSearch(q, searchOptions);
+      }
     });
 
     /**
