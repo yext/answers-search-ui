@@ -190,7 +190,7 @@ export default class Core {
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+        geolocation: this.storage.get(StorageKeys.GEOLOCATION),
         ...parsedQuery,
         filter: this.filterRegistry.getStaticFilterPayload(),
         facetFilter: this.filterRegistry.getFacetFilterPayload(),
@@ -301,7 +301,7 @@ export default class Core {
     );
     return this._searcher
       .universalSearch(queryString, {
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+        geolocation: this.storage.get(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
