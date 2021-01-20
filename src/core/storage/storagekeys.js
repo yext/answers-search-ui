@@ -18,7 +18,7 @@ export default {
   QUERY: 'query', // Has been cut over to the new global storage
   QUERY_ID: 'query-id', // Has been cut over to the new global storage
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
-  DYNAMIC_FILTERS: 'dynamic-filters',
+  DYNAMIC_FILTERS: 'dynamic-filters', // Has been cut over to the new global storage
   GEOLOCATION: 'geolocation', // Has been cut over to the new global storage
   QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
   SEARCH_CONFIG: 'search-config', // Has been cut over to the new global storage
@@ -32,7 +32,7 @@ export default {
   SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
   NO_RESULTS_CONFIG: 'no-results-config', // Has been cut over to the new global storage
   LOCATION_RADIUS: 'location-radius', // Has been cut over to the new global storage
-  RESULTS_HEADER: 'results-header',
+  RESULTS_HEADER: 'results-header', // DEPRECATED // Has been cut over to the new global storage
   API_CONTEXT: 'context', // Has been cut over to the new global storage
   REFERRER_PAGE_URL: 'referrerPageUrl',
   QUERY_TRIGGER: 'queryTrigger',
