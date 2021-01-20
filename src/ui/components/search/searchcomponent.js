@@ -182,14 +182,14 @@ export default class SearchComponent extends Component {
         }
         if (q === null) {
           if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
-            this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+            this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
             this.core.setQuery(this._defaultInitialSearch);
           }
           return;
         }
         this._updateClearButtonVisibility(q);
 
-        const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
+        const queryTrigger = this.core.storage.get(StorageKeys.QUERY_TRIGGER);
         const resetPagination = this._verticalKey &&
           queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
           queryTrigger !== QueryTriggers.INITIALIZE;
