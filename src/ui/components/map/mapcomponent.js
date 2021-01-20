@@ -64,7 +64,7 @@ export default class MapComponent extends Component {
   // TODO(billy) Make ProviderTypes a factory class
   getProviderInstance (type) {
     const _config = {
-      locale: this.core.globalStorage.getState(StorageKeys.LOCALE),
+      locale: this.core.storage.get(StorageKeys.LOCALE),
       ...this._config,
       noResults: this._noResults
     };

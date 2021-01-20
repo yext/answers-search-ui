@@ -29,7 +29,7 @@ export default {
   LOCATION_BIAS: 'location-bias',
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
-  LOCALE: 'locale',
+  LOCALE: 'locale', // Has been cut over to the new global storage
   SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
   NO_RESULTS_CONFIG: 'no-results-config',
   LOCATION_RADIUS: 'location-radius', // Has been cut over to the new global storage

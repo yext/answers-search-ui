@@ -194,7 +194,7 @@ export default class QuestionSubmissionComponent extends Component {
      * Reference to the locale as set in the global config
      * @type {string}
      */
-    this.locale = this.core.globalStorage.getState(StorageKeys.LOCALE);
+    this.locale = this.core.storage.get(StorageKeys.LOCALE);
 
     /**
      * NOTE(billy) if this is a pattern we want to follow for configuration
