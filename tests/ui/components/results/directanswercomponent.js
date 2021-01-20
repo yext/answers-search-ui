@@ -4,6 +4,8 @@ import DOM from '../../../../src/ui/dom/dom';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import DirectAnswerComponent from '../../../../src/ui/components/results/directanswercomponent';
 
+// TODO(SLAP-1028): add coverage for other parts of the UI, such as the breadcrumb, displayed value, etc.
+
 DOM.setup(document, new DOMParser());
 let COMPONENT_MANAGER, defaultConfig, directAnswerData, storage;
 beforeEach(() => {
