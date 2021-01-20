@@ -27,7 +27,7 @@ export default {
   SPELL_CHECK: 'spell-check',
   LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage
   SESSIONS_OPT_IN: 'sessions-opt-in',
-  VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
+  VERTICAL_PAGES_CONFIG: 'vertical-pages-config', // Has been cut over to the new global storage
   LOCALE: 'locale', // Has been cut over to the new global storage
   SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
   NO_RESULTS_CONFIG: 'no-results-config', // Has been cut over to the new global storage
