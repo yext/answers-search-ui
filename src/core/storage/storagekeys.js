@@ -26,6 +26,8 @@ export default {
   SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check', // Has been cut over to the new global storage
   SKIP_SPELL_CHECK: 'skipSpellCheck', // Has been cut over to the new global storage
+  LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage
+  SPELL_CHECK: 'spell-check',
   LOCATION_BIAS: 'location-bias',
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
