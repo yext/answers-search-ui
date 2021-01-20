@@ -186,7 +186,7 @@ class Answers {
       }
     });
     globalStorage.setAll(persistentStorage.getAll());
-    globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
+    storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     storage.set(StorageKeys.LOCALE, parsedConfig.locale);
     storage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
