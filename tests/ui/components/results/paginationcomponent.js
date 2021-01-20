@@ -11,8 +11,7 @@ const createCore = () => {
   // pagination will hide itself if there are no results, so we fake the relevant global storage.
   const globalStorage = {
     [StorageKeys.SEARCH_OFFSET]: 0,
-    [StorageKeys.SEARCH_CONFIG]: { limit: 5 },
-    [StorageKeys.NO_RESULTS_CONFIG]: { displayAllResults: true }
+    [StorageKeys.SEARCH_CONFIG]: { limit: 5 }
   };
   const persistentStorage = {};
   const storage = new Storage().init();
