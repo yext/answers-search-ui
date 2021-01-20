@@ -10,7 +10,7 @@ import SearchStates from '../../../../src/core/storage/searchstates';
 const createCore = () => {
   // pagination will hide itself if there are no results, so we fake the relevant global storage.
   const globalStorage = {
-    [StorageKeys.SEARCH_OFFSET]: 0,
+    [StorageKeys.SEARCH_OFFSET]: 0
   };
   const persistentStorage = {};
   const storage = new Storage().init();
