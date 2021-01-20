@@ -18,7 +18,7 @@ export default {
   QUERY: 'query',
   QUERY_ID: 'query-id',
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
-  DYNAMIC_FILTERS: 'dynamic-filters',
+  DYNAMIC_FILTERS: 'dynamic-filters', // Has been cut over to the new global storage
   PARAMS: 'params',
   GEOLOCATION: 'geolocation',
   INTENTS: 'intents',
@@ -33,7 +33,7 @@ export default {
   SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
   NO_RESULTS_CONFIG: 'no-results-config',
   LOCATION_RADIUS: 'location-radius', // Has been cut over to the new global storage
-  RESULTS_HEADER: 'results-header',
+  RESULTS_HEADER: 'results-header', // DEPRECATED // Has been cut over to the new global storage
   API_CONTEXT: 'context',
   REFERRER_PAGE_URL: 'referrerPageUrl',
   QUERY_TRIGGER: 'queryTrigger',

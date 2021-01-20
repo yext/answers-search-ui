@@ -48,6 +48,11 @@ export default class ComponentManager {
      * A mapping from component types to component names, as these may be configured by a user
      */
     this._componentTypeToComponentNames = {};
+
+    /**
+     * A mapping of Components to moduleId storage listeners, for removal purposes.
+     */
+    this._componentToModuleIdListener = new Map();
   }
 
   static getInstance () {
@@ -153,14 +158,13 @@ export default class ComponentManager {
       if (component.moduleId === undefined || component.moduleId === null) {
         return component;
       }
-
-      this._core.storage.registerListener({
+      const listener = {
         eventType: 'update',
         storageKey: component.moduleId,
-        callback: (data) => {
-          component.setState(data);
-        }
-      });
+        callback: data => component.setState(data)
+      };
+      this._core.storage.registerListener(listener);
+      this._componentToModuleIdListener.set(component, listener);
 
       // TODO(SLAP-869) remove this._core.globalStorage.on()
       // when the new global storage is fully cut over
@@ -180,6 +184,7 @@ export default class ComponentManager {
    */
   remove (component) {
     this._core.globalStorage.off('update', component.moduleId);
+    this._core.storage.removeListener(this._componentToModuleIdListener.get(component));
 
     const index = this._activeComponents.findIndex(c => c.name === component.name);
     this._activeComponents.splice(index, 1);
