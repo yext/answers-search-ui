@@ -34,7 +34,7 @@ export default {
   NO_RESULTS_CONFIG: 'no-results-config', // Has been cut over to the new global storage
   LOCATION_RADIUS: 'location-radius', // Has been cut over to the new global storage
   RESULTS_HEADER: 'results-header', // DEPRECATED // Has been cut over to the new global storage
-  API_CONTEXT: 'context',
+  API_CONTEXT: 'context', // Has been cut over to the new global storage
   REFERRER_PAGE_URL: 'referrerPageUrl',
   QUERY_TRIGGER: 'queryTrigger',
   FACETS_LOADED: 'facets-loaded',
