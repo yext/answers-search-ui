@@ -34,7 +34,7 @@ export default class SpellCheckComponent extends Component {
   }
 
   onCreate () {
-    this.core.persistentStorage.delete('skipSpellCheck', true);
+    this.core.persistentStorage.delete(StorageKeys.SKIP_SPELL_CHECK, true);
     this.core.persistentStorage.delete(StorageKeys.QUERY_TRIGGER, true);
   }
 
@@ -51,8 +51,8 @@ export default class SpellCheckComponent extends Component {
       return '';
     }
     let params = new SearchParams(window.location.search.substring(1));
-    params.set('query', query.value);
-    params.set('skipSpellCheck', true);
+    params.set(StorageKeys.QUERY, query.value);
+    params.set(StorageKeys.SKIP_SPELL_CHECK, true);
     params.set(StorageKeys.QUERY_TRIGGER, type.toLowerCase());
     return '?' + params.toString();
   }
