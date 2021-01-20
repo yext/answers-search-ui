@@ -98,10 +98,10 @@ export default class SearchApi {
         source: querySource
       }
     };
-    const getState = () => {
+    const get = () => {
       return { value: sessionTrackingEnabled };
     };
-    const request = new ApiRequest(requestConfig, { getState });
+    const request = new ApiRequest(requestConfig, { get });
 
     window.performance.mark('yext.answers.verticalQuerySent');
     return request.get()
@@ -131,10 +131,10 @@ export default class SearchApi {
         source: params.querySource
       }
     };
-    const getState = () => {
+    const get = () => {
       return { value: params.sessionTrackingEnabled };
     };
-    const request = new ApiRequest(requestConfig, { getState });
+    const request = new ApiRequest(requestConfig, { get });
 
     window.performance.mark('yext.answers.universalQuerySent');
     return request.get()

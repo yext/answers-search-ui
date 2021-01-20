@@ -198,12 +198,12 @@ export default class Core {
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
         referrerPageUrl: referrerPageUrl,
-        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -304,7 +304,7 @@ export default class Core {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
         referrerPageUrl: referrerPageUrl,
         querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)

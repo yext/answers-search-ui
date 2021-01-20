@@ -168,6 +168,7 @@ class Answers {
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
+    const storage = new Storage().init(window.location.search);
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: parsedConfig.onStateChange,
@@ -192,15 +193,15 @@ class Answers {
 
     // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
     // what is in parsedConfig.
-    const sessionOptIn = globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    const sessionOptIn = storage.get(StorageKeys.SESSIONS_OPT_IN);
     if (!sessionOptIn) {
-      globalStorage.set(
+      storage.set(
         StorageKeys.SESSIONS_OPT_IN,
         { value: parsedConfig.sessionTrackingEnabled, setDynamically: false });
     } else {
       // If sessionsOptIn was stored in the URL, it was stored only as a string.
       // Parse this value and add it back to globalStorage.
-      globalStorage.set(
+      storage.set(
         StorageKeys.SESSIONS_OPT_IN,
         { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
     }
@@ -232,7 +233,7 @@ class Answers {
 
     this._services = parsedConfig.mock
       ? getMockServices()
-      : getServices(parsedConfig, globalStorage);
+      : getServices(parsedConfig, storage);
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
     // TODO(amullings): Initialize with other services
@@ -254,8 +255,6 @@ class Answers {
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
     }
-
-    const storage = new Storage().init(window.location.search);
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
@@ -462,7 +461,7 @@ class Answers {
    * @param {boolean} optIn
    */
   setSessionsOptIn (optIn) {
-    this.core.globalStorage.set(
+    this.core.storage.set(
       StorageKeys.SESSIONS_OPT_IN, { value: optIn, setDynamically: true });
   }
 

@@ -2,7 +2,8 @@ import AutoCompleteApi from '../../../../src/core/search/autocompleteapi';
 import AutoCompleteData from '../../../../src/core/models/autocompletedata';
 import HttpRequester from '../../../../src/core/http/httprequester';
 import { LIB_VERSION } from '../../../../src/core/constants';
-import GlobalStorage from '../../../../src/core/storage/globalstorage';
+import GlobalStorage from '../../../../src/core/storage/storage';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
 jest.mock('../../../../src/core/http/httprequester');
 jest.mock('../../../../src/core/storage/globalstorage');
 
@@ -43,13 +44,8 @@ describe('querying and responding', () => {
   let autocomplete;
   const mockedGet = jest.fn(() => Promise.resolve({ json: () => Promise.resolve(expectedResponse) }));
 
-  const mockedGetState = jest.fn(() => { return { value: sessionTrackingEnabled }; });
-  GlobalStorage.mockImplementation(() => {
-    return {
-      getState: mockedGetState
-    };
-  });
-  const globalStorage = new GlobalStorage();
+  const globalStorage = new GlobalStorage().init();
+  globalStorage.set(StorageKeys.SESSIONS_OPT_IN, { value: sessionTrackingEnabled });
 
   beforeEach(() => {
     mockedGet.mockClear();
