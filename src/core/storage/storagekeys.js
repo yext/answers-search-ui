@@ -19,10 +19,9 @@ export default {
   QUERY_ID: 'query-id',
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
   DYNAMIC_FILTERS: 'dynamic-filters',
-  PARAMS: 'params',
-  GEOLOCATION: 'geolocation',
+  GEOLOCATION: 'geolocation', // Has been cut over to the new global storage
   INTENTS: 'intents',
-  QUESTION_SUBMISSION: 'question-submission',
+  QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check', // Has been cut over to the new global storage

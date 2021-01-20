@@ -190,7 +190,7 @@ export default class Core {
     return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+        geolocation: this.storage.get(StorageKeys.GEOLOCATION),
         ...parsedQuery,
         filter: this.filterRegistry.getStaticFilterPayload(),
         facetFilter: this.filterRegistry.getFacetFilterPayload(),
@@ -253,7 +253,7 @@ export default class Core {
     this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
     this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
-    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
+    this.storage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
     this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
     this.storage.set(StorageKeys.NAVIGATION, new Navigation());
     this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
@@ -292,7 +292,7 @@ export default class Core {
 
     this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
     this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
-    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
+    this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {});
     this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
 
@@ -301,7 +301,7 @@ export default class Core {
     );
     return this._searcher
       .universalSearch(queryString, {
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
+        geolocation: this.storage.get(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
@@ -424,7 +424,7 @@ export default class Core {
     return this._questionAnswer
       .submitQuestion(question)
       .then(data => {
-        this.globalStorage.set(
+        this.storage.set(
           StorageKeys.QUESTION_SUBMISSION,
           QuestionSubmission.submitted());
       });
