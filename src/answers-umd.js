@@ -188,8 +188,8 @@ class Answers {
     globalStorage.setAll(persistentStorage.getAll());
     globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
-    globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
-    globalStorage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
+    storage.set(StorageKeys.LOCALE, parsedConfig.locale);
+    storage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
 
     // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
     // what is in parsedConfig.
@@ -206,17 +206,17 @@ class Answers {
         { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
     }
 
-    parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
+    parsedConfig.noResults && storage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
     const isSuggestQueryTrigger =
       globalStorage.getState(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
     if (globalStorage.getState(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
       globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 
-    const context = globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = storage.get(StorageKeys.API_CONTEXT);
     if (context && !isValidContext(context)) {
       persistentStorage.delete(StorageKeys.API_CONTEXT, true);
-      globalStorage.delete(StorageKeys.API_CONTEXT);
+      storage.delete(StorageKeys.API_CONTEXT);
       console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
     }
 
@@ -248,9 +248,11 @@ class Answers {
         parsedConfig.environment);
 
       // listen to query id updates
-      globalStorage.on('update', StorageKeys.QUERY_ID, id =>
-        this._analyticsReporterService.setQueryId(id)
-      );
+      storage.registerListener({
+        eventType: 'update',
+        storageKey: StorageKeys.QUERY_ID,
+        callback: id => this._analyticsReporterService.setQueryId(id)
+      });
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
@@ -559,7 +561,7 @@ class Answers {
       return;
     }
 
-    this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
+    this.core.storage.set(StorageKeys.API_CONTEXT, contextString);
   }
 
   /**
@@ -585,7 +587,7 @@ class Answers {
    * @returns {string}
    */
   _getInitLocale () {
-    return this.core.globalStorage.getState(StorageKeys.LOCALE);
+    return this.core.storage.get(StorageKeys.LOCALE);
   }
 }
 

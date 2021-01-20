@@ -178,7 +178,7 @@ export default class VerticalResultsComponent extends Component {
     super(new VerticalResultsConfig(APPLY_SYNONYMS(config)), systemConfig);
 
     const noResultsConfig = this._config.noResults ||
-      this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG);
+      this.core.storage.get(StorageKeys.NO_RESULTS_CONFIG);
     /**
      * A parsed version of the noResults config provided to the component.
      * Applies sensible defaults if certain values are not set.
@@ -308,7 +308,7 @@ export default class VerticalResultsComponent extends Component {
   _getExperienceURL (baseUrl, params) {
     params.set(StorageKeys.QUERY, this.query);
 
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }

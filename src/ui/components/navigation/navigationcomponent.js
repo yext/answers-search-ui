@@ -193,7 +193,11 @@ export default class NavigationComponent extends Component {
       this.setState(this.core.storage.get(StorageKeys.NAVIGATION) || {});
     };
 
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.API_CONTEXT,
+      callback: reRender
+    });
     this.core.storage.registerListener({
       eventType: 'update',
       storageKey: StorageKeys.SESSIONS_OPT_IN,
@@ -348,7 +352,7 @@ export default class NavigationComponent extends Component {
 
     const params = getUrlParams();
     params.set('tabOrder', this._tabOrder);
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }

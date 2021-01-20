@@ -12,11 +12,11 @@ export default {
   VERTICAL_RESULTS: 'vertical-results', // Has been cut over to the new global storage
   ALTERNATIVE_VERTICALS: 'alternative-verticals', // Has been cut over to the new global storage
   AUTOCOMPLETE: 'autocomplete', // Has been cut over to the new global storage
-  DIRECT_ANSWER: 'direct-answer',
+  DIRECT_ANSWER: 'direct-answer', // Has been cut over to the new global storage
   FILTER: 'filter', // DEPRECATED // Has been cut over to the new global storage
   STATIC_FILTER_NODE: 'static-filter-node', // Has been cut over to the new global storage
   QUERY: 'query',
-  QUERY_ID: 'query-id',
+  QUERY_ID: 'query-id', // Has been cut over to the new global storage
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
   DYNAMIC_FILTERS: 'dynamic-filters',
   GEOLOCATION: 'geolocation', // Has been cut over to the new global storage
@@ -28,14 +28,14 @@ export default {
   LOCATION_BIAS: 'location-bias', // Has been cut over to the new global storage
   SESSIONS_OPT_IN: 'sessions-opt-in', // Has been cut over to the new global storage
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
-  LOCALE: 'locale',
+  LOCALE: 'locale', // Has been cut over to the new global storage
   SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
-  NO_RESULTS_CONFIG: 'no-results-config',
+  NO_RESULTS_CONFIG: 'no-results-config', // Has been cut over to the new global storage
   LOCATION_RADIUS: 'location-radius', // Has been cut over to the new global storage
   RESULTS_HEADER: 'results-header',
-  API_CONTEXT: 'context',
+  API_CONTEXT: 'context', // Has been cut over to the new global storage
   REFERRER_PAGE_URL: 'referrerPageUrl',
   QUERY_TRIGGER: 'queryTrigger',
   FACETS_LOADED: 'facets-loaded',
-  QUERY_SOURCE: 'query-source'
+  QUERY_SOURCE: 'query-source' // Has been cut over to the new global storage
 };

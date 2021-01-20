@@ -27,7 +27,11 @@ export default class UniversalResultsComponent extends Component {
 
     const reRender = () =>
       this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.API_CONTEXT,
+      callback: reRender
+    });
     this.core.storage.registerListener({
       eventType: 'update',
       storageKey: StorageKeys.SESSIONS_OPT_IN,
