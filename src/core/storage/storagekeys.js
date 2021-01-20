@@ -20,9 +20,8 @@ export default {
   FACET_FILTER_NODE: 'facet-filter-node', // Has been cut over to the new global storage
   DYNAMIC_FILTERS: 'dynamic-filters',
   GEOLOCATION: 'geolocation', // Has been cut over to the new global storage
-  INTENTS: 'intents',
   QUESTION_SUBMISSION: 'question-submission', // Has been cut over to the new global storage
-  SEARCH_CONFIG: 'search-config',
+  SEARCH_CONFIG: 'search-config', // Has been cut over to the new global storage
   SEARCH_OFFSET: 'search-offset', // Has been cut over to the new global storage
   SPELL_CHECK: 'spell-check', // Has been cut over to the new global storage
   SKIP_SPELL_CHECK: 'skipSpellCheck', // Has been cut over to the new global storage
