@@ -186,7 +186,7 @@ class Answers {
       }
     });
     globalStorage.setAll(persistentStorage.getAll());
-    globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
+    storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     storage.set(StorageKeys.LOCALE, parsedConfig.locale);
     storage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
@@ -213,10 +213,10 @@ class Answers {
       globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 
-    const context = globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = storage.get(StorageKeys.API_CONTEXT);
     if (context && !isValidContext(context)) {
       persistentStorage.delete(StorageKeys.API_CONTEXT, true);
-      globalStorage.delete(StorageKeys.API_CONTEXT);
+      storage.delete(StorageKeys.API_CONTEXT);
       console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
     }
 
@@ -561,7 +561,7 @@ class Answers {
       return;
     }
 
-    this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
+    this.core.storage.set(StorageKeys.API_CONTEXT, contextString);
   }
 
   /**

@@ -159,7 +159,7 @@ export default class Core {
     }
 
     const { setQueryParams } = options;
-    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.storage.get(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
 
     const defaultQueryInput = this.globalStorage.getState(StorageKeys.QUERY) || '';
@@ -174,9 +174,9 @@ export default class Core {
       }
     }
 
-    const searchConfig = this.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+    const searchConfig = this.storage.get(StorageKeys.SEARCH_CONFIG) || {};
     if (!searchConfig.verticalKey) {
-      this.globalStorage.set(StorageKeys.SEARCH_CONFIG, {
+      this.storage.set(StorageKeys.SEARCH_CONFIG, {
         ...searchConfig,
         verticalKey: verticalKey
       });
@@ -188,7 +188,7 @@ export default class Core {
     );
     return this._searcher
       .verticalSearch(verticalKey, {
-        limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.storage.get(StorageKeys.GEOLOCATION),
         ...parsedQuery,
         filter: this.filterRegistry.getStaticFilterPayload(),
@@ -275,7 +275,7 @@ export default class Core {
   search (queryString, urls, options = {}) {
     window.performance.mark('yext.answers.universalQueryStart');
     const { setQueryParams } = options;
-    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.storage.get(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
 
     if (setQueryParams) {
