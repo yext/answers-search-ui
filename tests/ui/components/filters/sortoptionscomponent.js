@@ -21,8 +21,7 @@ const mockedCore = () => {
       getAll: storageKey => {
         expect([StorageKeys.FACET_FILTER_NODE, StorageKeys.STATIC_FILTER_NODE]).toContain(storageKey);
         return [];
-      },
-      delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
+      }
     },
     persistentStorage: {
       set: (namespace, optionIndex) => {

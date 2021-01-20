@@ -152,7 +152,7 @@ export default class Core {
     const { resetPagination, useFacets } = options;
     if (resetPagination) {
       this.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.storage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
     if (!useFacets) {
@@ -194,7 +194,7 @@ export default class Core {
         ...parsedQuery,
         filter: this.filterRegistry.getStaticFilterPayload(),
         facetFilter: this.filterRegistry.getFacetFilterPayload(),
-        offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
+        offset: this.storage.get(StorageKeys.SEARCH_OFFSET) || 0,
         isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,

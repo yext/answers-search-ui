@@ -24,7 +24,7 @@ export default {
   INTENTS: 'intents',
   QUESTION_SUBMISSION: 'question-submission',
   SEARCH_CONFIG: 'search-config',
-  SEARCH_OFFSET: 'search-offset',
+  SEARCH_OFFSET: 'search-offset', // Has been cut over to the new global storage
   SPELL_CHECK: 'spell-check',
   LOCATION_BIAS: 'location-bias',
   SESSIONS_OPT_IN: 'sessions-opt-in',
