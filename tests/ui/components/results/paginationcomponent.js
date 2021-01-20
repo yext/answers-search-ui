@@ -10,13 +10,13 @@ import SearchStates from '../../../../src/core/storage/searchstates';
 const createCore = () => {
   // pagination will hide itself if there are no results, so we fake the relevant global storage.
   const globalStorage = {
-    [StorageKeys.SEARCH_CONFIG]: { limit: 5 },
-    [StorageKeys.NO_RESULTS_CONFIG]: { displayAllResults: true }
+    [StorageKeys.SEARCH_CONFIG]: { limit: 5 }
   };
   const persistentStorage = {};
   const storage = new Storage().init();
   storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 21 });
   storage.set(StorageKeys.SEARCH_OFFSET, 0);
+  storage.set(StorageKeys.NO_RESULTS_CONFIG, { displayAllResults: true });
 
   return {
     verticalSearch: () => {},
