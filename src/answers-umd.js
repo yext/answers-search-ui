@@ -168,6 +168,7 @@ class Answers {
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
+    const storage = new Storage().init(window.location.search);
     const globalStorage = new GlobalStorage();
     const persistentStorage = new PersistentStorage({
       updateListener: parsedConfig.onStateChange,
@@ -205,7 +206,7 @@ class Answers {
         { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
     }
 
-    parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
+    parsedConfig.noResults && storage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
     const isSuggestQueryTrigger =
       globalStorage.getState(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
     if (globalStorage.getState(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
@@ -254,8 +255,6 @@ class Answers {
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
     }
-
-    const storage = new Storage().init(window.location.search);
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,

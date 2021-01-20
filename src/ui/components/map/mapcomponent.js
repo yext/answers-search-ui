@@ -29,7 +29,7 @@ export default class MapComponent extends Component {
       displayAllResults: false,
       visible: undefined,
       template: '',
-      ...(opts.noResults || this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG))
+      ...(opts.noResults || this.core.storage.get(StorageKeys.NO_RESULTS_CONFIG))
     };
 
     /**

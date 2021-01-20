@@ -31,7 +31,7 @@ export default {
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',
   SORT_BYS: 'sort-bys', // Has been cut over to the new global storage
-  NO_RESULTS_CONFIG: 'no-results-config',
+  NO_RESULTS_CONFIG: 'no-results-config', // Has been cut over to the new global storage
   LOCATION_RADIUS: 'location-radius', // Has been cut over to the new global storage
   RESULTS_HEADER: 'results-header',
   API_CONTEXT: 'context',

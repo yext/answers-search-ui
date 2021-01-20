@@ -17,6 +17,7 @@ const createCore = () => {
   const persistentStorage = {};
   const storage = new Storage().init();
   storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 21 });
+  storage.set(StorageKeys.NO_RESULTS_CONFIG, { displayAllResults: true });
 
   return {
     verticalSearch: () => {},
