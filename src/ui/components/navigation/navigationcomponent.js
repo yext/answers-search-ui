@@ -198,7 +198,11 @@ export default class NavigationComponent extends Component {
       storageKey: StorageKeys.API_CONTEXT,
       callback: reRender
     });
-    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.SESSIONS_OPT_IN,
+      callback: reRender
+    });
   }
 
   static get type () {

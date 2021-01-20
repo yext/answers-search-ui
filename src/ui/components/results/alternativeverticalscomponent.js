@@ -86,7 +86,11 @@ export default class AlternativeVerticalsComponent extends Component {
       storageKey: StorageKeys.API_CONTEXT,
       callback: reRender
     });
-    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.SESSIONS_OPT_IN,
+      callback: reRender
+    });
   }
 
   static get type () {
@@ -140,7 +144,7 @@ export default class AlternativeVerticalsComponent extends Component {
     if (typeof referrerPageUrl === 'string') {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
-    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    const sessionsOptIn = this.core.storage.get(StorageKeys.SESSIONS_OPT_IN);
     if (sessionsOptIn && sessionsOptIn.setDynamically) {
       params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
     }
