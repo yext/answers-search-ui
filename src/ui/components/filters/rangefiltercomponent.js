@@ -44,13 +44,13 @@ export default class RangeFilterComponent extends Component {
      */
     this._storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
-    let minVal = this.core.globalStorage.getState(`${this.name}.min`);
+    let minVal = this.core.storage.get(`${this.name}.min`);
     if (typeof minVal === 'string') {
       try {
         minVal = Number.parseInt(minVal);
       } catch (e) {}
     }
-    let maxVal = this.core.globalStorage.getState(`${this.name}.max`);
+    let maxVal = this.core.storage.get(`${this.name}.max`);
     if (typeof minVal === 'string') {
       try {
         maxVal = Number.parseInt(maxVal);
