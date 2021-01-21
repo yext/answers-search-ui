@@ -7,6 +7,7 @@ import FilterMetadata from 'src/core/filters/filtermetadata';
 import FilterType from '../../../../src/core/filters/filtertype';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import PersistentStorage from 'src/ui/storage/persistentstorage';
+import Storage from '../../../../src/core/storage/storage';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
@@ -63,6 +64,8 @@ describe('filter options component', () => {
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
     setStaticFilterNodes = jest.fn();
+    const storage = new Storage().init();
+    storage.set(StorageKeys.SEARCH_CONFIG, { verticalKey: 'a vertical key' });
 
     const mockCore = {
       setStaticFilterNodes: setStaticFilterNodes,
@@ -70,18 +73,7 @@ describe('filter options component', () => {
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
       },
-      globalStorage: {
-        getState: (key) => {
-          if (key === StorageKeys.SEARCH_CONFIG) {
-            return {
-              verticalKey: 'a vertical key'
-            };
-          }
-          return null;
-        },
-        delete: () => { },
-        on: () => {}
-      },
+      storage,
       persistentStorage: new PersistentStorage()
     };
 
@@ -398,17 +390,10 @@ describe('filter options component', () => {
       const bodyEl = DOM.query('body');
       DOM.empty(bodyEl);
       DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-
+      const storage = new Storage().init();
+      storage.set('test-previous-options', ['label1', 'label2']);
       COMPONENT_MANAGER = mockManager({
-        globalStorage: {
-          getState: key => {
-            if (key === 'test-previous-options') {
-              return ['label1', 'label2'];
-            }
-          },
-          delete: () => { },
-          on: () => {}
-        },
+        storage,
         setStaticFilterNodes: () => { }
       });
 
@@ -543,11 +528,6 @@ describe('filter options component', () => {
       setStaticFilterNodes = jest.fn();
 
       COMPONENT_MANAGER = mockManager({
-        globalStorage: {
-          getState: () => { },
-          delete: () => { },
-          on: () => {}
-        },
         persistentStorage: {
           set: () => { },
           get: () => { }

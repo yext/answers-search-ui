@@ -269,8 +269,8 @@ export default class FilterOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
 
-    let previousOptions = this.core.globalStorage.getState(this.name);
-    this.core.globalStorage.delete(this.name);
+    let previousOptions = this.core.storage.get(this.name);
+    this.core.storage.delete(this.name);
 
     /**
      * The component config
@@ -304,17 +304,21 @@ export default class FilterOptionsComponent extends Component {
       // Update listener for when navigating backwards in history. When we back nav, the
       // globalStorage is updated with the previous URL filter values. We should not update
       // this.name otherwise, instead opt for this.core.setStaticFilterNodes()
-      this.core.globalStorage.on('update', this.name, (data) => {
-        try {
-          const newOptions = JSON.parse(data);
-          this.config.options = this.config.getSelectedOptions(
-            this.config.initialOptions,
-            newOptions
-          );
-          this.updateListeners();
-          this.setState();
-        } catch (e) {
-          console.warn(`Filter option ${data} could not be parsed`);
+      this.core.storage.registerListener({
+        eventType: 'update',
+        storageKey: this.name,
+        callback: (data) => {
+          try {
+            const newOptions = JSON.parse(data);
+            this.config.options = this.config.getSelectedOptions(
+              this.config.initialOptions,
+              newOptions
+            );
+            this.updateListeners();
+            this.setState();
+          } catch (e) {
+            console.warn(`Filter option ${data} could not be parsed`);
+          }
         }
       });
     }

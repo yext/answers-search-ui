@@ -12,17 +12,6 @@ const mockedCore = () => {
     },
     clearSortBys: () => {},
     verticalSearch: () => {},
-    globalStorage: {
-      on: () => {},
-      getState: storageKey => {
-        expect(['SortOptions', StorageKeys.QUERY]).toContain(storageKey);
-        return null;
-      },
-      getAll: storageKey => {
-        expect([StorageKeys.FACET_FILTER_NODE, StorageKeys.STATIC_FILTER_NODE]).toContain(storageKey);
-        return [];
-      }
-    },
     persistentStorage: {
       set: (namespace, optionIndex) => {
         expect(namespace).toBe('SortOptions');

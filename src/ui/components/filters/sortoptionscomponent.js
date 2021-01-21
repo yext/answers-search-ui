@@ -18,7 +18,7 @@ export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
     this.options = this._config.options;
-    this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
+    this.selectedOptionIndex = parseInt(this.core.storage.get(this.name)) || 0;
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.searchOnChangeIsEnabled = this._config.searchOnChange;

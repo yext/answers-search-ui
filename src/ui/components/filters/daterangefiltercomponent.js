@@ -66,8 +66,8 @@ export default class DateRangeFilterComponent extends Component {
 
     const today = new Date();
     const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
-    const minDate = this.core.globalStorage.getState(`${this.name}.min`);
-    const maxDate = this.core.globalStorage.getState(`${this.name}.max`);
+    const minDate = this.core.storage.get(`${this.name}.min`);
+    const maxDate = this.core.storage.get(`${this.name}.max`);
 
     /**
      * The current date range
