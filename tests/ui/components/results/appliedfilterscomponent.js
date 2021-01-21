@@ -24,7 +24,7 @@ beforeEach(() => {
 });
 
 describe('AppliedFilters component', () => {
-  it('listens to updates to VERTICAL_RESULTS in global storage', () => {
+  it('listens to updates to VERTICAL_RESULTS in storage', () => {
     const storage = COMPONENT_MANAGER.core.storage;
     const component = COMPONENT_MANAGER.create(AppliedFiltersComponent.type, defaultConfig);
     const wrapper = mount(component);

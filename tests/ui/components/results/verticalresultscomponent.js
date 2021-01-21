@@ -37,14 +37,14 @@ describe('vertical results component', () => {
     };
   });
 
-  it('getVerticalUrl encodes the global storage query when the component is created', () => {
+  it('getVerticalUrl encodes the storage query when the component is created', () => {
     COMPONENT_MANAGER.core.storage.set(StorageKeys.QUERY, 'yext');
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
 
     expect(component.getVerticalURL()).toContain('query=yext');
   });
 
-  it('updates to global storage vertical results update the component results', () => {
+  it('updates to storage vertical results update the component results', () => {
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
 
     const verticalResults = {

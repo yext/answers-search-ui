@@ -1,5 +1,5 @@
 /**
- * The storage listener is a listener on changes to the SDK global storage
+ * The storage listener is a listener on changes to the SDK storage
  */
 export default class StorageListener {
   /**

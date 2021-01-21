@@ -14,7 +14,7 @@ import { getLiveApiUrl } from '../utils/urlutils';
 export default class ApiRequest {
   // TODO (tmeyer): Create an ApiService interface and pass an implementation to the current
   // consumers of ApiRequest as a dependency.
-  constructor (opts = {}, globalStorage) {
+  constructor (opts = {}, storage) {
     /**
      * An abstraction used for making network request and handling errors
      * @type {HttpRequester}
@@ -64,14 +64,14 @@ export default class ApiRequest {
      */
     this._params = opts.params || {};
 
-    if (!globalStorage) {
-      throw new AnswersBasicError('Must include global storage', 'ApiRequest');
+    if (!storage) {
+      throw new AnswersBasicError('Must include storage', 'ApiRequest');
     }
     /**
-     * @type {GlobalStorage}
+     * @type {Storage}
      * @private
      */
-    this._globalStorage = globalStorage;
+    this._storage = storage;
   }
 
   /**
@@ -109,7 +109,7 @@ export default class ApiRequest {
       'v': this._version,
       'api_key': this._apiKey,
       'jsLibVersion': LIB_VERSION,
-      'sessionTrackingEnabled': this._globalStorage.get(StorageKeys.SESSIONS_OPT_IN).value
+      'sessionTrackingEnabled': this._storage.get(StorageKeys.SESSIONS_OPT_IN).value
     };
     const urlParams = new SearchParams(window.location.search.substring(1));
     if (urlParams.has('beta')) {

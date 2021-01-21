@@ -498,7 +498,7 @@ export default class SearchComponent extends Component {
 
   /**
    * The handler for a query submission. This method first sets the new query in
-   * persistent and global storage, than performs a debounced search.
+   * persistent and storage, than performs a debounced search.
    *
    * @param {Node} inputEl The input element containing the query.
    */
@@ -591,7 +591,7 @@ export default class SearchComponent extends Component {
    * is a twin searchbar.
    * @param {string} query The string to query against.
    * @param {Object} searchOptions The options to pass for core search
-   * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
+   * @returns {Promise} A promise that will perform the query and update storage accordingly.
    */
   debouncedSearch (query, searchOptions) {
     if (this._throttled ||
@@ -645,7 +645,7 @@ export default class SearchComponent extends Component {
    * Performs a query using the provided string input.
    * @param {string} query The string to query against.
    * @param {Object} searchOptions The options to pass for core search
-   * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
+   * @returns {Promise} A promise that will perform the query and update storage accordingly.
    */
   search (query, searchOptions) {
     this.customHooks.onConductSearch(query);
@@ -684,7 +684,7 @@ export default class SearchComponent extends Component {
   /**
    * A helper method that computes the intents of the provided query. If the query was entered
    * manually into the search bar or selected via autocomplete, its intents will have been stored
-   * already in globalStorage. Otherwise, a new API call will have to be issued to determine
+   * already in storage. Otherwise, a new API call will have to be issued to determine
    * intent.
    * @param {string} query The query whose intent is needed.
    * @returns {Promise} A promise containing the intents of the query.
