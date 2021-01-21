@@ -1,7 +1,6 @@
 import DOM from '../../../../src/ui/dom/dom';
 import mockManager from '../../../setup/managermocker';
 import { mount } from 'enzyme';
-import GlobalStorage from '../../../../src/core/storage/globalstorage';
 import PersistentStorage from '../../../../src/ui/storage/persistentstorage';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 
@@ -14,15 +13,13 @@ describe('SearchBar component', () => {
   };
 
   const COMPONENT_MANAGER = mockManager({
-    globalStorage: new GlobalStorage(),
     persistentStorage: new PersistentStorage(),
     setQuery: function (query) {
-      this.globalStorage.set(StorageKeys.QUERY, query);
+      this.storage.set(StorageKeys.QUERY, query);
     },
     autoCompleteVertical: jest.fn(() => Promise.resolve())
   });
 
-  const globalStorage = COMPONENT_MANAGER.core.globalStorage;
   const persistentStorage = COMPONENT_MANAGER.core.persistentStorage;
   const storage = COMPONENT_MANAGER.core.storage;
 
@@ -63,13 +60,13 @@ describe('SearchBar component', () => {
       const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
       const wrapper = mount(component);
 
-      globalStorage.set(StorageKeys.QUERY, 'what does yext do?');
-      expect(globalStorage.getState(StorageKeys.QUERY)).toBeTruthy();
+      storage.set(StorageKeys.QUERY, 'what does yext do?');
+      expect(storage.get(StorageKeys.QUERY)).toBeTruthy();
 
       const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
       clearButton.simulate('click');
 
-      expect(globalStorage.getState(StorageKeys.QUERY)).toEqual('');
+      expect(storage.get(StorageKeys.QUERY)).toEqual('');
     });
 
     it('clear button sets QUERY to the empty string in persistent storage', () => {

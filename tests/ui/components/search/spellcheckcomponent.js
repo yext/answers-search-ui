@@ -2,12 +2,10 @@ import DOM from '../../../../src/ui/dom/dom';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import SpellCheckComponent from '../../../../src/ui/components/search/spellcheckcomponent';
-import GlobalStorage from '../../../../src/core/storage/globalstorage';
 import PersistentStorage from '../../../../src/ui/storage/persistentstorage';
 import QueryTriggers from '../../../../src/core/models/querytriggers';
 
 const mockCore = {
-  globalStorage: new GlobalStorage(),
   persistentStorage: new PersistentStorage()
 };
 

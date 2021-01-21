@@ -63,13 +63,6 @@ export default class Core {
     this._fieldFormatters = config.fieldFormatters || {};
 
     /**
-     * A reference to the core data storage that powers the UI
-     * @type {GlobalStorage}
-     * @private
-     */
-    this.globalStorage = config.globalStorage;
-
-    /**
      * A reference to the core persistent storage
      * @type {PersistentStorage}
      * @private
