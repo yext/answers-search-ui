@@ -4,7 +4,6 @@ import HttpRequester from '../../../src/core/http/httprequester';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 jest.mock('../../../src/core/http/httprequester');
-jest.mock('../../../src/core/storage/globalstorage');
 
 describe('checking Answers Status page', () => {
   it('behaves correctly when JSON is present and disabled is true', () => {

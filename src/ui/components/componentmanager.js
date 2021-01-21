@@ -154,7 +154,7 @@ export default class ComponentManager {
     // If there is a global storage to power state, apply the state
     // from the storage to the component, and then bind the component
     // state to the storage via its updates
-    if (this._core && this._core.globalStorage !== null) {
+    if (this._core && this._core.storage !== null) {
       if (component.moduleId === undefined || component.moduleId === null) {
         return component;
       }
@@ -165,13 +165,6 @@ export default class ComponentManager {
       };
       this._core.storage.registerListener(listener);
       this._componentToModuleIdListener.set(component, listener);
-
-      // TODO(SLAP-869) remove this._core.globalStorage.on()
-      // when the new global storage is fully cut over
-      this._core.globalStorage
-        .on('update', component.moduleId, (data) => {
-          component.setState(data);
-        });
     }
 
     return component;
@@ -183,7 +176,6 @@ export default class ComponentManager {
    * @param {Component} component The component to remove
    */
   remove (component) {
-    this._core.globalStorage.off('update', component.moduleId);
     this._core.storage.removeListener(this._componentToModuleIdListener.get(component));
 
     const index = this._activeComponents.findIndex(c => c.name === component.name);

@@ -5,7 +5,6 @@ import { LIB_VERSION } from '../../../../src/core/constants';
 import GlobalStorage from '../../../../src/core/storage/storage';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 jest.mock('../../../../src/core/http/httprequester');
-jest.mock('../../../../src/core/storage/globalstorage');
 
 const baseUrl = 'https://liveapi-cached.yext.com/v2/accounts/me';
 const filtersBaseUrl = 'https://liveapi.yext.com/v2/accounts/me';
