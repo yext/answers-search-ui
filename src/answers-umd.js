@@ -176,13 +176,13 @@ class Answers {
        * Called when the 'popstate' event is fired, i.e. window.history
        * back or forward navigation.
        *
-       * @param {Map} data 
+       * @param {Map} data
        */
       reset: data => {
         if (!data.get(StorageKeys.QUERY)) {
           this.core.clearResults();
         } else {
-         this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+          this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
         this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
 

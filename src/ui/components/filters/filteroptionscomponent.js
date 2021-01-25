@@ -318,10 +318,10 @@ export default class FilterOptionsComponent extends Component {
               this.config.initialOptions,
               newOptions
             );
-            this.updateListeners(false, false, true);
+            this.updateListeners();
             this.setState();
           } catch (e) {
-            console.warn(`Filter option ${data} could not be parsed:`, e);
+            console.warn(`Filter option ${newOptions} could not be parsed:`, e);
           }
         }
       });
@@ -603,12 +603,11 @@ export default class FilterOptionsComponent extends Component {
    * component state.
    * @param {boolean} alwaysSaveFilterNodes
    * @param {boolean} blockSearchOnChange
-   * @param {boolean} saveToStorage
    */
-  updateListeners (alwaysSaveFilterNodes, blockSearchOnChange, skipPersistedStorage) {
+  updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
-      this.apply(skipPersistedStorage);
+      this.apply();
     }
 
     this.config.onChange(filterNode, alwaysSaveFilterNodes, blockSearchOnChange);
@@ -629,10 +628,8 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Apply filter changes
-   *
-   * @param {boolean} skipPersistedStorage
    */
-  apply (skipPersistedStorage) {
+  apply () {
     switch (this.config.optionType) {
       case OptionTypes.RADIUS_FILTER:
         this.core.setLocationRadiusFilterNode(this.getLocationRadiusFilterNode());
@@ -644,9 +641,7 @@ export default class FilterOptionsComponent extends Component {
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
 
-    if (!skipPersistedStorage) {
-      this.saveSelectedWithPersist();
-    }
+    this.saveSelectedWithPersist();
   }
 
   floatSelected () {

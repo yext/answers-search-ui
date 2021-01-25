@@ -276,12 +276,9 @@ export default class FilterBoxComponent extends Component {
   onFilterNodeChange (index, filterNode, saveFilterNodes, searchOnChange) {
     this._filterNodes[index] = filterNode;
     if (saveFilterNodes || searchOnChange) {
-      console.log('save filter nodse to strage')
-      throw new Error()
       this._saveFilterNodesToStorage();
     }
     if (searchOnChange) {
-      console.log('search')
       this._search();
     }
   }
