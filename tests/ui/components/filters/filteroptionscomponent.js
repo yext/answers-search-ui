@@ -257,7 +257,7 @@ describe('filter options component', () => {
       const expectedNode = nodes[0];
       expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
       expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
     });
 
     it('creates combined filternodes correctly from multi options', () => {
@@ -268,7 +268,7 @@ describe('filter options component', () => {
       const expectedNode = FilterNodeFactory.or(nodes[0], nodes[1]);
       expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
       expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(5);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
     });
 
     it('can unset filter nodes', () => {
@@ -280,7 +280,7 @@ describe('filter options component', () => {
       const expectedNode = nodes[0];
       expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
       expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(7);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
     });
 
     it('can do complicated operations', () => {
@@ -303,7 +303,7 @@ describe('filter options component', () => {
       const expectedNode = FilterNodeFactory.and(orNode0, orNode1);
       expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
       expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(25);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(13);
     });
   });
 
@@ -362,7 +362,7 @@ describe('filter options component', () => {
     component._updateOption(0, true);
     expect(component.getFilterNode().getFilter()).toEqual(nodes[0].getFilter());
     expect(component.getFilterNode().getMetadata()).toEqual(nodes[0].getMetadata());
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
   });
 
   it('creates combined filternodes correctly from single options', () => {
@@ -378,7 +378,7 @@ describe('filter options component', () => {
     component._updateOption(2, true);
     expect(component.getFilterNode().getFilter()).toEqual(nodes[2].getFilter());
     expect(component.getFilterNode().getMetadata()).toEqual(nodes[2].getMetadata());
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(7);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
   });
 
   describe('filter options when setting selected options in config', () => {
@@ -554,7 +554,7 @@ describe('filter options component', () => {
       expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
       expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
       component.apply();
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
       expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
     });
 
