@@ -151,7 +151,7 @@ export default class ComponentManager {
     }
     this._componentTypeToComponentNames[componentType].push(component.name);
 
-    // If there is a global storage to power state, apply the state
+    // If there is a storage to power state, apply the state
     // from the storage to the component, and then bind the component
     // state to the storage via its updates
     if (this._core && this._core.storage !== null) {

@@ -30,7 +30,7 @@ describe('SearchBar component', () => {
   });
 
   describe('Clicking the clear button updates storage properly', () => {
-    it('clear button deletes SEARCH_OFFSET from global storage', () => {
+    it('clear button deletes SEARCH_OFFSET from storage', () => {
       const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
       const wrapper = mount(component);
 
@@ -56,7 +56,7 @@ describe('SearchBar component', () => {
       expect(persistentStorage.get(StorageKeys.SEARCH_OFFSET)).toBeFalsy();
     });
 
-    it('clear button sets QUERY to the empty string in global storage', () => {
+    it('clear button sets QUERY to the empty string in storage', () => {
       const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
       const wrapper = mount(component);
 

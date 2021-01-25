@@ -132,7 +132,7 @@ describe('navigation tab links are correct', () => {
     COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
   });
 
-  it('tab links contain the referrerPageUrl from global storage', () => {
+  it('tab links contain the referrerPageUrl from storage', () => {
     COMPONENT_MANAGER.core.storage.set(StorageKeys.REFERRER_PAGE_URL, 'yext.com');
 
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
@@ -144,7 +144,7 @@ describe('navigation tab links are correct', () => {
     expect(tabLink).toContain('referrerPageUrl=yext.com');
   });
 
-  it('tab links contain the context from global storage', () => {
+  it('tab links contain the context from storage', () => {
     COMPONENT_MANAGER.core.storage.set(StorageKeys.API_CONTEXT, 'some context');
 
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
@@ -156,7 +156,7 @@ describe('navigation tab links are correct', () => {
     expect(tabLink).toContain('context=some+context');
   });
 
-  it('updating the context in global storage updates the context in tab links', () => {
+  it('updating the context in storage updates the context in tab links', () => {
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
     const wrapper = mount(component);
 
@@ -171,7 +171,7 @@ describe('navigation tab links are correct', () => {
     expect(tabLink).toContain('context=new+context');
   });
 
-  it('tab links default to the tab order from global storage', () => {
+  it('tab links default to the tab order from storage', () => {
     const verticalPagesConfig = new VerticalPagesConfig([
       { label: 'Home', url: './index.html' },
       { label: 'People', url: './people.html', verticalKey: 'people' }

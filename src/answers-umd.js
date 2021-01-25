@@ -207,7 +207,7 @@ class Answers {
         { value: parsedConfig.sessionTrackingEnabled, setDynamically: false });
     } else {
       // If sessionsOptIn was stored in the URL, it was stored only as a string.
-      // Parse this value and add it back to globalStorage.
+      // Parse this value and add it back to storage.
       storage.set(
         StorageKeys.SESSIONS_OPT_IN,
         { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
@@ -493,7 +493,7 @@ class Answers {
   }
 
   /**
-   * Sets the geolocation tag in global storage, overriding other inputs. Do not use in conjunction
+   * Sets the geolocation tag in storage, overriding other inputs. Do not use in conjunction
    * with other components that will set the geolocation internally.
    * @param {number} lat
    * @param {number} long
@@ -599,10 +599,10 @@ class Answers {
 
 /**
  * @param {Object} config
- * @param {GlobalStorage} globalStorage
+ * @param {Storage} storage
  * @returns {Services}
  */
-function getServices (config, globalStorage) {
+function getServices (config, storage) {
   return {
     searchService: new SearchApi({
       apiKey: config.apiKey,
@@ -619,10 +619,10 @@ function getServices (config, globalStorage) {
         locale: config.locale,
         environment: config.environment
       },
-      globalStorage),
+      storage),
     questionAnswerService: new QuestionAnswerApi(
       { apiKey: config.apiKey, environment: config.environment },
-      globalStorage),
+      storage),
     errorReporterService: new ErrorReporter(
       {
         apiKey: config.apiKey,
@@ -632,7 +632,7 @@ function getServices (config, globalStorage) {
         sendToServer: !config.suppressErrorReports,
         environment: config.environment
       },
-      globalStorage)
+      storage)
   };
 }
 

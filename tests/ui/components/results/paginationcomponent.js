@@ -8,7 +8,7 @@ import PaginationComponent from '../../../../src/ui/components/results/paginatio
 import SearchStates from '../../../../src/core/storage/searchstates';
 
 const createCore = () => {
-  // pagination will hide itself if there are no results, so we fake the relevant global storage.
+  // pagination will hide itself if there are no results, so we fake the relevant storage.
   const persistentStorage = {};
   const storage = new Storage().init();
   storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 21 });
@@ -133,7 +133,7 @@ describe('rendering the page numbers', () => {
 });
 
 describe('properly interacts with storage', () => {
-  it('the global storage search-config.limit and results.resultsCount determine the total page count', () => {
+  it('the storage search-config.limit and results.resultsCount determine the total page count', () => {
     COMPONENT_MANAGER.core.storage.set(StorageKeys.VERTICAL_RESULTS,
       { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 20 }
     );
@@ -148,7 +148,7 @@ describe('properly interacts with storage', () => {
     expect(paginationInfo.totalPageCount).toEqual(4);
   });
 
-  it('the global storage search-config.limit and search-offset determine the current page number', () => {
+  it('the storage search-config.limit and search-offset determine the current page number', () => {
     COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 10);
 
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
@@ -160,7 +160,7 @@ describe('properly interacts with storage', () => {
     expect(activePageSpan.text()).toEqual('Page 3');
   });
 
-  it('updating the page sets global storage searchOffset', () => {
+  it('updating the page sets storage searchOffset', () => {
     COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
 
     const component = COMPONENT_MANAGER.create('Pagination', defaultConfig);
@@ -185,7 +185,7 @@ describe('properly interacts with storage', () => {
     expect(searchOffset).toEqual(5);
   });
 
-  it('listens to updates to VERTICAL_RESULTS in global storage', () => {
+  it('listens to updates to VERTICAL_RESULTS in storage', () => {
     const storage = COMPONENT_MANAGER.core.storage;
     storage.delete(StorageKeys.VERTICAL_RESULTS);
     const component = COMPONENT_MANAGER.create(PaginationComponent.type, defaultConfig);

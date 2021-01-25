@@ -55,14 +55,14 @@ describe('results count component', () => {
     expect(wrapper.find('.yxt-VerticalResultsCount-total').text()).toEqual('200');
   });
 
-  it('page start is equal to the global storage search offset plus one', () => {
+  it('page start is equal to the storage search offset plus one', () => {
     const COMPONENT_MANAGER = mockManager();
     COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 15);
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
     expect(component.getState('pageStart')).toEqual(16);
   });
 
-  it('page end is equal to the global storage search offset plus the number of results', () => {
+  it('page end is equal to the storage search offset plus the number of results', () => {
     const COMPONENT_MANAGER = mockManager();
     COMPONENT_MANAGER.core.storage.set(StorageKeys.SEARCH_OFFSET, 15);
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);
@@ -73,7 +73,7 @@ describe('results count component', () => {
     expect(component.getState('pageEnd')).toEqual(18);
   });
 
-  it('listens to updates to VERTICAL_RESULTS in global storage', () => {
+  it('listens to updates to VERTICAL_RESULTS in storage', () => {
     const COMPONENT_MANAGER = mockManager();
     const storage = COMPONENT_MANAGER.core.storage;
     const component = COMPONENT_MANAGER.create(VerticalResultsCountComponent.type, defaultConfig);

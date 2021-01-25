@@ -77,7 +77,7 @@ export default class Core {
 
     /**
      * The filterRegistry is in charge of setting, removing, and retrieving filters
-     * and facet filters from global storage.
+     * and facet filters from storage.
      * @type {FilterRegistry}
      */
     this.filterRegistry = new FilterRegistry(this.storage);
@@ -435,7 +435,7 @@ export default class Core {
   }
 
   /**
-   * Clears the sortBys key in global storage.
+   * Clears the sortBys key in storage.
    */
   clearSortBys () {
     this.storage.delete(StorageKeys.SORT_BYS);

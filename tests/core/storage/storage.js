@@ -1,4 +1,4 @@
-import GlobalStorage from '../../../src/core/storage/storage';
+import Storage from '../../../src/core/storage/storage';
 import StorageListener from '../../../src/core/storage/storagelistener';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
@@ -7,13 +7,13 @@ let stateUpdateListener;
 let stateResetListener;
 
 beforeEach(() => {
-  storage = new GlobalStorage();
+  storage = new Storage();
   stateUpdateListener = jest.fn();
   stateResetListener = jest.fn();
 });
 
 it('calls update and reset listeners onpopstate', () => {
-  storage = new GlobalStorage({ update: stateUpdateListener, reset: stateResetListener });
+  storage = new Storage({ update: stateUpdateListener, reset: stateResetListener });
   window.dispatchEvent(new CustomEvent('popstate'));
   expect(stateUpdateListener).toBeCalled();
   expect(stateResetListener).toBeCalled();
@@ -35,19 +35,19 @@ describe('init', () => {
   ]);
 
   it('should be initialized with an absolute url', () => {
-    storage = new GlobalStorage();
+    storage = new Storage();
     storage.init('https://www.yext.com/?key1=val1&key2=val2');
     expect(storage.getAll()).toEqual(expectedResult);
   });
 
   it('should be initialized with a query param string w/ ?', () => {
-    storage = new GlobalStorage();
+    storage = new Storage();
     storage.init('?key1=val1&key2=val2');
     expect(storage.getAll()).toEqual(expectedResult);
   });
 
   it('should be initialized with a query param string w/o ?', () => {
-    storage = new GlobalStorage();
+    storage = new Storage();
     storage.init('key1=val1&key2=val2');
     expect(storage.getAll()).toEqual(expectedResult);
   });
@@ -407,7 +407,7 @@ describe('pushStateToHistory', () => {
   });
 
   it('calls update listeners on push', () => {
-    storage = new GlobalStorage({ update: stateUpdateListener, reset: stateResetListener });
+    storage = new Storage({ update: stateUpdateListener, reset: stateResetListener });
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
     storage.pushStateToHistory();
     expect(stateUpdateListener).toBeCalled();

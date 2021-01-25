@@ -20,7 +20,7 @@ beforeEach(() => {
 });
 
 describe('QASubmission component', () => {
-  it('listens to updates to VERTICAL_RESULTS in global storage', () => {
+  it('listens to updates to VERTICAL_RESULTS in storage', () => {
     const storage = COMPONENT_MANAGER.core.storage;
     const component = COMPONENT_MANAGER.create(QuestionSubmissionComponent.type, defaultConfig);
     const wrapper = mount(component);
@@ -32,7 +32,7 @@ describe('QASubmission component', () => {
     expect(wrapper.exists('.yxt-QuestionSubmission')).toBeTruthy();
   });
 
-  it('sets the question text to the current query in global storage', () => {
+  it('sets the question text to the current query in storage', () => {
     const storage = COMPONENT_MANAGER.core.storage;
     storage.set(StorageKeys.QUERY, 'is this a pigeon?');
     const component = COMPONENT_MANAGER.create(QuestionSubmissionComponent.type, defaultConfig);

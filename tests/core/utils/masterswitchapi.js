@@ -1,5 +1,5 @@
 import MasterSwitchApi from '../../../src/core/utils/masterswitchapi';
-import GlobalStorage from '../../../src/core/storage/storage';
+import Storage from '../../../src/core/storage/storage';
 import HttpRequester from '../../../src/core/http/httprequester';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
@@ -65,7 +65,7 @@ function createMasterSwitchApi (mockedRequest) {
       get: mockedRequest
     };
   });
-  const globalStorage = new GlobalStorage().init();
-  globalStorage.set(StorageKeys.SESSIONS_OPT_IN, { value: true });
-  return MasterSwitchApi.from('apiKey', 'experienceKey', globalStorage);
+  const storage = new Storage().init();
+  storage.set(StorageKeys.SESSIONS_OPT_IN, { value: true });
+  return MasterSwitchApi.from('apiKey', 'experienceKey', storage);
 }
