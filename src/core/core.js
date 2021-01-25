@@ -63,13 +63,6 @@ export default class Core {
     this._fieldFormatters = config.fieldFormatters || {};
 
     /**
-     * A reference to the core persistent storage
-     * @type {PersistentStorage}
-     * @private
-     */
-    this.persistentStorage = config.persistentStorage;
-
-    /**
      * A reference to the core data storage that powers the UI
      * @type {Storage}
      */
@@ -143,7 +136,6 @@ export default class Core {
 
     const { resetPagination, useFacets } = options;
     if (resetPagination) {
-      this.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.storage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
@@ -160,10 +152,10 @@ export default class Core {
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+        this.storage.setWithPersist(StorageKeys.API_CONTEXT, context);
       }
       if (referrerPageUrl !== undefined) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+        this.storage.setWithPersist(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
       }
     }
 
@@ -176,6 +168,8 @@ export default class Core {
     }
 
     const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
+    const shouldPushState =
+      this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
       this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
@@ -234,6 +228,9 @@ export default class Core {
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        if (shouldPushState) {
+          this.storage.pushStateToHistory();
+        }
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       });
   }
@@ -273,10 +270,10 @@ export default class Core {
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+        this.storage.setWithPersist(StorageKeys.API_CONTEXT, context);
       }
       if (referrerPageUrl !== undefined) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+        this.storage.setWithPersist(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
       }
     }
 
@@ -286,6 +283,8 @@ export default class Core {
     this.storage.set(StorageKeys.SPELL_CHECK, {});
     this.storage.set(StorageKeys.LOCATION_BIAS, {});
 
+    const shouldPushState =
+      this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
       this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
@@ -316,6 +315,9 @@ export default class Core {
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
+        }
+        if (shouldPushState) {
+          this.storage.pushStateToHistory();
         }
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       });
@@ -544,6 +546,25 @@ export default class Core {
       return null;
     }
     return queryTrigger;
+  }
+
+  /**
+   * Determines whether or not a new url state should be pushed for a search.
+   *
+   * If queryTrigger is INITIALIZE, don't push an extra state on page load.
+   * If queryTrigger is QUERY_PARAMETER, this only occurs either on page load
+   * or when hitting the history back and forward buttons. For both cases we
+   * don't push an extra state.
+   * If queryTrigger is SUGGEST, this only occurs when clicking a spellcheck
+   * link, which reloads the page, so don't push an extra state.
+   *
+   * @param {QueryTriggers} queryTrigger SDK query trigger
+   * @returns {boolean}
+   */
+  shouldPushState (queryTrigger) {
+    return queryTrigger !== QueryTriggers.INITIALIZE &&
+      queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
+      queryTrigger !== QueryTriggers.SUGGEST;
   }
 
   enableDynamicFilters () {

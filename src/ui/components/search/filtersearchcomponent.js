@@ -160,7 +160,7 @@ export default class FilterSearchComponent extends Component {
 
   _removeFilterNode () {
     this.query = '';
-    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+    this.core.storage.setWithPersist(`${StorageKeys.QUERY}.${this.name}`, this.query);
     this.core.clearStaticFilterNode(this.name);
     this.setState();
   }
@@ -210,8 +210,8 @@ export default class FilterSearchComponent extends Component {
 
         // save the filter to storage for the next search
         this.query = query;
-        this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
+        this.core.storage.setWithPersist(`${StorageKeys.QUERY}.${this.name}`, this.query);
+        this.core.storage.setWithPersist(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
         this.core.setStaticFilterNodes(this.name, filterNode);
         this.search();
       }

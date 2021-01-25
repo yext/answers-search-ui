@@ -138,8 +138,8 @@ export default class RangeFilterComponent extends Component {
     this.setState();
     this._onChange(FilterNodeFactory.from());
     this.core.clearStaticFilterNode(this.name);
-    this.core.persistentStorage.delete(`${this.name}.min`);
-    this.core.persistentStorage.delete(`${this.name}.max`);
+    this.core.storage.delete(`${this.name}.min`);
+    this.core.storage.delete(`${this.name}.max`);
   }
 
   /**
@@ -169,8 +169,8 @@ export default class RangeFilterComponent extends Component {
     if (this._storeOnChange) {
       this.core.setStaticFilterNodes(this.name, filterNode);
     }
-    this.core.persistentStorage.set(`${this.name}.min`, this._range.min);
-    this.core.persistentStorage.set(`${this.name}.max`, this._range.max);
+    this.core.storage.setWithPersist(`${this.name}.min`, this._range.min);
+    this.core.storage.setWithPersist(`${this.name}.max`, this._range.max);
 
     this._onChange(filterNode);
   }

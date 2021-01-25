@@ -5,7 +5,6 @@ import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
 import FilterCombinators from 'src/core/filters/filtercombinators';
 import FilterType from 'src/core/filters/filtertype';
-import PersistentStorage from 'src/ui/storage/persistentstorage';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
@@ -75,8 +74,7 @@ describe('filter box component', () => {
       verticalSearch: verticalSearch,
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
-      },
-      persistentStorage: new PersistentStorage()
+      }
     };
 
     COMPONENT_MANAGER = mockManager(mockCore);
@@ -198,7 +196,7 @@ describe('filter box component', () => {
       ]
     };
 
-    it('persistent storage does not change after the filter is selected when searchOnChange = false', () => {
+    it('url state does not change after the filter is selected when searchOnChange = false', () => {
       const config = {
         ...oneFilterConfig,
         searchOnChange: false
@@ -206,13 +204,13 @@ describe('filter box component', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
       mount(component);
       const filterComponent = component._filterComponents[0];
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getUrlWithCurrentState();
       filterComponent._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).toEqual(storageAfterSelection);
+      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      expect(urlBefore).toEqual(urlAfter);
     });
 
-    it('persistent storage changes after the apply button is clicked when searchOnChange = false', () => {
+    it('url state changes after the apply button is clicked when searchOnChange = false', () => {
       const config = {
         ...oneFilterConfig,
         searchOnChange: false
@@ -221,13 +219,13 @@ describe('filter box component', () => {
       const wrapper = mount(component);
       const filterComponent = component._filterComponents[0];
       filterComponent._updateOption(0, true);
-      const storageBeforeApply = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getUrlWithCurrentState();
       wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
-      const storageAfterApply = component.core.persistentStorage.getAll();
-      expect(storageBeforeApply).not.toEqual(storageAfterApply);
+      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      expect(urlBefore).not.toEqual(urlAfter);
     });
 
-    it('persistent storage changes after filter selection when searchOnChange = true', () => {
+    it('url state changes after filter selection when searchOnChange = true', () => {
       const config = {
         ...oneFilterConfig,
         searchOnChange: true
@@ -235,10 +233,10 @@ describe('filter box component', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
       mount(component);
       const filterComponent = component._filterComponents[0];
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getUrlWithCurrentState();
       filterComponent._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).not.toEqual(storageAfterSelection);
+      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      expect(urlBefore).not.toEqual(urlAfter);
     });
   });
 

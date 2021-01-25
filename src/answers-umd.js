@@ -14,7 +14,6 @@ import Component from './ui/components/component';
 import ErrorReporter from './core/errors/errorreporter';
 import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
-import PersistentStorage from './ui/storage/persistentstorage';
 import Storage from './core/storage/storage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
@@ -167,32 +166,45 @@ class Answers {
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
-    const storage = new Storage().init(window.location.search);
-    const persistentStorage = new PersistentStorage({
-      updateListener: parsedConfig.onStateChange,
-      resetListener: data => {
-        if (!data[StorageKeys.QUERY]) {
+    const storage = new Storage({
+      update: (data, url) => {
+        if (parsedConfig.onStateChange) {
+          parsedConfig.onStateChange(Object.fromEntries(data), url);
+        }
+      },
+      /**
+       * Called when the 'popstate' event is fired, i.e. window.history
+       * back or forward navigation.
+       *
+       * @param {Map} data 
+       */
+      reset: data => {
+        if (!data.get(StorageKeys.QUERY)) {
           this.core.clearResults();
         } else {
-          this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+         this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
+        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
 
-        if (!data[StorageKeys.SEARCH_OFFSET]) {
+        if (!data.get(StorageKeys.SEARCH_OFFSET)) {
           this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
 
-        for (const [key, val] of Object.entries(data)) {
+        let query;
+        data.forEach((value, key) => {
           if (key === StorageKeys.QUERY) {
-            continue;
+            query = value;
+            return;
           }
-          storage.set(key, val);
-        }
+          this.core.storage.set(key, value);
+        });
 
-        if (data[StorageKeys.QUERY]) {
-          storage.set(StorageKeys.QUERY, data[StorageKeys.QUERY]);
+        if (query) {
+          this.core.storage.set(StorageKeys.QUERY, query);
         }
       }
     });
+    storage.init(window.location.search);
     storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     storage.set(StorageKeys.LOCALE, parsedConfig.locale);
@@ -222,7 +234,6 @@ class Answers {
 
     const context = storage.get(StorageKeys.API_CONTEXT);
     if (context && !isValidContext(context)) {
-      persistentStorage.delete(StorageKeys.API_CONTEXT, true);
       storage.delete(StorageKeys.API_CONTEXT);
       console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
     }
@@ -267,7 +278,6 @@ class Answers {
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
-      persistentStorage: persistentStorage,
       storage: storage,
       experienceKey: parsedConfig.experienceKey,
       fieldFormatters: parsedConfig.fieldFormatters,
@@ -282,7 +292,9 @@ class Answers {
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
-      parsedConfig.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
+      parsedConfig.onStateChange(
+        Object.fromEntries(storage.getAll()),
+        window.location.search.substr(1));
     }
 
     this.components
@@ -436,8 +448,7 @@ class Answers {
    * @param {string} query
    */
   search (query) {
-    this.core.setQuery(query, { setQueryParams: true });
-    this.core.persistentStorage.set(StorageKeys.QUERY, query);
+    this.core.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
   registerHelper (name, cb) {

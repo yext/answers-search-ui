@@ -6,7 +6,6 @@ import Filter from 'src/core/models/filter';
 import FilterMetadata from 'src/core/filters/filtermetadata';
 import FilterType from '../../../../src/core/filters/filtertype';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
-import PersistentStorage from 'src/ui/storage/persistentstorage';
 import Storage from '../../../../src/core/storage/storage';
 
 describe('filter options component', () => {
@@ -73,8 +72,7 @@ describe('filter options component', () => {
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
       },
-      storage,
-      persistentStorage: new PersistentStorage()
+      storage
     };
 
     COMPONENT_MANAGER = mockManager(mockCore);
@@ -151,10 +149,10 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getUrlWithCurrentState();
       component._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).not.toEqual(storageAfterSelection);
+      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      expect(urlBefore).not.toEqual(urlAfter);
     });
 
     it('selecting an option does not update the URL when storeOnChange = false', () => {
@@ -164,10 +162,10 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getUrlWithCurrentState();
       component._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).toEqual(storageAfterSelection);
+      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      expect(urlBefore).toEqual(urlAfter);
     });
   });
 
@@ -259,7 +257,7 @@ describe('filter options component', () => {
       const expectedNode = nodes[0];
       expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
       expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
     });
 
     it('creates combined filternodes correctly from multi options', () => {
@@ -270,7 +268,7 @@ describe('filter options component', () => {
       const expectedNode = FilterNodeFactory.or(nodes[0], nodes[1]);
       expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
       expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(5);
     });
 
     it('can unset filter nodes', () => {
@@ -282,7 +280,7 @@ describe('filter options component', () => {
       const expectedNode = nodes[0];
       expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
       expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(7);
     });
 
     it('can do complicated operations', () => {
@@ -305,7 +303,7 @@ describe('filter options component', () => {
       const expectedNode = FilterNodeFactory.and(orNode0, orNode1);
       expect(actualNode.getMetadata()).toEqual(expectedNode.getMetadata());
       expect(actualNode.getFilter()).toEqual(expectedNode.getFilter());
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(13);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(25);
     });
   });
 
@@ -364,7 +362,7 @@ describe('filter options component', () => {
     component._updateOption(0, true);
     expect(component.getFilterNode().getFilter()).toEqual(nodes[0].getFilter());
     expect(component.getFilterNode().getMetadata()).toEqual(nodes[0].getMetadata());
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
   });
 
   it('creates combined filternodes correctly from single options', () => {
@@ -380,7 +378,7 @@ describe('filter options component', () => {
     component._updateOption(2, true);
     expect(component.getFilterNode().getFilter()).toEqual(nodes[2].getFilter());
     expect(component.getFilterNode().getMetadata()).toEqual(nodes[2].getMetadata());
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(7);
   });
 
   describe('filter options when setting selected options in config', () => {
@@ -528,10 +526,6 @@ describe('filter options component', () => {
       setStaticFilterNodes = jest.fn();
 
       COMPONENT_MANAGER = mockManager({
-        persistentStorage: {
-          set: () => { },
-          get: () => { }
-        },
         setLocationRadiusFilterNode,
         setStaticFilterNodes
       });
@@ -560,7 +554,7 @@ describe('filter options component', () => {
       expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
       expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
       component.apply();
-      expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
+      expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
       expect(setLocationRadiusFilterNode.mock.calls).toHaveLength(0);
     });
 

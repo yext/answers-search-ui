@@ -33,11 +33,6 @@ export default class SpellCheckComponent extends Component {
     return 'search/spellcheck';
   }
 
-  onCreate () {
-    this.core.persistentStorage.delete(StorageKeys.SKIP_SPELL_CHECK, true);
-    this.core.persistentStorage.delete(StorageKeys.QUERY_TRIGGER, true);
-  }
-
   setState (data, val) {
     return super.setState(Object.assign({}, data, {
       shouldShow: data.correctedQuery !== undefined,
