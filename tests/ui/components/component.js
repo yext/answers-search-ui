@@ -6,7 +6,7 @@ import Handlebars from 'handlebars/dist/handlebars.min.js';
 
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
 import MockComponentManager from '../../setup/mockcomponentmanager';
-import GlobalStorage from '../../../src/core/storage/storage';
+import Storage from '../../../src/core/storage/storage';
 
 /* global MouseEvent */
 
@@ -138,7 +138,7 @@ describe('attaching analytics events', () => {
   });
 
   it('calls setState() when there is a storage change for its moduleId', () => {
-    COMPONENT_MANAGER.core.storage = new GlobalStorage().init();
+    COMPONENT_MANAGER.core.storage = new Storage().init();
     const component = COMPONENT_MANAGER.create('Component', {
       onCreate: function () {
         this.moduleId = 'testModuleId';

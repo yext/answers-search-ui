@@ -4,7 +4,7 @@ import { AnswersStorageError } from '../errors/errors';
 /** @typedef {import('./storagelistener').default} StorageListener */
 
 /**
- * GlobalStorage is a container around application state.  It
+ * Storage is a container around application state.  It
  * exposes an interface for CRUD operations as well as listening
  * for stateful changes.
  *
@@ -32,7 +32,7 @@ export default class Storage {
     };
 
     /**
-     * The core data for the global storage
+     * The core data for the storage
      *
      * @type {Map<string, *>}
      */
@@ -47,7 +47,7 @@ export default class Storage {
     this.persistentStorage = new DefaultPersistentStorage(this.popListener);
 
     /**
-     * The listeners to apply on changes to global storage
+     * The listeners to apply on changes to storage
      *
      * @type {StorageListener[]}
      */
@@ -60,7 +60,7 @@ export default class Storage {
    * could fetch a sessionId from some backend
    *
    * @param {string} url The starting URL
-   * @returns {GlobalStorage}
+   * @returns {Storage}
    */
   init (url) {
     this.persistentStorage.init(url);

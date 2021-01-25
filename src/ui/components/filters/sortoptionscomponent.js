@@ -288,7 +288,7 @@ function assignDefaults (config) {
     context: 'Title for a group of controls that sort results'
   });
 
-  // Optional, when true component does not update globalStorage
+  // Optional, when true component does not update storage
   // possibly delegating that to a higher-order/composite component
   updatedConfig.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 

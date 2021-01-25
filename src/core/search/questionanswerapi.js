@@ -13,7 +13,7 @@ import { getKnowledgeApiUrl } from '../utils/urlutils';
  * @implements {QuestionAnswerService}
  */
 export default class QuestionAnswerApi {
-  constructor (config = {}, globalStorage) {
+  constructor (config = {}, storage) {
     /**
      * The API Key to use for the request
      * @type {string}
@@ -25,14 +25,14 @@ export default class QuestionAnswerApi {
     this._apiKey = config.apiKey;
 
     /**
-     * The global storage instance of the experience
-     * @type {GlobalStorage}
+     * The storage instance of the experience
+     * @type {Storage}
      * @private
      */
-    if (!globalStorage) {
-      throw new AnswersBasicError('Global storage is required', 'QuestionAnswerApi');
+    if (!storage) {
+      throw new AnswersBasicError('Storage is required', 'QuestionAnswerApi');
     }
-    this._globalStorage = globalStorage;
+    this._storage = storage;
 
     /**
      * The environment of the Answers experience
@@ -58,7 +58,7 @@ export default class QuestionAnswerApi {
         'questionLanguage': question.questionLanguage
       }
     };
-    let request = new ApiRequest(requestConfig, this._globalStorage);
+    let request = new ApiRequest(requestConfig, this._storage);
 
     return request.post({
       mode: 'cors',
