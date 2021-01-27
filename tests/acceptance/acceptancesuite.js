@@ -245,8 +245,8 @@ test.requestHooks(filterSearchLogger)(`filtersearch`, async t => {
   await t.expect(filterTags.count).eql(1);
   let filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
   await t.expect(filterTagText).eql('Virginia, United States');
-  await t.expect(filterSearchLogger.requests.length).eql(1);
   expectRequestFiltersToEql(virginiaFilter);
+  filterSearchLogger.clear();
 
   // Choose the 'New York City, New York, United States' filter option
   await filterSearch.enterQuery('new york');
@@ -254,29 +254,28 @@ test.requestHooks(filterSearchLogger)(`filtersearch`, async t => {
   await t.expect(filterTags.count).eql(1);
   filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
   await t.expect(filterTagText).eql('New York City, New York, United States');
-  await t.expect(filterSearchLogger.requests.length).eql(2);
   expectRequestFiltersToEql(newYorkFilter);
+  filterSearchLogger.clear();
 
   // Hit the back button, expect to be back at the 'Virginia' filter state
   await browserBackButton();
   await t.expect(filterTags.count).eql(1);
   filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
   await t.expect(filterTagText).eql('Virginia, United States');
-  await t.expect(filterSearchLogger.requests.length).eql(3);
   expectRequestFiltersToEql(virginiaFilter);
+  filterSearchLogger.clear();
 
   // Test that refreshing the page will use the 'Virginia' filter
   await browserRefreshPage();
   await t.expect(filterTags.count).eql(1);
   filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
   await t.expect(filterTagText).eql('Virginia, United States');
-  await t.expect(filterSearchLogger.requests.length).eql(4);
   expectRequestFiltersToEql(virginiaFilter);
+  filterSearchLogger.clear();
 
   // Hit the back button, expect to be back at the initial state
   await browserBackButton();
   await t.expect(filterTags.count).eql(0);
-  await t.expect(filterSearchLogger.requests.length).eql(5);
   expectRequestFiltersToEql({});
 });
 
