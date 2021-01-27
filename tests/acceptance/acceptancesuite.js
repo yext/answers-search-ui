@@ -3,10 +3,7 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
-import {
-  browserBackButton,
-  browserRefreshPage
-} from './utils';
+import { browserBackButton, browserRefreshPage } from './utils';
 
 const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
 const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/vertical';
