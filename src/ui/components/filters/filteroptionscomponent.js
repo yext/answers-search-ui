@@ -309,15 +309,12 @@ export default class FilterOptionsComponent extends Component {
         storageKey: StorageKeys.HISTORY_POP_STATE,
         callback: data => {
           const newOptions = data.get(this.name);
-          if (!newOptions) {
-            return;
-          }
           try {
             this.config.options = this.config.getSelectedOptions(
               this.config.initialOptions,
               newOptions
             );
-            this.updateListeners();
+            this.updateListeners(false, true);
             this.setState();
           } catch (e) {
             console.warn(`Filter option ${newOptions} could not be parsed:`, e);

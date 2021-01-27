@@ -94,18 +94,41 @@
               options: [
                 {
                   "label": "5 miles",
-                  "value": 8046.72, //NEW
+                  "value": 8046.72,
                 },
                 {
                   "label": "10 miles",
-                  "value": 16093.4, //NEW
+                  "value": 16093.4,
                 },
                 {
                   "label": "25 miles",
-                  "value": 40233.6, //NEW
+                  "value": 40233.6,
                 },
               ]
             },
+            {
+              type: 'FilterOptions',
+              optionType: 'STATIC_FILTER',
+              label: 'STATIC FILTERS',
+              control: 'multioption',
+              options: [
+                {
+                  label: 'Bot2',
+                  field: 'c_awards',
+                  value: 'Bot2'
+                },
+                {
+                  label: 'Marty',
+                  field: 'c_puppyPreference',
+                  value: 'Marty',
+                },
+                {
+                  label: 'Frodo',
+                  field: 'c_puppyPreference',
+                  value: 'Frodo',
+                }
+              ]
+            }
           ],
           verticalKey: 'people',
           searchOnChange: true,
@@ -114,6 +137,9 @@
 
         this.addComponent('VerticalResults', {
           container: '.results-container',
+          appliedFilters: {
+            removable: true
+          }
         });
 
         this.addComponent('Facets', {

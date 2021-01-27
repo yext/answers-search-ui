@@ -5,6 +5,7 @@ import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
 import FilterCombinators from 'src/core/filters/filtercombinators';
 import FilterType from 'src/core/filters/filtertype';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
@@ -293,6 +294,41 @@ describe('filter box component', () => {
     const expectedFilterNode = FilterNodeFactory.from();
     expect(actualFilterNode.getFilter()).toEqual(expectedFilterNode.getFilter());
     expect(actualFilterNode.getMetadata()).toEqual(expectedFilterNode.getMetadata());
+  });
+
+  describe('back navigation (HISTORY_POP_STATE listener)', () => {
+    const config = {
+      ...defaultConfig,
+      name: 'test-name',
+      searchOnChange: true,
+      filters: [
+        {
+          type: 'FilterOptions',
+          label: 'first filter options',
+          control: 'multioption',
+          options: [
+            {
+              label: 'ciri',
+              field: 'witcher',
+              value: 'cirilla'
+            }
+          ]
+        }
+      ]
+    };
+
+    it('does not trigger core.verticalSearch() calls on back nav', () => {
+      const verticalSearch = jest.fn();
+      COMPONENT_MANAGER.core.verticalSearch = verticalSearch;
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      expect(verticalSearch).toHaveBeenCalledTimes(0);
+      mount(component);
+      const historyPopState = new Map();
+      historyPopState.set('test-name.filter0', []);
+      historyPopState.set('test-name.filter1', []);
+      COMPONENT_MANAGER.core.storage.set(StorageKeys.HISTORY_POP_STATE, historyPopState);
+      expect(verticalSearch).toHaveBeenCalledTimes(0);
+    });
   });
 });
 

@@ -160,6 +160,60 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await t.expect(actualResultsCount).eql(initialResultsCount);
 });
 
+test(`static filterboxes`, async t => {
+  const expectResultsCountToEql = async expectedCount => {
+    const currentResultsCount = await verticalResultsComponent.getResultsCountTotal();
+    await t.expect(currentResultsCount).eql(expectedCount);
+  };
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.enterQuery('all');
+  await searchComponent.submitQuery();
+  const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
+  const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
+
+  const filterBox = FacetsPage.getStaticFilterBox();
+  const radiusFilter = await filterBox.getFilterOptions('DISTANCE');
+  const staticFilter = await filterBox.getFilterOptions('STATIC FILTERS');
+
+  // Choose the 25 miles radius filter
+  await radiusFilter.toggleOption('25 miles');
+  const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
+  await t.expect(filterTags.count).eql(1);
+
+  // Hit the back button, see the radius filter disappear
+  await browserBackButton();
+  await t.expect(filterTags.count).eql(0);
+  await expectResultsCountToEql(initialResultsCount);
+
+  // Click the 'Marty' checkbox and see it affect the search.
+  // It should add 2 filter tags, one for the facet (from the backend)
+  // and one for the static filter we just clicked
+  await staticFilter.toggleOption('Marty');
+  await t.expect(filterTags.count).eql(2);
+  await expectResultsCountToEql(1);
+  await t.expect(Selector('.yxt-StandardCard-title').innerText).eql('Liz Frailey');
+
+  // Click the 'Frodo' checkbox and see it affect the search
+  // It should add 2 filter tags, one for the facet (from the backend)
+  // and one for the static filter we just clicked
+  await staticFilter.toggleOption('Frodo');
+  await t.expect(filterTags.count).eql(4);
+  await expectResultsCountToEql(2);
+  await t.expect(Selector('.yxt-StandardCard-title').nth(0).innerText).eql('Liz Frailey');
+  await t.expect(Selector('.yxt-StandardCard-title').nth(1).innerText).eql('Sophia Kleyman');
+
+  // Hit the back button, see the 'Frodo' filter disappear
+  await browserBackButton();
+  await t.expect(filterTags.count).eql(2);
+  await expectResultsCountToEql(1);
+  await t.expect(Selector('.yxt-StandardCard-title').innerText).eql('Liz Frailey');
+
+  // Hit the back button, see the 'Marty' filter disappear and return to the 'all' search.
+  await browserBackButton();
+  await t.expect(filterTags.count).eql(0);
+  await expectResultsCountToEql(initialResultsCount);
+});
+
 test(`selecting a sort option and refreshing maintains that sort selection`, async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
