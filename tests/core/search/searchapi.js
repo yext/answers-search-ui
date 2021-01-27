@@ -37,7 +37,7 @@ describe('vertical searching', () => {
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
         expect.anything(),
-        expect.objectContaining({ input: 'query', verticalKey: 'vertical' }),
+        expect.objectContaining({ input: 'query', verticalKey: 'vertical', sessionTrackingEnabled }),
         undefined);
 
       expect(results.test).toBe('value');
@@ -51,7 +51,7 @@ describe('vertical searching', () => {
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
         expect.anything(),
-        expect.objectContaining({ filters: filter, verticalKey: 'vertical' }),
+        expect.objectContaining({ filters: filter, verticalKey: 'vertical', sessionTrackingEnabled }),
         undefined);
 
       expect(results.test).toBe('value');
@@ -65,7 +65,7 @@ describe('vertical searching', () => {
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
         expect.anything(),
-        expect.objectContaining({ input: 'word', filters: filter, verticalKey: 'vertical' }),
+        expect.objectContaining({ input: 'word', filters: filter, verticalKey: 'vertical', sessionTrackingEnabled }),
         undefined);
 
       expect(results.test).toBe('value');
@@ -78,7 +78,7 @@ describe('vertical searching', () => {
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
         expect.anything(),
-        expect.objectContaining({ input: 'query', limit: 25, offset: 10, verticalKey: 'vertical' }),
+        expect.objectContaining({ input: 'query', limit: 25, offset: 10, verticalKey: 'vertical', sessionTrackingEnabled }),
         undefined);
 
       expect(results.test).toBe('value');
@@ -97,7 +97,7 @@ describe('vertical searching', () => {
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
         expect.anything(),
-        expect.objectContaining({ input: 'query', limit: 25, offset: 10, verticalKey: 'vertical', queryId: '12345' }),
+        expect.objectContaining({ input: 'query', limit: 25, offset: 10, verticalKey: 'vertical', queryId: '12345', sessionTrackingEnabled }),
         undefined);
     });
   });
