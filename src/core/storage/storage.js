@@ -153,16 +153,6 @@ export default class Storage {
   }
 
   /**
-   * Checks whether storage contains a key.
-   *
-   * @param {string} key
-   * @returns {boolean}
-   */
-  has (key) {
-    return this.storage.has(key);
-  }
-
-  /**
    * Returns the query parameters to encode the current state
    *
    * @return {string} The query parameters for a page link with the
