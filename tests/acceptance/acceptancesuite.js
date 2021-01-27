@@ -3,7 +3,11 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
-import { browserBackButton, browserRefreshPage } from './utils';
+import {
+  browserBackButton,
+  browserRefreshPage,
+  getMostRecentQueryParamsFromLogger
+} from './utils';
 
 const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
 const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/vertical';
@@ -212,6 +216,68 @@ test(`static filterboxes`, async t => {
   await browserBackButton();
   await t.expect(filterTags.count).eql(0);
   await expectResultsCountToEql(initialResultsCount);
+});
+
+const filterSearchLogger = RequestLogger({
+  url: /v2\/accounts\/me\/answers\/vertical\/query/
+});
+test.requestHooks(filterSearchLogger)(`filtersearch`, async t => {
+  const expectRequestFiltersToEql = async expectedFilters => {
+    const urlParams = getMostRecentQueryParamsFromLogger(filterSearchLogger);
+    await t.expect(urlParams['filters']).eql(JSON.stringify(expectedFilters));
+  };
+  const filterSearch = FacetsPage.getFilterSearch();
+  const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
+  const virginiaFilter = {
+    'builtin.location': {
+      $eq: 'P-region.7919684583758790'
+    }
+  };
+  const newYorkFilter = {
+    'builtin.location': {
+      $eq: 'P-place.15278078705964500'
+    }
+  };
+
+  // Choose the 'Virginia, United States' filter option
+  await filterSearch.enterQuery('virginia');
+  await filterSearch.selectFilter('Virginia, United States');
+  await t.expect(filterTags.count).eql(1);
+  let filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
+  await t.expect(filterTagText).eql('Virginia, United States');
+  await t.expect(filterSearchLogger.requests.length).eql(1);
+  expectRequestFiltersToEql(virginiaFilter);
+
+  // Choose the 'New York City, New York, United States' filter option
+  await filterSearch.enterQuery('new york');
+  await filterSearch.selectFilter('New York City, New York, United States');
+  await t.expect(filterTags.count).eql(1);
+  filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
+  await t.expect(filterTagText).eql('New York City, New York, United States');
+  await t.expect(filterSearchLogger.requests.length).eql(2);
+  expectRequestFiltersToEql(newYorkFilter);
+
+  // Hit the back button, expect to be back at the 'Virginia' filter state
+  await browserBackButton();
+  await t.expect(filterTags.count).eql(1);
+  filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
+  await t.expect(filterTagText).eql('Virginia, United States');
+  await t.expect(filterSearchLogger.requests.length).eql(3);
+  expectRequestFiltersToEql(virginiaFilter);
+
+  // Test that refreshing the page will use the 'Virginia' filter
+  await browserRefreshPage();
+  await t.expect(filterTags.count).eql(1);
+  filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
+  await t.expect(filterTagText).eql('Virginia, United States');
+  await t.expect(filterSearchLogger.requests.length).eql(4);
+  expectRequestFiltersToEql(virginiaFilter);
+
+  // Hit the back button, expect to be back at the initial state
+  await browserBackButton();
+  await t.expect(filterTags.count).eql(0);
+  await t.expect(filterSearchLogger.requests.length).eql(5);
+  expectRequestFiltersToEql({});
 });
 
 test(`selecting a sort option and refreshing maintains that sort selection`, async t => {

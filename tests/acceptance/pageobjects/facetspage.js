@@ -3,6 +3,7 @@ import VerticalResultsComponentBlock from '../blocks/verticalresultscomponent';
 import FacetsComponentBlock from '../blocks/facetscomponent';
 import FilterBoxComponentBlock from '../blocks/filterboxcomponent';
 import { Selector } from 'testcafe';
+import FilterSearchComponentBlock from '../blocks/filtersearchcomponent';
 
 /**
  * A model of a vertical search page with facets, containing block representations
@@ -15,6 +16,7 @@ class FacetsPage {
     this._facetsComponent = new FacetsComponentBlock();
     this._staticFilterBox = new FilterBoxComponentBlock(
       Selector('.filterbox-container .yxt-FilterBox-container'));
+    this._filterSearch = new FilterSearchComponentBlock();
   }
 
   /**
@@ -43,6 +45,13 @@ class FacetsPage {
    */
   getStaticFilterBox () {
     return this._staticFilterBox;
+  }
+
+  /**
+   * Returns the {@link FilterSearchComponentBlock} on the page.
+   */
+  getFilterSearch () {
+    return this._filterSearch;
   }
 }
 

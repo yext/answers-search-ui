@@ -98,13 +98,17 @@ export default class FilterSearchComponent extends Component {
     this.query = config.query || this.core.storage.get(`${StorageKeys.QUERY}.${this.name}`) || '';
     this.core.storage.registerListener({
       eventType: 'update',
-      storageKey: `${StorageKeys.QUERY}.${this.name}`,
-      callback: q => {
-        this.query = q;
+      storageKey: StorageKeys.HISTORY_POP_STATE,
+      callback: data => {
+        const query = data.get(`${StorageKeys.QUERY}.${this.name}`) || '';
+        const filter = data.get(`${StorageKeys.FILTER}.${this.name}`) || '{}';
+        this.query = query;
+        this.filter = JSON.parse(filter);
         this.search();
+        this._saveFilterNodeToStorage();
+        this.setState();
       }
     });
-
     /**
      * The filter string to use for the provided query
      * Optionally provided
@@ -118,8 +122,7 @@ export default class FilterSearchComponent extends Component {
     }
 
     if (this.query && this.filter) {
-      const filterNode = this._buildFilterNode(this.query, this.filter);
-      this.core.setStaticFilterNodes(this.name, filterNode);
+      this._saveFilterNodeToStorage();
     }
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
@@ -156,6 +159,11 @@ export default class FilterSearchComponent extends Component {
     if (this.autoFocus === true && this.query.length === 0) {
       DOM.query(this._container, this._inputEl).focus();
     }
+  }
+
+  _saveFilterNodeToStorage () {
+    const filterNode = this._buildFilterNode(this.query, this.filter);
+    this.core.setStaticFilterNodes(this.name, filterNode);
   }
 
   _removeFilterNode () {
