@@ -184,7 +184,6 @@ class FilterOptionsConfig {
         config.previousOptions = [];
       }
     }
-    // previousOptions will be null if there were no previousOptions in persistentStorage
     const previousOptions = config.previousOptions;
     this.options = this.getSelectedOptions(this.options, previousOptions);
   }
@@ -640,8 +639,9 @@ export default class FilterOptionsComponent extends Component {
       default:
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
-
-    this.saveSelectedWithPersist();
+    if (!this.config.isDynamic) {
+      this.saveSelectedWithPersist();
+    }
   }
 
   floatSelected () {

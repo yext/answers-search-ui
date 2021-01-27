@@ -294,7 +294,7 @@ class Answers {
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
       parsedConfig.onStateChange(
         Object.fromEntries(storage.getAll()),
-        window.location.search.substr(1));
+        this.core.storage.getUrlWithCurrentState());
     }
 
     this.components
@@ -621,7 +621,8 @@ function getServices (config, storage) {
       experienceVersion: config.experienceVersion,
       locale: config.locale,
       environment: config.environment
-    }),
+    },
+    storage),
     autoCompleteService: new AutoCompleteApi(
       {
         apiKey: config.apiKey,

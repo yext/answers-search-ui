@@ -197,7 +197,7 @@ export default class FilterSearchComponent extends Component {
         this.filter = Filter.fromResponse(filter);
         const filterNode = this._buildFilterNode(query, this.filter);
 
-        const params = new SearchParams(window.location.search.substring(1));
+        const params = new SearchParams(this.core.storage.getUrlWithCurrentState());
         params.set(`${this.name}.query`, query);
         params.set(`${this.name}.filter`, filter);
 
