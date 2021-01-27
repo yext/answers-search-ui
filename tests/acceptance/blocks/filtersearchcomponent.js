@@ -32,6 +32,7 @@ export default class FilterOptionsComponentBlock {
     await t.click(this._input);
     const autocompleteOption =
       this._selector.find('.yxt-AutoComplete-option').withText(displayValue);
+    await t.expect(autocompleteOption.exists).ok();
     await t.click(autocompleteOption);
   }
 }
