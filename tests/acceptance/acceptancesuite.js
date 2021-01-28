@@ -12,7 +12,8 @@ import {
 import {
   expectRequestFiltersToEql,
   expectRequestLocationRadiusToEql,
-  expectRequestDoesNotContainParam
+  expectRequestDoesNotContainParam,
+  getMostRecentQueryParamsFromLogger
 } from './requestUtils';
 
 const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
@@ -94,8 +95,8 @@ test.requestHooks(spellCheckLogger)('spell check flow', async t => {
 
   // Check that clicking spell check sends a queryTrigger=suggest url param
   // TODO(oshi) investigate making this an integration test
-  const requestUrl = spellCheckLogger.requests[spellCheckLogger.requests.length - 1].request.url;
-  const queryTriggerParam = new URLSearchParams(requestUrl).get('queryTrigger');
+  const queryParams = await getMostRecentQueryParamsFromLogger(spellCheckLogger);
+  const queryTriggerParam = queryParams.get('queryTrigger');
   await t.expect(queryTriggerParam).eql('suggest');
 });
 

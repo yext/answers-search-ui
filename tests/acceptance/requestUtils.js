@@ -5,22 +5,12 @@ import { t } from 'testcafe';
  * for the given logger.
  *
  * @param {import('testcafe').RequestLogger} logger
- * @returns {URLSearchParams} the query params of the last request
+ * @returns {Promise<URLSearchParams>} the query params of the last request
  */
-function getMostRecentQueryParamsFromLogger (logger) {
-  await waitForFirstRequest(logger);
+export async function getMostRecentQueryParamsFromLogger (logger) {
+  await t.expect(logger.contains(record => record.response.statusCode === 200)).ok();
   const url = logger.requests[logger.requests.length - 1].request.url;
   return new URLSearchParams(url);
-}
-
-async function waitForFirstRequest(logger) {
-  for (let i = 0; i < 50; i++) {
-    await t.wait(100);
-    if (logger.requests.length > 0 ) {
-      return;  
-    }
-  }
-  throw new Error('No requests found for logger');
 }
 
 /**
@@ -31,7 +21,7 @@ async function waitForFirstRequest(logger) {
  * @param {Object} expectedFilters the expected filters object
  */
 export async function expectRequestFiltersToEql (logger, expectedFilters) {
-  const urlParams = getMostRecentQueryParamsFromLogger(logger);
+  const urlParams = await getMostRecentQueryParamsFromLogger(logger);
   const filtersParam = urlParams.get('filters');
   const expectedValue = typeof expectedFilters === 'object'
     ? JSON.stringify(expectedFilters)
@@ -47,7 +37,7 @@ export async function expectRequestFiltersToEql (logger, expectedFilters) {
  * @param {number} expectedLocationRadius the expected location radius e.g. 123.45
  */
 export async function expectRequestLocationRadiusToEql (logger, expectedLocationRadius) {
-  const urlParams = getMostRecentQueryParamsFromLogger(logger);
+  const urlParams = await getMostRecentQueryParamsFromLogger(logger);
   const actualLocationRadius = urlParams.get('locationRadius');
   return t.expect(actualLocationRadius).eql(expectedLocationRadius.toString());
 }
@@ -59,6 +49,6 @@ export async function expectRequestLocationRadiusToEql (logger, expectedLocation
  * @param {string} paramName the expected location radius e.g. 123.45
  */
 export async function expectRequestDoesNotContainParam (logger, paramName) {
-  const urlParams = getMostRecentQueryParamsFromLogger(logger);
-  return t.expect(urlParams.has(paramName)).notOk;
+  const urlParams = await getMostRecentQueryParamsFromLogger(logger);
+  return t.expect(urlParams.has(paramName)).notOk();
 }
