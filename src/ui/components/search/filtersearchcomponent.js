@@ -102,11 +102,13 @@ export default class FilterSearchComponent extends Component {
       callback: data => {
         const query = data.get(`${StorageKeys.QUERY}.${this.name}`) || '';
         const filter = data.get(`${StorageKeys.FILTER}.${this.name}`) || '{}';
-        this.query = query;
-        this.filter = JSON.parse(filter);
-        this.search();
-        this._saveFilterNodeToStorage();
-        this.setState();
+        if (query && Object.keys(filter).length !== 0) {
+          this.query = query;
+          this.filter = JSON.parse(filter);
+          this.search();
+          this._saveFilterNodeToStorage();
+          this.setState();
+        }
       }
     });
     /**

@@ -11,3 +11,8 @@ export async function browserBackButton () {
   await ClientFunction(() => window.history.back())();
   return t.wait(2500);
 }
+
+export async function browserForwardButton () {
+  await ClientFunction(() => window.history.forward())();
+  return t.wait(2500);
+}

@@ -3,7 +3,11 @@ import VerticalPage from './pageobjects/verticalpage';
 import { setupServer, shutdownServer } from './server';
 import FacetsPage from './pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
-import { browserBackButton, browserRefreshPage } from './utils';
+import {
+  browserBackButton,
+  browserRefreshPage,
+  browserForwardButton
+} from './utils';
 
 const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
 const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/vertical';
@@ -212,11 +216,30 @@ test(`static filterboxes`, async t => {
   await browserBackButton();
   await t.expect(filterTags.count).eql(0);
   await expectResultsCountToEql(initialResultsCount);
+
+  // Hit the forward button, should see the 'Marty' filter applied again
+  await browserForwardButton();
+  await t.expect(filterTags.count).eql(2);
+  await expectResultsCountToEql(1);
+  await t.expect(Selector('.yxt-StandardCard-title').innerText).eql('Liz Frailey');
+
+  // Hit the forward button, should see the 'Frodo' filter applied again
+  await browserForwardButton();
+  await t.expect(filterTags.count).eql(4);
+  await expectResultsCountToEql(2);
+  await t.expect(Selector('.yxt-StandardCard-title').nth(0).innerText).eql('Liz Frailey');
+  await t.expect(Selector('.yxt-StandardCard-title').nth(1).innerText).eql('Sophia Kleyman');
 });
 
 test(`filtersearch`, async t => {
+  const expectResultsCountToEql = async expectedCount => {
+    const currentResultsCount = await verticalResultsComponent.getResultsCountTotal();
+    await t.expect(currentResultsCount).eql(expectedCount);
+  };
+  const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
   const filterSearch = FacetsPage.getFilterSearch();
   const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
+  await t.expect(Selector('.yxt-StandardCard-title').count).eql(0);
 
   // Choose the 'Virginia, United States' filter option
   await filterSearch.enterQuery('virginia');
@@ -224,6 +247,7 @@ test(`filtersearch`, async t => {
   await t.expect(filterTags.count).eql(1);
   let filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
   await t.expect(filterTagText).eql('Virginia, United States');
+  await expectResultsCountToEql(4);
 
   // Choose the 'New York City, New York, United States' filter option
   await filterSearch.enterQuery('new york');
@@ -231,22 +255,39 @@ test(`filtersearch`, async t => {
   await t.expect(filterTags.count).eql(1);
   filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
   await t.expect(filterTagText).eql('New York City, New York, United States');
+  await expectResultsCountToEql(1033);
 
   // Hit the back button, expect to be back at the 'Virginia' filter state
   await browserBackButton();
   await t.expect(filterTags.count).eql(1);
   filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
   await t.expect(filterTagText).eql('Virginia, United States');
+  await expectResultsCountToEql(4);
 
   // Test that refreshing the page will use the 'Virginia' filter
   await browserRefreshPage();
   await t.expect(filterTags.count).eql(1);
   filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
   await t.expect(filterTagText).eql('Virginia, United States');
+  await expectResultsCountToEql(4);
 
   // Hit the back button, expect to be back at the initial state
   await browserBackButton();
   await t.expect(filterTags.count).eql(0);
+  await t.expect(Selector('.yxt-StandardCard-title').count).eql(0);
+
+  // Hit the forward button, expect to see the 'Virginia' filter applied
+  await browserForwardButton();
+  await t.expect(filterTags.count).eql(1);
+  filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
+  await t.expect(filterTagText).eql('Virginia, United States');
+
+  // Hit the forward button, expect to see the 'New York' filter applied
+  await browserForwardButton();
+  await t.expect(filterTags.count).eql(1);
+  filterTagText = await filterTags.nth(0).find('.yxt-ResultsHeader-removableFilterValue').innerText;
+  await t.expect(filterTagText).eql('New York City, New York, United States');
+  await expectResultsCountToEql(1033);
 });
 
 test(`selecting a sort option and refreshing maintains that sort selection`, async t => {
