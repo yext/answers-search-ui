@@ -304,9 +304,10 @@ export default class FilterOptionsComponent extends Component {
       this.core.storage.registerListener({
         eventType: 'update',
         storageKey: StorageKeys.HISTORY_POP_STATE,
-        callback: data => {
+        callback: historyData => {
+          const data = historyData.get(this.name);
           try {
-            const newOptions = JSON.parse(data.get(this.name));
+            const newOptions = data ? JSON.parse(data) : data;
             this.config.options = this.config.getSelectedOptions(
               this.config.initialOptions,
               newOptions
@@ -314,7 +315,7 @@ export default class FilterOptionsComponent extends Component {
             this.updateListeners(false, true);
             this.setState();
           } catch (e) {
-            console.warn(`Filter option ${data.get(this.name)} could not be parsed:`, e);
+            console.warn(`Filter option ${data} could not be parsed:`, e);
           }
         }
       });
