@@ -284,7 +284,7 @@ test.requestHooks(filterSearchLogger)(
       await t.expect(filterTags.count).eql(1);
       const filterTagText = await filterTags.nth(0).find(
         '.yxt-ResultsHeader-removableFilterValue').innerText;
-      await t.expect(filterTagText).eql(expectedText);
+      return t.expect(filterTagText).eql(expectedText);
     };
     const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
     const filterSearch = FacetsPage.getFilterSearch();
@@ -304,26 +304,26 @@ test.requestHooks(filterSearchLogger)(
     await filterSearch.enterQuery('virginia');
     await filterSearch.selectFilter('Virginia, United States');
     await expectOnlyFilterTagToEql('Virginia, United States');
-    await expectRequestFiltersToEql(filterBoxLogger, filterSearchLogger, virginiaFilter);
+    await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
     filterSearchLogger.clear();
 
     // Choose the 'New York City, New York, United States' filter option
     await filterSearch.enterQuery('new york');
     await filterSearch.selectFilter('New York City, New York, United States');
     await expectOnlyFilterTagToEql('New York City, New York, United States');
-    await expectRequestFiltersToEql(filterBoxLogger, filterSearchLogger, newYorkFilter);
+    await expectRequestFiltersToEql(filterSearchLogger, newYorkFilter);
     filterSearchLogger.clear();
 
     // Hit the back button, expect to be back at the 'Virginia' filter state
     await browserBackButton();
     await expectOnlyFilterTagToEql('Virginia, United States');
-    await expectRequestFiltersToEql(filterBoxLogger, filterSearchLogger, virginiaFilter);
+    await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
     filterSearchLogger.clear();
 
     // Test that refreshing the page will use the 'Virginia' filter
     await browserRefreshPage();
     await expectOnlyFilterTagToEql('Virginia, United States');
-    await expectRequestFiltersToEql(filterBoxLogger, filterSearchLogger, virginiaFilter);
+    await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
     filterSearchLogger.clear();
 
     // Hit the back button, expect to be back at the initial state with 0 results
@@ -335,13 +335,13 @@ test.requestHooks(filterSearchLogger)(
     // Hit the forward button, expect to see the 'Virginia' filter applied
     await browserForwardButton();
     await expectOnlyFilterTagToEql('Virginia, United States');
-    await expectRequestFiltersToEql(filterBoxLogger, filterSearchLogger, virginiaFilter);
+    await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
     filterSearchLogger.clear();
 
     // Hit the forward button, expect to see the 'New York' filter applied
     await browserForwardButton();
     await expectOnlyFilterTagToEql('New York City, New York, United States');
-    await expectRequestFiltersToEql(filterBoxLogger, filterSearchLogger, newYorkFilter);
+    await expectRequestFiltersToEql(filterSearchLogger, newYorkFilter);
     filterSearchLogger.clear();
   });
 
