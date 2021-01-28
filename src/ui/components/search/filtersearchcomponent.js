@@ -101,14 +101,16 @@ export default class FilterSearchComponent extends Component {
       storageKey: StorageKeys.HISTORY_POP_STATE,
       callback: data => {
         const query = data.get(`${StorageKeys.QUERY}.${this.name}`) || '';
-        const filter = data.get(`${StorageKeys.FILTER}.${this.name}`) || '{}';
-        if (query && Object.keys(filter).length !== 0) {
+        const filter = data.get(`${StorageKeys.FILTER}.${this.name}`);
+        if (filter && query) {
           this.query = query;
           this.filter = JSON.parse(filter);
-          this.search();
           this._saveFilterNodeToStorage();
-          this.setState();
+          this.search();
+        } else {
+          this._removeFilterNode();
         }
+        this.setState();
       }
     });
     /**
