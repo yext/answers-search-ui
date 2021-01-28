@@ -23,7 +23,7 @@ export default class Storage {
 
     /**
      * The listener for window.pop in the persistent storage
-     * 
+     *
      * @param {Map<string, string>} queryParamsObject  A Map containing the persisted state
      * @param {string} queryParamsString the url params of the new state
      *                                   e.g. "?query=virginia&otherParam=yext"
