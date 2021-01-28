@@ -174,7 +174,7 @@ test(`Facets load on the page, and can affect the search`, async t => {
 const radiusFilterLogger = RequestLogger({
   url: /v2\/accounts\/me\/answers\/vertical\/query/
 });
-test.requestHooks(radiusFilterLogger).only(
+test.requestHooks(radiusFilterLogger).only.disablePageCaching(
   `radius filter filterbox works with back/forward navigation and page refresh`, async t => {
     const searchComponent = FacetsPage.getSearchComponent();
     await searchComponent.enterQuery('all');
@@ -216,7 +216,7 @@ test.requestHooks(radiusFilterLogger).only(
 const filterBoxLogger = RequestLogger({
   url: /v2\/accounts\/me\/answers\/vertical\/query/
 });
-test.requestHooks(filterBoxLogger).only(
+test.requestHooks(filterBoxLogger).only.disablePageCaching(
   `static filter filterbox works with back/forward navigation and page refresh`, async t => {
     const martyFilter = {
       c_puppyPreference: {
@@ -288,7 +288,7 @@ test.requestHooks(filterBoxLogger).only(
 const filterSearchLogger = RequestLogger({
   url: /v2\/accounts\/me\/answers\/vertical\/query/
 });
-test.requestHooks(filterSearchLogger).only(
+test.requestHooks(filterSearchLogger).only.disablePageCaching(
   `filtersearch works with back/forward navigation and page refresh`, async t => {
     const expectOnlyFilterTagToEql = async expectedText => {
       await t.expect(filterTags.count).eql(1);
