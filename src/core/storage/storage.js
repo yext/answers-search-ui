@@ -25,7 +25,7 @@ export default class Storage {
      * The listener for window.pop in the persistent storage
      *
      * @param {Map<string, string>} queryParamsMap A Map containing the persisted state,
-     *                                                for example a map of 'query' => 'virginia'
+     *                                             for example a map of 'query' => 'virginia'
      * @param {string} queryParamsString the url params of the persisted state 
      *                                   for the above case '?query=virginia'
      */
