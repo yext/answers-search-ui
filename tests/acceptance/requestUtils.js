@@ -8,8 +8,19 @@ import { t } from 'testcafe';
  * @returns {URLSearchParams} the query params of the last request
  */
 function getMostRecentQueryParamsFromLogger (logger) {
+  await waitForFirstRequest(logger);
   const url = logger.requests[logger.requests.length - 1].request.url;
   return new URLSearchParams(url);
+}
+
+async function waitForFirstRequest(logger) {
+  for (let i = 0; i < 50; i++) {
+    await t.wait(100);
+    if (logger.requests.length > 0 ) {
+      return;  
+    }
+  }
+  throw new Error('No requests found for logger');
 }
 
 /**
