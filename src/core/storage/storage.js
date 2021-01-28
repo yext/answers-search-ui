@@ -24,13 +24,14 @@ export default class Storage {
     /**
      * The listener for window.pop in the persistent storage
      *
-     * @param {Map<string, string>} queryParamsObject  A Map containing the persisted state
-     * @param {string} queryParamsString the url params of the new state
-     *                                   e.g. "?query=virginia&otherParam=yext"
+     * @param {Map<string, string>} queryParamsMap A Map containing the persisted state,
+     *                                                for example a map of 'query' => 'virginia'
+     * @param {string} queryParamsString the url params of the persisted state 
+     *                                   for the above case '?query=virginia'
      */
-    this.popListener = (queryParamsObject, queryParamsString) => {
-      this.persistedStateListeners.update(queryParamsObject, queryParamsString);
-      this.persistedStateListeners.reset(queryParamsObject, queryParamsString);
+    this.popListener = (queryParamsMap, queryParamsString) => {
+      this.persistedStateListeners.update(queryParamsMap, queryParamsString);
+      this.persistedStateListeners.reset(queryParamsMap, queryParamsString);
     };
 
     /**
