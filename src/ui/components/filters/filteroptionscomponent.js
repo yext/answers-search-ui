@@ -301,9 +301,6 @@ export default class FilterOptionsComponent extends Component {
     }
 
     if (!this.config.isDynamic) {
-      // Update listener for when navigating backwards in history. When we back nav, the
-      // storage is updated with the previous URL filter values. We should not update
-      // this.name otherwise, instead opt for this.core.setStaticFilterNodes()
       this.core.storage.registerListener({
         eventType: 'update',
         storageKey: StorageKeys.HISTORY_POP_STATE,
