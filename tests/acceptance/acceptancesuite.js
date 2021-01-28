@@ -346,6 +346,40 @@ test.requestHooks(filterSearchLogger)(
     filterSearchLogger.clear();
   });
 
+test(`pagination works with page navigation after selecting a filtersearch filter`, async t => {
+  const expectFilterTagIsVirginia = async () => {
+    await t.expect(filterTags.count).eql(1);
+    const filterTagText = await filterTags.nth(0).find(
+      '.yxt-ResultsHeader-removableFilterValue').innerText;
+    return t.expect(filterTagText).eql('New York City, New York, United States');
+  };
+  const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
+  const paginationComponent = FacetsPage.getPaginationComponent();
+  const filterSearch = FacetsPage.getFilterSearch();
+
+  await filterSearch.enterQuery('new york');
+  await filterSearch.selectFilter('New York City, New York, United States');
+  await paginationComponent.clickNextButton();
+  let pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+  await expectFilterTagIsVirginia();
+
+  await browserBackButton();
+  pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 1');
+  await expectFilterTagIsVirginia();
+
+  await browserForwardButton();
+  pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+  await expectFilterTagIsVirginia();
+
+  await browserRefreshPage();
+  pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+  await expectFilterTagIsVirginia();
+});
+
 test(`selecting a sort option and refreshing maintains that sort selection`, async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();

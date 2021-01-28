@@ -4,6 +4,7 @@ import FacetsComponentBlock from '../blocks/facetscomponent';
 import FilterBoxComponentBlock from '../blocks/filterboxcomponent';
 import { Selector } from 'testcafe';
 import FilterSearchComponentBlock from '../blocks/filtersearchcomponent';
+import PaginationComponentBlock from '../blocks/paginationcomponent';
 
 /**
  * A model of a vertical search page with facets, containing block representations
@@ -17,6 +18,7 @@ class FacetsPage {
     this._staticFilterBox = new FilterBoxComponentBlock(
       Selector('.filterbox-container .yxt-FilterBox-container'));
     this._filterSearch = new FilterSearchComponentBlock();
+    this._paginationComponent = new PaginationComponentBlock();
   }
 
   /**
@@ -52,6 +54,13 @@ class FacetsPage {
    */
   getFilterSearch () {
     return this._filterSearch;
+  }
+
+  /**
+   * Returns the {@link PaginationComponentBlock} on the page.
+   */
+  getPaginationComponent () {
+    return this._paginationComponent;
   }
 }
 

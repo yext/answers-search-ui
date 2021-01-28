@@ -17,6 +17,7 @@
     <div class="facets-container"></div>
     <div class="filter-search-container"></div>
     <div class="results-container"></div>
+    <div class="pagination-container"></div>
   </div>
 
   <script>
@@ -148,7 +149,7 @@
           expand: false
         });
 
-        ANSWERS.addComponent('FilterSearch', {
+        this.addComponent('FilterSearch', {
           container: '.filter-search-container',
           verticalKey: 'people',
           title: 'filtersearch',
@@ -159,6 +160,10 @@
               sectioned: false,
             }]
           }
+        });
+
+        this.addComponent('Pagination', {
+          container:'.pagination-container',
         });
       }
     })

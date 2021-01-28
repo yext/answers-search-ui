@@ -106,7 +106,7 @@ export default class FilterSearchComponent extends Component {
           this.query = query;
           this.filter = JSON.parse(filter);
           this._saveFilterNodeToStorage();
-          this.search();
+          this.search(false);
         } else {
           this._removeFilterNode();
         }
@@ -145,11 +145,11 @@ export default class FilterSearchComponent extends Component {
     return 'search/filtersearch';
   }
 
-  // TODO(oshi): SPR-1925 check that it is safe to remove this, it runs an extra search
-  // For no obvious reasons
+  // This is needed for filtersearch only pages, however it will run an duplicate search
+  // if you also have a searchbar on the page.
   onCreate () {
     if (this.query && this.filter) {
-      this.search();
+      this.search(false);
     }
   }
 
@@ -235,14 +235,14 @@ export default class FilterSearchComponent extends Component {
    * optionally redirecting based on config. Uses window.setTimeout to allow
    * other filters to finish rendering before searching.
    */
-  search () {
+  search (resetPagination = true) {
     if (this._storeOnChange) {
       return;
     }
     window.setTimeout(() => {
       this.core.verticalSearch(this._config.verticalKey, {
         setQueryParams: true,
-        resetPagination: true,
+        resetPagination: resetPagination,
         useFacets: true
       });
     });
