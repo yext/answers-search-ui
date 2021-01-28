@@ -251,7 +251,7 @@ test.requestHooks(filterBoxLogger)(
     await t.expect(filterTags.count).eql(2);
 
     // Hit the back button, see the 'Marty' filter disappear
-    await browserBackButton();
+    await browserBackButton(10000);
     await expectRequestFiltersToEql(filterBoxLogger, {});
     await t.expect(filterTags.count).eql(0);
 

@@ -7,9 +7,9 @@ export async function browserRefreshPage () {
   return t.wait(2500);
 }
 
-export async function browserBackButton () {
+export async function browserBackButton (timeout=2500) {
   await ClientFunction(() => window.history.back())();
-  return t.wait(2500);
+  return t.wait(timeout);
 }
 
 export async function browserForwardButton () {
