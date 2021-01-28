@@ -26,7 +26,7 @@ export default class Storage {
      *
      * @param {Map<string, string>} queryParamsMap A Map containing the persisted state,
      *                                             for example a map of 'query' => 'virginia'
-     * @param {string} queryParamsString the url params of the persisted state 
+     * @param {string} queryParamsString the url params of the persisted state
      *                                   for the above case '?query=virginia'
      */
     this.popListener = (queryParamsMap, queryParamsString) => {
