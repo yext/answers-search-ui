@@ -19,20 +19,20 @@ export default class FilterOptionsComponentBlock {
     await t.click(this._input);
     await t.pressKey('ctrl+a');
     await t.pressKey('backspace');
-    await t.typeText(this._input, query);
+    return t.typeText(this._input, query);
   }
 
   /**
    * Returns a Selector for the desired autocomplete option
    *
    * @param {string} displayValue
-   * @returns {Selector}
+   * @returns {Promise<Selector>}
    */
   async selectFilter (displayValue) {
     await t.click(this._input);
     const autocompleteOption =
       this._selector.find('.yxt-AutoComplete-option').withText(displayValue);
     await t.expect(autocompleteOption.exists).ok();
-    await t.click(autocompleteOption);
+    return t.click(autocompleteOption);
   }
 }
