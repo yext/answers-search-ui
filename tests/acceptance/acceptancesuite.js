@@ -193,6 +193,7 @@ test.requestHooks(radiusFilterLogger).only.disablePageCaching(
 
     // Hit the back button
     console.log('back');
+    await t.wait(5000);
     await browserBackButton();
     await t.expect(filterTags.count).eql(0);
     await t.wait(5000);
@@ -216,7 +217,7 @@ test.requestHooks(radiusFilterLogger).only.disablePageCaching(
 const filterBoxLogger = RequestLogger({
   url: /v2\/accounts\/me\/answers\/vertical\/query/
 });
-test.requestHooks(filterBoxLogger).only.disablePageCaching(
+test.requestHooks(filterBoxLogger).disablePageCaching(
   `static filter filterbox works with back/forward navigation and page refresh`, async t => {
     const martyFilter = {
       c_puppyPreference: {
@@ -288,7 +289,7 @@ test.requestHooks(filterBoxLogger).only.disablePageCaching(
 const filterSearchLogger = RequestLogger({
   url: /v2\/accounts\/me\/answers\/vertical\/query/
 });
-test.requestHooks(filterSearchLogger).only.disablePageCaching(
+test.requestHooks(filterSearchLogger).disablePageCaching(
   `filtersearch works with back/forward navigation and page refresh`, async t => {
     const expectOnlyFilterTagToEql = async expectedText => {
       await t.expect(filterTags.count).eql(1);
