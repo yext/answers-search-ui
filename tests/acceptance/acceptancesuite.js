@@ -305,14 +305,12 @@ test(`filtersearch works with back/forward navigation and page refresh`, async t
   await t.expect(filterSearchLogger.requests.length).eql(0);
 
   // Choose the 'Virginia, United States' filter option
-  await filterSearch.enterQuery('virginia');
   await filterSearch.selectFilter('Virginia, United States');
   await expectOnlyFilterTagToEql('Virginia, United States');
   await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
   filterSearchLogger.clear();
 
   // Choose the 'New York City, New York, United States' filter option
-  await filterSearch.enterQuery('new york');
   await filterSearch.selectFilter('New York City, New York, United States');
   await expectOnlyFilterTagToEql('New York City, New York, United States');
   await expectRequestFiltersToEql(filterSearchLogger, newYorkFilter);
@@ -360,7 +358,6 @@ test(`pagination works with page navigation after selecting a filtersearch filte
   const paginationComponent = FacetsPage.getPaginationComponent();
   const filterSearch = FacetsPage.getFilterSearch();
 
-  await filterSearch.enterQuery('new york');
   await filterSearch.selectFilter('New York City, New York, United States');
   await paginationComponent.clickNextButton();
   let pageNum = await paginationComponent.getActivePageLabelAndNumber();
