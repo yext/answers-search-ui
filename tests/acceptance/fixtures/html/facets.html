@@ -6,17 +6,33 @@
   <script src="http://localhost:9999/dist/answerstemplates.compiled.min.js"></script>
   <script src="http://localhost:9999/dist/answers.js"></script>
   <link rel="stylesheet" type="text/css" href="http://localhost:9999/dist/answers.css">
+  <style>
+    .bottom {
+      display: flex;
+    }
+
+    .left {
+      max-width: 300px;
+    }
+  </style>
 </head>
 
 <body>
   <div class="answers-container">
     <div class="search-bar-container"></div>
     <div class="navigation-container"></div>
-    <div class="sort-options-container"></div>
-    <div class="filterbox-container"></div>
-    <div class="facets-container"></div>
-    <div class="filter-search-container"></div>
-    <div class="results-container"></div>
+    <div class="bottom">
+      <div class="left">
+        <div class="filter-search-container"></div>
+        <div class="sort-options-container"></div>
+        <div class="filterbox-container"></div>
+        <div class="facets-container"></div>
+      </div>
+      <div class="right">
+        <div class="pagination-container"></div>
+        <div class="results-container"></div>
+      </div>
+    </div>
   </div>
 
   <script>
@@ -148,7 +164,7 @@
           expand: false
         });
 
-        ANSWERS.addComponent('FilterSearch', {
+        this.addComponent('FilterSearch', {
           container: '.filter-search-container',
           verticalKey: 'people',
           title: 'filtersearch',
@@ -159,6 +175,10 @@
               sectioned: false,
             }]
           }
+        });
+
+        this.addComponent('Pagination', {
+          container:'.pagination-container',
         });
       }
     })
