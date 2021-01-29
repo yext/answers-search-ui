@@ -8,23 +8,22 @@ import { RequestHook } from 'testcafe';
  * testcafe's RequestLogger. This is only a problem in IE11.
  */
 export default class IE11NoCacheHook extends RequestHook {
-  // /**
-  //  * 
-  //  * @param {Object} event 
-  //  */
-  // _onConfigureResponse (event) {
-  //   super._onConfigureResponse(event);
-  //   event.setHeader('cache-control', 'no-store');
-  // }
-
   /**
-   * If the request is for IE11, add a 'no-store' cache control header.
-   *
-   * @param {Object} requestEvent
+   * This comes from the suggestion here on the testcafe github
+   * https://github.com/DevExpress/testcafe/issues/3780#issuecomment-496955368
+   * The --disable-page-caching flag did not work for ie11, and neither
+   * did trying to set the header in onRequest(), so this workaround was used instead.
+   * 
+   * @param {Object} event 
    */
+  _onConfigureResponse (event) {
+    super._onConfigureResponse(event);
+    event.setHeader('cache-control', 'no-store');
+  }
+
   async onRequest (requestEvent) {
-    // requestEvent.setHeader('cache-control', 'no-store');
-    requestEvent.requestOptions.headers['cache-control'] = 'no-store';
+    console.log('blah')
+    // We don't need to do anything here, but still need to override the method.
   }
 
   async onResponse () {
