@@ -96,7 +96,7 @@
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "semistandard",
     "test": "semistandard && stylelint src/**/*.scss && jest",
-    "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuite.js",
+    "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuites/*.js",
     "size": "size-limit",
     "fix": "semistandard --fix",
     "extract-translations": "gulp extractTranslations",

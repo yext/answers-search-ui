@@ -324,8 +324,8 @@ describe('filter box component', () => {
       expect(verticalSearch).toHaveBeenCalledTimes(0);
       mount(component);
       const historyPopState = new Map();
-      historyPopState.set('test-name.filter0', []);
-      historyPopState.set('test-name.filter1', []);
+      historyPopState.set('test-name.filter0', '[]');
+      historyPopState.set('test-name.filter1', '[]');
       COMPONENT_MANAGER.core.storage.set(StorageKeys.HISTORY_POP_STATE, historyPopState);
       expect(verticalSearch).toHaveBeenCalledTimes(0);
     });

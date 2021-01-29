@@ -3,7 +3,7 @@ import { Selector, t } from 'testcafe';
 /**
  * This class models user interactions with the {@link FilterSearchComponent}.
  */
-export default class FilterOptionsComponentBlock {
+export default class FilterSearchComponentBlock {
   constructor () {
     this._selector = Selector('.yext-search-container');
     this._input = this._selector.find('.js-yext-query');
