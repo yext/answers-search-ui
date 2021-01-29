@@ -250,8 +250,8 @@ export default class GeoLocationComponent extends Component {
           this._saveDataToStorage('', filter, 'Current Location', position);
           this._enabled = true;
           this.setState({});
-          this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-          this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+          this.core.storage.delete(`${StorageKeys.QUERY}.${this.name}`);
+          this.core.storage.delete(`${StorageKeys.FILTER}.${this.name}`);
         },
         () => this._handleGeolocationError(),
         this._geolocationOptions
@@ -268,8 +268,8 @@ export default class GeoLocationComponent extends Component {
   }
 
   _removeFilterNode () {
-    this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-    this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+    this.core.storage.delete(`${StorageKeys.QUERY}.${this.name}`);
+    this.core.storage.delete(`${StorageKeys.FILTER}.${this.name}`);
     this._enabled = false;
     this.query = '';
     this.core.clearStaticFilterNode(this.name);
@@ -298,8 +298,8 @@ export default class GeoLocationComponent extends Component {
    * @private
    */
   _saveDataToStorage (query, filter, displayValue, position) {
-    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
-    this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
+    this.core.storage.setWithPersist(`${StorageKeys.QUERY}.${this.name}`, query);
+    this.core.storage.setWithPersist(`${StorageKeys.FILTER}.${this.name}`, filter);
     const filterNode = this._buildFilterNode(filter, displayValue);
     this.core.setStaticFilterNodes(this.name, filterNode);
 

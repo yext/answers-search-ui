@@ -6,7 +6,6 @@ import Filter from 'src/core/models/filter';
 import FilterMetadata from 'src/core/filters/filtermetadata';
 import FilterType from '../../../../src/core/filters/filtertype';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
-import PersistentStorage from 'src/ui/storage/persistentstorage';
 import Storage from '../../../../src/core/storage/storage';
 
 describe('filter options component', () => {
@@ -73,8 +72,7 @@ describe('filter options component', () => {
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
       },
-      storage,
-      persistentStorage: new PersistentStorage()
+      storage
     };
 
     COMPONENT_MANAGER = mockManager(mockCore);
@@ -151,10 +149,10 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       component._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).not.toEqual(storageAfterSelection);
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
+      expect(urlBefore).not.toEqual(urlAfter);
     });
 
     it('selecting an option does not update the URL when storeOnChange = false', () => {
@@ -164,10 +162,10 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       component._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).toEqual(storageAfterSelection);
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
+      expect(urlBefore).toEqual(urlAfter);
     });
   });
 
@@ -528,10 +526,6 @@ describe('filter options component', () => {
       setStaticFilterNodes = jest.fn();
 
       COMPONENT_MANAGER = mockManager({
-        persistentStorage: {
-          set: () => { },
-          get: () => { }
-        },
         setLocationRadiusFilterNode,
         setStaticFilterNodes
       });

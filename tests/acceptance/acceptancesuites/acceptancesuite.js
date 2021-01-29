@@ -1,13 +1,20 @@
-import UniversalPage from './pageobjects/universalpage';
-import VerticalPage from './pageobjects/verticalpage';
-import { setupServer, shutdownServer } from './server';
-import FacetsPage from './pageobjects/facetspage';
+import UniversalPage from '../pageobjects/universalpage';
+import VerticalPage from '../pageobjects/verticalpage';
+import {
+  setupServer,
+  shutdownServer,
+  UNIVERSAL_PAGE,
+  FACETS_PAGE,
+  VERTICAL_PAGE
+} from '../server';
+import FacetsPage from '../pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
-import { browserBackButton, browserRefreshPage } from './utils';
-
-const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
-const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/vertical';
-const FACETS_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/facets';
+import {
+  browserBackButton,
+  browserRefreshPage,
+  registerIE11NoCacheHook
+} from '../utils';
+import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -63,10 +70,12 @@ test('navigating and refreshing mantains that page number', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
-const spellCheckLogger = RequestLogger({
-  url: /v2\/accounts\/me\/answers\/vertical\/query/
-});
-test.requestHooks(spellCheckLogger)('spell check flow', async t => {
+test('spell check flow', async t => {
+  const spellCheckLogger = RequestLogger({
+    url: /v2\/accounts\/me\/answers\/vertical\/query/
+  });
+  await t.addRequestHooks(spellCheckLogger);
+  await registerIE11NoCacheHook(t);
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('varginia');
   await searchComponent.submitQuery();
@@ -83,9 +92,9 @@ test.requestHooks(spellCheckLogger)('spell check flow', async t => {
   await t.expect(pageNum).eql('Page 1');
 
   // Check that clicking spell check sends a queryTrigger=suggest url param
-  // TODO(oshi) investigate making this an integration test
-  const requestUrl = spellCheckLogger.requests[spellCheckLogger.requests.length - 1].request.url;
-  const queryTriggerParam = new URLSearchParams(requestUrl).get('queryTrigger');
+  // TODO(SLAP-1062) investigate making this an integration test
+  const queryParams = await getMostRecentQueryParamsFromLogger(spellCheckLogger);
+  const queryTriggerParam = queryParams.get('queryTrigger');
   await t.expect(queryTriggerParam).eql('suggest');
 });
 

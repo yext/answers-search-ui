@@ -175,7 +175,7 @@ export default class SortOptionsComponent extends Component {
 
     // searchOnChange really means sort on change here, just that the sort is done through a search,
     // This was done to have a consistent option name between filters.
-    this.core.persistentStorage.set(this.name, optionIndex);
+    this.core.storage.setWithPersist(this.name, optionIndex);
     if (this._config.storeOnChange && optionIndex === 0) {
       this.core.clearSortBys();
     } else if (this._config.storeOnChange) {
