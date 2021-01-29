@@ -10,7 +10,7 @@ export default class FilterOptionsComponentBlock {
   }
 
   /**
-   * Returns a Selector for the desired autocomplete option
+   * Selects the filter with the given display value in FilterSearch's autocomplete.
    *
    * @param {string} displayValue
    * @returns {Promise<Selector>}
