@@ -58,7 +58,7 @@ export default class AlternativeVerticalsComponent extends Component {
      */
     this._universalUrl = this._getUniversalURL(
       this._baseUniversalUrl,
-      new SearchParams(window.location.search.substring(1))
+      new SearchParams(this.core.storage.getCurrentStateUrlMerged())
     );
 
     /**
@@ -76,7 +76,7 @@ export default class AlternativeVerticalsComponent extends Component {
       );
       this._universalUrl = this._getUniversalURL(
         this._baseUniversalUrl,
-        new SearchParams(window.location.search.substring(1))
+        new SearchParams(this.core.storage.getCurrentStateUrlMerged())
       );
       this.setState(this.core.storage.get(StorageKeys.ALTERNATIVE_VERTICALS));
     };
@@ -137,7 +137,7 @@ export default class AlternativeVerticalsComponent extends Component {
   _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context, referrerPageUrl) {
     let verticals = [];
 
-    const params = new SearchParams(window.location.search.substring(1));
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }

@@ -12,6 +12,7 @@ import { groupArray } from '../../../core/utils/arrayutils';
 import FilterType from '../../../core/filters/filtertype';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 /**
  * The currently supported controls
@@ -183,7 +184,6 @@ class FilterOptionsConfig {
         config.previousOptions = [];
       }
     }
-    // previousOptions will be null if there were no previousOptions in persistentStorage
     const previousOptions = config.previousOptions;
     this.options = this.getSelectedOptions(this.options, previousOptions);
   }
@@ -297,27 +297,25 @@ export default class FilterOptionsComponent extends Component {
     this.showMoreState = this.config.showMore;
 
     if (this.config.storeOnChange) {
-      this.apply(this.config.isDynamic);
+      this.apply();
     }
 
     if (!this.config.isDynamic) {
-      // Update listener for when navigating backwards in history. When we back nav, the
-      // storage is updated with the previous URL filter values. We should not update
-      // this.name otherwise, instead opt for this.core.setStaticFilterNodes()
       this.core.storage.registerListener({
         eventType: 'update',
-        storageKey: this.name,
-        callback: (data) => {
+        storageKey: StorageKeys.HISTORY_POP_STATE,
+        callback: historyData => {
+          const data = historyData.get(this.name);
           try {
-            const newOptions = JSON.parse(data);
+            const newOptions = data ? JSON.parse(data) : data;
             this.config.options = this.config.getSelectedOptions(
               this.config.initialOptions,
               newOptions
             );
-            this.updateListeners();
+            this.updateListeners(false, true);
             this.setState();
           } catch (e) {
-            console.warn(`Filter option ${data} could not be parsed`);
+            console.warn(`Filter option ${data} could not be parsed:`, e);
           }
         }
       });
@@ -603,7 +601,7 @@ export default class FilterOptionsComponent extends Component {
   updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
-      this.apply(false);
+      this.apply();
     }
 
     this.config.onChange(filterNode, alwaysSaveFilterNodes, blockSearchOnChange);
@@ -624,10 +622,8 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Apply filter changes
-   * @param {boolean} replaceHistory Whether we replace or push a new history
-   *                                 state for the associated changes
    */
-  apply (replaceHistory) {
+  apply () {
     switch (this.config.optionType) {
       case OptionTypes.RADIUS_FILTER:
         this.core.setLocationRadiusFilterNode(this.getLocationRadiusFilterNode());
@@ -638,8 +634,9 @@ export default class FilterOptionsComponent extends Component {
       default:
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
-
-    this.saveSelectedToPersistentStorage(replaceHistory);
+    if (!this.config.isDynamic) {
+      this.saveSelectedWithPersist();
+    }
   }
 
   floatSelected () {
@@ -699,14 +696,11 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Saves selected options to persistent storage
-   * @param {boolean} replaceHistory Whether we replace or push a new history
-   *                                 state for the associated changes
    */
-  saveSelectedToPersistentStorage (replaceHistory) {
-    this.core.persistentStorage.set(
+  saveSelectedWithPersist () {
+    this.core.storage.setWithPersist(
       this.name,
-      this.config.options.filter(o => o.selected).map(o => o.label),
-      replaceHistory || (this.core.persistentStorage.get(this.name) === null)
+      this.config.options.filter(o => o.selected).map(o => o.label)
     );
   }
 

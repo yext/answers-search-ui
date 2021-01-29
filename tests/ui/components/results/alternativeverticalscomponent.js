@@ -14,10 +14,7 @@ beforeEach(() => {
   DOM.empty(bodyEl);
   DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
   storage = COMPONENT_MANAGER.core.storage;
-  delete global.window.location;
-  global.window.location = {
-    search: '?query=office+space'
-  };
+  COMPONENT_MANAGER.core.storage.setWithPersist(StorageKeys.QUERY, 'office space');
 
   defaultConfig = {
     container: '#test-component',

@@ -9,11 +9,6 @@ import Storage from '../../src/core/storage/storage';
  */
 export default function mockManager (mockedCore) {
   const core = {
-    persistentStorage: {
-      set: () => {},
-      get: () => {},
-      delete: () => {}
-    },
     storage: new Storage().init(),
     ...mockedCore
   };

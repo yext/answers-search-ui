@@ -128,14 +128,11 @@ describe('vertical results component', () => {
 
   describe('creates verticalURL correctly', () => {
     let component;
-    delete global.window.location;
-    global.window = Object.create(window);
-    global.window.location = {
-      search: '?query=virginia&otherParam=123'
-    };
 
     beforeEach(() => {
       component = COMPONENT_MANAGER.create('VerticalResults', {});
+      COMPONENT_MANAGER.core.storage.setWithPersist(StorageKeys.QUERY, 'virginia');
+      COMPONENT_MANAGER.core.storage.setWithPersist('otherParam', 123);
       component.query = 'my-query';
       component.verticalKey = 'key';
     });

@@ -2,7 +2,6 @@ import DOM from '../../../../src/ui/dom/dom';
 import { Tab } from '../../../../src/ui/components/navigation/navigationcomponent';
 import mockManager from '../../../setup/managermocker';
 import { mount } from 'enzyme';
-import PersistentStorage from '../../../../src/ui/storage/persistentstorage';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import VerticalPagesConfig from '../../../../src/core/models/verticalpagesconfig';
 
@@ -125,10 +124,7 @@ describe('navigation tab links are correct', () => {
   };
 
   beforeEach(() => {
-    COMPONENT_MANAGER = mockManager({
-      persistentStorage: new PersistentStorage()
-    });
-
+    COMPONENT_MANAGER = mockManager();
     COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
   });
 
@@ -206,9 +202,7 @@ describe('navigation tab order', () => {
     ]
   };
 
-  COMPONENT_MANAGER = mockManager({
-    persistentStorage: new PersistentStorage()
-  });
+  COMPONENT_MANAGER = mockManager();
 
   COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
 

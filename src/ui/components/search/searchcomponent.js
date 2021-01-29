@@ -425,10 +425,8 @@ export default class SearchComponent extends Component {
       button.classList.add('yxt-SearchBar--hidden');
       this.queryEl.value = this.query;
 
-      this.core.persistentStorage.set(StorageKeys.QUERY, this.query);
-      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
       this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.setQuery(this.query);
+      this.core.storage.setWithPersist(StorageKeys.QUERY, this.query);
 
       // Focus the input element after clearing the query, regardless of whether
       // or not the autoFocus option is enabled.
@@ -505,7 +503,7 @@ export default class SearchComponent extends Component {
   onQuerySubmit (inputEl) {
     const query = inputEl.value;
     this.query = query;
-    const params = new SearchParams(window.location.search.substring(1));
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     params.set('query', query);
 
     const context = this.core.storage.get(StorageKeys.API_CONTEXT);
@@ -540,10 +538,8 @@ export default class SearchComponent extends Component {
       this.animateIconToYext();
     }
 
-    this.core.persistentStorage.set(StorageKeys.QUERY, query);
-    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.setQuery(query);
+    this.core.storage.setWithPersist(StorageKeys.QUERY, query);
     this.debouncedSearch(query, this._defaultSearchOptions);
     return false;
   }

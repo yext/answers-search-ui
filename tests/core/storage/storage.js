@@ -440,3 +440,50 @@ describe('getUrlWithCurrentState', () => {
     expect(storage.getUrlWithCurrentState()).toEqual('query=val2');
   });
 });
+
+describe('getCurrentStateUrlMerged', () => {
+  describe('acts like getUrlWithCurrentState when no extra params are in the url', () => {
+    it('passes from persistent storage', () => {
+      storage.setWithPersist(StorageKeys.QUERY, 'val1');
+      storage.pushStateToHistory();
+      expect(storage.getCurrentStateUrlMerged()).toEqual('query=val1');
+    });
+
+    it('adds buffer entries to the url', () => {
+      storage.setWithPersist(StorageKeys.QUERY, 'val1');
+      expect(storage.getCurrentStateUrlMerged()).toEqual('query=val1');
+      storage.pushStateToHistory();
+
+      storage.setWithPersist(StorageKeys.AUTOCOMPLETE, 'val2');
+      expect(storage.getCurrentStateUrlMerged()).toEqual('query=val1&autocomplete=val2');
+    });
+
+    it('overrides params from persistent storage with buffer', () => {
+      storage.setWithPersist(StorageKeys.QUERY, 'val1');
+      expect(storage.getCurrentStateUrlMerged()).toEqual('query=val1');
+      storage.pushStateToHistory();
+
+      storage.setWithPersist(StorageKeys.QUERY, 'val2');
+      expect(storage.getCurrentStateUrlMerged()).toEqual('query=val2');
+    });
+  });
+
+  describe('merges in additional params from the url', () => {
+    beforeEach(() => {
+      delete global.window.location;
+      global.window.location = {
+        search: '?testParam=123'
+      };
+    });
+
+    it('passes from persistent storage', () => {
+      storage.setWithPersist(StorageKeys.QUERY, 'val1');
+      expect(storage.getCurrentStateUrlMerged()).toEqual('testParam=123&query=val1');
+    });
+
+    it('persistentStorage has higher priority over window.location.search', () => {
+      storage.setWithPersist('testParam', 'val1');
+      expect(storage.getCurrentStateUrlMerged()).toEqual('testParam=val1');
+    });
+  });
+});

@@ -277,7 +277,7 @@ export default class VerticalResultsComponent extends Component {
     }
     return this._getExperienceURL(
       baseUniversalUrl,
-      new SearchParams(window.location.search.substring(1))
+      new SearchParams(this.core.storage.getCurrentStateUrlMerged())
     );
   }
 
@@ -290,8 +290,9 @@ export default class VerticalResultsComponent extends Component {
 
     const navigationData = this.core.storage.get(StorageKeys.NAVIGATION);
     const dataTabOrder = navigationData ? navigationData.tabOrder : [];
-    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
-    const params = new SearchParams(window.location.search.substring(1));
+    const tabOrder = getTabOrder(
+      this._verticalsConfig, dataTabOrder, this.core.storage.getCurrentStateUrlMerged());
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     params.set('tabOrder', tabOrder);
 
     return this._getExperienceURL(verticalURL, params);
