@@ -172,12 +172,6 @@ class Answers {
           parsedConfig.onStateChange(Object.fromEntries(data), url);
         }
       },
-      /**
-       * Called when the 'popstate' event is fired, i.e. window.history
-       * back or forward navigation.
-       *
-       * @param {Map} data
-       */
       reset: data => {
         if (!data.get(StorageKeys.QUERY)) {
           this.core.clearResults();
