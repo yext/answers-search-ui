@@ -8,21 +8,21 @@ describe('cardOverrides logic works properly', () => {
   let defaultConfig;
 
   const directAnswer = {
-    type: "FIELD_VALUE",
+    type: 'FIELD_VALUE',
     answer: {
-      entityName: "Amani Farooque",
-      fieldName: "Phone Number",
-      fieldApiName: "mainPhone",
-      value: "+18003332222",
-      fieldType: "phone"
+      entityName: 'Amani Farooque',
+      fieldName: 'Phone Number',
+      fieldApiName: 'mainPhone',
+      value: '+18003332222',
+      fieldType: 'phone'
     },
     relatedItem: {
-      verticalConfigId: "people",
+      verticalConfigId: 'people',
       data: {
         type: 'Location'
       }
     }
-  }
+  };
 
   beforeEach(() => {
     const bodyEl = DOM.query('body');
@@ -30,7 +30,7 @@ describe('cardOverrides logic works properly', () => {
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
     defaultConfig = {
-      container: '#test-component',
+      container: '#test-component'
     };
   });
 
@@ -49,8 +49,8 @@ describe('cardOverrides logic works properly', () => {
         }
       ]
     });
-    
-    expect(component._getCustomCard(directAnswer)).toEqual('default-card')
+
+    expect(component._getCustomCard(directAnswer)).toEqual('default-card');
   });
 
   it('can specify override by type', () => {
@@ -63,8 +63,8 @@ describe('cardOverrides logic works properly', () => {
         }
       ]
     });
-    
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card')
+
+    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
   });
 
   it('can specify override by entityType', () => {
@@ -77,8 +77,8 @@ describe('cardOverrides logic works properly', () => {
         }
       ]
     });
-    
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card')
+
+    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
   });
 
   it('can specify override by fieldName', () => {
@@ -91,8 +91,8 @@ describe('cardOverrides logic works properly', () => {
         }
       ]
     });
-    
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card')
+
+    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
   });
 
   it('can specify override by fieldType', () => {
@@ -105,8 +105,8 @@ describe('cardOverrides logic works properly', () => {
         }
       ]
     });
-    
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card')
+
+    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
   });
 
   it('if multiple overrides match, first match is used', () => {
@@ -124,7 +124,7 @@ describe('cardOverrides logic works properly', () => {
         }
       ]
     });
-    
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card')
+
+    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
   });
 });
