@@ -23,8 +23,8 @@ export default class IE11NoCacheHook extends RequestHook {
    * @param {Object} requestEvent
    */
   async onRequest (requestEvent) {
-    requestEvent.setHeader('cache-control', 'no-store');
-    // requestEvent.requestOptions.headers['cache-control'] = 'no-store';
+    // requestEvent.setHeader('cache-control', 'no-store');
+    requestEvent.requestOptions.headers['cache-control'] = 'no-store';
   }
 
   async onResponse () {
