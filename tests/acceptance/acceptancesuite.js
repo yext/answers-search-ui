@@ -278,7 +278,7 @@ test(`static filter filterbox works with back/forward navigation and page refres
   });
 });
 
-test(`filtersearch works with back/forward navigation and page refresh`, async t => {
+test.only(`filtersearch works with back/forward navigation and page refresh`, async t => {
   const filterSearchLogger = RequestLogger({
     url: /v2\/accounts\/me\/answers\/vertical\/query/
   });
