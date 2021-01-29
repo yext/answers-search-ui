@@ -60,6 +60,7 @@ export default class HttpRequester {
   // TODO (agrow) investigate removing this
   // Use imported fetchPolyfill if it does not already exist on window
   _fetch (url, reqArgs) {
+    reqArgs.cache = 'no-store';
     if (!window.fetch) {
       return fetchPolyfill(url, reqArgs);
     }

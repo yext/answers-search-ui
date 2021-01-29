@@ -14,9 +14,7 @@ export default class IE11NoCacheHook extends RequestHook {
    * @param {Object} requestEvent
    */
   async onRequest (requestEvent) {
-    const originalUrl = requestEvent.requestOptions.url;
-    requestEvent.requestOptions.url = originalUrl + 'ie11Timestamp=' + Date.now();
-    console.log(requestEvent.requestOptions.url);
+    requestEvent.requestOptions.headers['Cache-Control'] = 'no-store';
   }
 
   async onResponse () {

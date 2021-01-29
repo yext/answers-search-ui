@@ -25,7 +25,7 @@ export async function browserForwardButton () {
  */
 export async function registerIE11NoCacheHook (testInstance) {
   const isIE11 = await ClientFunction(() => {
-    return window.MSInputMethodContext && document.documentMode;
+    return !!window.MSInputMethodContext && !!document.documentMode;
   })();
   // if (isIE11 || true) {
   console.log(isIE11);
