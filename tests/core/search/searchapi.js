@@ -1,13 +1,15 @@
 import SearchApi from '../../../src/core/search/searchapi';
 import HttpRequester from '../../../src/core/http/httprequester';
 import { AnswersCoreError } from '../../../src/core/errors/errors';
+import Storage from '../../../src/core/storage/storage';
+import StorageKeys from '../../../src/core/storage/storagekeys';
 
 jest.mock('../../../src/core/http/httprequester');
 
 describe('vertical searching', () => {
   const sessionTrackingEnabled = true;
   const mockedRequest = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({ test: 'value' }) }));
-  let searchApi;
+  let searchApi, storage;
 
   beforeEach(() => {
     delete global.window.performance;
@@ -20,15 +22,17 @@ describe('vertical searching', () => {
         get: mockedRequest
       };
     });
+    storage = new Storage().init();
+    storage.set(StorageKeys.SESSIONS_OPT_IN, { value: sessionTrackingEnabled });
     searchApi = new SearchApi({
       apiKey: '1234abcd',
       experienceKey: 'abc123',
       locale: 'en'
-    });
+    }, storage);
   });
 
   it('searches with input', () => {
-    const result = searchApi.verticalSearch('vertical', { input: 'query', sessionTrackingEnabled });
+    const result = searchApi.verticalSearch('vertical', { input: 'query' });
     expect.assertions(2);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
@@ -42,7 +46,7 @@ describe('vertical searching', () => {
 
   it('searches with filters', () => {
     const filter = '{ "thing": { "$eq": "cool" } }';
-    const result = searchApi.verticalSearch('vertical', { filter, sessionTrackingEnabled });
+    const result = searchApi.verticalSearch('vertical', { filter });
     expect.assertions(2);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
@@ -56,7 +60,7 @@ describe('vertical searching', () => {
 
   it('searches with input and filter', () => {
     const filter = '{ "thing": { "$eq": "cool" } }';
-    const result = searchApi.verticalSearch('vertical', { input: 'word', filter, sessionTrackingEnabled });
+    const result = searchApi.verticalSearch('vertical', { input: 'word', filter });
     expect.assertions(2);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
@@ -69,7 +73,7 @@ describe('vertical searching', () => {
   });
 
   it('searches with limit and offset', () => {
-    const result = searchApi.verticalSearch('vertical', { input: 'query', limit: 25, offset: 10, sessionTrackingEnabled });
+    const result = searchApi.verticalSearch('vertical', { input: 'query', limit: 25, offset: 10 });
     expect.assertions(2);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(
@@ -88,7 +92,7 @@ describe('vertical searching', () => {
   });
 
   it('searches with queryId if provided', () => {
-    const result = searchApi.verticalSearch('vertical', { input: 'query', limit: 25, offset: 10, id: '12345', sessionTrackingEnabled });
+    const result = searchApi.verticalSearch('vertical', { input: 'query', limit: 25, offset: 10, id: '12345' });
     expect.assertions(1);
     result.then(results => {
       expect(mockedRequest).toBeCalledWith(

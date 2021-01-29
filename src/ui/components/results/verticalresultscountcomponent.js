@@ -6,9 +6,14 @@ import ResultsContext from '../../../core/storage/resultscontext';
 export default class VerticalResultsCountComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, verticalResults => {
-      if (verticalResults.searchState === SearchStates.SEARCH_COMPLETE) {
-        this.setState(verticalResults);
+
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: results => {
+        if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+          this.setState(results);
+        }
       }
     });
 
@@ -39,7 +44,7 @@ export default class VerticalResultsCountComponent extends Component {
      */
     const resultsLength = (verticalResults.results || []).length;
 
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const offset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
     const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
     const hasZeroResults = resultsCount === 0;
     const isHidden = (!this._visibleForNoResults && isNoResults) || hasZeroResults;

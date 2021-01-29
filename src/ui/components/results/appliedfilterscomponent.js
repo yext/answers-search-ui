@@ -26,13 +26,17 @@ export default class AppliedFiltersComponent extends Component {
     super({ ...DEFAULT_CONFIG, ...config }, systemConfig);
 
     this._verticalKey = this._config.verticalKey ||
-      this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+      this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey;
 
     this.moduleId = StorageKeys.FACETS_LOADED;
 
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
-      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
-        this.setState();
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: results => {
+        if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+          this.setState();
+        }
       }
     });
   }
@@ -128,7 +132,7 @@ export default class AppliedFiltersComponent extends Component {
   }
 
   setState (data) {
-    const verticalResults = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
+    const verticalResults = this.core.storage.get(StorageKeys.VERTICAL_RESULTS) || {};
 
     /**
      * Array of nlp filters in the search response.

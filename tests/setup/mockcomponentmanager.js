@@ -13,7 +13,7 @@ import { COMPONENT_REGISTRY } from '../../src/ui/components/registry';
  * each unit test component if manually created.
  */
 export default class MockComponentManager {
-  constructor (mockCore) {
+  constructor (mockCore = {}) {
     this.core = mockCore;
 
     this.renderer = new Renderers.Handlebars();
@@ -42,15 +42,17 @@ export default class MockComponentManager {
 
     const component = new COMPONENT_REGISTRY[componentType](componentConfig, systemConfig).init(componentConfig);
 
-    if (this.core && this.core.globalStorage) {
+    if (this.core && this.core.storage) {
       if (component.moduleId === undefined || component.moduleId === null) {
         return component;
       }
-
-      this.core.globalStorage
-        .on('update', component.moduleId, (data) => {
+      this.core.storage.registerListener({
+        eventType: 'update',
+        storageKey: component.moduleId,
+        callback: data => {
           component.setState(data);
-        });
+        }
+      });
     }
 
     return component;

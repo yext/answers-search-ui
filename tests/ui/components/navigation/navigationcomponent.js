@@ -2,8 +2,6 @@ import DOM from '../../../../src/ui/dom/dom';
 import { Tab } from '../../../../src/ui/components/navigation/navigationcomponent';
 import mockManager from '../../../setup/managermocker';
 import { mount } from 'enzyme';
-import GlobalStorage from '../../../../src/core/storage/globalstorage';
-import PersistentStorage from '../../../../src/ui/storage/persistentstorage';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import VerticalPagesConfig from '../../../../src/core/models/verticalpagesconfig';
 
@@ -126,16 +124,12 @@ describe('navigation tab links are correct', () => {
   };
 
   beforeEach(() => {
-    COMPONENT_MANAGER = mockManager({
-      globalStorage: new GlobalStorage(),
-      persistentStorage: new PersistentStorage()
-    });
-
+    COMPONENT_MANAGER = mockManager();
     COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
   });
 
-  it('tab links contain the referrerPageUrl from global storage', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.REFERRER_PAGE_URL, 'yext.com');
+  it('tab links contain the referrerPageUrl from storage', () => {
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.REFERRER_PAGE_URL, 'yext.com');
 
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
     const wrapper = mount(component);
@@ -146,8 +140,8 @@ describe('navigation tab links are correct', () => {
     expect(tabLink).toContain('referrerPageUrl=yext.com');
   });
 
-  it('tab links contain the context from global storage', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.API_CONTEXT, 'some context');
+  it('tab links contain the context from storage', () => {
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.API_CONTEXT, 'some context');
 
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
     const wrapper = mount(component);
@@ -158,11 +152,11 @@ describe('navigation tab links are correct', () => {
     expect(tabLink).toContain('context=some+context');
   });
 
-  it('updating the context in global storage updates the context in tab links', () => {
+  it('updating the context in storage updates the context in tab links', () => {
     const component = COMPONENT_MANAGER.create('Navigation', defaultConfig);
     const wrapper = mount(component);
 
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.API_CONTEXT, 'new context');
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.API_CONTEXT, 'new context');
 
     // Re-render because the component state changed
     wrapper.update();
@@ -173,13 +167,13 @@ describe('navigation tab links are correct', () => {
     expect(tabLink).toContain('context=new+context');
   });
 
-  it('tab links default to the tab order from global storage', () => {
+  it('tab links default to the tab order from storage', () => {
     const verticalPagesConfig = new VerticalPagesConfig([
       { label: 'Home', url: './index.html' },
       { label: 'People', url: './people.html', verticalKey: 'people' }
     ]);
 
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, verticalPagesConfig);
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, verticalPagesConfig);
 
     const component = COMPONENT_MANAGER.create('Navigation', {
       container: '#test-component',
@@ -208,10 +202,7 @@ describe('navigation tab order', () => {
     ]
   };
 
-  COMPONENT_MANAGER = mockManager({
-    globalStorage: new GlobalStorage(),
-    persistentStorage: new PersistentStorage()
-  });
+  COMPONENT_MANAGER = mockManager();
 
   COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
 
@@ -223,7 +214,7 @@ describe('navigation tab order', () => {
       tabOrder: ['third', 'second', 'first']
     };
 
-    component.core.globalStorage.set(StorageKeys.NAVIGATION, navStateWithReversedTabs);
+    component.core.storage.set(StorageKeys.NAVIGATION, navStateWithReversedTabs);
     wrapper.update();
 
     const firstTab = wrapper.find('.js-yxt-navItem').at(0);

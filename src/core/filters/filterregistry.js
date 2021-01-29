@@ -4,18 +4,21 @@ import FilterNodeFactory from './filternodefactory';
 import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 
+/** @typedef {import('../storage/storage').default} Storage */
+
 /**
  * FilterRegistry is a structure that manages static {@link Filter}s and {@link Facet} filters.
  *
- * Static filters and facet filters are stored within global storage using FilterNodes.
+ * Static filters and facet filters are stored within storage using FilterNodes.
  */
 export default class FilterRegistry {
-  constructor (globalStorage, availableFieldIds = []) {
+  constructor (storage, availableFieldIds = []) {
     /**
-     * FilterRegistry uses {@link GlobalStorage} for storing FilterNodes.
-     * Each node is given a unique key in global storage.
+     * FilterRegistry uses {@link Storage} for storing FilterNodes.
+     * Each node is given a unique key in storage.
+     * @type {Storage}
      */
-    this.globalStorage = globalStorage;
+    this.storage = storage;
 
     /**
      * All available field ids for the current facet filters, including
@@ -26,19 +29,19 @@ export default class FilterRegistry {
   }
 
   /**
-   * Returns an array containing all of the filternodes stored in global storage.
+   * Returns an array containing all of the filternodes stored in storage.
    * @returns {Array<FilterNode>}
    */
   getAllFilterNodes () {
-    const globalStorageFilterNodes = [
+    const storageFilterNodes = [
       ...this.getStaticFilterNodes(),
       ...this.getFacetFilterNodes()
     ];
     const locationRadiusFilterNode = this.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
     if (locationRadiusFilterNode) {
-      globalStorageFilterNodes.push(locationRadiusFilterNode);
+      storageFilterNodes.push(locationRadiusFilterNode);
     }
-    return globalStorageFilterNodes;
+    return storageFilterNodes;
   }
 
   /**
@@ -46,7 +49,13 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getStaticFilterNodes () {
-    return this.globalStorage.getAll(StorageKeys.STATIC_FILTER_NODE);
+    const staticFilterNodes = [];
+    this.storage.getAll().forEach((value, key) => {
+      if (key.startsWith(StorageKeys.STATIC_FILTER_NODE)) {
+        staticFilterNodes.push(value);
+      }
+    });
+    return staticFilterNodes;
   }
 
   /**
@@ -54,7 +63,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getFacetFilterNodes () {
-    return this.globalStorage.getState(StorageKeys.FACET_FILTER_NODE) || [];
+    return this.storage.get(StorageKeys.FACET_FILTER_NODE) || [];
   }
 
   /**
@@ -93,7 +102,7 @@ export default class FilterRegistry {
    * @param {string} key
    */
   getFilterNodeByKey (key) {
-    return this.globalStorage.getState(key);
+    return this.storage.get(key);
   }
 
   /**
@@ -103,7 +112,7 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setStaticFilterNodes (key, filterNode) {
-    this.globalStorage.set(`${StorageKeys.STATIC_FILTER_NODE}.${key}`, filterNode);
+    this.storage.set(`${StorageKeys.STATIC_FILTER_NODE}.${key}`, filterNode);
   }
 
   /**
@@ -117,7 +126,7 @@ export default class FilterRegistry {
    */
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
-    this.globalStorage.set(StorageKeys.FACET_FILTER_NODE, filterNodes);
+    this.storage.set(StorageKeys.FACET_FILTER_NODE, filterNodes);
   }
 
   /**
@@ -126,7 +135,7 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setLocationRadiusFilterNode (filterNode) {
-    this.globalStorage.set(StorageKeys.LOCATION_RADIUS, filterNode);
+    this.storage.set(StorageKeys.LOCATION_RADIUS, filterNode);
   }
 
   /**
@@ -134,13 +143,13 @@ export default class FilterRegistry {
    * @param {string} key
    */
   clearStaticFilterNode (key) {
-    this.globalStorage.delete(`${StorageKeys.STATIC_FILTER_NODE}.${key}`);
+    this.storage.delete(`${StorageKeys.STATIC_FILTER_NODE}.${key}`);
   }
 
   /**
    * Remove all facet FilterNodes.
    */
   clearFacetFilterNodes () {
-    this.globalStorage.delete(StorageKeys.FACET_FILTER_NODE);
+    this.storage.delete(StorageKeys.FACET_FILTER_NODE);
   }
 }

@@ -4,10 +4,10 @@ import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import SearchStates from '../../../../src/core/storage/searchstates';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
-import GlobalStorage from '../../../../src/core/storage/globalstorage';
+import Storage from '../../../../src/core/storage/storage';
 
 const mockCore = {
-  globalStorage: new GlobalStorage(),
+  storage: new Storage().init(),
   getStaticFilterNodes: () => [],
   getFacetFilterNodes: () => [],
   getLocationRadiusFilterNode: () => null
@@ -15,8 +15,8 @@ const mockCore = {
 
 DOM.setup(document, new DOMParser());
 
-mockCore.globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, { get: () => [] });
-mockCore.globalStorage.set(StorageKeys.REFERRER_PAGE_URL, '');
+mockCore.storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, { get: () => [] });
+mockCore.storage.set(StorageKeys.REFERRER_PAGE_URL, '');
 
 const COMPONENT_MANAGER = mockManager(mockCore);
 COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => {
@@ -37,14 +37,14 @@ describe('vertical results component', () => {
     };
   });
 
-  it('getVerticalUrl encodes the global storage query when the component is created', () => {
-    COMPONENT_MANAGER.core.globalStorage.set(StorageKeys.QUERY, 'yext');
+  it('getVerticalUrl encodes the storage query when the component is created', () => {
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.QUERY, 'yext');
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
 
     expect(component.getVerticalURL()).toContain('query=yext');
   });
 
-  it('updates to global storage vertical results update the component results', () => {
+  it('updates to storage vertical results update the component results', () => {
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
 
     const verticalResults = {
@@ -55,7 +55,7 @@ describe('vertical results component', () => {
       resultsContext: {}
     };
 
-    component.core.globalStorage.set(StorageKeys.VERTICAL_RESULTS, verticalResults);
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, verticalResults);
 
     expect(component.getState('results')).toEqual('yext search results');
   });
@@ -128,14 +128,11 @@ describe('vertical results component', () => {
 
   describe('creates verticalURL correctly', () => {
     let component;
-    delete global.window.location;
-    global.window = Object.create(window);
-    global.window.location = {
-      search: '?query=virginia&otherParam=123'
-    };
 
     beforeEach(() => {
       component = COMPONENT_MANAGER.create('VerticalResults', {});
+      COMPONENT_MANAGER.core.storage.setWithPersist(StorageKeys.QUERY, 'virginia');
+      COMPONENT_MANAGER.core.storage.setWithPersist('otherParam', 123);
       component.query = 'my-query';
       component.verticalKey = 'key';
     });

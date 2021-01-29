@@ -194,7 +194,7 @@ export default class QuestionSubmissionComponent extends Component {
      * Reference to the locale as set in the global config
      * @type {string}
      */
-    this.locale = this.core.globalStorage.getState(StorageKeys.LOCALE);
+    this.locale = this.core.storage.get(StorageKeys.LOCALE);
 
     /**
      * NOTE(billy) if this is a pattern we want to follow for configuration
@@ -208,7 +208,7 @@ export default class QuestionSubmissionComponent extends Component {
      */
     const onResultsUpdate = results => {
       if (results.searchState !== SearchStates.SEARCH_LOADING) {
-        const questionText = this.core.globalStorage.getState(StorageKeys.QUERY);
+        const questionText = this.core.storage.get(StorageKeys.QUERY);
         this.setState(new QuestionSubmission({
           questionText: questionText,
           expanded: this._config.expanded
@@ -218,8 +218,17 @@ export default class QuestionSubmissionComponent extends Component {
       }
     };
 
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, onResultsUpdate);
-    this.core.globalStorage.on('update', StorageKeys.UNIVERSAL_RESULTS, onResultsUpdate);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: onResultsUpdate
+    });
+
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.UNIVERSAL_RESULTS,
+      callback: onResultsUpdate
+    });
   }
 
   /**
