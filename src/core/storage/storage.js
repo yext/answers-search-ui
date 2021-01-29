@@ -1,5 +1,6 @@
 import DefaultPersistentStorage from '@yext/answers-storage';
 import { AnswersStorageError } from '../errors/errors';
+import SearchParams from '../../ui/dom/searchparams';
 
 /** @typedef {import('./storagelistener').default} StorageListener */
 
@@ -27,7 +28,7 @@ export default class Storage {
      * @param {Map<string, string>} queryParamsMap A Map containing the persisted state,
      *                                             for example a map of 'query' => 'virginia'
      * @param {string} queryParamsString the url params of the persisted state
-     *                                   for the above case '?query=virginia'
+     *                                   for the above case 'query=virginia'
      */
     this.popListener = (queryParamsMap, queryParamsString) => {
       this.persistedStateListeners.update(queryParamsMap, queryParamsString);
@@ -118,7 +119,7 @@ export default class Storage {
     this.persistentStorage.pushStateToHistory();
     this.persistedStateListeners.update(
       this.persistentStorage.getAll(),
-      this.persistentStorage.getUrlWithCurrentState()
+      this.getCurrentStateUrlMerged()
     );
   }
 
@@ -153,6 +154,20 @@ export default class Storage {
 
     this.storage.delete(key);
     this.persistentStorage.delete(key);
+  }
+
+  /**
+   * Returns the url representing the current persisted state, merged
+   * with any additional query params currently in the url.
+   *
+   * @returns {string}
+   */
+  getCurrentStateUrlMerged () {
+    const searchParams = new SearchParams(window.location.search.substring(1));
+    this.persistentStorage.getAll().forEach((value, key) => {
+      searchParams.set(key, value);
+    });
+    return searchParams.toString();
   }
 
   /**

@@ -205,9 +205,9 @@ describe('filter box component', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
       mount(component);
       const filterComponent = component._filterComponents[0];
-      const urlBefore = component.core.storage.getUrlWithCurrentState();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       filterComponent._updateOption(0, true);
-      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
       expect(urlBefore).toEqual(urlAfter);
     });
 
@@ -220,9 +220,9 @@ describe('filter box component', () => {
       const wrapper = mount(component);
       const filterComponent = component._filterComponents[0];
       filterComponent._updateOption(0, true);
-      const urlBefore = component.core.storage.getUrlWithCurrentState();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
-      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
       expect(urlBefore).not.toEqual(urlAfter);
     });
 
@@ -234,9 +234,9 @@ describe('filter box component', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
       mount(component);
       const filterComponent = component._filterComponents[0];
-      const urlBefore = component.core.storage.getUrlWithCurrentState();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       filterComponent._updateOption(0, true);
-      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
       expect(urlBefore).not.toEqual(urlAfter);
     });
   });

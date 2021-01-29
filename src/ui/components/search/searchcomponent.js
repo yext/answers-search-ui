@@ -503,7 +503,7 @@ export default class SearchComponent extends Component {
   onQuerySubmit (inputEl) {
     const query = inputEl.value;
     this.query = query;
-    const params = new SearchParams(this.core.storage.getUrlWithCurrentState());
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     params.set('query', query);
 
     const context = this.core.storage.get(StorageKeys.API_CONTEXT);

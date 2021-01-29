@@ -163,7 +163,7 @@ export default class NavigationComponent extends Component {
      * @private
      */
     this._tabOrder = getDefaultTabOrder(
-      this._tabsConfig, getUrlParams(this.core.storage.getUrlWithCurrentState()));
+      this._tabsConfig, getUrlParams(this.core.storage.getCurrentStateUrlMerged()));
 
     /**
      * Breakpoints at which navigation items move to the "more" dropdown
@@ -351,7 +351,7 @@ export default class NavigationComponent extends Component {
       this._tabOrder = mergeTabOrder(data.tabOrder, this._tabOrder, this._tabs);
     }
 
-    const params = getUrlParams(this.core.storage.getUrlWithCurrentState());
+    const params = getUrlParams(this.core.storage.getCurrentStateUrlMerged());
     params.set('tabOrder', this._tabOrder);
     const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {

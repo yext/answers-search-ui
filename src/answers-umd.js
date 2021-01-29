@@ -288,7 +288,7 @@ class Answers {
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
       parsedConfig.onStateChange(
         Object.fromEntries(storage.getAll()),
-        this.core.storage.getUrlWithCurrentState());
+        this.core.storage.getCurrentStateUrlMerged());
     }
 
     this.components

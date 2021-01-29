@@ -149,9 +149,9 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const urlBefore = component.core.storage.getUrlWithCurrentState();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       component._updateOption(0, true);
-      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
       expect(urlBefore).not.toEqual(urlAfter);
     });
 
@@ -162,9 +162,9 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const urlBefore = component.core.storage.getUrlWithCurrentState();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       component._updateOption(0, true);
-      const urlAfter = component.core.storage.getUrlWithCurrentState();
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
       expect(urlBefore).toEqual(urlAfter);
     });
   });
