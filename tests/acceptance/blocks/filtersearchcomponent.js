@@ -16,10 +16,12 @@ export default class FilterOptionsComponentBlock {
    * @param {string} query The query to enter in the input.
    */
   async enterQuery (query) {
-    await t.click(this._input);
-    await t.pressKey('ctrl+a');
-    await t.pressKey('backspace');
-    return t.typeText(this._input, query);
+    return t
+      .click(this._input)
+      .pressKey('ctrl+a')
+      .pressKey('backspace')
+      .typeText(this._input, query)
+      .wait(300);
   }
 
   /**
