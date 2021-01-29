@@ -6,5 +6,5 @@ COMMIT_MSG_TITLE=$(git log -n 1 --pretty=format:%s)
 export BROWSERSTACK_TEST_RUN_NAME=$COMMIT_MSG_TITLE
 export BROWSERSTACK_NETWORK_LOGS="true"
 
-npx testcafe "browserstack:ie@11.0" tests/acceptance/acceptancesuite.js --disable-page-caching
+npx testcafe "browserstack:ie@11.0" tests/acceptance/acceptancesuite.js
 # npx testcafe "browserstack:ie@11.0,browserstack:safari" tests/acceptance/acceptancesuite.js

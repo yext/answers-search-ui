@@ -8,13 +8,19 @@ import { RequestHook } from 'testcafe';
  * testcafe's RequestLogger. This is only a problem in IE11.
  */
 export default class IE11NoCacheHook extends RequestHook {
+  _onConfigureResponse (event) {
+    super._onConfigureResponse(event);
+
+    event.setHeader('cache-control', 'no-store');
+  }
+
   /**
    * If the request is for IE11, add a 'no-store' cache control header.
    *
    * @param {Object} requestEvent
    */
   async onRequest (requestEvent) {
-    requestEvent.requestOptions.headers['Cache-Control'] = 'no-store';
+    // requestEvent.requestOptions.headers['Cache-Control'] = 'no-store';
   }
 
   async onResponse () {
