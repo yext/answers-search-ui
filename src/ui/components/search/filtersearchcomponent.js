@@ -145,7 +145,7 @@ export default class FilterSearchComponent extends Component {
     return 'search/filtersearch';
   }
 
-  // This is needed for filtersearch only pages, however it will run an duplicate search
+  // This is needed for filtersearch only pages, however it will run a duplicate search
   // if you also have a searchbar on the page.
   onCreate () {
     if (this.query && this.filter) {
