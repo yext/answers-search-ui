@@ -103,8 +103,7 @@ export default class SearchApi {
         locationRadius: locationRadius,
         context: context,
         referrerPageUrl: referrerPageUrl,
-        source: querySource,
-        ie11Timestamp: Date.now()
+        source: querySource
       }
     };
     const request = new ApiRequest(requestConfig, this._storage);

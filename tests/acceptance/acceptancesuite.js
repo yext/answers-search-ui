@@ -6,9 +6,9 @@ import { Selector, RequestLogger } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
-  browserForwardButton
+  browserForwardButton,
+  registerIE11NoCacheHook
 } from './utils';
-
 import {
   expectRequestFiltersToEql,
   expectRequestLocationRadiusToEql,
@@ -74,10 +74,12 @@ test('navigating and refreshing mantains that page number', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
-const spellCheckLogger = RequestLogger({
-  url: /v2\/accounts\/me\/answers\/vertical\/query/
-});
-test.requestHooks(spellCheckLogger)('spell check flow', async t => {
+test('spell check flow', async t => {
+  const spellCheckLogger = RequestLogger({
+    url: /v2\/accounts\/me\/answers\/vertical\/query/
+  });
+  await t.addRequestHooks(spellCheckLogger);
+  await registerIE11NoCacheHook(t);
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('varginia');
   await searchComponent.submitQuery();
@@ -171,179 +173,181 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await t.expect(actualResultsCount).eql(initialResultsCount);
 });
 
-const radiusFilterLogger = RequestLogger({
-  url: /v2\/accounts\/me\/answers\/vertical\/query/
+test(`radius filter filterbox works with back/forward navigation and page refresh`, async t => {
+  const radiusFilterLogger = RequestLogger({
+    url: /v2\/accounts\/me\/answers\/vertical\/query/
+  });
+  await t.addRequestHooks(radiusFilterLogger);
+  await registerIE11NoCacheHook(t);
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.enterQuery('all');
+  await searchComponent.submitQuery();
+
+  const filterBox = FacetsPage.getStaticFilterBox();
+  const radiusFilter = await filterBox.getFilterOptions('DISTANCE');
+
+  // Choose the 25 miles radius filter
+  await radiusFilter.toggleOption('25 miles');
+  const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
+  await t.expect(filterTags.count).eql(1);
+  await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
+  radiusFilterLogger.clear();
+
+  // Hit the back button
+  await browserBackButton();
+  await t.expect(filterTags.count).eql(0);
+  await expectRequestDoesNotContainParam(radiusFilterLogger, 'locationRadius');
+  radiusFilterLogger.clear();
+
+  // Hit the forward button
+  await browserForwardButton();
+  await t.expect(filterTags.count).eql(1);
+  await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
+  radiusFilterLogger.clear();
+
+  // Refresh the page
+  await browserRefreshPage();
+  await t.expect(filterTags.count).eql(1);
+  await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
 });
-test.requestHooks(radiusFilterLogger)(
-  `radius filter filterbox works with back/forward navigation and page refresh`, async t => {
-    const searchComponent = FacetsPage.getSearchComponent();
-    await searchComponent.enterQuery('all');
-    await searchComponent.submitQuery();
 
-    const filterBox = FacetsPage.getStaticFilterBox();
-    const radiusFilter = await filterBox.getFilterOptions('DISTANCE');
+test(`static filter filterbox works with back/forward navigation and page refresh`, async t => {
+  const filterBoxLogger = RequestLogger({
+    url: /v2\/accounts\/me\/answers\/vertical\/query/
+  });
+  await t.addRequestHooks(filterBoxLogger);
+  await registerIE11NoCacheHook(t);
+  const martyFilter = {
+    c_puppyPreference: {
+      $eq: 'Marty'
+    }
+  };
+  const frodoFilter = {
+    c_puppyPreference: {
+      $eq: 'Frodo'
+    }
+  };
+  const filterBox = FacetsPage.getStaticFilterBox();
+  const staticFilter = await filterBox.getFilterOptions('STATIC FILTERS');
+  const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.enterQuery('all');
+  await searchComponent.submitQuery();
 
-    // Choose the 25 miles radius filter
-    await radiusFilter.toggleOption('25 miles');
-    const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
-    await t.expect(filterTags.count).eql(1);
-    await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
-    radiusFilterLogger.clear();
+  // Click the 'Marty' checkbox
+  // 2 filter tags should be rendered, 1 from the backend facet and 1 from the static filter
+  await staticFilter.toggleOption('Marty');
+  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
+  await t.expect(filterTags.count).eql(2);
 
-    // Hit the back button
-    await browserBackButton();
-    await t.expect(filterTags.count).eql(0);
-    await expectRequestDoesNotContainParam(radiusFilterLogger, 'locationRadius');
-    radiusFilterLogger.clear();
-
-    // Hit the forward button
-    await browserForwardButton();
-    await t.expect(filterTags.count).eql(1);
-    await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
-    radiusFilterLogger.clear();
-
-    // Refresh the page
-    await browserRefreshPage();
-    await t.expect(filterTags.count).eql(1);
-    await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
+  // Click the 'Frodo' checkbox
+  // 2 filter tags should be rendered, 1 from the backend facet and 1 from the static filter
+  await staticFilter.toggleOption('Frodo');
+  await t.expect(filterTags.count).eql(4);
+  await expectRequestFiltersToEql(filterBoxLogger, {
+    $or: [martyFilter, frodoFilter]
   });
 
-const filterBoxLogger = RequestLogger({
-  url: /v2\/accounts\/me\/answers\/vertical\/query/
-});
-test.requestHooks(filterBoxLogger)(
-  `static filter filterbox works with back/forward navigation and page refresh`, async t => {
-    const martyFilter = {
-      c_puppyPreference: {
-        $eq: 'Marty'
-      }
-    };
-    const frodoFilter = {
-      c_puppyPreference: {
-        $eq: 'Frodo'
-      }
-    };
+  // Hit the back button, see the 'Frodo' filter disappear
+  await browserBackButton();
+  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
+  await t.expect(filterTags.count).eql(2);
 
-    const filterBox = FacetsPage.getStaticFilterBox();
-    const staticFilter = await filterBox.getFilterOptions('STATIC FILTERS');
-    const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
-    const searchComponent = FacetsPage.getSearchComponent();
-    await searchComponent.enterQuery('all');
-    await searchComponent.submitQuery();
+  // Hit the back button, see the 'Marty' filter disappear
+  await browserBackButton();
+  await expectRequestFiltersToEql(filterBoxLogger, {});
+  await t.expect(filterTags.count).eql(0);
 
-    // Click the 'Marty' checkbox
-    // 2 filter tags should be rendered, 1 from the backend facet and 1 from the static filter
-    await staticFilter.toggleOption('Marty');
-    await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-    await t.expect(filterTags.count).eql(2);
+  // Hit the forward button, see the 'Marty' filter applied again
+  await browserForwardButton();
+  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
+  await t.expect(filterTags.count).eql(2);
 
-    // Click the 'Frodo' checkbox
-    // 2 filter tags should be rendered, 1 from the backend facet and 1 from the static filter
-    await staticFilter.toggleOption('Frodo');
-    await t.expect(filterTags.count).eql(4);
-    await expectRequestFiltersToEql(filterBoxLogger, {
-      $or: [martyFilter, frodoFilter]
-    });
-
-    // Hit the back button, see the 'Frodo' filter disappear
-    await browserBackButton();
-    await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-    await t.expect(filterTags.count).eql(2);
-
-    // Hit the back button, see the 'Marty' filter disappear
-    await browserBackButton();
-    await expectRequestFiltersToEql(filterBoxLogger, {});
-    await t.expect(filterTags.count).eql(0);
-
-    // Hit the forward button, see the 'Marty' filter applied again
-    await browserForwardButton();
-    await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-    await t.expect(filterTags.count).eql(2);
-
-    // Hit the forward button, see the 'Frodo' filter applied again
-    await browserForwardButton();
-    await t.expect(filterTags.count).eql(4);
-    await expectRequestFiltersToEql(filterBoxLogger, {
-      $or: [martyFilter, frodoFilter]
-    });
-
-    // Refresh the page
-    await browserRefreshPage();
-    await t.expect(filterTags.count).eql(4);
-    await expectRequestFiltersToEql(filterBoxLogger, {
-      $or: [martyFilter, frodoFilter]
-    });
+  // Hit the forward button, see the 'Frodo' filter applied again
+  await browserForwardButton();
+  await t.expect(filterTags.count).eql(4);
+  await expectRequestFiltersToEql(filterBoxLogger, {
+    $or: [martyFilter, frodoFilter]
   });
 
-const filterSearchLogger = RequestLogger({
-  url: /v2\/accounts\/me\/answers\/vertical\/query/
-});
-test.requestHooks(filterSearchLogger)(
-  `filtersearch works with back/forward navigation and page refresh`, async t => {
-    const expectOnlyFilterTagToEql = async expectedText => {
-      await t.expect(filterTags.count).eql(1);
-      const filterTagText = await filterTags.nth(0).find(
-        '.yxt-ResultsHeader-removableFilterValue').innerText;
-      return t.expect(filterTagText).eql(expectedText);
-    };
-    const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
-    const filterSearch = FacetsPage.getFilterSearch();
-    const virginiaFilter = {
-      'builtin.location': {
-        $eq: 'P-region.7919684583758790'
-      }
-    };
-    const newYorkFilter = {
-      'builtin.location': {
-        $eq: 'P-place.15278078705964500'
-      }
-    };
-    await t.expect(filterSearchLogger.requests.length).eql(0);
-
-    // Choose the 'Virginia, United States' filter option
-    await filterSearch.enterQuery('virginia');
-    await filterSearch.selectFilter('Virginia, United States');
-    await expectOnlyFilterTagToEql('Virginia, United States');
-    await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
-    filterSearchLogger.clear();
-
-    // Choose the 'New York City, New York, United States' filter option
-    await filterSearch.enterQuery('new york');
-    await filterSearch.selectFilter('New York City, New York, United States');
-    await expectOnlyFilterTagToEql('New York City, New York, United States');
-    await expectRequestFiltersToEql(filterSearchLogger, newYorkFilter);
-    filterSearchLogger.clear();
-
-    // Hit the back button, expect to be back at the 'Virginia' filter state
-    await browserBackButton();
-    await expectOnlyFilterTagToEql('Virginia, United States');
-    await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
-    filterSearchLogger.clear();
-
-    // Test that refreshing the page will use the 'Virginia' filter
-    await browserRefreshPage();
-    await expectOnlyFilterTagToEql('Virginia, United States');
-    await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
-    filterSearchLogger.clear();
-
-    // Hit the back button, expect to be back at the initial state with 0 results
-    await browserBackButton();
-    await t.expect(filterTags.count).eql(0);
-    await t.expect(Selector('.yxt-StandardCard-title').count).eql(0);
-    await t.expect(filterSearchLogger.requests.length).eql(0);
-
-    // Hit the forward button, expect to see the 'Virginia' filter applied
-    await browserForwardButton();
-    await expectOnlyFilterTagToEql('Virginia, United States');
-    await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
-    filterSearchLogger.clear();
-
-    // Hit the forward button, expect to see the 'New York' filter applied
-    await browserForwardButton();
-    await expectOnlyFilterTagToEql('New York City, New York, United States');
-    await expectRequestFiltersToEql(filterSearchLogger, newYorkFilter);
-    filterSearchLogger.clear();
+  // Refresh the page
+  await browserRefreshPage();
+  await t.expect(filterTags.count).eql(4);
+  await expectRequestFiltersToEql(filterBoxLogger, {
+    $or: [martyFilter, frodoFilter]
   });
+});
+
+test(`filtersearch works with back/forward navigation and page refresh`, async t => {
+  const filterSearchLogger = RequestLogger({
+    url: /v2\/accounts\/me\/answers\/vertical\/query/
+  });
+  await t.addRequestHooks(filterSearchLogger);
+  await registerIE11NoCacheHook(t);
+  const expectOnlyFilterTagToEql = async expectedText => {
+    await t.expect(filterTags.count).eql(1);
+    const filterTagText = await filterTags.nth(0).find(
+      '.yxt-ResultsHeader-removableFilterValue').innerText;
+    return t.expect(filterTagText).eql(expectedText);
+  };
+  const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
+  const filterSearch = FacetsPage.getFilterSearch();
+  const virginiaFilter = {
+    'builtin.location': {
+      $eq: 'P-region.7919684583758790'
+    }
+  };
+  const newYorkFilter = {
+    'builtin.location': {
+      $eq: 'P-place.15278078705964500'
+    }
+  };
+  await t.expect(filterSearchLogger.requests.length).eql(0);
+
+  // Choose the 'Virginia, United States' filter option
+  await filterSearch.enterQuery('virginia');
+  await filterSearch.selectFilter('Virginia, United States');
+  await expectOnlyFilterTagToEql('Virginia, United States');
+  await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
+  filterSearchLogger.clear();
+
+  // Choose the 'New York City, New York, United States' filter option
+  await filterSearch.enterQuery('new york');
+  await filterSearch.selectFilter('New York City, New York, United States');
+  await expectOnlyFilterTagToEql('New York City, New York, United States');
+  await expectRequestFiltersToEql(filterSearchLogger, newYorkFilter);
+  filterSearchLogger.clear();
+
+  // Hit the back button, expect to be back at the 'Virginia' filter state
+  await browserBackButton();
+  await expectOnlyFilterTagToEql('Virginia, United States');
+  await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
+  filterSearchLogger.clear();
+
+  // Test that refreshing the page will use the 'Virginia' filter
+  await browserRefreshPage();
+  await expectOnlyFilterTagToEql('Virginia, United States');
+  await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
+  filterSearchLogger.clear();
+
+  // Hit the back button, expect to be back at the initial state with 0 results
+  await browserBackButton();
+  await t.expect(filterTags.count).eql(0);
+  await t.expect(Selector('.yxt-StandardCard-title').count).eql(0);
+  await t.expect(filterSearchLogger.requests.length).eql(0);
+
+  // Hit the forward button, expect to see the 'Virginia' filter applied
+  await browserForwardButton();
+  await expectOnlyFilterTagToEql('Virginia, United States');
+  await expectRequestFiltersToEql(filterSearchLogger, virginiaFilter);
+  filterSearchLogger.clear();
+
+  // Hit the forward button, expect to see the 'New York' filter applied
+  await browserForwardButton();
+  await expectOnlyFilterTagToEql('New York City, New York, United States');
+  await expectRequestFiltersToEql(filterSearchLogger, newYorkFilter);
+  filterSearchLogger.clear();
+});
 
 test(`pagination works with page navigation after selecting a filtersearch filter`, async t => {
   const expectFilterTagIsVirginia = async () => {
