@@ -13,7 +13,7 @@ import { LIB_VERSION } from '../constants';
  * @implements {ErrorReporterService}
  */
 export default class ErrorReporter {
-  constructor (config, globalStorage) {
+  constructor (config, storage) {
     /**
      * The apiKey to use for reporting
      * @type {string}
@@ -45,15 +45,15 @@ export default class ErrorReporter {
     this.sendToServer = config.sendToServer;
 
     /**
-     * The global storage instance of the experience
-     * @type {GlobalStorage}
+     * The storage instance of the experience
+     * @type {Storage}
      */
-    if (this.sendToServer && !globalStorage) {
+    if (this.sendToServer && !storage) {
       throw new AnswersBasicError(
-        'Must include globalStorage to send errors to server',
+        'Must include storage to send errors to server',
         'ErrorReporter');
     }
-    this.globalStorage = globalStorage;
+    this.storage = storage;
 
     /**
      * The environment of the Answers experience
@@ -96,7 +96,7 @@ export default class ErrorReporter {
           'error': err.toJson()
         }
       };
-      const request = new ApiRequest(requestConfig, this.globalStorage);
+      const request = new ApiRequest(requestConfig, this.storage);
 
       // TODO(amullings): We should probably change this endpoint to POST,
       // ideally using the beacon API. Stack traces will likely easily hit URL

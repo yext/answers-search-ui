@@ -1,6 +1,7 @@
 /** @module SearchApi */
 
 /** @typedef {import('./searchservice').default} SearchService */
+/** @typedef {import('../storage/storage').default} Storage */
 
 import ApiRequest from '../http/apirequest';
 import { AnswersBasicError, AnswersCoreError } from '../errors/errors';
@@ -12,7 +13,7 @@ import { AnswersBasicError, AnswersCoreError } from '../errors/errors';
  * @implements {SearchService}
  */
 export default class SearchApi {
-  constructor (config = {}) {
+  constructor (config = {}, storage) {
     /**
      * A local reference to the API Key to use for the request
      * @type {string}
@@ -63,6 +64,13 @@ export default class SearchApi {
      * @private
      */
     this._environment = config.environment;
+
+    /**
+     * The storage instance of the experience
+     * @type {Storage}
+     * @private
+     */
+    this._storage = storage;
   }
 
   /** @inheritdoc */
@@ -98,10 +106,7 @@ export default class SearchApi {
         source: querySource
       }
     };
-    const getState = () => {
-      return { value: sessionTrackingEnabled };
-    };
-    const request = new ApiRequest(requestConfig, { getState });
+    const request = new ApiRequest(requestConfig, this._storage);
 
     window.performance.mark('yext.answers.verticalQuerySent');
     return request.get()
@@ -131,10 +136,7 @@ export default class SearchApi {
         source: params.querySource
       }
     };
-    const getState = () => {
-      return { value: params.sessionTrackingEnabled };
-    };
-    const request = new ApiRequest(requestConfig, { getState });
+    const request = new ApiRequest(requestConfig, this._storage);
 
     window.performance.mark('yext.answers.universalQuerySent');
     return request.get()

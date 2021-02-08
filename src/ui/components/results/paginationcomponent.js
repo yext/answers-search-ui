@@ -17,7 +17,7 @@ export default class PaginationComponent extends Component {
      * @type {string}
      * @private
      */
-    this._verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
+    this._verticalKey = config.verticalKey || this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey;
     if (typeof this._verticalKey !== 'string') {
       throw new AnswersComponentError(
         'verticalKey not provided, but necessary for pagination',
@@ -111,20 +111,28 @@ export default class PaginationComponent extends Component {
      * @type {number}
      * @private
      */
-    this._limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+    this._limit = this.core.storage.get(StorageKeys.SEARCH_CONFIG).limit;
 
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
-    this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
-    this.core.globalStorage.on('update', StorageKeys.SEARCH_OFFSET, offset => {
-      if (typeof offset === 'number') {
-        return;
+    const offset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
+    this.core.storage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.SEARCH_OFFSET,
+      callback: offset => {
+        if (typeof offset === 'number') {
+          return;
+        }
+        this.core.storage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
       }
-      this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, Number(offset));
     });
 
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
-      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
-        this.setState();
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: results => {
+        if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+          this.setState();
+        }
       }
     });
 
@@ -132,7 +140,7 @@ export default class PaginationComponent extends Component {
      * Configuration for the behavior when there are no vertical results.
      */
     this._noResults = config.noResults ||
-      this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG) ||
+      this.core.storage.get(StorageKeys.NO_RESULTS_CONFIG) ||
       {};
   }
 
@@ -154,10 +162,10 @@ export default class PaginationComponent extends Component {
   }
 
   onMount () {
-    const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
-    const limit = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit;
+    const results = this.core.storage.get(StorageKeys.VERTICAL_RESULTS) || {};
+    const limit = this.core.storage.get(StorageKeys.SEARCH_CONFIG).limit;
     const showControls = this.shouldShowControls(results, limit);
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const offset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
     if (!showControls) {
       return;
     }
@@ -185,14 +193,13 @@ export default class PaginationComponent extends Component {
   }
 
   updatePage (offset) {
-    const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
-    const currentOffset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const results = this.core.storage.get(StorageKeys.VERTICAL_RESULTS) || {};
+    const currentOffset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
     const currentPageNumber = (currentOffset / this._limit) + 1;
     const newPageNumber = (offset / this._limit) + 1;
     const maxPageCount = this._computeMaxPage(results.resultsCount);
     this._onPaginate(newPageNumber, currentPageNumber, maxPageCount);
-    this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, offset);
-    this.core.persistentStorage.set(StorageKeys.SEARCH_OFFSET, offset);
+    this.core.storage.setWithPersist(StorageKeys.SEARCH_OFFSET, offset);
     this.core.verticalPage(this._verticalKey);
   }
 
@@ -290,8 +297,8 @@ export default class PaginationComponent extends Component {
   }
 
   setState (data) {
-    const results = this.core.globalStorage.getState(StorageKeys.VERTICAL_RESULTS) || {};
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const results = this.core.storage.get(StorageKeys.VERTICAL_RESULTS) || {};
+    const offset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
     const pageNumber = (offset / this._limit) + 1;
     const isMoreResults = results.resultsCount > offset + this._limit;
     const maxPage = this._computeMaxPage(results.resultsCount);

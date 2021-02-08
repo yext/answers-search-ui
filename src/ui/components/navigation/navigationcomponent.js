@@ -147,7 +147,7 @@ export default class NavigationComponent extends Component {
      * @private
      */
     this._tabsConfig = config.verticalPages ||
-      this.core.globalStorage.getState(StorageKeys.VERTICAL_PAGES_CONFIG).get();
+      this.core.storage.get(StorageKeys.VERTICAL_PAGES_CONFIG).get();
 
     /**
      * Unordered map of each tab, keyed by VS verticalKey
@@ -162,7 +162,8 @@ export default class NavigationComponent extends Component {
      * @type {Array.<String>} The list of VS verticalKeys
      * @private
      */
-    this._tabOrder = getDefaultTabOrder(this._tabsConfig, getUrlParams());
+    this._tabOrder = getDefaultTabOrder(
+      this._tabsConfig, getUrlParams(this.core.storage.getCurrentStateUrlMerged()));
 
     /**
      * Breakpoints at which navigation items move to the "more" dropdown
@@ -190,11 +191,19 @@ export default class NavigationComponent extends Component {
     this.checkMobileOverflowBehavior = this.checkMobileOverflowBehavior.bind(this);
 
     const reRender = () => {
-      this.setState(this.core.globalStorage.getState(StorageKeys.NAVIGATION) || {});
+      this.setState(this.core.storage.get(StorageKeys.NAVIGATION) || {});
     };
 
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
-    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.API_CONTEXT,
+      callback: reRender
+    });
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.SESSIONS_OPT_IN,
+      callback: reRender
+    });
   }
 
   static get type () {
@@ -342,14 +351,14 @@ export default class NavigationComponent extends Component {
       this._tabOrder = mergeTabOrder(data.tabOrder, this._tabOrder, this._tabs);
     }
 
-    const params = getUrlParams();
+    const params = getUrlParams(this.core.storage.getCurrentStateUrlMerged());
     params.set('tabOrder', this._tabOrder);
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
-    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
-    if (referrerPageUrl !== null) {
+    const referrerPageUrl = this.core.storage.get(StorageKeys.REFERRER_PAGE_URL);
+    if (referrerPageUrl !== undefined) {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 

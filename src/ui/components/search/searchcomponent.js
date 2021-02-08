@@ -150,7 +150,7 @@ export default class SearchComponent extends Component {
     /**
      * The search config from ANSWERS.init configuration
      */
-    this._globalSearchConfig = this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+    this._globalSearchConfig = this.core.storage.get(StorageKeys.SEARCH_CONFIG) || {};
 
     /**
      * The default initial search query, can be an empty string
@@ -171,31 +171,35 @@ export default class SearchComponent extends Component {
      * Optionally provided
      * @type {string|null}
      */
-    this.query = config.query || this.core.globalStorage.getState(StorageKeys.QUERY);
-    this.core.globalStorage.on('update', StorageKeys.QUERY, q => {
-      this.query = q;
-      if (this.queryEl) {
-        this.queryEl.value = q;
-      }
-      if (q === null) {
-        if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
-          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-          this.core.setQuery(this._defaultInitialSearch);
+    this.query = config.query || this.core.storage.get(StorageKeys.QUERY);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.QUERY,
+      callback: q => {
+        this.query = q;
+        if (this.queryEl) {
+          this.queryEl.value = q;
         }
-        return;
-      }
-      this._updateClearButtonVisibility(q);
+        if (q === null) {
+          if (this._defaultInitialSearch || this._defaultInitialSearch === '') {
+            this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+            this.core.setQuery(this._defaultInitialSearch);
+          }
+          return;
+        }
+        this._updateClearButtonVisibility(q);
 
-      const queryTrigger = this.core.globalStorage.getState(StorageKeys.QUERY_TRIGGER);
-      const resetPagination = this._verticalKey &&
-        queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
-        queryTrigger !== QueryTriggers.INITIALIZE;
-      const searchOptions = Object.assign(
-        {},
-        this._defaultSearchOptions,
-        { resetPagination: resetPagination }
-      );
-      this.debouncedSearch(q, searchOptions);
+        const queryTrigger = this.core.storage.get(StorageKeys.QUERY_TRIGGER);
+        const resetPagination = this._verticalKey &&
+          queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
+          queryTrigger !== QueryTriggers.INITIALIZE;
+        const searchOptions = Object.assign(
+          {},
+          this._defaultSearchOptions,
+          { resetPagination: resetPagination }
+        );
+        this.debouncedSearch(q, searchOptions);
+      }
     });
 
     /**
@@ -421,10 +425,8 @@ export default class SearchComponent extends Component {
       button.classList.add('yxt-SearchBar--hidden');
       this.queryEl.value = this.query;
 
-      this.core.persistentStorage.set(StorageKeys.QUERY, this.query);
-      this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.setQuery(this.query);
+      this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
+      this.core.storage.setWithPersist(StorageKeys.QUERY, this.query);
 
       // Focus the input element after clearing the query, regardless of whether
       // or not the autoFocus option is enabled.
@@ -494,17 +496,17 @@ export default class SearchComponent extends Component {
 
   /**
    * The handler for a query submission. This method first sets the new query in
-   * persistent and global storage, than performs a debounced search.
+   * persistent and storage, than performs a debounced search.
    *
    * @param {Node} inputEl The input element containing the query.
    */
   onQuerySubmit (inputEl) {
     const query = inputEl.value;
     this.query = query;
-    const params = new SearchParams(window.location.search.substring(1));
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     params.set('query', query);
 
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
@@ -536,10 +538,8 @@ export default class SearchComponent extends Component {
       this.animateIconToYext();
     }
 
-    this.core.persistentStorage.set(StorageKeys.QUERY, query);
-    this.core.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.setQuery(query);
+    this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.storage.setWithPersist(StorageKeys.QUERY, query);
     this.debouncedSearch(query, this._defaultSearchOptions);
     return false;
   }
@@ -587,7 +587,7 @@ export default class SearchComponent extends Component {
    * is a twin searchbar.
    * @param {string} query The string to query against.
    * @param {Object} searchOptions The options to pass for core search
-   * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
+   * @returns {Promise} A promise that will perform the query and update storage accordingly.
    */
   debouncedSearch (query, searchOptions) {
     if (this._throttled ||
@@ -608,11 +608,11 @@ export default class SearchComponent extends Component {
       this.fetchQueryIntents(query)
         .then(queryIntents => queryIntents.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
-          if (queryHasNearMeIntent && !this.core.globalStorage.getState(StorageKeys.GEOLOCATION)) {
+          if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {
             return new Promise((resolve, reject) =>
               navigator.geolocation.getCurrentPosition(
                 position => {
-                  this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+                  this.core.storage.set(StorageKeys.GEOLOCATION, {
                     lat: position.coords.latitude,
                     lng: position.coords.longitude,
                     radius: position.coords.accuracy
@@ -641,7 +641,7 @@ export default class SearchComponent extends Component {
    * Performs a query using the provided string input.
    * @param {string} query The string to query against.
    * @param {Object} searchOptions The options to pass for core search
-   * @returns {Promise} A promise that will perform the query and update globalStorage accordingly.
+   * @returns {Promise} A promise that will perform the query and update storage accordingly.
    */
   search (query, searchOptions) {
     this.customHooks.onConductSearch(query);
@@ -680,14 +680,14 @@ export default class SearchComponent extends Component {
   /**
    * A helper method that computes the intents of the provided query. If the query was entered
    * manually into the search bar or selected via autocomplete, its intents will have been stored
-   * already in globalStorage. Otherwise, a new API call will have to be issued to determine
+   * already in storage. Otherwise, a new API call will have to be issued to determine
    * intent.
    * @param {string} query The query whose intent is needed.
    * @returns {Promise} A promise containing the intents of the query.
    */
   fetchQueryIntents (query) {
     const autocompleteData =
-      this.core.globalStorage.getState(`${StorageKeys.AUTOCOMPLETE}.${this._autoCompleteName}`);
+      this.core.storage.get(`${StorageKeys.AUTOCOMPLETE}.${this._autoCompleteName}`);
     if (!autocompleteData) {
       const autocompleteRequest = this._verticalKey
         ? this.core.autoCompleteVertical(
@@ -713,7 +713,7 @@ export default class SearchComponent extends Component {
    * analytics event.
    */
   eventOptions () {
-    const queryId = this.core.globalStorage.getState(StorageKeys.QUERY_ID);
+    const queryId = this.core.storage.get(StorageKeys.QUERY_ID);
     const options = Object.assign(
       {},
       queryId && { queryId },

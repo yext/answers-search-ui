@@ -28,6 +28,12 @@ export default class Result {
     this._highlighted = data.highlighted;
 
     /**
+     * An object that lists the substrings to highlight for each applicable field.
+     * @type {Object}
+     */
+    this.highlightedFields = data.highlightedFields;
+
+    /**
      * The index number of the result
      * @type {Number}
      */

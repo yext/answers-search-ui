@@ -17,10 +17,8 @@ import TranslationFlagger from '../../i18n/translationflagger';
 export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
-    // TODO SPR-1929 centralize this logic
-    this._config.verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey;
     this.options = this._config.options;
-    this.selectedOptionIndex = parseInt(this.core.globalStorage.getState(this.name)) || 0;
+    this.selectedOptionIndex = parseInt(this.core.storage.get(this.name)) || 0;
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.searchOnChangeIsEnabled = this._config.searchOnChange;
@@ -32,12 +30,16 @@ export default class SortOptionsComponent extends Component {
      * This component should only render if there are search results, so it should listen
      * to updates to vertical results and handle them accordingly.
      */
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, verticalResults => {
-      const isSearchComplete = verticalResults.searchState === SearchStates.SEARCH_COMPLETE;
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: verticalResults => {
+        const isSearchComplete = verticalResults.searchState === SearchStates.SEARCH_COMPLETE;
 
-      if (isSearchComplete) {
-        const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
-        this.handleVerticalResultsUpdate(isNoResults);
+        if (isSearchComplete) {
+          const isNoResults = verticalResults.resultsContext === ResultsContext.NO_RESULTS;
+          this.handleVerticalResultsUpdate(isNoResults);
+        }
       }
     });
   }
@@ -173,7 +175,7 @@ export default class SortOptionsComponent extends Component {
 
     // searchOnChange really means sort on change here, just that the sort is done through a search,
     // This was done to have a consistent option name between filters.
-    this.core.persistentStorage.set(this.name, optionIndex);
+    this.core.storage.setWithPersist(this.name, optionIndex);
     if (this._config.storeOnChange && optionIndex === 0) {
       this.core.clearSortBys();
     } else if (this._config.storeOnChange) {
@@ -286,7 +288,7 @@ function assignDefaults (config) {
     context: 'Title for a group of controls that sort results'
   });
 
-  // Optional, when true component does not update globalStorage
+  // Optional, when true component does not update storage
   // possibly delegating that to a higher-order/composite component
   updatedConfig.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
@@ -295,7 +297,8 @@ function assignDefaults (config) {
     context: 'Button label, effectuates changes'
   });
 
-  updatedConfig.verticalKey = config.verticalKey;
+  updatedConfig.verticalKey = config.verticalKey ||
+    ANSWERS.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey;
   if (!updatedConfig.verticalKey) {
     throw new AnswersBasicError('vertical key is required', 'SortOptions');
   }

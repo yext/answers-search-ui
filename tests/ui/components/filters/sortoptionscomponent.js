@@ -3,7 +3,6 @@ import SortOptionsComponent from '../../../../src/ui/components/filters/sortopti
 import { mount } from 'enzyme';
 import { AnswersBasicError } from '../../../../src/core/errors/errors';
 import mockManager from '../../../setup/managermocker';
-import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 const mockedCore = () => {
   return {
@@ -11,26 +10,7 @@ const mockedCore = () => {
       options.forEach(opt => expect(opt).toHaveProperty('type'));
     },
     clearSortBys: () => {},
-    verticalSearch: () => {},
-    globalStorage: {
-      on: () => {},
-      getState: storageKey => {
-        expect(['SortOptions', StorageKeys.QUERY]).toContain(storageKey);
-        return null;
-      },
-      getAll: storageKey => {
-        expect([StorageKeys.FACET_FILTER_NODE, StorageKeys.STATIC_FILTER_NODE]).toContain(storageKey);
-        return [];
-      },
-      delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
-    },
-    persistentStorage: {
-      set: (namespace, optionIndex) => {
-        expect(namespace).toBe('SortOptions');
-        expect(typeof optionIndex).toBe('number');
-      },
-      delete: storageKey => expect(storageKey).toBe(StorageKeys.SEARCH_OFFSET)
-    }
+    verticalSearch: () => {}
   };
 };
 

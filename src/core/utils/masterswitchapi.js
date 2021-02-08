@@ -6,8 +6,8 @@ import ApiRequest from '../http/apirequest';
  * due to back-end issues.
  */
 export default class MasterSwitchApi {
-  constructor (requestConfig, globalStorage) {
-    this._request = new ApiRequest(requestConfig, globalStorage);
+  constructor (requestConfig, storage) {
+    this._request = new ApiRequest(requestConfig, storage);
   }
 
   /**
@@ -39,15 +39,15 @@ export default class MasterSwitchApi {
    *
    * @param {string} apiKey The apiKey of the experience.
    * @param {string} experienceKey The identifier of the experience.
-   * @param {GlobalStorage} globalStorage The {@link GlobalStorage} instance.
+   * @param {Storage} storage The {@link Storage} instance.
    * @returns {MasterSwitchApi} The new {@link MasterSwitchApi} instance.
    */
-  static from (apiKey, experienceKey, globalStorage) {
+  static from (apiKey, experienceKey, storage) {
     const requestConfig = {
       apiKey,
       baseUrl: 'https://answersstatus.pagescdn.com/',
       endpoint: `${apiKey}/${experienceKey}/status.json`
     };
-    return new MasterSwitchApi(requestConfig, globalStorage);
+    return new MasterSwitchApi(requestConfig, storage);
   }
 }

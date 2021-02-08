@@ -14,7 +14,7 @@ import { getCachedLiveApiUrl } from '../utils/urlutils';
  * @implements {AutoCompleteService}
  */
 export default class AutoCompleteApi {
-  constructor (config = {}, globalStorage) {
+  constructor (config = {}, storage) {
     /**
      * The API Key to use for the request
      * @type {string}
@@ -60,14 +60,14 @@ export default class AutoCompleteApi {
     this._locale = config.locale;
 
     /**
-     * The global storage instance of the experience
-     * @type {GlobalStorage}
+     * The storage instance of the experience
+     * @type {Storage}
      * @private
      */
-    if (!globalStorage) {
-      throw new AnswersBasicError('Global storage is required', 'AutoComplete');
+    if (!storage) {
+      throw new AnswersBasicError('Storage is required', 'AutoComplete');
     }
-    this._globalStorage = globalStorage;
+    this._storage = storage;
 
     /**
      * The environment of the Answers experience
@@ -100,7 +100,7 @@ export default class AutoCompleteApi {
         'search_parameters': JSON.stringify(config.searchParameters)
       }
     };
-    let request = new ApiRequest(requestConfig, this._globalStorage);
+    let request = new ApiRequest(requestConfig, this._storage);
 
     return request.get()
       .then(response => response.json())
@@ -126,7 +126,7 @@ export default class AutoCompleteApi {
         'locale': this._locale
       }
     };
-    let request = new ApiRequest(requestConfig, this._globalStorage);
+    let request = new ApiRequest(requestConfig, this._storage);
 
     return request.get()
       .then(response => response.json())
@@ -151,7 +151,7 @@ export default class AutoCompleteApi {
         'locale': this._locale
       }
     };
-    let request = new ApiRequest(requestConfig, this._globalStorage);
+    let request = new ApiRequest(requestConfig, this._storage);
 
     return request.get()
       .then(response => response.json())

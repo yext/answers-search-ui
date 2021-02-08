@@ -119,10 +119,14 @@ export default class GeoLocationComponent extends Component {
      * The query string to use for the input box, provided to template for rendering.
      * @type {string}
      */
-    this.query = this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
-    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
-      this.query = q;
-      this.setState();
+    this.query = this.core.storage.get(`${StorageKeys.QUERY}.${this.name}`) || '';
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: `${StorageKeys.QUERY}.${this.name}`,
+      callback: q => {
+        this.query = q;
+        this.setState();
+      }
     });
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
@@ -246,8 +250,8 @@ export default class GeoLocationComponent extends Component {
           this._saveDataToStorage('', filter, 'Current Location', position);
           this._enabled = true;
           this.setState({});
-          this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-          this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+          this.core.storage.delete(`${StorageKeys.QUERY}.${this.name}`);
+          this.core.storage.delete(`${StorageKeys.FILTER}.${this.name}`);
         },
         () => this._handleGeolocationError(),
         this._geolocationOptions
@@ -264,8 +268,8 @@ export default class GeoLocationComponent extends Component {
   }
 
   _removeFilterNode () {
-    this.core.persistentStorage.delete(`${StorageKeys.QUERY}.${this.name}`);
-    this.core.persistentStorage.delete(`${StorageKeys.FILTER}.${this.name}`);
+    this.core.storage.delete(`${StorageKeys.QUERY}.${this.name}`);
+    this.core.storage.delete(`${StorageKeys.FILTER}.${this.name}`);
     this._enabled = false;
     this.query = '';
     this.core.clearStaticFilterNode(this.name);
@@ -294,13 +298,13 @@ export default class GeoLocationComponent extends Component {
    * @private
    */
   _saveDataToStorage (query, filter, displayValue, position) {
-    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, query);
-    this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filter);
+    this.core.storage.setWithPersist(`${StorageKeys.QUERY}.${this.name}`, query);
+    this.core.storage.setWithPersist(`${StorageKeys.FILTER}.${this.name}`, filter);
     const filterNode = this._buildFilterNode(filter, displayValue);
     this.core.setStaticFilterNodes(this.name, filterNode);
 
     if (position) {
-      this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+      this.core.storage.set(StorageKeys.GEOLOCATION, {
         lat: position.coords.latitude,
         lng: position.coords.longitude,
         radius: position.coords.accuracy
