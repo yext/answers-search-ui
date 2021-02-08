@@ -6,7 +6,6 @@ import SearchDataTransformer from './search/searchdatatransformer';
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
-import SearchIntents from './models/searchintents';
 import Navigation from './models/navigation';
 import AlternativeVerticals from './models/alternativeverticals';
 import LocationBias from './models/locationbias';
@@ -22,6 +21,7 @@ import AutoCompleteResponseTransformer from './search/autocompleteresponsetransf
 /** @typedef {import('./services/searchservice').default} SearchService */
 /** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
 /** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
+/** @typedef {import('./storage/storage').default} Storage */
 
 /**
  * CoreAdapter is the main application container for all of the network and storage
@@ -68,24 +68,16 @@ export default class CoreAdapter {
 
     /**
      * A reference to the core data storage that powers the UI
-     * @type {GlobalStorage}
-     * @private
+     * @type {Storage}
      */
-    this.globalStorage = config.globalStorage;
-
-    /**
-     * A reference to the core persistent storage
-     * @type {PersistentStorage}
-     * @private
-     */
-    this.persistentStorage = config.persistentStorage;
+    this.storage = config.storage;
 
     /**
      * The filterRegistry is in charge of setting, removing, and retrieving filters
-     * and facet filters from global storage.
+     * and facet filters from storage.
      * @type {FilterRegistry}
      */
-    this.filterRegistry = new FilterRegistry(this.globalStorage);
+    this.filterRegistry = new FilterRegistry(this.storage);
 
     /**
      * An abstraction containing the integration with the RESTful search API
@@ -156,15 +148,14 @@ export default class CoreAdapter {
   verticalSearch (verticalKey, options = {}, query = {}) {
     window.performance.mark('yext.answers.verticalQueryStart');
     if (!query.append) {
-      this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
-      this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
-      this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
+      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      this.storage.set(StorageKeys.SPELL_CHECK, {});
+      this.storage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
     const { resetPagination, useFacets } = options;
     if (resetPagination) {
-      this.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.storage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
     if (!useFacets) {
@@ -172,32 +163,34 @@ export default class CoreAdapter {
     }
 
     const { setQueryParams } = options;
-    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
-    const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    const context = this.storage.get(StorageKeys.API_CONTEXT);
+    const referrerPageUrl = this.storage.get(StorageKeys.REFERRER_PAGE_URL);
 
-    const defaultQueryInput = this.globalStorage.getState(StorageKeys.QUERY) || '';
+    const defaultQueryInput = this.storage.get(StorageKeys.QUERY) || '';
     const parsedQuery = Object.assign({}, { input: defaultQueryInput }, query);
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+        this.storage.setWithPersist(StorageKeys.API_CONTEXT, context);
       }
-      if (referrerPageUrl !== null) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+      if (referrerPageUrl !== undefined) {
+        this.storage.setWithPersist(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
       }
     }
 
-    const searchConfig = this.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+    const searchConfig = this.storage.get(StorageKeys.SEARCH_CONFIG) || {};
     if (!searchConfig.verticalKey) {
-      this.globalStorage.set(StorageKeys.SEARCH_CONFIG, {
+      this.storage.set(StorageKeys.SEARCH_CONFIG, {
         ...searchConfig,
         verticalKey: verticalKey
       });
     }
 
     const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
+    const shouldPushState =
+      this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
-      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+      this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
 
     return this._coreLibrary
@@ -212,69 +205,70 @@ export default class CoreAdapter {
         offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        sortBys: this.storage.get(StorageKeys.SORT_BYS),
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
         referrerPageUrl: referrerPageUrl,
-        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
 
         if (query.append) {
-          const mergedResults = this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS)
+          const mergedResults = this.storage.get(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
-          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+          this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
         } else {
-          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+          this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
         }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
-          this.globalStorage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.storage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
         }
         if (data[StorageKeys.SPELL_CHECK]) {
-          this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+          this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         }
         if (data[StorageKeys.LOCATION_BIAS]) {
-          this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
+          this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         }
-        this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+        this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
+        this.storage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = {
           verticalKey: verticalKey,
           queryString: parsedQuery.input,
-          resultsCount: this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS).resultsCount,
+          resultsCount: this.storage.get(StorageKeys.VERTICAL_RESULTS).resultsCount,
           resultsContext: data[StorageKeys.VERTICAL_RESULTS].resultsContext
         };
         const analyticsEvent = this.onVerticalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        if (shouldPushState) {
+          this.storage.pushStateToHistory();
+        }
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       });
   }
 
   clearResults () {
-    this.globalStorage.set(StorageKeys.QUERY, null);
-    this.globalStorage.set(StorageKeys.QUERY_ID, '');
-    this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
-    this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
-    this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
-    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
-    this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
-    this.globalStorage.set(StorageKeys.NAVIGATION, new Navigation());
-    this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
-    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
-    this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
-    this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
-    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
+    this.storage.set(StorageKeys.QUERY, null);
+    this.storage.set(StorageKeys.QUERY_ID, '');
+    this.storage.set(StorageKeys.RESULTS_HEADER, {});
+    this.storage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
+    this.storage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
+    this.storage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
+    this.storage.set(StorageKeys.NAVIGATION, new Navigation());
+    this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
+    this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
+    this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
+    this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
   }
 
   /**
@@ -285,33 +279,35 @@ export default class CoreAdapter {
    */
   verticalPage (verticalKey) {
     this.verticalSearch(verticalKey, { useFacets: true, setQueryParams: true }, {
-      id: this.globalStorage.getState(StorageKeys.QUERY_ID)
+      id: this.storage.get(StorageKeys.QUERY_ID)
     });
   }
 
   search (queryString, urls, options = {}) {
     window.performance.mark('yext.answers.universalQueryStart');
     const { setQueryParams } = options;
-    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
-    const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    const context = this.storage.get(StorageKeys.API_CONTEXT);
+    const referrerPageUrl = this.storage.get(StorageKeys.REFERRER_PAGE_URL);
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+        this.storage.setWithPersist(StorageKeys.API_CONTEXT, context);
       }
-      if (referrerPageUrl !== null) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+      if (referrerPageUrl !== undefined) {
+        this.storage.setWithPersist(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
       }
     }
 
-    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
-    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
-    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
-    this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
-    this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
+    this.storage.set(StorageKeys.DIRECT_ANSWER, {});
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
+    this.storage.set(StorageKeys.SPELL_CHECK, {});
+    this.storage.set(StorageKeys.LOCATION_BIAS, {});
 
+    const shouldPushState =
+      this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
-      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+      this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
     return this._coreLibrary
       .universalSearch({
@@ -319,10 +315,10 @@ export default class CoreAdapter {
         coordinates: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
         referrerPageUrl: referrerPageUrl,
-        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
@@ -343,6 +339,9 @@ export default class CoreAdapter {
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
+        }
+        if (shouldPushState) {
+          this.storage.pushStateToHistory();
         }
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       });
@@ -390,7 +389,7 @@ export default class CoreAdapter {
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
       });
   }
@@ -412,7 +411,7 @@ export default class CoreAdapter {
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
       });
   }
@@ -445,7 +444,7 @@ export default class CoreAdapter {
       })
       .then(response => AutoCompleteResponseTransformer.transformFilterAutoCompleteResponse(response))
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });
   }
 
@@ -490,14 +489,14 @@ export default class CoreAdapter {
         direction: option.direction
       };
     });
-    this.globalStorage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+    this.storage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
   }
 
   /**
-   * Clears the sortBys key in global storage.
+   * Clears the sortBys key in storage.
    */
   clearSortBys () {
-    this.globalStorage.delete(StorageKeys.SORT_BYS);
+    this.storage.delete(StorageKeys.SORT_BYS);
   }
 
   /**
@@ -505,7 +504,7 @@ export default class CoreAdapter {
    * @param {string} query the query to store
    */
   setQuery (query) {
-    this.globalStorage.set(StorageKeys.QUERY, query);
+    this.storage.set(StorageKeys.QUERY, query);
   }
 
   /**
@@ -513,7 +512,7 @@ export default class CoreAdapter {
    * @param {string} queryId The query id to store
    */
   setQueryId (queryId) {
-    this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
+    this.storage.set(StorageKeys.QUERY_ID, queryId);
   }
 
   /**
@@ -605,11 +604,35 @@ export default class CoreAdapter {
     return queryTrigger;
   }
 
+  /**
+   * Determines whether or not a new url state should be pushed for a search.
+   *
+   * If queryTrigger is INITIALIZE, don't push an extra state on page load.
+   * If queryTrigger is QUERY_PARAMETER, this only occurs either on page load
+   * or when hitting the history back and forward buttons. For both cases we
+   * don't push an extra state.
+   * If queryTrigger is SUGGEST, this only occurs when clicking a spellcheck
+   * link, which reloads the page, so don't push an extra state.
+   *
+   * @param {QueryTriggers} queryTrigger SDK query trigger
+   * @returns {boolean}
+   */
+  shouldPushState (queryTrigger) {
+    return queryTrigger !== QueryTriggers.INITIALIZE &&
+      queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
+      queryTrigger !== QueryTriggers.SUGGEST;
+  }
+
   enableDynamicFilters () {
     this._isDynamicFiltersEnabled = true;
   }
 
-  on (evt, moduleId, cb) {
-    return this.globalStorage.on(evt, moduleId, cb);
+  on (evt, storageKey, cb) {
+    this.storage.registerListener({
+      eventType: evt,
+      storageKey: storageKey,
+      callback: cb
+    });
+    return this.storage;
   }
 }

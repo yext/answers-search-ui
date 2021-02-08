@@ -1,8 +1,20 @@
-import UniversalPage from './pageobjects/universalpage';
-import VerticalPage from './pageobjects/verticalpage';
-import { setupServer, shutdownServer } from './server';
-import FacetsPage from './pageobjects/facetspage';
-import { Selector } from 'testcafe';
+import UniversalPage from '../pageobjects/universalpage';
+import VerticalPage from '../pageobjects/verticalpage';
+import {
+  setupServer,
+  shutdownServer,
+  UNIVERSAL_PAGE,
+  FACETS_PAGE,
+  VERTICAL_PAGE
+} from '../server';
+import FacetsPage from '../pageobjects/facetspage';
+import { Selector, RequestLogger } from 'testcafe';
+import {
+  browserBackButton,
+  browserRefreshPage,
+  registerIE11NoCacheHook
+} from '../utils';
+import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -10,10 +22,11 @@ import { Selector } from 'testcafe';
  * up to serve the search page and the dist directory of Answers.
  * This server is closed once all tests have completed.
  */
+
 fixture`Universal search page works as expected`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/universal`;
+  .page`${UNIVERSAL_PAGE}`;
 
 test('Basic universal flow', async t => {
   const searchComponent = UniversalPage.getSearchComponent();
@@ -35,7 +48,7 @@ test('Basic universal flow', async t => {
 fixture`Vertical search page works as expected`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/vertical`;
+  .page`${VERTICAL_PAGE}`;
 
 test('pagination flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
@@ -47,10 +60,59 @@ test('pagination flow', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
+test('navigating and refreshing mantains that page number', async t => {
+  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+
+  const paginationComponent = VerticalPage.getPaginationComponent();
+  await paginationComponent.clickNextButton();
+  await browserRefreshPage();
+  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+});
+
+test('spell check flow', async t => {
+  const spellCheckLogger = RequestLogger({
+    url: /v2\/accounts\/me\/answers\/vertical\/query/
+  });
+  await t.addRequestHooks(spellCheckLogger);
+  await registerIE11NoCacheHook(t);
+  const searchComponent = VerticalPage.getSearchComponent();
+  await searchComponent.enterQuery('varginia');
+  await searchComponent.submitQuery();
+
+  // Check that clicking spell check resets pagination to page 1
+  const paginationComponent = VerticalPage.getPaginationComponent();
+  await paginationComponent.clickNextButton();
+  let pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+
+  const spellCheckComponent = VerticalPage.getSpellCheckComponent();
+  await spellCheckComponent.clickLink();
+  pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 1');
+
+  // Check that clicking spell check sends a queryTrigger=suggest url param
+  // TODO(SLAP-1062) investigate making this an integration test
+  const queryParams = await getMostRecentQueryParamsFromLogger(spellCheckLogger);
+  const queryTriggerParam = queryParams.get('queryTrigger');
+  await t.expect(queryTriggerParam).eql('suggest');
+});
+
+test('navigating pages and hitting the browser back button lands you on the right page', async t => {
+  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+
+  const paginationComponent = VerticalPage.getPaginationComponent();
+  await paginationComponent.clickNextButton();
+  await paginationComponent.clickNextButton();
+  await browserBackButton();
+  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+});
+
 fixture`Facets page`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+  .page`${FACETS_PAGE}`;
 
 test(`Facets load on the page, and can affect the search`, async t => {
   const searchComponent = FacetsPage.getSearchComponent();
@@ -107,10 +169,21 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await t.expect(actualResultsCount).eql(initialResultsCount);
 });
 
+test(`selecting a sort option and refreshing maintains that sort selection`, async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
+
+  const thirdSortOption = await Selector('.yxt-SortOptions-optionSelector').nth(2);
+  await t.click(thirdSortOption);
+  await browserRefreshPage();
+
+  await t.expect(thirdSortOption.checked).ok();
+});
+
 fixture`Experience links work as expected`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+  .page`${FACETS_PAGE}`;
 
 test('Facets, pagination, and filters do not persist accross experience links', async t => {
   const verifyCleanLink = async (link) => {
@@ -184,7 +257,7 @@ test('Facets, pagination, and filters do not persist accross experience links', 
 fixture`Performance marks on search`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+  .page`${FACETS_PAGE}`;
 
 test('window.performance calls are marked for a normal search', async t => {
   const marksToCheck = [
@@ -218,7 +291,7 @@ test('window.performance calls are marked for a normal search', async t => {
 fixture`W3C Accessibility standards are met`
   .before(setupServer)
   .after(shutdownServer)
-  .page`http://localhost:9999/tests/acceptance/fixtures/html/facets`;
+  .page`${FACETS_PAGE}`;
 
 test('Sort options focus state works', async t => {
   const searchComponent = FacetsPage.getSearchComponent();

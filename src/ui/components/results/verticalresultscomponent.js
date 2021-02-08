@@ -178,7 +178,7 @@ export default class VerticalResultsComponent extends Component {
     super(new VerticalResultsConfig(APPLY_SYNONYMS(config)), systemConfig);
 
     const noResultsConfig = this._config.noResults ||
-      this.core.globalStorage.getState(StorageKeys.NO_RESULTS_CONFIG);
+      this.core.storage.get(StorageKeys.NO_RESULTS_CONFIG);
     /**
      * A parsed version of the noResults config provided to the component.
      * Applies sensible defaults if certain values are not set.
@@ -211,9 +211,13 @@ export default class VerticalResultsComponent extends Component {
      */
     this._noResultsTemplate = this._noResultsConfig.template;
 
-    this.core.globalStorage.on('update', StorageKeys.VERTICAL_RESULTS, results => {
-      if (results.searchState === SearchStates.SEARCH_COMPLETE) {
-        this.setState(results);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.VERTICAL_RESULTS,
+      callback: results => {
+        if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+          this.setState(results);
+        }
       }
     });
 
@@ -222,8 +226,8 @@ export default class VerticalResultsComponent extends Component {
      * @type {Array.<object>}
      * @private
      */
-    this._verticalsConfig = config.verticalPages || this.core.globalStorage
-      .getState(StorageKeys.VERTICAL_PAGES_CONFIG)
+    this._verticalsConfig = config.verticalPages || this.core.storage
+      .get(StorageKeys.VERTICAL_PAGES_CONFIG)
       .get() || [];
     /**
      * @type {Array<Result>}
@@ -273,7 +277,7 @@ export default class VerticalResultsComponent extends Component {
     }
     return this._getExperienceURL(
       baseUniversalUrl,
-      new SearchParams(window.location.search.substring(1))
+      new SearchParams(this.core.storage.getCurrentStateUrlMerged())
     );
   }
 
@@ -284,11 +288,11 @@ export default class VerticalResultsComponent extends Component {
     const verticalURL = this._config.verticalURL || verticalConfig.url ||
       data.verticalURL || this.verticalKey + '.html';
 
-    const dataTabOrder = this.core.globalStorage.getState(StorageKeys.NAVIGATION)
-      ? this.core.globalStorage.getState(StorageKeys.NAVIGATION).tabOrder
-      : [];
-    const tabOrder = getTabOrder(this._verticalsConfig, dataTabOrder);
-    const params = new SearchParams(window.location.search.substring(1));
+    const navigationData = this.core.storage.get(StorageKeys.NAVIGATION);
+    const dataTabOrder = navigationData ? navigationData.tabOrder : [];
+    const tabOrder = getTabOrder(
+      this._verticalsConfig, dataTabOrder, this.core.storage.getCurrentStateUrlMerged());
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     params.set('tabOrder', tabOrder);
 
     return this._getExperienceURL(verticalURL, params);
@@ -305,16 +309,16 @@ export default class VerticalResultsComponent extends Component {
   _getExperienceURL (baseUrl, params) {
     params.set(StorageKeys.QUERY, this.query);
 
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
-    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
-    if (referrerPageUrl !== null) {
+    const referrerPageUrl = this.core.storage.get(StorageKeys.REFERRER_PAGE_URL);
+    if (referrerPageUrl !== undefined) {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 
-    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    const sessionsOptIn = this.core.storage.get(StorageKeys.SESSIONS_OPT_IN);
     if (sessionsOptIn && sessionsOptIn.setDynamically) {
       params.set(StorageKeys.SESSIONS_OPT_IN, sessionsOptIn.value);
     }
@@ -339,7 +343,7 @@ export default class VerticalResultsComponent extends Component {
     const displayResultsIfExist = this._config.isUniversal ||
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
-    this.query = this.core.globalStorage.getState(StorageKeys.QUERY);
+    this.query = this.core.storage.get(StorageKeys.QUERY);
     return super.setState(Object.assign({ results: [] }, data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
@@ -411,7 +415,7 @@ export default class VerticalResultsComponent extends Component {
       return super.addChild(updatedData, type, newOpts);
     } else if (type === AlternativeVerticalsComponent.type) {
       const hasResults = this.results && this.results.length > 0;
-      data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);
+      data = this.core.storage.get(StorageKeys.ALTERNATIVE_VERTICALS);
       const newOpts = {
         template: this._noResultsTemplate,
         baseUniversalUrl: this.getBaseUniversalUrl(),

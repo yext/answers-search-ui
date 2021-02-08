@@ -7,7 +7,6 @@ import VerticalResults from '../models/verticalresults';
 import SpellCheck from '../models/spellcheck';
 import StorageKeys from '../storage/storagekeys';
 import DynamicFilters from '../models/dynamicfilters';
-import SearchIntents from '../models/searchintents';
 import LocationBias from '../models/locationbias';
 import AlternativeVerticals from '../models/alternativeverticals';
 import ResultsContext from '../storage/resultscontext';

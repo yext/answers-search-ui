@@ -2,7 +2,7 @@ import FilterCombinators from '../../../src/core/filters/filtercombinators';
 import FilterRegistry from '../../../src/core/filters/filterregistry';
 import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
 import Filter from '../../../src/core/models/filter';
-import GlobalStorage from '../../../src/core/storage/globalstorage';
+import Storage from '../../../src/core/storage/storage';
 import FilterMetadata from '../../../src/core/filters/filtermetadata';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
@@ -38,7 +38,7 @@ describe('FilterRegistry', () => {
       metadata: metadata2
     });
 
-    registry = new FilterRegistry(new GlobalStorage());
+    registry = new FilterRegistry(new Storage().init());
   });
 
   it('returns empty array for getStaticFilterNodes when no values set', () => {

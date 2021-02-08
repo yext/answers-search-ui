@@ -1,6 +1,6 @@
 {
-  "name": "answers",
-  "version": "1.6.2",
+  "name": "@yext/answers",
+  "version": "1.7.0",
   "description": "Javascript Answers Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
@@ -21,6 +21,7 @@
   ],
   "dependencies": {
     "@mapbox/mapbox-gl-language": "^0.10.1",
+    "@yext/answers-storage": "^1.0.0-beta.0",
     "@yext/rtf-converter": "^1.2.0",
     "css-vars-ponyfill": "^2.3.1",
     "gulp-sourcemaps": "^2.6.5",
@@ -44,6 +45,7 @@
     "@babel/preset-env": "^7.6.0",
     "@babel/runtime-corejs3": "^7.8.4",
     "@percy/testcafe": "^0.2.1",
+    "@size-limit/file": "^4.9.0",
     "@types/jest": "^24.0.15",
     "autoprefixer": "7.2.5",
     "cssnano": "^4.1.10",
@@ -78,7 +80,7 @@
     "rollup-plugin-node-resolve": "^4.0.1",
     "semistandard": "^13.0.1",
     "serve": "^11.3.0",
-    "size-limit": "^0.21.1",
+    "size-limit": "^4.9.0",
     "stylelint": "^13.7.1",
     "testcafe": "^1.9.4",
     "testcafe-browser-provider-browserstack": "^1.13.0",
@@ -94,7 +96,7 @@
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "semistandard",
     "test": "semistandard && stylelint src/**/*.scss && jest",
-    "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuite.js",
+    "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuites/*.js",
     "size": "size-limit",
     "fix": "semistandard --fix",
     "extract-translations": "gulp extractTranslations",
@@ -131,7 +133,9 @@
       "DOMParser",
       "ytag",
       "test",
-      "fixture"
+      "fixture",
+      "CustomEvent",
+      "ANSWERS"
     ],
     "ignore": [
       "docs/"

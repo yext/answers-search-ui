@@ -31,6 +31,7 @@ Outline:
    - [LocationBias Component](#location-bias-component)
    - [SortOptions Component](#sort-options-component)
    - [Map Component](#map-component)
+     - [Supported Map Locales](#supported-map-locales)
    - [Icon Component](#icon-component)
 5. [Customizing Components](#customizing-components)
    - [Using a Custom Renderer](#using-a-custom-renderer)
@@ -1339,12 +1340,32 @@ ANSWERS.addComponent('Facets', {
     'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
       // Optional, the placeholder text used for the filter option search input
       placeholderText: 'Search here...',
+      // Optional, show a reset button per facet group
+      showReset: false,
+      // Optional, the label to use for the reset button above
+      resetLabel: 'reset',
       // Optional, if true, display the filter option search input
       searchable: false,
+      // Optional, the form label text for the search input, defaults to 'Search for a filter option'
+      searchLabelText: 'Search for a filter option',
       // Optional, control type, singleoption or multioption
       control: 'singleoption',
       // Optional, override the field name for this facet
       label: 'My custom field'
+      // Optional, allow collapsing excess facet options after a limit
+      showMore: true,
+      // Optional, the max number of facets to show before collapsing extras
+      showMoreLimit: 5,
+      // Optional, the label to show for displaying more facets
+      showMoreLabel: 'show more',
+      // Optional, the label to show for displaying less facets
+      showLessLabel: 'show less',
+      // Optional, allow expanding and collapsing entire groups of facets
+      expand: true,
+      // Optional, callback function for when a facet is changed
+      onChange: function() { console.log('Facet changed'); },
+      // Optional, the selector used for options in the template, defaults to '.js-yext-filter-option'
+      optionSelector: '.js-yext-filter-option',
     }
   },
   // Optional, the label to show on the apply button
@@ -1929,6 +1950,7 @@ ANSWERS.addComponent('Map', {
   // Optional, can be used for Google Maps in place of the API key
   clientId: '',
   // Optional, used to determine the language of the map. Defaults to the locale specified in the ANSWERS init.
+  // Refer to the section "Supported Map Locales" below for the list of supported locales.
   locale: 'en',
   // Optional, determines whether or not to collapse pins at the same lat/lng
   collapsePins: false,
@@ -1967,6 +1989,24 @@ ANSWERS.addComponent('Map', {
   },
 };
 ```
+
+### Supported Map Locales
+
+When using MapBox (`mapBox`) as the `mapProvider`, the valid locale options
+are the ones listed here:
+
++ Arabic: `ar`
++ Chinese: `zh`
++ English: `en`
++ French: `fr`
++ German: `de`
++ Japanese: `ja`
++ Korean: `ko`
++ Portuguese: `pt`
++ Russian: `ru`
++ Spanish: `es`
+
+When using Google Maps (`google`) as the `mapProvider`, the valid locale options can be found [here](https://developers.google.com/maps/faq#languagesupport).
 
 ## Icon Component
 The Icon Component will typically be created by other components, but it can be used as a standalone component as well.

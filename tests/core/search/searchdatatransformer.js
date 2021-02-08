@@ -4,7 +4,6 @@ import Navigation from '../../../src/core/models/navigation';
 import VerticalResults from '../../../src/core/models/verticalresults';
 import SpellCheck from '../../../src/core/models/spellcheck';
 import DynamicFilters from '../../../src/core/models/dynamicfilters';
-import SearchIntents from '../../../src/core/models/searchintents';
 import LocationBias from '../../../src/core/models/locationbias';
 import ResponseWithResults from '../../fixtures/responseWithResults.json';
 import ResponseWithoutResults from '../../fixtures/responseWithNoResults.json';

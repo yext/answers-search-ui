@@ -19,13 +19,12 @@ export default {
   QUERY_ID: 'query-id',
   FACET_FILTER_NODE: 'facet-filter-node',
   DYNAMIC_FILTERS: 'dynamic-filters',
-  PARAMS: 'params',
   GEOLOCATION: 'geolocation',
-  INTENTS: 'intents',
   QUESTION_SUBMISSION: 'question-submission',
   SEARCH_CONFIG: 'search-config',
   SEARCH_OFFSET: 'search-offset',
   SPELL_CHECK: 'spell-check',
+  SKIP_SPELL_CHECK: 'skipSpellCheck',
   LOCATION_BIAS: 'location-bias',
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
@@ -33,10 +32,11 @@ export default {
   SORT_BYS: 'sort-bys',
   NO_RESULTS_CONFIG: 'no-results-config',
   LOCATION_RADIUS: 'location-radius',
-  RESULTS_HEADER: 'results-header',
+  RESULTS_HEADER: 'results-header', // DEPRECATED
   API_CONTEXT: 'context',
   REFERRER_PAGE_URL: 'referrerPageUrl',
   QUERY_TRIGGER: 'queryTrigger',
   FACETS_LOADED: 'facets-loaded',
-  QUERY_SOURCE: 'query-source'
+  QUERY_SOURCE: 'query-source',
+  HISTORY_POP_STATE: 'history-pop-state'
 };
