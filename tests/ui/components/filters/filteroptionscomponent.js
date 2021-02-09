@@ -6,7 +6,7 @@ import Filter from 'src/core/models/filter';
 import FilterMetadata from 'src/core/filters/filtermetadata';
 import FilterType from '../../../../src/core/filters/filtertype';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
-import PersistentStorage from 'src/ui/storage/persistentstorage';
+import Storage from '../../../../src/core/storage/storage';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
@@ -63,6 +63,8 @@ describe('filter options component', () => {
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
     setStaticFilterNodes = jest.fn();
+    const storage = new Storage().init();
+    storage.set(StorageKeys.SEARCH_CONFIG, { verticalKey: 'a vertical key' });
 
     const mockCore = {
       setStaticFilterNodes: setStaticFilterNodes,
@@ -70,19 +72,7 @@ describe('filter options component', () => {
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
       },
-      globalStorage: {
-        getState: (key) => {
-          if (key === StorageKeys.SEARCH_CONFIG) {
-            return {
-              verticalKey: 'a vertical key'
-            };
-          }
-          return null;
-        },
-        delete: () => { },
-        on: () => {}
-      },
-      persistentStorage: new PersistentStorage()
+      storage
     };
 
     COMPONENT_MANAGER = mockManager(mockCore);
@@ -159,10 +149,10 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       component._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).not.toEqual(storageAfterSelection);
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
+      expect(urlBefore).not.toEqual(urlAfter);
     });
 
     it('selecting an option does not update the URL when storeOnChange = false', () => {
@@ -172,10 +162,10 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
+      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       component._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).toEqual(storageAfterSelection);
+      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
+      expect(urlBefore).toEqual(urlAfter);
     });
   });
 
@@ -398,17 +388,10 @@ describe('filter options component', () => {
       const bodyEl = DOM.query('body');
       DOM.empty(bodyEl);
       DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-
+      const storage = new Storage().init();
+      storage.set('test-previous-options', ['label1', 'label2']);
       COMPONENT_MANAGER = mockManager({
-        globalStorage: {
-          getState: key => {
-            if (key === 'test-previous-options') {
-              return ['label1', 'label2'];
-            }
-          },
-          delete: () => { },
-          on: () => {}
-        },
+        storage,
         setStaticFilterNodes: () => { }
       });
 
@@ -543,15 +526,6 @@ describe('filter options component', () => {
       setStaticFilterNodes = jest.fn();
 
       COMPONENT_MANAGER = mockManager({
-        globalStorage: {
-          getState: () => { },
-          delete: () => { },
-          on: () => {}
-        },
-        persistentStorage: {
-          set: () => { },
-          get: () => { }
-        },
         setLocationRadiusFilterNode,
         setStaticFilterNodes
       });

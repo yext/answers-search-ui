@@ -275,6 +275,6 @@ export default class FacetsComponent extends Component {
     );
 
     this._filterbox.mount();
-    this.core.globalStorage.set(StorageKeys.FACETS_LOADED, true);
+    this.core.storage.set(StorageKeys.FACETS_LOADED, true);
   }
 }

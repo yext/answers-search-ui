@@ -66,8 +66,8 @@ export default class DateRangeFilterComponent extends Component {
 
     const today = new Date();
     const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
-    const minDate = this.core.globalStorage.getState(`${this.name}.min`);
-    const maxDate = this.core.globalStorage.getState(`${this.name}.max`);
+    const minDate = this.core.storage.get(`${this.name}.min`);
+    const maxDate = this.core.storage.get(`${this.name}.max`);
 
     /**
      * The current date range
@@ -128,8 +128,8 @@ export default class DateRangeFilterComponent extends Component {
     this.setState();
     this._onChange(FilterNodeFactory.from());
     this.core.clearStaticFilterNode(this.name);
-    this.core.persistentStorage.delete(`${this.name}.min`);
-    this.core.persistentStorage.delete(`${this.name}.max`);
+    this.core.storage.delete(`${this.name}.min`);
+    this.core.storage.delete(`${this.name}.max`);
   }
 
   /**
@@ -160,8 +160,8 @@ export default class DateRangeFilterComponent extends Component {
     if (this._storeOnChange) {
       this.core.setStaticFilterNodes(this.name, filterNode);
     }
-    this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
-    this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
+    this.core.storage.setWithPersist(`${this.name}.min`, this._date.min);
+    this.core.storage.setWithPersist(`${this.name}.max`, this._date.max);
 
     this._onChange(filterNode);
   }

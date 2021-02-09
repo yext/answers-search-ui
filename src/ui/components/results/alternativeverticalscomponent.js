@@ -42,8 +42,8 @@ export default class AlternativeVerticalsComponent extends Component {
     this.verticalSuggestions = this._buildVerticalSuggestions(
       this._alternativeVerticals,
       this._verticalsConfig,
-      this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
-      this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+      this.core.storage.get(StorageKeys.API_CONTEXT),
+      this.core.storage.get(StorageKeys.REFERRER_PAGE_URL)
     );
 
     /**
@@ -58,7 +58,7 @@ export default class AlternativeVerticalsComponent extends Component {
      */
     this._universalUrl = this._getUniversalURL(
       this._baseUniversalUrl,
-      new SearchParams(window.location.search.substring(1))
+      new SearchParams(this.core.storage.getCurrentStateUrlMerged())
     );
 
     /**
@@ -71,18 +71,26 @@ export default class AlternativeVerticalsComponent extends Component {
       this.verticalSuggestions = this._buildVerticalSuggestions(
         this._alternativeVerticals,
         this._verticalsConfig,
-        this.core.globalStorage.getState(StorageKeys.API_CONTEXT),
-        this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL)
+        this.core.storage.get(StorageKeys.API_CONTEXT),
+        this.core.storage.get(StorageKeys.REFERRER_PAGE_URL)
       );
       this._universalUrl = this._getUniversalURL(
         this._baseUniversalUrl,
-        new SearchParams(window.location.search.substring(1))
+        new SearchParams(this.core.storage.getCurrentStateUrlMerged())
       );
-      this.setState(this.core.globalStorage.getState(StorageKeys.ALERNATIVE_VERTICALS));
+      this.setState(this.core.storage.get(StorageKeys.ALTERNATIVE_VERTICALS));
     };
 
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
-    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.API_CONTEXT,
+      callback: reRender
+    });
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.SESSIONS_OPT_IN,
+      callback: reRender
+    });
   }
 
   static get type () {
@@ -108,7 +116,7 @@ export default class AlternativeVerticalsComponent extends Component {
       verticalSuggestions: this.verticalSuggestions,
       currentVerticalLabel: this._currentVerticalLabel,
       isShowingResults: this._isShowingResults,
-      query: this.core.globalStorage.getState(StorageKeys.QUERY)
+      query: this.core.storage.get(StorageKeys.QUERY)
     }));
   }
 
@@ -129,14 +137,14 @@ export default class AlternativeVerticalsComponent extends Component {
   _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context, referrerPageUrl) {
     let verticals = [];
 
-    const params = new SearchParams(window.location.search.substring(1));
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
     if (typeof referrerPageUrl === 'string') {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
-    const sessionsOptIn = this.core.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    const sessionsOptIn = this.core.storage.get(StorageKeys.SESSIONS_OPT_IN);
     if (sessionsOptIn && sessionsOptIn.setDynamically) {
       params[StorageKeys.SESSIONS_OPT_IN] = sessionsOptIn.value;
     }
@@ -182,14 +190,14 @@ export default class AlternativeVerticalsComponent extends Component {
       return '';
     }
 
-    params.set(StorageKeys.QUERY, this.core.globalStorage.getState(StorageKeys.QUERY));
+    params.set(StorageKeys.QUERY, this.core.storage.get(StorageKeys.QUERY));
 
-    const context = this.core.globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
     if (context) {
       params.set(StorageKeys.API_CONTEXT, context);
     }
-    const referrerPageUrl = this.core.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
-    if (referrerPageUrl !== null) {
+    const referrerPageUrl = this.core.storage.get(StorageKeys.REFERRER_PAGE_URL);
+    if (referrerPageUrl !== undefined) {
       params.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
     }
 

@@ -14,8 +14,7 @@ import Component from './ui/components/component';
 import ErrorReporter from './core/errors/errorreporter';
 import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
-import PersistentStorage from './ui/storage/persistentstorage';
-import GlobalStorage from './core/storage/globalstorage';
+import Storage from './core/storage/storage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
@@ -165,69 +164,86 @@ class Answers {
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
-    const globalStorage = new GlobalStorage();
-    const persistentStorage = new PersistentStorage({
-      updateListener: parsedConfig.onStateChange,
-      resetListener: data => {
-        if (!data[StorageKeys.QUERY]) {
+    const storage = new Storage({
+      update: (data, url) => {
+        if (parsedConfig.onStateChange) {
+          parsedConfig.onStateChange(Object.fromEntries(data), url);
+        }
+      },
+      reset: data => {
+        if (!data.get(StorageKeys.QUERY)) {
           this.coreAdapter.clearResults();
         } else {
-          this.coreAdapter.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+          this.coreAdapter.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+        }
+        this.coreAdapter.storage.set(StorageKeys.HISTORY_POP_STATE, data);
+
+        if (!data.get(StorageKeys.SEARCH_OFFSET)) {
+          this.coreAdapter.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
 
-        if (!data[StorageKeys.SEARCH_OFFSET]) {
-          this.coreAdapter.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+        let query;
+        data.forEach((value, key) => {
+          if (key === StorageKeys.QUERY) {
+            query = value;
+            return;
+          }
+          this.coreAdapter.storage.set(key, value);
+        });
+
+        if (query) {
+          this.coreAdapter.storage.set(StorageKeys.QUERY, query);
         }
-        globalStorage.setAll(data);
       }
     });
-    globalStorage.setAll(persistentStorage.getAll());
-    globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
-    globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
-    globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
-    globalStorage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
+    storage.init(window.location.search);
+    storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
+    storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
+    storage.set(StorageKeys.LOCALE, parsedConfig.locale);
+    storage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
 
     // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
     // what is in parsedConfig.
-    const sessionOptIn = globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    const sessionOptIn = storage.get(StorageKeys.SESSIONS_OPT_IN);
     if (!sessionOptIn) {
-      globalStorage.set(
+      storage.set(
         StorageKeys.SESSIONS_OPT_IN,
         { value: parsedConfig.sessionTrackingEnabled, setDynamically: false });
     } else {
       // If sessionsOptIn was stored in the URL, it was stored only as a string.
-      // Parse this value and add it back to globalStorage.
-      globalStorage.set(
+      // Parse this value and add it back to storage.
+      storage.set(
         StorageKeys.SESSIONS_OPT_IN,
         { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
     }
 
-    parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
-    if (globalStorage.getState(StorageKeys.QUERY)) {
-      globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+    parsedConfig.noResults && storage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
+    const isSuggestQueryTrigger =
+      storage.get(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
+    if (storage.get(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
+      storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 
-    const context = globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = storage.get(StorageKeys.API_CONTEXT);
     if (context && !isValidContext(context)) {
-      persistentStorage.delete(StorageKeys.API_CONTEXT, true);
-      globalStorage.delete(StorageKeys.API_CONTEXT);
+      storage.delete(StorageKeys.API_CONTEXT);
       console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
     }
 
-    if (globalStorage.getState(StorageKeys.REFERRER_PAGE_URL) === null) {
-      globalStorage.set(
+    if (storage.get(StorageKeys.REFERRER_PAGE_URL) === undefined) {
+      storage.set(
         StorageKeys.REFERRER_PAGE_URL,
         urlWithoutQueryParamsAndHash(document.referrer)
       );
     }
 
     this._masterSwitchApi = statusPage
-      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, globalStorage)
-      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, globalStorage);
+      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, storage)
+      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, storage);
 
     this._services = parsedConfig.mock
       ? getMockServices()
-      : getServices(parsedConfig, globalStorage);
+      : getServices(parsedConfig, storage);
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
     // TODO(amullings): Initialize with other services
@@ -242,9 +258,11 @@ class Answers {
         parsedConfig.environment);
 
       // listen to query id updates
-      globalStorage.on('update', StorageKeys.QUERY_ID, id =>
-        this._analyticsReporterService.setQueryId(id)
-      );
+      storage.registerListener({
+        eventType: 'update',
+        storageKey: StorageKeys.QUERY_ID,
+        callback: id => this._analyticsReporterService.setQueryId(id)
+      });
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
@@ -252,8 +270,7 @@ class Answers {
 
     this.coreAdapter = new CoreAdapter({
       apiKey: parsedConfig.apiKey,
-      globalStorage: globalStorage,
-      persistentStorage: persistentStorage,
+      storage: storage,
       experienceKey: parsedConfig.experienceKey,
       fieldFormatters: parsedConfig.fieldFormatters,
       experienceVersion: parsedConfig.experienceVersion,
@@ -267,7 +284,9 @@ class Answers {
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
-      parsedConfig.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
+      parsedConfig.onStateChange(
+        Object.fromEntries(storage.getAll()),
+        this.coreAdapter.storage.getCurrentStateUrlMerged());
     }
 
     this.components
@@ -409,8 +428,7 @@ class Answers {
    * @param {string} query
    */
   search (query) {
-    this.coreAdapter.setQuery(query, { setQueryParams: true });
-    this.coreAdapter.persistentStorage.set(StorageKeys.QUERY, query);
+    this.coreAdapter.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
   registerHelper (name, cb) {
@@ -442,7 +460,7 @@ class Answers {
    * @param {boolean} optIn
    */
   setSessionsOptIn (optIn) {
-    this.coreAdapter.globalStorage.set(
+    this.coreAdapter.storage.set(
       StorageKeys.SESSIONS_OPT_IN, { value: optIn, setDynamically: true });
   }
 
@@ -457,22 +475,22 @@ class Answers {
     if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
       return;
     }
-    const prepopulatedQuery = this.coreAdapter.globalStorage.getState(StorageKeys.QUERY);
+    const prepopulatedQuery = this.coreAdapter.storage.get(StorageKeys.QUERY);
     if (prepopulatedQuery != null) {
       return;
     }
-    this.coreAdapter.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+    this.coreAdapter.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
     this.coreAdapter.setQuery(searchConfig.defaultInitialSearch);
   }
 
   /**
-   * Sets the geolocation tag in global storage, overriding other inputs. Do not use in conjunction
+   * Sets the geolocation tag in storage, overriding other inputs. Do not use in conjunction
    * with other components that will set the geolocation internally.
    * @param {number} lat
    * @param {number} long
    */
   setGeolocation (lat, lng) {
-    this.coreAdapter.globalStorage.set(StorageKeys.GEOLOCATION, {
+    this.coreAdapter.storage.set(StorageKeys.GEOLOCATION, {
       lat, lng, radius: 0
     });
   }
@@ -540,7 +558,7 @@ class Answers {
       return;
     }
 
-    this.coreAdapter.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
+    this.coreAdapter.storage.set(StorageKeys.API_CONTEXT, contextString);
   }
 
   /**
@@ -566,16 +584,16 @@ class Answers {
    * @returns {string}
    */
   _getInitLocale () {
-    return this.coreAdapter.globalStorage.getState(StorageKeys.LOCALE);
+    return this.coreAdapter.storage.get(StorageKeys.LOCALE);
   }
 }
 
 /**
  * @param {Object} config
- * @param {GlobalStorage} globalStorage
+ * @param {Storage} storage
  * @returns {Services}
  */
-function getServices (config, globalStorage) {
+function getServices (config, storage) {
   return {
     searchService: new SearchApi({
       apiKey: config.apiKey,
@@ -583,7 +601,8 @@ function getServices (config, globalStorage) {
       experienceVersion: config.experienceVersion,
       locale: config.locale,
       environment: config.environment
-    }),
+    },
+    storage),
     autoCompleteService: new AutoCompleteApi(
       {
         apiKey: config.apiKey,
@@ -592,7 +611,7 @@ function getServices (config, globalStorage) {
         locale: config.locale,
         environment: config.environment
       },
-      globalStorage),
+      storage),
     errorReporterService: new ErrorReporter(
       {
         apiKey: config.apiKey,
@@ -602,7 +621,7 @@ function getServices (config, globalStorage) {
         sendToServer: !config.suppressErrorReports,
         environment: config.environment
       },
-      globalStorage)
+      storage)
   };
 }
 

@@ -26,9 +26,17 @@ export default class UniversalResultsComponent extends Component {
     };
 
     const reRender = () =>
-      this.setState(this.core.globalStorage.getState(StorageKeys.UNIVERSAL_RESULTS) || {});
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
-    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
+      this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.API_CONTEXT,
+      callback: reRender
+    });
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.SESSIONS_OPT_IN,
+      callback: reRender
+    });
   }
 
   static get type () {
@@ -45,7 +53,7 @@ export default class UniversalResultsComponent extends Component {
 
   setState (data, val) {
     const sections = data.sections || [];
-    const query = this.core.globalStorage.getState(StorageKeys.QUERY);
+    const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,

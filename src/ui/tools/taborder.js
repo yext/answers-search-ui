@@ -1,7 +1,11 @@
 import SearchParams from '../dom/searchparams';
 
-export function getUrlParams () {
-  return new SearchParams(window.location.search.substring(1));
+/**
+ * @param {string} urlParams a query param string like "query=hi&otherParam=hello"
+ * @returns {SearchParams}
+ */
+export function getUrlParams (urlParams) {
+  return new SearchParams(urlParams);
 }
 
 export function getDefaultTabOrder (tabsConfig, urlParams) {
@@ -50,8 +54,8 @@ export function mergeTabOrder (tabOrder, otherTabOrder, tabs) {
   return tabOrder;
 }
 
-export function getTabOrder (tabsConfig, dataTabOrder) {
-  let tabOrder = getDefaultTabOrder(tabsConfig, getUrlParams());
+export function getTabOrder (tabsConfig, dataTabOrder, urlParams) {
+  let tabOrder = getDefaultTabOrder(tabsConfig, getUrlParams(urlParams));
   // We want to persist the params from the existing URL to the new
   // URLS we create.
   if (tabOrder && dataTabOrder) {

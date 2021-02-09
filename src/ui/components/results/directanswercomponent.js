@@ -119,6 +119,7 @@ export default class DirectAnswerComponent extends Component {
       return true;
     }
     const directAnswerPropeties = {
+      type: directAnswer.type,
       entityType: directAnswer.relatedItem.data.type,
       fieldName: directAnswer.answer.fieldName,
       fieldType: directAnswer.answer.fieldType

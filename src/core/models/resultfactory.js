@@ -197,7 +197,8 @@ export default class ResultFactory {
       id: data.id,
       ordinal: index + 1,
       distance: distance,
-      distanceFromFilter: distanceFromFilter
+      distanceFromFilter: distanceFromFilter,
+      highlightedFields
     });
   }
 
