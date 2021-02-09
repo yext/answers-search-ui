@@ -381,7 +381,7 @@ export default class CoreAdapter {
    */
   autoCompleteUniversal (input, namespace) {
     return this._coreLibrary
-      .universalAutoComplete({
+      .universalAutocomplete({
         input: input,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
       })
@@ -402,7 +402,7 @@ export default class CoreAdapter {
    */
   autoCompleteVertical (input, namespace, verticalKey) {
     return this._coreLibrary
-      .verticalAutoComplete({
+      .verticalAutocomplete({
         input: input,
         verticalKey: verticalKey,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
@@ -429,18 +429,15 @@ export default class CoreAdapter {
       entityType: field.entityTypeId,
       fetchEntities: field.shouldFetchEntities
     }));
-    const searchParams = {
-      sectioned: config.searchParameters.sectioned,
-      fields: searchParamFields
-    };
     return this._coreLibrary
-      .filterAutoComplete({
+      .filterSearch({
         input: input,
         verticalKey: config.verticalKey,
-        searchParameters: searchParams,
+        fields: searchParamFields,
+        sectioned: config.searchParameters.sectioned,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
       })
-      .then(response => AutoCompleteResponseTransformer.transformFilterAutoCompleteResponse(response))
+      .then(response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response))
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });
