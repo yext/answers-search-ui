@@ -38,13 +38,7 @@ exports.modernBundle = function (callback, outputConfig, bundleName, locale, lib
         exclude: [/node_modules/],
         presets: ['@babel/env']
       })
-    ],
-    onwarn: function(warning) {
-      if ( warning.code === 'THIS_IS_UNDEFINED' ) { 
-        return;
-      }
-      console.warn( warning.message );
-    },
+    ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
 };
@@ -94,13 +88,7 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
           '@babel/plugin-transform-object-assign'
         ]
       })
-    ],
-    onwarn: function(warning) {
-      if ( warning.code === 'THIS_IS_UNDEFINED' ) { 
-        return; 
-      }
-      console.warn( warning.message );
-    },
+    ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
 };
