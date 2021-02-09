@@ -22,6 +22,7 @@
   "dependencies": {
     "@mapbox/mapbox-gl-language": "^0.10.1",
     "@yext/answers-storage": "^1.0.0-beta.0",
+    "@yext/answers-core": "^1.0.0-beta.3",
     "@yext/rtf-converter": "^1.2.0",
     "css-vars-ponyfill": "^2.3.1",
     "gulp-sourcemaps": "^2.6.5",
@@ -47,7 +48,6 @@
     "@percy/testcafe": "^0.2.1",
     "@size-limit/file": "^4.9.0",
     "@types/jest": "^24.0.15",
-    "@yext/answers-core": "^1.0.0-beta.0",
     "autoprefixer": "7.2.5",
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
