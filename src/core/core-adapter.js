@@ -1,5 +1,5 @@
 /** @module Core */
-import { provideCore } from '@yext/answers-core';
+import { provideCore } from '@yext/answers-core/lib/commonjs';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -123,9 +123,8 @@ export default class CoreAdapter {
       experienceKey: this._experienceKey,
       locale: this._locale
     };
-    return provideCore(params).then(coreLibrary => {
-      this._coreLibrary = coreLibrary;
-    });
+
+    this._coreLibrary = provideCore(params);
   }
 
   /**
