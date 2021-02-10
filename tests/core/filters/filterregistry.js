@@ -234,7 +234,6 @@ describe('FilterRegistry', () => {
     expect(registry.getFacetFilterNodes()).toEqual(facetNodes);
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
     expect(registry.getFacetsPayload()).toEqual(expectedFacets);
-    console.log(expectedFacets);
   });
 
   it('can set locationRadius FilterNodes', () => {
