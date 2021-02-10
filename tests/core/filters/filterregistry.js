@@ -200,9 +200,36 @@ describe('FilterRegistry', () => {
 
     registry.setFacetFilterNodes([ 'random_field', 'another_field' ], facetNodes);
     const expectedFacets = [
-      Filter.from(filter1),
-      Filter.from(filter3),
-      Filter.from(filter2)
+      {
+        fieldId: 'random_field',
+        options: []
+      },
+      {
+        fieldId: 'another_field',
+        options: []
+      },
+      {
+        fieldId: 'c_1',
+        options: [
+          {
+            matcher: '$eq',
+            value: '1'
+          },
+          {
+            matcher: '$eq',
+            value: '2'
+          }
+        ]
+      },
+      {
+        fieldId: 'c_2',
+        options: [
+          {
+            matcher: '$eq',
+            value: '2'
+          }
+        ]
+      }
     ];
     expect(registry.getFacetFilterNodes()).toEqual(facetNodes);
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
