@@ -52,13 +52,13 @@ describe('FilterRegistry', () => {
   it('can correctly set simple filter nodes', () => {
     const transformedFilter1 = {
       fieldId: 'c_1',
-      comparator: '$eq',
-      comparedValue: filter1.c_1['$eq']
+      matcher: '$eq',
+      value: filter1.c_1['$eq']
     };
     const transformedFilter2 = {
       fieldId: 'c_2',
-      comparator: '$eq',
-      comparedValue: filter2.c_2['$eq']
+      matcher: '$eq',
+      value: filter2.c_2['$eq']
     };
     registry.setStaticFilterNodes('namespace1', node1);
     expect(registry.getStaticFilterNodes()).toHaveLength(1);
@@ -95,13 +95,13 @@ describe('FilterRegistry', () => {
   it('can correctly set nested filter nodes', () => {
     const transformedFilter1 = {
       fieldId: 'c_1',
-      comparator: '$eq',
-      comparedValue: filter1.c_1['$eq']
+      matcher: '$eq',
+      value: filter1.c_1['$eq']
     };
     const transformedFilter2 = {
       fieldId: 'c_2',
-      comparator: '$eq',
-      comparedValue: filter2.c_2['$eq']
+      matcher: '$eq',
+      value: filter2.c_2['$eq']
     };
     const orNode = FilterNodeFactory.or(node1, node2);
     registry.setStaticFilterNodes('namespace1', orNode);
@@ -155,9 +155,36 @@ describe('FilterRegistry', () => {
 
   it('can set facet filter nodes, always overriding previous facets', () => {
     registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
-    const expectedFacets = [ filter1, filter2 ];
+    const expectedFacets = [ 
+      {
+        fieldId: 'random_field',
+        options: []
+      },
+      {
+        fieldId: 'another_field',
+        options: []
+      },
+      {
+        fieldId: 'c_1',
+        options: [
+          {
+            matcher: '$eq',
+            value: '1'
+          }
+        ]
+      },
+      {
+        fieldId: 'c_2',
+        options: [
+          {
+            matcher: '$eq',
+            value: '2'
+          }
+        ]
+      },
+    ];
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
-    expect(registry.getFacetFilterPayload()).toEqual(expectedFacets);
+    expect(registry.getFacetsPayload()).toEqual(expectedFacets);
   });
 
   it('facets can combine multiple filter nodes', () => {
@@ -179,7 +206,8 @@ describe('FilterRegistry', () => {
     ];
     expect(registry.getFacetFilterNodes()).toEqual(facetNodes);
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
-    expect(registry.getFacetFilterPayload()).toEqual(expectedFacets);
+    expect(registry.getFacetsPayload()).toEqual(expectedFacets);
+    console.log(expectedFacets);
   });
 
   it('can set locationRadius FilterNodes', () => {
