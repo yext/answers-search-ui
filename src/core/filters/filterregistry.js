@@ -126,9 +126,26 @@ export default class FilterRegistry {
   }
 
   /**
+   * Transforms a {@link Filter} into answers-core's {@link FacetOption}
+   *
+   * @param {Filter} filter
+   * @returns {FacetOption} from answers-core
+   */
+  _transformSimpleFilterNodeIntoFacetOption (filter) {
+    const fieldId = Object.keys(filter)[0];
+    const filterComparison = filter[fieldId];
+    const matcher = Object.keys(filterComparison)[0];
+    const value = filterComparison[matcher];
+    return {
+      matcher: matcher,
+      value: value
+    };
+  }
+
+  /**
    * Gets the facet filters as an array of Filters to send to the answers-core.
    *
-   * @returns {Filter[]} from the answers-core
+   * @returns {Facet[]} from answers-core
    */
   getFacetsPayload () {
     const getFilters = fn => fn.getChildren().length
@@ -137,21 +154,10 @@ export default class FilterRegistry {
     const filters = this.getFacetFilterNodes().flatMap(getFilters);
     const facets = Facet.fromFilters(this.availableFieldIds, ...filters);
 
-    const transformFilter = filter => {
-      const fieldId = Object.keys(filter)[0];
-      const filterComparison = filter[fieldId];
-      const matcher = Object.keys(filterComparison)[0];
-      const value = filterComparison[matcher];
-      return {
-        matcher: matcher,
-        value: value
-      };
-    };
-
     const coreFacets = Object.entries(facets).map(([fieldId, filterArray]) => {
       return {
         fieldId: fieldId,
-        options: filterArray.map(transformFilter)
+        options: filterArray.map(this._transformSimpleFilterNodeIntoFacetOption)
       };
     });
 
