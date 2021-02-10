@@ -196,7 +196,7 @@ export default class CoreAdapter {
       .verticalSearch({
         verticalKey: verticalKey || searchConfig.verticalKey,
         limit: this.storage.get(StorageKeys.SEARCH_CONFIG).limit,
-        location: this.storage.get(StorageKeys.GEOLOCATION),
+        coordinates: this.storage.get(StorageKeys.GEOLOCATION),
         query: parsedQuery.input,
         retrieveFacets: this._isDynamicFiltersEnabled,
         facets: this.filterRegistry.getFacetsPayload(),
