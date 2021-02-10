@@ -106,7 +106,7 @@
   },
   "jest": {
     "bail": 0,
-    "verbose": false,
+    "verbose": true,
     "setupFilesAfterEnv": [
       "./tests/setup/setup.js"
     ],
