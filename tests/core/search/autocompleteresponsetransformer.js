@@ -61,8 +61,8 @@ describe('transform autocomplete response', () => {
                 }
               ],
               filter: {
-                comparator: '$eq',
-                comparedValue: 'Virginia Beach',
+                matcher: '$eq',
+                value: 'Virginia Beach',
                 fieldId: 'name'
               },
               key: 'name'
@@ -104,7 +104,7 @@ describe('transform autocomplete response', () => {
       ]
     };
     const actualTransformedResponse =
-      AutoCompleteResponseTransformer.transformFilterAutoCompleteResponse(responseFromCore);
+      AutoCompleteResponseTransformer.transformFilterSearchResponse(responseFromCore);
     expect(actualTransformedResponse).toEqual(expectedTransformedResponse);
   });
 
@@ -122,8 +122,8 @@ describe('transform autocomplete response', () => {
             }
           ],
           filter: {
-            comparator: '$eq',
-            comparedValue: 'Virginia Beach',
+            matcher: '$eq',
+            value: 'Virginia Beach',
             fieldId: 'name'
           },
           key: 'name'
@@ -161,14 +161,14 @@ describe('transform autocomplete response', () => {
       ]
     };
     const actualTransformedResponse =
-      AutoCompleteResponseTransformer.transformFilterAutoCompleteResponse(responseFromCore);
+      AutoCompleteResponseTransformer.transformFilterSearchResponse(responseFromCore);
     expect(actualTransformedResponse).toEqual(expectedTransformedResponse);
   });
 
   it('transform filter', () => {
     const filterFromCore = {
-      comparator: '$eq',
-      comparedValue: 'Arlington',
+      matcher: '$eq',
+      value: 'Arlington',
       fieldId: 'c_name'
     };
     const expectedTransformedFilter = {
@@ -191,8 +191,8 @@ describe('transform autocomplete response', () => {
         }
       ],
       filter: {
-        comparator: '$eq',
-        comparedValue: 'Virginia Beach',
+        matcher: '$eq',
+        value: 'Virginia Beach',
         fieldId: 'name'
       },
       key: 'name'
