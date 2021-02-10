@@ -155,7 +155,7 @@ describe('FilterRegistry', () => {
 
   it('can set facet filter nodes, always overriding previous facets', () => {
     registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
-    const expectedFacets = [ 
+    const expectedFacets = [
       {
         fieldId: 'random_field',
         options: []
@@ -181,7 +181,7 @@ describe('FilterRegistry', () => {
             value: '2'
           }
         ]
-      },
+      }
     ];
     expect(registry.availableFieldIds).toEqual(['random_field', 'another_field']);
     expect(registry.getFacetsPayload()).toEqual(expectedFacets);
