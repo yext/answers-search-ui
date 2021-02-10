@@ -484,7 +484,7 @@ export default class CoreAdapter {
         direction: option.direction
       };
     });
-    this.storage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+    this.storage.set(StorageKeys.SORT_BYS, sortBys);
   }
 
   /**
