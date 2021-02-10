@@ -51,7 +51,7 @@ export default class Filter {
 
     return new Filter({
       [filter.fieldId]: {
-        [filter.comparator]: filter.comparedValue
+        [filter.matcher]: filter.value
       }
     });
   }

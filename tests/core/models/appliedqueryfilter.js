@@ -6,8 +6,8 @@ it('constructs an applied query filter from an answers-core applied query filter
     displayValue: '23',
     filter: {
       fieldId: 'field1',
-      comparator: '$eq',
-      comparedValue: 'yext'
+      matcher: '$eq',
+      value: 'yext'
     }
   };
   const expectedFilter = {

@@ -6,8 +6,8 @@
         "displayValue": "Locations",
         "filter": {
           "fieldId": "builtin.entityType",
-          "comparator": "$eq",
-          "comparedValue": "Locations"
+          "matcher": "$eq",
+          "value": "Locations"
         }
       }
     ],

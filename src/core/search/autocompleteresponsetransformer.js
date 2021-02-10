@@ -63,11 +63,11 @@ export default class AutoCompleteResponseTransformer {
 
   static _transformFilter (filter) {
     const fieldId = filter.fieldId;
-    const comparator = filter.comparator;
-    const comparedValue = filter.comparedValue;
+    const matcher = filter.matcher;
+    const value = filter.value;
     return {
       [fieldId]: {
-        [comparator]: comparedValue
+        [matcher]: value
       }
     };
   }
