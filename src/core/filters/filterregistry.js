@@ -1,6 +1,7 @@
 /** @module FilterRegistry */
 
 import FilterCombinators from './filtercombinators';
+import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 
 /** @typedef {import('../storage/storage').default} Storage */
@@ -66,9 +67,9 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the static filters as a {@link SimpleFilter|CombinedFilter} to send to the answers-core
+   * Gets the static filters as a {@link Filter|CombinedFilter} to send to the answers-core
    *
-   * @returns {CombinedFilter|SimpleFilter|null} Returns null if no filters with
+   * @returns {CombinedFilter|Filter|null} Returns null if no filters with
    *                                             filtering logic are present.
    */
   getStaticFilterPayload () {
@@ -83,11 +84,11 @@ export default class FilterRegistry {
 
   /**
    * Transforms a list of filter nodes {@link CombinedFilterNode} or {@link SimpleFilterNode} to
-   * answers-core's {@link SimpleFilter} or {@link CombinedFilter}
+   * answers-core's {@link Filter} or {@link CombinedFilter}
    *
    * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
    * @param {FilterCombinator} combinator from answers-core
-   * @returns {CombinedFilter|SimpleFilter} from answers-core
+   * @returns {CombinedFilter|Filter} from answers-core
    */
   _transformFilterNodes (filterNodes, combinator) {
     const filters = filterNodes.flatMap(filterNode => {
@@ -107,35 +108,60 @@ export default class FilterRegistry {
   }
 
   /**
-   * Transforms a {@link SimpleFilterNode} to answers-core's {@link SimpleFilter}
+   * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter}
    *
    * @param {SimpleFilterNode} filterNode
-   * @returns {SimpleFilter}
+   * @returns {Filter}
    */
   _transformSimpleFilterNode (filterNode) {
     const fieldId = Object.keys(filterNode.filter)[0];
     const filterComparison = filterNode.filter[fieldId];
-    const comparator = Object.keys(filterComparison)[0];
-    const comparedValue = filterComparison[comparator];
+    const matcher = Object.keys(filterComparison)[0];
+    const value = filterComparison[matcher];
     return {
       fieldId: fieldId,
-      comparator: comparator,
-      comparedValue: comparedValue
+      matcher: matcher,
+      value: value
     };
   }
 
   /**
-   * Gets the facet filters as an array of SimpleFilters to send to the answers-core.
+   * Transforms a {@link Filter} into answers-core's {@link FacetOption}
    *
-   * @returns {SimpleFilter[]} from the answers-core
+   * @param {Filter} filter
+   * @returns {FacetOption} from answers-core
    */
-  getFacetFilterPayload () {
-    return this.getFacetFilterNodes()
-      .flatMap(filterNode => {
-        const childNodes = filterNode.getChildren();
-        return childNodes.length > 0 ? childNodes : filterNode;
-      })
-      .map(simpleFilterNode => simpleFilterNode.getFilter());
+  _transformSimpleFilterNodeIntoFacetOption (filter) {
+    const fieldId = Object.keys(filter)[0];
+    const filterComparison = filter[fieldId];
+    const matcher = Object.keys(filterComparison)[0];
+    const value = filterComparison[matcher];
+    return {
+      matcher: matcher,
+      value: value
+    };
+  }
+
+  /**
+   * Gets the facet filters as an array of Filters to send to the answers-core.
+   *
+   * @returns {Facet[]} from answers-core
+   */
+  getFacetsPayload () {
+    const getFilters = fn => fn.getChildren().length
+      ? fn.getChildren().flatMap(getFilters)
+      : fn.getFilter();
+    const filters = this.getFacetFilterNodes().flatMap(getFilters);
+    const facets = Facet.fromFilters(this.availableFieldIds, ...filters);
+
+    const coreFacets = Object.entries(facets).map(([fieldId, filterArray]) => {
+      return {
+        fieldId: fieldId,
+        options: filterArray.map(this._transformSimpleFilterNodeIntoFacetOption)
+      };
+    });
+
+    return coreFacets;
   }
 
   /**

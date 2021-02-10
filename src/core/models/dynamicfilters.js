@@ -35,7 +35,11 @@ export default class DynamicFilters {
         label: o['displayName'],
         countLabel: o['count'],
         selected: o['selected'],
-        filter: o['filter']
+        filter: {
+          [f['fieldId']]: {
+            [o['matcher']]: o['value']
+          }
+        }
       }))
     }));
 

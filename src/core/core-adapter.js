@@ -199,7 +199,7 @@ export default class CoreAdapter {
         location: this._getLocationPayload(),
         query: parsedQuery.input,
         retrieveFacets: this._isDynamicFiltersEnabled,
-        facetFilters: this.filterRegistry.getFacetFilterPayload(),
+        facets: this.filterRegistry.getFacetsPayload(),
         staticFilters: this.filterRegistry.getStaticFilterPayload(),
         offset: this.storage.get(StorageKeys.SEARCH_OFFSET) || 0,
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
@@ -484,7 +484,7 @@ export default class CoreAdapter {
         direction: option.direction
       };
     });
-    this.storage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+    this.storage.set(StorageKeys.SORT_BYS, sortBys);
   }
 
   /**
