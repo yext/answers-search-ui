@@ -101,7 +101,8 @@ export default class CoreAdapter {
     const params = {
       apiKey: this._apiKey,
       experienceKey: this._experienceKey,
-      locale: this._locale
+      locale: this._locale,
+      experienceVersion: this._experienceVersion
     };
 
     this._coreLibrary = provideCore(params);
