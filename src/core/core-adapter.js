@@ -17,6 +17,9 @@ import FilterRegistry from './filters/filterregistry';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
+import { PRODUCTION, ENDPOINTS } from './constants';
+import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
+
 /** @typedef {import('./storage/storage').default} Storage */
 
 /**
@@ -92,6 +95,12 @@ export default class CoreAdapter {
      * @type {Function}
      */
     this.onVerticalSearch = config.onVerticalSearch || function () {};
+
+    /**
+     * The environment which determines which URLs the requests use.
+     * @type {string}
+     */
+    this._environment = config.environment || PRODUCTION;
   }
 
   /**
@@ -102,10 +111,25 @@ export default class CoreAdapter {
       apiKey: this._apiKey,
       experienceKey: this._experienceKey,
       locale: this._locale,
-      experienceVersion: this._experienceVersion
+      experienceVersion: this._experienceVersion,
+      endpoints: this._getServiceUrls()
     };
 
     this._coreLibrary = provideCore(params);
+  }
+
+  /**
+   * Get the urls for each service based on the environment.
+   */
+  _getServiceUrls() {
+    return {
+      universalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_SEARCH,
+      verticalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_SEARCH,
+      questionSubmission: getKnowledgeApiUrl(this._environment) + ENDPOINTS.QUESTION_SUBMISSION,
+      universalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_AUTOCOMPLETE,
+      verticalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_AUTOCOMPLETE,
+      filterSearch: getCachedLiveApiUrl(this._environment) + ENDPOINTS.FILTER_SEARCH
+    }
   }
 
   /**
