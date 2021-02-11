@@ -20,10 +20,6 @@ import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
-import AutoCompleteApi from './core/search/autocompleteapi';
-import MockAutoCompleteService from './core/search/mockautocompleteservice';
-import SearchApi from './core/search/searchapi';
-import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
@@ -275,9 +271,6 @@ class Answers {
       fieldFormatters: parsedConfig.fieldFormatters,
       experienceVersion: parsedConfig.experienceVersion,
       locale: parsedConfig.locale,
-      searchService: this._services.searchService,
-      autoCompleteService: this._services.autoCompleteService,
-      questionAnswerService: this._services.questionAnswerService,
       analyticsReporter: this._analyticsReporterService,
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch
@@ -595,23 +588,6 @@ class Answers {
  */
 function getServices (config, storage) {
   return {
-    searchService: new SearchApi({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      locale: config.locale,
-      environment: config.environment
-    },
-    storage),
-    autoCompleteService: new AutoCompleteApi(
-      {
-        apiKey: config.apiKey,
-        experienceKey: config.experienceKey,
-        experienceVersion: config.experienceVersion,
-        locale: config.locale,
-        environment: config.environment
-      },
-      storage),
     errorReporterService: new ErrorReporter(
       {
         apiKey: config.apiKey,
@@ -630,8 +606,6 @@ function getServices (config, storage) {
  */
 function getMockServices () {
   return {
-    searchService: new MockSearchService(),
-    autoCompleteService: new MockAutoCompleteService(),
     errorReporterService: new ConsoleErrorReporter()
   };
 }

@@ -1,5 +1,5 @@
 /** @module Core */
-import { provideCore } from '@yext/answers-core/lib/commonjs';
+import { provideCore } from '@yext/answers-core';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -78,22 +78,6 @@ export default class CoreAdapter {
      * @type {FilterRegistry}
      */
     this.filterRegistry = new FilterRegistry(this.storage);
-
-    /**
-     * An abstraction containing the integration with the RESTful search API
-     * For both vertical and universal search
-     * @type {SearchService}
-     * @private
-     */
-    this._searcher = config.searchService;
-
-    /**
-     * An abstraction containing the integration with the RESTful autocomplete API
-     * For filter search, vertical autocomplete, and universal autocomplete
-     * @type {AutoCompleteService}
-     * @private
-     */
-    this._autoComplete = config.autoCompleteService;
 
     /**
      * A local reference to the analytics reporter, used to report events for this component
