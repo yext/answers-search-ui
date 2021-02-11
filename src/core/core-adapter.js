@@ -196,7 +196,7 @@ export default class CoreAdapter {
       .verticalSearch({
         verticalKey: verticalKey || searchConfig.verticalKey,
         limit: this.storage.get(StorageKeys.SEARCH_CONFIG).limit,
-        coordinates: this.storage.get(StorageKeys.GEOLOCATION),
+        location: this._getLocationPayload(),
         query: parsedQuery.input,
         retrieveFacets: this._isDynamicFiltersEnabled,
         facets: this.filterRegistry.getFacetsPayload(),
@@ -311,7 +311,7 @@ export default class CoreAdapter {
     return this._coreLibrary
       .universalSearch({
         query: queryString,
-        coordinates: this.storage.get(StorageKeys.GEOLOCATION),
+        location: this._getLocationPayload(),
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
@@ -585,6 +585,19 @@ export default class CoreAdapter {
    */
   clearLocationRadiusFilterNode () {
     this.filterRegistry.clearLocationRadiusFilterNode();
+  }
+
+  /**
+   * Gets the location object needed for answers-core
+   *
+   * @returns {LatLong|undefined} from answers-core
+   */
+  _getLocationPayload () {
+    const geolocation = this.storage.get(StorageKeys.GEOLOCATION);
+    return geolocation && {
+      latitude: geolocation.lat,
+      longitude: geolocation.lng
+    };
   }
 
   /**
