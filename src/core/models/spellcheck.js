@@ -43,7 +43,9 @@ export default class SpellCheck {
 
     return new SpellCheck({
       query: response.originalQuery,
-      correctedQuery: response.correctedQuery,
+      correctedQuery: {
+        value: response.correctedQuery
+      },
       type: response.type
     });
   }

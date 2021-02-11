@@ -9,7 +9,9 @@ it('constructs a spellcheck from an answers-core spellcheck', () => {
 
   const expectedSpellCheck = {
     query: 'where is the baank',
-    correctedQuery: 'where is the bank',
+    correctedQuery: {
+      value: 'where is the bank'
+    },
     type: 'AUTOCORRECT',
     shouldShow: true
   };
