@@ -30,17 +30,11 @@ import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
 
-/** @typedef {import('./core/services/searchservice').default} SearchService */
-/** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./core/services/questionanswerservice').default} QuestionAnswerService */
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
 
 /**
  * @typedef Services
- * @property {SearchService} searchService
- * @property {AutoCompleteService} autoCompleteService
- * @property {QuestionAnswerService} questionAnswerService
  * @property {ErrorReporterService} errorReporterService
  */
 

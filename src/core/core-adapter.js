@@ -17,9 +17,6 @@ import FilterRegistry from './filters/filterregistry';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
-/** @typedef {import('./services/searchservice').default} SearchService */
-/** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
 /** @typedef {import('./storage/storage').default} Storage */
 
 /**
