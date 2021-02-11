@@ -14,13 +14,9 @@ import QueryTriggers from './models/querytriggers';
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
-import { AnswersEndpointError } from './errors/errors';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
-/** @typedef {import('./services/searchservice').default} SearchService */
-/** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
 /** @typedef {import('./storage/storage').default} Storage */
 
 /**
@@ -78,22 +74,6 @@ export default class CoreAdapter {
      * @type {FilterRegistry}
      */
     this.filterRegistry = new FilterRegistry(this.storage);
-
-    /**
-     * An abstraction containing the integration with the RESTful search API
-     * For both vertical and universal search
-     * @type {SearchService}
-     * @private
-     */
-    this._searcher = config.searchService;
-
-    /**
-     * An abstraction containing the integration with the RESTful autocomplete API
-     * For filter search, vertical autocomplete, and universal autocomplete
-     * @type {AutoCompleteService}
-     * @private
-     */
-    this._autoComplete = config.autoCompleteService;
 
     /**
      * A local reference to the analytics reporter, used to report events for this component
@@ -458,12 +438,6 @@ export default class CoreAdapter {
       .submitQuestion({
         ...question,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
-      })
-      .catch(error => {
-        throw new AnswersEndpointError(
-          'Question submit failed',
-          'QuestionAnswerApi',
-          error);
       })
       .then(() => {
         this.storage.set(
