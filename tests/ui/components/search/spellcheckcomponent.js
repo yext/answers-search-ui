@@ -13,7 +13,9 @@ describe('spellcheck redirect links', () => {
   const component = createSpellcheckComponent();
 
   component.setState({
-    correctedQuery: 'What is Yext Answers?',
+    correctedQuery: {
+      value: 'What is Yext Answers?'
+    },
     type: 'SUGGEST'
   });
 
