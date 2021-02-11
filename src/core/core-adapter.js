@@ -589,15 +589,15 @@ export default class CoreAdapter {
 
   /**
    * Gets the location object needed for answers-core
-   * 
+   *
    * @returns {LatLong|undefined} from answers-core
    */
   _getLocationPayload () {
     const geolocation = this.storage.get(StorageKeys.GEOLOCATION);
     return geolocation && {
       latitude: geolocation.lat,
-      longitude: geolocation.lng,
-    }
+      longitude: geolocation.lng
+    };
   }
 
   /**
