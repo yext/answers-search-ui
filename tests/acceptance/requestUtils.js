@@ -23,7 +23,7 @@ export async function getMostRecentQueryParamsFromLogger (logger) {
 export async function expectRequestFiltersToEql (logger, expectedFilters) {
   const urlParams = await getMostRecentQueryParamsFromLogger(logger);
   const filtersParam = urlParams.get('filters');
-  const expectedValue = expectedFilters && typeof expectedFilters === 'object'
+  const expectedValue = typeof expectedFilters === 'object'
     ? JSON.stringify(expectedFilters)
     : expectedFilters;
   return t.expect(filtersParam).eql(expectedValue);

@@ -104,7 +104,7 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
 
   // Hit the back button, see the 'Marty' filter disappear
   await browserBackButton();
-  await expectRequestFiltersToEql(filterBoxLogger, null);
+  await expectRequestDoesNotContainParam(filterBoxLogger, 'filters');
   await t.expect(filterTags.count).eql(0);
 
   // Hit the forward button, see the 'Marty' filter applied again
