@@ -14,7 +14,6 @@ import QueryTriggers from './models/querytriggers';
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
-import { AnswersEndpointError } from './errors/errors';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
@@ -442,12 +441,6 @@ export default class CoreAdapter {
       .submitQuestion({
         ...question,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
-      })
-      .catch(error => {
-        throw new AnswersEndpointError(
-          'Question submit failed',
-          'QuestionAnswerApi',
-          error);
       })
       .then(() => {
         this.storage.set(
