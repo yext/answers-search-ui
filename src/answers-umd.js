@@ -420,6 +420,7 @@ class Answers {
 
   /**
    * Conduct a vertical search with the provided options.
+   *
    * @param {Object} options
    * @param {string} options.verticalKey the vertical ID for the search
    * @param {string} options.query the query string of the search
@@ -442,6 +443,9 @@ class Answers {
     this.coreAdapter.verticalSearch(verticalKey, verticalOptions, queryOptions);
   }
 
+  /**
+   * Rests all filters in the filter registry.
+   */
   resetAllFilters () {
     const filterNodes = this.coreAdapter.filterRegistry
       .getAllFilterNodes()
@@ -451,12 +455,17 @@ class Answers {
     });
   }
 
+  /**
+   * Retrieve data from storage.
+   *
+   * @param {string} storageKey
+   */
   getFromStorage (storageKey) {
     return this.coreAdapter.storage.get(storageKey);
   }
 
   /**
-   * Adds a listener to the given module for a given event
+   * Adds a listener to the given module for a given event.
    *
    * @param {StorageListener} listener the listener to add
    */
