@@ -418,6 +418,52 @@ class Answers {
     this.coreAdapter.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
+  /**
+   * Conduct a vertical search with the provided options.
+   * @param {Object} options
+   * @param {string} options.verticalKey the vertical ID for the search
+   * @param {string} options.query the query string of the search
+   * @param {boolean} options.useFacets enables facets if true
+   * @param {boolean} options.resetPagination resets the search offset if true
+   * @param {string} options.queryId the queryId associated with the search
+   * @param {boolean} options.appendQuery if true, adds the results of this query to the current results
+   */
+  verticalSearch (options) {
+    const verticalKey = options.verticalKey;
+    const verticalOptions = {
+      ...options.useFacets && { useFacets: options.useFacets },
+      ...options.resetPagination && { resetPagination: options.resetPagination }
+    };
+    const queryOptions = {
+      ...options.query && { input: options.query },
+      ...options.queryId && { id: options.queryId },
+      ...options.appendQuery && { append: options.appendQuery }
+    };
+    this.coreAdapter.verticalSearch(verticalKey, verticalOptions, queryOptions);
+  }
+
+  resetAllFilters () {
+    const filterNodes = this.coreAdapter.filterRegistry
+      .getAllFilterNodes()
+      .filter(fn => fn.getFilter().getFilterKey());
+    filterNodes.forEach(node => {
+      node.remove();
+    });
+  }
+
+  getFromStorage (storageKey) {
+    return this.coreAdapter.storage.get(storageKey);
+  }
+
+  /**
+   * Adds a listener to the given module for a given event
+   *
+   * @param {StorageListener} listener the listener to add
+   */
+  registerListener (listener) {
+    this.coreAdapter.storage.registerListener(listener);
+  }
+
   registerHelper (name, cb) {
     this.renderer.registerHelper(name, cb);
     return this;
