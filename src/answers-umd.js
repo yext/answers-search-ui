@@ -282,13 +282,14 @@ class Answers {
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
+    this.core.init();
+
     this._onReady = parsedConfig.onReady || function () {};
 
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
     return asyncDeps.finally(() => {
-      if (!this.core.isInitialized()) {
-        throw new Error(
-          'Failed to initialize Core, likely because the experience\'s front-end has been disabled.');
+      if (this._disabledByMasterSwitch) {
+        throw new Error('MasterSwitchApi determined the front-end should be disabled');
       }
       this._onReady();
     });
@@ -297,8 +298,8 @@ class Answers {
   _loadAsyncDependencies (parsedConfig) {
     const loadTemplates = this._loadTemplates(parsedConfig);
     const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
-    const initializeCore = this.core.init();
-    return Promise.all([loadTemplates, ponyfillCssVariables, initializeCore]);
+    const masterSwitch = this._checkMasterSwitch();
+    return Promise.all([loadTemplates, ponyfillCssVariables, masterSwitch]);
   }
 
   _loadTemplates ({ useTemplates, templateBundle }) {
@@ -315,6 +316,19 @@ class Answers {
       });
       return this.templates.fetchTemplates();
     }
+  }
+
+  _checkMasterSwitch () {
+    window.performance.mark('yext.answers.statusStart');
+    const handleFulfilledMasterSwitch = (isDisabled) => {
+      this._disabledByMasterSwitch = isDisabled;
+    };
+    const handleRejectedMasterSwitch = () => {
+      this._disabledByMasterSwitch = false;
+    };
+    return this._masterSwitchApi.isDisabled()
+      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch)
+      .finally(() => window.performance.mark('yext.answers.statusEnd'));
   }
 
   domReady (cb) {
