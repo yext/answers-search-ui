@@ -444,7 +444,7 @@ class Answers {
   }
 
   /**
-   * Rests all filters in the filter registry.
+   * Resets all filters in the filter registry.
    */
   resetAllFilters () {
     const filterNodes = this.coreAdapter.filterRegistry
@@ -456,12 +456,32 @@ class Answers {
   }
 
   /**
+   * Set the data in storage with the given key to the provided
+   * data, completely overwriting any existing data.
+   *
+   * @param {string} key The storage key to set
+   * @param {*} data The data to set
+   */
+  setStorage (key, data) {
+    this.coreAdapter.storage.set(key, data);
+  }
+
+  /**
    * Retrieve data from storage.
    *
-   * @param {string} storageKey
+   * @param {string} key
    */
-  getFromStorage (storageKey) {
-    return this.coreAdapter.storage.get(storageKey);
+  getFromStorage (key) {
+    return this.coreAdapter.storage.get(key);
+  }
+
+  /**
+   * Remove the data in storage with the given key
+   *
+   * @param {string} key The storage key to delete
+   */
+  deleteFromStorage (key) {
+    this.coreAdapter.storage.delete(key);
   }
 
   /**
