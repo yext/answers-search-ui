@@ -1,6 +1,6 @@
 /** @module */
 
-import CoreAdapter from './core/core-adapter';
+import Core from './core/core';
 import cssVars from 'css-vars-ponyfill';
 
 import {
@@ -93,7 +93,7 @@ class Answers {
      * A local reference to the core api
      * @type {Core}
      */
-    this.coreAdapter = null;
+    this.core = null;
 
     /**
      * A callback function to invoke once the library is ready.
@@ -162,14 +162,14 @@ class Answers {
       },
       reset: data => {
         if (!data.get(StorageKeys.QUERY)) {
-          this.coreAdapter.clearResults();
+          this.core.clearResults();
         } else {
-          this.coreAdapter.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+          this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
-        this.coreAdapter.storage.set(StorageKeys.HISTORY_POP_STATE, data);
+        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
 
         if (!data.get(StorageKeys.SEARCH_OFFSET)) {
-          this.coreAdapter.storage.set(StorageKeys.SEARCH_OFFSET, 0);
+          this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
 
         let query;
@@ -178,11 +178,11 @@ class Answers {
             query = value;
             return;
           }
-          this.coreAdapter.storage.set(key, value);
+          this.core.storage.set(key, value);
         });
 
         if (query) {
-          this.coreAdapter.storage.set(StorageKeys.QUERY, query);
+          this.core.storage.set(StorageKeys.QUERY, query);
         }
       }
     });
@@ -258,7 +258,7 @@ class Answers {
       initScrollListener(this._analyticsReporterService);
     }
 
-    this.coreAdapter = new CoreAdapter({
+    this.core = new Core({
       apiKey: parsedConfig.apiKey,
       storage: storage,
       experienceKey: parsedConfig.experienceKey,
@@ -273,11 +273,11 @@ class Answers {
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
       parsedConfig.onStateChange(
         Object.fromEntries(storage.getAll()),
-        this.coreAdapter.storage.getCurrentStateUrlMerged());
+        this.core.storage.getCurrentStateUrlMerged());
     }
 
     this.components
-      .setCore(this.coreAdapter)
+      .setCore(this.core)
       .setRenderer(this.renderer);
 
     this._setDefaultInitialSearch(parsedConfig.search);
@@ -286,7 +286,7 @@ class Answers {
 
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
     return asyncDeps.finally(() => {
-      if (!this.coreAdapter.isInitialized()) {
+      if (!this.core.isInitialized()) {
         throw new Error(
           'Failed to initialize Core, likely because the experience\'s front-end has been disabled.');
       }
@@ -297,8 +297,8 @@ class Answers {
   _loadAsyncDependencies (parsedConfig) {
     const loadTemplates = this._loadTemplates(parsedConfig);
     const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
-    const initializeCoreAdapter = this.coreAdapter.init();
-    return Promise.all([loadTemplates, ponyfillCssVariables, initializeCoreAdapter]);
+    const initializeCore = this.core.init();
+    return Promise.all([loadTemplates, ponyfillCssVariables, initializeCore]);
   }
 
   _loadTemplates ({ useTemplates, templateBundle }) {
@@ -415,7 +415,7 @@ class Answers {
    * @param {string} query
    */
   search (query) {
-    this.coreAdapter.storage.setWithPersist(StorageKeys.QUERY, query);
+    this.core.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
   registerHelper (name, cb) {
@@ -447,7 +447,7 @@ class Answers {
    * @param {boolean} optIn
    */
   setSessionsOptIn (optIn) {
-    this.coreAdapter.storage.set(
+    this.core.storage.set(
       StorageKeys.SESSIONS_OPT_IN, { value: optIn, setDynamically: true });
   }
 
@@ -462,12 +462,12 @@ class Answers {
     if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
       return;
     }
-    const prepopulatedQuery = this.coreAdapter.storage.get(StorageKeys.QUERY);
+    const prepopulatedQuery = this.core.storage.get(StorageKeys.QUERY);
     if (prepopulatedQuery != null) {
       return;
     }
-    this.coreAdapter.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-    this.coreAdapter.setQuery(searchConfig.defaultInitialSearch);
+    this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+    this.core.setQuery(searchConfig.defaultInitialSearch);
   }
 
   /**
@@ -477,7 +477,7 @@ class Answers {
    * @param {number} long
    */
   setGeolocation (lat, lng) {
-    this.coreAdapter.storage.set(StorageKeys.GEOLOCATION, {
+    this.core.storage.set(StorageKeys.GEOLOCATION, {
       lat, lng, radius: 0
     });
   }
@@ -545,7 +545,7 @@ class Answers {
       return;
     }
 
-    this.coreAdapter.storage.set(StorageKeys.API_CONTEXT, contextString);
+    this.core.storage.set(StorageKeys.API_CONTEXT, contextString);
   }
 
   /**
@@ -571,7 +571,7 @@ class Answers {
    * @returns {string}
    */
   _getInitLocale () {
-    return this.coreAdapter.storage.get(StorageKeys.LOCALE);
+    return this.core.storage.get(StorageKeys.LOCALE);
   }
 }
 

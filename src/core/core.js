@@ -20,11 +20,11 @@ import AutoCompleteResponseTransformer from './search/autocompleteresponsetransf
 /** @typedef {import('./storage/storage').default} Storage */
 
 /**
- * CoreAdapter is the main application container for all of the network and storage
+ * Core is the main application container for all of the network and storage
  * related behaviors of the application. It uses an instance of the external Core
  * library to perform the actual network calls.
  */
-export default class CoreAdapter {
+export default class Core {
   constructor (config = {}) {
     /**
      * A reference to the client API Key used for all requests
@@ -95,7 +95,7 @@ export default class CoreAdapter {
   }
 
   /**
-   * Initializes the {@link CoreAdapter} by providing it with an instance of the Core library.
+   * Initializes the {@link Core} by providing it with an instance of the Core library.
    */
   init () {
     const params = {
@@ -109,7 +109,7 @@ export default class CoreAdapter {
   }
 
   /**
-   * @returns {boolean} A boolean indicating if the {@link CoreAdapter} has been
+   * @returns {boolean} A boolean indicating if the {@link Core} has been
    *                    initailized.
    */
   isInitialized () {
