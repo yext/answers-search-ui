@@ -282,8 +282,6 @@ class Answers {
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
-    this.core.init();
-
     this._onReady = parsedConfig.onReady || function () {};
 
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
@@ -299,7 +297,8 @@ class Answers {
   _loadAsyncDependencies (parsedConfig) {
     const loadTemplates = this._loadTemplates(parsedConfig);
     const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
-    return Promise.all([loadTemplates, ponyfillCssVariables]);
+    const initializeCore = this.core.init();
+    return Promise.all([loadTemplates, ponyfillCssVariables, initializeCore]);
   }
 
   _loadTemplates ({ useTemplates, templateBundle }) {
