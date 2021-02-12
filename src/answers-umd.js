@@ -282,6 +282,8 @@ class Answers {
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
+    this.core.init();
+
     this._onReady = parsedConfig.onReady || function () {};
 
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
