@@ -87,8 +87,7 @@
     "testcafe": "^1.9.4",
     "testcafe-browser-provider-browserstack": "^1.13.0",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0",
-    "whatwg-fetch": "^3.0.0"
+    "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
     "build": "gulp && size-limit",
