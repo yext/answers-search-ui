@@ -121,7 +121,7 @@ export default class CoreAdapter {
   /**
    * Get the urls for each service based on the environment.
    */
-  _getServiceUrls() {
+  _getServiceUrls () {
     return {
       universalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_SEARCH,
       verticalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_SEARCH,
@@ -129,7 +129,7 @@ export default class CoreAdapter {
       universalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_AUTOCOMPLETE,
       verticalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_AUTOCOMPLETE,
       filterSearch: getCachedLiveApiUrl(this._environment) + ENDPOINTS.FILTER_SEARCH
-    }
+    };
   }
 
   /**

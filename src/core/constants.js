@@ -25,4 +25,4 @@ export const ENDPOINTS = {
   UNIVERSAL_AUTOCOMPLETE: '/v2/accounts/me/answers/autocomplete',
   VERTICAL_AUTOCOMPLETE: '/v2/accounts/me/answers/vertical/autocomplete',
   FILTER_SEARCH: '/v2/accounts/me/answers/filtersearch'
-}
+};
