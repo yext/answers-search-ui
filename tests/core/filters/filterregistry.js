@@ -245,7 +245,7 @@ describe('FilterRegistry', () => {
       filter: new Filter({ value: 1234 })
     });
     registry.setLocationRadiusFilterNode(filterNode);
-    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
     expect(locationRadiusFilterNode.getFilter().value).toEqual(1234);
   });
 
@@ -259,7 +259,7 @@ describe('FilterRegistry', () => {
     });
     registry.setLocationRadiusFilterNode(filterNode);
     registry.setLocationRadiusFilterNode(FilterNodeFactory.from());
-    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
     expect(locationRadiusFilterNode.getFilter()).toEqual(FilterNodeFactory.from().getFilter());
     expect(locationRadiusFilterNode.getMetadata()).toEqual(FilterNodeFactory.from().getMetadata());
   });

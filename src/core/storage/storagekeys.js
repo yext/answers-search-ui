@@ -14,10 +14,16 @@ export default {
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter', // DEPRECATED
-  STATIC_FILTER_NODE: 'static-filter-node',
+  /** Filters stored in the url */
+  FILTERS: 'filters',
+  /** FilterNodes stored in the FilterRegistry for non-Facet filters*/
+  STATIC_FILTER_NODES: 'static-filter-nodes',
+  /** The currently active FilterNode for the locationRadius param */
+  LOCATION_RADIUS_FILTER_NODE: 'location-radius-filter-node',
   QUERY: 'query',
   QUERY_ID: 'query-id',
-  FACET_FILTER_NODE: 'facet-filter-node',
+  /** FiltersNodes stored in the FilterRegistry for Facet filters*/
+  FACET_FILTER_NODES: 'facet-filter-nodes',
   DYNAMIC_FILTERS: 'dynamic-filters',
   GEOLOCATION: 'geolocation',
   QUESTION_SUBMISSION: 'question-submission',
@@ -31,7 +37,6 @@ export default {
   LOCALE: 'locale',
   SORT_BYS: 'sort-bys',
   NO_RESULTS_CONFIG: 'no-results-config',
-  LOCATION_RADIUS: 'location-radius',
   RESULTS_HEADER: 'results-header', // DEPRECATED
   API_CONTEXT: 'context',
   REFERRER_PAGE_URL: 'referrerPageUrl',

@@ -506,7 +506,7 @@ export default class Core {
    * @returns {FilterNode}
    */
   getLocationRadiusFilterNode () {
-    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
   }
 
   /**

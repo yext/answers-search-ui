@@ -37,7 +37,7 @@ export default class FilterRegistry {
       ...this.getStaticFilterNodes(),
       ...this.getFacetFilterNodes()
     ];
-    const locationRadiusFilterNode = this.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = this.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
     if (locationRadiusFilterNode) {
       storageFilterNodes.push(locationRadiusFilterNode);
     }
@@ -51,7 +51,7 @@ export default class FilterRegistry {
   getStaticFilterNodes () {
     const staticFilterNodes = [];
     this.storage.getAll().forEach((value, key) => {
-      if (key.startsWith(StorageKeys.STATIC_FILTER_NODE)) {
+      if (key.startsWith(StorageKeys.STATIC_FILTER_NODES)) {
         staticFilterNodes.push(value);
       }
     });
@@ -63,7 +63,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getFacetFilterNodes () {
-    return this.storage.get(StorageKeys.FACET_FILTER_NODE) || [];
+    return this.storage.get(StorageKeys.FACET_FILTER_NODES) || [];
   }
 
   /**
@@ -179,7 +179,7 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setStaticFilterNodes (key, filterNode) {
-    this.storage.set(`${StorageKeys.STATIC_FILTER_NODE}.${key}`, filterNode);
+    this.storage.set(`${StorageKeys.STATIC_FILTER_NODES}.${key}`, filterNode);
   }
 
   /**
@@ -193,7 +193,7 @@ export default class FilterRegistry {
    */
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
-    this.storage.set(StorageKeys.FACET_FILTER_NODE, filterNodes);
+    this.storage.set(StorageKeys.FACET_FILTER_NODES, filterNodes);
   }
 
   /**
@@ -202,7 +202,7 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setLocationRadiusFilterNode (filterNode) {
-    this.storage.set(StorageKeys.LOCATION_RADIUS, filterNode);
+    this.storage.set(StorageKeys.LOCATION_RADIUS_FILTER_NODE, filterNode);
   }
 
   /**
@@ -210,13 +210,13 @@ export default class FilterRegistry {
    * @param {string} key
    */
   clearStaticFilterNode (key) {
-    this.storage.delete(`${StorageKeys.STATIC_FILTER_NODE}.${key}`);
+    this.storage.delete(`${StorageKeys.STATIC_FILTER_NODES}.${key}`);
   }
 
   /**
    * Remove all facet FilterNodes.
    */
   clearFacetFilterNodes () {
-    this.storage.delete(StorageKeys.FACET_FILTER_NODE);
+    this.storage.delete(StorageKeys.FACET_FILTER_NODES);
   }
 }
