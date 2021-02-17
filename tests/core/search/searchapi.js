@@ -127,6 +127,26 @@ describe('codelab people searches', () => {
     });
   });
 
+  it('searches with julian full name and no additional text', () => {
+    const result = searchApi.julianSearch(true, false, '');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Julian Brown ' }));
+    });
+  });
+
+  it('searches with julian username and additional text', () => {
+    const result = searchApi.julianSearch(false, true, 'additional');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'jbrown additional' }));
+    });
+  });
+
   it('performs a search for Connor', () => {
     const result = searchApi.connorSearch();
     expect.assertions(1);

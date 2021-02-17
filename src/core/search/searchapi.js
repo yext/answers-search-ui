@@ -130,6 +130,42 @@ export default class SearchApi {
   }
 
   /**
+   * Initiate a Julian Search
+   * @param {boolean} includeLastName
+   * @param {boolean} useUserName
+   * @param {string} additionalSearchText
+   */
+  julianSearch (includeLastName, useUserName, additionalSearchText) {
+    let name = includeLastName ? 'Julian Brown' : 'Julian';
+    name = useUserName ? 'jbrown' : name;
+
+    if (additionalSearchText && typeof additionalSearchText !== 'string') {
+      throw new AnswersCoreError('additionalSearchText must be a string', 'julianSearch');
+    }
+
+    const query = `${name} ${additionalSearchText}`;
+
+    let request = new ApiRequest({
+      endpoint: '/v2/accounts/me/answers/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': query,
+        'experienceKey': this._experienceKey,
+        params: {
+          'input': query,
+          'experienceKey': this._experienceKey,
+          'version': this._experienceVersion,
+          'locale': this._locale
+        }
+      }
+    });
+
+    return request.get()
+      .then((response) => response.json());
+  }
+
+  /**
    * Initiate a kelly search
    * @param {boolean} includeLastName include last name in the search
    * @param {boolean} useUserName user username instead of real name
