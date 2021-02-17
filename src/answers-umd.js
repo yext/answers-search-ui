@@ -162,7 +162,7 @@ class Answers {
       },
       reset: data => {
         this.core.storage.delete(StorageKeys.LOCATION_RADIUS);
-        this.core.storage.delete(StorageKeys.FILTERS);
+        this.core.storage.delete(StorageKeys.PERSISTED_FILTERS);
         if (!data.get(StorageKeys.QUERY)) {
           this.core.clearResults();
         } else {

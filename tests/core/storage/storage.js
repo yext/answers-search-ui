@@ -497,10 +497,10 @@ describe('setAllFromPersistentStorage', () => {
 
   it('parses FILTERS correctly', () => {
     const persistedData = new Map([
-      [StorageKeys.FILTERS, JSON.stringify(filter)]
+      [StorageKeys.PERSISTED_FILTERS, JSON.stringify(filter)]
     ]);
     storage.setAllFromPersistentStorage(persistedData);
-    expect(storage.get(StorageKeys.FILTERS)).toMatchObject(filter);
+    expect(storage.get(StorageKeys.PERSISTED_FILTERS)).toMatchObject(filter);
   });
 
   it('parses LOCATION_RADIUS correctly', () => {

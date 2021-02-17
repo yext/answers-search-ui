@@ -90,7 +90,7 @@ export default class Storage {
         case StorageKeys.QUERY:
           query = value;
           break;
-        case StorageKeys.FILTERS:
+        case StorageKeys.PERSISTED_FILTERS:
           parsedValue = this._tryToParseJson(value);
           if (parsedValue) {
             this.set(key, Filter.from(parsedValue));

@@ -474,7 +474,7 @@ describe('filter options component', () => {
         ...defaultConfig,
         control: 'multioption'
       };
-      storage.set(StorageKeys.FILTERS, Filter.from({
+      storage.set(StorageKeys.PERSISTED_FILTERS, Filter.from({
         [FilterCombinators.OR]: [Filter.equal('field', 'val1'), Filter.equal('field', 'val2')]
       }));
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
@@ -520,7 +520,7 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
 
-      storage.set(StorageKeys.FILTERS, Filter.equal('field', 'val1'));
+      storage.set(StorageKeys.PERSISTED_FILTERS, Filter.equal('field', 'val1'));
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
       const options = component.config.options;
       const selectedOptions = options.filter(o => o.selected);
