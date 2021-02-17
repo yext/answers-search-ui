@@ -142,34 +142,6 @@ describe('filter options component', () => {
     }
   });
 
-  describe('properly interacts with URL', () => {
-    it('selecting an option updates the URL when storeOnChange = true', () => {
-      const config = {
-        ...defaultConfig,
-        storeOnChange: true,
-        control: 'singleoption'
-      };
-      const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
-      component._updateOption(0, true);
-      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
-      expect(urlBefore).not.toEqual(urlAfter);
-    });
-
-    it('selecting an option does not update the URL when storeOnChange = false', () => {
-      const config = {
-        ...defaultConfig,
-        storeOnChange: false,
-        control: 'singleoption'
-      };
-      const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
-      component._updateOption(0, true);
-      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
-      expect(urlBefore).toEqual(urlAfter);
-    });
-  });
-
   describe('hides options if the number of options exceeds the show more limit', () => {
     it('works for singleoption', () => {
       const config = {

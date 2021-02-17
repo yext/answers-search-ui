@@ -183,7 +183,7 @@ describe('filter box component', () => {
     });
   });
 
-  describe('properly interacts with the URL', () => {
+  describe('searchOnChange interactions with FilterRegistry', () => {
     const oneFilterConfig = {
       ...defaultConfig,
       name: 'unique name',
@@ -197,47 +197,34 @@ describe('filter box component', () => {
       ]
     };
 
-    it('url state does not change after the filter is selected when searchOnChange = false', () => {
+    it('when searchOnChange = false, does not update FilterRegistry until the apply button is clicked', () => {
       const config = {
         ...oneFilterConfig,
         searchOnChange: false
       };
       const component = COMPONENT_MANAGER.create('FilterBox', config);
-      mount(component);
-      const filterComponent = component._filterComponents[0];
-      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
-      filterComponent._updateOption(0, true);
-      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
-      expect(urlBefore).toEqual(urlAfter);
-    });
-
-    it('url state changes after the apply button is clicked when searchOnChange = false', () => {
-      const config = {
-        ...oneFilterConfig,
-        searchOnChange: false
-      };
-      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(0);
       const wrapper = mount(component);
       const filterComponent = component._filterComponents[0];
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
       filterComponent._updateOption(0, true);
-      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
       wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
-      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
-      expect(urlBefore).not.toEqual(urlAfter);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(2);
     });
 
-    it('url state changes after filter selection when searchOnChange = true', () => {
+    it('when searchOnChange = true, filter selection immediately updates FilterRegistry', () => {
       const config = {
         ...oneFilterConfig,
         searchOnChange: true
       };
       const component = COMPONENT_MANAGER.create('FilterBox', config);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(0);
       mount(component);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
       const filterComponent = component._filterComponents[0];
-      const urlBefore = component.core.storage.getCurrentStateUrlMerged();
       filterComponent._updateOption(0, true);
-      const urlAfter = component.core.storage.getCurrentStateUrlMerged();
-      expect(urlBefore).not.toEqual(urlAfter);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(2);
     });
   });
 

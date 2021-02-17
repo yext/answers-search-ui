@@ -84,15 +84,13 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
   await searchComponent.submitQuery();
 
   // Click the 'Marty' checkbox
-  // 2 filter tags should be rendered, 1 from the backend facet and 1 from the static filter
   await staticFilter.toggleOption('Marty');
   await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-  await t.expect(filterTags.count).eql(2);
+  await t.expect(filterTags.count).eql(1);
 
   // Click the 'Frodo' checkbox
-  // 2 filter tags should be rendered, 1 from the backend facet and 1 from the static filter
   await staticFilter.toggleOption('Frodo');
-  await t.expect(filterTags.count).eql(4);
+  await t.expect(filterTags.count).eql(2);
   await expectRequestFiltersToEql(filterBoxLogger, {
     $or: [martyFilter, frodoFilter]
   });
@@ -100,7 +98,7 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
   // Hit the back button, see the 'Frodo' filter disappear
   await browserBackButton();
   await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-  await t.expect(filterTags.count).eql(2);
+  await t.expect(filterTags.count).eql(1);
 
   // Hit the back button, see the 'Marty' filter disappear
   await browserBackButton();
@@ -110,18 +108,18 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
   // Hit the forward button, see the 'Marty' filter applied again
   await browserForwardButton();
   await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-  await t.expect(filterTags.count).eql(2);
+  await t.expect(filterTags.count).eql(1);
 
   // Hit the forward button, see the 'Frodo' filter applied again
   await browserForwardButton();
-  await t.expect(filterTags.count).eql(4);
+  await t.expect(filterTags.count).eql(2);
   await expectRequestFiltersToEql(filterBoxLogger, {
     $or: [martyFilter, frodoFilter]
   });
 
   // Refresh the page
   await browserRefreshPage();
-  await t.expect(filterTags.count).eql(4);
+  await t.expect(filterTags.count).eql(2);
   await expectRequestFiltersToEql(filterBoxLogger, {
     $or: [martyFilter, frodoFilter]
   });

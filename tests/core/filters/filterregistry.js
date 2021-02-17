@@ -283,12 +283,4 @@ describe('FilterRegistry', () => {
       $and: [filter1, filter2]
     });
   });
-
-  it('setLocationRadiusFilterNode setsWithPersist LOCATION_RADIUS', () => {
-    const filterNode = FilterNodeFactory.from({
-      filter: new Filter({ value: 1234 })
-    });
-    registry.setLocationRadiusFilterNode(filterNode);
-    expect(registry.storage.persistentStorage.get(StorageKeys.PERSISTED_LOCATION_RADIUS)).toEqual('1234');
-  });
 });
