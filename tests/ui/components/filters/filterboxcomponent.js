@@ -310,11 +310,36 @@ describe('filter box component', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
       expect(verticalSearch).toHaveBeenCalledTimes(0);
       mount(component);
-      const historyPopState = new Map();
-      historyPopState.set('test-name.filter0', '[]');
-      historyPopState.set('test-name.filter1', '[]');
-      COMPONENT_MANAGER.core.storage.set(StorageKeys.HISTORY_POP_STATE, historyPopState);
+      COMPONENT_MANAGER.core.storage.set(StorageKeys.HISTORY_POP_STATE, new Map());
       expect(verticalSearch).toHaveBeenCalledTimes(0);
+    });
+
+    it('with searchOnChange = false, will reset to initial state on back nav to blank url', () => {
+      const component = COMPONENT_MANAGER.create('FilterBox', { ...config, searchOnChange: false });
+      const wrapper = mount(component);
+      setStaticFilterNodes.mockClear();
+      component._filterComponents[0]._updateOption(0, true);
+      wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
+      expect(setStaticFilterNodes.mock.calls[0][1]).toMatchObject({
+        filter: {
+          'witcher': {
+            '$eq': 'cirilla'
+          }
+        },
+        metadata: {
+          'displayValue': 'ciri',
+          'fieldName': 'first filter options',
+          'filterType': 'filter-type-static'
+        }
+      });
+      setStaticFilterNodes.mockClear();
+      component.core.storage.set(StorageKeys.HISTORY_POP_STATE, new Map());
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
+      expect(setStaticFilterNodes.mock.calls[0][1]).toMatchObject({
+        filter: {},
+        metadata: {}
+      });
     });
   });
 });
