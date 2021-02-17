@@ -96,7 +96,7 @@ export default class Storage {
             this.set(key, Filter.from(parsedValue));
           }
           break;
-        case StorageKeys.LOCATION_RADIUS:
+        case StorageKeys.PERSISTED_LOCATION_RADIUS:
           parsedValue = this._tryToParseJson(value);
           if (parsedValue) {
             this.set(key, parsedValue);

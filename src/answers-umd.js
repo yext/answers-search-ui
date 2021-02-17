@@ -161,7 +161,7 @@ class Answers {
         }
       },
       reset: data => {
-        this.core.storage.delete(StorageKeys.LOCATION_RADIUS);
+        this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
         this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
         if (!data.get(StorageKeys.QUERY)) {
           this.core.clearResults();

@@ -21,7 +21,7 @@ const StorageKeys = {
   /** The currently active FilterNode for the locationRadius param */
   LOCATION_RADIUS_FILTER_NODE: 'location-radius-filter-node',
   /** The persisted locationRadius url param */
-  LOCATION_RADIUS: 'locationRadius',
+  PERSISTED_LOCATION_RADIUS: 'locationRadius',
   QUERY: 'query',
   QUERY_ID: 'query-id',
   /** FiltersNodes stored in the FilterRegistry for Facet filters */

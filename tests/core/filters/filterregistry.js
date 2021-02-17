@@ -289,6 +289,6 @@ describe('FilterRegistry', () => {
       filter: new Filter({ value: 1234 })
     });
     registry.setLocationRadiusFilterNode(filterNode);
-    expect(registry.storage.persistentStorage.get(StorageKeys.LOCATION_RADIUS)).toEqual('1234');
+    expect(registry.storage.persistentStorage.get(StorageKeys.PERSISTED_LOCATION_RADIUS)).toEqual('1234');
   });
 });

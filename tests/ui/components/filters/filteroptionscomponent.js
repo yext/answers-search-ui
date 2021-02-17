@@ -664,7 +664,7 @@ describe('filter options component', () => {
       optionType: 'RADIUS_FILTER'
     };
 
-    storage.set(StorageKeys.LOCATION_RADIUS, 123);
+    storage.set(StorageKeys.PERSISTED_LOCATION_RADIUS, 123);
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
     const options = component.config.options;
     const selectedOptions = options.filter(o => o.selected);

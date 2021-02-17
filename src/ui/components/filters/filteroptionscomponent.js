@@ -299,7 +299,7 @@ export default class FilterOptionsComponent extends Component {
    */
   _initVariables (config) {
     const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
-    const persistedLocationRadius = this.core.storage.get(StorageKeys.LOCATION_RADIUS);
+    const persistedLocationRadius = this.core.storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS);
     /**
      * The component config
      * @type {FilterOptionsConfig}

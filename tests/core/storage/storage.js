@@ -508,6 +508,6 @@ describe('setAllFromPersistentStorage', () => {
       [StorageKeys.LOCATION_RADIUS, '123']
     ]);
     storage.setAllFromPersistentStorage(persistedData);
-    expect(storage.get(StorageKeys.LOCATION_RADIUS)).toEqual(123);
+    expect(storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS)).toEqual(123);
   });
 });

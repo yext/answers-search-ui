@@ -216,7 +216,7 @@ export default class FilterRegistry {
     this.storage.set(StorageKeys.LOCATION_RADIUS_FILTER_NODE, filterNode);
     const locationRadius = filterNode.getFilter().value;
     if (locationRadius) {
-      this.storage.setWithPersist(StorageKeys.LOCATION_RADIUS, locationRadius);
+      this.storage.setWithPersist(StorageKeys.PERSISTED_LOCATION_RADIUS, locationRadius);
     }
   }
 
