@@ -492,8 +492,8 @@ describe('filter options component', () => {
         control: 'singleoption'
       };
 
-      // const expectedErrorRegex = /\"singleoption\" control cannot have multiple selected options/;
-      expect(() => COMPONENT_MANAGER.create('FilterOptions', config)).toThrow('FilterOptions component with "singleoption" control cannot have multiple selected options');
+      expect(() => COMPONENT_MANAGER.create('FilterOptions', config))
+        .toThrow('FilterOptions component with "singleoption" control cannot have multiple selected options');
     });
 
     it('prioritizes persisted filters over config\'s selected options for singleoption', () => {
