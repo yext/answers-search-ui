@@ -84,7 +84,7 @@ export default class FilterRegistry {
   }
 
   /**
-   * Updates the filter that will be persisted in the URL in the next
+   * Computes the filter that will be persisted in the URL in the next
    * history state.
    */
   createPersistedFilter () {
