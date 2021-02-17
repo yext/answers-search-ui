@@ -646,9 +646,6 @@ export default class FilterOptionsComponent extends Component {
       default:
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
-    if (!this.config.isDynamic) {
-      this.saveSelectedWithPersist();
-    }
   }
 
   floatSelected () {
@@ -704,16 +701,6 @@ export default class FilterOptionsComponent extends Component {
     option.selected = false;
     this.updateListeners(true, true);
     this.setState();
-  }
-
-  /**
-   * Saves selected options to persistent storage
-   */
-  saveSelectedWithPersist () {
-    this.core.storage.setWithPersist(
-      this.name,
-      this.config.options.filter(o => o.selected).map(o => o.label)
-    );
   }
 
   /**
