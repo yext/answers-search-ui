@@ -3,6 +3,7 @@
 import FilterCombinators from './filtercombinators';
 import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
+import FilterNodeFactory from './filternodefactory';
 
 /** @typedef {import('../storage/storage').default} Storage */
 
@@ -80,6 +81,16 @@ export default class FilterRegistry {
     return filterNodes.length > 0
       ? this._transformFilterNodes(filterNodes, FilterCombinators.AND)
       : null;
+  }
+
+  /**
+   * Updates the filter that will be persisted in the URL in the next
+   * history state.
+   */
+  getPersistedFilter () {
+    const filterNodes = this.getStaticFilterNodes();
+    const totalNode = FilterNodeFactory.and(...filterNodes);
+    return totalNode.getFilter();
   }
 
   /**
@@ -203,6 +214,10 @@ export default class FilterRegistry {
    */
   setLocationRadiusFilterNode (filterNode) {
     this.storage.set(StorageKeys.LOCATION_RADIUS_FILTER_NODE, filterNode);
+    const locationRadius = filterNode.getFilter().value;
+    if (locationRadius) {
+      this.storage.setWithPersist(StorageKeys.LOCATION_RADIUS, locationRadius);
+    }
   }
 
   /**

@@ -161,29 +161,21 @@ class Answers {
         }
       },
       reset: data => {
+        this.core.storage.delete(StorageKeys.LOCATION_RADIUS);
+        this.core.storage.delete(StorageKeys.FILTERS);
         if (!data.get(StorageKeys.QUERY)) {
           this.core.clearResults();
         } else {
           this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
-        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
 
         if (!data.get(StorageKeys.SEARCH_OFFSET)) {
           this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
-
-        let query;
-        data.forEach((value, key) => {
-          if (key === StorageKeys.QUERY) {
-            query = value;
-            return;
-          }
-          this.core.storage.set(key, value);
-        });
-
-        if (query) {
-          this.core.storage.set(StorageKeys.QUERY, query);
-        }
+        const beforeQueryHook = () => {
+          this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
+        };
+        this.core.storage.setAllFromPersistentStorage(data, beforeQueryHook);
       }
     });
     storage.init(window.location.search);

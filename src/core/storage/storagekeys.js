@@ -6,7 +6,7 @@
  *
  * @enum {string}
  */
-export default {
+const StorageKeys = {
   NAVIGATION: 'navigation',
   UNIVERSAL_RESULTS: 'universal-results',
   VERTICAL_RESULTS: 'vertical-results',
@@ -14,15 +14,17 @@ export default {
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter', // DEPRECATED
-  /** Filters stored in the url */
+  /** The filter stored in the url, can be a combined filter */
   FILTERS: 'filters',
-  /** FilterNodes stored in the FilterRegistry for non-Facet filters*/
+  /** FilterNodes stored in the FilterRegistry for non-Facet filters */
   STATIC_FILTER_NODES: 'static-filter-nodes',
   /** The currently active FilterNode for the locationRadius param */
   LOCATION_RADIUS_FILTER_NODE: 'location-radius-filter-node',
+  /** The persisted locationRadius url param */
+  LOCATION_RADIUS: 'locationRadius',
   QUERY: 'query',
   QUERY_ID: 'query-id',
-  /** FiltersNodes stored in the FilterRegistry for Facet filters*/
+  /** FiltersNodes stored in the FilterRegistry for Facet filters */
   FACET_FILTER_NODES: 'facet-filter-nodes',
   DYNAMIC_FILTERS: 'dynamic-filters',
   GEOLOCATION: 'geolocation',
@@ -45,3 +47,4 @@ export default {
   QUERY_SOURCE: 'query-source',
   HISTORY_POP_STATE: 'history-pop-state'
 };
+export default StorageKeys;

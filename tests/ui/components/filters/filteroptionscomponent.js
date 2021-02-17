@@ -7,10 +7,11 @@ import FilterMetadata from 'src/core/filters/filtermetadata';
 import FilterType from '../../../../src/core/filters/filtertype';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import Storage from '../../../../src/core/storage/storage';
+import FilterCombinators from '../../../../src/core/filters/filtercombinators';
 
 describe('filter options component', () => {
   DOM.setup(document, new DOMParser());
-  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes;
+  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes, storage;
 
   const options = [
     {
@@ -63,7 +64,7 @@ describe('filter options component', () => {
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
     setStaticFilterNodes = jest.fn();
-    const storage = new Storage().init();
+    storage = new Storage().init();
     storage.set(StorageKeys.SEARCH_CONFIG, { verticalKey: 'a vertical key' });
 
     const mockCore = {
@@ -382,14 +383,13 @@ describe('filter options component', () => {
   });
 
   describe('filter options when setting selected options in config', () => {
-    let COMPONENT_MANAGER, defaultConfig;
+    let COMPONENT_MANAGER, defaultConfig, storage;
 
     beforeEach(() => {
       const bodyEl = DOM.query('body');
       DOM.empty(bodyEl);
       DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-      const storage = new Storage().init();
-      storage.set('test-previous-options', ['label1', 'label2']);
+      storage = new Storage().init();
       COMPONENT_MANAGER = mockManager({
         storage,
         setStaticFilterNodes: () => { }
@@ -469,13 +469,14 @@ describe('filter options component', () => {
       expect(selectedOptions[1].label).toEqual('label4');
     });
 
-    it('prioritizes previously selected options over config\'s selected options for multioption', () => {
+    it('prioritizes persisted filters over config\'s selected options for multioption', () => {
       const config = {
         ...defaultConfig,
-        name: 'test-previous-options',
         control: 'multioption'
       };
-
+      storage.set(StorageKeys.FILTERS, Filter.from({
+        [FilterCombinators.OR]: [Filter.equal('field', 'val1'), Filter.equal('field', 'val2')]
+      }));
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
       const options = component.config.options;
       expect(options).toHaveLength(4);
@@ -485,30 +486,43 @@ describe('filter options component', () => {
       expect(selectedOptions[1].label).toEqual('label2');
     });
 
-    it('properly sets selected option for singleoption', () => {
+    it('singleoption will throw when multiple options are marked as selected', () => {
       const config = {
         ...defaultConfig,
         control: 'singleoption'
       };
 
-      const component = COMPONENT_MANAGER.create('FilterOptions', config);
-      const options = component.config.options;
-      expect(options).toHaveLength(4);
-      const selectedOptions = options.filter(o => o.selected);
-      expect(selectedOptions).toHaveLength(1);
-      expect(selectedOptions[0].label).toEqual('label3');
+      // const expectedErrorRegex = /\"singleoption\" control cannot have multiple selected options/;
+      expect(() => COMPONENT_MANAGER.create('FilterOptions', config)).toThrow('FilterOptions component with "singleoption" control cannot have multiple selected options');
     });
 
-    it('prioritizes previously selected option over config\'s selected options for singleoption', () => {
+    it('prioritizes persisted filters over config\'s selected options for singleoption', () => {
       const config = {
         ...defaultConfig,
-        name: 'test-previous-options',
+        options: [
+          {
+            label: 'label1',
+            field: 'field',
+            value: 'val1'
+          },
+          {
+            label: 'label2',
+            field: 'field',
+            value: 'val2'
+          },
+          {
+            label: 'label3',
+            field: 'field',
+            value: 'val3',
+            selected: true
+          }
+        ],
         control: 'singleoption'
       };
 
+      storage.set(StorageKeys.FILTERS, Filter.equal('field', 'val1'));
       const component = COMPONENT_MANAGER.create('FilterOptions', config);
       const options = component.config.options;
-      expect(options).toHaveLength(4);
       const selectedOptions = options.filter(o => o.selected);
       expect(selectedOptions).toHaveLength(1);
       expect(selectedOptions[0].label).toEqual('label1');
@@ -630,5 +644,30 @@ describe('filter options component', () => {
 
       expect(() => COMPONENT_MANAGER.create('FilterOptions', config)).toThrow();
     });
+  });
+
+  it('will initialize component using persisted locationRadius param', () => {
+    const config = {
+      ...defaultConfig,
+      options: [
+        {
+          label: 'label1',
+          value: 123
+        },
+        {
+          label: 'label2',
+          value: 456,
+          selected: true
+        }
+      ],
+      control: 'singleoption',
+      optionType: 'RADIUS_FILTER'
+    };
+
+    storage.set(StorageKeys.LOCATION_RADIUS, 123);
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    const options = component.config.options;
+    const selectedOptions = options.filter(o => o.selected);
+    expect(selectedOptions[0].label).toEqual('label1');
   });
 });
