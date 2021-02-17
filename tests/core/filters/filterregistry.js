@@ -275,4 +275,20 @@ describe('FilterRegistry', () => {
     registry.clearStaticFilterNode('namespace1');
     expect(registry.getStaticFilterNodes()).toEqual([]);
   });
+
+  it('getPersistedFilter combines filters corectly', () => {
+    registry.setStaticFilterNodes('aName', node1);
+    registry.setStaticFilterNodes('bName', node2);
+    expect(registry.getPersistedFilter()).toEqual({
+      $and: [filter1, filter2]
+    });
+  });
+
+  it('setLocationRadiusFilterNode setsWithPersist LOCATION_RADIUS', () => {
+    const filterNode = FilterNodeFactory.from({
+      filter: new Filter({ value: 1234 })
+    });
+    registry.setLocationRadiusFilterNode(filterNode)
+    expect(registry.storage.persistentStorage.get(StorageKeys.LOCATION_RADIUS)).toEqual('1234');
+  });
 });

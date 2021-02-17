@@ -487,3 +487,27 @@ describe('getCurrentStateUrlMerged', () => {
     });
   });
 });
+
+describe('setAllFromPersistentStorage', () => {
+  const filter = {
+    c_customField: {
+      $eq: 'someValue'
+    }
+  };
+
+  it('parses FILTERS correctly', () => {
+    const persistedData = new Map([
+      [StorageKeys.FILTERS, JSON.stringify(filter)]
+    ]);
+    storage.setAllFromPersistentStorage(persistedData);
+    expect(storage.get(StorageKeys.FILTERS)).toMatchObject(filter);
+  });
+
+  it('parses LOCATION_RADIUS correctly', () => {
+    const persistedData = new Map([
+      [StorageKeys.LOCATION_RADIUS, '123']
+    ]);
+    storage.setAllFromPersistentStorage(persistedData);
+    expect(storage.get(StorageKeys.LOCATION_RADIUS)).toEqual(123);
+  });
+});
