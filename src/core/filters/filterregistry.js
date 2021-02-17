@@ -87,7 +87,7 @@ export default class FilterRegistry {
    * Updates the filter that will be persisted in the URL in the next
    * history state.
    */
-  getPersistedFilter () {
+  createPersistedFilter () {
     const filterNodes = this.getStaticFilterNodes();
     const totalNode = FilterNodeFactory.and(...filterNodes);
     return totalNode.getFilter();

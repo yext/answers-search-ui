@@ -276,10 +276,10 @@ describe('FilterRegistry', () => {
     expect(registry.getStaticFilterNodes()).toEqual([]);
   });
 
-  it('getPersistedFilter combines filters corectly', () => {
+  it('createPersistedFilter combines filters corectly', () => {
     registry.setStaticFilterNodes('aName', node1);
     registry.setStaticFilterNodes('bName', node2);
-    expect(registry.getPersistedFilter()).toEqual({
+    expect(registry.createPersistedFilter()).toEqual({
       $and: [filter1, filter2]
     });
   });

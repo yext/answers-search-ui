@@ -254,7 +254,7 @@ export default class Core {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
         if (shouldPushState) {
-          const persistedFilter = this.filterRegistry.getPersistedFilter();
+          const persistedFilter = this.filterRegistry.createPersistedFilter();
           this.storage.setWithPersist(StorageKeys.PERSISTED_FILTERS, persistedFilter);
           this.storage.pushStateToHistory();
         }
