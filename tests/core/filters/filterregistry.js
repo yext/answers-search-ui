@@ -288,7 +288,7 @@ describe('FilterRegistry', () => {
     const filterNode = FilterNodeFactory.from({
       filter: new Filter({ value: 1234 })
     });
-    registry.setLocationRadiusFilterNode(filterNode)
+    registry.setLocationRadiusFilterNode(filterNode);
     expect(registry.storage.persistentStorage.get(StorageKeys.LOCATION_RADIUS)).toEqual('1234');
   });
 });
