@@ -15,7 +15,7 @@ const StorageKeys = {
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter', // DEPRECATED
   /** The filter stored in the url, can be a combined filter */
-  PERSISTED_FILTERS: 'filters',
+  PERSISTED_FILTER: 'filters',
   /** FilterNodes stored in the FilterRegistry for non-Facet filters */
   STATIC_FILTER_NODES: 'static-filter-nodes',
   /** The currently active FilterNode for the locationRadius param */

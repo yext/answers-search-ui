@@ -255,7 +255,7 @@ export default class Core {
         }
         if (shouldPushState) {
           const persistedFilter = this.filterRegistry.createPersistedFilter();
-          this.storage.setWithPersist(StorageKeys.PERSISTED_FILTERS, persistedFilter);
+          this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
           this.storage.pushStateToHistory();
         }
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
