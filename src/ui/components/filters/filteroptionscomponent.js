@@ -300,6 +300,7 @@ export default class FilterOptionsComponent extends Component {
   _initVariables (config) {
     const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
     const persistedLocationRadius = this.core.storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS);
+    config.optionType === OptionTypes.RADIUS_FILTER && console.log('init variables', this.name, persistedLocationRadius)
     /**
      * The component config
      * @type {FilterOptionsConfig}
@@ -327,8 +328,9 @@ export default class FilterOptionsComponent extends Component {
       eventType: 'update',
       storageKey: StorageKeys.HISTORY_POP_STATE,
       callback: () => {
+        this.config.optionType === OptionTypes.RADIUS_FILTER && console.log('running pop state listener', this.name, this.core.storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS))
         this._initVariables(this._config);
-        this.updateListeners(false, true);
+        this.updateListeners(true, true);
         this.setState();
       }
     });

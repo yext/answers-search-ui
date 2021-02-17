@@ -9,10 +9,15 @@
   <style>
     .bottom {
       display: flex;
+      margin-top: 25px;
     }
 
     .left {
-      max-width: 300px;
+      min-width: 300px;
+    }
+  
+    .right {
+      flex-grow: 1;
     }
   </style>
 </head>
@@ -75,6 +80,29 @@
         ANSWERS.addComponent('FilterBox', {
           container: '.filterbox-container',
           filters: [
+            {
+              type: 'FilterOptions',
+              optionType: 'STATIC_FILTER',
+              label: 'Location',
+              control: 'multioption',
+              options: [
+                {
+                  label: 'canada',
+                  field: 'c_employeeCountry',
+                  value: 'Canada',
+                },
+                {
+                  label: 'remote',
+                  field: 'c_employeeCountry',
+                  value: 'Remote'
+                },
+                {
+                  label: 'usa',
+                  field: 'c_employeeCountry',
+                  value: 'United States'
+                }
+              ]
+            },
             {
               type: "FilterOptions",
               label: "DISTANCE",

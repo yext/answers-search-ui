@@ -191,6 +191,9 @@ export default class Core {
     }
 
     const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
+    const locationRadius = locationRadiusFilterNode
+      ? locationRadiusFilterNode.getFilter().value
+      : null;
     const shouldPushState =
       this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
@@ -211,7 +214,7 @@ export default class Core {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
-        locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
+        locationRadius: locationRadius,
         context: context,
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
@@ -253,9 +256,14 @@ export default class Core {
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        const persistedFilter = this.filterRegistry.createPersistedFilter();
+        this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
+        if (locationRadius) {
+          this.storage.setWithPersist(StorageKeys.PERSISTED_LOCATION_RADIUS, locationRadius);
+        } else {
+          this.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
+        }
         if (shouldPushState) {
-          const persistedFilter = this.filterRegistry.createPersistedFilter();
-          this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
           this.storage.pushStateToHistory();
         }
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
