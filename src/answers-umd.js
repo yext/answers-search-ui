@@ -259,7 +259,8 @@ class Answers {
       locale: parsedConfig.locale,
       analyticsReporter: this._analyticsReporterService,
       onVerticalSearch: parsedConfig.onVerticalSearch,
-      onUniversalSearch: parsedConfig.onUniversalSearch
+      onUniversalSearch: parsedConfig.onUniversalSearch,
+      environment: parsedConfig.environment
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
