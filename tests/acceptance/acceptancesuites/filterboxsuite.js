@@ -1,7 +1,7 @@
 import {
   setupServer,
   shutdownServer,
-  FACETS_PAGE
+  FILTERBOX_PAGE
 } from '../server';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
@@ -17,10 +17,10 @@ import {
   expectRequestDoesNotContainParam
 } from '../requestUtils';
 
-fixture`Facets page`
+fixture`FilterBox page`
   .before(setupServer)
   .after(shutdownServer)
-  .page`${FACETS_PAGE}`;
+  .page`${FILTERBOX_PAGE}`;
 
 test(`single option filterbox works with back/forward navigation and page refresh`, async t => {
   const radiusFilterLogger = RequestLogger({
