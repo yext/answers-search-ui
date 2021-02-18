@@ -221,6 +221,8 @@ export default class Core {
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
+        this._persistFilters(locationRadius);
+
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
@@ -255,13 +257,6 @@ export default class Core {
         const analyticsEvent = this.onVerticalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
-        }
-        const persistedFilter = this.filterRegistry.createPersistedFilter();
-        this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
-        if (locationRadius) {
-          this.storage.setWithPersist(StorageKeys.PERSISTED_LOCATION_RADIUS, locationRadius);
-        } else {
-          this.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
         }
         if (shouldPushState) {
           this.storage.pushStateToHistory();
@@ -638,6 +633,19 @@ export default class Core {
     return queryTrigger !== QueryTriggers.INITIALIZE &&
       queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
       queryTrigger !== QueryTriggers.SUGGEST;
+  }
+
+  /**
+   * Persists filters for the next request in the URL.
+   */
+  _persistFilters (locationRadius) {
+    const persistedFilter = this.filterRegistry.createPersistedFilter();
+    this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
+    if (locationRadius) {
+      this.storage.setWithPersist(StorageKeys.PERSISTED_LOCATION_RADIUS, locationRadius);
+    } else {
+      this.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
+    }
   }
 
   enableDynamicFilters () {
