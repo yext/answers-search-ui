@@ -23,6 +23,8 @@ export default class Storage {
     };
 
     /**
+     * A hook for parsing values from persistent storage on init.
+     *
      * @type {Function}
      */
     this.persistedValueParser = config.persistedValueParser;
