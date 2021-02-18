@@ -152,12 +152,8 @@ export default class SearchApi {
       params: {
         'input': query,
         'experienceKey': this._experienceKey,
-        params: {
-          'input': query,
-          'experienceKey': this._experienceKey,
-          'version': this._experienceVersion,
-          'locale': this._locale
-        }
+        'version': this._experienceVersion,
+        'locale': this._locale
       }
     });
 
