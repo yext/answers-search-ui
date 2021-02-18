@@ -206,4 +206,11 @@ export default class ComponentManager {
       return names.concat(this._componentTypeToComponentNames[type] || []);
     }, []);
   }
+
+  /**
+   * Calls every component's afterAnswersOnReady hook.
+   */
+  afterAnswersOnReady () {
+    this._activeComponents.forEach(c => c.afterAnswersOnReady());
+  }
 }

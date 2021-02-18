@@ -300,6 +300,7 @@ class Answers {
         throw new Error('MasterSwitchApi determined the front-end should be disabled');
       }
       this._onReady();
+      this.components.afterAnswersOnReady();
     });
   }
 
