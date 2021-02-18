@@ -602,7 +602,7 @@ class Answers {
    *
    * @param {string} key
    * @param {string} value
-   * @returns {string|number|Filter|number}
+   * @returns {string|number|Filter}
    */
   _parsePersistentStorageValue (key, value) {
     switch (key) {
