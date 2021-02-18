@@ -283,4 +283,15 @@ describe('FilterRegistry', () => {
       $and: [filter1, filter2]
     });
   });
+
+  it('createFacetsFromFilterNodes', () => {
+    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
+    const expectedFacets = {
+      'another_field': [],
+      'c_1': [{ 'c_1': { '$eq': '1' } }],
+      'c_2': [{ 'c_2': { '$eq': '2' } }],
+      'random_field': []
+    };
+    expect(registry.createFacetsFromFilterNodes()).toEqual(expectedFacets);
+  });
 });

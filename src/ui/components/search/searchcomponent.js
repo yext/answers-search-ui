@@ -201,10 +201,19 @@ export default class SearchComponent extends Component {
         const resetPagination = this._verticalKey &&
           queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
           queryTrigger !== QueryTriggers.INITIALIZE;
+        // Facets should be reset for new searches
+        const isNotNewSearch = [
+          QueryTriggers.QUERY_PARAMETER,
+          QueryTriggers.INITIALIZE,
+          QueryTriggers.SUGGEST
+        ].includes(queryTrigger);
         const searchOptions = Object.assign(
           {},
           this._defaultSearchOptions,
-          { resetPagination: resetPagination }
+          {
+            resetPagination: resetPagination,
+            useFacets: isNotNewSearch
+          }
         );
         this.debouncedSearch(q, searchOptions);
       }

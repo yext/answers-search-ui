@@ -88,7 +88,7 @@ test(`filtersearch works with back/forward navigation and page refresh`, async t
 });
 
 test(`pagination works with page navigation after selecting a filtersearch filter`, async t => {
-  const expectFilterTagIsVirginia = async () => {
+  const expectFilterTagIsNewYork = async () => {
     await t.expect(filterTags.count).eql(1);
     const filterTagText = await filterTags.nth(0).find(
       '.yxt-ResultsHeader-removableFilterValue').innerText;
@@ -102,20 +102,20 @@ test(`pagination works with page navigation after selecting a filtersearch filte
   await paginationComponent.clickNextButton();
   let pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
-  await expectFilterTagIsVirginia();
+  await expectFilterTagIsNewYork();
 
   await browserBackButton();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 1');
-  await expectFilterTagIsVirginia();
+  await expectFilterTagIsNewYork();
 
   await browserForwardButton();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
-  await expectFilterTagIsVirginia();
+  await expectFilterTagIsNewYork();
 
   await browserRefreshPage();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
-  await expectFilterTagIsVirginia();
+  await expectFilterTagIsNewYork();
 });

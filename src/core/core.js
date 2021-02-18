@@ -219,6 +219,7 @@ export default class Core {
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
+        this._persistFacets();
         this._persistFilters();
         this._persistLocationRadius();
 
@@ -643,6 +644,14 @@ export default class Core {
     return locationRadiusFilterNode
       ? locationRadiusFilterNode.getFilter().value
       : null;
+  }
+
+  /**
+   * Persists the current `facetFilters` state into the URL.
+   */
+  _persistFacets () {
+    const persistedFacets = this.filterRegistry.createFacetsFromFilterNodes();
+    this.storage.setWithPersist(StorageKeys.PERSISTED_FACETS, persistedFacets);
   }
 
   /**
