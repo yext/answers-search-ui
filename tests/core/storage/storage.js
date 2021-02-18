@@ -61,7 +61,7 @@ describe('init', () => {
     expect(persistedValueParser).toHaveBeenCalledWith('key1', 'val1');
     expect(persistedValueParser).toHaveBeenCalledWith('key2', 'val2');
     expect(persistedValueParser).toHaveBeenCalledTimes(2);
-    expect(storage.getAll()).toEqual(new Map([['key1', 5], ['key2', 5]]))
+    expect(storage.getAll()).toEqual(new Map([['key1', 5], ['key2', 5]]));
   });
 });
 

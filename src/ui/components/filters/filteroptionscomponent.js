@@ -300,7 +300,6 @@ export default class FilterOptionsComponent extends Component {
   _initVariables (config) {
     const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
     const persistedLocationRadius = this.core.storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS);
-    console.log('persisted loc radius', persistedLocationRadius)
     /**
      * The component config
      * @type {FilterOptionsConfig}
