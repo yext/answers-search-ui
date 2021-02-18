@@ -13,7 +13,7 @@ beforeEach(() => {
 });
 
 it('calls update and reset listeners onpopstate', () => {
-  storage = new Storage({ update: stateUpdateListener, reset: stateResetListener });
+  storage = new Storage({ updateListener: stateUpdateListener, resetListener: stateResetListener });
   window.dispatchEvent(new CustomEvent('popstate'));
   expect(stateUpdateListener).toBeCalled();
   expect(stateResetListener).toBeCalled();
@@ -50,6 +50,18 @@ describe('init', () => {
     storage = new Storage();
     storage.init('key1=val1&key2=val2');
     expect(storage.getAll()).toEqual(expectedResult);
+  });
+
+  it('will use custom persistedValueParser in init', () => {
+    const persistedValueParser = jest.fn(() => 5);
+    storage = new Storage({
+      persistedValueParser: persistedValueParser
+    });
+    storage.init('key1=val1&key2=val2');
+    expect(persistedValueParser).toHaveBeenCalledWith('key1', 'val1');
+    expect(persistedValueParser).toHaveBeenCalledWith('key2', 'val2');
+    expect(persistedValueParser).toHaveBeenCalledTimes(2);
+    expect(storage.getAll()).toEqual(new Map([['key1', 5], ['key2', 5]]))
   });
 });
 
@@ -407,7 +419,7 @@ describe('pushStateToHistory', () => {
   });
 
   it('calls update listeners on push', () => {
-    storage = new Storage({ update: stateUpdateListener, reset: stateResetListener });
+    storage = new Storage({ updateListener: stateUpdateListener, resetListener: stateResetListener });
     storage.setWithPersist(StorageKeys.QUERY, 'val1');
     storage.pushStateToHistory();
     expect(stateUpdateListener).toBeCalled();
@@ -485,29 +497,5 @@ describe('getCurrentStateUrlMerged', () => {
       storage.setWithPersist('testParam', 'val1');
       expect(storage.getCurrentStateUrlMerged()).toEqual('testParam=val1');
     });
-  });
-});
-
-describe('setAllFromPersistentStorage', () => {
-  const filter = {
-    c_customField: {
-      $eq: 'someValue'
-    }
-  };
-
-  it('parses FILTERS correctly', () => {
-    const persistedData = new Map([
-      [StorageKeys.PERSISTED_FILTER, JSON.stringify(filter)]
-    ]);
-    storage.setAllFromPersistentStorage(persistedData);
-    expect(storage.get(StorageKeys.PERSISTED_FILTER)).toMatchObject(filter);
-  });
-
-  it('parses LOCATION_RADIUS correctly', () => {
-    const persistedData = new Map([
-      [StorageKeys.PERSISTED_LOCATION_RADIUS, '123']
-    ]);
-    storage.setAllFromPersistentStorage(persistedData);
-    expect(storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS)).toEqual(123);
   });
 });

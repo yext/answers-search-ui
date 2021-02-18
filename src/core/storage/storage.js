@@ -1,8 +1,6 @@
 import DefaultPersistentStorage from '@yext/answers-storage';
 import { AnswersStorageError } from '../errors/errors';
 import SearchParams from '../../ui/dom/searchparams';
-import StorageKeys from './storagekeys';
-import Filter from '../models/filter';
 
 /** @typedef {import('./storagelistener').default} StorageListener */
 
@@ -15,14 +13,19 @@ import Filter from '../models/filter';
  * @param {Function} callback for state (persistent store) reset
  */
 export default class Storage {
-  constructor (persistedStateListeners = {}) {
+  constructor (config = {}) {
     /**
      * The listeners for changes in state (persistent storage changes)
      */
     this.persistedStateListeners = {
-      update: persistedStateListeners.update || function () {},
-      reset: persistedStateListeners.reset || function () {}
+      update: config.updateListener || function () { },
+      reset: config.resetListener || function () { }
     };
+
+    /**
+     * @type {Function}
+     */
+    this.persistedValueParser = config.persistedValueParser;
 
     /**
      * The listener for window.pop in the persistent storage
@@ -70,64 +73,15 @@ export default class Storage {
    */
   init (url) {
     this.persistentStorage.init(url);
-    this.setAllFromPersistentStorage(this.persistentStorage.getAll());
+    this.persistentStorage.getAll().forEach((value, key) => {
+      const parsedValue = this.persistedValueParser
+        ? this.persistedValueParser(key, value)
+        : value;
+      this.set(key, parsedValue);
+    });
     return this;
   }
 
-  /**
-   * Sets all of the key-value pairs in the dataMap.
-   * Will try to JSON.parse StorageKeys that are expected to be json.
-   * QUERY is set last as it can trigger a search.
-   *
-   * @param {Map<string, string>} dataMap
-   * @param {Function} beforeQueryHook
-   */
-  setAllFromPersistentStorage (dataMap, beforeQueryHook) {
-    let query;
-    dataMap.forEach((value, key) => {
-      let parsedValue;
-      switch (key) {
-        case StorageKeys.QUERY:
-          query = value;
-          break;
-        case StorageKeys.PERSISTED_FILTER:
-          parsedValue = this._tryToParseJson(value);
-          if (parsedValue) {
-            this.set(key, Filter.from(parsedValue));
-          }
-          break;
-        case StorageKeys.PERSISTED_LOCATION_RADIUS:
-          parsedValue = this._tryToParseJson(value);
-          if (parsedValue) {
-            this.set(key, parsedValue);
-          }
-          break;
-        default:
-          this.set(key, value);
-      }
-    });
-    if (beforeQueryHook) {
-      beforeQueryHook();
-    }
-    if (query) {
-      this.set(StorageKeys.QUERY, query);
-    }
-  }
-
-  /**
-   * Will try to JSON.parse and then set the given key-value pair.
-   * Will not set anything if the value cannot be parsed.
-   *
-   * @param {string} value
-   * @returns {string|undefined}
-   */
-  _tryToParseJson (value) {
-    try {
-      return JSON.parse(value);
-    } catch (err) {
-      console.error(`Storage: unable to JSON.parse ${value}`, err);
-    }
-  }
   /**
    * Set the data in storage with the given key to the provided
    * data, completely overwriting any existing data.

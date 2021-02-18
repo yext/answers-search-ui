@@ -29,6 +29,7 @@ import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
+import Filter from './core/models/filter';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -155,14 +156,15 @@ class Answers {
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
     const storage = new Storage({
-      update: (data, url) => {
+      updateListener: (data, url) => {
         if (parsedConfig.onStateChange) {
           parsedConfig.onStateChange(Object.fromEntries(data), url);
         }
       },
-      reset: data => {
+      resetListener: data => {
         this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
         this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
+
         if (!data.get(StorageKeys.QUERY)) {
           this.core.clearResults();
         } else {
@@ -172,11 +174,24 @@ class Answers {
         if (!data.get(StorageKeys.SEARCH_OFFSET)) {
           this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
-        const beforeQueryHook = () => {
-          this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
-        };
-        this.core.storage.setAllFromPersistentStorage(data, beforeQueryHook);
-      }
+
+        let query;
+        data.forEach((value, key) => {
+          if (key === StorageKeys.QUERY) {
+            query = value;
+            return;
+          }
+          const parsedValue = this._parsePersistentStorageValue(key, value);
+          this.core.storage.set(key, parsedValue);
+        });
+
+        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
+
+        if (query) {
+          this.core.storage.set(StorageKeys.QUERY, query);
+        }
+      },
+      persistedValueParser: this._parsePersistentStorageValue
     });
     storage.init(window.location.search);
     storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
@@ -579,6 +594,25 @@ class Answers {
    */
   _getInitLocale () {
     return this.core.storage.get(StorageKeys.LOCALE);
+  }
+
+  /**
+   * Parses a value from persistent storage, which stores strings,
+   * into the shape the SDK expects.
+   *
+   * @param {string} key
+   * @param {string} value
+   * @returns {string|number|Filter|number}
+   */
+  _parsePersistentStorageValue (key, value) {
+    switch (key) {
+      case StorageKeys.PERSISTED_FILTER:
+        return Filter.from(JSON.parse(value));
+      case StorageKeys.PERSISTED_LOCATION_RADIUS:
+        return parseFloat(value);
+      default:
+        return value;
+    }
   }
 }
 

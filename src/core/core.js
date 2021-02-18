@@ -190,10 +190,6 @@ export default class Core {
       });
     }
 
-    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
-    const locationRadius = locationRadiusFilterNode
-      ? locationRadiusFilterNode.getFilter().value
-      : null;
     const shouldPushState =
       this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
@@ -214,14 +210,15 @@ export default class Core {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
-        locationRadius: locationRadius,
+        locationRadius: this._getLocationRadius(),
         context: context,
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
-        this._persistFilters(locationRadius);
+        this._persistFilters();
+        this._persistLocationRadius();
 
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
@@ -636,11 +633,29 @@ export default class Core {
   }
 
   /**
-   * Persists filters for the next request in the URL.
+   * Returns the current `locationRadius` state
+   * @returns {number|null}
    */
-  _persistFilters (locationRadius) {
+  _getLocationRadius () {
+    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
+    return locationRadiusFilterNode
+      ? locationRadiusFilterNode.getFilter().value
+      : null;
+  }
+
+  /**
+   * Persists the current `filters` state into the URL.
+   */
+  _persistFilters () {
     const persistedFilter = this.filterRegistry.createPersistedFilter();
     this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
+  }
+
+  /**
+   * Persists the current `locationRadius` state into the URL.
+   */
+  _persistLocationRadius () {
+    const locationRadius = this._getLocationRadius();
     if (locationRadius) {
       this.storage.setWithPersist(StorageKeys.PERSISTED_LOCATION_RADIUS, locationRadius);
     } else {
