@@ -219,7 +219,7 @@ export default class FilterRegistry {
   }
 
   /**
-   * Remove the static FilterNode with this namespace.
+   * Deletes the static FilterNode with this namespace.
    * @param {string} key
    */
   clearStaticFilterNode (key) {
@@ -227,9 +227,22 @@ export default class FilterRegistry {
   }
 
   /**
-   * Remove all facet FilterNodes.
+   * Deletes all facet FilterNodes.
    */
   clearFacetFilterNodes () {
     this.storage.delete(StorageKeys.FACET_FILTER_NODES);
+  }
+
+  /**
+   * Deletes all FilterNodes in storage.
+   */
+  clearAllFilterNodes() {
+    this.storage.delete(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
+    this.clearFacetFilterNodes();
+    this.storage.getAll().forEach((value, key) => {
+      if (key.startsWith(StorageKeys.STATIC_FILTER_NODES)) {
+        this.storage.delete(key);
+      }
+    });
   }
 }

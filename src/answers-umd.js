@@ -163,10 +163,15 @@ class Answers {
         }
       },
       resetListener: data => {
+        let query = data.get(StorageKeys.QUERY);
+        if (!query && data.has(StorageKeys.PERSISTED_FILTER)) {
+          query = '';
+        }
         this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
         this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
+        this.core.filterRegistry.clearAllFilterNodes();
 
-        if (!data.get(StorageKeys.QUERY)) {
+        if (!query && query !== '') {
           this.core.clearResults();
         } else {
           this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
@@ -176,10 +181,8 @@ class Answers {
           this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
 
-        let query;
         data.forEach((value, key) => {
           if (key === StorageKeys.QUERY) {
-            query = value;
             return;
           }
           const parsedValue = this._parsePersistentStorageValue(key, value);
@@ -188,7 +191,7 @@ class Answers {
 
         this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
 
-        if (query) {
+        if (query || query === '') {
           this.core.storage.set(StorageKeys.QUERY, query);
         }
       },
