@@ -502,7 +502,7 @@ export default class Core {
    * @param {string} query the query to store
    */
   setQuery (query) {
-    this.storage.set(StorageKeys.QUERY, query);
+    this.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
   /**

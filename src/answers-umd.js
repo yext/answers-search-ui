@@ -164,14 +164,12 @@ class Answers {
       },
       resetListener: data => {
         let query = data.get(StorageKeys.QUERY);
-        if (!query && data.has(StorageKeys.PERSISTED_FILTER)) {
-          query = '';
-        }
+        const hasQuery = query || query === '';
         this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
         this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
         this.core.filterRegistry.clearAllFilterNodes();
 
-        if (!query && query !== '') {
+        if (!hasQuery) {
           this.core.clearResults();
         } else {
           this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
@@ -191,7 +189,7 @@ class Answers {
 
         this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
 
-        if (query || query === '') {
+        if (hasQuery) {
           this.core.storage.set(StorageKeys.QUERY, query);
         }
       },
