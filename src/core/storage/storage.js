@@ -18,8 +18,8 @@ export default class Storage {
      * The listeners for changes in state (persistent storage changes)
      */
     this.persistedStateListeners = {
-      update: config.updateListener || function () { },
-      reset: config.resetListener || function () { }
+      update: config.updateListener || function () {},
+      reset: config.resetListener || function () {}
     };
 
     /**
