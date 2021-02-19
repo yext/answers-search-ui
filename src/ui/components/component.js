@@ -451,17 +451,6 @@ export default class Component {
   }
 
   /**
-   * afterAnswersOnReady is called after ANSWERS.onReady is finished.
-   * This is intended for code that is meant to be run AFTER all addComponent
-   * calls are finished.
-   *
-   * @param {function} cb
-   */
-  afterAnswersOnReady (cb) {
-
-  }
-
-  /**
    * onCreate is triggered when the component is constructed
    * @param {function} the callback to invoke upon emit
    */

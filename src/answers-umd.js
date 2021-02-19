@@ -30,6 +30,7 @@ import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
 import Filter from './core/models/filter';
+import SearchComponent from './ui/components/search/searchcomponent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -300,8 +301,17 @@ class Answers {
         throw new Error('MasterSwitchApi determined the front-end should be disabled');
       }
       this._onReady();
-      this.components.afterAnswersOnReady();
+      this._searchOnLoad();
     });
+  }
+
+  /**
+   * Calls each SearchBar's searchAfterAnswersOnReady().
+   */
+  _searchOnLoad () {
+    this.components._activeComponents
+      .filter(c => c.constructor.type === SearchComponent.type)
+      .forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
   }
 
   _loadAsyncDependencies (parsedConfig) {

@@ -314,7 +314,11 @@ export default class SearchComponent extends Component {
     return 'search/search';
   }
 
-  afterAnswersOnReady () {
+  /**
+   * This method is called by answers-umd AFTER the onReady() is finished, and
+   * all components have been mounted.
+   */
+  searchAfterAnswersOnReady () {
     if (this.query != null && !this.redirectUrl) {
       this.core.setQuery(this.query);
     }
