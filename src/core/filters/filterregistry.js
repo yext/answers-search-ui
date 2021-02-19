@@ -236,7 +236,7 @@ export default class FilterRegistry {
   /**
    * Deletes all FilterNodes in storage.
    */
-  clearAllFilterNodes() {
+  clearAllFilterNodes () {
     this.storage.delete(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
     this.clearFacetFilterNodes();
     this.storage.getAll().forEach((value, key) => {
