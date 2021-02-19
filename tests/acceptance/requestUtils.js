@@ -14,19 +14,14 @@ export async function getMostRecentQueryParamsFromLogger (logger) {
 }
 
 /**
- * Tests whether the last request for the given logger has the expected
- * filters query params.
+ * Returns the filters param from the last request.
  *
  * @param {import('testcafe').RequestLogger} logger
- * @param {Object} expectedFilters the expected filters object
+ * @returns {Object} the filters param
  */
-export async function expectRequestFiltersToEql (logger, expectedFilters) {
+export async function getRequestFilters (logger) {
   const urlParams = await getMostRecentQueryParamsFromLogger(logger);
-  const filtersParam = urlParams.get('filters');
-  const expectedValue = typeof expectedFilters === 'object'
-    ? JSON.stringify(expectedFilters)
-    : expectedFilters;
-  return t.expect(filtersParam).eql(expectedValue);
+  return JSON.parse(urlParams.get('filters'));
 }
 
 /**

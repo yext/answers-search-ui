@@ -12,7 +12,7 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import {
-  expectRequestFiltersToEql,
+  getRequestFilters,
   expectRequestLocationRadiusToEql,
   expectRequestDoesNotContainParam
 } from '../requestUtils';
@@ -85,20 +85,23 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
 
   // Click the 'Marty' checkbox
   await staticFilter.toggleOption('Marty');
-  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
   await t.expect(filterTags.count).eql(1);
+  filterBoxLogger.clear();
 
   // Click the 'Frodo' checkbox
   await staticFilter.toggleOption('Frodo');
   await t.expect(filterTags.count).eql(2);
-  await expectRequestFiltersToEql(filterBoxLogger, {
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
   });
+  filterBoxLogger.clear();
 
   // Hit the back button, see the 'Frodo' filter disappear
   await browserBackButton();
-  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
   await t.expect(filterTags.count).eql(1);
+  filterBoxLogger.clear();
 
   // Hit the back button, see the 'Marty' filter disappear
   await browserBackButton();
@@ -107,20 +110,22 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
 
   // Hit the forward button, see the 'Marty' filter applied again
   await browserForwardButton();
-  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
   await t.expect(filterTags.count).eql(1);
+  filterBoxLogger.clear();
 
   // Hit the forward button, see the 'Frodo' filter applied again
   await browserForwardButton();
   await t.expect(filterTags.count).eql(2);
-  await expectRequestFiltersToEql(filterBoxLogger, {
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
   });
+  filterBoxLogger.clear();
 
   // Refresh the page
   await browserRefreshPage();
   await t.expect(filterTags.count).eql(2);
-  await expectRequestFiltersToEql(filterBoxLogger, {
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
   });
 });
