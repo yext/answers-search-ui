@@ -9,7 +9,7 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
-  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes, verticalSearch;
+  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes;
   const options = [
     {
       label: 'ciri',
@@ -68,11 +68,9 @@ describe('filter box component', () => {
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
     setStaticFilterNodes = jest.fn();
-    verticalSearch = jest.fn();
 
     const mockCore = {
       setStaticFilterNodes: setStaticFilterNodes,
-      verticalSearch: verticalSearch,
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
       }
@@ -251,11 +249,12 @@ describe('filter box component', () => {
     const wrapper = mount(component);
     const child0 = component._filterComponents[0];
     child0._updateOption(0, true);
+    const setQuery = component.core.setQuery;
     expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
-    expect(verticalSearch.mock.calls).toHaveLength(0);
+    expect(setQuery.mock.calls).toHaveLength(0);
     wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
     expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
-    expect(verticalSearch.mock.calls).toHaveLength(1);
+    expect(setQuery.mock.calls).toHaveLength(1);
   });
 
   it('reset button resets filter node', () => {
@@ -304,14 +303,13 @@ describe('filter box component', () => {
       ]
     };
 
-    it('does not trigger core.verticalSearch() calls on back nav', () => {
-      const verticalSearch = jest.fn();
-      COMPONENT_MANAGER.core.verticalSearch = verticalSearch;
+    it('does not trigger core.setQuery() calls on back nav', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
-      expect(verticalSearch).toHaveBeenCalledTimes(0);
+      const setQuery = component.core.setQuery;
+      expect(setQuery).toHaveBeenCalledTimes(0);
       mount(component);
-      COMPONENT_MANAGER.core.storage.set(StorageKeys.HISTORY_POP_STATE, new Map());
-      expect(verticalSearch).toHaveBeenCalledTimes(0);
+      component.core.storage.set(StorageKeys.HISTORY_POP_STATE, new Map());
+      expect(setQuery).toHaveBeenCalledTimes(0);
     });
 
     it('with searchOnChange = false, will reset to initial state on back nav to blank url', () => {
@@ -346,19 +344,17 @@ describe('filter box component', () => {
 
 describe('dynamic filterbox component', () => {
   DOM.setup(document, new DOMParser());
-  let COMPONENT_MANAGER, defaultConfig, verticalSearch, setFacetFilterNodes;
+  let COMPONENT_MANAGER, defaultConfig, setFacetFilterNodes;
   let node1, node2, node3, node4;
 
   beforeEach(() => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-    verticalSearch = jest.fn();
     setFacetFilterNodes = jest.fn();
 
     const mockCore = {
       setFacetFilterNodes: setFacetFilterNodes,
-      verticalSearch: verticalSearch,
       filterRegistry: {
         setFacetFilterNodes: setFacetFilterNodes
       }

@@ -307,7 +307,16 @@ class Answers {
   }
 
   /**
-   * Calls each SearchBar's searchAfterAnswersOnReady().
+   * This guarantees that execution of the SearchBar's search on page load occurs only
+   * AFTER all components have been added to the page. Trying to do this with a regular
+   * onCreate relies on the SearchBar having some sort of async behavior to move the execution
+   * of the search to the end of the call stack. For instance, relying on promptForLocation
+   * being set to true, which adds additional Promises that will delay the exeuction.
+   *
+   * We need to guarantee that the searchOnLoad happens after the onReady, because certain
+   * components will update values in storage in their onMount/onCreate, which are then expected
+   * to be applied to this search on page load. For example, filter components can apply
+   * filters on page load, which must be applied before this search is made to affect it.
    */
   _searchOnLoad () {
     this.components._activeComponents
