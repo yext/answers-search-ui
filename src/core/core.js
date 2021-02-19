@@ -189,6 +189,9 @@ export default class Core {
         verticalKey: verticalKey
       });
     }
+    const locationRadius = this._getLocationRadius();
+    // The backend throws an error when locationRadius is 0
+    const nonZeroLocationRadius = locationRadius === 0 ? undefined : locationRadius;
 
     const shouldPushState =
       this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
@@ -210,7 +213,7 @@ export default class Core {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
-        locationRadius: this._getLocationRadius(),
+        locationRadius: nonZeroLocationRadius,
         context: context,
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
@@ -647,7 +650,8 @@ export default class Core {
    * Persists the current `filters` state into the URL.
    */
   _persistFilters () {
-    const persistedFilter = this.filterRegistry.createPersistedFilter();
+    const totalFilterNode = this.filterRegistry.getAllStaticFilterNodesCombined();
+    const persistedFilter = totalFilterNode.getFilter();
     this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
   }
 
@@ -656,7 +660,7 @@ export default class Core {
    */
   _persistLocationRadius () {
     const locationRadius = this._getLocationRadius();
-    if (locationRadius) {
+    if (locationRadius || locationRadius === 0) {
       this.storage.setWithPersist(StorageKeys.PERSISTED_LOCATION_RADIUS, locationRadius);
     } else {
       this.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);

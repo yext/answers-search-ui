@@ -84,13 +84,15 @@ export default class FilterRegistry {
   }
 
   /**
-   * Computes the filter that will be persisted in the URL in the next
-   * history state.
+   * Combines together all static filter nodes in the same shape that would
+   * be sent to the API.
+   *
+   * @returns {FilterNode}
    */
-  createPersistedFilter () {
+  getAllStaticFilterNodesCombined () {
     const filterNodes = this.getStaticFilterNodes();
     const totalNode = FilterNodeFactory.and(...filterNodes);
-    return totalNode.getFilter();
+    return totalNode;
   }
 
   /**

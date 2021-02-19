@@ -572,7 +572,7 @@ describe('filter options component', () => {
       expect(setLocationRadiusFilterNode.mock.calls[1][0].getMetadata()).toEqual(filterNode.getMetadata());
     });
 
-    it('clears locationRadius when radius = 0', () => {
+    it('does not clear locationRadius even when radius = 0', () => {
       const config = {
         ...defaultConfig,
         control: 'singleoption',
@@ -594,7 +594,7 @@ describe('filter options component', () => {
           displayValue: 'le 0 metres',
           filterType: FilterType.RADIUS
         }),
-        filter: Filter.empty()
+        filter: { value: 0 }
       });
       expect(setLocationRadiusFilterNode.mock.calls[1][0].getFilter()).toEqual(filterNode.getFilter());
       expect(setLocationRadiusFilterNode.mock.calls[1][0].getMetadata()).toEqual(filterNode.getMetadata());

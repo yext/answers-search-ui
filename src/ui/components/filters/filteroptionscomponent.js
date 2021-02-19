@@ -33,7 +33,7 @@ const OptionTypes = {
 };
 
 class FilterOptionsConfig {
-  constructor (config, persistedFilter, persistedLocationRadius) {
+  constructor (config, persistedState) {
     /**
      * The type of control to display
      * @type {string}
@@ -177,6 +177,7 @@ class FilterOptionsConfig {
     });
 
     this.validate();
+    const { persistedFilter, persistedLocationRadius } = persistedState;
     if (!this.isDynamic) {
       const hasPersistedLocationRadius = persistedLocationRadius || persistedLocationRadius === 0;
       if (this.optionType === OptionTypes.STATIC_FILTER && persistedFilter) {
@@ -300,11 +301,13 @@ export default class FilterOptionsComponent extends Component {
   _initVariables (config) {
     const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
     const persistedLocationRadius = this.core.storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS);
+    const persistedState = { persistedFilter, persistedLocationRadius };
+
     /**
      * The component config
      * @type {FilterOptionsConfig}
      */
-    this.config = new FilterOptionsConfig(config, persistedFilter, persistedLocationRadius);
+    this.config = new FilterOptionsConfig(config, persistedState);
 
     const selectedCount = this.config.getInitialSelectedCount();
 
@@ -687,14 +690,7 @@ export default class FilterOptionsComponent extends Component {
       filter: { value: selectedOption.value },
       remove: () => this._clearSingleOption(selectedOption)
     };
-    if (selectedOption.value === 0) {
-      return FilterNodeFactory.from({
-        ...filterNode,
-        filter: Filter.empty()
-      });
-    } else {
-      return FilterNodeFactory.from(filterNode);
-    }
+    return FilterNodeFactory.from(filterNode);
   }
 
   _clearSingleOption (option) {

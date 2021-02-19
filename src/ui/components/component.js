@@ -455,7 +455,7 @@ export default class Component {
    * This is intended for code that is meant to be run AFTER all addComponent
    * calls are finished.
    *
-   * @param {function} cb 
+   * @param {function} cb
    */
   afterAnswersOnReady (cb) {
 
