@@ -190,10 +190,6 @@ export default class Core {
       });
     }
     const locationRadius = this._getLocationRadius();
-    // The backend throws an error when locationRadius is 0
-    // Partially because of this, the SDK has decided to make locationRadius of 0
-    // mean "unset my locationRadius"
-    const nonZeroLocationRadius = locationRadius === 0 ? undefined : locationRadius;
 
     const shouldPushState =
       this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
@@ -215,7 +211,8 @@ export default class Core {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
-        locationRadius: nonZeroLocationRadius,
+        /** In the SDK a locationRadius of 0 means "unset my locationRadius" */
+        locationRadius: locationRadius === 0 ? undefined : locationRadius,
         context: context,
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
