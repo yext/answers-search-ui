@@ -620,6 +620,7 @@ class Answers {
   /**
    * Parses a value from persistent storage, which stores strings,
    * into the shape the SDK expects.
+   * TODO(SLAP-1111): Move this into a dedicated file/class.
    *
    * @param {string} key
    * @param {string} value
