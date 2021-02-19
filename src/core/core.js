@@ -191,6 +191,8 @@ export default class Core {
     }
     const locationRadius = this._getLocationRadius();
     // The backend throws an error when locationRadius is 0
+    // Partially because of this, the SDK has decided to make locationRadius of 0
+    // mean "unset my locationRadius"
     const nonZeroLocationRadius = locationRadius === 0 ? undefined : locationRadius;
 
     const shouldPushState =
