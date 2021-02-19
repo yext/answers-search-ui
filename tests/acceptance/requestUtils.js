@@ -8,7 +8,12 @@ import { t } from 'testcafe';
  * @returns {Promise<URLSearchParams>} the query params of the last request
  */
 export async function getMostRecentQueryParamsFromLogger (logger) {
-  await t.expect(logger.contains(record => record.response.statusCode === 200)).ok();
+  for (let i = 0; i < 50; i++) {
+    await t.wait(100);
+    if (logger.requests.length > 0 ) {
+      break;
+    }
+  }
   const url = logger.requests[logger.requests.length - 1].request.url;
   return new URLSearchParams(url);
 }
