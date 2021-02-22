@@ -119,9 +119,6 @@ export function filterParamsForExperienceLink (
   getComponentNamesForComponentTypes
 ) {
   const componentTypesToExclude = [
-    ComponentTypes.FACETS,
-    ComponentTypes.FILTER_BOX,
-    ComponentTypes.FILTER_OPTIONS,
     ComponentTypes.RANGE_FILTER,
     ComponentTypes.DATE_RANGE_FILTER,
     ComponentTypes.SORT_OPTIONS,
@@ -139,5 +136,7 @@ export function filterParamsForExperienceLink (
 
   const newParams = removeParamsWithPrefixes(params, paramsToFilter);
   newParams.delete(StorageKeys.SEARCH_OFFSET);
+  newParams.delete(StorageKeys.PERSISTED_FILTER);
+  newParams.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
   return newParams;
 }

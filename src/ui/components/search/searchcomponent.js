@@ -190,6 +190,14 @@ export default class SearchComponent extends Component {
         this._updateClearButtonVisibility(q);
 
         const queryTrigger = this.core.storage.get(StorageKeys.QUERY_TRIGGER);
+        if (queryTrigger === QueryTriggers.FILTER_COMPONENT) {
+          this.debouncedSearch(q, {
+            setQueryParams: true,
+            resetPagination: true,
+            useFacets: true
+          });
+          return;
+        }
         const resetPagination = this._verticalKey &&
           queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
           queryTrigger !== QueryTriggers.INITIALIZE;
@@ -314,7 +322,11 @@ export default class SearchComponent extends Component {
     return 'search/search';
   }
 
-  onCreate () {
+  /**
+   * This method is called by answers-umd AFTER the onReady() is finished, and
+   * all components have been mounted.
+   */
+  searchAfterAnswersOnReady () {
     if (this.query != null && !this.redirectUrl) {
       this.core.setQuery(this.query);
     }

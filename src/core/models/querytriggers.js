@@ -6,8 +6,10 @@
  *
  * @enum {string}
  */
-export default {
+const QueryTriggers = {
   INITIALIZE: 'initialize',
   QUERY_PARAMETER: 'query-parameter',
-  SUGGEST: 'suggest'
+  SUGGEST: 'suggest',
+  FILTER_COMPONENT: 'filter-component'
 };
+export default QueryTriggers;

@@ -6,7 +6,7 @@
  *
  * @enum {string}
  */
-export default {
+const StorageKeys = {
   NAVIGATION: 'navigation',
   UNIVERSAL_RESULTS: 'universal-results',
   VERTICAL_RESULTS: 'vertical-results',
@@ -14,10 +14,13 @@ export default {
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
   FILTER: 'filter', // DEPRECATED
-  STATIC_FILTER_NODE: 'static-filter-node',
+  PERSISTED_FILTER: 'filters',
+  STATIC_FILTER_NODES: 'static-filter-nodes',
+  LOCATION_RADIUS_FILTER_NODE: 'location-radius-filter-node',
+  PERSISTED_LOCATION_RADIUS: 'locationRadius',
   QUERY: 'query',
   QUERY_ID: 'query-id',
-  FACET_FILTER_NODE: 'facet-filter-node',
+  FACET_FILTER_NODES: 'facet-filter-nodes',
   DYNAMIC_FILTERS: 'dynamic-filters',
   GEOLOCATION: 'geolocation',
   QUESTION_SUBMISSION: 'question-submission',
@@ -31,7 +34,6 @@ export default {
   LOCALE: 'locale',
   SORT_BYS: 'sort-bys',
   NO_RESULTS_CONFIG: 'no-results-config',
-  LOCATION_RADIUS: 'location-radius',
   RESULTS_HEADER: 'results-header', // DEPRECATED
   API_CONTEXT: 'context',
   REFERRER_PAGE_URL: 'referrerPageUrl',
@@ -40,3 +42,4 @@ export default {
   QUERY_SOURCE: 'query-source',
   HISTORY_POP_STATE: 'history-pop-state'
 };
+export default StorageKeys;

@@ -185,22 +185,26 @@ fixture`Experience links work as expected`
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
-test('Facets, pagination, and filters do not persist accross experience links', async t => {
-  const verifyCleanLink = async (link) => {
-    await t.expect(universalUrl).notContains('Facets');
-    await t.expect(universalUrl).notContains('filter');
+test('Pagination, filters, and locationRadius do not persist accross experience links', async t => {
+  const verifyCleanLink = async () => {
+    await t.expect(universalUrl).notContains('locationRadius');
+    await t.expect(universalUrl).notContains('filters');
     await t.expect(universalUrl).notContains('search-offset');
   };
 
-  // When you land, nav links should not have the Facets/filter/pagination parameters
+  // When you land, nav links should be clean
   let universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
   await t.expect(universalUrl).contains('universal');
   await t.expect(universalUrl).contains('referrerPageUrl');
   await verifyCleanLink(universalUrl);
 
-  // When you search, nav links should not have the Facets/filter/pagination parameters
+  // When you search, nav links should be clean
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
+
+  const staticFilterBox = FacetsPage.getStaticFilterBox();
+  const distanceFilter = await staticFilterBox.getFilterOptions('DISTANCE');
+  await distanceFilter.toggleOption('1000 miles');
 
   const facets = FacetsPage.getFacetsComponent();
   const filterBox = facets.getFilterBox();
