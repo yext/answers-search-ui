@@ -5,6 +5,8 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import StorageKeys from '../../../core/storage/storagekeys';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -308,10 +310,8 @@ export default class FilterBoxComponent extends Component {
    * Trigger a search with all filters in storage
    */
   _search () {
-    this.core.verticalSearch(this._config.verticalKey, {
-      setQueryParams: true,
-      resetPagination: true,
-      useFacets: true
-    });
+    const query = this.core.storage.get(StorageKeys.QUERY) || '';
+    this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.FILTER_COMPONENT);
+    this.core.setQuery(query);
   }
 }

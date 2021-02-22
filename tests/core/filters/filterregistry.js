@@ -245,7 +245,7 @@ describe('FilterRegistry', () => {
       filter: new Filter({ value: 1234 })
     });
     registry.setLocationRadiusFilterNode(filterNode);
-    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
     expect(locationRadiusFilterNode.getFilter().value).toEqual(1234);
   });
 
@@ -259,7 +259,7 @@ describe('FilterRegistry', () => {
     });
     registry.setLocationRadiusFilterNode(filterNode);
     registry.setLocationRadiusFilterNode(FilterNodeFactory.from());
-    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = registry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
     expect(locationRadiusFilterNode.getFilter()).toEqual(FilterNodeFactory.from().getFilter());
     expect(locationRadiusFilterNode.getMetadata()).toEqual(FilterNodeFactory.from().getMetadata());
   });
@@ -274,5 +274,13 @@ describe('FilterRegistry', () => {
     registry.setStaticFilterNodes('namespace1', node1);
     registry.clearStaticFilterNode('namespace1');
     expect(registry.getStaticFilterNodes()).toEqual([]);
+  });
+
+  it('getAllStaticFilterNodesCombined combines filters corectly', () => {
+    registry.setStaticFilterNodes('aName', node1);
+    registry.setStaticFilterNodes('bName', node2);
+    expect(registry.getAllStaticFilterNodesCombined().getFilter()).toEqual({
+      $and: [filter1, filter2]
+    });
   });
 });

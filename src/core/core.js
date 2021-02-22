@@ -189,8 +189,8 @@ export default class Core {
         verticalKey: verticalKey
       });
     }
+    const locationRadius = this._getLocationRadius();
 
-    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
     const shouldPushState =
       this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
@@ -211,13 +211,17 @@ export default class Core {
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
-        locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
+        /** In the SDK a locationRadius of 0 means "unset my locationRadius" */
+        locationRadius: locationRadius === 0 ? undefined : locationRadius,
         context: context,
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
+        this._persistFilters();
+        this._persistLocationRadius();
+
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
@@ -498,7 +502,7 @@ export default class Core {
    * @param {string} query the query to store
    */
   setQuery (query) {
-    this.storage.set(StorageKeys.QUERY, query);
+    this.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
   /**
@@ -530,7 +534,7 @@ export default class Core {
    * @returns {FilterNode}
    */
   getLocationRadiusFilterNode () {
-    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
   }
 
   /**
@@ -628,6 +632,38 @@ export default class Core {
     return queryTrigger !== QueryTriggers.INITIALIZE &&
       queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
       queryTrigger !== QueryTriggers.SUGGEST;
+  }
+
+  /**
+   * Returns the current `locationRadius` state
+   * @returns {number|null}
+   */
+  _getLocationRadius () {
+    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
+    return locationRadiusFilterNode
+      ? locationRadiusFilterNode.getFilter().value
+      : null;
+  }
+
+  /**
+   * Persists the current `filters` state into the URL.
+   */
+  _persistFilters () {
+    const totalFilterNode = this.filterRegistry.getAllStaticFilterNodesCombined();
+    const persistedFilter = totalFilterNode.getFilter();
+    this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
+  }
+
+  /**
+   * Persists the current `locationRadius` state into the URL.
+   */
+  _persistLocationRadius () {
+    const locationRadius = this._getLocationRadius();
+    if (locationRadius || locationRadius === 0) {
+      this.storage.setWithPersist(StorageKeys.PERSISTED_LOCATION_RADIUS, locationRadius);
+    } else {
+      this.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
+    }
   }
 
   enableDynamicFilters () {

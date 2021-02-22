@@ -29,6 +29,8 @@ import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
+import Filter from './core/models/filter';
+import SearchComponent from './ui/components/search/searchcomponent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -155,36 +157,43 @@ class Answers {
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
     const storage = new Storage({
-      update: (data, url) => {
+      updateListener: (data, url) => {
         if (parsedConfig.onStateChange) {
           parsedConfig.onStateChange(Object.fromEntries(data), url);
         }
       },
-      reset: data => {
-        if (!data.get(StorageKeys.QUERY)) {
+      resetListener: data => {
+        let query = data.get(StorageKeys.QUERY);
+        const hasQuery = query || query === '';
+        this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
+        this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
+        this.core.filterRegistry.clearAllFilterNodes();
+
+        if (!hasQuery) {
           this.core.clearResults();
         } else {
           this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
-        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
 
         if (!data.get(StorageKeys.SEARCH_OFFSET)) {
           this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
 
-        let query;
         data.forEach((value, key) => {
           if (key === StorageKeys.QUERY) {
-            query = value;
             return;
           }
-          this.core.storage.set(key, value);
+          const parsedValue = this._parsePersistentStorageValue(key, value);
+          this.core.storage.set(key, parsedValue);
         });
 
-        if (query) {
+        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
+
+        if (hasQuery) {
           this.core.storage.set(StorageKeys.QUERY, query);
         }
-      }
+      },
+      persistedValueParser: this._parsePersistentStorageValue
     });
     storage.init(window.location.search);
     storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
@@ -293,7 +302,26 @@ class Answers {
         throw new Error('MasterSwitchApi determined the front-end should be disabled');
       }
       this._onReady();
+      this._searchOnLoad();
     });
+  }
+
+  /**
+   * This guarantees that execution of the SearchBar's search on page load occurs only
+   * AFTER all components have been added to the page. Trying to do this with a regular
+   * onCreate relies on the SearchBar having some sort of async behavior to move the execution
+   * of the search to the end of the call stack. For instance, relying on promptForLocation
+   * being set to true, which adds additional Promises that will delay the exeuction.
+   *
+   * We need to guarantee that the searchOnLoad happens after the onReady, because certain
+   * components will update values in storage in their onMount/onCreate, which are then expected
+   * to be applied to this search on page load. For example, filter components can apply
+   * filters on page load, which must be applied before this search is made to affect it.
+   */
+  _searchOnLoad () {
+    this.components._activeComponents
+      .filter(c => c.constructor.type === SearchComponent.type)
+      .forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
   }
 
   _loadAsyncDependencies (parsedConfig) {
@@ -586,6 +614,26 @@ class Answers {
    */
   _getInitLocale () {
     return this.core.storage.get(StorageKeys.LOCALE);
+  }
+
+  /**
+   * Parses a value from persistent storage, which stores strings,
+   * into the shape the SDK expects.
+   * TODO(SLAP-1111): Move this into a dedicated file/class.
+   *
+   * @param {string} key
+   * @param {string} value
+   * @returns {string|number|Filter}
+   */
+  _parsePersistentStorageValue (key, value) {
+    switch (key) {
+      case StorageKeys.PERSISTED_FILTER:
+        return Filter.from(JSON.parse(value));
+      case StorageKeys.PERSISTED_LOCATION_RADIUS:
+        return parseFloat(value);
+      default:
+        return value;
+    }
   }
 }
 
