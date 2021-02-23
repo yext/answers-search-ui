@@ -101,10 +101,15 @@ export default class HandlebarsRenderer extends Renderer {
       return config.template(data);
     }
 
+    if (!(config.templateName in this._templates)) {
+      throw new Error('Can\'t find tempate: ' + config.templateName);
+    }
+
     try {
       return this._templates[config.templateName](data);
     } catch (e) {
-      throw new Error('Can not find/render template: ' + config.templateName, e);
+      console.error('Error when trying to render the template: ' + config.templateName);
+      throw e;
     }
   }
 
