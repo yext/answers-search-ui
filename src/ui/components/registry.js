@@ -25,8 +25,6 @@ import PaginationComponent from './results/paginationcomponent';
 
 import CardComponent from './cards/cardcomponent';
 import StandardCardComponent from './cards/standardcardcomponent';
-import AccordionCardComponent from './cards/accordioncardcomponent';
-import LegacyCardComponent from './cards/legacycardcomponent';
 
 import AlternativeVerticalsComponent from './results/alternativeverticalscomponent';
 import MapComponent from './map/mapcomponent';
@@ -72,8 +70,6 @@ const COMPONENT_CLASS_LIST = [
   // Card Components
   CardComponent,
   StandardCardComponent,
-  AccordionCardComponent,
-  LegacyCardComponent,
 
   // Questions Components
   QuestionSubmissionComponent,
