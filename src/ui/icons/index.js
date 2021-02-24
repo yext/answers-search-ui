@@ -54,8 +54,6 @@ const iconsArray = [
   lightBulbIcon,
   elements,
   close,
-  yextAnimatedForward,
-  yextAnimatedReverse,
   email,
   starIcon
 ];
