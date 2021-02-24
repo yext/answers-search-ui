@@ -9,6 +9,5 @@ export default {
   FILTER_BOX: 'FilterBox',
   FILTER_OPTIONS: 'FilterOptions',
   FACETS: 'Facets',
-  GEOLOCATION_FILTER: 'GeoLocationFilter',
   SORT_OPTIONS: 'SortOptions',
 };

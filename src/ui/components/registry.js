@@ -12,7 +12,6 @@ import LocationBiasComponent from './search/locationbiascomponent';
 import FilterBoxComponent from './filters/filterboxcomponent';
 import FilterOptionsComponent from './filters/filteroptionscomponent';
 import FacetsComponent from './filters/facetscomponent';
-import GeoLocationComponent from './filters/geolocationcomponent';
 import SortOptionsComponent from './filters/sortoptionscomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
@@ -47,7 +46,6 @@ const COMPONENT_CLASS_LIST = [
   FilterBoxComponent,
   FilterOptionsComponent,
   FacetsComponent,
-  GeoLocationComponent,
   SortOptionsComponent,
 
   // Results Components
