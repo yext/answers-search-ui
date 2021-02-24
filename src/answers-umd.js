@@ -246,7 +246,7 @@ class Answers {
 
       this._handlePonyfillCssVariables(
         parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
+        () => this._invokeOnReady(parsedConfig));
       return this;
     }
 
@@ -256,18 +256,23 @@ class Answers {
       this.renderer.init(templates);
       this._handlePonyfillCssVariables(
         parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
+        () => this._invokeOnReady(parsedConfig));
     });
 
     return this;
   }
 
   /**
-   * Checks the experience's Answer Status page before invoking onReady. If the status is
-   * disabled, onReady is not called.
+   * Invokes the user's onReady. If there is a verticalSearchPromise or universalSearchPromise,
+   * handle them here.
    */
-  _invokeOnReady () {
-    return this._onReady();
+  _invokeOnReady (config) {
+    this._onReady();
+    if (config.verticalSearchPromise) {
+      this.core.handleVerticalSearchPromise(config.verticalSearchPromise);
+    } else if (config.universalSearchPromise) {
+      this.core.handleUniversalSearchPromise(config.universalSearchPromise);
+    }
   }
 
   /**
