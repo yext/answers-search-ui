@@ -2,14 +2,12 @@
 
 import Component from '../component';
 
-import GoogleMapProvider from './providers/googlemapprovider';
 import MapBoxMapProvider from './providers/mapboxmapprovider';
 
 import StorageKeys from '../../../core/storage/storagekeys';
 import ResultsContext from '../../../core/storage/resultscontext';
 
 const ProviderTypes = {
-  'google': GoogleMapProvider,
   'mapbox': MapBoxMapProvider
 };
 

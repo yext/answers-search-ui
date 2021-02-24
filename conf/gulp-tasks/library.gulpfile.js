@@ -19,6 +19,7 @@ const postcss = require('gulp-postcss');
 const uglify = require('gulp-uglify-es').default;
 
 const NAMESPACE = 'ANSWERS';
+const visualizer = require('rollup-plugin-visualizer');
 
 function getLibVersion () {
   try {
@@ -56,6 +57,9 @@ function bundle () {
         babelrc: false,
         exclude: 'node_modules/**',
         presets: ['@babel/env']
+      }),
+      visualizer({
+        filename: 'answers-modern.html'
       })
     ]
   })
@@ -120,6 +124,9 @@ function legacyBundle (outputConfig, fileName) {
           '@babel/plugin-transform-arrow-functions',
           '@babel/plugin-proposal-object-rest-spread'
         ]
+      }),
+      visualizer({
+        filename: fileName.split('.')[0] + '.html'
       })
     ]
   })

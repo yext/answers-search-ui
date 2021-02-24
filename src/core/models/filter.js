@@ -70,37 +70,6 @@ export default class Filter {
   }
 
   /**
-   * Helper method for creating a range filter
-   * @param {string} field field id of the filter
-   * @param {number|string} min minimum value
-   * @param {number|string} max maximum value
-   * @param {boolean} isExclusive whether this is an inclusive or exclusive range
-   * @returns {Filter}
-   */
-  static range (field, min, max, isExclusive) {
-    const falsyMin = min === null || min === undefined || min === '';
-    const falsyMax = max === null || max === undefined || max === '';
-    if (falsyMin && falsyMax) {
-      return Filter.empty();
-    } else if (falsyMax) {
-      return isExclusive
-        ? Filter.greaterThan(field, min)
-        : Filter.greaterThanEqual(field, min);
-    } else if (falsyMin) {
-      return isExclusive
-        ? Filter.lessThan(field, max)
-        : Filter.lessThanEqual(field, max);
-    } else if (min === max) {
-      return isExclusive
-        ? Filter.empty()
-        : Filter.equal(field, min);
-    }
-    return isExclusive
-      ? Filter.exclusiveRange(field, min, max)
-      : Filter.inclusiveRange(field, min, max);
-  }
-
-  /**
    * Create a new "equal to" filter for a field
    * @param {string} field The subject field of the filter
    * @param {*} value The value the field should be equal to
@@ -109,79 +78,6 @@ export default class Filter {
   static equal (field, value) {
     return Filter._fromMatcher(field, '$eq', value);
   }
-
-  /**
-   * Create a new "less than" filter for a field
-   * @param {string} field The subject field of the filter
-   * @param {*} value The value the field should be less than
-   * @returns {Filter}
-   */
-  static lessThan (field, value) {
-    return Filter._fromMatcher(field, '$lt', value);
-  }
-
-  /**
-   * Create a new "less than or equal to" filter for a field
-   * @param {string} field The subject field of the filter
-   * @param {*} value The value the field should be less than or equal to
-   * @returns {Filter}
-   */
-  static lessThanEqual (field, value) {
-    return Filter._fromMatcher(field, '$le', value);
-  }
-
-  /**
-   * Create a new "greater than" filter for a field
-   * @param {string} field The subject field of the filter
-   * @param {*} value The value the field should be greater than
-   * @returns {Filter}
-   */
-  static greaterThan (field, value) {
-    return Filter._fromMatcher(field, '$gt', value);
-  }
-
-  /**
-   * Create a new "greater than or equal to" filter for a field
-   * @param {string} field The subject field of the filter
-   * @param {*} value The value the field should be greater than or equal to
-   * @returns {Filter}
-   */
-  static greaterThanEqual (field, value) {
-    return Filter._fromMatcher(field, '$ge', value);
-  }
-
-  /**
-   * Create a new inclusive range filter
-   * @param {string} field The subject field of the filter
-   * @param {*} min The minimum value
-   * @param {*} max The maximum value
-   * @returns {Filter}
-   */
-  static inclusiveRange (field, min, max) {
-    return new Filter({
-      [field]: {
-        '$ge': min,
-        '$le': max
-      }
-    });
-  }
-
-  /**
-   * Create a new exclusive range filter
-   * @param {string} field The subject field of the filter
-   * @param {*} min The minimum value
-   * @param {*} max The maximum value
-   * @returns {Filter}
-   */
-  static exclusiveRange (field, min, max) {
-    return new Filter({
-      [field]: {
-        '$gt': min,
-        '$lt': max
-      }
-    });
-  }
-
   /**
    * Create a new position filter
    * @param {number} lat The latitude of the position

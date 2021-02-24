@@ -29,12 +29,6 @@ export default class AutoCompleteComponent extends Component {
     super(opts, systemOpts);
 
     /**
-     * Whether autocomplete is simple or filter
-     * @type {boolean}
-     */
-    this.isFilterSearch = opts.isFilterSearch || false;
-
-    /**
      * The `verticalKey` of the vertical search to use for auto-complete
      * @type {string}
      */
@@ -291,13 +285,7 @@ export default class AutoCompleteComponent extends Component {
   }
 
   autoComplete (input) {
-    if (this.isFilterSearch) {
-      this.core.autoCompleteFilter(input, {
-        namespace: this.name,
-        verticalKey: this._verticalKey,
-        searchParameters: this._searchParameters
-      });
-    } else if (this._verticalKey) {
+    if (this._verticalKey) {
       this.core.autoCompleteVertical(input, this.name, this._verticalKey);
     } else {
       this.core.autoCompleteUniversal(input, this.name);
@@ -391,19 +379,12 @@ export default class AutoCompleteComponent extends Component {
   handleSubmitResult (key, value, e) {
     let sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
-      if (this.isFilterSearch) {
-        this.autoComplete(value);
-      }
       return;
     }
 
     // submit the search on enter
     if (key === Keys.ENTER) {
       e.preventDefault();
-
-      if (this.isFilterSearch && this._resultIndex === -1) {
-        return;
-      }
 
       let filter = '';
       if (this._sectionIndex >= 0 && this._resultIndex >= 0) {

@@ -4,7 +4,6 @@ import Component from '../component';
 
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
-import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 
 export default class UniversalResultsComponent extends Component {
@@ -61,8 +60,7 @@ export default class UniversalResultsComponent extends Component {
       ...UniversalResultsComponent.getChildConfig(
         verticalKey, verticals[verticalKey] || {}, this._appliedFilters)
     };
-    const childType = childOpts.useAccordion ? AccordionResultsComponent.type : type;
-    return super.addChild(data, childType, childOpts);
+    return super.addChild(data, type, childOpts);
   }
 
   /**
@@ -88,8 +86,6 @@ export default class UniversalResultsComponent extends Component {
       viewMoreLabel: defaultConfigOption(config, ['viewMoreLabel', 'viewAllText'], 'View More'),
       // Whether to show a result count.
       showResultCount: false,
-      // Whether to use AccordionResults (DEPRECATED)
-      useAccordion: false,
       // Override vertical config defaults with user given config.
       ...config,
       // Config for the applied filters bar. Must be placed after ...config to not override defaults.

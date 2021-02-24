@@ -61,7 +61,6 @@
 {{#*inline "content"}}
   <div class="yxt-StandardCard-content">
     {{> details}}
-    {{> ctas}}
   </div>
 {{/inline}}
 
@@ -85,11 +84,5 @@
         </button>
       {{/if}}
     </div>
-  {{/if}}
-{{/inline}}
-
-{{#*inline "ctas"}}
-  {{#if hasCTAs}}
-    <div class="yxt-StandardCard-ctas" data-component="CTACollection" data-prop="result"></div>
   {{/if}}
 {{/inline}}

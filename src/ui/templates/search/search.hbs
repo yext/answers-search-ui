@@ -37,17 +37,6 @@
                 data-component="IconComponent"
                 data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
             ></div>
-          {{else}}
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
-              data-component="IconComponent"
-              data-opts="{{json forwardIconOpts}}">
-            </div>
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
-              data-component="IconComponent"
-              data-opts="{{json reverseIconOpts}}">
-            </div>
           {{/if}}
           <span class="yxt-SearchBar-buttonText sr-only">
             {{submitText}}

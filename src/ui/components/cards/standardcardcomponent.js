@@ -4,7 +4,6 @@ import Component from '../component';
 import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
-import CTACollectionComponent from '../ctas/ctacollectioncomponent';
 
 class StandardCardConfig {
   constructor (config = {}) {
@@ -164,7 +163,6 @@ export default class StandardCardComponent extends Component {
       ...data,
       hideExcessDetails: this.hideExcessDetails,
       result: this.result,
-      hasCTAs: CTACollectionComponent.hasCTAs(this.result._raw, this._config.callsToAction),
       entityId: this.result._raw.id,
       verticalKey: this.verticalKey,
       details
@@ -182,18 +180,6 @@ export default class StandardCardComponent extends Component {
   }
 
   addChild (data, type, opts) {
-    if (type === CTACollectionComponent.type) {
-      const updatedData = {
-        verticalKey: this.verticalKey,
-        result: data
-      };
-      return super.addChild(updatedData, type, {
-        callsToAction: this._config.callsToAction,
-        isUniversal: this._config.isUniversal,
-        _ctaModifiers: ['StandardCard'],
-        ...opts
-      });
-    }
     return super.addChild(data, type, opts);
   }
 
