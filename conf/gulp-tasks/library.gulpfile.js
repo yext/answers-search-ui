@@ -59,7 +59,7 @@ function bundle () {
         presets: ['@babel/env']
       }),
       visualizer({
-        filename: 'answers-modern.html'
+        filename: 'dist/answers-modern.html'
       })
     ]
   })
@@ -126,7 +126,7 @@ function legacyBundle (outputConfig, fileName) {
         ]
       }),
       visualizer({
-        filename: fileName.split('.')[0] + '.html'
+        filename: 'dist/' + fileName.split('.')[0] + '.html'
       })
     ]
   })
