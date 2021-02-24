@@ -19,9 +19,9 @@ const postcss = require('gulp-postcss');
 const uglify = require('gulp-uglify-es').default;
 
 const NAMESPACE = 'ANSWERS';
-const visualizer = require('rollup-plugin-visualizer')
+const visualizer = require('rollup-plugin-visualizer');
 
-function getLibVersion() {
+function getLibVersion () {
   try {
     const insideWorkTree = require('child_process')
       .execSync('git rev-parse --is-inside-work-tree 2>/dev/null')
@@ -39,7 +39,7 @@ function getLibVersion() {
   return 'TEST';
 }
 
-function bundle() {
+function bundle () {
   return rollup({
     input: './src/answers-umd.js',
     output: {
@@ -61,35 +61,35 @@ function bundle() {
       visualizer({
         filename: 'answers-modern.html'
       })
-    ],
+    ]
   })
     .pipe(source('answers-modern.js'))
     .pipe(replace('@@LIB_VERSION', getLibVersion()))
     .pipe(dest('dist'));
 }
 
-function legacyBundleIIFE() {
+function legacyBundleIIFE () {
   return legacyBundle({
     format: 'iife',
     name: NAMESPACE,
     sourcemap: true
   },
-    'answers.js'
+  'answers.js'
   );
 }
 
-function legacyBundleUMD() {
+function legacyBundleUMD () {
   return legacyBundle({
     format: 'umd',
     name: NAMESPACE,
     export: 'default',
     sourcemap: true
   },
-    'answers-umd.js'
+  'answers-umd.js'
   );
 }
 
-function legacyBundle(outputConfig, fileName) {
+function legacyBundle (outputConfig, fileName) {
   return rollup({
     input: './src/answers-umd.js',
     output: outputConfig,
@@ -135,28 +135,28 @@ function legacyBundle(outputConfig, fileName) {
     .pipe(dest('dist'));
 }
 
-function minifyJS() {
+function minifyJS () {
   return src('./dist/answers-modern.js')
     .pipe(rename('answers-modern.min.js'))
     .pipe(uglify())
     .pipe(dest('dist'));
 }
 
-function minifyLegacy() {
+function minifyLegacy () {
   return src('./dist/answers.js')
     .pipe(rename('answers.min.js'))
     .pipe(uglify())
     .pipe(dest('dist'));
 }
 
-function minifyLegacyUMD() {
+function minifyLegacyUMD () {
   return src('./dist/answers-umd.js')
     .pipe(rename('answers-umd.min.js'))
     .pipe(uglify())
     .pipe(dest('dist'));
 }
 
-function compileCSS() {
+function compileCSS () {
   return src('./src/ui/sass/**/*.scss')
     .pipe(sass({
       outputStyle: 'compressed'
@@ -165,13 +165,13 @@ function compileCSS() {
     .pipe(dest('./dist/'));
 }
 
-function watchJS(cb) {
+function watchJS (cb) {
   return watch(['./src/**/*.js'], {
     ignored: './dist/'
   }, parallel(legacyBundleIIFE));
 }
 
-function watchCSS(cb) {
+function watchCSS (cb) {
   return watch(['./src/ui/sass/**/*.scss'], {
     ignored: './dist/'
   }, series(compileCSS));
