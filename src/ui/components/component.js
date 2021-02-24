@@ -1,7 +1,5 @@
 /** @module Component */
 
-import cloneDeep from 'lodash.clonedeep';
-
 import { Renderers } from '../rendering/const';
 
 import DOM from '../dom/dom';
@@ -9,6 +7,10 @@ import State from './state';
 import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused-vars
 import AnalyticsEvent from '../../core/analytics/analyticsevent';
 import { AnswersComponentError } from '../../core/errors/errors';
+
+function cloneDeep (obj) {
+  return JSON.parse(JSON.stringify(obj));
+}
 
 /**
  * Component is an abstraction that encapsulates state, behavior,
