@@ -245,37 +245,3 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     border-right: var(--yxt-border-legacy);
   }
 }
-
-// Legacy AccordionResults specific styling
-.yxt-Accordion .yxt-Results
-{
-  &-titleBar
-  {
-    display: flex;
-    justify-content: space-between;
-    padding-left: var(--yxt-base-spacing);
-    padding-right: var(--yxt-base-spacing);
-    padding-top: calc(var(--yxt-base-spacing) / 2);
-    padding-bottom: calc(var(--yxt-base-spacing) / 2);
-    background-color: var(--yxt-results-title-bar-background);
-    border: var(--yxt-border-legacy);
-    border-bottom: none;
-  }
-
-  &-title
-  {
-    @include Text(
-      var(--yxt-results-title-bar-text-font-size),
-      var(--yxt-results-title-bar-text-line-height),
-      var(--yxt-results-title-bar-text-font-weight),
-      $color: var(--yxt-results-title-bar-text-color)
-    );
-
-    text-transform: uppercase;
-  }
-
-  &-titleIconWrapper
-  {
-    color: inherit;
-  }
-}

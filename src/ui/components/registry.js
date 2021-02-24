@@ -16,7 +16,6 @@ import GeoLocationComponent from './filters/geolocationcomponent';
 import SortOptionsComponent from './filters/sortoptionscomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
-import AccordionResultsComponent from './results/accordionresultscomponent.js';
 import VerticalResultsComponent from './results/verticalresultscomponent';
 import UniversalResultsComponent from './results/universalresultscomponent';
 import PaginationComponent from './results/paginationcomponent';
@@ -58,7 +57,6 @@ const COMPONENT_CLASS_LIST = [
   UniversalResultsComponent,
   VerticalResultsComponent,
   PaginationComponent,
-  AccordionResultsComponent,
   MapComponent,
   AlternativeVerticalsComponent,
   ResultsHeaderComponent,
