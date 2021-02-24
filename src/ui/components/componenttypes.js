@@ -9,5 +9,5 @@ export default {
   FILTER_BOX: 'FilterBox',
   FILTER_OPTIONS: 'FilterOptions',
   FACETS: 'Facets',
-  SORT_OPTIONS: 'SortOptions',
+  SORT_OPTIONS: 'SortOptions'
 };

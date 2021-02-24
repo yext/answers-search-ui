@@ -10,7 +10,7 @@ describe('map component config', () => {
   const systemConfig = { core };
   beforeEach(() => {
     defaultConfig = {
-      mapProvider: 'google'
+      mapProvider: 'mapbox'
     };
   });
 
