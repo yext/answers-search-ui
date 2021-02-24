@@ -268,10 +268,13 @@ class Answers {
    */
   _invokeOnReady (config) {
     this._onReady();
-    if (config.verticalSearchPromise) {
-      this.core.handleVerticalSearchPromise(config.verticalSearchPromise);
-    } else if (config.universalSearchPromise) {
-      this.core.handleUniversalSearchPromise(config.universalSearchPromise);
+    if (config.preloadedQuery) {
+      const { verticalSearchPromise, universalSearchPromise, query } = config.preloadedQuery;
+      if (verticalSearchPromise) {
+        this.core.handleVerticalSearchPromise(verticalSearchPromise, config.search.verticalKey, query);
+      } else if (config.universalSearchPromise) {
+        this.core.handleUniversalSearchPromise(universalSearchPromise, {}, query);
+      }
     }
   }
 

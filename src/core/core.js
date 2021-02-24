@@ -129,10 +129,10 @@ export default class Core {
    * Takes in a vertical search promise, and handles resolution of the promise and
    * updating the SDK's state.
    *
-   * @param {Promise} verticalSearchPromise 
+   * @param {Promise} verticalSearchPromise
    * @returns {Promise}
    */
-  handleVerticalSearchPromise(verticalSearchPromise) {
+  handleVerticalSearchPromise (verticalSearchPromise, verticalKey, query) {
     return verticalSearchPromise
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -249,8 +249,8 @@ export default class Core {
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
         referrerPageUrl: referrerPageUrl
-      })
-    return this.handleVerticalSearchPromise(verticalSearchPromise);
+      });
+    return this.handleVerticalSearchPromise(verticalSearchPromise, verticalKey, query);
   }
 
   _updatePersistedFacets () {
@@ -289,7 +289,7 @@ export default class Core {
     });
   }
 
-  handleUniversalSearchPromise (universalSearchPromise) {
+  handleUniversalSearchPromise (universalSearchPromise, urls, queryString) {
     return universalSearchPromise
       .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
       .then(data => {
@@ -346,8 +346,8 @@ export default class Core {
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         context: context,
         referrerPageUrl: referrerPageUrl
-      })
-    return this.handleUniversalSearchPromise(universalSearchPromise);
+      });
+    return this.handleUniversalSearchPromise(universalSearchPromise, urls, queryString);
   }
 
   /**
