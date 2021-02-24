@@ -30,7 +30,6 @@ import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION } from './core/constants';
-import MasterSwitchApi from './core/utils/masterswitchapi';
 import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
@@ -199,10 +198,6 @@ class Answers {
       );
     }
 
-    this._masterSwitchApi = statusPage
-      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, globalStorage)
-      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, globalStorage);
-
     this._services = parsedConfig.mock
       ? getMockServices()
       : getServices(parsedConfig, globalStorage);
@@ -284,18 +279,7 @@ class Answers {
    * disabled, onReady is not called.
    */
   _invokeOnReady () {
-    window.performance.mark('yext.answers.statusStart');
-
-    const handleFulfilledMasterSwitch = (isDisabled) => {
-      window.performance.mark('yext.answers.statusEnd');
-      return !isDisabled && this._onReady();
-    };
-    const handleRejectedMasterSwitch = () => {
-      window.performance.mark('yext.answers.statusEnd');
-      return this._onReady();
-    };
-    this._masterSwitchApi.isDisabled()
-      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch);
+    return this._onReady();
   }
 
   /**
