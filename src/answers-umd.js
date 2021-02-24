@@ -12,7 +12,6 @@ import {
 import Component from './ui/components/component';
 
 import ErrorReporter from './core/errors/errorreporter';
-import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
@@ -22,11 +21,8 @@ import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
 import AutoCompleteApi from './core/search/autocompleteapi';
-import MockAutoCompleteService from './core/search/mockautocompleteservice';
 import QuestionAnswerApi from './core/search/questionanswerapi';
-import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
 import SearchApi from './core/search/searchapi';
-import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION } from './core/constants';
@@ -198,9 +194,7 @@ class Answers {
       );
     }
 
-    this._services = parsedConfig.mock
-      ? getMockServices()
-      : getServices(parsedConfig, globalStorage);
+    this._services = getServices(parsedConfig, globalStorage);
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
     // TODO(amullings): Initialize with other services
@@ -539,18 +533,6 @@ function getServices (config, globalStorage) {
         environment: config.environment
       },
       globalStorage)
-  };
-}
-
-/**
- * @returns {Services}
- */
-function getMockServices () {
-  return {
-    searchService: new MockSearchService(),
-    autoCompleteService: new MockAutoCompleteService(),
-    questionAnswerService: new MockQuestionAnswerService(),
-    errorReporterService: new ConsoleErrorReporter()
   };
 }
 
