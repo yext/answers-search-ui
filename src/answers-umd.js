@@ -11,7 +11,6 @@ import {
 } from './ui/index';
 import Component from './ui/components/component';
 
-import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
@@ -34,7 +33,6 @@ import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
 /** @typedef {import('./core/services/questionanswerservice').default} QuestionAnswerService */
-/** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
 
 /**
@@ -42,7 +40,6 @@ import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
  * @property {SearchService} searchService
  * @property {AutoCompleteService} autoCompleteService
  * @property {QuestionAnswerService} questionAnswerService
- * @property {ErrorReporterService} errorReporterService
  */
 
 const DEFAULTS = {
@@ -494,16 +491,6 @@ function getServices (config, globalStorage) {
       globalStorage),
     questionAnswerService: new QuestionAnswerApi(
       { apiKey: config.apiKey, environment: config.environment },
-      globalStorage),
-    errorReporterService: new ErrorReporter(
-      {
-        apiKey: config.apiKey,
-        experienceKey: config.experienceKey,
-        experienceVersion: config.experienceVersion,
-        printVerbose: config.debug,
-        sendToServer: !config.suppressErrorReports,
-        environment: config.environment
-      },
       globalStorage)
   };
 }
