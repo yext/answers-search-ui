@@ -147,7 +147,6 @@ class Answers {
   init (config) {
     window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
-    this.validateConfig(parsedConfig);
 
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
@@ -324,31 +323,6 @@ class Answers {
     parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
 
     return parsedConfig;
-  }
-
-  /**
-   * Validates the Answers config object to ensure things like api key and experience key are
-   * properly set.
-   * @param {Object} config The Answers config.
-   */
-  validateConfig (config) {
-    // TODO (tmeyer): Extract this method into it's own class. Investigate the use of JSON schema
-    // to validate these configs.
-    if (typeof config.apiKey !== 'string') {
-      throw new Error('Missing required `apiKey`. Type must be {string}');
-    }
-
-    if (typeof config.experienceKey !== 'string') {
-      throw new Error('Missing required `experienceKey`. Type must be {string}');
-    }
-
-    if (config.onVerticalSearch && typeof config.onVerticalSearch !== 'function') {
-      throw new Error('onVerticalSearch must be a function. Current type is: ' + typeof config.onVerticalSearch);
-    }
-
-    if (config.onUniversalSearch && typeof config.onUniversalSearch !== 'function') {
-      throw new Error('onUniversalSearch must be a function. Current type is: ' + typeof config.onUniversalSearch);
-    }
   }
 
   /**
