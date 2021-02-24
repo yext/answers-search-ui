@@ -5,7 +5,6 @@ import Component from './component';
 import NavigationComponent from './navigation/navigationcomponent';
 
 import SearchComponent from './search/searchcomponent';
-import FilterSearchComponent from './search/filtersearchcomponent';
 import AutoCompleteComponent from './search/autocompletecomponent';
 import SpellCheckComponent from './search/spellcheckcomponent';
 import LocationBiasComponent from './search/locationbiascomponent';
@@ -47,7 +46,6 @@ const COMPONENT_CLASS_LIST = [
 
   // Search Components
   SearchComponent,
-  FilterSearchComponent,
   AutoCompleteComponent,
   SpellCheckComponent,
   LocationBiasComponent,

@@ -394,23 +394,6 @@ export default class Core {
   }
 
   /**
-   * Given an input, provide a list of suitable filters for autocompletion
-   *
-   * @param {string} input  the string to search for filters with
-   * @param {object} config  the config to serach for filters with
-   * @param {string} config.namespace  the namespace to use for the storage key
-   * @param {string} config.verticalKey the vertical key for the config
-   * @param {object} config.searchParameters  the search parameters for the config v2
-   */
-  autoCompleteFilter (input, config) {
-    return this._autoComplete
-      .queryFilter(input, config)
-      .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
-      });
-  }
-
-  /**
    * Submits a question to the server and updates the underlying question model
    * @param {object} question The question object to submit to the server
    * @param {number} question.entityId The entity to associate with the question (required)

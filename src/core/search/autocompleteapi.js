@@ -85,32 +85,6 @@ export default class AutoCompleteApi {
   }
 
   /** @inheritdoc */
-  queryFilter (input, config) {
-    const requestConfig = {
-      endpoint: '/v2/accounts/me/answers/filtersearch',
-      apiKey: this._apiKey,
-      version: this._version,
-      environment: this._environment,
-      params: {
-        'input': input,
-        'experienceKey': this._experienceKey,
-        'version': this._experienceVersion,
-        'verticalKey': config.verticalKey,
-        'locale': this._locale,
-        'search_parameters': JSON.stringify(config.searchParameters)
-      }
-    };
-    let request = new ApiRequest(requestConfig, this._globalStorage);
-
-    return request.get()
-      .then(response => response.json())
-      .then(response => AutoCompleteDataTransformer.filter(response.response))
-      .catch(error => {
-        throw new AnswersEndpointError('Filter search request failed', 'AutoComplete', error);
-      });
-  }
-
-  /** @inheritdoc */
   queryVertical (input, verticalKey) {
     const requestConfig = {
       endpoint: '/v2/accounts/me/answers/vertical/autocomplete',
