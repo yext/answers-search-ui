@@ -32,7 +32,7 @@ import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
-import AnswersConfig from './core/models/answersconfig';
+import AnswersConfigBuilder from './core/models/answersconfig';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
@@ -153,7 +153,10 @@ class Answers {
    */
   init (config, statusPage) {
     window.performance.mark('yext.answers.initStart');
-    const answersConfig = new AnswersConfig(config);
+    const answersConfig = new AnswersConfigBuilder()
+      .setRawConfig(config)
+      .build();
+
     const storage = new Storage({
       update: (data, url) => {
         answersConfig.onStateChange(Object.fromEntries(data), url);
@@ -229,13 +232,13 @@ class Answers {
       ? new MasterSwitchApi({ apiKey: answersConfig.apiKey, ...statusPage }, storage)
       : MasterSwitchApi.from(answersConfig.apiKey, answersConfig.experienceKey, storage);
 
-    this._services = answersConfig.mock
+    this._services = answersConfig.useMock
       ? getMockServices()
       : getServices(answersConfig, storage);
 
     this._eligibleForAnalytics = answersConfig.businessId != null;
     // TODO(amullings): Initialize with other services
-    if (this._eligibleForAnalytics && answersConfig.mock) {
+    if (this._eligibleForAnalytics && answersConfig.useMock) {
       this._analyticsReporterService = new NoopAnalyticsReporter();
     } else if (this._eligibleForAnalytics) {
       this._analyticsReporterService = new AnalyticsReporter(
