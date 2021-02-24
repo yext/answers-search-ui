@@ -11,3 +11,5 @@ exports.dev = parallel(
   templates.dev,
   library.dev
 );
+
+exports.test = templates.default;
