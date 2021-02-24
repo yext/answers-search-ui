@@ -11,8 +11,6 @@ import {
 } from './ui/index';
 import Component from './ui/components/component';
 
-import ErrorReporter from './core/errors/errorreporter';
-import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
@@ -22,11 +20,8 @@ import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
 import AutoCompleteApi from './core/search/autocompleteapi';
-import MockAutoCompleteService from './core/search/mockautocompleteservice';
 import QuestionAnswerApi from './core/search/questionanswerapi';
-import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
 import SearchApi from './core/search/searchapi';
-import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION } from './core/constants';
@@ -38,7 +33,6 @@ import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
 /** @typedef {import('./core/services/questionanswerservice').default} QuestionAnswerService */
-/** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
 
 /**
@@ -46,7 +40,6 @@ import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
  * @property {SearchService} searchService
  * @property {AutoCompleteService} autoCompleteService
  * @property {QuestionAnswerService} questionAnswerService
- * @property {ErrorReporterService} errorReporterService
  */
 
 const DEFAULTS = {
@@ -147,13 +140,10 @@ class Answers {
    * is ever called, a check to the relevant Answers Status page is made.
    *
    * @param {Object} config The Answers configuration.
-   * @param {Object} statusPage An override for the baseUrl and endpoint of the
-   *                            experience's Answers Status page.
    */
-  init (config, statusPage) {
+  init (config) {
     window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
-    this.validateConfig(parsedConfig);
 
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
@@ -198,9 +188,7 @@ class Answers {
       );
     }
 
-    this._services = parsedConfig.mock
-      ? getMockServices()
-      : getServices(parsedConfig, globalStorage);
+    this._services = getServices(parsedConfig, globalStorage);
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
     // TODO(amullings): Initialize with other services
@@ -332,31 +320,6 @@ class Answers {
     parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
 
     return parsedConfig;
-  }
-
-  /**
-   * Validates the Answers config object to ensure things like api key and experience key are
-   * properly set.
-   * @param {Object} config The Answers config.
-   */
-  validateConfig (config) {
-    // TODO (tmeyer): Extract this method into it's own class. Investigate the use of JSON schema
-    // to validate these configs.
-    if (typeof config.apiKey !== 'string') {
-      throw new Error('Missing required `apiKey`. Type must be {string}');
-    }
-
-    if (typeof config.experienceKey !== 'string') {
-      throw new Error('Missing required `experienceKey`. Type must be {string}');
-    }
-
-    if (config.onVerticalSearch && typeof config.onVerticalSearch !== 'function') {
-      throw new Error('onVerticalSearch must be a function. Current type is: ' + typeof config.onVerticalSearch);
-    }
-
-    if (config.onUniversalSearch && typeof config.onUniversalSearch !== 'function') {
-      throw new Error('onUniversalSearch must be a function. Current type is: ' + typeof config.onUniversalSearch);
-    }
   }
 
   /**
@@ -528,29 +491,7 @@ function getServices (config, globalStorage) {
       globalStorage),
     questionAnswerService: new QuestionAnswerApi(
       { apiKey: config.apiKey, environment: config.environment },
-      globalStorage),
-    errorReporterService: new ErrorReporter(
-      {
-        apiKey: config.apiKey,
-        experienceKey: config.experienceKey,
-        experienceVersion: config.experienceVersion,
-        printVerbose: config.debug,
-        sendToServer: !config.suppressErrorReports,
-        environment: config.environment
-      },
       globalStorage)
-  };
-}
-
-/**
- * @returns {Services}
- */
-function getMockServices () {
-  return {
-    searchService: new MockSearchService(),
-    autoCompleteService: new MockAutoCompleteService(),
-    questionAnswerService: new MockQuestionAnswerService(),
-    errorReporterService: new ConsoleErrorReporter()
   };
 }
 
