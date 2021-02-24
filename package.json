@@ -50,6 +50,7 @@
     "rollup-plugin-insert": "1.2.0",
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^4.0.1",
+    "rollup-plugin-visualizer": "^4.2.0",
     "semistandard": "^13.0.1",
     "serve": "^11.3.0",
     "size-limit": "^0.21.1",
