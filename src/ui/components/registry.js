@@ -28,8 +28,6 @@ import MapComponent from './map/mapcomponent';
 import QuestionSubmissionComponent from './questions/questionsubmissioncomponent';
 
 import IconComponent from './icons/iconcomponent.js';
-import CTAComponent from './ctas/ctacomponent';
-import CTACollectionComponent from './ctas/ctacollectioncomponent';
 import ResultsHeaderComponent from './results/resultsheadercomponent';
 
 const COMPONENT_CLASS_LIST = [
@@ -69,9 +67,7 @@ const COMPONENT_CLASS_LIST = [
   QuestionSubmissionComponent,
 
   // Helper Components
-  IconComponent,
-  CTAComponent,
-  CTACollectionComponent
+  IconComponent
 ];
 
 /**
