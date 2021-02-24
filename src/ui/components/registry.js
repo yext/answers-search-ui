@@ -11,8 +11,6 @@ import LocationBiasComponent from './search/locationbiascomponent';
 
 import FilterBoxComponent from './filters/filterboxcomponent';
 import FilterOptionsComponent from './filters/filteroptionscomponent';
-import RangeFilterComponent from './filters/rangefiltercomponent';
-import DateRangeFilterComponent from './filters/daterangefiltercomponent';
 import FacetsComponent from './filters/facetscomponent';
 import GeoLocationComponent from './filters/geolocationcomponent';
 import SortOptionsComponent from './filters/sortoptionscomponent';
@@ -51,8 +49,6 @@ const COMPONENT_CLASS_LIST = [
   // Filter Components
   FilterBoxComponent,
   FilterOptionsComponent,
-  RangeFilterComponent,
-  DateRangeFilterComponent,
   FacetsComponent,
   GeoLocationComponent,
   SortOptionsComponent,
