@@ -121,6 +121,8 @@ class Answers {
      * @private
      */
     this._analyticsReporterService = null;
+
+    this._previousInitPromise = null;
   }
 
   static setInstance (instance) {
@@ -143,6 +145,19 @@ class Answers {
    */
   init (config) {
     window.performance.mark('yext.answers.initStart');
+    if (this._previousInitPromise) {
+      this._previousInitPromise = this._previousInitPromise.then(() => {
+        config.onReady.bind(this)();
+      });
+    } else {
+      this._previousInitPromise = new Promise(resolve => {
+        this._init(config);
+        resolve();
+      });
+    }
+  }
+
+  _init (config) {
     const parsedConfig = this.parseConfig(config);
 
     parsedConfig.search = new SearchConfig(parsedConfig.search);
