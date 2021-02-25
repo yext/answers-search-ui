@@ -271,7 +271,7 @@ class Answers {
     if (config.preloadedQuery) {
       const { verticalSearchPromise, universalSearchPromise, query } = config.preloadedQuery;
       if (verticalSearchPromise) {
-        this.core.handleVerticalSearchPromise(verticalSearchPromise, config.search.verticalKey, query);
+        this.core.handleVerticalSearchPromise(verticalSearchPromise, config.search.verticalKey, { input: query });
       } else if (config.universalSearchPromise) {
         this.core.handleUniversalSearchPromise(universalSearchPromise, {}, query);
       }
