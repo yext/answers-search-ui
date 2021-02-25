@@ -274,7 +274,10 @@ class Answers {
       onUniversalSearch: answersConfig.onUniversalSearch
     });
 
-    answersConfig.onStateChange(Object.fromEntries(storage.getAll()), this.core.storage.getCurrentStateUrlMerged());
+    answersConfig.onStateChange(
+      Object.fromEntries(storage.getAll()),
+      this.core.storage.getCurrentStateUrlMerged()
+    );
 
     this.components
       .setCore(this.core)

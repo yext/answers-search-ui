@@ -27,20 +27,20 @@ export default class AnswersConfig {
     this.experienceKey = rawConfig.experienceKey;
 
     /**
-     *  Optional, initialize components here, invoked when the Answers component library is loaded/ready.
-     *  If components are not added here, they can also be added when the init promise resolves
+     * Optional, initialize components here, invoked when the Answers component library is loaded/ready.
+     * If components are not added here, they can also be added when the init promise resolves
      * @type {function()}
      */
     this.onReady = rawConfig.onReady;
 
     /**
-     * Optional*, Yext businessId, *required to send analytics events
-     * @type {number|string|*}
+     * Optional, Yext businessId, required to send analytics events
+     * @type {string}
      */
     this.businessId = rawConfig.businessId;
 
     /**
-     * Optional, if false, the library will not fetch pre-made templates. Only use change this to false if you provide a
+     * Optional, if false, the library will not fetch pre-made templates. Only change this to false if you provide a
      *  template bundle in the `templateBundle` config option or implement custom renders for every component
      * @type {boolean}
      */
@@ -101,13 +101,13 @@ export default class AnswersConfig {
     this.onStateChange = rawConfig.onStateChange;
 
     /**
-     * Optional, analytics callback after a vertical search, see onVerticalSearch Configuration for additional details
+     * Optional, analytics callback after a vertical search
      * @type {function()}
      */
     this.onVerticalSearch = rawConfig.onVerticalSearch;
 
     /**
-     * Optional, analytics callback after a universal search, see onUniversalSearch Configuration for additional details
+     * Optional, analytics callback after a universal search
      * @type {function()}
      */
     this.onUniversalSearch = rawConfig.onUniversalSearch;
@@ -132,13 +132,13 @@ export default class AnswersConfig {
 
     /**
      * Global options to include with every analytic event reported to the server
-     * @type {object}
+     * @type {Object}
      */
     this.analyticsOptions = rawConfig.analyticsOptions;
 
     /**
      * A map of field formatters used to format results, if present
-     * @type {object}
+     * @type {Object}
      */
     this.fieldFormatters = rawConfig.fieldFormatters;
 
