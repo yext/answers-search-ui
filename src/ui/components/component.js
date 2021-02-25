@@ -21,6 +21,7 @@ function cloneDeep (obj) {
  */
 export default class Component {
   constructor (config = {}, systemConfig = {}) {
+    this.onLinkClick = systemConfig.onLinkClick;
     this.moduleId = null;
 
     /**
@@ -357,6 +358,14 @@ export default class Component {
     if (this.analyticsReporter) {
       let domHooks = DOM.queryAll(this._container, '[data-eventtype]:not([data-is-analytics-attached])');
       domHooks.forEach(this._createAnalyticsHook.bind(this));
+    }
+    if (this.onLinkClick) {
+      let linkEls = DOM.queryAll(this._container, 'a');
+      linkEls.forEach(el => {
+        const href = el.href;
+        el.removeAttribute('href');
+        DOM.on(el, 'click', ev => this.onLinkClick(href, ev, el));
+      });
     }
 
     this._isMounted = true;

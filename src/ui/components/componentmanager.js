@@ -66,6 +66,10 @@ export default class ComponentManager {
     return this;
   }
 
+  onLinkClick (onLinkClick) {
+    this.onLinkClick = onLinkClick;
+  }
+
   setAnalyticsReporter (reporter) {
     this._analyticsReporter = reporter;
     return this;
@@ -109,7 +113,8 @@ export default class ComponentManager {
       core: this._core,
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,
-      componentManager: this
+      componentManager: this,
+      onLinkClick: this.onLinkClick
     };
 
     let componentClass = COMPONENT_REGISTRY[componentType];

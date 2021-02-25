@@ -233,7 +233,8 @@ class Answers {
 
     this.components
       .setCore(this.core)
-      .setRenderer(this.renderer);
+      .setRenderer(this.renderer)
+      .onLinkClick(parsedConfig.onLinkClick);
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
