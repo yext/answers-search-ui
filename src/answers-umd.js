@@ -155,6 +155,7 @@ class Answers {
         resolve();
       });
     }
+    return this._previousInitPromise;
   }
 
   _init (config) {
