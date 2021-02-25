@@ -1,6 +1,6 @@
-import AnswersConfigBuilder from '../../../src/core/models/answersconfig';
 import { AnswersConfigError } from '../../../src/core/errors/errors';
 import { LOCALE, PRODUCTION, QUERY_SOURCE, SANDBOX } from '../../../src/core/constants';
+import AnswersConfigBuilder from '../../../src/core/models/answersconfigbuilder';
 
 describe('constructing AnswersConfig', () => {
   const key = 'someRandomKey';
@@ -13,7 +13,7 @@ describe('constructing AnswersConfig', () => {
     expect(buildingAnswersConfig).toThrow('Missing required `apiKey`. Type must be {string}');
   });
 
-  it('throws an error when the api key is missing from the raw answers config', () => {
+  it('throws an error when the experienceKey key is missing from the raw answers config', () => {
     const config = {
       apiKey: key
     };

@@ -1,42 +1,22 @@
 /** @module AnswersConfig */
-
-import { LOCALE, PRODUCTION, QUERY_SOURCE, SANDBOX } from '../constants';
 import SearchConfig from '../models/searchconfig';
 import VerticalPagesConfig from '../models/verticalpagesconfig';
-import { AnswersConfigError } from '../errors/errors';
-
-const sandboxPrefix = `${SANDBOX}-`;
-const DEFAULTS = {
-  environment: PRODUCTION,
-  onReady: function () {},
-  useTemplates: true,
-  locale: LOCALE,
-  experienceVersion: 'PRODUCTION',
-  debug: false,
-  sessionTrackingEnabled: true,
-  onStateChange: function () {},
-  onVerticalSearch: function () {},
-  onUniversalSearch: function () {},
-  disableCssVariablesPonyfill: false,
-  querySource: QUERY_SOURCE
-};
 
 /**
- * AnswersConfig is a model that is used that is used to turn a raw configuration into a data model that also storesVerticalPagesConfig}. It is used to initialze the Answers SDK
+ * AnswersConfig is a model that is used that is used to turn a raw configuration into a data model.
+ * It is used to initialize the Answers SDK
  */
-class AnswersConfig {
+export default class AnswersConfig {
   constructor (rawConfig) {
     /**
      * Required, the Yext Answers API Key
      * @type {string}
-     * @private
      */
     this.apiKey = rawConfig.apiKey;
 
     /**
      * The internal Yext environment
      * @type {string}
-     * @private
      */
     this.environment = rawConfig.environment;
 
@@ -163,52 +143,5 @@ class AnswersConfig {
     this.fieldFormatters = rawConfig.fieldFormatters;
 
     Object.freeze(this);
-  }
-}
-
-export default class AnswersConfigBuilder {
-  setRawConfig (rawConfig) {
-    this.rawConfig = rawConfig;
-    return this;
-  }
-
-  /**
-   * Validates and builds the Answers config object to ensure things like api key and experience key are
-   * properly set. Any options in rawConfig not supplied by the user are given default values.
-   */
-  build () {
-    if (this.rawConfig.apiKey === undefined || typeof this.rawConfig.apiKey !== 'string') {
-      throw new AnswersConfigError('Missing required `apiKey`. Type must be {string}', 'AnswersConfig');
-    }
-
-    if (this.rawConfig.experienceKey === undefined || typeof this.rawConfig.experienceKey !== 'string') {
-      throw new AnswersConfigError('Missing required `experienceKey`. Type must be {string}', 'AnswersConfig');
-    }
-
-    if (this.rawConfig.onStateChange && typeof this.rawConfig.onStateChange !== 'function') {
-      throw new AnswersConfigError('onStateChange must be a function. Current type is: ' + typeof this.rawConfig.onStateChange, 'AnswersConfig');
-    }
-
-    if (this.rawConfig.onVerticalSearch && typeof this.rawConfig.onVerticalSearch !== 'function') {
-      throw new AnswersConfigError('onVerticalSearch must be a function. Current type is: ' + typeof this.rawConfig.onVerticalSearch, 'AnswersConfig');
-    }
-
-    if (this.rawConfig.onUniversalSearch && typeof this.rawConfig.onUniversalSearch !== 'function') {
-      throw new AnswersConfigError('onUniversalSearch must be a function. Current type is: ' + typeof this.rawConfig.onUniversalSearch, 'AnswersConfig');
-    }
-
-    if (this.rawConfig.sessionTrackingEnabled !== undefined && typeof this.rawConfig.sessionTrackingEnabled !== 'boolean') {
-      throw new AnswersConfigError('sessionTrackingEnabled must be a boolean. Current type is: ' + typeof this.rawConfig.sessionTrackingEnabled, 'AnswersConfig');
-    }
-
-    // Apply default values to the rawConfig before creating the AnswersConfig object
-    const rawConfig = Object.assign({}, DEFAULTS, this.rawConfig);
-
-    // Update apiKey and environment values if sandboxPrefix is included
-    if (rawConfig.apiKey.includes(sandboxPrefix)) {
-      rawConfig.apiKey = rawConfig.apiKey.replace(sandboxPrefix, '');
-      rawConfig.environment = SANDBOX;
-    }
-    return new AnswersConfig(rawConfig);
   }
 }

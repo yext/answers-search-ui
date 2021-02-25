@@ -32,7 +32,7 @@ import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
-import AnswersConfigBuilder from './core/models/answersconfig';
+import AnswersConfigBuilder from './core/models/answersconfigbuilder';
 
 /** @typedef {import('./core/services/searchservice').default} SearchService */
 /** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
