@@ -72,6 +72,8 @@ export default class ApiRequest {
      * @private
      */
     this._globalStorage = globalStorage;
+
+    this._jsLibVersion = opts.jsLibVersion || LIB_VERSION;
   }
 
   /**
@@ -108,7 +110,7 @@ export default class ApiRequest {
     let baseParams = {
       'v': this._version,
       'api_key': this._apiKey,
-      'jsLibVersion': LIB_VERSION,
+      'jsLibVersion': this._jsLibVersion,
       'sessionTrackingEnabled': this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
     };
 

@@ -63,6 +63,8 @@ export default class SearchApi {
      * @private
      */
     this._environment = config.environment;
+
+    this._jsLibVersion = config.jsLibVersion;
   }
 
   /** @inheritdoc */
@@ -75,6 +77,7 @@ export default class SearchApi {
       apiKey: this._apiKey,
       version: this._version,
       environment: this._environment,
+      jsLibVersion: this._jsLibVersion,
       params: {
         'input': input,
         'experienceKey': this._experienceKey,
@@ -114,6 +117,7 @@ export default class SearchApi {
       apiKey: this._apiKey,
       version: this._version,
       environment: this._environment,
+      jsLibVersion: this._jsLibVersion,
       params: {
         'input': queryString,
         'experienceKey': this._experienceKey,
