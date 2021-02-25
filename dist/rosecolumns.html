@@ -1,0 +1,633 @@
+<head>
+  <!-- <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';"> -->
+  <script>
+    const components = {
+      // spellCheck: true,
+      facets: true,
+      filterbox: true,
+      // filteroptions: true,
+      // geolocation: true,
+      map: {
+        // google: true,
+        // mapbox: true
+      },
+      // range: true,
+      // daterange: true,
+      // filtersearch: true,
+      // sortoptions: true,
+      searchbar: true
+    };
+  </script>
+  
+  <!-- <script src="https://assets.sitescdn.net/answers/answerstemplates.compiled.min.js"></script>
+  <script src="https://assets.sitescdn.net/answers/answers.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://assets.sitescdn.net/answers/answers.css"> -->
+  
+  <!-- <script src="https://assets.sitescdn.net/answers/dev/feature-apply-filters-from-url/answerstemplates.compiled.min.js"></script>
+  <script src="https://assets.sitescdn.net/answers/dev/feature-apply-filters-from-url/answers.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://assets.sitescdn.net/answers/dev/feature-apply-filters-from-url/answers.css"> -->
+
+  <script src="./answerstemplates.compiled.min.js" async defer></script>
+  <script src="./answers.js"></script>
+  <link rel="stylesheet" type="text/css" href="./answers.css">
+
+  <!-- <script src="http://localhost:3002/answerstemplates.compiled.min.js" async defer></script>
+  <script src="http://localhost:3002/answers.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://localhost:3002/answers.css"> -->
+  <style>
+    body {
+      background-color: aliceblue;
+    }
+
+    .top {
+      margin-bottom: 2em;
+    }
+
+    .bottom {
+      display: flex;
+    }
+
+    .left {
+      margin-right: 1em;
+      flex-basis: 300px;
+      min-width: 300px;
+    }
+
+    .right {
+      margin-left: 1em;
+      flex-grow: 1;
+    }
+
+    .map {
+      width: 50%;
+      height: 300px;
+      flex-grow: 1;
+    }
+
+    :root {
+      /* --yxt-filter-options-checkmark-color: red; */
+      /* --yxt-filter-options-checkbox-focus-color: orange; */
+      --yxt-filter-options-options-max-height: 200px;
+    }
+
+    .yxt-VerticalResultsCount {
+      margin-right: 12px;
+      margin-bottom: 0;
+    }
+
+    .yxt-AppliedFilters {
+      margin-right: 0;
+    }
+    .yxt-AppliedFilters-filterValue {
+      margin-bottom: 0;
+    }
+
+    .header {
+      display: flex;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="top">
+    <a href="/rosecolumns.html">Reset!</a>
+    <div class="icon-comp"></div>
+    <div class="results-header"></div>
+    <div class="search-bar-container"></div>
+    <div class="search-bar-2"></div>
+    <div class="navigation-container"></div>
+  </div>
+  <div class="bottom">
+    <div class="left">
+      <div class="filter-search-container"></div>
+      <div class="sort-container"></div>
+      <div class="staticfilter-container"></div>
+      <div class="filters-container"></div>
+      <div class="staticfilter2-container"></div>
+      <div class="staticfilter3-container"></div>
+      <div class="date-range-filter-container"></div>
+      <div class="range-filter-container"></div>
+    </div>
+    <div class="right">
+      <div class="spell-check-container" id='spell-check'></div>
+      <div class="pagination-container"></div>
+      <div class="direct-answer-container"></div>
+      <div class="header">
+        <div class='fuc'></div>
+        <div class='vertical-results-count'></div>
+      </div>
+      <div class="results-container"></div>
+      <div class="Answers-qaSubmission js-Answers-qaSubmission"></div>
+      <div class="location-bias-container"></div>
+      <div class="geolocation-filter-container"></div>
+      <div class="map map-container-google"></div>
+      <div class="map map-container-mapbox"></div>
+    </div>
+  </div>
+
+  <script>
+    const g_noResults = {
+      displayAllResults: true,
+      visible: true
+      // template: "ALKSJDLAKSDLKJASD",
+      // visible: false
+    };
+
+    const map_noResults = {
+
+    };
+    const map_showEmptyMap = false;
+    const answersConfig = {
+
+      // apiKey: 'df4b24f4075800e5e9705090c54c6c13',
+      onStateChange: function(state, url) {
+        // console.log(url);
+      },
+      querySource: 'oshi',
+      // sessionTrackingEnabled: false,
+      // experienceKey: 'rosetest',
+      // answersKey: 'rosetest',
+      apiKey: '2d8c550071a64ea23e263118a2b0680b',
+      experienceKey: 'slanswers',
+      experienceVersion: 'STAGING',
+      useTemplates: false,
+      templateBundle: TemplateBundle.default,
+      search: {
+        defaultInitialSearch: '',
+        verticalKey: 'people',
+        perPage: 10,
+        limit: 3
+      },
+      businessId: '2287528',
+      noResults: g_noResults,
+      verticalPages: [
+        {
+          label: 'Home',         // The label used for the navigation element
+          url: './bobd.html',   // The link for the navigation element
+          hideInNavigation: false,   // hide this tab in the navigation component (defaults to 
+          isFirst: true,         // optional, will always show this item first
+          icon: 'star'        // optional, the icon to use in no results and universal results,                   
+        },
+        {
+          verticalKey: 'employees',  // optional, the vertical key
+          label: 'Employees',      // The label used for the navigation element
+          url: 'employees-static-filters.html',  // The link for the navigation element
+          hideInNavigation: false,   // hide this tab in the navigation component (defaults to false_    
+          isActive: true,
+          icon: 'star'        // optional, the icon to use in no results and universal results, 
+        },
+        {
+          verticalKey: 'KM',  // optional, the vertical key
+          label: 'Locations',      // The label used for the navigation element
+          url: 'locations.html',  // The link for the navigation element
+          icon: 'phone',
+          iconUrl: 'Thinking.gif'
+        },
+        {
+          verticalKey: 'faq',  // optional, the vertical key
+          label: 'FAQs',      // The label used for the navigation element
+          url: 'faq.html',  // The link for the navigation element
+          hideInNavigation: true,
+          icon: "link"
+        },
+        {
+          verticalKey: 'people',  // optional, the vertical key
+          label: 'PEOPLE',      // The label used for the navigation element
+          url: 'peopelelele.html',  // The link for the navigation element
+          hideInNavigation: true,
+          icon: "link"
+        },
+      ],
+    };
+    ANSWERS.init({
+      ...answersConfig,
+      onReady: function () {
+        console.log('onready 1')
+        // ANSWERS.setGeolocation(38.8955, -77.0699)
+
+        if (components.searchbar) {
+          this.addComponent('SearchBar', {
+            // name: 'search-bar-1',
+            container: '.search-bar-container',
+            placeholderText: "Try searching some things!",
+            clearButton: true,
+            allowEmptySearch: true,
+            verticalKey: 'people',
+            promptForLocation: true,
+            submitIcon: 'briefcase',
+            // promptForLocation: false,
+            searchText: "what can we help you find?",
+            customHooks: {
+            }
+            // autocompleteOnLoad: false,
+            // autoFocus: false
+          });
+        }
+        // this.addComponent('VerticalResultsCount', {
+        //   container: '.vertical-results-count',
+        //   // noResults: {
+        //   //   visible: true
+        //   // }
+        // });
+        // this.addComponent('AppliedFilters', {
+        //   container: '.fuc',
+        //   showFieldNames: true,
+        //   removable: true
+        // });
+        this.addComponent('VerticalResults', {
+          container: '.results-container',
+          maxNumberOfColumns: 1,
+          verticalKey: 'people',
+          appliedFilters: {
+            removable: true
+          },
+        });
+
+        if (components.spellCheck) {
+          ANSWERS.addComponent('SpellCheck', {
+            // Required, the selector for the container element where the component will be injected
+            container: '.spell-check-container',
+            // Optional, the help text to display when suggesting a query
+            suggestionHelpText: 'Did you mean:',
+          });
+        }
+
+        if (components.filterbox) {
+          ANSWERS.addComponent('FilterBox', {
+            container: '.staticfilter-container',
+            // resetFilters: true,
+            // resetFiltersLabel: "RESET ME HAHAHA YAY",
+            // resetFilter: true,
+            // resetFilterLabel: 'RESET THIS ONE LINE',
+            expand: false,
+            // List of filter component configurations
+            filters: [
+              // {
+              //   type: 'FilterOptions',
+              //   label: 'Static Filters',
+              //   control: 'singleoption',
+              //   options: [
+              //     {
+              //       label: 'Roses Friend',
+              //       field: 'c_awards',
+              //       value: 'Roses Friend',
+              //       // selected: true
+              //     },
+              //     {
+              //       label: 'Pres Club',
+              //       field: 'c_awards',
+              //       value: 'Presidents Club',
+              //     },
+              //     {
+              //       label: 'Bot',
+              //       field: 'c_awards',
+              //       value: 'Bot',
+              //     },
+              //   ]
+              // },
+              {
+                type: 'FilterOptions',
+                optionType: 'STATIC_FILTER',
+                label: 'Static Filters 2: Electric BOoOogaloo',
+                control: 'multioption',
+                // control: 'singleoption',
+                options: [
+                  {
+                    label: 'Bot2',
+                    field: 'c_awards',
+                    value: 'Bot2'
+                  },
+                  {
+                    label: 'Marty',
+                    field: 'c_puppyPreference',
+                    value: 'Marty',
+                  },
+                  {
+                    label: 'Frodo',
+                    field: 'c_puppyPreference',
+                    value: 'Frodo',
+                    // selected: true
+                  }
+                ]
+              },
+              {
+                type: 'FilterOptions',
+                optionType: 'RADIUS_FILTER',
+                label: 'Radiiiiiiiii',
+                control: 'singleoption',
+                options: [
+                  {
+                    label: "0",
+                    value: 0
+                  },
+                  {
+                    label: "1",
+                    value: 1,
+                  },
+                  {
+                    label: "10 miles",
+                    value: 16093.4,
+                  },
+                  {
+                    label: "50 miles",
+                    value: 80467.2,
+                  },
+                  {
+                    label: "big number",
+                    value: 804670000.2,
+                  }
+                ],
+              },
+              {
+                type: 'FilterOptions',
+                optionType: 'STATIC_FILTER',
+                label: 'Location',
+                control: 'multioption',
+                options: [
+                  {
+                    label: 'canada',
+                    field: 'c_employeeCountry',
+                    value: 'Canada',
+                  },
+                  {
+                    label: 'remote',
+                    field: 'c_employeeCountry',
+                    value: 'Remote'
+                  },
+                  {
+                    label: 'usa',
+                    field: 'c_employeeCountry',
+                    value: 'United States',
+                  }
+                ]
+              }
+            ],
+            searchOnChange: true,
+            // Required, the vertical key for the search, default null
+            verticalKey: 'people',
+            // Title to display above the filter
+            title: 'Filters',
+            // Show number of results for each filter
+          });
+        }
+
+        if (components.filteroptions) {
+          ANSWERS.addComponent('FilterOptions', {
+            container: '.staticfilter2-container',
+            showReset: true,
+            // optionType: 'STATIC_FILTER',
+            optionType: 'RADIUS_FILTER',
+            label: 'radius filteroptions',
+            control: 'singleoption',
+            storeOnChange: true,
+            showExpand: false,
+            // showMoreLimit: 2,
+            options: [
+              {
+                label: '100',
+                // field: 'c_employeeCountry',
+                // value: 'Canada',
+                value: 100
+              },
+              {
+                label: '200',
+                // field: 'c_employeeCountry',
+                // value: 'Remote'
+                value: 200
+              },
+              {
+                label: '3000000',
+                // field: 'c_employeeCountry',
+                // value: 'United States'
+                value: 3000000,
+              }
+            ]
+          });
+
+          ANSWERS.addComponent('FilterOptions', {
+            container: '.staticfilter3-container',
+            optionType: 'STATIC_FILTER',
+            showExpand: false,
+            control: 'multioption',
+            options: [
+              {
+                label: 'Bot2',
+                field: 'c_awards',
+                value: 'Bot2'
+              },
+              {
+                label: 'Marty',
+                field: 'c_puppyPreference',
+                value: 'Marty',
+              },
+              {
+                label: 'Frodo',
+                field: 'c_puppyPreference',
+                value: 'Frodo',
+              }
+            ]
+          });
+        }
+
+
+        if (components.facets) {
+          this.addComponent('Facets', {
+            container: '.filters-container',
+            expand: false,
+            isTwin: false,
+            searchOnChange: true,
+            resetFacets: true,
+            showMore: true,
+            showMoreLimit: 10,
+            verticalKey: 'people',
+            // title: 'Facets',
+            // showCount: true,
+            // resetFacet: true,
+            // resetFacetLabel: 'reset',
+            // resetFacets: true,
+            // resetFacetsLabel: 'reset-all',
+            // showMore: true,
+            // showMoreLimit: 3,
+            // showMoreLabel: 'show more',
+            // showLessLabel: 'show less',
+            // expand: false,
+            // showNumberApplied: true,
+            // applyLabel: 'apply',
+            // floatSelected: true,
+            searchable: true,
+            // expand: false,
+          });
+        }
+
+        if (components.daterange) {
+          ANSWERS.addComponent('DateRangeFilter', {
+            container: '.date-range-filter-container',
+            field: 'c_startDate',
+            title: 'Start Time',
+            minLabel: 'Earliest',
+            maxLabel: 'Latest',
+            initialMin: '2019-08-01',
+            initialMax: null,
+            isExclusive: false,
+            onChange: function () { }
+          });
+        }
+
+        // this.addComponent('LocationBias', {
+        //   container: '.location-bias-container',
+        //   verticalKey: 'people'
+        // })
+
+        if (components.filtersearch) {
+          ANSWERS.addComponent('FilterSearch', {
+            container: '.filter-search-container',
+            verticalKey: 'people',
+            name: 'my-filter-search',
+            title: 'title',
+            searchText: 'What do you want to search',
+            promptHeader: 'Header',
+            autoFocus: true,
+            searchParameters: {
+              fields: [{
+                fieldId: 'builtin.location',
+                entityTypeId: 'ce_person',
+                sectioned: false,
+                fetchEntities: true
+              }]
+            }
+          });
+        }
+
+        this.addComponent('Pagination', {
+          container: '.pagination-container',
+          maxVisiblePagesDesktop: 5,
+        });
+
+        if (components.map.google) {
+          ANSWERS.addComponent('Map', {
+            container: '.map-container-google',
+            apiKey: 'AIzaSyB5D45ghF1YMfqTLSzWubmlCN1euBVPhFw',
+            mapProvider: 'google',
+            // noResults: map_noResults,
+            showEmptyMap: map_showEmptyMap
+          });
+        }
+        if (components.map.mapbox) {
+          ANSWERS.addComponent('Map', {
+            container: '.map-container-mapbox',
+            mapProvider: "mapBox",
+            apiKey: "pk.eyJ1IjoieWV4dCIsImEiOiJqNzVybUhnIn0.hTOO5A1yqfpN42-_z_GuLw",
+            // noResults: map_noResults,
+            showEmptyMap: map_showEmptyMap
+          });
+        }
+
+        if (components.sortoptions) {
+          this.addComponent('SortOptions', {
+            container: '.sort-container',
+            defaultSortLabel: "THE DEFAULT",
+            options: [
+              {
+                type: 'FIELD',
+                field: 'c_popularity',
+                direction: 'DESC',
+                label: 'Popularity'
+              },
+              {
+                type: "ENTITY_DISTANCE",
+                label: 'Distance'
+              },
+              {
+                type: 'RELEVANCE',
+                label: 'Relevance'
+              }
+            ],
+            searchOnChange: true,
+            showReset: true,
+            resetLabel: "RESET ME",
+            showMore: true,
+            showMoreLimit: 1,
+            showMoreLabel: "SHOW MORE!",
+            showLessLabel: "SHOW LESS!",
+            optionSelector: 'blah',
+            verticalKey: 'people'
+          });
+        }
+
+        if (components.range) {
+          ANSWERS.addComponent('RangeFilter', {
+            container: '.range-filter-container',
+            field: 'outdoorPoolCount',
+            title: 'Number of Outdoor Pools',
+            // The label to show next to the min value, optional
+            minLabel: 'At Least',
+            // The label to show next to the max value, optional
+            maxLabel: 'Not More Than',
+            // The initial min value to show, defaults to 0
+            initialMin: -10,
+            // The initial max value to show, defaults to 10
+            initialMax: 10,
+            // Optional, the callback function to call when changed
+            onChange: function () { }
+          });
+        }
+
+        if (components.geolocation) {
+          ANSWERS.addComponent('GeoLocationFilter', {
+            container: '.geolocation-filter-container',
+            verticalKey: 'people',
+            radius: 50,
+            enabledText: 'Disable My Location',
+            loadingText: 'Loading',
+            errorText: 'Unable To Use Location',
+            buttonSelector: '.js-yxt-GeoLocationFilter-button',
+            inputSelector: '.js-yxt-GeoLocationFilter-input',
+            searchOnChange: true,
+            geoButtonIcon: 'Thinking.gif',
+            geoButtonText: 'Use my location',
+            searchParameters: {
+              fields: [{
+                fieldId: 'builtin.location',
+                entityTypeId: 'ce_person',
+                sectioned: false,
+              }]
+            },
+            geolocationOptions: {
+              timeout: 99999999999,
+              maximumAge: 1000000
+            },
+            geolocationTimeoutAlert: {
+              enabled: true,
+              message: 'poop'
+            }
+          });
+        }
+      }
+    });
+    let initTwice = true;
+    if (initTwice) {
+      ANSWERS.init({
+      ...answersConfig,
+      onReady: function() {
+        console.log('onready 2')
+        this.addComponent('SearchBar', {
+          container: '.search-bar-2',
+          name: 'search-bar-2',
+          placeholderText: "Try searching some things!",
+          clearButton: true,
+          allowEmptySearch: true,
+          verticalKey: 'people',
+          promptForLocation: true,
+          // promptForLocation: false,
+          searchText: "what can we help you find?",
+          submitIcon: 'star',
+          customHooks: {
+          }
+          // autocompleteOnLoad: false,
+          // autoFocus: false
+        });
+      }
+    })
+    }
+  </script>
+</body>
