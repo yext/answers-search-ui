@@ -363,8 +363,8 @@ export default class Component {
       let linkEls = DOM.queryAll(this._container, 'a[data-inter-experience]');
       linkEls.forEach(el => {
         const href = el.href;
-        el.removeAttribute('href');
-        DOM.on(el, 'click', ev => this.onLinkClick(href, ev, el));
+        el.setAttribute('href', 'javascript:void(0);');
+        DOM.on(el, 'click', ev => this.onLinkClick(href, el, ev));
       });
     }
 
