@@ -3,7 +3,7 @@ import SearchConfig from '../models/searchconfig';
 import VerticalPagesConfig from '../models/verticalpagesconfig';
 
 /**
- * AnswersConfig is a model that is used that is used to turn a raw configuration into a data model.
+ * AnswersConfig is a model that is used to turn a raw configuration into a data model.
  * It is used to initialize the Answers SDK
  */
 export default class AnswersConfig {
@@ -27,9 +27,10 @@ export default class AnswersConfig {
     this.experienceKey = rawConfig.experienceKey;
 
     /**
-     * Optional, initialize components here, invoked when the Answers component library is loaded/ready.
-     * If components are not added here, they can also be added when the init promise resolves
-     * @type {function()}
+     * Optional, initialize components here, invoked when the Answers component library is
+     * loaded/ready. If components are not added here, they can also be added when the init
+     * promise resolves
+     * @type {function}
      */
     this.onReady = rawConfig.onReady;
 
@@ -83,7 +84,7 @@ export default class AnswersConfig {
     this.experienceVersion = rawConfig.experienceVersion;
 
     /**
-     * Optional, prints full Answers error details when set to \`true\`. Defaults to false.
+     * Optional, prints full Answers error details when set to true.
      * @type {boolean}
      */
     this.debug = rawConfig.debug;
@@ -119,7 +120,8 @@ export default class AnswersConfig {
     this.disableCssVariablesPonyfill = rawConfig.disableCssVariablesPonyfill;
 
     /**
-     * Optional, the analytics key describing the Answers integration type. Accepts 'STANDARD' or 'OVERLAY', defaults to 'STANDARD'
+     * Optional, the analytics key describing the Answers integration type.
+     * Accepts 'STANDARD' or 'OVERLAY'
      * @type {string}
      */
     this.querySource = rawConfig.querySource;
