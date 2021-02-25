@@ -46,6 +46,8 @@ export default class ComponentManager {
      * A mapping from component types to component names, as these may be configured by a user
      */
     this._componentTypeToComponentNames = {};
+
+    this._onLinkClick = null;
   }
 
   static getInstance () {
@@ -67,7 +69,7 @@ export default class ComponentManager {
   }
 
   onLinkClick (onLinkClick) {
-    this.onLinkClick = onLinkClick;
+    this._onLinkClick = onLinkClick;
   }
 
   setAnalyticsReporter (reporter) {
@@ -114,7 +116,7 @@ export default class ComponentManager {
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,
       componentManager: this,
-      onLinkClick: this.onLinkClick
+      onLinkClick: this._onLinkClick
     };
 
     let componentClass = COMPONENT_REGISTRY[componentType];
