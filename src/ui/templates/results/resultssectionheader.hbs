@@ -16,7 +16,9 @@
     <a class="yxt-Results-viewAllLink" href="{{verticalURL}}"
         data-middleclick="active"
         data-eventtype="VERTICAL_VIEW_ALL"
-        data-eventoptions='{{eventOptions}}'>
+        data-eventoptions='{{eventOptions}}'
+        data-inter-experience
+      >
       {{_config.viewAllText}}
     </a>
   {{/if}}
@@ -34,6 +36,7 @@
           data-middleclick="active"
           data-eventtype="FILTERING_WITHIN_SECTION"
           data-eventoptions='{{eventOptions}}'
+          data-inter-experience
         >
           {{#if _config.changeFiltersText}}{{_config.changeFiltersText}}{{else}}change{{/if}}
         </a>

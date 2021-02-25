@@ -360,7 +360,7 @@ export default class Component {
       domHooks.forEach(this._createAnalyticsHook.bind(this));
     }
     if (this.onLinkClick) {
-      let linkEls = DOM.queryAll(this._container, 'a');
+      let linkEls = DOM.queryAll(this._container, 'a[data-inter-experience]');
       linkEls.forEach(el => {
         const href = el.href;
         el.removeAttribute('href');

@@ -28,7 +28,7 @@
         {{#each verticalSuggestions}}
           <li class="yxt-AlternativeVerticals-suggestion">
             <a class="yxt-AlternativeVerticals-suggestionLink"
-                href="{{url}}">
+                href="{{url}}" data-inter-experience>
               {{#if hasIcon}}
                 <div class="yxt-AlternativeVerticals-verticalIconWrapper"
                       data-component="IconComponent"
@@ -60,7 +60,7 @@
         <div class="yxt-AlternativeVerticals-universalDetails">
           Alternatively, you can
           <a class="yxt-AlternativeVerticals-universalLink"
-             href={{universalUrl}}>
+             href={{universalUrl}} data-inter-experience>
             view results across all search categories</a>.
         </div>
       {{/if}}
