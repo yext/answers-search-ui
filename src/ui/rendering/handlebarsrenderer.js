@@ -99,7 +99,8 @@ export default class HandlebarsRenderer extends Renderer {
     try {
       return this._templates[config.templateName](data);
     } catch (e) {
-      throw new Error('Can not find/render template: ' + config.templateName, e);
+      console.error('Can not find/render template: ' + config.templateName, e);
+      throw e;
     }
   }
 
