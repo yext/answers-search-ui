@@ -26,17 +26,17 @@
 {{#*inline "titleBar"}}
   {{#if _config.isUniversal}}
     <div class="yxt-Results-titleBar">
-    {{#if _config.icon}}
-      {{#if iconIsBuiltIn}}
-        <div class="yxt-Results-titleIconWrapper"
-          data-component="IconComponent"
-          data-opts='{ "iconName": "{{ _config.icon }}" }'></div>
-      {{else}}
-        <div class="yxt-Results-titleIconWrapper"
-          data-component="IconComponent"
-          data-opts='{ "iconUrl": "{{ _config.icon }}" }'></div>
+      {{#if _config.icon}}
+        {{#if iconIsBuiltIn}}
+          <div class="yxt-Results-titleIconWrapper"
+            data-component="IconComponent"
+            data-opts='{ "iconName": "{{ _config.icon }}" }'></div>
+        {{else}}
+          <div class="yxt-Results-titleIconWrapper"
+            data-component="IconComponent"
+            data-opts='{ "iconUrl": "{{ _config.icon }}" }'></div>
+        {{/if}}
       {{/if}}
-    {{/if}}
       <h2 class="yxt-Results-title">{{_config.title}}</h2>
     </div>
   {{/if}}
