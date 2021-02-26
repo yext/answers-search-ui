@@ -364,6 +364,7 @@ export default class Component {
       linkEls.forEach(el => {
         const href = el.href;
         el.setAttribute('href', 'javascript:void(0);');
+        el.setAttribute('data-href', href);
         DOM.on(el, 'click', ev => this.onLinkClick(href, el, ev));
       });
     }
