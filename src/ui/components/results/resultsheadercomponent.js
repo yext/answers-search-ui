@@ -45,12 +45,6 @@ export default class ResultsHeaderComponent extends Component {
     this.resultsLength = data.resultsLength || 0;
 
     /**
-     * The compiled custom results count template, if the user specifies one.
-     * @type {Function}
-     */
-    this._compiledResultsCountTemplate = this._renderer.compile(this._config.resultsCountTemplate);
-
-    /**
      * Array of nlp filters in the search response.
      * @type {Array<AppliedQueryFilter>}
      */
@@ -174,7 +168,6 @@ export default class ResultsHeaderComponent extends Component {
       showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
       appliedFiltersArray: appliedFiltersArray,
-      customResultsCount: this._compiledResultsCountTemplate(resultsCountData)
     });
   }
 
