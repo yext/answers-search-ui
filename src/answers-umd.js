@@ -224,7 +224,8 @@ class Answers {
       questionAnswerService: this._services.questionAnswerService,
       analyticsReporter: this._analyticsReporterService,
       onVerticalSearch: parsedConfig.onVerticalSearch,
-      onUniversalSearch: parsedConfig.onUniversalSearch
+      onUniversalSearch: parsedConfig.onUniversalSearch,
+      preloadedSearchPromise: parsedConfig.preloadedSearchPromise
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {

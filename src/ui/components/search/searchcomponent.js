@@ -245,6 +245,9 @@ export default class SearchComponent extends Component {
   }
 
   onCreate () {
+    if (this.core.preloadedSearchPromise) {
+      return;
+    }
     if (this.query != null && !this.redirectUrl) {
       this.core.setQuery(this.query);
     }
