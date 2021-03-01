@@ -190,7 +190,7 @@ export default class FilterBoxComponent extends Component {
     }
 
     // Initialize filters from configs
-    for (let i = 0; i < this.config.filterConfigs.length; i++) {
+    for (let i = 0, j = this.config.filterConfigs.length; i < j; i++) {
       const config = this.config.filterConfigs[i];
       const component = this.componentManager.create(config.type, {
         ...this.config,

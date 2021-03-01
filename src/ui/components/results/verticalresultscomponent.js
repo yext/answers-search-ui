@@ -7,7 +7,6 @@ import MapComponent from '../map/mapcomponent';
 import ResultsContext from '../../../core/storage/resultscontext';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
-import CardComponent from '../cards/cardcomponent';
 import ResultsHeaderComponent from './resultsheadercomponent';
 import { replaceUrlParams, filterParamsForExperienceLink } from '../../../core/utils/urlutils';
 import Icons from '../../icons/index';
@@ -222,7 +221,21 @@ export default class VerticalResultsComponent extends Component {
     };
   }
 
+  onMount () {
+    for (let i = this.results.length - 1; i >= 0; i--) {
+      super.addChild({
+        result: this.results[i],
+        verticalKey: this.verticalKey
+      }, this._config.card.cardType, {
+        container: '.yxt-Results-items',
+        isUniversal: this._config.isUniversal,
+        name: `${this._config.card.cardType}--${i}`
+      }).mount();
+    }
+  }
+
   mount () {
+    console.log('reg mount');
     if (Object.keys(this.getState()).length > 0) {
       super.mount();
     }
@@ -361,21 +374,6 @@ export default class VerticalResultsComponent extends Component {
         map: data
       };
       return super.addChild(_data, type, _opts);
-    } else if (type === CardComponent.type) {
-      const updatedData = {
-        result: this.results[opts._index],
-        verticalKey: this.verticalKey
-      };
-      const newOpts = {
-        target: this._config.target,
-        ...this._config.card,
-        isUniversal: this._config.isUniversal,
-        template: this._config.itemTemplate,
-        render: this._config.renderItem,
-        modifier: this._config.modifier,
-        ...opts
-      };
-      return super.addChild(updatedData, type, newOpts);
     } else if (type === AlternativeVerticalsComponent.type) {
       const hasResults = this.results && this.results.length > 0;
       data = this.core.globalStorage.getState(StorageKeys.ALTERNATIVE_VERTICALS);

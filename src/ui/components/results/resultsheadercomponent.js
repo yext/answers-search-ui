@@ -167,7 +167,7 @@ export default class ResultsHeaderComponent extends Component {
       ...resultsCountData,
       showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
-      appliedFiltersArray: appliedFiltersArray,
+      appliedFiltersArray: appliedFiltersArray
     });
   }
 

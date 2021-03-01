@@ -142,12 +142,12 @@ function minifyJS () {
     .pipe(dest('dist'));
 }
 
-function minifyLegacy () {
-  return src('./dist/answers.js')
-    .pipe(rename('answers.min.js'))
-    .pipe(uglify())
-    .pipe(dest('dist'));
-}
+// function minifyLegacy () {
+//   return src('./dist/answers.js')
+//     .pipe(rename('answers.min.js'))
+//     .pipe(uglify())
+//     .pipe(dest('dist'));
+// }
 
 function minifyLegacyUMD () {
   return src('./dist/answers-umd.js')
