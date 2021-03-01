@@ -222,15 +222,17 @@ export default class VerticalResultsComponent extends Component {
   }
 
   onMount () {
-    for (let i = this.results.length - 1; i >= 0; i--) {
-      super.addChild({
-        result: this.results[i],
-        verticalKey: this.verticalKey
-      }, this._config.card.cardType, {
-        container: '.yxt-Results-items',
-        isUniversal: this._config.isUniversal,
-        name: `${this._config.card.cardType}--${i}`
-      }).mount();
+    if (this._config.card && this._config.card.cardType) {
+      for (let i = this.results.length - 1; i >= 0; i--) {
+        super.addChild({
+          result: this.results[i],
+          verticalKey: this.verticalKey
+        }, this._config.card.cardType, {
+          container: '.yxt-Results-items',
+          isUniversal: this._config.isUniversal,
+          name: `${this._config.card.cardType}--${i}`
+        }).mount();
+      }
     }
   }
 
