@@ -25,16 +25,6 @@
       {{/if}}
       <div data-component="ResultsHeader"></div>
       <div class="yxt-Results-items js-yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
-        {{!-- {{#each results}}
-          <div class="yxt-Card{{#if ../_config.isUniversal}} yxt-Card--universal{{/if}}"
-            data-component="{{{../_config.card.cardType}}}"
-            data-opts='{ "_index": {{@index}} }'>
-          </div>
-        {{/each}} --}}
-        {{#each results}}
-          <div class="yxt-Card--{{@index}}">
-          </div>
-        {{/each}}
       </div>
       {{#if (and _config.isUniversal _config.viewMore _config.viewMoreLabel verticalURL)}}
         <a class="yxt-Results-viewAll yxt-Results-viewAllLink" href="{{ verticalURL }}"
