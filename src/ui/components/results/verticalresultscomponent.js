@@ -235,7 +235,6 @@ export default class VerticalResultsComponent extends Component {
   }
 
   mount () {
-    console.log('reg mount');
     if (Object.keys(this.getState()).length > 0) {
       super.mount();
     }
