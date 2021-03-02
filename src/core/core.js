@@ -128,48 +128,45 @@ export default class Core {
     this.universalSearchPromise = config.universalSearchPromise;
   }
 
-  handleVerticalSearch (responsePromise, verticalKey, queryString, shouldAppend) {
-    responsePromise
-      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
-      .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
+  handleVerticalSearch (res, verticalKey, queryString, shouldAppend) {
+    const data = SearchDataTransformer.transformVertical(res, this._fieldFormatters, verticalKey);
+    this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+    this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+    this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
+    this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
 
-        if (shouldAppend) {
-          const mergedResults = this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS)
-            .append(data[StorageKeys.VERTICAL_RESULTS]);
-          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
-        } else {
-          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
-        }
+    if (shouldAppend) {
+      const mergedResults = this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS)
+        .append(data[StorageKeys.VERTICAL_RESULTS]);
+      this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+    } else {
+      this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+    }
 
-        if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
-          this.globalStorage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
-        }
-        if (data[StorageKeys.SPELL_CHECK]) {
-          this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
-        }
-        if (data[StorageKeys.LOCATION_BIAS]) {
-          this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
-        }
-        this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+    if (data[StorageKeys.DYNAMIC_FILTERS]) {
+      this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
+      this.globalStorage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
+    }
+    if (data[StorageKeys.SPELL_CHECK]) {
+      this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+    }
+    if (data[StorageKeys.LOCATION_BIAS]) {
+      this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
+    }
+    this.globalStorage.delete('skipSpellCheck');
+    this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
-        const exposedParams = {
-          verticalKey: verticalKey,
-          queryString: queryString,
-          resultsCount: this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS).resultsCount,
-          resultsContext: data[StorageKeys.VERTICAL_RESULTS].resultsContext
-        };
-        const analyticsEvent = this.onVerticalSearch(exposedParams);
-        if (typeof analyticsEvent === 'object') {
-          this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
-        }
-        window.performance.mark('yext.answers.verticalQueryResponseRendered');
-      });
+    const exposedParams = {
+      verticalKey: verticalKey,
+      queryString: queryString,
+      resultsCount: this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS).resultsCount,
+      resultsContext: data[StorageKeys.VERTICAL_RESULTS].resultsContext
+    };
+    const analyticsEvent = this.onVerticalSearch(exposedParams);
+    if (typeof analyticsEvent === 'object') {
+      this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
+    }
+    window.performance.mark('yext.answers.verticalQueryResponseRendered');
   }
 
   /**
@@ -229,7 +226,7 @@ export default class Core {
       this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
     );
     const queryString = query.input || this.globalStorage.getState(StorageKeys.QUERY) || '';
-    const promise = this._searcher
+    return this._searcher
       .verticalSearch(verticalKey, {
         limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
@@ -246,8 +243,9 @@ export default class Core {
         locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
         context: context,
         referrerPageUrl: referrerPageUrl
-      })
-    return this.handleVerticalSearch(promise, verticalKey, queryString, query.append);
+      }).then(res => {
+        this.handleVerticalSearch(res, verticalKey, queryString, query.append);
+      });
   }
 
   _updatePersistedFacets () {
@@ -310,7 +308,7 @@ export default class Core {
     const queryTrigger = this.getQueryTriggerForSearchApi(
       this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
     );
-    const promise = this._searcher
+    return this._searcher
       .universalSearch(queryString, {
         geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
         skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
@@ -318,33 +316,31 @@ export default class Core {
         sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN),
         context: context,
         referrerPageUrl: referrerPageUrl
-      })
-    return this.handleUniversalSearch(promise, urls);
+      }).then(res => {
+        this.handleUniversalSearch(res, queryString, urls);
+      });
   }
 
-  handleUniversalSearch (promise, urls) {
-    promise
-      .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
-      .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
-        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
-        this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
-        this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+  handleUniversalSearch (res, queryString, urls) {
+    const data = SearchDataTransformer.transform(res, urls, this._fieldFormatters);
+    this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+    this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
+    this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
+    this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+    this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
+    this.globalStorage.delete('skipSpellCheck');
+    this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
 
-        const exposedParams = this._getOnUniversalSearchParams(
-          data[StorageKeys.UNIVERSAL_RESULTS].sections,
-          queryString);
-        const analyticsEvent = this.onUniversalSearch(exposedParams);
-        if (typeof analyticsEvent === 'object') {
-          this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
-        }
-        window.performance.mark('yext.answers.universalQueryResponseRendered');
-      });
+    const exposedParams = this._getOnUniversalSearchParams(
+      data[StorageKeys.UNIVERSAL_RESULTS].sections,
+      queryString);
+    const analyticsEvent = this.onUniversalSearch(exposedParams);
+    if (typeof analyticsEvent === 'object') {
+      this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
+    }
+    window.performance.mark('yext.answers.universalQueryResponseRendered');
   }
 
   /**

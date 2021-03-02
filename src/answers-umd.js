@@ -272,9 +272,15 @@ class Answers {
   _invokeOnReady () {
     this._onReady();
     if (this.core.verticalSearchPromise) {
-      this.core.handleVerticalSearch(this.core.verticalSearchPromise)
+      this.core.verticalSearchPromise.then(resData => {
+        const { res, verticalKey, queryString } = resData;
+        this.core.handleVerticalSearch(res, verticalKey, queryString);
+      });
     } else if (this.core.universalSearchPromise) {
-      this.core.handleUniversalSearch(this.core.universalSearchPromise)
+      this.core.universalSearchPromise.then(resData => {
+        const { res, queryString } = resData;
+        this.core.handleUniversalSearch(res, queryString, {});
+      });
     }
   }
 
