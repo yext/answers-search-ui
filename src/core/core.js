@@ -124,7 +124,8 @@ export default class Core {
      */
     this.onVerticalSearch = config.onVerticalSearch || function () {};
 
-    this.preloadedSearchPromise = config.preloadedSearchPromise;
+    this.verticalSearchPromise = config.verticalSearchPromise;
+    this.universalSearchPromise = config.universalSearchPromise;
   }
 
   handleVerticalSearch (responsePromise, verticalKey, queryString, shouldAppend) {

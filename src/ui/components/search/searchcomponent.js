@@ -245,7 +245,7 @@ export default class SearchComponent extends Component {
   }
 
   onCreate () {
-    if (this.core.preloadedSearchPromise) {
+    if (this.core.universalSearchPromise || this.core.verticalSearchPromise) {
       return;
     }
     if (this.query != null && !this.redirectUrl) {

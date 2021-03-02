@@ -225,7 +225,8 @@ class Answers {
       analyticsReporter: this._analyticsReporterService,
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch,
-      preloadedSearchPromise: parsedConfig.preloadedSearchPromise
+      verticalSearchPromise: parsedConfig.verticalSearchPromise,
+      universalSearchPromise: parsedConfig.universalSearchPromise
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
@@ -269,7 +270,12 @@ class Answers {
    * disabled, onReady is not called.
    */
   _invokeOnReady () {
-    return this._onReady();
+    this._onReady();
+    if (this.core.verticalSearchPromise) {
+      this.core.handleVerticalSearch(this.core.verticalSearchPromise)
+    } else if (this.core.universalSearchPromise) {
+      this.core.handleUniversalSearch(this.core.universalSearchPromise)
+    }
   }
 
   /**
