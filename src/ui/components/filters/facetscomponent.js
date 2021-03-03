@@ -5,6 +5,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import ResultsContext from '../../../core/storage/resultscontext';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import Facet from '../../../core/models/facet';
 
 class FacetsConfig {
   constructor (config) {
@@ -114,7 +115,7 @@ class FacetsConfig {
      * The controls to use for each field. Each type of filter has a default
      * $eq : multioption (checkbox)
      *
-     * DEPRECATED: prefer putting this in config.fields
+     * DEPRECATED: use transformFacets instead
      *
      * @type {Object}
      */
@@ -147,6 +148,9 @@ class FacetsConfig {
     /**
      * An object that maps field API names to their filter options overrides,
      * which have the same keys as the config options in FilterOptions component.
+     *
+     * DEPRECATED: use transformFacets instead
+     *
      * @type {Object}
      */
     this.fields = config.fields || {};
@@ -157,6 +161,12 @@ class FacetsConfig {
      * @private
      */
     this.applyButtonSelector = config.applyButtonSelector || null;
+
+    /**
+     * A transformation function which operates on the core library DisplayableFacet model
+     * @type {Function}
+     */
+    this.transformFacets = config.transformFacets;
 
     this.validate();
   }
@@ -201,6 +211,18 @@ export default class FacetsComponent extends Component {
      * @private
      */
     this._filterbox = null;
+
+    /**
+     * Determines whether or not field overrides are enabled
+     * @type {boolean}
+     */
+    this._isFieldOverridesEnabled = !this.config.transformFacets;
+
+    /**
+     * A transformation function which operates on the core library DisplayableFacet model
+     * @type {Function}
+     */
+    this.transformFacets = config.transformFacets || (facets => facets);
   }
 
   static get type () {
@@ -237,14 +259,17 @@ export default class FacetsComponent extends Component {
       this._filterbox.remove();
     }
 
-    let { filters, resultsContext } = this._state.get();
+    let filters = this._getFacets();
+    const resultsContext = this._getResultsContext();
 
     if (!filters || resultsContext === ResultsContext.NO_RESULTS) {
       return;
     }
 
     filters = filters.map(f => {
-      const fieldOverrides = this.config.fields[f.fieldId] || {};
+      const fieldOverrides = this._isFieldOverridesEnabled
+        ? this.config.fields[f.fieldId] || {}
+        : {};
       return Object.assign({}, f, {
         type: 'FilterOptions',
         control: this.config.fieldControls[f.fieldId] || 'multioption',
@@ -276,5 +301,29 @@ export default class FacetsComponent extends Component {
 
     this._filterbox.mount();
     this.core.storage.set(StorageKeys.FACETS_LOADED, true);
+  }
+
+  /**
+   * Gets the answers-core DisplayableFacet array, applies transformFacets,
+   * and then converts it into an array of Facets
+   *
+   * @returns {Facets[]}
+   */
+  _getFacets () {
+    const dynamicFilters = this._state.get();
+    const coreFacets = dynamicFilters['filters'] || [];
+    const transformedFacets = this.transformFacets(coreFacets);
+
+    return Facet.fromCore(transformedFacets);
+  }
+
+  /**
+   * Gets the current results context
+   *
+   * @returns {ResultsContext}
+   */
+  _getResultsContext () {
+    const dynamicFilters = this._state.get();
+    return dynamicFilters['resultsContext'];
   }
 }
