@@ -1,7 +1,5 @@
 /** @module Component */
 
-import { Renderers } from '../rendering/const';
-
 import DOM from '../dom/dom';
 import State from './state';
 import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused-vars
@@ -115,7 +113,7 @@ export default class Component {
      * A local reference to the default {Renderer} that will be used for rendering the template
      * @type {Renderer}
      */
-    this._renderer = Renderers.Handlebars;
+    this._renderer = systemConfig.renderer;
 
     /**
      * The templateName to use for rendering the component.
@@ -251,15 +249,6 @@ export default class Component {
   remove () {
     this._children.forEach(c => c.remove());
     this.componentManager.remove(this);
-  }
-
-  /**
-   * Set the renderer for the component
-   * @param {RendererType} renderer
-   */
-  setRenderer (renderer) {
-    this._renderer = Renderers[renderer];
-    return this;
   }
 
   unMount () {
