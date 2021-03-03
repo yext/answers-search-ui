@@ -237,7 +237,7 @@ export default class VerticalResultsComponent extends Component {
       result: this.results[i],
       verticalKey: this.verticalKey
     }, this._config.card.cardType, {
-      container: `yxt-Card--${i}`,
+      container: `.yxt-Card--${i}`,
       isUniversal: this._config.isUniversal,
       name: `${this._config.card.cardType}--${i}`
     }).mount();
