@@ -22,6 +22,7 @@ Outline:
    - [Pagination Component](#pagination-component)
    - [FilterBox Component](#filterbox-component)
    - [Facets Component](#facets-component)
+      - [Transforming Facets](#transforming-facets)
    - [FilterSearch Component](#filtersearch-component)
    - [Filter Components](#filter-components)
    - [Applied Filters Component](#applied-filters-component)
