@@ -6,6 +6,7 @@ import ResultsContext from '../../../core/storage/resultscontext';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
 import Facet from '../../../core/models/facet';
+import cloneDeep from 'lodash/cloneDeep';
 
 class FacetsConfig {
   constructor (config) {
@@ -222,7 +223,7 @@ export default class FacetsComponent extends Component {
      * A transformation function which operates on the core library DisplayableFacet model
      * @type {Function}
      */
-    this.transformFacets = config.transformFacets || ((facets, config) => facets);
+    this._transformFacets = config.transformFacets;
   }
 
   static get type () {
@@ -312,7 +313,13 @@ export default class FacetsComponent extends Component {
   _getFacets () {
     const dynamicFilters = this._state.get();
     const coreFacets = dynamicFilters['filters'] || [];
-    const transformedFacets = this.transformFacets(coreFacets, this.config);
+
+    if (!this._transformFacets) {
+      return Facet.fromCore(coreFacets);
+    }
+
+    const facetsCopy = cloneDeep(coreFacets);
+    const transformedFacets = this._transformFacets(facetsCopy, this.config);
 
     return Facet.fromCore(transformedFacets);
   }
