@@ -222,7 +222,7 @@ export default class FacetsComponent extends Component {
      * A transformation function which operates on the core library DisplayableFacet model
      * @type {Function}
      */
-    this.transformFacets = config.transformFacets || (facets => facets);
+    this.transformFacets = config.transformFacets || ((facets, config) => facets);
   }
 
   static get type () {
@@ -262,7 +262,7 @@ export default class FacetsComponent extends Component {
     let filters = this._getFacets();
     const resultsContext = this._getResultsContext();
 
-    if (!filters || resultsContext === ResultsContext.NO_RESULTS) {
+    if (filters.length === 0 || resultsContext === ResultsContext.NO_RESULTS) {
       return;
     }
 
@@ -312,7 +312,7 @@ export default class FacetsComponent extends Component {
   _getFacets () {
     const dynamicFilters = this._state.get();
     const coreFacets = dynamicFilters['filters'] || [];
-    const transformedFacets = this.transformFacets(coreFacets);
+    const transformedFacets = this.transformFacets(coreFacets, this.config);
 
     return Facet.fromCore(transformedFacets);
   }
