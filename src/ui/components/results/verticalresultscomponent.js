@@ -223,11 +223,11 @@ export default class VerticalResultsComponent extends Component {
 
   onMount () {
     if (this.transformData) {
-      this.results = this.transformData({ results: this.results }).results
+      this.results = this.transformData({ results: this.results }).results;
     }
     if (this._config.card && this._config.card.cardType) {
       for (let i = this.results.length - 1; i >= 0; i--) {
-        this.addCardChild(i)
+        this.addCardChild(i);
       }
     }
   }
