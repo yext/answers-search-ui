@@ -1337,7 +1337,7 @@ ANSWERS.addComponent('Facets', {
   searchLabelText: 'Search for a filter option',
   // Optional, a transform function which is applied to an array of facets
   // See the "Transforming Facets" section below for more info
-  transformFacets: (facets => facets),
+  transformFacets: (facets, config => facets),
   // DEPRECATED, please use transformFacets instead. This option is disabled if transformFacets is supplied
   // Optional, field-specific overrides for a filter
   fields: {
@@ -1379,20 +1379,20 @@ ANSWERS.addComponent('Facets', {
 
 ### Transforming Facets
 
-The `transformFacets` option of the Facets component allows facets data to be fully customized. The function takes in and returns an array of the answers-core DisplayableFacet which is described [here](https://github.com/yext/answers-core/blob/master/docs/answers-core.displayablefacet.md).
+The `transformFacets` option of the Facets component allows facets data to be fully customized. The function takes in and returns an array of the answers-core DisplayableFacet which is described [here](https://github.com/yext/answers-core/blob/master/docs/answers-core.displayablefacet.md). The function also has access to the Facets config as the second parameter.
 
 Here's an example of using this option to customize a boolean facet:
 
 ```js
 transformFacets: facets => {
   facets.forEach(facet => {
-    if (facet.fieldId === 'c_acceptingNewPatients') {
+    if (facet.fieldId === 'specialities') {
       facet.options.forEach(option => {
-        if (option.value === false) { option.displayName = "Not Accepting Patients"}
-        if (option.value === true) { option.displayName = "Accepting Patients"}
-      })
+        if (option.value === false) { option.displayName = 'Not Accepting Patients'; }
+        if (option.value === true) { option.displayName = 'Accepting Patients'; }
+      });
     }
-  })
+  });
   return facets;
 },
 ```
