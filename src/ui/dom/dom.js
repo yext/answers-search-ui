@@ -148,6 +148,10 @@ export default class DOM {
     parent.innerHTML = '';
   }
 
+  static attr (selector, attr, val) {
+    DOM.query(selector).setAttribute(attr, val);
+  }
+
   static attributes (selector, attrs) {
     Object.entries(attrs)
       .forEach(([attr, val]) => this.attr(selector, attr, val));
