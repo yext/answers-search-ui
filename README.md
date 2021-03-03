@@ -1381,19 +1381,20 @@ ANSWERS.addComponent('Facets', {
 
 The `transformFacets` option of the Facets component allows facets data to be fully customized. The function takes in and returns an array of the answers-core DisplayableFacet which is described [here](https://github.com/yext/answers-core/blob/master/docs/answers-core.displayablefacet.md). The function also has access to the Facets config as the second parameter.
 
-Here's an example of using this option to customize a boolean facet:
+Here's an example of using this option to customize a boolean facet. The function creates a deep copy in order to prevent side effects.
 
 ```js
 transformFacets: facets => {
-  facets.forEach(facet => {
-    if (facet.fieldId === 'specialities') {
+  const facetsCopy = JSON.parse(JSON.stringify(facets));
+  facetsCopy.forEach(facet => {
+    if (facet.fieldId === 'c_acceptingNewPatients') {
       facet.options.forEach(option => {
-        if (option.value === false) { option.displayName = 'Not Accepting Patients'; }
-        if (option.value === true) { option.displayName = 'Accepting Patients'; }
+        if (option.value === false) { option.displayName = "Not Accepting Patients"; }
+        if (option.value === true) { option.displayName = "Accepting Patients"; }
       });
     }
   });
-  return facets;
+  return facetsCopy;
 },
 ```
 
