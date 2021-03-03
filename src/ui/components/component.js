@@ -134,7 +134,7 @@ export default class Component {
      * By default, no transformation happens.
      * @type {function}
      */
-    this.transformData = config.transformData || this.transformData || function () {};
+    this.transformData = config.transformData;
 
     /**
      * The a local reference to the callback that will be invoked when a component is created.
@@ -222,10 +222,6 @@ export default class Component {
     return this._state.has(prop);
   }
 
-  transformData (data) {
-    return data;
-  }
-
   addChild (data, type, opts) {
     let childComponent = this.componentManager.create(
       type,
@@ -284,7 +280,7 @@ export default class Component {
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     const domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');
-    const data = this.transformData(cloneDeep(this._state.get()));
+    const data = this.getTransformedData(this._state.get());
     domComponents.forEach(c => this._createSubcomponent(c, data));
 
     this._children.forEach(child => {
@@ -313,6 +309,10 @@ export default class Component {
     return this;
   }
 
+  getTransformedData (data) {
+    return this.transformData ? this.transformData(cloneDeep(data)) : data;
+  }
+
   /**
    * render the template using the {Renderer} with the current state and template of the component
    * @returns {string}
@@ -322,7 +322,7 @@ export default class Component {
     // So that we can query it for processing of sub components
     return DOM.create(this._renderer.render({
       templateName: this._templateName
-    }, this.transformData(cloneDeep(data)))).innerHTML;
+    }, this.getTransformedData(data))).innerHTML;
   }
 
   _createSubcomponent (domComponent, data) {
