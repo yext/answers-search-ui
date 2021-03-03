@@ -1336,9 +1336,9 @@ ANSWERS.addComponent('Facets', {
   // Optional, the form label text for the search input, defaults to 'Search for a filter option'
   searchLabelText: 'Search for a filter option',
   // Optional, a transform function which is applied to an array of facets
-  // See the [Transforming Facets](#transforming-facets) section below for more info
+  // See the "Transforming Facets" section below for more info
   transformFacets: (facets => facets),
-  // DEPRECATED, please use transformFacets instead
+  // DEPRECATED, please use transformFacets instead. This option is disabled if transformFacets is supplied
   // Optional, field-specific overrides for a filter
   fields: {
     'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
@@ -1379,7 +1379,7 @@ ANSWERS.addComponent('Facets', {
 
 ### Transforming Facets
 
-The transformFacets option of the Facets component allows facets data to be fully customized. The function takes in and returns an array of the answers-core DisplayableFacet which is described [here](https://github.com/yext/answers-core/blob/master/docs/answers-core.displayablefacet.md).
+The `transformFacets` option of the Facets component allows facets data to be fully customized. The function takes in and returns an array of the answers-core DisplayableFacet which is described [here](https://github.com/yext/answers-core/blob/master/docs/answers-core.displayablefacet.md).
 
 Here's an example of using this option to customize a boolean facet:
 
