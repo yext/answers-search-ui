@@ -293,11 +293,11 @@ export default class Component {
       domHooks.forEach(this._createAnalyticsHook.bind(this));
     }
     if (this.onLinkClick) {
-      let linkEls = DOM.queryAll(this._container, 'a[data-inter-experience]');
+      let linkEls = DOM.queryAll(this._container, 'a[data-inter-experience]:not([data-inter-experience-href])');
       linkEls.forEach(el => {
         const href = el.href;
         el.setAttribute('href', 'javascript:void(0);');
-        el.setAttribute('data-href', href);
+        el.setAttribute('data-inter-experience-href', href);
         DOM.on(el, 'click', ev => this.onLinkClick(href, el, ev));
       });
     }
