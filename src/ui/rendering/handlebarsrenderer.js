@@ -9,7 +9,7 @@ import HighlightedValue from '../../core/models/highlightedvalue';
  * @extends Renderer
  */
 export default class HandlebarsRenderer extends Renderer {
-  constructor (templates = {}, opts = {}) {
+  constructor (templates = {}) {
     super();
 
     /**
@@ -63,54 +63,17 @@ export default class HandlebarsRenderer extends Renderer {
   }
 
   /**
-   * compile a handlebars template so that it can be rendered,
-   * using the {Handlebars} compiler
-   * @param {string} template The template string to compile
-   */
-  compile (template) {
-    if (typeof template !== 'string') {
-      return '';
-    }
-    return this._handlebars.compile(template);
-  }
-
-  /**
-   * compile a template and then add it to the current template bundle
-   * @param {string} templateName The unique name for the template
-   * @param {string} template The handlebars template string
-   */
-  registerTemplate (templateName, template) {
-    this._templates[templateName] = this.compile(template);
-  }
-
-  /**
    * render will render a template with data
    * @param {Object} config Provide either a templateName or a pre-compiled template
    * @param {Object} data The data to provide to the template
    */
   render (config, data) {
-    // If a custom template is provided, use it,
-    // otherwise fall back to the template name
-    // TODO(billy) This interface should probably be less ugly
-    if (config.template !== null) {
-      return config.template(data);
-    }
-
-    try {
-      return this._templates[config.templateName](data);
-    } catch (e) {
-      console.error('Can not find/render template: ' + config.templateName, e);
-      throw e;
-    }
+    return this._templates[config.templateName](data);
   }
 
   _registerCustomHelpers () {
     this.registerHelper('ifeq', function (arg1, arg2, options) {
       return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
-    });
-
-    this.registerHelper('ifnoteq', function (arg1, arg2, options) {
-      return (arg1 !== arg2) ? options.fn(this) : options.inverse(this);
     });
 
     this.registerHelper({

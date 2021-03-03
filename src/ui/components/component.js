@@ -85,16 +85,16 @@ export default class Component {
      * @type {object}
      * @private
      */
-    this._analyticsOptions = config.analyticsOptions || {};
+    this._analyticsOptions = config.analyticsOptions;
 
     /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
      * @type {HTMLElement}
      */
-    if (this._parentContainer === null) {
+    if (!this._parentContainer) {
       if (typeof config.container === 'string') {
-        this._container = DOM.query(config.container) || null;
-        if (this._container === null) {
+        this._container = DOM.query(config.container);
+        if (!this._container) {
           throw new Error('Cannot find container DOM node: ' + config.container);
         }
       }
@@ -103,7 +103,7 @@ export default class Component {
 
       // If we have a parent, and the container is missing from the DOM,
       // we construct the container and append it to the parent
-      if (this._container === null) {
+      if (!this._container) {
         this._container = DOM.createEl('div', {
           class: config.container.substring(1, config.container.length)
         });
@@ -112,29 +112,10 @@ export default class Component {
     }
 
     /**
-     * A custom class to be applied to {this._container} node
-     * @type {string}
-     */
-    this._className = config.class || 'component';
-
-    /**
-     * A custom render function to be used instead of using the default renderer
-     * @type {Renderer}
-     */
-    this._render = config.render || null;
-
-    /**
      * A local reference to the default {Renderer} that will be used for rendering the template
      * @type {Renderer}
      */
-    this._renderer = systemConfig.renderer || Renderers.Handlebars;
-
-    /**
-     * The template string to use for rendering the component
-     * If this is left empty, we lookup the template the base templates using the templateName
-     * @type {string}
-     */
-    this._template = config.template ? this._renderer.compile(config.template) : null;
+    this._renderer = Renderers.Handlebars;
 
     /**
      * The templateName to use for rendering the component.
@@ -172,13 +153,6 @@ export default class Component {
     this.onMount = this.onMount.bind(this);
 
     /**
-     * The a local reference to the callback that will be invoked when a components state is updated.
-     * @type {function}
-     */
-    this.onUpdate = config.onUpdateOverride || this.onUpdate || function () { };
-    this.onUpdate = this.onUpdate.bind(this);
-
-    /**
      * A user provided onCreate callback
      * @type {function}
      */
@@ -189,12 +163,6 @@ export default class Component {
      * @type {function}
      */
     this.userOnMount = config.onMount || function () {};
-
-    /**
-     * A user provided onUpdate callback
-     * @type {function}
-     */
-    this.userOnUpdate = config.onUpdate || function () {};
   }
 
   /**
@@ -228,8 +196,6 @@ export default class Component {
 
     this._state.on('update', () => {
       try {
-        this.onUpdate();
-        this.userOnUpdate();
         this.unMount();
         this.mount();
       } catch (e) {
@@ -240,7 +206,7 @@ export default class Component {
       }
     });
 
-    DOM.addClass(this._container, this._className);
+    DOM.addClass(this._container, 'component');
     return this;
   }
 
@@ -288,30 +254,12 @@ export default class Component {
   }
 
   /**
-   * Set the render method to be used for rendering the component
-   * @param {Function} render
-   * @return {string}
-   */
-  setRender (render) {
-    this._render = render;
-    return this;
-  }
-
-  /**
    * Set the renderer for the component
    * @param {RendererType} renderer
    */
   setRenderer (renderer) {
     this._renderer = Renderers[renderer];
     return this;
-  }
-
-  /**
-   * Sets the template for the component to use when rendering
-   * @param {string} template
-   */
-  setTemplate (template) {
-    this._template = this._renderer.compile(template);
   }
 
   unMount () {
@@ -381,32 +329,11 @@ export default class Component {
    * @returns {string}
    */
   render (data = this._state.get()) {
-    this.beforeRender();
-    // Temporary fix for passing immutable data to transformData().
-    data = this.transformData(cloneDeep(data));
-
-    let html = '';
-    // Use either the custom render function or the internal renderer
-    // dependant on the component configuration
-    if (typeof this._render === 'function') {
-      html = this._render(data);
-      if (typeof html !== 'string') {
-        throw new Error('Render method must return HTML as type {string}');
-      }
-    } else {
-      // Render the existing templates as a string
-      html = this._renderer.render({
-        template: this._template,
-        templateName: this._templateName
-      }, data);
-    }
-
     // We create an HTML Document fragment with the rendered string
     // So that we can query it for processing of sub components
-    let el = DOM.create(html);
-
-    this.afterRender();
-    return el.innerHTML;
+    return DOM.create(this._renderer.render({
+      templateName: this._templateName
+    }, this.transformData(cloneDeep(data)))).innerHTML;
   }
 
   _createSubcomponent (domComponent, data) {
@@ -453,7 +380,7 @@ export default class Component {
     DOM.on(domComponent, 'mousedown', e => {
       if (e.button === 0 || (middleclick && e.button === 1)) {
         const event = new AnalyticsEvent(type, label);
-        event.addOptions(this._analyticsOptions);
+        event.addOptions(this._analyticsOptions || {});
         event.addOptions(options);
         this.analyticsReporter.report(event);
       }
@@ -464,31 +391,7 @@ export default class Component {
    * onCreate is triggered when the component is constructed
    * @param {function} the callback to invoke upon emit
    */
-  onCreate (cb) {
-
-  }
-
-  /**
-   * onUpdate is triggered when the state of the component changes
-   * @param {function} the callback to invoke upon emit
-   */
-  onUpdate (cb) {
-
-  }
-
-  /**
-   * beforeRender event is triggered before the component is rendered
-   * @param {function} the callback to invoke upon emit
-   */
-  beforeRender (cb) {
-
-  }
-
-  /**
-   * afterRender event is triggered after the component is rendered
-   * @param {function} the callback to invoke upon emit
-   */
-  afterRender (cb) {
+  onCreate () {
 
   }
 
@@ -496,7 +399,7 @@ export default class Component {
    * onMount is triggered when the component is appended to the DOM
    * @param {function} the callback to invoke upon emit
    */
-  onMount (cb) {
+  onMount () {
 
   }
 
@@ -504,7 +407,7 @@ export default class Component {
    * onUnMount is triggered when the component is removed from the DOM
    * @param {function} the callback to invoke upon emit
    */
-  onUnMount (cb) {
+  onUnMount () {
 
   }
 
@@ -512,7 +415,7 @@ export default class Component {
    * beforeMount is triggered before the component is mounted to the DOM
    * @param {function} the callback to invoke upon emit
    */
-  beforeMount (cb) {
+  beforeMount () {
 
   }
 
@@ -520,7 +423,7 @@ export default class Component {
    * onDestroy is triggered when the component is destroyed
    * @param {function} the callback to invoke upon emit
    */
-  onDestroy (cb) {
+  onDestroy () {
 
   }
 }

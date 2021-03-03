@@ -9,7 +9,7 @@ let document = window.document;
  * @namespace
  */
 export default class DOM {
-  static setup (d, p) {
+  static setup (d) {
     document = d;
   }
 
@@ -146,18 +146,6 @@ export default class DOM {
 
   static empty (parent) {
     parent.innerHTML = '';
-  }
-
-  static css (selector, styles) {
-    let node = DOM.query(selector);
-
-    for (let prop in styles) {
-      node.style[prop] = styles[prop];
-    }
-  }
-
-  static attr (selector, attr, val) {
-    DOM.query(selector).setAttribute(attr, val);
   }
 
   static attributes (selector, attrs) {
