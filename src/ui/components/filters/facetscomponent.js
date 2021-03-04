@@ -254,7 +254,7 @@ export default class FacetsComponent extends Component {
 
     return super.setState({
       ...data,
-      filters: updatedFacets,
+      filters: Facet.fromCore(updatedFacets),
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     });
   }
@@ -273,10 +273,9 @@ export default class FacetsComponent extends Component {
       this._filterbox.remove();
     }
 
-    let filters = this._getFacets();
-    const resultsContext = this._getResultsContext();
+    let { filters, isNoResults } = this._state.get();
 
-    if (filters.length === 0 || resultsContext === ResultsContext.NO_RESULTS) {
+    if (filters.length === 0 || isNoResults) {
       return;
     }
 
@@ -315,27 +314,5 @@ export default class FacetsComponent extends Component {
 
     this._filterbox.mount();
     this.core.storage.set(StorageKeys.FACETS_LOADED, true);
-  }
-
-  /**
-   * Gets the answers-core DisplayableFacet array and converts it into an array of Facets
-   *
-   * @returns {Facets[]}
-   */
-  _getFacets () {
-    const dynamicFilters = this._state.get();
-    const coreFacets = dynamicFilters['filters'];
-
-    return Facet.fromCore(coreFacets);
-  }
-
-  /**
-   * Gets the current results context
-   *
-   * @returns {ResultsContext}
-   */
-  _getResultsContext () {
-    const dynamicFilters = this._state.get();
-    return dynamicFilters['resultsContext'];
   }
 }
