@@ -15,6 +15,7 @@ export default class SearchComponent extends Component {
     this.query = config.query;
     this._allowEmptySearch = config.allowEmptySearch;
     this._autoCompleteName = this.name +'.autocomplete';
+    this._processParams = config.processParams;
   }
 
   onMount () {
@@ -45,6 +46,9 @@ export default class SearchComponent extends Component {
     this.query = query;
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
+    if (this._processParams) {
+      params = this._processParams(params);
+    }
 
     if (this._allowEmptySearch || query) {
       window.location.href = this.redirectUrl + '?' + params.toString();
