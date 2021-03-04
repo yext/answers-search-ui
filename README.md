@@ -1388,10 +1388,10 @@ Here's an example of using this option to customize a boolean facet.
 transformFacets: facets => {
   return facets.map(facet => {
     const options = facet.options.map(option => {
+      let displayName = option.displayName;
       if (facet.fieldId === 'c_acceptingNewPatients') {
-        const displayName = option.value === true
-          ? "Accepting Patients"
-          : "Not Accepting Patients";
+        if (option.value === false) { displayName = "Not Accepting Patients"; }
+        if (option.value === true) { displayName = "Accepting Patients"; }
       }
       return Object.assign({}, option, { displayName });
     });
