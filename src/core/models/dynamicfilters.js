@@ -8,8 +8,8 @@ import ResultsContext from '../storage/resultscontext';
 export default class DynamicFilters {
   constructor (data) {
     /**
-     * The list of filters this model holds
-     * @type {{label: string, fieldId: string, options: object[]}}
+     * The list of facets this model holds
+     * @type {DisplayableFacet[]} from answers-core
      */
     this.filters = data.filters || [];
 
@@ -23,28 +23,13 @@ export default class DynamicFilters {
 
   /**
    * Organize 'facets' from the answers-core into dynamic filters
-   * @param {Facet[]} facets from answers-core
+   * @param {DisplayableFacet[]} facets from answers-core
    * @param {ResultsContext} resultsContext
    * @returns {DynamicFilters}
    */
   static fromCore (facets = [], resultsContext = ResultsContext.NORMAL) {
-    const dynamicFilters = facets.map(f => ({
-      label: f['displayName'],
-      fieldId: f['fieldId'],
-      options: f.options.map(o => ({
-        label: o['displayName'],
-        countLabel: o['count'],
-        selected: o['selected'],
-        filter: {
-          [f['fieldId']]: {
-            [o['matcher']]: o['value']
-          }
-        }
-      }))
-    }));
-
     return new DynamicFilters({
-      filters: dynamicFilters,
+      filters: facets,
       resultsContext: resultsContext
     });
   }
