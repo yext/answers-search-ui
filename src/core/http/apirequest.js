@@ -3,18 +3,9 @@
 import HttpRequester from './httprequester';
 import { LIB_VERSION, PRODUCTION } from '../constants';
 import SearchParams from '../../ui/dom/searchparams'; // TODO ideally this would be passed in as a param
-import { AnswersBasicError } from '../errors/errors';
-import StorageKeys from '../storage/storagekeys';
-import { getLiveApiUrl } from '../utils/urlutils';
 
-/**
- * ApiRequest is the base class for all API requests.
- * It defines all of the core properties required to make a request
- */
 export default class ApiRequest {
-  // TODO (tmeyer): Create an ApiService interface and pass an implementation to the current
-  // consumers of ApiRequest as a dependency.
-  constructor (opts = {}, globalStorage) {
+  constructor (opts = {}) {
     /**
      * An abstraction used for making network request and handling errors
      * @type {HttpRequester}
@@ -34,7 +25,7 @@ export default class ApiRequest {
      * @type {string}
      * @private
      */
-    this._baseUrl = opts.baseUrl || getLiveApiUrl(this._environment);
+    this._baseUrl = opts.baseUrl;
 
     /**
      * The endpoint to use in the url (appended to the {baseUrl})
@@ -64,14 +55,7 @@ export default class ApiRequest {
      */
     this._params = opts.params || {};
 
-    if (!globalStorage) {
-      throw new AnswersBasicError('Must include global storage', 'ApiRequest');
-    }
-    /**
-     * @type {GlobalStorage}
-     * @private
-     */
-    this._globalStorage = globalStorage;
+    this._sessionTrackingEnabled = opts.sessionTrackingEnabled;
   }
 
   /**
@@ -109,7 +93,7 @@ export default class ApiRequest {
       'v': this._version,
       'api_key': this._apiKey,
       'jsLibVersion': LIB_VERSION,
-      'sessionTrackingEnabled': this._globalStorage.getState(StorageKeys.SESSIONS_OPT_IN)
+      'sessionTrackingEnabled': this._sessionTrackingEnabled
     };
 
     const urlParams = new SearchParams(window.location.search.substring(1));

@@ -1,125 +1,32 @@
 /** @module */
 
 import Core from './core/core';
-import cssVars from 'css-vars-ponyfill';
 
 import {
-  DefaultTemplatesLoader,
   Renderers,
-  DOM,
-  SearchParams
+  DOM
 } from './ui/index';
-import Component from './ui/components/component';
 
-import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
-import PersistentStorage from './ui/storage/persistentstorage';
-import GlobalStorage from './core/storage/globalstorage';
-import { AnswersComponentError } from './core/errors/errors';
-import AnalyticsEvent from './core/analytics/analyticsevent';
-import StorageKeys from './core/storage/storagekeys';
-import QueryTriggers from './core/models/querytriggers';
-import SearchConfig from './core/models/searchconfig';
+import { AnalyticsReporter } from './core';
 import AutoCompleteApi from './core/search/autocompleteapi';
-import QuestionAnswerApi from './core/search/questionanswerapi';
-import SearchApi from './core/search/searchapi';
 import ComponentManager from './ui/components/componentmanager';
-import VerticalPagesConfig from './core/models/verticalpagesconfig';
-import { SANDBOX, PRODUCTION } from './core/constants';
-import RichTextFormatter from './core/utils/richtextformatter';
-import { isValidContext } from './core/utils/apicontext';
-import FilterNodeFactory from './core/filters/filternodefactory';
-import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
-
-/** @typedef {import('./core/services/searchservice').default} SearchService */
-/** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./core/services/questionanswerservice').default} QuestionAnswerService */
-/** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
-
-/**
- * @typedef Services
- * @property {SearchService} searchService
- * @property {AutoCompleteService} autoCompleteService
- * @property {QuestionAnswerService} questionAnswerService
- */
 
 const DEFAULTS = {
   locale: 'en'
 };
 
-/**
- * The main Answers interface
- */
 class Answers {
   constructor () {
     if (!Answers.setInstance(this)) {
       return Answers.getInstance();
     }
 
-    /**
-     * A reference to the Component base class for custom
-     * components to extend
-     */
-    this.Component = Component;
-
-    /**
-     * A reference to the AnalyticsEvent base class for reporting
-     * custom analytics
-     */
-    this.AnalyticsEvent = AnalyticsEvent;
-
-    /**
-     * A reference to the FilterNodeFactory class for creating {@link FilterNode}s.
-     */
-    this.FilterNodeFactory = FilterNodeFactory;
-
-    /**
-     * A reference of the renderer to use for the components
-     * This is provided during initialization.
-     * @type {Renderer}
-     */
     this.renderer = new Renderers.Handlebars();
-
-    /**
-     * A reference to the formatRichText function.
-     * @type {Function}
-     */
-    this.formatRichText = (markdown, eventOptionsFieldName, targetConfig) =>
-      RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig);
-
-    /**
-     * A local reference to the component manager
-     * @type {ComponentManager}
-     */
-    this.components = ComponentManager.getInstance();
-
-    /**
-     * A local reference to the core api
-     * @type {Core}
-     */
+    this.components = new ComponentManager();
     this.core = null;
-
-    /**
-     * A callback function to invoke once the library is ready.
-     * Typically fired after templates are fetched from server for rendering.
-     */
     this._onReady = function () {};
-
-    /**
-     * @type {boolean}
-     * @private
-     */
     this._eligibleForAnalytics = false;
-
-    /**
-     * @type {Services}
-     * @private
-     */
     this._services = null;
-
-    /**
-     * @type {AnalyticsReporterService}
-     * @private
-     */
     this._analyticsReporterService = null;
   }
 
@@ -135,66 +42,12 @@ class Answers {
     return this.instance;
   }
 
-  /**
-   * Initializes the SDK with the provided configuration. Note that before onReady
-   * is ever called, a check to the relevant Answers Status page is made.
-   *
-   * @param {Object} config The Answers configuration.
-   */
   init (config) {
     window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
-
-    parsedConfig.search = new SearchConfig(parsedConfig.search);
-    parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
-
-    const globalStorage = new GlobalStorage();
-    const persistentStorage = new PersistentStorage({
-      updateListener: parsedConfig.onStateChange,
-      resetListener: data => {
-        if (!data[StorageKeys.QUERY]) {
-          this.core.clearResults();
-        } else {
-          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
-        }
-
-        if (!data[StorageKeys.SEARCH_OFFSET]) {
-          this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
-        }
-        globalStorage.setAll(data);
-      }
-    });
-    globalStorage.setAll(persistentStorage.getAll());
-    globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
-    globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
-    globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
-    globalStorage.set(StorageKeys.SESSIONS_OPT_IN, parsedConfig.sessionTrackingEnabled);
-    parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
-    if (globalStorage.getState(StorageKeys.QUERY)) {
-      globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
-    }
-
-    const context = globalStorage.getState(StorageKeys.API_CONTEXT);
-    if (context && !isValidContext(context)) {
-      persistentStorage.delete(StorageKeys.API_CONTEXT, true);
-      globalStorage.delete(StorageKeys.API_CONTEXT);
-      console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
-    }
-
-    if (globalStorage.getState(StorageKeys.REFERRER_PAGE_URL) === null) {
-      globalStorage.set(
-        StorageKeys.REFERRER_PAGE_URL,
-        urlWithoutQueryParamsAndHash(document.referrer)
-      );
-    }
-
-    this._services = getServices(parsedConfig, globalStorage);
-
+    this._services = getServices(parsedConfig);
     this._eligibleForAnalytics = parsedConfig.businessId != null;
-    // TODO(amullings): Initialize with other services
-    if (this._eligibleForAnalytics && parsedConfig.mock) {
-      this._analyticsReporterService = new NoopAnalyticsReporter();
-    } else if (this._eligibleForAnalytics) {
+    if (this._eligibleForAnalytics) {
       this._analyticsReporterService = new AnalyticsReporter(
         parsedConfig.experienceKey,
         parsedConfig.experienceVersion,
@@ -202,109 +55,31 @@ class Answers {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
-      // listen to query id updates
-      globalStorage.on('update', StorageKeys.QUERY_ID, id =>
-        this._analyticsReporterService.setQueryId(id)
-      );
-
       this.components.setAnalyticsReporter(this._analyticsReporterService);
-      initScrollListener(this._analyticsReporterService);
     }
 
     this.core = new Core({
-      apiKey: parsedConfig.apiKey,
-      globalStorage: globalStorage,
-      persistentStorage: persistentStorage,
-      experienceKey: parsedConfig.experienceKey,
-      fieldFormatters: parsedConfig.fieldFormatters,
-      experienceVersion: parsedConfig.experienceVersion,
-      locale: parsedConfig.locale,
-      searchService: this._services.searchService,
       autoCompleteService: this._services.autoCompleteService,
-      questionAnswerService: this._services.questionAnswerService,
-      analyticsReporter: this._analyticsReporterService,
-      onVerticalSearch: parsedConfig.onVerticalSearch,
-      onUniversalSearch: parsedConfig.onUniversalSearch,
-      verticalSearchPromise: parsedConfig.verticalSearchPromise,
-      universalSearchPromise: parsedConfig.universalSearchPromise
     });
-
-    if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
-      parsedConfig.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
-    }
 
     this.components
       .setCore(this.core)
-      .setRenderer(this.renderer)
-      .onLinkClick(parsedConfig.onLinkClick);
+      .setRenderer(this.renderer);
 
-    this._setDefaultInitialSearch(parsedConfig.search);
-
-    this._onReady = parsedConfig.onReady || function () {};
-
-    if (parsedConfig.useTemplates === false || parsedConfig.templateBundle) {
-      if (parsedConfig.templateBundle) {
-        this.renderer.init(parsedConfig.templateBundle);
-      }
-
-      this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
-      return this;
-    }
-
-    // Templates are currently downloaded separately from the CORE and UI bundle.
-    // Future enhancement is to ship the components with templates in a separate bundle.
-    this.templates = new DefaultTemplatesLoader(templates => {
-      this.renderer.init(templates);
-      this._handlePonyfillCssVariables(
-        parsedConfig.disableCssVariablesPonyfill,
-        this._invokeOnReady.bind(this));
-    });
+    this.renderer.init(parsedConfig.templateBundle);
+    parsedConfig.onReady();
 
     return this;
   }
 
-  /**
-   * Checks the experience's Answer Status page before invoking onReady. If the status is
-   * disabled, onReady is not called.
-   */
-  _invokeOnReady () {
-    this._onReady();
-    if (this.core.verticalSearchPromise) {
-      this.core.verticalSearchPromise.then(resData => {
-        const { res, verticalKey, queryString } = resData;
-        window.performance.mark('yext.answers.handlePreloadedVerticalQueryStart');
-        this.core.handleVerticalSearch(res, verticalKey, queryString);
-      });
-    } else if (this.core.universalSearchPromise) {
-      this.core.universalSearchPromise.then(resData => {
-        const { res, queryString } = resData;
-        window.performance.mark('yext.answers.handlePreloadedUniversalQueryStart');
-        this.core.handleUniversalSearch(res, queryString, {});
-      });
+  parseConfig (config) {
+    const parsedConfig = Object.assign({}, DEFAULTS, config);
+    let sessionTrackingEnabled = true;
+    if (typeof config.sessionTrackingEnabled === 'boolean') {
+      sessionTrackingEnabled = config.sessionTrackingEnabled;
     }
-  }
-
-  /**
-   * Calls the CSS vars ponyfill, if opted-in, and invokes the callback
-   * regardless of if there was an error/success. If opted-out, only invokes the callback.
-   * @param {boolean} option to opt out of the css variables ponyfill
-   * @param callback {Function} always called after function
-   */
-  _handlePonyfillCssVariables (ponyfillDisabled, callback) {
-    window.performance.mark('yext.answers.ponyfillStart');
-    if (!ponyfillDisabled) {
-      this.ponyfillCssVariables({
-        onFinally: () => {
-          window.performance.mark('yext.answers.ponyfillEnd');
-          callback();
-        }
-      });
-    } else {
-      window.performance.mark('yext.answers.ponyfillEnd');
-      callback();
-    }
+    parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
+    return parsedConfig;
   }
 
   domReady (cb) {
@@ -316,223 +91,24 @@ class Answers {
     return this;
   }
 
-  /**
-   * Parses the config provided by the user. In the parsed config, any options not supplied by the
-   * user are given default values.
-   * @param {Object} config The user supplied config.
-   */
-  parseConfig (config) {
-    const parsedConfig = Object.assign({}, DEFAULTS, config);
-    let sessionTrackingEnabled = true;
-    if (typeof config.sessionTrackingEnabled === 'boolean') {
-      sessionTrackingEnabled = config.sessionTrackingEnabled;
-    }
-    parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
-
-    const sandboxPrefix = `${SANDBOX}-`;
-    parsedConfig.apiKey.includes(sandboxPrefix)
-      ? parsedConfig.environment = SANDBOX
-      : parsedConfig.environment = PRODUCTION;
-    parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
-
-    return parsedConfig;
-  }
-
-  /**
-   * Register a custom component type so it can be created via
-   * addComponent and used as a child component
-   * @param {Component} componentClass
-   */
-  registerComponentType (componentClass) {
-    this.components.register(componentClass);
-  }
-
   addComponent (type, opts) {
-    if (typeof opts === 'string') {
-      opts = {
-        container: opts
-      };
-    }
-
-    try {
-      this.components.create(type, opts).mount();
-    } catch (e) {
-      throw new AnswersComponentError('Failed to add component', type, e);
-    }
+    this.components.create(type, opts).mount();
     return this;
-  }
-
-  /**
-   * Remove the component - and all of its children - with the given name
-   * @param {string} name The name of the component to remove
-   */
-  removeComponent (name) {
-    this.components.removeByName(name);
-  }
-
-  createComponent (opts) {
-    return this.components.create('Component', opts).mount();
-  }
-
-  registerHelper (name, cb) {
-    this.renderer.registerHelper(name, cb);
-    return this;
-  }
-
-  /**
-   * Compile and add a template to the current renderer
-   * @param {string} templateName The unique name for the template
-   * @param {string} template The handlebars template string
-   */
-  registerTemplate (templateName, template) {
-    this.renderer.registerTemplate(templateName, template);
-  }
-
-  /**
-   * Opt in or out of convertion tracking analytics
-   * @param {boolean} optIn
-   */
-  setConversionsOptIn (optIn) {
-    if (this._eligibleForAnalytics) {
-      this._analyticsReporterService.setConversionTrackingEnabled(optIn);
-    }
-  }
-
-  /**
-   * Opt in or out of session cookies
-   * @param {boolean} optIn
-   */
-  setSessionsOptIn (optIn) {
-    this.core.globalStorage.set(StorageKeys.SESSIONS_OPT_IN, optIn);
-  }
-
-  /**
-   * Sets a search query on initialization for vertical searchers that have a
-   * defaultInitialSearch provided, if the user hasn't already provided their
-   * own via URL param.
-   * @param {SearchConfig} searchConfig
-   * @private
-   */
-  _setDefaultInitialSearch (searchConfig) {
-    if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
-      return;
-    }
-    const prepopulatedQuery = this.core.globalStorage.getState(StorageKeys.QUERY);
-    if (prepopulatedQuery != null) {
-      return;
-    }
-    this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-    this.core.setQuery(searchConfig.defaultInitialSearch);
-  }
-
-  /**
-   * Sets the geolocation tag in global storage, overriding other inputs. Do not use in conjunction
-   * with other components that will set the geolocation internally.
-   * @param {number} lat
-   * @param {number} long
-   */
-  setGeolocation (lat, lng) {
-    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
-      lat, lng, radius: 0
-    });
-  }
-
-  /*
-   * Updates the css styles with new current variables. This is useful when the css
-   * variables are updated dynamically (e.g. through js) or if the css variables are
-   * added after the ANSWERS.init
-   *
-   * To solve issues with non-zero max-age cache controls for link/script assets in IE11,
-   * we add a cache busting parameter so that XMLHttpRequests succeed.
-   *
-   * @param {Object} config Additional config to pass to the ponyfill
-   */
-  ponyfillCssVariables (config = {}) {
-    cssVars({
-      onlyLegacy: true,
-      onError: config.onError || function () {},
-      onSuccess: config.onSuccess || function () {},
-      onFinally: config.onFinally || function () {},
-      onBeforeSend: (xhr, node, url) => {
-        try {
-          const uriWithCacheBust = new URL(url);
-          const params = new SearchParams(uriWithCacheBust.search);
-          params.set('_', new Date().getTime());
-          uriWithCacheBust.search = params.toString();
-          xhr.open('GET', uriWithCacheBust.toString());
-        } catch (e) {
-          // Catch the error and continue if the URL provided in the asset is not a valid URL
-        }
-      }
-    });
-  }
-
-  /*
-   * Adds context as a parameter for the query API calls.
-   * @param {Object} context The context object passed in the API calls
-   */
-  setContext (context) {
-    const contextString = JSON.stringify(context);
-    if (!isValidContext(contextString)) {
-      console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
-      return;
-    }
-
-    this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
   }
 }
 
-/**
- * @param {Object} config
- * @param {GlobalStorage} globalStorage
- * @returns {Services}
- */
-function getServices (config, globalStorage) {
+function getServices (config) {
   return {
-    searchService: new SearchApi({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      locale: config.locale,
-      environment: config.environment
-    }),
     autoCompleteService: new AutoCompleteApi(
       {
         apiKey: config.apiKey,
         experienceKey: config.experienceKey,
         experienceVersion: config.experienceVersion,
         locale: config.locale,
-        environment: config.environment
-      },
-      globalStorage),
-    questionAnswerService: new QuestionAnswerApi(
-      { apiKey: config.apiKey, environment: config.environment },
-      globalStorage)
+        environment: config.environment,
+        sessionTrackingEnabled: config.sessionTrackingEnabled
+      })
   };
-}
-
-/**
- * Initialize the scroll event listener to send analytics events
- * when the user scrolls to the bottom. Debounces scroll events so
- * they are processed after the user stops scrolling
- */
-function initScrollListener (reporter) {
-  const DEBOUNCE_TIME = 100;
-  let timeout = null;
-
-  const sendEvent = () => {
-    if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight) {
-      const event = new AnalyticsEvent('SCROLL_TO_BOTTOM_OF_PAGE');
-      if (reporter.getQueryId()) {
-        reporter.report(event);
-      }
-    }
-  };
-
-  document.addEventListener('scroll', () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(sendEvent, DEBOUNCE_TIME);
-  });
 }
 
 const ANSWERS = new Answers();

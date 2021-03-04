@@ -2,7 +2,6 @@
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import StorageKeys from '../../../core/storage/storagekeys';
 
 const Keys = {
   BACKSPACE: 8,
@@ -27,102 +26,24 @@ const Keys = {
 export default class AutoCompleteComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
     super(opts, systemOpts);
-
-    /**
-     * The `verticalKey` of the vertical search to use for auto-complete
-     * @type {string}
-     */
-    this._verticalKey = opts.verticalKey || null;
-
-    /**
-     * A reference to the input el selector for auto complete
-     * @type {string}
-     */
     this._inputEl = opts.inputEl || '.js-yext-query';
-
-    /**
-     * A selector for the autocomplete elementes
-     * @type {string}
-     */
     this._autocompleteEls = opts.autoCompleteEls || '.js-yext-autocomplete-option';
-
-    /**
-     * An internal reference for the data-storage to listen for updates from the server
-     * @type {string}
-     */
-    this.moduleId = `${StorageKeys.AUTOCOMPLETE}.${this.name}`;
-
-    /**
-     * An internal reference to the input value when typing.
-     * We use this for resetting the state of the input value when other interactions (e.g. result navigation)
-     * change based on interactions. For instance, hitting escape should reset the value to the original typed query.
-     * @type {string}
-     */
     this._originalQuery = opts.originalQuery || '';
-
-    /**
-     * Used for keyboard navigation through results.
-     * An internal reference to the current section we're navigating in.
-     * @type {number}
-     */
     this._sectionIndex = 0;
-
-    /**
-     * Used for keyboard navigation through results.
-     * An internal reference to the current result index we're navigating on.
-     * @type {number}
-     */
     this._resultIndex = -1;
-
-    /**
-     * The query text to show as the first item for auto complete.
-     * Optionally provided
-     * @type {string}
-     */
-    this.promptHeader = opts.promptHeader || null;
-
-    /**
-     * Whether the input is autocomatically focused or not
-     * @type {boolean}
-     */
-    this._autoFocus = opts.autoFocus || false;
-
-    /**
-     * Callback invoked when the `Enter` key is pressed on auto complete.
-     */
     this._onSubmit = opts.onSubmit || function () {};
-
-    /**
-     * Callback invoked when keys are used to navigate through the auto complete. Note that this is
-     * not called when either the `Enter` key is pressed or the mouse is used to select an
-     * autocomplete option.
-     */
     this._onChange = opts.onChange || function () {};
 
     this._searchParameters = opts.searchParameters || null;
   }
-
-  /**
-   * The aliased used by the component manager for creation.
-   */
   static get type () {
     return 'AutoComplete';
   }
 
-  /**
-   * The template to render
-   * @returns {string}
-   * @override
-   */
   static defaultTemplateName (config) {
     return 'search/autocomplete';
   }
 
-  /**
-   * setState is overridden so that we can provide additional meta data
-   * to the template (e.g. the sectionIndex and resultIndex), since
-   * those are client-interaction specific values and aren't returned from the server.
-   */
   setState (data) {
     if (!this.isQueryInputFocused()) {
       this._sectionIndex = 0;
@@ -285,11 +206,7 @@ export default class AutoCompleteComponent extends Component {
   }
 
   autoComplete (input) {
-    if (this._verticalKey) {
-      this.core.autoCompleteVertical(input, this.name, this._verticalKey);
-    } else {
-      this.core.autoCompleteUniversal(input, this.name);
-    }
+    this.core.autoCompleteUniversal(input, this.name).then(data => this.setState(data));
   }
 
   /**

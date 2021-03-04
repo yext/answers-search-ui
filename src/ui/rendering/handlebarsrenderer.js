@@ -1,7 +1,6 @@
 /** @module HandlebarsRenderer */
 
 import Renderer from './renderer';
-import Icons from '../icons';
 import HighlightedValue from '../../core/models/highlightedvalue';
 
 /**
@@ -76,57 +75,6 @@ export default class HandlebarsRenderer extends Renderer {
       return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
     });
 
-    this.registerHelper({
-      eq: function (v1, v2) {
-        return v1 === v2;
-      },
-      ne: function (v1, v2) {
-        return v1 !== v2;
-      },
-      lt: function (v1, v2) {
-        return v1 < v2;
-      },
-      gt: function (v1, v2) {
-        return v1 > v2;
-      },
-      lte: function (v1, v2) {
-        return v1 <= v2;
-      },
-      gte: function (v1, v2) {
-        return v1 >= v2;
-      },
-      and: function () {
-        return Array.prototype.slice.call(arguments).every(Boolean);
-      },
-      or: function () {
-        return Array.prototype.slice.call(arguments, 0, -1).some(Boolean);
-      }
-    });
-
-    this.registerHelper({
-      add: (a1, a2) => a1 + a2,
-      sub: (a1, a2) => a1 - a2,
-      mul: (a1, a2) => a1 * a2,
-      div: (a1, a2) => a1 / a2,
-      mod: (a1, a2) => a1 % a2
-    });
-
-    this.registerHelper('every', function (...args) {
-      const values = args.slice(0, args.length - 1);
-      const options = args[args.length - 1];
-      return (values.every(v => v)) ? options.fn(this) : options.inverse(this);
-    });
-
-    this.registerHelper('formatPhoneNumber', function (phoneNumberString) {
-      var cleaned = ('' + phoneNumberString).replace(/\D/g, '');
-      var match = cleaned.match(/^(1|)?(\d{3})(\d{3})(\d{4})$/);
-      if (match) {
-        var intlCode = (match[1] ? '+1 ' : '');
-        return [intlCode, '(', match[2], ') ', match[3], '-', match[4]].join('');
-      }
-      return null;
-    });
-
     this.registerHelper('assign', function (name, value, options) {
       let args = arguments;
       options = args[args.length - 1];
@@ -148,27 +96,7 @@ export default class HandlebarsRenderer extends Renderer {
         ? ''
         : JSON.stringify(name);
     });
-
-    this.registerHelper('plural', function (number, singularText, pluralText) {
-      return number === 1
-        ? singularText
-        : pluralText;
-    });
-
     let self = this;
-    self.registerHelper('icon', function (name, complexContentsParams, options) {
-      let icon = Icons.default;
-      if (!Icons[name]) {
-        return self.SafeString(icon);
-      }
-      if (typeof Icons[name] === 'function') {
-        icon = Icons[name](complexContentsParams);
-      } else {
-        icon = Icons[name];
-      }
-      return self.SafeString(icon);
-    });
-
     self.registerHelper('highlightValue', function (value, getInverted) {
       const escapedInput = self.escapeExpression(value.value || value.shortValue);
 
