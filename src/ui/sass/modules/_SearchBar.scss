@@ -35,7 +35,7 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   --yxt-searchbar-button-text-color-active: #{$searchbar-button-text-color-active};
 }
 
-.yxt-SearchBar, .yxt-GeoLocationFilter
+.yxt-SearchBar
 {
   width: 100%;
   height: 51px;
@@ -172,28 +172,5 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     @media (max-width: $breakpoint-mobile-max) {
       margin-left: var(--yxt-base-spacing);
     }
-  }
-
-  &-AnimatedIcon
-  {
-    display: flex;
-  }
-
-  &-AnimatedIcon--inactive svg
-  {
-    display: none;
-  }
-
-  &-AnimatedIcon--paused svg > g
-  {
-    animation-play-state: paused;
-  }
-}
-
-.yxt-GeoLocationFilter
-{
-  &-title
-  {
-    @include sr-only;
   }
 }
