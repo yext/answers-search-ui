@@ -10,7 +10,7 @@ const COMPONENT_CLASS_LIST = [
   Component,
   // Search Components
   SearchComponent,
-  AutoCompleteComponent,
+  AutoCompleteComponent
 ];
 
 /**

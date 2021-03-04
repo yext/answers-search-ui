@@ -14,7 +14,7 @@ export default class SearchComponent extends Component {
     this.redirectUrl = config.redirectUrl;
     this.query = config.query;
     this._allowEmptySearch = config.allowEmptySearch;
-    this._autoCompleteName = this.name +'.autocomplete';
+    this._autoCompleteName = this.name + '.autocomplete';
     this._processParams = config.processParams;
   }
 
@@ -33,7 +33,7 @@ export default class SearchComponent extends Component {
     this._container.classList.add('yxt-SearchBar-wrapper');
 
     let form = DOM.query(this._container, formSelector);
-    console.log(form)
+    console.log(form);
     DOM.on(form, 'submit', (e) => {
       e.preventDefault();
       const inputEl = form.querySelector('.js-yext-query');
@@ -46,12 +46,10 @@ export default class SearchComponent extends Component {
     this.query = query;
     const params = new SearchParams(window.location.search.substring(1));
     params.set('query', query);
-    if (this._processParams) {
-      params = this._processParams(params);
-    }
+    const paramString = this._processParams ? this._processParams(params).toString() : params.toString();
 
     if (this._allowEmptySearch || query) {
-      window.location.href = this.redirectUrl + '?' + params.toString();
+      window.location.href = this.redirectUrl + '?' + paramString;
       return false;
     }
   }

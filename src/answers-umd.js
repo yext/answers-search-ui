@@ -59,7 +59,7 @@ class Answers {
     }
 
     this.core = new Core({
-      autoCompleteService: this._services.autoCompleteService,
+      autoCompleteService: this._services.autoCompleteService
     });
 
     this.components
