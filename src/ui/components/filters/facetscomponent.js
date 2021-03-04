@@ -240,8 +240,21 @@ export default class FacetsComponent extends Component {
   }
 
   setState (data) {
+    const previousFacets = data['filters'] || [];
+    let updatedFacets = [];
+
+    if (this._transformFacets) {
+      const facetsCopy = cloneDeep(previousFacets);
+      const transformedFacets = this._transformFacets(facetsCopy, this.config);
+
+      updatedFacets = transformedFacets;
+    } else {
+      updatedFacets = previousFacets;
+    }
+
     return super.setState({
       ...data,
+      filters: updatedFacets,
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     });
   }
@@ -305,23 +318,15 @@ export default class FacetsComponent extends Component {
   }
 
   /**
-   * Gets the answers-core DisplayableFacet array, applies transformFacets,
-   * and then converts it into an array of Facets
+   * Gets the answers-core DisplayableFacet array and converts it into an array of Facets
    *
    * @returns {Facets[]}
    */
   _getFacets () {
     const dynamicFilters = this._state.get();
-    const coreFacets = dynamicFilters['filters'] || [];
+    const coreFacets = dynamicFilters['filters'];
 
-    if (!this._transformFacets) {
-      return Facet.fromCore(coreFacets);
-    }
-
-    const facetsCopy = cloneDeep(coreFacets);
-    const transformedFacets = this._transformFacets(facetsCopy, this.config);
-
-    return Facet.fromCore(transformedFacets);
+    return Facet.fromCore(coreFacets);
   }
 
   /**

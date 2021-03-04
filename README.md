@@ -1386,15 +1386,17 @@ Here's an example of using this option to customize a boolean facet.
 
 ```js
 transformFacets: facets => {
-  facets.forEach(facet => {
-    if (facet.fieldId === 'c_acceptingNewPatients') {
-      facet.options.forEach(option => {
-        if (option.value === false) { option.displayName = "Not Accepting Patients"; }
-        if (option.value === true) { option.displayName = "Accepting Patients"; }
-      });
-    }
+  return facets.map(facet => {
+    const options = facet.options.map(option => {
+      if (facet.fieldId === 'c_acceptingNewPatients') {
+        const displayName = option.value === true
+          ? "Accepting Patients"
+          : "Not Accepting Patients";
+      }
+      return Object.assign({}, option, { displayName });
+    });
+    return Object.assign({}, facet, { options });
   });
-  return facets;
 },
 ```
 
