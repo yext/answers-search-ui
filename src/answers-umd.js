@@ -268,27 +268,6 @@ class Answers {
     }
   }
 
-  /**
-   * Calls the CSS vars ponyfill, if opted-in, and invokes the callback
-   * regardless of if there was an error/success. If opted-out, only invokes the callback.
-   * @param {boolean} option to opt out of the css variables ponyfill
-   * @param callback {Function} always called after function
-   */
-  _handlePonyfillCssVariables (ponyfillDisabled, callback) {
-    window.performance.mark('yext.answers.ponyfillStart');
-    if (!ponyfillDisabled) {
-      this.ponyfillCssVariables({
-        onFinally: () => {
-          window.performance.mark('yext.answers.ponyfillEnd');
-          callback();
-        }
-      });
-    } else {
-      window.performance.mark('yext.answers.ponyfillEnd');
-      callback();
-    }
-  }
-
   domReady (cb) {
     DOM.onReady(cb);
   }
