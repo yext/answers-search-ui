@@ -8,7 +8,7 @@ import {
 } from './ui/index';
 import Component from './ui/components/component';
 
-import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
+import { AnalyticsReporter } from './core';
 import PersistentStorage from './ui/storage/persistentstorage';
 import GlobalStorage from './core/storage/globalstorage';
 import { AnswersComponentError } from './core/errors/errors';
@@ -189,9 +189,7 @@ class Answers {
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
     // TODO(amullings): Initialize with other services
-    if (this._eligibleForAnalytics && parsedConfig.mock) {
-      this._analyticsReporterService = new NoopAnalyticsReporter();
-    } else if (this._eligibleForAnalytics) {
+    if (this._eligibleForAnalytics) {
       this._analyticsReporterService = new AnalyticsReporter(
         parsedConfig.experienceKey,
         parsedConfig.experienceVersion,
