@@ -97,6 +97,6 @@ describe('SearchBar component', () => {
       });
     });
 
-    return expect(wasSearchRanPromise).resolves.toBe(true);
+    return expect(wasSearchRanPromise).resolves.toBeTruthy();
   });
 });
