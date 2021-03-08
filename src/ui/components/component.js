@@ -6,10 +6,6 @@ import { AnalyticsReporter } from '../../core'; // eslint-disable-line no-unused
 import AnalyticsEvent from '../../core/analytics/analyticsevent';
 import { AnswersComponentError } from '../../core/errors/errors';
 
-function cloneDeep (obj) {
-  return JSON.parse(JSON.stringify(obj));
-}
-
 /**
  * Component is an abstraction that encapsulates state, behavior,
  * and view for a particular chunk of functionality on the page.
@@ -262,7 +258,7 @@ export default class Component {
     this.onUnMount();
   }
 
-  mount (container) {
+  mount (container, isChild) {
     if (container) {
       this._container = container;
     }
@@ -284,9 +280,20 @@ export default class Component {
     domComponents.forEach(c => this._createSubcomponent(c, data));
 
     this._children.forEach(child => {
-      child.mount();
+      child.mount(child._container, true);
     });
+    if (!isChild) {
+      this._attachListeners();
+    }
 
+    this._isMounted = true;
+    this.onMount(this);
+    this.userOnMount(this);
+
+    return this;
+  }
+
+  _attachListeners() {
     // Attach analytics hooks as necessary
     if (this.analyticsReporter) {
       let domHooks = DOM.queryAll(this._container, '[data-eventtype]:not([data-is-analytics-attached])');
@@ -301,16 +308,10 @@ export default class Component {
         DOM.on(el, 'click', ev => this.onLinkClick(href, el, ev));
       });
     }
-
-    this._isMounted = true;
-    this.onMount(this);
-    this.userOnMount(this);
-
-    return this;
   }
 
   getTransformedData (data) {
-    return this.transformData ? this.transformData(cloneDeep(data)) : data;
+    return this.transformData ? this.transformData(data) : data;
   }
 
   /**
@@ -320,9 +321,9 @@ export default class Component {
   render (data = this._state.get()) {
     // We create an HTML Document fragment with the rendered string
     // So that we can query it for processing of sub components
-    return DOM.create(this._renderer.render({
+    return this._renderer.render({
       templateName: this._templateName
-    }, this.getTransformedData(data))).innerHTML;
+    }, this.getTransformedData(data));
   }
 
   _createSubcomponent (domComponent, data) {
