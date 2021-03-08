@@ -2,6 +2,7 @@ import DOM from '../../../../src/ui/dom/dom';
 import mockManager from '../../../setup/managermocker';
 import { mount } from 'enzyme';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
+import QueryTriggers from '../../../../src/core/models/querytriggers';
 
 DOM.setup(document, new DOMParser());
 
@@ -78,5 +79,24 @@ describe('SearchBar component', () => {
 
       expect(storage.getUrlWithCurrentState()).toEqual('query=');
     });
+  });
+
+  it('default initial search works for universal', () => {
+    const defaultInitialSearch = '';
+    storage.set(StorageKeys.QUERY, defaultInitialSearch);
+    storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      allowEmptySearch: true
+    });
+
+    const wasSearchRanPromise = new Promise(resolve => {
+      component.search = jest.fn(() => {
+        resolve(true);
+      });
+    });
+
+    return expect(wasSearchRanPromise).resolves.toBe(true);
   });
 });
