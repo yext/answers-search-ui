@@ -293,7 +293,7 @@ export default class Component {
     return this;
   }
 
-  _attachListeners() {
+  _attachListeners () {
     // Attach analytics hooks as necessary
     if (this.analyticsReporter) {
       let domHooks = DOM.queryAll(this._container, '[data-eventtype]:not([data-is-analytics-attached])');
