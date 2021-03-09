@@ -70,7 +70,7 @@ test('navigating and refreshing mantains that page number', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
-test.only('navigating and refreshing mantains that page number with blank query', async t => {
+test('navigating and refreshing mantains that page number with blank query', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.submitQuery();
 
