@@ -93,6 +93,7 @@ describe('SearchBar component', () => {
       verticalKey: null,
       allowEmptySearch: true
     });
+    component.searchAfterAnswersOnReady();
 
     const wasSearchRanPromise = new Promise(resolve => {
       component.core.search = jest.fn(() => {

@@ -167,6 +167,16 @@ export default class Storage {
   }
 
   /**
+   * Whether the specified key exists or not
+   *
+   * @param {string} key the storage key
+   * @return {boolean}
+   */
+  has (key) {
+    return this.storage.has(key);
+  }
+
+  /**
    * Returns the url representing the current persisted state, merged
    * with any additional query params currently in the url.
    *
