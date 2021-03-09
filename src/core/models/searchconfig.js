@@ -18,7 +18,7 @@ export default class SearchConfig {
     this.verticalKey = config.verticalKey || null;
 
     /**
-     * A default search to use on initialization for vertical searchers, when the user has't provided a query
+     * A default search to use on initialization when the user hasn't provided a query
      * @type {string}
      */
     this.defaultInitialSearch = config.defaultInitialSearch;

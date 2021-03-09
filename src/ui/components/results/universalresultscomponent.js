@@ -59,7 +59,7 @@ export default class UniversalResultsComponent extends Component {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      showNoResults: sections.length === 0 && query,
+      showNoResults: sections.length === 0 && (query || query === ''),
       query: query,
       sections: sections
     }, val));

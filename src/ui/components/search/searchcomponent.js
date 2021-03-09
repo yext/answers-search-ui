@@ -225,7 +225,7 @@ export default class SearchComponent extends Component {
     this._showClearButton = this.clearButton && this.query;
 
     /**
-     * For vertical search bars, whether or not to allow empty searches.
+     * Whether or not to allow empty searches.
      * @type {boolean}
      * @private
      */
@@ -591,8 +591,7 @@ export default class SearchComponent extends Component {
    */
   debouncedSearch (query, searchOptions) {
     if (this._throttled ||
-      (!query && !this._verticalKey) ||
-      (!query && this._verticalKey && !this._allowEmptySearch) ||
+      (!query && !this._allowEmptySearch) ||
       this._isTwin) {
       return;
     }
