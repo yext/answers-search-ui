@@ -85,8 +85,8 @@ export default class DirectAnswerComponent extends Component {
     this._cardOverrides = config.cardOverrides || [];
 
     /**
-     * Type options, which allows a card type to be specified based on the direct answer type. May contain
-     * cardOverrides.
+     * Type options, which allows a card type to be specified based on the direct answer type.
+     * May contain cardOverrides.
      *
      * @example
      * {
@@ -271,8 +271,8 @@ export default class DirectAnswerComponent extends Component {
    *
    * @param {Object} directAnswer The direct answer state
    * @param {Object[]} overrides The overrides to search through
-   * @param {string} fallback The card to fall back on if no match is found
-   * @returns {string | null}
+   * @param {string} fallback The card to return if no match is found
+   * @returns {string}
    */
   _getCardBasedOnOverrides ({ directAnswer, overrides, fallback }) {
     const cardOverride = overrides.find(override => {

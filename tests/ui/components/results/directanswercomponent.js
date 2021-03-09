@@ -46,7 +46,7 @@ describe('types logic works properly', () => {
     expect(component._getCard(directAnswer)).toEqual('default-card');
   });
 
-  it('can specify by an option on the type', () => {
+  it('cardTypes can be specified', () => {
     const component = COMPONENT_MANAGER.create('DirectAnswer', {
       ...defaultConfig,
       defaultCard: 'default-card',
@@ -63,7 +63,7 @@ describe('types logic works properly', () => {
     expect(component._getCard(directAnswer)).toEqual('allfields-standard');
   });
 
-  it('defaults if types option does not match the directAnswer', () => {
+  it('defaults if the option does not match the directAnswer', () => {
     const component = COMPONENT_MANAGER.create('DirectAnswer', {
       ...defaultConfig,
       defaultCard: 'default-card',
@@ -106,11 +106,11 @@ describe('types logic works properly', () => {
           cardType: 'custom-card',
           cardOverrides: [
             {
-              entityType: 'Person',
+              entityType: 'Location',
               cardType: 'some-card'
             },
             {
-              entityType: 'Location',
+              fieldName: 'Phone Number',
               cardType: 'other-card'
             }
           ]
@@ -118,7 +118,7 @@ describe('types logic works properly', () => {
       }
     });
 
-    expect(component._getCard(directAnswer)).toEqual('other-card');
+    expect(component._getCard(directAnswer)).toEqual('some-card');
   });
 
   it('if the overrides within types do not match, use the specified cardType', () => {
@@ -172,7 +172,7 @@ describe('types logic works properly', () => {
       },
       cardOverrides: [
         {
-          fieldName: 'Some field',
+          entityType: 'Location',
           cardType: 'other-card'
         }
       ]
