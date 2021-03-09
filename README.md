@@ -511,6 +511,37 @@ ANSWERS.addComponent('DirectAnswer', {
    negativeFeedbackSrText: 'This did not answer my question',
   // Optional, the footer text to display on submission of feedback
   footerTextOnSubmission: 'Thank you for your feedback!',
+  // Optional, specify card types and overrides based on the direct answer type. The first matching cardOverride will be used, otherwise the cardType is used
+  types: {
+    'FEATURED_SNIPPET': {
+      cardType: "documentsearch-standard",
+      cardOverrides: [
+        {
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          cardType: 'MenuItemDescriptionDirectAnswer'
+        },
+        {
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          fieldType: 'rich_text'
+          cardType: 'MenuItemDescriptionDirectAnswer'
+        }
+      ]
+    },
+    'FIELD_VALUE': {
+      cardType: "allfields-standard",
+      cardOverrides: [
+        {
+          cardType: 'MenuItemDescriptionDirectAnswer',
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          fieldType: 'rich_text'
+        }
+      ]
+    }
+  }
+  // DEPRECATED: use the types option instead
   // Optional, card overrides that allow you to specify a specific direct answers card depending on the fieldName, entityType, and fieldType of the direct answer. The first matching card will be used, otherwise defaultCard will be used.
   cardOverrides: [
     {
