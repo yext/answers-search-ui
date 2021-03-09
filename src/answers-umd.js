@@ -219,7 +219,7 @@ class Answers {
     parsedConfig.noResults && storage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
     const isSuggestQueryTrigger =
       storage.get(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
-    if (storage.get(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
+    if (storage.has(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
       storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 

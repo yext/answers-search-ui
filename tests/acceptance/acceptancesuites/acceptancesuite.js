@@ -70,6 +70,19 @@ test('navigating and refreshing mantains that page number', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
+test.only('navigating and refreshing mantains that page number with blank query', async t => {
+  const searchComponent = VerticalPage.getSearchComponent();
+  await searchComponent.submitQuery();
+
+  const paginationComponent = VerticalPage.getPaginationComponent();
+  await paginationComponent.clickNextButton();
+  let pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+  await browserRefreshPage();
+  pageNum = await paginationComponent.getActivePageLabelAndNumber();
+  await t.expect(pageNum).eql('Page 2');
+});
+
 test('spell check flow', async t => {
   const spellCheckLogger = RequestLogger({
     url: /v2\/accounts\/me\/answers\/vertical\/query/
