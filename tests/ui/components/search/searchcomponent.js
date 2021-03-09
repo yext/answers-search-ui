@@ -22,8 +22,10 @@ describe('SearchBar component', () => {
         this.storage.set(StorageKeys.QUERY, query);
       },
       autoCompleteVertical: jest.fn(() => Promise.resolve({ inputIntents: [] })),
+      autoCompleteUniversal: jest.fn(() => Promise.resolve({ inputIntents: [] })),
       verticalSearch: jest.fn()
     });
+    COMPONENT_MANAGER.getActiveComponent = () => null;
     storage = COMPONENT_MANAGER.core.storage;
   });
 
@@ -88,11 +90,12 @@ describe('SearchBar component', () => {
 
     const component = COMPONENT_MANAGER.create('SearchBar', {
       ...defaultConfig,
+      verticalKey: null,
       allowEmptySearch: true
     });
 
     const wasSearchRanPromise = new Promise(resolve => {
-      component.search = jest.fn(() => {
+      component.core.search = jest.fn(() => {
         resolve(true);
       });
     });
