@@ -319,49 +319,25 @@ export default class DirectAnswerComponent extends Component {
       return;
     }
 
+    const validateSupportedKeysOfObject = (supportedKeys, object) => {
+      Object.keys(object).forEach(key => {
+        if (!supportedKeys.includes(key)) {
+          const supportedKeysString = supportedKeys.join(' and ');
+          throw new Error(`The key '${key}' is not a supported option. Supported options include ${supportedKeysString}.`);
+        }
+      });
+    };
+
     Object.entries(this._types).forEach(([directAnswerType, typeOptions]) => {
-      this._validateTypeOptions(typeOptions);
-      typeOptions.cardOverrides && this._validateCardOverrides(typeOptions.cardOverrides);
-    });
-  }
-
-  /**
-   * Throws an error if any typeOptions includes unsupported keys
-   *
-   * @param {Objet} typeOptions
-   * @throws if validation fails
-   */
-  _validateTypeOptions (typeOptions) {
-    const supportedKeys = ['cardType', 'cardOverrides'];
-    return this._validateSupportedKeysOfObject(supportedKeys, typeOptions);
-  }
-
-  /**
-   * Throws an error if cardOverrides within the types option contain unsupported keys
-   *
-   * @param {Object[]} overrides
-   * @throws if validation fails
-   */
-  _validateCardOverrides (overrides) {
-    const supportedKeys = ['fieldName', 'entityType', 'fieldType', 'cardType'];
-    overrides.forEach(overrideOptions => {
-      this._validateSupportedKeysOfObject(supportedKeys, overrideOptions);
-    });
-  }
-
-  /**
-   * Throws an error if an object has keys other than the supported keys.
-   *
-   * @param {string[]} supportedKeys A list of supported keys
-   * @param {Object} object The object to check the keys of
-   * @throws if validation fails
-   */
-  _validateSupportedKeysOfObject (supportedKeys, object) {
-    const supportedKeysString = supportedKeys.join(' and ');
-    Object.keys(object).forEach(key => {
-      if (!supportedKeys.includes(key)) {
-        throw new Error(`The key '${key}' is not a supported option. Supported options include ${supportedKeysString}.`);
+      const supportedTypeOptions = ['cardType', 'cardOverrides'];
+      validateSupportedKeysOfObject(supportedTypeOptions, typeOptions);
+      if (!typeOptions.cardOverrides) {
+        return;
       }
+      const supportedCardOverrideOptions = ['fieldName', 'entityType', 'fieldType', 'cardType'];
+      typeOptions.cardOverrides.forEach(overrideOptions => {
+        validateSupportedKeysOfObject(supportedCardOverrideOptions, overrideOptions);
+      });
     });
   }
 
