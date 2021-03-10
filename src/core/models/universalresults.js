@@ -30,7 +30,7 @@ export default class UniversalResults {
   }
 
   /**
-   * Construct a UnivervalResults object representing loading results
+   * Construct a UniversalResults object representing loading results
    * @return {UniversalResults}
    */
   static searchLoading () {

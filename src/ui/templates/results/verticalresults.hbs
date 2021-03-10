@@ -1,17 +1,20 @@
-{{#if isSearchComplete}}
-  {{#if showNoResults}}
-    {{> noResults}}
+<div class="yxt-ResultsContainer
+  yxt-ResultsContainer--{{#if isPreSearch}}preSearch{{else if isSearchLoading}}loading{{else if isSearchComplete}}loaded{{/if}}">
+  {{#if isSearchComplete}}
+    {{#if showNoResults}}
+      {{> noResults}}
+    {{/if}}
+    {{#if resultsPresent}}
+      <section class="yxt-Results yxt-Results--{{_config.modifier}}{{#if _config.isUniversal}} yxt-Results--universal{{/if}}">
+        {{> titleBar}}
+        {{> resultsHeader }}
+        {{> map}}
+        {{> results}}
+        {{> viewAll}}
+      </section>
+    {{/if}}
   {{/if}}
-  {{#if resultsPresent}}
-    <section class="yxt-Results yxt-Results--{{_config.modifier}}{{#if _config.isUniversal}} yxt-Results--universal{{/if}}">
-      {{> titleBar}}
-      {{> resultsHeader }}
-      {{> map}}
-      {{> results}}
-      {{> viewAll}}
-    </section>
-  {{/if}}
-{{/if}}
+</div>
 
 {{#*inline "noResults"}}
   {{#if useLegacyNoResults}}

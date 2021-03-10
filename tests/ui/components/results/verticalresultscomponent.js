@@ -5,6 +5,7 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 import SearchStates from '../../../../src/core/storage/searchstates';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
 import Storage from '../../../../src/core/storage/storage';
+import VerticalResults from '../../../../src/core/models/verticalresults';
 
 const mockCore = {
   storage: new Storage().init(),
@@ -42,6 +43,20 @@ describe('vertical results component', () => {
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
 
     expect(component.getVerticalURL()).toContain('query=yext');
+  });
+
+  it('sets correct loading state css class', () => {
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
+    const wrapper = mount(component);
+    expect(wrapper.exists('.yxt-ResultsContainer--preSearch')).toBeTruthy();
+
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    wrapper.update();
+    expect(wrapper.exists('.yxt-ResultsContainer--loading')).toBeTruthy();
+
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE });
+    wrapper.update();
+    expect(wrapper.exists('.yxt-ResultsContainer--loaded')).toBeTruthy();
   });
 
   it('updates to storage vertical results update the component results', () => {

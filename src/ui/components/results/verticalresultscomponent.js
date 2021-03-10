@@ -215,7 +215,8 @@ export default class VerticalResultsComponent extends Component {
       eventType: 'update',
       storageKey: StorageKeys.VERTICAL_RESULTS,
       callback: results => {
-        if (results.searchState === SearchStates.SEARCH_COMPLETE) {
+        if (results.searchState === SearchStates.SEARCH_COMPLETE ||
+          results.searchState === SearchStates.SEARCH_LOADING) {
           this.setState(results);
         }
       }
