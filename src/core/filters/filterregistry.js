@@ -1,6 +1,6 @@
 /** @module FilterRegistry */
 
-import FilterNodeFactory from './filternodefactory';
+import FilterCombinators from './filtercombinators';
 import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 
@@ -67,34 +67,101 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the filter string to send in a search query.
-   * TODO: move payload method logic into core.js, since it is only used there.
-   * @returns {string}
+   * Gets the static filters as a {@link Filter|CombinedFilter} to send to the answers-core
+   *
+   * @returns {CombinedFilter|Filter|null} Returns null if no filters with
+   *                                             filtering logic are present.
    */
   getStaticFilterPayload () {
-    return JSON.stringify(this._getStaticFilterPayload());
-  }
-
-  _getStaticFilterPayload () {
-    const filterNodes = this.getStaticFilterNodes();
-    const totalNode = FilterNodeFactory.and(...filterNodes);
-    return totalNode.getFilter();
+    const filterNodes = this.getStaticFilterNodes()
+      .filter(filterNode => {
+        return filterNode.getChildren().length > 0 || filterNode.getFilter().getFilterKey();
+      });
+    return filterNodes.length > 0
+      ? this._transformFilterNodes(filterNodes, FilterCombinators.AND)
+      : null;
   }
 
   /**
-   * Gets the facet filter string to send in a search query.
-   * @returns {string}
+   * Transforms a list of filter nodes {@link CombinedFilterNode} or {@link SimpleFilterNode} to
+   * answers-core's {@link Filter} or {@link CombinedFilter}
+   *
+   * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
+   * @param {FilterCombinator} combinator from answers-core
+   * @returns {CombinedFilter|Filter} from answers-core
    */
-  getFacetFilterPayload () {
-    return JSON.stringify(this._getFacetFilterPayload());
+  _transformFilterNodes (filterNodes, combinator) {
+    const filters = filterNodes.flatMap(filterNode => {
+      if (filterNode.children) {
+        return this._transformFilterNodes(filterNode.children, filterNode.combinator);
+      }
+
+      return this._transformSimpleFilterNode(filterNode);
+    });
+
+    return filters.length === 1
+      ? filters[0]
+      : {
+        filters: filters,
+        combinator: combinator
+      };
   }
 
-  _getFacetFilterPayload () {
+  /**
+   * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter}
+   *
+   * @param {SimpleFilterNode} filterNode
+   * @returns {Filter}
+   */
+  _transformSimpleFilterNode (filterNode) {
+    const fieldId = Object.keys(filterNode.filter)[0];
+    const filterComparison = filterNode.filter[fieldId];
+    const matcher = Object.keys(filterComparison)[0];
+    const value = filterComparison[matcher];
+    return {
+      fieldId: fieldId,
+      matcher: matcher,
+      value: value
+    };
+  }
+
+  /**
+   * Transforms a {@link Filter} into answers-core's {@link FacetOption}
+   *
+   * @param {Filter} filter
+   * @returns {FacetOption} from answers-core
+   */
+  _transformSimpleFilterNodeIntoFacetOption (filter) {
+    const fieldId = Object.keys(filter)[0];
+    const filterComparison = filter[fieldId];
+    const matcher = Object.keys(filterComparison)[0];
+    const value = filterComparison[matcher];
+    return {
+      matcher: matcher,
+      value: value
+    };
+  }
+
+  /**
+   * Gets the facet filters as an array of Filters to send to the answers-core.
+   *
+   * @returns {Facet[]} from answers-core
+   */
+  getFacetsPayload () {
     const getFilters = fn => fn.getChildren().length
       ? fn.getChildren().flatMap(getFilters)
       : fn.getFilter();
     const filters = this.getFacetFilterNodes().flatMap(getFilters);
-    return Facet.fromFilters(this.availableFieldIds, ...filters);
+    const facets = Facet.fromFilters(this.availableFieldIds, ...filters);
+
+    const coreFacets = Object.entries(facets).map(([fieldId, filterArray]) => {
+      return {
+        fieldId: fieldId,
+        options: filterArray.map(this._transformSimpleFilterNodeIntoFacetOption)
+      };
+    });
+
+    return coreFacets;
   }
 
   /**

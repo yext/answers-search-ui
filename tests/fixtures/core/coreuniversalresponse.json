@@ -1,0 +1,208 @@
+{
+  "verticalResults": [
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 40,
+      "results": [
+        {
+          "rawData": {
+            "id": "Employee-2116",
+            "type": "ce_person",
+            "website": "http://www.test.com",
+            "address": {
+              "line1": "7333 Yext Drive",
+              "city": "Mclean",
+              "region": "VA",
+              "postalCode": "22102",
+              "countryCode": "US"
+            },
+            "associations": [
+              "Runners Association"
+            ],
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+            "name": "Bob Smith",
+            "cityCoordinate": {
+              "latitude": 30.123456,
+              "longitude": -70.123456
+            },
+            "c_allstateLadyCTA": {
+              "label": "Learn More",
+              "linkType": "URL",
+              "link": "http://yext.com"
+            },
+            "c_employeeCity": "Tysons Corner",
+            "c_employeeCountry": "United States",
+            "c_employeeDepartment": "Consulting",
+            "c_employeeRegion": "Virginia",
+            "c_employeeTitle": "Associate Technical Project Manager",
+            "c_oliverCta": {
+              "url": "https://www.yext.com/",
+              "icon": "yext",
+              "label": "test cta"
+            },
+            "c_startDate": "2017-09-18",
+            "emails": [
+              "test@yext.com"
+            ],
+            "firstName": "Bob",
+            "geocodedCoordinate": {
+              "latitude": 30.123456,
+              "longitude": -70.123456
+            },
+            "languages": [
+              "German"
+            ],
+            "lastName": "Smith",
+            "mainPhone": "+18888888888",
+            "specialities": [
+              "Documentation",
+              "Coding"
+            ],
+            "websiteUrl": {
+              "url": "http://www.test.com",
+              "displayUrl": "http://www.testdisplay.com",
+              "preferDisplayUrl": true
+            },
+            "yextDisplayCoordinate": {
+              "latitude": 30.123456,
+              "longitude": -70.123456
+            },
+            "yextRoutableCoordinate": {
+              "latitude": 30.123456,
+              "longitude": -70.123456
+            }
+          },
+          "index": 1,
+          "name": "Bob Smith",
+          "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "link": "http://www.test.com",
+          "id": "Employee-2116",
+          "distance": 36032
+        }
+      ],
+      "resultsCount": 1,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "people"
+    },
+    {
+      "appliedQueryFilters": [],
+      "queryDurationMillis": 106,
+      "results": [
+        {
+          "rawData": {
+            "id": "1074283123523689994",
+            "type": "faq",
+            "answer": "Great question! To start, you can **bold,** *italicize,* and ++underline.++ You can also create lists.",
+            "name": "Bob loves FAQs"
+          },
+          "index": 1,
+          "name": "Bob loves FAQs",
+          "id": "1074283123523689994"
+        },
+        {
+          "rawData": {
+            "id": "faq-134",
+            "type": "faq",
+            "answer": "Yes. We require a Federal Tax ID number, to verify your business status.",
+            "name": "Will I need my Federal Tax Identification Number?",
+            "c_NERTags": [
+              "Tax"
+            ]
+          },
+          "index": 2,
+          "name": "Will I need my Federal Tax Identification Number?",
+          "id": "faq-134"
+        }
+      ],
+      "resultsCount": 2,
+      "source": "KNOWLEDGE_MANAGER",
+      "verticalKey": "faq"
+    }
+  ],
+  "queryId": "28aa65cc-5aff-4a4e-afcf-ad04a70738fc",
+  "directAnswer": {
+    "relatedResult": {
+      "rawData": {
+        "address": {
+          "line1": "7333 Yext Drive",
+          "city": "Mclean",
+          "region": "VA",
+          "postalCode": "22102",
+          "countryCode": "US"
+        },
+        "associations": [
+          "Runners Association"
+        ],
+        "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+        "name": "Bob Smith",
+        "cityCoordinate": {
+          "latitude": 30.123456,
+          "longitude": -70.123456
+        },
+        "c_allstateLadyCTA": {
+          "label": "Learn More",
+          "linkType": "URL",
+          "link": "http://yext.com"
+        },
+        "c_employeeCity": "Tysons Corner",
+        "c_employeeCountry": "United States",
+        "c_employeeDepartment": "Consulting",
+        "c_employeeRegion": "Virginia",
+        "c_employeeTitle": "Associate Technical Project Manager",
+        "c_oliverCta": {
+          "url": "https://www.yext.com/",
+          "icon": "yext",
+          "label": "test cta"
+        },
+        "c_startDate": "2017-09-18",
+        "emails": [
+          "test@yext.com"
+        ],
+        "firstName": "Bob",
+        "geocodedCoordinate": {
+          "latitude": 30.123456,
+          "longitude": -70.123456
+        },
+        "languages": [
+          "German"
+        ],
+        "lastName": "Smith",
+        "mainPhone": "+18888888888",
+        "specialities": [
+          "Documentation",
+          "Coding"
+        ],
+        "websiteUrl": {
+          "url": "http://www.test.com",
+          "displayUrl": "http://www.testdisplay.com",
+          "preferDisplayUrl": true
+        },
+        "yextDisplayCoordinate": {
+          "latitude": 30.123456,
+          "longitude": -70.123456
+        },
+        "yextRoutableCoordinate": {
+          "latitude": 30.123456,
+          "longitude": -70.123456
+        }
+      },
+      "name": "Bob Smith",
+      "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+      "link": "http://www.test.com",
+      "id": "Employee-2116"
+    },
+    "verticalKey": "people",
+    "entityName": "Bob Smith",
+    "fieldName": "Phone Number",
+    "fieldApiName": "mainPhone",
+    "value": "+18888888888",
+    "fieldType": "phone"
+  },
+  "searchIntents": ["NEAR_ME"],
+  "locationBias": {
+    "latitude": 30.123456,
+    "longitude": -70.123456,
+    "displayName": "Virginia, United States",
+    "method": "IP"
+  }
+}

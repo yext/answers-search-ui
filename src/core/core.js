@@ -1,4 +1,5 @@
 /** @module Core */
+import { provideCore } from '@yext/answers-core/lib/commonjs';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -7,22 +8,24 @@ import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
 import Navigation from './models/navigation';
 import AlternativeVerticals from './models/alternativeverticals';
-import DirectAnswer from './models/directanswer';
 import LocationBias from './models/locationbias';
 import QueryTriggers from './models/querytriggers';
 
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
+import DirectAnswer from './models/directanswer';
+import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
-/** @typedef {import('./services/searchservice').default} SearchService */
-/** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
+import { PRODUCTION, ENDPOINTS } from './constants';
+import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
+
 /** @typedef {import('./storage/storage').default} Storage */
 
 /**
  * Core is the main application container for all of the network and storage
- * related behaviors of the application.
+ * related behaviors of the application. It uses an instance of the external Core
+ * library to perform the actual network calls.
  */
 export default class Core {
   constructor (config = {}) {
@@ -57,7 +60,7 @@ export default class Core {
 
     /**
      * A map of field formatters used to format results, if present
-     * @type {Object.<string, function>}
+     * @type {Object<string, function>}
      * @private
      */
     this._fieldFormatters = config.fieldFormatters || {};
@@ -76,29 +79,6 @@ export default class Core {
     this.filterRegistry = new FilterRegistry(this.storage);
 
     /**
-     * An abstraction containing the integration with the RESTful search API
-     * For both vertical and universal search
-     * @type {SearchService}
-     * @private
-     */
-    this._searcher = config.searchService;
-
-    /**
-     * An abstraction containing the integration with the RESTful autocomplete API
-     * For filter search, vertical autocomplete, and universal autocomplete
-     * @type {AutoCompleteService}
-     * @private
-     */
-    this._autoComplete = config.autoCompleteService;
-
-    /**
-     * An abstraction for interacting with the Q&A rest interface
-     * @type {QuestionAnswerService}
-     * @private
-     */
-    this._questionAnswer = config.questionAnswerService;
-
-    /**
      * A local reference to the analytics reporter, used to report events for this component
      * @type {AnalyticsReporter}
      */
@@ -115,6 +95,49 @@ export default class Core {
      * @type {Function}
      */
     this.onVerticalSearch = config.onVerticalSearch || function () {};
+
+    /**
+     * The environment which determines which URLs the requests use.
+     * @type {string}
+     */
+    this._environment = config.environment || PRODUCTION;
+  }
+
+  /**
+   * Initializes the {@link Core} by providing it with an instance of the Core library.
+   */
+  init () {
+    const params = {
+      apiKey: this._apiKey,
+      experienceKey: this._experienceKey,
+      locale: this._locale,
+      experienceVersion: this._experienceVersion,
+      endpoints: this._getServiceUrls()
+    };
+
+    this._coreLibrary = provideCore(params);
+  }
+
+  /**
+   * Get the urls for each service based on the environment.
+   */
+  _getServiceUrls () {
+    return {
+      universalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_SEARCH,
+      verticalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_SEARCH,
+      questionSubmission: getKnowledgeApiUrl(this._environment) + ENDPOINTS.QUESTION_SUBMISSION,
+      universalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_AUTOCOMPLETE,
+      verticalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_AUTOCOMPLETE,
+      filterSearch: getCachedLiveApiUrl(this._environment) + ENDPOINTS.FILTER_SEARCH
+    };
+  }
+
+  /**
+   * @returns {boolean} A boolean indicating if the {@link Core} has been
+   *                    initailized.
+   */
+  isInitialized () {
+    return !!this._coreLibrary;
   }
 
   /**
@@ -173,15 +196,17 @@ export default class Core {
     const queryTrigger = this.getQueryTriggerForSearchApi(
       this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
-    return this._searcher
-      .verticalSearch(verticalKey, {
+
+    return this._coreLibrary
+      .verticalSearch({
+        verticalKey: verticalKey || searchConfig.verticalKey,
         limit: this.storage.get(StorageKeys.SEARCH_CONFIG).limit,
-        geolocation: this.storage.get(StorageKeys.GEOLOCATION),
-        ...parsedQuery,
-        filter: this.filterRegistry.getStaticFilterPayload(),
-        facetFilter: this.filterRegistry.getFacetFilterPayload(),
+        location: this._getLocationPayload(),
+        query: parsedQuery.input,
+        retrieveFacets: this._isDynamicFiltersEnabled,
+        facets: this.filterRegistry.getFacetsPayload(),
+        staticFilters: this.filterRegistry.getStaticFilterPayload(),
         offset: this.storage.get(StorageKeys.SEARCH_OFFSET) || 0,
-        isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
@@ -288,9 +313,10 @@ export default class Core {
     const queryTrigger = this.getQueryTriggerForSearchApi(
       this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
-    return this._searcher
-      .universalSearch(queryString, {
-        geolocation: this.storage.get(StorageKeys.GEOLOCATION),
+    return this._coreLibrary
+      .universalSearch({
+        query: queryString,
+        location: this._getLocationPayload(),
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTrigger,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
@@ -298,7 +324,7 @@ export default class Core {
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
-      .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
+      .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
@@ -306,6 +332,7 @@ export default class Core {
         this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
         this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
+
         this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
         this.storage.delete(StorageKeys.QUERY_TRIGGER);
 
@@ -358,8 +385,12 @@ export default class Core {
    * @param {string} namespace the namespace to use for the storage key
    */
   autoCompleteUniversal (input, namespace) {
-    return this._autoComplete
-      .queryUniversal(input)
+    return this._coreLibrary
+      .universalAutocomplete({
+        input: input,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
@@ -375,8 +406,13 @@ export default class Core {
    * @param {string} verticalKey the vertical key for the experience
    */
   autoCompleteVertical (input, namespace, verticalKey) {
-    return this._autoComplete
-      .queryVertical(input, verticalKey)
+    return this._coreLibrary
+      .verticalAutocomplete({
+        input: input,
+        verticalKey: verticalKey,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
@@ -393,8 +429,20 @@ export default class Core {
    * @param {object} config.searchParameters  the search parameters for the config v2
    */
   autoCompleteFilter (input, config) {
-    return this._autoComplete
-      .queryFilter(input, config)
+    const searchParamFields = config.searchParameters.fields.map(field => ({
+      fieldApiName: field.fieldId,
+      entityType: field.entityTypeId,
+      fetchEntities: field.shouldFetchEntities
+    }));
+    return this._coreLibrary
+      .filterSearch({
+        input: input,
+        verticalKey: config.verticalKey,
+        fields: searchParamFields,
+        sectioned: config.searchParameters.sectioned,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .then(response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response))
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });
@@ -404,7 +452,6 @@ export default class Core {
    * Submits a question to the server and updates the underlying question model
    * @param {object} question The question object to submit to the server
    * @param {number} question.entityId The entity to associate with the question (required)
-   * @param {string} question.lanuage The language of the question
    * @param {string} question.site The "publisher" of the (e.g. 'FIRST_PARTY')
    * @param {string} question.name The name of the author
    * @param {string} question.email The email address of the author
@@ -412,9 +459,12 @@ export default class Core {
    * @param {string} question.questionDescription Additional information about the question
    */
   submitQuestion (question) {
-    return this._questionAnswer
-      .submitQuestion(question)
-      .then(data => {
+    return this._coreLibrary
+      .submitQuestion({
+        ...question,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .then(() => {
         this.storage.set(
           StorageKeys.QUESTION_SUBMISSION,
           QuestionSubmission.submitted());
@@ -433,7 +483,7 @@ export default class Core {
         direction: option.direction
       };
     });
-    this.storage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+    this.storage.set(StorageKeys.SORT_BYS, sortBys);
   }
 
   /**
@@ -534,6 +584,19 @@ export default class Core {
    */
   clearLocationRadiusFilterNode () {
     this.filterRegistry.clearLocationRadiusFilterNode();
+  }
+
+  /**
+   * Gets the location object needed for answers-core
+   *
+   * @returns {LatLong|undefined} from answers-core
+   */
+  _getLocationPayload () {
+    const geolocation = this.storage.get(StorageKeys.GEOLOCATION);
+    return geolocation && {
+      latitude: geolocation.lat,
+      longitude: geolocation.lng
+    };
   }
 
   /**
