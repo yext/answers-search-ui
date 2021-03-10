@@ -2,7 +2,7 @@
 
 /* global fetch, XMLHttpRequest, ActiveXObject */
 
-import { fetch as fetchPolyfill } from 'cross-fetch';
+import { fetch as fetchPolyfill } from 'whatwg-fetch';
 
 /**
  * Types of HTTP requests

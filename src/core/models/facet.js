@@ -37,28 +37,4 @@ export default class Facet {
 
     return new Facet(groups);
   }
-
-  /**
-   * Transforms an answers-core DisplayableFacet array into a Facet array
-   *
-   * @param {DisplayableFacet[]} coreFacets from answers-core
-   * @returns {Facet[]}
-   */
-  static fromCore (coreFacets = []) {
-    const facets = coreFacets.map(f => ({
-      label: f['displayName'],
-      fieldId: f['fieldId'],
-      options: f.options.map(o => ({
-        label: o['displayName'],
-        countLabel: o['count'],
-        selected: o['selected'],
-        filter: {
-          [f['fieldId']]: {
-            [o['matcher']]: o['value']
-          }
-        }
-      }))
-    })).map(f => new Facet(f));
-    return facets;
-  }
 }

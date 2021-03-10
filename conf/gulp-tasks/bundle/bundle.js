@@ -29,13 +29,13 @@ exports.modernBundle = function (callback, outputConfig, bundleName, locale, lib
     input: './src/answers-umd.js',
     output: outputConfig,
     plugins: [
-      resolve({ browser: true }),
+      resolve(),
       commonjs({
-        include: [/node_modules/]
+        include: './node_modules/**'
       }),
       babel({
         babelrc: false,
-        exclude: [/node_modules/],
+        exclude: 'node_modules/**',
         presets: ['@babel/env']
       })
     ]
@@ -61,14 +61,14 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
     input: './src/answers-umd.js',
     output: outputConfig,
     plugins: [
-      resolve({ browser: true }),
+      resolve(),
       commonjs({
-        include: [/node_modules/]
+        include: './node_modules/**'
       }),
       babel({
         runtimeHelpers: true,
         babelrc: false,
-        exclude: /node_modules\/(?!cross-fetch)(?!@yext\/answers-storage)(?!@yext\/answers-core).*/,
+        exclude: /node_modules\/(?!whatwg-fetch)(?!@yext\/answers-storage).*/,
         presets: [
           [
             '@babel/preset-env',

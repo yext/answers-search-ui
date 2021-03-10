@@ -22,7 +22,6 @@ Outline:
    - [Pagination Component](#pagination-component)
    - [FilterBox Component](#filterbox-component)
    - [Facets Component](#facets-component)
-      - [Transforming Facets](#transforming-facets)
    - [FilterSearch Component](#filtersearch-component)
    - [Filter Components](#filter-components)
    - [Applied Filters Component](#applied-filters-component)
@@ -1367,10 +1366,6 @@ ANSWERS.addComponent('Facets', {
   searchable: false,
   // Optional, the form label text for the search input, defaults to 'Search for a filter option'
   searchLabelText: 'Search for a filter option',
-  // Optional, a transform function which is applied to an array of facets
-  // See the "Transforming Facets" section below for more info
-  transformFacets: (facets, config => facets),
-  // DEPRECATED, please use transformFacets instead. This option is disabled if transformFacets is supplied
   // Optional, field-specific overrides for a filter
   fields: {
     'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
@@ -1407,28 +1402,6 @@ ANSWERS.addComponent('Facets', {
   // Optional, the label to show on the apply button
   applyLabel: 'apply'
 });
-```
-
-### Transforming Facets
-
-The `transformFacets` option of the Facets component allows facets data to be fully customized. The function takes in and returns an array of the answers-core DisplayableFacet which is described [here](https://github.com/yext/answers-core/blob/master/docs/answers-core.displayablefacet.md). The function also has access to the Facets config as the second parameter.
-
-Here's an example of using this option to customize a boolean facet.
-
-```js
-transformFacets: facets => {
-  return facets.map(facet => {
-    const options = facet.options.map(option => {
-      let displayName = option.displayName;
-      if (facet.fieldId === 'c_acceptingNewPatients') {
-        if (option.value === false) { displayName = "Not Accepting Patients"; }
-        if (option.value === true) { displayName = "Accepting Patients"; }
-      }
-      return Object.assign({}, option, { displayName });
-    });
-    return Object.assign({}, facet, { options });
-  });
-},
 ```
 
 ## FilterSearch Component
