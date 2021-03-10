@@ -327,6 +327,8 @@ export default class DirectAnswerComponent extends Component {
 
   /**
    * Throws an error if any typeOptions includes unsupported keys
+   *
+   * @param {Objet} typeOptions
    * @throws if validation fails
    */
   _validateTypeOptions (typeOptions) {
@@ -335,11 +337,10 @@ export default class DirectAnswerComponent extends Component {
   }
 
   /**
-   * Validates the cardOverrides option within the types option.
-   * Throws an error if the cardOverrides contains the 'type' option.
+   * Throws an error if cardOverrides within the types option contain unsupported keys
    *
    * @param {Object[]} overrides
-   lc
+   * @throws if validation fails
    */
   _validateCardOverrides (overrides) {
     const supportedKeys = ['fieldName', 'entityType', 'fieldType', 'cardType'];
