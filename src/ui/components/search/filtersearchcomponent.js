@@ -9,6 +9,8 @@ import buildSearchParameters from '../../tools/searchparamsparser';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import SearchComponent from './searchcomponent';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -106,7 +108,10 @@ export default class FilterSearchComponent extends Component {
           this.query = query;
           this.filter = JSON.parse(filter);
           this._saveFilterNodeToStorage();
-          this.search(false);
+          if (this._shouldRunSearch()) {
+            this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+            this.search(false);
+          }
         } else {
           this._removeFilterNode();
         }
@@ -125,10 +130,6 @@ export default class FilterSearchComponent extends Component {
       } catch (e) {}
     }
 
-    if (this.query && this.filter) {
-      this._saveFilterNodeToStorage();
-    }
-
     this.searchParameters = buildSearchParameters(config.searchParameters);
   }
 
@@ -145,12 +146,25 @@ export default class FilterSearchComponent extends Component {
     return 'search/filtersearch';
   }
 
-  // This is needed for filtersearch only pages, however it will run a duplicate search
-  // if you also have a searchbar on the page.
+  /**
+   * This is needed for filtersearch only pages, so that a search will be run on load.
+   * If a searchbar exists, a search will already be ran on page load, so don't run
+   * an additional one.
+   */
   onCreate () {
     if (this.query && this.filter) {
-      this.search(false);
+      this._saveFilterNodeToStorage();
+      if (this._shouldRunSearch()) {
+        this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+        this.search(false);
+      }
     }
+  }
+
+  _shouldRunSearch () {
+    const searchBarDoesNotExist = !this.componentManager.getActiveComponent(SearchComponent.type);
+    const noQueryInStorage = this.core.storage.has(StorageKeys.QUERY);
+    return searchBarDoesNotExist || noQueryInStorage;
   }
 
   onMount () {
@@ -225,6 +239,7 @@ export default class FilterSearchComponent extends Component {
         this.core.storage.setWithPersist(`${StorageKeys.QUERY}.${this.name}`, this.query);
         this.core.storage.setWithPersist(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
         this.core.setStaticFilterNodes(this.name, filterNode);
+        this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.FILTER_COMPONENT);
         this.search();
       }
     });
