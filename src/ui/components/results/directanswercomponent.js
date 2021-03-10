@@ -104,6 +104,8 @@ export default class DirectAnswerComponent extends Component {
      * @type {Object}
      */
     this._types = config.types;
+
+    this._validateTypes();
   }
 
   static get type () {
@@ -246,24 +248,23 @@ export default class DirectAnswerComponent extends Component {
    * @returns {string}
    */
   _getCardBasedOnTypes (directAnswer) {
-    return Object.entries(this._types).reduce((cardType, [directAnswerType, typeOptions]) => {
-      if (directAnswerType !== directAnswer.type) {
-        return cardType;
-      }
+    if (!('type' in directAnswer) || !(directAnswer.type in this._types)) {
+      return this._defaultCard;
+    }
 
-      const cardFallback = typeOptions.cardType || this._defaultCard;
+    const typeOptions = this._types[directAnswer.type];
 
-      if (typeOptions.cardOverrides) {
-        this._validateCardOverrides(typeOptions.cardOverrides);
-        return this._getCardBasedOnOverrides({
-          directAnswer: directAnswer,
-          overrides: typeOptions.cardOverrides,
-          fallback: cardFallback
-        });
-      }
+    const cardFallback = typeOptions.cardType || this._defaultCard;
 
-      return cardFallback;
-    }, this._defaultCard);
+    if (typeOptions.cardOverrides) {
+      return this._getCardBasedOnOverrides({
+        directAnswer: directAnswer,
+        overrides: typeOptions.cardOverrides,
+        fallback: cardFallback
+      });
+    }
+
+    return cardFallback;
   }
 
   /**
@@ -310,19 +311,57 @@ export default class DirectAnswerComponent extends Component {
   }
 
   /**
+   * Throws an error if the types config option is not formatted properly.
+   * @throws if validation fails
+   */
+  _validateTypes () {
+    if (!this._types) {
+      return;
+    }
+
+    Object.entries(this._types).forEach(([directAnswerType, typeOptions]) => {
+      this._validateTypeOptions(typeOptions);
+      typeOptions.cardOverrides && this._validateCardOverrides(typeOptions.cardOverrides);
+    });
+  }
+
+  /**
+   * Throws an error if any typeOptions include unsupported keys
+   * @throws if validation fails
+   */
+  _validateTypeOptions (typeOptions) {
+    const supportedKeys = ['cardType', 'cardOverrides'];
+    return this._validateSupportedKeysOfObject(supportedKeys, typeOptions);
+  }
+
+  /**
    * Validates the cardOverrides option within the types option.
    * Throws an error if the cardOverrides contains the 'type' option.
    *
    * @param {Object[]} overrides
-   * @throws if a validation fails
+   lc
    */
   _validateCardOverrides (overrides) {
-    const containsTypeOption = overrides.some(overrideOptions => {
-      return Object.keys(overrideOptions).includes('type');
+    const supportedKeys = ['fieldName', 'entityType', 'fieldType', 'cardType'];
+    overrides.forEach(overrideOptions => {
+      this._validateSupportedKeysOfObject(supportedKeys, overrideOptions);
     });
-    if (containsTypeOption) {
-      throw new Error('The cardOverrides option within the types option cannot contain a "type" field');
-    }
+  }
+
+  /**
+   * Throws an error if an object has keys other than the supported keys.
+   *
+   * @param {string[]} supportedKeys A list of supported keys
+   * @param {Object} object The object to check the keys of
+   * @throws if validation fails
+   */
+  _validateSupportedKeysOfObject (supportedKeys, object) {
+    const supportedKeysString = supportedKeys.join(' and ');
+    Object.keys(object).forEach(key => {
+      if (!supportedKeys.includes(key)) {
+        throw new Error(`The key '${key}' is not a supported option. Supported options include ${supportedKeysString}.`);
+      }
+    });
   }
 
   /**

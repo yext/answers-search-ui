@@ -142,23 +142,25 @@ describe('types logic works properly', () => {
   });
 
   it('an error is thrown if a type property is included in cardOverrides within the types option', () => {
-    const component = COMPONENT_MANAGER.create('DirectAnswer', {
-      ...defaultConfig,
-      defaultCard: 'default-card',
-      types: {
-        'FIELD_VALUE': {
-          cardType: 'custom-card',
-          cardOverrides: [
-            {
-              type: 'Person',
-              cardType: 'override-card'
-            }
-          ]
+    const createDirectAnswerComponent = () => {
+      COMPONENT_MANAGER.create('DirectAnswer', {
+        ...defaultConfig,
+        defaultCard: 'default-card',
+        types: {
+          'FIELD_VALUE': {
+            cardType: 'custom-card',
+            cardOverrides: [
+              {
+                type: 'Person',
+                cardType: 'override-card'
+              }
+            ]
+          }
         }
-      }
-    });
+      });
+    };
 
-    expect(() => component._getCard(directAnswer)).toThrow();
+    expect(createDirectAnswerComponent).toThrow();
   });
 
   it('if types is supplied, cardOverrides is ignored', () => {
