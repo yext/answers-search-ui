@@ -326,7 +326,7 @@ export default class DirectAnswerComponent extends Component {
   }
 
   /**
-   * Throws an error if any typeOptions include unsupported keys
+   * Throws an error if any typeOptions includes unsupported keys
    * @throws if validation fails
    */
   _validateTypeOptions (typeOptions) {
