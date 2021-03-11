@@ -154,7 +154,7 @@ export default class DOM {
       return;
     }
 
-    let classes = className.split(',');
+    const classes = className.split(',');
     classes.forEach(className => node.classList.remove(className));
   }
 

@@ -252,7 +252,7 @@ export default class Component {
   }
 
   /**
-   * Removes the specified classes from the container of the compenent
+   * Removes the specified classes from the container of the component
    * @param {string} className - A comma separated value of classes
    */
   removeContainerClass (className) {
