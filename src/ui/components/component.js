@@ -243,10 +243,18 @@ export default class Component {
     return this;
   }
 
+  /**
+   * Adds a class to the container of the component.
+   * @param {string} className - A comma separated value of classes
+   */
   addContainerClass (className) {
     DOM.addClass(this._container, className);
   }
 
+  /**
+   * Removes the specified classes from the container of the compenent
+   * @param {string} className - A comma separated value of classes
+   */
   removeContainerClass (className) {
     DOM.removeClass(this._container, className);
   }
@@ -350,6 +358,7 @@ export default class Component {
     }
 
     DOM.append(this._container, this.render(this._state.asJSON()));
+
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     const domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');

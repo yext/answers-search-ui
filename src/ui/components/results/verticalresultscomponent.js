@@ -15,6 +15,7 @@ import { defaultConfigOption } from '../../../core/utils/configutils';
 import { getTabOrder } from '../../tools/taborder';
 import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
+import { snakeCaseToCamelCase } from '../../../core/utils/stringutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -258,13 +259,9 @@ export default class VerticalResultsComponent extends Component {
   mount (container) {
     if (Object.keys(this.getState()).length > 0) {
       const searchState = this.getState('searchState');
-      const camelCase = (str) => {
-        return str
-          .split('-')
-          .reduce((a, b) => a + b.charAt(0).toUpperCase() + b.slice(1));
-      };
-      Object.entries(SearchStates).forEach(([k, state]) => super.removeContainerClass(`yxt-Results--${camelCase(state)}`));
-      super.addContainerClass(`yxt-Results--${camelCase(searchState)}`);
+      Object.entries(SearchStates).forEach(([k, state]) =>
+        this.removeContainerClass(`yxt-Results--${snakeCaseToCamelCase(state)}`));
+      this.addContainerClass(`yxt-Results--${snakeCaseToCamelCase(searchState)}`);
       return super.mount(container);
     }
     return this;

@@ -144,17 +144,18 @@ export default class DOM {
     }
   }
 
+  /**
+   * Removes classes from a specified element.
+   * @param {HTMLElement} node - The html element to be acted upon
+   * @param {string} className - A comma separated list of classes to be removed
+   */
   static removeClass (node, className) {
     if (!node) {
       return;
     }
 
     let classes = className.split(',');
-    let len = classes.length;
-
-    for (let i = 0; i < len; i++) {
-      node.classList.remove(classes[i]);
-    }
+    classes.forEach(className => node.classList.remove(className));
   }
 
   static empty (parent) {

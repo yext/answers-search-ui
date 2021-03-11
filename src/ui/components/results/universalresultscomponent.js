@@ -7,6 +7,7 @@ import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import TranslationFlagger from '../../i18n/translationflagger';
+import { snakeCaseToCamelCase } from '../../../core/utils/stringutils';
 
 export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -53,13 +54,9 @@ export default class UniversalResultsComponent extends Component {
 
   mount (container) {
     const searchState = this.getState('searchState');
-    const camelCase = (str) => {
-      return str
-        .split('-')
-        .reduce((a, b) => a + b.charAt(0).toUpperCase() + b.slice(1));
-    };
-    Object.keys(SearchStates).forEach(state => super.removeContainerClass(`yxt-Results--${camelCase(state)}`));
-    super.addContainerClass(`yxt-Results--${camelCase(searchState)}`);
+    Object.entries(SearchStates).forEach(([k, state]) =>
+      this.removeContainerClass(`yxt-Results--${snakeCaseToCamelCase(state)}`));
+    this.addContainerClass(`yxt-Results--${snakeCaseToCamelCase(searchState)}`);
     return super.mount(container);
   }
 
