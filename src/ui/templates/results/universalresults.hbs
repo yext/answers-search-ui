@@ -1,15 +1,12 @@
-<div class="yxt-ResultsContainer
-  yxt-ResultsContainer--{{#if isPreSearch}}preSearch{{else if isSearchLoading}}loading{{else if isSearchComplete}}loaded{{/if}}">
-  {{#if isSearchComplete}}
-    {{#if showNoResults}}
-      {{> results/noresults}}
-    {{else}}
-      <div class="universal-result-list">
-        <div class="universal-result-sections"
-            data-component="VerticalResults"
-            data-prop="sections">
-        </div>
+{{#if isSearchComplete}}
+  {{#if showNoResults}}
+    {{> results/noresults}}
+  {{else}}
+    <div class="universal-result-list">
+      <div class="universal-result-sections"
+          data-component="VerticalResults"
+          data-prop="sections">
       </div>
-    {{/if}}
+    </div>
   {{/if}}
-</div>
+{{/if}}

@@ -51,11 +51,24 @@ export default class UniversalResultsComponent extends Component {
     return true;
   }
 
+  mount (container) {
+    const searchState = this.getState('searchState');
+    const camelCase = (str) => {
+      return str
+        .split('-')
+        .reduce((a, b) => a + b.charAt(0).toUpperCase() + b.slice(1));
+    };
+    Object.keys(SearchStates).forEach(state => super.removeContainerClass(`yxt-Results--${camelCase(state)}`));
+    super.addContainerClass(`yxt-Results--${camelCase(searchState)}`);
+    return super.mount(container);
+  }
+
   setState (data, val) {
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign(data, {
+      searchState: searchState,
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,

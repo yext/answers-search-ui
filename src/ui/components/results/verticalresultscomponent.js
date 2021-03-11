@@ -255,9 +255,17 @@ export default class VerticalResultsComponent extends Component {
     };
   }
 
-  mount () {
+  mount (container) {
     if (Object.keys(this.getState()).length > 0) {
-      super.mount();
+      const searchState = this.getState('searchState');
+      const camelCase = (str) => {
+        return str
+          .split('-')
+          .reduce((a, b) => a + b.charAt(0).toUpperCase() + b.slice(1));
+      };
+      Object.entries(SearchStates).forEach(([k, state]) => super.removeContainerClass(`yxt-Results--${camelCase(state)}`));
+      super.addContainerClass(`yxt-Results--${camelCase(searchState)}`);
+      return super.mount(container);
     }
     return this;
   }
@@ -346,6 +354,7 @@ export default class VerticalResultsComponent extends Component {
       data.resultsContext === ResultsContext.NORMAL;
     this.query = this.core.storage.get(StorageKeys.QUERY);
     return super.setState(Object.assign({ results: [] }, data, {
+      searchState: searchState,
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,

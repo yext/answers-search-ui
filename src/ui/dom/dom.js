@@ -144,6 +144,19 @@ export default class DOM {
     }
   }
 
+  static removeClass (node, className) {
+    if (!node) {
+      return;
+    }
+
+    let classes = className.split(',');
+    let len = classes.length;
+
+    for (let i = 0; i < len; i++) {
+      node.classList.remove(classes[i]);
+    }
+  }
+
   static empty (parent) {
     parent.innerHTML = '';
   }

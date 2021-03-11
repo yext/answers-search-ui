@@ -243,6 +243,14 @@ export default class Component {
     return this;
   }
 
+  addContainerClass (className) {
+    DOM.addClass(this._container, className);
+  }
+
+  removeContainerClass (className) {
+    DOM.removeClass(this._container, className);
+  }
+
   setState (data) {
     const newState = Object.assign({}, { _config: this._config }, data);
     this._state.set(newState);
@@ -342,7 +350,6 @@ export default class Component {
     }
 
     DOM.append(this._container, this.render(this._state.asJSON()));
-
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     const domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');

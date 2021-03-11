@@ -47,16 +47,15 @@ describe('vertical results component', () => {
 
   it('sets correct loading state css class', () => {
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
-    const wrapper = mount(component);
-    expect(wrapper.exists('.yxt-ResultsContainer--preSearch')).toBeTruthy();
+    const container = DOM.query('#test-component');
+    mount(component, { attachTo: container });
+    expect(container.classList.contains('yxt-Results--preSearch')).toBeTruthy();
 
     component.core.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
-    wrapper.update();
-    expect(wrapper.exists('.yxt-ResultsContainer--loading')).toBeTruthy();
+    expect(container.classList.contains('yxt-Results--searchLoading')).toBeTruthy();
 
     component.core.storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE });
-    wrapper.update();
-    expect(wrapper.exists('.yxt-ResultsContainer--loaded')).toBeTruthy();
+    expect(container.classList.contains('yxt-Results--searchComplete')).toBeTruthy();
   });
 
   it('updates to storage vertical results update the component results', () => {
