@@ -1,6 +1,6 @@
 /** @module UniversalResultsComponent */
 
-import AbstractResultsComponent from './abstractResultsComponent';
+import AbstractResultsComponent from './abstractresultscomponent';
 
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';

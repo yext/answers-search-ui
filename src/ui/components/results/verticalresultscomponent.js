@@ -1,6 +1,6 @@
 /** @module VerticalResultsComponent */
 
-import AbstractResultsComponent from './abstractResultsComponent';
+import AbstractResultsComponent from './abstractresultscomponent';
 
 import AlternativeVerticalsComponent from './alternativeverticalscomponent';
 import MapComponent from '../map/mapcomponent';
