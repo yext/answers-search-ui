@@ -23,6 +23,8 @@ export default class DirectAnswer {
 
     const directAnswerData = {
       answer: {
+        type: directAnswer.type,
+        snippet: directAnswer.snippet,
         entityName: directAnswer.entityName,
         fieldName: directAnswer.fieldName,
         fieldApiName: directAnswer.fieldApiName,

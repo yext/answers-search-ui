@@ -1,6 +1,7 @@
 /** @module Result */
 
-import HighlightedFieldMap from './highlightedfieldmap';
+import AppliedHighlightedFields from './appliedhighlightedfields';
+import HighlightedFields from './highlightedfields';
 import { truncate } from '../utils/strings';
 import { AnswersCoreError } from '../errors/errors';
 
@@ -121,8 +122,9 @@ export default class Result {
    * @returns {@link Result}
    */
   static fromCore (result, formatters, verticalKey) {
-    const highlightedData = HighlightedFieldMap.fromCore(result.highlightedValues);
-    const details = highlightedData.description || result.description;
+    const highlightedFields = HighlightedFields.fromCore(result.highlightedValues);
+    const appliedHighlightedFields = AppliedHighlightedFields.fromCore(result.highlightedValues);
+    const details = appliedHighlightedFields.description || result.description;
     const truncatedDetails = truncate(details);
 
     const resultData = {
@@ -134,7 +136,8 @@ export default class Result {
       id: result.id,
       distance: result.distance,
       distanceFromFilter: result.distanceFromFilter,
-      highlighted: highlightedData
+      highlighted: appliedHighlightedFields,
+      highlightedFields
     };
 
     if (result.source !== 'KNOWLEDGE_MANAGER') {

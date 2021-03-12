@@ -1,7 +1,7 @@
-import HighlightedFieldMap from '../../../src/core/models/highlightedfieldmap';
+import AppliedHighlightedFields from '../../../src/core/models/appliedhighlightedfields';
 
-it('constructs a highlighted field map from an answers-core HighlightInfo array', () => {
-  const highlightInfoArray = [{
+it('constructs an AppliedHighlightedField object from an answers-core HighlightedValue array', () => {
+  const highlightedValueArray = [{
     fieldName: 'description',
     path: ['description'],
     value: 'yext is a company',
@@ -22,14 +22,14 @@ it('constructs a highlighted field map from an answers-core HighlightInfo array'
     }]
   }];
 
-  const expectedHighlightedFieldMap = {
+  const expectedAppliedHighlightedFields = {
     description: '<strong>yext</strong> is a company',
     featured: {
       info: '<strong>perfect</strong> <strong>answers</strong> everywhere'
     }
   };
 
-  const actualHighlightedFieldMap = HighlightedFieldMap.fromCore(highlightInfoArray);
+  const actualHighlightedFields = AppliedHighlightedFields.fromCore(highlightedValueArray);
 
-  expect(actualHighlightedFieldMap).toMatchObject(expectedHighlightedFieldMap);
+  expect(actualHighlightedFields).toMatchObject(expectedAppliedHighlightedFields);
 });
