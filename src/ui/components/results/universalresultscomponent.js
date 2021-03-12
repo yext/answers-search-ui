@@ -7,6 +7,7 @@ import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import TranslationFlagger from '../../i18n/translationflagger';
+import { getContainerClass } from '../../../core/utils/resultsutils';
 
 export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -55,6 +56,10 @@ export default class UniversalResultsComponent extends Component {
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    Object.entries(SearchStates).forEach(([k, searchState]) => {
+      this.removeContainerClass(getContainerClass(searchState));
+    });
+    this.addContainerClass(getContainerClass(searchState));
     return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
