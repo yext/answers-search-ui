@@ -12,6 +12,7 @@
  *
  * @param {*} value
  * @param {string[]} keys
+ * @returns {Object}
  */
 export function nestValue (value, keys) {
   return keys.reduceRight((acc, key) => {
