@@ -59,7 +59,7 @@ export default class UniversalResultsComponent extends Component {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      showNoResults: sections.length === 0 && query,
+      showNoResults: sections.length === 0 && (query || query === ''),
       query: query,
       sections: sections
     }, val));
@@ -91,7 +91,7 @@ export default class UniversalResultsComponent extends Component {
       // Label for the vertical in the titlebar.
       title: config.sectionTitle || verticalKey,
       // Icon in the titlebar
-      icon: config.sectionTitleIconName || config.sectionTitleIconUrl || 'star',
+      icon: config.sectionTitleIconName || config.sectionTitleIconUrl,
       // Url that links to the vertical search for this vertical.
       verticalURL: config.url,
       // Show a view more link by default, which also links to verticalURL.
