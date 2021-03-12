@@ -1,6 +1,6 @@
 import AppliedHighlightedFields from '../../../src/core/models/appliedhighlightedfields';
 
-it('constructs a highlighted field map from an answers-core HighlightInfo array', () => {
+it('constructs an AppliedHighlightedField object from an answers-core HighlightedValue array', () => {
   const highlightedValueArray = [{
     fieldName: 'description',
     path: ['description'],
@@ -29,7 +29,7 @@ it('constructs a highlighted field map from an answers-core HighlightInfo array'
     }
   };
 
-  const actualHighlightedFieldMap = AppliedHighlightedFields.fromCore(highlightedValueArray);
+  const actualHighlightedFields = AppliedHighlightedFields.fromCore(highlightedValueArray);
 
-  expect(actualHighlightedFieldMap).toMatchObject(expectedAppliedHighlightedFields);
+  expect(actualHighlightedFields).toMatchObject(expectedAppliedHighlightedFields);
 });
