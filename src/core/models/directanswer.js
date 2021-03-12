@@ -23,7 +23,6 @@ export default class DirectAnswer {
 
     const directAnswerData = {
       answer: {
-        type: directAnswer.type,
         snippet: directAnswer.snippet,
         entityName: directAnswer.entityName,
         fieldName: directAnswer.fieldName,
@@ -39,7 +38,8 @@ export default class DirectAnswer {
           website: relatedResult.link
         },
         verticalConfigId: directAnswer.verticalKey
-      }
+      },
+      type: directAnswer.type
     };
 
     const directAnswerFieldApiName = directAnswerData.answer.fieldApiName;
