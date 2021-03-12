@@ -346,8 +346,10 @@ export default class VerticalResultsComponent extends Component {
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
     this.query = this.core.storage.get(StorageKeys.QUERY);
-    ['preSearch', 'searchLoading', 'searchLoaded']
-      .forEach(state => this.removeContainerClass(`yxt-Results--${state}`));
+    Object.entries(SearchStates).forEach(([k, searchState]) => {
+      this.removeContainerClass(getContainerClass(searchState));
+    });
+
     this.addContainerClass(getContainerClass(searchState));
     return super.setState(Object.assign({ results: [] }, data, {
       searchState: searchState,

@@ -245,7 +245,7 @@ export default class Component {
 
   /**
    * Adds a class to the container of the component.
-   * @param {string} className - A comma separated value of classes
+   * @param {string} className A comma separated value of classes
    */
   addContainerClass (className) {
     DOM.addClass(this._container, className);
@@ -253,7 +253,7 @@ export default class Component {
 
   /**
    * Removes the specified classes from the container of the component
-   * @param {string} className - A comma separated value of classes
+   * @param {string} className A comma separated value of classes
    */
   removeContainerClass (className) {
     DOM.removeClass(this._container, className);

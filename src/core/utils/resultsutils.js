@@ -2,7 +2,7 @@ import SearchStates from '../storage/searchstates';
 
 /**
  * Returns a CSS class for the input searchState
- * @param {string} searchState - A search state from {@link SearchStates}
+ * @param {SearchState} searchState
  * @returns {string}
  */
 export function getContainerClass (searchState) {
@@ -13,5 +13,8 @@ export function getContainerClass (searchState) {
       return 'yxt-Results--searchLoading';
     case SearchStates.SEARCH_COMPLETE:
       return 'yxt-Results--searchComplete';
+    default:
+      console.trace('encountered an unknown search state');
+      return '';
   }
 }

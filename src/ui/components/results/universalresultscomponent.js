@@ -56,8 +56,9 @@ export default class UniversalResultsComponent extends Component {
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
-    ['preSearch', 'searchLoading', 'searchLoaded']
-      .forEach(state => this.removeContainerClass(`yxt-Results--${state}`));
+    Object.entries(SearchStates).forEach(([k, searchState]) => {
+      this.removeContainerClass(getContainerClass(searchState));
+    });
     this.addContainerClass(getContainerClass(searchState));
     return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
