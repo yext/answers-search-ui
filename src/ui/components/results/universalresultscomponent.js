@@ -1,15 +1,14 @@
 /** @module UniversalResultsComponent */
 
-import Component from '../component';
+import AbstractResultsComponent from './abstractResultsComponent';
 
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import TranslationFlagger from '../../i18n/translationflagger';
-import { snakeCaseToCamelCase } from '../../../core/utils/stringutils';
 
-export default class UniversalResultsComponent extends Component {
+export default class UniversalResultsComponent extends AbstractResultsComponent {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
@@ -52,20 +51,11 @@ export default class UniversalResultsComponent extends Component {
     return true;
   }
 
-  mount (container) {
-    const searchState = this.getState('searchState');
-    Object.entries(SearchStates).forEach(([k, state]) =>
-      this.removeContainerClass(`yxt-Results--${snakeCaseToCamelCase(state)}`));
-    this.addContainerClass(`yxt-Results--${snakeCaseToCamelCase(searchState)}`);
-    return super.mount(container);
-  }
-
   setState (data, val) {
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     return super.setState(Object.assign(data, {
-      searchState: searchState,
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,

@@ -1,6 +1,6 @@
 /** @module VerticalResultsComponent */
 
-import Component from '../component';
+import AbstractResultsComponent from './abstractResultsComponent';
 
 import AlternativeVerticalsComponent from './alternativeverticalscomponent';
 import MapComponent from '../map/mapcomponent';
@@ -15,7 +15,6 @@ import { defaultConfigOption } from '../../../core/utils/configutils';
 import { getTabOrder } from '../../tools/taborder';
 import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
-import { snakeCaseToCamelCase } from '../../../core/utils/stringutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -174,7 +173,7 @@ class VerticalResultsConfig {
   }
 }
 
-export default class VerticalResultsComponent extends Component {
+export default class VerticalResultsComponent extends AbstractResultsComponent {
   constructor (config = {}, systemConfig = {}) {
     super(new VerticalResultsConfig(APPLY_SYNONYMS(config)), systemConfig);
 
@@ -256,13 +255,9 @@ export default class VerticalResultsComponent extends Component {
     };
   }
 
-  mount (container) {
+  mount () {
     if (Object.keys(this.getState()).length > 0) {
-      const searchState = this.getState('searchState');
-      Object.entries(SearchStates).forEach(([k, state]) =>
-        this.removeContainerClass(`yxt-Results--${snakeCaseToCamelCase(state)}`));
-      this.addContainerClass(`yxt-Results--${snakeCaseToCamelCase(searchState)}`);
-      return super.mount(container);
+      super.mount();
     }
     return this;
   }
