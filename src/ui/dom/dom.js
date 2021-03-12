@@ -146,8 +146,8 @@ export default class DOM {
 
   /**
    * Removes classes from a specified element.
-   * @param {HTMLElement} node - The html element to be acted upon
-   * @param {string} className - A comma separated list of classes to be removed
+   * @param {HTMLElement} node The html element to be acted upon
+   * @param {string} className A comma separated list of classes to be removed
    */
   static removeClass (node, className) {
     if (!node) {
