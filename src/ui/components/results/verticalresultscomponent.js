@@ -1,6 +1,6 @@
 /** @module VerticalResultsComponent */
 
-import AbstractResultsComponent from './abstractresultscomponent';
+import Component from '../component';
 
 import AlternativeVerticalsComponent from './alternativeverticalscomponent';
 import MapComponent from '../map/mapcomponent';
@@ -15,6 +15,7 @@ import { defaultConfigOption } from '../../../core/utils/configutils';
 import { getTabOrder } from '../../tools/taborder';
 import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
+import { getContainerClass } from '../../../core/utils/resultsutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -173,7 +174,7 @@ class VerticalResultsConfig {
   }
 }
 
-export default class VerticalResultsComponent extends AbstractResultsComponent {
+export default class VerticalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(new VerticalResultsConfig(APPLY_SYNONYMS(config)), systemConfig);
 
@@ -345,6 +346,9 @@ export default class VerticalResultsComponent extends AbstractResultsComponent {
       this._displayAllResults ||
       data.resultsContext === ResultsContext.NORMAL;
     this.query = this.core.storage.get(StorageKeys.QUERY);
+    ['preSearch', 'searchLoading', 'searchLoaded']
+      .forEach(state => this.removeContainerClass(`yxt-Results--${state}`));
+    this.addContainerClass(getContainerClass(searchState));
     return super.setState(Object.assign({ results: [] }, data, {
       searchState: searchState,
       isPreSearch: searchState === SearchStates.PRE_SEARCH,

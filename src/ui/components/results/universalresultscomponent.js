@@ -1,14 +1,15 @@
 /** @module UniversalResultsComponent */
 
-import AbstractResultsComponent from './abstractresultscomponent';
+import Component from '../component';
 
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import TranslationFlagger from '../../i18n/translationflagger';
+import { getContainerClass } from '../../../core/utils/resultsutils';
 
-export default class UniversalResultsComponent extends AbstractResultsComponent {
+export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
     this.moduleId = StorageKeys.UNIVERSAL_RESULTS;
@@ -55,6 +56,9 @@ export default class UniversalResultsComponent extends AbstractResultsComponent 
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    ['preSearch', 'searchLoading', 'searchLoaded']
+      .forEach(state => this.removeContainerClass(`yxt-Results--${state}`));
+    this.addContainerClass(getContainerClass(searchState));
     return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
