@@ -16,9 +16,11 @@ const createCore = () => {
   storage.set(StorageKeys.NO_RESULTS_CONFIG, { displayAllResults: true });
 
   return {
-    verticalSearch: () => {},
     verticalPage: () => {},
-    storage: storage
+    storage: storage,
+    searchListener: {
+      updateConfig: jest.fn()
+    }
   };
 };
 

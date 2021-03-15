@@ -18,8 +18,10 @@ describe('SearchBar component', () => {
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
     COMPONENT_MANAGER = mockManager({
-      setQuery: function (query) {
-        this.storage.set(StorageKeys.QUERY, query);
+      searchListener: {
+        updateConfig: jest.fn(),
+        registerMiddleware: jest.fn(),
+        registerOnConductSearchHook: jest.fn()
       },
       autoCompleteVertical: jest.fn(() => Promise.resolve({ inputIntents: [] })),
       autoCompleteUniversal: jest.fn(() => Promise.resolve({ inputIntents: [] })),

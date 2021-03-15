@@ -93,12 +93,12 @@ test('spell check flow', async t => {
   await searchComponent.enterQuery('varginia');
   await searchComponent.submitQuery();
 
-  // Check that clicking spell check resets pagination to page 1
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   let pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 
+  // Check that clicking spell check resets pagination to page 1
   const spellCheckComponent = VerticalPage.getSpellCheckComponent();
   await spellCheckComponent.clickLink();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();

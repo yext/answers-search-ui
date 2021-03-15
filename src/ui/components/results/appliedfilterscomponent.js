@@ -10,6 +10,7 @@ import {
   flattenFilterNodes,
   pruneFilterNodes
 } from '../../../core/utils/filternodeutils';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 const DEFAULT_CONFIG = {
   showFieldNames: false,
@@ -62,11 +63,7 @@ export default class AppliedFiltersComponent extends Component {
     const { filterId } = tag.dataset;
     const filterNode = this.appliedFilterNodes[filterId];
     filterNode.remove();
-    this.core.verticalSearch(this._verticalKey, {
-      setQueryParams: true,
-      resetPagination: true,
-      useFacets: true
-    });
+    this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
   }
 
   /**

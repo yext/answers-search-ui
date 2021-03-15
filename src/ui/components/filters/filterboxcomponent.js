@@ -5,7 +5,6 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
-import StorageKeys from '../../../core/storage/storagekeys';
 import QueryTriggers from '../../../core/models/querytriggers';
 
 class FilterBoxConfig {
@@ -247,7 +246,7 @@ export default class FilterBoxComponent extends Component {
       if (button) {
         DOM.on(button, 'click', () => {
           this._saveFilterNodesToStorage();
-          this._search();
+          this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
         });
       }
     }
@@ -281,7 +280,7 @@ export default class FilterBoxComponent extends Component {
       this._saveFilterNodesToStorage();
     }
     if (searchOnChange) {
-      this._search();
+      this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
     }
   }
 
@@ -304,14 +303,5 @@ export default class FilterBoxComponent extends Component {
     } else {
       this._filterComponents.forEach(fc => fc.apply());
     }
-  }
-
-  /**
-   * Trigger a search with all filters in storage
-   */
-  _search () {
-    const query = this.core.storage.get(StorageKeys.QUERY) || '';
-    this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.FILTER_COMPONENT);
-    this.core.setQuery(query);
   }
 }

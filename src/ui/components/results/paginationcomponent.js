@@ -142,6 +142,10 @@ export default class PaginationComponent extends Component {
     this._noResults = config.noResults ||
       this.core.storage.get(StorageKeys.NO_RESULTS_CONFIG) ||
       {};
+
+    this.core.searchListener.updateConfig({
+      verticalKey: this._verticalKey
+    });
   }
 
   static get type () {

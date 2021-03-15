@@ -19,6 +19,8 @@ import AutoCompleteResponseTransformer from './search/autocompleteresponsetransf
 
 import { PRODUCTION, ENDPOINTS } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
+import SearchListener from './statelisteners/searchlistener';
+import { SearchParams } from '../ui';
 
 /** @typedef {import('./storage/storage').default} Storage */
 
@@ -101,6 +103,31 @@ export default class Core {
      * @type {string}
      */
     this._environment = config.environment || PRODUCTION;
+
+    /**
+     * @type {string}
+     */
+    this._verticalKey = config.verticalKey;
+
+    /**
+     * @type {ComponentManager}
+     */
+    this._componentManager = config.componentManager;
+
+    /**
+     * A reference to the global SearchListener
+     */
+    this.searchListener = new SearchListener({
+      storage: this.storage,
+      core: this
+    }, {
+      defaultInitialSearch: config.defaultInitialSearch,
+      verticalKey: config.verticalKey
+    });
+  }
+
+  initSearchListener () {
+    this.searchListener.init();
   }
 
   /**
@@ -144,9 +171,13 @@ export default class Core {
    * Search in the context of a vertical
    * @param {string} verticalKey vertical ID for the search
    * @param {Object} options additional settings for the search.
+   * @param {boolean} options.useFacets Whether to apply facets to this search, or to reset them instead
+   * @param {boolean} options.resetPagination Whether to reset the search offset, going back to page 1.
+   * @param {boolean} options.setQueryParams Whether to persist certain params in the url
+   * @param {string} options.sendQueryId Whether to send the queryId currently in storage.
+   *                                     If paging within a query, the same ID should be used.
    * @param {Object} query The query details
    * @param {string} query.input The input to search for
-   * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, options = {}, query = {}) {
@@ -157,7 +188,7 @@ export default class Core {
       this.storage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
-    const { resetPagination, useFacets } = options;
+    const { resetPagination, useFacets, sendQueryId, setQueryParams } = options;
     if (resetPagination) {
       this.storage.delete(StorageKeys.SEARCH_OFFSET);
     }
@@ -166,7 +197,6 @@ export default class Core {
       this.filterRegistry.setFacetFilterNodes([], []);
     }
 
-    const { setQueryParams } = options;
     const context = this.storage.get(StorageKeys.API_CONTEXT);
     const referrerPageUrl = this.storage.get(StorageKeys.REFERRER_PAGE_URL);
 
@@ -203,6 +233,7 @@ export default class Core {
         limit: this.storage.get(StorageKeys.SEARCH_CONFIG).limit,
         location: this._getLocationPayload(),
         query: parsedQuery.input,
+        queryId: sendQueryId && this.storage.get(StorageKeys.QUERY_ID),
         retrieveFacets: this._isDynamicFiltersEnabled,
         facets: this.filterRegistry.getFacetsPayload(),
         staticFilters: this.filterRegistry.getStaticFilterPayload(),
@@ -281,17 +312,13 @@ export default class Core {
 
   /**
    * Page within the results of the last query
-   * TODO: Should id be in all searches? Currently is only in searches done by the pagination
-   * component
-   * @param {string} verticalKey The vertical key to use in the search
    */
-  verticalPage (verticalKey) {
-    this.verticalSearch(verticalKey, { useFacets: true, setQueryParams: true }, {
-      id: this.storage.get(StorageKeys.QUERY_ID)
-    });
+  verticalPage () {
+    this.triggerSearch(QueryTriggers.PAGINATION);
   }
 
-  search (queryString, urls, options = {}) {
+  search (queryString, options = {}) {
+    const urls = this._getUrls(queryString);
     window.performance.mark('yext.answers.universalQueryStart');
     const { setQueryParams } = options;
     const context = this.storage.get(StorageKeys.API_CONTEXT);
@@ -333,7 +360,7 @@ export default class Core {
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
+        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS]);
         this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
 
@@ -513,6 +540,16 @@ export default class Core {
     this.storage.set(StorageKeys.QUERY_ID, queryId);
   }
 
+  triggerSearch (queryTrigger) {
+    const query = this.storage.get(StorageKeys.QUERY) || '';
+    if (queryTrigger) {
+      this.storage.set(StorageKeys.QUERY_TRIGGER, queryTrigger);
+    } else {
+      this.storage.delete(StorageKeys.QUERY_TRIGGER);
+    }
+    this.setQuery(query);
+  }
+
   /**
    * Get all of the {@link FilterNode}s for static filters.
    * @returns {Array<FilterNode>}
@@ -677,5 +714,33 @@ export default class Core {
       callback: cb
     });
     return this.storage;
+  }
+
+  /**
+   * This is needed to support very old usages of the SDK that have not been updated
+   * to use StorageKeys.VERTICAL_PAGES_CONFIG
+   */
+  _getUrls (query) {
+    let nav = this._componentManager.getActiveComponent('Navigation');
+    if (!nav) {
+      return undefined;
+    }
+
+    let tabs = nav.getState('tabs');
+    let urls = {};
+
+    if (tabs && Array.isArray(tabs)) {
+      for (let i = 0; i < tabs.length; i++) {
+        let params = new SearchParams(tabs[i].url.split('?')[1]);
+        params.set('query', query);
+
+        let url = tabs[i].baseUrl;
+        if (params.toString().length > 0) {
+          url += '?' + params.toString();
+        }
+        urls[tabs[i].configId] = url;
+      }
+    }
+    return urls;
   }
 }

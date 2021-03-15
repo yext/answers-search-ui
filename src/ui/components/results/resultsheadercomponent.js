@@ -10,6 +10,7 @@ import {
   pruneFilterNodes
 } from '../../../core/utils/filternodeutils';
 import TranslationFlagger from '../../i18n/translationflagger';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -86,11 +87,7 @@ export default class ResultsHeaderComponent extends Component {
     const { filterId } = tag.dataset;
     const filterNode = this.appliedFilterNodes[filterId];
     filterNode.remove();
-    this.core.verticalSearch(this._config.verticalKey, {
-      setQueryParams: true,
-      resetPagination: true,
-      useFacets: true
-    });
+    this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
   }
 
   /**
