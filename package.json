@@ -66,7 +66,7 @@
     "gulp-wrap": "^0.14.0",
     "i18next": "^19.7.0",
     "i18next-conv": "^10.0.2",
-    "jest": "^24.8.0",
+    "jest": "^26.6.3",
     "jsdoc": "^3.6.3",
     "node-sass": "^4.12.0",
     "postcss-pxtorem": "4.0.1",
