@@ -44,7 +44,7 @@ export default class SearchListener {
    * Register a middleware, to be called before searches are run.
    * Middleware must return a Promise if they are async.
    *
-   * @param {Function<Promise>} middlewareFunction
+   * @param {Function} middlewareFunction
    */
   registerMiddleware (middlewareFunction) {
     this.middleware.push(middlewareFunction);
