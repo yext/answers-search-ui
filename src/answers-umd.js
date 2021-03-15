@@ -20,12 +20,6 @@ import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
-import AutoCompleteApi from './core/search/autocompleteapi';
-import MockAutoCompleteService from './core/search/mockautocompleteservice';
-import QuestionAnswerApi from './core/search/questionanswerapi';
-import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
-import SearchApi from './core/search/searchapi';
-import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
@@ -36,17 +30,11 @@ import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
 
-/** @typedef {import('./core/services/searchservice').default} SearchService */
-/** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./core/services/questionanswerservice').default} QuestionAnswerService */
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
 
 /**
  * @typedef Services
- * @property {SearchService} searchService
- * @property {AutoCompleteService} autoCompleteService
- * @property {QuestionAnswerService} questionAnswerService
  * @property {ErrorReporterService} errorReporterService
  */
 
@@ -277,12 +265,10 @@ class Answers {
       fieldFormatters: parsedConfig.fieldFormatters,
       experienceVersion: parsedConfig.experienceVersion,
       locale: parsedConfig.locale,
-      searchService: this._services.searchService,
-      autoCompleteService: this._services.autoCompleteService,
-      questionAnswerService: this._services.questionAnswerService,
       analyticsReporter: this._analyticsReporterService,
       onVerticalSearch: parsedConfig.onVerticalSearch,
-      onUniversalSearch: parsedConfig.onUniversalSearch
+      onUniversalSearch: parsedConfig.onUniversalSearch,
+      environment: parsedConfig.environment
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
@@ -296,6 +282,8 @@ class Answers {
       .setRenderer(this.renderer);
 
     this._setDefaultInitialSearch(parsedConfig.search);
+
+    this.core.init();
 
     this._onReady = parsedConfig.onReady || function () {};
 
@@ -608,26 +596,6 @@ class Answers {
  */
 function getServices (config, storage) {
   return {
-    searchService: new SearchApi({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      locale: config.locale,
-      environment: config.environment
-    },
-    storage),
-    autoCompleteService: new AutoCompleteApi(
-      {
-        apiKey: config.apiKey,
-        experienceKey: config.experienceKey,
-        experienceVersion: config.experienceVersion,
-        locale: config.locale,
-        environment: config.environment
-      },
-      storage),
-    questionAnswerService: new QuestionAnswerApi(
-      { apiKey: config.apiKey, environment: config.environment },
-      storage),
     errorReporterService: new ErrorReporter(
       {
         apiKey: config.apiKey,
@@ -646,9 +614,6 @@ function getServices (config, storage) {
  */
 function getMockServices () {
   return {
-    searchService: new MockSearchService(),
-    autoCompleteService: new MockAutoCompleteService(),
-    questionAnswerService: new MockQuestionAnswerService(),
     errorReporterService: new ConsoleErrorReporter()
   };
 }

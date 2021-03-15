@@ -1,0 +1,242 @@
+{
+  "queryId": "28aa65cc-5aff-4a4e-afcf-ad04a70738fc",
+  "sections": [
+    {
+      "searchState": "search-complete",
+      "verticalConfigId": "people",
+      "resultsCount": 1,
+      "encodedState": "",
+      "appliedQueryFilters": [],
+      "facets": null,
+      "results": [
+        {
+          "_raw": {
+            "id": "Employee-2116",
+            "type": "ce_person",
+            "website": "http://www.test.com",
+            "address": {
+              "line1": "7333 Yext Drive",
+              "city": "Mclean",
+              "region": "VA",
+              "postalCode": "22102",
+              "countryCode": "US"
+            },
+            "associations": [
+              "Runners Association"
+            ],
+            "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+            "name": "Bob Smith",
+            "cityCoordinate": {
+              "latitude": 30.123456,
+              "longitude": -70.123456
+            },
+            "c_allstateLadyCTA": {
+              "label": "Learn More",
+              "linkType": "URL",
+              "link": "http://yext.com"
+            },
+            "c_employeeCity": "Tysons Corner",
+            "c_employeeCountry": "United States",
+            "c_employeeDepartment": "Consulting",
+            "c_employeeRegion": "Virginia",
+            "c_employeeTitle": "Associate Technical Project Manager",
+            "c_oliverCta": {
+              "url": "https://www.yext.com/",
+              "icon": "yext",
+              "label": "test cta"
+            },
+            "c_startDate": "2017-09-18",
+            "emails": [
+              "test@yext.com"
+            ],
+            "firstName": "Bob",
+            "geocodedCoordinate": {
+              "latitude": 30.123456,
+              "longitude": -70.123456
+            },
+            "languages": [
+              "German"
+            ],
+            "lastName": "Smith",
+            "mainPhone": "+18888888888",
+            "specialities": [
+              "Documentation",
+              "Coding"
+            ],
+            "websiteUrl": {
+              "url": "http://www.test.com",
+              "displayUrl": "http://www.testdisplay.com",
+              "preferDisplayUrl": true
+            },
+            "yextDisplayCoordinate": {
+              "latitude": 30.123456,
+              "longitude": -70.123456
+            },
+            "yextRoutableCoordinate": {
+              "latitude": 30.123456,
+              "longitude": -70.123456
+            }
+          },
+          "_highlighted": {},
+          "ordinal": 1,
+          "title": "Bob Smith",
+          "details": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+          "link": "http://www.test.com",
+          "id": "Employee-2116",
+          "subtitle": null,
+          "modifier": null,
+          "bigDate": null,
+          "image": null,
+          "callsToAction": [],
+          "collapsed": true,
+          "distance": 36032,
+          "distanceFromFilter": null
+        }
+      ],
+      "map": {
+        "mapCenter": {
+          "latitude": 30.123456,
+          "longitude": -70.123456
+        },
+        "mapMarkers": [
+          {
+            "item": {
+              "id": "Employee-2116",
+              "type": "ce_person",
+              "website": "http://www.test.com",
+              "address": {
+                "line1": "7333 Yext Drive",
+                "city": "Mclean",
+                "region": "VA",
+                "postalCode": "22102",
+                "countryCode": "US"
+              },
+              "associations": [
+                "Runners Association"
+              ],
+              "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
+              "name": "Bob Smith",
+              "cityCoordinate": {
+                "latitude": 30.123456,
+                "longitude": -70.123456
+              },
+              "c_allstateLadyCTA": {
+                "label": "Learn More",
+                "linkType": "URL",
+                "link": "http://yext.com"
+              },
+              "c_employeeCity": "Tysons Corner",
+              "c_employeeCountry": "United States",
+              "c_employeeDepartment": "Consulting",
+              "c_employeeRegion": "Virginia",
+              "c_employeeTitle": "Associate Technical Project Manager",
+              "c_oliverCta": {
+                "url": "https://www.yext.com/",
+                "icon": "yext",
+                "label": "test cta"
+              },
+              "c_startDate": "2017-09-18",
+              "emails": [
+                "test@yext.com"
+              ],
+              "firstName": "Bob",
+              "geocodedCoordinate": {
+                "latitude": 30.123456,
+                "longitude": -70.123456
+              },
+              "languages": [
+                "German"
+              ],
+              "lastName": "Smith",
+              "mainPhone": "+18888888888",
+              "specialities": [
+                "Documentation",
+                "Coding"
+              ],
+              "websiteUrl": {
+                "url": "http://www.test.com",
+                "displayUrl": "http://www.testdisplay.com",
+                "preferDisplayUrl": true
+              },
+              "yextDisplayCoordinate": {
+                "latitude": 30.123456,
+                "longitude": -70.123456
+              },
+              "yextRoutableCoordinate": {
+                "latitude": 30.123456,
+                "longitude": -70.123456
+              }
+            },
+            "label": 1,
+            "latitude": 30.123456,
+            "longitude": -70.123456
+          }
+        ]
+      },
+      "verticalURL": "./people.html"
+    },
+    {
+      "searchState": "search-complete",
+      "verticalConfigId": "faq",
+      "resultsCount": 2,
+      "encodedState": "",
+      "appliedQueryFilters": [],
+      "facets": null,
+      "results": [
+        {
+          "_raw": {
+            "id": "1074283123523689994",
+            "type": "faq",
+            "answer": "Great question! To start, you can **bold,** *italicize,* and ++underline.++ You can also create lists.",
+            "name": "Bob loves FAQs"
+          },
+          "_highlighted": {},
+          "ordinal": 1,
+          "title": "Bob loves FAQs",
+          "details": null,
+          "link": null,
+          "id": "1074283123523689994",
+          "subtitle": null,
+          "modifier": null,
+          "bigDate": null,
+          "image": null,
+          "callsToAction": [],
+          "collapsed": true,
+          "distance": null,
+          "distanceFromFilter": null
+        },
+        {
+          "_raw": {
+            "id": "faq-134",
+            "type": "faq",
+            "answer": "Yes. We require a Federal Tax ID number, to verify your business status.",
+            "name": "Will I need my Federal Tax Identification Number?",
+            "c_NERTags": [
+              "Tax"
+            ]
+          },
+          "_highlighted": {},
+          "ordinal": 2,
+          "title": "Will I need my Federal Tax Identification Number?",
+          "details": null,
+          "link": null,
+          "id": "faq-134",
+          "subtitle": null,
+          "modifier": null,
+          "bigDate": null,
+          "image": null,
+          "callsToAction": [],
+          "collapsed": true,
+          "distance": null,
+          "distanceFromFilter": null
+        }
+      ],
+      "map": {
+        "mapCenter": {},
+        "mapMarkers": []
+      },
+      "verticalURL": "./faq.html"
+    }
+  ],
+  "searchState": "search-complete"
+}

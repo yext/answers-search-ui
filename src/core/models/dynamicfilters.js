@@ -1,13 +1,15 @@
 /** @module DynamicFilters */
 
+import ResultsContext from '../storage/resultscontext';
+
 /**
  * Model representing a set of dynamic filters
  */
 export default class DynamicFilters {
   constructor (data) {
     /**
-     * The list of filters this model holds
-     * @type {{label: string, fieldId: string, options: object[]}}
+     * The list of facets this model holds
+     * @type {DisplayableFacet[]} from answers-core
      */
     this.filters = data.filters || [];
 
@@ -20,26 +22,15 @@ export default class DynamicFilters {
   }
 
   /**
-   * Organize 'facets' from the api response into dynamic filters
-   * @param {Object} response dynamic filter response from the api
+   * Organize 'facets' from the answers-core into dynamic filters
+   * @param {DisplayableFacet[]} facets from answers-core
+   * @param {ResultsContext} resultsContext
    * @returns {DynamicFilters}
    */
-  static from (response) {
-    const facets = response.facets || [];
-    const dynamicFilters = facets.map(f => ({
-      label: f['displayName'],
-      fieldId: f['fieldId'],
-      options: f.options.map(o => ({
-        label: o['displayName'],
-        countLabel: o['count'],
-        selected: o['selected'],
-        filter: o['filter']
-      }))
-    }));
-
+  static fromCore (facets = [], resultsContext = ResultsContext.NORMAL) {
     return new DynamicFilters({
-      filters: dynamicFilters,
-      resultsContext: response.resultsContext
+      filters: facets,
+      resultsContext: resultsContext
     });
   }
 }

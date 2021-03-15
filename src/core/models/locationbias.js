@@ -31,22 +31,24 @@ export default class LocationBias {
     this.locationDisplayName = data.locationDisplayName || null;
   }
 
-  /**
-   * Create a location bias model from the provided data
-   * @param {Object} response The location bias response
-   */
-  static from (response) {
-    if (!response) {
+  /*
+  * Constructs an SDK LocationBias model from an answers-core LocationBias
+  *
+  * @param {LocationBias} locationBias from answers-core
+  * @returns {LocationBias}
+  */
+  static fromCore (locationBias) {
+    if (!locationBias) {
       return new LocationBias({
         accuracy: 'UNKNOWN'
       });
     }
 
     return new LocationBias({
-      accuracy: response.accuracy,
-      latitude: response.latitude,
-      longitude: response.longitude,
-      locationDisplayName: response.locationDisplayName
+      accuracy: locationBias.method,
+      latitude: locationBias.latitude,
+      longitude: locationBias.longitude,
+      locationDisplayName: locationBias.displayName
     });
   }
 }
