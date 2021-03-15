@@ -332,7 +332,7 @@ class Answers {
     if (searchComponents.length) {
       searchComponents.forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
     } else if (this.core.storage.has(StorageKeys.QUERY)) {
-      this.core.triggerSearch();
+      this.core.triggerSearch(this.core.storage.get(StorageKeys.QUERY_TRIGGER));
     }
   }
 
