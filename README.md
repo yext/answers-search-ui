@@ -1,6 +1,4 @@
-# Answers
-Answers Javascript API Library.
-
+# Answers Search UI
 Outline:
 1. [Install / Setup](#install-and-setup)
 2. [ANSWERS.init Configuration Options](#answersinit-configuration-options)
