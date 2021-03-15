@@ -3,6 +3,7 @@ import mockManager from '../../../setup/managermocker';
 import { mount } from 'enzyme';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import QueryTriggers from '../../../../src/core/models/querytriggers';
+import SearchListener from '../../../../src/core/statelisteners/searchlistener';
 
 DOM.setup(document, new DOMParser());
 
@@ -87,6 +88,10 @@ describe('SearchBar component', () => {
 
   it('default initial search works for universal', () => {
     const defaultInitialSearch = '';
+    COMPONENT_MANAGER.core.searchListener = new SearchListener({
+      core: COMPONENT_MANAGER.core,
+      storage: COMPONENT_MANAGER.core.storage
+    }).init()
     storage.set(StorageKeys.QUERY, defaultInitialSearch);
     storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
 
