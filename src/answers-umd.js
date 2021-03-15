@@ -306,9 +306,6 @@ class Answers {
         throw new Error('MasterSwitchApi determined the front-end should be disabled');
       }
       this._onReady();
-      // initSearchListener happens after the onReady, so that we Wait for addComponent
-      // calls before initializing the SearchListener,
-      // This way components can update the SearchListener config, for backwards compatibility
       this.core.initSearchListener();
       this._searchOnLoad();
     });
