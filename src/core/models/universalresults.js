@@ -11,13 +11,13 @@ export default class UniversalResults {
     /**
      * The current state of the search, used to render different templates before, during,
      * and after loading
-     * @type {string}
+     * @type {SearchState}
      */
     this.searchState = data.searchState || SearchStates.SEARCH_COMPLETE;
   }
 
   /**
-   * Construct a UnivervalResults object representing loading results
+   * Construct a UniversalResults object representing loading results
    * @return {UniversalResults}
    */
   static searchLoading () {

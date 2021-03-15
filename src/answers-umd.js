@@ -467,14 +467,13 @@ class Answers {
   }
 
   /**
-   * Sets a search query on initialization for vertical searchers that have a
-   * defaultInitialSearch provided, if the user hasn't already provided their
-   * own via URL param.
+   * Sets a search query on initialization when defaultInitialSearch is provided
+   * if the user hasn't already provided their own via URL param.
    * @param {SearchConfig} searchConfig
    * @private
    */
   _setDefaultInitialSearch (searchConfig) {
-    if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
+    if (searchConfig.defaultInitialSearch == null) {
       return;
     }
     const prepopulatedQuery = this.core.storage.get(StorageKeys.QUERY);

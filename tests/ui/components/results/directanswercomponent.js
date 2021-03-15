@@ -35,6 +35,155 @@ beforeEach(() => {
   };
 });
 
+describe('types logic works properly', () => {
+  it('if no types match, default is used', () => {
+    const component = COMPONENT_MANAGER.create('DirectAnswer', {
+      ...defaultConfig,
+      defaultCard: 'default-card',
+      types: {}
+    });
+
+    expect(component._getCard(directAnswer)).toEqual('default-card');
+  });
+
+  it('cardTypes can be specified', () => {
+    const component = COMPONENT_MANAGER.create('DirectAnswer', {
+      ...defaultConfig,
+      defaultCard: 'default-card',
+      types: {
+        'FEATURED_SNIPPET': {
+          cardType: 'documentsearch-standard'
+        },
+        'FIELD_VALUE': {
+          cardType: 'allfields-standard'
+        }
+      }
+    });
+
+    expect(component._getCard(directAnswer)).toEqual('allfields-standard');
+  });
+
+  it('defaults if the option does not match the directAnswer', () => {
+    const component = COMPONENT_MANAGER.create('DirectAnswer', {
+      ...defaultConfig,
+      defaultCard: 'default-card',
+      types: {
+        'FEATURED_SNIPPET': {
+          cardType: 'custom-card'
+        }
+      }
+    });
+
+    expect(component._getCard(directAnswer)).toEqual('default-card');
+  });
+
+  it('card overrides works within the types option', () => {
+    const component = COMPONENT_MANAGER.create('DirectAnswer', {
+      ...defaultConfig,
+      defaultCard: 'default-card',
+      types: {
+        'FIELD_VALUE': {
+          cardType: 'custom-card',
+          cardOverrides: [
+            {
+              entityType: 'Location',
+              cardType: 'override-card'
+            }
+          ]
+        }
+      }
+    });
+
+    expect(component._getCard(directAnswer)).toEqual('override-card');
+  });
+
+  it('the first matching override within the types option is used', () => {
+    const component = COMPONENT_MANAGER.create('DirectAnswer', {
+      ...defaultConfig,
+      defaultCard: 'default-card',
+      types: {
+        'FIELD_VALUE': {
+          cardType: 'custom-card',
+          cardOverrides: [
+            {
+              entityType: 'Location',
+              cardType: 'some-card'
+            },
+            {
+              fieldName: 'Phone Number',
+              cardType: 'other-card'
+            }
+          ]
+        }
+      }
+    });
+
+    expect(component._getCard(directAnswer)).toEqual('some-card');
+  });
+
+  it('if the overrides within types do not match, use the specified cardType', () => {
+    const component = COMPONENT_MANAGER.create('DirectAnswer', {
+      ...defaultConfig,
+      defaultCard: 'default-card',
+      types: {
+        'FIELD_VALUE': {
+          cardType: 'custom-card',
+          cardOverrides: [
+            {
+              entityType: 'Person',
+              cardType: 'override-card'
+            }
+          ]
+        }
+      }
+    });
+
+    expect(component._getCard(directAnswer)).toEqual('custom-card');
+  });
+
+  it('an error is thrown if a type property is included in cardOverrides within the types option', () => {
+    const createDirectAnswerComponent = () => {
+      COMPONENT_MANAGER.create('DirectAnswer', {
+        ...defaultConfig,
+        defaultCard: 'default-card',
+        types: {
+          'FIELD_VALUE': {
+            cardType: 'custom-card',
+            cardOverrides: [
+              {
+                type: 'Person',
+                cardType: 'override-card'
+              }
+            ]
+          }
+        }
+      });
+    };
+
+    expect(createDirectAnswerComponent).toThrow();
+  });
+
+  it('if types is supplied, cardOverrides is ignored', () => {
+    const component = COMPONENT_MANAGER.create('DirectAnswer', {
+      ...defaultConfig,
+      defaultCard: 'default-card',
+      types: {
+        'FIELD_VALUE': {
+          cardType: 'custom-card'
+        }
+      },
+      cardOverrides: [
+        {
+          entityType: 'Location',
+          cardType: 'other-card'
+        }
+      ]
+    });
+
+    expect(component._getCard(directAnswer)).toEqual('custom-card');
+  });
+});
+
 describe('cardOverrides logic works properly', () => {
   it('if no overrides match, default is used', () => {
     const component = COMPONENT_MANAGER.create('DirectAnswer', {
@@ -52,7 +201,7 @@ describe('cardOverrides logic works properly', () => {
       ]
     });
 
-    expect(component._getCustomCard(directAnswer)).toEqual('default-card');
+    expect(component._getCard(directAnswer)).toEqual('default-card');
   });
 
   it('can specify override by type', () => {
@@ -66,7 +215,7 @@ describe('cardOverrides logic works properly', () => {
       ]
     });
 
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
+    expect(component._getCard(directAnswer)).toEqual('some-card');
   });
 
   it('can specify override by entityType', () => {
@@ -80,7 +229,7 @@ describe('cardOverrides logic works properly', () => {
       ]
     });
 
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
+    expect(component._getCard(directAnswer)).toEqual('some-card');
   });
 
   it('can specify override by fieldName', () => {
@@ -94,7 +243,7 @@ describe('cardOverrides logic works properly', () => {
       ]
     });
 
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
+    expect(component._getCard(directAnswer)).toEqual('some-card');
   });
 
   it('can specify override by fieldType', () => {
@@ -108,7 +257,7 @@ describe('cardOverrides logic works properly', () => {
       ]
     });
 
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
+    expect(component._getCard(directAnswer)).toEqual('some-card');
   });
 
   it('if multiple overrides match, first match is used', () => {
@@ -127,7 +276,7 @@ describe('cardOverrides logic works properly', () => {
       ]
     });
 
-    expect(component._getCustomCard(directAnswer)).toEqual('some-card');
+    expect(component._getCard(directAnswer)).toEqual('some-card');
   });
 });
 
