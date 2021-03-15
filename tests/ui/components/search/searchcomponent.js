@@ -91,7 +91,7 @@ describe('SearchBar component', () => {
     COMPONENT_MANAGER.core.searchListener = new SearchListener({
       core: COMPONENT_MANAGER.core,
       storage: COMPONENT_MANAGER.core.storage
-    }).init()
+    }).init();
     storage.set(StorageKeys.QUERY, defaultInitialSearch);
     storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
 
