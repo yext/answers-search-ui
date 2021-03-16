@@ -271,10 +271,10 @@ export default class FacetsComponent extends Component {
       const options = facet.options.map(option => {
         let displayName = option.displayName;
         if (option.value === true && displayName === 'true') {
-          displayName = TranslationFlagger.flag({ phrase: 'True' });
+          displayName = TranslationFlagger.flag({ phrase: 'True', context: 'True or False' });
         }
         if (option.value === false && displayName === 'false') {
-          displayName = TranslationFlagger.flag({ phrase: 'False' });
+          displayName = TranslationFlagger.flag({ phrase: 'False', context: 'True or False' });
         }
         return Object.assign({}, option, { displayName });
       });
