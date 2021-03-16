@@ -252,10 +252,33 @@ export default class FacetsComponent extends Component {
       updatedFacets = previousFacets;
     }
 
+    updatedFacets = this._transformBooleanFacets(updatedFacets);
+
     return super.setState({
       ...data,
       filters: Facet.fromCore(updatedFacets),
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
+    });
+  }
+
+  /**
+   * Applies default formatting to boolean facets
+   *
+   * @param {DisplayableFacet[]} facets from answers-core
+   */
+  _transformBooleanFacets (facets) {
+    return facets.map(facet => {
+      const options = facet.options.map(option => {
+        let displayName = option.displayName;
+        if (option.value === true && displayName === 'true') { 
+          displayName = TranslationFlagger.flag({ phrase: 'True' });
+        }
+        if (option.value === false && displayName === 'false') {
+          displayName = TranslationFlagger.flag({ phrase: 'False' });
+        }
+        return Object.assign({}, option, { displayName });
+      });
+      return Object.assign({}, facet, { options });
     });
   }
 
