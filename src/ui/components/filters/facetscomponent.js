@@ -270,7 +270,7 @@ export default class FacetsComponent extends Component {
     return facets.map(facet => {
       const options = facet.options.map(option => {
         let displayName = option.displayName;
-        if (option.value === true && displayName === 'true') { 
+        if (option.value === true && displayName === 'true') {
           displayName = TranslationFlagger.flag({ phrase: 'True' });
         }
         if (option.value === false && displayName === 'false') {
