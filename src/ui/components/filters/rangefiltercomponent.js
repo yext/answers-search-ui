@@ -7,6 +7,9 @@ import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import FilterMetadata from '../../../core/filters/filtermetadata';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import StorageKeys from '../../../core/storage/storagekeys';
+import { getPersistedRangeFilterContents } from '../../tools/filterutils';
+import Matcher from '../../../core/filters/matcher';
 
 const DEFAULT_CONFIG = {
   minPlaceholderText: TranslationFlagger.flag({
@@ -44,29 +47,6 @@ export default class RangeFilterComponent extends Component {
      */
     this._storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
 
-    let minVal = this.core.storage.get(`${this.name}.min`);
-    if (typeof minVal === 'string') {
-      try {
-        minVal = Number.parseInt(minVal);
-      } catch (e) {}
-    }
-    let maxVal = this.core.storage.get(`${this.name}.max`);
-    if (typeof minVal === 'string') {
-      try {
-        maxVal = Number.parseInt(maxVal);
-      } catch (e) {}
-    }
-
-    /**
-     * The current range represented
-     * @type {object}
-     * @private
-     */
-    this._range = {
-      min: [minVal, config.initialMin, 0].find(v => v !== undefined),
-      max: [maxVal, config.initialMax, 10].find(v => v !== undefined)
-    };
-
     /**
      * The title to display for the range control
      * @type {string}
@@ -87,6 +67,46 @@ export default class RangeFilterComponent extends Component {
      * @private
      */
     this._maxLabel = config.maxLabel || null;
+
+    this.seedFromPersistedFilter();
+
+    this.core.storage.registerListener({
+      storageKey: StorageKeys.HISTORY_POP_STATE,
+      eventType: 'update',
+      callback: () => {
+        this.seedFromPersistedFilter();
+        this.setState();
+      }
+    });
+  }
+
+  /**
+   * Reseeds the component state from the PERSISTED_FILTER in storage.
+   * If there is an active filter, store it in core.
+   */
+  seedFromPersistedFilter () {
+    if (this.core.storage.has(StorageKeys.PERSISTED_FILTER)) {
+      const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
+      const persistedFilterContents = getPersistedRangeFilterContents(persistedFilter, this._field);
+      const {
+        [Matcher.GreaterThanOrEqualTo]: minVal,
+        [Matcher.LessThanOrEqualTo]: maxVal
+      } = persistedFilterContents;
+      this._range = {
+        min: minVal,
+        max: maxVal
+      };
+    } else {
+      this._range = {
+        min: [this._config.initialMin, 0].find(v => v !== undefined),
+        max: [this._config.initialMax, 10].find(v => v !== undefined)
+      };
+    }
+
+    if (this._range.min != null || this._range.max != null) {
+      const filterNode = this.getFilterNode();
+      this.core.setStaticFilterNodes(this.name, filterNode);
+    }
   }
 
   static get type () {
@@ -161,8 +181,6 @@ export default class RangeFilterComponent extends Component {
     if (this._storeOnChange) {
       this.core.setStaticFilterNodes(this.name, filterNode);
     }
-    this.core.storage.setWithPersist(`${this.name}.min`, this._range.min);
-    this.core.storage.setWithPersist(`${this.name}.max`, this._range.max);
 
     this._onChange(filterNode);
   }
