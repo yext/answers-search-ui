@@ -142,10 +142,6 @@ export default class PaginationComponent extends Component {
     this._noResults = config.noResults ||
       this.core.storage.get(StorageKeys.NO_RESULTS_CONFIG) ||
       {};
-
-    this.core.searchListener.updateConfig({
-      verticalKey: this._verticalKey
-    });
   }
 
   static get type () {
@@ -204,7 +200,7 @@ export default class PaginationComponent extends Component {
     const maxPageCount = this._computeMaxPage(results.resultsCount);
     this._onPaginate(newPageNumber, currentPageNumber, maxPageCount);
     this.core.storage.setWithPersist(StorageKeys.SEARCH_OFFSET, offset);
-    this.core.verticalPage(this._verticalKey);
+    this.core.verticalPage();
   }
 
   scrollToTop () {

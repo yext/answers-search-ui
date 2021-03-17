@@ -3,7 +3,6 @@ import mockManager from '../../../setup/managermocker';
 import { mount } from 'enzyme';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import QueryTriggers from '../../../../src/core/models/querytriggers';
-import SearchListener from '../../../../src/core/statelisteners/searchlistener';
 
 DOM.setup(document, new DOMParser());
 
@@ -19,11 +18,6 @@ describe('SearchBar component', () => {
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
     COMPONENT_MANAGER = mockManager({
-      searchListener: {
-        updateConfig: jest.fn(),
-        registerMiddleware: jest.fn(),
-        registerOnConductSearchHook: jest.fn()
-      },
       autoCompleteVertical: jest.fn(() => Promise.resolve({ inputIntents: [] })),
       autoCompleteUniversal: jest.fn(() => Promise.resolve({ inputIntents: [] })),
       verticalSearch: jest.fn()
@@ -88,10 +82,6 @@ describe('SearchBar component', () => {
 
   it('default initial search works for universal', () => {
     const defaultInitialSearch = '';
-    COMPONENT_MANAGER.core.searchListener = new SearchListener({
-      core: COMPONENT_MANAGER.core,
-      storage: COMPONENT_MANAGER.core.storage
-    }).init();
     storage.set(StorageKeys.QUERY, defaultInitialSearch);
     storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
 

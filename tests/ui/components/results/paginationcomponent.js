@@ -17,10 +17,7 @@ const createCore = () => {
 
   return {
     verticalPage: () => {},
-    storage: storage,
-    searchListener: {
-      updateConfig: jest.fn()
-    }
+    storage: storage
   };
 };
 

@@ -3,14 +3,12 @@ import SearchOptionsFactory from '../search/searchoptionsfactory';
 import StorageKeys from '../storage/storagekeys';
 
 /**
- * SearchListener is responsible for running a vertical or universal search when
+ * QueryUpdateListener is responsible for running a vertical or universal search when
  * the QUERY storage key is updated.
  */
-export default class SearchListener {
-  constructor (systemConfig, config) {
-    this.storage = systemConfig.storage;
-    this.componentManager = systemConfig.componentManager;
-    this.core = systemConfig.core;
+export default class QueryUpdateListener {
+  constructor (core, config) {
+    this.core = core;
     this.config = {
       searchCooldown: 300,
       verticalKey: undefined,
@@ -25,19 +23,12 @@ export default class SearchListener {
     this.middleware = [];
 
     this.searchOptionsFactory = new SearchOptionsFactory();
-  }
 
-  /**
-   * Update the config of SearchListener. This function is needed for backwards compatibility from when
-   * this listener used to live in the SearchBar component.
-   *
-   * @param {Object} newConfig
-   */
-  updateConfig (newConfig) {
-    this.config = {
-      ...this.config,
-      ...newConfig
-    };
+    this.core.storage.registerListener({
+      storageKey: StorageKeys.QUERY,
+      eventType: 'update',
+      callback: query => this._handleQueryUpdate(query)
+    });
   }
 
   /**
@@ -51,20 +42,6 @@ export default class SearchListener {
   }
 
   /**
-   * Initialize the QUERY update storage listener.
-   *
-   * @returns {SearchListener}
-   */
-  init () {
-    this.storage.registerListener({
-      storageKey: StorageKeys.QUERY,
-      eventType: 'update',
-      callback: query => this._handleQueryUpdate(query)
-    });
-    return this;
-  }
-
-  /**
    * Runs a debounced search. If the query is null, set the query to the defaultInitialSearch,
    * which retriggers the QUERY listener.
    *
@@ -73,8 +50,8 @@ export default class SearchListener {
   _handleQueryUpdate (query) {
     if (query === null) {
       if (this.config.defaultInitialSearch || this.config.defaultInitialSearch === '') {
-        this.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-        this.storage.set(StorageKeys.QUERY, this.config.defaultInitialSearch);
+        this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+        this.core.storage.set(StorageKeys.QUERY, this.config.defaultInitialSearch);
       }
       return;
     }
@@ -84,7 +61,7 @@ export default class SearchListener {
   _debouncedSearch (query) {
     if (this._throttled ||
       (!query && !this.config.allowEmptySearch &&
-        this.storage.get(StorageKeys.QUERY_TRIGGER) !== QueryTriggers.FILTER_COMPONENT)) {
+        this.core.storage.get(StorageKeys.QUERY_TRIGGER) !== QueryTriggers.FILTER_COMPONENT)) {
       return;
     }
 
@@ -95,7 +72,7 @@ export default class SearchListener {
 
   _search (query) {
     const middlewarePromises = this.middleware.map(middleware => middleware(query));
-    const queryTrigger = this.storage.get(StorageKeys.QUERY_TRIGGER);
+    const queryTrigger = this.core.storage.get(StorageKeys.QUERY_TRIGGER);
     return Promise.all(middlewarePromises).then(() => {
       if (this.config.verticalKey) {
         return this.core.verticalSearch(

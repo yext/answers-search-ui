@@ -31,6 +31,7 @@ import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
 import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
+import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -267,7 +268,6 @@ class Answers {
       initScrollListener(this._analyticsReporterService);
     }
 
-    const { defaultInitialSearch, verticalKey } = parsedConfig.search || {};
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
       storage: storage,
@@ -279,9 +279,7 @@ class Answers {
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch,
       environment: parsedConfig.environment,
-      componentManager: this.components,
-      defaultInitialSearch,
-      verticalKey
+      componentManager: this.components
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
@@ -306,9 +304,19 @@ class Answers {
         throw new Error('MasterSwitchApi determined the front-end should be disabled');
       }
       this._onReady();
-      this.core.initSearchListener();
+      if (!this.components.getActiveComponent(SearchComponent.type)) {
+        this._initQueryUpdateListener(parsedConfig.search);
+      }
       this._searchOnLoad();
     });
+  }
+
+  _initQueryUpdateListener ({ verticalKey, defaultInitialSearch }) {
+    const queryUpdateListener = new QueryUpdateListener(this.core, {
+      defaultInitialSearch,
+      verticalKey
+    });
+    this.core.setQueryUpdateListener(queryUpdateListener);
   }
 
   /**

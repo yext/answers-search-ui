@@ -5,6 +5,7 @@ import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
+import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistener';
 
 const IconState = {
   'YEXT': 0,
@@ -270,20 +271,23 @@ export default class SearchComponent extends Component {
       onClose: config.autocomplete && config.autocomplete.onClose
     };
 
-    this.updateSearchListener();
+    if (!this._isTwin) {
+      this.initQueryUpdateListener();
+    }
   }
 
   /**
    * Updates the global search listener with the searchbar's config.
    */
-  updateSearchListener () {
-    this.core.searchListener.updateConfig({
+  initQueryUpdateListener () {
+    const queryUpdateListener = new QueryUpdateListener(this.core, {
       searchCooldown: this._searchCooldown,
       verticalKey: this._verticalKey,
       allowEmptySearch: this._allowEmptySearch
     });
-    this.core.searchListener.registerMiddleware(query => this.promptForLocation(query));
-    this.core.searchListener.registerMiddleware(query => this.customHooks.onConductSearch(query));
+    this.core.setQueryUpdateListener(queryUpdateListener);
+    this.core.queryUpdateListener.registerMiddleware(query => this.promptForLocation(query));
+    this.core.queryUpdateListener.registerMiddleware(query => this.customHooks.onConductSearch(query));
   }
 
   static get type () {

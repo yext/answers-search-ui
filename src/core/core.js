@@ -19,7 +19,6 @@ import AutoCompleteResponseTransformer from './search/autocompleteresponsetransf
 
 import { PRODUCTION, ENDPOINTS } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
-import SearchListener from './statelisteners/searchlistener';
 import { SearchParams } from '../ui';
 
 /** @typedef {import('./storage/storage').default} Storage */
@@ -113,21 +112,15 @@ export default class Core {
      * @type {ComponentManager}
      */
     this._componentManager = config.componentManager;
-
-    /**
-     * A reference to the global SearchListener
-     */
-    this.searchListener = new SearchListener({
-      storage: this.storage,
-      core: this
-    }, {
-      defaultInitialSearch: config.defaultInitialSearch,
-      verticalKey: config.verticalKey
-    });
   }
 
-  initSearchListener () {
-    this.searchListener.init();
+  /**
+   * Sets a reference in core to the global QueryUpdateListener.
+   *
+   * @param {QueryUpdateListener} queryUpdateListener
+   */
+  setQueryUpdateListener (queryUpdateListener) {
+    this.queryUpdateListener = queryUpdateListener;
   }
 
   /**

@@ -16,6 +16,9 @@ export default function mockManager (mockedCore) {
     setQuery: jest.fn(query => core.storage.setWithPersist(StorageKeys.QUERY, query)),
     ...mockedCore
   };
+  core.setQueryUpdateListener = (queryUpdateListener) => {
+    core.queryUpdateListener = queryUpdateListener;
+  };
   const COMPONENT_MANAGER = new MockComponentManager(core);
 
   const mockAnalyticsReporter = {
