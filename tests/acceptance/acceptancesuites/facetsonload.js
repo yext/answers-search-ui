@@ -4,7 +4,7 @@ import {
   FACETS_PAGE
 } from '../server';
 import FacetsPage from '../pageobjects/facetspage';
-import { RequestLogger, Selector } from 'testcafe';
+import { RequestLogger } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
