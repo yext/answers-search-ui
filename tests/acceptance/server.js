@@ -26,4 +26,3 @@ export const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/ht
 export const FACETS_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/facets';
 export const FILTERBOX_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/filterbox';
 export const UNIVERSAL_INITIAL_SEARCH_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universalinitialsearch';
-export const FACETS_INITIAL_SEARCH_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/facetsdefaultinitialsearch';

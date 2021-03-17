@@ -1,8 +1,7 @@
 import {
   setupServer,
   shutdownServer,
-  FACETS_PAGE,
-  FACETS_INITIAL_SEARCH_PAGE
+  FACETS_PAGE
 } from '../server';
 import FacetsPage from '../pageobjects/facetspage';
 import { RequestLogger, Selector } from 'testcafe';
@@ -96,51 +95,6 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
   await browserBackButton();
   currentFacets = await getFacetsFromRequest();
   await t.expect(currentFacets).eql(state1);
-
-  await browserBackButton();
-  currentFacets = await getFacetsFromRequest();
-  await t.expect(currentFacets).eql({});
-});
-
-fixture`Facets page with defaultInitialSearch`
-  .before(setupServer)
-  .after(shutdownServer)
-  .page`${FACETS_INITIAL_SEARCH_PAGE}`;
-
-test(`Facets work with back/forward navigation and page refresh`, async t => {
-  const logger = RequestLogger({
-    url: /v2\/accounts\/me\/answers\/vertical\/query/
-  });
-  await t.addRequestHooks(logger);
-  await registerIE11NoCacheHook(t);
-
-  async function getFacetsFromRequest () {
-    const urlParams = await getMostRecentQueryParamsFromLogger(logger);
-    return JSON.parse(urlParams.get('facetFilters'));
-  }
-
-  await Selector('.yxt-Results').with({ visibilityCheck: true })();
-  await t.expect(Selector('.yxt-Results').exists).ok();
-
-  let currentFacets = await getFacetsFromRequest();
-  await t.expect(currentFacets).eql({});
-  logger.clear();
-
-  let options;
-  const facets = FacetsPage.getFacetsComponent();
-  const filterBox = facets.getFilterBox();
-  options = await filterBox.getFilterOptions('Employee Department');
-  await options.toggleOption('Client Delivery');
-  await filterBox.applyFilters();
-  currentFacets = await getFacetsFromRequest();
-  const state1 = {
-    'c_puppyPreference': [],
-    'c_employeeDepartment': [{ 'c_employeeDepartment': { '$eq': 'Client Delivery [SO]' } }],
-    'languages': [],
-    'specialities': []
-  };
-  await t.expect(currentFacets).eql(state1);
-  logger.clear();
 
   await browserBackButton();
   currentFacets = await getFacetsFromRequest();
