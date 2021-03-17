@@ -122,7 +122,7 @@ test.only(`Facets work with back/forward navigation and page refresh`, async t =
   await Selector('.yxt-Results').with({ visibilityCheck: true })();
   await t.expect(Selector('.yxt-Results').exists).ok();
 
-  console.log('first search')
+  console.log('first search');
   let currentFacets = await getFacetsFromRequest();
   await t.expect(currentFacets).eql({});
   logger.clear();
@@ -131,11 +131,11 @@ test.only(`Facets work with back/forward navigation and page refresh`, async t =
   const facets = FacetsPage.getFacetsComponent();
   const filterBox = facets.getFilterBox();
   options = await filterBox.getFilterOptions('Employee Department');
-  console.log('looking for client delivery search')
+  console.log('looking for client delivery search');
   await options.toggleOption('Client Delivery');
   await filterBox.applyFilters();
 
-  console.log('applying, second search')
+  console.log('applying, second search');
   currentFacets = await getFacetsFromRequest();
   const state1 = {
     'c_puppyPreference': [],
@@ -143,14 +143,13 @@ test.only(`Facets work with back/forward navigation and page refresh`, async t =
     'languages': [],
     'specialities': []
   };
-  console.log('second search')
+  console.log('second search');
   await t.expect(currentFacets).eql(state1);
   logger.clear();
 
-
-  console.log('back button')
+  console.log('back button');
   await browserBackButton();
   currentFacets = await getFacetsFromRequest();
-  console.log('third search')
+  console.log('third search');
   await t.expect(currentFacets).eql({});
 });
