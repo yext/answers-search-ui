@@ -226,7 +226,7 @@ describe('filter box component', () => {
     });
   });
 
-  it('searches only when apply button if search on change = false', () => {
+  it('searches only when apply button is clicked if search on change = false', () => {
     const config = {
       ...defaultConfig,
       name: 'unique name',
@@ -249,12 +249,12 @@ describe('filter box component', () => {
     const wrapper = mount(component);
     const child0 = component._filterComponents[0];
     child0._updateOption(0, true);
-    const setQuery = component.core.setQuery;
+    const triggerSearch = component.core.triggerSearch;
     expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
-    expect(setQuery.mock.calls).toHaveLength(0);
+    expect(triggerSearch.mock.calls).toHaveLength(0);
     wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
     expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
-    expect(setQuery.mock.calls).toHaveLength(1);
+    expect(triggerSearch.mock.calls).toHaveLength(1);
   });
 
   it('reset button resets filter node', () => {
@@ -303,13 +303,13 @@ describe('filter box component', () => {
       ]
     };
 
-    it('does not trigger core.setQuery() calls on back nav', () => {
+    it('does not trigger core.triggerSearch() calls on back nav', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
-      const setQuery = component.core.setQuery;
-      expect(setQuery).toHaveBeenCalledTimes(0);
+      const triggerSearch = component.core.triggerSearch;
+      expect(triggerSearch).toHaveBeenCalledTimes(0);
       mount(component);
       component.core.storage.set(StorageKeys.HISTORY_POP_STATE, new Map());
-      expect(setQuery).toHaveBeenCalledTimes(0);
+      expect(triggerSearch).toHaveBeenCalledTimes(0);
     });
 
     it('with searchOnChange = false, will reset to initial state on back nav to blank url', () => {

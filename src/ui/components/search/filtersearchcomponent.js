@@ -9,6 +9,7 @@ import buildSearchParameters from '../../tools/searchparamsparser';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -106,7 +107,6 @@ export default class FilterSearchComponent extends Component {
           this.query = query;
           this.filter = JSON.parse(filter);
           this._saveFilterNodeToStorage();
-          this.search(false);
         } else {
           this._removeFilterNode();
         }
@@ -143,14 +143,6 @@ export default class FilterSearchComponent extends Component {
    */
   static defaultTemplateName () {
     return 'search/filtersearch';
-  }
-
-  // This is needed for filtersearch only pages, however it will run a duplicate search
-  // if you also have a searchbar on the page.
-  onCreate () {
-    if (this.query && this.filter) {
-      this.search(false);
-    }
   }
 
   onMount () {
@@ -225,7 +217,7 @@ export default class FilterSearchComponent extends Component {
         this.core.storage.setWithPersist(`${StorageKeys.QUERY}.${this.name}`, this.query);
         this.core.storage.setWithPersist(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
         this.core.setStaticFilterNodes(this.name, filterNode);
-        this.search();
+        this.search(QueryTriggers.FILTER_COMPONENT);
       }
     });
   }
@@ -235,17 +227,11 @@ export default class FilterSearchComponent extends Component {
    * optionally redirecting based on config. Uses window.setTimeout to allow
    * other filters to finish rendering before searching.
    */
-  search (resetPagination = true) {
+  search (queryTrigger) {
     if (this._storeOnChange) {
       return;
     }
-    window.setTimeout(() => {
-      this.core.verticalSearch(this._config.verticalKey, {
-        setQueryParams: true,
-        resetPagination: resetPagination,
-        useFacets: true
-      });
-    });
+    this.core.triggerSearch(queryTrigger);
   }
 
   setState (data) {

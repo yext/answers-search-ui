@@ -31,6 +31,7 @@ import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
 import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
+import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -277,7 +278,8 @@ class Answers {
       analyticsReporter: this._analyticsReporterService,
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch,
-      environment: parsedConfig.environment
+      environment: parsedConfig.environment,
+      componentManager: this.components
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
@@ -302,8 +304,19 @@ class Answers {
         throw new Error('MasterSwitchApi determined the front-end should be disabled');
       }
       this._onReady();
+      if (!this.components.getActiveComponent(SearchComponent.type)) {
+        this._initQueryUpdateListener(parsedConfig.search);
+      }
       this._searchOnLoad();
     });
+  }
+
+  _initQueryUpdateListener ({ verticalKey, defaultInitialSearch }) {
+    const queryUpdateListener = new QueryUpdateListener(this.core, {
+      defaultInitialSearch,
+      verticalKey
+    });
+    this.core.setQueryUpdateListener(queryUpdateListener);
   }
 
   /**
@@ -317,11 +330,18 @@ class Answers {
    * components will update values in storage in their onMount/onCreate, which are then expected
    * to be applied to this search on page load. For example, filter components can apply
    * filters on page load, which must be applied before this search is made to affect it.
+   *
+   * If no special search components exist, we still want to search on load if a query has been set,
+   * either from a defaultInitialSearch or from a query in the URL.
    */
   _searchOnLoad () {
-    this.components._activeComponents
-      .filter(c => c.constructor.type === SearchComponent.type)
-      .forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
+    const searchComponents = this.components._activeComponents
+      .filter(c => c.constructor.type === SearchComponent.type);
+    if (searchComponents.length) {
+      searchComponents.forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
+    } else if (this.core.storage.has(StorageKeys.QUERY)) {
+      this.core.triggerSearch(this.core.storage.get(StorageKeys.QUERY_TRIGGER));
+    }
   }
 
   _loadAsyncDependencies (parsedConfig) {
@@ -495,8 +515,11 @@ class Answers {
   }
 
   /**
-   * Sets a search query on initialization when defaultInitialSearch is provided
-   * if the user hasn't already provided their own via URL param.
+   * Sets a search query on initialization for vertical searchers that have a
+   * defaultInitialSearch provided, if the user hasn't already provided their
+   * own via URL param. A default initial search should not be persisted in the URL,
+   * so we do a regular set instead of a setWithPersist here.
+   *
    * @param {SearchConfig} searchConfig
    * @private
    */
@@ -509,7 +532,7 @@ class Answers {
       return;
     }
     this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-    this.core.setQuery(searchConfig.defaultInitialSearch);
+    this.core.storage.set(StorageKeys.QUERY, searchConfig.defaultInitialSearch);
   }
 
   /**

@@ -9,11 +9,16 @@ import StorageKeys from '../../src/core/storage/storagekeys';
  * TODO(oshi): better module/method names
  */
 export default function mockManager (mockedCore) {
+  const storage = new Storage().init();
   const core = {
-    storage: new Storage().init(),
+    storage,
+    triggerSearch: jest.fn(),
+    setQuery: jest.fn(query => core.storage.setWithPersist(StorageKeys.QUERY, query)),
     ...mockedCore
   };
-  core.setQuery = jest.fn(query => core.storage.set(StorageKeys.QUERY, query));
+  core.setQueryUpdateListener = (queryUpdateListener) => {
+    core.queryUpdateListener = queryUpdateListener;
+  };
   const COMPONENT_MANAGER = new MockComponentManager(core);
 
   const mockAnalyticsReporter = {

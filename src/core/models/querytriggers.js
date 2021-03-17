@@ -10,6 +10,7 @@ const QueryTriggers = {
   INITIALIZE: 'initialize',
   QUERY_PARAMETER: 'query-parameter',
   SUGGEST: 'suggest',
-  FILTER_COMPONENT: 'filter-component'
+  FILTER_COMPONENT: 'filter-component',
+  PAGINATION: 'pagination'
 };
 export default QueryTriggers;

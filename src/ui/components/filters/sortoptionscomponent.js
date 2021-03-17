@@ -8,6 +8,7 @@ import ResultsContext from '../../../core/storage/resultscontext';
 import SearchStates from '../../../core/storage/searchstates';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 /**
  * Renders configuration options for sorting Vertical Results.
@@ -189,11 +190,7 @@ export default class SortOptionsComponent extends Component {
    * Trigger a search with all filters in storage
    */
   _search () {
-    this.core.verticalSearch(this._config.verticalKey, {
-      setQueryParams: true,
-      resetPagination: true,
-      useFacets: true
-    });
+    this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
   }
 
   static get type () {
