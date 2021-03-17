@@ -176,37 +176,9 @@ workflows:
                 - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
-      - unit_test:
-          requires:
-            - build
-      - headless_acceptance_test:
-          requires:
-            - build
       - browserstack_acceptance_test:
           requires:
             - build
-      - translation_test:
-          requires:
-            - build
-      - deploy_canary:
-          filters:
-            branches:
-              only: develop
-          requires:
-            - unit_test
-            - headless_acceptance_test
-            - browserstack_acceptance_test
-            - translation_test
-      - deploy_branch:
-          filters:
-            branches:
-              ignore:
-                - develop
-          requires:
-            - unit_test
-            - browserstack_acceptance_test
-            - headless_acceptance_test
-            - translation_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
