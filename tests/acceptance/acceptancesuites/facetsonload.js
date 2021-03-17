@@ -113,14 +113,13 @@ test.only(`Facets work with back/forward navigation and page refresh`, async t =
   });
   await t.addRequestHooks(logger);
   await registerIE11NoCacheHook(t);
+  logger.clear();
+  await browserRefreshPage();
 
   async function getFacetsFromRequest () {
     const urlParams = await getMostRecentQueryParamsFromLogger(logger);
     return JSON.parse(urlParams.get('facetFilters'));
   }
-
-  await Selector('.yxt-Results').with({ visibilityCheck: true })();
-  await t.expect(Selector('.yxt-Results').exists).ok();
 
   console.log('first search');
   let currentFacets = await getFacetsFromRequest();
