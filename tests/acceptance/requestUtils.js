@@ -9,7 +9,7 @@ import { t } from 'testcafe';
  */
 export async function getMostRecentQueryParamsFromLogger (logger) {
   for (let i = 0; i < 50; i++) {
-    await t.wait(100);
+    await t.wait(200);
     if (logger.requests.length > 0) {
       break;
     }
