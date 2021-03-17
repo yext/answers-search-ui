@@ -107,7 +107,7 @@ fixture`Facets page with defaultInitialSearch`
   .after(shutdownServer)
   .page`${FACETS_INITIAL_SEARCH_PAGE}`;
 
-test.only(`Facets work with back/forward navigation and page refresh`, async t => {
+test(`Facets work with back/forward navigation and page refresh`, async t => {
   const logger = RequestLogger({
     url: /v2\/accounts\/me\/answers\/vertical\/query/
   });
