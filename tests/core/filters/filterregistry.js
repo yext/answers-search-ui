@@ -294,4 +294,31 @@ describe('FilterRegistry', () => {
     };
     expect(registry.createFacetsFromFilterNodes()).toEqual(expectedFacets);
   });
+  it('transforms static filters with multiple matchers into combined filters', () => {
+    const originalFilter = {
+      aField: {
+        $gt: 0,
+        $lt: 5
+      }
+    };
+    registry.setStaticFilterNodes('aName', FilterNodeFactory.from({
+      metadata: {},
+      filter: originalFilter
+    }));
+    expect(registry.getStaticFilterPayload()).toMatchObject({
+      combinator: '$and',
+      filters: [
+        {
+          fieldId: 'aField',
+          matcher: '$gt',
+          value: 0
+        },
+        {
+          fieldId: 'aField',
+          matcher: '$lt',
+          value: 5
+        }
+      ]
+    });
+  });
 });
