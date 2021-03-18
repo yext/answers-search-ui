@@ -21,6 +21,7 @@ const StorageKeys = {
   QUERY: 'query',
   QUERY_ID: 'query-id',
   FACET_FILTER_NODES: 'facet-filter-nodes',
+  PERSISTED_FACETS: 'facetFilters',
   DYNAMIC_FILTERS: 'dynamic-filters',
   GEOLOCATION: 'geolocation',
   QUESTION_SUBMISSION: 'question-submission',

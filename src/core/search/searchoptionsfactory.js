@@ -29,9 +29,15 @@ export default class SearchOptionsFactory {
       case QueryTriggers.INITIALIZE:
         return {
           setQueryParams: true,
-          resetPagination: false
+          resetPagination: false,
+          useFacets: true
         };
       case QueryTriggers.SUGGEST:
+        return {
+          setQueryParams: true,
+          resetPagination: true,
+          useFacets: true
+        };
       default:
         return {
           setQueryParams: true,

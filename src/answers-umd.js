@@ -168,6 +168,7 @@ class Answers {
         const hasQuery = query || query === '';
         this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
         this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
+        this.core.storage.delete(StorageKeys.PERSISTED_FACETS);
         this.core.filterRegistry.clearAllFilterNodes();
 
         if (!hasQuery) {
@@ -654,6 +655,8 @@ class Answers {
         return Filter.from(JSON.parse(value));
       case StorageKeys.PERSISTED_LOCATION_RADIUS:
         return parseFloat(value);
+      case StorageKeys.PERSISTED_FACETS:
+        return JSON.parse(value);
       default:
         return value;
     }
