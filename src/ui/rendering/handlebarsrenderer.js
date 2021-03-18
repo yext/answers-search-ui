@@ -102,7 +102,7 @@ export default class HandlebarsRenderer extends Renderer {
     }
 
     if (!(config.templateName in this._templates)) {
-      throw new Error('Can\'t find tempate: ' + config.templateName);
+      throw new Error('Can\'t find template: ' + config.templateName);
     }
 
     try {
