@@ -294,6 +294,7 @@ describe('FilterRegistry', () => {
     };
     expect(registry.createFacetsFromFilterNodes()).toEqual(expectedFacets);
   });
+
   it('transforms static filters with multiple matchers into combined filters', () => {
     const originalFilter = {
       aField: {
