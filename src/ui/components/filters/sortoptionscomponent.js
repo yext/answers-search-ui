@@ -19,7 +19,7 @@ export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
     this.options = this._config.options;
-    this.selectedOptionIndex = this.getPersistedOptionIndex();
+    this.selectedOptionIndex = this.getPersistedSelectedOptionIndex();
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.searchOnChangeIsEnabled = this._config.searchOnChange;
@@ -48,7 +48,7 @@ export default class SortOptionsComponent extends Component {
       eventType: 'update',
       storageKey: StorageKeys.HISTORY_POP_STATE,
       callback: () => {
-        const persistedOptionIndex = this.getPersistedOptionIndex();
+        const persistedOptionIndex = this.getPersistedSelectedOptionIndex();
         this._updateSelectedOption(persistedOptionIndex);
         this.setState();
       }
@@ -60,7 +60,7 @@ export default class SortOptionsComponent extends Component {
    *
    * @returns {number|undefined}
    */
-  getPersistedOptionIndex () {
+  getPersistedSelectedOptionIndex () {
     const persistedSortBys = this.core.storage.get(StorageKeys.SORT_BYS) || [];
     const persistedIndex = this._config.options.findIndex(option => {
       return persistedSortBys.find(persistedOption =>
