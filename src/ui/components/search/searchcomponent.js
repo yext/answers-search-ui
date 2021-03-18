@@ -153,6 +153,11 @@ export default class SearchComponent extends Component {
     this._globalSearchConfig = this.core.storage.get(StorageKeys.SEARCH_CONFIG) || {};
 
     /**
+     * The default initial search query, can be an empty string
+     */
+    this._defaultInitialSearch = this._globalSearchConfig.defaultInitialSearch;
+
+    /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
      * @type {string|null}
@@ -283,7 +288,8 @@ export default class SearchComponent extends Component {
     const queryUpdateListener = new QueryUpdateListener(this.core, {
       searchCooldown: this._searchCooldown,
       verticalKey: this._verticalKey,
-      allowEmptySearch: this._allowEmptySearch
+      allowEmptySearch: this._allowEmptySearch,
+      defaultInitialSearch: this._defaultInitialSearch
     });
     this.core.setQueryUpdateListener(queryUpdateListener);
     this.core.queryUpdateListener.registerMiddleware(query => this.promptForLocation(query));
