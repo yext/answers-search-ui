@@ -4,6 +4,7 @@ import { mount } from 'enzyme';
 import { AnswersBasicError } from '../../../../src/core/errors/errors';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
+import QueryTriggers from '../../../../src/core/models/querytriggers';
 
 const mockedCore = () => {
   return {
@@ -211,7 +212,7 @@ describe('sort options component', () => {
     expect(wrapper.find('.yxt-SortOptions-optionSelector').at(0).getDOMNode().checked).toBeTruthy();
   });
 
-  it('sets persisted sort option on back navigation', () => {
+  it('sets the selected sort option on HISTORY_POP_STATE', () => {
     const opts = {
       ...defaultConfig,
       options: threeOptions
@@ -225,7 +226,7 @@ describe('sort options component', () => {
     expect(wrapper.find('.yxt-SortOptions-optionSelector').at(3).getDOMNode().checked).toBeTruthy();
   });
 
-  it('resets persisted sort option when back navigating to blank url', () => {
+  it('sets the selected sort option to default on HISTORY_POP_STATE with no persisted sorts', () => {
     const opts = {
       ...defaultConfig,
       options: threeOptions
@@ -238,5 +239,30 @@ describe('sort options component', () => {
     COMPONENT_MANAGER.core.storage.set(StorageKeys.HISTORY_POP_STATE, {});
     wrapper.update();
     expect(wrapper.find('.yxt-SortOptions-optionSelector').at(0).getDOMNode().checked).toBeTruthy();
+  });
+
+  it('sets the selected sort option on back/forward navigation', () => {
+    const opts = {
+      ...defaultConfig,
+      options: threeOptions
+    };
+    const triggerSearch = jest.fn();
+    COMPONENT_MANAGER.core.triggerSearch = triggerSearch;
+    const component = COMPONENT_MANAGER.create('SortOptions', opts);
+    const wrapper = mount(component);
+    expect(wrapper.find('.yxt-SortOptions-optionSelector').at(0).getDOMNode().checked).toBeTruthy();
+    expect(triggerSearch).toHaveBeenCalledTimes(0);
+
+    const fourthOption = wrapper.find('.yxt-SortOptions-optionSelector').at(3);
+    fourthOption.simulate('click');
+    expect(triggerSearch).toHaveBeenCalledTimes(1);
+    expect(triggerSearch).toHaveBeenLastCalledWith(QueryTriggers.FILTER_COMPONENT);
+    expect(wrapper.find('.yxt-SortOptions-optionSelector').at(3).getDOMNode().checked).toBeTruthy();
+
+    COMPONENT_MANAGER.core.storage.delete(StorageKeys.SORT_BYS);
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.HISTORY_POP_STATE, {});
+    wrapper.update();
+    expect(wrapper.find('.yxt-SortOptions-optionSelector').at(0).getDOMNode().checked).toBeTruthy();
+    expect(triggerSearch).toHaveBeenCalledTimes(1);
   });
 });
