@@ -265,6 +265,7 @@ export default class FacetsComponent extends Component {
    * Applies default formatting to boolean facets
    *
    * @param {DisplayableFacet[]} facets from answers-core
+   * @returns {DisplayableFacet[]} from answers-core
    */
   _transformBooleanFacets (facets) {
     return facets.map(facet => {
