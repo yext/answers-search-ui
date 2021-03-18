@@ -216,7 +216,7 @@ export default class SortOptionsComponent extends Component {
    * Trigger a search with all filters in storage
    */
   _search () {
-    console.log('trigger sort search')
+    console.log('trigger sort search');
     this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
   }
 
