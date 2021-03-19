@@ -33,7 +33,7 @@ const StorageKeys = {
   SESSIONS_OPT_IN: 'sessions-opt-in',
   VERTICAL_PAGES_CONFIG: 'vertical-pages-config',
   LOCALE: 'locale',
-  SORT_BYS: 'sort-bys',
+  SORT_BYS: 'sortBys',
   NO_RESULTS_CONFIG: 'no-results-config',
   RESULTS_HEADER: 'results-header', // DEPRECATED
   API_CONTEXT: 'context',

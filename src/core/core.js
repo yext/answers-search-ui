@@ -508,7 +508,7 @@ export default class Core {
         direction: option.direction
       };
     });
-    this.storage.set(StorageKeys.SORT_BYS, sortBys);
+    this.storage.setWithPersist(StorageKeys.SORT_BYS, sortBys);
   }
 
   /**

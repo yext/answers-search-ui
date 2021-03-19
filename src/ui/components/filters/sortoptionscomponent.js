@@ -19,7 +19,7 @@ export default class SortOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(assignDefaults(config), systemConfig);
     this.options = this._config.options;
-    this.selectedOptionIndex = parseInt(this.core.storage.get(this.name)) || 0;
+    this.selectedOptionIndex = this.getPersistedSelectedOptionIndex();
     this.options[this.selectedOptionIndex].isSelected = true;
     this.hideExcessOptions = this._config.showMore && this.selectedOptionIndex < this._config.showMoreLimit;
     this.searchOnChangeIsEnabled = this._config.searchOnChange;
@@ -43,6 +43,33 @@ export default class SortOptionsComponent extends Component {
         }
       }
     });
+
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.HISTORY_POP_STATE,
+      callback: () => {
+        const persistedOptionIndex = this.getPersistedSelectedOptionIndex();
+        this._updateSelectedOption(persistedOptionIndex);
+        this.setState();
+      }
+    });
+  }
+
+  /**
+   * Returns the option index matching the persisted sortBys, if one exists.
+   *
+   * @returns {number|undefined}
+   */
+  getPersistedSelectedOptionIndex () {
+    const persistedSortBys = this.core.storage.get(StorageKeys.SORT_BYS) || [];
+    const persistedIndex = this._config.options.findIndex(option => {
+      return persistedSortBys.find(persistedOption =>
+        persistedOption.direction === option.direction &&
+        persistedOption.type === option.type &&
+        persistedOption.field === option.field
+      );
+    });
+    return persistedIndex === -1 ? 0 : persistedIndex;
   }
 
   /**
@@ -176,7 +203,6 @@ export default class SortOptionsComponent extends Component {
 
     // searchOnChange really means sort on change here, just that the sort is done through a search,
     // This was done to have a consistent option name between filters.
-    this.core.storage.setWithPersist(this.name, optionIndex);
     if (this._config.storeOnChange && optionIndex === 0) {
       this.core.clearSortBys();
     } else if (this._config.storeOnChange) {
