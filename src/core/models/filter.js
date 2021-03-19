@@ -25,7 +25,7 @@ export default class Filter {
   }
 
   /**
-   * Whether the this filter is a range filter.
+   * Whether this filter is a range filter.
    *
    * @param {Filter} filter
    * @returns {boolean}

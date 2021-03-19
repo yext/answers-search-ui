@@ -1,3 +1,6 @@
+/**
+ * A Matcher is a filtering operation for {@link Filter}s.
+ */
 const Matcher = {
   Equals: '$eq',
   NotEquals: '!$eq',
