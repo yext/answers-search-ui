@@ -123,6 +123,7 @@ export default class FilterRegistry {
   /**
    * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter} or {@link CombinedFilter}
    * if there are multiple matchers.
+   * TODO(SLAP-1183): remove the parsing for multiple matchers.
    *
    * @param {SimpleFilterNode} filterNode
    * @returns {Filter}
