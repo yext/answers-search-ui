@@ -121,7 +121,9 @@ export default class FilterRegistry {
   }
 
   /**
-   * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter}
+   * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter} or {@link CombinedFilter}
+   * if there are multiple matchers.
+   * TODO(SLAP-1183): remove the parsing for multiple matchers.
    *
    * @param {SimpleFilterNode} filterNode
    * @returns {Filter}
@@ -129,13 +131,26 @@ export default class FilterRegistry {
   _transformSimpleFilterNode (filterNode) {
     const fieldId = Object.keys(filterNode.filter)[0];
     const filterComparison = filterNode.filter[fieldId];
-    const matcher = Object.keys(filterComparison)[0];
-    const value = filterComparison[matcher];
-    return {
-      fieldId: fieldId,
-      matcher: matcher,
-      value: value
-    };
+    const matchers = Object.keys(filterComparison);
+    if (matchers.length === 1) {
+      const matcher = matchers[0];
+      const value = filterComparison[matcher];
+      return {
+        fieldId: fieldId,
+        matcher: matcher,
+        value: value
+      };
+    } else if (matchers.length > 1) {
+      const childFilters = matchers.map(matcher => ({
+        fieldId: fieldId,
+        matcher: matcher,
+        value: filterComparison[matcher]
+      }));
+      return {
+        combinator: FilterCombinators.AND,
+        filters: childFilters
+      };
+    }
   }
 
   /**
