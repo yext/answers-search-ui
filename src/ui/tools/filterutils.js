@@ -34,7 +34,7 @@ export function findSimpleFiltersWithFieldId (persistedFilter, fieldId) {
     persistedFilter[FilterCombinators.AND] || persistedFilter[FilterCombinators.OR];
   if (childFilters) {
     return childFilters.flatMap(
-      childFilter => findSimpleFiltersWithFieldId(Filter.from(childFilter), persistedFilter));
+      childFilter => findSimpleFiltersWithFieldId(Filter.from(childFilter), fieldId));
   }
   if (Filter.from(persistedFilter).getFilterKey() === fieldId) {
     return [ persistedFilter ];
