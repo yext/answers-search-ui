@@ -79,6 +79,10 @@ export default class DateRangeFilterComponent extends Component {
     });
   }
 
+  /**
+   * Reseeds the component state from the PERSISTED_FILTER in storage.
+   * If there is an active filter, store it in core.
+   */
   seedFromPersistedFilter () {
     if (this.core.storage.has(StorageKeys.PERSISTED_FILTER)) {
       const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
