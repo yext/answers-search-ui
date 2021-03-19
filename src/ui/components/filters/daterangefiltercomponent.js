@@ -74,8 +74,8 @@ export default class DateRangeFilterComponent extends Component {
      * @private
      */
     this._date = {
-      min: minDate || config.initialMin || todayString,
-      max: maxDate || config.initialMax || todayString
+      min: [minDate, config.initialMin, todayString].find(v => v !== undefined),
+      max: [maxDate, config.initialMax, todayString].find(v => v !== undefined)
     };
   }
 

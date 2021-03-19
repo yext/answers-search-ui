@@ -359,4 +359,21 @@ describe('date range filter component', () => {
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
   });
+
+  it('interprets a null initialMin/Max as unset', () => {
+    const config = {
+      ...defaultConfig,
+      initialMin: null,
+      initialMax: null
+    };
+
+    const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
+    const wrapper = mount(component);
+    const minInputs = wrapper.find('input[data-key="min"]');
+    expect(minInputs).toHaveLength(1);
+    expect(minInputs.props().value).toBeFalsy();
+    const maxInputs = wrapper.find('input[data-key="max"]');
+    expect(maxInputs).toHaveLength(1);
+    expect(maxInputs.props().value).toBeFalsy();
+  });
 });

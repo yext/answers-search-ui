@@ -183,4 +183,23 @@ describe('range filter component', () => {
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
   });
+
+  it('interprets a null initialMin/Max as unset', () => {
+    const config = {
+      ...defaultConfig,
+      field: 'yorha',
+      title: 'Flowers for m[A]chines',
+      initialMin: null,
+      initialMax: null
+    };
+
+    const component = COMPONENT_MANAGER.create('RangeFilter', config);
+    const wrapper = mount(component);
+    const minInputs = wrapper.find('input[data-key="min"]');
+    expect(minInputs).toHaveLength(1);
+    expect(minInputs.props().value).toBeFalsy();
+    const maxInputs = wrapper.find('input[data-key="max"]');
+    expect(maxInputs).toHaveLength(1);
+    expect(maxInputs.props().value).toBeFalsy();
+  });
 });

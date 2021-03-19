@@ -1644,9 +1644,9 @@ ANSWERS.addComponent('RangeFilter', {
   maxLabel: 'Not More Than',
   // Optional, the placeholder text for the max value, defaults to 'Max'
   maxPlaceholderText: 'Max',
-  // Optional, the initial min value to show, defaults to 0
+  // Optional, the initial min value to show, defaults to 0. Set this to null to clear the value.
   initialMin: 1,
-  // Optional, the initial max value to show, defaults to 10
+  // Optional, the initial max value to show, defaults to 10. Set this to null to clear the value.
   initialMax: 5,
   // Optional, the callback function to call when changed
   onChange: function() {}
@@ -1673,9 +1673,9 @@ ANSWERS.addComponent('DateRangeFilter', {
   minLabel: 'Earliest',
   // Optional, the label to show next to the max date, defaults to no label
   maxLabel: 'Latest',
-  // Optional, the initial min date to show in yyyy-mm-dd format, defaults to today
+  // Optional, the initial min date to show in yyyy-mm-dd format, defaults to today. Set this to null to clear the value.
   initialMin: '2019-08-01',
-  // Optional, the initial max date to show in yyyy-mm-dd format, defaults to today
+  // Optional, the initial max date to show in yyyy-mm-dd format, defaults to today. Set this to null to clear the value.
   initialMax: '2019-09-01',
   // Optional, whether to store the filter on change to input
   storeOnChange: true,

@@ -63,8 +63,8 @@ export default class RangeFilterComponent extends Component {
      * @private
      */
     this._range = {
-      min: this.getFirstValidValue(minVal, config.initialMin, 0),
-      max: this.getFirstValidValue(maxVal, config.initialMax, 10)
+      min: [minVal, config.initialMin, 0].find(v => v !== undefined),
+      max: [maxVal, config.initialMax, 10].find(v => v !== undefined)
     };
 
     /**
@@ -87,14 +87,6 @@ export default class RangeFilterComponent extends Component {
      * @private
      */
     this._maxLabel = config.maxLabel || null;
-  }
-
-  getFirstValidValue (...values) {
-    for (const value of values) {
-      if (value || value === 0) {
-        return value;
-      }
-    }
   }
 
   static get type () {
