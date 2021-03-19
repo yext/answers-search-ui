@@ -24,16 +24,17 @@ export function filterIsPersisted (filter, persistedFilter) {
  * Given a filter, return an array of all it's descendants, including itself, that
  * filter on the given fieldId.
  *
- * @param {string} fieldId
  * @param {Filter} persistedFilter
+ * @param {string} fieldId
+ *
  * @returns {Array<Filter>}
  */
-export function findSimpleFiltersWithFieldId (fieldId, persistedFilter) {
+export function findSimpleFiltersWithFieldId (persistedFilter, fieldId) {
   const childFilters =
     persistedFilter[FilterCombinators.AND] || persistedFilter[FilterCombinators.OR];
   if (childFilters) {
     return childFilters.flatMap(
-      childFilter => findSimpleFiltersWithFieldId(fieldId, Filter.from(childFilter)));
+      childFilter => findSimpleFiltersWithFieldId(Filter.from(childFilter), persistedFilter));
   }
   if (Filter.from(persistedFilter).getFilterKey() === fieldId) {
     return [ persistedFilter ];
@@ -44,6 +45,8 @@ export function findSimpleFiltersWithFieldId (fieldId, persistedFilter) {
 /**
  * Finds a persisted range filter for the given fieldId, and returns its contents.
  *
+ * @param {Filter} persistedFilter
+ * @param {string} fieldId
  * @returns {{minVal: number, maxVal: number}}
  */
 export function getPersistedRangeFilterContents (persistedFilter, fieldId) {
@@ -51,7 +54,7 @@ export function getPersistedRangeFilterContents (persistedFilter, fieldId) {
     return {};
   }
   const rangeFiltersForFieldId =
-    findSimpleFiltersWithFieldId(fieldId, persistedFilter)
+    findSimpleFiltersWithFieldId(persistedFilter, fieldId)
       .filter(f => f.isRangeFilter());
   if (rangeFiltersForFieldId.length < 1) {
     return {};

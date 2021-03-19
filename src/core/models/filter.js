@@ -3,6 +3,13 @@
 import FilterCombinators from '../filters/filtercombinators';
 import Matcher from '../filters/matcher';
 
+const RANGE_MATCHERS = new Set([
+  Matcher.GreaterThan,
+  Matcher.GreaterThanOrEqualTo,
+  Matcher.LessThanOrEqualTo,
+  Matcher.LessThan
+]);
+
 /**
  * Represents an api filter and provides static methods for easily constructing Filters.
  * See https://developer.yext.com/docs/api-reference/#operation/listEntities for structure details
@@ -27,7 +34,6 @@ export default class Filter {
   /**
    * Whether this filter is a range filter.
    *
-   * @param {Filter} filter
    * @returns {boolean}
    */
   isRangeFilter () {
@@ -36,13 +42,7 @@ export default class Filter {
       return false;
     }
     const matchers = Object.keys(this[filterKey]);
-    const rangeMatchers = new Set([
-      Matcher.GreaterThan,
-      Matcher.GreaterThanOrEqualTo,
-      Matcher.LessThanOrEqualTo,
-      Matcher.LessThan
-    ]);
-    return matchers.every(m => rangeMatchers.has(m));
+    return matchers.every(m => RANGE_MATCHERS.has(m));
   }
 
   /**

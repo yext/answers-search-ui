@@ -1,5 +1,9 @@
 import Filter from '../../../src/core/models/filter';
-import { filterIsPersisted, findSimpleFiltersWithFieldId, getPersistedRangeFilterContents } from '../../../src/ui/tools/filterutils';
+import {
+  filterIsPersisted,
+  findSimpleFiltersWithFieldId,
+  getPersistedRangeFilterContents
+} from '../../../src/ui/tools/filterutils';
 
 describe('filterIsPersisted', () => {
   it('can detect when a filter is equal to the persisted filter', () => {
@@ -115,7 +119,7 @@ describe('findSimpleFiltersWithFieldId', () => {
         filter4
       ]
     });
-    expect(findSimpleFiltersWithFieldId(fieldId, persistedFilter))
+    expect(findSimpleFiltersWithFieldId(persistedFilter, fieldId))
       .toContainEqual(filter2, filter3, filter4);
   });
 
@@ -129,14 +133,14 @@ describe('findSimpleFiltersWithFieldId', () => {
     const persistedFilter = Filter.from({
       $or: [filter1, filter2]
     });
-    expect(findSimpleFiltersWithFieldId('bob_id', persistedFilter)).toEqual([]);
+    expect(findSimpleFiltersWithFieldId(persistedFilter, 'bob_id')).toEqual([]);
   });
 
   it('works when the persisted filter is a simple filter', () => {
     const filter1 = Filter.from({
       c_aField: { $eq: 5 }
     });
-    expect(findSimpleFiltersWithFieldId('c_aField', filter1)).toEqual([ filter1 ]);
+    expect(findSimpleFiltersWithFieldId(filter1, 'c_aField')).toEqual([ filter1 ]);
   });
 });
 
