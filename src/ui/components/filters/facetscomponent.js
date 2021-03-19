@@ -214,12 +214,6 @@ export default class FacetsComponent extends Component {
     this._filterbox = null;
 
     /**
-     * Determines whether or not field overrides are enabled
-     * @type {boolean}
-     */
-    this._isFieldOverridesEnabled = !this.config.transformFacets;
-
-    /**
      * A transformation function which operates on the core library DisplayableFacet model
      * @type {Function}
      */
@@ -257,8 +251,28 @@ export default class FacetsComponent extends Component {
     return super.setState({
       ...data,
       filters: Facet.fromCore(updatedFacets),
+      filterOptionsConfigs: this._getFilterOptionsConfigs(updatedFacets),
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     });
+  }
+
+  /**
+   * Gets filter options from transformedFacets and puts them in an object
+   * keyed by fieldId
+   *
+   * @param {DisplayableFacet | FilterOptionsConfig} transformedFacets a union of the
+   * DisplayableFacet model from ansers-core, and the config options of the FilterOptionsConfig
+   * @returns {Object} config options of the FilterOptionsConfig keyed by filterId
+   */
+  _getFilterOptionsConfigs (transformedFacets) {
+    return transformedFacets.reduce((acc, currentFacet) => {
+      const filterOptions = Object.assign({}, currentFacet);
+      // Don't support options when extracting filterOptions from transformedFacets
+      // because the core library DisplayableFacet isn't compatible with FilterOptionsConfig.options
+      filterOptions['options'] && delete filterOptions['options'];
+      acc[currentFacet.fieldId] = filterOptions;
+      return acc;
+    }, {});
   }
 
   /**
@@ -297,16 +311,17 @@ export default class FacetsComponent extends Component {
       this._filterbox.remove();
     }
 
-    let { filters, isNoResults } = this._state.get();
+    let { filters, isNoResults, filterOptionsConfigs } = this._state.get();
 
     if (filters.length === 0 || isNoResults) {
       return;
     }
 
     filters = filters.map(f => {
-      const fieldOverrides = this._isFieldOverridesEnabled
-        ? this.config.fields[f.fieldId] || {}
-        : {};
+      const fieldOverrides = this.config.transformFacets
+        ? filterOptionsConfigs[f.fieldId] || {}
+        : this.config.fields[f.fieldId] || {};
+
       return Object.assign({}, f, {
         type: 'FilterOptions',
         control: this.config.fieldControls[f.fieldId] || 'multioption',
