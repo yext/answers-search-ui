@@ -1,15 +1,15 @@
 /** @module RangeFilterComponent */
 
-import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
 import Component from '../component';
-import FilterNodeFactory from '../../../core/filters/filternodefactory';
-import FilterMetadata from '../../../core/filters/filtermetadata';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import Filter from '../../../core/models/filter';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
+import Matcher from '../../../core/filters/matcher';
 import StorageKeys from '../../../core/storage/storagekeys';
 import { getPersistedRangeFilterContents } from '../../tools/filterutils';
-import Matcher from '../../../core/filters/matcher';
 
 const DEFAULT_CONFIG = {
   minPlaceholderText: TranslationFlagger.flag({
