@@ -240,25 +240,48 @@ export default class FacetsComponent extends Component {
   }
 
   setState (data) {
-    const previousFacets = data['filters'] || [];
-    let updatedFacets = [];
+    const facets = data['filters'] || [];
+    let processedFacets = this._processFacets(facets);
 
     if (this._transformFacets) {
-      const facetsCopy = cloneDeep(previousFacets);
-      const transformedFacets = this._transformFacets(facetsCopy, this.config);
-
-      updatedFacets = transformedFacets;
-    } else {
-      updatedFacets = previousFacets;
+      const facetsCopy = cloneDeep(facets);
+      processedFacets = this._transformFacets(facetsCopy, this.config);
     }
-
-    updatedFacets = this._transformBooleanFacets(updatedFacets);
 
     return super.setState({
       ...data,
-      filters: Facet.fromCore(updatedFacets),
+      filters: Facet.fromCore(processedFacets),
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     });
+  }
+
+  /**
+   * Applies default formatting to different types of facets
+   *
+   * @param {DisplayableFacet[]} facets from answers-core
+   * @returns {DisplayableFacet[]} from answers-core
+   */
+  _processFacets (facets) {
+    const processedFacets = [];
+    const booleanFacets = [];
+
+    const isBooleanFacet = facet => {
+      const firstOption = (facet.options && facet.options[1]) || {};
+      return firstOption['value'] === true || firstOption['value'] === false;
+    };
+
+    facets.forEach(facet => {
+      if (isBooleanFacet(facet)) {
+        booleanFacets.push(facet);
+      } else {
+        processedFacets.push(facet);
+      }
+    });
+
+    const transformedBooleanFacets = this._transformBooleanFacets(booleanFacets);
+    processedFacets.push(...transformedBooleanFacets);
+
+    return processedFacets;
   }
 
   /**
