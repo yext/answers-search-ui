@@ -114,4 +114,27 @@ describe('Facets Component', () => {
 
     expect(actualDisplayNames).toEqual(expect.arrayContaining(expectedDisplayNames));
   });
+
+  it('filter options can be specified with transformFacets', () => {
+    const expectedFacetDisplayName = 'Custom Facet';
+    const transformFacets = facets => {
+      facets.forEach(facet => {
+        facet.label = expectedFacetDisplayName;
+        return facet;
+      });
+      return facets;
+    };
+    const component = COMPONENT_MANAGER.create('Facets', {
+      transformFacets,
+      defaultConfig
+    });
+    const dynamicFilters = DynamicFilters.fromCore(coreFacets);
+    component.core.storage.set(StorageKeys.DYNAMIC_FILTERS, dynamicFilters);
+    const wrapper = mount(component);
+
+    const firstFacet = wrapper.find('.yxt-FilterOptions-label')[0];
+    const firstFacetDisplayName = firstFacet.text().trim();
+
+    expect(firstFacetDisplayName).toEqual(expectedFacetDisplayName);
+  });
 });
