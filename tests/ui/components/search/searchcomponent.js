@@ -18,9 +18,6 @@ describe('SearchBar component', () => {
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
     COMPONENT_MANAGER = mockManager({
-      setQuery: function (query) {
-        this.storage.set(StorageKeys.QUERY, query);
-      },
       autoCompleteVertical: jest.fn(() => Promise.resolve({ inputIntents: [] })),
       autoCompleteUniversal: jest.fn(() => Promise.resolve({ inputIntents: [] })),
       verticalSearch: jest.fn()
@@ -93,6 +90,7 @@ describe('SearchBar component', () => {
       verticalKey: null,
       allowEmptySearch: true
     });
+    component.searchAfterAnswersOnReady();
 
     const wasSearchRanPromise = new Promise(resolve => {
       component.core.search = jest.fn(() => {

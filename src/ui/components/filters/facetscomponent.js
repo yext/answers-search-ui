@@ -234,24 +234,18 @@ export default class FacetsComponent extends Component {
   }
 
   setState (data) {
-    const previousFacets = data['filters'] || [];
-    let updatedFacets = [];
+    const facets = data['filters'] || [];
+    let processedFacets = this._processFacets(facets);
 
     if (this._transformFacets) {
-      const facetsCopy = cloneDeep(previousFacets);
-      const transformedFacets = this._transformFacets(facetsCopy, this.config);
-
-      updatedFacets = transformedFacets;
-    } else {
-      updatedFacets = previousFacets;
+      const facetsCopy = cloneDeep(facets);
+      processedFacets = this._transformFacets(facetsCopy, this.config);
     }
-
-    updatedFacets = this._transformBooleanFacets(updatedFacets);
 
     return super.setState({
       ...data,
-      filters: Facet.fromCore(updatedFacets),
-      filterOptionsConfigs: this._getFilterOptionsConfigs(updatedFacets),
+      filters: Facet.fromCore(processedFacets),
+      filterOptionsConfigs: this._getFilterOptionsConfigs(processedFacets),
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     });
   }
@@ -276,25 +270,43 @@ export default class FacetsComponent extends Component {
   }
 
   /**
-   * Applies default formatting to boolean facets
+   * Applies default formatting to different types of facets
    *
    * @param {DisplayableFacet[]} facets from answers-core
    * @returns {DisplayableFacet[]} from answers-core
    */
-  _transformBooleanFacets (facets) {
+  _processFacets (facets) {
+    const isBooleanFacet = facet => {
+      const firstOption = (facet.options && facet.options[1]) || {};
+      return firstOption['value'] === true || firstOption['value'] === false;
+    };
+
     return facets.map(facet => {
-      const options = facet.options.map(option => {
-        let displayName = option.displayName;
-        if (option.value === true && displayName === 'true') {
-          displayName = TranslationFlagger.flag({ phrase: 'True', context: 'True or False' });
-        }
-        if (option.value === false && displayName === 'false') {
-          displayName = TranslationFlagger.flag({ phrase: 'False', context: 'True or False' });
-        }
-        return Object.assign({}, option, { displayName });
-      });
-      return Object.assign({}, facet, { options });
+      if (isBooleanFacet(facet)) {
+        return this._transformBooleanFacet(facet);
+      }
+      return facet;
     });
+  }
+
+  /**
+   * Applies default formatting to a boolean facet
+   *
+   * @param {DisplayableFacet} facet from answers-core
+   * @returns {DisplayableFacet} from answers-core
+   */
+  _transformBooleanFacet (facet) {
+    const options = facet.options.map(option => {
+      let displayName = option.displayName;
+      if (option.value === true && displayName === 'true') {
+        displayName = TranslationFlagger.flag({ phrase: 'True', context: 'True or False' });
+      }
+      if (option.value === false && displayName === 'false') {
+        displayName = TranslationFlagger.flag({ phrase: 'False', context: 'True or False' });
+      }
+      return Object.assign({}, option, { displayName });
+    });
+    return Object.assign({}, facet, { options });
   }
 
   remove () {

@@ -13,14 +13,21 @@ import SearchParams from '../../ui/dom/searchparams';
  * @param {Function} callback for state (persistent store) reset
  */
 export default class Storage {
-  constructor (persistedStateListeners = {}) {
+  constructor (config = {}) {
     /**
      * The listeners for changes in state (persistent storage changes)
      */
     this.persistedStateListeners = {
-      update: persistedStateListeners.update || function () {},
-      reset: persistedStateListeners.reset || function () {}
+      update: config.updateListener || function () {},
+      reset: config.resetListener || function () {}
     };
+
+    /**
+     * A hook for parsing values from persistent storage on init.
+     *
+     * @type {Function}
+     */
+    this.persistedValueParser = config.persistedValueParser;
 
     /**
      * The listener for window.pop in the persistent storage
@@ -69,7 +76,10 @@ export default class Storage {
   init (url) {
     this.persistentStorage.init(url);
     this.persistentStorage.getAll().forEach((value, key) => {
-      this.set(key, value);
+      const parsedValue = this.persistedValueParser
+        ? this.persistedValueParser(key, value)
+        : value;
+      this.set(key, parsedValue);
     });
     return this;
   }
@@ -154,6 +164,16 @@ export default class Storage {
 
     this.storage.delete(key);
     this.persistentStorage.delete(key);
+  }
+
+  /**
+   * Whether the specified key exists or not
+   *
+   * @param {string} key the storage key
+   * @return {boolean}
+   */
+  has (key) {
+    return this.storage.has(key);
   }
 
   /**

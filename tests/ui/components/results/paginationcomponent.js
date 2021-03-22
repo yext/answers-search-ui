@@ -16,7 +16,6 @@ const createCore = () => {
   storage.set(StorageKeys.NO_RESULTS_CONFIG, { displayAllResults: true });
 
   return {
-    verticalSearch: () => {},
     verticalPage: () => {},
     storage: storage
   };

@@ -101,7 +101,7 @@ export default class LocationBiasComponent extends Component {
             lng: position.coords.longitude,
             radius: position.coords.accuracy
           });
-          this._doSearch();
+          this.core.triggerSearch();
         },
         (err) => this._handleGeolocationError(err),
         this._geolocationOptions);
@@ -150,18 +150,6 @@ export default class LocationBiasComponent extends Component {
         return this._config.deviceAccuracyHelpText;
       default:
         return '';
-    }
-  }
-
-  _doSearch () {
-    if (this._verticalKey) {
-      this.core.verticalSearch(this._verticalKey, {
-        setQueryParams: true,
-        useFacets: true
-      });
-    } else {
-      let query = this.core.storage.get(StorageKeys.QUERY);
-      this.core.search(query);
     }
   }
 

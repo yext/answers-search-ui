@@ -8,6 +8,7 @@ import buildSearchParameters from '../../tools/searchparamsparser';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -312,11 +313,7 @@ export default class GeoLocationComponent extends Component {
     }
 
     if (this._config.searchOnChange) {
-      this.core.verticalSearch(this._config.verticalKey, {
-        setQueryParams: true,
-        resetPagination: true,
-        useFacets: true
-      });
+      this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
     }
   }
 
