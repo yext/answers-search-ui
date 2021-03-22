@@ -445,3 +445,13 @@ msgstr "Eine Fragen stellen"
 msgctxt "Verb, clears search"
 msgid "Clear"
 msgstr "entfernen"
+
+#: src/ui/components/filters/facetscomponent.js:277
+msgctxt "True or False"
+msgid "False"
+msgstr "Falsch"
+
+#: src/ui/components/filters/facetscomponent.js:274
+msgctxt "True or False"
+msgid "True"
+msgstr "Wahr"

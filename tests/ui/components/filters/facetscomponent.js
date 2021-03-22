@@ -10,6 +10,27 @@ describe('Facets Component', () => {
   DOM.setup(document, new DOMParser());
   let COMPONENT_MANAGER, defaultConfig;
 
+  const coreFacets = [{
+    fieldId: 'c_acceptingNewPatients',
+    displayName: 'Accepting New Patients',
+    options: [
+      {
+        displayName: 'true',
+        count: 1,
+        selected: false,
+        matcher: '$eq',
+        value: true
+      },
+      {
+        displayName: 'false',
+        count: 1,
+        selected: false,
+        matcher: '$eq',
+        value: false
+      }
+    ]
+  }];
+
   beforeEach(() => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
@@ -52,27 +73,6 @@ describe('Facets Component', () => {
       });
       return facets;
     };
-    const coreFacets = [{
-      fieldId: 'c_acceptingNewPatients',
-      displayName: 'Accepting New Patients',
-      options: [
-        {
-          displayName: 'true',
-          count: 1,
-          selected: false,
-          matcher: '$eq',
-          value: true
-        },
-        {
-          displayName: 'false',
-          count: 1,
-          selected: false,
-          matcher: '$eq',
-          value: false
-        }
-      ]
-    }];
-
     const component = COMPONENT_MANAGER.create('Facets', {
       transformFacets,
       ...defaultConfig
@@ -84,6 +84,26 @@ describe('Facets Component', () => {
     const expectedDisplayNames = [
       'Not Accepting Patients',
       'Accepting Patients'
+    ];
+    const actualDisplayNames = [];
+
+    wrapper.find('.js-yxt-FilterOptions-optionLabel--name').forEach(node => {
+      const displayName = node.text().trim();
+      actualDisplayNames.push(displayName);
+    });
+
+    expect(actualDisplayNames).toEqual(expect.arrayContaining(expectedDisplayNames));
+  });
+
+  it('_transformBooleanFacets() makes boolean facets uppercase by default', () => {
+    const component = COMPONENT_MANAGER.create('Facets', defaultConfig);
+    const dynamicFilters = DynamicFilters.fromCore(coreFacets);
+    component.core.storage.set(StorageKeys.DYNAMIC_FILTERS, dynamicFilters);
+    const wrapper = mount(component);
+
+    const expectedDisplayNames = [
+      'True',
+      'False'
     ];
     const actualDisplayNames = [];
 

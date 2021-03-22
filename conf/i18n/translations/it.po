@@ -444,3 +444,13 @@ msgstr "Fai una domanda"
 msgctxt "Verb, clears search"
 msgid "Clear"
 msgstr "Cancellare"
+
+#: src/ui/components/filters/facetscomponent.js:277
+msgctxt "True or False"
+msgid "False"
+msgstr "Falso"
+
+#: src/ui/components/filters/facetscomponent.js:274
+msgctxt "True or False"
+msgid "True"
+msgstr "Vero"
