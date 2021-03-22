@@ -22,7 +22,8 @@ import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
  * up to serve the search page and the dist directory of Answers.
  * This server is closed once all tests have completed.
  */
-let shouldThrowError = false;
+let shouldThrowError = true;
+let count = 0;
 fixture`Universal search page works as expected`
   .before(setupServer)
   .after(shutdownServer)
@@ -45,6 +46,7 @@ test.only('Basic universal flow', async t => {
   const faqsSectionTitle = await sections[1].getTitle();
   await t.expect(faqsSectionTitle.toUpperCase()).contains('FAQ');
   if (shouldThrowError) {
+    console.log('throwing error', ++count);
     throw new Error('test quarantine mode');
   }
   shouldThrowError = !shouldThrowError;
