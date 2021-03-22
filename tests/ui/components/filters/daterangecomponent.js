@@ -3,6 +3,7 @@ import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
 import Filter from 'src/core/models/filter';
 import FilterMetadata from '../../../../src/core/filters/filtermetadata';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 describe('date range filter component', () => {
   DOM.setup(document, new DOMParser());
@@ -149,7 +150,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
 
     // Set the min value again
     min = '2020-07-30';
@@ -161,7 +162,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
 
     // Clear the max value
     max = '';
@@ -173,7 +174,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
 
     // Set the max value again
     max = '2021-01-01';
@@ -185,7 +186,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(5);
 
     // Clear both values
     min = '';
@@ -198,7 +199,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(7);
 
     // Set both values, finally done!
     min = '2020-08-15';
@@ -212,7 +213,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(8);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(9);
   });
 
   it('correctly creates filter node when isExclusive is true', () => {
@@ -247,7 +248,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(1);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
 
     // Set the min value again
     min = '2020-07-30';
@@ -259,7 +260,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
 
     // Clear the max value
     max = '';
@@ -271,7 +272,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(3);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
 
     // Set the max value again
     max = '2021-01-01';
@@ -283,7 +284,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(5);
 
     // Clear both values
     min = '';
@@ -296,7 +297,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(6);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(7);
 
     // Set both values, finally done!
     min = '2020-08-15';
@@ -310,7 +311,7 @@ describe('date range filter component', () => {
     });
     expect(component.getFilterNode().getFilter()).toEqual(filter);
     expect(component.getFilterNode().getMetadata()).toEqual(metadata);
-    expect(setStaticFilterNodes.mock.calls).toHaveLength(8);
+    expect(setStaticFilterNodes.mock.calls).toHaveLength(9);
   });
 
   it('correctly creates filter node when min and max are equal and isExclusive is true', () => {
@@ -375,5 +376,98 @@ describe('date range filter component', () => {
     const maxInputs = wrapper.find('input[data-key="max"]');
     expect(maxInputs).toHaveLength(1);
     expect(maxInputs.props().value).toBeFalsy();
+  });
+
+  it('sets a filter on page load if min or max are not null, even if no persisted filter', () => {
+    const config = {
+      ...defaultConfig,
+      field: 'aField',
+      title: 'aTitle',
+      initialMin: 5,
+      initialMax: null
+    };
+    COMPONENT_MANAGER.create('DateRangeFilter', config);
+    expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
+    expect(setStaticFilterNodes.mock.calls[0][1].getFilter()).toMatchObject({
+      aField: {
+        $ge: 5
+      }
+    });
+  });
+
+  it('sets a filter on page load using the persisted filter, inclusive range', () => {
+    const config = {
+      ...defaultConfig,
+      field: 'aField',
+      title: 'aTitle'
+    };
+    const persistedFilter = Filter.from({
+      aField: {
+        $ge: 'startDate',
+        $le: 'endDate'
+      }
+    });
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.PERSISTED_FILTER, persistedFilter);
+    COMPONENT_MANAGER.create('DateRangeFilter', config);
+    expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
+    expect(setStaticFilterNodes.mock.calls[0][1].getFilter()).toMatchObject(persistedFilter);
+  });
+
+  it('sets a filter on page load using the persisted filter, exclusive range', () => {
+    const config = {
+      ...defaultConfig,
+      field: 'aField',
+      title: 'aTitle',
+      isExclusive: true
+    };
+    const persistedFilter = Filter.from({
+      aField: {
+        $gt: 'startDate',
+        $lt: 'endDate'
+      }
+    });
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.PERSISTED_FILTER, persistedFilter);
+    COMPONENT_MANAGER.create('DateRangeFilter', config);
+    expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
+    expect(setStaticFilterNodes.mock.calls[0][1].getFilter()).toMatchObject(persistedFilter);
+  });
+
+  it('will ignore an inclusive range filter if isExclusive is true', () => {
+    const config = {
+      ...defaultConfig,
+      field: 'aField',
+      title: 'aTitle',
+      isExclusive: true
+    };
+    const persistedFilter = Filter.from({
+      aField: {
+        $ge: 'startDate',
+        $le: 'endDate'
+      }
+    });
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.PERSISTED_FILTER, persistedFilter);
+    COMPONENT_MANAGER.create('DateRangeFilter', config);
+    expect(setStaticFilterNodes).toHaveBeenCalledTimes(0);
+  });
+
+  it('sets a filter on back navigation', () => {
+    const config = {
+      ...defaultConfig,
+      field: 'aField',
+      title: 'aTitle',
+      initialMin: null,
+      initialMax: null
+    };
+    const component = COMPONENT_MANAGER.create('DateRangeFilter', config);
+    expect(setStaticFilterNodes).toHaveBeenCalledTimes(0);
+    const persistedFilter = Filter.from({
+      aField: {
+        $le: 'endDate'
+      }
+    });
+    component.core.storage.set(StorageKeys.PERSISTED_FILTER, persistedFilter);
+    component.core.storage.set(StorageKeys.HISTORY_POP_STATE, new Map());
+    expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
+    expect(setStaticFilterNodes.mock.calls[0][1].getFilter()).toMatchObject(persistedFilter);
   });
 });
