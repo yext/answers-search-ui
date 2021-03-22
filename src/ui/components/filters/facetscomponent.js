@@ -262,48 +262,37 @@ export default class FacetsComponent extends Component {
    * @returns {DisplayableFacet[]} from answers-core
    */
   _processFacets (facets) {
-    const processedFacets = [];
-    const booleanFacets = [];
-
     const isBooleanFacet = facet => {
       const firstOption = (facet.options && facet.options[1]) || {};
       return firstOption['value'] === true || firstOption['value'] === false;
     };
 
-    facets.forEach(facet => {
+    return facets.map(facet => {
       if (isBooleanFacet(facet)) {
-        booleanFacets.push(facet);
-      } else {
-        processedFacets.push(facet);
+        return this._transformBooleanFacet(facet);
       }
+      return facet;
     });
-
-    const transformedBooleanFacets = this._transformBooleanFacets(booleanFacets);
-    processedFacets.push(...transformedBooleanFacets);
-
-    return processedFacets;
   }
 
   /**
-   * Applies default formatting to boolean facets
+   * Applies default formatting to a boolean facet
    *
-   * @param {DisplayableFacet[]} facets from answers-core
-   * @returns {DisplayableFacet[]} from answers-core
+   * @param {DisplayableFacet} facet from answers-core
+   * @returns {DisplayableFacet} from answers-core
    */
-  _transformBooleanFacets (facets) {
-    return facets.map(facet => {
-      const options = facet.options.map(option => {
-        let displayName = option.displayName;
-        if (option.value === true && displayName === 'true') {
-          displayName = TranslationFlagger.flag({ phrase: 'True', context: 'True or False' });
-        }
-        if (option.value === false && displayName === 'false') {
-          displayName = TranslationFlagger.flag({ phrase: 'False', context: 'True or False' });
-        }
-        return Object.assign({}, option, { displayName });
-      });
-      return Object.assign({}, facet, { options });
+  _transformBooleanFacet (facet) {
+    const options = facet.options.map(option => {
+      let displayName = option.displayName;
+      if (option.value === true && displayName === 'true') {
+        displayName = TranslationFlagger.flag({ phrase: 'True', context: 'True or False' });
+      }
+      if (option.value === false && displayName === 'false') {
+        displayName = TranslationFlagger.flag({ phrase: 'False', context: 'True or False' });
+      }
+      return Object.assign({}, option, { displayName });
     });
+    return Object.assign({}, facet, { options });
   }
 
   remove () {
