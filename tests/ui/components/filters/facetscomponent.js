@@ -132,7 +132,7 @@ describe('Facets Component', () => {
     component.core.storage.set(StorageKeys.DYNAMIC_FILTERS, dynamicFilters);
     const wrapper = mount(component);
 
-    const firstFacet = wrapper.find('.yxt-FilterOptions-label')[0];
+    const firstFacet = wrapper.find('.yxt-FilterOptions-label');
     const firstFacetDisplayName = firstFacet.text().trim();
 
     expect(firstFacetDisplayName).toEqual(expectedFacetDisplayName);
