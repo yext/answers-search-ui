@@ -28,7 +28,8 @@ fixture`Universal search page works as expected`
   .after(shutdownServer)
   .page`${UNIVERSAL_PAGE}`;
 
-test('Basic universal flow', async t => {
+test.only('Basic universal flow', async t => {
+  console.log('test quarantine mode log');
   const searchComponent = UniversalPage.getSearchComponent();
 
   await searchComponent.enterQuery('Tom');
@@ -43,6 +44,7 @@ test('Basic universal flow', async t => {
 
   const faqsSectionTitle = await sections[1].getTitle();
   await t.expect(faqsSectionTitle.toUpperCase()).contains('FAQ');
+  throw new Error('test quarantine mode');
 });
 
 fixture`Vertical search page works as expected`
