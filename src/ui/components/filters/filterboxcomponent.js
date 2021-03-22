@@ -5,6 +5,7 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import DOM from '../../dom/dom';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 class FilterBoxConfig {
   constructor (config) {
@@ -245,7 +246,7 @@ export default class FilterBoxComponent extends Component {
       if (button) {
         DOM.on(button, 'click', () => {
           this._saveFilterNodesToStorage();
-          this._search();
+          this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
         });
       }
     }
@@ -279,7 +280,7 @@ export default class FilterBoxComponent extends Component {
       this._saveFilterNodesToStorage();
     }
     if (searchOnChange) {
-      this._search();
+      this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
     }
   }
 
@@ -302,16 +303,5 @@ export default class FilterBoxComponent extends Component {
     } else {
       this._filterComponents.forEach(fc => fc.apply());
     }
-  }
-
-  /**
-   * Trigger a search with all filters in storage
-   */
-  _search () {
-    this.core.verticalSearch(this._config.verticalKey, {
-      setQueryParams: true,
-      resetPagination: true,
-      useFacets: true
-    });
   }
 }

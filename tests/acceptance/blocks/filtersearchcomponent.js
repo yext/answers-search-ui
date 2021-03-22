@@ -21,6 +21,7 @@ export default class FilterSearchComponentBlock {
       .pressKey('ctrl+a')
       .pressKey('backspace')
       .typeText(this._input, displayValue)
+      .pressKey('space')
       .wait(500)
       .click(this._selector.find('.js-yext-autocomplete-option').withText(displayValue));
   }

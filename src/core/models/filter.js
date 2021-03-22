@@ -1,6 +1,14 @@
 /** @module Filter */
 
 import FilterCombinators from '../filters/filtercombinators';
+import Matcher from '../filters/matcher';
+
+const RANGE_MATCHERS = new Set([
+  Matcher.GreaterThan,
+  Matcher.GreaterThanOrEqualTo,
+  Matcher.LessThanOrEqualTo,
+  Matcher.LessThan
+]);
 
 /**
  * Represents an api filter and provides static methods for easily constructing Filters.
@@ -21,6 +29,20 @@ export default class Filter {
     if (Object.keys(this).length > 0) {
       return Object.keys(this)[0];
     }
+  }
+
+  /**
+   * Whether this filter is a range filter.
+   *
+   * @returns {boolean}
+   */
+  isRangeFilter () {
+    const filterKey = this.getFilterKey();
+    if (!filterKey) {
+      return false;
+    }
+    const matchers = Object.keys(this[filterKey]);
+    return matchers.every(m => RANGE_MATCHERS.has(m));
   }
 
   /**
@@ -125,7 +147,7 @@ export default class Filter {
    * @returns {Filter}
    */
   static equal (field, value) {
-    return Filter._fromMatcher(field, '$eq', value);
+    return Filter._fromMatcher(field, Matcher.Equals, value);
   }
 
   /**
@@ -135,7 +157,7 @@ export default class Filter {
    * @returns {Filter}
    */
   static lessThan (field, value) {
-    return Filter._fromMatcher(field, '$lt', value);
+    return Filter._fromMatcher(field, Matcher.LessThan, value);
   }
 
   /**
@@ -145,7 +167,7 @@ export default class Filter {
    * @returns {Filter}
    */
   static lessThanEqual (field, value) {
-    return Filter._fromMatcher(field, '$le', value);
+    return Filter._fromMatcher(field, Matcher.LessThanOrEqualTo, value);
   }
 
   /**
@@ -155,7 +177,7 @@ export default class Filter {
    * @returns {Filter}
    */
   static greaterThan (field, value) {
-    return Filter._fromMatcher(field, '$gt', value);
+    return Filter._fromMatcher(field, Matcher.GreaterThan, value);
   }
 
   /**
@@ -165,7 +187,7 @@ export default class Filter {
    * @returns {Filter}
    */
   static greaterThanEqual (field, value) {
-    return Filter._fromMatcher(field, '$ge', value);
+    return Filter._fromMatcher(field, Matcher.GreaterThanOrEqualTo, value);
   }
 
   /**
@@ -178,8 +200,8 @@ export default class Filter {
   static inclusiveRange (field, min, max) {
     return new Filter({
       [field]: {
-        '$ge': min,
-        '$le': max
+        [Matcher.GreaterThanOrEqualTo]: min,
+        [Matcher.LessThanOrEqualTo]: max
       }
     });
   }
@@ -194,8 +216,8 @@ export default class Filter {
   static exclusiveRange (field, min, max) {
     return new Filter({
       [field]: {
-        '$gt': min,
-        '$lt': max
+        [Matcher.GreaterThan]: min,
+        [Matcher.LessThan]: max
       }
     });
   }
@@ -207,7 +229,7 @@ export default class Filter {
    * @param {number} radius The search radius (in meters)
    */
   static position (lat, lng, radius) {
-    return Filter._fromMatcher('builtin.location', '$near', { lat, lng, radius });
+    return Filter._fromMatcher('builtin.location', Matcher.Near, { lat, lng, radius });
   }
 
   /**

@@ -3,6 +3,7 @@
 import FilterCombinators from './filtercombinators';
 import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
+import FilterNodeFactory from './filternodefactory';
 
 /** @typedef {import('../storage/storage').default} Storage */
 
@@ -37,7 +38,7 @@ export default class FilterRegistry {
       ...this.getStaticFilterNodes(),
       ...this.getFacetFilterNodes()
     ];
-    const locationRadiusFilterNode = this.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    const locationRadiusFilterNode = this.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
     if (locationRadiusFilterNode) {
       storageFilterNodes.push(locationRadiusFilterNode);
     }
@@ -51,7 +52,7 @@ export default class FilterRegistry {
   getStaticFilterNodes () {
     const staticFilterNodes = [];
     this.storage.getAll().forEach((value, key) => {
-      if (key.startsWith(StorageKeys.STATIC_FILTER_NODE)) {
+      if (key.startsWith(StorageKeys.STATIC_FILTER_NODES)) {
         staticFilterNodes.push(value);
       }
     });
@@ -63,7 +64,7 @@ export default class FilterRegistry {
    * @returns {Array<FilterNode>}
    */
   getFacetFilterNodes () {
-    return this.storage.get(StorageKeys.FACET_FILTER_NODE) || [];
+    return this.storage.get(StorageKeys.FACET_FILTER_NODES) || [];
   }
 
   /**
@@ -80,6 +81,18 @@ export default class FilterRegistry {
     return filterNodes.length > 0
       ? this._transformFilterNodes(filterNodes, FilterCombinators.AND)
       : null;
+  }
+
+  /**
+   * Combines together all static filter nodes in the same shape that would
+   * be sent to the API.
+   *
+   * @returns {FilterNode}
+   */
+  getAllStaticFilterNodesCombined () {
+    const filterNodes = this.getStaticFilterNodes();
+    const totalNode = FilterNodeFactory.and(...filterNodes);
+    return totalNode;
   }
 
   /**
@@ -108,7 +121,9 @@ export default class FilterRegistry {
   }
 
   /**
-   * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter}
+   * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter} or {@link CombinedFilter}
+   * if there are multiple matchers.
+   * TODO(SLAP-1183): remove the parsing for multiple matchers.
    *
    * @param {SimpleFilterNode} filterNode
    * @returns {Filter}
@@ -116,13 +131,26 @@ export default class FilterRegistry {
   _transformSimpleFilterNode (filterNode) {
     const fieldId = Object.keys(filterNode.filter)[0];
     const filterComparison = filterNode.filter[fieldId];
-    const matcher = Object.keys(filterComparison)[0];
-    const value = filterComparison[matcher];
-    return {
-      fieldId: fieldId,
-      matcher: matcher,
-      value: value
-    };
+    const matchers = Object.keys(filterComparison);
+    if (matchers.length === 1) {
+      const matcher = matchers[0];
+      const value = filterComparison[matcher];
+      return {
+        fieldId: fieldId,
+        matcher: matcher,
+        value: value
+      };
+    } else if (matchers.length > 1) {
+      const childFilters = matchers.map(matcher => ({
+        fieldId: fieldId,
+        matcher: matcher,
+        value: filterComparison[matcher]
+      }));
+      return {
+        combinator: FilterCombinators.AND,
+        filters: childFilters
+      };
+    }
   }
 
   /**
@@ -143,16 +171,27 @@ export default class FilterRegistry {
   }
 
   /**
+   * Combines the active facet FilterNodes into a single Facet
+   * @returns {Facet}
+   */
+  createFacetsFromFilterNodes () {
+    const getFilters = fn => fn.getChildren().length
+      ? fn.getChildren().flatMap(getFilters)
+      : fn.getFilter();
+    const filters = this.getFacetFilterNodes().flatMap(getFilters);
+    return Facet.fromFilters(this.availableFieldIds, ...filters);
+  }
+
+  /**
    * Gets the facet filters as an array of Filters to send to the answers-core.
    *
    * @returns {Facet[]} from answers-core
    */
   getFacetsPayload () {
-    const getFilters = fn => fn.getChildren().length
-      ? fn.getChildren().flatMap(getFilters)
-      : fn.getFilter();
-    const filters = this.getFacetFilterNodes().flatMap(getFilters);
-    const facets = Facet.fromFilters(this.availableFieldIds, ...filters);
+    const hasFacetFilterNodes = this.storage.has(StorageKeys.FACET_FILTER_NODES);
+    const facets = hasFacetFilterNodes
+      ? this.createFacetsFromFilterNodes()
+      : this.storage.get(StorageKeys.PERSISTED_FACETS) || {};
 
     const coreFacets = Object.entries(facets).map(([fieldId, filterArray]) => {
       return {
@@ -179,7 +218,7 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setStaticFilterNodes (key, filterNode) {
-    this.storage.set(`${StorageKeys.STATIC_FILTER_NODE}.${key}`, filterNode);
+    this.storage.set(`${StorageKeys.STATIC_FILTER_NODES}.${key}`, filterNode);
   }
 
   /**
@@ -193,7 +232,7 @@ export default class FilterRegistry {
    */
   setFacetFilterNodes (availableFieldIds = [], filterNodes = []) {
     this.availableFieldIds = availableFieldIds;
-    this.storage.set(StorageKeys.FACET_FILTER_NODE, filterNodes);
+    this.storage.set(StorageKeys.FACET_FILTER_NODES, filterNodes);
   }
 
   /**
@@ -202,21 +241,34 @@ export default class FilterRegistry {
    * @param {FilterNode} filterNode
    */
   setLocationRadiusFilterNode (filterNode) {
-    this.storage.set(StorageKeys.LOCATION_RADIUS, filterNode);
+    this.storage.set(StorageKeys.LOCATION_RADIUS_FILTER_NODE, filterNode);
   }
 
   /**
-   * Remove the static FilterNode with this namespace.
+   * Deletes the static FilterNode with this namespace.
    * @param {string} key
    */
   clearStaticFilterNode (key) {
-    this.storage.delete(`${StorageKeys.STATIC_FILTER_NODE}.${key}`);
+    this.storage.delete(`${StorageKeys.STATIC_FILTER_NODES}.${key}`);
   }
 
   /**
-   * Remove all facet FilterNodes.
+   * Deletes all facet FilterNodes.
    */
   clearFacetFilterNodes () {
-    this.storage.delete(StorageKeys.FACET_FILTER_NODE);
+    this.storage.delete(StorageKeys.FACET_FILTER_NODES);
+  }
+
+  /**
+   * Deletes all FilterNodes in storage.
+   */
+  clearAllFilterNodes () {
+    this.storage.delete(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
+    this.clearFacetFilterNodes();
+    this.storage.getAll().forEach((value, key) => {
+      if (key.startsWith(StorageKeys.STATIC_FILTER_NODES)) {
+        this.storage.delete(key);
+      }
+    });
   }
 }
