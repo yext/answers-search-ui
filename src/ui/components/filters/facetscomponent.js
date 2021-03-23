@@ -251,18 +251,20 @@ export default class FacetsComponent extends Component {
   }
 
   /**
-   * Gets filter options from transformedFacets and puts them in an object
+   * Extracts the filter options from transformedFacets and puts them in an object
    * keyed by fieldId
    *
    * @param {DisplayableFacet | FilterOptionsConfig} transformedFacets a union of the
    * DisplayableFacet model from ansers-core, and the config options of the FilterOptionsConfig
-   * @returns {Object} config options of the FilterOptionsConfig keyed by filterId
+   * @returns {Object} config options of the FilterOptionsConfig keyed by fieldId
    */
   _getFilterOptionsConfigs (transformedFacets) {
     return transformedFacets.reduce((acc, currentFacet) => {
       const filterOptions = Object.assign({}, currentFacet);
-      // Don't support options when extracting filterOptions from transformedFacets
-      // because the core library DisplayableFacet isn't compatible with FilterOptionsConfig.options
+      // Delete the options from filterOptions because a DisplayableFacetOption array cannot be
+      // passed to FilterOptionsConfig. Even after deletion here, the filter options will still
+      // exist in the 'filters' field of the facets component state, and therefore any
+      // modifications which occur to options inside transformFacets will still take effect.
       filterOptions['options'] && delete filterOptions['options'];
       acc[currentFacet.fieldId] = filterOptions;
       return acc;
