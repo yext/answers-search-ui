@@ -276,7 +276,7 @@ export default class FacetsComponent extends Component {
    * Applies default formatting to a facet
    *
    * @param {DisplayableFacet} facet from answers-core
-   * @returns {DisplayableFacet[]} from answers-core
+   * @returns {DisplayableFacet} from answers-core
    */
   _processFacet (facet) {
     const isBooleanFacet = facet => {
