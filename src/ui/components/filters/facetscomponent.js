@@ -234,18 +234,19 @@ export default class FacetsComponent extends Component {
   }
 
   setState (data) {
-    const facets = data['filters'] || [];
-    let processedFacets = this._processFacets(facets);
+    let facets = data['filters'] || [];
 
     if (this._transformFacets) {
       const facetsCopy = cloneDeep(facets);
-      processedFacets = this._transformFacets(facetsCopy, this.config);
+      facets = this._transformFacets(facetsCopy, this.config);
     }
+
+    facets = facets.map(this._applyDefaultFormatting);
 
     return super.setState({
       ...data,
-      filters: Facet.fromCore(processedFacets),
-      filterOptionsConfigs: this._getFilterOptionsConfigs(processedFacets),
+      filters: Facet.fromCore(facets),
+      filterOptionsConfigs: this._getFilterOptionsConfigs(facets),
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     });
   }
@@ -272,23 +273,21 @@ export default class FacetsComponent extends Component {
   }
 
   /**
-   * Applies default formatting to different types of facets
+   * Applies default formatting to a facet
    *
-   * @param {DisplayableFacet[]} facets from answers-core
-   * @returns {DisplayableFacet[]} from answers-core
+   * @param {DisplayableFacet} facet from answers-core
+   * @returns {DisplayableFacet} from answers-core
    */
-  _processFacets (facets) {
+  _applyDefaultFormatting (facet) {
     const isBooleanFacet = facet => {
       const firstOption = (facet.options && facet.options[1]) || {};
       return firstOption['value'] === true || firstOption['value'] === false;
     };
 
-    return facets.map(facet => {
-      if (isBooleanFacet(facet)) {
-        return this._transformBooleanFacet(facet);
-      }
-      return facet;
-    });
+    if (isBooleanFacet(facet)) {
+      return FacetsComponent._transformBooleanFacet(facet);
+    }
+    return facet;
   }
 
   /**
@@ -297,7 +296,7 @@ export default class FacetsComponent extends Component {
    * @param {DisplayableFacet} facet from answers-core
    * @returns {DisplayableFacet} from answers-core
    */
-  _transformBooleanFacet (facet) {
+  static _transformBooleanFacet (facet) {
     const options = facet.options.map(option => {
       let displayName = option.displayName;
       if (option.value === true && displayName === 'true') {
