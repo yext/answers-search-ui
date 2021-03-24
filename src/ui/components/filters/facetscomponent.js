@@ -241,12 +241,12 @@ export default class FacetsComponent extends Component {
       facets = this._transformFacets(facetsCopy, this.config);
     }
 
-    const processedFacets = facets.map(this._processFacet);
+    facets = facets.map(this._applyDefaultFormatting);
 
     return super.setState({
       ...data,
-      filters: Facet.fromCore(processedFacets),
-      filterOptionsConfigs: this._getFilterOptionsConfigs(processedFacets),
+      filters: Facet.fromCore(facets),
+      filterOptionsConfigs: this._getFilterOptionsConfigs(facets),
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     });
   }
@@ -278,7 +278,7 @@ export default class FacetsComponent extends Component {
    * @param {DisplayableFacet} facet from answers-core
    * @returns {DisplayableFacet} from answers-core
    */
-  _processFacet (facet) {
+  _applyDefaultFormatting (facet) {
     const isBooleanFacet = facet => {
       const firstOption = (facet.options && facet.options[1]) || {};
       return firstOption['value'] === true || firstOption['value'] === false;
