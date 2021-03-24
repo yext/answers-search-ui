@@ -2528,3 +2528,10 @@ The SDK uses the Performance API, via `window.performance.mark()`, to create per
 
 4. `'yext.answers.universalQueryResponseRendered'` called after a universal query is finished and all components have finished rendering
 
+## License
+
+Yext Answers-Search-UI is an open-sourced library licensed under the [BSD-3 License](./LICENSE).
+
+## Third Party Licenses
+
+The licenses of our 3rd party dependencies are collected here: [THIRD-PARTY-NOTICES](./THIRD-PARTY-NOTICES).
