@@ -54,6 +54,7 @@
     "del": "^5.1.0",
     "enzyme": "^3.11.0",
     "fs-extra": "^9.0.1",
+    "generate-license-file": "^1.1.0",
     "gettext-extractor": "^3.5.2",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
@@ -102,7 +103,8 @@
     "fix": "semistandard --fix",
     "extract-translations": "gulp extractTranslations",
     "prepublishOnly": "./conf/npm/prepublishOnly.sh",
-    "postpublish": "./conf/npm/postpublish.sh"
+    "postpublish": "./conf/npm/postpublish.sh",
+    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
   },
   "jest": {
     "bail": 0,
