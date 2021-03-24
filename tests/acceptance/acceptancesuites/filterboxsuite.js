@@ -131,10 +131,6 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
 });
 
 test(`locationRadius of 0 is persisted`, async t => {
-  const searchComponent = FacetsPage.getSearchComponent();
-  await searchComponent.enterQuery('all');
-  await searchComponent.submitQuery();
-
   const filterBox = FacetsPage.getStaticFilterBox();
   const radiusFilter = await filterBox.getFilterOptions('DISTANCE');
   await radiusFilter.toggleOption('0 miles');
