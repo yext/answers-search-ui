@@ -122,8 +122,8 @@ export default class Result {
    * @returns {@link Result}
    */
   static fromCore (result, formatters, verticalKey) {
-    const highlightedFields = HighlightedFields.fromCore(result.highlightedValues);
-    const appliedHighlightedFields = AppliedHighlightedFields.fromCore(result.highlightedValues);
+    const highlightedFields = new HighlightedFields(result.highlightedFields);
+    const appliedHighlightedFields = AppliedHighlightedFields.fromCore(result.highlightedFields);
     const details = appliedHighlightedFields.description || result.description;
     const truncatedDetails = truncate(details);
 

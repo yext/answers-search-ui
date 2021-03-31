@@ -1,5 +1,4 @@
 import HighlightedValue from './highlightedvalue';
-import HighlightedFields from './highlightedfields';
 
 /**
  * Represents highlighted fields with the highlighting applied
@@ -9,7 +8,7 @@ export default class AppliedHighlightedFields {
    * Constructs a highlighted field map which consists of mappings from fields to highlighted
    * value strings.
    *
-   * @param {Object<string, string|object>} data Keyed by fieldName. It may consist of nested fields
+   * @param {Object<string, string|object|array>} data Keyed by fieldName. It may consist of nested fields
    *
    * Example object:
    *
@@ -17,7 +16,13 @@ export default class AppliedHighlightedFields {
    *   name: '<strong>Yext</strong>',
    *   description: {
    *     featured: '<strong>Yext</strong> is the offical answers company'
-   *   }
+   *   },
+   *   languages: ['english', 'spanish'],
+   *   c_food: [
+   *     {
+   *       vegetables: ['carrots', 'celery']
+   *     }
+   *   ]
    * }
    */
   constructor (data = {}) {
@@ -25,17 +30,43 @@ export default class AppliedHighlightedFields {
   }
 
   /**
-   * Constructs an AppliedHighlightedFields object from an answers-core HighlightedValue array
+   * Constructs an AppliedHighlightedFields object from an answers-core HighlightedField
    *
-   * @param {HighlightedValue[]} highlightedValueArray from answers-core
+   * @param {import('@yext/answers-core').HighlightedFields} highlightedFields from answers-core
    * @returns {AppliedHighlightedFields}
    */
-  static fromCore (highlightedValueArray) {
-    const appliedHighlightedFields =
-      HighlightedFields.combineHighlightedValues(highlightedValueArray, highlightedValue => {
-        const { value, matchedSubstrings } = highlightedValue;
-        return new HighlightedValue().buildHighlightedValue(value, matchedSubstrings);
-      });
+  static fromCore (highlightedFields) {
+    if (!highlightedFields || typeof highlightedFields !== 'object') {
+      return {};
+    }
+    const appliedHighlightedFields = this.computeHighlightedDataRecursively(highlightedFields);
     return new AppliedHighlightedFields(appliedHighlightedFields);
+  }
+
+  /**
+   * Given an answers-core HighlightedFields tree, returns a new tree
+   * with highlighting applied to the leaf nodes.
+   *
+   * @param {import('@yext/answers-core').HighlightedFields} highlightedFields from answers-core
+   * @returns {AppliedHighlightedFields}
+   */
+  static computeHighlightedDataRecursively (highlightedFields) {
+    if (this.isHighlightedFieldLeafNode(highlightedFields)) {
+      const { value, matchedSubstrings } = highlightedFields;
+      return new HighlightedValue().buildHighlightedValue(value, matchedSubstrings);
+    }
+    if (Array.isArray(highlightedFields)) {
+      return highlightedFields.map(
+        childFields => this.computeHighlightedDataRecursively(childFields));
+    }
+    return Object.entries(highlightedFields)
+      .reduce((computedFields, [fieldName, childFields]) => {
+        computedFields[fieldName] = this.computeHighlightedDataRecursively(childFields);
+        return computedFields;
+      }, {});
+  }
+
+  static isHighlightedFieldLeafNode ({ matchedSubstrings, value }) {
+    return matchedSubstrings !== undefined && value !== undefined;
   }
 }
