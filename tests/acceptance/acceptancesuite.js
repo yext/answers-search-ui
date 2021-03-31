@@ -153,7 +153,7 @@ test('Facets, pagination, and filters do not persist accross experience links', 
 
   // When you navigate with pagination, nav links should not have the
   // Facets/filter/pagination parameters
-  await searchComponent.enterQuery('all');
+  await searchComponent.enterQuery(' ');
   await searchComponent.submitQuery();
 
   await t.click(await Selector('.js-yxt-navItem').nth(2)); // Go to vertical page
