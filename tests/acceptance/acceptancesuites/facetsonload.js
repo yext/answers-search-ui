@@ -33,7 +33,7 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
   await searchComponent.submitQuery();
 
   let currentFacets = await getFacetsFromRequest();
-  await t.expect(currentFacets).eql({});
+  await t.expect(currentFacets).contains({});
   logger.clear();
 
   const facets = FacetsPage.getFacetsComponent();
@@ -45,12 +45,9 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
   await filterBox.applyFilters();
   currentFacets = await getFacetsFromRequest();
   const state1 = {
-    'c_puppyPreference': [],
     'c_employeeDepartment': [{ 'c_employeeDepartment': { '$eq': 'Client Delivery [SO]' } }],
-    'languages': [],
-    'specialities': []
   };
-  await t.expect(currentFacets).eql(state1);
+  await t.expect(currentFacets).contains(state1);
   logger.clear();
 
   options = await filterBox.getFilterOptions('Employee Department');
@@ -63,7 +60,7 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
       { 'c_employeeDepartment': { '$eq': 'Technology' } }
     ]
   };
-  await t.expect(currentFacets).eql(state2);
+  await t.expect(currentFacets).contains(state2);
   logger.clear();
 
   options = await filterBox.getFilterOptions('Puppy Preference');
@@ -75,28 +72,26 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
     'c_employeeDepartment': [
       { 'c_employeeDepartment': { '$eq': 'Client Delivery [SO]' } },
       { 'c_employeeDepartment': { '$eq': 'Technology' } }
-    ],
-    'languages': [],
-    'specialities': []
+    ]
   };
-  await t.expect(currentFacets).eql(state3);
+  await t.expect(currentFacets).contains(state3);
   logger.clear();
 
   await browserRefreshPage();
   currentFacets = await getFacetsFromRequest();
-  await t.expect(currentFacets).eql(state3);
+  await t.expect(currentFacets).contains(state3);
   logger.clear();
 
   await browserBackButton();
   currentFacets = await getFacetsFromRequest();
-  await t.expect(currentFacets).eql(state2);
+  await t.expect(currentFacets).contains(state2);
   logger.clear();
 
   await browserBackButton();
   currentFacets = await getFacetsFromRequest();
-  await t.expect(currentFacets).eql(state1);
+  await t.expect(currentFacets).contains(state1);
 
   await browserBackButton();
   currentFacets = await getFacetsFromRequest();
-  await t.expect(currentFacets).eql({});
+  await t.expect(currentFacets).contains({});
 });
