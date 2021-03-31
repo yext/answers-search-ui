@@ -45,7 +45,7 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
   await filterBox.applyFilters();
   currentFacets = await getFacetsFromRequest();
   const state1 = {
-    'c_employeeDepartment': [{ 'c_employeeDepartment': { '$eq': 'Client Delivery [SO]' } }],
+    'c_employeeDepartment': [{ 'c_employeeDepartment': { '$eq': 'Client Delivery [SO]' } }]
   };
   await t.expect(currentFacets).contains(state1);
   logger.clear();
