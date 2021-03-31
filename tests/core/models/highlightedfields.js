@@ -48,3 +48,59 @@ it('constructs a HighlightedFields object from an answers-core HighlightInfo arr
 
   expect(actualHighlightedFields).toMatchObject(expectedHighlightedFields);
 });
+
+it('can construct a HighlighedFields obj with arbitrarily nested array fields', () => {
+  const highlightedValueArray = [
+    {
+      fieldName: 'superDuper',
+      value: 'super',
+      path: ['featured', 'languages', 'superDuper'],
+      matchedSubstrings: []
+    },
+    {
+      fieldName: 'superDuper',
+      value: 'deeduper',
+      path: ['featured', 'languages', 'superDuper'],
+      matchedSubstrings: []
+    },
+    {
+      fieldName: 'reallyAwesome',
+      value: 'Spanish',
+      path: ['featured', 'languages', 'reallyAwesome'],
+      matchedSubstrings: [
+        {
+          offset: 0,
+          length: 7
+        }
+      ]
+    }
+  ];
+  const expectedHighlightedFields = {
+    featured: {
+      languages: {
+        superDuper: [
+          {
+            value: 'super',
+            matchedSubstrings: []
+          },
+          {
+            value: 'deeduper',
+            matchedSubstrings: []
+          }
+        ],
+        reallyAwesome: {
+          value: 'Spanish',
+          matchedSubstrings: [
+            {
+              offset: 0,
+              length: 7
+            }
+          ]
+        }
+      }
+    }
+  };
+
+  const actualHighlightedFields = HighlightedFields.fromCore(highlightedValueArray);
+  expect(actualHighlightedFields).toMatchObject(expectedHighlightedFields);
+});

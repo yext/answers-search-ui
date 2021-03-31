@@ -30,6 +30,40 @@ it('constructs an AppliedHighlightedField object from an answers-core Highlighte
   };
 
   const actualHighlightedFields = AppliedHighlightedFields.fromCore(highlightedValueArray);
+  expect(actualHighlightedFields).toMatchObject(expectedAppliedHighlightedFields);
+});
 
+it('can construct an AppliedHighlightedField that contains arrays ', () => {
+  const highlightedValueArray = [{
+    fieldName: 'info',
+    path: ['featured', 'info'],
+    value: 'yext is a company',
+    matchedSubstrings: [{
+      length: 4,
+      offset: 0
+    }]
+  }, {
+    fieldName: 'info',
+    path: ['featured', 'info'],
+    value: 'perfect answers everywhere',
+    matchedSubstrings: [{
+      length: 7,
+      offset: 0
+    }, {
+      length: 7,
+      offset: 8
+    }]
+  }];
+
+  const expectedAppliedHighlightedFields = {
+    featured: {
+      info: [
+        '<strong>yext</strong> is a company',
+        '<strong>perfect</strong> <strong>answers</strong> everywhere'
+      ]
+    }
+  };
+
+  const actualHighlightedFields = AppliedHighlightedFields.fromCore(highlightedValueArray);
   expect(actualHighlightedFields).toMatchObject(expectedAppliedHighlightedFields);
 });
