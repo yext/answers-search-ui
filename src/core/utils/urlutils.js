@@ -119,9 +119,6 @@ export function filterParamsForExperienceLink (
   getComponentNamesForComponentTypes
 ) {
   const componentTypesToExclude = [
-    ComponentTypes.RANGE_FILTER,
-    ComponentTypes.DATE_RANGE_FILTER,
-    ComponentTypes.SORT_OPTIONS,
     ComponentTypes.GEOLOCATION_FILTER,
     ComponentTypes.FILTER_SEARCH
   ];
@@ -132,11 +129,15 @@ export function filterParamsForExperienceLink (
     }
     return params;
   });
-  paramsToFilter = paramsToFilter.concat([StorageKeys.FILTER]);
 
   const newParams = removeParamsWithPrefixes(params, paramsToFilter);
-  newParams.delete(StorageKeys.SEARCH_OFFSET);
-  newParams.delete(StorageKeys.PERSISTED_FILTER);
-  newParams.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
+  const paramsToDelete = [
+    StorageKeys.SEARCH_OFFSET,
+    StorageKeys.PERSISTED_FILTER,
+    StorageKeys.PERSISTED_LOCATION_RADIUS,
+    StorageKeys.PERSISTED_FACETS,
+    StorageKeys.SORT_BYS
+  ];
+  paramsToDelete.forEach(storageKey => newParams.delete(storageKey));
   return newParams;
 }
