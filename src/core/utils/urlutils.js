@@ -122,13 +122,14 @@ export function filterParamsForExperienceLink (
     ComponentTypes.GEOLOCATION_FILTER,
     ComponentTypes.FILTER_SEARCH
   ];
-  let paramsToFilter = componentTypesToExclude.flatMap(type => {
-    let params = getComponentNamesForComponentTypes([type]);
-    if (type === ComponentTypes.GEOLOCATION_FILTER || type === ComponentTypes.FILTER_SEARCH) {
-      params = params.map(param => `${StorageKeys.QUERY}.${param}`);
-    }
+  const paramsToFilter = componentTypesToExclude.reduce((params, type) => {
+    getComponentNamesForComponentTypes([type])
+      .forEach(componentName => {
+        params.push(`${StorageKeys.QUERY}.${componentName}`);
+        params.push(`${StorageKeys.FILTER}.${componentName}`);
+      });
     return params;
-  });
+  }, []);
 
   const newParams = removeParamsWithPrefixes(params, paramsToFilter);
   const paramsToDelete = [
