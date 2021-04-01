@@ -13,14 +13,11 @@ export default class AppliedHighlightedFields {
    * Example object:
    *
    * {
-   *   name: '<strong>Yext</strong>',
-   *   description: {
-   *     featured: '<strong>Yext</strong> is the offical answers company'
-   *   },
-   *   languages: ['english', 'spanish'],
-   *   c_food: [
+   *   description: 'likes <strong>apple</strong> pie and green <strong>apple</strong>s',
+   *   c_favoriteFruits: [
    *     {
-   *       vegetables: ['carrots', 'celery']
+   *       apples: ['Granny Smith','Upton Pyne <strong>Apple</strong>'],
+   *       pears: ['Callery Pear']
    *     }
    *   ]
    * }

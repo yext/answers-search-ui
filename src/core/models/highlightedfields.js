@@ -10,27 +10,31 @@ export default class HighlightedFields {
    * Example object:
    *
    * {
-   *   name: {
-   *     value: 'Yext',
-   *     matchedSubstrings: [{ offset: 0, length: 4}]
-   *   },
    *   description: {
-   *     featured: {
-   *       value: 'Yext is a search company',
-   *       matchedSubstrings: [{ offset: 0, length: 4}]
-   *     }
+   *     value: 'likes apple pie and green apples',
+   *     matchedSubstrings: [
+   *       { offset: 6, length: 5 },
+   *       { offset: 26, length: 5 }
+   *     ]
    *   },
-   *   c_food: [
+   *   c_favoriteFruits: [
    *     {
-   *       fruits: [
-   *       {
-   *         value: 'apple',
-   *         matchedSubstrings: []
-   *       },
-   *       {
-   *         value: 'pear',
-   *         matchedSubstrings: []
-   *       }
+   *       apples: [
+   *         {
+   *           value: 'Granny Smith',
+   *           matchedSubstrings: []
+   *         },
+   *         {
+   *           value: 'Upton Pyne Apple',
+   *           matchedSubstrings: [{ offset: 11, length: 5}]
+   *         }
+   *       ],
+   *       pears: [
+   *         {
+   *           value: 'Callery Pear',
+   *           matchedSubstrings: []
+   *         }
+   *       ]
    *     }
    *   ]
    * }
