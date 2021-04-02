@@ -9,14 +9,15 @@ export default class TranslationProcessor {
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
    * @param {string} language The langauge associated with the pluralization
+   * @param {string} escapeExpression A function which escapes HTML in the passed string
    * @returns {string} The translation with any interpolation or pluralization applied
    */
-  static process (translations, interpolationParams, count, language) {
+  static process (translations, interpolationParams, count, language, escapeExpression) {
     const stringToInterpolate = (typeof translations === 'string')
       ? translations
       : this._selectPluralForm(translations, count, language);
 
-    return this._interpolate(stringToInterpolate, interpolationParams);
+    return this._interpolate(stringToInterpolate, interpolationParams, escapeExpression);
   }
 
   /**
@@ -44,11 +45,16 @@ export default class TranslationProcessor {
     return Array.from((new Array(numberOfPluralForms)).keys());
   }
 
-  static _interpolate (stringToInterpolate, interpolationParams) {
+  static _interpolate (stringToInterpolate, interpolationParams, escapeExpression) {
+    if (interpolationParams && !escapeExpression) {
+      throw new Error('An escapeExpression function must be provided when processing translations with interpolation');
+    }
+
     const interpolationRegex = /\[\[([a-zA-Z0-9]+)\]\]/g;
 
     return stringToInterpolate.replace(interpolationRegex, (match, interpolationKey) => {
-      return interpolationParams[interpolationKey];
+      const interpolation = interpolationParams[interpolationKey];
+      return escapeExpression(interpolation);
     });
   }
 }
