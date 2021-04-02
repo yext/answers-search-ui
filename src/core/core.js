@@ -534,13 +534,13 @@ export default class Core {
     this.storage.set(StorageKeys.QUERY_ID, queryId);
   }
 
-  triggerSearch (queryTrigger) {
-    const query = this.storage.get(StorageKeys.QUERY) || '';
-    if (queryTrigger) {
-      this.storage.set(StorageKeys.QUERY_TRIGGER, queryTrigger);
-    } else {
-      this.storage.delete(StorageKeys.QUERY_TRIGGER);
-    }
+  triggerSearch (queryTrigger, newQuery) {
+    const query = newQuery !== undefined
+      ? newQuery
+      : this.storage.get(StorageKeys.QUERY) || '';
+    queryTrigger
+      ? this.storage.set(StorageKeys.QUERY_TRIGGER, queryTrigger)
+      : this.storage.delete(StorageKeys.QUERY_TRIGGER);
     this.setQuery(query);
   }
 

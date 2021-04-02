@@ -24,6 +24,15 @@ describe('SearchBar component', () => {
     });
     COMPONENT_MANAGER.getActiveComponent = () => null;
     storage = COMPONENT_MANAGER.core.storage;
+    COMPONENT_MANAGER.core.triggerSearch = (queryTrigger, newQuery) => {
+      const query = newQuery !== undefined
+        ? newQuery
+        : storage.get(StorageKeys.QUERY) || '';
+      queryTrigger
+        ? storage.set(StorageKeys.QUERY_TRIGGER, queryTrigger)
+        : storage.delete(StorageKeys.QUERY_TRIGGER);
+      COMPONENT_MANAGER.core.setQuery(query);
+    };
   });
 
   describe('Clicking the clear button updates storage properly', () => {
@@ -78,6 +87,19 @@ describe('SearchBar component', () => {
 
       expect(storage.getUrlWithCurrentState()).toEqual('query=');
     });
+
+    it('clear button sets QUERY_TRIGGER to SEARCH_BAR', () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
+      const wrapper = mount(component);
+
+      storage.setWithPersist(StorageKeys.QUERY, 'what does yext do?');
+      expect(storage.get(StorageKeys.QUERY_TRIGGER)).toBeFalsy();
+
+      const clearButton = wrapper.find('.js-yxt-SearchBar-clear');
+      clearButton.simulate('click');
+
+      expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.SEARCH_BAR);
+    });
   });
 
   it('default initial search works for universal', () => {
@@ -99,5 +121,14 @@ describe('SearchBar component', () => {
     });
 
     return expect(wasSearchRanPromise).resolves.toBeTruthy();
+  });
+
+  it('searching with the search bar sets QUERY_TRIGGER to SEARCH_BAR', () => {
+    storage.setWithPersist(StorageKeys.QUERY, 'what does yext do?');
+    const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
+    const wrapper = mount(component);
+    const form = wrapper.find('form');
+    form.simulate('submit');
+    expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.SEARCH_BAR);
   });
 });
