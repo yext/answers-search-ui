@@ -15,15 +15,15 @@ it('constructs a result from an answers-core result', () => {
     id: 2,
     distance: 20,
     distanceFromFilter: 30,
-    highlightedValues: [{
-      fieldName: 'description',
-      path: ['description'],
-      value: fullDescription,
-      matchedSubstrings: [{
-        length: 11,
-        offset: 0
-      }]
-    }],
+    highlightedFields: {
+      description: {
+        value: fullDescription,
+        matchedSubstrings: [{
+          length: 11,
+          offset: 0
+        }]
+      }
+    },
     entityType: 'ce_fruit'
   };
 
