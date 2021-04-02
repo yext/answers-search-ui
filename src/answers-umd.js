@@ -561,7 +561,14 @@ class Answers {
     const initLocale = this._getInitLocale();
     language = language || initLocale.substring(0, 2);
 
-    return TranslationProcessor.process(translations, interpolationParams, count, language);
+    if (!this.renderer) {
+      console.error('The renderer must be initialized before translations can be processed');
+      return '';
+    }
+
+    const escapeExpression = this.renderer.escapeExpression.bind(this.renderer);
+
+    return TranslationProcessor.process(translations, interpolationParams, count, language, escapeExpression);
   }
 
   /**
