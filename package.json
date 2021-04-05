@@ -1,16 +1,16 @@
 {
-  "name": "@yext/answers",
-  "version": "1.7.0",
+  "name": "@yext/answers-search-ui",
+  "version": "1.7.3",
   "description": "Javascript Answers Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yext/answers.git"
+    "url": "git+https://github.com/yext/answers-search-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/yext/answers/issues"
+    "url": "https://github.com/yext/answers-search-ui/issues"
   },
-  "homepage": "https://github.com/yext/answers#readme",
+  "homepage": "https://github.com/yext/answers-search-ui#readme",
   "keywords": [
     "yext",
     "search",

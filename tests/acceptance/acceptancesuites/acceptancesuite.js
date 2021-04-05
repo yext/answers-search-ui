@@ -246,7 +246,7 @@ test('experience links are clean', async t => {
 
   // When you navigate with pagination, nav links should not have the
   // Facets/filter/pagination parameters
-  await searchComponent.enterQuery('all');
+  await searchComponent.enterQuery(' ');
   await searchComponent.submitQuery();
 
   await t.click(await Selector('.js-yxt-navItem').nth(2)); // Go to vertical page
