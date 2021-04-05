@@ -1,28 +1,32 @@
 /** @module Core */
+import { provideCore } from '@yext/answers-core/lib/commonjs';
 
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import VerticalResults from './models/verticalresults';
 import UniversalResults from './models/universalresults';
 import QuestionSubmission from './models/questionsubmission';
-import SearchIntents from './models/searchintents';
 import Navigation from './models/navigation';
 import AlternativeVerticals from './models/alternativeverticals';
-import DirectAnswer from './models/directanswer';
 import LocationBias from './models/locationbias';
 import QueryTriggers from './models/querytriggers';
 
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
 import FilterRegistry from './filters/filterregistry';
+import DirectAnswer from './models/directanswer';
+import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
-/** @typedef {import('./services/searchservice').default} SearchService */
-/** @typedef {import('./services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./services/questionanswerservice').default} QuestionAnswerService */
+import { PRODUCTION, ENDPOINTS } from './constants';
+import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
+import { SearchParams } from '../ui';
+
+/** @typedef {import('./storage/storage').default} Storage */
 
 /**
  * Core is the main application container for all of the network and storage
- * related behaviors of the application.
+ * related behaviors of the application. It uses an instance of the external Core
+ * library to perform the actual network calls.
  */
 export default class Core {
   constructor (config = {}) {
@@ -57,54 +61,23 @@ export default class Core {
 
     /**
      * A map of field formatters used to format results, if present
-     * @type {Object.<string, function>}
+     * @type {Object<string, function>}
      * @private
      */
     this._fieldFormatters = config.fieldFormatters || {};
 
     /**
      * A reference to the core data storage that powers the UI
-     * @type {GlobalStorage}
-     * @private
+     * @type {Storage}
      */
-    this.globalStorage = config.globalStorage;
-
-    /**
-     * A reference to the core persistent storage
-     * @type {PersistentStorage}
-     * @private
-     */
-    this.persistentStorage = config.persistentStorage;
+    this.storage = config.storage;
 
     /**
      * The filterRegistry is in charge of setting, removing, and retrieving filters
-     * and facet filters from global storage.
+     * and facet filters from storage.
      * @type {FilterRegistry}
      */
-    this.filterRegistry = new FilterRegistry(this.globalStorage);
-
-    /**
-     * An abstraction containing the integration with the RESTful search API
-     * For both vertical and universal search
-     * @type {SearchService}
-     * @private
-     */
-    this._searcher = config.searchService;
-
-    /**
-     * An abstraction containing the integration with the RESTful autocomplete API
-     * For filter search, vertical autocomplete, and universal autocomplete
-     * @type {AutoCompleteService}
-     * @private
-     */
-    this._autoComplete = config.autoCompleteService;
-
-    /**
-     * An abstraction for interacting with the Q&A rest interface
-     * @type {QuestionAnswerService}
-     * @private
-     */
-    this._questionAnswer = config.questionAnswerService;
+    this.filterRegistry = new FilterRegistry(this.storage);
 
     /**
      * A local reference to the analytics reporter, used to report events for this component
@@ -123,196 +96,270 @@ export default class Core {
      * @type {Function}
      */
     this.onVerticalSearch = config.onVerticalSearch || function () {};
+
+    /**
+     * The environment which determines which URLs the requests use.
+     * @type {string}
+     */
+    this._environment = config.environment || PRODUCTION;
+
+    /**
+     * @type {string}
+     */
+    this._verticalKey = config.verticalKey;
+
+    /**
+     * @type {ComponentManager}
+     */
+    this._componentManager = config.componentManager;
+  }
+
+  /**
+   * Sets a reference in core to the global QueryUpdateListener.
+   *
+   * @param {QueryUpdateListener} queryUpdateListener
+   */
+  setQueryUpdateListener (queryUpdateListener) {
+    this.queryUpdateListener = queryUpdateListener;
+  }
+
+  /**
+   * Initializes the {@link Core} by providing it with an instance of the Core library.
+   */
+  init () {
+    const params = {
+      apiKey: this._apiKey,
+      experienceKey: this._experienceKey,
+      locale: this._locale,
+      experienceVersion: this._experienceVersion,
+      endpoints: this._getServiceUrls()
+    };
+
+    this._coreLibrary = provideCore(params);
+  }
+
+  /**
+   * Get the urls for each service based on the environment.
+   */
+  _getServiceUrls () {
+    return {
+      universalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_SEARCH,
+      verticalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_SEARCH,
+      questionSubmission: getKnowledgeApiUrl(this._environment) + ENDPOINTS.QUESTION_SUBMISSION,
+      universalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_AUTOCOMPLETE,
+      verticalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_AUTOCOMPLETE,
+      filterSearch: getCachedLiveApiUrl(this._environment) + ENDPOINTS.FILTER_SEARCH
+    };
+  }
+
+  /**
+   * @returns {boolean} A boolean indicating if the {@link Core} has been
+   *                    initailized.
+   */
+  isInitialized () {
+    return !!this._coreLibrary;
   }
 
   /**
    * Search in the context of a vertical
    * @param {string} verticalKey vertical ID for the search
    * @param {Object} options additional settings for the search.
+   * @param {boolean} options.useFacets Whether to apply facets to this search, or to reset them instead
+   * @param {boolean} options.resetPagination Whether to reset the search offset, going back to page 1.
+   * @param {boolean} options.setQueryParams Whether to persist certain params in the url
+   * @param {string} options.sendQueryId Whether to send the queryId currently in storage.
+   *                                     If paging within a query, the same ID should be used.
    * @param {Object} query The query details
    * @param {string} query.input The input to search for
-   * @param {string} query.id The query ID to use. If paging within a query, the same ID should be used
    * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
    */
   verticalSearch (verticalKey, options = {}, query = {}) {
     window.performance.mark('yext.answers.verticalQueryStart');
     if (!query.append) {
-      this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
-      this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
-      this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
+      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      this.storage.set(StorageKeys.SPELL_CHECK, {});
+      this.storage.set(StorageKeys.LOCATION_BIAS, {});
     }
 
-    const { resetPagination, useFacets } = options;
+    const { resetPagination, useFacets, sendQueryId, setQueryParams } = options;
     if (resetPagination) {
-      this.persistentStorage.delete(StorageKeys.SEARCH_OFFSET);
-      this.globalStorage.delete(StorageKeys.SEARCH_OFFSET);
+      this.storage.delete(StorageKeys.SEARCH_OFFSET);
     }
 
     if (!useFacets) {
       this.filterRegistry.setFacetFilterNodes([], []);
     }
 
-    const { setQueryParams } = options;
-    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
-    const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    const context = this.storage.get(StorageKeys.API_CONTEXT);
+    const referrerPageUrl = this.storage.get(StorageKeys.REFERRER_PAGE_URL);
 
-    const defaultQueryInput = this.globalStorage.getState(StorageKeys.QUERY) || '';
+    const defaultQueryInput = this.storage.get(StorageKeys.QUERY) || '';
     const parsedQuery = Object.assign({}, { input: defaultQueryInput }, query);
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+        this.storage.setWithPersist(StorageKeys.API_CONTEXT, context);
       }
-      if (referrerPageUrl !== null) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+      if (referrerPageUrl !== undefined) {
+        this.storage.setWithPersist(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
       }
     }
 
-    const searchConfig = this.globalStorage.getState(StorageKeys.SEARCH_CONFIG) || {};
+    const searchConfig = this.storage.get(StorageKeys.SEARCH_CONFIG) || {};
     if (!searchConfig.verticalKey) {
-      this.globalStorage.set(StorageKeys.SEARCH_CONFIG, {
+      this.storage.set(StorageKeys.SEARCH_CONFIG, {
         ...searchConfig,
         verticalKey: verticalKey
       });
     }
+    const locationRadius = this._getLocationRadius();
 
-    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
+    const shouldPushState =
+      this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
-      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+      this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
-    return this._searcher
-      .verticalSearch(verticalKey, {
-        limit: this.globalStorage.getState(StorageKeys.SEARCH_CONFIG).limit,
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
-        ...parsedQuery,
-        filter: this.filterRegistry.getStaticFilterPayload(),
-        facetFilter: this.filterRegistry.getFacetFilterPayload(),
-        offset: this.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0,
-        isDynamicFiltersEnabled: this._isDynamicFiltersEnabled,
-        skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
+
+    return this._coreLibrary
+      .verticalSearch({
+        verticalKey: verticalKey || searchConfig.verticalKey,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG).limit,
+        location: this._getLocationPayload(),
+        query: parsedQuery.input,
+        queryId: sendQueryId && this.storage.get(StorageKeys.QUERY_ID),
+        retrieveFacets: this._isDynamicFiltersEnabled,
+        facets: this.filterRegistry.getFacetsPayload(),
+        staticFilters: this.filterRegistry.getStaticFilterPayload(),
+        offset: this.storage.get(StorageKeys.SEARCH_OFFSET) || 0,
+        skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
-        sortBys: this.globalStorage.getState(StorageKeys.SORT_BYS),
-        locationRadius: locationRadiusFilterNode ? locationRadiusFilterNode.getFilter().value : null,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        sortBys: this.storage.get(StorageKeys.SORT_BYS),
+        /** In the SDK a locationRadius of 0 means "unset my locationRadius" */
+        locationRadius: locationRadius === 0 ? undefined : locationRadius,
         context: context,
         referrerPageUrl: referrerPageUrl,
-        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
+        this._persistFacets();
+        this._persistFilters();
+        this._persistLocationRadius();
+
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
 
         if (query.append) {
-          const mergedResults = this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS)
+          const mergedResults = this.storage.get(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
-          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+          this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
         } else {
-          this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+          this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
         }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
-          this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
-          this.globalStorage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.storage.set(StorageKeys.DYNAMIC_FILTERS, data[StorageKeys.DYNAMIC_FILTERS]);
+          this.storage.set(StorageKeys.RESULTS_HEADER, data[StorageKeys.DYNAMIC_FILTERS]);
         }
         if (data[StorageKeys.SPELL_CHECK]) {
-          this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+          this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
         }
         if (data[StorageKeys.LOCATION_BIAS]) {
-          this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
+          this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
         }
-        this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+        this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
+        this.storage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = {
           verticalKey: verticalKey,
           queryString: parsedQuery.input,
-          resultsCount: this.globalStorage.getState(StorageKeys.VERTICAL_RESULTS).resultsCount,
+          resultsCount: this.storage.get(StorageKeys.VERTICAL_RESULTS).resultsCount,
           resultsContext: data[StorageKeys.VERTICAL_RESULTS].resultsContext
         };
         const analyticsEvent = this.onVerticalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
         }
+        if (shouldPushState) {
+          this.storage.pushStateToHistory();
+        }
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       });
   }
 
   clearResults () {
-    this.globalStorage.set(StorageKeys.QUERY, null);
-    this.globalStorage.set(StorageKeys.QUERY_ID, '');
-    this.globalStorage.set(StorageKeys.RESULTS_HEADER, {});
-    this.globalStorage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
-    this.globalStorage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
-    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
-    this.globalStorage.set(StorageKeys.INTENTS, new SearchIntents({}));
-    this.globalStorage.set(StorageKeys.NAVIGATION, new Navigation());
-    this.globalStorage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
-    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
-    this.globalStorage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
-    this.globalStorage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
-    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
+    this.storage.set(StorageKeys.QUERY, null);
+    this.storage.set(StorageKeys.QUERY_ID, '');
+    this.storage.set(StorageKeys.RESULTS_HEADER, {});
+    this.storage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
+    this.storage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
+    this.storage.set(StorageKeys.QUESTION_SUBMISSION, new QuestionSubmission({}));
+    this.storage.set(StorageKeys.NAVIGATION, new Navigation());
+    this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, new AlternativeVerticals({}));
+    this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer({}));
+    this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
+    this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
   }
 
   /**
    * Page within the results of the last query
-   * TODO: Should id be in all searches? Currently is only in searches done by the pagination
-   * component
-   * @param {string} verticalKey The vertical key to use in the search
    */
-  verticalPage (verticalKey) {
-    this.verticalSearch(verticalKey, { useFacets: true, setQueryParams: true }, {
-      id: this.globalStorage.getState(StorageKeys.QUERY_ID)
-    });
+  verticalPage () {
+    this.triggerSearch(QueryTriggers.PAGINATION);
   }
 
-  search (queryString, urls, options = {}) {
+  search (queryString, options = {}) {
+    const urls = this._getUrls(queryString);
     window.performance.mark('yext.answers.universalQueryStart');
     const { setQueryParams } = options;
-    const context = this.globalStorage.getState(StorageKeys.API_CONTEXT);
-    const referrerPageUrl = this.globalStorage.getState(StorageKeys.REFERRER_PAGE_URL);
+    const context = this.storage.get(StorageKeys.API_CONTEXT);
+    const referrerPageUrl = this.storage.get(StorageKeys.REFERRER_PAGE_URL);
 
     if (setQueryParams) {
       if (context) {
-        this.persistentStorage.set(StorageKeys.API_CONTEXT, context, true);
+        this.storage.setWithPersist(StorageKeys.API_CONTEXT, context);
       }
-      if (referrerPageUrl !== null) {
-        this.persistentStorage.set(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl, true);
+      if (referrerPageUrl !== undefined) {
+        this.storage.setWithPersist(StorageKeys.REFERRER_PAGE_URL, referrerPageUrl);
       }
     }
 
-    this.globalStorage.set(StorageKeys.DIRECT_ANSWER, {});
-    this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
-    this.globalStorage.set(StorageKeys.QUESTION_SUBMISSION, {});
-    this.globalStorage.set(StorageKeys.SPELL_CHECK, {});
-    this.globalStorage.set(StorageKeys.LOCATION_BIAS, {});
+    this.storage.set(StorageKeys.DIRECT_ANSWER, {});
+    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
+    this.storage.set(StorageKeys.SPELL_CHECK, {});
+    this.storage.set(StorageKeys.LOCATION_BIAS, {});
 
+    const shouldPushState =
+      this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
     const queryTrigger = this.getQueryTriggerForSearchApi(
-      this.globalStorage.getState(StorageKeys.QUERY_TRIGGER)
+      this.storage.get(StorageKeys.QUERY_TRIGGER)
     );
-    return this._searcher
-      .universalSearch(queryString, {
-        geolocation: this.globalStorage.getState(StorageKeys.GEOLOCATION),
-        skipSpellCheck: this.globalStorage.getState('skipSpellCheck'),
+    return this._coreLibrary
+      .universalSearch({
+        query: queryString,
+        location: this._getLocationPayload(),
+        skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTrigger,
-        sessionTrackingEnabled: this.globalStorage.getState(StorageKeys.SESSIONS_OPT_IN).value,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context,
         referrerPageUrl: referrerPageUrl,
-        querySource: this.globalStorage.getState(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
-      .then(response => SearchDataTransformer.transform(response, urls, this._fieldFormatters))
+      .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
-        this.globalStorage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
-        this.globalStorage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
-        this.globalStorage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
-        this.globalStorage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS], urls);
-        this.globalStorage.set(StorageKeys.INTENTS, data[StorageKeys.INTENTS]);
-        this.globalStorage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
-        this.globalStorage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
-        this.globalStorage.delete('skipSpellCheck');
-        this.globalStorage.delete(StorageKeys.QUERY_TRIGGER);
+        this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
+        this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
+        this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, data[StorageKeys.UNIVERSAL_RESULTS]);
+        this.storage.set(StorageKeys.SPELL_CHECK, data[StorageKeys.SPELL_CHECK]);
+        this.storage.set(StorageKeys.LOCATION_BIAS, data[StorageKeys.LOCATION_BIAS]);
+
+        this.storage.delete(StorageKeys.SKIP_SPELL_CHECK);
+        this.storage.delete(StorageKeys.QUERY_TRIGGER);
 
         const exposedParams = this._getOnUniversalSearchParams(
           data[StorageKeys.UNIVERSAL_RESULTS].sections,
@@ -320,6 +367,9 @@ export default class Core {
         const analyticsEvent = this.onUniversalSearch(exposedParams);
         if (typeof analyticsEvent === 'object') {
           this._analyticsReporter.report(AnalyticsEvent.fromData(analyticsEvent));
+        }
+        if (shouldPushState) {
+          this.storage.pushStateToHistory();
         }
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       });
@@ -360,10 +410,14 @@ export default class Core {
    * @param {string} namespace the namespace to use for the storage key
    */
   autoCompleteUniversal (input, namespace) {
-    return this._autoComplete
-      .queryUniversal(input)
+    return this._coreLibrary
+      .universalAutocomplete({
+        input: input,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
       });
   }
@@ -377,10 +431,15 @@ export default class Core {
    * @param {string} verticalKey the vertical key for the experience
    */
   autoCompleteVertical (input, namespace, verticalKey) {
-    return this._autoComplete
-      .queryVertical(input, verticalKey)
+    return this._coreLibrary
+      .verticalAutocomplete({
+        input: input,
+        verticalKey: verticalKey,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
       });
   }
@@ -395,10 +454,22 @@ export default class Core {
    * @param {object} config.searchParameters  the search parameters for the config v2
    */
   autoCompleteFilter (input, config) {
-    return this._autoComplete
-      .queryFilter(input, config)
+    const searchParamFields = config.searchParameters.fields.map(field => ({
+      fieldApiName: field.fieldId,
+      entityType: field.entityTypeId,
+      fetchEntities: field.shouldFetchEntities
+    }));
+    return this._coreLibrary
+      .filterSearch({
+        input: input,
+        verticalKey: config.verticalKey,
+        fields: searchParamFields,
+        sectioned: config.searchParameters.sectioned,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .then(response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response))
       .then(data => {
-        this.globalStorage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
+        this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });
   }
 
@@ -406,7 +477,6 @@ export default class Core {
    * Submits a question to the server and updates the underlying question model
    * @param {object} question The question object to submit to the server
    * @param {number} question.entityId The entity to associate with the question (required)
-   * @param {string} question.lanuage The language of the question
    * @param {string} question.site The "publisher" of the (e.g. 'FIRST_PARTY')
    * @param {string} question.name The name of the author
    * @param {string} question.email The email address of the author
@@ -414,10 +484,13 @@ export default class Core {
    * @param {string} question.questionDescription Additional information about the question
    */
   submitQuestion (question) {
-    return this._questionAnswer
-      .submitQuestion(question)
-      .then(data => {
-        this.globalStorage.set(
+    return this._coreLibrary
+      .submitQuestion({
+        ...question,
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+      })
+      .then(() => {
+        this.storage.set(
           StorageKeys.QUESTION_SUBMISSION,
           QuestionSubmission.submitted());
       });
@@ -435,14 +508,14 @@ export default class Core {
         direction: option.direction
       };
     });
-    this.globalStorage.set(StorageKeys.SORT_BYS, JSON.stringify(sortBys));
+    this.storage.setWithPersist(StorageKeys.SORT_BYS, sortBys);
   }
 
   /**
-   * Clears the sortBys key in global storage.
+   * Clears the sortBys key in storage.
    */
   clearSortBys () {
-    this.globalStorage.delete(StorageKeys.SORT_BYS);
+    this.storage.delete(StorageKeys.SORT_BYS);
   }
 
   /**
@@ -450,7 +523,7 @@ export default class Core {
    * @param {string} query the query to store
    */
   setQuery (query) {
-    this.globalStorage.set(StorageKeys.QUERY, query);
+    this.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
   /**
@@ -458,7 +531,17 @@ export default class Core {
    * @param {string} queryId The query id to store
    */
   setQueryId (queryId) {
-    this.globalStorage.set(StorageKeys.QUERY_ID, queryId);
+    this.storage.set(StorageKeys.QUERY_ID, queryId);
+  }
+
+  triggerSearch (queryTrigger, newQuery) {
+    const query = newQuery !== undefined
+      ? newQuery
+      : this.storage.get(StorageKeys.QUERY) || '';
+    queryTrigger
+      ? this.storage.set(StorageKeys.QUERY_TRIGGER, queryTrigger)
+      : this.storage.delete(StorageKeys.QUERY_TRIGGER);
+    this.setQuery(query);
   }
 
   /**
@@ -482,7 +565,7 @@ export default class Core {
    * @returns {FilterNode}
    */
   getLocationRadiusFilterNode () {
-    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS);
+    return this.filterRegistry.getFilterNodeByKey(StorageKeys.LOCATION_RADIUS_FILTER_NODE);
   }
 
   /**
@@ -539,6 +622,19 @@ export default class Core {
   }
 
   /**
+   * Gets the location object needed for answers-core
+   *
+   * @returns {LatLong|undefined} from answers-core
+   */
+  _getLocationPayload () {
+    const geolocation = this.storage.get(StorageKeys.GEOLOCATION);
+    return geolocation && {
+      latitude: geolocation.lat,
+      longitude: geolocation.lng
+    };
+  }
+
+  /**
    * Returns the query trigger for the search API given the SDK query trigger
    * @param {QueryTriggers} queryTrigger SDK query trigger
    * @returns {QueryTriggers} query trigger if accepted by the search API, null o/w
@@ -550,11 +646,103 @@ export default class Core {
     return queryTrigger;
   }
 
+  /**
+   * Determines whether or not a new url state should be pushed for a search.
+   *
+   * If queryTrigger is INITIALIZE, don't push an extra state on page load.
+   * If queryTrigger is QUERY_PARAMETER, this only occurs either on page load
+   * or when hitting the history back and forward buttons. For both cases we
+   * don't push an extra state.
+   * If queryTrigger is SUGGEST, this only occurs when clicking a spellcheck
+   * link, which reloads the page, so don't push an extra state.
+   *
+   * @param {QueryTriggers} queryTrigger SDK query trigger
+   * @returns {boolean}
+   */
+  shouldPushState (queryTrigger) {
+    return queryTrigger !== QueryTriggers.INITIALIZE &&
+      queryTrigger !== QueryTriggers.QUERY_PARAMETER &&
+      queryTrigger !== QueryTriggers.SUGGEST;
+  }
+
+  /**
+   * Returns the current `locationRadius` state
+   * @returns {number|null}
+   */
+  _getLocationRadius () {
+    const locationRadiusFilterNode = this.getLocationRadiusFilterNode();
+    return locationRadiusFilterNode
+      ? locationRadiusFilterNode.getFilter().value
+      : null;
+  }
+
+  /**
+   * Persists the current `facetFilters` state into the URL.
+   */
+  _persistFacets () {
+    const persistedFacets = this.filterRegistry.createFacetsFromFilterNodes();
+    this.storage.setWithPersist(StorageKeys.PERSISTED_FACETS, persistedFacets);
+  }
+
+  /**
+   * Persists the current `filters` state into the URL.
+   */
+  _persistFilters () {
+    const totalFilterNode = this.filterRegistry.getAllStaticFilterNodesCombined();
+    const persistedFilter = totalFilterNode.getFilter();
+    this.storage.setWithPersist(StorageKeys.PERSISTED_FILTER, persistedFilter);
+  }
+
+  /**
+   * Persists the current `locationRadius` state into the URL.
+   */
+  _persistLocationRadius () {
+    const locationRadius = this._getLocationRadius();
+    if (locationRadius || locationRadius === 0) {
+      this.storage.setWithPersist(StorageKeys.PERSISTED_LOCATION_RADIUS, locationRadius);
+    } else {
+      this.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
+    }
+  }
+
   enableDynamicFilters () {
     this._isDynamicFiltersEnabled = true;
   }
 
-  on (evt, moduleId, cb) {
-    return this.globalStorage.on(evt, moduleId, cb);
+  on (evt, storageKey, cb) {
+    this.storage.registerListener({
+      eventType: evt,
+      storageKey: storageKey,
+      callback: cb
+    });
+    return this.storage;
+  }
+
+  /**
+   * This is needed to support very old usages of the SDK that have not been updated
+   * to use StorageKeys.VERTICAL_PAGES_CONFIG
+   */
+  _getUrls (query) {
+    let nav = this._componentManager.getActiveComponent('Navigation');
+    if (!nav) {
+      return undefined;
+    }
+
+    let tabs = nav.getState('tabs');
+    let urls = {};
+
+    if (tabs && Array.isArray(tabs)) {
+      for (let i = 0; i < tabs.length; i++) {
+        let params = new SearchParams(tabs[i].url.split('?')[1]);
+        params.set('query', query);
+
+        let url = tabs[i].baseUrl;
+        if (params.toString().length > 0) {
+          url += '?' + params.toString();
+        }
+        urls[tabs[i].configId] = url;
+      }
+    }
+    return urls;
   }
 }

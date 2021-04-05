@@ -41,7 +41,7 @@ export default class LocationBiasComponent extends Component {
      * @type {string}
      */
     // TODO: Remove config.verticalKey
-    this._verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey || null;
+    this._verticalKey = config.verticalKey || this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey || null;
 
     /**
      * The element used for updating location
@@ -96,12 +96,12 @@ export default class LocationBiasComponent extends Component {
     DOM.on(this._updateLocationEl, 'click', (e) => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition((position) => {
-          this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+          this.core.storage.set(StorageKeys.GEOLOCATION, {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
             radius: position.coords.accuracy
           });
-          this._doSearch();
+          this.core.triggerSearch();
         },
         (err) => this._handleGeolocationError(err),
         this._geolocationOptions);
@@ -153,18 +153,6 @@ export default class LocationBiasComponent extends Component {
     }
   }
 
-  _doSearch () {
-    if (this._verticalKey) {
-      this.core.verticalSearch(this._verticalKey, {
-        setQueryParams: true,
-        useFacets: true
-      });
-    } else {
-      let query = this.core.globalStorage.getState(StorageKeys.QUERY);
-      this.core.search(query);
-    }
-  }
-
   _disableLocationUpdateIfGeolocationDenied () {
     if ('permissions' in navigator) {
       navigator.permissions.query({ name: 'geolocation' })
@@ -177,7 +165,7 @@ export default class LocationBiasComponent extends Component {
   }
 
   _disableLocationUpdate () {
-    this.core.globalStorage.delete(StorageKeys.GEOLOCATION);
+    this.core.storage.delete(StorageKeys.GEOLOCATION);
     this._allowUpdate = false;
     this.setState({
       locationDisplayName: this._locationDisplayName,

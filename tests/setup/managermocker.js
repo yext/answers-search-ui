@@ -1,24 +1,23 @@
 /** @module ManagerMocker */
 
 import MockComponentManager from './mockcomponentmanager';
+import Storage from '../../src/core/storage/storage';
+import StorageKeys from '../../src/core/storage/storagekeys';
+
 /**
  * Generates a MockComponentManager with templates from the passed in template paths.
  * TODO(oshi): better module/method names
  */
 export default function mockManager (mockedCore) {
+  const storage = new Storage().init();
   const core = {
-    globalStorage: {
-      getState: () => null,
-      delete: () => {},
-      on: () => {},
-      set: () => {}
-    },
-    persistentStorage: {
-      set: () => {},
-      get: () => {},
-      delete: () => {}
-    },
+    storage,
+    triggerSearch: jest.fn(),
+    setQuery: jest.fn(query => core.storage.setWithPersist(StorageKeys.QUERY, query)),
     ...mockedCore
+  };
+  core.setQueryUpdateListener = (queryUpdateListener) => {
+    core.queryUpdateListener = queryUpdateListener;
   };
   const COMPONENT_MANAGER = new MockComponentManager(core);
 

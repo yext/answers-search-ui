@@ -7,27 +7,6 @@ export default class AutoCompleteData {
     this.inputIntents = data.inputIntents || [];
     Object.freeze(this);
   }
-
-  static from (response) {
-    let sections;
-    if (response.sections) {
-      sections = response.sections.map(s => ({
-        label: s.label,
-        results: s.results.map(r => new AutoCompleteResult(r)),
-        resultsCount: s.results.length
-      }));
-    } else {
-      sections = [{
-        results: response.results.map(r => new AutoCompleteResult(r)),
-        resultsCount: response.results.length
-      }];
-    }
-    let inputIntents = response.input ? response.input.queryIntents : [];
-    return new AutoCompleteData({
-      sections,
-      queryId: response.queryId,
-      inputIntents });
-  }
 }
 
 export class AutoCompleteResult {

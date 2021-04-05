@@ -91,7 +91,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: npx testcafe chrome:headless,firefox:headless tests/acceptance/acceptancesuite.js
+      - run: npx testcafe chrome:headless,firefox:headless tests/acceptance/acceptancesuites/*.js
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
@@ -116,6 +116,18 @@ jobs:
           command: |
             sudo apt-get install -qq gettext
             ./.circleci/run_translation_verification.sh
+  # verify that the third party notices file is up to date
+  third_party_notices_test:
+    docker:
+      - image: circleci/node:14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: 
+          name: Verify third party notices
+          command: ./.circleci/validate_third_party_notices.sh
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
@@ -188,6 +200,9 @@ workflows:
       - translation_test:
           requires:
             - build
+      - third_party_notices_test:
+          requires:
+            - build
       - deploy_canary:
           filters:
             branches:
@@ -197,6 +212,7 @@ workflows:
             - headless_acceptance_test
             - browserstack_acceptance_test
             - translation_test
+            - third_party_notices_test
       - deploy_branch:
           filters:
             branches:
@@ -207,6 +223,7 @@ workflows:
             - browserstack_acceptance_test
             - headless_acceptance_test
             - translation_test
+            - third_party_notices_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
@@ -229,12 +246,16 @@ workflows:
       - translation_test:
           requires:
             - build_i18n
+      - third_party_notices_test:
+          requires:
+            - build_i18n
       - deploy_branch:
           requires:
             - unit_test
             - browserstack_acceptance_test
             - headless_acceptance_test
             - translation_test
+            - third_party_notices_test
   build_and_deploy_hold:
     jobs:
       - build_i18n:
@@ -268,6 +289,12 @@ workflows:
               only: /^v.*/
           requires:
             - build_i18n
+      - third_party_notices_test:
+          filters:
+            tags:
+              only: /^v.*/
+          requires:
+            - build_i18n
       - hold:
           type: approval
           filters:
@@ -278,6 +305,7 @@ workflows:
             - browserstack_acceptance_test
             - headless_acceptance_test
             - translation_test
+            - third_party_notices_test
       - deploy_latest:
           filters:
             branches:

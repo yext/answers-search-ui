@@ -7,6 +7,7 @@ import SearchStates from '../../../core/storage/searchstates';
 import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import TranslationFlagger from '../../i18n/translationflagger';
+import { getContainerClass } from '../../../core/utils/resultsutils';
 
 export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -26,9 +27,17 @@ export default class UniversalResultsComponent extends Component {
     };
 
     const reRender = () =>
-      this.setState(this.core.globalStorage.getState(StorageKeys.UNIVERSAL_RESULTS) || {});
-    this.core.globalStorage.on('update', StorageKeys.API_CONTEXT, reRender);
-    this.core.globalStorage.on('update', StorageKeys.SESSIONS_OPT_IN, reRender);
+      this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.API_CONTEXT,
+      callback: reRender
+    });
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.SESSIONS_OPT_IN,
+      callback: reRender
+    });
   }
 
   static get type () {
@@ -45,13 +54,17 @@ export default class UniversalResultsComponent extends Component {
 
   setState (data, val) {
     const sections = data.sections || [];
-    const query = this.core.globalStorage.getState(StorageKeys.QUERY);
+    const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    Object.entries(SearchStates).forEach(([k, searchState]) => {
+      this.removeContainerClass(getContainerClass(searchState));
+    });
+    this.addContainerClass(getContainerClass(searchState));
     return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
-      showNoResults: sections.length === 0 && query,
+      showNoResults: sections.length === 0 && (query || query === ''),
       query: query,
       sections: sections
     }, val));
@@ -83,7 +96,7 @@ export default class UniversalResultsComponent extends Component {
       // Label for the vertical in the titlebar.
       title: config.sectionTitle || verticalKey,
       // Icon in the titlebar
-      icon: config.sectionTitleIconName || config.sectionTitleIconUrl || 'star',
+      icon: config.sectionTitleIconName || config.sectionTitleIconUrl,
       // Url that links to the vertical search for this vertical.
       verticalURL: config.url,
       // Show a view more link by default, which also links to verticalURL.

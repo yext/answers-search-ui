@@ -33,16 +33,19 @@ export default class SpellCheck {
 
   /**
    * Create a spell check model from the provided data
+   *
    * @param {Object} response The spell check response
    */
-  static from (response) {
+  static fromCore (response) {
     if (!response) {
       return {};
     }
 
     return new SpellCheck({
       query: response.originalQuery,
-      correctedQuery: response.correctedQuery,
+      correctedQuery: {
+        value: response.correctedQuery
+      },
       type: response.type
     });
   }

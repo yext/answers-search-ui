@@ -443,3 +443,13 @@ msgid "[[resultsCount]] autocomplete option found"
 msgid_plural "[[resultsCount]] autocomplete options found"
 msgstr[0] "オートコンプリート選択が[[resultsCount]]件見つかりました"
 msgstr[1] "オートコンプリート選択が[[resultsCount]]件見つかりました"
+
+#: src/ui/components/filters/facetscomponent.js:277
+msgctxt "True or False"
+msgid "False"
+msgstr "False"
+
+#: src/ui/components/filters/facetscomponent.js:274
+msgctxt "True or False"
+msgid "True"
+msgstr "True"

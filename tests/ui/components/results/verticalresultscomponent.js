@@ -2,32 +2,22 @@ import DOM from '../../../../src/ui/dom/dom';
 import { mount } from 'enzyme';
 import mockManager from '../../../setup/managermocker';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
+import SearchStates from '../../../../src/core/storage/searchstates';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
+import Storage from '../../../../src/core/storage/storage';
+import VerticalResults from '../../../../src/core/models/verticalresults';
 
 const mockCore = {
-  globalStorage: {
-    set: () => {},
-    on: () => {},
-    getState: (storageKey) => {
-      if (storageKey === StorageKeys.VERTICAL_PAGES_CONFIG) {
-        return { get: () => { return []; } };
-      } else if (storageKey === StorageKeys.NO_RESULTS_CONFIG) {
-        return {};
-      } else if (storageKey === StorageKeys.API_CONTEXT) {
-        return undefined;
-      } else if (storageKey === StorageKeys.REFERRER_PAGE_URL) {
-        return '';
-      } else if (storageKey === StorageKeys.SESSIONS_OPT_IN) {
-        return {};
-      }
-    }
-  },
+  storage: new Storage().init(),
   getStaticFilterNodes: () => [],
   getFacetFilterNodes: () => [],
   getLocationRadiusFilterNode: () => null
 };
 
 DOM.setup(document, new DOMParser());
+
+mockCore.storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, { get: () => [] });
+mockCore.storage.set(StorageKeys.REFERRER_PAGE_URL, '');
 
 const COMPONENT_MANAGER = mockManager(mockCore);
 COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => {
@@ -46,6 +36,42 @@ describe('vertical results component', () => {
       container: '#test-component',
       verticalKey: 'verticalKey'
     };
+  });
+
+  it('getVerticalUrl encodes the storage query when the component is created', () => {
+    COMPONENT_MANAGER.core.storage.set(StorageKeys.QUERY, 'yext');
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
+
+    expect(component.getVerticalURL()).toContain('query=yext');
+  });
+
+  it('sets correct loading state css class', () => {
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
+    const container = DOM.query('#test-component');
+    mount(component, { attachTo: container });
+    expect(container.classList.contains('yxt-Results--preSearch')).toBeTruthy();
+
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    expect(container.classList.contains('yxt-Results--searchLoading')).toBeTruthy();
+
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE });
+    expect(container.classList.contains('yxt-Results--searchComplete')).toBeTruthy();
+  });
+
+  it('updates to storage vertical results update the component results', () => {
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
+
+    const verticalResults = {
+      searchState: SearchStates.SEARCH_COMPLETE,
+      resultsCount: 15,
+      results: 'yext search results',
+      verticalConfigId: 'verticalKey',
+      resultsContext: {}
+    };
+
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, verticalResults);
+
+    expect(component.getState('results')).toEqual('yext search results');
   });
 
   it('renders with only default config', () => {
@@ -116,14 +142,11 @@ describe('vertical results component', () => {
 
   describe('creates verticalURL correctly', () => {
     let component;
-    delete global.window.location;
-    global.window = Object.create(window);
-    global.window.location = {
-      search: '?query=virginia&otherParam=123'
-    };
 
     beforeEach(() => {
       component = COMPONENT_MANAGER.create('VerticalResults', {});
+      COMPONENT_MANAGER.core.storage.setWithPersist(StorageKeys.QUERY, 'virginia');
+      COMPONENT_MANAGER.core.storage.setWithPersist('otherParam', 123);
       component.query = 'my-query';
       component.verticalKey = 'key';
     });

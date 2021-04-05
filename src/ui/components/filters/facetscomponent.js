@@ -5,6 +5,8 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import ResultsContext from '../../../core/storage/resultscontext';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import Facet from '../../../core/models/facet';
+import cloneDeep from 'lodash/cloneDeep';
 
 class FacetsConfig {
   constructor (config) {
@@ -114,7 +116,7 @@ class FacetsConfig {
      * The controls to use for each field. Each type of filter has a default
      * $eq : multioption (checkbox)
      *
-     * DEPRECATED: prefer putting this in config.fields
+     * DEPRECATED: use transformFacets instead
      *
      * @type {Object}
      */
@@ -147,6 +149,9 @@ class FacetsConfig {
     /**
      * An object that maps field API names to their filter options overrides,
      * which have the same keys as the config options in FilterOptions component.
+     *
+     * DEPRECATED: use transformFacets instead
+     *
      * @type {Object}
      */
     this.fields = config.fields || {};
@@ -157,6 +162,12 @@ class FacetsConfig {
      * @private
      */
     this.applyButtonSelector = config.applyButtonSelector || null;
+
+    /**
+     * A transformation function which operates on the core library DisplayableFacet model
+     * @type {Function}
+     */
+    this.transformFacets = config.transformFacets;
 
     this.validate();
   }
@@ -201,6 +212,12 @@ export default class FacetsComponent extends Component {
      * @private
      */
     this._filterbox = null;
+
+    /**
+     * A transformation function which operates on the core library DisplayableFacet model
+     * @type {Function}
+     */
+    this._transformFacets = config.transformFacets;
   }
 
   static get type () {
@@ -217,10 +234,80 @@ export default class FacetsComponent extends Component {
   }
 
   setState (data) {
+    let facets = data['filters'] || [];
+
+    if (this._transformFacets) {
+      const facetsCopy = cloneDeep(facets);
+      facets = this._transformFacets(facetsCopy, this.config);
+    }
+
+    facets = facets.map(this._applyDefaultFormatting);
+
     return super.setState({
       ...data,
+      filters: Facet.fromCore(facets),
+      filterOptionsConfigs: this._getFilterOptionsConfigs(facets),
       isNoResults: data.resultsContext === ResultsContext.NO_RESULTS
     });
+  }
+
+  /**
+   * Extracts the filter options from transformedFacets and puts them in an object
+   * keyed by fieldId
+   *
+   * @param {DisplayableFacet | FilterOptionsConfig} transformedFacets a union of the
+   * DisplayableFacet model from ansers-core, and the config options of the FilterOptionsConfig
+   * @returns {Object} config options of the FilterOptionsConfig keyed by fieldId
+   */
+  _getFilterOptionsConfigs (transformedFacets) {
+    return transformedFacets.reduce((acc, currentFacet) => {
+      const filterOptions = Object.assign({}, currentFacet);
+      // Delete the options from filterOptions because a DisplayableFacetOption array cannot be
+      // passed to FilterOptionsConfig. Even after deletion here, the filter options will still
+      // exist in the 'filters' field of the facets component state, and therefore any
+      // modifications which occur to options inside transformFacets will still take effect.
+      filterOptions['options'] && delete filterOptions['options'];
+      acc[currentFacet.fieldId] = filterOptions;
+      return acc;
+    }, {});
+  }
+
+  /**
+   * Applies default formatting to a facet
+   *
+   * @param {DisplayableFacet} facet from answers-core
+   * @returns {DisplayableFacet} from answers-core
+   */
+  _applyDefaultFormatting (facet) {
+    const isBooleanFacet = facet => {
+      const firstOption = (facet.options && facet.options[0]) || {};
+      return firstOption['value'] === true || firstOption['value'] === false;
+    };
+
+    if (isBooleanFacet(facet)) {
+      return FacetsComponent._transformBooleanFacet(facet);
+    }
+    return facet;
+  }
+
+  /**
+   * Applies default formatting to a boolean facet
+   *
+   * @param {DisplayableFacet} facet from answers-core
+   * @returns {DisplayableFacet} from answers-core
+   */
+  static _transformBooleanFacet (facet) {
+    const options = facet.options.map(option => {
+      let displayName = option.displayName;
+      if (option.value === true && displayName === 'true') {
+        displayName = TranslationFlagger.flag({ phrase: 'True', context: 'True or False' });
+      }
+      if (option.value === false && displayName === 'false') {
+        displayName = TranslationFlagger.flag({ phrase: 'False', context: 'True or False' });
+      }
+      return Object.assign({}, option, { displayName });
+    });
+    return Object.assign({}, facet, { options });
   }
 
   remove () {
@@ -237,14 +324,17 @@ export default class FacetsComponent extends Component {
       this._filterbox.remove();
     }
 
-    let { filters, resultsContext } = this._state.get();
+    let { filters, isNoResults, filterOptionsConfigs } = this._state.get();
 
-    if (!filters || resultsContext === ResultsContext.NO_RESULTS) {
+    if (filters.length === 0 || isNoResults) {
       return;
     }
 
     filters = filters.map(f => {
-      const fieldOverrides = this.config.fields[f.fieldId] || {};
+      const fieldOverrides = this.config.transformFacets
+        ? filterOptionsConfigs[f.fieldId] || {}
+        : this.config.fields[f.fieldId] || {};
+
       return Object.assign({}, f, {
         type: 'FilterOptions',
         control: this.config.fieldControls[f.fieldId] || 'multioption',
@@ -275,6 +365,6 @@ export default class FacetsComponent extends Component {
     );
 
     this._filterbox.mount();
-    this.core.globalStorage.set(StorageKeys.FACETS_LOADED, true);
+    this.core.storage.set(StorageKeys.FACETS_LOADED, true);
   }
 }

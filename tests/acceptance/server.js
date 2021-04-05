@@ -20,3 +20,9 @@ export async function setupServer (ctx) {
 export async function shutdownServer (ctx) {
   ctx.server.close();
 }
+
+export const UNIVERSAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universal';
+export const VERTICAL_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/vertical';
+export const FACETS_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/facets';
+export const FILTERBOX_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/filterbox';
+export const UNIVERSAL_INITIAL_SEARCH_PAGE = 'http://localhost:9999/tests/acceptance/fixtures/html/universalinitialsearch';

@@ -9,6 +9,7 @@ import buildSearchParameters from '../../tools/searchparamsparser';
 import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -95,18 +96,29 @@ export default class FilterSearchComponent extends Component {
      * Optionally provided
      * @type {string}
      */
-    this.query = config.query || this.core.globalStorage.getState(`${StorageKeys.QUERY}.${this.name}`) || '';
-    this.core.globalStorage.on('update', `${StorageKeys.QUERY}.${this.name}`, q => {
-      this.query = q;
-      this.search();
+    this.query = config.query || this.core.storage.get(`${StorageKeys.QUERY}.${this.name}`) || '';
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.HISTORY_POP_STATE,
+      callback: data => {
+        const query = data.get(`${StorageKeys.QUERY}.${this.name}`) || '';
+        const filter = data.get(`${StorageKeys.FILTER}.${this.name}`);
+        if (filter && query) {
+          this.query = query;
+          this.filter = JSON.parse(filter);
+          this._saveFilterNodeToStorage();
+        } else {
+          this._removeFilterNode();
+        }
+        this.setState();
+      }
     });
-
     /**
      * The filter string to use for the provided query
      * Optionally provided
      * @type {string}
      */
-    this.filter = config.filter || this.core.globalStorage.getState(`${StorageKeys.FILTER}.${this.name}`);
+    this.filter = config.filter || this.core.storage.get(`${StorageKeys.FILTER}.${this.name}`);
     if (typeof this.filter === 'string') {
       try {
         this.filter = JSON.parse(this.filter);
@@ -114,8 +126,7 @@ export default class FilterSearchComponent extends Component {
     }
 
     if (this.query && this.filter) {
-      const filterNode = this._buildFilterNode(this.query, this.filter);
-      this.core.setStaticFilterNodes(this.name, filterNode);
+      this._saveFilterNodeToStorage();
     }
 
     this.searchParameters = buildSearchParameters(config.searchParameters);
@@ -134,14 +145,6 @@ export default class FilterSearchComponent extends Component {
     return 'search/filtersearch';
   }
 
-  // TODO(oshi): SPR-1925 check that it is safe to remove this, it runs an extra search
-  // For no obvious reasons
-  onCreate () {
-    if (this.query && this.filter) {
-      this.search();
-    }
-  }
-
   onMount () {
     if (this.autoCompleteComponent) {
       this.autoCompleteComponent.remove();
@@ -154,9 +157,14 @@ export default class FilterSearchComponent extends Component {
     }
   }
 
+  _saveFilterNodeToStorage () {
+    const filterNode = this._buildFilterNode(this.query, this.filter);
+    this.core.setStaticFilterNodes(this.name, filterNode);
+  }
+
   _removeFilterNode () {
     this.query = '';
-    this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
+    this.core.storage.setWithPersist(`${StorageKeys.QUERY}.${this.name}`, this.query);
     this.core.clearStaticFilterNode(this.name);
     this.setState();
   }
@@ -193,7 +201,7 @@ export default class FilterSearchComponent extends Component {
         this.filter = Filter.fromResponse(filter);
         const filterNode = this._buildFilterNode(query, this.filter);
 
-        const params = new SearchParams(window.location.search.substring(1));
+        const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
         params.set(`${this.name}.query`, query);
         params.set(`${this.name}.filter`, filter);
 
@@ -206,10 +214,10 @@ export default class FilterSearchComponent extends Component {
 
         // save the filter to storage for the next search
         this.query = query;
-        this.core.persistentStorage.set(`${StorageKeys.QUERY}.${this.name}`, this.query);
-        this.core.persistentStorage.set(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
+        this.core.storage.setWithPersist(`${StorageKeys.QUERY}.${this.name}`, this.query);
+        this.core.storage.setWithPersist(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
         this.core.setStaticFilterNodes(this.name, filterNode);
-        this.search();
+        this.search(QueryTriggers.FILTER_COMPONENT);
       }
     });
   }
@@ -219,17 +227,11 @@ export default class FilterSearchComponent extends Component {
    * optionally redirecting based on config. Uses window.setTimeout to allow
    * other filters to finish rendering before searching.
    */
-  search () {
+  search (queryTrigger) {
     if (this._storeOnChange) {
       return;
     }
-    window.setTimeout(() => {
-      this.core.verticalSearch(this._config.verticalKey, {
-        setQueryParams: true,
-        resetPagination: true,
-        useFacets: true
-      });
-    });
+    this.core.triggerSearch(queryTrigger);
   }
 
   setState (data) {

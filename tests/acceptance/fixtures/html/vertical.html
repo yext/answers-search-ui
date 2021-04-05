@@ -9,6 +9,7 @@
     <body>
         <div class="answers-container">
             <div class="search-bar-container"></div>
+            <div class="spell-check-container"></div>
             <div class="navigation-container"></div>
             <div class="results-container"></div>
             <div class="pagination-container"></div>
@@ -26,12 +27,16 @@
                   verticalKey: 'KM',
                   limit: 15,
                 },
+                noResults: {
+                  displayAllResults: true
+                },
                 onReady: function() {
                     this.addComponent('SearchBar', {
                         container: '.search-bar-container',
                         verticalKey:'KM',
                         clearButton: true,
-                        promptForLocation: true
+                        promptForLocation: true,
+                        allowEmptySearch: true
                     });
 
                     this.addComponent('Navigation', {
@@ -44,7 +49,7 @@
                         },
                         {
                           label: 'Facets',
-                          url: './links',
+                          url: './facets',
                         },
                         {
                           label: 'Vertical',
@@ -56,12 +61,17 @@
 
                     this.addComponent('VerticalResults', {
                         container: '.results-container',
-                        verticalKey:'KM',
+                        verticalKey:'KM'
                     });
 
                     this.addComponent('Pagination', {
                       container:'.pagination-container',
-                    })
+                    });
+
+                    this.addComponent('SpellCheck', {
+                      container: '.spell-check-container',
+                    });
+
                 }
             })
         </script>

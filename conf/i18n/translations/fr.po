@@ -444,3 +444,13 @@ msgid "[[resultsCount]] autocomplete option found"
 msgid_plural "[[resultsCount]] autocomplete options found"
 msgstr[0] "[[resultsCount]] option de saisie automatique trouvée"
 msgstr[1] "[[resultsCount]] options de saisie automatique trouvées"
+
+#: src/ui/components/filters/facetscomponent.js:277
+msgctxt "True or False"
+msgid "False"
+msgstr "Faux"
+
+#: src/ui/components/filters/facetscomponent.js:274
+msgctxt "True or False"
+msgid "True"
+msgstr "Vrai"

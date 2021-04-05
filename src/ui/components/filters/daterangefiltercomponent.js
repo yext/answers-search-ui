@@ -1,12 +1,15 @@
 /** @module DateFilterComponent */
 
-import Component from '../component';
-import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
-import FilterNodeFactory from '../../../core/filters/filternodefactory';
-import FilterMetadata from '../../../core/filters/filtermetadata';
+import Component from '../component';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import Filter from '../../../core/models/filter';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
+import Matcher from '../../../core/filters/matcher';
+import StorageKeys from '../../../core/storage/storagekeys';
+import { getPersistedRangeFilterContents } from '../../tools/filterutils';
 
 /**
  * A filter for a range of dates
@@ -64,19 +67,52 @@ export default class DateRangeFilterComponent extends Component {
      */
     this._isExclusive = config.isExclusive;
 
-    const today = new Date();
-    const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
-    const minDate = this.core.globalStorage.getState(`${this.name}.min`);
-    const maxDate = this.core.globalStorage.getState(`${this.name}.max`);
+    this.seedFromPersistedFilter();
 
-    /**
-     * The current date range
-     * @private
-     */
-    this._date = {
-      min: minDate || config.initialMin || todayString,
-      max: maxDate || config.initialMax || todayString
-    };
+    this.core.storage.registerListener({
+      storageKey: StorageKeys.HISTORY_POP_STATE,
+      eventType: 'update',
+      callback: () => {
+        this.seedFromPersistedFilter();
+        this.setState();
+      }
+    });
+  }
+
+  /**
+   * Reseeds the component state from the PERSISTED_FILTER in storage.
+   * If there is an active filter, store it in core.
+   */
+  seedFromPersistedFilter () {
+    if (this.core.storage.has(StorageKeys.PERSISTED_FILTER)) {
+      const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
+      const persistedFilterContents = getPersistedRangeFilterContents(persistedFilter, this._field);
+      let minVal, maxVal;
+      if (this._isExclusive) {
+        minVal = persistedFilterContents[Matcher.GreaterThan];
+        maxVal = persistedFilterContents[Matcher.LessThan];
+      } else {
+        minVal = persistedFilterContents[Matcher.GreaterThanOrEqualTo];
+        maxVal = persistedFilterContents[Matcher.LessThanOrEqualTo];
+      }
+      this._date = {
+        min: minVal,
+        max: maxVal
+      };
+    } else {
+      const today = new Date();
+      const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
+
+      this._date = {
+        min: [this._config.initialMin, todayString].find(v => v !== undefined),
+        max: [this._config.initialMax, todayString].find(v => v !== undefined)
+      };
+    }
+
+    if (this._date.min != null || this._date.max != null) {
+      const filterNode = this.getFilterNode();
+      this.core.setStaticFilterNodes(this.name, filterNode);
+    }
   }
 
   static defaultTemplateName () {
@@ -128,8 +164,8 @@ export default class DateRangeFilterComponent extends Component {
     this.setState();
     this._onChange(FilterNodeFactory.from());
     this.core.clearStaticFilterNode(this.name);
-    this.core.persistentStorage.delete(`${this.name}.min`);
-    this.core.persistentStorage.delete(`${this.name}.max`);
+    this.core.storage.delete(`${this.name}.min`);
+    this.core.storage.delete(`${this.name}.max`);
   }
 
   /**
@@ -160,8 +196,8 @@ export default class DateRangeFilterComponent extends Component {
     if (this._storeOnChange) {
       this.core.setStaticFilterNodes(this.name, filterNode);
     }
-    this.core.persistentStorage.set(`${this.name}.min`, this._date.min);
-    this.core.persistentStorage.set(`${this.name}.max`, this._date.max);
+    this.core.storage.setWithPersist(`${this.name}.min`, this._date.min);
+    this.core.storage.setWithPersist(`${this.name}.max`, this._date.max);
 
     this._onChange(filterNode);
   }
