@@ -12,6 +12,7 @@ rm THIRD-PARTY-NOTICES-CURRENT
 if test $diff_exit_code -eq 1
 then
   echo "The THIRD-PARTY-NOTICES files is out of date. Run 'npm run generate-notices' and commit the updated docs."
+  echo "You may need to run 'npm install' before generating the notices."
   exit 1
 else
   echo "The THIRD-PARTY-NOTICES file is up to date."
