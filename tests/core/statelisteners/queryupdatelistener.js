@@ -1,6 +1,7 @@
 import { Storage } from '../../../src/core';
 import QueryTriggers from '../../../src/core/models/querytriggers';
 import QueryUpdateListener from '../../../src/core/statelisteners/queryupdatelistener';
+import SearchStates from '../../../src/core/storage/searchstates';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 describe('registerMiddleware', () => {
@@ -67,6 +68,31 @@ describe('_debouncedSearch', () => {
     };
     expect(queryUpdateListener.core.verticalSearch)
       .toHaveBeenCalledWith('aVerticalKey', expectedSearchOptions, { input: 'query1' });
+  });
+});
+
+describe('sets the search loading state properly', () => {
+  it('no search loading state is set on init', () => {
+    const queryUpdateListener = initQueryUpdateListener();
+    const storage = queryUpdateListener.core.storage;
+    expect(storage.get(StorageKeys.VERTICAL_RESULTS)).toBeFalsy();
+    expect(storage.get(StorageKeys.UNIVERSAL_RESULTS)).toBeFalsy();
+  });
+  it('for universal results', () => {
+    const queryUpdateListener = initQueryUpdateListener();
+    const storage = queryUpdateListener.core.storage;
+    storage.set(StorageKeys.QUERY, 'test query');
+    expect(storage.get(StorageKeys.UNIVERSAL_RESULTS).searchState).toEqual(SearchStates.SEARCH_LOADING);
+    expect(storage.get(StorageKeys.VERTICAL_RESULTS)).toBeFalsy();
+  });
+  it('for vertical results', () => {
+    const queryUpdateListener = initQueryUpdateListener({
+      verticalKey: 'aVerticalKey'
+    });
+    const storage = queryUpdateListener.core.storage;
+    storage.set(StorageKeys.QUERY, 'test query');
+    expect(storage.get(StorageKeys.VERTICAL_RESULTS).searchState).toEqual(SearchStates.SEARCH_LOADING);
+    expect(storage.get(StorageKeys.UNIVERSAL_RESULTS)).toBeFalsy();
   });
 });
 

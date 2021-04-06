@@ -20,6 +20,7 @@ import AutoCompleteResponseTransformer from './search/autocompleteresponsetransf
 import { PRODUCTION, ENDPOINTS } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
+import SearchStates from './storage/searchstates';
 
 /** @typedef {import('./storage/storage').default} Storage */
 
@@ -176,7 +177,10 @@ export default class Core {
   verticalSearch (verticalKey, options = {}, query = {}) {
     window.performance.mark('yext.answers.verticalQueryStart');
     if (!query.append) {
-      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      const verticalResults = this.storage.get(StorageKeys.VERTICAL_RESULTS);
+      if (!verticalResults || verticalResults.searchState !== SearchStates.SEARCH_LOADING) {
+        this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      }
       this.storage.set(StorageKeys.SPELL_CHECK, {});
       this.storage.set(StorageKeys.LOCATION_BIAS, {});
     }
@@ -328,7 +332,10 @@ export default class Core {
     }
 
     this.storage.set(StorageKeys.DIRECT_ANSWER, {});
-    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    const universalResults = this.storage.get(StorageKeys.UNIVERSAL_RESULTS);
+    if (!universalResults || universalResults.searchState !== SearchStates.SEARCH_LOADING) {
+      this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    }
     this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {});
     this.storage.set(StorageKeys.LOCATION_BIAS, {});
