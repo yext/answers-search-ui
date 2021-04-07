@@ -1,5 +1,7 @@
 /** @module LocationBias */
 
+import SearchStates from '../storage/searchstates';
+
 /**
  * LocationBias is the core state model
  * to power the LocationBias component
@@ -29,6 +31,19 @@ export default class LocationBias {
      * @type {string}
      */
     this.locationDisplayName = data.locationDisplayName || null;
+
+    /**
+     * Whether the search is loading or completed
+     */
+    this.searchState = data.searchState;
+  }
+
+  /**
+   * Construct a LocationBias object representing loading results
+   * @return {LocationBias}
+   */
+  static searchLoading () {
+    return new LocationBias({ searchState: SearchStates.SEARCH_LOADING });
   }
 
   /*
@@ -48,7 +63,8 @@ export default class LocationBias {
       accuracy: locationBias.method,
       latitude: locationBias.latitude,
       longitude: locationBias.longitude,
-      locationDisplayName: locationBias.displayName
+      locationDisplayName: locationBias.displayName,
+      searchState: SearchStates.SEARCH_COMPLETE
     });
   }
 }
