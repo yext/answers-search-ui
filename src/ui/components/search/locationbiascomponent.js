@@ -2,6 +2,8 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import TranslationFlagger from '../../i18n/translationflagger';
+import isEqual from 'lodash.isequal';
+import SearchStates from '../../../core/storage/searchstates';
 
 const DEFAULT_CONFIG = {
   ipAccuracyHelpText: TranslationFlagger.flag({
@@ -32,7 +34,16 @@ export default class LocationBiasComponent extends Component {
      * Recieve updates from storage based on this index
      * @type {StorageKey}
      */
-    this.moduleId = StorageKeys.LOCATION_BIAS;
+    this.core.storage.registerListener({
+      storageKey: StorageKeys.LOCATION_BIAS,
+      eventType: 'update',
+      callback: data => {
+        const searchIsLoading = data.searchState === SearchStates.SEARCH_LOADING;
+        if (!searchIsLoading && !isEqual(data, this.getState('locationBias'))) {
+          this.setState(data);
+        }
+      }
+    });
 
     /**
      * The optional vertical key for vertical search configuration
@@ -129,7 +140,8 @@ export default class LocationBiasComponent extends Component {
       isPreciseLocation: data.accuracy === 'DEVICE' && this._allowUpdate,
       isUnknownLocation: data.accuracy === 'UNKNOWN',
       shouldShow: data.accuracy !== undefined && data.accuracy !== null,
-      allowUpdate: this._allowUpdate
+      allowUpdate: this._allowUpdate,
+      locationBias: data
     }, val));
   }
 

@@ -182,7 +182,7 @@ export default class Core {
         this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       }
       this.storage.set(StorageKeys.SPELL_CHECK, {});
-      this.storage.set(StorageKeys.LOCATION_BIAS, {});
+      this.storage.set(StorageKeys.LOCATION_BIAS, LocationBias.searchLoading());
     }
 
     const { resetPagination, useFacets, sendQueryId, setQueryParams } = options;
