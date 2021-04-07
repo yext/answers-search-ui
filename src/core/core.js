@@ -338,7 +338,7 @@ export default class Core {
     }
     this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {});
-    this.storage.set(StorageKeys.LOCATION_BIAS, {});
+    this.storage.set(StorageKeys.LOCATION_BIAS, LocationBias.searchLoading());
 
     const shouldPushState =
       this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
