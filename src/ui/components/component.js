@@ -22,7 +22,12 @@ export default class Component {
     this.moduleId = null;
 
     /**
-     * Unique name of this component instance
+     * UUID for the component.
+     */
+    this.uuid = systemConfig.uuid;
+
+    /**
+     * Name of this component instance
      * Used to distinguish between other components of the same type
      * @type {String}
      */
