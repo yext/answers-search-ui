@@ -23,6 +23,7 @@ export default class Component {
 
     /**
      * UUID for the component.
+     * @type {number}
      */
     this.uuid = systemConfig.uuid;
 
