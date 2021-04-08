@@ -197,6 +197,7 @@ export default class ComponentManager {
    */
   removeByName (name) {
     const component = Object.values(this._activeComponents).find(c => c.name === name);
+    component.remove();
     this.remove(component);
     DOM.empty(component._container);
   }
