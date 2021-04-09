@@ -122,7 +122,7 @@ export default class ComponentManager {
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,
       componentManager: this,
-      uuid: this._componentIdCounter
+      uniqueId: this._componentIdCounter
     };
     this._componentIdCounter++;
 
@@ -185,7 +185,7 @@ export default class ComponentManager {
   remove (component) {
     this._core.storage.removeListener(this._componentToModuleIdListener.get(component));
 
-    const index = this._activeComponents.findIndex(c => c.uuid === component.uuid);
+    const index = this._activeComponents.findIndex(c => c.uniqueId === component.uniqueId);
     if (index !== -1) {
       this._activeComponents.splice(index, 1);
     }
