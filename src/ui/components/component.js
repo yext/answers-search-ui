@@ -20,8 +20,13 @@ export default class Component {
     this.moduleId = null;
 
     /**
-     * Unique name of this component instance
-     * Used to distinguish between other components of the same type
+     * A unique id number for the component.
+     * @type {number}
+     */
+    this.uniqueId = systemConfig.uniqueId;
+
+    /**
+     * Name of this component instance.
      * @type {String}
      */
     this.name = config.name || this.constructor.type;
