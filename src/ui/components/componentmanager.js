@@ -196,7 +196,7 @@ export default class ComponentManager {
    * @param {string} name The name of the compnent to remove
    */
   removeByName (name) {
-    const component = Object.values(this._activeComponents).find(c => c.name === name);
+    const component = this._activeComponents.find(c => c.name === name);
     component.remove();
     DOM.empty(component._container);
   }

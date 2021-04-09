@@ -28,8 +28,7 @@ export default class Component {
     this.uuid = systemConfig.uuid;
 
     /**
-     * Name of this component instance
-     * Used to distinguish between other components of the same type
+     * Name of this component instance.
      * @type {String}
      */
     this.name = config.name || this.constructor.type;
