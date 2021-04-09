@@ -22,6 +22,11 @@ export default class ComponentManager {
     this._activeComponents = [];
 
     /**
+     * A counter for the id the give to the next component that is created.
+     */
+    this._componentIdCounter = 0;
+
+    /**
      * A local reference to the core library dependency
      *
      * The Core contains both the storage AND services that are needed for performing operations
@@ -116,8 +121,10 @@ export default class ComponentManager {
       core: this._core,
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,
-      componentManager: this
+      componentManager: this,
+      uniqueId: this._componentIdCounter
     };
+    this._componentIdCounter++;
 
     let componentClass = COMPONENT_REGISTRY[componentType];
     if (!componentClass) {
@@ -178,8 +185,10 @@ export default class ComponentManager {
   remove (component) {
     this._core.storage.removeListener(this._componentToModuleIdListener.get(component));
 
-    const index = this._activeComponents.findIndex(c => c.name === component.name);
-    this._activeComponents.splice(index, 1);
+    const index = this._activeComponents.findIndex(c => c.uniqueId === component.uniqueId);
+    if (index !== -1) {
+      this._activeComponents.splice(index, 1);
+    }
   }
 
   /**
