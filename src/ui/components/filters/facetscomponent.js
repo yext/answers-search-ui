@@ -184,6 +184,7 @@ export default class FacetsComponent extends Component {
 
     if (this._filterbox) {
       this._filterbox.remove();
+      this._filterbox = null;
     }
 
     let { filters, resultsContext } = this._state.get();
