@@ -23,7 +23,6 @@ import SearchConfig from './core/models/searchconfig';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
-import MasterSwitchApi from './core/utils/masterswitchapi';
 import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
@@ -121,12 +120,6 @@ class Answers {
      * @private
      */
     this._analyticsReporterService = null;
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this._disabledByMasterSwitch = false;
   }
 
   static setInstance (instance) {
@@ -239,10 +232,6 @@ class Answers {
       );
     }
 
-    this._masterSwitchApi = statusPage
-      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, storage)
-      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, storage);
-
     this._services = parsedConfig.mock
       ? getMockServices()
       : getServices(parsedConfig, storage);
@@ -302,9 +291,6 @@ class Answers {
 
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
     return asyncDeps.finally(() => {
-      if (this._disabledByMasterSwitch) {
-        throw new Error('MasterSwitchApi determined the front-end should be disabled');
-      }
       this._onReady();
       if (!this.components.getActiveComponent(SearchComponent.type)) {
         this._initQueryUpdateListener(parsedConfig.search);
@@ -349,8 +335,7 @@ class Answers {
   _loadAsyncDependencies (parsedConfig) {
     const loadTemplates = this._loadTemplates(parsedConfig);
     const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
-    const masterSwitch = this._checkMasterSwitch();
-    return Promise.all([loadTemplates, ponyfillCssVariables, masterSwitch]);
+    return Promise.all([loadTemplates, ponyfillCssVariables]);
   }
 
   _loadTemplates ({ useTemplates, templateBundle }) {
@@ -367,19 +352,6 @@ class Answers {
       });
       return this.templates.fetchTemplates();
     }
-  }
-
-  _checkMasterSwitch () {
-    window.performance.mark('yext.answers.statusStart');
-    const handleFulfilledMasterSwitch = (isDisabled) => {
-      this._disabledByMasterSwitch = isDisabled;
-    };
-    const handleRejectedMasterSwitch = () => {
-      this._disabledByMasterSwitch = false;
-    };
-    return this._masterSwitchApi.isDisabled()
-      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch)
-      .finally(() => window.performance.mark('yext.answers.statusEnd'));
   }
 
   domReady (cb) {
