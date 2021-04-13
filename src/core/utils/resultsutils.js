@@ -14,7 +14,7 @@ export function getContainerClass (searchState) {
     case SearchStates.SEARCH_COMPLETE:
       return 'yxt-Results--searchComplete';
     default:
-      console.trace('encountered an unknown search state');
+      console.trace(`encountered an unknown search state: ${searchState}`);
       return '';
   }
 }

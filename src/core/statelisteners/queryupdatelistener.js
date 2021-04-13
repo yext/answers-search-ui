@@ -1,4 +1,6 @@
 import QueryTriggers from '../models/querytriggers';
+import UniversalResults from '../models/universalresults';
+import VerticalResults from '../models/verticalresults';
 import SearchOptionsFactory from '../search/searchoptionsfactory';
 import StorageKeys from '../storage/storagekeys';
 
@@ -64,10 +66,17 @@ export default class QueryUpdateListener {
         this.core.storage.get(StorageKeys.QUERY_TRIGGER) !== QueryTriggers.FILTER_COMPONENT)) {
       return;
     }
+    this._setSearchLoadingState();
 
     this._throttled = true;
     setTimeout(() => { this._throttled = false; }, this._searchCooldown);
     return this._search(query);
+  }
+
+  _setSearchLoadingState () {
+    this.config.verticalKey
+      ? this.core.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading())
+      : this.core.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
   }
 
   _search (query) {

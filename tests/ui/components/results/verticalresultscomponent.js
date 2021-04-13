@@ -187,4 +187,24 @@ describe('vertical results component', () => {
       expect(component.getVerticalURL()).toEqual('vertical-url?query=my-query&otherParam=123&tabOrder=&referrerPageUrl=');
     });
   });
+
+  it('only remounts the component during the SEARCH_LOADING state of vertical results', () => {
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, {
+      ...defaultConfig,
+      template: '{{{searchState}}}'
+    });
+    const wrapper = mount(component);
+    expect(wrapper.text()).toEqual('pre-search');
+    const { storage } = component.core;
+
+    storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    wrapper.update();
+    expect(wrapper.text()).toEqual('pre-search');
+
+    storage.set(StorageKeys.VERTICAL_RESULTS, {
+      searchState: SearchStates.SEARCH_COMPLETE
+    });
+    wrapper.update();
+    expect(wrapper.text()).toEqual('search-complete');
+  });
 });

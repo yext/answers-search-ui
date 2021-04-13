@@ -52,14 +52,22 @@ export default class UniversalResultsComponent extends Component {
     return true;
   }
 
+  /**
+   * Updates the search state css class on this component's container.
+   */
+  updateContainerClass (searchState) {
+    Object.values(SearchStates).forEach(searchState => {
+      this.removeContainerClass(getContainerClass(searchState));
+    });
+
+    this.addContainerClass(getContainerClass(searchState));
+  }
+
   setState (data, val) {
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
-    Object.entries(SearchStates).forEach(([k, searchState]) => {
-      this.removeContainerClass(getContainerClass(searchState));
-    });
-    this.addContainerClass(getContainerClass(searchState));
+    this.updateContainerClass(searchState);
     return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,

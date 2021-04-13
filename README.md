@@ -1,6 +1,4 @@
-# Answers
-Answers Javascript API Library.
-
+# Answers Search UI
 Outline:
 1. [Install / Setup](#install-and-setup)
 2. [ANSWERS.init Configuration Options](#answersinit-configuration-options)
@@ -421,10 +419,10 @@ ANSWERS.addComponent('SearchBar', {
   promptHeader: 'Header',
   // Optional, no default
   placeholderText: 'Start typing...',
-  // Optional, defaults to false
-  autoFocus: true,
-  // Optional, when auto focus on load,  open the autocomplete
-  autoCompleteOnLoad: false,
+  // Optional, auto focuses the search bar. Defaults to false
+  autoFocus: false,
+  // Optional, opens the autocomplete suggestions on page load. Defaults to false. Requires autoFocus to be set to true
+  autocompleteOnLoad: false,
   // Optional, allows a user to conduct an empty search. Should be set to true if the defaultInitialSearch is "".
   allowEmptySearch: false,
   // Optional, defaults to 300ms (0.3 seconds)
@@ -2528,3 +2526,10 @@ The SDK uses the Performance API, via `window.performance.mark()`, to create per
 
 4. `'yext.answers.universalQueryResponseRendered'` called after a universal query is finished and all components have finished rendering
 
+## License
+
+Yext Answers-Search-UI is an open-sourced library licensed under the [BSD-3 License](./LICENSE).
+
+## Third Party Licenses
+
+The licenses of our 3rd party dependencies are collected here: [THIRD-PARTY-NOTICES](./THIRD-PARTY-NOTICES).

@@ -1,5 +1,4 @@
 import HighlightedValue from './highlightedvalue';
-import { nestValue } from '../utils/objectutils';
 
 /**
  * Represents highlighted fields with the highlighting applied
@@ -9,15 +8,18 @@ export default class AppliedHighlightedFields {
    * Constructs a highlighted field map which consists of mappings from fields to highlighted
    * value strings.
    *
-   * @param {Object<string, string|object>} data Keyed by fieldName. It may consist of nested fields
+   * @param {Object<string, string|object|array>} data Keyed by fieldName. It may consist of nested fields
    *
    * Example object:
    *
    * {
-   *   name: '<strong>Yext</strong>',
-   *   description: {
-   *     featured: '<strong>Yext</strong> is the offical answers company'
-   *   }
+   *   description: 'likes <strong>apple</strong> pie and green <strong>apple</strong>s',
+   *   c_favoriteFruits: [
+   *     {
+   *       apples: ['Granny Smith','Upton Pyne <strong>Apple</strong>'],
+   *       pears: ['Callery Pear']
+   *     }
+   *   ]
    * }
    */
   constructor (data = {}) {
@@ -25,32 +27,43 @@ export default class AppliedHighlightedFields {
   }
 
   /**
-   * Constructs an AppliedHighlightedFields object from an answers-core HighlightedValue array
+   * Constructs an AppliedHighlightedFields object from an answers-core HighlightedField
    *
-   * @param {HighlightedValue[]} highlightedValueArray from answers-core
+   * @param {import('@yext/answers-core').HighlightedFields} highlightedFields
    * @returns {AppliedHighlightedFields}
    */
-  static fromCore (highlightedValueArray) {
-    if (!highlightedValueArray || !Array.isArray(highlightedValueArray)) {
-      return new AppliedHighlightedFields();
+  static fromCore (highlightedFields) {
+    if (!highlightedFields || typeof highlightedFields !== 'object') {
+      return {};
     }
+    const appliedHighlightedFields = this.computeHighlightedDataRecursively(highlightedFields);
+    return new AppliedHighlightedFields(appliedHighlightedFields);
+  }
 
-    return highlightedValueArray.reduce((highlightedFieldMappings, highlightedValue) => {
-      const highlightedValueString = new HighlightedValue()
-        .buildHighlightedValue(highlightedValue.value, highlightedValue.matchedSubstrings);
-      const fieldIsNested = (highlightedValue.path.length > 1);
+  /**
+   * Given an answers-core HighlightedFields tree, returns a new tree
+   * with highlighting applied to the leaf nodes.
+   *
+   * @param {import('@yext/answers-core').HighlightedFields} highlightedFields
+   * @returns {AppliedHighlightedFields}
+   */
+  static computeHighlightedDataRecursively (highlightedFields) {
+    if (this.isHighlightedFieldLeafNode(highlightedFields)) {
+      const { value, matchedSubstrings } = highlightedFields;
+      return new HighlightedValue().buildHighlightedValue(value, matchedSubstrings);
+    }
+    if (Array.isArray(highlightedFields)) {
+      return highlightedFields.map(
+        childFields => this.computeHighlightedDataRecursively(childFields));
+    }
+    return Object.entries(highlightedFields)
+      .reduce((computedFields, [fieldName, childFields]) => {
+        computedFields[fieldName] = this.computeHighlightedDataRecursively(childFields);
+        return computedFields;
+      }, {});
+  }
 
-      if (fieldIsNested) {
-        const topLevelOfPath = highlightedValue.path[0];
-        const nestedPath = highlightedValue.path.slice(1);
-        const nestedHighlightedValueString = nestValue(highlightedValueString, nestedPath);
-
-        highlightedFieldMappings[topLevelOfPath] = nestedHighlightedValueString;
-      } else {
-        highlightedFieldMappings[highlightedValue.fieldName] = highlightedValueString;
-      }
-
-      return new AppliedHighlightedFields(highlightedFieldMappings);
-    }, {});
+  static isHighlightedFieldLeafNode ({ matchedSubstrings, value }) {
+    return matchedSubstrings !== undefined && value !== undefined;
   }
 }

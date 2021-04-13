@@ -6,6 +6,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
 import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistener';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 const IconState = {
   'YEXT': 0,
@@ -425,7 +426,7 @@ export default class SearchComponent extends Component {
       this.queryEl.value = this.query;
 
       this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
-      this.core.setQuery(this.query);
+      this.core.triggerSearch(QueryTriggers.SEARCH_BAR, this.query);
 
       // Focus the input element after clearing the query, regardless of whether
       // or not the autoFocus option is enabled.
@@ -538,7 +539,7 @@ export default class SearchComponent extends Component {
     }
 
     this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.setQuery(query);
+    this.core.triggerSearch(QueryTriggers.SEARCH_BAR, query);
     return false;
   }
 

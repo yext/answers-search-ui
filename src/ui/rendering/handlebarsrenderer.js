@@ -223,8 +223,8 @@ export default class HandlebarsRenderer extends Renderer {
       const language = locale.substring(0, 2);
 
       return isUsingPluralization
-        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, language)
-        : TranslationProcessor.process(phrase, interpolationParams);
+        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, language, self.escapeExpression.bind(self))
+        : TranslationProcessor.process(phrase, interpolationParams, null, null, self.escapeExpression.bind(self));
     });
 
     self.registerHelper('icon', function (name, complexContentsParams, options) {

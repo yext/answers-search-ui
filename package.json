@@ -1,16 +1,16 @@
 {
-  "name": "@yext/answers",
-  "version": "1.7.0",
+  "name": "@yext/answers-search-ui",
+  "version": "1.8.0",
   "description": "Javascript Answers Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/yext/answers.git"
+    "url": "git+https://github.com/yext/answers-search-ui.git"
   },
   "bugs": {
-    "url": "https://github.com/yext/answers/issues"
+    "url": "https://github.com/yext/answers-search-ui/issues"
   },
-  "homepage": "https://github.com/yext/answers#readme",
+  "homepage": "https://github.com/yext/answers-search-ui#readme",
   "keywords": [
     "yext",
     "search",
@@ -21,9 +21,9 @@
   ],
   "dependencies": {
     "@mapbox/mapbox-gl-language": "^0.10.1",
-    "@yext/answers-core": "^1.1.0-beta.0",
+    "@yext/answers-core": "^1.1.0",
     "@yext/answers-storage": "^1.0.0-beta.0",
-    "@yext/rtf-converter": "^1.3.0",
+    "@yext/rtf-converter": "^1.5.0",
     "cross-fetch": "^3.0.6",
     "css-vars-ponyfill": "^2.4.3",
     "gulp-sourcemaps": "^2.6.5",
@@ -54,6 +54,7 @@
     "del": "^5.1.0",
     "enzyme": "^3.11.0",
     "fs-extra": "^9.0.1",
+    "generate-license-file": "^1.1.0",
     "gettext-extractor": "^3.5.2",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
@@ -102,7 +103,8 @@
     "fix": "semistandard --fix",
     "extract-translations": "gulp extractTranslations",
     "prepublishOnly": "./conf/npm/prepublishOnly.sh",
-    "postpublish": "./conf/npm/postpublish.sh"
+    "postpublish": "./conf/npm/postpublish.sh",
+    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
   },
   "jest": {
     "bail": 0,

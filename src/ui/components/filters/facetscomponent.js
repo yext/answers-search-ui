@@ -280,7 +280,7 @@ export default class FacetsComponent extends Component {
    */
   _applyDefaultFormatting (facet) {
     const isBooleanFacet = facet => {
-      const firstOption = (facet.options && facet.options[1]) || {};
+      const firstOption = (facet.options && facet.options[0]) || {};
       return firstOption['value'] === true || firstOption['value'] === false;
     };
 
@@ -322,6 +322,7 @@ export default class FacetsComponent extends Component {
 
     if (this._filterbox) {
       this._filterbox.remove();
+      this._filterbox = null;
     }
 
     let { filters, isNoResults, filterOptionsConfigs } = this._state.get();

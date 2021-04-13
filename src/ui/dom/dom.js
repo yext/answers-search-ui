@@ -147,15 +147,14 @@ export default class DOM {
   /**
    * Removes classes from a specified element.
    * @param {HTMLElement} node The html element to be acted upon
-   * @param {string} className A comma separated list of classes to be removed
+   * @param {string} className A css class to be removed
    */
   static removeClass (node, className) {
     if (!node) {
       return;
     }
 
-    const classes = className.split(',');
-    classes.forEach(className => node.classList.remove(className));
+    node.classList.remove(className);
   }
 
   static empty (parent) {

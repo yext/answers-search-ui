@@ -20,6 +20,7 @@ import AutoCompleteResponseTransformer from './search/autocompleteresponsetransf
 import { PRODUCTION, ENDPOINTS } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
+import SearchStates from './storage/searchstates';
 
 /** @typedef {import('./storage/storage').default} Storage */
 
@@ -176,9 +177,12 @@ export default class Core {
   verticalSearch (verticalKey, options = {}, query = {}) {
     window.performance.mark('yext.answers.verticalQueryStart');
     if (!query.append) {
-      this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      const verticalResults = this.storage.get(StorageKeys.VERTICAL_RESULTS);
+      if (!verticalResults || verticalResults.searchState !== SearchStates.SEARCH_LOADING) {
+        this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+      }
       this.storage.set(StorageKeys.SPELL_CHECK, {});
-      this.storage.set(StorageKeys.LOCATION_BIAS, {});
+      this.storage.set(StorageKeys.LOCATION_BIAS, LocationBias.searchLoading());
     }
 
     const { resetPagination, useFacets, sendQueryId, setQueryParams } = options;
@@ -328,10 +332,13 @@ export default class Core {
     }
 
     this.storage.set(StorageKeys.DIRECT_ANSWER, {});
-    this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    const universalResults = this.storage.get(StorageKeys.UNIVERSAL_RESULTS);
+    if (!universalResults || universalResults.searchState !== SearchStates.SEARCH_LOADING) {
+      this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    }
     this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {});
-    this.storage.set(StorageKeys.LOCATION_BIAS, {});
+    this.storage.set(StorageKeys.LOCATION_BIAS, LocationBias.searchLoading());
 
     const shouldPushState =
       this.shouldPushState(this.storage.get(StorageKeys.QUERY_TRIGGER));
@@ -534,13 +541,13 @@ export default class Core {
     this.storage.set(StorageKeys.QUERY_ID, queryId);
   }
 
-  triggerSearch (queryTrigger) {
-    const query = this.storage.get(StorageKeys.QUERY) || '';
-    if (queryTrigger) {
-      this.storage.set(StorageKeys.QUERY_TRIGGER, queryTrigger);
-    } else {
-      this.storage.delete(StorageKeys.QUERY_TRIGGER);
-    }
+  triggerSearch (queryTrigger, newQuery) {
+    const query = newQuery !== undefined
+      ? newQuery
+      : this.storage.get(StorageKeys.QUERY) || '';
+    queryTrigger
+      ? this.storage.set(StorageKeys.QUERY_TRIGGER, queryTrigger)
+      : this.storage.delete(StorageKeys.QUERY_TRIGGER);
     this.setQuery(query);
   }
 
@@ -640,7 +647,7 @@ export default class Core {
    * @returns {QueryTriggers} query trigger if accepted by the search API, null o/w
    */
   getQueryTriggerForSearchApi (queryTrigger) {
-    if (queryTrigger === QueryTriggers.QUERY_PARAMETER) {
+    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST].includes(queryTrigger)) {
       return null;
     }
     return queryTrigger;

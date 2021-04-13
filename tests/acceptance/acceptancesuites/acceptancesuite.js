@@ -15,6 +15,7 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
+import StorageKeys from '../../../src/core/storage/storagekeys';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -198,11 +199,13 @@ fixture`Experience links work as expected`
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
-test('Pagination, filters, and locationRadius do not persist accross experience links', async t => {
+test('experience links are clean', async t => {
   const verifyCleanLink = async () => {
-    await t.expect(universalUrl).notContains('locationRadius');
-    await t.expect(universalUrl).notContains('filters');
-    await t.expect(universalUrl).notContains('search-offset');
+    await t.expect(universalUrl).notContains(StorageKeys.PERSISTED_FACETS + '=');
+    await t.expect(universalUrl).notContains(StorageKeys.SEARCH_OFFSET + '=');
+    await t.expect(universalUrl).notContains(StorageKeys.PERSISTED_LOCATION_RADIUS + '=');
+    await t.expect(universalUrl).notContains(StorageKeys.PERSISTED_FILTER + '=');
+    await t.expect(universalUrl).notContains(StorageKeys.SORT_BYS + '=');
   };
 
   // When you land, nav links should be clean
@@ -243,7 +246,7 @@ test('Pagination, filters, and locationRadius do not persist accross experience 
 
   // When you navigate with pagination, nav links should not have the
   // Facets/filter/pagination parameters
-  await searchComponent.enterQuery('all');
+  await searchComponent.enterQuery(' ');
   await searchComponent.submitQuery();
 
   await t.click(await Selector('.js-yxt-navItem').nth(2)); // Go to vertical page

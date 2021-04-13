@@ -11,6 +11,7 @@ const QueryTriggers = {
   QUERY_PARAMETER: 'query-parameter',
   SUGGEST: 'suggest',
   FILTER_COMPONENT: 'filter-component',
-  PAGINATION: 'pagination'
+  PAGINATION: 'pagination',
+  SEARCH_BAR: 'search-bar'
 };
 export default QueryTriggers;
