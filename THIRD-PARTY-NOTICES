@@ -342,7 +342,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM packages may be included in this product:
 
- - @yext/answers-search-ui@1.7.4
+ - @yext/answers-search-ui@1.8.0
  - @yext/answers-storage@1.0.0-beta.0
 
 These packages each contain the following license and notice below:
