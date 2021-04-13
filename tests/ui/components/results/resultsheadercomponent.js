@@ -5,6 +5,7 @@ import FilterNodeFactory from '../../../../src/core/filters/filternodefactory';
 import Filter from '../../../../src/core/models/filter';
 import { mount } from 'enzyme';
 import DOM from 'src/ui/dom/dom';
+import QueryTriggers from '../../../../src/core/models/querytriggers';
 
 describe('ResultsHeaderComponent\'s applied filters', () => {
   let resultsHeaderComponent;
@@ -148,7 +149,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     ]);
   });
 
-  it('renders removable filter tags, which onClick remove the filter and run a verticalSearch', () => {
+  it('renders removable filter tags, which onClick remove the filter and run a core.triggerSearch', () => {
     // Setup DOM
     DOM.setup(document, new DOMParser());
     const bodyEl = DOM.query('body');
@@ -156,9 +157,9 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 
     // Mock src/core.js functionality
-    const verticalSearchFn = jest.fn();
+    const triggerSearchFn = jest.fn();
     COMPONENT_MANAGER = mockManager({
-      verticalSearch: verticalSearchFn,
+      triggerSearch: triggerSearchFn,
       filterRegistry: {
         getAllFilterNodes: () => [ node_f0_v0, node_f0_v1, node_f1_v0 ]
       }
@@ -178,18 +179,13 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     expect(wrapper.find('.yxt-ResultsHeader-removableFilterValue')).toHaveLength(3);
     expect(wrapper.find('.yxt-ResultsHeader-removableFilterX')).toHaveLength(3);
     expect(wrapper.find('.yxt-ResultsHeader-removableFilterTag')).toHaveLength(3);
-    expect(verticalSearchFn.mock.calls).toHaveLength(0);
+    expect(triggerSearchFn.mock.calls).toHaveLength(0);
     expect(remove_f0_v0_fn.mock.calls).toHaveLength(0);
     expect(remove_f0_v1_fn.mock.calls).toHaveLength(0);
     expect(remove_f1_v0_fn.mock.calls).toHaveLength(0);
     wrapper.find('.yxt-ResultsHeader-removableFilterTag').at(0).simulate('click');
-    expect(verticalSearchFn.mock.calls).toHaveLength(1);
-    expect(verticalSearchFn.mock.calls[0][0]).toEqual('a vertical key');
-    expect(verticalSearchFn.mock.calls[0][1]).toEqual({
-      setQueryParams: true,
-      resetPagination: true,
-      useFacets: true
-    });
+    expect(triggerSearchFn.mock.calls).toHaveLength(1);
+    expect(triggerSearchFn.mock.calls[0][0]).toEqual(QueryTriggers.FILTER_COMPONENT);
     expect(remove_f0_v0_fn.mock.calls).toHaveLength(1);
     expect(remove_f0_v1_fn.mock.calls).toHaveLength(0);
     expect(remove_f1_v0_fn.mock.calls).toHaveLength(0);

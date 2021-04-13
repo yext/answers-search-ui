@@ -7,7 +7,6 @@ import VerticalResults from '../models/verticalresults';
 import SpellCheck from '../models/spellcheck';
 import StorageKeys from '../storage/storagekeys';
 import DynamicFilters from '../models/dynamicfilters';
-import SearchIntents from '../models/searchintents';
 import LocationBias from '../models/locationbias';
 import AlternativeVerticals from '../models/alternativeverticals';
 import ResultsContext from '../storage/resultscontext';
@@ -18,55 +17,56 @@ import ResultsContext from '../storage/resultscontext';
  * component library and core storage understand.
  */
 export default class SearchDataTransformer {
-  static transform (data, urls = {}, formatters) {
-    let response = data.response;
+  static transformUniversal (data, urls = {}, formatters) {
     return {
-      [StorageKeys.QUERY_ID]: response.queryId,
-      [StorageKeys.NAVIGATION]: Navigation.from(response.modules),
-      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.from(response.directAnswer, formatters),
-      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.from(response, urls, formatters),
-      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
-      [StorageKeys.LOCATION_BIAS]: LocationBias.from(response.locationBias)
+      [StorageKeys.QUERY_ID]: data.queryId,
+      [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer, formatters),
+      [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.fromCore(data, urls, formatters),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
+      [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(data.locationBias)
     };
   }
 
-  static transformVertical (data, formatters, verticalKey) {
-    const response = SearchDataTransformer._parseVerticalResponse(data.response);
+  static transformVertical (coreResponse, formatters, verticalKey) {
+    const hasResults = coreResponse.verticalResults &&
+      coreResponse.verticalResults.results &&
+      coreResponse.verticalResults.resultsCount > 0;
+
+    let resultsContext = ResultsContext.NORMAL;
+    let response = coreResponse;
+    if (!hasResults) {
+      resultsContext = ResultsContext.NO_RESULTS;
+      response = SearchDataTransformer._reshapeForNoResults(coreResponse);
+    }
+
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.from(response, formatters, verticalKey),
-      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.from(response),
-      [StorageKeys.INTENTS]: SearchIntents.from(response.searchIntents),
-      [StorageKeys.SPELL_CHECK]: SpellCheck.from(response.spellCheck),
-      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.from(response, formatters),
-      [StorageKeys.LOCATION_BIAS]: LocationBias.from(response.locationBias)
+      [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
+        response.verticalResults, {}, formatters, resultsContext, verticalKey),
+      [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(response.facets, resultsContext),
+      [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(response.spellCheck),
+      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(response.alternativeVerticals, formatters),
+      [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(response.locationBias)
     };
   }
 
   /**
    * Form response as if the results from `allResultsForVertical` were the actual
    * results in `results`
+   *
    * @param {Object} response The server response
    */
-  static _parseVerticalResponse (response) {
-    const hasResults = response.results && response.resultsCount > 0;
-    const resultsContext = hasResults ? ResultsContext.NORMAL : ResultsContext.NO_RESULTS;
-
-    if (resultsContext === ResultsContext.NO_RESULTS) {
-      const { results, resultsCount, facets } = response.allResultsForVertical || {};
-      return {
-        ...response,
-        results: results || [],
-        resultsCount: resultsCount || 0,
-        resultsContext,
-        facets
-      };
-    }
+  static _reshapeForNoResults (response) {
+    const allResultsForVertical = response.allResultsForVertical || {};
+    const { results, resultsCount } = allResultsForVertical.verticalResults || {};
     return {
       ...response,
-      resultsContext
+      results: results || [],
+      resultsCount: resultsCount || 0,
+      verticalResults: allResultsForVertical.verticalResults,
+      facets: allResultsForVertical.facets
     };
   }
 }

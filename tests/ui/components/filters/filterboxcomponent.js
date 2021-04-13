@@ -5,11 +5,11 @@ import FilterNodeFactory from 'src/core/filters/filternodefactory';
 import Filter from 'src/core/models/filter';
 import FilterCombinators from 'src/core/filters/filtercombinators';
 import FilterType from 'src/core/filters/filtertype';
-import PersistentStorage from 'src/ui/storage/persistentstorage';
+import StorageKeys from '../../../../src/core/storage/storagekeys';
 
 describe('filter box component', () => {
   DOM.setup(document, new DOMParser());
-  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes, verticalSearch;
+  let COMPONENT_MANAGER, defaultConfig, setStaticFilterNodes;
   const options = [
     {
       label: 'ciri',
@@ -68,15 +68,12 @@ describe('filter box component', () => {
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
     setStaticFilterNodes = jest.fn();
-    verticalSearch = jest.fn();
 
     const mockCore = {
       setStaticFilterNodes: setStaticFilterNodes,
-      verticalSearch: verticalSearch,
       filterRegistry: {
         setStaticFilterNodes: setStaticFilterNodes
-      },
-      persistentStorage: new PersistentStorage()
+      }
     };
 
     COMPONENT_MANAGER = mockManager(mockCore);
@@ -184,7 +181,7 @@ describe('filter box component', () => {
     });
   });
 
-  describe('properly interacts with the URL', () => {
+  describe('searchOnChange interactions with FilterRegistry', () => {
     const oneFilterConfig = {
       ...defaultConfig,
       name: 'unique name',
@@ -198,51 +195,38 @@ describe('filter box component', () => {
       ]
     };
 
-    it('persistent storage does not change after the filter is selected when searchOnChange = false', () => {
+    it('when searchOnChange = false, does not update FilterRegistry until the apply button is clicked', () => {
       const config = {
         ...oneFilterConfig,
         searchOnChange: false
       };
       const component = COMPONENT_MANAGER.create('FilterBox', config);
-      mount(component);
-      const filterComponent = component._filterComponents[0];
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
-      filterComponent._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).toEqual(storageAfterSelection);
-    });
-
-    it('persistent storage changes after the apply button is clicked when searchOnChange = false', () => {
-      const config = {
-        ...oneFilterConfig,
-        searchOnChange: false
-      };
-      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(0);
       const wrapper = mount(component);
       const filterComponent = component._filterComponents[0];
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
       filterComponent._updateOption(0, true);
-      const storageBeforeApply = component.core.persistentStorage.getAll();
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
       wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
-      const storageAfterApply = component.core.persistentStorage.getAll();
-      expect(storageBeforeApply).not.toEqual(storageAfterApply);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(2);
     });
 
-    it('persistent storage changes after filter selection when searchOnChange = true', () => {
+    it('when searchOnChange = true, filter selection immediately updates FilterRegistry', () => {
       const config = {
         ...oneFilterConfig,
         searchOnChange: true
       };
       const component = COMPONENT_MANAGER.create('FilterBox', config);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(0);
       mount(component);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
       const filterComponent = component._filterComponents[0];
-      const storageBeforeSelection = component.core.persistentStorage.getAll();
       filterComponent._updateOption(0, true);
-      const storageAfterSelection = component.core.persistentStorage.getAll();
-      expect(storageBeforeSelection).not.toEqual(storageAfterSelection);
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(2);
     });
   });
 
-  it('searches only when apply button if search on change = false', () => {
+  it('searches only when apply button is clicked if search on change = false', () => {
     const config = {
       ...defaultConfig,
       name: 'unique name',
@@ -265,11 +249,12 @@ describe('filter box component', () => {
     const wrapper = mount(component);
     const child0 = component._filterComponents[0];
     child0._updateOption(0, true);
+    const triggerSearch = component.core.triggerSearch;
     expect(setStaticFilterNodes.mock.calls).toHaveLength(2);
-    expect(verticalSearch.mock.calls).toHaveLength(0);
+    expect(triggerSearch.mock.calls).toHaveLength(0);
     wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
     expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
-    expect(verticalSearch.mock.calls).toHaveLength(1);
+    expect(triggerSearch.mock.calls).toHaveLength(1);
   });
 
   it('reset button resets filter node', () => {
@@ -296,23 +281,80 @@ describe('filter box component', () => {
     expect(actualFilterNode.getFilter()).toEqual(expectedFilterNode.getFilter());
     expect(actualFilterNode.getMetadata()).toEqual(expectedFilterNode.getMetadata());
   });
+
+  describe('back navigation (HISTORY_POP_STATE listener)', () => {
+    const config = {
+      ...defaultConfig,
+      name: 'test-name',
+      searchOnChange: true,
+      filters: [
+        {
+          type: 'FilterOptions',
+          label: 'first filter options',
+          control: 'multioption',
+          options: [
+            {
+              label: 'ciri',
+              field: 'witcher',
+              value: 'cirilla'
+            }
+          ]
+        }
+      ]
+    };
+
+    it('does not trigger core.triggerSearch() calls on back nav', () => {
+      const component = COMPONENT_MANAGER.create('FilterBox', config);
+      const triggerSearch = component.core.triggerSearch;
+      expect(triggerSearch).toHaveBeenCalledTimes(0);
+      mount(component);
+      component.core.storage.set(StorageKeys.HISTORY_POP_STATE, new Map());
+      expect(triggerSearch).toHaveBeenCalledTimes(0);
+    });
+
+    it('with searchOnChange = false, will reset to initial state on back nav to blank url', () => {
+      const component = COMPONENT_MANAGER.create('FilterBox', { ...config, searchOnChange: false });
+      const wrapper = mount(component);
+      setStaticFilterNodes.mockClear();
+      component._filterComponents[0]._updateOption(0, true);
+      wrapper.find('.js-yext-filterbox-apply').first().simulate('click');
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
+      expect(setStaticFilterNodes.mock.calls[0][1]).toMatchObject({
+        filter: {
+          'witcher': {
+            '$eq': 'cirilla'
+          }
+        },
+        metadata: {
+          'displayValue': 'ciri',
+          'fieldName': 'first filter options',
+          'filterType': 'filter-type-static'
+        }
+      });
+      setStaticFilterNodes.mockClear();
+      component.core.storage.set(StorageKeys.HISTORY_POP_STATE, new Map());
+      expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
+      expect(setStaticFilterNodes.mock.calls[0][1]).toMatchObject({
+        filter: {},
+        metadata: {}
+      });
+    });
+  });
 });
 
 describe('dynamic filterbox component', () => {
   DOM.setup(document, new DOMParser());
-  let COMPONENT_MANAGER, defaultConfig, verticalSearch, setFacetFilterNodes;
+  let COMPONENT_MANAGER, defaultConfig, setFacetFilterNodes;
   let node1, node2, node3, node4;
 
   beforeEach(() => {
     const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-    verticalSearch = jest.fn();
     setFacetFilterNodes = jest.fn();
 
     const mockCore = {
       setFacetFilterNodes: setFacetFilterNodes,
-      verticalSearch: verticalSearch,
       filterRegistry: {
         setFacetFilterNodes: setFacetFilterNodes
       }

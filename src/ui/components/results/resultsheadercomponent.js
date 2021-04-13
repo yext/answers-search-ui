@@ -10,6 +10,7 @@ import {
   pruneFilterNodes
 } from '../../../core/utils/filternodeutils';
 import TranslationFlagger from '../../i18n/translationflagger';
+import QueryTriggers from '../../../core/models/querytriggers';
 
 const DEFAULT_CONFIG = {
   showResultCount: true,
@@ -62,14 +63,7 @@ export default class ResultsHeaderComponent extends Component {
      */
     this.nlpFilterNodes = convertNlpFiltersToFilterNodes(data.nlpFilters || []);
 
-    /**
-     * TODO (SPR-2455): Ideally, we would be able to set moduleId to DYNAMIC_FILTERS, the actual data
-     * we are listening to changes to, instead of this bespoke RESULTS_HEADER storage key.
-     * The issue is that when two components share a moduleId, if that moduleId listener is ever
-     * unregistered with the off() method, all listeners to that moduleId are unregistered.
-     * With child components, this is something that happens whenever the parent component rerenders.
-     */
-    this.moduleId = StorageKeys.RESULTS_HEADER;
+    this.moduleId = StorageKeys.DYNAMIC_FILTERS;
   }
 
   static areDuplicateNamesAllowed () {
@@ -93,11 +87,7 @@ export default class ResultsHeaderComponent extends Component {
     const { filterId } = tag.dataset;
     const filterNode = this.appliedFilterNodes[filterId];
     filterNode.remove();
-    this.core.verticalSearch(this._config.verticalKey, {
-      setQueryParams: true,
-      resetPagination: true,
-      useFacets: true
-    });
+    this.core.triggerSearch(QueryTriggers.FILTER_COMPONENT);
   }
 
   /**
@@ -165,7 +155,7 @@ export default class ResultsHeaderComponent extends Component {
   }
 
   setState (data) {
-    const offset = this.core.globalStorage.getState(StorageKeys.SEARCH_OFFSET) || 0;
+    const offset = this.core.storage.get(StorageKeys.SEARCH_OFFSET) || 0;
     this.appliedFilterNodes = this._calculateAppliedFilterNodes();
     const appliedFiltersArray = this._createAppliedFiltersArray();
     const shouldShowFilters = appliedFiltersArray.length > 0 && this._config.showAppliedFilters;

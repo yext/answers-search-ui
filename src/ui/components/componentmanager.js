@@ -4,6 +4,8 @@ import { AnswersComponentError } from '../../core/errors/errors';
 import DOM from '../dom/dom';
 import { COMPONENT_REGISTRY } from './registry';
 
+/** @typedef {import('../../core/core').default} Core */
+
 /**
  * ComponentManager is a Singletone that contains both an internal registry of
  * eligible components to be created, as well as keeps track of the current
@@ -51,6 +53,11 @@ export default class ComponentManager {
      * A mapping from component types to component names, as these may be configured by a user
      */
     this._componentTypeToComponentNames = {};
+
+    /**
+     * A mapping of Components to moduleId storage listeners, for removal purposes.
+     */
+    this._componentToModuleIdListener = new Map();
   }
 
   static getInstance () {
@@ -151,18 +158,20 @@ export default class ComponentManager {
     }
     this._componentTypeToComponentNames[componentType].push(component.name);
 
-    // If there is a global storage to power state, apply the state
+    // If there is a storage to power state, apply the state
     // from the storage to the component, and then bind the component
     // state to the storage via its updates
-    if (this._core && this._core.globalStorage !== null) {
+    if (this._core && this._core.storage !== null) {
       if (component.moduleId === undefined || component.moduleId === null) {
         return component;
       }
-
-      this._core.globalStorage
-        .on('update', component.moduleId, (data) => {
-          component.setState(data);
-        });
+      const listener = {
+        eventType: 'update',
+        storageKey: component.moduleId,
+        callback: data => component.setState(data)
+      };
+      this._core.storage.registerListener(listener);
+      this._componentToModuleIdListener.set(component, listener);
     }
 
     return component;
@@ -174,7 +183,7 @@ export default class ComponentManager {
    * @param {Component} component The component to remove
    */
   remove (component) {
-    this._core.globalStorage.off('update', component.moduleId);
+    this._core.storage.removeListener(this._componentToModuleIdListener.get(component));
 
     const index = this._activeComponents.findIndex(c => c.uniqueId === component.uniqueId);
     if (index !== -1) {

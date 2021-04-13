@@ -14,19 +14,12 @@ import Component from './ui/components/component';
 import ErrorReporter from './core/errors/errorreporter';
 import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
-import PersistentStorage from './ui/storage/persistentstorage';
-import GlobalStorage from './core/storage/globalstorage';
+import Storage from './core/storage/storage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
-import AutoCompleteApi from './core/search/autocompleteapi';
-import MockAutoCompleteService from './core/search/mockautocompleteservice';
-import QuestionAnswerApi from './core/search/questionanswerapi';
-import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
-import SearchApi from './core/search/searchapi';
-import MockSearchService from './core/search/mocksearchservice';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
@@ -36,18 +29,15 @@ import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
+import Filter from './core/models/filter';
+import SearchComponent from './ui/components/search/searchcomponent';
+import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 
-/** @typedef {import('./core/services/searchservice').default} SearchService */
-/** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./core/services/questionanswerservice').default} QuestionAnswerService */
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
 
 /**
  * @typedef Services
- * @property {SearchService} searchService
- * @property {AutoCompleteService} autoCompleteService
- * @property {QuestionAnswerService} questionAnswerService
  * @property {ErrorReporterService} errorReporterService
  */
 
@@ -167,71 +157,95 @@ class Answers {
     parsedConfig.search = new SearchConfig(parsedConfig.search);
     parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
-    const globalStorage = new GlobalStorage();
-    const persistentStorage = new PersistentStorage({
-      updateListener: parsedConfig.onStateChange,
+    const storage = new Storage({
+      updateListener: (data, url) => {
+        if (parsedConfig.onStateChange) {
+          parsedConfig.onStateChange(Object.fromEntries(data), url);
+        }
+      },
       resetListener: data => {
-        if (!data[StorageKeys.QUERY]) {
+        let query = data.get(StorageKeys.QUERY);
+        const hasQuery = query || query === '';
+        this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
+        this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
+        this.core.storage.delete(StorageKeys.PERSISTED_FACETS);
+        this.core.storage.delete(StorageKeys.SORT_BYS);
+        this.core.filterRegistry.clearAllFilterNodes();
+
+        if (!hasQuery) {
           this.core.clearResults();
         } else {
-          this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+          this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
 
-        if (!data[StorageKeys.SEARCH_OFFSET]) {
-          this.core.globalStorage.set(StorageKeys.SEARCH_OFFSET, 0);
+        if (!data.get(StorageKeys.SEARCH_OFFSET)) {
+          this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
-        globalStorage.setAll(data);
-      }
+
+        data.forEach((value, key) => {
+          if (key === StorageKeys.QUERY) {
+            return;
+          }
+          const parsedValue = this._parsePersistentStorageValue(key, value);
+          this.core.storage.set(key, parsedValue);
+        });
+
+        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
+
+        if (hasQuery) {
+          this.core.storage.set(StorageKeys.QUERY, query);
+        }
+      },
+      persistedValueParser: this._parsePersistentStorageValue
     });
-    globalStorage.setAll(persistentStorage.getAll());
-    globalStorage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
-    globalStorage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
-    globalStorage.set(StorageKeys.LOCALE, parsedConfig.locale);
-    globalStorage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
+    storage.init(window.location.search);
+    storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
+    storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
+    storage.set(StorageKeys.LOCALE, parsedConfig.locale);
+    storage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
 
     // Check if sessionsOptIn data is stored in the URL. If it is, prefer that over
     // what is in parsedConfig.
-    const sessionOptIn = globalStorage.getState(StorageKeys.SESSIONS_OPT_IN);
+    const sessionOptIn = storage.get(StorageKeys.SESSIONS_OPT_IN);
     if (!sessionOptIn) {
-      globalStorage.set(
+      storage.set(
         StorageKeys.SESSIONS_OPT_IN,
         { value: parsedConfig.sessionTrackingEnabled, setDynamically: false });
     } else {
       // If sessionsOptIn was stored in the URL, it was stored only as a string.
-      // Parse this value and add it back to globalStorage.
-      globalStorage.set(
+      // Parse this value and add it back to storage.
+      storage.set(
         StorageKeys.SESSIONS_OPT_IN,
         { value: (/^true$/i).test(sessionOptIn), setDynamically: true });
     }
 
-    parsedConfig.noResults && globalStorage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
+    parsedConfig.noResults && storage.set(StorageKeys.NO_RESULTS_CONFIG, parsedConfig.noResults);
     const isSuggestQueryTrigger =
-      globalStorage.getState(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
-    if (globalStorage.getState(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
-      globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
+      storage.get(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
+    if (storage.has(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
+      storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 
-    const context = globalStorage.getState(StorageKeys.API_CONTEXT);
+    const context = storage.get(StorageKeys.API_CONTEXT);
     if (context && !isValidContext(context)) {
-      persistentStorage.delete(StorageKeys.API_CONTEXT, true);
-      globalStorage.delete(StorageKeys.API_CONTEXT);
+      storage.delete(StorageKeys.API_CONTEXT);
       console.error(`Context parameter "${context}" is invalid, omitting from the search.`);
     }
 
-    if (globalStorage.getState(StorageKeys.REFERRER_PAGE_URL) === null) {
-      globalStorage.set(
+    if (storage.get(StorageKeys.REFERRER_PAGE_URL) === undefined) {
+      storage.set(
         StorageKeys.REFERRER_PAGE_URL,
         urlWithoutQueryParamsAndHash(document.referrer)
       );
     }
 
     this._masterSwitchApi = statusPage
-      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, globalStorage)
-      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, globalStorage);
+      ? new MasterSwitchApi({ apiKey: parsedConfig.apiKey, ...statusPage }, storage)
+      : MasterSwitchApi.from(parsedConfig.apiKey, parsedConfig.experienceKey, storage);
 
     this._services = parsedConfig.mock
       ? getMockServices()
-      : getServices(parsedConfig, globalStorage);
+      : getServices(parsedConfig, storage);
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
     // TODO(amullings): Initialize with other services
@@ -246,9 +260,11 @@ class Answers {
         parsedConfig.environment);
 
       // listen to query id updates
-      globalStorage.on('update', StorageKeys.QUERY_ID, id =>
-        this._analyticsReporterService.setQueryId(id)
-      );
+      storage.registerListener({
+        eventType: 'update',
+        storageKey: StorageKeys.QUERY_ID,
+        callback: id => this._analyticsReporterService.setQueryId(id)
+      });
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
@@ -256,22 +272,22 @@ class Answers {
 
     this.core = new Core({
       apiKey: parsedConfig.apiKey,
-      globalStorage: globalStorage,
-      persistentStorage: persistentStorage,
+      storage: storage,
       experienceKey: parsedConfig.experienceKey,
       fieldFormatters: parsedConfig.fieldFormatters,
       experienceVersion: parsedConfig.experienceVersion,
       locale: parsedConfig.locale,
-      searchService: this._services.searchService,
-      autoCompleteService: this._services.autoCompleteService,
-      questionAnswerService: this._services.questionAnswerService,
       analyticsReporter: this._analyticsReporterService,
       onVerticalSearch: parsedConfig.onVerticalSearch,
-      onUniversalSearch: parsedConfig.onUniversalSearch
+      onUniversalSearch: parsedConfig.onUniversalSearch,
+      environment: parsedConfig.environment,
+      componentManager: this.components
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
-      parsedConfig.onStateChange(persistentStorage.getAll(), window.location.search.substr(1));
+      parsedConfig.onStateChange(
+        Object.fromEntries(storage.getAll()),
+        this.core.storage.getCurrentStateUrlMerged());
     }
 
     this.components
@@ -279,6 +295,8 @@ class Answers {
       .setRenderer(this.renderer);
 
     this._setDefaultInitialSearch(parsedConfig.search);
+
+    this.core.init();
 
     this._onReady = parsedConfig.onReady || function () {};
 
@@ -288,7 +306,44 @@ class Answers {
         throw new Error('MasterSwitchApi determined the front-end should be disabled');
       }
       this._onReady();
+      if (!this.components.getActiveComponent(SearchComponent.type)) {
+        this._initQueryUpdateListener(parsedConfig.search);
+      }
+      this._searchOnLoad();
     });
+  }
+
+  _initQueryUpdateListener ({ verticalKey, defaultInitialSearch }) {
+    const queryUpdateListener = new QueryUpdateListener(this.core, {
+      defaultInitialSearch,
+      verticalKey
+    });
+    this.core.setQueryUpdateListener(queryUpdateListener);
+  }
+
+  /**
+   * This guarantees that execution of the SearchBar's search on page load occurs only
+   * AFTER all components have been added to the page. Trying to do this with a regular
+   * onCreate relies on the SearchBar having some sort of async behavior to move the execution
+   * of the search to the end of the call stack. For instance, relying on promptForLocation
+   * being set to true, which adds additional Promises that will delay the exeuction.
+   *
+   * We need to guarantee that the searchOnLoad happens after the onReady, because certain
+   * components will update values in storage in their onMount/onCreate, which are then expected
+   * to be applied to this search on page load. For example, filter components can apply
+   * filters on page load, which must be applied before this search is made to affect it.
+   *
+   * If no special search components exist, we still want to search on load if a query has been set,
+   * either from a defaultInitialSearch or from a query in the URL.
+   */
+  _searchOnLoad () {
+    const searchComponents = this.components._activeComponents
+      .filter(c => c.constructor.type === SearchComponent.type);
+    if (searchComponents.length) {
+      searchComponents.forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
+    } else if (this.core.storage.has(StorageKeys.QUERY)) {
+      this.core.triggerSearch(this.core.storage.get(StorageKeys.QUERY_TRIGGER));
+    }
   }
 
   _loadAsyncDependencies (parsedConfig) {
@@ -425,8 +480,7 @@ class Answers {
    * @param {string} query
    */
   search (query) {
-    this.core.setQuery(query, { setQueryParams: true });
-    this.core.persistentStorage.set(StorageKeys.QUERY, query);
+    this.core.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
   registerHelper (name, cb) {
@@ -458,37 +512,39 @@ class Answers {
    * @param {boolean} optIn
    */
   setSessionsOptIn (optIn) {
-    this.core.globalStorage.set(
+    this.core.storage.set(
       StorageKeys.SESSIONS_OPT_IN, { value: optIn, setDynamically: true });
   }
 
   /**
    * Sets a search query on initialization for vertical searchers that have a
    * defaultInitialSearch provided, if the user hasn't already provided their
-   * own via URL param.
+   * own via URL param. A default initial search should not be persisted in the URL,
+   * so we do a regular set instead of a setWithPersist here.
+   *
    * @param {SearchConfig} searchConfig
    * @private
    */
   _setDefaultInitialSearch (searchConfig) {
-    if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
+    if (searchConfig.defaultInitialSearch == null) {
       return;
     }
-    const prepopulatedQuery = this.core.globalStorage.getState(StorageKeys.QUERY);
+    const prepopulatedQuery = this.core.storage.get(StorageKeys.QUERY);
     if (prepopulatedQuery != null) {
       return;
     }
-    this.core.globalStorage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-    this.core.setQuery(searchConfig.defaultInitialSearch);
+    this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
+    this.core.storage.set(StorageKeys.QUERY, searchConfig.defaultInitialSearch);
   }
 
   /**
-   * Sets the geolocation tag in global storage, overriding other inputs. Do not use in conjunction
+   * Sets the geolocation tag in storage, overriding other inputs. Do not use in conjunction
    * with other components that will set the geolocation internally.
    * @param {number} lat
    * @param {number} long
    */
   setGeolocation (lat, lng) {
-    this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+    this.core.storage.set(StorageKeys.GEOLOCATION, {
       lat, lng, radius: 0
     });
   }
@@ -556,7 +612,7 @@ class Answers {
       return;
     }
 
-    this.core.globalStorage.set(StorageKeys.API_CONTEXT, contextString);
+    this.core.storage.set(StorageKeys.API_CONTEXT, contextString);
   }
 
   /**
@@ -589,36 +645,40 @@ class Answers {
    * @returns {string}
    */
   _getInitLocale () {
-    return this.core.globalStorage.getState(StorageKeys.LOCALE);
+    return this.core.storage.get(StorageKeys.LOCALE);
+  }
+
+  /**
+   * Parses a value from persistent storage, which stores strings,
+   * into the shape the SDK expects.
+   * TODO(SLAP-1111): Move this into a dedicated file/class.
+   *
+   * @param {string} key
+   * @param {string} value
+   * @returns {string|number|Filter}
+   */
+  _parsePersistentStorageValue (key, value) {
+    switch (key) {
+      case StorageKeys.PERSISTED_FILTER:
+        return Filter.from(JSON.parse(value));
+      case StorageKeys.PERSISTED_LOCATION_RADIUS:
+        return parseFloat(value);
+      case StorageKeys.PERSISTED_FACETS:
+      case StorageKeys.SORT_BYS:
+        return JSON.parse(value);
+      default:
+        return value;
+    }
   }
 }
 
 /**
  * @param {Object} config
- * @param {GlobalStorage} globalStorage
+ * @param {Storage} storage
  * @returns {Services}
  */
-function getServices (config, globalStorage) {
+function getServices (config, storage) {
   return {
-    searchService: new SearchApi({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      locale: config.locale,
-      environment: config.environment
-    }),
-    autoCompleteService: new AutoCompleteApi(
-      {
-        apiKey: config.apiKey,
-        experienceKey: config.experienceKey,
-        experienceVersion: config.experienceVersion,
-        locale: config.locale,
-        environment: config.environment
-      },
-      globalStorage),
-    questionAnswerService: new QuestionAnswerApi(
-      { apiKey: config.apiKey, environment: config.environment },
-      globalStorage),
     errorReporterService: new ErrorReporter(
       {
         apiKey: config.apiKey,
@@ -628,7 +688,7 @@ function getServices (config, globalStorage) {
         sendToServer: !config.suppressErrorReports,
         environment: config.environment
       },
-      globalStorage)
+      storage)
   };
 }
 
@@ -637,9 +697,6 @@ function getServices (config, globalStorage) {
  */
 function getMockServices () {
   return {
-    searchService: new MockSearchService(),
-    autoCompleteService: new MockAutoCompleteService(),
-    questionAnswerService: new MockQuestionAnswerService(),
     errorReporterService: new ConsoleErrorReporter()
   };
 }

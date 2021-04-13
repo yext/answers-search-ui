@@ -12,6 +12,8 @@ import { groupArray } from '../../../core/utils/arrayutils';
 import FilterType from '../../../core/filters/filtertype';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
+import StorageKeys from '../../../core/storage/storagekeys';
+import { filterIsPersisted } from '../../tools/filterutils';
 
 /**
  * The currently supported controls
@@ -31,7 +33,7 @@ const OptionTypes = {
 };
 
 class FilterOptionsConfig {
-  constructor (config) {
+  constructor (config, persistedState) {
     /**
      * The type of control to display
      * @type {string}
@@ -175,57 +177,63 @@ class FilterOptionsConfig {
     });
 
     this.validate();
-
-    if (typeof config.previousOptions === 'string') {
-      try {
-        config.previousOptions = JSON.parse(config.previousOptions);
-      } catch (e) {
-        config.previousOptions = [];
+    const { persistedFilter, persistedLocationRadius } = persistedState;
+    if (!this.isDynamic) {
+      const hasPersistedLocationRadius = persistedLocationRadius || persistedLocationRadius === 0;
+      if (this.optionType === OptionTypes.STATIC_FILTER && persistedFilter) {
+        this.options = this.getPersistedStaticFilterOptions(this.options, persistedFilter);
+      } else if (this.optionType === OptionTypes.RADIUS_FILTER && hasPersistedLocationRadius) {
+        this.options = this.getPersistedLocationRadiusOptions(this.options, persistedLocationRadius);
       }
     }
-    // previousOptions will be null if there were no previousOptions in persistentStorage
-    const previousOptions = config.previousOptions;
-    this.options = this.getSelectedOptions(this.options, previousOptions);
   }
 
   /**
-   * Returns a list of options with `selected` determined by initialOptions and
-   * optionsOverrides. optionsOverrides take precedence over initialOptions. If the
-   * control is singleoption and `selected` appears more than once in either
-   * initialOptions or optionsOverrides then the first instance is used.
-   * @param {Array<Object>} initialOptions Options from the component configuration
-   * @param {Array<string>} optionsOverrides Options as they are formatted for persistentStorage
+   * Returns the initial options from config, but with the persisted filters set to
+   * selected = true.
+   *
+   * @param {Array<{{
+   *  label: string,
+   *  value: string,
+   *  field: string,
+   *  selected?: boolean
+   * }}>} initialOptions Options from the component configuration.
+   * @param {Object} persistedFilter A persisted filter, can be combined or simple
    * @returns {Array<Object>} The options in the same format as initialOptions with updated
    *                          selected values
    */
-  getSelectedOptions (initialOptions, optionsOverrides) {
-    const options = initialOptions.map(o => ({ ...o }));
-    if (optionsOverrides && this.control === 'singleoption') {
-      let hasSeenSelectedOption = false;
-      return options.map(o => {
-        if (optionsOverrides.includes(o.label) && !hasSeenSelectedOption) {
-          hasSeenSelectedOption = true;
-          return { ...o, selected: true };
-        }
-        return { ...o, selected: false };
-      });
-    } else if (optionsOverrides && this.control === 'multioption') {
-      return options.map(o => ({
+  getPersistedStaticFilterOptions (initialOptions, persistedFilter) {
+    return initialOptions.map(o => {
+      const filterForOption = Filter.equal(o.field, o.value);
+      const isPersisted = filterIsPersisted(filterForOption, persistedFilter);
+      return {
         ...o,
-        selected: optionsOverrides.includes(o.label)
-      }));
-    } else if (this.control === 'singleoption') {
-      let hasSeenSelectedOption = false;
-      return options.map(o => {
-        if (hasSeenSelectedOption) {
-          return { ...o, selected: false };
-        } else if (o.selected) {
-          hasSeenSelectedOption = true;
-        }
-        return { ...o };
-      });
-    }
-    return options;
+        selected: isPersisted
+      };
+    });
+  }
+
+  /**
+   * Returns the initial options from config, but with the persisted location radius filter
+   * set to selected = true.
+   *
+   * @param {Array<{{
+   *  label: string,
+   *  value: string,
+   *  selected?: boolean
+   * }}>} initialOptions Options from the component configuration.
+    * @param {number} persistedLocationRadius The value of the persisted locationRadius
+    * @returns {Array<Object>} The options in the same format as initialOptions with updated
+    *                          selected values
+    */
+  getPersistedLocationRadiusOptions (initialOptions, persistedLocationRadius) {
+    return initialOptions.map(o => {
+      const isPersisted = o.value === persistedLocationRadius;
+      return {
+        ...o,
+        selected: isPersisted
+      };
+    });
   }
 
   getInitialSelectedCount () {
@@ -259,6 +267,12 @@ class FilterOptionsConfig {
         'FilterOptions component requires options to be provided',
         'FilterOptions');
     }
+
+    if (this.control === 'singleoption' && this.options.filter(o => o.selected).length > 1) {
+      throw new AnswersComponentError(
+        'FilterOptions component with "singleoption" control cannot have multiple selected options',
+        'FilterOptions');
+    }
   }
 }
 
@@ -268,18 +282,32 @@ class FilterOptionsConfig {
 export default class FilterOptionsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
+    this._initVariables(config);
 
-    let previousOptions = this.core.globalStorage.getState(this.name);
-    this.core.globalStorage.delete(this.name);
+    if (this.config.storeOnChange) {
+      this.apply();
+    }
+
+    if (!this.config.isDynamic) {
+      this._registerBackNavigationListener();
+    }
+  }
+
+  /**
+   * Initializes the component's instance variables.
+   *
+   * @param {Object} config
+   */
+  _initVariables (config) {
+    const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
+    const persistedLocationRadius = this.core.storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS);
+    const persistedState = { persistedFilter, persistedLocationRadius };
 
     /**
      * The component config
      * @type {FilterOptionsConfig}
      */
-    this.config = new FilterOptionsConfig({
-      previousOptions,
-      ...config
-    });
+    this.config = new FilterOptionsConfig(config, persistedState);
 
     const selectedCount = this.config.getInitialSelectedCount();
 
@@ -295,29 +323,18 @@ export default class FilterOptionsComponent extends Component {
      * @type {boolean}
      */
     this.showMoreState = this.config.showMore;
+  }
 
-    if (this.config.storeOnChange) {
-      this.apply(this.config.isDynamic);
-    }
-
-    if (!this.config.isDynamic) {
-      // Update listener for when navigating backwards in history. When we back nav, the
-      // globalStorage is updated with the previous URL filter values. We should not update
-      // this.name otherwise, instead opt for this.core.setStaticFilterNodes()
-      this.core.globalStorage.on('update', this.name, (data) => {
-        try {
-          const newOptions = JSON.parse(data);
-          this.config.options = this.config.getSelectedOptions(
-            this.config.initialOptions,
-            newOptions
-          );
-          this.updateListeners();
-          this.setState();
-        } catch (e) {
-          console.warn(`Filter option ${data} could not be parsed`);
-        }
-      });
-    }
+  _registerBackNavigationListener () {
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.HISTORY_POP_STATE,
+      callback: () => {
+        this._initVariables(this._config);
+        this.updateListeners(true, true);
+        this.setState();
+      }
+    });
   }
 
   static get type () {
@@ -599,7 +616,7 @@ export default class FilterOptionsComponent extends Component {
   updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
     const filterNode = this.getFilterNode();
     if (this.config.storeOnChange) {
-      this.apply(false);
+      this.apply();
     }
 
     this.config.onChange(filterNode, alwaysSaveFilterNodes, blockSearchOnChange);
@@ -620,10 +637,8 @@ export default class FilterOptionsComponent extends Component {
 
   /**
    * Apply filter changes
-   * @param {boolean} replaceHistory Whether we replace or push a new history
-   *                                 state for the associated changes
    */
-  apply (replaceHistory) {
+  apply () {
     switch (this.config.optionType) {
       case OptionTypes.RADIUS_FILTER:
         this.core.setLocationRadiusFilterNode(this.getLocationRadiusFilterNode());
@@ -634,8 +649,6 @@ export default class FilterOptionsComponent extends Component {
       default:
         throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
     }
-
-    this.saveSelectedToPersistentStorage(replaceHistory);
   }
 
   floatSelected () {
@@ -677,33 +690,13 @@ export default class FilterOptionsComponent extends Component {
       filter: { value: selectedOption.value },
       remove: () => this._clearSingleOption(selectedOption)
     };
-    if (selectedOption.value === 0) {
-      return FilterNodeFactory.from({
-        ...filterNode,
-        filter: Filter.empty()
-      });
-    } else {
-      return FilterNodeFactory.from(filterNode);
-    }
+    return FilterNodeFactory.from(filterNode);
   }
 
   _clearSingleOption (option) {
     option.selected = false;
     this.updateListeners(true, true);
     this.setState();
-  }
-
-  /**
-   * Saves selected options to persistent storage
-   * @param {boolean} replaceHistory Whether we replace or push a new history
-   *                                 state for the associated changes
-   */
-  saveSelectedToPersistentStorage (replaceHistory) {
-    this.core.persistentStorage.set(
-      this.name,
-      this.config.options.filter(o => o.selected).map(o => o.label),
-      replaceHistory || (this.core.persistentStorage.get(this.name) === null)
-    );
   }
 
   /**

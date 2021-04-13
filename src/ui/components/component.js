@@ -248,6 +248,22 @@ export default class Component {
     return this;
   }
 
+  /**
+   * Adds a class to the container of the component.
+   * @param {string} className A comma separated value of classes
+   */
+  addContainerClass (className) {
+    DOM.addClass(this._container, className);
+  }
+
+  /**
+   * Removes the specified classes from the container of the component
+   * @param {string} className A comma separated value of classes
+   */
+  removeContainerClass (className) {
+    DOM.removeClass(this._container, className);
+  }
+
   setState (data) {
     const newState = Object.assign({}, { _config: this._config }, data);
     this._state.set(newState);

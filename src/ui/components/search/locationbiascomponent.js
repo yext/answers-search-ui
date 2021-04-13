@@ -2,6 +2,8 @@ import Component from '../component';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import TranslationFlagger from '../../i18n/translationflagger';
+import isEqual from 'lodash.isequal';
+import SearchStates from '../../../core/storage/searchstates';
 
 const DEFAULT_CONFIG = {
   ipAccuracyHelpText: TranslationFlagger.flag({
@@ -32,7 +34,16 @@ export default class LocationBiasComponent extends Component {
      * Recieve updates from storage based on this index
      * @type {StorageKey}
      */
-    this.moduleId = StorageKeys.LOCATION_BIAS;
+    this.core.storage.registerListener({
+      storageKey: StorageKeys.LOCATION_BIAS,
+      eventType: 'update',
+      callback: data => {
+        const searchIsLoading = data.searchState === SearchStates.SEARCH_LOADING;
+        if (!searchIsLoading && !isEqual(data, this.getState('locationBias'))) {
+          this.setState(data);
+        }
+      }
+    });
 
     /**
      * The optional vertical key for vertical search configuration
@@ -41,7 +52,7 @@ export default class LocationBiasComponent extends Component {
      * @type {string}
      */
     // TODO: Remove config.verticalKey
-    this._verticalKey = config.verticalKey || this.core.globalStorage.getState(StorageKeys.SEARCH_CONFIG).verticalKey || null;
+    this._verticalKey = config.verticalKey || this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey || null;
 
     /**
      * The element used for updating location
@@ -96,12 +107,12 @@ export default class LocationBiasComponent extends Component {
     DOM.on(this._updateLocationEl, 'click', (e) => {
       if ('geolocation' in navigator) {
         navigator.geolocation.getCurrentPosition((position) => {
-          this.core.globalStorage.set(StorageKeys.GEOLOCATION, {
+          this.core.storage.set(StorageKeys.GEOLOCATION, {
             lat: position.coords.latitude,
             lng: position.coords.longitude,
             radius: position.coords.accuracy
           });
-          this._doSearch();
+          this.core.triggerSearch();
         },
         (err) => this._handleGeolocationError(err),
         this._geolocationOptions);
@@ -129,7 +140,8 @@ export default class LocationBiasComponent extends Component {
       isPreciseLocation: data.accuracy === 'DEVICE' && this._allowUpdate,
       isUnknownLocation: data.accuracy === 'UNKNOWN',
       shouldShow: data.accuracy !== undefined && data.accuracy !== null,
-      allowUpdate: this._allowUpdate
+      allowUpdate: this._allowUpdate,
+      locationBias: data
     }, val));
   }
 
@@ -153,18 +165,6 @@ export default class LocationBiasComponent extends Component {
     }
   }
 
-  _doSearch () {
-    if (this._verticalKey) {
-      this.core.verticalSearch(this._verticalKey, {
-        setQueryParams: true,
-        useFacets: true
-      });
-    } else {
-      let query = this.core.globalStorage.getState(StorageKeys.QUERY);
-      this.core.search(query);
-    }
-  }
-
   _disableLocationUpdateIfGeolocationDenied () {
     if ('permissions' in navigator) {
       navigator.permissions.query({ name: 'geolocation' })
@@ -177,7 +177,7 @@ export default class LocationBiasComponent extends Component {
   }
 
   _disableLocationUpdate () {
-    this.core.globalStorage.delete(StorageKeys.GEOLOCATION);
+    this.core.storage.delete(StorageKeys.GEOLOCATION);
     this._allowUpdate = false;
     this.setState({
       locationDisplayName: this._locationDisplayName,

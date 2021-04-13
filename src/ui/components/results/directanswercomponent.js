@@ -83,6 +83,29 @@ export default class DirectAnswerComponent extends Component {
      * @type {Array<Object>}
      */
     this._cardOverrides = config.cardOverrides || [];
+
+    /**
+     * Type options, which allows a card type to be specified based on the direct answer type.
+     * May contain cardOverrides.
+     *
+     * @example
+     * {
+     *   'FEATURED_SNIPPET': {
+     *      cardType: 'documentsearch-standard',
+     *      cardOverrides: [
+     *        {
+     *           entityType: 'Person',
+     *           cardType: 'custom-card'
+     *        }
+     *     ]
+     *   }
+     * }
+     *
+     * @type {Object}
+     */
+    this._types = config.types;
+
+    this._validateTypes();
   }
 
   static get type () {
@@ -107,44 +130,6 @@ export default class DirectAnswerComponent extends Component {
     }
 
     return true;
-  }
-
-  /**
-   * Check whether a given cardOverride matches a given directAnswer.
-   * @param {Object} directAnswer
-   * @param {Object} override
-   */
-  _overrideMatchesAnswer (directAnswer, override) {
-    if (!Object.keys(directAnswer).length) {
-      return true;
-    }
-    const directAnswerPropeties = {
-      entityType: directAnswer.relatedItem.data.type,
-      fieldName: directAnswer.answer.fieldName,
-      fieldType: directAnswer.answer.fieldType
-    };
-    for (let [propertyToMatch, propertyValue] of Object.entries(override)) {
-      if (propertyToMatch === 'cardType') {
-        continue;
-      }
-      if (directAnswerPropeties[propertyToMatch] !== propertyValue) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  /**
-   * Returns the custom card that should be used for the given direct answer.
-   * First, checks user given cardOverrides for a matching override, if there are none
-   * then returns the default card.
-   * @returns {string}
-   */
-  _getCustomCard (directAnswer) {
-    const cardOverride = this._cardOverrides.find(override => {
-      return this._overrideMatchesAnswer(directAnswer, override);
-    });
-    return cardOverride ? cardOverride.cardType : this._defaultCard;
   }
 
   /**
@@ -220,7 +205,7 @@ export default class DirectAnswerComponent extends Component {
       eventOptions: this.eventOptions(data),
       viewDetailsText: this._viewDetailsText,
       directAnswer: data,
-      customCard: this._getCustomCard(data)
+      customCard: this._getCard(data)
     }));
   }
 
@@ -233,6 +218,126 @@ export default class DirectAnswerComponent extends Component {
       searcher: 'UNIVERSAL',
       entityId: data.relatedItem.data.id,
       ctaLabel: this._viewDetailsText.toUpperCase().replace(' ', '_')
+    });
+  }
+
+  /**
+   * Determines the card that should be used for the given direct answer.
+   *
+   * @param {Object} directAnswer The direct answer state
+   * @returns {string}
+   */
+  _getCard (directAnswer) {
+    if (this._types) {
+      return this._getCardBasedOnTypes(directAnswer);
+    } else if (this._cardOverrides.length > 0) {
+      return this._getCardBasedOnOverrides({
+        directAnswer: directAnswer,
+        overrides: this._cardOverrides,
+        fallback: this._defaultCard
+      });
+    } else {
+      return this._defaultCard;
+    }
+  }
+
+  /**
+   * Determines the card that should be used based on the types option
+   *
+   * @param {Object} directAnswer The direct answer state
+   * @returns {string}
+   */
+  _getCardBasedOnTypes (directAnswer) {
+    if (!('type' in directAnswer) || !(directAnswer.type in this._types)) {
+      return this._defaultCard;
+    }
+
+    const typeOptions = this._types[directAnswer.type];
+
+    const cardFallback = typeOptions.cardType || this._defaultCard;
+
+    if (typeOptions.cardOverrides) {
+      return this._getCardBasedOnOverrides({
+        directAnswer: directAnswer,
+        overrides: typeOptions.cardOverrides,
+        fallback: cardFallback
+      });
+    }
+
+    return cardFallback;
+  }
+
+  /**
+   * Returns the custom card type that should be used for the given direct answer.
+   *
+   * @param {Object} directAnswer The direct answer state
+   * @param {Object[]} overrides The overrides to search through
+   * @param {string} fallback The card to return if no match is found
+   * @returns {string}
+   */
+  _getCardBasedOnOverrides ({ directAnswer, overrides, fallback }) {
+    const cardOverride = overrides.find(override => {
+      return this._overrideMatchesAnswer(override, directAnswer);
+    });
+    return cardOverride ? cardOverride.cardType : fallback;
+  }
+
+  /**
+   * Check whether a given cardOverride matches a given directAnswer.
+   *
+   * @param {Object} override
+   * @param {Object} directAnswer
+   * @returns {boolean}
+   */
+  _overrideMatchesAnswer (override, directAnswer) {
+    if (!Object.keys(directAnswer).length) {
+      return true;
+    }
+    const directAnswerPropeties = {
+      type: directAnswer.type,
+      entityType: directAnswer.relatedItem.data.type,
+      fieldName: directAnswer.answer.fieldName,
+      fieldType: directAnswer.answer.fieldType
+    };
+    for (let [propertyToMatch, propertyValue] of Object.entries(override)) {
+      if (propertyToMatch === 'cardType') {
+        continue;
+      }
+      if (directAnswerPropeties[propertyToMatch] !== propertyValue) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  /**
+   * Throws an error if the types config option is not formatted properly.
+   * @throws if validation fails
+   */
+  _validateTypes () {
+    if (!this._types) {
+      return;
+    }
+
+    const validateSupportedKeysOfObject = (supportedKeys, object) => {
+      Object.keys(object).forEach(key => {
+        if (!supportedKeys.includes(key)) {
+          const supportedKeysString = supportedKeys.join(' and ');
+          throw new Error(`The key '${key}' is not a supported option. Supported options include ${supportedKeysString}.`);
+        }
+      });
+    };
+
+    Object.entries(this._types).forEach(([directAnswerType, typeOptions]) => {
+      const supportedTypeOptions = ['cardType', 'cardOverrides'];
+      validateSupportedKeysOfObject(supportedTypeOptions, typeOptions);
+      if (!typeOptions.cardOverrides) {
+        return;
+      }
+      const supportedCardOverrideOptions = ['fieldName', 'entityType', 'fieldType', 'cardType'];
+      typeOptions.cardOverrides.forEach(overrideOptions => {
+        validateSupportedKeysOfObject(supportedCardOverrideOptions, overrideOptions);
+      });
     });
   }
 
