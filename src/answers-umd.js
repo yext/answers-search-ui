@@ -141,7 +141,7 @@ class Answers {
     return this.instance;
   }
 
-  _initStorage(parsedConfig) {
+  _initStorage (parsedConfig) {
     const storage = new Storage({
       updateListener: (data, url) => {
         if (parsedConfig.onStateChange) {
