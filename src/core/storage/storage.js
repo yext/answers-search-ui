@@ -123,6 +123,18 @@ export default class Storage {
   }
 
   /**
+   * Adds all entries of the persistent storage to the URL,
+   * replacing the current history state.
+   */
+  replaceHistoryWithState () {
+    this.persistentStorage.replaceHistoryWithState();
+    this.persistedStateListeners.update(
+      this.persistentStorage.getAll(),
+      this.getCurrentStateUrlMerged()
+    );
+  }
+
+  /**
    * Adds all entries of the persistent storage to the URL.
    */
   pushStateToHistory () {
