@@ -17,7 +17,7 @@ test(`blank defaultInitialSearch will fire on universal if allowEmptySearch is t
   await t.expect(Selector('.yxt-Results').exists).ok();
 });
 
-test.only(`referrerPageUrl is added to the URL on default initial searches`, async t => {
+test(`referrerPageUrl is added to the URL on default initial searches`, async t => {
   await Selector('.yxt-Results').with({ visibilityCheck: true })();
   const currentSearchParams = await getCurrentUrlParams();
   const referrerPageUrl = currentSearchParams.has(StorageKeys.REFERRER_PAGE_URL);
