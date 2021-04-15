@@ -1,21 +1,16 @@
 import {
   setupServer,
   shutdownServer,
-  UNIVERSAL_INITIAL_SEARCH_PAGE
+  FILTERBOX_PAGE
 } from '../server';
 import { Selector } from 'testcafe';
 import { getCurrentUrlParams } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
-fixture`Universal page with default initial search`
+fixture`Vertical page with default initial search`
   .before(setupServer)
   .after(shutdownServer)
-  .page`${UNIVERSAL_INITIAL_SEARCH_PAGE}`;
-
-test(`blank defaultInitialSearch will fire on universal if allowEmptySearch is true`, async t => {
-  await Selector('.yxt-Results').with({ visibilityCheck: true })();
-  await t.expect(Selector('.yxt-Results').exists).ok();
-});
+  .page`${FILTERBOX_PAGE}`;
 
 test(`referrerPageUrl is added to the URL on default initial searches`, async t => {
   await Selector('.yxt-Results').with({ visibilityCheck: true })();

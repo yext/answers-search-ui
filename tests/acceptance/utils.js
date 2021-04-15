@@ -18,6 +18,11 @@ export async function browserForwardButton () {
   return t.wait(2500);
 }
 
+export async function getCurrentUrlParams () {
+  const urlParams = await ClientFunction(() => window.location.search)();
+  return new URLSearchParams(urlParams);
+}
+
 /**
  * Register the Ie11NoCacheHook, if the current browser is IE11.
  *
