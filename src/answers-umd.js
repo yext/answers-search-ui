@@ -134,22 +134,7 @@ class Answers {
     return this.instance;
   }
 
-  /**
-   * Initializes the SDK with the provided configuration. Note that before onReady
-   * is ever called, a check to the relevant Answers Status page is made.
-   *
-   * @param {Object} config The Answers configuration.
-   * @param {Object} statusPage An override for the baseUrl and endpoint of the
-   *                            experience's Answers Status page.
-   */
-  init (config, statusPage) {
-    window.performance.mark('yext.answers.initStart');
-    const parsedConfig = this.parseConfig(config);
-    this.validateConfig(parsedConfig);
-
-    parsedConfig.search = new SearchConfig(parsedConfig.search);
-    parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
-
+  _initStorage (parsedConfig) {
     const storage = new Storage({
       updateListener: (data, url) => {
         if (parsedConfig.onStateChange) {
@@ -231,7 +216,26 @@ class Answers {
         urlWithoutQueryParamsAndHash(document.referrer)
       );
     }
+    return storage;
+  }
 
+  /**
+   * Initializes the SDK with the provided configuration. Note that before onReady
+   * is ever called, a check to the relevant Answers Status page is made.
+   *
+   * @param {Object} config The Answers configuration.
+   * @param {Object} statusPage An override for the baseUrl and endpoint of the
+   *                            experience's Answers Status page.
+   */
+  init (config, statusPage) {
+    window.performance.mark('yext.answers.initStart');
+    const parsedConfig = this.parseConfig(config);
+    this.validateConfig(parsedConfig);
+
+    parsedConfig.search = new SearchConfig(parsedConfig.search);
+    parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
+
+    const storage = this._initStorage(parsedConfig);
     this._services = parsedConfig.mock
       ? getMockServices()
       : getServices(parsedConfig, storage);
