@@ -96,8 +96,8 @@ class AnswersSearchBar {
    * Attempts to set the singleton instance of the {@link AnswersSearchBar}.
    * If there is already an instance of this class, the method returns False.
    * If the provided instance was set successfully, the method returns True.
-   * 
-   * @param {AnswersSearchBar} instance 
+   *
+   * @param {AnswersSearchBar} instance
    * @returns {boolean}
    */
   static setInstance (instance) {
