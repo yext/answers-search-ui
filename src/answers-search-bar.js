@@ -92,6 +92,14 @@ class AnswersSearchBar {
     this._analyticsReporterService = null;
   }
 
+  /**
+   * Attempts to set the singleton instance of the {@link AnswersSearchBar}.
+   * If there is already an instance of this class, the method returns False.
+   * If the provided instance was set successfully, the method returns True.
+   * 
+   * @param {AnswersSearchBar} instance 
+   * @returns {boolean}
+   */
   static setInstance (instance) {
     if (!this.instance) {
       this.instance = instance;
@@ -201,7 +209,6 @@ class AnswersSearchBar {
     this._services = getServices(parsedConfig, storage);
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
-    // TODO(amullings): Initialize with other services
     if (this._eligibleForAnalytics) {
       this._analyticsReporterService = new AnalyticsReporter(
         parsedConfig.experienceKey,
