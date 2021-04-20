@@ -15,6 +15,7 @@ import { defaultConfigOption } from '../../../core/utils/configutils';
 import { getTabOrder } from '../../tools/taborder';
 import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
+import { getContainerClass } from '../../../core/utils/resultsutils';
 
 class VerticalResultsConfig {
   constructor (config = {}) {
@@ -215,6 +216,7 @@ export default class VerticalResultsComponent extends Component {
       eventType: 'update',
       storageKey: StorageKeys.VERTICAL_RESULTS,
       callback: results => {
+        this.updateContainerClass(results.searchState);
         if (results.searchState === SearchStates.SEARCH_COMPLETE) {
           this.setState(results);
         }
@@ -252,6 +254,10 @@ export default class VerticalResultsComponent extends Component {
       hiddenFields: this._config.appliedFilters.hiddenFields,
       resultsCountTemplate: this._config.resultsCountTemplate
     };
+  }
+
+  onCreate () {
+    this.updateContainerClass(SearchStates.PRE_SEARCH);
   }
 
   mount () {
@@ -331,6 +337,17 @@ export default class VerticalResultsComponent extends Component {
     return replaceUrlParams(baseUrl, filteredParams);
   }
 
+  /**
+   * Updates the search state css class on this component's container.
+   */
+  updateContainerClass (searchState) {
+    Object.values(SearchStates).forEach(searchState => {
+      this.removeContainerClass(getContainerClass(searchState));
+    });
+
+    this.addContainerClass(getContainerClass(searchState));
+  }
+
   setState (data = {}, val) {
     /**
      * @type {Array<Result>}
@@ -345,6 +362,7 @@ export default class VerticalResultsComponent extends Component {
       data.resultsContext === ResultsContext.NORMAL;
     this.query = this.core.storage.get(StorageKeys.QUERY);
     return super.setState(Object.assign({ results: [] }, data, {
+      searchState: searchState,
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,

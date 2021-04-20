@@ -19,32 +19,25 @@ import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
-import AutoCompleteApi from './core/search/autocompleteapi';
-import MockAutoCompleteService from './core/search/mockautocompleteservice';
-import QuestionAnswerApi from './core/search/questionanswerapi';
-import MockQuestionAnswerService from './core/search/mockquestionanswerservice';
-import SearchApi from './core/search/searchapi';
-import MockSearchService from './core/search/mocksearchservice';
+import SearchConfig from './core/models/searchconfig';
 import ComponentManager from './ui/components/componentmanager';
-import MasterSwitchApi from './core/utils/masterswitchapi';
+import VerticalPagesConfig from './core/models/verticalpagesconfig';
+import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
 import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
 import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import TranslationProcessor from './core/i18n/translationprocessor';
 import AnswersConfigBuilder from './core/models/answersconfigbuilder';
+import Filter from './core/models/filter';
+import SearchComponent from './ui/components/search/searchcomponent';
+import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 
-/** @typedef {import('./core/services/searchservice').default} SearchService */
-/** @typedef {import('./core/services/autocompleteservice').default} AutoCompleteService */
-/** @typedef {import('./core/services/questionanswerservice').default} QuestionAnswerService */
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
 
 /**
  * @typedef Services
- * @property {SearchService} searchService
- * @property {AutoCompleteService} autoCompleteService
- * @property {QuestionAnswerService} questionAnswerService
  * @property {ErrorReporterService} errorReporterService
  */
 
@@ -123,12 +116,6 @@ class Answers {
      * @private
      */
     this._analyticsReporterService = null;
-
-    /**
-     * @type {boolean}
-     * @private
-     */
-    this._disabledByMasterSwitch = false;
   }
 
   static setInstance (instance) {
@@ -158,34 +145,45 @@ class Answers {
       .build();
 
     const storage = new Storage({
-      update: (data, url) => {
-        answersConfig.onStateChange(Object.fromEntries(data), url);
+      updateListener: (data, url) => {
+        if (parsedConfig.onStateChange) {
+          parsedConfig.onStateChange(Object.fromEntries(data), url);
+        }
       },
-      reset: data => {
-        if (!data.get(StorageKeys.QUERY)) {
+      resetListener: data => {
+        let query = data.get(StorageKeys.QUERY);
+        const hasQuery = query || query === '';
+        this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
+        this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
+        this.core.storage.delete(StorageKeys.PERSISTED_FACETS);
+        this.core.storage.delete(StorageKeys.SORT_BYS);
+        this.core.filterRegistry.clearAllFilterNodes();
+
+        if (!hasQuery) {
           this.core.clearResults();
         } else {
           this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
         }
-        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
 
         if (!data.get(StorageKeys.SEARCH_OFFSET)) {
           this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
         }
 
-        let query;
         data.forEach((value, key) => {
           if (key === StorageKeys.QUERY) {
-            query = value;
             return;
           }
-          this.core.storage.set(key, value);
+          const parsedValue = this._parsePersistentStorageValue(key, value);
+          this.core.storage.set(key, parsedValue);
         });
 
-        if (query) {
+        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
+
+        if (hasQuery) {
           this.core.storage.set(StorageKeys.QUERY, query);
         }
-      }
+      },
+      persistedValueParser: this._parsePersistentStorageValue
     });
     storage.init(window.location.search);
     storage.set(StorageKeys.SEARCH_CONFIG, answersConfig.search);
@@ -211,7 +209,7 @@ class Answers {
     answersConfig.noResults && storage.set(StorageKeys.NO_RESULTS_CONFIG, answersConfig.noResults);
     const isSuggestQueryTrigger =
       storage.get(StorageKeys.QUERY_TRIGGER) === QueryTriggers.SUGGEST;
-    if (storage.get(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
+    if (storage.has(StorageKeys.QUERY) && !isSuggestQueryTrigger) {
       storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
     }
 
@@ -228,11 +226,7 @@ class Answers {
       );
     }
 
-    this._masterSwitchApi = statusPage
-      ? new MasterSwitchApi({ apiKey: answersConfig.apiKey, ...statusPage }, storage)
-      : MasterSwitchApi.from(answersConfig.apiKey, answersConfig.experienceKey, storage);
-
-    this._services = answersConfig.useMock
+    this._services = parsedConfig.mock
       ? getMockServices()
       : getServices(answersConfig, storage);
 
@@ -262,16 +256,15 @@ class Answers {
     this.core = new Core({
       apiKey: answersConfig.apiKey,
       storage: storage,
-      experienceKey: answersConfig.experienceKey,
-      fieldFormatters: answersConfig.fieldFormatters,
-      experienceVersion: answersConfig.experienceVersion,
-      locale: answersConfig.locale,
-      searchService: this._services.searchService,
-      autoCompleteService: this._services.autoCompleteService,
-      questionAnswerService: this._services.questionAnswerService,
+      experienceKey: parsedConfig.experienceKey,
+      fieldFormatters: parsedConfig.fieldFormatters,
+      experienceVersion: parsedConfig.experienceVersion,
+      locale: parsedConfig.locale,
       analyticsReporter: this._analyticsReporterService,
-      onVerticalSearch: answersConfig.onVerticalSearch,
-      onUniversalSearch: answersConfig.onUniversalSearch
+      onVerticalSearch: parsedConfig.onVerticalSearch,
+      onUniversalSearch: parsedConfig.onUniversalSearch,
+      environment: parsedConfig.environment,
+      componentManager: this.components
     });
 
     answersConfig.onStateChange(
@@ -285,22 +278,57 @@ class Answers {
 
     this._setDefaultInitialSearch(answersConfig.search);
 
-    this._onReady = answersConfig.onReady;
+    this.core.init();
+
+    this._onReady = parsedConfig.onReady || function () {};
 
     const asyncDeps = this._loadAsyncDependencies(answersConfig);
     return asyncDeps.finally(() => {
-      if (this._disabledByMasterSwitch) {
-        throw new Error('MasterSwitchApi determined the front-end should be disabled');
-      }
       this._onReady();
+      if (!this.components.getActiveComponent(SearchComponent.type)) {
+        this._initQueryUpdateListener(parsedConfig.search);
+      }
+      this._searchOnLoad();
     });
+  }
+
+  _initQueryUpdateListener ({ verticalKey, defaultInitialSearch }) {
+    const queryUpdateListener = new QueryUpdateListener(this.core, {
+      defaultInitialSearch,
+      verticalKey
+    });
+    this.core.setQueryUpdateListener(queryUpdateListener);
+  }
+
+  /**
+   * This guarantees that execution of the SearchBar's search on page load occurs only
+   * AFTER all components have been added to the page. Trying to do this with a regular
+   * onCreate relies on the SearchBar having some sort of async behavior to move the execution
+   * of the search to the end of the call stack. For instance, relying on promptForLocation
+   * being set to true, which adds additional Promises that will delay the exeuction.
+   *
+   * We need to guarantee that the searchOnLoad happens after the onReady, because certain
+   * components will update values in storage in their onMount/onCreate, which are then expected
+   * to be applied to this search on page load. For example, filter components can apply
+   * filters on page load, which must be applied before this search is made to affect it.
+   *
+   * If no special search components exist, we still want to search on load if a query has been set,
+   * either from a defaultInitialSearch or from a query in the URL.
+   */
+  _searchOnLoad () {
+    const searchComponents = this.components._activeComponents
+      .filter(c => c.constructor.type === SearchComponent.type);
+    if (searchComponents.length) {
+      searchComponents.forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
+    } else if (this.core.storage.has(StorageKeys.QUERY)) {
+      this.core.triggerSearch(this.core.storage.get(StorageKeys.QUERY_TRIGGER));
+    }
   }
 
   _loadAsyncDependencies (parsedConfig) {
     const loadTemplates = this._loadTemplates(parsedConfig);
     const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
-    const masterSwitch = this._checkMasterSwitch();
-    return Promise.all([loadTemplates, ponyfillCssVariables, masterSwitch]);
+    return Promise.all([loadTemplates, ponyfillCssVariables]);
   }
 
   _loadTemplates ({ useTemplates, templateBundle }) {
@@ -317,19 +345,6 @@ class Answers {
       });
       return this.templates.fetchTemplates();
     }
-  }
-
-  _checkMasterSwitch () {
-    window.performance.mark('yext.answers.statusStart');
-    const handleFulfilledMasterSwitch = (isDisabled) => {
-      this._disabledByMasterSwitch = isDisabled;
-    };
-    const handleRejectedMasterSwitch = () => {
-      this._disabledByMasterSwitch = false;
-    };
-    return this._masterSwitchApi.isDisabled()
-      .then(handleFulfilledMasterSwitch, handleRejectedMasterSwitch)
-      .finally(() => window.performance.mark('yext.answers.statusEnd'));
   }
 
   domReady (cb) {
@@ -422,12 +437,14 @@ class Answers {
   /**
    * Sets a search query on initialization for vertical searchers that have a
    * defaultInitialSearch provided, if the user hasn't already provided their
-   * own via URL param.
+   * own via URL param. A default initial search should not be persisted in the URL,
+   * so we do a regular set instead of a setWithPersist here.
+   *
    * @param {SearchConfig} searchConfig
    * @private
    */
   _setDefaultInitialSearch (searchConfig) {
-    if (searchConfig.defaultInitialSearch == null || !searchConfig.verticalKey) {
+    if (searchConfig.defaultInitialSearch == null) {
       return;
     }
     const prepopulatedQuery = this.core.storage.get(StorageKeys.QUERY);
@@ -435,7 +452,7 @@ class Answers {
       return;
     }
     this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.INITIALIZE);
-    this.core.setQuery(searchConfig.defaultInitialSearch);
+    this.core.storage.set(StorageKeys.QUERY, searchConfig.defaultInitialSearch);
   }
 
   /**
@@ -530,7 +547,14 @@ class Answers {
     const initLocale = this._getInitLocale();
     language = language || initLocale.substring(0, 2);
 
-    return TranslationProcessor.process(translations, interpolationParams, count, language);
+    if (!this.renderer) {
+      console.error('The renderer must be initialized before translations can be processed');
+      return '';
+    }
+
+    const escapeExpression = this.renderer.escapeExpression.bind(this.renderer);
+
+    return TranslationProcessor.process(translations, interpolationParams, count, language, escapeExpression);
   }
 
   /**
@@ -541,6 +565,29 @@ class Answers {
   _getInitLocale () {
     return this.core.storage.get(StorageKeys.LOCALE);
   }
+
+  /**
+   * Parses a value from persistent storage, which stores strings,
+   * into the shape the SDK expects.
+   * TODO(SLAP-1111): Move this into a dedicated file/class.
+   *
+   * @param {string} key
+   * @param {string} value
+   * @returns {string|number|Filter}
+   */
+  _parsePersistentStorageValue (key, value) {
+    switch (key) {
+      case StorageKeys.PERSISTED_FILTER:
+        return Filter.from(JSON.parse(value));
+      case StorageKeys.PERSISTED_LOCATION_RADIUS:
+        return parseFloat(value);
+      case StorageKeys.PERSISTED_FACETS:
+      case StorageKeys.SORT_BYS:
+        return JSON.parse(value);
+      default:
+        return value;
+    }
+  }
 }
 
 /**
@@ -550,26 +597,6 @@ class Answers {
  */
 function getServices (config, storage) {
   return {
-    searchService: new SearchApi({
-      apiKey: config.apiKey,
-      experienceKey: config.experienceKey,
-      experienceVersion: config.experienceVersion,
-      locale: config.locale,
-      environment: config.environment
-    },
-    storage),
-    autoCompleteService: new AutoCompleteApi(
-      {
-        apiKey: config.apiKey,
-        experienceKey: config.experienceKey,
-        experienceVersion: config.experienceVersion,
-        locale: config.locale,
-        environment: config.environment
-      },
-      storage),
-    questionAnswerService: new QuestionAnswerApi(
-      { apiKey: config.apiKey, environment: config.environment },
-      storage),
     errorReporterService: new ErrorReporter(
       {
         apiKey: config.apiKey,
@@ -588,9 +615,6 @@ function getServices (config, storage) {
  */
 function getMockServices () {
   return {
-    searchService: new MockSearchService(),
-    autoCompleteService: new MockAutoCompleteService(),
-    questionAnswerService: new MockQuestionAnswerService(),
     errorReporterService: new ConsoleErrorReporter()
   };
 }

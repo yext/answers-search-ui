@@ -8,25 +8,25 @@ import { t } from 'testcafe';
  * @returns {Promise<URLSearchParams>} the query params of the last request
  */
 export async function getMostRecentQueryParamsFromLogger (logger) {
-  await t.expect(logger.contains(record => record.response.statusCode === 200)).ok();
+  for (let i = 0; i < 50; i++) {
+    await t.wait(100);
+    if (logger.requests.length > 0) {
+      break;
+    }
+  }
   const url = logger.requests[logger.requests.length - 1].request.url;
   return new URLSearchParams(url);
 }
 
 /**
- * Tests whether the last request for the given logger has the expected
- * filters query params.
+ * Returns the filters param from the last request.
  *
  * @param {import('testcafe').RequestLogger} logger
- * @param {Object} expectedFilters the expected filters object
+ * @returns {Object} the filters param
  */
-export async function expectRequestFiltersToEql (logger, expectedFilters) {
+export async function getRequestFilters (logger) {
   const urlParams = await getMostRecentQueryParamsFromLogger(logger);
-  const filtersParam = urlParams.get('filters');
-  const expectedValue = typeof expectedFilters === 'object'
-    ? JSON.stringify(expectedFilters)
-    : expectedFilters;
-  return t.expect(filtersParam).eql(expectedValue);
+  return JSON.parse(urlParams.get('filters'));
 }
 
 /**

@@ -1,6 +1,4 @@
-# Answers
-Answers Javascript API Library.
-
+# Answers Search UI
 Outline:
 1. [Install / Setup](#install-and-setup)
 2. [ANSWERS.init Configuration Options](#answersinit-configuration-options)
@@ -22,6 +20,7 @@ Outline:
    - [Pagination Component](#pagination-component)
    - [FilterBox Component](#filterbox-component)
    - [Facets Component](#facets-component)
+      - [Transforming Facets](#transforming-facets)
    - [FilterSearch Component](#filtersearch-component)
    - [Filter Components](#filter-components)
    - [Applied Filters Component](#applied-filters-component)
@@ -420,11 +419,11 @@ ANSWERS.addComponent('SearchBar', {
   promptHeader: 'Header',
   // Optional, no default
   placeholderText: 'Start typing...',
-  // Optional, defaults to false
-  autoFocus: true,
-  // Optional, when auto focus on load,  open the autocomplete
-  autoCompleteOnLoad: false,
-  // Optional, on vertical search, allow a user to conduct an empty search. Should be set to true if the defaultInitialSearch is "".
+  // Optional, auto focuses the search bar. Defaults to false
+  autoFocus: false,
+  // Optional, opens the autocomplete suggestions on page load. Defaults to false. Requires autoFocus to be set to true
+  autocompleteOnLoad: false,
+  // Optional, allows a user to conduct an empty search. Should be set to true if the defaultInitialSearch is "".
   allowEmptySearch: false,
   // Optional, defaults to 300ms (0.3 seconds)
   searchCooldown: 2000,
@@ -511,6 +510,37 @@ ANSWERS.addComponent('DirectAnswer', {
    negativeFeedbackSrText: 'This did not answer my question',
   // Optional, the footer text to display on submission of feedback
   footerTextOnSubmission: 'Thank you for your feedback!',
+  // Optional, specify card types and overrides based on the direct answer type. The first matching cardOverride will be used, otherwise the cardType is used
+  types: {
+    'FEATURED_SNIPPET': {
+      cardType: "documentsearch-standard",
+      cardOverrides: [
+        {
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          cardType: 'MenuItemDescriptionDirectAnswer'
+        },
+        {
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          fieldType: 'rich_text'
+          cardType: 'MenuItemDescriptionDirectAnswer'
+        }
+      ]
+    },
+    'FIELD_VALUE': {
+      cardType: "allfields-standard",
+      cardOverrides: [
+        {
+          cardType: 'MenuItemDescriptionDirectAnswer',
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          fieldType: 'rich_text'
+        }
+      ]
+    }
+  }
+  // DEPRECATED: use the types option instead
   // Optional, card overrides that allow you to specify a specific direct answers card depending on the fieldName, entityType, and fieldType of the direct answer. The first matching card will be used, otherwise defaultCard will be used.
   cardOverrides: [
     {
@@ -1335,6 +1365,10 @@ ANSWERS.addComponent('Facets', {
   searchable: false,
   // Optional, the form label text for the search input, defaults to 'Search for a filter option'
   searchLabelText: 'Search for a filter option',
+  // Optional, a transform function which is applied to an array of facets
+  // See the "Transforming Facets" section below for more info
+  transformFacets: (facets, config => facets),
+  // DEPRECATED, please use transformFacets instead. This option is disabled if transformFacets is supplied
   // Optional, field-specific overrides for a filter
   fields: {
     'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
@@ -1371,6 +1405,28 @@ ANSWERS.addComponent('Facets', {
   // Optional, the label to show on the apply button
   applyLabel: 'apply'
 });
+```
+
+### Transforming Facets
+
+The `transformFacets` option of the Facets component allows facets data to be fully customized. The function takes in and returns an array of the answers-core DisplayableFacet which is described [here](https://github.com/yext/answers-core/blob/master/docs/answers-core.displayablefacet.md). The function also has access to the Facets config as the second parameter.
+
+Here's an example of using this option to customize a boolean facet.
+
+```js
+transformFacets: facets => {
+  return facets.map(facet => {
+    const options = facet.options.map(option => {
+      let displayName = option.displayName;
+      if (facet.fieldId === 'c_acceptingNewPatients') {
+        if (option.value === false) { displayName = "Not Accepting Patients"; }
+        if (option.value === true) { displayName = "Accepting Patients"; }
+      }
+      return Object.assign({}, option, { displayName });
+    });
+    return Object.assign({}, facet, { options });
+  });
+},
 ```
 
 ## FilterSearch Component
@@ -1586,9 +1642,9 @@ ANSWERS.addComponent('RangeFilter', {
   maxLabel: 'Not More Than',
   // Optional, the placeholder text for the max value, defaults to 'Max'
   maxPlaceholderText: 'Max',
-  // Optional, the initial min value to show, defaults to 0
+  // Optional, the initial min value to show, defaults to 0. Set this to null to clear the value.
   initialMin: 1,
-  // Optional, the initial max value to show, defaults to 10
+  // Optional, the initial max value to show, defaults to 10. Set this to null to clear the value.
   initialMax: 5,
   // Optional, the callback function to call when changed
   onChange: function() {}
@@ -1615,9 +1671,9 @@ ANSWERS.addComponent('DateRangeFilter', {
   minLabel: 'Earliest',
   // Optional, the label to show next to the max date, defaults to no label
   maxLabel: 'Latest',
-  // Optional, the initial min date to show in yyyy-mm-dd format, defaults to today
+  // Optional, the initial min date to show in yyyy-mm-dd format, defaults to today. Set this to null to clear the value.
   initialMin: '2019-08-01',
-  // Optional, the initial max date to show in yyyy-mm-dd format, defaults to today
+  // Optional, the initial max date to show in yyyy-mm-dd format, defaults to today. Set this to null to clear the value.
   initialMax: '2019-09-01',
   // Optional, whether to store the filter on change to input
   storeOnChange: true,
@@ -2470,3 +2526,10 @@ The SDK uses the Performance API, via `window.performance.mark()`, to create per
 
 4. `'yext.answers.universalQueryResponseRendered'` called after a universal query is finished and all components have finished rendering
 
+## License
+
+Yext Answers-Search-UI is an open-sourced library licensed under the [BSD-3 License](./LICENSE).
+
+## Third Party Licenses
+
+The licenses of our 3rd party dependencies are collected here: [THIRD-PARTY-NOTICES](./THIRD-PARTY-NOTICES).

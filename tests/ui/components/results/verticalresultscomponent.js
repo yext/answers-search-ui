@@ -5,6 +5,7 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 import SearchStates from '../../../../src/core/storage/searchstates';
 import VerticalResultsComponent from '../../../../src/ui/components/results/verticalresultscomponent';
 import Storage from '../../../../src/core/storage/storage';
+import VerticalResults from '../../../../src/core/models/verticalresults';
 
 const mockCore = {
   storage: new Storage().init(),
@@ -42,6 +43,19 @@ describe('vertical results component', () => {
     const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
 
     expect(component.getVerticalURL()).toContain('query=yext');
+  });
+
+  it('sets correct loading state css class', () => {
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, defaultConfig);
+    const container = DOM.query('#test-component');
+    mount(component, { attachTo: container });
+    expect(container.classList.contains('yxt-Results--preSearch')).toBeTruthy();
+
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    expect(container.classList.contains('yxt-Results--searchLoading')).toBeTruthy();
+
+    component.core.storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE });
+    expect(container.classList.contains('yxt-Results--searchComplete')).toBeTruthy();
   });
 
   it('updates to storage vertical results update the component results', () => {
@@ -172,5 +186,25 @@ describe('vertical results component', () => {
       component.verticalKey = 'key';
       expect(component.getVerticalURL()).toEqual('vertical-url?query=my-query&otherParam=123&tabOrder=&referrerPageUrl=');
     });
+  });
+
+  it('only remounts the component during the SEARCH_LOADING state of vertical results', () => {
+    const component = COMPONENT_MANAGER.create(VerticalResultsComponent.type, {
+      ...defaultConfig,
+      template: '{{{searchState}}}'
+    });
+    const wrapper = mount(component);
+    expect(wrapper.text()).toEqual('pre-search');
+    const { storage } = component.core;
+
+    storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
+    wrapper.update();
+    expect(wrapper.text()).toEqual('pre-search');
+
+    storage.set(StorageKeys.VERTICAL_RESULTS, {
+      searchState: SearchStates.SEARCH_COMPLETE
+    });
+    wrapper.update();
+    expect(wrapper.text()).toEqual('search-complete');
   });
 });

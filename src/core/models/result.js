@@ -1,5 +1,10 @@
 /** @module Result */
 
+import AppliedHighlightedFields from './appliedhighlightedfields';
+import HighlightedFields from './highlightedfields';
+import { truncate } from '../utils/strings';
+import { AnswersCoreError } from '../errors/errors';
+
 export default class Result {
   constructor (data = {}) {
     /**
@@ -106,5 +111,95 @@ export default class Result {
      * @type {number}
      */
     this.distanceFromFilter = data.distanceFromFilter || null;
+  }
+
+  /**
+   * Constructs an SDK Result from an answers-core Result
+   *
+   * @param {Result} result from answers-core
+   * @param {Object<string, function>} formatters applied to the result fields
+   * @param {string} verticalKey the verticalKey associated with the result
+   * @returns {@link Result}
+   */
+  static fromCore (result, formatters, verticalKey) {
+    const highlightedFields = new HighlightedFields(result.highlightedFields);
+    const appliedHighlightedFields = AppliedHighlightedFields.fromCore(result.highlightedFields);
+    const details = appliedHighlightedFields.description || result.description;
+    const truncatedDetails = truncate(details);
+
+    const resultData = {
+      raw: result.rawData,
+      ordinal: result.index,
+      title: result.name,
+      details: truncatedDetails,
+      link: result.link,
+      id: result.id,
+      distance: result.distance,
+      distanceFromFilter: result.distanceFromFilter,
+      highlighted: appliedHighlightedFields,
+      highlightedFields
+    };
+
+    if (result.source !== 'KNOWLEDGE_MANAGER') {
+      return new Result(resultData);
+    }
+
+    const formattedData = this._getFormattedData(resultData, formatters, verticalKey);
+    resultData.formatted = formattedData;
+
+    if (formattedData.description !== undefined) {
+      resultData.details = formattedData.description;
+    }
+
+    return new Result(resultData);
+  }
+
+  /**
+   * Returns an object which contains formatted fields
+   *
+   * @param {Object} resultData the same shape as the input to the Result constructor
+   * @param {Object<string, function>} formatters to apply to the result fields
+   * @param {string} verticalKey the verticalKey associated with the result
+   * @returns {Object<string, string>} keys are field names and values are the formatted data
+   */
+  static _getFormattedData (resultData, formatters, verticalKey) {
+    const formattedData = {};
+
+    if (!formatters || !resultData.raw) {
+      return formattedData;
+    }
+
+    if (Object.keys(formatters).length === 0) {
+      return formattedData;
+    }
+
+    Object.entries(resultData.raw).forEach(([fieldName, fieldVal]) => {
+      // check if a field formatter exists for the current entity profile field
+      if (formatters[fieldName] === undefined) {
+        return;
+      }
+      // verify the field formatter provided is a formatter function as expected
+      if (typeof formatters[fieldName] !== 'function') {
+        throw new AnswersCoreError('Field formatter is not of expected type function', 'Result');
+      }
+
+      // if highlighted version of field value is available, make it available to field formatter
+      let highlightedFieldVal = null;
+      if (resultData.highlighted && resultData.highlighted[fieldName]) {
+        highlightedFieldVal = resultData.highlighted[fieldName];
+      }
+
+      // call formatter function associated with the field name
+      // the input object defines the interface that field formatter functions work with
+      formattedData[fieldName] = formatters[fieldName]({
+        entityProfileData: resultData.raw,
+        entityFieldValue: fieldVal,
+        highlightedEntityFieldValue: highlightedFieldVal,
+        verticalId: verticalKey,
+        isDirectAnswer: false
+      });
+    });
+
+    return formattedData;
   }
 }

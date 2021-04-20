@@ -144,6 +144,19 @@ export default class DOM {
     }
   }
 
+  /**
+   * Removes classes from a specified element.
+   * @param {HTMLElement} node The html element to be acted upon
+   * @param {string} className A css class to be removed
+   */
+  static removeClass (node, className) {
+    if (!node) {
+      return;
+    }
+
+    node.classList.remove(className);
+  }
+
   static empty (parent) {
     parent.innerHTML = '';
   }

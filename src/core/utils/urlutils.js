@@ -119,25 +119,26 @@ export function filterParamsForExperienceLink (
   getComponentNamesForComponentTypes
 ) {
   const componentTypesToExclude = [
-    ComponentTypes.FACETS,
-    ComponentTypes.FILTER_BOX,
-    ComponentTypes.FILTER_OPTIONS,
-    ComponentTypes.RANGE_FILTER,
-    ComponentTypes.DATE_RANGE_FILTER,
-    ComponentTypes.SORT_OPTIONS,
     ComponentTypes.GEOLOCATION_FILTER,
     ComponentTypes.FILTER_SEARCH
   ];
-  let paramsToFilter = componentTypesToExclude.flatMap(type => {
-    let params = getComponentNamesForComponentTypes([type]);
-    if (type === ComponentTypes.GEOLOCATION_FILTER || type === ComponentTypes.FILTER_SEARCH) {
-      params = params.map(param => `${StorageKeys.QUERY}.${param}`);
-    }
+  const paramsToFilter = componentTypesToExclude.reduce((params, type) => {
+    getComponentNamesForComponentTypes([type])
+      .forEach(componentName => {
+        params.push(`${StorageKeys.QUERY}.${componentName}`);
+        params.push(`${StorageKeys.FILTER}.${componentName}`);
+      });
     return params;
-  });
-  paramsToFilter = paramsToFilter.concat([StorageKeys.FILTER]);
+  }, []);
 
   const newParams = removeParamsWithPrefixes(params, paramsToFilter);
-  newParams.delete(StorageKeys.SEARCH_OFFSET);
+  const paramsToDelete = [
+    StorageKeys.SEARCH_OFFSET,
+    StorageKeys.PERSISTED_FILTER,
+    StorageKeys.PERSISTED_LOCATION_RADIUS,
+    StorageKeys.PERSISTED_FACETS,
+    StorageKeys.SORT_BYS
+  ];
+  paramsToDelete.forEach(storageKey => newParams.delete(storageKey));
   return newParams;
 }

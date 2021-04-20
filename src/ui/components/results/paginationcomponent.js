@@ -200,7 +200,7 @@ export default class PaginationComponent extends Component {
     const maxPageCount = this._computeMaxPage(results.resultsCount);
     this._onPaginate(newPageNumber, currentPageNumber, maxPageCount);
     this.core.storage.setWithPersist(StorageKeys.SEARCH_OFFSET, offset);
-    this.core.verticalPage(this._verticalKey);
+    this.core.verticalPage();
   }
 
   scrollToTop () {

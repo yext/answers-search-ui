@@ -16,4 +16,14 @@ export default class Navigation {
     }
     return new Navigation(nav);
   }
+
+  /**
+   * Constructs a Navigation model from an answers-core VerticalResults array
+   *
+   * @param {VerticalResults[]} verticalResults
+   */
+  static fromCore (verticalResults) {
+    const verticalKeys = verticalResults.map(result => result.verticalKey);
+    return new Navigation(verticalKeys);
+  }
 }

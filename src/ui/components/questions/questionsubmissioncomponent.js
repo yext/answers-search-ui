@@ -316,7 +316,6 @@ export default class QuestionSubmissionComponent extends Component {
 
       this.core.submitQuestion({
         'entityId': this._config.entityId,
-        'questionLanguage': this.locale,
         'site': 'FIRSTPARTY',
         'name': formData.name,
         'email': formData.email,

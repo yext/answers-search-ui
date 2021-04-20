@@ -101,10 +101,15 @@ export default class HandlebarsRenderer extends Renderer {
       return config.template(data);
     }
 
+    if (!(config.templateName in this._templates)) {
+      throw new Error('Can\'t find template: ' + config.templateName);
+    }
+
     try {
       return this._templates[config.templateName](data);
     } catch (e) {
-      throw new Error('Can not find/render template: ' + config.templateName, e);
+      console.error('Error when trying to render the template: ' + config.templateName);
+      throw e;
     }
   }
 
@@ -218,8 +223,8 @@ export default class HandlebarsRenderer extends Renderer {
       const language = locale.substring(0, 2);
 
       return isUsingPluralization
-        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, language)
-        : TranslationProcessor.process(phrase, interpolationParams);
+        ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, language, self.escapeExpression.bind(self))
+        : TranslationProcessor.process(phrase, interpolationParams, null, null, self.escapeExpression.bind(self));
     });
 
     self.registerHelper('icon', function (name, complexContentsParams, options) {

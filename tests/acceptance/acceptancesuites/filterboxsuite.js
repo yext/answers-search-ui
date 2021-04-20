@@ -1,7 +1,7 @@
 import {
   setupServer,
   shutdownServer,
-  FACETS_PAGE
+  FILTERBOX_PAGE
 } from '../server';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
@@ -12,15 +12,15 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import {
-  expectRequestFiltersToEql,
+  getRequestFilters,
   expectRequestLocationRadiusToEql,
   expectRequestDoesNotContainParam
 } from '../requestUtils';
 
-fixture`Facets page`
+fixture`FilterBox page`
   .before(setupServer)
   .after(shutdownServer)
-  .page`${FACETS_PAGE}`;
+  .page`${FILTERBOX_PAGE}`;
 
 test(`single option filterbox works with back/forward navigation and page refresh`, async t => {
   const radiusFilterLogger = RequestLogger({
@@ -84,45 +84,60 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
   await searchComponent.submitQuery();
 
   // Click the 'Marty' checkbox
-  // 2 filter tags should be rendered, 1 from the backend facet and 1 from the static filter
   await staticFilter.toggleOption('Marty');
-  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-  await t.expect(filterTags.count).eql(2);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
+  await t.expect(filterTags.count).eql(1);
+  filterBoxLogger.clear();
 
   // Click the 'Frodo' checkbox
-  // 2 filter tags should be rendered, 1 from the backend facet and 1 from the static filter
   await staticFilter.toggleOption('Frodo');
-  await t.expect(filterTags.count).eql(4);
-  await expectRequestFiltersToEql(filterBoxLogger, {
+  await t.expect(filterTags.count).eql(2);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
   });
+  filterBoxLogger.clear();
 
   // Hit the back button, see the 'Frodo' filter disappear
   await browserBackButton();
-  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-  await t.expect(filterTags.count).eql(2);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
+  await t.expect(filterTags.count).eql(1);
+  filterBoxLogger.clear();
 
   // Hit the back button, see the 'Marty' filter disappear
   await browserBackButton();
-  await expectRequestFiltersToEql(filterBoxLogger, {});
+  await expectRequestDoesNotContainParam(filterBoxLogger, 'filters');
   await t.expect(filterTags.count).eql(0);
 
   // Hit the forward button, see the 'Marty' filter applied again
   await browserForwardButton();
-  await expectRequestFiltersToEql(filterBoxLogger, martyFilter);
-  await t.expect(filterTags.count).eql(2);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
+  await t.expect(filterTags.count).eql(1);
+  filterBoxLogger.clear();
 
   // Hit the forward button, see the 'Frodo' filter applied again
   await browserForwardButton();
-  await t.expect(filterTags.count).eql(4);
-  await expectRequestFiltersToEql(filterBoxLogger, {
+  await t.expect(filterTags.count).eql(2);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
   });
+  filterBoxLogger.clear();
 
   // Refresh the page
   await browserRefreshPage();
-  await t.expect(filterTags.count).eql(4);
-  await expectRequestFiltersToEql(filterBoxLogger, {
+  await t.expect(filterTags.count).eql(2);
+  await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
   });
+});
+
+test(`locationRadius of 0 is persisted`, async t => {
+  const filterBox = FacetsPage.getStaticFilterBox();
+  const radiusFilter = await filterBox.getFilterOptions('DISTANCE');
+  await radiusFilter.toggleOption('0 miles');
+  const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
+  await t.expect(filterTags.count).eql(1);
+
+  // Refresh the page
+  await browserRefreshPage();
+  await t.expect(filterTags.count).eql(1);
 });

@@ -22,8 +22,13 @@ export default class Component {
     this.moduleId = null;
 
     /**
-     * Unique name of this component instance
-     * Used to distinguish between other components of the same type
+     * A unique id number for the component.
+     * @type {number}
+     */
+    this.uniqueId = systemConfig.uniqueId;
+
+    /**
+     * Name of this component instance.
      * @type {String}
      */
     this.name = config.name || this.constructor.type;
@@ -241,6 +246,22 @@ export default class Component {
     DOM.addClass(this._container, this._className);
     DOM.addClass(this._container, 'yxt-Answers-component');
     return this;
+  }
+
+  /**
+   * Adds a class to the container of the component.
+   * @param {string} className A comma separated value of classes
+   */
+  addContainerClass (className) {
+    DOM.addClass(this._container, className);
+  }
+
+  /**
+   * Removes the specified classes from the container of the component
+   * @param {string} className A comma separated value of classes
+   */
+  removeContainerClass (className) {
+    DOM.removeClass(this._container, className);
   }
 
   setState (data) {
