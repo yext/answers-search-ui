@@ -1,19 +1,14 @@
 /** @module */
 
 import Core from './core/core';
-import cssVars from 'css-vars-ponyfill';
 
 import {
-  DefaultTemplatesLoader,
   Renderers,
-  DOM,
-  SearchParams
+  DOM
 } from './ui/index';
-import Component from './ui/components/component';
 
 import ErrorReporter from './core/errors/errorreporter';
-import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
-import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
+import { AnalyticsReporter } from './core';
 import Storage from './core/storage/storage';
 import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
@@ -23,15 +18,12 @@ import SearchConfig from './core/models/searchconfig';
 import ComponentManager from './ui/components/componentmanager';
 import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
-import RichTextFormatter from './core/utils/richtextformatter';
 import { isValidContext } from './core/utils/apicontext';
-import FilterNodeFactory from './core/filters/filternodefactory';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
-import TranslationProcessor from './core/i18n/translationprocessor';
 import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
 import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
-import { COMPONENT_REGISTRY } from './ui/components/registry';
+import { SEARCH_BAR_COMPONENTS_REGISTRY } from './ui/components/search-bar-only-registry';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -47,30 +39,14 @@ const DEFAULTS = {
 };
 
 /**
- * The main Answers interface
+ * The class that powers the stand-alone SearchBar integration. Note that this class
+ * follows the singleton pattern.
  */
-class Answers {
+class AnswersSearchBar {
   constructor () {
-    if (!Answers.setInstance(this)) {
-      return Answers.getInstance();
+    if (!AnswersSearchBar.setInstance(this)) {
+      return AnswersSearchBar.getInstance();
     }
-
-    /**
-     * A reference to the Component base class for custom
-     * components to extend
-     */
-    this.Component = Component;
-
-    /**
-     * A reference to the AnalyticsEvent base class for reporting
-     * custom analytics
-     */
-    this.AnalyticsEvent = AnalyticsEvent;
-
-    /**
-     * A reference to the FilterNodeFactory class for creating {@link FilterNode}s.
-     */
-    this.FilterNodeFactory = FilterNodeFactory;
 
     /**
      * A reference of the renderer to use for the components
@@ -80,17 +56,10 @@ class Answers {
     this.renderer = new Renderers.Handlebars();
 
     /**
-     * A reference to the formatRichText function.
-     * @type {Function}
-     */
-    this.formatRichText = (markdown, eventOptionsFieldName, targetConfig) =>
-      RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig);
-
-    /**
      * A local reference to the component manager
      * @type {ComponentManager}
      */
-    this.components = new ComponentManager(COMPONENT_REGISTRY);
+    this.components = new ComponentManager(SEARCH_BAR_COMPONENTS_REGISTRY);
 
     /**
      * A local reference to the core api
@@ -123,6 +92,14 @@ class Answers {
     this._analyticsReporterService = null;
   }
 
+  /**
+   * Attempts to set the singleton instance of the {@link AnswersSearchBar}.
+   * If there is already an instance of this class, the method returns False.
+   * If the provided instance was set successfully, the method returns True.
+   *
+   * @param {AnswersSearchBar} instance
+   * @returns {boolean}
+   */
   static setInstance (instance) {
     if (!this.instance) {
       this.instance = instance;
@@ -136,13 +113,11 @@ class Answers {
   }
 
   /**
-   * Initializes the SDK with the provided configuration. Note that before onReady
-   * is ever called, a check to the relevant Answers Status page is made.
+   * Initializes the stand-alone SearchBar using the provided configuration.
    *
    * @param {Object} config The Answers configuration.
    */
   init (config) {
-    window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
     this.validateConfig(parsedConfig);
 
@@ -231,15 +206,10 @@ class Answers {
       );
     }
 
-    this._services = parsedConfig.mock
-      ? getMockServices()
-      : getServices(parsedConfig, storage);
+    this._services = getServices(parsedConfig, storage);
 
     this._eligibleForAnalytics = parsedConfig.businessId != null;
-    // TODO(amullings): Initialize with other services
-    if (this._eligibleForAnalytics && parsedConfig.mock) {
-      this._analyticsReporterService = new NoopAnalyticsReporter();
-    } else if (this._eligibleForAnalytics) {
+    if (this._eligibleForAnalytics) {
       this._analyticsReporterService = new AnalyticsReporter(
         parsedConfig.experienceKey,
         parsedConfig.experienceVersion,
@@ -288,14 +258,12 @@ class Answers {
 
     this._onReady = parsedConfig.onReady || function () {};
 
-    const asyncDeps = this._loadAsyncDependencies(parsedConfig);
-    return asyncDeps.finally(() => {
-      this._onReady();
-      if (!this.components.getActiveComponent(SearchComponent.type)) {
-        this._initQueryUpdateListener(parsedConfig.search);
-      }
-      this._searchOnLoad();
-    });
+    this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
+    this._onReady();
+    if (!this.components.getActiveComponent(SearchComponent.type)) {
+      this._initQueryUpdateListener(parsedConfig.search);
+    }
+    this._searchOnLoad();
   }
 
   _initQueryUpdateListener ({ verticalKey, defaultInitialSearch }) {
@@ -328,28 +296,6 @@ class Answers {
       searchComponents.forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
     } else if (this.core.storage.has(StorageKeys.QUERY)) {
       this.core.triggerSearch(this.core.storage.get(StorageKeys.QUERY_TRIGGER));
-    }
-  }
-
-  _loadAsyncDependencies (parsedConfig) {
-    const loadTemplates = this._loadTemplates(parsedConfig);
-    const ponyfillCssVariables = this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill);
-    return Promise.all([loadTemplates, ponyfillCssVariables]);
-  }
-
-  _loadTemplates ({ useTemplates, templateBundle }) {
-    if (useTemplates === false || templateBundle) {
-      if (templateBundle) {
-        this.renderer.init(templateBundle, this._getInitLocale());
-        return Promise.resolve();
-      }
-    } else {
-      // Templates are currently downloaded separately from the CORE and UI bundle.
-      // Future enhancement is to ship the components with templates in a separate bundle.
-      this.templates = new DefaultTemplatesLoader(templates => {
-        this.renderer.init(templates, this._getInitLocale());
-      });
-      return this.templates.fetchTemplates();
     }
   }
 
@@ -409,15 +355,6 @@ class Answers {
     }
   }
 
-  /**
-   * Register a custom component type so it can be created via
-   * addComponent and used as a child component
-   * @param {Component} componentClass
-   */
-  registerComponentType (componentClass) {
-    this.components.register(componentClass);
-  }
-
   addComponent (type, opts) {
     if (typeof opts === 'string') {
       opts = {
@@ -434,38 +371,12 @@ class Answers {
   }
 
   /**
-   * Remove the component - and all of its children - with the given name
-   * @param {string} name The name of the component to remove
-   */
-  removeComponent (name) {
-    this.components.removeByName(name);
-  }
-
-  createComponent (opts) {
-    return this.components.create('Component', opts).mount();
-  }
-
-  /**
    * Conducts a search in the Answers experience
    *
    * @param {string} query
    */
   search (query) {
     this.core.storage.setWithPersist(StorageKeys.QUERY, query);
-  }
-
-  registerHelper (name, cb) {
-    this.renderer.registerHelper(name, cb);
-    return this;
-  }
-
-  /**
-   * Compile and add a template to the current renderer
-   * @param {string} templateName The unique name for the template
-   * @param {string} template The handlebars template string
-   */
-  registerTemplate (templateName, template) {
-    this.renderer.registerTemplate(templateName, template);
   }
 
   /**
@@ -520,58 +431,6 @@ class Answers {
     });
   }
 
-  /**
-   * A promise that resolves when ponyfillCssVariables resolves,
-   * or resolves immediately if ponyfill is disabled
-   * @param {boolean} option to opt out of the css variables ponyfill
-   * @return {Promise} resolves after ponyfillCssVariables, or immediately if disabled
-   */
-  _handlePonyfillCssVariables (ponyfillDisabled) {
-    window.performance.mark('yext.answers.ponyfillStart');
-    if (ponyfillDisabled) {
-      window.performance.mark('yext.answers.ponyfillEnd');
-      return Promise.resolve();
-    }
-    return new Promise((resolve, reject) => {
-      this.ponyfillCssVariables({
-        onFinally: () => {
-          window.performance.mark('yext.answers.ponyfillEnd');
-          resolve();
-        }
-      });
-    });
-  }
-
-  /*
-   * Updates the css styles with new current variables. This is useful when the css
-   * variables are updated dynamically (e.g. through js) or if the css variables are
-   * added after the ANSWERS.init
-   *
-   * To solve issues with non-zero max-age cache controls for link/script assets in IE11,
-   * we add a cache busting parameter so that XMLHttpRequests succeed.
-   *
-   * @param {Object} config Additional config to pass to the ponyfill
-   */
-  ponyfillCssVariables (config = {}) {
-    cssVars({
-      onlyLegacy: true,
-      onError: config.onError || function () {},
-      onSuccess: config.onSuccess || function () {},
-      onFinally: config.onFinally || function () {},
-      onBeforeSend: (xhr, node, url) => {
-        try {
-          const uriWithCacheBust = new URL(url);
-          const params = new SearchParams(uriWithCacheBust.search);
-          params.set('_', new Date().getTime());
-          uriWithCacheBust.search = params.toString();
-          xhr.open('GET', uriWithCacheBust.toString());
-        } catch (e) {
-          // Catch the error and continue if the URL provided in the asset is not a valid URL
-        }
-      }
-    });
-  }
-
   /*
    * Adds context as a parameter for the query API calls.
    * @param {Object} context The context object passed in the API calls
@@ -584,30 +443,6 @@ class Answers {
     }
 
     this.core.storage.set(StorageKeys.API_CONTEXT, contextString);
-  }
-
-  /**
-   * Processes a translation which includes performing interpolation, pluralization, or
-   * both
-   * @param {string | Object} translations The translation, or an object containing
-   * translated plural forms
-   * @param {Object} interpolationParams Params to use during interpolation
-   * @param {number} count The count associated with the pluralization
-   * @param {string} language The langauge associated with the pluralization
-   * @returns {string} The translation with any interpolation or pluralization applied
-   */
-  processTranslation (translations, interpolationParams, count, language) {
-    const initLocale = this._getInitLocale();
-    language = language || initLocale.substring(0, 2);
-
-    if (!this.renderer) {
-      console.error('The renderer must be initialized before translations can be processed');
-      return '';
-    }
-
-    const escapeExpression = this.renderer.escapeExpression.bind(this.renderer);
-
-    return TranslationProcessor.process(translations, interpolationParams, count, language, escapeExpression);
   }
 
   /**
@@ -664,15 +499,6 @@ function getServices (config, storage) {
 }
 
 /**
- * @returns {Services}
- */
-function getMockServices () {
-  return {
-    errorReporterService: new ConsoleErrorReporter()
-  };
-}
-
-/**
  * Initialize the scroll event listener to send analytics events
  * when the user scrolls to the bottom. Debounces scroll events so
  * they are processed after the user stops scrolling
@@ -696,5 +522,5 @@ function initScrollListener (reporter) {
   });
 }
 
-const ANSWERS = new Answers();
-export default ANSWERS;
+const ANSWERS_SEARCH_BAR = new AnswersSearchBar();
+export default ANSWERS_SEARCH_BAR;

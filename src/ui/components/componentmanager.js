@@ -2,24 +2,27 @@
 
 import { AnswersComponentError } from '../../core/errors/errors';
 import DOM from '../dom/dom';
-import { COMPONENT_REGISTRY } from './registry';
 
 /** @typedef {import('../../core/core').default} Core */
 
 /**
- * ComponentManager is a Singletone that contains both an internal registry of
- * eligible components to be created, as well as keeps track of the current
- * instantiated and active components.
+ * ComponentManager contains both a registry of eligible components to be created,
+ * as well as keeps track of the current instantiated and active components.
  *
  * ALL components should be constructed using the {ComponentManager} via its `create` method.
  */
 export default class ComponentManager {
-  constructor () {
+  constructor (componentRegistry) {
     /**
      * The active components is an internal container to keep track
      * of all of the components that have been constructed
      */
     this._activeComponents = [];
+
+    /**
+     * The registry of possible components that can be instantiated.
+     */
+    this._componentRegistry = componentRegistry;
 
     /**
      * A counter for the id the give to the next component that is created.
@@ -60,14 +63,6 @@ export default class ComponentManager {
     this._componentToModuleIdListener = new Map();
   }
 
-  static getInstance () {
-    if (!this.instance) {
-      this.instance = new ComponentManager();
-    }
-
-    return this.instance;
-  }
-
   setRenderer (renderer) {
     this._renderer = renderer;
     return this;
@@ -88,7 +83,7 @@ export default class ComponentManager {
    * @param {Component} The Component Class to register
    */
   register (componentClazz) {
-    COMPONENT_REGISTRY[componentClazz.type] = componentClazz;
+    this._componentRegistry[componentClazz.type] = componentClazz;
     return this;
   }
 
@@ -97,11 +92,11 @@ export default class ComponentManager {
    * @param {string} componentType
    */
   getSimilarComponents (componentType) {
-    let similarComponents = Object.keys(COMPONENT_REGISTRY).filter(type =>
+    let similarComponents = Object.keys(this._componentRegistry).filter(type =>
       type.startsWith(componentType.substring(0, 2))
     );
     if (similarComponents.length === 0) {
-      similarComponents = Object.keys(COMPONENT_REGISTRY);
+      similarComponents = Object.keys(this._componentRegistry);
     }
     return similarComponents;
   }
@@ -126,7 +121,7 @@ export default class ComponentManager {
     };
     this._componentIdCounter++;
 
-    let componentClass = COMPONENT_REGISTRY[componentType];
+    let componentClass = this._componentRegistry[componentType];
     if (!componentClass) {
       throw new AnswersComponentError(
         `Component type ${componentType} is not recognized as a valid component.` +
@@ -149,7 +144,7 @@ export default class ComponentManager {
 
     // Instantiate our new component and keep track of it
     let component =
-      new COMPONENT_REGISTRY[componentType](config, systemOpts)
+      new this._componentRegistry[componentType](config, systemOpts)
         .init(config);
 
     this._activeComponents.push(component);
