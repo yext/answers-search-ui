@@ -11,18 +11,15 @@ import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
 import Storage from './core/storage/storage';
 import { AnswersComponentError } from './core/errors/errors';
-import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
 import SearchConfig from './core/models/searchconfig';
 import ComponentManager from './ui/components/componentmanager';
-import VerticalPagesConfig from './core/models/verticalpagesconfig';
 import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
 import { isValidContext } from './core/utils/apicontext';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
-import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { SEARCH_BAR_COMPONENTS_REGISTRY } from './ui/components/search-bar-only-registry';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
@@ -122,52 +119,12 @@ class AnswersSearchBar {
     this.validateConfig(parsedConfig);
 
     parsedConfig.search = new SearchConfig(parsedConfig.search);
-    parsedConfig.verticalPages = new VerticalPagesConfig(parsedConfig.verticalPages);
 
     const storage = new Storage({
-      updateListener: (data, url) => {
-        if (parsedConfig.onStateChange) {
-          parsedConfig.onStateChange(Object.fromEntries(data), url);
-        }
-      },
-      resetListener: data => {
-        let query = data.get(StorageKeys.QUERY);
-        const hasQuery = query || query === '';
-        this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
-        this.core.storage.delete(StorageKeys.PERSISTED_FILTER);
-        this.core.storage.delete(StorageKeys.PERSISTED_FACETS);
-        this.core.storage.delete(StorageKeys.SORT_BYS);
-        this.core.filterRegistry.clearAllFilterNodes();
-
-        if (!hasQuery) {
-          this.core.clearResults();
-        } else {
-          this.core.storage.set(StorageKeys.QUERY_TRIGGER, QueryTriggers.QUERY_PARAMETER);
-        }
-
-        if (!data.get(StorageKeys.SEARCH_OFFSET)) {
-          this.core.storage.set(StorageKeys.SEARCH_OFFSET, 0);
-        }
-
-        data.forEach((value, key) => {
-          if (key === StorageKeys.QUERY) {
-            return;
-          }
-          const parsedValue = this._parsePersistentStorageValue(key, value);
-          this.core.storage.set(key, parsedValue);
-        });
-
-        this.core.storage.set(StorageKeys.HISTORY_POP_STATE, data);
-
-        if (hasQuery) {
-          this.core.storage.set(StorageKeys.QUERY, query);
-        }
-      },
       persistedValueParser: this._parsePersistentStorageValue
     });
     storage.init(window.location.search);
     storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
-    storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     storage.set(StorageKeys.LOCALE, parsedConfig.locale);
     storage.set(StorageKeys.QUERY_SOURCE, parsedConfig.querySource);
 
@@ -217,15 +174,7 @@ class AnswersSearchBar {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
-      // listen to query id updates
-      storage.registerListener({
-        eventType: 'update',
-        storageKey: StorageKeys.QUERY_ID,
-        callback: id => this._analyticsReporterService.setQueryId(id)
-      });
-
       this.components.setAnalyticsReporter(this._analyticsReporterService);
-      initScrollListener(this._analyticsReporterService);
     }
 
     this.core = new Core({
@@ -260,18 +209,7 @@ class AnswersSearchBar {
 
     this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
     this._onReady();
-    if (!this.components.getActiveComponent(SearchComponent.type)) {
-      this._initQueryUpdateListener(parsedConfig.search);
-    }
     this._searchOnLoad();
-  }
-
-  _initQueryUpdateListener ({ verticalKey, defaultInitialSearch }) {
-    const queryUpdateListener = new QueryUpdateListener(this.core, {
-      defaultInitialSearch,
-      verticalKey
-    });
-    this.core.setQueryUpdateListener(queryUpdateListener);
   }
 
   /**
@@ -368,15 +306,6 @@ class AnswersSearchBar {
       throw new AnswersComponentError('Failed to add component', type, e);
     }
     return this;
-  }
-
-  /**
-   * Conducts a search in the Answers experience
-   *
-   * @param {string} query
-   */
-  search (query) {
-    this.core.storage.setWithPersist(StorageKeys.QUERY, query);
   }
 
   /**
@@ -496,30 +425,6 @@ function getServices (config, storage) {
       },
       storage)
   };
-}
-
-/**
- * Initialize the scroll event listener to send analytics events
- * when the user scrolls to the bottom. Debounces scroll events so
- * they are processed after the user stops scrolling
- */
-function initScrollListener (reporter) {
-  const DEBOUNCE_TIME = 100;
-  let timeout = null;
-
-  const sendEvent = () => {
-    if ((window.innerHeight + window.pageYOffset) >= document.body.scrollHeight) {
-      const event = new AnalyticsEvent('SCROLL_TO_BOTTOM_OF_PAGE');
-      if (reporter.getQueryId()) {
-        reporter.report(event);
-      }
-    }
-  };
-
-  document.addEventListener('scroll', () => {
-    clearTimeout(timeout);
-    timeout = setTimeout(sendEvent, DEBOUNCE_TIME);
-  });
 }
 
 const ANSWERS_SEARCH_BAR = new AnswersSearchBar();
