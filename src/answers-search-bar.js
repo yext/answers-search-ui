@@ -209,32 +209,6 @@ class AnswersSearchBar {
 
     this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
     this._onReady();
-    this._searchOnLoad();
-  }
-
-  /**
-   * This guarantees that execution of the SearchBar's search on page load occurs only
-   * AFTER all components have been added to the page. Trying to do this with a regular
-   * onCreate relies on the SearchBar having some sort of async behavior to move the execution
-   * of the search to the end of the call stack. For instance, relying on promptForLocation
-   * being set to true, which adds additional Promises that will delay the exeuction.
-   *
-   * We need to guarantee that the searchOnLoad happens after the onReady, because certain
-   * components will update values in storage in their onMount/onCreate, which are then expected
-   * to be applied to this search on page load. For example, filter components can apply
-   * filters on page load, which must be applied before this search is made to affect it.
-   *
-   * If no special search components exist, we still want to search on load if a query has been set,
-   * either from a defaultInitialSearch or from a query in the URL.
-   */
-  _searchOnLoad () {
-    const searchComponents = this.components._activeComponents
-      .filter(c => c.constructor.type === SearchComponent.type);
-    if (searchComponents.length) {
-      searchComponents.forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
-    } else if (this.core.storage.has(StorageKeys.QUERY)) {
-      this.core.triggerSearch(this.core.storage.get(StorageKeys.QUERY_TRIGGER));
-    }
   }
 
   domReady (cb) {
