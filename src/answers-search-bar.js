@@ -19,7 +19,6 @@ import { SANDBOX, PRODUCTION, LOCALE, QUERY_SOURCE } from './core/constants';
 import { isValidContext } from './core/utils/apicontext';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import Filter from './core/models/filter';
-import SearchComponent from './ui/components/search/searchcomponent';
 import { SEARCH_BAR_COMPONENTS_REGISTRY } from './ui/components/search-bar-only-registry';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
