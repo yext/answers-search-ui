@@ -3,19 +3,19 @@ import Storage from '../../src/core/storage/storage';
 import StorageKeys from '../../src/core/storage/storagekeys';
 
 describe('Search requests are created properly', () => {
-    window.performance.mark = jest.fn();
-    const mockCore = getMockCore();
-    const context = {
-      str: 'string',
-      num: 123,
-      bool: true
-    };
+  window.performance.mark = jest.fn();
+  const mockCore = getMockCore();
+  const context = {
+    str: 'string',
+    num: 123,
+    bool: true
+  };
 
   it('context is passed as an object for universal search', () => {
     mockCore.storage.set(StorageKeys.API_CONTEXT, JSON.stringify(context));
     mockCore.search('test');
     expect(mockCore._coreLibrary.universalSearch).toHaveBeenCalledWith(
-      expect.objectContaining({ context }),
+      expect.objectContaining({ context })
     );
   });
 
@@ -23,7 +23,7 @@ describe('Search requests are created properly', () => {
     mockCore.storage.set(StorageKeys.API_CONTEXT, JSON.stringify(context));
     mockCore.verticalSearch('verticalKey', 'test');
     expect(mockCore._coreLibrary.verticalSearch).toHaveBeenCalledWith(
-      expect.objectContaining({ context }),
+      expect.objectContaining({ context })
     );
   });
 });
