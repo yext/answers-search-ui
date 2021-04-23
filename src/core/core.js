@@ -237,7 +237,7 @@ export default class Core {
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
         /** In the SDK a locationRadius of 0 means "unset my locationRadius" */
         locationRadius: locationRadius === 0 ? undefined : locationRadius,
-        context: context,
+        context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
@@ -343,7 +343,7 @@ export default class Core {
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTriggerForApi,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
-        context: context,
+        context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
