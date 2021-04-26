@@ -5,7 +5,7 @@ const { modernBundle, legacyBundle } = require('./bundle');
 const BundleNamespaces = {
   ANSWERS: 'ANSWERS',
   ANSWERS_SEARCH_BAR: 'ANSWERS_SEARCH_BAR'
-}
+};
 Object.freeze(BundleNamespaces);
 
 // An enum describing the different types of SDK bundle.

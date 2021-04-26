@@ -43,7 +43,7 @@ class BundleTemplatesTaskFactory {
   _createBundleFunction (templateType) {
     const bundleConfig = this._getOutputConfig(templateType);
     const outputFile = getFileName(templateType, this._locale);
-    const precompiledFile = 
+    const precompiledFile =
       getPrecompiledFileName(this._locale, templateType === TemplateType.SEARCH_BAR_UMD);
     return callback =>
       this._bundleTemplates(callback, bundleConfig, precompiledFile, outputFile);

@@ -19,7 +19,7 @@ const { addLocalePrefix, getPrecompiledFileName } = require('./filenameutils');
  */
 function createPrecompileTemplatesTask (locale, isSearchBarOnly, translator) {
   const precompileTask = callback =>
-     _precompileTemplates(callback, locale, isSearchBarOnly, translator);
+    _precompileTemplates(callback, locale, isSearchBarOnly, translator);
   const taskName = addLocalePrefix('precompileTemplates', locale);
   Object.defineProperty(precompileTask, 'name', {
     value: taskName
@@ -45,9 +45,8 @@ function _precompileTemplates (callback, locale, isSearchBarOnly, translator) {
   let templatesStream = src('./src/ui/templates/**/*.hbs');
   if (isSearchBarOnly) {
     templatesWrapper = './conf/templates/handlebarswrapper-search-bar.txt';
-    templatesStream = 
+    templatesStream =
       templatesStream.pipe(filter(['**/search/**/*.hbs', '**/icons/**/*.hbs']));
-    ;
   }
 
   return precompileTemplates(

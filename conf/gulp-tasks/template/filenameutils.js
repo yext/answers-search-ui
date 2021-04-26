@@ -38,8 +38,8 @@ exports.getFileName = function (templateType, locale) {
  * @returns {string}
  */
 exports.getPrecompiledFileName = function (locale, isSearchBarOnly) {
-  const precompiledFileName = isSearchBarOnly ?
-    'answers-search-bar-templates.precompiled.min.js' :
-    'answerstemplates.precompiled.min.js';
+  const precompiledFileName = isSearchBarOnly
+    ? 'answers-search-bar-templates.precompiled.min.js'
+    : 'answerstemplates.precompiled.min.js';
   return addLocalePrefix(precompiledFileName, locale);
 };

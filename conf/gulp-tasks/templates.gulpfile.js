@@ -58,21 +58,21 @@ exports.dev = devTemplates;
  * @returns {Function}
  */
 function createDefaultTask (locale, translator) {
-  const precompileSDKTemplates = 
+  const precompileSDKTemplates =
     createPrecompileTemplatesTask(locale, false, translator);
-  const precompileSearchBarTemplates = 
+  const precompileSearchBarTemplates =
     createPrecompileTemplatesTask(locale, true, translator);
 
   const bundleFactory = new BundleTemplatesTaskFactory(locale);
   const bundleTemplatesIIFE = bundleFactory.create(TemplateType.IIFE);
   const bundleTemplatesUMD = bundleFactory.create(TemplateType.UMD);
-  const bundleSearchTemplatesUMD = 
+  const bundleSearchTemplatesUMD =
     bundleFactory.create(TemplateType.SEARCH_BAR_UMD);
 
   const minifyFactory = new MinifyTemplatesTaskFactory(locale);
   const minifyTemplatesIIFE = minifyFactory.create(TemplateType.IIFE);
   const minifyTemplatesUMD = minifyFactory.create(TemplateType.UMD);
-  const minifyTemplatesSearchUMD = 
+  const minifyTemplatesSearchUMD =
     minifyFactory.create(TemplateType.SEARCH_BAR_UMD);
 
   const cleanFiles = createCleanFilesTask(locale);
