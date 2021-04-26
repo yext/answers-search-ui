@@ -1,0 +1,31 @@
+import Handlebars from 'handlebars/dist/handlebars.runtime.min.js';
+
+const ignoreHelpers = ['each'];
+let parseHelper = function(helpers) {
+
+  for (let name in helpers) {
+    if (typeof helpers[name] !== 'function') {
+      parseHelper(helpers[name]);
+      continue;
+    }
+
+    if (ignoreHelpers.indexOf(name) > -1) {
+      continue;
+    }
+    Handlebars.registerHelper(name, helpers[name]);
+  }
+}
+
+var context = context || {};
+
+context['_hb'] = Handlebars;
+
+<%= contents %>;
+
+const autoinit = function() {
+  if (window.ANSWERS && window.ANSWERS.templates) {
+    ANSWERS.templates.register(context);
+  }
+}()
+
+export { context as default };

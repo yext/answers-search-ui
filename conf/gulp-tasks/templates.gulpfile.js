@@ -58,23 +58,32 @@ exports.dev = devTemplates;
  * @returns {Function}
  */
 function createDefaultTask (locale, translator) {
-  const precompileTemplates = createPrecompileTemplatesTask(locale, translator);
+  const precompileSDKTemplates = 
+    createPrecompileTemplatesTask(locale, false, translator);
+  const precompileSearchBarTemplates = 
+    createPrecompileTemplatesTask(locale, true, translator);
 
   const bundleFactory = new BundleTemplatesTaskFactory(locale);
   const bundleTemplatesIIFE = bundleFactory.create(TemplateType.IIFE);
   const bundleTemplatesUMD = bundleFactory.create(TemplateType.UMD);
+  const bundleSearchTemplatesUMD = 
+    bundleFactory.create(TemplateType.SEARCH_BAR_UMD);
 
   const minifyFactory = new MinifyTemplatesTaskFactory(locale);
   const minifyTemplatesIIFE = minifyFactory.create(TemplateType.IIFE);
   const minifyTemplatesUMD = minifyFactory.create(TemplateType.UMD);
+  const minifyTemplatesSearchUMD = 
+    minifyFactory.create(TemplateType.SEARCH_BAR_UMD);
 
   const cleanFiles = createCleanFilesTask(locale);
 
   return series(
-    precompileTemplates,
+    precompileSDKTemplates,
+    precompileSearchBarTemplates,
     parallel(
       series(bundleTemplatesIIFE, minifyTemplatesIIFE),
-      series(bundleTemplatesUMD, minifyTemplatesUMD)
+      series(bundleTemplatesUMD, minifyTemplatesUMD),
+      series(bundleSearchTemplatesUMD, minifyTemplatesSearchUMD)
     ),
     cleanFiles
   );
@@ -106,6 +115,7 @@ exports.buildLanguages = function allLanguageTemplates () {
 
 exports.buildLocales = function allLocaleTemplates () {
   const assetNames = [
+    'answers-search-bar-templates.compiled.min.js',
     'answerstemplates-iife.compiled.min.js',
     'answerstemplates.compiled.min.js'];
 
