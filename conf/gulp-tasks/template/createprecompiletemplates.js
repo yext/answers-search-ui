@@ -41,30 +41,39 @@ function _precompileTemplates (callback, locale, isSearchBarOnly, translator) {
   const precompiledFileName = getPrecompiledFileName(locale, isSearchBarOnly);
   const processAST = ast => new TranslateHelperVisitor(translator).accept(ast);
 
-  let templatesWrapper = './conf/templates/handlebarswrapper.txt';
-  let templatesStream = src('./src/ui/templates/**/*.hbs');
-  if (isSearchBarOnly) {
-    templatesWrapper = './conf/templates/handlebarswrapper-search-bar.txt';
-    templatesStream =
-      templatesStream.pipe(filter(['**/search/**/*.hbs', '**/icons/**/*.hbs']));
-  }
-
   return precompileTemplates(
-    callback, templatesStream, templatesWrapper, precompiledFileName, processAST);
+    callback, isSearchBarOnly, precompiledFileName, processAST);
 }
 
 /**
- * Precopmiles the provided templates to the given output file.
+ * Precopmiles the requested templates to the given output file.
  *
  * @param {Function} callback called when the task is finished
- * @param {stream.Readable} templatesStream A stream containing the various HBS templates
- *                                          to pre-compile.
- * @param {string} templatesWrapper A JS file to wrap the pre-compiled templates.
+ * @param {boolean} isSearchBarOnly A boolean indicating if only those templates for
+ *                                  the search-bar integration should be included.
  * @param {string} outputFile
  * @param {Function} processAST a function that takes in and mutates a handlebars AST
  * @returns {stream.Readable}
  */
-function precompileTemplates (callback, templatesStream, templatesWrapper, outputFile, processAST) {
+function precompileTemplates (callback, isSearchBarOnly, outputFile, processAST) {
+  let templatesStream = src('./src/ui/templates/**/*.hbs');
+  let handlebarsWrapperData;
+
+  if (isSearchBarOnly) {
+    templatesStream =
+      templatesStream.pipe(filter(['**/search/**/*.hbs', '**/icons/**/*.hbs']));
+    handlebarsWrapperData = {
+      importStatements: "import Handlebars from 'handlebars/dist/handlebars.runtime.min.js';"
+    };
+  } else {
+    handlebarsWrapperData = {
+      importStatements: `import Handlebars from 'handlebars/dist/handlebars.min.js';\n` +
+                        `import templateHelpers from 'template-helpers';`,
+      handlebarsHelpers: `let handlebarsHelpers = templateHelpers();\n` +
+                         `parseHelper(handlebarsHelpers);`
+    };
+  }
+
   return templatesStream
     .pipe(handlebars({ processAST: processAST }))
     .pipe(wrap(`Handlebars.template(<%= contents %>);
@@ -102,7 +111,8 @@ function precompileTemplates (callback, templatesStream, templatesWrapper, outpu
       }
     }))
     .pipe(concat(outputFile))
-    .pipe(wrap({ src: templatesWrapper }))
+    .pipe(wrap(
+      { src: './conf/templates/handlebarswrapper.txt' }, handlebarsWrapperData, { variable: 'data' }))
     .pipe(dest('dist'))
     .on('end', callback);
 }

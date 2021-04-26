@@ -35,6 +35,8 @@ exports.getFileName = function (templateType, locale) {
  * Gets the precompiled templates fileName for the given locale.
  *
  * @param {string} locale
+ * @param {boolean} isSearchBarOnly If the precompiled bundle is for
+ *                                  the search bar-only integration.
  * @returns {string}
  */
 exports.getPrecompiledFileName = function (locale, isSearchBarOnly) {
