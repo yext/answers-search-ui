@@ -15,9 +15,10 @@ const {
 const TranslateCallParser = require('../../i18n/translatecallparser');
 
 /**
- * The Gulp task for producing the modern version of the SDK bundle.
+ * The Gulp task for producing the modern bundle of an SDK asset.
  *
  * @param {Function} callback
+ * @param {string} entryPoint The entry point for the asset.
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the modern bundle.
  * @param {string} bundleName The name of the created bundle.
@@ -28,9 +29,17 @@ const TranslateCallParser = require('../../i18n/translatecallparser');
  * @returns {stream.Writable} A {@link Writable} stream containing the modern
  *                            SDK bundle.
  */
-exports.modernBundle = function (callback, outputConfig, bundleName, locale, libVersion, translationResolver) {
+exports.modernBundle = function (
+  callback,
+  entryPoint,
+  outputConfig, 
+  bundleName, 
+  locale, 
+  libVersion, 
+  translationResolver) 
+{
   const rollupConfig = {
-    input: './src/answers-umd.js',
+    input: entryPoint,
     output: outputConfig,
     plugins: [
       resolve({ browser: true }),

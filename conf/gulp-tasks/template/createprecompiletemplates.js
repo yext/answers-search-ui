@@ -3,6 +3,7 @@ const handlebars = require('gulp-handlebars');
 const concat = require('gulp-concat');
 const declare = require('gulp-declare');
 const wrap = require('gulp-wrap');
+const filter = require('gulp-filter');
 
 const TranslateHelperVisitor = require('../../i18n/translatehelpervisitor');
 const { addLocalePrefix, getPrecompiledFileName } = require('./filenameutils');
@@ -11,11 +12,14 @@ const { addLocalePrefix, getPrecompiledFileName } = require('./filenameutils');
  * Creates the precompileTemplates task for a given locale and translator.
  *
  * @param {string} locale
+ * @param {boolean} isSearchBarOnly If only templates related to the SearchBar
+ *                                  should be included.
  * @param {Translator} translator
  * @returns {Function}
  */
-function createPrecompileTemplatesTask (locale, translator) {
-  const precompileTask = callback => _precompileTemplates(callback, locale, translator);
+function createPrecompileTemplatesTask (locale, isSearchBarOnly, translator) {
+  const precompileTask = callback =>
+    _precompileTemplates(callback, locale, isSearchBarOnly, translator);
   const taskName = addLocalePrefix('precompileTemplates', locale);
   Object.defineProperty(precompileTask, 'name', {
     value: taskName
@@ -28,25 +32,49 @@ function createPrecompileTemplatesTask (locale, translator) {
  *
  * @param {Function} callback called when the task is finished
  * @param {string} locale
+ * @param {boolean} isSearchBarOnly If only the templates related to the SearchBar
+ *                                  should be included.
  * @param {Translator} translator
  * @returns {stream.Readable}
  */
-function _precompileTemplates (callback, locale, translator) {
-  const precompiledFileName = getPrecompiledFileName(locale);
+function _precompileTemplates (callback, locale, isSearchBarOnly, translator) {
+  const precompiledFileName = getPrecompiledFileName(locale, isSearchBarOnly);
   const processAST = ast => new TranslateHelperVisitor(translator).accept(ast);
-  return precompileTemplates(callback, precompiledFileName, processAST);
+
+  return precompileTemplates(
+    callback, isSearchBarOnly, precompiledFileName, processAST);
 }
 
 /**
- * Precopmiles SDK templates to the given output file.
+ * Precopmiles the requested templates to the given output file.
  *
  * @param {Function} callback called when the task is finished
+ * @param {boolean} isSearchBarOnly A boolean indicating if only those templates for
+ *                                  the search-bar integration should be included.
  * @param {string} outputFile
  * @param {Function} processAST a function that takes in and mutates a handlebars AST
  * @returns {stream.Readable}
  */
-function precompileTemplates (callback, outputFile, processAST) {
-  return src('./src/ui/templates/**/*.hbs')
+function precompileTemplates (callback, isSearchBarOnly, outputFile, processAST) {
+  let templatesStream = src('./src/ui/templates/**/*.hbs');
+  let handlebarsWrapperData;
+
+  if (isSearchBarOnly) {
+    templatesStream =
+      templatesStream.pipe(filter(['**/search/**/*.hbs', '**/icons/**/*.hbs']));
+    handlebarsWrapperData = {
+      importStatements: "import Handlebars from 'handlebars/dist/handlebars.runtime.min.js';"
+    };
+  } else {
+    handlebarsWrapperData = {
+      importStatements: `import Handlebars from 'handlebars/dist/handlebars.min.js';\n` +
+                        `import templateHelpers from 'template-helpers';`,
+      handlebarsHelpers: `let handlebarsHelpers = templateHelpers();\n` +
+                         `parseHelper(handlebarsHelpers);`
+    };
+  }
+
+  return templatesStream
     .pipe(handlebars({ processAST: processAST }))
     .pipe(wrap(`Handlebars.template(<%= contents %>);
         Handlebars.registerPartial(<%= processPartialName(file.relative) %>, <%= customContext(file.relative) %> )`, {}, {
@@ -83,7 +111,8 @@ function precompileTemplates (callback, outputFile, processAST) {
       }
     }))
     .pipe(concat(outputFile))
-    .pipe(wrap({ src: './conf/templates/handlebarswrapper.txt' }))
+    .pipe(wrap(
+      { src: './conf/templates/handlebarswrapper.txt' }, handlebarsWrapperData, { variable: 'data' }))
     .pipe(dest('dist'))
     .on('end', callback);
 }
