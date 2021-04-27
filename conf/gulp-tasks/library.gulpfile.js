@@ -60,6 +60,8 @@ exports.buildLocales = function allLocaleJSBundles () {
     'answers.min.js',
     'answers-modern.js',
     'answers-modern.min.js',
+    'answers-search-bar-modern.js',
+    'answers-search-bar-modern.min.js',
     'answers-umd.js',
     'answers-umd.min.js'];
 
@@ -87,6 +89,10 @@ function createBundles (bundleTaskFactory, minifyTaskFactory) {
     series(
       bundleTaskFactory.create(BundleType.LEGACY_UMD),
       minifyTaskFactory.minify(BundleType.LEGACY_UMD)
+    ),
+    series(
+      bundleTaskFactory.create(BundleType.SEARCH_BAR_MODERN),
+      minifyTaskFactory.minify(BundleType.SEARCH_BAR_MODERN)
     )
   );
 }

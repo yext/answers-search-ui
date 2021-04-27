@@ -2,7 +2,8 @@ const TemplateType = require('./templatetype');
 
 const fileNames = {
   [TemplateType.UMD]: 'answerstemplates.compiled.min.js',
-  [TemplateType.IIFE]: 'answerstemplates-iife.compiled.min.js'
+  [TemplateType.IIFE]: 'answerstemplates-iife.compiled.min.js',
+  [TemplateType.SEARCH_BAR_UMD]: 'answers-search-bar-templates.compiled.min.js'
 };
 
 /**
@@ -34,9 +35,13 @@ exports.getFileName = function (templateType, locale) {
  * Gets the precompiled templates fileName for the given locale.
  *
  * @param {string} locale
+ * @param {boolean} isSearchBarOnly If the precompiled bundle is for
+ *                                  the search bar-only integration.
  * @returns {string}
  */
-exports.getPrecompiledFileName = function (locale) {
-  const precompiledFileName = 'answerstemplates.precompiled.min.js';
+exports.getPrecompiledFileName = function (locale, isSearchBarOnly) {
+  const precompiledFileName = isSearchBarOnly
+    ? 'answers-search-bar-templates.precompiled.min.js'
+    : 'answerstemplates.precompiled.min.js';
   return addLocalePrefix(precompiledFileName, locale);
 };

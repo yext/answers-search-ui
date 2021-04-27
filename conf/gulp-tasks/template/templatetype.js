@@ -3,7 +3,8 @@
  */
 const TemplateType = {
   UMD: 'templates-UMD',
-  IIFE: 'templates-IIFE'
+  IIFE: 'templates-IIFE',
+  SEARCH_BAR_UMD: 'templates-search-bar-UMD'
 };
 
 module.exports = TemplateType;

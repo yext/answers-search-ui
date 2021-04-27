@@ -62,6 +62,7 @@ class MinifyTemplatesTaskFactory {
   _getTaskName (templateType) {
     const typeToTaskName = {
       [TemplateType.UMD]: 'minifyTemplatesUMD',
+      [TemplateType.SEARCH_BAR_UMD]: 'minifySearchTemplatesUMD',
       [TemplateType.IIFE]: 'minifyTemplatesIIFE'
     };
     const taskName = typeToTaskName[templateType];

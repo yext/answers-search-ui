@@ -43,7 +43,8 @@ class BundleTemplatesTaskFactory {
   _createBundleFunction (templateType) {
     const bundleConfig = this._getOutputConfig(templateType);
     const outputFile = getFileName(templateType, this._locale);
-    const precompiledFile = getPrecompiledFileName(this._locale);
+    const precompiledFile =
+      getPrecompiledFileName(this._locale, templateType === TemplateType.SEARCH_BAR_UMD);
     return callback =>
       this._bundleTemplates(callback, bundleConfig, precompiledFile, outputFile);
   }
@@ -66,6 +67,8 @@ class BundleTemplatesTaskFactory {
         name: 'TemplateBundle'
       }
     };
+    typeToConfig[TemplateType.SEARCH_BAR_UMD] = typeToConfig[TemplateType.UMD];
+
     return typeToConfig[templateType];
   }
 
@@ -78,6 +81,7 @@ class BundleTemplatesTaskFactory {
   _getTaskName (templateType) {
     const typeToTaskName = {
       [TemplateType.UMD]: 'bundleTemplatesUMD',
+      [TemplateType.SEARCH_BAR_UMD]: 'bundleSearchTemplatesUMD',
       [TemplateType.IIFE]: 'bundleTemplatesIIFE'
     };
     const taskName = typeToTaskName[templateType];
