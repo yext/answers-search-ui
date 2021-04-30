@@ -90,6 +90,12 @@ export default class Component {
     this._analyticsOptions = config.analyticsOptions || {};
 
     /**
+     * Allows the main thread to regain control while rendering child components
+     * @type {boolean}
+     */
+    this._progressivelyRenderChildren = config.progressivelyRenderChildren;
+
+    /**
      * A reference to the DOM node that the component will be appended to when mounted/rendered.
      * @type {HTMLElement}
      */
@@ -158,7 +164,7 @@ export default class Component {
      * By default, no transformation happens.
      * @type {function}
      */
-    this.transformData = config.transformData || this.transformData || function () {};
+    this.transformData = config.transformData;
 
     /**
      * The a local reference to the callback that will be invoked when a component is created.
@@ -278,10 +284,6 @@ export default class Component {
     return this._state.has(prop);
   }
 
-  transformData (data) {
-    return data;
-  }
-
   addChild (data, type, opts) {
     let childComponent = this.componentManager.create(
       type,
@@ -367,12 +369,22 @@ export default class Component {
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     const domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');
-    const data = this.transformData(cloneDeep(this._state.get()));
+    const data = this.transformData
+      ? this.transformData(cloneDeep(this._state.get()))
+      : this._state.get();
     domComponents.forEach(c => this._createSubcomponent(c, data));
 
-    this._children.forEach(child => {
-      child.mount();
-    });
+    if (this._progressivelyRenderChildren) {
+      this._children.forEach(child => {
+        setTimeout(() => {
+          child.mount();
+        }, 0);
+      });
+    } else {
+      this._children.forEach(child => {
+        child.mount();
+      });
+    }
 
     // Attach analytics hooks as necessary
     if (this.analyticsReporter) {
@@ -384,6 +396,8 @@ export default class Component {
     this.onMount(this);
     this.userOnMount(this);
 
+    DOM.removeClass(this._container, 'yxt-Answers-component--unmounted');
+
     return this;
   }
 
@@ -394,7 +408,9 @@ export default class Component {
   render (data = this._state.get()) {
     this.beforeRender();
     // Temporary fix for passing immutable data to transformData().
-    data = this.transformData(cloneDeep(data));
+    data = this.transformData
+      ? this.transformData(cloneDeep(data))
+      : data;
 
     let html = '';
     // Use either the custom render function or the internal renderer

@@ -138,7 +138,8 @@
       "test",
       "fixture",
       "CustomEvent",
-      "ANSWERS"
+      "ANSWERS",
+      "requestAnimationFrame"
     ],
     "ignore": [
       "docs/"
