@@ -378,7 +378,7 @@ export default class Component {
       this._children.forEach(child => {
         setTimeout(() => {
           child.mount();
-        }, 0);
+        });
       });
     } else {
       this._children.forEach(child => {
