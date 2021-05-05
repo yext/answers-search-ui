@@ -5,7 +5,8 @@ import cssVars from 'css-vars-ponyfill';
 
 import {
   Renderers,
-  DOM
+  DOM,
+  SearchParams
 } from './ui/index';
 
 import ErrorReporter from './core/errors/errorreporter';
@@ -209,7 +210,7 @@ class AnswersSearchBar {
 
     this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
     this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
-      .finally(() => this._onReady());    
+      .finally(() => this._onReady());
   }
 
   domReady (cb) {
@@ -364,7 +365,7 @@ class AnswersSearchBar {
    * @param {boolean} option to opt out of the css variables ponyfill
    * @return {Promise} resolves after ponyfillCssVariables, or immediately if disabled
    */
-   _handlePonyfillCssVariables (ponyfillDisabled) {
+  _handlePonyfillCssVariables (ponyfillDisabled) {
     if (ponyfillDisabled) {
       return Promise.resolve();
     }

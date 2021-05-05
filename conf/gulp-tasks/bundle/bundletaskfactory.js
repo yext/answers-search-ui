@@ -146,7 +146,7 @@ class BundleTaskFactory {
       namespace = BundleNamespaces.ANSWERS_SEARCH_BAR;
       entryPoint = './src/answers-search-bar.js';
     }
-    
+
     const legacyBundleConfig = {
       format: 'umd',
       name: namespace,
