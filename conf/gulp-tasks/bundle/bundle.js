@@ -53,12 +53,12 @@ exports.modernBundle = function (
 };
 
 /**
- * The Gulp task for producing either variant of the legacy SDK bundle.
+ * The Gulp task for producing any variant of a legacy SDK asset.
  *
  * @param {Function} callback
+ * @param {string} entryPoint The entry point for the asset.
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the legacy bundle.
- * @param {string} entryPoint The entry point for the asset.
  * @param {string} bundleName The name of the created bundle.
  * @param {string} locale The current locale
  * @param {string} libVersion The current JS library version

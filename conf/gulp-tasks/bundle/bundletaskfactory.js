@@ -98,7 +98,7 @@ class BundleTaskFactory {
   }
 
   /**
-   * The Gulp task for producing the legacy, IIFE-style SDK bundle.
+   * The Gulp task for producing a legacy, IIFE-style bundle of an SDK asset.
    *
    * @param {function} callback function that will run after the Gulp task
    * @param {BundleType} bundleType The type of SDK asset to generate the bundle for.
@@ -131,7 +131,7 @@ class BundleTaskFactory {
   }
 
   /**
-   * The Gulp task for producing the legacy, UMD-style SDK bundle.
+   * The Gulp task for producing the legacy, UMD-style bundle of an SDK asset.
    *
    * @param {function} callback function that will run after the Gulp task
    * @param {BundleType} bundleType The type of SDK asset to generate the bundle for.
