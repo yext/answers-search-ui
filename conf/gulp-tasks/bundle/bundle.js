@@ -58,6 +58,7 @@ exports.modernBundle = function (
  * @param {Function} callback
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the legacy bundle.
+ * @param {string} entryPoint The entry point for the asset.
  * @param {string} bundleName The name of the created bundle.
  * @param {string} locale The current locale
  * @param {string} libVersion The current JS library version
@@ -65,9 +66,17 @@ exports.modernBundle = function (
  * @returns {stream.Writable} A {@link Writable} stream containing the legacy
  *                            SDK bundle.
  */
-exports.legacyBundle = function (callback, outputConfig, bundleName, locale, libVersion, translationResolver) {
+exports.legacyBundle = function (
+  callback,
+  entryPoint,
+  outputConfig, 
+  bundleName, 
+  locale, 
+  libVersion,
+  translationResolver) 
+{
   const rollupConfig = {
-    input: './src/answers-umd.js',
+    input: entryPoint,
     output: outputConfig,
     plugins: [
       resolve({ browser: true }),
