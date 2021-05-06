@@ -179,7 +179,12 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
+      - translation_test
+      - third_party_notices_test
       - build:
+          requires:
+            - translation_test
+            - third_party_notices_test
           filters:
             branches:
               ignore:
@@ -195,12 +200,6 @@ workflows:
           requires:
             - build
       - browserstack_acceptance_test:
-          requires:
-            - build
-      - translation_test:
-          requires:
-            - build
-      - third_party_notices_test:
           requires:
             - build
       - deploy_canary:
@@ -211,8 +210,6 @@ workflows:
             - unit_test
             - headless_acceptance_test
             - browserstack_acceptance_test
-            - translation_test
-            - third_party_notices_test
       - deploy_branch:
           filters:
             branches:
@@ -222,11 +219,14 @@ workflows:
             - unit_test
             - browserstack_acceptance_test
             - headless_acceptance_test
-            - translation_test
-            - third_party_notices_test
   build_and_deploy_i18n:
     jobs:
+      - translation_test
+      - third_party_notices_test
       - build_i18n:
+          requires:
+            - translation_test
+            - third_party_notices_test
           filters:
             branches:
               only:
@@ -243,22 +243,25 @@ workflows:
       - browserstack_acceptance_test:
           requires:
             - build_i18n
-      - translation_test:
-          requires:
-            - build_i18n
-      - third_party_notices_test:
-          requires:
-            - build_i18n
       - deploy_branch:
           requires:
             - unit_test
             - browserstack_acceptance_test
             - headless_acceptance_test
-            - translation_test
-            - third_party_notices_test
   build_and_deploy_hold:
     jobs:
+      - translation_test:
+          filters:
+            tags:
+              only: /^v.*/
+      - third_party_notices_test:
+          filters:
+            tags:
+              only: /^v.*/
       - build_i18n:
+          requires:
+            - translation_test
+            - third_party_notices_test
           filters:
             tags:
               only: /^v.*/
@@ -278,18 +281,6 @@ workflows:
           requires:
             - build_i18n
       - browserstack_acceptance_test:
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - build_i18n
-      - translation_test:
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - build_i18n
-      - third_party_notices_test:
           filters:
             tags:
               only: /^v.*/
@@ -304,8 +295,6 @@ workflows:
             - unit_test
             - browserstack_acceptance_test
             - headless_acceptance_test
-            - translation_test
-            - third_party_notices_test
       - deploy_latest:
           filters:
             branches:
