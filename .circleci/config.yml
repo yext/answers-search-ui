@@ -221,12 +221,7 @@ workflows:
             - headless_acceptance_test
   build_and_deploy_i18n:
     jobs:
-      - translation_test
-      - third_party_notices_test
-      - build_i18n:
-          requires:
-            - translation_test
-            - third_party_notices_test
+      - translation_test:
           filters:
             branches:
               only:
@@ -234,6 +229,18 @@ workflows:
                 - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
+      - third_party_notices_test:
+          filters:
+            branches:
+              only:
+                - /^support\/.*/
+                - /^hotfix\/.*/
+                - /^feature\/.*-i18n/
+                - /^release\/.*/
+      - build_i18n:
+          requires:
+            - translation_test
+            - third_party_notices_test
       - unit_test:
           requires:
             - build_i18n
@@ -254,20 +261,20 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              only:
+                - master
       - third_party_notices_test:
-          filters:
-            tags:
-              only: /^v.*/
-      - build_i18n:
-          requires:
-            - translation_test
-            - third_party_notices_test
           filters:
             tags:
               only: /^v.*/
             branches:
               only:
                 - master
+      - build_i18n:
+          requires:
+            - translation_test
+            - third_party_notices_test
       - unit_test:
           filters:
             tags:
