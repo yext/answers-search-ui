@@ -102,6 +102,16 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: ./.circleci/run_browserstack_acceptance.sh
+  # style linting for src code
+  linting:
+    docker:
+      - image: circleci/node:14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: npm run lint
   # verify all translations are present
   translation_test:
     docker:
@@ -179,10 +189,12 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
+      - linting
       - translation_test
       - third_party_notices_test
       - build:
           requires:
+            - linting
             - translation_test
             - third_party_notices_test
           filters:
@@ -221,6 +233,14 @@ workflows:
             - headless_acceptance_test
   build_and_deploy_i18n:
     jobs:
+      - linting:
+          filters:
+            branches:
+              only:
+                - /^support\/.*/
+                - /^hotfix\/.*/
+                - /^feature\/.*-i18n/
+                - /^release\/.*/
       - translation_test:
           filters:
             branches:
@@ -239,6 +259,7 @@ workflows:
                 - /^release\/.*/
       - build_i18n:
           requires:
+            - linting
             - translation_test
             - third_party_notices_test
       - unit_test:
@@ -257,6 +278,13 @@ workflows:
             - headless_acceptance_test
   build_and_deploy_hold:
     jobs:
+      - linting:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              only:
+                - master
       - translation_test:
           filters:
             tags:
@@ -273,6 +301,7 @@ workflows:
                 - master
       - build_i18n:
           requires:
+            - linting
             - translation_test
             - third_party_notices_test
       - unit_test:
