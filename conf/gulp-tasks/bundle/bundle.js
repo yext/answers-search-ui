@@ -58,9 +58,10 @@ exports.modernBundle = function (
 };
 
 /**
- * The Gulp task for producing either variant of the legacy SDK bundle.
+ * The Gulp task for producing any variant of a legacy SDK asset.
  *
  * @param {Function} callback
+ * @param {string} entryPoint The entry point for the asset.
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the legacy bundle.
  * @param {string} bundleName The name of the created bundle.
@@ -70,9 +71,17 @@ exports.modernBundle = function (
  * @returns {stream.Writable} A {@link Writable} stream containing the legacy
  *                            SDK bundle.
  */
-exports.legacyBundle = function (callback, outputConfig, bundleName, locale, libVersion, translationResolver) {
+exports.legacyBundle = function (
+  callback,
+  entryPoint,
+  outputConfig, 
+  bundleName, 
+  locale, 
+  libVersion,
+  translationResolver) 
+{
   const rollupConfig = {
-    input: './src/answers-umd.js',
+    input: entryPoint,
     output: outputConfig,
     plugins: [
       resolve({ browser: true }),
