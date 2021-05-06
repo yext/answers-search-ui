@@ -37,25 +37,21 @@ class BundleTaskFactory {
    */
   create (bundleType) {
     let bundleFunction;
-    switch (bundleType) {
-      case BundleType.SEARCH_BAR_MODERN:
-        // fall through
-      case BundleType.MODERN:
-        bundleFunction = (callback) => this._modernBundle(callback, bundleType);
-        break;
-      case BundleType.SEARCH_BAR_LEGACY_IIFE:
-        // fall through
-      case BundleType.LEGACY_IIFE:
-        bundleFunction = (callback) => this._legacyBundleIIFE(callback, bundleType);
-        break;
-      case BundleType.SEARCH_BAR_LEGACY_UMD:
-        // fall through
-      case BundleType.LEGACY_UMD:
-        bundleFunction = (callback) => this._legacyBundleUMD(callback, bundleType);
-        break;
-      default:
-        throw new Error('Unrecognized BundleType');
+
+    const modernBundleTypes = [BundleType.MODERN, BundleType.SEARCH_BAR_MODERN];
+    const iifeBundleTypes = [BundleType.LEGACY_IIFE, BundleType.SEARCH_BAR_LEGACY_IIFE];
+    const umdBundleTypes = [BundleType.LEGACY_UMD, BundleType.SEARCH_BAR_LEGACY_UMD];
+
+    if (modernBundleTypes.includes(bundleType)) {
+      bundleFunction = (callback) => this._modernBundle(callback, bundleType);
+    } else if (iifeBundleTypes.includes(bundleType)) {
+      bundleFunction = (callback) => this._legacyBundleIIFE(callback, bundleType);
+    } else if (umdBundleTypes.includes(bundleType)) {
+      bundleFunction = (callback) => this._legacyBundleUMD(callback, bundleType);
+    } else {
+      throw new Error('Unrecognized BundleType');
     }
+
     Object.defineProperty(bundleFunction, 'name', {
       value: `bundle ${getBundleName(bundleType, this._locale)}`
     });
