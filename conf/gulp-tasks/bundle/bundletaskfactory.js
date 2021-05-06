@@ -13,7 +13,9 @@ const BundleType = {
   MODERN: 'answers-modern',
   LEGACY_IIFE: 'answers',
   LEGACY_UMD: 'answers-umd',
-  SEARCH_BAR_MODERN: 'answers-search-bar-modern'
+  SEARCH_BAR_MODERN: 'answers-search-bar-modern',
+  SEARCH_BAR_LEGACY_IIFE: 'answers-search-bar',
+  SEARCH_BAR_LEGACY_UMD: 'answers-search-bar-umd'
 };
 Object.freeze(BundleType);
 
@@ -35,21 +37,21 @@ class BundleTaskFactory {
    */
   create (bundleType) {
     let bundleFunction;
-    switch (bundleType) {
-      case BundleType.SEARCH_BAR_MODERN:
-        // fall through
-      case BundleType.MODERN:
-        bundleFunction = (callback) => this._modernBundle(callback, bundleType);
-        break;
-      case BundleType.LEGACY_IIFE:
-        bundleFunction = (callback) => this._legacyBundleIIFE(callback);
-        break;
-      case BundleType.LEGACY_UMD:
-        bundleFunction = (callback) => this._legacyBundleUMD(callback);
-        break;
-      default:
-        throw new Error('Unrecognized BundleType');
+
+    const modernBundleTypes = [BundleType.MODERN, BundleType.SEARCH_BAR_MODERN];
+    const iifeBundleTypes = [BundleType.LEGACY_IIFE, BundleType.SEARCH_BAR_LEGACY_IIFE];
+    const umdBundleTypes = [BundleType.LEGACY_UMD, BundleType.SEARCH_BAR_LEGACY_UMD];
+
+    if (modernBundleTypes.includes(bundleType)) {
+      bundleFunction = (callback) => this._modernBundle(callback, bundleType);
+    } else if (iifeBundleTypes.includes(bundleType)) {
+      bundleFunction = (callback) => this._legacyBundleIIFE(callback, bundleType);
+    } else if (umdBundleTypes.includes(bundleType)) {
+      bundleFunction = (callback) => this._legacyBundleUMD(callback, bundleType);
+    } else {
+      throw new Error('Unrecognized BundleType');
     }
+
     Object.defineProperty(bundleFunction, 'name', {
       value: `bundle ${getBundleName(bundleType, this._locale)}`
     });
@@ -92,22 +94,32 @@ class BundleTaskFactory {
   }
 
   /**
-   * The Gulp task for producing the legacy, IIFE-style SDK bundle.
+   * The Gulp task for producing a legacy, IIFE-style bundle of an SDK asset.
    *
    * @param {function} callback function that will run after the Gulp task
+   * @param {BundleType} bundleType The type of SDK asset to generate the bundle for.
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            IIFE-style SDK bundle.
    */
-  _legacyBundleIIFE (callback) {
+  _legacyBundleIIFE (callback, bundleType) {
+    let namespace = BundleNamespaces.ANSWERS;
+    let entryPoint = './src/answers-umd.js';
+
+    if (bundleType === BundleType.SEARCH_BAR_LEGACY_IIFE) {
+      namespace = BundleNamespaces.ANSWERS_SEARCH_BAR;
+      entryPoint = './src/answers-search-bar.js';
+    }
+
     const legacyBundleConfig = {
       format: 'iife',
-      name: BundleNamespaces.ANSWERS,
+      name: namespace,
       sourcemap: true
     };
     return legacyBundle(
       callback,
+      entryPoint,
       legacyBundleConfig,
-      getBundleName(BundleType.LEGACY_IIFE, this._locale),
+      getBundleName(bundleType, this._locale),
       this._locale,
       this._libVersion,
       this._translationResolver
@@ -115,23 +127,33 @@ class BundleTaskFactory {
   }
 
   /**
-   * The Gulp task for producing the legacy, UMD-style SDK bundle.
+   * The Gulp task for producing the legacy, UMD-style bundle of an SDK asset.
    *
    * @param {function} callback function that will run after the Gulp task
+   * @param {BundleType} bundleType The type of SDK asset to generate the bundle for.
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            UMD-style SDK bundle.
    */
-  _legacyBundleUMD (callback) {
+  _legacyBundleUMD (callback, bundleType) {
+    let namespace = BundleNamespaces.ANSWERS;
+    let entryPoint = './src/answers-umd.js';
+
+    if (bundleType === BundleType.SEARCH_BAR_LEGACY_UMD) {
+      namespace = BundleNamespaces.ANSWERS_SEARCH_BAR;
+      entryPoint = './src/answers-search-bar.js';
+    }
+
     const legacyBundleConfig = {
       format: 'umd',
-      name: BundleNamespaces.ANSWERS,
+      name: namespace,
       export: 'default',
       sourcemap: true
     };
     return legacyBundle(
       callback,
+      entryPoint,
       legacyBundleConfig,
-      getBundleName(BundleType.LEGACY_UMD, this._locale),
+      getBundleName(bundleType, this._locale),
       this._locale,
       this._libVersion,
       this._translationResolver
