@@ -452,5 +452,5 @@ function getServices (config, storage) {
   };
 }
 
-const ANSWERS_SEARCH_BAR = new AnswersSearchBar();
-export default ANSWERS_SEARCH_BAR;
+const ANSWERS = new AnswersSearchBar();
+export default ANSWERS;
