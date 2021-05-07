@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-search-ui",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "Javascript Answers Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
@@ -27,7 +27,7 @@
     "cross-fetch": "^3.0.6",
     "css-vars-ponyfill": "^2.4.3",
     "gulp-sourcemaps": "^2.6.5",
-    "handlebars": "^4.7.2",
+    "handlebars": "^4.7.7",
     "js-levenshtein": "^1.1.6",
     "kind-of": "^6.0.3",
     "lodash.clonedeep": "^4.5.0",
