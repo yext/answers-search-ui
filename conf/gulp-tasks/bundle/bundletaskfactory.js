@@ -1,13 +1,6 @@
 const getBundleName = require('../utils/bundlename');
 const { modernBundle, legacyBundle } = require('./bundle');
 
-// An enum outlining the namespaces for different SDK bundles.
-const BundleNamespaces = {
-  ANSWERS: 'ANSWERS',
-  ANSWERS_SEARCH_BAR: 'ANSWERS_SEARCH_BAR'
-};
-Object.freeze(BundleNamespaces);
-
 // An enum describing the different types of SDK bundle.
 const BundleType = {
   MODERN: 'answers-modern',
@@ -68,17 +61,15 @@ class BundleTaskFactory {
    *                            bundled asset.
    */
   _modernBundle (callback, bundleType) {
-    let namespace = BundleNamespaces.ANSWERS;
     let entryPoint = './src/answers-umd.js';
 
     if (bundleType === BundleType.SEARCH_BAR_MODERN) {
-      namespace = BundleNamespaces.ANSWERS_SEARCH_BAR;
       entryPoint = './src/answers-search-bar.js';
     }
 
     const modernBundleConfig = {
       format: 'umd',
-      name: namespace,
+      name: 'ANSWERS',
       exports: 'default',
       sourcemap: true
     };
@@ -102,17 +93,15 @@ class BundleTaskFactory {
    *                            IIFE-style SDK bundle.
    */
   _legacyBundleIIFE (callback, bundleType) {
-    let namespace = BundleNamespaces.ANSWERS;
     let entryPoint = './src/answers-umd.js';
 
     if (bundleType === BundleType.SEARCH_BAR_LEGACY_IIFE) {
-      namespace = BundleNamespaces.ANSWERS_SEARCH_BAR;
       entryPoint = './src/answers-search-bar.js';
     }
 
     const legacyBundleConfig = {
       format: 'iife',
-      name: namespace,
+      name: 'ANSWERS',
       sourcemap: true
     };
     return legacyBundle(
@@ -135,17 +124,15 @@ class BundleTaskFactory {
    *                            UMD-style SDK bundle.
    */
   _legacyBundleUMD (callback, bundleType) {
-    let namespace = BundleNamespaces.ANSWERS;
     let entryPoint = './src/answers-umd.js';
 
     if (bundleType === BundleType.SEARCH_BAR_LEGACY_UMD) {
-      namespace = BundleNamespaces.ANSWERS_SEARCH_BAR;
       entryPoint = './src/answers-search-bar.js';
     }
 
     const legacyBundleConfig = {
       format: 'umd',
-      name: namespace,
+      name: 'ANSWERS',
       export: 'default',
       sourcemap: true
     };
