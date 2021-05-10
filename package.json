@@ -109,8 +109,8 @@
   "jest": {
     "bail": 0,
     "collectCoverageFrom": [
-      "src/**/*.js",
-      "conf/**/*.js"
+      "<rootDir>/src/**/*.js",
+      "<rootDir>/conf/**/*.js"
     ],
     "verbose": true,
     "setupFilesAfterEnv": [
