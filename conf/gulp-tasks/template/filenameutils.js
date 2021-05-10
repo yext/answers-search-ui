@@ -3,7 +3,8 @@ const TemplateType = require('./templatetype');
 const fileNames = {
   [TemplateType.UMD]: 'answerstemplates.compiled.min.js',
   [TemplateType.IIFE]: 'answerstemplates-iife.compiled.min.js',
-  [TemplateType.SEARCH_BAR_UMD]: 'answers-search-bar-templates.compiled.min.js'
+  [TemplateType.SEARCH_BAR_UMD]: 'answers-search-bar-templates.compiled.min.js',
+  [TemplateType.SEARCH_BAR_IIFE]: 'answers-search-bar-templates-iife.compiled.min.js'
 };
 
 /**
