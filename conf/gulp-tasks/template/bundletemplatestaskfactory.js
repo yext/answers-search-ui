@@ -68,6 +68,7 @@ class BundleTemplatesTaskFactory {
       }
     };
     typeToConfig[TemplateType.SEARCH_BAR_UMD] = typeToConfig[TemplateType.UMD];
+    typeToConfig[TemplateType.SEARCH_BAR_IIFE] = typeToConfig[TemplateType.IIFE];
 
     return typeToConfig[templateType];
   }
@@ -82,7 +83,8 @@ class BundleTemplatesTaskFactory {
     const typeToTaskName = {
       [TemplateType.UMD]: 'bundleTemplatesUMD',
       [TemplateType.SEARCH_BAR_UMD]: 'bundleSearchTemplatesUMD',
-      [TemplateType.IIFE]: 'bundleTemplatesIIFE'
+      [TemplateType.IIFE]: 'bundleTemplatesIIFE',
+      [TemplateType.SEARCH_BAR_IIFE]: 'bundleSearchTemplatesIIFE'
     };
     const taskName = typeToTaskName[templateType];
     return addLocalePrefix(taskName, this._locale);
