@@ -428,12 +428,8 @@ export default class Component {
       }, data);
     }
 
-    // We create an HTML Document fragment with the rendered string
-    // So that we can query it for processing of sub components
-    let el = DOM.create(html);
-
     this.afterRender();
-    return el.innerHTML;
+    return html;
   }
 
   _createSubcomponent (domComponent, data) {
