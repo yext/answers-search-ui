@@ -182,7 +182,7 @@ describe('sort options component', () => {
     const isNoResults = true;
     component.handleVerticalResultsUpdate(isNoResults);
     const wrapper = mount(component);
-    expect(wrapper.text()).toEqual('');
+    expect(wrapper.find('.yxt-SortOptions-fieldSet')).toHaveLength(0);
   });
 
   it('uses the persisted sortBys on load', () => {
