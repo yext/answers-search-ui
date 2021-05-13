@@ -17,7 +17,7 @@ import FilterRegistry from './filters/filterregistry';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
-import { PRODUCTION, ENDPOINTS } from './constants';
+import { PRODUCTION, ENDPOINTS, LIB_VERSION } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
@@ -133,7 +133,10 @@ export default class Core {
       experienceKey: this._experienceKey,
       locale: this._locale,
       experienceVersion: this._experienceVersion,
-      endpoints: this._getServiceUrls()
+      endpoints: this._getServiceUrls(),
+      additionalQueryParams: {
+        jsLibVersion: LIB_VERSION
+      }
     };
 
     this._coreLibrary = provideCore(params);
