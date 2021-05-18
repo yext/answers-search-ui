@@ -108,6 +108,10 @@
   },
   "jest": {
     "bail": 0,
+    "collectCoverageFrom": [
+      "<rootDir>/src/**/*.js",
+      "<rootDir>/conf/**/*.js"
+    ],
     "verbose": true,
     "setupFilesAfterEnv": [
       "./tests/setup/setup.js"

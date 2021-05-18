@@ -1,5 +1,11 @@
 # Answers Search UI
-Outline:
+
+<h3>
+  <a href='https://coveralls.io/github/yext/answers-search-ui?branch=master'>
+    <img src='https://coveralls.io/repos/github/yext/answers-search-ui/badge.svg?branch=master' alt='Coverage Status' />
+  </a>
+</h3>
+
 1. [Install / Setup](#install-and-setup)
 2. [ANSWERS.init Configuration Options](#answersinit-configuration-options)
    - [Vertical Pages Configuration](#vertical-pages-configuration)
