@@ -2,6 +2,7 @@ const { series, parallel, src, dest, watch } = require('gulp');
 const path = require('path');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
+sass.compiler = require('sass');
 
 const getLibraryVersion = require('./utils/libversion');
 const { BundleType, BundleTaskFactory } = require('./bundle/bundletaskfactory');
