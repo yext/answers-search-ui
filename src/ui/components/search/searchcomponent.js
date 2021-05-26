@@ -416,8 +416,11 @@ export default class SearchComponent extends Component {
   initClearButton () {
     const button = this._getClearButton();
     this._showClearButton = this._showClearButton || this.query;
-    button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
-
+    if (this._showClearButton) {
+      button.classList.remove('yxt-SearchBar--hidden');
+    } else {
+      button.classList.add('yxt-SearchBar--hidden');
+    }
     DOM.on(button, 'click', () => {
       this.customHooks.onClearSearch();
       this.query = '';
@@ -523,17 +526,6 @@ export default class SearchComponent extends Component {
 
     inputEl.blur();
     DOM.query(this._container, '.js-yext-submit').blur();
-    // TODO: move this into initClearButton
-    if (this.clearButton) {
-      const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
-      if (this.query) {
-        this._showClearButton = true;
-        button.classList.remove('yxt-SearchBar--hidden');
-      } else {
-        this._showClearButton = false;
-        button.classList.add('yxt-SearchBar--hidden');
-      }
-    }
     if (this.isUsingYextAnimatedIcon) {
       this.animateIconToYext();
     }
