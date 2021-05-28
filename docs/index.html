@@ -43,208 +43,1883 @@
 
 
     <section>
-        <article><h1>Answers</h1>
-<p>Answers Javascript API Library.</p>
+        <article><h1>Answers Search UI</h1>
 <p>Outline:</p>
 <ol>
-<li><a href="#install-and-setup">Install / Setup</a>
+<li><a href="#install-and-setup">Install / Setup</a></li>
+<li><a href="#answersinit-configuration-options">ANSWERS.init Configuration Options</a>
 <ul>
-<li><a href="#configuration-options">Configuration Options</a></li>
-<li><a href="#template-helpers">Template Helpers</a></li>
+<li><a href="#vertical-pages-configuration">Vertical Pages Configuration</a></li>
+<li><a href="#search-configuration">Search Configuration</a></li>
+<li><a href="#vertical-no-results-configuration">Vertical No Results Configuration</a></li>
+<li><a href="#onverticalsearch-configuration">onVerticalSearch Configuration</a></li>
+<li><a href="#onuniversalsearch-configuration">onUniversalSearch Configuration</a></li>
 </ul>
 </li>
 <li><a href="#component-usage">Component Usage</a>
 <ul>
 <li><a href="#base-component-configuration">Base Component Configuration</a></li>
-<li><a href="#adding-a-component">Adding a Component</a></li>
-<li><a href="#using-a-custom-template">Using a Custom Template</a></li>
-<li><a href="#using-a-custom-renderer">Using a Custom Renderer</a></li>
-<li><a href="#custom-data-transforms">Custom Data Transforms</a></li>
+<li><a href="#adding-a-component-to-your-page">Adding a Component</a></li>
+<li><a href="#removing-components">Removing Components</a></li>
 </ul>
 </li>
-<li><a href="#types-of-components">Types of Components</a>
+<li><a href="#types-of-built-in-components">Types of Built-in Components</a>
 <ul>
-<li><a href="#navigation-component">Navigation Component</a></li>
 <li><a href="#searchbar-component">SearchBar Component</a></li>
-<li><a href="#filtersearch-component">FilterSearch Component</a></li>
 <li><a href="#direct-answer-component">DirectAnswer Component</a></li>
 <li><a href="#universal-results-component">UniversalResults Component</a></li>
 <li><a href="#vertical-results-component">VerticalResults Component</a></li>
-<li><a href="#qa-submission-component">QASubmission Component</a></li>
+<li><a href="#vertical-results-count-component">VerticalResultsCount Component</a></li>
+<li><a href="#pagination-component">Pagination Component</a></li>
+<li><a href="#filterbox-component">FilterBox Component</a></li>
+<li><a href="#facets-component">Facets Component</a>
+<ul>
+<li><a href="#transforming-facets">Transforming Facets</a></li>
 </ul>
 </li>
+<li><a href="#filtersearch-component">FilterSearch Component</a></li>
+<li><a href="#filter-components">Filter Components</a></li>
+<li><a href="#applied-filters-component">Applied Filters Component</a></li>
+<li><a href="#navigation-component">Navigation Component</a></li>
+<li><a href="#qa-submission-component">QASubmission Component</a></li>
+<li><a href="#spell-check-component">SpellCheck Component</a></li>
+<li><a href="#location-bias-component">LocationBias Component</a></li>
+<li><a href="#sort-options-component">SortOptions Component</a></li>
+<li><a href="#map-component">Map Component</a>
+<ul>
+<li><a href="#supported-map-locales">Supported Map Locales</a></li>
+</ul>
+</li>
+<li><a href="#icon-component">Icon Component</a></li>
+</ul>
+</li>
+<li><a href="#customizing-components">Customizing Components</a>
+<ul>
+<li><a href="#using-a-custom-renderer">Using a Custom Renderer</a></li>
+<li><a href="#custom-data-formatting">Custom Data Formatting</a></li>
+<li><a href="#custom-data-transforms">Custom Data Transforms</a></li>
+<li><a href="#using-a-custom-template-for-a-component">Using a Custom Template for a Component</a></li>
+<li><a href="#creating-custom-components">Creating Custom Components</a></li>
+</ul>
+</li>
+<li><a href="#template-helpers">Template Helpers</a></li>
 <li><a href="#analytics">Analytics</a>
 <ul>
-<li><a href="#click-analytics">Click Analytics</a></li>
+<li><a href="#custom-analytics-using-javascript">Custom Analytics Using JavaScript</a></li>
+<li><a href="#custom-analytics-using-data-attributes">Custom Analytics Using Data Attributes</a></li>
+<li><a href="#built-in-analytics-events-for-ctas">Built-In Analytics Events For CTAs</a></li>
+<li><a href="#conversion-tracking">Conversion Tracking</a></li>
+<li><a href="#on-search-analytics">On-Search Analytics</a></li>
 </ul>
 </li>
+<li><a href="#rich-text-formatting">Rich Text Formatting</a></li>
+<li><a href="#processing-translations">Processing Translations</a></li>
+<li><a href="#performance-metrics">Performance Metrics</a></li>
 </ol>
 <h1>Install and Setup</h1>
-<p>To include the answers base CSS (optional).</p>
+<p>The Answers Javascript API Library does not need to be installed locally. Instead, it can be used
+with script tags on a webpage. The instructions below explain how to do this; they will walk you through
+adding the Answers stylesheet, JS library, and an intialization script to an HTML page.
+After doing this, you can view your page in the browser.</p>
+<p>Include the Answers CSS</p>
 <pre class="prettyprint source lang-html"><code>&lt;link rel=&quot;stylesheet&quot; type=&quot;text/css&quot; href=&quot;https://assets.sitescdn.net/answers/answers.css&quot;>
 </code></pre>
-<p>Adding the Javascript library</p>
-<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://assets.sitescdn.net/answers/answers.min.js&quot; onload=&quot;ANSWERS.domReady(initAnswers)&quot; async>&lt;/script>
+<p>Add the Javascript library and placeholder elements for <a href="#component-usage">Answers components</a>.</p>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://assets.sitescdn.net/answers/answers.min.js&quot; onload=&quot;ANSWERS.domReady(initAnswers)&quot; defer async>&lt;/script>
+
+&lt;div id=&quot;SearchBarContainer&quot;>&lt;/div>
+&lt;div id=&quot;UniversalResultsContainer&quot;>&lt;/div>
 </code></pre>
+<p>Add an initialization script with an apiKey, experienceKey and onReady function. In the example below, we've initialized two
+basic components: <a href="#searchbar-component">SearchBar</a> and <a href="#universal-results-component">UniversalResults</a>.</p>
 <pre class="prettyprint source lang-js"><code>function initAnswers() {
   ANSWERS.init({
-    apiKey: '&lt;API_KEY_HERE>',
-    answersKey: '&lt;ANSWERS_KEY_HERE>',
+    apiKey: '&lt;API_KEY_HERE>', // See [1]
+    experienceKey: '&lt;EXPERIENCE_KEY_HERE>',
     onReady: function() {
-      // Component creation logic here
-    })
+      ANSWERS.addComponent('SearchBar', {
+        container: '#SearchBarContainer',
+      });
+
+      ANSWERS.addComponent('UniversalResults', {
+        container: '#UniversalResultsContainer',
+      });
+    }
   })
 }
 </code></pre>
-<h2>Configuration Options</h2>
-<p>Below is a list of configuration options that can be used during initialization.</p>
-<table>
-<thead>
-<tr>
-<th>option</th>
-<th>type</th>
-<th>description</th>
-<th>required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>apiKey</td>
-<td>string</td>
-<td>Your API key</td>
-<td>required</td>
-</tr>
-<tr>
-<td>answersKey</td>
-<td>string</td>
-<td>The key used for your answers project</td>
-<td>required</td>
-</tr>
-<tr>
-<td>onReady</td>
-<td>function</td>
-<td>Invoked when the Answers component library is loaded/ready</td>
-<td>required</td>
-</tr>
-<tr>
-<td>useTemplates</td>
-<td>boolean</td>
-<td>default: <code>true</code>.  If false, don't fetch pre-made templates. Only use this if you plan to implement custom renders for every component!</td>
-<td>not required</td>
-</tr>
-<tr>
-<td>templateUrl</td>
-<td>string</td>
-<td>Use precompiled template hosted by you</td>
-<td>not required</td>
-</tr>
-<tr>
-<td>templateBundle</td>
-<td>object</td>
-<td>Provide the precompiled templates</td>
-<td>not required</td>
-</tr>
-<tr>
-<td>locale</td>
-<td>string</td>
-<td>The locale of the configuration. The locale will affect how queries are interpreted and the results returned. The default locale value is 'en'.</td>
-<td>not required</td>
-</tr>
-</tbody>
-</table>
-<h2>Template Helpers</h2>
-<p>When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them <a href="https://github.com/jonschlinkert/template-helpers">here</a>.</p>
-<p>If you want to register custom template helpers to the handlebars render, you can do so like this:</p>
-<pre class="prettyprint source lang-js"><code>ANSWERS.registerHelper('noop', function(options) {
-  return options.fn(this);
-})
+<p>ANSWERS.init() returns a promise which optionally allows components to be added using promise syntax</p>
+<pre class="prettyprint source lang-js"><code>function initAnswers() {
+  ANSWERS.init({
+    apiKey: '&lt;API_KEY_HERE>', // See [1]
+    experienceKey: '&lt;EXPERIENCE_KEY_HERE>',
+  }).then(function() {
+    ANSWERS.addComponent('SearchBar', {
+      container: '#SearchBarContainer',
+    });
+
+    ANSWERS.addComponent('UniversalResults', {
+      container: '#UniversalResultsContainer',
+    });
+  });
+}
 </code></pre>
-<p>You can learn more about the interface for registering helpers by taking a look at the <a href="https://handlebarsjs.com/block_helpers.html">Handlebars Block Helpers</a> documentation.</p>
+<p>[1] Learn more about <a href="https://developer.yext.com/docs/guides/get-started/">getting your API key</a>.</p>
+<h1>ANSWERS.init Configuration Options</h1>
+<p>The configuration provided here is configuration that is shared across components.</p>
+<pre class="prettyprint source lang-js"><code>function initAnswers() {
+  ANSWERS.init({
+    // Required, your Yext Answers API key
+    apiKey: '&lt;API_KEY_HERE>',
+    // Required, the key used for your Answers experience
+    experienceKey: '&lt;EXPERIENCE_KEY_HERE>',
+    // Optional, initialize components here, invoked when the Answers component library is loaded/ready.
+    //    If components are not added here, they can also be added when the init promise resolves
+    onReady: function() {},
+    // Optional*, Yext businessId, *required to send analytics events
+    businessId: 'businessId',
+    // Optional, if false, the library will not fetch pre-made templates. Only use change this to false if you provide a
+    //    template bundle in the `templateBundle` config option or implement custom renders for every component
+    useTemplates: true,
+    // Optional, additional templates to register with the renderer
+    templateBundle: {},
+    // Optional, provide configuration for each vertical that is shared across components, see Vertical Pages Configuration below
+    verticalPages: [],
+    // Optional, search specific settings, see Search Configuration below
+    search: {},
+    // Optional, vertical no results settings, see Vertical No Results below
+    noResults: {},
+    // Optional, the locale will affect how queries are interpreted and the results returned. Defaults to 'en'.
+    locale: 'en',
+    // Optional, the Answers Experience version to use for api requests
+    experienceVersion: 'PRODUCTION',
+    // Optional, prints full Answers error details when set to `true`. Defaults to false.
+    debug: false,
+    // Optional, If true, the search session is tracked. If false, there is no tracking. Defaults to true.
+    sessionTrackingEnabled: true,
+    // Optional, invoked when the state of any component changes
+    onStateChange: function() {},
+    // Optional, analytics callback after a vertical search, see onVerticalSearch Configuration for additional details
+    onVerticalSearch: function() {},
+    // Optional, analytics callback after a universal search, see onUniversalSearch Configuration for additional details
+    onUniversalSearch: function() {},
+    // Optional, opt-out of automatic css variable resolution on init for legacy browsers
+    disableCssVariablesPonyfill: false,
+    // Optional, the analytics key describing the Answers integration type. Accepts 'STANDARD' or 'OVERLAY', defaults to 'STANDARD'
+    querySource: 'STANDARD',
+  })
+}
+</code></pre>
+<h2>Vertical Pages Configuration</h2>
+<p>Below is a list of configuration options related to vertical pages in navigation and no results, used in the <a href="#answersinit-configuration-options">base configuration</a> above.</p>
+<pre class="prettyprint source lang-js"><code>verticalPages: [
+  {
+    // Required, the label for this page
+    label: 'Home',
+    // Required, the link to this page
+    url: './index.html',
+    // Optional*, the verticalKey, *required for vertical pages (must omit this property for universal)
+    verticalKey: 'locations',
+    // Optional, the icon name to use in no results, defaults to no icon
+    icon: 'star',
+    // Optional, the URL icon to use in no results, defaults to no icon
+    iconUrl: '',
+    // Optional, if true, will show this page first in the Navigation Component, defaults to false
+    isFirst: false,
+    // Optional, if true, will add a special styling to this page in the Navigation Component, defaults to false
+    isActive: false,
+    // Optional, if true, hide this tab in the Navigation Component, defaults to false
+    hideInNavigation: false,
+  },
+  ...
+]
+</code></pre>
+<h2>Search Configuration</h2>
+<p>Below is a list of configuration options related to search, used in the <a href="#answersinit-configuration-options">base configuration</a> above.</p>
+<pre class="prettyprint source lang-js"><code>    search: {
+      // Optional, the vertical key to use for searches
+      verticalKey: 'verticalKey',
+      // Optional, the number of results to display per page, defaults to 20. Maximum is 50.
+      limit: '20',
+      // Optional, Vertical Pages only, a default search to use on page load when the user hasn't provided a query
+      defaultInitialSearch: 'What is Yext Answers?',
+    },
+</code></pre>
+<h2>Vertical No Results Configuration</h2>
+<p>Below is a list of configuration options related to no results on Vertical Pages, used in the <a href="#answersinit-configuration-options">base configuration</a> above.</p>
+<pre class="prettyprint source lang-js"><code>    noResults: {
+      // Optional, whether to display all results for the Vertical when a query has no results, defaults to false
+      displayAllResults: false,
+      // Optional, a custom template for the no results card
+      template: '',
+    },
+</code></pre>
+<h2>onVerticalSearch Configuration</h2>
+<p>The onVerticalSearch Configuration is a function, used in the <a href="#answersinit-configuration-options">base configuration</a> above.</p>
+<p>It allows you to send an analytics event each time a search is run on a Vertical page. This function should take in one parameter, <code>searchParams</code>, which contains information about the search, and return the desired analytics event.</p>
+<p>Like all Answers Javascript API Library analytics, this will only work if there is a businessId in the ANSWERS.init.</p>
+<p>The search information exposed in <code>searchParams</code> is shown below.</p>
+<pre class="prettyprint source lang-js"><code>function (searchParams) => {
+    /**
+     * Vertical key used for the search.
+     * @type {string}
+     */
+    const verticalKey = searchParams.verticalKey;
+
+    /**
+     * The string being searched for.
+     * @type {string}
+     */
+    const queryString = searchParams.queryString;
+
+    /**
+     * The total number of results found.
+     * @type {number}
+     */
+    const resultsCount = searchParams.resultsCount;
+
+    /**
+     * Either 'normal' or 'no-results'.
+     * @type {string}
+     */
+    const resultsContext = searchParams.resultsContext;
+
+    let analyticsEvent = new ANSWERS.AnalyticsEvent('ANALYTICS_EVENT_TYPE');
+    analyticsEvent.addOptions({
+      label: 'Sample analytics event',
+      searcher: 'VERTICAL',
+      query: queryString,
+      resultsCount: resultsCount,
+      resultsContext: resultsContext,
+    });
+    return analyticsEvent;
+  },
+}),
+</code></pre>
+<h2>onUniversalSearch Configuration</h2>
+<p>The onUniversalSearch Configuration is a function, used in the <a href="#answersinit-configuration-options">base configuration</a> above.</p>
+<p>It allows you to send an analytics event each time a search is run
+on a Universal page. This function should take in one parameter, <code>searchParams</code>, which contains information about the
+search, and return the desired analytics event.</p>
+<p>Like all Answers Javascript API Library analytics, this will only work if there is a businessId in the ANSWERS.init.</p>
+<p>The search information exposed in <code>searchParams</code> is shown below.</p>
+<pre class="prettyprint source lang-js"><code>function (searchParams) => {
+    /**
+     * The string being searched for.
+     * @type {string}
+     */
+    const queryString = searchParams.queryString;
+
+    /**
+     * The total number of results found.
+     * @type {number}
+     */
+    const sectionsCount = searchParams.sectionsCount;
+
+    /**
+     * A map containing entries of the form:
+     * { totalResultsCount: 150, displayedResultsCount: 10}
+     * for each returned vertical. The totalResultsCount indicates how many results
+     * are present in the vertical. The displayResultsCount indicates how many of
+     * those results are actually displayed.
+     * @type {Object&lt;string,Object>}
+     */
+    const resultsCountByVertical = searchParams.resultsCountByVertical;
+
+    let analyticsEvent = new ANSWERS.AnalyticsEvent('ANALYTICS_EVENT_TYPE');
+    analyticsEvent.addOptions({
+      type: 'ANALYTICS_EVENT_TYPE',
+      label: 'Sample analytics event',
+      searcher: 'UNIVERSAL',
+      query: queryString
+      sectionsCount: sectionsCount,
+    });
+    return analyticsEvent;
+  },
+}),
+</code></pre>
 <h1>Component Usage</h1>
 <p>The Answers Component Library exposes an easy to use interface for adding and customizing various types of UI components on your page.</p>
-<p>Every component requires a containing HTML element.</p>
+<h2>What is a Component?</h2>
+<p>At a high level, components are the individual pieces of an Answers page. The Answers Javascript API Library comes with many types of components. Each component is an independent, reusable piece of code. A component fills an HTML element container that the implementer provides on the page. Components are updated from their config, the config from the ANSWERS.init, and potentially an API response.</p>
+<p>Each type of Component has its own custom configurations. Additionally, all components share the base configuration options defined above. We will provide a brief description below of what each component does, along with describing how it can be configured.</p>
 <h2>Base Component Configuration</h2>
 <p>Every component has the same base configuration options.</p>
-<table>
-<thead>
-<tr>
-<th>option</th>
-<th>type</th>
-<th>description</th>
-<th>required</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>name</td>
-<td>string</td>
-<td>a unique name, if using multiple components of the same type</td>
-<td>optional</td>
-</tr>
-<tr>
-<td>container</td>
-<td>string</td>
-<td>the CSS selector to append the component.</td>
-<td>required</td>
-</tr>
-<tr>
-<td>class</td>
-<td>string</td>
-<td>a custom class to apply to the component</td>
-<td>not required</td>
-</tr>
-<tr>
-<td>template</td>
-<td>string</td>
-<td>override internal handlebars template</td>
-<td>not required</td>
-</tr>
-<tr>
-<td>render</td>
-<td>function</td>
-<td>override render function. data provided</td>
-<td>not required</td>
-</tr>
-<tr>
-<td>transformData</td>
-<td>function</td>
-<td>A hook for transforming data before it gets sent to render</td>
-<td>not required</td>
-</tr>
-<tr>
-<td>onMount</td>
-<td>function</td>
-<td>invoked when the HTML is mounted to the DOM</td>
-<td>not required</td>
-</tr>
-</tbody>
-</table>
-<h2>Adding a Component</h2>
+<pre class="prettyprint source lang-js"><code>  {
+    // Required, the selector for the container element where the component will be injected
+    container: 'container',
+    // Optional, a unique name for the component
+    name: 'name',
+    // Optional, an additional, custom HTML classname for the component. The component will also 
+    // have a classname of 'yxt-Answers-component' applied.
+    class: 'class',
+    // Optional, handlebars template or HTML to override built-in handlebars template for the component
+    template: 'template',
+    // Optional, override render function
+    render: function(data) {},
+    // Optional, a hook for transforming data before it gets sent to render
+    transformData: function(data) {},
+    // Optional, invoked when the HTML is mounted to the DOM, this will not override any built-in onMount function for a component
+    onMount: function(data) {},
+    // Optional, invoked when the HTML is mounted to the DOM, this will override any built-in onMount function for a component
+    onMountOverride: function(data) {},
+    // Optional, additional properties to send with every analytics event
+    analyticsOptions: {},
+  }
+</code></pre>
+<h2>Adding a Component to Your Page</h2>
 <p>Adding a component to your page is super easy!
-You can add many different <a href="#types-of-components">types</a> of components to your page.
+You can add many different <a href="#types-of-built-in-components">types</a> of components to your page.
 Each component supports the base configuration options above, as well as their own unique configurations.</p>
 <p>To start, every component requires an HTML container.</p>
 <pre class="prettyprint source lang-html"><code>&lt;div class=&quot;search-container&quot;>&lt;/div>
 </code></pre>
-<p>Then, you can add a component to your page through the ANSWERS add interface.</p>
-<p>This is an example of the <code>SearchBar</code>. See <a href="#types-of-components">Types of Components</a> below.</p>
+<p>Then, you can add a component to your page through the ANSWERS add interface. You need to call <code>addComponent</code> from <code>onReady</code>.</p>
+<p>This is an example of the <code>SearchBar</code>. See <a href="#types-of-built-in-components">Types of Built-in Components</a> below.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
+  container: '.search-container'
+})
+</code></pre>
+<h2>Removing Components</h2>
+<p>If you'd like to remove a component and all of its children, you can do it. Simply <code>ANSWERS.removeComponent(&lt;component name&gt;)</code>:</p>
 <pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
   container: '.search-container',
-  // -- other options --
+  name: 'MySearchBar'
 })
-</code></pre>
-<h2>Using a Custom Template</h2>
-<p>All component templates are written using handlebars.</p>
-<p>It's easy to override these templates with your own templates.
-Keep in mind, that you must provide valid handlebars syntax here.</p>
-<pre class="prettyprint source lang-js"><code>// Use handlebars syntax to create a template string
-let customTemplate = `&lt;div class=&quot;my-search&quot;>{{title}}&lt;/div>`
 
-ANSWERS.addComponent('SearchBar', {
-  container: '.search-container',
-  template: customTemplate
+ANSWERS.removeComponent('MySearchBar');
+</code></pre>
+<h1>Types of Built-in Components</h1>
+<h2>SearchBar Component</h2>
+<p>The SearchBar component is the main entry point for search querying. It provides the input box, where the user
+types their query, as well as the autocomplete behavior.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;search-query-container&quot;>&lt;/div>
+</code></pre>
+<p>If the <code>verticalKey</code> config option is omitted, the SearchBar will perform Universal searches. Universal
+searches return results across multiple Verticals; Vertical searches search within one Vertical. Additionally, Universal search and Vertical search provide a different way of auto complete.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.search-query-container',
+  // Required* for Vertical pages, omit for Universal pages
+  verticalKey: '&lt;VERTICAL_KEY>',
+  // Optional, title is not present by default
+  title: 'Search my Brand',
+  // Optional, the initial query string to use for the input box
+  query: 'query',
+  // Optional, defaults to 'Conduct a search'
+  labelText: 'What are you looking for?',
+  // Optional, used for labeling the submit button, also provided to the template
+  submitText: 'Submit',
+  // Optional, used for labeling the clear button, also provided to the template
+  clearText: 'Clear',
+  // Optional, used to specify a different built-in icon for the submit button. Defaults to Animated Magnifying glass when CSS is included.
+  submitIcon: 'iconName',
+  // Optional, a url for a custom icon for the submit button. Defaults to Animated Magnifying glass when CSS is included.
+  customIconUrl: 'path/to/icon',
+  // Optional, the query text to show as the first item for auto complete
+  promptHeader: 'Header',
+  // Optional, no default
+  placeholderText: 'Start typing...',
+  // Optional, auto focuses the search bar. Defaults to false
+  autoFocus: false,
+  // Optional, opens the autocomplete suggestions on page load. Defaults to false. Requires autoFocus to be set to true
+  autocompleteOnLoad: false,
+  // Optional, allows a user to conduct an empty search. Should be set to true if the defaultInitialSearch is &quot;&quot;.
+  allowEmptySearch: false,
+  // Optional, defaults to 300ms (0.3 seconds)
+  searchCooldown: 2000,
+  // Optional, asks the user for their geolocation when &quot;near me&quot; intent is detected
+  promptForLocation: true,
+  // Optional, displays an &quot;x&quot; button to clear the current query when true
+  clearButton: true,
+  // Optional, redirect search query to url
+  redirectUrl: 'path/to/url',
+  // Optional, target frame for the redirect url, defaults to current frame. Expects a valid target: &quot;_blank&quot;, &quot;_self&quot;, &quot;_parent&quot;, &quot;_top&quot; or the name of a frame
+  redirectUrlTarget: '_self',
+  // Optional, defaults to native form node within container
+  formSelector: 'form',
+  // Optional, defaults to true. When true, a form is used as the query submission context.
+  // Note that WCAG compliance is not guaranteed if a form is not used as the context.
+  useForm: 'true',
+  // Optional, the input element used for searching and wires up the keyboard interaction
+  inputEl: '.js-yext-query',
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 1 second.
+    timeout: 1000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: &quot;We are unable to determine your location&quot;
+  },
+  // Optional, functions invoked when certain events occur
+  customHooks: {
+    // Optional, a callback invoked when the clear search button is clicked
+    onClearSearch: function() {},
+    // Optional, a function invoked when a search is conducted. The search terms are passed in as a string
+    onConductSearch: function(searchTerms) {}
+  },
+  // Optional, options to pass to the autocomplete component
+  autocomplete: {
+    // Optional, boolean used to hide the autocomplete when the search input is empty (even if the
+    // input is focused). Defaults to false.
+    shouldHideOnEmptySearch: false,
+    // Optional, callback invoked when the autocomplete component changes from open to closed.
+    onClose: function() {},
+    // Optional, callback invoked when the autocomplete component changes from closed to open.
+    onOpen: function() {},
+  }
 })
 </code></pre>
+<h2>Direct Answer Component</h2>
+<p>This component is for Universal pages only.</p>
+<p>The Direct Answer Component will render the BEST result, if found, based on the query.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;direct-answer-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('DirectAnswer', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.direct-answer-container',
+  // Optional, a custom direct answer card to use, which is the default when there are no matching card overrides.
+  // See the Custom Direct Answer Card section below.
+  defaultCard: 'MyCustomDirectAnswerCard',
+  // Optional, the selector for the form used for submitting the feedback
+  formEl: '.js-directAnswer-feedback-form',
+  // Optional, the selector to bind ui interaction to for reporting
+  thumbsUpSelector: '.js-directAnswer-thumbUp',
+  // Optional, the selector to bind ui interaction to for reporting
+  thumbsDownSelector: '.js-directAnswer-thumbDown',
+  // Optional, the display text for the View Details click to action link
+  viewDetailsText: 'View Details',
+  // Optional, the screen reader text for positive feedback on the answer
+   positiveFeedbackSrText: 'This answered my question',
+  // Optional, the screen reader text for negative feedback on the answer
+   negativeFeedbackSrText: 'This did not answer my question',
+  // Optional, the footer text to display on submission of feedback
+  footerTextOnSubmission: 'Thank you for your feedback!',
+  // Optional, specify card types and overrides based on the direct answer type. The first matching cardOverride will be used, otherwise the cardType is used
+  types: {
+    'FEATURED_SNIPPET': {
+      cardType: &quot;documentsearch-standard&quot;,
+      cardOverrides: [
+        {
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          cardType: 'MenuItemDescriptionDirectAnswer'
+        },
+        {
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          fieldType: 'rich_text'
+          cardType: 'MenuItemDescriptionDirectAnswer'
+        }
+      ]
+    },
+    'FIELD_VALUE': {
+      cardType: &quot;allfields-standard&quot;,
+      cardOverrides: [
+        {
+          cardType: 'MenuItemDescriptionDirectAnswer',
+          fieldName: 'description',
+          entityType: 'ce_menuItem',
+          fieldType: 'rich_text'
+        }
+      ]
+    }
+  }
+  // DEPRECATED: use the types option instead
+  // Optional, card overrides that allow you to specify a specific direct answers card depending on the fieldName, entityType, and fieldType of the direct answer. The first matching card will be used, otherwise defaultCard will be used.
+  cardOverrides: [
+    {
+      cardType: 'MenuItemDescriptionDirectAnswer',
+      fieldName: 'description',
+      entityType: 'ce_menuItem',
+      fieldType: 'rich_text'
+    },
+    {
+      cardType: 'DeliveryHoursDirectAnswer',
+      fieldName: 'c_deliveryHours'
+    },
+    {
+      cardType: 'PhoneDirectAnswer',
+      fieldType: 'phone'
+    }
+  ]
+})
+</code></pre>
+<h2>Creating a Custom Direct Answer Card</h2>
+<p>You can customize the look and behavior of your Direct Answer by creating a custom Direct Answer card.</p>
+<p>A custom Direct Answer card is given the same data as the built-in card.
+That data will look something like the below:</p>
+<pre class="prettyprint source lang-js"><code>{
+  type: &quot;FIELD_VALUE&quot;,
+  answer: {
+    entityName: &quot;Entity Name&quot;,
+    fieldName: &quot;Phone Number&quot;,
+    fieldApiName: &quot;mainPhone&quot;,
+    value: &quot;+11234567890&quot;,
+    fieldType: &quot;phone&quot; 
+  },
+  relatedItem: { 
+    verticalConfigId: 'people',
+    data: { 
+      id: &quot;Employee-2116&quot;,
+      type: &quot;ce_person&quot;,
+      fieldValues: {
+        description: &quot;This is the description field.&quot;,
+        name: &quot;First Last&quot;,
+        firstName: &quot;First&quot;,
+        lastName: &quot;Last&quot;,
+        mainPhone: &quot;+1234567890&quot;,
+      }
+    }
+  }
+}
+</code></pre>
+<p>A custom Direct Answer card needs a corresponding template.
+This can be added either inline by changing the component's constructor to:</p>
+<pre class="prettyprint source lang-js"><code>    constructor(config, systemConfig) {
+      super(config, systemConfig);
+      this.setTemplate(`&lt;div> your template here &lt;/div>`)
+    }
+</code></pre>
+<p>Or by including a custom template bundle, and adding:</p>
+<pre class="prettyprint source lang-js"><code>  static defaultTemplateName () {
+    return 'CustomDirectAnswerTemplate';
+  }
+</code></pre>
+<p>Where 'CustomDirectAnswerTemplate' is the name the template is registered under.</p>
+<p>We will use the following template for our example card.</p>
+<pre class="prettyprint source lang-hbs"><code>  &lt;div class=&quot;customDirectAnswer&quot;>
+    &lt;div class=&quot;customDirectAnswer-type&quot;>
+      {{type}}
+    &lt;/div>
+    &lt;div class=&quot;customDirectAnswer-value&quot;>
+      {{#each customValue}}
+      {{#if url}}
+        {{> valueLink }}
+      {{else}}
+        {{{this}}}
+      {{/if}}
+      {{/each}}
+    &lt;/div>
+    {{> feedback}}
+  &lt;/div>
+
+  {{#*inline 'feedback'}}
+  &lt;span class=&quot;customDirectAnswer-thumbsUpIcon js-customDirectAnswer-thumbsUpIcon&quot;
+    data-component=&quot;IconComponent&quot;
+    data-opts='{&quot;iconName&quot;: &quot;thumb&quot;}'
+  >&lt;/span>
+  &lt;span class=&quot;customDirectAnswer-thumbsDownIcon js-customDirectAnswer-thumbsDownIcon&quot;
+    data-component=&quot;IconComponent&quot;
+    data-opts='{&quot;iconName&quot;: &quot;thumb&quot;}'
+  >&lt;/span>
+  {{/inline}}
+
+  {{#*inline 'valueLink'}}
+  &lt;a class=&quot;customDirectAnswer-fieldValueLink&quot; href=&quot;{{{url}}}&quot;
+    {{#if @root/eventType}}data-eventtype=&quot;{{@root/eventType}}&quot;{{/if}}
+    {{#if @root/eventOptions}}data-eventoptions='{{{ json @root/eventOptions }}}'{{/if}}>
+    {{{displayText}}}
+  &lt;/a>
+  {{/inline}}
+</code></pre>
+<p>This specific example needs some css to flip the thumbs up icon the right way.</p>
+<pre class="prettyprint source lang-css"><code>  .customDirectAnswer-thumbsUpIcon svg {
+    transform: rotate(180deg);
+  }
+</code></pre>
+<p>This is the javascript class for our custom Direct Answer card.
+It applies custom formatting to the Direct Answer, registers analytics events
+to the thumbs up/down icons, and passes custom event options into the template.</p>
+<pre class="prettyprint source lang-js"><code>  class CustomDirectAnswerClass extends ANSWERS.Component {
+    constructor(config, systemConfig) {
+      // If you need to override the constructor, make sure to call super(config, systemConfig) first.
+      super(config, systemConfig);
+
+      // For simplicity's sake, we set this card's template using setTemplate(), as opposed to
+      // a custom template bundle.
+      this.setTemplate(`&lt;div> your template here &lt;/div>`)
+    }
+
+    /**
+     * setState() lets you pass variables directly into your template.
+     * Here, data is the directAnswer data from the query.
+     * Below, we pass through a custom direct answers value, customValue.
+     * @param {Object} data
+     * @returns {Object}
+     */ 
+    setState(data) {
+      const { type, answer, relatedItem } = data;
+      const associatedEntityId = data.relatedItem && data.relatedItem.data && data.relatedItem.data.id;
+      const verticalConfigId = data.relatedItem && data.relatedItem.verticalConfigId;
+      return super.setState({
+        ...data,
+        customValue: this.getCustomValue(answer),
+        eventType: 'CUSTOM_EVENT',
+        eventOptions: {
+          searcher: 'UNIVERSAL',
+          verticalConfigId: verticalConfigId,
+          entityId: associatedEntityId,
+        }
+      });
+    }
+
+    /**
+     * onMount() lets you register event listeners. Here, we register the thumbs up and thumbs
+     * down buttons to fire an analytics event on click.
+     */ 
+    onMount() {
+      const thumbsUpIcon = this._container.querySelector('.js-customDirectAnswer-thumbsUpIcon');
+      const thumbsDownIcon = this._container.querySelector('.js-customDirectAnswer-thumbsDownIcon');
+      thumbsUpIcon.addEventListener('click', () => this.reportQuality(true));
+      thumbsDownIcon.addEventListener('click', () => this.reportQuality(false));
+    }
+
+    /**
+     * reportQuality() sends an analytics event (either THUMBS_UP or THUMBS_DOWN).
+     * @param {boolean} isGood true if the answer is what you were looking for
+     */
+    reportQuality(isGood) {
+      const eventType = isGood === true ? 'THUMBS_UP' : 'THUMBS_DOWN';
+      const event = new ANSWERS.AnalyticsEvent(eventType).addOptions({
+        directAnswer: true
+      });
+      this.analyticsReporter.report(event);
+    }
+
+    /**
+     * Formats a Direct Answer value based on its fieldType.
+     * @param {Object} answer the answer property in the directAnswer model
+     * @returns {string}
+     */ 
+    formatValue(answer) {
+      const { fieldType, value } = answer;
+      switch (fieldType) {
+        case 'phone':
+          return {
+              url: 'http://myCustomWebsite.com/?mainPhone=' + value,
+              displayText: value,
+            };
+        case 'rich_text':
+          return ANSWERS.formatRichText(value);
+        case 'single_line_text':
+        case 'multi_line_text':
+        default:
+          return value;
+      }
+    }
+
+    /**
+     * Computes a custom Direct Answer. If answer.value is an array, this method
+     * formats every value in the array and returns it, otherwise it just formats the single
+     * given value.
+     * @param {Object} answer
+     * @returns {Array&lt;string>}
+     */ 
+    getCustomValue(answer) {
+      if (Array.isArray(answer.value)) {
+        return answer.value.map(value => this.formatValue(answer))
+      } else {
+        return [ this.formatValue(answer) ];
+      }
+    }
+
+    /**
+     * The name of your custom direct answer card. THIS is the value you will use in any config,
+     * such as defaultCard, when you want to specify this custom Direct Answer card.
+     * @returns {string}
+     */
+    static get type() {
+      return 'MyCustomDirectAnswerCard';
+    }
+  }
+
+  // Don't forget to register your Direct Answer card within the SDK. Otherwise the SDK won't recognize your card name!
+  ANSWERS.registerComponentType(CustomDirectAnswerClass);
+</code></pre>
+<h2>Universal Results Component</h2>
+<p>The Universal Results component will render the results of a query,
+across all configured verticals, with one section per vertical.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;universal-results-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.universal-results-container',
+  // Settings for the applied filters bar in the results header. These settings can be overriden in the
+  // &quot;config&quot; option below on a per-vertical basis.
+  appliedFilters: {
+    // If true, show any applied filters that were applied to the universal search. Defaults to true
+    show: true,
+    // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. &quot;Location: Virginia&quot; vs just &quot;Virginia&quot;. Defaults to false.
+    showFieldNames: false,
+    // If appliedFilters.show is true, this is list of filters that should not be displayed.
+    // By default, builtin.entityType will be hidden
+    hiddenFields: ['builtin.entityType'],
+    // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
+    resultsCountSeparator: '|',
+    // Whether to display the change filters link in universal results. Defaults to false.
+    showChangeFilters: false,
+    // The text for the change filters link. Defaults to 'change filters'.
+    changeFiltersText: 'change filters',
+    // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
+    delimiter: '|',
+    // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
+    labelText: 'Filters applied to this search:',
+  },
+  // Optional, configuration for each vertical's results
+  config: {
+    people: { // The verticalKey
+      card: {
+        // Configuration for the cards in this vertical, see Cards
+      },
+      // Optional: A custom handlebars template for this section
+      template: '&lt;div> Custom section template &lt;/div>',
+      // The title of the vertical
+      // Defaults to the vertical key, in this example 'people'
+      title: 'People',
+      // Icon to display to the left of the title. Must be one of our built-in icons, defaults to 'star'
+      icon: 'star',
+      // The url for both the viewMore link and the change-filters link. Defaults to '{{VERTICAL_KEY}}.html',
+      // in this case that is 'people.html'
+      url: 'people.html',
+      // Whether to display a view more link. Defaults to true
+      viewMore: true,
+      // The text for the view more link, if viewMore is true. Defaults to 'View More'
+      viewMoreLabel: 'View More!',
+      // Config for the applied filters bar in the results header.
+      appliedFilters: {
+        // Same as appliedFilters settings above. Settings specified here will override any top level settings.
+      },
+      // If true, display the count of results at the very top of the results. Defaults to false.
+      showResultCount: true,
+      // If true, display the total number of results. Defaults to true
+      // Optional, whether to use the AccordionResults component instead of VerticalResults for this vertical
+      useAccordion: false,
+      // Optional, whether to include a map with this vertical's results, defaults to false
+      includeMap: true,
+      // Optional*, if includeMap is true, this is required
+      mapConfig: {
+        // Required, either 'mapbox' or 'google', not case sensitive
+        mapProvider: 'google',
+        // Required, API key for the map provider
+        apiKey: '&lt;&lt;&lt; enter your api key here >>>',
+        // ... Optional, any other config for the Map Component, find more info in the section &quot;Map Component&quot;
+      },
+      // Optional, override the render function for each result in this vertical
+      renderItem: function(data) {},
+      // Optional, override the handlebars template for each item in this vertical
+      itemTemplate: `my item {{name}}`,
+      // DEPRECATED, please use viewMoreLabel instead. viewAllText is a synonym for viewMoreLabel, where viewMoreLabel takes precedence over viewAllText. Defaults to 'View More'.
+      viewAllText: 'View All Results For Vertical'
+    }
+  },
+  // Optional, override the render function for each item in the result list
+  renderItem: function(data) {},
+  // Optional, override the handlebars template for each item in the result list
+  itemTemplate: `my item {{name}}`,
+})
+</code></pre>
+<h2>Vertical Results Component</h2>
+<p>The Vertical Results component shares all the same configurations from Universal Results, but you don't need to specifiy a config or context. You may limit the number of search results returned, with a maximum of 50.</p>
+<p>You define all the options at the top level object.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;vertical-results-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('VerticalResults', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.vertical-results-container',
+  // Optional, function to give each result item custom rendering
+  renderItem: () => {},
+  // Optional, string to give custom template to result item
+  itemTemplate: `&lt;div> Custom template &lt;/div>`,
+  // Optional, set a max number of columns to display at the widest breakpoint. Possible values are 1, 2, 3 or 4, defaults to 1
+  maxNumberOfColumns: 1,
+  // Optional, a modifier that will be appended to a class on the results list like this `yxt-Results--{modifier}`
+  modifier: '',
+  // Optional, whether to hide the default results header that VerticalResults provides. Defaults to false.
+  hideResultsHeader: false,
+  // Optional, the card used to display each individual result, see the Cards section for more details,
+  card: {
+    // Optional, The type of card, built-in types are: 'Standard', 'Accordion', and 'Legacy'. Defaults to 'Standard'
+    cardType: 'Standard',
+    // Optional, see Data Mappings for more details
+    dataMappings: () => {},
+    // Optional, see Calls To Action for more details
+    callsToAction: () => []
+  },
+  // Optional, configuration for what to display when no results are found.
+  noResults: {
+    // Optional, used to specify a custom template for the no results card, defaults to a built-in template.
+    template: '&lt;div> &lt;em>No results found!&lt;/em> Try again? &lt;/div>',
+    // Optional, whether to display all results in the vertical when no results are found. Defaults to false, in which case only the no results card will be shown.
+    displayAllResults: false
+  },
+
+  /**
+   * NOTE: The config options below are DEPRECATED.
+   * They will still work as expected, and the defaults will still be applied,
+   * but future major versions of the SDK will remove them.
+   * We recommend setting hideResultsHeader to true, and using the VerticalResultsCount and AppliedFilters components instead.
+   */
+  // Optional, whether to display the total number of results, default true
+  showResultCount: true,
+  // Optional, a custom template for the results count. You can specify the variables resultsCountStart, resultsCountEnd, and resultsCount.
+  resultsCountTemplate: '&lt;div>{{resultsCountStart}} - {{resultsCountEnd}} of {{resultsCount}}&lt;/div>',
+  // Configuration for the applied filters bar in the header.
+  appliedFilters: {
+    // If true, show any applied filters that were applied to the vertical search. Defaults to true
+    show: true,
+    // If appliedFilters.show is true, whether to display the field name of an applied filter, e.g. &quot;Location: Virginia&quot; vs just &quot;Virginia&quot;. Defaults to false.
+    showFieldNames: false,
+    // If appliedFilters.show is true, this is list of filters that should not be displayed.
+    // By default, builtin.entityType will be hidden
+    hiddenFields: ['builtin.entityType'],
+    // The character that separates the count of results (e.g. “1-6”) from the applied filter bar. Defaults to '|'
+    resultsCountSeparator: '|',
+    // If the filters are shown, whether or not they should be removable buttons. Defaults to false.
+    removable: false,
+    // The character that separates each field (and its associated filters) within the applied filter bar. Defaults to '|'
+    delimiter: '|',
+    // The aria-label given to the applied filters bar. Defaults to 'Filters applied to this search:'.
+    labelText: 'Filters applied to this search:',
+    // The aria-label given to the removable filter buttons.
+    removableLabelText: 'Remove this filter'
+  }
+})
+</code></pre>
+<h2>Vertical Results Count Component</h2>
+<p>The results count component displays the current results count on a vertical page.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('VerticalResultsCount', {
+  container: '.results-count-container',
+  noResults: {
+    // Optional, whether the results count should be visible when displaying no results.
+    // Defaults to false.
+    visible: false
+  }
+});
+</code></pre>
+<h2>Cards</h2>
+<p>Cards are used in Universal/Vertical Results for configuring the UI for a result on a per-item basis.</p>
+<p>Cards take in a dataMappings attribute, which contains configuration for the card, and a callsToAction
+attribute, which contains config for any callToAction buttons in the card.</p>
+<p>callsToAction config is common throughout all cards, whereas different cards such as Standard vs BigImage
+have specialized configuration depending on the card. See <a href="#Calls-To-Action">Calls To Action</a></p>
+<p>There are three built-in cards, the <a href="#Standard-Card">Standard Card</a>, the <a href="#Accordion-Card">Accordion Card</a>
+and <a href="#Legacy-Card">Legacy Card</a>.</p>
+<h2>Calls To Action</h2>
+<p>callsToActions are specified as either an array of CTA configs, or a function that returns
+an array of CTA configs. An array of CTA configs is an object of either static config options
+or functions that return the desired config option.</p>
+<p>Examples are detailed below.</p>
+<p>Note: A CTA without both a label and icon will not be rendered.</p>
+<ol>
+<li>an array of static CTA config objects</li>
+</ol>
+<pre class="prettyprint source lang-js"><code>const callsToAction = [{
+  // Label below the CTA icon, default null
+  label: 'cta label',
+  // Icon name for the CTA that is one of the built-in icons, defaults to undefined (no icon). If your icon
+  // is not recognized it will default to 'star'.
+  icon: 'star',
+  // URL to a custom icon for the cta. This takes priority over icon if both are present, default is
+  // no icon url.
+  iconUrl: 'https://urltomyicon.com/customicon.gif',
+  // Click through url for the icon and label
+  // Note, a protocol like https:// is required here.
+  url: 'https://yext.com',
+  // Analytics event that should fire, defaults to 'CTA_CLICK'. Other events outlined in the Analytics section.
+  analytics: 'CTA_CLICK',
+  // The target attribute for the CTA link, defaults to '_blank'. To open in a new window use '_blank'
+  target: '_blank',
+  // The eventOptions needed for the event to fire. Either a valid json string, an object, or a function that
+  // takes in the result data response.
+  // By default, if no event options are specified the SDK will try to add verticalKey, entityId, and searcher options
+  // to the analytics event.
+  eventOptions: result => {
+    return {
+      // The vertical key for the CTA. If unspecified, this defaults to the vertical key this cta is a part of
+      verticalKey: 'people',
+      // The entity id of the result this cta is a part of, defaults to the entityId field in Knowledge Graph
+      entityId: result.id,
+      // If the CTA is inside a vertical search, defaults to the value &quot;VERTICAL&quot;,
+      // if is inside a universal search, defaults to the value &quot;UNIVERSAL&quot;
+      searcher: 'VERTICAL'
+    };
+  }
+}]
+</code></pre>
+<ol start="2">
+<li>as a function that returns a cta config object.
+NOTE: we do not allow multiple nested functions, to avoid messy user configurations.</li>
+</ol>
+<pre class="prettyprint source lang-js"><code>const callsToAction = item => [{
+  label: item._raw.name,
+  url: 'https://yext.com',
+  analyticsEventType: 'CTA_CLICK',
+  target: '_blank',
+  icon: 'briefcase',
+  eventOptions: `{ &quot;verticalKey&quot;: &quot;credit-cards&quot;, &quot;entityId&quot;: &quot;${item._raw.id}&quot;, &quot;searcher&quot;:&quot;UNIVERSAL&quot;, &quot;ctaLabel&quot;: &quot;cards&quot;}`
+}, {
+  label: 'call now',
+  url: 'https://maps.google.com',
+  analyticsEventType: 'CTA_CLICK',
+  target: '_blank',
+  icon: 'phone',
+  eventOptions: `{ &quot;verticalKey&quot;: &quot;credit-cards&quot;, &quot;entityId&quot;: &quot;${item._raw.id}&quot;, &quot;searcher&quot;: &quot;UNIVERSAL&quot;, &quot;ctaLabel&quot;: &quot;cards&quot;}`
+}]
+</code></pre>
+<ol start="3">
+<li>Each individual field in a CTA config can also be a function that operates on the result item.</li>
+</ol>
+<pre class="prettyprint source lang-js"><code>const callsToAction = item => [{
+  label: item => item._raw.name,
+  url: 'https://yext.com',
+  analyticsEventType: 'CTA_CLICK',
+  target: '_self',
+  icon: 'briefcase',
+  eventOptions: `{ &quot;verticalKey&quot;: &quot;credit-cards&quot;, &quot;entityId&quot;: &quot;${item._raw.id}&quot;, &quot;searcher&quot;: &quot;UNIVERSAL&quot;, &quot;ctaLabel&quot;: &quot;cards&quot;}`
+}]
+</code></pre>
+<p>callsToActions can then be included in a card object like so:</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('VerticalResults', {
+  /* ...other vertical results config... */
+  card: {
+    /* ...other card config...*/
+    callsToAction: item => [{
+      label: item => item._raw.name,
+      url: 'https://yext.com',
+    }]
+  }
+  /* ...other vertical results config... */
+})
+</code></pre>
+<h2>Data Mappings</h2>
+<p>The dataMappings config option define how a card's attributes, such as title and details, will be rendered.
+They can be configured either through a function that returns a dataMappings object
+or a static dataMappings object.</p>
+<p>Each attribute of a dataMappings object is also either a function or a static value.</p>
+<p>Below is an example of dataMappings as function.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('VerticalResults', {
+  /* ...other vertical results config... */
+  card: {
+    /* ...other card config...*/
+    dataMappings: item => ({
+      title: item.name,
+      subtitle: `Department: ${item.name} `,
+      details: item.description,
+      image: item.headshot ? item.headshot.url : '',
+      url: 'https://yext.com',
+      showMoreLimit: 500,
+      showMoreText: &quot;show more&quot;,
+      showLessText: &quot;put it back&quot;,
+      target: '_blank'
+    })
+  }
+  /* ...other vertical results config... */
+})
+</code></pre>
+<p>And below is an example of dataMappings as an object with functions inside it.
+You can use both static attributes and function attributes together.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('VerticalResults', {
+  /* ...other vertical results config... */
+  card: {
+    /* ...other card config...*/
+    dataMappings: {
+      title: item => item.name,
+      subtitle: item => `Department: ${item.name} `,
+      details: item => item.description,
+      image: item => item.headshot ? item.headshot.url : '',
+      url: 'https://yext.com',
+      showMoreLimit: 500,
+      showMoreText: 'show more',
+      showLessText: 'put it back',
+      target: '_blank'
+    }
+  }
+  /* ...other vertical results config... */
+})
+</code></pre>
+<h2>Standard Card</h2>
+<p>The data mappings for a Standard Card has these attributes</p>
+<pre class="prettyprint source lang-js"><code>const dataMappings = item => {
+  return {
+    // Title for the card, defaults to the name of the entity
+    title: item.title,
+    // Subtitle, defaults to null
+    subtitle: `Department: ${item.name} `,
+    // Details, defaults to the entity's description
+    details: item.description,
+    // Image to display, defaults to null
+    image: item.headshot ? item.headshot.url : '',
+    // Url for the title/subtitle, defaults to the entity's website url
+    // Note, a protocol like https://yext.com is required, as opposed to just yext.com
+    url: item.link || item.website,
+    // Character limit to hide remaining details and display a show more button, defaults to no limit.
+    showMoreLimit: 350,
+    // Text for show more button, defaults to 'Show More'
+    showMoreText: 'show more',
+    // Text for show less button, defaults to 'Show Less'
+    showLessText: 'put it back',
+    // The target attribute for the title link, defaults to '_self'. To open in a new window use '_blank'
+    target: '_blank',
+    // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
+    // defaults to false
+    showOrdinal: false,
+    // A tag to display on top of an image, always overlays the image, default no tag
+    tagLabel: 'On Sale!'
+  };
+}
+</code></pre>
+<h2>Accordion Card</h2>
+<p>The data mappings for an Accordion Card has these attributes</p>
+<pre class="prettyprint source lang-js"><code>const dataMappings = item => {
+  return {
+    // Title for the card, defaults to the name of the entity
+    title: item.title,
+    // Subtitle, defaults to null
+    subtitle: `Department: ${item.name} `,
+    // Details, defaults to the entity's description
+    details: item.description,
+    // Whether the first Accordion Card shown in vertical/universal results should be open on page load, defaults to false
+    expanded: false
+  };
+}
+</code></pre>
+<h2>Legacy Card</h2>
+<p>The Legacy Card is very similar to the Standard Card, but with the legacy DOM structure and class names
+from before v0.13.0. New users should not use the Legacy Card; instead, use the Standard Card. Features
+added after v0.13.0 may not work with the Legacy Card.</p>
+<p>The data mappings for a legacy card has these attributes</p>
+<pre class="prettyprint source lang-js"><code>const dataMappings = item => {
+  return {
+    // Title for the card, defaults to the name of the entity
+    title: item.title,
+    // Subtitle, defaults to null
+    subtitle: `Department: ${item.name} `,
+    // Details, defaults to the entity's description
+    details: item.description,
+    // Image to display, defaults to null
+    image: item.headshot ? item.headshot.url : '',
+    // Url for the title/subtitle, defaults to the entity's website url
+    url: item.link || item.website,
+    // The target attribute for the title link, defaults to '_self'. To open in a new window use '_blank'
+    target: '_blank',
+    // Whether to show the ordinal of this card in the results, i.e. first card is 1 second card is 2,
+    // defaults to false
+    showOrdinal: false
+  };
+}
+</code></pre>
+<h2>Pagination Component</h2>
+<p>This component is only for Vertical pages.</p>
+<p>The Pagination component allows users to page through vertical search results.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;pagination-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('Pagination', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.pagination-component',
+  // Required*, the vertical for pagination, *if omitted, will fall back to the search base config
+  verticalKey: 'verticalKey',
+  // Optional, the maximum number of pages visible to non-mobile users. Defaults to 1.
+  maxVisiblePagesDesktop: 1,
+  // Optional, the maximum number of pages visible to mobile users. Defaults to 1.
+  maxVisiblePagesMobile: 1,
+  // Optional, ensure that the page numbers for first and last page are always shown. Not recommended to use with showFirstAndLastButton. Defaults to false.
+  pinFirstAndLastPage: false,
+  // Optional, display double-arrows allowing users to jump to the first and last page of results. Defaults to true.
+  showFirstAndLastButton: true,
+  // Optional, label for a page of results. Defaults to 'Page'.
+  pageLabel: 'Page',
+  // Optional, configuration for the pagination behavior when a query returns no results
+  noResults: {
+    // Optional, whether pagination should be visible when displaying no results.
+    // Defaults to false.
+    visible: false
+  },
+  // Function invoked when a user clicks to change pages. By default, scrolls the user to the top of the page.
+  onPaginate: (newPageNumber, oldPageNumber, totalPages) => {},
+  // DEPRECATED, please use showFirstAndLastButton instead.
+  // Display a double arrow allowing users to jump to the first page of results. Defaults to showFirstAndLastButton.
+  showFirst: true,
+  // DEPRECATED, please use showFirstAndLastButton instead.
+  // Display a double arrow allowing users to jump to the last page of results. Defaults to showFirstAndLastButton.
+  showLast: true,
+});
+</code></pre>
+<h2>FilterBox Component</h2>
+<p>This component is only for Vertical pages.</p>
+<p>The FilterBox component shows a list of filters to apply to a search.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filters-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterBox', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.filters-container',
+  // Required, list of filter component configurations
+  filters: [
+    {
+      type: 'FilterOptions',
+      control: 'multioption',
+      options: [
+        {
+          label: 'Open Now',
+          field: 'c_openNow',
+          value: true
+        },
+        {
+          label: 'Dog Friendly',
+          field: 'c_dogFriendly',
+          value: true
+        },
+        {
+          label: 'Megastores',
+          field: 'c_storeType',
+          value: 'Megastore'
+        }
+      ]
+    }
+  ],
+  // Required, the vertical key for the search, default null
+  verticalKey: 'verticalKey',
+  // Optional, title to display above the filter
+  title: 'Filters',
+  // Optional, show number of results for each filter
+  showCount: true,
+  // Optional, execute a new search whenever a filter selection changes. If true, the Apply and Reset buttons will not display
+  searchOnChange: false,
+  // Optional, show a reset button per filter group, this will only display if searchOnChange is false
+  resetFilter: false,
+  // Optional, the label to use for the reset button above, this will only display if searchOnChange is false
+  resetFilterLabel: 'reset',
+  // Optional, show a reset-all button for the filter control. Defaults to displaying a reset button if searchOnChange is false.
+  resetFilters: true,
+  // Optional, the label to use for the reset-all button above, this will only display if resetFilters is true.
+  resetFiltersLabel: 'reset-all',
+  // Optional, allow collapsing excess filter options after a limit
+  showMore: true,
+  // Optional, the max number of filter to show before collapsing extras
+  showMoreLimit: 5,
+  // Optional, the label to show for displaying more filter
+  showMoreLabel: 'show more',
+  // Optional, the label to show for displaying less filter
+  showLessLabel: 'show less',
+  // Optional, allow expanding and collapsing entire groups of filters
+  expand: true,
+  // Optional, show the number of applied filter when a group is collapsed
+  showNumberApplied: true,
+  // Optional, the label to show on the apply button, this will only display if searchOnChange is false
+  applyLabel: 'apply',
+  // Optional, whether or not this filterbox contains dynamic filters, default false
+  isDynamic: true
+});
+</code></pre>
+<h2>Facets Component</h2>
+<p>This component is only for Vertical pages.</p>
+<p>The Facets component displays filters relevant to the current search, configured on the server, automatically. The Facets component will be hidden when a query returns no results. The selected options in a facets component will float to the top.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;facets-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('Facets', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.facets-container',
+  // Required
+  verticalKey: '&lt;VERTICAL_KEY>',
+  // Optional, title to display above the facets
+  title: 'Filters',
+  // Optional, show number of results for each facet
+  showCount: true,
+  // Optional, execute a new search whenever a facet selection changes
+  searchOnChange: false,
+  // Optional, show a reset button per facet group
+  resetFacet: false,
+  // Optional, the label to use for the reset button above
+  resetFacetLabel: 'reset',
+  // Optional, show a reset-all button for the facets control. Defaults to showing a reset-all button if searchOnChange is false.
+  resetFacets: true,
+  // Optional, the label to use for the reset-all button above
+  resetFacetsLabel: 'reset-all',
+  // Optional, allow collapsing excess facet options after a limit
+  showMore: true,
+  // Optional, the max number of facets to show before collapsing extras
+  showMoreLimit: 5,
+  // Optional, the label to show for displaying more facets
+  showMoreLabel: 'show more',
+  // Optional, the label to show for displaying less facets
+  showLessLabel: 'show less',
+  // Optional, allow expanding and collapsing entire groups of facets
+  expand: true,
+  // Optional, show the number of applied facets when a group is collapsed
+  showNumberApplied: true,
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
+  // Optional, the form label text for the search input, defaults to 'Search for a filter option'
+  searchLabelText: 'Search for a filter option',
+  // Optional, a transform function which is applied to an array of facets
+  // See the &quot;Transforming Facets&quot; section below for more info
+  transformFacets: (facets, config => facets),
+  // DEPRECATED, please use transformFacets instead. This option is disabled if transformFacets is supplied
+  // Optional, field-specific overrides for a filter
+  fields: {
+    'c_customFieldName':  { // Field id to override e.g. c_customFieldName, builtin.location
+      // Optional, the placeholder text used for the filter option search input
+      placeholderText: 'Search here...',
+      // Optional, show a reset button per facet group
+      showReset: false,
+      // Optional, the label to use for the reset button above
+      resetLabel: 'reset',
+      // Optional, if true, display the filter option search input
+      searchable: false,
+      // Optional, the form label text for the search input, defaults to 'Search for a filter option'
+      searchLabelText: 'Search for a filter option',
+      // Optional, control type, singleoption or multioption
+      control: 'singleoption',
+      // Optional, override the field name for this facet
+      label: 'My custom field'
+      // Optional, allow collapsing excess facet options after a limit
+      showMore: true,
+      // Optional, the max number of facets to show before collapsing extras
+      showMoreLimit: 5,
+      // Optional, the label to show for displaying more facets
+      showMoreLabel: 'show more',
+      // Optional, the label to show for displaying less facets
+      showLessLabel: 'show less',
+      // Optional, allow expanding and collapsing entire groups of facets
+      expand: true,
+      // Optional, callback function for when a facet is changed
+      onChange: function() { console.log('Facet changed'); },
+      // Optional, the selector used for options in the template, defaults to '.js-yext-filter-option'
+      optionSelector: '.js-yext-filter-option',
+    }
+  },
+  // Optional, the label to show on the apply button
+  applyLabel: 'apply'
+});
+</code></pre>
+<h3>Transforming Facets</h3>
+<p>The <code>transformFacets</code> option of the Facets component allows facets data to be fully customized. The function takes in and returns an array of the answers-core DisplayableFacet which is described <a href="https://github.com/yext/answers-core/blob/master/docs/answers-core.displayablefacet.md">here</a>. The function also has access to the Facets config as the second parameter.</p>
+<p>Here's an example of using this option to customize a boolean facet.</p>
+<pre class="prettyprint source lang-js"><code>transformFacets: facets => {
+  return facets.map(facet => {
+    const options = facet.options.map(option => {
+      let displayName = option.displayName;
+      if (facet.fieldId === 'c_acceptingNewPatients') {
+        if (option.value === false) { displayName = &quot;Not Accepting Patients&quot;; }
+        if (option.value === true) { displayName = &quot;Accepting Patients&quot;; }
+      }
+      return Object.assign({}, option, { displayName });
+    });
+    return Object.assign({}, facet, { options });
+  });
+},
+</code></pre>
+<h2>FilterSearch Component</h2>
+<p>The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed, and the filter and query are stored in the url. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filter-search-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterSearch', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.filter-search-container',
+  // Required
+  verticalKey: '&lt;VERTICAL_KEY>',
+  // Optional, no default
+  placeholderText: 'Start typing...',
+  // Optional, if true, the selected filter is saved and used for the next search,
+  // but does not trigger a search itself. Defaults to false.
+  storeOnChange: true,
+  // Optional, defaults to native form node within container
+  formSelector: '.js-form',
+  // Optional, the input element used for searching and wires up the keyboard interaction
+  inputEl: '.js-query',
+  // Optional, provided to the template as a data point
+  title: 'title',
+  // Optional, the search text used for labeling the input box, also provided to template
+  searchText: 'What do you want to search',
+  // Optional, the query text to show as the first item for auto complete
+  promptHeader: 'Header',
+  // Optional, auto focuses the input box if set to true, default false
+  autoFocus: true,
+  // Optional, redirect search query to url
+  redirectUrl: 'path/to/url',
+  // Optional, the query displayed on load. Defaults to the query stored in the url (if any).
+  query: 'Green Ice Cream Flavor',
+  // Optional, the filter for filtersearch to apply on load, defaults to the filter stored in the url (if any).
+  // An example filter is shown below. For more information see the filter section of
+  // https://developer.yext.com/docs/api-reference/#operation/KnowledgeApiServer.listEntities
+  filter: {
+    c_iceCreamFlavors: {
+      $eq: 'pistachio'
+    }
+  },
+  // Optional, the search parameters for autocompletion
+  searchParameters: {
+    // List of fields to query for
+    fields: [{
+      // Field id to query for e.g. c_customFieldName, builtin.location
+      fieldId: 'builtin.location',
+      // Entity type api name e.g. healthcareProfessional, location, ce_person
+      entityTypeId: 'ce_person',
+    }]
+    // Optional, if true sections search results by search filter, default false
+    sectioned: false,
+  }
+})
+</code></pre>
+<h2>Filter Components</h2>
+<p>Filter components can be used in a FilterBox or on their own to affect a search.</p>
+<h3>FilterOptions</h3>
+<p>FilterOptions displays a set of filters with either checkboxes or radio buttons.
+As a user interacts with FilterOptions, information on which options are selected
+is stored in the url. Returning to that same url will load the page with those saved
+options already selected.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filter-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterOptions', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.filter-container',
+  // Required, control type: 'singleoption' or 'multioption'
+  control: 'singleoption',
+  // The type of options to filter by, either 'STATIC_FILTER' or 'RADIUS_FILTER'.
+  // Defaults to 'STATIC_FILTER'.
+  optionType: 'STATIC_FILTER',
+  // Required, list of options
+  options: [
+    /** Depends on the above optionType, either 'STATIC_FILTER' or 'RADIUS_FILTER', see below. **/
+  ],
+  // Optional, if true, the filter value is saved on change and sent with the next search. Defaults to true.
+  storeOnChange: true,
+  // Optional, the selector used for options in the template, defaults to '.js-yext-filter-option'
+  optionSelector: '.js-yext-filter-option',
+  // Optional, if true, show a reset button
+  showReset: false,
+  // Optional, the label to use for the reset button, defaults to 'reset'
+  resetLabel: 'reset',
+  // Optional, allow collapsing excess filter options after a limit, defaults to true
+  showMore: true,
+  // Optional, the max number of filter options to show before collapsing extras, defaults to 5
+  showMoreLimit: 5,
+  // Optional, the label to show for displaying more options, defaults to 'show more'
+  showMoreLabel: 'show more',
+  // Optional, the label to show for displaying less options, defaults to 'show less'
+  showLessLabel: 'show less',
+  // Optional, allow expanding and collapsing the filter, defaults to true
+  showExpand: true,
+  // Optional, show the number of applied options when a group is collapsed, defaults to true
+  showNumberApplied: true,
+  // Optional, the callback function to call when changed
+  onChange: function() {},
+  // Optional, the label to be used in the legend, defaults to 'Filters'
+  label: 'Filters',
+  // Optional, the placeholder text used for the filter option search input
+  placeholderText: 'Search here...',
+  // Optional, if true, display the filter option search input
+  searchable: false,
+  // Optional, the form label text for the search input, defaults to 'Search for a filter option'
+  searchLabelText: 'Search for a filter option',
+});
+</code></pre>
+<p>The options config varies depending on whether the optionType is 'STATIC_FILTER' or 'RADIUS_FILTER'.
+A STATIC_FILTER allows you to filter on a specified field, while a RADIUS_FILTER allows you to filter
+results based on their distance from the user.</p>
+<h5>STATIC_FILTER</h5>
+<pre class="prettyprint source lang-js"><code>{
+  options: [
+    {
+      // Required, the api field to filter on, configured on the Yext platform.
+      field: 'c_openNow',
+      // Required, the value for the above field to filter by.
+      value: true,
+      // Optional, the label to show next to the filter option.
+      label: 'Open Now',
+      // Optional, whether this option will be selected on page load. Selected options stored in the url
+      // take priority over this. Defaults to false.
+      selected: false
+    },
+    {
+      field: 'c_dogFriendly',
+      value: true,
+      label: 'Dog Friendly',
+      selected: true
+    },
+    {
+      field: 'c_storeType',
+      value: 'Megastore',
+      label: 'Megastores'
+    }
+  ]
+}
+</code></pre>
+<h5>RADIUS_FILTER</h5>
+<pre class="prettyprint source lang-js"><code>{
+  options: [
+    {
+      // Required, the value of the radius to apply (in meters). If this value is 0, the SDK will not add explicit radius filtering to the request. The backend may still perform its own filtering depending on the query given.
+      value: 8046.72,
+      // Optional, the label to show next to the filter option.
+      label: '5 miles',
+      // Optional, whether this option will be selected on page load. Selected options stored in the url
+      // take priority over this. Defaults to false.
+      selected: false
+    },
+    {
+      value: 16093.4,
+      label: '10 miles',
+      selected: true
+    },
+    {
+      value: 40233.6,
+      label: '25 miles'
+    },
+    {
+      value: 80467.2,
+      label: '50 miles'
+    },
+    {
+      value: 0,
+      label: &quot;Do not filter by radius&quot;
+    }
+  ],
+}
+</code></pre>
+<h3>RangeFilter</h3>
+<p>Displays two numeric inputs for selecting a number range.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;range-filter-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('RangeFilter', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.range-filter-container',
+  // Required, the API name of the field to filter on
+  field: 'outdoorPoolCount',
+  // Optional, title to display for the range control, defaults to empty legend
+  title: 'Number of Outdoor Pools',
+  // Optional, the label to show next to the min value, defaults to no label
+  minLabel: 'At Least',
+  // Optional, the placeholder text for the min value, defaults to 'Min'
+  minPlaceholderText: 'Min',
+  // Optional, the label to show next to the max value, defaults to no label
+  maxLabel: 'Not More Than',
+  // Optional, the placeholder text for the max value, defaults to 'Max'
+  maxPlaceholderText: 'Max',
+  // Optional, the initial min value to show, defaults to 0. Set this to null to clear the value.
+  initialMin: 1,
+  // Optional, the initial max value to show, defaults to 10. Set this to null to clear the value.
+  initialMax: 5,
+  // Optional, the callback function to call when changed
+  onChange: function() {}
+});
+</code></pre>
+<h3>DateRangeFilter</h3>
+<p>Displays two date inputs for selecting a range of dates.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;date-range-filter-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('DateRangeFilter', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.date-range-filter-container',
+  // Required, the API name of the field to filter on
+  field: 'time.start',
+  // Optional, title to display for the range, defaults to empty legend
+  title: 'Event Start Date',
+  // Optional, the label to show next to the min date, defaults to no label
+  minLabel: 'Earliest',
+  // Optional, the label to show next to the max date, defaults to no label
+  maxLabel: 'Latest',
+  // Optional, the initial min date to show in yyyy-mm-dd format, defaults to today. Set this to null to clear the value.
+  initialMin: '2019-08-01',
+  // Optional, the initial max date to show in yyyy-mm-dd format, defaults to today. Set this to null to clear the value.
+  initialMax: '2019-09-01',
+  // Optional, whether to store the filter on change to input
+  storeOnChange: true,
+  // Optional, if true, this filter represents an exclusive range, rather than an inclusive one, defaults to false
+  isExclusive: false,
+  // Optional, the callback function to call when changed
+  onChange: function() {}
+});
+</code></pre>
+<h3>GeoLocationFilter</h3>
+<p>Displays a &quot;Use My Location&quot; button that filters results to a radius around the user's current position.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;geolocation-filter-container&quot;>&lt;/div>
+</code></pre>
+<p>For all optional config in the example, unless otherwise specified, the default is the example value.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('GeoLocationFilter', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.geolocation-filter-container',
+  // Optional, the vertical key to use
+  verticalKey: 'verticalKey',
+  // Optional, radius around the user, in miles, to find results, default 50
+  radius: 50,
+  // Optional, the text to show when enabled
+  enabledText: 'Disable My Location',
+  // Optional, the text to show ehn loading the user's location
+  loadingText: 'Loading',
+  // Optional, The label to show when unable to get the user's location
+  errorText: 'Unable To Use Location',
+  // Optional, CSS selector of the button
+  buttonSelector: '.js-yxt-GeoLocationFilter-button',
+  // Optional, Css selector of the query input
+  inputSelector: '.js-yxt-GeoLocationFilter-input',
+  // Optional, if true, triggers a search on each change to a filter, default false
+  searchOnChange: true,
+  // Optional, the icon url to show in the geo button
+  geoButtonIcon: 'path/to/url',
+  // Optional, the alt text to use with the geo button's icon
+  geoButtonIconAltText: 'Use My Location',
+  // Optional, the text to show in the geo button
+  geoButtonText: 'Use my location',
+  // Optional, Search parameters for the geolocation autocomplete
+  searchParameters: {
+    // List of fields to query for
+    fields: [{
+      // Field id to query for e.g. c_customFieldName, builtin.location
+      fieldId: 'builtin.location',
+      // Entity type api name e.g. healthcareProfessional, location, ce_person
+      entityTypeId: 'ce_person',
+      // Optional, if true sections search results by search filter, default false
+      sectioned: false,
+    }]
+  },
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 6 seconds.
+    timeout: 6000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: &quot;We are unable to determine your location&quot;
+  }
+});
+</code></pre>
+<h2>Applied Filters Component</h2>
+<p>The Applied Filters Component displays your currently applied filters as a row of text tags, labeled
+by filter display value. If the &quot;removable&quot; config option is set to true, these text tags will instead
+be &quot;removable filters&quot;, which, when clicked, will remove the clicked filter from the search.
+Only intended for vertical pages.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('AppliedFilters', {
+  container: '.applied-filters-container',
+  // Optional, The vertical key of your search. Defaults to the vertical key specified in the search config.
+  verticalKey: 'aVerticalKey',
+  // Optional, Whether to display the field name of each group of applied filters. e.g. &quot;Location: Virginia, New York&quot; vs just &quot;Virginia, New York&quot;. Defaults to false.
+  showFieldNames: false,
+  // Optional, This is list of filters that should not be displayed. Defaults to hiding ['builtin.entityType'].
+  hiddenFields: ['builtin.entityType'],
+  // Optional, Whether or not the displayed filters should be removable filters, or just simple text tags. Defaults to false (text tags).
+  removable: false,
+  // Optional, The character that separates each group of filters (grouped by field name). Defaults to '|'.
+  delimiter: '|',
+  // Optional, The aria-label given to the component. Defaults to 'Filters applied to this search:'.
+  labelText: 'Filters applied to this search:',
+  // Optional, The aria-label given to the removable filters. Defaults to 'Remove this filter'.
+  removableLabelText: 'Remove this filter'
+});
+</code></pre>
+<h2>Navigation Component</h2>
+<p>The Navigation Component adds a dynamic experience to your pages navigation experience.</p>
+<p>When using multiple vertical searches in a universal search, the navigation ordering will be automatically updated based on the search results. By default, tabs that do not fit in the container will go inside a dropdown menu.</p>
+<p>Vertical configurations should be provided the ANSWERS.init's <code>verticalPages</code> configuration. Find more info in the <a href="#vertical-pages-configuration">Vertical Pages Configuration</a> section.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;navigation-container&quot;>&lt;/nav>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('Navigation', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.navigation-container',
+  // Optional, controls if navigation shows a scroll bar or dropdown for mobile. Options are COLLAPSE and INNERSCROLL
+  mobileOverflowBehavior: 'COLLAPSE',
+  // Optional, the aria-label to set on the navigation, defaults to 'Search Page Navigation'
+  ariaLabel: 'Search Page Navigation',
+  // Optional, the label to display on the dropdown menu button when it overflows, defaults to 'More'
+  overflowLabel: 'More',
+  // Optional, name of the icon to show on the dropdown button instead when it overflows
+  overflowIcon: null,
+})
+</code></pre>
+<h2>QA Submission Component</h2>
+<p>The QA Submission component provides a form for submitting a QA question,
+when a search query is run.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;question-submission-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('QASubmission', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.question-submission-container',
+  // Required. Set this to the Entity ID of the organization entity in the Knowledge Graph
+  entityId: 123,
+  // Required. Defaults to ''
+  privacyPolicyUrl: 'https://mybiz.com/policy',
+  // Optional, defaults to native form node within container
+  formSelector: '.js-form',
+  // Optional, ;abel for name input
+  nameLabel: 'Name',
+  // Optional, label for email input
+  emailLabel: 'Email',
+  // Optional, label for question input
+  questionLabel: 'Question',
+  // Optional, title displayed for the form
+  sectionTitle: 'Ask a question',
+  // Optional, teaser displayed for the form, next to the title
+  teaser: 'Can\'t find what you’re looking for? Ask a question below.',
+  // Optional, description for the form
+  description: 'Enter your question and contact information, and we\'ll get back to you with a response shortly.'
+  // Optional, text before the privacy policy link
+  privacyPolicyText: 'By submitting my email address, I consent to being contacted via email at the address provided.',
+  // Optional, label for the privacy policy url
+  privacyPolicyUrlLabel: 'Learn more here.',
+  // Optional, error message displayed when the privacy policy is not selected
+  privacyPolicyErrorText: '* You must agree to the privacy policy to submit feedback.',
+  // Optional, error message displayed when an invalid email is not submitted
+  emailFormatErrorText: '* Please enter a valid email address.'
+  // Optional, placeholder displayed in all required fields
+  requiredInputPlaceholder: '(required)',
+  // Optional, confirmation displayed once a question is submitted
+  questionSubmissionConfirmationText: 'Thank you for your question!',
+  // Optional, label displayed on the button to submit a question
+  buttonLabel: 'Submit',
+  // Optional, set this to whether or not the form is expanded by default when a user arrives on the  page
+  expanded: true,
+  // Optional, error message displayed when there is an issue with the QA Submission request
+  networkErrorText: 'We\'re sorry, an error occurred.'
+})
+</code></pre>
+<h2>Spell Check Component</h2>
+<p>The spell check component shows spell check suggestions/autocorrect.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;spell-check-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SpellCheck', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.spell-check-container',
+  // Optional, the help text to display when suggesting a query
+  suggestionHelpText: 'Did you mean:',
+})
+</code></pre>
+<h2>Location Bias Component</h2>
+<p>The location bias component shows location that used for location bias and allow user to improve accuracy with HTML5 geolocation.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;location-bias-container&quot;>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('LocationBias', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.location-bias-container',
+  // Optional, the vertical key for the search, default null
+  verticalKey: 'verticalKey',
+  // Optional, the element used for updating location
+  updateLocationEl: '.js-locationBias-update-location',
+  // Optional, help text to inform someone their IP was used for location
+  ipAccuracyHelpText: 'based on your internet address',
+  // Optional, help text to inform someone their device was used for location
+  deviceAccuracyHelpText: 'based on your device',
+  // Optional, text used for the button to update location
+  updateLocationButtonText: 'Update your location',
+  // Optional, options to pass to the geolocation api, which is used to fetch the user's current location.
+  // https://developer.mozilla.org/en-US/docs/Web/API/PositionOptions
+  geolocationOptions: {
+    // Optional, whether to improve accuracy at the cost of response time and/or power consumption, defaults to false.
+    enableHighAccuracy: false,
+    // Optional, the maximum amount of time (in ms) a geolocation call is allowed to take before defaulting, defaults to 6 seconds.
+    timeout: 6000,
+    // Optional, the maximum amount of time (in ms) to cache a geolocation call, defaults to 5 minutes.
+    maximumAge: 300000,
+  },
+  // Optional, options for an alert when the geolocation call fails.
+  geolocationTimeoutAlert: {
+    // Optional, whether to display a window.alert() on the page, defaults to false.
+    enabled: false,
+    // Optional, the message in the alert. Defaults to the below
+    message: &quot;We are unable to determine your location&quot;
+  }
+})
+</code></pre>
+<h2>Sort Options Component</h2>
+<p>The sort options component displays a list of radio buttons that allows users to sort the results of a vertical search. When a query returns no results, the component will not be rendered on the page.
+Currently, there may be only one sort options component per page.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class='sort-options-container'>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>// note: showExpand and showNumberApplied options are explicitly not included:
+// sorting will always be exposed to the user if added.
+ANSWERS.addComponent('SortOptions', {
+  // Required, the selector for the container element where the component will be injected
+  container: '.sort-options-container',
+  // Optional: The label used for the “default” sort (aka sort the order provided by the config), defaults to 'Best Match'
+  defaultSortLabel: 'Best Match',
+  // Required: List of component configurations
+  options: [
+    {
+      // Required: Either FIELD, ENTITY_DISTANCE, or RELEVANCE
+      type: 'FIELD',
+      // Required only if type is FIELD, field name to sort by
+      field: 'c_popularity',
+      // Direction to sort by, either 'ASC' or 'DESC'
+      // Required only if type is FIELD
+      direction: 'ASC',
+      // Required: Label for the sort option's radio button
+      label: 'Popularity',
+    },
+    {
+      type: &quot;ENTITY_DISTANCE&quot;,
+      label: 'Distance'
+    },
+    {
+      type: 'RELEVANCE',
+      label: 'Relevance'
+    }
+  ],
+  // Required: the vertical key used
+  verticalKey: 'KM',
+  // Optional: the selector used for options in the template, defaults to '.yxt-SortOptions-optionSelector'
+  optionSelector: '.yxt-SortOptions-optionSelector',
+  // Optional: if true, triggers a resorts on each change to the sort options,
+  // if false the component also renders an apply button that applies the sort, defaults to false
+  searchOnChange: false,
+  // Optional: Show a reset button, defaults to false
+  showReset: false,
+  // Optional: The label to use for the reset button, defaults to 'reset'
+  resetLabel: 'reset',
+  // Optional: Allow collapsing excess filter options after a limit, defaults to true
+  // Note: screen readers will not read options hidden by this flag, without clicking show more first
+  showMore: true,
+  // Optional: The max number of filter options to show before collapsing extras, defaults to 5
+  showMoreLimit: 5,
+  // Optional: The label to show for displaying more options, defaults to 'Show more'
+  showMoreLabel: 'Show more',
+  // Optional: The label to show for displaying less options, defaults to 'Show less'
+  showLessLabel: 'Show less',
+  // Optional, the callback function to call when changed, defaults to function() => {}
+  // runs BEFORE search triggered by searchOnChange if searchOnChange is true
+  onChange: function() {},
+  // Optional, the label to be used in the legend, defaults to 'Sorting'
+  label: 'Sorting',
+  // Optional, the label to be used on the apply button
+  // only appears if searchOnChange is false, defaults to 'Apply'
+  applyLabel: 'Apply'
+});
+</code></pre>
+<h2>Map Component</h2>
+<p>The Map component displays a map with a pin for each result that has Yext display coordinates.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class='map-container'>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('Map', {
+  // Required. This is the class of the target HTML element the component will be mounted to
+  container: '.map-container',
+  // Required. Supported map providers include: `google` or `mapBox`, not case-sensitive
+  mapProvider: 'mapBox',
+  // Required*. The API Key used for interacting with the map provider; (*except for Google Maps if provided `clientId`)
+  apiKey: '',
+  // Optional, can be used for Google Maps in place of the API key
+  clientId: '',
+  // Optional, used to determine the language of the map. Defaults to the locale specified in the ANSWERS init.
+  // Refer to the section &quot;Supported Map Locales&quot; below for the list of supported locales.
+  locale: 'en',
+  // Optional, determines whether or not to collapse pins at the same lat/lng
+  collapsePins: false,
+  // Optional, the zoom level of the map, defaults to 14
+  zoom: 14,
+  // Optional, the default coordinates to display if there are no results returned used if showEmptyMap is set to true
+  defaultPosition: { lat: 37.0902, lng: -95.7129 },
+  // Optional, determines if an empty map should be shown when there are no results. Defaults to false.
+  showEmptyMap: false,
+  // Optional, callback to invoke when a pin is clicked. The clicked item(s) are passed to the callback
+  onPinClick: null,
+  // Optional, callback to invoke when a pin is hovered. The clicked item(s) are passed to the callback
+  onPinMouseOver: null,
+  // Optional, callback to invoke when a pin is no longer hovered after being hovered. The clicked item(s) are passed to the callback
+  onPinMouseOut: null,
+  // Optional, callback to invoke once the Javascript is loaded
+  onLoaded: function () {},
+  // Optional, configuration for the map's behavior when a query returns no results
+  noResults: {
+    // Optional, whether to display map pins for all possible results when no results are found. Defaults to false.
+    displayAllResults: false,
+    // Optional, whether to display the map when no results are found, taking priority over showEmptyMap. If unset, a map will be visible if showEmptyMap is true OR if displayAllResults is true and alternative results are returned.
+    visible: false
+  },
+  // Optional, the custom configuration override to use for the map markers, function
+  pin: function () {
+    return {
+      icon: {
+        anchor: null, // e.g. { x: 1, y: 1 }
+        svg: null,
+        url: null,
+        scaledSize: null // e.g. { w: 20, h: 20 }
+      },
+      labelType: 'numeric'
+    };
+  },
+};
+</code></pre>
+<h3>Supported Map Locales</h3>
+<p>When using MapBox (<code>mapBox</code>) as the <code>mapProvider</code>, the valid locale options
+are the ones listed here:</p>
+<ul>
+<li>Arabic: <code>ar</code></li>
+<li>Chinese: <code>zh</code></li>
+<li>English: <code>en</code></li>
+<li>French: <code>fr</code></li>
+<li>German: <code>de</code></li>
+<li>Japanese: <code>ja</code></li>
+<li>Korean: <code>ko</code></li>
+<li>Portuguese: <code>pt</code></li>
+<li>Russian: <code>ru</code></li>
+<li>Spanish: <code>es</code></li>
+</ul>
+<p>When using Google Maps (<code>google</code>) as the <code>mapProvider</code>, the valid locale options can be found <a href="https://developers.google.com/maps/faq#languagesupport">here</a>.</p>
+<h2>Icon Component</h2>
+<p>The Icon Component will typically be created by other components, but it can be used as a standalone component as well.</p>
+<pre class="prettyprint source lang-html"><code>&lt;div class='icon-container'>&lt;/div>
+</code></pre>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('IconComponent', {
+  // Required. This is the class of the target HTML element the component will be mounted to.
+  container: '.icon-container',
+  // Optional. Can be used to access an icon defined within the Answers system. See below for default icon names.
+  iconName: 'default',
+  // Optional. Sets the icon to reference an image URL. Overrides icon name.
+  iconUrl: '',
+  // Optional. Adds class names to the icon. Multiple classnames should be space-delimited.
+  classNames: '',
+});
+</code></pre>
+<p>The following is a list of names for the icons that are supported by default.</p>
+<ul>
+<li>briefcase</li>
+<li>calendar</li>
+<li>callout</li>
+<li>chevron</li>
+<li>close</li>
+<li>directions</li>
+<li>document</li>
+<li>elements</li>
+<li>email</li>
+<li>gear</li>
+<li>info</li>
+<li>kabob</li>
+<li>light_bulb</li>
+<li>link</li>
+<li>magnifying_glass</li>
+<li>mic</li>
+<li>office</li>
+<li>pantheon</li>
+<li>person</li>
+<li>phone</li>
+<li>pin</li>
+<li>receipt</li>
+<li>star</li>
+<li>support</li>
+<li>tag</li>
+<li>thumb</li>
+<li>window</li>
+<li>yext_animated_forward</li>
+<li>yext_animated_reverse</li>
+<li>yext</li>
+</ul>
+<h1>Customizing Components</h1>
 <h2>Using a Custom Renderer</h2>
 <p>If you want to use a use your own template language (e.g. soy, mustache, groovy, etc),
 you should NOT use the template argument. Instead, you can provide a custom render function to the component.</p>
@@ -256,6 +1931,27 @@ you should NOT use the template argument. Instead, you can provide a custom rend
     return `&lt;div class=&quot;my-search&quot;>${data.title}&lt;/div>`
   }
 })
+</code></pre>
+<h2>Custom Data Formatting</h2>
+<p>You can format specific entity fields using <code>fieldFormatters</code>.
+These formatters are applied before the <code>transformData</code> step.</p>
+<p>Each formatter takes in an object with the following properties :</p>
+<ul>
+<li><code>entityProfileData</code></li>
+<li><code>entityFieldValue</code></li>
+<li><code>highlightedEntityFieldValue</code></li>
+<li><code>verticalId</code></li>
+<li><code>isDirectAnswer</code></li>
+</ul>
+<p>Below is an example usage.</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.init({
+  apiKey: '&lt;API_KEY_HERE>',
+  experienceKey: '&lt;EXPERIENCE_KEY_HERE>',
+  fieldFormatters: {
+    'name': (formatterObject) => formatterObject.entityFieldValue.toUpperCase(),
+    'description' : (formatterObject) => formatterObject.highlightedEntityFieldValue
+  }
+});
 </code></pre>
 <h2>Custom Data Transforms</h2>
 <p>If you want to mutate the data thats provided to the render/template before it gets rendered,
@@ -276,233 +1972,294 @@ you can use the <code>transformData</code> hook.</p>
   }
 })
 </code></pre>
-<h1>Types of Components</h1>
-<p>Each type of Component has it's own custom configurations. However, all components share the
-base configuration options defined above.</p>
-<h2>Navigation Component</h2>
-<p>The Navigation Component adds a dynamic experience to your pages navigation experience.
-When using multiple veritcal searches in a universal search, the navigation ordering will be automatically
-updated based on the search results.</p>
-<pre class="prettyprint source lang-html"><code>&lt;nav class=&quot;navigation-container&quot;>&lt;/nav>
-</code></pre>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('Navigation', {
-  container: '.navigation-container',
-  tabs: [
-    {
-      label: 'Home',         // The label used for the navigation element
-      url: './index.html',   // The link for the navigation element
-      isFirst: true,         // optional, will always show this item first
-      isActive: true         // optional, will add a special class to the item
-    },
-    {
-      configId: 'locations'  // optional, the vertical search config id
-      label: 'Location'      // The label used for the navigation element
-      url: 'locations.html'  // The link for the navigation element
-    },
-    {
-      configId: 'employees'  // optional, the vertical search config id
-      label: 'Employees'     // The label used for the navigation element
-      url: 'employees.html'  // The link for the navigation element
-    }
-  ]
+<h2>Using a Custom Template for a Component</h2>
+<p>All component templates are written using <a href="https://handlebarsjs.com/">Handlebars templates</a>.</p>
+<p>It's easy to override these templates with your own templates.
+Keep in mind, that you must provide valid handlebars syntax here.</p>
+<pre class="prettyprint source lang-js"><code>// Use handlebars syntax to create a template string
+let customTemplate = `&lt;div class=&quot;my-search&quot;>{{title}}&lt;/div>`
+
+ANSWERS.addComponent('SearchBar', {
+  container: '.search-container',
+  template: customTemplate
 })
 </code></pre>
-<h2>SearchBar Component</h2>
-<p>The SearchBar component is the main entry point for search querying. It provides the input box, where the user
-types their query, as well as the autocomplete behavior.</p>
-<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;search-query-container&quot;>&lt;/div>
+<p>The SDK also offers an <code>ANSWERS.registerTemplate</code> function. This will map
+a template string to an entry in the Answers handlebars renderer.</p>
+<pre class="prettyprint source lang-js"><code>  /**
+   * Compile and add a template
+   * @param {string} templateName The unique name for the template
+   * @param {string} template The handlebars template string
+   */
+  registerTemplate (templateName, template)
 </code></pre>
-<p>There are two types of search experiences. Universal Search and Vertical Search.
-Each provide a different way of auto complete.</p>
-<h3>For Universal Search:</h3>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
-  container: '.search-query-container',
-  title: 'Search my Brand',                // optional, defaults to 'Answers'
-  searchText: 'What are you looking for?', // optional, defaults to 'What are you interested in?'
-  autoFocus: true,                          // optional, defaults to false
-  redirectUrl: 'path/to/url'                // optional, redirect search query to url
-})
+<p>The default handlebars renderer uses a mapping from template name strings to
+handlebars template strings. If, while trying to register a template, the
+template name does not exist, a new template entry is created. If the name
+already exists, the current template for the template name is overriden. This
+allows you override default template names.</p>
+<p>For example:</p>
+<pre class="prettyprint source lang-js"><code>  // override current SpellCheck template
+  ANSWERS.registerTemplate(
+    'search/spellcheck',
+    '&lt;div class=&quot;Mine&quot;>Did you mean {{correctedQuery}}?&lt;/div>'
+  );
+
+  // create new Card template
+  ANSWERS.registerTemplate(
+    'cards/custom',
+    '&lt;p>Card content&lt;/p>'
+  );
 </code></pre>
-<h3>For Vertical Search:</h3>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('SearchBar', {
-  container: '.search-query-container',
-  verticalKey: '&lt;VERTICAL_KEY>',      // required
-  barKey: '&lt;BAR_KEY>'                 // optional
-})
+<h2>Creating Custom Components</h2>
+<p>You can create custom Answers components with the same power of the builtin components. First, create
+a subtype of ANSWERS.Component and register it.</p>
+<p>For ES6:</p>
+<pre class="prettyprint source lang-js"><code>class MyCustomComponent extends ANSWERS.Component {
+  constructor (config) {
+    super(config);
+    this.myProperty = config.myProperty;
+  }
+
+  static defaultTemplateName () {
+    return 'default';
+  }
+
+  static areDuplicateNamesAllowed () {
+    return false;
+  }
+
+  static get type () {
+    return 'MyCustomComponent';
+  }
+}
+ANSWERS.registerComponentType(MyCustomComponent); // Register the component with the library
 </code></pre>
-<h2>FilterSearch Component</h2>
-<p>The FilterSearch component provides a text input box for users to type a query and select a preset matching filter. When a filter is selected, a vertical search is performed. If multiple FilterSearch components are on the page, the search will include all selected filters across all of the components.</p>
-<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filter-search-container&quot;>&lt;/div>
+<p>For ES5:</p>
+<pre class="prettyprint source lang-js"><code>function MyCustomComponent (config) {
+  ANSWERS.Component.call(this, config);
+
+  this.myProperty = config.myProperty;
+}
+
+MyCustomComponent.prototype = Object.create(ANSWERS.Component.prototype);
+MyCustomComponent.prototype.constructor = MyCustomComponent;
+MyCustomComponent.defaultTemplateName = function () { return 'default' };
+MyCustomComponent.areDuplicateNamesAllowed = function () { return false };
+Object.defineProperty(MyCustomComponent, 'type', { get: function () { return 'MyCustomComponent' } });
+
+ANSWERS.registerComponentType(MyCustomComponent); // Register the component with the library
 </code></pre>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterSearch', {
-  container: '.filter-search-container',
-  verticalKey: '&lt;VERTICAL_KEY>',      // required
-  barKey: '&lt;BAR_KEY>'                 // optional
-})
-</code></pre>
-<h2>FilterBox Component</h2>
-<p>The FilterBox component shows a list of filters to apply to a search.</p>
-<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filters-container&quot;>&lt;/div>
-</code></pre>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterBox', {
-  container: '.filters-container',
-  // List of filter component configurations
-  filters: [
-    {
-      type: 'FilterOptions',
-      control: 'multioption',
-      options: [
-        {
-          label: 'Open Now',
-          field: 'c_openNow',
-          value: 'true'
-        },
-        {
-          label: 'Dog Friendly',
-          field: 'c_dogFriendly',
-          value: 'true'
-        },
-        {
-          label: 'Megastores',
-          field: 'c_storeType',
-          value: 'Megastore'
-        }
-      ]
-    }
-  ]
+<p>Now you can use your custom component like any built-in component:</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('MyCustomComponent', {
+  container: '.my-component-container',
+  template: `&lt;div>{{_config.myProperty}}&lt;/div>`,
+  myProperty: 'my property'
 });
 </code></pre>
-<h2>Filter Components</h2>
-<p>Filter components can be used in a FilterBox or on their own to affect a search.</p>
-<h3>FilterOptions</h3>
-<p>FilterOptions displays a set of filters with either checkboxes or radio buttons.</p>
-<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;filter-container&quot;>&lt;/div>
-</code></pre>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('FilterOptions', {
-  container: '.filter-container',
-  // Control type, singleoption or multioption
-  control: 'singleoption',
-  // List of options
-  options: [
-    {
-      // Label to show next to the filter option
-      label: 'Open Now',
-      // The api field to filter on, configured on the Yext platform
-      field: 'c_openNow',
-      // The value for the above field to filter by
-      value: 'true'
-    },
-    {
-      label: 'Dog Friendly',
-      field: 'c_dogFriendly',
-      value: 'true'
-    },
-    {
-      label: 'Megastores',
-      field: 'c_storeType',
-      value: 'Megastore'
-    }
-  ]
-});
-</code></pre>
-<h2>Direct Answer Component</h2>
-<p>The Direct Answer Component will render the BEST result, if found,
-based on the query.</p>
-<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;direct-answer-container&quot;>&lt;/div>
-</code></pre>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('DirectAnswer', {
-  container: '.direct-answer-container'
+<h1>Template Helpers</h1>
+<p>When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them <a href="https://github.com/jonschlinkert/template-helpers">here</a>.</p>
+<p>If you want to register custom template helpers to the handlebars render, you can do so like this:</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.registerHelper('noop', function(options) {
+  return options.fn(this);
 })
 </code></pre>
-<h2>Universal Results Component</h2>
-<p>The Universal Results component will render the results of a query,
-across all configured verticals, seperated by sections.</p>
-<p>The most complex component has a ton of overridable configuration options.</p>
-<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;universal-results-container&quot;>&lt;/div>
-</code></pre>
-<h3>Basic Component</h3>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-})
-</code></pre>
-<h3>Custom Render for ALL Result Items</h3>
-<p>You can override the render function for EACH item in the result list,
-as apposed to the entire component.</p>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  renderItem: function(data) {
-    return `my item ${data.name}`
-  }
-})
-</code></pre>
-<h3>Custom Template for ALL Result Items</h3>
-<p>You can override the handlebars template for EACH item in the result list,
-as apposed to the entire component.</p>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  itemTemplate: `my item {{name}}`
-})
-</code></pre>
-<h3>Custom Render For Specific Vertical Result Items</h3>
-<p>You can override the render function for a particular section within the results list,
-by providing a vertical search config id as the context, and using the same options as above.</p>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  config: {
-    'locations': { // The vertical search config id
-      renderItem: function(data) {
-        return `my item ${data.name}`;
-      }
-    }
-  }
-})
-</code></pre>
-<h3>Custom Template For Specific Vertical Result Items</h3>
-<p>You can override the handlebars template for a particular section within the results list,
-by providing a vertical search config id as the context, and using the same options as above.</p>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('UniversalResults', {
-  container: '.universal-results-container',
-  config: {
-    'locations': { // The vertical search config id
-      itemTemplate: `my item {{name}}`
-    }
-  }
-})
-</code></pre>
-<h2>Vertical Results Component</h2>
-<p>The Vertical Results component shares all the same configurations from Universal Results, but you don't need to specifiy a config or context.</p>
-<p>You define all the options at the top level object.</p>
-<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;results-container&quot;>&lt;/div>
-</code></pre>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('VerticalResults', {
-  container: '.results-container',
-})
-</code></pre>
-<h2>QA Submission Component</h2>
-<p>The QA Submission component provides a form for submitting a QA question,
-when a search query is run.</p>
-<pre class="prettyprint source lang-html"><code>&lt;div class=&quot;question-submission-container&quot;>&lt;/div>
-</code></pre>
-<pre class="prettyprint source lang-js"><code>ANSWERS.addComponent('QASubmission', {
-  container: '.question-submission-container',
-  nameLabel: 'Your Name:',             // Optional, defaults to 'Name:'
-  emailLabel: '*Email:',               // Optional, defaults to '*Email:'
-  questionLabel: 'Ask us anything!:',  // Optional, defaults to 'What is your question?'
-  privacyPolicyLabel: 'I agree!',      // Optional, defaults to 'I agree to our policy:',
-  buttonLabel: 'Submit'                // Optional,  defaults to 'Submit:'
-})
-</code></pre>
+<p>You can learn more about the interface for registering helpers by taking a look at the <a href="https://handlebarsjs.com/block_helpers.html">Handlebars Block Helpers</a> documentation.</p>
 <h1>Analytics</h1>
-<p>Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks. You may add additional, custom analytic events to templates using certain data attributes, explained below.</p>
-<h2>Click Analytics</h2>
-<p>Click analytics can be attached to an element by adding the <code>data-eventtype</code> attribute to the element you want to track clicks for. The provided string should be the type of the analytics event. You can optionally include metadata inside the <code>data-eventoptions</code> attribute, in a JSON format. Whenever the element is clicked, an analtyics event with that data will be sent to the server.</p>
+<p>If a businessId is supplied in the config, Answers will track some basic interaction analytics automatically, such as search bar impressions and Call-To-Action clicks.</p>
+<p>If you would like to add custom analytics on top of the built-in ones, use the following:</p>
+<h2>Custom Analytics Using JavaScript</h2>
+<p>You may send analytics from external code with the below interface.</p>
+<pre class="prettyprint source lang-js"><code>  const event = new ANSWERS.AnalyticsEvent('CUSTOM');
+  event.addOptions({ myData: 'data' });
+  ANSWERS.AnalyticsReporter.report(event)
+</code></pre>
+<h2>Custom Analytics Using Data Attributes</h2>
+<p>You may add additional, custom analytic events to templates using certain data attributes. Click analytics can be attached to an element by adding the <code>data-eventtype</code> attribute to the element you want to track clicks for. The provided string should be the type of the analytics event. You can optionally include metadata inside the <code>data-eventoptions</code> attribute, in a JSON format. Whenever the element is clicked, an analtyics event with that data will be sent to the server.</p>
 <pre class="prettyprint source lang-html"><code>&lt;button class=&quot;driving-directions-button&quot;
         data-eventtype=&quot;DRIVING_DIRECTIONS&quot;
         data-eventoptions='{&quot;store&quot;: &quot;{{store}}&quot;}'
 >
     Drive to {{store}}
 &lt;/button>
-</code></pre></article>
+</code></pre>
+<h2>Built-In Analytics Events For CTAs</h2>
+<p>Here are the possible Event Types for CTAs:</p>
+<ul>
+<li>TITLE_CLICK</li>
+<li>CTA_CLICK</li>
+<li>TAP_TO_CALL</li>
+<li>ORDER_NOW</li>
+<li>ADD_TO_CART</li>
+<li>APPLY_NOW</li>
+<li>DRIVING_DIRECTIONS</li>
+<li>VIEW_WEBSITE</li>
+<li>EMAIL</li>
+<li>BOOK_APPOINTMENT</li>
+<li>RSVP</li>
+</ul>
+<p>These types are accepted as the <code>analytics</code> attribute in <a href="#Calls-To-Action">Calls To Action</a>.</p>
+<h2>Conversion Tracking</h2>
+<p>By default, Answers does not perform conversion tracking for analytics. To opt-in to this behavior, use the <code>setConversionsOptIn</code> method after initialization:</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.init({ ... });
+agreementButton.onclick = function() { ANSWERS.setConversionsOptIn(true); };
+</code></pre>
+<p>You must also add the following to your HTML:</p>
+<pre class="prettyprint source lang-html"><code>&lt;script src=&quot;https://assets.sitescdn.net/ytag/ytag.min.js&quot;>&lt;/script>
+</code></pre>
+<h2>On-Search Analytics</h2>
+<p>You can find instructions for configuring on search analytics above in these sections: <a href="#onverticalsearch-configuration">onVerticalSearch Configuration</a>, <a href="#onuniversalsearch-configuration">onUniversalSearch Configuration</a>.</p>
+<h1>Rich Text Formatting</h1>
+<p>The Answers SDK exposes a <code>formatRichText</code> function which translates CommonMark to HTML. This function will
+ensure that a Rich Text Formatted value is shown properly on the page. To use this function, call it like so:</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.formatRichText(rtfFieldValue, eventOptionsFieldName, targetConfig)
+</code></pre>
+<p>For instance, this function can be used in the <code>dataMappings</code> of a Card to display an RTF attribute.</p>
+<p>When clicking any link in the resultant HTML, an <code>AnalyticsEvent</code> will be fired. If the <code>eventOptionsFieldName</code> has been
+specified, the <code>eventOptions</code> will include a <code>fieldName</code> attribute with the given value.</p>
+<p>The <code>targetConfig</code> parameter dictates where the link is opened: the current window, a new tab, etc. It can have the following forms:</p>
+<pre class="prettyprint source lang-js"><code>targetConfig = { url: '_blank', phone: '_self', email: '_parent' }
+targetConfig = '_blank'
+</code></pre>
+<p>When <code>targetConfig</code> is a string, it is assumed that any link, regardless of type, has the specified <code>target</code> behavior. This parameter, like <code>eventOptionsFieldName</code>, is optional. When not provided, no <code>target</code> attribute is supplied to the links.</p>
+<p>Note that when using this function, you must ensure that the relevant Handlebars template correctly unescapes the output HTML.</p>
+<h1>CSS Variable Styling</h1>
+<p>The Answers SDK supports styling specific elements with CSS variables for runtime styling.</p>
+<ul>
+<li>All sdk variables are exposed in the <code>:root</code> ruleset</li>
+<li>All overridden variables must be included the <code>:root</code> ruleset</li>
+<li>All overrides should be defined after Answers CSS is imported and before ANSWERS.init is called</li>
+<li>To see available variables, see the scss modules in the SDK</li>
+<li>For example, to override:</li>
+</ul>
+<pre class="prettyprint source lang-html"><code>&lt;style>
+  :root {
+    --yxt-font-font-family: sans-serif;
+    --yxt-color-brand-primary: green;
+    --yxt-color-text-primary: #212121;
+    --yxt-searchbar-button-background-color-hover: red;
+    --yxt-nav-border-color: #e9e9e9;
+  }
+&lt;/style>
+</code></pre>
+<p>Most browsers have native css variable support. In legacy browsers,
+we use the <a href="https://github.com/jhildenbiddle/css-vars-ponyfill">css-vars-ponyfill</a>.</p>
+<ul>
+<li>The SDK will do automatic resolution of CSS variables on initialization. Variables should be loaded
+before initialization. Overrided variables should be loaded after sdk variables are loaded.</li>
+<li>You can opt-out with the <code>disableCssVariablesPonyfill</code> flag in ANSWERS.init.</li>
+<li>If you opt-out of automatic resolution of variables, you should call ANSWERS.ponyfillCssVariables()
+after css variables are loaded and before components are added.</li>
+<li>If you change a css variable value after initialization and wish to see the change in variable
+value in a legacy browser, you should call ANSWERS.ponyfillCssVariables() after the value is changed.</li>
+<li>We support all callback functions, described <a href="https://jhildenbiddle.github.io/css-vars-ponyfill/#/?id=onbeforesend">here</a></li>
+</ul>
+<pre class="prettyprint source lang-js"><code>ANSWERS.ponyfillCssVariables({
+        onError: function() {},
+        onSuccess: function() {},
+        onFinally: function() {},
+});
+</code></pre>
+<h1>Processing Translations</h1>
+<p>The Answers SDK provides functionality to perform translation interpolation, pluralization, or both.</p>
+<h2>Interpolation</h2>
+<p>Interpolation allows the use of dynamic values in translations. Interpolation parameters are defined
+inside double brackets, and they must also be defined in an object in the second parameter.</p>
+<p>The following example will return 'Bonjour Howard' provided the variable <code>myName</code> equals 'Howard':</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.processTranslation('Bonjour [[name]]', { name: myName });
+</code></pre>
+<p>The translation processor is also available though a Handlebars helper:</p>
+<pre class="prettyprint source lang-hbs"><code>{{ processTranslation phrase='Bonjour [[name1]] et [[name2]]' name1=name1 name2=name2}}
+</code></pre>
+<h2>Pluralization</h2>
+<p>Pluralization makes it possible to select the plural form of a translation depending on a
+qualifying count. Different languages have different plural rules, which is the method of
+selecting a plural form based on a count. An optional third parameter 'count' and an optional
+fourth parameter 'locale' may be used for pluralization. The locale parameter determines the
+plural forms and the plural rule used. If locale is not defined but the first
+parameter is an object containing pluralizations, the locale supplied in the ANSWERS.init() will be
+used. For more information on plural forms, see this <a href="https://developer.mozilla.org/en-US/docs/Mozilla/Localization/Localization_and_Plurals">doc</a>:</p>
+<p>The following example will use the singular form keyed by '0' for a count of 1, and the plural
+form keyed by '1' for any other count. A count of 0 will return '0 results':</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] result', 1: '[[resultsCount]] results' }, 
+  { resultsCount: count }, 
+  count, 
+  'en'
+);
+</code></pre>
+<p>French is different than English in that a count of zero uses the same plural form as a count
+of one. For example, a count of 0 will return '0 résultat':</p>
+<pre class="prettyprint source lang-js"><code>ANSWERS.processTranslation(
+  { 0: '[[resultsCount]] résultat', 1: '[[resultsCount]] résultats' }, 
+  { resultsCount: count }, 
+  count, 
+  'fr'
+);
+</code></pre>
+<p>Here's what the usage looks like in a Handlebars helper:</p>
+<pre class="prettyprint source lang-hbs"><code>{{ processTranslation 
+  pluralForm0='[[resultsCount]] résultat' 
+  pluralForm1='[[resultsCount]] résultats' 
+  resultsCount=count 
+  count=count 
+  locale='fr' 
+}}
+</code></pre>
+<h1>Performance Metrics</h1>
+<p>The SDK uses the Performance API, via <code>window.performance.mark()</code>, to create performance metrics regarding ANSWERS.init(), vertical search, and universal search. These marks can be viewed through browser developer tools, or programmatically through <code>window.performance.getEntries()</code>.</p>
+<h2>ANSWERS.init()</h2>
+<ol>
+<li>
+<p><code>'yext.answers.initStart'</code> called when ANSWERS.init beings</p>
+</li>
+<li>
+<p><code>'yext.answers.ponyfillStart'</code> called when css-variables ponyfill starts</p>
+</li>
+<li>
+<p><code>'yext.answers.ponyfillEnd'</code> called when css-variables ponyfill ends.</p>
+</li>
+<li>
+<p><code>'yext.answers.statusStart'</code> called when the ANSWERS status call is made</p>
+</li>
+<li>
+<p><code>'yext.answers.statusEnd'</code> called when the ANSWERS status check is done</p>
+</li>
+</ol>
+<h2>Vertical Search</h2>
+<ol>
+<li>
+<p><code>'yext.answers.verticalQueryStart'</code> called when a vertical query begins</p>
+</li>
+<li>
+<p><code>'yext.answers.verticalQuerySent'</code> called right before the vertical query API call is made</p>
+</li>
+<li>
+<p><code>'yext.answers.verticalQueryResponseReceived'</code> called immediately after a vertical query response is received</p>
+</li>
+<li>
+<p><code>'yext.answers.verticalQueryResponseRendered'</code> called after a vertial query is finished, and all components have finished rendering</p>
+</li>
+</ol>
+<h2>Universal Search</h2>
+<ol>
+<li>
+<p><code>'yext.answers.universalQueryStart'</code> called when a universal query starts</p>
+</li>
+<li>
+<p><code>'yext.answers.universalQuerySent'</code> called right before the universal query API call is made</p>
+</li>
+<li>
+<p><code>'yext.answers.universalQueryResponseReceived'</code> called immediately after a universal query response is received</p>
+</li>
+<li>
+<p><code>'yext.answers.universalQueryResponseRendered'</code> called after a universal query is finished and all components have finished rendering</p>
+</li>
+</ol>
+<h2>License</h2>
+<p>Yext Answers-Search-UI is an open-sourced library licensed under the <a href="./LICENSE">BSD-3 License</a>.</p>
+<h2>Third Party Licenses</h2>
+<p>The licenses of our 3rd party dependencies are collected here: <a href="./THIRD-PARTY-NOTICES">THIRD-PARTY-NOTICES</a>.</p></article>
     </section>
 
 
@@ -513,13 +2270,13 @@ when a search query is run.</p>
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AccordionCardComponent.html">AccordionCardComponent</a></li><li><a href="module-AccordionResultsComponent.html">AccordionResultsComponent</a></li><li><a href="module-AlternativeVerticals.html">AlternativeVerticals</a></li><li><a href="module-AlternativeVerticalsComponent.html">AlternativeVerticalsComponent</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AppliedFiltersComponent.html">AppliedFiltersComponent</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-CardComponent.html">CardComponent</a></li><li><a href="module-CombinedFilterNode.html">CombinedFilterNode</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storageindexes.html">core/storage/storageindexes</a></li><li><a href="module-CTACollectionComponent.html">CTACollectionComponent</a></li><li><a href="module-CTAComponent.html">CTAComponent</a></li><li><a href="module-DateFilterComponent.html">DateFilterComponent</a></li><li><a href="module-DefaultTemplatesLoader.html">DefaultTemplatesLoader</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-DynamicFilters.html">DynamicFilters</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Facet.html">Facet</a></li><li><a href="module-FacetsComponent.html">FacetsComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterCombinators.html">FilterCombinators</a></li><li><a href="module-FilterMetadata.html">FilterMetadata</a></li><li><a href="module-FilterNode.html">FilterNode</a></li><li><a href="module-FilterNodeFactory.html">FilterNodeFactory</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterRegistry.html">FilterRegistry</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-FilterTypes.html">FilterTypes</a></li><li><a href="module-GeoLocationComponent.html">GeoLocationComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HighlightedValue.html">HighlightedValue</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-IconComponent.html">IconComponent</a></li><li><a href="module-LegacyCardComponent.html">LegacyCardComponent</a></li><li><a href="module-LocationBias.html">LocationBias</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PaginationComponent.html">PaginationComponent</a></li><li><a href="module-QueryTriggers.html">QueryTriggers</a></li><li><a href="module-QuestionSubmission.html">QuestionSubmission</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-RangeFilterComponent.html">RangeFilterComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsContext.html">ResultsContext</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchConfig.html">SearchConfig</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-SearchParams.html">SearchParams</a></li><li><a href="module-SearchParamsParser.html">SearchParamsParser</a></li><li><a href="module-SearchStates.html">SearchStates</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-SimpleFilterNode.html">SimpleFilterNode</a></li><li><a href="module-SortOptionsComponent.html">SortOptionsComponent</a></li><li><a href="module-SpellCheck.html">SpellCheck</a></li><li><a href="module-SpellCheckComponent.html">SpellCheckComponent</a></li><li><a href="module-StandardCardComponent.html">StandardCardComponent</a></li><li><a href="module-State.html">State</a></li><li><a href="module-StorageKeys.html">StorageKeys</a></li><li><a href="module-ui_components_componenttypes.html">ui/components/componenttypes</a></li><li><a href="module-ui_components_registry.html">ui/components/registry</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalPagesConfig.html">VerticalPagesConfig</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li><li><a href="module-VerticalResultsComponent.html">VerticalResultsComponent</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-CombinedFilterNode.html">CombinedFilterNode</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-DateFilterComponent.html">DateFilterComponent</a></li><li><a href="module-DefaultTemplatesLoader.html">DefaultTemplatesLoader</a></li><li><a href="module-DynamicFilters.html">DynamicFilters</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersAnalyticsError.html">AnswersAnalyticsError</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersConfigError.html">AnswersConfigError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Facet.html">Facet</a></li><li><a href="module-FacetsComponent.html">FacetsComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterMetadata.html">FilterMetadata</a></li><li><a href="module-FilterNode.html">FilterNode</a></li><li><a href="module-FilterNodeFactory.html">FilterNodeFactory</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterRegistry.html">FilterRegistry</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GeoLocationComponent.html">GeoLocationComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HighlightedValue.html">HighlightedValue</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-IconComponent.html">IconComponent</a></li><li><a href="module-LegacyCardComponent.html">LegacyCardComponent</a></li><li><a href="module-LocationBias.html">LocationBias</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-QuestionSubmission.html">QuestionSubmission</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-SearchParams.html">SearchParams</a></li><li><a href="module-SimpleFilterNode.html">SimpleFilterNode</a></li><li><a href="module-SortOptionsComponent.html">SortOptionsComponent</a></li><li><a href="module-SpellCheck.html">SpellCheck</a></li><li><a href="module-SpellCheckComponent.html">SpellCheckComponent</a></li><li><a href="module-StandardCardComponent.html">StandardCardComponent</a></li><li><a href="module-State.html">State</a></li><li><a href="RichTextFormatterImpl.html">RichTextFormatterImpl</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_callListeners">_callListeners</a></li><li><a href="global.html#_generateArrayOneToN">_generateArrayOneToN</a></li><li><a href="global.html#_handleQueryUpdate">_handleQueryUpdate</a></li><li><a href="global.html#_selectPluralForm">_selectPluralForm</a></li><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#computeHighlightedDataRecursively">computeHighlightedDataRecursively</a></li><li><a href="global.html#convertNlpFiltersToFilterNodes">convertNlpFiltersToFilterNodes</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#defaultConfigOption">defaultConfigOption</a></li><li><a href="global.html#defaultTemplateName">defaultTemplateName</a></li><li><a href="global.html#delete">delete</a></li><li><a href="global.html#equivalentParams">equivalentParams</a></li><li><a href="global.html#filterIsPersisted">filterIsPersisted</a></li><li><a href="global.html#filterParamsForExperienceLink">filterParamsForExperienceLink</a></li><li><a href="global.html#findSimpleFiltersWithFieldId">findSimpleFiltersWithFieldId</a></li><li><a href="global.html#flag">flag</a></li><li><a href="global.html#flattenFilterNodes">flattenFilterNodes</a></li><li><a href="global.html#fromCore">fromCore</a></li><li><a href="global.html#fromData">fromData</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAnalyticsUrl">getAnalyticsUrl</a></li><li><a href="global.html#getCachedLiveApiUrl">getCachedLiveApiUrl</a></li><li><a href="global.html#getContainerClass">getContainerClass</a></li><li><a href="global.html#getCurrentStateUrlMerged">getCurrentStateUrlMerged</a></li><li><a href="global.html#getKnowledgeApiUrl">getKnowledgeApiUrl</a></li><li><a href="global.html#getLiveApiUrl">getLiveApiUrl</a></li><li><a href="global.html#getPersistedRangeFilterContents">getPersistedRangeFilterContents</a></li><li><a href="global.html#getUrlParams">getUrlParams</a></li><li><a href="global.html#getUrlWithCurrentState">getUrlWithCurrentState</a></li><li><a href="global.html#groupArray">groupArray</a></li><li><a href="global.html#has">has</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#markup">markup</a></li><li><a href="global.html#Matcher">Matcher</a></li><li><a href="global.html#mergeTabOrder">mergeTabOrder</a></li><li><a href="global.html#nestValue">nestValue</a></li><li><a href="global.html#process">process</a></li><li><a href="global.html#pruneFilterNodes">pruneFilterNodes</a></li><li><a href="global.html#pushStateToHistory">pushStateToHistory</a></li><li><a href="global.html#registerListener">registerListener</a></li><li><a href="global.html#registerMiddleware">registerMiddleware</a></li><li><a href="global.html#removeListener">removeListener</a></li><li><a href="global.html#removeParamsWithPrefixes">removeParamsWithPrefixes</a></li><li><a href="global.html#replaceHistoryWithState">replaceHistoryWithState</a></li><li><a href="global.html#replaceUrlParams">replaceUrlParams</a></li><li><a href="global.html#report">report</a></li><li><a href="global.html#set">set</a></li><li><a href="global.html#setConversionTrackingEnabled">setConversionTrackingEnabled</a></li><li><a href="global.html#setWithPersist">setWithPersist</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li><li><a href="global.html#transformAutoCompleteResponse">transformAutoCompleteResponse</a></li><li><a href="global.html#transformFilterSearchResponse">transformFilterSearchResponse</a></li><li><a href="global.html#truncate">truncate</a></li><li><a href="global.html#urlWithoutQueryParamsAndHash">urlWithoutQueryParamsAndHash</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 19 2019 10:43:24 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu May 27 2021 09:23:11 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
