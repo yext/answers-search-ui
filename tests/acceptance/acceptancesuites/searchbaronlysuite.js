@@ -28,7 +28,7 @@ test('Basic search and redirect flow', async t => {
 
   const getUrl = ClientFunction(() => window.location.href);
   const clientUrl = await getUrl();
-  const expectedUrl = 
+  const expectedUrl =
     'http://localhost:9999/tests/acceptance/fixtures/html/universal?query=amani+farooque+phone+number';
   await t.expect(clientUrl).eql(expectedUrl);
 });
