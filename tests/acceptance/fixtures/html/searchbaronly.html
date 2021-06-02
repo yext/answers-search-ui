@@ -1,0 +1,31 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <script src="http://localhost:9999/dist/answers-search-bar-templates.compiled.min.js"></script>
+    <script src="http://localhost:9999/dist/answers-search-bar.js"></script>
+    <link rel="stylesheet" type="text/css" href="http://localhost:9999/dist/answers-search-bar.css">
+  </head>
+  <body>
+    <div class="answers-container">
+      <div class="search-bar-container"></div>
+      <div class="navigation-container"></div>
+      <div class="results-container"></div>
+    </div>
+    <script>
+      ANSWERS.init({
+        apiKey: '2d8c550071a64ea23e263118a2b0680b',
+        experienceKey: 'slanswers',
+        businessId: '3350634',
+        experienceVersion: 'PRODUCTION',
+        templateBundle: TemplateBundle.default,
+        onReady: function() {
+          this.addComponent('SearchBar', {
+            container: '.search-bar-container',
+            clearButton: true,
+            redirectUrl: './universal'
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
