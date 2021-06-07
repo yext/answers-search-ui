@@ -15,7 +15,6 @@ import ErrorReporter from './core/errors/errorreporter';
 import ConsoleErrorReporter from './core/errors/consoleerrorreporter';
 import { AnalyticsReporter, NoopAnalyticsReporter } from './core';
 import Storage from './core/storage/storage';
-import { AnswersComponentError } from './core/errors/errors';
 import AnalyticsEvent from './core/analytics/analyticsevent';
 import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
@@ -433,7 +432,7 @@ class Answers {
     try {
       this.components.create(type, opts).mount();
     } catch (e) {
-      throw new AnswersComponentError('Failed to add component', type, e);
+      console.error('Failed to add component', type, '\n\n', e);
     }
     return this;
   }
