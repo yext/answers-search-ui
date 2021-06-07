@@ -1,3 +1,4 @@
+/* eslint-disable no-self-assign */
 /** @module CTAComponent */
 
 import Component from '../component';

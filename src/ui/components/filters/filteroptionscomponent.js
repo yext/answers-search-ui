@@ -347,7 +347,7 @@ export default class FilterOptionsComponent extends Component {
    * @override
    */
   static defaultTemplateName (config) {
-    return `controls/filteroptions`;
+    return 'controls/filteroptions';
   }
 
   setState (data) {

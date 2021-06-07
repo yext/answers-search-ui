@@ -1,3 +1,4 @@
+/* eslint-disable no-self-assign */
 /** @module LegacyCardComponent */
 
 import Component from '../component';

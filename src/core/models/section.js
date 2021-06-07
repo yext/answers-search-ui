@@ -3,7 +3,7 @@
 import SearchStates from '../storage/searchstates';
 
 export default class Section {
-  constructor (data = {}, url, resultsContext) {
+  constructor (data = {}, url = null, resultsContext = undefined) {
     this.searchState = SearchStates.SEARCH_COMPLETE;
     this.verticalConfigId = data.verticalConfigId || null;
     this.resultsCount = data.resultsCount || 0;

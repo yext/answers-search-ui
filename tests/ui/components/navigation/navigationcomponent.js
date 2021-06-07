@@ -190,8 +190,6 @@ describe('navigation tab links are correct', () => {
 });
 
 describe('navigation tab order', () => {
-  let COMPONENT_MANAGER;
-
   const defaultConfig = {
     container: '#test-component',
     verticalKey: 'verticalKey',
@@ -202,7 +200,7 @@ describe('navigation tab order', () => {
     ]
   };
 
-  COMPONENT_MANAGER = mockManager();
+  const COMPONENT_MANAGER = mockManager();
 
   COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
 

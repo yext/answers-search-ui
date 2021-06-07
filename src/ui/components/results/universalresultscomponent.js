@@ -78,7 +78,7 @@ export default class UniversalResultsComponent extends Component {
     }, val));
   }
 
-  addChild (data = {}, type, opts) {
+  addChild (data = {}, type = undefined, opts = undefined) {
     const verticals = this._config.verticals || this._config.config || {};
     const verticalKey = data.verticalConfigId;
     const childOpts = {
