@@ -22,7 +22,7 @@ const IconState = {
 export default class SearchComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
     super(config, systemConfig);
-    throw new Error("error");
+
     /**
      * The optional vertical key for vertical search configuration
      * If not provided, auto-complete and search will be based on universal
