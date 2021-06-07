@@ -432,7 +432,7 @@ class Answers {
     try {
       this.components.create(type, opts).mount();
     } catch (e) {
-      console.error('Failed to add component', type, e);
+      console.error('Failed to add component', type, '\n\n', e);
     }
     return this;
   }
