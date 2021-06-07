@@ -234,7 +234,7 @@ export default class FacetsComponent extends Component {
   }
 
   setState (data) {
-    let facets = data['filters'] || [];
+    let facets = data.filters || [];
 
     if (this._transformFacets) {
       const facetsCopy = cloneDeep(facets);
@@ -266,7 +266,7 @@ export default class FacetsComponent extends Component {
       // passed to FilterOptionsConfig. Even after deletion here, the filter options will still
       // exist in the 'filters' field of the facets component state, and therefore any
       // modifications which occur to options inside transformFacets will still take effect.
-      filterOptions['options'] && delete filterOptions['options'];
+      filterOptions.options && delete filterOptions.options;
       acc[currentFacet.fieldId] = filterOptions;
       return acc;
     }, {});
@@ -281,7 +281,7 @@ export default class FacetsComponent extends Component {
   _applyDefaultFormatting (facet) {
     const isBooleanFacet = facet => {
       const firstOption = (facet.options && facet.options[0]) || {};
-      return firstOption['value'] === true || firstOption['value'] === false;
+      return firstOption.value === true || firstOption.value === false;
     };
 
     if (isBooleanFacet(facet)) {

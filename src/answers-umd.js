@@ -142,7 +142,7 @@ class Answers {
         }
       },
       resetListener: data => {
-        let query = data.get(StorageKeys.QUERY);
+        const query = data.get(StorageKeys.QUERY);
         const hasQuery = query || query === '';
         this.core.storage.delete(StorageKeys.PERSISTED_LOCATION_RADIUS);
         this.core.storage.delete(StorageKeys.PERSISTED_FILTER);

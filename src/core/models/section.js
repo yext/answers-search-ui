@@ -21,12 +21,12 @@ export default class Section {
       return {};
     }
 
-    let mapMarkers = [];
+    const mapMarkers = [];
 
     let centerCoordinates = {};
 
     for (let j = 0; j < results.length; j++) {
-      let result = results[j]._raw;
+      const result = results[j]._raw;
       if (result && result.yextDisplayCoordinate) {
         if (!centerCoordinates.latitude) {
           centerCoordinates = {
@@ -44,8 +44,8 @@ export default class Section {
     }
 
     return {
-      'mapCenter': centerCoordinates,
-      'mapMarkers': mapMarkers
+      mapCenter: centerCoordinates,
+      mapMarkers: mapMarkers
     };
   }
 }

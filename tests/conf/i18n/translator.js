@@ -186,7 +186,8 @@ describe('translations with one plural form (French)', () => {
         '<a href="https://www.yext.com">View our websites [[name]]</a>');
       const expectedResult = {
         0: '<a href="https://www.yext.com">Voir notre site web [[name]]</a>',
-        1: '<a href="https://www.yext.com">Voir nos sites web [[name]]</a>' };
+        1: '<a href="https://www.yext.com">Voir nos sites web [[name]]</a>'
+      };
       expect(translation).toEqual(expectedResult);
     });
 
@@ -197,7 +198,8 @@ describe('translations with one plural form (French)', () => {
         'internet web, not spider web');
       const expectedResult = {
         0: '<a href="https://www.yext.com">Voir notre site web [[name]]</a>',
-        1: '<a href="https://www.yext.com">Voir nos sites web [[name]]</a>' };
+        1: '<a href="https://www.yext.com">Voir nos sites web [[name]]</a>'
+      };
       expect(translation).toEqual(expectedResult);
     });
   });
@@ -209,7 +211,8 @@ describe('translations with one plural form (French)', () => {
         '([[resultsCount]] results)');
       const expectedResult = {
         0: '([[resultsCount]] résultat)',
-        1: '([[resultsCount]] résultats)' };
+        1: '([[resultsCount]] résultats)'
+      };
       expect(translation).toEqual(expectedResult);
     });
   });

@@ -10,14 +10,18 @@ async function createTranslationResolver () {
 
 async function createTranslator () {
   const locale = 'fr';
-  return Translator.create(locale, [], { [locale]: { translation: {
-    'Hello': 'Bonjour',
-    'result': 'résultat',
-    'result_plural': 'résultats',
-    'object_noun': 'objet',
-    'object_noun_plural': 'objets',
-    'mail_noun': 'courrier'
-  } } });
+  return Translator.create(locale, [], {
+    [locale]: {
+      translation: {
+        Hello: 'Bonjour',
+        result: 'résultat',
+        result_plural: 'résultats',
+        object_noun: 'objet',
+        object_noun_plural: 'objets',
+        mail_noun: 'courrier'
+      }
+    }
+  });
 }
 
 describe('TranslationResolver can resolve various TranslationPlaceholders', () => {
@@ -51,8 +55,8 @@ describe('TranslationResolver can resolve various TranslationPlaceholders', () =
       interpolationValues: {}
     });
     const expectedResult = {
-      '0': 'résultat',
-      '1': 'résultats'
+      0: 'résultat',
+      1: 'résultats'
     };
     const resolverResult = translationResolver.resolve(placeholder);
     expect(resolverResult).toMatchObject(expectedResult);
@@ -68,8 +72,8 @@ describe('TranslationResolver can resolve various TranslationPlaceholders', () =
       interpolationValues: {}
     });
     const expectedResult = {
-      '0': 'objet',
-      '1': 'objets'
+      0: 'objet',
+      1: 'objets'
     };
     const resolverResult = translationResolver.resolve(placeholder);
     expect(resolverResult).toMatchObject(expectedResult);

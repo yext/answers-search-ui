@@ -105,15 +105,15 @@ export default class ApiRequest {
    * @private
    */
   baseParams () {
-    let baseParams = {
-      'v': this._version,
-      'api_key': this._apiKey,
-      'jsLibVersion': LIB_VERSION,
-      'sessionTrackingEnabled': this._storage.get(StorageKeys.SESSIONS_OPT_IN).value
+    const baseParams = {
+      v: this._version,
+      api_key: this._apiKey,
+      jsLibVersion: LIB_VERSION,
+      sessionTrackingEnabled: this._storage.get(StorageKeys.SESSIONS_OPT_IN).value
     };
     const urlParams = new SearchParams(this._storage.getCurrentStateUrlMerged());
     if (urlParams.has('beta')) {
-      baseParams['beta'] = urlParams.get('beta');
+      baseParams.beta = urlParams.get('beta');
     }
 
     return baseParams;

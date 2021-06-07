@@ -9,8 +9,8 @@ import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistene
 import QueryTriggers from '../../../core/models/querytriggers';
 
 const IconState = {
-  'YEXT': 0,
-  'MAGNIFYING_GLASS': 1
+  YEXT: 0,
+  MAGNIFYING_GLASS: 1
 };
 
 /**
@@ -459,7 +459,7 @@ export default class SearchComponent extends Component {
     this._container.classList.add('yxt-SearchBar-wrapper');
 
     if (this._useForm) {
-      let form = DOM.query(this._container, formSelector);
+      const form = DOM.query(this._container, formSelector);
       if (!form) {
         throw new Error(
           'Could not initialize SearchBar; Can not find {HTMLElement} `',
@@ -626,9 +626,9 @@ export default class SearchComponent extends Component {
     if (!autocompleteData) {
       const autocompleteRequest = this._verticalKey
         ? this.core.autoCompleteVertical(
-          query,
-          this._autoCompleteName,
-          this._verticalKey)
+            query,
+            this._autoCompleteName,
+            this._verticalKey)
         : this.core.autoCompleteUniversal(query, this._autoCompleteName);
       return autocompleteRequest.then(data => data.inputIntents);
     } else {

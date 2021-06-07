@@ -16,7 +16,7 @@ fixture`Facets page`
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
-test(`filtersearch works with back/forward navigation and page refresh`, async t => {
+test('filtersearch works with back/forward navigation and page refresh', async t => {
   const expectOnlyFilterTagToEql = async expectedText => {
     await t.expect(filterTags.count).eql(1);
     const filterTagText = await filterTags.nth(0).find(
@@ -56,7 +56,7 @@ test(`filtersearch works with back/forward navigation and page refresh`, async t
   await expectOnlyFilterTagToEql('New York City, New York, United States');
 });
 
-test(`pagination works with page navigation after selecting a filtersearch filter`, async t => {
+test('pagination works with page navigation after selecting a filtersearch filter', async t => {
   const expectFilterTagIsNewYork = async () => {
     await t.expect(filterTags.count).eql(1);
     const filterTagText = await filterTags.nth(0).find(

@@ -27,7 +27,7 @@ function createCleanFilesTask (locale) {
  */
 function _cleanFiles (callback, locale) {
   const precompiledFile = getPrecompiledFileName(locale);
-  del.sync([ `./dist/${precompiledFile}` ]);
+  del.sync([`./dist/${precompiledFile}`]);
   callback();
 }
 

@@ -65,13 +65,13 @@ export default class EventEmitter {
    * @param {Object} data the data to send along to the subscribers
    */
   emit (evt, data) {
-    let listeners = this._listeners[evt];
+    const listeners = this._listeners[evt];
     if (listeners === undefined) {
       return;
     }
 
     // Invoke each of all the listener handlers and remove the ones that should fire only once.
-    let keep = [];
+    const keep = [];
     for (let i = 0; i < listeners.length; i++) {
       listeners[i].cb(data);
       if (listeners[i].once === true) {

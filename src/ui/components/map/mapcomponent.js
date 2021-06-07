@@ -9,8 +9,8 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import ResultsContext from '../../../core/storage/resultscontext';
 
 const ProviderTypes = {
-  'google': GoogleMapProvider,
-  'mapbox': MapBoxMapProvider
+  google: GoogleMapProvider,
+  mapbox: MapBoxMapProvider
 };
 
 export default class MapComponent extends Component {

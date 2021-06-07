@@ -76,7 +76,7 @@ export default class CTACollectionComponent extends Component {
         parsedCTAs = parsedCTAs.concat(ctaMapping(result));
       } else if (typeof ctaMapping === 'object') {
         const ctaObject = { ...ctaMapping };
-        for (let [ctaAttribute, attributeMapping] of Object.entries(ctaMapping)) {
+        for (const [ctaAttribute, attributeMapping] of Object.entries(ctaMapping)) {
           if (typeof attributeMapping === 'function') {
             ctaObject[ctaAttribute] = attributeMapping(result);
           }

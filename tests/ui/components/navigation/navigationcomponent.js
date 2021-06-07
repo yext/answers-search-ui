@@ -14,7 +14,7 @@ DOM.setup(
 
 beforeEach(() => {
   // Always reset the DOM before each component render test
-  let bodyEl = DOM.query('body');
+  const bodyEl = DOM.query('body');
   DOM.empty(bodyEl);
 
   // Create the container that our component will be injected into

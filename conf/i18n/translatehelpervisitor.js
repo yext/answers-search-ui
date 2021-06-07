@@ -107,7 +107,7 @@ class TranslateHelperVisitor {
       ...statement,
       path: {
         ...statement.path,
-        parts: [ this._processTranslationHelper ],
+        parts: [this._processTranslationHelper],
         original: this._processTranslationHelper
       }
     };

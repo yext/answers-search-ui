@@ -365,11 +365,11 @@ export default class FilterOptionsComponent extends Component {
 
   onMount () {
     DOM.delegate(
-      DOM.query(this._container, `.yxt-FilterOptions-options`),
+      DOM.query(this._container, '.yxt-FilterOptions-options'),
       this.config.optionSelector,
       'click',
       event => {
-        let selectedCountEl = DOM.query(this._container, '.js-yxt-FilterOptions-selectedCount');
+        const selectedCountEl = DOM.query(this._container, '.js-yxt-FilterOptions-selectedCount');
         if (selectedCountEl) {
           selectedCountEl.innerText = this._getSelectedCount();
         }
@@ -394,7 +394,7 @@ export default class FilterOptionsComponent extends Component {
           this.showMoreState = true;
           showLessEl.classList.add('hidden');
           showMoreEl.classList.remove('hidden');
-          for (let optionEl of optionsOverLimitEls) {
+          for (const optionEl of optionsOverLimitEls) {
             optionEl.classList.add('hidden');
           }
         });
@@ -405,7 +405,7 @@ export default class FilterOptionsComponent extends Component {
           this.showMoreState = false;
           showLessEl.classList.remove('hidden');
           showMoreEl.classList.add('hidden');
-          for (let optionEl of optionsOverLimitEls) {
+          for (const optionEl of optionsOverLimitEls) {
             optionEl.classList.remove('hidden');
           }
         });
@@ -441,7 +441,7 @@ export default class FilterOptionsComponent extends Component {
             clearSearchEl.classList.remove('js-hidden');
           }
 
-          for (let filterOption of filterOptionEls) {
+          for (const filterOption of filterOptionEls) {
             const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
             let labelText = labelEl.textContent || labelEl.innerText || '';
             labelText = labelText.trim();
@@ -450,7 +450,7 @@ export default class FilterOptionsComponent extends Component {
               filterOption.classList.remove('displaySearch');
               labelEl.innerHTML = labelText;
             } else {
-              let matchedSubstring = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
+              const matchedSubstring = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
               if (matchedSubstring) {
                 filterOption.classList.add('displaySearch');
                 filterOption.classList.remove('hiddenSearch');
@@ -550,7 +550,7 @@ export default class FilterOptionsComponent extends Component {
     const maxLevenshteinDistance = 1;
     if (filter.length > minFilterSizeForLevenshtein) {
       // Break option into X filter.length size substrings
-      let substrings = [];
+      const substrings = [];
       for (let start = 0; start <= (option.length - filter.length); start++) {
         substrings.push(option.substr(start, filter.length));
       }
@@ -558,8 +558,8 @@ export default class FilterOptionsComponent extends Component {
       // Find the substring that is the closest in levenshtein distance to filter
       let minLevDist = filter.length;
       let minLevSubstring = filter;
-      for (let substring of substrings) {
-        let levDist = this._calcLevenshteinDistance(substring, filter);
+      for (const substring of substrings) {
+        const levDist = this._calcLevenshteinDistance(substring, filter);
         if (levDist < minLevDist) {
           minLevDist = levDist;
           minLevSubstring = substring;

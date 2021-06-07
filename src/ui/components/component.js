@@ -285,7 +285,7 @@ export default class Component {
   }
 
   addChild (data, type, opts) {
-    let childComponent = this.componentManager.create(
+    const childComponent = this.componentManager.create(
       type,
       Object.assign({
         name: data.name,
@@ -388,7 +388,7 @@ export default class Component {
 
     // Attach analytics hooks as necessary
     if (this.analyticsReporter) {
-      let domHooks = DOM.queryAll(this._container, '[data-eventtype]:not([data-is-analytics-attached])');
+      const domHooks = DOM.queryAll(this._container, '[data-eventtype]:not([data-is-analytics-attached])');
       domHooks.forEach(this._createAnalyticsHook.bind(this));
     }
 
@@ -439,7 +439,7 @@ export default class Component {
     const prop = dataset.prop;
     let opts = dataset.opts ? JSON.parse(dataset.opts) : {};
 
-    let childData = data[prop] || {};
+    const childData = data[prop] || {};
 
     opts = {
       ...opts,

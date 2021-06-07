@@ -34,7 +34,7 @@ describe('core configuration', () => {
       }
     ];
 
-    let params = new URLSearchParams('tabOrder=tab2,tab1');
+    const params = new URLSearchParams('tabOrder=tab2,tab1');
     const defaultOrder = getDefaultTabOrder(tabConfig, params);
     expect(defaultOrder).toMatchObject(['tab2', 'tab1']);
   });

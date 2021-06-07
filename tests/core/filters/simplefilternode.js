@@ -3,10 +3,10 @@ import FilterNodeFactory from '../../../src/core/filters/filternodefactory';
 
 describe('haveEqualSimpleFilters helper', () => {
   const joeFilterNode = FilterNodeFactory.from({
-    filter: { name: { '$eq': 'joe' } }
+    filter: { name: { $eq: 'joe' } }
   });
   const bobFilterNode = FilterNodeFactory.from({
-    filter: { name: { '$eq': 'bob' } }
+    filter: { name: { $eq: 'bob' } }
   });
 
   it('works for equivalent simple filters', () => {
@@ -23,8 +23,8 @@ describe('haveEqualSimpleFilters helper', () => {
     const rangeFilterNode = FilterNodeFactory.from({
       filter: {
         fieldId: {
-          '$ge': 5,
-          '$le': 7
+          $ge: 5,
+          $le: 7
         }
       }
     });
@@ -32,8 +32,8 @@ describe('haveEqualSimpleFilters helper', () => {
     const rangeFilterNodeReverse = FilterNodeFactory.from({
       filter: {
         fieldId: {
-          '$le': 7,
-          '$ge': 5
+          $le: 7,
+          $ge: 5
         }
       }
     });
@@ -44,8 +44,8 @@ describe('haveEqualSimpleFilters helper', () => {
     const rangeFilterNode = FilterNodeFactory.from({
       filter: {
         iamDifferent: {
-          '$ge': 5,
-          '$le': 7
+          $ge: 5,
+          $le: 7
         }
       }
     });
@@ -53,8 +53,8 @@ describe('haveEqualSimpleFilters helper', () => {
     const rangeFilterNodeReverse = FilterNodeFactory.from({
       filter: {
         thanBefore: {
-          '$le': 7,
-          '$ge': 5
+          $le: 7,
+          $ge: 5
         }
       }
     });
@@ -65,9 +65,9 @@ describe('haveEqualSimpleFilters helper', () => {
     const rangeFilterNode = FilterNodeFactory.from({
       filter: {
         aFieldId: {
-          '$eq': 5,
-          '$eq': 5,
-          '$le': 7
+          $eq: 5,
+          $eq: 5,
+          $le: 7
         }
       }
     });
@@ -75,9 +75,9 @@ describe('haveEqualSimpleFilters helper', () => {
     const rangeFilterNodeReverse = FilterNodeFactory.from({
       filter: {
         aFieldId: {
-          '$eq': 5,
-          '$le': 7,
-          '$le': 7
+          $eq: 5,
+          $le: 7,
+          $le: 7
         }
       }
     });

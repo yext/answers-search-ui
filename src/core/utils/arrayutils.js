@@ -16,7 +16,7 @@ export function groupArray (arr, keyFunc, valueFunc, initial) {
     const key = keyFunc(element, idx);
     const value = valueFunc(element, idx);
     if (!groups[key]) {
-      groups[key] = [ value ];
+      groups[key] = [value];
     } else {
       groups[key].push(value);
     }

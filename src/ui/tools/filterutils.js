@@ -37,7 +37,7 @@ export function findSimpleFiltersWithFieldId (persistedFilter, fieldId) {
       childFilter => findSimpleFiltersWithFieldId(Filter.from(childFilter), fieldId));
   }
   if (Filter.from(persistedFilter).getFilterKey() === fieldId) {
-    return [ persistedFilter ];
+    return [persistedFilter];
   }
   return [];
 }

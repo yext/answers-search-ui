@@ -22,7 +22,7 @@ fixture`FilterBox page`
   .after(shutdownServer)
   .page`${FILTERBOX_PAGE}`;
 
-test(`single option filterbox works with back/forward navigation and page refresh`, async t => {
+test('single option filterbox works with back/forward navigation and page refresh', async t => {
   const radiusFilterLogger = RequestLogger({
     url: /v2\/accounts\/me\/answers\/vertical\/query/
   });
@@ -60,7 +60,7 @@ test(`single option filterbox works with back/forward navigation and page refres
   await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
 });
 
-test(`multioption filterbox works with back/forward navigation and page refresh`, async t => {
+test('multioption filterbox works with back/forward navigation and page refresh', async t => {
   const filterBoxLogger = RequestLogger({
     url: /v2\/accounts\/me\/answers\/vertical\/query/
   });
@@ -130,7 +130,7 @@ test(`multioption filterbox works with back/forward navigation and page refresh`
   });
 });
 
-test(`locationRadius of 0 is persisted`, async t => {
+test('locationRadius of 0 is persisted', async t => {
   const filterBox = FacetsPage.getStaticFilterBox();
   const radiusFilter = await filterBox.getFilterOptions('DISTANCE');
   await radiusFilter.toggleOption('0 miles');

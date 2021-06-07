@@ -5,11 +5,15 @@ const _ = require('lodash');
 
 async function createTranslator () {
   const locale = 'fr';
-  return Translator.create(locale, [], { [locale]: { translation: {
-    'Hello': 'Bonjour',
-    'result': 'résultat',
-    'result_plural': 'résultats'
-  } } });
+  return Translator.create(locale, [], {
+    [locale]: {
+      translation: {
+        Hello: 'Bonjour',
+        result: 'résultat',
+        result_plural: 'résultats'
+      }
+    }
+  });
 }
 
 describe('TranslateHelperVisitor translates visited nodes', () => {
@@ -19,7 +23,7 @@ describe('TranslateHelperVisitor translates visited nodes', () => {
   });
 
   it('static translation', () => {
-    const template = `{{ translate phrase='Hello' }}`;
+    const template = '{{ translate phrase=\'Hello\' }}';
     const ast = Handlebars.parse(template);
 
     new TranslateHelperVisitor(translator).accept(ast);
@@ -30,7 +34,7 @@ describe('TranslateHelperVisitor translates visited nodes', () => {
   });
 
   it('plural translation', () => {
-    const template = `{{ translate phrase='result' pluralForm='results' count=resultCount }}`;
+    const template = '{{ translate phrase=\'result\' pluralForm=\'results\' count=resultCount }}';
     const ast = Handlebars.parse(template);
 
     new TranslateHelperVisitor(translator).accept(ast);
@@ -54,7 +58,7 @@ describe('TranslateHelperVisitor translates visited nodes', () => {
   });
 
   it('a non-translate helper should not be modified', () => {
-    const template = `{{ yext phrase='Hello' }}`;
+    const template = '{{ yext phrase=\'Hello\' }}';
     const ast = Handlebars.parse(template);
     const originalAst = _.cloneDeep(ast);
 

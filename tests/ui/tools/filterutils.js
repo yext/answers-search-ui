@@ -140,7 +140,7 @@ describe('findSimpleFiltersWithFieldId', () => {
     const filter1 = Filter.from({
       c_aField: { $eq: 5 }
     });
-    expect(findSimpleFiltersWithFieldId(filter1, 'c_aField')).toEqual([ filter1 ]);
+    expect(findSimpleFiltersWithFieldId(filter1, 'c_aField')).toEqual([filter1]);
   });
 });
 
