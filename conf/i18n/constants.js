@@ -3,7 +3,7 @@ exports.TRANSLATION_FLAGGER_REGEX = /TranslationFlagger.flag\((\s)*\{[^;]+?\}(\s
 exports.DEFAULT_LOCALE = 'en';
 
 const LANGUAGES_TO_LOCALES = {
-  'en': [
+  en: [
     'en_AE',
     'en_AI',
     'en_AS',
@@ -65,7 +65,7 @@ const LANGUAGES_TO_LOCALES = {
     'en_US',
     'en_ZA'
   ],
-  'es': [
+  es: [
     'es_BO',
     'es_CO',
     'es_CU',
@@ -77,7 +77,7 @@ const LANGUAGES_TO_LOCALES = {
     'es_NI',
     'es_US'
   ],
-  'fr': [
+  fr: [
     'fr_BE',
     'fr_BL',
     'fr_CA',
@@ -89,18 +89,18 @@ const LANGUAGES_TO_LOCALES = {
     'fr_MC',
     'fr_RE'
   ],
-  'it': [
+  it: [
     'it_CH',
     'it_IT'
   ],
-  'de': [
+  de: [
     'de_AT',
     'de_CH',
     'de_DE',
     'de_EU',
     'de_LU'
   ],
-  'ja': [
+  ja: [
     'ja_JP'
   ]
 };

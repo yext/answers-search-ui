@@ -7,7 +7,7 @@ export default class Navigation {
   }
 
   static from (modules) {
-    let nav = [];
+    const nav = [];
     if (!modules || !Array.isArray(modules)) {
       return nav;
     }

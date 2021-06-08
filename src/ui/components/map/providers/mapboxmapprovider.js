@@ -28,7 +28,7 @@ export default class MapBoxMapProvider extends MapProvider {
    * @param {function} onLoad An optional callback to invoke once the JS is loaded.
    */
   loadJS (onLoad) {
-    let script = DOM.createEl('script', {
+    const script = DOM.createEl('script', {
       id: 'yext-map-js',
       onload: () => {
         this._isLoaded = true;
@@ -46,7 +46,7 @@ export default class MapBoxMapProvider extends MapProvider {
       src: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'
     });
 
-    let css = DOM.createEl('link', {
+    const css = DOM.createEl('link', {
       id: 'yext-map-css',
       rel: 'stylesheet',
       href: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css'
@@ -62,7 +62,7 @@ export default class MapBoxMapProvider extends MapProvider {
       return this;
     }
 
-    let container = DOM.query(el);
+    const container = DOM.query(el);
     this._map = new mapboxgl.Map({
       container: container,
       zoom: this._zoom,
@@ -85,11 +85,11 @@ export default class MapBoxMapProvider extends MapProvider {
 
       const bounds = new mapboxgl.LngLatBounds();
       for (let i = 0; i < mapboxMapMarkerConfigs.length; i++) {
-        let wrapper = mapboxMapMarkerConfigs[i].wrapper;
-        let coords = new mapboxgl.LngLat(
+        const wrapper = mapboxMapMarkerConfigs[i].wrapper;
+        const coords = new mapboxgl.LngLat(
           mapboxMapMarkerConfigs[i].position.longitude,
           mapboxMapMarkerConfigs[i].position.latitude);
-        let marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
+        const marker = new mapboxgl.Marker(wrapper).setLngLat(coords);
         bounds.extend(marker.getLngLat());
         marker.addTo(this._map);
         if (this._onPinClick) {
@@ -159,7 +159,7 @@ export class MapBoxMarkerConfig {
    * @returns {string[]}
    */
   static serialize (mapboxMapMarkerConfigs) {
-    let serializedMarkers = [];
+    const serializedMarkers = [];
     mapboxMapMarkerConfigs.forEach((marker) => {
       if (marker.staticMapPin) {
         serializedMarkers.push(`url-${marker.staticMapPin}(${marker.position.longitude},${marker.position.latitude})`);
@@ -178,7 +178,7 @@ export class MapBoxMarkerConfig {
    * @returns {MapBoxMarkerConfig[]}
    */
   static from (markers, pinConfig, map) {
-    let mapboxMapMarkerConfigs = [];
+    const mapboxMapMarkerConfigs = [];
     if (!Array.isArray(markers)) {
       markers = [markers];
     }

@@ -135,7 +135,7 @@ export default class AlternativeVerticalsComponent extends Component {
    * @param {object} verticalsConfig the configuration to use
    */
   _buildVerticalSuggestions (alternativeVerticals, verticalsConfig, context, referrerPageUrl) {
-    let verticals = [];
+    const verticals = [];
 
     const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     if (context) {

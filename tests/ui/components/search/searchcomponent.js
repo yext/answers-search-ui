@@ -13,7 +13,7 @@ describe('SearchBar component', () => {
   };
   let COMPONENT_MANAGER, storage;
   beforeEach(() => {
-    let bodyEl = DOM.query('body');
+    const bodyEl = DOM.query('body');
     DOM.empty(bodyEl);
     DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 

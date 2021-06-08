@@ -19,19 +19,19 @@ const DEFAULT_CONFIG = {
    * This is typically an organization object
    * @type {number}
    */
-  'entityId': null,
+  entityId: null,
 
   /**
    * The main CSS selector used to reference the form for the component.
    * @type {string} CSS selector
    */
-  'formSelector': 'form',
+  formSelector: 'form',
 
   /**
    * An optional label to use for the e-mail address input
    * @type {string}
    */
-  'emailLabel': TranslationFlagger.flag({
+  emailLabel: TranslationFlagger.flag({
     phrase: 'Email',
     context: 'Labels the email value provided as an argument'
   }),
@@ -40,7 +40,7 @@ const DEFAULT_CONFIG = {
    * An optional label to use for the name input
    * @type {string}
    */
-  'nameLabel': TranslationFlagger.flag({
+  nameLabel: TranslationFlagger.flag({
     phrase: 'Name',
     context: 'Labels the name value provided as an argument'
   }),
@@ -49,7 +49,7 @@ const DEFAULT_CONFIG = {
    * An optional label to use for the question
    * @type {string}
    */
-  'questionLabel': TranslationFlagger.flag({
+  questionLabel: TranslationFlagger.flag({
     phrase: 'Question',
     context: 'Labels the question value provided as an argument'
   }),
@@ -58,7 +58,7 @@ const DEFAULT_CONFIG = {
    * An optional label to use for the Privacy Policy
    * @type {string}
    */
-  'privacyPolicyText': TranslationFlagger.flag({
+  privacyPolicyText: TranslationFlagger.flag({
     phrase: 'By submitting my email address, I consent to being contacted via email at the address provided.'
   }),
 
@@ -66,7 +66,7 @@ const DEFAULT_CONFIG = {
    * The label to use for the Submit button
    * @type {string}
    */
-  'buttonLabel': TranslationFlagger.flag({
+  buttonLabel: TranslationFlagger.flag({
     phrase: 'Submit',
     context: 'Button label'
   }),
@@ -75,7 +75,7 @@ const DEFAULT_CONFIG = {
    * The title to display in the title bar
    * @type {string}
    */
-  'sectionTitle': TranslationFlagger.flag({
+  sectionTitle: TranslationFlagger.flag({
     phrase: 'Ask a Question',
     context: 'Title of section'
   }),
@@ -84,7 +84,7 @@ const DEFAULT_CONFIG = {
    * The description to display in the title bar
    * @type {string}
    */
-  'teaser': TranslationFlagger.flag({
+  teaser: TranslationFlagger.flag({
     phrase: 'Can’t find what you\'re looking for? Ask a question below.'
   }),
 
@@ -92,13 +92,13 @@ const DEFAULT_CONFIG = {
    * The name of the icon to use in the title bar
    * @type {string}
    */
-  'sectionTitleIconName': 'support',
+  sectionTitleIconName: 'support',
 
   /**
    * The text to display in the feedback form ahead of the Question input
    * @type {string}
    */
-  'description': TranslationFlagger.flag({
+  description: TranslationFlagger.flag({
     phrase: 'Enter your question and contact information, and we\'ll get back to you with a response shortly.'
   }),
 
@@ -106,7 +106,7 @@ const DEFAULT_CONFIG = {
    * The placeholder text for required inputs
    * @type {string}
    */
-  'requiredInputPlaceholder': TranslationFlagger.flag({
+  requiredInputPlaceholder: TranslationFlagger.flag({
     phrase: '(required)',
     context: 'Indicates that entering input is mandatory'
   }),
@@ -115,7 +115,7 @@ const DEFAULT_CONFIG = {
    * The placeholder text for the question text area
    * @type {string}
    */
-  'questionInputPlaceholder': TranslationFlagger.flag({
+  questionInputPlaceholder: TranslationFlagger.flag({
     phrase: 'Enter your question here',
     context: 'Placeholder text for input field'
   }),
@@ -124,7 +124,7 @@ const DEFAULT_CONFIG = {
    * The confirmation text to display after successfully submitting feedback
    * @type {string}
    */
-  'questionSubmissionConfirmationText': TranslationFlagger.flag({
+  questionSubmissionConfirmationText: TranslationFlagger.flag({
     phrase: 'Thank you for your question!'
   }),
 
@@ -132,7 +132,7 @@ const DEFAULT_CONFIG = {
    * The default privacy policy url label
    * @type {string}
   */
-  'privacyPolicyUrlLabel': TranslationFlagger.flag({
+  privacyPolicyUrlLabel: TranslationFlagger.flag({
     phrase: 'Learn more here.',
     context: 'Labels a link'
   }),
@@ -141,13 +141,13 @@ const DEFAULT_CONFIG = {
    * The default privacy policy url
    * @type {string}
    */
-  'privacyPolicyUrl': '',
+  privacyPolicyUrl: '',
 
   /**
    * The default privacy policy error text, shown when the user does not agree
    * @type {string}
    */
-  'privacyPolicyErrorText': TranslationFlagger.flag({
+  privacyPolicyErrorText: TranslationFlagger.flag({
     phrase: '* You must agree to the privacy policy to submit a question.'
   }),
 
@@ -155,7 +155,7 @@ const DEFAULT_CONFIG = {
    * The default email format error text, shown when the user submits an invalid email
    * @type {string}
    */
-  'emailFormatErrorText': TranslationFlagger.flag({
+  emailFormatErrorText: TranslationFlagger.flag({
     phrase: '* Please enter a valid email address.'
   }),
 
@@ -164,7 +164,7 @@ const DEFAULT_CONFIG = {
    * request.
    * @type {string}
    */
-  'networkErrorText': TranslationFlagger.flag({
+  networkErrorText: TranslationFlagger.flag({
     phrase: 'We\'re sorry, an error occurred.'
   }),
 
@@ -172,7 +172,7 @@ const DEFAULT_CONFIG = {
    * Whether or not this component is expanded by default.
    * @type {boolean}
    */
-  'expanded': true
+  expanded: true
 };
 
 /**
@@ -268,12 +268,12 @@ export default class QuestionSubmissionComponent extends Component {
   }
 
   onMount () {
-    let triggerEl = DOM.query(this._container, '.js-content-visibility-toggle');
+    const triggerEl = DOM.query(this._container, '.js-content-visibility-toggle');
     if (triggerEl !== null) {
       this.bindFormToggle(triggerEl);
     }
 
-    let formEl = DOM.query(this._container, this._config.formSelector);
+    const formEl = DOM.query(this._container, this._config.formSelector);
     if (formEl === null) {
       return;
     }
@@ -315,17 +315,17 @@ export default class QuestionSubmissionComponent extends Component {
       }
 
       this.core.submitQuestion({
-        'entityId': this._config.entityId,
-        'site': 'FIRSTPARTY',
-        'name': formData.name,
-        'email': formData.email,
-        'questionText': formData.questionText,
-        'questionDescription': formData.questionDescription
+        entityId: this._config.entityId,
+        site: 'FIRSTPARTY',
+        name: formData.name,
+        email: formData.email,
+        questionText: formData.questionText,
+        questionDescription: formData.questionDescription
       })
         .catch(error => {
           this.setState(
             new QuestionSubmission(formData, {
-              'network': 'We\'re sorry, an error occurred.'
+              network: 'We\'re sorry, an error occurred.'
             })
           );
           throw error;
@@ -343,8 +343,9 @@ export default class QuestionSubmissionComponent extends Component {
       this.setState(
         new QuestionSubmission({
           ...formData,
-          'expanded': !formData.questionExpanded,
-          'submitted': formData.questionSubmitted },
+          expanded: !formData.questionExpanded,
+          submitted: formData.questionSubmitted
+        },
         formData.errors));
     });
   }
@@ -361,7 +362,7 @@ export default class QuestionSubmissionComponent extends Component {
       return {};
     }
 
-    let obj = {};
+    const obj = {};
     for (let i = 0; i < inputFields.length; i++) {
       let val = inputFields[i].value;
       if (inputFields[i].type === 'checkbox') {
@@ -379,7 +380,7 @@ export default class QuestionSubmissionComponent extends Component {
    * @returns {Object} errors object if any errors found
    */
   validate (formEl) {
-    let errors = {};
+    const errors = {};
     const fields = DOM.queryAll(formEl, '.js-question-field');
     for (let i = 0; i < fields.length; i++) {
       if (!fields[i].checkValidity()) {
@@ -389,20 +390,20 @@ export default class QuestionSubmissionComponent extends Component {
         }
         switch (fields[i].name) {
           case 'email':
-            errors['emailError'] = true;
+            errors.emailError = true;
             if (!fields[i].validity.valueMissing) {
-              errors['emailErrorText'] = this._config.emailFormatErrorText;
+              errors.emailErrorText = this._config.emailFormatErrorText;
             }
             break;
           case 'name':
-            errors['nameError'] = true;
+            errors.nameError = true;
             break;
           case 'privacyPolicy':
-            errors['privacyPolicyErrorText'] = this._config.privacyPolicyErrorText;
-            errors['privacyPolicyError'] = true;
+            errors.privacyPolicyErrorText = this._config.privacyPolicyErrorText;
+            errors.privacyPolicyError = true;
             break;
           case 'questionText':
-            errors['questionTextError'] = true;
+            errors.questionTextError = true;
             break;
         }
       }

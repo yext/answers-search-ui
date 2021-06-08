@@ -117,7 +117,7 @@ export default class ComponentManager {
     // Every component needs local access to the component manager
     // because sometimes components have subcomponents that need to be
     // constructed during creation
-    let systemOpts = {
+    const systemOpts = {
       core: this._core,
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,
@@ -126,7 +126,7 @@ export default class ComponentManager {
     };
     this._componentIdCounter++;
 
-    let componentClass = COMPONENT_REGISTRY[componentType];
+    const componentClass = COMPONENT_REGISTRY[componentType];
     if (!componentClass) {
       throw new AnswersComponentError(
         `Component type ${componentType} is not recognized as a valid component.` +
@@ -148,7 +148,7 @@ export default class ComponentManager {
     };
 
     // Instantiate our new component and keep track of it
-    let component =
+    const component =
       new COMPONENT_REGISTRY[componentType](config, systemOpts)
         .init(config);
 

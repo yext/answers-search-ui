@@ -34,7 +34,7 @@ export default class SearchParams {
    * @returns {Object} mapping from query param -> value where value is '' if no value is provided
    */
   parse (url) {
-    let params = {};
+    const params = {};
     let search = url;
 
     if (!search) {
@@ -102,16 +102,16 @@ export default class SearchParams {
    * @return {string}
    */
   toString () {
-    let string = [];
-    for (let key in this._params) {
+    const string = [];
+    for (const key in this._params) {
       string.push(`${key}=${SearchParams.encode(this._params[key])}`);
     }
     return string.join('&');
   }
 
   entries () {
-    let entries = [];
-    for (let key in this._params) {
+    const entries = [];
+    for (const key in this._params) {
       entries.push([key, this._params[key]]);
     }
     return entries;
@@ -132,7 +132,7 @@ export default class SearchParams {
    * @return {string}
    */
   static encode (string) {
-    let replace = {
+    const replace = {
       '!': '%21',
       "'": '%27',
       '(': '%28',

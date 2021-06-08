@@ -192,7 +192,7 @@ describe('sort options component', () => {
     };
     const setSortBys = jest.fn();
     COMPONENT_MANAGER.core.setSortBys = setSortBys;
-    COMPONENT_MANAGER.core.storage.setWithPersist(StorageKeys.SORT_BYS, [ threeOptions[1] ]);
+    COMPONENT_MANAGER.core.storage.setWithPersist(StorageKeys.SORT_BYS, [threeOptions[1]]);
     const component = COMPONENT_MANAGER.create('SortOptions', opts);
     const wrapper = mount(component);
     expect(setSortBys).toHaveBeenCalledTimes(0);

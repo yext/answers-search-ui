@@ -17,7 +17,7 @@ import ResultsContext from '../storage/resultscontext';
  * component library and core storage understand.
  */
 export default class SearchDataTransformer {
-  static transformUniversal (data, urls = {}, formatters) {
+  static transformUniversal (data, urls = {}, formatters = undefined) {
     return {
       [StorageKeys.QUERY_ID]: data.queryId,
       [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),

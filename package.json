@@ -53,6 +53,12 @@
     "cssnano": "^4.1.10",
     "del": "^5.1.0",
     "enzyme": "^3.11.0",
+    "eslint": "^7.28.0",
+    "eslint-config-semistandard": "^15.0.1",
+    "eslint-config-standard": "^16.0.3",
+    "eslint-plugin-import": "^2.23.4",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
     "fs-extra": "^9.0.1",
     "generate-license-file": "^1.1.0",
     "gettext-extractor": "^3.5.2",
@@ -81,7 +87,6 @@
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^4.0.1",
     "sass": "^1.34.0",
-    "semistandard": "^13.0.1",
     "serve": "^11.3.0",
     "size-limit": "^4.9.0",
     "stylelint": "^13.7.1",
@@ -96,11 +101,11 @@
     "build-locales": "gulp buildLocales && size-limit",
     "dev": "gulp dev",
     "docs": "jsdoc -R README.md -d docs/ -r src/",
-    "lint": "semistandard",
-    "test": "semistandard && stylelint src/**/*.scss && jest",
+    "lint": "eslint .",
+    "test": "eslint . && stylelint src/**/*.scss && jest",
     "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuites/*.js",
     "size": "size-limit",
-    "fix": "semistandard --fix",
+    "fix": "eslint . --fix",
     "extract-translations": "gulp extractTranslations",
     "prepublishOnly": "./conf/npm/prepublishOnly.sh",
     "postpublish": "./conf/npm/postpublish.sh",
@@ -127,25 +132,6 @@
       "**/tests/core/**/*.js",
       "**/tests/ui/**/*.js",
       "**/tests/conf/**/*.js"
-    ]
-  },
-  "semistandard": {
-    "globals": [
-      "beforeEach",
-      "beforeAll",
-      "describe",
-      "it",
-      "expect",
-      "jest",
-      "DOMParser",
-      "ytag",
-      "test",
-      "fixture",
-      "CustomEvent",
-      "ANSWERS"
-    ],
-    "ignore": [
-      "docs/"
     ]
   },
   "percy": {

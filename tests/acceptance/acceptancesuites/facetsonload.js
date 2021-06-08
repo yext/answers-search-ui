@@ -17,7 +17,7 @@ fixture`Facets page`
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
-test(`Facets work with back/forward navigation and page refresh`, async t => {
+test('Facets work with back/forward navigation and page refresh', async t => {
   const logger = RequestLogger({
     url: /v2\/accounts\/me\/answers\/vertical\/query/
   });
@@ -45,10 +45,10 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
   await filterBox.applyFilters();
   currentFacets = await getFacetsFromRequest();
   const state1 = {
-    'c_puppyPreference': [],
-    'c_employeeDepartment': [{ 'c_employeeDepartment': { '$eq': 'Client Delivery [SO]' } }],
-    'languages': [],
-    'specialities': []
+    c_puppyPreference: [],
+    c_employeeDepartment: [{ c_employeeDepartment: { $eq: 'Client Delivery [SO]' } }],
+    languages: [],
+    specialities: []
   };
   await t.expect(currentFacets).eql(state1);
   logger.clear();
@@ -58,9 +58,9 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
   await filterBox.applyFilters();
   currentFacets = await getFacetsFromRequest();
   const state2 = {
-    'c_employeeDepartment': [
-      { 'c_employeeDepartment': { '$eq': 'Client Delivery [SO]' } },
-      { 'c_employeeDepartment': { '$eq': 'Technology' } }
+    c_employeeDepartment: [
+      { c_employeeDepartment: { $eq: 'Client Delivery [SO]' } },
+      { c_employeeDepartment: { $eq: 'Technology' } }
     ]
   };
   await t.expect(currentFacets).eql(state2);
@@ -71,13 +71,13 @@ test(`Facets work with back/forward navigation and page refresh`, async t => {
   await filterBox.applyFilters();
   currentFacets = await getFacetsFromRequest();
   const state3 = {
-    'c_puppyPreference': [{ 'c_puppyPreference': { '$eq': 'Frodo' } }],
-    'c_employeeDepartment': [
-      { 'c_employeeDepartment': { '$eq': 'Client Delivery [SO]' } },
-      { 'c_employeeDepartment': { '$eq': 'Technology' } }
+    c_puppyPreference: [{ c_puppyPreference: { $eq: 'Frodo' } }],
+    c_employeeDepartment: [
+      { c_employeeDepartment: { $eq: 'Client Delivery [SO]' } },
+      { c_employeeDepartment: { $eq: 'Technology' } }
     ],
-    'languages': [],
-    'specialities': []
+    languages: [],
+    specialities: []
   };
   await t.expect(currentFacets).eql(state3);
   logger.clear();

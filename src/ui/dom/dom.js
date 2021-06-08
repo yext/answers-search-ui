@@ -98,8 +98,8 @@ export default class DOM {
    * @param {Object} opts_data Optional attributes to apply to the new HTMLElement
    */
   static createEl (el, opts_data = {}) {
-    let node = document.createElement(el);
-    let props = Object.keys(opts_data);
+    const node = document.createElement(el);
+    const props = Object.keys(opts_data);
 
     for (let i = 0; i < props.length; i++) {
       if (props[i] === 'class') {
@@ -136,8 +136,8 @@ export default class DOM {
       return;
     }
 
-    let classes = className.split(',');
-    let len = classes.length;
+    const classes = className.split(',');
+    const len = classes.length;
 
     for (let i = 0; i < len; i++) {
       node.classList.add(classes[i]);
@@ -162,9 +162,9 @@ export default class DOM {
   }
 
   static css (selector, styles) {
-    let node = DOM.query(selector);
+    const node = DOM.query(selector);
 
-    for (let prop in styles) {
+    for (const prop in styles) {
       node.style[prop] = styles[prop];
     }
   }
@@ -179,7 +179,7 @@ export default class DOM {
   }
 
   static trigger (selector, event, settings) {
-    let e = DOM._customEvent(event, settings);
+    const e = DOM._customEvent(event, settings);
     DOM.query(selector).dispatchEvent(e);
   }
 
@@ -210,7 +210,7 @@ export default class DOM {
   }
 
   static delegate (ctxt, selector, evt, handler) {
-    let el = DOM.query(ctxt);
+    const el = DOM.query(ctxt);
     el.addEventListener(evt, function (event) {
       let target = event.target;
       while (!target.isEqualNode(el)) {

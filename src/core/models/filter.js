@@ -94,7 +94,7 @@ export default class Filter {
    */
   static or (...filters) {
     return new Filter({
-      [ FilterCombinators.OR ]: filters
+      [FilterCombinators.OR]: filters
     });
   }
 
@@ -105,7 +105,7 @@ export default class Filter {
    */
   static and (...filters) {
     return new Filter({
-      [ FilterCombinators.AND ]: filters
+      [FilterCombinators.AND]: filters
     });
   }
 

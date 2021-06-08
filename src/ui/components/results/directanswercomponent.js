@@ -151,7 +151,7 @@ export default class DirectAnswerComponent extends Component {
 
       this.reportQuality(checkedValue);
       this.updateState({
-        'feedbackSubmitted': true
+        feedbackSubmitted: true
       });
     });
 
@@ -299,7 +299,7 @@ export default class DirectAnswerComponent extends Component {
       fieldName: directAnswer.answer.fieldName,
       fieldType: directAnswer.answer.fieldType
     };
-    for (let [propertyToMatch, propertyValue] of Object.entries(override)) {
+    for (const [propertyToMatch, propertyValue] of Object.entries(override)) {
       if (propertyToMatch === 'cardType') {
         continue;
       }
@@ -349,7 +349,7 @@ export default class DirectAnswerComponent extends Component {
     const eventType = isGood === true ? EventTypes.THUMBS_UP : EventTypes.THUMBS_DOWN;
     const event = new AnalyticsEvent(eventType)
       .addOptions({
-        'directAnswer': true
+        directAnswer: true
       });
 
     this.analyticsReporter.report(event);

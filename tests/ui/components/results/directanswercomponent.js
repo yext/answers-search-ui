@@ -51,10 +51,10 @@ describe('types logic works properly', () => {
       ...defaultConfig,
       defaultCard: 'default-card',
       types: {
-        'FEATURED_SNIPPET': {
+        FEATURED_SNIPPET: {
           cardType: 'documentsearch-standard'
         },
-        'FIELD_VALUE': {
+        FIELD_VALUE: {
           cardType: 'allfields-standard'
         }
       }
@@ -68,7 +68,7 @@ describe('types logic works properly', () => {
       ...defaultConfig,
       defaultCard: 'default-card',
       types: {
-        'FEATURED_SNIPPET': {
+        FEATURED_SNIPPET: {
           cardType: 'custom-card'
         }
       }
@@ -82,7 +82,7 @@ describe('types logic works properly', () => {
       ...defaultConfig,
       defaultCard: 'default-card',
       types: {
-        'FIELD_VALUE': {
+        FIELD_VALUE: {
           cardType: 'custom-card',
           cardOverrides: [
             {
@@ -102,7 +102,7 @@ describe('types logic works properly', () => {
       ...defaultConfig,
       defaultCard: 'default-card',
       types: {
-        'FIELD_VALUE': {
+        FIELD_VALUE: {
           cardType: 'custom-card',
           cardOverrides: [
             {
@@ -126,7 +126,7 @@ describe('types logic works properly', () => {
       ...defaultConfig,
       defaultCard: 'default-card',
       types: {
-        'FIELD_VALUE': {
+        FIELD_VALUE: {
           cardType: 'custom-card',
           cardOverrides: [
             {
@@ -147,7 +147,7 @@ describe('types logic works properly', () => {
         ...defaultConfig,
         defaultCard: 'default-card',
         types: {
-          'FIELD_VALUE': {
+          FIELD_VALUE: {
             cardType: 'custom-card',
             cardOverrides: [
               {
@@ -168,7 +168,7 @@ describe('types logic works properly', () => {
       ...defaultConfig,
       defaultCard: 'default-card',
       types: {
-        'FIELD_VALUE': {
+        FIELD_VALUE: {
           cardType: 'custom-card'
         }
       },

@@ -45,7 +45,7 @@ export default class SpellCheckComponent extends Component {
     if (query === undefined) {
       return '';
     }
-    let params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
     params.set(StorageKeys.QUERY, query.value);
     params.set(StorageKeys.SKIP_SPELL_CHECK, true);
     params.set(StorageKeys.QUERY_TRIGGER, type.toLowerCase());

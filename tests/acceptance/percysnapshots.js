@@ -14,5 +14,5 @@ fixture`Percy Snapshots for the Facets Page`
 test.page`http://localhost:9999/tests/acceptance/fixtures/html/facets`(
   'Facets page',
   async t => {
-    await percySnapshot(t, `facets page pre search`);
+    await percySnapshot(t, 'facets page pre search');
   });

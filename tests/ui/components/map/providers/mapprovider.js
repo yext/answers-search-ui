@@ -55,12 +55,12 @@ describe('can show/hide map behavior for no results with blank map data', () => 
     const visibleForNoResults = undefined;
     const mapData = { mapMarkers: [1] };
     it('shows map if showEmptyMap is true and tehre is no mapt data', () => {
-      let showEmptyMap = true;
+      const showEmptyMap = true;
       expect(MapProvider.shouldHideMap(null, resultsContext, showEmptyMap, visibleForNoResults)).toBeFalsy();
     });
 
     it('hides map if showEmptyMap is false and there is no map data', () => {
-      let showEmptyMap = false;
+      const showEmptyMap = false;
       expect(MapProvider.shouldHideMap(null, resultsContext, showEmptyMap, visibleForNoResults)).toBeTruthy();
     });
 
