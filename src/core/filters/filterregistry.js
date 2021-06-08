@@ -170,6 +170,11 @@ export default class FilterRegistry {
     };
   }
 
+  /**
+   * Combines the active facet FilterNodes into a single Facet
+   *
+   * @returns {Facet}
+   */
   _createFacetsFromFilterNodes () {
     const getFilters = fn => fn.getChildren().length
       ? fn.getChildren().flatMap(getFilters)
@@ -179,7 +184,8 @@ export default class FilterRegistry {
   }
 
   /**
-   * Combines the active facet FilterNodes into a single Facet
+   * Returns the current Facets state.
+   *
    * @returns {Facet}
    */
   getFacets () {
