@@ -19,6 +19,9 @@
     "javascript",
     "vanilla"
   ],
+  "files": [
+    "dist"
+  ],
   "dependencies": {
     "@mapbox/mapbox-gl-language": "^0.10.1",
     "@yext/answers-core": "^1.2.0-alpha.0",
