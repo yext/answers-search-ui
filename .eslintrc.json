@@ -1,0 +1,18 @@
+{
+   "extends": ["semistandard"],
+   "ignorePatterns": ["dist", "docs"],
+   "globals": {
+      "beforeEach" : true,
+      "beforeAll" : true,
+      "describe" : true,
+      "it" : true,
+      "expect" : true,
+      "jest" : true,
+      "DOMParser" : true,
+      "ytag" : true,
+      "test" : true,
+      "fixture" : true,
+      "CustomEvent" : true,
+      "ANSWERS" : true
+    }
+}

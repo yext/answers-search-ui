@@ -626,9 +626,9 @@ export default class SearchComponent extends Component {
     if (!autocompleteData) {
       const autocompleteRequest = this._verticalKey
         ? this.core.autoCompleteVertical(
-            query,
-            this._autoCompleteName,
-            this._verticalKey)
+          query,
+          this._autoCompleteName,
+          this._verticalKey)
         : this.core.autoCompleteUniversal(query, this._autoCompleteName);
       return autocompleteRequest.then(data => data.inputIntents);
     } else {
