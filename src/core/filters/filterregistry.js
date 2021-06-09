@@ -172,9 +172,10 @@ export default class FilterRegistry {
 
   /**
    * Combines the active facet FilterNodes into a single Facet
+   *
    * @returns {Facet}
    */
-  createFacetsFromFilterNodes () {
+  _createFacetsFromFilterNodes () {
     const getFilters = fn => fn.getChildren().length
       ? fn.getChildren().flatMap(getFilters)
       : fn.getFilter();
@@ -183,16 +184,24 @@ export default class FilterRegistry {
   }
 
   /**
+   * Returns the current Facets state.
+   *
+   * @returns {Facet}
+   */
+  getFacets () {
+    const hasFacetFilterNodes = this.storage.has(StorageKeys.FACET_FILTER_NODES);
+    return hasFacetFilterNodes
+      ? this._createFacetsFromFilterNodes()
+      : this.storage.get(StorageKeys.PERSISTED_FACETS) || {};
+  }
+
+  /**
    * Gets the facet filters as an array of Filters to send to the answers-core.
    *
    * @returns {Facet[]} from answers-core
    */
   getFacetsPayload () {
-    const hasFacetFilterNodes = this.storage.has(StorageKeys.FACET_FILTER_NODES);
-    const facets = hasFacetFilterNodes
-      ? this.createFacetsFromFilterNodes()
-      : this.storage.get(StorageKeys.PERSISTED_FACETS) || {};
-
+    const facets = this.getFacets();
     const coreFacets = Object.entries(facets).map(([fieldId, filterArray]) => {
       return {
         fieldId: fieldId,
