@@ -13,9 +13,9 @@ fixture`Universal page`
   .after(shutdownServer)
   .page`${UNIVERSAL_PAGE}`;
 
-test(`a universal page's search bar is protected against xss`, async t => {
+test('a universal page\'s search bar is protected against xss', async t => {
   const searchComponent = UniversalPage.getSearchComponent();
-  const xssCode = `window.xssFingerprint = 'gottem!!!'`;
+  const xssCode = 'window.xssFingerprint = \'gottem!!!\'';
   const xssAttackQuery = `"<span><img src=sdf onerror="${xssCode}"`;
   await searchComponent.enterQuery(xssAttackQuery);
   await searchComponent.submitQuery();
@@ -28,9 +28,9 @@ fixture`Vertical page`
   .after(shutdownServer)
   .page`${VERTICAL_PAGE}`;
 
-test(`a vertical page's search bar is protected against xss`, async t => {
+test('a vertical page\'s search bar is protected against xss', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
-  const xssCode = `window.xssFingerprint = 'gottem!!!'`;
+  const xssCode = 'window.xssFingerprint = \'gottem!!!\'';
   const xssAttackQuery = `"<span><img src=sdf onerror="${xssCode}"`;
   await searchComponent.enterQuery(xssAttackQuery);
   await searchComponent.submitQuery();

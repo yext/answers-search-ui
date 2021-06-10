@@ -63,9 +63,9 @@ describe('forming no results response', () => {
       resultsCount: 0,
       facets: [
         {
-          'fieldId': 'c_features',
-          'displayName': 'Features',
-          'options': []
+          fieldId: 'c_features',
+          displayName: 'Features',
+          options: []
         }
       ],
       allResultsForVertical: {
@@ -83,16 +83,16 @@ describe('forming no results response', () => {
         ],
         facets: [
           {
-            'fieldId': 'c_features',
-            'displayName': 'Features',
-            'options': [
+            fieldId: 'c_features',
+            displayName: 'Features',
+            options: [
               {
-                'displayName': 'Dog Friendly',
-                'count': 1,
-                'selected': false,
-                'filter': {
-                  'c_features': {
-                    '$eq': 'Dog Friendly'
+                displayName: 'Dog Friendly',
+                count: 1,
+                selected: false,
+                filter: {
+                  c_features: {
+                    $eq: 'Dog Friendly'
                   }
                 }
               }

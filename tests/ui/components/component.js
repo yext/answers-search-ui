@@ -15,8 +15,8 @@ const DEFAULT_TEMPLATE = '<div>This is a default template {{name}}</div>';
 // Our render requires the native handlebars compiler,
 // and the set of precompiled templates for the components to use
 const RENDERER = new HandlebarsRenderer({
-  '_hb': Handlebars,
-  'default': Handlebars.compile(DEFAULT_TEMPLATE)
+  _hb: Handlebars,
+  default: Handlebars.compile(DEFAULT_TEMPLATE)
 });
 
 const COMPONENT_MANAGER = new MockComponentManager();
@@ -32,7 +32,7 @@ describe('rendering component templates', () => {
     const component = COMPONENT_MANAGER.create('Component', {
       data: { name: 'Billy' }
     });
-    let wrapper = render(component);
+    const wrapper = render(component);
     expect(wrapper.text()).toBe('This is a default template Billy');
   });
 
@@ -42,14 +42,14 @@ describe('rendering component templates', () => {
       data: { name: 'Adrian' }
     });
     component.setTemplate(customTemplate);
-    let wrapper = render(component);
+    const wrapper = render(component);
     expect(wrapper.text()).toBe('This is a test template Adrian');
   });
 });
 
 describe('creating subcomponents', () => {
   it('creates subcomponents based on data attributes during mount', () => {
-    const template = `<div data-component="Component" data-prop="child"></div>`;
+    const template = '<div data-component="Component" data-prop="child"></div>';
     const component = COMPONENT_MANAGER.create('Component', {
       data: {
         child: { name: 'Bowen' }
@@ -68,7 +68,7 @@ describe('attaching analytics events', () => {
   });
 
   it('attaches analytics events based on data attributes during mount', () => {
-    const template = `<div id='test' data-eventtype="test_event" data-eventoptions='{"name":"{{name}}"}'>This is a test template</div>`;
+    const template = '<div id=\'test\' data-eventtype="test_event" data-eventoptions=\'{"name":"{{name}}"}\'>This is a test template</div>';
 
     const component = COMPONENT_MANAGER.create(
       'Component',
@@ -112,7 +112,7 @@ describe('attaching analytics events', () => {
   });
 
   it('reports analyticsOptions provided to the component', () => {
-    const template = `<div id='test' data-eventtype="test_event" data-eventoptions='{"name":"{{name}}"}'>This is a test template</div>`;
+    const template = '<div id=\'test\' data-eventtype="test_event" data-eventoptions=\'{"name":"{{name}}"}\'>This is a test template</div>';
 
     const component = COMPONENT_MANAGER.create(
       'Component',

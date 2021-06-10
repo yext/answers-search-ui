@@ -108,7 +108,7 @@ export default class GoogleMapProvider extends MapProvider {
     // NOTE(billy) This timeout is a hack for dealing with async nature.
     // Only here for demo purposes, so we'll fix later.
     setTimeout(() => {
-      let container = DOM.query(el);
+      const container = DOM.query(el);
       this.map = new google.maps.Map(container, {
         zoom: this._zoom,
         center: this.getCenterMarker(mapData)
@@ -119,14 +119,14 @@ export default class GoogleMapProvider extends MapProvider {
         const collapsedMarkers = this._collapsePins
           ? this._collapseMarkers(mapData.mapMarkers)
           : mapData.mapMarkers;
-        let googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
+        const googleMapMarkerConfigs = GoogleMapMarkerConfig.from(
           collapsedMarkers,
           this._pinConfig,
           this.map);
 
-        let bounds = new google.maps.LatLngBounds();
+        const bounds = new google.maps.LatLngBounds();
         for (let i = 0; i < googleMapMarkerConfigs.length; i++) {
-          let marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
+          const marker = new google.maps.Marker(googleMapMarkerConfigs[i]);
           if (this._onPinClick) {
             marker.addListener('click', () => this._onPinClick(collapsedMarkers[i].item));
           }
@@ -196,7 +196,7 @@ export class GoogleMapMarkerConfig {
    * @returns {string[]}
    */
   static serialize (googleMapMarkerConfigs) {
-    let serializedMarkers = [];
+    const serializedMarkers = [];
     googleMapMarkerConfigs.forEach((marker) => {
       serializedMarkers.push(`markers=label:${marker.label}|${marker.position.lat},${marker.position.lng}`);
     });
@@ -211,7 +211,7 @@ export class GoogleMapMarkerConfig {
    * @returns {GoogleMapMarkerConfig[]}
    */
   static from (markers, pinConfig, map) {
-    let googleMapMarkerConfigs = [];
+    const googleMapMarkerConfigs = [];
     if (!Array.isArray(markers)) {
       markers = [markers];
     }

@@ -11,5 +11,5 @@ export default class ErrorReporterService {
    * Reports an error to backend servers for logging
    * @param {AnswersBaseError} err The error to be reported
    */
-  report (err) {} // eslint-disable-line handle-callback-err
+  report (err) {} // eslint-disable-line
 }

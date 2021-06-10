@@ -6,15 +6,15 @@ describe('generateProcessTranslationJsCall works as expected', () => {
     const interpolationValues = {};
 
     const actualJsCall = generateProcessTranslationJsCall(translation, interpolationValues);
-    const expectedJsCall = `ANSWERS.processTranslation('Bonjour', {})`;
+    const expectedJsCall = 'ANSWERS.processTranslation(\'Bonjour\', {})';
 
     expect(actualJsCall).toEqual(expectedJsCall);
   });
 
   it('translation with plural form', () => {
     const translations = {
-      '0': '[[count]] résultat pour [[verticalName]]',
-      '1': '[[count]] résultats pour [[verticalName]]'
+      0: '[[count]] résultat pour [[verticalName]]',
+      1: '[[count]] résultats pour [[verticalName]]'
     };
     const interpolationValues = {
       count: 'myCount',
@@ -22,7 +22,7 @@ describe('generateProcessTranslationJsCall works as expected', () => {
     };
 
     const actualJsCall = generateProcessTranslationJsCall(translations, interpolationValues, 'myCount');
-    const expectedJsCall = `ANSWERS.processTranslation({0:'[[count]] résultat pour [[verticalName]]',1:'[[count]] résultats pour [[verticalName]]'}, {count:myCount,verticalName:verticalName}, myCount)`;
+    const expectedJsCall = 'ANSWERS.processTranslation({0:\'[[count]] résultat pour [[verticalName]]\',1:\'[[count]] résultats pour [[verticalName]]\'}, {count:myCount,verticalName:verticalName}, myCount)';
 
     expect(actualJsCall).toEqual(expectedJsCall);
   });

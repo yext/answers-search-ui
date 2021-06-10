@@ -32,6 +32,16 @@ import Component from '../component';
 import { AnswersComponentError } from '../../../core/errors/errors';
 import Filter from '../../../core/models/filter';
 import DOM from '../../dom/dom';
+import HighlightedValue from '../../../core/models/highlightedvalue';
+import levenshtein from 'js-levenshtein';
+import FilterNodeFactory from '../../../core/filters/filternodefactory';
+import FilterMetadata from '../../../core/filters/filtermetadata';
+import { groupArray } from '../../../core/utils/arrayutils';
+import FilterType from '../../../core/filters/filtertype';
+import ComponentTypes from '../../components/componenttypes';
+import TranslationFlagger from '../../i18n/translationflagger';
+import StorageKeys from '../../../core/storage/storagekeys';
+import { filterIsPersisted } from '../../tools/filterutils';
 
 /**
  * The currently supported controls
@@ -43,122 +53,705 @@ const SUPPORTED_CONTROLS = [
 ];
 
 /**
- * Renders a set of options, each one representing a filter in a search.
+ * The currently supported option types.
  */
-export default class FilterOptionsComponent extends Component {
-  constructor (config = {}) {
-    super(config);
+const OptionTypes = {
+  RADIUS_FILTER: 'RADIUS_FILTER',
+  STATIC_FILTER: 'STATIC_FILTER'
+};
 
-    if (!config.control || !SUPPORTED_CONTROLS.includes(config.control)) {
+class FilterOptionsConfig {
+  constructor (config, persistedState) {
+    /**
+     * The type of control to display
+     * @type {string}
+     */
+    this.control = config.control;
+
+    /**
+     * The type of filtering to apply to the options.
+     * @type {string}
+     */
+    this.optionType = config.optionType || OptionTypes.STATIC_FILTER;
+
+    /**
+     * The list of filter options to display with checked status as
+     * initially specified in the user configuration
+     * @type {object[]}
+     */
+    this.initialOptions = config.options.map(o => ({ ...o }));
+
+    /**
+     * The list of filter options to display.
+     * @type {object[]}
+     */
+    this.options = config.options.map(o => ({ ...o }));
+
+    /**
+     * The label to be used in the legend
+     * @type {string}
+     */
+    this.label = config.label || TranslationFlagger.flag({
+      phrase: 'Filters',
+      context: 'Plural noun, title for a group of controls that filter results'
+    });
+
+    /**
+     * The callback function to call when changed
+     * @type {function}
+     */
+    this.onChange = config.onChange || function () { };
+
+    /**
+     * If true, stores the filter to global and persistent storage on each change
+     * @type {boolean}
+     */
+    this.storeOnChange = config.storeOnChange === undefined ? true : config.storeOnChange;
+
+    /**
+     * If true, show a button to reset the current filter selection
+     * @type {boolean}
+     */
+    this.showReset = config.showReset &amp;&amp; this.options.length > 0;
+
+    /**
+     * Whether this FilterOptions is part of a dynamic FilterBox component (i.e. is
+     * part of a FacetsComponent). Used to correctly set the {@link FilterType} of
+     * the created {@link FilterNode}.
+     * @type {boolean}
+     */
+    this.isDynamic = config.isDynamic;
+
+    /**
+     * The label to show for the reset button
+     * @type {string}
+     */
+    this.resetLabel = config.resetLabel || TranslationFlagger.flag({
+      phrase: 'reset',
+      context: 'Button label, deselects one or more options'
+    });
+
+    /**
+     * The max number of facets to show before displaying "show more"/"show less"
+     * @type {number}
+     */
+    this.showMoreLimit = config.showMoreLimit || 5;
+
+    /**
+     * The label to show for displaying more facets
+     * @type {string}
+     */
+    this.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({
+      phrase: 'show more',
+      context: 'Displays more options'
+    });
+
+    /**
+     * The label to show for displaying less facets
+     * @type {string}
+     */
+    this.showLessLabel = config.showLessLabel || TranslationFlagger.flag({
+      phrase: 'show less',
+      context: 'Displays less options'
+    });
+
+    /**
+     * If true, enable hiding excess facets with a "show more"/"show less" button
+     * @type {boolean}
+     */
+    this.showMore = config.showMore === undefined ? true : config.showMore;
+    this.showMore = this.showMore &amp;&amp; this.options.length > this.showMoreLimit;
+
+    /**
+     * If true, allow expanding and collapsing the group of facets
+     * @type {boolean}
+     */
+    this.showExpand = config.showExpand === undefined ? true : config.showExpand;
+
+    /**
+     * If true, display the number of currently applied filters when collapsed
+     * @type {boolean}
+     */
+    this.showNumberApplied = config.showNumberApplied === undefined ? true : config.showNumberApplied;
+
+    /**
+     * The selector used for options in the template
+     * @type {string}
+     */
+    this.optionSelector = config.optionSelector || '.js-yext-filter-option';
+
+    /**
+     * The placeholder text used for the filter option search input
+     * @type {string}
+     */
+    this.placeholderText = config.placeholderText || TranslationFlagger.flag({
+      phrase: 'Search here...',
+      context: 'Placeholder text for input field'
+    });
+
+    /**
+     * If true, display the filter option search input
+     * @type {boolean}
+     */
+    this.searchable = config.searchable || false;
+
+    /**
+     * The form label text for the search input
+     * @type {boolean}
+     */
+    this.searchLabelText = config.searchLabelText || TranslationFlagger.flag({
+      phrase: 'Search for a filter option',
+      context: 'Labels an input field'
+    });
+
+    this.validate();
+    const { persistedFilter, persistedLocationRadius } = persistedState;
+    if (!this.isDynamic) {
+      const hasPersistedLocationRadius = persistedLocationRadius || persistedLocationRadius === 0;
+      if (this.optionType === OptionTypes.STATIC_FILTER &amp;&amp; persistedFilter) {
+        this.options = this.getPersistedStaticFilterOptions(this.options, persistedFilter);
+      } else if (this.optionType === OptionTypes.RADIUS_FILTER &amp;&amp; hasPersistedLocationRadius) {
+        this.options = this.getPersistedLocationRadiusOptions(this.options, persistedLocationRadius);
+      }
+    }
+  }
+
+  /**
+   * Returns the initial options from config, but with the persisted filters set to
+   * selected = true.
+   *
+   * @param {Array&lt;{{
+   *  label: string,
+   *  value: string,
+   *  field: string,
+   *  selected?: boolean
+   * }}>} initialOptions Options from the component configuration.
+   * @param {Object} persistedFilter A persisted filter, can be combined or simple
+   * @returns {Array&lt;Object>} The options in the same format as initialOptions with updated
+   *                          selected values
+   */
+  getPersistedStaticFilterOptions (initialOptions, persistedFilter) {
+    return initialOptions.map(o => {
+      const filterForOption = Filter.equal(o.field, o.value);
+      const isPersisted = filterIsPersisted(filterForOption, persistedFilter);
+      return {
+        ...o,
+        selected: isPersisted
+      };
+    });
+  }
+
+  /**
+   * Returns the initial options from config, but with the persisted location radius filter
+   * set to selected = true.
+   *
+   * @param {Array&lt;{{
+   *  label: string,
+   *  value: string,
+   *  selected?: boolean
+   * }}>} initialOptions Options from the component configuration.
+    * @param {number} persistedLocationRadius The value of the persisted locationRadius
+    * @returns {Array&lt;Object>} The options in the same format as initialOptions with updated
+    *                          selected values
+    */
+  getPersistedLocationRadiusOptions (initialOptions, persistedLocationRadius) {
+    return initialOptions.map(o => {
+      const isPersisted = o.value === persistedLocationRadius;
+      return {
+        ...o,
+        selected: isPersisted
+      };
+    });
+  }
+
+  getInitialSelectedCount () {
+    return this.options.reduce(
+      (numSelected, option) => option.selected ? numSelected + 1 : numSelected,
+      0);
+  }
+
+  validate () {
+    if (!this.control || !SUPPORTED_CONTROLS.includes(this.control)) {
       throw new AnswersComponentError(
         'FilterOptions requires a valid "control" to be provided',
         'FilterOptions');
     }
 
-    if (!config.options) {
+    if (!(this.optionType in OptionTypes)) {
+      const possibleTypes = Object.values(OptionTypes).join(', ');
+      throw new AnswersComponentError(
+        `Invalid optionType ${this.optionType} passed to FilterOptions. Expected one of ${possibleTypes}`,
+        'FilterOptions');
+    }
+
+    if (this.optionType === OptionTypes.RADIUS_FILTER &amp;&amp; this.control !== 'singleoption') {
+      throw new AnswersComponentError(
+        `FilterOptions of optionType ${OptionTypes.RADIUS_FILTER} requires control "singleoption"`,
+        'FilterOptions');
+    }
+
+    if (!this.options) {
       throw new AnswersComponentError(
         'FilterOptions component requires options to be provided',
         'FilterOptions');
     }
 
-    /**
-     * The list of filter options to display with checked status
-     * @type {object[]}
-     * @private
-     */
-    this._options = config.options.map(o => Object.assign({}, o, { checked: false }));
+    if (this.control === 'singleoption' &amp;&amp; this.options.filter(o => o.selected).length > 1) {
+      throw new AnswersComponentError(
+        'FilterOptions component with "singleoption" control cannot have multiple selected options',
+        'FilterOptions');
+    }
+  }
+}
+
+/**
+ * Renders a set of options, each one representing a filter in a search.
+ */
+export default class FilterOptionsComponent extends Component {
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
+    this._initVariables(config);
+
+    if (this.config.storeOnChange) {
+      this.apply();
+    }
+
+    if (!this.config.isDynamic) {
+      this._registerBackNavigationListener();
+    }
+  }
+
+  /**
+   * Initializes the component's instance variables.
+   *
+   * @param {Object} config
+   */
+  _initVariables (config) {
+    const persistedFilter = this.core.storage.get(StorageKeys.PERSISTED_FILTER);
+    const persistedLocationRadius = this.core.storage.get(StorageKeys.PERSISTED_LOCATION_RADIUS);
+    const persistedState = { persistedFilter, persistedLocationRadius };
 
     /**
-     * The type of control to display
-     * @type {string}
-     * @private
+     * The component config
+     * @type {FilterOptionsConfig}
      */
-    this._control = config.control;
+    this.config = new FilterOptionsConfig(config, persistedState);
+
+    const selectedCount = this.config.getInitialSelectedCount();
 
     /**
-     * The selector used for options in the template
-     * @type {string}
-     * @private
-     */
-    this._optionSelector = config.optionSelector || '.js-yext-filter-option';
-
-    /**
-     * If true, stores the filter to storage on each change
+     * True if the option list is expanded and visible
      * @type {boolean}
-     * @private
      */
-    this._storeOnChange = config.storeOnChange || false;
+    this.expanded = this.config.showExpand ? selectedCount > 0 : true;
 
     /**
-     * The callback function to call when changed
-     * @type {function}
-     * @private
+     * Whether the current is currently showing more or less. If true, is currently "show more".
+     * Only used if config.showMore is true.
+     * @type {boolean}
      */
-    this._onChange = config.onChange || function () {};
+    this.showMoreState = this.config.showMore;
+  }
 
-    /**
-     * The template to render, based on the control
-     * @type {string}
-     * @private
-     */
-    this._templateName = `controls/${config.control}`;
+  _registerBackNavigationListener () {
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.HISTORY_POP_STATE,
+      callback: () => {
+        this._initVariables(this._config);
+        this.updateListeners(true, true);
+        this.setState();
+      }
+    });
   }
 
   static get type () {
-    return 'FilterOptions';
+    return ComponentTypes.FILTER_OPTIONS;
+  }
+
+  /**
+   * The template to render, based on the control
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName (config) {
+    return `controls/filteroptions`;
   }
 
   setState (data) {
+    const selectedCount = this._getSelectedCount();
     super.setState(Object.assign({}, data, {
-      name: this.name,
-      options: this._options
+      name: this.name.toLowerCase(),
+      ...this.config,
+      showMoreState: this.showMoreState,
+      displayReset: this.config.showReset &amp;&amp; selectedCount > 0,
+      expanded: this.expanded,
+      selectedCount,
+      isSingleOption: this.config.control === 'singleoption'
     }));
   }
 
   onMount () {
-    DOM.delegate(this._container, this._optionSelector, 'click', (event) => {
-      this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
+    DOM.delegate(
+      DOM.query(this._container, `.yxt-FilterOptions-options`),
+      this.config.optionSelector,
+      'click',
+      event => {
+        let selectedCountEl = DOM.query(this._container, '.js-yxt-FilterOptions-selectedCount');
+        if (selectedCountEl) {
+          selectedCountEl.innerText = this._getSelectedCount();
+        }
+        this._updateOption(parseInt(event.target.dataset.index), event.target.checked);
+      });
 
-      const filter = this._buildFilter();
-      if (this._storeOnChange) {
-        this.core.setFilter(this.name, filter);
-      }
-
-      this._onChange(filter);
-    });
-  }
-
-  _updateOption (index, checked) {
-    if (this._control === 'singleoption') {
-      this._options = this._options.map(o => Object.assign({}, o, { checked: false }));
+    // Initialize reset element if present
+    const resetEl = DOM.query(this._container, '.js-yxt-FilterOptions-reset');
+    if (resetEl) {
+      DOM.on(resetEl, 'click', this.clearOptions.bind(this));
     }
 
-    this._options[index] = Object.assign({}, this._options[index], { checked });
+    // show more/less button
+    if (this.config.showMore) {
+      const showLessEl = DOM.query(this._container, '.js-yxt-FilterOptions-showLess');
+      const showMoreEl = DOM.query(this._container, '.js-yxt-FilterOptions-showMore');
+      const optionsOverLimitEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-aboveShowMoreLimit');
+      DOM.on(
+        showLessEl,
+        'click',
+        () => {
+          this.showMoreState = true;
+          showLessEl.classList.add('hidden');
+          showMoreEl.classList.remove('hidden');
+          for (let optionEl of optionsOverLimitEls) {
+            optionEl.classList.add('hidden');
+          }
+        });
+      DOM.on(
+        showMoreEl,
+        'click',
+        () => {
+          this.showMoreState = false;
+          showLessEl.classList.remove('hidden');
+          showMoreEl.classList.add('hidden');
+          for (let optionEl of optionsOverLimitEls) {
+            optionEl.classList.remove('hidden');
+          }
+        });
+    }
+
+    // searchable option list
+    if (this.config.searchable) {
+      const clearSearchEl = DOM.query(this._container, '.js-yxt-FilterOptions-clearSearch');
+      const searchInputEl = DOM.query(this._container, '.js-yxt-FilterOptions-filter');
+      const filterOptionEls = DOM.queryAll(this._container, '.js-yxt-FilterOptions-option');
+      const filterContainerEl = DOM.query(this._container, '.js-yxt-FilterOptions-container');
+
+      // On clearSearchEl click, clear search input
+      if (clearSearchEl &amp;&amp; searchInputEl) {
+        DOM.on(clearSearchEl, 'click', event => {
+          searchInputEl.value = '';
+          DOM.trigger(searchInputEl, 'input');
+          searchInputEl.focus();
+        });
+      }
+
+      DOM.on(
+        searchInputEl,
+        'input',
+        event => {
+          const filter = event.target.value;
+
+          if (!filter) {
+            filterContainerEl.classList.remove('yxt-FilterOptions-container--searching');
+            clearSearchEl.classList.add('js-hidden');
+          } else {
+            filterContainerEl.classList.add('yxt-FilterOptions-container--searching');
+            clearSearchEl.classList.remove('js-hidden');
+          }
+
+          for (let filterOption of filterOptionEls) {
+            const labelEl = DOM.query(filterOption, '.js-yxt-FilterOptions-optionLabel--name');
+            let labelText = labelEl.textContent || labelEl.innerText || '';
+            labelText = labelText.trim();
+            if (!filter) {
+              filterOption.classList.remove('hiddenSearch');
+              filterOption.classList.remove('displaySearch');
+              labelEl.innerHTML = labelText;
+            } else {
+              let matchedSubstring = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
+              if (matchedSubstring) {
+                filterOption.classList.add('displaySearch');
+                filterOption.classList.remove('hiddenSearch');
+                labelEl.innerHTML = new HighlightedValue({
+                  value: labelText,
+                  matchedSubstrings: [matchedSubstring]
+                }).get();
+              } else {
+                filterOption.classList.add('hiddenSearch');
+                filterOption.classList.remove('displaySearch');
+                labelEl.innerHTML = labelText;
+              }
+            }
+          }
+        }
+      );
+    }
+
+    // expand button
+    if (this.config.showExpand) {
+      const legend = DOM.query(this._container, '.yxt-FilterOptions-clickableLegend');
+      DOM.on(
+        legend,
+        'mousedown',
+        click => {
+          if (click.button === 0) {
+            this.expanded = !this.expanded;
+            this.setState();
+          }
+        });
+
+      DOM.on(
+        legend,
+        'keydown',
+        key => {
+          if (key.key === ' ' || key.key === 'Enter') {
+            key.preventDefault();
+            this.expanded = !this.expanded;
+            this.setState();
+          }
+        });
+    }
+  }
+
+  /**
+   * Returns the count of currently selected options
+   * @returns {number}
+   * @private
+   */
+  _getSelectedCount () {
+    return this.config.options.filter(o => o.selected).length;
+  }
+
+  /**
+   * Toggles the display of the reset element based on the selected count. If there are selected
+   * options, show the reset element, if not, hide it.
+   *
+   * Note: this will not have any effect if the reset element isn't in the DOM.
+   *
+   * @returns {number}
+   * @private
+   */
+  _toggleReset () {
+    const resetEl = DOM.query(this._container, '.js-yxt-FilterOptions-reset');
+    const selectedCount = this._getSelectedCount();
+    if (selectedCount > 0) {
+      resetEl.classList.remove('js-hidden');
+    } else if (!resetEl.classList.contains('js-hidden')) {
+      resetEl.classList.add('js-hidden');
+    }
+  }
+
+  /**
+   * Finds the length and offset of the substring where (string) option and
+   * (string) filter "match".
+   *
+   * "Match" is defined as an exact text match, or -- if the length of filter
+   * is greater than the `minFilterSizeForLevenshtein` -- a "match" can occur if
+   * any "n length" substring of option (where "n length" is the length of filter)
+   * is within the `maxLevenshteinDistance` levenshtein distance of the filter.
+   *
+   * Note: this is case sensitive.
+   *
+   * @returns {Object}
+   * @private
+   */
+  _getMatchedSubstring (option, filter) {
+    let offset = this._getOffset(option, filter);
+    if (offset > -1) {
+      return {
+        length: filter.length,
+        offset: offset
+      };
+    }
+
+    const minFilterSizeForLevenshtein = 3;
+    const maxLevenshteinDistance = 1;
+    if (filter.length > minFilterSizeForLevenshtein) {
+      // Break option into X filter.length size substrings
+      let substrings = [];
+      for (let start = 0; start &lt;= (option.length - filter.length); start++) {
+        substrings.push(option.substr(start, filter.length));
+      }
+
+      // Find the substring that is the closest in levenshtein distance to filter
+      let minLevDist = filter.length;
+      let minLevSubstring = filter;
+      for (let substring of substrings) {
+        let levDist = this._calcLevenshteinDistance(substring, filter);
+        if (levDist &lt; minLevDist) {
+          minLevDist = levDist;
+          minLevSubstring = substring;
+        }
+      }
+
+      // If the min levenshtein distance is below the max, count it as a match
+      if (minLevDist &lt;= maxLevenshteinDistance) {
+        offset = this._getOffset(option, minLevSubstring);
+        if (offset > -1) {
+          return {
+            length: filter.length,
+            offset: offset
+          };
+        }
+      }
+    }
+  }
+
+  /**
+   * Calculate the levenshtein distance for two strings
+   * @returns {number}
+   * @private
+   */
+  _calcLevenshteinDistance (a, b) {
+    return levenshtein(a, b);
+  }
+
+  /**
+   * Returns the starting index of first occurance of the (string) filter in
+   * the (string) option, or -1 if not present
+   * @returns {number}
+   * @private
+   */
+  _getOffset (option, filter) {
+    return (option &amp;&amp; filter) ? option.indexOf(filter) : -1;
+  }
+
+  /**
+   * Clears all selected options.
+   */
+  clearOptions () {
+    this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
+    this.updateListeners();
     this.setState();
   }
 
   /**
-   * Clear all options
+   * Call the config.onChange callback with the FilterNode corresponding to the
+   * component state.
+   * @param {boolean} alwaysSaveFilterNodes
+   * @param {boolean} blockSearchOnChange
    */
-  clear () {
-    const elements = DOM.queryAll(this._container, this._optionSelector);
-    elements.forEach(e => e.setAttribute('checked', 'false'));
-    this._applyFilter();
+  updateListeners (alwaysSaveFilterNodes, blockSearchOnChange) {
+    const filterNode = this.getFilterNode();
+    if (this.config.storeOnChange) {
+      this.apply();
+    }
+
+    this.config.onChange(filterNode, alwaysSaveFilterNodes, blockSearchOnChange);
+  }
+
+  _updateOption (index, selected) {
+    if (this.config.control === 'singleoption') {
+      this.config.options = this.config.options.map(o => Object.assign({}, o, { selected: false }));
+    }
+
+    this.config.options[index] = Object.assign({}, this.config.options[index], { selected });
+
+    if (this.config.showReset) {
+      this._toggleReset();
+    }
+    this.updateListeners();
   }
 
   /**
-   * Build and return the Filter that represents the current state
-   * @returns {Filter}
-   * @private
+   * Apply filter changes
    */
-  _buildFilter () {
-    const filters = this._options
-      .filter(o => o.checked)
-      .map(o => Filter.equal(o.field, o.value));
+  apply () {
+    switch (this.config.optionType) {
+      case OptionTypes.RADIUS_FILTER:
+        this.core.setLocationRadiusFilterNode(this.getLocationRadiusFilterNode());
+        break;
+      case OptionTypes.STATIC_FILTER:
+        this.core.setStaticFilterNodes(this.name, this.getFilterNode());
+        break;
+      default:
+        throw new AnswersComponentError(`Unknown optionType ${this.config.optionType}`, 'FilterOptions');
+    }
+  }
 
-    return filters.length > 0
-      ? Filter.group(...filters)
-      : {};
+  floatSelected () {
+    this.config.options = this.config.options.sort((a, b) => b.selected - a.selected);
+  }
+
+  _buildFilter (option) {
+    return option.filter ? option.filter : Filter.equal(option.field, option.value);
+  }
+
+  _getFilterType () {
+    if (this.config.isDynamic) {
+      return FilterType.FACET;
+    }
+    return this.config.optionType === 'RADIUS_FILTER'
+      ? FilterType.RADIUS
+      : FilterType.STATIC;
+  }
+
+  _buildFilterMetadata (option) {
+    return new FilterMetadata({
+      fieldName: this.config.label,
+      displayValue: option.label,
+      filterType: this._getFilterType()
+    });
+  }
+
+  /**
+   * Return the FilterNode when this is a RADIUS_FILTER.
+   * @type {FilterNode}
+   */
+  getLocationRadiusFilterNode () {
+    const selectedOption = this.config.options.find(o => o.selected);
+    if (!selectedOption) {
+      return FilterNodeFactory.from();
+    }
+    const filterNode = {
+      metadata: this._buildFilterMetadata(selectedOption),
+      filter: { value: selectedOption.value },
+      remove: () => this._clearSingleOption(selectedOption)
+    };
+    return FilterNodeFactory.from(filterNode);
+  }
+
+  _clearSingleOption (option) {
+    option.selected = false;
+    this.updateListeners(true, true);
+    this.setState();
+  }
+
+  /**
+   * Returns this component's filter node when it is a STATIC_FILTER.
+   * This method is exposed so that components like {@link FilterBoxComponent}
+   * can access them.
+   * @returns {FilterNode}
+   */
+  getFilterNode () {
+    const filterNodes = this.config.options
+      .filter(o => o.selected)
+      .map(o => FilterNodeFactory.from({
+        filter: this._buildFilter(o),
+        metadata: this._buildFilterMetadata(o),
+        remove: () => this._clearSingleOption(o)
+      }));
+
+    const fieldIdToFilterNodes = groupArray(filterNodes, fn => fn.getFilter().getFilterKey());
+
+    // OR together filter nodes for the same field id.
+    const totalFilterNodes = [];
+    for (const sameIdNodes of Object.values(fieldIdToFilterNodes)) {
+      totalFilterNodes.push(FilterNodeFactory.or(...sameIdNodes));
+    }
+
+    // AND all of the ORed together nodes.
+    return FilterNodeFactory.and(...totalFilterNodes);
   }
 }
 </code></pre>
@@ -171,13 +764,13 @@ export default class FilterOptionsComponent extends Component {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AccordionCardComponent.html">AccordionCardComponent</a></li><li><a href="module-AccordionResultsComponent.html">AccordionResultsComponent</a></li><li><a href="module-AlternativeVerticals.html">AlternativeVerticals</a></li><li><a href="module-AlternativeVerticalsComponent.html">AlternativeVerticalsComponent</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AppliedFiltersComponent.html">AppliedFiltersComponent</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-CardComponent.html">CardComponent</a></li><li><a href="module-CombinedFilterNode.html">CombinedFilterNode</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storageindexes.html">core/storage/storageindexes</a></li><li><a href="module-CTACollectionComponent.html">CTACollectionComponent</a></li><li><a href="module-CTAComponent.html">CTAComponent</a></li><li><a href="module-DateFilterComponent.html">DateFilterComponent</a></li><li><a href="module-DefaultTemplatesLoader.html">DefaultTemplatesLoader</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-DynamicFilters.html">DynamicFilters</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Facet.html">Facet</a></li><li><a href="module-FacetsComponent.html">FacetsComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterCombinators.html">FilterCombinators</a></li><li><a href="module-FilterMetadata.html">FilterMetadata</a></li><li><a href="module-FilterNode.html">FilterNode</a></li><li><a href="module-FilterNodeFactory.html">FilterNodeFactory</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterRegistry.html">FilterRegistry</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-FilterTypes.html">FilterTypes</a></li><li><a href="module-GeoLocationComponent.html">GeoLocationComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HighlightedValue.html">HighlightedValue</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-IconComponent.html">IconComponent</a></li><li><a href="module-LegacyCardComponent.html">LegacyCardComponent</a></li><li><a href="module-LocationBias.html">LocationBias</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PaginationComponent.html">PaginationComponent</a></li><li><a href="module-QueryTriggers.html">QueryTriggers</a></li><li><a href="module-QuestionSubmission.html">QuestionSubmission</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-RangeFilterComponent.html">RangeFilterComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsContext.html">ResultsContext</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchConfig.html">SearchConfig</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-SearchParams.html">SearchParams</a></li><li><a href="module-SearchParamsParser.html">SearchParamsParser</a></li><li><a href="module-SearchStates.html">SearchStates</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-SimpleFilterNode.html">SimpleFilterNode</a></li><li><a href="module-SortOptionsComponent.html">SortOptionsComponent</a></li><li><a href="module-SpellCheck.html">SpellCheck</a></li><li><a href="module-SpellCheckComponent.html">SpellCheckComponent</a></li><li><a href="module-StandardCardComponent.html">StandardCardComponent</a></li><li><a href="module-State.html">State</a></li><li><a href="module-StorageKeys.html">StorageKeys</a></li><li><a href="module-ui_components_componenttypes.html">ui/components/componenttypes</a></li><li><a href="module-ui_components_registry.html">ui/components/registry</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalPagesConfig.html">VerticalPagesConfig</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li><li><a href="module-VerticalResultsComponent.html">VerticalResultsComponent</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-CombinedFilterNode.html">CombinedFilterNode</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-DateFilterComponent.html">DateFilterComponent</a></li><li><a href="module-DefaultTemplatesLoader.html">DefaultTemplatesLoader</a></li><li><a href="module-DynamicFilters.html">DynamicFilters</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersAnalyticsError.html">AnswersAnalyticsError</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersConfigError.html">AnswersConfigError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Facet.html">Facet</a></li><li><a href="module-FacetsComponent.html">FacetsComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterMetadata.html">FilterMetadata</a></li><li><a href="module-FilterNode.html">FilterNode</a></li><li><a href="module-FilterNodeFactory.html">FilterNodeFactory</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterRegistry.html">FilterRegistry</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GeoLocationComponent.html">GeoLocationComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HighlightedValue.html">HighlightedValue</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-IconComponent.html">IconComponent</a></li><li><a href="module-LegacyCardComponent.html">LegacyCardComponent</a></li><li><a href="module-LocationBias.html">LocationBias</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-QuestionSubmission.html">QuestionSubmission</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-SearchParams.html">SearchParams</a></li><li><a href="module-SimpleFilterNode.html">SimpleFilterNode</a></li><li><a href="module-SortOptionsComponent.html">SortOptionsComponent</a></li><li><a href="module-SpellCheck.html">SpellCheck</a></li><li><a href="module-SpellCheckComponent.html">SpellCheckComponent</a></li><li><a href="module-StandardCardComponent.html">StandardCardComponent</a></li><li><a href="module-State.html">State</a></li><li><a href="RichTextFormatterImpl.html">RichTextFormatterImpl</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_callListeners">_callListeners</a></li><li><a href="global.html#_generateArrayOneToN">_generateArrayOneToN</a></li><li><a href="global.html#_handleQueryUpdate">_handleQueryUpdate</a></li><li><a href="global.html#_selectPluralForm">_selectPluralForm</a></li><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#computeHighlightedDataRecursively">computeHighlightedDataRecursively</a></li><li><a href="global.html#convertNlpFiltersToFilterNodes">convertNlpFiltersToFilterNodes</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#defaultConfigOption">defaultConfigOption</a></li><li><a href="global.html#defaultTemplateName">defaultTemplateName</a></li><li><a href="global.html#delete">delete</a></li><li><a href="global.html#equivalentParams">equivalentParams</a></li><li><a href="global.html#filterIsPersisted">filterIsPersisted</a></li><li><a href="global.html#filterParamsForExperienceLink">filterParamsForExperienceLink</a></li><li><a href="global.html#findSimpleFiltersWithFieldId">findSimpleFiltersWithFieldId</a></li><li><a href="global.html#flag">flag</a></li><li><a href="global.html#flattenFilterNodes">flattenFilterNodes</a></li><li><a href="global.html#fromCore">fromCore</a></li><li><a href="global.html#fromData">fromData</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAnalyticsUrl">getAnalyticsUrl</a></li><li><a href="global.html#getCachedLiveApiUrl">getCachedLiveApiUrl</a></li><li><a href="global.html#getContainerClass">getContainerClass</a></li><li><a href="global.html#getCurrentStateUrlMerged">getCurrentStateUrlMerged</a></li><li><a href="global.html#getKnowledgeApiUrl">getKnowledgeApiUrl</a></li><li><a href="global.html#getLiveApiUrl">getLiveApiUrl</a></li><li><a href="global.html#getPersistedRangeFilterContents">getPersistedRangeFilterContents</a></li><li><a href="global.html#getUrlParams">getUrlParams</a></li><li><a href="global.html#getUrlWithCurrentState">getUrlWithCurrentState</a></li><li><a href="global.html#groupArray">groupArray</a></li><li><a href="global.html#has">has</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#markup">markup</a></li><li><a href="global.html#Matcher">Matcher</a></li><li><a href="global.html#mergeTabOrder">mergeTabOrder</a></li><li><a href="global.html#nestValue">nestValue</a></li><li><a href="global.html#process">process</a></li><li><a href="global.html#pruneFilterNodes">pruneFilterNodes</a></li><li><a href="global.html#pushStateToHistory">pushStateToHistory</a></li><li><a href="global.html#registerListener">registerListener</a></li><li><a href="global.html#registerMiddleware">registerMiddleware</a></li><li><a href="global.html#removeListener">removeListener</a></li><li><a href="global.html#removeParamsWithPrefixes">removeParamsWithPrefixes</a></li><li><a href="global.html#replaceHistoryWithState">replaceHistoryWithState</a></li><li><a href="global.html#replaceUrlParams">replaceUrlParams</a></li><li><a href="global.html#report">report</a></li><li><a href="global.html#set">set</a></li><li><a href="global.html#setConversionTrackingEnabled">setConversionTrackingEnabled</a></li><li><a href="global.html#setWithPersist">setWithPersist</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li><li><a href="global.html#transformAutoCompleteResponse">transformAutoCompleteResponse</a></li><li><a href="global.html#transformFilterSearchResponse">transformFilterSearchResponse</a></li><li><a href="global.html#truncate">truncate</a></li><li><a href="global.html#urlWithoutQueryParamsAndHash">urlWithoutQueryParamsAndHash</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 19 2019 10:43:24 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu May 27 2021 09:23:11 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

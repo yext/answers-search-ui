@@ -1,7 +1,7 @@
 import { MapBoxMarkerConfig } from '../../../../../src/ui/components/map/providers/mapboxmapprovider';
 
 const map = { tmp: 'test value' };
-const wrapper = `<button>this is the pin</button>`;
+const wrapper = '<button>this is the pin</button>';
 
 describe('create MapBoxMarkerConfig', () => {
   it('constructs a MapBoxMarkerConfig with provided options', () => {
@@ -14,7 +14,7 @@ describe('create MapBoxMarkerConfig', () => {
     const expected = {
       map: map,
       position: { latitude: 91.234, longitude: 71.578 },
-      wrapper: `<button>this is the pin</button>`
+      wrapper: '<button>this is the pin</button>'
     };
 
     expect(mapboxMarkerConfig).toMatchObject(expected);
@@ -110,7 +110,7 @@ describe('converts array of markers into MapboxMarkers', () => {
     ];
 
     const pinConfig = {
-      wrapper: `<button>this is the pin</button>`
+      wrapper: '<button>this is the pin</button>'
     };
 
     const actual = MapBoxMarkerConfig.from(markers, pinConfig, map);
@@ -144,7 +144,7 @@ describe('converts array of markers into MapboxMarkers', () => {
           latitude: 44,
           longitude: 45
         },
-        wrapper: `<svg><tspan>1</tspan></svg>`,
+        wrapper: '<svg><tspan>1</tspan></svg>',
         label: '1'
       }),
       new MapBoxMarkerConfig({
@@ -153,7 +153,7 @@ describe('converts array of markers into MapboxMarkers', () => {
           latitude: 44,
           longitude: 45
         },
-        wrapper: `<svg><tspan>2</tspan></svg>`,
+        wrapper: '<svg><tspan>2</tspan></svg>',
         label: '2'
       })
     ];

@@ -14,7 +14,7 @@ DOM.setup(
 
 beforeEach(() => {
   // Always reset the DOM before each component render test
-  let bodyEl = DOM.query('body');
+  const bodyEl = DOM.query('body');
   DOM.empty(bodyEl);
 
   // Create the container that our component will be injected into
@@ -190,8 +190,6 @@ describe('navigation tab links are correct', () => {
 });
 
 describe('navigation tab order', () => {
-  let COMPONENT_MANAGER;
-
   const defaultConfig = {
     container: '#test-component',
     verticalKey: 'verticalKey',
@@ -202,7 +200,7 @@ describe('navigation tab order', () => {
     ]
   };
 
-  COMPONENT_MANAGER = mockManager();
+  const COMPONENT_MANAGER = mockManager();
 
   COMPONENT_MANAGER.getComponentNamesForComponentTypes = () => [];
 

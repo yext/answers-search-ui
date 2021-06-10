@@ -54,7 +54,7 @@ function precompileTemplates (callback, outputFile, processAST) {
         processPartialName: function (fileName, a, b, c) {
           // Strip the extension and the underscore
           // Escape the output with JSON.stringify
-          let name = fileName.split('.')[0];
+          const name = fileName.split('.')[0];
           if (name.charAt(0) === '_') {
             return JSON.stringify(name.substr(1));
           } else {
@@ -64,8 +64,8 @@ function precompileTemplates (callback, outputFile, processAST) {
         // TBH, this isn't really needed anymore since we don't name files like so 'foo.bar.js', but this is here to
         // support that use case.
         customContext: function (fileName) {
-          let name = fileName.split('.')[0];
-          let keys = name.split('.');
+          const name = fileName.split('.')[0];
+          const keys = name.split('.');
           let context = 'context';
           for (let i = 0; i < keys.length; i++) {
             context = context += '["' + keys[i] + '"]';
@@ -78,7 +78,7 @@ function precompileTemplates (callback, outputFile, processAST) {
       root: 'context',
       noRedeclare: true,
       processName: function (filePath) {
-        let path = filePath.replace('src/ui/templates', '');
+        const path = filePath.replace('src/ui/templates', '');
         return declare.processNameByPath(path, '').replace('.', '/');
       }
     }))

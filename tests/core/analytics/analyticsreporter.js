@@ -34,7 +34,7 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expectedEvent.toApiEvent() }));
+      expect.objectContaining({ data: expectedEvent.toApiEvent() }));
   });
 
   it('includes global options', () => {
@@ -45,7 +45,7 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expect.objectContaining({ testOption: 'test' }) }));
+      expect.objectContaining({ data: expect.objectContaining({ testOption: 'test' }) }));
   });
 
   it('includes experienceVersion when supplied', () => {
@@ -56,7 +56,7 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expect.objectContaining({ experienceVersion: 'PRODUCTION' }) }));
+      expect.objectContaining({ data: expect.objectContaining({ experienceVersion: 'PRODUCTION' }) }));
   });
 
   it('doesn\'t send cookies by default', () => {

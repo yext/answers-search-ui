@@ -52,6 +52,6 @@ function formatPluralForms (translatorResult) {
  * @returns {string}
  */
 function escapeSingleQuotes (str) {
-  const regex = new RegExp('\'', 'g');
+  const regex = /'/g;
   return str.replace(regex, '\\\'');
 }

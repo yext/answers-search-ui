@@ -188,8 +188,8 @@ export default class AutoCompleteComponent extends Component {
   }
 
   isQueryInputFocused () {
-    return document.activeElement &&
-      document.activeElement.className.includes(this._inputEl.substring(1));
+    return document.activeElement && document.activeElement.getAttribute('class') &&
+      document.activeElement.getAttribute('class').includes(this._inputEl.substring(1));
   }
 
   /**
@@ -205,7 +205,7 @@ export default class AutoCompleteComponent extends Component {
    */
   onCreate () {
     // Use the context of the parent component to find the input node.
-    let queryInput = DOM.query(this._parentContainer, this._inputEl);
+    const queryInput = DOM.query(this._parentContainer, this._inputEl);
     if (!queryInput) {
       throw new Error('Could not initialize AutoComplete. Can not find {HTMLElement} `', this._inputEl, '`.');
     }
@@ -248,8 +248,8 @@ export default class AutoCompleteComponent extends Component {
 
     // Allow the user to select a result with the mouse
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
-      let data = target.dataset;
-      let val = data.short;
+      const data = target.dataset;
+      const val = data.short;
 
       this.updateQuery(val);
       this._onSubmit(val, data.filter);
@@ -290,18 +290,18 @@ export default class AutoCompleteComponent extends Component {
     // If one is provided, great.
     // Otherwise, lets try to find it from the current selection in the results.
     if (optValue === undefined) {
-      let sections = this._state.get('sections');
+      const sections = this._state.get('sections');
 
-      let results = sections[this._sectionIndex].results;
+      const results = sections[this._sectionIndex].results;
       optValue = results[this._resultIndex].shortValue;
     }
 
-    let queryEl = DOM.query(this._parentContainer, this._inputEl);
+    const queryEl = DOM.query(this._parentContainer, this._inputEl);
     queryEl.value = optValue;
   }
 
   handleTyping (key, value, e) {
-    let ignoredKeys = [
+    const ignoredKeys = [
       Keys.DOWN,
       Keys.UP,
       Keys.CTRL,
@@ -356,7 +356,7 @@ export default class AutoCompleteComponent extends Component {
     if (!data) {
       return false;
     }
-    let sections = data['sections'];
+    const sections = data.sections;
     if (!sections) {
       return false;
     }
@@ -380,7 +380,7 @@ export default class AutoCompleteComponent extends Component {
   }
 
   handleNavigateResults (key, e) {
-    let sections = this._state.get('sections');
+    const sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
       return;
     }
@@ -391,7 +391,7 @@ export default class AutoCompleteComponent extends Component {
       return;
     }
 
-    let results = sections[this._sectionIndex].results;
+    const results = sections[this._sectionIndex].results;
     if (key === Keys.UP) {
       e.preventDefault();
       if (this._resultIndex <= 0) {
@@ -433,7 +433,7 @@ export default class AutoCompleteComponent extends Component {
   }
 
   handleSubmitResult (key, value, e) {
-    let sections = this._state.get('sections');
+    const sections = this._state.get('sections');
     if (sections === undefined || sections.length <= 0) {
       if (this.isFilterSearch) {
         this.autoComplete(value);

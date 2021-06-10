@@ -115,9 +115,9 @@ export default class FilterRegistry {
     return filters.length === 1
       ? filters[0]
       : {
-        filters: filters,
-        combinator: combinator
-      };
+          filters: filters,
+          combinator: combinator
+        };
   }
 
   /**

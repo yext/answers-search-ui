@@ -95,7 +95,7 @@ export default class SimpleFilterNode extends FilterNode {
       return false;
     }
     return thisMatchers.every(m =>
-      otherMatchersToValues.hasOwnProperty(m) &&
+      m in otherMatchersToValues &&
       otherMatchersToValues[m] === thisMatchersToValues[m]
     );
   }

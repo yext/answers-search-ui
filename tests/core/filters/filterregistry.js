@@ -53,12 +53,12 @@ describe('FilterRegistry', () => {
     const transformedFilter1 = {
       fieldId: 'c_1',
       matcher: '$eq',
-      value: filter1.c_1['$eq']
+      value: filter1.c_1.$eq
     };
     const transformedFilter2 = {
       fieldId: 'c_2',
       matcher: '$eq',
-      value: filter2.c_2['$eq']
+      value: filter2.c_2.$eq
     };
     registry.setStaticFilterNodes('namespace1', node1);
     expect(registry.getStaticFilterNodes()).toHaveLength(1);
@@ -96,18 +96,18 @@ describe('FilterRegistry', () => {
     const transformedFilter1 = {
       fieldId: 'c_1',
       matcher: '$eq',
-      value: filter1.c_1['$eq']
+      value: filter1.c_1.$eq
     };
     const transformedFilter2 = {
       fieldId: 'c_2',
       matcher: '$eq',
-      value: filter2.c_2['$eq']
+      value: filter2.c_2.$eq
     };
     const orNode = FilterNodeFactory.or(node1, node2);
     registry.setStaticFilterNodes('namespace1', orNode);
     expect(registry.getStaticFilterNodes()).toHaveLength(1);
     const expectedFilter1 = {
-      [ FilterCombinators.OR ]: [ filter1, filter2 ]
+      [FilterCombinators.OR]: [filter1, filter2]
     };
     expect(orNode.getFilter()).toEqual(expectedFilter1);
     const expectedTransformedFilter1 = {
@@ -145,7 +145,7 @@ describe('FilterRegistry', () => {
         expectedTransformedFilter1,
         {
           combinator: FilterCombinators.AND,
-          filters: [ transformedFilter1, transformedFilter2 ]
+          filters: [transformedFilter1, transformedFilter2]
         },
         transformedFilter1
       ]
@@ -154,7 +154,7 @@ describe('FilterRegistry', () => {
   });
 
   it('can set facet filter nodes, always overriding previous facets', () => {
-    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
+    registry.setFacetFilterNodes(['random_field', 'another_field'], [node1, node2]);
     const expectedFacets = [
       {
         fieldId: 'random_field',
@@ -196,9 +196,9 @@ describe('FilterRegistry', () => {
     const node3 = FilterNodeFactory.from({
       filter: filter3
     });
-    const facetNodes = [ FilterNodeFactory.or(node1, node3), node2 ];
+    const facetNodes = [FilterNodeFactory.or(node1, node3), node2];
 
-    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], facetNodes);
+    registry.setFacetFilterNodes(['random_field', 'another_field'], facetNodes);
     const expectedFacets = [
       {
         fieldId: 'random_field',
@@ -265,7 +265,7 @@ describe('FilterRegistry', () => {
   });
 
   it('can clear facet filter nodes', () => {
-    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
+    registry.setFacetFilterNodes(['random_field', 'another_field'], [node1, node2]);
     registry.clearFacetFilterNodes();
     expect(registry.getFacetFilterNodes()).toEqual([]);
   });
@@ -284,13 +284,14 @@ describe('FilterRegistry', () => {
     });
   });
 
-  it('_createFacetsFromFilterNodes', () => {
-    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
+
+  it('createFacetsFromFilterNodes', () => {
+    registry.setFacetFilterNodes(['random_field', 'another_field'], [node1, node2]);
     const expectedFacets = {
-      'another_field': [],
-      'c_1': [{ 'c_1': { '$eq': '1' } }],
-      'c_2': [{ 'c_2': { '$eq': '2' } }],
-      'random_field': []
+      another_field: [],
+      c_1: [{ c_1: { $eq: '1' } }],
+      c_2: [{ c_2: { $eq: '2' } }],
+      random_field: []
     };
     expect(registry._createFacetsFromFilterNodes()).toEqual(expectedFacets);
   });

@@ -4,7 +4,7 @@ import Handlebars from 'handlebars';
 describe('the handlebars processTranslation helper', () => {
   const renderer = new HandlebarsRenderer();
   renderer.init({
-    '_hb': Handlebars
+    _hb: Handlebars
   }, 'en');
 
   it('can translate a string phrase', () => {
@@ -96,7 +96,7 @@ describe('the handlebars processTranslation helper', () => {
     it('use locale specified in the renderer init', () => {
       const rendererWithLocale = new HandlebarsRenderer();
       rendererWithLocale.init({
-        '_hb': Handlebars
+        _hb: Handlebars
       }, 'lt-LT');
 
       const template = `{{processTranslation
@@ -115,7 +115,7 @@ describe('the handlebars processTranslation helper', () => {
     it('locale in the template overrides the one in the init if specified', () => {
       const rendererWithLocale = new HandlebarsRenderer();
       rendererWithLocale.init({
-        '_hb': Handlebars
+        _hb: Handlebars
       }, 'en');
 
       const template = `{{processTranslation

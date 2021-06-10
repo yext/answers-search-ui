@@ -12,11 +12,11 @@
  * @param {any} defaultValue
  */
 export function defaultConfigOption (config, synonyms, defaultValue) {
-  for (let name of synonyms) {
+  for (const name of synonyms) {
     const accessors = name.split('.');
     let parentConfig = config;
     let skip = false;
-    for (let childConfigAccessor of accessors.slice(0, -1)) {
+    for (const childConfigAccessor of accessors.slice(0, -1)) {
       if (!(childConfigAccessor in parentConfig)) {
         skip = true;
         break;

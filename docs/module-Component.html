@@ -97,7 +97,7 @@ mounted, created, etc.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line18">line 18</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line20">line 20</a>
     </li></ul></dd>
     
 
@@ -201,7 +201,7 @@ mounted, created, etc.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line58">line 58</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line59">line 59</a>
     </li></ul></dd>
     
 
@@ -225,7 +225,8 @@ mounted, created, etc.</div>
 
 
 <div class="description">
-    A custom class to be applied to {this._container} node
+    A custom class to be applied to {this._container} node. Note that the class
+'yxt-Answers-component' will be included as well.
 </div>
 
 
@@ -273,7 +274,79 @@ mounted, created, etc.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line114">line 114</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line127">line 127</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="_config"><span class="type-signature"></span>_config<span class="type-signature"> :Object</span></h4>
+
+
+
+
+<div class="description">
+    Cache the options so that we can propogate properly to child components
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">Object</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line40">line 40</a>
     </li></ul></dd>
     
 
@@ -345,7 +418,7 @@ mounted, created, etc.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line146">line 146</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line159">line 159</a>
     </li></ul></dd>
     
 
@@ -363,79 +436,7 @@ mounted, created, etc.</div>
 
         
             
-<h4 class="name" id="_opts"><span class="type-signature"></span>_opts<span class="type-signature"> :Object</span></h4>
-
-
-
-
-<div class="description">
-    Cache the options so that we can propogate properly to child components
-</div>
-
-
-
-    <h5>Type:</h5>
-    <ul>
-        <li>
-            
-<span class="param-type">Object</span>
-
-
-        </li>
-    </ul>
-
-
-
-
-
-<dl class="details">
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-
-    
-    <dt class="tag-source">Source:</dt>
-    <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line39">line 39</a>
-    </li></ul></dd>
-    
-
-    
-
-    
-
-    
-</dl>
-
-
-
-
-
-
-        
-            
-<h4 class="name" id="_parent"><span class="type-signature"></span>_parent<span class="type-signature"> :Component</span></h4>
+<h4 class="name" id="_parentContainer"><span class="type-signature"></span>_parentContainer<span class="type-signature"> :Component</span></h4>
 
 
 
@@ -489,7 +490,79 @@ mounted, created, etc.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line52">line 52</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line53">line 53</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="_progressivelyRenderChildren"><span class="type-signature"></span>_progressivelyRenderChildren<span class="type-signature"> :boolean</span></h4>
+
+
+
+
+<div class="description">
+    Allows the main thread to regain control while rendering child components
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">boolean</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line96">line 96</a>
     </li></ul></dd>
     
 
@@ -561,7 +634,7 @@ mounted, created, etc.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line120">line 120</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line133">line 133</a>
     </li></ul></dd>
     
 
@@ -633,7 +706,7 @@ mounted, created, etc.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line126">line 126</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line139">line 139</a>
     </li></ul></dd>
     
 
@@ -705,7 +778,7 @@ mounted, created, etc.</div>
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line64">line 64</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line65">line 65</a>
     </li></ul></dd>
     
 
@@ -778,7 +851,7 @@ If this is left empty, we lookup the template the base templates using the templ
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line133">line 133</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line146">line 146</a>
     </li></ul></dd>
     
 
@@ -851,7 +924,7 @@ This is only used if _template is empty.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line140">line 140</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line153">line 153</a>
     </li></ul></dd>
     
 
@@ -927,7 +1000,7 @@ The component manager uses this information in order to persist and organize com
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line46">line 46</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line47">line 47</a>
     </li></ul></dd>
     
 
@@ -999,7 +1072,7 @@ The component manager uses this information in order to persist and organize com
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line82">line 82</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line83">line 83</a>
     </li></ul></dd>
     
 
@@ -1072,7 +1145,7 @@ eligible to be created
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line76">line 76</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line77">line 77</a>
     </li></ul></dd>
     
 
@@ -1134,7 +1207,7 @@ eligible to be created
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line69">line 69</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line70">line 70</a>
     </li></ul></dd>
     
 
@@ -1158,8 +1231,7 @@ eligible to be created
 
 
 <div class="description">
-    Unique name of this component instance
-Used to distinguish between other components of the same type
+    Name of this component instance.
 </div>
 
 
@@ -1207,7 +1279,7 @@ Used to distinguish between other components of the same type
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line33">line 33</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line34">line 34</a>
     </li></ul></dd>
     
 
@@ -1279,7 +1351,7 @@ Used to distinguish between other components of the same type
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line160">line 160</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line173">line 173</a>
     </li></ul></dd>
     
 
@@ -1351,7 +1423,7 @@ Used to distinguish between other components of the same type
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line166">line 166</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line180">line 180</a>
     </li></ul></dd>
     
 
@@ -1423,7 +1495,7 @@ Used to distinguish between other components of the same type
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line172">line 172</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line187">line 187</a>
     </li></ul></dd>
     
 
@@ -1497,7 +1569,295 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line154">line 154</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line167">line 167</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="uniqueId"><span class="type-signature"></span>uniqueId<span class="type-signature"> :number</span></h4>
+
+
+
+
+<div class="description">
+    A unique id number for the component.
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">number</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line28">line 28</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="userOnCreate"><span class="type-signature"></span>userOnCreate<span class="type-signature"> :function</span></h4>
+
+
+
+
+<div class="description">
+    A user provided onCreate callback
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">function</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line194">line 194</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="userOnMount"><span class="type-signature"></span>userOnMount<span class="type-signature"> :function</span></h4>
+
+
+
+
+<div class="description">
+    A user provided onMount callback
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">function</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line200">line 200</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+        
+            
+<h4 class="name" id="userOnUpdate"><span class="type-signature"></span>userOnUpdate<span class="type-signature"> :function</span></h4>
+
+
+
+
+<div class="description">
+    A user provided onUpdate callback
+</div>
+
+
+
+    <h5>Type:</h5>
+    <ul>
+        <li>
+            
+<span class="param-type">function</span>
+
+
+        </li>
+    </ul>
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line206">line 206</a>
     </li></ul></dd>
     
 
@@ -1518,6 +1878,249 @@ By default, no transformation happens.
 
     
         <h3 class="subsection-title">Methods</h3>
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id=".defaultTemplateName"><span class="type-signature">(static) </span>defaultTemplateName<span class="signature">()</span><span class="type-signature"> &rarr; {string}</span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    The template to render
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line214">line 214</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<h5>Returns:</h5>
+
+        
+
+
+<dl>
+    <dt>
+        Type
+    </dt>
+    <dd>
+        
+<span class="param-type">string</span>
+
+
+    </dd>
+</dl>
+
+    
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="addContainerClass"><span class="type-signature"></span>addContainerClass<span class="signature">(className)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Adds a class to the container of the component.
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>className</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A comma separated value of classes</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line261">line 261</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         
             
@@ -1626,7 +2229,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line406">line 406</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line518">line 518</a>
     </li></ul></dd>
     
 
@@ -1763,7 +2366,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line430">line 430</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line542">line 542</a>
     </li></ul></dd>
     
 
@@ -1900,7 +2503,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line398">line 398</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line510">line 510</a>
     </li></ul></dd>
     
 
@@ -2037,7 +2640,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line382">line 382</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line494">line 494</a>
     </li></ul></dd>
     
 
@@ -2174,7 +2777,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line438">line 438</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line550">line 550</a>
     </li></ul></dd>
     
 
@@ -2311,7 +2914,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line414">line 414</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line526">line 526</a>
     </li></ul></dd>
     
 
@@ -2448,7 +3051,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line422">line 422</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line534">line 534</a>
     </li></ul></dd>
     
 
@@ -2585,7 +3188,233 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line390">line 390</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line502">line 502</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="remove"><span class="type-signature"></span>remove<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Unmount and remove this component and its children from the list
+of active components
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line307">line 307</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+            
+
+    
+
+    
+    <h4 class="name" id="removeContainerClass"><span class="type-signature"></span>removeContainerClass<span class="signature">(className)</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    Removes the specified classes from the container of the component
+</div>
+
+
+
+
+
+
+
+
+
+    <h5>Parameters:</h5>
+    
+
+<table class="params">
+    <thead>
+    <tr>
+        
+        <th>Name</th>
+        
+
+        <th>Type</th>
+
+        
+
+        
+
+        <th class="last">Description</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    
+
+        <tr>
+            
+                <td class="name"><code>className</code></td>
+            
+
+            <td class="type">
+            
+                
+<span class="param-type">string</span>
+
+
+            
+            </td>
+
+            
+
+            
+
+            <td class="description last">A comma separated value of classes</td>
+        </tr>
+
+    
+    </tbody>
+</table>
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line269">line 269</a>
     </li></ul></dd>
     
 
@@ -2673,7 +3502,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line296">line 296</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line408">line 408</a>
     </li></ul></dd>
     
 
@@ -2828,7 +3657,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line233">line 233</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line317">line 317</a>
     </li></ul></dd>
     
 
@@ -2983,7 +3812,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line242">line 242</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line326">line 326</a>
     </li></ul></dd>
     
 
@@ -3120,7 +3949,7 @@ By default, no transformation happens.
     
     <dt class="tag-source">Source:</dt>
     <dd class="tag-source"><ul class="dummy"><li>
-        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line251">line 251</a>
+        <a href="ui_components_component.js.html">ui/components/component.js</a>, <a href="ui_components_component.js.html#line335">line 335</a>
     </li></ul></dd>
     
 
@@ -3166,13 +3995,13 @@ By default, no transformation happens.
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AccordionCardComponent.html">AccordionCardComponent</a></li><li><a href="module-AccordionResultsComponent.html">AccordionResultsComponent</a></li><li><a href="module-AlternativeVerticals.html">AlternativeVerticals</a></li><li><a href="module-AlternativeVerticalsComponent.html">AlternativeVerticalsComponent</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AppliedFiltersComponent.html">AppliedFiltersComponent</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-CardComponent.html">CardComponent</a></li><li><a href="module-CombinedFilterNode.html">CombinedFilterNode</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storageindexes.html">core/storage/storageindexes</a></li><li><a href="module-CTACollectionComponent.html">CTACollectionComponent</a></li><li><a href="module-CTAComponent.html">CTAComponent</a></li><li><a href="module-DateFilterComponent.html">DateFilterComponent</a></li><li><a href="module-DefaultTemplatesLoader.html">DefaultTemplatesLoader</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-DynamicFilters.html">DynamicFilters</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Facet.html">Facet</a></li><li><a href="module-FacetsComponent.html">FacetsComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterCombinators.html">FilterCombinators</a></li><li><a href="module-FilterMetadata.html">FilterMetadata</a></li><li><a href="module-FilterNode.html">FilterNode</a></li><li><a href="module-FilterNodeFactory.html">FilterNodeFactory</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterRegistry.html">FilterRegistry</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-FilterTypes.html">FilterTypes</a></li><li><a href="module-GeoLocationComponent.html">GeoLocationComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HighlightedValue.html">HighlightedValue</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-IconComponent.html">IconComponent</a></li><li><a href="module-LegacyCardComponent.html">LegacyCardComponent</a></li><li><a href="module-LocationBias.html">LocationBias</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PaginationComponent.html">PaginationComponent</a></li><li><a href="module-QueryTriggers.html">QueryTriggers</a></li><li><a href="module-QuestionSubmission.html">QuestionSubmission</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-RangeFilterComponent.html">RangeFilterComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsContext.html">ResultsContext</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchConfig.html">SearchConfig</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-SearchParams.html">SearchParams</a></li><li><a href="module-SearchParamsParser.html">SearchParamsParser</a></li><li><a href="module-SearchStates.html">SearchStates</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-SimpleFilterNode.html">SimpleFilterNode</a></li><li><a href="module-SortOptionsComponent.html">SortOptionsComponent</a></li><li><a href="module-SpellCheck.html">SpellCheck</a></li><li><a href="module-SpellCheckComponent.html">SpellCheckComponent</a></li><li><a href="module-StandardCardComponent.html">StandardCardComponent</a></li><li><a href="module-State.html">State</a></li><li><a href="module-StorageKeys.html">StorageKeys</a></li><li><a href="module-ui_components_componenttypes.html">ui/components/componenttypes</a></li><li><a href="module-ui_components_registry.html">ui/components/registry</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalPagesConfig.html">VerticalPagesConfig</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li><li><a href="module-VerticalResultsComponent.html">VerticalResultsComponent</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-CombinedFilterNode.html">CombinedFilterNode</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-DateFilterComponent.html">DateFilterComponent</a></li><li><a href="module-DefaultTemplatesLoader.html">DefaultTemplatesLoader</a></li><li><a href="module-DynamicFilters.html">DynamicFilters</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersAnalyticsError.html">AnswersAnalyticsError</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersConfigError.html">AnswersConfigError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Facet.html">Facet</a></li><li><a href="module-FacetsComponent.html">FacetsComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterMetadata.html">FilterMetadata</a></li><li><a href="module-FilterNode.html">FilterNode</a></li><li><a href="module-FilterNodeFactory.html">FilterNodeFactory</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterRegistry.html">FilterRegistry</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GeoLocationComponent.html">GeoLocationComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HighlightedValue.html">HighlightedValue</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-IconComponent.html">IconComponent</a></li><li><a href="module-LegacyCardComponent.html">LegacyCardComponent</a></li><li><a href="module-LocationBias.html">LocationBias</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-QuestionSubmission.html">QuestionSubmission</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-SearchParams.html">SearchParams</a></li><li><a href="module-SimpleFilterNode.html">SimpleFilterNode</a></li><li><a href="module-SortOptionsComponent.html">SortOptionsComponent</a></li><li><a href="module-SpellCheck.html">SpellCheck</a></li><li><a href="module-SpellCheckComponent.html">SpellCheckComponent</a></li><li><a href="module-StandardCardComponent.html">StandardCardComponent</a></li><li><a href="module-State.html">State</a></li><li><a href="RichTextFormatterImpl.html">RichTextFormatterImpl</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_callListeners">_callListeners</a></li><li><a href="global.html#_generateArrayOneToN">_generateArrayOneToN</a></li><li><a href="global.html#_handleQueryUpdate">_handleQueryUpdate</a></li><li><a href="global.html#_selectPluralForm">_selectPluralForm</a></li><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#computeHighlightedDataRecursively">computeHighlightedDataRecursively</a></li><li><a href="global.html#convertNlpFiltersToFilterNodes">convertNlpFiltersToFilterNodes</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#defaultConfigOption">defaultConfigOption</a></li><li><a href="global.html#defaultTemplateName">defaultTemplateName</a></li><li><a href="global.html#delete">delete</a></li><li><a href="global.html#equivalentParams">equivalentParams</a></li><li><a href="global.html#filterIsPersisted">filterIsPersisted</a></li><li><a href="global.html#filterParamsForExperienceLink">filterParamsForExperienceLink</a></li><li><a href="global.html#findSimpleFiltersWithFieldId">findSimpleFiltersWithFieldId</a></li><li><a href="global.html#flag">flag</a></li><li><a href="global.html#flattenFilterNodes">flattenFilterNodes</a></li><li><a href="global.html#fromCore">fromCore</a></li><li><a href="global.html#fromData">fromData</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAnalyticsUrl">getAnalyticsUrl</a></li><li><a href="global.html#getCachedLiveApiUrl">getCachedLiveApiUrl</a></li><li><a href="global.html#getContainerClass">getContainerClass</a></li><li><a href="global.html#getCurrentStateUrlMerged">getCurrentStateUrlMerged</a></li><li><a href="global.html#getKnowledgeApiUrl">getKnowledgeApiUrl</a></li><li><a href="global.html#getLiveApiUrl">getLiveApiUrl</a></li><li><a href="global.html#getPersistedRangeFilterContents">getPersistedRangeFilterContents</a></li><li><a href="global.html#getUrlParams">getUrlParams</a></li><li><a href="global.html#getUrlWithCurrentState">getUrlWithCurrentState</a></li><li><a href="global.html#groupArray">groupArray</a></li><li><a href="global.html#has">has</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#markup">markup</a></li><li><a href="global.html#Matcher">Matcher</a></li><li><a href="global.html#mergeTabOrder">mergeTabOrder</a></li><li><a href="global.html#nestValue">nestValue</a></li><li><a href="global.html#process">process</a></li><li><a href="global.html#pruneFilterNodes">pruneFilterNodes</a></li><li><a href="global.html#pushStateToHistory">pushStateToHistory</a></li><li><a href="global.html#registerListener">registerListener</a></li><li><a href="global.html#registerMiddleware">registerMiddleware</a></li><li><a href="global.html#removeListener">removeListener</a></li><li><a href="global.html#removeParamsWithPrefixes">removeParamsWithPrefixes</a></li><li><a href="global.html#replaceHistoryWithState">replaceHistoryWithState</a></li><li><a href="global.html#replaceUrlParams">replaceUrlParams</a></li><li><a href="global.html#report">report</a></li><li><a href="global.html#set">set</a></li><li><a href="global.html#setConversionTrackingEnabled">setConversionTrackingEnabled</a></li><li><a href="global.html#setWithPersist">setWithPersist</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li><li><a href="global.html#transformAutoCompleteResponse">transformAutoCompleteResponse</a></li><li><a href="global.html#transformFilterSearchResponse">transformFilterSearchResponse</a></li><li><a href="global.html#truncate">truncate</a></li><li><a href="global.html#urlWithoutQueryParamsAndHash">urlWithoutQueryParamsAndHash</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 19 2019 10:43:24 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu May 27 2021 09:23:11 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>
