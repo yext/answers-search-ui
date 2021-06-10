@@ -284,7 +284,7 @@ describe('FilterRegistry', () => {
     });
   });
 
-  it('createFacetsFromFilterNodes', () => {
+  it('_createFacetsFromFilterNodes', () => {
     registry.setFacetFilterNodes(['random_field', 'another_field'], [node1, node2]);
     const expectedFacets = {
       another_field: [],
@@ -292,7 +292,36 @@ describe('FilterRegistry', () => {
       c_2: [{ c_2: { $eq: '2' } }],
       random_field: []
     };
-    expect(registry.createFacetsFromFilterNodes()).toEqual(expectedFacets);
+    expect(registry._createFacetsFromFilterNodes()).toEqual(expectedFacets);
+  });
+
+  it('getFacets defaults to the current state of PERSISTED_FACETS if no filter nodes exist', () => {
+    const persistedFacets = {
+      c_employeeDepartment: [
+        {
+          c_employeeDepartment: {
+            $eq: 'International Dang Sales'
+          }
+        }
+      ]
+    };
+    registry.storage.set(StorageKeys.PERSISTED_FACETS, persistedFacets);
+    expect(registry.getFacets()).toEqual(persistedFacets);
+  });
+
+  it('getFacets uses FACET_FILTER_NODES if they exist', () => {
+    registry.setFacetFilterNodes(['random_field', 'another_field'], [node1, node2]);
+    const persistedFacets = {
+      c_employeeDepartment: [
+        {
+          c_employeeDepartment: {
+            $eq: 'International Dang Sales'
+          }
+        }
+      ]
+    };
+    registry.storage.set(StorageKeys.PERSISTED_FACETS, persistedFacets);
+    expect(registry.getFacets()).toEqual(registry._createFacetsFromFilterNodes());
   });
 
   it('transforms static filters with multiple matchers into combined filters', () => {

@@ -1,13 +1,14 @@
 import {
   setupServer,
   shutdownServer,
-  FACETS_PAGE
+  FACETS_ON_LOAD_PAGE
 } from '../server';
 import FacetsPage from '../pageobjects/facetspage';
 import { RequestLogger } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
+  browserForwardButton,
   registerIE11NoCacheHook
 } from '../utils';
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
@@ -15,7 +16,7 @@ import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 fixture`Facets page`
   .before(setupServer)
   .after(shutdownServer)
-  .page`${FACETS_PAGE}`;
+  .page`${FACETS_ON_LOAD_PAGE}`;
 
 test('Facets work with back/forward navigation and page refresh', async t => {
   const logger = RequestLogger({
@@ -42,7 +43,6 @@ test('Facets work with back/forward navigation and page refresh', async t => {
   let options;
   options = await filterBox.getFilterOptions('Employee Department');
   await options.toggleOption('Client Delivery');
-  await filterBox.applyFilters();
   currentFacets = await getFacetsFromRequest();
   const state1 = {
     c_puppyPreference: [],
@@ -55,7 +55,6 @@ test('Facets work with back/forward navigation and page refresh', async t => {
 
   options = await filterBox.getFilterOptions('Employee Department');
   await options.toggleOption('Technology');
-  await filterBox.applyFilters();
   currentFacets = await getFacetsFromRequest();
   const state2 = {
     c_employeeDepartment: [
@@ -68,7 +67,6 @@ test('Facets work with back/forward navigation and page refresh', async t => {
 
   options = await filterBox.getFilterOptions('Puppy Preference');
   await options.toggleOption('Frodo');
-  await filterBox.applyFilters();
   currentFacets = await getFacetsFromRequest();
   const state3 = {
     c_puppyPreference: [{ c_puppyPreference: { $eq: 'Frodo' } }],
@@ -79,6 +77,11 @@ test('Facets work with back/forward navigation and page refresh', async t => {
     languages: [],
     specialities: []
   };
+  await t.expect(currentFacets).eql(state3);
+  logger.clear();
+
+  await browserRefreshPage();
+  currentFacets = await getFacetsFromRequest();
   await t.expect(currentFacets).eql(state3);
   logger.clear();
 
@@ -99,4 +102,8 @@ test('Facets work with back/forward navigation and page refresh', async t => {
   await browserBackButton();
   currentFacets = await getFacetsFromRequest();
   await t.expect(currentFacets).eql({});
+
+  await browserForwardButton();
+  currentFacets = await getFacetsFromRequest();
+  await t.expect(currentFacets).eql(state1);
 });

@@ -681,7 +681,7 @@ export default class Core {
    * Persists the current `facetFilters` state into the URL.
    */
   _persistFacets () {
-    const persistedFacets = this.filterRegistry.createFacetsFromFilterNodes();
+    const persistedFacets = this.filterRegistry.getFacets();
     this.storage.setWithPersist(StorageKeys.PERSISTED_FACETS, persistedFacets);
   }
 
