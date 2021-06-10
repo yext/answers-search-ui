@@ -284,8 +284,7 @@ describe('FilterRegistry', () => {
     });
   });
 
-
-  it('createFacetsFromFilterNodes', () => {
+  it('_createFacetsFromFilterNodes', () => {
     registry.setFacetFilterNodes(['random_field', 'another_field'], [node1, node2]);
     const expectedFacets = {
       another_field: [],
@@ -311,7 +310,7 @@ describe('FilterRegistry', () => {
   });
 
   it('getFacets uses FACET_FILTER_NODES if they exist', () => {
-    registry.setFacetFilterNodes([ 'random_field', 'another_field' ], [node1, node2]);
+    registry.setFacetFilterNodes(['random_field', 'another_field'], [node1, node2]);
     const persistedFacets = {
       c_employeeDepartment: [
         {
