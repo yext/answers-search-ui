@@ -244,11 +244,11 @@ export default class SearchApi {
   }
 
   /**
- * Initiate a Chris search.
- * @param {boolean} includeLastName include last name in the search
- * @param {boolean} useUserName use username instead of real name
- * @param {string} additionalSearchText more text to add to the search
- */
+  * Initiate a Chris search.
+  * @param {boolean} includeLastName include last name in the search
+  * @param {boolean} useUserName use username instead of real name
+  * @param {string} additionalSearchText more text to add to the search
+  */
   chrisSearch (includeLastName, useUserName, additionalSearchText) {
     let name = includeLastName ? 'Chris Jiang' : 'Chris';
     name = useUserName ? 'cjiang' : name;
