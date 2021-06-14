@@ -235,4 +235,24 @@ describe('codelab people searches', () => {
         expect.objectContaining({ input: 'nhu extra text ' }));
     });
   });
+
+  it('searches yen using full name and no additional text', () => {
+    const result = searchApi.yenSearch(true, false, '');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Yen Truong' }));
+    });
+  });
+
+  it('searches yen using username and additional text', () => {
+    const result = searchApi.yenSearch(false, true, 'extra');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'ytruong extra' }));
+    });
+  });
 });
