@@ -242,4 +242,36 @@ export default class SearchApi {
     return request.get()
       .then(response => response.json());
   }
+
+  /**
+   * Initiate a Yen Search
+   * @param {boolean} includeLastName include last name in the search
+   * @param {boolean} useUserName use username in the search
+   * @param {string} additionalSearchText include additional text in the search
+   */
+  yenSearch (includeLastName, useUserName, additionalSearchText) {
+    let name = includeLastName ? 'Yen Truong' : 'Yen';
+    name = useUserName ? 'ytruong' : name;
+
+    if (additionalSearchText && typeof additionalSearchText !== 'string') {
+      throw new AnswersCoreError('additionalSearchText must be a string', 'yenSearch');
+    }
+
+    const query = `${name} ${additionalSearchText}`;
+
+    let request = new ApiRequest({
+      endpoint: '/v2/accounts/me/answers/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': query,
+        'experienceKey': this._experienceKey,
+        'version': this._experienceVersion,
+        'locale': this._locale
+      }
+    });
+
+    return request.get()
+      .then((response) => response.json());
+  }
 }
