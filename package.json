@@ -53,7 +53,7 @@
     "dev": "gulp dev",
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "semistandard",
-    "test": "semistandard && jest",
+    "test": "jest",
     "size": "size-limit",
     "fix": "semistandard --fix"
   },
