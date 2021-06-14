@@ -192,7 +192,7 @@ export default class SearchApi {
   }
 
   /**
-   * Initiate a search for Connor
+   * Initiate a search for Connor.
    */
   connorSearch () {
     const query = 'Connor';
@@ -241,5 +241,37 @@ export default class SearchApi {
 
     return request.get()
       .then(response => response.json());
+  }
+
+  /**
+ * Initiate a Chris search.
+ * @param {boolean} includeLastName include last name in the search
+ * @param {boolean} useUserName use username instead of real name
+ * @param {string} additionalSearchText more text to add to the search
+ */
+  chrisSearch (includeLastName, useUserName, additionalSearchText) {
+    let name = includeLastName ? 'Chris Jiang' : 'Chris';
+    name = useUserName ? 'cjiang' : name;
+
+    if (additionalSearchText && typeof additionalSearchText !== 'string') {
+      throw new AnswersCoreError('additionalSearchText must be a string', 'Search');
+    }
+
+    const query = `${name} ${additionalSearchText}`;
+
+    let request = new ApiRequest({
+      endpoint: '/v2/accounts/me/answers/query',
+      apiKey: this._apiKey,
+      version: this._version,
+      params: {
+        'input': query,
+        'experienceKey': this._experienceKey,
+        'version': this._experienceVersion,
+        'locale': this._locale
+      }
+    });
+
+    return request.get()
+      .then((response) => response.json());
   }
 }
