@@ -167,6 +167,45 @@ describe('codelab people searches', () => {
     });
   });
 
+  describe('chrisSearch', () => {
+    const mockedRequest = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({ test: 'value' }) }));
+    let searchApi;
+
+    beforeEach(() => {
+      mockedRequest.mockClear();
+      HttpRequester.mockImplementation(() => {
+        return {
+          get: mockedRequest
+        };
+      });
+      searchApi = new SearchApi({
+        apiKey: '1234abcd',
+        experienceKey: 'abc123',
+        locale: 'en'
+      });
+    });
+
+    it('searches full name and additional text', () => {
+      const result = searchApi.chrisSearch(true, false, 'likes cheese');
+      expect.assertions(1);
+      result.then(results => {
+        expect(mockedRequest).toBeCalledWith(
+          expect.anything(),
+          expect.objectContaining({ input: 'Chris Jiang likes cheese' }));
+      });
+    });
+
+    it('searches username and no additional text', () => {
+      const result = searchApi.chrisSearch(true, true, '');
+      expect.assertions(1);
+      result.then(results => {
+        expect(mockedRequest).toBeCalledWith(
+          expect.anything(),
+          expect.objectContaining({ input: 'cjiang' }));
+      });
+    });
+  });
+
   it('searches with Nan first name and no additional text', () => {
     const result = searchApi.nanSearch(false, false, '');
     expect.assertions(1);
