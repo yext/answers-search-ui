@@ -4,34 +4,6 @@ import { AnswersCoreError } from '../../../src/core/errors/errors';
 
 jest.mock('../../../src/core/http/httprequester');
 
-describe('search', () => {
-  const mockedRequest = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({ test: 'value' }) }));
-  let searchApi;
-
-  beforeEach(() => {
-    mockedRequest.mockClear();
-    HttpRequester.mockImplementation(() => {
-      return {
-        get: mockedRequest
-      };
-    });
-    searchApi = new SearchApi({
-      apiKey: '1234abcd',
-      experienceKey: 'abc123',
-      locale: 'en'
-    });
-  });
-
-  it('searches full name and additional text', () => {
-    const result = searchApi.Search(true, false, 'likes cheese');
-    expect.assertions(1);
-    result.then(results => {
-      expect(mockedRequest).toBeCalledWith(
-        expect.anything(),
-        expect.objectContaining({ input: 'Chris Jiang likes cheese' }));
-    });
-  });
-})
 describe('vertical searching', () => {
   const mockedRequest = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({ test: 'value' }) }));
   let searchApi;
