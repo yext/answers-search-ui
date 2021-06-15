@@ -18,6 +18,7 @@ export default class AnalyticsReporter {
     experienceKey,
     experienceVersion,
     businessId,
+    analyticsEventsEnabled,
     globalOptions = {},
     environment = PRODUCTION) {
     /**
@@ -26,6 +27,12 @@ export default class AnalyticsReporter {
      */
     this._businessId = businessId;
 
+    /**
+     * Boolean indicating if the Answers Search UI submits analytic click events
+     * @type {boolean}
+     */
+
+    this._analyticsEventsEnabled = analyticsEventsEnabled;
     /**
      * Options to include with every analytic event reported to the server
      * @type {object}
@@ -67,8 +74,19 @@ export default class AnalyticsReporter {
     this._globalOptions.queryId = queryId;
   }
 
+  /**
+   * Opt in or out of analytics click events
+   * @param {boolean} bool
+   */
+  setAnalyticsOptIn (bool) {
+    this._analyticsEventsEnabled = bool;
+  }
+
   /** @inheritdoc */
   report (event) {
+    if (!this._analyticsEventsEnabled) {
+      return false;
+    }
     let cookieData = {};
     if (this._conversionTrackingEnabled && typeof ytag === 'function') {
       ytag('optin', true);
