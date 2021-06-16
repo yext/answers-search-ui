@@ -41,7 +41,8 @@ import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 
 const DEFAULTS = {
   locale: LOCALE,
-  querySource: QUERY_SOURCE
+  querySource: QUERY_SOURCE,
+  analyticsEventsEnabled: true
 };
 
 /**
@@ -223,10 +224,8 @@ class Answers {
    * is ever called, a check to the relevant Answers Status page is made.
    *
    * @param {Object} config The Answers configuration.
-   * @param {Object} statusPage An override for the baseUrl and endpoint of the
-   *                            experience's Answers Status page.
    */
-  init (config, statusPage) {
+  init (config) {
     window.performance.mark('yext.answers.initStart');
     const parsedConfig = this.parseConfig(config);
     this.validateConfig(parsedConfig);
@@ -248,6 +247,7 @@ class Answers {
         parsedConfig.experienceKey,
         parsedConfig.experienceVersion,
         parsedConfig.businessId,
+        parsedConfig.analyticsEventsEnabled,
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
@@ -470,6 +470,14 @@ class Answers {
    */
   registerTemplate (templateName, template) {
     this.renderer.registerTemplate(templateName, template);
+  }
+
+  /**
+   * Opt in or out of analytic events
+   * @param {boolean} analyticsEventsEnabled
+   */
+  setAnalyticsOptIn (analyticsEventsEnabled) {
+    this._analyticsReporterService.setAnalyticsOptIn(analyticsEventsEnabled);
   }
 
   /**
