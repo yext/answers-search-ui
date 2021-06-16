@@ -76,10 +76,10 @@ export default class AnalyticsReporter {
 
   /**
    * Opt in or out of analytics click events
-   * @param {boolean} bool
+   * @param {boolean} analyticsEventsEnabled
    */
-  setAnalyticsOptIn (bool) {
-    this._analyticsEventsEnabled = bool;
+  setAnalyticsOptIn (analyticsEventsEnabled) {
+    this._analyticsEventsEnabled = analyticsEventsEnabled;
   }
 
   /** @inheritdoc */

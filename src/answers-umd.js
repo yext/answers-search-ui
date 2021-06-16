@@ -474,10 +474,10 @@ class Answers {
 
   /**
    * Opt in or out of analytic events
-   * @param {boolean} bool
+   * @param {boolean} analyticsEventsEnabled
    */
-  setAnalyticsOptIn (bool) {
-    this._analyticsReporterService.setAnalyticsOptIn(bool);
+  setAnalyticsOptIn (analyticsEventsEnabled) {
+    this._analyticsReporterService.setAnalyticsOptIn(analyticsEventsEnabled);
   }
 
   /**
