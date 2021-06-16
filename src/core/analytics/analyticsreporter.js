@@ -31,8 +31,8 @@ export default class AnalyticsReporter {
      * Boolean indicating if the Answers Search UI submits analytic click events
      * @type {boolean}
      */
-
     this._analyticsEventsEnabled = analyticsEventsEnabled;
+
     /**
      * Options to include with every analytic event reported to the server
      * @type {object}

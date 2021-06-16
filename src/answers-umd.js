@@ -473,6 +473,14 @@ class Answers {
   }
 
   /**
+   * Opt in or out of analytic events
+   * @param {boolean} bool
+   */
+  setAnalyticsOptIn (bool) {
+    this._analyticsReporterService.setAnalyticsOptIn(bool);
+  }
+
+  /**
    * Opt in or out of convertion tracking analytics
    * @param {boolean} optIn
    */
