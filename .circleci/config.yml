@@ -146,6 +146,7 @@ jobs:
           command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
       - deploy-to-aws:
           subdirectory: '/dev/${FORMATTED_CIRCLE_BRANCH}'
+          cache-control: 'max-age=409090909'
   # deploys assets to a long-lived-cache folder in the S3 bucket named by hash
   deploy_canary:
     docker:
@@ -173,8 +174,10 @@ jobs:
             echo "export MAJOR_VERSION="$(echo "${CIRCLE_TAG}" | cut -d '.' -f 1)"" >> $BASH_ENV
       - deploy-to-aws:
           subdirectory: '/${MINOR_VERSION}'
+          cache-control: 'max-age=43200'
       - deploy-to-aws:
           subdirectory: '/${MAJOR_VERSION}'
+          cache-control: 'max-age=43200'
 workflows:
   version: 2
   build_and_deploy:
