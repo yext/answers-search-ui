@@ -184,6 +184,7 @@ export default class Core {
       if (!verticalResults || verticalResults.searchState !== SearchStates.SEARCH_LOADING) {
         this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       }
+      this.storage.set(StorageKeys.DIRECT_ANSWER, {});
       this.storage.set(StorageKeys.SPELL_CHECK, {});
       this.storage.set(StorageKeys.LOCATION_BIAS, LocationBias.searchLoading());
     }
@@ -258,8 +259,12 @@ export default class Core {
           const mergedResults = this.storage.get(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
           this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+          if(data[StorageKeys.DIRECT_ANSWER].answer) {
+            this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+          }
         } else {
           this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+          this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
