@@ -259,7 +259,7 @@ export default class Core {
           const mergedResults = this.storage.get(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
           this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
-          if(data[StorageKeys.DIRECT_ANSWER].answer) {
+          if (data[StorageKeys.DIRECT_ANSWER].answer) {
             this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
           }
         } else {
