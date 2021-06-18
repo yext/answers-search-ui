@@ -30,6 +30,7 @@ export default class DefaultTemplatesLoader {
   }
 
   fetchTemplates () {
+    console.log('???');
     // If template have already been loaded, do nothing
     const node = DOM.query('#yext-answers-templates');
     if (node) {
