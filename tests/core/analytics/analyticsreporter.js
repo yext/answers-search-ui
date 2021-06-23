@@ -18,7 +18,7 @@ describe('reporting events', () => {
         beacon: mockedBeacon
       };
     });
-    analyticsReporter = new AnalyticsReporter('abc123', null, '213412');
+    analyticsReporter = new AnalyticsReporter('abc123', null, '213412', true);
   });
 
   it('throws an error if given a non-AnalyticsEvent', () => {
@@ -34,29 +34,29 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expectedEvent.toApiEvent() }));
+      expect.objectContaining({ data: expectedEvent.toApiEvent() }));
   });
 
   it('includes global options', () => {
-    const analyticsReporter = new AnalyticsReporter('abc123', null, '213412', { testOption: 'test' });
+    const analyticsReporter = new AnalyticsReporter('abc123', null, '213412', true, { testOption: 'test' });
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expect.objectContaining({ testOption: 'test' }) }));
+      expect.objectContaining({ data: expect.objectContaining({ testOption: 'test' }) }));
   });
 
   it('includes experienceVersion when supplied', () => {
-    const analyticsReporter = new AnalyticsReporter('abc123', 'PRODUCTION', '213412', { testOption: 'test' });
+    const analyticsReporter = new AnalyticsReporter('abc123', 'PRODUCTION', '213412', true, { testOption: 'test' });
     const expectedEvent = new AnalyticsEvent('thumbs_up');
     analyticsReporter.report(expectedEvent);
 
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(
       expect.anything(),
-      expect.objectContaining({ 'data': expect.objectContaining({ experienceVersion: 'PRODUCTION' }) }));
+      expect.objectContaining({ data: expect.objectContaining({ experienceVersion: 'PRODUCTION' }) }));
   });
 
   it('doesn\'t send cookies by default', () => {
@@ -86,5 +86,26 @@ describe('reporting events', () => {
     expect(mockedBeacon).toBeCalledWith(
       expect.stringContaining(getAnalyticsUrl(PRODUCTION, true)),
       { data: { eventType: 'THUMBS_UP', experienceKey: 'abc123' }, ...cookieData });
+  });
+
+  it('All analytic events are enabled when analyticsEventsEnabled is set to true', () => {
+    analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
+
+    expect(mockedBeacon).toBeCalledTimes(1);
+  });
+
+  it('All analytic events are disabled when analyticsEventsEnabled is set to false', () => {
+    analyticsReporter = new AnalyticsReporter('abc123', null, '213412', false);
+    analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
+
+    expect(mockedBeacon).toBeCalledTimes(0);
+  });
+
+  it('All analytic events are disabled when analyticsEventsEnabled is set to false with setAnalyticsOptIn(bool)', () => {
+    analyticsReporter = new AnalyticsReporter('abc123', null, '213412');
+    analyticsReporter.setAnalyticsOptIn(false);
+    analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
+
+    expect(mockedBeacon).toBeCalledTimes(0);
   });
 });

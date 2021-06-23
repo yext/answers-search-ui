@@ -1,3 +1,4 @@
+/* eslint-disable no-self-assign */
 /** @module AccordionCardComponent */
 
 import Component from '../component';

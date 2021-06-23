@@ -6,8 +6,6 @@ import SpellCheckComponent from '../../../../src/ui/components/search/spellcheck
 const COMPONENT_MANAGER = mockManager();
 
 describe('spellcheck redirect links', () => {
-  let linkUrlParams;
-
   setupDOM();
 
   const component = createSpellcheckComponent();
@@ -20,7 +18,7 @@ describe('spellcheck redirect links', () => {
   });
 
   const correctedQueryUrl = component.getState('correctedQueryUrl');
-  linkUrlParams = new URLSearchParams(correctedQueryUrl);
+  const linkUrlParams = new URLSearchParams(correctedQueryUrl);
 
   it('redirect links contain a query url param', () => {
     const query = linkUrlParams.get('query');

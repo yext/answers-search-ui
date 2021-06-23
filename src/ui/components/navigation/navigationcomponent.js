@@ -392,7 +392,7 @@ export default class NavigationComponent extends Component {
   // ParentNode.prepend polyfill
   // https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend#Polyfill
   _prepend (collapsedLinks, lastLink) {
-    if (!collapsedLinks.hasOwnProperty('prepend')) {
+    if (!collapsedLinks.hasOwnProperty('prepend')) { // eslint-disable-line no-prototype-builtins
       const docFrag = document.createDocumentFragment();
       const isNode = lastLink instanceof Node;
       docFrag.appendChild(isNode ? lastLink : document.createTextNode(String(lastLink)));
@@ -408,7 +408,7 @@ export default class NavigationComponent extends Component {
   // Adapted from Element.closest polyfill
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/closest#Polyfill
   _closest (el, closestElSelector) {
-    if (!el.hasOwnProperty('closest')) {
+    if (!el.hasOwnProperty('closest')) { // eslint-disable-line no-prototype-builtins
       do {
         if (DOM.matches(el, closestElSelector)) return el;
         el = el.parentElement || el.parentNode;
@@ -422,10 +422,11 @@ export default class NavigationComponent extends Component {
     switch (this._mobileOverflowBehavior) {
       case MOBILE_OVERFLOW_BEHAVIOR_OPTION.COLLAPSE:
         return true;
-      case MOBILE_OVERFLOW_BEHAVIOR_OPTION.INNERSCROLL:
+      case MOBILE_OVERFLOW_BEHAVIOR_OPTION.INNERSCROLL: {
         const container = DOM.query(this._container, '.yxt-Nav-container') || this._container;
         const navWidth = container.offsetWidth;
         return navWidth > MOBILE_BREAKPOINT;
+      }
     }
   }
 }

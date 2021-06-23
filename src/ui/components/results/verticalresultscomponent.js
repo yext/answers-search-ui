@@ -348,7 +348,7 @@ export default class VerticalResultsComponent extends Component {
     this.addContainerClass(getContainerClass(searchState));
   }
 
-  setState (data = {}, val) {
+  setState (data = {}, val = undefined) {
     /**
      * @type {Array<Result>}
      */

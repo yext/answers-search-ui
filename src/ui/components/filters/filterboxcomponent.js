@@ -176,7 +176,7 @@ export default class FilterBoxComponent extends Component {
     this._filterNodes = [];
 
     this.config.filterConfigs.forEach(config => {
-      let hideCount = config.showCount === undefined ? !this.config.showCount : !config.showCount;
+      const hideCount = config.showCount === undefined ? !this.config.showCount : !config.showCount;
 
       if (hideCount) {
         config.options.forEach(option => {
@@ -252,7 +252,7 @@ export default class FilterBoxComponent extends Component {
     }
 
     // Initialize reset button
-    let resetEl = DOM.query(this._container, '.js-yxt-FilterBox-reset');
+    const resetEl = DOM.query(this._container, '.js-yxt-FilterBox-reset');
 
     if (resetEl) {
       DOM.on(resetEl, 'click', this.resetFilters.bind(this));

@@ -227,9 +227,9 @@ export default class PaginationComponent extends Component {
    * @returns {Array<number>} the backLimit and frontLimit, respectively
    */
   _allocate (pageNumber, maxPage, limit) {
-    var backLimit = pageNumber;
-    var frontLimit = pageNumber;
-    for (var i = 0; i < limit; i++) {
+    let backLimit = pageNumber;
+    let frontLimit = pageNumber;
+    for (let i = 0; i < limit; i++) {
       if (i % 2 === 0) {
         if (backLimit > 0) {
           backLimit--;
@@ -258,7 +258,7 @@ export default class PaginationComponent extends Component {
     const [mobileBackLimit, mobileFrontLimit] = this._allocate(pageNumber, maxPage, this._maxVisiblePagesMobile);
     const [desktopBackLimit, desktopFrontLimit] = this._allocate(pageNumber, maxPage, this._maxVisiblePagesDesktop);
     const pageNumberViews = [];
-    for (var i = 1; i <= maxPage; i++) {
+    for (let i = 1; i <= maxPage; i++) {
       const num = { number: i };
       if (i === pageNumber) {
         num.active = true;

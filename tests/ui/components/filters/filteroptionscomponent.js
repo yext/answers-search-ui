@@ -319,7 +319,7 @@ describe('filter options component', () => {
     };
     expect(setStaticFilterNodes.mock.calls).toHaveLength(0);
     const component = COMPONENT_MANAGER.create('FilterOptions', config);
-    let filterNode = component.getFilterNode();
+    const filterNode = component.getFilterNode();
     expect(filterNode.getFilter()).toEqual(FilterNodeFactory.from().getFilter());
     expect(filterNode.getMetadata()).toEqual(FilterNodeFactory.from().getMetadata());
     expect(setStaticFilterNodes.mock.calls).toHaveLength(1);

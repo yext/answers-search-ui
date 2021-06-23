@@ -5,13 +5,13 @@ describe('createing highlighted values', () => {
     const data = {
       key: 'jesse',
       value: 'Jesse Sharps',
-      matchedSubstrings: [ { offset: 8, length: 2 } ]
+      matchedSubstrings: [{ offset: 8, length: 2 }]
     };
 
     const expectedResult = 'Jesse Sh<strong>ar</strong>ps';
     const expectedInvertedResult = '<strong>Jesse Sh</strong>ar<strong>ps</strong>';
 
-    let highlightedValue = new HighlightedValue(data);
+    const highlightedValue = new HighlightedValue(data);
     const result = highlightedValue.get();
     const invertedResult = highlightedValue.getInverted();
 
@@ -23,13 +23,13 @@ describe('createing highlighted values', () => {
     const data = {
       key: 'jesse',
       value: 'Jesse Sharps',
-      matchedSubstrings: [ { offset: 7, length: 4 }, { offset: 1, length: 3 } ]
+      matchedSubstrings: [{ offset: 7, length: 4 }, { offset: 1, length: 3 }]
     };
 
     const expectedResult = 'J<strong>ess</strong>e S<strong>harp</strong>s';
     const expectedInvertedResult = '<strong>J</strong>ess<strong>e S</strong>harp<strong>s</strong>';
 
-    let highlightedValue = new HighlightedValue(data);
+    const highlightedValue = new HighlightedValue(data);
     const result = highlightedValue.get();
     const invertedResult = highlightedValue.getInverted();
 
@@ -41,13 +41,13 @@ describe('createing highlighted values', () => {
     const data = {
       key: 'jesse',
       value: 'Jesse',
-      matchedSubstrings: [ { offset: 0, length: 5 } ]
+      matchedSubstrings: [{ offset: 0, length: 5 }]
     };
 
     const expectedResult = '<strong>Jesse</strong>';
     const expectedInvertedResult = 'Jesse';
 
-    let highlightedValue = new HighlightedValue(data);
+    const highlightedValue = new HighlightedValue(data);
     const result = highlightedValue.get();
     const invertedResult = highlightedValue.getInverted();
 
@@ -61,7 +61,7 @@ describe('createing highlighted values', () => {
     const expectedResult = '';
     const expectedInvertedResult = '';
 
-    let highlightedValue = new HighlightedValue(data);
+    const highlightedValue = new HighlightedValue(data);
     const result = highlightedValue.get();
     const invertedResult = highlightedValue.getInverted();
 
@@ -73,13 +73,13 @@ describe('createing highlighted values', () => {
     const data = {
       key: 'jesse',
       value: 'Jes\'se Sharps',
-      matchedSubstrings: [ { offset: 8, length: 4 }, { offset: 1, length: 4 } ]
+      matchedSubstrings: [{ offset: 8, length: 4 }, { offset: 1, length: 4 }]
     };
 
     const expectedResult = 'J<strong>es%27s</strong>e S<strong>harp</strong>s';
     const expectedInvertedResult = '<strong>J</strong>es%27s<strong>e S</strong>harp<strong>s</strong>';
 
-    let highlightedValue = new HighlightedValue(data);
+    const highlightedValue = new HighlightedValue(data);
     const transformFn = (string) => {
       return string.replace(/'/gi, '%27');
     };

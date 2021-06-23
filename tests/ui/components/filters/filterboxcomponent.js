@@ -154,8 +154,8 @@ describe('filter box component', () => {
     it('can save simple filternodes', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
       mount(component);
-      let child0 = component._filterComponents[0];
-      let child1 = component._filterComponents[1];
+      const child0 = component._filterComponents[0];
+      const child1 = component._filterComponents[1];
       child0._updateOption(0, true);
       expect(child0.getFilterNode().getFilter()).toEqual(nodes0[0].getFilter());
       expect(child0.getFilterNode().getMetadata()).toEqual(nodes0[0].getMetadata());
@@ -169,8 +169,8 @@ describe('filter box component', () => {
     it('can save combined filternodes', () => {
       const component = COMPONENT_MANAGER.create('FilterBox', config);
       mount(component);
-      let child0 = component._filterComponents[0];
-      let child1 = component._filterComponents[1];
+      const child0 = component._filterComponents[0];
+      const child1 = component._filterComponents[1];
       child0._updateOption(0, true);
       child1._updateOption(0, true);
       child1._updateOption(3, true);
@@ -321,14 +321,14 @@ describe('filter box component', () => {
       expect(setStaticFilterNodes).toHaveBeenCalledTimes(1);
       expect(setStaticFilterNodes.mock.calls[0][1]).toMatchObject({
         filter: {
-          'witcher': {
-            '$eq': 'cirilla'
+          witcher: {
+            $eq: 'cirilla'
           }
         },
         metadata: {
-          'displayValue': 'ciri',
-          'fieldName': 'first filter options',
-          'filterType': 'filter-type-static'
+          displayValue: 'ciri',
+          fieldName: 'first filter options',
+          filterType: 'filter-type-static'
         }
       });
       setStaticFilterNodes.mockClear();

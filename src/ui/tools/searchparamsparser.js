@@ -1,7 +1,7 @@
 /** @module SearchParamsParser */
 
 export default function buildSearchParameters (searchParameterConfigs) {
-  let searchParameters = {
+  const searchParameters = {
     sectioned: false,
     fields: []
   };

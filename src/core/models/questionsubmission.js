@@ -5,7 +5,7 @@
  * to power the QuestionSubmission component
  */
 export default class QuestionSubmission {
-  constructor (question = {}, errors) {
+  constructor (question = {}, errors = null) {
     /**
      * The author of the question
      * @type {string}

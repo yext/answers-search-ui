@@ -14,7 +14,7 @@ import { getLiveApiUrl } from '../utils/urlutils';
 export default class ApiRequest {
   // TODO (tmeyer): Create an ApiService interface and pass an implementation to the current
   // consumers of ApiRequest as a dependency.
-  constructor (opts = {}, storage) {
+  constructor (opts = {}, storage = undefined) {
     /**
      * An abstraction used for making network request and handling errors
      * @type {HttpRequester}
@@ -105,15 +105,15 @@ export default class ApiRequest {
    * @private
    */
   baseParams () {
-    let baseParams = {
-      'v': this._version,
-      'api_key': this._apiKey,
-      'jsLibVersion': LIB_VERSION,
-      'sessionTrackingEnabled': this._storage.get(StorageKeys.SESSIONS_OPT_IN).value
+    const baseParams = {
+      v: this._version,
+      api_key: this._apiKey,
+      jsLibVersion: LIB_VERSION,
+      sessionTrackingEnabled: this._storage.get(StorageKeys.SESSIONS_OPT_IN).value
     };
     const urlParams = new SearchParams(this._storage.getCurrentStateUrlMerged());
     if (urlParams.has('beta')) {
-      baseParams['beta'] = urlParams.get('beta');
+      baseParams.beta = urlParams.get('beta');
     }
 
     return baseParams;

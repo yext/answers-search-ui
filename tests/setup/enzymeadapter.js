@@ -186,7 +186,7 @@ function toDomRstNode (domElement) {
   const attr = domElement.attributes;
   for (let i = 0; i < attr.length; i++) {
     if (attr[i].name === 'class') {
-      props['className'] = attr[i].value;
+      props.className = attr[i].value;
       continue;
     }
     props[attr[i].name] = attr[i].value;

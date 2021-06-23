@@ -115,8 +115,8 @@ export default class HighlightedValue {
     }
 
     for (let j = 0; j < highlightedSubstrings.length; j++) {
-      let start = Number(highlightedSubstrings[j].offset);
-      let end = start + highlightedSubstrings[j].length;
+      const start = Number(highlightedSubstrings[j].offset);
+      const end = start + highlightedSubstrings[j].length;
 
       highlightedValue += [
         transformFunction(val.slice(nextStart, start)),

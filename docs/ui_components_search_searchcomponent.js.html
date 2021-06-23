@@ -19,19 +19,27 @@
 
     <h1 class="page-title">Source: ui/components/search/searchcomponent.js</h1>
 
+    
 
 
 
-
-
+    
     <section>
         <article>
             <pre class="prettyprint source linenums"><code>/** @module SearchComponent */
 
 import Component from '../component';
 import DOM from '../../dom/dom';
-import Filter from '../../../core/models/filter';
 import StorageKeys from '../../../core/storage/storagekeys';
+import SearchParams from '../../dom/searchparams';
+import TranslationFlagger from '../../i18n/translationflagger';
+import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistener';
+import QueryTriggers from '../../../core/models/querytriggers';
+
+const IconState = {
+  'YEXT': 0,
+  'MAGNIFYING_GLASS': 1
+};
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -40,70 +48,107 @@ import StorageKeys from '../../../core/storage/storagekeys';
  * @extends Component
  */
 export default class SearchComponent extends Component {
-  constructor (opts = {}) {
-    super(opts);
-
-    /**
-     * The template name to use for rendering with handlebars
-     * @type {string}
-     */
-    this._templateName = 'search/search';
-
-    /**
-     * The optional input key for the vertical search configuration
-     * If not provided, auto-complete and search will be based on universal
-     * @type {string}
-     */
-    this._barKey = opts.barKey || null;
+  constructor (config = {}, systemConfig = {}) {
+    super(config, systemConfig);
 
     /**
      * The optional vertical key for vertical search configuration
      * If not provided, auto-complete and search will be based on universal
      * @type {string}
      */
-    this._verticalKey = opts.verticalKey || null;
+    this._verticalKey = config.verticalKey || null;
+
+    /**
+     * Query submission can optionally be based on a form as context. Note that if
+     * a form is not used, the component has no guarantee of WCAG compliance.
+     */
+    this._useForm = config.useForm !== undefined ? config.useForm : true;
 
     /**
      * Query submission is based on a form as context.
      * Optionally provided, otherwise defaults to native form node within container
      * @type {string} CSS selector
      */
-    this._formEl = opts.formSelector || 'form';
+    this._formEl = config.formSelector || 'form';
 
     /**
      * The input element used for searching and wires up the keyboard interaction
      * Optionally provided.
      * @type {string} CSS selector
      */
-    this._inputEl = opts.inputEl || '.js-yext-query';
+    this._inputEl = config.inputEl || '.js-yext-query';
 
     /**
      * The title used, provided to the template as a data point
-     * Optionally provided.
+     * Optionally provided. If not provided, no title will be included.
      * @type {string}
      */
-    this.title = opts.title || 'Answers Universal Search';
+    this.title = config.title;
 
     /**
-     * The search text used for labeling the input box, also provided to template.
+     * The label text is used for labeling the input box, also provided to template.
      * Optionally provided
      * @type {string}
      */
-    this.searchText = opts.searchText || 'What are you interested in?';
+    this.labelText = config.labelText || TranslationFlagger.flag({
+      phrase: 'Conduct a search',
+      context: 'Labels an input field'
+    });
+
+    /**
+     * The submit text is used for labeling the submit button, also provided to the template.
+     * @type {string}
+     */
+    this.submitText = config.submitText || TranslationFlagger.flag({
+      phrase: 'Submit',
+      context: 'Button label'
+    });
+
+    /**
+     * The clear text is used for labeling the clear button, also provided to the template.
+     * @type {string}
+     */
+    this.clearText = config.clearText || TranslationFlagger.flag({
+      phrase: 'Clear',
+      context: 'Verb, clears search'
+    });
+
+    /**
+     * The submit icon is an icon for the submit button, if provided it will be displayed and the
+     * submit text will be used for screen readers.
+     * @type {string|null}
+     */
+    this.submitIcon = config.submitIcon || null;
 
     /**
      * The query text to show as the first item for auto complete.
      * Optionally provided
      * @type {string}
      */
-    this.promptHeader = opts.promptHeader || null;
+    this.promptHeader = config.promptHeader || null;
 
     /**
      * Auto focuses the input box if set to true.
      * Optionally provided, defaults to false.
      * @type {boolean}
      */
-    this.autoFocus = opts.autoFocus === true;
+    this.autoFocus = config.autoFocus === true;
+
+    /**
+     * If true, show an "x" that allows the user to clear the current
+     * query
+     * @type {boolean}
+     */
+    this.clearButton = config.clearButton === undefined
+      ? true
+      : config.clearButton;
+
+    /**
+     * When autofocusing on load, optionally open the autocomplete
+     * (preset prompts)
+     * @type {boolean}
+     */
+    this.autocompleteOnLoad = config.autocompleteOnLoad || false;
 
     /**
      * submitURL will force the search query submission to get
@@ -112,75 +157,418 @@ export default class SearchComponent extends Component {
      *
      * If no redirectUrl provided, we keep the page as a single page app.
      *
-     * @type {boolean}
+     * @type {string}
      */
-    this.redirectUrl = opts.redirectUrl || null;
+    this.redirectUrl = config.redirectUrl || null;
+
+    /**
+     * redirectUrlTarget will force the search query submission to open in the frame specified if
+     * redirectUrl is also supplied.
+     * Optional, defaults to current frame.
+     *
+     * @type {string}
+     */
+    this.redirectUrlTarget = config.redirectUrlTarget || '_self';
+
+    /**
+     * true if there is another search bar present on the page.
+     * Twins only update the query, and do not search
+     */
+    this._isTwin = config.isTwin;
+
+    /**
+     * The search config from ANSWERS.init configuration
+     */
+    this._globalSearchConfig = this.core.storage.get(StorageKeys.SEARCH_CONFIG) || {};
+
+    /**
+     * The default initial search query, can be an empty string
+     */
+    this._defaultInitialSearch = this._globalSearchConfig.defaultInitialSearch;
 
     /**
      * The query string to use for the input box, provided to template for rendering.
      * Optionally provided
+     * @type {string|null}
+     */
+    this.query = config.query || this.core.storage.get(StorageKeys.QUERY);
+    this.core.storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.QUERY,
+      callback: q => {
+        this.query = q;
+        if (this.queryEl) {
+          this.queryEl.value = q;
+        }
+        if (q === null) {
+          return;
+        }
+        this._updateClearButtonVisibility(q);
+      }
+    });
+
+    /**
+     * The minimum time allowed in milliseconds between searches to prevent
+     * many duplicate searches back-to-back
+     * @type {number}
+     * @private
+     */
+    this._searchCooldown = config.searchCooldown || 300;
+
+    /**
+     * When true and "near me" intent is expressed, prompt the user for their geolocation
+     * @type {boolean}
+     * @private
+     */
+    this._promptForLocation = config.promptForLocation === undefined
+      ? true
+      : Boolean(config.promptForLocation);
+
+    /**
+     * Controls showing and hiding the search clear button
+     */
+    this._showClearButton = this.clearButton &amp;&amp; this.query;
+
+    /**
+     * Whether or not to allow empty searches.
+     * @type {boolean}
+     * @private
+     */
+    this._allowEmptySearch = !!config.allowEmptySearch;
+
+    /**
+     * The name of the child AutoComplete component.
+     * @type {string}
+     * @private
+     */
+    this._autoCompleteName = `${this.name}.autocomplete`;
+
+    /**
+     * Options to pass to the geolocation api.
+     * @type {Object}
+     */
+    this._geolocationOptions = {
+      enableHighAccuracy: false,
+      timeout: 1000,
+      maximumAge: 300000,
+      ...config.geolocationOptions
+    };
+
+    /**
+     * Options for the geolocation timeout alert.
+     * @type {Object}
+     */
+    this._geolocationTimeoutAlert = {
+      enabled: false,
+      message: TranslationFlagger.flag({
+        phrase: 'We are unable to determine your location'
+      }),
+      ...config.geolocationTimeoutAlert
+    };
+
+    /**
+     * The unique HTML id name for the autocomplete container
      * @type {string}
      */
-    this.query = opts.query || this.getUrlParams().get('query') || '';
+    this.autocompleteContainerIdName = `yxt-SearchBar-autocomplete--${this.name}`;
+
+    /**
+     * The unique HTML id name for the search input label
+     * @type {string}
+     */
+    this.inputLabelIdName = `yxt-SearchBar-inputLabel--${this.name}`;
+
+    /**
+     * The unique HTML id name for the search input
+     * @type {string}
+     */
+    this.inputIdName = `yxt-SearchBar-input--${this.name}`;
+
+    this.customHooks = {
+      /**
+       * Callback invoked when the clear search button is clicked
+       */
+      onClearSearch: (config.customHooks &amp;&amp; config.customHooks.onClearSearch) || function () {},
+      /**
+       * Callback invoked when a search is conducted
+       */
+      onConductSearch: (config.customHooks &amp;&amp; config.customHooks.onConductSearch) || function () {}
+    };
+
+    /**
+     * Options to pass to the autocomplete component
+     * @type {Object}
+     */
+    this._autocompleteConfig = {
+      shouldHideOnEmptySearch: config.autocomplete &amp;&amp; config.autocomplete.shouldHideOnEmptySearch,
+      onOpen: config.autocomplete &amp;&amp; config.autocomplete.onOpen,
+      onClose: config.autocomplete &amp;&amp; config.autocomplete.onClose
+    };
+
+    if (!this._isTwin) {
+      this.initQueryUpdateListener();
+    }
+  }
+
+  /**
+   * Updates the global search listener with the searchbar's config.
+   */
+  initQueryUpdateListener () {
+    const queryUpdateListener = new QueryUpdateListener(this.core, {
+      searchCooldown: this._searchCooldown,
+      verticalKey: this._verticalKey,
+      allowEmptySearch: this._allowEmptySearch,
+      defaultInitialSearch: this._defaultInitialSearch
+    });
+    this.core.setQueryUpdateListener(queryUpdateListener);
+    this.core.queryUpdateListener.registerMiddleware(query => this.promptForLocation(query));
+    this.core.queryUpdateListener.registerMiddleware(query => this.customHooks.onConductSearch(query));
   }
 
   static get type () {
     return 'SearchBar';
   }
 
-  onCreate () {
-    if (this.query &amp;&amp; this.query.length > 0) {
-      this.core.setQuery(this.query);
-      this.search(this.query);
-    }
+  /**
+   * The template to render
+   * @returns {string}
+   * @override
+   */
+  static defaultTemplateName () {
+    return 'search/search';
+  }
 
-    this.bindBrowserHistory();
+  /**
+   * This method is called by answers-umd AFTER the onReady() is finished, and
+   * all components have been mounted.
+   */
+  searchAfterAnswersOnReady () {
+    if (this.query != null &amp;&amp; !this.redirectUrl) {
+      this.core.setQuery(this.query);
+    }
   }
 
   onMount () {
+    this.queryEl = DOM.query(this._container, this._inputEl);
+    if (this.autoFocus &amp;&amp; !this.query &amp;&amp; !this.autocompleteOnLoad) {
+      this.focusInputElement();
+    }
+
+    this.isUsingYextAnimatedIcon = !this._config.customIconUrl &amp;&amp; !this.submitIcon;
+    if (this.isUsingYextAnimatedIcon) {
+      this.initAnimatedIcon();
+    }
+
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
     this.initAutoComplete(this._inputEl);
 
-    if (this.autoFocus === true &amp;&amp; this.query.length === 0) {
-      DOM.query(this._container, this._inputEl).focus();
+    if (this.clearButton) {
+      this.initClearButton();
+    }
+
+    if (this.autoFocus &amp;&amp; !this.query &amp;&amp; this.autocompleteOnLoad) {
+      this.focusInputElement();
     }
   }
 
+  requestIconAnimationFrame (iconState) {
+    if (this.iconState === iconState) {
+      return;
+    }
+    this.iconState = iconState;
+    if (!this.isRequestingAnimationFrame) {
+      this.isRequestingAnimationFrame = true;
+      window.requestAnimationFrame(() => {
+        this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
+        this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
+        if (this.iconState === IconState.MAGNIFYING_GLASS) {
+          this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+          this.reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+        } else if (this.iconState === IconState.YEXT) {
+          this.forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
+          this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
+        }
+        this.isRequestingAnimationFrame = false;
+      });
+    }
+  }
+
+  animateIconToMagnifyingGlass () {
+    if (this.iconIsFrozen) {
+      return;
+    }
+    this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS);
+  }
+
+  animateIconToYext (e) {
+    let focusStillInSearchbar = false;
+    if (e &amp;&amp; e.relatedTarget) {
+      focusStillInSearchbar = this._container.contains(e.relatedTarget);
+    }
+    if (this.iconIsFrozen || focusStillInSearchbar) {
+      return;
+    }
+    this.requestIconAnimationFrame(IconState.YEXT);
+  }
+
+  initAnimatedIcon () {
+    this.iconState = (this.autoFocus &amp;&amp; !this.query) ? IconState.MAGNIFYING_GLASS : IconState.YEXT;
+    this.forwardIcon = DOM.query(this._container, '.js-yxt-AnimatedForward');
+    this.reverseIcon = DOM.query(this._container, '.js-yxt-AnimatedReverse');
+    const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
+    for (const selector of clickableElementSelectors) {
+      const clickableEl = DOM.query(this._container, selector);
+      if (clickableEl) {
+        DOM.on(clickableEl, 'mousedown', () => {
+          this.iconIsFrozen = true;
+        });
+        DOM.on(clickableEl, 'mouseup', () => {
+          this.iconIsFrozen = false;
+        });
+      }
+    }
+    DOM.on(this.queryEl, 'focus', () => {
+      this.animateIconToMagnifyingGlass();
+    });
+    DOM.on(this._container, 'focusout', e => {
+      this.animateIconToYext(e);
+    });
+  }
+
+  remove () {
+    this._autocomplete.remove();
+    super.remove();
+  }
+
+  initClearButton () {
+    const button = this._getClearButton();
+    this._showClearButton = this._showClearButton || this.query;
+    button.classList.toggle('yxt-SearchBar--hidden', !this._showClearButton);
+
+    DOM.on(button, 'click', () => {
+      this.customHooks.onClearSearch();
+      this.query = '';
+      this._showClearButton = false;
+      button.classList.add('yxt-SearchBar--hidden');
+      this.queryEl.value = this.query;
+
+      this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
+      this.core.triggerSearch(QueryTriggers.SEARCH_BAR, this.query);
+
+      // Focus the input element after clearing the query, regardless of whether
+      // or not the autoFocus option is enabled.
+      // NOTE(amullings): This depends heavily on the fact that the re-renders
+      // triggered by setState and core.setQuery happen synchronously; if this
+      // stops being the case at some point, we'll need an alternative solution
+      this.focusInputElement();
+    });
+
+    DOM.on(this.queryEl, 'input', e => {
+      const input = e.target.value;
+      this.query = input;
+      this._updateClearButtonVisibility(input);
+    });
+  }
+
   /**
-   * A helper method to use for wiring up searching on form submission
-   * @param {string} formSelector CSS selector to bind our submit handling to
+   * Registers the different event handlers that can issue a search. Note that
+   * different handlers are used depending on whether or not a form is used as
+   * context.
+   *
+   * @param {string} formSelector CSS selector to bind our form submit handling to
    */
   initSearch (formSelector) {
     this._formEl = formSelector;
 
-    let form = DOM.query(this._container, formSelector);
-    if (!form) {
-      throw new Error('Could not initialize SearchBar; Can not find {HTMLElement} `', this._formEl, '`.');
-    }
+    this._container.classList.add('yxt-SearchBar-wrapper');
 
-    DOM.on(form, 'submit', (e) => {
-      e.preventDefault();
-
-      let query = form.querySelector(this._inputEl).value;
-      let params = this.getUrlParams();
-      params.set('query', query);
-
-      // If we have a redirectUrl, we want the form to be
-      // serialized and submitted.
-      if (typeof this.redirectUrl === 'string') {
-        window.location.href = this.redirectUrl + '?' + params.toString();
-        return false;
+    if (this._useForm) {
+      let form = DOM.query(this._container, formSelector);
+      if (!form) {
+        throw new Error(
+          'Could not initialize SearchBar; Can not find {HTMLElement} `',
+          this._formEl, '`.');
       }
 
-      window.history.pushState({
-        query: query
-      }, query, '?' + params.toString());
+      DOM.on(form, 'submit', (e) => {
+        e.preventDefault();
+        // TODO(oshi) we should not use the same css selector (this._inputEl)
+        // For both the autocomplete AND the search bar input
+        // This is incredibly confusing, and also makes the first DOM.query
+        // Rely on the order of the input el and autocomplete in the template
+        const inputEl = form.querySelector(this._inputEl);
+        this.onQuerySubmit(inputEl);
+      });
+    } else {
+      const inputEl = DOM.query(this._container, this._inputEl);
+      if (!inputEl) {
+        throw new Error(
+          'Could not initialize SearchBar; Can not find {HTMLElement} `',
+          this._inputEl, '`.');
+      }
+      DOM.on(inputEl, 'keydown', (e) => {
+        if (e.key === 'Enter') {
+          e.preventDefault();
+          this.onQuerySubmit(inputEl);
+        }
+      });
 
-      this.core.setQuery(query);
-      this.search(query);
-      return false;
-    });
+      const submitButton = DOM.query(this._container, '.js-yext-submit');
+      DOM.on(submitButton, 'click', (e) => {
+        e.preventDefault();
+        this.onQuerySubmit(inputEl);
+      });
+    }
+  }
+
+  /**
+   * The handler for a query submission. This method first sets the new query in
+   * persistent and storage, than performs a debounced search.
+   *
+   * @param {Node} inputEl The input element containing the query.
+   */
+  onQuerySubmit (inputEl) {
+    const query = inputEl.value;
+    this.query = query;
+    const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
+    params.set('query', query);
+
+    const context = this.core.storage.get(StorageKeys.API_CONTEXT);
+    if (context) {
+      params.set(StorageKeys.API_CONTEXT, context);
+    }
+
+    // If we have a redirectUrl, we want the form to be
+    // serialized and submitted.
+    if (typeof this.redirectUrl === 'string') {
+      if (this._allowEmptySearch || query) {
+        const newUrl = this.redirectUrl + '?' + params.toString();
+        window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
+        return false;
+      }
+    }
+
+    inputEl.blur();
+    DOM.query(this._container, '.js-yext-submit').blur();
+    // TODO: move this into initClearButton
+    if (this.clearButton) {
+      const button = DOM.query(this._container, '.js-yxt-SearchBar-clear');
+      if (this.query) {
+        this._showClearButton = true;
+        button.classList.remove('yxt-SearchBar--hidden');
+      } else {
+        this._showClearButton = false;
+        button.classList.add('yxt-SearchBar--hidden');
+      }
+    }
+    if (this.isUsingYextAnimatedIcon) {
+      this.animateIconToYext();
+    }
+
+    this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
+    this.core.triggerSearch(QueryTriggers.SEARCH_BAR, query);
+    return false;
   }
 
   /**
@@ -190,81 +578,184 @@ export default class SearchComponent extends Component {
   initAutoComplete (inputSelector) {
     this._inputEl = inputSelector;
 
-    this.componentManager.create('AutoComplete', {
-      parent: this,
-      name: `${this.name}.autocomplete`,
+    if (this._autocomplete) {
+      this._autocomplete.remove();
+    }
+
+    this._autocomplete = this.componentManager.create('AutoComplete', {
+      parentContainer: this._container,
+      name: this._autoCompleteName,
       container: '.yxt-SearchBar-autocomplete',
-      barKey: this._barKey,
+      autoFocus: this.autoFocus &amp;&amp; !this.autocompleteOnLoad,
       verticalKey: this._verticalKey,
       promptHeader: this.promptHeader,
       originalQuery: this.query,
       inputEl: inputSelector,
+      listLabelIdName: this.inputLabelIdName,
+      ...this._autocompleteConfig,
       onSubmit: () => {
-        DOM.trigger('form', 'submit');
+        if (this._useForm) {
+          DOM.trigger(DOM.query(this._container, this._formEl), 'submit');
+        } else {
+          const inputEl = DOM.query(this._container, inputSelector);
+          this.onQuerySubmit(inputEl);
+        }
+      },
+      onChange: () => {
+        DOM.trigger(DOM.query(this._container, inputSelector), 'input');
       }
     });
+    this._autocomplete.mount();
   }
 
-  search (query) {
-    if (this._verticalKey) {
-      const allFilters = this.core.storage.getAll(StorageKeys.FILTER);
-      const totalFilter = allFilters.length > 1
-        ? Filter.and(...allFilters)
-        : allFilters[0];
-      return this.core.verticalSearch(query, this._verticalKey, JSON.stringify(totalFilter));
-    } else {
-      // NOTE(billy) Temporary hack for DEMO
-      // Remove me after the demo
-      let nav = this.componentManager
-        .getActiveComponent('Navigation');
-
-      if (nav) {
-        let tabs = nav.getState('tabs');
-        let urls = {};
-
-        if (tabs &amp;&amp; Array.isArray(tabs)) {
-          for (let i = 0; i &lt; tabs.length; i++) {
-            let params = this.getUrlParams(tabs[i].url.split('?')[1]);
-            params.set('query', query);
-
-            let url = tabs[i].baseUrl;
-            if (params.toString().length > 0) {
-              url += '?' + params.toString();
-            }
-            urls[tabs[i].configId] = url;
+  /**
+   * If _promptForLocation is enabled, we will compute the query's intent and, from there,
+   * determine if it's necessary to prompt the user for their location information. It will
+   * be unnecessary if the query does not have near me intent or we already have their location
+   * stored.
+   * @param {string} query The string to query against.
+   * @returns {Promise} A promise that will perform the query and update storage accordingly.
+   */
+  promptForLocation (query) {
+    if (this._promptForLocation) {
+      return this.fetchQueryIntents(query)
+        .then(queryIntents => queryIntents.includes('NEAR_ME'))
+        .then(queryHasNearMeIntent => {
+          if (queryHasNearMeIntent &amp;&amp; !this.core.storage.get(StorageKeys.GEOLOCATION)) {
+            return new Promise((resolve, reject) =>
+              navigator.geolocation.getCurrentPosition(
+                position => {
+                  this.core.storage.set(StorageKeys.GEOLOCATION, {
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                    radius: position.coords.accuracy
+                  });
+                  resolve();
+                },
+                () => {
+                  resolve();
+                  const { enabled, message } = this._geolocationTimeoutAlert;
+                  if (enabled) {
+                    window.alert(message);
+                  }
+                },
+                this._geolocationOptions)
+            );
           }
-        }
-        return this.core.search(query, urls);
-      }
-
-      return this.core.search(query);
+        });
+    } else {
+      return Promise.resolve();
     }
   }
 
+  /**
+   * A helper method that computes the intents of the provided query. If the query was entered
+   * manually into the search bar or selected via autocomplete, its intents will have been stored
+   * already in storage. Otherwise, a new API call will have to be issued to determine
+   * intent.
+   * @param {string} query The query whose intent is needed.
+   * @returns {Promise} A promise containing the intents of the query.
+   */
+  fetchQueryIntents (query) {
+    const autocompleteData =
+      this.core.storage.get(`${StorageKeys.AUTOCOMPLETE}.${this._autoCompleteName}`);
+    if (!autocompleteData) {
+      const autocompleteRequest = this._verticalKey
+        ? this.core.autoCompleteVertical(
+          query,
+          this._autoCompleteName,
+          this._verticalKey)
+        : this.core.autoCompleteUniversal(query, this._autoCompleteName);
+      return autocompleteRequest.then(data => data.inputIntents);
+    } else {
+      // There are two alternatives to consider here. The user could have selected the query
+      // as an autocomplete option or manually input it themselves. If the former, use the intents
+      // of the corresponding autocomplete option. If the latter, use the inputIntents of the
+      // autocompleteData.
+      const results = autocompleteData.sections.flatMap(section => section.results);
+      const matchingResult = results.find(result => result.value === query);
+      const queryIntents = matchingResult ? matchingResult.intents : autocompleteData.inputIntents;
+      return Promise.resolve(queryIntents);
+    }
+  }
+
+  /**
+   * A helper method that constructs the meta information needed by the SEARCH_CLEAR_BUTTON
+   * analytics event.
+   */
+  eventOptions () {
+    const queryId = this.core.storage.get(StorageKeys.QUERY_ID);
+    const options = Object.assign(
+      {},
+      queryId &amp;&amp; { queryId },
+      this._verticalKey &amp;&amp; { verticalKey: this._verticalKey }
+    );
+    return JSON.stringify(options);
+  }
+
   setState (data) {
+    const forwardIconOpts = {
+      iconName: 'yext_animated_forward',
+      classNames: 'Icon--lg',
+      complexContentsParams: {
+        iconPrefix: this.name
+      }
+    };
+    const reverseIconOpts = {
+      iconName: 'yext_animated_reverse',
+      classNames: 'Icon--lg',
+      complexContentsParams: {
+        iconPrefix: this.name
+      }
+    };
     return super.setState(Object.assign({
       title: this.title,
-      searchText: this.searchText,
-      query: this.query
+      inputIdName: this.inputIdName,
+      labelText: this.labelText,
+      inputLabelIdName: this.inputLabelIdName,
+      submitIcon: this.submitIcon,
+      submitText: this.submitText,
+      clearText: this.clearText,
+      showClearButton: this._showClearButton,
+      query: this.query || '',
+      eventOptions: this.eventOptions(),
+      iconId: this.name,
+      forwardIconOpts: forwardIconOpts,
+      reverseIconOpts: reverseIconOpts,
+      autoFocus: this.autoFocus &amp;&amp; !this.query,
+      useForm: this._useForm,
+      autocompleteContainerIdName: this.autocompleteContainerIdName
     }, data));
   }
 
-  getUrlParams (url) {
-    url = url || window.location.search.substring(1);
-    return new URLSearchParams(url);
+  focusInputElement () {
+    DOM.query(this._container, this._inputEl).focus();
   }
 
-  bindBrowserHistory () {
-    DOM.on(window, 'popstate', () => {
-      this.query = this.getUrlParams().get('query');
-      this.setState({
-        query: this.query
-      });
+  /**
+   * Returns the clear button element, if exists
+   *
+   * @returns {Element}
+   */
+  _getClearButton () {
+    return DOM.query(this._container, '.js-yxt-SearchBar-clear');
+  }
 
-      this.core.setQuery(this.query);
+  /**
+   * Updates the Search inputs clear button based on the current input value
+   *
+   * @param {string} input
+   */
+  _updateClearButtonVisibility (input) {
+    const clearButton = this._getClearButton();
 
-      this.search(this.query);
-    });
+    if (!this._showClearButton &amp;&amp; input.length > 0) {
+      this._showClearButton = true;
+      clearButton.classList.remove('yxt-SearchBar--hidden');
+    } else if (this._showClearButton &amp;&amp; input.length === 0) {
+      this._showClearButton = false;
+      clearButton.classList.add('yxt-SearchBar--hidden');
+    }
   }
 }
 </code></pre>
@@ -277,13 +768,13 @@ export default class SearchComponent extends Component {
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storagekeys.html">core/storage/storagekeys</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-EventResultsItemComponent.html">EventResultsItemComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-LocationResultsItemComponent.html">LocationResultsItemComponent</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PeopleResultsItemComponent.html">PeopleResultsItemComponent</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsComponent.html">ResultsComponent</a></li><li><a href="module-ResultsItemComponent.html">ResultsItemComponent</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li><li><a href="module-ui_components_const.html">ui/components/const</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AutoCompleteApi.html">AutoCompleteApi</a></li><li><a href="module-AutoCompleteDataTransformer.html">AutoCompleteDataTransformer</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchApi.html">SearchApi</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-State.html">State</a></li><li><a href="module-Storage.html">Storage</a></li><li><a href="module-TemplateLoader.html">TemplateLoader</a></li></ul><h3>Global</h3><ul><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-AccordionCardComponent.html">AccordionCardComponent</a></li><li><a href="module-AccordionResultsComponent.html">AccordionResultsComponent</a></li><li><a href="module-AlternativeVerticals.html">AlternativeVerticals</a></li><li><a href="module-AlternativeVerticalsComponent.html">AlternativeVerticalsComponent</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd.html">answers-umd</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-AppliedFiltersComponent.html">AppliedFiltersComponent</a></li><li><a href="module-AutoCompleteComponent.html">AutoCompleteComponent</a></li><li><a href="module-AutoCompleteData.html">AutoCompleteData</a></li><li><a href="module-CardComponent.html">CardComponent</a></li><li><a href="module-CombinedFilterNode.html">CombinedFilterNode</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-core_constants.html">core/constants</a></li><li><a href="module-core_index.html">core/index</a></li><li><a href="module-core_storage_storageindexes.html">core/storage/storageindexes</a></li><li><a href="module-CTACollectionComponent.html">CTACollectionComponent</a></li><li><a href="module-CTAComponent.html">CTAComponent</a></li><li><a href="module-DateFilterComponent.html">DateFilterComponent</a></li><li><a href="module-DefaultTemplatesLoader.html">DefaultTemplatesLoader</a></li><li><a href="module-DirectAnswer.html">DirectAnswer</a></li><li><a href="module-DirectAnswerComponent.html">DirectAnswerComponent</a></li><li><a href="module-DOM.html">DOM</a></li><li><a href="module-DynamicFilters.html">DynamicFilters</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.html">Errors</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Facet.html">Facet</a></li><li><a href="module-FacetsComponent.html">FacetsComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterCombinators.html">FilterCombinators</a></li><li><a href="module-FilterMetadata.html">FilterMetadata</a></li><li><a href="module-FilterNode.html">FilterNode</a></li><li><a href="module-FilterNodeFactory.html">FilterNodeFactory</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterRegistry.html">FilterRegistry</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-FilterTypes.html">FilterTypes</a></li><li><a href="module-GeoLocationComponent.html">GeoLocationComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HighlightedValue.html">HighlightedValue</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-IconComponent.html">IconComponent</a></li><li><a href="module-LegacyCardComponent.html">LegacyCardComponent</a></li><li><a href="module-LocationBias.html">LocationBias</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapComponent.html">MapComponent</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-Navigation.html">Navigation</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-PaginationComponent.html">PaginationComponent</a></li><li><a href="module-QueryTriggers.html">QueryTriggers</a></li><li><a href="module-QuestionSubmission.html">QuestionSubmission</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-RangeFilterComponent.html">RangeFilterComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-Result.html">Result</a></li><li><a href="module-ResultsContext.html">ResultsContext</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchConfig.html">SearchConfig</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-SearchParams.html">SearchParams</a></li><li><a href="module-SearchParamsParser.html">SearchParamsParser</a></li><li><a href="module-SearchStates.html">SearchStates</a></li><li><a href="module-Section.html">Section</a></li><li><a href="module-SimpleFilterNode.html">SimpleFilterNode</a></li><li><a href="module-SortOptionsComponent.html">SortOptionsComponent</a></li><li><a href="module-SpellCheck.html">SpellCheck</a></li><li><a href="module-SpellCheckComponent.html">SpellCheckComponent</a></li><li><a href="module-StandardCardComponent.html">StandardCardComponent</a></li><li><a href="module-State.html">State</a></li><li><a href="module-StorageKeys.html">StorageKeys</a></li><li><a href="module-ui_components_componenttypes.html">ui/components/componenttypes</a></li><li><a href="module-ui_components_registry.html">ui/components/registry</a></li><li><a href="module-ui_index.html">ui/index</a></li><li><a href="module-ui_rendering_const.html">ui/rendering/const</a></li><li><a href="module-UniversalResults.html">UniversalResults</a></li><li><a href="module-UniversalResultsComponent.html">UniversalResultsComponent</a></li><li><a href="module-VerticalPagesConfig.html">VerticalPagesConfig</a></li><li><a href="module-VerticalResults.html">VerticalResults</a></li><li><a href="module-VerticalResultsComponent.html">VerticalResultsComponent</a></li></ul><h3>Namespaces</h3><ul><li><a href="module-DOM.html">DOM</a></li></ul><h3>Classes</h3><ul><li><a href="module.exports.html">exports</a></li><li><a href="module.exports_module.exports.html">exports</a></li><li><a href="module-AnalyticsReporter.html">AnalyticsReporter</a></li><li><a href="module-answers-umd-Answers.html">Answers</a></li><li><a href="module-ApiRequest.html">ApiRequest</a></li><li><a href="module-CombinedFilterNode.html">CombinedFilterNode</a></li><li><a href="module-Component.html">Component</a></li><li><a href="module-ComponentManager.html">ComponentManager</a></li><li><a href="module-Core.html">Core</a></li><li><a href="module-DateFilterComponent.html">DateFilterComponent</a></li><li><a href="module-DefaultTemplatesLoader.html">DefaultTemplatesLoader</a></li><li><a href="module-DynamicFilters.html">DynamicFilters</a></li><li><a href="module-ErrorReporter.html">ErrorReporter</a></li><li><a href="module-Errors.AnswersAnalyticsError.html">AnswersAnalyticsError</a></li><li><a href="module-Errors.AnswersBaseError.html">AnswersBaseError</a></li><li><a href="module-Errors.AnswersBasicError.html">AnswersBasicError</a></li><li><a href="module-Errors.AnswersComponentError.html">AnswersComponentError</a></li><li><a href="module-Errors.AnswersConfigError.html">AnswersConfigError</a></li><li><a href="module-Errors.AnswersCoreError.html">AnswersCoreError</a></li><li><a href="module-Errors.AnswersEndpointError.html">AnswersEndpointError</a></li><li><a href="module-Errors.AnswersStorageError.html">AnswersStorageError</a></li><li><a href="module-Errors.AnswersUiError.html">AnswersUiError</a></li><li><a href="module-EventEmitter.html">EventEmitter</a></li><li><a href="module-Facet.html">Facet</a></li><li><a href="module-FacetsComponent.html">FacetsComponent</a></li><li><a href="module-Filter.html">Filter</a></li><li><a href="module-FilterBoxComponent.html">FilterBoxComponent</a></li><li><a href="module-FilterMetadata.html">FilterMetadata</a></li><li><a href="module-FilterNode.html">FilterNode</a></li><li><a href="module-FilterNodeFactory.html">FilterNodeFactory</a></li><li><a href="module-FilterOptionsComponent.html">FilterOptionsComponent</a></li><li><a href="module-FilterRegistry.html">FilterRegistry</a></li><li><a href="module-FilterSearchComponent.html">FilterSearchComponent</a></li><li><a href="module-GeoLocationComponent.html">GeoLocationComponent</a></li><li><a href="module-GoogleMapProvider.html">GoogleMapProvider</a></li><li><a href="module-HandlebarsRenderer.html">HandlebarsRenderer</a></li><li><a href="module-HighlightedValue.html">HighlightedValue</a></li><li><a href="module-HttpRequester.html">HttpRequester</a></li><li><a href="module-IconComponent.html">IconComponent</a></li><li><a href="module-LegacyCardComponent.html">LegacyCardComponent</a></li><li><a href="module-LocationBias.html">LocationBias</a></li><li><a href="module-MapBoxMapProvider.html">MapBoxMapProvider</a></li><li><a href="module-MapProvider.html">MapProvider</a></li><li><a href="module-ModuleData.html">ModuleData</a></li><li><a href="module-NavigationComponent.html">NavigationComponent</a></li><li><a href="module-NavigationComponent.Tab.html">Tab</a></li><li><a href="module-QuestionSubmission.html">QuestionSubmission</a></li><li><a href="module-QuestionSubmissionComponent.html">QuestionSubmissionComponent</a></li><li><a href="module-Renderer.html">Renderer</a></li><li><a href="module-SearchComponent.html">SearchComponent</a></li><li><a href="module-SearchDataTransformer.html">SearchDataTransformer</a></li><li><a href="module-SearchParams.html">SearchParams</a></li><li><a href="module-SimpleFilterNode.html">SimpleFilterNode</a></li><li><a href="module-SortOptionsComponent.html">SortOptionsComponent</a></li><li><a href="module-SpellCheck.html">SpellCheck</a></li><li><a href="module-SpellCheckComponent.html">SpellCheckComponent</a></li><li><a href="module-StandardCardComponent.html">StandardCardComponent</a></li><li><a href="module-State.html">State</a></li><li><a href="RichTextFormatterImpl.html">RichTextFormatterImpl</a></li></ul><h3>Global</h3><ul><li><a href="global.html#_callListeners">_callListeners</a></li><li><a href="global.html#_generateArrayOneToN">_generateArrayOneToN</a></li><li><a href="global.html#_handleQueryUpdate">_handleQueryUpdate</a></li><li><a href="global.html#_selectPluralForm">_selectPluralForm</a></li><li><a href="global.html#addOptions">addOptions</a></li><li><a href="global.html#computeHighlightedDataRecursively">computeHighlightedDataRecursively</a></li><li><a href="global.html#convertNlpFiltersToFilterNodes">convertNlpFiltersToFilterNodes</a></li><li><a href="global.html#create">create</a></li><li><a href="global.html#defaultConfigOption">defaultConfigOption</a></li><li><a href="global.html#defaultTemplateName">defaultTemplateName</a></li><li><a href="global.html#delete">delete</a></li><li><a href="global.html#equivalentParams">equivalentParams</a></li><li><a href="global.html#filterIsPersisted">filterIsPersisted</a></li><li><a href="global.html#filterParamsForExperienceLink">filterParamsForExperienceLink</a></li><li><a href="global.html#findSimpleFiltersWithFieldId">findSimpleFiltersWithFieldId</a></li><li><a href="global.html#flag">flag</a></li><li><a href="global.html#flattenFilterNodes">flattenFilterNodes</a></li><li><a href="global.html#fromCore">fromCore</a></li><li><a href="global.html#fromData">fromData</a></li><li><a href="global.html#get">get</a></li><li><a href="global.html#getAll">getAll</a></li><li><a href="global.html#getAnalyticsUrl">getAnalyticsUrl</a></li><li><a href="global.html#getCachedLiveApiUrl">getCachedLiveApiUrl</a></li><li><a href="global.html#getContainerClass">getContainerClass</a></li><li><a href="global.html#getCurrentStateUrlMerged">getCurrentStateUrlMerged</a></li><li><a href="global.html#getKnowledgeApiUrl">getKnowledgeApiUrl</a></li><li><a href="global.html#getLiveApiUrl">getLiveApiUrl</a></li><li><a href="global.html#getPersistedRangeFilterContents">getPersistedRangeFilterContents</a></li><li><a href="global.html#getUrlParams">getUrlParams</a></li><li><a href="global.html#getUrlWithCurrentState">getUrlWithCurrentState</a></li><li><a href="global.html#groupArray">groupArray</a></li><li><a href="global.html#has">has</a></li><li><a href="global.html#init">init</a></li><li><a href="global.html#markup">markup</a></li><li><a href="global.html#Matcher">Matcher</a></li><li><a href="global.html#mergeTabOrder">mergeTabOrder</a></li><li><a href="global.html#nestValue">nestValue</a></li><li><a href="global.html#process">process</a></li><li><a href="global.html#pruneFilterNodes">pruneFilterNodes</a></li><li><a href="global.html#pushStateToHistory">pushStateToHistory</a></li><li><a href="global.html#registerListener">registerListener</a></li><li><a href="global.html#registerMiddleware">registerMiddleware</a></li><li><a href="global.html#removeListener">removeListener</a></li><li><a href="global.html#removeParamsWithPrefixes">removeParamsWithPrefixes</a></li><li><a href="global.html#replaceHistoryWithState">replaceHistoryWithState</a></li><li><a href="global.html#replaceUrlParams">replaceUrlParams</a></li><li><a href="global.html#report">report</a></li><li><a href="global.html#set">set</a></li><li><a href="global.html#setConversionTrackingEnabled">setConversionTrackingEnabled</a></li><li><a href="global.html#setWithPersist">setWithPersist</a></li><li><a href="global.html#toApiEvent">toApiEvent</a></li><li><a href="global.html#transformAutoCompleteResponse">transformAutoCompleteResponse</a></li><li><a href="global.html#transformFilterSearchResponse">transformFilterSearchResponse</a></li><li><a href="global.html#truncate">truncate</a></li><li><a href="global.html#urlWithoutQueryParamsAndHash">urlWithoutQueryParamsAndHash</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.2</a> on Fri Jul 19 2019 10:43:24 GMT-0400 (Eastern Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.6</a> on Thu May 27 2021 09:23:11 GMT-0400 (Eastern Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

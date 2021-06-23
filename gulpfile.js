@@ -21,3 +21,4 @@ exports.buildLocales = parallel(
   templates.buildLocales
 );
 exports.extractTranslations = extractTranslations;
+exports.templates = templates.default;

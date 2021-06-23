@@ -173,8 +173,10 @@ jobs:
             echo "export MAJOR_VERSION="$(echo "${CIRCLE_TAG}" | cut -d '.' -f 1)"" >> $BASH_ENV
       - deploy-to-aws:
           subdirectory: '/${MINOR_VERSION}'
+          cache-control: 'max-age=43200'
       - deploy-to-aws:
           subdirectory: '/${MAJOR_VERSION}'
+          cache-control: 'max-age=43200'
 workflows:
   version: 2
   build_and_deploy:

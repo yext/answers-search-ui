@@ -50,8 +50,8 @@ export default class HttpRequester {
 
   request (method, url, opts) {
     const reqArgs = Object.assign({}, {
-      'method': method,
-      'credentials': 'include'
+      method: method,
+      credentials: 'include'
     }, opts);
 
     return this._fetch(url, reqArgs);
@@ -89,9 +89,9 @@ export default class HttpRequester {
       return window.navigator.sendBeacon(url, data);
     }
 
-    var event = window.event && window.event.type;
-    var sync = event === 'unload' || event === 'beforeunload';
-    var xhr = ('XMLHttpRequest' in window) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+    const event = window.event && window.event.type;
+    const sync = event === 'unload' || event === 'beforeunload';
+    const xhr = ('XMLHttpRequest' in window) ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
     xhr.open('POST', url, !sync);
     xhr.setRequestHeader('Accept', '*/*');
     if (typeof data === 'string') {
@@ -113,7 +113,7 @@ export default class HttpRequester {
     let hasParam = url.indexOf('?') > -1;
 
     let searchQuery = '';
-    for (let key in params) {
+    for (const key in params) {
       if (!hasParam) {
         hasParam = true;
         searchQuery += '?';

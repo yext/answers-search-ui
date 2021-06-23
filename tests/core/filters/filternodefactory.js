@@ -119,17 +119,17 @@ describe('FilterNodeFactory', () => {
     filter2 = Filter.from(filter2);
     const node3 = FilterNodeFactory.or(node1, node2);
     const filter3 = Filter.from({
-      [ FilterCombinators.OR ]: [ filter1, filter2 ]
+      [FilterCombinators.OR]: [filter1, filter2]
     });
     expect(node3.getFilter()).toEqual(filter3);
     const node4 = FilterNodeFactory.and(node1, node2);
     const filter4 = Filter.from({
-      [ FilterCombinators.AND ]: [ filter1, filter2 ]
+      [FilterCombinators.AND]: [filter1, filter2]
     });
     expect(node4.getFilter()).toEqual(filter4);
     const rootNode = FilterNodeFactory.and(node1, node3, node4);
     expect(rootNode.getFilter()).toEqual(Filter.from({
-      [ FilterCombinators.AND ]: [ filter1, filter3, filter4 ]
+      [FilterCombinators.AND]: [filter1, filter3, filter4]
     }));
 
     const leafNodes = getLeafNodes(rootNode);
@@ -153,7 +153,7 @@ describe('FilterNodeFactory', () => {
     const orNode = FilterNodeFactory.or(node1, node2, FilterNodeFactory.from({ filter: Filter.empty() }));
     expect(orNode.children).toHaveLength(2);
     const expectedFilter = Filter.from({
-      [FilterCombinators.OR]: [ filter1, filter2 ]
+      [FilterCombinators.OR]: [filter1, filter2]
     });
     expect(orNode.getFilter()).toEqual(expectedFilter);
   });

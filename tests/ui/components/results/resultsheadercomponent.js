@@ -63,11 +63,11 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
   });
 
   it('works with simpleFilterNodes, removable = false by default', () => {
-    const simpleFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
+    const simpleFilterNodes = [node_f0_v0, node_f0_v1, node_f1_v0];
     resultsHeaderComponent.appliedFilterNodes = simpleFilterNodes;
     const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
     expect(Object.keys(groupedFilters)).toHaveLength(2);
-    expect(groupedFilters['name0']).toEqual([
+    expect(groupedFilters.name0).toEqual([
       {
         displayValue: 'display0',
         dataFilterId: 0,
@@ -79,7 +79,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
         removable: false
       }
     ]);
-    expect(groupedFilters['name1']).toEqual([
+    expect(groupedFilters.name1).toEqual([
       {
         displayValue: 'display0',
         dataFilterId: 2,
@@ -89,21 +89,21 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
   });
 
   it('duplicate display values should still be repeated', () => {
-    const simpleFilterNodes = [ node_f1_v1, node_f1_v1 ];
+    const simpleFilterNodes = [node_f1_v1, node_f1_v1];
     resultsHeaderComponent.appliedFilterNodes = simpleFilterNodes;
     const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
     expect(Object.keys(groupedFilters)).toHaveLength(1);
-    expect(groupedFilters['name1']).toHaveLength(2);
+    expect(groupedFilters.name1).toHaveLength(2);
   });
 
   it('nlp filter nodes that are duplicates are removed', () => {
-    const appliedFilterNodes = [ node_f0_v0, node_f1_v0 ];
-    const nlpFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
+    const appliedFilterNodes = [node_f0_v0, node_f1_v0];
+    const nlpFilterNodes = [node_f0_v0, node_f0_v1, node_f1_v0];
     resultsHeaderComponent.appliedFilterNodes = appliedFilterNodes;
     resultsHeaderComponent.nlpFilterNodes = nlpFilterNodes;
     const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
     expect(Object.keys(groupedFilters)).toHaveLength(2);
-    expect(groupedFilters['name0']).toEqual([
+    expect(groupedFilters.name0).toEqual([
       {
         displayValue: 'display0',
         dataFilterId: 0,
@@ -113,7 +113,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
         displayValue: 'display1'
       }
     ]);
-    expect(groupedFilters['name1']).toEqual([
+    expect(groupedFilters.name1).toEqual([
       {
         displayValue: 'display0',
         dataFilterId: 1,
@@ -123,12 +123,12 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
   });
 
   it('can display removable filters', () => {
-    const simpleFilterNodes = [ node_f0_v0, node_f0_v1, node_f1_v0 ];
+    const simpleFilterNodes = [node_f0_v0, node_f0_v1, node_f1_v0];
     resultsHeaderComponent._config.removable = true;
     resultsHeaderComponent.appliedFilterNodes = simpleFilterNodes;
     const groupedFilters = resultsHeaderComponent._groupAppliedFilters();
     expect(Object.keys(groupedFilters)).toHaveLength(2);
-    expect(groupedFilters['name0']).toEqual([
+    expect(groupedFilters.name0).toEqual([
       {
         displayValue: 'display0',
         dataFilterId: 0,
@@ -140,7 +140,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
         removable: true
       }
     ]);
-    expect(groupedFilters['name1']).toEqual([
+    expect(groupedFilters.name1).toEqual([
       {
         displayValue: 'display0',
         dataFilterId: 2,
@@ -161,7 +161,7 @@ describe('ResultsHeaderComponent\'s applied filters', () => {
     COMPONENT_MANAGER = mockManager({
       triggerSearch: triggerSearchFn,
       filterRegistry: {
-        getAllFilterNodes: () => [ node_f0_v0, node_f0_v1, node_f1_v0 ]
+        getAllFilterNodes: () => [node_f0_v0, node_f0_v1, node_f1_v0]
       }
     });
 

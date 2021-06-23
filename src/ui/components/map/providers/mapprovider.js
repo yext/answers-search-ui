@@ -173,7 +173,7 @@ export default class MapProvider {
     });
 
     const collapsedMarkers = [];
-    for (let [, markers] of Object.entries(locationToItem)) {
+    for (const [, markers] of Object.entries(locationToItem)) {
       if (markers.length > 1) {
         const collapsedMarker = {
           item: markers.map(m => m.item),

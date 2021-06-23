@@ -90,10 +90,10 @@ export default class ErrorReporter {
         version: 20190301,
         environment: this.environment,
         params: {
-          'libVersion': LIB_VERSION,
-          'experienceVersion': this.experienceVersion,
-          'experienceKey': this.experienceKey,
-          'error': err.toJson()
+          libVersion: LIB_VERSION,
+          experienceVersion: this.experienceVersion,
+          experienceKey: this.experienceKey,
+          error: err.toJson()
         }
       };
       const request = new ApiRequest(requestConfig, this.storage);

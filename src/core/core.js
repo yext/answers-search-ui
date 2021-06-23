@@ -724,17 +724,17 @@ export default class Core {
    * to use StorageKeys.VERTICAL_PAGES_CONFIG
    */
   _getUrls (query) {
-    let nav = this._componentManager.getActiveComponent('Navigation');
+    const nav = this._componentManager.getActiveComponent('Navigation');
     if (!nav) {
       return undefined;
     }
 
-    let tabs = nav.getState('tabs');
-    let urls = {};
+    const tabs = nav.getState('tabs');
+    const urls = {};
 
     if (tabs && Array.isArray(tabs)) {
       for (let i = 0; i < tabs.length; i++) {
-        let params = new SearchParams(tabs[i].url.split('?')[1]);
+        const params = new SearchParams(tabs[i].url.split('?')[1]);
         params.set('query', query);
 
         let url = tabs[i].baseUrl;

@@ -164,7 +164,7 @@ class Translator {
     const placeholders = {};
     let placeholderMatch;
 
-    const placeholderRegex = new RegExp(/\[\[([a-zA-Z0-9]+)\]\]/, 'g');
+    const placeholderRegex = /\[\[([a-zA-Z0-9]+)\]\]/g;
     while ((placeholderMatch = placeholderRegex.exec(phrase)) != null) {
       if (placeholderMatch.length >= 2) {
         placeholders[placeholderMatch[1]] = placeholderMatch[0];

@@ -46,15 +46,15 @@ export default class Facet {
    */
   static fromCore (coreFacets = []) {
     const facets = coreFacets.map(f => ({
-      label: f['displayName'],
-      fieldId: f['fieldId'],
+      label: f.displayName,
+      fieldId: f.fieldId,
       options: f.options.map(o => ({
-        label: o['displayName'],
-        countLabel: o['count'],
-        selected: o['selected'],
+        label: o.displayName,
+        countLabel: o.count,
+        selected: o.selected,
         filter: {
-          [f['fieldId']]: {
-            [o['matcher']]: o['value']
+          [f.fieldId]: {
+            [o.matcher]: o.value
           }
         }
       }))

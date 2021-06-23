@@ -1,3 +1,4 @@
+/* eslint-disable no-self-assign */
 /** @module StandardCardComponent */
 
 import Component from '../component';

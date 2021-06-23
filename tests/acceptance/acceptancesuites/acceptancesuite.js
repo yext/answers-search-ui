@@ -128,7 +128,7 @@ fixture`Facets page`
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
-test(`Facets load on the page, and can affect the search`, async t => {
+test('Facets load on the page, and can affect the search', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
 
@@ -183,7 +183,7 @@ test(`Facets load on the page, and can affect the search`, async t => {
   await t.expect(actualResultsCount).eql(initialResultsCount);
 });
 
-test(`selecting a sort option and refreshing maintains that sort selection`, async t => {
+test('selecting a sort option and refreshing maintains that sort selection', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
 
