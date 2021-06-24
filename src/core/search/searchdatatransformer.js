@@ -43,6 +43,7 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
         response.verticalResults, {}, formatters, resultsContext, verticalKey),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(response.facets, resultsContext),
