@@ -181,7 +181,7 @@ export default class DirectAnswerComponent extends Component {
       verticalKey: relatedItem.verticalConfigId,
       directAnswer: true,
       fieldName: this.getState('answer').fieldApiName,
-      searcher: 'UNIVERSAL',
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
       entityId: relatedItem.data.id,
       url: event.target.href
     };
@@ -215,7 +215,7 @@ export default class DirectAnswerComponent extends Component {
     }
     return JSON.stringify({
       verticalConfigId: data.relatedItem.verticalConfigId,
-      searcher: 'UNIVERSAL',
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
       entityId: data.relatedItem.data.id,
       ctaLabel: this._viewDetailsText.toUpperCase().replace(' ', '_')
     });
