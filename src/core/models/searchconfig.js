@@ -12,6 +12,12 @@ export default class SearchConfig {
     this.limit = config.limit || 20;
 
     /**
+     * The max results for universal search.
+     * @type {number}
+     */
+    this.universalLimit = config.universalLimit;
+
+    /**
      * The vertical key to use for all searches
      * @type {string}
      */
