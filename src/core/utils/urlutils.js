@@ -8,7 +8,7 @@ import ComponentTypes from '../../ui/components/componenttypes';
  * @param {string} env The desired environment.
  */
 export function getLiveApiUrl (env = PRODUCTION) {
-  return env === SANDBOX ? 'https://liveapi-sandbox.yext.com' : 'https://liveapi.yext.com';
+  return env === SANDBOX ? 'https://liveapi-sandbox.yext.com' : 'https://live.yextapis.com';
 }
 
 /**
@@ -16,7 +16,7 @@ export function getLiveApiUrl (env = PRODUCTION) {
  * @param {string} env The desired environment.
  */
 export function getCachedLiveApiUrl (env = PRODUCTION) {
-  return env === SANDBOX ? 'https://liveapi-sandbox.yext.com' : 'https://liveapi-cached.yext.com';
+  return env === SANDBOX ? 'https://liveapi-sandbox.yext.com' : 'https://live-cached.yextapis.com';
 }
 
 /**
@@ -24,7 +24,7 @@ export function getCachedLiveApiUrl (env = PRODUCTION) {
  * @param {string} env The desired environment.
  */
 export function getKnowledgeApiUrl (env = PRODUCTION) {
-  return env === SANDBOX ? 'https://api-sandbox.yext.com' : 'https://api.yext.com';
+  return env === SANDBOX ? 'https://api-sandbox.yext.com' : 'https://admin.yextapis.com';
 }
 
 /**
@@ -33,14 +33,13 @@ export function getKnowledgeApiUrl (env = PRODUCTION) {
  * @param {boolean} conversionTrackingEnabled If conversion tracking has been opted into.
  */
 export function getAnalyticsUrl (env = PRODUCTION, conversionTrackingEnabled = false) {
-  if (conversionTrackingEnabled) {
-    return env === SANDBOX
-      ? 'https://sandbox-realtimeanalytics.yext.com'
-      : 'https://realtimeanalytics.yext.com';
+  if (env === PRODUCTION) {
+    return 'https://answers.yext-pixel.com';
   }
-  return env === SANDBOX
-    ? 'https://sandbox-answers.yext-pixel.com'
-    : 'https://answers.yext-pixel.com';
+
+  return conversionTrackingEnabled ? 
+    'https://sandbox-realtimeanalytics.yext.com':
+    'https://sandbox-answers.yext-pixel.com';
 }
 
 /**
