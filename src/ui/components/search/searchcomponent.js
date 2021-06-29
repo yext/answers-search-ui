@@ -659,15 +659,11 @@ export default class SearchComponent extends Component {
 
   setState (data) {
     const forwardIconOpts = {
-      iconName: 'yext_animated_forward',
-      classNames: 'Icon--lg',
       complexContentsParams: {
         iconPrefix: this.name
       }
     };
     const reverseIconOpts = {
-      iconName: 'yext_animated_reverse',
-      classNames: 'Icon--lg',
       complexContentsParams: {
         iconPrefix: this.name
       }
