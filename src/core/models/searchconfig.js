@@ -12,8 +12,8 @@ export default class SearchConfig {
     this.limit = config.limit || 20;
 
     /**
-     * The max results for universal search.
-     * @type {number}
+     * The max results per vertical for universal search.
+     * @type {Object<string, number>}
      */
     this.universalLimit = config.universalLimit;
 
