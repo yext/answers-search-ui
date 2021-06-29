@@ -18,10 +18,9 @@
                       data-entity-id="{{this.id}}">
                 {{this.title}}
                 <div class="yxt-AccordionResult-indicatorWrapper" aria-hidden="true">
-                  <span class="yxt-AccordionResult-indicator"
-                        data-component="IconComponent"
-                        data-opts='{"iconName": "chevron"}'
-                        data-prop="icon"></span>
+                  <span class="yxt-AccordionResult-indicator">
+                    {{> icons/iconPartial iconName='chevron'}}
+                  </span>
                 </div>
               </button>
             </h3>
@@ -42,10 +41,9 @@
                           >
                             {{#if this.icon}}
                               <div class="yxt-AccordionResult-ctaIconWrapper">
-                                <span class="yxt-AccordionResult-ctaIcon"
-                                      data-component="IconComponent"
-                                      data-opts='{"iconName": "{{this.icon}}"}'
-                                      data-prop="icon"></span>
+                                <span class="yxt-AccordionResult-ctaIcon">
+                                  {{> icons/iconPartial iconName=this.icon}}
+                                </span>
                               </div>
                             {{/if}}
                             <span class="yxt-AccordionResult-ctaLabel">
