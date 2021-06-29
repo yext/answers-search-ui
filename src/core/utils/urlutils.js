@@ -37,9 +37,9 @@ export function getAnalyticsUrl (env = PRODUCTION, conversionTrackingEnabled = f
     return 'https://answers.yext-pixel.com';
   }
 
-  return conversionTrackingEnabled ? 
-    'https://sandbox-realtimeanalytics.yext.com':
-    'https://sandbox-answers.yext-pixel.com';
+  return conversionTrackingEnabled
+    ? 'https://sandbox-realtimeanalytics.yext.com'
+    : 'https://sandbox-answers.yext-pixel.com';
 }
 
 /**

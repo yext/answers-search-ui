@@ -27,7 +27,7 @@ describe('getUrlFunctions work', () => {
   });
 
   it('differentiates conversion tracking in analytics url', () => {
-    expect(getAnalyticsUrl(PRODUCTION, true)).toEqual(expect.stringContaining('realtimeanalytics'));
+    expect(getAnalyticsUrl(PRODUCTION, true)).not.toEqual(expect.stringContaining('realtimeanalytics'));
     expect(getAnalyticsUrl(SANDBOX, true)).toEqual(expect.stringContaining('realtimeanalytics'));
 
     expect(getAnalyticsUrl(PRODUCTION)).not.toEqual(expect.stringContaining('realtimeanalytics'));
