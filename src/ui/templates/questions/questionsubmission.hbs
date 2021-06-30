@@ -8,13 +8,9 @@
     aria-controls="yxt-QuestionSubmission-form-{{name}}"
     aria-expanded="{{#if questionExpanded}}true{{else}}false{{/if}}">
     <div class="yxt-QuestionSubmission-left">
-      <div class="yxt-QuestionSubmission-titleIconWrapper"
-          data-component="IconComponent"
-          data-opts='{
-              "iconName": "{{_config.sectionTitleIconName}}"
-            }'
-          data-prop="icon"
-      ></div>
+      <div class="yxt-QuestionSubmission-titleIconWrapper">
+        {{> icons/iconPartial iconName=_config.sectionTitleIconName}}
+      </div>
       <div class="yxt-QuestionSubmission-title">
         {{_config.sectionTitle}}
       </div>
@@ -23,11 +19,9 @@
       <div class="yxt-QuestionSubmission-titleDescription">
         {{_config.teaser}}
       </div>
-      <span class="yxt-QuestionSubmission-toggle{{#if questionExpanded}}--expanded{{else}}--collapsed{{/if}} yxt-QuestionSubmission-toggle"
-        data-component="IconComponent"
-        data-opts='{ "iconName": "chevron" }'
-        data-prop="icon"
-      ></span>
+      <span class="yxt-QuestionSubmission-toggle{{#if questionExpanded}}--expanded{{else}}--collapsed{{/if}} yxt-QuestionSubmission-toggle">
+        {{> icons/iconPartial iconName='chevron'}}
+      </span>
     </div>
   </button>
 

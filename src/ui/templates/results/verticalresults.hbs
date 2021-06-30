@@ -27,15 +27,13 @@
   {{#if _config.isUniversal}}
     <div class="yxt-Results-titleBar">
       {{#if _config.icon}}
-        {{#if iconIsBuiltIn}}
-          <div class="yxt-Results-titleIconWrapper"
-            data-component="IconComponent"
-            data-opts='{ "iconName": "{{ _config.icon }}" }'></div>
-        {{else}}
-          <div class="yxt-Results-titleIconWrapper"
-            data-component="IconComponent"
-            data-opts='{ "iconUrl": "{{ _config.icon }}" }'></div>
-        {{/if}}
+        <div class="yxt-Results-titleIconWrapper">
+          {{#if iconIsBuiltIn}}
+            {{> icons/iconPartial iconName=_config.icon }}
+          {{else}}
+            {{> icons/iconPartial iconUrl=_config.icon }}
+          {{/if}}
+        </div>
       {{/if}}
       <h2 class="yxt-Results-title">{{_config.title}}</h2>
     </div>
@@ -79,7 +77,9 @@
       data-eventoptions='{{eventOptions}}'
     >
       <div class="yxt-Results-viewAllLabel">{{_config.viewMoreLabel}}</div>
-      <div data-component="IconComponent" data-opts='{ "iconName": "chevron" }'></div>
+      <div>
+        {{> icons/iconPartial iconName='chevron'}}
+      </div>
     </a>
   {{/if}}
 {{/inline}}

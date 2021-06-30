@@ -1,0 +1,7 @@
+<div class="Icon Icon--{{#if iconName}}{{iconName}}{{else}}custom{{/if}} {{classNames}}" aria-hidden="true">
+  {{#if iconUrl}}
+    <img src="{{iconUrl}}" alt="" class="Icon-image">
+  {{else}}
+    {{icon iconName complexContentsParams}}
+  {{/if}}
+</div>

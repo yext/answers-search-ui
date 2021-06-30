@@ -16,12 +16,8 @@
             <a class="yxt-AlternativeVerticals-suggestionLink"
                 href="{{url}}">
               {{#if hasIcon}}
-                <div class="yxt-AlternativeVerticals-verticalIconWrapper"
-                      data-component="IconComponent"
-                      data-opts='{
-                        "iconName": "{{iconName}}",
-                        "iconUrl": "{{iconUrl}}"
-                      }'>
+                <div class="yxt-AlternativeVerticals-verticalIconWrapper">
+                  {{> icons/iconPartial iconName=iconName iconUrl=iconUrl}}
                 </div>
               {{/if}}
               <div class="yxt-AlternativeVerticals-suggestionLink--copy">
@@ -32,11 +28,8 @@
                   {{translate phrase='([[resultsCount]] result)' pluralForm='([[resultsCount]] results)' count=resultsCount resultsCount=resultsCount }}
                 </span>
               </div>
-              <div class="yxt-AlternativeVerticals-arrowIconWrapper"
-                    data-component="IconComponent"
-                    data-opts='{
-                      "iconName": "chevron"
-                    }'>
+              <div class="yxt-AlternativeVerticals-arrowIconWrapper">
+                {{> icons/iconPartial iconName='chevron'}}
               </div>
             </a>
           </li>

@@ -73,15 +73,15 @@
       </div>
       {{#if _config.showToggle}}
         <button class="yxt-StandardCard-toggle js-yxt-StandardCard-toggle">
-          {{#if hideExcessDetails}}
-            {{_config.showMoreText}}
-            <span data-component="IconComponent"
-              data-opts='{ "iconName": "chevron", "classNames": "Icon--sm Icon-collapseDown" }'></span>
-          {{else}}
-            {{_config.showLessText}}
-            <span data-component="IconComponent"
-              data-opts='{ "iconName": "chevron", "classNames": "Icon--sm Icon-collapseUp" }'></span>
-          {{/if}}
+          <span>
+            {{#if hideExcessDetails}}
+              {{_config.showMoreText}}
+              {{> icons/iconPartial iconName='chevron' classNames='Icon--sm Icon-collapseDown'}}
+            {{else}}
+              {{_config.showLessText}}
+              {{> icons/iconPartial iconName='chevron' classNames='Icon--sm Icon-collapseUp'}}
+            {{/if}}
+          </span>
         </button>
       {{/if}}
     </div>

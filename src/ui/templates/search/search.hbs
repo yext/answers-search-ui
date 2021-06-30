@@ -28,10 +28,8 @@
                 class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
                 data-eventtype="SEARCH_CLEAR_BUTTON"
                 data-eventoptions="{{eventOptions}}"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "close" }'
-                data-prop="icon"
         >
+          {{> icons/iconPartial iconName='close'}}
           <span class="yxt-SearchBar-clearButtonText sr-only">
             {{clearText}}
           </span>
@@ -39,25 +37,29 @@
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
           {{#if submitIcon}}
-            <div class="yxt-SearchBar-buttonImage"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "{{submitIcon}}" }'
-            ></div>
+            <div class="yxt-SearchBar-buttonImage">
+              {{> icons/iconPartial iconName=submitIcon}}
+            </div>
           {{else if _config.customIconUrl}}
-            <div class="yxt-SearchBar-buttonImage"
-                data-component="IconComponent"
-                data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
-            ></div>
+            <div class="yxt-SearchBar-buttonImage">
+              {{> icons/iconPartial iconUrl=_config.customIconUrl}}
+            </div>
           {{else}}
             <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
-              data-component="IconComponent"
-              data-opts="{{json forwardIconOpts}}">
+              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}">
+              {{> icons/iconPartial
+                iconName='yext_animated_forward'
+                classNames='Icon--lg'
+                complexContentsParams=forwardIconOpts.complexContentsParams
+              }}
             </div>
             <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
-              data-component="IconComponent"
-              data-opts="{{json reverseIconOpts}}">
+              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}">
+              {{> icons/iconPartial
+                iconName='yext_animated_reverse'
+                classNames='Icon--lg'
+                complexContentsParams=reverseIconOpts.complexContentsParams
+              }}
             </div>
           {{/if}}
           <span class="yxt-SearchBar-buttonText sr-only">
@@ -88,10 +90,8 @@
                 class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
                 data-eventtype="SEARCH_CLEAR_BUTTON"
                 data-eventoptions="{{eventOptions}}"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "close" }'
-                data-prop="icon"
         >
+          {{> icons/iconPartial iconName='close' }}
           <span class="yxt-SearchBar-clearButtonText sr-only">
             {{clearText}}
           </span>
@@ -99,15 +99,13 @@
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
           {{#if submitIcon}}
-            <div class="yxt-SearchBar-buttonImage"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "{{submitIcon}}" }'
-            ></div>
+            <div class="yxt-SearchBar-buttonImage">
+              {{> icons/iconPartial iconName=submitIcon}}
+            </div>
           {{else if _config.customIconUrl}}
-            <div class="yxt-SearchBar-buttonImage"
-                data-component="IconComponent"
-                data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
-            ></div>
+            <div class="yxt-SearchBar-buttonImage">
+              {{> icons/iconPartial iconUrl=_config.customIconUrl}}
+            </div>
           {{else}}
             <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
               {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
