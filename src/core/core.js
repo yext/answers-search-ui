@@ -226,7 +226,7 @@ export default class Core {
     return this._coreLibrary
       .verticalSearch({
         verticalKey: verticalKey || searchConfig.verticalKey,
-        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.limit,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.limitForVertical,
         location: this._getLocationPayload(),
         query: parsedQuery.input,
         queryId: sendQueryId && this.storage.get(StorageKeys.QUERY_ID),

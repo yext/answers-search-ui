@@ -9,7 +9,7 @@ export default class SearchConfig {
      * Also defines the number of results per page, if pagination is enabled
      * @type {number}
      */
-    this.limit = config.limit || 20;
+    this.limitForVertical = config.limit || 20;
 
     /**
      * The max results per vertical for universal search.
@@ -34,7 +34,7 @@ export default class SearchConfig {
   }
 
   validate () {
-    if (typeof this.limit !== 'number' || this.limit < 1 || this.limit > 50) {
+    if (typeof this.limitForVertical !== 'number' || this.limitForVertical < 1 || this.limitForVertical > 50) {
       throw new AnswersConfigError('Search Limit must be between 1 and 50', 'SearchConfig');
     }
   }
