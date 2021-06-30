@@ -37,5 +37,13 @@ export default class SearchConfig {
     if (typeof this.limitForVertical !== 'number' || this.limitForVertical < 1 || this.limitForVertical > 50) {
       throw new AnswersConfigError('Search Limit must be between 1 and 50', 'SearchConfig');
     }
+
+    if (typeof this.universalLimit === 'object' && this.universalLimit !== null) {
+      Object.values(this.universalLimit).forEach((value) => {
+        if (typeof value !== 'number' || value < 1 || value > 50) {
+          throw new AnswersConfigError('Universal limits must be between 1 and 50', 'SearchConfig');
+        }
+      });
+    }
   }
 }

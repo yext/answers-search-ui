@@ -201,7 +201,8 @@ Below is a list of configuration options related to search, used in the [base co
       verticalKey: 'verticalKey',
       // Optional, the number of results to display per page, defaults to 20. Maximum is 50.
       limit: '20',
-      // Optional, an object containing the number of results to display per vertical key. Minimum is 1. Maximum is 50. No default provided.
+      // Optional, an object containing the number of results to display per vertical key. Minimum is 1. Maximum is 50.
+      // The default value is determined by the API at 10.
       universalLimit: {
         verticalKey1: 20,
         verticalKey2: 49
