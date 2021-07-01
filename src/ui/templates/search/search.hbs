@@ -29,7 +29,7 @@
                 data-eventtype="SEARCH_CLEAR_BUTTON"
                 data-eventoptions="{{eventOptions}}"
         >
-          {{> icons/iconPartial iconName='close'}}
+          {{> icons/bakedInIcon iconName='close'}}
           <span class="yxt-SearchBar-clearButtonText sr-only">
             {{clearText}}
           </span>
@@ -38,7 +38,7 @@
           class="js-yext-submit yxt-SearchBar-button">
           {{#if submitIcon}}
             <div class="yxt-SearchBar-buttonImage">
-              {{> icons/iconPartial iconName=submitIcon}}
+              {{> icons/bakedInIcon iconName=submitIcon}}
             </div>
           {{else if _config.customIconUrl}}
             <div class="yxt-SearchBar-buttonImage">
@@ -47,7 +47,7 @@
           {{else}}
             <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
               {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}">
-              {{> icons/iconPartial
+              {{> icons/bakedInIcon
                 iconName='yext_animated_forward'
                 classNames='Icon--lg'
                 complexContentsParams=forwardIconOpts.complexContentsParams
@@ -55,7 +55,7 @@
             </div>
             <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
               {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}">
-              {{> icons/iconPartial
+              {{> icons/bakedInIcon
                 iconName='yext_animated_reverse'
                 classNames='Icon--lg'
                 complexContentsParams=reverseIconOpts.complexContentsParams
@@ -91,7 +91,7 @@
                 data-eventtype="SEARCH_CLEAR_BUTTON"
                 data-eventoptions="{{eventOptions}}"
         >
-          {{> icons/iconPartial iconName='close' }}
+          {{> icons/bakedInIcon iconName='close' }}
           <span class="yxt-SearchBar-clearButtonText sr-only">
             {{clearText}}
           </span>
@@ -100,7 +100,7 @@
           class="js-yext-submit yxt-SearchBar-button">
           {{#if submitIcon}}
             <div class="yxt-SearchBar-buttonImage">
-              {{> icons/iconPartial iconName=submitIcon}}
+              {{> icons/bakedInIcon iconName=submitIcon}}
             </div>
           {{else if _config.customIconUrl}}
             <div class="yxt-SearchBar-buttonImage">
