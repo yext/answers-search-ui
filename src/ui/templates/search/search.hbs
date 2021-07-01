@@ -47,16 +47,16 @@
           {{else}}
             <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
               {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}">
-              {{> icons/iconPartial
-                bakedInIcon='yext_animated_forward'
+              {{> icons/bakedInIcon
+                iconName='yext_animated_forward'
                 classNames='Icon--lg'
                 complexContentsParams=forwardIconOpts.complexContentsParams
               }}
             </div>
             <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
               {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}">
-              {{> icons/iconPartial
-                bakedInIcon='yext_animated_reverse'
+              {{> icons/bakedInIcon
+                iconName='yext_animated_reverse'
                 classNames='Icon--lg'
                 complexContentsParams=reverseIconOpts.complexContentsParams
               }}
