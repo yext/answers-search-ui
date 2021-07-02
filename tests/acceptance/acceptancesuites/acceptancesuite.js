@@ -104,12 +104,6 @@ test('spell check flow', async t => {
   await spellCheckComponent.clickLink();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 1');
-
-  // Check that clicking spell check sends a queryTrigger=suggest url param
-  // TODO(SLAP-1062) investigate making this an integration test
-  const queryParams = await getMostRecentQueryParamsFromLogger(spellCheckLogger);
-  const queryTriggerParam = queryParams.get('queryTrigger');
-  await t.expect(queryTriggerParam).eql('suggest');
 });
 
 test('navigating pages and hitting the browser back button lands you on the right page', async t => {
