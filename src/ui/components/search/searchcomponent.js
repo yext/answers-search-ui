@@ -289,13 +289,13 @@ export default class SearchComponent extends Component {
      * If true, a loading indicator will be displayed
      * @type {boolean}
      */
-    this._showLoadingIndicator = (config.loadingIndicator && config.loadingIndicator.display) || false;
+    this._showLoadingIndicator = config.loadingIndicator?.display || false;
 
     /**
      * Custom icon url for loading indicator
      * @type {string}
      */
-    this.loadIconUrl = (config.loadingIndicator && config.loadingIndicator.iconUrl) || null;
+    this.loadIconUrl = config.loadingIndicator?.iconUrl || null;
 
     if (this._showLoadingIndicator) {
       this.core.storage.registerListener({
