@@ -295,7 +295,7 @@ export default class SearchComponent extends Component {
      * Custom icon url for loading indicator
      * @type {string}
      */
-    this.loadIconUrl = config.loadingIndicator?.iconUrl || null;
+    this.loadingIconUrl = config.loadingIndicator?.iconUrl || null;
 
     if (this._showLoadingIndicator) {
       this.core.storage.registerListener({
@@ -411,7 +411,7 @@ export default class SearchComponent extends Component {
   }
 
   animateIconToLoading () {
-    this.loadIconUrl
+    this.loadingIconUrl
       ? this.requestIconAnimationFrame(IconState.LOADING, '.js-yxt-SearchBar-loadingImage')
       : this.requestIconAnimationFrame(IconState.LOADING, '.js-yxt-SearchBar-LoadingIndicator');
   }
@@ -747,7 +747,7 @@ export default class SearchComponent extends Component {
       clearText: this.clearText,
       showClearButton: this._showClearButton,
       showLoadingIndicator: this._showLoadingIndicator,
-      loadIconUrl: this.loadIconUrl,
+      loadingIconUrl: this.loadingIconUrl,
       query: this.query || '',
       eventOptions: this.eventOptions(),
       iconId: this.name,

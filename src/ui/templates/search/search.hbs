@@ -37,9 +37,9 @@
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
           {{#if showLoadingIndicator}}
-            {{#if loadIconUrl}}
+            {{#if loadingIconUrl}}
               <div class="yxt-SearchBar-loadingImage js-yxt-SearchBar-loadingImage js-yxt-SearchBar-Icon yxt-SearchBar-Icon--inactive">
-                {{> icons/iconPartial iconUrl=loadIconUrl}}
+                {{> icons/iconPartial iconUrl=loadingIconUrl}}
               </div>
             {{else}}
               <div class="yxt-SearchBar-AnimatedIcon js-yxt-SearchBar-LoadingIndicator yxt-SearchBar-LoadingIndicator js-yxt-SearchBar-Icon 
@@ -113,9 +113,9 @@
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
           {{#if showLoadingIndicator}}
-            {{#if loadIconUrl}}
+            {{#if loadingIconUrl}}
               <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon">
-                {{> icons/iconPartial iconUrl=loadIconUrl}}
+                {{> icons/iconPartial iconUrl=loadingIconUrl}}
               </div>
             {{else}}
               <div class="yxt-SearchBar-AnimatedIcon js-yxt-SearchBar-LoadingIndicator yxt-SearchBar-LoadingIndicator js-yxt-SearchBar-Icon 
