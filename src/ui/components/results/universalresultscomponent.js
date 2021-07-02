@@ -68,6 +68,9 @@ export default class UniversalResultsComponent extends Component {
     const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
     this.updateContainerClass(searchState);
+    if (searchState === SearchStates.SEARCH_LOADING) {
+      return;
+    }
     return super.setState(Object.assign(data, {
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,

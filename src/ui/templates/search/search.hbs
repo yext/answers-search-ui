@@ -38,24 +38,38 @@
         </button>
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
+          {{#if showLoadingIndicator}}
+            {{#if loadIconUrl}}
+              <div class="yxt-SearchBar-loadingImage js-yxt-SearchBar-loadingImage js-yxt-SearchBar-Icon yxt-SearchBar-Icon--inactive"
+                  data-component="IconComponent"
+                  data-opts='{ "iconUrl": "{{loadIconUrl}}" }'
+              ></div>
+            {{else}}
+              <div class="yxt-SearchBar-AnimatedIcon js-yxt-SearchBar-LoadingIndicator yxt-SearchBar-LoadingIndicator js-yxt-SearchBar-Icon yxt-SearchBar-LoadingIndicator--inactive">
+                <svg class= "yxt-SearchBar-LoadingIndicator-AnimatedIcon" viewBox="0 0 72 72">
+                  <circle class="yxt-SearchBar-LoadingIndicator-Circle" cx="36" cy="36" r="33" stroke="black" stroke-width="3" fill="none"/>
+                </svg>
+              </div>
+            {{/if}}
+          {{/if}}
           {{#if submitIcon}}
-            <div class="yxt-SearchBar-buttonImage"
+            <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon"
                 data-component="IconComponent"
                 data-opts='{ "iconName": "{{submitIcon}}" }'
             ></div>
           {{else if _config.customIconUrl}}
-            <div class="yxt-SearchBar-buttonImage"
+            <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon"
                 data-component="IconComponent"
                 data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
             ></div>
           {{else}}
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
+            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward js-yxt-SearchBar-Icon
+              {{#unless autoFocus}} yxt-SearchBar-Icon--inactive{{/unless}}"
               data-component="IconComponent"
               data-opts="{{json forwardIconOpts}}">
             </div>
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
+            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse js-yxt-SearchBar-Icon
+              {{#if autoFocus}} yxt-SearchBar-Icon--inactive{{/if}}"
               data-component="IconComponent"
               data-opts="{{json reverseIconOpts}}">
             </div>
@@ -98,24 +112,38 @@
         </button>
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
+          {{#if showLoadingIndicator}}
+            {{#if loadIconUrl}}
+              <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon"
+                  data-component="IconComponent"
+                  data-opts='{ "iconUrl": "{{loadIconUrl}}" }'
+              ></div>
+            {{else}}
+              <div class="yxt-SearchBar-AnimatedIcon js-yxt-SearchBar-LoadingIndicator yxt-SearchBar-LoadingIndicator js-yxt-SearchBar-Icon yxt-SearchBar-LoadingIndicator--inactive">
+                <svg class= "yxt-SearchBar-LoadingIndicator-AnimatedIcon" viewBox="0 0 72 72">
+                  <circle class="yxt-SearchBar-LoadingIndicator-Circle" cx="36" cy="36" r="33" stroke="black" stroke-width="3" fill="none"/>
+                </svg>
+              </div>
+            {{/if}}
+          {{/if}}
           {{#if submitIcon}}
-            <div class="yxt-SearchBar-buttonImage"
+            <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon"
                 data-component="IconComponent"
                 data-opts='{ "iconName": "{{submitIcon}}" }'
             ></div>
           {{else if _config.customIconUrl}}
-            <div class="yxt-SearchBar-buttonImage"
+            <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon"
                 data-component="IconComponent"
                 data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
             ></div>
           {{else}}
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
+            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward js-yxt-SearchBar-Icon
+              {{#unless autoFocus}} yxt-SearchBar-Icon--inactive{{/unless}}"
               data-component="IconComponent"
               data-opts="{{json forwardIconOpts}}">
             </div>
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
+            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse js-yxt-SearchBar-Icon
+              {{#if autoFocus}} yxt-SearchBar-Icon--inactive{{/if}}"
               data-component="IconComponent"
               data-opts="{{json reverseIconOpts}}">
             </div>
