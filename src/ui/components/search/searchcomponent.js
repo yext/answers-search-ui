@@ -383,7 +383,7 @@ export default class SearchComponent extends Component {
     if (!this.isRequestingAnimationFrame) {
       this.isRequestingAnimationFrame = true;
       window.requestAnimationFrame(() => {
-        const iconEls = DOM.queryAll('.js-yxt-SearchBar-Icon');
+        const iconEls = DOM.queryAll(this._container, '.js-yxt-SearchBar-Icon');
         iconEls.forEach((el) => {
           el.classList.contains('js-yxt-SearchBar-LoadingIndicator')
             ? el.classList.add('yxt-SearchBar-LoadingIndicator--inactive')
