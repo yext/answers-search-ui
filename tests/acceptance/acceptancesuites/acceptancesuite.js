@@ -14,7 +14,6 @@ import {
   browserRefreshPage,
   registerIE11NoCacheHook
 } from '../utils';
-import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 /**
