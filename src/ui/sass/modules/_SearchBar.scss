@@ -185,7 +185,7 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     display: none;
   }
 
-  &-AnimatedIcon--paused svg
+  &-AnimatedIcon--paused svg > g
   {
     animation-play-state: paused;
   }
