@@ -396,7 +396,7 @@ export default class SearchComponent extends Component {
 
         iconEl.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
         if (this.iconState === IconState.MAGNIFYING_GLASS) {
-          const forwardEl = DOM.query(this._container, iconElClass).firstChild;
+          const forwardEl = DOM.query(this._container, iconElClass).firstElementChild;
           if (prevState === IconState.DONE_LOADING) {
             forwardEl.classList.remove('Icon--yext_animated_forward');
             forwardEl.classList.add('Icon--magnifying_glass');
@@ -728,15 +728,11 @@ export default class SearchComponent extends Component {
 
   setState (data) {
     const forwardIconOpts = {
-      iconName: 'yext_animated_forward',
-      classNames: 'Icon--lg',
       complexContentsParams: {
         iconPrefix: this.name
       }
     };
     const reverseIconOpts = {
-      iconName: 'yext_animated_reverse',
-      classNames: 'Icon--lg',
       complexContentsParams: {
         iconPrefix: this.name
       }

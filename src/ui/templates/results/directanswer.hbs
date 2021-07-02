@@ -3,14 +3,9 @@
 {{else}}
   <div class="yxt-DirectAnswer">
     <div class="yxt-DirectAnswer-title">
-      <div class="yxt-DirectAnswer-titleIconWrapper yxt-Results-titleIconWrapper"
-          data-component="IconComponent"
-          data-opts='{
-              "iconName": "{{iconName}}",
-              "iconUrl": "{{customIconUrl}}"
-            }'
-          data-prop="icon"
-      ></div>
+      <div class="yxt-DirectAnswer-titleIconWrapper yxt-Results-titleIconWrapper">
+        {{> icons/iconPartial iconName=iconName iconUrl=customIconUrl}}
+      </div>
       <h2 class="yxt-DirectAnswer-titleText">
         <span class="yxt-DirectAnswer-entityName">
           {{answer.entityName}}
@@ -52,11 +47,9 @@
           </div>
           <form class="yxt-DirectAnswer-thumbs js-directAnswer-feedback-form">
             <label class="yxt-DirectAnswer-thumb">
-              <span class="yxt-DirectAnswer-thumbUpIcon"
-                  data-component="IconComponent"
-                  data-opts='{"iconName": "thumb"}'
-                  data-prop="icon"
-              ></span>
+              <span class="yxt-DirectAnswer-thumbUpIcon">
+                {{> icons/bakedInIcon iconName='thumb'}}
+              </span>
               <input type="radio"
                     name="feedback"
                     value="true"
@@ -66,11 +59,9 @@
               </span>
             </label>
             <label class="yxt-DirectAnswer-thumb">
-              <span class="yxt-DirectAnswer-thumbDownIcon"
-                  data-component="IconComponent"
-                  data-opts='{"iconName": "thumb"}'
-                  data-prop="icon"
-              ></span>
+              <span class="yxt-DirectAnswer-thumbDownIcon">
+                {{> icons/bakedInIcon iconName='thumb'}}
+              </span>
               <input type="radio"
                     name="feedback"
                     value="false"

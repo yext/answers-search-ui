@@ -4,14 +4,13 @@
   rel="noopener noreferrer nofollow"
 >
   {{#if hasIcon}}
-    <div class='yxt-CTA-icon{{#if _config.includeLegacyClasses}} yxt-Result-ctaIconWrapper{{/if}}'
-         data-component='IconComponent'
-         data-opts='{
-           "iconName": "{{_config.icon}}",
-           "iconUrl": "{{_config.iconUrl}}"
-           {{#if _config.includeLegacyClasses}}, "classNames": "yxt-Result-ctaIcon"{{/if}} 
-          }'
-         ></div>
+    <div class='yxt-CTA-icon{{#if _config.includeLegacyClasses}} yxt-Result-ctaIconWrapper{{/if}}'>
+      {{#if _config.includeLegacyClasses}}
+        {{> icons/iconPartial iconName=_config.icon iconUrl=_config.iconUrl classNames="yxt-Results-ctaIcon" }}
+      {{else}}
+        {{> icons/iconPartial iconName=_config.icon iconUrl=_config.iconUrl }}
+      {{/if}}
+    </div>
   {{/if}}
   <div class='yxt-CTA-iconLabel{{#if _config.includeLegacyClasses}} yxt-Result-ctaLabel{{/if}}'>
     {{{_config.label}}}
