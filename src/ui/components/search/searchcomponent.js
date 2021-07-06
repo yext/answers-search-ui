@@ -389,11 +389,11 @@ export default class SearchComponent extends Component {
           activeIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
         }
 
-        // Static yext icon is used after loading to avoid the transition from being too flashy.
+        // Static yext icon is used after loading to avoid unecessary transition from magnifying glass to yext.
         if (this.iconState === IconState.YEXT) {
-          const forwardEl = DOM.query(this._container, '.Icon--yext_animated_reverse');
+          const yextIconEl = DOM.query(this._container, '.Icon--yext_animated_reverse');
           const wasLoading = [IconState.LOADING, IconState.CUSTOM_LOADING].includes(this.prevState);
-          wasLoading ? forwardEl.classList.add('yxt-SearchBar-Yext--static') : forwardEl.classList.remove('yxt-SearchBar-Yext--static');
+          wasLoading ? yextIconEl.classList.add('yxt-SearchBar-Yext--static') : yextIconEl.classList.remove('yxt-SearchBar-Yext--static');
         }
         this.isRequestingAnimationFrame = false;
       });
