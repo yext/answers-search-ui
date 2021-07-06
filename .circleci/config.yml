@@ -185,7 +185,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - dev/i18n-develop
+                - develop
                 - master
                 - /^support\/.*/
                 - /^hotfix\/.*/
@@ -219,7 +219,7 @@ workflows:
           filters:
             branches:
               only:
-                - dev/i18n-develop
+                - develop
                 - /^support\/.*/
                 - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
@@ -243,7 +243,7 @@ workflows:
           filters:
             branches:
               ignore:
-                - dev/i18n-develop
+                - develop
           requires:
             - unit_test
             - browserstack_acceptance_test
@@ -253,7 +253,7 @@ workflows:
       - deploy_canary:
           filters:
             branches:
-              only: dev/i18n-develop
+              only: develop
           requires:
             - unit_test
             - headless_acceptance_test
