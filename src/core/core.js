@@ -750,7 +750,7 @@ export default class Core {
     return urls;
   }
 
-  getOrSetupSessionId() {
+  getOrSetupSessionId () {
     if (this.storage.get(StorageKeys.SESSIONS_OPT_IN).value) {
       try {
         let sessionId = window.sessionStorage.getItem('sessionId');
@@ -759,8 +759,7 @@ export default class Core {
           window.sessionStorage.setItem('sessionId', sessionId);
         }
         return sessionId;
-      }
-      catch(e) {
+      } catch (e) {
         console.error(e);
       }
     }
