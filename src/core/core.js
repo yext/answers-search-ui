@@ -1,6 +1,6 @@
 /** @module Core */
 import { provideCore } from '@yext/answers-core/lib/commonjs';
-import {uuid} from './utils/uuid';
+import { generateUUID } from './utils/uuid';
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import VerticalResults from './models/verticalresults';
@@ -236,7 +236,7 @@ export default class Core {
         offset: this.storage.get(StorageKeys.SEARCH_OFFSET) || 0,
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTriggerForApi,
-        sessionId: this.getSessionId(),
+        sessionId: this.getOrSetupSessionId(),
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
         /** In the SDK a locationRadius of 0 means "unset my locationRadius" */
@@ -347,7 +347,7 @@ export default class Core {
         location: this._getLocationPayload(),
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTriggerForApi,
-        sessionId: this.getSessionId(),
+        sessionId: this.getOrSetupSessionId(),
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
@@ -750,12 +750,12 @@ export default class Core {
     return urls;
   }
 
-  getSessionId() {
+  getOrSetupSessionId() {
     if (this.storage.get(StorageKeys.SESSIONS_OPT_IN).value) {
       try {
         let sessionId = window.sessionStorage.getItem('sessionId');
         if (!sessionId) {
-          sessionId = uuid();
+          sessionId = generateUUID();
           window.sessionStorage.setItem('sessionId', sessionId);
         }
         return sessionId;

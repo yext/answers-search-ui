@@ -5,6 +5,6 @@ import { v4 as uuidv4 } from 'uuid';
  * 
  * @returns {String}
  */
-export function uuid() {
+export function generateUUID() {
     return uuidv4();
 }
