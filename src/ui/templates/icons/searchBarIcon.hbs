@@ -15,7 +15,7 @@
 
 {{#if submitIcon}}
   <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon">
-    {{> icons/bakedInIcon iconName=submitIcon}}
+    {{> icons/builtInIcon iconName=submitIcon}}
   </div>
 {{else if _config.customIconUrl}}
   <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon">
@@ -24,7 +24,7 @@
 {{else}}
   <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward js-yxt-SearchBar-Icon
     {{#unless autoFocus}} yxt-SearchBar-Icon--inactive{{/unless}}">
-    {{> icons/bakedInIcon
+    {{> icons/builtInIcon
       iconName='yext_animated_forward'
       classNames='Icon--lg'
       complexContentsParams=forwardIconOpts.complexContentsParams
@@ -32,7 +32,7 @@
   </div>
   <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse js-yxt-SearchBar-Icon
     {{#if autoFocus}} yxt-SearchBar-Icon--inactive{{/if}}">
-    {{> icons/bakedInIcon
+    {{> icons/builtInIcon
       iconName='yext_animated_reverse'
       classNames='Icon--lg'
       complexContentsParams=reverseIconOpts.complexContentsParams
