@@ -183,6 +183,13 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   &-Icon--inactive
   {
     display: none;
+    
+    &.yxt-SearchBar-LoadingIndicator {
+      display: block;
+      visibility: hidden;
+      width: 0;
+      position: absolute;
+    }
   }
 
   &-AnimatedIcon--paused svg > g
@@ -193,13 +200,6 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   &-LoadingIndicator
   {
     animation: rotate 1.4s linear infinite;
-  }
-
-  &-LoadingIndicator--inactive 
-  {
-    visibility: hidden;
-    width: 0;
-    position: absolute;
   }
 
   @keyframes static {

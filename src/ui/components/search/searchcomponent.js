@@ -357,9 +357,7 @@ export default class SearchComponent extends Component {
     }
 
     this.isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
-    if (this.isUsingYextAnimatedIcon) {
-      this.initAnimatedIcon();
-    }
+    this.isUsingYextAnimatedIcon ? this.initAnimatedIcon() : this.iconState = IconState.CUSTOM_ICON;
 
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
@@ -383,27 +381,15 @@ export default class SearchComponent extends Component {
     if (!this.isRequestingAnimationFrame) {
       this.isRequestingAnimationFrame = true;
       window.requestAnimationFrame(() => {
-        const iconEls = DOM.queryAll(this._container, '.js-yxt-SearchBar-Icon');
-        iconEls.forEach((el) => {
-          el.classList.contains('js-yxt-SearchBar-LoadingIndicator')
-            ? el.classList.add('yxt-SearchBar-LoadingIndicator--inactive')
-            : el.classList.add('yxt-SearchBar-Icon--inactive');
-        });
+        DOM.query(this._container, this.prevState).classList.add('yxt-SearchBar-Icon--inactive');
         const iconEl = DOM.query(this._container, this.iconState);
-        iconEl.classList.contains('js-yxt-SearchBar-LoadingIndicator')
-          ? iconEl.classList.remove('yxt-SearchBar-LoadingIndicator--inactive')
-          : iconEl.classList.remove('yxt-SearchBar-Icon--inactive');
-
+        iconEl.classList.remove('yxt-SearchBar-Icon--inactive');
         iconEl.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
         if (this.iconState === IconState.MAGNIFYING_GLASS) {
-          const forwardEl = DOM.query(this._container, this.iconState).firstElementChild;
-          if (this.prevState === IconState.LOADING || this.prevState === IconState.CUSTOM_LOADING) {
-            forwardEl.classList.remove('Icon--yext_animated_forward');
-            forwardEl.classList.add('Icon--magnifying_glass');
-          } else {
-            forwardEl.classList.add('Icon--yext_animated_forward');
-            forwardEl.classList.remove('Icon--magnifying_glass');
-          }
+          const forwardEl = DOM.query(this._container, '.Icon--yext_animated_forward');
+          this.prevState === IconState.LOADING || this.prevState === IconState.CUSTOM_LOADING
+            ? forwardEl.classList.add('yxt-SearchBar-MagnifyingGlass')
+            : forwardEl.classList.remove('yxt-SearchBar-MagnifyingGlass');
         }
         this.isRequestingAnimationFrame = false;
       });
