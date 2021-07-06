@@ -9,7 +9,7 @@
     aria-expanded="{{#if questionExpanded}}true{{else}}false{{/if}}">
     <div class="yxt-QuestionSubmission-left">
       <div class="yxt-QuestionSubmission-titleIconWrapper">
-        {{> icons/bakedInIcon iconName=_config.sectionTitleIconName}}
+        {{> icons/builtInIcon iconName=_config.sectionTitleIconName}}
       </div>
       <div class="yxt-QuestionSubmission-title">
         {{_config.sectionTitle}}
@@ -20,7 +20,7 @@
         {{_config.teaser}}
       </div>
       <span class="yxt-QuestionSubmission-toggle{{#if questionExpanded}}--expanded{{else}}--collapsed{{/if}} yxt-QuestionSubmission-toggle">
-        {{> icons/bakedInIcon iconName='chevron'}}
+        {{> icons/builtInIcon iconName='chevron'}}
       </span>
     </div>
   </button>
