@@ -10,11 +10,11 @@ import QueryTriggers from '../../../core/models/querytriggers';
 import SearchStates from '../../../core/storage/searchstates';
 
 const IconState = {
-  LOADING: 0,
-  DONE_LOADING: 1,
-  CUSTOM_ICON: 2,
-  YEXT: 3,
-  MAGNIFYING_GLASS: 4
+  LOADING: '.js-yxt-SearchBar-LoadingIndicator',
+  CUSTOM_LOADING: '.js-yxt-SearchBar-CustomLoadingImage',
+  CUSTOM_ICON: '.js-yxt-SearchBar-buttonImage',
+  YEXT: '.js-yxt-AnimatedReverse',
+  MAGNIFYING_GLASS: '.js-yxt-AnimatedForward'
 };
 
 /**
@@ -374,11 +374,11 @@ export default class SearchComponent extends Component {
     }
   }
 
-  requestIconAnimationFrame (iconState, iconElClass) {
+  requestIconAnimationFrame (iconState) {
     if (this.iconState === iconState) {
       return;
     }
-    const prevState = this.iconState;
+    this.prevState = this.iconState;
     this.iconState = iconState;
     if (!this.isRequestingAnimationFrame) {
       this.isRequestingAnimationFrame = true;
@@ -389,15 +389,15 @@ export default class SearchComponent extends Component {
             ? el.classList.add('yxt-SearchBar-LoadingIndicator--inactive')
             : el.classList.add('yxt-SearchBar-Icon--inactive');
         });
-        const iconEl = DOM.query(this._container, iconElClass);
+        const iconEl = DOM.query(this._container, this.iconState);
         iconEl.classList.contains('js-yxt-SearchBar-LoadingIndicator')
           ? iconEl.classList.remove('yxt-SearchBar-LoadingIndicator--inactive')
           : iconEl.classList.remove('yxt-SearchBar-Icon--inactive');
 
         iconEl.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
         if (this.iconState === IconState.MAGNIFYING_GLASS) {
-          const forwardEl = DOM.query(this._container, iconElClass).firstElementChild;
-          if (prevState === IconState.DONE_LOADING) {
+          const forwardEl = DOM.query(this._container, this.iconState).firstElementChild;
+          if (this.prevState === IconState.LOADING || this.prevState === IconState.CUSTOM_LOADING) {
             forwardEl.classList.remove('Icon--yext_animated_forward');
             forwardEl.classList.add('Icon--magnifying_glass');
           } else {
@@ -412,31 +412,27 @@ export default class SearchComponent extends Component {
 
   animateIconToLoading () {
     this.customLoadingIconUrl
-      ? this.requestIconAnimationFrame(IconState.LOADING, '.js-yxt-SearchBar-CustomLoadingImage')
-      : this.requestIconAnimationFrame(IconState.LOADING, '.js-yxt-SearchBar-LoadingIndicator');
+      ? this.requestIconAnimationFrame(IconState.CUSTOM_LOADING)
+      : this.requestIconAnimationFrame(IconState.LOADING);
   }
 
   animateIconToDoneLoading () {
     this.iconIsFrozen = false;
-    this.iconState = IconState.DONE_LOADING;
     if (this.isUsingYextAnimatedIcon) {
       this.queryEl === document.activeElement
-        ? this.animateIconToMagnifyingGlass()
-        : this.animateIconToYext();
+        ? this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS)
+        : this.requestIconAnimationFrame(IconState.YEXT);
     } else {
-      this.animateIconToCustomIcon();
+      this.requestIconAnimationFrame(IconState.CUSTOM_ICON);
     }
-  }
-
-  animateIconToCustomIcon () {
-    this.requestIconAnimationFrame(IconState.CUSTOM_ICON, '.js-yxt-SearchBar-buttonImage');
   }
 
   animateIconToMagnifyingGlass () {
-    if (this.iconState === IconState.LOADING || this.iconIsFrozen) {
+    if (this.iconState === IconState.LOADING || this.iconState === IconState.CUSTOM_LOADING ||
+      this.iconIsFrozen) {
       return;
     }
-    this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS, '.js-yxt-AnimatedForward');
+    this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS);
   }
 
   animateIconToYext (e) {
@@ -444,10 +440,11 @@ export default class SearchComponent extends Component {
     if (e && e.relatedTarget) {
       focusStillInSearchbar = this._container.contains(e.relatedTarget);
     }
-    if (this.iconState === IconState.LOADING || this.iconIsFrozen || focusStillInSearchbar) {
+    if (this.iconState === IconState.LOADING || this.iconState === IconState.CUSTOM_LOADING ||
+      this.iconIsFrozen || focusStillInSearchbar) {
       return;
     }
-    this.requestIconAnimationFrame(IconState.YEXT, '.js-yxt-AnimatedReverse');
+    this.requestIconAnimationFrame(IconState.YEXT);
   }
 
   oneTimeMouseUpListener () {
