@@ -17,7 +17,7 @@ commands:
       - save_cache:
           paths:
             - node_modules
-          key: v2-dependencies-{{ checksum "package-lockpack.json" }}
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
   deploy-to-aws:
     description: "Deploys the dist directory to a given subdirectory of the answers bucket"
     parameters:
