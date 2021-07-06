@@ -23,7 +23,7 @@
   </div>
 {{else}}
   <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward js-yxt-SearchBar-Icon
-    {{#unless autoFocus}} yxt-SearchBar-Icon--inactive{{/unless}}">
+    {{#if autoFocus}} yxt-SearchBar-Icon--inactive{{/if}}">
     {{> icons/builtInIcon
       iconName='yext_animated_forward'
       classNames='Icon--lg'
@@ -31,7 +31,7 @@
     }}
   </div>
   <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse js-yxt-SearchBar-Icon
-    {{#if autoFocus}} yxt-SearchBar-Icon--inactive{{/if}}">
+    {{#unless autoFocus}} yxt-SearchBar-Icon--inactive{{/unless}}">
     {{> icons/builtInIcon
       iconName='yext_animated_reverse'
       classNames='Icon--lg'

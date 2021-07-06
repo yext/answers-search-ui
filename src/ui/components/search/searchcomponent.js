@@ -381,15 +381,19 @@ export default class SearchComponent extends Component {
     if (!this.isRequestingAnimationFrame) {
       this.isRequestingAnimationFrame = true;
       window.requestAnimationFrame(() => {
-        DOM.query(this._container, this.prevState).classList.add('yxt-SearchBar-Icon--inactive');
-        const iconEl = DOM.query(this._container, this.iconState);
-        iconEl.classList.remove('yxt-SearchBar-Icon--inactive');
-        iconEl.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
-        if (this.iconState === IconState.MAGNIFYING_GLASS) {
-          const forwardEl = DOM.query(this._container, '.Icon--yext_animated_forward');
-          this.prevState === IconState.LOADING || this.prevState === IconState.CUSTOM_LOADING
-            ? forwardEl.classList.add('yxt-SearchBar-MagnifyingGlass')
-            : forwardEl.classList.remove('yxt-SearchBar-MagnifyingGlass');
+        DOM.queryAll(this._container, '.js-yxt-SearchBar-Icon')
+          .forEach(e => e.classList.add('yxt-SearchBar-Icon--inactive'));
+        const activeIcon = DOM.query(this._container, this.iconState);
+        activeIcon.classList.remove('yxt-SearchBar-Icon--inactive');
+        if (this.iconState === IconState.MAGNIFYING_GLASS || this.iconState === IconState.YEXT) {
+          activeIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
+        }
+
+        // Static yext icon is used after loading to avoid the transition from being too flashy.
+        if (this.iconState === IconState.YEXT) {
+          const forwardEl = DOM.query(this._container, '.Icon--yext_animated_reverse');
+          const wasLoading = [IconState.LOADING, IconState.CUSTOM_LOADING].includes(this.prevState);
+          wasLoading ? forwardEl.classList.add('yxt-SearchBar-Yext--static') : forwardEl.classList.remove('yxt-SearchBar-Yext--static');
         }
         this.isRequestingAnimationFrame = false;
       });
@@ -574,13 +578,8 @@ export default class SearchComponent extends Component {
       }
     }
 
-    if (!this._showLoadingIndicator) {
-      inputEl.blur();
-      DOM.query(this._container, '.js-yext-submit').blur();
-      if (this.isUsingYextAnimatedIcon) {
-        this.animateIconToYext();
-      }
-    }
+    inputEl.blur();
+    DOM.query(this._container, '.js-yext-submit').blur();
 
     this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
     this.core.triggerSearch(QueryTriggers.SEARCH_BAR, query);
