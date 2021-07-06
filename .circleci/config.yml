@@ -7,15 +7,7 @@ commands:
     description: "Checks out the repo and installs node_modules with the cache"
     steps:
       - checkout
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "package.json" }}
       - run: npm install
-      - save_cache:
-          paths:
-            - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
   deploy-to-aws:
     description: "Deploys the dist directory to a given subdirectory of the answers bucket"
     parameters:
