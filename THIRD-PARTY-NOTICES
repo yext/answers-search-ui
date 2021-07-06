@@ -303,7 +303,7 @@ MIT License
 
 The following NPM packages may be included in this product:
 
- - @yext/answers-search-ui-blah@1.9.0
+ - @yext/answers-search-ui-blah-2@1.9.0
  - @yext/answers-storage@1.1.0
 
 These packages each contain the following license and notice below:
