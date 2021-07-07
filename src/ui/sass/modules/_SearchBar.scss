@@ -192,11 +192,6 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     }
   }
 
-  &-AnimatedIcon--paused svg > g
-  {
-    animation-play-state: paused;
-  }
-
   &-LoadingIndicator
   {
     animation: rotate 1.4s linear infinite;

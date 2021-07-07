@@ -375,29 +375,31 @@ export default class SearchComponent extends Component {
     if (this.iconState === iconState) {
       return;
     }
-    this.prevState = this.iconState;
-    this.iconState = iconState;
-    if (!this.isRequestingAnimationFrame) {
-      this.isRequestingAnimationFrame = true;
-      window.requestAnimationFrame(() => {
-        DOM.queryAll(this._container, '.js-yxt-SearchBar-Icon')
-          .forEach(e => e.classList.add('yxt-SearchBar-Icon--inactive'));
-        const activeIcon = DOM.query(this._container, this.iconState);
-        activeIcon.classList.remove('yxt-SearchBar-Icon--inactive');
-        if (this.iconState === IconState.MAGNIFYING_GLASS || this.iconState === IconState.YEXT) {
-          activeIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
-        }
-
-        // Static yext icon is used after loading to avoid unecessary transition from magnifying glass to yext.
-        if (this.iconState === IconState.YEXT) {
-          const yextIconEl = DOM.query(activeIcon, '.Icon--yext_animated_reverse');
-          this.prevState === IconState.LOADING
-            ? yextIconEl.classList.add('yxt-SearchBar-Yext--static')
-            : yextIconEl.classList.remove('yxt-SearchBar-Yext--static');
-        }
-        this.isRequestingAnimationFrame = false;
-      });
+    if (this.animationID) {
+      window.cancelAnimationFrame(this.animationID);
     }
+    this.animationID = window.requestAnimationFrame(() => {
+      this.prevState = this.iconState;
+      this.iconState = iconState;
+      DOM.query(this._container, this.prevState).classList.add('yxt-SearchBar-Icon--inactive');
+      const activeIcon = DOM.query(this._container, this.iconState);
+      activeIcon.classList.remove('yxt-SearchBar-Icon--inactive');
+      if (this.iconState === IconState.MAGNIFYING_GLASS) {
+        DOM.query(activeIcon, '.Icon--yext_animated_forward').classList.remove('yxt-SearchBar-MagnifyingGlass--static');
+      }
+      if (this.iconState === IconState.YEXT) {
+        DOM.query(activeIcon, '.Icon--yext_animated_reverse').classList.remove('yxt-SearchBar-Yext--static');
+      }
+
+      // Static yext icon is used after loading to avoid unecessary transition from magnifying glass to yext.
+      if (this.iconState === IconState.YEXT) {
+        const yextIconEl = DOM.query(activeIcon, '.Icon--yext_animated_reverse');
+        this.prevState === IconState.LOADING
+          ? yextIconEl.classList.add('yxt-SearchBar-Yext--static')
+          : yextIconEl.classList.remove('yxt-SearchBar-Yext--static');
+      }
+      this.animationID = null;
+    });
   }
 
   animateIconToLoading () {

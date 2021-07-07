@@ -22,20 +22,20 @@
     {{> icons/iconPartial iconUrl=_config.customIconUrl}}
   </div>
 {{else}}
-  <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward js-yxt-SearchBar-Icon
-    {{#if autoFocus}} yxt-SearchBar-Icon--inactive{{/if}}">
+  <div class="yxt-SearchBar-AnimatedIcon js-yxt-AnimatedForward js-yxt-SearchBar-Icon
+    {{#unless autoFocus}} yxt-SearchBar-Icon--inactive{{/unless}}">
     {{> icons/builtInIcon
       iconName='yext_animated_forward'
-      classNames='Icon--lg'
+      classNames='yxt-SearchBar-MagnifyingGlass--static Icon--lg'
       complexContentsParams=forwardIconOpts.complexContentsParams
     }}
   </div>
-  <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse js-yxt-SearchBar-Icon
-    {{#unless autoFocus}} yxt-SearchBar-Icon--inactive{{/unless}}">
+  <div class="yxt-SearchBar-AnimatedIcon js-yxt-AnimatedReverse js-yxt-SearchBar-Icon
+    {{#if autoFocus}} yxt-SearchBar-Icon--inactive{{/if}}">
     {{> icons/builtInIcon
       iconName='yext_animated_reverse'
-      classNames='Icon--lg'
-      complexContentsParams=reverseIconOpts.complexContentsParams
+      classNames='yxt-SearchBar-Yext--static Icon--lg'
+      complexContentsParams=forwardIconOpts.complexContentsParams
     }}
   </div>
 {{/if}}
