@@ -391,7 +391,7 @@ export default class SearchComponent extends Component {
 
         // Static yext icon is used after loading to avoid unecessary transition from magnifying glass to yext.
         if (this.iconState === IconState.YEXT) {
-          const yextIconEl = DOM.query(this._container, '.Icon--yext_animated_reverse');
+          const yextIconEl = DOM.query(activeIcon, '.Icon--yext_animated_reverse');
           const wasLoading = [IconState.LOADING, IconState.CUSTOM_LOADING].includes(this.prevState);
           wasLoading ? yextIconEl.classList.add('yxt-SearchBar-Yext--static') : yextIconEl.classList.remove('yxt-SearchBar-Yext--static');
         }
