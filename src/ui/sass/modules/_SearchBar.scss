@@ -180,15 +180,60 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     display: flex;
   }
 
-  &-AnimatedIcon--inactive svg
+  &-Icon--inactive
   {
     display: none;
+    
+    &.yxt-SearchBar-LoadingIndicator {
+      display: block;
+      visibility: hidden;
+      width: 0;
+      position: absolute;
+    }
   }
 
-  &-AnimatedIcon--paused svg > g
+  &-LoadingIndicator
   {
-    animation-play-state: paused;
+    animation: rotate 1.4s linear infinite;
   }
+
+  @keyframes static {
+    100% {
+      transform: rotate(360deg);
+    }
+  } 
+  
+  @keyframes rotate 
+  {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  &-LoadingIndicator-AnimatedIcon 
+  {
+    stroke-dasharray: 208;
+    transform-origin: 50% 50%;
+    animation: dash 1.4s ease-in-out infinite;
+  }
+  
+  @keyframes dash 
+  {
+    0% {
+      stroke-dashoffset: 204;
+      transform: rotate(0deg);
+    }
+    50% {
+      stroke-dashoffset: 52;
+      transform: rotate(45deg);
+    }
+    100% {
+      stroke-dashoffset: 204;
+      transform: rotate(360deg);
+    }
+  }
+
+
 }
 
 .yxt-GeoLocationFilter

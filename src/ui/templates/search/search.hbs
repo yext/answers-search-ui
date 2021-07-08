@@ -36,32 +36,7 @@
         </button>
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
-          {{#if submitIcon}}
-            <div class="yxt-SearchBar-buttonImage">
-              {{> icons/builtInIcon iconName=submitIcon}}
-            </div>
-          {{else if _config.customIconUrl}}
-            <div class="yxt-SearchBar-buttonImage">
-              {{> icons/iconPartial iconUrl=_config.customIconUrl}}
-            </div>
-          {{else}}
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}">
-              {{> icons/builtInIcon
-                iconName='yext_animated_forward'
-                classNames='Icon--lg'
-                complexContentsParams=forwardIconOpts.complexContentsParams
-              }}
-            </div>
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}">
-              {{> icons/builtInIcon
-                iconName='yext_animated_reverse'
-                classNames='Icon--lg'
-                complexContentsParams=reverseIconOpts.complexContentsParams
-              }}
-            </div>
-          {{/if}}
+          {{> icons/searchBarIcon}}
           <span class="yxt-SearchBar-buttonText sr-only">
             {{submitText}}
           </span>
@@ -98,26 +73,7 @@
         </button>
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
-          {{#if submitIcon}}
-            <div class="yxt-SearchBar-buttonImage">
-              {{> icons/builtInIcon iconName=submitIcon}}
-            </div>
-          {{else if _config.customIconUrl}}
-            <div class="yxt-SearchBar-buttonImage">
-              {{> icons/iconPartial iconUrl=_config.customIconUrl}}
-            </div>
-          {{else}}
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
-              data-component="IconComponent"
-              data-opts="{{json forwardIconOpts}}">
-            </div>
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
-              data-component="IconComponent"
-              data-opts="{{json reverseIconOpts}}">
-            </div>
-          {{/if}}
+          {{> icons/searchBarIcon}}
           <span class="yxt-SearchBar-buttonText sr-only">
             {{submitText}}
           </span>

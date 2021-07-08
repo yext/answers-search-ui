@@ -53,6 +53,11 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
   border-bottom: 0;
   width: 100%;
 
+  &--searchLoading
+  {
+    opacity: 0.5;
+  }
+
   & + &
   {
     margin-top: var(--yxt-base-spacing);
