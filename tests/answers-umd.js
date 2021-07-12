@@ -36,7 +36,14 @@ function mockWindowWithData (data) {
     performance: {
       mark: jest.fn()
     },
+    sessionStorage: {
+      getItem: jest.fn(),
+      setItem: jest.fn()
+    },
     addEventListener: jest.fn(),
+    history: {
+      replaceState: jest.fn()
+    },
     ...data
   }));
 }
