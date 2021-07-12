@@ -75,6 +75,7 @@
     "jest": "^24.8.0",
     "jsdoc": "^3.6.3",
     "node-sass": "^4.12.0",
+    "npm-force-resolutions": "0.0.10",
     "postcss-pxtorem": "4.0.1",
     "regenerator-runtime": "^0.13.7",
     "rollup": "^1.4.1",
@@ -103,9 +104,13 @@
     "size": "size-limit",
     "fix": "semistandard --fix",
     "extract-translations": "gulp extractTranslations",
+    "preinstall": "npx npm-force-resolutions",
     "prepublishOnly": "./conf/npm/prepublishOnly.sh",
     "postpublish": "./conf/npm/postpublish.sh",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
+  },
+  "resolutions": {
+    "regenerator-runtime": "0.13.1"
   },
   "jest": {
     "bail": 0,
