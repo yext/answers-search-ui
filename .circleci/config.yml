@@ -10,14 +10,14 @@ commands:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v2-dependencies-
       - run: npm install
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
   deploy-to-aws:
     description: "Deploys the dist directory to a given subdirectory of the answers bucket"
     parameters:
@@ -185,6 +185,7 @@ workflows:
           filters:
             branches:
               ignore:
+                - develop
                 - master
                 - /^support\/.*/
                 - /^hotfix\/.*/
@@ -205,21 +206,7 @@ workflows:
       - third_party_notices_test:
           requires:
             - build
-      - deploy_canary:
-          filters:
-            branches:
-              only: develop
-          requires:
-            - unit_test
-            - headless_acceptance_test
-            - browserstack_acceptance_test
-            - translation_test
-            - third_party_notices_test
       - deploy_branch:
-          filters:
-            branches:
-              ignore:
-                - develop
           requires:
             - unit_test
             - browserstack_acceptance_test
@@ -232,6 +219,7 @@ workflows:
           filters:
             branches:
               only:
+                - develop
                 - /^support\/.*/
                 - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
@@ -252,10 +240,24 @@ workflows:
           requires:
             - build_i18n
       - deploy_branch:
+          filters:
+            branches:
+              ignore:
+                - develop
           requires:
             - unit_test
             - browserstack_acceptance_test
             - headless_acceptance_test
+            - translation_test
+            - third_party_notices_test
+      - deploy_canary:
+          filters:
+            branches:
+              only: develop
+          requires:
+            - unit_test
+            - headless_acceptance_test
+            - browserstack_acceptance_test
             - translation_test
             - third_party_notices_test
   build_and_deploy_hold:

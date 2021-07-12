@@ -6,13 +6,14 @@ import StorageKeys from '../../../../src/core/storage/storagekeys';
 import Storage from '../../../../src/core/storage/storage';
 import PaginationComponent from '../../../../src/ui/components/results/paginationcomponent';
 import SearchStates from '../../../../src/core/storage/searchstates';
+import SearchConfig from '../../../../src/core/models/searchconfig';
 
 const createCore = () => {
   // pagination will hide itself if there are no results, so we fake the relevant storage.
   const storage = new Storage().init();
   storage.set(StorageKeys.VERTICAL_RESULTS, { searchState: SearchStates.SEARCH_COMPLETE, resultsCount: 21 });
   storage.set(StorageKeys.SEARCH_OFFSET, 0);
-  storage.set(StorageKeys.SEARCH_CONFIG, { limit: 5 });
+  storage.set(StorageKeys.SEARCH_CONFIG, new SearchConfig({ limit: 5 }));
   storage.set(StorageKeys.NO_RESULTS_CONFIG, { displayAllResults: true });
 
   return {

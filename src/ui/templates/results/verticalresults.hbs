@@ -29,7 +29,7 @@
       {{#if _config.icon}}
         <div class="yxt-Results-titleIconWrapper">
           {{#if iconIsBuiltIn}}
-            {{> icons/iconPartial iconName=_config.icon }}
+            {{> icons/builtInIcon iconName=_config.icon }}
           {{else}}
             {{> icons/iconPartial iconUrl=_config.icon }}
           {{/if}}
@@ -78,7 +78,7 @@
     >
       <div class="yxt-Results-viewAllLabel">{{_config.viewMoreLabel}}</div>
       <div>
-        {{> icons/iconPartial iconName='chevron'}}
+        {{> icons/builtInIcon iconName='chevron'}}
       </div>
     </a>
   {{/if}}

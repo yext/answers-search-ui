@@ -2,7 +2,6 @@
 
 import Core from './core/core';
 import cssVars from 'css-vars-ponyfill';
-
 import {
   DefaultTemplatesLoader,
   Renderers,
