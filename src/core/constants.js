@@ -1,7 +1,7 @@
 /** @module */
 
 /** The current lib version, reported with errors and analytics, injected by the build process */
-export const LIB_VERSION = '@@LIB_VERSION';
+export const LIB_VERSION = 'searchbar-v1.0.2';
 
 /** The current locale, injected by the build process */
 export const LOCALE = '@@LOCALE';
