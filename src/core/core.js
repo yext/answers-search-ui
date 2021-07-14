@@ -329,7 +329,6 @@ export default class Core {
       }
     }
 
-    this.storage.set(StorageKeys.DIRECT_ANSWER, {});
     const universalResults = this.storage.get(StorageKeys.UNIVERSAL_RESULTS);
     if (!universalResults || universalResults.searchState !== SearchStates.SEARCH_LOADING) {
       this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
@@ -337,6 +336,7 @@ export default class Core {
     this.storage.set(StorageKeys.QUESTION_SUBMISSION, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {});
     this.storage.set(StorageKeys.LOCATION_BIAS, LocationBias.searchLoading());
+    this.storage.set(StorageKeys.DIRECT_ANSWER, DirectAnswer.searchLoading());
 
     const queryTrigger = this.storage.get(StorageKeys.QUERY_TRIGGER);
     const queryTriggerForApi = this.getQueryTriggerForSearchApi(queryTrigger);
