@@ -4,6 +4,7 @@ import {
   FACETS_ON_LOAD_PAGE
 } from '../server';
 import FacetsPage from '../pageobjects/facetspage';
+import VerticalPage from '../pageobjects/verticalpage';
 import { RequestLogger } from 'testcafe';
 import {
   browserBackButton,
@@ -14,24 +15,30 @@ import {
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 
 fixture`Facets page`
+  .beforeEach(async t => {
+    await VerticalPage.getVerticalResultsComponent().registerLogger(t);
+  })
   .before(setupServer)
   .after(shutdownServer)
   .page`${FACETS_ON_LOAD_PAGE}`;
 
 test('Facets work with back/forward navigation and page refresh', async t => {
+  const searchQueryUrl = VerticalPage.getVerticalResultsComponent().getSearchQueryUrl();
   const logger = RequestLogger({
-    url: /v2\/accounts\/me\/answers\/vertical\/query/
+    url: searchQueryUrl
   });
   await t.addRequestHooks(logger);
-  await registerIE11NoCacheHook(t);
+  await registerIE11NoCacheHook(t, searchQueryUrl);
 
   async function getFacetsFromRequest () {
     const urlParams = await getMostRecentQueryParamsFromLogger(logger);
     return JSON.parse(urlParams.get('facetFilters'));
   }
   const searchComponent = FacetsPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
   await searchComponent.enterQuery('all');
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   let currentFacets = await getFacetsFromRequest();
   await t.expect(currentFacets).eql({});

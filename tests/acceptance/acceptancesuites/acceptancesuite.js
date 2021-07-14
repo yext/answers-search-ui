@@ -24,18 +24,23 @@ import StorageKeys from '../../../src/core/storage/storagekeys';
  */
 
 fixture`Universal search page works as expected`
+  .beforeEach(async t => {
+    await UniversalPage.getUniversalResultsComponent().registerLogger(t);
+  })
   .before(setupServer)
   .after(shutdownServer)
   .page`${UNIVERSAL_PAGE}`;
 
 test('Basic universal flow', async t => {
   const searchComponent = UniversalPage.getSearchComponent();
+  const resultComponent = UniversalPage.getUniversalResultsComponent();
 
   await searchComponent.enterQuery('Tom');
   await searchComponent.clearQuery();
 
   await searchComponent.enterQuery('ama');
   await searchComponent.getAutoComplete().selectOption('amani farooque phone number');
+  await resultComponent.waitOnSearchComplete();
 
   const sections =
         await UniversalPage.getUniversalResultsComponent().getSections();
@@ -46,84 +51,120 @@ test('Basic universal flow', async t => {
 });
 
 fixture`Vertical search page works as expected`
+  .beforeEach(async t => {
+    await VerticalPage.getVerticalResultsComponent().registerLogger(t);
+  })
   .before(setupServer)
   .after(shutdownServer)
   .page`${VERTICAL_PAGE}`;
 
 test('pagination flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
+
   await searchComponent.enterQuery('Virginia');
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
+
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
+  await resultComponent.waitOnSearchComplete();
+
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
 
 test('navigating and refreshing mantains that page number', async t => {
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
+
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  await resultComponent.waitOnSearchComplete();
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
+  await resultComponent.waitOnSearchComplete();
+
   await browserRefreshPage();
+  await resultComponent.waitOnSearchComplete();
+
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
 
 test('navigating and refreshing mantains that page number with blank query', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
+
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
+  await resultComponent.waitOnSearchComplete();
+
   let pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
+
   await browserRefreshPage();
+  await resultComponent.waitOnSearchComplete();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
 
 test('spell check flow', async t => {
+  const searchQueryUrl = VerticalPage.getVerticalResultsComponent().getSearchQueryUrl();
   const spellCheckLogger = RequestLogger({
-    url: /v2\/accounts\/me\/answers\/vertical\/query/
+    url: searchQueryUrl
   });
   await t.addRequestHooks(spellCheckLogger);
-  await registerIE11NoCacheHook(t);
+  await registerIE11NoCacheHook(t, searchQueryUrl);
   const searchComponent = VerticalPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
   await searchComponent.enterQuery('varginia');
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
+  await resultComponent.waitOnSearchComplete();
   let pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 
   // Check that clicking spell check resets pagination to page 1
   const spellCheckComponent = VerticalPage.getSpellCheckComponent();
   await spellCheckComponent.clickLink();
+  await resultComponent.waitOnSearchComplete();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 1');
 });
 
 test('navigating pages and hitting the browser back button lands you on the right page', async t => {
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  await resultComponent.waitOnSearchComplete();
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   await paginationComponent.clickNextButton();
   await browserBackButton();
+  await resultComponent.waitOnSearchComplete();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
 
 fixture`Facets page`
+  .beforeEach(async t => {
+    await VerticalPage.getVerticalResultsComponent().registerLogger(t);
+  })
   .before(setupServer)
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('Facets load on the page, and can affect the search', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   const facets = FacetsPage.getFacetsComponent();
   const filterBox = facets.getFilterBox();
@@ -178,7 +219,9 @@ test('Facets load on the page, and can affect the search', async t => {
 
 test('selecting a sort option and refreshing maintains that sort selection', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   const thirdSortOption = await Selector('.yxt-SortOptions-optionSelector').nth(2);
   await t.click(thirdSortOption);
@@ -188,6 +231,9 @@ test('selecting a sort option and refreshing maintains that sort selection', asy
 });
 
 fixture`Experience links work as expected`
+  .beforeEach(async t => {
+    await VerticalPage.getVerticalResultsComponent().registerLogger(t);
+  })
   .before(setupServer)
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
@@ -209,7 +255,9 @@ test('experience links are clean', async t => {
 
   // When you search, nav links should be clean
   const searchComponent = FacetsPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   const staticFilterBox = FacetsPage.getStaticFilterBox();
   const distanceFilter = await staticFilterBox.getFilterOptions('DISTANCE');
@@ -241,6 +289,7 @@ test('experience links are clean', async t => {
   // Facets/filter/pagination parameters
   await searchComponent.enterQuery(' ');
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   await t.click(await Selector('.js-yxt-navItem').nth(2)); // Go to vertical page
   await t.click(await Selector('.js-yxt-Pagination-next').nth(0)); // Page forward
@@ -255,6 +304,7 @@ test('experience links are clean', async t => {
   await searchComponent.clearQuery();
   await searchComponent.enterQuery('virginia');
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   const changeFiltersLink = await Selector('.yxt-ResultsHeader-changeFilters')
     .nth(0).getAttribute('href');
@@ -268,6 +318,9 @@ test('experience links are clean', async t => {
 });
 
 fixture`Performance marks on search`
+  .beforeEach(async t => {
+    await VerticalPage.getVerticalResultsComponent().registerLogger(t);
+  })
   .before(setupServer)
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
@@ -285,7 +338,9 @@ test('window.performance calls are marked for a normal search', async t => {
     'yext.answers.verticalQueryResponseRendered'
   ];
   const searchComponent = FacetsPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   // Wait for Results to be rendered
   const resultsSelector = await Selector('.yxt-Results');
@@ -302,13 +357,18 @@ test('window.performance calls are marked for a normal search', async t => {
 });
 
 fixture`W3C Accessibility standards are met`
+  .beforeEach(async t => {
+    await VerticalPage.getVerticalResultsComponent().registerLogger(t);
+  })
   .before(setupServer)
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('Sort options focus state works', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
+  const resultComponent = VerticalPage.getVerticalResultsComponent();
   await searchComponent.submitQuery();
+  await resultComponent.waitOnSearchComplete();
 
   const firstOption = await Selector('.yxt-SortOptions-optionSelector').nth(0);
 
