@@ -44,12 +44,9 @@ class SearchRequestLogger {
     const responseWaitTimeout = 10000;
     const waitTimeInterval = 200;
     let totalWaitTime = 0;
-    while (!await this.isLoggerResultsPresent()) {
+    while (totalWaitTime < responseWaitTimeout && !await this.isLoggerResultsPresent()) {
       await testInstance.wait(waitTimeInterval);
       totalWaitTime += waitTimeInterval;
-      if (totalWaitTime < responseWaitTimeout) {
-        break;
-      }
     }
     this._queryRequestLogger.clear();
   }
