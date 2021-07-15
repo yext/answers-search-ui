@@ -40,7 +40,7 @@ test('Basic universal flow', async t => {
 
   await searchComponent.enterQuery('ama');
   await searchComponent.getAutoComplete().selectOption('amani farooque phone number');
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const sections =
         await UniversalPage.getUniversalResultsComponent().getSections();
@@ -62,7 +62,7 @@ test('pagination flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('Virginia');
   await searchComponent.submitQuery();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
@@ -73,11 +73,11 @@ test('pagination flow', async t => {
 
 test('navigating and refreshing mantains that page number', async t => {
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   await browserRefreshPage();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
@@ -87,7 +87,7 @@ test('navigating and refreshing mantains that page number', async t => {
 test('navigating and refreshing mantains that page number with blank query', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.submitQuery();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
@@ -108,7 +108,7 @@ test('spell check flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('varginia');
   await searchComponent.submitQuery();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
@@ -143,7 +143,7 @@ fixture`Facets page`
 test('Facets load on the page, and can affect the search', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const facets = FacetsPage.getFacetsComponent();
   const filterBox = facets.getFilterBox();
@@ -199,7 +199,7 @@ test('Facets load on the page, and can affect the search', async t => {
 test('selecting a sort option and refreshing maintains that sort selection', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const thirdSortOption = await Selector('.yxt-SortOptions-optionSelector').nth(2);
   await t.click(thirdSortOption);

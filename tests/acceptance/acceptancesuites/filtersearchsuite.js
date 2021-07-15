@@ -32,38 +32,38 @@ test('filtersearch works with back/forward navigation and page refresh', async t
 
   // Choose the 'Virginia, United States' filter option
   await filterSearch.selectFilter('Virginia, United States');
-  SearchRequestLogger.waitOnSearchComplete();
+  SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('Virginia, United States');
 
   // Choose the 'New York City, New York, United States' filter option
   await filterSearch.selectFilter('New York City, New York, United States');
-  SearchRequestLogger.waitOnSearchComplete();
+  SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('New York City, New York, United States');
 
   // Hit the back button, expect to be back at the 'Virginia' filter state
   await browserBackButton();
-  SearchRequestLogger.waitOnSearchComplete();
+  SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('Virginia, United States');
 
   // Test that refreshing the page will use the 'Virginia' filter
   await browserRefreshPage();
-  SearchRequestLogger.waitOnSearchComplete();
+  SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('Virginia, United States');
 
   // Hit the back button, expect to be back at the initial state with 0 results
   await browserBackButton();
-  SearchRequestLogger.waitOnSearchComplete();
+  SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(0);
   await t.expect(Selector('.yxt-StandardCard-title').count).eql(0);
 
   // Hit the forward button, expect to see the 'Virginia' filter applied
   await browserForwardButton();
-  SearchRequestLogger.waitOnSearchComplete();
+  SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('Virginia, United States');
 
   // Hit the forward button, expect to see the 'New York' filter applied
   await browserForwardButton();
-  SearchRequestLogger.waitOnSearchComplete();
+  SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('New York City, New York, United States');
 });
 

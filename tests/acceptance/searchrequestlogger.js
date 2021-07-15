@@ -1,5 +1,5 @@
 import { VERTICAL_SEARCH_URL_REGEX, UNIVERSAL_SEARCH_URL_REGEX } from './constants';
-import { RequestLogger, t } from 'testcafe';
+import { RequestLogger } from 'testcafe';
 import { registerIE11NoCacheHook } from './utils';
 
 /**
@@ -37,13 +37,15 @@ class SearchRequestLogger {
   /**
    * Wait for results to load on page by checking query response status
    * (timeout is set to 10 seconds)
+   *
+   * @param {import('testcafe').TestController} testInstance
    */
-  async waitOnSearchComplete () {
+  async waitOnSearchComplete (testInstance) {
     const responseWaitTimeout = 10000;
     const waitTimeInterval = 200;
     let totalWaitTime = 0;
     while (totalWaitTime < responseWaitTimeout && !await this.isLoggerResultsPresent()) {
-      await t.wait(waitTimeInterval);
+      await testInstance.wait(waitTimeInterval);
       totalWaitTime += waitTimeInterval;
     }
     this._queryRequestLogger.clear();

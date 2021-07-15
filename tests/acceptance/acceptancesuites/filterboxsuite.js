@@ -36,7 +36,7 @@ test('single option filterbox works with back/forward navigation and page refres
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.enterQuery('all');
   await searchComponent.submitQuery();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const filterBox = FacetsPage.getStaticFilterBox();
   const radiusFilter = await filterBox.getFilterOptions('DISTANCE');
@@ -44,28 +44,28 @@ test('single option filterbox works with back/forward navigation and page refres
   // Choose the 25 miles radius filter
   await radiusFilter.toggleOption('25 miles');
   const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(1);
   await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
   radiusFilterLogger.clear();
 
   // Hit the back button
   await browserBackButton();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(0);
   await expectRequestDoesNotContainParam(radiusFilterLogger, 'locationRadius');
   radiusFilterLogger.clear();
 
   // Hit the forward button
   await browserForwardButton();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(1);
   await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
   radiusFilterLogger.clear();
 
   // Refresh the page
   await browserRefreshPage();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(1);
   await expectRequestLocationRadiusToEql(radiusFilterLogger, 40233.6);
 });
@@ -95,14 +95,14 @@ test('multioption filterbox works with back/forward navigation and page refresh'
 
   // Click the 'Marty' checkbox
   await staticFilter.toggleOption('Marty');
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
   await t.expect(filterTags.count).eql(1);
   filterBoxLogger.clear();
 
   // Click the 'Frodo' checkbox
   await staticFilter.toggleOption('Frodo');
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(2);
   await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
@@ -111,27 +111,27 @@ test('multioption filterbox works with back/forward navigation and page refresh'
 
   // Hit the back button, see the 'Frodo' filter disappear
   await browserBackButton();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
   await t.expect(filterTags.count).eql(1);
   filterBoxLogger.clear();
 
   // Hit the back button, see the 'Marty' filter disappear
   await browserBackButton();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await expectRequestDoesNotContainParam(filterBoxLogger, 'filters');
   await t.expect(filterTags.count).eql(0);
 
   // Hit the forward button, see the 'Marty' filter applied again
   await browserForwardButton();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(await getRequestFilters(filterBoxLogger)).eql(martyFilter);
   await t.expect(filterTags.count).eql(1);
   filterBoxLogger.clear();
 
   // Hit the forward button, see the 'Frodo' filter applied again
   await browserForwardButton();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(2);
   await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
@@ -140,7 +140,7 @@ test('multioption filterbox works with back/forward navigation and page refresh'
 
   // Refresh the page
   await browserRefreshPage();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(2);
   await t.expect(await getRequestFilters(filterBoxLogger)).eql({
     $or: [martyFilter, frodoFilter]
@@ -152,11 +152,11 @@ test('locationRadius of 0 is persisted', async t => {
   const radiusFilter = await filterBox.getFilterOptions('DISTANCE');
   await radiusFilter.toggleOption('0 miles');
   const filterTags = Selector('.yxt-ResultsHeader-removableFilterTag');
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(1);
 
   // Refresh the page
   await browserRefreshPage();
-  await SearchRequestLogger.waitOnSearchComplete();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(1);
 });
