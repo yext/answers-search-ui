@@ -6,9 +6,6 @@ import { SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE } from '../constants';
  * and defaulting the locale to the 2 character language code if it is not
  * supported by Edge.
  *
- * Expects the input locale to use an underscore separator as opposed to a dash
- * separator.
- *
  * @param {string} locale
  * @returns {string}
  */
