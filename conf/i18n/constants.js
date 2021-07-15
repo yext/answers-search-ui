@@ -102,6 +102,9 @@ const LANGUAGES_TO_LOCALES = {
   ],
   ja: [
     'ja_JP'
+  ],
+  ar: [
+    'ar'
   ]
 };
 exports.LANGUAGES_TO_LOCALES = LANGUAGES_TO_LOCALES;
