@@ -229,14 +229,13 @@ export default class DirectAnswerComponent extends Component {
   }
 
   eventOptions (data) {
-    if (!data || Object.keys(data).length === 0 ||
-      (Object.keys(data).length === 1 && Object.keys(data)[0] === 'searchState')) {
+    if (!data || Object.keys(data).length === 0) {
       return data;
     }
     return JSON.stringify({
-      verticalConfigId: data.relatedItem.verticalConfigId,
+      verticalConfigId: data.relatedItem?.verticalConfigId,
       searcher: 'UNIVERSAL',
-      entityId: data.relatedItem.data.id,
+      entityId: data.relatedItem?.data.id,
       ctaLabel: this._viewDetailsText.toUpperCase().replace(' ', '_')
     });
   }
