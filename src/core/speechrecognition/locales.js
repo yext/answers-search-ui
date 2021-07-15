@@ -17,9 +17,10 @@ export function transformSpeechRecognitionLocaleForEdge (locale) {
   if (underscoreIndex === -1) {
     return locale;
   }
+  locale = locale.replace('_', '-');
   const isCompatibleWithEdge = SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE.includes(locale.toLowerCase());
   if (isCompatibleWithEdge) {
-    return locale.substring(0, underscoreIndex) + '-' + locale.substring(underscoreIndex + 1);
+    return locale;
   }
   return locale.substring(0, underscoreIndex);
 }

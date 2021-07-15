@@ -9,6 +9,11 @@ it('does nothing when no underscore', () => {
   expect(transformSpeechRecognitionLocaleForEdge('en')).toEqual('en');
 });
 
+it('will recognize supported locales that have dashes', () => {
+  expect(transformSpeechRecognitionLocaleForEdge('en-US')).toEqual('en-US');
+  expect(transformSpeechRecognitionLocaleForEdge('en-GB')).toEqual('en-GB');
+});
+
 it('defaults Edge incompatible locales to the language code', () => {
   expect(transformSpeechRecognitionLocaleForEdge('ja_FAKE')).toEqual('ja');
   expect(transformSpeechRecognitionLocaleForEdge('en_AI')).toEqual('en');
