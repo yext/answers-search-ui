@@ -123,10 +123,6 @@ export default class DirectAnswerComponent extends Component {
     return 'results/directanswer';
   }
 
-  onCreate () {
-    this.updateContainerClass(SearchStates.PRE_SEARCH);
-  }
-
   /**
    * beforeMount, only display the direct answer component if it has data
    */
