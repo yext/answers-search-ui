@@ -39,6 +39,7 @@ class SearchRequestLogger {
    * (timeout is set to 10 seconds)
    *
    * @param {import('testcafe').TestController} testInstance
+   * @returns {Promise<boolean>} true if a successful query response is present
    */
   async waitOnSearchComplete (testInstance) {
     const responseWaitTimeout = 10000;
@@ -48,7 +49,9 @@ class SearchRequestLogger {
       await testInstance.wait(waitTimeInterval);
       totalWaitTime += waitTimeInterval;
     }
+    const isResultsPresent = await this.isLoggerResultsPresent();
     this._queryRequestLogger.clear();
+    return isResultsPresent;
   }
 
   /**
