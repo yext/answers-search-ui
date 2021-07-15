@@ -26,14 +26,15 @@ export async function getCurrentUrlParams () {
 /**
  * Register the Ie11NoCacheHook, if the current browser is IE11.
  *
- * @param {TestController} testInstance
+ * @param {import('testcafe').TestController} testInstance
+ * @param {string} url
  */
-export async function registerIE11NoCacheHook (testInstance) {
+export async function registerIE11NoCacheHook (testInstance, url) {
   const isIE11 = await ClientFunction(() => {
     return !!window.MSInputMethodContext && !!document.documentMode;
   })();
   if (isIE11) {
-    const ie11Hook = new IE11NoCacheHook(/v2\/accounts\/me\/answers\/vertical\/query/);
+    const ie11Hook = new IE11NoCacheHook(url);
     return testInstance.addRequestHooks(ie11Hook);
   }
 }
