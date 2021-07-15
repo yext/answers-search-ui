@@ -209,8 +209,6 @@ workflows:
       - deploy_branch:
           requires:
             - unit_test
-            - browserstack_acceptance_test
-            - headless_acceptance_test
             - translation_test
             - third_party_notices_test
   build_and_deploy_i18n:
@@ -224,42 +222,19 @@ workflows:
                 - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
-      - unit_test:
-          requires:
-            - build_i18n
-      - headless_acceptance_test:
-          requires:
-            - build_i18n
-      - browserstack_acceptance_test:
-          requires:
-            - build_i18n
-      - translation_test:
-          requires:
-            - build_i18n
-      - third_party_notices_test:
-          requires:
-            - build_i18n
       - deploy_branch:
           filters:
             branches:
               ignore:
                 - develop
           requires:
-            - unit_test
-            - browserstack_acceptance_test
-            - headless_acceptance_test
-            - translation_test
-            - third_party_notices_test
+            - build_i18n
       - deploy_canary:
           filters:
             branches:
               only: develop
           requires:
-            - unit_test
-            - headless_acceptance_test
-            - browserstack_acceptance_test
-            - translation_test
-            - third_party_notices_test
+            - build_i18n
   build_and_deploy_hold:
     jobs:
       - build_i18n:
