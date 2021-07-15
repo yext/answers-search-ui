@@ -1,8 +1,10 @@
 /** @module DirectAnswer */
 
+import SearchStates from '../storage/searchstates';
+
 export default class DirectAnswer {
   constructor (directAnswer = {}) {
-    Object.assign(this, directAnswer);
+    Object.assign(this, { searchState: SearchStates.SEARCH_COMPLETE }, directAnswer);
     Object.freeze(this);
   }
 
@@ -70,5 +72,13 @@ export default class DirectAnswer {
       data.relatedItem.data.fieldValues,
       data.relatedItem.verticalConfigId,
       true);
+  }
+
+  /**
+   * Construct a DirectAnswer object representing loading results
+   * @return {DirectAnswer}
+   */
+  static searchLoading () {
+    return new DirectAnswer({ searchState: SearchStates.SEARCH_LOADING });
   }
 }
