@@ -33,6 +33,10 @@ export default class TranslationProcessor {
     }
     const oneToNArray = this._generateArrayOneToN(language);
     const pluralFormIndex = getPluralFunc(language)(count, oneToNArray);
+    if (!(pluralFormIndex in translations)) {
+      console.error(`msgstr[${pluralFormIndex}] not found for msgid "${translations[0]}" and language "${language}".`);
+      return translations[0];
+    }
     return translations[pluralFormIndex];
   }
 
