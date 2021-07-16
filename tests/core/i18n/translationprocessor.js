@@ -112,7 +112,7 @@ describe('selecting the correct plural form', () => {
     const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
     const translation = TranslationProcessor.process({
       0: 'original msgid',
-      1: 'plural form',
+      1: 'plural form'
     }, { count: 4 }, 4, 'ar-DZ', escapeExpression);
     expect(translation).toEqual('original msgid');
     expect(errorSpy).toHaveBeenCalledTimes(1);
