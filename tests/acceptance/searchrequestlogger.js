@@ -1,52 +1,52 @@
 import { VERTICAL_SEARCH_URL_REGEX, UNIVERSAL_SEARCH_URL_REGEX } from './constants';
-import { RequestLogger, t } from 'testcafe';
-import { registerIE11NoCacheHook } from './utils';
+import { RequestLogger } from 'testcafe';
 
 /**
- * Handles search request logger registration and request/response data received during test execution.
+ * Handles request logger creation and request/response data received during test execution.
  */
 class SearchRequestLogger {
   /**
-   * Register a RequestLogger that tracks vertical query requests to given test.
-   * If browser is IE11, register an Ie11NoCacheHook.
+   * Create a RequestLogger that tracks vertical query requests to given test.
    *
-   * @param {import('testcafe').TestController} testInstance
+   * @returns {import('testcafe').RequestLogger}
    */
-  async registerVerticalSearchLogger (testInstance) {
+  createVerticalSearchLogger () {
     this._queryRequestLogger = RequestLogger({
       url: VERTICAL_SEARCH_URL_REGEX
     });
-    await testInstance.addRequestHooks(this._queryRequestLogger);
-    await registerIE11NoCacheHook(testInstance, VERTICAL_SEARCH_URL_REGEX);
+    return this._queryRequestLogger;
   }
 
   /**
-   * Register a RequestLogger that tracks universal query requests to given test.
-   * If browser is IE11, register an Ie11NoCacheHook.
+   * Create a RequestLogger that tracks universal query requests to given test.
    *
-   * @param {import('testcafe').TestController} testInstance
+   * @returns {import('testcafe').RequestLogger}
    */
-  async registerUniversalSearchLogger (testInstance) {
+  createUniversalSearchLogger () {
     this._queryRequestLogger = RequestLogger({
       url: UNIVERSAL_SEARCH_URL_REGEX
     });
-    await testInstance.addRequestHooks(this._queryRequestLogger);
-    await registerIE11NoCacheHook(testInstance, UNIVERSAL_SEARCH_URL_REGEX);
+    return this._queryRequestLogger;
   }
 
   /**
    * Wait for results to load on page by checking query response status
    * (timeout is set to 10 seconds)
+   *
+   * @param {import('testcafe').TestController} testInstance
+   * @returns {Promise<boolean>} true if a successful query response is present
    */
-  async waitOnSearchComplete () {
+  async waitOnSearchComplete (testInstance) {
     const responseWaitTimeout = 10000;
     const waitTimeInterval = 200;
     let totalWaitTime = 0;
     while (totalWaitTime < responseWaitTimeout && !await this.isLoggerResultsPresent()) {
-      await t.wait(waitTimeInterval);
+      await testInstance.wait(waitTimeInterval);
       totalWaitTime += waitTimeInterval;
     }
+    const isResultsPresent = await this.isLoggerResultsPresent();
     this._queryRequestLogger.clear();
+    return isResultsPresent;
   }
 
   /**
