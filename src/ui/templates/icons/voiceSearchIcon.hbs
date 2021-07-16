@@ -1,4 +1,17 @@
-<div class="js-yxt-SearchBar-Icon">
-  {{> icons/builtInIcon iconName='voice_search'}}
+<div class="yxt-SearchBar-voiceIconWrapper">
+  <div class="yxt-SearchBar-micIconWrapper">
+    {{#if customMicIconUrl}}
+      {{> icons/iconPartial iconUrl=customMicIconUrl}}
+    {{else}}
+      {{> icons/builtInIcon iconName='voice_search_mic'}}
+    {{/if}}
+  </div>
+  <div class="yxt-SearchBar-listeningIconWrapper {{#if customListeningIconUrl}}yxt-SearchBar-CustomIcon--inactive{{/if}}">
+    {{#if customListeningIconUrl}}
+      {{> icons/iconPartial iconUrl=customListeningIconUrl}}
+    {{else}}
+      {{> icons/builtInIcon iconName='voice_search_dots'}}
+    {{/if}}
+  </div>
   <span class="yxt-SearchBar-voiceSearchText sr-only"></span>
 </div>

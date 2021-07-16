@@ -331,6 +331,10 @@ export default class SearchComponent extends Component {
      */
     // TODO: add browser compatability and language support check
     this._showVoiceSearch = this._voiceSearchEnabled;
+
+    this._customMicIconUrl = config.voiceSearch?.customMicIconUrl;
+
+    this._customListeningIconUrl = config.voiceSearch?.customListeningIconUrl;
   }
 
   /**
@@ -757,7 +761,9 @@ export default class SearchComponent extends Component {
       clearText: this.clearText,
       showClearButton: this._showClearButton,
       showLoadingIndicator: this._showLoadingIndicator,
-      customLoadingIconUrl: this.customLoadingIconUrl,
+      customMicIconUrl: this._customMicIconUrl,
+      customLoadingIconUrl: this._customLoadingIconUrl,
+      customListeningIconUrl: this._customListeningIconUrl,
       showVoiceSearch: this._showVoiceSearch,
       query: this.query || '',
       eventOptions: this.eventOptions(),
