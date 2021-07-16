@@ -43,6 +43,33 @@
   }
 }
 
+.yxt-SearchBar-voiceSearch {
+  background-color: var(--yxt-searchbar-button-background-color-base);
+  border: none;
+  cursor: pointer;
+
+  // Hide voice search on mobile
+  @media (max-width: $breakpoint-mobile-max) {
+    display: none;
+  }
+
+  &:hover {
+    .yxt-SearchBar-mic {
+      opacity: 1;
+    }
+  }
+
+  &:focus {
+    background-color: var(--yxt-searchbar-button-background-color-hover);
+  }
+
+  .Icon svg {
+    height: 2.4em;
+    width: 2.4em;
+    fill: none;
+  }
+}
+
 .Icon--yext_animated_reverse {
   svg
   {

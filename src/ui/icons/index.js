@@ -2,6 +2,7 @@ import thumbIcon from './thumb.js';
 import receiptIcon from './receipt.js';
 import pantheonIcon from './pantheon.js';
 import micIcon from './mic.js';
+import voiceSearchIcon from './voice_search';
 import directionsIcon from './directions.js';
 import calendarIcon from './calendar.js';
 import calloutIcon from './callout.js';
@@ -34,6 +35,7 @@ const iconsArray = [
   receiptIcon,
   pantheonIcon,
   micIcon,
+  voiceSearchIcon,
   directionsIcon,
   calendarIcon,
   calloutIcon,

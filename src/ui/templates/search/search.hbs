@@ -34,6 +34,13 @@
             {{clearText}}
           </span>
         </button>
+        {{#if showVoiceSearch}}
+          <button type="button"
+                  class="js-yxt-SearchBar-voiceSearch yxt-SearchBar-voiceSearch"
+          >
+            {{> icons/voiceSearchIcon}}
+          </button>
+        {{/if}}
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
           {{> icons/searchBarIcon}}
@@ -71,6 +78,13 @@
             {{clearText}}
           </span>
         </button>
+        {{#if showVoiceSearch}}
+          <button type="button"
+                  class="js-yxt-SearchBar-voiceSearch yxt-SearchBar-voiceSearch"
+          >
+            {{> icons/voiceSearchIcon}}
+          </button>
+        {{/if}}
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
           {{> icons/searchBarIcon}}
