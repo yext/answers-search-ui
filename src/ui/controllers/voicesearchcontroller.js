@@ -46,8 +46,8 @@ export default class VoiceSearchController {
     /** @type {SVGAnimateElement[]} */
     this._dotsFadeOutAnimations = DOM.queryAll(searchBarContainer, '.js-yxt-SearchBar-dotsFadeOut');
 
-    this._voiceSearchMicElement = DOM.query(this._searchBarContainer, '.yxt-SearchBar-micIconWrapper');
-    this._voiceSearchListeningElement = DOM.query(this._searchBarContainer, '.yxt-SearchBar-listeningIconWrapper');
+    this._micIconWrapper = DOM.query(this._searchBarContainer, '.yxt-SearchBar-micIconWrapper');
+    this._listeningIconWrapper = DOM.query(this._searchBarContainer, '.yxt-SearchBar-listeningIconWrapper');
 
     this._customMicIconUrl = config.customMicIconUrl;
     this._customListeningIconUrl = config.customListeningIconUrl;
@@ -107,21 +107,21 @@ export default class VoiceSearchController {
 
   _applyCustomMicIconStyling () {
     if (this._state === State.NOT_LISTENING) {
-      this._voiceSearchMicElement.classList.add('yxt-SearchBar-CustomIcon--active');
-      this._voiceSearchMicElement.classList.remove('yxt-SearchBar-CustomIcon--inactive');
+      this._micIconWrapper.classList.add('yxt-SearchBar-CustomIcon--active');
+      this._micIconWrapper.classList.remove('yxt-SearchBar-CustomIcon--inactive');
     } else if (this._state === State.LISTENING) {
-      this._voiceSearchMicElement.classList.add('yxt-SearchBar-CustomIcon--inactive');
-      this._voiceSearchMicElement.classList.remove('yxt-SearchBar-CustomIcon--active');
+      this._micIconWrapper.classList.add('yxt-SearchBar-CustomIcon--inactive');
+      this._micIconWrapper.classList.remove('yxt-SearchBar-CustomIcon--active');
     }
   }
 
   _applyCustomListeningIconStyling () {
     if (this._state === State.NOT_LISTENING) {
-      this._voiceSearchListeningElement.classList.add('yxt-SearchBar-CustomIcon--inactive');
-      this._voiceSearchListeningElement.classList.remove('yxt-SearchBar-CustomIcon--active');
+      this._listeningIconWrapper.classList.add('yxt-SearchBar-CustomIcon--inactive');
+      this._listeningIconWrapper.classList.remove('yxt-SearchBar-CustomIcon--active');
     } else if (this._state === State.LISTENING) {
-      this._voiceSearchListeningElement.classList.add('yxt-SearchBar-CustomIcon--active');
-      this._voiceSearchListeningElement.classList.remove('yxt-SearchBar-CustomIcon--inactive');
+      this._listeningIconWrapper.classList.add('yxt-SearchBar-CustomIcon--active');
+      this._listeningIconWrapper.classList.remove('yxt-SearchBar-CustomIcon--inactive');
     }
   }
 
