@@ -107,4 +107,17 @@ describe('selecting the correct plural form', () => {
     const translation = TranslationProcessor.process(translations, { count: 100 }, 100, 'hawaii', escapeExpression);
     expect(translation).toEqual('Pasirinkta 100 tinklalapiai');
   });
+
+  it('logs an error, and returns the singular form when the plural form is not found', () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const translation = TranslationProcessor.process({
+      0: 'original msgid',
+      1: 'plural form',
+    }, { count: 4 }, 4, 'ar-DZ', escapeExpression);
+    expect(translation).toEqual('original msgid');
+    expect(errorSpy).toHaveBeenCalledTimes(1);
+    expect(errorSpy).toHaveBeenCalledWith(
+      'msgstr[3] not found for msgid "original msgid" and locale "ar-DZ".');
+    errorSpy.mockRestore();
+  });
 });
