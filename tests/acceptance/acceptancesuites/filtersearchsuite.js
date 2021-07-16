@@ -8,13 +8,16 @@ import { Selector } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
-  browserForwardButton
+  browserForwardButton,
+  registerIE11NoCacheHook
 } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
+import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
 
 fixture`Facets page`
+  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
   .beforeEach(async t => {
-    await SearchRequestLogger.registerVerticalSearchLogger(t);
+    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
   .before(setupServer)
   .after(shutdownServer)

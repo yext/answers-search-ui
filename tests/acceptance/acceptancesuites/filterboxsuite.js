@@ -20,8 +20,9 @@ import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
 import SearchRequestLogger from '../searchrequestlogger';
 
 fixture`FilterBox page`
+  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
   .beforeEach(async t => {
-    await SearchRequestLogger.registerVerticalSearchLogger(t);
+    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
   .before(setupServer)
   .after(shutdownServer)

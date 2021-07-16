@@ -16,7 +16,7 @@ import {
 } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 import SearchRequestLogger from '../searchrequestlogger';
-import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
+import { UNIVERSAL_SEARCH_URL_REGEX, VERTICAL_SEARCH_URL_REGEX } from '../constants';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -26,8 +26,9 @@ import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
  */
 
 fixture`Universal search page works as expected`
+  .requestHooks(SearchRequestLogger.createUniversalSearchLogger())
   .beforeEach(async t => {
-    await SearchRequestLogger.registerUniversalSearchLogger(t);
+    await registerIE11NoCacheHook(t, UNIVERSAL_SEARCH_URL_REGEX);
   })
   .before(setupServer)
   .after(shutdownServer)
@@ -51,8 +52,9 @@ test('Basic universal flow', async t => {
 });
 
 fixture`Vertical search page works as expected`
+  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
   .beforeEach(async t => {
-    SearchRequestLogger.registerVerticalSearchLogger(t);
+    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
   .before(setupServer)
   .after(shutdownServer)
@@ -133,8 +135,9 @@ test('navigating pages and hitting the browser back button lands you on the righ
 });
 
 fixture`Facets page`
+  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
   .beforeEach(async t => {
-    await SearchRequestLogger.registerVerticalSearchLogger(t);
+    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
   .before(setupServer)
   .after(shutdownServer)
