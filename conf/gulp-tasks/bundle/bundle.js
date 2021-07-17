@@ -6,7 +6,10 @@ const replace = require('gulp-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const rollup = require('gulp-rollup-lightweight');
 const source = require('vinyl-source-stream');
-const { TRANSLATION_FLAGGER_REGEX } = require('../../i18n/constants');
+const {
+  TRANSLATION_FLAGGER_REGEX,
+  SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE
+} = require('../../i18n/constants');
 
 const TranslateCallParser = require('../../i18n/translatecallparser');
 
@@ -109,6 +112,7 @@ function _buildBundle (callback, rollupConfig, bundleName, locale, libVersion, t
     .pipe(source(`${bundleName}.js`))
     .pipe(replace('@@LIB_VERSION', libVersion))
     .pipe(replace('@@LOCALE', locale))
+    .pipe(replace('\'@@SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE\'', JSON.stringify(SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE)))
     .pipe(replace(TRANSLATION_FLAGGER_REGEX, translateCall => {
       const placeholder = new TranslateCallParser().parse(translateCall);
       const translationResult = translationResolver.resolve(placeholder);

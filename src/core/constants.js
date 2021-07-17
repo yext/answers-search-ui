@@ -6,6 +6,9 @@ export const LIB_VERSION = '@@LIB_VERSION';
 /** The current locale, injected by the build process */
 export const LOCALE = '@@LOCALE';
 
+/** The speech recognition locales supported by Microsoft Edge */
+export const SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE = '@@SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE';
+
 /** The identifier of the production environment */
 export const PRODUCTION = 'production';
 
