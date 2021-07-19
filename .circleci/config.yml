@@ -156,10 +156,8 @@ jobs:
             echo "Latest tag is ${LATEST_TAG}"
             echo "Circle CI tag is ${LATEST_TAG}"
             if [[ $LATEST_TAG != $CIRCLE_TAG ]]; then
-              echo 'The current tag is not the latest tag';
               echo "export SHOULD_SKIP_DEPLOY=true" >> $BASH_ENV;
             else
-              echo 'The current tag is the latest tag';
               echo "export SHOULD_SKIP_DEPLOY=false" >> $BASH_ENV;
             fi
       - deploy-to-aws:
