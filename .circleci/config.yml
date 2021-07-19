@@ -28,12 +28,14 @@ commands:
         type: string
         default: "no-cache"
       skip:
-        type: boolean
-        default: false
+        # Use a string becuase this value is coming from an environment variable
+        type: string
+        default: 'false'
     steps:
       - when:
           condition:
-            not: << parameters.skip >>
+            not:
+              equal: [ 'true', << parameters.skip >>]
           steps:
             - attach_workspace:
                 at: ~/answers
