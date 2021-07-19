@@ -150,8 +150,11 @@ jobs:
     working_directory: ~/answers
     steps:
       - setup-workspace
-      - attach_workspace:
-          at: ~/answers
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+            - .circleci
       
   test_deploy:
     docker:
