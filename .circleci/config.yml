@@ -33,17 +33,17 @@ commands:
     steps:
       - attach_workspace:
           at: ~/answers
-      - run:
-          name: Configure AWS
-          command: |
-            mkdir -p ~/.aws
-            cp .circleci/aws_config ~/.aws/config
-            echo -e $AWS_PROD_PROFILE >> ~/.aws/config
       - when:
           condition:
             not:
               << parameters.skip >>
           steps:
+            - run:
+                name: Configure AWS
+                command: |
+                  mkdir -p ~/.aws
+                  cp .circleci/aws_config ~/.aws/config
+                  echo -e $AWS_PROD_PROFILE >> ~/.aws/config
             - aws-s3/copy:
                 from: dist
                 to: '${AWS_DEPLOY_BUCKET}<< parameters.subdirectory >>'
