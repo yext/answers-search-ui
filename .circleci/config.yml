@@ -146,7 +146,7 @@ jobs:
       - deploy-to-aws
   test:
     docker:
-      - image: circleci/python:2.7
+      - image: circleci/node:14.5
     working_directory: ~/answers
     steps:
       - setup-workspace
