@@ -155,15 +155,6 @@ jobs:
           paths:
             - dist
             - .circleci
-      
-  test_deploy:
-    docker:
-      - image: circleci/python:2.7
-    working_directory: ~/answers
-    steps:
-      - setup-workspace
-      - attach_workspace:
-          at: ~/answers
       - run:
           name: "Testing"
           command: |
@@ -177,6 +168,12 @@ jobs:
               echo 'Latest version'
               echo "export SHOULD_SKIP_DEPLOY=false" >> $BASH_ENV;
             fi
+      
+  test_deploy:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/answers
+    steps:
       - run:
           name: "Setup branch formatting, replace / with -"
           command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
