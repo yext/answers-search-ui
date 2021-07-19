@@ -157,7 +157,7 @@ jobs:
           command: |
             export LATEST_TAG=$(git tag  | grep -E '^v[0-9]' | sort -V | tail -1)
             echo "Latest tag is ${LATEST_TAG}"
-            echo "Circle CI tag is ${LATEST_TAG}"
+            echo "Circle CI tag is ${CIRCLE_TAG}"
             if [[ $LATEST_TAG != $CIRCLE_TAG ]]; then
               echo 'Not latest version'
               echo "export SHOULD_SKIP_DEPLOY=true" >> $BASH_ENV;
