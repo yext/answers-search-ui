@@ -1,2 +1,0 @@
-export SHOULD_SKIP_DEPLOY=true current tag is the latest tag;
-              echo "export SHOULD_SKIP_DEPLOY=false" >> $BASH_ENV

@@ -161,6 +161,9 @@ jobs:
       - image: circleci/python:2.7
     working_directory: ~/answers
     steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
       - run:
           name: "Testing"
           command: |
