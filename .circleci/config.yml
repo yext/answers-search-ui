@@ -144,7 +144,7 @@ jobs:
     working_directory: ~/answers
     steps:
       - deploy-to-aws
-  test:
+  test_setup:
     docker:
       - image: circleci/node:14.5
     working_directory: ~/answers
@@ -152,6 +152,12 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
+      
+  test_deploy:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/answers
+    steps:
       - run:
           name: "Testing"
           command: |
@@ -165,6 +171,9 @@ jobs:
               echo 'Latest version'
               echo "export SHOULD_SKIP_DEPLOY=false" >> $BASH_ENV;
             fi
+      - run:
+          name: "Setup branch formatting, replace / with -"
+          command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
       - deploy-to-aws:
           subdirectory: '/dev/${FORMATTED_CIRCLE_BRANCH}'
           skip: '${SHOULD_SKIP_DEPLOY}'
@@ -215,7 +224,9 @@ workflows:
   version: 2
   build_and_deploy:
     jobs:
-      - test
+      - test_setup
+      - test_deploy
+          requires: test_setup
       - build:
           filters:
             branches:
