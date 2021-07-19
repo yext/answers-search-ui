@@ -27,6 +27,8 @@ commands:
       cache-control:
         type: string
         default: "no-cache"
+      skip:
+        type: boolean
     steps:
       - attach_workspace:
           at: ~/answers
@@ -36,14 +38,19 @@ commands:
             mkdir -p ~/.aws
             cp .circleci/aws_config ~/.aws/config
             echo -e $AWS_PROD_PROFILE >> ~/.aws/config
-      - aws-s3/copy:
-          from: dist
-          to: '${AWS_DEPLOY_BUCKET}<< parameters.subdirectory >>'
-          arguments: |
-            --acl public-read \
-            --cache-control << parameters.cache-control >> \
-            --recursive \
-            --profile production \
+      - when:
+          condition:
+            not:
+              << parameters.skip >>
+          steps:
+            - aws-s3/copy:
+                from: dist
+                to: '${AWS_DEPLOY_BUCKET}<< parameters.subdirectory >>'
+                arguments: |
+                  --acl public-read \
+                  --cache-control << parameters.cache-control >> \
+                  --recursive \
+                  --profile production \
 jobs:
   # generate bundles
   build:
