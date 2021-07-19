@@ -225,7 +225,7 @@ workflows:
   build_and_deploy:
     jobs:
       - test_setup
-      - test_deploy
+      - test_deploy:
           requires:
             - test_setup
       - build:
