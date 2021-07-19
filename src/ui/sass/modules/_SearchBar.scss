@@ -233,7 +233,56 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     }
   }
 
+  &-voiceSearch
+  {
+    background-color: var(--yxt-searchbar-button-background-color-base);
+    border: none;
+    cursor: pointer;
 
+    // Hide voice search on mobile
+    @media (max-width: $breakpoint-mobile-max) {
+      display: none;
+    }
+
+    &:hover {
+      .yxt-SearchBar-mic {
+        opacity: 1;
+      }
+    }
+
+    &:focus {
+      background-color: var(--yxt-searchbar-button-background-color-hover);
+    }
+
+    .Icon svg {
+      height: 2.4em;
+      width: 2.4em;
+      fill: none;
+    }
+
+    .Icon-image {
+      width: 2.4em;
+      height: 2.4em;
+    }
+
+    // The SVGs are placed on top of each other
+    .yxt-SearchBar-micIconWrapper {
+      position: absolute;
+    }
+    .yxt-SearchBar-listeningIconWrapper {
+      position: relative;
+    }
+
+    // If custom icons are supplied, the SVGs simply alternate opacity
+    .yxt-SearchBar-CustomMicIcon--active {
+      opacity: 1;
+      transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+    }
+    .yxt-SearchBar-CustomListenigIcon--inactive {
+      opacity: 0;
+      transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+    }
+  }
 }
 
 .yxt-GeoLocationFilter

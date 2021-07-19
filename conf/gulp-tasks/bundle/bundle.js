@@ -4,6 +4,7 @@ const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const replace = require('gulp-replace');
 const resolve = require('rollup-plugin-node-resolve');
+const svg = require('rollup-plugin-svg');
 const rollup = require('gulp-rollup-lightweight');
 const source = require('vinyl-source-stream');
 const { TRANSLATION_FLAGGER_REGEX } = require('../../i18n/constants');
@@ -37,7 +38,8 @@ exports.modernBundle = function (callback, outputConfig, bundleName, locale, lib
         babelrc: false,
         exclude: [/node_modules/],
         presets: ['@babel/env']
-      })
+      }),
+      svg()
     ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
@@ -87,7 +89,8 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
           '@babel/plugin-proposal-object-rest-spread',
           '@babel/plugin-transform-object-assign'
         ]
-      })
+      }),
+      svg()
     ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
