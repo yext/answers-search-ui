@@ -226,7 +226,8 @@ workflows:
     jobs:
       - test_setup
       - test_deploy
-          requires: test_setup
+          requires:
+            - test_setup
       - build:
           filters:
             branches:
