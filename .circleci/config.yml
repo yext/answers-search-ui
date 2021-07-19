@@ -29,6 +29,7 @@ commands:
         default: "no-cache"
       skip:
         type: boolean
+        default: false
     steps:
       - attach_workspace:
           at: ~/answers
