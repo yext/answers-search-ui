@@ -152,7 +152,7 @@ jobs:
       - run:
           name: "Testing"
           command: |
-            export LATEST_TAG=$(git tag  | grep -E '^v[0-9]' | sort -V | tail -1)'
+            export LATEST_TAG=$(git tag  | grep -E '^v[0-9]' | sort -V | tail -1)
             echo "Latest tag is ${LATEST_TAG}"
             echo "Circle CI tag is ${LATEST_TAG}"
             if [[ $LATEST_TAG != $CIRCLE_TAG ]]; then
