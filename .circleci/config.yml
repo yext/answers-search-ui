@@ -155,16 +155,6 @@ jobs:
           paths:
             - dist
             - .circleci
-      - run:
-          name: "Testing"
-          command: |
-            export LATEST_TAG=$(git tag  | grep -E '^v[0-9]' | sort -V | tail -1)
-            echo "Latest tag is ${LATEST_TAG}"
-            echo "Circle CI tag is ${CIRCLE_TAG}"
-            if [[ $LATEST_TAG != $CIRCLE_TAG ]]; then
-              touch ./.circleci/is_latest_answers_version
-            fi
-            ls .circleci
       
   test_deploy:
     docker:
@@ -176,14 +166,16 @@ jobs:
       - run:
           name: 'Testing'
           command: |
-            if [ -f ./.circleci/is_latest_answers_version ]; then
+            export LATEST_TAG=$(git tag  | grep -E '^v[0-9]' | sort -V | tail -1)
+            echo "Latest tag is ${LATEST_TAG}"
+            echo "Circle CI tag is ${CIRCLE_TAG}"
+            if [[ $LATEST_TAG = $CIRCLE_TAG ]]; then
               echo 'deploy should not be skipped'
               echo 'export SHOULD_SKIP_DEPLOY=false' >> $BASH_ENV
             else
               echo 'deploy should be skipped'
               echo 'export SHOULD_SKIP_DEPLOY=true' >> $BASH_ENV
             fi
-            ls .circleci
       - run:
           name: "Setup branch formatting, replace / with -"
           command: echo 'export FORMATTED_CIRCLE_BRANCH=$(echo ${CIRCLE_BRANCH} | sed "s/\//-/g")' >> $BASH_ENV
