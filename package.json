@@ -146,8 +146,8 @@
       "**/tests/answers-umd.js"
     ],
     "transform": {
-      "^.+\\.js$": "babel-jest",
-      ".+\\.(svg)$": "jest-transform-stub"
+      ".+\\.js$": "babel-jest",
+      ".+\\.svg$": "jest-transform-stub"
     }
   },
   "percy": {
