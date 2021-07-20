@@ -276,20 +276,25 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 }
 
 // If custom icons are supplied, the SVGs simply alternate opacity
-.yxt-SearchBar-VoiceSearchCustomIcon {
+.yxt-SearchBar-CustomMicIcon {
   opacity: 0;
   transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
 }
 
-.yxt-SearchBar-CustomMicIcon {
-  .yxt-SearchBar-VoiceSearchCustomIcon {
+.yxt-SearchBar-CustomListeningIcon {
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+}
+
+.yxt-SearchBar-CustomMicIcon--active {
+  .yxt-SearchBar-CustomMicIcon {
     opacity: 1;
     transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
   }
 }
 
-.yxt-SearchBar-CustomListeningIcon {
-  .yxt-SearchBar-VoiceSearchCustomIcon {
+.yxt-SearchBar-CustomListeningIcon--active {
+  .yxt-SearchBar-CustomListeningIcon {
     opacity: 1;
     transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
   }
