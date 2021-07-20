@@ -1,10 +1,10 @@
-import { setupServer, shutdownServer } from '../server.mjs';
 import puppeteer from 'puppeteer';
 import percySnapshot from '@percy/puppeteer';
+import http from 'http';
+import handler from 'serve-handler';
 
 (async () => {
-  const context = {};
-  await setupServer(context);
+  const server = await setupServer();
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
@@ -17,5 +17,16 @@ import percySnapshot from '@percy/puppeteer';
   await snap('no-unsafe-eval.html', 'no unsafe eval CSP');
 
   await browser.close();
-  await shutdownServer(context);
+  await server.close();
 })();
+
+/**
+ * Initalizes the server to port 9999
+ */
+async function setupServer () {
+  const server = http.createServer((request, response) => {
+    return handler(request, response);
+  });
+  server.listen(9999);
+  return server;
+}
