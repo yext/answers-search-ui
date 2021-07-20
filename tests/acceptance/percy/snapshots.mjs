@@ -1,4 +1,4 @@
-import { setupServer, shutdownServer } from '../server';
+import { setupServer, shutdownServer } from '../server.mjs';
 import puppeteer from 'puppeteer';
 import percySnapshot from '@percy/puppeteer';
 
