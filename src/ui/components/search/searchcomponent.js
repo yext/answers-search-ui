@@ -9,6 +9,7 @@ import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistene
 import QueryTriggers from '../../../core/models/querytriggers';
 import SearchStates from '../../../core/storage/searchstates';
 import VoiceSearchController from '../../controllers/voicesearchcontroller';
+import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 
 const IconState = {
   LOADING: '.js-yxt-SearchBar-LoadingIndicator',
@@ -329,8 +330,7 @@ export default class SearchComponent extends Component {
      * Whether or not the voice search icon should appear
      * @type {boolean}
      */
-    // TODO: add browser compatability and language support check
-    this._showVoiceSearch = this._voiceSearchEnabled;
+    this._showVoiceSearch = this._voiceSearchEnabled && speechRecognitionIsSupported();
 
     this._customMicIconUrl = config.voiceSearch?.customMicIconUrl;
 
