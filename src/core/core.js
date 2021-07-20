@@ -329,7 +329,7 @@ export default class Core {
       }
     }
 
-    this.storage.set(StorageKeys.DIRECT_ANSWER, {});
+    this.storage.set(StorageKeys.DIRECT_ANSWER, DirectAnswer.searchLoading());
     const universalResults = this.storage.get(StorageKeys.UNIVERSAL_RESULTS);
     if (!universalResults || universalResults.searchState !== SearchStates.SEARCH_LOADING) {
       this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());

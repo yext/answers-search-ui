@@ -12,6 +12,7 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
+import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
 
 fixture`Facets page`
   .before(setupServer)
@@ -20,10 +21,10 @@ fixture`Facets page`
 
 test('Facets work with back/forward navigation and page refresh', async t => {
   const logger = RequestLogger({
-    url: /v2\/accounts\/me\/answers\/vertical\/query/
+    url: VERTICAL_SEARCH_URL_REGEX
   });
   await t.addRequestHooks(logger);
-  await registerIE11NoCacheHook(t);
+  await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
 
   async function getFacetsFromRequest () {
     const urlParams = await getMostRecentQueryParamsFromLogger(logger);

@@ -8,10 +8,17 @@ import { Selector } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
-  browserForwardButton
+  browserForwardButton,
+  registerIE11NoCacheHook
 } from '../utils';
+import SearchRequestLogger from '../searchrequestlogger';
+import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
 
 fixture`Facets page`
+  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+  .beforeEach(async t => {
+    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
+  })
   .before(setupServer)
   .after(shutdownServer)
   .page`${FACETS_PAGE}`;
@@ -28,31 +35,38 @@ test('filtersearch works with back/forward navigation and page refresh', async t
 
   // Choose the 'Virginia, United States' filter option
   await filterSearch.selectFilter('Virginia, United States');
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('Virginia, United States');
 
   // Choose the 'New York City, New York, United States' filter option
   await filterSearch.selectFilter('New York City, New York, United States');
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('New York City, New York, United States');
 
   // Hit the back button, expect to be back at the 'Virginia' filter state
   await browserBackButton();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('Virginia, United States');
 
   // Test that refreshing the page will use the 'Virginia' filter
   await browserRefreshPage();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('Virginia, United States');
 
   // Hit the back button, expect to be back at the initial state with 0 results
   await browserBackButton();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await t.expect(filterTags.count).eql(0);
   await t.expect(Selector('.yxt-StandardCard-title').count).eql(0);
 
   // Hit the forward button, expect to see the 'Virginia' filter applied
   await browserForwardButton();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('Virginia, United States');
 
   // Hit the forward button, expect to see the 'New York' filter applied
   await browserForwardButton();
+  await SearchRequestLogger.waitOnSearchComplete(t);
   await expectOnlyFilterTagToEql('New York City, New York, United States');
 });
 

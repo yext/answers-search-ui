@@ -1,6 +1,5 @@
 import { Selector } from 'testcafe';
 import VerticalResultsComponentBlock from './verticalresultscomponent';
-
 /**
  * This class models interactions with the {@link UniversalResultsComponent}.
  */
