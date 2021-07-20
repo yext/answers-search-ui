@@ -34,20 +34,15 @@ export default class VoiceSearchController {
 
     this._searchBarContainer = searchBarContainer;
     this._voiceSearchElement = DOM.query(searchBarContainer, '.yxt-SearchBar-voiceSearch');
+    this._voiceIconWrapper = DOM.query(searchBarContainer, '.yxt-SearchBar-voiceIconWrapper');
     this._screenReaderTextElement = DOM.query(searchBarContainer, '.yxt-SearchBar-voiceSearchText');
     this._updateScreenReaderText();
 
     /** @type {SVGAnimateElement} */
     this._micFadeInAnimation = DOM.query(searchBarContainer, '.js-yxt-SearchBar-micFadeIn');
-    /** @type {SVGAnimateElement} */
     this._micFadeOutAnimation = DOM.query(searchBarContainer, '.js-yxt-SearchBar-micFadeOut');
-    /** @type {SVGAnimateElement[]} */
     this._dotsFadeInAnimations = DOM.queryAll(searchBarContainer, '.js-yxt-SearchBar-dotsFadeIn');
-    /** @type {SVGAnimateElement[]} */
     this._dotsFadeOutAnimations = DOM.queryAll(searchBarContainer, '.js-yxt-SearchBar-dotsFadeOut');
-
-    this._micIconWrapper = DOM.query(this._searchBarContainer, '.yxt-SearchBar-micIconWrapper');
-    this._listeningIconWrapper = DOM.query(this._searchBarContainer, '.yxt-SearchBar-listeningIconWrapper');
 
     this._customMicIconUrl = config.customMicIconUrl;
     this._customListeningIconUrl = config.customListeningIconUrl;
@@ -82,6 +77,7 @@ export default class VoiceSearchController {
       this._executeDefaultListeningIconAnimations();
     }
     this._updateScreenReaderText();
+    // Blur so that the focus state isn't maintained after clicking
     this._voiceSearchElement.blur();
   }
 
@@ -107,21 +103,17 @@ export default class VoiceSearchController {
 
   _applyCustomMicIconStyling () {
     if (this._state === State.NOT_LISTENING) {
-      this._micIconWrapper.classList.add('yxt-SearchBar-CustomIcon--active');
-      this._micIconWrapper.classList.remove('yxt-SearchBar-CustomIcon--inactive');
+      this._voiceIconWrapper.classList.add('yxt-SearchBar-CustomMicIcon');
     } else if (this._state === State.LISTENING) {
-      this._micIconWrapper.classList.add('yxt-SearchBar-CustomIcon--inactive');
-      this._micIconWrapper.classList.remove('yxt-SearchBar-CustomIcon--active');
+      this._voiceIconWrapper.classList.remove('yxt-SearchBar-CustomMicIcon');
     }
   }
 
   _applyCustomListeningIconStyling () {
     if (this._state === State.NOT_LISTENING) {
-      this._listeningIconWrapper.classList.add('yxt-SearchBar-CustomIcon--inactive');
-      this._listeningIconWrapper.classList.remove('yxt-SearchBar-CustomIcon--active');
+      this._voiceIconWrapper.classList.remove('yxt-SearchBar-CustomListeningIcon');
     } else if (this._state === State.LISTENING) {
-      this._listeningIconWrapper.classList.add('yxt-SearchBar-CustomIcon--active');
-      this._listeningIconWrapper.classList.remove('yxt-SearchBar-CustomIcon--inactive');
+      this._voiceIconWrapper.classList.add('yxt-SearchBar-CustomListeningIcon');
     }
   }
 

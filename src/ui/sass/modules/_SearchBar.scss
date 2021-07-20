@@ -272,16 +272,26 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     .yxt-SearchBar-listeningIconWrapper {
       position: relative;
     }
+  }
+}
 
-    // If custom icons are supplied, the SVGs simply alternate opacity
-    .yxt-SearchBar-CustomMicIcon--active {
-      opacity: 1;
-      transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
-    }
-    .yxt-SearchBar-CustomListenigIcon--inactive {
-      opacity: 0;
-      transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
-    }
+// If custom icons are supplied, the SVGs simply alternate opacity
+.yxt-SearchBar-VoiceSearchCustomIcon {
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+}
+
+.yxt-SearchBar-CustomMicIcon {
+  .yxt-SearchBar-VoiceSearchCustomIcon {
+    opacity: 1;
+    transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+  }
+}
+
+.yxt-SearchBar-CustomListeningIcon {
+  .yxt-SearchBar-VoiceSearchCustomIcon {
+    opacity: 1;
+    transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
   }
 }
 
