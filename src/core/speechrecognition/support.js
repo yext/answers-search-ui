@@ -9,5 +9,5 @@
  * @returns {boolean}
  */
 export function speechRecognitionIsSupported () {
-  return !!(SpeechRecognition || webkitSpeechRecognition);
+  return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
 }

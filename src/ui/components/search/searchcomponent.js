@@ -8,6 +8,8 @@ import TranslationFlagger from '../../i18n/translationflagger';
 import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistener';
 import QueryTriggers from '../../../core/models/querytriggers';
 import SearchStates from '../../../core/storage/searchstates';
+import VoiceSearchController from '../../controllers/voicesearchcontroller';
+import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 
 const IconState = {
   LOADING: '.js-yxt-SearchBar-LoadingIndicator',
@@ -309,6 +311,30 @@ export default class SearchComponent extends Component {
     }
 
     this.onMouseUp = this.oneTimeMouseUpListener.bind(this);
+
+    this._voiceSearchConfig = config.voiceSearch || {};
+
+    /**
+     * Whether or not voice search should be enabled
+     * @type {boolean}
+     */
+    this._voiceSearchEnabled = config.voiceSearch?.enabled;
+
+    /**
+     * Once voice search has activited, this value determines the length of silence in milliseconds
+     * needed to trigger an automatic voice search
+     */
+    this._silenceThresholdToSearch = config.voiceSearch?.silenceThresholdToSearch || 1500;
+
+    /**
+     * Whether or not the voice search icon should appear
+     * @type {boolean}
+     */
+    this._showVoiceSearch = this._voiceSearchEnabled && speechRecognitionIsSupported();
+
+    this._customMicIconUrl = config.voiceSearch?.customMicIconUrl;
+
+    this._customListeningIconUrl = config.voiceSearch?.customListeningIconUrl;
   }
 
   /**
@@ -357,6 +383,14 @@ export default class SearchComponent extends Component {
 
     this.isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
     this.isUsingYextAnimatedIcon ? this.initAnimatedIcon() : this.iconState = IconState.CUSTOM_ICON;
+
+    if (this._showVoiceSearch) {
+      const voiceSearchController = new VoiceSearchController(this._container, this._voiceSearchConfig);
+      const voiceSearchElement = DOM.query(this._container, '.js-yxt-SearchBar-voiceSearch');
+      DOM.on(voiceSearchElement, 'click', () => {
+        voiceSearchController.handleIconClick();
+      });
+    }
 
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
@@ -727,7 +761,10 @@ export default class SearchComponent extends Component {
       clearText: this.clearText,
       showClearButton: this._showClearButton,
       showLoadingIndicator: this._showLoadingIndicator,
-      customLoadingIconUrl: this.customLoadingIconUrl,
+      customMicIconUrl: this._customMicIconUrl,
+      customLoadingIconUrl: this._customLoadingIconUrl,
+      customListeningIconUrl: this._customListeningIconUrl,
+      showVoiceSearch: this._showVoiceSearch,
       query: this.query || '',
       eventOptions: this.eventOptions(),
       iconId: this.name,
