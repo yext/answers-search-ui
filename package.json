@@ -82,6 +82,7 @@
     "i18next": "^19.9.2",
     "i18next-conv": "^10.0.2",
     "jest": "^24.8.0",
+    "jest-transform-stub": "^2.0.0",
     "jsdoc": "^3.6.3",
     "npm-force-resolutions": "0.0.10",
     "postcss-pxtorem": "4.0.1",
@@ -143,7 +144,11 @@
       "**/tests/ui/**/*.js",
       "**/tests/conf/**/*.js",
       "**/tests/answers-umd.js"
-    ]
+    ],
+    "transform": {
+      "^.+\\.js$": "babel-jest",
+      ".+\\.(svg)$": "jest-transform-stub"
+    }
   },
   "percy": {
     "agent": {
