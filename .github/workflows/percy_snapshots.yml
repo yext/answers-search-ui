@@ -21,9 +21,8 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm i @babel/core@7.14
-    - run: npm i @babel/node@7.14
     - run: npm run build
+    - run: npm i @babel/core@7.14 @babel/node@7.14
     - name: Percy Snapshots
       run: npx percy exec -- npx babel-node tests/acceptance/percy/snapshots.js --plugins @babel/plugin-transform-runtime
       env:
