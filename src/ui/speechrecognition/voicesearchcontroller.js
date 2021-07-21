@@ -1,4 +1,4 @@
-import DOM from '../../dom/dom';
+import DOM from '../dom/dom';
 import MicIconStylist from './miciconstylist';
 import ListeningIconStylist from './listeningiconstylist';
 import ScreenReaderTextController from './screenreadertextcontroller';

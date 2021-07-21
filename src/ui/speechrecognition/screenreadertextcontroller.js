@@ -1,5 +1,5 @@
-import DOM from '../../dom/dom';
-import TranslationFlagger from '../../i18n/translationflagger';
+import DOM from '../dom/dom';
+import TranslationFlagger from '../i18n/translationflagger';
 
 export default class ScreenReaderTextController {
   constructor (searchBarContainer, startText, stopText) {

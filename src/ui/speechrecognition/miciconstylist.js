@@ -1,4 +1,4 @@
-import DOM from '../../dom/dom';
+import DOM from '../dom/dom';
 
 export default class MicIconStylist {
   constructor (searchBarContainer, customMicIconUrl) {
