@@ -1,5 +1,8 @@
 import DOM from '../dom/dom';
 
+/**
+ *  Responsible for styling the voice search mic icon
+ */
 export default class MicIconStylist {
   constructor (searchBarContainer, customMicIconUrl) {
     this._voiceIconWrapper = DOM.query(searchBarContainer, '.yxt-SearchBar-voiceIconWrapper');
@@ -12,6 +15,9 @@ export default class MicIconStylist {
     this._customMicIconUrl = customMicIconUrl;
   }
 
+  /**
+   * Applies styling for when the icon is active
+   */
   applyActiveStyling () {
     if (this._customMicIconUrl) {
       this._voiceIconWrapper.classList.add(this._activeCustomIconClass);
@@ -20,6 +26,9 @@ export default class MicIconStylist {
     }
   }
 
+  /**
+   * Applies styling for when the icon is inactive
+   */
   applyInactiveStyling () {
     if (this._customMicIconUrl) {
       this._voiceIconWrapper.classList.remove(this._activeCustomIconClass);

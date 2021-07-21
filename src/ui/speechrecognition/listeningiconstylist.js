@@ -1,10 +1,13 @@
 import DOM from '../dom/dom';
 
+/**
+ *  Responsible for styling the voice search listening icon
+ */
 export default class ListeningIconStylist {
   constructor (searchBarContainer, customListeningIconUrl) {
     this._voiceIconWrapper = DOM.query(searchBarContainer, '.yxt-SearchBar-voiceIconWrapper');
 
-    /** @type {SVGAnimateElement} */
+    /** @type {SVGAnimateElement[]} */
     this._dotsFadeInAnimations = DOM.queryAll(searchBarContainer, '.js-yxt-SearchBar-dotsFadeIn');
     this._dotsFadeOutAnimations = DOM.queryAll(searchBarContainer, '.js-yxt-SearchBar-dotsFadeOut');
 
@@ -12,6 +15,9 @@ export default class ListeningIconStylist {
     this._customListeningIconUrl = customListeningIconUrl;
   }
 
+  /**
+   * Applies styling for when the icon is active
+   */
   applyActiveStyling () {
     if (this._customListeningIconUrl) {
       this._voiceIconWrapper.classList.add(this._activeCustomIconClass);
@@ -22,6 +28,9 @@ export default class ListeningIconStylist {
     }
   }
 
+  /**
+   * Applies styling for when the icon is inactive
+   */
   applyInactiveStyling () {
     if (this._customListeningIconUrl) {
       this._voiceIconWrapper.classList.remove(this._activeCustomIconClass);
