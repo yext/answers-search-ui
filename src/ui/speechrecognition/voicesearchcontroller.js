@@ -8,6 +8,9 @@ const State = {
   LISTENING: 'listening'
 };
 
+/**
+ * Responsible for controling the voice search button
+ */
 export default class VoiceSearchController {
   /**
    * @param {Element} searchBarContainer The search bar which contains the voice search button

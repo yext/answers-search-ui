@@ -1,6 +1,9 @@
 import DOM from '../dom/dom';
 import TranslationFlagger from '../i18n/translationflagger';
 
+/**
+ * Responsible for updating the screen reader text for the voice search button
+ */
 export default class ScreenReaderTextController {
   constructor (searchBarContainer, startText, stopText) {
     /**
