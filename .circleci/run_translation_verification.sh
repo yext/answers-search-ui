@@ -5,7 +5,7 @@
 
 npm run extract-translations
 
-git diff --exit-code > /dev/null # send stdout to /dev/null to reduce clutter in the CI output
+git diff conf/i18n/translations/messages.pot --exit-code > /dev/null # send stdout to /dev/null to reduce clutter in the CI output
 diff_exit_code=$?
 
 if test $diff_exit_code -eq 1
