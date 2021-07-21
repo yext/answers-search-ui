@@ -455,8 +455,3 @@ msgstr ""
 msgctxt "True or False"
 msgid "True"
 msgstr ""
-
-#: src/ui/components/search/searchcomponent.js:88
-msgctxt "Verb, clears search"
-msgid "Clear"
-msgstr ""
