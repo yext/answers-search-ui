@@ -12,8 +12,6 @@ if test $diff_exit_code -eq 1
 then
   echo "Extracted translations are out of date. Run 'npm run extract-translations' and commit the updated pot file."
   exit 1
-else
-  echo "Extracted translations are up to date"
 fi
 
 cd conf/i18n/translations
