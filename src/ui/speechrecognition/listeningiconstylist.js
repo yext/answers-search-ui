@@ -42,9 +42,6 @@ export default class ListeningIconStylist {
       this._dotsFadeOutAnimations.forEach(animation => {
         animation.beginElement();
       });
-      this._dotsListeningAnimations.forEach(animation => {
-        animation.endElement();
-      });
     }
   }
 }
