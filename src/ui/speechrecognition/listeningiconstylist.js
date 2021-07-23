@@ -10,6 +10,7 @@ export default class ListeningIconStylist {
     /** @type {SVGAnimateElement[]} */
     this._dotsFadeInAnimations = DOM.queryAll(searchBarContainer, '.js-yxt-SearchBar-dotsFadeIn');
     this._dotsFadeOutAnimations = DOM.queryAll(searchBarContainer, '.js-yxt-SearchBar-dotsFadeOut');
+    this._dotsListeningAnimations = DOM.queryAll(searchBarContainer, '.js-yxt-SearchBar-dotsListening');
 
     this._activeCustomIconClass = 'yxt-SearchBar-CustomListeningIcon--active';
     this._customListeningIconUrl = customListeningIconUrl;
@@ -23,6 +24,9 @@ export default class ListeningIconStylist {
       this._voiceIconWrapper.classList.add(this._activeCustomIconClass);
     } else {
       this._dotsFadeInAnimations.forEach(animation => {
+        animation.beginElement();
+      });
+      this._dotsListeningAnimations.forEach(animation => {
         animation.beginElement();
       });
     }
