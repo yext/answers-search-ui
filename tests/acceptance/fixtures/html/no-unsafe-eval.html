@@ -1,0 +1,59 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
+
+  <script src="http://localhost:9999/dist/answerstemplates.compiled.min.js"></script>
+  <script src="http://localhost:9999/dist/answers.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://localhost:9999/dist/answers.css">
+</head>
+
+<body>
+  <div class="answers-container">
+    <div class="search-bar-container"></div>
+    <div class="navigation-container"></div>
+  </div>
+
+  <script>
+    ANSWERS.init({
+      apiKey: '2d8c550071a64ea23e263118a2b0680b',
+      experienceKey: 'slanswers',
+      businessId: '3350634',
+      experienceVersion: 'PRODUCTION',
+      templateBundle: TemplateBundle.default,
+      search: {
+        verticalKey: 'people',
+        defaultInitialSearch: 'virginia'
+      },
+      onReady: function () {
+        this.addComponent('SearchBar', {
+          container: '.search-bar-container',
+          verticalKey: 'people'
+        });
+
+        this.addComponent('Navigation', {
+          container: '.navigation-container',
+          verticalPages: [
+            {
+              label: 'Home',
+              url: './universal',
+              isFirst: true
+            },
+            {
+              label: 'Facets',
+              url: './facets',
+              isActive: true
+            },
+            {
+              label: 'Vertical',
+              url: './vertical',
+            }
+          ],
+        });
+      }
+    })
+  </script>
+</body>
+
+</html>

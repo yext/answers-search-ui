@@ -17,14 +17,12 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
+      uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build
     - name: Percy Snapshots
-      uses: percy/exec-action@v0.3.1
-      with:
-        command: npx testcafe "chrome:headless" tests/acceptance/percysnapshots.js
+      run: npx percy exec -- node tests/acceptance/percy/snapshots.mjs
       env:
         PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
