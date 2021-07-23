@@ -3,6 +3,8 @@ import MicIconStylist from './miciconstylist';
 import ListeningIconStylist from './listeningiconstylist';
 import ScreenReaderTextController from './screenreadertextcontroller';
 import SpeechRecognizer from './speechrecognizer';
+import TranslationFlagger from '../i18n/translationflagger';
+import StorageKeys from '../../core/storage/storagekeys';
 
 const State = {
   NOT_LISTENING: 'not-listening',
@@ -26,7 +28,8 @@ export default class VoiceSearchController {
     this._listeningIconStylist = new ListeningIconStylist(searchBarContainer, config.customListeningIconUrl);
     this._screenReaderTextController = new ScreenReaderTextController(searchBarContainer, config.startText, config.stopText);
 
-    this._speechRecognizer = new SpeechRecognizer();
+    const locale = searchComponent.core.storage.get(StorageKeys.LOCALE);
+    this._speechRecognizer = new SpeechRecognizer(locale);
 
     this._searchComponent = searchComponent;
     this._autocompleteComponent = searchComponent._autocomplete;
@@ -42,16 +45,37 @@ export default class VoiceSearchController {
 
     this._speechRecognizer.onInterimResult(this._handleInterimResult.bind(this));
     this._speechRecognizer.onFinalResult(this._handleFinalResult.bind(this));
+    this._speechRecognizer.onError(this._enterNotListeningState.bind(this));
   }
 
   handleIconClick () {
+    // Blur so that the focus state isn't maintained after clicking
+    this._voiceSearchElement.blur();
+
     if (this._state === State.NOT_LISTENING) {
-      this._enterListeningState();
+      this._hasMicAccess().then(hasMicAccess => {
+        if (hasMicAccess) {
+          this._enterListeningState();
+        } else {
+          window.alert(TranslationFlagger.flag({
+            phrase: 'Permission to use microphone is blocked'
+          }));
+        }
+      });
     } else if (this._state === State.LISTENING) {
       this._enterNotListeningState();
     }
-    // Blur so that the focus state isn't maintained after clicking
-    this._voiceSearchElement.blur();
+  }
+
+  _hasMicAccess () {
+    return navigator.mediaDevices.getUserMedia({ audio: true })
+      .then(stream => {
+        // Stop the audio tracks which are started when requesting permission
+        stream.getTracks().forEach(track => track.stop());
+        return true;
+      }).catch(() => {
+        return false;
+      });
   }
 
   _enterListeningState () {
