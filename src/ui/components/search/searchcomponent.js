@@ -8,7 +8,7 @@ import TranslationFlagger from '../../i18n/translationflagger';
 import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistener';
 import QueryTriggers from '../../../core/models/querytriggers';
 import SearchStates from '../../../core/storage/searchstates';
-import VoiceSearchController from '../../controllers/voicesearchcontroller';
+import VoiceSearchController from '../../speechrecognition/voicesearchcontroller';
 import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 
 const IconState = {
