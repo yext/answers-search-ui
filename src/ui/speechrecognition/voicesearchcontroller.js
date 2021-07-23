@@ -60,9 +60,7 @@ export default class VoiceSearchController {
         if (hasMicAccess) {
           this._enterListeningState();
         } else {
-          window.alert(TranslationFlagger.flag({
-            phrase: 'Permission to use microphone is blocked'
-          }));
+          window.alert('Permission to use microphone is blocked');
         }
       });
     } else if (this._state === State.LISTENING) {

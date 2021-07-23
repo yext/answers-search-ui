@@ -1,7 +1,6 @@
 /* eslint-disable new-cap */
 import { isMicrosoftEdge } from '../../core/utils/useragent';
 import { transformSpeechRecognitionLocaleForEdge } from '../../core/speechrecognition/locales';
-import TranslationFlagger from '../i18n/translationflagger';
 
 /**
  * Responsible for recognizing speech
@@ -93,8 +92,8 @@ export default class SpeechRecognizer {
   _handleErrorEvent (event) {
     if (event.error === 'service-not-allowed') {
       window.alert(
-        TranslationFlagger.flag({ phrase: 'Speech Recognition is not available.' }) + '\n' +
-        TranslationFlagger.flag({ phrase: 'Siri must be enabled for support on Safari.' })
+        'Speech Recognition is not available.' + '\n' +
+        'Siri must be enabled for support on Safari.'
       );
     } else {
       console.warn(event);
