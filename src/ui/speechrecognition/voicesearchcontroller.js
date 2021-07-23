@@ -55,7 +55,6 @@ export default class VoiceSearchController {
     this._voiceSearchElement.blur();
 
     if (this._state === State.NOT_LISTENING) {
-      this._reportVoiceStartClick();
       this._hasMicAccess().then(hasMicAccess => {
         if (hasMicAccess) {
           this._enterListeningState();
@@ -66,7 +65,6 @@ export default class VoiceSearchController {
         }
       });
     } else if (this._state === State.LISTENING) {
-      this._reportVoiceStopClick();
       this._enterNotListeningState();
     }
   }
@@ -93,6 +91,7 @@ export default class VoiceSearchController {
     this._listeningIconStylist.applyActiveStyling();
     this._micIconStylist.applyInactiveStyling();
     this._screenReaderTextController.setStopListeningText();
+    this._reportVoiceStart();
   }
 
   _enterNotListeningState () {
@@ -101,6 +100,7 @@ export default class VoiceSearchController {
     this._micIconStylist.applyActiveStyling();
     this._listeningIconStylist.applyInactiveStyling();
     this._screenReaderTextController.setStartListeningText();
+    this._reportVoiceStop();
   }
 
   /**
@@ -133,9 +133,9 @@ export default class VoiceSearchController {
   }
 
   /**
-   * Reports an analytics event for when the user clicks to start voice search
+   * Reports an analytics event for when voice search starts
    */
-  _reportVoiceStartClick () {
+  _reportVoiceStart () {
     if (!this._searchComponent.analyticsReporter) {
       return;
     }
@@ -150,9 +150,9 @@ export default class VoiceSearchController {
   }
 
   /**
-   * Reports an analytics event for when the user clicks to stop voice search
+   * Reports an analytics event for when voice search stops
    */
-  _reportVoiceStopClick () {
+  _reportVoiceStop () {
     if (!this._searchComponent.analyticsReporter) {
       return;
     }
