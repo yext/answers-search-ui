@@ -3,7 +3,6 @@ import MicIconStylist from './miciconstylist';
 import ListeningIconStylist from './listeningiconstylist';
 import ScreenReaderTextController from './screenreadertextcontroller';
 import SpeechRecognizer from './speechrecognizer';
-import TranslationFlagger from '../i18n/translationflagger';
 import StorageKeys from '../../core/storage/storagekeys';
 import AnalyticsEvent from '../../core/analytics/analyticsevent';
 import { generateUUID } from '../../core/utils/uuid';
