@@ -45,8 +45,8 @@ export default class VoiceSearchController {
     this._config.customListeningIconUrl && this._listeningIconStylist.applyInactiveStyling();
     this._screenReaderTextController.setStartListeningText();
 
-    this._speechRecognizer.onInterimResult(this._handleInterimResult.bind(this));
-    this._speechRecognizer.onFinalResult(this._handleFinalResult.bind(this));
+    this._speechRecognizer.onResult(this._handleResult.bind(this));
+    this._speechRecognizer.onComplete(this._handleComplete.bind(this));
     this._speechRecognizer.onError(this._enterNotListeningState.bind(this));
   }
 
@@ -71,6 +71,10 @@ export default class VoiceSearchController {
     }
   }
 
+  /**
+   * Returns a promise which indicates whether or not mic access is granted
+   * @returns {Promise<boolean>}
+   */
   _hasMicAccess () {
     return navigator.mediaDevices.getUserMedia({ audio: true })
       .then(stream => {
@@ -99,6 +103,9 @@ export default class VoiceSearchController {
     this._screenReaderTextController.setStartListeningText();
   }
 
+  /**
+   * Sets up the search bar when voice search begins listening
+   */
   _setupSearchBarForListening () {
     this._autocompleteComponent.updateQuery('');
     this._autocompleteComponent.close();
@@ -107,20 +114,27 @@ export default class VoiceSearchController {
   }
 
   /**
+   * Handles an interim or final result from the speech recognizer
    * @param {string} result The latest speech recognition result. This includes the entire sentence, not just the latest word
    */
-  _handleInterimResult (result) {
+  _handleResult (result) {
     this._autocompleteComponent.updateQuery(result);
     this._autocompleteComponent.autoComplete(result);
   }
 
-  _handleFinalResult () {
+  /**
+   * Handler for when the speech recognizer has completes speech recognition
+   */
+  _handleComplete () {
     this._searchComponent.submitVoiceQuery();
     this._autocompleteComponent.close();
     this._autocompleteComponent.setIsVoiceSearchActive(false);
     this._enterNotListeningState();
   }
 
+  /**
+   * Reports an analytics event for when the user clicks to start voice search
+   */
   _reportVoiceStartClick () {
     if (!this._searchComponent.analyticsReporter) {
       return;
@@ -135,14 +149,17 @@ export default class VoiceSearchController {
     this._searchComponent.analyticsReporter.report(analyticsEvent);
   }
 
+  /**
+   * Reports an analytics event for when the user clicks to stop voice search
+   */
   _reportVoiceStopClick () {
     if (!this._searchComponent.analyticsReporter) {
       return;
     }
     const analyticsEvent = AnalyticsEvent.fromData({
       type: 'VOICE_STOP',
-      timestamp: new Date().getTime(),
       businessId: this._searchComponent.analyticsReporter._businessId,
+      timestamp: new Date().getTime(),
       voiceSessionId: this._voiceSessionId
     });
     this._searchComponent.analyticsReporter.report(analyticsEvent);
