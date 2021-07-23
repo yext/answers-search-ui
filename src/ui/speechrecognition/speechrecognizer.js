@@ -33,6 +33,7 @@ export default class SpeechRecognizer {
     });
     this._speechRecognition.addEventListener('end', () => {
       this._recognitionActive = false;
+      this._onFinalResultHandler && this._onFinalResultHandler(this._latestResult);
     });
     this._speechRecognition.addEventListener('result', event => {
       this._handleResultEvent(event);
@@ -57,7 +58,6 @@ export default class SpeechRecognizer {
     }
     if (isFinalResult) {
       this.stop();
-      this._onFinalResultHandler && this._onFinalResultHandler(this._latestResult);
     }
   }
 

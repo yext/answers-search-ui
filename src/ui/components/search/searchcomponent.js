@@ -533,9 +533,9 @@ export default class SearchComponent extends Component {
     });
   }
 
-  submitQuery () {
+  submitVoiceQuery () {
     const inputEl = DOM.query(this._container, this._inputEl);
-    this.onQuerySubmit(inputEl);
+    this.onQuerySubmit(inputEl, QueryTriggers.VOICE_SEARCH);
   }
 
   /**
@@ -594,8 +594,9 @@ export default class SearchComponent extends Component {
    * persistent and storage, than performs a debounced search.
    *
    * @param {Node} inputEl The input element containing the query.
+   * @param {QueryTrigger} queryTrigger An optional query trigger used for the search
    */
-  onQuerySubmit (inputEl) {
+  onQuerySubmit (inputEl, queryTrigger = QueryTriggers.SEARCH_BAR) {
     const query = inputEl.value;
     this.query = query;
     const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
@@ -620,7 +621,7 @@ export default class SearchComponent extends Component {
     DOM.query(this._container, '.js-yext-submit').blur();
 
     this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.triggerSearch(QueryTriggers.SEARCH_BAR, query);
+    this.core.triggerSearch(queryTrigger, query);
     return false;
   }
 

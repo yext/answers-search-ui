@@ -5,6 +5,8 @@ import ScreenReaderTextController from './screenreadertextcontroller';
 import SpeechRecognizer from './speechrecognizer';
 import TranslationFlagger from '../i18n/translationflagger';
 import StorageKeys from '../../core/storage/storagekeys';
+import AnalyticsEvent from '../../core/analytics/analyticsevent';
+import { generateUUID } from '../../core/utils/uuid';
 
 const State = {
   NOT_LISTENING: 'not-listening',
@@ -53,6 +55,7 @@ export default class VoiceSearchController {
     this._voiceSearchElement.blur();
 
     if (this._state === State.NOT_LISTENING) {
+      this._reportVoiceStartClick();
       this._hasMicAccess().then(hasMicAccess => {
         if (hasMicAccess) {
           this._enterListeningState();
@@ -63,6 +66,7 @@ export default class VoiceSearchController {
         }
       });
     } else if (this._state === State.LISTENING) {
+      this._reportVoiceStopClick();
       this._enterNotListeningState();
     }
   }
@@ -111,9 +115,36 @@ export default class VoiceSearchController {
   }
 
   _handleFinalResult () {
-    this._searchComponent.submitQuery();
+    this._searchComponent.submitVoiceQuery();
     this._autocompleteComponent.close();
     this._autocompleteComponent.setIsVoiceSearchActive(false);
     this._enterNotListeningState();
+  }
+
+  _reportVoiceStartClick () {
+    if (!this._searchComponent.analyticsReporter) {
+      return;
+    }
+    this._voiceSessionId = generateUUID();
+    const analyticsEvent = AnalyticsEvent.fromData({
+      type: 'VOICE_START',
+      businessId: this._searchComponent.analyticsReporter._businessId,
+      timestamp: new Date().getTime(),
+      voiceSessionId: this._voiceSessionId
+    });
+    this._searchComponent.analyticsReporter.report(analyticsEvent);
+  }
+
+  _reportVoiceStopClick () {
+    if (!this._searchComponent.analyticsReporter) {
+      return;
+    }
+    const analyticsEvent = AnalyticsEvent.fromData({
+      type: 'VOICE_STOP',
+      timestamp: new Date().getTime(),
+      businessId: this._searchComponent.analyticsReporter._businessId,
+      voiceSessionId: this._voiceSessionId
+    });
+    this._searchComponent.analyticsReporter.report(analyticsEvent);
   }
 }
