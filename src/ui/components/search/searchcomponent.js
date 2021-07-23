@@ -390,12 +390,12 @@ export default class SearchComponent extends Component {
       searchBarContainer: this._container,
       inputEl: this._inputEl
     };
-    const searchBarIconController = new SearchBarIconController(config);
+    this.searchBarIconController = new SearchBarIconController(config);
     if (this._showLoadingIndicator) {
-      searchBarIconController.setupLoadingIconEvents(this.core.storage, this._verticalKey);
+      this.searchBarIconController.setupLoadingIconEvents(this.core.storage, this._verticalKey);
     }
     if (!config.useCustomIcon) {
-      searchBarIconController.setupAnimatedIconEvents();
+      this.searchBarIconController.setupAnimatedIconEvents();
     }
   }
 
