@@ -233,11 +233,18 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     }
   }
 
+  &-voiceIconWrapper
+  {
+    width: 32px;
+  }
+
   &-voiceSearch
   {
     background-color: var(--yxt-searchbar-button-background-color-base);
     border: none;
     cursor: pointer;
+    padding-top: calc(var(--yxt-base-spacing)/2);
+    padding-bottom: calc(var(--yxt-base-spacing)/2);
 
     // Hide voice search on mobile
     @media (max-width: $breakpoint-mobile-max) {
