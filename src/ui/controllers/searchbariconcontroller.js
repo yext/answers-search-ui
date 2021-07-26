@@ -35,25 +35,27 @@ export default class SearchBarIconController {
     this.searchBarContainer = config.searchBarContainer;
     this.onMouseUp = this.oneTimeMouseUpListener.bind(this);
 
-    const loadingState = new LoadingIconState(this, IconState.LOADING_ICON);
-    const searchState = new SearchIconState(this, IconState.SEARCH_ICON, config.useCustomIcon);
-    const defaultState = new DefaultIconState(this, IconState.DEFAULT_ICON, config.useCustomIcon);
+    const stateMap = {
+      [IconState.LOADING_ICON]: new LoadingIconState(this, IconState.LOADING_ICON),
+      [IconState.DEFAULT_ICON]: new DefaultIconState(this, IconState.DEFAULT_ICON, config.useCustomIcon),
+      [IconState.SEARCH_ICON]: new SearchIconState(this, IconState.SEARCH_ICON, config.useCustomIcon)
+    };
 
     const possibleTransitions = {
       [IconState.LOADING_ICON]: {
-        SEARCH_COMPLETE: defaultState
+        [IconEvent.SEARCH_COMPLETE]: IconState.DEFAULT_ICON
       },
       [IconState.DEFAULT_ICON]: {
-        SUBMIT: loadingState,
-        FOCUS: searchState
+        [IconEvent.SUBMIT]: IconState.LOADING_ICON,
+        [IconEvent.FOCUS]: IconState.SEARCH_ICON
       },
       [IconState.SEARCH_ICON]: {
-        SUBMIT: loadingState,
-        FOCUS_OUT: defaultState
+        [IconEvent.SUBMIT]: IconState.LOADING_ICON,
+        [IconEvent.FOCUS_OUT]: IconState.DEFAULT_ICON
       }
     };
-    const initialIconState = config.isFocus ? searchState : defaultState;
-    this._fsm = new StateMachine(initialIconState, possibleTransitions);
+    const initialIconState = config.isFocus ? stateMap[IconState.SEARCH_ICON] : stateMap[IconState.DEFAULT_ICON];
+    this._fsm = new StateMachine(initialIconState, stateMap, possibleTransitions);
   }
 
   handleEvent (event, context) {

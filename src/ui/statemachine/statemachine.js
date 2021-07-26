@@ -16,14 +16,19 @@ export class State {
  * Finite state machine model that tracks current behavior status and performs state transitions.
  */
 export class StateMachine {
-  constructor (initialState, transitions) {
+  constructor (initialState, stateMap, transitions) {
     /**
      * @type {State} initial state where the execution of the machine starts
      */
     this._state = initialState;
 
     /**
-     * @type {Object<string, Object<string, State>>}  state-transition map that defines
+     * @type {Object<string, State>} map state id to state instances
+     */
+    this._stateMap = stateMap;
+
+    /**
+     * @type {Object<string, Object<string, string>>}  state-transition map that defines
      * what states that machine can move to based on current state and event
      */
     this.transitions = transitions;
@@ -38,7 +43,7 @@ export class StateMachine {
    * @returns {State} updated state
    */
   updateState (event, context) {
-    const nextState = this.transitions[this._state.id][event];
+    const nextState = this._stateMap[this.transitions[this._state.id][event]];
     if (nextState && nextState !== this._state && nextState.canEnter(context)) {
       this._state.onExit(nextState);
       nextState.onEnter(this._state);
