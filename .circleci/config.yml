@@ -91,7 +91,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: npx testcafe -c 2 chrome:headless,firefox:headless tests/acceptance/acceptancesuites/*.js -q --app "npx serve -l tcp://0.0.0.0:9999" --app-init-delay 4000
+      - run: npx testcafe -c 3 chrome:headless,firefox:headless tests/acceptance/acceptancesuites/*.js -q --app "npx serve -l tcp://0.0.0.0:9999" --app-init-delay 4000
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
