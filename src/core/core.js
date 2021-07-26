@@ -184,7 +184,7 @@ export default class Core {
       if (!verticalResults || verticalResults.searchState !== SearchStates.SEARCH_LOADING) {
         this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       }
-      this.storage.set(StorageKeys.DIRECT_ANSWER, {});
+      this.storage.set(StorageKeys.DIRECT_ANSWER, DirectAnswer.searchLoading());
       this.storage.set(StorageKeys.SPELL_CHECK, {});
       this.storage.set(StorageKeys.LOCATION_BIAS, LocationBias.searchLoading());
     }
