@@ -1,6 +1,6 @@
 /** @module Core */
 import { provideCore } from '@yext/answers-core/lib/commonjs';
-
+import { generateUUID } from './utils/uuid';
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import VerticalResults from './models/verticalresults';
@@ -227,7 +227,7 @@ export default class Core {
     return this._coreLibrary
       .verticalSearch({
         verticalKey: verticalKey || searchConfig.verticalKey,
-        limit: this.storage.get(StorageKeys.SEARCH_CONFIG).limit,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.limitForVertical,
         location: this._getLocationPayload(),
         query: parsedQuery.input,
         queryId: sendQueryId && this.storage.get(StorageKeys.QUERY_ID),
@@ -237,6 +237,7 @@ export default class Core {
         offset: this.storage.get(StorageKeys.SEARCH_OFFSET) || 0,
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTriggerForApi,
+        sessionId: this.getOrSetupSessionId(),
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
         /** In the SDK a locationRadius of 0 means "unset my locationRadius" */
@@ -333,7 +334,7 @@ export default class Core {
       }
     }
 
-    this.storage.set(StorageKeys.DIRECT_ANSWER, {});
+    this.storage.set(StorageKeys.DIRECT_ANSWER, DirectAnswer.searchLoading());
     const universalResults = this.storage.get(StorageKeys.UNIVERSAL_RESULTS);
     if (!universalResults || universalResults.searchState !== SearchStates.SEARCH_LOADING) {
       this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
@@ -347,9 +348,11 @@ export default class Core {
     return this._coreLibrary
       .universalSearch({
         query: queryString,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.universalLimit,
         location: this._getLocationPayload(),
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTriggerForApi,
+        sessionId: this.getOrSetupSessionId(),
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
@@ -750,5 +753,21 @@ export default class Core {
       }
     }
     return urls;
+  }
+
+  getOrSetupSessionId () {
+    if (this.storage.get(StorageKeys.SESSIONS_OPT_IN).value) {
+      try {
+        let sessionId = window.sessionStorage.getItem('sessionId');
+        if (!sessionId) {
+          sessionId = generateUUID();
+          window.sessionStorage.setItem('sessionId', sessionId);
+        }
+        return sessionId;
+      } catch (e) {
+        console.error(e);
+      }
+    }
+    return null;
   }
 }

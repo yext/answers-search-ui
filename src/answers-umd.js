@@ -2,7 +2,6 @@
 
 import Core from './core/core';
 import cssVars from 'css-vars-ponyfill';
-
 import {
   DefaultTemplatesLoader,
   Renderers,
@@ -497,6 +496,14 @@ class Answers {
   setSessionsOptIn (optIn) {
     this.core.storage.set(
       StorageKeys.SESSIONS_OPT_IN, { value: optIn, setDynamically: true });
+  }
+
+  /**
+   * Sets the query source which is included with universal and vertical searches
+   * @param {string} source
+   */
+  setQuerySource (source) {
+    this.core.storage.set(StorageKeys.QUERY_SOURCE, source);
   }
 
   /**

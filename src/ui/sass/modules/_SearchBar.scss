@@ -107,13 +107,13 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 
   &-clear
   {
-    padding-left: calc(var(--yxt-base-spacing) / 2);
-    padding-right: calc(var(--yxt-base-spacing) / 2);
+    padding-left: calc(var(--yxt-base-spacing) * 3/4);
+    padding-right: calc(var(--yxt-base-spacing) * 3/4 );
   }
 
   &-button
   {
-    padding-left: var(--yxt-base-spacing);
+    padding-left: calc(var(--yxt-base-spacing) * 3/4);
     padding-right: var(--yxt-base-spacing);
   }
 
@@ -180,14 +180,118 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     display: flex;
   }
 
-  &-AnimatedIcon--inactive svg
+  &-Icon--inactive
   {
     display: none;
+    
+    &.yxt-SearchBar-LoadingIndicator {
+      display: block;
+      visibility: hidden;
+      width: 0;
+      position: absolute;
+    }
   }
 
-  &-AnimatedIcon--paused svg > g
+  &-LoadingIndicator
   {
-    animation-play-state: paused;
+    animation: rotate 1.4s linear infinite;
+  }
+
+  @keyframes static {
+    100% {
+      transform: rotate(360deg);
+    }
+  } 
+  
+  @keyframes rotate 
+  {
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  &-LoadingIndicator-AnimatedIcon 
+  {
+    stroke-dasharray: 208;
+    transform-origin: 50% 50%;
+    animation: dash 1.4s ease-in-out infinite;
+  }
+  
+  @keyframes dash 
+  {
+    0% {
+      stroke-dashoffset: 204;
+      transform: rotate(0deg);
+    }
+    50% {
+      stroke-dashoffset: 52;
+      transform: rotate(45deg);
+    }
+    100% {
+      stroke-dashoffset: 204;
+      transform: rotate(360deg);
+    }
+  }
+
+  &-voiceSearch
+  {
+    background-color: var(--yxt-searchbar-button-background-color-base);
+    border: none;
+    cursor: pointer;
+
+    // Hide voice search on mobile
+    @media (max-width: $breakpoint-mobile-max) {
+      display: none;
+    }
+
+    &:hover {
+      .yxt-SearchBar-mic {
+        opacity: 1;
+      }
+    }
+
+    &:focus {
+      background-color: var(--yxt-searchbar-button-background-color-hover);
+    }
+
+    .Icon svg {
+      height: 2.4em;
+      width: 2.4em;
+      fill: none;
+    }
+
+    .Icon-image {
+      width: 2.4em;
+      height: 2.4em;
+    }
+
+    // The SVGs are placed on top of each other
+    .yxt-SearchBar-micIconWrapper {
+      position: absolute;
+    }
+    .yxt-SearchBar-listeningIconWrapper {
+      position: relative;
+    }
+  }
+}
+
+// If custom icons are supplied, the SVGs simply alternate opacity
+.yxt-SearchBar-VoiceSearchCustomIcon {
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+}
+
+.yxt-SearchBar-CustomMicIcon {
+  .yxt-SearchBar-VoiceSearchCustomIcon {
+    opacity: 1;
+    transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+  }
+}
+
+.yxt-SearchBar-CustomListeningIcon {
+  .yxt-SearchBar-VoiceSearchCustomIcon {
+    opacity: 1;
+    transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
   }
 }
 

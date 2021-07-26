@@ -147,10 +147,10 @@ describe('Facets Component', () => {
     const dynamicFilters = DynamicFilters.fromCore(coreFacets);
     storage.set(StorageKeys.DYNAMIC_FILTERS, dynamicFilters);
     mount(component);
+    expect(remove).toHaveBeenCalledTimes(2);
+    storage.set(StorageKeys.DYNAMIC_FILTERS, { resultsContext: ResultsContext.NO_RESULTS });
     expect(remove).toHaveBeenCalledTimes(4);
     storage.set(StorageKeys.DYNAMIC_FILTERS, { resultsContext: ResultsContext.NO_RESULTS });
-    expect(remove).toHaveBeenCalledTimes(8);
-    storage.set(StorageKeys.DYNAMIC_FILTERS, { resultsContext: ResultsContext.NO_RESULTS });
-    expect(remove).toHaveBeenCalledTimes(8);
+    expect(remove).toHaveBeenCalledTimes(4);
   });
 });

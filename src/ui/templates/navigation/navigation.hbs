@@ -20,10 +20,9 @@
   {{#if showCollapse}}
     <div class="yxt-Nav-moreContainer">
       <button id="yxt-Nav-moreButton" class="yxt-Nav-item yxt-Nav-more yxt-Nav-item--more js-yxt-navMore">
-        <span class="yxt-Nav-moreIcon"
-        data-component="IconComponent"
-        data-opts='{"iconName": "{{overflowIcon}}"}'
-        data-prop="icon"></span>
+        <span class="yxt-Nav-moreIcon">
+          {{> icons/builtInIcon iconName=overflowIcon}}
+        </span>
         {{overflowLabel}}
       </button>
       <ul class="yxt-Nav-modal js-yxt-navModal {{#if expanded}}is-active{{/if}}"

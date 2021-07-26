@@ -3,6 +3,8 @@ import mockManager from '../../../setup/managermocker';
 import DirectAnswerComponent from '../../../../src/ui/components/results/directanswercomponent';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import { mount } from 'enzyme';
+import DirectAnswer from '../../../../src/core/models/directanswer';
+import SearchStates from '../../../../src/core/storage/searchstates';
 
 DOM.setup(document, new DOMParser());
 let COMPONENT_MANAGER, defaultConfig;
@@ -287,4 +289,17 @@ it('displays the answer correctly', () => {
   const wrapper = mount(component);
   const actualAnswer = wrapper.find('.yxt-DirectAnswer-fieldValue').text().trim();
   expect(actualAnswer).toEqual('+18003332222');
+});
+
+it('sets correct loading state css class', () => {
+  const component = COMPONENT_MANAGER.create(DirectAnswerComponent.type, defaultConfig);
+  const container = DOM.query('#test-component');
+  mount(component, { attachTo: container });
+  expect(container.classList.contains('yxt-Results--preSearch')).toBeTruthy();
+
+  component.core.storage.set(StorageKeys.DIRECT_ANSWER, DirectAnswer.searchLoading());
+  expect(container.classList.contains('yxt-Results--searchLoading')).toBeTruthy();
+
+  component.core.storage.set(StorageKeys.DIRECT_ANSWER, { searchState: SearchStates.SEARCH_COMPLETE });
+  expect(container.classList.contains('yxt-Results--searchComplete')).toBeTruthy();
 });
