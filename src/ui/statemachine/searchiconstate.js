@@ -5,13 +5,16 @@ import DOM from '../dom/dom';
  * Defines behavior for search bar icon in search state and during state transitions
  */
 export default class SearchIconState extends State {
-  constructor (controller, useCustomIcon) {
-    super('search');
+  constructor (controller, stateId, useCustomIcon) {
+    super(stateId);
     this._controller = controller;
     this._useCustomIcon = useCustomIcon;
-    this._searchIconElement = useCustomIcon
-      ? DOM.query(this._controller.searchBarContainer, '.js-yxt-SearchBar-buttonImage')
-      : DOM.query(this._controller.searchBarContainer, '.js-yxt-AnimatedForward');
+    if (useCustomIcon) {
+      this._searchIconElement = DOM.query(this._controller.searchBarContainer, '.js-yxt-SearchBar-buttonImage');
+    } else {
+      this._searchIconElement = DOM.query(this._controller.searchBarContainer, '.js-yxt-AnimatedForward');
+      this.svgWrapper = DOM.query(this._searchIconElement, '.Icon--yext_animated_forward');
+    }
   }
 
   canEnter (context) {
@@ -24,7 +27,7 @@ export default class SearchIconState extends State {
 
   _handleTransitionToMagifyingGlass () {
     this._searchIconElement.classList.remove('yxt-SearchBar-Icon--inactive');
-    DOM.query(this._searchIconElement, '.Icon--yext_animated_forward').classList.remove('yxt-SearchBar-MagnifyingGlass--static');
+    this.svgWrapper.classList.remove('yxt-SearchBar-MagnifyingGlass--static');
   }
 
   _handleTransitionToCustom () {

@@ -7,6 +7,25 @@ import DefaultIconState from '../statemachine/defaulticonstate';
 import { StateMachine } from '../statemachine/statemachine';
 
 /**
+ * Events to trigger state transitions in search bar icon state machine
+ */
+const IconEvent = {
+  SEARCH_COMPLETE: 'SEARCH_COMPLETE',
+  SUBMIT: 'SUBMIT',
+  FOCUS: 'FOCUS',
+  FOCUS_OUT: 'FOCUS_OUT'
+};
+
+/**
+ * Possible states in search bar icon state machine
+ */
+const IconState = {
+  LOADING_ICON: 'LOADING_ICON',
+  SEARCH_ICON: 'SEARCH_ICON',
+  DEFAULT_ICON: 'DEFAULT_ICON'
+};
+
+/**
  * Responsible for controlling the search bar icon behavior
  */
 export default class SearchBarIconController {
@@ -16,27 +35,25 @@ export default class SearchBarIconController {
     this.searchBarContainer = config.searchBarContainer;
     this.onMouseUp = this.oneTimeMouseUpListener.bind(this);
 
-    const IconState = {
-      LOADING: new LoadingIconState(this),
-      SEARCH: new SearchIconState(this, config.useCustomIcon),
-      DEFAULT: new DefaultIconState(this, config.useCustomIcon)
-    };
+    const loadingState = new LoadingIconState(this, IconState.LOADING_ICON);
+    const searchState = new SearchIconState(this, IconState.SEARCH_ICON, config.useCustomIcon);
+    const defaultState = new DefaultIconState(this, IconState.DEFAULT_ICON, config.useCustomIcon);
 
-    const transitions = {
-      [IconState.LOADING.id]: {
-        SEARCH_COMPLETE: IconState.DEFAULT
+    const possibleTransitions = {
+      [IconState.LOADING_ICON]: {
+        SEARCH_COMPLETE: defaultState
       },
-      [IconState.DEFAULT.id]: {
-        SUBMIT: IconState.LOADING,
-        FOCUS: IconState.SEARCH
+      [IconState.DEFAULT_ICON]: {
+        SUBMIT: loadingState,
+        FOCUS: searchState
       },
-      [IconState.SEARCH.id]: {
-        SUBMIT: IconState.LOADING,
-        FOCUS_OUT: IconState.DEFAULT
+      [IconState.SEARCH_ICON]: {
+        SUBMIT: loadingState,
+        FOCUS_OUT: defaultState
       }
     };
-    const initialIconState = config.isFocus ? IconState.SEARCH : IconState.DEFAULT;
-    this._fsm = new StateMachine(initialIconState, transitions);
+    const initialIconState = config.isFocus ? searchState : defaultState;
+    this._fsm = new StateMachine(initialIconState, possibleTransitions);
   }
 
   handleEvent (event, context) {
@@ -50,8 +67,8 @@ export default class SearchBarIconController {
       callback: results => {
         this.iconIsFrozen = false;
         results.searchState === SearchStates.SEARCH_LOADING
-          ? this.handleEvent('SUBMIT')
-          : this.handleEvent('SEARCH_COMPLETE');
+          ? this.handleEvent(IconEvent.SUBMIT)
+          : this.handleEvent(IconEvent.SEARCH_COMPLETE);
       }
     });
   }
@@ -69,10 +86,10 @@ export default class SearchBarIconController {
     }
     const queryEl = DOM.query(this.searchBarContainer, this.inputEl);
     DOM.on(queryEl, 'focus', () => {
-      this.handleEvent('FOCUS');
+      this.handleEvent(IconEvent.FOCUS);
     });
     DOM.on(this.searchBarContainer, 'focusout', e => {
-      this.handleEvent('FOCUS_OUT', e);
+      this.handleEvent(IconEvent.FOCUS_OUT, e);
     });
   }
 

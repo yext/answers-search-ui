@@ -3,16 +3,19 @@ import LoadingIconState from './loadingiconstate';
 import DOM from '../dom/dom';
 
 /**
- * Defines behavior for search bar icon in default state and during state transitions
+ * Defines behavior for search bar icon in default state (Yext logo) and during state transitions
  */
 export default class DefaultIconState extends State {
-  constructor (controller, useCustomIcon) {
-    super('default');
+  constructor (controller, stateId, useCustomIcon) {
+    super(stateId);
     this._controller = controller;
     this._useCustomIcon = useCustomIcon;
-    this._defaultIconElement = useCustomIcon
-      ? DOM.query(this._controller.searchBarContainer, '.js-yxt-SearchBar-buttonImage')
-      : DOM.query(this._controller.searchBarContainer, '.js-yxt-AnimatedReverse');
+    if (useCustomIcon) {
+      this._defaultIconElement = DOM.query(this._controller.searchBarContainer, '.js-yxt-SearchBar-buttonImage');
+    } else {
+      this._defaultIconElement = DOM.query(this._controller.searchBarContainer, '.js-yxt-AnimatedReverse');
+      this.svgWrapper = DOM.query(this._defaultIconElement, '.Icon--yext_animated_reverse');
+    }
   }
 
   canEnter (e) {
@@ -29,10 +32,9 @@ export default class DefaultIconState extends State {
 
   _handleTransitionToYext (prevState) {
     this._defaultIconElement.classList.remove('yxt-SearchBar-Icon--inactive');
-    const svgWrapper = DOM.query(this._defaultIconElement, '.Icon--yext_animated_reverse');
     prevState instanceof LoadingIconState
-      ? svgWrapper.classList.add('yxt-SearchBar-Yext--static')
-      : svgWrapper.classList.remove('yxt-SearchBar-Yext--static');
+      ? this.svgWrapper.classList.add('yxt-SearchBar-Yext--static')
+      : this.svgWrapper.classList.remove('yxt-SearchBar-Yext--static');
   }
 
   _handleTransitionToCustom () {

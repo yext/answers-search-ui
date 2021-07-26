@@ -1,3 +1,7 @@
+/**
+ * Defines a status of a system, including entry and exit behaviors and
+ * any related data and actions during this state.
+ */
 export class State {
   constructor (id) {
     this.id = id;
