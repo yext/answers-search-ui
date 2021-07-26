@@ -94,7 +94,7 @@ export default class SpeechRecognizer {
     if (event.error === 'service-not-allowed') {
       window.alert(
         TranslationFlagger.flag({ phrase: 'Speech Recognition is not available.' }) + '\n' +
-        TranslationFlagger.flag({ phrase: 'Siri must be enabled for support on Safari.' })
+        TranslationFlagger.flag({ phrase: 'Note: For Safari users, Siri must be enabled' })
       );
     } else {
       console.warn(event);
