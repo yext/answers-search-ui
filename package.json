@@ -102,8 +102,7 @@
     "testcafe": "^1.15.0",
     "testcafe-browser-provider-browserstack": "^1.13.0",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0",
-    "yargs": "^17.0.1"
+    "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
     "build": "gulp && size-limit",
@@ -113,7 +112,7 @@
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "eslint .",
     "test": "eslint . && stylelint src/**/*.scss && jest",
-    "acceptance": "node ./tests/acceptance/index.js",
+    "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuites/*.js -q --app \"npx serve -l tcp://0.0.0.0:9999\" --app-init-delay 4000",
     "size": "size-limit",
     "fix": "eslint . --fix",
     "extract-translations": "gulp extractTranslations",
