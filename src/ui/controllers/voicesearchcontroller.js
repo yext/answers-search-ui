@@ -18,19 +18,13 @@ export default class VoiceSearchController {
      * The screen reader text for the "Start Voice Search" button
      * @type {string}
      */
-    this._startVoiceSearchText = config.startText || TranslationFlagger.flag({
-      phrase: 'Start Voice Search',
-      context: 'A button to begin listening for a voice search'
-    });
+    this._startVoiceSearchText = config.startText || 'Start Voice Search';
 
     /**
      * The screen reader text for the "Stop Voice Search" button
      * @type {string}
      */
-    this._stopVoiceSearchText = config.stopText || TranslationFlagger.flag({
-      phrase: 'Stop Voice Search',
-      context: 'A button to stop listening for a voice search'
-    });
+    this._stopVoiceSearchText = config.stopText || 'Stop Voice Search';
 
     this._searchBarContainer = searchBarContainer;
     this._voiceSearchElement = DOM.query(searchBarContainer, '.yxt-SearchBar-voiceSearch');

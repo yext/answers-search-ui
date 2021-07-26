@@ -180,16 +180,6 @@ msgstr ""
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
 msgstr ""
 
-#: src/ui/controllers/voicesearchcontroller.js:21
-msgctxt "A button to begin listening for a voice search"
-msgid "Start Voice Search"
-msgstr ""
-
-#: src/ui/controllers/voicesearchcontroller.js:30
-msgctxt "A button to stop listening for a voice search"
-msgid "Stop Voice Search"
-msgstr ""
-
 #: src/ui/components/filters/daterangefiltercomponent.js:228
 msgctxt "After a date. Example: After [August 15th]"
 msgid "After [[date]]"
