@@ -1,12 +1,12 @@
 import UniversalPage from '../pageobjects/universalpage';
 import VerticalPage from '../pageobjects/verticalpage';
 import {
-  setupServer,
-  shutdownServer,
   UNIVERSAL_PAGE,
   FACETS_PAGE,
-  VERTICAL_PAGE
-} from '../server';
+  VERTICAL_PAGE,
+  UNIVERSAL_SEARCH_URL_REGEX,
+  VERTICAL_SEARCH_URL_REGEX
+} from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
 import {
@@ -16,7 +16,6 @@ import {
 } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 import SearchRequestLogger from '../searchrequestlogger';
-import { UNIVERSAL_SEARCH_URL_REGEX, VERTICAL_SEARCH_URL_REGEX } from '../constants';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -30,8 +29,6 @@ fixture`Universal search page works as expected`
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, UNIVERSAL_SEARCH_URL_REGEX);
   })
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${UNIVERSAL_PAGE}`;
 
 test('Basic universal flow', async t => {
@@ -56,8 +53,6 @@ fixture`Vertical search page works as expected`
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${VERTICAL_PAGE}`;
 
 test('pagination flow', async t => {
@@ -139,8 +134,6 @@ fixture`Facets page`
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('Facets load on the page, and can affect the search', async t => {
@@ -212,8 +205,6 @@ test('selecting a sort option and refreshing maintains that sort selection', asy
 });
 
 fixture`Experience links work as expected`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('experience links are clean', async t => {
@@ -292,8 +283,6 @@ test('experience links are clean', async t => {
 });
 
 fixture`Performance marks on search`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('window.performance calls are marked for a normal search', async t => {
@@ -326,8 +315,6 @@ test('window.performance calls are marked for a normal search', async t => {
 });
 
 fixture`W3C Accessibility standards are met`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('Sort options focus state works', async t => {

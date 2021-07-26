@@ -10,7 +10,7 @@ if [[ $CIRCLE_BRANCH == release/*
   || $CIRCLE_BRANCH == master
   || $CIRCLE_BRANCH == support* ]]
 then
-  npx testcafe "browserstack:ie@11.0,browserstack:chrome,browserstack:safari,browserstack:firefox" tests/acceptance/acceptancesuites/*.js -q
+  npm run acceptance -- --browsers browserstack:ie@11.0 browserstack:safari browserstack:firefox browserstack:chrome
 else
-  npx testcafe -c 2 "browserstack:ie@11.0,browserstack:chrome" tests/acceptance/acceptancesuites/*.js -q
+  npm run acceptance -- --browsers browserstack:ie@11.0 browserstack:chrome --concurrency 2
 fi

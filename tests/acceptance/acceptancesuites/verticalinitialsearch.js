@@ -1,15 +1,11 @@
 import {
-  setupServer,
-  shutdownServer,
   FILTERBOX_PAGE
-} from '../server';
+} from '../constants';
 import { Selector } from 'testcafe';
 import { getCurrentUrlParams } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 fixture`Vertical page with default initial search`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FILTERBOX_PAGE}`;
 
 test('referrerPageUrl is added to the URL on default initial searches', async t => {

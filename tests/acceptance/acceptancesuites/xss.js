@@ -1,16 +1,12 @@
 import {
-  setupServer,
-  shutdownServer,
   UNIVERSAL_PAGE,
   VERTICAL_PAGE
-} from '../server';
+} from '../constants';
 import { ClientFunction } from 'testcafe';
 import UniversalPage from '../pageobjects/universalpage';
 import VerticalPage from '../pageobjects/verticalpage';
 
 fixture`Universal page`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${UNIVERSAL_PAGE}`;
 
 test('a universal page\'s search bar is protected against xss', async t => {
@@ -24,8 +20,6 @@ test('a universal page\'s search bar is protected against xss', async t => {
 });
 
 fixture`Vertical page`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${VERTICAL_PAGE}`;
 
 test('a vertical page\'s search bar is protected against xss', async t => {
