@@ -233,11 +233,6 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     }
   }
 
-  &-voiceIconWrapper
-  {
-    width: 32px;
-  }
-
   &-voiceSearch
   {
     background-color: var(--yxt-searchbar-button-background-color-base);
@@ -259,17 +254,6 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 
     &:focus {
       background-color: var(--yxt-searchbar-button-background-color-hover);
-    }
-
-    .Icon svg {
-      height: 2.4em;
-      width: 2.4em;
-      fill: none;
-    }
-
-    .Icon-image {
-      width: 2.4em;
-      height: 2.4em;
     }
 
     // The SVGs are placed on top of each other

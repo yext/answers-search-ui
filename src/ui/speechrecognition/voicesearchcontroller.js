@@ -144,7 +144,8 @@ export default class VoiceSearchController {
       type: 'VOICE_START',
       businessId: this._searchComponent.analyticsReporter._businessId,
       timestamp: new Date().getTime(),
-      voiceSessionId: this._voiceSessionId
+      voiceSessionId: this._voiceSessionId,
+      queryId: null
     });
     this._searchComponent.analyticsReporter.report(analyticsEvent);
   }
@@ -160,7 +161,8 @@ export default class VoiceSearchController {
       type: 'VOICE_STOP',
       businessId: this._searchComponent.analyticsReporter._businessId,
       timestamp: new Date().getTime(),
-      voiceSessionId: this._voiceSessionId
+      voiceSessionId: this._voiceSessionId,
+      queryId: null
     });
     this._searchComponent.analyticsReporter.report(analyticsEvent);
   }
