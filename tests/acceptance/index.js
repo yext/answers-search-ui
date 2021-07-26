@@ -22,7 +22,7 @@ const argv = yargs
   .parse();
 
 console.log('run tests....');
-runTests(argv.browsers, argv.concurrency);
+// runTests(argv.browsers, argv.concurrency);
 
 /**
  * Run the acceptance tests
