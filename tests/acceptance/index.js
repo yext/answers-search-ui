@@ -21,6 +21,7 @@ const argv = yargs
   .alias('help', 'h')
   .parse();
 
+console.log('run tests....');
 runTests(argv.browsers, argv.concurrency);
 
 /**
@@ -32,6 +33,7 @@ runTests(argv.browsers, argv.concurrency);
 async function runTests (browsers, concurrency) {
   const testcafe = await createTestCafe();
   try {
+    console.log('create runner....');
     const numberTestsFailed = await testcafe.createRunner()
       .src('tests/acceptance/acceptancesuites/*.js')
       .browsers(browsers)
@@ -40,13 +42,17 @@ async function runTests (browsers, concurrency) {
       .run({ quarantineMode: true });
     if (numberTestsFailed > 0) {
       await testcafe.close();
+      console.log('exit ONE....');
       process.exit(1);
     }
   } catch (e) {
     console.error(e);
+    console.log('exit TWO....');
     await testcafe.close();
     process.exit(1);
   } finally {
+    console.log('exit THREE....');
     await testcafe.close();
   }
+  console.log('DONE....');
 }
