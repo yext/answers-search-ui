@@ -83,7 +83,7 @@ export default class AnalyticsReporter {
   }
 
   /** @inheritdoc */
-  report (event) {
+  report (event, includeQueryId = true) {
     if (!this._analyticsEventsEnabled) {
       return false;
     }
@@ -99,7 +99,14 @@ export default class AnalyticsReporter {
       throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
     }
 
-    event.addOptions(this._globalOptions);
+    if (includeQueryId) {
+      event.addOptions(this._globalOptions);
+    } else {
+      event.addOptions({
+        ...this._globalOptions,
+        queryId: undefined
+      });
+    }
 
     return new HttpRequester().beacon(
       `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,

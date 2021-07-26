@@ -16,11 +16,6 @@ export default class AnalyticsEvent {
     if (label) {
       this.label = label;
     }
-
-    /**
-     * Whether or not queryId should be included with the event
-     */
-    this.includeQueryId = true;
   }
 
   /**
@@ -29,9 +24,6 @@ export default class AnalyticsEvent {
    */
   addOptions (options) {
     Object.assign(this, options);
-    if (this.includeQueryId === false) {
-      Object.assign(this, { queryId: undefined });
-    }
     return this;
   }
 
@@ -50,9 +42,6 @@ export default class AnalyticsEvent {
     const { type, label, ...eventOptions } = data;
     const analyticsEvent = new AnalyticsEvent(type, label);
     analyticsEvent.addOptions(eventOptions);
-    if (eventOptions.queryId === null) {
-      analyticsEvent.includeQueryId = false;
-    }
     return analyticsEvent;
   }
 }
