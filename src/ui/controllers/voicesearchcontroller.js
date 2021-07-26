@@ -1,5 +1,4 @@
 import DOM from '../dom/dom';
-import TranslationFlagger from '../i18n/translationflagger';
 
 const State = {
   NOT_LISTENING: 'not-listening',
