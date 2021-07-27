@@ -69,8 +69,8 @@ export default class VoiceSearchController {
       });
     } else if (this._state === State.LISTENING) {
       this._enterNotListeningState();
-      return Promise.resolve();
     }
+    return Promise.resolve();
   }
 
   /**

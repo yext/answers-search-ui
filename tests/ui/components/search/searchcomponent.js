@@ -171,11 +171,8 @@ describe('SearchBar component', () => {
     });
 
     afterEach(() => {
-      windowSpy.mockRestore();
-      navigatorSpy.mockRestore();
-      Object.values(webkitSpeechRecognitionMock).forEach(value => {
-        (typeof value === 'function') && value._isMockFunction && value.mockClear();
-      });
+      jest.restoreAllMocks();
+      jest.clearAllMocks();
     });
 
     it('submitVoiceQuery sets QUERY_TRIGGER to VOICE_SEARCH', () => {
@@ -190,7 +187,7 @@ describe('SearchBar component', () => {
       expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.VOICE_SEARCH);
     });
 
-    it('Clicking the voice search button starts voice search', async () => {
+    it('Clicking the voice search button starts and stops voice search', async () => {
       const component = COMPONENT_MANAGER.create('SearchBar', {
         ...defaultConfig,
         voiceSearch: {
@@ -198,20 +195,11 @@ describe('SearchBar component', () => {
         }
       });
       mount(component);
+      expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(0);
+      expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(0);
       await component._voiceSearchController.handleIconClick();
       expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(1);
       expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(0);
-    });
-
-    it('Clicking the voice search button twice starts then stops voice search', async () => {
-      const component = COMPONENT_MANAGER.create('SearchBar', {
-        ...defaultConfig,
-        voiceSearch: {
-          enabled: true
-        }
-      });
-      mount(component);
-      await component._voiceSearchController.handleIconClick();
       await component._voiceSearchController.handleIconClick();
       expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(1);
       expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(1);
