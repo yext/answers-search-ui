@@ -5,14 +5,14 @@ export BROWSERSTACK_BUILD_ID="${CIRCLE_BRANCH} - ${CIRCLE_BUILD_NUM}"
 COMMIT_MSG_TITLE=$(git log -n 1 --pretty=format:%s)
 export BROWSERSTACK_TEST_RUN_NAME=$COMMIT_MSG_TITLE
 
-. $(dirname $0)/testcafe_config
+CONFIG_FILE=$(dirname $0)/testcafe.json
 
 if [[ $CIRCLE_BRANCH == release/*
   || $CIRCLE_BRANCH == hotfix/*
   || $CIRCLE_BRANCH == master
   || $CIRCLE_BRANCH == support* ]]
 then
-  npx testcafe "browserstack:ie@11.0,browserstack:safari" $TEST_FILES -q --app "$APP_INIT" --app-init-delay $APP_INIT_DELAY
+  npx testcafe "browserstack:ie@11.0,browserstack:safari" --config-file $CONFIG_FILE
 else
-  npx testcafe -c 2 "browserstack:ie@11.0" $TEST_FILES -q --app "$APP_INIT" --app-init-delay $APP_INIT_DELAY
+  npx testcafe -c 2 "browserstack:ie@11.0" --config-file $CONFIG_FILE
 fi

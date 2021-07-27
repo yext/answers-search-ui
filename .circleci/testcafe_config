@@ -1,3 +1,0 @@
-TEST_FILES="tests/acceptance/acceptancesuites/*.js"
-APP_INIT='npx serve -l tcp://0.0.0.0:9999'
-APP_INIT_DELAY=4000

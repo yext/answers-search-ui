@@ -1,12 +1,13 @@
 #!/bin/bash
-. $(dirname $0)/testcafe_config
+
+CONFIG_FILE=$(dirname $0)/testcafe.json
 
 if [[ $CIRCLE_BRANCH == release/*
   || $CIRCLE_BRANCH == hotfix/*
   || $CIRCLE_BRANCH == master
   || $CIRCLE_BRANCH == support* ]]
 then
-  npx testcafe -c 3 "chrome:headless,firefox:headless" $TEST_FILES -q --app "$APP_INIT" --app-init-delay $APP_INIT_DELAY
+  npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file $CONFIG_FILE
 else
-  npx testcafe -c 3 "chrome:headless" $TEST_FILES -q --app "$APP_INIT" --app-init-delay $APP_INIT_DELAY
+  npx testcafe -c 3 "chrome:headless" --config-file $CONFIG_FILE
 fi
