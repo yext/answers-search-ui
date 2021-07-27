@@ -149,11 +149,8 @@ describe('SearchBar component', () => {
       })
     };
 
-    let windowSpy;
-    let navigatorSpy;
-
     beforeEach(() => {
-      windowSpy = jest.spyOn(global, 'window', 'get').mockImplementation(() => ({
+      jest.spyOn(global, 'window', 'get').mockImplementation(() => ({
         webkitSpeechRecognition: () => webkitSpeechRecognitionMock,
         location: {
           search: {
@@ -161,7 +158,7 @@ describe('SearchBar component', () => {
           }
         }
       }));
-      navigatorSpy = jest.spyOn(global, 'navigator', 'get').mockImplementation(() => ({
+      jest.spyOn(global, 'navigator', 'get').mockImplementation(() => ({
         mediaDevices: {
           getUserMedia: () => Promise.resolve({
             getTracks: () => ([{ stop: jest.fn() }])
