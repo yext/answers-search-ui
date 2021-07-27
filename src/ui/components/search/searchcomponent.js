@@ -7,7 +7,7 @@ import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
 import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistener';
 import QueryTriggers from '../../../core/models/querytriggers';
-import VoiceSearchController from '../../controllers/voicesearchcontroller';
+import VoiceSearchController from '../../speechrecognition/voicesearchcontroller';
 import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 import SearchBarIconController from '../../controllers/searchbariconcontroller';
 
