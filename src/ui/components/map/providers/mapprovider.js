@@ -97,6 +97,12 @@ export default class MapProvider {
      * @type {string}
      */
     this._locale = this._getValidatedLocale(config.locale);
+
+    /**
+     * Map options to be passed directly to the Map Provider
+     * @type {Object}
+     */
+    this._providerOptions = config.providerOptions || {};
   }
 
   /**

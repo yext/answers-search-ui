@@ -2055,6 +2055,11 @@ ANSWERS.addComponent('Map', {
       labelType: 'numeric'
     };
   },
+  // Optional, an object which contains options which are passed directly to the specified mapProvider.
+  // Refer to the map option api reference for the specified map provider
+  providerOptions: {
+    style: 'mapbox://styles/mapbox/light-v9' // Specifies a custom style for mapbox
+  }
 };
 ```
 
