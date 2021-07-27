@@ -111,7 +111,8 @@ export default class GoogleMapProvider extends MapProvider {
       const container = DOM.query(el);
       this.map = new google.maps.Map(container, {
         zoom: this._zoom,
-        center: this.getCenterMarker(mapData)
+        center: this.getCenterMarker(mapData),
+        ...this._providerOptions
       });
 
       // Apply our search data to our GoogleMap

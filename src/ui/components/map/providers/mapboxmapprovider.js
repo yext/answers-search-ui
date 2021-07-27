@@ -67,7 +67,8 @@ export default class MapBoxMapProvider extends MapProvider {
       container: container,
       zoom: this._zoom,
       style: 'mapbox://styles/mapbox/streets-v9',
-      center: this.getCenterMarker(mapData)
+      center: this.getCenterMarker(mapData),
+      ...this._providerOptions
     });
 
     this._map.addControl(new MapboxLanguage({

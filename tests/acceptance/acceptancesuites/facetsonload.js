@@ -1,8 +1,4 @@
-import {
-  setupServer,
-  shutdownServer,
-  FACETS_ON_LOAD_PAGE
-} from '../server';
+import { FACETS_ON_LOAD_PAGE, VERTICAL_SEARCH_URL_REGEX } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { RequestLogger } from 'testcafe';
 import {
@@ -12,11 +8,8 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
-import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
 
 fixture`Facets page`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_ON_LOAD_PAGE}`;
 
 test('Facets work with back/forward navigation and page refresh', async t => {

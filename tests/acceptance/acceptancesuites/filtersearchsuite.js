@@ -1,8 +1,4 @@
-import {
-  setupServer,
-  shutdownServer,
-  FACETS_PAGE
-} from '../server';
+import { FACETS_PAGE, VERTICAL_SEARCH_URL_REGEX } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector } from 'testcafe';
 import {
@@ -12,15 +8,12 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
-import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
 
 fixture`Facets page`
   .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('filtersearch works with back/forward navigation and page refresh', async t => {
