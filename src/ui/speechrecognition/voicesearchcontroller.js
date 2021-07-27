@@ -50,12 +50,15 @@ export default class VoiceSearchController {
     this._speechRecognizer.onError(this._enterNotListeningState.bind(this));
   }
 
+  /**
+   * @returns {Promise} Resolves when the click has been handled
+   */
   handleIconClick () {
     // Blur so that the focus state isn't maintained after clicking
     this._voiceSearchElement.blur();
 
     if (this._state === State.NOT_LISTENING) {
-      this._hasMicAccess().then(hasMicAccess => {
+      return this._hasMicAccess().then(hasMicAccess => {
         if (hasMicAccess) {
           this._enterListeningState();
         } else {
@@ -66,6 +69,7 @@ export default class VoiceSearchController {
       });
     } else if (this._state === State.LISTENING) {
       this._enterNotListeningState();
+      return Promise.resolve();
     }
   }
 

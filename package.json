@@ -112,6 +112,7 @@
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "eslint .",
     "test": "eslint . && stylelint src/**/*.scss && jest",
+    "jest": "jest",
     "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuites/*.js",
     "size": "size-limit",
     "fix": "eslint . --fix",
