@@ -114,7 +114,7 @@ describe('reporting events', () => {
     const expectedEvent = AnalyticsEvent.fromData({
       type: 'VOICE_STOP'
     });
-    analyticsReporter.report(expectedEvent, false);
+    analyticsReporter.report(expectedEvent, { includeQueryId: false });
 
     expect(mockedBeacon).toBeCalledTimes(1);
     expect(mockedBeacon).toBeCalledWith(

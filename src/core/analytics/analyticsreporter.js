@@ -82,8 +82,13 @@ export default class AnalyticsReporter {
     this._analyticsEventsEnabled = analyticsEventsEnabled;
   }
 
-  /** @inheritdoc */
-  report (event, includeQueryId = true) {
+  /**
+   * Reports an analytics event
+   * @param {AnalyticsEvent} event The event to send
+   * @param {Object} options
+   * @returns {boolean} true if the request was successful
+   */
+  report (event, { includeQueryId = true } = {}) {
     if (!this._analyticsEventsEnabled) {
       return false;
     }

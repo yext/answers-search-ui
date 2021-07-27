@@ -146,7 +146,7 @@ export default class VoiceSearchController {
       timestamp: new Date().getTime(),
       voiceSessionId: this._voiceSessionId
     });
-    this._searchComponent.analyticsReporter.report(analyticsEvent, false);
+    this._searchComponent.analyticsReporter.report(analyticsEvent, { includeQueryId: false });
   }
 
   /**
@@ -162,6 +162,6 @@ export default class VoiceSearchController {
       timestamp: new Date().getTime(),
       voiceSessionId: this._voiceSessionId
     });
-    this._searchComponent.analyticsReporter.report(analyticsEvent, false);
+    this._searchComponent.analyticsReporter.report(analyticsEvent, { includeQueryId: false });
   }
 }
