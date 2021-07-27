@@ -1,7 +1,4 @@
-import {
-  FACETS_PAGE,
-  VERTICAL_SEARCH_URL_REGEX
-} from '../constants';
+import { FACETS_PAGE, VERTICAL_SEARCH_URL_REGEX } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector } from 'testcafe';
 import {

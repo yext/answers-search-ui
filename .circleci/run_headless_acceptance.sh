@@ -1,12 +1,12 @@
 #!/bin/bash
+. $(dirname $0)/testcafe_config
+
 if [[ $CIRCLE_BRANCH == release/*
   || $CIRCLE_BRANCH == hotfix/*
   || $CIRCLE_BRANCH == master
   || $CIRCLE_BRANCH == support* ]]
 then
-  npx testcafe -c 3 "chrome:headless,firefox:headless" tests/acceptance/acceptancesuites/*.js \
-  -q --app "npx serve -l tcp://0.0.0.0:9999" --app-init-delay 4000
+  npx testcafe -c 3 "chrome:headless,firefox:headless" $TEST_FILES -q --app "$APP_INIT" --app-init-delay $APP_INIT_DELAY
 else
-  npx testcafe -c 3 "chrome:headless" tests/acceptance/acceptancesuites/*.js \
-  -q --app "npx serve -l tcp://0.0.0.0:9999" --app-init-delay 4000
+  npx testcafe -c 3 "chrome:headless" $TEST_FILES -q --app "$APP_INIT" --app-init-delay $APP_INIT_DELAY
 fi

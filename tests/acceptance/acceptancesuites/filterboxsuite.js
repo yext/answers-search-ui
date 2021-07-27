@@ -1,7 +1,4 @@
-import {
-  FILTERBOX_PAGE,
-  VERTICAL_SEARCH_URL_REGEX
-} from '../constants';
+import { FILTERBOX_PAGE, VERTICAL_SEARCH_URL_REGEX } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
 import {

@@ -1,6 +1,4 @@
-import {
-  FILTERBOX_PAGE
-} from '../constants';
+import { FILTERBOX_PAGE } from '../constants';
 import { Selector } from 'testcafe';
 import { getCurrentUrlParams } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';

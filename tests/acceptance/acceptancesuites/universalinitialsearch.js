@@ -1,6 +1,4 @@
-import {
-  UNIVERSAL_INITIAL_SEARCH_PAGE
-} from '../constants';
+import { UNIVERSAL_INITIAL_SEARCH_PAGE } from '../constants';
 import { Selector } from 'testcafe';
 import { getCurrentUrlParams } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
