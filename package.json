@@ -112,7 +112,7 @@
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "eslint .",
     "test": "eslint . && stylelint src/**/*.scss && jest",
-    "acceptance": "testcafe safari,chrome tests/acceptance/acceptancesuites/*.js -q --app \"npx serve -l tcp://0.0.0.0:9999\" --app-init-delay 4000",
+    "acceptance": "testcafe safari,chrome --config-file ./.circleci/testcafe.json",
     "size": "size-limit",
     "fix": "eslint . --fix",
     "extract-translations": "gulp extractTranslations",
