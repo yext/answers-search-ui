@@ -1,15 +1,9 @@
-import {
-  setupServer,
-  shutdownServer,
-  UNIVERSAL_INITIAL_SEARCH_PAGE
-} from '../server';
+import { UNIVERSAL_INITIAL_SEARCH_PAGE } from '../constants';
 import { Selector } from 'testcafe';
 import { getCurrentUrlParams } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 
 fixture`Universal page with default initial search`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${UNIVERSAL_INITIAL_SEARCH_PAGE}`;
 
 test('blank defaultInitialSearch will fire on universal if allowEmptySearch is true', async t => {

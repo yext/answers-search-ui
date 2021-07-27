@@ -9,6 +9,7 @@ import ResponseWithResults from '../../fixtures/responseWithResults.json';
 import ResponseWithoutResults from '../../fixtures/responseWithNoResults.json';
 import ResultsContext from '../../../src/core/storage/resultscontext';
 import AlternativeVerticals from '../../../src/core/models/alternativeverticals';
+import DirectAnswer from '../../../src/core/models/directanswer';
 
 describe('tranform vertical search response', () => {
   let response;
@@ -22,10 +23,13 @@ describe('tranform vertical search response', () => {
   it('transforms vertical response correctly with results', () => {
     const data = response;
     const result = SearchDataTransformer.transformVertical(data);
+    const formatters = {};
+
     expect(result).toEqual(
       {
         [StorageKeys.QUERY_ID]: data.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
+        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(data.verticalResults, {}, {}, ResultsContext.NORMAL),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(data.facets, ResultsContext.NORMAL),
         [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
@@ -39,10 +43,13 @@ describe('tranform vertical search response', () => {
     const data = responseWithNoResults;
     const result = SearchDataTransformer.transformVertical(data);
     const convertedResponse = SearchDataTransformer._reshapeForNoResults(data);
+    const formatters = {};
+
     expect(result).toEqual(
       {
         [StorageKeys.QUERY_ID]: convertedResponse.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
+        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
           convertedResponse.verticalResults, {}, {}, ResultsContext.NO_RESULTS),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(convertedResponse.facets, ResultsContext.NO_RESULTS),
@@ -100,6 +107,23 @@ describe('forming no results response', () => {
           }
         ]
       },
+      directAnswer: {
+        type: 'FEATURED_SNIPPET',
+        relatedResult: {
+          rawData: {},
+          source: 'KNOWLEDGE_MANAGER'
+        },
+        verticalKey: 'help_articles',
+        snippet: {
+          value: 'Lorem ipsum dolor sit amet.\n consectetur adipiscing elit.',
+          matchedSubstrings: [
+            {
+              offset: 0,
+              length: 10
+            }
+          ]
+        }
+      },
       appliedQueryFilters: []
     };
   });
@@ -116,6 +140,7 @@ describe('forming no results response', () => {
       results: [],
       resultsCount: 0,
       allResultsForVertical: [],
+      directAnswer: {},
       appliedQueryFilters: []
     };
     const convertedResponse = SearchDataTransformer._reshapeForNoResults(responseEmptyResults);
@@ -125,6 +150,7 @@ describe('forming no results response', () => {
       facets: undefined,
       resultsCount: 0,
       allResultsForVertical: [],
+      directAnswer: {},
       appliedQueryFilters: []
     });
   });
@@ -133,6 +159,7 @@ describe('forming no results response', () => {
     const responseEmptyResults = {
       results: [],
       resultsCount: 0,
+      directAnswer: {},
       appliedQueryFilters: []
     };
     const convertedResponse = SearchDataTransformer._reshapeForNoResults(responseEmptyResults);
@@ -141,6 +168,7 @@ describe('forming no results response', () => {
       results: [],
       facets: undefined,
       resultsCount: 0,
+      directAnswer: {},
       appliedQueryFilters: []
     });
   });

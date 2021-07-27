@@ -7,16 +7,9 @@ import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
 import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistener';
 import QueryTriggers from '../../../core/models/querytriggers';
-import SearchStates from '../../../core/storage/searchstates';
 import VoiceSearchController from '../../speechrecognition/voicesearchcontroller';
 import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
-
-const IconState = {
-  LOADING: '.js-yxt-SearchBar-LoadingIndicator',
-  CUSTOM_ICON: '.js-yxt-SearchBar-buttonImage',
-  YEXT: '.js-yxt-AnimatedReverse',
-  MAGNIFYING_GLASS: '.js-yxt-AnimatedForward'
-};
+import SearchBarIconController from '../../controllers/searchbariconcontroller';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -296,21 +289,7 @@ export default class SearchComponent extends Component {
      * Custom icon url for loading indicator
      * @type {string}
      */
-    this.customLoadingIconUrl = config.loadingIndicator?.iconUrl || null;
-
-    if (this._showLoadingIndicator) {
-      this.core.storage.registerListener({
-        eventType: 'update',
-        storageKey: this._verticalKey ? StorageKeys.VERTICAL_RESULTS : StorageKeys.UNIVERSAL_RESULTS,
-        callback: results => {
-          results.searchState === SearchStates.SEARCH_LOADING
-            ? this.animateIconToLoading()
-            : this.animateIconToDoneLoading();
-        }
-      });
-    }
-
-    this.onMouseUp = this.oneTimeMouseUpListener.bind(this);
+    this._customLoadingIconUrl = config.loadingIndicator?.iconUrl || null;
 
     this._voiceSearchConfig = config.voiceSearch || {};
 
@@ -381,8 +360,7 @@ export default class SearchComponent extends Component {
       this.focusInputElement();
     }
 
-    this.isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
-    this.isUsingYextAnimatedIcon ? this.initAnimatedIcon() : this.iconState = IconState.CUSTOM_ICON;
+    this.initSearchBarIconController();
 
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
@@ -406,93 +384,20 @@ export default class SearchComponent extends Component {
     }
   }
 
-  requestIconAnimationFrame (iconState) {
-    if (this.iconState === iconState) {
-      return;
+  initSearchBarIconController () {
+    const config = {
+      useCustomIcon: this._config.customIconUrl || this.submitIcon,
+      isFocus: this.autoFocus && !this.query,
+      searchBarContainer: this._container,
+      inputEl: this._inputEl
+    };
+    this.searchBarIconController = new SearchBarIconController(config);
+    if (this._showLoadingIndicator) {
+      this.searchBarIconController.setupLoadingIconEvents(this.core.storage, this._verticalKey);
     }
-    if (this.animationID) {
-      window.cancelAnimationFrame(this.animationID);
+    if (!config.useCustomIcon) {
+      this.searchBarIconController.setupAnimatedIconEvents();
     }
-    this.animationID = window.requestAnimationFrame(() => {
-      this.prevState = this.iconState;
-      this.iconState = iconState;
-      DOM.query(this._container, this.prevState).classList.add('yxt-SearchBar-Icon--inactive');
-      const activeIcon = DOM.query(this._container, this.iconState);
-      activeIcon.classList.remove('yxt-SearchBar-Icon--inactive');
-      if (this.iconState === IconState.MAGNIFYING_GLASS) {
-        DOM.query(activeIcon, '.Icon--yext_animated_forward').classList.remove('yxt-SearchBar-MagnifyingGlass--static');
-      }
-      if (this.iconState === IconState.YEXT) {
-        DOM.query(activeIcon, '.Icon--yext_animated_reverse').classList.remove('yxt-SearchBar-Yext--static');
-      }
-
-      // Static yext icon is used after loading to avoid unecessary transition from magnifying glass to yext.
-      if (this.iconState === IconState.YEXT) {
-        const yextIconEl = DOM.query(activeIcon, '.Icon--yext_animated_reverse');
-        this.prevState === IconState.LOADING
-          ? yextIconEl.classList.add('yxt-SearchBar-Yext--static')
-          : yextIconEl.classList.remove('yxt-SearchBar-Yext--static');
-      }
-      this.animationID = null;
-    });
-  }
-
-  animateIconToLoading () {
-    this.requestIconAnimationFrame(IconState.LOADING);
-  }
-
-  animateIconToDoneLoading () {
-    this.iconIsFrozen = false;
-    if (this.isUsingYextAnimatedIcon) {
-      this.queryEl === document.activeElement
-        ? this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS)
-        : this.requestIconAnimationFrame(IconState.YEXT);
-    } else {
-      this.requestIconAnimationFrame(IconState.CUSTOM_ICON);
-    }
-  }
-
-  animateIconToMagnifyingGlass () {
-    if (this.iconState === IconState.LOADING || this.iconIsFrozen) {
-      return;
-    }
-    this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS);
-  }
-
-  animateIconToYext (e) {
-    let focusStillInSearchbar = false;
-    if (e && e.relatedTarget) {
-      focusStillInSearchbar = this._container.contains(e.relatedTarget);
-    }
-    if (this.iconState === IconState.LOADING || this.iconIsFrozen || focusStillInSearchbar) {
-      return;
-    }
-    this.requestIconAnimationFrame(IconState.YEXT);
-  }
-
-  oneTimeMouseUpListener () {
-    document.removeEventListener('mouseup', this.onMouseUp);
-    this.iconIsFrozen = false;
-  }
-
-  initAnimatedIcon () {
-    this.iconState = (this.autoFocus && !this.query) ? IconState.MAGNIFYING_GLASS : IconState.YEXT;
-    const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
-    for (const selector of clickableElementSelectors) {
-      const clickableEl = DOM.query(this._container, selector);
-      if (clickableEl) {
-        DOM.on(clickableEl, 'mousedown', () => {
-          this.iconIsFrozen = true;
-          DOM.on(document, 'mouseup', this.onMouseUp);
-        });
-      }
-    }
-    DOM.on(this.queryEl, 'focus', () => {
-      this.animateIconToMagnifyingGlass();
-    });
-    DOM.on(this._container, 'focusout', e => {
-      this.animateIconToYext(e);
-    });
   }
 
   remove () {

@@ -1,8 +1,4 @@
-import {
-  setupServer,
-  shutdownServer,
-  FILTERBOX_PAGE
-} from '../server';
+import { FILTERBOX_PAGE, VERTICAL_SEARCH_URL_REGEX } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
 import {
@@ -16,7 +12,6 @@ import {
   expectRequestLocationRadiusToEql,
   expectRequestDoesNotContainParam
 } from '../requestUtils';
-import { VERTICAL_SEARCH_URL_REGEX } from '../constants';
 import SearchRequestLogger from '../searchrequestlogger';
 
 fixture`FilterBox page`
@@ -24,8 +19,6 @@ fixture`FilterBox page`
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FILTERBOX_PAGE}`;
 
 test('single option filterbox works with back/forward navigation and page refresh', async t => {
