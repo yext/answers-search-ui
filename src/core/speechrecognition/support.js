@@ -9,5 +9,5 @@
  * @returns {boolean}
  */
 export function speechRecognitionIsSupported () {
-  return !!(window.SpeechRecognition || window.webkitSpeechRecognition);
+  return !!(window.webkitSpeechRecognition && navigator.mediaDevices);
 }

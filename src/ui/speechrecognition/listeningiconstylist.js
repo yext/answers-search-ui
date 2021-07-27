@@ -14,6 +14,8 @@ export default class ListeningIconStylist {
 
     this._activeCustomIconClass = 'yxt-SearchBar-CustomListeningIcon--active';
     this._customListeningIconUrl = customListeningIconUrl;
+
+    this._hasDotsAnimationStarted = false;
   }
 
   /**
@@ -26,9 +28,13 @@ export default class ListeningIconStylist {
       this._dotsFadeInAnimations.forEach(animation => {
         animation.beginElement();
       });
+      if (this._hasDotsAnimationStarted) {
+        return;
+      }
       this._dotsListeningAnimations.forEach(animation => {
         animation.beginElement();
       });
+      this._hasDotsAnimationStarted = true;
     }
   }
 

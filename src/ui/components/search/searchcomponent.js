@@ -384,17 +384,18 @@ export default class SearchComponent extends Component {
     this.isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
     this.isUsingYextAnimatedIcon ? this.initAnimatedIcon() : this.iconState = IconState.CUSTOM_ICON;
 
+    // Wire up our search handling and auto complete
+    this.initSearch(this._formEl);
+    this.initAutoComplete(this._inputEl);
+
     if (this._showVoiceSearch) {
-      const voiceSearchController = new VoiceSearchController(this._container, this._voiceSearchConfig);
+      const voiceSearchController =
+        new VoiceSearchController(this._container, this._voiceSearchConfig, this);
       const voiceSearchElement = DOM.query(this._container, '.js-yxt-SearchBar-voiceSearch');
       DOM.on(voiceSearchElement, 'click', () => {
         voiceSearchController.handleIconClick();
       });
     }
-
-    // Wire up our search handling and auto complete
-    this.initSearch(this._formEl);
-    this.initAutoComplete(this._inputEl);
 
     if (this.clearButton) {
       this.initClearButton();
@@ -532,6 +533,11 @@ export default class SearchComponent extends Component {
     });
   }
 
+  submitVoiceQuery () {
+    const inputEl = DOM.query(this._container, this._inputEl);
+    this.onQuerySubmit(inputEl, QueryTriggers.VOICE_SEARCH);
+  }
+
   /**
    * Registers the different event handlers that can issue a search. Note that
    * different handlers are used depending on whether or not a form is used as
@@ -588,8 +594,9 @@ export default class SearchComponent extends Component {
    * persistent and storage, than performs a debounced search.
    *
    * @param {Node} inputEl The input element containing the query.
+   * @param {QueryTrigger} queryTrigger An optional query trigger used for the search
    */
-  onQuerySubmit (inputEl) {
+  onQuerySubmit (inputEl, queryTrigger = QueryTriggers.SEARCH_BAR) {
     const query = inputEl.value;
     this.query = query;
     const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
@@ -614,7 +621,7 @@ export default class SearchComponent extends Component {
     DOM.query(this._container, '.js-yext-submit').blur();
 
     this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.triggerSearch(QueryTriggers.SEARCH_BAR, query);
+    this.core.triggerSearch(queryTrigger, query);
     return false;
   }
 
@@ -789,20 +796,26 @@ export default class SearchComponent extends Component {
     return DOM.query(this._container, '.js-yxt-SearchBar-clear');
   }
 
+  hideClearButton () {
+    this._showClearButton = false;
+    this._getClearButton().classList.add('yxt-SearchBar--hidden');
+  }
+
+  showClearButton () {
+    this._showClearButton = true;
+    this._getClearButton().classList.remove('yxt-SearchBar--hidden');
+  }
+
   /**
    * Updates the Search inputs clear button based on the current input value
    *
    * @param {string} input
    */
   _updateClearButtonVisibility (input) {
-    const clearButton = this._getClearButton();
-
     if (!this._showClearButton && input.length > 0) {
-      this._showClearButton = true;
-      clearButton.classList.remove('yxt-SearchBar--hidden');
+      this.showClearButton();
     } else if (this._showClearButton && input.length === 0) {
-      this._showClearButton = false;
-      clearButton.classList.add('yxt-SearchBar--hidden');
+      this.hideClearButton();
     }
   }
 }
