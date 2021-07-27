@@ -85,7 +85,8 @@ export default class AnalyticsReporter {
   /**
    * Reports an analytics event
    * @param {AnalyticsEvent} event The event to send
-   * @param {Object} options
+   * @param {Object} options Analytics reporting otpions
+   * @param {boolean} options.includeQueryId Whether or not to include the queryId with the request
    * @returns {boolean} true if the request was successful
    */
   report (event, { includeQueryId = true } = {}) {
