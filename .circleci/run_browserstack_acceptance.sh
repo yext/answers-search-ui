@@ -8,7 +8,7 @@ export BROWSERSTACK_TEST_RUN_NAME=$COMMIT_MSG_TITLE
 if [[ $CIRCLE_BRANCH == release/*
   || $CIRCLE_BRANCH == hotfix/*
   || $CIRCLE_BRANCH == master
-  || $CIRCLE_BRANCH == support* ]]
+  || $CIRCLE_BRANCH == support/* ]]
 then
   npx testcafe "browserstack:ie@11.0,browserstack:safari" --config-file ./.circleci/testcafe.json
 else
