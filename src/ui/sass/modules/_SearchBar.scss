@@ -238,6 +238,8 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     background-color: var(--yxt-searchbar-button-background-color-base);
     border: none;
     cursor: pointer;
+    padding-top: calc(var(--yxt-base-spacing)/2);
+    padding-bottom: calc(var(--yxt-base-spacing)/2);
 
     // Hide voice search on mobile
     @media (max-width: $breakpoint-mobile-max) {
@@ -254,17 +256,6 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
       background-color: var(--yxt-searchbar-button-background-color-hover);
     }
 
-    .Icon svg {
-      height: 2.4em;
-      width: 2.4em;
-      fill: none;
-    }
-
-    .Icon-image {
-      width: 2.4em;
-      height: 2.4em;
-    }
-
     // The SVGs are placed on top of each other
     .yxt-SearchBar-micIconWrapper {
       position: absolute;
@@ -276,20 +267,25 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 }
 
 // If custom icons are supplied, the SVGs simply alternate opacity
-.yxt-SearchBar-VoiceSearchCustomIcon {
+.yxt-SearchBar-CustomMicIcon {
   opacity: 0;
   transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
 }
 
-.yxt-SearchBar-CustomMicIcon {
-  .yxt-SearchBar-VoiceSearchCustomIcon {
+.yxt-SearchBar-CustomListeningIcon {
+  opacity: 0;
+  transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+}
+
+.yxt-SearchBar-CustomMicIcon--active {
+  .yxt-SearchBar-CustomMicIcon {
     opacity: 1;
     transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
   }
 }
 
-.yxt-SearchBar-CustomListeningIcon {
-  .yxt-SearchBar-VoiceSearchCustomIcon {
+.yxt-SearchBar-CustomListeningIcon--active {
+  .yxt-SearchBar-CustomListeningIcon {
     opacity: 1;
     transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
   }

@@ -131,4 +131,16 @@ describe('SearchBar component', () => {
     form.simulate('submit');
     expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.SEARCH_BAR);
   });
+
+  it('submitVoiceQuery sets QUERY_TRIGGER to VOICE_SEARCH', () => {
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      voiceSearch: {
+        enabled: true
+      }
+    });
+    mount(component);
+    component.submitVoiceQuery();
+    expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.VOICE_SEARCH);
+  });
 });

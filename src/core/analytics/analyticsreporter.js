@@ -82,8 +82,14 @@ export default class AnalyticsReporter {
     this._analyticsEventsEnabled = analyticsEventsEnabled;
   }
 
-  /** @inheritdoc */
-  report (event) {
+  /**
+   * Reports an analytics event
+   * @param {AnalyticsEvent} event The event to send
+   * @param {Object} options Analytics reporting otpions
+   * @param {boolean} options.includeQueryId Whether or not to include the queryId with the request
+   * @returns {boolean} true if the request was successful
+   */
+  report (event, { includeQueryId = true } = {}) {
     if (!this._analyticsEventsEnabled) {
       return false;
     }
@@ -99,7 +105,14 @@ export default class AnalyticsReporter {
       throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
     }
 
-    event.addOptions(this._globalOptions);
+    if (includeQueryId) {
+      event.addOptions(this._globalOptions);
+    } else {
+      event.addOptions({
+        ...this._globalOptions,
+        queryId: undefined
+      });
+    }
 
     return new HttpRequester().beacon(
       `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,

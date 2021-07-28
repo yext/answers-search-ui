@@ -107,12 +107,24 @@ msgstr ""
 msgid "Make sure all words are spelled correctly."
 msgstr ""
 
+#: src/ui/speechrecognition/speechrecognizer.js:97
+msgid "Note: For Safari users, Siri must be enabled"
+msgstr ""
+
+#: src/ui/speechrecognition/voicesearchcontroller.js:62
+msgid "Permission to use microphone is blocked"
+msgstr ""
+
 #: src/ui/templates/results/directanswer.hbs:74
 msgid "Send feedback"
 msgstr ""
 
 #: src/ui/templates/results/alternativeverticals.hbs:5
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
+msgstr ""
+
+#: src/ui/speechrecognition/speechrecognizer.js:96
+msgid "Speech Recognition is not available."
 msgstr ""
 
 #: src/ui/templates/results/noresults.hbs:24
@@ -180,12 +192,12 @@ msgstr ""
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
 msgstr ""
 
-#: src/ui/controllers/voicesearchcontroller.js:21
+#: src/ui/speechrecognition/screenreadertextcontroller.js:13
 msgctxt "A button to begin listening for a voice search"
 msgid "Start Voice Search"
 msgstr ""
 
-#: src/ui/controllers/voicesearchcontroller.js:30
+#: src/ui/speechrecognition/screenreadertextcontroller.js:22
 msgctxt "A button to stop listening for a voice search"
 msgid "Stop Voice Search"
 msgstr ""

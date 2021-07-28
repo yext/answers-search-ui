@@ -647,7 +647,7 @@ export default class Core {
    * @returns {QueryTriggers} query trigger if accepted by the search API, null o/w
    */
   getQueryTriggerForSearchApi (queryTrigger) {
-    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST].includes(queryTrigger)) {
+    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST, QueryTriggers.VOICE_SEARCH].includes(queryTrigger)) {
       return null;
     }
     return queryTrigger;
