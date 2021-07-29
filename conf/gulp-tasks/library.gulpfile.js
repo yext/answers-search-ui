@@ -2,6 +2,8 @@ const { series, parallel, src, dest, watch } = require('gulp');
 const path = require('path');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
+const rtlcss = require('gulp-rtlcss');
+const rename = require('gulp-rename');
 sass.compiler = require('sass');
 
 const getLibraryVersion = require('./utils/libversion');
@@ -111,11 +113,34 @@ async function createBundleTaskFactory (locale) {
 }
 
 function compileCSS () {
+  return new Promise(resolve => {
+    return parallel(compileLTRCSS, compileRTLCSS)(resolve);
+  });
+}
+
+/**
+ * Compiles the standard left to right CSS
+ */
+function compileLTRCSS () {
   return src('./src/ui/sass/**/*.scss')
     .pipe(sass({
       outputStyle: 'compressed'
     }).on('error', sass.logError))
     .pipe(postcss())
+    .pipe(dest('./dist/'));
+}
+
+/**
+ * Compiles the right to left CSS which is used for languages such as Arabic
+ */
+function compileRTLCSS () {
+  return src('./src/ui/sass/**/*.scss')
+    .pipe(sass({
+      outputStyle: 'compressed'
+    }).on('error', sass.logError))
+    .pipe(rtlcss())
+    .pipe(postcss())
+    .pipe(rename('answers.rtl.css'))
     .pipe(dest('./dist/'));
 }
 
