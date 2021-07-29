@@ -367,11 +367,11 @@ export default class SearchComponent extends Component {
     this.initAutoComplete(this._inputEl);
 
     if (this._showVoiceSearch) {
-      const voiceSearchController =
+      this._voiceSearchController =
         new VoiceSearchController(this._container, this._voiceSearchConfig, this);
       const voiceSearchElement = DOM.query(this._container, '.js-yxt-SearchBar-voiceSearch');
-      DOM.on(voiceSearchElement, 'click', () => {
-        voiceSearchController.handleIconClick();
+      DOM.on(voiceSearchElement, 'click', async () => {
+        await this._voiceSearchController.handleIconClick();
       });
     }
 
