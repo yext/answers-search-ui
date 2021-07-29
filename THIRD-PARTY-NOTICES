@@ -304,7 +304,7 @@ MIT License
 
 The following NPM packages may be included in this product:
 
- - @yext/answers-core@1.3.0-beta.2
+ - @yext/answers-core@1.3.0-beta.3
 
 These packages each contain the following license and notice below:
 
@@ -342,7 +342,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM packages may be included in this product:
 
- - @yext/answers-search-ui@1.9.1
+ - @yext/answers-search-ui@1.9.2
  - @yext/answers-storage@1.1.0
 
 These packages each contain the following license and notice below:
@@ -2007,7 +2007,7 @@ SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - cross-fetch@3.0.6
+ - cross-fetch@3.1.4
 
 These packages each contain the following license and notice below:
 
