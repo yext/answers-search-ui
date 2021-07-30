@@ -370,8 +370,8 @@ export default class SearchComponent extends Component {
       this._voiceSearchController =
         new VoiceSearchController(this._container, this._voiceSearchConfig, this);
       const voiceSearchElement = DOM.query(this._container, '.js-yxt-SearchBar-voiceSearch');
-      DOM.on(voiceSearchElement, 'click', async () => {
-        await this._voiceSearchController.handleIconClick();
+      DOM.on(voiceSearchElement, 'click', () => {
+        this._voiceSearchController.handleIconClick();
       });
     }
 
