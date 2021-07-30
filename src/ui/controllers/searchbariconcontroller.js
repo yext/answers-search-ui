@@ -33,7 +33,6 @@ export default class SearchBarIconController {
     this.iconIsFrozen = false;
     this.inputEl = config.inputEl;
     this.searchBarContainer = config.searchBarContainer;
-    this.onMouseUp = this.oneTimeMouseUpListener.bind(this);
 
     const stateMap = {
       [IconState.LOADING_ICON]: new LoadingIconState(this, IconState.LOADING_ICON),
@@ -82,7 +81,9 @@ export default class SearchBarIconController {
       if (clickableEl) {
         DOM.on(clickableEl, 'mousedown', () => {
           this.iconIsFrozen = true;
-          DOM.on(document, 'mouseup', this.onMouseUp);
+          DOM.once(document, 'mouseup', () => {
+            this.iconIsFrozen = false;
+          });
         });
       }
     }
@@ -93,10 +94,5 @@ export default class SearchBarIconController {
     DOM.on(this.searchBarContainer, 'focusout', e => {
       this.handleEvent(IconEvent.FOCUS_OUT, e);
     });
-  }
-
-  oneTimeMouseUpListener () {
-    document.removeEventListener('mouseup', this.onMouseUp);
-    this.iconIsFrozen = false;
   }
 }

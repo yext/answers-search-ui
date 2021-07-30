@@ -8,7 +8,7 @@ import TranslationFlagger from '../i18n/translationflagger';
  */
 export default class SpeechRecognizer {
   constructor (locale) {
-    this._speechRecognition = new webkitSpeechRecognition();
+    this._speechRecognition = new window.webkitSpeechRecognition();
     this._speechRecognition.interimResults = true;
 
     this._speechRecognition.lang = isMicrosoftEdge()

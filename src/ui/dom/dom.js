@@ -202,7 +202,11 @@ export default class DOM {
   }
 
   static once (selector, evt, handler) {
-    DOM.query(selector).addEventListener(evt, handler, { once: true });
+    const oneTimeHandler = () => {
+      handler();
+      DOM.off(selector, evt, oneTimeHandler);
+    };
+    DOM.query(selector).addEventListener(evt, oneTimeHandler);
   }
 
   static off (selector, evt, handler) {

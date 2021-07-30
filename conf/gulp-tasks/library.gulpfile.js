@@ -114,14 +114,14 @@ async function createBundleTaskFactory (locale) {
 
 function compileCSS () {
   return new Promise(resolve => {
-    return parallel(compileLTRCSS, compileRTLCSS)(resolve);
+    return parallel(compileLtrCSS, compileRtlCSS)(resolve);
   });
 }
 
 /**
  * Compiles the standard left to right CSS
  */
-function compileLTRCSS () {
+function compileLtrCSS () {
   return src('./src/ui/sass/**/*.scss')
     .pipe(sass({
       outputStyle: 'compressed'
@@ -133,14 +133,16 @@ function compileLTRCSS () {
 /**
  * Compiles the right to left CSS which is used for languages such as Arabic
  */
-function compileRTLCSS () {
+function compileRtlCSS () {
   return src('./src/ui/sass/**/*.scss')
     .pipe(sass({
       outputStyle: 'compressed'
     }).on('error', sass.logError))
     .pipe(rtlcss())
     .pipe(postcss())
-    .pipe(rename('answers.rtl.css'))
+    .pipe(rename(function (path) {
+      path.basename += '.rtl';
+    }))
     .pipe(dest('./dist/'));
 }
 
