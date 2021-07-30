@@ -43,6 +43,10 @@
   }
 }
 
+.Icon--chevron {
+  transform:none #{"/*rtl:rotate(180deg)*/;"};
+}
+
 .Icon--yext_animated_reverse {
   svg
   {
