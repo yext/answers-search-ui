@@ -2,7 +2,7 @@ const { series, parallel, src, dest, watch } = require('gulp');
 const path = require('path');
 const postcss = require('gulp-postcss');
 const sass = require('gulp-sass');
-const rtlcss = require('gulp-RtlCSS');
+const rtlcss = require('gulp-rtlcss');
 const rename = require('gulp-rename');
 sass.compiler = require('sass');
 
