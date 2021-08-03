@@ -15,7 +15,11 @@ export default class ListeningIconStylist {
     this._activeCustomIconClass = 'yxt-SearchBar-CustomListeningIcon--active';
     this._customListeningIconUrl = customListeningIconUrl;
 
-    this._hasDotsAnimationStarted = false;
+    /**
+     * The ID of the timer which stops the listening dots animation
+     * @type {number|null}
+     */
+    this._stopListeningAnimationTimeout = null;
   }
 
   /**
@@ -28,13 +32,11 @@ export default class ListeningIconStylist {
       this._dotsFadeInAnimations.forEach(animation => {
         animation.beginElement();
       });
-      if (this._hasDotsAnimationStarted) {
-        return;
-      }
+      // Clear the timeout to prevent it from stopping the animation
+      this._stopListeningAnimationTimeout && clearTimeout(this._stopListeningAnimationTimeout);
       this._dotsListeningAnimations.forEach(animation => {
         animation.beginElement();
       });
-      this._hasDotsAnimationStarted = true;
     }
   }
 
@@ -48,6 +50,14 @@ export default class ListeningIconStylist {
       this._dotsFadeOutAnimations.forEach(animation => {
         animation.beginElement();
       });
+      // Set a timeout which will stop the listening dots once the
+      // fade out animation has completed
+      this._stopListeningAnimationTimeout && clearTimeout(this._stopListeningAnimationTimeout);
+      this._stopListeningAnimationTimeout = setTimeout(() => {
+        this._dotsListeningAnimations.forEach(animation => {
+          animation.endElement();
+        });
+      }, 300); // This duration matches the fade out duration defined in voice_search_dots.svg
     }
   }
 }
