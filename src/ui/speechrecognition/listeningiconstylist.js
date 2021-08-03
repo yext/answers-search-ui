@@ -33,7 +33,7 @@ export default class ListeningIconStylist {
         animation.beginElement();
       });
       // Clear the timeout to prevent it from stopping the animation
-      clearTimeout(this._stopListeningAnimationTimeout);
+      this._stopListeningAnimationTimeout && clearTimeout(this._stopListeningAnimationTimeout);
       this._dotsListeningAnimations.forEach(animation => {
         animation.beginElement();
       });
@@ -52,7 +52,7 @@ export default class ListeningIconStylist {
       });
       // Set a timeout which will stop the listening dots once the
       // fade out animation has completed
-      clearTimeout(this._stopListeningAnimationTimeout);
+      this._stopListeningAnimationTimeout && clearTimeout(this._stopListeningAnimationTimeout);
       this._stopListeningAnimationTimeout = setTimeout(() => {
         this._dotsListeningAnimations.forEach(animation => {
           animation.endElement();
