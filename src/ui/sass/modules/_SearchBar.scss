@@ -216,6 +216,11 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     transform-origin: 50% 50%;
     animation: dash 1.4s ease-in-out infinite;
   }
+
+  &-Icon--inactive &-LoadingIndicator-AnimatedIcon 
+  {
+    display: none;
+  }
   
   @keyframes dash 
   {
