@@ -1,0 +1,18 @@
+{
+  "exports": {
+    "./css": "./dist/answers.css",
+    "./rtl-css": "./dist/answers.rtl.css",
+    ".": "./dist/answers-umd.js",
+    "./modern": "./dist/answers-modern.js",
+    "./modern.min": "./dist/answers-modern.min.js",
+    "./template": "./dist/answerstemplates.compiled.min.js",
+    "./es": "./dist/es-answers-umd.js",
+    "./es/modern": "./dist/es-answers-modern.js",
+    "./es/modern.min": "./dist/es-answers-modern.min.js",
+    "./es/template": "./dist/es-answerstemplates.compiled.min.js",
+    "./fr": "./dist/fr-answers-umd.js",
+    "./fr/modern": "./dist/fr-answers-modern.js",
+    "./fr/modern.min": "./dist/fr-answers-modern.min.js",
+    "./fr/template": "./dist/fr-answerstemplates.compiled.min.js"
+  }
+}

@@ -26,8 +26,8 @@ function addCSSBundleEntries (exportJSON) {
 function addDefaultLanguageBundleEntries (exportJSON) {
   const bundleEntries = {
     '.': './dist/answers-umd.js',
-    './esm': './dist/answers-modern.js',
-    './esm.min': './dist/answers-modern.min.js',
+    './modern': './dist/answers-modern.js',
+    './modern.min': './dist/answers-modern.min.js',
     './template': './dist/answerstemplates.compiled.min.js'
   };
   Object.assign(exportJSON.exports, bundleEntries);
@@ -42,8 +42,8 @@ function addDefaultLanguageBundleEntries (exportJSON) {
 function addLanguageBundleEntries (exportJSON, lang) {
   const bundleEntries = {
     [`./${lang}`]: `./dist/${lang}-answers-umd.js`,
-    [`./${lang}/esm`]: `./dist/${lang}-answers-modern.js`,
-    [`./${lang}/esm.min`]: `./dist/${lang}-answers-modern.min.js`,
+    [`./${lang}/modern`]: `./dist/${lang}-answers-modern.js`,
+    [`./${lang}/modern.min`]: `./dist/${lang}-answers-modern.min.js`,
     [`./${lang}/template`]: `./dist/${lang}-answerstemplates.compiled.min.js`
   };
   Object.assign(exportJSON.exports, bundleEntries);
@@ -53,9 +53,11 @@ function addLanguageBundleEntries (exportJSON, lang) {
  * Append the exports field in the package.json. This defines a public interface for the package,
  * mapping entry points (path from import requests) to bundles. Any other paths not specified
  * in exports field will lead to a ModuleNotFound Error or ERR_PACKAGE_PATH_NOT_EXPORTED Error.
+ *
+ * @param {string} inputFile name of file to append exports field to
  */
-function appendExportsField () {
-  const packageData = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+function appendExportsField (inputFile) {
+  const packageData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
   const exportJSON = { exports: {} };
   addCSSBundleEntries(exportJSON);
   ALL_LANGUAGES.forEach(lang => {
@@ -64,7 +66,7 @@ function appendExportsField () {
       : addLanguageBundleEntries(exportJSON, lang);
   });
   Object.assign(packageData, exportJSON);
-  fs.writeFileSync('package.json', JSON.stringify(packageData, null, 2));
+  fs.writeFileSync(inputFile, JSON.stringify(packageData, null, 2));
 }
 
-appendExportsField();
+appendExportsField(process.argv[2]);
