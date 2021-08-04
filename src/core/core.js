@@ -18,7 +18,7 @@ import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
 import { PRODUCTION, ENDPOINTS, LIB_VERSION } from './constants';
-import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
+import { getCachedLiveApiUrl, getLiveApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
 
@@ -149,7 +149,7 @@ export default class Core {
     return {
       universalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_SEARCH,
       verticalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_SEARCH,
-      questionSubmission: getKnowledgeApiUrl(this._environment) + ENDPOINTS.QUESTION_SUBMISSION,
+      questionSubmission: getLiveApiUrl(this._environment) + ENDPOINTS.QUESTION_SUBMISSION,
       universalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_AUTOCOMPLETE,
       verticalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_AUTOCOMPLETE,
       filterSearch: getCachedLiveApiUrl(this._environment) + ENDPOINTS.FILTER_SEARCH
