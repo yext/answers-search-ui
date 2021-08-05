@@ -4,4 +4,3 @@
 
 mv ./README.md ./README.tmp
 cp ./conf/npm/README.md ./README.md
-npm run generate-entry-points

@@ -106,7 +106,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
-    "build": "gulp && size-limit",
+    "build": "gulp && size-limit && npm run generate-entry-points",
     "build-languages": "gulp buildLanguages && size-limit",
     "build-locales": "gulp buildLocales && size-limit",
     "dev": "gulp dev",
