@@ -247,7 +247,6 @@ workflows:
             - unit_test
             - browserstack_acceptance_test
             - headless_acceptance_test
-            - translation_test
             - third_party_notices_test
       - deploy_canary:
           filters:
