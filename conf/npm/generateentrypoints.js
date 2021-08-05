@@ -4,49 +4,19 @@ const fs = require('fs');
 const { ALL_LANGUAGES } = require('../i18n/constants');
 
 /**
- * Add entry points to css bundles to the export field
+ * return entry points to js and template bundles for the provided language
  *
- * @param {Object} exportJSON
  * @param {string} lang
+ * @returns {Object}
  */
-function addCSSBundleEntries (exportJSON) {
-  const cssEntries = {
-    './css': './dist/answers.css',
-    './rtl-css': './dist/answers.rtl.css'
-  };
-  Object.assign(exportJSON.exports, cssEntries);
-}
-
-/**
- * Add entry points to js and template bundles to the export field for default language en
- *
- * @param {Object} exportJSON
- * @param {string} lang
- */
-function addDefaultLanguageBundleEntries (exportJSON) {
-  const bundleEntries = {
-    '.': './dist/answers-umd.js',
-    './modern': './dist/answers-modern.js',
-    './modern.min': './dist/answers-modern.min.js',
-    './template': './dist/answerstemplates.compiled.min.js'
-  };
-  Object.assign(exportJSON.exports, bundleEntries);
-}
-
-/**
- * Add entry points to js and template bundles to the export field for the provided language
- *
- * @param {Object} exportJSON
- * @param {string} lang
- */
-function addLanguageBundleEntries (exportJSON, lang) {
+function getLanguageBundleEntries (lang) {
   const bundleEntries = {
     [`./${lang}`]: `./dist/${lang}-answers-umd.js`,
     [`./${lang}/modern`]: `./dist/${lang}-answers-modern.js`,
     [`./${lang}/modern.min`]: `./dist/${lang}-answers-modern.min.js`,
     [`./${lang}/template`]: `./dist/${lang}-answerstemplates.compiled.min.js`
   };
-  Object.assign(exportJSON.exports, bundleEntries);
+  return bundleEntries;
 }
 
 /**
@@ -58,14 +28,24 @@ function addLanguageBundleEntries (exportJSON, lang) {
  */
 function appendExportsField (inputFile) {
   const packageData = JSON.parse(fs.readFileSync(inputFile, 'utf8'));
-  const exportJSON = { exports: {} };
-  addCSSBundleEntries(exportJSON);
+  const cssEntries = {
+    './css': './dist/answers.css',
+    './rtl-css': './dist/answers.rtl.css'
+  };
+  const defaultBundleEntries = {
+    '.': './dist/answers-umd.js',
+    './modern': './dist/answers-modern.js',
+    './modern.min': './dist/answers-modern.min.js',
+    './template': './dist/answerstemplates.compiled.min.js'
+  };
+  let exports = { ...cssEntries, ...defaultBundleEntries };
+
   ALL_LANGUAGES.forEach(lang => {
-    lang === 'en'
-      ? addDefaultLanguageBundleEntries(exportJSON)
-      : addLanguageBundleEntries(exportJSON, lang);
+    if (lang !== 'en') {
+      exports = { ...exports, ...getLanguageBundleEntries(lang) };
+    }
   });
-  Object.assign(packageData, exportJSON);
+  Object.assign(packageData, { exports: exports });
   fs.writeFileSync(inputFile, JSON.stringify(packageData, null, 2));
 }
 
