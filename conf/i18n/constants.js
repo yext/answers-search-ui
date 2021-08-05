@@ -93,6 +93,9 @@ const LANGUAGES_TO_LOCALES = {
     'it_CH',
     'it_IT'
   ],
+  ar: [
+    'ar_AR'
+  ],
   de: [
     'de_AT',
     'de_CH',
