@@ -106,7 +106,7 @@
     "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
-    "build": "gulp && size-limit",
+    "build": "gulp && size-limit && npm run generate-entry-points",
     "build-languages": "gulp buildLanguages && size-limit",
     "build-locales": "gulp buildLocales && size-limit",
     "dev": "gulp dev",
@@ -120,7 +120,8 @@
     "preinstall": "npx npm-force-resolutions",
     "prepublishOnly": "./conf/npm/prepublishOnly.sh",
     "postpublish": "./conf/npm/postpublish.sh",
-    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES"
+    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES",
+    "generate-entry-points": "./conf/npm/generateentrypoints.js package.json"
   },
   "resolutions": {
     "regenerator-runtime": "0.13.1"
@@ -164,5 +165,33 @@
   "license": "BSD-3-Clause",
   "engines": {
     "node": ">=12"
+  },
+  "exports": {
+    "./css": "./dist/answers.css",
+    "./rtl-css": "./dist/answers.rtl.css",
+    ".": "./dist/answers-umd.js",
+    "./modern": "./dist/answers-modern.js",
+    "./modern.min": "./dist/answers-modern.min.js",
+    "./template": "./dist/answerstemplates.compiled.min.js",
+    "./es": "./dist/es-answers-umd.js",
+    "./es/modern": "./dist/es-answers-modern.js",
+    "./es/modern.min": "./dist/es-answers-modern.min.js",
+    "./es/template": "./dist/es-answerstemplates.compiled.min.js",
+    "./fr": "./dist/fr-answers-umd.js",
+    "./fr/modern": "./dist/fr-answers-modern.js",
+    "./fr/modern.min": "./dist/fr-answers-modern.min.js",
+    "./fr/template": "./dist/fr-answerstemplates.compiled.min.js",
+    "./it": "./dist/it-answers-umd.js",
+    "./it/modern": "./dist/it-answers-modern.js",
+    "./it/modern.min": "./dist/it-answers-modern.min.js",
+    "./it/template": "./dist/it-answerstemplates.compiled.min.js",
+    "./de": "./dist/de-answers-umd.js",
+    "./de/modern": "./dist/de-answers-modern.js",
+    "./de/modern.min": "./dist/de-answers-modern.min.js",
+    "./de/template": "./dist/de-answerstemplates.compiled.min.js",
+    "./ja": "./dist/ja-answers-umd.js",
+    "./ja/modern": "./dist/ja-answers-modern.js",
+    "./ja/modern.min": "./dist/ja-answers-modern.min.js",
+    "./ja/template": "./dist/ja-answerstemplates.compiled.min.js"
   }
 }
