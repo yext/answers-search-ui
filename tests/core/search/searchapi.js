@@ -255,4 +255,34 @@ describe('codelab people searches', () => {
         expect.objectContaining({ input: 'ytruong extra' }));
     });
   });
+
+  it('searches with Nidhi first name and no additional text', () => {
+    const result = searchApi.nidhiSearch(false, false, '');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Nidhi' }));
+    });
+  });
+
+  it('searches with Nidhi full name and additional text', () => {
+    const result = searchApi.nidhiSearch(true, false, 'additional');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'Nidhi Manu additional' }));
+    });
+  });
+
+  it('searches with Nidhi username and no additional text', () => {
+    const result = searchApi.nidhiSearch(true, true, '');
+    expect.assertions(1);
+    result.then(results => {
+      expect(mockedRequest).toBeCalledWith(
+        expect.anything(),
+        expect.objectContaining({ input: 'nmanu' }));
+    });
+  });
 });
