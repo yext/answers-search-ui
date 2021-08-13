@@ -116,34 +116,6 @@ jobs:
           command: |
             sudo apt-get install -qq gettext
             ./.circleci/run_translation_verification.sh
-  # check and update third party notices file if needed
-  third_party_notices_test:
-    docker:
-      - image: circleci/node:14.5
-    working_directory: ~/answers
-    steps:
-      - setup-workspace
-      - attach_workspace:
-          at: ~/answers
-      - name: Install generate-license-file
-          run: npm install -g generate-license-file
-      - uses: actions/checkout@v2
-      - name: Npm install
-          run: npm install
-      - name: Generate license file
-          run: generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES
-      - name: Git diff
-          run: git diff
-      - name: Check if there are changes
-          id: changes
-          uses: UnicornGlobal/has-changes-action@v1.0.11
-      - name: Update THIRD-PARTY-NOTICES
-          uses: EndBug/add-and-commit@v7
-          with:
-            message: 'Automated update to THIRD-PARTY-NOTICES'
-            add: 'THIRD-PARTY-NOTICES'
-            push: true
-            default_author: github_actions
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
