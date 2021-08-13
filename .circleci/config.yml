@@ -191,15 +191,11 @@ workflows:
       - translation_test:
           requires:
             - build
-      - third_party_notices_test:
-          requires:
-            - build
       - deploy_branch:
           requires:
             - unit_test
             - browserstack_acceptance_test
             - headless_acceptance_test
-            - third_party_notices_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
@@ -223,9 +219,6 @@ workflows:
       - translation_test:
           requires:
             - build_i18n
-      - third_party_notices_test:
-          requires:
-            - build_i18n
       - deploy_branch:
           filters:
             branches:
@@ -236,7 +229,6 @@ workflows:
             - browserstack_acceptance_test
             - headless_acceptance_test
             - translation_test
-            - third_party_notices_test
       - deploy_canary:
           filters:
             branches:
@@ -245,7 +237,6 @@ workflows:
             - unit_test
             - headless_acceptance_test
             - browserstack_acceptance_test
-            - third_party_notices_test
   build_and_deploy_hold:
     jobs:
       - build_i18n:
@@ -279,12 +270,6 @@ workflows:
               only: /^v.*/
           requires:
             - build_i18n
-      - third_party_notices_test:
-          filters:
-            tags:
-              only: /^v.*/
-          requires:
-            - build_i18n
       - hold:
           type: approval
           filters:
@@ -295,7 +280,6 @@ workflows:
             - browserstack_acceptance_test
             - headless_acceptance_test
             - translation_test
-            - third_party_notices_test
       - deploy_latest:
           filters:
             branches:
