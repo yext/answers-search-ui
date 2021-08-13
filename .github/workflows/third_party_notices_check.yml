@@ -12,8 +12,7 @@ jobs:
       - run: npm install -g generate-license-file
       - uses: actions/checkout@v2
       - run: npm ci
-      - name: Generate license file
-        run: generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES
+      - run: generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES
       - run: git diff
       - name: Check if there are changes
         id: changes
