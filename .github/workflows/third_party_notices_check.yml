@@ -13,9 +13,6 @@ jobs:
       - uses: actions/checkout@v2
       - run: npm ci
       - run: generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES
-      - run: git diff
-      - name: Check if there are changes
-        uses: UnicornGlobal/has-changes-action@v1.0.11
       - name: Update THIRD-PARTY-NOTICES
         uses: EndBug/add-and-commit@v7
         with:
