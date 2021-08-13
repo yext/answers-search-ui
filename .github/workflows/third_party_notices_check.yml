@@ -12,8 +12,7 @@ jobs:
       - name: Install generate-license-file
         run: npm install -g generate-license-file
       - uses: actions/checkout@v2
-      - name: Npm install
-        run: npm install
+      - run: npm ci
       - name: Generate license file
         run: generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES
       - name: Git diff
@@ -24,7 +23,7 @@ jobs:
       - name: Update THIRD-PARTY-NOTICES
         uses: EndBug/add-and-commit@v7
         with:
-          message: 'Automated update to THIRD-PARTY-NOTICES'
+          message: 'Automated update to THIRD-PARTY-NOTICES from github action's 3rd party notices check'
           add: 'THIRD-PARTY-NOTICES'
           push: true
           default_author: github_actions
