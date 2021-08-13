@@ -6,17 +6,15 @@ jobs:
   license-check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - name: Install generate-license-file
-        run: npm install -g generate-license-file
+      - run: npm install -g generate-license-file
       - uses: actions/checkout@v2
       - run: npm ci
       - name: Generate license file
         run: generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES
-      - name: Git diff
-        run: git diff
+      - run: git diff
       - name: Check if there are changes
         id: changes
         uses: UnicornGlobal/has-changes-action@v1.0.11
