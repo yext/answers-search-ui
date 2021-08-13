@@ -764,8 +764,8 @@ export default class Core {
           window.sessionStorage.setItem('sessionId', sessionId);
         }
         return sessionId;
-      } catch (e) {
-        console.error(e);
+      } catch (err) {
+        console.warn('Unable to use browser sessionStorage for sessionId.\n', err);
       }
     }
     return null;
