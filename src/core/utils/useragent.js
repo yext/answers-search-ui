@@ -18,14 +18,15 @@ export function isMicrosoftEdge () {
  * Returns whether the current browser is Safari.
  * Currently, Safari does not support User-Agent clients hints (userAgentData).
  * Chrome likes to pretend that it's Safari.
+ * Edge also likes to pretend that it's Safari.
  *
  * @returns {boolean}
  */
 export function isSafari () {
-  if (isMicrosoftEdge()) {
+  if (isChrome()) {
     return false;
   }
-  if (isChrome()) {
+  if (isMicrosoftEdge()) {
     return false;
   }
   return navigator.userAgent.includes('Safari');
