@@ -110,7 +110,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: ./.circleci/run_browserstack_acceptance.sh
+      - run: ./.circleci/run_useragent_acceptance.sh
   # verify all translations are present
   translation_test:
     docker:
