@@ -1,0 +1,479 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: src/ui/templates/results/alternativeverticals.hbs:28
+msgid "([[resultsCount]] result)"
+msgid_plural "([[resultsCount]] results)"
+msgstr[0] "([[resultsCount]] результат)"
+msgstr[1] "([[resultsCount]] результата)"
+msgstr[2] "([[resultsCount]] результатов)"
+
+#: src/ui/templates/search/autocomplete.hbs:14
+msgid "[[resultsCount]] autocomplete option found"
+msgid_plural "[[resultsCount]] autocomplete options found"
+msgstr[0] "Найден [[resultsCount]] вариант автозаполнения"
+msgstr[1] "Найдены [[resultsCount]] варианта автозаполнения"
+msgstr[2] "Найдены [[resultsCount]] вариантов автозаполнения"
+
+#: src/ui/templates/results/resultsheader.hbs:19
+#: src/ui/templates/results/verticalresultscount.hbs:3
+msgid "[[start]] through [[end]] of [[resultsCount]]"
+msgstr "[[start]] - [[end]] из [[resultsCount]]"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:158
+msgid "* Please enter a valid email address."
+msgstr "* Укажите действительный адрес эл. почты."
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:150
+msgid "* You must agree to the privacy policy to submit a question."
+msgstr "* Чтобы отправить вопрос, необходимо принять условия политики конфиденциальности."
+
+#: src/ui/templates/results/alternativeverticals.hbs:3
+msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
+msgstr "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">Не найдены результаты</em> в [[currentVerticalLabel]]."
+
+#: src/ui/templates/results/alternativeverticals.hbs:40
+msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
+msgstr "Вы также можете <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\">посмотреть результаты во всех категориях поиска</a>."
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:61
+msgid "By submitting my email address, I consent to being contacted via email at the address provided."
+msgstr "Предоставляя адрес электронной почты, я соглашаюсь получать на него электронные письма."
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:87
+msgid "Can’t find what you're looking for? Ask a question below."
+msgstr "Не нашли что искали? Задайте вопрос ниже."
+
+#: src/ui/components/filters/geolocationcomponent.js:94
+msgid "Could Not Find Your Location"
+msgstr "Не удалось определить ваше местоположение"
+
+#: src/ui/templates/results/pagination.hbs:60
+msgid "Currently on page [[pageNumber]]"
+msgstr "Текущая страница: [[pageNumber]]"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:101
+msgid "Enter your question and contact information, and we'll get back to you with a response shortly."
+msgstr "Введите свой вопрос и контактную информацию, и мы скоро на него ответим."
+
+#: src/ui/templates/questions/questionsubmission.hbs:7
+msgid "expand question form"
+msgstr "развернуть форму вопроса"
+
+#: src/ui/components/results/resultsheadercomponent.js:25
+#: src/ui/components/results/universalresultscomponent.js:23
+#: src/ui/components/results/verticalresultscomponent.js:143
+msgid "Filters applied to this search:"
+msgstr "Фильтры поиска:"
+
+#: src/ui/components/filters/geolocationcomponent.js:86
+msgid "Finding Your Location..."
+msgstr "Определяем местоположение…"
+
+#: src/ui/templates/results/pagination.hbs:83
+msgid "Go to page [[maxPage]] of results"
+msgstr "Перейти на страницу [[maxPage]] с результатами"
+
+#: src/ui/templates/results/pagination.hbs:65
+msgid "Go to page [[pageNumber]] of results"
+msgstr "Перейти на страницу [[pageNumber]] с результатами"
+
+#: src/ui/templates/results/pagination.hbs:44
+msgid "Go to page 1 of results"
+msgstr "Перейти к странице 1 с результатами"
+
+#: src/ui/templates/results/pagination.hbs:7
+msgid "Go to the first page of results"
+msgstr "Перейти на первую страницу с результатами"
+
+#: src/ui/templates/results/pagination.hbs:111
+msgid "Go to the last page of results"
+msgstr "Перейти на последнюю страницу с результатами"
+
+#: src/ui/templates/results/pagination.hbs:94
+msgid "Go to the next page of results"
+msgstr "Перейти на следующую страницу с результатами"
+
+#: src/ui/templates/cards/standard.hbs:24
+msgid "Image for [[title]]"
+msgstr "Изображение для [[title]]"
+
+#: src/ui/components/filters/geolocationcomponent.js:285
+#: src/ui/components/filters/geolocationcomponent.js:39
+#: src/ui/components/filters/geolocationcomponent.js:47
+msgid "Location"
+msgstr "Местоположение"
+
+#: src/ui/templates/results/noresults.hbs:31
+msgid "Make sure all words are spelled correctly."
+msgstr "Убедитесь, что все слова написаны правильно."
+
+#: src/ui/speechrecognition/speechrecognizer.js:97
+msgid "Note: For Safari users, Siri must be enabled"
+msgstr "Примечание. У пользователей Safari должна быть включена Siri"
+
+#: src/ui/speechrecognition/voicesearchcontroller.js:62
+msgid "Permission to use microphone is blocked"
+msgstr "Нет разрешения на использование микрофона"
+
+#: src/ui/templates/results/directanswer.hbs:74
+msgid "Send feedback"
+msgstr "Отправить отзыв"
+
+#: src/ui/templates/results/alternativeverticals.hbs:5
+msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
+msgstr "Вместо этого показаны <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">все [[currentVerticalLabel]]</em>."
+
+#: src/ui/speechrecognition/speechrecognizer.js:96
+msgid "Speech Recognition is not available."
+msgstr "Распознавание речи недоступно."
+
+#: src/ui/templates/results/noresults.hbs:24
+msgid "Suggestions:"
+msgstr "Предложения:"
+
+#: src/ui/components/results/directanswercomponent.js:29
+msgid "Thank you for your feedback!"
+msgstr "Спасибо за ваш отзыв!"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:127
+msgid "Thank you for your question!"
+msgstr "Спасибо за ваш вопрос!"
+
+#: src/ui/templates/results/alternativeverticals.hbs:11
+msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgstr[0] "Следующая категория поиска содержит результаты по запросу <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
+msgstr[1] "Следующие категории поиска содержат результаты по запросу <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
+msgstr[2] "Следующие категории поиска содержат результаты по запросу <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
+
+#: src/ui/components/results/directanswercomponent.js:23
+msgid "This answered my question"
+msgstr "Ответ был полезен"
+
+#: src/ui/components/results/directanswercomponent.js:26
+msgid "This did not answer my question"
+msgstr "Ответ не был полезен"
+
+#: src/ui/templates/results/noresults.hbs:34
+msgid "Try fewer words."
+msgstr "Попробуйте использовать меньше слов."
+
+#: src/ui/templates/results/noresults.hbs:33
+msgid "Try more general words."
+msgstr "Попробуйте использовать более общие слова."
+
+#: src/ui/templates/results/noresults.hbs:15
+msgid "Try refining your query or <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">search all content.</a>"
+msgstr "Попробуйте уточнить запрос или <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">выполните поиск по всему контенту</a>."
+
+#: src/ui/templates/results/noresults.hbs:32
+msgid "Try to ask your question a different way."
+msgstr "Попробуйте задать вопрос иначе."
+
+#: src/ui/components/search/locationbiascomponent.js:150
+msgid "Unknown Location"
+msgstr "Неизвестное местоположение"
+
+#: src/ui/components/filters/geolocationcomponent.js:61
+#: src/ui/components/filters/geolocationcomponent.js:69
+msgid "Use My Location"
+msgstr "Использовать мое местоположение"
+
+#: src/ui/components/filters/geolocationcomponent.js:152
+#: src/ui/components/search/locationbiascomponent.js:87
+#: src/ui/components/search/searchcomponent.js:240
+msgid "We are unable to determine your location"
+msgstr "Нам не удалось определить ваше местоположение"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:167
+msgid "We're sorry, an error occurred."
+msgstr "К сожалению, произошла ошибка."
+
+#: src/ui/templates/results/noresults.hbs:7
+msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
+msgstr "Мы не нашли ответов по запросу <span class=\"yxt-NoResults-query\">[[query]]</span>."
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:13
+msgctxt "A button to begin listening for a voice search"
+msgid "Start Voice Search"
+msgstr "Начать голосовой поиск"
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:22
+msgctxt "A button to stop listening for a voice search"
+msgid "Stop Voice Search"
+msgstr "Остановить голосовой поиск"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:228
+msgctxt "After a date. Example: After [August 15th]"
+msgid "After [[date]]"
+msgstr "После [[date]]"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:244
+msgctxt "Before a date. Example: Before [August 15th]"
+msgid "Before [[date]]"
+msgstr "До [[date]]"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:235
+msgctxt "Beginning at a date (with no end date). Example: [August 15th] or later"
+msgid "[[date]] or later"
+msgstr "[[date]] или позднее"
+
+#: src/ui/components/filters/sortoptionscomponent.js:235
+msgctxt "Best match (i.e. most relevant), describing results"
+msgid "Best Match"
+msgstr "Лучшее соответствие"
+
+#: src/ui/components/results/resultsheadercomponent.js:28
+#: src/ui/components/results/verticalresultscomponent.js:155
+msgctxt "Button label"
+msgid "Remove this filter"
+msgstr "Удалить фильтр"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:69
+#: src/ui/components/search/searchcomponent.js:79
+msgctxt "Button label"
+msgid "Submit"
+msgstr "Отправить"
+
+#: src/ui/components/search/locationbiascomponent.js:17
+msgctxt "Button label"
+msgid "Update your location"
+msgstr "Обновите свое местоположение"
+
+#: src/ui/components/filters/facetscomponent.js:59
+#: src/ui/components/filters/filterboxcomponent.js:58
+msgctxt "Button label, deselects all options"
+msgid "reset all"
+msgstr "сбросить все"
+
+#: src/ui/components/filters/facetscomponent.js:44
+#: src/ui/components/filters/filterboxcomponent.js:43
+#: src/ui/components/filters/filteroptionscomponent.js:101
+#: src/ui/components/filters/sortoptionscomponent.js:281
+msgctxt "Button label, deselects one or more options"
+msgid "reset"
+msgstr "сбросить"
+
+#: src/ui/components/navigation/navigationcomponent.js:127
+msgctxt "Button label, displays more items"
+msgid "More"
+msgstr "Еще"
+
+#: src/ui/components/filters/facetscomponent.js:110
+#: src/ui/components/filters/filterboxcomponent.js:109
+msgctxt "Button label, effectuates changes"
+msgid "apply"
+msgstr "применить"
+
+#: src/ui/components/filters/sortoptionscomponent.js:318
+msgctxt "Button label, effectuates changes"
+msgid "Apply"
+msgstr "Применить"
+
+#: src/ui/components/results/directanswercomponent.js:72
+msgctxt "Button label, view is a verb"
+msgid "View Details"
+msgstr "Подробнее"
+
+#: src/ui/components/results/universalresultscomponent.js:121
+#: src/ui/components/results/verticalresultscomponent.js:169
+msgctxt "Button label, view more [results]"
+msgid "View More"
+msgstr "Показать еще"
+
+#: src/ui/templates/results/resultsheader.hbs:65
+msgctxt "Change is a verb, filters are a set of fixed values or criteria that limit results"
+msgid "change filters"
+msgstr "изменить фильтры"
+
+#: src/ui/templates/results/resultssectionheader.hbs:36
+msgctxt "Change is a verb. Example: change filtering logic"
+msgid "change"
+msgstr "изменить"
+
+#: src/ui/components/search/locationbiascomponent.js:13
+msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your device"
+msgid "based on your device"
+msgstr "по вашему устройству"
+
+#: src/ui/components/search/locationbiascomponent.js:9
+msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your internet address"
+msgid "based on your internet address"
+msgstr "по вашему интернет-адресу"
+
+#: src/ui/components/cards/standardcardcomponent.js:73
+msgctxt "Displays less details for the result"
+msgid "Show Less"
+msgstr "Показать меньше"
+
+#: src/ui/components/filters/facetscomponent.js:83
+#: src/ui/components/filters/filterboxcomponent.js:82
+#: src/ui/components/filters/filteroptionscomponent.js:125
+msgctxt "Displays less options"
+msgid "show less"
+msgstr "показать меньше"
+
+#: src/ui/components/filters/sortoptionscomponent.js:300
+msgctxt "Displays less options"
+msgid "Show less"
+msgstr "Показать меньше"
+
+#: src/ui/components/cards/standardcardcomponent.js:64
+msgctxt "Displays more details for the result"
+msgid "Show More"
+msgstr "Показать еще"
+
+#: src/ui/components/filters/facetscomponent.js:74
+#: src/ui/components/filters/filterboxcomponent.js:73
+#: src/ui/components/filters/filteroptionscomponent.js:116
+msgctxt "Displays more options"
+msgid "show more"
+msgstr "показать еще"
+
+#: src/ui/components/filters/sortoptionscomponent.js:294
+msgctxt "Displays more options"
+msgid "Show more"
+msgstr "Показать еще"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:251
+msgctxt "Ending at a date with (no start date). Example: [August 15th] or earlier"
+msgid "[[date]] and earlier"
+msgstr "[[date]] или раньше"
+
+#: src/ui/templates/results/resultsheader.hbs:21
+msgctxt "Example: 1-10 of 50"
+msgid "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">of</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
+msgstr "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span>"
+" <span class=\"yxt-ResultsHeader-resultsCountOf\">из</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
+
+#: src/ui/templates/results/verticalresultscount.hbs:5
+msgctxt "Example: 1-10 of 50"
+msgid ""
+"<span class=\"yxt-VerticalResultsCount-start\">[[start]]</span>\n"
+"<span class=\"yxt-VerticalResultsCount-dash\">-</span>\n"
+"<span class=\"yxt-VerticalResultsCount-end\">[[end]]</span>\n"
+"<span class=\"yxt-VerticalResultsCount-of\">of</span>\n"
+"<span class=\"yxt-VerticalResultsCount-total\">[[resultsCount]]</span>"
+msgstr "<span class=\"yxt-VerticalResultsCount-start\">[[start]]</span>\n<span class=\"yxt-VerticalResultsCount-dash\">-</span>\n<span class=\"yxt-VerticalResultsCount-end\">[[end]]</span>\n<span"
+" class=\"yxt-VerticalResultsCount-of\">из</span>\n<span class=\"yxt-VerticalResultsCount-total\">[[resultsCount]]</span>"
+
+#: src/ui/components/search/spellcheckcomponent.js:9
+msgctxt "Help text, labels a suggested phrase"
+msgid "Did you mean:"
+msgstr "Возможно, вы имели в виду:"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:109
+msgctxt "Indicates that entering input is mandatory"
+msgid "(required)"
+msgstr "(обязательно)"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:135
+msgctxt "Labels a link"
+msgid "Learn more here."
+msgstr "Узнайте больше здесь."
+
+#: src/ui/components/search/searchcomponent.js:70
+msgctxt "Labels an input field"
+msgid "Conduct a search"
+msgstr "Искать"
+
+#: src/ui/components/filters/facetscomponent.js:144
+#: src/ui/components/filters/filteroptionscomponent.js:174
+msgctxt "Labels an input field"
+msgid "Search for a filter option"
+msgstr "Искать фильтр"
+
+#: src/ui/components/search/filtersearchcomponent.js:64
+msgctxt "Labels an input field"
+msgid "What are you interested in?"
+msgstr "Чем вы интересуетесь?"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:34
+msgctxt "Labels the email value provided as an argument"
+msgid "Email"
+msgstr "Эл. почта"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:43
+msgctxt "Labels the name value provided as an argument"
+msgid "Name"
+msgstr "Имя"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:52
+msgctxt "Labels the question value provided as an argument"
+msgid "Question"
+msgstr "Вопрос"
+
+#: src/ui/components/filters/geolocationcomponent.js:77
+msgctxt "Labels the user's current location"
+msgid "Current Location"
+msgstr "Текущее местоположение"
+
+#: src/ui/components/filters/rangefiltercomponent.js:19
+msgctxt "Maximum"
+msgid "Max"
+msgstr "Макс."
+
+#: src/ui/components/filters/rangefiltercomponent.js:15
+msgctxt "Minimum"
+msgid "Min"
+msgstr "Мин."
+
+#: src/ui/components/results/paginationcomponent.js:97
+msgctxt "Noun, a page of results"
+msgid "Page"
+msgstr "Страница"
+
+#: src/ui/components/navigation/navigationcomponent.js:185
+msgctxt "Noun, labels the navigation for the search page"
+msgid "Search Page Navigation"
+msgstr "Навигация по страницам поиска"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:118
+msgctxt "Placeholder text for input field"
+msgid "Enter your question here"
+msgstr "Введите свой вопрос здесь"
+
+#: src/ui/components/filters/facetscomponent.js:129
+#: src/ui/components/filters/filteroptionscomponent.js:159
+msgctxt "Placeholder text for input field"
+msgid "Search here..."
+msgstr "Искать здесь…"
+
+#: src/ui/components/filters/facetscomponent.js:17
+#: src/ui/components/filters/filterboxcomponent.js:16
+#: src/ui/components/filters/filteroptionscomponent.js:66
+msgctxt "Plural noun, title for a group of controls that filter results"
+msgid "Filters"
+msgstr "Фильтры"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:261
+msgctxt "Start date to end date. Example: [August 15th] - [August 16th]"
+msgid "[[start]] - [[end]]"
+msgstr "[[start]] - [[end]]"
+
+#: src/ui/components/filters/sortoptionscomponent.js:309
+msgctxt "Title for a group of controls that sort results"
+msgid "Sorting"
+msgstr "Сортировать по"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:78
+msgctxt "Title of section"
+msgid "Ask a Question"
+msgstr "Задать вопрос"
+
+#: src/ui/components/filters/facetscomponent.js:306
+msgctxt "True or False"
+msgid "False"
+msgstr "Ложь"
+
+#: src/ui/components/filters/facetscomponent.js:303
+msgctxt "True or False"
+msgid "True"
+msgstr "Истина"
+
+#: src/ui/components/search/searchcomponent.js:88
+msgctxt "Verb, clears search"
+msgid "Clear"
+msgstr "Очистить"

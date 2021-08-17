@@ -1,0 +1,476 @@
+msgid ""
+msgstr ""
+"Content-Type: text/plain; charset=UTF-8\n"
+
+#: src/ui/templates/results/alternativeverticals.hbs:28
+msgid "([[resultsCount]] result)"
+msgid_plural "([[resultsCount]] results)"
+msgstr[0] "([[resultsCount]] result)"
+msgstr[1] "([[resultsCount]] results)"
+
+#: src/ui/templates/search/autocomplete.hbs:14
+msgid "[[resultsCount]] autocomplete option found"
+msgid_plural "[[resultsCount]] autocomplete options found"
+msgstr[0] "[[resultsCount]] ऑटोकंप्लीट विकल्प मिला"
+msgstr[1] "[[resultsCount]] ऑटोकंप्लीट विकल्प मिले"
+
+#: src/ui/templates/results/resultsheader.hbs:19
+#: src/ui/templates/results/verticalresultscount.hbs:3
+msgid "[[start]] through [[end]] of [[resultsCount]]"
+msgstr "[[resultsCount]] का [[start]] through [[end]]"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:158
+msgid "* Please enter a valid email address."
+msgstr "* कृपया एक मान्य ईमेल पता डालें."
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:150
+msgid "* You must agree to the privacy policy to submit a question."
+msgstr "* सवाल सबमिट करने के लिए आपको गोपनीयता नीति को सहमति देनी होगी."
+
+#: src/ui/templates/results/alternativeverticals.hbs:3
+msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
+msgstr "[[currentVerticalLabel]] में <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em>."
+
+#: src/ui/templates/results/alternativeverticals.hbs:40
+msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
+msgstr "इसके बजाय, आप <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\">सभी सर्च कैटेगरी में परिणाम देख</a> सकते हैं."
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:61
+msgid "By submitting my email address, I consent to being contacted via email at the address provided."
+msgstr "अपना ईमेल पता सबमिट करके, मैं दिए गए पते पर ईमेल से संपर्क किए जाने की सहमति देता हूं."
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:87
+msgid "Can’t find what you're looking for? Ask a question below."
+msgstr "आप जो खोज रहे हैं वह नहीं मिल रहा है? नीचे एक सवाल पूछें."
+
+#: src/ui/components/filters/geolocationcomponent.js:94
+msgid "Could Not Find Your Location"
+msgstr "आपका लोकेशन नहीं मिला"
+
+#: src/ui/templates/results/pagination.hbs:60
+msgid "Currently on page [[pageNumber]]"
+msgstr "इस समय पेज [[paageNumber]] पर"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:101
+msgid "Enter your question and contact information, and we'll get back to you with a response shortly."
+msgstr "अपना सवाल और संपर्क जानकारी डालें और हम जल्द से जल्द जवाब देंगें."
+
+#: src/ui/templates/questions/questionsubmission.hbs:7
+msgid "expand question form"
+msgstr "सवाल वाला फ़ॉर्म फैलाएँ"
+
+#: src/ui/components/results/resultsheadercomponent.js:25
+#: src/ui/components/results/universalresultscomponent.js:23
+#: src/ui/components/results/verticalresultscomponent.js:143
+msgid "Filters applied to this search:"
+msgstr "इस सर्च पर ये फ़िल्टर लगे हुए हैं:"
+
+#: src/ui/components/filters/geolocationcomponent.js:86
+msgid "Finding Your Location..."
+msgstr "आपका लोकेशन ढूँढा जा रहा है..."
+
+#: src/ui/templates/results/pagination.hbs:83
+msgid "Go to page [[maxPage]] of results"
+msgstr "परिणामों के पेज [[maxPage]] पर जाएं"
+
+#: src/ui/templates/results/pagination.hbs:65
+msgid "Go to page [[pageNumber]] of results"
+msgstr "परिणामों के पेज [[pageNumber]] पर जाएं"
+
+#: src/ui/templates/results/pagination.hbs:44
+msgid "Go to page 1 of results"
+msgstr "परिणामों के पेज 1 पर जाएँ"
+
+#: src/ui/templates/results/pagination.hbs:7
+msgid "Go to the first page of results"
+msgstr "परिणामों के पहले पेज पर जाएं"
+
+#: src/ui/templates/results/pagination.hbs:111
+msgid "Go to the last page of results"
+msgstr "परिणामों के आखिरी पेज पर जाएं"
+
+#: src/ui/templates/results/pagination.hbs:94
+msgid "Go to the next page of results"
+msgstr "परिणामों के अगले पेज पर जाएं"
+
+#: src/ui/templates/cards/standard.hbs:24
+msgid "Image for [[title]]"
+msgstr "[[title]] के लिए इमेज"
+
+#: src/ui/components/filters/geolocationcomponent.js:285
+#: src/ui/components/filters/geolocationcomponent.js:39
+#: src/ui/components/filters/geolocationcomponent.js:47
+msgid "Location"
+msgstr "लोकेशन"
+
+#: src/ui/templates/results/noresults.hbs:31
+msgid "Make sure all words are spelled correctly."
+msgstr "सुनिश्चित करें कि सभी शब्दों का सही उच्चारण किया गया हो."
+
+#: src/ui/speechrecognition/speechrecognizer.js:97
+msgid "Note: For Safari users, Siri must be enabled"
+msgstr "नोट: Safari उपयोगकर्ताओं के लिए, Siri इनेबल होनी चाहिए"
+
+#: src/ui/speechrecognition/voicesearchcontroller.js:62
+msgid "Permission to use microphone is blocked"
+msgstr "माइक्रोफ़ोन को इस्तेमाल करने की अनुमति ब्लॉक है"
+
+#: src/ui/templates/results/directanswer.hbs:74
+msgid "Send feedback"
+msgstr "फ़ीडबैक दें"
+
+#: src/ui/templates/results/alternativeverticals.hbs:5
+msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
+msgstr "इसकी जगह <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> दिखाया जा रहा है."
+
+#: src/ui/speechrecognition/speechrecognizer.js:96
+msgid "Speech Recognition is not available."
+msgstr "आवाज़ की पहचान उपलब्ध नहीं है."
+
+#: src/ui/templates/results/noresults.hbs:24
+msgid "Suggestions:"
+msgstr "सुझाव:"
+
+#: src/ui/components/results/directanswercomponent.js:29
+msgid "Thank you for your feedback!"
+msgstr "आपके फ़ीडबैक के लिए आपका धन्यवाद!"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:127
+msgid "Thank you for your question!"
+msgstr "आपके सवाल के लिए आपका धन्यवाद!"
+
+#: src/ui/templates/results/alternativeverticals.hbs:11
+msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgstr[0] "इस सर्च केटेगरी से <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span> के परिणाम सामने आए:"
+msgstr[1] "इन सर्च कैटेगरीज़ से <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span> के परिणाम सामने आए:"
+
+#: src/ui/components/results/directanswercomponent.js:23
+msgid "This answered my question"
+msgstr "इससे मेरे सवाल का जवाब मिल गया"
+
+#: src/ui/components/results/directanswercomponent.js:26
+msgid "This did not answer my question"
+msgstr "इससे मेरे सवाल का जवाब नहीं मिला"
+
+#: src/ui/templates/results/noresults.hbs:34
+msgid "Try fewer words."
+msgstr "कम शब्दों का इस्तेमाल करें."
+
+#: src/ui/templates/results/noresults.hbs:33
+msgid "Try more general words."
+msgstr "आम शब्दों का इस्तेमाल करें."
+
+#: src/ui/templates/results/noresults.hbs:15
+msgid "Try refining your query or <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">search all content.</a>"
+msgstr "अपने सवाल को और बेहतर बनाने की कोशिश करें या <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">सारा कंटेंट सर्च करें.</a>"
+
+#: src/ui/templates/results/noresults.hbs:32
+msgid "Try to ask your question a different way."
+msgstr "अपने सवाल को दूसरे तरीके से पूछने की कोशिश करें."
+
+#: src/ui/components/search/locationbiascomponent.js:150
+msgid "Unknown Location"
+msgstr "अनजान लोकेशन"
+
+#: src/ui/components/filters/geolocationcomponent.js:61
+#: src/ui/components/filters/geolocationcomponent.js:69
+msgid "Use My Location"
+msgstr "मेरे लोकेशन का इस्तेमाल करें"
+
+#: src/ui/components/filters/geolocationcomponent.js:152
+#: src/ui/components/search/locationbiascomponent.js:87
+#: src/ui/components/search/searchcomponent.js:240
+msgid "We are unable to determine your location"
+msgstr "हम आपके लोकेशन का पता नहीं लगा पाए"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:167
+msgid "We're sorry, an error occurred."
+msgstr "माफ़ कीजिए, एक गड़बड़ी हुई."
+
+#: src/ui/templates/results/noresults.hbs:7
+msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
+msgstr "आपका सर्च - <span class=\"yxt-NoResults-query\">[[query]]</span> - हमारे पास मौजूद किसी भी जवाब से मेल नहीं खाता."
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:13
+msgctxt "A button to begin listening for a voice search"
+msgid "Start Voice Search"
+msgstr "वॉइस सर्च शुरू करें"
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:22
+msgctxt "A button to stop listening for a voice search"
+msgid "Stop Voice Search"
+msgstr "वॉइस सर्च बंद करें"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:228
+msgctxt "After a date. Example: After [August 15th]"
+msgid "After [[date]]"
+msgstr "[[date]] के बाद"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:244
+msgctxt "Before a date. Example: Before [August 15th]"
+msgid "Before [[date]]"
+msgstr "[[date]] से पहले"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:235
+msgctxt "Beginning at a date (with no end date). Example: [August 15th] or later"
+msgid "[[date]] or later"
+msgstr "[[date]] या उसके बाद"
+
+#: src/ui/components/filters/sortoptionscomponent.js:235
+msgctxt "Best match (i.e. most relevant), describing results"
+msgid "Best Match"
+msgstr "सबसे अच्छा मैच"
+
+#: src/ui/components/results/resultsheadercomponent.js:28
+#: src/ui/components/results/verticalresultscomponent.js:155
+msgctxt "Button label"
+msgid "Remove this filter"
+msgstr "इस फ़िल्टर को हटाएँ"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:69
+#: src/ui/components/search/searchcomponent.js:79
+msgctxt "Button label"
+msgid "Submit"
+msgstr "सबमिट करें"
+
+#: src/ui/components/search/locationbiascomponent.js:17
+msgctxt "Button label"
+msgid "Update your location"
+msgstr "अपना लोकेशन अपडेट करें"
+
+#: src/ui/components/filters/facetscomponent.js:59
+#: src/ui/components/filters/filterboxcomponent.js:58
+msgctxt "Button label, deselects all options"
+msgid "reset all"
+msgstr "सभी रीसेट करें"
+
+#: src/ui/components/filters/facetscomponent.js:44
+#: src/ui/components/filters/filterboxcomponent.js:43
+#: src/ui/components/filters/filteroptionscomponent.js:101
+#: src/ui/components/filters/sortoptionscomponent.js:281
+msgctxt "Button label, deselects one or more options"
+msgid "reset"
+msgstr "रीसेट करें"
+
+#: src/ui/components/navigation/navigationcomponent.js:127
+msgctxt "Button label, displays more items"
+msgid "More"
+msgstr "ज़्यादा"
+
+#: src/ui/components/filters/facetscomponent.js:110
+#: src/ui/components/filters/filterboxcomponent.js:109
+msgctxt "Button label, effectuates changes"
+msgid "apply"
+msgstr "लागू करें"
+
+#: src/ui/components/filters/sortoptionscomponent.js:318
+msgctxt "Button label, effectuates changes"
+msgid "Apply"
+msgstr "लागू करें"
+
+#: src/ui/components/results/directanswercomponent.js:72
+msgctxt "Button label, view is a verb"
+msgid "View Details"
+msgstr "जानकारी देखें"
+
+#: src/ui/components/results/universalresultscomponent.js:121
+#: src/ui/components/results/verticalresultscomponent.js:169
+msgctxt "Button label, view more [results]"
+msgid "View More"
+msgstr "और देखें"
+
+#: src/ui/templates/results/resultsheader.hbs:65
+msgctxt "Change is a verb, filters are a set of fixed values or criteria that limit results"
+msgid "change filters"
+msgstr "फ़िल्टर बदलें"
+
+#: src/ui/templates/results/resultssectionheader.hbs:36
+msgctxt "Change is a verb. Example: change filtering logic"
+msgid "change"
+msgstr "बदलें"
+
+#: src/ui/components/search/locationbiascomponent.js:13
+msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your device"
+msgid "based on your device"
+msgstr "आपके डिवाइस के आधार पर"
+
+#: src/ui/components/search/locationbiascomponent.js:9
+msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your internet address"
+msgid "based on your internet address"
+msgstr "आपके इंटरनेट पते के आधार पर"
+
+#: src/ui/components/cards/standardcardcomponent.js:73
+msgctxt "Displays less details for the result"
+msgid "Show Less"
+msgstr "कम देखें"
+
+#: src/ui/components/filters/facetscomponent.js:83
+#: src/ui/components/filters/filterboxcomponent.js:82
+#: src/ui/components/filters/filteroptionscomponent.js:125
+msgctxt "Displays less options"
+msgid "show less"
+msgstr "कम देखें"
+
+#: src/ui/components/filters/sortoptionscomponent.js:300
+msgctxt "Displays less options"
+msgid "Show less"
+msgstr "कम देखें"
+
+#: src/ui/components/cards/standardcardcomponent.js:64
+msgctxt "Displays more details for the result"
+msgid "Show More"
+msgstr "ज़्यादा देखें"
+
+#: src/ui/components/filters/facetscomponent.js:74
+#: src/ui/components/filters/filterboxcomponent.js:73
+#: src/ui/components/filters/filteroptionscomponent.js:116
+msgctxt "Displays more options"
+msgid "show more"
+msgstr "ज़्यादा देखें"
+
+#: src/ui/components/filters/sortoptionscomponent.js:294
+msgctxt "Displays more options"
+msgid "Show more"
+msgstr "ज़्यादा देखें"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:251
+msgctxt "Ending at a date with (no start date). Example: [August 15th] or earlier"
+msgid "[[date]] and earlier"
+msgstr "[[date]] या उससे पहले"
+
+#: src/ui/templates/results/resultsheader.hbs:21
+msgctxt "Example: 1-10 of 50"
+msgid "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">of</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
+msgstr "<span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">का</span> <span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span>"
+" <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> "
+
+#: src/ui/templates/results/verticalresultscount.hbs:5
+msgctxt "Example: 1-10 of 50"
+msgid ""
+"<span class=\"yxt-VerticalResultsCount-start\">[[start]]</span>\n"
+"<span class=\"yxt-VerticalResultsCount-dash\">-</span>\n"
+"<span class=\"yxt-VerticalResultsCount-end\">[[end]]</span>\n"
+"<span class=\"yxt-VerticalResultsCount-of\">of</span>\n"
+"<span class=\"yxt-VerticalResultsCount-total\">[[resultsCount]]</span>"
+msgstr "<span class=\"yxt-VerticalResultsCount-total\">[[resultsCount]]</span>\n<span class=\"yxt-VerticalResultsCount-of\">का</span>\n<span class=\"yxt-VerticalResultsCount-start\">[[start]]</span>\n<span"
+" class=\"yxt-VerticalResultsCount-dash\">-</span>\n<span class=\"yxt-VerticalResultsCount-end\">[[end]]</span>"
+
+#: src/ui/components/search/spellcheckcomponent.js:9
+msgctxt "Help text, labels a suggested phrase"
+msgid "Did you mean:"
+msgstr "क्या आपका मतलब यह था:"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:109
+msgctxt "Indicates that entering input is mandatory"
+msgid "(required)"
+msgstr "(आवश्यक)"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:135
+msgctxt "Labels a link"
+msgid "Learn more here."
+msgstr "यहाँ और जानें."
+
+#: src/ui/components/search/searchcomponent.js:70
+msgctxt "Labels an input field"
+msgid "Conduct a search"
+msgstr "सर्च करें"
+
+#: src/ui/components/filters/facetscomponent.js:144
+#: src/ui/components/filters/filteroptionscomponent.js:174
+msgctxt "Labels an input field"
+msgid "Search for a filter option"
+msgstr "फ़िल्टर विकल्प ढूँढ़ें"
+
+#: src/ui/components/search/filtersearchcomponent.js:64
+msgctxt "Labels an input field"
+msgid "What are you interested in?"
+msgstr "आपकी रुचि किस चीज़ में है?"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:34
+msgctxt "Labels the email value provided as an argument"
+msgid "Email"
+msgstr "ईमेल"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:43
+msgctxt "Labels the name value provided as an argument"
+msgid "Name"
+msgstr "नाम"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:52
+msgctxt "Labels the question value provided as an argument"
+msgid "Question"
+msgstr "सवाल"
+
+#: src/ui/components/filters/geolocationcomponent.js:77
+msgctxt "Labels the user's current location"
+msgid "Current Location"
+msgstr "अभी का लोकेशन"
+
+#: src/ui/components/filters/rangefiltercomponent.js:19
+msgctxt "Maximum"
+msgid "Max"
+msgstr "अधिकतम"
+
+#: src/ui/components/filters/rangefiltercomponent.js:15
+msgctxt "Minimum"
+msgid "Min"
+msgstr "कम से कम"
+
+#: src/ui/components/results/paginationcomponent.js:97
+msgctxt "Noun, a page of results"
+msgid "Page"
+msgstr "पेज"
+
+#: src/ui/components/navigation/navigationcomponent.js:185
+msgctxt "Noun, labels the navigation for the search page"
+msgid "Search Page Navigation"
+msgstr "सर्च पेज नेविगेशन"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:118
+msgctxt "Placeholder text for input field"
+msgid "Enter your question here"
+msgstr "अपना सवाल यहाँ डालें"
+
+#: src/ui/components/filters/facetscomponent.js:129
+#: src/ui/components/filters/filteroptionscomponent.js:159
+msgctxt "Placeholder text for input field"
+msgid "Search here..."
+msgstr "यहाँ सर्च करें..."
+
+#: src/ui/components/filters/facetscomponent.js:17
+#: src/ui/components/filters/filterboxcomponent.js:16
+#: src/ui/components/filters/filteroptionscomponent.js:66
+msgctxt "Plural noun, title for a group of controls that filter results"
+msgid "Filters"
+msgstr "फ़िल्टर"
+
+#: src/ui/components/filters/daterangefiltercomponent.js:261
+msgctxt "Start date to end date. Example: [August 15th] - [August 16th]"
+msgid "[[start]] - [[end]]"
+msgstr "[[start]] - [[end]]"
+
+#: src/ui/components/filters/sortoptionscomponent.js:309
+msgctxt "Title for a group of controls that sort results"
+msgid "Sorting"
+msgstr "सॉर्टिंग"
+
+#: src/ui/components/questions/questionsubmissioncomponent.js:78
+msgctxt "Title of section"
+msgid "Ask a Question"
+msgstr "सवाल पूछें."
+
+#: src/ui/components/filters/facetscomponent.js:306
+msgctxt "True or False"
+msgid "False"
+msgstr "ग़लत"
+
+#: src/ui/components/filters/facetscomponent.js:303
+msgctxt "True or False"
+msgid "True"
+msgstr "सही"
+
+#: src/ui/components/search/searchcomponent.js:88
+msgctxt "Verb, clears search"
+msgid "Clear"
+msgstr "क्लियर करें"
