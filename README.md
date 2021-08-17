@@ -499,9 +499,9 @@ ANSWERS.addComponent('SearchBar', {
   voiceSearch: {
     // Optional, whether or not voice search is enabled
     enabled: false,
-    // Optional, path to override the voice start icon
+    // Optional, provide custom mic icon url to override the voice start icon
     customMicIconUrl: "",
-    // Optional, path to override the voice stop icon
+    // Optional, provide custom listening icon url to override the voice stop icon
     customListeningIconUrl: ""
   }
 })
