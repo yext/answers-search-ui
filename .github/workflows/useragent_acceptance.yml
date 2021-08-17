@@ -19,5 +19,6 @@ jobs:
     - run: npx testcafe --list-browsers
     - uses: DevExpress/testcafe-action@latest
       with:
+        skip-install: true
         args: "\"chrome:headless,firefox:headless,safari,edge\" tests/acceptance/useragent/useragentsuite.js --config-file ./.circleci/testcafe.json"
 
