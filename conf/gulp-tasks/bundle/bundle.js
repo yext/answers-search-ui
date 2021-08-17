@@ -32,12 +32,11 @@ const TranslateCallParser = require('../../i18n/translatecallparser');
 exports.modernBundle = function (
   callback,
   entryPoint,
-  outputConfig, 
-  bundleName, 
-  locale, 
-  libVersion, 
-  translationResolver) 
-{
+  outputConfig,
+  bundleName,
+  locale,
+  libVersion,
+  translationResolver) {
   const rollupConfig = {
     input: entryPoint,
     output: outputConfig,
@@ -74,12 +73,11 @@ exports.modernBundle = function (
 exports.legacyBundle = function (
   callback,
   entryPoint,
-  outputConfig, 
-  bundleName, 
-  locale, 
+  outputConfig,
+  bundleName,
+  locale,
   libVersion,
-  translationResolver) 
-{
+  translationResolver) {
   const rollupConfig = {
     input: entryPoint,
     output: outputConfig,

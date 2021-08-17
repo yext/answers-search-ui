@@ -121,7 +121,7 @@ export default class ComponentManager {
     };
     this._componentIdCounter++;
 
-    let componentClass = this._componentRegistry[componentType];
+    const componentClass = this._componentRegistry[componentType];
     if (!componentClass) {
       throw new AnswersComponentError(
         `Component type ${componentType} is not recognized as a valid component.` +
@@ -143,7 +143,7 @@ export default class ComponentManager {
     };
 
     // Instantiate our new component and keep track of it
-    let component =
+    const component =
       new this._componentRegistry[componentType](config, systemOpts)
         .init(config);
 

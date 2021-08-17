@@ -63,14 +63,14 @@ function precompileTemplates (callback, isSearchBarOnly, outputFile, processAST)
     templatesStream =
       templatesStream.pipe(filter(['**/search/**/*.hbs', '**/icons/**/*.hbs']));
     handlebarsWrapperData = {
-      importStatements: "import Handlebars from 'handlebars/dist/handlebars.runtime.min.js';"
+      importStatements: 'import Handlebars from \'handlebars/dist/handlebars.runtime.min.js\';'
     };
   } else {
     handlebarsWrapperData = {
-      importStatements: `import Handlebars from 'handlebars/dist/handlebars.min.js';\n` +
-                        `import templateHelpers from 'template-helpers';`,
-      handlebarsHelpers: `let handlebarsHelpers = templateHelpers();\n` +
-                         `parseHelper(handlebarsHelpers);`
+      importStatements: 'import Handlebars from \'handlebars/dist/handlebars.min.js\';\n' +
+                        'import templateHelpers from \'template-helpers\';',
+      handlebarsHelpers: 'let handlebarsHelpers = templateHelpers();\n' +
+                         'parseHelper(handlebarsHelpers);'
     };
   }
 
