@@ -487,6 +487,22 @@ ANSWERS.addComponent('SearchBar', {
     onClose: function() {},
     // Optional, callback invoked when the autocomplete component changes from closed to open.
     onOpen: function() {},
+  },
+  //Optional, options for loading indicator on seachbar
+  loadingIndicator: {
+    //Optional, whether to include a loading indicator on seachbar
+    display: false,
+    //Optional, use custom icon url instead of the default loading indicator animation
+    iconUrl: ""
+  },
+  //Optional, options for voice search feature on seachbar
+  voiceSearch: {
+    // Optional, whether or not voice search is enabled
+    enabled: false,
+    // Optional, provide custom mic icon url to override the voice start icon
+    customMicIconUrl: "",
+    // Optional, provide custom listening icon url to override the voice stop icon
+    customListeningIconUrl: ""
   }
 })
 ```
