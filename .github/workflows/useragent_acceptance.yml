@@ -17,5 +17,7 @@ jobs:
     - run: npm ci
     - run: npm run build
     - run: npx testcafe --list-browsers
-    - run: npx testcafe "chrome:headless,firefox:headless,safari,edge" tests/acceptance/useragent/useragentsuite.js --config-file ./.circleci/testcafe.json
+    - uses: DevExpress/testcafe-action@latest
+      with:
+        args: "\"chrome:headless,firefox:headless,safari,edge\" tests/acceptance/useragent/useragentsuite.js --config-file ./.circleci/testcafe.json"
 
