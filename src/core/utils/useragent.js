@@ -1,3 +1,7 @@
+import { getParser } from "bowser";
+
+const browser = Bowser.getParser(window.navigator.userAgent);
+
 /**
  * Returns whether the current browser is Microsoft Edge.
  * Tries to use User-Agent clients hints, and defaults to
@@ -6,12 +10,7 @@
  * @returns {boolean}
  */
 export function isMicrosoftEdge () {
-  const brands = navigator.userAgentData?.brands;
-  if (brands && brands.length > 0) {
-    return !!brands.find(b => b.brand === 'Microsoft Edge');
-  } else if (navigator.userAgent) {
-    return navigator.userAgent.includes('Edg');
-  }
+  return browser.getBrowserName() === 'Microsoft Edge';
 }
 
 /**
@@ -23,13 +22,7 @@ export function isMicrosoftEdge () {
  * @returns {boolean}
  */
 export function isSafari () {
-  if (isChrome()) {
-    return false;
-  }
-  if (isMicrosoftEdge()) {
-    return false;
-  }
-  return navigator.userAgent.includes('Safari');
+  return browser.getBrowserName() === 'Safari';
 }
 
 /**
@@ -39,13 +32,5 @@ export function isSafari () {
  * @returns {boolean}
  */
 export function isChrome () {
-  if (isMicrosoftEdge()) {
-    return false;
-  }
-  const brands = navigator.userAgentData?.brands;
-  if (brands && brands.length > 0) {
-    return !!brands.find(b => b.brand === 'Google Chrome');
-  } else if (navigator.userAgent) {
-    return navigator.userAgent.includes('Chrome');
-  }
+  return browser.getBrowserName() === 'Chrome';
 }
