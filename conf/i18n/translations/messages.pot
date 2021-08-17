@@ -97,6 +97,10 @@ msgstr ""
 msgid "Image for [[title]]"
 msgstr ""
 
+#: src/ui/components/questions/questionsubmissioncomponent.js:176
+msgid "Invalid email address. Please refresh the page and try submitting your question again."
+msgstr ""
+
 #: src/ui/components/filters/geolocationcomponent.js:285
 #: src/ui/components/filters/geolocationcomponent.js:39
 #: src/ui/components/filters/geolocationcomponent.js:47
@@ -111,7 +115,7 @@ msgstr ""
 msgid "Note: For Safari users, Siri must be enabled"
 msgstr ""
 
-#: src/ui/speechrecognition/voicesearchcontroller.js:62
+#: src/ui/speechrecognition/voicesearchcontroller.js:65
 msgid "Permission to use microphone is blocked"
 msgstr ""
 
