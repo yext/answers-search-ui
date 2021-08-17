@@ -25,7 +25,7 @@ msgctxt "Change is a verb, filters are a set of fixed values or criteria that li
 msgid "change filters"
 msgstr "cambiar filtros"
 
-#: src/ui/templates/results/resultssectionheader.hbs:41
+#: src/ui/templates/results/resultssectionheader.hbs:36
 msgctxt "Change is a verb. Example: change filtering logic"
 msgid "change"
 msgstr "cambiar"
@@ -98,7 +98,7 @@ msgctxt "Labels the user's current location"
 msgid "Current Location"
 msgstr "Local actual"
 
-#: src/ui/templates/results/alternativeverticals.hbs:32
+#: src/ui/templates/results/alternativeverticals.hbs:28
 msgid "([[resultsCount]] result)"
 msgid_plural "([[resultsCount]] results)"
 msgstr[0] "[[resultsCount]] resultado"
@@ -116,7 +116,7 @@ msgstr "* Aceptar las normas de privacidad para enviar su opinión."
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
 msgstr "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">Ningún resultado disponible</em> en [[currentVerticalLabel]]."
 
-#: src/ui/templates/results/alternativeverticals.hbs:47
+#: src/ui/templates/results/alternativeverticals.hbs:40
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
 msgstr "En su defecto, puede <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> ver los resultados para todas las categorías de búsqueda</a>."
 
@@ -170,7 +170,15 @@ msgstr "imagen para [[title]]"
 msgid "Make sure all words are spelled correctly."
 msgstr "Verifique que todas las palabras estén escritas correctamente."
 
-#: src/ui/templates/results/directanswer.hbs:83
+#: src/ui/speechrecognition/speechrecognizer.js:97
+msgid "Note: For Safari users, Siri must be enabled"
+msgstr "Nota: Para los usuarios de Safari, Siri debe estar activada"
+
+#: src/ui/speechrecognition/voicesearchcontroller.js:62
+msgid "Permission to use microphone is blocked"
+msgstr "El permiso para usar el micrófono está denegado"
+
+#: src/ui/templates/results/directanswer.hbs:74
 msgid "Send feedback"
 msgstr "enviar feedback"
 
@@ -178,11 +186,15 @@ msgstr "enviar feedback"
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
 msgstr "Mostrando <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\"> en vez que [[currentVerticalLabel]]</em>."
 
+#: src/ui/speechrecognition/speechrecognizer.js:96
+msgid "Speech Recognition is not available."
+msgstr "El reconocimiento de voz no está disponible."
+
 #: src/ui/templates/results/noresults.hbs:24
 msgid "Suggestions:"
 msgstr "Sugerencias:"
 
-#: src/ui/components/results/directanswercomponent.js:27
+#: src/ui/components/results/directanswercomponent.js:29
 msgid "Thank you for your feedback!"
 msgstr "Gracias por su comentario"
 
@@ -196,11 +208,11 @@ msgid_plural "The following search categories yielded results for <span class=\"
 msgstr[0] "La siguiente búsqueda ha generado categoría resultados para <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
 msgstr[1] "La siguiente búsqueda ha generado categorias resultados para <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
 
-#: src/ui/components/results/directanswercomponent.js:21
+#: src/ui/components/results/directanswercomponent.js:23
 msgid "This answered my question"
 msgstr "Ha respondido mi pregunta"
 
-#: src/ui/components/results/directanswercomponent.js:24
+#: src/ui/components/results/directanswercomponent.js:26
 msgid "This did not answer my question"
 msgstr "No ha respondido mi pregunta"
 
@@ -227,7 +239,7 @@ msgstr "Utiliza mi posición"
 
 #: src/ui/components/filters/geolocationcomponent.js:147
 #: src/ui/components/search/locationbiascomponent.js:76
-#: src/ui/components/search/searchcomponent.js:207
+#: src/ui/components/search/searchcomponent.js:233
 msgid "We are unable to determine your location"
 msgstr "No hemos podido determinar su posición exacta"
 
@@ -238,6 +250,16 @@ msgstr "Nos disculpamos, ha ocurrido un error."
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
 msgstr "Su búsqueda - <span class=\"yxt-NoResults-query\">[[query]]</span> - no ha coincidido con las respuestas disponibles."
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:13
+msgctxt "A button to begin listening for a voice search"
+msgid "Start Voice Search"
+msgstr "Iniciar la búsqueda por voz"
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:22
+msgctxt "A button to stop listening for a voice search"
+msgid "Stop Voice Search"
+msgstr "Detener la búsqueda por voz"
 
 #: src/ui/components/filters/sortoptionscomponent.js:152
 msgctxt "Best match (i.e. most relevant), describing results"
@@ -291,12 +313,12 @@ msgctxt "Button label, effectuates changes"
 msgid "Apply"
 msgstr "Aplicar"
 
-#: src/ui/components/results/directanswercomponent.js:70
+#: src/ui/components/results/directanswercomponent.js:72
 msgctxt "Button label, view is a verb"
 msgid "View Details"
 msgstr "Más detalles"
 
-#: src/ui/components/results/universalresultscomponent.js:94
+#: src/ui/components/results/universalresultscomponent.js:121
 #: src/ui/components/results/verticalresultscomponent.js:161
 msgctxt "Button label, view more [results]"
 msgid "View More"

@@ -19,7 +19,7 @@ msgctxt "Change is a verb, filters are a set of fixed values or criteria that li
 msgid "change filters"
 msgstr "フィルタを変更する"
 
-#: src/ui/templates/results/resultssectionheader.hbs:41
+#: src/ui/templates/results/resultssectionheader.hbs:36
 msgctxt "Change is a verb. Example: change filtering logic"
 msgid "change"
 msgstr "変更する"
@@ -92,7 +92,7 @@ msgctxt "Labels the user's current location"
 msgid "Current Location"
 msgstr "現在のロケーション"
 
-#: src/ui/templates/results/alternativeverticals.hbs:32
+#: src/ui/templates/results/alternativeverticals.hbs:28
 msgid "([[resultsCount]] result)"
 msgid_plural "([[resultsCount]] results)"
 msgstr[0] "（[[resultsCount]]件の結果）"
@@ -101,7 +101,7 @@ msgstr[0] "（[[resultsCount]]件の結果）"
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
 msgstr "[[currentVerticalLabel]] で<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">結果は見つかりませんでした</em>。"
 
-#: src/ui/templates/results/alternativeverticals.hbs:47
+#: src/ui/templates/results/alternativeverticals.hbs:40
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
 msgstr "代わりに<a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\">すべての検索カテゴリーの結果を表示することもできます</a>。"
 
@@ -137,13 +137,25 @@ msgstr "[[title]]の画像"
 msgid "Make sure all words are spelled correctly."
 msgstr "すべての単語の綴りが正しいことを確認してください。"
 
-#: src/ui/templates/results/directanswer.hbs:83
+#: src/ui/speechrecognition/speechrecognizer.js:97
+msgid "Note: For Safari users, Siri must be enabled"
+msgstr "注：Safariをご利用の場合はSiriを有効にする必要があります。"
+
+#: src/ui/speechrecognition/voicesearchcontroller.js:62
+msgid "Permission to use microphone is blocked"
+msgstr "マイクの使用許可がブロックされています"
+
+#: src/ui/templates/results/directanswer.hbs:74
 msgid "Send feedback"
 msgstr "フィードバックを送信する"
 
 #: src/ui/templates/results/alternativeverticals.hbs:5
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
 msgstr "代わりに<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">すべての[[currentVerticalLabel]]</em>を表示しています。"
+
+#: src/ui/speechrecognition/speechrecognizer.js:96
+msgid "Speech Recognition is not available."
+msgstr "音声認識は利用できません。"
 
 #: src/ui/templates/results/noresults.hbs:24
 msgid "Suggestions:"
@@ -174,6 +186,16 @@ msgstr "別の方法で質問してみてください。"
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
 msgstr "検索内容 - <span class=\"yxt-NoResults-query\">[[query]]</span> - に一致する回答はありませんでした。"
 
+#: src/ui/speechrecognition/screenreadertextcontroller.js:13
+msgctxt "A button to begin listening for a voice search"
+msgid "Start Voice Search"
+msgstr "音声検索を開始"
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:22
+msgctxt "A button to stop listening for a voice search"
+msgid "Stop Voice Search"
+msgstr "音声検索を停止"
+
 #: src/ui/components/questions/questionsubmissioncomponent.js:158
 msgid "* Please enter a valid email address."
 msgstr "メールアドレスを正しく入力してください。"
@@ -200,7 +222,7 @@ msgstr "お問い合わせ内容とご連絡先を記入いただければ、ご
 msgid "Filters applied to this search:"
 msgstr "適用済みの絞り込み条件:"
 
-#: src/ui/components/results/directanswercomponent.js:27
+#: src/ui/components/results/directanswercomponent.js:29
 msgid "Thank you for your feedback!"
 msgstr "フィードバックありがとうございます"
 
@@ -208,11 +230,11 @@ msgstr "フィードバックありがとうございます"
 msgid "Thank you for your question!"
 msgstr "お問い合わせありがとうございます！"
 
-#: src/ui/components/results/directanswercomponent.js:21
+#: src/ui/components/results/directanswercomponent.js:23
 msgid "This answered my question"
 msgstr "役に立たなかった"
 
-#: src/ui/components/results/directanswercomponent.js:24
+#: src/ui/components/results/directanswercomponent.js:26
 msgid "This did not answer my question"
 msgstr "役に立たなかった"
 
@@ -223,7 +245,7 @@ msgstr "現在地を使用する"
 
 #: src/ui/components/filters/geolocationcomponent.js:147
 #: src/ui/components/search/locationbiascomponent.js:76
-#: src/ui/components/search/searchcomponent.js:207
+#: src/ui/components/search/searchcomponent.js:233
 msgid "We are unable to determine your location"
 msgstr "現在地を特定できません"
 
@@ -283,13 +305,13 @@ msgctxt "Button label, effectuates changes"
 msgid "Apply"
 msgstr "適用する"
 
-#: src/ui/components/results/directanswercomponent.js:70
+#: src/ui/components/results/directanswercomponent.js:72
 msgctxt "Button label, view is a verb"
 msgid "View Details"
 msgstr "詳細をみる"
 
-#: src/ui/components/results/universalresultscomponent.js:94
-#: src/ui/components/results/verticalresultscomponent.js:161
+#: src/ui/components/results/universalresultscomponent.js:121
+#: src/ui/components/results/verticalresultscomponent.js:169
 msgctxt "Button label, view more [results]"
 msgid "View More"
 msgstr "更に表示する"
