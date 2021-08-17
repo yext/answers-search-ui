@@ -1,7 +1,4 @@
 #!/bin/bash
-
-npx testcafe --list-browsers
-
 export BROWSERSTACK_USE_AUTOMATE="1"
 export BROWSERSTACK_PROJECT_NAME="Answers SDK"
 export BROWSERSTACK_BUILD_ID="${CIRCLE_BRANCH} - ${CIRCLE_BUILD_NUM}"

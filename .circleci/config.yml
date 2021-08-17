@@ -110,7 +110,6 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: npx testcafe --list-browsers
       - run: ./.circleci/run_useragent_acceptance.sh
   # verify all translations are present
   translation_test:
