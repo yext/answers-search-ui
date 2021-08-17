@@ -1,6 +1,3 @@
-import { getParser } from 'bowser';
-
-
 /**
  * Returns whether the current browser is Microsoft Edge.
  * Tries to use User-Agent clients hints, and defaults to
@@ -9,8 +6,12 @@ import { getParser } from 'bowser';
  * @returns {boolean}
  */
 export function isMicrosoftEdge () {
-  const browser = getParser(navigator.userAgent);
-  return browser.getBrowserName() === 'Microsoft Edge';
+  const brands = navigator.userAgentData?.brands;
+  if (brands && brands.length > 0) {
+    return !!brands.find(b => b.brand === 'Microsoft Edge');
+  } else if (navigator.userAgent) {
+    return navigator.userAgent.includes('Edg');
+  }
 }
 
 /**
@@ -22,8 +23,13 @@ export function isMicrosoftEdge () {
  * @returns {boolean}
  */
 export function isSafari () {
-  const browser = getParser(navigator.userAgent);
-  return browser.getBrowserName() === 'Safari';
+  if (isChrome()) {
+    return false;
+  }
+  if (isMicrosoftEdge()) {
+    return false;
+  }
+  return navigator.userAgent.includes('Safari');
 }
 
 /**
@@ -33,6 +39,13 @@ export function isSafari () {
  * @returns {boolean}
  */
 export function isChrome () {
-  const browser = getParser(navigator.userAgent);
-  return browser.getBrowserName() === 'Chrome';
+  if (isMicrosoftEdge()) {
+    return false;
+  }
+  const brands = navigator.userAgentData?.brands;
+  if (brands && brands.length > 0) {
+    return !!brands.find(b => b.brand === 'Google Chrome');
+  } else if (navigator.userAgent) {
+    return navigator.userAgent.includes('Chrome');
+  }
 }
