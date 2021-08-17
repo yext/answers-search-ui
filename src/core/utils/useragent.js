@@ -13,3 +13,38 @@ export function isMicrosoftEdge () {
     return navigator.userAgent.includes('Edg');
   }
 }
+
+/**
+ * Returns whether the current browser is Safari.
+ * Currently, Safari does not support User-Agent clients hints (userAgentData).
+ * Chrome likes to pretend that it's Safari.
+ *
+ * @returns {boolean}
+ */
+export function isSafari () {
+  if (isMicrosoftEdge()) {
+    return false;
+  }
+  if (isChrome()) {
+    return false;
+  }
+  return navigator.userAgent.includes('Safari');
+}
+
+/**
+ * Returns whether the current browser is Chrome.
+ * Edge likes to pretend that it is Chrome.
+ *
+ * @returns {boolean}
+ */
+export function isChrome () {
+  if (isMicrosoftEdge()) {
+    return false;
+  }
+  const brands = navigator.userAgentData?.brands;
+  if (brands && brands.length > 0) {
+    return !!brands.find(b => b.brand === 'Google Chrome');
+  } else if (navigator.userAgent) {
+    return navigator.userAgent.includes('Chrome');
+  }
+}
