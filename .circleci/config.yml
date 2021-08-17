@@ -246,7 +246,6 @@ workflows:
             - useragent_acceptance_test
             - headless_acceptance_test
             - translation_test
-            - third_party_notices_test
       - deploy_canary:
           filters:
             branches:
@@ -256,7 +255,6 @@ workflows:
             - headless_acceptance_test
             - browserstack_acceptance_test
             - useragent_acceptance_test
-            - third_party_notices_test
   build_and_deploy_hold:
     jobs:
       - build_i18n:
