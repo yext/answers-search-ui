@@ -5,249 +5,257 @@ msgstr ""
 #: src/ui/templates/results/alternativeverticals.hbs:28
 msgid "([[resultsCount]] result)"
 msgid_plural "([[resultsCount]] results)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "([[resultsCount]] نتائج)"
+msgstr[1] "([[resultsCount]] نتيجة)"
+msgstr[2] "([[resultsCount]] نتائج)"
+msgstr[3] "([[resultsCount]] نتائج)"
+msgstr[4] "([[resultsCount]] نتيجة)"
+msgstr[5] "([[resultsCount]] نتيجة)"
 
 #: src/ui/templates/search/autocomplete.hbs:14
 msgid "[[resultsCount]] autocomplete option found"
 msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "[[resultsCount]] خيارات إكمال تلقائي موجودة"
+msgstr[1] "[[resultsCount]] خيار إكمال تلقائي موجود"
+msgstr[2] "[[resultsCount]] خيارات إكمال تلقائي موجودة"
+msgstr[3] "[[resultsCount]] خيارات إكمال تلقائي موجودة"
+msgstr[4] "[[resultsCount]] خيار إكمال تلقائي موجود"
+msgstr[5] "[[resultsCount]] خيار إكمال تلقائي موجودة"
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
 msgid "[[start]] through [[end]] of [[resultsCount]]"
-msgstr ""
+msgstr "[[start]] وحتى [[end]] من [[resultsCount]]"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:158
 msgid "* Please enter a valid email address."
-msgstr ""
+msgstr "* يرجى إدخال عنوان بريد إلكتروني صالح."
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:150
 msgid "* You must agree to the privacy policy to submit a question."
-msgstr ""
+msgstr "* يجب أن توافق على سياسة الخصوصية لإرسال سؤال."
 
 #: src/ui/templates/results/alternativeverticals.hbs:3
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
-msgstr ""
+msgstr "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">لم يتم العثور على نتائج</em> في [[currentVerticalLabel]]."
 
 #: src/ui/templates/results/alternativeverticals.hbs:40
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
-msgstr ""
+msgstr "وبدلاً من ذلك، يمكنك <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> عرض النتائج عبر جميع فئات البحث</a>."
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:61
 msgid "By submitting my email address, I consent to being contacted via email at the address provided."
-msgstr ""
+msgstr "بإرسال عنوان بريدي الإلكتروني، أوافق على التواصل معي عبر البريد الإلكتروني على العنوان المقدم."
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:87
 msgid "Can’t find what you're looking for? Ask a question below."
-msgstr ""
+msgstr "هل تعذر عليك إيجاد ما تبحث عنه؟ اطرح سؤالاً أدناه."
 
 #: src/ui/components/filters/geolocationcomponent.js:94
 msgid "Could Not Find Your Location"
-msgstr ""
+msgstr "تعذر العثور على موقعك"
 
 #: src/ui/templates/results/pagination.hbs:60
 msgid "Currently on page [[pageNumber]]"
-msgstr ""
+msgstr "حاليًا في الصفحة [[pageNumber]]"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:101
 msgid "Enter your question and contact information, and we'll get back to you with a response shortly."
-msgstr ""
+msgstr "أدخل سؤالك ومعلومات الاتصال الخاصة بك، وسنرد عليك في أقرب وقت."
 
 #: src/ui/templates/questions/questionsubmission.hbs:7
 msgid "expand question form"
-msgstr ""
+msgstr "توسيع نموذج السؤال"
 
 #: src/ui/components/results/resultsheadercomponent.js:25
 #: src/ui/components/results/universalresultscomponent.js:23
 #: src/ui/components/results/verticalresultscomponent.js:143
 msgid "Filters applied to this search:"
-msgstr ""
+msgstr "تم تطبيق عوامل التصفية على هذا البحث:"
 
 #: src/ui/components/filters/geolocationcomponent.js:86
 msgid "Finding Your Location..."
-msgstr ""
+msgstr "جارٍ العثور على موقعك..."
 
 #: src/ui/templates/results/pagination.hbs:83
 msgid "Go to page [[maxPage]] of results"
-msgstr ""
+msgstr "انتقل إلى الصفحة [[maxPage]] من النتائج"
 
 #: src/ui/templates/results/pagination.hbs:65
 msgid "Go to page [[pageNumber]] of results"
-msgstr ""
+msgstr "انتقل إلى الصفحة [[pageNumber]] من النتائج"
 
 #: src/ui/templates/results/pagination.hbs:44
 msgid "Go to page 1 of results"
-msgstr ""
+msgstr "الانتقال إلى الصفحة 1 من النتائج"
 
 #: src/ui/templates/results/pagination.hbs:7
 msgid "Go to the first page of results"
-msgstr ""
+msgstr "انتقل إلى الصفحة الأولى من النتائج"
 
 #: src/ui/templates/results/pagination.hbs:111
 msgid "Go to the last page of results"
-msgstr ""
+msgstr "انتقل إلى الصفحة الأخيرة من النتائج"
 
 #: src/ui/templates/results/pagination.hbs:94
 msgid "Go to the next page of results"
-msgstr ""
+msgstr "انتقل إلى الصفحة التالية من النتائج"
 
 #: src/ui/templates/cards/standard.hbs:24
 msgid "Image for [[title]]"
-msgstr ""
-
-#: src/ui/components/questions/questionsubmissioncomponent.js:176
-msgid "Invalid email address. Please refresh the page and try submitting your question again."
-msgstr ""
+msgstr "صورة لـ [[title]]"
 
 #: src/ui/components/filters/geolocationcomponent.js:285
 #: src/ui/components/filters/geolocationcomponent.js:39
 #: src/ui/components/filters/geolocationcomponent.js:47
 msgid "Location"
-msgstr ""
+msgstr "الموقع"
 
 #: src/ui/templates/results/noresults.hbs:31
 msgid "Make sure all words are spelled correctly."
-msgstr ""
+msgstr "تأكد من كتابة جميع الكلمات بشكل صحيح."
 
 #: src/ui/speechrecognition/speechrecognizer.js:97
 msgid "Note: For Safari users, Siri must be enabled"
-msgstr ""
+msgstr "ملاحظة: فيما يتعلق بمستخدمي متصفح Safari، يجب تمكين المساعد Siri"
 
-#: src/ui/speechrecognition/voicesearchcontroller.js:65
+#: src/ui/speechrecognition/voicesearchcontroller.js:62
 msgid "Permission to use microphone is blocked"
-msgstr ""
+msgstr "تم حظر إذن استخدام الميكروفون"
 
 #: src/ui/templates/results/directanswer.hbs:74
 msgid "Send feedback"
-msgstr ""
+msgstr "إرسال ملاحظات"
 
 #: src/ui/templates/results/alternativeverticals.hbs:5
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
-msgstr ""
+msgstr "إظهار <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">جميع [[currentVerticalLabel]]</em> بدلاً من ذلك."
 
 #: src/ui/speechrecognition/speechrecognizer.js:96
 msgid "Speech Recognition is not available."
-msgstr ""
+msgstr "التعرف على الكلام غير متاح."
 
 #: src/ui/templates/results/noresults.hbs:24
 msgid "Suggestions:"
-msgstr ""
+msgstr "الاقتراحات:"
 
 #: src/ui/components/results/directanswercomponent.js:29
 msgid "Thank you for your feedback!"
-msgstr ""
+msgstr "شكرًا على ملاحظاتك!"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:127
 msgid "Thank you for your question!"
-msgstr ""
+msgstr "شكرا لك على سؤالك!"
 
 #: src/ui/templates/results/alternativeverticals.hbs:11
 msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
 msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
+msgstr[1] "أسفرت فئة البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
+msgstr[2] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
+msgstr[3] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
+msgstr[4] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
+msgstr[5] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
 
 #: src/ui/components/results/directanswercomponent.js:23
 msgid "This answered my question"
-msgstr ""
+msgstr "هذا أجاب عن سؤالي"
 
 #: src/ui/components/results/directanswercomponent.js:26
 msgid "This did not answer my question"
-msgstr ""
+msgstr "هذا لم يُجِب على سؤالي"
 
 #: src/ui/templates/results/noresults.hbs:34
 msgid "Try fewer words."
-msgstr ""
+msgstr "جَرِّب استخدام كلمات أقل."
 
 #: src/ui/templates/results/noresults.hbs:33
 msgid "Try more general words."
-msgstr ""
+msgstr "جَرِّب كلمات أكثر عمومية."
 
 #: src/ui/templates/results/noresults.hbs:15
 msgid "Try refining your query or <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">search all content.</a>"
-msgstr ""
+msgstr "حاول تنقيح استعلامك أو <a href=\"[[universalUrl]]\" class=\"yxt-NoResults-returnLink\">البحث في كل المحتوى</a>."
 
 #: src/ui/templates/results/noresults.hbs:32
 msgid "Try to ask your question a different way."
-msgstr ""
+msgstr "جرِّب أن تطرح سؤالك بطريقة مختلفة."
 
 #: src/ui/components/search/locationbiascomponent.js:150
 msgid "Unknown Location"
-msgstr ""
+msgstr "موقع غير معروف"
 
 #: src/ui/components/filters/geolocationcomponent.js:61
 #: src/ui/components/filters/geolocationcomponent.js:69
 msgid "Use My Location"
-msgstr ""
+msgstr "استخدم موقعي"
 
 #: src/ui/components/filters/geolocationcomponent.js:152
 #: src/ui/components/search/locationbiascomponent.js:87
-#: src/ui/components/search/searchcomponent.js:233
+#: src/ui/components/search/searchcomponent.js:240
 msgid "We are unable to determine your location"
-msgstr ""
+msgstr "تعذر علينا تحديد موقعك"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
-msgstr ""
+msgstr "نأسف لذلك، حدث خطأ."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
-msgstr ""
+msgstr "لم يتطابق بحثك - <span class=\"yxt-NoResults-query\">[[query]]</span> - مع أي إجابات لدينا."
 
 #: src/ui/speechrecognition/screenreadertextcontroller.js:13
 msgctxt "A button to begin listening for a voice search"
 msgid "Start Voice Search"
-msgstr ""
+msgstr "بدء البحث الصوتي"
 
 #: src/ui/speechrecognition/screenreadertextcontroller.js:22
 msgctxt "A button to stop listening for a voice search"
 msgid "Stop Voice Search"
-msgstr ""
+msgstr "إيقاف البحث الصوتي"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:228
 msgctxt "After a date. Example: After [August 15th]"
 msgid "After [[date]]"
-msgstr ""
+msgstr "بعد [[date]]"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:244
 msgctxt "Before a date. Example: Before [August 15th]"
 msgid "Before [[date]]"
-msgstr ""
+msgstr "قبل [[date]]"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:235
 msgctxt "Beginning at a date (with no end date). Example: [August 15th] or later"
 msgid "[[date]] or later"
-msgstr ""
+msgstr "[[date]] أو لاحقًا"
 
 #: src/ui/components/filters/sortoptionscomponent.js:235
 msgctxt "Best match (i.e. most relevant), describing results"
 msgid "Best Match"
-msgstr ""
+msgstr "أفضل تطابق"
 
 #: src/ui/components/results/resultsheadercomponent.js:28
 #: src/ui/components/results/verticalresultscomponent.js:155
 msgctxt "Button label"
 msgid "Remove this filter"
-msgstr ""
+msgstr "إزالة عامل التصفية هذا"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:69
-#: src/ui/components/search/searchcomponent.js:72
+#: src/ui/components/search/searchcomponent.js:79
 msgctxt "Button label"
 msgid "Submit"
-msgstr ""
+msgstr "إرسال"
 
 #: src/ui/components/search/locationbiascomponent.js:17
 msgctxt "Button label"
 msgid "Update your location"
-msgstr ""
+msgstr "تحديث موقعك"
 
 #: src/ui/components/filters/facetscomponent.js:59
 #: src/ui/components/filters/filterboxcomponent.js:58
 msgctxt "Button label, deselects all options"
 msgid "reset all"
-msgstr ""
+msgstr "إعادة ضبط الكل"
 
 #: src/ui/components/filters/facetscomponent.js:44
 #: src/ui/components/filters/filterboxcomponent.js:43
@@ -255,98 +263,99 @@ msgstr ""
 #: src/ui/components/filters/sortoptionscomponent.js:281
 msgctxt "Button label, deselects one or more options"
 msgid "reset"
-msgstr ""
+msgstr "إعادة ضبط"
 
 #: src/ui/components/navigation/navigationcomponent.js:127
 msgctxt "Button label, displays more items"
 msgid "More"
-msgstr ""
+msgstr "المزيد"
 
 #: src/ui/components/filters/facetscomponent.js:110
 #: src/ui/components/filters/filterboxcomponent.js:109
 msgctxt "Button label, effectuates changes"
 msgid "apply"
-msgstr ""
+msgstr "تطبيق"
 
 #: src/ui/components/filters/sortoptionscomponent.js:318
 msgctxt "Button label, effectuates changes"
 msgid "Apply"
-msgstr ""
+msgstr "تطبيق"
 
 #: src/ui/components/results/directanswercomponent.js:72
 msgctxt "Button label, view is a verb"
 msgid "View Details"
-msgstr ""
+msgstr "عرض التفاصيل"
 
 #: src/ui/components/results/universalresultscomponent.js:121
 #: src/ui/components/results/verticalresultscomponent.js:169
 msgctxt "Button label, view more [results]"
 msgid "View More"
-msgstr ""
+msgstr "عرض المزيد"
 
 #: src/ui/templates/results/resultsheader.hbs:65
 msgctxt "Change is a verb, filters are a set of fixed values or criteria that limit results"
 msgid "change filters"
-msgstr ""
+msgstr "تغيير عوامل التصفية"
 
 #: src/ui/templates/results/resultssectionheader.hbs:36
 msgctxt "Change is a verb. Example: change filtering logic"
 msgid "change"
-msgstr ""
+msgstr "تغيير"
 
 #: src/ui/components/search/locationbiascomponent.js:13
 msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your device"
 msgid "based on your device"
-msgstr ""
+msgstr "حسب جهازك"
 
 #: src/ui/components/search/locationbiascomponent.js:9
 msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your internet address"
 msgid "based on your internet address"
-msgstr ""
+msgstr "حسب عنوانك على الإنترنت"
 
 #: src/ui/components/cards/standardcardcomponent.js:73
 msgctxt "Displays less details for the result"
 msgid "Show Less"
-msgstr ""
+msgstr "عرض أقل"
 
 #: src/ui/components/filters/facetscomponent.js:83
 #: src/ui/components/filters/filterboxcomponent.js:82
 #: src/ui/components/filters/filteroptionscomponent.js:125
 msgctxt "Displays less options"
 msgid "show less"
-msgstr ""
+msgstr "عرض أقل"
 
 #: src/ui/components/filters/sortoptionscomponent.js:300
 msgctxt "Displays less options"
 msgid "Show less"
-msgstr ""
+msgstr "عرض أقل"
 
 #: src/ui/components/cards/standardcardcomponent.js:64
 msgctxt "Displays more details for the result"
 msgid "Show More"
-msgstr ""
+msgstr "عرض أكثر"
 
 #: src/ui/components/filters/facetscomponent.js:74
 #: src/ui/components/filters/filterboxcomponent.js:73
 #: src/ui/components/filters/filteroptionscomponent.js:116
 msgctxt "Displays more options"
 msgid "show more"
-msgstr ""
+msgstr "عرض أكثر"
 
 #: src/ui/components/filters/sortoptionscomponent.js:294
 msgctxt "Displays more options"
 msgid "Show more"
-msgstr ""
+msgstr "عرض أكثر"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:251
 msgctxt "Ending at a date with (no start date). Example: [August 15th] or earlier"
 msgid "[[date]] and earlier"
-msgstr ""
+msgstr "[[date]] وقبل ذلك"
 
 #: src/ui/templates/results/resultsheader.hbs:21
 msgctxt "Example: 1-10 of 50"
 msgid "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">of</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
-msgstr ""
+msgstr "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span>"
+" <span class=\"yxt-ResultsHeader-resultsCountOf\">من</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
 
 #: src/ui/templates/results/verticalresultscount.hbs:5
 msgctxt "Example: 1-10 of 50"
@@ -356,123 +365,124 @@ msgid ""
 "<span class=\"yxt-VerticalResultsCount-end\">[[end]]</span>\n"
 "<span class=\"yxt-VerticalResultsCount-of\">of</span>\n"
 "<span class=\"yxt-VerticalResultsCount-total\">[[resultsCount]]</span>"
-msgstr ""
+msgstr "<span class=\"yxt-VerticalResultsCount-start\">[[start]]</span>\n<span class=\"yxt-VerticalResultsCount-dash\">-</span>\n<span class=\"yxt-VerticalResultsCount-end\">[[end]]</span>\n<span"
+" class=\"yxt-VerticalResultsCount-of\">من</span>\n<span class=\"yxt-VerticalResultsCount-total\">[[resultsCount]]</span>"
 
 #: src/ui/components/search/spellcheckcomponent.js:9
 msgctxt "Help text, labels a suggested phrase"
 msgid "Did you mean:"
-msgstr ""
+msgstr "هل تعني:"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:109
 msgctxt "Indicates that entering input is mandatory"
 msgid "(required)"
-msgstr ""
+msgstr "(مطلوب)"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:135
 msgctxt "Labels a link"
 msgid "Learn more here."
-msgstr ""
+msgstr "تعرّف على المزيد هنا."
 
-#: src/ui/components/search/searchcomponent.js:63
+#: src/ui/components/search/searchcomponent.js:70
 msgctxt "Labels an input field"
 msgid "Conduct a search"
-msgstr ""
+msgstr "إجراء بحث"
 
 #: src/ui/components/filters/facetscomponent.js:144
 #: src/ui/components/filters/filteroptionscomponent.js:174
 msgctxt "Labels an input field"
 msgid "Search for a filter option"
-msgstr ""
+msgstr "بحث عن خيار عامل تصفية"
 
 #: src/ui/components/search/filtersearchcomponent.js:64
 msgctxt "Labels an input field"
 msgid "What are you interested in?"
-msgstr ""
+msgstr "ما الذي تهتم به؟"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:34
 msgctxt "Labels the email value provided as an argument"
 msgid "Email"
-msgstr ""
+msgstr "البريد الإلكتروني"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:43
 msgctxt "Labels the name value provided as an argument"
 msgid "Name"
-msgstr ""
+msgstr "الاسم"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:52
 msgctxt "Labels the question value provided as an argument"
 msgid "Question"
-msgstr ""
+msgstr "السؤال"
 
 #: src/ui/components/filters/geolocationcomponent.js:77
 msgctxt "Labels the user's current location"
 msgid "Current Location"
-msgstr ""
+msgstr "الموقع الحالي"
 
 #: src/ui/components/filters/rangefiltercomponent.js:19
 msgctxt "Maximum"
 msgid "Max"
-msgstr ""
+msgstr "الحد الأقصى"
 
 #: src/ui/components/filters/rangefiltercomponent.js:15
 msgctxt "Minimum"
 msgid "Min"
-msgstr ""
+msgstr "الحد الأدنى"
 
 #: src/ui/components/results/paginationcomponent.js:97
 msgctxt "Noun, a page of results"
 msgid "Page"
-msgstr ""
+msgstr "الصفحة"
 
 #: src/ui/components/navigation/navigationcomponent.js:185
 msgctxt "Noun, labels the navigation for the search page"
 msgid "Search Page Navigation"
-msgstr ""
+msgstr "التنقل ضمن صفحات البحث"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:118
 msgctxt "Placeholder text for input field"
 msgid "Enter your question here"
-msgstr ""
+msgstr "أدخل سؤالك هنا"
 
 #: src/ui/components/filters/facetscomponent.js:129
 #: src/ui/components/filters/filteroptionscomponent.js:159
 msgctxt "Placeholder text for input field"
 msgid "Search here..."
-msgstr ""
+msgstr "البحث هنا..."
 
 #: src/ui/components/filters/facetscomponent.js:17
 #: src/ui/components/filters/filterboxcomponent.js:16
 #: src/ui/components/filters/filteroptionscomponent.js:66
 msgctxt "Plural noun, title for a group of controls that filter results"
 msgid "Filters"
-msgstr ""
+msgstr "عوامل التصفية"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:261
 msgctxt "Start date to end date. Example: [August 15th] - [August 16th]"
 msgid "[[start]] - [[end]]"
-msgstr ""
+msgstr "[[start]] - [[end]]"
 
 #: src/ui/components/filters/sortoptionscomponent.js:309
 msgctxt "Title for a group of controls that sort results"
 msgid "Sorting"
-msgstr ""
+msgstr "الفرز"
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:78
 msgctxt "Title of section"
 msgid "Ask a Question"
-msgstr ""
+msgstr "طرح سؤال"
 
 #: src/ui/components/filters/facetscomponent.js:306
 msgctxt "True or False"
 msgid "False"
-msgstr ""
+msgstr "خطأ"
 
 #: src/ui/components/filters/facetscomponent.js:303
 msgctxt "True or False"
 msgid "True"
-msgstr ""
+msgstr "صواب"
 
-#: src/ui/components/search/searchcomponent.js:81
+#: src/ui/components/search/searchcomponent.js:88
 msgctxt "Verb, clears search"
 msgid "Clear"
-msgstr ""
+msgstr "مسح"
