@@ -1,6 +1,5 @@
-import { getParser } from "bowser";
+import { getParser } from 'bowser';
 
-const browser = Bowser.getParser(window.navigator.userAgent);
 
 /**
  * Returns whether the current browser is Microsoft Edge.
@@ -10,6 +9,7 @@ const browser = Bowser.getParser(window.navigator.userAgent);
  * @returns {boolean}
  */
 export function isMicrosoftEdge () {
+  const browser = getParser(navigator.userAgent);
   return browser.getBrowserName() === 'Microsoft Edge';
 }
 
@@ -22,6 +22,7 @@ export function isMicrosoftEdge () {
  * @returns {boolean}
  */
 export function isSafari () {
+  const browser = getParser(navigator.userAgent);
   return browser.getBrowserName() === 'Safari';
 }
 
@@ -32,5 +33,6 @@ export function isSafari () {
  * @returns {boolean}
  */
 export function isChrome () {
+  const browser = getParser(navigator.userAgent);
   return browser.getBrowserName() === 'Chrome';
 }
