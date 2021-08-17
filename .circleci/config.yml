@@ -95,7 +95,7 @@ jobs:
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
-      - image: circleci/node:14.5-browsers
+      - image: circleci/node:14.5
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -104,7 +104,7 @@ jobs:
       - run: ./.circleci/run_browserstack_acceptance.sh
   useragent_acceptance_test:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:14.5-browsers
     working_directory: ~/answers
     steps:
       - setup-workspace
