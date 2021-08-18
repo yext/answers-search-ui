@@ -134,15 +134,15 @@ const LANGUAGES_TO_LOCALES = {
   sv: [
     'sv_SE'
   ],
-  'zh-CN': [
-    'zh-CN_CN',
-    'zh_CN_HK',
-    'zh_CN_SG'
+  'zh-Hans': [
+    'zh-Hans_CN',
+    'zh-Hans_HK',
+    'zh-Hans_SG'
   ],
-  'zh-TW': [
-    'zh-TW_HK',
-    'zh-TW_MO',
-    'zh-TW_TW'
+  'zh-Hant': [
+    'zh-Hant_HK',
+    'zh-Hant_MO',
+    'zh-Hant_TW'
   ]
 };
 exports.LANGUAGES_TO_LOCALES = LANGUAGES_TO_LOCALES;
