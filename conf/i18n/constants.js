@@ -76,6 +76,73 @@ const LANGUAGES_TO_LOCALES = {
     'es_MX',
     'es_NI',
     'es_US'
+  ],
+  fr: [
+    'fr_BE',
+    'fr_BL',
+    'fr_CA',
+    'fr_CH',
+    'fr_EU',
+    'fr_FR',
+    'fr_IT',
+    'fr_LU',
+    'fr_MC',
+    'fr_RE'
+  ],
+  it: [
+    'it_CH',
+    'it_IT'
+  ],
+  de: [
+    'de_AT',
+    'de_CH',
+    'de_DE',
+    'de_EU',
+    'de_LU'
+  ],
+  ja: [
+    'ja_JP'
+  ],
+  ar: [
+    'ar_AE',
+    'ar_BH',
+    'ar_DZ',
+    'ar_IQ',
+    'ar_KW',
+    'ar_LY',
+    'ar_OM',
+    'ar_PS',
+    'ar_QA',
+    'ar_SA'
+  ],
+  hi: [],
+  ko: [],
+  nl: [
+    'nl_BE',
+    'nl_NL',
+    'nl_SX'
+  ],
+  pl: [],
+  pt: [
+    'pt_BR',
+    'pt_CV',
+    'pt_PT'
+  ],
+  ru: [
+    'ru_UA'
+  ],
+  sv: [
+    'sv_SE'
+  ],
+  'zh-CN': [
+    'zh-CN_CN',
+    'zh_CN_HK',
+    'zh_CN_SG'
+  ],
+  'zh-TW': [
+    'zh-TW_HK',
+    'zh-TW_MO',
+    'zh-TW_TW'
   ]
 };
 exports.LANGUAGES_TO_LOCALES = LANGUAGES_TO_LOCALES;
