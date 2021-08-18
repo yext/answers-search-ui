@@ -22,3 +22,8 @@ exports.buildLocales = parallel(
 );
 exports.extractTranslations = extractTranslations;
 exports.templates = templates.default;
+
+exports.buildSearchBarOnlyAssets = parallel(
+  templates.buildSearchBarOnlyAssets,
+  library.buildSearchBarOnlyAssets
+);
