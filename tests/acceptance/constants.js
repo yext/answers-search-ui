@@ -10,3 +10,4 @@ export const FACETS_PAGE = `${PAGE_DIR}/facets`;
 export const FACETS_ON_LOAD_PAGE = `${PAGE_DIR}/facetsonload`;
 export const FILTERBOX_PAGE = `${PAGE_DIR}/filterbox`;
 export const UNIVERSAL_INITIAL_SEARCH_PAGE = `${PAGE_DIR}/universalinitialsearch`;
+export const SEARCH_BAR_ONLY_PAGE = `${PAGE_DIR}/searchbaronly`;

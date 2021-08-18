@@ -26,17 +26,17 @@ class BundleTaskFactory {
    * @param {BundleType} bundleType The type of SDK bundle to build.
    * @returns {Function} Gulp task for producing the requested SDK bundle.
    */
-  create (bundleType) {
+  create (bundleType, entryPoint) {
     let bundleFunction;
     switch (bundleType) {
       case BundleType.MODERN:
-        bundleFunction = (callback) => this._modernBundle(callback);
+        bundleFunction = (callback) => this._modernBundle(callback, entryPoint);
         break;
       case BundleType.LEGACY_IIFE:
-        bundleFunction = (callback) => this._legacyBundleIIFE(callback);
+        bundleFunction = (callback) => this._legacyBundleIIFE(callback, entryPoint);
         break;
       case BundleType.LEGACY_UMD:
-        bundleFunction = (callback) => this._legacyBundleUMD(callback);
+        bundleFunction = (callback) => this._legacyBundleUMD(callback, entryPoint);
         break;
       default:
         throw new Error('Unrecognized BundleType');
@@ -51,10 +51,11 @@ class BundleTaskFactory {
    * The Gulp task for producing the modern version of the SDK bundle.
    *
    * @param {function} callback function that will run after the Gulp task
+   * @param {string} entryPoint
    * @returns {stream.Writable} A {@link Writable} stream containing the modern
    *                            SDK bundle.
    */
-  _modernBundle (callback) {
+  _modernBundle (callback, entryPoint) {
     const modernBundleConfig = {
       format: 'umd',
       name: this._namespace,
@@ -63,6 +64,7 @@ class BundleTaskFactory {
     };
     return modernBundle(
       callback,
+      entryPoint,
       modernBundleConfig,
       getBundleName(BundleType.MODERN, this._locale),
       this._locale,
@@ -75,10 +77,11 @@ class BundleTaskFactory {
    * The Gulp task for producing the legacy, IIFE-style SDK bundle.
    *
    * @param {function} callback function that will run after the Gulp task
+   * @param {string} entryPoint
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            IIFE-style SDK bundle.
    */
-  _legacyBundleIIFE (callback) {
+  _legacyBundleIIFE (callback, entryPoint) {
     const legacyBundleConfig = {
       format: 'iife',
       name: this._namespace,
@@ -86,6 +89,7 @@ class BundleTaskFactory {
     };
     return legacyBundle(
       callback,
+      entryPoint,
       legacyBundleConfig,
       getBundleName(BundleType.LEGACY_IIFE, this._locale),
       this._locale,
@@ -98,10 +102,11 @@ class BundleTaskFactory {
    * The Gulp task for producing the legacy, UMD-style SDK bundle.
    *
    * @param {function} callback function that will run after the Gulp task
+   * @param {string} entryPoint
    * @returns {stream.Writable} A {@link Writable} stream containing the legacy,
    *                            UMD-style SDK bundle.
    */
-  _legacyBundleUMD (callback) {
+  _legacyBundleUMD (callback, entryPoint) {
     const legacyBundleConfig = {
       format: 'umd',
       name: this._namespace,
@@ -110,6 +115,7 @@ class BundleTaskFactory {
     };
     return legacyBundle(
       callback,
+      entryPoint,
       legacyBundleConfig,
       getBundleName(BundleType.LEGACY_UMD, this._locale),
       this._locale,

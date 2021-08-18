@@ -57,8 +57,8 @@ exports.dev = devTemplates;
  * @param {Translator} translator
  * @returns {Function}
  */
-function createDefaultTask (locale, translator) {
-  const precompileTemplates = createPrecompileTemplatesTask(locale, translator);
+function createDefaultTask (locale, translator, isSearchBarOnly) {
+  const precompileTemplates = createPrecompileTemplatesTask(locale, translator, isSearchBarOnly);
 
   const bundleFactory = new BundleTemplatesTaskFactory(locale);
   const bundleTemplatesIIFE = bundleFactory.create(TemplateType.IIFE);
@@ -87,14 +87,29 @@ function createDefaultTask (locale, translator) {
  * @param {Array<string>} languages
  * @returns {Promise<Function>}
  */
-async function createTemplatesForLanguages (languages) {
+async function createTemplatesForLanguages (languages, isSearchBarOnly = false) {
   const localizedTaskPromises = languages.map(async language => {
     const translator = await createTranslator(language);
-    return createDefaultTask(language, translator);
+    return createDefaultTask(language, translator, isSearchBarOnly);
   });
   const localizedTasks = await Promise.all(localizedTaskPromises);
   return new Promise(resolve => series(...localizedTasks)(resolve));
 }
+
+/**
+ * 
+ * @param {boolean} isSearchBarOnly 
+ * @returns 
+ */
+function allLocaleTemplates (isSearchBarOnly = false) {
+  const assetNames = [
+    'answerstemplates-iife.compiled.min.js',
+    'answerstemplates.compiled.min.js'];
+
+  return createTemplatesForLanguages(ALL_LANGUAGES, isSearchBarOnly).then(() => {
+    copyAssetsForLocales(assetNames);
+  });
+};
 
 exports.default = function defaultTemplates () {
   return createTemplatesForLanguages([DEFAULT_LOCALE]);
@@ -104,12 +119,8 @@ exports.buildLanguages = function allLanguageTemplates () {
   return createTemplatesForLanguages(ALL_LANGUAGES);
 };
 
-exports.buildLocales = function allLocaleTemplates () {
-  const assetNames = [
-    'answerstemplates-iife.compiled.min.js',
-    'answerstemplates.compiled.min.js'];
-
-  return createTemplatesForLanguages(ALL_LANGUAGES).then(() => {
-    copyAssetsForLocales(assetNames);
-  });
+exports.buildSearchBarOnlyAssets = function () {
+  return allLocaleTemplates(true);
 };
+
+exports.buildLocales = allLocaleTemplates;

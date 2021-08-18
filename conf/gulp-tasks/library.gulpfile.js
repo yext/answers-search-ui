@@ -24,7 +24,7 @@ exports.dev = function devJSBundle () {
   return createBundleTaskFactory(DEFAULT_LOCALE).then(devTaskFactory => {
     return new Promise(resolve => {
       return parallel(
-        series(devTaskFactory.create(BundleType.LEGACY_IIFE), getWatchJSTask(devTaskFactory)),
+        series(devTaskFactory.create(BundleType.LEGACY_IIFE, './src/answers-umd.js'), getWatchJSTask(devTaskFactory)),
         series(compileCSS, watchCSS)
       )(resolve);
     });
@@ -36,18 +36,40 @@ exports.dev = function devJSBundle () {
  * This function also supports locales, but it is named to reflect the current use case
  * of creating bundles for just languages.
  * @param {Array<string>} languages
+ * @param {boolean} isSearchBarOnly
  * @returns {Promise<Function>}
  */
-function createJSBundlesForLanguages (languages) {
+function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
   const localizedTaskPromises = languages.map(language => {
     const minifyTaskFactory = new MinifyTaskFactory(language);
     return createBundleTaskFactory(language)
-      .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory));
+      .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory, isSearchBarOnly));
   });
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
     return new Promise(resolve => series(compileCSS, ...localizedTasks)(resolve));
   });
 }
+
+/**
+ * Creates a build task for each provided language and combines them into a series task.
+ * This function also supports locales, but it is named to reflect the current use case
+ * of creating bundles for just languages.
+ * @param {boolean} isSearchBarOnly
+ * @returns {Promise<Function>}
+ */
+function allLocaleJSBundles (isSearchBarOnly = false) {
+  const assetNames = [
+    'answers.js',
+    'answers.min.js',
+    'answers-modern.js',
+    'answers-modern.min.js',
+    'answers-umd.js',
+    'answers-umd.min.js'];
+
+  return createJSBundlesForLanguages(ALL_LANGUAGES, isSearchBarOnly).then(() => {
+    copyAssetsForLocales(assetNames);
+  });
+};
 
 exports.default = function defaultLanguageJSBundles () {
   return createJSBundlesForLanguages([DEFAULT_LOCALE]);
@@ -57,18 +79,10 @@ exports.buildLanguages = function allLanguageJSBundles () {
   return createJSBundlesForLanguages(ALL_LANGUAGES);
 };
 
-exports.buildLocales = function allLocaleJSBundles () {
-  const assetNames = [
-    'answers.js',
-    'answers.min.js',
-    'answers-modern.js',
-    'answers-modern.min.js',
-    'answers-umd.js',
-    'answers-umd.min.js'];
+exports.buildLocales = allLocaleJSBundles;
 
-  return createJSBundlesForLanguages(ALL_LANGUAGES).then(() => {
-    copyAssetsForLocales(assetNames);
-  });
+exports.buildSearchBarOnlyAssets = function () {
+  return allLocaleJSBundles(true);
 };
 
 /**
@@ -77,18 +91,19 @@ exports.buildLocales = function allLocaleJSBundles () {
  * @param {BundleTaskFactory} bundleTaskFactory
  * @param {MinifyTaskFactory} minifyTaskFactory
  */
-function createBundles (bundleTaskFactory, minifyTaskFactory) {
+function createBundles (bundleTaskFactory, minifyTaskFactory, isSearchBarOnly) {
+  const entryPoint = isSearchBarOnly ? './src/answers-search-bar.js' : './src/answers-umd.js';
   return parallel(
     series(
-      bundleTaskFactory.create(BundleType.MODERN),
+      bundleTaskFactory.create(BundleType.MODERN, entryPoint),
       minifyTaskFactory.minify(BundleType.MODERN)
     ),
     series(
-      bundleTaskFactory.create(BundleType.LEGACY_IIFE),
+      bundleTaskFactory.create(BundleType.LEGACY_IIFE, entryPoint),
       minifyTaskFactory.minify(BundleType.LEGACY_IIFE)
     ),
     series(
-      bundleTaskFactory.create(BundleType.LEGACY_UMD),
+      bundleTaskFactory.create(BundleType.LEGACY_UMD, entryPoint),
       minifyTaskFactory.minify(BundleType.LEGACY_UMD)
     )
   );
@@ -155,7 +170,7 @@ function getWatchJSTask (bundleTaskFactory) {
   return function watchJS () {
     return watch(['./src/**/*.js'], {
       ignored: './dist/'
-    }, bundleTaskFactory.create(BundleType.LEGACY_IIFE));
+    }, bundleTaskFactory.create(BundleType.LEGACY_IIFE, './src/answers-umd.js'));
   };
 }
 
