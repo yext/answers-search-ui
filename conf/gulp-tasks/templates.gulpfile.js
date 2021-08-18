@@ -85,7 +85,7 @@ function createDefaultTask (locale, translator, isSearchBarOnly) {
  * Creates a build task per language, and combines them into a series task. This function
  * also supports locales, but it is named to reflect the current use case of creating
  * bundles for just languages.
- * 
+ *
  * @param {Array<string>} languages
  * @param {boolean} isSearchBarOnly If only templates related to the SearchBar should be included.
  * @returns {Promise<Function>}
@@ -101,7 +101,7 @@ async function createTemplatesForLanguages (languages, isSearchBarOnly = false) 
 
 /**
  * Creates a template bundle for each supported language, locale pair.
- * 
+ *
  * @param {boolean} isSearchBarOnly If only templates related to the SearchBar should be included.
  * @returns {Promise<Function>}
  */
@@ -129,4 +129,4 @@ exports.buildSearchBarOnlyAssets = function () {
 
 exports.buildLocales = function () {
   return allLocaleTemplates();
-}
+};

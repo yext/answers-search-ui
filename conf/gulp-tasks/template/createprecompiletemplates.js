@@ -111,8 +111,8 @@ function precompileTemplates (callback, isSearchBarOnly, outputFile, processAST)
     }))
     .pipe(concat(outputFile))
     .pipe(wrap(
-      { src: './conf/templates/handlebarswrapper.txt' }, 
-      handlebarsWrapperData, 
+      { src: './conf/templates/handlebarswrapper.txt' },
+      handlebarsWrapperData,
       { variable: 'data' }))
     .pipe(dest('dist'))
     .on('end', callback);

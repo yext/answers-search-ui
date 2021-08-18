@@ -35,7 +35,7 @@ exports.dev = function devJSBundle () {
  * Creates a build task for each provided language and combines them into a series task.
  * This function also supports locales, but it is named to reflect the current use case
  * of creating bundles for just languages.
- * 
+ *
  * @param {Array<string>} languages
  * @param {boolean} isSearchBarOnly If the build task is for the SearchBar-only assets.
  * @returns {Promise<Function>}
@@ -53,7 +53,7 @@ function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
 
 /**
  * Creates a task for building all of the localized SDK assets.
- * 
+ *
  * @param {boolean} isSearchBarOnly If the task is for the SearchBar-only assets.
  * @returns {Promise<Function>}
  */
@@ -79,7 +79,7 @@ exports.buildLanguages = function allLanguageJSBundles () {
   return createJSBundlesForLanguages(ALL_LANGUAGES);
 };
 
-exports.buildLocales = function() {
+exports.buildLocales = function () {
   return allLocaleJSBundles();
 };
 
