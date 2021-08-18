@@ -1,5 +1,5 @@
 {
-  "src": "tests/acceptance/acceptancesuites/*.js",
+  "src": ["tests/acceptance/acceptancesuites/*.js", "!tests/acceptance/acceptancesuites/searchbaronlysuite.js"],
   "quarantineMode": true,
   "appCommand": "npx serve -l tcp://0.0.0.0:9999",
   "appInitDelay": 4000

@@ -24,7 +24,7 @@ exports.dev = function devJSBundle () {
   return createBundleTaskFactory(DEFAULT_LOCALE).then(devTaskFactory => {
     return new Promise(resolve => {
       return parallel(
-        series(devTaskFactory.create(BundleType.LEGACY_IIFE, './src/answers-umd.js'), getWatchJSTask(devTaskFactory)),
+        series(devTaskFactory.create(BundleType.LEGACY_IIFE), getWatchJSTask(devTaskFactory)),
         series(compileCSS, watchCSS)
       )(resolve);
     });
@@ -35,8 +35,9 @@ exports.dev = function devJSBundle () {
  * Creates a build task for each provided language and combines them into a series task.
  * This function also supports locales, but it is named to reflect the current use case
  * of creating bundles for just languages.
+ * 
  * @param {Array<string>} languages
- * @param {boolean} isSearchBarOnly
+ * @param {boolean} isSearchBarOnly If the build task is for the SearchBar-only assets.
  * @returns {Promise<Function>}
  */
 function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
@@ -51,10 +52,9 @@ function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
 }
 
 /**
- * Creates a build task for each provided language and combines them into a series task.
- * This function also supports locales, but it is named to reflect the current use case
- * of creating bundles for just languages.
- * @param {boolean} isSearchBarOnly
+ * Creates a task for building all of the localized SDK assets.
+ * 
+ * @param {boolean} isSearchBarOnly If the task is for the SearchBar-only assets.
  * @returns {Promise<Function>}
  */
 function allLocaleJSBundles (isSearchBarOnly = false) {
@@ -90,6 +90,7 @@ exports.buildSearchBarOnlyAssets = function () {
  *
  * @param {BundleTaskFactory} bundleTaskFactory
  * @param {MinifyTaskFactory} minifyTaskFactory
+ * @param {boolean} isSearchBarOnly If the bundles are for the SearchBar-only integration.
  */
 function createBundles (bundleTaskFactory, minifyTaskFactory, isSearchBarOnly) {
   const entryPoint = isSearchBarOnly ? './src/answers-search-bar.js' : './src/answers-umd.js';
@@ -170,7 +171,7 @@ function getWatchJSTask (bundleTaskFactory) {
   return function watchJS () {
     return watch(['./src/**/*.js'], {
       ignored: './dist/'
-    }, bundleTaskFactory.create(BundleType.LEGACY_IIFE, './src/answers-umd.js'));
+    }, bundleTaskFactory.create(BundleType.LEGACY_IIFE));
   };
 }
 

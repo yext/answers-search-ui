@@ -41,8 +41,7 @@ function _precompileTemplates (callback, locale, isSearchBarOnly, translator) {
   const precompiledFileName = getPrecompiledFileName(locale);
   const processAST = ast => new TranslateHelperVisitor(translator).accept(ast);
 
-  return precompileTemplates(
-    callback, isSearchBarOnly, precompiledFileName, processAST);
+  return precompileTemplates(callback, isSearchBarOnly, precompiledFileName, processAST);
 }
 
 /**
@@ -112,7 +111,9 @@ function precompileTemplates (callback, isSearchBarOnly, outputFile, processAST)
     }))
     .pipe(concat(outputFile))
     .pipe(wrap(
-      { src: './conf/templates/handlebarswrapper.txt' }, handlebarsWrapperData, { variable: 'data' }))
+      { src: './conf/templates/handlebarswrapper.txt' }, 
+      handlebarsWrapperData, 
+      { variable: 'data' }))
     .pipe(dest('dist'))
     .on('end', callback);
 }
