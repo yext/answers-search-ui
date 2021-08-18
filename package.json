@@ -101,8 +101,8 @@
     "serve": "^11.3.0",
     "size-limit": "^4.9.0",
     "stylelint": "^13.7.1",
-    "testcafe": "^1.15.0",
-    "testcafe-browser-provider-browserstack": "^1.13.0",
+    "testcafe": "^1.15.2",
+    "testcafe-browser-provider-browserstack": "^1.13.1",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },

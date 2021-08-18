@@ -127,7 +127,7 @@ msgstr ""
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
 msgstr ""
 
-#: src/ui/speechrecognition/speechrecognizer.js:96
+#: src/ui/speechrecognition/speechrecognizer.js:95
 msgid "Speech Recognition is not available."
 msgstr ""
 
