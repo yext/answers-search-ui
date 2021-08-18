@@ -127,4 +127,6 @@ exports.buildSearchBarOnlyAssets = function () {
   return allLocaleTemplates(true);
 };
 
-exports.buildLocales = allLocaleTemplates;
+exports.buildLocales = function () {
+  return allLocaleTemplates();
+}

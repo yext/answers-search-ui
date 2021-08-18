@@ -79,7 +79,9 @@ exports.buildLanguages = function allLanguageJSBundles () {
   return createJSBundlesForLanguages(ALL_LANGUAGES);
 };
 
-exports.buildLocales = allLocaleJSBundles;
+exports.buildLocales = function() {
+  return allLocaleJSBundles();
+};
 
 exports.buildSearchBarOnlyAssets = function () {
   return allLocaleJSBundles(true);
