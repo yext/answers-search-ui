@@ -96,11 +96,6 @@ async function createTemplatesForLanguages (languages, isSearchBarOnly = false) 
   return new Promise(resolve => series(...localizedTasks)(resolve));
 }
 
-/**
- * 
- * @param {boolean} isSearchBarOnly 
- * @returns 
- */
 function allLocaleTemplates (isSearchBarOnly = false) {
   const assetNames = [
     'answerstemplates-iife.compiled.min.js',
@@ -109,7 +104,7 @@ function allLocaleTemplates (isSearchBarOnly = false) {
   return createTemplatesForLanguages(ALL_LANGUAGES, isSearchBarOnly).then(() => {
     copyAssetsForLocales(assetNames);
   });
-};
+}
 
 exports.default = function defaultTemplates () {
   return createTemplatesForLanguages([DEFAULT_LOCALE]);

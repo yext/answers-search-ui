@@ -69,7 +69,7 @@ function allLocaleJSBundles (isSearchBarOnly = false) {
   return createJSBundlesForLanguages(ALL_LANGUAGES, isSearchBarOnly).then(() => {
     copyAssetsForLocales(assetNames);
   });
-};
+}
 
 exports.default = function defaultLanguageJSBundles () {
   return createJSBundlesForLanguages([DEFAULT_LOCALE]);
