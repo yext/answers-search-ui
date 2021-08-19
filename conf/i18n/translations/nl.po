@@ -97,6 +97,10 @@ msgstr "Ga naar de volgende pagina met resultaten"
 msgid "Image for [[title]]"
 msgstr "Afbeelding voor [[title]]"
 
+#: src/ui/components/questions/questionsubmissioncomponent.js:176
+msgid "Invalid email address. Please refresh the page and try submitting your question again."
+msgstr "Ongeldig e-mailadres. Vernieuw de pagina en probeer uw vraag opnieuw te verzenden."
+
 #: src/ui/components/filters/geolocationcomponent.js:285
 #: src/ui/components/filters/geolocationcomponent.js:39
 #: src/ui/components/filters/geolocationcomponent.js:47

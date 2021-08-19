@@ -134,15 +134,15 @@ const LANGUAGES_TO_LOCALES = {
   sv: [
     'sv_SE'
   ],
-  'zh-CN': [
-    'zh-CN_CN',
-    'zh_CN_HK',
-    'zh_CN_SG'
+  'zh-Hans': [
+    'zh-Hans_CN',
+    'zh-Hans_HK',
+    'zh-Hans_SG'
   ],
-  'zh-TW': [
-    'zh-TW_HK',
-    'zh-TW_MO',
-    'zh-TW_TW'
+  'zh-Hant': [
+    'zh-Hant_HK',
+    'zh-Hant_MO',
+    'zh-Hant_TW'
   ]
 };
 exports.LANGUAGES_TO_LOCALES = LANGUAGES_TO_LOCALES;
@@ -186,5 +186,28 @@ exports.SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE = [
   'de-at',
   'de-ch',
   'de-de',
-  'ja-jp'
+  'ja-jp',
+  'ar-ae',
+  'ar-bh',
+  'ar-dz',
+  'ar-iq',
+  'ar-kw',
+  'ar-ly',
+  'ar-om',
+  'ar-ps',
+  'ar-qa',
+  'ar-sa',
+  'nl-be',
+  'nl-nl',
+  'pt-br',
+  'pt-pt',
+  'sv-se',
+  'zh-hans-cn',
+  'zh-hans-hk',
+  'zh-hant-hk',
+  'zh-hant-tw',
+
+  // Below are locales that are not the SDK's built-in locales, but are supported by edge
+  'zh-cn',
+  'zh-tw'
 ];

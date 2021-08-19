@@ -28,7 +28,7 @@ export function parseLocale (localeCode) {
       };
     } else if (numSections > 3) {
       console.error(
-        `Encountered strangely formatted locale "${localeCode}", ` +
+        `Encountered unsupported locale "${localeCode}", ` +
         `with ${numSections} sections.`);
       return {};
     }
