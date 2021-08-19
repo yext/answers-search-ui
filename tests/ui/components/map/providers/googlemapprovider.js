@@ -1,4 +1,5 @@
-import { GoogleMapMarkerConfig } from '../../../../../src/ui/components/map/providers/googlemapprovider';
+// eslint-disable-next-line import/no-named-default
+import { default as GoogleMapProvider, GoogleMapMarkerConfig } from '../../../../../src/ui/components/map/providers/googlemapprovider';
 
 window.google = {};
 window.google.maps = {
@@ -195,5 +196,32 @@ describe('converts array of markers into GoogleAPIMarkers', () => {
     const actual = GoogleMapMarkerConfig.from(markers, pinConfigFunc, map);
 
     expect(actual).toEqual(expected);
+  });
+});
+
+describe('google map provider properly handles locales', () => {
+  it('en locale is set correctly', () => {
+    const map = new GoogleMapProvider({ locale: 'en', apiKey: '123' });
+    expect(map._language).toEqual('en');
+  });
+
+  it('extended custom locales supported by google work', () => {
+    const map = new GoogleMapProvider({ locale: 'fr-CA', apiKey: '123' });
+    expect(map._language).toEqual('fr-CA');
+  });
+
+  it('locales with a HK region fallback to zh-HK', () => {
+    const map = new GoogleMapProvider({ locale: 'zh-Hant-HK', apiKey: '123' });
+    expect(map._language).toEqual('zh-HK');
+  });
+
+  it('zh-Hans falls back to zh-CN', () => {
+    const map = new GoogleMapProvider({ locale: 'zh-Hans', apiKey: '123' });
+    expect(map._language).toEqual('zh-CN');
+  });
+
+  it('zh-Hant falls back to zh-TW', () => {
+    const map = new GoogleMapProvider({ locale: 'zh-Hant', apiKey: '123' });
+    expect(map._language).toEqual('zh-TW');
   });
 });

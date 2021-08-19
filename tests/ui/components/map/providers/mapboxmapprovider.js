@@ -1,4 +1,5 @@
-import { MapBoxMarkerConfig } from '../../../../../src/ui/components/map/providers/mapboxmapprovider';
+// eslint-disable-next-line import/no-named-default
+import { default as MapboxMapProvider, MapBoxMarkerConfig } from '../../../../../src/ui/components/map/providers/mapboxmapprovider';
 
 const map = { tmp: 'test value' };
 const wrapper = '<button>this is the pin</button>';
@@ -161,5 +162,27 @@ describe('converts array of markers into MapboxMarkers', () => {
     const actual = MapBoxMarkerConfig.from(markers, pinConfigFunc, map);
 
     expect(actual).toEqual(expected);
+  });
+});
+
+describe('mapbox map provider properly handles locales', () => {
+  it('en locale is set correctly', () => {
+    const map = new MapboxMapProvider({ locale: 'en' });
+    expect(map._language).toEqual('en');
+  });
+
+  it('locales with regions fall back to the language code', () => {
+    const map = new MapboxMapProvider({ locale: 'fr-CA' });
+    expect(map._language).toEqual('fr');
+  });
+
+  it('zh-Hans is supported', () => {
+    const map = new MapboxMapProvider({ locale: 'zh-Hans' });
+    expect(map._language).toEqual('zh-Hans');
+  });
+
+  it('zh-Hant is supported', () => {
+    const map = new MapboxMapProvider({ locale: 'zh-Hant' });
+    expect(map._language).toEqual('zh-Hant');
   });
 });

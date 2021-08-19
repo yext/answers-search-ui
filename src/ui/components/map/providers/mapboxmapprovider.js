@@ -4,6 +4,7 @@ import MapboxLanguage from '@mapbox/mapbox-gl-language';
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
+import { parseLocale } from '../../../../core/utils/i18nutils';
 
 /* global mapboxgl */
 
@@ -16,11 +17,12 @@ export default class MapBoxMapProvider extends MapProvider {
   constructor (opts = {}, systemOpts = {}) {
     super(opts, systemOpts);
 
+    const { language, modifier } = parseLocale(this._locale);
     /**
      * Language of the map.
      * @type {string}
      */
-    this._language = this._locale.substring(0, 2);
+    this._language = modifier ? `${language}-${modifier}` : language;
   }
 
   /**
