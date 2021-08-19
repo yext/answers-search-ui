@@ -41,7 +41,7 @@ export default class GoogleMapProvider extends MapProvider {
    */
   getLanguage (localeStr) {
     const googleMapsCustomLanguages =
-      ['zh-CN', 'zn-HK', 'zh-TW', 'en-AU', 'en-GB', 'fr-CA', 'pt-BR', 'pt-PT', 'es-419'];
+      ['zh-CN', 'zh-HK', 'zh-TW', 'en-AU', 'en-GB', 'fr-CA', 'pt-BR', 'pt-PT', 'es-419'];
     const locale = localeStr.replace('_', '-');
 
     if (googleMapsCustomLanguages.includes(locale)) {
