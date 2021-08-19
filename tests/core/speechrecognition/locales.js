@@ -5,27 +5,31 @@ jest.mock('../../../src/core/constants', () => ({
     require('../../../conf/i18n/constants').SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE
 }));
 
-it('does nothing when no underscore', () => {
+it('works for plain languages', () => {
   expect(transformSpeechRecognitionLocaleForEdge('en')).toEqual('en');
+  expect(transformSpeechRecognitionLocaleForEdge('ZH_Hans')).toEqual('zh-hans');
 });
 
 it('will recognize supported locales that have dashes', () => {
-  expect(transformSpeechRecognitionLocaleForEdge('en-US')).toEqual('en-US');
-  expect(transformSpeechRecognitionLocaleForEdge('en-GB')).toEqual('en-GB');
+  expect(transformSpeechRecognitionLocaleForEdge('en-US')).toEqual('en-us');
+  expect(transformSpeechRecognitionLocaleForEdge('en-GB')).toEqual('en-gb');
+  expect(transformSpeechRecognitionLocaleForEdge('zh-Hant-tw')).toEqual('zh-hant-tw');
 });
 
 it('defaults Edge incompatible locales to the language code', () => {
   expect(transformSpeechRecognitionLocaleForEdge('ja_FAKE')).toEqual('ja');
   expect(transformSpeechRecognitionLocaleForEdge('en_AI')).toEqual('en');
+  expect(transformSpeechRecognitionLocaleForEdge('zH_hAns_fake')).toEqual('zh-hans');
+  expect(transformSpeechRecognitionLocaleForEdge('ZH-HANS-FAKE')).toEqual('zh-hans');
 });
 
 it('replaces underscores with dashes for supported locales', () => {
-  expect(transformSpeechRecognitionLocaleForEdge('en_US')).toEqual('en-US');
-  expect(transformSpeechRecognitionLocaleForEdge('en_GB')).toEqual('en-GB');
+  expect(transformSpeechRecognitionLocaleForEdge('en_US')).toEqual('en-us');
+  expect(transformSpeechRecognitionLocaleForEdge('en_GB')).toEqual('en-gb');
 });
 
-it('is case insensitive', () => {
-  expect(transformSpeechRecognitionLocaleForEdge('en_us')).toEqual('en-us');
-  expect(transformSpeechRecognitionLocaleForEdge('EN_AI')).toEqual('EN');
-  expect(transformSpeechRecognitionLocaleForEdge('jA_AI')).toEqual('jA');
+it('canonicalizes case', () => {
+  expect(transformSpeechRecognitionLocaleForEdge('en_uS')).toEqual('en-us');
+  expect(transformSpeechRecognitionLocaleForEdge('EN_AI')).toEqual('en');
+  expect(transformSpeechRecognitionLocaleForEdge('jA_AI')).toEqual('ja');
 });
