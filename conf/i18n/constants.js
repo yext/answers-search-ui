@@ -186,5 +186,28 @@ exports.SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE = [
   'de-at',
   'de-ch',
   'de-de',
-  'ja-jp'
+  'ja-jp',
+  'ar-ae',
+  'ar-bh',
+  'ar-dz',
+  'ar-iq',
+  'ar-kw',
+  'ar-ly',
+  'ar-om',
+  'ar-ps',
+  'ar-qa',
+  'ar-sa',
+  'nl-be',
+  'nl-nl',
+  'pt-br',
+  'pt-pt',
+  'sv-se',
+  'zh-hans-cn',
+  'zh-hans-hk',
+  'zh-hant-hk',
+  'zh-hant-tw',
+
+  // Below are locales that are not the SDK's built-in locales, but are supported by edge
+  'zh-cn',
+  'zh-tw'
 ];
