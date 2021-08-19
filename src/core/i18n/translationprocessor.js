@@ -8,7 +8,7 @@ export default class TranslationProcessor {
    * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
-   * @param {string} language The langauge associated with the pluralization
+   * @param {string} language The language associated with the pluralization
    * @param {string} escapeExpression A function which escapes HTML in the passed string
    * @returns {string} The translation with any interpolation or pluralization applied
    */

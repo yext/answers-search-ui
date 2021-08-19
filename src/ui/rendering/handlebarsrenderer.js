@@ -4,6 +4,7 @@ import Renderer from './renderer';
 import Icons from '../icons';
 import HighlightedValue from '../../core/models/highlightedvalue';
 import TranslationProcessor from '../../core/i18n/translationprocessor';
+import { parseLocale } from '../../core/utils/i18nutils';
 
 /**
  * HandlebarsRenderer is a wrapper around the nativate handlebars renderer.
@@ -220,7 +221,7 @@ export default class HandlebarsRenderer extends Renderer {
       const isUsingPluralization = (typeof phrase !== 'string');
 
       locale = locale || self._initLocale;
-      const language = locale.substring(0, 2);
+      const { language } = parseLocale(locale);
 
       return isUsingPluralization
         ? TranslationProcessor.process(pluralizationInfo, interpolationParams, count, language, self.escapeExpression.bind(self))

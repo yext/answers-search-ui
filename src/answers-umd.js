@@ -30,6 +30,7 @@ import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
 import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
+import { parseLocale } from './core/utils/i18nutils';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -613,12 +614,12 @@ class Answers {
    * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
-   * @param {string} language The langauge associated with the pluralization
+   * @param {string} locale The locale associated with the pluralization
    * @returns {string} The translation with any interpolation or pluralization applied
    */
-  processTranslation (translations, interpolationParams, count, language) {
+  processTranslation (translations, interpolationParams, count, locale) {
     const initLocale = this._getInitLocale();
-    language = language || initLocale.substring(0, 2);
+    const { language } = parseLocale(locale ?? initLocale);
 
     if (!this.renderer) {
       console.error('The renderer must be initialized before translations can be processed');
