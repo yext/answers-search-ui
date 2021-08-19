@@ -24,7 +24,7 @@
     "@yext/rtf-converter": "^1.4.0",
     "css-vars-ponyfill": "^2.3.1",
     "gulp-sourcemaps": "^2.6.5",
-    "handlebars": "^4.7.2",
+    "handlebars": "^4.7.7",
     "js-levenshtein": "^1.1.6",
     "kind-of": "^6.0.3",
     "lodash.clonedeep": "^4.5.0",
