@@ -99,6 +99,10 @@ msgstr "Przejdź do następnej strony wyników"
 msgid "Image for [[title]]"
 msgstr "Obraz dla [[tytuł]]"
 
+#: src/ui/components/questions/questionsubmissioncomponent.js:176
+msgid "Invalid email address. Please refresh the page and try submitting your question again."
+msgstr "Nieprawidłowy adres e-mail. Odśwież stronę i spróbuj ponownie przesłać pytanie."
+
 #: src/ui/components/filters/geolocationcomponent.js:285
 #: src/ui/components/filters/geolocationcomponent.js:39
 #: src/ui/components/filters/geolocationcomponent.js:47

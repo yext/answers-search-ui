@@ -166,6 +166,10 @@ msgstr "Vaya a la página siguiente de los resultados"
 msgid "Image for [[title]]"
 msgstr "imagen para [[title]]"
 
+#: src/ui/components/questions/questionsubmissioncomponent.js:176
+msgid "Invalid email address. Please refresh the page and try submitting your question again."
+msgstr "Dirección de correo electrónico no válida. Actualiza la página e intenta enviar tu pregunta de nuevo."
+
 #: src/ui/templates/results/noresults.hbs:31
 msgid "Make sure all words are spelled correctly."
 msgstr "Verifique que todas las palabras estén escritas correctamente."

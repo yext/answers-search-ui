@@ -133,6 +133,10 @@ msgstr "検索結果の次のページへ移動する"
 msgid "Image for [[title]]"
 msgstr "[[title]]の画像"
 
+#: src/ui/components/questions/questionsubmissioncomponent.js:176
+msgid "Invalid email address. Please refresh the page and try submitting your question again."
+msgstr "メールアドレスが無効です。ページを更新し、質問を再度送信してみてください。"
+
 #: src/ui/templates/results/noresults.hbs:31
 msgid "Make sure all words are spelled correctly."
 msgstr "すべての単語の綴りが正しいことを確認してください。"
