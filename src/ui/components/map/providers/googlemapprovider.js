@@ -59,7 +59,7 @@ export default class GoogleMapProvider extends MapProvider {
       return 'zh-CN';
     }
 
-    // Google maps uses the 'TW' region code to indicate Traditionalls Chinese
+    // Google maps uses the 'TW' region code to indicate Traditional Chinese
     if (language === 'zh' && modifier === 'Hant') {
       return 'zh-TW';
     }
