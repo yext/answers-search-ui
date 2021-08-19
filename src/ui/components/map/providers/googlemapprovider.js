@@ -48,12 +48,18 @@ export default class GoogleMapProvider extends MapProvider {
       return locale;
     }
 
-    const { language, modifier } = parseLocale(localeStr);
+    const { language, modifier, region } = parseLocale(localeStr);
 
+    if (language === 'zh' && region === 'HK') {
+      return 'zh-HK';
+    }
+
+    // Google maps uses the 'CN' region code to indicate Simplified Chinese
     if (language === 'zh' && modifier === 'Hans') {
       return 'zh-CN';
     }
 
+    // Google maps uses the 'TW' region code to indicate Traditionalls Chinese
     if (language === 'zh' && modifier === 'Hant') {
       return 'zh-TW';
     }
