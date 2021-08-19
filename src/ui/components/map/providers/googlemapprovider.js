@@ -2,6 +2,7 @@
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
+import { parseLocale } from '../../../../core/utils/i18nutils';
 
 /* global google */
 
@@ -33,7 +34,8 @@ export default class GoogleMapProvider extends MapProvider {
 
   /**
    * Google Maps supports some language codes that are longer than two characters. If the
-   * locale matches one of these edge cases, use it. Otherwise, fallback on the first two
+   * locale matches one of these edge cases, use it. If a chinese script code is used, map
+   * it to the corresponding locale supported by Google. Otherwise, fallback on the first two
    * characters of the locale.
    * @param {string} localeStr Unicode locale
    */
@@ -46,7 +48,16 @@ export default class GoogleMapProvider extends MapProvider {
       return locale;
     }
 
-    const language = locale.substring(0, 2);
+    const { language, modifier } = parseLocale(localeStr);
+
+    if (language === 'zh' && modifier === 'Hans') {
+      return 'zh-CN';
+    }
+
+    if (language === 'zh' && modifier === 'Hant') {
+      return 'zh-TW';
+    }
+
     return language;
   }
 
