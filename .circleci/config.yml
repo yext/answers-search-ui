@@ -395,11 +395,9 @@ workflows:
             - build_search_bar
             - headless_acceptance_test_search_bar
             - translation_test
-      # - deploy_search_bar_version:
-      #     filters:
-      #       tags:
-      #         only: /^search-bar-v.*/
-      #       branches:
-      #         ignore: /.*/
-      #     requires:
-      #       - hold
+      - deploy_search_bar_version:
+          filters:
+            tags:
+              only: /^search-bar-v.*/
+          requires:
+            - hold
