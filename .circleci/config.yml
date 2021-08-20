@@ -27,6 +27,9 @@ commands:
       cache-control:
         type: string
         default: "no-cache"
+      deploy-bucket:
+        type: string
+        default: answers
     steps:
       - attach_workspace:
           at: ~/answers
@@ -38,7 +41,7 @@ commands:
             echo -e $AWS_PROD_PROFILE >> ~/.aws/config
       - aws-s3/copy:
           from: dist
-          to: '${AWS_DEPLOY_BUCKET}<< parameters.subdirectory >>'
+          to: '<< parameters.deploy-bucket >><< parameters.subdirectory >>'
           arguments: |
             --acl public-read \
             --cache-control << parameters.cache-control >> \
@@ -71,6 +74,18 @@ jobs:
           paths:
             - dist
             - .circleci
+  build_search_bar:
+    docker:
+      - image: circleci/node:14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - run: npm run build-search-bar-only
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+            - .circleci
   # run the jest unit tests
   unit_test:
     docker:
@@ -92,6 +107,15 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: ./.circleci/run_headless_acceptance.sh
+  headless_acceptance_test_search_bar:
+    docker:
+      - image: circleci/node:14.5-browsers
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: ./.circleci/run_headless_acceptance_search_bar.sh
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
@@ -172,6 +196,29 @@ jobs:
           subdirectory: '/${MINOR_VERSION}'
           cache-control: 'max-age=43200'
       - deploy-to-aws:
+          subdirectory: '/${MAJOR_VERSION}'
+          cache-control: 'max-age=43200'
+  # deploys assets to a long-lived-cache folder in the S3 bucket named by release tag
+  deploy_search_bar_version:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/answers
+    steps:
+      - deploy-to-aws:
+          deploy-bucket: 'answers-search-bar'
+          subdirectory: '/${CIRCLE_TAG##search-bar-}'
+          cache-control: 'max-age=31536000'
+      - run:
+          name: "Get major and minor version substrings"
+          command: |
+            echo "export MINOR_VERSION="$(echo "${CIRCLE_TAG##search-bar-}" | cut -d '.' -f 1,2)"" >> $BASH_ENV
+            echo "export MAJOR_VERSION="$(echo "${CIRCLE_TAG##search-bar-}" | cut -d '.' -f 1)"" >> $BASH_ENV
+      - deploy-to-aws:
+          deploy-bucket: 'answers-search-bar'
+          subdirectory: '/${MINOR_VERSION}'
+          cache-control: 'max-age=43200'
+      - deploy-to-aws:
+          deploy-bucket: 'answers-search-bar'
           subdirectory: '/${MAJOR_VERSION}'
           cache-control: 'max-age=43200'
 workflows:
@@ -319,3 +366,40 @@ workflows:
               ignore: /.*/
           requires:
             - hold
+  build_and_deploy_search_bar:
+    jobs:
+      - build_search_bar:
+          filters:
+            branches:
+              only: dev/search-bar-cd
+            tags:
+              only: /^search-bar-v.*/
+      - headless_acceptance_test_search_bar:
+          filters:
+            tags:
+              only: /^search-bar-v.*/
+          requires:
+            - build_search_bar
+      - translation_test:
+          filters:
+            tags:
+              only: /^search-bar-v.*/
+          requires:
+            - build_search_bar
+      - hold:
+          type: approval
+          filters:
+            tags:
+              only: /^search-bar-v.*/
+          requires:
+            - build_search_bar
+            - headless_acceptance_test_search_bar
+            - translation_test
+      # - deploy_search_bar_version:
+      #     filters:
+      #       tags:
+      #         only: /^search-bar-v.*/
+      #       branches:
+      #         ignore: /.*/
+      #     requires:
+      #       - hold
