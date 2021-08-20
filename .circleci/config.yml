@@ -41,7 +41,7 @@ commands:
             echo -e $AWS_PROD_PROFILE >> ~/.aws/config
       - aws-s3/copy:
           from: dist
-          to: '<< parameters.deploy-bucket >><< parameters.subdirectory >>'
+          to: 's3://assets.sitescdn.net/<< parameters.deploy-bucket >><< parameters.subdirectory >>'
           arguments: |
             --acl public-read \
             --cache-control << parameters.cache-control >> \
