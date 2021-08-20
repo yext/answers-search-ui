@@ -370,8 +370,6 @@ workflows:
     jobs:
       - build_search_bar:
           filters:
-            branches:
-              only: dev/search-bar-cd
             tags:
               only: /^search-bar-v.*/
       - headless_acceptance_test_search_bar:
