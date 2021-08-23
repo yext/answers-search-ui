@@ -1,6 +1,6 @@
 {
   "name": "answers",
-  "version": "1.4.10",
+  "version": "1.4.11",
   "description": "Javascript Answers Programming Interface",
   "main": "gulpfile.js",
   "dependencies": {
