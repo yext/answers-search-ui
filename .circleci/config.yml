@@ -392,7 +392,6 @@ workflows:
             tags:
               only: /^search-bar-v.*/
           requires:
-            - build_search_bar
             - headless_acceptance_test_search_bar
             - translation_test
       - deploy_search_bar_version:
