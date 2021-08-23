@@ -48,7 +48,7 @@ jobs:
   # generate bundles
   build:
     docker:
-      - image: circleci/node:7.10
+      - image: circleci/node:10.13.0
     working_directory: ~/answers
     steps:
       - setup-workspace
