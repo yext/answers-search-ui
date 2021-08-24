@@ -23,7 +23,6 @@ commands:
     parameters:
       subdirectory:
         type: string
-        default: ''
       cache-control:
         type: string
         default: "no-cache"
@@ -151,13 +150,6 @@ jobs:
           command: |
             sudo apt-get install -qq gettext
             ./.circleci/run_translation_verification.sh
-  # deploy to S3 in the root folder, overwriting the existing latest version
-  deploy_latest:
-    docker:
-      - image: circleci/python:2.7
-    working_directory: ~/answers
-    steps:
-      - deploy-to-aws
   # deploys assets to an uncached folder in the S3 bucket named by branch
   deploy_branch:
     docker:
@@ -311,8 +303,7 @@ workflows:
             tags:
               only: /^v.*/
             branches:
-              only:
-                - master
+              ignore: /.*/
       - unit_test:
           filters:
             tags:
@@ -354,18 +345,10 @@ workflows:
             - useragent_acceptance_test
             - headless_acceptance_test
             - translation_test
-      - deploy_latest:
-          filters:
-            branches:
-              only: master
-          requires:
-            - hold
       - deploy_version:
           filters:
             tags:
               only: /^v.*/
-            branches:
-              ignore: /.*/
           requires:
             - hold
   build_and_deploy_search_bar:
