@@ -115,7 +115,9 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: ./.circleci/run_headless_acceptance_search_bar.sh
+      - run:
+          name: Search Bar Acceptance Tests
+          command: npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.circleci/testcafe_search_bar.json -q
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
