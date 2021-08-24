@@ -14,13 +14,13 @@
             {{/if}}
 
             {{#if expanded}}
-              <span class="yxt-FilterOptions-expand yxt-FilterOptions-collapseUp"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "chevron" }'></span>
+              <span class="yxt-FilterOptions-expand yxt-FilterOptions-collapseUp">
+                {{> icons/builtInIcon iconName='chevron'}}
+              </span>
             {{else}}
-              <span class="yxt-FilterOptions-expand yxt-FilterOptions-collapseDown"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "chevron" }'></span>
+              <span class="yxt-FilterOptions-expand yxt-FilterOptions-collapseDown">
+                {{> icons/builtInIcon iconName='chevron'}}
+              </span>
             {{/if}}
           </div>
         {{else}}
@@ -48,10 +48,9 @@
     {{#if searchable}}
       <div class="yxt-FilterOptions-search js-yxt-FilterOptions-search">
         <input type="text" class="yxt-FilterOptions-filter js-yxt-FilterOptions-filter" aria-label="{{searchLabelText}}" placeholder="{{placeholderText}}">
-        <button class="yxt-FilterOptions-clearSearch js-yxt-FilterOptions-clearSearch js-hidden"
-          data-component="IconComponent"
-          data-opts='{ "iconName": "close" }'
-          data-prop="icon"></button>
+        <button class="yxt-FilterOptions-clearSearch js-yxt-FilterOptions-clearSearch js-hidden">
+          {{> icons/builtInIcon iconName='close'}}
+        </button>
       </div>
     {{/if}}
     </div>
@@ -115,17 +114,17 @@
         <span class="yxt-FilterOptions-showToggleLabel">
           {{showLessLabel}}
         </span>
-        <span class="yxt-FilterOptions-collapseUp"
-          data-component="IconComponent"
-          data-opts='{ "iconName": "chevron" }'></span>
+        <span class="yxt-FilterOptions-collapseUp">
+          {{> icons/builtInIcon iconName='chevron'}}
+        </span>
       </button>
       <button class="yxt-FilterOptions-showToggle js-yxt-FilterOptions-showToggle js-yxt-FilterOptions-showMore{{#unless showMoreState}} hidden{{/unless}}">
         <span class="yxt-FilterOptions-showToggleLabel">
           {{showMoreLabel}}
         </span>
-        <span class="yxt-FilterOptions-collapseDown"
-          data-component="IconComponent"
-          data-opts='{ "iconName": "chevron" }'></span>
+        <span class="yxt-FilterOptions-collapseDown">
+          {{> icons/builtInIcon iconName='chevron'}}
+        </span>
       </button>
     {{/if}}
   </div>

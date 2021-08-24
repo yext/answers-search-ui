@@ -1,12 +1,12 @@
 import UniversalPage from '../pageobjects/universalpage';
 import VerticalPage from '../pageobjects/verticalpage';
 import {
-  setupServer,
-  shutdownServer,
   UNIVERSAL_PAGE,
   FACETS_PAGE,
-  VERTICAL_PAGE
-} from '../server';
+  VERTICAL_PAGE,
+  UNIVERSAL_SEARCH_URL_REGEX,
+  VERTICAL_SEARCH_URL_REGEX
+} from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector, RequestLogger } from 'testcafe';
 import {
@@ -14,8 +14,8 @@ import {
   browserRefreshPage,
   registerIE11NoCacheHook
 } from '../utils';
-import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
+import SearchRequestLogger from '../searchrequestlogger';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -25,18 +25,20 @@ import StorageKeys from '../../../src/core/storage/storagekeys';
  */
 
 fixture`Universal search page works as expected`
-  .before(setupServer)
-  .after(shutdownServer)
+  .requestHooks(SearchRequestLogger.createUniversalSearchLogger())
+  .beforeEach(async t => {
+    await registerIE11NoCacheHook(t, UNIVERSAL_SEARCH_URL_REGEX);
+  })
   .page`${UNIVERSAL_PAGE}`;
 
 test('Basic universal flow', async t => {
   const searchComponent = UniversalPage.getSearchComponent();
-
   await searchComponent.enterQuery('Tom');
   await searchComponent.clearQuery();
 
   await searchComponent.enterQuery('ama');
   await searchComponent.getAutoComplete().selectOption('amani farooque phone number');
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const sections =
         await UniversalPage.getUniversalResultsComponent().getSections();
@@ -47,25 +49,33 @@ test('Basic universal flow', async t => {
 });
 
 fixture`Vertical search page works as expected`
-  .before(setupServer)
-  .after(shutdownServer)
+  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+  .beforeEach(async t => {
+    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
+  })
   .page`${VERTICAL_PAGE}`;
 
 test('pagination flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('Virginia');
   await searchComponent.submitQuery();
+  await SearchRequestLogger.waitOnSearchComplete(t);
+
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
+
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
 
 test('navigating and refreshing mantains that page number', async t => {
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
+  await SearchRequestLogger.waitOnSearchComplete(t);
+
   await browserRefreshPage();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
@@ -74,11 +84,13 @@ test('navigating and refreshing mantains that page number', async t => {
 test('navigating and refreshing mantains that page number with blank query', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.submitQuery();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   let pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
+
   await browserRefreshPage();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
@@ -86,13 +98,14 @@ test('navigating and refreshing mantains that page number with blank query', asy
 
 test('spell check flow', async t => {
   const spellCheckLogger = RequestLogger({
-    url: /v2\/accounts\/me\/answers\/vertical\/query/
+    url: VERTICAL_SEARCH_URL_REGEX
   });
   await t.addRequestHooks(spellCheckLogger);
-  await registerIE11NoCacheHook(t);
+  await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('varginia');
   await searchComponent.submitQuery();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
@@ -104,17 +117,10 @@ test('spell check flow', async t => {
   await spellCheckComponent.clickLink();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 1');
-
-  // Check that clicking spell check sends a queryTrigger=suggest url param
-  // TODO(SLAP-1062) investigate making this an integration test
-  const queryParams = await getMostRecentQueryParamsFromLogger(spellCheckLogger);
-  const queryTriggerParam = queryParams.get('queryTrigger');
-  await t.expect(queryTriggerParam).eql('suggest');
 });
 
 test('navigating pages and hitting the browser back button lands you on the right page', async t => {
   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
-
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   await paginationComponent.clickNextButton();
@@ -124,13 +130,16 @@ test('navigating pages and hitting the browser back button lands you on the righ
 });
 
 fixture`Facets page`
-  .before(setupServer)
-  .after(shutdownServer)
+  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+  .beforeEach(async t => {
+    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
+  })
   .page`${FACETS_PAGE}`;
 
 test('Facets load on the page, and can affect the search', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const facets = FacetsPage.getFacetsComponent();
   const filterBox = facets.getFilterBox();
@@ -186,6 +195,7 @@ test('Facets load on the page, and can affect the search', async t => {
 test('selecting a sort option and refreshing maintains that sort selection', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
+  await SearchRequestLogger.waitOnSearchComplete(t);
 
   const thirdSortOption = await Selector('.yxt-SortOptions-optionSelector').nth(2);
   await t.click(thirdSortOption);
@@ -195,8 +205,6 @@ test('selecting a sort option and refreshing maintains that sort selection', asy
 });
 
 fixture`Experience links work as expected`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('experience links are clean', async t => {
@@ -275,8 +283,6 @@ test('experience links are clean', async t => {
 });
 
 fixture`Performance marks on search`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('window.performance calls are marked for a normal search', async t => {
@@ -309,8 +315,6 @@ test('window.performance calls are marked for a normal search', async t => {
 });
 
 fixture`W3C Accessibility standards are met`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_PAGE}`;
 
 test('Sort options focus state works', async t => {

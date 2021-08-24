@@ -1,3 +1,4 @@
+import DirectAnswer from '../models/directanswer';
 import QueryTriggers from '../models/querytriggers';
 import UniversalResults from '../models/universalresults';
 import VerticalResults from '../models/verticalresults';
@@ -77,6 +78,7 @@ export default class QueryUpdateListener {
     this.config.verticalKey
       ? this.core.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading())
       : this.core.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
+    this.core.storage.set(StorageKeys.DIRECT_ANSWER, DirectAnswer.searchLoading());
   }
 
   _search (query) {

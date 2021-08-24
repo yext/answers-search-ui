@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: src/ui/templates/results/alternativeverticals.hbs:32
+#: src/ui/templates/results/alternativeverticals.hbs:28
 msgid "([[resultsCount]] result)"
 msgid_plural "([[resultsCount]] results)"
 msgstr[0] "[[resultsCount]] Ergebnis"
@@ -31,7 +31,7 @@ msgstr "* Sie müssen der Datenschutzrichtlinie zustimmen, um Ihre Frage abzusen
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
 msgstr "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">Keine Ergebnisse gefunden</em> in [[currentVerticalLabel]]."
 
-#: src/ui/templates/results/alternativeverticals.hbs:47
+#: src/ui/templates/results/alternativeverticals.hbs:40
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
 msgstr "Sehen Sie alternativ <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> Ergebnisse aus allen Kategorien</a>."
 
@@ -97,6 +97,10 @@ msgstr "Zur nächsten Ergebnisseite wechseln"
 msgid "Image for [[title]]"
 msgstr "Bild für [[title]]"
 
+#: src/ui/components/questions/questionsubmissioncomponent.js:176
+msgid "Invalid email address. Please refresh the page and try submitting your question again."
+msgstr "E-Mail-Adresse ungültig. Bitte aktualisieren Sie die Seite und versuchen Sie erneut, Ihre Frage einzureichen."
+
 #: src/ui/components/filters/geolocationcomponent.js:280
 #: src/ui/components/filters/geolocationcomponent.js:38
 #: src/ui/components/filters/geolocationcomponent.js:46
@@ -107,7 +111,15 @@ msgstr "Standort"
 msgid "Make sure all words are spelled correctly."
 msgstr "Vergewissern Sie sich auf korrekte Rechtschreibung."
 
-#: src/ui/templates/results/directanswer.hbs:83
+#: src/ui/speechrecognition/speechrecognizer.js:97
+msgid "Note: For Safari users, Siri must be enabled"
+msgstr "Hinweis: Siri muss für Nutzer von Safari aktiviert sein."
+
+#: src/ui/speechrecognition/voicesearchcontroller.js:62
+msgid "Permission to use microphone is blocked"
+msgstr "Der Zugriff auf die Verwendung des Mikrofons ist gesperrt."
+
+#: src/ui/templates/results/directanswer.hbs:74
 msgid "Send feedback"
 msgstr "Feedback senden"
 
@@ -115,11 +127,15 @@ msgstr "Feedback senden"
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
 msgstr "Stattdessen werden <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">alle [[currentVerticalLabel]]</em> gezeigt."
 
+#: src/ui/speechrecognition/speechrecognizer.js:96
+msgid "Speech Recognition is not available."
+msgstr "Spracherkennung ist nicht verfügbar."
+
 #: src/ui/templates/results/noresults.hbs:24
 msgid "Suggestions:"
 msgstr "Vorschläge:"
 
-#: src/ui/components/results/directanswercomponent.js:27
+#: src/ui/components/results/directanswercomponent.js:29
 msgid "Thank you for your feedback!"
 msgstr "Danke für Ihr Feedback!"
 
@@ -133,11 +149,11 @@ msgid_plural "The following search categories yielded results for <span class=\"
 msgstr[0] "Die folgenden Kategorie liefert Suchergebnisse für <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
 msgstr[1] "Die folgenden Kategorien liefern Suchergebnisse für <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
 
-#: src/ui/components/results/directanswercomponent.js:21
+#: src/ui/components/results/directanswercomponent.js:23
 msgid "This answered my question"
 msgstr "Meine Frage wurde beantwortet"
 
-#: src/ui/components/results/directanswercomponent.js:24
+#: src/ui/components/results/directanswercomponent.js:26
 msgid "This did not answer my question"
 msgstr "Meine Frage wurde nicht beantwortet"
 
@@ -168,7 +184,7 @@ msgstr "Meinen Standort verwenden"
 
 #: src/ui/components/filters/geolocationcomponent.js:147
 #: src/ui/components/search/locationbiascomponent.js:76
-#: src/ui/components/search/searchcomponent.js:207
+#: src/ui/components/search/searchcomponent.js:233
 msgid "We are unable to determine your location"
 msgstr "Ihr Standort konnte nicht ermittelt werden"
 
@@ -179,6 +195,16 @@ msgstr "Leider ist ein Fehler aufgetreten."
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
 msgstr "Ihre Suche - <span class=\"yxt-NoResults-query\">[[query]]</span> - stimmt mit keinen unserer Anworten überein."
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:13
+msgctxt "A button to begin listening for a voice search"
+msgid "Start Voice Search"
+msgstr "Sprachsuche starten"
+
+#: src/ui/speechrecognition/screenreadertextcontroller.js:22
+msgctxt "A button to stop listening for a voice search"
+msgid "Stop Voice Search"
+msgstr "Sprachsuche beenden"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:192
 msgctxt "After a date. Example: After [August 15th]"
@@ -247,13 +273,13 @@ msgctxt "Button label, effectuates changes"
 msgid "Apply"
 msgstr "Anwenden"
 
-#: src/ui/components/results/directanswercomponent.js:70
+#: src/ui/components/results/directanswercomponent.js:72
 msgctxt "Button label, view is a verb"
 msgid "View Details"
 msgstr "Details anzeigen"
 
-#: src/ui/components/results/universalresultscomponent.js:94
-#: src/ui/components/results/verticalresultscomponent.js:161
+#: src/ui/components/results/universalresultscomponent.js:121
+#: src/ui/components/results/verticalresultscomponent.js:169
 msgctxt "Button label, view more [results]"
 msgid "View More"
 msgstr "Mehr sehen"
@@ -263,7 +289,7 @@ msgctxt "Change is a verb, filters are a set of fixed values or criteria that li
 msgid "change filters"
 msgstr "Filter ändern"
 
-#: src/ui/templates/results/resultssectionheader.hbs:41
+#: src/ui/templates/results/resultssectionheader.hbs:36
 msgctxt "Change is a verb. Example: change filtering logic"
 msgid "change"
 msgstr "ändern"

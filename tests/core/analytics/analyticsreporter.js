@@ -108,4 +108,17 @@ describe('reporting events', () => {
 
     expect(mockedBeacon).toBeCalledTimes(0);
   });
+
+  it('When inludeQueryId is false, the queryId won\'t be included', () => {
+    const analyticsReporter = new AnalyticsReporter('abc123', null, '213412', true, { queryId: '123' });
+    const expectedEvent = AnalyticsEvent.fromData({
+      type: 'VOICE_STOP'
+    });
+    analyticsReporter.report(expectedEvent, { includeQueryId: false });
+
+    expect(mockedBeacon).toBeCalledTimes(1);
+    expect(mockedBeacon).toBeCalledWith(
+      expect.anything(),
+      expect.objectContaining({ data: expect.not.objectContaining({ queryId: '123' }) }));
+  });
 });

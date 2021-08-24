@@ -28,38 +28,22 @@
                 class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
                 data-eventtype="SEARCH_CLEAR_BUTTON"
                 data-eventoptions="{{eventOptions}}"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "close" }'
-                data-prop="icon"
         >
+          {{> icons/builtInIcon iconName='close'}}
           <span class="yxt-SearchBar-clearButtonText sr-only">
             {{clearText}}
           </span>
         </button>
+        {{#if showVoiceSearch}}
+          <button type="button"
+                  class="js-yxt-SearchBar-voiceSearch yxt-SearchBar-voiceSearch"
+          >
+            {{> icons/voiceSearchIcon}}
+          </button>
+        {{/if}}
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
-          {{#if submitIcon}}
-            <div class="yxt-SearchBar-buttonImage"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "{{submitIcon}}" }'
-            ></div>
-          {{else if _config.customIconUrl}}
-            <div class="yxt-SearchBar-buttonImage"
-                data-component="IconComponent"
-                data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
-            ></div>
-          {{else}}
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
-              data-component="IconComponent"
-              data-opts="{{json forwardIconOpts}}">
-            </div>
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
-              data-component="IconComponent"
-              data-opts="{{json reverseIconOpts}}">
-            </div>
-          {{/if}}
+          {{> icons/searchBarIcon}}
           <span class="yxt-SearchBar-buttonText sr-only">
             {{submitText}}
           </span>
@@ -88,38 +72,22 @@
                 class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
                 data-eventtype="SEARCH_CLEAR_BUTTON"
                 data-eventoptions="{{eventOptions}}"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "close" }'
-                data-prop="icon"
         >
+          {{> icons/builtInIcon iconName='close' }}
           <span class="yxt-SearchBar-clearButtonText sr-only">
             {{clearText}}
           </span>
         </button>
+        {{#if showVoiceSearch}}
+          <button type="button"
+                  class="js-yxt-SearchBar-voiceSearch yxt-SearchBar-voiceSearch"
+          >
+            {{> icons/voiceSearchIcon}}
+          </button>
+        {{/if}}
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button">
-          {{#if submitIcon}}
-            <div class="yxt-SearchBar-buttonImage"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "{{submitIcon}}" }'
-            ></div>
-          {{else if _config.customIconUrl}}
-            <div class="yxt-SearchBar-buttonImage"
-                data-component="IconComponent"
-                data-opts='{ "iconUrl": "{{_config.customIconUrl}}" }'
-            ></div>
-          {{else}}
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedForward
-              {{#if autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/if}}"
-              data-component="IconComponent"
-              data-opts="{{json forwardIconOpts}}">
-            </div>
-            <div class="yxt-SearchBar-AnimatedIcon yxt-SearchBar-AnimatedIcon--paused js-yxt-AnimatedReverse
-              {{#unless autoFocus}} yxt-SearchBar-AnimatedIcon--inactive{{/unless}}"
-              data-component="IconComponent"
-              data-opts="{{json reverseIconOpts}}">
-            </div>
-          {{/if}}
+          {{> icons/searchBarIcon}}
           <span class="yxt-SearchBar-buttonText sr-only">
             {{submitText}}
           </span>

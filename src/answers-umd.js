@@ -2,7 +2,6 @@
 
 import Core from './core/core';
 import cssVars from 'css-vars-ponyfill';
-
 import {
   DefaultTemplatesLoader,
   Renderers,
@@ -30,6 +29,8 @@ import TranslationProcessor from './core/i18n/translationprocessor';
 import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
 import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
+import { COMPONENT_REGISTRY } from './ui/components/registry';
+import { parseLocale } from './core/utils/i18nutils';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -89,7 +90,7 @@ class Answers {
      * A local reference to the component manager
      * @type {ComponentManager}
      */
-    this.components = ComponentManager.getInstance();
+    this.components = new ComponentManager(COMPONENT_REGISTRY);
 
     /**
      * A local reference to the core api
@@ -500,6 +501,14 @@ class Answers {
   }
 
   /**
+   * Sets the query source which is included with universal and vertical searches
+   * @param {string} source
+   */
+  setQuerySource (source) {
+    this.core.storage.set(StorageKeys.QUERY_SOURCE, source);
+  }
+
+  /**
    * Sets a search query on initialization for vertical searchers that have a
    * defaultInitialSearch provided, if the user hasn't already provided their
    * own via URL param. A default initial search should not be persisted in the URL,
@@ -605,12 +614,12 @@ class Answers {
    * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
-   * @param {string} language The langauge associated with the pluralization
+   * @param {string} locale The locale associated with the pluralization
    * @returns {string} The translation with any interpolation or pluralization applied
    */
-  processTranslation (translations, interpolationParams, count, language) {
+  processTranslation (translations, interpolationParams, count, locale) {
     const initLocale = this._getInitLocale();
-    language = language || initLocale.substring(0, 2);
+    const { language } = parseLocale(locale ?? initLocale);
 
     if (!this.renderer) {
       console.error('The renderer must be initialized before translations can be processed');

@@ -136,6 +136,12 @@ export default class AutoCompleteComponent extends Component {
      * @type {boolean}
      */
     this._isOpen = false;
+
+    /**
+     * Indicates that voice search is currently active
+     * @type {boolean}
+     */
+    this._isVoiceSearchActive = false;
   }
 
   /**
@@ -163,7 +169,7 @@ export default class AutoCompleteComponent extends Component {
     const queryInputEl = DOM.query(this._parentContainer, this._inputEl);
     const shouldHideAutocomplete = this._shouldHideOnEmptySearch && !queryInputEl.value;
     const wasOpen = this._isOpen;
-    if (!this.isQueryInputFocused() || shouldHideAutocomplete) {
+    if (shouldHideAutocomplete || (!this.isQueryInputFocused() && !this._isVoiceSearchActive)) {
       this._isOpen = false;
       this._sectionIndex = 0;
       this._resultIndex = -1;
@@ -332,6 +338,10 @@ export default class AutoCompleteComponent extends Component {
 
     this.reset();
     this.autoComplete(value);
+  }
+
+  setIsVoiceSearchActive (value) {
+    this._isVoiceSearchActive = value;
   }
 
   autoComplete (input) {

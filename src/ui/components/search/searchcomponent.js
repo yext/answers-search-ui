@@ -7,11 +7,9 @@ import SearchParams from '../../dom/searchparams';
 import TranslationFlagger from '../../i18n/translationflagger';
 import QueryUpdateListener from '../../../core/statelisteners/queryupdatelistener';
 import QueryTriggers from '../../../core/models/querytriggers';
-
-const IconState = {
-  YEXT: 0,
-  MAGNIFYING_GLASS: 1
-};
+import VoiceSearchController from '../../speechrecognition/voicesearchcontroller';
+import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
+import SearchBarIconController from '../../controllers/searchbariconcontroller';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -280,6 +278,42 @@ export default class SearchComponent extends Component {
     if (!this._isTwin) {
       this.initQueryUpdateListener();
     }
+
+    /**
+     * If true, a loading indicator will be displayed
+     * @type {boolean}
+     */
+    this._showLoadingIndicator = config.loadingIndicator?.display || false;
+
+    /**
+     * Custom icon url for loading indicator
+     * @type {string}
+     */
+    this._customLoadingIconUrl = config.loadingIndicator?.iconUrl || null;
+
+    this._voiceSearchConfig = config.voiceSearch || {};
+
+    /**
+     * Whether or not voice search should be enabled
+     * @type {boolean}
+     */
+    this._voiceSearchEnabled = config.voiceSearch?.enabled;
+
+    /**
+     * Once voice search has activited, this value determines the length of silence in milliseconds
+     * needed to trigger an automatic voice search
+     */
+    this._silenceThresholdToSearch = config.voiceSearch?.silenceThresholdToSearch || 1500;
+
+    /**
+     * Whether or not the voice search icon should appear
+     * @type {boolean}
+     */
+    this._showVoiceSearch = this._voiceSearchEnabled && speechRecognitionIsSupported();
+
+    this._customMicIconUrl = config.voiceSearch?.customMicIconUrl;
+
+    this._customListeningIconUrl = config.voiceSearch?.customListeningIconUrl;
   }
 
   /**
@@ -326,14 +360,20 @@ export default class SearchComponent extends Component {
       this.focusInputElement();
     }
 
-    this.isUsingYextAnimatedIcon = !this._config.customIconUrl && !this.submitIcon;
-    if (this.isUsingYextAnimatedIcon) {
-      this.initAnimatedIcon();
-    }
+    this.initSearchBarIconController();
 
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
     this.initAutoComplete(this._inputEl);
+
+    if (this._showVoiceSearch) {
+      this._voiceSearchController =
+        new VoiceSearchController(this._container, this._voiceSearchConfig, this);
+      const voiceSearchElement = DOM.query(this._container, '.js-yxt-SearchBar-voiceSearch');
+      DOM.on(voiceSearchElement, 'click', () => {
+        this._voiceSearchController.handleIconClick();
+      });
+    }
 
     if (this.clearButton) {
       this.initClearButton();
@@ -344,68 +384,20 @@ export default class SearchComponent extends Component {
     }
   }
 
-  requestIconAnimationFrame (iconState) {
-    if (this.iconState === iconState) {
-      return;
+  initSearchBarIconController () {
+    const config = {
+      useCustomIcon: this._config.customIconUrl || this.submitIcon,
+      isFocus: this.autoFocus && !this.query,
+      searchBarContainer: this._container,
+      inputEl: this._inputEl
+    };
+    this.searchBarIconController = new SearchBarIconController(config);
+    if (this._showLoadingIndicator) {
+      this.searchBarIconController.setupLoadingIconEvents(this.core.storage, this._verticalKey);
     }
-    this.iconState = iconState;
-    if (!this.isRequestingAnimationFrame) {
-      this.isRequestingAnimationFrame = true;
-      window.requestAnimationFrame(() => {
-        this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
-        this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--paused');
-        if (this.iconState === IconState.MAGNIFYING_GLASS) {
-          this.forwardIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
-          this.reverseIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
-        } else if (this.iconState === IconState.YEXT) {
-          this.forwardIcon.classList.add('yxt-SearchBar-AnimatedIcon--inactive');
-          this.reverseIcon.classList.remove('yxt-SearchBar-AnimatedIcon--inactive');
-        }
-        this.isRequestingAnimationFrame = false;
-      });
+    if (!config.useCustomIcon) {
+      this.searchBarIconController.setupAnimatedIconEvents();
     }
-  }
-
-  animateIconToMagnifyingGlass () {
-    if (this.iconIsFrozen) {
-      return;
-    }
-    this.requestIconAnimationFrame(IconState.MAGNIFYING_GLASS);
-  }
-
-  animateIconToYext (e) {
-    let focusStillInSearchbar = false;
-    if (e && e.relatedTarget) {
-      focusStillInSearchbar = this._container.contains(e.relatedTarget);
-    }
-    if (this.iconIsFrozen || focusStillInSearchbar) {
-      return;
-    }
-    this.requestIconAnimationFrame(IconState.YEXT);
-  }
-
-  initAnimatedIcon () {
-    this.iconState = (this.autoFocus && !this.query) ? IconState.MAGNIFYING_GLASS : IconState.YEXT;
-    this.forwardIcon = DOM.query(this._container, '.js-yxt-AnimatedForward');
-    this.reverseIcon = DOM.query(this._container, '.js-yxt-AnimatedReverse');
-    const clickableElementSelectors = ['.js-yext-submit', '.js-yxt-SearchBar-clear'];
-    for (const selector of clickableElementSelectors) {
-      const clickableEl = DOM.query(this._container, selector);
-      if (clickableEl) {
-        DOM.on(clickableEl, 'mousedown', () => {
-          this.iconIsFrozen = true;
-        });
-        DOM.on(clickableEl, 'mouseup', () => {
-          this.iconIsFrozen = false;
-        });
-      }
-    }
-    DOM.on(this.queryEl, 'focus', () => {
-      this.animateIconToMagnifyingGlass();
-    });
-    DOM.on(this._container, 'focusout', e => {
-      this.animateIconToYext(e);
-    });
   }
 
   remove () {
@@ -444,6 +436,11 @@ export default class SearchComponent extends Component {
       this.query = input;
       this._updateClearButtonVisibility(input);
     });
+  }
+
+  submitVoiceQuery () {
+    const inputEl = DOM.query(this._container, this._inputEl);
+    this.onQuerySubmit(inputEl, QueryTriggers.VOICE_SEARCH);
   }
 
   /**
@@ -502,8 +499,9 @@ export default class SearchComponent extends Component {
    * persistent and storage, than performs a debounced search.
    *
    * @param {Node} inputEl The input element containing the query.
+   * @param {QueryTrigger} queryTrigger An optional query trigger used for the search
    */
-  onQuerySubmit (inputEl) {
+  onQuerySubmit (inputEl, queryTrigger = QueryTriggers.SEARCH_BAR) {
     const query = inputEl.value;
     this.query = query;
     const params = new SearchParams(this.core.storage.getCurrentStateUrlMerged());
@@ -526,12 +524,9 @@ export default class SearchComponent extends Component {
 
     inputEl.blur();
     DOM.query(this._container, '.js-yext-submit').blur();
-    if (this.isUsingYextAnimatedIcon) {
-      this.animateIconToYext();
-    }
 
     this.core.storage.delete(StorageKeys.SEARCH_OFFSET);
-    this.core.triggerSearch(QueryTriggers.SEARCH_BAR, query);
+    this.core.triggerSearch(queryTrigger, query);
     return false;
   }
 
@@ -659,15 +654,11 @@ export default class SearchComponent extends Component {
 
   setState (data) {
     const forwardIconOpts = {
-      iconName: 'yext_animated_forward',
-      classNames: 'Icon--lg',
       complexContentsParams: {
         iconPrefix: this.name
       }
     };
     const reverseIconOpts = {
-      iconName: 'yext_animated_reverse',
-      classNames: 'Icon--lg',
       complexContentsParams: {
         iconPrefix: this.name
       }
@@ -681,6 +672,11 @@ export default class SearchComponent extends Component {
       submitText: this.submitText,
       clearText: this.clearText,
       showClearButton: this._showClearButton,
+      showLoadingIndicator: this._showLoadingIndicator,
+      customMicIconUrl: this._customMicIconUrl,
+      customLoadingIconUrl: this._customLoadingIconUrl,
+      customListeningIconUrl: this._customListeningIconUrl,
+      showVoiceSearch: this._showVoiceSearch,
       query: this.query || '',
       eventOptions: this.eventOptions(),
       iconId: this.name,
@@ -705,20 +701,26 @@ export default class SearchComponent extends Component {
     return DOM.query(this._container, '.js-yxt-SearchBar-clear');
   }
 
+  hideClearButton () {
+    this._showClearButton = false;
+    this._getClearButton().classList.add('yxt-SearchBar--hidden');
+  }
+
+  showClearButton () {
+    this._showClearButton = true;
+    this._getClearButton().classList.remove('yxt-SearchBar--hidden');
+  }
+
   /**
    * Updates the Search inputs clear button based on the current input value
    *
    * @param {string} input
    */
   _updateClearButtonVisibility (input) {
-    const clearButton = this._getClearButton();
-
     if (!this._showClearButton && input.length > 0) {
-      this._showClearButton = true;
-      clearButton.classList.remove('yxt-SearchBar--hidden');
+      this.showClearButton();
     } else if (this._showClearButton && input.length === 0) {
-      this._showClearButton = false;
-      clearButton.classList.add('yxt-SearchBar--hidden');
+      this.hideClearButton();
     }
   }
 }

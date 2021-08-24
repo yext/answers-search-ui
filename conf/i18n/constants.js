@@ -102,8 +102,112 @@ const LANGUAGES_TO_LOCALES = {
   ],
   ja: [
     'ja_JP'
+  ],
+  ar: [
+    'ar_AE',
+    'ar_BH',
+    'ar_DZ',
+    'ar_IQ',
+    'ar_KW',
+    'ar_LY',
+    'ar_OM',
+    'ar_PS',
+    'ar_QA',
+    'ar_SA'
+  ],
+  hi: [],
+  ko: [],
+  nl: [
+    'nl_BE',
+    'nl_NL',
+    'nl_SX'
+  ],
+  pl: [],
+  pt: [
+    'pt_BR',
+    'pt_CV',
+    'pt_PT'
+  ],
+  ru: [
+    'ru_UA'
+  ],
+  sv: [
+    'sv_SE'
+  ],
+  'zh-Hans': [
+    'zh-Hans_CN',
+    'zh-Hans_HK',
+    'zh-Hans_SG'
+  ],
+  'zh-Hant': [
+    'zh-Hant_HK',
+    'zh-Hant_MO',
+    'zh-Hant_TW'
   ]
 };
 exports.LANGUAGES_TO_LOCALES = LANGUAGES_TO_LOCALES;
 
 exports.ALL_LANGUAGES = Object.keys(LANGUAGES_TO_LOCALES);
+
+/**
+ * Of the 3 browsers that support speech recognition, only Edge will
+ * error out if it encounters a locale it doesn't like.
+ * Chrome and Safari still do their best to use a reasonable locale.
+ *
+ * This list of locales is used to manually default to the 2 character language code
+ * for locales not in this list, when the user's browser is Edge.
+ */
+exports.SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE = [
+  'en-ae',
+  'en-au',
+  'en-ca',
+  'en-de',
+  'en-gb',
+  'en-hk',
+  'en-ie',
+  'en-jm',
+  'en-sg',
+  'en-us',
+  'en-za',
+  'es-bo',
+  'es-co',
+  'es-cu',
+  'es-es',
+  'es-gt',
+  'es-hn',
+  'es-mx',
+  'es-ni',
+  'es-us',
+  'fr-be',
+  'fr-ca',
+  'fr-ch',
+  'fr-fr',
+  'it-it',
+  'de-at',
+  'de-ch',
+  'de-de',
+  'ja-jp',
+  'ar-ae',
+  'ar-bh',
+  'ar-dz',
+  'ar-iq',
+  'ar-kw',
+  'ar-ly',
+  'ar-om',
+  'ar-ps',
+  'ar-qa',
+  'ar-sa',
+  'nl-be',
+  'nl-nl',
+  'pt-br',
+  'pt-pt',
+  'sv-se',
+  'zh-hans-cn',
+  'zh-hans-hk',
+  'zh-hant-hk',
+  'zh-hant-tw',
+
+  // Below are locales that are not the SDK's built-in locales, but are supported by edge
+  'zh-cn',
+  'zh-tw'
+];

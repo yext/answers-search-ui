@@ -4,6 +4,9 @@ import { mount } from 'enzyme';
 import StorageKeys from '../../../../src/core/storage/storagekeys';
 import QueryTriggers from '../../../../src/core/models/querytriggers';
 
+jest.mock('../../../../src/ui/speechrecognition/miciconstylist');
+jest.mock('../../../../src/ui/speechrecognition/listeningiconstylist');
+
 DOM.setup(document, new DOMParser());
 
 describe('SearchBar component', () => {
@@ -130,5 +133,73 @@ describe('SearchBar component', () => {
     const form = wrapper.find('form');
     form.simulate('submit');
     expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.SEARCH_BAR);
+  });
+
+  describe('Voice search works properly', () => {
+    const events = {};
+    const webkitSpeechRecognitionMock = {
+      addEventListener: jest.fn((eventName, cb) => {
+        events[eventName] = cb;
+      }),
+      start: jest.fn(() => {
+        'start' in events && events.start();
+      }),
+      stop: jest.fn(() => {
+        'stop' in events && events.stop();
+      })
+    };
+
+    beforeEach(() => {
+      jest.spyOn(global, 'window', 'get').mockImplementation(() => ({
+        webkitSpeechRecognition: () => webkitSpeechRecognitionMock,
+        location: {
+          search: {
+            substring: jest.fn()
+          }
+        }
+      }));
+      jest.spyOn(global, 'navigator', 'get').mockImplementation(() => ({
+        mediaDevices: {
+          getUserMedia: () => Promise.resolve({
+            getTracks: () => ([{ stop: jest.fn() }])
+          })
+        }
+      }));
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+      jest.clearAllMocks();
+    });
+
+    it('submitVoiceQuery sets QUERY_TRIGGER to VOICE_SEARCH', () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', {
+        ...defaultConfig,
+        voiceSearch: {
+          enabled: true
+        }
+      });
+      mount(component);
+      component.submitVoiceQuery();
+      expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.VOICE_SEARCH);
+    });
+
+    it('Clicking the voice search button starts and stops voice search', async () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', {
+        ...defaultConfig,
+        voiceSearch: {
+          enabled: true
+        }
+      });
+      mount(component);
+      expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(0);
+      expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(0);
+      await component._voiceSearchController.handleIconClick();
+      expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(1);
+      expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(0);
+      await component._voiceSearchController.handleIconClick();
+      expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(1);
+      expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(1);
+    });
   });
 });

@@ -8,7 +8,7 @@ export default class TranslationProcessor {
    * translated plural forms
    * @param {Object} interpolationParams Params to use during interpolation
    * @param {number} count The count associated with the pluralization
-   * @param {string} language The langauge associated with the pluralization
+   * @param {string} language The language associated with the pluralization
    * @param {string} escapeExpression A function which escapes HTML in the passed string
    * @returns {string} The translation with any interpolation or pluralization applied
    */
@@ -33,6 +33,10 @@ export default class TranslationProcessor {
     }
     const oneToNArray = this._generateArrayOneToN(language);
     const pluralFormIndex = getPluralFunc(language)(count, oneToNArray);
+    if (!(pluralFormIndex in translations)) {
+      console.error(`msgstr[${pluralFormIndex}] not found for msgid "${translations[0]}" and locale "${language}".`);
+      return translations[0];
+    }
     return translations[pluralFormIndex];
   }
 

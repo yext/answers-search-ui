@@ -160,12 +160,21 @@ const DEFAULT_CONFIG = {
   }),
 
   /**
-   * The default network error text, shown when there is an issue with the QA Submission
+   * The default error text, shown when there is an issue with the QA Submission
    * request.
    * @type {string}
    */
-  networkErrorText: TranslationFlagger.flag({
+  defaultErrorText: TranslationFlagger.flag({
     phrase: 'We\'re sorry, an error occurred.'
+  }),
+
+  /**
+   * The default email error text, shown when there is an email is invalid with the QA Submission
+   * request.
+   * @type {string}
+   */
+  emailInvalidErrorText: TranslationFlagger.flag({
+    phrase: 'Invalid email address. Please refresh the page and try submitting your question again.'
   }),
 
   /**
@@ -293,7 +302,7 @@ export default class QuestionSubmissionComponent extends Component {
 
     const questionText = DOM.query(formEl, '.js-question-text');
     DOM.on(questionText, 'focus', () => {
-      this.analyticsReporter.report(this.getAnalyticsEvent('QUESTION_FOCUS'));
+      this.analyticsReporter?.report(this.getAnalyticsEvent('QUESTION_FOCUS'));
     });
   }
 
@@ -305,7 +314,7 @@ export default class QuestionSubmissionComponent extends Component {
   bindFormSubmit (formEl) {
     DOM.on(formEl, 'submit', (e) => {
       e.preventDefault();
-      this.analyticsReporter.report(this.getAnalyticsEvent('QUESTION_SUBMIT'));
+      this.analyticsReporter?.report(this.getAnalyticsEvent('QUESTION_SUBMIT'));
 
       // TODO(billy) we probably want to disable the form from being submitted twice
       const errors = this.validate(formEl);
@@ -323,10 +332,12 @@ export default class QuestionSubmissionComponent extends Component {
         questionDescription: formData.questionDescription
       })
         .catch(error => {
+          let errorMessage = this._config.defaultErrorText;
+          if (error.code === 22) {
+            errorMessage = this._config.emailInvalidErrorText;
+          }
           this.setState(
-            new QuestionSubmission(formData, {
-              network: 'We\'re sorry, an error occurred.'
-            })
+            new QuestionSubmission(formData, { network: errorMessage })
           );
           throw error;
         });

@@ -1,8 +1,4 @@
-import {
-  setupServer,
-  shutdownServer,
-  FACETS_ON_LOAD_PAGE
-} from '../server';
+import { FACETS_ON_LOAD_PAGE, VERTICAL_SEARCH_URL_REGEX } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { RequestLogger } from 'testcafe';
 import {
@@ -14,16 +10,14 @@ import {
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 
 fixture`Facets page`
-  .before(setupServer)
-  .after(shutdownServer)
   .page`${FACETS_ON_LOAD_PAGE}`;
 
 test('Facets work with back/forward navigation and page refresh', async t => {
   const logger = RequestLogger({
-    url: /v2\/accounts\/me\/answers\/vertical\/query/
+    url: VERTICAL_SEARCH_URL_REGEX
   });
   await t.addRequestHooks(logger);
-  await registerIE11NoCacheHook(t);
+  await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
 
   async function getFacetsFromRequest () {
     const urlParams = await getMostRecentQueryParamsFromLogger(logger);

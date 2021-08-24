@@ -10,14 +10,14 @@ commands:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "package.json" }}
+            - v2-dependencies-{{ checksum "package-lock.json" }}
             # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+            - v2-dependencies-
       - run: npm install
       - save_cache:
           paths:
             - node_modules
-          key: v1-dependencies-{{ checksum "package.json" }}
+          key: v2-dependencies-{{ checksum "package-lock.json" }}
   deploy-to-aws:
     description: "Deploys the dist directory to a given subdirectory of the answers bucket"
     parameters:
@@ -27,6 +27,9 @@ commands:
       cache-control:
         type: string
         default: "no-cache"
+      deploy-bucket:
+        type: string
+        default: answers
     steps:
       - attach_workspace:
           at: ~/answers
@@ -38,7 +41,7 @@ commands:
             echo -e $AWS_PROD_PROFILE >> ~/.aws/config
       - aws-s3/copy:
           from: dist
-          to: '${AWS_DEPLOY_BUCKET}<< parameters.subdirectory >>'
+          to: 's3://assets.sitescdn.net/<< parameters.deploy-bucket >><< parameters.subdirectory >>'
           arguments: |
             --acl public-read \
             --cache-control << parameters.cache-control >> \
@@ -71,6 +74,18 @@ jobs:
           paths:
             - dist
             - .circleci
+  build_search_bar:
+    docker:
+      - image: circleci/node:14.5
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - run: npm run build-search-bar-only
+      - persist_to_workspace:
+          root: .
+          paths:
+            - dist
+            - .circleci
   # run the jest unit tests
   unit_test:
     docker:
@@ -91,7 +106,18 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: npx testcafe chrome:headless,firefox:headless tests/acceptance/acceptancesuites/*.js -q
+      - run: ./.circleci/run_headless_acceptance.sh
+  headless_acceptance_test_search_bar:
+    docker:
+      - image: circleci/node:14.5-browsers
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run:
+          name: Search Bar Acceptance Tests
+          command: npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.circleci/testcafe_search_bar.json -q
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
@@ -102,6 +128,15 @@ jobs:
       - attach_workspace:
           at: ~/answers
       - run: ./.circleci/run_browserstack_acceptance.sh
+  useragent_acceptance_test:
+    docker:
+      - image: circleci/node:14.5-browsers
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: ./.circleci/run_useragent_acceptance.sh
   # verify all translations are present
   translation_test:
     docker:
@@ -116,18 +151,6 @@ jobs:
           command: |
             sudo apt-get install -qq gettext
             ./.circleci/run_translation_verification.sh
-  # verify that the third party notices file is up to date
-  third_party_notices_test:
-    docker:
-      - image: circleci/node:14.5
-    working_directory: ~/answers
-    steps:
-      - setup-workspace
-      - attach_workspace:
-          at: ~/answers
-      - run: 
-          name: Verify third party notices
-          command: ./.circleci/validate_third_party_notices.sh
   # deploy to S3 in the root folder, overwriting the existing latest version
   deploy_latest:
     docker:
@@ -177,6 +200,29 @@ jobs:
       - deploy-to-aws:
           subdirectory: '/${MAJOR_VERSION}'
           cache-control: 'max-age=43200'
+  # deploys assets to a long-lived-cache folder in the S3 bucket named by release tag
+  deploy_search_bar_version:
+    docker:
+      - image: circleci/python:2.7
+    working_directory: ~/answers
+    steps:
+      - deploy-to-aws:
+          deploy-bucket: 'answers-search-bar'
+          subdirectory: '/${CIRCLE_TAG##search-bar-}'
+          cache-control: 'max-age=31536000'
+      - run:
+          name: "Get major and minor version substrings"
+          command: |
+            echo "export MINOR_VERSION="$(echo "${CIRCLE_TAG##search-bar-}" | cut -d '.' -f 1,2)"" >> $BASH_ENV
+            echo "export MAJOR_VERSION="$(echo "${CIRCLE_TAG##search-bar-}" | cut -d '.' -f 1)"" >> $BASH_ENV
+      - deploy-to-aws:
+          deploy-bucket: 'answers-search-bar'
+          subdirectory: '/${MINOR_VERSION}'
+          cache-control: 'max-age=43200'
+      - deploy-to-aws:
+          deploy-bucket: 'answers-search-bar'
+          subdirectory: '/${MAJOR_VERSION}'
+          cache-control: 'max-age=43200'
 workflows:
   version: 2
   build_and_deploy:
@@ -185,6 +231,7 @@ workflows:
           filters:
             branches:
               ignore:
+                - develop
                 - master
                 - /^support\/.*/
                 - /^hotfix\/.*/
@@ -199,39 +246,25 @@ workflows:
       - browserstack_acceptance_test:
           requires:
             - build
+      - useragent_acceptance_test:
+          requires:
+            - build
       - translation_test:
           requires:
             - build
-      - third_party_notices_test:
-          requires:
-            - build
-      - deploy_canary:
-          filters:
-            branches:
-              only: develop
-          requires:
-            - unit_test
-            - headless_acceptance_test
-            - browserstack_acceptance_test
-            - translation_test
-            - third_party_notices_test
       - deploy_branch:
-          filters:
-            branches:
-              ignore:
-                - develop
           requires:
             - unit_test
             - browserstack_acceptance_test
+            - useragent_acceptance_test
             - headless_acceptance_test
-            - translation_test
-            - third_party_notices_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
           filters:
             branches:
               only:
+                - develop
                 - /^support\/.*/
                 - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
@@ -245,19 +278,32 @@ workflows:
       - browserstack_acceptance_test:
           requires:
             - build_i18n
+      - useragent_acceptance_test:
+          requires:
+            - build_i18n
       - translation_test:
           requires:
             - build_i18n
-      - third_party_notices_test:
-          requires:
-            - build_i18n
       - deploy_branch:
+          filters:
+            branches:
+              ignore:
+                - develop
           requires:
             - unit_test
             - browserstack_acceptance_test
+            - useragent_acceptance_test
             - headless_acceptance_test
             - translation_test
-            - third_party_notices_test
+      - deploy_canary:
+          filters:
+            branches:
+              only: develop
+          requires:
+            - unit_test
+            - headless_acceptance_test
+            - browserstack_acceptance_test
+            - useragent_acceptance_test
   build_and_deploy_hold:
     jobs:
       - build_i18n:
@@ -285,13 +331,13 @@ workflows:
               only: /^v.*/
           requires:
             - build_i18n
-      - translation_test:
+      - useragent_acceptance_test:
           filters:
             tags:
               only: /^v.*/
           requires:
             - build_i18n
-      - third_party_notices_test:
+      - translation_test:
           filters:
             tags:
               only: /^v.*/
@@ -305,9 +351,9 @@ workflows:
           requires:
             - unit_test
             - browserstack_acceptance_test
+            - useragent_acceptance_test
             - headless_acceptance_test
             - translation_test
-            - third_party_notices_test
       - deploy_latest:
           filters:
             branches:
@@ -320,5 +366,39 @@ workflows:
               only: /^v.*/
             branches:
               ignore: /.*/
+          requires:
+            - hold
+  build_and_deploy_search_bar:
+    jobs:
+      - build_search_bar:
+          filters:
+            tags:
+              only: /^search-bar-v.*/
+            branches:
+              ignore: /.*/
+      - headless_acceptance_test_search_bar:
+          filters:
+            tags:
+              only: /^search-bar-v.*/
+          requires:
+            - build_search_bar
+      - translation_test:
+          filters:
+            tags:
+              only: /^search-bar-v.*/
+          requires:
+            - build_search_bar
+      - hold:
+          type: approval
+          filters:
+            tags:
+              only: /^search-bar-v.*/
+          requires:
+            - headless_acceptance_test_search_bar
+            - translation_test
+      - deploy_search_bar_version:
+          filters:
+            tags:
+              only: /^search-bar-v.*/
           requires:
             - hold

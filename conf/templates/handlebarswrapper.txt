@@ -1,5 +1,4 @@
-import Handlebars from 'handlebars/dist/handlebars.min.js';
-import templateHelpers from 'template-helpers';
+<%= data.importStatements %>
 
 const ignoreHelpers = ['each'];
 let parseHelper = function(helpers) {
@@ -17,14 +16,13 @@ let parseHelper = function(helpers) {
   }
 }
 
-let handlebarsHelpers = templateHelpers();
-parseHelper(handlebarsHelpers);
+<%= data.handlebarsHelpers %>
 
 var context = context || {};
 
 context['_hb'] = Handlebars;
 
-<%= contents %>;
+<%= data.contents %>;
 
 const autoinit = function() {
   if (window.ANSWERS && window.ANSWERS.templates) {

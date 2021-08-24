@@ -1,6 +1,6 @@
 /** @module Core */
 import { provideCore } from '@yext/answers-core/lib/commonjs';
-
+import { generateUUID } from './utils/uuid';
 import SearchDataTransformer from './search/searchdatatransformer';
 
 import VerticalResults from './models/verticalresults';
@@ -18,7 +18,7 @@ import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
 import { PRODUCTION, ENDPOINTS, LIB_VERSION } from './constants';
-import { getCachedLiveApiUrl, getLiveApiUrl, getKnowledgeApiUrl } from './utils/urlutils';
+import { getCachedLiveApiUrl, getLiveApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
 
@@ -149,7 +149,7 @@ export default class Core {
     return {
       universalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_SEARCH,
       verticalSearch: getLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_SEARCH,
-      questionSubmission: getKnowledgeApiUrl(this._environment) + ENDPOINTS.QUESTION_SUBMISSION,
+      questionSubmission: getLiveApiUrl(this._environment) + ENDPOINTS.QUESTION_SUBMISSION,
       universalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.UNIVERSAL_AUTOCOMPLETE,
       verticalAutocomplete: getCachedLiveApiUrl(this._environment) + ENDPOINTS.VERTICAL_AUTOCOMPLETE,
       filterSearch: getCachedLiveApiUrl(this._environment) + ENDPOINTS.FILTER_SEARCH
@@ -184,6 +184,7 @@ export default class Core {
       if (!verticalResults || verticalResults.searchState !== SearchStates.SEARCH_LOADING) {
         this.storage.set(StorageKeys.VERTICAL_RESULTS, VerticalResults.searchLoading());
       }
+      this.storage.set(StorageKeys.DIRECT_ANSWER, DirectAnswer.searchLoading());
       this.storage.set(StorageKeys.SPELL_CHECK, {});
       this.storage.set(StorageKeys.LOCATION_BIAS, LocationBias.searchLoading());
     }
@@ -226,7 +227,7 @@ export default class Core {
     return this._coreLibrary
       .verticalSearch({
         verticalKey: verticalKey || searchConfig.verticalKey,
-        limit: this.storage.get(StorageKeys.SEARCH_CONFIG).limit,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.limitForVertical,
         location: this._getLocationPayload(),
         query: parsedQuery.input,
         queryId: sendQueryId && this.storage.get(StorageKeys.QUERY_ID),
@@ -236,6 +237,7 @@ export default class Core {
         offset: this.storage.get(StorageKeys.SEARCH_OFFSET) || 0,
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTriggerForApi,
+        sessionId: this.getOrSetupSessionId(),
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         sortBys: this.storage.get(StorageKeys.SORT_BYS),
         /** In the SDK a locationRadius of 0 means "unset my locationRadius" */
@@ -258,8 +260,12 @@ export default class Core {
           const mergedResults = this.storage.get(StorageKeys.VERTICAL_RESULTS)
             .append(data[StorageKeys.VERTICAL_RESULTS]);
           this.storage.set(StorageKeys.VERTICAL_RESULTS, mergedResults);
+          if (data[StorageKeys.DIRECT_ANSWER].answer) {
+            this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
+          }
         } else {
           this.storage.set(StorageKeys.VERTICAL_RESULTS, data[StorageKeys.VERTICAL_RESULTS]);
+          this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
         }
 
         if (data[StorageKeys.DYNAMIC_FILTERS]) {
@@ -328,7 +334,7 @@ export default class Core {
       }
     }
 
-    this.storage.set(StorageKeys.DIRECT_ANSWER, {});
+    this.storage.set(StorageKeys.DIRECT_ANSWER, DirectAnswer.searchLoading());
     const universalResults = this.storage.get(StorageKeys.UNIVERSAL_RESULTS);
     if (!universalResults || universalResults.searchState !== SearchStates.SEARCH_LOADING) {
       this.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.searchLoading());
@@ -342,9 +348,11 @@ export default class Core {
     return this._coreLibrary
       .universalSearch({
         query: queryString,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.universalLimit,
         location: this._getLocationPayload(),
         skipSpellCheck: this.storage.get(StorageKeys.SKIP_SPELL_CHECK),
         queryTrigger: queryTriggerForApi,
+        sessionId: this.getOrSetupSessionId(),
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
@@ -639,7 +647,7 @@ export default class Core {
    * @returns {QueryTriggers} query trigger if accepted by the search API, null o/w
    */
   getQueryTriggerForSearchApi (queryTrigger) {
-    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST].includes(queryTrigger)) {
+    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST, QueryTriggers.VOICE_SEARCH].includes(queryTrigger)) {
       return null;
     }
     return queryTrigger;
@@ -745,5 +753,21 @@ export default class Core {
       }
     }
     return urls;
+  }
+
+  getOrSetupSessionId () {
+    if (this.storage.get(StorageKeys.SESSIONS_OPT_IN).value) {
+      try {
+        let sessionId = window.sessionStorage.getItem('sessionId');
+        if (!sessionId) {
+          sessionId = generateUUID();
+          window.sessionStorage.setItem('sessionId', sessionId);
+        }
+        return sessionId;
+      } catch (err) {
+        console.warn('Unable to use browser sessionStorage for sessionId.\n', err);
+      }
+    }
+    return null;
   }
 }

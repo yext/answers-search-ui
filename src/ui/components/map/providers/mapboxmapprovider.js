@@ -4,6 +4,7 @@ import MapboxLanguage from '@mapbox/mapbox-gl-language';
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
+import { parseLocale } from '../../../../core/utils/i18nutils';
 
 /* global mapboxgl */
 
@@ -16,11 +17,12 @@ export default class MapBoxMapProvider extends MapProvider {
   constructor (opts = {}, systemOpts = {}) {
     super(opts, systemOpts);
 
+    const { language, modifier } = parseLocale(this._locale);
     /**
      * Language of the map.
      * @type {string}
      */
-    this._language = this._locale.substring(0, 2);
+    this._language = modifier ? `${language}-${modifier}` : language;
   }
 
   /**
@@ -33,7 +35,11 @@ export default class MapBoxMapProvider extends MapProvider {
       onload: () => {
         this._isLoaded = true;
         mapboxgl.accessToken = this._apiKey;
-
+        mapboxgl.setRTLTextPlugin(
+          'https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.2.3/mapbox-gl-rtl-text.js',
+          null,
+          true // Lazy load the plugin
+        );
         if (typeof onLoad === 'function') {
           onLoad();
         }
@@ -67,7 +73,8 @@ export default class MapBoxMapProvider extends MapProvider {
       container: container,
       zoom: this._zoom,
       style: 'mapbox://styles/mapbox/streets-v9',
-      center: this.getCenterMarker(mapData)
+      center: this.getCenterMarker(mapData),
+      ...this._providerOptions
     });
 
     this._map.addControl(new MapboxLanguage({

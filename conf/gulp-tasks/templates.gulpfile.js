@@ -55,10 +55,11 @@ exports.dev = devTemplates;
  *
  * @param {string} locale
  * @param {Translator} translator
+ * @param {boolean} isSearchBarOnly If only templates related to the SearchBar should be included.
  * @returns {Function}
  */
-function createDefaultTask (locale, translator) {
-  const precompileTemplates = createPrecompileTemplatesTask(locale, translator);
+function createDefaultTask (locale, translator, isSearchBarOnly) {
+  const precompileTemplates = createPrecompileTemplatesTask(locale, translator, isSearchBarOnly);
 
   const bundleFactory = new BundleTemplatesTaskFactory(locale);
   const bundleTemplatesIIFE = bundleFactory.create(TemplateType.IIFE);
@@ -84,16 +85,34 @@ function createDefaultTask (locale, translator) {
  * Creates a build task per language, and combines them into a series task. This function
  * also supports locales, but it is named to reflect the current use case of creating
  * bundles for just languages.
+ *
  * @param {Array<string>} languages
+ * @param {boolean} isSearchBarOnly If only templates related to the SearchBar should be included.
  * @returns {Promise<Function>}
  */
-async function createTemplatesForLanguages (languages) {
+async function createTemplatesForLanguages (languages, isSearchBarOnly = false) {
   const localizedTaskPromises = languages.map(async language => {
     const translator = await createTranslator(language);
-    return createDefaultTask(language, translator);
+    return createDefaultTask(language, translator, isSearchBarOnly);
   });
   const localizedTasks = await Promise.all(localizedTaskPromises);
   return new Promise(resolve => series(...localizedTasks)(resolve));
+}
+
+/**
+ * Creates a template bundle for each supported language, locale pair.
+ *
+ * @param {boolean} isSearchBarOnly If only templates related to the SearchBar should be included.
+ * @returns {Promise<Function>}
+ */
+function allLocaleTemplates (isSearchBarOnly = false) {
+  const assetNames = [
+    'answerstemplates-iife.compiled.min.js',
+    'answerstemplates.compiled.min.js'];
+
+  return createTemplatesForLanguages(ALL_LANGUAGES, isSearchBarOnly).then(() => {
+    copyAssetsForLocales(assetNames);
+  });
 }
 
 exports.default = function defaultTemplates () {
@@ -104,12 +123,10 @@ exports.buildLanguages = function allLanguageTemplates () {
   return createTemplatesForLanguages(ALL_LANGUAGES);
 };
 
-exports.buildLocales = function allLocaleTemplates () {
-  const assetNames = [
-    'answerstemplates-iife.compiled.min.js',
-    'answerstemplates.compiled.min.js'];
+exports.buildSearchBarOnlyAssets = function () {
+  return allLocaleTemplates(true);
+};
 
-  return createTemplatesForLanguages(ALL_LANGUAGES).then(() => {
-    copyAssetsForLocales(assetNames);
-  });
+exports.buildLocales = function () {
+  return allLocaleTemplates();
 };

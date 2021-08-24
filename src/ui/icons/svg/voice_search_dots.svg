@@ -1,0 +1,104 @@
+<svg x="0.25" y="4.25" width="0.01" height="0.01" style ="overflow:visible" opacity="1" label="anchorPointContainer">
+    <g label="flipped" transform="scale(1 1)">
+        <g label="layerRotation" transform="rotate(0)">
+            <svg x="-0" y="-0" width="32" height="19" style ="overflow:visible" opacity="0" label="DotsContainer">
+            <animate class="js-yxt-SearchBar-dotsFadeIn" begin="indefinite" attributeName="x" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1" keyTimes="0;0.5;1" values="13.5;13.5;0"/>
+            <animate class="js-yxt-SearchBar-dotsFadeIn" begin="indefinite" attributeName="width" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1" keyTimes="0;0.5;1"  values="5;5;32"/>
+            <animate class="js-yxt-SearchBar-dotsFadeIn" id="dotsFadeIn" begin="indefinite" attributeName="opacity" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.5;0.75;1"  values="0;0;1;1"/>
+            <animate class="js-yxt-SearchBar-dotsFadeOut" begin="indefinite" attributeName="x" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0 0 1 1" keyTimes="0;0.5;1" values="0;13.5;13.5"/>
+            <animate class="js-yxt-SearchBar-dotsFadeOut" begin="indefinite" attributeName="width" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0 0 1 1" keyTimes="0;0.5;1"  values="32;5;5"/>
+            <animate class="js-yxt-SearchBar-dotsFadeOut" id="dotsFadeOut" begin="indefinite" attributeName="opacity" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0 0 1 1" keyTimes="0;0.5;0.75;1"  values="1;1;0;0"/>
+                <g clip-path="" label="maskPath">
+                    <g label="layerShadow" filter="">
+                    <!-- Layer: dot4 -->
+                    <svg x="27" y="7" width="0.01" height="0.01" style ="overflow:visible" opacity="1" label="anchorPointContainer">
+                        <animate class="js-yxt-SearchBar-dotsListening"  begin="indefinite" attributeName="y" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.125;0.5;0.875;1" repeatCount="indefinite" values="7;7;5;7;7"/>
+                        <animate class="js-yxt-SearchBar-dotsFadeIn" begin="indefinite" attributeName="x" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1" keyTimes="0;0.5;1" values="0;0;27"/>
+                        <animate class="js-yxt-SearchBar-dotsFadeOut" begin="indefinite" attributeName="x" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0 0 1 1" keyTimes="0;0.5;1" values="27;0;0"/>
+                        <g label="flipped" transform="scale(1 1)">
+                            <g label="layerRotation" transform="rotate(0)">
+                                <svg x="-0" y="-0" width="5" height="5" style ="overflow:visible" opacity="1" label="dot4Container">
+                                    <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="height" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.125;0.5;0.875;1" repeatCount="indefinite" values="5;5;9;5;5"/>
+                                    <g clip-path="" label="maskPath">
+                                        <g label="layerShadow" filter="">
+                                        <path class="yxt-SearchBar-dot4" d="M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5" fill="#87B7F7" id="dot4" stroke="#00000000" stroke-dasharray="0" stroke-dashoffset="0" stroke-miterlimit="4" stroke-width="1">
+                                            <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="d" calcMode="spline" dur="0.3s" fill="freeze" href="#dot4" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.125;0.5;0.875;1" repeatCount="indefinite" values="M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,4,0,4 0,1.371,-1.129,2.5,-2.5,2.5 0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-4,0,-4zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5"/>
+                                        </path>
+                        
+                                        </g>
+                                    </g>
+                                </svg>
+                            </g>
+                        </g>
+                    </svg>
+                    <!-- Layer: dot3 -->
+                    <svg x="18" y="7" width="0.01" height="0.01" style ="overflow:visible" opacity="1" label="anchorPointContainer">
+                        <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="y" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.375;0.75;1" repeatCount="indefinite" values="7;2;7;7"/>
+                        <animate class="js-yxt-SearchBar-dotsFadeIn" begin="indefinite" attributeName="x" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1" keyTimes="0;0.5;1"  values="0;0;18"/>
+                        <animate class="js-yxt-SearchBar-dotsFadeOut" begin="indefinite" attributeName="x" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0 0 1 1" keyTimes="0;0.5;1" values="18;0;0"/>
+                        <g label="flipped" transform="scale(1 1)">
+                            <g label="layerRotation" transform="rotate(0)">
+                                <svg x="-0" y="-0" width="5" height="5" style ="overflow:visible" opacity="1" label="dot3Container">
+                                    <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="height" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.375;0.75;1" repeatCount="indefinite" values="5;15;5;5"/>
+                                    <g clip-path="" label="maskPath">
+                                        <g label="layerShadow" filter="">
+                                        <path class="yxt-SearchBar-dot3" d="M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5" fill="#87B7F7" id="dot3" stroke="#00000000" stroke-dasharray="0" stroke-dashoffset="0" stroke-miterlimit="4" stroke-width="1">
+                                            <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="d" calcMode="spline" dur="0.3s" fill="freeze" href="#dot3" keySplines="0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.375;0.75;1" repeatCount="indefinite" values="M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,10,0,10 0,1.371,-1.129,2.5,-2.5,2.5 0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-10,0,-10zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5"/>
+                                        </path>
+                        
+                                        </g>
+                                    </g>
+                                </svg>
+                            </g>
+                        </g>
+                    </svg>
+                    <!-- Layer: dot2 -->
+                    <svg x="9" y="7" width="0.01" height="0.01" style ="overflow:visible" opacity="1" label="anchorPointContainer">
+                        <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="y" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.125;0.5;0.875;1" repeatCount="indefinite" values="7;7;4;7;7"/>
+                        <animate class="js-yxt-SearchBar-dotsFadeIn" begin="indefinite" attributeName="x" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1" keyTimes="0;0.5;1"  values="0;0;9"/>
+                        <animate class="js-yxt-SearchBar-dotsFadeOut" begin="indefinite" attributeName="x" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0 0 1 1" keyTimes="0;0.5;1" values="9;0;0"/>
+                        <g label="flipped" transform="scale(1 1)">
+                            <g label="layerRotation" transform="rotate(0)">
+                                <svg x="-0" y="-0" width="5" height="5" style ="overflow:visible" opacity="1" label="dot2Container">
+                                    <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="height" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.125;0.5;0.875;1" repeatCount="indefinite" values="5;5;11;5;5"/>
+                                    <g clip-path="" label="maskPath">
+                                        <g label="layerShadow" filter="">
+                                        <path class="yxt-SearchBar-dot2" d="M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5" fill="#87B7F7" id="dot2" stroke="#00000000" stroke-dasharray="0" stroke-dashoffset="0" stroke-miterlimit="4" stroke-width="1">
+                                            <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="d" calcMode="spline" dur="0.3s" fill="freeze" href="#dot2" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.125;0.5;0.875;1" repeatCount="indefinite" values="M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,6,0,6 0,1.371,-1.129,2.5,-2.5,2.5 0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-6,0,-6zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5"/>
+                                        </path>
+                        
+                                        </g>
+                                    </g>
+                                </svg>
+                            </g>
+                        </g>
+                    </svg>
+                    <!-- Layer: dot1 -->
+                    <svg x="0" y="7" width="0.01" height="0.01" style ="overflow:visible" opacity="1" label="anchorPointContainer">
+                        <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="y" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.25;0.625;1" repeatCount="indefinite" values="7;7;6;7"/>
+                        <g label="flipped" transform="scale(1 1)">
+                            <g label="layerRotation" transform="rotate(0)">
+                                <svg x="-0" y="-0" width="5" height="5" style ="overflow:visible" opacity="1" label="dot1Container">
+                                    <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="height" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.25;0.625;1" repeatCount="indefinite" values="5;5;7;5"/>
+                                    <g clip-path="" label="maskPath">
+                                        <g label="layerShadow" filter="">
+                                        <path class="yxt-SearchBar-dot1" d="M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5" fill="#87B7F7" id="dot1" stroke="#00000000" stroke-dasharray="0" stroke-dashoffset="0" stroke-miterlimit="4" stroke-width="1">
+                                            <animate class="js-yxt-SearchBar-dotsListening" begin="indefinite" attributeName="d" calcMode="spline" dur="0.3s" fill="freeze" href="#dot1" keySplines="0 0 1 1;0.42 0 0.58 1;0.42 0 0.58 1" keyTimes="0;0.25;0.625;1" repeatCount="indefinite" values="M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,2,0,2 0,1.371,-1.129,2.5,-2.5,2.5 0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-2,0,-2zM0,2.5;M0,2.5c-0,-1.371,1.129,-2.5,2.5,-2.5 0,0,0,0,0,0 1.371,-0,2.5,1.129,2.5,2.5 0,0,0,0,0,0 0,0,0,0,0,0 0,1.371,-1.129,2.5,-2.5,2.5 -0,0,-0,0,-0,0 0,0,0,0,0,0 -1.371,0,-2.5,-1.129,-2.5,-2.5 0,0,0,0,0,0 0,0,0,-0,0,-0zM0,2.5"/>
+                                        </path>
+                        
+                                        </g>
+                                    </g>
+                                </svg>
+                            </g>
+                        </g>
+                    </svg>
+                    <rect fill="none" height="100%" rx="0" stroke="#00000000" stroke-width="1" width="100%" x="0" y="0">
+                        <animate class="js-yxt-SearchBar-dotsFadeIn" begin="indefinite" attributeName="width" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0 0 1 1;0.42 0 0.58 1" keyTimes="0;0.5;1"  values="5;5;32"/>
+                        <animate class="js-yxt-SearchBar-dotsFadeOut" begin="indefinite" attributeName="width" calcMode="spline" dur="0.3s" fill="freeze" keySplines="0.42 0 0.58 1;0 0 1 1" keyTimes="0;0.5;1" values="32;5;5"/>
+                    </rect>
+                    </g>
+                </g>
+            </svg>
+        </g>
+    </g>
+</svg>

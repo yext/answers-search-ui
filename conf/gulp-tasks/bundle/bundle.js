@@ -4,16 +4,21 @@ const babel = require('rollup-plugin-babel');
 const commonjs = require('rollup-plugin-commonjs');
 const replace = require('gulp-replace');
 const resolve = require('rollup-plugin-node-resolve');
+const svg = require('rollup-plugin-svg');
 const rollup = require('gulp-rollup-lightweight');
 const source = require('vinyl-source-stream');
-const { TRANSLATION_FLAGGER_REGEX } = require('../../i18n/constants');
+const {
+  TRANSLATION_FLAGGER_REGEX,
+  SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE
+} = require('../../i18n/constants');
 
 const TranslateCallParser = require('../../i18n/translatecallparser');
 
 /**
- * The Gulp task for producing the modern version of the SDK bundle.
+ * The Gulp task for producing the modern bundle of an SDK asset.
  *
  * @param {Function} callback
+ * @param {string} entryPoint The entry point for the asset.
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the modern bundle.
  * @param {string} bundleName The name of the created bundle.
@@ -24,9 +29,16 @@ const TranslateCallParser = require('../../i18n/translatecallparser');
  * @returns {stream.Writable} A {@link Writable} stream containing the modern
  *                            SDK bundle.
  */
-exports.modernBundle = function (callback, outputConfig, bundleName, locale, libVersion, translationResolver) {
+exports.modernBundle = function (
+  callback,
+  entryPoint,
+  outputConfig,
+  bundleName,
+  locale,
+  libVersion,
+  translationResolver) {
   const rollupConfig = {
-    input: './src/answers-umd.js',
+    input: entryPoint,
     output: outputConfig,
     plugins: [
       resolve({ browser: true }),
@@ -37,16 +49,18 @@ exports.modernBundle = function (callback, outputConfig, bundleName, locale, lib
         babelrc: false,
         exclude: [/node_modules/],
         presets: ['@babel/env']
-      })
+      }),
+      svg()
     ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
 };
 
 /**
- * The Gulp task for producing either variant of the legacy SDK bundle.
+ * The Gulp task for producing any variant of a legacy SDK asset.
  *
  * @param {Function} callback
+ * @param {string} entryPoint The entry point for the asset.
  * @param {Object<string, ?>} outputConfig Any variant-specific configuration
  *                                         for the legacy bundle.
  * @param {string} bundleName The name of the created bundle.
@@ -56,9 +70,16 @@ exports.modernBundle = function (callback, outputConfig, bundleName, locale, lib
  * @returns {stream.Writable} A {@link Writable} stream containing the legacy
  *                            SDK bundle.
  */
-exports.legacyBundle = function (callback, outputConfig, bundleName, locale, libVersion, translationResolver) {
+exports.legacyBundle = function (
+  callback,
+  entryPoint,
+  outputConfig,
+  bundleName,
+  locale,
+  libVersion,
+  translationResolver) {
   const rollupConfig = {
-    input: './src/answers-umd.js',
+    input: entryPoint,
     output: outputConfig,
     plugins: [
       resolve({ browser: true }),
@@ -87,7 +108,8 @@ exports.legacyBundle = function (callback, outputConfig, bundleName, locale, lib
           '@babel/plugin-proposal-object-rest-spread',
           '@babel/plugin-transform-object-assign'
         ]
-      })
+      }),
+      svg()
     ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
@@ -109,6 +131,7 @@ function _buildBundle (callback, rollupConfig, bundleName, locale, libVersion, t
     .pipe(source(`${bundleName}.js`))
     .pipe(replace('@@LIB_VERSION', libVersion))
     .pipe(replace('@@LOCALE', locale))
+    .pipe(replace('\'@@SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE\'', JSON.stringify(SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE)))
     .pipe(replace(TRANSLATION_FLAGGER_REGEX, translateCall => {
       const placeholder = new TranslateCallParser().parse(translateCall);
       const translationResult = translationResolver.resolve(placeholder);

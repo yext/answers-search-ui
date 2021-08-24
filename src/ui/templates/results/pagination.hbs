@@ -8,16 +8,16 @@
         tabindex="0"
       >
         {{#unless icons.firstButtonIcon}}
-          <span class="yxt-Pagination-doubleChevron--left"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "chevron" }'></span>
-          <span class="yxt-Pagination-chevron--left"
-                data-component="IconComponent"
-                data-opts='{ "iconName": "chevron" }'></span>
+          <span class="yxt-Pagination-doubleChevron--left">
+            {{> icons/builtInIcon iconName='chevron'}}
+          </span>
+          <span class="yxt-Pagination-chevron--left">
+            {{> icons/builtInIcon iconName='chevron'}}
+          </span>
         {{else}}
-          <span class="yxt-Pagination-doubleChevron--left"
-                data-component="IconComponent"
-                data-opts='{ "iconUrl": "{{icons.firstButtonIcon}}" }'></span>
+          <span class="yxt-Pagination-doubleChevron--left">
+            {{> icons/iconPartial iconUrl=icons.firstButtonIcon}}
+          </span>
         {{/unless}}
       </a>
     {{/if}}
@@ -29,13 +29,13 @@
       tabindex="0"
     >
       {{#unless icons.previousButtonIcon}}
-        <span class="yxt-Pagination-chevron--left"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
+        <span class="yxt-Pagination-chevron--left">
+          {{> icons/builtInIcon iconName='chevron'}}
+        </span>
       {{else}}
-        <span class="yxt-Pagination-chevron--left"
-              data-component="IconComponent"
-              data-opts='{ "iconUrl": "{{icons.previousButtonIcon}}" }'></span>
+        <span class="yxt-Pagination-chevron--left">
+          {{> icons/iconPartial iconUrl=icons.previousButtonIcon}}      
+        </span>
       {{/unless}}
     </a>
 
@@ -95,13 +95,13 @@
       tabindex="0"
     >
       {{#unless icons.nextButtonIcon}}
-        <span class="yxt-Pagination-chevron"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
+        <span class="yxt-Pagination-chevron">
+          {{> icons/builtInIcon iconName='chevron'}}
+        </span>
       {{else}}
-        <span class="yxt-Pagination-chevron"
-              data-component="IconComponent"
-              data-opts='{ "iconUrl": "{{icons.nextButtonIcon}}" }'></span>
+        <span class="yxt-Pagination-chevron">
+          {{> icons/iconPartial iconUrl=icons.nextButtonIcon}}
+        </span>
       {{/unless}}
     </a>
     {{#if lastPageButtonEnabled}}
@@ -112,16 +112,16 @@
         tabindex="0"
       >
         {{#unless icons.lastButtonIcon}}
-        <span class="yxt-Pagination-doubleChevron"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
-        <span class="yxt-Pagination-chevron"
-              data-component="IconComponent"
-              data-opts='{ "iconName": "chevron" }'></span>
+        <span class="yxt-Pagination-doubleChevron">
+          {{> icons/builtInIcon iconName='chevron'}}
+        </span>
+        <span class="yxt-Pagination-chevron">
+          {{> icons/builtInIcon iconName='chevron'}}
+        </span>
         {{else}}
-          <span class="yxt-Pagination-doubleChevron"
-              data-component="IconComponent"
-              data-opts='{ "iconUrl": "{{icons.lastButtonIcon}}" }'></span>
+          <span class="yxt-Pagination-doubleChevron">
+            {{> icons/iconPartial iconUrl=icons.lastButtonIcon}}
+          </span>
         {{/unless}}
       </a>
     {{/if}}

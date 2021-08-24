@@ -159,7 +159,7 @@ function initAnswers() {
     onUniversalSearch: function() {},
     // Optional, opt-out of automatic css variable resolution on init for legacy browsers
     disableCssVariablesPonyfill: false,
-    // Optional, the analytics key describing the Answers integration type. Accepts 'STANDARD' or 'OVERLAY', defaults to 'STANDARD'
+    // Optional, the analytics key describing the Answers integration type. Accepts 'STANDARD', 'OVERLAY', or arbitrary strings. Defaults to 'STANDARD'
     querySource: 'STANDARD',
   })
 }
@@ -201,6 +201,12 @@ Below is a list of configuration options related to search, used in the [base co
       verticalKey: 'verticalKey',
       // Optional, the number of results to display per page, defaults to 20. Maximum is 50.
       limit: '20',
+      // Optional, an object containing the number of results to display per vertical key. Minimum is 1. Maximum is 50.
+      // The default value is determined by the API at 10.
+      universalLimit: {
+        verticalKey1: 20,
+        verticalKey2: 49
+      },
       // Optional, Vertical Pages only, a default search to use on page load when the user hasn't provided a query
       defaultInitialSearch: 'What is Yext Answers?',
     },
@@ -481,6 +487,22 @@ ANSWERS.addComponent('SearchBar', {
     onClose: function() {},
     // Optional, callback invoked when the autocomplete component changes from closed to open.
     onOpen: function() {},
+  },
+  //Optional, options for loading indicator on seachbar
+  loadingIndicator: {
+    //Optional, whether to include a loading indicator on seachbar
+    display: false,
+    //Optional, use custom icon url instead of the default loading indicator animation
+    iconUrl: ""
+  },
+  //Optional, options for voice search feature on seachbar
+  voiceSearch: {
+    // Optional, whether or not voice search is enabled
+    enabled: false,
+    // Optional, provide custom mic icon url to override the voice start icon
+    customMicIconUrl: "",
+    // Optional, provide custom listening icon url to override the voice stop icon
+    customListeningIconUrl: ""
   }
 })
 ```
@@ -2049,6 +2071,11 @@ ANSWERS.addComponent('Map', {
       labelType: 'numeric'
     };
   },
+  // Optional, an object which contains options which are passed directly to the specified mapProvider.
+  // Refer to the map option api reference for the specified map provider
+  providerOptions: {
+    style: 'mapbox://styles/mapbox/light-v9' // Specifies a custom style for mapbox
+  }
 };
 ```
 

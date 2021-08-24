@@ -5,6 +5,8 @@ import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import TranslationFlagger from '../../i18n/translationflagger';
+import SearchStates from '../../../core/storage/searchstates';
+import { getContainerClass } from '../../../core/utils/resultsutils';
 
 /**
  * EventTypes are explicit strings defined
@@ -181,7 +183,7 @@ export default class DirectAnswerComponent extends Component {
       verticalKey: relatedItem.verticalConfigId,
       directAnswer: true,
       fieldName: this.getState('answer').fieldApiName,
-      searcher: 'UNIVERSAL',
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
       entityId: relatedItem.data.id,
       url: event.target.href
     };
@@ -200,8 +202,25 @@ export default class DirectAnswerComponent extends Component {
     this.setState(newState);
   }
 
+  /**
+   * Updates the search state css class on this component's container.
+   */
+  updateContainerClass (searchState) {
+    Object.values(SearchStates).forEach(searchState => {
+      this.removeContainerClass(getContainerClass(searchState));
+    });
+    this.addContainerClass(getContainerClass(searchState));
+  }
+
   setState (data) {
+    const searchState = data.searchState || SearchStates.PRE_SEARCH;
+    this.updateContainerClass(searchState);
+    if (searchState === SearchStates.SEARCH_LOADING) {
+      return;
+    }
+
     return super.setState(Object.assign({}, data, {
+      searchState: searchState,
       eventOptions: this.eventOptions(data),
       viewDetailsText: this._viewDetailsText,
       directAnswer: data,
@@ -214,9 +233,9 @@ export default class DirectAnswerComponent extends Component {
       return data;
     }
     return JSON.stringify({
-      verticalConfigId: data.relatedItem.verticalConfigId,
-      searcher: 'UNIVERSAL',
-      entityId: data.relatedItem.data.id,
+      verticalConfigId: data.relatedItem?.verticalConfigId,
+      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
+      entityId: data.relatedItem?.data.id,
       ctaLabel: this._viewDetailsText.toUpperCase().replace(' ', '_')
     });
   }

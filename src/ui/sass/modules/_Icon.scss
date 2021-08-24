@@ -43,24 +43,30 @@
   }
 }
 
-.Icon--yext_animated_reverse svg
-{
-  @keyframes reverse-a0_o { 0% { opacity: 0; } 89.82% { opacity: 0; } 100% { opacity: 1; } }
-  @keyframes reverse-a1_o { 0% { opacity: 0; } 80.24% { opacity: 0; } 89.82% { opacity: 1; } 100% { opacity: 0; } }
-  @keyframes reverse-a2_o { 0% { opacity: 0; } 70.06% { opacity: 0; } 80.24% { opacity: 1; } 89.82% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes reverse-a3_o { 0% { opacity: 0; } 59.88% { opacity: 0; } 70.06% { opacity: 1; } 80.24% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes reverse-a4_o { 0% { opacity: 0; } 50.299% { opacity: 0; } 59.88% { opacity: 1; } 70.06% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes reverse-a5_o { 0% { opacity: 0; } 40.12% { opacity: 0; } 50.299% { opacity: 1; } 59.88% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes reverse-a6_o { 0% { opacity: 0; } 29.94% { opacity: 0; } 40.12% { opacity: 1; } 50.299% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes reverse-a7_o { 0% { opacity: 0; } 20.359% { opacity: 0; } 29.94% { opacity: 1; } 40.12% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes reverse-a8_o { 0% { opacity: 0; } 10.18% { opacity: 0; } 20.359% { opacity: 1; } 29.94% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes reverse-a9_o { 0% { opacity: 0; } 10.18% { opacity: 1; } 20.359% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes reverse-a10_o { 0% { opacity: 1; } 10.18% { opacity: 0; } 100% { opacity: 0; } }
+.Icon--chevron {
+  transform:none #{"/*rtl:rotate(180deg)*/;"};
+}
 
-  color: black;
-  background: rgba(255,255,255,0.00);
+.Icon--yext_animated_reverse {
+  svg
+  {
+    @keyframes reverse-a0_o { 0% { opacity: 0; } 89.82% { opacity: 0; } 100% { opacity: 1; } }
+    @keyframes reverse-a1_o { 0% { opacity: 0; } 80.24% { opacity: 0; } 89.82% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes reverse-a2_o { 0% { opacity: 0; } 70.06% { opacity: 0; } 80.24% { opacity: 1; } 89.82% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes reverse-a3_o { 0% { opacity: 0; } 59.88% { opacity: 0; } 70.06% { opacity: 1; } 80.24% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes reverse-a4_o { 0% { opacity: 0; } 50.299% { opacity: 0; } 59.88% { opacity: 1; } 70.06% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes reverse-a5_o { 0% { opacity: 0; } 40.12% { opacity: 0; } 50.299% { opacity: 1; } 59.88% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes reverse-a6_o { 0% { opacity: 0; } 29.94% { opacity: 0; } 40.12% { opacity: 1; } 50.299% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes reverse-a7_o { 0% { opacity: 0; } 20.359% { opacity: 0; } 29.94% { opacity: 1; } 40.12% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes reverse-a8_o { 0% { opacity: 0; } 10.18% { opacity: 0; } 20.359% { opacity: 1; } 29.94% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes reverse-a9_o { 0% { opacity: 0; } 10.18% { opacity: 1; } 20.359% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes reverse-a10_o { 0% { opacity: 1; } 10.18% { opacity: 0; } 100% { opacity: 0; } }
 
-  & > g
+    color: black;
+    background: rgba(255,255,255,0.00);
+  }
+
+  &:not(.yxt-SearchBar-Yext--static) svg > g
   {
     animation-duration: 0.18s;
     animation-timing-function: linear;
@@ -100,26 +106,38 @@
       animation-name: reverse-a10_o;
     }
   }
+
+  &.yxt-SearchBar-Yext--static svg {
+    & > g:nth-of-type(1) {
+      opacity: 1;
+    }
+    & > g:nth-of-type(11) {
+      opacity: 0;
+    }
+  }
 }
 
-.Icon--yext_animated_forward svg
-{
-  @keyframes forward-a0_o { 0% { opacity: 1; } 9.29% { opacity: 1; } 18.033% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a1_o { 0% { opacity: 0; } 9.29% { opacity: 0; } 18.033% { opacity: 1; } 27.322% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a2_o { 0% { opacity: 0; } 18.033% { opacity: 0; } 27.322% { opacity: 1; } 36.612% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a3_o { 0% { opacity: 0; } 27.322% { opacity: 0; } 36.612% { opacity: 1; } 45.355% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a4_o { 0% { opacity: 0; } 36.612% { opacity: 0; } 45.355% { opacity: 1; } 54.645% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a5_o { 0% { opacity: 0; } 45.355% { opacity: 0; } 54.645% { opacity: 1; } 63.934% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a6_o { 0% { opacity: 0; } 54.645% { opacity: 0; } 63.934% { opacity: 1; } 72.678% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a7_o { 0% { opacity: 0; } 63.934% { opacity: 0; } 72.678% { opacity: 1; } 81.967% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a8_o { 0% { opacity: 0; } 72.678% { opacity: 0; } 81.967% { opacity: 1; } 91.257% { opacity: 0; } 100% { opacity: 0; } }
-  @keyframes forward-a9_o { 0% { opacity: 0; } 81.967% { opacity: 0; } 91.257% { opacity: 1; } 100% { opacity: 0; } }
-  @keyframes forward-a10_o { 0% { opacity: 0; } 91.257% { opacity: 0; } 100% { opacity: 1; } }
+.Icon--yext_animated_forward {
 
-  color: black;
-  background: rgba(255,255,255,0.00);
+  svg
+  {
+    @keyframes forward-a0_o { 0% { opacity: 1; } 9.29% { opacity: 1; } 18.033% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a1_o { 0% { opacity: 0; } 9.29% { opacity: 0; } 18.033% { opacity: 1; } 27.322% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a2_o { 0% { opacity: 0; } 18.033% { opacity: 0; } 27.322% { opacity: 1; } 36.612% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a3_o { 0% { opacity: 0; } 27.322% { opacity: 0; } 36.612% { opacity: 1; } 45.355% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a4_o { 0% { opacity: 0; } 36.612% { opacity: 0; } 45.355% { opacity: 1; } 54.645% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a5_o { 0% { opacity: 0; } 45.355% { opacity: 0; } 54.645% { opacity: 1; } 63.934% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a6_o { 0% { opacity: 0; } 54.645% { opacity: 0; } 63.934% { opacity: 1; } 72.678% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a7_o { 0% { opacity: 0; } 63.934% { opacity: 0; } 72.678% { opacity: 1; } 81.967% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a8_o { 0% { opacity: 0; } 72.678% { opacity: 0; } 81.967% { opacity: 1; } 91.257% { opacity: 0; } 100% { opacity: 0; } }
+    @keyframes forward-a9_o { 0% { opacity: 0; } 81.967% { opacity: 0; } 91.257% { opacity: 1; } 100% { opacity: 0; } }
+    @keyframes forward-a10_o { 0% { opacity: 0; } 91.257% { opacity: 0; } 100% { opacity: 1; } }
 
-  & > g
+    color: black;
+    background: rgba(255,255,255,0.00);
+  }
+  
+  &:not(.yxt-SearchBar-MagnifyingGlass--static) svg > g
   {
     animation-duration: 0.18s;
     animation-timing-function: linear;
@@ -157,6 +175,15 @@
     }
     &:nth-of-type(11) {
       animation-name: forward-a10_o;
+    }
+  }
+
+  &.yxt-SearchBar-MagnifyingGlass--static svg {
+    & > g:nth-of-type(1) {
+      opacity: 0;
+    }
+    & > g:nth-of-type(11) {
+      opacity: 1;
     }
   }
 }
