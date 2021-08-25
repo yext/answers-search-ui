@@ -10,14 +10,14 @@ commands:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v2-dependencies-{{ checksum "package-lock.json" }}
-            # fallback to using the latest cache if no exact match is found
-            - v2-dependencies-
+            - node-14-{{ .Branch }}-{{ checksum "package-lock.json" }}
+            - node-14-{{ .Branch }}-
+            - node-14-
       - run: npm install
       - save_cache:
           paths:
             - node_modules
-          key: v2-dependencies-{{ checksum "package-lock.json" }}
+          key: node-14-{{ .Branch }}-{{ checksum "package-lock.json" }}
   deploy-to-aws:
     description: "Deploys the dist directory to a given subdirectory of the answers bucket"
     parameters:
