@@ -11,6 +11,7 @@ commands:
       - restore_cache:
           keys:
             - v3-node-14-{{ checksum "package-lock.json" }}
+            # fallback to use the latest cache from the same node version if no exact match is found
             - v3-node-14-
       - run: npm install
       - save_cache:
