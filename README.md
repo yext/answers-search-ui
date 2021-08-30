@@ -44,7 +44,9 @@
    - [Custom Data Transforms](#custom-data-transforms)
    - [Using a Custom Template for a Component](#using-a-custom-template-for-a-component)
    - [Creating Custom Components](#creating-custom-components)
-6. [Template Helpers](#template-helpers)
+6. [Extending the Built-in Renderer](#extending-the-built-in-renderer)
+   - [Custom Partials](#custom-partials)
+   - [Template Helpers](#template-helpers)
 7. [Analytics](#analytics)
    - [Custom Analytics Using JavaScript](#custom-analytics-using-javascript)
    - [Custom Analytics Using Data Attributes](#custom-analytics-using-data-attributes)
@@ -2319,12 +2321,15 @@ ANSWERS.addComponent('MyCustomComponent', {
 });
 ```
 
-# Custom Partials
+# Extending the Built-in Renderer
 
-[Handlebars partials](https://handlebarsjs.com/guide/partials.html) are
-templates that can be reused and called directly from other templates. The 
-SDK offers an `ANSWERS.registerPartial` function. This will map a partial string 
-to an entry in the Answers handlebars renderer.
+## Custom Partials
+
+[Handlebars partials](https://handlebarsjs.com/guide/partials.html) use the
+same handlebars syntax as templates, but they can be reused and be called
+directly from templates or other partials. The ANSWERS object offers an
+`ANSWERS.registerPartial` function for custom partials. This will map a partial 
+string to an entry in the Answers handlebars renderer.
 
 ```js
   /**
@@ -2337,7 +2342,7 @@ to an entry in the Answers handlebars renderer.
 
 The default handlebars renderer uses a mapping from partial name strings to
 handlebars partial strings. Once registered, this custom partial can be called
-from other templates.
+from other partials or templates.
 
 For example,
 ```js
@@ -2354,7 +2359,7 @@ For example,
   );
 ```
 
-# Template Helpers
+## Template Helpers
 
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
 
