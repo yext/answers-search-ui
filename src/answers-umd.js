@@ -474,6 +474,15 @@ class Answers {
   }
 
   /**
+   * Add a partial to the current renderer
+   * @param {string} partialName The unique name for the partial
+   * @param {string} partial The handlebars partial string
+   */
+   registerPartial (partialName, partial) {
+    this.renderer.registerPartial(partialName, partial);
+  }
+  
+  /**
    * Opt in or out of analytic events
    * @param {boolean} analyticsEventsEnabled
    */

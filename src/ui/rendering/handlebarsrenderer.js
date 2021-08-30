@@ -52,6 +52,15 @@ export default class HandlebarsRenderer extends Renderer {
   }
 
   /**
+   * register a partial to the internal Handlebars compiler
+   * @param {*} partialName The unique name for the partial
+   * @param {*} partial The handlebars partial string
+   */
+  registerPartial (partialName, partial) {
+    this._handlebars.registerPartial(partialName, partial);
+  }
+
+  /**
    * SafeString is a public interface for external dependencies to
    * mark a string as 'safe'. Handlebars will not escape a SafeString
    */
