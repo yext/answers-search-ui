@@ -23,7 +23,7 @@ export default class Renderer {
   }
 
   registerPartial (partialName, partial) {
-    
+
   }
 
   compile (template) {
