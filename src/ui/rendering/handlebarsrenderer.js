@@ -52,9 +52,9 @@ export default class HandlebarsRenderer extends Renderer {
   }
 
   /**
-   * register a partial to the internal Handlebars compiler
-   * @param {*} partialName The unique name for the partial
-   * @param {*} partial The handlebars partial string
+   * Register a partial to the internal Handlebars compiler
+   * @param {string} partialName The unique name for the partial
+   * @param {string} partial The handlebars partial string
    */
   registerPartial (partialName, partial) {
     this._handlebars.registerPartial(partialName, partial);

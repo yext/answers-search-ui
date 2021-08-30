@@ -2319,6 +2319,41 @@ ANSWERS.addComponent('MyCustomComponent', {
 });
 ```
 
+# Custom Partials
+
+[Handlebars partials](https://handlebarsjs.com/guide/partials.html) are
+templates that can be reused and called directly from other templates. The 
+SDK offers an `ANSWERS.registerPartial` function. This will map a partial string 
+to an entry in the Answers handlebars renderer.
+
+```js
+  /**
+   * Add a partial
+   * @param {string} partialName The unique name for the partial
+   * @param {string} partial The handlebars partial string
+   */
+  registerPartial (partialName, partial)
+```
+
+The default handlebars renderer uses a mapping from partial name strings to
+handlebars partial strings. Once registered, this custom partial can be called
+from other templates.
+
+For example,
+```js
+  // create custom partial
+  ANSWERS.registerPartial(
+    'thank-you-message',
+    '<div class="thanks">Thank you!</div>'
+  );
+
+  // use new partial in a template
+  ANSWERS.registerTemplate(
+    'cards/custom',
+    '<p>Main information</p> {{> thank-you-message }}'
+  );
+```
+
 # Template Helpers
 
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
