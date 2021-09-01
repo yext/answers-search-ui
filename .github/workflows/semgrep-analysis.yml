@@ -1,0 +1,24 @@
+# This workflow file requires a free account on Semgrep.dev to
+# manage rules, file ignores, notifications, and more.
+#
+# See https://semgrep.dev/docs
+
+name: Semgrep
+on:
+  pull_request: {}
+  push:
+    branches:
+      - main
+      - master
+jobs:
+  semgrep:
+    name: Scan
+    runs-on: ubuntu-latest
+    if: (github.actor != 'dependabot[bot]')
+    steps:
+      - uses: actions/checkout@v2
+      - uses: returntocorp/semgrep-action@v1
+        with:
+          auditOn: push
+          publishToken: ${{ secrets.SEMGREP_APP_TOKEN }}
+          publishDeployment: 2671
