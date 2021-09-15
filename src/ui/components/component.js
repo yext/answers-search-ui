@@ -247,7 +247,6 @@ export default class Component {
         this.onUpdate();
         this.userOnUpdate();
         this.unMount();
-        console.log(this.name + " update; before mount");
         this.mount();
       } catch (e) {
         throw new AnswersComponentError(
