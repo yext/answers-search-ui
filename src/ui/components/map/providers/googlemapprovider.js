@@ -264,7 +264,7 @@ export class GoogleMapMarkerConfig {
       }
 
       let label;
-      if (pinConfigObj.label) {
+      if (pinConfigObj.label || pinConfigObj.label === '') {
         label = pinConfigObj.label;
       } else {
         label = marker.label.toString();
