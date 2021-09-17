@@ -4,6 +4,7 @@ import DOM from '../../dom/dom';
 import TranslationFlagger from '../../i18n/translationflagger';
 import isEqual from 'lodash.isequal';
 import SearchStates from '../../../core/storage/searchstates';
+import alertify from 'alertifyjs';
 
 const DEFAULT_CONFIG = {
   ipAccuracyHelpText: TranslationFlagger.flag({
@@ -127,7 +128,7 @@ export default class LocationBiasComponent extends Component {
     }
     const { enabled, message } = this._geolocationTimeoutAlert;
     if (enabled) {
-      window.alert(message);
+      alertify.alert(message);
     }
   }
 

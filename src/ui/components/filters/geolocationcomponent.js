@@ -9,6 +9,7 @@ import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
 import QueryTriggers from '../../../core/models/querytriggers';
+import alertify from 'alertifyjs';
 
 const METERS_PER_MILE = 1609.344;
 
@@ -264,7 +265,7 @@ export default class GeoLocationComponent extends Component {
     this.setState({ geoError: true });
     const { enabled, message } = this._geolocationTimeoutAlert;
     if (enabled) {
-      window.alert(message);
+      alertify.alert(message);
     }
   }
 
