@@ -7,7 +7,7 @@ import TranslationFlagger from '../i18n/translationflagger';
 import StorageKeys from '../../core/storage/storagekeys';
 import AnalyticsEvent from '../../core/analytics/analyticsevent';
 import { generateUUID } from '../../core/utils/uuid';
-import alertify from 'alertifyjs';
+import Notify from '../alert';
 
 const State = {
   NOT_LISTENING: 'not-listening',
@@ -63,7 +63,7 @@ export default class VoiceSearchController {
         if (hasMicAccess) {
           this._enterListeningState();
         } else {
-          alertify.alert(TranslationFlagger.flag({
+          Notify.alert(TranslationFlagger.flag({
             phrase: 'Permission to use microphone is blocked'
           }));
         }

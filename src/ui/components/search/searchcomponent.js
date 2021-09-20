@@ -10,7 +10,7 @@ import QueryTriggers from '../../../core/models/querytriggers';
 import VoiceSearchController from '../../speechrecognition/voicesearchcontroller';
 import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 import SearchBarIconController from '../../controllers/searchbariconcontroller';
-import alertify from 'alertifyjs';
+import Notify from '../../alert';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -596,7 +596,7 @@ export default class SearchComponent extends Component {
                   resolve();
                   const { enabled, message } = this._geolocationTimeoutAlert;
                   if (enabled) {
-                    alertify.alert(message);
+                    Notify.alert(message);
                   }
                 },
                 this._geolocationOptions)

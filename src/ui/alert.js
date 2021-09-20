@@ -1,14 +1,16 @@
-import alertify from 'alertifyjs';
+import swal from 'sweetalert';
+import DOM from './dom/dom';
 
-function setUpAlertConfiguration () {
-  Object.assign(alertify.defaults, {
-    transitionOff: true,
-    closable: false,
-    defaultFocusOff: true,
-    glossary: { ...alertify.defaults.glossary, title: '' }
-  });
+const defaultAlertOptions = {
+  closeOnClickOutside: false,
+  closeOnEsc: false
+};
+
+export default class Notify {
+  static alert (message, options = null) {
+    const opts = options || defaultAlertOptions;
+    swal(message, opts).then(() => {
+      DOM.query('.swal-overlay').remove();
+    });
+  }
 }
-
-setUpAlertConfiguration();
-
-export default alertify;

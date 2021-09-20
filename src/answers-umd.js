@@ -6,8 +6,7 @@ import {
   DefaultTemplatesLoader,
   Renderers,
   DOM,
-  SearchParams,
-  alertify
+  SearchParams
 } from './ui/index';
 import Component from './ui/components/component';
 
@@ -79,11 +78,6 @@ class Answers {
      * @type {Renderer}
      */
     this.renderer = new Renderers.Handlebars();
-
-    /**
-     * A reference of AlertifyJS library for browser dialogs and notifications.
-     */
-    this.alertify = alertify;
 
     /**
      * A reference to the formatRichText function.
