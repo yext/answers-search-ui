@@ -4,6 +4,8 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import { cardTypes } from './consts';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
+import { toLocalizedDistance } from '../../../core/utils/i18nutils';
+import StorageKeys from '../../../core/storage/storagekeys';
 
 class CardConfig {
   constructor (config = {}) {
@@ -111,9 +113,13 @@ export default class CardComponent extends Component {
 
     // Use the cardType as component name if it is not a built-in type
     const cardComponentName = cardTypes[cardType] || cardType;
+    const result = {
+      ...this.result,
+      distance: toLocalizedDistance(this.result.distance, this.core.storage.get(StorageKeys.LOCALE))
+    };
     return super.setState({
       ...data,
-      result: this.result,
+      result: result,
       cardType: cardComponentName
     });
   }
