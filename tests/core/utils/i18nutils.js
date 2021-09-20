@@ -25,21 +25,21 @@ describe('localizedDistance', () => {
 
   it('Correctly formats distance for Spanish display', () => {
     const distance = localizedDistance(givenDistance, 'es');
-    expect(distance).toEqual('10 000,0 km');
+    expect(distance).toEqual('10.000,0 km');
   });
 
   it('Correctly formats distance for Italian display', () => {
     const distance = localizedDistance(givenDistance, 'it');
-    expect(distance).toEqual('10 000,0 km');
+    expect(distance).toEqual('10.000,0 km');
   });
 
   it('Correctly formats distance for German display', () => {
     const distance = localizedDistance(givenDistance, 'de');
-    expect(distance).toEqual('10 000,0 km');
+    expect(distance).toEqual('10.000,0 km');
   });
 
   it('Correctly formats distance for Japan display', () => {
     const distance = localizedDistance(givenDistance, 'ja');
-    expect(distance).toEqual('10 000,0 km');
+    expect(distance).toEqual('10,000.0 km');
   });
 });
