@@ -116,7 +116,6 @@ msgid "Note: For Safari users, Siri must be enabled"
 msgstr ""
 
 #: src/ui/speechrecognition/voicesearchcontroller.js:66
-#: src/ui/speechrecognition/voicesearchcontroller.js:69
 msgid "Permission to use microphone is blocked"
 msgstr ""
 
