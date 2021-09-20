@@ -91,7 +91,7 @@ const unitSystemFallback = METRIC;
  * @param {string} locale
  * @returns {string} localized distance with a unit of length
  */
-export function toLocalizedDistance (distance, locale) {
+export function localizedDistance (distance, locale) {
   if (!distance) {
     return null;
   }

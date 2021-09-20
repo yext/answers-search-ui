@@ -4,7 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import { cardTypes } from './consts';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
-import { toLocalizedDistance } from '../../../core/utils/i18nutils';
+import { localizedDistance } from '../../../core/utils/i18nutils';
 import StorageKeys from '../../../core/storage/storagekeys';
 
 class CardConfig {
@@ -115,7 +115,7 @@ export default class CardComponent extends Component {
     const cardComponentName = cardTypes[cardType] || cardType;
     const result = {
       ...this.result,
-      distance: toLocalizedDistance(this.result.distance, this.core.storage.get(StorageKeys.LOCALE))
+      distance: localizedDistance(this.result.distance, this.core.storage.get(StorageKeys.LOCALE))
     };
     return super.setState({
       ...data,
