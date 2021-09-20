@@ -6,11 +6,9 @@ const defaultAlertOptions = {
   closeOnEsc: false
 };
 
-export default class Notify {
-  static alert (message, options = null) {
-    const opts = options || defaultAlertOptions;
-    swal(message, opts).then(() => {
-      DOM.query('.swal-overlay').remove();
-    });
-  }
+export default function alert (message, options = null) {
+  const opts = options || defaultAlertOptions;
+  swal(message, opts).then(() => {
+    DOM.query('.swal-overlay').remove();
+  });
 }

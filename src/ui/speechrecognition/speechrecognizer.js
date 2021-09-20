@@ -2,7 +2,7 @@
 import { isMicrosoftEdge, isSafari } from '../../core/utils/useragent';
 import { transformSpeechRecognitionLocaleForEdge } from '../../core/speechrecognition/locales';
 import TranslationFlagger from '../i18n/translationflagger';
-import Notify from '../alert';
+import alert from '../alert';
 
 /**
  * Responsible for recognizing speech
@@ -97,7 +97,7 @@ export default class SpeechRecognizer {
       if (isSafari()) {
         errorMsg += '\n' + TranslationFlagger.flag({ phrase: 'Note: For Safari users, Siri must be enabled' });
       }
-      Notify.alert(errorMsg);
+      alert(errorMsg);
     } else {
       console.warn(event);
     }
