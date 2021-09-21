@@ -113,13 +113,13 @@ export default class CardComponent extends Component {
 
     // Use the cardType as component name if it is not a built-in type
     const cardComponentName = cardTypes[cardType] || cardType;
-    const result = {
-      ...this.result,
-      distance: localizedDistance(this.result.distance, this.core.storage.get(StorageKeys.LOCALE))
-    };
+
+    // additional field(s) for dataMappings config option
+    this.result._raw.distance = this.result.distance;
+
     return super.setState({
       ...data,
-      result: result,
+      result: this.result,
       cardType: cardComponentName
     });
   }
