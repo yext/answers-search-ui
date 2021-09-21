@@ -30,6 +30,7 @@ export default class MapBoxMapProvider extends MapProvider {
    * @param {function} onLoad An optional callback to invoke once the JS is loaded.
    */
   loadJS (onLoad) {
+    const version = 'v1.13.1';
     const script = DOM.createEl('script', {
       id: 'yext-map-js',
       onload: () => {
@@ -49,13 +50,13 @@ export default class MapBoxMapProvider extends MapProvider {
         }
       },
       async: true,
-      src: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'
+      src: `https://api.mapbox.com/mapbox-gl-js/${version}/mapbox-gl.js`
     });
 
     const css = DOM.createEl('link', {
       id: 'yext-map-css',
       rel: 'stylesheet',
-      href: 'https://api.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css'
+      href: `https://api.mapbox.com/mapbox-gl-js/${version}/mapbox-gl.css`
     });
 
     DOM.append('body', css);
