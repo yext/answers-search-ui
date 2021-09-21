@@ -96,6 +96,7 @@ export function localizedDistance (distance, locale) {
     return null;
   }
   const distanceUnits = _getDistanceUnit(locale);
+  locale = locale.replace(/_/g, '-');
   switch (distanceUnits) {
     case 'mi':
       return _toMiles(distance, locale);

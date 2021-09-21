@@ -13,9 +13,9 @@ describe('localizedDistance', () => {
     expect(distance).toEqual('6,213.7 mi');
   });
 
-  it('Fallbacks to miles', () => {
-    const distance = localizedDistance(givenDistance, 'unknown-unit');
-    expect(distance).toEqual('6,213.7 mi');
+  it('Fallbacks to kilometers', () => {
+    const distance = localizedDistance(givenDistance, 'unknown-country');
+    expect(distance).toEqual('10,000.0 km');
   });
 
   it('Correctly formats distance for French display', () => {
@@ -38,8 +38,15 @@ describe('localizedDistance', () => {
     expect(distance).toEqual('10.000,0 km');
   });
 
-  it('Correctly formats distance for Japan display', () => {
+  it('Correctly formats distance for Japanese display', () => {
     const distance = localizedDistance(givenDistance, 'ja');
+    expect(distance).toEqual('10,000.0 km');
+  });
+
+  it('Correctly formats distance for Chinese display', () => {
+    let distance = localizedDistance(givenDistance, 'zh-CN');
+    expect(distance).toEqual('10,000.0 km');
+    distance = localizedDistance(givenDistance, 'zh-Hant_TW');
     expect(distance).toEqual('10,000.0 km');
   });
 });
