@@ -4,8 +4,6 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import { cardTypes } from './consts';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
-import { localizedDistance } from '../../../core/utils/i18nutils';
-import StorageKeys from '../../../core/storage/storagekeys';
 
 class CardConfig {
   constructor (config = {}) {

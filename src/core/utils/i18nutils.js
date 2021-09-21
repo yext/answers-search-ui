@@ -116,8 +116,7 @@ export function localizedDistance (distance, locale) {
  */
 function _toKilometers (distance, locale) {
   const distanceInKilometers = distance / 1000; // Convert meters to kilometers
-  return new Intl.NumberFormat(locale,
-    { style: 'decimal', maximumFractionDigits: 1, minimumFractionDigits: 1 })
+  return new Intl.NumberFormat(locale, { style: 'decimal', maximumFractionDigits: 1, minimumFractionDigits: 1 })
     .format(distanceInKilometers) + ' ' + 'km';
 }
 
@@ -130,8 +129,7 @@ function _toKilometers (distance, locale) {
  */
 function _toMiles (distance, locale) {
   const distanceInMiles = distance / 1609.344; // Convert meters to miles
-  return new Intl.NumberFormat(locale,
-    { style: 'decimal', maximumFractionDigits: 1, minimumFractionDigits: 1 })
+  return new Intl.NumberFormat(locale, { style: 'decimal', maximumFractionDigits: 1, minimumFractionDigits: 1 })
     .format(distanceInMiles) + ' ' + 'mi';
 }
 
