@@ -43,7 +43,7 @@ msgstr ""
 msgid "Can’t find what you're looking for? Ask a question below."
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:94
+#: src/ui/components/filters/geolocationcomponent.js:95
 msgid "Could Not Find Your Location"
 msgstr ""
 
@@ -65,7 +65,7 @@ msgstr ""
 msgid "Filters applied to this search:"
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:86
+#: src/ui/components/filters/geolocationcomponent.js:87
 msgid "Finding Your Location..."
 msgstr ""
 
@@ -101,9 +101,9 @@ msgstr ""
 msgid "Invalid email address. Please refresh the page and try submitting your question again."
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:285
-#: src/ui/components/filters/geolocationcomponent.js:39
-#: src/ui/components/filters/geolocationcomponent.js:47
+#: src/ui/components/filters/geolocationcomponent.js:286
+#: src/ui/components/filters/geolocationcomponent.js:40
+#: src/ui/components/filters/geolocationcomponent.js:48
 msgid "Location"
 msgstr ""
 
@@ -111,11 +111,11 @@ msgstr ""
 msgid "Make sure all words are spelled correctly."
 msgstr ""
 
-#: src/ui/speechrecognition/speechrecognizer.js:97
+#: src/ui/speechrecognition/speechrecognizer.js:98
 msgid "Note: For Safari users, Siri must be enabled"
 msgstr ""
 
-#: src/ui/speechrecognition/voicesearchcontroller.js:65
+#: src/ui/speechrecognition/voicesearchcontroller.js:66
 msgid "Permission to use microphone is blocked"
 msgstr ""
 
@@ -127,7 +127,7 @@ msgstr ""
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
 msgstr ""
 
-#: src/ui/speechrecognition/speechrecognizer.js:95
+#: src/ui/speechrecognition/speechrecognizer.js:96
 msgid "Speech Recognition is not available."
 msgstr ""
 
@@ -173,18 +173,18 @@ msgstr ""
 msgid "Try to ask your question a different way."
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:150
+#: src/ui/components/search/locationbiascomponent.js:151
 msgid "Unknown Location"
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:61
-#: src/ui/components/filters/geolocationcomponent.js:69
+#: src/ui/components/filters/geolocationcomponent.js:62
+#: src/ui/components/filters/geolocationcomponent.js:70
 msgid "Use My Location"
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:152
-#: src/ui/components/search/locationbiascomponent.js:87
-#: src/ui/components/search/searchcomponent.js:233
+#: src/ui/components/filters/geolocationcomponent.js:153
+#: src/ui/components/search/locationbiascomponent.js:88
+#: src/ui/components/search/searchcomponent.js:234
 msgid "We are unable to determine your location"
 msgstr ""
 
@@ -233,12 +233,12 @@ msgid "Remove this filter"
 msgstr ""
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:69
-#: src/ui/components/search/searchcomponent.js:72
+#: src/ui/components/search/searchcomponent.js:73
 msgctxt "Button label"
 msgid "Submit"
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:17
+#: src/ui/components/search/locationbiascomponent.js:18
 msgctxt "Button label"
 msgid "Update your location"
 msgstr ""
@@ -294,12 +294,12 @@ msgctxt "Change is a verb. Example: change filtering logic"
 msgid "change"
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:13
+#: src/ui/components/search/locationbiascomponent.js:14
 msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your device"
 msgid "based on your device"
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:9
+#: src/ui/components/search/locationbiascomponent.js:10
 msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your internet address"
 msgid "based on your internet address"
 msgstr ""
@@ -373,7 +373,7 @@ msgctxt "Labels a link"
 msgid "Learn more here."
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:63
+#: src/ui/components/search/searchcomponent.js:64
 msgctxt "Labels an input field"
 msgid "Conduct a search"
 msgstr ""
@@ -404,7 +404,7 @@ msgctxt "Labels the question value provided as an argument"
 msgid "Question"
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:77
+#: src/ui/components/filters/geolocationcomponent.js:78
 msgctxt "Labels the user's current location"
 msgid "Current Location"
 msgstr ""
@@ -472,7 +472,7 @@ msgctxt "True or False"
 msgid "True"
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:81
+#: src/ui/components/search/searchcomponent.js:82
 msgctxt "Verb, clears search"
 msgid "Clear"
 msgstr ""

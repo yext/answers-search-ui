@@ -1,0 +1,19 @@
+.swal-overlay {
+  .swal-modal {
+    animation: none;
+  }
+
+  .swal-text {
+    @include Text($color: black, $size: var(--yxt-font-size-md-lg));
+  }
+
+  .swal-button {
+    @include Text($color: white, $size: var(--yxt-font-size-md-lg));
+    @include Button();
+
+    &:not(:disabled):focus {
+      border: none;
+      background: var(--yxt-color-brand-hover);
+    }
+  }
+}
