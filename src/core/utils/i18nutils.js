@@ -50,3 +50,114 @@ export function parseLocale (localeCode) {
 
   return parsedLocale;
 }
+
+/**
+ * Object containing imperial units
+ */
+const IMPERIAL = {
+  distance: 'mi'
+};
+
+/**
+ * Object containing metric units
+ */
+const METRIC = {
+  distance: 'km'
+};
+
+/**
+ * This object is keyed by language and region. If a region isn't defined, it falls back
+ * to 'default'
+ * @type {Object}
+ */
+export const LOCALE_UNIT_MAP = {
+  en: {
+    GB: METRIC,
+    AU: METRIC,
+    default: IMPERIAL
+  },
+  es: {
+    US: IMPERIAL
+  }
+};
+
+const unitSystemFallback = METRIC;
+
+/**
+ * Convert distance given by liveAPI from meters to kilometers or miles
+ * based on the given locale.
+ *
+ * @param {number} distance
+ * @param {string} locale
+ * @returns {string} localized distance with a unit of length
+ */
+export function localizedDistance (distance, locale) {
+  if (!distance) {
+    return null;
+  }
+  const distanceUnits = _getDistanceUnit(locale);
+  locale = locale.replace(/_/g, '-');
+  switch (distanceUnits) {
+    case 'mi':
+      return _toMiles(distance, locale);
+    case 'km':
+      return _toKilometers(distance, locale);
+    default:
+      return _toMiles(distance, locale);
+  }
+}
+
+/**
+ * Convert distance from meters to kilometers
+ *
+ * @param {number} distance
+ * @param {string} locale
+ * @returns {string} a string consist of distance and km as unit of length
+ */
+function _toKilometers (distance, locale) {
+  const distanceInKilometers = distance / 1000; // Convert meters to kilometers
+  return new Intl.NumberFormat(locale, { style: 'decimal', maximumFractionDigits: 1, minimumFractionDigits: 1 })
+    .format(distanceInKilometers) + ' ' + 'km';
+}
+
+/**
+ * Convert distance from meters to miles
+ *
+ * @param {number} distance
+ * @param {string} locale
+ * @returns {string} a string consist of distance and mi as unit of length
+ */
+function _toMiles (distance, locale) {
+  const distanceInMiles = distance / 1609.344; // Convert meters to miles
+  return new Intl.NumberFormat(locale, { style: 'decimal', maximumFractionDigits: 1, minimumFractionDigits: 1 })
+    .format(distanceInMiles) + ' ' + 'mi';
+}
+
+/**
+ * Gets the distance unit for the specified locale
+ * @param {string} locale
+ * @returns {string} 'km' or 'mi'
+ */
+function _getDistanceUnit (locale) {
+  const units = _getUnitsForLocale(locale);
+  return units.distance;
+}
+
+/**
+ * Gets a map of unit types for a specified locale
+ * @param {string} locale
+ * @returns {Object}
+ */
+function _getUnitsForLocale (locale) {
+  const { language, region } = parseLocale(locale);
+  const isKnownLanguage = (language in LOCALE_UNIT_MAP);
+  if (!isKnownLanguage) {
+    return unitSystemFallback;
+  }
+
+  const isKnownRegion = (region in LOCALE_UNIT_MAP[language]);
+  if (!isKnownRegion) {
+    return LOCALE_UNIT_MAP[language].default || unitSystemFallback;
+  }
+  return LOCALE_UNIT_MAP[language][region];
+}

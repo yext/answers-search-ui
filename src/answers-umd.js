@@ -30,7 +30,7 @@ import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
 import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
-import { parseLocale } from './core/utils/i18nutils';
+import { localizedDistance, parseLocale } from './core/utils/i18nutils';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -85,6 +85,13 @@ class Answers {
      */
     this.formatRichText = (markdown, eventOptionsFieldName, targetConfig) =>
       RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig);
+
+    /**
+     * A reference to the localizeDistance function.
+     * @type {Function}
+     */
+    this.formatDistance = (distance) =>
+      localizedDistance(distance, this.core.storage.get(StorageKeys.LOCALE));
 
     /**
      * A local reference to the component manager
