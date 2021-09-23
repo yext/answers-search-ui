@@ -403,8 +403,6 @@ export default class Component {
     this.onMount(this);
     this.userOnMount(this);
 
-    DOM.removeClass(this._container, 'yxt-Answers-component--unmounted');
-
     return this;
   }
 
