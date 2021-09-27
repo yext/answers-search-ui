@@ -12,6 +12,7 @@ import {
 import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
 import Storage from './core/storage/storage';
+import AnalyticsEvent from './core/analytics/analyticsevent';
 import { AnswersComponentError } from './core/errors/errors';
 import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
@@ -174,6 +175,13 @@ class AnswersSearchBar {
         parsedConfig.businessId,
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
+
+      const impressionEvent = AnalyticsEvent.fromData({
+        type: 'ANSWERS_IMPRESSION',
+        searcher: parsedConfig.search.verticalKey ? 'VERTICAL' : 'UNIVERSAL',
+        standalone: true
+      });
+      this._analyticsReporterService.report(impressionEvent);
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
     }

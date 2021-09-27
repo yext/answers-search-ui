@@ -259,6 +259,13 @@ class Answers {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
+      const impressionEvent = AnalyticsEvent.fromData({
+        type: 'ANSWERS_IMPRESSION',
+        searcher: parsedConfig.search.verticalKey ? 'VERTICAL' : 'UNIVERSAL',
+        standalone: false
+      });
+      this._analyticsReporterService.report(impressionEvent);
+
       // listen to query id updates
       storage.registerListener({
         eventType: 'update',

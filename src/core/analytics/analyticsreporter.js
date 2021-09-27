@@ -38,7 +38,7 @@ export default class AnalyticsReporter {
      * @type {object}
      * @private
      */
-    this._globalOptions = Object.assign({}, globalOptions, { experienceKey });
+    this._globalOptions = Object.assign({}, globalOptions, { experienceKey, experienceVersion });
 
     /**
      * The environment of the Answers experience
