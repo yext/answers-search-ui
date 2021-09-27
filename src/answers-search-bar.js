@@ -34,7 +34,8 @@ import { SEARCH_BAR_COMPONENTS_REGISTRY } from './ui/components/search-bar-only-
 
 const DEFAULTS = {
   locale: LOCALE,
-  querySource: QUERY_SOURCE
+  querySource: QUERY_SOURCE,
+  analyticsEventsEnabled: true
 };
 
 /**
@@ -173,6 +174,7 @@ class AnswersSearchBar {
         parsedConfig.experienceKey,
         parsedConfig.experienceVersion,
         parsedConfig.businessId,
+        parsedConfig.analyticsEventsEnabled,
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
@@ -290,6 +292,14 @@ class AnswersSearchBar {
       throw new AnswersComponentError('Failed to add component', type, e);
     }
     return this;
+  }
+
+  /**
+   * Opt in or out of analytic events
+   * @param {boolean} analyticsEventsEnabled
+   */
+  setAnalyticsOptIn (analyticsEventsEnabled) {
+    this._analyticsReporterService.setAnalyticsOptIn(analyticsEventsEnabled);
   }
 
   /**
