@@ -260,10 +260,6 @@ class Answers {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
-      const verticalKey = parsedConfig.search?.verticalKey;
-      const impressionEvent = createImpressionEvent({ verticalKey, standAlone: false });
-      this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
-
       // listen to query id updates
       storage.registerListener({
         eventType: 'update',
@@ -308,9 +304,17 @@ class Answers {
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
     return asyncDeps.finally(() => {
       this._onReady();
+
       if (!this.components.getActiveComponent(SearchComponent.type)) {
         this._initQueryUpdateListener(parsedConfig.search);
       }
+
+      const impressionEvent = createImpressionEvent({
+        verticalKey: parsedConfig.search?.verticalKey,
+        standAlone: false
+      });
+      this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+
       this._searchOnLoad();
     });
   }

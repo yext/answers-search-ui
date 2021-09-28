@@ -178,10 +178,6 @@ class AnswersSearchBar {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
-      const verticalKey = parsedConfig.search?.verticalKey;
-      const impressionEvent = createImpressionEvent({ verticalKey, standAlone: true });
-      this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
-
       this.components.setAnalyticsReporter(this._analyticsReporterService);
     }
 
@@ -217,7 +213,14 @@ class AnswersSearchBar {
 
     this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
     this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
-      .finally(() => this._onReady());
+      .finally(() => {
+        this._onReady();
+        const impressionEvent = createImpressionEvent({
+          verticalKey: parsedConfig.search?.verticalKey,
+          standAlone: true
+        });
+        this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+      });
   }
 
   domReady (cb) {
