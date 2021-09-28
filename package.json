@@ -152,7 +152,7 @@
       "**/tests/core/**/*.js",
       "**/tests/ui/**/*.js",
       "**/tests/conf/**/*.js",
-      "**/tests/answers-umd.js"
+      "**/tests/answers-*.js"
     ],
     "transform": {
       ".+\\.js$": "babel-jest",
