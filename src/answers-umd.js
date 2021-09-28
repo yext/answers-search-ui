@@ -31,6 +31,7 @@ import SearchComponent from './ui/components/search/searchcomponent';
 import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
 import { localizedDistance, parseLocale } from './core/utils/i18nutils';
+import createImpressionEvent from './core/analytics/createimpressionevent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -259,12 +260,9 @@ class Answers {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
-      const impressionEvent = AnalyticsEvent.fromData({
-        type: 'ANSWERS_IMPRESSION',
-        searcher: parsedConfig.search.verticalKey ? 'VERTICAL' : 'UNIVERSAL',
-        standalone: false
-      });
-      this._analyticsReporterService.report(impressionEvent);
+      const verticalKey = parsedConfig.search?.verticalKey;
+      const impressionEvent = createImpressionEvent({ verticalKey, standAlone: false });
+      this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
 
       // listen to query id updates
       storage.registerListener({

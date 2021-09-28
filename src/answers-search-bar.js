@@ -12,7 +12,6 @@ import {
 import ErrorReporter from './core/errors/errorreporter';
 import { AnalyticsReporter } from './core';
 import Storage from './core/storage/storage';
-import AnalyticsEvent from './core/analytics/analyticsevent';
 import { AnswersComponentError } from './core/errors/errors';
 import StorageKeys from './core/storage/storagekeys';
 import QueryTriggers from './core/models/querytriggers';
@@ -23,6 +22,7 @@ import { isValidContext } from './core/utils/apicontext';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import Filter from './core/models/filter';
 import { SEARCH_BAR_COMPONENTS_REGISTRY } from './ui/components/search-bar-only-registry';
+import createImpressionEvent from './core/analytics/createimpressionevent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -178,12 +178,9 @@ class AnswersSearchBar {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
-      const impressionEvent = AnalyticsEvent.fromData({
-        type: 'ANSWERS_IMPRESSION',
-        searcher: parsedConfig.search.verticalKey ? 'VERTICAL' : 'UNIVERSAL',
-        standalone: true
-      });
-      this._analyticsReporterService.report(impressionEvent);
+      const verticalKey = parsedConfig.search?.verticalKey;
+      const impressionEvent = createImpressionEvent({ verticalKey, standAlone: true });
+      this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
     }
