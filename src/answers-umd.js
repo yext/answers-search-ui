@@ -305,15 +305,19 @@ class Answers {
     return asyncDeps.finally(() => {
       this._onReady();
 
-      if (!this.components.getActiveComponent(SearchComponent.type)) {
+      const isSearchBarActive = this.components.getActiveComponent(SearchComponent.type);
+      const numActiveComponents = this.components.getNumActiveComponents();
+
+      if (isSearchBarActive) {
+        const impressionEvent = createImpressionEvent({
+          verticalKey: parsedConfig.search?.verticalKey,
+          // check that 1 or 2 components are active because the search bar also creates the autocomplete component
+          standAlone: numActiveComponents >= 1 && numActiveComponents <= 2
+        });
+        this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+      } else {
         this._initQueryUpdateListener(parsedConfig.search);
       }
-
-      const impressionEvent = createImpressionEvent({
-        verticalKey: parsedConfig.search?.verticalKey,
-        standAlone: false
-      });
-      this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
 
       this._searchOnLoad();
     });

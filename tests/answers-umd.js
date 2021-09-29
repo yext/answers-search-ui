@@ -30,17 +30,19 @@ describe('ANSWERS instance integration testing', () => {
     expect(ANSWERS.core._coreLibrary.universalSearch).toHaveBeenCalledWith(expectedParams);
   });
 
-  it('An ANSWERS impression event is reported during ANSWERS.init', async () => {
+  it('An ANSWERS impression event is reported during ANSWERS.init if the search bar component is active', async () => {
     mockWindow(windowSpy, {
       location: {
         search: '?query=test'
       }
     });
-    await initAnswers(ANSWERS);
+    await initAnswers(ANSWERS, {
+      onReady: () => ANSWERS.addComponent('SearchBar')
+    });
     const expectedEvent = {
       eventType: 'ANSWERS_IMPRESSION',
       searcher: 'UNIVERSAL',
-      standAlone: false
+      standAlone: true
     };
     expect(ANSWERS._analyticsReporterService.report).toHaveBeenCalledWith(expectedEvent, expect.anything());
   });
