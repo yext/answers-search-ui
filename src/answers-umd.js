@@ -31,6 +31,7 @@ import SearchComponent from './ui/components/search/searchcomponent';
 import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
 import { localizedDistance, parseLocale } from './core/utils/i18nutils';
+import createImpressionEvent from './core/analytics/createimpressionevent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -303,9 +304,21 @@ class Answers {
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
     return asyncDeps.finally(() => {
       this._onReady();
-      if (!this.components.getActiveComponent(SearchComponent.type)) {
+
+      const isSearchBarActive = this.components.getActiveComponent(SearchComponent.type);
+      const numActiveComponents = this.components.getNumActiveComponents();
+
+      if (isSearchBarActive) {
+        const impressionEvent = createImpressionEvent({
+          verticalKey: parsedConfig.search?.verticalKey,
+          // check that 1 or 2 components are active because the search bar also creates the autocomplete component
+          standAlone: numActiveComponents >= 1 && numActiveComponents <= 2
+        });
+        this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+      } else {
         this._initQueryUpdateListener(parsedConfig.search);
       }
+
       this._searchOnLoad();
     });
   }

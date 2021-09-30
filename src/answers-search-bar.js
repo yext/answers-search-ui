@@ -22,6 +22,7 @@ import { isValidContext } from './core/utils/apicontext';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import Filter from './core/models/filter';
 import { SEARCH_BAR_COMPONENTS_REGISTRY } from './ui/components/search-bar-only-registry';
+import createImpressionEvent from './core/analytics/createimpressionevent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -212,7 +213,14 @@ class AnswersSearchBar {
 
     this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
     this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
-      .finally(() => this._onReady());
+      .finally(() => {
+        this._onReady();
+        const impressionEvent = createImpressionEvent({
+          verticalKey: parsedConfig.search?.verticalKey,
+          standAlone: true
+        });
+        this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+      });
   }
 
   domReady (cb) {
