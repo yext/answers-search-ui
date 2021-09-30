@@ -450,7 +450,8 @@ export default class FilterOptionsComponent extends Component {
               filterOption.classList.remove('displaySearch');
               labelEl.innerHTML = labelText;
             } else {
-              const matchedSubstring = this._getMatchedSubstring(labelText.toLowerCase(), filter.toLowerCase());
+              const matchedSubstring = this._getMatchedSubstring(
+                labelText.toLowerCase(), filter.toLowerCase());
               if (matchedSubstring) {
                 filterOption.classList.add('displaySearch');
                 filterOption.classList.remove('hiddenSearch');

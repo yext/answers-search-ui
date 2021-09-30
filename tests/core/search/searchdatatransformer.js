@@ -30,7 +30,8 @@ describe('tranform vertical search response', () => {
         [StorageKeys.QUERY_ID]: data.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
         [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
-        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(data.verticalResults, {}, {}, ResultsContext.NORMAL),
+        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
+          data.verticalResults, {}, {}, ResultsContext.NORMAL),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(data.facets, ResultsContext.NORMAL),
         [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
         [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(data.alternativeVerticals),
@@ -52,9 +53,11 @@ describe('tranform vertical search response', () => {
         [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
           convertedResponse.verticalResults, {}, {}, ResultsContext.NO_RESULTS),
-        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(convertedResponse.facets, ResultsContext.NO_RESULTS),
+        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(
+          convertedResponse.facets, ResultsContext.NO_RESULTS),
         [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(convertedResponse.spellCheck),
-        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(convertedResponse.alternativeVerticals),
+        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(
+          convertedResponse.alternativeVerticals),
         [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(convertedResponse.locationBias)
       }
     );

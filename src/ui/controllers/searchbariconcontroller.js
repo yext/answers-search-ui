@@ -53,7 +53,9 @@ export default class SearchBarIconController {
         [IconEvent.FOCUS_OUT]: IconState.DEFAULT_ICON
       }
     };
-    const initialIconState = config.isFocus ? stateMap[IconState.SEARCH_ICON] : stateMap[IconState.DEFAULT_ICON];
+    const initialIconState = config.isFocus
+      ? stateMap[IconState.SEARCH_ICON]
+      : stateMap[IconState.DEFAULT_ICON];
     this._fsm = new StateMachine(initialIconState, stateMap, possibleTransitions);
   }
 

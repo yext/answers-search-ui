@@ -134,7 +134,7 @@ export default class SearchParams {
   static encode (string) {
     const replace = {
       '!': '%21',
-      "'": '%27',
+      '\'': '%27',
       '(': '%28',
       ')': '%29',
       '%20': '+'

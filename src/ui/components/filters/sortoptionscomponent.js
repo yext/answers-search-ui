@@ -288,7 +288,8 @@ function assignDefaults (config) {
 
   // Optional, allow collapsing excess sort options after a limit
   updatedConfig.showMore = config.showMore === undefined ? true : config.showMore;
-  updatedConfig.showMore = updatedConfig.showMore && (updatedConfig.options.length > updatedConfig.showMoreLimit);
+  updatedConfig.showMore = updatedConfig.showMore &&
+    (updatedConfig.options.length > updatedConfig.showMoreLimit);
 
   // Optional, the label to show for displaying more options
   updatedConfig.showMoreLabel = config.showMoreLabel || TranslationFlagger.flag({

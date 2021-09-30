@@ -48,7 +48,8 @@ export default class SearchDataTransformer {
         response.verticalResults, {}, formatters, resultsContext, verticalKey),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(response.facets, resultsContext),
       [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(response.spellCheck),
-      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(response.alternativeVerticals, formatters),
+      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(
+        response.alternativeVerticals, formatters),
       [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(response.locationBias)
     };
   }

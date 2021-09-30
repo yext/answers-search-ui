@@ -175,7 +175,8 @@ export default class Core {
    *                                     If paging within a query, the same ID should be used.
    * @param {Object} query The query details
    * @param {string} query.input The input to search for
-   * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
+   * @param {boolean} query.append If true, adds the results of this query to the end of
+   *                               the current results, defaults false
    */
   verticalSearch (verticalKey, options = {}, query = {}) {
     window.performance.mark('yext.answers.verticalQueryStart');
@@ -647,7 +648,8 @@ export default class Core {
    * @returns {QueryTriggers} query trigger if accepted by the search API, null o/w
    */
   getQueryTriggerForSearchApi (queryTrigger) {
-    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST, QueryTriggers.VOICE_SEARCH].includes(queryTrigger)) {
+    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST, QueryTriggers.VOICE_SEARCH]
+      .includes(queryTrigger)) {
       return null;
     }
     return queryTrigger;
