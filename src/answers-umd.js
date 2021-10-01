@@ -351,7 +351,6 @@ class Answers {
   _searchOnLoad () {
     const searchComponents = this.components._activeComponents
       .filter(c => c.constructor.type === SearchComponent.type);
-    console.log('search on load?', searchComponents, this.core.storage)
     if (searchComponents.length) {
       searchComponents.forEach(c => c.searchAfterAnswersOnReady && c.searchAfterAnswersOnReady());
     } else if (this.core.storage.has(StorageKeys.QUERY)) {
