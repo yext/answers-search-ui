@@ -305,7 +305,7 @@ class Answers {
     return asyncDeps.finally(() => {
       this._onReady();
 
-      const searchBarIsActive = this.components.getActiveComponent(SearchComponent.type);
+      const searchBarIsActive = !!this.components.getActiveComponent(SearchComponent.type);
       if (searchBarIsActive && this._analyticsReporterService) {
         const numActiveComponents = this.components.getNumActiveComponents();
         const impressionEvent = createImpressionEvent({
