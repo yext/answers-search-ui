@@ -24,7 +24,7 @@ describe('ANSWERS search bar instance integration testing', () => {
     });
     await initAnswers(ANSWERS);
     const expectedEvent = {
-      eventType: 'ANSWERS_IMPRESSION',
+      eventType: 'SEARCH_BAR_IMPRESSION',
       searcher: 'UNIVERSAL',
       standAlone: true
     };

@@ -40,7 +40,7 @@ describe('ANSWERS instance integration testing', () => {
       onReady: () => ANSWERS.addComponent('SearchBar')
     });
     const expectedEvent = {
-      eventType: 'ANSWERS_IMPRESSION',
+      eventType: 'SEARCH_BAR_IMPRESSION',
       searcher: 'UNIVERSAL',
       standAlone: true
     };
