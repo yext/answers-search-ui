@@ -306,8 +306,8 @@ class Answers {
       this._onReady();
 
       const searchBarIsActive = this.components.getActiveComponent(SearchComponent.type);
-
-      if (searchBarIsActive && this._analyticsReporterService) {
+      // if (searchBarIsActive && this._analyticsReporterService) {
+      if (searchBarIsActive) {
         const numActiveComponents = this.components.getNumActiveComponents();
         const impressionEvent = createImpressionEvent({
           verticalKey: parsedConfig.search?.verticalKey,
