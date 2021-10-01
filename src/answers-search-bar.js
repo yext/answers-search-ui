@@ -215,11 +215,13 @@ class AnswersSearchBar {
     this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
       .finally(() => {
         this._onReady();
-        const impressionEvent = createImpressionEvent({
-          verticalKey: parsedConfig.search?.verticalKey,
-          standAlone: true
-        });
-        this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+        if (this._analyticsReporterService) {
+          const impressionEvent = createImpressionEvent({
+            verticalKey: parsedConfig.search?.verticalKey,
+            standAlone: true
+          });
+          this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+        }
       });
   }
 
