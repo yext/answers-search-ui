@@ -29,7 +29,8 @@ export default class VoiceSearchController {
 
     this._micIconStylist = new MicIconStylist(searchBarContainer, config.customMicIconUrl);
     this._listeningIconStylist = new ListeningIconStylist(searchBarContainer, config.customListeningIconUrl);
-    this._screenReaderTextController = new ScreenReaderTextController(searchBarContainer, config.startText, config.stopText);
+    this._screenReaderTextController = new ScreenReaderTextController(
+      searchBarContainer, config.startText, config.stopText);
 
     const locale = searchComponent.core.storage.get(StorageKeys.LOCALE);
     this._speechRecognizer = new SpeechRecognizer(locale);
@@ -120,7 +121,8 @@ export default class VoiceSearchController {
 
   /**
    * Handles an interim or final result from the speech recognizer
-   * @param {string} result The latest speech recognition result. This includes the entire sentence, not just the latest word
+   * @param {string} result The latest speech recognition result.
+   * This includes the entire sentence, not just the latest word
    */
   _handleResult (result) {
     this._autocompleteComponent.updateQuery(result);

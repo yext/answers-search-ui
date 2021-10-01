@@ -61,7 +61,7 @@ msgstr ""
 
 #: src/ui/components/results/resultsheadercomponent.js:25
 #: src/ui/components/results/universalresultscomponent.js:23
-#: src/ui/components/results/verticalresultscomponent.js:143
+#: src/ui/components/results/verticalresultscomponent.js:144
 msgid "Filters applied to this search:"
 msgstr ""
 
@@ -115,7 +115,7 @@ msgstr ""
 msgid "Note: For Safari users, Siri must be enabled"
 msgstr ""
 
-#: src/ui/speechrecognition/voicesearchcontroller.js:66
+#: src/ui/speechrecognition/voicesearchcontroller.js:67
 msgid "Permission to use microphone is blocked"
 msgstr ""
 
@@ -173,7 +173,7 @@ msgstr ""
 msgid "Try to ask your question a different way."
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:151
+#: src/ui/components/search/locationbiascomponent.js:152
 msgid "Unknown Location"
 msgstr ""
 
@@ -183,7 +183,7 @@ msgid "Use My Location"
 msgstr ""
 
 #: src/ui/components/filters/geolocationcomponent.js:153
-#: src/ui/components/search/locationbiascomponent.js:88
+#: src/ui/components/search/locationbiascomponent.js:89
 #: src/ui/components/search/searchcomponent.js:234
 msgid "We are unable to determine your location"
 msgstr ""
@@ -227,7 +227,7 @@ msgid "Best Match"
 msgstr ""
 
 #: src/ui/components/results/resultsheadercomponent.js:28
-#: src/ui/components/results/verticalresultscomponent.js:155
+#: src/ui/components/results/verticalresultscomponent.js:156
 msgctxt "Button label"
 msgid "Remove this filter"
 msgstr ""
@@ -268,7 +268,7 @@ msgctxt "Button label, effectuates changes"
 msgid "apply"
 msgstr ""
 
-#: src/ui/components/filters/sortoptionscomponent.js:318
+#: src/ui/components/filters/sortoptionscomponent.js:319
 msgctxt "Button label, effectuates changes"
 msgid "Apply"
 msgstr ""
@@ -279,7 +279,7 @@ msgid "View Details"
 msgstr ""
 
 #: src/ui/components/results/universalresultscomponent.js:121
-#: src/ui/components/results/verticalresultscomponent.js:169
+#: src/ui/components/results/verticalresultscomponent.js:170
 msgctxt "Button label, view more [results]"
 msgid "View More"
 msgstr ""
@@ -316,7 +316,7 @@ msgctxt "Displays less options"
 msgid "show less"
 msgstr ""
 
-#: src/ui/components/filters/sortoptionscomponent.js:300
+#: src/ui/components/filters/sortoptionscomponent.js:301
 msgctxt "Displays less options"
 msgid "Show less"
 msgstr ""
@@ -333,7 +333,7 @@ msgctxt "Displays more options"
 msgid "show more"
 msgstr ""
 
-#: src/ui/components/filters/sortoptionscomponent.js:294
+#: src/ui/components/filters/sortoptionscomponent.js:295
 msgctxt "Displays more options"
 msgid "Show more"
 msgstr ""
@@ -419,7 +419,7 @@ msgctxt "Minimum"
 msgid "Min"
 msgstr ""
 
-#: src/ui/components/results/paginationcomponent.js:97
+#: src/ui/components/results/paginationcomponent.js:107
 msgctxt "Noun, a page of results"
 msgid "Page"
 msgstr ""
@@ -452,7 +452,7 @@ msgctxt "Start date to end date. Example: [August 15th] - [August 16th]"
 msgid "[[start]] - [[end]]"
 msgstr ""
 
-#: src/ui/components/filters/sortoptionscomponent.js:309
+#: src/ui/components/filters/sortoptionscomponent.js:310
 msgctxt "Title for a group of controls that sort results"
 msgid "Sorting"
 msgstr ""

@@ -66,9 +66,11 @@ describe('can show/hide map behavior for no results with blank map data', () => 
 
     it('shows map when there is mapData', () => {
       let showEmptyMap = true;
-      expect(MapProvider.shouldHideMap(mapData, resultsContext, showEmptyMap, visibleForNoResults)).toBeFalsy();
+      expect(MapProvider.shouldHideMap(mapData, resultsContext, showEmptyMap, visibleForNoResults))
+        .toBeFalsy();
       showEmptyMap = false;
-      expect(MapProvider.shouldHideMap(mapData, resultsContext, showEmptyMap, visibleForNoResults)).toBeFalsy();
+      expect(MapProvider.shouldHideMap(mapData, resultsContext, showEmptyMap, visibleForNoResults))
+        .toBeFalsy();
     });
   });
 

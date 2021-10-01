@@ -46,7 +46,13 @@ export default class VerticalResults {
    * @param {string} verticalKeyFromRequest
    * @returns {@link Section}
    */
-  static fromCore (verticalResults, urls = {}, formatters = undefined, resultsContext = ResultsContext.NORMAL, verticalKeyFromRequest = undefined) {
+  static fromCore (
+    verticalResults,
+    urls = {},
+    formatters = undefined,
+    resultsContext = ResultsContext.NORMAL,
+    verticalKeyFromRequest = undefined
+  ) {
     if (!verticalResults) {
       return new Section();
     }

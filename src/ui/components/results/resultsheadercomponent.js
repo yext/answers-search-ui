@@ -167,7 +167,8 @@ export default class ResultsHeaderComponent extends Component {
     return super.setState({
       ...data,
       ...resultsCountData,
-      showResultSeparator: this._config.resultsCountSeparator && this._config.showResultCount && shouldShowFilters,
+      showResultSeparator: this._config.resultsCountSeparator &&
+        this._config.showResultCount && shouldShowFilters,
       shouldShowFilters: shouldShowFilters,
       appliedFiltersArray: appliedFiltersArray,
       customResultsCount: this._compiledResultsCountTemplate(resultsCountData)

@@ -311,7 +311,8 @@ class Answers {
       if (isSearchBarActive) {
         const impressionEvent = createImpressionEvent({
           verticalKey: parsedConfig.search?.verticalKey,
-          // check that 1 or 2 components are active because the search bar also creates the autocomplete component
+          // check that 1 or 2 components are active because the
+          // search bar also creates the autocomplete component
           standAlone: numActiveComponents >= 1 && numActiveComponents <= 2
         });
         this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
