@@ -305,10 +305,9 @@ class Answers {
     return asyncDeps.finally(() => {
       this._onReady();
 
-      const isSearchBarActive = this.components.getActiveComponent(SearchComponent.type);
-      const numActiveComponents = this.components.getNumActiveComponents();
-
-      if (isSearchBarActive) {
+      const searchBarIsActive = !!this.components.getActiveComponent(SearchComponent.type);
+      if (searchBarIsActive && this._analyticsReporterService) {
+        const numActiveComponents = this.components.getNumActiveComponents();
         const impressionEvent = createImpressionEvent({
           verticalKey: parsedConfig.search?.verticalKey,
           // check that 1 or 2 components are active because the
@@ -316,7 +315,9 @@ class Answers {
           standAlone: numActiveComponents >= 1 && numActiveComponents <= 2
         });
         this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
-      } else {
+      }
+
+      if (!searchBarIsActive) {
         this._initQueryUpdateListener(parsedConfig.search);
       }
 
