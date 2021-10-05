@@ -129,6 +129,8 @@ function initAnswers() {
     apiKey: '<API_KEY_HERE>',
     // Required, the key used for your Answers experience
     experienceKey: '<EXPERIENCE_KEY_HERE>',
+    // Optional, visitor interacting with the experience, see Visitor Configuration below
+    visitor: '<VISTOR_HERE>',
     // Optional, initialize components here, invoked when the Answers component library is loaded/ready.
     //    If components are not added here, they can also be added when the init promise resolves
     onReady: function() {},
@@ -321,6 +323,21 @@ function (searchParams) => {
     return analyticsEvent;
   },
 }),
+```
+
+## Visitor Configuration
+
+Below is a list of configuration attributes related to a visitor, used in the [base configuration](#answersinit-configuration-options) above.
+
+The visitor object ties a user's identity to their searches and actions. The visitor can also be set or changed using the `ANSWERS.setVisitor` function.
+
+```js
+    visitor: {
+      // Optional, the method used to generate the visitor ID.
+      idMethod: 'YEXT_USER',
+      // The visitor ID. This will be the yextUserId if Yext Auth is used.
+      id: '123919',
+    },
 ```
 
 # Component Usage

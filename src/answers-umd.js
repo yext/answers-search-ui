@@ -260,6 +260,8 @@ class Answers {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
+      this.setVisitor(parsedConfig.visitor);
+
       // listen to query id updates
       storage.registerListener({
         eventType: 'update',
@@ -692,6 +694,10 @@ class Answers {
       default:
         return value;
     }
+  }
+
+  setVisitor (visitor) {
+    this._analyticsReporterService.setVisitor(visitor);
   }
 }
 

@@ -46,4 +46,27 @@ describe('ANSWERS instance integration testing', () => {
     };
     expect(ANSWERS._analyticsReporterService.report).toHaveBeenCalledWith(expectedEvent, expect.anything());
   });
+
+  it('Visitor is set by analytics reporter if passed to ANSWERS.init', async () => {
+    mockWindow(windowSpy, {
+      location: {
+        search: '?query=test'
+      }
+    });
+    await initAnswers(ANSWERS, {
+      visitor: { id: '123' }
+    });
+    expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenCalledWith({ id: '123' });
+  });
+
+  it('Visitor can be changed', async () => {
+    mockWindow(windowSpy, {
+      location: {
+        search: '?query=test'
+      }
+    });
+    await initAnswers(ANSWERS, { visitor: { id: '123', idMethod: 'test' } });
+    ANSWERS.setVisitor({ id: '456' });
+    expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenLastCalledWith({ id: '456' });
+  });
 });
