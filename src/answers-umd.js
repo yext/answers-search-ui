@@ -260,8 +260,6 @@ class Answers {
         parsedConfig.analyticsOptions,
         parsedConfig.environment);
 
-      this.setVisitor(parsedConfig.visitor);
-
       // listen to query id updates
       storage.registerListener({
         eventType: 'update',
@@ -286,6 +284,10 @@ class Answers {
       environment: parsedConfig.environment,
       componentManager: this.components
     });
+
+    if (parsedConfig.visitor) {
+      this.setVisitor(parsedConfig.visitor);
+    }
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
       parsedConfig.onStateChange(
@@ -697,7 +699,8 @@ class Answers {
   }
 
   setVisitor (visitor) {
-    this._analyticsReporterService.setVisitor(visitor);
+    this._analyticsReporterService?.setVisitor(visitor);
+    this.core.storage.set(StorageKeys.VISITOR, visitor);
   }
 }
 
