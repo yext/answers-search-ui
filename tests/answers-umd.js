@@ -1,7 +1,6 @@
 import ANSWERS from '../src/answers-umd';
 import mockWindow from './setup/mockwindow';
 import initAnswers from './setup/initanswers';
-import StorageKeys from '../src/core/storage/storagekeys';
 
 jest.mock('../src/core/analytics/analyticsreporter');
 
@@ -58,10 +57,10 @@ describe('ANSWERS instance integration testing', () => {
       visitor: { id: '123' }
     });
     expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenCalledWith({ id: '123' });
-    expect(ANSWERS.core.storage.get(StorageKeys.VISITOR)).toEqual({ id: '123' });
   });
 
   it('Visitor is not set if missing id', async () => {
+    const consoleSpy = jest.spyOn(console, 'error');
     mockWindow(windowSpy, {
       location: {
         search: '?query=test'
@@ -71,7 +70,7 @@ describe('ANSWERS instance integration testing', () => {
       visitor: { idMethod: 'test' }
     });
     expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenCalledTimes(0);
-    expect(ANSWERS.core.storage.get(StorageKeys.VISITOR)).toBeUndefined();
+    expect(consoleSpy).toHaveBeenCalled();
   });
 
   it('Visitor can be changed', async () => {
@@ -81,8 +80,9 @@ describe('ANSWERS instance integration testing', () => {
       }
     });
     await initAnswers(ANSWERS, { visitor: { id: '123', idMethod: 'test' } });
+    const initSpy = jest.spyOn(ANSWERS.core, 'init');
     ANSWERS.setVisitor({ id: '456' });
     expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenLastCalledWith({ id: '456' });
-    expect(ANSWERS.core.storage.get(StorageKeys.VISITOR)).toEqual({ id: '456' });
+    expect(initSpy).toHaveBeenCalledWith({ id: '456' });
   });
 });

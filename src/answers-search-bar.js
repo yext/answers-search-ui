@@ -458,10 +458,9 @@ class AnswersSearchBar {
   setVisitor (visitor) {
     if (visitor.id) {
       this._analyticsReporterService?.setVisitor(visitor);
-      this.core.storage.set(StorageKeys.VISITOR, visitor);
-      this.core.init();
+      this.core.init(visitor);
     } else {
-      console.error(`Invalid visitor. Visitor was not set because "${visitor}" does not have an id.`);
+      console.error(`Invalid visitor. Visitor was not set because "${JSON.stringify(visitor)}" does not have an id.`);
     }
   }
 }

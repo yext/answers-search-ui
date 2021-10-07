@@ -127,13 +127,13 @@ export default class Core {
   /**
    * Initializes the {@link Core} by providing it with an instance of the Core library.
    */
-  init () {
+  init (visitor) {
     const params = {
       apiKey: this._apiKey,
       experienceKey: this._experienceKey,
       locale: this._locale,
       experienceVersion: this._experienceVersion,
-      visitor: this.storage.get(StorageKeys.VISITOR),
+      visitor: visitor,
       endpoints: this._getServiceUrls(),
       additionalQueryParams: {
         jsLibVersion: LIB_VERSION
