@@ -133,6 +133,7 @@ export default class Core {
       experienceKey: this._experienceKey,
       locale: this._locale,
       experienceVersion: this._experienceVersion,
+      visitor: this.storage.get(StorageKeys.VISITOR),
       endpoints: this._getServiceUrls(),
       additionalQueryParams: {
         jsLibVersion: LIB_VERSION
@@ -245,8 +246,7 @@ export default class Core {
         locationRadius: locationRadius === 0 ? undefined : locationRadius,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
-        querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
-        visitor: this.storage.get(StorageKeys.VISITOR)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -358,8 +358,7 @@ export default class Core {
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
-        querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
-        visitor: this.storage.get(StorageKeys.VISITOR)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
@@ -423,8 +422,7 @@ export default class Core {
     return this._coreLibrary
       .universalAutocomplete({
         input: input,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
-        visitor: this.storage.get(StorageKeys.VISITOR)
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -446,8 +444,7 @@ export default class Core {
       .verticalAutocomplete({
         input: input,
         verticalKey: verticalKey,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
-        visitor: this.storage.get(StorageKeys.VISITOR)
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -477,8 +474,7 @@ export default class Core {
         verticalKey: config.verticalKey,
         fields: searchParamFields,
         sectioned: config.searchParameters.sectioned,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
-        visitor: this.storage.get(StorageKeys.VISITOR)
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
       })
       .then(response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response))
       .then(data => {

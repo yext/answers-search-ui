@@ -285,10 +285,6 @@ class Answers {
       componentManager: this.components
     });
 
-    if (parsedConfig.visitor) {
-      this.setVisitor(parsedConfig.visitor);
-    }
-
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
       parsedConfig.onStateChange(
         Object.fromEntries(storage.getAll()),
@@ -301,7 +297,11 @@ class Answers {
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
-    this.core.init();
+    if (parsedConfig.visitor) {
+      this.setVisitor(parsedConfig.visitor);
+    } else {
+      this.core.init();
+    }
 
     this._onReady = parsedConfig.onReady || function () {};
 
@@ -699,8 +699,13 @@ class Answers {
   }
 
   setVisitor (visitor) {
-    this._analyticsReporterService?.setVisitor(visitor);
-    this.core.storage.set(StorageKeys.VISITOR, visitor);
+    if (visitor.id) {
+      this._analyticsReporterService?.setVisitor(visitor);
+      this.core.storage.set(StorageKeys.VISITOR, visitor);
+      this.core.init();
+    } else {
+      console.error(`Invalid visitor. Visitor was not set because "${visitor}" does not have an id.`);
+    }
   }
 }
 

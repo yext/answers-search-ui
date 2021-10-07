@@ -129,8 +129,13 @@ function initAnswers() {
     apiKey: '<API_KEY_HERE>',
     // Required, the key used for your Answers experience
     experienceKey: '<EXPERIENCE_KEY_HERE>',
-    // Optional, visitor interacting with the experience, see Visitor Configuration below
-    visitor: '<VISTOR_HERE>',
+    // Optional, visitor interacting with the experience, see Visitor Configuration below for details
+    visitor: {
+      // Required, see below
+      id: '<ID_HERE>',
+      // Optional, see below
+      idMethod: '<ID_METHOD_HERE>',
+    },
     // Optional, initialize components here, invoked when the Answers component library is loaded/ready.
     //    If components are not added here, they can also be added when the init promise resolves
     onReady: function() {},
@@ -333,10 +338,10 @@ The visitor object ties a user's identity to their searches and actions. The vis
 
 ```js
     visitor: {
+      // Required, the visitor ID. This will be the yextUserId if Yext Auth is used.
+      id: '123919',
       // Optional, the method used to generate the visitor ID.
       idMethod: 'YEXT_USER',
-      // The visitor ID. This will be the yextUserId if Yext Auth is used.
-      id: '123919',
     },
 ```
 

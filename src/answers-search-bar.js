@@ -207,7 +207,11 @@ class AnswersSearchBar {
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
-    this.core.init();
+    if (parsedConfig.visitor) {
+      this.setVisitor(parsedConfig.visitor);
+    } else {
+      this.core.init();
+    }
 
     this._onReady = parsedConfig.onReady || function () {};
 
@@ -448,6 +452,16 @@ class AnswersSearchBar {
         return JSON.parse(value);
       default:
         return value;
+    }
+  }
+
+  setVisitor (visitor) {
+    if (visitor.id) {
+      this._analyticsReporterService?.setVisitor(visitor);
+      this.core.storage.set(StorageKeys.VISITOR, visitor);
+      this.core.init();
+    } else {
+      console.error(`Invalid visitor. Visitor was not set because "${visitor}" does not have an id.`);
     }
   }
 }

@@ -48,7 +48,7 @@ describe('ANSWERS instance integration testing', () => {
     expect(ANSWERS._analyticsReporterService.report).toHaveBeenCalledWith(expectedEvent, expect.anything());
   });
 
-  it('Visitor is set by analytics reporter if passed to ANSWERS.init', async () => {
+  it('Visitor is set if passed to ANSWERS.init', async () => {
     mockWindow(windowSpy, {
       location: {
         search: '?query=test'
@@ -59,6 +59,19 @@ describe('ANSWERS instance integration testing', () => {
     });
     expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenCalledWith({ id: '123' });
     expect(ANSWERS.core.storage.get(StorageKeys.VISITOR)).toEqual({ id: '123' });
+  });
+
+  it('Visitor is not set if missing id', async () => {
+    mockWindow(windowSpy, {
+      location: {
+        search: '?query=test'
+      }
+    });
+    await initAnswers(ANSWERS, {
+      visitor: { idMethod: 'test' }
+    });
+    expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenCalledTimes(0);
+    expect(ANSWERS.core.storage.get(StorageKeys.VISITOR)).toBeUndefined();
   });
 
   it('Visitor can be changed', async () => {
