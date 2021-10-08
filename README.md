@@ -338,7 +338,7 @@ The visitor object ties a user's identity to their searches and actions. The vis
 
 ```js
     visitor: {
-      // Required, the visitor ID. This will be the yextUserId if Yext Auth is used.
+      // Required, the ID associated with the user. This will be the yextUserId if Yext Auth is used.
       id: '123919',
       // Optional, the method used to generate the visitor ID.
       idMethod: 'YEXT_USER',

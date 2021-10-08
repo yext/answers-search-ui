@@ -83,6 +83,6 @@ describe('ANSWERS instance integration testing', () => {
     const initSpy = jest.spyOn(ANSWERS.core, 'init');
     ANSWERS.setVisitor({ id: '456' });
     expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenLastCalledWith({ id: '456' });
-    expect(initSpy).toHaveBeenCalledWith({ id: '456' });
+    expect(initSpy).toHaveBeenCalledWith({ visitor: { id: '456' } });
   });
 });
