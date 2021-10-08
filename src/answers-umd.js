@@ -297,7 +297,11 @@ class Answers {
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
-    this.core.init();
+    if (parsedConfig.visitor) {
+      this.setVisitor(parsedConfig.visitor);
+    } else {
+      this.core.init();
+    }
 
     this._onReady = parsedConfig.onReady || function () {};
 
@@ -691,6 +695,15 @@ class Answers {
         return JSON.parse(value);
       default:
         return value;
+    }
+  }
+
+  setVisitor (visitor) {
+    if (visitor.id) {
+      this._analyticsReporterService?.setVisitor(visitor);
+      this.core.init({ visitor: visitor });
+    } else {
+      console.error(`Invalid visitor. Visitor was not set because "${JSON.stringify(visitor)}" does not have an id.`);
     }
   }
 }

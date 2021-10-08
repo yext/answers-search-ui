@@ -74,6 +74,10 @@ export default class AnalyticsReporter {
     this._globalOptions.queryId = queryId;
   }
 
+  setVisitor (visitor) {
+    this._globalOptions.visitor = visitor;
+  }
+
   /**
    * Opt in or out of analytics click events
    * @param {boolean} analyticsEventsEnabled
