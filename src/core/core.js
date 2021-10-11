@@ -32,6 +32,13 @@ import SearchStates from './storage/searchstates';
 export default class Core {
   constructor (config = {}) {
     /**
+     * A reference to the auth token used for all requests
+     * @type {string}
+     * @private
+     */
+    this._token = config.token;
+
+    /**
      * A reference to the client API Key used for all requests
      * @type {string}
      * @private
@@ -129,6 +136,7 @@ export default class Core {
    */
   init () {
     const params = {
+      token: this._token,
       apiKey: this._apiKey,
       experienceKey: this._experienceKey,
       locale: this._locale,
