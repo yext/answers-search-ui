@@ -272,6 +272,7 @@ class Answers {
     }
 
     this.core = new Core({
+      token: parsedConfig.token,
       apiKey: parsedConfig.apiKey,
       storage: storage,
       experienceKey: parsedConfig.experienceKey,
@@ -406,11 +407,12 @@ class Answers {
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
 
+    const authIdKey = parsedConfig.apiKey ? 'apiKey' : 'token';
     const sandboxPrefix = `${SANDBOX}-`;
-    parsedConfig.apiKey.includes(sandboxPrefix)
+    parsedConfig[authIdKey].includes(sandboxPrefix)
       ? parsedConfig.environment = SANDBOX
       : parsedConfig.environment = PRODUCTION;
-    parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
+    parsedConfig[authIdKey] = parsedConfig[authIdKey].replace(sandboxPrefix, '');
 
     return parsedConfig;
   }
@@ -423,8 +425,12 @@ class Answers {
   validateConfig (config) {
     // TODO (tmeyer): Extract this method into it's own class. Investigate the use of JSON schema
     // to validate these configs.
-    if (typeof config.apiKey !== 'string') {
-      throw new Error('Missing required `apiKey`. Type must be {string}');
+    if (typeof config.apiKey !== 'string' && typeof config.token !== 'string') {
+      throw new Error('Missing required `apiKey` or `token`. Type must be {string}');
+    }
+
+    if (typeof config.apiKey === 'string' && typeof config.token === 'string') {
+      throw new Error('Both apiKey and token are present. Only one authentication method should be provided');
     }
 
     if (typeof config.experienceKey !== 'string') {

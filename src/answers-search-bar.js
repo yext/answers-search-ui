@@ -182,6 +182,7 @@ class AnswersSearchBar {
     }
 
     this.core = new Core({
+      token: parsedConfig.token,
       apiKey: parsedConfig.apiKey,
       storage: storage,
       experienceKey: parsedConfig.experienceKey,
@@ -251,11 +252,12 @@ class AnswersSearchBar {
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
 
+    const authIdKey = parsedConfig.apiKey ? 'apiKey' : 'token';
     const sandboxPrefix = `${SANDBOX}-`;
-    parsedConfig.apiKey.includes(sandboxPrefix)
+    parsedConfig[authIdKey].includes(sandboxPrefix)
       ? parsedConfig.environment = SANDBOX
       : parsedConfig.environment = PRODUCTION;
-    parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
+    parsedConfig[authIdKey] = parsedConfig[authIdKey].replace(sandboxPrefix, '');
 
     return parsedConfig;
   }
