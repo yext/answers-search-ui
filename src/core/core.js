@@ -134,7 +134,7 @@ export default class Core {
   /**
    * Initializes the {@link Core} by providing it with an instance of the Core library.
    */
-  init () {
+  init (config) {
     const params = {
       token: this._token,
       apiKey: this._apiKey,
@@ -144,7 +144,8 @@ export default class Core {
       endpoints: this._getServiceUrls(),
       additionalQueryParams: {
         jsLibVersion: LIB_VERSION
-      }
+      },
+      ...config
     };
 
     this._coreLibrary = provideCore(params);
