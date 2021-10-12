@@ -93,7 +93,7 @@
     "npm-force-resolutions": "0.0.10",
     "postcss-pxtorem": "4.0.1",
     "puppeteer": "^10.1.0",
-    "regenerator-runtime": "^0.13.7",
+    "regenerator-runtime": "^0.13.1",
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^9.2.1",
