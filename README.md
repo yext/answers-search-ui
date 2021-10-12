@@ -127,7 +127,7 @@ function initAnswers() {
   ANSWERS.init({
     // Required*, your Yext Answers API key. *Do NOT provide apiKey if token is used.
     apiKey: '<API_KEY_HERE>',
-    //Required*, custom auth token. *Do NOT provide token if apiKey is used.
+    // Required*, custom auth token. *Do NOT provide token if apiKey is used.
     token: '<TOKEN_HERE>',
     // Required, the key used for your Answers experience
     experienceKey: '<EXPERIENCE_KEY_HERE>',
