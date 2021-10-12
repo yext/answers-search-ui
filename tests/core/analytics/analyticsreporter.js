@@ -132,4 +132,9 @@ describe('reporting events', () => {
       expect.anything(),
       expect.objectContaining({ data: expect.objectContaining({ visitor: { id: '123' } }) }));
   });
+
+  it('Set and get analytics opt in', async () => {
+    analyticsReporter.setAnalyticsOptIn(true);
+    expect(analyticsReporter.getAnalyticsOptIn()).toEqual(true);
+  });
 });

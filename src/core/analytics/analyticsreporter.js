@@ -87,6 +87,13 @@ export default class AnalyticsReporter {
   }
 
   /**
+   * @returns {boolean} Whether analytics events are opted in or out
+   */
+  getAnalyticsOptIn () {
+    return this._analyticsEventsEnabled;
+  }
+
+  /**
    * Reports an analytics event
    * @param {AnalyticsEvent} event The event to send
    * @param {Object} options Analytics reporting otpions
