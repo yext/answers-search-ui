@@ -287,6 +287,13 @@ class AnswersSearchBar {
   }
 
   /**
+   * @returns {boolean} Whether analytics events are opted in or out
+   */
+  getAnalyticsOptIn () {
+    return this._analyticsReporterService?.getAnalyticsOptIn();
+  }
+
+  /**
    * Opt in or out of analytic events
    * @param {boolean} analyticsEventsEnabled
    */
