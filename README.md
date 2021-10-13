@@ -44,7 +44,9 @@
    - [Custom Data Transforms](#custom-data-transforms)
    - [Using a Custom Template for a Component](#using-a-custom-template-for-a-component)
    - [Creating Custom Components](#creating-custom-components)
-6. [Template Helpers](#template-helpers)
+6. [Extending the Built-in Renderer](#extending-the-built-in-renderer)
+   - [Custom Partials](#custom-partials)
+   - [Template Helpers](#template-helpers)
 7. [Analytics](#analytics)
    - [Custom Analytics Using JavaScript](#custom-analytics-using-javascript)
    - [Custom Analytics Using Data Attributes](#custom-analytics-using-data-attributes)
@@ -2319,7 +2321,45 @@ ANSWERS.addComponent('MyCustomComponent', {
 });
 ```
 
-# Template Helpers
+# Extending the Built-in Renderer
+
+## Custom Partials
+
+[Handlebars partials](https://handlebarsjs.com/guide/partials.html) use the
+same handlebars syntax as templates, but they can be reused and be called
+directly from templates or other partials. The ANSWERS object offers an
+`ANSWERS.registerPartial` function for custom partials. This will map a partial 
+string to an entry in the Answers handlebars renderer.
+
+```js
+  /**
+   * Add a partial
+   * @param {string} partialName The unique name for the partial
+   * @param {string} partial The handlebars partial string
+   */
+  registerPartial (partialName, partial)
+```
+
+The default handlebars renderer uses a mapping from partial name strings to
+handlebars partial strings. Once registered, this custom partial can be called
+from other partials or templates.
+
+For example,
+```js
+  // create custom partial
+  ANSWERS.registerPartial(
+    'thank-you-message',
+    '<div class="thanks">Thank you!</div>'
+  );
+
+  // use new partial in a template
+  ANSWERS.registerTemplate(
+    'cards/custom',
+    '<p>Main information</p> {{> thank-you-message }}'
+  );
+```
+
+## Template Helpers
 
 When using handlebars templates, Answers ships with a bunch of pre-built template helpers that you can use. You can learn more about them [here](https://github.com/jonschlinkert/template-helpers).
 
