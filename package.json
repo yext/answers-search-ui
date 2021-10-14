@@ -120,7 +120,7 @@
     "fix": "eslint . --fix",
     "extract-translations": "gulp extractTranslations",
     "preinstall": "npx npm-force-resolutions",
-    "prepublishOnly": "./conf/npm/prepublishOnly.sh",
+    "prepublishOnly": "npm run build-languages && npm run generate-entry-points && ./conf/npm/prepublishOnly.sh",
     "postpublish": "./conf/npm/postpublish.sh",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES",
     "generate-entry-points": "./conf/npm/generateentrypoints.js package.json"
