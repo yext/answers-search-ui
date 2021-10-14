@@ -1,0 +1,27 @@
+name: create PR from main to develop
+
+on:
+  push:
+    branches: [main, master]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  createPullRequest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: extract package version
+        id: vars
+        run: |
+          PACKAGE_VERSION="v$(cat ./package.json | grep version | head -1 | awk -F: '{ print $2 }' | sed 's/[",]//g' | tr -d '[[:space:]]')"
+          echo ::set-output name=tag::${PACKAGE_VERSION}
+      - uses: repo-sync/pull-request@v2
+        with:
+          source_branch: "${{ github.event.repository.default_branch }}"
+          destination_branch: "develop"
+          pr_title: "Merge ${{ github.event.repository.default_branch }} (${{ steps.vars.outputs.tag }}) into develop"
+          pr_body: "Merge ${{ github.event.repository.default_branch }} (${{ steps.vars.outputs.tag }}) into develop"
+          github_token: ${{ secrets.GITHUB_TOKEN }}

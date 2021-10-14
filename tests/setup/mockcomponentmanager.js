@@ -40,7 +40,8 @@ export default class MockComponentManager {
       class: 'enzyme-component'
     };
 
-    const component = new COMPONENT_REGISTRY[componentType](componentConfig, systemConfig).init(componentConfig);
+    const component =
+      new COMPONENT_REGISTRY[componentType](componentConfig, systemConfig).init(componentConfig);
 
     if (this.core && this.core.storage) {
       if (component.moduleId === undefined || component.moduleId === null) {
@@ -67,7 +68,8 @@ export default class MockComponentManager {
   }
 
   /**
-   * @param {Object} reporter - The analytics reporter to provide to constructed components (typically a jest mock)
+   * @param {Object} reporter - The analytics reporter to provide to
+   * constructed components (typically a jest mock)
    */
   setAnalyticsReporter (reporter) {
     this.analyticsReporter = reporter;

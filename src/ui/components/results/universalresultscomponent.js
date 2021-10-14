@@ -148,7 +148,8 @@ export default class UniversalResultsComponent extends Component {
         // The text for the change filters link.
         changeFiltersText: defaultConfigOption(config,
           ['appliedFilters.changeFiltersText', 'changeFiltersText'], topLevelAppliedFilters.changeFiltersText),
-        // The symbol placed between different filters with the same fieldName. e.g. Location: Virginia | New York | Miami.
+        // The symbol placed between different filters with the same fieldName.
+        // e.g. Location: Virginia | New York | Miami.
         delimiter: defaultConfigOption(config, ['appliedFilters.delimiter'], topLevelAppliedFilters.delimiter),
         // The aria-label given to the applied filters bar.
         labelText: defaultConfigOption(config, ['appliedFilters.labelText'], topLevelAppliedFilters.labelText)

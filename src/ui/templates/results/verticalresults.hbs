@@ -49,7 +49,7 @@
 {{#*inline "results"}}
   <div class="yxt-Results-items js-yxt-Results-items{{#if numColumns}} yxt-Results-items--{{numColumns}}{{/if}}">
     {{#each results}}
-      <div class="yxt-Answers-component--unmounted yxt-Card{{#if ../_config.isUniversal}} yxt-Card--universal{{/if}}"
+      <div class="yxt-Card{{#if ../_config.isUniversal}} yxt-Card--universal{{/if}}"
         data-component="Card"
         data-opts='{ "_index": {{@index}} }'>
       </div>

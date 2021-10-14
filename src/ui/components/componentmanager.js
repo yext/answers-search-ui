@@ -210,4 +210,12 @@ export default class ComponentManager {
       return names.concat(this._componentTypeToComponentNames[type] || []);
     }, []);
   }
+
+  /**
+   * Returns the number of active components
+   * @returns {number} The number of active componets
+   */
+  getNumActiveComponents () {
+    return this._activeComponents.length;
+  }
 }

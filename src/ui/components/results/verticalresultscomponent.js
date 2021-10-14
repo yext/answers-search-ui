@@ -110,7 +110,8 @@ class VerticalResultsConfig {
       hiddenFields: defaultConfigOption(config, ['appliedFilters.hiddenFields', 'hiddenFields'], ['builtin.entityType']),
 
       /**
-       * The character that should separate each field (and its associated filters) within the applied filter bar
+       * The character that should separate each field(and its associated filters)
+       * within the applied filter bar
        * @type {string}
        */
       delimiter: defaultConfigOption(config, ['appliedFilters.delimiter'], '|'),

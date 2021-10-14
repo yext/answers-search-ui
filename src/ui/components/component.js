@@ -167,21 +167,28 @@ export default class Component {
     this.transformData = config.transformData;
 
     /**
-     * The a local reference to the callback that will be invoked when a component is created.
+     * A local reference to the callback that will be invoked when a component is created.
      * @type {function}
      */
     this.onCreate = config.onCreateOverride || this.onCreate || function () {};
     this.onCreate = this.onCreate.bind(this);
 
     /**
-     * The a local reference to the callback that will be invoked when a component is Mounted.
+     * A local reference to the callback that will be invoked before a component is mounted.
+     * @type {function}
+     */
+    this.beforeMount = config.beforeMountOverride || this.beforeMount || function () {};
+    this.beforeMount = this.beforeMount.bind(this);
+
+    /**
+     * A local reference to the callback that will be invoked when a component is mounted.
      * @type {function}
      */
     this.onMount = config.onMountOverride || this.onMount || function () {};
     this.onMount = this.onMount.bind(this);
 
     /**
-     * The a local reference to the callback that will be invoked when a components state is updated.
+     * A local reference to the callback that will be invoked when a components state is updated.
      * @type {function}
      */
     this.onUpdate = config.onUpdateOverride || this.onUpdate || function () { };
@@ -395,8 +402,6 @@ export default class Component {
     this._isMounted = true;
     this.onMount(this);
     this.userOnMount(this);
-
-    DOM.removeClass(this._container, 'yxt-Answers-component--unmounted');
 
     return this;
   }

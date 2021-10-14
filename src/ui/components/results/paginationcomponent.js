@@ -29,35 +29,45 @@ export default class PaginationComponent extends Component {
      * @type {number}
      * @private
      */
-    this._maxVisiblePagesDesktop = config.maxVisiblePagesDesktop === undefined ? 1 : config.maxVisiblePagesDesktop;
+    this._maxVisiblePagesDesktop = config.maxVisiblePagesDesktop === undefined
+      ? 1
+      : config.maxVisiblePagesDesktop;
 
     /**
      * The number of pages visible before/after the current page on mobile.
      * @type {number}
      * @private
      */
-    this._maxVisiblePagesMobile = config.maxVisiblePagesMobile === undefined ? 1 : config.maxVisiblePagesMobile;
+    this._maxVisiblePagesMobile = config.maxVisiblePagesMobile === undefined
+      ? 1
+      : config.maxVisiblePagesMobile;
 
     /**
      * If true, displays the first and last page buttons
      * @type {boolean}
      * @private
      */
-    this._showFirstAndLastPageButtons = config.showFirstAndLastButton === undefined ? true : config.showFirstAndLastButton;
+    this._showFirstAndLastPageButtons = config.showFirstAndLastButton === undefined
+      ? true
+      : config.showFirstAndLastButton;
 
     /**
      * DEPRECATED
      * @type {boolean}
      * @private
      */
-    this._firstPageButtonEnabled = config.showFirst === undefined ? this._showFirstAndLastPageButtons : config.showFirst;
+    this._firstPageButtonEnabled = config.showFirst === undefined
+      ? this._showFirstAndLastPageButtons
+      : config.showFirst;
 
     /**
      * DEPRECATED
      * @type {boolean}
      * @private
      */
-    this._lastPageButtonEnabled = config.showLast === undefined ? this._showFirstAndLastPageButtons : config.showLast;
+    this._lastPageButtonEnabled = config.showLast === undefined
+      ? this._showFirstAndLastPageButtons
+      : config.showLast;
 
     /**
      * If true, always displays the page numbers for first and last page.
@@ -252,11 +262,14 @@ export default class PaginationComponent extends Component {
    * Creates an object representing the view state of the page numbers and ellipses
    * @param {number} pageNumber refers to the page number, not the page index
    * @param {number} maxPage the highest page number, which also represents the total page count
-   * @returns {Object} the view-model for the page numbers displayed in the component, including whether to display ellipses
+   * @returns {Object} the view-model for the page numbers displayed in the component,
+   * including whether to display ellipses
    */
   _createPageNumberViews (pageNumber, maxPage) {
-    const [mobileBackLimit, mobileFrontLimit] = this._allocate(pageNumber, maxPage, this._maxVisiblePagesMobile);
-    const [desktopBackLimit, desktopFrontLimit] = this._allocate(pageNumber, maxPage, this._maxVisiblePagesDesktop);
+    const [mobileBackLimit, mobileFrontLimit] = this._allocate(
+      pageNumber, maxPage, this._maxVisiblePagesMobile);
+    const [desktopBackLimit, desktopFrontLimit] = this._allocate(
+      pageNumber, maxPage, this._maxVisiblePagesDesktop);
     const pageNumberViews = [];
     for (let i = 1; i <= maxPage; i++) {
       const num = { number: i };

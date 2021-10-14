@@ -59,6 +59,11 @@ export default class CardComponent extends Component {
      */
     this.result = data.result || {};
 
+    // additional field(s) for dataMappings config option
+    if (this.result && this.result._raw) {
+      this.result._raw.distance = this.result.distance;
+    }
+
     /**
      * Vertical key for the search.
      * @type {string}
@@ -111,6 +116,7 @@ export default class CardComponent extends Component {
 
     // Use the cardType as component name if it is not a built-in type
     const cardComponentName = cardTypes[cardType] || cardType;
+
     return super.setState({
       ...data,
       result: this.result,

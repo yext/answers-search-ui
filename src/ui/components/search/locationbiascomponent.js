@@ -4,6 +4,7 @@ import DOM from '../../dom/dom';
 import TranslationFlagger from '../../i18n/translationflagger';
 import isEqual from 'lodash.isequal';
 import SearchStates from '../../../core/storage/searchstates';
+import alert from '../../alert';
 
 const DEFAULT_CONFIG = {
   ipAccuracyHelpText: TranslationFlagger.flag({
@@ -52,7 +53,8 @@ export default class LocationBiasComponent extends Component {
      * @type {string}
      */
     // TODO: Remove config.verticalKey
-    this._verticalKey = config.verticalKey || this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey || null;
+    this._verticalKey = config.verticalKey ||
+      this.core.storage.get(StorageKeys.SEARCH_CONFIG).verticalKey || null;
 
     /**
      * The element used for updating location
@@ -127,7 +129,7 @@ export default class LocationBiasComponent extends Component {
     }
     const { enabled, message } = this._geolocationTimeoutAlert;
     if (enabled) {
-      window.alert(message);
+      alert(message);
     }
   }
 

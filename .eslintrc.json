@@ -1,6 +1,19 @@
 {
    "extends": ["semistandard"],
    "ignorePatterns": ["dist", "docs"],
+   "rules": {
+      "arrow-spacing": "error",
+      "quotes": ["error", "single"],
+      "max-len": ["error", {
+        "code": 110,
+        "ignorePattern": "^import\\s.+\\sfrom\\s.+;$",
+        "ignoreUrls": true,
+        "ignoreTemplateLiterals": true,
+        "ignoreStrings": true,
+        "ignoreRegExpLiterals": true,
+        "ignoreTrailingComments": true
+      }]
+    },
    "globals": {
       "beforeEach": true,
       "afterEach": true,

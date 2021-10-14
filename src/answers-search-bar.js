@@ -22,6 +22,7 @@ import { isValidContext } from './core/utils/apicontext';
 import { urlWithoutQueryParamsAndHash } from './core/utils/urlutils';
 import Filter from './core/models/filter';
 import { SEARCH_BAR_COMPONENTS_REGISTRY } from './ui/components/search-bar-only-registry';
+import createImpressionEvent from './core/analytics/createimpressionevent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -181,6 +182,7 @@ class AnswersSearchBar {
     }
 
     this.core = new Core({
+      token: parsedConfig.token,
       apiKey: parsedConfig.apiKey,
       storage: storage,
       experienceKey: parsedConfig.experienceKey,
@@ -206,13 +208,26 @@ class AnswersSearchBar {
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
-    this.core.init();
+    if (parsedConfig.visitor) {
+      this.setVisitor(parsedConfig.visitor);
+    } else {
+      this.core.init();
+    }
 
     this._onReady = parsedConfig.onReady || function () {};
 
     this.renderer.init(parsedConfig.templateBundle, this._getInitLocale());
     this._handlePonyfillCssVariables(parsedConfig.disableCssVariablesPonyfill)
-      .finally(() => this._onReady());
+      .finally(() => {
+        this._onReady();
+        if (this._analyticsReporterService) {
+          const impressionEvent = createImpressionEvent({
+            verticalKey: parsedConfig.search?.verticalKey,
+            standAlone: true
+          });
+          this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+        }
+      });
   }
 
   domReady (cb) {
@@ -237,11 +252,12 @@ class AnswersSearchBar {
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
 
+    const authIdKey = parsedConfig.apiKey ? 'apiKey' : 'token';
     const sandboxPrefix = `${SANDBOX}-`;
-    parsedConfig.apiKey.includes(sandboxPrefix)
+    parsedConfig[authIdKey].includes(sandboxPrefix)
       ? parsedConfig.environment = SANDBOX
       : parsedConfig.environment = PRODUCTION;
-    parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
+    parsedConfig[authIdKey] = parsedConfig[authIdKey].replace(sandboxPrefix, '');
 
     return parsedConfig;
   }
@@ -445,6 +461,15 @@ class AnswersSearchBar {
         return JSON.parse(value);
       default:
         return value;
+    }
+  }
+
+  setVisitor (visitor) {
+    if (visitor.id) {
+      this._analyticsReporterService?.setVisitor(visitor);
+      this.core.init({ visitor: visitor });
+    } else {
+      console.error(`Invalid visitor. Visitor was not set because "${JSON.stringify(visitor)}" does not have an id.`);
     }
   }
 }

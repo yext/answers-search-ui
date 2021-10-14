@@ -126,4 +126,15 @@ describe('reporting events', () => {
     analyticsReporter.setAnalyticsOptIn(true);
     expect(analyticsReporter.getAnalyticsOptIn()).toEqual(true);
   });
+
+  it('Includes visitor when set', () => {
+    analyticsReporter.setVisitor({ id: '123' });
+    const expectedEvent = new AnalyticsEvent('thumbs_up');
+    analyticsReporter.report(expectedEvent);
+
+    expect(mockedBeacon).toBeCalledTimes(1);
+    expect(mockedBeacon).toBeCalledWith(
+      expect.anything(),
+      expect.objectContaining({ data: expect.objectContaining({ visitor: { id: '123' } }) }));
+  });
 });

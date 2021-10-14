@@ -60,8 +60,9 @@ export default class AutoCompleteComponent extends Component {
 
     /**
      * An internal reference to the input value when typing.
-     * We use this for resetting the state of the input value when other interactions (e.g. result navigation)
-     * change based on interactions. For instance, hitting escape should reset the value to the original typed query.
+     * We use this for resetting the state of the input value when other
+     * interactions (e.g. result navigation) change based on interactions.
+     * For instance, hitting escape should reset the value to the original typed query.
      * @type {string}
      */
     this._originalQuery = opts.originalQuery || '';

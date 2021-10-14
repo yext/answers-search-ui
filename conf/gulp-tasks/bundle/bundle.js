@@ -131,7 +131,8 @@ function _buildBundle (callback, rollupConfig, bundleName, locale, libVersion, t
     .pipe(source(`${bundleName}.js`))
     .pipe(replace('@@LIB_VERSION', libVersion))
     .pipe(replace('@@LOCALE', locale))
-    .pipe(replace('\'@@SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE\'', JSON.stringify(SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE)))
+    .pipe(replace('\'@@SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE\'',
+      JSON.stringify(SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE)))
     .pipe(replace(TRANSLATION_FLAGGER_REGEX, translateCall => {
       const placeholder = new TranslateCallParser().parse(translateCall);
       const translationResult = translationResolver.resolve(placeholder);

@@ -160,10 +160,14 @@ describe('filter box component', () => {
       expect(child0.getFilterNode().getFilter()).toEqual(nodes0[0].getFilter());
       expect(child0.getFilterNode().getMetadata()).toEqual(nodes0[0].getMetadata());
       expect(setStaticFilterNodes.mock.calls).toHaveLength(4);
-      expect(setStaticFilterNodes.mock.calls[2][1].getFilter()).toEqual(child0.getFilterNode().getFilter());
-      expect(setStaticFilterNodes.mock.calls[2][1].getMetadata()).toEqual(child0.getFilterNode().getMetadata());
-      expect(setStaticFilterNodes.mock.calls[3][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
-      expect(setStaticFilterNodes.mock.calls[3][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
+      expect(setStaticFilterNodes.mock.calls[2][1].getFilter())
+        .toEqual(child0.getFilterNode().getFilter());
+      expect(setStaticFilterNodes.mock.calls[2][1].getMetadata())
+        .toEqual(child0.getFilterNode().getMetadata());
+      expect(setStaticFilterNodes.mock.calls[3][1].getFilter())
+        .toEqual(child1.getFilterNode().getFilter());
+      expect(setStaticFilterNodes.mock.calls[3][1].getMetadata())
+        .toEqual(child1.getFilterNode().getMetadata());
     });
 
     it('can save combined filternodes', () => {
@@ -176,8 +180,10 @@ describe('filter box component', () => {
       child1._updateOption(3, true);
       child1._updateOption(4, true);
       expect(setStaticFilterNodes.mock.calls).toHaveLength(10);
-      expect(setStaticFilterNodes.mock.calls[9][1].getFilter()).toEqual(child1.getFilterNode().getFilter());
-      expect(setStaticFilterNodes.mock.calls[9][1].getMetadata()).toEqual(child1.getFilterNode().getMetadata());
+      expect(setStaticFilterNodes.mock.calls[9][1].getFilter())
+        .toEqual(child1.getFilterNode().getFilter());
+      expect(setStaticFilterNodes.mock.calls[9][1].getMetadata())
+        .toEqual(child1.getFilterNode().getMetadata());
     });
   });
 
@@ -195,7 +201,8 @@ describe('filter box component', () => {
       ]
     };
 
-    it('when searchOnChange = false, does not update FilterRegistry until the apply button is clicked', () => {
+    it('when searchOnChange = false, does not update FilterRegistry ' +
+      'until the apply button is clicked', () => {
       const config = {
         ...oneFilterConfig,
         searchOnChange: false
