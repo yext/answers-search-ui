@@ -123,8 +123,8 @@
     "fix": "eslint . --fix",
     "extract-translations": "gulp extractTranslations",
     "preinstall": "npx npm-force-resolutions",
-    "prepublishOnly": "./conf/npm/prepublishOnly.sh",
-    "postpublish": "./conf/npm/postpublish.sh",
+    "prepublishOnly": "npm run build-languages && npm run generate-entry-points && ./conf/npm/use_npm_readme.sh",
+    "postpublish": "./conf/npm/revert_npm_readme.sh",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES",
     "generate-entry-points": "./conf/npm/generateentrypoints.js package.json"
   },
