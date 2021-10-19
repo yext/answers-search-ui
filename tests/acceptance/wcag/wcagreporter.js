@@ -25,7 +25,7 @@ class WcagReporter {
   async _analyzeVerticalPages () {
     await this._pageNavigator.goto('facets', { query: 'tom' });
     this.results.push(await this._analyzer.analyze());
-    await this._pageNavigator.goto('filterbox');
+    await this._pageNavigator.goto('filterbox', { query: 'sales' });
     this.results.push(await this._analyzer.analyze());
     await this._pageNavigator.click('input[id="js-yext-checkbox-filterbox.filter0-2"]');
     await this._pageNavigator.click('input[id="js-yext-checkbox-filterbox.filter2-0"]');
