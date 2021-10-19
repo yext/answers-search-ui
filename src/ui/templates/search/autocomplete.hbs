@@ -1,4 +1,21 @@
 <div class="yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper" aria-expanded="{{hasResults}}">
+  <span class="yxt-AutoComplete-resultsCount sr-only" aria-live="assertive">
+    {{#unless beforeSearch}}
+      {{#if hasResults}}
+        {{#each sections}}
+          {{translate
+            phrase='[[resultsCount]] [[label]] autocomplete option found.'
+            pluralForm='[[resultsCount]] [[label]] autocomplete options found.'
+            resultsCount=resultsCount
+            label=label
+            count=resultsCount
+          }}
+        {{/each}}
+      {{else}}
+        {{translate phrase='0 autocomplete options found.'}}
+      {{/if}}
+    {{/unless}}
+  </span>
   {{#if hasResults}}
     <div class="yxt-AutoComplete">
       {{assign 'currentSelected' sectionIndex resultIndex}}
@@ -10,14 +27,6 @@
         </ul>
       {{/if}}
       {{#each sections}}
-        <span class="yxt-AutoComplete-resultsCount sr-only" aria-live="assertive">
-          {{translate
-            phrase='[[resultsCount]] autocomplete option found'
-            pluralForm='[[resultsCount]] autocomplete options found'
-            resultsCount=resultsCount
-            count=resultsCount
-          }}
-        </span>
         <ul role="listbox"
             class="yxt-AutoComplete-results"
             aria-labelledby="{{../listLabelIdName}}"

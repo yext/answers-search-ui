@@ -143,6 +143,11 @@ export default class AutoCompleteComponent extends Component {
      * @type {boolean}
      */
     this._isVoiceSearchActive = false;
+
+    /**
+     * Indicates that the user hasn't typed anything in the autocomplete input yet
+     */
+    this._beforeSearch = true;
   }
 
   /**
@@ -181,12 +186,18 @@ export default class AutoCompleteComponent extends Component {
 
     if (wasOpen && !this._isOpen) {
       this._onClose();
+      this._beforeSearch = true;
     } else if (!wasOpen && this._isOpen) {
       this._onOpen();
     }
 
+    if (queryInputEl.value && this.isQueryInputFocused()) {
+      this._beforeSearch = false;
+    }
+
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
+      beforeSearch: this._beforeSearch,
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,

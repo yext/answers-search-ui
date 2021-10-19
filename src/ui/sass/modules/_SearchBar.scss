@@ -275,6 +275,10 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     width: 2em;
     height: 2em;
   }
+
+  &-instructions {
+    display: none;
+  }
 }
 
 // If custom icons are supplied, the SVGs simply alternate opacity
