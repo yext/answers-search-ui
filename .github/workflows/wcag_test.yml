@@ -5,7 +5,7 @@ on:
     branches: [develop, hotfix/*, release/*, support/*]
 
 jobs:
-  Coveralls:
+  WCAG-test:
     runs-on: ubuntu-latest
 
     strategy:
