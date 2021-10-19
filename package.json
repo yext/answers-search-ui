@@ -44,6 +44,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@axe-core/puppeteer": "^4.3.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/plugin-transform-arrow-functions": "^7.8.3",
@@ -119,6 +120,7 @@
     "lint": "eslint .",
     "test": "eslint . && stylelint src/**/*.scss && cross-env NODE_ICU_DATA=node_modules/full-icu jest",
     "acceptance": "testcafe safari,chrome --config-file ./.circleci/testcafe.json",
+    "wcag": "./tests/acceptance/wcag/index.js",
     "size": "size-limit",
     "fix": "eslint . --fix",
     "extract-translations": "gulp extractTranslations",
