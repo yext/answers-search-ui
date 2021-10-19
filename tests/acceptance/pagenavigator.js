@@ -1,4 +1,4 @@
-const { waitTillHTMLRendered, getQueryParamsString } = require('./utils');
+const { waitTillHTMLRendered, getQueryParamsString } = require('./wcag/utils');
 
 /**
  * Responsible for navigating pages

@@ -2,7 +2,7 @@
 
 const puppeteer = require('puppeteer');
 const { AxePuppeteer } = require('@axe-core/puppeteer');
-const PageNavigator = require('./pagenavigator');
+const PageNavigator = require('../pagenavigator');
 const WcagReporter = require('./wcagreporter');
 const handler = require('serve-handler');
 const http = require('http');
