@@ -22,8 +22,7 @@ class PageNavigator {
    * @param {string} selector The CSS selector to click on
    */
   async click (selector) {
-    const elem = await this._page.$(selector);
-    await elem.evaluate(b => b.click());
+    await this._page.evaluate((selector) => document.querySelector(selector).click(), selector);
     await waitTillHTMLRendered(this._page);
   }
 }
