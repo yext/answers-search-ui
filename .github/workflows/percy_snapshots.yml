@@ -23,6 +23,6 @@ jobs:
     - run: npm ci
     - run: npm run build
     - name: Percy Snapshots
-      run: npx percy exec -- node tests/acceptance/percy/snapshots.mjs
+      run: npx percy exec -- node tests/acceptance/percy/snapshots.js
       env:
         PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
