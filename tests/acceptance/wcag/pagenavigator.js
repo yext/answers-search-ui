@@ -1,4 +1,4 @@
-const { getQueryParamsString } = require('./utils');
+const { waitTillHTMLRendered, getQueryParamsString } = require('./utils');
 
 /**
  * Responsible for navigating pages
@@ -13,9 +13,7 @@ class PageNavigator {
     const queryParamsString = getQueryParamsString(queryParams);
     const url = `${this._siteUrl}/${pageName}?${queryParamsString}`;
     await this._page.goto(url);
-    await this._pagepage.waitForNavigation({
-      waitUntil: 'networkidle0'
-    });
+    await waitTillHTMLRendered(this._page);
   }
 
   /**
@@ -26,11 +24,9 @@ class PageNavigator {
   async click (selector) {
     this._page.evaluate((selector) => {
       console.log(document.querySelector(selector));
-      document.querySelector(selector).click();
+      // document.querySelector(selector).click();
     }, selector);
-    await this._pagepage.waitForNavigation({
-      waitUntil: 'networkidle0'
-    });
+    await waitTillHTMLRendered(this._page);
   }
 }
 
