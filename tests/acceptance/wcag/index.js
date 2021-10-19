@@ -8,6 +8,14 @@ const handler = require('serve-handler');
 const http = require('http');
 const PORT = 9999;
 
+/**
+ * specifies options to be used by axe-core engine within axe-core/puppeteer.
+ * API documentation: https://github.com/dequelabs/axe-core/blob/master/doc/API.md
+ * - set reporter to 'no-passes' to only return violation results
+ * - set runOnly with tag values below to run WCAG standards:
+ *    - WCAG 2.0 Level A, AA, AAA
+ *    - WCAG 2.1 Level A, AA
+ */
 const axeCoreConfig = {
   reporter: 'no-passes',
   runOnly: {
