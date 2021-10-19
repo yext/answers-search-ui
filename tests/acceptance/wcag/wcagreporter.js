@@ -27,8 +27,8 @@ class WcagReporter {
     this.results.push(await this._analyzer.analyze());
     await this._pageNavigator.goto('filterbox', { query: 'sales' });
     this.results.push(await this._analyzer.analyze());
-    await this._pageNavigator.click('input[id="js-yext-checkbox-filterbox.filter0-2"]');
-    await this._pageNavigator.click('input[id="js-yext-checkbox-filterbox.filter2-0"]');
+    await this._pageNavigator.click('#js-yext-checkbox-filterbox.filter0-2');
+    await this._pageNavigator.click('#js-yext-checkbox-filterbox.filter2-0');
     this.results.push(await this._analyzer.analyze());
     await this._pageNavigator.goto('vertical');
     this.results.push(await this._analyzer.analyze());
