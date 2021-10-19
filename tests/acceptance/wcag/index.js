@@ -31,7 +31,15 @@ async function setupServer () {
 
   const pageNavigator = new PageNavigator(page, `http://localhost:${PORT}/tests/acceptance/fixtures/html`);
   const analyzer = await new AxePuppeteer(page).options(axeCoreConfig);
-  const results = await new WcagReporter(pageNavigator, analyzer).analyze();
+  let results = [];
+  try {
+    results = await new WcagReporter(pageNavigator, analyzer).analyze();
+  } catch (e) {
+    console.log(e);
+    await browser.close();
+    await server.close();
+    process.exit(1);
+  }
 
   const failedResults = [];
   results.forEach(result => {
