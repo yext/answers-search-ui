@@ -24,7 +24,7 @@ async function setupServer () {
   return server;
 }
 
-(async () => {
+async function wcagTester () {
   const server = await setupServer();
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
@@ -57,4 +57,6 @@ async function setupServer () {
     console.log(JSON.stringify(failedResults, null, 2));
     process.exit(1);
   }
-})();
+}
+
+wcagTester();

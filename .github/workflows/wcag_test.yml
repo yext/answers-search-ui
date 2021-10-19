@@ -1,10 +1,8 @@
 name: WCAG tests
 
 on:
-  push:
-    branches: [develop, hotfix/*, support/*]
   pull_request:
-    branches: [develop, hotfix/*, support/*]
+    branches: [develop, hotfix/*, release/*, support/*]
 
 jobs:
   Coveralls:
