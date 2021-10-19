@@ -27,7 +27,7 @@ class WcagReporter {
     this.results.push(await this._analyzer.analyze());
     await this._pageNavigator.goto('filterbox', { query: 'sales' });
     this.results.push(await this._analyzer.analyze());
-    await this._pageNavigator.click('input[value="United States"]');
+    await this._pageNavigator.click('.js-yxt-FilterOptions-option input');
     this.results.push(await this._analyzer.analyze());
     await this._pageNavigator.goto('vertical');
     this.results.push(await this._analyzer.analyze());
