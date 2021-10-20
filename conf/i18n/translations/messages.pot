@@ -8,9 +8,15 @@ msgid_plural "([[resultsCount]] results)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/ui/templates/search/autocomplete.hbs:6
+#: src/ui/templates/search/autocomplete.hbs:7
 msgid "[[resultsCount]] [[label]] autocomplete option found."
 msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/ui/templates/search/autocomplete.hbs:15
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -31,7 +37,7 @@ msgstr ""
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
 msgstr ""
 
-#: src/ui/templates/search/autocomplete.hbs:15
+#: src/ui/templates/search/autocomplete.hbs:24
 msgid "0 autocomplete options found."
 msgstr ""
 

@@ -3,13 +3,22 @@
     {{#unless beforeSearch}}
       {{#if hasResults}}
         {{#each sections}}
-          {{translate
-            phrase='[[resultsCount]] [[label]] autocomplete option found.'
-            pluralForm='[[resultsCount]] [[label]] autocomplete options found.'
-            resultsCount=resultsCount
-            label=label
-            count=resultsCount
-          }}
+          {{#if label}}
+            {{translate
+              phrase='[[resultsCount]] [[label]] autocomplete option found.'
+              pluralForm='[[resultsCount]] [[label]] autocomplete options found.'
+              resultsCount=resultsCount
+              label=label
+              count=resultsCount
+            }}
+          {{else}}
+            {{translate
+              phrase='[[resultsCount]] autocomplete option found.'
+              pluralForm='[[resultsCount]] autocomplete options found.'
+              resultsCount=resultsCount
+              count=resultsCount
+            }}
+          {{/if}}
         {{/each}}
       {{else}}
         {{translate phrase='0 autocomplete options found.'}}
