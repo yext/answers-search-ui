@@ -52,7 +52,7 @@ async function wcagTester () {
   const failedResults = [];
   results.forEach(result => {
     const { url, violations } = result;
-    if (violations) {
+    if (violations && violations.length > 0) {
       failedResults.push({ url, violations });
     }
   });
