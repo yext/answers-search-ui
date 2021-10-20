@@ -15,7 +15,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/ui/templates/search/autocomplete.hbs:14
-#: src/ui/templates/search/autocomplete.hbs:24
+#: src/ui/templates/search/autocomplete.hbs:23
 msgid "[[resultsCount]] autocomplete option found."
 msgid_plural "[[resultsCount]] autocomplete options found."
 msgstr[0] ""
