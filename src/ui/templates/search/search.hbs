@@ -22,8 +22,14 @@
           aria-label="{{labelText}}"
           aria-autocomplete="list"
           aria-controls="{{autocompleteContainerIdName}}"
+          aria-describedby="instructions"
           aria-haspopup="listbox"
         >
+        <div id="instructions" class="yxt-SearchBar-instructions sr-only">
+          {{translate
+            phrase='When autocomplete results are available, use up and down arrows to review and enter to select.'
+          }}
+        </div>
         <button type="button"
                 class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
                 data-eventtype="SEARCH_CLEAR_BUTTON"

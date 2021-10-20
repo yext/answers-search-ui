@@ -187,6 +187,7 @@ export default class AutoCompleteComponent extends Component {
 
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
+      isAlreadyOpen: this._isOpen && wasOpen,
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
@@ -237,7 +238,8 @@ export default class AutoCompleteComponent extends Component {
     // When a user focuses the input, we should populate the autocomplete based
     // on the current value
     DOM.on(queryInput, 'focus', () => {
-      this.reset();
+      this._sectionIndex = 0;
+      this._resultIndex = -1;
       this.autoComplete(queryInput.value);
     });
 

@@ -5,7 +5,13 @@
          type="text"
          name="query"
          value="{{query}}"
-         {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}>
+         {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
+         aria-describedby="instructions">
   </input>
+  <div id="instructions" class="yxt-SearchBar-instructions sr-only">
+    {{translate
+      phrase='When autocomplete results are available, use up and down arrows to review and enter to select.'
+    }}
+  </div>
   <div class="yxt-SearchBar-autocomplete"></div>
 </div>
