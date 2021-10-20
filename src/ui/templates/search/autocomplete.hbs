@@ -1,29 +1,34 @@
 <div class="yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper" aria-expanded="{{hasResults}}">
   <span class="yxt-AutoComplete-resultsCount sr-only" aria-live="assertive">
-    {{#unless beforeSearch}}
-      {{#if hasResults}}
-        {{#each sections}}
-          {{#if label}}
-            {{translate
-              phrase='[[resultsCount]] [[label]] autocomplete option found.'
-              pluralForm='[[resultsCount]] [[label]] autocomplete options found.'
-              resultsCount=resultsCount
-              label=label
-              count=resultsCount
-            }}
-          {{else}}
-            {{translate
-              phrase='[[resultsCount]] autocomplete option found.'
-              pluralForm='[[resultsCount]] autocomplete options found.'
-              resultsCount=resultsCount
-              count=resultsCount
-            }}
-          {{/if}}
-        {{/each}}
-      {{else}}
-        {{translate phrase='0 autocomplete options found.'}}
+    {{#if hasResults}}
+      {{#each sections}}
+        {{#if label}}
+          {{translate
+            phrase='[[resultsCount]] [[label]] autocomplete option found.'
+            pluralForm='[[resultsCount]] [[label]] autocomplete options found.'
+            resultsCount=resultsCount
+            label=label
+            count=resultsCount
+          }}
+        {{else}}
+          {{translate
+            phrase='[[resultsCount]] autocomplete option found.'
+            pluralForm='[[resultsCount]] autocomplete options found.'
+            resultsCount=resultsCount
+            count=resultsCount
+          }}
+        {{/if}}
+      {{/each}}
+    {{else}}
+      {{#if isAlreadyOpen}}
+        {{translate
+          phrase='[[resultsCount]] autocomplete option found.'
+          pluralForm='[[resultsCount]] autocomplete options found.'
+          resultsCount=0
+          count=0
+        }}
       {{/if}}
-    {{/unless}}
+    {{/if}}
   </span>
   {{#if hasResults}}
     <div class="yxt-AutoComplete">

@@ -143,11 +143,6 @@ export default class AutoCompleteComponent extends Component {
      * @type {boolean}
      */
     this._isVoiceSearchActive = false;
-
-    /**
-     * Indicates that the user hasn't typed anything in the autocomplete input yet
-     */
-    this._beforeSearch = true;
   }
 
   /**
@@ -184,20 +179,18 @@ export default class AutoCompleteComponent extends Component {
       this._isOpen = true;
     }
 
+    let _onOpen = false;
+
     if (wasOpen && !this._isOpen) {
       this._onClose();
-      this._beforeSearch = true;
     } else if (!wasOpen && this._isOpen) {
       this._onOpen();
-    }
-
-    if (queryInputEl.value && this.isQueryInputFocused()) {
-      this._beforeSearch = false;
+      _onOpen = true;
     }
 
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
-      beforeSearch: this._beforeSearch,
+      isAlreadyOpen: this._isOpen && !_onOpen,
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
@@ -248,7 +241,8 @@ export default class AutoCompleteComponent extends Component {
     // When a user focuses the input, we should populate the autocomplete based
     // on the current value
     DOM.on(queryInput, 'focus', () => {
-      this.reset();
+      this._sectionIndex = 0;
+      this._resultIndex = -1;
       this.autoComplete(queryInput.value);
     });
 
