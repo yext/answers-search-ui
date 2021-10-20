@@ -19,15 +19,13 @@
           }}
         {{/if}}
       {{/each}}
-    {{else}}
-      {{#if isAlreadyOpen}}
-        {{translate
-          phrase='[[resultsCount]] autocomplete option found.'
-          pluralForm='[[resultsCount]] autocomplete options found.'
-          resultsCount=0
-          count=0
-        }}
-      {{/if}}
+    {{else if isAlreadyOpen}}
+      {{translate
+        phrase='[[resultsCount]] autocomplete option found.'
+        pluralForm='[[resultsCount]] autocomplete options found.'
+        resultsCount=0
+        count=0
+      }}
     {{/if}}
   </span>
   {{#if hasResults}}

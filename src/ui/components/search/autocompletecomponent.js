@@ -179,18 +179,18 @@ export default class AutoCompleteComponent extends Component {
       this._isOpen = true;
     }
 
-    let _onOpen = false;
+    // let _onOpen = false;
 
     if (wasOpen && !this._isOpen) {
       this._onClose();
     } else if (!wasOpen && this._isOpen) {
       this._onOpen();
-      _onOpen = true;
+      // _onOpen = true;
     }
 
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
-      isAlreadyOpen: this._isOpen && !_onOpen,
+      isAlreadyOpen: this._isOpen && wasOpen,
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
