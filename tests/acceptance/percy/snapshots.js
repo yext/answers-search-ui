@@ -1,18 +1,19 @@
-import puppeteer from 'puppeteer';
-import percySnapshot from '@percy/puppeteer';
-import http from 'http';
-import handler from 'serve-handler';
+const puppeteer = require('puppeteer');
+const percySnapshot = require('@percy/puppeteer');
+const http = require('http');
+const handler = require('serve-handler');
+const PageNavigator = require('../pagenavigator');
 
 (async () => {
   const server = await setupServer();
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+  const navigator = new PageNavigator(page, 'http://localhost:9999/tests/acceptance/fixtures/html');
 
   async function snap (slug, name) {
-    await page.goto(`http://localhost:9999/tests/acceptance/fixtures/html/${slug}`);
+    await navigator.goto(slug);
     await percySnapshot(page, name);
   }
-
   await snap('facets.html', 'facets page pre search');
   await snap('no-unsafe-eval.html', 'no unsafe eval CSP');
 

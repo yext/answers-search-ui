@@ -1,18 +1,16 @@
-name: Percy Snapshots
+name: WCAG tests
 
-on: 
-  push:
-    branches-ignore: dev/*
+on:
   pull_request:
+    branches: [develop, hotfix/*, release/*, support/*]
 
 jobs:
-  build:
-
+  WCAG-test:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        node-version: [15.x]
+        node-version: [14.x]
 
     steps:
     - uses: actions/checkout@v2
@@ -21,8 +19,4 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - run: npm ci
-    - run: npm run build
-    - name: Percy Snapshots
-      run: npx percy exec -- node tests/acceptance/percy/snapshots.js
-      env:
-        PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+    - run: npm run wcag
