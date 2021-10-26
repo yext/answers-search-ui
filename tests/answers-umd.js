@@ -85,4 +85,26 @@ describe('ANSWERS instance integration testing', () => {
     expect(ANSWERS._analyticsReporterService.setVisitor).toHaveBeenLastCalledWith({ id: '456' });
     expect(initSpy).toHaveBeenCalledWith({ visitor: { id: '456' } });
   });
+
+  it('Set and get analytics opt in', async () => {
+    mockWindow(windowSpy, {
+      location: {
+        search: '?query=test'
+      }
+    });
+    await initAnswers(ANSWERS);
+    ANSWERS.setAnalyticsOptIn(true);
+    ANSWERS.getAnalyticsOptIn();
+    expect(ANSWERS._analyticsReporterService.getAnalyticsOptIn).toHaveBeenCalled();
+  });
+
+  it('Analytics opt in not defined if no businessId', async () => {
+    mockWindow(windowSpy, {
+      location: {
+        search: '?query=test'
+      }
+    });
+    await initAnswers(ANSWERS, { businessId: undefined });
+    expect(ANSWERS.getAnalyticsOptIn()).toBeUndefined();
+  });
 });
