@@ -185,6 +185,7 @@ export default class AutoCompleteComponent extends Component {
       this._onOpen();
     }
 
+    queryInputEl.removeAttribute('aria-activedescendant');
     if (this._resultIndex >= 0) {
       const selectedOptionId = `yxt-AutoComplete-option-${this._config.name}-${this._sectionIndex}-${this._resultIndex}`;
       queryInputEl.setAttribute('aria-activedescendant', selectedOptionId);
