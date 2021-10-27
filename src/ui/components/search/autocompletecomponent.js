@@ -184,12 +184,7 @@ export default class AutoCompleteComponent extends Component {
     } else if (!wasOpen && this._isOpen) {
       this._onOpen();
     }
-
-    queryInputEl.removeAttribute('aria-activedescendant');
-    if (this._resultIndex >= 0) {
-      const selectedOptionId = `yxt-AutoComplete-option-${this._config.name}-${this._sectionIndex}-${this._resultIndex}`;
-      queryInputEl.setAttribute('aria-activedescendant', selectedOptionId);
-    }
+    this.updateAriaAttribute();
 
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
@@ -199,6 +194,15 @@ export default class AutoCompleteComponent extends Component {
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
       listLabelIdName: this.listLabelIdName
     }));
+  }
+
+  updateAriaAttribute () {
+    const queryInputEl = DOM.query(this._parentContainer, this._inputEl);
+    queryInputEl.removeAttribute('aria-activedescendant');
+    if (this._sectionIndex >= 0 && this._resultIndex >= 0) {
+      const selectedOptionId = `yxt-AutoComplete-option-${this._config.name}-${this._sectionIndex}-${this._resultIndex}`;
+      queryInputEl.setAttribute('aria-activedescendant', selectedOptionId);
+    }
   }
 
   isQueryInputFocused () {
