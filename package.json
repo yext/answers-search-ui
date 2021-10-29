@@ -99,7 +99,7 @@
     "rollup-plugin-svg": "^2.0.0",
     "sass": "^1.34.0",
     "serve": "^11.3.0",
-    "size-limit": "^4.9.0",
+    "size-limit": "^4.12.0",
     "stylelint": "^13.7.1",
     "testcafe": "^1.15.2",
     "testcafe-browser-provider-browserstack": "^1.13.1",
