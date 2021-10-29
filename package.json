@@ -43,12 +43,12 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.9.5",
+    "@babel/plugin-proposal-object-rest-spread": "^7.15.6",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
-    "@babel/plugin-transform-arrow-functions": "^7.8.3",
-    "@babel/plugin-transform-object-assign": "^7.10.4",
-    "@babel/plugin-transform-runtime": "^7.9.0",
-    "@babel/preset-env": "^7.13.10",
+    "@babel/plugin-transform-arrow-functions": "^7.14.5",
+    "@babel/plugin-transform-object-assign": "^7.14.5",
+    "@babel/plugin-transform-runtime": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
     "@babel/runtime-corejs3": "^7.13.10",
     "@percy/cli": "^1.0.0-beta.60",
     "@percy/puppeteer": "^2.0.0",
