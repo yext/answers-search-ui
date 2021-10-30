@@ -149,7 +149,7 @@ The following NPM packages may be included in this product:
  - @nodelib/fs.scandir@2.1.3
  - @nodelib/fs.stat@2.0.3
  - @nodelib/fs.walk@1.2.4
- - fast-glob@3.2.4
+ - fast-glob@3.2.7
 
 These packages each contain the following license and notice below:
 
@@ -212,41 +212,11 @@ SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - @types/mdast@3.0.3
- - @types/parse-json@4.0.0
- - @types/unist@2.0.3
+ - @types/mdast@3.0.10
+ - @types/minimist@1.2.2
+ - @types/unist@2.0.6
 
 These packages each contain the following license and notice below:
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
------------
-
-The following NPM package may be included in this product:
-
- - @types/minimist@1.2.1
-
-This package contains the following license and notice below:
 
 MIT License
 
@@ -275,6 +245,36 @@ MIT License
 The following NPM package may be included in this product:
 
  - @types/normalize-package-data@2.4.0
+
+This package contains the following license and notice below:
+
+MIT License
+
+    Copyright (c) Microsoft Corporation. All rights reserved.
+
+    Permission is hereby granted, free of charge, to any person obtaining a copy
+    of this software and associated documentation files (the "Software"), to deal
+    in the Software without restriction, including without limitation the rights
+    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+    copies of the Software, and to permit persons to whom the Software is
+    furnished to do so, subject to the following conditions:
+
+    The above copyright notice and this permission notice shall be included in all
+    copies or substantial portions of the Software.
+
+    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+    SOFTWARE
+
+-----------
+
+The following NPM package may be included in this product:
+
+ - @types/parse-json@4.0.0
 
 This package contains the following license and notice below:
 
@@ -425,13 +425,13 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - ajv@6.12.6
+ - ajv@8.6.0
 
 This package contains the following license and notice below:
 
 The MIT License (MIT)
 
-Copyright (c) 2015-2017 Evgeny Poberezkin
+Copyright (c) 2015-2021 Evgeny Poberezkin
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -518,6 +518,7 @@ THE SOFTWARE.
 The following NPM packages may be included in this product:
 
  - ansi-regex@5.0.0
+ - ansi-regex@5.0.1
  - ansi-styles@3.2.1
  - ansi-styles@4.3.0
  - array-union@2.1.0
@@ -525,24 +526,22 @@ The following NPM packages may be included in this product:
  - camelcase-keys@6.2.2
  - camelcase@5.3.1
  - chalk@2.4.2
- - chalk@4.1.0
+ - chalk@4.1.2
  - clone-regexp@2.2.0
  - execall@2.0.0
  - find-up@4.1.0
  - globals@11.12.0
- - globby@11.0.1
+ - globby@11.0.4
  - hard-rejection@2.1.0
  - has-flag@3.0.0
  - has-flag@4.0.0
  - html-tags@3.1.0
- - import-fresh@3.2.2
  - import-lazy@4.0.0
  - indent-string@4.0.0
  - is-fullwidth-code-point@3.0.0
  - is-plain-obj@2.1.0
  - is-regexp@2.1.0
  - locate-path@5.0.0
- - map-obj@4.1.0
  - p-limit@2.3.0
  - p-locate@4.1.0
  - p-try@2.2.0
@@ -557,12 +556,13 @@ The following NPM packages may be included in this product:
  - resolve-from@5.0.0
  - slash@3.0.0
  - string-width@4.2.0
+ - string-width@4.2.3
  - strip-ansi@6.0.0
+ - strip-ansi@6.0.1
  - strip-indent@3.0.0
  - supports-color@5.5.0
- - supports-color@6.1.0
  - supports-color@7.2.0
- - trim-newlines@3.0.0
+ - trim-newlines@3.0.1
  - type-fest@0.6.0
  - type-fest@0.8.1
 
@@ -1172,11 +1172,11 @@ SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - autoprefixer@9.8.6
+ - autoprefixer@9.8.8
  - postcss-safe-parser@4.0.2
  - postcss-scss@2.1.1
  - postcss@6.0.23
- - postcss@7.0.35
+ - postcss@7.0.39
 
 These packages each contain the following license and notice below:
 
@@ -1239,11 +1239,12 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
-The following NPM package may be included in this product:
+The following NPM packages may be included in this product:
 
  - balanced-match@1.0.0
+ - balanced-match@2.0.0
 
-This package contains the following license and notice below:
+These packages each contain the following license and notice below:
 
 (MIT)
 
@@ -1977,7 +1978,7 @@ IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - cosmiconfig@7.0.0
+ - cosmiconfig@7.0.1
 
 This package contains the following license and notice below:
 
@@ -2175,6 +2176,7 @@ The following NPM packages may be included in this product:
 
  - debug@3.2.7
  - debug@4.3.1
+ - debug@4.3.2
 
 These packages each contain the following license and notice below:
 
@@ -2510,7 +2512,7 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 The following NPM packages may be included in this product:
 
  - fast-deep-equal@3.1.3
- - json-schema-traverse@0.4.1
+ - json-schema-traverse@1.0.0
 
 These packages each contain the following license and notice below:
 
@@ -2535,36 +2537,6 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
------------
-
-The following NPM package may be included in this product:
-
- - fast-json-stable-stringify@2.1.0
-
-This package contains the following license and notice below:
-
-This software is released under the MIT license:
-
-Copyright (c) 2017 Evgeny Poberezkin
-Copyright (c) 2013 James Halliday
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of
-this software and associated documentation files (the "Software"), to deal in
-the Software without restriction, including without limitation the rights to
-use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
-the Software, and to permit persons to whom the Software is furnished to do so,
-subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
-FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
-COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
-IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
-CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
@@ -2622,7 +2594,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - file-entry-cache@6.0.0
+ - file-entry-cache@6.0.1
  - flat-cache@3.0.4
 
 These packages each contain the following license and notice below:
@@ -2655,7 +2627,7 @@ The following NPM packages may be included in this product:
 
  - fill-range@7.0.1
  - is-number@7.0.0
- - micromatch@4.0.2
+ - micromatch@4.0.4
 
 These packages each contain the following license and notice below:
 
@@ -2870,9 +2842,12 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 The following NPM packages may be included in this product:
 
  - get-stdin@8.0.0
- - log-symbols@4.0.0
- - meow@8.0.0
- - parse-json@5.1.0
+ - import-fresh@3.3.0
+ - is-unicode-supported@0.1.0
+ - log-symbols@4.1.0
+ - map-obj@4.3.0
+ - meow@9.0.0
+ - parse-json@5.2.0
 
 These packages each contain the following license and notice below:
 
@@ -2890,7 +2865,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following NPM package may be included in this product:
 
- - glob-parent@5.1.1
+ - glob-parent@5.1.2
 
 This package contains the following license and notice below:
 
@@ -3961,8 +3936,8 @@ THE SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - hosted-git-info@2.8.8
- - hosted-git-info@3.0.7
+ - hosted-git-info@2.8.9
+ - hosted-git-info@4.0.2
 
 These packages each contain the following license and notice below:
 
@@ -4258,7 +4233,7 @@ The following NPM packages may be included in this product:
  - once@1.4.0
  - rimraf@3.0.2
  - semver@5.7.1
- - semver@7.3.4
+ - semver@7.3.5
  - which@1.3.1
  - wrappy@1.0.2
  - yallist@4.0.0
@@ -4353,11 +4328,12 @@ THE SOFTWARE.
 
 -----------
 
-The following NPM package may be included in this product:
+The following NPM packages may be included in this product:
 
  - is-core-module@2.2.0
+ - is-core-module@2.8.0
 
-This package contains the following license and notice below:
+These packages each contain the following license and notice below:
 
 The MIT License (MIT)
 
@@ -4729,7 +4705,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - known-css-properties@0.20.0
+ - known-css-properties@0.21.0
 
 This package contains the following license and notice below:
 
@@ -4822,6 +4798,7 @@ The following NPM packages may be included in this product:
 
  - lodash.clonedeep@4.5.0
  - lodash.escaperegexp@4.1.2
+ - lodash.truncate@4.4.2
 
 These packages each contain the following license and notice below:
 
@@ -5197,9 +5174,9 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - mdast-util-from-markdown@0.8.2
- - mdast-util-to-markdown@0.5.4
- - micromark@2.10.1
+ - mdast-util-from-markdown@0.8.5
+ - mdast-util-to-markdown@0.6.5
+ - micromark@2.11.4
 
 These packages each contain the following license and notice below:
 
@@ -5571,12 +5548,11 @@ THE SOFTWARE.
 
 -----------
 
-The following NPM packages may be included in this product:
+The following NPM package may be included in this product:
 
  - normalize-package-data@2.5.0
- - normalize-package-data@3.0.0
 
-These packages each contain the following license and notice below:
+This package contains the following license and notice below:
 
 This package contains code originally written by Isaac Z. Schlueter.
 Used with permission.
@@ -5608,6 +5584,30 @@ BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY,
 WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
 OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN
 IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+-----------
+
+The following NPM package may be included in this product:
+
+ - normalize-package-data@3.0.3
+
+This package contains the following license and notice below:
+
+This package contains code originally written by Isaac Z. Schlueter.
+Used with permission.
+
+Copyright (c) Meryn Stol ("Author")
+All rights reserved.
+
+The BSD License
+
+Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
+
+1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
+
+2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 -----------
 
@@ -5746,7 +5746,31 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - picomatch@2.2.2
+ - picocolors@0.2.1
+
+This package contains the following license and notice below:
+
+ISC License
+
+Copyright (c) 2021 Alexey Raspopov, Kostiantyn Denysov, Anton Verinov
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+-----------
+
+The following NPM package may be included in this product:
+
+ - picomatch@2.3.0
 
 This package contains the following license and notice below:
 
@@ -6078,11 +6102,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
-The following NPM package may be included in this product:
+The following NPM packages may be included in this product:
 
  - postcss-selector-parser@6.0.4
+ - postcss-selector-parser@6.0.6
 
-This package contains the following license and notice below:
+These packages each contain the following license and notice below:
 
 Copyright (c) Ben Briggs <beneb.info@gmail.com> (http://beneb.info)
 
@@ -6227,41 +6252,31 @@ IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - regenerator-runtime@0.13.1
+ - regenerator-runtime@0.13.9
 
 This package contains the following license and notice below:
 
-# regenerator-runtime
+MIT License
 
-Standalone runtime for
-[Regenerator](https://github.com/facebook/regenerator)-compiled generator
-and `async` functions.
+Copyright (c) 2014-present, Facebook, Inc.
 
-To import the runtime as a module (recommended), either of the following
-import styles will work:
-```js
-// CommonJS
-const regeneratorRuntime = require("regenerator-runtime");
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-// ECMAScript 2015
-import regeneratorRuntime from "regenerator-runtime";
-```
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-To ensure that `regeneratorRuntime` is defined globally, either of the
-following styles will work:
-```js
-// CommonJS
-require("regenerator-runtime/runtime");
-
-// ECMAScript 2015
-import "regenerator-runtime/runtime";
-```
-
-To get the absolute file system path of `runtime.js`, evaluate the
-following expression:
-```js
-require("regenerator-runtime/path").path
-```
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 -----------
 
@@ -6473,227 +6488,32 @@ Support this effort and give back by sponsoring on [OpenCollective][collective]!
 
 The following NPM package may be included in this product:
 
- - remark-stringify@9.0.0
+ - remark-stringify@9.0.1
 
 This package contains the following license and notice below:
 
-# remark-stringify
-
-[![Build][build-badge]][build]
-[![Coverage][coverage-badge]][coverage]
-[![Downloads][downloads-badge]][downloads]
-[![Size][size-badge]][size]
-[![Chat][chat-badge]][chat]
-[![Sponsors][sponsors-badge]][collective]
-[![Backers][backers-badge]][collective]
-
-[Compiler][] for [**unified**][unified].
-Serializes [**mdast**][mdast] syntax trees to Markdown.
-Used in the [**remark** processor][remark] but can be used on its own as well.
-Can be [extended][extend] to change how Markdown is serialized.
-
-## Install
-
-[npm][]:
-
-```sh
-npm install remark-stringify
-```
-
-## Use
-
-```js
-var unified = require('unified')
-var createStream = require('unified-stream')
-var html = require('rehype-parse')
-var rehype2remark = require('rehype-remark')
-var stringify = require('remark-stringify')
-
-var processor = unified().use(html).use(rehype2remark).use(stringify, {
-  bullet: '*',
-  fence: '~',
-  fences: true,
-  incrementListMarker: false
-})
-
-process.stdin.pipe(createStream(processor)).pipe(process.stdout)
-```
-
-[See **unified** for more examples »][unified]
-
-## API
-
-[See **unified** for API docs »][unified]
-
-### `processor().use(stringify[, options])`
-
-Configure the `processor` to serialize [**mdast**][mdast] syntax trees to
-Markdown.
-
-###### `options`
-
-Options can be passed directly, or passed later through
-[`processor.data()`][data].
-
-All the formatting options of [`mdast-util-to-markdown`][to-markdown-options]
-are supported and will be passed through.
-
-## Extending the compiler
-
-See [`mdast-util-to-markdown`][to-markdown].
-Then create a wrapper plugin such as [`remark-gfm`][remark-gfm].
-
-## Security
-
-`remark-stringify` will do its best to serialize markdown to match the syntax
-tree, but there are several cases where that is impossible.
-It’ll do its best, but complete roundtripping is impossible given that any
-value could be injected into the tree.
-
-As Markdown is sometimes used for HTML, and improper use of HTML can open you up
-to a [cross-site scripting (XSS)][xss] attack, use of `remark-stringify` and
-parsing it again later can potentially be unsafe.
-When parsing Markdown afterwards, use remark in combination with the
-[**rehype**][rehype] ecosystem, and use [`rehype-sanitize`][sanitize] to make
-the tree safe.
-
-Use of remark plugins could also open you up to other attacks.
-Carefully assess each plugin and the risks involved in using them.
-
-## Contribute
-
-See [`contributing.md`][contributing] in [`remarkjs/.github`][health] for ways
-to get started.
-See [`support.md`][support] for ways to get help.
-Ideas for new plugins and tools can be posted in [`remarkjs/ideas`][ideas].
-
-A curated list of awesome remark resources can be found in [**awesome
-remark**][awesome].
-
-This project has a [code of conduct][coc].
-By interacting with this repository, organization, or community you agree to
-abide by its terms.
-
-## Sponsor
-
-Support this effort and give back by sponsoring on [OpenCollective][collective]!
-
-<!--lint ignore no-html-->
-
-<table>
-<tr valign="middle">
-<td width="20%" align="center" colspan="2">
-  <a href="https://www.gatsbyjs.org">Gatsby</a> 🥇<br><br>
-  <a href="https://www.gatsbyjs.org"><img src="https://avatars1.githubusercontent.com/u/12551863?s=256&v=4" width="128"></a>
-</td>
-<td width="20%" align="center" colspan="2">
-  <a href="https://vercel.com">Vercel</a> 🥇<br><br>
-  <a href="https://vercel.com"><img src="https://avatars1.githubusercontent.com/u/14985020?s=256&v=4" width="128"></a>
-</td>
-<td width="20%" align="center" colspan="2">
-  <a href="https://www.netlify.com">Netlify</a><br><br>
-  <!--OC has a sharper image-->
-  <a href="https://www.netlify.com"><img src="https://images.opencollective.com/netlify/4087de2/logo/256.png" width="128"></a>
-</td>
-<td width="10%" align="center">
-  <a href="https://www.holloway.com">Holloway</a><br><br>
-  <a href="https://www.holloway.com"><img src="https://avatars1.githubusercontent.com/u/35904294?s=128&v=4" width="64"></a>
-</td>
-<td width="10%" align="center">
-  <a href="https://themeisle.com">ThemeIsle</a><br><br>
-  <a href="https://themeisle.com"><img src="https://avatars1.githubusercontent.com/u/58979018?s=128&v=4" width="64"></a>
-</td>
-<td width="10%" align="center">
-  <a href="https://boosthub.io">Boost Hub</a><br><br>
-  <a href="https://boosthub.io"><img src="https://images.opencollective.com/boosthub/6318083/logo/128.png" width="64"></a>
-</td>
-<td width="10%" align="center">
-  <a href="https://expo.io">Expo</a><br><br>
-  <a href="https://expo.io"><img src="https://avatars1.githubusercontent.com/u/12504344?s=128&v=4" width="64"></a>
-</td>
-</tr>
-<tr valign="middle">
-<td width="100%" align="center" colspan="10">
-  <br>
-  <a href="https://opencollective.com/unified"><strong>You?</strong></a>
-  <br><br>
-</td>
-</tr>
-</table>
-
-## License
-
-[MIT][license] © [Titus Wormer][author]
-
-<!-- Definitions -->
-
-[build-badge]: https://img.shields.io/travis/remarkjs/remark.svg
-
-[build]: https://travis-ci.org/remarkjs/remark
-
-[coverage-badge]: https://img.shields.io/codecov/c/github/remarkjs/remark.svg
-
-[coverage]: https://codecov.io/github/remarkjs/remark
-
-[downloads-badge]: https://img.shields.io/npm/dm/remark-stringify.svg
-
-[downloads]: https://www.npmjs.com/package/remark-stringify
-
-[size-badge]: https://img.shields.io/bundlephobia/minzip/remark-stringify.svg
-
-[size]: https://bundlephobia.com/result?p=remark-stringify
-
-[sponsors-badge]: https://opencollective.com/unified/sponsors/badge.svg
-
-[backers-badge]: https://opencollective.com/unified/backers/badge.svg
-
-[collective]: https://opencollective.com/unified
-
-[chat-badge]: https://img.shields.io/badge/chat-discussions-success.svg
-
-[chat]: https://github.com/remarkjs/remark/discussions
-
-[health]: https://github.com/remarkjs/.github
-
-[contributing]: https://github.com/remarkjs/.github/blob/HEAD/contributing.md
-
-[support]: https://github.com/remarkjs/.github/blob/HEAD/support.md
-
-[coc]: https://github.com/remarkjs/.github/blob/HEAD/code-of-conduct.md
-
-[ideas]: https://github.com/remarkjs/ideas
-
-[awesome]: https://github.com/remarkjs/awesome-remark
-
-[license]: https://github.com/remarkjs/remark/blob/main/license
-
-[author]: https://wooorm.com
-
-[npm]: https://docs.npmjs.com/cli/install
-
-[unified]: https://github.com/unifiedjs/unified
-
-[data]: https://github.com/unifiedjs/unified#processordatakey-value
-
-[remark]: https://github.com/remarkjs/remark/tree/main/packages/remark
-
-[compiler]: https://github.com/unifiedjs/unified#processorcompiler
-
-[mdast]: https://github.com/syntax-tree/mdast
-
-[xss]: https://en.wikipedia.org/wiki/Cross-site_scripting
-
-[rehype]: https://github.com/rehypejs/rehype
-
-[sanitize]: https://github.com/rehypejs/rehype-sanitize
-
-[to-markdown]: https://github.com/syntax-tree/mdast-util-to-markdown
-
-[to-markdown-options]: https://github.com/syntax-tree/mdast-util-to-markdown#formatting-options
-
-[extend]: #extending-the-compiler
-
-[remark-gfm]: https://github.com/remarkjs/remark-gfm
+(The MIT License)
+
+Copyright (c) 2014-2020 Titus Wormer <tituswormer@gmail.com>
+Copyright (c) 2011-2014, Christopher Jeffrey (https://github.com/chjj/)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
 -----------
 
@@ -6975,6 +6795,36 @@ This package contains the following license and notice below:
 Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
 
 THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+-----------
+
+The following NPM package may be included in this product:
+
+ - require-from-string@2.0.2
+
+This package contains the following license and notice below:
+
+The MIT License (MIT)
+
+Copyright (c) Vsevolod Strukchinsky <floatdrop@gmail.com> (github.com/floatdrop)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
 -----------
 
@@ -7745,7 +7595,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - stylelint@13.8.0
+ - stylelint@13.13.1
 
 This package contains the following license and notice below:
 
@@ -7833,7 +7683,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - table@6.0.4
+ - table@6.7.1
 
 This package contains the following license and notice below:
 
@@ -8065,7 +7915,7 @@ SUCH DAMAGE.
 
 The following NPM packages may be included in this product:
 
- - unified@9.2.0
+ - unified@9.2.2
  - vfile@4.2.1
 
 These packages each contain the following license and notice below:
@@ -8126,7 +7976,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - unist-util-is@4.0.4
+ - unist-util-is@4.1.0
 
 This package contains the following license and notice below:
 
@@ -8228,7 +8078,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following NPM package may be included in this product:
 
- - v8-compile-cache@2.2.0
+ - v8-compile-cache@2.3.0
 
 This package contains the following license and notice below:
 
@@ -8354,7 +8204,7 @@ THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - yargs-parser@20.2.4
+ - yargs-parser@20.2.9
 
 This package contains the following license and notice below:
 
