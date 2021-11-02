@@ -29,7 +29,7 @@ describe('tranform vertical search response', () => {
       {
         [StorageKeys.QUERY_ID]: data.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
+        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters, 'VERTICAL'),
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
           data.verticalResults, {}, {}, ResultsContext.NORMAL),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(data.facets, ResultsContext.NORMAL),
@@ -50,7 +50,7 @@ describe('tranform vertical search response', () => {
       {
         [StorageKeys.QUERY_ID]: convertedResponse.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
+        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters, 'VERTICAL'),
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
           convertedResponse.verticalResults, {}, {}, ResultsContext.NO_RESULTS),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(

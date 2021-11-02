@@ -38,10 +38,11 @@ it('constructs a direct answer from an answers-core direct answer', () => {
         website: 'yext.com'
       },
       verticalConfigId: 'foods'
-    }
+    },
+    searcher: 'UNIVESRAL'
   };
 
-  const actualDirectAnswer = DirectAnswer.fromCore(coreDirectAnswer);
+  const actualDirectAnswer = DirectAnswer.fromCore(coreDirectAnswer, null, 'UNIVESRAL');
 
   expect(actualDirectAnswer).toMatchObject(expectedDirectAnswer);
 });

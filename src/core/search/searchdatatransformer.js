@@ -21,7 +21,7 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: data.queryId,
       [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),
-      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer, formatters),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer, formatters, 'UNIVESRAL'),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.fromCore(data, urls, formatters),
       [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
       [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(data.locationBias)
@@ -43,7 +43,7 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters, 'VERTICAL'),
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
         response.verticalResults, {}, formatters, resultsContext, verticalKey),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(response.facets, resultsContext),
