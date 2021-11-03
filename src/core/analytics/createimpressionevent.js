@@ -1,3 +1,4 @@
+import Searcher from '../models/searcher';
 import AnalyticsEvent from './analyticsevent';
 
 /**
@@ -14,7 +15,7 @@ export default function createImpressionEvent ({
 }) {
   return AnalyticsEvent.fromData({
     type: 'SEARCH_BAR_IMPRESSION',
-    searcher: verticalKey ? 'VERTICAL' : 'UNIVERSAL',
+    searcher: verticalKey ? Searcher.VERTICAL : Searcher.UNIVERSAL,
     ...verticalKey && { verticalConfigId: verticalKey },
     standAlone
   });

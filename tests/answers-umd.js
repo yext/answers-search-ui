@@ -1,6 +1,7 @@
 import ANSWERS from '../src/answers-umd';
 import mockWindow from './setup/mockwindow';
 import initAnswers from './setup/initanswers';
+import Searcher from '../src/core/models/searcher';
 
 jest.mock('../src/core/analytics/analyticsreporter');
 
@@ -41,7 +42,7 @@ describe('ANSWERS instance integration testing', () => {
     });
     const expectedEvent = {
       eventType: 'SEARCH_BAR_IMPRESSION',
-      searcher: 'UNIVERSAL',
+      searcher: Searcher.UNIVERSAL,
       standAlone: true
     };
     expect(ANSWERS._analyticsReporterService.report).toHaveBeenCalledWith(expectedEvent, expect.anything());

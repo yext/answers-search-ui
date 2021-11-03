@@ -10,6 +10,7 @@ import ResponseWithoutResults from '../../fixtures/responseWithNoResults.json';
 import ResultsContext from '../../../src/core/storage/resultscontext';
 import AlternativeVerticals from '../../../src/core/models/alternativeverticals';
 import DirectAnswer from '../../../src/core/models/directanswer';
+import Searcher from '../../../src/core/models/searcher';
 
 describe('tranform vertical search response', () => {
   let response;
@@ -29,7 +30,8 @@ describe('tranform vertical search response', () => {
       {
         [StorageKeys.QUERY_ID]: data.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters, 'VERTICAL'),
+        [StorageKeys.DIRECT_ANSWER]: DirectAnswer
+          .fromCore(response.directAnswer, formatters, Searcher.VERTICAL),
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
           data.verticalResults, {}, {}, ResultsContext.NORMAL),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(data.facets, ResultsContext.NORMAL),
@@ -50,7 +52,8 @@ describe('tranform vertical search response', () => {
       {
         [StorageKeys.QUERY_ID]: convertedResponse.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters, 'VERTICAL'),
+        [StorageKeys.DIRECT_ANSWER]: DirectAnswer
+          .fromCore(response.directAnswer, formatters, Searcher.VERTICAL),
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
           convertedResponse.verticalResults, {}, {}, ResultsContext.NO_RESULTS),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(
