@@ -402,9 +402,6 @@ class Answers {
    */
   parseConfig (config) {
     const parsedConfig = Object.assign({}, DEFAULTS, config);
-    console.log('before');
-    console.log(config.environment);
-    console.log(parsedConfig.environment);
 
     let sessionTrackingEnabled = true;
     if (typeof config.sessionTrackingEnabled === 'boolean') {
@@ -421,9 +418,6 @@ class Answers {
       }
       parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
     }
-    console.log('after');
-    console.log(config.environment);
-    console.log(parsedConfig.environment);
 
     return parsedConfig;
   }
