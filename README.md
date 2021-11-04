@@ -131,7 +131,7 @@ function initAnswers() {
     token: '<TOKEN_HERE>',
     // Required, the key used for your Answers experience
     experienceKey: '<EXPERIENCE_KEY_HERE>',
-    // Optional, indicates the environment to run Answers experience with ('production' or 'sandbox')
+    // Optional, indicates the environment to run Answers experience in ('production' or 'sandbox')
     environment: '<ENVIRONMENT_HERE',
     // Optional, visitor interacting with the experience, see Visitor Configuration below for details
     visitor: {
