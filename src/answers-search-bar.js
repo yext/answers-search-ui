@@ -33,6 +33,7 @@ import createImpressionEvent from './core/analytics/createimpressionevent';
  */
 
 const DEFAULTS = {
+  environment: PRODUCTION,
   locale: LOCALE,
   querySource: QUERY_SOURCE,
   analyticsEventsEnabled: true
@@ -252,12 +253,15 @@ class AnswersSearchBar {
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
 
-    const authIdKey = parsedConfig.apiKey ? 'apiKey' : 'token';
-    const sandboxPrefix = `${SANDBOX}-`;
-    parsedConfig[authIdKey].includes(sandboxPrefix)
-      ? parsedConfig.environment = SANDBOX
-      : parsedConfig.environment = PRODUCTION;
-    parsedConfig[authIdKey] = parsedConfig[authIdKey].replace(sandboxPrefix, '');
+    if (parsedConfig.apiKey) {
+      const sandboxPrefix = `${SANDBOX}-`;
+      if (!config.environment) {
+        parsedConfig.apiKey.includes(sandboxPrefix)
+          ? parsedConfig.environment = SANDBOX
+          : parsedConfig.environment = PRODUCTION;
+      }
+      parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
+    }
 
     return parsedConfig;
   }
