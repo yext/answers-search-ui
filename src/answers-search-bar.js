@@ -255,9 +255,11 @@ class AnswersSearchBar {
 
     if (parsedConfig.apiKey) {
       const sandboxPrefix = `${SANDBOX}-`;
-      !config.environment && parsedConfig.apiKey.includes(sandboxPrefix)
-        ? parsedConfig.environment = SANDBOX
-        : parsedConfig.environment = PRODUCTION;
+      if (!config.environment) {
+        parsedConfig.apiKey.includes(sandboxPrefix)
+          ? parsedConfig.environment = SANDBOX
+          : parsedConfig.environment = PRODUCTION;
+      }
       parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
     }
 

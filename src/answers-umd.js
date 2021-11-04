@@ -402,6 +402,10 @@ class Answers {
    */
   parseConfig (config) {
     const parsedConfig = Object.assign({}, DEFAULTS, config);
+    console.log('before');
+    console.log(config.environment);
+    console.log(parsedConfig.environment);
+
     let sessionTrackingEnabled = true;
     if (typeof config.sessionTrackingEnabled === 'boolean') {
       sessionTrackingEnabled = config.sessionTrackingEnabled;
@@ -410,11 +414,16 @@ class Answers {
 
     if (parsedConfig.apiKey) {
       const sandboxPrefix = `${SANDBOX}-`;
-      !config.environment && parsedConfig.apiKey.includes(sandboxPrefix)
-        ? parsedConfig.environment = SANDBOX
-        : parsedConfig.environment = PRODUCTION;
+      if (!config.environment) {
+        parsedConfig.apiKey.includes(sandboxPrefix)
+          ? parsedConfig.environment = SANDBOX
+          : parsedConfig.environment = PRODUCTION;
+      }
       parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
     }
+    console.log('after');
+    console.log(config.environment);
+    console.log(parsedConfig.environment);
 
     return parsedConfig;
   }
