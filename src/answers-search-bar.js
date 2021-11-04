@@ -253,13 +253,14 @@ class AnswersSearchBar {
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
 
-    if (parsedConfig.apiKey && !config.environment) {
+    if (parsedConfig.apiKey) {
       const sandboxPrefix = `${SANDBOX}-`;
-      parsedConfig.apiKey.includes(sandboxPrefix)
+      !config.environment && parsedConfig.apiKey.includes(sandboxPrefix)
         ? parsedConfig.environment = SANDBOX
         : parsedConfig.environment = PRODUCTION;
       parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
     }
+
     return parsedConfig;
   }
 
