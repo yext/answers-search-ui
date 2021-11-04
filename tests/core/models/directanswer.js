@@ -1,4 +1,5 @@
 import DirectAnswer from '../../../src/core/models/directanswer';
+import Searcher from '../../../src/core/models/searcher';
 
 it('constructs a direct answer from an answers-core direct answer', () => {
   const coreRelatedResult = {
@@ -38,10 +39,11 @@ it('constructs a direct answer from an answers-core direct answer', () => {
         website: 'yext.com'
       },
       verticalConfigId: 'foods'
-    }
+    },
+    searcher: Searcher.UNIVERSAL
   };
 
-  const actualDirectAnswer = DirectAnswer.fromCore(coreDirectAnswer);
+  const actualDirectAnswer = DirectAnswer.fromCore(coreDirectAnswer, null, Searcher.UNIVERSAL);
 
   expect(actualDirectAnswer).toMatchObject(expectedDirectAnswer);
 });
