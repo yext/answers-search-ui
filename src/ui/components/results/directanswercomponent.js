@@ -183,7 +183,7 @@ export default class DirectAnswerComponent extends Component {
       verticalKey: relatedItem.verticalConfigId,
       directAnswer: true,
       fieldName: this.getState('answer').fieldApiName,
-      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
+      searcher: this.getState('searcher'),
       entityId: relatedItem.data.id,
       url: event.target.href
     };
@@ -221,6 +221,7 @@ export default class DirectAnswerComponent extends Component {
 
     return super.setState(Object.assign({}, data, {
       searchState: searchState,
+      searcher: data.searcher,
       eventOptions: this.eventOptions(data),
       viewDetailsText: this._viewDetailsText,
       directAnswer: data,
@@ -234,7 +235,7 @@ export default class DirectAnswerComponent extends Component {
     }
     return JSON.stringify({
       verticalConfigId: data.relatedItem?.verticalConfigId,
-      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
+      searcher: this.getState('searcher'),
       entityId: data.relatedItem?.data.id,
       ctaLabel: this._viewDetailsText.toUpperCase().replace(' ', '_')
     });
@@ -366,11 +367,15 @@ export default class DirectAnswerComponent extends Component {
    */
   reportQuality (isGood) {
     const eventType = isGood === true ? EventTypes.THUMBS_UP : EventTypes.THUMBS_DOWN;
+    const relatedItem = this.getState('relatedItem');
+    const analyticsOptions = {
+      directAnswer: true,
+      verticalKey: relatedItem.verticalConfigId,
+      searcher: this.getState('searcher'),
+      entityId: relatedItem.data.id
+    };
     const event = new AnalyticsEvent(eventType)
-      .addOptions({
-        directAnswer: true
-      });
-
+      .addOptions(analyticsOptions);
     this.analyticsReporter.report(event);
   }
 

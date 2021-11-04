@@ -1,5 +1,6 @@
 /** @module CTACollectionComponent */
 
+import Searcher from '../../../core/models/searcher';
 import Component from '../component';
 
 export default class CTACollectionComponent extends Component {
@@ -106,7 +107,7 @@ export default class CTACollectionComponent extends Component {
   defaultEventOptions (result) {
     const eventOptions = {
       verticalKey: this.verticalKey,
-      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+      searcher: this._config.isUniversal ? Searcher.UNIVERSAL : Searcher.VERTICAL
     };
     if (result._raw.id) {
       eventOptions.entityId = result._raw.id;
