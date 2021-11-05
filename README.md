@@ -1508,7 +1508,7 @@ ANSWERS.addComponent('FilterSearch', {
       // Entity type api name e.g. healthcareProfessional, location, ce_person
       entityTypeId: 'ce_person',
     }],
-    // Optional, if true sections search results by search filter, default false
+    // Optional, if true, sections search results by search filter, default false
     sectioned: false
   },
   // Optional, no default
