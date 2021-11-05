@@ -1499,6 +1499,18 @@ ANSWERS.addComponent('FilterSearch', {
   container: '.filter-search-container',
   // Required
   verticalKey: '<VERTICAL_KEY>',
+  // Required, the search parameters for autocompletion
+  searchParameters: {
+    // List of fields to query for
+    fields: [{
+      // Field id to query for e.g. c_customFieldName, builtin.location
+      fieldId: 'builtin.location',
+      // Entity type api name e.g. healthcareProfessional, location, ce_person
+      entityTypeId: 'ce_person',
+    }]
+    // Optional, if true sections search results by search filter, default false
+    sectioned: false
+  },
   // Optional, no default
   placeholderText: 'Start typing...',
   // Optional, if true, the selected filter is saved and used for the next search,
@@ -1527,18 +1539,6 @@ ANSWERS.addComponent('FilterSearch', {
     c_iceCreamFlavors: {
       $eq: 'pistachio'
     }
-  },
-  // Optional, the search parameters for autocompletion
-  searchParameters: {
-    // List of fields to query for
-    fields: [{
-      // Field id to query for e.g. c_customFieldName, builtin.location
-      fieldId: 'builtin.location',
-      // Entity type api name e.g. healthcareProfessional, location, ce_person
-      entityTypeId: 'ce_person',
-    }]
-    // Optional, if true sections search results by search filter, default false
-    sectioned: false,
   }
 })
 ```
