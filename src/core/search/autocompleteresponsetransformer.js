@@ -35,20 +35,17 @@ export default class AutoCompleteResponseTransformer {
    * @returns {AutoCompleteData}
    */
   static transformFilterSearchResponse (response) {
-    if (response.sectioned && response.sections) {
-      const transformedSections = response.sections.map(section => ({
-        label: section.label,
-        results: section.results.map(result => this._transformAutoCompleteResult(result)),
-        resultsCount: section.results.length
-      }));
-      return new AutoCompleteData({
-        sections: transformedSections,
-        queryId: response.queryId,
-        inputIntents: response.inputIntents
-      });
-    } else {
-      return this.transformAutoCompleteResponse(response);
-    }
+    const transformedSections = response.sections.map(section => ({
+      label: section.label,
+      results: section.results.map(result => this._transformAutoCompleteResult(result)),
+      resultsCount: section.results.length
+    }));
+    return new AutoCompleteData({
+      sections: transformedSections,
+      queryId: response.queryId,
+      businessId: response.businessId,
+      failedVerticals: response.failedVerticals
+    });
   }
 
   static _transformAutoCompleteResult (result) {
