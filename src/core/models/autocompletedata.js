@@ -5,6 +5,8 @@ export default class AutoCompleteData {
     this.sections = data.sections || [];
     this.queryId = data.queryId || '';
     this.inputIntents = data.inputIntents || [];
+    this.businessId = data.businessId || '';
+    this.failedVerticals = data.failedVerticals || [];
     Object.freeze(this);
   }
 }

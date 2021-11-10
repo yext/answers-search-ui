@@ -1,5 +1,5 @@
 /** @module Core */
-import { provideCore } from '@yext/answers-core/lib/commonjs';
+import { provideCore } from '../../../answers-core/lib/esm';
 import { generateUUID } from './utils/uuid';
 import SearchDataTransformer from './search/searchdatatransformer';
 
