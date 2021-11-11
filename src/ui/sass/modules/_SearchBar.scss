@@ -270,7 +270,7 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     }
   }
 
-  &-buttonImage .Icon svg, .Icon-image
+  &-AnimatedIcon svg, &-buttonImage .Icon svg, .Icon-image
   {
     width: 1.5em;
     height: 1.5em;
