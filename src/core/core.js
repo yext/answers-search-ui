@@ -484,7 +484,9 @@ export default class Core {
         sectioned: config.searchParameters.sectioned,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
       })
-      .then(response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response))
+      .then(
+        response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response),
+        error => console.error(error))
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       });

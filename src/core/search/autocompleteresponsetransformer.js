@@ -43,8 +43,7 @@ export default class AutoCompleteResponseTransformer {
     return new AutoCompleteData({
       sections: transformedSections,
       queryId: response.queryId,
-      businessId: response.businessId,
-      failedVerticals: response.failedVerticals
+      businessId: response.businessId
     });
   }
 
