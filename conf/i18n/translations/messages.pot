@@ -26,11 +26,11 @@ msgstr[1] ""
 msgid "[[start]] through [[end]] of [[resultsCount]]"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:158
+#: src/ui/components/questions/questionsubmissioncomponent.js:159
 msgid "* Please enter a valid email address."
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:150
+#: src/ui/components/questions/questionsubmissioncomponent.js:151
 msgid "* You must agree to the privacy policy to submit a question."
 msgstr ""
 
@@ -42,11 +42,11 @@ msgstr ""
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:61
+#: src/ui/components/questions/questionsubmissioncomponent.js:62
 msgid "By submitting my email address, I consent to being contacted via email at the address provided."
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:87
+#: src/ui/components/questions/questionsubmissioncomponent.js:88
 msgid "Can’t find what you're looking for? Ask a question below."
 msgstr ""
 
@@ -58,7 +58,7 @@ msgstr ""
 msgid "Currently on page [[pageNumber]]"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:101
+#: src/ui/components/questions/questionsubmissioncomponent.js:102
 msgid "Enter your question and contact information, and we'll get back to you with a response shortly."
 msgstr ""
 
@@ -104,7 +104,7 @@ msgstr ""
 msgid "Image for [[title]]"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:176
+#: src/ui/components/questions/questionsubmissioncomponent.js:177
 msgid "Invalid email address. Please refresh the page and try submitting your question again."
 msgstr ""
 
@@ -146,7 +146,7 @@ msgstr ""
 msgid "Thank you for your feedback!"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:127
+#: src/ui/components/questions/questionsubmissioncomponent.js:128
 msgid "Thank you for your question!"
 msgstr ""
 
@@ -195,7 +195,7 @@ msgstr ""
 msgid "We are unable to determine your location"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:167
+#: src/ui/components/questions/questionsubmissioncomponent.js:168
 msgid "We're sorry, an error occurred."
 msgstr ""
 
@@ -244,7 +244,7 @@ msgctxt "Button label"
 msgid "Remove this filter"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:69
+#: src/ui/components/questions/questionsubmissioncomponent.js:70
 #: src/ui/components/search/searchcomponent.js:73
 msgctxt "Button label"
 msgid "Submit"
@@ -375,12 +375,12 @@ msgctxt "Help text, labels a suggested phrase"
 msgid "Did you mean:"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:109
+#: src/ui/components/questions/questionsubmissioncomponent.js:110
 msgctxt "Indicates that entering input is mandatory"
 msgid "(required)"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:135
+#: src/ui/components/questions/questionsubmissioncomponent.js:136
 msgctxt "Labels a link"
 msgid "Learn more here."
 msgstr ""
@@ -401,17 +401,17 @@ msgctxt "Labels an input field"
 msgid "What are you interested in?"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:34
+#: src/ui/components/questions/questionsubmissioncomponent.js:35
 msgctxt "Labels the email value provided as an argument"
 msgid "Email"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:43
+#: src/ui/components/questions/questionsubmissioncomponent.js:44
 msgctxt "Labels the name value provided as an argument"
 msgid "Name"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:52
+#: src/ui/components/questions/questionsubmissioncomponent.js:53
 msgctxt "Labels the question value provided as an argument"
 msgid "Question"
 msgstr ""
@@ -441,7 +441,7 @@ msgctxt "Noun, labels the navigation for the search page"
 msgid "Search Page Navigation"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:118
+#: src/ui/components/questions/questionsubmissioncomponent.js:119
 msgctxt "Placeholder text for input field"
 msgid "Enter your question here"
 msgstr ""
@@ -469,7 +469,7 @@ msgctxt "Title for a group of controls that sort results"
 msgid "Sorting"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:78
+#: src/ui/components/questions/questionsubmissioncomponent.js:79
 msgctxt "Title of section"
 msgid "Ask a Question"
 msgstr ""
