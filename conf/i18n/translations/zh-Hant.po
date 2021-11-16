@@ -7,10 +7,16 @@ msgid "([[resultsCount]] result)"
 msgid_plural "([[resultsCount]] results)"
 msgstr[0] "([[resultsCount]] 個結果)"
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "找到 [[resultsCount]] 個[[label]]自動完成選項。"
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "找到 [[resultsCount]] 個自動完成選項"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "找到 [[resultsCount]] 個自動完成選項。"
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -188,6 +194,11 @@ msgstr "我們無法判斷您的地點"
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "很抱歉，發生錯誤了。"
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "若有自動完成結果可供使用，請使用向上和向下鍵檢閱，並以 Enter 鍵選取。"
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."

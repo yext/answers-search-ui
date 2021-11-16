@@ -8,11 +8,18 @@ msgid_plural "([[resultsCount]] results)"
 msgstr[0] "([[resultsCount]] resultat)"
 msgstr[1] "([[resultsCount]] resultat)"
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "[[resultsCount]] [[label]] alternativ för automatisk komplettering hittat."
+msgstr[1] "[[resultsCount]] [[label]] alternativ för automatisk komplettering hittade."
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "[[resultsCount]] alternativ för automatiskt slutförande hittat"
-msgstr[1] "[[resultsCount]] alternativ för automatiskt slutförande hittade"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "[[resultsCount]] alternativ för automatisk komplettering hittat."
+msgstr[1] "[[resultsCount]] alternativ för automatisk komplettering hittade."
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -191,6 +198,11 @@ msgstr "Vi kan inte fastställa din plats"
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "Tyvärr uppstod ett fel."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "När resultat för automatisk komplettering är tillgängliga använder du upp- och nedpilarna för att bläddra och Retur för att välja."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."

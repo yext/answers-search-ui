@@ -7,10 +7,16 @@ msgid "([[resultsCount]] result)"
 msgid_plural "([[resultsCount]] results)"
 msgstr[0] "(결과 [[resultsCount]]개)"
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "자동 완성 옵션 [[resultsCount]] [[label]]개를 찾음."
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "자동 완성 옵션 [[resultsCount]]개를 찾음"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "자동 완성 옵션 [[resultsCount]]개를 찾음."
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -188,6 +194,11 @@ msgstr "위치를 확인할 수 없습니다"
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "죄송합니다. 오류가 발생했습니다."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "자동 완성 결과가 나타나면 위아래 화살표를 통해 확인하고 Enter 키를 눌러 선택하세요."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."

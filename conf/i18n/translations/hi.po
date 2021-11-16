@@ -8,11 +8,18 @@ msgid_plural "([[resultsCount]] results)"
 msgstr[0] "([[resultsCount]] result)"
 msgstr[1] "([[resultsCount]] results)"
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "[[resultsCount]] [[label]] ऑटोकंप्लीट विकल्प मिला."
+msgstr[1] "[[resultsCount]] [[label]] ऑटोकंप्लीट विकल्प मिले."
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "[[resultsCount]] ऑटोकंप्लीट विकल्प मिला"
-msgstr[1] "[[resultsCount]] ऑटोकंप्लीट विकल्प मिले"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "[[resultsCount]] ऑटोकंप्लीट विकल्प मिला."
+msgstr[1] "[[resultsCount]] ऑटोकंप्लीट विकल्प मिले."
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -191,6 +198,11 @@ msgstr "हम आपके लोकेशन का पता नहीं ल
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "माफ़ कीजिए, एक गड़बड़ी हुई."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "जब ऑटोकंप्लीट परिणाम उपलब्ध हो जाएं तो रिव्यू करने के लिए ऊपर और नीचे वाले तीर का उपयोग करें और चुनने के लिए एंटर दबाएं."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
