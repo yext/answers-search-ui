@@ -136,8 +136,8 @@ export default class Core {
    */
   init (config) {
     const params = {
-      token: this._token,
-      apiKey: this._apiKey,
+      ...(this._token && { token: this._token }),
+      ...(this._apiKey && { apiKey: this._apiKey }),
       experienceKey: this._experienceKey,
       locale: this._locale,
       experienceVersion: this._experienceVersion,
