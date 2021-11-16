@@ -202,8 +202,7 @@ msgstr "Leider ist ein Fehler aufgetreten."
 #: src/ui/templates/search/filtersearch.hbs:12
 #: src/ui/templates/search/search.hbs:29
 msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
-msgstr "Wenn Ergebnisse zum Autovervollständigen verfügbar sind, können Sie sie mit den nach oben und nach unten zeigenden Pfeilen prüfen und mit der Eingabetaste"
-" auswählen."
+msgstr "Wenn Ergebnisse zum Autovervollständigen verfügbar sind, können Sie sie mit den nach oben und nach unten zeigenden Pfeilen prüfen und mit der Eingabetaste auswählen."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
