@@ -30,7 +30,8 @@ import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
 import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
-import { parseLocale } from './core/utils/i18nutils';
+import { localizedDistance, parseLocale } from './core/utils/i18nutils';
+import createImpressionEvent from './core/analytics/createimpressionevent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -41,6 +42,7 @@ import { parseLocale } from './core/utils/i18nutils';
  */
 
 const DEFAULTS = {
+  environment: PRODUCTION,
   locale: LOCALE,
   querySource: QUERY_SOURCE,
   analyticsEventsEnabled: true
@@ -85,6 +87,13 @@ class Answers {
      */
     this.formatRichText = (markdown, eventOptionsFieldName, targetConfig) =>
       RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig);
+
+    /**
+     * A reference to the localizeDistance function.
+     * @type {Function}
+     */
+    this.formatDistance = (distance) =>
+      localizedDistance(distance, this.core.storage.get(StorageKeys.LOCALE));
 
     /**
      * A local reference to the component manager
@@ -264,6 +273,7 @@ class Answers {
     }
 
     this.core = new Core({
+      token: parsedConfig.token,
       apiKey: parsedConfig.apiKey,
       storage: storage,
       experienceKey: parsedConfig.experienceKey,
@@ -289,16 +299,34 @@ class Answers {
 
     this._setDefaultInitialSearch(parsedConfig.search);
 
-    this.core.init();
+    if (parsedConfig.visitor) {
+      this.setVisitor(parsedConfig.visitor);
+    } else {
+      this.core.init();
+    }
 
     this._onReady = parsedConfig.onReady || function () {};
 
     const asyncDeps = this._loadAsyncDependencies(parsedConfig);
     return asyncDeps.finally(() => {
       this._onReady();
-      if (!this.components.getActiveComponent(SearchComponent.type)) {
+
+      const searchBarIsActive = !!this.components.getActiveComponent(SearchComponent.type);
+      if (searchBarIsActive && this._analyticsReporterService) {
+        const numActiveComponents = this.components.getNumActiveComponents();
+        const impressionEvent = createImpressionEvent({
+          verticalKey: parsedConfig.search?.verticalKey,
+          // check that 1 or 2 components are active because the
+          // search bar also creates the autocomplete component
+          standAlone: numActiveComponents >= 1 && numActiveComponents <= 2
+        });
+        this._analyticsReporterService.report(impressionEvent, { includeQueryId: false });
+      }
+
+      if (!searchBarIsActive) {
         this._initQueryUpdateListener(parsedConfig.search);
       }
+
       this._searchOnLoad();
     });
   }
@@ -374,17 +402,22 @@ class Answers {
    */
   parseConfig (config) {
     const parsedConfig = Object.assign({}, DEFAULTS, config);
+
     let sessionTrackingEnabled = true;
     if (typeof config.sessionTrackingEnabled === 'boolean') {
       sessionTrackingEnabled = config.sessionTrackingEnabled;
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
 
-    const sandboxPrefix = `${SANDBOX}-`;
-    parsedConfig.apiKey.includes(sandboxPrefix)
-      ? parsedConfig.environment = SANDBOX
-      : parsedConfig.environment = PRODUCTION;
-    parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
+    if (parsedConfig.apiKey) {
+      const sandboxPrefix = `${SANDBOX}-`;
+      if (!config.environment) {
+        parsedConfig.apiKey.includes(sandboxPrefix)
+          ? parsedConfig.environment = SANDBOX
+          : parsedConfig.environment = PRODUCTION;
+      }
+      parsedConfig.apiKey = parsedConfig.apiKey.replace(sandboxPrefix, '');
+    }
 
     return parsedConfig;
   }
@@ -397,8 +430,12 @@ class Answers {
   validateConfig (config) {
     // TODO (tmeyer): Extract this method into it's own class. Investigate the use of JSON schema
     // to validate these configs.
-    if (typeof config.apiKey !== 'string') {
-      throw new Error('Missing required `apiKey`. Type must be {string}');
+    if (typeof config.apiKey !== 'string' && typeof config.token !== 'string') {
+      throw new Error('Missing required `apiKey` or `token`. Type must be {string}');
+    }
+
+    if (typeof config.apiKey === 'string' && typeof config.token === 'string') {
+      throw new Error('Both apiKey and token are present. Only one authentication method should be provided');
     }
 
     if (typeof config.experienceKey !== 'string') {
@@ -676,6 +713,15 @@ class Answers {
         return JSON.parse(value);
       default:
         return value;
+    }
+  }
+
+  setVisitor (visitor) {
+    if (visitor.id) {
+      this._analyticsReporterService?.setVisitor(visitor);
+      this.core.init({ visitor: visitor });
+    } else {
+      console.error(`Invalid visitor. Visitor was not set because "${JSON.stringify(visitor)}" does not have an id.`);
     }
   }
 }

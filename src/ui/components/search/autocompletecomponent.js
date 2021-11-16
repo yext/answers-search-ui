@@ -60,8 +60,9 @@ export default class AutoCompleteComponent extends Component {
 
     /**
      * An internal reference to the input value when typing.
-     * We use this for resetting the state of the input value when other interactions (e.g. result navigation)
-     * change based on interactions. For instance, hitting escape should reset the value to the original typed query.
+     * We use this for resetting the state of the input value when other
+     * interactions (e.g. result navigation) change based on interactions.
+     * For instance, hitting escape should reset the value to the original typed query.
      * @type {string}
      */
     this._originalQuery = opts.originalQuery || '';
@@ -183,14 +184,26 @@ export default class AutoCompleteComponent extends Component {
     } else if (!wasOpen && this._isOpen) {
       this._onOpen();
     }
+    this.updateAriaAttribute();
 
     super.setState(Object.assign({}, data, {
       hasResults: this.hasResults(data),
+      isAlreadyOpen: this._isOpen && wasOpen,
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
       listLabelIdName: this.listLabelIdName
     }));
+  }
+
+  updateAriaAttribute () {
+    const queryInputEl = DOM.query(this._parentContainer, this._inputEl);
+    queryInputEl.removeAttribute('aria-activedescendant');
+    if (this._sectionIndex >= 0 && this._resultIndex >= 0) {
+      const selectedOptionId =
+        `yxt-AutoComplete-option-${this._config.name}-${this._sectionIndex}-${this._resultIndex}`;
+      queryInputEl.setAttribute('aria-activedescendant', selectedOptionId);
+    }
   }
 
   isQueryInputFocused () {
@@ -236,7 +249,8 @@ export default class AutoCompleteComponent extends Component {
     // When a user focuses the input, we should populate the autocomplete based
     // on the current value
     DOM.on(queryInput, 'focus', () => {
-      this.reset();
+      this._sectionIndex = 0;
+      this._resultIndex = -1;
       this.autoComplete(queryInput.value);
     });
 

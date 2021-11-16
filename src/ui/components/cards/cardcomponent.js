@@ -4,6 +4,7 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import { cardTypes } from './consts';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
+import Searcher from '../../../core/models/searcher';
 
 class CardConfig {
   constructor (config = {}) {
@@ -59,6 +60,11 @@ export default class CardComponent extends Component {
      */
     this.result = data.result || {};
 
+    // additional field(s) for dataMappings config option
+    if (this.result && this.result._raw) {
+      this.result._raw.distance = this.result.distance;
+    }
+
     /**
      * Vertical key for the search.
      * @type {string}
@@ -91,7 +97,7 @@ export default class CardComponent extends Component {
     const analyticsOptions = {
       directAnswer: false,
       verticalKey: this._config.data.verticalKey,
-      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL',
+      searcher: this._config.isUniversal ? Searcher.UNIVERSAL : Searcher.VERTICAL,
       entityId: this._config.data.result.id,
       url: event.target.href
     };
@@ -111,6 +117,7 @@ export default class CardComponent extends Component {
 
     // Use the cardType as component name if it is not a built-in type
     const cardComponentName = cardTypes[cardType] || cardType;
+
     return super.setState({
       ...data,
       result: this.result,

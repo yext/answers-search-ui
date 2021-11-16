@@ -5,6 +5,7 @@ import Component from '../component';
 import CardComponent from './cardcomponent';
 import { cardTemplates, cardTypes } from './consts';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
+import Searcher from '../../../core/models/searcher';
 
 class LegacyCardConfig {
   constructor (config = {}) {
@@ -139,7 +140,7 @@ export default class LegacyCardComponent extends Component {
   _legacyEventOptions (entityId, url) {
     const options = {
       verticalConfigId: this.verticalKey,
-      searcher: this._config.isUniversal ? 'UNIVERSAL' : 'VERTICAL'
+      searcher: this._config.isUniversal ? Searcher.UNIVERSAL : Searcher.VERTICAL
     };
 
     if (entityId) {

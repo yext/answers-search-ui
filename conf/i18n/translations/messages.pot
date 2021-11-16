@@ -8,9 +8,16 @@ msgid_plural "([[resultsCount]] results)"
 msgstr[0] ""
 msgstr[1] ""
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] ""
+msgstr[1] ""
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -19,11 +26,11 @@ msgstr[1] ""
 msgid "[[start]] through [[end]] of [[resultsCount]]"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:158
+#: src/ui/components/questions/questionsubmissioncomponent.js:159
 msgid "* Please enter a valid email address."
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:150
+#: src/ui/components/questions/questionsubmissioncomponent.js:151
 msgid "* You must agree to the privacy policy to submit a question."
 msgstr ""
 
@@ -35,15 +42,15 @@ msgstr ""
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:61
+#: src/ui/components/questions/questionsubmissioncomponent.js:62
 msgid "By submitting my email address, I consent to being contacted via email at the address provided."
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:87
+#: src/ui/components/questions/questionsubmissioncomponent.js:88
 msgid "Can’t find what you're looking for? Ask a question below."
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:94
+#: src/ui/components/filters/geolocationcomponent.js:95
 msgid "Could Not Find Your Location"
 msgstr ""
 
@@ -51,7 +58,7 @@ msgstr ""
 msgid "Currently on page [[pageNumber]]"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:101
+#: src/ui/components/questions/questionsubmissioncomponent.js:102
 msgid "Enter your question and contact information, and we'll get back to you with a response shortly."
 msgstr ""
 
@@ -61,11 +68,11 @@ msgstr ""
 
 #: src/ui/components/results/resultsheadercomponent.js:25
 #: src/ui/components/results/universalresultscomponent.js:23
-#: src/ui/components/results/verticalresultscomponent.js:143
+#: src/ui/components/results/verticalresultscomponent.js:144
 msgid "Filters applied to this search:"
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:86
+#: src/ui/components/filters/geolocationcomponent.js:87
 msgid "Finding Your Location..."
 msgstr ""
 
@@ -97,13 +104,13 @@ msgstr ""
 msgid "Image for [[title]]"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:176
+#: src/ui/components/questions/questionsubmissioncomponent.js:177
 msgid "Invalid email address. Please refresh the page and try submitting your question again."
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:285
-#: src/ui/components/filters/geolocationcomponent.js:39
-#: src/ui/components/filters/geolocationcomponent.js:47
+#: src/ui/components/filters/geolocationcomponent.js:286
+#: src/ui/components/filters/geolocationcomponent.js:40
+#: src/ui/components/filters/geolocationcomponent.js:48
 msgid "Location"
 msgstr ""
 
@@ -111,11 +118,11 @@ msgstr ""
 msgid "Make sure all words are spelled correctly."
 msgstr ""
 
-#: src/ui/speechrecognition/speechrecognizer.js:97
+#: src/ui/speechrecognition/speechrecognizer.js:98
 msgid "Note: For Safari users, Siri must be enabled"
 msgstr ""
 
-#: src/ui/speechrecognition/voicesearchcontroller.js:65
+#: src/ui/speechrecognition/voicesearchcontroller.js:67
 msgid "Permission to use microphone is blocked"
 msgstr ""
 
@@ -127,7 +134,7 @@ msgstr ""
 msgid "Showing <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">all [[currentVerticalLabel]]</em> instead."
 msgstr ""
 
-#: src/ui/speechrecognition/speechrecognizer.js:95
+#: src/ui/speechrecognition/speechrecognizer.js:96
 msgid "Speech Recognition is not available."
 msgstr ""
 
@@ -139,7 +146,7 @@ msgstr ""
 msgid "Thank you for your feedback!"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:127
+#: src/ui/components/questions/questionsubmissioncomponent.js:128
 msgid "Thank you for your question!"
 msgstr ""
 
@@ -173,23 +180,28 @@ msgstr ""
 msgid "Try to ask your question a different way."
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:150
+#: src/ui/components/search/locationbiascomponent.js:152
 msgid "Unknown Location"
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:61
-#: src/ui/components/filters/geolocationcomponent.js:69
+#: src/ui/components/filters/geolocationcomponent.js:62
+#: src/ui/components/filters/geolocationcomponent.js:70
 msgid "Use My Location"
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:152
-#: src/ui/components/search/locationbiascomponent.js:87
-#: src/ui/components/search/searchcomponent.js:233
+#: src/ui/components/filters/geolocationcomponent.js:153
+#: src/ui/components/search/locationbiascomponent.js:89
+#: src/ui/components/search/searchcomponent.js:234
 msgid "We are unable to determine your location"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:167
+#: src/ui/components/questions/questionsubmissioncomponent.js:168
 msgid "We're sorry, an error occurred."
+msgstr ""
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
 msgstr ""
 
 #: src/ui/templates/results/noresults.hbs:7
@@ -227,18 +239,18 @@ msgid "Best Match"
 msgstr ""
 
 #: src/ui/components/results/resultsheadercomponent.js:28
-#: src/ui/components/results/verticalresultscomponent.js:155
+#: src/ui/components/results/verticalresultscomponent.js:156
 msgctxt "Button label"
 msgid "Remove this filter"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:69
-#: src/ui/components/search/searchcomponent.js:72
+#: src/ui/components/questions/questionsubmissioncomponent.js:70
+#: src/ui/components/search/searchcomponent.js:73
 msgctxt "Button label"
 msgid "Submit"
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:17
+#: src/ui/components/search/locationbiascomponent.js:18
 msgctxt "Button label"
 msgid "Update your location"
 msgstr ""
@@ -268,7 +280,7 @@ msgctxt "Button label, effectuates changes"
 msgid "apply"
 msgstr ""
 
-#: src/ui/components/filters/sortoptionscomponent.js:318
+#: src/ui/components/filters/sortoptionscomponent.js:319
 msgctxt "Button label, effectuates changes"
 msgid "Apply"
 msgstr ""
@@ -279,7 +291,7 @@ msgid "View Details"
 msgstr ""
 
 #: src/ui/components/results/universalresultscomponent.js:121
-#: src/ui/components/results/verticalresultscomponent.js:169
+#: src/ui/components/results/verticalresultscomponent.js:170
 msgctxt "Button label, view more [results]"
 msgid "View More"
 msgstr ""
@@ -294,12 +306,12 @@ msgctxt "Change is a verb. Example: change filtering logic"
 msgid "change"
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:13
+#: src/ui/components/search/locationbiascomponent.js:14
 msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your device"
 msgid "based on your device"
 msgstr ""
 
-#: src/ui/components/search/locationbiascomponent.js:9
+#: src/ui/components/search/locationbiascomponent.js:10
 msgctxt "Describes the accuracy of estimated location. Example: Salt Lake City, Utah based on your internet address"
 msgid "based on your internet address"
 msgstr ""
@@ -316,7 +328,7 @@ msgctxt "Displays less options"
 msgid "show less"
 msgstr ""
 
-#: src/ui/components/filters/sortoptionscomponent.js:300
+#: src/ui/components/filters/sortoptionscomponent.js:301
 msgctxt "Displays less options"
 msgid "Show less"
 msgstr ""
@@ -333,7 +345,7 @@ msgctxt "Displays more options"
 msgid "show more"
 msgstr ""
 
-#: src/ui/components/filters/sortoptionscomponent.js:294
+#: src/ui/components/filters/sortoptionscomponent.js:295
 msgctxt "Displays more options"
 msgid "Show more"
 msgstr ""
@@ -363,17 +375,17 @@ msgctxt "Help text, labels a suggested phrase"
 msgid "Did you mean:"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:109
+#: src/ui/components/questions/questionsubmissioncomponent.js:110
 msgctxt "Indicates that entering input is mandatory"
 msgid "(required)"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:135
+#: src/ui/components/questions/questionsubmissioncomponent.js:136
 msgctxt "Labels a link"
 msgid "Learn more here."
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:63
+#: src/ui/components/search/searchcomponent.js:64
 msgctxt "Labels an input field"
 msgid "Conduct a search"
 msgstr ""
@@ -389,22 +401,22 @@ msgctxt "Labels an input field"
 msgid "What are you interested in?"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:34
+#: src/ui/components/questions/questionsubmissioncomponent.js:35
 msgctxt "Labels the email value provided as an argument"
 msgid "Email"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:43
+#: src/ui/components/questions/questionsubmissioncomponent.js:44
 msgctxt "Labels the name value provided as an argument"
 msgid "Name"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:52
+#: src/ui/components/questions/questionsubmissioncomponent.js:53
 msgctxt "Labels the question value provided as an argument"
 msgid "Question"
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:77
+#: src/ui/components/filters/geolocationcomponent.js:78
 msgctxt "Labels the user's current location"
 msgid "Current Location"
 msgstr ""
@@ -419,7 +431,7 @@ msgctxt "Minimum"
 msgid "Min"
 msgstr ""
 
-#: src/ui/components/results/paginationcomponent.js:97
+#: src/ui/components/results/paginationcomponent.js:107
 msgctxt "Noun, a page of results"
 msgid "Page"
 msgstr ""
@@ -429,7 +441,7 @@ msgctxt "Noun, labels the navigation for the search page"
 msgid "Search Page Navigation"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:118
+#: src/ui/components/questions/questionsubmissioncomponent.js:119
 msgctxt "Placeholder text for input field"
 msgid "Enter your question here"
 msgstr ""
@@ -452,12 +464,12 @@ msgctxt "Start date to end date. Example: [August 15th] - [August 16th]"
 msgid "[[start]] - [[end]]"
 msgstr ""
 
-#: src/ui/components/filters/sortoptionscomponent.js:309
+#: src/ui/components/filters/sortoptionscomponent.js:310
 msgctxt "Title for a group of controls that sort results"
 msgid "Sorting"
 msgstr ""
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:78
+#: src/ui/components/questions/questionsubmissioncomponent.js:79
 msgctxt "Title of section"
 msgid "Ask a Question"
 msgstr ""
@@ -472,7 +484,7 @@ msgctxt "True or False"
 msgid "True"
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:81
+#: src/ui/components/search/searchcomponent.js:82
 msgctxt "Verb, clears search"
 msgid "Clear"
 msgstr ""

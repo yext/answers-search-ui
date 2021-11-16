@@ -10,6 +10,7 @@ import ResponseWithoutResults from '../../fixtures/responseWithNoResults.json';
 import ResultsContext from '../../../src/core/storage/resultscontext';
 import AlternativeVerticals from '../../../src/core/models/alternativeverticals';
 import DirectAnswer from '../../../src/core/models/directanswer';
+import Searcher from '../../../src/core/models/searcher';
 
 describe('tranform vertical search response', () => {
   let response;
@@ -29,8 +30,10 @@ describe('tranform vertical search response', () => {
       {
         [StorageKeys.QUERY_ID]: data.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
-        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(data.verticalResults, {}, {}, ResultsContext.NORMAL),
+        [StorageKeys.DIRECT_ANSWER]: DirectAnswer
+          .fromCore(response.directAnswer, formatters, Searcher.VERTICAL),
+        [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
+          data.verticalResults, {}, {}, ResultsContext.NORMAL),
         [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(data.facets, ResultsContext.NORMAL),
         [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
         [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(data.alternativeVerticals),
@@ -49,12 +52,15 @@ describe('tranform vertical search response', () => {
       {
         [StorageKeys.QUERY_ID]: convertedResponse.queryId,
         [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-        [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
+        [StorageKeys.DIRECT_ANSWER]: DirectAnswer
+          .fromCore(response.directAnswer, formatters, Searcher.VERTICAL),
         [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
           convertedResponse.verticalResults, {}, {}, ResultsContext.NO_RESULTS),
-        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(convertedResponse.facets, ResultsContext.NO_RESULTS),
+        [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(
+          convertedResponse.facets, ResultsContext.NO_RESULTS),
         [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(convertedResponse.spellCheck),
-        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(convertedResponse.alternativeVerticals),
+        [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(
+          convertedResponse.alternativeVerticals),
         [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(convertedResponse.locationBias)
       }
     );

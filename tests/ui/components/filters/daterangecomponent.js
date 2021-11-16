@@ -42,7 +42,8 @@ describe('date range filter component', () => {
     const component = COMPONENT_MANAGER.create('DateRangeFilter', defaultConfig);
     const wrapper = mount(component);
     const today = new Date();
-    const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`.padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
+    const todayString = `${today.getFullYear()}-${`${today.getMonth() + 1}`
+      .padStart(2, '0')}-${`${today.getDate()}`.padStart(2, '0')}`;
     expect(component._date.min).toEqual(todayString);
     expect(component._date.max).toEqual(todayString);
     const minInputs = wrapper.find('input[data-key="min"]');

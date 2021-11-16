@@ -5,6 +5,7 @@ import DirectAnswer from '../models/directanswer';
 import Navigation from '../models/navigation';
 import VerticalResults from '../models/verticalresults';
 import SpellCheck from '../models/spellcheck';
+import Searcher from '../models/searcher';
 import StorageKeys from '../storage/storagekeys';
 import DynamicFilters from '../models/dynamicfilters';
 import LocationBias from '../models/locationbias';
@@ -21,7 +22,7 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: data.queryId,
       [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),
-      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer, formatters),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer, formatters, Searcher.UNIVERSAL),
       [StorageKeys.UNIVERSAL_RESULTS]: UniversalResults.fromCore(data, urls, formatters),
       [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(data.spellCheck),
       [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(data.locationBias)
@@ -43,12 +44,14 @@ export default class SearchDataTransformer {
     return {
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
-      [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(response.directAnswer, formatters),
+      [StorageKeys.DIRECT_ANSWER]: DirectAnswer
+        .fromCore(response.directAnswer, formatters, Searcher.VERTICAL),
       [StorageKeys.VERTICAL_RESULTS]: VerticalResults.fromCore(
         response.verticalResults, {}, formatters, resultsContext, verticalKey),
       [StorageKeys.DYNAMIC_FILTERS]: DynamicFilters.fromCore(response.facets, resultsContext),
       [StorageKeys.SPELL_CHECK]: SpellCheck.fromCore(response.spellCheck),
-      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(response.alternativeVerticals, formatters),
+      [StorageKeys.ALTERNATIVE_VERTICALS]: AlternativeVerticals.fromCore(
+        response.alternativeVerticals, formatters),
       [StorageKeys.LOCATION_BIAS]: LocationBias.fromCore(response.locationBias)
     };
   }

@@ -32,6 +32,13 @@ import SearchStates from './storage/searchstates';
 export default class Core {
   constructor (config = {}) {
     /**
+     * A reference to the auth token used for all requests
+     * @type {string}
+     * @private
+     */
+    this._token = config.token;
+
+    /**
      * A reference to the client API Key used for all requests
      * @type {string}
      * @private
@@ -127,16 +134,18 @@ export default class Core {
   /**
    * Initializes the {@link Core} by providing it with an instance of the Core library.
    */
-  init () {
+  init (config) {
     const params = {
-      apiKey: this._apiKey,
+      ...(this._token && { token: this._token }),
+      ...(this._apiKey && { apiKey: this._apiKey }),
       experienceKey: this._experienceKey,
       locale: this._locale,
       experienceVersion: this._experienceVersion,
       endpoints: this._getServiceUrls(),
       additionalQueryParams: {
         jsLibVersion: LIB_VERSION
-      }
+      },
+      ...config
     };
 
     this._coreLibrary = provideCore(params);
@@ -175,7 +184,8 @@ export default class Core {
    *                                     If paging within a query, the same ID should be used.
    * @param {Object} query The query details
    * @param {string} query.input The input to search for
-   * @param {boolean} query.append If true, adds the results of this query to the end of the current results, defaults false
+   * @param {boolean} query.append If true, adds the results of this query to the end of
+   *                               the current results, defaults false
    */
   verticalSearch (verticalKey, options = {}, query = {}) {
     window.performance.mark('yext.answers.verticalQueryStart');
@@ -647,7 +657,8 @@ export default class Core {
    * @returns {QueryTriggers} query trigger if accepted by the search API, null o/w
    */
   getQueryTriggerForSearchApi (queryTrigger) {
-    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST, QueryTriggers.VOICE_SEARCH].includes(queryTrigger)) {
+    if (![QueryTriggers.INITIALIZE, QueryTriggers.SUGGEST, QueryTriggers.VOICE_SEARCH]
+      .includes(queryTrigger)) {
       return null;
     }
     return queryTrigger;

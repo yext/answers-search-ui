@@ -88,8 +88,8 @@ function precompileTemplates (callback, isSearchBarOnly, outputFile, processAST)
             return JSON.stringify(name);
           }
         },
-        // TBH, this isn't really needed anymore since we don't name files like so 'foo.bar.js', but this is here to
-        // support that use case.
+        // TBH, this isn't really needed anymore since we don't name files
+        // like so 'foo.bar.js', but this is here to support that use case.
         customContext: function (fileName) {
           const name = fileName.split('.')[0];
           const keys = name.split('.');

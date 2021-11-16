@@ -12,11 +12,12 @@ export default class DirectAnswer {
    * Constructs an SDK DirectAnswer from an answers-core DirectAnswer and applies formatting
    *
    * @param {DirectAnswer} directAnswer from answers-core
-   * @param {Object<string, function>} formatters keyed by fieldApiName. If a formatter matches the fieldApiName
-   * of the direct answer, it will be applied to the direct answer value.
+   * @param {Object<string, function>} formatters keyed by fieldApiName. If a formatter matches
+   * the fieldApiName of the direct answer, it will be applied to the direct answer value.
+   * @param {string} searcher whether this direct answer is from a "UNIVERSAL" or "VERTICAL" search
    * @returns {DirectAnswer}
    */
-  static fromCore (directAnswer, formatters) {
+  static fromCore (directAnswer, formatters, searcher) {
     if (!directAnswer) {
       return new DirectAnswer();
     }
@@ -41,7 +42,8 @@ export default class DirectAnswer {
         },
         verticalConfigId: directAnswer.verticalKey
       },
-      type: directAnswer.type
+      type: directAnswer.type,
+      searcher
     };
 
     const directAnswerFieldApiName = directAnswerData.answer.fieldApiName;

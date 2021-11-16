@@ -78,8 +78,8 @@ Add the Javascript library and placeholder elements for [Answers components](#co
 <div id="UniversalResultsContainer"></div>
 ```
 
-Add an initialization script with an apiKey, experienceKey and onReady function. In the example below, we've initialized two
-basic components: [SearchBar](#searchbar-component) and [UniversalResults](#universal-results-component).
+Add an initialization script with an apiKey or token, experienceKey and onReady function. In the example below, we've initialized two
+basic components with apiKey: [SearchBar](#searchbar-component) and [UniversalResults](#universal-results-component).
 ```js
 function initAnswers() {
   ANSWERS.init({
@@ -125,10 +125,21 @@ The configuration provided here is configuration that is shared across component
 ```js
 function initAnswers() {
   ANSWERS.init({
-    // Required, your Yext Answers API key
+    // Required*, your Yext Answers API key. *Do NOT provide apiKey if token is used.
     apiKey: '<API_KEY_HERE>',
+    // Required*, custom auth token. *Do NOT provide token if apiKey is used.
+    token: '<TOKEN_HERE>',
     // Required, the key used for your Answers experience
     experienceKey: '<EXPERIENCE_KEY_HERE>',
+    // Optional, indicates the environment to run Answers experience in ('production' or 'sandbox')
+    environment: '<ENVIRONMENT_HERE',
+    // Optional, visitor interacting with the experience, see Visitor Configuration below for details
+    visitor: {
+      // Required, see below
+      id: '<ID_HERE>',
+      // Optional, see below
+      idMethod: '<ID_METHOD_HERE>',
+    },
     // Optional, initialize components here, invoked when the Answers component library is loaded/ready.
     //    If components are not added here, they can also be added when the init promise resolves
     onReady: function() {},
@@ -321,6 +332,21 @@ function (searchParams) => {
     return analyticsEvent;
   },
 }),
+```
+
+## Visitor Configuration
+
+Below is a list of configuration attributes related to a visitor, used in the [base configuration](#answersinit-configuration-options) above.
+
+The visitor object ties a user's identity to their searches and actions. The visitor can also be set or changed using the `ANSWERS.setVisitor` function.
+
+```js
+    visitor: {
+      // Required, the ID associated with the user. This will be the yextUserId if Yext Auth is used.
+      id: '123919',
+      // Optional, the method used to generate the visitor ID.
+      idMethod: 'YEXT_USER',
+    },
 ```
 
 # Component Usage

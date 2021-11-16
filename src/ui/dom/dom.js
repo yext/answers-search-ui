@@ -201,6 +201,15 @@ export default class DOM {
     DOM.query(selector).addEventListener(evt, handler);
   }
 
+  static onClickOrEnter (selector, handler) {
+    DOM.query(selector).addEventListener('click', handler);
+    DOM.query(selector).addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        handler(e);
+      }
+    });
+  }
+
   static once (selector, evt, handler) {
     const oneTimeHandler = () => {
       handler();
