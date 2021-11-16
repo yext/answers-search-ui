@@ -286,6 +286,7 @@ workflows:
             - browserstack_acceptance_test
             - useragent_acceptance_test
             - headless_acceptance_test
+            - translation_test
       - deploy_canary:
           filters:
             branches:
