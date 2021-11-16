@@ -9,12 +9,20 @@ msgstr[0] "([[resultsCount]] wynik)"
 msgstr[1] "([[resultsCount]] wyniki)"
 msgstr[2] "([[resultsCount]] wyników)"
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "[[resultsCount]] [[label]] znaleziona opcja autouzupełniania."
+msgstr[1] "[[resultsCount]] [[label]] znalezione opcje autouzupełniania."
+msgstr[2] "[[resultsCount]] [[label]] znalezionych opcji autouzupełniania."
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "[[resultsCount]] znaleziona opcja autouzupełniania"
-msgstr[1] "[[resultsCount]] znalezione opcje autouzupełniania"
-msgstr[2] "[[resultsCount]] znalezionych opcji autouzupełniania"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "[[resultsCount]] znaleziona opcja autouzupełniania."
+msgstr[1] "[[resultsCount]] znalezione opcje autouzupełniania."
+msgstr[2] "[[resultsCount]] znalezionych opcji autouzupełniania."
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -194,6 +202,11 @@ msgstr "Nie możemy określić Twojej lokalizacji"
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "Niestety wystąpił błąd."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "Gdy wyniki autouzupełniania będą dostępne, użyj strzałek w górę i w dół, aby przeglądać, i klawisza Enter, aby wybrać."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."

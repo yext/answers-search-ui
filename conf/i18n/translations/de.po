@@ -5,14 +5,21 @@ msgstr ""
 #: src/ui/templates/results/alternativeverticals.hbs:28
 msgid "([[resultsCount]] result)"
 msgid_plural "([[resultsCount]] results)"
-msgstr[0] "[[resultsCount]] Ergebnis"
-msgstr[1] "[[resultsCount]] Ergebnisse"
+msgstr[0] "([[resultsCount]] Ergebnis)"
+msgstr[1] "([[resultsCount]] Ergebnisse)"
+
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "[[resultsCount]] [[label]] Option zum Autovervollständigen gefunden."
+msgstr[1] "[[resultsCount]] [[label]] Optionen zum Autovervollständigen gefunden."
 
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "[[resultsCount]] Vorschlag gefunden"
-msgstr[1] "[[resultsCount]] Vorschläge gefunden"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "[[resultsCount]] Option zum Autovervollständigen gefunden."
+msgstr[1] "[[resultsCount]] Optionen zum Autovervollständigen gefunden."
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -191,6 +198,12 @@ msgstr "Ihr Standort konnte nicht ermittelt werden"
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "Leider ist ein Fehler aufgetreten."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "Wenn Ergebnisse zum Autovervollständigen verfügbar sind, können Sie sie mit den nach oben und nach unten zeigenden Pfeilen prüfen und mit der Eingabetaste"
+" auswählen."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."

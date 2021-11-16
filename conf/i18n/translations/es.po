@@ -101,8 +101,22 @@ msgstr "Local actual"
 #: src/ui/templates/results/alternativeverticals.hbs:28
 msgid "([[resultsCount]] result)"
 msgid_plural "([[resultsCount]] results)"
-msgstr[0] "[[resultsCount]] resultado"
-msgstr[1] "[[resultsCount]] resultados"
+msgstr[0] "([[resultsCount]] resultado)"
+msgstr[1] "([[resultsCount]] resultados)"
+
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "[[resultsCount]] [[label]] opción de autocompletar encontrada."
+msgstr[1] "[[resultsCount]] [[label]] opciones de autocompletar encontradas."
+
+#: src/ui/templates/search/autocomplete.hbs:14
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "[[resultsCount]] opción de autocompletar encontrada."
+msgstr[1] "[[resultsCount]] opciones de autocompletar encontradas."
+
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:158
 msgid "* Please enter a valid email address."
@@ -250,6 +264,11 @@ msgstr "No hemos podido determinar su posición exacta"
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "Nos disculpamos, ha ocurrido un error."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "Cuando los resultados de autocompletar estén disponibles, utiliza las flechas hacia arriba y hacia abajo para revisar e Intro para seleccionar."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
