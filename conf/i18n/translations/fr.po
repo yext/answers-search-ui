@@ -261,8 +261,7 @@ msgstr "Veuillez nous excuser, une erreur s'est produite"
 #: src/ui/templates/search/filtersearch.hbs:12
 #: src/ui/templates/search/search.hbs:29
 msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
-msgstr "Si des résultats de remplissage automatique sont disponibles, utilisez les flèches haut et bas pour les passer en revue et la touche Entrée pour en sélectionner"
-" un."
+msgstr "Si des résultats de remplissage automatique sont disponibles, utilisez les flèches haut et bas pour les passer en revue et la touche Entrée pour en sélectionner un."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
