@@ -69,7 +69,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "fs-extra": "^9.0.1",
     "full-icu": "^1.3.4",
-    "generate-license-file": "^1.1.0",
+    "generate-license-file": "^1.2.0",
     "gettext-extractor": "^3.5.2",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
