@@ -9,12 +9,20 @@ msgstr[0] "([[resultsCount]] результат)"
 msgstr[1] "([[resultsCount]] результата)"
 msgstr[2] "([[resultsCount]] результатов)"
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "Найден [[resultsCount]] вариант автозаполнения поля [[label]]."
+msgstr[1] "Найдены [[resultsCount]] варианта автозаполнения поля [[label]]."
+msgstr[2] "Найдены [[resultsCount]] вариантов автозаполнения поля [[label]]."
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "Найден [[resultsCount]] вариант автозаполнения"
-msgstr[1] "Найдены [[resultsCount]] варианта автозаполнения"
-msgstr[2] "Найдены [[resultsCount]] вариантов автозаполнения"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "Найден [[resultsCount]] вариант автозаполнения."
+msgstr[1] "Найдены [[resultsCount]] варианта автозаполнения."
+msgstr[2] "Найдены [[resultsCount]] вариантов автозаполнения."
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -194,6 +202,11 @@ msgstr "Нам не удалось определить ваше местопо�
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "К сожалению, произошла ошибка."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "При наличии результатов автозаполнения используйте стрелки вверх и вниз для просмотра и клавишу Enter — для выбора."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
