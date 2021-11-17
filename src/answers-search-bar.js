@@ -274,8 +274,12 @@ class AnswersSearchBar {
   validateConfig (config) {
     // TODO (tmeyer): Extract this method into it's own class. Investigate the use of JSON schema
     // to validate these configs.
-    if (typeof config.apiKey !== 'string') {
-      throw new Error('Missing required `apiKey`. Type must be {string}');
+    if (typeof config.apiKey !== 'string' && typeof config.token !== 'string') {
+      throw new Error('Missing required `apiKey` or `token`. Type must be {string}');
+    }
+
+    if (typeof config.apiKey === 'string' && typeof config.token === 'string') {
+      throw new Error('Both apiKey and token are present. Only one authentication method should be provided');
     }
 
     if (typeof config.experienceKey !== 'string') {
