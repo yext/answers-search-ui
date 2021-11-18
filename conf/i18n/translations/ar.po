@@ -12,15 +12,26 @@ msgstr[3] "([[resultsCount]] نتائج)"
 msgstr[4] "([[resultsCount]] نتيجة)"
 msgstr[5] "([[resultsCount]] نتيجة)"
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "[[resultsCount]] [[label]] خيارات إكمال تلقائي موجودة."
+msgstr[1] "[[resultsCount]] [[label]] خيار إكمال تلقائي موجود."
+msgstr[2] "[[resultsCount]] [[label]] خيار إكمال تلقائي موجود."
+msgstr[3] "[[resultsCount]] [[label]] خيارات إكمال تلقائي موجودة."
+msgstr[4] "[[resultsCount]] [[label]] خيار إكمال تلقائي موجودًا."
+msgstr[5] "[[resultsCount]] [[label]] خيار إكمال تلقائي موجود."
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "[[resultsCount]] خيارات إكمال تلقائي موجودة"
-msgstr[1] "[[resultsCount]] خيار إكمال تلقائي موجود"
-msgstr[2] "[[resultsCount]] خيارات إكمال تلقائي موجودة"
-msgstr[3] "[[resultsCount]] خيارات إكمال تلقائي موجودة"
-msgstr[4] "[[resultsCount]] خيار إكمال تلقائي موجود"
-msgstr[5] "[[resultsCount]] خيار إكمال تلقائي موجودة"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "[[resultsCount]] خيارات إكمال تلقائي موجودة."
+msgstr[1] "[[resultsCount]] خيار إكمال تلقائي موجود."
+msgstr[2] "[[resultsCount]] خيار إكمال تلقائي موجود."
+msgstr[3] "[[resultsCount]] خيارات إكمال تلقائي موجودة."
+msgstr[4] "[[resultsCount]] خيار إكمال تلقائي موجودًا."
+msgstr[5] "[[resultsCount]] خيار إكمال تلقائي موجود."
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -203,6 +214,11 @@ msgstr "تعذر علينا تحديد موقعك"
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "نأسف لذلك، حدث خطأ."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "عندما تتوفر نتائج الإكمال التلقائي، استخدم السهمين لأعلى ولأسفل للمراجعة ومفتاح الإدخال للتحديد."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."

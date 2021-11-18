@@ -8,11 +8,18 @@ msgid_plural "([[resultsCount]] results)"
 msgstr[0] "([[resultsCount]] resultaat)"
 msgstr[1] "([[resultsCount]] resultaten)"
 
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "[[resultsCount]] [[label]] optie voor automatisch aanvullen gevonden."
+msgstr[1] "[[resultsCount]] [[label]] opties voor automatisch aanvullen gevonden."
+
 #: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "[[resultsCount]] optie voor automatisch aanvullen gevonden"
-msgstr[1] "[[resultsCount]] opties voor automatisch aanvullen gevonden"
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "[[resultsCount]] optie voor automatisch aanvullen gevonden."
+msgstr[1] "[[resultsCount]] opties voor automatisch aanvullen gevonden."
 
 #: src/ui/templates/results/resultsheader.hbs:19
 #: src/ui/templates/results/verticalresultscount.hbs:3
@@ -191,6 +198,11 @@ msgstr "We kunnen uw locatie niet bepalen"
 #: src/ui/components/questions/questionsubmissioncomponent.js:167
 msgid "We're sorry, an error occurred."
 msgstr "Onze excuses, er is een fout opgetreden."
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "Als resultaten voor automatisch aanvullen beschikbaar zijn, gebruikt u de pijl omhoog en omlaag om te controleren en enter om te selecteren."
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."

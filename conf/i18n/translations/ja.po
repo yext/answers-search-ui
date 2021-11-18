@@ -71,16 +71,29 @@ msgstr "[[date]]より後"
 msgctxt "Before a date. Example: Before [August 15th]"
 msgid "Before [[date]]"
 msgstr "[[date]]より前"
+#: src/ui/templates/results/alternativeverticals.hbs:28
+msgid "([[resultsCount]] result)"
+msgid_plural "([[resultsCount]] results)"
+msgstr[0] "（[[resultsCount]]件の結果）"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:199
 msgctxt "Beginning at a date (with no end date). Example: [August 15th] or later"
 msgid "[[date]] or later"
 msgstr "[[date]]以降"
+#: src/ui/templates/search/autocomplete.hbs:6
+msgid "[[resultsCount]] [[label]] autocomplete option found."
+msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
+msgstr[0] "[[resultsCount]] [[label]] の入力候補が見つかりました。"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:215
 msgctxt "Ending at a date with (no start date). Example: [August 15th] or earlier"
 msgid "[[date]] and earlier"
 msgstr "[[date]]以前"
+#: src/ui/templates/search/autocomplete.hbs:14
+#: src/ui/templates/search/autocomplete.hbs:23
+msgid "[[resultsCount]] autocomplete option found."
+msgid_plural "[[resultsCount]] autocomplete options found."
+msgstr[0] "[[resultsCount]] 件の入力候補が見つかりました。"
 
 #: src/ui/components/search/filtersearchcomponent.js:63
 msgctxt "Labels an input field"
@@ -185,6 +198,11 @@ msgstr "クエリを絞り込むか、<a href=\"[[universalUrl]]\" class=\"yxt-N
 #: src/ui/templates/results/noresults.hbs:32
 msgid "Try to ask your question a different way."
 msgstr "別の方法で質問してみてください。"
+
+#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/search.hbs:29
+msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
+msgstr "入力候補が表示されている場合は、上下の矢印で確認してEnterキーで選択します。"
 
 #: src/ui/templates/results/noresults.hbs:7
 msgid "Your search - <span class=\"yxt-NoResults-query\">[[query]]</span> - did not match any answers we have."
