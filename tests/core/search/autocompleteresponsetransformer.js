@@ -18,6 +18,7 @@ describe('transform autocomplete response', () => {
     };
     const expectedTransformedResponse = {
       inputIntents: ['NEAR_ME'],
+      businessId: '',
       queryId: '',
       sections: [
         {
@@ -47,7 +48,6 @@ describe('transform autocomplete response', () => {
 
   it('transform filter autocomplete response with sections', () => {
     const responseFromCore = {
-      sectioned: true,
       sections: [
         {
           label: 'Name',
@@ -70,73 +70,15 @@ describe('transform autocomplete response', () => {
           ]
         }
       ],
-      results: [],
-      inputIntents: [],
       queryId: '42d5b709-3b9f-464a-b9b5-764467cbf540'
     };
     const expectedTransformedResponse = {
       inputIntents: [],
+      businessId: '',
       queryId: '42d5b709-3b9f-464a-b9b5-764467cbf540',
       sections: [
         {
           label: 'Name',
-          results: [
-            {
-              filter: {
-                name: {
-                  $eq: 'Virginia Beach'
-                }
-              },
-              intents: [],
-              key: 'name',
-              matchedSubstrings: [
-                {
-                  length: 8,
-                  offset: 0
-                }
-              ],
-              shortValue: 'Virginia Beach',
-              value: 'Virginia Beach'
-            }
-          ],
-          resultsCount: 1
-        }
-      ]
-    };
-    const actualTransformedResponse =
-      AutoCompleteResponseTransformer.transformFilterSearchResponse(responseFromCore);
-    expect(actualTransformedResponse).toEqual(expectedTransformedResponse);
-  });
-
-  it('transform filter autocomplete response without sections', () => {
-    const responseFromCore = {
-      sectioned: false,
-      sections: [],
-      results: [
-        {
-          value: 'Virginia Beach',
-          matchedSubstrings: [
-            {
-              offset: 0,
-              length: 8
-            }
-          ],
-          filter: {
-            matcher: '$eq',
-            value: 'Virginia Beach',
-            fieldId: 'name'
-          },
-          key: 'name'
-        }
-      ],
-      inputIntents: [],
-      queryId: '42d5b709-3b9f-464a-b9b5-764467cbf540'
-    };
-    const expectedTransformedResponse = {
-      inputIntents: [],
-      queryId: '42d5b709-3b9f-464a-b9b5-764467cbf540',
-      sections: [
-        {
           results: [
             {
               filter: {
