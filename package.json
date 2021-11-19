@@ -101,7 +101,7 @@
     "rollup-plugin-node-builtins": "^2.1.2",
     "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-plugin-svg": "^2.0.0",
-    "sass": "^1.34.0",
+    "sass": "^1.43.4",
     "serve": "^11.3.0",
     "size-limit": "^4.9.0",
     "stylelint": "^13.7.1",
