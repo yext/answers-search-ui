@@ -87,7 +87,7 @@
     "gulp-umd": "^2.0.0",
     "gulp-wrap": "^0.14.0",
     "i18next": "^19.9.2",
-    "i18next-conv": "^10.0.2",
+    "i18next-conv": "^10.2.0",
     "jest": "^24.8.0",
     "jest-transform-stub": "^2.0.0",
     "jsdoc": "^3.6.3",
