@@ -40,5 +40,5 @@ jobs:
           source_branch: "dev/update-version-${{ steps.vars.outputs.version }}"
           destination_branch: "${{ steps.vars.outputs.branch }}"
           pr_title: "Update Package Version to ${{ steps.vars.outputs.version }}"
-          pr_body: "*An automated PR which updates package version*"
+          pr_body: "*An automated PR which updates the version number in package.json and package-lock.json files*"
           github_token: ${{ secrets.GITHUB_TOKEN }}
