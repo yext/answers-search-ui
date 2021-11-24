@@ -20,9 +20,13 @@ jobs:
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           PACKAGE_VERSION="${GITHUB_REF##*/}"
           echo ::set-output name=branch::${BRANCH_NAME}
-          echo ::set-output name=version::${PACKAGE_VERSION}
-          if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]
+          if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)*$ ]]
           then
+            if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+$ ]]
+            then
+              PACKAGE_VERSION="${PACKAGE_VERSION}.0"
+            fi
+            echo ::set-output name=version::${PACKAGE_VERSION}
             git config user.name 'github-actions[bot]'
             git config user.email 'github-actions[bot]@users.noreply.github.com'
             npm version ${PACKAGE_VERSION}
@@ -36,5 +40,5 @@ jobs:
           source_branch: "dev/update-version-${{ steps.vars.outputs.version }}"
           destination_branch: "${{ steps.vars.outputs.branch }}"
           pr_title: "Update Package Version to ${{ steps.vars.outputs.version }}"
-          pr_body: "*An automated PR*"
+          pr_body: "*An automated PR which updates package version*"
           github_token: ${{ secrets.GITHUB_TOKEN }}
