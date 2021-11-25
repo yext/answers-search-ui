@@ -34,7 +34,15 @@ async function setupServer () {
 
 async function wcagTester () {
   const server = await setupServer();
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: [
+      '--hide-scrollbars',
+      '--enable-font-antialiasing',
+      '--force-device-scale-factor=1', '--high-dpi-support=1',
+      '--no-sandbox', '--disable-setuid-sandbox'
+    ]
+  });
   const page = await browser.newPage();
 
   const pageNavigator = new PageNavigator(page, `http://localhost:${PORT}/tests/acceptance/fixtures/html`);
