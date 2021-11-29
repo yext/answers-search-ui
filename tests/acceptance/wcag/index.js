@@ -45,6 +45,13 @@ async function wcagTester () {
   });
   const page = await browser.newPage();
 
+  page
+    .on('console', message =>
+      console.log(`Browser console ${message.type().substr(0, 3).toUpperCase()}: ${message.text()}`))
+    .on('pageerror', ({ message }) => console.log(`Page error: ${message}`))
+    .on('requestfailed', request =>
+      console.log(`Network request failed: ${request.failure().errorText} ${request.url()}`));
+
   const pageNavigator = new PageNavigator(page, `http://localhost:${PORT}/tests/acceptance/fixtures/html`);
   const analyzer = await new AxePuppeteer(page).options(axeCoreConfig);
   let results = [];
