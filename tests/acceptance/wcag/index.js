@@ -34,15 +34,7 @@ async function setupServer () {
 
 async function wcagTester () {
   const server = await setupServer();
-  const browser = await puppeteer.launch({
-    headless: true,
-    args: [
-      '--hide-scrollbars',
-      '--enable-font-antialiasing',
-      '--force-device-scale-factor=1', '--high-dpi-support=1',
-      '--no-sandbox', '--disable-setuid-sandbox'
-    ]
-  });
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
   page
