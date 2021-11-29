@@ -20,7 +20,7 @@ jobs:
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           PACKAGE_VERSION="${GITHUB_REF##*/}"
           echo ::set-output name=branch::${BRANCH_NAME}
-          if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)*$ ]]
+          if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]
           then
             if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+$ ]]
             then
