@@ -25,8 +25,8 @@ export default class Section {
 
     let centerCoordinates = {};
 
-    for (let j = 0; j < results.length; j++) {
-      const result = results[j]._raw;
+    for (let resultIndex = 0; resultIndex < results.length; resultIndex++) {
+      const result = results[resultIndex]._raw;
       if (result && result.yextDisplayCoordinate) {
         if (!centerCoordinates.latitude) {
           centerCoordinates = {
@@ -36,7 +36,7 @@ export default class Section {
         }
         mapMarkers.push({
           item: result,
-          label: j + 1,
+          label: resultIndex + 1,
           latitude: result.yextDisplayCoordinate.latitude,
           longitude: result.yextDisplayCoordinate.longitude
         });
