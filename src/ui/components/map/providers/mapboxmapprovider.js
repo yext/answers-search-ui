@@ -4,7 +4,7 @@ import MapboxLanguage from '@mapbox/mapbox-gl-language';
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
-import { parseLocale } from '../../../../core/utils/i18nutils';
+import { parseLocale, isRTL } from '../../../../core/utils/i18nutils';
 
 /* global mapboxgl */
 
@@ -81,6 +81,11 @@ export default class MapBoxMapProvider extends MapProvider {
     this._map.addControl(new MapboxLanguage({
       defaultLanguage: this._language
     }));
+
+    const zoomControl = new mapboxgl.NavigationControl({ showCompass: false });
+    isRTL(this._language)
+      ? this._map.addControl(zoomControl, 'bottom-left')
+      : this._map.addControl(zoomControl, 'bottom-right');
 
     if (mapData && mapData.mapMarkers.length) {
       const collapsedMarkers = this._collapsePins

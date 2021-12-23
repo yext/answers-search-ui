@@ -52,6 +52,19 @@ export function parseLocale (localeCode) {
 }
 
 /**
+ * Checks if the specified language is RTL.
+ *
+ * @param {string} language
+ * @returns Whether or not the given language is written from right to left (requires rtl css)
+ */
+export function isRTL (language) {
+  if (language === 'ar') {
+    return true;
+  }
+  return false;
+}
+
+/**
  * Object containing imperial units
  */
 const IMPERIAL = {
