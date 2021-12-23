@@ -84,8 +84,8 @@ export default class MapBoxMapProvider extends MapProvider {
 
     const zoomControl = new mapboxgl.NavigationControl({ showCompass: false });
     isRTL(this._language)
-      ? this._map.addControl(zoomControl, 'bottom-left')
-      : this._map.addControl(zoomControl, 'bottom-right');
+      ? this._map.addControl(zoomControl, 'top-left')
+      : this._map.addControl(zoomControl);
 
     if (mapData && mapData.mapMarkers.length) {
       const collapsedMarkers = this._collapsePins

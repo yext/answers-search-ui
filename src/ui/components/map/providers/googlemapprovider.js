@@ -128,8 +128,8 @@ export default class GoogleMapProvider extends MapProvider {
       const container = DOM.query(el);
 
       const zoomControlPosition = isRTL(this._language)
-        ? google.maps.ControlPosition.LEFT_BOTTOM
-        : google.maps.ControlPosition.RIGHT_BOTTOM;
+        ? google.maps.ControlPosition.LEFT_TOP
+        : google.maps.ControlPosition.RIGHT_TOP;
 
       this.map = new google.maps.Map(container, {
         zoom: this._zoom,
