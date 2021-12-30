@@ -2,7 +2,7 @@ const { dest } = require('gulp');
 const rollup = require('gulp-rollup-lightweight');
 const babel = require('rollup-plugin-babel');
 const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
+const commonjs = require('@rollup/plugin-commonjs');
 const builtins = require('rollup-plugin-node-builtins');
 const source = require('vinyl-source-stream');
 

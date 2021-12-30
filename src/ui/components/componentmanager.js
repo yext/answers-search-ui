@@ -61,6 +61,8 @@ export default class ComponentManager {
      * A mapping of Components to moduleId storage listeners, for removal purposes.
      */
     this._componentToModuleIdListener = new Map();
+
+    this._answersHeadless = null;
   }
 
   setRenderer (renderer) {
@@ -75,6 +77,11 @@ export default class ComponentManager {
 
   setAnalyticsReporter (reporter) {
     this._analyticsReporter = reporter;
+    return this;
+  }
+
+  setAnswersHeadless (answerHeadless) {
+    this._answersHeadless = answerHeadless;
     return this;
   }
 
@@ -117,7 +124,8 @@ export default class ComponentManager {
       renderer: this._renderer,
       analyticsReporter: this._analyticsReporter,
       componentManager: this,
-      uniqueId: this._componentIdCounter
+      uniqueId: this._componentIdCounter,
+      answersHeadless: this._answersHeadless
     };
     this._componentIdCounter++;
 

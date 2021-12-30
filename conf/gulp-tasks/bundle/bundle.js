@@ -1,12 +1,14 @@
 const { dest } = require('gulp');
 
 const babel = require('rollup-plugin-babel');
-const commonjs = require('rollup-plugin-commonjs');
+const commonjs = require('@rollup/plugin-commonjs');
 const replace = require('gulp-replace');
 const resolve = require('rollup-plugin-node-resolve');
 const svg = require('rollup-plugin-svg');
 const rollup = require('gulp-rollup-lightweight');
 const source = require('vinyl-source-stream');
+const rollupEnv = require('rollup-plugin-replace');
+
 const {
   TRANSLATION_FLAGGER_REGEX,
   SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE
@@ -41,6 +43,9 @@ exports.modernBundle = function (
     input: entryPoint,
     output: outputConfig,
     plugins: [
+      rollupEnv({
+        'process.env.NODE_ENV': JSON.stringify('development')
+      }),
       resolve({ browser: true }),
       commonjs({
         include: [/node_modules/]
@@ -82,6 +87,9 @@ exports.legacyBundle = function (
     input: entryPoint,
     output: outputConfig,
     plugins: [
+      rollupEnv({
+        'process.env.NODE_ENV': JSON.stringify('development')
+      }),
       resolve({ browser: true }),
       commonjs({
         include: [/node_modules/]

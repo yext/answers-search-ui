@@ -44,4 +44,18 @@ export default class UniversalResults {
       })
     });
   }
+
+  static fromHeadless (verticalResults) {
+    if (!verticalResults) {
+      return new UniversalResults();
+    }
+
+    console.log('universalResults fromHeadless', verticalResults);
+    return new UniversalResults({
+      queryId: '', // temp
+      sections: verticalResults.map(verticalResults => {
+        return VerticalResults.fromCore(verticalResults);
+      })
+    });
+  }
 }

@@ -32,6 +32,7 @@ import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
 import { localizedDistance, parseLocale } from './core/utils/i18nutils';
 import createImpressionEvent from './core/analytics/createimpressionevent';
+import { createAnswersHeadless } from 'test-react-component';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -293,9 +294,17 @@ class Answers {
         this.core.storage.getCurrentStateUrlMerged());
     }
 
+    this.answersHeadless = createAnswersHeadless({
+      apiKey: '3517add824e992916861b76e456724d9',
+      experienceKey: 'answers-js-docs',
+      locale: 'en',
+      sessionTrackingEnabled: true
+    });
+
     this.components
       .setCore(this.core)
-      .setRenderer(this.renderer);
+      .setRenderer(this.renderer)
+      .setAnswersHeadless(this.answersHeadless);
 
     this._setDefaultInitialSearch(parsedConfig.search);
 

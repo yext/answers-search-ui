@@ -141,7 +141,8 @@ function compileCSS () {
 function compileLtrCSS () {
   return src('./src/ui/sass/**/*.scss')
     .pipe(sass({
-      outputStyle: 'compressed'
+      outputStyle: 'compressed',
+      includePaths: ['node_modules']
     }).on('error', sass.logError))
     .pipe(postcss())
     .pipe(dest('./dist/'));
@@ -153,7 +154,8 @@ function compileLtrCSS () {
 function compileRtlCSS () {
   return src('./src/ui/sass/**/*.scss')
     .pipe(sass({
-      outputStyle: 'compressed'
+      outputStyle: 'compressed',
+      includePaths: ['node_modules']
     }).on('error', sass.logError))
     .pipe(rtlcss())
     .pipe(postcss())

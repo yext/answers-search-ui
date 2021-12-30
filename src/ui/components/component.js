@@ -69,6 +69,8 @@ export default class Component {
      */
     this.core = systemConfig.core || null;
 
+    this.answersHeadless = systemConfig.answersHeadless || null;
+
     /**
      * A local reference to the component manager, which contains all of the component classes
      * eligible to be created

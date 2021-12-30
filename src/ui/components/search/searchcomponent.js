@@ -11,6 +11,8 @@ import VoiceSearchController from '../../speechrecognition/voicesearchcontroller
 import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 import SearchBarIconController from '../../controllers/searchbariconcontroller';
 import alert from '../../alert';
+import { ExampleComponent, SampleVisualSearchBar, renderComponent } from 'test-react-component';
+import UniversalResults from '../../../core/models/universalresults';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -315,6 +317,16 @@ export default class SearchComponent extends Component {
     this._customMicIconUrl = config.voiceSearch?.customMicIconUrl;
 
     this._customListeningIconUrl = config.voiceSearch?.customListeningIconUrl;
+
+    this._useReactComponent = config.useReactComponent;
+
+    this.answersHeadless && this.answersHeadless.addListener({
+      valueAccessor: state => state.universal.verticals,
+      callback: verticals => {
+        console.log('vertical updates', verticals);
+        this.core.storage.set(StorageKeys.UNIVERSAL_RESULTS, UniversalResults.fromHeadless(verticals));
+      }
+    });
   }
 
   /**
@@ -542,6 +554,26 @@ export default class SearchComponent extends Component {
       this._autocomplete.remove();
     }
 
+    if (this._useReactComponent) {
+      console.log('use react component.');
+      const domContainer2 = document.querySelector('#example_component_container');
+      renderComponent({
+        Component: ExampleComponent,
+        props: { text: 'hello!' },
+        container: domContainer2
+      });
+      const domContainer3 = document.querySelector('#VA_component_container');
+      if (this.answersHeadless) {
+        renderComponent({
+          answers: this.answersHeadless,
+          Component: SampleVisualSearchBar,
+          props: {},
+          container: domContainer3
+        });
+      } else {
+        console.log('no answers headless..');
+      }
+    }
     this._autocomplete = this.componentManager.create('AutoComplete', {
       parentContainer: this._container,
       name: this._autoCompleteName,

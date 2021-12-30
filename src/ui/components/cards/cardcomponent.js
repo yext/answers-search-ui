@@ -61,9 +61,7 @@ export default class CardComponent extends Component {
     this.result = data.result || {};
 
     // additional field(s) for dataMappings config option
-    if (this.result && this.result._raw) {
-      this.result._raw.distance = this.result.distance;
-    }
+    this.result._raw = { ...this.result._raw, distance: this.result.distance };
 
     /**
      * Vertical key for the search.
