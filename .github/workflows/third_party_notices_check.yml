@@ -9,10 +9,9 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 14.x
-      - run: npm install -g generate-license-file
       - uses: actions/checkout@v2
       - run: npm ci
-      - run: generate-license-file --input package.json --output ./THIRD-PARTY-NOTICES
+      - run: npm run generate-notices
       - name: Update THIRD-PARTY-NOTICES
         uses: EndBug/add-and-commit@v7
         with:
