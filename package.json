@@ -69,7 +69,7 @@
     "eslint-plugin-promise": "^5.1.0",
     "fs-extra": "^9.0.1",
     "full-icu": "^1.3.4",
-    "generate-license-file": "^1.1.0",
+    "generate-license-file": "^1.3.0",
     "gettext-extractor": "^3.5.2",
     "gulp": "^4.0.2",
     "gulp-concat": "^2.6.1",
@@ -127,7 +127,7 @@
     "preinstall": "npx npm-force-resolutions",
     "prepublishOnly": "npm run build-languages && npm run generate-entry-points && ./conf/npm/use_npm_readme.sh",
     "postpublish": "./conf/npm/revert_npm_readme.sh",
-    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES",
+    "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite",
     "generate-entry-points": "./conf/npm/generateentrypoints.js package.json"
   },
   "resolutions": {
