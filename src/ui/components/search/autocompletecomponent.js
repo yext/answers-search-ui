@@ -245,7 +245,7 @@ export default class AutoCompleteComponent extends Component {
       }
       this.close();
     });
-    if (document !== window.parent.document) {
+    if (window.parent?.document && document !== window.parent.document) {
       window.parent.document.addEventListener('click', () => {
         this.close();
       });
