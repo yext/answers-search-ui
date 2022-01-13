@@ -245,6 +245,11 @@ export default class AutoCompleteComponent extends Component {
       }
       this.close();
     });
+    if (document !== window.parent.document) {
+      window.parent.document.addEventListener('click', () => {
+        this.close();
+      });
+    }
 
     // When a user focuses the input, we should populate the autocomplete based
     // on the current value
