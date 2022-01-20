@@ -9,6 +9,9 @@ jobs:
     uses: yext/answers-search-ui/.github/workflows/build.yml@dev/build-workflow
     with:
       build_script: build-locales
+    
+  unit_test:
+    uses: yext/answers-search-ui/.github/workflows/unit_test.yml@dev/build-workflow
 
   test:
     runs-on: ubuntu-latest
