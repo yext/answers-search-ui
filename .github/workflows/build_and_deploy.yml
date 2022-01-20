@@ -1,31 +1,22 @@
-name: Build and deploy
+name: Build and deploy # Note: Deployment will be added in a future PR 
 
 on:
   push:
-    branches: [dev/*]
+    branches-ignore:
+      - develop
+      - master
+      - support/**
+      - hotfix/**
+      - feature/**-i18n
+      - release/**
 
 jobs:
-  build:
+  call_build:
     uses: yext/answers-search-ui/.github/workflows/build.yml@dev/build-workflow
 
-  unit_test:
+  call_unit_test:
     uses: yext/answers-search-ui/.github/workflows/unit_test.yml@dev/build-workflow
-    needs: build
-
-  test:
-    runs-on: ubuntu-latest
-    needs: build
-
-    steps:
-      - name: Download build-output artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build-output
-          path: dist/
-
-      # The "build" directory is now available inside this job
-      - name: Test view dist folder
-        run: ls dist
+    needs: call_build
 
 concurrency:
   group: ci-build-and-deploy-${{ github.ref }}-1

@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  run_unit_tests:
+  unit_tests:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,5 +20,4 @@ jobs:
         with:
           name: build-output
           path: dist/
-      - name: Run unit tests
-        run: npm run test
+      - run: npm run test

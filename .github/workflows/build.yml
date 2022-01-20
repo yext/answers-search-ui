@@ -1,4 +1,4 @@
-name: Build Answers Assets
+name: Build Answers assets
 
 on:
   workflow_call:
