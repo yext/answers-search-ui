@@ -7,6 +7,8 @@ on:
 jobs:
   build:
     uses: yext/answers-search-ui/.github/workflows/build.yml@dev/build-workflow
+    with:
+      build_script: build_locales
 
   test:
     runs-on: ubuntu-latest

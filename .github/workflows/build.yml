@@ -4,7 +4,8 @@ on:
   workflow_call:
     inputs:
       build_script:
-        required: true
+        required: false
+        default: build
         type: string
 
 jobs:
