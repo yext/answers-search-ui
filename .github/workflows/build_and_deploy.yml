@@ -26,3 +26,7 @@ jobs:
       # The "build" directory is now available inside this job
       - name: Test view dist folder
         run: ls dist
+
+concurrency:
+  group: ci-build-and-deploy-${{ github.ref }}-1
+  cancel-in-progress: true
