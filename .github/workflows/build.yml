@@ -20,7 +20,7 @@ jobs:
     - run: npm ci
     - run: npm run ${{ inputs.build_script }}
     - name: Create build-output artifact
-        uses: actions/upload-artifact@master
-        with:
-          name: build-output
-          path: dist/
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-output
+        path: dist/
