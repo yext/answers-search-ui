@@ -1,0 +1,25 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [dev/*]
+
+jobs:
+  build:
+    uses: yext/answers-search-ui/.github/workflows/build.yml@dev/build-workflow
+    with:
+      build_script: build
+
+  test:
+    needs: build
+
+    steps:
+      - name: Download build-output artifact
+        uses: actions/download-artifact@master
+        with:
+          name: build-output
+          path: dist/
+
+      # The "build" directory is now available inside this job
+      - name: Test view dist folder
+        run: ls dist
