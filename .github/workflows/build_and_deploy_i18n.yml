@@ -12,6 +12,7 @@ jobs:
     
   unit_test:
     uses: yext/answers-search-ui/.github/workflows/unit_test.yml@dev/build-workflow
+    needs: build
 
   test:
     runs-on: ubuntu-latest
