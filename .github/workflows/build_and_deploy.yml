@@ -1,0 +1,23 @@
+name: Build and deploy # Note: Deployment will be added in a future PR 
+
+on:
+  push:
+    branches-ignore:
+      - develop
+      - master
+      - support/**
+      - hotfix/**
+      - feature/**-i18n
+      - release/**
+
+jobs:
+  call_build:
+    uses: yext/answers-search-ui/.github/workflows/build.yml@dev/build-workflow
+
+  call_unit_test:
+    uses: yext/answers-search-ui/.github/workflows/unit_test.yml@dev/build-workflow
+    needs: call_build
+
+concurrency:
+  group: ci-build-and-deploy-${{ github.ref }}-1
+  cancel-in-progress: true
