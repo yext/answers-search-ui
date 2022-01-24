@@ -12,11 +12,17 @@ on:
 
 jobs:
   call_build:
-    uses: yext/answers-search-ui/.github/workflows/build.yml@dev/build-workflow
+    uses: yext/answers-search-ui/.github/workflows/build.yml@feature/gh-action-migration
 
   call_unit_test:
-    uses: yext/answers-search-ui/.github/workflows/unit_test.yml@dev/build-workflow
+    uses: yext/answers-search-ui/.github/workflows/unit_test.yml@feature/gh-action-migration
     needs: call_build
+  
+  call_deploy:
+    uses: yext/answers-search-ui/.github/workflows/deploy.yml@dev/gh-s3-deploy
+    needs: call_unit_test
+    with:
+      directory: dev/gh-s3-deploy
 
 concurrency:
   group: ci-build-and-deploy-${{ github.ref }}-1
