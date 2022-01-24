@@ -29,11 +29,11 @@ jobs:
           echo $FORMATTED_BRANCH
           echo ::set-output name=formatted_branch::${FORMATTED_BRANCH}
     uses: yext/answers-search-ui/.github/workflows/deploy.yml@dev/gh-s3-deploy
-      with:
-        directory: dev/test-test/${{ steps.vars.outputs.formatted_branch }}
-      secrets:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+    with:
+      directory: dev/test-test/${{ steps.vars.outputs.formatted_branch }}
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-${{ github.ref }}-1
