@@ -39,6 +39,7 @@ jobs:
           aws-region: us-east-1
       - name: Deploy to S3
         run: |
-          aws s3 sync ./dist/ s3://assets.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }} \
+          aws s3 cp ./dist/ s3://assets.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }} \
           --acl public-read \
+          --recursive \
           --cache-control ${{ inputs.cache-control }}
