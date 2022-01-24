@@ -27,6 +27,12 @@ jobs:
           FORMATTED_BRANCH="$(echo ${GITHUB_REF_NAME} | sed "s/\//-/g")" 
           echo $FORMATTED_BRANCH
           echo ::set-output name=formatted_branch::${FORMATTED_BRANCH}
+  print_formatted_branch_name:
+    runs_on: ubuntu-latest
+    steps:
+      - name: Print formatted branch name
+        run: |
+          echo "${{ steps.vars.outputs.formatted_branch }}"
 
   # call_deploy:
   #   uses: yext/answers-search-ui/.github/workflows/deploy.yml@dev/gh-s3-deploy
