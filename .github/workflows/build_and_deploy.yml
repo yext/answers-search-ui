@@ -17,16 +17,25 @@ jobs:
   call_unit_test:
     uses: yext/answers-search-ui/.github/workflows/unit_test.yml@feature/gh-action-migration
     needs: call_build
-  
-  call_deploy:
-    uses: yext/answers-search-ui/.github/workflows/deploy.yml@dev/gh-s3-deploy
-    needs: call_unit_test
-    with:
-      directory: dev/gh-s3-deploy
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
+  format_branch_name:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Format branch name # replace '/' with '-'
+        id: vars
+        run: |
+          FORMATTED_BRANCH="$(echo ${GITHUB_REF_NAME} | sed "s/\//-/g")" 
+          echo $FORMATTED_BRANCH
+          echo ::set-output name=formatted_branch::${FORMATTED_BRANCH}
+
+  # call_deploy:
+  #   uses: yext/answers-search-ui/.github/workflows/deploy.yml@dev/gh-s3-deploy
+  #   needs: call_unit_test
+  #   with:
+  #     directory: ${{ github.ref_name }}
+  #   secrets:
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-${{ github.ref }}-1
