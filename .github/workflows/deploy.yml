@@ -41,5 +41,4 @@ jobs:
         run: |
           aws s3 sync ./dist/ s3://assets.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }} \
           --acl public-read \
-          --cache-control ${{ inputs.cache-control }} \
-          --profile production
+          --cache-control ${{ inputs.cache-control }}
