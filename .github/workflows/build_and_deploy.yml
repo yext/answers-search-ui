@@ -18,9 +18,10 @@ jobs:
     uses: yext/answers-search-ui/.github/workflows/unit_test.yml@feature/gh-action-migration
     needs: call_build
 
-  call_deploy:
+  format_branch_name:
     runs-on: ubuntu-latest
-    needs: call_unit_test
+    outputs:
+      formatted_branch: ${{ steps.vars.outputs.formatted_branch }}
     steps:
       - name: Format branch name # replace '/' with '-'
         id: vars
@@ -28,9 +29,14 @@ jobs:
           FORMATTED_BRANCH="$(echo ${GITHUB_REF_NAME} | sed "s/\//-/g")" 
           echo $FORMATTED_BRANCH
           echo ::set-output name=formatted_branch::${FORMATTED_BRANCH}
+
+  call_deploy:
+    needs: 
+      - call_unit_test
+      - format_branch_name
     uses: yext/answers-search-ui/.github/workflows/deploy.yml@dev/gh-s3-deploy
     with:
-      directory: dev/test-test/${{ steps.vars.outputs.formatted_branch }}
+      directory: dev/test-test/${{ needs.format_branch_name.outputs.formatted_branch }}
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
