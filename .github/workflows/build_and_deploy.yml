@@ -28,7 +28,7 @@ jobs:
           echo $FORMATTED_BRANCH
           echo ::set-output name=formatted_branch::${FORMATTED_BRANCH}
   print_formatted_branch_name:
-    runs_on: ubuntu-latest
+    runs-on: ubuntu-latest
     steps:
       - name: Print formatted branch name
         run: |
