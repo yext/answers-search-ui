@@ -38,7 +38,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
       - name: Deploy to S3
-        run: aws s3 sync ./dist/ s3://assets.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }} \
+        run: |
+          aws s3 sync ./dist/ s3://assets.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }} \
           --acl public-read \
           --cache-control ${{ inputs.cache-control }} \
           --profile production
