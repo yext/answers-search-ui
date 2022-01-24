@@ -36,7 +36,7 @@ jobs:
       - format_branch_name
     uses: yext/answers-search-ui/.github/workflows/deploy.yml@dev/gh-s3-deploy
     with:
-      directory: dev/test-test/${{ needs.format_branch_name.outputs.formatted_branch }}
+      directory: dev/${{ needs.format_branch_name.outputs.formatted_branch }}
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
