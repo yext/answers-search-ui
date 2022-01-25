@@ -1,28 +1,28 @@
-name: Percy Snapshots
+# name: Percy Snapshots
 
-on: 
-  push:
-    branches-ignore: dev/*
-  pull_request:
+# on: 
+#   push:
+#     branches-ignore: dev/*
+#   pull_request:
 
-jobs:
-  build:
+# jobs:
+#   build:
 
-    runs-on: ubuntu-latest
+#     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [15.x]
+#     strategy:
+#       matrix:
+#         node-version: [15.x]
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build
-    - name: Percy Snapshots
-      run: npx percy exec -- node tests/acceptance/percy/snapshots.js
-      env:
-        PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#     - run: npm ci
+#     - run: npm run build
+#     - name: Percy Snapshots
+#       run: npx percy exec -- node tests/acceptance/percy/snapshots.js
+#       env:
+#         PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
