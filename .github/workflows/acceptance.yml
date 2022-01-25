@@ -4,7 +4,7 @@ on:
   workflow_call:
 
 jobs:
-  acceptance_tests:
+  headless_acceptance:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,4 +20,58 @@ jobs:
         with:
           name: build-output
           path: dist/
-      - run: ./.circleci/run_browserstack_acceptance.sh & ./.circleci/run_headless_acceptance.sh & ./.circleci/run_translation_verification.sh & ./.circleci/run_useragent_acceptance.sh
+      - run: ./.circleci/run_headless_acceptance.sh
+  
+  browserstack_acceptance:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.circleci/run_browserstack_acceptance.sh
+  
+  translation_vertification:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.circleci/run_translation_verification.sh
+
+  useragent:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.circleci/run_useragent_acceptance.sh
