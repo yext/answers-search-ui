@@ -22,7 +22,7 @@ jobs:
     uses: ./.github/workflows/acceptance.yml
     needs: call_build
     with:
-      GITHUB_BRANCH: bob
+      GITHUB_BRANCH: ${{ GITHUB_BRANCH }}
     secrets:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}

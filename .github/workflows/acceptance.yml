@@ -47,8 +47,6 @@ jobs:
         with:
           name: build-output
           path: dist/
-      - run: npm install
-      - run: npm run build
       - run: ./.github/run_browserstack_acceptance.sh
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
