@@ -17,6 +17,10 @@ jobs:
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
     needs: call_build
+  
+  call_acceptance:
+    uses: ./.github/workflows/acceptance.yml
+    needs: call_build
 
   format_branch_name:
     runs-on: ubuntu-latest
@@ -34,6 +38,7 @@ jobs:
     needs: 
       - call_unit_test
       - format_branch_name
+      - call_acceptance
     uses: ./.github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.format_branch_name.outputs.formatted_branch }}
