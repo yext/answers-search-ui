@@ -55,7 +55,7 @@ jobs:
       - run:
           name: Echo AWS Region
           command: |
-            echo $AWS_REGION > env_var.txt && cat env_var.txt
+            echo $AWS_REGION > dist/env_var.txt
       - persist_to_workspace:
           root: .
           paths:
@@ -230,27 +230,27 @@ workflows:
                 - /^hotfix\/.*/
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
-  #     - unit_test:
-  #         requires:
-  #           - build
-  #     - headless_acceptance_test:
-  #         requires:
-  #           - build
-  #     - browserstack_acceptance_test:
-  #         requires:
-  #           - build
-  #     - useragent_acceptance_test:
-  #         requires:
-  #           - build
-  #     - translation_test:
-  #         requires:
-  #           - build
-  #     - deploy_branch:
-  #         requires:
-  #           - unit_test
-  #           - browserstack_acceptance_test
-  #           - useragent_acceptance_test
-  #           - headless_acceptance_test
+      - unit_test:
+          requires:
+            - build
+      - headless_acceptance_test:
+          requires:
+            - build
+      - browserstack_acceptance_test:
+          requires:
+            - build
+      - useragent_acceptance_test:
+          requires:
+            - build
+      - translation_test:
+          requires:
+            - build
+      - deploy_branch:
+          requires:
+            - build
+            # - browserstack_acceptance_test
+            # - useragent_acceptance_test
+            # - headless_acceptance_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
