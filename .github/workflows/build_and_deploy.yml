@@ -12,10 +12,10 @@ on:
 
 jobs:
   call_build:
-    uses: yext/answers-search-ui/.github/workflows/build.yml@feature/gh-action-migration
+    uses: .github/workflows/build.yml
 
   call_unit_test:
-    uses: yext/answers-search-ui/.github/workflows/unit_test.yml@feature/gh-action-migration
+    uses: .github/workflows/unit_test.yml
     needs: call_build
 
   format_branch_name:
@@ -34,7 +34,7 @@ jobs:
     needs: 
       - call_unit_test
       - format_branch_name
-    uses: yext/answers-search-ui/.github/workflows/deploy.yml@dev/gh-s3-deploy
+    uses: .github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.format_branch_name.outputs.formatted_branch }}
     secrets:
