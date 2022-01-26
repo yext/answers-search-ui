@@ -52,7 +52,10 @@ jobs:
     working_directory: ~/answers
     steps:
       - setup-workspace
-      - run: npm run build
+      - run:
+          name: Echo AWS Region
+          command: |
+            echo $AWS_REGION
       - persist_to_workspace:
           root: .
           paths:
@@ -215,18 +218,18 @@ jobs:
           cache-control: 'max-age=43200'
 workflows:
   version: 2
-  # build_and_deploy:
-  #   jobs:
-  #     - build:
-  #         filters:
-  #           branches:
-  #             ignore:
-  #               - develop
-  #               - master
-  #               - /^support\/.*/
-  #               - /^hotfix\/.*/
-  #               - /^feature\/.*-i18n/
-  #               - /^release\/.*/
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - develop
+                - master
+                - /^support\/.*/
+                - /^hotfix\/.*/
+                - /^feature\/.*-i18n/
+                - /^release\/.*/
   #     - unit_test:
   #         requires:
   #           - build
