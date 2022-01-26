@@ -3,14 +3,9 @@ name: Run acceptance tests
 on:
   workflow_call:
 
-
-env:
-  BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-  BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 jobs:
   headless_acceptance:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14
@@ -28,7 +23,9 @@ jobs:
   
   browserstack_acceptance:
     runs-on: ubuntu-latest
-
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14
@@ -47,7 +44,6 @@ jobs:
   
   translation_vertification:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14
@@ -65,7 +61,9 @@ jobs:
 
   useragent:
     runs-on: ubuntu-latest
-
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14
