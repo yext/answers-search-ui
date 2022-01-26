@@ -51,11 +51,11 @@ jobs:
       - image: circleci/node:14.5
     working_directory: ~/answers
     steps:
-      - setup-workspace
+      # - setup-workspace
       - run:
           name: Echo AWS Region
           command: |
-            echo $AWS_REGION > dist/env_var.txt
+            mkdir dist && touch dist/env_var.txt && echo $AWS_REGION > dist/env_var.txt
       - persist_to_workspace:
           root: .
           paths:
