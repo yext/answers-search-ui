@@ -1,31 +1,31 @@
-# This workflow will run our tests, generate an lcov code coverage file,
-# and send that coverage to Coveralls 
+# # This workflow will run our tests, generate an lcov code coverage file,
+# # and send that coverage to Coveralls 
 
-name: Code Coverage
+# name: Code Coverage
 
-on:
-  push:
-    branches-ignore: dev/*
-  pull_request:
+# on:
+#   push:
+#     branches-ignore: dev/*
+#   pull_request:
 
-jobs:
-  Coveralls:
-    runs-on: ubuntu-latest
+# jobs:
+#   Coveralls:
+#     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-version: [14.x]
+#     strategy:
+#       matrix:
+#         node-version: [14.x]
 
-    steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npx gulp templates
-    - run: npx jest --coverage
-    - name: Coveralls
-      uses: coverallsapp/github-action@master
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
+#     steps:
+#     - uses: actions/checkout@v2
+#     - name: Use Node.js ${{ matrix.node-version }}
+#       uses: actions/setup-node@v2
+#       with:
+#         node-version: ${{ matrix.node-version }}
+#     - run: npm ci
+#     - run: npx gulp templates
+#     - run: npx jest --coverage
+#     - name: Coveralls
+#       uses: coverallsapp/github-action@master
+#       with:
+#         github-token: ${{ secrets.GITHUB_TOKEN }}
