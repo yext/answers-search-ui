@@ -1,9 +1,9 @@
 #!/bin/bash
 
-if [[ $GITHUB_REF_NAME == release/*
-  || $GITHUB_REF_NAME == hotfix/*
-  || $GITHUB_REF_NAME == master
-  || $GITHUB_REF_NAME == support/* ]]
+if [[ $GITHUB_BRANCH == release/*
+  || $GITHUB_BRANCH == hotfix/*
+  || $GITHUB_BRANCH == master
+  || $GITHUB_BRANCH == support/* ]]
 then
   npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.circleci/testcafe.json -q
 else
