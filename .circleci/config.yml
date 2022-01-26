@@ -103,7 +103,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: ./.circleci/run_headless_acceptance.sh
+      - run: ./.github/run_headless_acceptance.sh
   headless_acceptance_test_search_bar:
     docker:
       - image: circleci/node:14.5-browsers
@@ -114,7 +114,7 @@ jobs:
           at: ~/answers
       - run:
           name: Search Bar Acceptance Tests
-          command: npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.circleci/testcafe_search_bar.json -q
+          command: npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.github/testcafe_search_bar.json -q
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
@@ -124,7 +124,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: ./.circleci/run_browserstack_acceptance.sh
+      - run: ./.github/run_browserstack_acceptance.sh
   useragent_acceptance_test:
     docker:
       - image: circleci/node:14.5-browsers
@@ -133,7 +133,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: ./.circleci/run_useragent_acceptance.sh
+      - run: ./.github/run_useragent_acceptance.sh
   # verify all translations are present
   translation_test:
     docker:
@@ -147,7 +147,7 @@ jobs:
           name: Verify translation files
           command: |
             sudo apt-get install -qq gettext
-            ./.circleci/run_translation_verification.sh
+            ./.github/run_translation_verification.sh
   # deploys assets to an uncached folder in the S3 bucket named by branch
   deploy_branch:
     docker:
@@ -215,39 +215,39 @@ jobs:
           cache-control: 'max-age=43200'
 workflows:
   version: 2
-  build_and_deploy:
-    jobs:
-      - build:
-          filters:
-            branches:
-              ignore:
-                - develop
-                - master
-                - /^support\/.*/
-                - /^hotfix\/.*/
-                - /^feature\/.*-i18n/
-                - /^release\/.*/
-      - unit_test:
-          requires:
-            - build
-      - headless_acceptance_test:
-          requires:
-            - build
-      - browserstack_acceptance_test:
-          requires:
-            - build
-      - useragent_acceptance_test:
-          requires:
-            - build
-      - translation_test:
-          requires:
-            - build
-      - deploy_branch:
-          requires:
-            - unit_test
-            - browserstack_acceptance_test
-            - useragent_acceptance_test
-            - headless_acceptance_test
+  # build_and_deploy:
+  #   jobs:
+  #     - build:
+  #         filters:
+  #           branches:
+  #             ignore:
+  #               - develop
+  #               - master
+  #               - /^support\/.*/
+  #               - /^hotfix\/.*/
+  #               - /^feature\/.*-i18n/
+  #               - /^release\/.*/
+  #     - unit_test:
+  #         requires:
+  #           - build
+  #     - headless_acceptance_test:
+  #         requires:
+  #           - build
+  #     - browserstack_acceptance_test:
+  #         requires:
+  #           - build
+  #     - useragent_acceptance_test:
+  #         requires:
+  #           - build
+  #     - translation_test:
+  #         requires:
+  #           - build
+  #     - deploy_branch:
+  #         requires:
+  #           - unit_test
+  #           - browserstack_acceptance_test
+  #           - useragent_acceptance_test
+  #           - headless_acceptance_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:

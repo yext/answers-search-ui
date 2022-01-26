@@ -11,7 +11,7 @@ if [[ $GITHUB_BRANCH == release/*
   || $GITHUB_BRANCH == master
   || $GITHUB_BRANCH == support/* ]]
 then
-  npx testcafe "browserstack:ie@11.0,browserstack:safari" --config-file ./.circleci/testcafe.json -q
+  npx testcafe "browserstack:ie@11.0,browserstack:safari" --config-file ./.github/testcafe.json -q
 else
-  npx testcafe -c 2 "browserstack:ie@11.0" --config-file ./.circleci/testcafe.json -q
+  npx testcafe -c 2 "browserstack:ie@11.0" --config-file ./.github/testcafe.json -q
 fi
