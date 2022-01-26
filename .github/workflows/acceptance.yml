@@ -38,6 +38,17 @@ jobs:
         with:
           name: build-output
           path: dist/
+      - name: set env vars
+          run: |
+            echo $ENV
+            echo "export BROWSERSTACK_USE_AUTOMATE=1" > ~/.bashrc
+            echo "export BROWSERSTACK_PROJECT_NAME='Answers SDK'" > ~/.bashrc
+            echo "export BROWSERSTACK_BUILD_ID='${CIRCLE_BRANCH} - ${CIRCLE_BUILD_NUM}'" > ~/.bashrc
+            echo "export COMMIT_MSG_TITLE=$(git log -n 1 --pretty=format:%s)" > ~/.bashrc
+            echo "export BROWSERSTACK_TEST_RUN_NAME=$COMMIT_MSG_TITLE" > ~/.bashrc
+            source ~/.bashrc
+            echo sourced
+            echo $ENV
       - run: ./.circleci/run_browserstack_acceptance.sh
   
   translation_vertification:
@@ -74,4 +85,20 @@ jobs:
         with:
           name: build-output
           path: dist/
+      - name: set env vars
+          run: |
+            echo $ENV
+            echo "export BROWSERSTACK_USE_AUTOMATE=1" > ~/.bashrc
+            echo "export BROWSERSTACK_PROJECT_NAME='Answers SDK'" > ~/.bashrc
+            echo "export BROWSERSTACK_BUILD_ID='${CIRCLE_BRANCH} - ${CIRCLE_BUILD_NUM}'" > ~/.bashrc
+            echo "export COMMIT_MSG_TITLE=$(git log -n 1 --pretty=format:%s)" > ~/.bashrc
+            echo "export BROWSERSTACK_TEST_RUN_NAME=$COMMIT_MSG_TITLE" > ~/.bashrc
+            source ~/.bashrc
+            echo sourced
+            echo $ENV
       - run: ./.circleci/run_useragent_acceptance.sh
+      
+
+
+
+
