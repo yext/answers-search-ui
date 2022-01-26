@@ -1,4 +1,7 @@
 #!/bin/bash
+echo $BROWSERSTACK_USERNAME
+
+printenv
 
 export BROWSERSTACK_USE_AUTOMATE="1"
 export BROWSERSTACK_PROJECT_NAME="Answers SDK"
