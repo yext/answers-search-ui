@@ -20,6 +20,9 @@ jobs:
   browserstack_acceptance:
     name: Browserstack Acceptance
     runs-on: ubuntu-latest
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.OSHI_BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.OSHI_BROWSERSTACK_ACCESS_KEY }}
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14
@@ -30,9 +33,6 @@ jobs:
       - run: npm ci
       - run: npm run build
       - run: ./.circleci/run_browserstack_acceptance.sh
-        env:
-          BROWSERSTACK_USERNAME: ${{ secrets.OSHI_BROWSERSTACK_USERNAME }}
-          BROWSERSTACK_ACCESS_KEY: ${{ secrets.OSHI_BROWSERSTACK_ACCESS_KEY }}
 
   translation_vertification:
     name: Translation Verification
