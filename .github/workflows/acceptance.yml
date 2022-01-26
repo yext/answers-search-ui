@@ -22,66 +22,65 @@ jobs:
           path: dist/
       - run: ./.circleci/run_headless_acceptance.sh
 
-  # browserstack_acceptance:
-  #   name: Browserstack Acceptance
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-  #     BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js 14
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 14
-  #         cache: 'npm'
-  #     - run: npm ci
-  #     - name: Download build-output artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: build-output
-  #         path: dist/
-  #     - name: set env vars
-  #     - run: ./.circleci/run_browserstack_acceptance.sh
+  browserstack_acceptance:
+    name: Browserstack Acceptance
+    runs-on: ubuntu-latest
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.circleci/run_browserstack_acceptance.sh
 
-  # translation_vertification:
-  #   name: Translation Verification
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js 14
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 14
-  #         cache: 'npm'
-  #     - run: npm ci
-  #     - name: Download build-output artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: build-output
-  #         path: dist/
-  #     - run: ./.circleci/run_translation_verification.sh
+  translation_vertification:
+    name: Translation Verification
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.circleci/run_translation_verification.sh
 
-  # useragent:
-  #   name: Useragent Acceptance
-  #   runs-on: ubuntu-latest
-  #   env:
-  #     BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-  #     BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js 14
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 14
-  #         cache: 'npm'
-  #     - run: npm ci
-  #     - name: Download build-output artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: build-output
-  #         path: dist/
-  #     - run: ./.circleci/run_useragent_acceptance.sh
+  useragent:
+    name: Useragent Acceptance
+    runs-on: ubuntu-latest
+    env:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.circleci/run_useragent_acceptance.sh
       
 
 
