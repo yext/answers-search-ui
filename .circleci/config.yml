@@ -55,7 +55,7 @@ jobs:
       - run:
           name: Echo AWS Region
           command: |
-            echo $AWS_REGION
+            echo $AWS_REGION > env_var.txt && cat env_var.txt
       - persist_to_workspace:
           root: .
           paths:
