@@ -231,11 +231,6 @@ workflows:
                 - /^feature\/.*-i18n/
                 - /^release\/.*/
       - deploy_branch:
-          requires:
-            - unit_test
-            - browserstack_acceptance_test
-            - useragent_acceptance_test
-            - headless_acceptance_test
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
