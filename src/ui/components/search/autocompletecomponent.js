@@ -3,6 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
+import AutoCompleteResponseTransformer from '../../../core/search/autocompleteresponsetransformer';
 
 const Keys = {
   BACKSPACE: 8,
@@ -143,6 +144,12 @@ export default class AutoCompleteComponent extends Component {
      * @type {boolean}
      */
     this._isVoiceSearchActive = false;
+
+    /**
+     * Custom autocomplete prompts
+     * @type {string[]}
+     */
+    this.customPrompts = opts.customPrompts;
   }
 
   /**
@@ -177,6 +184,15 @@ export default class AutoCompleteComponent extends Component {
       data = {};
     } else {
       this._isOpen = true;
+    }
+
+    if (this.customPrompts && !queryInputEl.value && data.sections) {
+      const hasCustomPrompts = data.sections.find(result => result.isCustom);
+      if (!hasCustomPrompts) {
+        const newAutocompleteResults = this.combineResultsWithCustomPrompts(data);
+        this.core.storage.set(`${StorageKeys.AUTOCOMPLETE}.${this.name}`, newAutocompleteResults);
+        return;
+      }
     }
 
     if (wasOpen && !this._isOpen) {
@@ -356,6 +372,23 @@ export default class AutoCompleteComponent extends Component {
 
   setIsVoiceSearchActive (value) {
     this._isVoiceSearchActive = value;
+  }
+
+  setCustomPrompts (prompts) {
+    this.customPrompts = prompts;
+  }
+
+  combineResultsWithCustomPrompts (data) {
+    const newSections = data.sections.filter(result => result.resultsCount !== 0);
+    const customAutocompleteResults = this.customPrompts
+      .map(prompt => AutoCompleteResponseTransformer._transformAutoCompleteResult({ value: prompt }));
+    newSections.unshift({
+      results: customAutocompleteResults,
+      resultsCount: customAutocompleteResults.length,
+      isCustom: true
+    });
+    const newAutocompleteResults = Object.assign({}, data, { sections: newSections });
+    return newAutocompleteResults;
   }
 
   autoComplete (input) {
