@@ -5,8 +5,8 @@ on:
 
 jobs:
   headless_acceptance:
+    name: Headless Acceptance
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14
@@ -21,10 +21,10 @@ jobs:
           name: build-output
           path: dist/
       - run: ./.circleci/run_headless_acceptance.sh
-  
-  browserstack_acceptance:
-    runs-on: ubuntu-latest
 
+  browserstack_acceptance:
+    name: Browserstack Acceptance
+    runs-on: ubuntu-latest
     env:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
@@ -43,10 +43,10 @@ jobs:
           path: dist/
       - name: set env vars
       - run: ./.circleci/run_browserstack_acceptance.sh
-  
-  translation_vertification:
-    runs-on: ubuntu-latest
 
+  translation_vertification:
+    name: Translation Verification
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
       - name: Use Node.js 14
@@ -63,8 +63,8 @@ jobs:
       - run: ./.circleci/run_translation_verification.sh
 
   useragent:
+    name: Useragent Acceptance
     runs-on: ubuntu-latest
-
     env:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
