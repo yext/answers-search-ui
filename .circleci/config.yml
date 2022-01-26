@@ -35,6 +35,7 @@ commands:
       - run:
           name: Configure AWS
           command: |
+            echo $AWS_REGION
             mkdir -p ~/.aws
             cp .circleci/aws_config ~/.aws/config
             echo -e $AWS_PROD_PROFILE >> ~/.aws/config
