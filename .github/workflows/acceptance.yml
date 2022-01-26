@@ -20,7 +20,11 @@ jobs:
           node-version: 14
           cache: 'npm'
       - run: npm ci
-      - run: npm run build
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
       - run: ./.circleci/run_headless_acceptance.sh
 
   browserstack_acceptance:
@@ -34,7 +38,11 @@ jobs:
           node-version: 14
           cache: 'npm'
       - run: npm ci
-      - run: npm run build
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
       - run: ./.circleci/run_browserstack_acceptance.sh
 
   translation_vertification:
@@ -48,7 +56,11 @@ jobs:
           node-version: 14
           cache: 'npm'
       - run: npm ci
-      - run: npm run build
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
       - run: ./.circleci/run_translation_verification.sh
 
   useragent:
@@ -62,7 +74,11 @@ jobs:
           node-version: 14
           cache: 'npm'
       - run: npm ci
-      - run: npm run build
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
       - run: ./.circleci/run_useragent_acceptance.sh
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
