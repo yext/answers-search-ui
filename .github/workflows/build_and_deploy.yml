@@ -12,10 +12,10 @@ on:
 
 jobs:
   call_build:
-    uses: .github/workflows/build.yml
+    uses: ./.github/workflows/build.yml
 
   call_unit_test:
-    uses: .github/workflows/unit_test.yml
+    uses: ./.github/workflows/unit_test.yml
     needs: call_build
 
   format_branch_name:
@@ -34,7 +34,7 @@ jobs:
     needs: 
       - call_unit_test
       - format_branch_name
-    uses: .github/workflows/deploy.yml
+    uses: ./.github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.format_branch_name.outputs.formatted_branch }}
     secrets:
