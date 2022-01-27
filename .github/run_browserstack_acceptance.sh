@@ -6,10 +6,6 @@ export BROWSERSTACK_BUILD_ID="${GITHUB_REF_NAME} - ${GITHUB_RUN_ID} + ${CIRCLE_B
 COMMIT_MSG_TITLE=$(git log -n 1 --pretty=format:%s)
 export BROWSERSTACK_TEST_RUN_NAME=$COMMIT_MSG_TITLE
 
-printenv
-
-pwd
-
 if [[ $GITHUB_REF_NAME == release/*
   || $GITHUB_REF_NAME == hotfix/*
   || $GITHUB_REF_NAME == master
