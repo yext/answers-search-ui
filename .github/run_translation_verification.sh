@@ -16,10 +16,10 @@ fi
 
 # Verify that translations are present for all languages
 cd conf/i18n/translations
-if [[ $GITHUB_BRANCH == release/*
-  || $GITHUB_BRANCH == hotfix/*
-  || $GITHUB_BRANCH == master
-  || $GITHUB_BRANCH == support/* ]]
+if [[ $GITHUB_REF_NAME == release/*
+  || $GITHUB_REF_NAME == hotfix/*
+  || $GITHUB_REF_NAME == master
+  || $GITHUB_REF_NAME == support/* ]]
 then
   for po_file in *.po
     do msgcmp $po_file messages.pot
