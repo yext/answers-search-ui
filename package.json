@@ -118,7 +118,7 @@
     "dev": "gulp dev",
     "docs": "jsdoc -R README.md -d docs/ -r src/",
     "lint": "eslint .",
-    "test": "eslint . && stylelint src/**/*.scss && cross-env NODE_ICU_DATA=node_modules/full-icu jest",
+    "test": "ls dist eslint . && stylelint src/**/*.scss && cross-env NODE_ICU_DATA=node_modules/full-icu jest",
     "acceptance": "testcafe safari,chrome --config-file ./.circleci/testcafe.json",
     "wcag": "./tests/acceptance/wcag/index.js",
     "size": "size-limit",
