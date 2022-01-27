@@ -1,4 +1,4 @@
-name: Build and deploy # Note: Deployment will be added in a future PR 
+name: Build and deploy
 
 on:
   push:
