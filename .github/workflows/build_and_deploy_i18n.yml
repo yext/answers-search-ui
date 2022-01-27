@@ -2,9 +2,8 @@ name: Build and deploy i18n
 
 on:
   push:
-    branches-ignore:
+    branches:
       - develop
-      - master
       - support/**
       - hotfix/**
       - feature/**-i18n
