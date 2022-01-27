@@ -9,23 +9,23 @@ on:
         required: true
 
 jobs:
-  # headless_acceptance:
-  #   name: Headless Acceptance
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js 14
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 14
-  #         cache: 'npm'
-  #     - run: npm ci
-  #     - name: Download build-output artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: build-output
-  #         path: dist/
-  #     - run: ./.github/run_headless_acceptance.sh
+  headless_acceptance:
+    name: Headless Acceptance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.github/run_headless_acceptance.sh
 
   browserstack_acceptance:
     name: Browserstack Acceptance
@@ -48,41 +48,23 @@ jobs:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
           BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
-  # translation_vertification:
-  #   name: Translation Verification
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js 14
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 14
-  #         cache: 'npm'
-  #     - run: npm ci
-  #     - name: Download build-output artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: build-output
-  #         path: dist/
-  #     - run: ./.github/run_translation_verification.sh
-
-  # useragent:
-  #   name: Useragent Acceptance
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #     - uses: actions/checkout@v2
-  #     - name: Use Node.js 14
-  #       uses: actions/setup-node@v2
-  #       with:
-  #         node-version: 14
-  #         cache: 'npm'
-  #     - run: npm ci
-  #     - name: Download build-output artifact
-  #       uses: actions/download-artifact@v2
-  #       with:
-  #         name: build-output
-  #         path: dist/
-  #     - run: ./.github/run_useragent_acceptance.sh
-  #       env:
-  #         BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-  #         BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  useragent:
+    name: Useragent Acceptance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.github/run_useragent_acceptance.sh
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
