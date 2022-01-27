@@ -28,7 +28,7 @@ test('single option filterbox works with back/forward navigation and page refres
   await t.addRequestHooks(radiusFilterLogger);
   await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   const searchComponent = FacetsPage.getSearchComponent();
-  await searchComponent.enterQuery('all');
+  await searchComponent.enterQuery(' ');
   await searchComponent.submitQuery();
   await SearchRequestLogger.waitOnSearchComplete(t);
 
