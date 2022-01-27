@@ -215,39 +215,21 @@ jobs:
           cache-control: 'max-age=43200'
 workflows:
   version: 2
-  # build_and_deploy:
-  #   jobs:
-  #     - build:
-  #         filters:
-  #           branches:
-  #             ignore:
-  #               - develop
-  #               - master
-  #               - /^support\/.*/
-  #               - /^hotfix\/.*/
-  #               - /^feature\/.*-i18n/
-  #               - /^release\/.*/
-  #     - unit_test:
-  #         requires:
-  #           - build
-  #     - headless_acceptance_test:
-  #         requires:
-  #           - build
-  #     - browserstack_acceptance_test:
-  #         requires:
-  #           - build
-  #     - useragent_acceptance_test:
-  #         requires:
-  #           - build
-  #     - translation_test:
-  #         requires:
-  #           - build
-  #     - deploy_branch:
-  #         requires:
-  #           - unit_test
-  #           - browserstack_acceptance_test
-  #           - useragent_acceptance_test
-  #           - headless_acceptance_test
+  build_and_deploy:
+    jobs:
+      - build:
+          filters:
+            branches:
+              ignore:
+                - develop
+                - master
+                - /^support\/.*/
+                - /^hotfix\/.*/
+                - /^feature\/.*-i18n/
+                - /^release\/.*/
+      - browserstack_acceptance_test:
+          requires:
+            - build
   build_and_deploy_i18n:
     jobs:
       - build_i18n:
