@@ -2,10 +2,6 @@ name: Run acceptance tests
 
 on:
   workflow_call:
-    inputs:
-      GITHUB_BRANCH:
-        required: true
-        type: string
     secrets:
       BROWSERSTACK_USERNAME:
         required: true
