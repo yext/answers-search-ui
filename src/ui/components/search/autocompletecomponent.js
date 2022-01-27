@@ -3,6 +3,7 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
+import { isCloseMatch } from '../../tools/stringmatching';
 import AutoCompleteResponseTransformer from '../../../core/search/autocompleteresponsetransformer';
 
 const Keys = {
@@ -186,7 +187,10 @@ export default class AutoCompleteComponent extends Component {
       this._isOpen = true;
     }
 
-    if (this.customPrompts && !queryInputEl.value && data.sections) {
+    // should show IF it's empty search OR levenstien match on a non empty search
+    if (this.customPrompts && data.sections) {
+      console.log('query', queryInputEl.value);
+      this.customPrompts.forEach(prompt => console.log('isCloseMatch(queryInputEl.value)', isCloseMatch(prompt, queryInputEl.value)));
       const hasCustomPrompts = data.sections.find(result => result.isCustom);
       if (!hasCustomPrompts) {
         const newAutocompleteResults = this.combineResultsWithCustomPrompts(data);
