@@ -21,6 +21,12 @@ jobs:
 
   call_format_branch_name:
     uses: ./.github/workflows/format_branch_name.yml
+  
+  #debug
+  call_test:
+    runs-on: ubuntu-latest
+    steps:
+      run: echo "github.ref_name is ${github.ref_name}"
 
   call_deploy:
     if: github.ref_name != 'dev/build-and-deploy-i18n' #develop
