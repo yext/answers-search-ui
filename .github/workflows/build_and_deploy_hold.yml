@@ -10,8 +10,8 @@ on:
 jobs:
   call_build:
     uses: ./.github/workflows/build.yml
-    with:
-      build_script: build-locales
+    # with:
+    #   build_script: build-locales
 
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
@@ -38,9 +38,9 @@ jobs:
 
   call_deploy_with_hold_state:
     needs: 
-      - call_unit_test
+      # - call_unit_test
       - call_format_branch_name
-      - call_acceptance
+      # - call_acceptance
       - call_extract_versions
     runs-on: ubuntu-latest
     steps:
