@@ -2,10 +2,8 @@ name: Build and deploy with a hold state
 
 on:
   push:
-    # tags:
-    #   - 'test-v*'
-    branches:
-      - dev/build-and-deploy-hold #test
+    tags:
+      - 'test-v*'
 
 jobs:
   call_build:
