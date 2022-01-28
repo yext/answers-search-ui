@@ -20,4 +20,4 @@ jobs:
         with:
           name: build-output
           path: dist/
-      - run: ./.circleci/run_translation_verification.sh
+      - run: ./.github/run_translation_verification.sh
