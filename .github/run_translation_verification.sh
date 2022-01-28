@@ -16,14 +16,7 @@ fi
 
 # Verify that translations are present for all languages
 cd conf/i18n/translations
-if [[ $GITHUB_REF_NAME == release/*
-  || $GITHUB_REF_NAME == hotfix/*
-  || $GITHUB_REF_NAME == master
-  || $GITHUB_REF_NAME == support/* ]]
-then
-  for po_file in *.po
-    do msgcmp $po_file messages.pot
-  done
-else
-  echo "Skipping the verification that all translations are present"
-fi
+
+for po_file in *.po
+  do msgcmp $po_file messages.pot
+done
