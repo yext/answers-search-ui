@@ -2,9 +2,10 @@ name: Build and deploy with a hold state
 
 on:
   push:
-    tags:
-      - 'v.*'
-
+    # tags:
+    #   - 'v.*'
+    branches:
+      - dev/build-and-deploy-hold
 jobs:
   # call_build:
   #   uses: ./.github/workflows/build.yml
