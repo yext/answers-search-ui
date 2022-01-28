@@ -23,7 +23,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment: production # sets in github repo with reiewer requirement protection rule
     steps:
       - uses: actions/checkout@v2
       - name: Download build-output artifact
