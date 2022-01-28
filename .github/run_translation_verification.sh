@@ -24,7 +24,8 @@ if [[ $GITHUB_REF_NAME == release/*
   || $GITHUB_REF_NAME == support/* ]]
 then
   for po_file in *.po
-    do msgcmp $po_file messages.pot
+  do
+    msgcmp $po_file messages.pot
     exit_code=$(( exit_code + $? ))
   done
 else
