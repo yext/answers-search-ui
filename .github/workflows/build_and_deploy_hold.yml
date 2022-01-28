@@ -3,7 +3,7 @@ name: Build and deploy with a hold state
 on:
   push:
     tags:
-      - 'v*'
+      - 'test-v*'
 
 jobs:
   call_build:
