@@ -5,7 +5,7 @@ on:
     branches-ignore:
       - develop
       - master
-      - support/**
+      # - support/**
       - hotfix/**
       - feature/**-i18n
       - release/**
