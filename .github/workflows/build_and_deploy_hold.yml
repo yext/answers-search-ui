@@ -2,72 +2,88 @@ name: Build and deploy with a hold state
 
 on:
   push:
-    tags:
-      - 'test-v*'
+    # tags:
+    #   - 'test-v*'
+    branches:
+      - dev/build-and-deploy-hold
 
 jobs:
-  call_build:
-    uses: ./.github/workflows/build.yml
-    with:
-      build_script: build-locales
+  # call_build:
+  #   uses: ./.github/workflows/build.yml
+  #   with:
+  #     build_script: build-locales
 
-  call_unit_test:
-    uses: ./.github/workflows/unit_test.yml
-    needs: call_build
+  # call_unit_test:
+  #   uses: ./.github/workflows/unit_test.yml
+  #   needs: call_build
 
-  call_format_branch_name:
-    uses: ./.github/workflows/format_branch_name.yml
+  # call_format_branch_name:
+  #   uses: ./.github/workflows/format_branch_name.yml
 
-  call_extract_versions:
-    runs-on: ubuntu-latest
-    outputs:
-      minor_version: ${{ steps.vars.outputs.minor_version }}
-      major_version: ${{ steps.vars.outputs.major_version }}
-    steps:
-      - name: extract major and minor substrings
-        id: vars
-        run: |
-          MINOR_VERSION="$(echo "${{ github.ref_name }}" | cut -d '.' -f 1,2)"  
-          echo $MINOR_VERSION
-          echo ::set-output name=minor_version::${MINOR_VERSION}
-          MAJOR_VERSION="$(echo "${{ github.ref_name }}" | cut -d '.' -f 1)"
-          echo $MAJOR_VERSION
-          echo ::set-output name=major_version::${MAJOR_VERSION}
+  # call_extract_versions:
+  #   runs-on: ubuntu-latest
+  #   outputs:
+  #     minor_version: ${{ steps.vars.outputs.minor_version }}
+  #     major_version: ${{ steps.vars.outputs.major_version }}
+  #   steps:
+  #     - name: extract major and minor substrings
+  #       id: vars
+  #       run: |
+  #         MINOR_VERSION="$(echo "${{ github.ref_name }}" | cut -d '.' -f 1,2)"  
+  #         echo $MINOR_VERSION
+  #         echo ::set-output name=minor_version::${MINOR_VERSION}
+  #         MAJOR_VERSION="$(echo "${{ github.ref_name }}" | cut -d '.' -f 1)"
+  #         echo $MAJOR_VERSION
+  #         echo ::set-output name=major_version::${MAJOR_VERSION}
 
-  call_deploy_with_hold_state:
-    needs: 
-      - call_unit_test
-      - call_format_branch_name
-      - call_acceptance
-      - call_extract_versions
+  test_one:
     environment:
       name: production
     runs-on: ubuntu-latest
     steps:
-      - name: deploy with full semantic version
-        uses: ./.github/workflows/deploy.yml
-        with:
-          directory: dev/dev-build-and-deploy-hold/${{ github.ref_name }} #/${{ github.ref_name }}
-          cache-control: 'max-age=31536000'
-        secrets:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: deploy with major version
-        uses: ./.github/workflows/deploy.yml
-        with:
-          directory: dev/dev-build-and-deploy-hold/${{ needs.call_extract_versions.outputs.major_version }} #/${{ needs.call_extract_versions.outputs.major_version }}
-          cache-control: 'max-age=43200'
-        secrets:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      - name: deploy with minor version
-        uses: ./.github/workflows/deploy.yml
-        with:
-          directory: dev/dev-build-and-deploy-hold/${{ needs.call_extract_versions.outputs.minor_version }} #/${{ needs.call_extract_versions.outputs.minor_version }}
-          cache-control: 'max-age=43200'
-        secrets:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      - run: echo 'test 1'
+
+  test_two:
+    environment:
+      name: production
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 'test 2'
+
+  # call_deploy_with_hold_state:
+  #   needs: 
+  #     - call_unit_test
+  #     - call_format_branch_name
+  #     - call_acceptance
+  #     - call_extract_versions
+  #   environment:
+  #     name: production
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: deploy with full semantic version
+  #       uses: ./.github/workflows/deploy.yml
+  #       with:
+  #         directory: dev/dev-build-and-deploy-hold/${{ github.ref_name }} #/${{ github.ref_name }}
+  #         cache-control: 'max-age=31536000'
+  #       secrets:
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     - name: deploy with major version
+  #       uses: ./.github/workflows/deploy.yml
+  #       with:
+  #         directory: dev/dev-build-and-deploy-hold/${{ needs.call_extract_versions.outputs.major_version }} #/${{ needs.call_extract_versions.outputs.major_version }}
+  #         cache-control: 'max-age=43200'
+  #       secrets:
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  #     - name: deploy with minor version
+  #       uses: ./.github/workflows/deploy.yml
+  #       with:
+  #         directory: dev/dev-build-and-deploy-hold/${{ needs.call_extract_versions.outputs.minor_version }} #/${{ needs.call_extract_versions.outputs.minor_version }}
+  #         cache-control: 'max-age=43200'
+  #       secrets:
+  #         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-hold-${{ github.ref }}-1
