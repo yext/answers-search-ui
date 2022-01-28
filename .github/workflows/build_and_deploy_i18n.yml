@@ -27,7 +27,7 @@ jobs:
   call_test:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "github.ref_name is ${github.ref_name}"
+      - run: echo ${{ github.ref_name }}
 
   # call_deploy:
   #   if: github.ref_name != 'dev/build-and-deploy-i18n' #develop
