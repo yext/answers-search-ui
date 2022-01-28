@@ -3,6 +3,7 @@ name: Build and deploy i18n
 on:
   push:
     branches:
+      - dev/build-and-deploy-i18n # for testing
       - develop
       - support/**
       - hotfix/**
