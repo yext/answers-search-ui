@@ -53,6 +53,8 @@ jobs:
       environment: production
 
   test_three:
+    environment:
+      name: production
     uses: ./.github/workflows/echo_test.yml
 
   # call_deploy_with_hold_state:

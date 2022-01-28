@@ -10,7 +10,7 @@ on:
 
 jobs:
   call_test:
-    environment: ${{ inputs.environment }}
+    # environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ secrets.DUMMY_SECRET }}
+      - run: echo ${{ secrets.SECRET_TEST }}
