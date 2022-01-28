@@ -20,9 +20,9 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build
-    - name: Percy Snapshots
-      run: npx percy exec -- node tests/acceptance/percy/snapshots.js
-      env:
-        PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+    # - run: npm ci
+    # - run: npm run build
+    # - name: Percy Snapshots
+    #   run: npx percy exec -- node tests/acceptance/percy/snapshots.js
+    #   env:
+    #     PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
