@@ -17,10 +17,9 @@ jobs:
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
     needs: call_build
-
-  call_misc_test:
+  
+  call_misc_tests:
     uses: ./.github/workflows/miscellaneous_tests.yml
-    needs: call_build
 
   call_acceptance:
     uses: ./.github/workflows/acceptance.yml

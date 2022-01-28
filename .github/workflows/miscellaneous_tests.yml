@@ -15,9 +15,4 @@ jobs:
           node-version: 14
           cache: 'npm'
       - run: npm ci
-      - name: Download build-output artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build-output
-          path: dist/
       - run: ./.github/run_translation_verification.sh
