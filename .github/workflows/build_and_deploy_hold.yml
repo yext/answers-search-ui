@@ -43,9 +43,9 @@ jobs:
       # - call_acceptance
       - call_extract_versions
     uses: ./.github/workflows/deploy_hold.yml
-        with:
-          directory: dev/dev-build-and-deploy-hold/${{ github.ref_name }} #/${{ github.ref_name }}
-          cache-control: 'max-age=31536000'
+      with:
+        directory: dev/dev-build-and-deploy-hold/${{ github.ref_name }} #/${{ github.ref_name }}
+        cache-control: 'max-age=31536000'
     # runs-on: ubuntu-latest
     # steps:
     #   - name: deploy with full semantic version
