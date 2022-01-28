@@ -5,7 +5,7 @@ on:
     # tags:
     #   - 'test-v*'
     branches:
-      - dev/build-and-deploy-hold
+      - dev/build-and-deploy-hold #test
 
 jobs:
   # call_build:
