@@ -28,42 +28,42 @@ jobs:
     steps:
       run: echo "github.ref_name is ${github.ref_name}"
 
-  call_deploy:
-    if: github.ref_name != 'dev/build-and-deploy-i18n' #develop
-    needs: 
-      - call_unit_test
-      - call_format_branch_name
-    uses: ./.github/workflows/deploy.yml
-    with:
-      directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}/test-call-deploy
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # call_deploy:
+  #   if: github.ref_name != 'dev/build-and-deploy-i18n' #develop
+  #   needs: 
+  #     - call_unit_test
+  #     - call_format_branch_name
+  #   uses: ./.github/workflows/deploy.yml
+  #   with:
+  #     directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}/test-call-deploy
+  #   secrets:
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  call_deploy_canary:
-    if: github.ref_name == 'dev/build-and-deploy-i18n' #develop
-    needs: 
-      - call_unit_test
-      - call_format_branch_name
-    uses: ./.github/workflows/deploy.yml
-    with:
-      directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}/test-call-deploy-canary-latest #canary/latest
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # call_deploy_canary:
+  #   if: github.ref_name == 'dev/build-and-deploy-i18n' #develop
+  #   needs: 
+  #     - call_unit_test
+  #     - call_format_branch_name
+  #   uses: ./.github/workflows/deploy.yml
+  #   with:
+  #     directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}/test-call-deploy-canary-latest #canary/latest
+  #   secrets:
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
-  call_deploy_canary_sha:
-    if: github.ref_name == 'dev/build-and-deploy-i18n' #develop
-    needs: 
-      - call_unit_test
-      - call_format_branch_name
-    uses: ./.github/workflows/deploy.yml
-    with:
-      directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}/test-call-deploy-canary-${{ github.sha }} #canary/${{ github.sha }}
-      cache-control: 'max-age=31536000'
-    secrets:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  # call_deploy_canary_sha:
+  #   if: github.ref_name == 'dev/build-and-deploy-i18n' #develop
+  #   needs: 
+  #     - call_unit_test
+  #     - call_format_branch_name
+  #   uses: ./.github/workflows/deploy.yml
+  #   with:
+  #     directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}/test-call-deploy-canary-${{ github.sha }} #canary/${{ github.sha }}
+  #     cache-control: 'max-age=31536000'
+  #   secrets:
+  #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-i18n-${{ github.ref }}-1
