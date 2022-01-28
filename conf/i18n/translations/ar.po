@@ -162,16 +162,6 @@ msgstr "شكرًا على ملاحظاتك!"
 msgid "Thank you for your question!"
 msgstr "شكرا لك على سؤالك!"
 
-#: src/ui/templates/results/alternativeverticals.hbs:11
-msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
-msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
-msgstr[0] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
-msgstr[1] "أسفرت فئة البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
-msgstr[2] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
-msgstr[3] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
-msgstr[4] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
-msgstr[5] "أسفرت فئات البحث التالية عن نتائج لعدد <span class=\"yxt-AlternativeVerticals-details--query\">&quot;[[query]]&quot;</span>:"
-
 #: src/ui/components/results/directanswercomponent.js:23
 msgid "This answered my question"
 msgstr "هذا أجاب عن سؤالي"

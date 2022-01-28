@@ -201,10 +201,6 @@ msgstr "Voici <em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\"> 
 msgid "Speech Recognition is not available."
 msgstr "La reconnaissance vocale n'est pas disponible."
 
-#: src/ui/templates/results/noresults.hbs:24
-msgid "Suggestions:"
-msgstr "Suggestions:"
-
 #: src/ui/components/results/directanswercomponent.js:29
 msgid "Thank you for your feedback!"
 msgstr "Merci pour vos retours !"

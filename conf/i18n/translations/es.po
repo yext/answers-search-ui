@@ -216,9 +216,6 @@ msgstr "Sugerencias:"
 msgid "Thank you for your feedback!"
 msgstr "Gracias por su comentario"
 
-#: src/ui/components/questions/questionsubmissioncomponent.js:127
-msgid "Thank you for your question!"
-msgstr "Gracias por su pregunta."
 
 #: src/ui/templates/results/alternativeverticals.hbs:11
 msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
