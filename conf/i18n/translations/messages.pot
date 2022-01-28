@@ -42,12 +42,6 @@ msgstr ""
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
 msgstr ""
 
-#: src/ui/templates/results/alternativeverticals.hbs:11
-msgid "bobob The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
-msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
-msgstr[0] ""
-msgstr[1] ""
-
 #: src/ui/components/questions/questionsubmissioncomponent.js:62
 msgid "By submitting my email address, I consent to being contacted via email at the address provided."
 msgstr ""
@@ -155,6 +149,12 @@ msgstr ""
 #: src/ui/components/questions/questionsubmissioncomponent.js:128
 msgid "Thank you for your question!"
 msgstr ""
+
+#: src/ui/templates/results/alternativeverticals.hbs:11
+msgid "The following search category yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgid_plural "The following search categories yielded results for <span class=\"yxt-AlternativeVerticals-details--query\">\"[[query]]\"</span>:"
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/ui/components/results/directanswercomponent.js:23
 msgid "This answered my question"
