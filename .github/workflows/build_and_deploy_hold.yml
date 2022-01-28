@@ -48,8 +48,8 @@ jobs:
 
   # test to see if secrets from repo that's not in specific environment can be access
   test_two:
-    environment:
-      name: production
+    # environment:
+    #   name: production
     uses: ./.github/workflows/echo_test.yml
     secrets:
       SECRET_TEST: ${{ secrets.DUMMY_SECRET }}
