@@ -36,6 +36,7 @@ jobs:
       - call_unit_test
       - call_format_branch_name
       - call_acceptance
+      - call_misc_tests
     uses: ./.github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}
