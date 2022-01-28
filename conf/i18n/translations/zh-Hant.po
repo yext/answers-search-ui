@@ -2,11 +2,6 @@ msgid ""
 msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 
-#: src/ui/templates/results/alternativeverticals.hbs:28
-msgid "([[resultsCount]] result)"
-msgid_plural "([[resultsCount]] results)"
-msgstr[0] "([[resultsCount]] 個結果)"
-
 #: src/ui/templates/search/autocomplete.hbs:6
 msgid "[[resultsCount]] [[label]] autocomplete option found."
 msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
