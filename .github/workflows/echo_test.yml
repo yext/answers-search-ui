@@ -2,12 +2,15 @@ name: test echo
 
 on:
   workflow_call:
-    secrets:
-      SECRET_TEST:
-        required: true
+    inputs:
+      environment:
+        required: false
+        type: string
+        default: staging
 
 jobs:
   call_test:
+    environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ secrets.SECRET_TEST }}
+      - run: echo ${{ secrets.DUMMY_TEST }}
