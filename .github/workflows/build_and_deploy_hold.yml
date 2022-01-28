@@ -36,19 +36,23 @@ jobs:
   #         echo $MAJOR_VERSION
   #         echo ::set-output name=major_version::${MAJOR_VERSION}
 
+  # test to see if secret can be pass by 'with' to workflow in 'steps'
   test_one:
     environment:
       name: production
     runs-on: ubuntu-latest
     steps:
-      - run: echo 'test 1'
+      - uses: ./.github/workflows/echo_test.yml
+        with:
+          SECRET_TEST: 'some secret string'
 
+  # test to see if secrets from repo that's not in specific environment can be access
   test_two:
     environment:
       name: production
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo 'test 2'
+    uses: ./.github/workflows/echo_test.yml
+    secrets:
+      SECRET_TEST: ${{ secrets.DUMMY_SECRET }}
 
   # call_deploy_with_hold_state:
   #   needs: 

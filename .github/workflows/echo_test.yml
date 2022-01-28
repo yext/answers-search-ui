@@ -1,0 +1,13 @@
+name: test echo
+
+on:
+  workflow_call:
+    secrets:
+      SECRET_TEST:
+        required: true
+
+jobs:
+  call_test:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo ${{ secrets.SECRET_TEST }}
