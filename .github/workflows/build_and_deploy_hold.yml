@@ -46,28 +46,28 @@ jobs:
     steps:
       - name: deploy with full semantic version
         uses: ./.github/workflows/deploy.yml
-          with:
-            directory: dev/dev-build-and-deploy-hold/${{ github.ref_name }} #/${{ github.ref_name }}
-            cache-control: 'max-age=31536000'
-          secrets:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
+          directory: dev/dev-build-and-deploy-hold/${{ github.ref_name }} #/${{ github.ref_name }}
+          cache-control: 'max-age=31536000'
+        secrets:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: deploy with major version
         uses: ./.github/workflows/deploy.yml
-          with:
-            directory: dev/dev-build-and-deploy-hold/${{ needs.call_extract_versions.outputs.major_version }} #/${{ needs.call_extract_versions.outputs.major_version }}
-            cache-control: 'max-age=43200'
-          secrets:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
+          directory: dev/dev-build-and-deploy-hold/${{ needs.call_extract_versions.outputs.major_version }} #/${{ needs.call_extract_versions.outputs.major_version }}
+          cache-control: 'max-age=43200'
+        secrets:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: deploy with minor version
         uses: ./.github/workflows/deploy.yml
-          with:
-            directory: dev/dev-build-and-deploy-hold/${{ needs.call_extract_versions.outputs.minor_version }} #/${{ needs.call_extract_versions.outputs.minor_version }}
-            cache-control: 'max-age=43200'
-          secrets:
-            AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-            AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        with:
+          directory: dev/dev-build-and-deploy-hold/${{ needs.call_extract_versions.outputs.minor_version }} #/${{ needs.call_extract_versions.outputs.minor_version }}
+          cache-control: 'max-age=43200'
+        secrets:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-hold-${{ github.ref }}-1
