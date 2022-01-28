@@ -13,4 +13,4 @@ jobs:
     environment: ${{ inputs.environment }}
     runs-on: ubuntu-latest
     steps:
-      - run: echo ${{ secrets.DUMMY_TEST }}
+      - run: echo ${{ secrets.DUMMY_SECRET }}
