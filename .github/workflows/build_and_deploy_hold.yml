@@ -38,7 +38,7 @@ jobs:
 
   call_deploy_with_hold_state:
     needs: 
-      # - call_unit_test
+      - call_unit_test
       - call_format_branch_name
       # - call_acceptance
       - call_extract_versions
