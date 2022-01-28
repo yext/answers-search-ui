@@ -15,4 +15,5 @@ jobs:
           node-version: 14
           cache: 'npm'
       - run: npm ci
+      - run: sudo apt-get install -qq gettext
       - run: ./.github/run_translation_verification.sh
