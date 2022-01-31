@@ -58,7 +58,7 @@ jobs:
           MINOR_VERSION=$(echo "${{ github.ref_name }}" | cut -d '.' -f 2) 
           MAJOR_VERSION=$(echo "${{ github.ref_name }}" | cut -d '.' -f 1)
           NEXT_MINOR_VERSION=$(( $MINOR_VERSION + 1 ))
-          OUTPUT=$(git tag -l "$MAJOR_VERSION.$NEXT_MINOR_VERSION.*")
+          OUTPUT=$(git tag --list "$MAJOR_VERSION.$NEXT_MINOR_VERSION.*")
           if [ -z $OUTPUT ]
           then
             echo ::set-output name=deploy_major_version::true
