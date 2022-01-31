@@ -16,7 +16,7 @@ export function speechRecognitionIsSupported () {
   }
 
   const browserData = Bowser.parse(window.navigator.userAgent);
-  if (browserData.platform.type !== 'mobile' && browserData.platform.type !== 'tablet') {
+  if (browserData.platform.type === 'desktop') {
     return true;
   }
 
