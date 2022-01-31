@@ -3,9 +3,9 @@ name: Build and deploy search bar
 on:
   push:
     tags:
-      -'search-bar-v*'
+      - 'search-bar-v*'
     branches:
-      -'search-bar-v*' ##FOR TESTING ONLY
+      - 'search-bar-v*' ##FOR TESTING ONLY
 
 jobs:
   call_build:
