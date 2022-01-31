@@ -1,3 +1,5 @@
+import Bowser from 'bowser';
+
 /**
  * Whether the SpeechRecognition API is supported by the current browser.
  *
@@ -9,5 +11,19 @@
  * @returns {boolean}
  */
 export function speechRecognitionIsSupported () {
-  return !!(window.webkitSpeechRecognition && navigator.mediaDevices);
+  if (!(window.webkitSpeechRecognition && navigator.mediaDevices)) {
+    return false;
+  }
+
+  const browserData = Bowser.parse(window.navigator.userAgent);
+  if (browserData.platform.type !== 'mobile' && browserData.platform.type !== 'tablet') {
+    return true;
+  }
+
+  const os = browserData.os.name;
+  const browser = browserData.browser.name;
+
+  return (browser === 'Safari' && os === 'iOS') ||
+    (browser === 'Chrome' && os === 'Android') ||
+    (browser === 'Samsung Internet for Android' && os === 'Android');
 }
