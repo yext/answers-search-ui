@@ -17,6 +17,9 @@ jobs:
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
     needs: call_build
+  
+  call_misc_tests:
+    uses: ./.github/workflows/miscellaneous_tests.yml
 
   call_format_branch_name:
     uses: ./.github/workflows/format_branch_name.yml
@@ -33,6 +36,7 @@ jobs:
       - call_unit_test
       - call_format_branch_name
       - call_acceptance
+      - call_misc_tests
     uses: ./.github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}
