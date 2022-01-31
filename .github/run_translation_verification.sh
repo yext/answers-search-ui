@@ -25,8 +25,7 @@ if [[ $GITHUB_REF_NAME == release/*
 then
   for po_file in *.po
   do
-    msgcmp $po_file messages.pot
-    exit_code=$(( exit_code + $? ))
+    msgcmp $po_file messages.pot || exit_code=1
   done
 else
   echo "Skipping the verification that all translations are present"
