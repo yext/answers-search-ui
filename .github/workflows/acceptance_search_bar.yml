@@ -25,4 +25,4 @@ jobs:
         with:
           name: build-output
           path: dist/
-      - run: npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ../testcafe_search_bar.json -q --ports 8888,8889
+      - run: npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.github/testcafe_search_bar.json -q
