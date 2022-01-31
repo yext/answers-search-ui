@@ -1,0 +1,44 @@
+name: Build and deploy i18n
+
+on:
+  push:
+    tags:
+      -'search-bar-v*'
+    branches:
+      -'search-bar-v*' ##FOR TESTING ONLY
+
+jobs:
+  call_build:
+    uses: ./.github/workflows/build.yml
+    with:
+      build_script: build-search-bar-only
+  
+  call_misc_tests:
+    uses: ./.github/workflows/miscellaneous_tests.yml
+
+  call_acceptance_search_bar:
+    uses: ./.github/workflows/acceptance_search_bar.yml
+    needs: call_build
+    secrets:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+
+  extract_versions:
+    runs-on: ubuntu-latest
+    outputs:
+      minor_version: ${{ steps.vars.outputs.minor_version }}
+      major_version: ${{ steps.vars.outputs.major_version }}
+    steps:
+      - name: extract major and minor substrings
+        id: vars
+        run: |
+          MINOR_VERSION="$(echo "${{ github.ref_name }}##search-bar-" | cut -d '.' -f 1,2)"  
+          echo $MINOR_VERSION
+          echo ::set-output name=minor_version::${MINOR_VERSION}
+          MAJOR_VERSION="$(echo "${{ github.ref_name }}##search-bar-" | cut -d '.' -f 1)"
+          echo $MAJOR_VERSION
+          echo ::set-output name=major_version::${MAJOR_VERSION}
+
+concurrency:
+  group: ci-build-and-deploy-i18n-${{ github.ref }}-1
+  cancel-in-progress: true
