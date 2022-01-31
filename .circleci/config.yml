@@ -149,7 +149,7 @@ jobs:
           name: Verify translation files
           command: |
             sudo apt-get install -qq gettext
-            ./.circleci/run_translation_verification.sh
+            ./.github/run_translation_verification.sh
   # deploys assets to an uncached folder in the S3 bucket named by branch
   deploy_branch:
     docker:
