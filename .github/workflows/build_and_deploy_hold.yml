@@ -15,6 +15,9 @@ jobs:
     uses: ./.github/workflows/unit_test.yml
     needs: call_build
 
+  call_misc_tests:
+    uses: ./.github/workflows/miscellaneous_tests.yml
+
   call_acceptance:
     uses: ./.github/workflows/acceptance.yml
     needs: call_build
@@ -47,6 +50,7 @@ jobs:
       - call_format_branch_name
       - call_acceptance
       - call_extract_versions
+      - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
     with:
       directory: ${{ github.ref_name }}
@@ -61,6 +65,7 @@ jobs:
       - call_format_branch_name
       - call_acceptance
       - call_extract_versions
+      - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
     with:
       directory: ${{ needs.call_extract_versions.outputs.major_version }}
@@ -75,6 +80,7 @@ jobs:
       - call_format_branch_name
       - call_acceptance
       - call_extract_versions
+      - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
     with:
       directory: ${{ needs.call_extract_versions.outputs.minor_version }}
