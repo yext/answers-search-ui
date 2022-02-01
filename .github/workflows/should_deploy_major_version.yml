@@ -8,14 +8,14 @@ on:
         default: ''
         type: string
     outputs:
-      should_deploy_major: 
-        value: ${{ jobs.should_deploy_major.outputs.should_deploy_major }}
+      should_deploy_major_version: 
+        value: ${{ jobs.should_deploy_major_version.outputs.should_deploy_major_version }}
 
 jobs:
-  should_deploy_major:
+  should_deploy_major_version:
     runs-on: ubuntu-latest
     outputs:
-      should_deploy_major: ${{ steps.vars.outputs.should_deploy_major }}
+      should_deploy_major_version: ${{ steps.vars.outputs.should_deploy_major_version }}
     steps:
       - uses: actions/checkout@v2
         with:
@@ -30,7 +30,7 @@ jobs:
           if [ -z $OUTPUT ]
           then
             echo 'Major version should be deployed.'
-            echo ::set-output name=deploy_major_version::true
+            echo ::set-output name=should_deploy_major_version::true
           else
             echo 'Major version should not be deployed.'
           fi
