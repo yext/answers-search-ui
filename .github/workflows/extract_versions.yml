@@ -18,6 +18,7 @@ jobs:
     outputs:
       minor_version: ${{ steps.vars.outputs.minor_version }}
       major_version: ${{ steps.vars.outputs.major_version }}
+      full_version: ${{ steps.vars.outputs.full_version }}
     steps:
       - name: extract major and minor version substrings
         id: vars
