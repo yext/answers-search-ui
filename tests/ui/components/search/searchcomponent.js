@@ -164,8 +164,8 @@ describe('SearchBar component', () => {
             getTracks: () => ([{ stop: jest.fn() }])
           })
         },
-        // taken from Microsoft Edge on desktop
-        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/97.0.4692.99 Safari/537.36 Edg/97.0.1072.76'
+        // taken from Safari on MacOS
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.2 Safari/605.1.15'
       }));
     });
 
