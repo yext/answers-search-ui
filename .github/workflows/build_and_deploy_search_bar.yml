@@ -31,7 +31,7 @@ jobs:
     with:
       ignore_prefix: search-bar-
 
-  call_deploy_tag_version:
+  call_deploy_full_version:
     needs:
       - call_acceptance_search_bar
       - call_extract_versions

@@ -31,10 +31,9 @@ jobs:
   call_should_deploy_major_version:
     uses: ./.github/workflows/should_deploy_major_version.yml
 
-  call_deploy_tag_version:
+  call_deploy_full_version:
     needs: 
       - call_unit_test
-      - call_format_branch_name
       - call_acceptance
       - call_extract_versions
       - call_misc_tests
