@@ -3,7 +3,7 @@ name: Build and deploy with a hold state
 on:
   push:
     tags:
-      - 'v*'
+      - 'test-v*'
 
 jobs:
   call_build:
@@ -39,7 +39,7 @@ jobs:
       - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
     with:
-      directory: ${{ github.ref_name }}
+      directory: dev/search-bar-deploy/${{ github.ref_name }}
       cache-control: 'max-age=31536000'
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -55,7 +55,7 @@ jobs:
     if: ${{ needs.call_should_deploy_major_version.outputs.should_deploy_major_version }}
     uses: ./.github/workflows/deploy_hold.yml
     with:
-      directory: ${{ needs.call_extract_versions.outputs.major_version }}
+      directory: dev/search-bar-deploy/${{ needs.call_extract_versions.outputs.major_version }}
       cache-control: 'max-age=43200'
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -69,7 +69,7 @@ jobs:
       - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
     with:
-      directory: ${{ needs.call_extract_versions.outputs.minor_version }}
+      directory: dev/search-bar-deploy/${{ needs.call_extract_versions.outputs.minor_version }}
       cache-control: 'max-age=43200'
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
