@@ -23,21 +23,8 @@ jobs:
       BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
-  extract_versions:
-    runs-on: ubuntu-latest
-    outputs:
-      minor_version: ${{ steps.vars.outputs.minor_version }}
-      major_version: ${{ steps.vars.outputs.major_version }}
-    steps:
-      - name: extract major and minor substrings
-        id: vars
-        run: |
-          MINOR_VERSION="$(echo "${{ github.ref_name }}##search-bar-" | cut -d '.' -f 1,2)"  
-          echo $MINOR_VERSION
-          echo ::set-output name=minor_version::${MINOR_VERSION}
-          MAJOR_VERSION="$(echo "${{ github.ref_name }}##search-bar-" | cut -d '.' -f 1)"
-          echo $MAJOR_VERSION
-          echo ::set-output name=major_version::${MAJOR_VERSION}
+  call_extract_versions:
+    uses: ./.github/workflows/extract_versions.yml
 
 concurrency:
   group: ci-build-and-deploy-i18n-${{ github.ref }}-1
