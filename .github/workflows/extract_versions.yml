@@ -10,17 +10,17 @@ on:
 
 jobs:
   extract_versions:
-  runs-on: ubuntu-latest
-  outputs:
-    minor_version: ${{ steps.vars.outputs.minor_version }}
-    major_version: ${{ steps.vars.outputs.major_version }}
-  steps:
-    - name: extract major and minor version substrings
-      id: vars
-      run: |
-        MINOR_VERSION="$(echo "${GITHUB_REF_NAME##${{ inputs.prefix }}}" | cut -d '.' -f 1,2)"  
-        echo $MINOR_VERSION
-        echo ::set-output name=minor_version::${MINOR_VERSION}
-        MAJOR_VERSION="$(echo "${GITHUB_REF_NAME##${{ inputs.prefix }}}" | cut -d '.' -f 1)"
-        echo $MAJOR_VERSION
-        echo ::set-output name=major_version::${MAJOR_VERSION}
+    runs-on: ubuntu-latest
+    outputs:
+      minor_version: ${{ steps.vars.outputs.minor_version }}
+      major_version: ${{ steps.vars.outputs.major_version }}
+    steps:
+      - name: extract major and minor version substrings
+        id: vars
+        run: |
+          MINOR_VERSION="$(echo "${GITHUB_REF_NAME##${{ inputs.prefix }}}" | cut -d '.' -f 1,2)"  
+          echo $MINOR_VERSION
+          echo ::set-output name=minor_version::${MINOR_VERSION}
+          MAJOR_VERSION="$(echo "${GITHUB_REF_NAME##${{ inputs.prefix }}}" | cut -d '.' -f 1)"
+          echo $MAJOR_VERSION
+          echo ::set-output name=major_version::${MAJOR_VERSION}
