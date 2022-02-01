@@ -8,9 +8,12 @@ on:
         default: ''
         type: string
     outputs:
-      minor_version: ${{ jobs.extract_versions.outputs.minor_version }}
-      major_version: ${{ jobs.extract_versions.outputs.major_version }}
-      full_version: ${{ jobs.extract_versions.outputs.full_version }}
+      minor_version: 
+        value: ${{ jobs.extract_versions.outputs.minor_version }}
+      major_version: 
+        value: ${{ jobs.extract_versions.outputs.major_version }}
+      full_version: 
+        value: ${{ jobs.extract_versions.outputs.full_version }}
 
 jobs:
   extract_versions:

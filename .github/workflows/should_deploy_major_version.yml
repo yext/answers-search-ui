@@ -8,7 +8,8 @@ on:
         default: ''
         type: string
     outputs:
-      should_deploy_major: ${{ jobs.should_deploy_major.outputs.should_deploy_major }}
+      should_deploy_major: 
+        vallue: ${{ jobs.should_deploy_major.outputs.should_deploy_major }}
 
 jobs:
   should_deploy_major:
