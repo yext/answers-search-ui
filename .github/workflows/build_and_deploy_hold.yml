@@ -53,7 +53,7 @@ jobs:
       - call_extract_versions
       - call_misc_tests
       - call_should_deploy_major_version
-    if: ${{ needs.should_deploy_major_version.outputs.deploy_major_version }}
+    if: ${{ needs.call_should_deploy_major_version.outputs.should_deploy_major_version }}
     uses: ./.github/workflows/deploy_hold.yml
     with:
       directory: ${{ needs.extract_versions.outputs.major_version }}
