@@ -25,6 +25,8 @@ jobs:
 
   call_extract_versions:
     uses: ./.github/workflows/extract_versions.yml
+    with:
+      prefix: search-bar-
 
 concurrency:
   group: ci-build-and-deploy-i18n-${{ github.ref }}-1
