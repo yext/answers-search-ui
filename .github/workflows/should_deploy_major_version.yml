@@ -29,5 +29,8 @@ jobs:
           OUTPUT=$(git tag --list "$MAJOR_VERSION.$NEXT_MINOR_VERSION.*")
           if [ -z $OUTPUT ]
           then
+            echo 'Major version should be deployed.'
             echo ::set-output name=deploy_major_version::true
+          else
+            echo 'Major version should not be deployed.'
           fi
