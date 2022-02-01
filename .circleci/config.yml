@@ -40,7 +40,6 @@ commands:
           from: dist
           to: 's3://assets.sitescdn.net/<< parameters.deploy-bucket >><< parameters.subdirectory >>'
           arguments: |
-            --acl public-read \
             --cache-control << parameters.cache-control >> \
             --recursive \
             --profile production \
@@ -55,7 +54,7 @@ jobs:
       - run:
           name: Echo AWS Region
           command: |
-            mkdir dist && touch dist/env_var.txt && echo $AWS_REGION > dist/env_var.txt
+            mkdir dist && touch dist/env_var.txt && echo $AWS_PROD_PROFILE > dist/env_var.txt
       - persist_to_workspace:
           root: .
           paths:
