@@ -15,7 +15,7 @@ export function speechRecognitionIsSupported () {
     return false;
   }
 
-  const browserData = Bowser.parse(window.navigator.userAgent);
+  const browserData = Bowser.parse(navigator.userAgent);
   if (browserData.platform.type === 'desktop') {
     return true;
   }
