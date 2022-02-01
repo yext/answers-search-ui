@@ -1,0 +1,32 @@
+name: Should deploy major version
+
+on:
+  workflow_call:
+    inputs:
+      ignore_prefix:
+        required: false
+        default: ''
+        type: string
+    outputs:
+      should_deploy_major: ${{ jobs.should_deploy_major.outputs.should_deploy_major }}
+
+jobs:
+  should_deploy_major:
+    runs-on: ubuntu-latest
+    outputs:
+      should_deploy_major: ${{ steps.vars.outputs.should_deploy_major }}
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+      - name: allow for major version deployment if the next minor version from current tag does not exist
+        id: vars
+        run: |
+          MINOR_VERSION=$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 2) 
+          MAJOR_VERSION=$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 1)
+          NEXT_MINOR_VERSION=$(( $MINOR_VERSION + 1 ))
+          OUTPUT=$(git tag --list "$MAJOR_VERSION.$NEXT_MINOR_VERSION.*")
+          if [ -z $OUTPUT ]
+          then
+            echo ::set-output name=deploy_major_version::true
+          fi
