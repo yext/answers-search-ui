@@ -208,7 +208,13 @@ export default class FilterSearchComponent extends Component {
         // If we have a redirectUrl, we want the params to be
         // serialized and submitted.
         if (typeof this.redirectUrl === 'string') {
-          window.location.href = this.redirectUrl + '?' + params.toString();
+          const newRedirectUrl = new URL(this.redirectUrl);
+          for (const [key, val] of params.entries()) {
+            if (!newRedirectUrl.searchParams.has(key)) {
+              newRedirectUrl.searchParams.set(key, val);
+            }
+          }
+          window.location.href = newRedirectUrl.href;
           return false;
         }
 

@@ -517,8 +517,14 @@ export default class SearchComponent extends Component {
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        const newUrl = this.redirectUrl + '?' + params.toString();
-        window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
+        const newRedirectUrl = new URL(this.redirectUrl);
+        for (const [key, val] of params.entries()) {
+          if (!newRedirectUrl.searchParams.has(key)) {
+            newRedirectUrl.searchParams.set(key, val);
+          }
+        }
+        window.open(newRedirectUrl.href, this.redirectUrlTarget) ||
+          (window.location.href = newRedirectUrl.href);
         return false;
       }
     }
