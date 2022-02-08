@@ -11,6 +11,7 @@ import VoiceSearchController from '../../speechrecognition/voicesearchcontroller
 import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 import SearchBarIconController from '../../controllers/searchbariconcontroller';
 import alert from '../../alert';
+import { constructRedirectUrl } from '../../tools/urlutils';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -517,12 +518,7 @@ export default class SearchComponent extends Component {
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        const newRedirectUrl = new URL(this.redirectUrl);
-        for (const [key, val] of params.entries()) {
-          if (!newRedirectUrl.searchParams.has(key)) {
-            newRedirectUrl.searchParams.set(key, val);
-          }
-        }
+        const newRedirectUrl = constructRedirectUrl(this.redirectUrl, params);
         window.open(newRedirectUrl.href, this.redirectUrlTarget) ||
           (window.location.href = newRedirectUrl.href);
         return false;

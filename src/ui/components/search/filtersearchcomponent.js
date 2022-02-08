@@ -10,6 +10,7 @@ import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
 import QueryTriggers from '../../../core/models/querytriggers';
+import { constructRedirectUrl } from '../../tools/urlutils';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -208,12 +209,7 @@ export default class FilterSearchComponent extends Component {
         // If we have a redirectUrl, we want the params to be
         // serialized and submitted.
         if (typeof this.redirectUrl === 'string') {
-          const newRedirectUrl = new URL(this.redirectUrl);
-          for (const [key, val] of params.entries()) {
-            if (!newRedirectUrl.searchParams.has(key)) {
-              newRedirectUrl.searchParams.set(key, val);
-            }
-          }
+          const newRedirectUrl = constructRedirectUrl(this.redirectUrl, params);
           window.location.href = newRedirectUrl.href;
           return false;
         }
