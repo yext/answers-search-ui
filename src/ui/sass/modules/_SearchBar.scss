@@ -213,13 +213,21 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   &-LoadingIndicator-AnimatedIcon 
   {
     stroke-dasharray: 208;
+    /* IE11 specific styling */  
+    _:-ms-fullscreen, :root & { 
+      /**
+       * IE11 does not support stroke-* properties in animation, so use smaller stroke
+       * length to simulate a fixed gap instead of using stroke-dashoffset in animation.
+       */
+      stroke-dasharray: 150;
+   }
     transform-origin: 50% 50%;
     animation: dash 1.4s ease-in-out infinite;
   }
 
   &-Icon--inactive &-LoadingIndicator-AnimatedIcon 
   {
-    display: none;
+    animation: none;
   }
   
   @keyframes dash 

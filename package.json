@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-search-ui",
-  "version": "1.12.0",
+  "version": "1.12.1",
   "description": "Javascript Answers Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
@@ -27,6 +27,7 @@
     "@yext/answers-core": "^1.4.0",
     "@yext/answers-storage": "^1.1.0",
     "@yext/rtf-converter": "^1.5.0",
+    "bowser": "^2.11.0",
     "cross-fetch": "^3.1.4",
     "css-vars-ponyfill": "^2.4.3",
     "gulp-sourcemaps": "^2.6.5",
@@ -105,7 +106,7 @@
     "serve": "^11.3.0",
     "size-limit": "^4.9.0",
     "stylelint": "^13.7.1",
-    "testcafe": "^1.15.2",
+    "testcafe": "^1.18.3",
     "testcafe-browser-provider-browserstack": "^1.13.1",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
