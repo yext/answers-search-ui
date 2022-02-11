@@ -579,30 +579,35 @@ export default class SearchComponent extends Component {
   promptForLocation (query) {
     if (this._promptForLocation) {
       return this.fetchQueryIntents(query)
-        .then(queryIntents => queryIntents.includes('NEAR_ME'))
-        .then(queryHasNearMeIntent => {
-          if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {
-            return new Promise((resolve, reject) =>
-              navigator.geolocation.getCurrentPosition(
-                position => {
-                  this.core.storage.set(StorageKeys.GEOLOCATION, {
-                    lat: position.coords.latitude,
-                    lng: position.coords.longitude,
-                    radius: position.coords.accuracy
-                  });
-                  resolve();
-                },
-                () => {
-                  resolve();
-                  const { enabled, message } = this._geolocationTimeoutAlert;
-                  if (enabled) {
-                    alert(message);
-                  }
-                },
-                this._geolocationOptions)
-            );
-          }
-        });
+        .then(
+          queryIntents => queryIntents.includes('NEAR_ME'),
+          error => console.warn('Unable to determine user\'s location. Error occured fetching query intents.', error)
+        ).then(
+          queryHasNearMeIntent => {
+            if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {
+              return new Promise((resolve, reject) =>
+                navigator.geolocation.getCurrentPosition(
+                  position => {
+                    this.core.storage.set(StorageKeys.GEOLOCATION, {
+                      lat: position.coords.latitude,
+                      lng: position.coords.longitude,
+                      radius: position.coords.accuracy
+                    });
+                    resolve();
+                  },
+                  () => {
+                    resolve();
+                    const { enabled, message } = this._geolocationTimeoutAlert;
+                    if (enabled) {
+                      alert(message);
+                    }
+                  },
+                  this._geolocationOptions)
+              );
+            }
+          },
+          error => console.warn('Unable to determine user\'s location. Error occured using geolocation API.', error)
+        );
     } else {
       return Promise.resolve();
     }
