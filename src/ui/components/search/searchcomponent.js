@@ -626,7 +626,7 @@ export default class SearchComponent extends Component {
           this._autoCompleteName,
           this._verticalKey)
         : this.core.autoCompleteUniversal(query, this._autoCompleteName);
-      return autocompleteRequest.then(data => data.inputIntents);
+      return autocompleteRequest.then(data => data?.inputIntents ?? []);
     } else {
       // There are two alternatives to consider here. The user could have selected the query
       // as an autocomplete option or manually input it themselves. If the former, use the intents
