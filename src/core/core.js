@@ -303,6 +303,8 @@ export default class Core {
         }
         this.updateHistoryAfterSearch(queryTrigger);
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
+      }).catch(error => {
+        console.error('Vertical search failed with the following error: ' + error);
       });
   }
 
@@ -389,6 +391,8 @@ export default class Core {
         }
         this.updateHistoryAfterSearch(queryTrigger);
         window.performance.mark('yext.answers.universalQueryResponseRendered');
+      }).catch(error => {
+        console.error('Universal search failed with the following error: ' + error);
       });
   }
 
@@ -436,6 +440,8 @@ export default class Core {
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
+      }).catch(error => {
+        console.error('Universal autocomplete failed with the following error: ' + error);
       });
   }
 
@@ -458,6 +464,8 @@ export default class Core {
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${namespace}`, data);
         return data;
+      }).catch(error => {
+        console.error('Vertical autocomplete failed with the following error: ' + error);
       });
   }
 
@@ -487,6 +495,8 @@ export default class Core {
       .then(response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response))
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
+      }).catch(error => {
+        console.error('Filter search failed with the following error: ' + error);
       });
   }
 
@@ -510,6 +520,9 @@ export default class Core {
         this.storage.set(
           StorageKeys.QUESTION_SUBMISSION,
           QuestionSubmission.submitted());
+      }).catch(error => {
+        console.error('Question submission failed with the following error: ' + error);
+        throw error;
       });
   }
 
