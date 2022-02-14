@@ -579,10 +579,7 @@ export default class SearchComponent extends Component {
   promptForLocation (query) {
     if (this._promptForLocation) {
       return this.fetchQueryIntents(query)
-        .then(
-          queryIntents => queryIntents.includes('NEAR_ME'),
-          error => Promise.reject(new Error('Failed to fetch query intents.', { cause: error }))
-        )
+        .then(queryIntents => queryIntents.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
           if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {
             return new Promise((resolve, reject) =>
