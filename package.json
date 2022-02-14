@@ -42,7 +42,8 @@
     "stylelint-scss": "^3.18.0",
     "sweetalert": "^2.1.2",
     "template-helpers": "^1.0.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "asdnasjdasdsadsadasdsa": "^8.3.2"
   },
   "devDependencies": {
     "@axe-core/puppeteer": "^4.3.1",
