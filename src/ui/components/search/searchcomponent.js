@@ -579,7 +579,7 @@ export default class SearchComponent extends Component {
   promptForLocation (query) {
     if (this._promptForLocation) {
       return this.fetchQueryIntents(query)
-        .then(queryIntents => queryIntents.includes('NEAR_ME'))
+        .then(queryIntents => queryIntents?.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
           if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {
             return new Promise((resolve, reject) =>
@@ -602,7 +602,8 @@ export default class SearchComponent extends Component {
                 this._geolocationOptions)
             );
           }
-        });
+        })
+        .catch(error => console.warn('Unable to determine user\'s location.', error));
     } else {
       return Promise.resolve();
     }
