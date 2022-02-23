@@ -54,7 +54,7 @@
     }
 
     &:focus {
-      border: var(--yxt-button-focus-border-size) double #0c5ecb;
+      border: var(--yxt-button-focus-border-size) double #0C5ECB;
     }
   }
 }
@@ -66,25 +66,25 @@
   $hover-decoration: underline,
   $active-color: $hover-color
 ) {
-    &:link,
-    &:visited
-   {
-       color: $base-color;
-       text-decoration: $base-decoration;
-   }
+  &:link,
+  &:visited
+  {
+    color: $base-color;
+    text-decoration: $base-decoration;
+  }
 
-    &:hover,
-    &:focus
-    {
-      color: $hover-color;
-      text-decoration: $hover-decoration;
-    }
+  &:hover,
+  &:focus
+  {
+    color: $hover-color;
+    text-decoration: $hover-decoration;
+  }
 
-    &:active
-    {
-        color: $active-color;
-        text-decoration: $hover-decoration;
-    }
+  &:active
+  {
+    color: $active-color;
+    text-decoration: $hover-decoration;
+  }
 }
 
 @mixin Link-1

@@ -47,13 +47,13 @@
 
   &-optionSelector {
     &:focus {
-      outline: .0625rem auto black;
+      outline: 0.0625rem auto black;
 
-      /* IE11 specific styling */  
-      _:-ms-fullscreen, :root & { 
+      /* IE11 specific styling */
+      _:-ms-fullscreen, :root & {
         // IE11 does not support auto, so use solid here
         outline: 1px solid black;
-     }
+      }
     }
   }
 
@@ -64,7 +64,7 @@
     @include TextButton($padding: 0);
 
     @media (max-width: $breakpoint-mobile-max) {
-      margin-top: var(--yxt-base-spacing) ;
+      margin-top: var(--yxt-base-spacing);
     }
 
     &.js-hidden {
@@ -110,11 +110,11 @@
       $weight: var(--yxt-font-weight-semibold),
       $color: white);
 
-    @include Button;
+    @include Button();
 
     color: white;
     box-sizing: border-box;
-padding: var(--yxt-base-spacing-sm);
+    padding: var(--yxt-base-spacing-sm);
     letter-spacing: 0.5px;
     font-size: var(--yxt-font-size-md);
     font-weight: var(--yxt-font-weight-semibold);

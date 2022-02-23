@@ -63,7 +63,7 @@ $direct-answer-footer-height: var(--yxt-module-footer-height) !default;
     border: var(--yxt-direct-answer-border);
     @include Text(
       $color: var(--yxt-direct-answer-title-color)
-    )
+    );
   }
 
   &-titleText
@@ -188,7 +188,7 @@ $direct-answer-footer-height: var(--yxt-module-footer-height) !default;
 
   &-fieldValueLink
   {
-    @include Link-1;
+    @include Link-1();
 
     font-weight: var(--yxt-font-weight-semibold);
   }
@@ -205,7 +205,7 @@ $direct-answer-footer-height: var(--yxt-module-footer-height) !default;
       $line-height: var(--yxt-direct-answer-view-details-line-height),
       $weight: var(--yxt-direct-answer-view-details-font-weight),
     );
-    @include Link-1;
+    @include Link-1();
 
     display: inline-flex;
     align-items: center;

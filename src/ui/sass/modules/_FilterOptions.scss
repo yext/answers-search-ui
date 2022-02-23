@@ -1,114 +1,114 @@
-  /** @define FilterOptions */
+/** @define FilterOptions */
 
-  $filter-options-checkmark-color: $color-brand-primary !default;
-  $filter-options-checkbox-focus-color: black !default;
-  $filter-options-options-max-height: none !default;
+$filter-options-checkmark-color: $color-brand-primary !default;
+$filter-options-checkbox-focus-color: black !default;
+$filter-options-options-max-height: none !default;
 
-  :root {
-    --yxt-filter-options-checkmark-color: #{$filter-options-checkmark-color};
-    --yxt-filter-options-checkbox-focus-color: #{$filter-options-checkbox-focus-color};
-    --yxt-filter-options-options-max-height: #{$filter-options-options-max-height};
-  }
+:root {
+  --yxt-filter-options-checkmark-color: #{$filter-options-checkmark-color};
+  --yxt-filter-options-checkbox-focus-color: #{$filter-options-checkbox-focus-color};
+  --yxt-filter-options-options-max-height: #{$filter-options-options-max-height};
+}
 
-  .yxt-FilterOptions {
-    &-container {
-      @include Text($line-height: var(--yxt-line-height-md));
+.yxt-FilterOptions {
+  &-container {
+    @include Text($line-height: var(--yxt-line-height-md));
 
-      &--searching {
-        .yxt-FilterOptions-showToggle {
+    &--searching {
+      .yxt-FilterOptions-showToggle {
+        display: none;
+      }
+
+      .yxt-FilterOptions-option {
+        &.displaySearch {
+          display: flex;
+        }
+
+        &.hiddenSearch {
           display: none;
         }
-
-        .yxt-FilterOptions-option {
-          &.displaySearch {
-            display: flex;
-          }
-
-          &.hiddenSearch {
-            display: none;
-          }
-        }
       }
     }
+  }
 
-    &-controls {
-      display: flex;
-      flex-direction: column;
+  &-controls {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &-buttonWrapper {
+    display: flex;
+  }
+
+  &-filter {
+    font-size: $font-size-md;
+    border: $border-default;
+    border-radius: 4px;
+    padding: 4px 8px;
+    width: 100%;
+
+    &:hover,
+    &:active,
+    &:focus {
+      border: var(--yxt-border-hover);
     }
 
-    &-buttonWrapper {
-      display: flex;
+    &::-ms-clear {
+      display: none;
+      height: 0;
+      width: 0;
+    }
+  }
+
+  &-fieldSet {
+    border: 0;
+    padding: 0;
+    margin: 12px 0;
+  }
+
+  &-legend {
+    width: 100%;
+    padding: 0;
+  }
+
+  &-legendLabel {
+    @include Text(
+      $size: var(--yxt-font-size-md-lg),
+      $line-height: var(--yxt-line-height-lg),
+      $weight: var(--yxt-font-weight-semibold));
+    text-align: left;
+    width: 100%;
+    display: flex;
+    align-items: center;
+
+    &:hover button {
+      color: var(--yxt-color-text-secondary);
+    }
+  }
+
+  &-option {
+    display: flex;
+    align-items: center;
+
+    &:not(:first-child) {
+      margin-top: 8px;
     }
 
-    &-filter {
-      font-size: $font-size-md;
-      border: $border-default;
-      border-radius: 4px;
-      padding: 4px 8px;
-      width: 100%;
-
-      &:hover,
-      &:active,
-      &:focus {
-        border: var(--yxt-border-hover);
-      }
-
-      &::-ms-clear {
-        display: none;
-        height: 0;
-        width: 0;
-      }
+    &.hidden {
+      display: none;
     }
 
-    &-fieldSet {
-      border: 0;
-      padding: 0;
-      margin: 12px 0;
+    @media (max-width: $breakpoint-mobile-max) {
+      margin: 22px 0;
     }
+  }
 
-    &-legend {
-      width: 100%;
-      padding: 0;
-    }
-
-    &-legendLabel {
-      @include Text(
-        $size: var(--yxt-font-size-md-lg),
-        $line-height: var(--yxt-line-height-lg),
-        $weight: var(--yxt-font-weight-semibold));
-      text-align: left;
-      width: 100%;
-      display: flex;
-      align-items: center;
-
-      &:hover button {
-        color: var(--yxt-color-text-secondary);
-      }
-    }
-
-    &-option {
-      display: flex;
-      align-items: center;
-
-      &:not(:first-child) {
-        margin-top: 8px;
-      }
-
-      &.hidden {
-        display: none;
-      }
-
-      @media (max-width: $breakpoint-mobile-max) {
-        margin: 22px 0;
-      }
-    }
-
-    &-options {
-      margin: 12px 0;
-      padding-left: 0;
-      max-height: var(--yxt-filter-options-options-max-height);
-      overflow-y: auto;
-    }
+  &-options {
+    margin: 12px 0;
+    padding-left: 0;
+    max-height: var(--yxt-filter-options-options-max-height);
+    overflow-y: auto;
+  }
 
   &-search {
     position: relative;
@@ -151,7 +151,7 @@
 
     /* Checkmark outer box */
     &::before {
-      content: '';
+      content: "";
       position: absolute;
       bottom: 50%;
       left: -22px;

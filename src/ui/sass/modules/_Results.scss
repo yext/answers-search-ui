@@ -96,7 +96,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
 
     &:not(:first-child)::before
     {
-      content: '';
+      content: "";
       width: 1px;
       top: 0;
       height: 40%;
@@ -124,7 +124,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
       var(--yxt-results-filters-link-font-weight),
       $color: var(--yxt-color-brand-primary)
     );
-    @include Link-2;
+    @include Link-2();
 
     margin-left: calc(var(--yxt-base-spacing) / 2);
   }
@@ -184,7 +184,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
       var(--yxt-results-title-bar-link-line-height),
       var(--yxt-results-title-bar-link-font-weight),
     );
-    @include Link-1;
+    @include Link-1();
   }
 
   &-viewAllLabel
@@ -204,7 +204,7 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
     display: flex;
     padding: calc(var(--yxt-base-spacing) / 2) var(--yxt-base-spacing);
     align-items: center;
-    background-color:  var(--yxt-results-title-bar-background);
+    background-color: var(--yxt-results-title-bar-background);
   }
 
   &-title
@@ -224,9 +224,9 @@ $results-cards-margin: calc(var(--yxt-base-spacing) / 2) !default;
 {
   margin-top: var(--yxt-base-spacing);
 
-  .yxt-Results 
+  .yxt-Results
   {
-    &-items 
+    &-items
     {
       margin-right: 0;
     }
