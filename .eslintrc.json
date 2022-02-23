@@ -1,6 +1,6 @@
 {
    "extends": ["semistandard"],
-   "ignorePatterns": ["dist", "docs"],
+   "ignorePatterns": ["dist"],
    "rules": {
       "arrow-spacing": "error",
       "quotes": ["error", "single"],
