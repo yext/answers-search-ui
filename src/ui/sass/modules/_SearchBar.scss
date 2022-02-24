@@ -12,7 +12,7 @@ $searchbar-text-line-height: var(--yxt-line-height-lg) !default;
 $searchbar-text-font-weight: var(--yxt-font-weight-normal) !default;
 
 $searchbar-button-background-color-base: white !default;
-$searchbar-button-background-color-hover: #e9e9e9 !default;
+$searchbar-button-background-color-hover: #E9E9E9 !default;
 $searchbar-button-background-color-active: var(--yxt-searchbar-button-background-color-base) !default;
 
 $searchbar-button-text-color-base: var(--yxt-color-text-primary) !default;
@@ -108,7 +108,7 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   &-clear
   {
     padding-left: calc(var(--yxt-base-spacing) * 3/4);
-    padding-right: calc(var(--yxt-base-spacing) * 3/4 );
+    padding-right: calc(var(--yxt-base-spacing) * 3/4);
   }
 
   &-button
@@ -154,7 +154,7 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 
   &-label
   {
-    @include sr-only;
+    @include sr-only();
   }
 }
 
@@ -201,36 +201,37 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     100% {
       transform: rotate(360deg);
     }
-  } 
+  }
   
-  @keyframes rotate 
+  @keyframes rotate
   {
     100% {
       transform: rotate(360deg);
     }
   }
 
-  &-LoadingIndicator-AnimatedIcon 
+  &-LoadingIndicator-AnimatedIcon
   {
     stroke-dasharray: 208;
-    /* IE11 specific styling */  
-    _:-ms-fullscreen, :root & { 
+
+    /* IE11 specific styling */
+    _:-ms-fullscreen, :root & {
       /**
        * IE11 does not support stroke-* properties in animation, so use smaller stroke
        * length to simulate a fixed gap instead of using stroke-dashoffset in animation.
        */
       stroke-dasharray: 150;
-   }
+    }
     transform-origin: 50% 50%;
     animation: dash 1.4s ease-in-out infinite;
   }
 
-  &-Icon--inactive &-LoadingIndicator-AnimatedIcon 
+  &-Icon--inactive &-LoadingIndicator-AnimatedIcon
   {
     animation: none;
   }
   
-  @keyframes dash 
+  @keyframes dash
   {
     0% {
       stroke-dashoffset: 204;
@@ -292,25 +293,25 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 // If custom icons are supplied, the SVGs simply alternate opacity
 .yxt-SearchBar-CustomMicIcon {
   opacity: 0;
-  transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+  transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .yxt-SearchBar-CustomListeningIcon {
   opacity: 0;
-  transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+  transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1);
 }
 
 .yxt-SearchBar-CustomMicIcon--active {
   .yxt-SearchBar-CustomMicIcon {
     opacity: 1;
-    transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+    transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1);
   }
 }
 
 .yxt-SearchBar-CustomListeningIcon--active {
   .yxt-SearchBar-CustomListeningIcon {
     opacity: 1;
-    transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1)
+    transition: opacity 0.2s cubic-bezier(0.42, 0, 0.58, 1);
   }
 }
 
@@ -318,6 +319,6 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 {
   &-title
   {
-    @include sr-only;
+    @include sr-only();
   }
 }

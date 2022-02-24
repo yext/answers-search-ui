@@ -51,11 +51,11 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
   --yxt-accordion-card-spacing--expanded: #{$accordion-card-spacing--expanded};
 }
 
-.yxt-AccordionCard 
+.yxt-AccordionCard
 {
   background-color: var(--yxt-accordion-card-background-color);
 
-  @media (max-width: $breakpoint-mobile-max) 
+  @media (max-width: $breakpoint-mobile-max)
   {
     margin-bottom: 0;
     border-top: 0;
@@ -70,10 +70,10 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
     border: 0;
     padding: 0;
     padding-right: calc(var(--yxt-accordion-card-spacing) * 0.5);
-    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
 
-    &:hover 
-    { 
+    &:hover
+    {
       background-color: var(--yxt-accordion-card-title-color-hover);
     }
 
@@ -82,7 +82,7 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
     }
   }
 
-  &-toggle svg 
+  &-toggle svg
   {
     height: var(--yxt-accordion-card-toggle-icon-height);
     width: var(--yxt-accordion-card-toggle-icon-width);
@@ -105,7 +105,7 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
     );
   }
 
-  &-icon 
+  &-icon
   {
     margin-left: auto;
     margin-right: calc(var(--yxt-accordion-card-spacing) / 2);
@@ -159,7 +159,7 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
   }
 }
 
-.yxt-AccordionCard--expanded 
+.yxt-AccordionCard--expanded
 {
   background-color: var(--yxt-accordion-card-background-color--expanded);
 
@@ -176,7 +176,7 @@ $accordion-card-spacing--expanded: var(--yxt-base-spacing) !default;
     transition: all 400ms ease-in;
   }
 
-  .yxt-AccordionCard-content  
+  .yxt-AccordionCard-content
   {
     height: auto;
     overflow: hidden;

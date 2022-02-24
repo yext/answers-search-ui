@@ -44,7 +44,7 @@
 }
 
 .Icon--chevron {
-  transform:none #{"/*rtl:rotate(180deg)*/;"};
+  transform: none #{"/*rtl:rotate(180deg)*/;"};
 }
 
 .Icon--yext_animated_reverse {
@@ -63,7 +63,7 @@
     @keyframes reverse-a10_o { 0% { opacity: 1; } 10.18% { opacity: 0; } 100% { opacity: 0; } }
 
     color: black;
-    background: rgba(255,255,255,0.00);
+    background: rgba(255, 255, 255, 0);
   }
 
   &:not(.yxt-SearchBar-Yext--static) svg > g
@@ -134,7 +134,7 @@
     @keyframes forward-a10_o { 0% { opacity: 0; } 91.257% { opacity: 0; } 100% { opacity: 1; } }
 
     color: black;
-    background: rgba(255,255,255,0.00);
+    background: rgba(255, 255, 255, 0);
   }
   
   &:not(.yxt-SearchBar-MagnifyingGlass--static) svg > g

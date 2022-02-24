@@ -67,17 +67,17 @@ $accordion-card-cta-color: var(--yxt-color-brand-primary) !default;
 }
 
 .yxt-CTA--AccordionCard {
-    align-items: flex-end;
+  align-items: flex-end;
 
-    @include Text(
-      $size: var(--yxt-accordion-card-cta-font-size),
-      $weight: var(--yxt-accordion-card-cta-font-weight),
-      $color: var(--yxt-accordion-card-cta-color),
-    );
+  @include Text(
+    $size: var(--yxt-accordion-card-cta-font-size),
+    $weight: var(--yxt-accordion-card-cta-font-weight),
+    $color: var(--yxt-accordion-card-cta-color),
+  );
 
-    .Icon {
-      height: var(--yxt-accordion-card-cta-icon-size);
-      width: var(--yxt-accordion-card-cta-icon-size);
-      margin-right: calc(var(--yxt-accordion-card-cta-spacing) * 0.5);
-    }
+  .Icon {
+    height: var(--yxt-accordion-card-cta-icon-size);
+    width: var(--yxt-accordion-card-cta-icon-size);
+    margin-right: calc(var(--yxt-accordion-card-cta-spacing) * 0.5);
+  }
 }
