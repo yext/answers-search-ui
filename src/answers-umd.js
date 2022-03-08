@@ -32,6 +32,7 @@ import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
 import { localizedDistance, parseLocale } from './core/utils/i18nutils';
 import createImpressionEvent from './core/analytics/createimpressionevent';
+import Searcher from './core/models/searcher';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -270,6 +271,7 @@ class Answers {
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
+      initVisibilityChangeListener(this._analyticsReporterService, parsedConfig.search?.verticalKey);
     }
 
     this.core = new Core({
@@ -776,6 +778,24 @@ function initScrollListener (reporter) {
   document.addEventListener('scroll', () => {
     clearTimeout(timeout);
     timeout = setTimeout(sendEvent, DEBOUNCE_TIME);
+  });
+}
+
+/**
+ * Initialize the visibilitychange event listener to send analytics
+ * events when user close or navigate away from a result page.
+ */
+function initVisibilityChangeListener (reporter, verticalKey) {
+  document.addEventListener('visibilitychange', () => {
+    const queryId = reporter.getQueryId();
+    if (!queryId) {
+      return;
+    }
+    if (document.visibilityState === 'hidden') {
+      const searcher = verticalKey ? Searcher.VERTICAL : Searcher.UNIVERSAL;
+      const event = new AnalyticsEvent('RESULTS_HIDDEN').addOptions({ queryId, searcher });
+      reporter.report(event);
+    }
   });
 }
 
