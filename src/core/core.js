@@ -21,6 +21,7 @@ import { PRODUCTION, ENDPOINTS, LIB_VERSION } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
+import Searcher from './models/searcher';
 
 /** @typedef {import('./storage/storage').default} Storage */
 
@@ -234,6 +235,12 @@ export default class Core {
     const queryTrigger = this.storage.get(StorageKeys.QUERY_TRIGGER);
     const queryTriggerForApi = this.getQueryTriggerForSearchApi(queryTrigger);
 
+    const queryId = this.storage.get(StorageKeys.QUERY_ID);
+    if (queryId) {
+      const event = new AnalyticsEvent('FOLLOW_UP_QUERY').addOptions({ searcher: Searcher.VERTICAL });
+      this._analyticsReporter.report(event);
+    }
+
     return this._coreLibrary
       .verticalSearch({
         verticalKey: verticalKey || searchConfig.verticalKey,
@@ -261,7 +268,6 @@ export default class Core {
         this._persistFacets();
         this._persistFilters();
         this._persistLocationRadius();
-
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
@@ -355,6 +361,13 @@ export default class Core {
 
     const queryTrigger = this.storage.get(StorageKeys.QUERY_TRIGGER);
     const queryTriggerForApi = this.getQueryTriggerForSearchApi(queryTrigger);
+
+    const queryId = this.storage.get(StorageKeys.QUERY_ID);
+    if (queryId) {
+      const event = new AnalyticsEvent('FOLLOW_UP_QUERY').addOptions({ searcher: Searcher.UNIVERSAL });
+      this._analyticsReporter.report(event);
+    }
+
     return this._coreLibrary
       .universalSearch({
         query: queryString,
