@@ -154,7 +154,7 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 
   &-label
   {
-    @include sr-only();
+    @include sr-only ();
   }
 }
 
@@ -213,7 +213,6 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   &-LoadingIndicator-AnimatedIcon
   {
     stroke-dasharray: 208;
-
     /* IE11 specific styling */
     _:-ms-fullscreen, :root & {
       /**
@@ -319,6 +318,6 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 {
   &-title
   {
-    @include sr-only();
+    @include sr-only ();
   }
 }
