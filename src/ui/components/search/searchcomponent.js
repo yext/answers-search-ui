@@ -579,7 +579,7 @@ export default class SearchComponent extends Component {
   promptForLocation (query) {
     if (this._promptForLocation) {
       return this.fetchQueryIntents(query)
-        .then(queryIntents => queryIntents.includes('NEAR_ME'))
+        .then(queryIntents => queryIntents?.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
           if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {
             return new Promise((resolve, reject) =>
@@ -602,7 +602,8 @@ export default class SearchComponent extends Component {
                 this._geolocationOptions)
             );
           }
-        });
+        })
+        .catch(error => console.warn('Unable to determine user\'s location.', error));
     } else {
       return Promise.resolve();
     }
@@ -626,7 +627,7 @@ export default class SearchComponent extends Component {
           this._autoCompleteName,
           this._verticalKey)
         : this.core.autoCompleteUniversal(query, this._autoCompleteName);
-      return autocompleteRequest.then(data => data.inputIntents);
+      return autocompleteRequest.then(data => data?.inputIntents ?? []);
     } else {
       // There are two alternatives to consider here. The user could have selected the query
       // as an autocomplete option or manually input it themselves. If the former, use the intents

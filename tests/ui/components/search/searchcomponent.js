@@ -126,6 +126,20 @@ describe('SearchBar component', () => {
     return expect(wasSearchRanPromise).resolves.toBeTruthy();
   });
 
+  it('An undefined universalAutocomplete response results in empty query intents', async () => {
+    expect.assertions(1);
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      verticalKey: null,
+      allowEmptySearch: true
+    });
+    component.core.autoCompleteUniversal = () => {
+      return Promise.resolve(undefined);
+    };
+
+    return expect(component.fetchQueryIntents()).resolves.toStrictEqual([]);
+  });
+
   it('searching with the search bar sets QUERY_TRIGGER to SEARCH_BAR', () => {
     storage.setWithPersist(StorageKeys.QUERY, 'what does yext do?');
     const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
