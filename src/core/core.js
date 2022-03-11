@@ -21,6 +21,7 @@ import { PRODUCTION, ENDPOINTS, LIB_VERSION } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
+import Searcher from './models/searcher';
 
 /** @typedef {import('./storage/storage').default} Storage */
 
@@ -174,6 +175,21 @@ export default class Core {
   }
 
   /**
+   * Send a FOLLOW_UP_QUERY analytics event for subsequent searches from the initial search.
+   * The following search must contains a different query id from the previous search.
+   *
+   * @param {string} newQueryId - id of the new query
+   * @param {string} searcher - searcher type of the new query ("UNIVERSAL" or "VERTICAL")
+   */
+  _reportFollowUpQueryEvent (newQueryId, searcher) {
+    const previousQueryId = this.storage.get(StorageKeys.QUERY_ID);
+    if (previousQueryId && previousQueryId !== newQueryId) {
+      const event = new AnalyticsEvent('FOLLOW_UP_QUERY').addOptions({ searcher });
+      this._analyticsReporter.report(event);
+    }
+  }
+
+  /**
    * Search in the context of a vertical
    * @param {string} verticalKey vertical ID for the search
    * @param {Object} options additional settings for the search.
@@ -261,6 +277,7 @@ export default class Core {
         this._persistFacets();
         this._persistFilters();
         this._persistLocationRadius();
+        this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.VERTICAL);
 
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
@@ -355,6 +372,7 @@ export default class Core {
 
     const queryTrigger = this.storage.get(StorageKeys.QUERY_TRIGGER);
     const queryTriggerForApi = this.getQueryTriggerForSearchApi(queryTrigger);
+
     return this._coreLibrary
       .universalSearch({
         query: queryString,
@@ -370,6 +388,7 @@ export default class Core {
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
+        this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.UNIVERSAL);
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
