@@ -772,8 +772,8 @@ class Answers {
       return;
     }
     const searcher = verticalKey ? Searcher.VERTICAL : Searcher.UNIVERSAL;
-    const event2 = new AnalyticsEvent(eventName).addOptions({ searcher });
-    this._analyticsReporterService.report(event2);
+    const event = new AnalyticsEvent(eventName).addOptions({ searcher });
+    this._analyticsReporterService.report(event);
   }
 }
 
