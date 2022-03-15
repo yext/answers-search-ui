@@ -33,6 +33,7 @@ import { COMPONENT_REGISTRY } from './ui/components/registry';
 import { localizedDistance, parseLocale } from './core/utils/i18nutils';
 import createImpressionEvent from './core/analytics/createimpressionevent';
 import Searcher from './core/models/searcher';
+import { isIE } from './core/utils/useragent';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -271,7 +272,7 @@ class Answers {
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
-      initVisibilityChangeListener(this._analyticsReporterService, parsedConfig.search?.verticalKey);
+      this._initVisibilityChangeListeners(parsedConfig.search?.verticalKey);
     }
 
     this.core = new Core({
@@ -726,6 +727,54 @@ class Answers {
       console.error(`Invalid visitor. Visitor was not set because "${JSON.stringify(visitor)}" does not have an id.`);
     }
   }
+
+  /**
+   * Initialize visibility change event listener(s) to send analytics
+   * events when user close or navigate away from a result page.
+   */
+  _initVisibilityChangeListeners (verticalKey) {
+    /**
+     * Safari desktop listener and IE11 listeners fire visibility change event twice when switch
+     * to new tab and then close browser. This variable is used to ensure RESULTS_HIDDEN analytics event
+     * does not get send again if the page is already hidden.
+     */
+    let documentVisibilityState;
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && documentVisibilityState !== 'hidden') {
+        documentVisibilityState = 'hidden';
+        this._reportVisibilityChangeEvent(verticalKey, 'RESULTS_HIDDEN');
+      } else if (document.visibilityState === 'visible') {
+        documentVisibilityState = 'visible';
+        this._reportVisibilityChangeEvent(verticalKey, 'RESULTS_UNHIDDEN');
+      }
+    });
+
+    /**
+     * VisibilityChange API does not register when page is terminated (close tab/browser) in IE11.
+     * So, unload event is used to capture those RESULTS_HIDDEN scenarios.
+     */
+    if (isIE()) {
+      window.addEventListener('unload', () => {
+        if (documentVisibilityState !== 'hidden') {
+          documentVisibilityState = 'hidden';
+          this._reportVisibilityChangeEvent(verticalKey, 'RESULTS_HIDDEN');
+        }
+      });
+    }
+  }
+
+  /**
+   * Send visibility change related analytics event.
+   */
+  _reportVisibilityChangeEvent (verticalKey, eventName) {
+    const queryId = this._analyticsReporterService.getQueryId();
+    if (!queryId) {
+      return;
+    }
+    const searcher = verticalKey ? Searcher.VERTICAL : Searcher.UNIVERSAL;
+    const event2 = new AnalyticsEvent(eventName).addOptions({ searcher });
+    this._analyticsReporterService.report(event2);
+  }
 }
 
 /**
@@ -778,24 +827,6 @@ function initScrollListener (reporter) {
   document.addEventListener('scroll', () => {
     clearTimeout(timeout);
     timeout = setTimeout(sendEvent, DEBOUNCE_TIME);
-  });
-}
-
-/**
- * Initialize the visibilitychange event listener to send analytics
- * events when user close or navigate away from a result page.
- */
-function initVisibilityChangeListener (reporter, verticalKey) {
-  document.addEventListener('visibilitychange', () => {
-    const queryId = reporter.getQueryId();
-    if (!queryId) {
-      return;
-    }
-    if (document.visibilityState === 'hidden') {
-      const searcher = verticalKey ? Searcher.VERTICAL : Searcher.UNIVERSAL;
-      const event = new AnalyticsEvent('RESULTS_HIDDEN').addOptions({ queryId, searcher });
-      reporter.report(event);
-    }
   });
 }
 
