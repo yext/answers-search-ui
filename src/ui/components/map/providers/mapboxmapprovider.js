@@ -32,7 +32,7 @@ export default class MapBoxMapProvider extends MapProvider {
   loadJS (onLoad) {
     const version = 'v1.13.1';
     const script = DOM.createEl('script', {
-      id: 'yext-map-js',
+      id: 'yext-map-mapbox-js',
       onload: () => {
         this._isLoaded = true;
         mapboxgl.accessToken = this._apiKey;
