@@ -54,7 +54,7 @@ export default class MapBoxMapProvider extends MapProvider {
     });
 
     const css = DOM.createEl('link', {
-      id: 'yext-map-css',
+      id: 'yext-map-mapbox-css',
       rel: 'stylesheet',
       href: `https://api.mapbox.com/mapbox-gl-js/${version}/mapbox-gl.css`
     });
