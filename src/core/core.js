@@ -121,6 +121,9 @@ export default class Core {
      * @type {ComponentManager}
      */
     this._componentManager = config.componentManager;
+
+    /** @type {{ [agent: string]: string, ANSWERS_CORE?: never, ANSWERS_SEARCH_UI_SDK?: never }} */
+    this._customClientSdk = config.customClientSdk || {};
   }
 
   /**
@@ -270,7 +273,8 @@ export default class Core {
         locationRadius: locationRadius === 0 ? undefined : locationRadius,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
-        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
+        customClientSdk: this._getMergedClientSdk()
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -386,7 +390,8 @@ export default class Core {
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
-        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
+        customClientSdk: this._getMergedClientSdk()
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
@@ -453,7 +458,8 @@ export default class Core {
     return this._coreLibrary
       .universalAutocomplete({
         input: input,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        customClientSdk: this._getMergedClientSdk()
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -477,7 +483,8 @@ export default class Core {
       .verticalAutocomplete({
         input: input,
         verticalKey: verticalKey,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        customClientSdk: this._getMergedClientSdk()
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -509,7 +516,8 @@ export default class Core {
         verticalKey: config.verticalKey,
         fields: searchParamFields,
         sectioned: config.searchParameters.sectioned,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        customClientSdk: this._getMergedClientSdk()
       })
       .then(
         response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response),
@@ -535,7 +543,8 @@ export default class Core {
     return this._coreLibrary
       .submitQuestion({
         ...question,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        customClientSdk: this._getMergedClientSdk()
       })
       .then(() => {
         this.storage.set(
@@ -814,5 +823,12 @@ export default class Core {
       }
     }
     return null;
+  }
+
+  _getMergedClientSdk () {
+    return {
+      ...this._customClientSdk,
+      ANSWERS_SEARCH_UI_SDK: LIB_VERSION
+    };
   }
 }

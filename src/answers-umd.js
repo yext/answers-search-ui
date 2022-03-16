@@ -286,7 +286,8 @@ class Answers {
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch,
       environment: parsedConfig.environment,
-      componentManager: this.components
+      componentManager: this.components,
+      customClientSdk: parsedConfig.customClientSdk
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {

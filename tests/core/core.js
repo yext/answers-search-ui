@@ -84,9 +84,65 @@ describe('sessionId is passed properly', () => {
   });
 });
 
-function getMockCore () {
+describe('customClientSdk param is passed correctly', () => {
+  const mockCore = getMockCore({
+    customClientSdk: { TEST: '1.3.5' }
+  });
+
+  it('verticalSearch', () => {
+    mockCore.verticalSearch();
+    expectCorrectCustomClientSdk('verticalSearch');
+  });
+
+  it('universalSearch', () => {
+    mockCore.search();
+    expectCorrectCustomClientSdk('universalSearch');
+  });
+
+  it('submitQuestion', () => {
+    mockCore.submitQuestion();
+    expectCorrectCustomClientSdk('submitQuestion');
+  });
+
+  it('autoCompleteVertical', () => {
+    mockCore.autoCompleteVertical();
+    expectCorrectCustomClientSdk('verticalAutocomplete');
+  });
+
+  it('autoCompleteUniversal', () => {
+    mockCore.autoCompleteUniversal();
+    expectCorrectCustomClientSdk('universalAutocomplete');
+  });
+
+  it('autoCompleteFilter', () => {
+    mockCore.autoCompleteFilter('input', {
+      searchParameters: {
+        fields: [{
+          fieldId: 'builtin.location',
+          entityTypeId: 'ce_person'
+        }],
+        sectioned: false
+      }
+    });
+    expectCorrectCustomClientSdk('filterSearch');
+  });
+
+  function expectCorrectCustomClientSdk (coreLibMethod) {
+    expect(mockCore._coreLibrary[coreLibMethod]).toHaveBeenCalledWith(
+      expect.objectContaining({
+        customClientSdk: expect.objectContaining({
+          TEST: '1.3.5',
+          ANSWERS_SEARCH_UI_SDK: '@@LIB_VERSION'
+        })
+      })
+    );
+  }
+});
+
+function getMockCore (config = {}) {
   const core = new Core({
-    storage: new Storage().init()
+    storage: new Storage().init(),
+    ...config
   });
   core.init();
   core._coreLibrary.universalSearch = jest.fn(() => Promise.resolve());

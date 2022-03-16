@@ -108,4 +108,16 @@ describe('ANSWERS instance integration testing', () => {
     await initAnswers(ANSWERS, { businessId: undefined });
     expect(ANSWERS.getAnalyticsOptIn()).toBeUndefined();
   });
+
+  it('passes the customClientSdk from config', async () => {
+    mockWindow(windowSpy, {
+      location: {
+        search: ''
+      }
+    });
+    await initAnswers(ANSWERS, {
+      customClientSdk: { TEST_CLIENT_SDK: '1.2.3' }
+    });
+    expect(ANSWERS.core._customClientSdk).toEqual({ TEST_CLIENT_SDK: '1.2.3' });
+  });
 });

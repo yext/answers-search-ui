@@ -174,6 +174,8 @@ function initAnswers() {
     disableCssVariablesPonyfill: false,
     // Optional, the analytics key describing the Answers integration type. Accepts 'STANDARD', 'OVERLAY', or arbitrary strings. Defaults to 'STANDARD'
     querySource: 'STANDARD',
+    // Optional, additional key-value pairs for the Client-SDK HTTP header.
+    customSdkClient: {}
   })
 }
 ```
