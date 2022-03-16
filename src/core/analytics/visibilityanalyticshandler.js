@@ -39,7 +39,7 @@ export default class VisibilityAnalyticsHandler {
     if (isIE()) {
       window.addEventListener('unload', () => {
         if (this._documentVisibilityState !== 'hidden') {
-          this._reportVisibilityChangeEvent('RESULTS_HIDDEN_UNLOAD');
+          this._reportVisibilityChangeEvent('RESULTS_HIDDEN');
         }
       });
     }
