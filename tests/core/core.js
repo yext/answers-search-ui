@@ -93,21 +93,6 @@ describe('additionalHttpHeaders are passed correctly', () => {
     }
   });
 
-  it('logs a warning if an unrecognized header is found', () => {
-    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
-    getMockCore({
-      additionalHttpHeaders: {
-        'Client-SDK': {
-          TEST: '1.3.5'
-        },
-        'weee--eee': {},
-        'eee---eeeb': {}
-      }
-    });
-    expect(warnSpy).toHaveBeenCalledTimes(2);
-    warnSpy.mockRestore();
-  });
-
   it('verticalSearch', () => {
     mockCore.verticalSearch();
     expectCorrectAdditionalHttpHeaders('verticalSearch');
