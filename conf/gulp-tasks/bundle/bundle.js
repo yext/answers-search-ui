@@ -11,6 +11,7 @@ const {
   TRANSLATION_FLAGGER_REGEX,
   SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE
 } = require('../../i18n/constants');
+const rollupJson = require('@rollup/plugin-json');
 
 const TranslateCallParser = require('../../i18n/translatecallparser');
 
@@ -50,7 +51,8 @@ exports.modernBundle = function (
         exclude: [/node_modules/],
         presets: ['@babel/env']
       }),
-      svg()
+      svg(),
+      rollupJson()
     ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
@@ -109,7 +111,8 @@ exports.legacyBundle = function (
           '@babel/plugin-transform-object-assign'
         ]
       }),
-      svg()
+      svg(),
+      rollupJson()
     ]
   };
   return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);

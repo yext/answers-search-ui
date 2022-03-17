@@ -290,7 +290,8 @@ class Answers {
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch,
       environment: parsedConfig.environment,
-      componentManager: this.components
+      componentManager: this.components,
+      additionalHttpHeaders: parsedConfig.additionalHttpHeaders
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {

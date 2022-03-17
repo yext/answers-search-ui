@@ -84,9 +84,71 @@ describe('sessionId is passed properly', () => {
   });
 });
 
-function getMockCore () {
+describe('additionalHttpHeaders are passed correctly', () => {
+  const mockCore = getMockCore({
+    additionalHttpHeaders: {
+      'Client-SDK': {
+        TEST: '1.3.5'
+      }
+    }
+  });
+
+  it('verticalSearch', () => {
+    mockCore.verticalSearch();
+    expectCorrectAdditionalHttpHeaders('verticalSearch');
+  });
+
+  it('universalSearch', () => {
+    mockCore.search();
+    expectCorrectAdditionalHttpHeaders('universalSearch');
+  });
+
+  it('submitQuestion', () => {
+    mockCore.submitQuestion();
+    expectCorrectAdditionalHttpHeaders('submitQuestion');
+  });
+
+  it('autoCompleteVertical', () => {
+    mockCore.autoCompleteVertical();
+    expectCorrectAdditionalHttpHeaders('verticalAutocomplete');
+  });
+
+  it('autoCompleteUniversal', () => {
+    mockCore.autoCompleteUniversal();
+    expectCorrectAdditionalHttpHeaders('universalAutocomplete');
+  });
+
+  it('autoCompleteFilter', () => {
+    mockCore.autoCompleteFilter('input', {
+      searchParameters: {
+        fields: [{
+          fieldId: 'builtin.location',
+          entityTypeId: 'ce_person'
+        }],
+        sectioned: false
+      }
+    });
+    expectCorrectAdditionalHttpHeaders('filterSearch');
+  });
+
+  function expectCorrectAdditionalHttpHeaders (coreLibMethod) {
+    expect(mockCore._coreLibrary[coreLibMethod]).toHaveBeenCalledWith(
+      expect.objectContaining({
+        additionalHttpHeaders: {
+          'Client-SDK': expect.objectContaining({
+            TEST: '1.3.5',
+            ANSWERS_SEARCH_UI_SDK: '@@LIB_VERSION'
+          })
+        }
+      })
+    );
+  }
+});
+
+function getMockCore (config = {}) {
   const core = new Core({
-    storage: new Storage().init()
+    storage: new Storage().init(),
+    ...config
   });
   core.init();
   core._coreLibrary.universalSearch = jest.fn(() => Promise.resolve());
