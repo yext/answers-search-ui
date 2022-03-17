@@ -22,7 +22,7 @@ import { getCachedLiveApiUrl, getLiveApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
 import Searcher from './models/searcher';
-import { getAdditionalHttpHeaders } from './utils/getAdditionalHttpHeaders';
+import { mergeAdditionalHttpHeaders } from './utils/mergeAdditionalHttpHeaders';
 
 /** @typedef {import('./storage/storage').default} Storage */
 
@@ -120,7 +120,7 @@ export default class Core {
     this._componentManager = config.componentManager;
 
     /** @type {import('@yext/answers-core').AdditionalHttpHeaders} */
-    this._additionalHttpHeaders = getAdditionalHttpHeaders(config.additionalHttpHeaders);
+    this._additionalHttpHeaders = mergeAdditionalHttpHeaders(config.additionalHttpHeaders);
   }
 
   /**
@@ -271,7 +271,7 @@ export default class Core {
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
-        additionalHttpHeaders: this._mergeAdditionalHttpHeaders()
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
@@ -388,7 +388,7 @@ export default class Core {
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
-        customAdditionalHttpHeaders: this._mergeAdditionalHttpHeaders()
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
@@ -456,7 +456,7 @@ export default class Core {
       .universalAutocomplete({
         input: input,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
-        customAdditionalHttpHeaders: this._mergeAdditionalHttpHeaders()
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -481,7 +481,7 @@ export default class Core {
         input: input,
         verticalKey: verticalKey,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
-        customAdditionalHttpHeaders: this._mergeAdditionalHttpHeaders()
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -514,7 +514,7 @@ export default class Core {
         fields: searchParamFields,
         sectioned: config.searchParameters.sectioned,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
-        customAdditionalHttpHeaders: this._mergeAdditionalHttpHeaders()
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(
         response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response),
@@ -541,7 +541,7 @@ export default class Core {
       .submitQuestion({
         ...question,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
-        customAdditionalHttpHeaders: this._mergeAdditionalHttpHeaders()
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(() => {
         this.storage.set(

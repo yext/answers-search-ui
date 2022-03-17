@@ -9,8 +9,8 @@ const CLIENT_SDK_HEADER = 'Client-SDK';
  * @param {Record<string, string>} additionalHttpHeaders
  * @returns {import('@yext/answers-core').AdditionalHttpHeaders}
  */
-export function getAdditionalHttpHeaders (additionalHttpHeaders = {}) {
-  const ignoredHeaders = Object.keys(additionalHttpHeaders).filter(v => v === CLIENT_SDK_HEADER);
+export function mergeAdditionalHttpHeaders (additionalHttpHeaders = {}) {
+  const ignoredHeaders = Object.keys(additionalHttpHeaders).filter(v => v !== CLIENT_SDK_HEADER);
   ignoredHeaders.forEach(h => console.warn(
     `Found unknown HTTP header "${h}", ignoring it. ` +
     `Only the "${CLIENT_SDK_HEADER}" header is recognized in additionalHttpHeaders.`

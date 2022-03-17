@@ -84,13 +84,28 @@ describe('sessionId is passed properly', () => {
   });
 });
 
-describe('additionalHttpHeaders param is passed correctly', () => {
+describe('additionalHttpHeaders are passed correctly', () => {
   const mockCore = getMockCore({
     additionalHttpHeaders: {
       'Client-SDK': {
         TEST: '1.3.5'
       }
     }
+  });
+
+  it('logs a warning if an unrecognized header is found', () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {});
+    getMockCore({
+      additionalHttpHeaders: {
+        'Client-SDK': {
+          TEST: '1.3.5'
+        },
+        'weee--eee': {},
+        'eee---eeeb': {}
+      }
+    });
+    expect(warnSpy).toHaveBeenCalledTimes(2);
+    warnSpy.mockRestore();
   });
 
   it('verticalSearch', () => {
