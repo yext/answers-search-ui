@@ -109,15 +109,24 @@ describe('ANSWERS instance integration testing', () => {
     expect(ANSWERS.getAnalyticsOptIn()).toBeUndefined();
   });
 
-  it('passes the customClientSdk from config', async () => {
+  it('passes the additionalHttpHeaders from config', async () => {
     mockWindow(windowSpy, {
       location: {
         search: ''
       }
     });
     await initAnswers(ANSWERS, {
-      customClientSdk: { TEST_CLIENT_SDK: '1.2.3' }
+      additionalHttpHeaders: {
+        'Client-SDK': {
+          TEST_CLIENT_SDK: '1.2.3'
+        }
+      }
     });
-    expect(ANSWERS.core._customClientSdk).toEqual({ TEST_CLIENT_SDK: '1.2.3' });
+    expect(ANSWERS.core._additionalHttpHeaders).toEqual({
+      'Client-SDK': {
+        ANSWERS_SEARCH_UI_SDK: '@@LIB_VERSION',
+        TEST_CLIENT_SDK: '1.2.3'
+      }
+    });
   });
 });

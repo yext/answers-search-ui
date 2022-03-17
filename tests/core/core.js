@@ -84,34 +84,38 @@ describe('sessionId is passed properly', () => {
   });
 });
 
-describe('customClientSdk param is passed correctly', () => {
+describe('additionalHttpHeaders param is passed correctly', () => {
   const mockCore = getMockCore({
-    customClientSdk: { TEST: '1.3.5' }
+    additionalHttpHeaders: {
+      'Client-SDK': {
+        TEST: '1.3.5'
+      }
+    }
   });
 
   it('verticalSearch', () => {
     mockCore.verticalSearch();
-    expectCorrectCustomClientSdk('verticalSearch');
+    expectCorrectAdditionalHttpHeaders('verticalSearch');
   });
 
   it('universalSearch', () => {
     mockCore.search();
-    expectCorrectCustomClientSdk('universalSearch');
+    expectCorrectAdditionalHttpHeaders('universalSearch');
   });
 
   it('submitQuestion', () => {
     mockCore.submitQuestion();
-    expectCorrectCustomClientSdk('submitQuestion');
+    expectCorrectAdditionalHttpHeaders('submitQuestion');
   });
 
   it('autoCompleteVertical', () => {
     mockCore.autoCompleteVertical();
-    expectCorrectCustomClientSdk('verticalAutocomplete');
+    expectCorrectAdditionalHttpHeaders('verticalAutocomplete');
   });
 
   it('autoCompleteUniversal', () => {
     mockCore.autoCompleteUniversal();
-    expectCorrectCustomClientSdk('universalAutocomplete');
+    expectCorrectAdditionalHttpHeaders('universalAutocomplete');
   });
 
   it('autoCompleteFilter', () => {
@@ -124,16 +128,18 @@ describe('customClientSdk param is passed correctly', () => {
         sectioned: false
       }
     });
-    expectCorrectCustomClientSdk('filterSearch');
+    expectCorrectAdditionalHttpHeaders('filterSearch');
   });
 
-  function expectCorrectCustomClientSdk (coreLibMethod) {
+  function expectCorrectAdditionalHttpHeaders (coreLibMethod) {
     expect(mockCore._coreLibrary[coreLibMethod]).toHaveBeenCalledWith(
       expect.objectContaining({
-        customClientSdk: expect.objectContaining({
-          TEST: '1.3.5',
-          ANSWERS_SEARCH_UI_SDK: '@@LIB_VERSION'
-        })
+        additionalHttpHeaders: {
+          'Client-SDK': expect.objectContaining({
+            TEST: '1.3.5',
+            ANSWERS_SEARCH_UI_SDK: '@@LIB_VERSION'
+          })
+        }
       })
     );
   }

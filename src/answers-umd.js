@@ -287,7 +287,7 @@ class Answers {
       onUniversalSearch: parsedConfig.onUniversalSearch,
       environment: parsedConfig.environment,
       componentManager: this.components,
-      customClientSdk: parsedConfig.customClientSdk
+      additionalHttpHeaders: parsedConfig.additionalHttpHeaders
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
