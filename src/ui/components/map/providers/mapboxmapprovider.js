@@ -32,7 +32,7 @@ export default class MapBoxMapProvider extends MapProvider {
   loadJS (onLoad) {
     const version = 'v1.13.1';
     const script = DOM.createEl('script', {
-      id: 'yext-map-js',
+      id: 'yext-map-mapbox-js',
       onload: () => {
         this._isLoaded = true;
         mapboxgl.accessToken = this._apiKey;
@@ -54,7 +54,7 @@ export default class MapBoxMapProvider extends MapProvider {
     });
 
     const css = DOM.createEl('link', {
-      id: 'yext-map-css',
+      id: 'yext-map-mapbox-css',
       rel: 'stylesheet',
       href: `https://api.mapbox.com/mapbox-gl-js/${version}/mapbox-gl.css`
     });

@@ -81,7 +81,7 @@ export default class GoogleMapProvider extends MapProvider {
       return;
     }
 
-    let script = DOM.query('#yext-map-js');
+    let script = DOM.query('#yext-map-google-js');
     if (script) {
       const onLoadFunc = script.onload;
       script.onload = function () {
@@ -92,7 +92,7 @@ export default class GoogleMapProvider extends MapProvider {
     }
 
     script = DOM.createEl('script', {
-      id: 'yext-map-js',
+      id: 'yext-map-google-js',
       onload: () => {
         self._isLoaded = true;
         onLoad();
