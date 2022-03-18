@@ -58,7 +58,7 @@
     "@rollup/plugin-json": "^4.1.0",
     "@size-limit/file": "^4.9.0",
     "@types/jest": "^24.0.15",
-    "autoprefixer": "7.2.5",
+    "autoprefixer": "^10.4.4",
     "cross-env": "^7.0.3",
     "cssnano": "^5.1.4",
     "del": "^6.0.0",
@@ -92,11 +92,10 @@
     "i18next-conv": "^10.0.2",
     "jest": "^24.8.0",
     "jest-transform-stub": "^2.0.0",
-    "npm-force-resolutions": "0.0.10",
-    "postcss": "^8.4.6",
+    "postcss": "^8.4.12",
     "postcss-pxtorem": "^6.0.0",
     "puppeteer": "^13.5.1",
-    "regenerator-runtime": "^0.13.7",
+    "regenerator-runtime": "0.13.1",
     "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^9.2.1",
@@ -110,7 +109,8 @@
     "testcafe": "^1.18.4",
     "testcafe-browser-provider-browserstack": "^1.13.1",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0"
+    "vinyl-source-stream": "^2.0.0",
+    "y18n": "^5.0.8"
   },
   "scripts": {
     "build": "gulp && size-limit && npm run generate-entry-points",
@@ -125,14 +125,15 @@
     "size": "size-limit",
     "fix": "eslint . --fix",
     "extract-translations": "gulp extractTranslations",
-    "preinstall": "npx npm-force-resolutions",
     "prepublishOnly": "npm run build-languages && npm run generate-entry-points && ./conf/npm/use_npm_readme.sh",
     "postpublish": "./conf/npm/revert_npm_readme.sh",
     "generate-notices": "generate-license-file --input package.json --output THIRD-PARTY-NOTICES --overwrite",
     "generate-entry-points": "./conf/npm/generateentrypoints.js package.json"
   },
-  "resolutions": {
-    "regenerator-runtime": "0.13.1"
+  "overrides": {
+    "regenerator-runtime": "0.13.1",
+    "postcss": "^8.4.12",
+    "ansi-regex": "^5.0.1"
   },
   "jest": {
     "bail": 0,
