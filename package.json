@@ -109,8 +109,7 @@
     "testcafe": "^1.18.4",
     "testcafe-browser-provider-browserstack": "^1.13.1",
     "vinyl-buffer": "^1.0.1",
-    "vinyl-source-stream": "^2.0.0",
-    "y18n": "^5.0.8"
+    "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
     "build": "gulp && size-limit && npm run generate-entry-points",
