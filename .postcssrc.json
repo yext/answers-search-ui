@@ -6,7 +6,7 @@
       "mediaQuery": true
     },
     "autoprefixer": {
-      "browsersList": ["last 2 versions"],
+      "overrideBrowserslist": ["last 2 versions"],
       "grid": true
     },
     "cssnano": true
