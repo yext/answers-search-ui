@@ -6,7 +6,7 @@ on:
 
 jobs:
   WCAG-test:
-    runs-on: ubuntu-latest
+    runs-on: macos-latest
 
     strategy:
       matrix:
