@@ -10,12 +10,12 @@ commands:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - v3-node-14-{{ checksum "package-lock.json" }}
+            - v3-node-16-{{ checksum "package-lock.json" }}
       - run: npm install
       - save_cache:
           paths:
             - node_modules
-          key: v3-node-14-{{ checksum "package-lock.json" }}
+          key: v3-node-16-{{ checksum "package-lock.json" }}
   deploy-to-aws:
     description: "Deploys the dist directory to a given subdirectory of the answers bucket"
     parameters:
@@ -48,7 +48,7 @@ jobs:
   # generate bundles
   build:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:16
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -61,7 +61,7 @@ jobs:
   # generate bundles for all languages and locales
   build_i18n:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:16
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -73,7 +73,7 @@ jobs:
             - .circleci
   build_search_bar:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:16
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -86,7 +86,7 @@ jobs:
   # run the jest unit tests
   unit_test:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:16
     resource_class: xlarge
     working_directory: ~/answers
     steps:
@@ -97,7 +97,7 @@ jobs:
   # run acceptance tests directly in the container
   headless_acceptance_test:
     docker:
-      - image: circleci/node:14.5-browsers
+      - image: circleci/node:16-browsers
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -106,7 +106,7 @@ jobs:
       - run: ./.circleci/run_headless_acceptance.sh
   headless_acceptance_test_search_bar:
     docker:
-      - image: circleci/node:14.5-browsers
+      - image: circleci/node:16-browsers
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -118,7 +118,7 @@ jobs:
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:16
     working_directory: ~/answers
     steps:
       - setup-workspace
@@ -128,7 +128,7 @@ jobs:
   # verify all translations are present
   translation_test:
     docker:
-      - image: circleci/node:14.5
+      - image: circleci/node:16
     working_directory: ~/answers
     steps:
       - setup-workspace
