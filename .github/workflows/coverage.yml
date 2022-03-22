@@ -10,5 +10,7 @@ on:
 jobs:
   call_coveralls:
     uses: yext/answers-headless/.github/workflows/coverage_reuse.yml@dev/test-reusable-workflows
+    with:
+      test_script: npx gulp templates && npx jest --coverage
     secrets:
       caller_github_token: ${{ secrets.GITHUB_TOKEN }}
