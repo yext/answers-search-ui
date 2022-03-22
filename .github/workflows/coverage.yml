@@ -5,6 +5,7 @@ name: Code Coverage
 
 on:
   push:
+    branches-ignore: dev/*
   pull_request:
 
 jobs:
