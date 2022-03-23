@@ -19,6 +19,7 @@ jobs:
         run: |
           BRANCH_NAME="${GITHUB_REF#refs/heads/}"
           PACKAGE_VERSION="${GITHUB_REF##*/}"
+          echo ${BRANCH_NAME}
           echo ::set-output name=branch::${BRANCH_NAME}
           if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]
           then
@@ -26,6 +27,7 @@ jobs:
             then
               PACKAGE_VERSION="${PACKAGE_VERSION}.0"
             fi
+            echo ${PACKAGE_VERSION}
             echo ::set-output name=version::${PACKAGE_VERSION}
             git config user.name 'github-actions[bot]'
             git config user.email 'github-actions[bot]@users.noreply.github.com'
