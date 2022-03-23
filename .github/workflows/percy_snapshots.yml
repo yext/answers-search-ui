@@ -2,6 +2,7 @@ name: Percy Snapshots
 
 on: 
   push:
+    branches-ignore: dev/*
   pull_request:
 
 jobs:
