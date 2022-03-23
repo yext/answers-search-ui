@@ -31,14 +31,22 @@ jobs:
             echo ::set-output name=version::${PACKAGE_VERSION}
             git config user.name 'github-actions[bot]'
             git config user.email 'github-actions[bot]@users.noreply.github.com'
-            if npm version ${PACKAGE_VERSION} | tee >( grep -q 'npm ERR! Version not changed' )
+            if npm --no-git-tag-version version ${PACKAGE_VERSION} &> temp-npm-version.txt
             then
-              echo "Package version is already in sync with branch name."
-              echo ::set-output name=should_create_pr::0
+              echo ::set-output name=should_create_pr::1
+              git add package.json package-lock.json
+              git commit -m ${PACKAGE_VERSION}
+              git push -u origin HEAD:"dev/update-version-${PACKAGE_VERSION}"
               exit 0
             fi
-            echo ::set-output name=should_create_pr::1
-            git push -u origin HEAD:"dev/update-version-${PACKAGE_VERSION}"
+            echo ::set-output name=should_create_pr::0
+            if grep -q 'npm ERR! Version not changed' temp-npm-version.txt
+            then
+              echo "Package version is already in sync with branch name."
+              exit 0
+            fi
+            cat temp-npm-version.txt
+            exit 1
           else
             echo "Branch name ${BRANCH_NAME} does not have the correct format with package version."
             exit 1
