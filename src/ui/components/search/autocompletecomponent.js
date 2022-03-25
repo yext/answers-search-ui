@@ -192,8 +192,22 @@ export default class AutoCompleteComponent extends Component {
       sectionIndex: this._sectionIndex,
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
-      listLabelIdName: this.listLabelIdName
+      listLabelIdName: this.listLabelIdName,
+      eventOptions: this.eventOptions(data)
     }));
+  }
+
+  eventOptions (data) {
+    const eventOptions = [];
+    data.sections?.forEach(section => {
+      const sectionEventOptions = section.results.map(result => {
+        return {
+          suggestedSearchText: result.value
+        };
+      });
+      eventOptions.push(sectionEventOptions);
+    });
+    return eventOptions;
   }
 
   updateAriaAttribute () {
