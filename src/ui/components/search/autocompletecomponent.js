@@ -199,7 +199,7 @@ export default class AutoCompleteComponent extends Component {
 
   eventOptions (data) {
     const eventOptions = data.sections?.map(section =>
-      section.results.map(result => {
+      section.results?.map(result => {
         return { suggestedSearchText: result.value };
       })
     );
