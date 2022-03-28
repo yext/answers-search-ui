@@ -95,19 +95,19 @@ export default class DOM {
   /**
    * createEle will create a {HTMLElement} and apply the properties attributes through an object provided.
    * @param {string} el The element `tag` name to construct
-   * @param {Object} opts_data Optional attributes to apply to the new HTMLElement
+   * @param {Object} optsData Optional attributes to apply to the new HTMLElement
    */
-  static createEl (el, opts_data = {}) {
+  static createEl (el, optsData = {}) {
     const node = document.createElement(el);
-    const props = Object.keys(opts_data);
+    const props = Object.keys(optsData);
 
     for (let i = 0; i < props.length; i++) {
       if (props[i] === 'class') {
-        DOM.addClass(node, opts_data[props[i]]);
+        DOM.addClass(node, optsData[props[i]]);
         continue;
       }
 
-      node[props[i]] = opts_data[props[i]];
+      node[props[i]] = optsData[props[i]];
     }
 
     return node;

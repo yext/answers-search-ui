@@ -1,9 +1,9 @@
 /** @define AutoComplete */
 
 $autocomplete-background-color: white !default;
-$autocomplete-box-shadow: 0 1px 6px 0 rgba(32,33,36,0.47) !default;;
-$autocomplete-selected-background-color: #f9f9f9 !default;
-$autocomplete-option-hover-background-color: #f9f9f9 !default;
+$autocomplete-box-shadow: 0 1px 6px 0 rgba(32, 33, 36, 0.47) !default;
+$autocomplete-selected-background-color: #F9F9F9 !default;
+$autocomplete-option-hover-background-color: #F9F9F9 !default;
 $autocomplete-separator-color: var(--yxt-color-borders) !default;
 
 $autocomplete-text-font-size: var(--yxt-font-size-md-lg) !default;
@@ -29,7 +29,7 @@ $autocomplete-prompt-header-font-weight: var(--yxt-font-weight-light) !default;
 {
   padding-bottom: 10px;
 
-  &:before
+  &::before
   {
     @media (min-width: $breakpoint-mobile-min) {
       margin-left: var(--yxt-base-spacing);

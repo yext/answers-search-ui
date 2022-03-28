@@ -170,7 +170,7 @@ $standard-card-ordinal-font-size: var(--yxt-font-size-xs) !default;
       flex-basis: calc(var(--yxt-standard-card-base-spacing) * 16);
     }
 
-    @media (max-width: $breakpoint-mobile-max) 
+    @media (max-width: $breakpoint-mobile-max)
     {
       flex-basis: 100%;
     }
@@ -196,5 +196,3 @@ $standard-card-ordinal-font-size: var(--yxt-font-size-xs) !default;
     flex-basis: 0;
   }
 }
-
-

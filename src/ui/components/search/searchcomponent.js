@@ -11,6 +11,7 @@ import VoiceSearchController from '../../speechrecognition/voicesearchcontroller
 import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 import SearchBarIconController from '../../controllers/searchbariconcontroller';
 import alert from '../../alert';
+import { constructRedirectUrl } from '../../tools/urlutils';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -518,8 +519,9 @@ export default class SearchComponent extends Component {
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        const newUrl = this.redirectUrl + '?' + params.toString();
-        window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
+        const newRedirectUrl = constructRedirectUrl(this.redirectUrl, params);
+        window.open(newRedirectUrl.href, this.redirectUrlTarget) ||
+          (window.location.href = newRedirectUrl.href);
         return false;
       }
     }
@@ -580,7 +582,7 @@ export default class SearchComponent extends Component {
   promptForLocation (query) {
     if (this._promptForLocation) {
       return this.fetchQueryIntents(query)
-        .then(queryIntents => queryIntents.includes('NEAR_ME'))
+        .then(queryIntents => queryIntents?.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
           if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {
             return new Promise((resolve, reject) =>
@@ -603,7 +605,8 @@ export default class SearchComponent extends Component {
                 this._geolocationOptions)
             );
           }
-        });
+        })
+        .catch(error => console.warn('Unable to determine user\'s location.', error));
     } else {
       return Promise.resolve();
     }
@@ -627,7 +630,7 @@ export default class SearchComponent extends Component {
           this._autoCompleteName,
           this._verticalKey)
         : this.core.autoCompleteUniversal(query, this._autoCompleteName);
-      return autocompleteRequest.then(data => data.inputIntents);
+      return autocompleteRequest.then(data => data?.inputIntents ?? []);
     } else {
       // There are two alternatives to consider here. The user could have selected the query
       // as an autocomplete option or manually input it themselves. If the former, use the intents

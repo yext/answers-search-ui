@@ -77,7 +77,7 @@ $results-header-universal-background: var(--yxt-color-brand-white) !default;
       $size: var(--yxt-results-header-filters-font-size),
       $line-height: var(--yxt-results-header-filters-line-height),
       $color: var(--yxt-results-header-filters-color),
-    )
+    );
   }
 
   &-filterValue

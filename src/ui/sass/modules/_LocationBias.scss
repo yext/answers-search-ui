@@ -35,8 +35,8 @@ $locationBias-bullet-color-default: var(--yxt-locationBias-text-color) !default;
 
   &-bullet
   {
-    height:  var(--yxt-locationBias-bullet-size);
-    width:  var(--yxt-locationBias-bullet-size);
+    height: var(--yxt-locationBias-bullet-size);
+    width: var(--yxt-locationBias-bullet-size);
     display: inline-block;
     border-radius: 100%;
     background: var(--yxt-locationBias-bullet-color-default);
@@ -65,7 +65,7 @@ $locationBias-bullet-color-default: var(--yxt-locationBias-text-color) !default;
 
   &-updateLoc
   {
-    @include Link-1;
+    @include Link-1();
     cursor: pointer;
     color: var(--yxt-color-brand-primary);
     text-decoration: none;

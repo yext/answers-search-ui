@@ -96,7 +96,7 @@ $accordion-result-cta-font-weight: var(--yxt-font-weight-normal) !default;
       $line-height: var(--yxt-accordion-result-cta-line-height),
       $weight: var(--yxt-accordion-result-cta-font-weight),
     );
-    @include Link-1;
+    @include Link-1();
 
     display: flex;
     align-items: center;

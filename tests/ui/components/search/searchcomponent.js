@@ -126,6 +126,20 @@ describe('SearchBar component', () => {
     return expect(wasSearchRanPromise).resolves.toBeTruthy();
   });
 
+  it('An undefined universalAutocomplete response results in empty query intents', async () => {
+    expect.assertions(1);
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      verticalKey: null,
+      allowEmptySearch: true
+    });
+    component.core.autoCompleteUniversal = () => {
+      return Promise.resolve(undefined);
+    };
+
+    return expect(component.fetchQueryIntents()).resolves.toStrictEqual([]);
+  });
+
   it('searching with the search bar sets QUERY_TRIGGER to SEARCH_BAR', () => {
     storage.setWithPersist(StorageKeys.QUERY, 'what does yext do?');
     const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
@@ -163,7 +177,9 @@ describe('SearchBar component', () => {
           getUserMedia: () => Promise.resolve({
             getTracks: () => ([{ stop: jest.fn() }])
           })
-        }
+        },
+        // taken from Safari on MacOS
+        userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.2 Safari/605.1.15'
       }));
     });
 
