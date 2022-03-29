@@ -22,6 +22,6 @@ test('Basic search and redirect flow', async t => {
 
   const getUrl = ClientFunction(() => window.location.href);
   const clientUrl = await getUrl();
-  const expectedUrl = 'https://answers-js-demo.netlify.app/sites/rose?query=amani+farooque+phone+number';
-  await t.expect(clientUrl).eql(expectedUrl);
+  const expectedUrl = 'https://theme.slapshot.pagescdn.com/?query=amani+farooque+phone+number';
+  await t.expect(clientUrl.startsWith(expectedUrl)).ok();
 });
