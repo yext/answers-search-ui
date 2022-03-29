@@ -187,14 +187,15 @@ export default class AutoCompleteComponent extends Component {
       this._isOpen = true;
     }
 
-    // should show IF it's empty search OR levenstien match on a non empty search
+    // show custom prompts if it's an empty search or levenshtein match on a non empty search
     if (this.customPrompts && data.sections) {
-      console.log('query', queryInputEl.value);
-      this.customPrompts.forEach(prompt => console.log('isCloseMatch(queryInputEl.value)', isCloseMatch(prompt, queryInputEl.value)));
       const hasCustomPrompts = data.sections.find(result => result.isCustom);
-      if (!hasCustomPrompts) {
-        const newAutocompleteResults = this.combineResultsWithCustomPrompts(data);
-        this.core.storage.set(`${StorageKeys.AUTOCOMPLETE}.${this.name}`, newAutocompleteResults);
+      const matchedCustomPrompts = this.customPrompts.filter(prompt =>
+        isCloseMatch(prompt, queryInputEl.value)
+      );
+      if (!hasCustomPrompts && matchedCustomPrompts.length > 0) {
+        const dataWithCustomPrompts = this.combineResultsWithCustomPrompts(data, matchedCustomPrompts);
+        this.core.storage.set(`${StorageKeys.AUTOCOMPLETE}.${this.name}`, dataWithCustomPrompts);
         return;
       }
     }
@@ -382,17 +383,22 @@ export default class AutoCompleteComponent extends Component {
     this.customPrompts = prompts;
   }
 
-  combineResultsWithCustomPrompts (data) {
-    const newSections = data.sections.filter(result => result.resultsCount !== 0);
-    const customAutocompleteResults = this.customPrompts
+  createSectionForCustomPrompts (customPrompts) {
+    const customAutocompleteResults = customPrompts
       .map(prompt => AutoCompleteResponseTransformer._transformAutoCompleteResult({ value: prompt }));
-    newSections.unshift({
+    return {
       results: customAutocompleteResults,
       resultsCount: customAutocompleteResults.length,
       isCustom: true
-    });
-    const newAutocompleteResults = Object.assign({}, data, { sections: newSections });
-    return newAutocompleteResults;
+    };
+  }
+
+  combineResultsWithCustomPrompts (data, customPrompts) {
+    const customPromptsSection = this.createSectionForCustomPrompts(customPrompts);
+    const newSections = data.sections.filter(result => result.resultsCount !== 0);
+    newSections.unshift(customPromptsSection);
+    const dataWithCustomPrompts = Object.assign({}, data, { sections: newSections });
+    return dataWithCustomPrompts;
   }
 
   autoComplete (input) {

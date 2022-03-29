@@ -200,6 +200,10 @@ export default class ComponentManager {
     return this._activeComponents.find(c => c.constructor.type === type);
   }
 
+  getActiveComponents (type) {
+    return this._activeComponents.filter(c => c.constructor.type === type);
+  }
+
   /**
    * Returns a concatenated list of all names associated with the given component types
    * @param {string[]} type The types of the component
