@@ -98,7 +98,7 @@ $result-cta-color: var(--yxt-color-link-primary) !default;
 
   &-titleLink
   {
-    @include Link-1;
+    @include Link-1();
 
     display: inline-flex;
     align-items: center;
@@ -224,7 +224,7 @@ $result-cta-color: var(--yxt-color-link-primary) !default;
 
   &-cta
   {
-    @include Link-1;
+    @include Link-1();
 
     display: flex;
     flex-direction: column;
@@ -257,7 +257,7 @@ $result-cta-color: var(--yxt-color-link-primary) !default;
     padding-right: calc(var(--yxt-base-spacing) * 2);
     margin-bottom: calc(var(--yxt-base-spacing) / 2);
 
-    @media(max-width: $breakpoint-mobile-max)
+    @media (max-width: $breakpoint-mobile-max)
     {
       padding-left: 0;
       padding-right: 0;

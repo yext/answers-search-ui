@@ -32,6 +32,7 @@ import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
 import { localizedDistance, parseLocale } from './core/utils/i18nutils';
 import createImpressionEvent from './core/analytics/createimpressionevent';
+import VisibilityAnalyticsHandler from './core/analytics/visibilityanalyticshandler';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -270,6 +271,11 @@ class Answers {
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
+      const visibilityAnalyticsHandler = new VisibilityAnalyticsHandler(
+        this._analyticsReporterService,
+        parsedConfig.search?.verticalKey
+      );
+      visibilityAnalyticsHandler.initVisibilityChangeListeners();
     }
 
     this.core = new Core({
@@ -284,7 +290,8 @@ class Answers {
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch,
       environment: parsedConfig.environment,
-      componentManager: this.components
+      componentManager: this.components,
+      additionalHttpHeaders: parsedConfig.additionalHttpHeaders
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {

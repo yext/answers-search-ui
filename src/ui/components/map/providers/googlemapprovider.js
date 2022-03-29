@@ -2,7 +2,7 @@
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
-import { parseLocale } from '../../../../core/utils/i18nutils';
+import { parseLocale, isRTL } from '../../../../core/utils/i18nutils';
 
 /* global google */
 
@@ -81,7 +81,7 @@ export default class GoogleMapProvider extends MapProvider {
       return;
     }
 
-    let script = DOM.query('#yext-map-js');
+    let script = DOM.query('#yext-map-google-js');
     if (script) {
       const onLoadFunc = script.onload;
       script.onload = function () {
@@ -92,7 +92,7 @@ export default class GoogleMapProvider extends MapProvider {
     }
 
     script = DOM.createEl('script', {
-      id: 'yext-map-js',
+      id: 'yext-map-google-js',
       onload: () => {
         self._isLoaded = true;
         onLoad();
@@ -126,9 +126,22 @@ export default class GoogleMapProvider extends MapProvider {
     // Only here for demo purposes, so we'll fix later.
     setTimeout(() => {
       const container = DOM.query(el);
+
+      const zoomControlPosition = isRTL(this._language)
+        ? google.maps.ControlPosition.LEFT_TOP
+        : google.maps.ControlPosition.RIGHT_TOP;
+
       this.map = new google.maps.Map(container, {
         zoom: this._zoom,
         center: this.getCenterMarker(mapData),
+        fullscreenControl: false,
+        mapTypeControl: false,
+        rotateControl: false,
+        scaleControl: false,
+        streetViewControl: false,
+        zoomControlOptions: {
+          position: zoomControlPosition
+        },
         ...this._providerOptions
       });
 
