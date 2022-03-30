@@ -189,7 +189,7 @@ export default class AutoCompleteComponent extends Component {
 
     // show custom prompts if it's an empty search or levenshtein match on a non empty search
     if (this.customPrompts && data.sections) {
-      const hasCustomPrompts = data.sections.find(result => result.isCustom);
+      const hasCustomPrompts = data.sections.find(section => section.isCustom);
       const matchedCustomPrompts = this.customPrompts.filter(prompt =>
         isCloseMatch(prompt, queryInputEl.value)
       );
