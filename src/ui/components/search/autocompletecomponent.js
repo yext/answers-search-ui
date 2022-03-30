@@ -385,7 +385,7 @@ export default class AutoCompleteComponent extends Component {
 
   createSectionForCustomPrompts (customPrompts) {
     const customAutocompleteResults = customPrompts
-      .map(prompt => AutoCompleteResponseTransformer._transformAutoCompleteResult({ value: prompt }));
+      .map(prompt => AutoCompleteResponseTransformer.transformAutoCompleteResult({ value: prompt }));
     return {
       results: customAutocompleteResults,
       resultsCount: customAutocompleteResults.length,

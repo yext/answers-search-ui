@@ -157,7 +157,7 @@ describe('transform autocomplete response', () => {
       value: 'Virginia Beach'
     };
     const actualTransformedResult =
-      AutoCompleteResponseTransformer._transformAutoCompleteResult(resultFromCore);
+      AutoCompleteResponseTransformer.transformAutoCompleteResult(resultFromCore);
     expect(actualTransformedResult).toEqual(expectedTransformedResult);
   });
 
@@ -185,7 +185,7 @@ describe('transform autocomplete response', () => {
       value: 'salesforce'
     };
     const actualTransformedResult =
-      AutoCompleteResponseTransformer._transformAutoCompleteResult(resultFromCore);
+      AutoCompleteResponseTransformer.transformAutoCompleteResult(resultFromCore);
     expect(actualTransformedResult).toEqual(expectedTransformedResult);
   });
 });

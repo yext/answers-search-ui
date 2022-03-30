@@ -16,7 +16,7 @@ export default class AutoCompleteResponseTransformer {
    */
   static transformAutoCompleteResponse (response) {
     const sections = [{
-      results: response.results.map(result => this._transformAutoCompleteResult(result)),
+      results: response.results.map(result => this.transformAutoCompleteResult(result)),
       resultsCount: response.results.length
     }];
     return new AutoCompleteData({
@@ -37,7 +37,7 @@ export default class AutoCompleteResponseTransformer {
   static transformFilterSearchResponse (response) {
     const transformedSections = response.sections.map(section => ({
       label: section.label,
-      results: section.results.map(result => this._transformAutoCompleteResult(result)),
+      results: section.results.map(result => this.transformAutoCompleteResult(result)),
       resultsCount: section.results.length
     }));
     return new AutoCompleteData({
@@ -47,7 +47,7 @@ export default class AutoCompleteResponseTransformer {
     });
   }
 
-  static _transformAutoCompleteResult (result) {
+  static transformAutoCompleteResult (result) {
     const transformedFilter = result.filter ? this._transformFilter(result.filter) : {};
     return new AutoCompleteResult({
       filter: transformedFilter,
