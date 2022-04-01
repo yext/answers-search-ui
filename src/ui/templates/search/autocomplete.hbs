@@ -53,7 +53,7 @@
               data-short="{{shortValue}}"
               data-filter='{{json filter}}'
               data-eventtype="AUTO_COMPLETE_SELECTION"
-              data-eventoptions='{"suggestedSearchText": "{{value}}"}'
+              data-eventoptions='{{json (lookup (lookup @root.eventOptions @../index) @index) }}'
               role="option"
               id="yxt-AutoComplete-option-{{../../_config.name}}-{{@../index}}-{{@index}}"
           >
