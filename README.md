@@ -521,7 +521,7 @@ ANSWERS.addComponent('SearchBar', {
     onClose: function() {},
     // Optional, callback invoked when the autocomplete component changes from closed to open.
     onOpen: function() {},
-    // Optional, custom prompts to include in the autocomplete dropdown.
+    // Optional, a string array of custom prompts to include in the autocomplete dropdown.
     customPrompts: []
   },
   //Optional, options for loading indicator on seachbar
