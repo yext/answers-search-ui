@@ -224,7 +224,17 @@ export default class GeoLocationComponent extends Component {
       inputEl: inputSelector,
       verticalKey: this._config.verticalKey,
       searchParameters: this.searchParameters,
-      onSubmit: (query, filter) => this._handleSubmit(query, filter)
+      onSubmit: (query, filter) => this._handleSubmit(query, filter),
+      onMount: () => {
+        const inputEl = DOM.query(this._container, inputSelector);
+        if (!inputEl) {
+          return;
+        }
+        const hasAutocompleteResults = this._autocomplete.getState('hasResults');
+        if (inputEl.getAttribute('aria-expanded') !== hasAutocompleteResults) {
+          inputEl.setAttribute('aria-expanded', hasAutocompleteResults);
+        }
+      }
     });
   }
 

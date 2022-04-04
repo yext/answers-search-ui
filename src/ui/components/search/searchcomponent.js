@@ -566,6 +566,16 @@ export default class SearchComponent extends Component {
       },
       onChange: () => {
         DOM.trigger(DOM.query(this._container, inputSelector), 'input');
+      },
+      onMount: () => {
+        const inputEl = DOM.query(this._container, inputSelector);
+        if (!inputEl) {
+          return;
+        }
+        const hasAutocompleteResults = this._autocomplete.getState('hasResults');
+        if (inputEl.getAttribute('aria-expanded') !== hasAutocompleteResults) {
+          inputEl.setAttribute('aria-expanded', hasAutocompleteResults);
+        }
       }
     });
     this._autocomplete.mount();
