@@ -522,14 +522,14 @@ ANSWERS.addComponent('SearchBar', {
     // Optional, callback invoked when the autocomplete component changes from closed to open.
     onOpen: function() {},
   },
-  //Optional, options for loading indicator on seachbar
+  // Optional, options for loading indicator on seachbar
   loadingIndicator: {
-    //Optional, whether to include a loading indicator on seachbar
+    // Optional, whether to include a loading indicator on seachbar
     display: false,
-    //Optional, use custom icon url instead of the default loading indicator animation
+    // Optional, use custom icon url instead of the default loading indicator animation
     iconUrl: ""
   },
-  //Optional, options for voice search feature on seachbar
+  // Optional, options for voice search feature on seachbar
   voiceSearch: {
     // Optional, whether or not voice search is enabled
     enabled: false,
