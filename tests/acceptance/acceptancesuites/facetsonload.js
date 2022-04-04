@@ -41,6 +41,7 @@ test('Facets work with back/forward navigation and page refresh', async t => {
   const state1 = {
     c_puppyPreference: [],
     c_employeeDepartment: [{ c_employeeDepartment: { $eq: 'Client Delivery [SO]' } }],
+    c_popularity: [],
     languages: [],
     specialities: []
   };
@@ -68,6 +69,7 @@ test('Facets work with back/forward navigation and page refresh', async t => {
       { c_employeeDepartment: { $eq: 'Client Delivery [SO]' } },
       { c_employeeDepartment: { $eq: 'Technology' } }
     ],
+    c_popularity: [],
     languages: [],
     specialities: []
   };
