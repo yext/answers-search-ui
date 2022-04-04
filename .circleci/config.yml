@@ -105,7 +105,7 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: ./.circleci/run_headless_acceptance.sh
+      - run: ./.github/run_headless_acceptance.sh
   headless_acceptance_test_search_bar:
     docker:
       - image: circleci/node:14.5-browsers
@@ -116,7 +116,7 @@ jobs:
           at: ~/answers
       - run:
           name: Search Bar Acceptance Tests
-          command: npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.circleci/testcafe_search_bar.json -q
+          command: npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.github/testcafe_search_bar.json -q
   # run the browserstack testcafe acceptance tests
   browserstack_acceptance_test:
     docker:
@@ -126,7 +126,16 @@ jobs:
       - setup-workspace
       - attach_workspace:
           at: ~/answers
-      - run: ./.circleci/run_browserstack_acceptance.sh
+      - run: ./.github/run_browserstack_acceptance.sh
+  useragent_acceptance_test:
+    docker:
+      - image: circleci/node:14.5-browsers
+    working_directory: ~/answers
+    steps:
+      - setup-workspace
+      - attach_workspace:
+          at: ~/answers
+      - run: ./.github/run_useragent_acceptance.sh
   # verify all translations are present
   translation_test:
     docker:
