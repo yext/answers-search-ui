@@ -23,6 +23,6 @@ export default class FilterSearchComponentBlock {
       .typeText(this._input, displayValue)
       .pressKey('space')
       .wait(500)
-      .click(this._selector.find('.js-yext-autocomplete-option').withText(displayValue));
+      .click(this._selector.find('.js-yext-autocomplete-option').withExactText(displayValue));
   }
 }

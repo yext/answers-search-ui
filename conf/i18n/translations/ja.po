@@ -71,10 +71,6 @@ msgstr "[[date]]より後"
 msgctxt "Before a date. Example: Before [August 15th]"
 msgid "Before [[date]]"
 msgstr "[[date]]より前"
-#: src/ui/templates/results/alternativeverticals.hbs:28
-msgid "([[resultsCount]] result)"
-msgid_plural "([[resultsCount]] results)"
-msgstr[0] "（[[resultsCount]]件の結果）"
 
 #: src/ui/components/filters/daterangefiltercomponent.js:199
 msgctxt "Beginning at a date (with no end date). Example: [August 15th] or later"
@@ -481,12 +477,6 @@ msgstr "クリア"
 msgctxt "Placeholder text for input field"
 msgid "Enter your question here"
 msgstr "ここに質問を入力して下さい"
-
-#: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "オートコンプリート選択が[[resultsCount]]件見つかりました"
-msgstr[1] "オートコンプリート選択が[[resultsCount]]件見つかりました"
 
 #: src/ui/components/filters/facetscomponent.js:277
 msgctxt "True or False"
