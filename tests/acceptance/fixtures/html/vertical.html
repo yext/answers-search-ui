@@ -25,6 +25,8 @@
                   limit: 15,
                 },
                 onReady: function() {
+                    this.setGeolocation(38.8955, -77.0699);
+
                     this.addComponent('SearchBar', {
                         container: '.search-bar-container',
                         verticalKey:'KM',
