@@ -1,0 +1,49 @@
+name: Run acceptance tests
+
+on:
+  workflow_call:
+    secrets:
+      BROWSERSTACK_USERNAME:
+        required: true
+      BROWSERSTACK_ACCESS_KEY:
+        required: true
+
+jobs:
+  headless_acceptance:
+    name: Headless Acceptance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.github/run_headless_acceptance.sh
+
+  browserstack_acceptance:
+    name: Browserstack Acceptance
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js 14
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+          cache: 'npm'
+      - run: npm ci
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - run: ./.github/run_browserstack_acceptance.sh
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
