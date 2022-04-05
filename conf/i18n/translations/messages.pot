@@ -191,7 +191,7 @@ msgstr ""
 
 #: src/ui/components/filters/geolocationcomponent.js:153
 #: src/ui/components/search/locationbiascomponent.js:89
-#: src/ui/components/search/searchcomponent.js:234
+#: src/ui/components/search/searchcomponent.js:235
 msgid "We are unable to determine your location"
 msgstr ""
 
@@ -245,7 +245,7 @@ msgid "Remove this filter"
 msgstr ""
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:70
-#: src/ui/components/search/searchcomponent.js:73
+#: src/ui/components/search/searchcomponent.js:74
 msgctxt "Button label"
 msgid "Submit"
 msgstr ""
@@ -385,7 +385,7 @@ msgctxt "Labels a link"
 msgid "Learn more here."
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:64
+#: src/ui/components/search/searchcomponent.js:65
 msgctxt "Labels an input field"
 msgid "Conduct a search"
 msgstr ""
@@ -396,7 +396,7 @@ msgctxt "Labels an input field"
 msgid "Search for a filter option"
 msgstr ""
 
-#: src/ui/components/search/filtersearchcomponent.js:64
+#: src/ui/components/search/filtersearchcomponent.js:65
 msgctxt "Labels an input field"
 msgid "What are you interested in?"
 msgstr ""
@@ -484,7 +484,7 @@ msgctxt "True or False"
 msgid "True"
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:82
+#: src/ui/components/search/searchcomponent.js:83
 msgctxt "Verb, clears search"
 msgid "Clear"
 msgstr ""

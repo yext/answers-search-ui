@@ -21,3 +21,14 @@ export function isSafari () {
 
   return browserData.browser.name === 'Safari';
 }
+
+/**
+ * Returns whether the current browser is Internet Explorer.
+ *
+ * @returns {boolean}
+ */
+export function isIE () {
+  const browserData = Bowser.parse(navigator.userAgent);
+
+  return browserData.browser.name === 'Internet Explorer';
+}

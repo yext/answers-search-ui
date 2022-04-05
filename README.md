@@ -174,6 +174,12 @@ function initAnswers() {
     disableCssVariablesPonyfill: false,
     // Optional, the analytics key describing the Answers integration type. Accepts 'STANDARD', 'OVERLAY', or arbitrary strings. Defaults to 'STANDARD'
     querySource: 'STANDARD',
+    // Optional, additional values for the HTTP headers listed below. Headers other than those listed below will be ignored.
+    additionalHttpHeaders: {
+      // Additional key-value pairs to send in the Client-SDK header.
+      // ANSWERS_CORE and ANSWERS_SEARCH_UI_SDK are automatically set and cannot be overwritten.
+      'Client-SDK': {}
+    }
   })
 }
 ```
@@ -515,15 +521,17 @@ ANSWERS.addComponent('SearchBar', {
     onClose: function() {},
     // Optional, callback invoked when the autocomplete component changes from closed to open.
     onOpen: function() {},
+    // Optional, a string array of custom prompts to include in the autocomplete dropdown.
+    customPrompts: []
   },
-  //Optional, options for loading indicator on seachbar
+  // Optional, options for loading indicator on seachbar
   loadingIndicator: {
-    //Optional, whether to include a loading indicator on seachbar
+    // Optional, whether to include a loading indicator on seachbar
     display: false,
-    //Optional, use custom icon url instead of the default loading indicator animation
+    // Optional, use custom icon url instead of the default loading indicator animation
     iconUrl: ""
   },
-  //Optional, options for voice search feature on seachbar
+  // Optional, options for voice search feature on seachbar
   voiceSearch: {
     // Optional, whether or not voice search is enabled
     enabled: false,
@@ -1499,6 +1507,18 @@ ANSWERS.addComponent('FilterSearch', {
   container: '.filter-search-container',
   // Required
   verticalKey: '<VERTICAL_KEY>',
+  // Required, the search parameters for autocompletion
+  searchParameters: {
+    // List of fields to query for
+    fields: [{
+      // Field id to query for e.g. c_customFieldName, builtin.location
+      fieldId: 'builtin.location',
+      // Entity type api name e.g. healthcareProfessional, location, ce_person
+      entityTypeId: 'ce_person',
+    }],
+    // Optional, if true, sections search results by search filter, default false
+    sectioned: false
+  },
   // Optional, no default
   placeholderText: 'Start typing...',
   // Optional, if true, the selected filter is saved and used for the next search,
@@ -1527,18 +1547,6 @@ ANSWERS.addComponent('FilterSearch', {
     c_iceCreamFlavors: {
       $eq: 'pistachio'
     }
-  },
-  // Optional, the search parameters for autocompletion
-  searchParameters: {
-    // List of fields to query for
-    fields: [{
-      // Field id to query for e.g. c_customFieldName, builtin.location
-      fieldId: 'builtin.location',
-      // Entity type api name e.g. healthcareProfessional, location, ce_person
-      entityTypeId: 'ce_person',
-    }]
-    // Optional, if true sections search results by search filter, default false
-    sectioned: false,
   }
 })
 ```

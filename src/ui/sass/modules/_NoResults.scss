@@ -33,7 +33,7 @@ $noresults-query-font-weight: var(--yxt-font-weight-semibold) !default;
 
   &-returnLink
   {
-    @include Link-2;
+    @include Link-2();
   }
 
   &-suggestions
