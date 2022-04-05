@@ -7,13 +7,13 @@ import Storage from '../../../../src/core/storage/storage';
 import FilterRegistry from '../../../../src/core/filters/filterregistry';
 import ResultsContext from '../../../../src/core/storage/resultscontext';
 
-function setupDOM() {
+function setupDOM () {
   const bodyEl = DOM.query('body');
   DOM.empty(bodyEl);
   DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 }
 
-function setupComponentManager() {
+function setupComponentManager () {
   const storage = new Storage().init();
   const filterRegistry = new FilterRegistry(storage);
 
