@@ -1,0 +1,21 @@
+name: Format branch name to use as part of s3 directory path
+
+on:
+  workflow_call:
+    outputs:
+      formatted_branch:
+        description: "formatted branch name"
+        value: ${{ jobs.format_branch_name.outputs.formatted_branch }}
+
+jobs:
+  format_branch_name:
+    runs-on: ubuntu-latest
+    outputs:
+      formatted_branch: ${{ steps.vars.outputs.formatted_branch }}
+    steps:
+      - name: Format branch name # replace '/' with '-'
+        id: vars
+        run: |
+          FORMATTED_BRANCH="$(echo ${GITHUB_REF_NAME} | sed "s/\//-/g")" 
+          echo $FORMATTED_BRANCH
+          echo ::set-output name=formatted_branch::${FORMATTED_BRANCH}
