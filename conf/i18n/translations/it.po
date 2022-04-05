@@ -6,12 +6,6 @@ msgstr ""
 msgid "[[start]] through [[end]] of [[resultsCount]]"
 msgstr "[[start]] a [[end]] di [[resultsCount]]"
 
-#: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "[[resultsCount]] risultato di completamento automatico trovato"
-msgstr[1] "[[resultsCount]] risultati di completamento automatico trovati"
-
 #: src/ui/templates/questions/questionsubmission.hbs:7
 msgid "expand question form"
 msgstr "espandi il modulo per le domande"

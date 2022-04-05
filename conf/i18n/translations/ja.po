@@ -464,12 +464,6 @@ msgctxt "Placeholder text for input field"
 msgid "Enter your question here"
 msgstr "ここに質問を入力して下さい"
 
-#: src/ui/templates/search/autocomplete.hbs:14
-msgid "[[resultsCount]] autocomplete option found"
-msgid_plural "[[resultsCount]] autocomplete options found"
-msgstr[0] "オートコンプリート選択が[[resultsCount]]件見つかりました"
-msgstr[1] "オートコンプリート選択が[[resultsCount]]件見つかりました"
-
 #: src/ui/components/filters/facetscomponent.js:277
 msgctxt "True or False"
 msgid "False"
