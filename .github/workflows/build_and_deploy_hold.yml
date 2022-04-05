@@ -1,0 +1,80 @@
+name: Build and deploy with a hold state
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  call_build:
+    uses: ./.github/workflows/build.yml
+    with:
+      build_script: build-locales
+
+  call_unit_test:
+    uses: ./.github/workflows/unit_test.yml
+    needs: call_build
+
+  call_misc_tests:
+    uses: ./.github/workflows/miscellaneous_tests.yml
+
+  call_acceptance:
+    uses: ./.github/workflows/acceptance.yml
+    needs: call_build
+    secrets:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  
+  call_extract_versions:
+    uses: ./.github/workflows/extract_versions.yml
+
+  call_should_deploy_major_version:
+    uses: ./.github/workflows/should_deploy_major_version.yml
+
+  call_deploy_full_version:
+    needs: 
+      - call_unit_test
+      - call_acceptance
+      - call_extract_versions
+      - call_misc_tests
+    uses: ./.github/workflows/deploy_hold.yml
+    with:
+      directory: ${{ github.ref_name }}
+      cache-control: 'max-age=31536000'
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  call_deploy_major_version:
+    needs: 
+      - call_unit_test
+      - call_acceptance
+      - call_extract_versions
+      - call_misc_tests
+      - call_should_deploy_major_version
+    if: ${{ needs.call_should_deploy_major_version.outputs.should_deploy_major_version }}
+    uses: ./.github/workflows/deploy_hold.yml
+    with:
+      directory: ${{ needs.call_extract_versions.outputs.major_version }}
+      cache-control: 'max-age=43200'
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+  call_deploy_minor_version:
+    needs: 
+      - call_unit_test
+      - call_acceptance
+      - call_extract_versions
+      - call_misc_tests
+    uses: ./.github/workflows/deploy_hold.yml
+    with:
+      directory: ${{ needs.call_extract_versions.outputs.minor_version }}
+      cache-control: 'max-age=43200'
+    secrets:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+concurrency:
+  group: ci-build-and-deploy-hold-${{ github.ref }}-1
+  cancel-in-progress: true
