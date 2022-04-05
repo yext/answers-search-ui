@@ -108,7 +108,7 @@ msgstr ""
 msgid "Invalid email address. Please refresh the page and try submitting your question again."
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:296
+#: src/ui/components/filters/geolocationcomponent.js:289
 #: src/ui/components/filters/geolocationcomponent.js:40
 #: src/ui/components/filters/geolocationcomponent.js:48
 msgid "Location"
