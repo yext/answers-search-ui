@@ -1,0 +1,37 @@
+name: Extract versions
+
+on:
+  workflow_call:
+    inputs:
+      ignore_prefix:
+        required: false
+        default: ''
+        type: string
+    outputs:
+      major_version: 
+        value: ${{ jobs.extract_versions.outputs.major_version }}
+      minor_version: 
+        value: ${{ jobs.extract_versions.outputs.minor_version }}
+      full_version: 
+        value: ${{ jobs.extract_versions.outputs.full_version }}
+
+jobs:
+  extract_versions:
+    runs-on: ubuntu-latest
+    outputs:
+      minor_version: ${{ steps.vars.outputs.minor_version }}
+      major_version: ${{ steps.vars.outputs.major_version }}
+      full_version: ${{ steps.vars.outputs.full_version }}
+    steps:
+      - name: extract major and minor version substrings
+        id: vars
+        run: |
+          MAJOR_VERSION="$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 1)"
+          echo "Major version: $MAJOR_VERSION"
+          echo ::set-output name=major_version::${MAJOR_VERSION}
+          MINOR_VERSION="$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 1,2)"  
+          echo "Minor version: $MINOR_VERSION"
+          echo ::set-output name=minor_version::${MINOR_VERSION}
+          FULL_VERSION="${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}"
+          echo "Full version: $FULL_VERSION"
+          echo ::set-output name=full_version::${FULL_VERSION}
