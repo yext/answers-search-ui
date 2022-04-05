@@ -222,14 +222,7 @@ export default class FilterSearchComponent extends Component {
         this.search(QueryTriggers.FILTER_COMPONENT);
       },
       onMount: () => {
-        const inputEl = DOM.query(this._container, inputSelector);
-        if (!inputEl) {
-          return;
-        }
-        const hasAutocompleteResults = this.autoCompleteComponent.getState('hasResults');
-        if (inputEl.getAttribute('aria-expanded') !== hasAutocompleteResults) {
-          inputEl.setAttribute('aria-expanded', hasAutocompleteResults);
-        }
+        this.autoCompleteComponent.updateAriaExpanded(DOM.query(this._container, inputSelector));
       }
     });
   }

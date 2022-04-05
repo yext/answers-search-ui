@@ -539,4 +539,14 @@ export default class AutoCompleteComponent extends Component {
       this._onChange();
     }
   }
+
+  updateAriaExpanded (inputEl) {
+    if (!inputEl) {
+      return;
+    }
+    const hasAutocompleteResults = this.getState('hasResults');
+    if (inputEl.getAttribute('aria-expanded') !== hasAutocompleteResults) {
+      inputEl.setAttribute('aria-expanded', hasAutocompleteResults);
+    }
+  }
 }
