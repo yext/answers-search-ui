@@ -1,0 +1,28 @@
+name: Build Answers assets
+
+on:
+  workflow_call:
+    inputs:
+      build_script:
+        required: false
+        default: build
+        type: string
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js 14
+      uses: actions/setup-node@v2
+      with:
+        node-version: 14
+        cache: 'npm'
+    - run: npm ci
+    - run: npm run ${{ inputs.build_script }}
+    - name: Create build-output artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-output
+        path: dist/
