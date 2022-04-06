@@ -26,8 +26,8 @@ jobs:
           MINOR_VERSION=$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 2) 
           MAJOR_VERSION=$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 1)
           NEXT_MINOR_VERSION=$(( $MINOR_VERSION + 1 ))
-          OUTPUT=$(git tag --list "$MAJOR_VERSION.$NEXT_MINOR_VERSION.*")
-          if [ -z $OUTPUT ]
+          TAGS_FOR_NEXT_MINOR=$(git tag --list "${{ inputs.ignore_prefix }}$MAJOR_VERSION.$NEXT_MINOR_VERSION.*")
+          if [ -z "$TAGS_FOR_NEXT_MINOR" ]
           then
             echo 'Major version should be deployed.'
             echo ::set-output name=should_deploy_major_version::true
