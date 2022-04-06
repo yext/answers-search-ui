@@ -220,6 +220,9 @@ export default class FilterSearchComponent extends Component {
         this.core.storage.setWithPersist(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
         this.core.setStaticFilterNodes(this.name, filterNode);
         this.search(QueryTriggers.FILTER_COMPONENT);
+      },
+      onMount: () => {
+        this.autoCompleteComponent.updateAriaExpanded(DOM.query(this._container, inputSelector));
       }
     });
   }

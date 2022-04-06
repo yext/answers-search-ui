@@ -566,6 +566,9 @@ export default class SearchComponent extends Component {
       },
       onChange: () => {
         DOM.trigger(DOM.query(this._container, inputSelector), 'input');
+      },
+      onMount: () => {
+        this._autocomplete.updateAriaExpanded(DOM.query(this._container, inputSelector));
       }
     });
     this._autocomplete.mount();
