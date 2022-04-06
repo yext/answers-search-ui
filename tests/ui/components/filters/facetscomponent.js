@@ -7,13 +7,13 @@ import Storage from '../../../../src/core/storage/storage';
 import FilterRegistry from '../../../../src/core/filters/filterregistry';
 import ResultsContext from '../../../../src/core/storage/resultscontext';
 
-function setupDOM () {
+function setupDOM() {
   const bodyEl = DOM.query('body');
   DOM.empty(bodyEl);
   DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
 }
 
-function setupComponentManager () {
+function setupComponentManager() {
   const storage = new Storage().init();
   const filterRegistry = new FilterRegistry(storage);
 
@@ -209,29 +209,37 @@ describe('numerical facets', () => {
   });
 
   it('applies numerical facets correctly', () => {
+    const filterRegistry = component.core.filterRegistry;
     const optionLabelNodes = wrapper.find('.js-yxt-FilterOptions-optionLabel');
-    expect(storage.get(StorageKeys.FACET_FILTER_NODES)).toHaveLength(0);
-    optionLabelNodes.at(0).simulate('click');
-    const facetFilterNodes = storage.get(StorageKeys.FACET_FILTER_NODES);
-    expect(facetFilterNodes).toHaveLength(1);
-    expect(facetFilterNodes[0].filter).toEqual({
-      price: {
-        $between: {
-          end: {
-            matcher: '$lt',
-            value: 23
-          },
-          start: {
-            matcher: '$ge',
-            value: 0
-          }
-        }
+    const initialPayload = filterRegistry.getFacetsPayload();
+    expect(initialPayload).toEqual([
+      {
+        fieldId: 'price',
+        options: []
       }
-    });
-    expect(facetFilterNodes[0].metadata).toEqual({
-      fieldName: 'Price',
-      displayValue: '0 - 23',
-      filterType: 'filter-type-facet'
-    });
+    ]);
+
+    optionLabelNodes.at(0).simulate('click');
+    const facetsPayload = filterRegistry.getFacetsPayload();
+    expect(facetsPayload).toEqual([
+      {
+        fieldId: 'price',
+        options: [
+          {
+            matcher: '$between',
+            value: {
+              end: {
+                matcher: '$lt',
+                value: 23
+              },
+              start: {
+                matcher: '$ge',
+                value: 0
+              }
+            }
+          }
+        ]
+      }
+    ]);
   });
 });
