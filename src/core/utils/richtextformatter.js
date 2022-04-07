@@ -13,12 +13,12 @@ class RichTextFormatterImpl {
    * links.
    *
    * @param {string} fieldValue A Rich Text field value.
-   * @param {string?} fieldName The name of the field, to be included in the payload of a click
+   * @param {string} [fieldName] The name of the field, to be included in the payload of a click
    *                           analytics event. This parameter is optional.
-   * @param {Object|string?} targetConfig Configuration object specifying the 'target' behavior for
+   * @param {Object|string} [targetConfig] Configuration object specifying the 'target' behavior for
    *                          the various types of links. If a string is provided, it is assumed that
    *                          is the 'target' behavior across all types of links. This parameter is optional.
-   * @param {number?} truncatedLength
+   * @param {number} [truncatedLength]
    *                          The length to truncate the rich text content to. This parameter is optional.
    * @returns {string} The HTML representation of the field value, serialized as a string.
    */
