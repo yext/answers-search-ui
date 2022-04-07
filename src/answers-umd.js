@@ -86,8 +86,8 @@ class Answers {
      * A reference to the formatRichText function.
      * @type {Function}
      */
-    this.formatRichText = (markdown, eventOptionsFieldName, targetConfig) =>
-      RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig);
+    this.formatRichText = (markdown, eventOptionsFieldName, targetConfig, truncatedLength) =>
+      RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig, truncatedLength);
 
     /**
      * A reference to the localizeDistance function.

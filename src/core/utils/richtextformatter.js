@@ -13,14 +13,16 @@ class RichTextFormatterImpl {
    * links.
    *
    * @param {string} fieldValue A Rich Text field value.
-   * @param {string} fieldName The name of the field, to be included in the payload of a click
+   * @param {string} [fieldName] The name of the field, to be included in the payload of a click
    *                           analytics event. This parameter is optional.
-   * @param {Object|string} targetConfig Configuration object specifying the 'target' behavior for
+   * @param {Object|string} [targetConfig] Configuration object specifying the 'target' behavior for
    *                          the various types of links. If a string is provided, it is assumed that
    *                          is the 'target' behavior across all types of links. This parameter is optional.
+   * @param {number} [truncatedLength]
+   *                          The length to truncate the rich text content to. This parameter is optional.
    * @returns {string} The HTML representation of the field value, serialized as a string.
    */
-  format (fieldValue, fieldName, targetConfig) {
+  format (fieldValue, fieldName, targetConfig, truncatedLength) {
     if (typeof fieldValue !== 'string') {
       throw new AnswersCoreError(
         `Rich text "${fieldValue}" needs to be a string. Currently is a ${typeof fieldValue}`
@@ -34,11 +36,13 @@ class RichTextFormatterImpl {
       'link_open',
       (tokens, idx) => this._urlTransformer(tokens, idx, targetConfig));
 
+    const richTextHtml = truncatedLength
+      ? RtfConverter.toTruncatedHTML(fieldValue, truncatedLength)
+      : RtfConverter.toHTML(fieldValue);
+
     fieldName = fieldName || '';
     const html =
-      `<div class="js-yxt-rtfValue" data-field-name="${fieldName}">\n` +
-      `${RtfConverter.toHTML(fieldValue)}` +
-      '</div>';
+      `<div class="js-yxt-rtfValue" data-field-name="${fieldName}">\n${richTextHtml}</div>`;
 
     // Because all invocations of this method share the same {@link RtfConverter}, we must make sure to
     // disable the plugin added above. Otherwise, it will be applied in all subsequent conversions.
