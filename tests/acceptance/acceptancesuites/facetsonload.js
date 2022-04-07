@@ -39,7 +39,6 @@ test('Facets work with back/forward navigation and page refresh', async t => {
   await options.toggleOption('Client Delivery');
   currentFacets = await getFacetsFromRequest();
   const state1 = {
-    c_popularity: [],
     c_puppyPreference: [],
     c_employeeDepartment: [{ c_employeeDepartment: { $eq: 'Client Delivery [SO]' } }],
     languages: [],
@@ -64,7 +63,6 @@ test('Facets work with back/forward navigation and page refresh', async t => {
   await options.toggleOption('Frodo');
   currentFacets = await getFacetsFromRequest();
   const state3 = {
-    c_popularity: [],
     c_puppyPreference: [{ c_puppyPreference: { $eq: 'Frodo' } }],
     c_employeeDepartment: [
       { c_employeeDepartment: { $eq: 'Client Delivery [SO]' } },
