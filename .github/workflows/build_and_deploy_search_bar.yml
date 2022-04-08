@@ -10,9 +10,6 @@ jobs:
     uses: ./.github/workflows/build.yml
     with:
       build_script: build-search-bar-only
-  
-  call_misc_tests:
-    uses: ./.github/workflows/miscellaneous_tests.yml
 
   call_extract_versions:
     uses: ./.github/workflows/extract_versions.yml
@@ -27,7 +24,6 @@ jobs:
   call_deploy_full_version:
     needs:
       - call_extract_versions
-      - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
     with:
       bucket: answers-search-bar
@@ -40,7 +36,6 @@ jobs:
   call_deploy_major_version:
     needs: 
       - call_extract_versions
-      - call_misc_tests
       - call_should_deploy_major_version
     if: ${{ needs.call_should_deploy_major_version.outputs.should_deploy_major_version }}
     uses: ./.github/workflows/deploy_hold.yml
@@ -55,7 +50,6 @@ jobs:
   call_deploy_minor_version:
     needs: 
       - call_extract_versions
-      - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
     with:
       bucket: answers-search-bar
