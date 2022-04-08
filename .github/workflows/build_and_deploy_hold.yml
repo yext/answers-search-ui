@@ -17,13 +17,6 @@ jobs:
 
   call_misc_tests:
     uses: ./.github/workflows/miscellaneous_tests.yml
-
-  call_acceptance:
-    uses: ./.github/workflows/acceptance.yml
-    needs: call_build
-    secrets:
-      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
   
   call_extract_versions:
     uses: ./.github/workflows/extract_versions.yml
@@ -34,7 +27,6 @@ jobs:
   call_deploy_full_version:
     needs: 
       - call_unit_test
-      - call_acceptance
       - call_extract_versions
       - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
@@ -48,7 +40,6 @@ jobs:
   call_deploy_major_version:
     needs: 
       - call_unit_test
-      - call_acceptance
       - call_extract_versions
       - call_misc_tests
       - call_should_deploy_major_version
@@ -64,7 +55,6 @@ jobs:
   call_deploy_minor_version:
     needs: 
       - call_unit_test
-      - call_acceptance
       - call_extract_versions
       - call_misc_tests
     uses: ./.github/workflows/deploy_hold.yml
