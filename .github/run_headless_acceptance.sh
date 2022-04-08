@@ -5,7 +5,7 @@ if [[ $GITHUB_REF_NAME == release/*
   || $GITHUB_REF_NAME == master
   || $GITHUB_REF_NAME == support/* ]]
 then
-  npx testcafe -c 3 "chrome:headless,firefox:headless" tests/acceptance/acceptancesuite.js -q
+  npx testcafe "chrome:headless,firefox:headless" tests/acceptance/acceptancesuite.js -q
 else
-  npx testcafe -c 3 "chrome:headless" tests/acceptance/acceptancesuite.js -q
+  npx testcafe "chrome:headless" tests/acceptance/acceptancesuite.js -q
 fi
