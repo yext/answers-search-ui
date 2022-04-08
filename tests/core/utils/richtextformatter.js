@@ -29,11 +29,12 @@ describe('adds cta-type data attribute to links', () => {
 });
 
 describe('adds target attribute to links', () => {
+  const richText =
+    '++[url link](http://google.com)++\n\n' +
+    '++[phone link](tel:+17326183404)++\n\n' +
+    '++[email link](mailto:oshi@yext.com)++\n';
+
   it('adds attributes correctly when targetConfig is a string', () => {
-    const richText =
-      '++[url link](http://google.com)++\n\n' +
-      '++[phone link](tel:+17326183404)++\n\n' +
-      '++[email link](mailto:oshi@yext.com)++\n';
     const expectedHTML =
       '<div class="js-yxt-rtfValue" data-field-name="someField">\n' +
       '<p><u><a href="http://google.com" data-cta-type="VIEW_WEBSITE" target="_blank">url link</a></u></p>\n' +
@@ -44,10 +45,6 @@ describe('adds target attribute to links', () => {
   });
 
   it('adds attributes correctly when targetConfig is an object', () => {
-    const richText =
-      '++[url link](http://google.com)++\n\n' +
-      '++[phone link](tel:+17326183404)++\n\n' +
-      '++[email link](mailto:oshi@yext.com)++\n';
     const expectedHTML =
       '<div class="js-yxt-rtfValue" data-field-name="someField">\n' +
       '<p><u><a href="http://google.com" data-cta-type="VIEW_WEBSITE" target="_self">url link</a></u></p>\n' +
@@ -59,16 +56,29 @@ describe('adds target attribute to links', () => {
   });
 });
 
-it('can return truncated HTML', () => {
+describe('truncated HTML', () => {
   const richText =
     '++[url link](http://google.com)++\n\n' +
     '++[phone link](tel:+17326183404)++\n\n' +
     '++[email link](mailto:oshi@yext.com)++\n';
-  const expectedHTML =
+  const expectedHTML = suffix =>
     '<div class="js-yxt-rtfValue" data-field-name="someField">\n' +
     '<p><u><a href="http://google.com" data-cta-type="VIEW_WEBSITE" target="_blank">url link</a></u></p>\n' +
-    '<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL" target="_blank">ph</a></u></p>\n' +
+    `<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL" target="_blank">ph${suffix}</a></u></p>\n` +
     '</div>';
-  const truncatedHTML = RichTextFormatter.format(richText, 'someField', '_blank', 10);
-  expect(truncatedHTML).toEqual(expectedHTML);
+
+  it('works as expected', () => {
+    const truncatedHTML = RichTextFormatter.format(richText, 'someField', '_blank', 10, '');
+    expect(truncatedHTML).toEqual(expectedHTML(''));
+  });
+
+  it('uses the correct default truncated suffix', () => {
+    const truncatedHTML = RichTextFormatter.format(richText, 'someField', '_blank', 10);
+    expect(truncatedHTML).toEqual(expectedHTML('...'));
+  });
+
+  it('can set a custom truncated suffix', () => {
+    const truncatedHTML = RichTextFormatter.format(richText, 'someField', '_blank', 10, '---');
+    expect(truncatedHTML).toEqual(expectedHTML('---'));
+  });
 });
