@@ -22,7 +22,7 @@ class RichTextFormatterImpl {
    *                          The length to truncate the rich text content to. This parameter is optional.
    * @returns {string} The HTML representation of the field value, serialized as a string.
    */
-  format (fieldValue, fieldName, targetConfig, truncatedLength) {
+  format (fieldValue, fieldName, targetConfig, truncatedLength, truncatedSuffix = '...') {
     if (typeof fieldValue !== 'string') {
       throw new AnswersCoreError(
         `Rich text "${fieldValue}" needs to be a string. Currently is a ${typeof fieldValue}`
@@ -37,7 +37,7 @@ class RichTextFormatterImpl {
       (tokens, idx) => this._urlTransformer(tokens, idx, targetConfig));
 
     const richTextHtml = truncatedLength
-      ? RtfConverter.toTruncatedHTML(fieldValue, truncatedLength)
+      ? RtfConverter.toTruncatedHTML(fieldValue, truncatedLength, truncatedSuffix)
       : RtfConverter.toHTML(fieldValue);
 
     fieldName = fieldName || '';
