@@ -2,13 +2,8 @@ name: Build and deploy
 
 on:
   push:
-    branches-ignore:
-      - develop
-      - master
-      - support/**
-      - hotfix/**
-      - feature/**-i18n
-      - release/**
+    branches:
+      - '**'
 
 jobs:
   call_build:
