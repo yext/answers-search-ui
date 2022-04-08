@@ -13,5 +13,5 @@ if [[ $GITHUB_REF_NAME == release/*
 then
   npx testcafe "browserstack:ie@11.0,browserstack:safari" tests/acceptance/acceptancesuite.js -q
 else
-  npx testcafe -c 2 "browserstack:ie@11.0" tests/acceptance/acceptancesuite.js -q
+  npx testcafe "browserstack:ie@11.0" tests/acceptance/acceptancesuite.js -q
 fi
