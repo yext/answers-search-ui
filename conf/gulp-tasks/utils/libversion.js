@@ -8,6 +8,7 @@ const { execSync } = require('child_process');
 function getLibVersion () {
   console.log(execSync('git --version').toString().trim());
   console.log('tags---', execSync('git tag').toString().trim());
+  console.log('logs---', execSync('git log').toString().trim());
   try {
     const insideWorkTree =
       execSync('git rev-parse --is-inside-work-tree 2>/dev/null')
