@@ -14,11 +14,9 @@ function getLibVersion () {
         .toString().trim();
     }
   } catch (e) {
-    // if above command fails, catch error and continue, as we are not in a git repository
+    console.error('Error getting lib version');
+    throw e;
   }
-
-  console.warn('Warning: Not in a github repository, using default hardcoded library version.');
-  return 'TEST';
 }
 
 module.exports = getLibVersion;
