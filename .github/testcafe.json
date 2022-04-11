@@ -3,5 +3,6 @@
   "appCommand": "npx serve -l tcp://0.0.0.0:9999",
   "appInitDelay": 4000,
   "skipJsErrors": true,
-  "retryTestPages": true
+  "retryTestPages": true,
+  "hostname": "localhost"
 }
