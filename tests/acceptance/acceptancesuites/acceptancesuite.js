@@ -8,6 +8,7 @@ import {
   VERTICAL_SEARCH_URL_REGEX
 } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
+import { MockedUniversalSearchRequest } from '../fixtures/responses/universal';
 import { Selector, RequestLogger } from 'testcafe';
 import {
   browserBackButton,
@@ -25,7 +26,7 @@ import SearchRequestLogger from '../searchrequestlogger';
  */
 
 fixture`Universal search page works as expected`
-  .requestHooks(SearchRequestLogger.createUniversalSearchLogger())
+  .requestHooks([SearchRequestLogger.createUniversalSearchLogger(), MockedUniversalSearchRequest])
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, UNIVERSAL_SEARCH_URL_REGEX);
   })
