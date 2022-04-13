@@ -2,7 +2,7 @@ import { RequestMock } from 'testcafe';
 
 const UniversalSearchResponse = {
   meta: {
-    uuid: '01802329-1751-0bf2-5572-2d00a23f8aae',
+    uuid: '0180235e-7fcd-5262-247b-d3537eea0002',
     errors: []
   },
   response: {
@@ -114,7 +114,7 @@ const UniversalSearchResponse = {
             type: 'FIELD_VALUE'
           }
         ],
-        queryDurationMillis: 230,
+        queryDurationMillis: 257,
         facets: [],
         source: 'KNOWLEDGE_MANAGER'
       },
@@ -361,13 +361,13 @@ const UniversalSearchResponse = {
           }
         ],
         appliedQueryFilters: [],
-        queryDurationMillis: 265,
+        queryDurationMillis: 297,
         facets: [],
         source: 'KNOWLEDGE_MANAGER'
       }
     ],
     failedVerticals: [],
-    queryId: '01802329-1768-601d-093f-c048c4c5dffa',
+    queryId: '0180235e-7fe7-6f95-65f6-b41cb1c5b543',
     directAnswer: {
       type: 'FIELD_VALUE',
       answer: {
@@ -479,5 +479,8 @@ const UniversalSearchResponse = {
 const CORSHeaders = { 'access-control-allow-credentials': true, 'access-control-allow-origin': 'http://localhost:9999' };
 
 export const MockedUniversalSearchRequest = RequestMock()
-  .onRequestTo(/^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/query\?input=amani\+farooque\+phone\+number/)
+  .onRequestTo(async request => {
+    const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/query\?input=amani\+farooque\+phone\+number/;
+    return urlRegex.test(request.url) && request.method === 'get';
+  })
   .respond(UniversalSearchResponse, 200, CORSHeaders);
