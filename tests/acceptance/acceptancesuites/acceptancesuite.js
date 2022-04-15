@@ -8,7 +8,8 @@ import {
   VERTICAL_SEARCH_URL_REGEX
 } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
-import { MockedUniversalAutoCompleteRequest, MockedUniversalSearchRequest } from '../fixtures/responses/universal';
+import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
+import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
 import { Selector, RequestLogger } from 'testcafe';
 import {
   browserBackButton,
