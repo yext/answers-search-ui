@@ -1,4 +1,5 @@
 import { RequestMock } from 'testcafe';
+import { CORSHeaders } from '../cors';
 
 const UniversalSearchResponse = {
   meta: {
@@ -476,7 +477,6 @@ const UniversalSearchResponse = {
     }
   }
 };
-const CORSHeaders = { 'access-control-allow-credentials': true, 'access-control-allow-origin': 'http://localhost:9999' };
 
 export const MockedUniversalSearchRequest = RequestMock()
   .onRequestTo(async request => {
