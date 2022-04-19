@@ -1346,8 +1346,6 @@ ANSWERS.addComponent('FilterBox', {
       ]
     }
   ],
-  // Required, the vertical key for the search, default null
-  verticalKey: 'verticalKey',
   // Optional, title to display above the filter
   title: 'Filters',
   // Optional, show number of results for each filter
@@ -1395,8 +1393,6 @@ The Facets component displays filters relevant to the current search, configured
 ANSWERS.addComponent('Facets', {
   // Required, the selector for the container element where the component will be injected
   container: '.facets-container',
-  // Required
-  verticalKey: '<VERTICAL_KEY>',
   // Optional, title to display above the facets
   title: 'Filters',
   // Optional, show number of results for each facet

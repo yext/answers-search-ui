@@ -474,12 +474,12 @@ msgctxt "Title of section"
 msgid "Ask a Question"
 msgstr ""
 
-#: src/ui/components/filters/facetscomponent.js:306
+#: src/ui/components/filters/facetscomponent.js:299
 msgctxt "True or False"
 msgid "False"
 msgstr ""
 
-#: src/ui/components/filters/facetscomponent.js:303
+#: src/ui/components/filters/facetscomponent.js:296
 msgctxt "True or False"
 msgid "True"
 msgstr ""

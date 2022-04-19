@@ -187,13 +187,6 @@ export default class FacetsComponent extends Component {
     this.config = new FacetsConfig(config);
 
     /**
-     * The vertical key for the search
-     * @type {string}
-     * @private
-     */
-    this._verticalKey = config.verticalKey;
-
-    /**
      * The selector of the apply button
      * @type {string}
      * @private
@@ -355,7 +348,6 @@ export default class FacetsComponent extends Component {
         parentContainer: this._container,
         name: `${this.name}.filterbox`,
         container: '.js-yxt-Facets',
-        verticalKey: this._verticalKey,
         resetFilter: this.config.resetFacet,
         resetFilters: this.config.resetFacets,
         resetFilterLabel: this.config.resetFacetLabel,
