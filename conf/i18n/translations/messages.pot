@@ -269,7 +269,7 @@ msgctxt "Button label, deselects one or more options"
 msgid "reset"
 msgstr ""
 
-#: src/ui/components/navigation/navigationcomponent.js:127
+#: src/ui/components/navigation/navigationcomponent.js:129
 msgctxt "Button label, displays more items"
 msgid "More"
 msgstr ""
@@ -436,7 +436,7 @@ msgctxt "Noun, a page of results"
 msgid "Page"
 msgstr ""
 
-#: src/ui/components/navigation/navigationcomponent.js:185
+#: src/ui/components/navigation/navigationcomponent.js:187
 msgctxt "Noun, labels the navigation for the search page"
 msgid "Search Page Navigation"
 msgstr ""
