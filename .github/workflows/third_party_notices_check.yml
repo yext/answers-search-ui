@@ -3,19 +3,5 @@ name: Check Third Party Notices File
 on: pull_request
 
 jobs:
-  license-check:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-      - uses: actions/checkout@v2
-      - run: npm ci
-      - run: npm run generate-notices
-      - name: Update THIRD-PARTY-NOTICES
-        uses: EndBug/add-and-commit@v7
-        with:
-          message: "Automated update to THIRD-PARTY-NOTICES from github action's 3rd party notices check"
-          add: 'THIRD-PARTY-NOTICES'
-          push: true
-          default_author: github_actions
+  call_notices_check:
+    uses: yext/slapshot-reusable-workflows/.github/workflows/third_party_notices_check.yml@v1
