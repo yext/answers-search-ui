@@ -9,6 +9,8 @@ import DOM from '../../dom/dom';
 import { mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/taborder';
 import { filterParamsForExperienceLink, replaceUrlParams } from '../../../core/utils/urlutils.js';
 import TranslationFlagger from '../../i18n/translationflagger';
+import AnalyticsEvent from '../../../core/analytics/analyticsevent';
+import Searcher from '../../../core/models/searcher';
 
 /**
  * The debounce duration for resize events
@@ -236,10 +238,29 @@ export default class NavigationComponent extends Component {
       this.refitNav();
       DOM.on(DOM.query(this._container, '.yxt-Nav-more'), 'click', this.toggleMoreDropdown.bind(this));
     }
+    DOM.queryAll(this._container, '.js-yxt-navItem').forEach((selector, index) => {
+      DOM.onClickOrEnter(selector, this.reportFollowUpQueryEvent.bind(this, index));
+    });
   }
 
   onUnMount () {
     this.unbindOverflowHandlers();
+  }
+
+  reportFollowUpQueryEvent (tabIndex) {
+    const searcher = tabIndex === 0 ? Searcher.UNIVERSAL : Searcher.VERTICAL;
+    const tabs = this.getState('tabs');
+    const tabUrlString = tabs?.[tabIndex]?.url || '';
+    let sameOriginForTabUrl = true;
+    if (tabUrlString.startsWith('http')) {
+      const tabUrl = new URL(tabUrlString);
+      sameOriginForTabUrl = tabUrl.origin === window.location.origin;
+    }
+    const hasPreviousQueryId = !!this.analyticsReporter.getQueryId();
+    if (hasPreviousQueryId && sameOriginForTabUrl) {
+      const event = new AnalyticsEvent('FOLLOW_UP_QUERY').addOptions({ searcher });
+      this.analyticsReporter.report(event);
+    }
   }
 
   bindOverflowHandlers () {

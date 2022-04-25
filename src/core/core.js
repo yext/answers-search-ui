@@ -182,7 +182,7 @@ export default class Core {
    * @param {string} searcher - searcher type of the new query ("UNIVERSAL" or "VERTICAL")
    */
   _reportFollowUpQueryEvent (newQueryId, searcher) {
-    const previousQueryId = this.storage.get(StorageKeys.QUERY_ID);
+    const previousQueryId = this._analyticsReporter.getQueryId();
     if (previousQueryId && previousQueryId !== newQueryId) {
       const event = new AnalyticsEvent('FOLLOW_UP_QUERY').addOptions({ searcher });
       this._analyticsReporter.report(event);
