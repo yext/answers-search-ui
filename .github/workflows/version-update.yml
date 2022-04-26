@@ -4,49 +4,8 @@ on:
   push:
     branches: [release/*, hotfix/*]
 
-permissions:
-  contents: write
-  pull-requests: write
-
 jobs:
-  update-version:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-      - name: update package version
-        id: vars
-        run: |
-          BRANCH_NAME="${GITHUB_REF#refs/heads/}"
-          PACKAGE_VERSION="${GITHUB_REF##*/}"
-          echo ::set-output name=branch::${BRANCH_NAME}
-          if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+(\.[0-9]+)?$ ]]
-          then
-            if [[ $PACKAGE_VERSION =~ ^v[0-9]+\.[0-9]+$ ]]
-            then
-              PACKAGE_VERSION="${PACKAGE_VERSION}.0"
-            fi
-            echo ::set-output name=version::${PACKAGE_VERSION}
-            git config user.name 'github-actions[bot]'
-            git config user.email 'github-actions[bot]@users.noreply.github.com'
-            if npm version ${PACKAGE_VERSION} | tee >( grep -q 'npm ERR! Version not changed' )
-            then
-              echo "Package version is already in sync with branch name."
-              echo ::set-output name=should_create_pr::0
-              exit 0
-            fi
-            echo ::set-output name=should_create_pr::1
-            git push -u origin HEAD:"dev/update-version-${PACKAGE_VERSION}"
-          else
-            echo "Branch name ${BRANCH_NAME} does not have the correct format with package version."
-            exit 1
-          fi
-      - name: create version update pr
-        if: steps.vars.outputs.should_create_pr == 1
-        uses: repo-sync/pull-request@v2
-        with:
-          source_branch: "dev/update-version-${{ steps.vars.outputs.version }}"
-          destination_branch: "${{ steps.vars.outputs.branch }}"
-          pr_title: "Update Package Version to ${{ steps.vars.outputs.version }}"
-          pr_body: "*An automated PR which updates the version number in package.json and package-lock.json files*"
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+  call_version_update:
+    uses: yext/slapshot-reusable-workflows/.github/workflows/version_update.yml@v1
+    secrets:
+      caller_github_token: ${{ secrets.GITHUB_TOKEN }}
