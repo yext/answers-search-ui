@@ -281,7 +281,6 @@ export default class Core {
         this._persistLocationRadius();
         this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.VERTICAL);
 
-        console.log('queryId from search', data[StorageKeys.QUERY_ID]);
         this.storage.setWithPersist(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
@@ -333,7 +332,6 @@ export default class Core {
 
   clearResults () {
     this.storage.set(StorageKeys.QUERY, null);
-    console.log('queryId from clear results', '');
     this.storage.setWithPersist(StorageKeys.QUERY_ID, '');
     this.storage.set(StorageKeys.RESULTS_HEADER, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
@@ -399,7 +397,6 @@ export default class Core {
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
         this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.UNIVERSAL);
-        console.log('queryId from search', data[StorageKeys.QUERY_ID]);
         this.storage.setWithPersist(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
@@ -728,7 +725,6 @@ export default class Core {
       QueryTriggers.SUGGEST,
       QueryTriggers.QUERY_PARAMETER
     ];
-    console.log('queryTrigger', queryTrigger);
     if (replaceStateTriggers.includes(queryTrigger)) {
       this.storage.replaceHistoryWithState();
     } else {
