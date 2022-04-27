@@ -19,8 +19,8 @@ export default class VisibilityAnalyticsHandler {
   initVisibilityChangeListeners () {
     /**
      * Safari desktop listener and IE11 listeners fire visibility change event twice when switch
-     * to new tab and then close browser. This variable is used to ensure RESULTS_HIDDEN analytics event
-     * does not get send again if the page is already hidden.
+     * to new tab and then close browser. _documentVisibilityState is used to ensure RESULTS_HIDDEN
+     * analytics event does not get send again if the page is already hidden.
      */
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden' && this._documentVisibilityState !== 'hidden') {
