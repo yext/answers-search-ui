@@ -186,7 +186,23 @@ class Answers {
       },
       persistedValueParser: this._parsePersistentStorageValue
     });
-    storage.init(window.location.search);
+
+    /**
+     * Guard the case of user copying a link with query-id param to a new tab
+     * and firing a FOLLOW_UP_QUERY analytics event from their first search.
+     * This is different from redirecting a href click into a new tab or a page
+     * refresh, which should fire a FOLLOW_UP_QUERY analytics event upon next
+     * search on load.
+     */
+    const searchParams = new SearchParams(window.location.search);
+    if (searchParams.has(StorageKeys.QUERY_ID)) {
+      const isPageReload = window.performance.getEntriesByType('navigation')?.[0]?.type === 'reload';
+      if (!document.referrer && !isPageReload) {
+        searchParams.delete(StorageKeys.QUERY_ID);
+      }
+    }
+
+    storage.init(searchParams.toString());
     storage.set(StorageKeys.SEARCH_CONFIG, parsedConfig.search);
     storage.set(StorageKeys.VERTICAL_PAGES_CONFIG, parsedConfig.verticalPages);
     storage.set(StorageKeys.LOCALE, parsedConfig.locale);
