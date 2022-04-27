@@ -195,9 +195,13 @@ class Answers {
      * search on load.
      */
     const searchParams = new SearchParams(window.location.search);
+    console.log('searchParams', searchParams);
     if (searchParams.has(StorageKeys.QUERY_ID)) {
       const isPageReload = window.performance.getEntriesByType('navigation')?.[0]?.type === 'reload';
+      console.log('isPageReload', isPageReload);
+      console.log('document.referrer', document.referrer);
       if (!document.referrer && !isPageReload) {
+        console.log('delete QUERY_ID');
         searchParams.delete(StorageKeys.QUERY_ID);
       }
     }
