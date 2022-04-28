@@ -38,7 +38,8 @@ describe('reporting events', () => {
   // });
 
   // it('includes global options', () => {
-  //   const analyticsReporter = new AnalyticsReporter('abc123', null, '213412', true, { testOption: 'test' });
+  //   const analyticsReporter = new
+  // AnalyticsReporter('abc123', null, '213412', true, { testOption: 'test' });
   //   const expectedEvent = new AnalyticsEvent('thumbs_up');
   //   analyticsReporter.report(expectedEvent);
 
@@ -49,7 +50,8 @@ describe('reporting events', () => {
   // });
 
   // it('includes experienceVersion when supplied', () => {
-  //   const analyticsReporter = new AnalyticsReporter('abc123', 'PRODUCTION', '213412', true, { testOption: 'test' });
+  //   const analyticsReporter = new
+  // AnalyticsReporter('abc123', 'PRODUCTION', '213412', true, { testOption: 'test' });
   //   const expectedEvent = new AnalyticsEvent('thumbs_up');
   //   analyticsReporter.report(expectedEvent);
 
@@ -101,7 +103,8 @@ describe('reporting events', () => {
   //   expect(mockedBeacon).toBeCalledTimes(0);
   // });
 
-  // it('All analytic events are disabled when analyticsEventsEnabled is set to false with setAnalyticsOptIn(bool)', () => {
+  // it('All analytic events are
+  // disabled when analyticsEventsEnabled is set to false with setAnalyticsOptIn(bool)', () => {
   //   analyticsReporter = new AnalyticsReporter('abc123', null, '213412');
   //   analyticsReporter.setAnalyticsOptIn(false);
   //   analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
