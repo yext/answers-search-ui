@@ -8,6 +8,9 @@
 jest.mock('../../../src/core/http/httprequester');
 
 describe('reporting events', () => {
+  it('', () => {
+    console.log('hi');
+  });
   // const mockedBeacon = jest.fn(() => Promise.resolve({ json: () => Promise.resolve({}) }));
   // let analyticsReporter;
 
