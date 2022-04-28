@@ -125,6 +125,12 @@ export default class AnalyticsReporter {
       });
     }
 
+    window.fetch(`${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`, {
+      method: 'POST',
+      body: JSON.stringify({ data: event.toApiEvent(), ...cookieData, test: 'this-is-a-test' }),
+      keepalive: true
+    });
+
     return new HttpRequester().beacon(
       `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,
       { data: event.toApiEvent(), ...cookieData }
