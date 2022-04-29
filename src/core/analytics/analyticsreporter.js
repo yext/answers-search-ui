@@ -1,11 +1,9 @@
 /** @module AnalyticsReporter */
-/* global fetch */
 import AnalyticsEvent from './analyticsevent';
 import { AnswersAnalyticsError } from '../errors/errors';
 import { PRODUCTION } from '../constants';
 import HttpRequester from '../http/httprequester';
 import { getAnalyticsUrl } from '../utils/urlutils';
-import { fetch as fetchPolyfill } from 'cross-fetch';
 
 /** @typedef {import('../services/analyticsreporterservice').default} AnalyticsReporterService */
 
@@ -125,17 +123,6 @@ export default class AnalyticsReporter {
         queryId: undefined
       });
     }
-
-    const reqArgs = {
-      method: 'POST',
-      body: JSON.stringify({ data: event.toApiEvent(), ...cookieData, test: 'this-is-a-test' }),
-      keepalive: true
-    };
-    const url = `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`;
-    if (!window.fetch) {
-      fetchPolyfill(url, reqArgs);
-    }
-    fetch(url, reqArgs);
 
     return new HttpRequester().beacon(
       `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,
