@@ -33,6 +33,16 @@ export default class VisibilityAnalyticsHandler {
     });
 
     /**
+     * For Back/Forward from a SERP with push state does not trigger a navigation,
+     * so document visibility may not change.
+     */
+    window.addEventListener('popstate', () => {
+      console.log('pop! document.visibilityState is', document.visibilityState);
+      console.log('queryId', this._analyticsReporterService.getQueryId());
+      this._reportVisibilityChangeEvent('RESULTS_HIDDEN');
+    });
+
+    /**
      * VisibilityChange API does not register when page is terminated (close tab/browser) in IE11.
      * Unload event is used to capture those RESULTS_HIDDEN scenarios.
      */
