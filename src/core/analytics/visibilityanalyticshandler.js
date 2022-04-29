@@ -19,8 +19,8 @@ export default class VisibilityAnalyticsHandler {
   initVisibilityChangeListeners () {
     /**
      * Safari desktop listener and IE11 listeners fire visibility change event twice when switch
-     * to new tab and then close browser. This variable is used to ensure RESULTS_HIDDEN analytics event
-     * does not get send again if the page is already hidden.
+     * to new tab and then close browser. This _documentVisibilityState is used to ensure RESULTS_HIDDEN
+     * analytics event does not get send again if the page is already hidden.
      */
     document.addEventListener('visibilitychange', () => {
       if (document.visibilityState === 'hidden' && this._documentVisibilityState !== 'hidden') {
@@ -30,6 +30,16 @@ export default class VisibilityAnalyticsHandler {
         this._documentVisibilityState = 'visible';
         this._reportVisibilityChangeEvent('RESULTS_UNHIDDEN');
       }
+    });
+
+    /**
+     * For back/forward page navigation of the same answers page with different url params, page history
+     * updates caused by push pushState() or replaceState(), such as when a search is performed, will not
+     * trigger a page load, meaning the document's visibility state will not change. So, popstate
+     * listener is used to report RESULTS_HIDDEN event for such cases.
+     */
+    window.addEventListener('popstate', () => {
+      this._reportVisibilityChangeEvent('RESULTS_HIDDEN');
     });
 
     /**
