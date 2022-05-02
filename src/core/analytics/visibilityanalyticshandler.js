@@ -51,10 +51,10 @@ export default class VisibilityAnalyticsHandler {
     }
 
     /**
-     * Use popstate event and storage listener on QUERY_ID to report result visibility change events
-     * for back/forward page navigation of the same answers page, since page history updates caused
-     * by pushState() or replaceState(), such as when a search is performed, will not trigger a page
-     * load, meaning the document's visibility state will not change.
+     * Page history updates caused by pushState() or replaceState(), such as when a search is performed,
+     * will not trigger a complete page load so the document's visibility state will not change. Use
+     * popstate event and storage listener on QUERY_ID to report result visibility change events for
+     * back/forward page navigation of the same answers page.
      */
     window.addEventListener('popstate', () => {
       const poppedStateQueryId = storage.get(StorageKeys.HISTORY_POP_STATE).get('pop-state-queryId');
