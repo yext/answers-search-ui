@@ -57,7 +57,7 @@ export default class VisibilityAnalyticsHandler {
      * back/forward page navigation of the same answers page.
      */
     window.addEventListener('popstate', () => {
-      const poppedStateQueryId = storage.get(StorageKeys.HISTORY_POP_STATE).get('pop-state-queryId');
+      const poppedStateQueryId = storage.get(StorageKeys.HISTORY_POP_STATE)?.get('pop-state-queryId');
       this._analyticsReporterService.setQueryId(poppedStateQueryId);
       this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.HIDDEN;
       this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.HIDDEN);
