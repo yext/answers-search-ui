@@ -1,13 +1,19 @@
 import { isIE } from '../utils/useragent';
 import AnalyticsEvent from '../analytics/analyticsevent';
 import Searcher from '../models/searcher';
+import StorageKeys from '../storage/storagekeys';
+
+const RESULTS_VISIBILITY_EVENT = {
+  HIDDEN: 'RESULTS_HIDDEN',
+  UNHIDDEN: 'RESULTS_UNHIDDEN'
+};
 
 /**
  * Manages the document's visibility status and handles any visibility related analytics events.
  */
 export default class VisibilityAnalyticsHandler {
   constructor (analyticsReporterService, verticalKey) {
-    this._documentVisibilityState = undefined;
+    this._previousResultsVisibilityEvent = undefined;
     this._analyticsReporterService = analyticsReporterService;
     this._verticalKey = verticalKey;
   }
@@ -16,30 +22,20 @@ export default class VisibilityAnalyticsHandler {
    * Initialize visibility change event listener(s) to send analytics events
    * when a result page have become visible or have been hidden.
    */
-  initVisibilityChangeListeners () {
+  initVisibilityChangeListeners (storage) {
     /**
      * Safari desktop listener and IE11 listeners fire visibility change event twice when switch
-     * to new tab and then close browser. This _documentVisibilityState is used to ensure RESULTS_HIDDEN
-     * analytics event does not get send again if the page is already hidden.
+     * to new tab and then close browser. Variable "_previousResultsVisibilityEvent" is used to ensure
+     * RESULTS_HIDDEN analytics event does not get send again if the page is already hidden.
      */
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden' && this._documentVisibilityState !== 'hidden') {
-        this._documentVisibilityState = 'hidden';
-        this._reportVisibilityChangeEvent('RESULTS_HIDDEN');
-      } else if (document.visibilityState === 'visible') {
-        this._documentVisibilityState = 'visible';
-        this._reportVisibilityChangeEvent('RESULTS_UNHIDDEN');
+      if (document.visibilityState === 'hidden' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.HIDDEN) {
+        this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.HIDDEN;
+        this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.HIDDEN);
+      } else if (document.visibilityState === 'visible' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.UNHIDDEN) {
+        this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.UNHIDDEN;
+        this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.UNHIDDEN);
       }
-    });
-
-    /**
-     * For back/forward page navigation of the same answers page with different url params, page history
-     * updates caused by push pushState() or replaceState(), such as when a search is performed, will not
-     * trigger a page load, meaning the document's visibility state will not change. So, popstate
-     * listener is used to report RESULTS_HIDDEN event for such cases.
-     */
-    window.addEventListener('popstate', () => {
-      this._reportVisibilityChangeEvent('RESULTS_HIDDEN');
     });
 
     /**
@@ -48,11 +44,35 @@ export default class VisibilityAnalyticsHandler {
      */
     if (isIE()) {
       window.addEventListener('unload', () => {
-        if (this._documentVisibilityState !== 'hidden') {
-          this._reportVisibilityChangeEvent('RESULTS_HIDDEN');
+        if (this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.HIDDEN) {
+          this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.HIDDEN);
         }
       });
     }
+
+    /**
+     * Use popstate event and storage listener on QUERY_ID to report result visibility change events
+     * for back/forward page navigation of the same answers page, since page history updates caused
+     * by pushState() or replaceState(), such as when a search is performed, will not trigger a page
+     * load, meaning the document's visibility state will not change.
+     */
+    window.addEventListener('popstate', () => {
+      const poppedStateQueryId = storage.get(StorageKeys.HISTORY_POP_STATE).get('pop-state-queryId');
+      this._analyticsReporterService.setQueryId(poppedStateQueryId);
+      this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.HIDDEN;
+      this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.HIDDEN);
+    });
+
+    storage.registerListener({
+      eventType: 'update',
+      storageKey: StorageKeys.QUERY_ID,
+      callback: id => {
+        if (this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.UNHIDDEN) {
+          this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.UNHIDDEN;
+          this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.UNHIDDEN);
+        }
+      }
+    });
   }
 
   /**
