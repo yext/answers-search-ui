@@ -21,6 +21,8 @@ export default class VisibilityAnalyticsHandler {
   /**
    * Initialize visibility change event listener(s) to send analytics events
    * when a result page have become visible or have been hidden.
+   *
+   * @param {Storage} storage - a container around application state
    */
   initVisibilityChangeListeners (storage) {
     /**
@@ -77,6 +79,8 @@ export default class VisibilityAnalyticsHandler {
 
   /**
    * Send visibility change related analytics event.
+   *
+   * @param {string} eventName - the name of the analytics event to report
    */
   _reportVisibilityChangeEvent (eventName) {
     const queryId = this._analyticsReporterService.getQueryId();
