@@ -81,6 +81,8 @@ export default class VisibilityAnalyticsHandler {
 
   /**
    * Returns true if results page was previously reported as unhidden and the page is now hidden.
+   *
+   * @returns {boolean}
    */
   _resultsVisibilityChangeToHidden () {
     return document.visibilityState === 'hidden' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.HIDDEN;
@@ -88,6 +90,8 @@ export default class VisibilityAnalyticsHandler {
 
   /**
    * Returns true if results page was previously reported as hidden and the page is now visible.
+   *
+   * @returns {boolean}
    */
   _resultsVisibilityChangeToVisible () {
     return document.visibilityState === 'visible' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.UNHIDDEN;
