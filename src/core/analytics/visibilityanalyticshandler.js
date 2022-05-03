@@ -31,10 +31,10 @@ export default class VisibilityAnalyticsHandler {
      * RESULTS_HIDDEN analytics event does not get send again if the page is already hidden.
      */
     document.addEventListener('visibilitychange', () => {
-      if (document.visibilityState === 'hidden' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.HIDDEN) {
+      if (this._resultsVisibilityChangeToHidden()) {
         this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.HIDDEN;
         this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.HIDDEN);
-      } else if (document.visibilityState === 'visible' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.UNHIDDEN) {
+      } else if (this._resultsVisibilityChangeToVisible()) {
         this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.UNHIDDEN;
         this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.UNHIDDEN);
       }
@@ -71,12 +71,26 @@ export default class VisibilityAnalyticsHandler {
       eventType: 'update',
       storageKey: StorageKeys.QUERY_ID,
       callback: id => {
-        if (document.visibilityState === 'visible' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.UNHIDDEN) {
+        if (this._resultsVisibilityChangeToVisible()) {
           this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.UNHIDDEN;
           this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.UNHIDDEN);
         }
       }
     });
+  }
+
+  /**
+   * Returns true if results page was previously reported as unhidden and the page is now hidden.
+   */
+  _resultsVisibilityChangeToHidden () {
+    return document.visibilityState === 'hidden' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.HIDDEN;
+  }
+
+  /**
+   * Returns true if results page was previously reported as hidden and the page is now visible.
+   */
+  _resultsVisibilityChangeToVisible () {
+    return document.visibilityState === 'visible' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.UNHIDDEN;
   }
 
   /**
