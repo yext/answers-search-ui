@@ -60,9 +60,11 @@ export default class VisibilityAnalyticsHandler {
      */
     window.addEventListener('popstate', () => {
       const poppedStateQueryId = storage.get(StorageKeys.HISTORY_POP_STATE)?.get('pop-state-queryId');
+      const storageQueryId = this._analyticsReporterService.getQueryId();
       this._analyticsReporterService.setQueryId(poppedStateQueryId);
       this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.HIDDEN;
       this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.HIDDEN);
+      this._analyticsReporterService.setQueryId(storageQueryId);
     });
 
     storage.registerListener({
