@@ -69,7 +69,7 @@ export default class VisibilityAnalyticsHandler {
       eventType: 'update',
       storageKey: StorageKeys.QUERY_ID,
       callback: id => {
-        if (this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.UNHIDDEN) {
+        if (document.visibilityState === 'visible' && this._previousResultsVisibilityEvent !== RESULTS_VISIBILITY_EVENT.UNHIDDEN) {
           this._previousResultsVisibilityEvent = RESULTS_VISIBILITY_EVENT.UNHIDDEN;
           this._reportVisibilityChangeEvent(RESULTS_VISIBILITY_EVENT.UNHIDDEN);
         }
