@@ -160,6 +160,9 @@ class Answers {
         this.core.storage.delete(StorageKeys.SORT_BYS);
         this.core.filterRegistry.clearAllFilterNodes();
 
+        const queryId = this.core.storage.get(StorageKeys.QUERY_ID);
+        data.set('pop-state-queryId', queryId);
+
         if (!hasQuery) {
           this.core.clearResults();
         } else {
@@ -274,7 +277,7 @@ class Answers {
         this._analyticsReporterService,
         parsedConfig.search?.verticalKey
       );
-      visibilityAnalyticsHandler.initVisibilityChangeListeners();
+      visibilityAnalyticsHandler.initVisibilityChangeListeners(storage);
     }
 
     this.core = new Core({
