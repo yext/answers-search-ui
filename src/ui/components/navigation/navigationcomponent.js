@@ -390,7 +390,7 @@ export default class NavigationComponent extends Component {
       const urlParser = document.createElement('a');
       tabs.forEach(tab => {
         urlParser.href = tab.url;
-        const tabParams = new SearchParams(tab.url);
+        const tabParams = new SearchParams(urlParser.search);
         const verticalUrl = urlParser.pathname.replace(/^\//, '');
         tabParams.set('verticalUrl', verticalUrl);
         tab.url = parentUrlWithoutParams + '?' + tabParams.toString();
