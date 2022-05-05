@@ -241,7 +241,7 @@ export default class NavigationComponent extends Component {
 
   setParentUrl (parentUrl) {
     this._parentUrl = parentUrl;
-    this.setState(this._state.get());
+    this.setState(this.core.storage.get(StorageKeys.NAVIGATION) || {});
   }
 
   onUnMount () {
