@@ -5,6 +5,7 @@
         <a class="js-yxt-navItem yxt-Nav-item{{#if isActive}} is-active{{/if}}"
           {{#if isActive}} aria-current="page"{{/if}}
           href="{{url}}"
+          {{#if target}} target="{{target}}"{{/if}}
           data-middleclick="active"
           {{#if @first}}
             data-eventtype="ALL_TAB_NAVIGATION"
