@@ -389,7 +389,7 @@ export default class NavigationComponent extends Component {
       const parentUrlWithoutParams = this._parentUrl.split('?')[0];
       const urlParser = document.createElement('a');
       tabs.forEach(tab => {
-        const tabParams = SearchParams(tab.url);
+        const tabParams = new SearchParams(tab.url);
         const verticalUrl = urlParser.pathname.replace(/^\//, '');
         tabParams.set('verticalUrl', verticalUrl);
         tab.url = parentUrlWithoutParams + '?' + tabParams.toString();
