@@ -9,6 +9,7 @@ import DOM from '../../dom/dom';
 import { mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/taborder';
 import { filterParamsForExperienceLink, replaceUrlParams } from '../../../core/utils/urlutils.js';
 import TranslationFlagger from '../../i18n/translationflagger';
+import SearchParams from '../../dom/searchparams';
 
 /**
  * The debounce duration for resize events
@@ -238,6 +239,11 @@ export default class NavigationComponent extends Component {
     }
   }
 
+  setParentUrl (parentUrl) {
+    this._parentUrl = parentUrl;
+    this.setState(this.core.storage.get(StorageKeys.NAVIGATION) || {});
+  }
+
   onUnMount () {
     this.unbindOverflowHandlers();
   }
@@ -377,6 +383,19 @@ export default class NavigationComponent extends Component {
         tab.url = replaceUrlParams(tab.baseUrl, filteredParams);
         tabs.push(tab);
       }
+    }
+
+    if (this._parentUrl) {
+      const parentUrlWithoutParams = this._parentUrl.split('?')[0];
+      const urlParser = document.createElement('a');
+      tabs.forEach(tab => {
+        urlParser.href = tab.url;
+        const tabParams = new SearchParams(urlParser.search);
+        const verticalUrl = urlParser.pathname.replace(/^\//, '');
+        tabParams.set('verticalUrl', verticalUrl);
+        tab.url = parentUrlWithoutParams + '?' + tabParams.toString();
+        tab.target = '_parent';
+      });
     }
 
     return super.setState({
