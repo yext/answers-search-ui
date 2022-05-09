@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - develop
-      - support/**
       - hotfix/**
       - feature/**-i18n
       - release/**
