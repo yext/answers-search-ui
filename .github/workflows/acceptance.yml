@@ -19,6 +19,7 @@ jobs:
         with:
           node-version: 16
           cache: 'npm'
+      - run: npm install -g npm@latest
       - run: npm ci
       - name: Download build-output artifact
         uses: actions/download-artifact@v2
@@ -43,7 +44,7 @@ jobs:
         with:
           name: build-output
           path: dist/
-      - run: ./.github/run_browserstack_acceptance.sh
-        env:
-          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+      # - run: ./.github/run_browserstack_acceptance.sh
+        # env:
+        #   BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+        #   BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
