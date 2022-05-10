@@ -6,16 +6,17 @@ import SearchParams from '../dom/searchparams';
  *
  * @param {string} redirectUrl user-specified redirect url
  * @param {SearchParams} params url params saved in answers storage
- * @returns {URL} new redirect url including params from answers storage
+ * @returns {string} new redirect url including params from answers storage
  */
 export function constructRedirectUrl (redirectUrl, params) {
-  const newRedirectUrl = new URL(redirectUrl);
-  const redirectUrlParams = new SearchParams(newRedirectUrl.search);
+  const urlParser = document.createElement('a');
+  urlParser.href = redirectUrl;
+  const redirectUrlParams = new SearchParams(urlParser.search);
   for (const [key, val] of params.entries()) {
     if (!redirectUrlParams.has(key)) {
       redirectUrlParams.set(key, val);
     }
   }
-  newRedirectUrl.search = redirectUrlParams.toString();
-  return newRedirectUrl;
+  urlParser.search = redirectUrlParams.toString();
+  return urlParser.href;
 }

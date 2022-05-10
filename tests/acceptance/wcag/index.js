@@ -13,14 +13,14 @@ const PORT = 9999;
  * API documentation: https://github.com/dequelabs/axe-core/blob/master/doc/API.md
  * - set reporter to 'no-passes' to only return violation results
  * - set runOnly with tag values below to run WCAG standards:
- *    - WCAG 2.0 Level A, AA, AAA
+ *    - WCAG 2.0 Level A, AA
  *    - WCAG 2.1 Level A, AA
  */
 const axeCoreConfig = {
   reporter: 'no-passes',
   runOnly: {
     type: 'tag',
-    values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag2aaa']
+    values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa']
   }
 };
 

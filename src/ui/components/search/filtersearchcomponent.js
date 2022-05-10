@@ -210,7 +210,7 @@ export default class FilterSearchComponent extends Component {
         // serialized and submitted.
         if (typeof this.redirectUrl === 'string') {
           const newRedirectUrl = constructRedirectUrl(this.redirectUrl, params);
-          window.location.href = newRedirectUrl.href;
+          window.location.href = newRedirectUrl;
           return false;
         }
 
