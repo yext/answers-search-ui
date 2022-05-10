@@ -7,6 +7,28 @@ import Storage from '../../../../src/core/storage/storage';
 import FilterRegistry from '../../../../src/core/filters/filterregistry';
 import ResultsContext from '../../../../src/core/storage/resultscontext';
 
+function setupDOM () {
+  const bodyEl = DOM.query('body');
+  DOM.empty(bodyEl);
+  DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
+}
+
+function setupComponentManager () {
+  const storage = new Storage().init();
+  const filterRegistry = new FilterRegistry(storage);
+
+  const mockCore = {
+    verticalSearch: jest.fn(),
+    enableDynamicFilters: jest.fn(),
+    storage: storage,
+    filterRegistry: filterRegistry,
+    setFacetFilterNodes: (availableFieldids = [], filterNodes = []) => {
+      filterRegistry.setFacetFilterNodes(availableFieldids, filterNodes);
+    }
+  };
+  return mockManager(mockCore);
+}
+
 describe('Facets Component', () => {
   DOM.setup(document, new DOMParser());
   let COMPONENT_MANAGER, defaultConfig;
@@ -33,24 +55,8 @@ describe('Facets Component', () => {
   }];
 
   beforeEach(() => {
-    const bodyEl = DOM.query('body');
-    DOM.empty(bodyEl);
-    DOM.append(bodyEl, DOM.createEl('div', { id: 'test-component' }));
-
-    const storage = new Storage().init();
-    const filterRegistry = new FilterRegistry(storage);
-
-    const mockCore = {
-      verticalSearch: jest.fn(),
-      enableDynamicFilters: jest.fn(),
-      storage: storage,
-      filterRegistry: filterRegistry,
-      setFacetFilterNodes: (availableFieldids = [], filterNodes = []) => {
-        filterRegistry.setFacetFilterNodes(availableFieldids, filterNodes);
-      }
-    };
-    COMPONENT_MANAGER = mockManager(mockCore);
-
+    setupDOM();
+    COMPONENT_MANAGER = setupComponentManager();
     defaultConfig = {
       container: '#test-component'
     };
@@ -152,5 +158,88 @@ describe('Facets Component', () => {
     expect(remove).toHaveBeenCalledTimes(4);
     storage.set(StorageKeys.DYNAMIC_FILTERS, { resultsContext: ResultsContext.NO_RESULTS });
     expect(remove).toHaveBeenCalledTimes(4);
+  });
+});
+
+describe('numerical facets', () => {
+  DOM.setup(document, new DOMParser());
+  setupDOM();
+  const component = setupComponentManager().create('Facets', {
+    container: '#test-component',
+    searchOnChange: true,
+    expand: false
+  });
+  const dynamicFilters = DynamicFilters.fromCore([
+    {
+      fieldId: 'price',
+      displayName: 'Price',
+      options: [
+        {
+          displayName: '0 - 23',
+          count: 20,
+          selected: false,
+          matcher: '$between',
+          value: {
+            start: { matcher: '$ge', value: 0 },
+            end: { matcher: '$lt', value: 23 }
+          }
+        },
+        {
+          displayName: '23 - 60',
+          count: 20,
+          selected: false,
+          matcher: '$between',
+          value: {
+            start: { matcher: '$ge', value: 23 },
+            end: { matcher: '$lt', value: 60 }
+          }
+        }
+      ]
+    }
+  ]);
+  const storage = component.core.storage;
+  storage.set(StorageKeys.DYNAMIC_FILTERS, dynamicFilters);
+  const wrapper = mount(component);
+
+  it('renders numerical facets correctly', () => {
+    const optionLabelNodes = wrapper.find('.js-yxt-FilterOptions-optionLabel--name');
+    expect(optionLabelNodes).toHaveLength(2);
+    expect(optionLabelNodes.at(0).text().trim()).toEqual('0 - 23');
+    expect(optionLabelNodes.at(1).text().trim()).toEqual('23 - 60');
+  });
+
+  it('applies numerical facets correctly', () => {
+    const filterRegistry = component.core.filterRegistry;
+    const optionLabelNodes = wrapper.find('.js-yxt-FilterOptions-optionLabel');
+    const initialPayload = filterRegistry.getFacetsPayload();
+    expect(initialPayload).toEqual([
+      {
+        fieldId: 'price',
+        options: []
+      }
+    ]);
+
+    optionLabelNodes.at(0).simulate('click');
+    const facetsPayload = filterRegistry.getFacetsPayload();
+    expect(facetsPayload).toEqual([
+      {
+        fieldId: 'price',
+        options: [
+          {
+            matcher: '$between',
+            value: {
+              end: {
+                matcher: '$lt',
+                value: 23
+              },
+              start: {
+                matcher: '$ge',
+                value: 0
+              }
+            }
+          }
+        ]
+      }
+    ]);
   });
 });

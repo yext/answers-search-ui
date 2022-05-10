@@ -3,6 +3,8 @@
 import Component from '../component';
 import DOM from '../../dom/dom';
 import StorageKeys from '../../../core/storage/storagekeys';
+import { isCloseMatch } from '../../tools/stringmatching';
+import AutoCompleteResponseTransformer from '../../../core/search/autocompleteresponsetransformer';
 
 const Keys = {
   BACKSPACE: 8,
@@ -143,6 +145,12 @@ export default class AutoCompleteComponent extends Component {
      * @type {boolean}
      */
     this._isVoiceSearchActive = false;
+
+    /**
+     * Custom autocomplete prompts
+     * @type {string[]}
+     */
+    this.customPrompts = opts.customPrompts;
   }
 
   /**
@@ -177,6 +185,19 @@ export default class AutoCompleteComponent extends Component {
       data = {};
     } else {
       this._isOpen = true;
+    }
+
+    // show custom prompts if it's an empty search or levenshtein match on a non empty search
+    if (this.customPrompts && data.sections) {
+      const hasCustomPrompts = data.sections.find(section => section.isCustom);
+      const matchedCustomPrompts = this.customPrompts.filter(prompt =>
+        isCloseMatch(prompt, queryInputEl.value)
+      );
+      if (!hasCustomPrompts && matchedCustomPrompts.length > 0) {
+        const dataWithCustomPrompts = this.combineResultsWithCustomPrompts(data, matchedCustomPrompts);
+        this.core.storage.set(`${StorageKeys.AUTOCOMPLETE}.${this.name}`, dataWithCustomPrompts);
+        return;
+      }
     }
 
     if (wasOpen && !this._isOpen) {
@@ -368,6 +389,28 @@ export default class AutoCompleteComponent extends Component {
     this._isVoiceSearchActive = value;
   }
 
+  setCustomPrompts (prompts) {
+    this.customPrompts = prompts;
+  }
+
+  createSectionForCustomPrompts (customPrompts) {
+    const customAutocompleteResults = customPrompts
+      .map(prompt => AutoCompleteResponseTransformer.transformAutoCompleteResult({ value: prompt }));
+    return {
+      results: customAutocompleteResults,
+      resultsCount: customAutocompleteResults.length,
+      isCustom: true
+    };
+  }
+
+  combineResultsWithCustomPrompts (data, customPrompts) {
+    const customPromptsSection = this.createSectionForCustomPrompts(customPrompts);
+    const newSections = data.sections.filter(result => result.resultsCount !== 0);
+    newSections.unshift(customPromptsSection);
+    const dataWithCustomPrompts = Object.assign({}, data, { sections: newSections });
+    return dataWithCustomPrompts;
+  }
+
   autoComplete (input) {
     if (this.isFilterSearch) {
       this.core.autoCompleteFilter(input, {
@@ -494,6 +537,16 @@ export default class AutoCompleteComponent extends Component {
       this.close();
     } else {
       this._onChange();
+    }
+  }
+
+  updateAriaExpanded (inputEl) {
+    if (!inputEl) {
+      return;
+    }
+    const hasAutocompleteResults = this.getState('hasResults');
+    if (inputEl.getAttribute('aria-expanded') !== hasAutocompleteResults) {
+      inputEl.setAttribute('aria-expanded', hasAutocompleteResults);
     }
   }
 }

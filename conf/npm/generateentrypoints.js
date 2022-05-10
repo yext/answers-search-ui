@@ -46,7 +46,7 @@ function appendExportsField (inputFile) {
     }
   });
   Object.assign(packageData, { exports: exports });
-  fs.writeFileSync(inputFile, JSON.stringify(packageData, null, 2));
+  fs.writeFileSync(inputFile, JSON.stringify(packageData, null, 2) + '\n');
 }
 
 appendExportsField(process.argv[2]);

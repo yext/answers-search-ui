@@ -11,6 +11,7 @@ import VoiceSearchController from '../../speechrecognition/voicesearchcontroller
 import { speechRecognitionIsSupported } from '../../../core/speechrecognition/support';
 import SearchBarIconController from '../../controllers/searchbariconcontroller';
 import alert from '../../alert';
+import { constructRedirectUrl } from '../../tools/urlutils';
 
 /**
  * SearchComponent exposes an interface in order to create
@@ -273,7 +274,8 @@ export default class SearchComponent extends Component {
     this._autocompleteConfig = {
       shouldHideOnEmptySearch: config.autocomplete && config.autocomplete.shouldHideOnEmptySearch,
       onOpen: config.autocomplete && config.autocomplete.onOpen,
-      onClose: config.autocomplete && config.autocomplete.onClose
+      onClose: config.autocomplete && config.autocomplete.onClose,
+      customPrompts: config.autocomplete && config.autocomplete.customPrompts
     };
 
     if (!this._isTwin) {
@@ -517,8 +519,9 @@ export default class SearchComponent extends Component {
     // serialized and submitted.
     if (typeof this.redirectUrl === 'string') {
       if (this._allowEmptySearch || query) {
-        const newUrl = this.redirectUrl + '?' + params.toString();
-        window.open(newUrl, this.redirectUrlTarget) || (window.location.href = newUrl);
+        const newRedirectUrl = constructRedirectUrl(this.redirectUrl, params);
+        window.open(newRedirectUrl, this.redirectUrlTarget) ||
+          (window.location.href = newRedirectUrl);
         return false;
       }
     }
@@ -563,6 +566,9 @@ export default class SearchComponent extends Component {
       },
       onChange: () => {
         DOM.trigger(DOM.query(this._container, inputSelector), 'input');
+      },
+      onMount: () => {
+        this._autocomplete.updateAriaExpanded(DOM.query(this._container, inputSelector));
       }
     });
     this._autocomplete.mount();

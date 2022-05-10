@@ -21,6 +21,8 @@ import { PRODUCTION, ENDPOINTS, LIB_VERSION } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
+import Searcher from './models/searcher';
+import { mergeAdditionalHttpHeaders } from './utils/mergeAdditionalHttpHeaders';
 
 /** @typedef {import('./storage/storage').default} Storage */
 
@@ -111,15 +113,14 @@ export default class Core {
      */
     this._environment = config.environment || PRODUCTION;
 
-    /**
-     * @type {string}
-     */
+    /** @type {string} */
     this._verticalKey = config.verticalKey;
 
-    /**
-     * @type {ComponentManager}
-     */
+    /** @type {ComponentManager} */
     this._componentManager = config.componentManager;
+
+    /** @type {import('@yext/answers-core').AdditionalHttpHeaders} */
+    this._additionalHttpHeaders = mergeAdditionalHttpHeaders(config.additionalHttpHeaders);
   }
 
   /**
@@ -171,6 +172,21 @@ export default class Core {
    */
   isInitialized () {
     return !!this._coreLibrary;
+  }
+
+  /**
+   * Send a FOLLOW_UP_QUERY analytics event for subsequent searches from the initial search.
+   * The following search must contains a different query id from the previous search.
+   *
+   * @param {string} newQueryId - id of the new query
+   * @param {string} searcher - searcher type of the new query ("UNIVERSAL" or "VERTICAL")
+   */
+  _reportFollowUpQueryEvent (newQueryId, searcher) {
+    const previousQueryId = this.storage.get(StorageKeys.QUERY_ID);
+    if (previousQueryId && previousQueryId !== newQueryId) {
+      const event = new AnalyticsEvent('FOLLOW_UP_QUERY').addOptions({ searcher });
+      this._analyticsReporter.report(event);
+    }
   }
 
   /**
@@ -254,13 +270,15 @@ export default class Core {
         locationRadius: locationRadius === 0 ? undefined : locationRadius,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
-        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
         this._persistFacets();
         this._persistFilters();
         this._persistLocationRadius();
+        this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.VERTICAL);
 
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
@@ -305,6 +323,9 @@ export default class Core {
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       }).catch(error => {
         console.error('Vertical search failed with the following error: ' + error);
+        this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults());
+        this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer());
+        this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
       });
   }
 
@@ -357,6 +378,7 @@ export default class Core {
 
     const queryTrigger = this.storage.get(StorageKeys.QUERY_TRIGGER);
     const queryTriggerForApi = this.getQueryTriggerForSearchApi(queryTrigger);
+
     return this._coreLibrary
       .universalSearch({
         query: queryString,
@@ -368,10 +390,12 @@ export default class Core {
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         context: context && JSON.parse(context),
         referrerPageUrl: referrerPageUrl,
-        querySource: this.storage.get(StorageKeys.QUERY_SOURCE)
+        querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
+        this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.UNIVERSAL);
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
@@ -393,6 +417,9 @@ export default class Core {
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       }).catch(error => {
         console.error('Universal search failed with the following error: ' + error);
+        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
+        this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer());
+        this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
       });
   }
 
@@ -434,7 +461,8 @@ export default class Core {
     return this._coreLibrary
       .universalAutocomplete({
         input: input,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -458,7 +486,8 @@ export default class Core {
       .verticalAutocomplete({
         input: input,
         verticalKey: verticalKey,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => AutoCompleteResponseTransformer.transformAutoCompleteResponse(response))
       .then(data => {
@@ -490,9 +519,12 @@ export default class Core {
         verticalKey: config.verticalKey,
         fields: searchParamFields,
         sectioned: config.searchParameters.sectioned,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
-      .then(response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response))
+      .then(
+        response => AutoCompleteResponseTransformer.transformFilterSearchResponse(response),
+        error => console.error(error))
       .then(data => {
         this.storage.set(`${StorageKeys.AUTOCOMPLETE}.${config.namespace}`, data);
       }).catch(error => {
@@ -514,7 +546,8 @@ export default class Core {
     return this._coreLibrary
       .submitQuestion({
         ...question,
-        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value
+        sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
+        additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(() => {
         this.storage.set(

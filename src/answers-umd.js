@@ -32,6 +32,7 @@ import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
 import { localizedDistance, parseLocale } from './core/utils/i18nutils';
 import createImpressionEvent from './core/analytics/createimpressionevent';
+import VisibilityAnalyticsHandler from './core/analytics/visibilityanalyticshandler';
 
 /** @typedef {import('./core/services/errorreporterservice').default} ErrorReporterService */
 /** @typedef {import('./core/services/analyticsreporterservice').default} AnalyticsReporterService */
@@ -85,8 +86,7 @@ class Answers {
      * A reference to the formatRichText function.
      * @type {Function}
      */
-    this.formatRichText = (markdown, eventOptionsFieldName, targetConfig) =>
-      RichTextFormatter.format(markdown, eventOptionsFieldName, targetConfig);
+    this.formatRichText = RichTextFormatter.format;
 
     /**
      * A reference to the localizeDistance function.
@@ -159,6 +159,9 @@ class Answers {
         this.core.storage.delete(StorageKeys.PERSISTED_FACETS);
         this.core.storage.delete(StorageKeys.SORT_BYS);
         this.core.filterRegistry.clearAllFilterNodes();
+
+        const queryId = this.core.storage.get(StorageKeys.QUERY_ID);
+        data.set('pop-state-queryId', queryId);
 
         if (!hasQuery) {
           this.core.clearResults();
@@ -270,6 +273,11 @@ class Answers {
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
       initScrollListener(this._analyticsReporterService);
+      const visibilityAnalyticsHandler = new VisibilityAnalyticsHandler(
+        this._analyticsReporterService,
+        parsedConfig.search?.verticalKey
+      );
+      visibilityAnalyticsHandler.initVisibilityChangeListeners(storage);
     }
 
     this.core = new Core({
@@ -284,7 +292,8 @@ class Answers {
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch,
       environment: parsedConfig.environment,
-      componentManager: this.components
+      componentManager: this.components,
+      additionalHttpHeaders: parsedConfig.additionalHttpHeaders
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {

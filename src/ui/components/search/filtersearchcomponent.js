@@ -10,6 +10,7 @@ import FilterNodeFactory from '../../../core/filters/filternodefactory';
 import ComponentTypes from '../../components/componenttypes';
 import TranslationFlagger from '../../i18n/translationflagger';
 import QueryTriggers from '../../../core/models/querytriggers';
+import { constructRedirectUrl } from '../../tools/urlutils';
 
 /**
  * FilterSearchComponent is used for autocomplete using the FilterSearch backend.
@@ -208,7 +209,8 @@ export default class FilterSearchComponent extends Component {
         // If we have a redirectUrl, we want the params to be
         // serialized and submitted.
         if (typeof this.redirectUrl === 'string') {
-          window.location.href = this.redirectUrl + '?' + params.toString();
+          const newRedirectUrl = constructRedirectUrl(this.redirectUrl, params);
+          window.location.href = newRedirectUrl;
           return false;
         }
 
@@ -218,6 +220,9 @@ export default class FilterSearchComponent extends Component {
         this.core.storage.setWithPersist(`${StorageKeys.FILTER}.${this.name}`, filterNode.getFilter());
         this.core.setStaticFilterNodes(this.name, filterNode);
         this.search(QueryTriggers.FILTER_COMPONENT);
+      },
+      onMount: () => {
+        this.autoCompleteComponent.updateAriaExpanded(DOM.query(this._container, inputSelector));
       }
     });
   }

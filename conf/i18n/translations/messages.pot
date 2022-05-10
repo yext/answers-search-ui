@@ -108,7 +108,7 @@ msgstr ""
 msgid "Invalid email address. Please refresh the page and try submitting your question again."
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:286
+#: src/ui/components/filters/geolocationcomponent.js:289
 #: src/ui/components/filters/geolocationcomponent.js:40
 #: src/ui/components/filters/geolocationcomponent.js:48
 msgid "Location"
@@ -191,7 +191,7 @@ msgstr ""
 
 #: src/ui/components/filters/geolocationcomponent.js:153
 #: src/ui/components/search/locationbiascomponent.js:89
-#: src/ui/components/search/searchcomponent.js:234
+#: src/ui/components/search/searchcomponent.js:235
 msgid "We are unable to determine your location"
 msgstr ""
 
@@ -245,7 +245,7 @@ msgid "Remove this filter"
 msgstr ""
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:70
-#: src/ui/components/search/searchcomponent.js:73
+#: src/ui/components/search/searchcomponent.js:74
 msgctxt "Button label"
 msgid "Submit"
 msgstr ""
@@ -269,7 +269,7 @@ msgctxt "Button label, deselects one or more options"
 msgid "reset"
 msgstr ""
 
-#: src/ui/components/navigation/navigationcomponent.js:127
+#: src/ui/components/navigation/navigationcomponent.js:128
 msgctxt "Button label, displays more items"
 msgid "More"
 msgstr ""
@@ -385,7 +385,7 @@ msgctxt "Labels a link"
 msgid "Learn more here."
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:64
+#: src/ui/components/search/searchcomponent.js:65
 msgctxt "Labels an input field"
 msgid "Conduct a search"
 msgstr ""
@@ -396,7 +396,7 @@ msgctxt "Labels an input field"
 msgid "Search for a filter option"
 msgstr ""
 
-#: src/ui/components/search/filtersearchcomponent.js:64
+#: src/ui/components/search/filtersearchcomponent.js:65
 msgctxt "Labels an input field"
 msgid "What are you interested in?"
 msgstr ""
@@ -436,7 +436,7 @@ msgctxt "Noun, a page of results"
 msgid "Page"
 msgstr ""
 
-#: src/ui/components/navigation/navigationcomponent.js:185
+#: src/ui/components/navigation/navigationcomponent.js:186
 msgctxt "Noun, labels the navigation for the search page"
 msgid "Search Page Navigation"
 msgstr ""
@@ -474,17 +474,17 @@ msgctxt "Title of section"
 msgid "Ask a Question"
 msgstr ""
 
-#: src/ui/components/filters/facetscomponent.js:306
+#: src/ui/components/filters/facetscomponent.js:299
 msgctxt "True or False"
 msgid "False"
 msgstr ""
 
-#: src/ui/components/filters/facetscomponent.js:303
+#: src/ui/components/filters/facetscomponent.js:296
 msgctxt "True or False"
 msgid "True"
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:82
+#: src/ui/components/search/searchcomponent.js:83
 msgctxt "Verb, clears search"
 msgid "Clear"
 msgstr ""

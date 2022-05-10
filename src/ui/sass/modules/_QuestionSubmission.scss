@@ -184,7 +184,6 @@ $question-submission-acknowledgement-bar-bg: var(--yxt-color-background-highligh
     {
       margin-top: 0;
     }
-
   }
 
   &-formFieldWrapper
@@ -290,7 +289,7 @@ $question-submission-acknowledgement-bar-bg: var(--yxt-color-background-highligh
     justify-content: space-between;
     padding-left: var(--yxt-base-spacing);
     padding-right: var(--yxt-base-spacing);
-    padding-top: var(--yxt-base-spacing) ;
+    padding-top: var(--yxt-base-spacing);
     padding-bottom: var(--yxt-base-spacing);
     border-top: var(--yxt-question-submission-border);
     background-color: var(--yxt-question-submission-acknowledgement-bar-bg);
@@ -320,7 +319,7 @@ $question-submission-acknowledgement-bar-bg: var(--yxt-color-background-highligh
 
   &-privacyPolicyUrl
   {
-    @include Link-1;
+    @include Link-1();
   }
 
   &-inputError
@@ -337,7 +336,7 @@ $question-submission-acknowledgement-bar-bg: var(--yxt-color-background-highligh
 
   &-submitButton
   {
-    @include Button;
+    @include Button();
 
     color: white;
     box-sizing: border-box;

@@ -4,7 +4,7 @@ import MapboxLanguage from '@mapbox/mapbox-gl-language';
 
 import MapProvider from './mapprovider';
 import DOM from '../../../dom/dom';
-import { parseLocale } from '../../../../core/utils/i18nutils';
+import { parseLocale, isRTL } from '../../../../core/utils/i18nutils';
 
 /* global mapboxgl */
 
@@ -32,7 +32,7 @@ export default class MapBoxMapProvider extends MapProvider {
   loadJS (onLoad) {
     const version = 'v1.13.1';
     const script = DOM.createEl('script', {
-      id: 'yext-map-js',
+      id: 'yext-map-mapbox-js',
       onload: () => {
         this._isLoaded = true;
         mapboxgl.accessToken = this._apiKey;
@@ -54,7 +54,7 @@ export default class MapBoxMapProvider extends MapProvider {
     });
 
     const css = DOM.createEl('link', {
-      id: 'yext-map-css',
+      id: 'yext-map-mapbox-css',
       rel: 'stylesheet',
       href: `https://api.mapbox.com/mapbox-gl-js/${version}/mapbox-gl.css`
     });
@@ -81,6 +81,11 @@ export default class MapBoxMapProvider extends MapProvider {
     this._map.addControl(new MapboxLanguage({
       defaultLanguage: this._language
     }));
+
+    const zoomControl = new mapboxgl.NavigationControl({ showCompass: false });
+    isRTL(this._language)
+      ? this._map.addControl(zoomControl, 'top-left')
+      : this._map.addControl(zoomControl);
 
     if (mapData && mapData.mapMarkers.length) {
       const collapsedMarkers = this._collapsePins
