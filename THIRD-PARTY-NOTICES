@@ -433,13 +433,19 @@ MIT License
 
 The following NPM package may be included in this product:
 
- - @yext/answers-core@1.6.0-beta.7
+ - @yext/answers-core@1.6.0
 
 This package contains the following license and notice below:
 
+The Answers Core files listed in this repository are licensed under the below license.  All other features and products are subject to separate agreements
+and certain functionality requires paid subscriptions to Yext products.
+
+Contains information from the language-subtag-registry JSON Database (https://github.com/mattcg/language-subtag-registry/tree/master/data/json)
+which is made available under the ODC Attribution License (https://github.com/mattcg/language-subtag-registry/blob/master/LICENSE.md).
+
 BSD 3-Clause License
 
-Copyright (c) 2021, Yext
+Copyright (c) 2022, Yext
 All rights reserved.
 
 Redistribution and use in source and binary forms, with or without
