@@ -12,6 +12,10 @@ exports.dev = parallel(
   templates.dev,
   library.dev
 );
+exports.basic = parallel(
+  templates.basic,
+  library.basic
+);
 exports.buildLanguages = parallel(
   templates.buildLanguages,
   library.buildLanguages
