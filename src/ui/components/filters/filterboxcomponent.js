@@ -155,13 +155,6 @@ export default class FilterBoxComponent extends Component {
     }
 
     /**
-     * The vertical key for the search
-     * @type {string}
-     * @private
-     */
-    this._verticalKey = config.verticalKey || null;
-
-    /**
      * The components created for each filter config
      * @type {Component[]}
      * @private
