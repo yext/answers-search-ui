@@ -23,14 +23,17 @@ async function createTranslator (locale) {
  * Precompiles templates together, bundles them together,
  * cleans up any intermediary files, and kicks off the watch task.
  *
+ * @param {boolean} shouldWatch Whether or not to watch for changes. Defaults to true
  * @returns {Promise<Function>}
  */
-async function devTemplates () {
+async function devTemplates (shouldWatch = true) {
   const bundleTemplatesUMD =
     new BundleTemplatesTaskFactory(DEFAULT_LOCALE).create(TemplateType.UMD);
   const cleanFiles = createCleanFilesTask(DEFAULT_LOCALE);
   const translator = await createTranslator(DEFAULT_LOCALE);
   const precompileTemplates = createPrecompileTemplatesTask(DEFAULT_LOCALE, translator);
+
+  const nonWatchTasks = [precompileTemplates, bundleTemplatesUMD, cleanFiles];
 
   function watchTemplates () {
     return watch(['./src/ui/templates/**/*.hbs'], {
@@ -39,16 +42,19 @@ async function devTemplates () {
   }
 
   return new Promise(resolve => {
-    return series(
-      precompileTemplates,
-      bundleTemplatesUMD,
-      cleanFiles,
-      watchTemplates
-    )(resolve);
+    return shouldWatch
+      ? series(
+        ...nonWatchTasks,
+        watchTemplates
+      )(resolve)
+      : series(...nonWatchTasks)(resolve);
   });
 }
 
 exports.dev = devTemplates;
+exports.basic = function () {
+  return devTemplates(false);
+};
 
 /**
  * Creates a template build task for a specific locale and translator.

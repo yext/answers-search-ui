@@ -31,6 +31,21 @@ exports.dev = function devJSBundle () {
 };
 
 /**
+ * Creates the un-minified legacy JS bundle and compiles CSS.
+ * @returns {Promise<Function>}
+ */
+exports.basic = function basicJSBundle () {
+  return createBundleTaskFactory(DEFAULT_LOCALE).then(basicTaskFactory => {
+    return new Promise(resolve => {
+      return parallel(
+        basicTaskFactory.create(BundleType.LEGACY_IIFE),
+        compileCSS
+      )(resolve);
+    });
+  });
+};
+
+/**
  * Creates a build task for each provided language and combines them into a series task.
  * This function also supports locales, but it is named to reflect the current use case
  * of creating bundles for just languages.
