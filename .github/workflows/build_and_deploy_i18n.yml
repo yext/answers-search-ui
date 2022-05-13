@@ -12,7 +12,7 @@ jobs:
   call_build:
     uses: ./.github/workflows/build.yml
     with:
-      build_script: build-locales
+      build_script: build-unminified-legacy
 
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
@@ -28,6 +28,11 @@ jobs:
     uses: ./.github/workflows/acceptance.yml
     needs: call_build
 
+  call_build_locales:
+    uses: ./.github/workflows/build.yml
+    with:
+      build_script: build-locales
+
   call_deploy:
     if: github.ref_name != 'develop'
     needs:
@@ -35,6 +40,7 @@ jobs:
       - call_format_branch_name
       - call_acceptance
       - call_misc_tests
+      - call_build_locales
     uses: ./.github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}
@@ -49,6 +55,7 @@ jobs:
       - call_format_branch_name
       - call_acceptance
       - call_misc_tests
+      - call_build_locales
     uses: ./.github/workflows/deploy.yml
     with:
       directory: canary/latest
@@ -63,6 +70,7 @@ jobs:
       - call_format_branch_name
       - call_acceptance
       - call_misc_tests
+      - call_build_locales
     uses: ./.github/workflows/deploy.yml
     with:
       directory: canary/${{ github.sha }}
