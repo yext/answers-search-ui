@@ -34,11 +34,11 @@ exports.dev = function devJSBundle () {
  * Creates the un-minified legacy JS bundle and compiles CSS.
  * @returns {Promise<Function>}
  */
-exports.basic = function basicJSBundle () {
-  return createBundleTaskFactory(DEFAULT_LOCALE).then(basicTaskFactory => {
+exports.unminifiedLegacy = function unminifiedLegacyJSBundle () {
+  return createBundleTaskFactory(DEFAULT_LOCALE).then(unminifiedLegacyTaskFactory => {
     return new Promise(resolve => {
       return parallel(
-        basicTaskFactory.create(BundleType.LEGACY_IIFE),
+        unminifiedLegacyTaskFactory.create(BundleType.LEGACY_IIFE),
         compileCSS
       )(resolve);
     });

@@ -49,7 +49,7 @@ async function devTemplates (shouldWatch = true) {
 }
 
 exports.dev = devTemplates;
-exports.basic = function () {
+exports.unminifiedLegacy = function () {
   return devTemplates(false);
 };
 
