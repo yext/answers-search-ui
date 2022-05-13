@@ -12,6 +12,8 @@ on:
 jobs:
   call_build:
     uses: ./.github/workflows/build.yml
+    with:
+      build_script: build-locales
 
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml

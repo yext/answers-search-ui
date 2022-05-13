@@ -114,7 +114,7 @@
   "scripts": {
     "build": "gulp && size-limit && npm run generate-entry-points",
     "build-languages": "gulp buildLanguages && size-limit",
-    "build-locales": "gulp buildLocales && size-limit",
+    "build-locales": "gulp buildLocales --max-old-space-size=7168 && size-limit",
     "build-search-bar-only": "gulp buildSearchBarOnlyAssets && size-limit",
     "dev": "gulp dev",
     "lint": "eslint .",
