@@ -12,7 +12,7 @@ jobs:
   call_build:
     uses: ./.github/workflows/build.yml
     with:
-      build_script: build-basic
+      build_script: build-unminified-legacy
 
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml

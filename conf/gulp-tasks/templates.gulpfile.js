@@ -33,21 +33,18 @@ async function devTemplates (shouldWatch = true) {
   const translator = await createTranslator(DEFAULT_LOCALE);
   const precompileTemplates = createPrecompileTemplatesTask(DEFAULT_LOCALE, translator);
 
-  const nonWatchTasks = [precompileTemplates, bundleTemplatesUMD, cleanFiles];
+  const templateTasks = [precompileTemplates, bundleTemplatesUMD, cleanFiles];
 
   function watchTemplates () {
     return watch(['./src/ui/templates/**/*.hbs'], {
       ignored: './dist/'
-    }, series(precompileTemplates, bundleTemplatesUMD, cleanFiles));
+    }, series(...templateTasks));
   }
 
+  const tasks = shouldWatch ? [...templateTasks, watchTemplates] : templateTasks;
+
   return new Promise(resolve => {
-    return shouldWatch
-      ? series(
-        ...nonWatchTasks,
-        watchTemplates
-      )(resolve)
-      : series(...nonWatchTasks)(resolve);
+    return series(...tasks)(resolve);
   });
 }
 

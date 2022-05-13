@@ -116,7 +116,7 @@
     "build-languages": "gulp buildLanguages && size-limit",
     "build-locales": "gulp buildLocales && size-limit",
     "build-search-bar-only": "gulp buildSearchBarOnlyAssets && size-limit",
-    "build-basic": "gulp basic",
+    "build-unminified-legacy": "gulp basic",
     "dev": "gulp dev",
     "lint": "eslint .",
     "test": "eslint . && stylelint src/**/*.scss && cross-env NODE_ICU_DATA=node_modules/full-icu jest",
