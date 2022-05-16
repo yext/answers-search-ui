@@ -114,36 +114,36 @@ const LANGUAGES_TO_LOCALES = {
     'ar_PS',
     'ar_QA',
     'ar_SA'
-  ],
-  hi: [],
-  ko: [],
-  nl: [
-    'nl_BE',
-    'nl_NL',
-    'nl_SX'
-  ],
-  pl: [],
-  pt: [
-    'pt_BR',
-    'pt_CV',
-    'pt_PT'
-  ],
-  ru: [
-    'ru_UA'
-  ],
-  sv: [
-    'sv_SE'
-  ],
-  'zh-Hans': [
-    'zh-Hans_CN',
-    'zh-Hans_HK',
-    'zh-Hans_SG'
-  ],
-  'zh-Hant': [
-    'zh-Hant_HK',
-    'zh-Hant_MO',
-    'zh-Hant_TW'
   ]
+  // hi: [],
+  // ko: [],
+  // nl: [
+  //   'nl_BE',
+  //   'nl_NL',
+  //   'nl_SX'
+  // ],
+  // pl: [],
+  // pt: [
+  //   'pt_BR',
+  //   'pt_CV',
+  //   'pt_PT'
+  // ],
+  // ru: [
+  //   'ru_UA'
+  // ],
+  // sv: [
+  //   'sv_SE'
+  // ],
+  // 'zh-Hans': [
+  //   'zh-Hans_CN',
+  //   'zh-Hans_HK',
+  //   'zh-Hans_SG'
+  // ],
+  // 'zh-Hant': [
+  //   'zh-Hant_HK',
+  //   'zh-Hant_MO',
+  //   'zh-Hant_TW'
+  // ]
 };
 exports.LANGUAGES_TO_LOCALES = LANGUAGES_TO_LOCALES;
 
