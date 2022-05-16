@@ -106,6 +106,8 @@ async function createTemplatesForLanguages (languages, isSearchBarOnly = false) 
  * Creates a template bundle for each supported language, locale pair.
  *
  * @param {boolean} isSearchBarOnly If only templates related to the SearchBar should be included.
+ * @param {string[]} languages a list of languages to build template bundle for,
+ *                             with the corresponding language-locale pairs.
  * @returns {Promise<Function>}
  */
 function allLocaleTemplates (isSearchBarOnly = false, languages = ALL_LANGUAGES) {

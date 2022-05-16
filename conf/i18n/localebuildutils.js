@@ -12,6 +12,7 @@ const fs = require('fs');
  * language must be created before this function is run.
  *
  * @param {Array<string>} assetNames File names used for iteration and file generation
+ * @param {string[]} languages a list of languages that requires copying assets for locales
  */
 function copyAssetsForLocales (assetNames, languages = ALL_LANGUAGES) {
   languages.forEach((language) => {

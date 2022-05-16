@@ -7,7 +7,6 @@ on:
       - hotfix/**
       - feature/**-i18n
       - release/**
-      - dev/speedup-i18n-build
 
 jobs:
   call_build:

@@ -69,6 +69,8 @@ function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
  * Creates a task for building all of the localized SDK assets.
  *
  * @param {boolean} isSearchBarOnly If the task is for the SearchBar-only assets.
+ * @param {string[]} languages a list of languages to build js bundles for,
+ *                             with the corresponding language-locale pairs.
  * @returns {Promise<Function>}
  */
 function allLocaleJSBundles (isSearchBarOnly = false, languages = ALL_LANGUAGES) {
