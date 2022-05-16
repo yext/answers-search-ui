@@ -326,6 +326,7 @@ export default class Core {
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       }).catch(error => {
         console.error('The following problem was encountered while processing vertical search results: ' + error);
+        this._updateResultsSearchState(Searcher.VERTICAL, SearchStates.SEARCH_COMPLETE);
       });
   }
 
@@ -398,6 +399,7 @@ export default class Core {
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
+        throw new Error('this is a mock throw');
         this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.UNIVERSAL);
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
@@ -420,7 +422,34 @@ export default class Core {
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       }).catch(error => {
         console.error('The following problem was encountered while processing universal search results: ' + error);
+        this._updateResultsSearchState(Searcher.UNIVERSAL, SearchStates.SEARCH_COMPLETE);
       });
+  }
+
+  /**
+   * Update the search state of the results in storage
+   *
+   * @param {Searcher} searcherType
+   * @param {SearchStates} searchState
+   */
+  _updateResultsSearchState (searcherType, searchState) {
+    const results = searcherType === Searcher.UNIVERSAL
+      ? this.storage.get(StorageKeys.UNIVERSAL_RESULTS)
+      : this.storage.get(StorageKeys.VERTICAL_RESULTS);
+    if (results) {
+      results.searchState = searchState;
+      this.storage.set(StorageKeys.UNIVERSAL_RESULTS, results);
+    }
+    const directanswer = this.storage.get(StorageKeys.DIRECT_ANSWER);
+    if (directanswer) {
+      directanswer.searchState = searchState;
+      this.storage.set(StorageKeys.DIRECT_ANSWER, directanswer);
+    }
+    const locationbias = this.storage.get(StorageKeys.LOCATION_BIAS);
+    if (locationbias) {
+      locationbias.searchState = searchState;
+      this.storage.set(StorageKeys.LOCATION_BIAS, locationbias);
+    }
   }
 
   /**
