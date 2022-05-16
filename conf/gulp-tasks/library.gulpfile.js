@@ -46,7 +46,7 @@ function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
       .then(bundleTaskFactory => createBundles(bundleTaskFactory, minifyTaskFactory, isSearchBarOnly));
   });
   return Promise.all(localizedTaskPromises).then(localizedTasks => {
-    return new Promise(resolve => parallel(compileCSS, ...localizedTasks)(resolve));
+    return new Promise(resolve => series(compileCSS, ...localizedTasks)(resolve));
   });
 }
 
