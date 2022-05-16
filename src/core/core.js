@@ -274,6 +274,10 @@ export default class Core {
         additionalHttpHeaders: this._additionalHttpHeaders
       })
       .catch(error => {
+        this._markSearchComplete(Searcher.VERTICAL, SearchStates.SEARCH_COMPLETE);
+        throw error;
+      })
+      .catch(error => {
         console.error('The following problem was encountered while executing a vertical search: ' + error);
       })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
@@ -326,7 +330,7 @@ export default class Core {
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       })
       .catch(error => {
-        this._updateResultsSearchState(Searcher.VERTICAL, SearchStates.SEARCH_COMPLETE);
+        this._markSearchComplete(Searcher.VERTICAL, SearchStates.SEARCH_COMPLETE);
         throw error;
       })
       .catch(error => {
@@ -399,6 +403,10 @@ export default class Core {
         additionalHttpHeaders: this._additionalHttpHeaders
       })
       .catch(error => {
+        this._markSearchComplete(Searcher.UNIVERSAL, SearchStates.SEARCH_COMPLETE);
+        throw error;
+      })
+      .catch(error => {
         console.error('The following problem was encountered while executing a universal search: ' + error);
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
@@ -425,7 +433,7 @@ export default class Core {
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       })
       .catch(error => {
-        this._updateResultsSearchState(Searcher.UNIVERSAL, SearchStates.SEARCH_COMPLETE);
+        this._markSearchComplete(Searcher.UNIVERSAL, SearchStates.SEARCH_COMPLETE);
         throw error;
       })
       .catch(error => {
@@ -434,27 +442,26 @@ export default class Core {
   }
 
   /**
-   * Update the search state of the results in storage
+   * Update the search state of the results in storage to SEARCH_COMPLETE.
    *
    * @param {Searcher} searcherType
-   * @param {SearchStates} searchState
    */
-  _updateResultsSearchState (searcherType, searchState) {
+  _markSearchComplete (searcherType) {
     const results = searcherType === Searcher.UNIVERSAL
       ? this.storage.get(StorageKeys.UNIVERSAL_RESULTS)
       : this.storage.get(StorageKeys.VERTICAL_RESULTS);
     if (results) {
-      results.searchState = searchState;
+      results.searchState = SearchStates.SEARCH_COMPLETE;
       this.storage.set(StorageKeys.UNIVERSAL_RESULTS, results);
     }
     const directanswer = this.storage.get(StorageKeys.DIRECT_ANSWER);
     if (directanswer) {
-      directanswer.searchState = searchState;
+      directanswer.searchState = SearchStates.SEARCH_COMPLETE;
       this.storage.set(StorageKeys.DIRECT_ANSWER, directanswer);
     }
     const locationbias = this.storage.get(StorageKeys.LOCATION_BIAS);
     if (locationbias) {
-      locationbias.searchState = searchState;
+      locationbias.searchState = SearchStates.SEARCH_COMPLETE;
       this.storage.set(StorageKeys.LOCATION_BIAS, locationbias);
     }
   }
