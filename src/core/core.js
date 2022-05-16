@@ -433,12 +433,13 @@ export default class Core {
    * @param {Searcher} searcherType
    */
   _markSearchComplete (searcherType) {
-    const results = searcherType === Searcher.UNIVERSAL
-      ? this.storage.get(StorageKeys.UNIVERSAL_RESULTS)
-      : this.storage.get(StorageKeys.VERTICAL_RESULTS);
+    const resultStorageKey = searcherType === Searcher.UNIVERSAL
+      ? StorageKeys.UNIVERSAL_RESULTS
+      : StorageKeys.VERTICAL_RESULTS;
+    const results = this.storage.get(resultStorageKey);
     if (results) {
       results.searchState = SearchStates.SEARCH_COMPLETE;
-      this.storage.set(StorageKeys.UNIVERSAL_RESULTS, results);
+      this.storage.set(resultStorageKey, results);
     }
     const directanswer = this.storage.get(StorageKeys.DIRECT_ANSWER);
     if (directanswer) {
