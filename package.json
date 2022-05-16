@@ -114,9 +114,10 @@
   "scripts": {
     "build": "gulp && size-limit && npm run generate-entry-points",
     "build-languages": "gulp buildLanguages && size-limit",
-    "build-locales": "gulp buildLocales && size-limit",
-    "build-locales-cmd-only": "gulp buildLocales",
-    "build-search-bar-only": "gulp buildSearchBarOnlyAssets && size-limit",
+    "build-locales-dev": "gulp buildLocales && size-limit",
+    "build-locales": "gulp buildLocales",
+    "build-search-bar-only-dev": "gulp buildSearchBarOnlyAssets && size-limit",
+    "build-search-bar-only": "gulp buildSearchBarOnlyAssets",
     "build-unminified-legacy": "gulp unminifiedLegacy",
     "dev": "gulp dev",
     "lint": "eslint .",

@@ -7,6 +7,7 @@ on:
       - hotfix/**
       - feature/**-i18n
       - release/**
+      - dev/speedup-i18n-build
 
 jobs:
   call_build:
@@ -32,9 +33,7 @@ jobs:
       BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
   
   call_build_locales:
-    uses: ./.github/workflows/build.yml
-    with:
-      build_script: build-locales
+    uses: ./.github/workflows/build_i18n.yml
 
   call_deploy:
     if: github.ref_name != 'develop'

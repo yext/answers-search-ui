@@ -35,6 +35,6 @@ exports.extractTranslations = extractTranslations;
 exports.templates = templates.default;
 
 exports.buildSearchBarOnlyAssets = parallel(
-  templates.buildSearchBarOnlyAssets,
-  library.buildSearchBarOnlyAssets
+  templates.buildSearchBarOnlyAssets.bind(null, languages),
+  library.buildSearchBarOnlyAssets.bind(null, languages)
 );

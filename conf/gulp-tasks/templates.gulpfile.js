@@ -126,8 +126,8 @@ exports.buildLanguages = function allLanguageTemplates () {
   return createTemplatesForLanguages(ALL_LANGUAGES);
 };
 
-exports.buildSearchBarOnlyAssets = function () {
-  return allLocaleTemplates(true);
+exports.buildSearchBarOnlyAssets = function (languages = ALL_LANGUAGES) {
+  return allLocaleTemplates(true, languages);
 };
 
 exports.buildLocales = function (languages = ALL_LANGUAGES) {

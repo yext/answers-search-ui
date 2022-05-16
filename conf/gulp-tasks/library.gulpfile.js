@@ -97,8 +97,8 @@ exports.buildLocales = function (languages = ALL_LANGUAGES) {
   return allLocaleJSBundles(false, languages);
 };
 
-exports.buildSearchBarOnlyAssets = function () {
-  return allLocaleJSBundles(true);
+exports.buildSearchBarOnlyAssets = function (languages = ALL_LANGUAGES) {
+  return allLocaleJSBundles(true, languages);
 };
 
 /**

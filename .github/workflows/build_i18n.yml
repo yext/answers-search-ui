@@ -5,7 +5,7 @@ on:
     inputs:
       build_script:
         required: false
-        default: build-locales-cmd-only
+        default: build-locales
         type: string
 
 jobs:
