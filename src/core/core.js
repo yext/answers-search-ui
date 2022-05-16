@@ -274,7 +274,7 @@ export default class Core {
         additionalHttpHeaders: this._additionalHttpHeaders
       })
       .catch(error => {
-        this._markSearchComplete(Searcher.VERTICAL, SearchStates.SEARCH_COMPLETE);
+        this._markSearchComplete(Searcher.VERTICAL);
         throw error;
       })
       .catch(error => {
@@ -330,7 +330,7 @@ export default class Core {
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       })
       .catch(error => {
-        this._markSearchComplete(Searcher.VERTICAL, SearchStates.SEARCH_COMPLETE);
+        this._markSearchComplete(Searcher.VERTICAL);
         throw error;
       })
       .catch(error => {
@@ -403,7 +403,7 @@ export default class Core {
         additionalHttpHeaders: this._additionalHttpHeaders
       })
       .catch(error => {
-        this._markSearchComplete(Searcher.UNIVERSAL, SearchStates.SEARCH_COMPLETE);
+        this._markSearchComplete(Searcher.UNIVERSAL);
         throw error;
       })
       .catch(error => {
@@ -433,7 +433,7 @@ export default class Core {
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       })
       .catch(error => {
-        this._markSearchComplete(Searcher.UNIVERSAL, SearchStates.SEARCH_COMPLETE);
+        this._markSearchComplete(Searcher.UNIVERSAL);
         throw error;
       })
       .catch(error => {
