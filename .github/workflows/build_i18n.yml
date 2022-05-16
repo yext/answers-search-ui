@@ -5,7 +5,7 @@ on:
     inputs:
       build_script:
         required: false
-        default: build-locales
+        default: build-locales-cmd-only
         type: string
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        languages: ${{ fromJson(needs.create_language_matrix.outputs.matrix) }}
+        language: ${{ fromJson(needs.create_language_matrix.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
       with:
@@ -41,8 +41,12 @@ jobs:
         node-version: 16
         cache: 'npm'
     - run: npm ci
-    - run: echo ${{ matrix.languages }}
-    - run: LANGUAGES=${{ matrix.languages }} npm run ${{ inputs.build_script }}
+    - run: echo ${{ matrix.language }}
+    - run: LANGUAGES=${{ matrix.language }} npm run ${{ inputs.build_script }}
+    - run: |
+        if [ "${{ matrix.language }}" == "en" ]; then 
+          npm run size
+        fi
     - name: Create build-output artifact
       uses: actions/upload-artifact@v2
       with:
