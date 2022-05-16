@@ -20,8 +20,8 @@ jobs:
   # call_misc_tests:
   #   uses: ./.github/workflows/miscellaneous_tests.yml
 
-  # call_format_branch_name:
-  #   uses: ./.github/workflows/format_branch_name.yml
+  call_format_branch_name:
+    uses: ./.github/workflows/format_branch_name.yml
 
   # call_acceptance:
   #   uses: ./.github/workflows/acceptance.yml
@@ -33,7 +33,7 @@ jobs:
   call_deploy:
     needs: 
       # - call_unit_test
-      # - call_format_branch_name
+      - call_format_branch_name
       # - call_acceptance
       # - call_misc_tests
       - call_build
