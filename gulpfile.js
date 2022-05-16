@@ -3,7 +3,12 @@ const { parallel } = require('gulp');
 const templates = require('./conf/gulp-tasks/templates.gulpfile.js');
 const library = require('./conf/gulp-tasks/library.gulpfile.js');
 const extractTranslations = require('./conf/gulp-tasks/extracttranslations.gulpfile.js');
-// const args = require('yargs').argv;
+
+const languageEnv = process.env.LANGUAGE;
+let languages;
+if (languageEnv && typeof languageEnv === 'string') {
+  languages = languageEnv.split(',');
+}
 
 exports.default = exports.build = parallel(
   templates.default,
@@ -18,9 +23,10 @@ exports.buildLanguages = parallel(
   library.buildLanguages
 );
 exports.buildLocales = parallel(
-  library.buildLocales.bind(null, process.env.LANGUAGES), // args.languages),
-  templates.buildLocales.bind(null, process.env.LANGUAGES)
+  library.buildLocales.bind(null, languages),
+  templates.buildLocales.bind(null, languages)
 );
+
 exports.extractTranslations = extractTranslations;
 exports.templates = templates.default;
 

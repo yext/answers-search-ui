@@ -128,9 +128,5 @@ exports.buildSearchBarOnlyAssets = function () {
 };
 
 exports.buildLocales = function (languages = ALL_LANGUAGES) {
-  let languagesArray = languages;
-  if (typeof languages === 'string') {
-    languagesArray = languages.split(',');
-  }
-  return allLocaleTemplates(false, languagesArray);
+  return allLocaleTemplates(false, languages);
 };

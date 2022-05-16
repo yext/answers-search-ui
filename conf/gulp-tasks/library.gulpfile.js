@@ -79,12 +79,7 @@ exports.buildLanguages = function allLanguageJSBundles () {
 };
 
 exports.buildLocales = function (languages = ALL_LANGUAGES) {
-  console.log('env', process.env.LANGUAGES);
-  let languagesArray = languages;
-  if (typeof languages === 'string') {
-    languagesArray = languages.split(',');
-  }
-  return allLocaleJSBundles(false, languagesArray);
+  return allLocaleJSBundles(false, languages);
 };
 
 exports.buildSearchBarOnlyAssets = function () {

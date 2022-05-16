@@ -42,7 +42,7 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: echo ${{ matrix.language }}
-    - run: LANGUAGES=${{ matrix.language }} npm run ${{ inputs.build_script }}
+    - run: LANGUAGE=${{ matrix.language }} npm run ${{ inputs.build_script }}
     - run: |
         if [ "${{ matrix.language }}" == "en" ]; then 
           npm run size
