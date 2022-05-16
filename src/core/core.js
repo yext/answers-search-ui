@@ -273,6 +273,9 @@ export default class Core {
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
         additionalHttpHeaders: this._additionalHttpHeaders
       })
+      .catch(error => {
+        console.error('The following problem was encountered while executing a vertical search: ' + error);
+      })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
         this._persistFacets();
@@ -322,7 +325,7 @@ export default class Core {
         this.updateHistoryAfterSearch(queryTrigger);
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       }).catch(error => {
-        console.error('Vertical search failed with the following error: ' + error);
+        console.error('The following problem was encountered while processing vertical search results: ' + error);
       });
   }
 
@@ -390,6 +393,9 @@ export default class Core {
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
         additionalHttpHeaders: this._additionalHttpHeaders
       })
+      .catch(error => {
+        console.error('The following problem was encountered while executing a universal search: ' + error);
+      })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
         this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.UNIVERSAL);
@@ -413,7 +419,7 @@ export default class Core {
         this.updateHistoryAfterSearch(queryTrigger);
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       }).catch(error => {
-        console.error('Universal search failed with the following error: ' + error);
+        console.error('The following problem was encountered while processing universal search results: ' + error);
       });
   }
 
