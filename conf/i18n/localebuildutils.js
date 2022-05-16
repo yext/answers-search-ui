@@ -13,8 +13,8 @@ const fs = require('fs');
  *
  * @param {Array<string>} assetNames File names used for iteration and file generation
  */
-function copyAssetsForLocales (assetNames) {
-  ALL_LANGUAGES.forEach((language) => {
+function copyAssetsForLocales (assetNames, languages = ALL_LANGUAGES) {
+  languages.forEach((language) => {
     assetNames.forEach((assetName) => {
       const languageBundleName = language !== 'en'
         ? `${language}-${assetName}`

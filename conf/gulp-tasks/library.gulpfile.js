@@ -56,7 +56,7 @@ function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
  * @param {boolean} isSearchBarOnly If the task is for the SearchBar-only assets.
  * @returns {Promise<Function>}
  */
-function allLocaleJSBundles (isSearchBarOnly = false) {
+function allLocaleJSBundles (isSearchBarOnly = false, languages = ALL_LANGUAGES) {
   const assetNames = [
     'answers.js',
     'answers.min.js',
@@ -65,8 +65,8 @@ function allLocaleJSBundles (isSearchBarOnly = false) {
     'answers-umd.js',
     'answers-umd.min.js'];
 
-  return createJSBundlesForLanguages(ALL_LANGUAGES, isSearchBarOnly).then(() => {
-    copyAssetsForLocales(assetNames);
+  return createJSBundlesForLanguages(languages, isSearchBarOnly).then(() => {
+    copyAssetsForLocales(assetNames, languages);
   });
 }
 
@@ -78,8 +78,13 @@ exports.buildLanguages = function allLanguageJSBundles () {
   return createJSBundlesForLanguages(ALL_LANGUAGES);
 };
 
-exports.buildLocales = function () {
-  return allLocaleJSBundles();
+exports.buildLocales = function (languages = ALL_LANGUAGES) {
+  console.log('env', process.env.LANGUAGES);
+  let languagesArray = languages;
+  if (typeof languages === 'string') {
+    languagesArray = languages.split(',');
+  }
+  return allLocaleJSBundles(false, languagesArray);
 };
 
 exports.buildSearchBarOnlyAssets = function () {

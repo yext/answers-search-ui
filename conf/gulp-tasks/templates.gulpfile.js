@@ -105,13 +105,13 @@ async function createTemplatesForLanguages (languages, isSearchBarOnly = false) 
  * @param {boolean} isSearchBarOnly If only templates related to the SearchBar should be included.
  * @returns {Promise<Function>}
  */
-function allLocaleTemplates (isSearchBarOnly = false) {
+function allLocaleTemplates (isSearchBarOnly = false, languages = ALL_LANGUAGES) {
   const assetNames = [
     'answerstemplates-iife.compiled.min.js',
     'answerstemplates.compiled.min.js'];
 
-  return createTemplatesForLanguages(ALL_LANGUAGES, isSearchBarOnly).then(() => {
-    copyAssetsForLocales(assetNames);
+  return createTemplatesForLanguages(languages, isSearchBarOnly).then(() => {
+    copyAssetsForLocales(assetNames, languages);
   });
 }
 
@@ -127,6 +127,10 @@ exports.buildSearchBarOnlyAssets = function () {
   return allLocaleTemplates(true);
 };
 
-exports.buildLocales = function () {
-  return allLocaleTemplates();
+exports.buildLocales = function (languages = ALL_LANGUAGES) {
+  let languagesArray = languages;
+  if (typeof languages === 'string') {
+    languagesArray = languages.split(',');
+  }
+  return allLocaleTemplates(false, languagesArray);
 };

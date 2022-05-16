@@ -40,12 +40,11 @@ jobs:
       with:
         node-version: 16
         cache: 'npm'
-    # - run: npm ci
+    - run: npm ci
     - run: echo ${{ matrix.languages }}
-    # - run: LANGUAGES=${{ matrix.languages }} npm run ${{ inputs.build_script }}
-    
-    # - name: Create build-output artifact
-    #   uses: actions/upload-artifact@v2
-    #   with:
-    #     name: build-output
-    #     path: dist/
+    - run: LANGUAGES=${{ matrix.languages }} npm run ${{ inputs.build_script }}
+    - name: Create build-output artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-output
+        path: dist/
