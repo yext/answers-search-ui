@@ -30,7 +30,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        languages: ${{ needs.create_language_matrix.outputs.matrix }}
+        languages: ${{ fromJson(needs.create_language_matrix.outputs.matrix) }}
     steps:
     - uses: actions/checkout@v2
       with:
