@@ -324,9 +324,13 @@ export default class Core {
         }
         this.updateHistoryAfterSearch(queryTrigger);
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
-      }).catch(error => {
-        console.error('The following problem was encountered while processing vertical search results: ' + error);
+      })
+      .catch(error => {
         this._updateResultsSearchState(Searcher.VERTICAL, SearchStates.SEARCH_COMPLETE);
+        throw error;
+      })
+      .catch(error => {
+        console.error('The following problem was encountered while processing vertical search results: ' + error);
       });
   }
 
@@ -419,9 +423,13 @@ export default class Core {
         }
         this.updateHistoryAfterSearch(queryTrigger);
         window.performance.mark('yext.answers.universalQueryResponseRendered');
-      }).catch(error => {
-        console.error('The following problem was encountered while processing universal search results: ' + error);
+      })
+      .catch(error => {
         this._updateResultsSearchState(Searcher.UNIVERSAL, SearchStates.SEARCH_COMPLETE);
+        throw error;
+      })
+      .catch(error => {
+        console.error('The following problem was encountered while processing universal search results: ' + error);
       });
   }
 
