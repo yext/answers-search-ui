@@ -323,9 +323,6 @@ export default class Core {
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
       }).catch(error => {
         console.error('Vertical search failed with the following error: ' + error);
-        // this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults());
-        // this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer());
-        // this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
       });
   }
 
@@ -417,9 +414,6 @@ export default class Core {
         window.performance.mark('yext.answers.universalQueryResponseRendered');
       }).catch(error => {
         console.error('Universal search failed with the following error: ' + error);
-        // this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
-        // this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer());
-        // this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
       });
   }
 
