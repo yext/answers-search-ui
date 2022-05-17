@@ -5,7 +5,6 @@ import SearchStates from '../storage/searchstates';
 export default class DirectAnswer {
   constructor (directAnswer = {}) {
     Object.assign(this, { searchState: SearchStates.SEARCH_COMPLETE }, directAnswer);
-    Object.freeze(this);
   }
 
   /**

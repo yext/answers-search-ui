@@ -17,8 +17,6 @@ export default class VerticalResults {
      * @type {ResultsContext}
      */
     this.resultsContext = data.resultsContext;
-
-    Object.freeze(this);
   }
 
   /**
