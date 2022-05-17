@@ -376,20 +376,38 @@ export default class Component {
     // Process the DOM to determine if we should create
     // in-memory sub-components for rendering
     const domComponents = DOM.queryAll(this._container, '[data-component]:not([data-is-component-mounted])');
-    const data = this.transformData
-      ? this.transformData(cloneDeep(this._state.get()))
-      : this._state.get();
-    domComponents.forEach(c => this._createSubcomponent(c, data));
-
+    let data;
+    try {
+      data = this.transformData
+        ? this.transformData(cloneDeep(this._state.get()))
+        : this._state.get();
+    } catch (e) {
+      console.error(`The following problem occurred while transforming data for sub-components of ${this.name}: `, e);
+    }
+    domComponents.forEach(c => {
+      try {
+        this._createSubcomponent(c, data);
+      } catch (e) {
+        console.error('The following problem occurred while initializing sub-component: ', c, e);
+      }
+    });
     if (this._progressivelyRenderChildren) {
       this._children.forEach(child => {
         setTimeout(() => {
-          child.mount();
+          try {
+            child.mount();
+          } catch (e) {
+            console.error('The following problem occurred while mounting sub-component: ', child, e);
+          }
         });
       });
     } else {
       this._children.forEach(child => {
-        child.mount();
+        try {
+          child.mount();
+        } catch (e) {
+          console.error('The following problem occurred while mounting sub-component: ', child, e);
+        }
       });
     }
 
