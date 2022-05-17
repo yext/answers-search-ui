@@ -73,7 +73,7 @@ function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
  *                             with the corresponding language-locale pairs.
  * @returns {Promise<Function>}
  */
-function allLocaleJSBundles (isSearchBarOnly = false, languages = ALL_LANGUAGES) {
+function allLocaleJSBundles (isSearchBarOnly = false, languages) {
   const assetNames = [
     'answers.js',
     'answers.min.js',

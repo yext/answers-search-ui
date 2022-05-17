@@ -41,7 +41,6 @@ jobs:
         node-version: 16
         cache: 'npm'
     - run: npm ci
-    - run: echo ${{ matrix.language }}
     - run: LANGUAGE=${{ matrix.language }} npm run ${{ inputs.build_script }}
     - run: |
         if [ "${{ matrix.language }}" == "en" ]; then 

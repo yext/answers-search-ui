@@ -110,7 +110,7 @@ async function createTemplatesForLanguages (languages, isSearchBarOnly = false) 
  *                             with the corresponding language-locale pairs.
  * @returns {Promise<Function>}
  */
-function allLocaleTemplates (isSearchBarOnly = false, languages = ALL_LANGUAGES) {
+function allLocaleTemplates (isSearchBarOnly = false, languages) {
   const assetNames = [
     'answerstemplates-iife.compiled.min.js',
     'answerstemplates.compiled.min.js'];
