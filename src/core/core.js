@@ -428,7 +428,10 @@ export default class Core {
   }
 
   /**
-   * Update the search state of the results in storage to SEARCH_COMPLETE.
+   * Update the search state of the results in storage to SEARCH_COMPLETE
+   * when handling errors from universal and vertical search. This will
+   * trigger a rerender of the components, which could potentially throw
+   * a new error.
    *
    * @param {Searcher} searcherType
    */
@@ -437,17 +440,17 @@ export default class Core {
       ? StorageKeys.UNIVERSAL_RESULTS
       : StorageKeys.VERTICAL_RESULTS;
     const results = this.storage.get(resultStorageKey);
-    if (results) {
+    if (results && results.searchState !== SearchStates.SEARCH_COMPLETE) {
       results.searchState = SearchStates.SEARCH_COMPLETE;
       this.storage.set(resultStorageKey, results);
     }
     const directanswer = this.storage.get(StorageKeys.DIRECT_ANSWER);
-    if (directanswer) {
+    if (directanswer && directanswer.searchState !== SearchStates.SEARCH_COMPLETE) {
       directanswer.searchState = SearchStates.SEARCH_COMPLETE;
       this.storage.set(StorageKeys.DIRECT_ANSWER, directanswer);
     }
     const locationbias = this.storage.get(StorageKeys.LOCATION_BIAS);
-    if (locationbias) {
+    if (locationbias && locationbias.searchState !== SearchStates.SEARCH_COMPLETE) {
       locationbias.searchState = SearchStates.SEARCH_COMPLETE;
       this.storage.set(StorageKeys.LOCATION_BIAS, locationbias);
     }
