@@ -321,11 +321,13 @@ export default class Core {
         }
         this.updateHistoryAfterSearch(queryTrigger);
         window.performance.mark('yext.answers.verticalQueryResponseRendered');
-      }).catch(error => {
-        console.error('Vertical search failed with the following error: ' + error);
-        this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults());
-        this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer());
-        this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
+      })
+      .catch(error => {
+        this._markSearchComplete(Searcher.VERTICAL);
+        throw error;
+      })
+      .catch(error => {
+        console.error('The following problem was encountered during vertical search: ' + error);
       });
   }
 
@@ -415,12 +417,43 @@ export default class Core {
         }
         this.updateHistoryAfterSearch(queryTrigger);
         window.performance.mark('yext.answers.universalQueryResponseRendered');
-      }).catch(error => {
-        console.error('Universal search failed with the following error: ' + error);
-        this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
-        this.storage.set(StorageKeys.DIRECT_ANSWER, new DirectAnswer());
-        this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
+      })
+      .catch(error => {
+        this._markSearchComplete(Searcher.UNIVERSAL);
+        throw error;
+      })
+      .catch(error => {
+        console.error('The following problem was encountered during universal search: ' + error);
       });
+  }
+
+  /**
+   * Update the search state of the results in storage to SEARCH_COMPLETE
+   * when handling errors from universal and vertical search. This will
+   * trigger a rerender of the components, which could potentially throw
+   * a new error.
+   *
+   * @param {Searcher} searcherType
+   */
+  _markSearchComplete (searcherType) {
+    const resultStorageKey = searcherType === Searcher.UNIVERSAL
+      ? StorageKeys.UNIVERSAL_RESULTS
+      : StorageKeys.VERTICAL_RESULTS;
+    const results = this.storage.get(resultStorageKey);
+    if (results && results.searchState !== SearchStates.SEARCH_COMPLETE) {
+      results.searchState = SearchStates.SEARCH_COMPLETE;
+      this.storage.set(resultStorageKey, results);
+    }
+    const directanswer = this.storage.get(StorageKeys.DIRECT_ANSWER);
+    if (directanswer && directanswer.searchState !== SearchStates.SEARCH_COMPLETE) {
+      directanswer.searchState = SearchStates.SEARCH_COMPLETE;
+      this.storage.set(StorageKeys.DIRECT_ANSWER, directanswer);
+    }
+    const locationbias = this.storage.get(StorageKeys.LOCATION_BIAS);
+    if (locationbias && locationbias.searchState !== SearchStates.SEARCH_COMPLETE) {
+      locationbias.searchState = SearchStates.SEARCH_COMPLETE;
+      this.storage.set(StorageKeys.LOCATION_BIAS, locationbias);
+    }
   }
 
   /**
