@@ -7,9 +7,7 @@ on:
 
 jobs:
   call_build:
-    uses: ./.github/workflows/build.yml
-    with:
-      build_script: build-locales
+    uses: ./.github/workflows/build_i18n.yml
 
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml

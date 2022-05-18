@@ -29,9 +29,7 @@ jobs:
     needs: call_build
 
   call_build_locales:
-    uses: ./.github/workflows/build.yml
-    with:
-      build_script: build-locales
+    uses: ./.github/workflows/build_i18n.yml
 
   call_deploy:
     if: github.ref_name != 'develop'
