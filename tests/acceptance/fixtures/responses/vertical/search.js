@@ -2,6 +2,7 @@ import { RequestMock } from 'testcafe';
 import { CORSHeaders } from '../cors';
 
 function generateVerticalSearchResponse (input, offset) {
+  console.log('input: "', input, '", offset: "', offset, '"');
   const meta = {
     uuid: '018163fe-e697-6ffc-6346-d01618241911',
     errors: []
