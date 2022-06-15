@@ -364,9 +364,9 @@ function generateVerticalSearchResponse (input, offset) {
 export const MockedVerticalSearchRequest = RequestMock()
   .onRequestTo(async request => {
     console.log('request: ', request.url);
-    const urlRegexVarginia = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/vertical\/query\?input=varginia/;
-    const urlRegexVirginia = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/vertical\/query\?input=virginia/;
-    return (urlRegexVarginia.test(request.url) || urlRegexVirginia.test(request.url)) && request.method === 'get';
+    const urlRegexVarginia = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/vertical\/query\?/;
+    const urlRegexVirginia = /input=v/;
+    return (urlRegexVarginia.test(request.url) && urlRegexVirginia.test(request.url)) && request.method === 'get';
   })
   .respond((req, res) => {
     console.log('responding');
