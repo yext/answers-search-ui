@@ -448,7 +448,7 @@ function generateVerticalSearchResponse (input, offset) {
     console.log('reached 3');
     if (offset === '1') {
       console.log('reached 4');
-      verticalSearchResponse.results = [
+      verticalSearchResponse.response.results = [
         vaData
       ];
     }
