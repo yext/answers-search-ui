@@ -422,7 +422,9 @@ function generateVerticalSearchResponse (input, offset) {
   };
 
   if (input === 'varginia') {
-    if (offset > 0) {
+    console.log('reached 1');
+    if (offset === '1') {
+      console.log('reached 2');
       spellCheckResponse.response.allResultsForVertical.results = [
         vaData
       ];
@@ -443,28 +445,32 @@ function generateVerticalSearchResponse (input, offset) {
   };
 
   if (input === '') {
-    if (offset === 1) {
+    console.log('reached 3');
+    if (offset === '1') {
+      console.log('reached 4');
       verticalSearchResponse.results = [
         vaData
       ];
     }
   } else if (input === 'virginia') {
+    console.log('reached 5');
     verticalSearchResponse.response.appliedQueryFilters = appliedQueryFilters;
-    if (offset === 0) {
-      verticalSearchResponse.response.results = [
-        {
-          ...vaData,
-          distanceFromFilter: 184935
-        }
-      ];
-    } else if (offset === 1) {
+    verticalSearchResponse.response.results = [
+      {
+        ...vaData,
+        distanceFromFilter: 184935
+      }
+    ];
+    if (offset === '1') {
+      console.log('reached 6');
       verticalSearchResponse.response.results = [
         {
           ...nyData,
           distanceFromFilter: 486363
         }
       ];
-    } else if (offset > 1) {
+    } else if (offset === '2') {
+      console.log('reached 7');
       verticalSearchResponse.response.results = [
         {
           ...ukData,
