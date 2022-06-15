@@ -64,7 +64,7 @@ function generateVerticalSearchResponse (input, offset) {
           isClosed: true
         }
       },
-      name: 'Office Space',
+      name: 'NY Office Space',
       cityCoordinate: {
         latitude: 40.708601,
         longitude: -73.876717
@@ -184,7 +184,7 @@ function generateVerticalSearchResponse (input, offset) {
           isClosed: true
         }
       },
-      name: 'Office Space',
+      name: 'VA Office Space',
       cityCoordinate: {
         latitude: 38.936519622802734,
         longitude: -77.18428039550781
@@ -280,7 +280,7 @@ function generateVerticalSearchResponse (input, offset) {
           isClosed: true
         }
       },
-      name: 'Office Space',
+      name: 'UK Office Space',
       cityCoordinate: {
         latitude: 51.50642013549805,
         longitude: -0.12721000611782074

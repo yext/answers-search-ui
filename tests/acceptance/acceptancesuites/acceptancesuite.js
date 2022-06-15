@@ -66,7 +66,7 @@ fixture`Vertical search page works as expected`
 
 test('pagination flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
-  await searchComponent.enterQuery('Virginia');
+  await searchComponent.enterQuery('virginia');
   await searchComponent.submitQuery();
   await SearchRequestLogger.waitOnSearchComplete(t);
 
@@ -78,7 +78,7 @@ test('pagination flow', async t => {
 });
 
 test('navigating and refreshing mantains that page number', async t => {
-  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  await t.navigateTo(`${VERTICAL_PAGE}?query=virginia`);
   await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
@@ -109,7 +109,7 @@ test('spell check flow', async t => {
   const spellCheckLogger = RequestLogger({
     url: VERTICAL_SEARCH_URL_REGEX
   });
-  await t.addRequestHooks([spellCheckLogger, MockedVerticalSearchRequest]);
+  await t.addRequestHooks(spellCheckLogger);
   await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('varginia');
@@ -129,7 +129,7 @@ test('spell check flow', async t => {
 });
 
 test('navigating pages and hitting the browser back button lands you on the right page', async t => {
-  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  await t.navigateTo(`${VERTICAL_PAGE}?query=virginia`);
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   await paginationComponent.clickNextButton();
