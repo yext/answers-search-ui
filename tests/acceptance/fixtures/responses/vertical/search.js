@@ -2,7 +2,6 @@ import { RequestMock } from 'testcafe';
 import { CORSHeaders } from '../cors';
 
 function generateVerticalSearchResponse (input, offset) {
-  console.log('input: "', input, '", offset: "', offset, '"');
   const meta = {
     uuid: '018163fe-e697-6ffc-6346-d01618241911',
     errors: []
@@ -422,9 +421,7 @@ function generateVerticalSearchResponse (input, offset) {
   };
 
   if (input === 'varginia') {
-    console.log('reached 1');
     if (offset === '1') {
-      console.log('reached 2');
       spellCheckResponse.response.allResultsForVertical.results = [
         vaData
       ];
@@ -445,15 +442,12 @@ function generateVerticalSearchResponse (input, offset) {
   };
 
   if (input === '') {
-    console.log('reached 3');
     if (offset === '1') {
-      console.log('reached 4');
       verticalSearchResponse.response.results = [
         vaData
       ];
     }
   } else if (input === 'virginia') {
-    console.log('reached 5');
     verticalSearchResponse.response.appliedQueryFilters = appliedQueryFilters;
     verticalSearchResponse.response.results = [
       {
@@ -462,7 +456,6 @@ function generateVerticalSearchResponse (input, offset) {
       }
     ];
     if (offset === '1') {
-      console.log('reached 6');
       verticalSearchResponse.response.results = [
         {
           ...nyData,
@@ -470,7 +463,6 @@ function generateVerticalSearchResponse (input, offset) {
         }
       ];
     } else if (offset === '2') {
-      console.log('reached 7');
       verticalSearchResponse.response.results = [
         {
           ...ukData,
@@ -485,12 +477,10 @@ function generateVerticalSearchResponse (input, offset) {
 
 export const MockedVerticalSearchRequest = RequestMock()
   .onRequestTo(async request => {
-    console.log('request: ', request.url);
-    const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/vertical\/query\?/;
+    const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/vertical\/query/;
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {
-    console.log('responding');
     const parsedUrl = new URL(req.url);
     res.body = JSON.stringify(generateVerticalSearchResponse(
       parsedUrl.searchParams.get('input'),

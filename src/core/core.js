@@ -273,10 +273,6 @@ export default class Core {
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
         additionalHttpHeaders: this._additionalHttpHeaders
       })
-      .then(response => {
-        console.log(response);
-        return response;
-      })
       .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
       .then(data => {
         this._persistFacets();
@@ -398,10 +394,6 @@ export default class Core {
         referrerPageUrl: referrerPageUrl,
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
         additionalHttpHeaders: this._additionalHttpHeaders
-      })
-      .then(response => {
-        console.log(response);
-        return response;
       })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {

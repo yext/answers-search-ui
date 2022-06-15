@@ -85,7 +85,7 @@ test('navigating and refreshing mantains that page number', async t => {
   await paginationComponent.clickNextButton();
   await SearchRequestLogger.waitOnSearchComplete(t);
 
-  // await browserRefreshPage();
+  await browserRefreshPage();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
@@ -100,7 +100,7 @@ test('navigating and refreshing mantains that page number with blank query', asy
   let pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 
-  // await browserRefreshPage();
+  await browserRefreshPage();
   pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
 });
