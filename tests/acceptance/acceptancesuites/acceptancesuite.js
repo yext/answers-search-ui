@@ -10,6 +10,7 @@ import {
 import FacetsPage from '../pageobjects/facetspage';
 import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
 import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
+import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import { Selector, RequestLogger } from 'testcafe';
 import {
   browserBackButton,
@@ -57,7 +58,7 @@ test('Basic universal flow', async t => {
 });
 
 fixture`Vertical search page works as expected`
-  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+  .requestHooks([SearchRequestLogger.createVerticalSearchLogger(), MockedVerticalSearchRequest])
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
@@ -65,7 +66,7 @@ fixture`Vertical search page works as expected`
 
 test('pagination flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
-  await searchComponent.enterQuery('Virginia');
+  await searchComponent.enterQuery('virginia');
   await searchComponent.submitQuery();
   await SearchRequestLogger.waitOnSearchComplete(t);
 
@@ -77,7 +78,7 @@ test('pagination flow', async t => {
 });
 
 test('navigating and refreshing mantains that page number', async t => {
-  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  await t.navigateTo(`${VERTICAL_PAGE}?query=virginia`);
   await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
@@ -128,7 +129,7 @@ test('spell check flow', async t => {
 });
 
 test('navigating pages and hitting the browser back button lands you on the right page', async t => {
-  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+  await t.navigateTo(`${VERTICAL_PAGE}?query=virginia`);
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
   await paginationComponent.clickNextButton();
