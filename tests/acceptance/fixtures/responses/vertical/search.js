@@ -237,12 +237,133 @@ function generateVerticalSearchResponse (input, offset) {
     distance: 13128
   };
 
+  const ukData = {
+    data: {
+      id: '7941089580646240971',
+      type: 'location',
+      website: 'https://locations.yext.com/gb/gt-lon/london/48-warwick-st-.html',
+      address: {
+        line1: '48 Warwick St.',
+        line2: 'Office 410',
+        city: 'London',
+        region: 'Gt Lon',
+        postalCode: 'W1B 5AW',
+        countryCode: 'GB'
+      },
+      addressHidden: false,
+      description: 'Yext is the global digital knowledge management leader, and our Knowledge Engine puts businesses in control of their digital knowledge.',
+      hours: {
+        monday: {
+          isClosed: true
+        },
+        tuesday: {
+          openIntervals: [
+            {
+              start: '15:00',
+              end: '16:00'
+            }
+          ]
+        },
+        wednesday: {
+          isClosed: true
+        },
+        thursday: {
+          isClosed: true
+        },
+        friday: {
+          isClosed: true
+        },
+        saturday: {
+          isClosed: true
+        },
+        sunday: {
+          isClosed: true
+        }
+      },
+      name: 'Office Space',
+      cityCoordinate: {
+        latitude: 51.50642013549805,
+        longitude: -0.12721000611782074
+      },
+      c_features: [
+        'Open Now'
+      ],
+      displayCoordinate: {
+        latitude: 51.5107139,
+        longitude: -0.1377914
+      },
+      geocodedCoordinate: {
+        latitude: 51.5106898,
+        longitude: -0.1378107
+      },
+      isoRegionCode: 'LND',
+      mainPhone: '+442037052290',
+      priceRange: '$$$$',
+      routableCoordinate: {
+        latitude: 51.51076,
+        longitude: -0.13767
+      },
+      services: [
+        'Dogs',
+        'Cats',
+        'Sleep'
+      ],
+      timezone: 'Europe/London',
+      websiteUrl: {
+        url: 'https://locations.yext.com/gb/gt-lon/london/48-warwick-st-.html',
+        preferDisplayUrl: false
+      },
+      yextDisplayCoordinate: {
+        latitude: 51.5107139,
+        longitude: -0.1377914
+      },
+      yextRoutableCoordinate: {
+        latitude: 51.51076,
+        longitude: -0.13767
+      },
+      categoryIds: [
+        '668'
+      ],
+      timeZoneUtcOffset: '+01:00',
+      uid: '18714999'
+    },
+    highlightedFields: {},
+    distance: 5900224
+  };
+
   const locationBias = {
     latitude: 38.890396,
     longitude: -77.084159,
     locationDisplayName: 'Arlington, Virginia, United States',
     accuracy: 'DEVICE'
   };
+
+  const appliedQueryFilters = [
+    {
+      displayKey: 'Location',
+      displayValue: 'Virginia',
+      filter: {
+        'builtin.location': {
+          $eq: 'P-region.7919684583758790'
+        }
+      },
+      type: 'PLACE',
+      details: {
+        latitude: 37.677592044,
+        longitude: -78.6190526172645,
+        placeName: 'Virginia, United States',
+        featureTypes: [
+          'region'
+        ],
+        boundingBox: {
+          minLatitude: 36.540855,
+          minLongitude: -83.6753959969438,
+          maxLatitude: 39.4660129984577,
+          maxLongitude: -75.165704098375
+        }
+      }
+    }
+  ];
 
   const basicResponseData = {
     businessId: 3350634,
@@ -299,47 +420,6 @@ function generateVerticalSearchResponse (input, offset) {
     }
   };
 
-  const verticalSearchResponse = {
-    meta,
-    response: {
-      ...basicResponseData,
-      resultsCount: 3,
-      results: [
-        {
-          ...vaData,
-          distanceFromFilter: 184935
-        }
-      ],
-      appliedQueryFilters: [
-        {
-          displayKey: 'Location',
-          displayValue: 'Virginia',
-          filter: {
-            'builtin.location': {
-              $eq: 'P-region.7919684583758790'
-            }
-          },
-          type: 'PLACE',
-          details: {
-            latitude: 37.677592044,
-            longitude: -78.6190526172645,
-            placeName: 'Virginia, United States',
-            featureTypes: [
-              'region'
-            ],
-            boundingBox: {
-              minLatitude: 36.540855,
-              minLongitude: -83.6753959969438,
-              maxLatitude: 39.4660129984577,
-              maxLongitude: -75.165704098375
-            }
-          }
-        }
-      ],
-      locationBias
-    }
-  };
-
   if (input === 'varginia') {
     if (offset > 0) {
       spellCheckResponse.response.allResultsForVertical.results = [
@@ -347,12 +427,47 @@ function generateVerticalSearchResponse (input, offset) {
       ];
     }
     return spellCheckResponse;
-  } else if (input === 'virginia') {
+  }
+
+  const verticalSearchResponse = {
+    meta,
+    response: {
+      ...basicResponseData,
+      resultsCount: 3,
+      results: [
+        nyData
+      ],
+      locationBias
+    }
+  };
+
+  if (input === '') {
     if (offset === 1) {
       verticalSearchResponse.results = [
+        vaData
+      ];
+    }
+  } else if (input === 'virginia') {
+    verticalSearchResponse.response.appliedQueryFilters = appliedQueryFilters;
+    if (offset === 0) {
+      verticalSearchResponse.response.results = [
+        {
+          ...vaData,
+          distanceFromFilter: 184935
+        }
+      ];
+    } else if (offset === 1) {
+      verticalSearchResponse.response.results = [
         {
           ...nyData,
           distanceFromFilter: 486363
+        }
+      ];
+    } else if (offset > 1) {
+      verticalSearchResponse.response.results = [
+        {
+          ...ukData,
+          distanceFromFilter: 9863632
         }
       ];
     }
@@ -364,9 +479,8 @@ function generateVerticalSearchResponse (input, offset) {
 export const MockedVerticalSearchRequest = RequestMock()
   .onRequestTo(async request => {
     console.log('request: ', request.url);
-    const urlRegexVarginia = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/vertical\/query\?/;
-    const urlRegexVirginia = /input=v/;
-    return (urlRegexVarginia.test(request.url) && urlRegexVirginia.test(request.url)) && request.method === 'get';
+    const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/vertical\/query\?/;
+    return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {
     console.log('responding');
