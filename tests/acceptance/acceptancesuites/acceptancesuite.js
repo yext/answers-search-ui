@@ -77,33 +77,33 @@ test('pagination flow', async t => {
   await t.expect(pageNum).eql('Page 2');
 });
 
-test('navigating and refreshing mantains that page number', async t => {
-  await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
-  await SearchRequestLogger.waitOnSearchComplete(t);
+// test('navigating and refreshing mantains that page number', async t => {
+//   await t.navigateTo(`${VERTICAL_PAGE}?query=Virginia`);
+//   await SearchRequestLogger.waitOnSearchComplete(t);
 
-  const paginationComponent = VerticalPage.getPaginationComponent();
-  await paginationComponent.clickNextButton();
-  await SearchRequestLogger.waitOnSearchComplete(t);
+//   const paginationComponent = VerticalPage.getPaginationComponent();
+//   await paginationComponent.clickNextButton();
+//   await SearchRequestLogger.waitOnSearchComplete(t);
 
-  await browserRefreshPage();
-  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
-});
+//   await browserRefreshPage();
+//   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
+//   await t.expect(pageNum).eql('Page 2');
+// });
 
-test('navigating and refreshing mantains that page number with blank query', async t => {
-  const searchComponent = VerticalPage.getSearchComponent();
-  await searchComponent.submitQuery();
-  await SearchRequestLogger.waitOnSearchComplete(t);
+// test('navigating and refreshing mantains that page number with blank query', async t => {
+//   const searchComponent = VerticalPage.getSearchComponent();
+//   await searchComponent.submitQuery();
+//   await SearchRequestLogger.waitOnSearchComplete(t);
 
-  const paginationComponent = VerticalPage.getPaginationComponent();
-  await paginationComponent.clickNextButton();
-  let pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+//   const paginationComponent = VerticalPage.getPaginationComponent();
+//   await paginationComponent.clickNextButton();
+//   let pageNum = await paginationComponent.getActivePageLabelAndNumber();
+//   await t.expect(pageNum).eql('Page 2');
 
-  await browserRefreshPage();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
-});
+//   await browserRefreshPage();
+//   pageNum = await paginationComponent.getActivePageLabelAndNumber();
+//   await t.expect(pageNum).eql('Page 2');
+// });
 
 test('spell check flow', async t => {
   const spellCheckLogger = RequestLogger({
