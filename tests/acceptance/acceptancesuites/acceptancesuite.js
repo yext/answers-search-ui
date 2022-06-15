@@ -109,7 +109,7 @@ test('spell check flow', async t => {
   const spellCheckLogger = RequestLogger({
     url: VERTICAL_SEARCH_URL_REGEX
   });
-  await t.addRequestHooks(spellCheckLogger);
+  await t.addRequestHooks([spellCheckLogger, MockedVerticalSearchRequest]);
   await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('varginia');

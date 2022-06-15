@@ -399,6 +399,10 @@ export default class Core {
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
         additionalHttpHeaders: this._additionalHttpHeaders
       })
+      .then(response => {
+        console.log(response);
+        return response;
+      })
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
         this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.UNIVERSAL);
