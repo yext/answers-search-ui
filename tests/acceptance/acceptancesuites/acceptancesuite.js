@@ -10,6 +10,7 @@ import {
 import FacetsPage from '../pageobjects/facetspage';
 import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
 import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
+import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import { Selector, RequestLogger } from 'testcafe';
 import {
   browserBackButton,
@@ -57,7 +58,7 @@ test('Basic universal flow', async t => {
 });
 
 fixture`Vertical search page works as expected`
-  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+  .requestHooks([SearchRequestLogger.createVerticalSearchLogger(), MockedVerticalSearchRequest])
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
