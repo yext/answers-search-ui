@@ -13,5 +13,6 @@ jobs:
     uses: yext/slapshot-reusable-workflows/.github/workflows/coverage.yml@v1
     with:
       test_script: npx gulp templates && npx jest --coverage
+      comparison_branch: master
     secrets:
       caller_github_token: ${{ secrets.GITHUB_TOKEN }}
