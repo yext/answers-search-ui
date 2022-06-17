@@ -1,0 +1,192 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+
+  <script src="answerstemplates.compiled.min.js"></script>
+  <script src="answers.js"></script>
+  <link rel="stylesheet" type="text/css" href="answers.css">
+  <style>
+    .bottom {
+      display: flex;
+    }
+
+    .left {
+      max-width: 300px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="answers-container">
+    <div class="search-bar-container"></div>
+    <div class="navigation-container"></div>
+    <div class="bottom">
+      <div class="left">
+        <div class="filter-search-container"></div>
+        <div class="sort-options-container"></div>
+        <div class="filterbox-container"></div>
+        <div class="facets-container"></div>
+      </div>
+      <div class="right">
+        <div class="pagination-container"></div>
+        <div class="results-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    ANSWERS.init({
+      apiKey: '2d8c550071a64ea23e263118a2b0680b',
+      experienceKey: 'slanswers',
+      businessId: '3350634',
+      experienceVersion: 'PRODUCTION',
+      templateBundle: TemplateBundle.default,
+      search: {
+        verticalKey: 'people',
+      },
+      onReady: function () {
+        this.addComponent('SearchBar', {
+          container: '.search-bar-container',
+          clearButton: true,
+          promptForLocation: true,
+          verticalKey: 'people',
+          allowEmptySearch: true
+        });
+
+        this.addComponent('Navigation', {
+          container: '.navigation-container',
+          verticalPages: [
+            {
+              label: 'Home',
+              url: './universal',
+              isFirst: true
+            },
+            {
+              label: 'Facets',
+              url: './facets',
+              isActive: true
+            },
+            {
+              label: 'Vertical',
+              url: './vertical',
+            }
+          ],
+        });
+
+        this.addComponent('SortOptions', {
+          container: '.sort-options-container',
+          options: [
+            {
+              type: 'FIELD',
+                field: 'c_popularity',
+                direction: 'DESC',
+                label: 'Popularity'
+            },
+            {
+              type: "ENTITY_DISTANCE",
+              label: 'Recently Released'
+            },
+            {
+              type: 'RELEVANCE',
+              label: 'Price - Low to High'
+            },
+            {
+              type: 'RELEVANCE',
+              label: 'Price - High to Low'
+            }  
+          ],
+          verticalKey: 'people'
+        });
+
+        ANSWERS.addComponent('FilterBox', {
+          container: '.filterbox-container',
+          filters: [
+            {
+              type: "FilterOptions",
+              label: "DISTANCE",
+              optionType: "RADIUS_FILTER",
+              control: "singleoption",
+              options: [
+                {
+                  "label": "5 miles",
+                  "value": 8046.72,
+                },
+                {
+                  "label": "10 miles",
+                  "value": 16093.4,
+                },
+                {
+                  "label": "25 miles",
+                  "value": 40233.6,
+                },
+                {
+                  "label": "1000 miles",
+                  "value": 1.609e+6,
+                },
+              ]
+            },
+            {
+              type: 'FilterOptions',
+              optionType: 'STATIC_FILTER',
+              label: 'STATIC FILTERS',
+              control: 'multioption',
+              options: [
+                {
+                  label: 'Bot2',
+                  field: 'c_awards',
+                  value: 'Bot2'
+                },
+                {
+                  label: 'Marty',
+                  field: 'c_puppyPreference',
+                  value: 'Marty',
+                },
+                {
+                  label: 'Frodo',
+                  field: 'c_puppyPreference',
+                  value: 'Frodo',
+                }
+              ]
+            }
+          ],
+          verticalKey: 'people',
+          searchOnChange: true,
+          expand: false
+        });
+
+        this.addComponent('VerticalResults', {
+          container: '.results-container',
+          appliedFilters: {
+            removable: true
+          }
+        });
+
+        this.addComponent('Facets', {
+          container: '.facets-container',
+          verticalKey: 'people',
+          expand: false
+        });
+
+        this.addComponent('FilterSearch', {
+          container: '.filter-search-container',
+          verticalKey: 'people',
+          title: 'filtersearch',
+          searchParameters: {
+            fields: [{
+              fieldId: 'builtin.location',
+              entityTypeId: 'ce_person',
+              sectioned: false,
+            }]
+          }
+        });
+
+        this.addComponent('Pagination', {
+          container:'.pagination-container',
+        });
+      }
+    })
+  </script>
+</body>
+
+</html>

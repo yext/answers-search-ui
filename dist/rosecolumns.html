@@ -1,0 +1,128 @@
+<head>
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline' 'unsafe-eval' *.sitescdn.net;">
+
+  <script src='answers.js'></script>
+  <script src='answerstemplates.compiled.min.js'></script>
+  <link rel='stylesheet' href='answers.css' />
+
+  <!-- <script src='https://assets.sitescdn.net/answers/v1.13/answers.js'></script>
+  <script src='https://assets.sitescdn.net/answers/v1.13/answerstemplates.compiled.min.js'></script>
+  <link rel='stylesheet' href='https://assets.sitescdn.net/answers/v1.13/answers.css' /> -->
+
+  <!-- <script src='https://assets.sitescdn.net/answers/dev/dev-lib-version-canary/answers.js'></script>
+  <script src='https://assets.sitescdn.net/answers/dev/dev-lib-version-canary/answerstemplates.compiled.min.js'></script>
+  <link rel='stylesheet' href='https://assets.sitescdn.net/answers/dev/dev-lib-version-canary/answers.css' /> -->
+
+
+  <!-- <script src='https://assets.sitescdn.net/answers/canary/latest/answers.js'></script>
+  <script src='https://assets.sitescdn.net/answers/canary/latest/answerstemplates.compiled.min.js'></script>
+  <link rel='stylesheet' href='https://assets.sitescdn.net/answers/canary/latest/answers.css' /> -->
+  <script>
+    const verticalKey = 'people'
+    // const verticalKey = undefined
+    const searchParameters = {
+      fields: [{
+        fieldId: 'builtin.location',
+        entityTypeId: 'ce_person',
+        sectioned: false,
+      }]
+    }
+    ANSWERS.init({
+      // apiKey: '2d8c550071a64ea23e263118a2b0680b',
+      // experienceKey: 'slanswers',
+      apiKey: 'df4b24f4075800e5e9705090c54c6c13',
+      experienceKey: 'rosetest',
+      templateBundle: TemplateBundle.default,
+      businessId: 2287528,
+      experienceVersion: 'PRODUCTION',
+      allowEmptySearch: true,
+      search: {
+        defaultInitialSearch: 'virginia',
+        verticalKey,
+      },
+      onReady: function () {
+        this.addComponent('SearchBar', {
+          verticalKey,
+          container: '#searchbar',
+          loadingIndicator: {
+            display: true
+          }
+        })
+        // this.addComponent('QASubmission', {
+        //   container: '#qa',
+        //   entityId: 'org-1'
+        // })
+        this.addComponent('FilterSearch', {
+          container: '#filtersearch',
+          title: 'filtersearch',
+          searchParameters: {
+            fields: [{
+              fieldId: 'builtin.location',
+              entityTypeId: 'ce_person',
+              sectioned: false,
+            }]
+          },
+          verticalKey
+        })
+        this.addComponent('DirectAnswer', {
+          container: '#da'
+        })
+        this.addComponent('LocationBias', {
+          container: '#bias'
+        })
+
+        this.addComponent('Facets', {
+          container: '#facets',
+          searchOnChange: true,
+          expand: false
+        })
+        this.addComponent('GeoLocationFilter', {
+          container: '#geofilter',
+          searchParameters,
+          verticalKey
+        })
+
+        if (verticalKey) {
+          this.addComponent('VerticalResults', {
+            container: '#results',
+            appliedFilters: {
+              show: true,
+              removable: true
+            }
+          })
+        } else {
+          this.addComponent('UniversalResults', {
+            container: '#results'
+          })
+        }
+      }
+    });
+  </script>
+  <style>
+    .flex {
+      display: flex
+    }
+
+    /* .left {
+
+    } */
+  </style>
+</head>
+
+<body>
+  <a href="./rosecolumns.html">RESET</a>
+  <div id="searchbar"></div>
+  <div class='flex'>
+    <div class="left">
+      <div id="geofilter"></div>
+      <div id="filtersearch"></div>
+      <div id="facets"></div>
+    </div>
+    <div class="right">
+      <div id="qa"></div>
+      <div id="da"></div>
+      <div id="results"></div>
+      <div id="bias"></div>
+    </div>
+  </div>
+</body>

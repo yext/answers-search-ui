@@ -1,0 +1,46 @@
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <script src='https://assets.sitescdn.net/answers/v1.12/answers.js'></script>
+  <script src='https://assets.sitescdn.net/answers/v1.12/answerstemplates.compiled.min.js'></script>
+  <link rel='stylesheet' href='https://assets.sitescdn.net/answers/v1.12/answers.css' />
+
+
+  <!-- <script src='answers.js'></script>
+  <script src='answerstemplates.compiled.min.js'></script>
+  <link rel='stylesheet' href='answers.css' /> -->
+
+</head>
+
+<body>
+  <div class="answers-container">
+    <div class="search-bar-container"></div>
+    <div class="navigation-container"></div>
+  </div>
+
+  <script>
+    ANSWERS.init({
+      apiKey: '2d8c550071a64ea23e263118a2b0680b',
+      experienceKey: 'slanswers',
+      businessId: '3350634',
+      experienceVersion: 'PRODUCTION',
+      templateBundle: TemplateBundle.default,
+      search: {
+        verticalKey: 'people',
+        defaultInitialSearch: 'virginia'
+      },
+      onReady: function () {
+        this.setGeolocation(38.8955, -77.0699);
+
+        this.addComponent('SearchBar', {
+          container: '.search-bar-container',
+          verticalKey: 'people',
+          redirectUrl: 'http://localhost:3000/?hi=123'
+        });
+      }
+    })
+  </script>
+</body>
+
+</html>

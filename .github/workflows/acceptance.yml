@@ -20,9 +20,4 @@ jobs:
           node-version: 16
           cache: 'npm'
       - run: npm ci
-      - name: Download build-output artifact
-        uses: actions/download-artifact@v2
-        with:
-          name: build-output
-          path: dist/
       - run: ./.github/run_headless_acceptance.sh
