@@ -1,9 +1,0 @@
-name: Check Third Party Notices File
-
-on: pull_request
-
-jobs:
-  call_notices_check:
-    uses: yext/slapshot-reusable-workflows/.github/workflows/third_party_notices_check.yml@v1
-    secrets:
-      REPO_SCOPED_TOKEN: ${{ secrets.BOT_REPO_SCOPED_TOKEN }}
