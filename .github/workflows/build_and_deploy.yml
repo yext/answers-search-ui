@@ -26,6 +26,10 @@ jobs:
     uses: ./.github/workflows/acceptance.yml
     with:
       concurrency: 10
+  call_acceptance-10:
+    uses: ./.github/workflows/acceptance.yml
+    with:
+      concurrency: 5
 
 concurrency:
   group: ci-build-and-deploy-${{ github.ref }}-1
