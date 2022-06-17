@@ -3,5 +3,5 @@
   "appCommand": "npx serve -l tcp://0.0.0.0:9999",
   "appInitDelay": 4000,
   "skipJsErrors": true,
-  "pageRequestTimeout": 2000
+  "pageRequestTimeout": 500
 }
