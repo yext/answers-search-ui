@@ -1,8 +1,6 @@
 {
   "src": ["tests/acceptance/acceptancesuites/*.js", "!tests/acceptance/acceptancesuites/searchbaronlysuite.js"],
   "appCommand": "npx serve -l tcp://0.0.0.0:9999",
-  "appInitDelay": 1000,
   "skipJsErrors": true,
-  "pageRequestTimeout": 500,
-  "browserInitTimeout": 15000
+  "pageRequestTimeout": 100
 }
