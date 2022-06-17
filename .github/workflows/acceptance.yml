@@ -2,12 +2,11 @@ name: Run acceptance tests
 
 on:
   workflow_call:
-    secrets:
-      BROWSERSTACK_USERNAME:
-        required: true
-      BROWSERSTACK_ACCESS_KEY:
-        required: true
-
+    inputs:
+      concurrency:
+        required: false
+        type: string
+        default: 3
 jobs:
   headless_acceptance:
     name: Headless Acceptance
@@ -20,4 +19,4 @@ jobs:
           node-version: 16
           cache: 'npm'
       - run: npm ci
-      - run: ./.github/run_headless_acceptance.sh
+      - run: npx testcafe -c ${{ inputs.concurrency }} "chrome:headless,firefox:headless" --config-file ./.github/testcafe.json -q
