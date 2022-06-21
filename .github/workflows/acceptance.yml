@@ -43,6 +43,7 @@ jobs:
         with:
           name: build-output
           path: dist/
+      - run: npm i -D testcafe-browser-provider-browserstack@1.13.2
       - run: ./.github/run_browserstack_acceptance.sh
         env:
           BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
