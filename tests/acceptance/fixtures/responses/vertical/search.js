@@ -1,12 +1,223 @@
 import { RequestMock } from 'testcafe';
 import { CORSHeaders } from '../cors';
 
-function generateVerticalSearchResponse (input, offset) {
-  const meta = {
-    uuid: '018163fe-e697-6ffc-6346-d01618241911',
-    errors: []
+const meta = {
+  uuid: '018163fe-e697-6ffc-6346-d01618241911',
+  errors: []
+};
+
+const locationBias = {
+  latitude: 38.890396,
+  longitude: -77.084159,
+  locationDisplayName: 'Arlington, Virginia, United States',
+  accuracy: 'DEVICE'
+};
+
+const basicResponseData = {
+  businessId: 3350634,
+  queryId: '018163fe-e6b4-af13-36e8-91d629a343d4',
+  results: [],
+  resultsCount: 0,
+  source: 'KNOWLEDGE_MANAGER',
+  searchIntents: []
+};
+
+function generateVerticalSearchResponse (verticalKey, input, offset) {
+  switch (verticalKey) {
+    case 'people':
+      return generatePeopleVerticalSearchResponse(input, offset);
+    case 'KM':
+      return generateKMVerticalSearchResponse(input, offset);
+    default:
+      return basicResponseData;
+  }
+}
+
+function generatePeopleVerticalSearchResponse (input, offset) {
+  const tomData = {
+    data: {
+      id: 'Employee-2143',
+      type: 'ce_person',
+      address: {
+        line1: '7900 Westpark Drive',
+        city: 'Mclean',
+        region: 'VA',
+        postalCode: '22102',
+        countryCode: 'US'
+      },
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+      name: 'Tom Meyer',
+      cityCoordinate: {
+        latitude: 38.936519622802734,
+        longitude: -77.18428039550781
+      },
+      c_allstateLadyCTA: {
+        label: 'Learn More',
+        linkType: 'URL',
+        link: 'http://yext.com'
+      },
+      c_employeeCity: 'Tysons Corner',
+      c_employeeCountry: 'United States',
+      c_employeeDepartment: 'Technology',
+      c_employeeRegion: 'Virginia',
+      c_employeeTitle: 'Software Engineer',
+      c_hierarchicalFacet: [
+        'Appliances',
+        'Appliances > Medium Appliances',
+        'Appliances > Medium Appliances > Cooking',
+        'Computer & Tablets',
+        'Computer & Tablets > Laptops'
+      ],
+      c_myRichTextField: '++Underlined stuff++  \n**Bold stuff**\n\n1. One\n2. Two\n3. *Three*',
+      c_popularity: '1.0',
+      c_startDate: '2017-09-05',
+      displayCoordinate: {
+        latitude: 38.924648,
+        longitude: -77.216859
+      },
+      emails: [
+        'tmeyer@yext.com'
+      ],
+      firstName: 'Tom',
+      geocodedCoordinate: {
+        latitude: 38.924654,
+        longitude: -77.216891
+      },
+      headshot: {
+        url: 'https://a.mktgcdn.com/p/cb9jR0A19ADuKc7ExlWmHaDchPW_61IR5TZ5G7NApjY/139x140.jpg',
+        width: 139,
+        height: 140,
+        sourceUrl: 'https://a.mktgcdn.com/p/cb9jR0A19ADuKc7ExlWmHaDchPW_61IR5TZ5G7NApjY/139x140.jpg'
+      },
+      lastName: 'Meyer',
+      routableCoordinate: {
+        latitude: 38.9242966,
+        longitude: -77.2177549
+      },
+      yextDisplayCoordinate: {
+        latitude: 38.924648,
+        longitude: -77.216859
+      },
+      yextRoutableCoordinate: {
+        latitude: 38.9242966,
+        longitude: -77.2177549
+      },
+      uid: '18716864'
+    },
+    highlightedFields: {},
+    distance: 13123
   };
 
+  const amaniData = {
+    data: {
+      id: 'Employee-2116',
+      type: 'ce_person',
+      website: 'http://www.test.com',
+      address: {
+        line1: '7900 Westpark Drive',
+        city: 'Mclean',
+        region: 'VA',
+        postalCode: '22102',
+        countryCode: 'US'
+      },
+      associations: [
+        'Runners Association'
+      ],
+      description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      name: 'Amani Farooque',
+      cityCoordinate: {
+        latitude: 38.936519622802734,
+        longitude: -77.18428039550781
+      },
+      c_allstateLadyCTA: {
+        label: 'Learn More',
+        linkType: 'URL',
+        link: 'http://yext.com'
+      },
+      c_employeeCity: 'Tysons Corner',
+      c_employeeCountry: 'United States',
+      c_employeeDepartment: 'Consulting',
+      c_employeeRegion: 'Virginia',
+      c_employeeTitle: 'Associate Technical Project Manager',
+      c_oliverCta: {
+        url: 'https://www.yext.com/s/2287528/entity/edit2?entityIds=13411251',
+        icon: 'yext',
+        label: 'test cta'
+      },
+      c_startDate: '2017-09-18',
+      displayCoordinate: {
+        latitude: 38.924648,
+        longitude: -77.216859
+      },
+      emails: [
+        'afarooque@yext.com',
+        'af@yext.com',
+        'aplomb@yext.com'
+      ],
+      firstName: 'Amani',
+      geocodedCoordinate: {
+        latitude: 38.924654,
+        longitude: -77.216891
+      },
+      headshot: {
+        url: 'https://a.mktgcdn.com/p/bmc3W88h2mMRXk-wHQ7dB0Em4rR_dfia6OVrAK3LjYU/192x191.png',
+        width: 192,
+        height: 191,
+        sourceUrl: 'http://a.mktgcdn.com/p/bmc3W88h2mMRXk-wHQ7dB0Em4rR_dfia6OVrAK3LjYU/192x191.png'
+      },
+      languages: [
+        'German'
+      ],
+      lastName: 'Farooque',
+      mainPhone: '+18003332222',
+      routableCoordinate: {
+        latitude: 38.9242966,
+        longitude: -77.2177549
+      },
+      specialities: [
+        'Documentation',
+        'Coding'
+      ],
+      websiteUrl: {
+        url: 'http://www.test.com',
+        displayUrl: 'http://www.testdisplay.com',
+        preferDisplayUrl: true
+      },
+      yextDisplayCoordinate: {
+        latitude: 38.924648,
+        longitude: -77.216859
+      },
+      yextRoutableCoordinate: {
+        latitude: 38.9242966,
+        longitude: -77.2177549
+      },
+      uid: '18716057'
+    },
+    highlightedFields: {},
+    distance: 13123
+  };
+
+  const verticalSearchResponse = {
+    meta,
+    response: {
+      ...basicResponseData,
+      resultsCount: 3,
+      results: [
+        amaniData
+      ],
+      locationBias
+    }
+  };
+
+  if (offset === '1') {
+    verticalSearchResponse.response.results = [
+      tomData
+    ];
+  }
+  return verticalSearchResponse;
+}
+
+function generateKMVerticalSearchResponse (input, offset) {
   const nyData = {
     data: {
       id: '637478382857487577',
@@ -331,13 +542,6 @@ function generateVerticalSearchResponse (input, offset) {
     distance: 5900224
   };
 
-  const locationBias = {
-    latitude: 38.890396,
-    longitude: -77.084159,
-    locationDisplayName: 'Arlington, Virginia, United States',
-    accuracy: 'DEVICE'
-  };
-
   const appliedQueryFilters = [
     {
       displayKey: 'Location',
@@ -364,14 +568,6 @@ function generateVerticalSearchResponse (input, offset) {
       }
     }
   ];
-
-  const basicResponseData = {
-    businessId: 3350634,
-    queryId: '018163fe-e6b4-af13-36e8-91d629a343d4',
-    facets: [],
-    source: 'KNOWLEDGE_MANAGER',
-    searchIntents: []
-  };
 
   const spellCheckResponse = {
     meta,
@@ -471,7 +667,6 @@ function generateVerticalSearchResponse (input, offset) {
       ];
     }
   }
-
   return verticalSearchResponse;
 }
 
@@ -483,6 +678,7 @@ export const MockedVerticalSearchRequest = RequestMock()
   .respond((req, res) => {
     const parsedUrl = new URL(req.url);
     res.body = JSON.stringify(generateVerticalSearchResponse(
+      parsedUrl.searchParams.get('verticalKey'),
       parsedUrl.searchParams.get('input'),
       parsedUrl.searchParams.get('offset')
     ));
