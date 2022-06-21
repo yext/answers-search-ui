@@ -1,4 +1,3 @@
-
 import { RequestMock } from 'testcafe';
 import { CORSHeaders } from '../cors';
 

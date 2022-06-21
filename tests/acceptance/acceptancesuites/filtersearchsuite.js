@@ -8,10 +8,15 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import { MockedFilterSearchRequest } from '../fixtures/responses/filtersearch/search';
+import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import SearchRequestLogger from '../searchrequestlogger';
 
 fixture`Facets page`
-  .requestHooks([SearchRequestLogger.createVerticalSearchLogger(), MockedFilterSearchRequest])
+  .requestHooks([
+    SearchRequestLogger.createVerticalSearchLogger(),
+    MockedFilterSearchRequest,
+    MockedVerticalSearchRequest
+  ])
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
