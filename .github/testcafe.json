@@ -1,6 +1,6 @@
 {
   "src": ["tests/acceptance/acceptancesuites/*.js", "!tests/acceptance/acceptancesuites/searchbaronlysuite.js"],
-  "appCommand": "npx http-server -p 9999",
+  "appCommand": "npx serve -p 9999",
   "appInitDelay": 4000,
   "skipJsErrors": true,
   "quarantineMode": false
