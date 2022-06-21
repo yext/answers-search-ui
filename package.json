@@ -23,6 +23,7 @@
     "dist"
   ],
   "devDependencies": {
+    "serve": "^13.0.2",
     "testcafe": "^1.19.0"
   },
   "scripts": {
