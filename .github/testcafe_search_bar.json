@@ -1,5 +1,5 @@
 {
   "src": ["tests/acceptance/acceptancesuites/searchbaronlysuite.js"],
   "appCommand": "npx serve -l tcp://0.0.0.0:9999",
-  "appInitDelay": 4000
+  "appInitDelay": 1
 }

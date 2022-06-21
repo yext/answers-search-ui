@@ -2,6 +2,7 @@
   "src": ["tests/acceptance/acceptancesuites/*.js", "!tests/acceptance/acceptancesuites/searchbaronlysuite.js"],
   "appCommand": "npx serve -l tcp://0.0.0.0:9999",
   "appInitDelay": 1,
+  "pageRequestTimeout": 1,
   "skipJsErrors": true,
   "quarantineMode": false
 }
