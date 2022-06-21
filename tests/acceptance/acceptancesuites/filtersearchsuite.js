@@ -7,10 +7,11 @@ import {
   browserForwardButton,
   registerIE11NoCacheHook
 } from '../utils';
+import { MockedFilterSearchRequest } from '../fixtures/responses/filtersearch/search';
 import SearchRequestLogger from '../searchrequestlogger';
 
 fixture`Facets page`
-  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+  .requestHooks([SearchRequestLogger.createVerticalSearchLogger(), MockedFilterSearchRequest])
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
