@@ -1,6 +1,6 @@
 {
   "src": ["tests/acceptance/acceptancesuites/*.js", "!tests/acceptance/acceptancesuites/searchbaronlysuite.js"],
-  "appCommand": "npx serve -p 9999",
+  "appCommand": "sleep 1 && npx serve -p 9999",
   "appInitDelay": 50,
   "skipJsErrors": true,
   "quarantineMode": false
