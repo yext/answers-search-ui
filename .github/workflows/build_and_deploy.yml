@@ -13,24 +13,24 @@ jobs:
   call_acceptance-1:
     uses: ./.github/workflows/acceptance.yml
     with:
-      concurrency: 3
+      concurrency: 1
   call_acceptance-2:
     uses: ./.github/workflows/acceptance.yml
     with:
-      concurrency: 3
+      concurrency: 1
   call_acceptance-3:
     uses: ./.github/workflows/acceptance.yml
     with:
-      concurrency: 3
+      concurrency: 1
   call_acceptance-4:
     uses: ./.github/workflows/acceptance.yml
     with:
-      concurrency: 3
+      concurrency: 2
   call_acceptance-5:
     uses: ./.github/workflows/acceptance.yml
     with:
-      concurrency: 3
+      concurrency: 2
   call_acceptance-6:
     uses: ./.github/workflows/acceptance.yml
     with:
-      concurrency: 3
+      concurrency: 2
