@@ -29,3 +29,17 @@ test('selecting a sort option and refreshing maintains that sort selection', asy
 
   await t.expect(thirdSortOption.checked).ok();
 });
+
+fixture`W3C Accessibility standards are met`
+  .requestHooks(MockedVerticalSearchRequest)
+  .page`${FACETS_PAGE}`;
+
+test('Sort options focus state works', async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
+
+  const firstOption = await Selector('.yxt-SortOptions-optionSelector').nth(0);
+
+  await t.click(firstOption);
+  await t.expect(firstOption.focused).ok();
+});

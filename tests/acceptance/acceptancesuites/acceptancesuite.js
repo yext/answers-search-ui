@@ -2,16 +2,14 @@ import UniversalPage from '../pageobjects/universalpage';
 import VerticalPage from '../pageobjects/verticalpage';
 import {
   UNIVERSAL_PAGE,
-  FACETS_PAGE,
   VERTICAL_PAGE,
   UNIVERSAL_SEARCH_URL_REGEX,
   VERTICAL_SEARCH_URL_REGEX
 } from '../constants';
-import FacetsPage from '../pageobjects/facetspage';
 import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
 import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
-import { Selector, RequestLogger } from 'testcafe';
+import { RequestLogger } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
@@ -135,18 +133,4 @@ test('navigating pages and hitting the browser back button lands you on the righ
   await browserBackButton();
   const pageNum = await paginationComponent.getActivePageLabelAndNumber();
   await t.expect(pageNum).eql('Page 2');
-});
-
-fixture`W3C Accessibility standards are met`
-  .requestHooks(MockedVerticalSearchRequest)
-  .page`${FACETS_PAGE}`;
-
-test('Sort options focus state works', async t => {
-  const searchComponent = FacetsPage.getSearchComponent();
-  await searchComponent.submitQuery();
-
-  const firstOption = await Selector('.yxt-SortOptions-optionSelector').nth(0);
-
-  await t.click(firstOption);
-  await t.expect(firstOption.focused).ok();
 });

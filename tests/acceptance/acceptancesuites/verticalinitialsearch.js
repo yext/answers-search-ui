@@ -2,8 +2,10 @@ import { FILTERBOX_PAGE } from '../constants';
 import { Selector } from 'testcafe';
 import { getCurrentUrlParams } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
+import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 
 fixture`Vertical page with default initial search`
+  .requestHooks(MockedVerticalSearchRequest)
   .page`${FILTERBOX_PAGE}`;
 
 test('referrerPageUrl is added to the URL on default initial searches', async t => {
