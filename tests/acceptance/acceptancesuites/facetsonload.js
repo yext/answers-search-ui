@@ -11,7 +11,7 @@ import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 
 fixture`Facets page`
-  .requestHooks([MockedVerticalSearchRequest])
+  .requestHooks(MockedVerticalSearchRequest)
   .page`${FACETS_ON_LOAD_PAGE}`;
 
 test('Facets work with back/forward navigation and page refresh', async t => {
