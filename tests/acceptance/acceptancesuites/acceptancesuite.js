@@ -139,7 +139,7 @@ test('navigating pages and hitting the browser back button lands you on the righ
 });
 
 fixture`Facets page`
-  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+  .requestHooks([SearchRequestLogger.createVerticalSearchLogger(), MockedVerticalSearchRequest])
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
