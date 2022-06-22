@@ -8,9 +8,10 @@ import { allResTwoFacets } from './allResTwoFacets';
 import { allResThreeFacets } from './allResThreeFacets';
 
 export function generatePeopleVerticalSearchResponse (input, offset, facetFilters) {
-  if (input === 'all') {
+  if (input === 'all' || input === '') {
     return getAllResponse(facetFilters);
   }
+
   const verticalSearchResponse = {
     meta,
     response: {
@@ -43,8 +44,9 @@ function getAllResponse (facetFilters) {
   function checkFacets (values, fieldId = 'c_employeeDepartment') {
     return facetsHasValues(cleanedFacets, fieldId, values);
   }
-
-  if (numAppliedFacets === 1 && checkFacets(['Client Delivery [SO]'])) {
+  if (numAppliedFacets === 0) {
+    return allResNoFacets;
+  } else if (numAppliedFacets === 1 && checkFacets(['Client Delivery [SO]'])) {
     return allResOneFacet;
   } else if (numAppliedFacets === 2 && checkFacets(['Client Delivery [SO]', 'Technology'])) {
     return allResTwoFacets;
