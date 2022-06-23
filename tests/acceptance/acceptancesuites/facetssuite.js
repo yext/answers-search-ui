@@ -16,7 +16,7 @@ fixture`Facets page`
   })
   .page`${FACETS_PAGE}`;
 
-test('Facets load on the page, and can affect the search', async t => {
+test('can select and reset a single facet', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
   await SearchRequestLogger.waitOnSearchComplete(t);
@@ -31,7 +31,7 @@ test('Facets load on the page, and can affect the search', async t => {
   // Select the first option in the first FilterOptions
   const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
   await employeeDepartment.toggleOption('Client Delivery');
-  let expectedResultsCount = await employeeDepartment.getOptionCount('Client Delivery');
+  const expectedResultsCount = await employeeDepartment.getOptionCount('Client Delivery');
 
   await filterBox.applyFilters();
 
@@ -45,15 +45,32 @@ test('Facets load on the page, and can affect the search', async t => {
   await filterBox.applyFilters();
   actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(initialResultsCount);
+});
+
+test('can select and reset multiple facets', async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.submitQuery();
+  await SearchRequestLogger.waitOnSearchComplete(t);
+
+  const facets = FacetsPage.getFacetsComponent();
+  const filterBox = facets.getFilterBox();
+
+  // Record the amount of results with no facets
+  const verticalResultsComponent = FacetsPage.getVerticalResultsComponent();
+  const initialResultsCount = await verticalResultsComponent.getResultsCountTotal();
+
+  // Select the first option in the first FilterOptions
+  const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
+  await employeeDepartment.toggleOption('Client Delivery');
 
   // Select the first option and second option in the first FilterOptions
   await employeeDepartment.toggleOption('Client Delivery');
   await employeeDepartment.toggleOption('Technology');
   const clientDeliveryCount = await employeeDepartment.getOptionCount('Client Delivery');
   const technologyCount = await employeeDepartment.getOptionCount('Technology');
-  expectedResultsCount = clientDeliveryCount + technologyCount;
+  let expectedResultsCount = clientDeliveryCount + technologyCount;
   await filterBox.applyFilters();
-  actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
+  let actualResultsCount = await verticalResultsComponent.getResultsCountTotal();
   await t.expect(actualResultsCount).eql(expectedResultsCount);
 
   // Check that selecting multiple FilterOptions works

@@ -8,22 +8,13 @@ fixture`Experience links work as expected`
   .requestHooks(MockedVerticalSearchRequest)
   .page`${FACETS_PAGE}`;
 
-test('experience links are clean', async t => {
-  const verifyCleanLink = async () => {
-    await t.expect(universalUrl).notContains(StorageKeys.PERSISTED_FACETS + '=');
-    await t.expect(universalUrl).notContains(StorageKeys.SEARCH_OFFSET + '=');
-    await t.expect(universalUrl).notContains(StorageKeys.PERSISTED_LOCATION_RADIUS + '=');
-    await t.expect(universalUrl).notContains(StorageKeys.PERSISTED_FILTER + '=');
-    await t.expect(universalUrl).notContains(StorageKeys.SORT_BYS + '=');
-  };
-
-  // When you land, nav links should be clean
-  let universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+test('When you land, nav links should be clean', async t => {
+  const universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
   await t.expect(universalUrl).contains('universal');
-  await t.expect(universalUrl).contains('referrerPageUrl');
-  await verifyCleanLink(universalUrl);
+  await verifyCleanLink(t, universalUrl);
+});
 
-  // When you search, nav links should be clean
+test('When you search, nav links should be clean', async t => {
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.submitQuery();
 
@@ -37,36 +28,38 @@ test('experience links are clean', async t => {
   await employeeDepartment.toggleOption('Client Delivery');
   await filterBox.applyFilters();
 
-  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
-  await t.expect(universalUrl).contains('referrerPageUrl');
-  await verifyCleanLink(universalUrl);
+  const universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await verifyCleanLink(t, universalUrl);
+});
 
-  // When you apply sort options, nav links should be clean
-  await t.click(await Selector('.yxt-SortOptions-optionSelector').nth(2)); // Click search option
-  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
-  await t.expect(universalUrl).contains('referrerPageUrl');
-  await verifyCleanLink(universalUrl);
+test('When you apply sort options, nav links should be clean', async t => {
+  await t.click(await Selector('.yxt-SortOptions-optionSelector').nth(2));
+  const universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await verifyCleanLink(t, universalUrl);
+});
 
-  // When you apply static filters, nav links should be clean
+test('When you apply static filters, nav links should be clean', async t => {
   await t.click(await Selector('.filterbox-container .js-yext-filter-option').nth(2)); // Click static filter
-  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
-  await t.expect(universalUrl).contains('referrerPageUrl');
-  await verifyCleanLink(universalUrl);
+  const universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
+  await verifyCleanLink(t, universalUrl);
+});
 
-  // When you navigate with pagination, nav links should not have the
-  // Facets/filter/pagination parameters
+test('When you navigate with pagination, nav links should be clean', async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.enterQuery(' ');
   await searchComponent.submitQuery();
 
   await t.click(await Selector('.js-yxt-navItem').nth(2)); // Go to vertical page
   await t.click(await Selector('.js-yxt-Pagination-next').nth(0)); // Page forward
-  universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
-  await t.expect(universalUrl).contains('referrerPageUrl');
+  const universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
   await verifyCleanLink(universalUrl);
+});
 
-  // View All links AND Change Filters links should not have
-  // Facets/filter/pagination parameters (though those components are not
-  // allowed on universal currently)
+test('View All links AND Change Filters links should be clean', async t => {
+  const searchComponent = FacetsPage.getSearchComponent();
+  await searchComponent.enterQuery(' ');
+  await searchComponent.submitQuery();
+
   await t.click(await Selector('.js-yxt-navItem').nth(0)); // Go to universal page
   await searchComponent.clearQuery();
   await searchComponent.enterQuery('virginia');
@@ -74,11 +67,18 @@ test('experience links are clean', async t => {
 
   const changeFiltersLink = await Selector('.yxt-ResultsHeader-changeFilters')
     .nth(0).getAttribute('href');
-  await t.expect(changeFiltersLink).contains('referrerPageUrl');
   await verifyCleanLink(changeFiltersLink);
 
   const viewAllLink = await Selector('.yxt-Results-viewAllLink')
     .nth(0).getAttribute('href');
-  await t.expect(viewAllLink).contains('referrerPageUrl');
   await verifyCleanLink(viewAllLink);
 });
+
+async function verifyCleanLink (t, url) {
+  await t.expect(url).contains('referrerPageUrl');
+  await t.expect(url).notContains(StorageKeys.PERSISTED_FACETS + '=');
+  await t.expect(url).notContains(StorageKeys.SEARCH_OFFSET + '=');
+  await t.expect(url).notContains(StorageKeys.PERSISTED_LOCATION_RADIUS + '=');
+  await t.expect(url).notContains(StorageKeys.PERSISTED_FILTER + '=');
+  await t.expect(url).notContains(StorageKeys.SORT_BYS + '=');
+}
