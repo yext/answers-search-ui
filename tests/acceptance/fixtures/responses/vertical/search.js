@@ -4,10 +4,10 @@ import { generateKMVerticalSearchResponse } from './KM/generateKMResponse';
 import { generatePeopleVerticalSearchResponse } from './people/generatePeopleResponse';
 import { basicResponseData } from './sharedData';
 
-function generateVerticalSearchResponse (verticalKey, input, offset) {
+function generateVerticalSearchResponse (verticalKey, input, offset, facetFilters) {
   switch (verticalKey) {
     case 'people':
-      return generatePeopleVerticalSearchResponse(input, offset);
+      return generatePeopleVerticalSearchResponse(input, offset, facetFilters);
     case 'KM':
       return generateKMVerticalSearchResponse(input, offset);
     default:
@@ -26,7 +26,7 @@ export const MockedVerticalSearchRequest = RequestMock()
       parsedUrl.searchParams.get('verticalKey'),
       parsedUrl.searchParams.get('input'),
       parsedUrl.searchParams.get('offset'),
-      parsedUrl.searchParams.get('facetFilters')
+      JSON.parse(parsedUrl.searchParams.get('facetFilters'))
     ));
     res.headers = CORSHeaders;
     res.statusCode = 200;
