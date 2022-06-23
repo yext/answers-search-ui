@@ -480,7 +480,7 @@ const UniversalSearchResponse = {
 
 export const MockedUniversalSearchRequest = RequestMock()
   .onRequestTo(async request => {
-    const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/query\?input=amani\+farooque\+phone\+number/;
+    const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/query/;
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond(UniversalSearchResponse, 200, CORSHeaders);
