@@ -33,7 +33,12 @@ function generateAutoCompleteResponse (prompt) {
     ];
   } else if (prompt.startsWith('a')) {
     mockedResponse.response.results = [
-      { value: 'amani farooque phone number', matchedSubstrings: [], queryIntents: [], verticalKeys: [] }
+      {
+        value: 'amani farooque phone number',
+        matchedSubstrings: [],
+        queryIntents: [],
+        verticalKeys: []
+      }
     ];
   }
 

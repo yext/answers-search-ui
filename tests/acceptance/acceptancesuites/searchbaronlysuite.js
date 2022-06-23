@@ -1,6 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { SEARCH_BAR_ONLY_PAGE } from '../constants';
 import SearchBarOnlyPage from '../pageobjects/searchbaronlypage';
+import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
 
 /**
  * This file contains acceptance tests for a SearchBar-only page.
@@ -9,6 +10,7 @@ import SearchBarOnlyPage from '../pageobjects/searchbaronlypage';
  * is closed once all tests have completed.
  */
 fixture`SearchBar-only page works as expected`
+  .requestHooks(MockedUniversalAutoCompleteRequest)
   .page`${SEARCH_BAR_ONLY_PAGE}`;
 
 test('Basic search and redirect flow', async t => {
