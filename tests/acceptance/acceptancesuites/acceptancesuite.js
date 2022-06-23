@@ -16,6 +16,7 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 /**
  * This file contains acceptance tests for a universal search page.
@@ -55,7 +56,13 @@ test('Basic universal flow', async t => {
 });
 
 fixture`Vertical search page works as expected`
-  .requestHooks([SearchRequestLogger.createVerticalSearchLogger(), MockedVerticalSearchRequest])
+  .requestHooks(
+    [
+      SearchRequestLogger.createVerticalSearchLogger(),
+      MockedVerticalSearchRequest,
+      MockedVerticalAutoCompleteRequest
+    ]
+  )
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
