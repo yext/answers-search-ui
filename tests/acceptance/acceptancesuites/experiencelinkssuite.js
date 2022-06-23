@@ -52,7 +52,7 @@ test('When you navigate with pagination, nav links should be clean', async t => 
   await t.click(await Selector('.js-yxt-navItem').nth(2)); // Go to vertical page
   await t.click(await Selector('.js-yxt-Pagination-next').nth(0)); // Page forward
   const universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
-  await verifyCleanLink(universalUrl);
+  await verifyCleanLink(t, universalUrl);
 });
 
 test('View All links AND Change Filters links should be clean', async t => {
@@ -67,11 +67,11 @@ test('View All links AND Change Filters links should be clean', async t => {
 
   const changeFiltersLink = await Selector('.yxt-ResultsHeader-changeFilters')
     .nth(0).getAttribute('href');
-  await verifyCleanLink(changeFiltersLink);
+  await verifyCleanLink(t, changeFiltersLink);
 
   const viewAllLink = await Selector('.yxt-Results-viewAllLink')
     .nth(0).getAttribute('href');
-  await verifyCleanLink(viewAllLink);
+  await verifyCleanLink(t, viewAllLink);
 });
 
 async function verifyCleanLink (t, url) {
