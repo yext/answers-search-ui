@@ -11,7 +11,7 @@ import { MockedFilterSearchRequest } from '../fixtures/responses/filtersearch/se
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import SearchRequestLogger from '../searchrequestlogger';
 
-fixture`Facets page`
+fixture`FilterSearch suite`
   .requestHooks([
     SearchRequestLogger.createVerticalSearchLogger(),
     MockedFilterSearchRequest,
