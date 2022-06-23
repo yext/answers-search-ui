@@ -3,10 +3,15 @@ import FacetsPage from '../pageobjects/facetspage';
 import { Selector } from 'testcafe';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import StorageKeys from '../../../src/core/storage/storagekeys';
-import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
+import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
+import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
 
 fixture`Experience links work as expected`
-  .requestHooks([MockedVerticalSearchRequest, MockedVerticalAutoCompleteRequest])
+  .requestHooks([
+    MockedVerticalSearchRequest,
+    MockedUniversalSearchRequest,
+    MockedUniversalAutoCompleteRequest
+  ])
   .page`${FACETS_PAGE}`;
 
 test('When you land, nav links should be clean', async t => {
@@ -40,7 +45,7 @@ test('When you apply sort options, nav links should be clean', async t => {
 });
 
 test('When you apply static filters, nav links should be clean', async t => {
-  await t.click(await Selector('.filterbox-container .js-yext-filter-option').nth(2)); // Click static filter
+  await t.click(await Selector('.filterbox-container .js-yext-filter-option').nth(2));
   const universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
   await verifyCleanLink(t, universalUrl);
 });

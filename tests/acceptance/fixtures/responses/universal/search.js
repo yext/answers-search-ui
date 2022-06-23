@@ -1,5 +1,6 @@
 import { RequestMock } from 'testcafe';
 import { CORSHeaders } from '../cors';
+import { virginiaRes } from './virginiaRes';
 
 const UniversalSearchResponse = {
   meta: {
@@ -478,9 +479,27 @@ const UniversalSearchResponse = {
   }
 };
 
+function generateUniversalSearchResponse (input) {
+  console.log('generating res for', input);
+  if (input === 'virginia') {
+    return virginiaRes;
+  } else {
+    return UniversalSearchResponse;
+  }
+}
+
 export const MockedUniversalSearchRequest = RequestMock()
   .onRequestTo(async request => {
     const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/query/;
+    urlRegex.test(request.url) && console.log('catching universal req for', urlRegex.test(request.url) && request.method === 'get', request.url, request.method);
     return urlRegex.test(request.url) && request.method === 'get';
   })
-  .respond(UniversalSearchResponse, 200, CORSHeaders);
+  .respond((req, res) => {
+    const parsedUrl = new URL(req.url);
+
+    res.body = JSON.stringify(generateUniversalSearchResponse(
+      parsedUrl.searchParams.get('input')
+    ));
+    res.headers = CORSHeaders;
+    res.statusCode = 200;
+  });
