@@ -1,13 +1,8 @@
-import UniversalPage from '../pageobjects/universalpage';
 import VerticalPage from '../pageobjects/verticalpage';
 import {
-  UNIVERSAL_PAGE,
   VERTICAL_PAGE,
-  UNIVERSAL_SEARCH_URL_REGEX,
   VERTICAL_SEARCH_URL_REGEX
 } from '../constants';
-import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
-import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import { RequestLogger } from 'testcafe';
 import {

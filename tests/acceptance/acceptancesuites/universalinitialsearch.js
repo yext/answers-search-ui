@@ -19,4 +19,3 @@ test('referrerPageUrl is added to the URL on default initial searches', async t 
   const referrerPageUrl = currentSearchParams.has(StorageKeys.REFERRER_PAGE_URL);
   await t.expect(referrerPageUrl).ok();
 });
-
