@@ -11,7 +11,7 @@ import {
 } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
 
-fixture`Facets page`
+fixture`SortOptions suite`
   .requestHooks([SearchRequestLogger.createVerticalSearchLogger(), MockedVerticalSearchRequest])
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);

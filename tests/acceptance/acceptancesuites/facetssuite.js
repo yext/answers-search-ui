@@ -62,9 +62,6 @@ test('can select and reset multiple facets', async t => {
   // Select the first option in the first FilterOptions
   const employeeDepartment = await filterBox.getFilterOptions('Employee Department');
   await employeeDepartment.toggleOption('Client Delivery');
-
-  // Select the first option and second option in the first FilterOptions
-  await employeeDepartment.toggleOption('Client Delivery');
   await employeeDepartment.toggleOption('Technology');
   const clientDeliveryCount = await employeeDepartment.getOptionCount('Client Delivery');
   const technologyCount = await employeeDepartment.getOptionCount('Technology');

@@ -10,7 +10,7 @@ import {
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 
-fixture`Facets page`
+fixture`Facets on page load`
   .requestHooks(MockedVerticalSearchRequest)
   .page`${FACETS_ON_LOAD_PAGE}`;
 
