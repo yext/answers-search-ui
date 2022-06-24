@@ -480,7 +480,6 @@ const UniversalSearchResponse = {
 };
 
 function generateUniversalSearchResponse (input) {
-  console.log('generating res for', input);
   if (input === 'virginia') {
     return virginiaRes;
   } else {
@@ -491,7 +490,6 @@ function generateUniversalSearchResponse (input) {
 export const MockedUniversalSearchRequest = RequestMock()
   .onRequestTo(async request => {
     const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/query/;
-    urlRegex.test(request.url) && console.log('catching universal req for', urlRegex.test(request.url) && request.method === 'get', request.url, request.method);
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {

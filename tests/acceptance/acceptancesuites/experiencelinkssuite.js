@@ -9,10 +9,11 @@ import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/univer
 fixture`Experience links work as expected`
   .requestHooks([
     MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest,
     MockedUniversalSearchRequest,
     MockedUniversalAutoCompleteRequest
   ])
-  .page`${FACETS_PAGE}`;
+  .page(`${FACETS_PAGE}`);
 
 test('When you land, nav links should be clean', async t => {
   const universalUrl = await Selector('.js-yxt-navItem').nth(0).getAttribute('href');
