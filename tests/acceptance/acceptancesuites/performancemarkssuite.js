@@ -1,10 +1,9 @@
 import { FACETS_PAGE } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
-import { waitForResults } from '../utils';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 fixture`Performance marks on search`
-  .requestHooks(MockedVerticalSearchRequest)
   .page`${FACETS_PAGE}`;
 
 test('window.performance calls are marked for a normal search', async t => {

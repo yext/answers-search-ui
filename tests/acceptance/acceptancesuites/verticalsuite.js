@@ -14,13 +14,11 @@ import SearchRequestLogger from '../searchrequestlogger';
 import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 fixture`Vertical search page works as expected`
-  .requestHooks(
-    [
-      SearchRequestLogger.createVerticalSearchLogger(),
-      MockedVerticalSearchRequest,
-      MockedVerticalAutoCompleteRequest
-    ]
-  )
+  .requestHooks([
+    SearchRequestLogger.createVerticalSearchLogger(),
+    MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest
+  ])
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })

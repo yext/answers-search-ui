@@ -3,9 +3,13 @@ import { Selector } from 'testcafe';
 import { getCurrentUrlParams, waitForResults } from '../utils';
 import StorageKeys from '../../../src/core/storage/storagekeys';
 import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
+import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
 
 fixture`Universal page with default initial search`
-  .requestHooks(MockedUniversalSearchRequest)
+  .requestHooks([
+    MockedUniversalSearchRequest,
+    MockedUniversalAutoCompleteRequest
+  ])
   .page`${UNIVERSAL_INITIAL_SEARCH_PAGE}`;
 
 test('blank defaultInitialSearch will fire on universal if allowEmptySearch is true', async t => {
