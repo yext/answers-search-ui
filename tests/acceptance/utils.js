@@ -1,21 +1,18 @@
-import { ClientFunction, t } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import IE11NoCacheHook from './ie11nocachehook';
 
 /* global location */
 
 export async function browserRefreshPage () {
   await ClientFunction(() => location.reload())();
-  return t.wait(2500);
 }
 
 export async function browserBackButton () {
   await ClientFunction(() => window.history.back())();
-  return t.wait(2500);
 }
 
 export async function browserForwardButton () {
   await ClientFunction(() => window.history.forward())();
-  return t.wait(2500);
 }
 
 export async function getCurrentUrlParams () {

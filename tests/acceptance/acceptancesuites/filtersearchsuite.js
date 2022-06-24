@@ -82,22 +82,22 @@ test('pagination works with page navigation after selecting a filtersearch filte
 
   await filterSearch.selectFilter('New York City, New York, United States');
   await paginationComponent.clickNextButton();
-  let pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  let pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
   await expectFilterTagIsNewYork();
 
   await browserBackButton();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 1');
+  pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 1');
   await expectFilterTagIsNewYork();
 
   await browserForwardButton();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
   await expectFilterTagIsNewYork();
 
   await browserRefreshPage();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
   await expectFilterTagIsNewYork();
 });

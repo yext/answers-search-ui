@@ -1,5 +1,5 @@
 {
-  "src": ["tests/acceptance/acceptancesuites/*.js", "!tests/acceptance/acceptancesuites/searchbaronlysuite.js"],
+  "src": ["tests/acceptance/acceptancesuites/filtersearch*.js", "!tests/acceptance/acceptancesuites/searchbaronlysuite.js"],
   "appCommand": "npx serve -l tcp://0.0.0.0:9999",
   "appInitDelay": 4000,
   "skipJsErrors": true
