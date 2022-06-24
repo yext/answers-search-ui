@@ -1,18 +1,21 @@
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import IE11NoCacheHook from './ie11nocachehook';
 
 /* global location */
 
 export async function browserRefreshPage () {
   await ClientFunction(() => location.reload())();
+  await waitForResults();
 }
 
 export async function browserBackButton () {
   await ClientFunction(() => window.history.back())();
+  await waitForResults();
 }
 
 export async function browserForwardButton () {
   await ClientFunction(() => window.history.forward())();
+  await waitForResults();
 }
 
 export async function getCurrentUrlParams () {
@@ -34,4 +37,9 @@ export async function registerIE11NoCacheHook (testInstance, url) {
     const ie11Hook = new IE11NoCacheHook(url);
     return testInstance.addRequestHooks(ie11Hook);
   }
+}
+
+export async function waitForResults () {
+  const resultsSelector = await Selector('.yxt-Results');
+  await resultsSelector.with({ visibilityCheck: true })();
 }
