@@ -11,11 +11,11 @@ import SearchRequestLogger from '../searchrequestlogger';
 import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 fixture`Facets page`
-  .requestHooks([
+  .requestHooks(
     SearchRequestLogger.createVerticalSearchLogger(),
     MockedVerticalSearchRequest,
     MockedVerticalAutoCompleteRequest
-  ])
+  )
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })

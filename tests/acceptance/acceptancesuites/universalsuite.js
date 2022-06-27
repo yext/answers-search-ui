@@ -18,11 +18,11 @@ import SearchRequestLogger from '../searchrequestlogger';
  */
 
 fixture`Universal search page works as expected`
-  .requestHooks([
+  .requestHooks(
     SearchRequestLogger.createUniversalSearchLogger(),
     MockedUniversalSearchRequest,
     MockedUniversalAutoCompleteRequest
-  ])
+  )
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, UNIVERSAL_SEARCH_URL_REGEX);
   })

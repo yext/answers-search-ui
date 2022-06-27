@@ -6,10 +6,10 @@ import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/se
 import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
 
 fixture`Universal page with default initial search`
-  .requestHooks([
+  .requestHooks(
     MockedUniversalSearchRequest,
     MockedUniversalAutoCompleteRequest
-  ])
+  )
   .page`${UNIVERSAL_INITIAL_SEARCH_PAGE}`;
 
 test('blank defaultInitialSearch will fire on universal if allowEmptySearch is true', async t => {

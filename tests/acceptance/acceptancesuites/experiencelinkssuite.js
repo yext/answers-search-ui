@@ -5,14 +5,15 @@ import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/sear
 import StorageKeys from '../../../src/core/storage/storagekeys';
 import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
 import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 fixture`Experience links work as expected`
-  .requestHooks([
+  .requestHooks(
     MockedVerticalSearchRequest,
     MockedVerticalAutoCompleteRequest,
     MockedUniversalSearchRequest,
     MockedUniversalAutoCompleteRequest
-  ])
+  )
   .page(`${FACETS_PAGE}`);
 
 test('When you land, nav links should be clean', async t => {
