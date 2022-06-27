@@ -7,7 +7,8 @@ import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/sear
 import { Selector } from 'testcafe';
 import {
   browserRefreshPage,
-  registerIE11NoCacheHook
+  registerIE11NoCacheHook,
+  waitForResults
 } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
 import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
@@ -30,9 +31,6 @@ test('selecting a sort option and refreshing maintains that sort selection', asy
   const thirdSortOption = await Selector('.yxt-SortOptions-optionSelector').nth(2);
   await t.click(thirdSortOption);
   await browserRefreshPage();
-
-  const resultsSelector = await Selector('.yxt-Results');
-  await resultsSelector.with({ visibilityCheck: true })();
 
   await t.expect(thirdSortOption.checked).ok();
 });
