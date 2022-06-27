@@ -77,8 +77,8 @@ test('pagination flow', async t => {
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
 
-  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  const pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
 });
 
 test('navigating and refreshing mantains that page number', async t => {
@@ -90,8 +90,8 @@ test('navigating and refreshing mantains that page number', async t => {
   await SearchRequestLogger.waitOnSearchComplete(t);
 
   await browserRefreshPage();
-  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  const pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
 });
 
 test('navigating and refreshing mantains that page number with blank query', async t => {
@@ -101,12 +101,12 @@ test('navigating and refreshing mantains that page number with blank query', asy
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
-  let pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  let pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
 
   await browserRefreshPage();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
 });
 
 test('spell check flow', async t => {
@@ -122,14 +122,14 @@ test('spell check flow', async t => {
 
   const paginationComponent = VerticalPage.getPaginationComponent();
   await paginationComponent.clickNextButton();
-  let pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  let pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
 
   // Check that clicking spell check resets pagination to page 1
   const spellCheckComponent = VerticalPage.getSpellCheckComponent();
   await spellCheckComponent.clickLink();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 1');
+  pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 1');
 });
 
 test('navigating pages and hitting the browser back button lands you on the right page', async t => {
@@ -138,6 +138,6 @@ test('navigating pages and hitting the browser back button lands you on the righ
   await paginationComponent.clickNextButton();
   await paginationComponent.clickNextButton();
   await browserBackButton();
-  const pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  const pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
 });
