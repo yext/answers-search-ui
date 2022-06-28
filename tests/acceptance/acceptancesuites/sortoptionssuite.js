@@ -7,8 +7,7 @@ import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/sear
 import { Selector } from 'testcafe';
 import {
   browserRefreshPage,
-  registerIE11NoCacheHook,
-  waitForResults
+  registerIE11NoCacheHook
 } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
 import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
