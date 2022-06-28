@@ -7,10 +7,18 @@ import {
   browserForwardButton,
   registerIE11NoCacheHook
 } from '../utils';
+import { MockedFilterSearchRequest } from '../fixtures/responses/filtersearch/search';
+import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import SearchRequestLogger from '../searchrequestlogger';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
-fixture`Facets page`
-  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+fixture`FilterSearch suite`
+  .requestHooks(
+    SearchRequestLogger.createVerticalSearchLogger(),
+    MockedFilterSearchRequest,
+    MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest
+  )
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })
@@ -76,22 +84,22 @@ test('pagination works with page navigation after selecting a filtersearch filte
 
   await filterSearch.selectFilter('New York City, New York, United States');
   await paginationComponent.clickNextButton();
-  let pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  let pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
   await expectFilterTagIsNewYork();
 
   await browserBackButton();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 1');
+  pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 1');
   await expectFilterTagIsNewYork();
 
   await browserForwardButton();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
   await expectFilterTagIsNewYork();
 
   await browserRefreshPage();
-  pageNum = await paginationComponent.getActivePageLabelAndNumber();
-  await t.expect(pageNum).eql('Page 2');
+  pageNumPromise = paginationComponent.getActivePageLabelAndNumberPromise();
+  await t.expect(pageNumPromise).eql('Page 2');
   await expectFilterTagIsNewYork();
 });
