@@ -10,13 +10,15 @@ import {
 import { MockedFilterSearchRequest } from '../fixtures/responses/filtersearch/search';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import SearchRequestLogger from '../searchrequestlogger';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 fixture`FilterSearch suite`
-  .requestHooks([
+  .requestHooks(
     SearchRequestLogger.createVerticalSearchLogger(),
     MockedFilterSearchRequest,
-    MockedVerticalSearchRequest
-  ])
+    MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest
+  )
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })

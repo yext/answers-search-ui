@@ -10,9 +10,13 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 fixture`SortOptions suite`
-  .requestHooks([SearchRequestLogger.createVerticalSearchLogger(), MockedVerticalSearchRequest])
+  .requestHooks(
+    MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest
+  )
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })

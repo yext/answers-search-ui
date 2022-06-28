@@ -12,7 +12,10 @@ import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/sear
 import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 fixture`Facets on page load`
-  .requestHooks([MockedVerticalSearchRequest, MockedVerticalAutoCompleteRequest])
+  .requestHooks(
+    MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest
+  )
   .page`${FACETS_ON_LOAD_PAGE}`;
 
 test('Facets work with back/forward navigation and page refresh', async t => {

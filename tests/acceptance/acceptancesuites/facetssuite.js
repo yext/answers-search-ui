@@ -12,11 +12,9 @@ import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertica
 
 fixture`Facets page`
   .requestHooks(
-    [
-      SearchRequestLogger.createVerticalSearchLogger(),
-      MockedVerticalSearchRequest,
-      MockedVerticalAutoCompleteRequest
-    ]
+    SearchRequestLogger.createVerticalSearchLogger(),
+    MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest
   )
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
