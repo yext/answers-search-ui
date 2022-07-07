@@ -1,7 +1,7 @@
 {
   "name": "@yext/answers-search-ui",
   "version": "1.14.1",
-  "description": "Javascript Search Programming Interface",
+  "description": "Javascript Answers Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
     "type": "git",
@@ -12,16 +12,12 @@
   },
   "homepage": "https://github.com/yext/answers-search-ui#readme",
   "keywords": [
+    "yext",
     "search",
     "search-engine",
     "autocomplete",
     "javascript",
-    "vanilla",
-    "ui",
-    "component",
-    "Answers",
-    "Yext",
-    "SDK"
+    "vanilla"
   ],
   "files": [
     "dist"
