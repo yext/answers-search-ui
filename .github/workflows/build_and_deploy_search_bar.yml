@@ -4,9 +4,8 @@ on:
   push:
     tags:
       - 'search-bar-v*'
-  branches:
+      branches:
       - dev/deploy-gcp #to test
-
 
 jobs:
   call_build:
