@@ -64,6 +64,6 @@ jobs:
         with:
           path: dist/
           destination: assets-eu.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }}
-          predefinedAcl: publicRead
+          # predefinedAcl: publicRead
           headers: |-
             cache-control: ${{ inputs.cache-control }}
