@@ -7,7 +7,6 @@ on:
       - hotfix/**
       - feature/**-i18n
       - release/**
-      - dev/deploy-gcp #to test
 
 jobs:
   call_build:
