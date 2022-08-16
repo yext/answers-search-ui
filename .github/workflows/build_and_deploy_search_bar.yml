@@ -2,9 +2,9 @@ name: Build and deploy search bar
 
 on:
   push:
-    tags:
-      - 'search-bar-v*'
-      branches:
+    # tags:
+    #   - 'search-bar-v*'
+    branches:
       - dev/deploy-gcp #to test
 
 jobs:
