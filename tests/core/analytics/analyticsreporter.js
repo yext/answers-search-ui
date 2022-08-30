@@ -22,9 +22,12 @@ describe('reporting events', () => {
   });
 
   it('throws an error if given a non-AnalyticsEvent', () => {
-    expect(() => {
-      analyticsReporter.report({ event_type: 'fake event' });
-    }).toThrow(AnswersAnalyticsError);
+    const consoleErrorSpy = jest.spyOn(global.console, 'error').mockImplementation();
+    expect(analyticsReporter.report({ event_type: 'fake event' })).toBeFalsy();
+    expect(consoleErrorSpy).toHaveBeenLastCalledWith(
+      'Tried to send invalid analytics event',
+      { event_type: 'fake event' }
+    );
   });
 
   it('sends the event via beacon in the "data" property', () => {
@@ -70,9 +73,9 @@ describe('reporting events', () => {
 
   it('throws error if opted in and ytag missing', () => {
     analyticsReporter.setConversionTrackingEnabled(true);
-    expect(() => {
-      analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
-    }).toThrow(AnswersAnalyticsError);
+    const consoleErrorSpy = jest.spyOn(global.console, 'error').mockImplementation();
+    expect(analyticsReporter.report(new AnalyticsEvent('thumbs_up'))).toBeFalsy();
+    expect(consoleErrorSpy).toHaveBeenLastCalledWith('Tried to enable conversion tracking without including ytag');
   });
 
   it('includes cookies if opted in and ytag present', () => {
