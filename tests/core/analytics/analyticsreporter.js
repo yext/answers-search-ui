@@ -1,6 +1,5 @@
 import AnalyticsReporter from '../../../src/core/analytics/analyticsreporter';
 import HttpRequester from '../../../src/core/http/httprequester';
-import { AnswersAnalyticsError } from '../../../src/core/errors/errors';
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
 import { getAnalyticsUrl } from '../../../src/core/utils/urlutils';
 import { PRODUCTION } from '../../../src/core/constants';
