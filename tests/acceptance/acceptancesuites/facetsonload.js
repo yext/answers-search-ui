@@ -39,9 +39,9 @@ test('Facets work with back/forward navigation and page refresh', async t => {
   await options.toggleOption('Client Delivery');
   currentFacets = await getFacetsFromRequest();
   const state1 = {
+    c_cellPhone: [],
     c_puppyPreference: [],
     c_employeeDepartment: [{ c_employeeDepartment: { $eq: 'Client Delivery [SO]' } }],
-    c_popularity: [],
     languages: [],
     specialities: []
   };
