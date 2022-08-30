@@ -21,7 +21,7 @@ describe('reporting events', () => {
   });
 
   it('throws an error if given a non-AnalyticsEvent', () => {
-    const consoleErrorSpy = jest.spyOn(global.console, 'error').mockImplementation();
+    const consoleErrorSpy = jest.spyOn(console, 'error');
     expect(analyticsReporter.report({ event_type: 'fake event' })).toBeFalsy();
     expect(consoleErrorSpy).toHaveBeenLastCalledWith(
       'Tried to send invalid analytics event',
@@ -72,7 +72,7 @@ describe('reporting events', () => {
 
   it('throws error if opted in and ytag missing', () => {
     analyticsReporter.setConversionTrackingEnabled(true);
-    const consoleErrorSpy = jest.spyOn(global.console, 'error').mockImplementation();
+    const consoleErrorSpy = jest.spyOn(console, 'error');
     expect(analyticsReporter.report(new AnalyticsEvent('thumbs_up'))).toBeFalsy();
     expect(consoleErrorSpy).toHaveBeenLastCalledWith('Tried to enable conversion tracking without including ytag');
   });
