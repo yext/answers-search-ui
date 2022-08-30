@@ -70,7 +70,7 @@ describe('reporting events', () => {
       expect.anything());
   });
 
-  it('provide a console error if opted in and ytag missing', () => {
+  it('provides a console error if opted in and ytag missing', () => {
     analyticsReporter.setConversionTrackingEnabled(true);
     const consoleErrorSpy = jest.spyOn(console, 'error');
     expect(analyticsReporter.report(new AnalyticsEvent('thumbs_up'))).toBeFalsy();
