@@ -109,11 +109,13 @@ export default class AnalyticsReporter {
       ytag('optin', true);
       cookieData = ytag('yfpc', null);
     } else if (this._conversionTrackingEnabled) {
-      throw new AnswersAnalyticsError('Tried to enable conversion tracking without including ytag');
+      console.error('Tried to enable conversion tracking without including ytag');
+      return false;
     }
 
     if (!(event instanceof AnalyticsEvent)) {
-      throw new AnswersAnalyticsError('Tried to send invalid analytics event', event);
+      console.error('Tried to send invalid analytics event', event);
+      return false;
     }
 
     if (includeQueryId) {
