@@ -1,7 +1,6 @@
 /** @module AnalyticsReporter */
 
 import AnalyticsEvent from './analyticsevent';
-import { AnswersAnalyticsError } from '../errors/errors';
 import { PRODUCTION } from '../constants';
 import HttpRequester from '../http/httprequester';
 import { getAnalyticsUrl } from '../utils/urlutils';
