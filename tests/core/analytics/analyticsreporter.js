@@ -20,7 +20,7 @@ describe('reporting events', () => {
     analyticsReporter = new AnalyticsReporter('abc123', null, '213412', true);
   });
 
-  it('provides a console error if given a non-AnalyticsEvent', () => {
+  it('logs a console error if given a non-AnalyticsEvent', () => {
     const consoleErrorSpy = jest.spyOn(console, 'error');
     expect(analyticsReporter.report({ event_type: 'fake event' })).toBeFalsy();
     expect(consoleErrorSpy).toHaveBeenLastCalledWith(
@@ -70,7 +70,7 @@ describe('reporting events', () => {
       expect.anything());
   });
 
-  it('provides a console error if opted in and ytag missing', () => {
+  it('logs a console error if opted in and ytag missing', () => {
     analyticsReporter.setConversionTrackingEnabled(true);
     const consoleErrorSpy = jest.spyOn(console, 'error');
     expect(analyticsReporter.report(new AnalyticsEvent('thumbs_up'))).toBeFalsy();
