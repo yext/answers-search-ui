@@ -19,7 +19,7 @@ export default class PaginationComponentBlock {
   /**
    * Find the current page label+number, if it exists
    */
-  async getActivePageLabelAndNumber () {
+  getActivePageLabelAndNumberPromise () {
     return this._currentPage.textContent;
   }
 }

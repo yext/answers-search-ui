@@ -1,4 +1,4 @@
-name: Deploy assets to AWS S3
+name: Deploy assets to AWS S3 and GCP Cloud Storage
 
 on:
   workflow_call:
@@ -19,11 +19,12 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
+      GCP_SA_KEY:
+        required: true
 
 jobs:
-  deploy:
+  deploy-aws:
     runs-on: ubuntu-latest
-
     steps:
       - uses: actions/checkout@v2
       - name: Download build-output artifact
@@ -43,3 +44,26 @@ jobs:
           --acl public-read \
           --recursive \
           --cache-control ${{ inputs.cache-control }}
+
+  deploy-gcp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download build-output artifact
+        uses: actions/download-artifact@v2
+        with:
+          name: build-output
+          path: dist/
+      - name: Authenticate to Google Cloud
+        id: auth
+        uses: google-github-actions/auth@v0
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+      - name: Deploy to GCP Bucket
+        uses: google-github-actions/upload-cloud-storage@v0
+        with:
+          path: dist/
+          parent: false
+          destination: assets-eu.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }}
+          headers: |-
+            cache-control: ${{ inputs.cache-control }}
