@@ -8,6 +8,7 @@ on:
       - hotfix/**
       - feature/**-i18n
       - release/**
+      - dev/investigate-browserstack-timeout
 
 jobs:
   call_build:
