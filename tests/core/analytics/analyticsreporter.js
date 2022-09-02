@@ -1,6 +1,5 @@
 import AnalyticsReporter from '../../../src/core/analytics/analyticsreporter';
 import HttpRequester from '../../../src/core/http/httprequester';
-import { AnswersAnalyticsError } from '../../../src/core/errors/errors';
 import AnalyticsEvent from '../../../src/core/analytics/analyticsevent';
 import { getAnalyticsUrl } from '../../../src/core/utils/urlutils';
 import { PRODUCTION } from '../../../src/core/constants';
@@ -21,10 +20,13 @@ describe('reporting events', () => {
     analyticsReporter = new AnalyticsReporter('abc123', null, '213412', true);
   });
 
-  it('throws an error if given a non-AnalyticsEvent', () => {
-    expect(() => {
-      analyticsReporter.report({ event_type: 'fake event' });
-    }).toThrow(AnswersAnalyticsError);
+  it('logs a console error if given a non-AnalyticsEvent', () => {
+    const consoleErrorSpy = jest.spyOn(console, 'error');
+    expect(analyticsReporter.report({ event_type: 'fake event' })).toBeFalsy();
+    expect(consoleErrorSpy).toHaveBeenLastCalledWith(
+      'Tried to send invalid analytics event',
+      { event_type: 'fake event' }
+    );
   });
 
   it('sends the event via beacon in the "data" property', () => {
@@ -68,11 +70,11 @@ describe('reporting events', () => {
       expect.anything());
   });
 
-  it('throws error if opted in and ytag missing', () => {
+  it('logs a console error if opted in and ytag missing', () => {
     analyticsReporter.setConversionTrackingEnabled(true);
-    expect(() => {
-      analyticsReporter.report(new AnalyticsEvent('thumbs_up'));
-    }).toThrow(AnswersAnalyticsError);
+    const consoleErrorSpy = jest.spyOn(console, 'error');
+    expect(analyticsReporter.report(new AnalyticsEvent('thumbs_up'))).toBeFalsy();
+    expect(consoleErrorSpy).toHaveBeenLastCalledWith('Tried to enable conversion tracking without including ytag');
   });
 
   it('includes cookies if opted in and ytag present', () => {
