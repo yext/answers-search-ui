@@ -1,75 +1,78 @@
 <html>
-    <head>
-        <meta charset="utf-8" />
-    
-        <script src="http://localhost:9999/dist/answerstemplates.compiled.min.js"></script>
-        <script src="http://localhost:9999/dist/answers.js"></script>
-        <link rel="stylesheet" type="text/css" href="http://localhost:9999/dist/answers.css">
-    </head>
-    <body>
-        <div class="answers-container">
-            <div class="search-bar-container"></div>
-            <div class="navigation-container"></div>
-            <div class="results-container"></div>
-        </div>
-    
-        <script>
-            ANSWERS.init({
-                apiKey: '2d8c550071a64ea23e263118a2b0680b',
-                experienceKey: 'slanswers',
-                businessId: '3350634',
-                experienceVersion: 'PRODUCTION',
-                templateBundle: TemplateBundle.default,
-                onReady: function() {
-                    this.setGeolocation(38.8955, -77.0699);
 
-                    this.addComponent('SearchBar', {
-                        container: '.search-bar-container',
-                        clearButton: true,
-                        promptForLocation: true
-                    });
+<head>
+  <meta charset="utf-8" />
 
-                    this.addComponent('Navigation', {
-                      container: '.navigation-container',
-                      verticalPages: [
-                        {
-                          label: 'Home',
-                          url: './universal',
-                          isFirst: true,
-                          isActive: true
-                        },
-                        {
-                          label: 'Facets',
-                          url: './facets',
-                        },
-                        {
-                          label: 'Vertical',
-                          url: './vertical',
-                        }
-                      ],
-                    });
+  <script src="http://localhost:9999/dist/answerstemplates.compiled.min.js"></script>
+  <script src="http://localhost:9999/dist/answers.js"></script>
+  <link rel="stylesheet" type="text/css" href="http://localhost:9999/dist/answers.css">
+</head>
 
-                    this.addComponent('UniversalResults', {
-                        container: '.results-container',
-                        appliedFilters: {
-                          showChangeFilters: true,
-                        },
-                        config: {
-                            "people": {
-                                includeMap: true,
-                                mapConfig: {
-                                    mapProvider: 'google',
-                                    apiKey: 'AIzaSyB5D45ghF1YMfqTLSzWubmlCN1euBVPhFw',
-                                }
-                            },
-                            "faq": {
-                                viewAllText: "View More faqs",
-                                sectionTitleIconName: 'briefcase',
-                            },
-                        }
-                    });
-                }
-            })
-        </script>
-    </body>
+<body>
+  <div class="answers-container">
+    <div class="search-bar-container"></div>
+    <div class="navigation-container"></div>
+    <div class="results-container"></div>
+  </div>
+
+  <script>
+    ANSWERS.init({
+      apiKey: '<apiKey>',
+      experienceKey: '<experienceKey>',
+      businessId: '<businessId>',
+      experienceVersion: 'PRODUCTION',
+      templateBundle: TemplateBundle.default,
+      onReady: function () {
+        this.setGeolocation(38.8955, -77.0699);
+
+        this.addComponent('SearchBar', {
+          container: '.search-bar-container',
+          clearButton: true,
+          promptForLocation: true
+        });
+
+        this.addComponent('Navigation', {
+          container: '.navigation-container',
+          verticalPages: [
+            {
+              label: 'Home',
+              url: './universal',
+              isFirst: true,
+              isActive: true
+            },
+            {
+              label: 'Facets',
+              url: './facets',
+            },
+            {
+              label: 'Vertical',
+              url: './vertical',
+            }
+          ],
+        });
+
+        this.addComponent('UniversalResults', {
+          container: '.results-container',
+          appliedFilters: {
+            showChangeFilters: true,
+          },
+          config: {
+            "people": {
+              includeMap: true,
+              mapConfig: {
+                mapProvider: 'google',
+                apiKey: 'AIzaSyB5D45ghF1YMfqTLSzWubmlCN1euBVPhFw',
+              }
+            },
+            "faq": {
+              viewAllText: "View More faqs",
+              sectionTitleIconName: 'briefcase',
+            },
+          }
+        });
+      }
+    })
+  </script>
+</body>
+
 </html>
