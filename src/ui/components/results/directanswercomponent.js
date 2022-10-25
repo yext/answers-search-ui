@@ -235,7 +235,7 @@ export default class DirectAnswerComponent extends Component {
     }
     return JSON.stringify({
       verticalConfigId: data.relatedItem?.verticalConfigId,
-      searcher: this.getState('searcher'),
+      searcher: data.searcher,
       entityId: data.relatedItem?.data.id,
       ctaLabel: this._viewDetailsText.toUpperCase().replace(' ', '_')
     });
