@@ -1,7 +1,7 @@
 {
   "name": "@yext/answers-search-ui",
-  "version": "1.14.3",
-  "description": "Javascript Answers Programming Interface",
+  "version": "1.15.0",
+  "description": "Javascript Search Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
     "type": "git",
@@ -12,12 +12,16 @@
   },
   "homepage": "https://github.com/yext/answers-search-ui#readme",
   "keywords": [
-    "yext",
     "search",
     "search-engine",
     "autocomplete",
     "javascript",
-    "vanilla"
+    "vanilla",
+    "ui",
+    "component",
+    "answers",
+    "yext",
+    "sdk"
   ],
   "files": [
     "dist"
@@ -53,7 +57,7 @@
     "@babel/plugin-transform-runtime": "^7.9.0",
     "@babel/preset-env": "^7.13.10",
     "@babel/runtime-corejs3": "^7.13.10",
-    "@percy/cli": "1.0.0-beta.76",
+    "@percy/cli": "^1.2.1",
     "@percy/puppeteer": "^2.0.0",
     "@rollup/plugin-json": "^4.1.0",
     "@size-limit/file": "^4.9.0",
@@ -103,19 +107,23 @@
     "rollup-plugin-node-resolve": "^4.0.1",
     "rollup-plugin-svg": "^2.0.0",
     "sass": "^1.34.0",
+    "serve": "^13.0.2",
+    "serve-handler": "^6.1.3",
     "size-limit": "^4.9.0",
     "stylelint": "^14.5.3",
     "stylelint-config-standard-scss": "^3.0.0",
-    "testcafe": "^1.18.4",
-    "testcafe-browser-provider-browserstack": "^1.13.1",
+    "testcafe": "^1.19.0",
     "vinyl-buffer": "^1.0.1",
     "vinyl-source-stream": "^2.0.0"
   },
   "scripts": {
     "build": "gulp && size-limit && npm run generate-entry-points",
     "build-languages": "gulp buildLanguages && size-limit",
-    "build-locales": "gulp buildLocales && size-limit",
-    "build-search-bar-only": "gulp buildSearchBarOnlyAssets && size-limit",
+    "build-locales-dev": "gulp buildLocales && size-limit",
+    "build-locales": "gulp buildLocales",
+    "build-search-bar-only-dev": "gulp buildSearchBarOnlyAssets && size-limit",
+    "build-search-bar-only": "gulp buildSearchBarOnlyAssets",
+    "build-unminified-legacy": "gulp unminifiedLegacy",
     "dev": "gulp dev",
     "lint": "eslint .",
     "test": "eslint . && stylelint src/**/*.scss && cross-env NODE_ICU_DATA=node_modules/full-icu jest",
@@ -173,7 +181,7 @@
   "author": "Yext",
   "license": "BSD-3-Clause",
   "engines": {
-    "node": ">=12"
+    "node": ">=14"
   },
   "exports": {
     "./css": "./dist/answers.css",

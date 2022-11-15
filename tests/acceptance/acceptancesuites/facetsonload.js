@@ -8,8 +8,14 @@ import {
   registerIE11NoCacheHook
 } from '../utils';
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
+import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
-fixture`Facets page`
+fixture`Facets on page load`
+  .requestHooks(
+    MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest
+  )
   .page`${FACETS_ON_LOAD_PAGE}`;
 
 test('Facets work with back/forward navigation and page refresh', async t => {

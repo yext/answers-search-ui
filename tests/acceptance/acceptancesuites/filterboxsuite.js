@@ -13,9 +13,15 @@ import {
   expectRequestDoesNotContainParam
 } from '../requestUtils';
 import SearchRequestLogger from '../searchrequestlogger';
+import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
 fixture`FilterBox page`
-  .requestHooks(SearchRequestLogger.createVerticalSearchLogger())
+  .requestHooks(
+    SearchRequestLogger.createVerticalSearchLogger(),
+    MockedVerticalSearchRequest,
+    MockedVerticalAutoCompleteRequest
+  )
   .beforeEach(async t => {
     await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   })

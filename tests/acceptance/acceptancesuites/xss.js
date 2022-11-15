@@ -5,8 +5,13 @@ import {
 import { ClientFunction } from 'testcafe';
 import UniversalPage from '../pageobjects/universalpage';
 import VerticalPage from '../pageobjects/verticalpage';
+import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
+import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
+import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
+import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 
 fixture`Universal page`
+  .requestHooks(MockedUniversalAutoCompleteRequest, MockedUniversalSearchRequest)
   .page`${UNIVERSAL_PAGE}`;
 
 test('a universal page\'s search bar is protected against xss', async t => {
@@ -20,6 +25,7 @@ test('a universal page\'s search bar is protected against xss', async t => {
 });
 
 fixture`Vertical page`
+  .requestHooks(MockedVerticalAutoCompleteRequest, MockedVerticalSearchRequest)
   .page`${VERTICAL_PAGE}`;
 
 test('a vertical page\'s search bar is protected against xss', async t => {
