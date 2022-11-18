@@ -17,7 +17,7 @@ jobs:
     outputs:
       should_deploy_major_version: ${{ steps.vars.outputs.should_deploy_major_version }}
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
       - name: allow for major version deployment if the next minor version from current tag does not exist
@@ -30,7 +30,7 @@ jobs:
           if [ -z "$TAGS_FOR_NEXT_MINOR" ]
           then
             echo 'Major version should be deployed.'
-            echo ::set-output name=should_deploy_major_version::true
+            echo should_deploy_major_version=true >> $GITHUB_OUTPUT
           else
             echo 'Major version should not be deployed.'
           fi
