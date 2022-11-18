@@ -13,5 +13,5 @@ if [[ $GITHUB_REF_NAME == release/*
 then
   npx testcafe "browserstack:ie@11.0,browserstack:safari" --config-file ./.github/testcafe.json -q
 else
-  npx testcafe -c 2 "browserstack:ie@11.0" --config-file ./.github/testcafe.json -q
+  npx testcafe -c 2 "browserstack:safari" --config-file ./.github/testcafe.json -q
 fi
