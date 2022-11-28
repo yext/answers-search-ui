@@ -14,16 +14,16 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - uses: actions/setup-node@v2
+    - uses: actions/setup-node@v3
       with:
         node-version: 16
         cache: 'npm'
     - id: set-matrix
       run: |
-        echo ::set-output name=matrix::$(node -e 'console.log(require("./conf/i18n/constants").ALL_LANGUAGES)')
+        echo matrix=$(node -e 'console.log(require("./conf/i18n/constants").ALL_LANGUAGES)') >> $GITHUB_OUTPUT
 
   build:
     needs: create_language_matrix
@@ -32,11 +32,11 @@ jobs:
       matrix:
         language: ${{ fromJson(needs.create_language_matrix.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Use Node.js 16
-      uses: actions/setup-node@v2
+      uses: actions/setup-node@v3
       with:
         node-version: 16
         cache: 'npm'
@@ -47,7 +47,7 @@ jobs:
           npm run size
         fi
     - name: Create build-output artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v3
       with:
         name: build-output
         path: dist/
