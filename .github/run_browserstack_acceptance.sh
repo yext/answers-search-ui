@@ -6,4 +6,4 @@ export BROWSERSTACK_BUILD_ID="${GITHUB_REF_NAME} - ${GITHUB_RUN_ID}"
 COMMIT_MSG_TITLE=$(git log -n 1 --pretty=format:%s)
 export BROWSERSTACK_TEST_RUN_NAME=$COMMIT_MSG_TITLE
 
-npx testcafe "browserstack:safari" --config-file ./.github/testcafe.json -q
+npx testcafe -c 3 "browserstack:safari" --config-file ./.github/testcafe.json -q
