@@ -1,14 +1,8 @@
-import {
-  FACETS_PAGE,
-  VERTICAL_SEARCH_URL_REGEX
-} from '../constants';
+import { FACETS_PAGE } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
 import { Selector } from 'testcafe';
-import {
-  browserRefreshPage,
-  registerIE11NoCacheHook
-} from '../utils';
+import { browserRefreshPage } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
 import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
@@ -17,9 +11,6 @@ fixture`SortOptions suite`
     MockedVerticalSearchRequest,
     MockedVerticalAutoCompleteRequest
   )
-  .beforeEach(async t => {
-    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
-  })
   .page`${FACETS_PAGE}`;
 
 test('selecting a sort option and refreshing maintains that sort selection', async t => {

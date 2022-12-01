@@ -1,11 +1,10 @@
-import { FACETS_PAGE, VERTICAL_SEARCH_URL_REGEX } from '../constants';
+import { FACETS_PAGE } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { Selector } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
-  browserForwardButton,
-  registerIE11NoCacheHook
+  browserForwardButton
 } from '../utils';
 import { MockedFilterSearchRequest } from '../fixtures/responses/filtersearch/search';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
@@ -19,9 +18,6 @@ fixture`FilterSearch suite`
     MockedVerticalSearchRequest,
     MockedVerticalAutoCompleteRequest
   )
-  .beforeEach(async t => {
-    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
-  })
   .page`${FACETS_PAGE}`;
 
 test('filtersearch works with back/forward navigation and page refresh', async t => {

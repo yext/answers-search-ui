@@ -1,13 +1,7 @@
 import UniversalPage from '../pageobjects/universalpage';
-import {
-  UNIVERSAL_PAGE,
-  UNIVERSAL_SEARCH_URL_REGEX
-} from '../constants';
+import { UNIVERSAL_PAGE } from '../constants';
 import { MockedUniversalAutoCompleteRequest } from '../fixtures/responses/universal/autocomplete';
 import { MockedUniversalSearchRequest } from '../fixtures/responses/universal/search';
-import {
-  registerIE11NoCacheHook
-} from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
 
 /**
@@ -23,9 +17,6 @@ fixture`Universal search page works as expected`
     MockedUniversalSearchRequest,
     MockedUniversalAutoCompleteRequest
   )
-  .beforeEach(async t => {
-    await registerIE11NoCacheHook(t, UNIVERSAL_SEARCH_URL_REGEX);
-  })
   .page`${UNIVERSAL_PAGE}`;
 
 test('Basic universal flow', async t => {
