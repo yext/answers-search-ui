@@ -4,8 +4,7 @@ import { RequestLogger } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
-  browserForwardButton,
-  registerIE11NoCacheHook
+  browserForwardButton
 } from '../utils';
 import { getMostRecentQueryParamsFromLogger } from '../requestUtils';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
@@ -23,7 +22,6 @@ test('Facets work with back/forward navigation and page refresh', async t => {
     url: VERTICAL_SEARCH_URL_REGEX
   });
   await t.addRequestHooks(logger);
-  await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
 
   async function getFacetsFromRequest () {
     const urlParams = await getMostRecentQueryParamsFromLogger(logger);

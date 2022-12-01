@@ -1,12 +1,6 @@
-import {
-  FACETS_PAGE,
-  VERTICAL_SEARCH_URL_REGEX
-} from '../constants';
+import { FACETS_PAGE } from '../constants';
 import FacetsPage from '../pageobjects/facetspage';
 import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/search';
-import {
-  registerIE11NoCacheHook
-} from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
 import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
 
@@ -16,9 +10,6 @@ fixture`Facets page`
     MockedVerticalSearchRequest,
     MockedVerticalAutoCompleteRequest
   )
-  .beforeEach(async t => {
-    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
-  })
   .page`${FACETS_PAGE}`;
 
 test('can select and reset a single facet', async t => {
