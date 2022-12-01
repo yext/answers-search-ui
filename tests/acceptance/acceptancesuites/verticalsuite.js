@@ -7,8 +7,7 @@ import { MockedVerticalSearchRequest } from '../fixtures/responses/vertical/sear
 import { RequestLogger } from 'testcafe';
 import {
   browserBackButton,
-  browserRefreshPage,
-  registerIE11NoCacheHook
+  browserRefreshPage
 } from '../utils';
 import SearchRequestLogger from '../searchrequestlogger';
 import { MockedVerticalAutoCompleteRequest } from '../fixtures/responses/vertical/autocomplete';
@@ -19,9 +18,6 @@ fixture`Vertical search page works as expected`
     MockedVerticalSearchRequest,
     MockedVerticalAutoCompleteRequest
   )
-  .beforeEach(async t => {
-    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
-  })
   .page`${VERTICAL_PAGE}`;
 
 test('pagination flow', async t => {
@@ -70,7 +66,6 @@ test('spell check flow', async t => {
     url: VERTICAL_SEARCH_URL_REGEX
   });
   await t.addRequestHooks(spellCheckLogger);
-  await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   const searchComponent = VerticalPage.getSearchComponent();
   await searchComponent.enterQuery('varginia');
   await searchComponent.submitQuery();

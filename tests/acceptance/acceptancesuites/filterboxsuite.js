@@ -4,8 +4,7 @@ import { Selector, RequestLogger } from 'testcafe';
 import {
   browserBackButton,
   browserRefreshPage,
-  browserForwardButton,
-  registerIE11NoCacheHook
+  browserForwardButton
 } from '../utils';
 import {
   getRequestFilters,
@@ -22,9 +21,6 @@ fixture`FilterBox page`
     MockedVerticalSearchRequest,
     MockedVerticalAutoCompleteRequest
   )
-  .beforeEach(async t => {
-    await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
-  })
   .page`${FILTERBOX_PAGE}`;
 
 test('single option filterbox works with back/forward navigation and page refresh', async t => {
@@ -32,7 +28,6 @@ test('single option filterbox works with back/forward navigation and page refres
     url: VERTICAL_SEARCH_URL_REGEX
   });
   await t.addRequestHooks(radiusFilterLogger);
-  await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   const searchComponent = FacetsPage.getSearchComponent();
   await searchComponent.enterQuery('all');
   await searchComponent.submitQuery();
@@ -75,7 +70,6 @@ test('multioption filterbox works with back/forward navigation and page refresh'
     url: VERTICAL_SEARCH_URL_REGEX
   });
   await t.addRequestHooks(filterBoxLogger);
-  await registerIE11NoCacheHook(t, VERTICAL_SEARCH_URL_REGEX);
   const martyFilter = {
     c_puppyPreference: {
       $eq: 'Marty'
