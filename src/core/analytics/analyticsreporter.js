@@ -108,8 +108,7 @@ export default class AnalyticsReporter {
       ytag('optin', true);
       cookieData = ytag('yfpc', null);
     } else if (this._conversionTrackingEnabled) {
-      console.error('Tried to enable conversion tracking without including ytag');
-      return false;
+      console.error('Conversion Tracking is enabled without supplying ytag. Analytics event sent without Conversion Tracking info.');
     }
 
     if (!(event instanceof AnalyticsEvent)) {
