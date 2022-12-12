@@ -73,8 +73,8 @@ describe('reporting events', () => {
   it('logs a console error if opted in and ytag missing', () => {
     analyticsReporter.setConversionTrackingEnabled(true);
     const consoleErrorSpy = jest.spyOn(console, 'error');
-    expect(analyticsReporter.report(new AnalyticsEvent('thumbs_up'))).toBeFalsy();
-    expect(consoleErrorSpy).toHaveBeenLastCalledWith('Tried to enable conversion tracking without including ytag');
+    expect(analyticsReporter.report(new AnalyticsEvent('thumbs_up'))).toBeTruthy();
+    expect(consoleErrorSpy).toHaveBeenLastCalledWith('Conversion Tracking is enabled without supplying ytag. Analytics event sent without Conversion Tracking info.');
   });
 
   it('includes cookies if opted in and ytag present', () => {
