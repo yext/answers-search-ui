@@ -290,7 +290,7 @@ msgctxt "Button label, view is a verb"
 msgid "View Details"
 msgstr ""
 
-#: src/ui/components/results/universalresultscomponent.js:126
+#: src/ui/components/results/universalresultscomponent.js:127
 #: src/ui/components/results/verticalresultscomponent.js:170
 msgctxt "Button label, view more [results]"
 msgid "View More"
