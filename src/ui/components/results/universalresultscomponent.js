@@ -79,6 +79,7 @@ export default class UniversalResultsComponent extends Component {
       return;
     }
     return super.setState(Object.assign(data, {
+      parentUrl: this._parentUrl,
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
