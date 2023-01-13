@@ -26,17 +26,17 @@ export default class UniversalResultsComponent extends Component {
       ...config.appliedFilters
     };
 
-    const reRender = () =>
+    this.reRender = () =>
       this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
     this.core.storage.registerListener({
       eventType: 'update',
       storageKey: StorageKeys.API_CONTEXT,
-      callback: reRender
+      callback: this.reRender
     });
     this.core.storage.registerListener({
       eventType: 'update',
       storageKey: StorageKeys.SESSIONS_OPT_IN,
-      callback: reRender
+      callback: this.reRender
     });
   }
 
@@ -50,6 +50,11 @@ export default class UniversalResultsComponent extends Component {
 
   static areDuplicateNamesAllowed () {
     return true;
+  }
+
+  setParentUrl (parentUrl) {
+    this._parentUrl = parentUrl;
+    this.reRender();
   }
 
   /**
@@ -111,7 +116,7 @@ export default class UniversalResultsComponent extends Component {
       // Icon in the titlebar
       icon: config.sectionTitleIconName || config.sectionTitleIconUrl,
       // Url that links to the vertical search for this vertical.
-      verticalURL: config.url,
+      verticalURL: config.url || this._parentUrl,
       // Show a view more link by default, which also links to verticalURL.
       viewMore: true,
       // By default, the view more link has a label of 'View More'.
