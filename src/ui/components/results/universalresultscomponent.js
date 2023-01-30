@@ -8,6 +8,7 @@ import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import TranslationFlagger from '../../i18n/translationflagger';
 import { getContainerClass } from '../../../core/utils/resultsutils';
+import { updateAnchorToTargetParent } from '../../../ui/tools/urlutils';
 
 export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -78,6 +79,12 @@ export default class UniversalResultsComponent extends Component {
     if (searchState === SearchStates.SEARCH_LOADING) {
       return;
     }
+
+    if (this._parentUrl) {
+      console.log({ data, val });
+      updateAnchorToTargetParent(this._parentUrl);
+    }
+
     return super.setState(Object.assign(data, {
       parentUrl: this._parentUrl,
       isPreSearch: searchState === SearchStates.PRE_SEARCH,

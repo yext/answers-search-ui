@@ -1,5 +1,5 @@
 import { SearchParams } from '../../../src/ui';
-import { constructRedirectUrl } from '../../../src/ui/tools/urlutils';
+import { constructRedirectUrl, updateAnchorToTargetParent } from '../../../src/ui/tools/urlutils';
 
 describe('constructRedirectUrl', () => {
   it('include answers params', () => {
@@ -35,5 +35,34 @@ describe('constructRedirectUrl', () => {
     const params = new SearchParams('?another=param');
     const newRedirectUrl = constructRedirectUrl(userRedirectUrl, params);
     expect(newRedirectUrl).toEqual('http://localhost/people.html/?query=test&another=param');
+  });
+});
+
+describe('anchorTargetParent', () => {
+  it('properly sets target to _parent', () => {
+    const anchor = document.createElement('a');
+    anchor.setAttribute('href', './locations.html?query=virginia');
+
+    updateAnchorToTargetParent('https://yext.com/search', anchor);
+
+    expect(anchor.getAttribute('target')).toEqual('_parent');
+  });
+
+  it('properly sets href to use parent domain with verticalUrl query param', () => {
+    const anchor = document.createElement('a');
+    anchor.setAttribute('href', './locations.html');
+
+    updateAnchorToTargetParent('https://yext.com/search', anchor);
+
+    expect(anchor.getAttribute('href')).toEqual('https://yext.com/search?verticalUrl=locations.html');
+  });
+
+  it('properly sets href to use parent domain with additional query params', () => {
+    const anchor = document.createElement('a');
+    anchor.setAttribute('href', './locations.html?query=virginia');
+
+    updateAnchorToTargetParent('https://yext.com/search', anchor);
+
+    expect(anchor.getAttribute('href')).toEqual('https://yext.com/search?query=virginia&verticalUrl=locations.html');
   });
 });
