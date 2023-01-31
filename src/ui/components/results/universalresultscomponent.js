@@ -27,8 +27,11 @@ export default class UniversalResultsComponent extends Component {
       ...config.appliedFilters
     };
 
-    this.reRender = () =>
-      this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
+    this.reRender = (ctx) => {
+      console.log({ ctx });
+      return this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
+    }
+
     this.core.storage.registerListener({
       eventType: 'update',
       storageKey: StorageKeys.API_CONTEXT,
