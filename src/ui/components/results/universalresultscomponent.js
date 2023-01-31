@@ -8,7 +8,7 @@ import AccordionResultsComponent from './accordionresultscomponent.js';
 import { defaultConfigOption } from '../../../core/utils/configutils';
 import TranslationFlagger from '../../i18n/translationflagger';
 import { getContainerClass } from '../../../core/utils/resultsutils';
-import { updateAnchorToTargetParent } from '../../../ui/tools/urlutils';
+import { createParentAnchor } from '../../../ui/tools/urlutils';
 
 export default class UniversalResultsComponent extends Component {
   constructor (config = {}, systemConfig = {}) {
@@ -81,9 +81,9 @@ export default class UniversalResultsComponent extends Component {
     }
 
     if (this._parentUrl) {
-      updateAnchorToTargetParent(this._parentUrl);
+      createParentAnchor(this._parentUrl, 'locations.html?verticalURL=test');
     }
-    const hello = updateAnchorToTargetParent("https://yext.com/searcher");
+    const hello = createParentAnchor('https://yext.com/searcher', 'locations.html?verticalURL=test');
     console.log({ hello });
 
     return super.setState(Object.assign(data, {

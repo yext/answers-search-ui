@@ -8,7 +8,7 @@ import StorageKeys from '../../../core/storage/storagekeys';
 import DOM from '../../dom/dom';
 import { mergeTabOrder, getDefaultTabOrder, getUrlParams } from '../../tools/taborder';
 import { filterParamsForExperienceLink, replaceUrlParams } from '../../../core/utils/urlutils.js';
-import { updateAnchorToTargetParent } from '../../../ui/tools/urlutils.js';
+import { createParentAnchor } from '../../../ui/tools/urlutils.js';
 import TranslationFlagger from '../../i18n/translationflagger';
 
 /**
@@ -386,12 +386,10 @@ export default class NavigationComponent extends Component {
     }
 
     if (this._parentUrl) {
-      const urlParser = document.createElement('a');
       tabs.forEach(tab => {
-        urlParser.href = tab.url;
-        updateAnchorToTargetParent(urlParser, this._parentUrl);
-        tab.url = urlParser.href;
-        tab.target = '_parent';
+        const virtualAnchor = createParentAnchor(this._parentUrl, tab.url);
+        tab.url = virtualAnchor.href;
+        tab.target = virtualAnchor.target;
       });
     }
 

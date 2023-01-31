@@ -24,19 +24,20 @@ export function constructRedirectUrl (redirectUrl, params) {
 /**
  * Modify an anchor tag to point to the _parent documents URL.
  *
- * @param {HTMLAnchorElement} anchorEl reference to anchor tag to be updated
  * @param {string} parentUrl URL of the _parent document sent from event
+ * @param {string} relativeUrl URL of the _parent document sent from event
  */
-export function updateAnchorToTargetParent (parentUrl, anchorEl = document.createElement('a')) {
+export function createParentAnchor (parentUrl, relativeUrl) {
   const parentUrlWithoutParams = parentUrl.split('?')[0];
 
+  const anchorEl = document.createElement('a');
+  anchorEl.href = relativeUrl;
   anchorEl.target = '_parent';
 
   const params = new SearchParams(anchorEl.search);
   const verticalUrl = anchorEl.pathname.replace(/^\//, '');
   params.set('verticalUrl', verticalUrl);
-  const url = parentUrlWithoutParams + '?' + params.toString();
-  anchorEl.href = url;
+  anchorEl.href = parentUrlWithoutParams + '?' + params.toString();
 
-  return url;
+  return anchorEl;
 }
