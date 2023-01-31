@@ -89,7 +89,7 @@ export default class UniversalResultsComponent extends Component {
     const verticals = this._config.verticals || this._config.config || {};
     const verticalKey = data.verticalConfigId;
     const hello = createParentAnchor('https://yext.com/search', verticals[verticalKey]?.url || '');
-    console.log({ test: hello.href }, this.parentUrl);
+    console.log({ test: hello.href }, this._parentUrl);
 
     return super.setState(Object.assign(data, {
       parentUrl: this._parentUrl,
