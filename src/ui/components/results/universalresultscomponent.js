@@ -81,9 +81,10 @@ export default class UniversalResultsComponent extends Component {
     }
 
     if (this._parentUrl) {
-      console.log({ data, val });
       updateAnchorToTargetParent(this._parentUrl);
     }
+    const hello = updateAnchorToTargetParent("https://yext.com/searcher");
+    console.log({ hello });
 
     return super.setState(Object.assign(data, {
       parentUrl: this._parentUrl,
