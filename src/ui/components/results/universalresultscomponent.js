@@ -55,7 +55,6 @@ export default class UniversalResultsComponent extends Component {
   }
 
   setParentUrl (parentUrl) {
-    console.log('universalresultscomponent.setParentUrl', parentUrl);
     this._parentUrl = parentUrl;
     this.reRender();
   }
@@ -81,14 +80,6 @@ export default class UniversalResultsComponent extends Component {
     if (searchState === SearchStates.SEARCH_LOADING) {
       return;
     }
-
-    if (this._parentUrl) {
-      createParentAnchor(this._parentUrl, 'locations.html?verticalURL=test');
-    }
-    const verticals = this._config.verticals || this._config.config || {};
-    const verticalKey = data.verticalConfigId;
-    const hello = createParentAnchor('https://yext.com/search', verticals[verticalKey]?.url || '');
-    console.log({ test: hello.href }, this._parentUrl, data);
 
     return super.setState(Object.assign(data, {
       parentUrl: this._parentUrl,

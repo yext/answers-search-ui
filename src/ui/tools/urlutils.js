@@ -28,7 +28,6 @@ export function constructRedirectUrl (redirectUrl, params) {
  * @param {string} relativeUrl URL of the _parent document sent from event
  */
 export function createParentAnchor (parentUrl, relativeUrl) {
-  console.log(`createParentAnchor (${parentUrl}, ${relativeUrl})`);
   const parentUrlWithoutParams = parentUrl.split('?')[0];
 
   const anchorEl = document.createElement('a');
@@ -37,7 +36,9 @@ export function createParentAnchor (parentUrl, relativeUrl) {
 
   const params = new SearchParams(anchorEl.search);
   const verticalUrl = anchorEl.pathname.replace(/^\//, '');
-  params.set('verticalUrl', verticalUrl);
+  if (verticalUrl) {
+    params.set('verticalUrl', verticalUrl);
+  }
   anchorEl.href = parentUrlWithoutParams + '?' + params.toString();
 
   return anchorEl;
