@@ -30,7 +30,7 @@ export default class UniversalResultsComponent extends Component {
     this.reRender = (ctx) => {
       console.log({ ctx });
       return this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
-    }
+    };
 
     this.core.storage.registerListener({
       eventType: 'update',
