@@ -83,8 +83,10 @@ export default class UniversalResultsComponent extends Component {
     if (this._parentUrl) {
       createParentAnchor(this._parentUrl, 'locations.html?verticalURL=test');
     }
-    const hello = createParentAnchor('https://yext.com/searcher', 'locations.html?verticalURL=test');
-    console.log({ hello });
+    const verticals = this._config.verticals || this._config.config || {};
+    const verticalKey = data.verticalConfigId;
+    const hello = createParentAnchor('https://yext.com/search', verticals[verticalKey].url);
+    console.log({ test: hello.href }, this.parentUrl);
 
     return super.setState(Object.assign(data, {
       parentUrl: this._parentUrl,
@@ -126,7 +128,7 @@ export default class UniversalResultsComponent extends Component {
       icon: config.sectionTitleIconName || config.sectionTitleIconUrl,
       // Url that links to the vertical search for this vertical.
       verticalURL: this._parentUrl
-        ? createParentAnchor(this._parentUrl, config.url).html
+        ? createParentAnchor(this._parentUrl, config.url).href
         : config.url,
       // Show a view more link by default, which also links to verticalURL.
       viewMore: true,
