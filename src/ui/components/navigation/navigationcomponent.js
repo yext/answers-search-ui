@@ -240,6 +240,7 @@ export default class NavigationComponent extends Component {
   }
 
   setParentUrl (parentUrl) {
+    console.log('navigatecomponent.setParentUrl', parentUrl);
     this._parentUrl = parentUrl;
     this.setState(this.core.storage.get(StorageKeys.NAVIGATION) || {});
   }
