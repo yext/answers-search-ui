@@ -27,10 +27,8 @@ export default class UniversalResultsComponent extends Component {
       ...config.appliedFilters
     };
 
-    this.reRender = (ctx) => {
-      console.log({ ctx });
-      return this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
-    };
+    this.reRender = () =>
+      this.setState(this.core.storage.get(StorageKeys.UNIVERSAL_RESULTS) || {});
 
     this.core.storage.registerListener({
       eventType: 'update',
@@ -57,6 +55,7 @@ export default class UniversalResultsComponent extends Component {
   }
 
   setParentUrl (parentUrl) {
+    console.log({ parentUrl });
     this._parentUrl = parentUrl;
     this.reRender();
   }
@@ -89,7 +88,7 @@ export default class UniversalResultsComponent extends Component {
     const verticals = this._config.verticals || this._config.config || {};
     const verticalKey = data.verticalConfigId;
     const hello = createParentAnchor('https://yext.com/search', verticals[verticalKey]?.url || '');
-    console.log({ test: hello.href }, this._parentUrl);
+    console.log({ test: hello.href }, this._parentUrl, 'where parent');
 
     return super.setState(Object.assign(data, {
       parentUrl: this._parentUrl,
