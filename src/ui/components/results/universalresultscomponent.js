@@ -71,7 +71,7 @@ export default class UniversalResultsComponent extends Component {
   }
 
   setState (data, val) {
-    data.parentUrl = "https://yext.com/search";
+    data.parentUrl = 'https://yext.com/search';
     console.log({ data, val });
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
@@ -84,7 +84,7 @@ export default class UniversalResultsComponent extends Component {
     }
 
     return super.setState(Object.assign(data, {
-      parentUrl: this._parentUrl  || "https://yext.com/question",
+      parentUrl: this._parentUrl || 'https://yext.com/question',
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
