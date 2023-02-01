@@ -71,6 +71,8 @@ export default class UniversalResultsComponent extends Component {
   }
 
   setState (data, val) {
+    data.parentUrl = "https://yext.com/search";
+    console.log({ data, val });
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
     const searchState = data.searchState || SearchStates.PRE_SEARCH;
@@ -82,7 +84,7 @@ export default class UniversalResultsComponent extends Component {
     }
 
     return super.setState(Object.assign(data, {
-      parentUrl: this._parentUrl,
+      parentUrl: this._parentUrl  || "https://yext.com/question",
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
@@ -112,6 +114,7 @@ export default class UniversalResultsComponent extends Component {
    * @returns {Object}
    */
   static getChildConfig (verticalKey, config, topLevelAppliedFilters) {
+    console.log(verticalKey, 'config', config);
     return {
       // Tells vertical results it is in a universal results page.
       isUniversal: true,
