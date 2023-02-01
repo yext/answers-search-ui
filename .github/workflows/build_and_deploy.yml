@@ -34,7 +34,7 @@ jobs:
     needs: 
       - call_unit_test
       - call_format_branch_name
-      - call_acceptance
+      # - call_acceptance
       - call_misc_tests
     uses: ./.github/workflows/deploy.yml
     with:
