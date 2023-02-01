@@ -55,6 +55,7 @@ export default class UniversalResultsComponent extends Component {
   }
 
   setParentUrl (parentUrl) {
+    console.log('fire setParentUrl()', parentUrl)
     this._parentUrl = parentUrl;
     this.reRender();
   }
@@ -71,7 +72,6 @@ export default class UniversalResultsComponent extends Component {
   }
 
   setState (data, val) {
-    data.parentUrl = 'https://yext.com/search';
     console.log({ data, val });
     const sections = data.sections || [];
     const query = this.core.storage.get(StorageKeys.QUERY);
@@ -83,8 +83,15 @@ export default class UniversalResultsComponent extends Component {
       return;
     }
 
+    const verticals = this._config.config;
+    if (verticals && this._parentUrl) {
+      Object.keys(verticals).forEach((vertical) => {
+        this._config.config[vertical].url = createParentAnchor(this._parentUrl, vertical.url).href;
+      });
+    }
+
     return super.setState(Object.assign(data, {
-      parentUrl: this._parentUrl || 'https://yext.com/question',
+      parentUrl: this._parentUrl,
       isPreSearch: searchState === SearchStates.PRE_SEARCH,
       isSearchLoading: searchState === SearchStates.SEARCH_LOADING,
       isSearchComplete: searchState === SearchStates.SEARCH_COMPLETE,
@@ -97,10 +104,12 @@ export default class UniversalResultsComponent extends Component {
   addChild (data = {}, type = undefined, opts = undefined) {
     const verticals = this._config.verticals || this._config.config || {};
     const verticalKey = data.verticalConfigId;
+    console.log(verticals);
     const childOpts = {
       ...opts,
       ...UniversalResultsComponent.getChildConfig(
-        verticalKey, verticals[verticalKey] || {}, this._appliedFilters)
+        verticalKey, verticals[verticalKey] || {}, this._appliedFilters),
+      url: 'https://mickeymouseclubhouse.com/locations.html'
     };
     const childType = childOpts.useAccordion ? AccordionResultsComponent.type : type;
     return super.addChild(data, childType, childOpts);
@@ -114,7 +123,7 @@ export default class UniversalResultsComponent extends Component {
    * @returns {Object}
    */
   static getChildConfig (verticalKey, config, topLevelAppliedFilters) {
-    console.log(verticalKey, 'config', config);
+    console.log({ config });
     return {
       // Tells vertical results it is in a universal results page.
       isUniversal: true,
@@ -123,9 +132,7 @@ export default class UniversalResultsComponent extends Component {
       // Icon in the titlebar
       icon: config.sectionTitleIconName || config.sectionTitleIconUrl,
       // Url that links to the vertical search for this vertical.
-      verticalURL: this._parentUrl
-        ? createParentAnchor(this._parentUrl, config.url).href
-        : config.url,
+      verticalURL: config.url,
       // Show a view more link by default, which also links to verticalURL.
       viewMore: true,
       // By default, the view more link has a label of 'View More'.
