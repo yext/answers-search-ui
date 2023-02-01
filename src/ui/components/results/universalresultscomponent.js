@@ -55,7 +55,7 @@ export default class UniversalResultsComponent extends Component {
   }
 
   setParentUrl (parentUrl) {
-    console.log('fire setParentUrl()', parentUrl)
+    console.log('fire setParentUrl()', parentUrl);
     this._parentUrl = parentUrl;
     this.reRender();
   }
