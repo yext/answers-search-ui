@@ -237,6 +237,19 @@ export default class NavigationComponent extends Component {
       this.refitNav();
       DOM.on(DOM.query(this._container, '.yxt-Nav-more'), 'click', this.toggleMoreDropdown.bind(this));
     }
+    const navLinks = DOM.queryAll(this._container, '[data-originalurl]');
+    navLinks.forEach(link => {
+      const originalUrl = link.dataset.originalurl;
+      if (originalUrl) {
+        DOM.on(link, 'click', e => {
+          if (e.metaKey || e.ctrlKey) {
+            return;
+          }
+          e.preventDefault();
+          window.open(originalUrl, '_self');
+        });
+      }
+    });
   }
 
   setParentUrl (parentUrl) {
@@ -389,6 +402,7 @@ export default class NavigationComponent extends Component {
       const parentUrlWithoutParams = this._parentUrl.split('?')[0];
       const urlParser = document.createElement('a');
       tabs.forEach(tab => {
+        tab.originalUrl = tab.url;
         urlParser.href = tab.url;
         const tabParams = new SearchParams(urlParser.search);
         const verticalUrl = urlParser.pathname.replace(/^\//, '');
