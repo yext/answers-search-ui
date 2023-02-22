@@ -242,7 +242,7 @@ export default class NavigationComponent extends Component {
       const originalUrl = link.dataset.originalurl;
       if (originalUrl) {
         DOM.on(link, 'click', e => {
-          if (e.metaKey) {
+          if (e.metaKey || e.ctrlKey) {
             return;
           }
           e.preventDefault();
