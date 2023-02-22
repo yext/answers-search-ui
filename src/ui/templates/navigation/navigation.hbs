@@ -13,6 +13,9 @@
             data-eventtype="VERTICAL_TAB_NAVIGATION"
             data-eventoptions='{"verticalKey": "{{verticalKey}}"}'
           {{/if}}
+          {{#if originalUrl}}
+            data-originalurl="{{originalUrl}}"
+          {{/if}}
         >
           {{label}}
         </a>
