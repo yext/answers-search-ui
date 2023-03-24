@@ -5,7 +5,7 @@ export default class HighlightedFields {
   /**
    * Constructs a highlighted fields object which consists of fields mapping to HighlightedValues
    *
-   * @param {import('@yext/answers-core').HighlightedFields} highlightedFields
+   * @param {import('@yext/search-core').HighlightedFields} highlightedFields
    *
    * Example object:
    *

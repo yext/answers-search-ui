@@ -114,9 +114,9 @@ export default class Result {
   }
 
   /**
-   * Constructs an SDK Result from an answers-core Result
+   * Constructs an SDK Result from an search-core Result
    *
-   * @param {Result} result from answers-core
+   * @param {Result} result from search-core
    * @param {Object<string, function>} formatters applied to the result fields
    * @param {string} verticalKey the verticalKey associated with the result
    * @returns {@link Result}

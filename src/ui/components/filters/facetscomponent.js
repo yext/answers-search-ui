@@ -268,8 +268,8 @@ export default class FacetsComponent extends Component {
   /**
    * Applies default formatting to a facet
    *
-   * @param {DisplayableFacet} facet from answers-core
-   * @returns {DisplayableFacet} from answers-core
+   * @param {DisplayableFacet} facet from search-core
+   * @returns {DisplayableFacet} from search-core
    */
   _applyDefaultFormatting (facet) {
     const isBooleanFacet = facet => {
@@ -286,8 +286,8 @@ export default class FacetsComponent extends Component {
   /**
    * Applies default formatting to a boolean facet
    *
-   * @param {DisplayableFacet} facet from answers-core
-   * @returns {DisplayableFacet} from answers-core
+   * @param {DisplayableFacet} facet from search-core
+   * @returns {DisplayableFacet} from search-core
    */
   static _transformBooleanFacet (facet) {
     const options = facet.options.map(option => {

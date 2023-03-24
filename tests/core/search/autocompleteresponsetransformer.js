@@ -2,11 +2,15 @@ const { default: AutoCompleteResponseTransformer } = require('../../../src/core/
 
 describe('transform autocomplete response', () => {
   it('transform universal/vertical autocomplete response', () => {
+    /**
+     * @type {import('@yext/search-core').AutocompleteResult}
+     */
     const responseFromCore = {
       inputIntents: ['NEAR_ME'],
       results: [
         {
           value: 'salesforce',
+          inputIntents: ['NEAR_ME'],
           matchedSubstrings: [
             {
               offset: 0,
@@ -25,7 +29,7 @@ describe('transform autocomplete response', () => {
           results: [
             {
               filter: {},
-              intents: [],
+              intents: ['NEAR_ME'],
               key: '',
               matchedSubstrings: [
                 {

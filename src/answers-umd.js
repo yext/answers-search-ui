@@ -305,7 +305,6 @@ class Answers {
     this.components
       .setCore(this.core)
       .setRenderer(this.renderer);
-
     this._setDefaultInitialSearch(parsedConfig.search);
 
     if (parsedConfig.visitor) {
@@ -731,6 +730,7 @@ class Answers {
       this.core.init({ visitor: visitor });
     } else {
       console.error(`Invalid visitor. Visitor was not set because "${JSON.stringify(visitor)}" does not have an id.`);
+      this.core.init();
     }
   }
 }
@@ -788,5 +788,5 @@ function initScrollListener (reporter) {
   });
 }
 
-const ANSWERS = new Answers();
-export default ANSWERS;
+const ANSWERS_SINGLETON = new Answers();
+export default ANSWERS_SINGLETON;

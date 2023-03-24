@@ -35,7 +35,7 @@ export default class VerticalResults {
   }
 
   /**
-   * Constructs an SDK Section model from an answers-core VerticalResult
+   * Constructs an SDK Section model from an search-core VerticalResult
    *
    * @param {VerticalResults} verticalResults
    * @param {Object<string, string>} urls keyed by vertical key

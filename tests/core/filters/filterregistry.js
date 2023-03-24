@@ -51,11 +51,13 @@ describe('FilterRegistry', () => {
 
   it('can correctly set simple filter nodes', () => {
     const transformedFilter1 = {
+      kind: 'fieldValue',
       fieldId: 'c_1',
       matcher: '$eq',
       value: filter1.c_1.$eq
     };
     const transformedFilter2 = {
+      kind: 'fieldValue',
       fieldId: 'c_2',
       matcher: '$eq',
       value: filter2.c_2.$eq
@@ -70,6 +72,7 @@ describe('FilterRegistry', () => {
     expect(registry.getStaticFilterNodes()).toContainEqual(node1);
     expect(registry.getStaticFilterNodes()).toContainEqual(node2);
     const expectedFilter2 = {
+      kind: 'conjunction',
       combinator: FilterCombinators.AND,
       filters: [
         transformedFilter1,
@@ -83,6 +86,7 @@ describe('FilterRegistry', () => {
     expect(registry.getStaticFilterNodes()[0]).toEqual(node2);
     expect(registry.getStaticFilterNodes()[1]).toEqual(node2);
     const expectedFilter3 = {
+      kind: 'conjunction',
       combinator: FilterCombinators.AND,
       filters: [
         transformedFilter2,
@@ -94,11 +98,13 @@ describe('FilterRegistry', () => {
 
   it('can correctly set nested filter nodes', () => {
     const transformedFilter1 = {
+      kind: 'fieldValue',
       fieldId: 'c_1',
       matcher: '$eq',
       value: filter1.c_1.$eq
     };
     const transformedFilter2 = {
+      kind: 'fieldValue',
       fieldId: 'c_2',
       matcher: '$eq',
       value: filter2.c_2.$eq
@@ -111,6 +117,7 @@ describe('FilterRegistry', () => {
     };
     expect(orNode.getFilter()).toEqual(expectedFilter1);
     const expectedTransformedFilter1 = {
+      kind: 'disjunction',
       combinator: FilterCombinators.OR,
       filters: [
         transformedFilter1,
@@ -123,10 +130,12 @@ describe('FilterRegistry', () => {
     registry.setStaticFilterNodes('namespace2', andNode);
     expect(registry.getStaticFilterNodes()).toHaveLength(2);
     const expectedFilter2 = {
+      kind: 'conjunction',
       combinator: FilterCombinators.AND,
       filters: [
         expectedTransformedFilter1,
         {
+          kind: 'conjunction',
           combinator: FilterCombinators.AND,
           filters: [
             transformedFilter1,
@@ -140,10 +149,12 @@ describe('FilterRegistry', () => {
     registry.setStaticFilterNodes('namespace3', node1);
     expect(registry.getStaticFilterNodes()).toHaveLength(3);
     const expectedFilter3 = {
+      kind: 'conjunction',
       combinator: FilterCombinators.AND,
       filters: [
         expectedTransformedFilter1,
         {
+          kind: 'conjunction',
           combinator: FilterCombinators.AND,
           filters: [transformedFilter1, transformedFilter2]
         },
