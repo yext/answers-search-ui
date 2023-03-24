@@ -70,8 +70,8 @@ export default class FilterRegistry {
   /**
    * Gets the static filters as a {@link Filter|CombinedFilter} to send to the search-core
    *
-   * @returns {CombinedFilter|Filter|null} Returns null if no filters with
-   *                                             filtering logic are present.
+   * @returns {import('@yext/search-core').StaticFilter | null}
+   * Returns null if no filters with filtering logic are present.
    */
   getStaticFilterPayload () {
     const filterNodes = this.getStaticFilterNodes()
@@ -123,10 +123,9 @@ export default class FilterRegistry {
   /**
    * Transforms a {@link SimpleFilterNode} to search-core's {@link Filter} or {@link CombinedFilter}
    * if there are multiple matchers.
-   * TODO(SLAP-1183): remove the parsing for multiple matchers.
    *
    * @param {SimpleFilterNode} filterNode
-   * @returns {Filter}
+   * @returns {import('@yext/search-core').StaticFilter}
    */
   _transformSimpleFilterNode (filterNode) {
     const fieldId = Object.keys(filterNode.filter)[0];
@@ -135,19 +134,25 @@ export default class FilterRegistry {
     if (matchers.length === 1) {
       const matcher = matchers[0];
       const value = filterComparison[matcher];
+      /** @type {import('@yext/search-core').FieldValueStaticFilter} */
       return {
+        kind: 'fieldValue',
         fieldId: fieldId,
         matcher: matcher,
         value: value
       };
     } else if (matchers.length > 1) {
+      /** @type {import('@yext/search-core').FieldValueStaticFilter[]} */
       const childFilters = matchers.map(matcher => ({
+        kind: 'fieldValue',
         fieldId: fieldId,
         matcher: matcher,
         value: filterComparison[matcher]
       }));
+      /** @type {import('@yext/search-core').ConjunctionStaticFilter} */
       return {
         combinator: FilterCombinators.AND,
+        kind: 'conjunction',
         filters: childFilters
       };
     }
