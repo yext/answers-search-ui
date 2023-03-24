@@ -124,6 +124,7 @@ export default class LocationBiasComponent extends Component {
   }
 
   _handleGeolocationError (err) {
+    console.error('geo err', err, this);
     if (err.code === 1) {
       this._disableLocationUpdate();
     }

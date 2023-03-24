@@ -585,6 +585,9 @@ export default class SearchComponent extends Component {
   promptForLocation (query) {
     if (this._promptForLocation) {
       return this.fetchQueryIntents(query)
+        .then(q => {
+          return q;
+        })
         .then(queryIntents => queryIntents?.includes('NEAR_ME'))
         .then(queryHasNearMeIntent => {
           if (queryHasNearMeIntent && !this.core.storage.get(StorageKeys.GEOLOCATION)) {

@@ -25,9 +25,9 @@ export default class UniversalResults {
   }
 
   /**
-   * Constructs an SDK UniversalResults model from an answers-core UniversalSearchResponse
+   * Constructs an SDK UniversalResults model from an search-core UniversalSearchResponse
    *
-   * @param {UniversalSearchResponse} response from answers-core
+   * @param {UniversalSearchResponse} response from search-core
    * @param {Object<string, string>} urls keyed by vertical key
    * @param {Object<string, function>} formatters applied to the result fields
    * @returns {@link UniversalResults}

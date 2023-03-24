@@ -91,7 +91,7 @@ exports.legacyBundle = function (
       babel({
         runtimeHelpers: true,
         babelrc: false,
-        exclude: /node_modules\/(?!cross-fetch)(?!@yext\/answers-storage)(?!@yext\/answers-core).*/,
+        exclude: /node_modules\/(?!cross-fetch)(?!@yext\/answers-storage)(?!@yext\/search-core).*/,
         presets: [
           [
             '@babel/preset-env',

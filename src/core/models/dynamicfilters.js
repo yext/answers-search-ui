@@ -9,7 +9,7 @@ export default class DynamicFilters {
   constructor (data) {
     /**
      * The list of facets this model holds
-     * @type {DisplayableFacet[]} from answers-core
+     * @type {DisplayableFacet[]} from search-core
      */
     this.filters = data.filters || [];
 
@@ -22,8 +22,8 @@ export default class DynamicFilters {
   }
 
   /**
-   * Organize 'facets' from the answers-core into dynamic filters
-   * @param {DisplayableFacet[]} facets from answers-core
+   * Organize 'facets' from the search-core into dynamic filters
+   * @param {DisplayableFacet[]} facets from search-core
    * @param {ResultsContext} resultsContext
    * @returns {DynamicFilters}
    */

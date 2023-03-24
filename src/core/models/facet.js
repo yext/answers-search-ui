@@ -39,9 +39,9 @@ export default class Facet {
   }
 
   /**
-   * Transforms an answers-core DisplayableFacet array into a Facet array
+   * Transforms an search-core DisplayableFacet array into a Facet array
    *
-   * @param {DisplayableFacet[]} coreFacets from answers-core
+   * @param {DisplayableFacet[]} coreFacets from search-core
    * @returns {Facet[]}
    */
   static fromCore (coreFacets = []) {

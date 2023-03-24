@@ -1,5 +1,5 @@
 /** @module Core */
-import { provideCore } from '@yext/answers-core/lib/commonjs';
+import { provideCore } from '@yext/search-core/lib/commonjs';
 import { generateUUID } from './utils/uuid';
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -119,7 +119,7 @@ export default class Core {
     /** @type {ComponentManager} */
     this._componentManager = config.componentManager;
 
-    /** @type {import('@yext/answers-core').AdditionalHttpHeaders} */
+    /** @type {import('@yext/search-core').AdditionalHttpHeaders} */
     this._additionalHttpHeaders = mergeAdditionalHttpHeaders(config.additionalHttpHeaders);
   }
 
@@ -718,9 +718,9 @@ export default class Core {
   }
 
   /**
-   * Gets the location object needed for answers-core
+   * Gets the location object needed for search-core
    *
-   * @returns {LatLong|undefined} from answers-core
+   * @returns {LatLong|undefined} from search-core
    */
   _getLocationPayload () {
     const geolocation = this.storage.get(StorageKeys.GEOLOCATION);

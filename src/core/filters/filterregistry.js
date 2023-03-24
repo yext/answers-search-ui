@@ -68,7 +68,7 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the static filters as a {@link Filter|CombinedFilter} to send to the answers-core
+   * Gets the static filters as a {@link Filter|CombinedFilter} to send to the search-core
    *
    * @returns {CombinedFilter|Filter|null} Returns null if no filters with
    *                                             filtering logic are present.
@@ -97,11 +97,11 @@ export default class FilterRegistry {
 
   /**
    * Transforms a list of filter nodes {@link CombinedFilterNode} or {@link SimpleFilterNode} to
-   * answers-core's {@link Filter} or {@link CombinedFilter}
+   * search-core's {@link Filter} or {@link CombinedFilter}
    *
    * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
-   * @param {FilterCombinator} combinator from answers-core
-   * @returns {CombinedFilter|Filter} from answers-core
+   * @param {FilterCombinator} combinator from search-core
+   * @returns {CombinedFilter|Filter} from search-core
    */
   _transformFilterNodes (filterNodes, combinator) {
     const filters = filterNodes.flatMap(filterNode => {
@@ -121,7 +121,7 @@ export default class FilterRegistry {
   }
 
   /**
-   * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter} or {@link CombinedFilter}
+   * Transforms a {@link SimpleFilterNode} to search-core's {@link Filter} or {@link CombinedFilter}
    * if there are multiple matchers.
    * TODO(SLAP-1183): remove the parsing for multiple matchers.
    *
@@ -154,10 +154,10 @@ export default class FilterRegistry {
   }
 
   /**
-   * Transforms a {@link Filter} into answers-core's {@link FacetOption}
+   * Transforms a {@link Filter} into search-core's {@link FacetOption}
    *
    * @param {Filter} filter
-   * @returns {FacetOption} from answers-core
+   * @returns {FacetOption} from search-core
    */
   _transformSimpleFilterNodeIntoFacetOption (filter) {
     const fieldId = Object.keys(filter)[0];
@@ -196,9 +196,9 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the facet filters as an array of Filters to send to the answers-core.
+   * Gets the facet filters as an array of Filters to send to the search-core.
    *
-   * @returns {Facet[]} from answers-core
+   * @returns {Facet[]} from search-core
    */
   getFacetsPayload () {
     const facets = this.getFacets();
