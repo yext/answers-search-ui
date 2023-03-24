@@ -47,9 +47,9 @@ export default class LocationBias {
   }
 
   /*
-  * Constructs an SDK LocationBias model from an answers-core LocationBias
+  * Constructs an SDK LocationBias model from an search-core LocationBias
   *
-  * @param {LocationBias} locationBias from answers-core
+  * @param {LocationBias} locationBias from search-core
   * @returns {LocationBias}
   */
   static fromCore (locationBias) {

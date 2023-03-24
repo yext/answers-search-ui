@@ -61,9 +61,9 @@ export default class Filter {
   }
 
   /**
-   * Constructs an SDK Filter model from an answers-core SimpleFilter model
+   * Constructs an SDK Filter model from an search-core SimpleFilter model
    *
-   * @param {SimpleFilter} filter from answers-core
+   * @param {SimpleFilter} filter from search-core
    * @returns {Filter}
    */
   static fromCoreSimpleFilter (filter) {

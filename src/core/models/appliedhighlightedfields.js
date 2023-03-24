@@ -27,9 +27,9 @@ export default class AppliedHighlightedFields {
   }
 
   /**
-   * Constructs an AppliedHighlightedFields object from an answers-core HighlightedField
+   * Constructs an AppliedHighlightedFields object from an search-core HighlightedField
    *
-   * @param {import('@yext/answers-core').HighlightedFields} highlightedFields
+   * @param {import('@yext/search-core').HighlightedFields} highlightedFields
    * @returns {AppliedHighlightedFields}
    */
   static fromCore (highlightedFields) {
@@ -41,10 +41,10 @@ export default class AppliedHighlightedFields {
   }
 
   /**
-   * Given an answers-core HighlightedFields tree, returns a new tree
+   * Given an search-core HighlightedFields tree, returns a new tree
    * with highlighting applied to the leaf nodes.
    *
-   * @param {import('@yext/answers-core').HighlightedFields} highlightedFields
+   * @param {import('@yext/search-core').HighlightedFields} highlightedFields
    * @returns {AppliedHighlightedFields}
    */
   static computeHighlightedDataRecursively (highlightedFields) {

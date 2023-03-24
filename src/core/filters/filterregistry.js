@@ -1,9 +1,9 @@
 /** @module FilterRegistry */
 
-import FilterCombinators from './filtercombinators';
 import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 import FilterNodeFactory from './filternodefactory';
+import { FilterCombinator } from '@yext/search-core';
 
 /** @typedef {import('../storage/storage').default} Storage */
 
@@ -68,10 +68,10 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the static filters as a {@link Filter|CombinedFilter} to send to the answers-core
+   * Gets the static filters as a {@link Filter|CombinedFilter} to send to the search-core
    *
-   * @returns {CombinedFilter|Filter|null} Returns null if no filters with
-   *                                             filtering logic are present.
+   * @returns {import('@yext/search-core').StaticFilter | null}
+   * Returns null if no filters with filtering logic are present.
    */
   getStaticFilterPayload () {
     const filterNodes = this.getStaticFilterNodes()
@@ -79,7 +79,7 @@ export default class FilterRegistry {
         return filterNode.getChildren().length > 0 || filterNode.getFilter().getFilterKey();
       });
     return filterNodes.length > 0
-      ? this._transformFilterNodes(filterNodes, FilterCombinators.AND)
+      ? this._transformFilterNodes(filterNodes, FilterCombinator.AND)
       : null;
   }
 
@@ -97,11 +97,11 @@ export default class FilterRegistry {
 
   /**
    * Transforms a list of filter nodes {@link CombinedFilterNode} or {@link SimpleFilterNode} to
-   * answers-core's {@link Filter} or {@link CombinedFilter}
+   * search-core's {@link Filter} or {@link CombinedFilter}
    *
    * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
-   * @param {FilterCombinator} combinator from answers-core
-   * @returns {CombinedFilter|Filter} from answers-core
+   * @param {FilterCombinator} combinator from search-core
+   * @returns {import('@yext/search-core').StaticFilter} from search-core
    */
   _transformFilterNodes (filterNodes, combinator) {
     const filters = filterNodes.flatMap(filterNode => {
@@ -115,18 +115,18 @@ export default class FilterRegistry {
     return filters.length === 1
       ? filters[0]
       : {
+          kind: combinator === FilterCombinator.OR ? 'disjunction' : 'conjunction',
           filters: filters,
           combinator: combinator
         };
   }
 
   /**
-   * Transforms a {@link SimpleFilterNode} to answers-core's {@link Filter} or {@link CombinedFilter}
+   * Transforms a {@link SimpleFilterNode} to search-core's {@link Filter} or {@link CombinedFilter}
    * if there are multiple matchers.
-   * TODO(SLAP-1183): remove the parsing for multiple matchers.
    *
    * @param {SimpleFilterNode} filterNode
-   * @returns {Filter}
+   * @returns {import('@yext/search-core').StaticFilter}
    */
   _transformSimpleFilterNode (filterNode) {
     const fieldId = Object.keys(filterNode.filter)[0];
@@ -135,29 +135,35 @@ export default class FilterRegistry {
     if (matchers.length === 1) {
       const matcher = matchers[0];
       const value = filterComparison[matcher];
+      /** @type {import('@yext/search-core').FieldValueStaticFilter} */
       return {
+        kind: 'fieldValue',
         fieldId: fieldId,
         matcher: matcher,
         value: value
       };
     } else if (matchers.length > 1) {
+      /** @type {import('@yext/search-core').FieldValueStaticFilter[]} */
       const childFilters = matchers.map(matcher => ({
+        kind: 'fieldValue',
         fieldId: fieldId,
         matcher: matcher,
         value: filterComparison[matcher]
       }));
+      /** @type {import('@yext/search-core').ConjunctionStaticFilter} */
       return {
-        combinator: FilterCombinators.AND,
+        combinator: FilterCombinator.AND,
+        kind: 'conjunction',
         filters: childFilters
       };
     }
   }
 
   /**
-   * Transforms a {@link Filter} into answers-core's {@link FacetOption}
+   * Transforms a {@link Filter} into search-core's {@link FacetOption}
    *
    * @param {Filter} filter
-   * @returns {FacetOption} from answers-core
+   * @returns {FacetOption} from search-core
    */
   _transformSimpleFilterNodeIntoFacetOption (filter) {
     const fieldId = Object.keys(filter)[0];
@@ -196,9 +202,9 @@ export default class FilterRegistry {
   }
 
   /**
-   * Gets the facet filters as an array of Filters to send to the answers-core.
+   * Gets the facet filters as an array of Filters to send to the search-core.
    *
-   * @returns {Facet[]} from answers-core
+   * @returns {Facet[]} from search-core
    */
   getFacetsPayload () {
     const facets = this.getFacets();
