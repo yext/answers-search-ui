@@ -1,9 +1,9 @@
 /** @module FilterRegistry */
 
-import FilterCombinators from './filtercombinators';
 import Facet from '../models/facet';
 import StorageKeys from '../storage/storagekeys';
 import FilterNodeFactory from './filternodefactory';
+import { FilterCombinator } from '@yext/search-core';
 
 /** @typedef {import('../storage/storage').default} Storage */
 
@@ -79,7 +79,7 @@ export default class FilterRegistry {
         return filterNode.getChildren().length > 0 || filterNode.getFilter().getFilterKey();
       });
     return filterNodes.length > 0
-      ? this._transformFilterNodes(filterNodes, FilterCombinators.AND)
+      ? this._transformFilterNodes(filterNodes, FilterCombinator.AND)
       : null;
   }
 
@@ -101,7 +101,7 @@ export default class FilterRegistry {
    *
    * @param {Array<CombinedFilterNode|SimpleFilterNode>} filterNodes
    * @param {FilterCombinator} combinator from search-core
-   * @returns {CombinedFilter|Filter} from search-core
+   * @returns {import('@yext/search-core').StaticFilter} from search-core
    */
   _transformFilterNodes (filterNodes, combinator) {
     const filters = filterNodes.flatMap(filterNode => {
@@ -115,6 +115,7 @@ export default class FilterRegistry {
     return filters.length === 1
       ? filters[0]
       : {
+          kind: combinator === FilterCombinator.OR ? 'disjunction' : 'conjunction',
           filters: filters,
           combinator: combinator
         };
@@ -151,7 +152,7 @@ export default class FilterRegistry {
       }));
       /** @type {import('@yext/search-core').ConjunctionStaticFilter} */
       return {
-        combinator: FilterCombinators.AND,
+        combinator: FilterCombinator.AND,
         kind: 'conjunction',
         filters: childFilters
       };
