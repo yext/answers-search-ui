@@ -8,9 +8,9 @@ export default class DirectAnswer {
   }
 
   /**
-   * Constructs an SDK DirectAnswer from an answers-core DirectAnswer and applies formatting
+   * Constructs an SDK DirectAnswer from an search-core DirectAnswer and applies formatting
    *
-   * @param {DirectAnswer} directAnswer from answers-core
+   * @param {DirectAnswer} directAnswer from search-core
    * @param {Object<string, function>} formatters keyed by fieldApiName. If a formatter matches
    * the fieldApiName of the direct answer, it will be applied to the direct answer value.
    * @param {string} searcher whether this direct answer is from a "UNIVERSAL" or "VERTICAL" search

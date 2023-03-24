@@ -33,9 +33,7 @@ describe('ANSWERS instance integration testing', () => {
 
   it('An ANSWERS impression event is reported during ANSWERS.init if the search bar component is active', async () => {
     mockWindow(windowSpy, {
-      location: {
-        search: '?query=test'
-      }
+      location: {}
     });
     await initAnswers(ANSWERS, {
       onReady: () => ANSWERS.addComponent('SearchBar')

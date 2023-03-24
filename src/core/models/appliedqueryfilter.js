@@ -12,9 +12,9 @@ export default class AppliedQueryFilter {
   }
 
   /**
-   * Constructs an SDK AppliedQueryFilter from an answers-core AppliedQueryFilter
+   * Constructs an SDK AppliedQueryFilter from an search-core AppliedQueryFilter
    *
-   * @param {AppliedQueryFilter} appliedFilter from answers-core
+   * @param {AppliedQueryFilter} appliedFilter from search-core
    * @returns {@link AppliedQueryFilter}
    */
   static fromCore (appliedFilter) {

@@ -10,7 +10,7 @@ export default class AutoCompleteResponseTransformer {
    * Converts a universal or vertical autocomplete response from the
    * core library into an object that the SDK understands.
    *
-   * @param {import('@yext/answers-core').AutocompleteResponse} response
+   * @param {import('@yext/search-core').AutocompleteResponse} response
    *  the response passed from the core library
    * @returns {AutoCompleteData}
    */
@@ -30,7 +30,7 @@ export default class AutoCompleteResponseTransformer {
    * Converts a filter search response from the
    * core library into an object that the SDK understands.
    *
-   * @param {import('@yext/answers-core').FilterSearchResponse} response
+   * @param {import('@yext/search-core').FilterSearchResponse} response
    *  the response passed from the core library
    * @returns {AutoCompleteData}
    */
@@ -47,13 +47,18 @@ export default class AutoCompleteResponseTransformer {
     });
   }
 
+  /**
+   * @param {import('@yext/search-core').AutocompleteResult} result
+   * @returns {AutoCompleteResult}
+   */
   static transformAutoCompleteResult (result) {
     const transformedFilter = result.filter ? this._transformFilter(result.filter) : {};
     return new AutoCompleteResult({
       filter: transformedFilter,
       key: result.key,
       matchedSubstrings: result.matchedSubstrings,
-      value: result.value
+      value: result.value,
+      queryIntents: result.inputIntents
     });
   }
 

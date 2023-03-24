@@ -14,7 +14,7 @@ const DEFAULT_CLIENT_SDK_VALUES = {
  * and performs run-time validation.
  *
  * @param {Record<string, string>} additionalHttpHeaders
- * @returns {import('@yext/answers-core').AdditionalHttpHeaders}
+ * @returns {import('@yext/search-core').AdditionalHttpHeaders}
  */
 export function mergeAdditionalHttpHeaders (additionalHttpHeaders = {}) {
   if (!validateAdditionalHeadersIsObj(additionalHttpHeaders)) {
