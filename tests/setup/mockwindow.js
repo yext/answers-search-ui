@@ -6,8 +6,7 @@
 export default function mockWindow (windowSpy, data = {}) {
   windowSpy.mockImplementation(() => ({
     performance: {
-      mark: jest.fn(),
-      hey: 123
+      mark: jest.fn()
     },
     sessionStorage: {
       getItem: jest.fn(),
