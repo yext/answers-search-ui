@@ -1,5 +1,6 @@
 <div class="yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper">
-  <span class="yxt-AutoComplete-resultsCount sr-only" aria-live="assertive">
+  <span class="yxt-AutoComplete-resultsCount sr-only" aria-live="assertive"
+        id="{{autocompleteContainerIdName}}-label">
     {{#if hasResults}}
       {{#each sections}}
         {{#if label}}
@@ -29,7 +30,8 @@
     {{/if}}
   </span>
   {{#if hasResults}}
-    <div class="yxt-AutoComplete">
+    <div class="yxt-AutoComplete" role="listbox" id="{{autocompleteContainerIdName}}-results"
+         aria-labelledby="{{autocompleteContainerIdName}}-label">
       {{assign 'currentSelected' sectionIndex resultIndex}}
       {{#if promptHeader}}
         <ul class="yxt-AutoComplete-results">
@@ -39,7 +41,7 @@
         </ul>
       {{/if}}
       {{#each sections}}
-        <ul role="listbox"
+        <ul role="group"
             class="yxt-AutoComplete-results"
             aria-labelledby="{{../listLabelIdName}}"
         >
