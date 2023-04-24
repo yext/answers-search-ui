@@ -6,8 +6,8 @@
 <div class="yxt-SearchBar">
   <div class="yxt-SearchBar-container">
     {{#if useForm}}
-      <form class="yxt-SearchBar-form">
-        <label class="sr-only" 
+      <form class="yxt-SearchBar-form" role="search">
+        <label class="sr-only"
                for="{{inputIdName}}"
                id="{{inputLabelIdName}}"
         >
@@ -16,6 +16,7 @@
         <input class="js-yext-query yxt-SearchBar-input"
           id="{{inputIdName}}"
           type="text"
+          role="combobox"
           name="query"
           value="{{query}}"
           {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
@@ -57,7 +58,7 @@
       </form>
     {{else}}
       <div class="yxt-SearchBar-input-wrapper">
-        <label class="sr-only" 
+        <label class="sr-only"
                for="{{inputIdName}}"
                id="{{inputLabelIdName}}"
         >
@@ -66,6 +67,7 @@
         <input class="js-yext-query yxt-SearchBar-input"
           id="{{inputIdName}}"
           type="text"
+          role="combobox"
           name="query"
           value="{{query}}"
           {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
@@ -100,6 +102,9 @@
         </button>
       </div>
     {{/if}}
-    <div id="{{autocompleteContainerIdName}}" class="yxt-SearchBar-autocomplete"></div>
+    <div
+      id="{{autocompleteContainerIdName}}"
+      class="yxt-SearchBar-autocomplete">
+    </div>
   </div>
 </div>

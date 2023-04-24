@@ -275,7 +275,8 @@ export default class SearchComponent extends Component {
       shouldHideOnEmptySearch: config.autocomplete && config.autocomplete.shouldHideOnEmptySearch,
       onOpen: config.autocomplete && config.autocomplete.onOpen,
       onClose: config.autocomplete && config.autocomplete.onClose,
-      customPrompts: config.autocomplete && config.autocomplete.customPrompts
+      customPrompts: config.autocomplete && config.autocomplete.customPrompts,
+      autocompleteContainerIdName: this.autocompleteContainerIdName
     };
 
     if (!this._isTwin) {
