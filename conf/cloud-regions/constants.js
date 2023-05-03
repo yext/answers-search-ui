@@ -1,0 +1,10 @@
+const CLOUD_REGION = {
+  US: 'US',
+  EU: 'EU'
+};
+
+exports.CLOUD_REGION = CLOUD_REGION;
+
+exports.DEFAULT_CLOUD_REGION = CLOUD_REGION.US;
+
+exports.ALL_CLOUD_REGIONS = Object.values(CLOUD_REGION);

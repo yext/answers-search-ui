@@ -26,6 +26,7 @@ const TranslateCallParser = require('../../i18n/translatecallparser');
  * @param {string} locale The current locale
  * @param {string} libVersion The current JS library version
  * @param {TranslationResolver} translationResolver
+ * @param {string} cloudRegion The current cloud region
  *
  * @returns {stream.Writable} A {@link Writable} stream containing the modern
  *                            SDK bundle.
@@ -37,7 +38,8 @@ exports.modernBundle = function (
   bundleName,
   locale,
   libVersion,
-  translationResolver) {
+  translationResolver,
+  cloudRegion) {
   const rollupConfig = {
     input: entryPoint,
     output: outputConfig,
@@ -55,7 +57,8 @@ exports.modernBundle = function (
       rollupJson()
     ]
   };
-  return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
+  return _buildBundle(
+    callback, rollupConfig, bundleName, locale, libVersion, translationResolver, cloudRegion);
 };
 
 /**
@@ -69,6 +72,7 @@ exports.modernBundle = function (
  * @param {string} locale The current locale
  * @param {string} libVersion The current JS library version
  * @param {TranslationResolver} translationResolver
+ * @param {string} cloudRegion The cloud region
  * @returns {stream.Writable} A {@link Writable} stream containing the legacy
  *                            SDK bundle.
  */
@@ -79,7 +83,9 @@ exports.legacyBundle = function (
   bundleName,
   locale,
   libVersion,
-  translationResolver) {
+  translationResolver,
+  cloudRegion
+) {
   const rollupConfig = {
     input: entryPoint,
     output: outputConfig,
@@ -115,7 +121,8 @@ exports.legacyBundle = function (
       rollupJson()
     ]
   };
-  return _buildBundle(callback, rollupConfig, bundleName, locale, libVersion, translationResolver);
+  return _buildBundle(
+    callback, rollupConfig, bundleName, locale, libVersion, translationResolver, cloudRegion);
 };
 
 /**
@@ -127,9 +134,18 @@ exports.legacyBundle = function (
  * @param {string} locale The current locale
  * @param {string} libVersion The current JS library version
  * @param {TranslationResolver} translationResolver for the given locale
+ * @param {string} cloudRegion The cloud region
  * @returns {stream.Writable} A {@link Writable} stream containing the SDK bundle.
  */
-function _buildBundle (callback, rollupConfig, bundleName, locale, libVersion, translationResolver) {
+function _buildBundle (
+  callback,
+  rollupConfig,
+  bundleName,
+  locale,
+  libVersion,
+  translationResolver,
+  cloudRegion
+) {
   return rollup(rollupConfig)
     .pipe(source(`${bundleName}.js`))
     .pipe(replace('@@LIB_VERSION', libVersion))
@@ -144,6 +160,7 @@ function _buildBundle (callback, rollupConfig, bundleName, locale, libVersion, t
         placeholder.hasNoInterpolation();
       return canBeTranslatedStatically ? `"${translationResult}"` : translationResult;
     }))
+    .pipe(replace('@@CLOUD_REGION', cloudRegion))
     .pipe(dest('dist'))
     .on('end', callback);
 }

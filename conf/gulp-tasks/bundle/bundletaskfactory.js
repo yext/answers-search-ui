@@ -13,11 +13,12 @@ Object.freeze(BundleType);
  * A factory class that provides Gulp tasks for the different kinds of SDK bundles.
  */
 class BundleTaskFactory {
-  constructor (libVersion, translationResolver, locale) {
+  constructor (libVersion, translationResolver, locale, cloudRegion) {
     this._libVersion = libVersion;
     this._locale = locale;
     this._translationResolver = translationResolver;
     this._namespace = 'ANSWERS';
+    this._cloudRegion = cloudRegion;
   }
 
   /**
@@ -70,7 +71,8 @@ class BundleTaskFactory {
       getBundleName(BundleType.MODERN, this._locale),
       this._locale,
       this._libVersion,
-      this._translationResolver
+      this._translationResolver,
+      this._cloudRegion
     );
   }
 
@@ -95,7 +97,8 @@ class BundleTaskFactory {
       getBundleName(BundleType.LEGACY_IIFE, this._locale),
       this._locale,
       this._libVersion,
-      this._translationResolver
+      this._translationResolver,
+      this._cloudRegion
     );
   }
 
@@ -121,7 +124,8 @@ class BundleTaskFactory {
       getBundleName(BundleType.LEGACY_UMD, this._locale),
       this._locale,
       this._libVersion,
-      this._translationResolver
+      this._translationResolver,
+      this._cloudRegion
     );
   }
 }
