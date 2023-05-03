@@ -55,7 +55,7 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: build-output
-          path: dist/
+          path: dist-eu/
       - name: Authenticate to Google Cloud
         id: auth
         uses: google-github-actions/auth@v0
@@ -64,7 +64,7 @@ jobs:
       - name: Deploy to GCP Bucket
         uses: google-github-actions/upload-cloud-storage@v0
         with:
-          path: dist/
+          path: dist-eu/
           parent: false
           destination: assets-eu.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }}
           headers: |-

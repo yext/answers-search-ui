@@ -16,7 +16,7 @@ jobs:
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
     needs: call_build
-  
+
   call_misc_tests:
     uses: ./.github/workflows/miscellaneous_tests.yml
 
@@ -28,7 +28,7 @@ jobs:
     needs: call_build
 
   call_deploy:
-    needs: 
+    needs:
       - call_unit_test
       - call_format_branch_name
       - call_acceptance
@@ -39,7 +39,6 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-${{ github.ref }}-1
