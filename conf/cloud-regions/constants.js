@@ -1,6 +1,6 @@
 const CLOUD_REGION = {
-  US: 'US',
-  EU: 'EU'
+  US: 'us',
+  EU: 'eu'
 };
 
 exports.CLOUD_REGION = CLOUD_REGION;
