@@ -55,11 +55,11 @@ jobs:
           npm run size
         fi
     - run: |
-        if [ "${{ input.output_dir }}" != "dist" ]; then 
-          mv dist ${{ input.output_dir }}
+        if [ "${{ inputs.output_dir }}" != "dist" ]; then 
+          mv dist ${{ inputs.output_dir }}
         fi
     - name: Create build-output artifact
       uses: actions/upload-artifact@v3
       with:
         name: build-output
-        path: ${{ input.output_dir }}
+        path: ${{ inputs.output_dir }}
