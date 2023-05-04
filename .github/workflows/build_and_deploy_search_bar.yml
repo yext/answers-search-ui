@@ -10,7 +10,16 @@ jobs:
     uses: ./.github/workflows/build_i18n.yml
     with:
       build_script: build-search-bar-only
-  
+      cloud_region: US
+      output_dir: dist
+
+  call_build_for_eu:
+    uses: ./.github/workflows/build_i18n.yml
+    with:
+      build_script: build-search-bar-only
+      cloud_region: EU
+      output_dir: dist-eu
+
   call_misc_tests:
     uses: ./.github/workflows/miscellaneous_tests.yml
 
@@ -30,6 +39,7 @@ jobs:
 
   call_deploy_full_version:
     needs:
+      - call_build_for_eu
       - call_acceptance_search_bar
       - call_extract_versions
       - call_misc_tests
@@ -44,7 +54,8 @@ jobs:
       GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
   call_deploy_major_version:
-    needs: 
+    needs:
+      - call_build_for_eu
       - call_acceptance_search_bar
       - call_extract_versions
       - call_misc_tests
@@ -61,7 +72,8 @@ jobs:
       GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
   call_deploy_minor_version:
-    needs: 
+    needs:
+      - call_build_for_eu
       - call_acceptance_search_bar
       - call_extract_versions
       - call_misc_tests

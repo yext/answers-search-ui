@@ -7,6 +7,14 @@ on:
         required: false
         default: build-locales
         type: string
+      cloud_region:
+        required: false
+        default: US
+        type: string
+      output_dir:
+        required: false
+        default: dist
+        type: string
 
 jobs:
   create_language_matrix:
@@ -41,13 +49,17 @@ jobs:
         node-version: 16
         cache: 'npm'
     - run: npm ci
-    - run: LANGUAGE=${{ matrix.language }} npm run ${{ inputs.build_script }}
+    - run: LANGUAGE=${{ matrix.language }} CLOUD_REGION=${{ inputs.cloud-region }} npm run ${{ inputs.build_script }}
     - run: |
         if [ "${{ matrix.language }}" == "en" ]; then 
           npm run size
+        fi
+    - run: |
+        if [ "${{ inputs.output_dir }}" != "dist" ]; then 
+          mv dist ${{ inputs.output_dir }}
         fi
     - name: Create build-output artifact
       uses: actions/upload-artifact@v3
       with:
         name: build-output
-        path: dist/
+        path: ${{ inputs.output_dir }}
