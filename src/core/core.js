@@ -17,7 +17,7 @@ import FilterRegistry from './filters/filterregistry';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
-import { PRODUCTION, ENDPOINTS, LIB_VERSION } from './constants';
+import { PRODUCTION, ENDPOINTS, LIB_VERSION, CLOUD_REGION } from './constants';
 import { getCachedLiveApiUrl, getLiveApiUrl } from './utils/urlutils';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
@@ -112,6 +112,8 @@ export default class Core {
      * @type {string}
      */
     this._environment = config.environment || PRODUCTION;
+
+    this._cloudRegion = CLOUD_REGION;
 
     /** @type {string} */
     this._verticalKey = config.verticalKey;

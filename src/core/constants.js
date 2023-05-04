@@ -9,6 +9,8 @@ export const LOCALE = '@@LOCALE';
 /** The speech recognition locales supported by Microsoft Edge */
 export const SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE = '@@SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE';
 
+export const CLOUD_REGION = '@@CLOUD_REGION';
+
 /** The identifier of the production environment */
 export const PRODUCTION = 'production';
 

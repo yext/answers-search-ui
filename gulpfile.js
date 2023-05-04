@@ -10,6 +10,12 @@ if (languageEnv && typeof languageEnv === 'string') {
   languages = languageEnv.split(',');
 }
 
+const cloudRegionEnv = process.env.CLOUD_REGION;
+let cloudRegion;
+if (cloudRegionEnv && typeof cloudRegionEnv === 'string') {
+  cloudRegion = cloudRegionEnv;
+}
+
 exports.default = exports.build = parallel(
   templates.default,
   library.default
@@ -27,7 +33,7 @@ exports.buildLanguages = parallel(
   library.buildLanguages
 );
 exports.buildLocales = parallel(
-  library.buildLocales.bind(null, languages),
+  library.buildLocales.bind(null, languages, cloudRegion),
   templates.buildLocales.bind(null, languages)
 );
 
@@ -35,6 +41,6 @@ exports.extractTranslations = extractTranslations;
 exports.templates = templates.default;
 
 exports.buildSearchBarOnlyAssets = parallel(
-  templates.buildSearchBarOnlyAssets.bind(null, languages),
-  library.buildSearchBarOnlyAssets.bind(null, languages)
+  library.buildSearchBarOnlyAssets.bind(null, languages, cloudRegion),
+  templates.buildSearchBarOnlyAssets.bind(null, languages)
 );
