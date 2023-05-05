@@ -23,8 +23,8 @@ jobs:
         cache: 'npm'
     - run: npm ci
     - run: npm run ${{ inputs.build_script }}
-    - name: Create build-output artifact
+    - name: Create build-output-US artifact
       uses: actions/upload-artifact@v3
       with:
-        name: build-output
+        name: build-output-US
         path: dist/

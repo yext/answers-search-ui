@@ -10,13 +10,11 @@ jobs:
     uses: ./.github/workflows/build_i18n.yml
     with:
       cloud_region: US
-      output_dir: dist
 
   call_build_for_eu:
     uses: ./.github/workflows/build_i18n.yml
     with:
       cloud_region: EU
-      output_dir: dist-eu
 
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml

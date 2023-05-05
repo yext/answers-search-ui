@@ -11,14 +11,12 @@ jobs:
     with:
       build_script: build-search-bar-only
       cloud_region: US
-      output_dir: dist
 
   call_build_for_eu:
     uses: ./.github/workflows/build_i18n.yml
     with:
       build_script: build-search-bar-only
       cloud_region: EU
-      output_dir: dist-eu
 
   call_misc_tests:
     uses: ./.github/workflows/miscellaneous_tests.yml
