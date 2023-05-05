@@ -1,5 +1,5 @@
-export const VERTICAL_SEARCH_URL_REGEX = /v2\/accounts\/me\/answers\/vertical\/query/;
-export const UNIVERSAL_SEARCH_URL_REGEX = /v2\/accounts\/me\/answers\/query/;
+export const VERTICAL_SEARCH_URL_REGEX = /v2\/accounts\/me\/search\/vertical\/query/;
+export const UNIVERSAL_SEARCH_URL_REGEX = /v2\/accounts\/me\/search\/query/;
 export const PORT = 9999;
 
 const PAGE_DIR = `http://localhost:${PORT}/tests/acceptance/fixtures/html`;

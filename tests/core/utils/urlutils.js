@@ -2,7 +2,6 @@ import SearchParams from '../../../src/ui/dom/searchparams';
 import { PRODUCTION, SANDBOX } from '../../../src/core/constants';
 import {
   getLiveApiUrl,
-  getCachedLiveApiUrl,
   getAnalyticsUrl,
   replaceUrlParams,
   urlWithoutQueryParamsAndHash,
@@ -15,11 +14,9 @@ const baseUrl = 'https://yext.com/';
 describe('getUrlFunctions work', () => {
   it('differentiates sandbox from prod', () => {
     expect(getLiveApiUrl()).not.toEqual(expect.stringContaining('sandbox'));
-    expect(getCachedLiveApiUrl()).not.toEqual(expect.stringContaining('sandbox'));
     expect(getAnalyticsUrl()).not.toEqual(expect.stringContaining('sandbox'));
 
     expect(getLiveApiUrl(SANDBOX)).toEqual(expect.stringContaining('sandbox'));
-    expect(getCachedLiveApiUrl(SANDBOX)).toEqual(expect.stringContaining('sandbox'));
     expect(getAnalyticsUrl(SANDBOX)).toEqual(expect.stringContaining('sandbox'));
   });
 

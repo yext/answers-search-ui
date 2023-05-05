@@ -86,16 +86,16 @@ function allLocaleJSBundles (isSearchBarOnly = false, languages, cloudRegion) {
     'answers-umd.min.js'];
 
   return createJSBundlesForLanguages(languages, cloudRegion, isSearchBarOnly).then(() => {
-    copyAssetsForLocales(assetNames, languages, cloudRegion);
+    copyAssetsForLocales(assetNames, languages);
   });
 }
 
 exports.default = function defaultLanguageJSBundles () {
-  return createJSBundlesForLanguages([DEFAULT_LOCALE]);
+  return createJSBundlesForLanguages([DEFAULT_LOCALE], DEFAULT_CLOUD_REGION, false);
 };
 
 exports.buildLanguages = function allLanguageJSBundles () {
-  return createJSBundlesForLanguages(ALL_LANGUAGES);
+  return createJSBundlesForLanguages(ALL_LANGUAGES, DEFAULT_CLOUD_REGION, false);
 };
 
 exports.buildLocales = function (languages = ALL_LANGUAGES, cloudRegion = DEFAULT_CLOUD_REGION) {
