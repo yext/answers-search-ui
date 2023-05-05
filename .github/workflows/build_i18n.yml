@@ -11,10 +11,6 @@ on:
         required: false
         default: US
         type: string
-      output_dir:
-        required: false
-        default: dist
-        type: string
 
 jobs:
   create_language_matrix:
@@ -54,12 +50,8 @@ jobs:
         if [ "${{ matrix.language }}" == "en" ]; then 
           npm run size
         fi
-    - run: |
-        if [ "${{ inputs.output_dir }}" != "dist" ]; then 
-          mv dist ${{ inputs.output_dir }}
-        fi
-    - name: Create build-output artifact
+    - name: Create build-output-${{ inputs.cloud_region }} artifact
       uses: actions/upload-artifact@v3
       with:
-        name: build-output
-        path: ${{ inputs.output_dir }}
+        name: build-output-${{ inputs.cloud_region }}
+        path: dist/
