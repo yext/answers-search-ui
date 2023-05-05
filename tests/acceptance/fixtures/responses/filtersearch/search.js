@@ -250,7 +250,7 @@ function generateFilterSearchResponse (input) {
 
 export const MockedFilterSearchRequest = RequestMock()
   .onRequestTo(async request => {
-    const urlRegex = /^https:\/\/liveapi-cached.yext.com\/v2\/accounts\/me\/answers\/filtersearch/;
+    const urlRegex = /^https:\/\/prod-cdn.us.yextapis.com\/v2\/accounts\/me\/search\/filtersearch/;
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {

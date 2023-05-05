@@ -489,7 +489,7 @@ function generateUniversalSearchResponse (input) {
 
 export const MockedUniversalSearchRequest = RequestMock()
   .onRequestTo(async request => {
-    const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/query/;
+    const urlRegex = /^https:\/\/prod-cdn.us.yextapis.com\/v2\/accounts\/me\/search\/query/;
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {
