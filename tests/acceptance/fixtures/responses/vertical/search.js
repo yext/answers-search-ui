@@ -17,7 +17,7 @@ function generateVerticalSearchResponse (verticalKey, input, offset, filterParam
 
 export const MockedVerticalSearchRequest = RequestMock()
   .onRequestTo(async request => {
-    const urlRegex = /^https:\/\/liveapi.yext.com\/v2\/accounts\/me\/answers\/vertical\/query/;
+    const urlRegex = /^https:\/\/prod-cdn.us.yextapis.com\/v2\/accounts\/me\/search\/vertical\/query/;
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {

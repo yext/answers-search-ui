@@ -8,6 +8,13 @@ on:
 jobs:
   call_build:
     uses: ./.github/workflows/build_i18n.yml
+    with:
+      cloud_region: US
+
+  call_build_for_eu:
+    uses: ./.github/workflows/build_i18n.yml
+    with:
+      cloud_region: EU
 
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
@@ -19,7 +26,7 @@ jobs:
   call_acceptance:
     uses: ./.github/workflows/acceptance.yml
     needs: call_build
-  
+
   call_extract_versions:
     uses: ./.github/workflows/extract_versions.yml
 
@@ -27,7 +34,8 @@ jobs:
     uses: ./.github/workflows/should_deploy_major_version.yml
 
   call_deploy_full_version:
-    needs: 
+    needs:
+      - call_build_for_eu
       - call_unit_test
       - call_acceptance
       - call_extract_versions
@@ -42,7 +50,8 @@ jobs:
       GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
   call_deploy_major_version:
-    needs: 
+    needs:
+      - call_build_for_eu
       - call_unit_test
       - call_acceptance
       - call_extract_versions
@@ -59,7 +68,8 @@ jobs:
       GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
   call_deploy_minor_version:
-    needs: 
+    needs:
+      - call_build_for_eu
       - call_unit_test
       - call_acceptance
       - call_extract_versions

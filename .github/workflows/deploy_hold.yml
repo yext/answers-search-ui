@@ -28,10 +28,10 @@ jobs:
     environment: production # sets in github repo with reviewer requirement protection rule
     steps:
       - uses: actions/checkout@v3
-      - name: Download build-output artifact
+      - name: Download build-output-US artifact
         uses: actions/download-artifact@v3
         with:
-          name: build-output
+          name: build-output-US
           path: dist/
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1-node16
@@ -51,10 +51,10 @@ jobs:
     environment: production # sets in github repo with reviewer requirement protection rule
     steps:
       - uses: actions/checkout@v3
-      - name: Download build-output artifact
+      - name: Download build-output-EU artifact
         uses: actions/download-artifact@v3
         with:
-          name: build-output
+          name: build-output-EU
           path: dist/
       - name: Authenticate to Google Cloud
         id: auth
