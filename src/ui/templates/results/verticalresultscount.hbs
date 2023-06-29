@@ -1,7 +1,5 @@
 {{#unless isHidden}}
-  <div class="yxt-VerticalResultsCount"
-    aria-label="{{translate phrase='[[start]] through [[end]] of [[resultsCount]]' start=pageStart end=pageEnd resultsCount=total }}">
-    <div aria-hidden="true">
+  <div class="yxt-VerticalResultsCount">
       {{translate
         phrase=
 '<span class="yxt-VerticalResultsCount-start">[[start]]</span>
@@ -14,6 +12,5 @@
         end=pageEnd
         resultsCount=total
       }}
-    </div>
   </div>
 {{/unless}}
