@@ -85,7 +85,7 @@ export default class ErrorReporter {
 
     if (this.sendToServer) {
       const requestConfig = {
-        endpoint: '/v2/accounts/me/answers/errors',
+        endpoint: '/v2/accounts/me/search/errors',
         apiKey: this.apiKey,
         version: 20190301,
         environment: this.environment,
