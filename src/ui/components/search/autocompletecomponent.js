@@ -214,6 +214,7 @@ export default class AutoCompleteComponent extends Component {
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
       listLabelIdName: this.listLabelIdName,
+      autocompleteContainerIdName: `yxt-AutoComplete-container-${this._config.name.replaceAll('.', '-')}`,
       eventOptions: this.eventOptions(data)
     }));
   }
