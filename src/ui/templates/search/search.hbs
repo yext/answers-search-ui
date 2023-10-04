@@ -23,10 +23,10 @@
           aria-label="{{labelText}}"
           aria-autocomplete="list"
           aria-controls="{{autocompleteContainerIdName}}"
-          aria-describedby="instructions"
+          aria-describedby="{{searchBarContainerId}}-instructions"
           aria-haspopup="listbox"
         >
-        <div id="instructions" class="yxt-SearchBar-instructions sr-only">
+        <div id="{{searchBarContainerId}}-instructions" class="yxt-SearchBar-instructions sr-only">
           {{translate
             phrase='When autocomplete results are available, use up and down arrows to review and enter to select.'
           }}
