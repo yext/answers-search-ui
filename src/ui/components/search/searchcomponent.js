@@ -678,7 +678,7 @@ export default class SearchComponent extends Component {
       labelText: this.labelText,
       inputLabelIdName: this.inputLabelIdName,
       submitIcon: this.submitIcon,
-      searchBarContainerId: this._container.id,
+      searchBarContainerId: this._container.id || '',
       submitText: this.submitText,
       clearText: this.clearText,
       showClearButton: this._showClearButton,
