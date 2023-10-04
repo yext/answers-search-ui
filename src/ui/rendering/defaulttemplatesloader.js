@@ -44,7 +44,7 @@ export default class DefaultTemplatesLoader {
         onload: resolve,
         onerror: reject,
         async: true,
-        src: COMPILED_TEMPLATES_URL
+        src: 'answerstemplates.compiled.min.js'
       });
       DOM.append('body', script);
     });
