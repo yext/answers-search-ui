@@ -15,6 +15,7 @@ import QueryTriggers from './models/querytriggers';
 
 import StorageKeys from './storage/storagekeys';
 import AnalyticsEvent from './analytics/analyticsevent';
+import AnalyticsReporter from './analytics/analyticsreporter';
 import FilterRegistry from './filters/filterregistry';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
@@ -94,7 +95,7 @@ export default class Core {
      * A local reference to the analytics reporter, used to report events for this component
      * @type {AnalyticsReporter}
      */
-    this._analyticsReporter = config.analyticsReporter;
+    this._analyticsReporter = config.analyticsReporter || new AnalyticsReporter();
 
     /**
      * A user-given function that returns an analytics event to fire after a universal search.
@@ -268,7 +269,9 @@ export default class Core {
         querySource: this.storage.get(StorageKeys.QUERY_SOURCE),
         additionalHttpHeaders: this._additionalHttpHeaders
       })
-      .then(response => SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey))
+      .then(response => {
+        return SearchDataTransformer.transformVertical(response, this._fieldFormatters, verticalKey);
+      })
       .then(data => {
         this._persistFacets();
         this._persistFilters();
