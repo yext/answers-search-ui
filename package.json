@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-search-ui",
-  "version": "1.16.4",
+  "version": "1.16.5",
   "description": "Javascript Search Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
