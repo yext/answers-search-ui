@@ -22,7 +22,6 @@ msgstr[0] ""
 msgstr[1] ""
 
 #: src/ui/templates/results/resultsheader.hbs:19
-#: src/ui/templates/results/verticalresultscount.hbs:3
 msgid "[[start]] through [[end]] of [[resultsCount]]"
 msgstr ""
 
@@ -360,7 +359,7 @@ msgctxt "Example: 1-10 of 50"
 msgid "<span class=\"yxt-ResultsHeader-resultsCountStart\">[[start]]</span> <span class=\"yxt-ResultsHeader-resultsCountDash\">-</span> <span class=\"yxt-ResultsHeader-resultsCountEnd\">[[end]]</span> <span class=\"yxt-ResultsHeader-resultsCountOf\">of</span> <span class=\"yxt-ResultsHeader-resultsCountTotal\">[[resultsCount]]</span>"
 msgstr ""
 
-#: src/ui/templates/results/verticalresultscount.hbs:5
+#: src/ui/templates/results/verticalresultscount.hbs:3
 msgctxt "Example: 1-10 of 50"
 msgid ""
 "<span class=\"yxt-VerticalResultsCount-start\">[[start]]</span>\n"
