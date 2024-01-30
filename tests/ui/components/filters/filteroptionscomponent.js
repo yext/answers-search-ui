@@ -116,6 +116,48 @@ describe('filter options component', () => {
     expect(wrapper.find('.js-yxt-FilterOptions-showMore')).toHaveLength(1);
   });
 
+  it('renders correct options based on the searchable input', () => {
+    const config = {
+      ...defaultConfig,
+      control: 'multioption',
+      searchable: true
+    };
+    const component = COMPONENT_MANAGER.create('FilterOptions', config);
+    const wrapper = mount(component);
+    expect(options).toHaveLength(6);
+    const searchInputEl = wrapper.find('.js-yxt-FilterOptions-filter');
+    expect(searchInputEl).toHaveLength(1);
+
+    // empty input
+    searchInputEl.at(0).simulate('input', { target: { value: '' } });
+    expect(wrapper.find('.js-yxt-FilterOptions-clearSearch').hasClass('js-hidden')).toBeTruthy();
+    expect(wrapper.find('.js-yxt-FilterOptions-container')
+      .hasClass('yxt-FilterOptions-container--searching')).toBeFalsy();
+    let filterOptionEls = wrapper.find('.js-yxt-FilterOptions-option');
+    for (let index = 0; index < filterOptionEls.length; index++) {
+      const filterOptionEl = filterOptionEls.at(index);
+
+      expect(filterOptionEl.hasClass('hiddenSearch')).toBeFalsy();
+      expect(filterOptionEl.hasClass('displaySearch')).toBeFalsy();
+      expect(filterOptionEl.find('.js-yxt-FilterOptions-optionLabel--name').text().trim())
+        .toEqual(options[index].label);
+    }
+
+    // non-empty input
+    searchInputEl.at(0).simulate('input', { target: { value: 'cir' } });
+    expect(wrapper.find('.js-yxt-FilterOptions-clearSearch').hasClass('js-hidden')).toBeFalsy();
+    expect(wrapper.find('.js-yxt-FilterOptions-container')
+      .hasClass('yxt-FilterOptions-container--searching')).toBeTruthy();
+    filterOptionEls = wrapper.find('.js-yxt-FilterOptions-option');
+    for (let index = 0; index < filterOptionEls.length; index++) {
+      const filterOptionEl = filterOptionEls.at(index);
+      expect(filterOptionEl.hasClass(index === 0 ? 'displaySearch' : 'hiddenSearch')).toBeTruthy();
+      expect(filterOptionEl.hasClass(index === 0 ? 'hiddenSearch' : 'displaySearch')).toBeFalsy();
+      expect(filterOptionEl.find('.js-yxt-FilterOptions-optionLabel--name').text().trim())
+        .toEqual(index === 0 ? '<strong>cir</strong>i' : options[index].label);
+    }
+  });
+
   it('renders correct number of multi options', () => {
     const config = {
       ...defaultConfig,
