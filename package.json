@@ -141,7 +141,9 @@
     "regenerator-runtime": "0.13.1",
     "postcss": "^8.4.12",
     "ansi-regex": "^5.0.1",
-    "eslint": "^8.11.0"
+    "eslint": "^8.11.0",
+    "get-func-name": "^v2.0.2",
+    "http-cache-semantics": "^4.1.1"
   },
   "jest": {
     "bail": 0,
