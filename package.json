@@ -89,7 +89,7 @@
     "gulp-rollup-lightweight": "^1.0.10",
     "gulp-rtlcss": "^1.4.2",
     "gulp-sass": "^5.1.0",
-    "gulp-uglify-es": "^3.0.0",
+    "gulp-uglify-es": "^2.0.0",
     "gulp-umd": "^2.0.0",
     "gulp-wrap": "^0.14.0",
     "i18next": "^19.9.2",
