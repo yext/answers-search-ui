@@ -280,6 +280,7 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 
   &-buttonImage .Icon svg, .Icon-image
   {
+    display: inline-block; 
     width: 2em;
     height: 2em;
   }
