@@ -288,6 +288,10 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   &-instructions {
     display: none;
   }
+
+  &-customLoadingImage {
+    display: block;
+  }
 }
 
 // If custom icons are supplied, the SVGs simply alternate opacity
