@@ -448,21 +448,21 @@ export default class FilterOptionsComponent extends Component {
             if (!filter) {
               filterOption.classList.remove('hiddenSearch');
               filterOption.classList.remove('displaySearch');
-              labelEl.innerHTML = labelText;
+              labelEl.textContent = labelText;
             } else {
               const matchedSubstring = this._getMatchedSubstring(
                 labelText.toLowerCase(), filter.toLowerCase());
               if (matchedSubstring) {
                 filterOption.classList.add('displaySearch');
                 filterOption.classList.remove('hiddenSearch');
-                labelEl.innerHTML = new HighlightedValue({
+                labelEl.textContent = new HighlightedValue({
                   value: labelText,
                   matchedSubstrings: [matchedSubstring]
                 }).get();
               } else {
                 filterOption.classList.add('hiddenSearch');
                 filterOption.classList.remove('displaySearch');
-                labelEl.innerHTML = labelText;
+                labelEl.textContent = labelText;
               }
             }
           }
