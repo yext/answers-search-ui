@@ -280,12 +280,17 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
 
   &-buttonImage .Icon svg, .Icon-image
   {
+    display: block;
     width: 2em;
     height: 2em;
   }
 
   &-instructions {
     display: none;
+  }
+
+  &-CustomLoadingImage {
+    display: block;
   }
 }
 

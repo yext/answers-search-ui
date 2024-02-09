@@ -110,7 +110,16 @@ export default class AnswersAdapter extends EnzymeAdapter {
           composed: args.composed,
           cancelable: args.cancelable
         });
-        Object.assign(event, args);
+
+        if (Array.isArray(...args)) {
+          for (const arg in args) {
+            if (arg && arg.target) {
+              Object.defineProperty(event, 'target', { value: arg.target });
+            }
+          }
+        } else {
+          Object.defineProperty(event, 'target', { value: args[0].target });
+        }
 
         node.instance.dispatchEvent(event);
       }
