@@ -1,41 +1,41 @@
 {{#if showLoadingIndicator}}
   {{#if customLoadingIconUrl}}
-    <span class="yxt-SearchBar-CustomLoadingImage js-yxt-SearchBar-LoadingIndicator js-yxt-SearchBar-Icon yxt-SearchBar-Icon--inactive">
+    <div class="yxt-SearchBar-CustomLoadingImage js-yxt-SearchBar-LoadingIndicator js-yxt-SearchBar-Icon yxt-SearchBar-Icon--inactive">
       {{> icons/iconPartial iconUrl=customLoadingIconUrl}}
-    </span>
+    </div>
   {{else}}
-    <span class="yxt-SearchBar-AnimatedIcon js-yxt-SearchBar-LoadingIndicator yxt-SearchBar-LoadingIndicator js-yxt-SearchBar-Icon 
+    <div class="yxt-SearchBar-AnimatedIcon js-yxt-SearchBar-LoadingIndicator yxt-SearchBar-LoadingIndicator js-yxt-SearchBar-Icon 
       yxt-SearchBar-Icon--inactive Icon--lg">
       <svg class= "yxt-SearchBar-LoadingIndicator-AnimatedIcon" viewBox="0 0 72 72">
         <circle class="yxt-SearchBar-LoadingIndicator-Circle" cx="36" cy="36" r="33" stroke="black" stroke-width="3" fill="none"/>
       </svg>
-    </span>
+    </div>
   {{/if}}
 {{/if}}
 
 {{#if submitIcon}}
-  <span class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon">
+  <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon">
     {{> icons/builtInIcon iconName=submitIcon}}
-  </span>
+  </div>
 {{else if _config.customIconUrl}}
-  <span class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon">
+  <div class="yxt-SearchBar-buttonImage js-yxt-SearchBar-buttonImage js-yxt-SearchBar-Icon">
     {{> icons/iconPartial iconUrl=_config.customIconUrl}}
-  </span>
+  </div>
 {{else}}
-  <span class="yxt-SearchBar-AnimatedIcon js-yxt-AnimatedForward js-yxt-SearchBar-Icon
+  <div class="yxt-SearchBar-AnimatedIcon js-yxt-AnimatedForward js-yxt-SearchBar-Icon
     {{#unless autoFocus}} yxt-SearchBar-Icon--inactive{{/unless}}">
     {{> icons/builtInIcon
       iconName='yext_animated_forward'
       classNames='yxt-SearchBar-MagnifyingGlass--static Icon--lg'
       complexContentsParams=forwardIconOpts.complexContentsParams
     }}
-  </span>
-  <span class="yxt-SearchBar-AnimatedIcon js-yxt-AnimatedReverse js-yxt-SearchBar-Icon
+  </div>
+  <div class="yxt-SearchBar-AnimatedIcon js-yxt-AnimatedReverse js-yxt-SearchBar-Icon
     {{#if autoFocus}} yxt-SearchBar-Icon--inactive{{/if}}">
     {{> icons/builtInIcon
       iconName='yext_animated_reverse'
       classNames='yxt-SearchBar-Yext--static Icon--lg'
       complexContentsParams=forwardIconOpts.complexContentsParams
     }}
-  </span>
+  </div>
 {{/if}}
