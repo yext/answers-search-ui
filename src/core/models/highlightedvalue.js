@@ -24,7 +24,7 @@ export default class HighlightedValue {
    */
   getElements () {
     this._sortMatchedSubstrings();
-    return this.buildHighlightedElements(this.value, this.matchedSubstrings);
+    return this._buildHighlightedElements(this.value, this.matchedSubstrings);
   }
 
   /**
@@ -158,7 +158,7 @@ export default class HighlightedValue {
    *     <strong>ATM</strong>,
    *   ]
    */
-  buildHighlightedElements (
+  _buildHighlightedElements (
     val,
     highlightedSubstrings,
     transformFunction = function (x) { return x; }
