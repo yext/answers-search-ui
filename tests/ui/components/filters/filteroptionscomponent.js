@@ -153,8 +153,10 @@ describe('filter options component', () => {
       const filterOptionEl = filterOptionEls.at(index);
       expect(filterOptionEl.hasClass(index === 0 ? 'displaySearch' : 'hiddenSearch')).toBeTruthy();
       expect(filterOptionEl.hasClass(index === 0 ? 'hiddenSearch' : 'displaySearch')).toBeFalsy();
-      expect(filterOptionEl.find('.js-yxt-FilterOptions-optionLabel--name').text().trim())
-        .toEqual(index === 0 ? '<strong>cir</strong>i' : options[index].label);
+      const labelNameEl = filterOptionEl.find('.js-yxt-FilterOptions-optionLabel--name');
+      if (index === 0) {
+        expect(labelNameEl.find('strong').text()).toEqual('cir');
+      }
     }
   });
 

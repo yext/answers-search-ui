@@ -19,6 +19,15 @@ export default class HighlightedValue {
   }
 
   /**
+   * get highlighted value elements
+   * @returns {Array<Element|string>}
+   */
+  getElements () {
+    this._sortMatchedSubstrings();
+    return this.buildHighlightedElements(this.value, this.matchedSubstrings);
+  }
+
+  /**
    * get highlighted value string
    * @param {Function} transformFunction takes a string and returns the transformed string
    * @returns {string} The value interpolated with highlighting markup and transformed in between
@@ -133,6 +142,56 @@ export default class HighlightedValue {
     }
 
     return highlightedValue;
+  }
+
+  /**
+   * introduces highlighting to input data according to highlighting specifiers and returns a
+   * list of elements/strings
+   *
+   * @param {Object} val input object to apply highlighting to
+   * @param {Object} highlightedSubstrings highlighting specifiers to apply to input object
+   * @param {Function} transformFunction function to apply to strings in between highlighting markup
+   * @returns {Array<Element|string>} a list of elements/strings representing the val with
+   * highlighting applied. Example returned value :
+   *   [
+   *     'Save time & bank on your terms at over 1,800',
+   *     <strong>ATM</strong>,
+   *   ]
+   */
+  buildHighlightedElements (
+    val,
+    highlightedSubstrings,
+    transformFunction = function (x) { return x; }
+  ) {
+    const highlightedElements = [];
+    let nextStart = 0;
+
+    if (highlightedSubstrings.length === 0) {
+      return transformFunction(val);
+    }
+
+    for (let j = 0; j < highlightedSubstrings.length; j++) {
+      const start = Number(highlightedSubstrings[j].offset);
+      const end = start + highlightedSubstrings[j].length;
+
+      if (nextStart < start) {
+        highlightedElements.push(transformFunction(val.slice(nextStart, start)));
+      }
+
+      if (start < end) {
+        const highlightedText = document.createElement('strong');
+        highlightedText.textContent = transformFunction(val.slice(start, end));
+        highlightedElements.push(highlightedText);
+      }
+
+      if (j === highlightedSubstrings.length - 1 && end < val.length) {
+        highlightedElements.push(transformFunction(val.slice(end)));
+      }
+
+      nextStart = end;
+    }
+
+    return highlightedElements;
   }
 
   _sortMatchedSubstrings () {
