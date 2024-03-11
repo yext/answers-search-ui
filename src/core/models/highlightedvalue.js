@@ -150,7 +150,6 @@ export default class HighlightedValue {
    *
    * @param {Object} val input object to apply highlighting to
    * @param {Object} highlightedSubstrings highlighting specifiers to apply to input object
-   * @param {Function} transformFunction function to apply to strings in between highlighting markup
    * @returns {Array<Element|string>} a list of elements/strings representing the val with
    * highlighting applied. Example returned value :
    *   [
@@ -158,34 +157,26 @@ export default class HighlightedValue {
    *     <strong>ATM</strong>,
    *   ]
    */
-  _buildHighlightedElements (
-    val,
-    highlightedSubstrings,
-    transformFunction = function (x) { return x; }
-  ) {
+  _buildHighlightedElements (val, highlightedSubstrings) {
     const highlightedElements = [];
     let nextStart = 0;
-
-    if (highlightedSubstrings.length === 0) {
-      return transformFunction(val);
-    }
 
     for (let j = 0; j < highlightedSubstrings.length; j++) {
       const start = Number(highlightedSubstrings[j].offset);
       const end = start + highlightedSubstrings[j].length;
 
       if (nextStart < start) {
-        highlightedElements.push(transformFunction(val.slice(nextStart, start)));
+        highlightedElements.push(val.slice(nextStart, start));
       }
 
       if (start < end) {
         const highlightedText = document.createElement('strong');
-        highlightedText.textContent = transformFunction(val.slice(start, end));
+        highlightedText.textContent = val.slice(start, end);
         highlightedElements.push(highlightedText);
       }
 
       if (j === highlightedSubstrings.length - 1 && end < val.length) {
-        highlightedElements.push(transformFunction(val.slice(end)));
+        highlightedElements.push(val.slice(end));
       }
 
       nextStart = end;
