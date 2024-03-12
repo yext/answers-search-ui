@@ -455,10 +455,13 @@ export default class FilterOptionsComponent extends Component {
               if (matchedSubstring) {
                 filterOption.classList.add('displaySearch');
                 filterOption.classList.remove('hiddenSearch');
-                labelEl.textContent = new HighlightedValue({
+                const highlightedElements = new HighlightedValue({
                   value: labelText,
                   matchedSubstrings: [matchedSubstring]
-                }).get();
+                }).getElements();
+
+                labelEl.textContent = '';
+                highlightedElements.forEach(el => labelEl.append(el));
               } else {
                 filterOption.classList.add('hiddenSearch');
                 filterOption.classList.remove('displaySearch');
