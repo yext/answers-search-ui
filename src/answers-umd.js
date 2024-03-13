@@ -629,6 +629,7 @@ class Answers {
    * variables are updated dynamically (e.g. through js) or if the css variables are
    * added after the ANSWERS.init
    *
+   * test test ets
    * To solve issues with non-zero max-age cache controls for link/script assets in IE11,
    * we add a cache busting parameter so that XMLHttpRequests succeed.
    *
