@@ -10,7 +10,7 @@ on:
 
 jobs:
   call_coveralls:
-    uses: yext/slapshot-reusable-workflows/.github/workflows/coverage.yml@v1
+    uses: yext/slapshot-reusable-workflows/.github/workflows/coverage.yml@node-20-upgrade
     with:
       test_script: npx gulp templates && npx jest --coverage
       comparison_branch: master
