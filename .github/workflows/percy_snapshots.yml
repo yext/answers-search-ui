@@ -7,7 +7,7 @@ on:
 
 jobs:
   call_percy_snapshots:
-    uses: yext/slapshot-reusable-workflows/.github/workflows/percy_snapshots.yml@v1
+    uses: yext/slapshot-reusable-workflows/.github/workflows/percy_snapshots.yml@dev/use-node-20
     with:
       snapshots_script_path: tests/acceptance/percy/snapshots.js
       fetch_depth: 0

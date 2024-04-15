@@ -6,6 +6,6 @@ on:
 
 jobs:
   call_wcag_test:
-    uses: yext/slapshot-reusable-workflows/.github/workflows/wcag_test.yml@v1
+    uses: yext/slapshot-reusable-workflows/.github/workflows/wcag_test.yml@dev/use-node-20
     with:
       fetch_depth: 0
