@@ -27,9 +27,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production # sets in github repo with reviewer requirement protection rule
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download build-output-US artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-output-US
           path: dist/
@@ -50,9 +50,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production # sets in github repo with reviewer requirement protection rule
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Download build-output-EU artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-output-EU
           path: dist/

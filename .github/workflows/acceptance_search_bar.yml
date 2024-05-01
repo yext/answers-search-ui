@@ -6,15 +6,15 @@ jobs:
     name: Headless Acceptance
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Use Node.js 16
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: 16
           cache: 'npm'
       - run: npm ci
       - name: Download build-output-US artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-output-US
           path: dist/
