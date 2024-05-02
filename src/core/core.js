@@ -30,7 +30,7 @@ import { mergeAdditionalHttpHeaders } from './utils/mergeAdditionalHttpHeaders';
 /**
  * Core is the main application container for all of the network and storage
  * related behaviors of the application. It uses an instance of the external Core
- * library to perform the actual network calls.
+ * library to perform the actual network calls
  */
 export default class Core {
   constructor (config = {}) {

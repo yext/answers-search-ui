@@ -15,7 +15,7 @@ import ResultsContext from '../storage/resultscontext';
 /**
  * A Data Transformer that takes the response object from a Search request
  * And transforms in to a front-end oriented data structure that our
- * component library and core storage understand.
+ * component library and core storage understand
  */
 export default class SearchDataTransformer {
   static transformUniversal (data, urls = {}, formatters = undefined) {
