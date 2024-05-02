@@ -41,7 +41,7 @@ describe('translations with one plural form (French)', () => {
       expect(translation).toEqual('Le chien.');
     });
 
-    it('translation with a colon : work as expected', () => {
+    it('translation with a colon : work as expected.', () => {
       const translation = translator.translate('The: dog');
       expect(translation).toEqual('Le: chien');
     });
