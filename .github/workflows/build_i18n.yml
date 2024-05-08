@@ -18,10 +18,10 @@ jobs:
     outputs:
       matrix: ${{ steps.set-matrix.outputs.matrix }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - uses: actions/setup-node@v3
+    - uses: actions/setup-node@v4
       with:
         node-version: 16
         cache: 'npm'
@@ -36,11 +36,11 @@ jobs:
       matrix:
         language: ${{ fromJson(needs.create_language_matrix.outputs.matrix) }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
       with:
         fetch-depth: 0
     - name: Use Node.js 16
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@v4
       with:
         node-version: 16
         cache: 'npm'
@@ -51,7 +51,7 @@ jobs:
           npm run size
         fi
     - name: Create build-output-${{ inputs.cloud_region }} artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
-        name: build-output-${{ inputs.cloud_region }}
+        name: build-output-${{ inputs.cloud_region }}-${{ matrix.language }}
         path: dist/
