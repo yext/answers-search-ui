@@ -14,8 +14,9 @@ jobs:
     with:
       build_script: build-unminified-legacy
 
-  call_build_locales:
-    uses: ./.github/workflows/build_i18n.yml
+  call_unit_test:
+    uses: ./.github/workflows/unit_test.yml
+    needs: call_build
 
   call_misc_tests:
     uses: ./.github/workflows/miscellaneous_tests.yml
@@ -23,22 +24,12 @@ jobs:
   call_format_branch_name:
     uses: ./.github/workflows/format_branch_name.yml
 
-  merge_multiple_us_artifacts:
-    uses: ./.github/workflows/merge_upload_multiple_artifacts.yml
-    needs:
-      - call_build_locales
-    with:
-      cloud_region: US
-
-  call_unit_test:
-    uses: ./.github/workflows/unit_test.yml
-    needs: 
-      - merge_multiple_us_artifacts
-
   call_acceptance:
     uses: ./.github/workflows/acceptance.yml
-    needs: 
-      - merge_multiple_us_artifacts
+    needs: call_build
+
+  call_build_locales:
+    uses: ./.github/workflows/build_i18n.yml
 
   call_deploy:
     if: github.ref_name != 'develop'

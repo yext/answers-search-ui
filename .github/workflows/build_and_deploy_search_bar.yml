@@ -53,6 +53,7 @@ jobs:
 
   call_deploy_full_version:
     needs:
+      - call_build_for_eu
       - call_acceptance_search_bar
       - call_extract_versions
       - call_misc_tests
