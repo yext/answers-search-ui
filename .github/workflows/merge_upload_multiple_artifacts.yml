@@ -1,0 +1,20 @@
+name: Merge and Upload Multiple Artifacts
+
+on:
+  workflow_call:
+    inputs:
+      cloud_region:
+        required: false
+        default: US
+        type: string
+
+jobs:
+  merge_multiple_artifacts:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge into build-output-US Artifact
+        uses: actions/upload-artifact/merge@v4
+        with:
+          name: build-output-${{ inputs.cloud_region }}
+          pattern: build-output-${{ inputs.cloud_region }}-*
+          merge-multiple: true
