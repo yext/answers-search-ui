@@ -8,12 +8,16 @@ on:
       - hotfix/**
       - feature/**-i18n
       - release/**
-      - dev/**
 
 jobs:
   call_build:
     uses: ./.github/workflows/build.yml
 
+  call_build_eu_locales:
+    uses: ./.github/workflows/build_i18n.yml
+    with:
+      cloud_region: EU
+      
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
     needs: call_build
@@ -34,12 +38,14 @@ jobs:
       - call_format_branch_name
       - call_acceptance
       - call_misc_tests
+      - call_build_eu_locales
     uses: ./.github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-${{ github.ref }}-1
