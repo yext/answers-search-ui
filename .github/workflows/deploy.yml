@@ -64,6 +64,7 @@ jobs:
         with:
           path: dist/
           parent: false
+          process_gcloudignore: false
           destination: assets-eu.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }}
           headers: |-
             cache-control: ${{ inputs.cache-control }}
