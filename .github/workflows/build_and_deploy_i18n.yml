@@ -7,7 +7,6 @@ on:
       - hotfix/**
       - feature/**-i18n
       - release/**
-      - dev/**
 
 jobs:
   call_build:
