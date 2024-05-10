@@ -20,7 +20,7 @@ jobs:
 
   call_misc_tests:
     uses: ./.github/workflows/miscellaneous_tests.yml
-    
+
   call_acceptance_search_bar:
     uses: ./.github/workflows/acceptance_search_bar.yml
     needs: call_build
