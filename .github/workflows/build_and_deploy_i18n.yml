@@ -32,6 +32,11 @@ jobs:
   call_build_locales:
     uses: ./.github/workflows/build_i18n.yml
 
+  call_build_eu_locales:
+    uses: ./.github/workflows/build_i18n.yml
+    with:
+      cloud_region: EU
+
   call_deploy:
     if: github.ref_name != 'develop'
     needs:
@@ -40,6 +45,7 @@ jobs:
       - call_acceptance
       - call_misc_tests
       - call_build_locales
+      - call_build_eu_locales
     uses: ./.github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}
