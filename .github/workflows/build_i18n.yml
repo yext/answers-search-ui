@@ -63,7 +63,22 @@ jobs:
         - name: Merge into build-output-${{ inputs.cloud_region }} Artifact
           uses: actions/upload-artifact/merge@v4
           with:
-            name: build-output-${{ inputs.cloud_region }}
+            name: build-output-${{ inputs.cloud_region }}-temp
             pattern: build-output-${{ inputs.cloud_region }}-*
-            overwrite: true
             delete-merged: true
+
+  overwrite_artifact:
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+        - name: Download build-output-${{ inputs.cloud_region }}-temp artifact
+          uses: actions/download-artifact@v4
+          with:
+            name: build-output-${{ inputs.cloud_region }}-temp
+            path: dist/
+        - name: Overwrite build-output-${{ inputs.cloud_region }} artifact
+          uses: actions/upload-artifact@v4
+          with:
+            name: build-output-${{ inputs.cloud_region }}
+            path: dist/
+            overwrite: true
