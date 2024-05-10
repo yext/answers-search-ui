@@ -65,3 +65,5 @@ jobs:
           with:
             name: build-output-${{ inputs.cloud_region }}
             pattern: build-output-${{ inputs.cloud_region }}-*
+            overwrite: true
+            delete-merged: true
