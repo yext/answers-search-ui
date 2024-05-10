@@ -77,6 +77,7 @@ jobs:
       - call_acceptance
       - call_misc_tests
       - call_build_locales
+      - call_build_for_eu_locales
     uses: ./.github/workflows/deploy.yml
     with:
       directory: canary/${{ github.sha }}
@@ -84,6 +85,7 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-i18n-${{ github.ref }}-1
