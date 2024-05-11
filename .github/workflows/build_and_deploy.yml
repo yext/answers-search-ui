@@ -12,7 +12,7 @@ on:
 jobs:
   call_build:
     uses: ./.github/workflows/build.yml
-      
+
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
     needs: call_build
