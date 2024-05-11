@@ -12,11 +12,6 @@ on:
 jobs:
   call_build:
     uses: ./.github/workflows/build.yml
-
-  call_build_eu_locales:
-    uses: ./.github/workflows/build_i18n.yml
-    with:
-      cloud_region: EU
       
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
@@ -38,7 +33,6 @@ jobs:
       - call_format_branch_name
       - call_acceptance
       - call_misc_tests
-      - call_build_eu_locales
     uses: ./.github/workflows/deploy.yml
     with:
       directory: dev/${{ needs.call_format_branch_name.outputs.formatted_branch }}

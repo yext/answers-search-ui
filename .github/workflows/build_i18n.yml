@@ -60,7 +60,7 @@ jobs:
       needs: build
       runs-on: ubuntu-latest
       steps:
-        - name: Merge into build-output-${{ inputs.cloud_region }} Artifact
+        - name: Merge into build-output-${{ inputs.cloud_region }}-temp Artifact
           uses: actions/upload-artifact/merge@v4
           with:
             name: build-output-${{ inputs.cloud_region }}-temp
