@@ -19,8 +19,6 @@ on:
         required: true
       AWS_SECRET_ACCESS_KEY:
         required: true
-      GCP_SA_KEY:
-        required: true
 
 jobs:
   deploy-aws:
