@@ -51,6 +51,7 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
   call_deploy_canary:
     if: github.ref_name == 'dev/test-deploy-canary'
@@ -84,6 +85,7 @@ jobs:
     secrets:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      GCP_SA_KEY: ${{ secrets.GCP_SA_KEY }}
 
 concurrency:
   group: ci-build-and-deploy-i18n-${{ github.ref }}-1
