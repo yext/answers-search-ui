@@ -715,7 +715,7 @@ export default class Core {
   /**
    * Gets the location object needed for search-core
    *
-   * @returns {LatLong|undefined} from search-core
+   * @returns {LatLong|undefined} from search-core.
    */
   _getLocationPayload () {
     const geolocation = this.storage.get(StorageKeys.GEOLOCATION);
