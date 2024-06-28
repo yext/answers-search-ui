@@ -1,8 +1,8 @@
 The following NPM packages may be included in this product:
 
- - @babel/code-frame@7.23.5
- - @babel/helper-validator-identifier@7.22.20
- - @babel/highlight@7.23.4
+ - @babel/code-frame@7.24.7
+ - @babel/helper-validator-identifier@7.24.7
+ - @babel/highlight@7.24.7
  - @babel/runtime-corejs3@7.17.9
 
 These packages each contain the following license and notice below:
@@ -2605,7 +2605,7 @@ the licensed code:
 
 The following NPM package may be included in this product:
 
- - function-bind@1.1.1
+ - function-bind@1.1.2
 
 This package contains the following license and notice below:
 
@@ -2924,32 +2924,31 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - has@1.0.3
+ - hasown@2.0.2
 
 This package contains the following license and notice below:
 
-Copyright (c) 2013 Thiago de Arruda
+MIT License
 
-Permission is hereby granted, free of charge, to any person
-obtaining a copy of this software and associated documentation
-files (the "Software"), to deal in the Software without
-restriction, including without limitation the rights to use,
-copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following
-conditions:
+Copyright (c) Jordan Harband and contributors
 
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES
-OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,
-WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
-OTHER DEALINGS IN THE SOFTWARE.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 -----------
 
@@ -3331,7 +3330,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - is-core-module@2.9.0
+ - is-core-module@2.14.0
 
 This package contains the following license and notice below:
 
@@ -4793,7 +4792,7 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM package may be included in this product:
 
- - picocolors@1.0.0
+ - picocolors@1.0.1
 
 This package contains the following license and notice below:
 
@@ -5521,7 +5520,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - resolve@1.22.0
+ - resolve@1.22.8
 
 This package contains the following license and notice below:
 
