@@ -137,7 +137,8 @@ export default class Result {
       distance: result.distance,
       distanceFromFilter: result.distanceFromFilter,
       highlighted: appliedHighlightedFields,
-      highlightedFields
+      highlightedFields,
+      segment: result.segment
     };
 
     if (result.source !== 'KNOWLEDGE_MANAGER') {
