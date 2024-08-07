@@ -146,7 +146,7 @@ export default class Result {
       segment: result.segment
     };
 
-    if (result.source !== 'KNOWLEDGE_MANAGER') {
+    if (result.source !== 'KNOWLEDGE_MANAGER' && result.source !== 'DOCUMENT_VERTICAL') {
       return new Result(resultData);
     }
 
