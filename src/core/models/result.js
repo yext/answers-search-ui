@@ -111,6 +111,11 @@ export default class Result {
      * @type {number}
      */
     this.distanceFromFilter = data.distanceFromFilter || null;
+    /**
+     * In the case of a Document Vertical result grouped by segments, the formatted segment data
+     * @type {Object}
+     */
+    this.segment = data.segment || null;
   }
 
   /**
