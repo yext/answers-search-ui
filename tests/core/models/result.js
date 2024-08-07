@@ -24,7 +24,13 @@ it('constructs a result from an answers-core result', () => {
         }]
       }
     },
-    entityType: 'ce_fruit'
+    entityType: 'ce_fruit',
+    segment: {
+      text: 'Some segment ',
+      score: 0.27316594,
+      segmentNumber: 3,
+      fieldId: 'c_segmentField'
+    }
   };
 
   const expectedResult = {
@@ -37,7 +43,13 @@ it('constructs a result from an answers-core result', () => {
     link: 'www.yext.com',
     id: 2,
     distance: 20,
-    distanceFromFilter: 30
+    distanceFromFilter: 30,
+    segment: {
+      text: 'Some segment ',
+      score: 0.27316594,
+      segmentNumber: 3,
+      fieldId: 'c_segmentField'
+    }
   };
 
   const actualResult = Result.fromCore(coreResult);

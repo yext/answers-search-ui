@@ -111,6 +111,11 @@ export default class Result {
      * @type {number}
      */
     this.distanceFromFilter = data.distanceFromFilter || null;
+    /**
+     * In the case of a Document Vertical result grouped by segments, the formatted segment data
+     * @type {Object}
+     */
+    this.segment = data.segment || null;
   }
 
   /**
@@ -137,10 +142,11 @@ export default class Result {
       distance: result.distance,
       distanceFromFilter: result.distanceFromFilter,
       highlighted: appliedHighlightedFields,
-      highlightedFields
+      highlightedFields,
+      segment: result.segment
     };
 
-    if (result.source !== 'KNOWLEDGE_MANAGER') {
+    if (result.source !== 'KNOWLEDGE_MANAGER' && result.source !== 'DOCUMENT_VERTICAL') {
       return new Result(resultData);
     }
 
