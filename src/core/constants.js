@@ -11,6 +11,11 @@ export const SPEECH_RECOGNITION_LOCALES_SUPPORTED_BY_EDGE = '@@SPEECH_RECOGNITIO
 
 /** The cloud region being used, injected by the build process */
 export const CLOUD_REGION = '@@CLOUD_REGION';
+/** The identifier of the production environment */
+export const GLOBAL_MULTI = 'multi';
+
+/** The identifier of the sandbox environment */
+export const GLOBAL_GCP = 'gcp';
 
 /** The identifier of the production environment */
 export const PRODUCTION = 'production';

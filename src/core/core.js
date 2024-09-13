@@ -19,7 +19,7 @@ import FilterRegistry from './filters/filterregistry';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
-import { PRODUCTION, LIB_VERSION, CLOUD_REGION, SANDBOX } from './constants';
+import { PRODUCTION, LIB_VERSION, CLOUD_REGION, SANDBOX, GLOBAL_MULTI, GLOBAL_GCP } from './constants';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
 import Searcher from './models/searcher';
@@ -150,6 +150,7 @@ export default class Core {
    */
   init (config) {
     const environment = this._environment === SANDBOX ? Environment.SANDBOX : Environment.PROD;
+    const cloudChoice = this._cloudChoice === GLOBAL_GCP ? CloudChoice.GLOBAL_GCP : CloudChoice.GLOBAL_MULTI;
     const params = {
       ...(this._token && { token: this._token }),
       ...(this._apiKey && { apiKey: this._apiKey }),
@@ -160,7 +161,7 @@ export default class Core {
         jsLibVersion: LIB_VERSION
       },
       cloudRegion: this._cloudRegion,
-      cloudChoice: this._cloudChoice,
+      cloudChoice,
       environment,
       ...config
     };
