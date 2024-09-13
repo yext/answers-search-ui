@@ -124,7 +124,7 @@ export default class Core {
      * Determines the cloud choice of the api endpoints used when making search requests.
      * @type {string}
      */
-    this._cloudChoice = config.cloudChoice || CloudChoice.GLOBAL_MULTI;
+    this._cloudChoice = config.cloudChoice || GLOBAL_MULTI;
 
     /** @type {string} */
     this._verticalKey = config.verticalKey;
