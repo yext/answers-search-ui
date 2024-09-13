@@ -1,7 +1,7 @@
 /** @module Core */
 import { provideCore } from '@yext/search-core/lib/commonjs';
 // Using the ESM build for importing the Environment enum due to an issue importing the commonjs version
-import { Environment } from '@yext/search-core';
+import { CloudChoice, Environment } from '@yext/search-core';
 import { generateUUID } from './utils/uuid';
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -120,6 +120,12 @@ export default class Core {
      */
     this._cloudRegion = CLOUD_REGION;
 
+    /**
+     * Determines the cloud choice of the api endpoints used when making search requests.
+     * @type {string}
+     */
+    this._cloudChoice = config.cloudChoice || CloudChoice.GLOBAL_MULTI;
+
     /** @type {string} */
     this._verticalKey = config.verticalKey;
 
@@ -154,6 +160,7 @@ export default class Core {
         jsLibVersion: LIB_VERSION
       },
       cloudRegion: this._cloudRegion,
+      cloudChoice: this._cloudChoice,
       environment,
       ...config
     };
