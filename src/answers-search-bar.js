@@ -194,7 +194,8 @@ class AnswersSearchBar {
       onVerticalSearch: parsedConfig.onVerticalSearch,
       onUniversalSearch: parsedConfig.onUniversalSearch,
       environment: parsedConfig.environment,
-      componentManager: this.components
+      componentManager: this.components,
+      cloudChoice: parsedConfig.cloudChoice
     });
 
     if (parsedConfig.onStateChange && typeof parsedConfig.onStateChange === 'function') {
