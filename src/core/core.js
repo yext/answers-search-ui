@@ -1,7 +1,7 @@
 /** @module Core */
 import { provideCore } from '@yext/search-core/lib/commonjs';
 // Using the ESM build for importing the Environment enum due to an issue importing the commonjs version
-import { Environment } from '@yext/search-core';
+import { CloudChoice, Environment } from '@yext/search-core';
 import { generateUUID } from './utils/uuid';
 import SearchDataTransformer from './search/searchdatatransformer';
 
@@ -19,7 +19,7 @@ import FilterRegistry from './filters/filterregistry';
 import DirectAnswer from './models/directanswer';
 import AutoCompleteResponseTransformer from './search/autocompleteresponsetransformer';
 
-import { PRODUCTION, LIB_VERSION, CLOUD_REGION, SANDBOX } from './constants';
+import { PRODUCTION, LIB_VERSION, CLOUD_REGION, SANDBOX, GLOBAL_MULTI, GLOBAL_GCP } from './constants';
 import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
 import Searcher from './models/searcher';
@@ -120,6 +120,12 @@ export default class Core {
      */
     this._cloudRegion = CLOUD_REGION;
 
+    /**
+     * Determines the cloud choice of the api endpoints used when making search requests.
+     * @type {string}
+     */
+    this._cloudChoice = config.cloudChoice || GLOBAL_MULTI;
+
     /** @type {string} */
     this._verticalKey = config.verticalKey;
 
@@ -144,6 +150,7 @@ export default class Core {
    */
   init (config) {
     const environment = this._environment === SANDBOX ? Environment.SANDBOX : Environment.PROD;
+    const cloudChoice = this._cloudChoice === GLOBAL_GCP ? CloudChoice.GLOBAL_GCP : CloudChoice.GLOBAL_MULTI;
     const params = {
       ...(this._token && { token: this._token }),
       ...(this._apiKey && { apiKey: this._apiKey }),
@@ -154,6 +161,7 @@ export default class Core {
         jsLibVersion: LIB_VERSION
       },
       cloudRegion: this._cloudRegion,
+      cloudChoice,
       environment,
       ...config
     };
