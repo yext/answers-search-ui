@@ -262,7 +262,8 @@ class Answers {
         parsedConfig.businessId,
         parsedConfig.analyticsEventsEnabled,
         parsedConfig.analyticsOptions,
-        parsedConfig.environment);
+        parsedConfig.environment,
+        parsedConfig.cloudChoice);
 
       // listen to query id updates
       storage.registerListener({
