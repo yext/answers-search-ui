@@ -20,12 +20,12 @@ describe('getUrlFunctions work', () => {
     expect(getAnalyticsUrl(SANDBOX)).toEqual(expect.stringContaining('sandbox'));
   });
 
-  it('differentiates conversion tracking in analytics url', () => {
-    expect(getAnalyticsUrl(PRODUCTION, true)).toEqual(expect.stringContaining('realtimeanalytics'));
-    expect(getAnalyticsUrl(SANDBOX, true)).toEqual(expect.stringContaining('realtimeanalytics'));
+  it('differentiates gcp from global', () => {
+    expect(getAnalyticsUrl(PRODUCTION, 'gcp')).toEqual(expect.stringContaining('gcp'));
+    expect(getAnalyticsUrl(SANDBOX, 'gcp')).toEqual(expect.stringContaining('sandbox-gcp'));
 
-    expect(getAnalyticsUrl(PRODUCTION)).not.toEqual(expect.stringContaining('realtimeanalytics'));
-    expect(getAnalyticsUrl(SANDBOX)).not.toEqual(expect.stringContaining('realtimeanalytics'));
+    expect(getAnalyticsUrl(PRODUCTION)).not.toEqual(expect.stringContaining('gcp'));
+    expect(getAnalyticsUrl(SANDBOX)).not.toEqual(expect.stringContaining('sandbox-gcp'));
   });
 });
 

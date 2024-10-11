@@ -177,7 +177,8 @@ class AnswersSearchBar {
         parsedConfig.businessId,
         parsedConfig.analyticsEventsEnabled,
         parsedConfig.analyticsOptions,
-        parsedConfig.environment);
+        parsedConfig.environment,
+        parsedConfig.cloudChoice);
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
     }
