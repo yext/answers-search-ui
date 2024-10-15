@@ -1,7 +1,7 @@
 /** @module AnalyticsReporter */
 
 import AnalyticsEvent from './analyticsevent';
-import { PRODUCTION } from '../constants';
+import { GLOBAL_MULTI, PRODUCTION } from '../constants';
 import HttpRequester from '../http/httprequester';
 import { getAnalyticsUrl } from '../utils/urlutils';
 
@@ -19,7 +19,8 @@ export default class AnalyticsReporter {
     businessId,
     analyticsEventsEnabled,
     globalOptions = {},
-    environment = PRODUCTION) {
+    environment = PRODUCTION,
+    cloudChoice = GLOBAL_MULTI) {
     /**
      * The internal business identifier used for reporting
      * @type {number}
@@ -47,11 +48,18 @@ export default class AnalyticsReporter {
     this._environment = environment;
 
     /**
+     * The choice of Cloud Provider
+     * @type {string}
+     * @private
+     */
+    this._cloudChoice = cloudChoice;
+
+    /**
      * Base URL for the analytics API
      * @type {string}
      * @private
      */
-    this._baseUrl = getAnalyticsUrl(this._environment);
+    this._baseUrl = getAnalyticsUrl(this._environment, this._cloudChoice);
 
     /**
      * Boolean indicating if opted in or out of conversion tracking
@@ -134,6 +142,5 @@ export default class AnalyticsReporter {
   /** @inheritdoc */
   setConversionTrackingEnabled (isEnabled) {
     this._conversionTrackingEnabled = isEnabled;
-    this._baseUrl = getAnalyticsUrl(this._environment, isEnabled);
   }
 }
