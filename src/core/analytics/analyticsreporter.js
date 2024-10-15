@@ -1,7 +1,7 @@
 /** @module AnalyticsReporter */
 
 import AnalyticsEvent from './analyticsevent';
-import { PRODUCTION } from '../constants';
+import { GLOBAL_MULTI, PRODUCTION } from '../constants';
 import HttpRequester from '../http/httprequester';
 import { getAnalyticsUrl } from '../utils/urlutils';
 
@@ -20,7 +20,7 @@ export default class AnalyticsReporter {
     analyticsEventsEnabled,
     globalOptions = {},
     environment = PRODUCTION,
-    cloudChoice) {
+    cloudChoice = GLOBAL_MULTI) {
     /**
      * The internal business identifier used for reporting
      * @type {number}
