@@ -100,7 +100,7 @@
     "postcss-pxtorem": "^6.0.0",
     "puppeteer": "^13.5.1",
     "regenerator-runtime": "0.13.1",
-    "rollup": "^2.79.2",
+    "rollup": "^1.4.1",
     "rollup-plugin-babel": "^4.4.0",
     "rollup-plugin-commonjs": "^9.2.1",
     "rollup-plugin-node-builtins": "^2.1.2",
