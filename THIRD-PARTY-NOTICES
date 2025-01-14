@@ -1,8 +1,7 @@
 The following NPM packages may be included in this product:
 
- - @babel/code-frame@7.24.7
- - @babel/helper-validator-identifier@7.24.7
- - @babel/highlight@7.24.7
+ - @babel/code-frame@7.26.2
+ - @babel/helper-validator-identifier@7.25.9
  - @babel/runtime-corejs3@7.17.9
 
 These packages each contain the following license and notice below:
@@ -652,19 +651,16 @@ THE SOFTWARE.
 The following NPM packages may be included in this product:
 
  - ansi-regex@5.0.1
- - ansi-styles@3.2.1
  - ansi-styles@4.3.0
  - array-union@2.1.0
  - callsites@3.1.0
  - camelcase-keys@6.2.2
  - camelcase@5.3.1
- - chalk@2.4.2
  - clone-regexp@2.2.0
  - execall@2.0.0
  - find-up@4.1.0
  - globby@11.1.0
  - hard-rejection@2.1.0
- - has-flag@3.0.0
  - has-flag@4.0.0
  - import-lazy@4.0.0
  - indent-string@4.0.0
@@ -687,7 +683,6 @@ The following NPM packages may be included in this product:
  - string-width@4.2.3
  - strip-ansi@6.0.1
  - strip-indent@3.0.0
- - supports-color@5.5.0
  - supports-color@7.2.0
  - trim-newlines@3.0.1
  - type-fest@0.6.0
@@ -1007,7 +1002,6 @@ The following NPM packages may be included in this product:
  - arrify@1.0.1
  - decamelize@1.2.0
  - detect-newline@2.1.0
- - escape-string-regexp@1.0.5
  - is-plain-obj@1.1.0
  - map-obj@1.0.1
  - object-assign@4.1.1
@@ -1468,12 +1462,11 @@ THE SOFTWARE.
 
 -----------
 
-The following NPM packages may be included in this product:
+The following NPM package may be included in this product:
 
- - color-convert@1.9.3
  - color-convert@2.0.1
 
-These packages each contain the following license and notice below:
+This package contains the following license and notice below:
 
 Copyright (c) 2011-2016 Heather Arthur <fayearthur@gmail.com>
 
@@ -1498,12 +1491,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
-The following NPM packages may be included in this product:
+The following NPM package may be included in this product:
 
- - color-name@1.1.3
  - color-name@1.1.4
 
-These packages each contain the following license and notice below:
+This package contains the following license and notice below:
 
 The MIT License (MIT)
 Copyright (c) 2015 Dmitry Ivanov
@@ -4506,7 +4498,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following NPM package may be included in this product:
 
- - nanoid@3.3.4
+ - nanoid@3.3.8
 
 This package contains the following license and notice below:
 
@@ -4816,6 +4808,30 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
+ - picocolors@1.1.1
+
+This package contains the following license and notice below:
+
+ISC License
+
+Copyright (c) 2021-2024 Oleksii Raspopov, Kostiantyn Denysov, Anton Verinov
+
+Permission to use, copy, modify, and/or distribute this software for any
+purpose with or without fee is hereby granted, provided that the above
+copyright notice and this permission notice appear in all copies.
+
+THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
+WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
+ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
+WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
+ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
+OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
+
+-----------
+
+The following NPM package may be included in this product:
+
  - picomatch@2.3.1
 
 This package contains the following license and notice below:
@@ -5089,7 +5105,7 @@ SOFTWARE.
 The following NPM packages may be included in this product:
 
  - postcss-safe-parser@6.0.0
- - postcss@8.4.13
+ - postcss@8.4.31
 
 These packages each contain the following license and notice below:
 
@@ -5689,7 +5705,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following NPM packages may be included in this product:
 
- - source-map-js@1.0.2
+ - source-map-js@1.2.1
  - source-map@0.6.1
 
 These packages each contain the following license and notice below:
