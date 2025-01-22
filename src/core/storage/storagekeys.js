@@ -13,6 +13,7 @@ const StorageKeys = {
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
+  GENERATIVE_DIRECT_ANSWER: 'generative-direct-answer',
   FILTER: 'filter', // DEPRECATED
   PERSISTED_FILTER: 'filters',
   STATIC_FILTER_NODES: 'static-filter-nodes',
