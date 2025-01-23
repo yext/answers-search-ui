@@ -63,6 +63,7 @@
     "@size-limit/file": "^4.9.0",
     "@types/jest": "^24.0.15",
     "autoprefixer": "^10.4.4",
+    "cheerio": "1.0.0-rc.12",
     "cross-env": "^7.0.3",
     "cssnano": "^5.1.4",
     "del": "^6.0.0",

@@ -24,6 +24,7 @@ import { SearchParams } from '../ui';
 import SearchStates from './storage/searchstates';
 import Searcher from './models/searcher';
 import { mergeAdditionalHttpHeaders } from './utils/mergeAdditionalHttpHeaders';
+import GenerativeDirectAnswer from './models/generativedirectanswer';
 
 /** @typedef {import('./storage/storage').default} Storage */
 
@@ -143,6 +144,15 @@ export default class Core {
    */
   setQueryUpdateListener (queryUpdateListener) {
     this.queryUpdateListener = queryUpdateListener;
+  }
+
+  /**
+   * Sets a reference in core to the global ResultsUpdateListener.
+   *
+   * @param {ResultsUpdateListener} resultsUpdateListener
+   */
+  setResultsUpdateListener (resultsUpdateListener) {
+    this.resultsUpdateListener = resultsUpdateListener;
   }
 
   /**
@@ -283,6 +293,7 @@ export default class Core {
         this._persistLocationRadius();
         this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.VERTICAL);
 
+        this.storage.set(StorageKeys.SEARCH_ID, data[StorageKeys.SEARCH_ID]);
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.ALTERNATIVE_VERTICALS, data[StorageKeys.ALTERNATIVE_VERTICALS]);
@@ -337,6 +348,7 @@ export default class Core {
   clearResults () {
     this.storage.set(StorageKeys.QUERY, null);
     this.storage.set(StorageKeys.QUERY_ID, '');
+    this.storage.set(StorageKeys.SEARCH_ID, '');
     this.storage.set(StorageKeys.RESULTS_HEADER, {});
     this.storage.set(StorageKeys.SPELL_CHECK, {}); // TODO has a model but not cleared w new
     this.storage.set(StorageKeys.DYNAMIC_FILTERS, {}); // TODO has a model but not cleared w new
@@ -347,6 +359,7 @@ export default class Core {
     this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
     this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
     this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
+    this.storage.delete(StorageKeys.GENERATIVE_DIRECT_ANSWER);
   }
 
   /**
@@ -401,6 +414,7 @@ export default class Core {
       .then(response => SearchDataTransformer.transformUniversal(response, urls, this._fieldFormatters))
       .then(data => {
         this._reportFollowUpQueryEvent(data[StorageKeys.QUERY_ID], Searcher.UNIVERSAL);
+        this.storage.set(StorageKeys.SEARCH_ID, data[StorageKeys.SEARCH_ID]);
         this.storage.set(StorageKeys.QUERY_ID, data[StorageKeys.QUERY_ID]);
         this.storage.set(StorageKeys.NAVIGATION, data[StorageKeys.NAVIGATION]);
         this.storage.set(StorageKeys.DIRECT_ANSWER, data[StorageKeys.DIRECT_ANSWER]);
@@ -427,6 +441,31 @@ export default class Core {
       })
       .catch(error => {
         console.error('The following problem was encountered during universal search: ' + error);
+      });
+  }
+
+  /**
+   * Attempt to generate a direct answer for the query from the given vertical results.
+   *
+   * @param {VerticalResult[]} verticalResults list of search-core VerticalResults
+   * @param {string} searcher the type of search that generated these results (Universal or Vertical)
+   */
+  generativeDirectAnswer (verticalResults, searcher) {
+    const searchId = this.storage.get(StorageKeys.SEARCH_ID);
+    const searchTerm = this.storage.get(StorageKeys.QUERY);
+    return this._coreLibrary
+      .generativeDirectAnswer({
+        searchId,
+        searchTerm,
+        results: verticalResults,
+        additionalHttpHeaders: this._additionalHttpHeaders
+      })
+      .then(response => {
+        const generativeDirectAnswer = GenerativeDirectAnswer.fromCore(response, searcher);
+        this.storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, generativeDirectAnswer);
+      }).catch(error => {
+        this.storage.delete(StorageKeys.GENERATIVE_DIRECT_ANSWER);
+        console.error('Failed to generate direct answer with the following error: ' + error);
       });
   }
 

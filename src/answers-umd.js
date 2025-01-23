@@ -29,6 +29,7 @@ import TranslationProcessor from './core/i18n/translationprocessor';
 import Filter from './core/models/filter';
 import SearchComponent from './ui/components/search/searchcomponent';
 import QueryUpdateListener from './core/statelisteners/queryupdatelistener';
+import ResultsUpdateListener from './core/statelisteners/resultsupdatelistener';
 import { COMPONENT_REGISTRY } from './ui/components/registry';
 import { localizedDistance, parseLocale } from './core/utils/i18nutils';
 import createImpressionEvent from './core/analytics/createimpressionevent';
@@ -337,6 +338,10 @@ class Answers {
         this._initQueryUpdateListener(parsedConfig.search);
       }
 
+      if (parsedConfig.useGenerativeDirectAnswers) {
+        this._initResultsUpdateListener();
+      }
+
       this._searchOnLoad();
     });
   }
@@ -347,6 +352,11 @@ class Answers {
       verticalKey
     });
     this.core.setQueryUpdateListener(queryUpdateListener);
+  }
+
+  _initResultsUpdateListener () {
+    const resultsUpdateListener = new ResultsUpdateListener(this.core);
+    this.core.setResultsUpdateListener(resultsUpdateListener);
   }
 
   /**
@@ -418,6 +428,12 @@ class Answers {
       sessionTrackingEnabled = config.sessionTrackingEnabled;
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
+
+    let useGenerativeDirectAnswers = false;
+    if (typeof config.useGenerativeDirectAnswers === 'boolean') {
+      useGenerativeDirectAnswers = config.useGenerativeDirectAnswers;
+    }
+    parsedConfig.useGenerativeDirectAnswers = useGenerativeDirectAnswers;
 
     if (parsedConfig.apiKey) {
       const sandboxPrefix = `${SANDBOX}-`;

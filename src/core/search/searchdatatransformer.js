@@ -20,6 +20,7 @@ import ResultsContext from '../storage/resultscontext';
 export default class SearchDataTransformer {
   static transformUniversal (data, urls = {}, formatters = undefined) {
     return {
+      [StorageKeys.SEARCH_ID]: data.uuid,
       [StorageKeys.QUERY_ID]: data.queryId,
       [StorageKeys.NAVIGATION]: Navigation.fromCore(data.verticalResults),
       [StorageKeys.DIRECT_ANSWER]: DirectAnswer.fromCore(data.directAnswer, formatters, Searcher.UNIVERSAL),
@@ -42,6 +43,7 @@ export default class SearchDataTransformer {
     }
 
     return {
+      [StorageKeys.SEARCH_ID]: response.uuid,
       [StorageKeys.QUERY_ID]: response.queryId,
       [StorageKeys.NAVIGATION]: new Navigation(), // Vertical doesn't respond with ordering, so use empty nav.
       [StorageKeys.DIRECT_ANSWER]: DirectAnswer
