@@ -34,7 +34,6 @@ export default class GenerativeDirectAnswer {
       searcher,
       results
     };
-    console.log("generativeDirectAnswerData: ", generativeDirectAnswerData);
     return new GenerativeDirectAnswer(generativeDirectAnswerData);
   }
 
