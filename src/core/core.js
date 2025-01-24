@@ -447,7 +447,7 @@ export default class Core {
   /**
    * Attempt to generate a direct answer for the query from the given vertical results.
    *
-   * @param {VerticalResult[]} verticalResults list of search-core VerticalResults
+   * @param {VerticalResults[]} verticalResults list of search-core VerticalResults
    * @param {string} searcher the type of search that generated these results (Universal or Vertical)
    */
   generativeDirectAnswer (verticalResults, searcher) {
@@ -461,7 +461,7 @@ export default class Core {
         additionalHttpHeaders: this._additionalHttpHeaders
       })
       .then(response => {
-        const generativeDirectAnswer = GenerativeDirectAnswer.fromCore(response, searcher);
+        const generativeDirectAnswer = GenerativeDirectAnswer.fromCore(response, searcher, verticalResults);
         this.storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, generativeDirectAnswer);
       }).catch(error => {
         this.storage.delete(StorageKeys.GENERATIVE_DIRECT_ANSWER);

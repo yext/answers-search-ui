@@ -12,17 +12,29 @@ export default class GenerativeDirectAnswer {
    *
    * @param {GenerativeDirectAnswerResponse} gdaResponse from search-core
    * @param {string} searcher whether this generative direct answer is from a "UNIVERSAL" or "VERTICAL" search
+   * @param {VerticalResults[]} verticalResults list of search-core VerticalResults
    * @returns {GenerativeDirectAnswer}
    */
-  static fromCore (gdaResponse, searcher) {
+  static fromCore (gdaResponse, searcher, verticalResults) {
     if (!gdaResponse) {
       return new GenerativeDirectAnswer();
     }
 
+    const results = verticalResults.flatMap(vr => vr.results).map(result => {
+      return {
+        uid: result.rawData.uid,
+        name: result.name,
+        description: result.description,
+        link: result.link
+      };
+    });
+
     const generativeDirectAnswerData = {
       ...gdaResponse,
-      searcher
+      searcher,
+      results
     };
+    console.log("generativeDirectAnswerData: ", generativeDirectAnswerData);
     return new GenerativeDirectAnswer(generativeDirectAnswerData);
   }
 
