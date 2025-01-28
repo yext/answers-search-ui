@@ -43,6 +43,15 @@ it('constructs a generative direct answer from an answers-core generative direct
           name: 'name-3',
           link: 'link-3',
           otherData: 'otherData'
+        },
+        {
+          rawData: {
+            uid: 'uuid-not-in-citations',
+            someField: 'someValue'
+          },
+          name: 'name-4',
+          link: 'link-4',
+          otherData: 'otherData'
         }
       ]
     }
@@ -53,7 +62,7 @@ it('constructs a generative direct answer from an answers-core generative direct
     resultStatus: 'SUCCESS',
     citations: ['uuid-1', 'uuid-2', 'uuid-3'],
     searcher: Searcher.UNIVERSAL,
-    results: [
+    citationsData: [
       {
         uid: 'uuid-1',
         name: 'name-1',

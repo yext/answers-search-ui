@@ -20,19 +20,23 @@ export default class GenerativeDirectAnswer {
       return new GenerativeDirectAnswer();
     }
 
-    const results = verticalResults.flatMap(vr => vr.results).map(result => {
-      return {
-        uid: result.rawData.uid,
-        name: result.name,
-        description: result.description,
-        link: result.link
-      };
-    });
+    const citationsData = verticalResults
+      .flatMap(vr => vr.results)
+      .filter(result => result.rawData?.uid && result.name)
+      .filter(result => gdaResponse.citations.includes(result.rawData.uid))
+      .map(result => {
+        return {
+          uid: result.rawData.uid,
+          name: result.name,
+          description: result.description,
+          link: result.link
+        };
+      });
 
     const generativeDirectAnswerData = {
       ...gdaResponse,
       searcher,
-      results
+      citationsData
     };
     return new GenerativeDirectAnswer(generativeDirectAnswerData);
   }
