@@ -42,6 +42,7 @@ const StorageKeys = {
   QUERY_TRIGGER: 'queryTrigger',
   FACETS_LOADED: 'facets-loaded',
   QUERY_SOURCE: 'query-source',
-  HISTORY_POP_STATE: 'history-pop-state'
+  HISTORY_POP_STATE: 'history-pop-state',
+  SEARCH_ID: 'search-id'
 };
 export default StorageKeys;

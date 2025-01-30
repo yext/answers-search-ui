@@ -14,6 +14,7 @@ export default class Section {
     this.map = Section.parseMap(data.results);
     this.verticalURL = url || null;
     this.resultsContext = resultsContext;
+    this.searchCoreDocument = data.searchCoreDocument || null;
   }
 
   static parseMap (results) {

@@ -254,6 +254,7 @@ class AnswersSearchBar {
       sessionTrackingEnabled = config.sessionTrackingEnabled;
     }
     parsedConfig.sessionTrackingEnabled = sessionTrackingEnabled;
+    parsedConfig.useGenerativeDirectAnswers = false;
 
     if (parsedConfig.apiKey) {
       const sandboxPrefix = `${SANDBOX}-`;
