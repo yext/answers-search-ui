@@ -19,6 +19,7 @@ import GeoLocationComponent from './filters/geolocationcomponent';
 import SortOptionsComponent from './filters/sortoptionscomponent';
 
 import DirectAnswerComponent from './results/directanswercomponent';
+import GenerativeDirectAnswerComponent from './results/generativedirectanswercomponent';
 import AccordionResultsComponent from './results/accordionresultscomponent.js';
 import VerticalResultsComponent from './results/verticalresultscomponent';
 import UniversalResultsComponent from './results/universalresultscomponent';
@@ -66,6 +67,7 @@ const COMPONENT_CLASS_LIST = [
 
   // Results Components
   DirectAnswerComponent,
+  GenerativeDirectAnswerComponent,
   UniversalResultsComponent,
   VerticalResultsComponent,
   PaginationComponent,

@@ -1,9 +1,10 @@
 import GenerativeDirectAnswer from '../../../src/core/models/generativedirectanswer';
 import Searcher from '../../../src/core/models/searcher';
+import RichTextFormatter from '../../../src/core/utils/richtextformatter';
 
 it('constructs a generative direct answer from an answers-core generative direct answer response', () => {
   const coreGenerativeDirectAnswerResponse = {
-    directAnswer: 'This is some generated text.',
+    directAnswer: 'This is some generated text **with bold**.',
     resultStatus: 'SUCCESS',
     citations: ['uuid-1', 'uuid-2', 'uuid-3']
   };
@@ -57,8 +58,9 @@ it('constructs a generative direct answer from an answers-core generative direct
     }
   ];
 
+  const directAnswerAsHTML = RichTextFormatter.format(coreGenerativeDirectAnswerResponse.directAnswer, 'gda-snippet');
   const expectedGenerativeDirectAnswer = {
-    directAnswer: 'This is some generated text.',
+    directAnswer: directAnswerAsHTML,
     resultStatus: 'SUCCESS',
     citations: ['uuid-1', 'uuid-2', 'uuid-3'],
     searcher: Searcher.UNIVERSAL,
