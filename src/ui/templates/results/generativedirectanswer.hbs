@@ -27,7 +27,8 @@
           {{#each generativeDirectAnswer.citationsData}}
           <a class="yxt-GenerativeDirectAnswer-citationCard js-gda-citation"
             {{#if this.link}}href={{this.link}}{{/if}}
-            entityId={{this.uid}}
+            data-entityid={{this.uid}}
+            data-eventtype="CITATION_CLICK"
             >
             <span class="yxt-GenerativeDirectAnswer-citationName">{{this.name}}</span>
             {{#if this.description}}

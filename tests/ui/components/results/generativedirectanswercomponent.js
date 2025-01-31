@@ -93,14 +93,17 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
 
     // Citation data is correct
     const firstCitation = wrapper.find('.yxt-GenerativeDirectAnswer-citationCard').at(0);
+    console.log(firstCitation.debug());
     const firstCitationName = firstCitation.find('.yxt-GenerativeDirectAnswer-citationName').text().trim();
     expect(firstCitationName).toEqual('Bob Kitty');
     const firstCitationDescription = firstCitation.find('.yxt-GenerativeDirectAnswer-citationDescription').text().trim();
     expect(firstCitationDescription).toEqual('I am a cat');
     const firstCitationLink = firstCitation.prop('href');
     expect(firstCitationLink).toBeUndefined();
-    const firstEntityId = firstCitation.prop('entityid');
+    const firstEntityId = firstCitation.prop('data-entityid');
     expect(firstEntityId).toEqual('1234');
+    const firstCitationClickEventType = firstCitation.prop('data-eventtype');
+    expect(firstCitationClickEventType).toEqual('CITATION_CLICK');
 
     const secondCitation = wrapper.find('.yxt-GenerativeDirectAnswer-citationCard').at(1);
     const secondCitationName = secondCitation.find('.yxt-GenerativeDirectAnswer-citationName').text().trim();
@@ -109,8 +112,10 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     expect(secondCitationDescription.exists()).toBeFalsy();
     const secondCitationLink = secondCitation.prop('href');
     expect(secondCitationLink).toEqual('https://yext.com');
-    const secondEntityId = secondCitation.prop('entityid');
+    const secondEntityId = secondCitation.prop('data-entityid');
     expect(secondEntityId).toEqual('5678');
+    const secondCitationClickEventType = secondCitation.prop('data-eventtype');
+    expect(secondCitationClickEventType).toEqual('CITATION_CLICK');
   });
 
   it('only displays loading text when GDA state is loading', () => {

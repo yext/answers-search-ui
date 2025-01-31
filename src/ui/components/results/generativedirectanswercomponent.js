@@ -80,7 +80,7 @@ export default class GenerativeDirectAnswerComponent extends Component {
     }
 
     const citationsElements = DOM.queryAll(this._container, this._citationsSelector);
-    citationsElements.forEach(citationElement => DOM.on(citationElement, 'click', e => this._handleCitationClickAnalytics(citationElement)));
+    citationsElements.forEach(citationElement => DOM.on(citationElement, 'click', e => this._handleCitationClickAnalytics(e)));
 
     const rtfElement = DOM.query(this._container, '.js-yxt-rtfValue');
     rtfElement && DOM.on(rtfElement, 'click', e => this._handleRtfClickAnalytics(e));
@@ -89,19 +89,33 @@ export default class GenerativeDirectAnswerComponent extends Component {
   /**
    * A click handler for citations in a Generated Direct Answer.
    *
-   * @param {HTMLElement} citationElement The citation element that was clicked.
+   * @param {MouseEvent} event The click event.
    */
-  _handleCitationClickAnalytics (citationElement) {
-    if (!citationElement.hasAttribute('entityId')) {
+  _handleCitationClickAnalytics (event) {
+    // Climbing up the DOM to find the parent citation element, in case an interior element was clicked.
+    let target = event.target;
+    console.log('click');
+    const citationTargetClassName = this._citationsSelector.substring(1);
+    while (target && !target.classList.contains(citationTargetClassName)) {
+      target = target.parentElement;
+    }
+    if (!target) {
+      console.error('No citation target found for analytics.');
+      return;
+    }
+    const entityId = target.dataset.entityid;
+    if (!entityId) {
       console.error('No entityId found on citation element for analytics.');
       return;
     }
-    const entityId = citationElement.getAttribute('entityId');
+    const eventType = target.dataset.eventtype || 'CITATION_CLICK';
     const analyticsOptions = {
+      generativeDirectAnswer: true,
+      directAnswer: true,
       searcher: this.getState('searcher'),
       entityId
     };
-    const analyticsEvent = new AnalyticsEvent('CITATION_CLICK');
+    const analyticsEvent = new AnalyticsEvent(eventType);
     analyticsEvent.addOptions(analyticsOptions);
     this.analyticsReporter.report(analyticsEvent);
   }
@@ -119,6 +133,7 @@ export default class GenerativeDirectAnswerComponent extends Component {
     const ctaType = event.target.dataset.ctaType;
 
     const analyticsOptions = {
+      generativeDirectAnswer: true,
       directAnswer: true,
       fieldName: 'gda-snippet',
       searcher: this.getState('searcher'),
