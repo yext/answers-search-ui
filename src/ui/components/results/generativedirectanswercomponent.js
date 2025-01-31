@@ -94,7 +94,6 @@ export default class GenerativeDirectAnswerComponent extends Component {
   _handleCitationClickAnalytics (event) {
     // Climbing up the DOM to find the parent citation element, in case an interior element was clicked.
     let target = event.target;
-    console.log('click');
     const citationTargetClassName = this._citationsSelector.substring(1);
     while (target && !target.classList.contains(citationTargetClassName)) {
       target = target.parentElement;
