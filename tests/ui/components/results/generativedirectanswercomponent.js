@@ -93,7 +93,6 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
 
     // Citation data is correct
     const firstCitation = wrapper.find('.yxt-GenerativeDirectAnswer-citationCard').at(0);
-    console.log(firstCitation.debug());
     const firstCitationName = firstCitation.find('.yxt-GenerativeDirectAnswer-citationName').text().trim();
     expect(firstCitationName).toEqual('Bob Kitty');
     const firstCitationDescription = firstCitation.find('.yxt-GenerativeDirectAnswer-citationDescription').text().trim();
