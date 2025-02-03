@@ -2,7 +2,7 @@ The following NPM packages may be included in this product:
 
  - @babel/code-frame@7.26.2
  - @babel/helper-validator-identifier@7.25.9
- - @babel/runtime-corejs3@7.17.9
+ - @babel/runtime-corejs3@7.26.0
 
 These packages each contain the following license and notice below:
 
@@ -28,6 +28,123 @@ NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-----------
+
+The following NPM package may be included in this product:
+
+ - @csstools/selector-specificity@2.2.0
+
+This package contains the following license and notice below:
+
+# CC0 1.0 Universal
+
+## Statement of Purpose
+
+The laws of most jurisdictions throughout the world automatically confer
+exclusive Copyright and Related Rights (defined below) upon the creator and
+subsequent owner(s) (each and all, an “owner”) of an original work of
+authorship and/or a database (each, a “Work”).
+
+Certain owners wish to permanently relinquish those rights to a Work for the
+purpose of contributing to a commons of creative, cultural and scientific works
+(“Commons”) that the public can reliably and without fear of later claims of
+infringement build upon, modify, incorporate in other works, reuse and
+redistribute as freely as possible in any form whatsoever and for any purposes,
+including without limitation commercial purposes. These owners may contribute
+to the Commons to promote the ideal of a free culture and the further
+production of creative, cultural and scientific works, or to gain reputation or
+greater distribution for their Work in part through the use and efforts of
+others.
+
+For these and/or other purposes and motivations, and without any expectation of
+additional consideration or compensation, the person associating CC0 with a
+Work (the “Affirmer”), to the extent that he or she is an owner of Copyright
+and Related Rights in the Work, voluntarily elects to apply CC0 to the Work and
+publicly distribute the Work under its terms, with knowledge of his or her
+Copyright and Related Rights in the Work and the meaning and intended legal
+effect of CC0 on those rights.
+
+1. Copyright and Related Rights. A Work made available under CC0 may be
+   protected by copyright and related or neighboring rights (“Copyright and
+   Related Rights”). Copyright and Related Rights include, but are not limited
+   to, the following:
+   1. the right to reproduce, adapt, distribute, perform, display, communicate,
+      and translate a Work;
+   2. moral rights retained by the original author(s) and/or performer(s);
+   3. publicity and privacy rights pertaining to a person’s image or likeness
+      depicted in a Work;
+   4. rights protecting against unfair competition in regards to a Work,
+      subject to the limitations in paragraph 4(i), below;
+   5. rights protecting the extraction, dissemination, use and reuse of data in
+      a Work;
+   6. database rights (such as those arising under Directive 96/9/EC of the
+      European Parliament and of the Council of 11 March 1996 on the legal
+      protection of databases, and under any national implementation thereof,
+      including any amended or successor version of such directive); and
+   7. other similar, equivalent or corresponding rights throughout the world
+      based on applicable law or treaty, and any national implementations
+      thereof.
+
+2. Waiver. To the greatest extent permitted by, but not in contravention of,
+   applicable law, Affirmer hereby overtly, fully, permanently, irrevocably and
+   unconditionally waives, abandons, and surrenders all of Affirmer’s Copyright
+   and Related Rights and associated claims and causes of action, whether now
+   known or unknown (including existing as well as future claims and causes of
+   action), in the Work (i) in all territories worldwide, (ii) for the maximum
+   duration provided by applicable law or treaty (including future time
+   extensions), (iii) in any current or future medium and for any number of
+   copies, and (iv) for any purpose whatsoever, including without limitation
+   commercial, advertising or promotional purposes (the “Waiver”). Affirmer
+   makes the Waiver for the benefit of each member of the public at large and
+   to the detriment of Affirmer’s heirs and successors, fully intending that
+   such Waiver shall not be subject to revocation, rescission, cancellation,
+   termination, or any other legal or equitable action to disrupt the quiet
+   enjoyment of the Work by the public as contemplated by Affirmer’s express
+   Statement of Purpose.
+
+3. Public License Fallback. Should any part of the Waiver for any reason be
+   judged legally invalid or ineffective under applicable law, then the Waiver
+   shall be preserved to the maximum extent permitted taking into account
+   Affirmer’s express Statement of Purpose. In addition, to the extent the
+   Waiver is so judged Affirmer hereby grants to each affected person a
+   royalty-free, non transferable, non sublicensable, non exclusive,
+   irrevocable and unconditional license to exercise Affirmer’s Copyright and
+   Related Rights in the Work (i) in all territories worldwide, (ii) for the
+   maximum duration provided by applicable law or treaty (including future time
+   extensions), (iii) in any current or future medium and for any number of
+   copies, and (iv) for any purpose whatsoever, including without limitation
+   commercial, advertising or promotional purposes (the “License”). The License
+   shall be deemed effective as of the date CC0 was applied by Affirmer to the
+   Work. Should any part of the License for any reason be judged legally
+   invalid or ineffective under applicable law, such partial invalidity or
+   ineffectiveness shall not invalidate the remainder of the License, and in
+   such case Affirmer hereby affirms that he or she will not (i) exercise any
+   of his or her remaining Copyright and Related Rights in the Work or (ii)
+   assert any associated claims and causes of action with respect to the Work,
+   in either case contrary to Affirmer’s express Statement of Purpose.
+
+4. Limitations and Disclaimers.
+   1. No trademark or patent rights held by Affirmer are waived, abandoned,
+      surrendered, licensed or otherwise affected by this document.
+   2. Affirmer offers the Work as-is and makes no representations or warranties
+      of any kind concerning the Work, express, implied, statutory or
+      otherwise, including without limitation warranties of title,
+      merchantability, fitness for a particular purpose, non infringement, or
+      the absence of latent or other defects, accuracy, or the present or
+      absence of errors, whether or not discoverable, all to the greatest
+      extent permissible under applicable law.
+   3. Affirmer disclaims responsibility for clearing rights of other persons
+      that may apply to the Work or any use thereof, including without
+      limitation any person’s Copyright and Related Rights in the Work.
+      Further, Affirmer disclaims responsibility for obtaining any necessary
+      consents, permissions or other rights required for any use of the Work.
+   4. Affirmer understands and acknowledges that Creative Commons is not a
+      party to this document and has no duty or obligation with respect to this
+      CC0 or use of the Work.
+
+For more information, please see
+http://creativecommons.org/publicdomain/zero/1.0/.
 
 -----------
 
@@ -64,7 +181,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - @mapbox/geojson-rewind@0.5.1
+ - @mapbox/geojson-rewind@0.5.2
 
 This package contains the following license and notice below:
 
@@ -341,7 +458,7 @@ The following NPM packages may be included in this product:
  - @nodelib/fs.scandir@2.1.5
  - @nodelib/fs.stat@2.0.5
  - @nodelib/fs.walk@1.2.8
- - fast-glob@3.2.11
+ - fast-glob@3.3.3
 
 These packages each contain the following license and notice below:
 
@@ -371,44 +488,15 @@ SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - @types/minimist@1.2.2
- - @types/normalize-package-data@2.4.1
+ - @types/minimist@1.2.5
+ - @types/normalize-package-data@2.4.4
+ - @types/parse-json@4.0.2
 
 These packages each contain the following license and notice below:
 
 MIT License
 
     Copyright (c) Microsoft Corporation.
-
-    Permission is hereby granted, free of charge, to any person obtaining a copy
-    of this software and associated documentation files (the "Software"), to deal
-    in the Software without restriction, including without limitation the rights
-    to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-    copies of the Software, and to permit persons to whom the Software is
-    furnished to do so, subject to the following conditions:
-
-    The above copyright notice and this permission notice shall be included in all
-    copies or substantial portions of the Software.
-
-    THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-    IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-    FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-    AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-    LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-    OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-    SOFTWARE
-
------------
-
-The following NPM package may be included in this product:
-
- - @types/parse-json@4.0.0
-
-This package contains the following license and notice below:
-
-MIT License
-
-    Copyright (c) Microsoft Corporation. All rights reserved.
 
     Permission is hereby granted, free of charge, to any person obtaining a copy
     of this software and associated documentation files (the "Software"), to deal
@@ -486,7 +574,7 @@ CDN
 
 The following NPM package may be included in this product:
 
- - @yext/search-core@2.5.4
+ - @yext/search-core@2.6.0-beta.5
 
 This package contains the following license and notice below:
 
@@ -558,7 +646,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - ajv@8.11.0
+ - ajv@8.17.1
 
 This package contains the following license and notice below:
 
@@ -656,8 +744,6 @@ The following NPM packages may be included in this product:
  - callsites@3.1.0
  - camelcase-keys@6.2.2
  - camelcase@5.3.1
- - clone-regexp@2.2.0
- - execall@2.0.0
  - find-up@4.1.0
  - globby@11.1.0
  - hard-rejection@2.1.0
@@ -665,7 +751,6 @@ The following NPM packages may be included in this product:
  - import-lazy@4.0.0
  - indent-string@4.0.0
  - is-fullwidth-code-point@3.0.0
- - is-regexp@2.1.0
  - locate-path@5.0.0
  - p-limit@2.3.0
  - p-locate@4.1.0
@@ -1402,15 +1487,16 @@ SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - braces@3.0.2
- - get-value@3.0.1
- - normalize-path@3.0.0
+ - braces@3.0.3
+ - fill-range@7.1.1
+ - is-number@7.0.0
+ - micromatch@4.0.8
 
 These packages each contain the following license and notice below:
 
 The MIT License (MIT)
 
-Copyright (c) 2014-2018, Jon Schlinkert.
+Copyright (c) 2014-present, Jon Schlinkert.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1510,7 +1596,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following NPM package may be included in this product:
 
- - colord@2.9.2
+ - colord@2.9.3
 
 This package contains the following license and notice below:
 
@@ -1541,7 +1627,7 @@ SOFTWARE.
 The following NPM packages may be included in this product:
 
  - concat-map@0.0.1
- - minimist@1.2.6
+ - minimist@1.2.8
  - wordwrap@1.0.0
 
 These packages each contain the following license and notice below:
@@ -1569,7 +1655,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - convert-source-map@1.8.0
+ - convert-source-map@1.9.0
 
 This package contains the following license and notice below:
 
@@ -1601,11 +1687,11 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - core-js-pure@3.22.5
+ - core-js-pure@3.40.0
 
 This package contains the following license and notice below:
 
-Copyright (c) 2014-2022 Denis Pushkarev
+Copyright (c) 2014-2025 Denis Pushkarev
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -1657,7 +1743,7 @@ IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - cosmiconfig@7.0.1
+ - cosmiconfig@7.1.0
 
 This package contains the following license and notice below:
 
@@ -1687,7 +1773,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - cross-fetch@3.1.5
+ - cross-fetch@3.2.0
 
 This package contains the following license and notice below:
 
@@ -1717,7 +1803,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - css-functions-list@3.0.1
+ - css-functions-list@3.2.3
 
 This package contains the following license and notice below:
 
@@ -1744,8 +1830,8 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - css-vars-ponyfill@2.4.7
- - get-css-data@2.1.0
+ - css-vars-ponyfill@2.4.9
+ - get-css-data@2.1.1
 
 These packages each contain the following license and notice below:
 
@@ -1849,7 +1935,6 @@ The following NPM packages may be included in this product:
 
  - cssesc@3.0.0
  - emoji-regex@8.0.0
- - punycode@2.1.1
  - uc.micro@1.0.6
 
 These packages each contain the following license and notice below:
@@ -1879,14 +1964,16 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - d@1.0.1
- - es6-symbol@3.1.3
+ - d@1.0.2
+ - es6-symbol@3.1.4
+ - esniff@2.0.1
+ - timers-ext@0.1.8
 
 These packages each contain the following license and notice below:
 
 ISC License
 
-Copyright (c) 2013-2019, Mariusz Nowak, @medikoo, medikoo.com
+Copyright (c) 2013-2024, Mariusz Nowak, @medikoo, medikoo.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -1961,7 +2048,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - debug@4.3.4
+ - debug@4.4.0
 
 This package contains the following license and notice below:
 
@@ -1989,7 +2076,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - decamelize-keys@1.1.0
+ - decamelize-keys@1.1.1
 
 This package contains the following license and notice below:
 
@@ -2019,37 +2106,25 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - decode-uri-component@0.2.0
+ - decode-uri-component@0.2.2
 
 This package contains the following license and notice below:
 
 The MIT License (MIT)
 
-Copyright (c) Sam Verschueren <sam.verschueren@gmail.com> (github.com/SamVerschueren)
+Copyright (c) 2017, Sam Verschueren <sam.verschueren@gmail.com> (github.com/SamVerschueren)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
 The following NPM package may be included in this product:
 
- - earcut@2.2.3
+ - earcut@2.2.4
 
 This package contains the following license and notice below:
 
@@ -2149,13 +2224,13 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - es5-ext@0.10.61
+ - es5-ext@0.10.64
 
 This package contains the following license and notice below:
 
 ISC License
 
-Copyright (c) 2011-2022, Mariusz Nowak, @medikoo, medikoo.com
+Copyright (c) 2011-2024, Mariusz Nowak, @medikoo, medikoo.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -2232,12 +2307,11 @@ WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
-The following NPM packages may be included in this product:
+The following NPM package may be included in this product:
 
  - es6-weak-map@2.0.3
- - timers-ext@0.1.7
 
-These packages each contain the following license and notice below:
+This package contains the following license and notice below:
 
 ISC License
 
@@ -2287,13 +2361,13 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - ext@1.6.0
+ - ext@1.7.0
 
 This package contains the following license and notice below:
 
 ISC License
 
-Copyright (c) 2011-2019, Mariusz Nowak, @medikoo, medikoo.com
+Copyright (c) 2011-2022, Mariusz Nowak, @medikoo, medikoo.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -2342,7 +2416,46 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - fastest-levenshtein@1.0.12
+ - fast-uri@3.0.6
+
+This package contains the following license and notice below:
+
+Copyright (c) 2021 The Fastify Team
+Copyright (c) 2011-2021, Gary Court until https://github.com/garycourt/uri-js/commit/a1acf730b4bba3f1097c9f52e7d9d3aba8cdcaae
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions are met:
+    * Redistributions of source code must retain the above copyright
+      notice, this list of conditions and the following disclaimer.
+    * Redistributions in binary form must reproduce the above copyright
+      notice, this list of conditions and the following disclaimer in the
+      documentation and/or other materials provided with the distribution.
+    * The names of any contributors may not be used to endorse or promote
+      products derived from this software without specific prior written
+      permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDERS AND CONTRIBUTORS BE LIABLE FOR ANY
+DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+(INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+                                  *   *   *
+
+The complete list of contributors can be found at:
+- https://github.com/garycourt/uri-js/graphs/contributors
+
+-----------
+
+The following NPM package may be included in this product:
+
+ - fastest-levenshtein@1.0.16
 
 This package contains the following license and notice below:
 
@@ -2372,7 +2485,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - fastq@1.13.0
+ - fastq@1.18.0
 
 This package contains the following license and notice below:
 
@@ -2392,12 +2505,11 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 -----------
 
-The following NPM packages may be included in this product:
+The following NPM package may be included in this product:
 
  - file-entry-cache@6.0.1
- - flat-cache@3.0.4
 
-These packages each contain the following license and notice below:
+This package contains the following license and notice below:
 
 The MIT License (MIT)
 
@@ -2423,17 +2535,15 @@ SOFTWARE.
 
 -----------
 
-The following NPM packages may be included in this product:
+The following NPM package may be included in this product:
 
- - fill-range@7.0.1
- - is-number@7.0.0
- - micromatch@4.0.5
+ - flat-cache@3.2.0
 
-These packages each contain the following license and notice below:
+This package contains the following license and notice below:
 
 The MIT License (MIT)
 
-Copyright (c) 2014-present, Jon Schlinkert.
+Copyright (c) Roy Riojas and Jared Wray
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -2442,22 +2552,22 @@ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
 furnished to do so, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
 AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 -----------
 
 The following NPM package may be included in this product:
 
- - flatted@3.2.5
+ - flatted@3.3.2
 
 This package contains the following license and notice below:
 
@@ -2485,7 +2595,6 @@ The following NPM packages may be included in this product:
  - kind-of@3.2.2
  - longest@2.0.1
  - normalize-path@2.1.1
- - word-wrap@1.2.3
 
 These packages each contain the following license and notice below:
 
@@ -2649,9 +2758,8 @@ THIS SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - get-stdin@8.0.0
  - get-stream@6.0.1
- - html-tags@3.2.0
+ - html-tags@3.3.1
  - import-fresh@3.3.0
  - map-obj@4.3.0
  - meow@9.0.0
@@ -2668,6 +2776,37 @@ Permission is hereby granted, free of charge, to any person obtaining a copy of 
 The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-----------
+
+The following NPM packages may be included in this product:
+
+ - get-value@3.0.1
+ - normalize-path@3.0.0
+
+These packages each contain the following license and notice below:
+
+The MIT License (MIT)
+
+Copyright (c) 2014-2018, Jon Schlinkert.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
 
 -----------
 
@@ -2725,7 +2864,7 @@ IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - glob@7.2.0
+ - glob@7.2.3
 
 This package contains the following license and notice below:
 
@@ -2818,7 +2957,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - graceful-fs@4.2.10
+ - graceful-fs@4.2.11
 
 This package contains the following license and notice below:
 
@@ -2888,7 +3027,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - handlebars@4.7.7
+ - handlebars@4.7.8
 
 This package contains the following license and notice below:
 
@@ -3048,7 +3187,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 The following NPM package may be included in this product:
 
- - ignore@5.2.0
+ - ignore@5.3.2
 
 This package contains the following license and notice below:
 
@@ -3263,8 +3402,8 @@ The following NPM packages may be included in this product:
  - minimatch@3.1.2
  - once@1.4.0
  - rimraf@3.0.2
- - semver@5.7.1
- - semver@7.3.7
+ - semver@5.7.2
+ - semver@7.6.3
  - which@1.3.1
  - wrappy@1.0.2
  - yallist@4.0.0
@@ -3322,7 +3461,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - is-core-module@2.14.0
+ - is-core-module@2.16.1
 
 This package contains the following license and notice below:
 
@@ -3349,11 +3488,12 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
-The following NPM package may be included in this product:
+The following NPM packages may be included in this product:
 
  - is-extglob@2.1.1
+ - word-wrap@1.2.5
 
-This package contains the following license and notice below:
+These packages each contain the following license and notice below:
 
 The MIT License (MIT)
 
@@ -3631,6 +3771,37 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
+ - json-buffer@3.0.1
+
+This package contains the following license and notice below:
+
+Copyright (c) 2013 Dominic Tarr
+
+Permission is hereby granted, free of charge, 
+to any person obtaining a copy of this software and 
+associated documentation files (the "Software"), to 
+deal in the Software without restriction, including 
+without limitation the rights to use, copy, modify, 
+merge, publish, distribute, sublicense, and/or sell 
+copies of the Software, and to permit persons to whom 
+the Software is furnished to do so, 
+subject to the following conditions:
+
+The above copyright notice and this permission notice 
+shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. 
+IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR 
+ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, 
+TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE 
+SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+-----------
+
+The following NPM package may be included in this product:
+
  - json-parse-even-better-errors@2.3.1
 
 This package contains the following license and notice below:
@@ -3690,7 +3861,445 @@ THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - known-css-properties@0.25.0
+ - keyv@4.5.4
+
+This package contains the following license and notice below:
+
+<h1 align="center">
+	<img width="250" src="https://jaredwray.com/images/keyv.svg" alt="keyv">
+	<br>
+	<br>
+</h1>
+
+> Simple key-value storage with support for multiple backends
+
+[![build](https://github.com/jaredwray/keyv/actions/workflows/tests.yaml/badge.svg)](https://github.com/jaredwray/keyv/actions/workflows/tests.yaml)
+[![codecov](https://codecov.io/gh/jaredwray/keyv/branch/main/graph/badge.svg?token=bRzR3RyOXZ)](https://codecov.io/gh/jaredwray/keyv)
+[![npm](https://img.shields.io/npm/dm/keyv.svg)](https://www.npmjs.com/package/keyv)
+[![npm](https://img.shields.io/npm/v/keyv.svg)](https://www.npmjs.com/package/keyv)
+
+Keyv provides a consistent interface for key-value storage across multiple backends via storage adapters. It supports TTL based expiry, making it suitable as a cache or a persistent key-value store.
+
+## Features
+
+There are a few existing modules similar to Keyv, however Keyv is different because it:
+
+- Isn't bloated
+- Has a simple Promise based API
+- Suitable as a TTL based cache or persistent key-value store
+- [Easily embeddable](#add-cache-support-to-your-module) inside another module
+- Works with any storage that implements the [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) API
+- Handles all JSON types plus `Buffer`
+- Supports namespaces
+- Wide range of [**efficient, well tested**](#official-storage-adapters) storage adapters
+- Connection errors are passed through (db failures won't kill your app)
+- Supports the current active LTS version of Node.js or higher
+
+## Usage
+
+Install Keyv.
+
+```
+npm install --save keyv
+```
+
+By default everything is stored in memory, you can optionally also install a storage adapter.
+
+```
+npm install --save @keyv/redis
+npm install --save @keyv/mongo
+npm install --save @keyv/sqlite
+npm install --save @keyv/postgres
+npm install --save @keyv/mysql
+npm install --save @keyv/etcd
+```
+
+Create a new Keyv instance, passing your connection string if applicable. Keyv will automatically load the correct storage adapter.
+
+```js
+const Keyv = require('keyv');
+
+// One of the following
+const keyv = new Keyv();
+const keyv = new Keyv('redis://user:pass@localhost:6379');
+const keyv = new Keyv('mongodb://user:pass@localhost:27017/dbname');
+const keyv = new Keyv('sqlite://path/to/database.sqlite');
+const keyv = new Keyv('postgresql://user:pass@localhost:5432/dbname');
+const keyv = new Keyv('mysql://user:pass@localhost:3306/dbname');
+const keyv = new Keyv('etcd://localhost:2379');
+
+// Handle DB connection errors
+keyv.on('error', err => console.log('Connection Error', err));
+
+await keyv.set('foo', 'expires in 1 second', 1000); // true
+await keyv.set('foo', 'never expires'); // true
+await keyv.get('foo'); // 'never expires'
+await keyv.delete('foo'); // true
+await keyv.clear(); // undefined
+```
+
+### Namespaces
+
+You can namespace your Keyv instance to avoid key collisions and allow you to clear only a certain namespace while using the same database.
+
+```js
+const users = new Keyv('redis://user:pass@localhost:6379', { namespace: 'users' });
+const cache = new Keyv('redis://user:pass@localhost:6379', { namespace: 'cache' });
+
+await users.set('foo', 'users'); // true
+await cache.set('foo', 'cache'); // true
+await users.get('foo'); // 'users'
+await cache.get('foo'); // 'cache'
+await users.clear(); // undefined
+await users.get('foo'); // undefined
+await cache.get('foo'); // 'cache'
+```
+
+### Custom Serializers
+
+Keyv uses [`json-buffer`](https://github.com/dominictarr/json-buffer) for data serialization to ensure consistency across different backends.
+
+You can optionally provide your own serialization functions to support extra data types or to serialize to something other than JSON.
+
+```js
+const keyv = new Keyv({ serialize: JSON.stringify, deserialize: JSON.parse });
+```
+
+**Warning:** Using custom serializers means you lose any guarantee of data consistency. You should do extensive testing with your serialisation functions and chosen storage engine.
+
+## Official Storage Adapters
+
+The official storage adapters are covered by [over 150 integration tests](https://github.com/jaredwray/keyv/actions/workflows/tests.yaml) to guarantee consistent behaviour. They are lightweight, efficient wrappers over the DB clients making use of indexes and native TTLs where available.
+
+Database | Adapter | Native TTL
+---|---|---
+Redis | [@keyv/redis](https://github.com/jaredwray/keyv/tree/master/packages/redis) | Yes
+MongoDB | [@keyv/mongo](https://github.com/jaredwray/keyv/tree/master/packages/mongo) | Yes 
+SQLite | [@keyv/sqlite](https://github.com/jaredwray/keyv/tree/master/packages/sqlite) | No 
+PostgreSQL | [@keyv/postgres](https://github.com/jaredwray/keyv/tree/master/packages/postgres) | No 
+MySQL | [@keyv/mysql](https://github.com/jaredwray/keyv/tree/master/packages/mysql) | No 
+Etcd | [@keyv/etcd](https://github.com/jaredwray/keyv/tree/master/packages/etcd) | Yes
+Memcache | [@keyv/memcache](https://github.com/jaredwray/keyv/tree/master/packages/memcache) | Yes
+
+## Third-party Storage Adapters
+
+You can also use third-party storage adapters or build your own. Keyv will wrap these storage adapters in TTL functionality and handle complex types internally.
+
+```js
+const Keyv = require('keyv');
+const myAdapter = require('./my-storage-adapter');
+
+const keyv = new Keyv({ store: myAdapter });
+```
+
+Any store that follows the [`Map`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map) api will work.
+
+```js
+new Keyv({ store: new Map() });
+```
+
+For example, [`quick-lru`](https://github.com/sindresorhus/quick-lru) is a completely unrelated module that implements the Map API.
+
+```js
+const Keyv = require('keyv');
+const QuickLRU = require('quick-lru');
+
+const lru = new QuickLRU({ maxSize: 1000 });
+const keyv = new Keyv({ store: lru });
+```
+
+The following are third-party storage adapters compatible with Keyv:
+
+- [quick-lru](https://github.com/sindresorhus/quick-lru) - Simple "Least Recently Used" (LRU) cache
+- [keyv-file](https://github.com/zaaack/keyv-file) - File system storage adapter for Keyv
+- [keyv-dynamodb](https://www.npmjs.com/package/keyv-dynamodb) - DynamoDB storage adapter for Keyv
+- [keyv-lru](https://www.npmjs.com/package/keyv-lru) - LRU storage adapter for Keyv
+- [keyv-null](https://www.npmjs.com/package/keyv-null) - Null storage adapter for Keyv
+- [keyv-firestore ](https://github.com/goto-bus-stop/keyv-firestore) – Firebase Cloud Firestore adapter for Keyv
+- [keyv-mssql](https://github.com/pmorgan3/keyv-mssql) - Microsoft Sql Server adapter for Keyv
+- [keyv-azuretable](https://github.com/howlowck/keyv-azuretable) - Azure Table Storage/API adapter for Keyv
+- [keyv-arango](https://github.com/TimMikeladze/keyv-arango) - ArangoDB storage adapter for Keyv
+- [keyv-momento](https://github.com/momentohq/node-keyv-adaptor/) - Momento storage adapter for Keyv
+
+## Add Cache Support to your Module
+
+Keyv is designed to be easily embedded into other modules to add cache support. The recommended pattern is to expose a `cache` option in your modules options which is passed through to Keyv. Caching will work in memory by default and users have the option to also install a Keyv storage adapter and pass in a connection string, or any other storage that implements the `Map` API.
+
+You should also set a namespace for your module so you can safely call `.clear()` without clearing unrelated app data.
+
+Inside your module:
+
+```js
+class AwesomeModule {
+	constructor(opts) {
+		this.cache = new Keyv({
+			uri: typeof opts.cache === 'string' && opts.cache,
+			store: typeof opts.cache !== 'string' && opts.cache,
+			namespace: 'awesome-module'
+		});
+	}
+}
+```
+
+Now it can be consumed like this:
+
+```js
+const AwesomeModule = require('awesome-module');
+
+// Caches stuff in memory by default
+const awesomeModule = new AwesomeModule();
+
+// After npm install --save keyv-redis
+const awesomeModule = new AwesomeModule({ cache: 'redis://localhost' });
+
+// Some third-party module that implements the Map API
+const awesomeModule = new AwesomeModule({ cache: some3rdPartyStore });
+```
+
+## Compression
+
+Keyv supports `gzip` and `brotli` compression. To enable compression, pass the `compress` option to the constructor.
+
+```js
+const KeyvGzip = require('@keyv/compress-gzip');
+const Keyv = require('keyv');
+
+const keyvGzip = new KeyvGzip();
+const keyv = new Keyv({ compression: KeyvGzip });
+```
+
+You can also pass a custom compression function to the `compression` option. Following the pattern of the official compression adapters.
+
+### Want to build your own? 
+
+Great! Keyv is designed to be easily extended. You can build your own compression adapter by following the pattern of the official compression adapters based on this interface:
+
+```typescript
+interface CompressionAdapter {
+	async compress(value: any, options?: any);
+	async decompress(value: any, options?: any);
+	async serialize(value: any);
+	async deserialize(value: any);
+}
+```
+
+In addition to the interface, you can test it with our compression test suite using @keyv/test-suite:
+
+```js
+const {keyvCompresstionTests} = require('@keyv/test-suite');
+const KeyvGzip = require('@keyv/compress-gzip');
+
+keyvCompresstionTests(test, new KeyvGzip());
+```
+
+## API
+
+### new Keyv([uri], [options])
+
+Returns a new Keyv instance.
+
+The Keyv instance is also an `EventEmitter` that will emit an `'error'` event if the storage adapter connection fails.
+
+### uri
+
+Type: `String`<br>
+Default: `undefined`
+
+The connection string URI.
+
+Merged into the options object as options.uri.
+
+### options
+
+Type: `Object`
+
+The options object is also passed through to the storage adapter. Check your storage adapter docs for any extra options.
+
+#### options.namespace
+
+Type: `String`<br>
+Default: `'keyv'`
+
+Namespace for the current instance.
+
+#### options.ttl
+
+Type: `Number`<br>
+Default: `undefined`
+
+Default TTL. Can be overridden by specififying a TTL on `.set()`.
+
+#### options.compression
+
+Type: `@keyv/compress-<compression_package_name>`<br>
+Default: `undefined`
+
+Compression package to use. See [Compression](#compression) for more details.
+
+#### options.serialize
+
+Type: `Function`<br>
+Default: `JSONB.stringify`
+
+A custom serialization function.
+
+#### options.deserialize
+
+Type: `Function`<br>
+Default: `JSONB.parse`
+
+A custom deserialization function.
+
+#### options.store
+
+Type: `Storage adapter instance`<br>
+Default: `new Map()`
+
+The storage adapter instance to be used by Keyv.
+
+#### options.adapter
+
+Type: `String`<br>
+Default: `undefined`
+
+Specify an adapter to use. e.g `'redis'` or `'mongodb'`.
+
+### Instance
+
+Keys must always be strings. Values can be of any type.
+
+#### .set(key, value, [ttl])
+
+Set a value.
+
+By default keys are persistent. You can set an expiry TTL in milliseconds.
+
+Returns a promise which resolves to `true`.
+
+#### .get(key, [options])
+
+Returns a promise which resolves to the retrieved value.
+
+##### options.raw
+
+Type: `Boolean`<br>
+Default: `false`
+
+If set to true the raw DB object Keyv stores internally will be returned instead of just the value.
+
+This contains the TTL timestamp.
+
+#### .delete(key)
+
+Deletes an entry.
+
+Returns a promise which resolves to `true` if the key existed, `false` if not.
+
+#### .clear()
+
+Delete all entries in the current namespace.
+
+Returns a promise which is resolved when the entries have been cleared.
+
+#### .iterator()
+
+Iterate over all entries of the current namespace.
+
+Returns a iterable that can be iterated by for-of loops. For example:
+
+```js
+// please note that the "await" keyword should be used here
+for await (const [key, value] of this.keyv.iterator()) {
+  console.log(key, value);
+};
+```
+
+# How to Contribute
+
+In this section of the documentation we will cover:
+
+1) How to set up this repository locally
+2) How to get started with running commands
+3) How to contribute changes using Pull Requests
+
+## Dependencies
+
+This package requires the following dependencies to run:
+
+1) [Yarn V1](https://yarnpkg.com/getting-started/install)
+3) [Docker](https://docs.docker.com/get-docker/)
+
+## Setting up your workspace
+
+To contribute to this repository, start by setting up this project locally:
+
+1) Fork this repository into your Git account
+2) Clone the forked repository to your local directory using `git clone`
+3) Install any of the above missing dependencies
+
+## Launching the project
+
+Once the project is installed locally, you are ready to start up its services:
+
+1) Ensure that your Docker service is running.
+2) From the root directory of your project, run the `yarn` command in the command prompt to install yarn.
+3) Run the `yarn bootstrap` command to  install any necessary dependencies.
+4) Run `yarn test:services:start` to start up this project's Docker container. The container will launch all services within your workspace.
+
+## Available Commands
+
+Once the project is running, you can execute a variety of commands. The root workspace and each subpackage contain a `package.json` file with a  `scripts` field listing all the commands that can be executed from that directory. This project also supports native `yarn`, and `docker` commands.
+
+Here, we'll cover the primary commands that can be executed from the root directory. Unless otherwise noted, these commands can also be executed from a subpackage. If executed from a subpackage, they will only affect that subpackage, rather than the entire workspace.
+
+### `yarn`
+
+The `yarn` command installs yarn in the workspace.
+
+### `yarn bootstrap`
+
+The `yarn bootstrap` command installs all dependencies in the workspace.
+
+### `yarn test:services:start`
+
+The `yarn test:services:start` command starts up the project's Docker container, launching all services in the workspace. This command must be executed from the root directory.
+
+### `yarn test:services:stop`
+
+The `yarn test:services:stop` command brings down the project's Docker container, halting all services. This command must be executed from the root directory.
+
+### `yarn test`
+
+The `yarn test` command runs all tests in the workspace.
+
+### `yarn clean`
+
+The `yarn clean` command removes yarn and all dependencies installed by yarn. After executing this command, you must repeat the steps in *Setting up your workspace* to rebuild your workspace.
+
+## Contributing Changes
+
+Now that you've set up your workspace, you're ready to contribute changes to the `keyv` repository.
+
+1) Make any changes that you would like to contribute in your local workspace.
+2) After making these changes, ensure that the project's tests still pass by executing the `yarn test` command in the root directory.
+3) Commit your changes and push them to your forked repository.
+4) Navigate to the original `keyv` repository and go the *Pull Requests* tab.
+5) Click the *New pull request* button, and open a pull request for the branch in your repository that contains your changes.
+6) Once your pull request is created, ensure that all checks have passed and that your branch has no conflicts with the base branch. If there are any issues, resolve these changes in your local repository, and then commit and push them to git.
+7) Similarly, respond to any reviewer comments or requests for changes by making edits to your local repository and pushing them to Git.
+8) Once the pull request has been reviewed, those with write access to the branch will be able to merge your changes into the `keyv` repository.
+
+If you need more information on the steps to create a pull request, you can find a detailed walkthrough in the [Github documentation](https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork)
+
+## License
+
+MIT © Jared Wray
+
+-----------
+
+The following NPM package may be included in this product:
+
+ - known-css-properties@0.26.0
 
 This package contains the following license and notice below:
 
@@ -3895,62 +4504,6 @@ terms above.
 
 The following NPM package may be included in this product:
 
- - lodash@4.17.21
-
-This package contains the following license and notice below:
-
-Copyright OpenJS Foundation and other contributors <https://openjsf.org/>
-
-Based on Underscore.js, copyright Jeremy Ashkenas,
-DocumentCloud and Investigative Reporters & Editors <http://underscorejs.org/>
-
-This software consists of voluntary contributions made by many
-individuals. For exact contribution history, see the revision history
-available at https://github.com/lodash/lodash
-
-The following license applies to all parts of this software except as
-documented below:
-
-====
-
-Permission is hereby granted, free of charge, to any person obtaining
-a copy of this software and associated documentation files (the
-"Software"), to deal in the Software without restriction, including
-without limitation the rights to use, copy, modify, merge, publish,
-distribute, sublicense, and/or sell copies of the Software, and to
-permit persons to whom the Software is furnished to do so, subject to
-the following conditions:
-
-The above copyright notice and this permission notice shall be
-included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
-====
-
-Copyright and related rights for sample code are waived via CC0. Sample
-code is defined as all source code displayed within the prose of the
-documentation.
-
-CC0: http://creativecommons.org/publicdomain/zero/1.0/
-
-====
-
-Files located in the node_modules and vendor directories are externally
-maintained libraries used by this software which have their own
-licenses; we recommend you read them, as their terms may differ from the
-terms above.
-
------------
-
-The following NPM package may be included in this product:
-
  - lru-queue@0.1.0
 
 This package contains the following license and notice below:
@@ -4012,7 +4565,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - mapbox-gl@1.13.2
+ - mapbox-gl@1.13.3
 
 This package contains the following license and notice below:
 
@@ -4305,13 +4858,13 @@ IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - memoizee@0.4.15
+ - memoizee@0.4.17
 
 This package contains the following license and notice below:
 
 ISC License
 
-Copyright (c) 2012-2018, Mariusz Nowak, @medikoo, medikoo.com
+Copyright (c) 2012-2024, Mariusz Nowak, @medikoo, medikoo.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -4419,13 +4972,13 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - ms@2.1.2
+ - ms@2.1.3
 
 This package contains the following license and notice below:
 
 The MIT License (MIT)
 
-Copyright (c) 2016 Zeit, Inc.
+Copyright (c) 2020 Vercel, Inc.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -4582,7 +5135,7 @@ PERFORMANCE OF THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - node-fetch@2.6.7
+ - node-fetch@2.7.0
 
 This package contains the following license and notice below:
 
@@ -4675,49 +5228,6 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 
 The following NPM package may be included in this product:
 
- - normalize-selector@0.2.0
-
-This package contains the following license and notice below:
-
-# Normalize-Selector
-
-Normalize CSS selectors.
-
-Examples:
-
-* `#foo>.bar` -> `#foo > .bar`
-* ` 	#foo 	 > 	 .bar 	 ` -> `#foo > .bar`
-* `foo[ a = 'b' ]` -> `foo[a='b']`
-
-## Tests
-
-Run mocha tests on node.js with:
-
-```
-npm test
-```
-
-or:
-
-```
-node ./test/mocha/node-suite.js
-```
-
-## rawgithub
-
-View the browser suite directly on
-[rawgithub](https://rawgithub.com/getify/normalize-selector/master/test/mocha/browser-suite.html)
-
-## License
-
-The code and all the documentation are released under the MIT license.
-
-http://getify.mit-license.org/
-
------------
-
-The following NPM package may be included in this product:
-
  - path-parse@1.0.7
 
 This package contains the following license and notice below:
@@ -4748,7 +5258,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - pbf@3.2.1
+ - pbf@3.3.0
 
 This package contains the following license and notice below:
 
@@ -4779,30 +5289,6 @@ SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
 CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
 OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
 OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
------------
-
-The following NPM package may be included in this product:
-
- - picocolors@1.0.1
-
-This package contains the following license and notice below:
-
-ISC License
-
-Copyright (c) 2021 Alexey Raspopov, Kostiantyn Denysov, Anton Verinov
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES
-WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF
-MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR
-ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES
-WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN
-ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF
-OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 -----------
 
@@ -4862,7 +5348,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - plural-forms@0.5.3
+ - plural-forms@0.5.5
 
 This package contains the following license and notice below:
 
@@ -5074,13 +5560,14 @@ MIT
 
 The following NPM package may be included in this product:
 
- - postcss-resolve-nested-selector@0.1.1
+ - postcss-resolve-nested-selector@0.1.6
 
 This package contains the following license and notice below:
 
 The MIT License (MIT)
 
 Copyright (c) 2016 David Clark
+Copyright © CSSTools Contributors
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5134,7 +5621,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - postcss-selector-parser@6.0.10
+ - postcss-selector-parser@6.1.2
 
 This package contains the following license and notice below:
 
@@ -5536,7 +6023,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - resolve@1.22.8
+ - resolve@1.22.10
 
 This package contains the following license and notice below:
 
@@ -5803,7 +6290,7 @@ THE SOFTWARE.
 
 The following NPM packages may be included in this product:
 
- - spdx-correct@3.1.1
+ - spdx-correct@3.2.0
  - validate-npm-package-license@3.0.4
 
 These packages each contain the following license and notice below:
@@ -6014,7 +6501,7 @@ Apache License
 
 The following NPM package may be included in this product:
 
- - spdx-exceptions@2.3.0
+ - spdx-exceptions@2.5.0
 
 This package contains the following license and notice below:
 
@@ -6090,20 +6577,19 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - spdx-license-ids@3.0.11
+ - spdx-license-ids@3.0.21
 
 This package contains the following license and notice below:
 
 # spdx-license-ids
 
 [![npm version](https://img.shields.io/npm/v/spdx-license-ids.svg)](https://www.npmjs.com/package/spdx-license-ids)
-[![Github Actions](https://action-badges.now.sh/shinnn/spdx-license-ids)](https://wdp9fww0r9.execute-api.us-west-2.amazonaws.com/production/results/shinnn/spdx-license-ids)
 
 A list of [SPDX license](https://spdx.org/licenses/) identifiers
 
 ## Installation
 
-[Download JSON directly](https://raw.githubusercontent.com/shinnn/spdx-license-ids/main/index.json), or [use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/about-npm/):
+[Download JSON directly](https://raw.githubusercontent.com/jslicense/spdx-license-ids/main/index.json), or [use](https://docs.npmjs.com/cli/install) [npm](https://docs.npmjs.com/about-npm/):
 
 ```
 npm install spdx-license-ids
@@ -6146,23 +6632,6 @@ deprecatedIds.includes('GPL-3.0'); //=> true
 ## License
 
 [Creative Commons Zero v1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/deed)
-
------------
-
-The following NPM package may be included in this product:
-
- - specificity@0.4.1
-
-This package contains the following license and notice below:
-
-The MIT License (MIT)
-Copyright (c) 2016 Keegan Street and others
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 -----------
 
@@ -6276,7 +6745,7 @@ OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - stylelint-scss@4.2.0
+ - stylelint-scss@4.7.0
 
 This package contains the following license and notice below:
 
@@ -6306,7 +6775,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - stylelint@14.8.2
+ - stylelint@14.16.1
 
 This package contains the following license and notice below:
 
@@ -6359,7 +6828,7 @@ THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - supports-hyperlinks@2.2.0
+ - supports-hyperlinks@2.3.0
 
 This package contains the following license and notice below:
 
@@ -6467,7 +6936,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - table@6.8.0
+ - table@6.9.0
 
 This package contains the following license and notice below:
 
@@ -6598,13 +7067,13 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following NPM package may be included in this product:
 
- - type@1.2.0
+ - type@2.7.3
 
 This package contains the following license and notice below:
 
 ISC License
 
-Copyright (c) 2019, Mariusz Nowak, @medikoo, medikoo.com
+Copyright (c) 2019-2024, Mariusz Nowak, @medikoo, medikoo.com
 
 Permission to use, copy, modify, and/or distribute this software for any
 purpose with or without fee is hereby granted, provided that the above
@@ -6622,37 +7091,13 @@ PERFORMANCE OF THIS SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - type@2.6.0
-
-This package contains the following license and notice below:
-
-ISC License
-
-Copyright (c) 2019-2022, Mariusz Nowak, @medikoo, medikoo.com
-
-Permission to use, copy, modify, and/or distribute this software for any
-purpose with or without fee is hereby granted, provided that the above
-copyright notice and this permission notice appear in all copies.
-
-THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE
-OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-PERFORMANCE OF THIS SOFTWARE.
-
------------
-
-The following NPM package may be included in this product:
-
- - uglify-js@3.15.4
+ - uglify-js@3.19.3
 
 This package contains the following license and notice below:
 
 UglifyJS is released under the BSD license:
 
-Copyright 2012-2019 (c) Mihai Bazon <mihai.bazon@gmail.com>
+Copyright 2012-2024 (c) Mihai Bazon <mihai.bazon@gmail.com>
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions
@@ -6679,26 +7124,6 @@ THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR
 TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF
 THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
 SUCH DAMAGE.
-
------------
-
-The following NPM package may be included in this product:
-
- - uri-js@4.4.1
-
-This package contains the following license and notice below:
-
-Copyright 2011 Gary Court. All rights reserved.
-
-Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
-
-1.	Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
-
-2.	Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
-
-THIS SOFTWARE IS PROVIDED BY GARY COURT "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL GARY COURT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
-
-The views and conclusions contained in the software and documentation are those of the authors and should not be interpreted as representing official policies, either expressed or implied, of Gary Court.
 
 -----------
 
@@ -6755,7 +7180,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following NPM package may be included in this product:
 
- - v8-compile-cache@2.3.0
+ - v8-compile-cache@2.4.0
 
 This package contains the following license and notice below:
 
@@ -6898,7 +7323,7 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - write-file-atomic@4.0.1
+ - write-file-atomic@4.0.2
 
 This package contains the following license and notice below:
 
