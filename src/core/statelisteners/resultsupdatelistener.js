@@ -34,7 +34,8 @@ export default class ResultsUpdateListener {
       callback: verticalResults => {
         const isSearchComplete = verticalResults.searchState === SearchStates.SEARCH_COMPLETE;
         if (isSearchComplete) {
-          this._handleVerticalResultsUpdate([verticalResults.searchCoreDocument], Searcher.VERTICAL);
+          const results = verticalResults.searchCoreDocument ? [verticalResults.searchCoreDocument] : [];
+          this._handleVerticalResultsUpdate(results, Searcher.VERTICAL);
         }
       }
     });
@@ -55,11 +56,16 @@ export default class ResultsUpdateListener {
 
   /**
      * Calls into search-core to generate a direct answer from the search-core vertical results.
+     * If no results are present, we will not attempt to find a generative direct answer.
      *
      * @param {VerticalResults[]} verticalResultsList list of search-core VerticalResults
      * @param {string} searcher the type of search that generated these results
      */
   _handleVerticalResultsUpdate (verticalResultsList, searcher) {
+    if (!verticalResultsList || verticalResultsList.length === 0) {
+      this.core.storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, new GenerativeDirectAnswer({}));
+      return;
+    }
     this.core.storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, GenerativeDirectAnswer.searchLoading());
     this.core.generativeDirectAnswer(verticalResultsList, searcher);
   }

@@ -359,7 +359,7 @@ export default class Core {
     this.storage.set(StorageKeys.LOCATION_BIAS, new LocationBias({}));
     this.storage.set(StorageKeys.VERTICAL_RESULTS, new VerticalResults({}));
     this.storage.set(StorageKeys.UNIVERSAL_RESULTS, new UniversalResults({}));
-    this.storage.delete(StorageKeys.GENERATIVE_DIRECT_ANSWER);
+    this.storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, new GenerativeDirectAnswer({}));
   }
 
   /**

@@ -5,7 +5,7 @@ module.exports = [
   },
   {
     path: 'dist/answers-modern.min.js',
-    limit: '160 KB'
+    limit: '170 KB'
   },
   {
     path: 'dist/answerstemplates.compiled.min.js',

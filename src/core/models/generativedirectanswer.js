@@ -1,6 +1,7 @@
 /** @module GenerativeDirectAnswer */
 
 import SearchStates from '../storage/searchstates';
+import RichTextFormatter from '../utils/richtextformatter';
 
 export default class GenerativeDirectAnswer {
   constructor (generativeDirectAnswer = {}) {
@@ -33,6 +34,10 @@ export default class GenerativeDirectAnswer {
         };
       });
 
+    if (gdaResponse.directAnswer) {
+      const directAnswerAsHTML = RichTextFormatter.format(gdaResponse.directAnswer, 'gda-snippet');
+      gdaResponse.directAnswer = directAnswerAsHTML;
+    }
     const generativeDirectAnswerData = {
       ...gdaResponse,
       searcher,
