@@ -168,7 +168,11 @@ export default class GenerativeDirectAnswerComponent extends Component {
     this.updateContainerClass(searchState);
     if (searchState !== SearchStates.SEARCH_COMPLETE || !data.directAnswer) {
       return super.setState(Object.assign({}, data, {
-        searchState
+        searchState,
+        generativeDirectAnswer: {
+          searchState
+        },
+        customCard: this._getCard()
       }));
     }
 
@@ -190,7 +194,8 @@ export default class GenerativeDirectAnswerComponent extends Component {
 
   addChild (data, type, opts) {
     if (type === this.getState('customCard')) {
-      return super.addChild(this.getState('generativeDirectAnswer'), type, {
+      const customCardData = this.getState('generativeDirectAnswer');
+      return super.addChild(customCardData, type, {
         ...this._userConfig,
         ...opts
       });
