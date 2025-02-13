@@ -2,6 +2,7 @@
 
 import SearchStates from '../storage/searchstates';
 import RichTextFormatter from '../utils/richtextformatter';
+import Searcher from '../models/searcher';
 
 export default class GenerativeDirectAnswer {
   constructor (generativeDirectAnswer = {}) {
@@ -20,6 +21,8 @@ export default class GenerativeDirectAnswer {
     if (!gdaResponse) {
       return new GenerativeDirectAnswer();
     }
+
+    const verticalKey = searcher === Searcher.UNIVERSAL ? '_universalInternal' : verticalResults[0].verticalKey;
 
     const citationsData = verticalResults
       .flatMap(vr => vr.results)
@@ -41,7 +44,8 @@ export default class GenerativeDirectAnswer {
     const generativeDirectAnswerData = {
       ...gdaResponse,
       searcher,
-      citationsData
+      citationsData,
+      verticalKey
     };
     return new GenerativeDirectAnswer(generativeDirectAnswerData);
   }

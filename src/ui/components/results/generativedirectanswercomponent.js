@@ -112,7 +112,8 @@ export default class GenerativeDirectAnswerComponent extends Component {
       generativeDirectAnswer: true,
       directAnswer: true,
       searcher: this.getState('searcher'),
-      entityId
+      entityId,
+      verticalConfigId: this.getState('verticalKey')
     };
     const analyticsEvent = new AnalyticsEvent(eventType);
     analyticsEvent.addOptions(analyticsOptions);
@@ -136,7 +137,8 @@ export default class GenerativeDirectAnswerComponent extends Component {
       directAnswer: true,
       fieldName: 'gda-snippet',
       searcher: this.getState('searcher'),
-      url: event.target.href
+      url: event.target.href,
+      verticalConfigId: this.getState('verticalKey')
     };
 
     const analyticsEvent = new AnalyticsEvent(ctaType);
@@ -180,7 +182,8 @@ export default class GenerativeDirectAnswerComponent extends Component {
       searchState,
       searcher: data.searcher,
       generativeDirectAnswer: data,
-      customCard: this._getCard()
+      customCard: this._getCard(),
+      verticalKey: data.verticalKey
     }));
   }
 
