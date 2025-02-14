@@ -14,6 +14,7 @@ describe('Constructs a generative direct answer from an answers-core generative 
       {
         results: [
           {
+            id: 'entityid-1',
             rawData: {
               uid: 'uuid-1',
               someField: 'someValue'
@@ -30,6 +31,7 @@ describe('Constructs a generative direct answer from an answers-core generative 
       {
         results: [
           {
+            id: 'entityid-2',
             rawData: {
               uid: 'uuid-2',
               someField: 'someValue'
@@ -40,6 +42,7 @@ describe('Constructs a generative direct answer from an answers-core generative 
             otherData: 'otherData'
           },
           {
+            id: 'entityid-3',
             rawData: {
               uid: 'uuid-3',
               someField: 'someValue'
@@ -49,6 +52,7 @@ describe('Constructs a generative direct answer from an answers-core generative 
             otherData: 'otherData'
           },
           {
+            id: 'entityid-4',
             rawData: {
               uid: 'uuid-not-in-citations',
               someField: 'someValue'
@@ -71,24 +75,24 @@ describe('Constructs a generative direct answer from an answers-core generative 
       searcher: Searcher.UNIVERSAL,
       citationsData: [
         {
-          uid: 'uuid-1',
+          id: 'entityid-1',
           name: 'name-1',
           description: 'description-1',
           link: 'link-1'
         },
         {
-          uid: 'uuid-2',
+          id: 'entityid-2',
           name: 'name-2',
           description: 'description-2',
           link: 'link-2'
         },
         {
-          uid: 'uuid-3',
+          id: 'entityid-3',
           name: 'name-3',
           link: 'link-3'
         }
       ],
-      verticalKey: '_universalInternal'
+      verticalKey: ''
     };
 
     const actualGenerativeDirectAnswer = GenerativeDirectAnswer.fromCore(
@@ -111,6 +115,7 @@ describe('Constructs a generative direct answer from an answers-core generative 
       {
         results: [
           {
+            id: 'entityid-2',
             rawData: {
               uid: 'uuid-2',
               someField: 'someValue'
@@ -121,6 +126,7 @@ describe('Constructs a generative direct answer from an answers-core generative 
             otherData: 'otherData'
           },
           {
+            id: 'entityid-3',
             rawData: {
               uid: 'uuid-3',
               someField: 'someValue'
@@ -130,6 +136,7 @@ describe('Constructs a generative direct answer from an answers-core generative 
             otherData: 'otherData'
           },
           {
+            id: 'entityid-4',
             rawData: {
               uid: 'uuid-not-in-citations',
               someField: 'someValue'
@@ -152,13 +159,13 @@ describe('Constructs a generative direct answer from an answers-core generative 
       searcher: Searcher.VERTICAL,
       citationsData: [
         {
-          uid: 'uuid-2',
+          id: 'entityid-2',
           name: 'name-2',
           description: 'description-2',
           link: 'link-2'
         },
         {
-          uid: 'uuid-3',
+          id: 'entityid-3',
           name: 'name-3',
           link: 'link-3'
         }

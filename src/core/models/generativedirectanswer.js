@@ -22,15 +22,15 @@ export default class GenerativeDirectAnswer {
       return new GenerativeDirectAnswer();
     }
 
-    const verticalKey = searcher === Searcher.UNIVERSAL ? '_universalInternal' : verticalResults[0].verticalKey;
+    const verticalKey = searcher === Searcher.UNIVERSAL ? '' : verticalResults[0].verticalKey;
 
     const citationsData = verticalResults
       .flatMap(vr => vr.results)
-      .filter(result => result.rawData?.uid && result.name)
+      .filter(result => result.rawData?.uid && result.id && result.name)
       .filter(result => gdaResponse.citations.includes(result.rawData.uid))
       .map(result => {
         return {
-          uid: result.rawData.uid,
+          id: result.id,
           name: result.name,
           description: result.description,
           link: result.link

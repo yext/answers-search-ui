@@ -15,12 +15,12 @@ const gdaSuccess = {
   citations: ['1234', '5678'],
   citationsData: [
     {
-      uid: '1234',
+      id: '123454321',
       name: 'Bob Kitty',
       description: 'I am a cat'
     },
     {
-      uid: '5678',
+      id: '567898765',
       name: 'Joe Cat',
       link: 'https://yext.com'
     }
@@ -56,7 +56,7 @@ beforeEach(() => {
 });
 
 describe('cardType logic works correctly', () => {
-  it('if no cardType is specified, do not use a ccustom card', () => {
+  it('if no cardType is specified, do not use a custom card', () => {
     const component = COMPONENT_MANAGER.create('GenerativeDirectAnswer', {
       ...defaultConfig
     });
@@ -100,7 +100,7 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     const firstCitationLink = firstCitation.prop('href');
     expect(firstCitationLink).toBeUndefined();
     const firstEntityId = firstCitation.prop('data-entityid');
-    expect(firstEntityId).toEqual('1234');
+    expect(firstEntityId).toEqual('123454321');
     const firstCitationClickEventType = firstCitation.prop('data-eventtype');
     expect(firstCitationClickEventType).toEqual('CITATION_CLICK');
 
@@ -112,7 +112,7 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     const secondCitationLink = secondCitation.prop('href');
     expect(secondCitationLink).toEqual('https://yext.com');
     const secondEntityId = secondCitation.prop('data-entityid');
-    expect(secondEntityId).toEqual('5678');
+    expect(secondEntityId).toEqual('567898765');
     const secondCitationClickEventType = secondCitation.prop('data-eventtype');
     expect(secondCitationClickEventType).toEqual('CITATION_CLICK');
   });
