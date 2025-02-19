@@ -1,6 +1,6 @@
 {
   "name": "@yext/answers-search-ui",
-  "version": "1.18.0-beta.3",
+  "version": "1.18.0",
   "description": "Javascript Search Programming Interface",
   "main": "dist/answers-umd.js",
   "repository": {
@@ -30,7 +30,7 @@
     "@mapbox/mapbox-gl-language": "^0.10.1",
     "@yext/answers-storage": "^1.1.0",
     "@yext/rtf-converter": "^1.7.1",
-    "@yext/search-core": "^2.6.0-beta.5",
+    "@yext/search-core": "^2.6.0",
     "bowser": "^2.11.0",
     "cross-fetch": "^3.1.5",
     "css-vars-ponyfill": "^2.4.3",
@@ -141,7 +141,8 @@
   "overrides": {
     "regenerator-runtime": "0.13.1",
     "ansi-regex": "^5.0.1",
-    "eslint": "^8.11.0"
+    "eslint": "^8.11.0",
+    "rollup": "2.79.2"
   },
   "jest": {
     "bail": 0,
