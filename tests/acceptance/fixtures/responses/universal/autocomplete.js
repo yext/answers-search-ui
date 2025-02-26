@@ -40,6 +40,8 @@ function generateAutoCompleteResponse (prompt) {
         verticalKeys: []
       }
     ];
+  } else {
+    mockedResponse.response.results = [];
   }
 
   return mockedResponse;
