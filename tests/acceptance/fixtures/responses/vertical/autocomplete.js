@@ -17,7 +17,7 @@ function generateAutoCompleteResponse (prompt) {
 
 export const MockedVerticalAutoCompleteRequest = RequestMock()
   .onRequestTo(async request => {
-    const urlRegex = /^https:\/\/prod-cdn.us.yextapis.com\/v2\/accounts\/me\/search\/vertical\/autocomplete/;
+    const urlRegex = /.*\.com\/v2\/accounts\/me\/search\/autocomplete/;
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {
