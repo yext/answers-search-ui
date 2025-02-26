@@ -49,7 +49,7 @@ function generateAutoCompleteResponse (prompt) {
 
 export const MockedUniversalAutoCompleteRequest = RequestMock()
   .onRequestTo(async request => {
-    const urlRegex = /^https:\/\/prod-cdn.us.yextapis.com\/v2\/accounts\/me\/search\/autocomplete/;
+    const urlRegex = /.*\/autocomplete/;
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {
