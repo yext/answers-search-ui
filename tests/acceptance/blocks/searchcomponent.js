@@ -16,7 +16,10 @@ class AutoCompleteComponentBlock {
      *                       select.
      */
   async selectOption (value) {
-    const option = this._options.withExactText(value);
+    const option = await this._options.withExactText(value);
+    if (!option.exists) {
+      await t.debug();
+    }
     await t.click(option);
   }
 }
