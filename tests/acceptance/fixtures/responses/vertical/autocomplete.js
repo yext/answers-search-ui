@@ -1,6 +1,5 @@
 import { RequestMock } from 'testcafe';
 import { CORSHeaders } from '../cors';
-import { meta } from './sharedData';
 
 function generateAutoCompleteResponse (prompt) {
   const mockedResponse = {
