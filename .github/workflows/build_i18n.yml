@@ -23,7 +23,7 @@ jobs:
         fetch-depth: 0
     - uses: actions/setup-node@v4
       with:
-        node-version: 16
+        node-version: 20
         cache: 'npm'
     - id: set-matrix
       run: |
@@ -39,10 +39,10 @@ jobs:
     - uses: actions/checkout@v4
       with:
         fetch-depth: 0
-    - name: Use Node.js 16
+    - name: Use Node.js 20
       uses: actions/setup-node@v4
       with:
-        node-version: 16
+        node-version: 20
         cache: 'npm'
     - run: npm ci
     - run: LANGUAGE=${{ matrix.language }} CLOUD_REGION=${{ inputs.cloud_region }} npm run ${{ inputs.build_script }}

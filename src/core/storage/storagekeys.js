@@ -13,6 +13,7 @@ const StorageKeys = {
   ALTERNATIVE_VERTICALS: 'alternative-verticals',
   AUTOCOMPLETE: 'autocomplete',
   DIRECT_ANSWER: 'direct-answer',
+  GENERATIVE_DIRECT_ANSWER: 'generative-direct-answer',
   FILTER: 'filter', // DEPRECATED
   PERSISTED_FILTER: 'filters',
   STATIC_FILTER_NODES: 'static-filter-nodes',
@@ -41,6 +42,7 @@ const StorageKeys = {
   QUERY_TRIGGER: 'queryTrigger',
   FACETS_LOADED: 'facets-loaded',
   QUERY_SOURCE: 'query-source',
-  HISTORY_POP_STATE: 'history-pop-state'
+  HISTORY_POP_STATE: 'history-pop-state',
+  SEARCH_ID: 'search-id'
 };
 export default StorageKeys;

@@ -1,0 +1,198 @@
+/** @define yxt-GenerativeDirectAnswer */
+
+$gda-border: var(--yxt-border-default) !default;
+
+$gda-title-background-color: var(--yxt-color-brand-primary) !default;
+$gda-content-background-color: white !default;
+$gda-footer-background-color: var(--yxt-color-background-highlight) !default;
+
+$gda-title-font-size: var(--yxt-font-size-md-lg) !default;
+$gda-title-line-height: var(--yxt-line-height-lg) !default;
+$gda-title-font-weight: var(--yxt-font-weight-semibold) !default;
+$gda-title-color: white !default;
+
+$gda-content-font-size: var(--yxt-font-size-xlg) !default;
+$gda-content-line-height: var(--yxt-line-height-md) !default;
+$gda-content-font-weight: var(--yxt-font-weight-normal) !default;
+$gda-content-bolded-font-weight: var(--yxt-font-weight-semibold) !default;
+$gda-content-color: var(--yxt-color-text-primary) !default;
+
+$gda-citations-divider-color: var(--yxt-color-borders) !default;
+
+$gda-citations-header-font-size: var(--yxt-font-size-md) !default;
+$gda-citations-header-line-height: var(--yxt-line-height-md) !default;
+$gda-citations-header-font-weight: var(--yxt-font-weight-semibold) !default;
+$gda-citations-header-color: var(--yxt-color-text-primary) !default;
+
+$gda-citation-button-spacing: var(--yxt-base-spacing-sm) !default;
+
+$gda-citation-name-font-size: var(--yxt-font-size-md) !default;
+$gda-citation-name-line-height: var(--yxt-line-height-md) !default;
+$gda-citation-name-font-weight: var(--yxt-font-weight-semibold) !default;
+$gda-citation-name-color: var(--yxt-color-text-primary) !default;
+
+$gda-citation-description-font-size: var(--yxt-font-size-sm) !default;
+$gda-citation-description-line-height: var(--yxt-line-height-md) !default;
+$gda-citation-description-font-weight: var(--yxt-font-weight-normal) !default;
+$gda-citation-description-color: var(--yxt-color-text-primary) !default;
+
+:root {
+  --yxt-gda-border: #{$gda-border};
+  --yxt-gda-title-background-color: #{$gda-title-background-color};
+  --yxt-gda-content-background-color: #{$gda-content-background-color};
+  --yxt-gda-footer-background-color: #{$gda-footer-background-color};
+  --yxt-gda-title-font-size: #{$gda-title-font-size};
+  --yxt-gda-title-line-height: #{$gda-title-line-height};
+  --yxt-gda-title-font-weight: #{$gda-title-font-weight};
+  --yxt-gda-title-color: #{$gda-title-color};
+  --yxt-gda-content-font-size: #{$gda-content-font-size};
+  --yxt-gda-content-line-height: #{$gda-content-line-height};
+  --yxt-gda-content-font-weight: #{$gda-content-font-weight};
+  --yxt-gda-content-bolded-font-weight: #{$gda-content-bolded-font-weight};
+  --yxt-gda-content-color: #{$gda-content-color};
+  --yxt-gda-citations-divider-color: #{$gda-citations-divider-color};
+  --yxt-gda-citations-header-font-size: #{$gda-citations-header-font-size};
+  --yxt-gda-citations-header-line-height: #{$gda-citations-header-line-height};
+  --yxt-gda-citations-header-font-weight: #{$gda-citations-header-font-weight};
+  --yxt-gda-citations-header-color: #{$gda-citations-header-color};
+  --yxt-gda-citation-button-spacing: #{$gda-citation-button-spacing};
+  --yxt-gda-citation-name-font-size: #{$gda-citation-name-font-size};
+  --yxt-gda-citation-name-line-height: #{$gda-citation-name-line-height};
+  --yxt-gda-citation-name-font-weight: #{$gda-citation-name-font-weight};
+  --yxt-gda-citation-name-color: #{$gda-citation-name-color};
+  --yxt-gda-citation-description-font-size: #{$gda-citation-description-font-size};
+  --yxt-gda-citation-description-line-height: #{$gda-citation-description-line-height};
+  --yxt-gda-citation-description-font-weight: #{$gda-citation-description-font-weight};
+  --yxt-gda-citation-description-color: #{$gda-citation-description-color};
+}
+
+.yxt-GenerativeDirectAnswer
+{
+  &-title
+  {
+    padding-top: calc(var(--yxt-base-spacing) / 2);
+    padding-left: var(--yxt-base-spacing);
+    padding-bottom: calc(var(--yxt-base-spacing) / 2);
+    padding-right: var(--yxt-base-spacing);
+    display: flex;
+    align-items: center;
+    background-color: var(--yxt-gda-title-background-color);
+    border: var(--yxt-gda-border);
+    @include Text(
+      $color: var(--yxt-gda-title-color)
+    );
+  }
+
+  &-titleText
+  {
+    margin: 0;
+    @include Text(
+      $size: var(--yxt-gda-title-font-size),
+      $line-height: var(--yxt-gda-title-line-height),
+      $weight: var(--yxt-gda-title-font-weight),
+      $color: var(--yxt-gda-title-color)
+    );
+  }
+
+  &-content
+  {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: var(--yxt-base-spacing);
+    background-color: var(--yxt-gda-content-background-color);
+    border-left: var(--yxt-gda-border);
+    border-right: var(--yxt-gda-border);
+    border-bottom: var(--yxt-gda-border);
+  }
+
+  &-citationsDivider
+  {
+    border-color: var(--yxt-gda-citations-divider-color);
+    width: 100%;
+  }
+
+  &-citationsHeader
+  {
+    @include Text(
+      $size: var(--yxt-gda-citations-header-font-size),
+      $line-height: var(--yxt-gda-citations-header-line-height),
+      $weight: var(--yxt-gda-citations-header-font-weight),
+      $color: var(--yxt-gda-citations-header-color)
+    );
+  }
+
+  &-citationsScroller
+  {
+    margin: 0;
+    overflow-x: auto;
+    white-space: nowrap;
+    padding-top: var(--yxt-base-spacing);
+  }
+
+  &-citationCard
+  {
+    display: inline-flex;
+    flex-direction: column;
+    gap: var(--yxt-base-spacing-sm);
+    text-align: left;
+    padding: 14px;
+    text-decoration: none;
+    border: var(--yxt-border-default);
+    border-radius: 4px;
+    width: 300px;
+    height: 85px;
+    margin-right: var(--yxt-gda-citation-button-spacing);
+    box-sizing: border-box;
+
+    &:hover,
+    &:active,
+    &:focus {
+      border: var(--yxt-border-hover);
+    }
+  }
+
+  &-citationName
+  {
+    @include Text(
+      $size: var(--yxt-gda-citation-name-font-size),
+      $line-height: var(--yxt-gda-citation-name-line-height),
+      $weight: var(--yxt-gda-citation-name-font-weight),
+      $color: var(--yxt-gda-citation-name-color)
+    );
+  }
+
+  &-citationDescription
+  {
+    @include Text(
+      $size: var(--yxt-gda-citation-description-font-size),
+      $line-height: var(--yxt-gda-citation-description-line-height),
+      $weight: var(--yxt-gda-citation-description-font-weight),
+      $color: var(--yxt-gda-citation-description-color)
+    );
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &-snippet
+  {
+    @include Text(
+      $size: var(--yxt-gda-content-font-size),
+      $line-height: var(--yxt-gda-content-line-height),
+      $weight: var(--yxt-gda-content-font-weight),
+      $color: var(--yxt-gda-content-color)
+    );
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+
+    strong, b {
+      font-weight: var(--yxt-gda-content-bolded-font-weight);
+    }
+
+    a {
+      @include Link-1();
+    }
+  }
+}
