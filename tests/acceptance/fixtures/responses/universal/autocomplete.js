@@ -40,8 +40,6 @@ function generateAutoCompleteResponse (prompt) {
         verticalKeys: []
       }
     ];
-  } else {
-    mockedResponse.response.results = [];
   }
 
   return mockedResponse;
@@ -49,7 +47,7 @@ function generateAutoCompleteResponse (prompt) {
 
 export const MockedUniversalAutoCompleteRequest = RequestMock()
   .onRequestTo(async request => {
-    const urlRegex = /.*\/autocomplete/;
+    const urlRegex = /.*\.com\/v2\/accounts\/me\/search\/autocomplete/;
     return urlRegex.test(request.url) && request.method === 'get';
   })
   .respond((req, res) => {
