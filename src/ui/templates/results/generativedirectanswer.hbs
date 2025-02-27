@@ -1,0 +1,43 @@
+{{#if customCard}}
+  <div class="yxt-GenerativeDirectAnswer--customComponent" data-component="{{customCard}}"></div>
+{{else if (eq searchState "search-loading")}}
+  <div class="yxt-GenerativeDirectAnswer">
+    <div class="yxt-GenerativeDirectAnswer-title">
+      <h2 class="yxt-GenerativeDirectAnswer-titleText">
+        AI Generating Answer...
+      </h2>
+    </div>
+  </div>
+{{else if (eq generativeDirectAnswer.resultStatus "SUCCESS")}}
+  <div class="yxt-GenerativeDirectAnswer">
+    <div class="yxt-GenerativeDirectAnswer-title">
+      <h2 class="yxt-GenerativeDirectAnswer-titleText">
+        AI Generated Answer
+      </h2>
+    </div>
+    <div class="yxt-GenerativeDirectAnswer-content">
+      <div class="yxt-GenerativeDirectAnswer-snippet">
+        {{{ generativeDirectAnswer.directAnswer }}}
+      </div>
+      <hr class="yxt-GenerativeDirectAnswer-citationsDivider" noshade>
+      <h2 class="yxt-GenerativeDirectAnswer-citationsHeader">
+          Sources ({{generativeDirectAnswer.citationsData.length}})
+      </h2>
+      <div class="yxt-GenerativeDirectAnswer-citationsScroller">
+          {{#each generativeDirectAnswer.citationsData}}
+          <a class="yxt-GenerativeDirectAnswer-citationCard js-gda-citation"
+            {{#if this.link}}href={{this.link}}{{/if}}
+            data-entityid={{this.id}}
+            data-eventtype="CITATION_CLICK"
+            data-is-analytics-attached="true"
+            >
+            <span class="yxt-GenerativeDirectAnswer-citationName">{{this.name}}</span>
+            {{#if this.description}}
+              <p class="yxt-GenerativeDirectAnswer-citationDescription">{{this.description}}</p>
+            {{/if}}
+          </a>
+          {{/each}}
+      </div>
+    </div>
+  </div>
+{{/if}}

@@ -35,7 +35,7 @@ export default class VerticalResults {
   }
 
   /**
-   * Constructs an SDK Section model from an search-core VerticalResult
+   * Constructs an SDK Section model from a search-core VerticalResults
    *
    * @param {VerticalResults} verticalResults
    * @param {Object<string, string>} urls keyed by vertical key
@@ -64,7 +64,8 @@ export default class VerticalResults {
         appliedQueryFilters: verticalResults.appliedQueryFilters.map(AppliedQueryFilter.fromCore),
         results: verticalResults.results.map(result => {
           return Result.fromCore(result, formatters, verticalKey);
-        })
+        }),
+        searchCoreDocument: verticalResults
       },
       urls[verticalKey],
       resultsContext

@@ -19,6 +19,9 @@ export default function mockManager (mockedCore) {
   core.setQueryUpdateListener = (queryUpdateListener) => {
     core.queryUpdateListener = queryUpdateListener;
   };
+  core.setResultsUpdateListener = (resultsUpdateListener) => {
+    core.resultsUpdateListener = resultsUpdateListener;
+  };
   const COMPONENT_MANAGER = new MockComponentManager(core);
 
   const mockAnalyticsReporter = {
