@@ -22,8 +22,8 @@ fixture`Vertical search page works as expected`
 
 test('pagination flow', async t => {
   const searchComponent = VerticalPage.getSearchComponent();
-  await searchComponent.enterQuery('virginia');
-  await searchComponent.submitQuery();
+  await searchComponent.enterQuery('virg');
+  await searchComponent.getAutoComplete().selectOption('virginia');
   await SearchRequestLogger.waitOnSearchComplete(t);
 
   const paginationComponent = VerticalPage.getPaginationComponent();
