@@ -464,7 +464,7 @@ export default class Core {
         const generativeDirectAnswer = GenerativeDirectAnswer.fromCore(response, searcher, verticalResults);
         this.storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, generativeDirectAnswer);
       }).catch(error => {
-        this.storage.delete(StorageKeys.GENERATIVE_DIRECT_ANSWER);
+        this.storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, new GenerativeDirectAnswer({}));
         console.error('Failed to generate direct answer with the following error: ' + error);
       });
   }

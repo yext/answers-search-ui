@@ -62,7 +62,8 @@ export default class ResultsUpdateListener {
      * @param {string} searcher the type of search that generated these results
      */
   _handleVerticalResultsUpdate (verticalResultsList, searcher) {
-    if (!verticalResultsList || verticalResultsList.length === 0) {
+    const searchTerm = this.core.storage.get(StorageKeys.QUERY);
+    if (!verticalResultsList || verticalResultsList.length === 0 || !searchTerm) {
       this.core.storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, new GenerativeDirectAnswer({}));
       return;
     }

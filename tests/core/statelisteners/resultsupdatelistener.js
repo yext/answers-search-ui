@@ -183,12 +183,38 @@ describe('_handleVerticalResultsUpdate', () => {
     );
     expect(_handleVerticalResultsUpdate).toHaveBeenCalledTimes(0);
   });
+
+  it('is not called when the search term is empty', () => {
+    const resultsUpdateListener = initResultsUpdateListener();
+    const _handleVerticalResultsUpdate = jest.fn();
+    resultsUpdateListener._handleVerticalResultsUpdate = _handleVerticalResultsUpdate;
+    expect(_handleVerticalResultsUpdate).toHaveBeenCalledTimes(0);
+    const searchCoreDocument = {
+      field1: 'field1 of search document',
+      field2: 'field2 of search document'
+    };
+    const fakeVerticalResults = {
+      searchState: SearchStates.SEARCH_COMPLETE,
+      searchCoreDocument
+    };
+    resultsUpdateListener.core.storage.setWithPersist(
+      StorageKeys.QUERY,
+      ''
+    );
+    resultsUpdateListener.core.storage.setWithPersist(
+      StorageKeys.VERTICAL_RESULTS,
+      fakeVerticalResults
+    );
+    expect(resultsUpdateListener.core.generativeDirectAnswer).toHaveBeenCalledTimes(0);
+  });
 });
 
 function initResultsUpdateListener (config) {
+  const storage = new Storage().init();
+  storage.setWithPersist(StorageKeys.QUERY, 'something');
   const mockCore = {
     generativeDirectAnswer: jest.fn(),
-    storage: new Storage().init()
+    storage
   };
 
   return new ResultsUpdateListener(mockCore);
