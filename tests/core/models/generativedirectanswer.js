@@ -21,7 +21,6 @@ describe('Constructs a generative direct answer from an answers-core generative 
             },
             name: 'name-1',
             description: 'description-1',
-            link: 'link-1',
             otherData: 'otherData'
           }
         ],
@@ -38,7 +37,6 @@ describe('Constructs a generative direct answer from an answers-core generative 
             },
             name: 'name-2',
             description: 'description-2',
-            link: 'link-2',
             otherData: 'otherData'
           },
           {
@@ -48,7 +46,6 @@ describe('Constructs a generative direct answer from an answers-core generative 
               someField: 'someValue'
             },
             name: 'name-3',
-            link: 'link-3',
             otherData: 'otherData'
           },
           {
@@ -58,7 +55,6 @@ describe('Constructs a generative direct answer from an answers-core generative 
               someField: 'someValue'
             },
             name: 'name-4',
-            link: 'link-4',
             otherData: 'otherData'
           }
         ],
@@ -78,18 +74,27 @@ describe('Constructs a generative direct answer from an answers-core generative 
           id: 'entityid-1',
           name: 'name-1',
           description: 'description-1',
-          link: 'link-1'
+          rawData: {
+            uid: 'uuid-1',
+            someField: 'someValue'
+          }
         },
         {
           id: 'entityid-2',
           name: 'name-2',
           description: 'description-2',
-          link: 'link-2'
+          rawData: {
+            uid: 'uuid-2',
+            someField: 'someValue'
+          }
         },
         {
           id: 'entityid-3',
           name: 'name-3',
-          link: 'link-3'
+          rawData: {
+            uid: 'uuid-3',
+            someField: 'someValue'
+          }
         }
       ],
       verticalKey: ''
@@ -122,7 +127,6 @@ describe('Constructs a generative direct answer from an answers-core generative 
             },
             name: 'name-2',
             description: 'description-2',
-            link: 'link-2',
             otherData: 'otherData'
           },
           {
@@ -132,7 +136,6 @@ describe('Constructs a generative direct answer from an answers-core generative 
               someField: 'someValue'
             },
             name: 'name-3',
-            link: 'link-3',
             otherData: 'otherData'
           },
           {
@@ -142,7 +145,6 @@ describe('Constructs a generative direct answer from an answers-core generative 
               someField: 'someValue'
             },
             name: 'name-4',
-            link: 'link-4',
             otherData: 'otherData'
           }
         ],
@@ -162,12 +164,18 @@ describe('Constructs a generative direct answer from an answers-core generative 
           id: 'entityid-2',
           name: 'name-2',
           description: 'description-2',
-          link: 'link-2'
+          rawData: {
+            uid: 'uuid-2',
+            someField: 'someValue'
+          }
         },
         {
           id: 'entityid-3',
           name: 'name-3',
-          link: 'link-3'
+          rawData: {
+            uid: 'uuid-3',
+            someField: 'someValue'
+          }
         }
       ],
       verticalKey: 'vertical-key-2'
