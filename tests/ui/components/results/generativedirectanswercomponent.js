@@ -17,12 +17,18 @@ const gdaSuccess = {
     {
       id: '123454321',
       name: 'Bob Kitty',
-      description: 'I am a cat'
+      description: 'I am a cat',
+      rawData: {
+        uid: '1234'
+      }
     },
     {
       id: '567898765',
       name: 'Joe Cat',
-      link: 'https://yext.com'
+      rawData: {
+        uid: '5678',
+        website: 'https://yext.com'
+      }
     }
   ],
   directAnswer: RichTextFormatter.format(directAnswerPlainText, 'gda-snippet'),
@@ -97,8 +103,6 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     expect(firstCitationName).toEqual('Bob Kitty');
     const firstCitationDescription = firstCitation.find('.yxt-GenerativeDirectAnswer-citationDescription').text().trim();
     expect(firstCitationDescription).toEqual('I am a cat');
-    const firstCitationLink = firstCitation.prop('href');
-    expect(firstCitationLink).toBeUndefined();
     const firstEntityId = firstCitation.prop('data-entityid');
     expect(firstEntityId).toEqual('123454321');
     const firstCitationClickEventType = firstCitation.prop('data-eventtype');
@@ -109,8 +113,6 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     expect(secondCitationName).toEqual('Joe Cat');
     const secondCitationDescription = secondCitation.find('.yxt-GenerativeDirectAnswer-citationDescription');
     expect(secondCitationDescription.exists()).toBeFalsy();
-    const secondCitationLink = secondCitation.prop('href');
-    expect(secondCitationLink).toEqual('https://yext.com');
     const secondEntityId = secondCitation.prop('data-entityid');
     expect(secondEntityId).toEqual('567898765');
     const secondCitationClickEventType = secondCitation.prop('data-eventtype');

@@ -33,7 +33,7 @@ export default class GenerativeDirectAnswer {
           id: result.id,
           name: result.name,
           description: result.description,
-          link: result.link
+          rawData: result.rawData
         };
       });
 
