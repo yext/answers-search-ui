@@ -8,7 +8,7 @@ on:
         default: ''
         type: string
     outputs:
-      should_deploy_major_version: 
+      should_deploy_major_version:
         value: ${{ jobs.should_deploy_major_version.outputs.should_deploy_major_version }}
 
 jobs:
@@ -23,10 +23,10 @@ jobs:
       - name: allow for major version deployment if the next minor version from current tag does not exist
         id: vars
         run: |
-          MINOR_VERSION=$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 2) 
-          MAJOR_VERSION=$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 1)
+          MINOR_VERSION=$(echo "${GITHUB_REF_NAME##"$IGNORE_PREFIX"}" | cut -d '.' -f 2) 
+          MAJOR_VERSION=$(echo "${GITHUB_REF_NAME##"$IGNORE_PREFIX"}" | cut -d '.' -f 1)
           NEXT_MINOR_VERSION=$(( $MINOR_VERSION + 1 ))
-          TAGS_FOR_NEXT_MINOR=$(git tag --list "${{ inputs.ignore_prefix }}$MAJOR_VERSION.$NEXT_MINOR_VERSION.*")
+          TAGS_FOR_NEXT_MINOR=$(git tag --list ""$IGNORE_PREFIX"$MAJOR_VERSION.$NEXT_MINOR_VERSION.*")
           if [ -z "$TAGS_FOR_NEXT_MINOR" ]
           then
             echo 'Major version should be deployed.'
@@ -34,3 +34,5 @@ jobs:
           else
             echo 'Major version should not be deployed.'
           fi
+        env:
+          IGNORE_PREFIX: ${{ inputs.ignore_prefix }}}

@@ -41,10 +41,14 @@ jobs:
           aws-region: us-east-1
       - name: Deploy to S3
         run: |
-          aws s3 cp ./dist/ s3://assets.sitescdn.net/${{ inputs.bucket }}/${{ inputs.directory }} \
+          aws s3 cp ./dist/ s3://assets.sitescdn.net/"$BUCKET"/"$DIRECTORY" \
           --acl public-read \
           --recursive \
-          --cache-control ${{ inputs.cache-control }}
+          --cache-control "$CACHE_CONTROL"
+        env:
+          BUCKET: ${{ inputs.bucket }}
+          DIRECTORY: ${{ inputs.directory }}
+          CACHE_CONTROL: ${{ inputs.cache-control }}
 
   deploy-gcp:
     runs-on: ubuntu-latest
