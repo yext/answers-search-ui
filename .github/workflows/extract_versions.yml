@@ -8,11 +8,11 @@ on:
         default: ''
         type: string
     outputs:
-      major_version: 
+      major_version:
         value: ${{ jobs.extract_versions.outputs.major_version }}
-      minor_version: 
+      minor_version:
         value: ${{ jobs.extract_versions.outputs.minor_version }}
-      full_version: 
+      full_version:
         value: ${{ jobs.extract_versions.outputs.full_version }}
 
 jobs:
@@ -26,12 +26,14 @@ jobs:
       - name: extract major and minor version substrings
         id: vars
         run: |
-          MAJOR_VERSION="$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 1)"
+          MAJOR_VERSION="$(echo "${GITHUB_REF_NAME##"$IGNORE_PREFIX"}" | cut -d '.' -f 1)"
           echo "Major version: $MAJOR_VERSION"
           echo major_version=${MAJOR_VERSION} >> $GITHUB_OUTPUT
-          MINOR_VERSION="$(echo "${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}" | cut -d '.' -f 1,2)"  
+          MINOR_VERSION="$(echo "${GITHUB_REF_NAME##"$IGNORE_PREFIX"}" | cut -d '.' -f 1,2)"  
           echo "Minor version: $MINOR_VERSION"
           echo minor_version=${MINOR_VERSION} >> $GITHUB_OUTPUT
-          FULL_VERSION="${GITHUB_REF_NAME##${{ inputs.ignore_prefix }}}"
+          FULL_VERSION="${GITHUB_REF_NAME##"$IGNORE_PREFIX"}"
           echo "Full version: $FULL_VERSION"
           echo full_version=${FULL_VERSION} >> $GITHUB_OUTPUT
+        env:
+          IGNORE_PREFIX: ${{ inputs.ignore_prefix }}}
