@@ -45,8 +45,10 @@ jobs:
         node-version: 20
         cache: 'npm'
     - run: npm ci
-    - run: LANGUAGE=${{ matrix.language }} CLOUD_REGION=${{ inputs.cloud_region }} npm run "$BUILD_SCRIPT"
+    - run: LANGUAGE="$LANGUAGE" CLOUD_REGION="$CLOUD_REGION" npm run "$BUILD_SCRIPT"
       env:
+        LANGUAGE: ${{ matrix.language }}
+        CLOUD_REGION: ${{ inputs.cloud_regiont }}
         BUILD_SCRIPT: ${{ inputs.build_script }}
     - run: |
         if [ "${{ matrix.language }}" == "en" ]; then 
