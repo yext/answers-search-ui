@@ -189,4 +189,85 @@ describe('Constructs a generative direct answer from an answers-core generative 
 
     expect(actualGenerativeDirectAnswer).toMatchObject(expectedGenerativeDirectAnswer);
   });
+
+  it('GDA citations on universal search are deduplicated', () => {
+    const coreGenerativeDirectAnswerResponse = {
+      directAnswer: 'This is some generated text **with bold**.',
+      resultStatus: 'SUCCESS',
+      citations: ['uuid-1']
+    };
+
+    const verticalResults = [
+      {
+        results: [
+          {
+            id: 'entityid-1',
+            rawData: {
+              uid: 'uuid-1',
+              someField: 'someValue'
+            },
+            name: 'name-1',
+            description: 'description-1',
+            otherData: 'otherData'
+          }
+        ],
+        resultsCount: 1,
+        verticalKey: 'vertical-key-1'
+      },
+      {
+        results: [
+          {
+            id: 'entityid-1',
+            rawData: {
+              uid: 'uuid-1',
+              someField: 'someValue'
+            },
+            name: 'name-1',
+            description: 'description-1',
+            otherData: 'otherData'
+          },
+          {
+            id: 'entityid-2',
+            rawData: {
+              uid: 'uuid-2',
+              someField: 'someValue'
+            },
+            name: 'name-2',
+            description: 'description-2',
+            otherData: 'otherData'
+          }
+        ],
+        resultsCount: 2,
+        verticalKey: 'vertical-key-2'
+      }
+    ];
+
+    const directAnswerAsHTML = RichTextFormatter.format(coreGenerativeDirectAnswerResponse.directAnswer, 'gda-snippet');
+    const expectedGenerativeDirectAnswer = {
+      directAnswer: directAnswerAsHTML,
+      resultStatus: 'SUCCESS',
+      citations: ['uuid-1'],
+      searcher: Searcher.UNIVERSAL,
+      citationsData: [
+        {
+          id: 'entityid-1',
+          name: 'name-1',
+          description: 'description-1',
+          rawData: {
+            uid: 'uuid-1',
+            someField: 'someValue'
+          }
+        }
+      ],
+      verticalKey: ''
+    };
+
+    const actualGenerativeDirectAnswer = GenerativeDirectAnswer.fromCore(
+      coreGenerativeDirectAnswerResponse,
+      Searcher.UNIVERSAL,
+      verticalResults
+    );
+
+    expect(actualGenerativeDirectAnswer).toMatchObject(expectedGenerativeDirectAnswer);
+  });
 });
