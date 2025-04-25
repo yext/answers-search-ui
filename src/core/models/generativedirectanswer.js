@@ -24,10 +24,16 @@ export default class GenerativeDirectAnswer {
 
     const verticalKey = searcher === Searcher.UNIVERSAL ? '' : verticalResults[0].verticalKey;
 
+    const citationIds = new Set(gdaResponse.citations);
     const citationsData = verticalResults
       .flatMap(vr => vr.results)
-      .filter(result => result.rawData?.uid && result.id && result.name)
-      .filter(result => gdaResponse.citations.includes(result.rawData.uid))
+      .filter(result => {
+        if (!result.rawData?.uid || !result.id || !result.name || !citationIds.has(result.rawData.uid)) {
+          return false;
+        }
+        citationIds.delete(result.rawData.uid);
+        return true;
+      })
       .map(result => {
         return {
           id: result.id,
