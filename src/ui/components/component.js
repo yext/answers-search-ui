@@ -482,8 +482,8 @@ export default class Component {
       return;
     }
 
-    childData.reverse();
-    childData.forEach(data => {
+    const reversedChildData = childData.slice().reverse();
+    reversedChildData.forEach(data => {
       this.addChild(data, type, opts);
     });
   }
