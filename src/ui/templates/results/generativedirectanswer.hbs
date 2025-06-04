@@ -29,6 +29,7 @@
             data-entityid={{this.id}}
             data-eventtype="CITATION_CLICK"
             data-is-analytics-attached="true"
+            target="{{#if ../_config.linkTarget}}{{../_config.linkTarget}}{{else}}_blank{{/if}}"
             >
             <span class="yxt-GenerativeDirectAnswer-citationName">{{this.name}}</span>
             {{#if this.description}}
