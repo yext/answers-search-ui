@@ -494,14 +494,20 @@ export default class Component {
     const label = dataset.eventlabel;
     const middleclick = dataset.middleclick;
     const options = dataset.eventoptions ? JSON.parse(dataset.eventoptions) : {};
-
-    DOM.on(domComponent, 'mousedown', e => {
+    const handleClick = (e) => {
       if (e.button === 0 || (middleclick && e.button === 1)) {
         const event = new AnalyticsEvent(type, label);
         event.addOptions(this._analyticsOptions);
         event.addOptions(options);
         this.analyticsReporter.report(event);
       }
+    };
+
+    DOM.on(domComponent, 'click', e => {
+      handleClick(e);
+    });
+    DOM.on(domComponent, 'auxclick', e => {
+      handleClick(e);
     });
   }
 
