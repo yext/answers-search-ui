@@ -2,11 +2,6 @@ name: Run acceptance tests
 
 on:
   workflow_call:
-    secrets:
-      BROWSERSTACK_USERNAME:
-        required: true
-      BROWSERSTACK_ACCESS_KEY:
-        required: true
 
 jobs:
   headless_acceptance:

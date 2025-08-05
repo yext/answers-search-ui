@@ -16,7 +16,7 @@ jobs:
   call_unit_test:
     uses: ./.github/workflows/unit_test.yml
     needs: call_build
-  
+
   call_misc_tests:
     uses: ./.github/workflows/miscellaneous_tests.yml
 
@@ -26,12 +26,9 @@ jobs:
   call_acceptance:
     uses: ./.github/workflows/acceptance.yml
     needs: call_build
-    secrets:
-      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
-      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
 
   call_deploy:
-    needs: 
+    needs:
       - call_unit_test
       - call_format_branch_name
       - call_acceptance
