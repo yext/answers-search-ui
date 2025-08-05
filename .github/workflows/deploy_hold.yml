@@ -25,9 +25,9 @@ jobs:
     runs-on: ubuntu-latest
     environment: production # sets in github repo with reiewer requirement protection rule
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Download build-output artifact
-        uses: actions/download-artifact@v2
+        uses: actions/download-artifact@v4
         with:
           name: build-output
           path: dist/
