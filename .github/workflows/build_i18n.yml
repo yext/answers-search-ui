@@ -49,5 +49,5 @@ jobs:
     - name: Create build-output artifact
       uses: actions/upload-artifact@v4
       with:
-        name: build-output
+        name: build-output-${{ matrix.language }}
         path: dist/
