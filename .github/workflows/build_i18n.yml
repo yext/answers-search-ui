@@ -47,7 +47,7 @@ jobs:
           npm run size
         fi
     - name: Create build-output artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: build-output
         path: dist/
