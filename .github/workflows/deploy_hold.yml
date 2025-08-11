@@ -28,13 +28,8 @@ jobs:
     environment: production # sets in github repo with reviewer requirement protection rule
     steps:
       - uses: actions/checkout@v3
-<<<<<<< HEAD
       - name: Download build-output artifact
-        uses: actions/download-artifact@v3
-=======
-      - name: Download build-output-US artifact
         uses: actions/download-artifact@v4
->>>>>>> 189459ef (Use github actions/download-artifact v4)
         with:
           name: build-output
           path: dist/
