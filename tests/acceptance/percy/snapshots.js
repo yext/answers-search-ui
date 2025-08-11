@@ -6,7 +6,10 @@ const PageNavigator = require('../pagenavigator');
 
 (async () => {
   const server = await setupServer();
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox']
+  });
   const page = await browser.newPage();
   const navigator = new PageNavigator(page, 'http://localhost:9999/tests/acceptance/fixtures/html');
 
