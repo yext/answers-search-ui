@@ -15,7 +15,7 @@ jobs:
           cache: 'npm'
       - run: npm ci
       - name: Download build-output-US artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: build-output-US
           path: dist/
