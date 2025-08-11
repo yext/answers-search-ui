@@ -53,5 +53,5 @@ jobs:
     - name: Create build-output-${{ inputs.cloud_region }} artifact
       uses: actions/upload-artifact@v4
       with:
-        name: build-output-${{ inputs.cloud_region }}
+        name: build-output-${{ inputs.cloud_region }}-${{ matrix.language }}
         path: dist/
