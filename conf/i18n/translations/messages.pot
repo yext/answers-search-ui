@@ -198,7 +198,7 @@ msgstr ""
 msgid "We're sorry, an error occurred."
 msgstr ""
 
-#: src/ui/templates/search/filtersearch.hbs:12
+#: src/ui/templates/search/filtersearch.hbs:14
 #: src/ui/templates/search/search.hbs:30
 msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
 msgstr ""
