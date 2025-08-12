@@ -34,7 +34,10 @@ async function setupServer () {
 
 async function wcagTester () {
   const server = await setupServer();
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({
+    headless: true,
+    args: ['--no-sandbox']
+  });
   const page = await browser.newPage();
 
   page
@@ -51,6 +54,7 @@ async function wcagTester () {
     results = await new WcagReporter(pageNavigator, analyzer).analyze();
   } catch (e) {
     console.log(e);
+    await page.close();
     await browser.close();
     await server.close();
     process.exit(1);
@@ -64,6 +68,7 @@ async function wcagTester () {
     }
   });
 
+  await page.close();
   await browser.close();
   await server.close();
 
@@ -74,4 +79,4 @@ async function wcagTester () {
   }
 }
 
-wcagTester();
+wcagTester().then(() => console.log('WCAG test completed'));

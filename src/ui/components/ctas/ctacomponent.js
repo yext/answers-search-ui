@@ -83,10 +83,16 @@ export default class CTAComponent extends Component {
   onMount () {
     const el = DOM.query(this._container, '.js-yxt-CTA');
     if (el && this._config.eventOptions) {
-      DOM.on(el, 'mousedown', e => {
+      const handleClick = (e) => {
         if (e.button === 0 || e.button === 1) {
           this.reportAnalyticsEvent();
         }
+      };
+      DOM.on(el, 'click', e => {
+        handleClick(e);
+      });
+      DOM.on(el, 'auxclick', e => {
+        handleClick(e);
       });
     }
   }
