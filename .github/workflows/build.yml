@@ -24,7 +24,7 @@ jobs:
     - run: npm ci
     - run: npm run ${{ inputs.build_script }}
     - name: Create build-output artifact
-      uses: actions/upload-artifact@v2
+      uses: actions/upload-artifact@v4
       with:
         name: build-output
         path: dist/
