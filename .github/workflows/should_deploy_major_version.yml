@@ -8,7 +8,7 @@ on:
         default: ''
         type: string
     outputs:
-      should_deploy_major_version:
+      should_deploy_major_version: 
         value: ${{ jobs.should_deploy_major_version.outputs.should_deploy_major_version }}
 
 jobs:
@@ -17,7 +17,7 @@ jobs:
     outputs:
       should_deploy_major_version: ${{ steps.vars.outputs.should_deploy_major_version }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v2
         with:
           fetch-depth: 0
       - name: allow for major version deployment if the next minor version from current tag does not exist

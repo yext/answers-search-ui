@@ -78,9 +78,9 @@ describe('attaching analytics events', () => {
     const domOn = jest.spyOn(DOM, 'on');
 
     const wrapper = mount(component);
-    expect(domOn).toHaveBeenCalledTimes(2);
+    expect(domOn).toHaveBeenCalledTimes(1);
 
-    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('click', { button: 0 }));
+    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
     expect(mockAnalyticsReporter.report).toHaveBeenCalledTimes(1);
     const expectedEvent = new AnalyticsEvent('test_event');
     expectedEvent.addOptions({ name: 'Jesse' });
@@ -102,9 +102,9 @@ describe('attaching analytics events', () => {
     const domOn = jest.spyOn(DOM, 'on');
 
     const wrapper = mount(component);
-    expect(domOn).toHaveBeenCalledTimes(2);
+    expect(domOn).toHaveBeenCalledTimes(1);
 
-    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('click', { button: 0 }));
+    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
     expect(mockAnalyticsReporter.report).toHaveBeenCalledTimes(1);
     const expectedEvent = new AnalyticsEvent('test_event');
     expectedEvent.addOptions({ name: 'Vig' });
@@ -125,9 +125,9 @@ describe('attaching analytics events', () => {
     const domOn = jest.spyOn(DOM, 'on');
 
     const wrapper = mount(component);
-    expect(domOn).toHaveBeenCalledTimes(2);
+    expect(domOn).toHaveBeenCalledTimes(1);
 
-    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('click', { button: 0 }));
+    wrapper.find('#test').getDOMNode().dispatchEvent(new MouseEvent('mousedown', { button: 0 }));
     expect(mockAnalyticsReporter.report).toHaveBeenCalledTimes(1);
     const expectedEvent = new AnalyticsEvent('test_event');
     expectedEvent.addOptions({
