@@ -21,7 +21,10 @@ jobs:
   call_acceptance:
     uses: ./.github/workflows/acceptance.yml
     needs: call_build
-
+    secrets:
+      BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+      BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+  
   call_extract_versions:
     uses: ./.github/workflows/extract_versions.yml
 
@@ -29,7 +32,7 @@ jobs:
     uses: ./.github/workflows/should_deploy_major_version.yml
 
   call_deploy_full_version:
-    needs:
+    needs: 
       - call_unit_test
       - call_acceptance
       - call_extract_versions
@@ -43,7 +46,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   call_deploy_major_version:
-    needs:
+    needs: 
       - call_unit_test
       - call_acceptance
       - call_extract_versions
@@ -59,7 +62,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
 
   call_deploy_minor_version:
-    needs:
+    needs: 
       - call_unit_test
       - call_acceptance
       - call_extract_versions
