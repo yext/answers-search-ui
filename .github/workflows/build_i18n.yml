@@ -1,0 +1,53 @@
+name: Build Answers i18n assets
+
+on:
+  workflow_call:
+    inputs:
+      build_script:
+        required: false
+        default: build-locales
+        type: string
+
+jobs:
+  create_language_matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set-matrix.outputs.matrix }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 16
+        cache: 'npm'
+    - id: set-matrix
+      run: |
+        echo ::set-output name=matrix::$(node -e 'console.log(require("./conf/i18n/constants").ALL_LANGUAGES)')
+
+  build:
+    needs: create_language_matrix
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: ${{ fromJson(needs.create_language_matrix.outputs.matrix) }}
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
+    - name: Use Node.js 16
+      uses: actions/setup-node@v2
+      with:
+        node-version: 16
+        cache: 'npm'
+    - run: npm ci
+    - run: LANGUAGE=${{ matrix.language }} npm run ${{ inputs.build_script }}
+    - run: |
+        if [ "${{ matrix.language }}" == "en" ]; then 
+          npm run size
+        fi
+    - name: Create build-output artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: build-output
+        path: dist/

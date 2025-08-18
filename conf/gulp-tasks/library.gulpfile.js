@@ -31,6 +31,21 @@ exports.dev = function devJSBundle () {
 };
 
 /**
+ * Creates the un-minified legacy JS bundle and compiles CSS.
+ * @returns {Promise<Function>}
+ */
+exports.unminifiedLegacy = function unminifiedLegacyJSBundle () {
+  return createBundleTaskFactory(DEFAULT_LOCALE).then(unminifiedLegacyTaskFactory => {
+    return new Promise(resolve => {
+      return parallel(
+        unminifiedLegacyTaskFactory.create(BundleType.LEGACY_IIFE),
+        compileCSS
+      )(resolve);
+    });
+  });
+};
+
+/**
  * Creates a build task for each provided language and combines them into a series task.
  * This function also supports locales, but it is named to reflect the current use case
  * of creating bundles for just languages.
@@ -54,9 +69,11 @@ function createJSBundlesForLanguages (languages, isSearchBarOnly = false) {
  * Creates a task for building all of the localized SDK assets.
  *
  * @param {boolean} isSearchBarOnly If the task is for the SearchBar-only assets.
+ * @param {string[]} languages a list of languages to build js bundles for,
+ *                             with the corresponding language-locale pairs.
  * @returns {Promise<Function>}
  */
-function allLocaleJSBundles (isSearchBarOnly = false) {
+function allLocaleJSBundles (isSearchBarOnly = false, languages) {
   const assetNames = [
     'answers.js',
     'answers.min.js',
@@ -65,8 +82,8 @@ function allLocaleJSBundles (isSearchBarOnly = false) {
     'answers-umd.js',
     'answers-umd.min.js'];
 
-  return createJSBundlesForLanguages(ALL_LANGUAGES, isSearchBarOnly).then(() => {
-    copyAssetsForLocales(assetNames);
+  return createJSBundlesForLanguages(languages, isSearchBarOnly).then(() => {
+    copyAssetsForLocales(assetNames, languages);
   });
 }
 
@@ -78,12 +95,12 @@ exports.buildLanguages = function allLanguageJSBundles () {
   return createJSBundlesForLanguages(ALL_LANGUAGES);
 };
 
-exports.buildLocales = function () {
-  return allLocaleJSBundles();
+exports.buildLocales = function (languages = ALL_LANGUAGES) {
+  return allLocaleJSBundles(false, languages);
 };
 
-exports.buildSearchBarOnlyAssets = function () {
-  return allLocaleJSBundles(true);
+exports.buildSearchBarOnlyAssets = function (languages = ALL_LANGUAGES) {
+  return allLocaleJSBundles(true, languages);
 };
 
 /**
