@@ -1,8 +1,8 @@
 The following NPM packages may be included in this product:
 
- - @babel/code-frame@7.26.2
- - @babel/helper-validator-identifier@7.25.9
- - @babel/runtime-corejs3@7.26.0
+ - @babel/code-frame@7.27.1
+ - @babel/helper-validator-identifier@7.27.1
+ - @babel/runtime-corejs3@7.28.4
 
 These packages each contain the following license and notice below:
 
@@ -1409,7 +1409,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - bowser@2.11.0
+ - bowser@2.12.1
 
 This package contains the following license and notice below:
 
@@ -1457,7 +1457,7 @@ Original Author, when distributed with the Software.
 
 The following NPM package may be included in this product:
 
- - brace-expansion@1.1.11
+ - brace-expansion@1.1.12
 
 This package contains the following license and notice below:
 
@@ -1687,7 +1687,7 @@ OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - core-js-pure@3.40.0
+ - core-js-pure@3.45.1
 
 This package contains the following license and notice below:
 
@@ -2048,7 +2048,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - debug@4.4.0
+ - debug@4.4.3
 
 This package contains the following license and notice below:
 
@@ -2193,7 +2193,7 @@ EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 The following NPM packages may be included in this product:
 
- - error-ex@1.3.2
+ - error-ex@1.3.4
  - is-arrayish@0.2.1
 
 These packages each contain the following license and notice below:
@@ -2416,13 +2416,15 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - fast-uri@3.0.6
+ - fast-uri@3.1.0
 
 This package contains the following license and notice below:
 
-Copyright (c) 2021 The Fastify Team
 Copyright (c) 2011-2021, Gary Court until https://github.com/garycourt/uri-js/commit/a1acf730b4bba3f1097c9f52e7d9d3aba8cdcaae
+Copyright (c) 2021-present The Fastify team
 All rights reserved.
+
+The Fastify team members are listed at https://github.com/fastify/fastify#team.
 
 Redistribution and use in source and binary forms, with or without
 modification, are permitted provided that the following conditions are met:
@@ -2485,7 +2487,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - fastq@1.18.0
+ - fastq@1.19.1
 
 This package contains the following license and notice below:
 
@@ -2567,7 +2569,7 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - flatted@3.3.2
+ - flatted@3.3.3
 
 This package contains the following license and notice below:
 
@@ -2760,7 +2762,7 @@ The following NPM packages may be included in this product:
 
  - get-stream@6.0.1
  - html-tags@3.3.1
- - import-fresh@3.3.0
+ - import-fresh@3.3.1
  - map-obj@4.3.0
  - meow@9.0.0
  - parse-json@5.2.0
@@ -2812,11 +2814,11 @@ THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - gl-matrix@3.4.3
+ - gl-matrix@3.4.4
 
 This package contains the following license and notice below:
 
-Copyright (c) 2015-2021, Brandon Jones, Colin MacKenzie IV.
+Copyright (c) 2015-2025, Brandon Jones, Colin MacKenzie IV.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -5050,7 +5052,7 @@ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLI
 
 The following NPM package may be included in this product:
 
- - nanoid@3.3.8
+ - nanoid@3.3.11
 
 This package contains the following license and notice below:
 
@@ -5879,46 +5881,6 @@ IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - regenerator-runtime@0.13.1
-
-This package contains the following license and notice below:
-
-# regenerator-runtime
-
-Standalone runtime for
-[Regenerator](https://github.com/facebook/regenerator)-compiled generator
-and `async` functions.
-
-To import the runtime as a module (recommended), either of the following
-import styles will work:
-```js
-// CommonJS
-const regeneratorRuntime = require("regenerator-runtime");
-
-// ECMAScript 2015
-import regeneratorRuntime from "regenerator-runtime";
-```
-
-To ensure that `regeneratorRuntime` is defined globally, either of the
-following styles will work:
-```js
-// CommonJS
-require("regenerator-runtime/runtime");
-
-// ECMAScript 2015
-import "regenerator-runtime/runtime";
-```
-
-To get the absolute file system path of `runtime.js`, evaluate the
-following expression:
-```js
-require("regenerator-runtime/path").path
-```
-
------------
-
-The following NPM package may be included in this product:
-
  - remove-trailing-separator@1.1.0
 
 This package contains the following license and notice below:
@@ -6052,13 +6014,13 @@ SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - reusify@1.0.4
+ - reusify@1.1.0
 
 This package contains the following license and notice below:
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Matteo Collina
+Copyright (c) 2015-2024 Matteo Collina
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -6576,7 +6538,7 @@ SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The following NPM package may be included in this product:
 
- - spdx-license-ids@3.0.21
+ - spdx-license-ids@3.0.22
 
 This package contains the following license and notice below:
 
