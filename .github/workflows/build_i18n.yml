@@ -48,7 +48,7 @@ jobs:
     - run: LANGUAGE="$LANGUAGE" CLOUD_REGION="$CLOUD_REGION" npm run "$BUILD_SCRIPT"
       env:
         LANGUAGE: ${{ matrix.language }}
-        CLOUD_REGION: ${{ inputs.cloud_regiont }}
+        CLOUD_REGION: ${{ inputs.cloud_region }}
         BUILD_SCRIPT: ${{ inputs.build_script }}
     - run: |
         if [ "${{ matrix.language }}" == "en" ]; then 
