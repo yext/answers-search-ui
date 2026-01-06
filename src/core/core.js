@@ -536,6 +536,7 @@ export default class Core {
     return this._coreLibrary
       .universalAutocomplete({
         input: input,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.autocompleteLimit,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         additionalHttpHeaders: this._additionalHttpHeaders
       })
@@ -561,6 +562,7 @@ export default class Core {
       .verticalAutocomplete({
         input: input,
         verticalKey: verticalKey,
+        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.autocompleteLimit,
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         additionalHttpHeaders: this._additionalHttpHeaders
       })
