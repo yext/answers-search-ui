@@ -533,10 +533,13 @@ export default class Core {
    * @param {string} namespace the namespace to use for the storage key
    */
   autoCompleteUniversal (input, namespace) {
+    const autocompleteLimit = this.storage.get(StorageKeys.SEARCH_CONFIG)?.autocompleteLimit;
     return this._coreLibrary
       .universalAutocomplete({
         input: input,
-        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.autocompleteLimit,
+        ...(autocompleteLimit && {
+          limit: autocompleteLimit
+        }),
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         additionalHttpHeaders: this._additionalHttpHeaders
       })
@@ -558,11 +561,14 @@ export default class Core {
    * @param {string} verticalKey the vertical key for the experience
    */
   autoCompleteVertical (input, namespace, verticalKey) {
+    const autocompleteLimit = this.storage.get(StorageKeys.SEARCH_CONFIG)?.autocompleteLimit;
     return this._coreLibrary
       .verticalAutocomplete({
         input: input,
         verticalKey: verticalKey,
-        limit: this.storage.get(StorageKeys.SEARCH_CONFIG)?.autocompleteLimit,
+        ...(autocompleteLimit && {
+          limit: autocompleteLimit
+        }),
         sessionTrackingEnabled: this.storage.get(StorageKeys.SESSIONS_OPT_IN).value,
         additionalHttpHeaders: this._additionalHttpHeaders
       })

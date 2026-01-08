@@ -21,7 +21,7 @@ export default class SearchConfig {
      * The max autocomplete results per search.
      * @type {number}
      */
-    this.autocompleteLimit = config.autocompleteLimit || 10;
+    this.autocompleteLimit = config.autocompleteLimit;
 
     /**
      * The vertical key to use for all searches
