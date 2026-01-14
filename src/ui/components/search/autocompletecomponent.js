@@ -151,6 +151,12 @@ export default class AutoCompleteComponent extends Component {
      * @type {string[]}
      */
     this.customPrompts = opts.customPrompts;
+
+    /**
+     * Whether to disable autocomplete
+     * @type {boolean}
+     */
+    this._disabled = opts.disabled || false;
   }
 
   /**
@@ -413,6 +419,9 @@ export default class AutoCompleteComponent extends Component {
   }
 
   autoComplete (input) {
+    if (this._disabled) {
+      return;
+    }
     if (this.isFilterSearch) {
       this.core.autoCompleteFilter(input, {
         namespace: this.name,
