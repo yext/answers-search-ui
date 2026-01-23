@@ -36,4 +36,4 @@ jobs:
           echo "Full version: $FULL_VERSION"
           echo full_version=${FULL_VERSION} >> $GITHUB_OUTPUT
         env:
-          IGNORE_PREFIX: ${{ inputs.ignore_prefix }}}
+          IGNORE_PREFIX: ${{ inputs.ignore_prefix }}
