@@ -35,4 +35,4 @@ jobs:
             echo 'Major version should not be deployed.'
           fi
         env:
-          IGNORE_PREFIX: ${{ inputs.ignore_prefix }}}
+          IGNORE_PREFIX: ${{ inputs.ignore_prefix }}
