@@ -4,6 +4,7 @@ on:
   push:
     tags:
       - "*"
+      - "!search-bar-v*"
 
 permissions:
   id-token: write # Required for OIDC
