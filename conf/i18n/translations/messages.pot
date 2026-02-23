@@ -37,6 +37,10 @@ msgstr ""
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
 msgstr ""
 
+#: src/ui/templates/search/search.hbs:37
+msgid "After typing a query, press enter to execute a search."
+msgstr ""
+
 #: src/ui/templates/results/alternativeverticals.hbs:40
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
 msgstr ""
@@ -199,7 +203,7 @@ msgid "We're sorry, an error occurred."
 msgstr ""
 
 #: src/ui/templates/search/filtersearch.hbs:14
-#: src/ui/templates/search/search.hbs:30
+#: src/ui/templates/search/search.hbs:33
 msgid "When autocomplete results are available, use up and down arrows to review and enter to select."
 msgstr ""
 
