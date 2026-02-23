@@ -16,21 +16,25 @@
         <input class="js-yext-query yxt-SearchBar-input"
           id="{{inputIdName}}"
           type="text"
-          role="combobox"
+          {{#unless autocompleteDisabled}}
+            role="combobox"
+            aria-autocomplete="list"
+            aria-controls="{{autocompleteContainerIdName}}"
+            aria-describedby="{{searchBarContainerId}}-instructions"
+            aria-haspopup="listbox"
+          {{/unless}}
           name="query"
           value="{{query}}"
           {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
           aria-label="{{labelText}}"
-          aria-autocomplete="list"
-          aria-controls="{{autocompleteContainerIdName}}"
-          aria-describedby="{{searchBarContainerId}}-instructions"
-          aria-haspopup="listbox"
         >
-        <div id="{{searchBarContainerId}}-instructions" class="yxt-SearchBar-instructions sr-only">
-          {{translate
-            phrase='When autocomplete results are available, use up and down arrows to review and enter to select.'
-          }}
-        </div>
+        {{#unless autocompleteDisabled}}
+          <div id="{{searchBarContainerId}}-instructions" class="yxt-SearchBar-instructions sr-only">
+            {{translate
+              phrase='When autocomplete results are available, use up and down arrows to review and enter to select.'
+            }}
+          </div>
+        {{/unless}}
         <button type="button"
                 class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
                 data-eventtype="SEARCH_CLEAR_BUTTON"
@@ -68,14 +72,16 @@
         <input class="js-yext-query yxt-SearchBar-input"
           id="{{inputIdName}}"
           type="text"
-          role="combobox"
+          {{#unless autocompleteDisabled}}
+            role="combobox"
+            aria-controls="{{autocompleteContainerIdName}}"
+            aria-haspopup="listbox"
+            aria-autocomplete="list"
+          {{/unless}}
           name="query"
           value="{{query}}"
           {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
           aria-label="{{labelText}}"
-          aria-autocomplete="list"
-          aria-controls="{{autocompleteContainerIdName}}"
-          aria-haspopup="listbox"
         >
         <button type="button"
                 class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
@@ -104,9 +110,11 @@
         </button>
       </div>
     {{/if}}
-    <div
-      id="{{autocompleteContainerIdName}}"
-      class="yxt-SearchBar-autocomplete">
-    </div>
+    {{#unless autocompleteDisabled}}
+      <div
+        id="{{autocompleteContainerIdName}}"
+        class="yxt-SearchBar-autocomplete">
+      </div>
+    {{/unless}}
   </div>
 </div>
