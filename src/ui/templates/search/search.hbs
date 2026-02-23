@@ -20,21 +20,25 @@
             role="combobox"
             aria-autocomplete="list"
             aria-controls="{{autocompleteContainerIdName}}"
-            aria-describedby="{{searchBarContainerId}}-instructions"
             aria-haspopup="listbox"
           {{/unless}}
           name="query"
           value="{{query}}"
+          aria-describedby="{{searchBarContainerId}}-instructions"
           {{#if _config.placeholderText}}placeholder="{{_config.placeholderText}}"{{/if}}
           aria-label="{{labelText}}"
         >
-        {{#unless autocompleteDisabled}}
-          <div id="{{searchBarContainerId}}-instructions" class="yxt-SearchBar-instructions sr-only">
+        <div id="{{searchBarContainerId}}-instructions" class="yxt-SearchBar-instructions sr-only">
+          {{#unless autocompleteDisabled}}
             {{translate
               phrase='When autocomplete results are available, use up and down arrows to review and enter to select.'
             }}
-          </div>
-        {{/unless}}
+          {{else}}
+            {{translate
+              phrase='After typing a query, press enter to execute a search.'
+            }}
+          {{/unless}}
+        </div>
         <button type="button"
                 class="js-yxt-SearchBar-clear yxt-SearchBar-clear yxt-SearchBar--hidden"
                 data-eventtype="SEARCH_CLEAR_BUTTON"

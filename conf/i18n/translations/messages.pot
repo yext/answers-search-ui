@@ -37,6 +37,10 @@ msgstr ""
 msgid "<em class=\"yxt-AlternativeVerticals-noResultsInfo--emphasized\">No results found</em> in [[currentVerticalLabel]]."
 msgstr ""
 
+#: src/ui/templates/search/search.hbs:37
+msgid "After typing a query, press enter to execute a search."
+msgstr ""
+
 #: src/ui/templates/results/alternativeverticals.hbs:40
 msgid "Alternatively, you can <a class=\"yxt-AlternativeVerticals-universalLink\" href=\"[[universalUrl]]\"> view results across all search categories</a>."
 msgstr ""
