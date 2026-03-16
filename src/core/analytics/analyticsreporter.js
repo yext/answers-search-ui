@@ -133,9 +133,27 @@ export default class AnalyticsReporter {
       });
     }
 
+    // do we just grab a bunch of things from event and see what's up?
+
+    const eventPayload = {
+      authorization: 'KEY 84cb837c4d06e93e6103bf59318e8b21',
+      action: event.action,
+      entity: event.entityId,
+      destinationUrl: event.destinationUrl,
+      label: event.label,
+      search: {
+        queryId: this.getQueryId(),
+        verticalKey: event.verticalKey,
+        isDirectAnswer: event.directAnswer,
+        versionLabel: this._globalOptions.experienceVersion,
+        experienceKey: this._globalOptions.experienceKey,
+        isGenerativeDirectAnswer: event.generativeDirectAnswer
+      }
+    };
+
     return new HttpRequester().beacon(
-      `${this._baseUrl}/realtimeanalytics/data/answers/${this._businessId}`,
-      { data: event.toApiEvent(), ...cookieData }
+      `${this._baseUrl}/accounts/me/events`,
+      eventPayload
     );
   }
 
@@ -143,4 +161,5 @@ export default class AnalyticsReporter {
   setConversionTrackingEnabled (isEnabled) {
     this._conversionTrackingEnabled = isEnabled;
   }
+  // to delete
 }

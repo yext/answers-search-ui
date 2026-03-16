@@ -561,14 +561,12 @@ class Answers {
   }
 
   /**
-   * Opt in or out of convertion tracking analytics
+   * @deprecated
+   * Conversion tracking is now enabled by default, so this does nothing and is only
+   * kept to maintain backwards compatability.
    * @param {boolean} optIn
    */
-  setConversionsOptIn (optIn) {
-    if (this._eligibleForAnalytics) {
-      this._analyticsReporterService.setConversionTrackingEnabled(optIn);
-    }
-  }
+  setConversionsOptIn (optIn) {}
 
   /**
    * Opt in or out of session cookies

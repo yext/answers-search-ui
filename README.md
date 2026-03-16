@@ -2446,20 +2446,6 @@ Here are the possible Event Types for CTAs:
 - RSVP
 
 These types are accepted as the `analytics` attribute in [Calls To Action](#Calls-To-Action).
-
-## Conversion Tracking
-
-By default, Answers does not perform conversion tracking for analytics. To opt-in to this behavior, use the `setConversionsOptIn` method after initialization:
-
-```js
-ANSWERS.init({ ... });
-agreementButton.onclick = function() { ANSWERS.setConversionsOptIn(true); };
-```
-
-You must also add the following to your HTML:
-
-```html
-<script src="https://assets.sitescdn.net/ytag/ytag.min.js"></script>
 ```
 
 ## On-Search Analytics
