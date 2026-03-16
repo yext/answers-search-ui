@@ -136,7 +136,7 @@ export default class AnalyticsReporter {
     // do we just grab a bunch of things from event and see what's up?
 
     const eventPayload = {
-      authorization: 'KEY 84cb837c4d06e93e6103bf59318e8b21',
+      authorization: 'KEY <key>',
       action: event.action,
       entity: event.entityId,
       destinationUrl: event.destinationUrl,
