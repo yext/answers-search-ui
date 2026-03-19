@@ -1,7 +1,6 @@
 /* eslint-disable new-cap */
 import { isMicrosoftEdge, isSafari } from '../../core/utils/useragent';
 import { transformSpeechRecognitionLocaleForEdge } from '../../core/speechrecognition/locales';
-import { getSpeechRecognitionConstructor } from '../../core/speechrecognition/support';
 import TranslationFlagger from '../i18n/translationflagger';
 import alert from '../alert';
 
