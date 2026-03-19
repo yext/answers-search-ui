@@ -1,6 +1,7 @@
 /* eslint-disable new-cap */
 import { isMicrosoftEdge, isSafari } from '../../core/utils/useragent';
 import { transformSpeechRecognitionLocaleForEdge } from '../../core/speechrecognition/locales';
+import { getSpeechRecognitionConstructor } from '../../core/speechrecognition/support';
 import TranslationFlagger from '../i18n/translationflagger';
 import alert from '../alert';
 
@@ -9,7 +10,8 @@ import alert from '../alert';
  */
 export default class SpeechRecognizer {
   constructor (locale) {
-    this._speechRecognition = new window.webkitSpeechRecognition();
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    this._speechRecognition = new SpeechRecognition();
     this._speechRecognition.interimResults = true;
 
     this._speechRecognition.lang = isMicrosoftEdge()
