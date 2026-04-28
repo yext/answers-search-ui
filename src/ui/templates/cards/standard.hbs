@@ -38,11 +38,10 @@
         href="{{_config.url}}" target="{{#if _config.target}}{{_config.target}}{{else if _config._parentOpts.target}}{{_config._parentOpts.target}}{{else}}_blank{{/if}}"
         rel="noopener noreferrer nofollow"
         data-middleclick="active"
-        data-eventtype="TITLE_CLICK"
+        data-eventtype="TITLE"
         data-eventoptions='{
           "verticalKey": "{{verticalKey}}",
           "entityId": "{{entityId}}",
-          "searcher": {{#if _config.isUniversal}}"UNIVERSAL"{{else}}"VERTICAL"{{/if}}
         }'
       >
         {{{_config.title}}}

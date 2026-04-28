@@ -176,6 +176,7 @@ class AnswersSearchBar {
         parsedConfig.experienceVersion,
         parsedConfig.businessId,
         parsedConfig.analyticsEventsEnabled,
+        parsedConfig.eventsApiKey,
         parsedConfig.analyticsOptions,
         parsedConfig.environment,
         parsedConfig.cloudChoice);
@@ -326,14 +327,6 @@ class AnswersSearchBar {
   setAnalyticsOptIn (analyticsEventsEnabled) {
     this._analyticsReporterService.setAnalyticsOptIn(analyticsEventsEnabled);
   }
-
-  /**
-   * @deprecated
-   * Conversion tracking is now enabled by default, so this does nothing and is only
-   * kept to maintain backwards compatability.
-   * @param {boolean} optIn
-   */
-  setConversionsOptIn (optIn) {}
 
   /**
    * Opt in or out of session cookies

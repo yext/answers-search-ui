@@ -85,8 +85,6 @@ export default class HttpRequester {
   // with the async-by-default behavior of Miguel Mota's polyfill:
   // https://github.com/miguelmota/Navigator.sendBeacon/blob/master/sendbeacon.js
   _sendBeacon (url, data) {
-    console.log(url);
-    console.log(data);
     if (window.navigator && window.navigator.sendBeacon) {
       return window.navigator.sendBeacon(url, data);
     }

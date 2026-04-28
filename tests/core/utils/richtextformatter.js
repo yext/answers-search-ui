@@ -22,7 +22,7 @@ describe('adds cta-type data attribute to links', () => {
       '</ol>\n' +
       '<p><u><a href="http://google.com" data-cta-type="VIEW_WEBSITE">url link</a></u></p>\n' +
       '<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL">phone link</a></u></p>\n' +
-      '<p><u><a href="mailto:oshi@yext.com" data-cta-type="EMAIL">email link</a></u></p>\n' +
+      '<p><u><a href="mailto:oshi@yext.com" data-cta-type="MESSAGE">email link</a></u></p>\n' +
       '</div>';
     expect(RichTextFormatter.format(richText, 'someField')).toEqual(expectedHTML);
   });
@@ -39,7 +39,7 @@ describe('adds target attribute to links', () => {
       '<div class="js-yxt-rtfValue" data-field-name="someField">\n' +
       '<p><u><a href="http://google.com" data-cta-type="VIEW_WEBSITE" target="_blank">url link</a></u></p>\n' +
       '<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL" target="_blank">phone link</a></u></p>\n' +
-      '<p><u><a href="mailto:oshi@yext.com" data-cta-type="EMAIL" target="_blank">email link</a></u></p>\n' +
+      '<p><u><a href="mailto:oshi@yext.com" data-cta-type="MESSAGE" target="_blank">email link</a></u></p>\n' +
       '</div>';
     expect(RichTextFormatter.format(richText, 'someField', '_blank')).toEqual(expectedHTML);
   });
@@ -49,7 +49,7 @@ describe('adds target attribute to links', () => {
       '<div class="js-yxt-rtfValue" data-field-name="someField">\n' +
       '<p><u><a href="http://google.com" data-cta-type="VIEW_WEBSITE" target="_self">url link</a></u></p>\n' +
       '<p><u><a href="tel:+17326183404" data-cta-type="TAP_TO_CALL" target="_blank">phone link</a></u></p>\n' +
-      '<p><u><a href="mailto:oshi@yext.com" data-cta-type="EMAIL">email link</a></u></p>\n' +
+      '<p><u><a href="mailto:oshi@yext.com" data-cta-type="MESSAGE">email link</a></u></p>\n' +
       '</div>';
     const targetConfig = { phone: '_blank', url: '_self' };
     expect(RichTextFormatter.format(richText, 'someField', targetConfig)).toEqual(expectedHTML);

@@ -66,7 +66,7 @@ function urlTransformer (tokens, idx, targetConfig) {
   const href = tokens[idx].attrGet('href');
   let ctaType;
   if (href.startsWith('mailto')) {
-    ctaType = 'EMAIL';
+    ctaType = 'MESSAGE';
     target = target || targetConfig.email;
   } else if (href.startsWith('tel')) {
     ctaType = 'TAP_TO_CALL';

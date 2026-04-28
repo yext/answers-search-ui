@@ -13,10 +13,4 @@ export default class AnalyticsReporterService {
    * @returns {boolean} whether the event was successfully reported
    */
   report (event) {}
-
-  /**
-   * Enable or disable conversion tracking
-   * @param {boolean} isEnabled
-   */
-  setConversionTrackingEnabled (isEnabled) {}
 }

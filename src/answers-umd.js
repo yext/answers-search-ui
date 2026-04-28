@@ -262,6 +262,7 @@ class Answers {
         parsedConfig.experienceVersion,
         parsedConfig.businessId,
         parsedConfig.analyticsEventsEnabled,
+        parsedConfig.eventsApiKey,
         parsedConfig.analyticsOptions,
         parsedConfig.environment,
         parsedConfig.cloudChoice);
@@ -271,6 +272,18 @@ class Answers {
         eventType: 'update',
         storageKey: StorageKeys.QUERY_ID,
         callback: id => this._analyticsReporterService.setQueryId(id)
+      });
+      // listen to search id updates
+      storage.registerListener({
+        eventType: 'update',
+        storageKey: StorageKeys.SEARCH_ID,
+        callback: id => this._analyticsReporterService.setSearchId(id)
+      });
+      // listen to search term updates
+      storage.registerListener({
+        eventType: 'update',
+        storageKey: StorageKeys.QUERY,
+        callback: query => this._analyticsReporterService.setSearchTerm(query)
       });
 
       this.components.setAnalyticsReporter(this._analyticsReporterService);
@@ -559,14 +572,6 @@ class Answers {
   setAnalyticsOptIn (analyticsEventsEnabled) {
     this._analyticsReporterService.setAnalyticsOptIn(analyticsEventsEnabled);
   }
-
-  /**
-   * @deprecated
-   * Conversion tracking is now enabled by default, so this does nothing and is only
-   * kept to maintain backwards compatability.
-   * @param {boolean} optIn
-   */
-  setConversionsOptIn (optIn) {}
 
   /**
    * Opt in or out of session cookies

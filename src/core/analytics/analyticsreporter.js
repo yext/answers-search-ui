@@ -18,6 +18,7 @@ export default class AnalyticsReporter {
     experienceVersion,
     businessId,
     analyticsEventsEnabled,
+    eventsApiKey,
     globalOptions = {},
     environment = PRODUCTION,
     cloudChoice = GLOBAL_MULTI) {
@@ -62,11 +63,10 @@ export default class AnalyticsReporter {
     this._baseUrl = getAnalyticsUrl(this._environment, this._cloudChoice);
 
     /**
-     * Boolean indicating if opted in or out of conversion tracking
-     * @type {boolean}
-     * @private
+     * The key authorized for the Events API
+     * @type {string}
      */
-    this._conversionTrackingEnabled = false;
+    this._eventsApiKey = eventsApiKey;
 
     if (experienceVersion) {
       this._globalOptions.experienceVersion = experienceVersion;
@@ -79,6 +79,22 @@ export default class AnalyticsReporter {
 
   setQueryId (queryId) {
     this._globalOptions.queryId = queryId;
+  }
+
+  getSearchId () {
+    return this._globalOptions.searchId;
+  }
+
+  setSearchId (searchId) {
+    this._globalOptions.searchId = searchId;
+  }
+
+  getSearchTerm () {
+    return this._globalOptions.searchTerm;
+  }
+
+  setSearchTerm (searchTerm) {
+    this._globalOptions.searchTerm = searchTerm;
   }
 
   setVisitor (visitor) {
@@ -111,12 +127,9 @@ export default class AnalyticsReporter {
     if (!this._analyticsEventsEnabled) {
       return false;
     }
-    let cookieData = {};
-    if (this._conversionTrackingEnabled && typeof ytag === 'function') {
-      ytag('optin', true);
-      cookieData = ytag('yfpc', null);
-    } else if (this._conversionTrackingEnabled) {
-      console.error('Conversion Tracking is enabled without supplying ytag. Analytics event sent without Conversion Tracking info.');
+    if (!this._eventsApiKey) {
+      console.error('A valid eventsApiKey must be set in the config to send Analytics Events');
+      return false;
     }
 
     if (!(event instanceof AnalyticsEvent)) {
@@ -124,31 +137,27 @@ export default class AnalyticsReporter {
       return false;
     }
 
-    if (includeQueryId) {
-      event.addOptions(this._globalOptions);
-    } else {
-      event.addOptions({
-        ...this._globalOptions,
-        queryId: undefined
-      });
-    }
+    event.addOptions(this._globalOptions);
 
-    // do we just grab a bunch of things from event and see what's up?
-
+    const apiEvent = event.toApiEvent();
     const eventPayload = {
-      authorization: 'KEY <key>',
-      action: event.action,
-      entity: event.entityId,
-      destinationUrl: event.destinationUrl,
-      label: event.label,
+      authorization: 'KEY ' + this._eventsApiKey,
+      action: apiEvent.action,
+      ...(event.entityId !== undefined && { entity: event.entityId }),
+      ...(event.destinationUrl !== undefined && { destinationUrl: event.destinationUrl }),
+      ...(event.label !== undefined && { label: event.label }),
       search: {
-        queryId: this.getQueryId(),
-        verticalKey: event.verticalKey,
-        isDirectAnswer: event.directAnswer,
+        ...(includeQueryId && { searchId: this.getSearchId() }),
+        ...(includeQueryId && { queryId: this.getQueryId() }),
+        ...(event.verticalKey !== undefined && { verticalKey: event.verticalKey }),
+        ...(event.directAnswer !== undefined && { isDirectAnswer: event.directAnswer }),
+        ...(event.generativeDirectAnswer !== undefined &&
+            { isGenerativeDirectAnswer: event.generativeDirectAnswer }),
         versionLabel: this._globalOptions.experienceVersion,
-        experienceKey: this._globalOptions.experienceKey,
-        isGenerativeDirectAnswer: event.generativeDirectAnswer
-      }
+        experienceKey: this._globalOptions.experienceKey
+      },
+      searchTerm: this.getSearchTerm(),
+      ...(event.visitor !== undefined && { visitor: event.visitor })
     };
 
     return new HttpRequester().beacon(
@@ -156,10 +165,4 @@ export default class AnalyticsReporter {
       eventPayload
     );
   }
-
-  /** @inheritdoc */
-  setConversionTrackingEnabled (isEnabled) {
-    this._conversionTrackingEnabled = isEnabled;
-  }
-  // to delete
 }
