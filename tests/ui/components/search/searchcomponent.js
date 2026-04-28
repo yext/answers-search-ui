@@ -151,7 +151,7 @@ describe('SearchBar component', () => {
 
   describe('Voice search works properly', () => {
     const events = {};
-    const webkitSpeechRecognitionMock = {
+    const speechRecognitionMock = {
       addEventListener: jest.fn((eventName, cb) => {
         events[eventName] = cb;
       }),
@@ -165,7 +165,8 @@ describe('SearchBar component', () => {
 
     beforeEach(() => {
       jest.spyOn(global, 'window', 'get').mockImplementation(() => ({
-        webkitSpeechRecognition: () => webkitSpeechRecognitionMock,
+        SpeechRecognition: () => speechRecognitionMock,
+        webkitSpeechRecognition: () => speechRecognitionMock,
         location: {
           search: {
             substring: jest.fn()
@@ -208,14 +209,14 @@ describe('SearchBar component', () => {
         }
       });
       mount(component);
-      expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(0);
-      expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(0);
+      expect(speechRecognitionMock.start).toHaveBeenCalledTimes(0);
+      expect(speechRecognitionMock.stop).toHaveBeenCalledTimes(0);
       await component._voiceSearchController.handleIconClick();
-      expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(1);
-      expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(0);
+      expect(speechRecognitionMock.start).toHaveBeenCalledTimes(1);
+      expect(speechRecognitionMock.stop).toHaveBeenCalledTimes(0);
       await component._voiceSearchController.handleIconClick();
-      expect(webkitSpeechRecognitionMock.start).toHaveBeenCalledTimes(1);
-      expect(webkitSpeechRecognitionMock.stop).toHaveBeenCalledTimes(1);
+      expect(speechRecognitionMock.start).toHaveBeenCalledTimes(1);
+      expect(speechRecognitionMock.stop).toHaveBeenCalledTimes(1);
     });
   });
 });

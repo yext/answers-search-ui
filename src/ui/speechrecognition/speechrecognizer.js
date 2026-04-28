@@ -9,7 +9,8 @@ import alert from '../alert';
  */
 export default class SpeechRecognizer {
   constructor (locale) {
-    this._speechRecognition = new window.webkitSpeechRecognition();
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    this._speechRecognition = new SpeechRecognition();
     this._speechRecognition.interimResults = true;
 
     this._speechRecognition.lang = isMicrosoftEdge()
