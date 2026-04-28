@@ -11,7 +11,8 @@ import Bowser from 'bowser';
  * @returns {boolean}
  */
 export function speechRecognitionIsSupported () {
-  if (!(window.webkitSpeechRecognition && navigator.mediaDevices)) {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+  if (!(SpeechRecognition && navigator.mediaDevices)) {
     return false;
   }
 
