@@ -141,20 +141,21 @@ export default class AnalyticsReporter {
 
     const apiEvent = event.toApiEvent();
     const eventPayload = {
-      authorization: 'KEY ' + this._eventsApiKey,
       action: apiEvent.action,
-      ...(event.entityId !== undefined && { entity: event.entityId }),
+      authorization: 'KEY ' + this._eventsApiKey,
       ...(event.destinationUrl !== undefined && { destinationUrl: event.destinationUrl }),
+      ...(event.entityId !== undefined && { entity: event.entityId }),
       ...(event.label !== undefined && { label: event.label }),
+      ...(event.locale !== undefined && { locale: event.locale }),
       search: {
-        ...(includeQueryId && { searchId: this.getSearchId() }),
-        ...(includeQueryId && { queryId: this.getQueryId() }),
-        ...(event.verticalKey !== undefined && { verticalKey: event.verticalKey }),
         ...(event.directAnswer !== undefined && { isDirectAnswer: event.directAnswer }),
+        experienceKey: this._globalOptions.experienceKey,
         ...(event.generativeDirectAnswer !== undefined &&
             { isGenerativeDirectAnswer: event.generativeDirectAnswer }),
+        ...(includeQueryId && { queryId: this.getQueryId() }),
+        ...(includeQueryId && { searchId: this.getSearchId() }),
         versionLabel: this._globalOptions.experienceVersion,
-        experienceKey: this._globalOptions.experienceKey
+        ...(event.verticalKey !== undefined && { verticalKey: event.verticalKey })
       },
       searchTerm: this.getSearchTerm(),
       ...(event.visitor !== undefined && { visitor: event.visitor })
