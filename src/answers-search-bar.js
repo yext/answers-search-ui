@@ -176,6 +176,7 @@ class AnswersSearchBar {
         parsedConfig.experienceVersion,
         parsedConfig.businessId,
         parsedConfig.analyticsEventsEnabled,
+        parsedConfig.eventsApiKey,
         parsedConfig.analyticsOptions,
         parsedConfig.environment,
         parsedConfig.cloudChoice);
@@ -325,16 +326,6 @@ class AnswersSearchBar {
    */
   setAnalyticsOptIn (analyticsEventsEnabled) {
     this._analyticsReporterService.setAnalyticsOptIn(analyticsEventsEnabled);
-  }
-
-  /**
-   * Opt in or out of convertion tracking analytics
-   * @param {boolean} optIn
-   */
-  setConversionsOptIn (optIn) {
-    if (this._eligibleForAnalytics) {
-      this._analyticsReporterService.setConversionTrackingEnabled(optIn);
-    }
   }
 
   /**

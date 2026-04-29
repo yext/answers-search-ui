@@ -4,7 +4,6 @@ import Component from '../component';
 import DOM from '../../dom/dom';
 import { cardTypes } from './consts';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
-import Searcher from '../../../core/models/searcher';
 
 class CardConfig {
   constructor (config = {}) {
@@ -97,9 +96,8 @@ export default class CardComponent extends Component {
     const analyticsOptions = {
       directAnswer: false,
       verticalKey: this._config.data.verticalKey,
-      searcher: this._config.isUniversal ? Searcher.UNIVERSAL : Searcher.VERTICAL,
       entityId: this._config.data.result.id,
-      url: event.target.href
+      destinationUrl: event.target.href
     };
     if (!fieldName) {
       console.warn('Field name not provided for RTF click analytics');

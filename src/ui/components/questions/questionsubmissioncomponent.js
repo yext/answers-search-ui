@@ -8,7 +8,6 @@ import { AnswersComponentError } from '../../../core/errors/errors';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import SearchStates from '../../../core/storage/searchstates';
 import TranslationFlagger from '../../i18n/translationflagger';
-import Searcher from '../../../core/models/searcher';
 
 /**
  * Configurable options for the component
@@ -429,8 +428,7 @@ export default class QuestionSubmissionComponent extends Component {
   getAnalyticsEvent (eventType) {
     const analyticsEvent = new AnalyticsEvent(eventType);
     analyticsEvent.addOptions({
-      verticalConfigId: this._verticalKey,
-      searcher: this._verticalKey ? Searcher.VERTICAL : Searcher.UNIVERSAL
+      verticalKey: this._verticalKey
     });
     return analyticsEvent;
   }

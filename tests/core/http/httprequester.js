@@ -187,7 +187,7 @@ describe('resquesting and responding', () => {
 
   describe('beacon', () => {
     const expectedUrl = `${baseUrl}/analytics`;
-    const expectedData = { data: { eventType: 'test', queryId: '1234abc' } };
+    const expectedData = { data: { action: 'test', queryId: '1234abc' } };
 
     it('sends a beacon to the url with stringified data', () => {
       const mockedSendBeacon = jest.fn();

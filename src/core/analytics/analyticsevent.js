@@ -7,7 +7,7 @@ export default class AnalyticsEvent {
      * The type of event to report
      * @type {string}
      */
-    this.eventType = type.toUpperCase();
+    this.action = type.toUpperCase();
 
     /**
      * An optional label to be provided for the event
