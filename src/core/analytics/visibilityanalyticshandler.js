@@ -1,6 +1,5 @@
 import { isIE } from '../utils/useragent';
 import AnalyticsEvent from '../analytics/analyticsevent';
-import Searcher from '../models/searcher';
 import StorageKeys from '../storage/storagekeys';
 
 const RESULTS_VISIBILITY_EVENT = {
@@ -107,8 +106,7 @@ export default class VisibilityAnalyticsHandler {
     if (!queryId) {
       return;
     }
-    const searcher = this._verticalKey ? Searcher.VERTICAL : Searcher.UNIVERSAL;
-    const event = new AnalyticsEvent(eventName).addOptions({ searcher });
+    const event = new AnalyticsEvent(eventName);
     this._analyticsReporterService.report(event);
   }
 }
