@@ -158,7 +158,7 @@ export default class AnalyticsReporter {
         versionLabel: this._globalOptions.experienceVersion,
         ...(event.verticalKey !== undefined && { verticalKey: event.verticalKey })
       },
-      ...(!!searchTerm && { searchTerm: searchTerm } ),
+      ...(!!searchTerm && { searchTerm: searchTerm }),
       ...(event.visitor !== undefined && { visitor: event.visitor })
     };
 
