@@ -138,6 +138,7 @@ export default class AnalyticsReporter {
     }
 
     event.addOptions(this._globalOptions);
+    const searchTerm = this.getSearchTerm();
 
     const apiEvent = event.toApiEvent();
     const eventPayload = {
@@ -157,7 +158,7 @@ export default class AnalyticsReporter {
         versionLabel: this._globalOptions.experienceVersion,
         ...(event.verticalKey !== undefined && { verticalKey: event.verticalKey })
       },
-      searchTerm: this.getSearchTerm(),
+      ...(!!searchTerm && { searchTerm: searchTerm } ),
       ...(event.visitor !== undefined && { visitor: event.visitor })
     };
 
