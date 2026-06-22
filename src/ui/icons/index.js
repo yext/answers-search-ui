@@ -8,6 +8,7 @@ import directionsIcon from './directions.js';
 import calendarIcon from './calendar.js';
 import calloutIcon from './callout.js';
 import infoIcon from './info.js';
+import aiSignpostIcon from './ai_signpost.js';
 import briefcaseIcon from './briefcase.js';
 import kabobIcon from './kabob.js';
 import personIcon from './person.js';
@@ -42,6 +43,7 @@ const iconsArray = [
   calendarIcon,
   calloutIcon,
   infoIcon,
+  aiSignpostIcon,
   briefcaseIcon,
   kabobIcon,
   personIcon,
