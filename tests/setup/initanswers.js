@@ -8,6 +8,7 @@ export default async function initAnswers (ANSWERS, config = {}) {
   ANSWERS._loadTemplates = () => Promise.resolve();
   await ANSWERS.init({
     apiKey: 'test',
+    eventsApiKey: 'test',
     experienceKey: 'test',
     // Don't load this polyfill during testing
     disableCssVariablesPonyfill: 'true',

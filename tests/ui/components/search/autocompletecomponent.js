@@ -55,7 +55,7 @@ describe('AUTO_COMPLETE_SELECTION analytics event fire as expected', () => {
 
     expect(mockAnalyticsReporter.report).toHaveBeenCalledTimes(1);
     const expectedEvent = {
-      eventType: "AUTO_COMPLETE_SELECTION",
+      action: "AUTO_COMPLETE_SELECTION",
       suggestedSearchText: "test prompt \"some text ...more text.\"  for TEST output"
     };
     expect(mockAnalyticsReporter.report).toHaveBeenLastCalledWith(expectedEvent);

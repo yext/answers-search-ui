@@ -8,7 +8,4 @@ export default class NoopAnalyticsReporter {
   report (event) {
     return true;
   }
-
-  /** @inheritdoc */
-  setConversionTrackingEnabled (isEnabled) {}
 }

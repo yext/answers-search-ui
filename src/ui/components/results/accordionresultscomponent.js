@@ -85,7 +85,7 @@ export default class AccordionResultsComponent extends VerticalResultsComponent 
   handleClick (wrapperEl, toggleEl, contentEl) {
     const event = new AnalyticsEvent(this.isCollapsed(wrapperEl) ? 'ROW_EXPAND' : 'ROW_COLLAPSE')
       .addOptions({
-        verticalConfigId: this.verticalConfigId,
+        verticalKey: this.verticalConfigId,
         entityId: toggleEl.dataset.entityId
       });
     wrapperEl.classList.toggle(this.collapsedClass);

@@ -7,7 +7,6 @@ import { cardTemplates, cardTypes } from './consts';
 import DOM from '../../dom/dom';
 import AnalyticsEvent from '../../../core/analytics/analyticsevent';
 import CTACollectionComponent from '../ctas/ctacollectioncomponent';
-import Searcher from '../../../core/models/searcher';
 
 class AccordionCardConfig {
   constructor (config = {}) {
@@ -138,8 +137,7 @@ export default class AccordionCardComponent extends Component {
     const event = new AnalyticsEvent(this.isExpanded ? 'ROW_EXPAND' : 'ROW_COLLAPSE')
       .addOptions({
         verticalKey: this.verticalKey,
-        entityId: this.result._raw.id,
-        searcher: this._config.isUniversal ? Searcher.UNIVERSAL : Searcher.VERTICAL
+        entityId: this.result._raw.id
       });
     this.analyticsReporter.report(event);
   }

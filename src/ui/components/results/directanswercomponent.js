@@ -182,10 +182,8 @@ export default class DirectAnswerComponent extends Component {
     const analyticsOptions = {
       verticalKey: relatedItem.verticalConfigId,
       directAnswer: true,
-      fieldName: this.getState('answer').fieldApiName,
-      searcher: this.getState('searcher'),
       entityId: relatedItem.data.id,
-      url: event.target.href
+      destinationUrl: event.target.href
     };
 
     const analyticsEvent = new AnalyticsEvent(ctaType);
@@ -371,7 +369,6 @@ export default class DirectAnswerComponent extends Component {
     const analyticsOptions = {
       directAnswer: true,
       verticalKey: relatedItem.verticalConfigId,
-      searcher: this.getState('searcher'),
       entityId: relatedItem.data.id
     };
     const event = new AnalyticsEvent(eventType)
