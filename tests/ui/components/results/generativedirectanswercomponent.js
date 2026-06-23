@@ -119,7 +119,7 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     expect(secondCitationClickEventType).toEqual('CITATION_CLICK');
   });
 
-  it('displays the default AI signpost below the answer header', () => {
+  it('displays the default AI signpost in the answer header', () => {
     const component = COMPONENT_MANAGER.create(GenerativeDirectAnswerComponent.type, defaultConfig);
     const storage = COMPONENT_MANAGER.core.storage;
     storage.set(StorageKeys.GENERATIVE_DIRECT_ANSWER, gdaSuccess);
@@ -129,8 +129,10 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     const signpost = wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostButton').getDOMNode();
     const snippet = wrapper.find('.yxt-GenerativeDirectAnswer-snippet').getDOMNode();
 
-    expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostLabel').text().trim()).toEqual('AI-Generated');
-    expect(title.compareDocumentPosition(signpost) & window.Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(title.contains(signpost)).toBeTruthy();
+    expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostLabel').exists()).toBeFalsy();
+    expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostButton').prop('aria-label'))
+      .toEqual('AI-Generated Content');
     expect(signpost.compareDocumentPosition(snippet) & window.Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
@@ -185,6 +187,8 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     const wrapper = mount(component);
 
     expect(wrapper.find('.Icon--info').exists()).toBeTruthy();
+    expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostButton').prop('aria-label'))
+      .toEqual('Custom Label');
     expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostLabel').text().trim()).toEqual('Custom Label');
     wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostButton').simulate('click');
     expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostPopoverHeaderText').text().trim())

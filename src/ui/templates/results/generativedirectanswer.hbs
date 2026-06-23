@@ -14,50 +14,58 @@
       <h2 class="yxt-GenerativeDirectAnswer-titleText">
         AI-Generated Answer
       </h2>
-    </div>
-    {{#unless _config.hideAISignpost}}
-      <div class="yxt-GenerativeDirectAnswer-aiSignpost">
-        <button
-          class="yxt-GenerativeDirectAnswer-aiSignpostButton js-yxt-GenerativeDirectAnswer-aiSignpostButton"
-          type="button"
-          aria-expanded="false"
-          aria-controls="yxt-GenerativeDirectAnswer-aiSignpostPopover-{{name}}">
-          {{> icons/iconPartial
-            iconName=_config.aiSignpost.iconName
-            iconUrl=_config.aiSignpost.iconUrl
-            classNames='yxt-GenerativeDirectAnswer-aiSignpostIcon'}}
-          <span class="yxt-GenerativeDirectAnswer-aiSignpostLabel">
-            {{_config.aiSignpost.label}}
-          </span>
-        </button>
-        <div
-          class="yxt-GenerativeDirectAnswer-aiSignpostPopover js-yxt-GenerativeDirectAnswer-aiSignpostPopover"
-          id="yxt-GenerativeDirectAnswer-aiSignpostPopover-{{name}}"
-          role="dialog"
-          aria-labelledby="yxt-GenerativeDirectAnswer-aiSignpostPopoverHeader-{{name}}"
-          aria-describedby="yxt-GenerativeDirectAnswer-aiSignpostPopoverBody-{{name}}"
-          hidden>
-          <div class="yxt-GenerativeDirectAnswer-aiSignpostPopoverHeader">
-            <div
-              class="yxt-GenerativeDirectAnswer-aiSignpostPopoverHeaderText"
-              id="yxt-GenerativeDirectAnswer-aiSignpostPopoverHeader-{{name}}">
-              {{_config.aiSignpost.popoverHeader}}
-            </div>
-            <button
-              class="yxt-GenerativeDirectAnswer-aiSignpostClose js-yxt-GenerativeDirectAnswer-aiSignpostClose"
-              type="button"
-              aria-label="{{translate phrase='Dismiss' }}">
-              {{> icons/builtInIcon iconName='close'}}
-            </button>
-          </div>
+      {{#unless _config.hideAISignpost}}
+        <div class="yxt-GenerativeDirectAnswer-aiSignpost">
+          <button
+            class="yxt-GenerativeDirectAnswer-aiSignpostButton js-yxt-GenerativeDirectAnswer-aiSignpostButton"
+            type="button"
+            aria-expanded="false"
+            aria-label=
+            {{#unless (eq _config.aiSignpost.label "")}}
+              {{_config.aiSignpost.label}}
+            {{else}}
+              "AI-Generated Content"
+            {{/unless}}
+            aria-controls="yxt-GenerativeDirectAnswer-aiSignpostPopover-{{name}}">
+            {{> icons/iconPartial
+              iconName=_config.aiSignpost.iconName
+              iconUrl=_config.aiSignpost.iconUrl
+              classNames='yxt-GenerativeDirectAnswer-aiSignpostIcon'}}
+            {{#if _config.aiSignpost.label}}
+              <span class="yxt-GenerativeDirectAnswer-aiSignpostLabel">
+                {{_config.aiSignpost.label}}
+              </span>
+            {{/if}}
+          </button>
           <div
-            class="yxt-GenerativeDirectAnswer-aiSignpostPopoverBody"
-            id="yxt-GenerativeDirectAnswer-aiSignpostPopoverBody-{{name}}">
-            {{_config.aiSignpost.popoverBody}}
+            class="yxt-GenerativeDirectAnswer-aiSignpostPopover js-yxt-GenerativeDirectAnswer-aiSignpostPopover"
+            id="yxt-GenerativeDirectAnswer-aiSignpostPopover-{{name}}"
+            role="dialog"
+            aria-labelledby="yxt-GenerativeDirectAnswer-aiSignpostPopoverHeader-{{name}}"
+            aria-describedby="yxt-GenerativeDirectAnswer-aiSignpostPopoverBody-{{name}}"
+            hidden>
+            <div class="yxt-GenerativeDirectAnswer-aiSignpostPopoverHeader">
+              <div
+                class="yxt-GenerativeDirectAnswer-aiSignpostPopoverHeaderText"
+                id="yxt-GenerativeDirectAnswer-aiSignpostPopoverHeader-{{name}}">
+                {{_config.aiSignpost.popoverHeader}}
+              </div>
+              <button
+                class="yxt-GenerativeDirectAnswer-aiSignpostClose js-yxt-GenerativeDirectAnswer-aiSignpostClose"
+                type="button"
+                aria-label="{{translate phrase='Dismiss' }}">
+                {{> icons/builtInIcon iconName='close'}}
+              </button>
+            </div>
+            <div
+              class="yxt-GenerativeDirectAnswer-aiSignpostPopoverBody"
+              id="yxt-GenerativeDirectAnswer-aiSignpostPopoverBody-{{name}}">
+              {{_config.aiSignpost.popoverBody}}
+            </div>
           </div>
         </div>
-      </div>
-    {{/unless}}
+      {{/unless}}
+    </div>
     <div class="yxt-GenerativeDirectAnswer-content">
       <div class="yxt-GenerativeDirectAnswer-snippet">
         {{{ generativeDirectAnswer.directAnswer }}}
