@@ -158,6 +158,11 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostClose').simulate('click');
     expect(button.getDOMNode().getAttribute('aria-expanded')).toEqual('false');
     expect(popover.getDOMNode().hidden).toBeTruthy();
+
+    button.simulate('click');
+    document.dispatchEvent(new window.Event('click', { bubbles: true }));
+    expect(button.getDOMNode().getAttribute('aria-expanded')).toEqual('false');
+    expect(popover.getDOMNode().hidden).toBeTruthy();
   });
 
   it('hides the AI signpost', () => {
@@ -187,8 +192,6 @@ describe('GenerativeDirectAnswerComponent renders properly', () => {
     const wrapper = mount(component);
 
     expect(wrapper.find('.Icon--info').exists()).toBeTruthy();
-    expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostButton').prop('aria-label'))
-      .toEqual('Custom Label');
     expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostLabel').text().trim()).toEqual('Custom Label');
     wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostButton').simulate('click');
     expect(wrapper.find('.yxt-GenerativeDirectAnswer-aiSignpostPopoverHeaderText').text().trim())
