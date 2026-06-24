@@ -17,6 +17,14 @@ $gda-content-font-weight: var(--yxt-font-weight-normal) !default;
 $gda-content-bolded-font-weight: var(--yxt-font-weight-semibold) !default;
 $gda-content-color: var(--yxt-color-text-primary) !default;
 
+$gda-ai-signpost-background-color: var(--yxt-gda-title-background-color) !default;
+$gda-ai-signpost-border: 1px solid var(--yxt-gda-title-background-color) !default;
+$gda-ai-signpost-color: var(--yxt-gda-title-color) !default;
+$gda-ai-signpost-hover-background-color: color-mix(in srgb, var(--yxt-gda-title-background-color) 92%, black) !default;
+$gda-ai-signpost-popover-background-color: white !default;
+$gda-ai-signpost-popover-border: var(--yxt-border-default) !default;
+$gda-ai-signpost-popover-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !default;
+
 $gda-citations-divider-color: var(--yxt-color-borders) !default;
 
 $gda-citations-header-font-size: var(--yxt-font-size-md) !default;
@@ -50,6 +58,13 @@ $gda-citation-description-color: var(--yxt-color-text-primary) !default;
   --yxt-gda-content-font-weight: #{$gda-content-font-weight};
   --yxt-gda-content-bolded-font-weight: #{$gda-content-bolded-font-weight};
   --yxt-gda-content-color: #{$gda-content-color};
+  --yxt-gda-ai-signpost-background-color: #{$gda-ai-signpost-background-color};
+  --yxt-gda-ai-signpost-border: #{$gda-ai-signpost-border};
+  --yxt-gda-ai-signpost-color: #{$gda-ai-signpost-color};
+  --yxt-gda-ai-signpost-hover-background-color: #{$gda-ai-signpost-hover-background-color};
+  --yxt-gda-ai-signpost-popover-background-color: #{$gda-ai-signpost-popover-background-color};
+  --yxt-gda-ai-signpost-popover-border: #{$gda-ai-signpost-popover-border};
+  --yxt-gda-ai-signpost-popover-box-shadow: #{$gda-ai-signpost-popover-box-shadow};
   --yxt-gda-citations-divider-color: #{$gda-citations-divider-color};
   --yxt-gda-citations-header-font-size: #{$gda-citations-header-font-size};
   --yxt-gda-citations-header-line-height: #{$gda-citations-header-line-height};
@@ -76,6 +91,7 @@ $gda-citation-description-color: var(--yxt-color-text-primary) !default;
     padding-right: var(--yxt-base-spacing);
     display: flex;
     align-items: center;
+    gap: var(--yxt-base-spacing-sm);
     background-color: var(--yxt-gda-title-background-color);
     border: var(--yxt-gda-border);
     @include Text(
@@ -104,6 +120,121 @@ $gda-citation-description-color: var(--yxt-color-text-primary) !default;
     border-left: var(--yxt-gda-border);
     border-right: var(--yxt-gda-border);
     border-bottom: var(--yxt-gda-border);
+  }
+
+  &-aiSignpost
+  {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &-aiSignpostButton
+  {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--yxt-base-spacing-sm);
+    padding: calc(var(--yxt-base-spacing-sm) / 2);
+    border: var(--yxt-gda-ai-signpost-border);
+    border-radius: 4px;
+    background-color: var(--yxt-gda-ai-signpost-background-color);
+    cursor: pointer;
+    @include Text(
+      $size: var(--yxt-font-size-sm),
+      $line-height: var(--yxt-line-height-md),
+      $weight: var(--yxt-font-weight-semibold),
+      $color: var(--yxt-gda-ai-signpost-color)
+    );
+
+    &:hover,
+    &:active,
+    &:focus-visible {
+      background-color: var(--yxt-gda-ai-signpost-hover-background-color);
+      border: 1px solid var(--yxt-gda-ai-signpost-color);
+    }
+  }
+
+  &-aiSignpostIcon
+  {
+    width: 16px;
+    height: 16px;
+    color: var(--yxt-gda-ai-signpost-color);
+
+    svg,
+    img {
+      width: 16px;
+      height: 16px;
+      display: block;
+    }
+  }
+
+  &-aiSignpostPopover
+  {
+    position: absolute;
+    z-index: 1;
+    top: calc(100% + var(--yxt-base-spacing-sm));
+    left: 0;
+    width: 320px;
+    padding: var(--yxt-base-spacing);
+    border: var(--yxt-gda-ai-signpost-popover-border);
+    border-radius: 4px;
+    background-color: var(--yxt-gda-ai-signpost-popover-background-color);
+    box-shadow: var(--yxt-gda-ai-signpost-popover-box-shadow);
+  }
+
+  &-aiSignpostPopover[hidden]
+  {
+    display: none;
+  }
+
+  &-aiSignpostPopoverHeader
+  {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--yxt-base-spacing);
+    margin-bottom: var(--yxt-base-spacing-sm);
+  }
+
+  &-aiSignpostPopoverHeaderText
+  {
+    @include Text(
+      $size: var(--yxt-font-size-sm),
+      $line-height: var(--yxt-line-height-md),
+      $weight: var(--yxt-font-weight-semibold),
+      $color: var(--yxt-color-text-primary)
+    );
+  }
+
+  &-aiSignpostClose
+  {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--yxt-color-text-secondary);
+    cursor: pointer;
+
+    .Icon,
+    svg {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &-aiSignpostPopoverBody
+  {
+    @include Text(
+      $size: var(--yxt-font-size-sm),
+      $line-height: var(--yxt-line-height-md),
+      $weight: var(--yxt-font-weight-normal),
+      $color: var(--yxt-color-text-primary)
+    );
   }
 
   &-citationsDivider
