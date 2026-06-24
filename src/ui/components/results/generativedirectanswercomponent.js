@@ -12,9 +12,7 @@ const DEFAULT_CONFIG = {
   hideAISignpost: false,
   aiSignpost: {
     iconName: 'ai_signpost',
-    label: TranslationFlagger.flag({
-      phrase: 'AI-Generated'
-    }),
+    label: '',
     popoverHeader: TranslationFlagger.flag({
       phrase: 'AI-Generated Content'
     }),
@@ -118,10 +116,11 @@ export default class GenerativeDirectAnswerComponent extends Component {
    * Wires up the AI signpost popover toggle behavior.
    */
   _bindAISignpost () {
+    const signpost = DOM.query(this._container, '.yxt-GenerativeDirectAnswer-aiSignpost');
     const signpostButton = DOM.query(this._container, '.js-yxt-GenerativeDirectAnswer-aiSignpostButton');
     const signpostPopover = DOM.query(this._container, '.js-yxt-GenerativeDirectAnswer-aiSignpostPopover');
     const signpostCloseButton = DOM.query(this._container, '.js-yxt-GenerativeDirectAnswer-aiSignpostClose');
-    if (!signpostButton || !signpostPopover) {
+    if (!signpost || !signpostButton || !signpostPopover) {
       return;
     }
 
@@ -135,6 +134,11 @@ export default class GenerativeDirectAnswerComponent extends Component {
     });
 
     signpostCloseButton && DOM.on(signpostCloseButton, 'click', () => setIsOpen(false));
+    DOM.on(document, 'click', event => {
+      if (!signpost.contains(event.target)) {
+        setIsOpen(false);
+      }
+    });
   }
 
   /**

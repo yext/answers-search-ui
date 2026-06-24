@@ -17,10 +17,10 @@ $gda-content-font-weight: var(--yxt-font-weight-normal) !default;
 $gda-content-bolded-font-weight: var(--yxt-font-weight-semibold) !default;
 $gda-content-color: var(--yxt-color-text-primary) !default;
 
-$gda-ai-signpost-background-color: var(--yxt-color-background-highlight) !default;
-$gda-ai-signpost-border: var(--yxt-border-default) !default;
-$gda-ai-signpost-color: var(--yxt-color-text-primary) !default;
-$gda-ai-signpost-hover-background-color: var(--yxt-color-background-highlight) !default;
+$gda-ai-signpost-background-color: var(--yxt-gda-title-background-color) !default;
+$gda-ai-signpost-border: 1px solid var(--yxt-gda-title-background-color) !default;
+$gda-ai-signpost-color: var(--yxt-gda-title-color) !default;
+$gda-ai-signpost-hover-background-color: color-mix(in srgb, var(--yxt-gda-title-background-color) 92%, black) !default;
 $gda-ai-signpost-popover-background-color: white !default;
 $gda-ai-signpost-popover-border: var(--yxt-border-default) !default;
 $gda-ai-signpost-popover-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !default;
@@ -91,6 +91,7 @@ $gda-citation-description-color: var(--yxt-color-text-primary) !default;
     padding-right: var(--yxt-base-spacing);
     display: flex;
     align-items: center;
+    gap: var(--yxt-base-spacing-sm);
     background-color: var(--yxt-gda-title-background-color);
     border: var(--yxt-gda-border);
     @include Text(
@@ -124,12 +125,8 @@ $gda-citation-description-color: var(--yxt-color-text-primary) !default;
   &-aiSignpost
   {
     position: relative;
-    padding-top: var(--yxt-base-spacing);
-    padding-left: var(--yxt-base-spacing);
-    padding-right: var(--yxt-base-spacing);
-    background-color: var(--yxt-gda-content-background-color);
-    border-left: var(--yxt-gda-border);
-    border-right: var(--yxt-gda-border);
+    display: inline-flex;
+    align-items: center;
   }
 
   &-aiSignpostButton
@@ -137,7 +134,7 @@ $gda-citation-description-color: var(--yxt-color-text-primary) !default;
     display: inline-flex;
     align-items: center;
     gap: var(--yxt-base-spacing-sm);
-    padding: calc(var(--yxt-base-spacing-sm) / 2) var(--yxt-base-spacing-sm);
+    padding: calc(var(--yxt-base-spacing-sm) / 2);
     border: var(--yxt-gda-ai-signpost-border);
     border-radius: 4px;
     background-color: var(--yxt-gda-ai-signpost-background-color);
@@ -151,9 +148,9 @@ $gda-citation-description-color: var(--yxt-color-text-primary) !default;
 
     &:hover,
     &:active,
-    &:focus {
+    &:focus-visible {
       background-color: var(--yxt-gda-ai-signpost-hover-background-color);
-      border: var(--yxt-border-hover);
+      border: 1px solid var(--yxt-gda-ai-signpost-color);
     }
   }
 
@@ -176,9 +173,8 @@ $gda-citation-description-color: var(--yxt-color-text-primary) !default;
     position: absolute;
     z-index: 1;
     top: calc(100% + var(--yxt-base-spacing-sm));
-    left: var(--yxt-base-spacing);
+    left: 0;
     width: 320px;
-    max-width: calc(100% - (2 * var(--yxt-base-spacing)));
     padding: var(--yxt-base-spacing);
     border: var(--yxt-gda-ai-signpost-popover-border);
     border-radius: 4px;
