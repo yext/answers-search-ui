@@ -196,6 +196,7 @@ export default class FilterSearchComponent extends Component {
       promptHeader: this.promptHeader,
       originalQuery: this.query,
       inputEl: inputSelector,
+      listLabelText: this.searchText,
       verticalKey: this._verticalKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => {

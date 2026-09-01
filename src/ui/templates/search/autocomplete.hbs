@@ -1,37 +1,36 @@
-<div class="yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper">
-  <span class="yxt-AutoComplete-resultsCount sr-only" aria-live="assertive"
-        id="{{autocompleteContainerIdName}}-label">
-    {{#if hasResults}}
-      {{#each sections}}
-        {{#if label}}
-          {{translate
-            phrase='[[resultsCount]] [[label]] autocomplete option found.'
-            pluralForm='[[resultsCount]] [[label]] autocomplete options found.'
-            resultsCount=resultsCount
-            label=label
-            count=resultsCount
-          }}
-        {{else}}
-          {{translate
-            phrase='[[resultsCount]] autocomplete option found.'
-            pluralForm='[[resultsCount]] autocomplete options found.'
-            resultsCount=resultsCount
-            count=resultsCount
-          }}
-        {{/if}}
-      {{/each}}
-    {{else if isAlreadyOpen}}
-      {{translate
-        phrase='[[resultsCount]] autocomplete option found.'
-        pluralForm='[[resultsCount]] autocomplete options found.'
-        resultsCount=0
-        count=0
-      }}
-    {{/if}}
-  </span>
+<div class="yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper"
+     data-results-count-announcement="{{#if shouldAnnounceResultsCount}}
+       {{#if hasResults}}
+         {{#each sections}}
+           {{#if label}}
+             {{translate
+               phrase='[[resultsCount]] [[label]] autocomplete option found.'
+               pluralForm='[[resultsCount]] [[label]] autocomplete options found.'
+               resultsCount=resultsCount
+               label=label
+               count=resultsCount
+             }}
+           {{else}}
+             {{translate
+               phrase='[[resultsCount]] autocomplete option found.'
+               pluralForm='[[resultsCount]] autocomplete options found.'
+               resultsCount=resultsCount
+               count=resultsCount
+             }}
+           {{/if}}
+         {{/each}}
+       {{else if isAlreadyOpen}}
+         {{translate
+           phrase='[[resultsCount]] autocomplete option found.'
+           pluralForm='[[resultsCount]] autocomplete options found.'
+           resultsCount=0
+           count=0
+         }}
+       {{/if}}
+     {{/if}}">
   {{#if hasResults}}
     <div class="yxt-AutoComplete" role="listbox" id="{{autocompleteContainerIdName}}-results"
-         aria-labelledby="{{autocompleteContainerIdName}}-label">
+         {{#if listLabelText}}aria-label="{{listLabelText}}"{{else}}aria-labelledby="{{listLabelIdName}}"{{/if}}>
       {{assign 'currentSelected' sectionIndex resultIndex}}
       {{#if promptHeader}}
         <ul class="yxt-AutoComplete-results">
