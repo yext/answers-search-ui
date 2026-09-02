@@ -8,14 +8,14 @@ msgid_plural "([[resultsCount]] results)"
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/ui/templates/search/autocomplete.hbs:7
+#: src/ui/templates/search/autocomplete.hbs:6
 msgid "[[resultsCount]] [[label]] autocomplete option found."
 msgid_plural "[[resultsCount]] [[label]] autocomplete options found."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/ui/templates/search/autocomplete.hbs:15
-#: src/ui/templates/search/autocomplete.hbs:24
+#: src/ui/templates/search/autocomplete.hbs:14
+#: src/ui/templates/search/autocomplete.hbs:23
 msgid "[[resultsCount]] autocomplete option found."
 msgid_plural "[[resultsCount]] autocomplete options found."
 msgstr[0] ""
@@ -119,7 +119,7 @@ msgstr ""
 msgid "Invalid email address. Please refresh the page and try submitting your question again."
 msgstr ""
 
-#: src/ui/components/filters/geolocationcomponent.js:289
+#: src/ui/components/filters/geolocationcomponent.js:290
 #: src/ui/components/filters/geolocationcomponent.js:40
 #: src/ui/components/filters/geolocationcomponent.js:48
 msgid "Location"

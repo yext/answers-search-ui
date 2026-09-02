@@ -26,6 +26,9 @@ const Keys = {
   SELECT_KEY: 93
 };
 
+const FALLBACK_RESULTS_COUNT_ANNOUNCER_ID = 'yxt-AutoComplete-resultsCount-announcer';
+const FALLBACK_ANNOUNCEMENT_CLEAR_DELAY = 5000;
+
 export default class AutoCompleteComponent extends Component {
   constructor (opts = {}, systemOpts = {}) {
     super(opts, systemOpts);
@@ -117,6 +120,12 @@ export default class AutoCompleteComponent extends Component {
     this.listLabelIdName = opts.listLabelIdName || 'yxt-SearchBar-listLabel--SearchBar';
 
     /**
+     * Text that provides a stable accessible name for the autocomplete listbox.
+     * @type {string}
+     */
+    this.listLabelText = opts.listLabelText || '';
+
+    /**
      * Whether to hide the autocomplete when the search input is empty
      * @type {boolean}
      */
@@ -180,7 +189,7 @@ export default class AutoCompleteComponent extends Component {
    * to the template (e.g. the sectionIndex and resultIndex), since
    * those are client-interaction specific values and aren't returned from the server.
    */
-  setState (data) {
+  setState (data, shouldAnnounceResultsCount = true) {
     const queryInputEl = DOM.query(this._parentContainer, this._inputEl);
     const shouldHideAutocomplete = this._shouldHideOnEmptySearch && !queryInputEl.value;
     const wasOpen = this._isOpen;
@@ -220,6 +229,8 @@ export default class AutoCompleteComponent extends Component {
       resultIndex: this._resultIndex,
       promptHeader: this._originalQuery.length === 0 ? this.promptHeader : null,
       listLabelIdName: this.listLabelIdName,
+      listLabelText: this.listLabelText,
+      shouldAnnounceResultsCount,
       autocompleteContainerIdName: `yxt-AutoComplete-container-${this._config.name?.replace(/\./g, '-') || ''}`,
       eventOptions: this.eventOptions(data)
     }));
@@ -253,7 +264,70 @@ export default class AutoCompleteComponent extends Component {
    * updateState is a helper to apply the current state with new client-state.
    */
   updateState () {
-    this.setState(this._state.get());
+    this.setState(this._state.get(), false);
+  }
+
+  onMount () {
+    // Announces a newly rendered autocomplete results count. The translated announcement is stored
+    // in a data attribute, so it is not exposed as a navigable node in the accessibility tree.
+    const wrapper = DOM.query(this._container, '.js-yxt-AutoComplete-wrapper');
+    const announcement = wrapper?.dataset.resultsCountAnnouncement
+      ?.replace(/\s+/g, ' ')
+      .trim();
+    if (announcement) {
+      this._announceResultsCount(announcement);
+    }
+  }
+
+  /**
+   * Announces the autocomplete results count. Browsers that implement ariaNotify can send the
+   * notification without creating a DOM node. Older browsers use a shared, body-level live region, so the
+   * fallback is outside the autocomplete navigation path.
+   */
+  _announceResultsCount (announcement) {
+    if (typeof document.ariaNotify === 'function') {
+      document.ariaNotify(announcement, { priority: 'normal' });
+      return;
+    }
+
+    const announcer = this._getFallbackResultsCountAnnouncer();
+    if (!announcer) {
+      return;
+    }
+
+    clearTimeout(announcer._updateAnnouncementTimeout);
+    clearTimeout(announcer._clearAnnouncementTimeout);
+    announcer.textContent = '';
+
+    // The fallback must be mounted before its text changes for assistive technologies to
+    // consistently recognize the update as a live-region announcement.
+    announcer._updateAnnouncementTimeout = setTimeout(() => {
+      announcer.textContent = announcement;
+      announcer._clearAnnouncementTimeout = setTimeout(() => {
+        announcer.textContent = '';
+      }, FALLBACK_ANNOUNCEMENT_CLEAR_DELAY);
+    }, 0);
+  }
+
+  /**
+   * Returns the shared fallback results-count announcer, creating it at the end of the document
+   * body when necessary.
+   */
+  _getFallbackResultsCountAnnouncer () {
+    let announcer = document.getElementById(FALLBACK_RESULTS_COUNT_ANNOUNCER_ID);
+    if (announcer || !document.body) {
+      return announcer;
+    }
+
+    announcer = DOM.createEl('div', {
+      id: FALLBACK_RESULTS_COUNT_ANNOUNCER_ID,
+      class: 'sr-only'
+    });
+    announcer.setAttribute('role', 'status');
+    announcer.setAttribute('aria-live', 'polite');
+    announcer.setAttribute('aria-atomic', 'true');
+    DOM.append(document.body, announcer);
+    return announcer;
   }
 
   /**
@@ -324,7 +398,7 @@ export default class AutoCompleteComponent extends Component {
    * close will hide the auto complete results and reset the state.
    */
   close () {
-    this.setState({});
+    this.setState({}, false);
     this.reset();
   }
 

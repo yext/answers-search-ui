@@ -222,6 +222,7 @@ export default class GeoLocationComponent extends Component {
       container: '.js-yxt-GeoLocationFilter-autocomplete',
       originalQuery: this.query,
       inputEl: inputSelector,
+      listLabelText: this._config.label,
       verticalKey: this._config.verticalKey,
       searchParameters: this.searchParameters,
       onSubmit: (query, filter) => this._handleSubmit(query, filter),

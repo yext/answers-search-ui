@@ -568,6 +568,7 @@ export default class SearchComponent extends Component {
       originalQuery: this.query,
       inputEl: inputSelector,
       listLabelIdName: this.inputLabelIdName,
+      listLabelText: this.labelText,
       ...this._autocompleteConfig,
       onSubmit: () => {
         if (this._useForm) {
