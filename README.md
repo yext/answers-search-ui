@@ -462,6 +462,8 @@ ANSWERS.addComponent('SearchBar', {
   submitIcon: 'iconName',
   // Optional, a url for a custom icon for the submit button. Defaults to Animated Magnifying glass when CSS is included.
   customIconUrl: 'path/to/icon',
+  // Optional, displays an AI signpost immediately before the submit button. Defaults to false.
+  showAISignpost: false,
   // Optional, the query text to show as the first item for auto complete
   promptHeader: 'Header',
   // Optional, no default

@@ -13,6 +13,16 @@ import SearchBarIconController from '../../controllers/searchbariconcontroller';
 import alert from '../../alert';
 import { constructRedirectUrl } from '../../tools/urlutils';
 
+const DEFAULT_AI_SIGNPOST = {
+  iconName: 'ai_signpost',
+  popoverHeader: TranslationFlagger.flag({
+    phrase: 'Powered by AI'
+  }),
+  popoverBody: TranslationFlagger.flag({
+    phrase: 'Search may use AI to find, prioritize, and output results. AI responses may be incomplete or inaccurate and should be checked.'
+  })
+};
+
 /**
  * SearchComponent exposes an interface in order to create
  * a UI Search experience for vertical and universal search.
@@ -299,6 +309,13 @@ export default class SearchComponent extends Component {
     this._voiceSearchConfig = config.voiceSearch || {};
 
     /**
+     * Whether or not the AI signpost should appear
+     * @type {boolean}
+     */
+    this._showAISignpost = config.showAISignpost === true;
+    this._aiSignpost = DEFAULT_AI_SIGNPOST;
+
+    /**
      * Whether or not voice search should be enabled
      * @type {boolean}
      */
@@ -373,6 +390,7 @@ export default class SearchComponent extends Component {
     }
 
     this.initSearchBarIconController();
+    this._bindAISignpost();
 
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
@@ -410,6 +428,35 @@ export default class SearchComponent extends Component {
     if (!config.useCustomIcon) {
       this.searchBarIconController.setupAnimatedIconEvents();
     }
+  }
+
+  /**
+   * Wires up the AI signpost popover toggle behavior.
+   */
+  _bindAISignpost () {
+    const signpost = DOM.query(this._container, '.yxt-SearchBar-aiSignpost');
+    const signpostButton = DOM.query(this._container, '.js-yxt-SearchBar-aiSignpostButton');
+    const signpostPopover = DOM.query(this._container, '.js-yxt-SearchBar-aiSignpostPopover');
+    const signpostCloseButton = DOM.query(this._container, '.js-yxt-SearchBar-aiSignpostClose');
+    if (!signpost || !signpostButton || !signpostPopover) {
+      return;
+    }
+
+    const setIsOpen = isOpen => {
+      signpostButton.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+      signpostPopover.hidden = !isOpen;
+    };
+
+    DOM.on(signpostButton, 'click', () => {
+      setIsOpen(signpostButton.getAttribute('aria-expanded') !== 'true');
+    });
+
+    signpostCloseButton && DOM.on(signpostCloseButton, 'click', () => setIsOpen(false));
+    DOM.on(document, 'click', event => {
+      if (!signpost.contains(event.target)) {
+        setIsOpen(false);
+      }
+    });
   }
 
   remove () {
@@ -700,6 +747,8 @@ export default class SearchComponent extends Component {
       customLoadingIconUrl: this._customLoadingIconUrl,
       customListeningIconUrl: this._customListeningIconUrl,
       showVoiceSearch: this._showVoiceSearch,
+      showAISignpost: this._showAISignpost,
+      aiSignpost: this._aiSignpost,
       query: this.query || '',
       eventOptions: this.eventOptions(),
       iconId: this.name,
