@@ -149,6 +149,68 @@ describe('SearchBar component', () => {
     expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.SEARCH_BAR);
   });
 
+  describe('AI signpost', () => {
+    it('is displayed only when enabled', () => {
+      const defaultComponent = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
+      const defaultWrapper = mount(defaultComponent);
+      expect(defaultWrapper.find('.yxt-SearchBar-aiSignpost').exists()).toBeFalsy();
+
+      defaultComponent.remove();
+      const enabledComponent = COMPONENT_MANAGER.create('SearchBar', {
+        ...defaultConfig,
+        showAISignpost: true
+      });
+      const enabledWrapper = mount(enabledComponent);
+      expect(enabledWrapper.find('.yxt-SearchBar-aiSignpost').exists()).toBeTruthy();
+    });
+
+    it('renders the approved icon-only disclosure before the search button', () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', {
+        ...defaultConfig,
+        showAISignpost: true
+      });
+      const wrapper = mount(component);
+      const signpost = wrapper.find('.yxt-SearchBar-aiSignpost').getDOMNode();
+      const searchButton = wrapper.find('.yxt-SearchBar-button').getDOMNode();
+
+      expect(wrapper.find('.yxt-SearchBar-aiSignpostButton').prop('aria-label'))
+        .toEqual('Powered by AI');
+      expect(wrapper.find('.Icon--ai_signpost').exists()).toBeTruthy();
+      expect(wrapper.find('.yxt-SearchBar-aiSignpostPopoverHeaderText').text().trim())
+        .toEqual('Powered by AI');
+      expect(wrapper.find('.yxt-SearchBar-aiSignpostPopoverBody').text().trim())
+        .toEqual('Search may use AI to find, prioritize, and output results. AI responses may be incomplete or inaccurate and should be checked.');
+      expect(signpost.compareDocumentPosition(searchButton) & window.Node.DOCUMENT_POSITION_FOLLOWING)
+        .toBeTruthy();
+    });
+
+    it('opens and dismisses the disclosure popover', () => {
+      const component = COMPONENT_MANAGER.create('SearchBar', {
+        ...defaultConfig,
+        showAISignpost: true
+      });
+      const wrapper = mount(component);
+      const button = wrapper.find('.yxt-SearchBar-aiSignpostButton');
+      const popover = wrapper.find('.yxt-SearchBar-aiSignpostPopover');
+
+      expect(button.prop('aria-expanded')).toEqual('false');
+      expect(popover.getDOMNode().hidden).toBeTruthy();
+
+      button.simulate('click');
+      expect(button.getDOMNode().getAttribute('aria-expanded')).toEqual('true');
+      expect(popover.getDOMNode().hidden).toBeFalsy();
+
+      wrapper.find('.yxt-SearchBar-aiSignpostClose').simulate('click');
+      expect(button.getDOMNode().getAttribute('aria-expanded')).toEqual('false');
+      expect(popover.getDOMNode().hidden).toBeTruthy();
+
+      button.simulate('click');
+      document.body.dispatchEvent(new window.Event('click', { bubbles: true }));
+      expect(button.getDOMNode().getAttribute('aria-expanded')).toEqual('false');
+      expect(popover.getDOMNode().hidden).toBeTruthy();
+    });
+  });
+
   describe('Voice search works properly', () => {
     const events = {};
     const speechRecognitionMock = {

@@ -1,0 +1,38 @@
+<div class="yxt-SearchBar-aiSignpost">
+  <button
+    class="yxt-SearchBar-aiSignpostButton js-yxt-SearchBar-aiSignpostButton"
+    type="button"
+    aria-expanded="false"
+    aria-label="{{aiSignpost.popoverHeader}}"
+    aria-controls="yxt-SearchBar-aiSignpostPopover-{{name}}">
+    {{> icons/iconPartial
+      iconName=aiSignpost.iconName
+      classNames='yxt-SearchBar-aiSignpostIcon'}}
+  </button>
+  <div
+    class="yxt-SearchBar-aiSignpostPopover js-yxt-SearchBar-aiSignpostPopover"
+    id="yxt-SearchBar-aiSignpostPopover-{{name}}"
+    role="dialog"
+    aria-labelledby="yxt-SearchBar-aiSignpostPopoverHeader-{{name}}"
+    aria-describedby="yxt-SearchBar-aiSignpostPopoverBody-{{name}}"
+    hidden>
+    <div class="yxt-SearchBar-aiSignpostPopoverHeader">
+      <div
+        class="yxt-SearchBar-aiSignpostPopoverHeaderText"
+        id="yxt-SearchBar-aiSignpostPopoverHeader-{{name}}">
+        {{aiSignpost.popoverHeader}}
+      </div>
+      <button
+        class="yxt-SearchBar-aiSignpostClose js-yxt-SearchBar-aiSignpostClose"
+        type="button"
+        aria-label="{{translate phrase='Dismiss' }}">
+        {{> icons/builtInIcon iconName='close'}}
+      </button>
+    </div>
+    <div
+      class="yxt-SearchBar-aiSignpostPopoverBody"
+      id="yxt-SearchBar-aiSignpostPopoverBody-{{name}}">
+      {{aiSignpost.popoverBody}}
+    </div>
+  </div>
+</div>
