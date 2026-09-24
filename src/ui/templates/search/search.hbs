@@ -4,7 +4,7 @@
   <h1 class="yxt-SearchBar-title">{{title}}</h1>
 {{/if}}
 <div class="yxt-SearchBar">
-  <div class="yxt-SearchBar-container">
+  <div class="yxt-SearchBar-container{{#if showAISignpost}} yxt-SearchBar-container--withAISignpost{{/if}}">
     {{#if useForm}}
       <form class="yxt-SearchBar-form" role="search">
         <label class="sr-only"
@@ -56,6 +56,9 @@
             {{> icons/voiceSearchIcon}}
           </button>
         {{/if}}
+        {{#if showAISignpost}}
+          {{> search/aiSignpost}}
+        {{/if}}
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button"
           aria-label="{{submitText}}">
@@ -103,6 +106,9 @@
           >
             {{> icons/voiceSearchIcon}}
           </button>
+        {{/if}}
+        {{#if showAISignpost}}
+          {{> search/aiSignpost}}
         {{/if}}
         <button {{#if useForm}}type="submit"{{else}}type="button"{{/if}}
           class="js-yext-submit yxt-SearchBar-button"

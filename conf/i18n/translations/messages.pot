@@ -66,6 +66,7 @@ msgid "Currently on page [[pageNumber]]"
 msgstr ""
 
 #: src/ui/templates/results/generativedirectanswer.hbs:56
+#: src/ui/templates/search/aiSignpost.hbs:28
 msgid "Dismiss"
 msgstr ""
 
@@ -137,6 +138,14 @@ msgstr ""
 msgid "Permission to use microphone is blocked"
 msgstr ""
 
+#: src/ui/components/search/searchcomponent.js:18
+msgid "Powered by AI"
+msgstr ""
+
+#: src/ui/components/search/searchcomponent.js:21
+msgid "Search may use AI to find, prioritize, and output results. AI responses may be incomplete or inaccurate and should be checked."
+msgstr ""
+
 #: src/ui/templates/results/directanswer.hbs:74
 msgid "Send feedback"
 msgstr ""
@@ -206,7 +215,7 @@ msgstr ""
 
 #: src/ui/components/filters/geolocationcomponent.js:153
 #: src/ui/components/search/locationbiascomponent.js:89
-#: src/ui/components/search/searchcomponent.js:235
+#: src/ui/components/search/searchcomponent.js:245
 msgid "We are unable to determine your location"
 msgstr ""
 
@@ -260,7 +269,7 @@ msgid "Remove this filter"
 msgstr ""
 
 #: src/ui/components/questions/questionsubmissioncomponent.js:69
-#: src/ui/components/search/searchcomponent.js:74
+#: src/ui/components/search/searchcomponent.js:84
 msgctxt "Button label"
 msgid "Submit"
 msgstr ""
@@ -400,7 +409,7 @@ msgctxt "Labels a link"
 msgid "Learn more here."
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:65
+#: src/ui/components/search/searchcomponent.js:75
 msgctxt "Labels an input field"
 msgid "Conduct a search"
 msgstr ""
@@ -499,7 +508,7 @@ msgctxt "True or False"
 msgid "True"
 msgstr ""
 
-#: src/ui/components/search/searchcomponent.js:83
+#: src/ui/components/search/searchcomponent.js:93
 msgctxt "Verb, clears search"
 msgid "Clear"
 msgstr ""

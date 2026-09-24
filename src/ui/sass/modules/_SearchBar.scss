@@ -18,6 +18,11 @@ $searchbar-button-background-color-active: var(--yxt-searchbar-button-background
 $searchbar-button-text-color-base: var(--yxt-color-text-primary) !default;
 $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base) !default;
 
+$searchbar-ai-signpost-color: var(--yxt-color-text-primary) !default;
+$searchbar-ai-signpost-popover-background-color: white !default;
+$searchbar-ai-signpost-popover-border: var(--yxt-border-default) !default;
+$searchbar-ai-signpost-popover-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !default;
+
 :root {
   --yxt-searchbar-form-background-color: #{$searchbar-form-background-color};
   --yxt-searchbar-form-outline-color-base: #{$searchbar-form-outline-color-base};
@@ -33,6 +38,10 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   --yxt-searchbar-button-background-color-active: #{$searchbar-button-background-color-active};
   --yxt-searchbar-button-text-color-base: #{$searchbar-button-text-color-base};
   --yxt-searchbar-button-text-color-active: #{$searchbar-button-text-color-active};
+  --yxt-searchbar-ai-signpost-color: #{$searchbar-ai-signpost-color};
+  --yxt-searchbar-ai-signpost-popover-background-color: #{$searchbar-ai-signpost-popover-background-color};
+  --yxt-searchbar-ai-signpost-popover-border: #{$searchbar-ai-signpost-popover-border};
+  --yxt-searchbar-ai-signpost-popover-box-shadow: #{$searchbar-ai-signpost-popover-box-shadow};
 }
 
 .yxt-SearchBar, .yxt-GeoLocationFilter
@@ -65,6 +74,11 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
     {
       box-shadow: var(--yxt-searchbar-focus-shadow);
     }
+  }
+
+  &-container--withAISignpost
+  {
+    overflow: visible;
   }
 
   &-form,
@@ -115,6 +129,116 @@ $searchbar-button-text-color-active: var(--yxt-searchbar-button-text-color-base)
   {
     padding-left: calc(var(--yxt-base-spacing) * 3/4);
     padding-right: var(--yxt-base-spacing);
+  }
+
+  &-aiSignpost
+  {
+    position: relative;
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+  }
+
+  &-aiSignpostButton
+  {
+    display: inline-flex;
+    align-items: center;
+    padding: calc(var(--yxt-base-spacing) * 3/4);
+    border: 0;
+    background-color: var(--yxt-searchbar-button-background-color-base);
+    color: var(--yxt-searchbar-ai-signpost-color);
+    cursor: pointer;
+
+    &:hover,
+    &:focus-visible
+    {
+      background-color: var(--yxt-searchbar-button-background-color-hover);
+    }
+  }
+
+  &-aiSignpostIcon
+  {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  &-aiSignpostIcon.Icon svg,
+  &-aiSignpostIcon.Icon img
+  {
+    display: block;
+    width: 20px;
+    height: 20px;
+  }
+
+  &-aiSignpostPopover
+  {
+    position: absolute;
+    z-index: 2;
+    top: calc(100% + var(--yxt-base-spacing-sm));
+    right: 0;
+    width: 320px;
+    padding: var(--yxt-base-spacing);
+    border: var(--yxt-searchbar-ai-signpost-popover-border);
+    border-radius: 4px;
+    background-color: var(--yxt-searchbar-ai-signpost-popover-background-color);
+    box-shadow: var(--yxt-searchbar-ai-signpost-popover-box-shadow);
+  }
+
+  &-aiSignpostPopover[hidden]
+  {
+    display: none;
+  }
+
+  &-aiSignpostPopoverHeader
+  {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--yxt-base-spacing);
+    margin-bottom: var(--yxt-base-spacing-sm);
+  }
+
+  &-aiSignpostPopoverHeaderText
+  {
+    @include Text(
+      $size: var(--yxt-font-size-sm),
+      $line-height: var(--yxt-line-height-md),
+      $weight: var(--yxt-font-weight-semibold),
+      $color: var(--yxt-color-text-primary)
+    );
+  }
+
+  &-aiSignpostClose
+  {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--yxt-color-text-secondary);
+    cursor: pointer;
+
+    .Icon,
+    svg
+    {
+      width: 16px;
+      height: 16px;
+    }
+  }
+
+  &-aiSignpostPopoverBody
+  {
+    @include Text(
+      $size: var(--yxt-font-size-sm),
+      $line-height: var(--yxt-line-height-md),
+      $weight: var(--yxt-font-weight-normal),
+      $color: var(--yxt-color-text-primary)
+    );
   }
 
   &-button,
