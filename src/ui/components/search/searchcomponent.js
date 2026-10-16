@@ -23,6 +23,8 @@ const DEFAULT_AI_SIGNPOST = {
   })
 };
 
+const CLOSE_AUTOCOMPLETE_EVENT = 'yext:search-bar:close-autocomplete';
+
 /**
  * SearchComponent exposes an interface in order to create
  * a UI Search experience for vertical and universal search.
@@ -391,6 +393,7 @@ export default class SearchComponent extends Component {
 
     this.initSearchBarIconController();
     this._bindAISignpost();
+    this._bindCloseAutocompleteEvent();
 
     // Wire up our search handling and auto complete
     this.initSearch(this._formEl);
@@ -457,6 +460,21 @@ export default class SearchComponent extends Component {
         setIsOpen(false);
       }
     });
+  }
+
+  /**
+   * Binds the host-page event used to close this SearchBar's autocomplete.
+   */
+  _bindCloseAutocompleteEvent () {
+    if (this._closeAutocompleteEventBound) {
+      return;
+    }
+
+    DOM.on(this._container, CLOSE_AUTOCOMPLETE_EVENT, () => {
+      this.queryEl.blur();
+      this._autocomplete.close();
+    });
+    this._closeAutocompleteEventBound = true;
   }
 
   remove () {
