@@ -149,6 +149,37 @@ describe('SearchBar component', () => {
     expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.SEARCH_BAR);
   });
 
+  it('closes autocomplete when the host dispatches the close event', () => {
+    const onClose = jest.fn();
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      autocomplete: { onClose }
+    });
+    const wrapper = mount(component);
+    const input = wrapper.find('.js-yext-query').getDOMNode();
+    const container = wrapper.getDOMNode();
+
+    input.focus();
+    component._autocomplete.setState({
+      sections: [{ resultsCount: 1, results: [{ value: 'suggestion' }] }]
+    });
+    expect(input.getAttribute('aria-expanded')).toEqual('true');
+
+    container.dispatchEvent(new window.CustomEvent('yext:search-bar:close-autocomplete'));
+
+    expect(document.activeElement).not.toEqual(input);
+    expect(input.getAttribute('aria-expanded')).toEqual('false');
+    expect(wrapper.find('.yxt-AutoComplete').exists()).toBeFalsy();
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    // A response already in flight must not reopen the dropdown after dismissal.
+    component._autocomplete.setState({
+      sections: [{ resultsCount: 1, results: [{ value: 'late suggestion' }] }]
+    });
+    expect(input.getAttribute('aria-expanded')).toEqual('false');
+    expect(wrapper.find('.yxt-AutoComplete').exists()).toBeFalsy();
+  });
+
   describe('AI signpost', () => {
     it('is displayed only when enabled', () => {
       const defaultComponent = COMPONENT_MANAGER.create('SearchBar', defaultConfig);

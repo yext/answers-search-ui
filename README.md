@@ -546,6 +546,17 @@ ANSWERS.addComponent('SearchBar', {
 })
 ```
 
+The host page can close a SearchBar's autocomplete in response to an interaction it can detect
+(for example, opening a navigation menu). Dispatch `yext:search-bar:close-autocomplete` on that
+SearchBar's container element. The SDK blurs the input and closes that SearchBar's suggestions;
+assistive-technology virtual-cursor movement alone does not produce a reliable browser event.
+
+```js
+document.querySelector('.search-query-container').dispatchEvent(
+  new CustomEvent('yext:search-bar:close-autocomplete')
+);
+```
+
 ## Direct Answer Component
 
 This component is for Universal pages only.
