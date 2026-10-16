@@ -517,6 +517,9 @@ ANSWERS.addComponent('SearchBar', {
   },
   // Optional, options to pass to the autocomplete component
   autocomplete: {
+    // Optional, whether focusing the input requests suggestions. Defaults to true.
+    // Set to false to wait until the user types or clicks the input.
+    openOnFocus: true,
     // Optional, boolean used to hide the autocomplete when the search input is empty (even if the
     // input is focused). Defaults to false.
     shouldHideOnEmptySearch: false,
