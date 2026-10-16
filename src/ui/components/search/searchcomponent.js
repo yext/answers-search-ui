@@ -284,6 +284,9 @@ export default class SearchComponent extends Component {
      * @type {Object}
      */
     this._autocompleteConfig = {
+      openOnFocus: config.autocomplete?.openOnFocus === undefined
+        ? true
+        : config.autocomplete.openOnFocus,
       shouldHideOnEmptySearch: config.autocomplete && config.autocomplete.shouldHideOnEmptySearch,
       onOpen: config.autocomplete && config.autocomplete.onOpen,
       onClose: config.autocomplete && config.autocomplete.onClose,
@@ -414,6 +417,9 @@ export default class SearchComponent extends Component {
 
     if (this.autoFocus && !this.query && this.autocompleteOnLoad) {
       this.focusInputElement();
+      if (!this._autocompleteConfig.openOnFocus) {
+        this._autocomplete?.autoComplete(this.queryEl.value);
+      }
     }
   }
 

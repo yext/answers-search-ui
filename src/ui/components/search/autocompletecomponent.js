@@ -94,10 +94,18 @@ export default class AutoCompleteComponent extends Component {
     this.promptHeader = opts.promptHeader || null;
 
     /**
-     * Whether the input is autocomatically focused or not
+     * Whether the search input is automatically focused on load.
      * @type {boolean}
      */
     this._autoFocus = opts.autoFocus || false;
+
+    /**
+     * Whether focusing the input requests autocomplete suggestions.
+     * @type {boolean}
+     */
+    this._openOnFocus = opts.openOnFocus === undefined
+      ? true
+      : opts.openOnFocus;
 
     /**
      * Callback invoked when the `Enter` key is pressed on auto complete.
@@ -358,25 +366,29 @@ export default class AutoCompleteComponent extends Component {
       this.close();
     });
 
-    // When a user focuses the input, we should populate the autocomplete based
-    // on the current value
+    // By default, focusing the input populates autocomplete based on its current value.
+    // This can be disabled so focus alone does not open suggestions.
     DOM.on(queryInput, 'focus', () => {
       this._sectionIndex = 0;
       this._resultIndex = -1;
-      this.autoComplete(queryInput.value);
+      if (this._openOnFocus) {
+        this.autoComplete(queryInput.value);
+      }
     });
+
+    if (this._openOnFocus) {
+      if (this._autoFocus) {
+        DOM.once(queryInput, 'click', () => this.autoComplete(queryInput.value));
+      }
+    } else {
+      DOM.on(queryInput, 'click', () => this.autoComplete(queryInput.value));
+    }
 
     // Allow the user to navigate between the results using the keyboard
     DOM.on(queryInput, 'keydown', (e) => {
       this.handleNavigateResults(e.keyCode, e);
       this.handleSubmitResult(e.keyCode, queryInput.value, e);
     });
-
-    if (this._autoFocus) {
-      DOM.once(queryInput, 'click', () => {
-        this.autoComplete(queryInput.value);
-      });
-    }
 
     // Allow the user to select a result with the mouse
     DOM.delegate(this._container, '.js-yext-autocomplete-option', 'click', (evt, target) => {
