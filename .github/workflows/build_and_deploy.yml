@@ -28,6 +28,8 @@ jobs:
     needs: call_build
 
   call_deploy:
+    # Temporary diagnostic branch: run acceptance without deploying assets.
+    if: false
     needs:
       - call_unit_test
       - call_format_branch_name

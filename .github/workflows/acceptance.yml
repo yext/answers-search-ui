@@ -6,6 +6,7 @@ jobs:
   headless_acceptance:
     name: Headless Acceptance
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - name: Use Node.js 20
