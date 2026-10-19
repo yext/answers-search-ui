@@ -7,5 +7,5 @@ if [[ $GITHUB_REF_NAME == release/*
 then
   npx testcafe -c 3 "chrome:headless,firefox:headless" --config-file ./.github/testcafe.json -q
 else
-  npx testcafe -c 3 "chrome:headless" --disable-native-automation --config-file ./.github/testcafe.json -q
+  npx testcafe -c 3 "chrome:headless" --config-file ./.github/testcafe.json -q
 fi
