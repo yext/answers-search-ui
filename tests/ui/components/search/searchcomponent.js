@@ -149,6 +149,126 @@ describe('SearchBar component', () => {
     expect(storage.get(StorageKeys.QUERY_TRIGGER)).toEqual(QueryTriggers.SEARCH_BAR);
   });
 
+  it('requests autocomplete on focus by default', () => {
+    const component = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
+    const wrapper = mount(component);
+    const input = wrapper.find('.js-yext-query').getDOMNode();
+
+    input.focus();
+
+    expect(component.core.autoCompleteVertical).toHaveBeenCalledTimes(1);
+  });
+
+  it('keeps autocomplete closed on focus when openOnFocus is disabled', () => {
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      autocomplete: { openOnFocus: false }
+    });
+    const wrapper = mount(component);
+    const input = wrapper.find('.js-yext-query').getDOMNode();
+
+    input.focus();
+
+    expect(component.core.autoCompleteVertical).not.toHaveBeenCalled();
+    expect(input.getAttribute('aria-expanded')).toEqual('false');
+  });
+
+  it('keeps autocomplete closed when autoFocus is enabled without autocompleteOnLoad', () => {
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      autoFocus: true
+    });
+    const wrapper = mount(component);
+    const input = wrapper.find('.js-yext-query').getDOMNode();
+
+    expect(document.activeElement).toEqual(input);
+    expect(component.core.autoCompleteVertical).not.toHaveBeenCalled();
+    expect(input.getAttribute('aria-expanded')).toEqual('false');
+  });
+
+  it('requests autocomplete when the focused input is clicked', () => {
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      autocomplete: { openOnFocus: false }
+    });
+    const wrapper = mount(component);
+    const input = wrapper.find('.js-yext-query').getDOMNode();
+
+    input.focus();
+    input.click();
+
+    expect(component.core.autoCompleteVertical).toHaveBeenCalledTimes(1);
+  });
+
+  it('requests autocomplete after the user starts typing', () => {
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      autocomplete: { openOnFocus: false }
+    });
+    const wrapper = mount(component);
+    const input = wrapper.find('.js-yext-query').getDOMNode();
+
+    input.focus();
+    input.value = 'a';
+    input.dispatchEvent(new window.KeyboardEvent('keyup', { bubbles: true, keyCode: 65 }));
+
+    expect(component.core.autoCompleteVertical).toHaveBeenCalledTimes(1);
+  });
+
+  it('still requests autocomplete on load when configured', () => {
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      autoFocus: true,
+      autocompleteOnLoad: true,
+      autocomplete: { openOnFocus: false }
+    });
+    mount(component);
+
+    expect(component.core.autoCompleteVertical).toHaveBeenCalledTimes(1);
+  });
+
+  it('requests autocomplete on load with the default focus behavior', () => {
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      autoFocus: true,
+      autocompleteOnLoad: true
+    });
+    mount(component);
+
+    expect(component.core.autoCompleteVertical).toHaveBeenCalledTimes(1);
+  });
+
+  it('closes autocomplete when the host dispatches the close event', () => {
+    const onClose = jest.fn();
+    const component = COMPONENT_MANAGER.create('SearchBar', {
+      ...defaultConfig,
+      autocomplete: { onClose }
+    });
+    const wrapper = mount(component);
+    const input = wrapper.find('.js-yext-query').getDOMNode();
+    const container = wrapper.getDOMNode();
+
+    input.focus();
+    component._autocomplete.setState({
+      sections: [{ resultsCount: 1, results: [{ value: 'suggestion' }] }]
+    });
+    expect(input.getAttribute('aria-expanded')).toEqual('true');
+
+    container.dispatchEvent(new window.CustomEvent('yext:search-bar:close-autocomplete'));
+
+    expect(document.activeElement).not.toEqual(input);
+    expect(input.getAttribute('aria-expanded')).toEqual('false');
+    expect(wrapper.find('.yxt-AutoComplete').exists()).toBeFalsy();
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    // A response already in flight must not reopen the dropdown after dismissal.
+    component._autocomplete.setState({
+      sections: [{ resultsCount: 1, results: [{ value: 'late suggestion' }] }]
+    });
+    expect(input.getAttribute('aria-expanded')).toEqual('false');
+    expect(wrapper.find('.yxt-AutoComplete').exists()).toBeFalsy();
+  });
+
   describe('AI signpost', () => {
     it('is displayed only when enabled', () => {
       const defaultComponent = COMPONENT_MANAGER.create('SearchBar', defaultConfig);
