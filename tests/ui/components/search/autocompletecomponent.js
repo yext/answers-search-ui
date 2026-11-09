@@ -109,6 +109,37 @@ describe('autocomplete accessibility announcements', () => {
     );
   });
 
+  it('announces the prompt header when autocomplete initially opens', () => {
+    document.ariaNotify = jest.fn();
+    const component = createAutocompleteComponent({
+      promptHeader: 'You can ask us'
+    });
+    component.isQueryInputFocused = () => true;
+    component.setState(results);
+
+    expect(document.ariaNotify).toHaveBeenCalledWith(
+      'You can ask us. 2 autocomplete options found.',
+      { priority: 'normal' }
+    );
+
+    component.updateState();
+    expect(document.ariaNotify).toHaveBeenCalledTimes(1);
+  });
+
+  it('preserves punctuation at the end of the prompt header announcement', () => {
+    document.ariaNotify = jest.fn();
+    const component = createAutocompleteComponent({
+      promptHeader: 'You can ask us:'
+    });
+    component.isQueryInputFocused = () => true;
+    component.setState(results);
+
+    expect(document.ariaNotify).toHaveBeenCalledWith(
+      'You can ask us: 2 autocomplete options found.',
+      { priority: 'normal' }
+    );
+  });
+
   it('preserves the count announcement for each labeled result section', () => {
     document.ariaNotify = jest.fn();
     const component = createAutocompleteComponent();

@@ -276,23 +276,50 @@ export default class AutoCompleteComponent extends Component {
   }
 
   onMount () {
-    // Announces a newly rendered autocomplete results count. The translated announcement is stored
-    // in a data attribute, so it is not exposed as a navigable node in the accessibility tree.
+    // Announces newly rendered autocomplete guidance. The announcement text is stored in data
+    // attributes, so it is not exposed as a navigable node in the accessibility tree.
     const wrapper = DOM.query(this._container, '.js-yxt-AutoComplete-wrapper');
-    const announcement = wrapper?.dataset.resultsCountAnnouncement
-      ?.replace(/\s+/g, ' ')
-      .trim();
+    const promptHeaderAnnouncement = this._normalizeAnnouncement(
+      wrapper?.dataset.promptHeaderAnnouncement
+    );
+    const resultsCountAnnouncement = this._normalizeAnnouncement(
+      wrapper?.dataset.resultsCountAnnouncement
+    );
+    const promptHeaderSeparator = this._endsWithPunctuation(promptHeaderAnnouncement)
+      ? ' '
+      : '. ';
+    const announcement = promptHeaderAnnouncement && resultsCountAnnouncement
+      ? `${promptHeaderAnnouncement}${promptHeaderSeparator}${resultsCountAnnouncement}`
+      : promptHeaderAnnouncement || resultsCountAnnouncement;
     if (announcement) {
-      this._announceResultsCount(announcement);
+      this._announceAutocomplete(announcement);
     }
   }
 
   /**
-   * Announces the autocomplete results count. Browsers that implement ariaNotify can send the
-   * notification without creating a DOM node. Older browsers use a shared, body-level live region, so the
-   * fallback is outside the autocomplete navigation path.
+   * Normalizes whitespace in text rendered into an announcement data attribute.
+   * @param {string} announcement The announcement text to normalize.
+   * @returns {string} The normalized announcement text.
    */
-  _announceResultsCount (announcement) {
+  _normalizeAnnouncement (announcement) {
+    return announcement?.replace(/\s+/g, ' ').trim() || '';
+  }
+
+  /**
+   * Returns whether announcement text already ends with sentence punctuation.
+   * @param {string} announcement The announcement text to inspect.
+   * @returns {boolean} Whether the text ends with punctuation.
+   */
+  _endsWithPunctuation (announcement) {
+    return /[.!?:;\u3002\uFF01\uFF1F\uFF1A\uFF1B]$/.test(announcement);
+  }
+
+  /**
+   * Announces autocomplete guidance. Browsers that implement ariaNotify can send the notification
+   * without creating a DOM node. Older browsers use a shared, body-level live region, so the fallback
+   * is outside the autocomplete navigation path.
+   */
+  _announceAutocomplete (announcement) {
     if (typeof document.ariaNotify === 'function') {
       document.ariaNotify(announcement, { priority: 'normal' });
       return;
