@@ -1,4 +1,9 @@
 <div class="yxt-AutoComplete-wrapper js-yxt-AutoComplete-wrapper"
+     data-prompt-header-announcement="{{#if shouldAnnounceResultsCount}}
+       {{#if hasResults}}
+         {{promptHeader}}
+       {{/if}}
+     {{/if}}"
      data-results-count-announcement="{{#if shouldAnnounceResultsCount}}
        {{#if hasResults}}
          {{#each sections}}
